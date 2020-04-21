@@ -4127,16 +4127,17 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                 AlertsCreator.createScheduleDatePickerDialog(this.parentActivity, this.parentFragment.getDialogId(), $$Lambda$ChatActivityEnterView$DbhNVr7aGBPkzi2ZSveTFbR_EbU.INSTANCE, $$Lambda$ChatActivityEnterView$HfVlrs8yNKiGpBRjGRr9aZOie5g.INSTANCE);
                             }
                             this.delegate.needStartRecordAudio(0);
-                            MediaController.getInstance().stopRecording(isInScheduleMode() ? 3 : 1, true, 0);
+                            MediaController instance = MediaController.getInstance();
+                            if (!isInScheduleMode()) {
+                                i = 1;
+                            }
+                            instance.stopRecording(i, true, 0);
                         } else {
                             CameraController.getInstance().cancelOnInitRunnable(this.onFinishInitCameraRunnable);
                             this.delegate.needStartRecordVideo(1, true, 0);
                         }
                         this.recordingAudioVideo = false;
-                        if (!isInScheduleMode()) {
-                            i = 1;
-                        }
-                        updateRecordIntefrace(i);
+                        updateRecordIntefrace(1);
                     }
                 } else if (motionEvent.getAction() == 2 && this.recordingAudioVideo) {
                     float x = motionEvent.getX();
@@ -4189,11 +4190,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         if (this.recordingAudioVideo && isInScheduleMode()) {
                             AlertsCreator.createScheduleDatePickerDialog(this.parentActivity, this.parentFragment.getDialogId(), $$Lambda$ChatActivityEnterView$ntnzswOfvdfLiJpE9RVLQ3qgvgc.INSTANCE, $$Lambda$ChatActivityEnterView$ig8uuPdwp02PNB5dFwZQd6fT5I.INSTANCE);
                         }
-                        MediaController instance = MediaController.getInstance();
+                        MediaController instance2 = MediaController.getInstance();
                         if (!isInScheduleMode()) {
                             i = 1;
                         }
-                        instance.stopRecording(i, true, 0);
+                        instance2.stopRecording(i, true, 0);
                         this.delegate.needStartRecordAudio(0);
                     } else {
                         this.delegate.needStartRecordVideo(1, true, 0);
@@ -8126,13 +8127,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
                     public void showTrendingStickersAlert(TrendingStickersLayout trendingStickersLayout) {
                         if (ChatActivityEnterView.this.parentActivity != null && ChatActivityEnterView.this.parentFragment != null) {
-                            this.trendingStickersAlert = new TrendingStickersAlert(ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment, trendingStickersLayout) {
+                            AnonymousClass1 r0 = new TrendingStickersAlert(ChatActivityEnterView.this.parentActivity, ChatActivityEnterView.this.parentFragment, trendingStickersLayout) {
                                 public void dismiss() {
                                     super.dismiss();
                                     TrendingStickersAlert unused = AnonymousClass40.this.trendingStickersAlert = null;
                                 }
                             };
-                            ChatActivityEnterView.this.parentFragment.showDialog(this.trendingStickersAlert);
+                            this.trendingStickersAlert = r0;
+                            r0.show();
                         }
                     }
                 });

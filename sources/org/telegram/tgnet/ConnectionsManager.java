@@ -260,9 +260,6 @@ public class ConnectionsManager extends BaseController {
             str10 = SharedConfig.pushStringStatus;
         }
         init(BuildVars.BUILD_VERSION, 112, BuildVars.APP_ID, str7, str9, str8, str, str6, file2, FileLog.getNetworkLogPath(), str10, AndroidUtilities.getCertificateSHA256Fingerprint(), (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000, getUserConfig().getClientUserId(), isPushConnectionEnabled);
-        if (this.currentAccount == 0 && BuildVars.DEBUG_PRIVATE_VERSION) {
-            new MozillaDnsLoadTask(this.currentAccount).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[]{null, null, null});
-        }
     }
 
     public boolean isPushConnectionEnabled() {

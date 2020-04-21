@@ -165,6 +165,8 @@
     <string name="AddAccount">Konto hinzufügen</string>
     <string name="AddAdminErrorBlacklisted">Du kannst diesen Nutzer nicht als Admin festlegen, da er sich in der Liste \"Entfernte Nutzer\" befindet und du ihn nicht entfernen darfst.</string>
     <string name="AddAdminErrorNotAMember">Du kannst diesen Nutzer nicht als Admin festlegen, da er kein Mitglied dieser Gruppe ist oder du keine Erlaubnis hast, ihn einzuladen.</string>
+    <string name="AddAnExplanation">Eine Erklärung hinzufügen</string>
+    <string name="AddAnExplanationInfo">Nutzer sehen diesen Text, nachdem sie die falsche Antwort gewählt haben. Gut für Lehrzwecke.</string>
     <string name="AddAnOption">Option hinzufügen...</string>
     <string name="AddAnOptionInfo">Noch %1$s</string>
     <string name="AddAnOptionInfoMax">Mehr Optionen gibt es derzeit leider nicht.</string>
@@ -251,6 +253,7 @@
     <string name="AnimatedStickers">Animierte Sticker</string>
     <string name="AnonymousPoll">Anonyme Umfrage</string>
     <string name="AnonymousQuizPoll">Anonymes Quiz</string>
+    <string name="AnswerOptions">Antwortoptionen</string>
     <string name="Answer_few">%1$d Antworten</string>
     <string name="Answer_many">%1$d Antworten</string>
     <string name="Answer_one">%1$d Antwort</string>
@@ -319,6 +322,7 @@
     <string name="AreYouSureDeleteSingleMessageMega">Wirklich diese Nachricht bei allen löschen?</string>
     <string name="AreYouSureDeleteThisChat">Möchtest du wirklich diesen Chat löschen?</string>
     <string name="AreYouSureDeleteThisChatSavedMessages">Wirklich den Chat **Gespeichertes** löschen?</string>
+    <string name="AreYouSureDeleteThisChatWithBot">Wirklich **%1$s** blockieren und den Chat löschen?</string>
     <string name="AreYouSureDeleteThisChatWithGroup">Wirklich den Chat **%1$s** löschen?</string>
     <string name="AreYouSureDeleteThisChatWithSecretUser">Wirklich den Geheimen Chat mit **%1$s** löschen?</string>
     <string name="AreYouSureDeleteThisChatWithUser">Wirklich den Chat mit **%1$s** löschen?</string>
@@ -524,6 +528,7 @@
     <string name="BytesSent">Bytes gesendet</string>
     <string name="CacheClear">Leeren</string>
     <string name="CacheEmpty">Leer</string>
+    <string name="CacheWasCleared">%s auf deinem Gerät freigegeben!</string>
     <string name="CalculatingSize">Berechne...</string>
     <string name="Call">Anrufen</string>
     <string name="CallAgain">Erneut anrufen</string>
@@ -581,6 +586,7 @@
     <string name="ChangeWallpaperToColor">Möchtest du wirklich dein Hintergrundbild durch eine Farbe ersetzen?</string>
     <string name="ChannelAddAdmin">Admin hinzufügen</string>
     <string name="ChannelAddException">Ausnahme hinzufügen</string>
+    <string name="ChannelAddSubscribers">Abonnenten hinzufügen</string>
     <string name="ChannelAddTo">%1$s zum Kanal hinzufügen?</string>
     <string name="ChannelAddToChannel">Dem Kanal hinzufügen</string>
     <string name="ChannelAddToGroup">Der Gruppe hinzufügen</string>
@@ -605,7 +611,7 @@
     <string name="ChannelContacts">Kontakte in diesem Kanal</string>
     <string name="ChannelCreator">Inhaber</string>
     <string name="ChannelDelete">Kanal löschen</string>
-    <string name="ChannelDeleteAlert">Wenn du diesen Kanal löschst, werden alle Mitglieder und alle Nachrichten entfernt. Wirklich löschen?</string>
+    <string name="ChannelDeleteAlert">Vorsicht! Wenn du diesen Kanal löschst, werden alle Abonnenten und alle Nachrichten entfernt. Möchtest du wirklich den Kanal löschen?</string>
     <string name="ChannelDeleteFromList">Von dieser Liste löschen</string>
     <string name="ChannelDeleteInfo">Du verlierst dadurch alle Nachrichten des Kanals.</string>
     <string name="ChannelDeleteMenu">Kanal löschen</string>
@@ -643,7 +649,7 @@
     <string name="ChannelMessageStickerEmoji">%1$s hat einen %2$s Sticker gesendet</string>
     <string name="ChannelMessageVideo">%1$s hat ein Video gesendet</string>
     <string name="ChannelMute">STUMM</string>
-    <string name="ChannelNotifyMembersInfoOff">Mitglieder erhalten stille Benachrichtigung</string>
+    <string name="ChannelNotifyMembersInfoOff">Stille Benachrichtigung wird gesendet</string>
     <string name="ChannelNotifyMembersInfoOn">Abonnenten werden benachrichtigt</string>
     <string name="ChannelOtherMembers">Weitere Mitglieder</string>
     <string name="ChannelOtherSubscribers">Weitere Abonnenten</string>
@@ -781,6 +787,7 @@
     <string name="ClearHistory">Verlauf leeren</string>
     <string name="ClearHistoryCache">Cache leeren</string>
     <string name="ClearHistoryOptionAlso">Verlauf auch bei %1$s leeren</string>
+    <string name="ClearLocalDatabase">Lokale Datenbank leeren</string>
     <string name="ClearMediaCache">Cache leeren</string>
     <string name="ClearOtherSessionsHelp">Alle Sitzungen außer dieser werden beendet.</string>
     <string name="ClearOtherWebSessionsHelp">Melde dich auf Webseiten an, die eine Anmeldung mit Telegram unterstützen.</string>
@@ -793,6 +800,7 @@
     <string name="ClearSearchSingleAlertTitle">Suchverlauf</string>
     <string name="ClearSearchSingleChatAlertText">Wirklich \"%1$s\" aus dem Suchverlauf entfernen?</string>
     <string name="ClearSearchSingleUserAlertText">Wirklich \"%1$s\" aus dem Suchverlauf entfernen?</string>
+    <string name="ClearTelegramCache">Telegram Cache leeren</string>
     <string name="Close">Schließen</string>
     <string name="CloseEditor">EDITOR SCHLIESSEN</string>
     <string name="Code">Code</string>
@@ -870,7 +878,7 @@
     <string name="CreateLink">Link erstellen</string>
     <string name="CreateNewContact">Neuen Kontakt erstellen</string>
     <string name="CreateNewFilter">Neuen Ordner erstellen</string>
-    <string name="CreateNewFilterInfo">Erstelle Ordner für verschiedene Gruppen von Chats,\10um schnell zwischen ihnen wechseln.</string>
+    <string name="CreateNewFilterInfo">Erstelle Ordner für verschiedene Gruppen von Chats, um schnell zwischen ihnen zu wechseln.</string>
     <string name="CreateNewThemeAlert">Du kannst dein eigenes Farbthema erstellen, indem du die Farben innerhalb der App änderst.\10\10Jederzeit kannst du hier zum Standard-Farbthema von Telegram zurückkehren.</string>
     <string name="CreateNewThemeHelp">Tippe auf das kleine Palettensymbol um eine Auswahl des jeweiligen Bildschirms anzuzeigen und wähle deine Wunschfarben.</string>
     <string name="CreateNewThemeMenu">Neues Thema erstellen</string>
@@ -893,6 +901,7 @@
     <string name="CustomShareInfo">Hier kannst du Nutzer hinzufügen, für die eine Ausnahme gemacht werden soll.</string>
     <string name="CustomShareSettingsHelp">Hier kannst du Kontakte oder ganze Gruppen hinzufügen, für die eine Ausnahme gemacht werden soll.</string>
     <string name="CustomThemes">Eigene Themen</string>
+    <string name="DartInfo">Sende einen **:dart:** Emoji, um dein Glück zu versuchen.</string>
     <string name="DataSettings">Daten und Speicher</string>
     <string name="DataUsage">Daten- und Speichernutzung</string>
     <string name="DaysBold_few">**%1$d** Tage</string>
@@ -977,14 +986,19 @@
     <string name="DeleteTheme">Thema löschen</string>
     <string name="DeleteThemeAlert">Möchtest du wirklich dieses Thema löschen?</string>
     <string name="DeleteThemeTitle">Thema löschen</string>
+    <string name="DeleteTheseChatsBothSides">Chats löschen</string>
     <string name="DeleteThisChat">Diesen Chat löschen</string>
+    <string name="DeleteThisChatBothSides">Diesen Chat löschen</string>
     <string name="DeleteThisGroup">Diese Gruppe löschen</string>
     <string name="DescriptionInfo">Beschreibe deinen Kanal (optional).</string>
     <string name="DescriptionOptionalPlaceholder">Beschreibung (optional)</string>
     <string name="DescriptionPlaceholder">Beschreibung</string>
+    <string name="DeviceStorage">Gerätespeicher</string>
     <string name="Devices">Geräte</string>
     <string name="DialogPin">Anheften</string>
     <string name="DialogUnpin">Nicht mehr anheften</string>
+    <string name="DiceEmojiInfo">Sende ein %1$s Emoji, um dein Glück zu versuchen.</string>
+    <string name="DiceInfo2">**:würfel:**-Emoji senden, um zu würfeln</string>
     <string name="DidNotGetTheCode">Code nicht erhalten?</string>
     <string name="DidNotGetTheCodeSms">Code per SMS senden</string>
     <string name="DirectShare">Direktes Teilen</string>
@@ -1093,6 +1107,7 @@
     <string name="EnableAllStreamingInfo">Einige Videos können nicht gestreamt werden - z.B. alle Videos, die von Telegram für Android 4.7 und früher gesendet wurden.</string>
     <string name="EnableAnimations">Animationen aktivieren</string>
     <string name="EnableStreaming">Videos und Audios streamen</string>
+    <string name="EnabledNotifications">Aktivierte Benachrichtigungen</string>
     <string name="EnabledPasswordText">Du hast die zweistufige Bestätigung aktiviert.\10Wenn du dich bei Telegram anmeldest, brauchst du dein Passwort.</string>
     <string name="EncryptedChatStartedIncoming">Du bist dem geheimen Chat beigetreten.</string>
     <string name="EncryptedChatStartedOutgoing">%s ist deinem geheimen Chat beigetreten.</string>
@@ -1273,14 +1288,16 @@
     <string name="FilterEditItem">Bearbeiten</string>
     <string name="FilterExclude">Ausgeschlossene Chats</string>
     <string name="FilterExcludeArchived">Archivierte ausschliessen</string>
-    <string name="FilterExcludeInfo">Choose chats and types of chats that will not appear in this folder.</string>
+    <string name="FilterExcludeInfo">Wähle einzelne Chats und Chatarten, die in diesem Ordner nicht erscheinen sollen.</string>
     <string name="FilterExcludeMuted">Stummgeschaltete ausschliessen</string>
     <string name="FilterExcludeRead">Gelesene ausschliessen</string>
     <string name="FilterGroups">Gruppen</string>
     <string name="FilterInclude">Enthaltene Chats</string>
-    <string name="FilterIncludeInfo">Choose chats and types of chats that will appear in this folder.</string>
+    <string name="FilterIncludeInfo">Wähle einzelne Chats und Chatarten, die in diesem Ordner erscheinen sollen.</string>
     <string name="FilterMuted">Stumm</string>
     <string name="FilterNameHint">Ordnername</string>
+    <string name="FilterNameNonMuted">Nicht stumm</string>
+    <string name="FilterNameUnread">Ungelesen</string>
     <string name="FilterNeverShow">Chats ausschließen</string>
     <string name="FilterNew">Neuer Ordner</string>
     <string name="FilterNoChats">Keine Chats</string>
@@ -1310,7 +1327,7 @@
     <string name="FilterUnread">Ungelesen</string>
     <string name="Filters">Ordner</string>
     <string name="FiltersSetup">Bearbeiten</string>
-    <string name="FiltersSetupPinAlert">Set Up Folders</string>
+    <string name="FiltersSetupPinAlert">Ordner einrichten</string>
     <string name="FinalResults">Endergebnis</string>
     <string name="FingerprintHelp">Berührungssensor</string>
     <string name="FingerprintInfo">Fingerabdruck bestätigen </string>
@@ -1632,6 +1649,7 @@
     <string name="LocalDatabaseClearText">Möchtest du wirklich den Textnachrichten-Cache leeren?</string>
     <string name="LocalDatabaseClearTextTitle">Lokale Datenbank leeren</string>
     <string name="LocalDatabaseInfo">Zwischengespeicherte Textnachrichten werden entfernt und die Datenbank optimiert, um Speicherplatz zurückzuerhalten. Auf Null lässt sich die Größe jedoch nicht reduzieren, da die App einige Daten für den laufenden Betrieb benötigt.\10\10Hinweis: Der Vorgang kann mehrere Minuten dauern.</string>
+    <string name="LocalDatabaseSize">%s Telegrams lokale Datenbank</string>
     <string name="LocalDocumentCache">Dateien</string>
     <string name="LocalGifCache">GIFs</string>
     <string name="LocalMusicCache">Musik</string>
@@ -1995,6 +2013,7 @@
     <string name="NotificationsAddAnException">Eine Ausnahme hinzufügen</string>
     <string name="NotificationsAndSounds">Mitteilungen und Töne</string>
     <string name="NotificationsChannels">Kanäle</string>
+    <string name="NotificationsChartTitle">Benachrichtigungen</string>
     <string name="NotificationsCustom">Eigene</string>
     <string name="NotificationsCustomize">Anpassen</string>
     <string name="NotificationsDefaultOff">Standard (Aus)</string>
@@ -2075,6 +2094,7 @@
     <string name="Orange">Orange</string>
     <string name="OtherLoginCode">Dein Anmeldecode lautet **%1$s**. Gebe ihn in der Telegram-App ein, bei der du dich anmelden möchtest.\10\10Den Code niemals weitergeben.</string>
     <string name="OtherSessions">Aktive Sitzungen</string>
+    <string name="OtherStickers">Mehr Sticker</string>
     <string name="OtherWebSessions">Verbundene Webseiten</string>
     <string name="OutgoingCalls">Ausgehende Anrufe</string>
     <string name="P2PContacts">Meine Kontakte</string>
@@ -2410,7 +2430,7 @@
     <string name="PinMessageAlertTitle">Nachricht anheften</string>
     <string name="PinNotify">Mitglieder benachrichtigen</string>
     <string name="PinToTop">Oben anheften</string>
-    <string name="PinToTopLimitReached2">Sorry, you can only pin %1$s to the top in the main list. More chats can be pinned in Chat Folders and your Archive.</string>
+    <string name="PinToTopLimitReached2">Du kannst leider nur %1$s oben deiner Chatliste anheften. Mehr Chats können in Chat-Ordnern oder in deinem Archiv angeheftet werden.</string>
     <string name="Ping">Ping: %1$d ms</string>
     <string name="Pink">Rosa</string>
     <string name="PinnedMessage">Angeheftete Nachricht</string>
@@ -2437,6 +2457,7 @@
     <string name="PollCollapse">Zuklappen</string>
     <string name="PollExpand">Aufklappen</string>
     <string name="PollMultiple">Mehrfachauswahl</string>
+    <string name="PollQuestion">Frage der Abstimmung</string>
     <string name="PollQuiz">Quiz-Modus</string>
     <string name="PollResults">Umfrageergebnis</string>
     <string name="PollSelectOption">Erst eine Option wählen</string>
@@ -2526,6 +2547,7 @@
     <string name="ReEnterYourPasscode">Neuen Pincode erneut eingben</string>
     <string name="Recent">Letzte</string>
     <string name="RecentFiles">Letzte Dateien</string>
+    <string name="RecentFilesAZ">Files A-Z</string>
     <string name="RecentPosts">Kürzliche Beiträge</string>
     <string name="RecentStickers">Kürzlich benutzt</string>
     <string name="RecentlyViewed">Kürzlich angeschaut</string>
@@ -2666,8 +2688,10 @@
     <string name="SearchInSettings">Einstellungen durchsuchen</string>
     <string name="SearchMembers">Mitglieder suchen</string>
     <string name="SearchMessages">Nachrichten</string>
+    <string name="SearchMusic">Search music</string>
     <string name="SearchRecentFiles">Letzte Dateien suchen</string>
     <string name="SearchStickersHint">Sticker suchen</string>
+    <string name="SearchTrendingStickersHint">Angesagte Sticker durchsuchen</string>
     <string name="SecondsBold_few">**%1$d** Sekunden</string>
     <string name="SecondsBold_many">**%1$d** Sekunden</string>
     <string name="SecondsBold_one">**%1$d** Sekunde</string>
@@ -2704,6 +2728,7 @@
     <string name="SendContactToText">Möchtest du diesen Kontakt **%1$s** senden?</string>
     <string name="SendDayAt">\'Am\' d MMM \'um\' HH:mm \'senden\'</string>
     <string name="SendDayYearAt">\'Am\' d MMM yyyy \'um\' HH:mm \'senden\'</string>
+    <string name="SendDice">SENDEN</string>
     <string name="SendGameToGroupText">Möchtest du dieses Spiel mit **%1$s** teilen?</string>
     <string name="SendGameToText">Möchtest du dieses Spiel mit **%1$s** teilen?</string>
     <string name="SendGifPreview">GIF senden</string>
@@ -2809,6 +2834,7 @@
     <string name="SharedPhotosAndVideos">Bilder und Videos</string>
     <string name="SharedPlace">Ort</string>
     <string name="SharedVoiceTab2">Sprachnachrichten</string>
+    <string name="SharesPerPost">Weiterleitungen nach Beitrag</string>
     <string name="Shares_few">%1$sx geteilt</string>
     <string name="Shares_many">%1$sx geteilt</string>
     <string name="Shares_one">%1$sx geteilt</string>
@@ -2857,7 +2883,7 @@
     <string name="SmartNotificationsDisabled">Deaktiviert</string>
     <string name="SmartNotificationsInfo">%1$d / %2$s</string>
     <string name="SmsText">Sende dir eine SMS in %1$d:%2$02d</string>
-    <string name="SoftUserLimitAlert">Sobald du diese Gruppe zu einer Supergruppe erweitert hast, kannst du mehr Nutzer einladen.</string>
+    <string name="SoftUserLimitAlert">Mehr Mitglieder kannst du hinzufügen, sobald die Gruppe erstellt wurde.</string>
     <string name="SortBy">sortiert nach</string>
     <string name="SortFirstName">Vorname</string>
     <string name="SortLastName">Nachname</string>
@@ -2869,6 +2895,7 @@
     <string name="StartEncryptedChat">Geheimen Chat starten</string>
     <string name="StartMessaging">JETZT BEGINNEN</string>
     <string name="StartText">Bitte bestätige deine Landesvorwahl und deine Telefonnummer.</string>
+    <string name="StatisticOverview">Übersicht</string>
     <string name="Statistics">Statistiken</string>
     <string name="StickerSets_few">%1$s Sticker-Pakete</string>
     <string name="StickerSets_many">%1$s Sticker-Pakete</string>
@@ -2949,6 +2976,7 @@
     <string name="TapToSendLocation">Antippen, um diesen Standort zu senden</string>
     <string name="TapToViewAsList">Antippen für Listenansicht</string>
     <string name="Teal">Blaugrün</string>
+    <string name="TelegramCacheSize">%s Telegram Cache</string>
     <string name="TelegramContacts_few">%1$d Kontakte bei Telegram</string>
     <string name="TelegramContacts_many">%1$d Kontakte bei Telegram</string>
     <string name="TelegramContacts_one">%1$d Kontakt bei Telegram</string>
@@ -3045,18 +3073,21 @@
     <string name="TintShadows">TIEFEN</string>
     <string name="TodayAt">um</string>
     <string name="TodayAtFormatted">um %1$s</string>
+    <string name="TodayAtFormattedWithToday">heute um %1$s</string>
     <string name="TooManyCommunities">Zu viele Gruppen/Kanäle</string>
     <string name="TooManyCommunitiesHintCreate">Du bist Mitglied in zu vielen Gruppen und Kanälen. Bitte verlasse einige, damit du neue erstellen kannst.</string>
     <string name="TooManyCommunitiesHintEdit">Du bist aktuell Mitglied zu vieler Gruppen oder Kanäle. Aus technischen Gründen musst du erst einige verlassen, bevor du diese Einstellung in deinen Gruppen ändern kannst.</string>
     <string name="TooManyCommunitiesHintJoin">Du bist aktuell Mitglied zu vieler Gruppen oder Kanäle. Bitte einige verlassen, bevor du neuen beitreten kannst.</string>
     <string name="TooManyTries">Zu viele Versuche.\10Bitte erneut in %1$s versuchen.</string>
-    <string name="TopHoursChartTitle">Aufrufe nach Stunden (UTC)</string>
+    <string name="TopHoursChartTitle">Aufrufe nach Stunden (GMT)</string>
     <string name="TosAgeText">Tippe auf Zustimmen, um zu bestätigen, dass du mindestens %1$s oder älter bist.</string>
     <string name="TosAgeTitle">Altersverifikation</string>
     <string name="TosDecline">Tut uns sehr leid, aber in diesem Fall kannst du dich nicht bei Telegram registrieren.\10\10Im Gegensatz zu anderen, nutzen wir deine Daten nicht für die Ausrichtung von Werbung und verkaufen sie nicht an andere. Telegram speichert nur die Informationen, die es benötigt, um als funktionsreicher Cloud-Dienst aufzutreten. Im Bereich \'Privatsphäre &amp; Sicherheit\' kannst du festlegen, wie wir deine Daten verwenden.\10\10Wenn du allgemein nicht mit unseren bescheidenen Anforderungen einverstanden bist, wird es uns nicht möglich sein, dir diesen Dienst anzubieten.</string>
     <string name="TosDeclineDeleteAccount">Warnung! Das wird dein Telegram-Konto mit all deinen Daten aus der Telegram-Cloud unwiderruflich löschen.\10\10Wichtig: Du kannst jetzt abbrechen und deine Daten vor der Löschung noch exportieren. (Öffne dazu die aktuellste Version von Telegram Desktop &gt; Einstellungen &gt; Erweitert &gt; Telegram-Daten exportieren.)</string>
     <string name="TosUpdateDecline">Es tut uns sehr leid aber in diesem Fall müssen sich unsere Wege trennen. Im Gegensatz zu anderen, werden bei Telegram deine Daten nicht für Werbezielerfassungen oder sonstige kommerzielle Zwecke verwendet. Telegram speichert nur die Informationen, die es braucht, um dir einen funktionsreichen Cloud-Dienst anbieten zu können. Unter \'Privatsphäre &amp; Sicherheit\' kannst du festlegen, wie wir deine Daten verwenden (z.B. synchronisierte Kontakte löschen).\10\10Wenn du dennoch mit unseren bescheidenen Anforderungen nicht einverstanden bist, wird es uns nicht möglich sein, dir diesen Dienst anzubieten. Du kannst dein Konto jetzt löschen oder dich noch etwas umschauen und jederzeit später löschen, sofern du mit Telegram nicht zufrieden sein solltest.</string>
     <string name="TotalDataUsage">Insgesamt</string>
+    <string name="TotalDeviceFreeSize">%s frei</string>
+    <string name="TotalDeviceSize">%s Sonstige Daten</string>
     <string name="TurnPasswordOff">Passwort deaktivieren</string>
     <string name="TurnPasswordOffPassport">Warnung! Alle Daten in deinem Telegram Passport gehen verloren!</string>
     <string name="TurnPasswordOffQuestion">Ganz sicher dein Passwort deaktivieren?</string>
@@ -3225,6 +3256,7 @@
     <string name="ViewExceptions">Ausnahmen anzeigen</string>
     <string name="ViewPackPreview">Paket anzeigen</string>
     <string name="ViewsBySourceChartTitle">Aufrufe nach Herkunft</string>
+    <string name="ViewsPerPost">Aufrufe nach Beitrag</string>
     <string name="Views_few">%1$s Aufrufe</string>
     <string name="Views_many">%1$s Aufrufe</string>
     <string name="Views_one">%1$s Aufruf</string>

@@ -566,6 +566,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     } else {
                         PhotoPickerActivity.this.listView.setPadding(AndroidUtilities.dp(6.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(6.0f), AndroidUtilities.dp(50.0f));
                     }
+                    PhotoPickerActivity.this.listView.stopScroll();
+                    PhotoPickerActivity.this.layoutManager.scrollToPositionWithOffset(0, 0);
                     PhotoPickerActivity.this.listAdapter.notifyDataSetChanged();
                 } else if (i == 2) {
                     if (PhotoPickerActivity.this.delegate != null) {

@@ -14,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StatFs;
 import android.os.SystemClock;
-import android.text.TextUtils;
 import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -25,13 +24,11 @@ import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
-import androidx.core.view.inputmethod.InputContentInfoCompat;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
@@ -95,11 +92,9 @@ import org.telegram.ui.Cells.DrawerUserCell;
 import org.telegram.ui.Cells.LanguageCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.BlockingUpdateView;
-import org.telegram.ui.Components.ChatAttachAlertContactsLayout;
 import org.telegram.ui.Components.EmbedBottomSheet;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.PasscodeView;
-import org.telegram.ui.Components.PhonebookShareAlert;
 import org.telegram.ui.Components.PipRoundVideoView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SideMenultItemAnimator;
@@ -4421,24 +4416,24 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (r4 == 0) goto L_0x12a9
             int r4 = r4.size()
             if (r4 == r10) goto L_0x12c5
-            r4 = 2131626698(0x7f0e0aca, float:1.888064E38)
+            r4 = 2131626693(0x7f0e0ac5, float:1.888063E38)
             java.lang.String r5 = "SendContactToText"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             java.lang.String r5 = "selectAlertString"
             r0.putString(r5, r4)
-            r4 = 2131626676(0x7f0e0ab4, float:1.8880595E38)
+            r4 = 2131626671(0x7f0e0aaf, float:1.8880585E38)
             java.lang.String r5 = "SendContactToGroupText"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             java.lang.String r5 = "selectAlertStringGroup"
             r0.putString(r5, r4)
             goto L_0x12c5
         L_0x12a9:
-            r4 = 2131626698(0x7f0e0aca, float:1.888064E38)
+            r4 = 2131626693(0x7f0e0ac5, float:1.888063E38)
             java.lang.String r5 = "SendMessagesToText"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             java.lang.String r5 = "selectAlertString"
             r0.putString(r5, r4)
-            r4 = 2131626697(0x7f0e0ac9, float:1.8880638E38)
+            r4 = 2131626692(0x7f0e0ac4, float:1.8880627E38)
             java.lang.String r5 = "SendMessagesToGroupText"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             java.lang.String r5 = "selectAlertStringGroup"
@@ -4692,7 +4687,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x005b:
             r4 = r15
             r15 = r13
-            r7 = 2131626006(0x7f0e0816, float:1.8879236E38)
+            r7 = 2131626003(0x7f0e0813, float:1.887923E38)
             java.lang.String r8 = "OK"
             r10 = 0
             r11 = 1
@@ -4715,7 +4710,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r2 = "AppName"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            r1 = 2131626042(0x7f0e083a, float:1.887931E38)
+            r1 = 2131626039(0x7f0e0837, float:1.8879303E38)
             java.lang.Object[] r2 = new java.lang.Object[r11]
             r2[r12] = r36
             java.lang.String r3 = "OtherLoginCode"
@@ -5121,12 +5116,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r4 = "cantSendToChannels"
             r3.putBoolean(r4, r6)
             r3.putInt(r8, r6)
-            r4 = 2131626682(0x7f0e0aba, float:1.8880607E38)
+            r4 = 2131626677(0x7f0e0ab5, float:1.8880597E38)
             java.lang.String r8 = "SendGameToText"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r8, r4)
             java.lang.String r8 = "selectAlertString"
             r3.putString(r8, r4)
-            r4 = 2131626681(0x7f0e0ab9, float:1.8880605E38)
+            r4 = 2131626676(0x7f0e0ab4, float:1.8880595E38)
             java.lang.String r8 = "SendGameToGroupText"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r8, r4)
             java.lang.String r8 = "selectAlertStringGroup"
@@ -5375,7 +5370,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0276:
             r10 = r21
             java.lang.String r0 = "NoUsernameFound"
-            r2 = 2131625848(0x7f0e0778, float:1.8878916E38)
+            r2 = 2131625845(0x7f0e0775, float:1.887891E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r2)     // Catch:{ Exception -> 0x0289 }
             android.widget.Toast r0 = android.widget.Toast.makeText(r13, r0, r7)     // Catch:{ Exception -> 0x0289 }
             r0.show()     // Catch:{ Exception -> 0x0289 }
@@ -5569,18 +5564,18 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r12 = "FLOOD_WAIT"
             boolean r10 = r10.startsWith(r12)
             if (r10 == 0) goto L_0x00d1
-            r10 = 2131625280(0x7f0e0540, float:1.8877763E38)
+            r10 = 2131625277(0x7f0e053d, float:1.8877757E38)
             java.lang.String r12 = "FloodWait"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r11.setMessage(r10)
             goto L_0x00dd
         L_0x00d1:
-            r10 = 2131625515(0x7f0e062b, float:1.887824E38)
+            r10 = 2131625512(0x7f0e0628, float:1.8878234E38)
             java.lang.String r12 = "JoinToGroupErrorNotExist"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r11.setMessage(r10)
         L_0x00dd:
-            r10 = 2131626006(0x7f0e0816, float:1.8879236E38)
+            r10 = 2131626003(0x7f0e0813, float:1.887923E38)
             java.lang.String r12 = "OK"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r12, r10)
             r11.setPositiveButton(r10, r0)
@@ -5939,7 +5934,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0049:
             java.lang.StringBuilder r9 = new java.lang.StringBuilder
             r9.<init>()
-            r10 = 2131625081(0x7f0e0479, float:1.887736E38)
+            r10 = 2131625078(0x7f0e0476, float:1.8877354E38)
             java.lang.String r11 = "ErrorOccurred"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r9.append(r10)
@@ -6065,11 +6060,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r5 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r5)
         L_0x008e:
-            r5 = 2131626961(0x7f0e0bd1, float:1.8881173E38)
+            r5 = 2131626956(0x7f0e0bcc, float:1.8881163E38)
             java.lang.String r6 = "Theme"
             if (r0 != r1) goto L_0x00aa
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            r6 = 2131626981(0x7f0e0be5, float:1.8881214E38)
+            r6 = 2131626976(0x7f0e0be0, float:1.8881203E38)
             java.lang.String r7 = "ThemeNotSupported"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             org.telegram.ui.ActionBar.AlertDialog$Builder r5 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r4, r5, r6)
@@ -6077,7 +6072,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             goto L_0x00be
         L_0x00aa:
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            r6 = 2131626980(0x7f0e0be4, float:1.8881212E38)
+            r6 = 2131626975(0x7f0e0bdf, float:1.8881201E38)
             java.lang.String r7 = "ThemeNotFound"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             org.telegram.ui.ActionBar.AlertDialog$Builder r5 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r4, r5, r6)
@@ -6290,164 +6285,373 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         handleIntent(intent, true, false, false);
     }
 
-    public void didSelectDialogs(DialogsActivity dialogsActivity, ArrayList<Long> arrayList, CharSequence charSequence, boolean z) {
-        ChatActivity chatActivity;
-        int i;
-        String str;
-        DialogsActivity dialogsActivity2 = dialogsActivity;
-        ArrayList<Long> arrayList2 = arrayList;
-        ArrayList<TLRPC$User> arrayList3 = this.contactsToSend;
-        int i2 = 0;
-        int size = arrayList3 != null ? arrayList3.size() + 0 : 0;
-        if (this.videoPath != null) {
-            size++;
-        }
-        ArrayList<SendMessagesHelper.SendingMediaInfo> arrayList4 = this.photoPathsArray;
-        if (arrayList4 != null) {
-            size += arrayList4.size();
-        }
-        ArrayList<String> arrayList5 = this.documentsPathsArray;
-        if (arrayList5 != null) {
-            size += arrayList5.size();
-        }
-        ArrayList<Uri> arrayList6 = this.documentsUrisArray;
-        if (arrayList6 != null) {
-            size += arrayList6.size();
-        }
-        if (this.videoPath == null && this.photoPathsArray == null && this.documentsPathsArray == null && this.documentsUrisArray == null && this.sendingText != null) {
-            size++;
-        }
-        int i3 = 0;
-        while (true) {
-            boolean z2 = true;
-            if (i3 < arrayList.size()) {
-                long longValue = arrayList2.get(i3).longValue();
-                int i4 = this.currentAccount;
-                if (size <= 1) {
-                    z2 = false;
-                }
-                if (!AlertsCreator.checkSlowMode(this, i4, longValue, z2)) {
-                    i3++;
-                } else {
-                    return;
-                }
-            } else {
-                int currentAccount2 = dialogsActivity2 != null ? dialogsActivity.getCurrentAccount() : this.currentAccount;
-                if (arrayList.size() <= 1) {
-                    long longValue2 = arrayList2.get(0).longValue();
-                    int i5 = (int) longValue2;
-                    int i6 = (int) (longValue2 >> 32);
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("scrollToTopOnResume", true);
-                    if (!AndroidUtilities.isTablet()) {
-                        NotificationCenter.getInstance(currentAccount2).postNotificationName(NotificationCenter.closeChats, new Object[0]);
-                    }
-                    if (i5 == 0) {
-                        bundle.putInt("enc_id", i6);
-                    } else if (i5 > 0) {
-                        bundle.putInt("user_id", i5);
-                    } else if (i5 < 0) {
-                        bundle.putInt("chat_id", -i5);
-                    }
-                    if (MessagesController.getInstance(currentAccount2).checkCanOpenChat(bundle, dialogsActivity2)) {
-                        chatActivity = new ChatActivity(bundle);
-                    } else {
-                        return;
-                    }
-                } else {
-                    chatActivity = null;
-                }
-                ArrayList<TLRPC$User> arrayList7 = this.contactsToSend;
-                if (arrayList7 == null || arrayList7.size() != 1 || mainFragmentsStack.isEmpty()) {
-                    int i7 = 0;
-                    while (i7 < arrayList.size()) {
-                        long longValue3 = arrayList2.get(i7).longValue();
-                        AccountInstance instance = AccountInstance.getInstance(UserConfig.selectedAccount);
-                        if (chatActivity != null) {
-                            this.actionBarLayout.presentFragment(chatActivity, dialogsActivity2 != null, dialogsActivity2 == null, true, false);
-                            String str2 = this.videoPath;
-                            if (str2 != null) {
-                                chatActivity.openVideoEditor(str2, this.sendingText);
-                                this.sendingText = null;
-                            }
-                        }
-                        if (this.photoPathsArray != null) {
-                            String str3 = this.sendingText;
-                            if (str3 != null && str3.length() <= 1024 && this.photoPathsArray.size() == 1) {
-                                this.photoPathsArray.get(i2).caption = this.sendingText;
-                                this.sendingText = null;
-                            }
-                            i = 1024;
-                            SendMessagesHelper.prepareSendingMedia(instance, this.photoPathsArray, longValue3, (MessageObject) null, (InputContentInfoCompat) null, false, false, (MessageObject) null, true, 0);
-                        } else {
-                            i = 1024;
-                        }
-                        if (!(this.documentsPathsArray == null && this.documentsUrisArray == null)) {
-                            String str4 = this.sendingText;
-                            if (str4 != null && str4.length() <= i) {
-                                ArrayList<String> arrayList8 = this.documentsPathsArray;
-                                int size2 = arrayList8 != null ? arrayList8.size() : 0;
-                                ArrayList<Uri> arrayList9 = this.documentsUrisArray;
-                                if (size2 + (arrayList9 != null ? arrayList9.size() : 0) == 1) {
-                                    String str5 = this.sendingText;
-                                    this.sendingText = null;
-                                    str = str5;
-                                    SendMessagesHelper.prepareSendingDocuments(instance, this.documentsPathsArray, this.documentsOriginalPathsArray, this.documentsUrisArray, str, this.documentsMimeType, longValue3, (MessageObject) null, (InputContentInfoCompat) null, (MessageObject) null, true, 0);
-                                }
-                            }
-                            str = null;
-                            SendMessagesHelper.prepareSendingDocuments(instance, this.documentsPathsArray, this.documentsOriginalPathsArray, this.documentsUrisArray, str, this.documentsMimeType, longValue3, (MessageObject) null, (InputContentInfoCompat) null, (MessageObject) null, true, 0);
-                        }
-                        String str6 = this.sendingText;
-                        if (str6 != null) {
-                            SendMessagesHelper.prepareSendingText(instance, str6, longValue3, true, 0);
-                        }
-                        ArrayList<TLRPC$User> arrayList10 = this.contactsToSend;
-                        if (arrayList10 != null && !arrayList10.isEmpty()) {
-                            for (int i8 = 0; i8 < this.contactsToSend.size(); i8++) {
-                                SendMessagesHelper.getInstance(currentAccount2).sendMessage(this.contactsToSend.get(i8), longValue3, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
-                            }
-                        }
-                        if (!TextUtils.isEmpty(charSequence)) {
-                            SendMessagesHelper.prepareSendingText(instance, charSequence.toString(), longValue3, true, 0);
-                        }
-                        i7++;
-                        i2 = 0;
-                    }
-                } else {
-                    ArrayList<BaseFragment> arrayList11 = mainFragmentsStack;
-                    PhonebookShareAlert phonebookShareAlert = new PhonebookShareAlert(arrayList11.get(arrayList11.size() - 1), (ContactsController.Contact) null, (TLRPC$User) null, this.contactsToSendUri, (File) null, (String) null);
-                    phonebookShareAlert.setDelegate(new ChatAttachAlertContactsLayout.PhonebookShareAlertDelegate(chatActivity, arrayList2, currentAccount2) {
-                        private final /* synthetic */ ChatActivity f$1;
-                        private final /* synthetic */ ArrayList f$2;
-                        private final /* synthetic */ int f$3;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                        }
-
-                        public final void didSelectContact(TLRPC$User tLRPC$User, boolean z, int i) {
-                            LaunchActivity.this.lambda$didSelectDialogs$43$LaunchActivity(this.f$1, this.f$2, this.f$3, tLRPC$User, z, i);
-                        }
-                    });
-                    ArrayList<BaseFragment> arrayList12 = mainFragmentsStack;
-                    arrayList12.get(arrayList12.size() - 1).showDialog(phonebookShareAlert);
-                }
-                if (dialogsActivity2 != null && chatActivity == null) {
-                    dialogsActivity.finishFragment();
-                }
-                this.photoPathsArray = null;
-                this.videoPath = null;
-                this.sendingText = null;
-                this.documentsPathsArray = null;
-                this.documentsOriginalPathsArray = null;
-                this.contactsToSend = null;
-                this.contactsToSendUri = null;
-                return;
-            }
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x01d7  */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x01dc  */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x01e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x01e6  */
+    /* JADX WARNING: Removed duplicated region for block: B:116:0x01ea  */
+    /* JADX WARNING: Removed duplicated region for block: B:121:0x020f  */
+    /* JADX WARNING: Removed duplicated region for block: B:129:0x022b A[LOOP:2: B:127:0x0223->B:129:0x022b, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x024e  */
+    /* JADX WARNING: Removed duplicated region for block: B:143:0x025b A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x018b  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void didSelectDialogs(org.telegram.ui.DialogsActivity r27, java.util.ArrayList<java.lang.Long> r28, java.lang.CharSequence r29, boolean r30) {
+        /*
+            r26 = this;
+            r0 = r26
+            r1 = r27
+            r2 = r28
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r3 = r0.contactsToSend
+            r4 = 0
+            if (r3 == 0) goto L_0x0011
+            int r3 = r3.size()
+            int r3 = r3 + r4
+            goto L_0x0012
+        L_0x0011:
+            r3 = 0
+        L_0x0012:
+            java.lang.String r5 = r0.videoPath
+            if (r5 == 0) goto L_0x0018
+            int r3 = r3 + 1
+        L_0x0018:
+            java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$SendingMediaInfo> r5 = r0.photoPathsArray
+            if (r5 == 0) goto L_0x0021
+            int r5 = r5.size()
+            int r3 = r3 + r5
+        L_0x0021:
+            java.util.ArrayList<java.lang.String> r5 = r0.documentsPathsArray
+            if (r5 == 0) goto L_0x002a
+            int r5 = r5.size()
+            int r3 = r3 + r5
+        L_0x002a:
+            java.util.ArrayList<android.net.Uri> r5 = r0.documentsUrisArray
+            if (r5 == 0) goto L_0x0033
+            int r5 = r5.size()
+            int r3 = r3 + r5
+        L_0x0033:
+            java.lang.String r5 = r0.videoPath
+            if (r5 != 0) goto L_0x0049
+            java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$SendingMediaInfo> r5 = r0.photoPathsArray
+            if (r5 != 0) goto L_0x0049
+            java.util.ArrayList<java.lang.String> r5 = r0.documentsPathsArray
+            if (r5 != 0) goto L_0x0049
+            java.util.ArrayList<android.net.Uri> r5 = r0.documentsUrisArray
+            if (r5 != 0) goto L_0x0049
+            java.lang.String r5 = r0.sendingText
+            if (r5 == 0) goto L_0x0049
+            int r3 = r3 + 1
+        L_0x0049:
+            r5 = 0
+        L_0x004a:
+            int r6 = r28.size()
+            r7 = 1
+            if (r5 >= r6) goto L_0x006b
+            java.lang.Object r6 = r2.get(r5)
+            java.lang.Long r6 = (java.lang.Long) r6
+            long r8 = r6.longValue()
+            int r6 = r0.currentAccount
+            if (r3 <= r7) goto L_0x0060
+            goto L_0x0061
+        L_0x0060:
+            r7 = 0
+        L_0x0061:
+            boolean r6 = org.telegram.ui.Components.AlertsCreator.checkSlowMode(r0, r6, r8, r7)
+            if (r6 == 0) goto L_0x0068
+            return
+        L_0x0068:
+            int r5 = r5 + 1
+            goto L_0x004a
+        L_0x006b:
+            if (r1 == 0) goto L_0x0072
+            int r3 = r27.getCurrentAccount()
+            goto L_0x0074
+        L_0x0072:
+            int r3 = r0.currentAccount
+        L_0x0074:
+            int r5 = r28.size()
+            r6 = 0
+            if (r5 > r7) goto L_0x00ce
+            java.lang.Object r5 = r2.get(r4)
+            java.lang.Long r5 = (java.lang.Long) r5
+            long r8 = r5.longValue()
+            int r5 = (int) r8
+            r10 = 32
+            long r8 = r8 >> r10
+            int r9 = (int) r8
+            android.os.Bundle r8 = new android.os.Bundle
+            r8.<init>()
+            java.lang.String r10 = "scrollToTopOnResume"
+            r8.putBoolean(r10, r7)
+            boolean r10 = org.telegram.messenger.AndroidUtilities.isTablet()
+            if (r10 != 0) goto L_0x00a5
+            org.telegram.messenger.NotificationCenter r10 = org.telegram.messenger.NotificationCenter.getInstance(r3)
+            int r11 = org.telegram.messenger.NotificationCenter.closeChats
+            java.lang.Object[] r12 = new java.lang.Object[r4]
+            r10.postNotificationName(r11, r12)
+        L_0x00a5:
+            if (r5 == 0) goto L_0x00b8
+            if (r5 <= 0) goto L_0x00af
+            java.lang.String r9 = "user_id"
+            r8.putInt(r9, r5)
+            goto L_0x00bd
+        L_0x00af:
+            if (r5 >= 0) goto L_0x00bd
+            int r5 = -r5
+            java.lang.String r9 = "chat_id"
+            r8.putInt(r9, r5)
+            goto L_0x00bd
+        L_0x00b8:
+            java.lang.String r5 = "enc_id"
+            r8.putInt(r5, r9)
+        L_0x00bd:
+            org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r3)
+            boolean r5 = r5.checkCanOpenChat(r8, r1)
+            if (r5 != 0) goto L_0x00c8
+            return
+        L_0x00c8:
+            org.telegram.ui.ChatActivity r5 = new org.telegram.ui.ChatActivity
+            r5.<init>(r8)
+            goto L_0x00cf
+        L_0x00ce:
+            r5 = r6
+        L_0x00cf:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r8 = r0.contactsToSend
+            if (r8 == 0) goto L_0x0115
+            int r8 = r8.size()
+            if (r8 != r7) goto L_0x0115
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r8 = mainFragmentsStack
+            boolean r8 = r8.isEmpty()
+            if (r8 != 0) goto L_0x0115
+            org.telegram.ui.Components.PhonebookShareAlert r4 = new org.telegram.ui.Components.PhonebookShareAlert
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r8 = mainFragmentsStack
+            int r9 = r8.size()
+            int r9 = r9 - r7
+            java.lang.Object r8 = r8.get(r9)
+            r10 = r8
+            org.telegram.ui.ActionBar.BaseFragment r10 = (org.telegram.ui.ActionBar.BaseFragment) r10
+            r11 = 0
+            r12 = 0
+            android.net.Uri r13 = r0.contactsToSendUri
+            r14 = 0
+            r15 = 0
+            r9 = r4
+            r9.<init>(r10, r11, r12, r13, r14, r15)
+            org.telegram.ui.-$$Lambda$LaunchActivity$m8ZmVX-T4i8xVmIqL49lKSr8rMc r8 = new org.telegram.ui.-$$Lambda$LaunchActivity$m8ZmVX-T4i8xVmIqL49lKSr8rMc
+            r8.<init>(r5, r2, r3)
+            r4.setDelegate(r8)
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r2 = mainFragmentsStack
+            int r3 = r2.size()
+            int r3 = r3 - r7
+            java.lang.Object r2 = r2.get(r3)
+            org.telegram.ui.ActionBar.BaseFragment r2 = (org.telegram.ui.ActionBar.BaseFragment) r2
+            r2.showDialog(r4)
+            goto L_0x0260
+        L_0x0115:
+            r8 = 0
+        L_0x0116:
+            int r9 = r28.size()
+            if (r8 >= r9) goto L_0x0260
+            java.lang.Object r9 = r2.get(r8)
+            java.lang.Long r9 = (java.lang.Long) r9
+            long r23 = r9.longValue()
+            int r9 = org.telegram.messenger.UserConfig.selectedAccount
+            org.telegram.messenger.AccountInstance r25 = org.telegram.messenger.AccountInstance.getInstance(r9)
+            r15 = 1024(0x400, float:1.435E-42)
+            if (r5 == 0) goto L_0x014e
+            org.telegram.ui.ActionBar.ActionBarLayout r9 = r0.actionBarLayout
+            if (r1 == 0) goto L_0x0136
+            r11 = 1
+            goto L_0x0137
+        L_0x0136:
+            r11 = 0
+        L_0x0137:
+            if (r1 != 0) goto L_0x013b
+            r12 = 1
+            goto L_0x013c
+        L_0x013b:
+            r12 = 0
+        L_0x013c:
+            r13 = 1
+            r14 = 0
+            r10 = r5
+            r9.presentFragment(r10, r11, r12, r13, r14)
+            java.lang.String r9 = r0.videoPath
+            if (r9 == 0) goto L_0x0185
+            java.lang.String r10 = r0.sendingText
+            r5.openVideoEditor(r9, r10)
+            r0.sendingText = r6
+            goto L_0x0185
+        L_0x014e:
+            java.lang.String r9 = r0.videoPath
+            if (r9 == 0) goto L_0x0185
+            java.lang.String r9 = r0.sendingText
+            if (r9 == 0) goto L_0x0162
+            int r9 = r9.length()
+            if (r9 > r15) goto L_0x0162
+            java.lang.String r9 = r0.sendingText
+            r0.sendingText = r6
+            r14 = r9
+            goto L_0x0163
+        L_0x0162:
+            r14 = r6
+        L_0x0163:
+            java.util.ArrayList r12 = new java.util.ArrayList
+            r12.<init>()
+            java.lang.String r9 = r0.videoPath
+            r12.add(r9)
+            r13 = 0
+            r9 = 0
+            r18 = 0
+            r19 = 0
+            r20 = 0
+            r21 = 1
+            r22 = 0
+            r10 = r25
+            r11 = r12
+            r6 = 1024(0x400, float:1.435E-42)
+            r15 = r9
+            r16 = r23
+            org.telegram.messenger.SendMessagesHelper.prepareSendingDocuments(r10, r11, r12, r13, r14, r15, r16, r18, r19, r20, r21, r22)
+            goto L_0x0187
+        L_0x0185:
+            r6 = 1024(0x400, float:1.435E-42)
+        L_0x0187:
+            java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$SendingMediaInfo> r9 = r0.photoPathsArray
+            if (r9 == 0) goto L_0x01c1
+            java.lang.String r9 = r0.sendingText
+            if (r9 == 0) goto L_0x01ac
+            int r9 = r9.length()
+            if (r9 > r6) goto L_0x01ac
+            java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$SendingMediaInfo> r9 = r0.photoPathsArray
+            int r9 = r9.size()
+            if (r9 != r7) goto L_0x01ac
+            java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$SendingMediaInfo> r9 = r0.photoPathsArray
+            java.lang.Object r9 = r9.get(r4)
+            org.telegram.messenger.SendMessagesHelper$SendingMediaInfo r9 = (org.telegram.messenger.SendMessagesHelper.SendingMediaInfo) r9
+            java.lang.String r10 = r0.sendingText
+            r9.caption = r10
+            r9 = 0
+            r0.sendingText = r9
+        L_0x01ac:
+            java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$SendingMediaInfo> r11 = r0.photoPathsArray
+            r14 = 0
+            r15 = 0
+            r16 = 0
+            r17 = 0
+            r18 = 0
+            r19 = 1
+            r20 = 0
+            r10 = r25
+            r12 = r23
+            org.telegram.messenger.SendMessagesHelper.prepareSendingMedia(r10, r11, r12, r14, r15, r16, r17, r18, r19, r20)
+        L_0x01c1:
+            java.util.ArrayList<java.lang.String> r9 = r0.documentsPathsArray
+            if (r9 != 0) goto L_0x01c9
+            java.util.ArrayList<android.net.Uri> r9 = r0.documentsUrisArray
+            if (r9 == 0) goto L_0x020b
+        L_0x01c9:
+            java.lang.String r9 = r0.sendingText
+            if (r9 == 0) goto L_0x01f1
+            int r9 = r9.length()
+            if (r9 > r6) goto L_0x01f1
+            java.util.ArrayList<java.lang.String> r6 = r0.documentsPathsArray
+            if (r6 == 0) goto L_0x01dc
+            int r6 = r6.size()
+            goto L_0x01dd
+        L_0x01dc:
+            r6 = 0
+        L_0x01dd:
+            java.util.ArrayList<android.net.Uri> r9 = r0.documentsUrisArray
+            if (r9 == 0) goto L_0x01e6
+            int r9 = r9.size()
+            goto L_0x01e7
+        L_0x01e6:
+            r9 = 0
+        L_0x01e7:
+            int r6 = r6 + r9
+            if (r6 != r7) goto L_0x01f1
+            java.lang.String r6 = r0.sendingText
+            r9 = 0
+            r0.sendingText = r9
+            r14 = r6
+            goto L_0x01f2
+        L_0x01f1:
+            r14 = 0
+        L_0x01f2:
+            java.util.ArrayList<java.lang.String> r11 = r0.documentsPathsArray
+            java.util.ArrayList<java.lang.String> r12 = r0.documentsOriginalPathsArray
+            java.util.ArrayList<android.net.Uri> r13 = r0.documentsUrisArray
+            java.lang.String r15 = r0.documentsMimeType
+            r18 = 0
+            r19 = 0
+            r20 = 0
+            r21 = 1
+            r22 = 0
+            r10 = r25
+            r16 = r23
+            org.telegram.messenger.SendMessagesHelper.prepareSendingDocuments(r10, r11, r12, r13, r14, r15, r16, r18, r19, r20, r21, r22)
+        L_0x020b:
+            java.lang.String r11 = r0.sendingText
+            if (r11 == 0) goto L_0x0218
+            r14 = 1
+            r15 = 0
+            r10 = r25
+            r12 = r23
+            org.telegram.messenger.SendMessagesHelper.prepareSendingText(r10, r11, r12, r14, r15)
+        L_0x0218:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r6 = r0.contactsToSend
+            if (r6 == 0) goto L_0x0248
+            boolean r6 = r6.isEmpty()
+            if (r6 != 0) goto L_0x0248
+            r6 = 0
+        L_0x0223:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r9 = r0.contactsToSend
+            int r9 = r9.size()
+            if (r6 >= r9) goto L_0x0248
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r9 = r0.contactsToSend
+            java.lang.Object r9 = r9.get(r6)
+            r11 = r9
+            org.telegram.tgnet.TLRPC$User r11 = (org.telegram.tgnet.TLRPC$User) r11
+            org.telegram.messenger.SendMessagesHelper r10 = org.telegram.messenger.SendMessagesHelper.getInstance(r3)
+            r14 = 0
+            r15 = 0
+            r16 = 0
+            r17 = 1
+            r18 = 0
+            r12 = r23
+            r10.sendMessage((org.telegram.tgnet.TLRPC$User) r11, (long) r12, (org.telegram.messenger.MessageObject) r14, (org.telegram.tgnet.TLRPC$ReplyMarkup) r15, (java.util.HashMap<java.lang.String, java.lang.String>) r16, (boolean) r17, (int) r18)
+            int r6 = r6 + 1
+            goto L_0x0223
+        L_0x0248:
+            boolean r6 = android.text.TextUtils.isEmpty(r29)
+            if (r6 != 0) goto L_0x025b
+            java.lang.String r11 = r29.toString()
+            r14 = 1
+            r15 = 0
+            r10 = r25
+            r12 = r23
+            org.telegram.messenger.SendMessagesHelper.prepareSendingText(r10, r11, r12, r14, r15)
+        L_0x025b:
+            int r8 = r8 + 1
+            r6 = 0
+            goto L_0x0116
+        L_0x0260:
+            if (r1 == 0) goto L_0x0267
+            if (r5 != 0) goto L_0x0267
+            r27.finishFragment()
+        L_0x0267:
+            r1 = 0
+            r0.photoPathsArray = r1
+            r0.videoPath = r1
+            r0.sendingText = r1
+            r0.documentsPathsArray = r1
+            r0.documentsOriginalPathsArray = r1
+            r0.contactsToSend = r1
+            r0.contactsToSendUri = r1
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.LaunchActivity.didSelectDialogs(org.telegram.ui.DialogsActivity, java.util.ArrayList, java.lang.CharSequence, boolean):void");
     }
 
     public /* synthetic */ void lambda$didSelectDialogs$43$LaunchActivity(ChatActivity chatActivity, ArrayList arrayList, int i, TLRPC$User tLRPC$User, boolean z, int i2) {
@@ -6869,7 +7073,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r5 = "AppName"
             r6 = 3
             r7 = 2
-            r8 = 2131626006(0x7f0e0816, float:1.8879236E38)
+            r8 = 2131626003(0x7f0e0813, float:1.887923E38)
             java.lang.String r9 = "OK"
             r10 = 0
             r11 = 1
@@ -6898,7 +7102,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (r1 == r7) goto L_0x00b2
             int r1 = r13.intValue()
             if (r1 == r6) goto L_0x00b2
-            r1 = 2131625746(0x7f0e0712, float:1.8878709E38)
+            r1 = 2131625743(0x7f0e070f, float:1.8878703E38)
             java.lang.String r4 = "MoreInfo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             org.telegram.ui.-$$Lambda$LaunchActivity$bF2RAMQkjS-XZtlAJEgLJHkP4ac r4 = new org.telegram.ui.-$$Lambda$LaunchActivity$bF2RAMQkjS-XZtlAJEgLJHkP4ac
@@ -6908,7 +7112,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             int r14 = r13.intValue()
             r1 = 5
             if (r14 != r1) goto L_0x00ce
-            r13 = 2131625853(0x7f0e077d, float:1.8878926E38)
+            r13 = 2131625850(0x7f0e077a, float:1.887892E38)
             java.lang.String r14 = "NobodyLikesSpam3"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r0.setMessage(r13)
@@ -6918,7 +7122,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00ce:
             int r14 = r13.intValue()
             if (r14 != 0) goto L_0x00e9
-            r13 = 2131625851(0x7f0e077b, float:1.8878922E38)
+            r13 = 2131625848(0x7f0e0778, float:1.8878916E38)
             java.lang.String r14 = "NobodyLikesSpam1"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r0.setMessage(r13)
@@ -6928,7 +7132,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00e9:
             int r14 = r13.intValue()
             if (r14 != r11) goto L_0x0103
-            r13 = 2131625852(0x7f0e077c, float:1.8878924E38)
+            r13 = 2131625849(0x7f0e0779, float:1.8878918E38)
             java.lang.String r14 = "NobodyLikesSpam2"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r0.setMessage(r13)
@@ -6948,7 +7152,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (r13 == 0) goto L_0x0135
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setPositiveButton(r13, r10)
-            r13 = 2131625609(0x7f0e0689, float:1.887843E38)
+            r13 = 2131625606(0x7f0e0686, float:1.8878425E38)
             java.lang.String r14 = "LogOut"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             org.telegram.ui.-$$Lambda$LaunchActivity$zZysRuGcsEomhTOcorktwP65b_E r14 = new org.telegram.ui.-$$Lambda$LaunchActivity$zZysRuGcsEomhTOcorktwP65b_E
@@ -6962,11 +7166,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x013d:
             int r13 = r13.intValue()
             if (r13 != r6) goto L_0x0169
-            r13 = 2131626466(0x7f0e09e2, float:1.888017E38)
+            r13 = 2131626462(0x7f0e09de, float:1.888016E38)
             java.lang.String r14 = "Proxy"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r0.setTitle(r13)
-            r13 = 2131627114(0x7f0e0c6a, float:1.8881483E38)
+            r13 = 2131627109(0x7f0e0CLASSNAME, float:1.8881473E38)
             java.lang.String r14 = "UseProxyTelegramError"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r0.setMessage(r13)
@@ -6998,13 +7202,13 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r15.setTitle(r0)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r15.setPositiveButton(r0, r10)
-            r0 = 2131626769(0x7f0e0b11, float:1.8880784E38)
+            r0 = 2131626764(0x7f0e0b0c, float:1.8880773E38)
             java.lang.String r1 = "ShareYouLocationUnableManually"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.ui.-$$Lambda$LaunchActivity$q-CXmSfWmpKLmI8IZ1k-863-aIA r1 = new org.telegram.ui.-$$Lambda$LaunchActivity$q-CXmSfWmpKLmI8IZ1k-863-aIA
             r1.<init>(r13, r14)
             r15.setNegativeButton(r0, r1)
-            r13 = 2131626768(0x7f0e0b10, float:1.8880782E38)
+            r13 = 2131626763(0x7f0e0b0b, float:1.8880771E38)
             java.lang.String r14 = "ShareYouLocationUnable"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r15.setMessage(r13)
@@ -7126,11 +7330,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.BaseFragment r4 = (org.telegram.ui.ActionBar.BaseFragment) r4
             org.telegram.ui.ActionBar.AlertDialog$Builder r5 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r5.<init>((android.content.Context) r12)
-            r6 = 2131627082(0x7f0e0c4a, float:1.8881418E38)
+            r6 = 2131627077(0x7f0e0CLASSNAME, float:1.8881408E38)
             java.lang.String r7 = "UpdateContactsTitle"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r5.setTitle(r6)
-            r6 = 2131627081(0x7f0e0CLASSNAME, float:1.8881416E38)
+            r6 = 2131627076(0x7f0e0CLASSNAME, float:1.8881406E38)
             java.lang.String r7 = "UpdateContactsMessage"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r5.setMessage(r6)
@@ -7642,7 +7846,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.AlertDialog$Builder r7 = new org.telegram.ui.ActionBar.AlertDialog$Builder     // Catch:{ Exception -> 0x0115 }
             r7.<init>((android.content.Context) r1)     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r8 = r1.systemLocaleStrings     // Catch:{ Exception -> 0x0115 }
-            r9 = 2131624712(0x7f0e0308, float:1.8876611E38)
+            r9 = 2131624711(0x7f0e0307, float:1.887661E38)
             java.lang.String r8 = r1.getStringForLanguageAlert(r8, r2, r9)     // Catch:{ Exception -> 0x0115 }
             r7.setTitle(r8)     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r8 = r1.englishLocaleStrings     // Catch:{ Exception -> 0x0115 }
@@ -7657,7 +7861,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.messenger.LocaleController$LocaleInfo[] r11 = new org.telegram.messenger.LocaleController.LocaleInfo[r8]     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r12 = r1.systemLocaleStrings     // Catch:{ Exception -> 0x0115 }
             java.lang.String r13 = "English"
-            r14 = 2131625070(0x7f0e046e, float:1.8877338E38)
+            r14 = 2131625067(0x7f0e046b, float:1.8877331E38)
             java.lang.String r12 = r1.getStringForLanguageAlert(r12, r13, r14)     // Catch:{ Exception -> 0x0115 }
             if (r5 == 0) goto L_0x0056
             r13 = r4
@@ -7728,7 +7932,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.Cells.LanguageCell r3 = new org.telegram.ui.Cells.LanguageCell     // Catch:{ Exception -> 0x0115 }
             r3.<init>(r1, r6)     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r4 = r1.systemLocaleStrings     // Catch:{ Exception -> 0x0115 }
-            r5 = 2131624713(0x7f0e0309, float:1.8876613E38)
+            r5 = 2131624712(0x7f0e0308, float:1.8876611E38)
             java.lang.String r4 = r1.getStringForLanguageAlert(r4, r0, r5)     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.englishLocaleStrings     // Catch:{ Exception -> 0x0115 }
             java.lang.String r0 = r1.getStringForLanguageAlert(r6, r0, r5)     // Catch:{ Exception -> 0x0115 }
@@ -7741,7 +7945,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r2.addView(r3, r0)     // Catch:{ Exception -> 0x0115 }
             r7.setView(r2)     // Catch:{ Exception -> 0x0115 }
             java.lang.String r0 = "OK"
-            r2 = 2131626006(0x7f0e0816, float:1.8879236E38)
+            r2 = 2131626003(0x7f0e0813, float:1.887923E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r2)     // Catch:{ Exception -> 0x0115 }
             org.telegram.ui.-$$Lambda$LaunchActivity$0kAJMcwHL3BemO-ZzCrDhD7Syb0 r2 = new org.telegram.ui.-$$Lambda$LaunchActivity$0kAJMcwHL3BemO-ZzCrDhD7Syb0     // Catch:{ Exception -> 0x0115 }
             r2.<init>(r10)     // Catch:{ Exception -> 0x0115 }

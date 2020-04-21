@@ -109,8 +109,7 @@ public class BottomSheet extends Dialog {
     /* access modifiers changed from: private */
     public DialogInterface.OnClickListener onClickListener;
     protected Interpolator openInterpolator = CubicBezierInterpolator.EASE_OUT_QUINT;
-    /* access modifiers changed from: protected */
-    public Drawable shadowDrawable;
+    protected Drawable shadowDrawable;
     private boolean showWithoutAnimation;
     protected Runnable startAnimationRunnable;
     /* access modifiers changed from: private */

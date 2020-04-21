@@ -701,7 +701,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131626715(0x7f0e0adb, float:1.8880674E38)
+                r8 = 2131626710(0x7f0e0ad6, float:1.8880664E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -729,7 +729,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131626719(0x7f0e0adf, float:1.8880682E38)
+                r8 = 2131626714(0x7f0e0ada, float:1.8880672E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -847,14 +847,14 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 int r1 = r0.currentType
                 if (r1 != r3) goto L_0x02f5
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131624941(0x7f0e03ed, float:1.8877076E38)
+                r2 = 2131624938(0x7f0e03ea, float:1.887707E38)
                 java.lang.String r3 = "DidNotGetTheCodeSms"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
                 goto L_0x0303
             L_0x02f5:
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131624940(0x7f0e03ec, float:1.8877074E38)
+                r2 = 2131624937(0x7f0e03e9, float:1.8877068E38)
                 java.lang.String r3 = "DidNotGetTheCode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
@@ -1653,7 +1653,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                                 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
                                                 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                                 android.widget.TextView r2 = r2.timeText
-                                                r3 = 2131626834(0x7f0e0b52, float:1.8880915E38)
+                                                r3 = 2131626829(0x7f0e0b4d, float:1.8880905E38)
                                                 java.lang.Object[] r4 = new java.lang.Object[r6]
                                                 java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                                 r4[r5] = r0
@@ -1786,7 +1786,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                                 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
                                                 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                                 android.widget.TextView r0 = r0.timeText
-                                                r1 = 2131626711(0x7f0e0ad7, float:1.8880666E38)
+                                                r1 = 2131626706(0x7f0e0ad2, float:1.8880656E38)
                                                 java.lang.String r2 = "SendingSms"
                                                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                                 r0.setText(r1)

@@ -1,6 +1,5 @@
 package org.telegram.messenger;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -137,7 +136,6 @@ import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.StickerSetBulletinLayout;
 import org.telegram.ui.Components.StickersArchiveAlert;
 import org.telegram.ui.Components.TextStyleSpan;
-import org.telegram.ui.Components.TrendingStickersAlert;
 import org.telegram.ui.Components.URLSpanReplacement;
 
 public class MediaDataController extends BaseController {
@@ -3332,13 +3330,7 @@ public class MediaDataController extends BaseController {
         loadArchivedStickersCount(i, false);
         getNotificationCenter().postNotificationName(NotificationCenter.needAddArchivedStickers, tLRPC$TL_messages_stickerSetInstallResultArchive.sets);
         if (baseFragment != null && baseFragment.getParentActivity() != null) {
-            StickersArchiveAlert stickersArchiveAlert = new StickersArchiveAlert(baseFragment.getParentActivity(), z ? baseFragment : null, tLRPC$TL_messages_stickerSetInstallResultArchive.sets);
-            Dialog visibleDialog = baseFragment.getVisibleDialog();
-            if (visibleDialog instanceof TrendingStickersAlert) {
-                ((TrendingStickersAlert) visibleDialog).getLayout().showStickersArchiveAlert(stickersArchiveAlert);
-            } else {
-                baseFragment.showDialog(stickersArchiveAlert.create());
-            }
+            baseFragment.showDialog(new StickersArchiveAlert(baseFragment.getParentActivity(), z ? baseFragment : null, tLRPC$TL_messages_stickerSetInstallResultArchive.sets).create());
         }
     }
 
@@ -5057,7 +5049,7 @@ public class MediaDataController extends BaseController {
             android.content.pm.ShortcutInfo$Builder r10 = new android.content.pm.ShortcutInfo$Builder     // Catch:{ all -> 0x02b3 }
             android.content.Context r11 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02b3 }
             r10.<init>(r11, r9)     // Catch:{ all -> 0x02b3 }
-            r11 = 2131625773(0x7f0e072d, float:1.8878763E38)
+            r11 = 2131625770(0x7f0e072a, float:1.8878757E38)
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r11)     // Catch:{ all -> 0x02b3 }
             android.content.pm.ShortcutInfo$Builder r10 = r10.setShortLabel(r12)     // Catch:{ all -> 0x02b3 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r11)     // Catch:{ all -> 0x02b3 }
@@ -5878,7 +5870,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x023b }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131626612(0x7f0e0a74, float:1.8880465E38)
+            r9 = 2131626607(0x7f0e0a6f, float:1.8880455E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x023b }
             r9 = r4
             r10 = 1

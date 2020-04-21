@@ -278,7 +278,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     public /* synthetic */ void lambda$createView$2$StickersActivity(Context context, View view, int i) {
         if (i < this.stickersStartRow || i >= this.stickersEndRow || getParentActivity() == null) {
             if (i == this.featuredRow) {
-                showDialog(new TrendingStickersAlert(context, this, new TrendingStickersLayout(context, new TrendingStickersLayout.Delegate() {
+                new TrendingStickersAlert(context, this, new TrendingStickersLayout(context, new TrendingStickersLayout.Delegate() {
                     public void onStickerSetAdd(TLRPC$StickerSetCovered tLRPC$StickerSetCovered, boolean z) {
                         MediaDataController.getInstance(StickersActivity.this.currentAccount).toggleStickerSet(StickersActivity.this.getParentActivity(), tLRPC$StickerSetCovered, 2, StickersActivity.this, false, false);
                     }
@@ -286,7 +286,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     public void onStickerSetRemove(TLRPC$StickerSetCovered tLRPC$StickerSetCovered) {
                         MediaDataController.getInstance(StickersActivity.this.currentAccount).toggleStickerSet(StickersActivity.this.getParentActivity(), tLRPC$StickerSetCovered, 0, StickersActivity.this, false, false);
                     }
-                })));
+                })).show();
             } else if (i == this.archivedRow) {
                 presentFragment(new ArchivedStickersActivity(this.currentType));
             } else if (i == this.masksRow) {

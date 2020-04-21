@@ -127,7 +127,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         return 1;
     }
 
-    static /* synthetic */ int access$1010(ChatAttachAlertPollLayout chatAttachAlertPollLayout) {
+    static /* synthetic */ int access$1110(ChatAttachAlertPollLayout chatAttachAlertPollLayout) {
         int i = chatAttachAlertPollLayout.answersCount;
         chatAttachAlertPollLayout.answersCount = i - 1;
         return i;
@@ -223,7 +223,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
             public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int i) {
                 AnonymousClass1 r2 = new LinearSmoothScroller(recyclerView.getContext()) {
                     public int calculateDyToMakeVisible(View view, int i) {
-                        return super.calculateDyToMakeVisible(view, i) - (ChatAttachAlertPollLayout.this.listView.getPaddingTop() - AndroidUtilities.dp(7.0f));
+                        return super.calculateDyToMakeVisible(view, i) - (ChatAttachAlertPollLayout.this.topPadding - AndroidUtilities.dp(7.0f));
                     }
 
                     /* access modifiers changed from: protected */
@@ -474,10 +474,10 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
 
     /* access modifiers changed from: package-private */
     public int getCurrentItemTop() {
-        if (this.listView.getChildCount() <= 0) {
+        View childAt;
+        if (this.listView.getChildCount() <= 0 || (childAt = this.listView.getChildAt(1)) == null) {
             return Integer.MAX_VALUE;
         }
-        View childAt = this.listView.getChildAt(1);
         RecyclerListView.Holder holder = (RecyclerListView.Holder) this.listView.findContainingViewHolder(childAt);
         int y = ((int) childAt.getY()) - AndroidUtilities.dp(8.0f);
         int i = (y <= 0 || holder == null || holder.getAdapterPosition() != 1) ? 0 : y;
@@ -577,7 +577,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
 
     /* access modifiers changed from: package-private */
     public void scrollToTop() {
-        this.listView.smoothScrollToPosition(0);
+        this.listView.smoothScrollToPosition(1);
     }
 
     private String getFixedString(String str) {
@@ -866,6 +866,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
             int itemViewType = viewHolder.getItemViewType();
+            int i2 = 3;
             boolean z = true;
             if (itemViewType != 0) {
                 boolean z2 = false;
@@ -873,19 +874,19 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                     TextCheckCell textCheckCell = (TextCheckCell) viewHolder.itemView;
                     if (i == ChatAttachAlertPollLayout.this.anonymousRow) {
                         String string = LocaleController.getString("PollAnonymous", NUM);
-                        boolean access$1200 = ChatAttachAlertPollLayout.this.anonymousPoll;
+                        boolean access$1300 = ChatAttachAlertPollLayout.this.anonymousPoll;
                         if (!(ChatAttachAlertPollLayout.this.multipleRow == -1 && ChatAttachAlertPollLayout.this.quizRow == -1)) {
                             z2 = true;
                         }
-                        textCheckCell.setTextAndCheck(string, access$1200, z2);
+                        textCheckCell.setTextAndCheck(string, access$1300, z2);
                         textCheckCell.setEnabled(true, (ArrayList<Animator>) null);
                     } else if (i == ChatAttachAlertPollLayout.this.multipleRow) {
                         String string2 = LocaleController.getString("PollMultiple", NUM);
-                        boolean access$1500 = ChatAttachAlertPollLayout.this.multipleChoise;
+                        boolean access$1600 = ChatAttachAlertPollLayout.this.multipleChoise;
                         if (ChatAttachAlertPollLayout.this.quizRow != -1) {
                             z2 = true;
                         }
-                        textCheckCell.setTextAndCheck(string2, access$1500, z2);
+                        textCheckCell.setTextAndCheck(string2, access$1600, z2);
                         textCheckCell.setEnabled(true, (ArrayList<Animator>) null);
                     } else if (i == ChatAttachAlertPollLayout.this.quizRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("PollQuiz", NUM), ChatAttachAlertPollLayout.this.quizPoll, false);
@@ -924,8 +925,16 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
             } else {
                 HeaderCell headerCell = (HeaderCell) viewHolder.itemView;
                 if (i == ChatAttachAlertPollLayout.this.questionHeaderRow) {
+                    headerCell.getTextView().setGravity(19);
                     headerCell.setText(LocaleController.getString("PollQuestion", NUM));
-                } else if (i == ChatAttachAlertPollLayout.this.answerHeaderRow) {
+                    return;
+                }
+                TextView textView = headerCell.getTextView();
+                if (LocaleController.isRTL) {
+                    i2 = 5;
+                }
+                textView.setGravity(i2 | 16);
+                if (i == ChatAttachAlertPollLayout.this.answerHeaderRow) {
                     if (ChatAttachAlertPollLayout.this.quizOnly == 1) {
                         headerCell.setText(LocaleController.getString("QuizAnswers", NUM));
                     } else {
@@ -1135,14 +1144,14 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 RecyclerView.ViewHolder findContainingViewHolder = ChatAttachAlertPollLayout.this.listView.findContainingViewHolder(pollEditTextCell);
                 if (findContainingViewHolder != null && (adapterPosition = findContainingViewHolder.getAdapterPosition()) != -1) {
                     ChatAttachAlertPollLayout.this.listView.setItemAnimator(ChatAttachAlertPollLayout.this.itemAnimator);
-                    int access$1900 = adapterPosition - ChatAttachAlertPollLayout.this.answerStartRow;
+                    int access$2000 = adapterPosition - ChatAttachAlertPollLayout.this.answerStartRow;
                     ChatAttachAlertPollLayout.this.listAdapter.notifyItemRemoved(adapterPosition);
-                    int i = access$1900 + 1;
-                    System.arraycopy(ChatAttachAlertPollLayout.this.answers, i, ChatAttachAlertPollLayout.this.answers, access$1900, (ChatAttachAlertPollLayout.this.answers.length - 1) - access$1900);
-                    System.arraycopy(ChatAttachAlertPollLayout.this.answersChecks, i, ChatAttachAlertPollLayout.this.answersChecks, access$1900, (ChatAttachAlertPollLayout.this.answersChecks.length - 1) - access$1900);
+                    int i = access$2000 + 1;
+                    System.arraycopy(ChatAttachAlertPollLayout.this.answers, i, ChatAttachAlertPollLayout.this.answers, access$2000, (ChatAttachAlertPollLayout.this.answers.length - 1) - access$2000);
+                    System.arraycopy(ChatAttachAlertPollLayout.this.answersChecks, i, ChatAttachAlertPollLayout.this.answersChecks, access$2000, (ChatAttachAlertPollLayout.this.answersChecks.length - 1) - access$2000);
                     ChatAttachAlertPollLayout.this.answers[ChatAttachAlertPollLayout.this.answers.length - 1] = null;
                     ChatAttachAlertPollLayout.this.answersChecks[ChatAttachAlertPollLayout.this.answersChecks.length - 1] = false;
-                    ChatAttachAlertPollLayout.access$1010(ChatAttachAlertPollLayout.this);
+                    ChatAttachAlertPollLayout.access$1110(ChatAttachAlertPollLayout.this);
                     if (ChatAttachAlertPollLayout.this.answersCount == ChatAttachAlertPollLayout.this.answers.length - 1) {
                         ChatAttachAlertPollLayout.this.listAdapter.notifyItemInserted((ChatAttachAlertPollLayout.this.answerStartRow + ChatAttachAlertPollLayout.this.answers.length) - 1);
                     }
@@ -1178,10 +1187,10 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
             }
             RecyclerView.ViewHolder findContainingViewHolder = ChatAttachAlertPollLayout.this.listView.findContainingViewHolder(pollEditTextCell);
             if (!(findContainingViewHolder == null || (adapterPosition = findContainingViewHolder.getAdapterPosition()) == -1)) {
-                int access$1900 = adapterPosition - ChatAttachAlertPollLayout.this.answerStartRow;
-                if (access$1900 == ChatAttachAlertPollLayout.this.answersCount - 1 && ChatAttachAlertPollLayout.this.answersCount < 10) {
+                int access$2000 = adapterPosition - ChatAttachAlertPollLayout.this.answerStartRow;
+                if (access$2000 == ChatAttachAlertPollLayout.this.answersCount - 1 && ChatAttachAlertPollLayout.this.answersCount < 10) {
                     ChatAttachAlertPollLayout.this.addNewField();
-                } else if (access$1900 == ChatAttachAlertPollLayout.this.answersCount - 1) {
+                } else if (access$2000 == ChatAttachAlertPollLayout.this.answersCount - 1) {
                     AndroidUtilities.hideKeyboard(pollEditTextCell.getTextView());
                 } else {
                     RecyclerView.ViewHolder findViewHolderForAdapterPosition = ChatAttachAlertPollLayout.this.listView.findViewHolderForAdapterPosition(adapterPosition + 1);
@@ -1234,15 +1243,15 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         }
 
         public void swapElements(int i, int i2) {
-            int access$1900 = i - ChatAttachAlertPollLayout.this.answerStartRow;
-            int access$19002 = i2 - ChatAttachAlertPollLayout.this.answerStartRow;
-            if (access$1900 >= 0 && access$19002 >= 0 && access$1900 < ChatAttachAlertPollLayout.this.answersCount && access$19002 < ChatAttachAlertPollLayout.this.answersCount) {
-                String str = ChatAttachAlertPollLayout.this.answers[access$1900];
-                ChatAttachAlertPollLayout.this.answers[access$1900] = ChatAttachAlertPollLayout.this.answers[access$19002];
-                ChatAttachAlertPollLayout.this.answers[access$19002] = str;
-                boolean z = ChatAttachAlertPollLayout.this.answersChecks[access$1900];
-                ChatAttachAlertPollLayout.this.answersChecks[access$1900] = ChatAttachAlertPollLayout.this.answersChecks[access$19002];
-                ChatAttachAlertPollLayout.this.answersChecks[access$19002] = z;
+            int access$2000 = i - ChatAttachAlertPollLayout.this.answerStartRow;
+            int access$20002 = i2 - ChatAttachAlertPollLayout.this.answerStartRow;
+            if (access$2000 >= 0 && access$20002 >= 0 && access$2000 < ChatAttachAlertPollLayout.this.answersCount && access$20002 < ChatAttachAlertPollLayout.this.answersCount) {
+                String str = ChatAttachAlertPollLayout.this.answers[access$2000];
+                ChatAttachAlertPollLayout.this.answers[access$2000] = ChatAttachAlertPollLayout.this.answers[access$20002];
+                ChatAttachAlertPollLayout.this.answers[access$20002] = str;
+                boolean z = ChatAttachAlertPollLayout.this.answersChecks[access$2000];
+                ChatAttachAlertPollLayout.this.answersChecks[access$2000] = ChatAttachAlertPollLayout.this.answersChecks[access$20002];
+                ChatAttachAlertPollLayout.this.answersChecks[access$20002] = z;
                 notifyItemMoved(i, i2);
             }
         }

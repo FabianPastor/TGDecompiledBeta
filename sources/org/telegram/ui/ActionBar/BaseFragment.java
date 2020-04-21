@@ -504,10 +504,6 @@ public class BaseFragment {
         return 0;
     }
 
-    public Dialog getVisibleDialog() {
-        return this.visibleDialog;
-    }
-
     public void setVisibleDialog(Dialog dialog) {
         this.visibleDialog = dialog;
     }

@@ -639,7 +639,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             android.widget.TextView r0 = new android.widget.TextView
             android.content.Context r3 = r6.context
             r0.<init>(r3)
-            r3 = 2131625847(0x7f0e0777, float:1.8878914E38)
+            r3 = 2131625844(0x7f0e0774, float:1.8878907E38)
             java.lang.String r5 = "NoStickersFound"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r0.setText(r3)

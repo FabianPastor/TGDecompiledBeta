@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: ujDVaKYv+fxSPcLWMmZOoOqHO2M=
+SHA1-Digest-Manifest: 3etBb5eDfOgxUNJK+r9430gXyag=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: Dk0eGtf4KpbfoNzdtzagVwoiqmw=
+SHA1-Digest: Abpl+8QTgTHtOo6TwKPKGVV9/pA=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9505,10 +9505,10 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: QP4KcvFbkTiBMbR7Nya0cv3vFW0=
+SHA1-Digest: XSFhNngh3zOTaifNNWa6KyX48hg=
 
 Name: classes2.dex
-SHA1-Digest: dK2l6No5LLOQMVyryqgg+sLNUdM=
+SHA1-Digest: EKZzc75I8OZxOB2wSTtcUpOXuYI=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -18491,7 +18491,7 @@ Name: res/xml/auth.xml
 SHA1-Digest: yqj2/800Rw2hInGa7NWcLt8U02Q=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: yMIxBdWzDCxdv+YFvGW8/CGCaes=
+SHA1-Digest: pzFFZ3BJts+AEF8IJXsJnFgOe2o=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: 9Hh95nQe6vvvIyVqqpGpBH5VMqA=
@@ -18506,7 +18506,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: wg0Epzt/1CYuEgjwVISp+5q6hvk=
+SHA1-Digest: oJSCpg04Sbe2F1sHP1dAi3QO1lY=
 
 Name: transport-api.properties
 SHA1-Digest: KlRwAVirU5yXrBUVC3JeyHIPlcs=

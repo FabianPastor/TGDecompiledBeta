@@ -249,6 +249,10 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$needReloadPolls(this);
                     }
 
+                    public /* synthetic */ void onDiceFinished() {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$onDiceFinished(this);
+                    }
+
                     public /* synthetic */ void setShouldNotRepeatSticker(MessageObject messageObject) {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$setShouldNotRepeatSticker(this, messageObject);
                     }

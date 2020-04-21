@@ -96,6 +96,10 @@ public class HeaderCell extends FrameLayout {
         }
     }
 
+    public TextView getTextView() {
+        return this.textView;
+    }
+
     public SimpleTextView getTextView2() {
         return this.textView2;
     }

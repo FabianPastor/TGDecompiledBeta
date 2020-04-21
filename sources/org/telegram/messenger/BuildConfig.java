@@ -5,6 +5,6 @@ public final class BuildConfig {
     public static final String BUILD_TYPE = "HA";
     public static final boolean DEBUG = false;
     public static final String FLAVOR = "afat";
-    public static final int VERSION_CODE = 1932;
+    public static final int VERSION_CODE = 1935;
     public static final String VERSION_NAME = "6.1.0";
 }

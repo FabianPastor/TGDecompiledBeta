@@ -3,7 +3,7 @@ Built-By: Generated-by-ADT
 Created-By: Android Gradle 3.6.3
 
 Name: AndroidManifest.xml
-SHA1-Digest: gfqf4qcFnqrgTh7WwKNQoXkV/iE=
+SHA1-Digest: A5mfBvLkoYHFEfIH5kDOkRlnKL8=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9504,10 +9504,10 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: OckaSZpelZOUvPkmDRAMDGLrx3w=
+SHA1-Digest: /+s2c0Ng4W/d3Ke+gxFn+Jkadwg=
 
 Name: classes2.dex
-SHA1-Digest: CCul/+B7bEkk4yiGrdJhEldSxWE=
+SHA1-Digest: vDjCR2pwyWY0+C7DqMogXnCOhyE=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -18490,7 +18490,7 @@ Name: res/xml/auth.xml
 SHA1-Digest: aUlt+rReyDXF/XtRxbd0/DYKxL8=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: 0dkKnizE1JLRTeX6YTMYn4pXXgM=
+SHA1-Digest: DurzP/CxtA33dB112SJDpYNMT3c=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: vNxeRePtnY64Hxd7k8wXLkWhqV0=
@@ -18505,7 +18505,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: YhLKiOn7iLP6fcpRhgHR+HBn57M=
+SHA1-Digest: 1gGHtUGG7xT+HyGlLK3qbUBEOrs=
 
 Name: transport-api.properties
 SHA1-Digest: 1ihjJr5LtYfq/sGtDlVEQK4Ajxg=

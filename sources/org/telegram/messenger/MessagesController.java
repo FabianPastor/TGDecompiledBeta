@@ -9,6 +9,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.util.SparseBooleanArray;
@@ -32,6 +33,7 @@ import org.telegram.messenger.support.SparseLongArray;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.NativeByteBuffer;
 import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$ChannelParticipant;
 import org.telegram.tgnet.TLRPC$Chat;
@@ -49,7 +51,6 @@ import org.telegram.tgnet.TLRPC$InputFile;
 import org.telegram.tgnet.TLRPC$InputPeer;
 import org.telegram.tgnet.TLRPC$InputPhoto;
 import org.telegram.tgnet.TLRPC$InputUser;
-import org.telegram.tgnet.TLRPC$JSONValue;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$MessageAction;
 import org.telegram.tgnet.TLRPC$MessageMedia;
@@ -57,6 +58,7 @@ import org.telegram.tgnet.TLRPC$Peer;
 import org.telegram.tgnet.TLRPC$PeerNotifySettings;
 import org.telegram.tgnet.TLRPC$Photo;
 import org.telegram.tgnet.TLRPC$PhotoSize;
+import org.telegram.tgnet.TLRPC$Poll;
 import org.telegram.tgnet.TLRPC$RecentMeUrl;
 import org.telegram.tgnet.TLRPC$SendMessageAction;
 import org.telegram.tgnet.TLRPC$TL_account_createTheme;
@@ -149,12 +151,6 @@ import org.telegram.tgnet.TLRPC$TL_inputUserEmpty;
 import org.telegram.tgnet.TLRPC$TL_inputUserSelf;
 import org.telegram.tgnet.TLRPC$TL_inputWallPaperNoFile;
 import org.telegram.tgnet.TLRPC$TL_inputWallPaperSlug;
-import org.telegram.tgnet.TLRPC$TL_jsonArray;
-import org.telegram.tgnet.TLRPC$TL_jsonBool;
-import org.telegram.tgnet.TLRPC$TL_jsonNumber;
-import org.telegram.tgnet.TLRPC$TL_jsonObject;
-import org.telegram.tgnet.TLRPC$TL_jsonObjectValue;
-import org.telegram.tgnet.TLRPC$TL_jsonString;
 import org.telegram.tgnet.TLRPC$TL_messageActionChannelCreate;
 import org.telegram.tgnet.TLRPC$TL_messageActionChatAddUser;
 import org.telegram.tgnet.TLRPC$TL_messageActionChatDeleteUser;
@@ -183,7 +179,6 @@ import org.telegram.tgnet.TLRPC$TL_messages_getOnlines;
 import org.telegram.tgnet.TLRPC$TL_messages_getPeerDialogs;
 import org.telegram.tgnet.TLRPC$TL_messages_getPeerSettings;
 import org.telegram.tgnet.TLRPC$TL_messages_getPinnedDialogs;
-import org.telegram.tgnet.TLRPC$TL_messages_getPollResults;
 import org.telegram.tgnet.TLRPC$TL_messages_getScheduledHistory;
 import org.telegram.tgnet.TLRPC$TL_messages_getSuggestedDialogFilters;
 import org.telegram.tgnet.TLRPC$TL_messages_getUnreadMentions;
@@ -325,26 +320,26 @@ public class MessagesController extends BaseController implements NotificationCe
     public static final int UPDATE_MASK_USER_PRINT = 64;
     private static volatile long lastPasswordCheckTime;
     private static volatile long lastThemeCheckTime;
-    private int DIALOGS_LOAD_TYPE_CACHE = 1;
-    private int DIALOGS_LOAD_TYPE_CHANNEL = 2;
-    private int DIALOGS_LOAD_TYPE_UNKNOWN = 3;
+    private int DIALOGS_LOAD_TYPE_CACHE;
+    private int DIALOGS_LOAD_TYPE_CHANNEL;
+    private int DIALOGS_LOAD_TYPE_UNKNOWN;
     protected ArrayList<TLRPC$Dialog> allDialogs = new ArrayList<>();
     public float animatedEmojisZoom;
     public int availableMapProviders;
     public boolean backgroundConnection;
     public boolean blockedCountry;
     public boolean blockedEndReached;
-    public SparseIntArray blockedUsers = new SparseIntArray();
+    public SparseIntArray blockedUsers;
     public int callConnectTimeout;
     public int callPacketTimeout;
     public int callReceiveTimeout;
     public int callRingTimeout;
     public boolean canRevokePmInbox;
-    private SparseArray<SparseArray<String>> channelAdmins = new SparseArray<>();
-    private SparseArray<ArrayList<Integer>> channelViewsToSend = new SparseArray<>();
-    private SparseIntArray channelsPts = new SparseIntArray();
+    private SparseArray<SparseArray<String>> channelAdmins;
+    private SparseArray<ArrayList<Integer>> channelViewsToSend;
+    private SparseIntArray channelsPts;
     private ConcurrentHashMap<Integer, TLRPC$Chat> chats = new ConcurrentHashMap<>(100, 1.0f, 2);
-    private SparseBooleanArray checkingLastMessagesDialogs = new SparseBooleanArray();
+    private SparseBooleanArray checkingLastMessagesDialogs;
     private boolean checkingProxyInfo;
     private int checkingProxyInfoRequestId;
     private boolean checkingTosUpdate;
@@ -359,18 +354,10 @@ public class MessagesController extends BaseController implements NotificationCe
     public String dcDomainName;
     public LongSparseArray<Integer> deletedHistory = new LongSparseArray<>();
     private LongSparseArray<TLRPC$Dialog> deletingDialogs = new LongSparseArray<>();
-    private final Comparator<TLRPC$Dialog> dialogComparator = new Comparator() {
-        public final int compare(Object obj, Object obj2) {
-            return MessagesController.this.lambda$new$2$MessagesController((TLRPC$Dialog) obj, (TLRPC$Dialog) obj2);
-        }
-    };
-    private final Comparator<TLRPC$Dialog> dialogDateComparator = new Comparator() {
-        public final int compare(Object obj, Object obj2) {
-            return MessagesController.this.lambda$new$1$MessagesController((TLRPC$Dialog) obj, (TLRPC$Dialog) obj2);
-        }
-    };
-    public ArrayList<DialogFilter> dialogFilters = new ArrayList<>();
-    public SparseArray<DialogFilter> dialogFiltersById = new SparseArray<>();
+    private final Comparator<TLRPC$Dialog> dialogComparator;
+    private final Comparator<TLRPC$Dialog> dialogDateComparator;
+    public ArrayList<DialogFilter> dialogFilters;
+    public SparseArray<DialogFilter> dialogFiltersById;
     public boolean dialogFiltersLoaded;
     public LongSparseArray<MessageObject> dialogMessage = new LongSparseArray<>();
     public SparseArray<MessageObject> dialogMessagesByIds = new SparseArray<>();
@@ -378,7 +365,7 @@ public class MessagesController extends BaseController implements NotificationCe
     private SparseArray<ArrayList<TLRPC$Dialog>> dialogsByFolder = new SparseArray<>();
     public ArrayList<TLRPC$Dialog> dialogsCanAddUsers = new ArrayList<>();
     public ArrayList<TLRPC$Dialog> dialogsChannelsOnly = new ArrayList<>();
-    private SparseBooleanArray dialogsEndReached = new SparseBooleanArray();
+    private SparseBooleanArray dialogsEndReached;
     public ArrayList<TLRPC$Dialog> dialogsForward = new ArrayList<>();
     public ArrayList<TLRPC$Dialog> dialogsGroupsOnly = new ArrayList<>();
     private boolean dialogsInTransaction;
@@ -390,21 +377,22 @@ public class MessagesController extends BaseController implements NotificationCe
     public ConcurrentHashMap<Long, Integer> dialogs_read_inbox_max = new ConcurrentHashMap<>(100, 1.0f, 2);
     public ConcurrentHashMap<Long, Integer> dialogs_read_outbox_max = new ConcurrentHashMap<>(100, 1.0f, 2);
     public HashSet<String> diceEmojies;
+    public HashMap<String, DiceFrameSuccess> diceSuccess;
     private SharedPreferences emojiPreferences;
     public boolean enableJoined;
     private ConcurrentHashMap<Integer, TLRPC$EncryptedChat> encryptedChats = new ConcurrentHashMap<>(10, 1.0f, 2);
     private SparseArray<TLRPC$ExportedChatInvite> exportedChats = new SparseArray<>();
     public boolean filtersEnabled;
     public boolean firstGettingTask;
-    private SparseArray<TLRPC$ChatFull> fullChats = new SparseArray<>();
-    private SparseArray<TLRPC$UserFull> fullUsers = new SparseArray<>();
-    private boolean getDifferenceFirstSync = true;
+    private SparseArray<TLRPC$ChatFull> fullChats;
+    private SparseArray<TLRPC$UserFull> fullUsers;
+    private boolean getDifferenceFirstSync;
     private boolean gettingAppChangelog;
     public boolean gettingDifference;
-    private SparseBooleanArray gettingDifferenceChannels = new SparseBooleanArray();
+    private SparseBooleanArray gettingDifferenceChannels;
     private boolean gettingNewDeleteTask;
-    private SparseBooleanArray gettingUnknownChannels = new SparseBooleanArray();
-    private LongSparseArray<Boolean> gettingUnknownDialogs = new LongSparseArray<>();
+    private SparseBooleanArray gettingUnknownChannels;
+    private LongSparseArray<Boolean> gettingUnknownDialogs;
     public String gifSearchBot;
     public ArrayList<TLRPC$RecentMeUrl> hintDialogs = new ArrayList<>();
     public String imageSearchBot;
@@ -415,31 +403,31 @@ public class MessagesController extends BaseController implements NotificationCe
     private int lastCheckProxyId;
     private int lastPrintingStringCount;
     private long lastPushRegisterSendTime;
-    private LongSparseArray<Long> lastScheduledServerQueryTime = new LongSparseArray<>();
+    private LongSparseArray<Long> lastScheduledServerQueryTime;
     private long lastStatusUpdateTime;
     private long lastViewsCheckTime;
     public String linkPrefix;
-    private ArrayList<Integer> loadedFullChats = new ArrayList<>();
-    private ArrayList<Integer> loadedFullParticipants = new ArrayList<>();
-    private ArrayList<Integer> loadedFullUsers = new ArrayList<>();
+    private ArrayList<Integer> loadedFullChats;
+    private ArrayList<Integer> loadedFullParticipants;
+    private ArrayList<Integer> loadedFullUsers;
     private boolean loadingAppConfig;
-    public boolean loadingBlockedUsers = false;
-    private SparseIntArray loadingChannelAdmins = new SparseIntArray();
-    private SparseBooleanArray loadingDialogs = new SparseBooleanArray();
-    private ArrayList<Integer> loadingFullChats = new ArrayList<>();
-    private ArrayList<Integer> loadingFullParticipants = new ArrayList<>();
-    private ArrayList<Integer> loadingFullUsers = new ArrayList<>();
+    public boolean loadingBlockedUsers;
+    private SparseIntArray loadingChannelAdmins;
+    private SparseBooleanArray loadingDialogs;
+    private ArrayList<Integer> loadingFullChats;
+    private ArrayList<Integer> loadingFullParticipants;
+    private ArrayList<Integer> loadingFullUsers;
     private int loadingNotificationSettings;
     private boolean loadingNotificationSignUpSettings;
     private LongSparseArray<Boolean> loadingPeerSettings = new LongSparseArray<>();
-    private SparseIntArray loadingPinnedDialogs = new SparseIntArray();
+    private SparseIntArray loadingPinnedDialogs;
     private boolean loadingRemoteFilters;
     private boolean loadingSuggestedFilters;
     private boolean loadingUnreadDialogs;
     private SharedPreferences mainPreferences;
     public String mapKey;
     public int mapProvider;
-    public int maxBroadcastCount = 100;
+    public int maxBroadcastCount;
     public int maxCaptionLength;
     public int maxEditTime;
     public int maxFaveStickersCount;
@@ -450,24 +438,20 @@ public class MessagesController extends BaseController implements NotificationCe
     public int maxPinnedDialogsCount;
     public int maxRecentGifsCount;
     public int maxRecentStickersCount;
-    private SparseIntArray migratedChats = new SparseIntArray();
+    private SparseIntArray migratedChats;
     private boolean migratingDialogs;
-    public int minGroupConvertSize = 200;
+    public int minGroupConvertSize;
     private SparseIntArray needShortPollChannels = new SparseIntArray();
     private SparseIntArray needShortPollOnlines = new SparseIntArray();
-    private SparseIntArray nextDialogsCacheOffset = new SparseIntArray();
+    private SparseIntArray nextDialogsCacheOffset;
     private int nextProxyInfoCheckTime;
     private int nextTosCheckTime;
     private SharedPreferences notificationsPreferences;
     private ConcurrentHashMap<String, TLObject> objectsByUsernames = new ConcurrentHashMap<>(100, 1.0f, 2);
     private boolean offlineSent;
     public ConcurrentHashMap<Integer, Integer> onlinePrivacy = new ConcurrentHashMap<>(20, 1.0f, 2);
-    private Runnable passwordCheckRunnable = new Runnable() {
-        public final void run() {
-            MessagesController.this.lambda$new$0$MessagesController();
-        }
-    };
-    private LongSparseArray<SparseArray<MessageObject>> pollsToCheck = new LongSparseArray<>();
+    private Runnable passwordCheckRunnable;
+    private LongSparseArray<SparseArray<MessageObject>> pollsToCheck;
     private int pollsToCheckSize;
     public boolean preloadFeaturedStickers;
     public LongSparseArray<CharSequence> printingStrings = new LongSparseArray<>();
@@ -478,14 +462,14 @@ public class MessagesController extends BaseController implements NotificationCe
     private long proxyDialogId;
     public boolean qrLoginCamera;
     public int ratingDecay;
-    private ArrayList<ReadTask> readTasks = new ArrayList<>();
-    private LongSparseArray<ReadTask> readTasksMap = new LongSparseArray<>();
+    private ArrayList<ReadTask> readTasks;
+    private LongSparseArray<ReadTask> readTasksMap;
     public boolean registeringForPush;
-    private LongSparseArray<ArrayList<Integer>> reloadingMessages = new LongSparseArray<>();
-    private HashMap<String, ArrayList<MessageObject>> reloadingScheduledWebpages = new HashMap<>();
-    private LongSparseArray<ArrayList<MessageObject>> reloadingScheduledWebpagesPending = new LongSparseArray<>();
-    private HashMap<String, ArrayList<MessageObject>> reloadingWebpages = new HashMap<>();
-    private LongSparseArray<ArrayList<MessageObject>> reloadingWebpagesPending = new LongSparseArray<>();
+    private LongSparseArray<ArrayList<Integer>> reloadingMessages;
+    private HashMap<String, ArrayList<MessageObject>> reloadingScheduledWebpages;
+    private LongSparseArray<ArrayList<MessageObject>> reloadingScheduledWebpagesPending;
+    private HashMap<String, ArrayList<MessageObject>> reloadingWebpages;
+    private LongSparseArray<ArrayList<MessageObject>> reloadingWebpagesPending;
     private TLRPC$messages_Dialogs resetDialogsAll;
     private TLRPC$TL_messages_peerDialogs resetDialogsPinned;
     private boolean resetingDialogs;
@@ -494,35 +478,31 @@ public class MessagesController extends BaseController implements NotificationCe
     public int secretWebpagePreview;
     public DialogFilter[] selectedDialogFilter = new DialogFilter[2];
     public SparseArray<LongSparseArray<Boolean>> sendingTypings = new SparseArray<>();
-    private SparseBooleanArray serverDialogsEndReached = new SparseBooleanArray();
+    private SparseBooleanArray serverDialogsEndReached;
     private SparseIntArray shortPollChannels = new SparseIntArray();
     private SparseIntArray shortPollOnlines = new SparseIntArray();
     public boolean showFiltersTooltip;
     private DialogFilter sortingDialogFilter;
     private int statusRequest;
     private int statusSettingState;
-    public boolean suggestContacts = true;
-    public ArrayList<TLRPC$TL_dialogFilterSuggested> suggestedFilters = new ArrayList<>();
+    public boolean suggestContacts;
+    public ArrayList<TLRPC$TL_dialogFilterSuggested> suggestedFilters;
     public String suggestedLangCode;
-    private Runnable themeCheckRunnable = $$Lambda$RQB0Jwr1FTqp6hrbGUHuOs9k1I.INSTANCE;
-    public int totalBlockedCount = -1;
+    private Runnable themeCheckRunnable;
+    public int totalBlockedCount;
     public int unreadUnmutedDialogs;
-    private final Comparator<TLRPC$Update> updatesComparator = new Comparator() {
-        public final int compare(Object obj, Object obj2) {
-            return MessagesController.this.lambda$new$3$MessagesController((TLRPC$Update) obj, (TLRPC$Update) obj2);
-        }
-    };
-    private SparseArray<ArrayList<TLRPC$Updates>> updatesQueueChannels = new SparseArray<>();
-    private ArrayList<TLRPC$Updates> updatesQueuePts = new ArrayList<>();
-    private ArrayList<TLRPC$Updates> updatesQueueQts = new ArrayList<>();
-    private ArrayList<TLRPC$Updates> updatesQueueSeq = new ArrayList<>();
-    private SparseLongArray updatesStartWaitTimeChannels = new SparseLongArray();
+    private final Comparator<TLRPC$Update> updatesComparator;
+    private SparseArray<ArrayList<TLRPC$Updates>> updatesQueueChannels;
+    private ArrayList<TLRPC$Updates> updatesQueuePts;
+    private ArrayList<TLRPC$Updates> updatesQueueQts;
+    private ArrayList<TLRPC$Updates> updatesQueueSeq;
+    private SparseLongArray updatesStartWaitTimeChannels;
     private long updatesStartWaitTimePts;
     private long updatesStartWaitTimeQts;
     private long updatesStartWaitTimeSeq;
     public boolean updatingState;
     private String uploadingAvatar;
-    private HashMap<String, Object> uploadingThemes = new HashMap<>();
+    private HashMap<String, Object> uploadingThemes;
     private String uploadingWallpaper;
     private Theme.OverrideWallpaperInfo uploadingWallpaperInfo;
     private ConcurrentHashMap<Integer, TLRPC$User> users = new ConcurrentHashMap<>(100, 1.0f, 2);
@@ -598,6 +578,27 @@ public class MessagesController extends BaseController implements NotificationCe
 
     public /* synthetic */ void lambda$new$0$MessagesController() {
         getUserConfig().checkSavedPassword();
+    }
+
+    public static class DiceFrameSuccess {
+        public int frame;
+        public int num;
+
+        public DiceFrameSuccess(int i, int i2) {
+            this.frame = i;
+            this.num = i2;
+        }
+
+        public boolean equals(Object obj) {
+            if (!(obj instanceof DiceFrameSuccess)) {
+                return false;
+            }
+            DiceFrameSuccess diceFrameSuccess = (DiceFrameSuccess) obj;
+            if (this.frame == diceFrameSuccess.frame && this.num == diceFrameSuccess.num) {
+                return true;
+            }
+            return false;
+        }
     }
 
     private static class UserActionUpdatesSeq extends TLRPC$Updates {
@@ -760,6 +761,78 @@ public class MessagesController extends BaseController implements NotificationCe
     public MessagesController(int i) {
         super(i);
         int i2 = 2;
+        this.loadingBlockedUsers = false;
+        this.blockedUsers = new SparseIntArray();
+        this.totalBlockedCount = -1;
+        this.channelViewsToSend = new SparseArray<>();
+        this.pollsToCheck = new LongSparseArray<>();
+        this.dialogFilters = new ArrayList<>();
+        this.dialogFiltersById = new SparseArray<>();
+        this.suggestedFilters = new ArrayList<>();
+        this.updatesQueueChannels = new SparseArray<>();
+        this.updatesStartWaitTimeChannels = new SparseLongArray();
+        this.channelsPts = new SparseIntArray();
+        this.gettingDifferenceChannels = new SparseBooleanArray();
+        this.gettingUnknownChannels = new SparseBooleanArray();
+        this.gettingUnknownDialogs = new LongSparseArray<>();
+        this.checkingLastMessagesDialogs = new SparseBooleanArray();
+        this.updatesQueueSeq = new ArrayList<>();
+        this.updatesQueuePts = new ArrayList<>();
+        this.updatesQueueQts = new ArrayList<>();
+        this.fullUsers = new SparseArray<>();
+        this.fullChats = new SparseArray<>();
+        this.loadingFullUsers = new ArrayList<>();
+        this.loadedFullUsers = new ArrayList<>();
+        this.loadingFullChats = new ArrayList<>();
+        this.loadingFullParticipants = new ArrayList<>();
+        this.loadedFullParticipants = new ArrayList<>();
+        this.loadedFullChats = new ArrayList<>();
+        this.channelAdmins = new SparseArray<>();
+        this.loadingChannelAdmins = new SparseIntArray();
+        this.migratedChats = new SparseIntArray();
+        this.reloadingWebpages = new HashMap<>();
+        this.reloadingWebpagesPending = new LongSparseArray<>();
+        this.reloadingScheduledWebpages = new HashMap<>();
+        this.reloadingScheduledWebpagesPending = new LongSparseArray<>();
+        this.lastScheduledServerQueryTime = new LongSparseArray<>();
+        this.reloadingMessages = new LongSparseArray<>();
+        this.readTasks = new ArrayList<>();
+        this.readTasksMap = new LongSparseArray<>();
+        this.nextDialogsCacheOffset = new SparseIntArray();
+        this.loadingDialogs = new SparseBooleanArray();
+        this.dialogsEndReached = new SparseBooleanArray();
+        this.serverDialogsEndReached = new SparseBooleanArray();
+        this.getDifferenceFirstSync = true;
+        this.loadingPinnedDialogs = new SparseIntArray();
+        this.suggestContacts = true;
+        this.themeCheckRunnable = $$Lambda$RQB0Jwr1FTqp6hrbGUHuOs9k1I.INSTANCE;
+        this.passwordCheckRunnable = new Runnable() {
+            public final void run() {
+                MessagesController.this.lambda$new$0$MessagesController();
+            }
+        };
+        this.uploadingThemes = new HashMap<>();
+        this.maxBroadcastCount = 100;
+        this.minGroupConvertSize = 200;
+        this.diceSuccess = new HashMap<>();
+        this.dialogDateComparator = new Comparator() {
+            public final int compare(Object obj, Object obj2) {
+                return MessagesController.this.lambda$new$1$MessagesController((TLRPC$Dialog) obj, (TLRPC$Dialog) obj2);
+            }
+        };
+        this.dialogComparator = new Comparator() {
+            public final int compare(Object obj, Object obj2) {
+                return MessagesController.this.lambda$new$2$MessagesController((TLRPC$Dialog) obj, (TLRPC$Dialog) obj2);
+            }
+        };
+        this.updatesComparator = new Comparator() {
+            public final int compare(Object obj, Object obj2) {
+                return MessagesController.this.lambda$new$3$MessagesController((TLRPC$Update) obj, (TLRPC$Update) obj2);
+            }
+        };
+        this.DIALOGS_LOAD_TYPE_CACHE = 1;
+        this.DIALOGS_LOAD_TYPE_CHANNEL = 2;
+        this.DIALOGS_LOAD_TYPE_UNKNOWN = 3;
         this.currentAccount = i;
         ImageLoader.getInstance();
         getMessagesStorage();
@@ -831,9 +904,27 @@ public class MessagesController extends BaseController implements NotificationCe
             this.diceEmojies = hashSet;
             hashSet.add("🎲");
             this.diceEmojies.add("🎯");
+        } else {
+            this.diceEmojies = new HashSet<>(stringSet);
+        }
+        String string = this.mainPreferences.getString("diceSuccess", (String) null);
+        if (string == null) {
+            this.diceSuccess.put("🎯", new DiceFrameSuccess(62, 6));
             return;
         }
-        this.diceEmojies = new HashSet<>(stringSet);
+        try {
+            byte[] decode = Base64.decode(string, 0);
+            if (decode != null) {
+                SerializedData serializedData = new SerializedData(decode);
+                int readInt32 = serializedData.readInt32(true);
+                for (int i3 = 0; i3 < readInt32; i3++) {
+                    this.diceSuccess.put(serializedData.readString(true), new DiceFrameSuccess(serializedData.readInt32(true), serializedData.readInt32(true)));
+                }
+                serializedData.cleanup();
+            }
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
     }
 
     public /* synthetic */ void lambda$new$4$MessagesController() {
@@ -1862,107 +1953,429 @@ public class MessagesController extends BaseController implements NotificationCe
         });
     }
 
-    public /* synthetic */ void lambda$null$14$MessagesController(TLObject tLObject) {
-        boolean z;
-        boolean z2;
-        boolean z3;
-        boolean z4;
-        boolean z5;
-        if (tLObject instanceof TLRPC$TL_jsonObject) {
-            SharedPreferences.Editor edit = this.mainPreferences.edit();
-            TLRPC$TL_jsonObject tLRPC$TL_jsonObject = (TLRPC$TL_jsonObject) tLObject;
-            int size = tLRPC$TL_jsonObject.value.size();
-            boolean z6 = false;
-            boolean z7 = false;
-            for (int i = 0; i < size; i++) {
-                TLRPC$TL_jsonObjectValue tLRPC$TL_jsonObjectValue = tLRPC$TL_jsonObject.value.get(i);
-                if ("emojies_animated_zoom".equals(tLRPC$TL_jsonObjectValue.key)) {
-                    TLRPC$JSONValue tLRPC$JSONValue = tLRPC$TL_jsonObjectValue.value;
-                    if (tLRPC$JSONValue instanceof TLRPC$TL_jsonNumber) {
-                        double d = ((TLRPC$TL_jsonNumber) tLRPC$JSONValue).value;
-                        if (((double) this.animatedEmojisZoom) != d) {
-                            float f = (float) d;
-                            this.animatedEmojisZoom = f;
-                            edit.putFloat("animatedEmojisZoom", f);
-                        }
-                    }
-                } else if ("dialog_filters_enabled".equals(tLRPC$TL_jsonObjectValue.key)) {
-                    TLRPC$JSONValue tLRPC$JSONValue2 = tLRPC$TL_jsonObjectValue.value;
-                    if ((tLRPC$JSONValue2 instanceof TLRPC$TL_jsonBool) && (z5 = ((TLRPC$TL_jsonBool) tLRPC$JSONValue2).value) != this.filtersEnabled) {
-                        this.filtersEnabled = z5;
-                        edit.putBoolean("filtersEnabled", z5);
-                    }
-                } else if ("dialog_filters_tooltip".equals(tLRPC$TL_jsonObjectValue.key)) {
-                    TLRPC$JSONValue tLRPC$JSONValue3 = tLRPC$TL_jsonObjectValue.value;
-                    if ((tLRPC$JSONValue3 instanceof TLRPC$TL_jsonBool) && (z4 = ((TLRPC$TL_jsonBool) tLRPC$JSONValue3).value) != this.showFiltersTooltip) {
-                        this.showFiltersTooltip = z4;
-                        edit.putBoolean("showFiltersTooltip", z4);
-                        getNotificationCenter().postNotificationName(NotificationCenter.filterSettingsUpdated, new Object[0]);
-                    }
-                } else if ("youtube_pip".equals(tLRPC$TL_jsonObjectValue.key)) {
-                    TLRPC$JSONValue tLRPC$JSONValue4 = tLRPC$TL_jsonObjectValue.value;
-                    if (tLRPC$JSONValue4 instanceof TLRPC$TL_jsonString) {
-                        TLRPC$TL_jsonString tLRPC$TL_jsonString = (TLRPC$TL_jsonString) tLRPC$JSONValue4;
-                        if (!tLRPC$TL_jsonString.value.equals(this.youtubePipType)) {
-                            String str = tLRPC$TL_jsonString.value;
-                            this.youtubePipType = str;
-                            edit.putString("youtubePipType", str);
-                        }
-                    }
-                } else {
-                    if ("background_connection".equals(tLRPC$TL_jsonObjectValue.key)) {
-                        TLRPC$JSONValue tLRPC$JSONValue5 = tLRPC$TL_jsonObjectValue.value;
-                        if ((tLRPC$JSONValue5 instanceof TLRPC$TL_jsonBool) && (z3 = ((TLRPC$TL_jsonBool) tLRPC$JSONValue5).value) != this.backgroundConnection) {
-                            this.backgroundConnection = z3;
-                            edit.putBoolean("backgroundConnection", z3);
-                        }
-                    } else {
-                        if ("keep_alive_service".equals(tLRPC$TL_jsonObjectValue.key)) {
-                            TLRPC$JSONValue tLRPC$JSONValue6 = tLRPC$TL_jsonObjectValue.value;
-                            if ((tLRPC$JSONValue6 instanceof TLRPC$TL_jsonBool) && (z2 = ((TLRPC$TL_jsonBool) tLRPC$JSONValue6).value) != this.keepAliveService) {
-                                this.keepAliveService = z2;
-                                edit.putBoolean("keepAliveService", z2);
-                            }
-                        } else if ("qr_login_camera".equals(tLRPC$TL_jsonObjectValue.key)) {
-                            TLRPC$JSONValue tLRPC$JSONValue7 = tLRPC$TL_jsonObjectValue.value;
-                            if ((tLRPC$JSONValue7 instanceof TLRPC$TL_jsonBool) && (z = ((TLRPC$TL_jsonBool) tLRPC$JSONValue7).value) != this.qrLoginCamera) {
-                                this.qrLoginCamera = z;
-                                edit.putBoolean("qrLoginCamera", z);
-                            }
-                        } else if ("emojies_send_dice".equals(tLRPC$TL_jsonObjectValue.key)) {
-                            HashSet<String> hashSet = new HashSet<>();
-                            TLRPC$JSONValue tLRPC$JSONValue8 = tLRPC$TL_jsonObjectValue.value;
-                            if (tLRPC$JSONValue8 instanceof TLRPC$TL_jsonArray) {
-                                TLRPC$TL_jsonArray tLRPC$TL_jsonArray = (TLRPC$TL_jsonArray) tLRPC$JSONValue8;
-                                int size2 = tLRPC$TL_jsonArray.value.size();
-                                for (int i2 = 0; i2 < size2; i2++) {
-                                    TLRPC$JSONValue tLRPC$JSONValue9 = tLRPC$TL_jsonArray.value.get(i2);
-                                    if (tLRPC$JSONValue9 instanceof TLRPC$TL_jsonString) {
-                                        hashSet.add(((TLRPC$TL_jsonString) tLRPC$JSONValue9).value);
-                                    }
-                                }
-                            }
-                            if (!this.diceEmojies.equals(hashSet)) {
-                                this.diceEmojies = hashSet;
-                                edit.putStringSet("diceEmojies", hashSet);
-                            }
-                        }
-                    }
-                    z6 = true;
-                    z7 = true;
-                }
-                z6 = true;
+    /* JADX WARNING: Can't fix incorrect switch cases order */
+    /* JADX WARNING: Code restructure failed: missing block: B:86:0x01ee, code lost:
+        r7 = true;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:97:0x0224, code lost:
+        r7 = true;
+        r8 = true;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public /* synthetic */ void lambda$null$14$MessagesController(org.telegram.tgnet.TLObject r23) {
+        /*
+            r22 = this;
+            r1 = r22
+            r0 = r23
+            boolean r2 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonObject
+            if (r2 == 0) goto L_0x02e0
+            android.content.SharedPreferences r2 = r1.mainPreferences
+            android.content.SharedPreferences$Editor r2 = r2.edit()
+            r4 = r0
+            org.telegram.tgnet.TLRPC$TL_jsonObject r4 = (org.telegram.tgnet.TLRPC$TL_jsonObject) r4
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r0 = r4.value
+            int r5 = r0.size()
+            r6 = 0
+            r7 = 0
+            r8 = 0
+        L_0x001a:
+            if (r6 >= r5) goto L_0x02cb
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r0 = r4.value
+            java.lang.Object r0 = r0.get(r6)
+            org.telegram.tgnet.TLRPC$TL_jsonObjectValue r0 = (org.telegram.tgnet.TLRPC$TL_jsonObjectValue) r0
+            java.lang.String r9 = r0.key
+            r10 = -1
+            int r11 = r9.hashCode()
+            switch(r11) {
+                case -1688620344: goto L_0x0080;
+                case -1683918311: goto L_0x0076;
+                case -1032177933: goto L_0x006c;
+                case -404170231: goto L_0x0062;
+                case -253815153: goto L_0x0058;
+                case -232883529: goto L_0x004d;
+                case -76561797: goto L_0x0043;
+                case -24016028: goto L_0x0039;
+                case 2136829446: goto L_0x002f;
+                default: goto L_0x002e;
             }
-            if (z6) {
-                edit.commit();
+        L_0x002e:
+            goto L_0x0089
+        L_0x002f:
+            java.lang.String r11 = "dialog_filters_enabled"
+            boolean r9 = r9.equals(r11)
+            if (r9 == 0) goto L_0x0089
+            r10 = 1
+            goto L_0x0089
+        L_0x0039:
+            java.lang.String r11 = "emojies_animated_zoom"
+            boolean r9 = r9.equals(r11)
+            if (r9 == 0) goto L_0x0089
+            r10 = 0
+            goto L_0x0089
+        L_0x0043:
+            java.lang.String r11 = "youtube_pip"
+            boolean r9 = r9.equals(r11)
+            if (r9 == 0) goto L_0x0089
+            r10 = 3
+            goto L_0x0089
+        L_0x004d:
+            java.lang.String r11 = "emojies_send_dice_success"
+            boolean r9 = r9.equals(r11)
+            if (r9 == 0) goto L_0x0089
+            r10 = 8
+            goto L_0x0089
+        L_0x0058:
+            java.lang.String r11 = "background_connection"
+            boolean r9 = r9.equals(r11)
+            if (r9 == 0) goto L_0x0089
+            r10 = 4
+            goto L_0x0089
+        L_0x0062:
+            java.lang.String r11 = "keep_alive_service"
+            boolean r9 = r9.equals(r11)
+            if (r9 == 0) goto L_0x0089
+            r10 = 5
+            goto L_0x0089
+        L_0x006c:
+            java.lang.String r11 = "emojies_send_dice"
+            boolean r9 = r9.equals(r11)
+            if (r9 == 0) goto L_0x0089
+            r10 = 7
+            goto L_0x0089
+        L_0x0076:
+            java.lang.String r11 = "qr_login_camera"
+            boolean r9 = r9.equals(r11)
+            if (r9 == 0) goto L_0x0089
+            r10 = 6
+            goto L_0x0089
+        L_0x0080:
+            java.lang.String r11 = "dialog_filters_tooltip"
+            boolean r9 = r9.equals(r11)
+            if (r9 == 0) goto L_0x0089
+            r10 = 2
+        L_0x0089:
+            java.lang.String r9 = ""
+            java.lang.String r11 = "️"
+            switch(r10) {
+                case 0: goto L_0x02a4;
+                case 1: goto L_0x0289;
+                case 2: goto L_0x0262;
+                case 3: goto L_0x0242;
+                case 4: goto L_0x0228;
+                case 5: goto L_0x020b;
+                case 6: goto L_0x01f1;
+                case 7: goto L_0x01ab;
+                case 8: goto L_0x0096;
+                default: goto L_0x0090;
             }
-            if (z7) {
-                ApplicationLoader.startPushService();
-                ConnectionsManager connectionsManager = getConnectionsManager();
-                connectionsManager.setPushConnectionEnabled(connectionsManager.isPushConnectionEnabled());
-            }
-        }
-        this.loadingAppConfig = false;
+        L_0x0090:
+            r17 = r4
+            r18 = r5
+            goto L_0x02c3
+        L_0x0096:
+            java.util.HashMap r10 = new java.util.HashMap     // Catch:{ Exception -> 0x01a1 }
+            r10.<init>()     // Catch:{ Exception -> 0x01a1 }
+            org.telegram.tgnet.TLRPC$JSONValue r13 = r0.value     // Catch:{ Exception -> 0x01a1 }
+            boolean r13 = r13 instanceof org.telegram.tgnet.TLRPC$TL_jsonObject     // Catch:{ Exception -> 0x01a1 }
+            if (r13 == 0) goto L_0x0144
+            org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value     // Catch:{ Exception -> 0x01a1 }
+            org.telegram.tgnet.TLRPC$TL_jsonObject r0 = (org.telegram.tgnet.TLRPC$TL_jsonObject) r0     // Catch:{ Exception -> 0x01a1 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r13 = r0.value     // Catch:{ Exception -> 0x01a1 }
+            int r13 = r13.size()     // Catch:{ Exception -> 0x01a1 }
+            r14 = 0
+        L_0x00ac:
+            if (r14 >= r13) goto L_0x0144
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r15 = r0.value     // Catch:{ Exception -> 0x01a1 }
+            java.lang.Object r15 = r15.get(r14)     // Catch:{ Exception -> 0x01a1 }
+            org.telegram.tgnet.TLRPC$TL_jsonObjectValue r15 = (org.telegram.tgnet.TLRPC$TL_jsonObjectValue) r15     // Catch:{ Exception -> 0x01a1 }
+            org.telegram.tgnet.TLRPC$JSONValue r12 = r15.value     // Catch:{ Exception -> 0x01a1 }
+            boolean r12 = r12 instanceof org.telegram.tgnet.TLRPC$TL_jsonObject     // Catch:{ Exception -> 0x01a1 }
+            if (r12 == 0) goto L_0x0130
+            org.telegram.tgnet.TLRPC$JSONValue r12 = r15.value     // Catch:{ Exception -> 0x01a1 }
+            org.telegram.tgnet.TLRPC$TL_jsonObject r12 = (org.telegram.tgnet.TLRPC$TL_jsonObject) r12     // Catch:{ Exception -> 0x01a1 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r3 = r12.value     // Catch:{ Exception -> 0x01a1 }
+            int r3 = r3.size()     // Catch:{ Exception -> 0x01a1 }
+            r16 = r0
+            r17 = r4
+            r18 = r5
+            r0 = 0
+            r4 = 2147483647(0x7fffffff, float:NaN)
+            r5 = 2147483647(0x7fffffff, float:NaN)
+        L_0x00d3:
+            if (r0 >= r3) goto L_0x0118
+            r19 = r3
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r3 = r12.value     // Catch:{ Exception -> 0x019f }
+            java.lang.Object r3 = r3.get(r0)     // Catch:{ Exception -> 0x019f }
+            org.telegram.tgnet.TLRPC$TL_jsonObjectValue r3 = (org.telegram.tgnet.TLRPC$TL_jsonObjectValue) r3     // Catch:{ Exception -> 0x019f }
+            r20 = r12
+            org.telegram.tgnet.TLRPC$JSONValue r12 = r3.value     // Catch:{ Exception -> 0x019f }
+            boolean r12 = r12 instanceof org.telegram.tgnet.TLRPC$TL_jsonNumber     // Catch:{ Exception -> 0x019f }
+            if (r12 == 0) goto L_0x010d
+            java.lang.String r12 = "value"
+            r21 = r13
+            java.lang.String r13 = r3.key     // Catch:{ Exception -> 0x019f }
+            boolean r12 = r12.equals(r13)     // Catch:{ Exception -> 0x019f }
+            if (r12 == 0) goto L_0x00fb
+            org.telegram.tgnet.TLRPC$JSONValue r3 = r3.value     // Catch:{ Exception -> 0x019f }
+            org.telegram.tgnet.TLRPC$TL_jsonNumber r3 = (org.telegram.tgnet.TLRPC$TL_jsonNumber) r3     // Catch:{ Exception -> 0x019f }
+            double r12 = r3.value     // Catch:{ Exception -> 0x019f }
+            int r5 = (int) r12     // Catch:{ Exception -> 0x019f }
+            goto L_0x010f
+        L_0x00fb:
+            java.lang.String r12 = "frame_start"
+            java.lang.String r13 = r3.key     // Catch:{ Exception -> 0x019f }
+            boolean r12 = r12.equals(r13)     // Catch:{ Exception -> 0x019f }
+            if (r12 == 0) goto L_0x010f
+            org.telegram.tgnet.TLRPC$JSONValue r3 = r3.value     // Catch:{ Exception -> 0x019f }
+            org.telegram.tgnet.TLRPC$TL_jsonNumber r3 = (org.telegram.tgnet.TLRPC$TL_jsonNumber) r3     // Catch:{ Exception -> 0x019f }
+            double r3 = r3.value     // Catch:{ Exception -> 0x019f }
+            int r4 = (int) r3     // Catch:{ Exception -> 0x019f }
+            goto L_0x010f
+        L_0x010d:
+            r21 = r13
+        L_0x010f:
+            int r0 = r0 + 1
+            r3 = r19
+            r12 = r20
+            r13 = r21
+            goto L_0x00d3
+        L_0x0118:
+            r21 = r13
+            r0 = 2147483647(0x7fffffff, float:NaN)
+            if (r4 == r0) goto L_0x0138
+            if (r5 == r0) goto L_0x0138
+            java.lang.String r0 = r15.key     // Catch:{ Exception -> 0x019f }
+            java.lang.String r0 = r0.replace(r11, r9)     // Catch:{ Exception -> 0x019f }
+            org.telegram.messenger.MessagesController$DiceFrameSuccess r3 = new org.telegram.messenger.MessagesController$DiceFrameSuccess     // Catch:{ Exception -> 0x019f }
+            r3.<init>(r4, r5)     // Catch:{ Exception -> 0x019f }
+            r10.put(r0, r3)     // Catch:{ Exception -> 0x019f }
+            goto L_0x0138
+        L_0x0130:
+            r16 = r0
+            r17 = r4
+            r18 = r5
+            r21 = r13
+        L_0x0138:
+            int r14 = r14 + 1
+            r0 = r16
+            r4 = r17
+            r5 = r18
+            r13 = r21
+            goto L_0x00ac
+        L_0x0144:
+            r17 = r4
+            r18 = r5
+            java.util.HashMap<java.lang.String, org.telegram.messenger.MessagesController$DiceFrameSuccess> r0 = r1.diceSuccess     // Catch:{ Exception -> 0x019f }
+            boolean r0 = r0.equals(r10)     // Catch:{ Exception -> 0x019f }
+            if (r0 != 0) goto L_0x02c3
+            r1.diceSuccess = r10     // Catch:{ Exception -> 0x019f }
+            org.telegram.tgnet.SerializedData r0 = new org.telegram.tgnet.SerializedData     // Catch:{ Exception -> 0x019f }
+            r0.<init>()     // Catch:{ Exception -> 0x019f }
+            java.util.HashMap<java.lang.String, org.telegram.messenger.MessagesController$DiceFrameSuccess> r3 = r1.diceSuccess     // Catch:{ Exception -> 0x019f }
+            int r3 = r3.size()     // Catch:{ Exception -> 0x019f }
+            r0.writeInt32(r3)     // Catch:{ Exception -> 0x019f }
+            java.util.HashMap<java.lang.String, org.telegram.messenger.MessagesController$DiceFrameSuccess> r3 = r1.diceSuccess     // Catch:{ Exception -> 0x019f }
+            java.util.Set r3 = r3.entrySet()     // Catch:{ Exception -> 0x019f }
+            java.util.Iterator r3 = r3.iterator()     // Catch:{ Exception -> 0x019f }
+        L_0x016a:
+            boolean r4 = r3.hasNext()     // Catch:{ Exception -> 0x019f }
+            if (r4 == 0) goto L_0x0190
+            java.lang.Object r4 = r3.next()     // Catch:{ Exception -> 0x019f }
+            java.util.Map$Entry r4 = (java.util.Map.Entry) r4     // Catch:{ Exception -> 0x019f }
+            java.lang.Object r5 = r4.getKey()     // Catch:{ Exception -> 0x019f }
+            java.lang.String r5 = (java.lang.String) r5     // Catch:{ Exception -> 0x019f }
+            r0.writeString(r5)     // Catch:{ Exception -> 0x019f }
+            java.lang.Object r4 = r4.getValue()     // Catch:{ Exception -> 0x019f }
+            org.telegram.messenger.MessagesController$DiceFrameSuccess r4 = (org.telegram.messenger.MessagesController.DiceFrameSuccess) r4     // Catch:{ Exception -> 0x019f }
+            int r5 = r4.frame     // Catch:{ Exception -> 0x019f }
+            r0.writeInt32(r5)     // Catch:{ Exception -> 0x019f }
+            int r4 = r4.num     // Catch:{ Exception -> 0x019f }
+            r0.writeInt32(r4)     // Catch:{ Exception -> 0x019f }
+            goto L_0x016a
+        L_0x0190:
+            java.lang.String r3 = "diceSuccess"
+            byte[] r0 = r0.toByteArray()     // Catch:{ Exception -> 0x019f }
+            r4 = 0
+            java.lang.String r0 = android.util.Base64.encodeToString(r0, r4)     // Catch:{ Exception -> 0x019f }
+            r2.putString(r3, r0)     // Catch:{ Exception -> 0x019f }
+            goto L_0x01ee
+        L_0x019f:
+            r0 = move-exception
+            goto L_0x01a6
+        L_0x01a1:
+            r0 = move-exception
+            r17 = r4
+            r18 = r5
+        L_0x01a6:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+            goto L_0x02c3
+        L_0x01ab:
+            r17 = r4
+            r18 = r5
+            java.util.HashSet r3 = new java.util.HashSet
+            r3.<init>()
+            org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
+            boolean r4 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonArray
+            if (r4 == 0) goto L_0x01df
+            org.telegram.tgnet.TLRPC$TL_jsonArray r0 = (org.telegram.tgnet.TLRPC$TL_jsonArray) r0
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r4 = r0.value
+            int r4 = r4.size()
+            r5 = 0
+        L_0x01c3:
+            if (r5 >= r4) goto L_0x01df
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r10 = r0.value
+            java.lang.Object r10 = r10.get(r5)
+            org.telegram.tgnet.TLRPC$JSONValue r10 = (org.telegram.tgnet.TLRPC$JSONValue) r10
+            boolean r12 = r10 instanceof org.telegram.tgnet.TLRPC$TL_jsonString
+            if (r12 == 0) goto L_0x01dc
+            org.telegram.tgnet.TLRPC$TL_jsonString r10 = (org.telegram.tgnet.TLRPC$TL_jsonString) r10
+            java.lang.String r10 = r10.value
+            java.lang.String r10 = r10.replace(r11, r9)
+            r3.add(r10)
+        L_0x01dc:
+            int r5 = r5 + 1
+            goto L_0x01c3
+        L_0x01df:
+            java.util.HashSet<java.lang.String> r0 = r1.diceEmojies
+            boolean r0 = r0.equals(r3)
+            if (r0 != 0) goto L_0x02c3
+            r1.diceEmojies = r3
+            java.lang.String r0 = "diceEmojies"
+            r2.putStringSet(r0, r3)
+        L_0x01ee:
+            r7 = 1
+            goto L_0x02c3
+        L_0x01f1:
+            r17 = r4
+            r18 = r5
+            org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
+            boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
+            if (r3 == 0) goto L_0x02c3
+            org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
+            boolean r0 = r0.value
+            boolean r3 = r1.qrLoginCamera
+            if (r0 == r3) goto L_0x02c3
+            r1.qrLoginCamera = r0
+            java.lang.String r3 = "qrLoginCamera"
+            r2.putBoolean(r3, r0)
+            goto L_0x01ee
+        L_0x020b:
+            r17 = r4
+            r18 = r5
+            org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
+            boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
+            if (r3 == 0) goto L_0x02c3
+            org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
+            boolean r0 = r0.value
+            boolean r3 = r1.keepAliveService
+            if (r0 == r3) goto L_0x02c3
+            r1.keepAliveService = r0
+            java.lang.String r3 = "keepAliveService"
+            r2.putBoolean(r3, r0)
+        L_0x0224:
+            r7 = 1
+            r8 = 1
+            goto L_0x02c3
+        L_0x0228:
+            r17 = r4
+            r18 = r5
+            org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
+            boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
+            if (r3 == 0) goto L_0x02c3
+            org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
+            boolean r0 = r0.value
+            boolean r3 = r1.backgroundConnection
+            if (r0 == r3) goto L_0x02c3
+            r1.backgroundConnection = r0
+            java.lang.String r3 = "backgroundConnection"
+            r2.putBoolean(r3, r0)
+            goto L_0x0224
+        L_0x0242:
+            r17 = r4
+            r18 = r5
+            org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
+            boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonString
+            if (r3 == 0) goto L_0x02c3
+            org.telegram.tgnet.TLRPC$TL_jsonString r0 = (org.telegram.tgnet.TLRPC$TL_jsonString) r0
+            java.lang.String r3 = r0.value
+            java.lang.String r4 = r1.youtubePipType
+            boolean r3 = r3.equals(r4)
+            if (r3 != 0) goto L_0x02c3
+            java.lang.String r0 = r0.value
+            r1.youtubePipType = r0
+            java.lang.String r3 = "youtubePipType"
+            r2.putString(r3, r0)
+            goto L_0x01ee
+        L_0x0262:
+            r17 = r4
+            r18 = r5
+            org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
+            boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
+            if (r3 == 0) goto L_0x02c3
+            org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
+            boolean r0 = r0.value
+            boolean r3 = r1.showFiltersTooltip
+            if (r0 == r3) goto L_0x02c3
+            r1.showFiltersTooltip = r0
+            java.lang.String r3 = "showFiltersTooltip"
+            r2.putBoolean(r3, r0)
+            org.telegram.messenger.NotificationCenter r0 = r22.getNotificationCenter()
+            int r3 = org.telegram.messenger.NotificationCenter.filterSettingsUpdated
+            r4 = 0
+            java.lang.Object[] r5 = new java.lang.Object[r4]
+            r0.postNotificationName(r3, r5)
+            goto L_0x01ee
+        L_0x0289:
+            r17 = r4
+            r18 = r5
+            org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
+            boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
+            if (r3 == 0) goto L_0x02c3
+            org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
+            boolean r0 = r0.value
+            boolean r3 = r1.filtersEnabled
+            if (r0 == r3) goto L_0x02c3
+            r1.filtersEnabled = r0
+            java.lang.String r3 = "filtersEnabled"
+            r2.putBoolean(r3, r0)
+            goto L_0x01ee
+        L_0x02a4:
+            r17 = r4
+            r18 = r5
+            org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
+            boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonNumber
+            if (r3 == 0) goto L_0x02c3
+            org.telegram.tgnet.TLRPC$TL_jsonNumber r0 = (org.telegram.tgnet.TLRPC$TL_jsonNumber) r0
+            float r3 = r1.animatedEmojisZoom
+            double r3 = (double) r3
+            double r9 = r0.value
+            int r0 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1))
+            if (r0 == 0) goto L_0x02c3
+            float r0 = (float) r9
+            r1.animatedEmojisZoom = r0
+            java.lang.String r3 = "animatedEmojisZoom"
+            r2.putFloat(r3, r0)
+            goto L_0x01ee
+        L_0x02c3:
+            int r6 = r6 + 1
+            r4 = r17
+            r5 = r18
+            goto L_0x001a
+        L_0x02cb:
+            if (r7 == 0) goto L_0x02d0
+            r2.commit()
+        L_0x02d0:
+            if (r8 == 0) goto L_0x02e0
+            org.telegram.messenger.ApplicationLoader.startPushService()
+            org.telegram.tgnet.ConnectionsManager r0 = r22.getConnectionsManager()
+            boolean r2 = r0.isPushConnectionEnabled()
+            r0.setPushConnectionEnabled(r2)
+        L_0x02e0:
+            r2 = 0
+            r1.loadingAppConfig = r2
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$null$14$MessagesController(org.telegram.tgnet.TLObject):void");
     }
 
     public void updateConfig(TLRPC$TL_config tLRPC$TL_config) {
@@ -6503,8 +6916,8 @@ public class MessagesController extends BaseController implements NotificationCe
                 this.channelViewsToSend.clear();
             }
             if (this.pollsToCheckSize > 0) {
-                AndroidUtilities.runOnUIThread(new Runnable(currentTimeMillis) {
-                    private final /* synthetic */ long f$1;
+                AndroidUtilities.runOnUIThread(new Runnable(currentTime) {
+                    private final /* synthetic */ int f$1;
 
                     {
                         this.f$1 = r2;
@@ -6698,67 +7111,135 @@ public class MessagesController extends BaseController implements NotificationCe
         getNotificationCenter().postNotificationName(NotificationCenter.didUpdateMessagesViews, sparseArray);
     }
 
-    public /* synthetic */ void lambda$updateTimerProc$107$MessagesController(long j) {
-        long elapsedRealtime = SystemClock.elapsedRealtime();
-        int size = this.pollsToCheck.size();
-        int i = 0;
-        while (i < size) {
-            SparseArray valueAt = this.pollsToCheck.valueAt(i);
-            if (valueAt != null) {
-                int size2 = valueAt.size();
-                int i2 = 0;
-                while (i2 < size2) {
-                    MessageObject messageObject = (MessageObject) valueAt.valueAt(i2);
-                    int i3 = ((TLRPC$TL_messageMediaPoll) messageObject.messageOwner.media).poll.close_date;
-                    boolean z = i3 != 0 && ((long) i3) >= j;
-                    int i4 = i;
-                    if (Math.abs(elapsedRealtime - messageObject.pollLastCheckTime) >= ((long) (z ? 1000 : 30000))) {
-                        messageObject.pollLastCheckTime = elapsedRealtime;
-                        TLRPC$TL_messages_getPollResults tLRPC$TL_messages_getPollResults = new TLRPC$TL_messages_getPollResults();
-                        tLRPC$TL_messages_getPollResults.peer = getInputPeer((int) messageObject.getDialogId());
-                        tLRPC$TL_messages_getPollResults.msg_id = messageObject.getId();
-                        getConnectionsManager().sendRequest(tLRPC$TL_messages_getPollResults, new RequestDelegate(z) {
-                            private final /* synthetic */ boolean f$1;
-
-                            {
-                                this.f$1 = r2;
-                            }
-
-                            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                                MessagesController.this.lambda$null$106$MessagesController(this.f$1, tLObject, tLRPC$TL_error);
-                            }
-                        });
-                    } else if (!messageObject.pollVisibleOnScreen) {
-                        valueAt.remove(messageObject.getId());
-                        size2--;
-                        i2--;
-                    }
-                    i2++;
-                    i = i4;
-                }
-                int i5 = i;
-                if (valueAt.size() == 0) {
-                    LongSparseArray<SparseArray<MessageObject>> longSparseArray = this.pollsToCheck;
-                    int i6 = i5;
-                    longSparseArray.remove(longSparseArray.keyAt(i6));
-                    size--;
-                    i = i6 - 1;
-                } else {
-                    i = i5;
-                }
-            }
-            i++;
-        }
-        this.pollsToCheckSize = this.pollsToCheck.size();
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x0062  */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x0074  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public /* synthetic */ void lambda$updateTimerProc$107$MessagesController(int r18) {
+        /*
+            r17 = this;
+            r0 = r17
+            r1 = r18
+            long r2 = android.os.SystemClock.elapsedRealtime()
+            android.util.LongSparseArray<android.util.SparseArray<org.telegram.messenger.MessageObject>> r4 = r0.pollsToCheck
+            int r4 = r4.size()
+            r6 = 2147483647(0x7fffffff, float:NaN)
+            r7 = 0
+        L_0x0012:
+            if (r7 >= r4) goto L_0x00c9
+            android.util.LongSparseArray<android.util.SparseArray<org.telegram.messenger.MessageObject>> r8 = r0.pollsToCheck
+            java.lang.Object r8 = r8.valueAt(r7)
+            android.util.SparseArray r8 = (android.util.SparseArray) r8
+            if (r8 != 0) goto L_0x0021
+        L_0x001e:
+            r5 = 1
+            goto L_0x00c6
+        L_0x0021:
+            int r10 = r8.size()
+            r11 = 0
+        L_0x0026:
+            r12 = 1000(0x3e8, float:1.401E-42)
+            if (r11 >= r10) goto L_0x009d
+            java.lang.Object r13 = r8.valueAt(r11)
+            org.telegram.messenger.MessageObject r13 = (org.telegram.messenger.MessageObject) r13
+            org.telegram.tgnet.TLRPC$Message r14 = r13.messageOwner
+            org.telegram.tgnet.TLRPC$MessageMedia r14 = r14.media
+            org.telegram.tgnet.TLRPC$TL_messageMediaPoll r14 = (org.telegram.tgnet.TLRPC$TL_messageMediaPoll) r14
+            org.telegram.tgnet.TLRPC$Poll r5 = r14.poll
+            int r15 = r5.close_date
+            if (r15 == 0) goto L_0x0042
+            boolean r5 = r5.closed
+            if (r5 != 0) goto L_0x0042
+            r5 = 1
+            goto L_0x0043
+        L_0x0042:
+            r5 = 0
+        L_0x0043:
+            if (r5 == 0) goto L_0x0051
+            org.telegram.tgnet.TLRPC$Poll r14 = r14.poll
+            int r14 = r14.close_date
+            if (r14 > r1) goto L_0x004c
+            goto L_0x0053
+        L_0x004c:
+            int r14 = r14 - r1
+            int r6 = java.lang.Math.min(r6, r14)
+        L_0x0051:
+            r12 = 30000(0x7530, float:4.2039E-41)
+        L_0x0053:
+            long r14 = r13.pollLastCheckTime
+            long r14 = r2 - r14
+            long r14 = java.lang.Math.abs(r14)
+            r16 = r10
+            long r9 = (long) r12
+            int r12 = (r14 > r9 ? 1 : (r14 == r9 ? 0 : -1))
+            if (r12 >= 0) goto L_0x0074
+            boolean r9 = r13.pollVisibleOnScreen
+            if (r9 != 0) goto L_0x0098
+            if (r5 != 0) goto L_0x0098
+            int r5 = r13.getId()
+            r8.remove(r5)
+            int r10 = r16 + -1
+            int r11 = r11 + -1
+            goto L_0x009a
+        L_0x0074:
+            r13.pollLastCheckTime = r2
+            org.telegram.tgnet.TLRPC$TL_messages_getPollResults r9 = new org.telegram.tgnet.TLRPC$TL_messages_getPollResults
+            r9.<init>()
+            long r14 = r13.getDialogId()
+            int r10 = (int) r14
+            org.telegram.tgnet.TLRPC$InputPeer r10 = r0.getInputPeer(r10)
+            r9.peer = r10
+            int r10 = r13.getId()
+            r9.msg_id = r10
+            org.telegram.tgnet.ConnectionsManager r10 = r17.getConnectionsManager()
+            org.telegram.messenger.-$$Lambda$MessagesController$xujVSh_FeyzypaKB5DG85d9wO1k r12 = new org.telegram.messenger.-$$Lambda$MessagesController$xujVSh_FeyzypaKB5DG85d9wO1k
+            r12.<init>(r5)
+            r10.sendRequest(r9, r12)
+        L_0x0098:
+            r10 = r16
+        L_0x009a:
+            r5 = 1
+            int r11 = r11 + r5
+            goto L_0x0026
+        L_0x009d:
+            r5 = 5
+            if (r6 >= r5) goto L_0x00b1
+            long r9 = r0.lastViewsCheckTime
+            long r13 = java.lang.System.currentTimeMillis()
+            int r5 = r5 - r6
+            int r5 = r5 * 1000
+            long r11 = (long) r5
+            long r13 = r13 - r11
+            long r9 = java.lang.Math.min(r9, r13)
+            r0.lastViewsCheckTime = r9
+        L_0x00b1:
+            int r5 = r8.size()
+            if (r5 != 0) goto L_0x001e
+            android.util.LongSparseArray<android.util.SparseArray<org.telegram.messenger.MessageObject>> r5 = r0.pollsToCheck
+            long r8 = r5.keyAt(r7)
+            r5.remove(r8)
+            int r4 = r4 + -1
+            int r7 = r7 + -1
+            goto L_0x001e
+        L_0x00c6:
+            int r7 = r7 + r5
+            goto L_0x0012
+        L_0x00c9:
+            android.util.LongSparseArray<android.util.SparseArray<org.telegram.messenger.MessageObject>> r1 = r0.pollsToCheck
+            int r1 = r1.size()
+            r0.pollsToCheckSize = r1
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.lambda$updateTimerProc$107$MessagesController(int):void");
     }
 
     public /* synthetic */ void lambda$null$106$MessagesController(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        TLRPC$Poll tLRPC$Poll;
         if (tLRPC$TL_error == null) {
             TLRPC$Updates tLRPC$Updates = (TLRPC$Updates) tLObject;
             if (z) {
                 for (int i = 0; i < tLRPC$Updates.updates.size(); i++) {
                     TLRPC$Update tLRPC$Update = tLRPC$Updates.updates.get(i);
-                    if ((tLRPC$Update instanceof TLRPC$TL_updateMessagePoll) && !((TLRPC$TL_updateMessagePoll) tLRPC$Update).poll.closed) {
+                    if ((tLRPC$Update instanceof TLRPC$TL_updateMessagePoll) && (tLRPC$Poll = ((TLRPC$TL_updateMessagePoll) tLRPC$Update).poll) != null && !tLRPC$Poll.closed) {
                         this.lastViewsCheckTime = System.currentTimeMillis() - 4000;
                     }
                 }
@@ -12380,12 +12861,17 @@ public class MessagesController extends BaseController implements NotificationCe
         int currentTime = getConnectionsManager().getCurrentTime();
         int size2 = arrayList.size();
         boolean z = false;
-        for (int i3 = 0; i3 < size2; i3++) {
-            MessageObject messageObject = arrayList.get(i3);
+        int i3 = Integer.MAX_VALUE;
+        for (int i4 = 0; i4 < size2; i4++) {
+            MessageObject messageObject = arrayList.get(i4);
             if (messageObject.type == 17) {
-                TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll = (TLRPC$TL_messageMediaPoll) messageObject.messageOwner.media;
-                if (!z && (i = tLRPC$TL_messageMediaPoll.poll.close_date) != 0 && i >= currentTime) {
-                    z = true;
+                TLRPC$Poll tLRPC$Poll = ((TLRPC$TL_messageMediaPoll) messageObject.messageOwner.media).poll;
+                if (!tLRPC$Poll.closed && (i = tLRPC$Poll.close_date) != 0) {
+                    if (i <= currentTime) {
+                        z = true;
+                    } else {
+                        i3 = Math.min(i3, i - currentTime);
+                    }
                 }
                 int id = messageObject.getId();
                 MessageObject messageObject2 = (MessageObject) sparseArray.get(id);
@@ -12398,6 +12884,8 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         if (z) {
             this.lastViewsCheckTime = 0;
+        } else if (i3 < 5) {
+            this.lastViewsCheckTime = Math.min(this.lastViewsCheckTime, System.currentTimeMillis() - ((long) ((5 - i3) * 1000)));
         }
     }
 

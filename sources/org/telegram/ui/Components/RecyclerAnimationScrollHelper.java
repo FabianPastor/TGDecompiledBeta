@@ -61,7 +61,8 @@ public class RecyclerAnimationScrollHelper {
             this.recyclerView.setScrollEnabled(false);
             final ArrayList arrayList = new ArrayList();
             this.positionToOldView.clear();
-            final ArrayList arrayList2 = new ArrayList();
+            ArrayList arrayList2 = new ArrayList();
+            this.recyclerView.getRecycledViewPool().clear();
             int i4 = 0;
             int i5 = 0;
             for (int i6 = 0; i6 < childCount; i6++) {
@@ -129,7 +130,9 @@ public class RecyclerAnimationScrollHelper {
                     Iterator it = arrayList.iterator();
                     while (it.hasNext()) {
                         View view2 = (View) it.next();
-                        RecyclerAnimationScrollHelper.this.recyclerView.addView(view2);
+                        if (view2.getParent() == null) {
+                            RecyclerAnimationScrollHelper.this.recyclerView.addView(view2);
+                        }
                         if (view2 instanceof ChatMessageCell) {
                             ((ChatMessageCell) view2).setAnimationRunning(true, true);
                         }
@@ -189,10 +192,6 @@ public class RecyclerAnimationScrollHelper {
                             }
                             if (RecyclerAnimationScrollHelper.this.animationCallback != null) {
                                 RecyclerAnimationScrollHelper.this.animationCallback.onEndAnimation();
-                            }
-                            Iterator it2 = arrayList2.iterator();
-                            while (it2.hasNext()) {
-                                RecyclerAnimationScrollHelper.this.recyclerView.getRecycledViewPool().putRecycledView((RecyclerView.ViewHolder) it2.next());
                             }
                             RecyclerAnimationScrollHelper.this.positionToOldView.clear();
                             ValueAnimator unused = RecyclerAnimationScrollHelper.this.animator = null;

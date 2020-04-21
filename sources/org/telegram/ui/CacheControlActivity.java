@@ -11,11 +11,13 @@ import android.transition.ChangeBounds;
 import android.transition.Fade;
 import android.transition.TransitionManager;
 import android.transition.TransitionSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
@@ -48,11 +50,9 @@ import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.StorageDiagramView;
 
 public class CacheControlActivity extends BaseFragment {
-    /* access modifiers changed from: private */
-    public View actionTextView;
+    private View actionTextView;
     private long audioSize = -1;
-    /* access modifiers changed from: private */
-    public BottomSheet bottomSheet;
+    private BottomSheet bottomSheet;
     private View bottomSheetView;
     /* access modifiers changed from: private */
     public int cacheInfoRow;
@@ -518,6 +518,7 @@ public class CacheControlActivity extends BaseFragment {
         long j;
         String str;
         String str2;
+        Context context2 = context;
         int i2 = i;
         if (getParentActivity() != null) {
             if (i2 == this.databaseRow) {
@@ -525,12 +526,18 @@ public class CacheControlActivity extends BaseFragment {
             } else if (i2 == this.storageUsageRow) {
                 long j2 = 0;
                 if (this.totalSize > 0 && getParentActivity() != null) {
-                    BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
-                    builder.setApplyBottomPadding(false);
-                    LinearLayout linearLayout = new LinearLayout(getParentActivity());
+                    AnonymousClass2 r2 = new BottomSheet(this, getParentActivity(), false) {
+                        /* access modifiers changed from: protected */
+                        public boolean canDismissWithSwipe() {
+                            return false;
+                        }
+                    };
+                    this.bottomSheet = r2;
+                    r2.setApplyBottomPadding(false);
+                    final LinearLayout linearLayout = new LinearLayout(getParentActivity());
                     this.bottomSheetView = linearLayout;
                     linearLayout.setOrientation(1);
-                    StorageDiagramView storageDiagramView = new StorageDiagramView(context);
+                    StorageDiagramView storageDiagramView = new StorageDiagramView(context2);
                     linearLayout.addView(storageDiagramView, LayoutHelper.createLinear(-2, -2, 1, 0, 16, 0, 16));
                     int i3 = 0;
                     CheckBoxCell checkBoxCell = null;
@@ -604,10 +611,18 @@ public class CacheControlActivity extends BaseFragment {
                         }
                     });
                     linearLayout.addView(bottomSheetCell, LayoutHelper.createLinear(-1, 50));
-                    builder.setCustomView(linearLayout);
-                    BottomSheet create = builder.create();
-                    this.bottomSheet = create;
-                    showDialog(create);
+                    AnonymousClass3 r3 = new NestedScrollView(this, context2) {
+                        public boolean onTouchEvent(MotionEvent motionEvent) {
+                            if (getMeasuredHeight() == linearLayout.getMeasuredHeight()) {
+                                return false;
+                            }
+                            return super.onTouchEvent(motionEvent);
+                        }
+                    };
+                    r3.setVerticalScrollBarEnabled(false);
+                    r3.addView(linearLayout);
+                    this.bottomSheet.setCustomView(r3);
+                    showDialog(this.bottomSheet);
                 }
             }
         }
@@ -1088,14 +1103,9 @@ public class CacheControlActivity extends BaseFragment {
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
-        AnonymousClass2 r7 = new ThemeDescription.ThemeDescriptionDelegate() {
-            public void didSetColor() {
-                if (CacheControlActivity.this.bottomSheet != null) {
-                    CacheControlActivity.this.bottomSheet.setBackgroundColor(Theme.getColor("dialogBackground"));
-                }
-                if (CacheControlActivity.this.actionTextView != null) {
-                    CacheControlActivity.this.actionTextView.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
-                }
+        $$Lambda$CacheControlActivity$nEvaMgIp17YqaiT9GswzkVzINg r7 = new ThemeDescription.ThemeDescriptionDelegate() {
+            public final void didSetColor() {
+                CacheControlActivity.this.lambda$getThemeDescriptions$10$CacheControlActivity();
             }
         };
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
@@ -1137,5 +1147,16 @@ public class CacheControlActivity extends BaseFragment {
         arrayList.add(new ThemeDescription(this.bottomSheetView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "statisticChartLine_orange"));
         arrayList.add(new ThemeDescription(this.bottomSheetView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "statisticChartLine_indigo"));
         return arrayList;
+    }
+
+    public /* synthetic */ void lambda$getThemeDescriptions$10$CacheControlActivity() {
+        BottomSheet bottomSheet2 = this.bottomSheet;
+        if (bottomSheet2 != null) {
+            bottomSheet2.setBackgroundColor(Theme.getColor("dialogBackground"));
+        }
+        View view = this.actionTextView;
+        if (view != null) {
+            view.setBackground(Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(4.0f), Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed")));
+        }
     }
 }

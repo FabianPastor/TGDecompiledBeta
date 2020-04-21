@@ -51,6 +51,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     public int diceSwitchFramesCount;
     private boolean doNotRemoveInvalidOnFrameReady;
     private final Rect dstRect;
+    private int finishFrame;
     private boolean forceFrameRedraw;
     /* access modifiers changed from: private */
     public int height;
@@ -76,6 +77,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     public volatile boolean nextFrameIsLast;
     /* access modifiers changed from: private */
     public volatile Bitmap nextRenderingBitmap;
+    private WeakReference<Runnable> onFinishCallback;
     private ArrayList<WeakReference<View>> parentViews;
     /* access modifiers changed from: private */
     public volatile HashMap<String, Integer> pendingColorUpdates;
@@ -177,6 +179,15 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         if (this.backgroundBitmap != null) {
             this.backgroundBitmap.recycle();
             this.backgroundBitmap = null;
+        }
+    }
+
+    public void setOnFinishCallback(Runnable runnable, int i) {
+        if (runnable != null) {
+            this.onFinishCallback = new WeakReference<>(runnable);
+            this.finishFrame = i;
+        } else if (this.onFinishCallback != null) {
+            this.onFinishCallback = null;
         }
     }
 
@@ -1101,8 +1112,16 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     private void setCurrentFrame(long j, long j2, long j3, boolean z) {
+        WeakReference<Runnable> weakReference;
         this.backgroundBitmap = this.renderingBitmap;
         this.renderingBitmap = this.nextRenderingBitmap;
+        if (this.isDice == 2 && (weakReference = this.onFinishCallback) != null && this.currentFrame - 1 >= this.finishFrame) {
+            Runnable runnable = (Runnable) weakReference.get();
+            if (runnable != null) {
+                runnable.run();
+            }
+            this.onFinishCallback = null;
+        }
         if (this.nextFrameIsLast) {
             stop();
         }
