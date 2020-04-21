@@ -3,7 +3,7 @@ Built-By: Generated-by-ADT
 Created-By: Android Gradle 3.6.3
 
 Name: AndroidManifest.xml
-SHA1-Digest: fWHsiefVc3jHmxRe2sKlTu4H9pk=
+SHA1-Digest: gfqf4qcFnqrgTh7WwKNQoXkV/iE=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9504,10 +9504,10 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: DOjJ0OC2RZ/nmWMVU18Kf24EoE0=
+SHA1-Digest: OckaSZpelZOUvPkmDRAMDGLrx3w=
 
 Name: classes2.dex
-SHA1-Digest: g71V5RfBIsooDdowvAR+piEx9n4=
+SHA1-Digest: CCul/+B7bEkk4yiGrdJhEldSxWE=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -18505,7 +18505,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: 2YlC3T3BS24b35EOjgqOAWCXSR0=
+SHA1-Digest: YhLKiOn7iLP6fcpRhgHR+HBn57M=
 
 Name: transport-api.properties
 SHA1-Digest: 1ihjJr5LtYfq/sGtDlVEQK4Ajxg=

@@ -205,7 +205,11 @@ public class CacheControlActivity extends BaseFragment {
                 TransitionManager.beginDelayedTransition(this.listView, transitionSet);
             }
             stroageUsageView.setStorageUsage(this.calculating, this.databaseSize, this.totalSize, this.totalDeviceFreeSize, this.totalDeviceSize);
-            this.listView.findViewHolderForAdapterPosition(this.databaseInfoRow);
+            RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(this.storageUsageRow);
+            if (findViewHolderForAdapterPosition != null) {
+                stroageUsageView.setEnabled(this.listAdapter.isEnabled(findViewHolderForAdapterPosition));
+                return;
+            }
             return;
         }
         this.listAdapter.notifyDataSetChanged();
@@ -988,7 +992,7 @@ public class CacheControlActivity extends BaseFragment {
 
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
             int adapterPosition = viewHolder.getAdapterPosition();
-            return adapterPosition == CacheControlActivity.this.databaseRow || (adapterPosition == CacheControlActivity.this.storageUsageRow && CacheControlActivity.this.totalSize > 0);
+            return adapterPosition == CacheControlActivity.this.databaseRow || (adapterPosition == CacheControlActivity.this.storageUsageRow && CacheControlActivity.this.totalSize > 0 && !CacheControlActivity.this.calculating);
         }
 
         public int getItemCount() {

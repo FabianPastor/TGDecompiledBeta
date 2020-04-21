@@ -584,9 +584,10 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
         }
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v5, resolved type: org.telegram.ui.Cells.FeaturedStickerSetInfoCell} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v9, resolved type: org.telegram.ui.Cells.FeaturedStickerSetInfoCell} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v10, resolved type: org.telegram.ui.Cells.FeaturedStickerSetInfoCell} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v4, resolved type: org.telegram.ui.Cells.StickerSetNameCell} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v9, resolved type: org.telegram.ui.Cells.StickerSetNameCell} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v10, resolved type: org.telegram.ui.Cells.StickerSetNameCell} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v11, resolved type: org.telegram.ui.Cells.StickerSetNameCell} */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r7, int r8) {
@@ -596,7 +597,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             r7 = 1
             if (r8 == r7) goto L_0x00b9
             r0 = 2
-            if (r8 == r0) goto L_0x00b0
+            if (r8 == r0) goto L_0x00af
             r0 = 3
             r1 = 17
             if (r8 == r0) goto L_0x009f
@@ -654,7 +655,7 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             r7 = -1082130432(0xffffffffbvar_, float:-1.0)
             android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r7)
             r8.setLayoutParams(r7)
-            goto L_0x00ae
+            goto L_0x00b7
         L_0x0097:
             android.view.View r7 = new android.view.View
             android.content.Context r8 = r6.context
@@ -667,14 +668,14 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$5BQQquM8yro4A6pm_PDpwuDjO6U r7 = new org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$5BQQquM8yro4A6pm_PDpwuDjO6U
             r7.<init>()
             r8.setAddOnClickListener(r7)
-        L_0x00ae:
+            goto L_0x00b7
+        L_0x00af:
+            org.telegram.ui.Cells.StickerSetNameCell r8 = new org.telegram.ui.Cells.StickerSetNameCell
+            android.content.Context r0 = r6.context
+            r1 = 0
+            r8.<init>(r0, r1, r7)
+        L_0x00b7:
             r7 = r8
-            goto L_0x00c8
-        L_0x00b0:
-            org.telegram.ui.Cells.StickerSetNameCell r7 = new org.telegram.ui.Cells.StickerSetNameCell
-            android.content.Context r8 = r6.context
-            r0 = 0
-            r7.<init>(r8, r0)
             goto L_0x00c8
         L_0x00b9:
             org.telegram.ui.Cells.EmptyCell r7 = new org.telegram.ui.Cells.EmptyCell

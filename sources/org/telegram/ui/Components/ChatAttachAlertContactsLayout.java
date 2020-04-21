@@ -528,7 +528,6 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
     /* access modifiers changed from: package-private */
     public void onPreMeasure(int i, int i2) {
         int i3;
-        int i4;
         if (this.parentAlert.sizeNotifierFrameLayout.getKeyboardHeight() > AndroidUtilities.dp(20.0f)) {
             i3 = AndroidUtilities.dp(8.0f);
             this.parentAlert.setAllowNestedScroll(false);
@@ -536,13 +535,11 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             if (!AndroidUtilities.isTablet()) {
                 Point point = AndroidUtilities.displaySize;
                 if (point.x > point.y) {
-                    i4 = i2 / 6;
-                    i3 = i4;
+                    i3 = (int) (((float) i2) / 3.5f);
                     this.parentAlert.setAllowNestedScroll(true);
                 }
             }
-            i4 = (i2 / 5) * 2;
-            i3 = i4;
+            i3 = (i2 / 5) * 2;
             this.parentAlert.setAllowNestedScroll(true);
         }
         if (this.listView.getPaddingTop() != i3) {

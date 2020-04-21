@@ -462,9 +462,9 @@ public class FilterTabsView extends FrameLayout {
                     /* access modifiers changed from: protected */
                     public void onTargetFound(View view, RecyclerView.State state, RecyclerView.SmoothScroller.Action action) {
                         int calculateDxToMakeVisible = calculateDxToMakeVisible(view, getHorizontalSnapPreference());
-                        if (calculateDxToMakeVisible > 0 || (calculateDxToMakeVisible == 0 && view.getLeft() - AndroidUtilities.dp(8.0f) < 0)) {
+                        if (calculateDxToMakeVisible > 0 || (calculateDxToMakeVisible == 0 && view.getLeft() - AndroidUtilities.dp(21.0f) < 0)) {
                             calculateDxToMakeVisible += AndroidUtilities.dp(60.0f);
-                        } else if (calculateDxToMakeVisible < 0 || (calculateDxToMakeVisible == 0 && view.getRight() + AndroidUtilities.dp(8.0f) > FilterTabsView.this.getMeasuredWidth())) {
+                        } else if (calculateDxToMakeVisible < 0 || (calculateDxToMakeVisible == 0 && view.getRight() + AndroidUtilities.dp(21.0f) > FilterTabsView.this.getMeasuredWidth())) {
                             calculateDxToMakeVisible -= AndroidUtilities.dp(60.0f);
                         }
                         int calculateDyToMakeVisible = calculateDyToMakeVisible(view, getVerticalSnapPreference());

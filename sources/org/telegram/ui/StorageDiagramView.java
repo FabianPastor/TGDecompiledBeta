@@ -15,11 +15,11 @@ import android.view.View;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.StorageDiagramView;
 
 public class StorageDiagramView extends View {
     private float[] animateToPercentage;
-    /* access modifiers changed from: private */
-    public ClearViewData[] data;
+    private ClearViewData[] data;
     private float[] drawingPercentage;
     int enabledCount;
     StaticLayout layout1;
@@ -244,102 +244,99 @@ public class StorageDiagramView extends View {
 
     /* access modifiers changed from: private */
     public void update(boolean z) {
-        int i = 0;
-        long j = 0;
-        int i2 = 0;
-        while (true) {
-            ClearViewData[] clearViewDataArr = this.data;
-            if (i2 >= clearViewDataArr.length) {
-                break;
-            }
-            if (clearViewDataArr[i2] != null && clearViewDataArr[i2].clear) {
-                j += clearViewDataArr[i2].size;
-            }
-            i2++;
-        }
-        this.enabledCount = 0;
-        int i3 = 0;
-        float f = 0.0f;
-        float f2 = 0.0f;
-        while (true) {
-            ClearViewData[] clearViewDataArr2 = this.data;
-            if (i3 >= clearViewDataArr2.length) {
-                break;
-            }
-            if (clearViewDataArr2[i3] != null && clearViewDataArr2[i3].clear) {
-                this.enabledCount++;
-            }
-            ClearViewData[] clearViewDataArr3 = this.data;
-            if (clearViewDataArr3[i3] == null || !clearViewDataArr3[i3].clear) {
-                this.animateToPercentage[i3] = 0.0f;
-            } else {
-                float f3 = ((float) clearViewDataArr3[i3].size) / ((float) j);
-                if (f3 < 0.02777f) {
-                    f3 = 0.02777f;
+        final ClearViewData[] clearViewDataArr = this.data;
+        if (clearViewDataArr != null) {
+            int i = 0;
+            long j = 0;
+            for (int i2 = 0; i2 < clearViewDataArr.length; i2++) {
+                if (clearViewDataArr[i2] != null && clearViewDataArr[i2].clear) {
+                    j += clearViewDataArr[i2].size;
                 }
-                f += f3;
-                if (f3 > f2 && this.data[i3].clear) {
-                    f2 = f3;
+            }
+            this.enabledCount = 0;
+            float f = 0.0f;
+            float f2 = 0.0f;
+            for (int i3 = 0; i3 < clearViewDataArr.length; i3++) {
+                if (clearViewDataArr[i3] != null && clearViewDataArr[i3].clear) {
+                    this.enabledCount++;
                 }
-                this.animateToPercentage[i3] = f3;
-            }
-            i3++;
-        }
-        if (f > 1.0f) {
-            float f4 = 1.0f / f;
-            int i4 = 0;
-            while (true) {
-                ClearViewData[] clearViewDataArr4 = this.data;
-                if (i4 >= clearViewDataArr4.length) {
-                    break;
+                if (clearViewDataArr[i3] == null || !clearViewDataArr[i3].clear) {
+                    this.animateToPercentage[i3] = 0.0f;
+                } else {
+                    float f3 = ((float) clearViewDataArr[i3].size) / ((float) j);
+                    if (f3 < 0.02777f) {
+                        f3 = 0.02777f;
+                    }
+                    f += f3;
+                    if (f3 > f2 && clearViewDataArr[i3].clear) {
+                        f2 = f3;
+                    }
+                    this.animateToPercentage[i3] = f3;
                 }
-                if (clearViewDataArr4[i4] != null) {
-                    float[] fArr = this.animateToPercentage;
-                    fArr[i4] = fArr[i4] * f4;
-                }
-                i4++;
             }
-        }
-        if (!z) {
-            while (i < this.data.length) {
-                this.drawingPercentage[i] = this.animateToPercentage[i];
-                i++;
-            }
-            return;
-        }
-        while (i < this.data.length) {
-            this.startFromPercentage[i] = this.drawingPercentage[i];
-            i++;
-        }
-        ValueAnimator valueAnimator2 = this.valueAnimator;
-        if (valueAnimator2 != null) {
-            valueAnimator2.removeAllListeners();
-            this.valueAnimator.cancel();
-        }
-        ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-        this.valueAnimator = ofFloat;
-        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                StorageDiagramView.this.lambda$update$0$StorageDiagramView(valueAnimator);
-            }
-        });
-        this.valueAnimator.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animator) {
-                for (int i = 0; i < StorageDiagramView.this.data.length; i++) {
-                    if (StorageDiagramView.this.data[i] != null) {
-                        StorageDiagramView.this.data[i].firstDraw = false;
+            if (f > 1.0f) {
+                float f4 = 1.0f / f;
+                for (int i4 = 0; i4 < clearViewDataArr.length; i4++) {
+                    if (clearViewDataArr[i4] != null) {
+                        float[] fArr = this.animateToPercentage;
+                        fArr[i4] = fArr[i4] * f4;
                     }
                 }
             }
-        });
-        this.valueAnimator.setDuration(450);
-        this.valueAnimator.setInterpolator(new FastOutSlowInInterpolator());
-        this.valueAnimator.start();
+            if (!z) {
+                while (i < clearViewDataArr.length) {
+                    this.drawingPercentage[i] = this.animateToPercentage[i];
+                    i++;
+                }
+                return;
+            }
+            while (i < clearViewDataArr.length) {
+                this.startFromPercentage[i] = this.drawingPercentage[i];
+                i++;
+            }
+            ValueAnimator valueAnimator2 = this.valueAnimator;
+            if (valueAnimator2 != null) {
+                valueAnimator2.removeAllListeners();
+                this.valueAnimator.cancel();
+            }
+            ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+            this.valueAnimator = ofFloat;
+            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(clearViewDataArr) {
+                private final /* synthetic */ StorageDiagramView.ClearViewData[] f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    StorageDiagramView.this.lambda$update$0$StorageDiagramView(this.f$1, valueAnimator);
+                }
+            });
+            this.valueAnimator.addListener(new AnimatorListenerAdapter(this) {
+                public void onAnimationEnd(Animator animator) {
+                    int i = 0;
+                    while (true) {
+                        ClearViewData[] clearViewDataArr = clearViewDataArr;
+                        if (i < clearViewDataArr.length) {
+                            if (clearViewDataArr[i] != null) {
+                                clearViewDataArr[i].firstDraw = false;
+                            }
+                            i++;
+                        } else {
+                            return;
+                        }
+                    }
+                }
+            });
+            this.valueAnimator.setDuration(450);
+            this.valueAnimator.setInterpolator(new FastOutSlowInInterpolator());
+            this.valueAnimator.start();
+        }
     }
 
-    public /* synthetic */ void lambda$update$0$StorageDiagramView(ValueAnimator valueAnimator2) {
+    public /* synthetic */ void lambda$update$0$StorageDiagramView(ClearViewData[] clearViewDataArr, ValueAnimator valueAnimator2) {
         float floatValue = ((Float) valueAnimator2.getAnimatedValue()).floatValue();
-        for (int i = 0; i < this.data.length; i++) {
+        for (int i = 0; i < clearViewDataArr.length; i++) {
             this.drawingPercentage[i] = (this.startFromPercentage[i] * (1.0f - floatValue)) + (this.animateToPercentage[i] * floatValue);
         }
         invalidate();
@@ -347,26 +344,28 @@ public class StorageDiagramView extends View {
 
     /* access modifiers changed from: private */
     public void updateDescription() {
-        long j = 0;
-        int i = 0;
-        while (true) {
-            ClearViewData[] clearViewDataArr = this.data;
-            if (i >= clearViewDataArr.length) {
-                break;
+        if (this.data != null) {
+            long j = 0;
+            int i = 0;
+            while (true) {
+                ClearViewData[] clearViewDataArr = this.data;
+                if (i >= clearViewDataArr.length) {
+                    break;
+                }
+                if (clearViewDataArr[i] != null && clearViewDataArr[i].clear) {
+                    j += clearViewDataArr[i].size;
+                }
+                i++;
             }
-            if (clearViewDataArr[i] != null && clearViewDataArr[i].clear) {
-                j += clearViewDataArr[i].size;
+            String str = " ";
+            String[] split = AndroidUtilities.formatFileSize(j).split(str);
+            if ((split != null) && (split.length > 1)) {
+                this.layout1 = new StaticLayout(j == 0 ? str : split[0], this.textPaint, getMeasuredWidth(), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
+                if (j != 0) {
+                    str = split[1];
+                }
+                this.layout2 = new StaticLayout(str, this.textPaint2, getMeasuredWidth(), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
             }
-            i++;
-        }
-        String str = " ";
-        String[] split = AndroidUtilities.formatFileSize(j).split(str);
-        if ((split != null) && (split.length > 1)) {
-            this.layout1 = new StaticLayout(j == 0 ? str : split[0], this.textPaint, getMeasuredWidth(), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
-            if (j != 0) {
-                str = split[1];
-            }
-            this.layout2 = new StaticLayout(str, this.textPaint2, getMeasuredWidth(), Layout.Alignment.ALIGN_CENTER, 1.0f, 0.0f, false);
         }
     }
 }

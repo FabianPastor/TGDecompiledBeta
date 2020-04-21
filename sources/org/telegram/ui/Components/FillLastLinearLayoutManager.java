@@ -13,6 +13,7 @@ public class FillLastLinearLayoutManager extends LinearLayoutManager {
     private int listHeight;
     private RecyclerView listView;
     private int listWidth;
+    private boolean skipFirstItem;
 
     public FillLastLinearLayoutManager(Context context, int i, boolean z, int i2, RecyclerView recyclerView) {
         super(context, i, z);
@@ -20,12 +21,16 @@ public class FillLastLinearLayoutManager extends LinearLayoutManager {
         this.additionalHeight = i2;
     }
 
+    public void setSkipFirstItem() {
+        this.skipFirstItem = true;
+    }
+
     private void calcLastItemHeight() {
         RecyclerView.Adapter adapter;
         if (this.listHeight > 0 && (adapter = this.listView.getAdapter()) != null) {
             int itemCount = adapter.getItemCount() - 1;
             int i = 0;
-            for (int i2 = 0; i2 < itemCount; i2++) {
+            for (int i2 = this.skipFirstItem; i2 < itemCount; i2++) {
                 int itemViewType = adapter.getItemViewType(i2);
                 RecyclerView.ViewHolder viewHolder = this.heights.get(itemViewType, (Object) null);
                 if (viewHolder == null) {

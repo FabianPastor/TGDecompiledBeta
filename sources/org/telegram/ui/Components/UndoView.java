@@ -11,8 +11,12 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.RectF;
 import android.os.SystemClock;
+import android.text.Selection;
+import android.text.Spannable;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.CharacterStyle;
 import android.util.Property;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
@@ -63,6 +68,31 @@ public class UndoView extends FrameLayout {
         return true;
     }
 
+    public void didPressUrl(CharacterStyle characterStyle) {
+    }
+
+    public class LinkMovementMethodMy extends LinkMovementMethod {
+        public LinkMovementMethodMy() {
+        }
+
+        public boolean onTouchEvent(TextView textView, Spannable spannable, MotionEvent motionEvent) {
+            try {
+                if (motionEvent.getAction() != 1) {
+                    return super.onTouchEvent(textView, spannable, motionEvent);
+                }
+                CharacterStyle[] characterStyleArr = (CharacterStyle[]) spannable.getSpans(textView.getSelectionStart(), textView.getSelectionEnd(), CharacterStyle.class);
+                if (characterStyleArr != null && characterStyleArr.length > 0) {
+                    UndoView.this.didPressUrl(characterStyleArr[0]);
+                }
+                Selection.removeSelection(spannable);
+                return true;
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
+                return false;
+            }
+        }
+    }
+
     public UndoView(Context context) {
         this(context, false);
     }
@@ -75,6 +105,8 @@ public class UndoView extends FrameLayout {
         this.infoTextView = textView;
         textView.setTextSize(1, 15.0f);
         this.infoTextView.setTextColor(Theme.getColor("undo_infoColor"));
+        this.infoTextView.setLinkTextColor(Theme.getColor("undo_cancelColor"));
+        this.infoTextView.setMovementMethod(new LinkMovementMethodMy());
         addView(this.infoTextView, LayoutHelper.createFrame(-2, -2.0f, 51, 45.0f, 13.0f, 0.0f, 0.0f));
         TextView textView2 = new TextView(context);
         this.subinfoTextView = textView2;

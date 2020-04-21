@@ -4397,7 +4397,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r1 = r2
             org.telegram.tgnet.TLRPC$TL_urlAuthResultAccepted r1 = (org.telegram.tgnet.TLRPC$TL_urlAuthResultAccepted) r1
             java.lang.String r1 = r1.url
-            r5.showOpenUrlAlert(r1, r6)
+            r5.showOpenUrlAlert(r1, r6, r6)
             goto L_0x016e
         L_0x003e:
             boolean r1 = r2 instanceof org.telegram.tgnet.TLRPC$TL_urlAuthResultDefault
@@ -4405,7 +4405,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r1 = r2
             org.telegram.tgnet.TLRPC$TL_urlAuthResultDefault r1 = (org.telegram.tgnet.TLRPC$TL_urlAuthResultDefault) r1
             java.lang.String r1 = r4.url
-            r5.showOpenUrlAlert(r1, r8)
+            r5.showOpenUrlAlert(r1, r6, r8)
             goto L_0x016e
         L_0x004c:
             boolean r7 = r4 instanceof org.telegram.tgnet.TLRPC$TL_keyboardButtonBuy
@@ -4556,7 +4556,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             goto L_0x016e
         L_0x0169:
             java.lang.String r1 = r2.url
-            r5.showOpenUrlAlert(r1, r6)
+            r5.showOpenUrlAlert(r1, r6, r6)
         L_0x016e:
             return
         */

@@ -140,6 +140,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     /* access modifiers changed from: private */
     public boolean enterCommentEventSent;
     /* access modifiers changed from: private */
+    public ArrayList<Rect> exclusionRects;
+    /* access modifiers changed from: private */
+    public Rect exclustionRect;
+    /* access modifiers changed from: private */
     public FrameLayout frameLayout2;
     private ActionBarMenuSubItem[] itemCells;
     private AttachAlertLayout[] layouts = new AttachAlertLayout[6];
@@ -582,6 +586,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.graphics.Paint r1 = new android.graphics.Paint
             r1.<init>(r11)
             r6.attachButtonPaint = r1
+            java.util.ArrayList r1 = new java.util.ArrayList
+            r1.<init>()
+            r6.exclusionRects = r1
+            android.graphics.Rect r1 = new android.graphics.Rect
+            r1.<init>()
+            r6.exclustionRect = r1
             org.telegram.ui.Components.ChatAttachAlert$15 r1 = new org.telegram.ui.Components.ChatAttachAlert$15
             java.lang.String r2 = "openProgress"
             r1.<init>(r2)
@@ -597,6 +607,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
             int r2 = org.telegram.messenger.NotificationCenter.reloadInlineHints
             r1.addObserver(r6, r2)
+            java.util.ArrayList<android.graphics.Rect> r1 = r6.exclusionRects
+            android.graphics.Rect r2 = r6.exclustionRect
+            r1.add(r2)
             org.telegram.ui.Components.ChatAttachAlert$2 r1 = new org.telegram.ui.Components.ChatAttachAlert$2
             r1.<init>(r7, r9)
             r6.sizeNotifierFrameLayout = r1
@@ -990,14 +1003,14 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r3)
             int r5 = android.os.Build.VERSION.SDK_INT
             r11 = 21
-            if (r5 < r11) goto L_0x0447
+            if (r5 < r11) goto L_0x045c
             java.lang.String r3 = "dialogFloatingButtonPressed"
-        L_0x0447:
+        L_0x045c:
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r2, r4, r3)
             r6.writeButtonDrawable = r2
             int r2 = android.os.Build.VERSION.SDK_INT
-            if (r2 >= r11) goto L_0x0482
+            if (r2 >= r11) goto L_0x0497
             android.content.res.Resources r2 = r30.getResources()
             r3 = 2131165388(0x7var_cc, float:1.7944992E38)
             android.graphics.drawable.Drawable r2 = r2.getDrawable(r3)
@@ -1013,7 +1026,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r0)
             r3.setIconSize(r2, r4)
             r6.writeButtonDrawable = r3
-        L_0x0482:
+        L_0x0497:
             android.widget.ImageView r2 = r6.writeButton
             android.graphics.drawable.Drawable r3 = r6.writeButtonDrawable
             r2.setBackgroundDrawable(r3)
@@ -1031,40 +1044,40 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r3)
             int r2 = android.os.Build.VERSION.SDK_INT
-            if (r2 < r11) goto L_0x04b8
+            if (r2 < r11) goto L_0x04cd
             android.widget.ImageView r2 = r6.writeButton
             org.telegram.ui.Components.ChatAttachAlert$9 r3 = new org.telegram.ui.Components.ChatAttachAlert$9
             r3.<init>(r6)
             r2.setOutlineProvider(r3)
-        L_0x04b8:
+        L_0x04cd:
             android.widget.FrameLayout r2 = r6.writeButtonContainer
             android.widget.ImageView r3 = r6.writeButton
             int r4 = android.os.Build.VERSION.SDK_INT
-            if (r4 < r11) goto L_0x04c5
+            if (r4 < r11) goto L_0x04da
             r4 = 56
             r17 = 56
-            goto L_0x04c9
-        L_0x04c5:
+            goto L_0x04de
+        L_0x04da:
             r4 = 60
             r17 = 60
-        L_0x04c9:
+        L_0x04de:
             int r4 = android.os.Build.VERSION.SDK_INT
-            if (r4 < r11) goto L_0x04d0
+            if (r4 < r11) goto L_0x04e5
             r18 = 1113587712(0x42600000, float:56.0)
-            goto L_0x04d4
-        L_0x04d0:
+            goto L_0x04e9
+        L_0x04e5:
             r0 = 1114636288(0x42700000, float:60.0)
             r18 = 1114636288(0x42700000, float:60.0)
-        L_0x04d4:
+        L_0x04e9:
             r19 = 51
             int r0 = android.os.Build.VERSION.SDK_INT
-            if (r0 < r11) goto L_0x04df
+            if (r0 < r11) goto L_0x04f4
             r5 = 1073741824(0x40000000, float:2.0)
             r20 = 1073741824(0x40000000, float:2.0)
-            goto L_0x04e1
-        L_0x04df:
+            goto L_0x04f6
+        L_0x04f4:
             r20 = 0
-        L_0x04e1:
+        L_0x04f6:
             r21 = 0
             r22 = 0
             r23 = 0
@@ -2083,9 +2096,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         if (this.menuShowed) {
             this.selectedMenuItem.setTranslationY(((float) (this.scrollOffsetY[i] - AndroidUtilities.dp((((float) i4) * f) + 37.0f))) + dp);
         } else {
-            this.selectedMenuItem.setTranslationY((float) (AndroidUtilities.dp(52.0f) - AndroidUtilities.dp((float) (i4 + 37))));
+            this.selectedMenuItem.setTranslationY((float) ((ActionBar.getCurrentActionBarHeight() - AndroidUtilities.dp(4.0f)) - AndroidUtilities.dp((float) (i4 + 37))));
         }
-        this.searchItem.setTranslationY((float) (AndroidUtilities.dp(52.0f) - AndroidUtilities.dp((float) (i4 + 37))));
+        this.searchItem.setTranslationY((float) ((ActionBar.getCurrentActionBarHeight() - AndroidUtilities.dp(4.0f)) - AndroidUtilities.dp((float) (i4 + 37))));
         this.selectedTextView.setTranslationY(((float) (this.scrollOffsetY[i] - AndroidUtilities.dp((((float) i4) * f) + 25.0f))) + dp);
         ChatAttachAlertPollLayout chatAttachAlertPollLayout = this.pollLayout;
         if (chatAttachAlertPollLayout != null && attachAlertLayout == chatAttachAlertPollLayout) {

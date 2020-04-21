@@ -530,7 +530,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     /* access modifiers changed from: package-private */
-    /* JADX WARNING: Removed duplicated region for block: B:12:0x003b  */
+    /* JADX WARNING: Removed duplicated region for block: B:12:0x003e  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onPreMeasure(int r4, int r5) {
         /*
@@ -540,52 +540,55 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             boolean r4 = r4.isSearchFieldVisible()
             r0 = 1
             r1 = 0
-            if (r4 != 0) goto L_0x0042
+            if (r4 != 0) goto L_0x0045
             org.telegram.ui.Components.ChatAttachAlert r4 = r3.parentAlert
             org.telegram.ui.Components.SizeNotifierFrameLayout r4 = r4.sizeNotifierFrameLayout
             int r4 = r4.getKeyboardHeight()
             r2 = 1101004800(0x41a00000, float:20.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             if (r4 <= r2) goto L_0x001d
-            goto L_0x0042
+            goto L_0x0045
         L_0x001d:
             boolean r4 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r4 != 0) goto L_0x002e
+            if (r4 != 0) goto L_0x0031
             android.graphics.Point r4 = org.telegram.messenger.AndroidUtilities.displaySize
             int r2 = r4.x
             int r4 = r4.y
-            if (r2 <= r4) goto L_0x002e
-            int r5 = r5 / 6
-            goto L_0x0032
-        L_0x002e:
+            if (r2 <= r4) goto L_0x0031
+            float r4 = (float) r5
+            r5 = 1080033280(0x40600000, float:3.5)
+            float r4 = r4 / r5
+            int r4 = (int) r4
+            goto L_0x0035
+        L_0x0031:
             int r5 = r5 / 5
-            int r5 = r5 * 2
-        L_0x0032:
-            r4 = 1065353216(0x3var_, float:1.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r5 = r5 - r4
-            if (r5 >= 0) goto L_0x003c
-            r5 = 0
-        L_0x003c:
-            org.telegram.ui.Components.ChatAttachAlert r4 = r3.parentAlert
-            r4.setAllowNestedScroll(r0)
-            goto L_0x004d
-        L_0x0042:
+            int r4 = r5 * 2
+        L_0x0035:
+            r5 = 1065353216(0x3var_, float:1.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            int r4 = r4 - r5
+            if (r4 >= 0) goto L_0x003f
+            r4 = 0
+        L_0x003f:
+            org.telegram.ui.Components.ChatAttachAlert r5 = r3.parentAlert
+            r5.setAllowNestedScroll(r0)
+            goto L_0x0050
+        L_0x0045:
             r4 = 1113587712(0x42600000, float:56.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            org.telegram.ui.Components.ChatAttachAlert r4 = r3.parentAlert
-            r4.setAllowNestedScroll(r1)
-        L_0x004d:
-            org.telegram.ui.Components.RecyclerListView r4 = r3.listView
-            int r4 = r4.getPaddingTop()
-            if (r4 == r5) goto L_0x0064
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            org.telegram.ui.Components.ChatAttachAlert r5 = r3.parentAlert
+            r5.setAllowNestedScroll(r1)
+        L_0x0050:
+            org.telegram.ui.Components.RecyclerListView r5 = r3.listView
+            int r5 = r5.getPaddingTop()
+            if (r5 == r4) goto L_0x0067
             r3.ignoreLayout = r0
-            org.telegram.ui.Components.RecyclerListView r4 = r3.listView
+            org.telegram.ui.Components.RecyclerListView r5 = r3.listView
             r0 = 1111490560(0x42400000, float:48.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-            r4.setPadding(r1, r5, r1, r0)
+            r5.setPadding(r1, r4, r1, r0)
             r3.ignoreLayout = r1
-        L_0x0064:
+        L_0x0067:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertDocumentLayout.onPreMeasure(int, int):void");

@@ -7763,7 +7763,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButton) {
                 SendMessagesHelper.getInstance(this.currentAccount).sendMessage(tLRPC$KeyboardButton2.text, this.dialog_id, messageObject, (TLRPC$WebPage) null, false, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
             } else if (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonUrl) {
-                this.parentFragment.showOpenUrlAlert(tLRPC$KeyboardButton2.url, true);
+                this.parentFragment.showOpenUrlAlert(tLRPC$KeyboardButton2.url, false, true);
             } else if (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonRequestPhone) {
                 this.parentFragment.shareMyContact(2, messageObject3);
             } else {

@@ -27,7 +27,6 @@ import android.text.TextUtils;
 import android.util.Property;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.animation.OvershootInterpolator;
 import android.widget.EditText;
@@ -101,9 +100,13 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
     public LocationActivityAdapter adapter;
     /* access modifiers changed from: private */
     public AnimatorSet animatorSet;
-    private Bitmap[] bitmapCache = new Bitmap[7];
+    /* access modifiers changed from: private */
+    public Paint backgroundPaint = new Paint();
+    private Bitmap[] bitmapCache;
     private boolean checkGpsEnabled = true;
     private boolean checkPermission = true;
+    /* access modifiers changed from: private */
+    public int clipSize;
     private boolean currentMapStyleDark;
     /* access modifiers changed from: private */
     public LocationActivityDelegate delegate;
@@ -114,7 +117,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
     private TextView emptyTitleTextView;
     /* access modifiers changed from: private */
     public LinearLayout emptyView;
-    private boolean first = true;
+    private boolean first;
     private boolean firstWas;
     /* access modifiers changed from: private */
     public CameraUpdate forceUpdate;
@@ -136,6 +139,8 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
     public ImageView locationButton;
     /* access modifiers changed from: private */
     public int locationType;
+    /* access modifiers changed from: private */
+    public int mapHeight;
     private ActionBarMenuItem mapTypeButton;
     private MapView mapView;
     /* access modifiers changed from: private */
@@ -146,10 +151,12 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
     /* access modifiers changed from: private */
     public int markerTop;
     private Location myLocation;
+    private int nonClipSize;
     private boolean onResumeCalled;
     /* access modifiers changed from: private */
     public ActionBarMenuItem otherItem;
-    private int overScrollHeight = ((AndroidUtilities.displaySize.x - ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.dp(66.0f));
+    /* access modifiers changed from: private */
+    public int overScrollHeight;
     /* access modifiers changed from: private */
     public MapOverlayView overlayView;
     private ArrayList<VenueLocation> placeMarkers = new ArrayList<>();
@@ -377,6 +384,11 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
     public ChatAttachAlertLocationLayout(ChatAttachAlert chatAttachAlert, Context context) {
         super(chatAttachAlert, context);
         Context context2 = context;
+        int currentActionBarHeight = (AndroidUtilities.displaySize.x - ActionBar.getCurrentActionBarHeight()) - AndroidUtilities.dp(66.0f);
+        this.overScrollHeight = currentActionBarHeight;
+        this.mapHeight = currentActionBarHeight;
+        this.first = true;
+        this.bitmapCache = new Bitmap[7];
         ChatActivity chatActivity = (ChatActivity) this.parentAlert.baseFragment;
         this.dialogId = chatActivity.getDialogId();
         if (chatActivity.getCurrentEncryptedChat() != null || chatActivity.isInScheduleMode() || UserObject.isUserSelf(chatActivity.getCurrentUser())) {
@@ -466,9 +478,38 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                     ChatAttachAlertLocationLayout.this.overlayView.updatePositions();
                 }
             }
+
+            /* access modifiers changed from: protected */
+            public boolean drawChild(Canvas canvas, View view, long j) {
+                canvas.save();
+                canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight() - ChatAttachAlertLocationLayout.this.clipSize);
+                boolean drawChild = super.drawChild(canvas, view, j);
+                canvas.restore();
+                return drawChild;
+            }
+
+            /* access modifiers changed from: protected */
+            public void onDraw(Canvas canvas) {
+                ChatAttachAlertLocationLayout.this.backgroundPaint.setColor(Theme.getColor("dialogBackground"));
+                canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) (getMeasuredHeight() - ChatAttachAlertLocationLayout.this.clipSize), ChatAttachAlertLocationLayout.this.backgroundPaint);
+            }
+
+            public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                if (motionEvent.getY() > ((float) (getMeasuredHeight() - ChatAttachAlertLocationLayout.this.clipSize))) {
+                    return false;
+                }
+                return super.onInterceptTouchEvent(motionEvent);
+            }
+
+            public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+                if (motionEvent.getY() > ((float) (getMeasuredHeight() - ChatAttachAlertLocationLayout.this.clipSize))) {
+                    return false;
+                }
+                return super.dispatchTouchEvent(motionEvent);
+            }
         };
         this.mapViewClip = r0;
-        r0.setBackgroundColor(Theme.getColor("dialogBackground"));
+        r0.setWillNotDraw(false);
         View view = new View(context2);
         this.loadingMapView = view;
         view.setBackgroundDrawable(new MapPlaceholderDrawable());
@@ -634,12 +675,12 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int i) {
                 AnonymousClass1 r2 = new LinearSmoothScroller(recyclerView.getContext()) {
                     public int calculateDyToMakeVisible(View view, int i) {
-                        return super.calculateDyToMakeVisible(view, i) - ChatAttachAlertLocationLayout.this.listView.getPaddingTop();
+                        return super.calculateDyToMakeVisible(view, i) - (ChatAttachAlertLocationLayout.this.listView.getPaddingTop() - (ChatAttachAlertLocationLayout.this.mapHeight - ChatAttachAlertLocationLayout.this.overScrollHeight));
                     }
 
                     /* access modifiers changed from: protected */
                     public int calculateTimeForDeceleration(int i) {
-                        return super.calculateTimeForDeceleration(i) * 2;
+                        return super.calculateTimeForDeceleration(i) * 4;
                     }
                 };
                 r2.setTargetPosition(i);
@@ -659,8 +700,8 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                 if (i == 0) {
                     int dp = AndroidUtilities.dp(13.0f);
                     int backgroundPaddingTop = ChatAttachAlertLocationLayout.this.parentAlert.getBackgroundPaddingTop();
-                    if (((ChatAttachAlertLocationLayout.this.parentAlert.scrollOffsetY[0] - backgroundPaddingTop) - dp) + backgroundPaddingTop < ActionBar.getCurrentActionBarHeight() && (holder = (RecyclerListView.Holder) ChatAttachAlertLocationLayout.this.listView.findViewHolderForAdapterPosition(0)) != null && holder.itemView.getTop() > 0) {
-                        ChatAttachAlertLocationLayout.this.listView.smoothScrollBy(0, holder.itemView.getTop());
+                    if (((ChatAttachAlertLocationLayout.this.parentAlert.scrollOffsetY[0] - backgroundPaddingTop) - dp) + backgroundPaddingTop < ActionBar.getCurrentActionBarHeight() && (holder = (RecyclerListView.Holder) ChatAttachAlertLocationLayout.this.listView.findViewHolderForAdapterPosition(0)) != null && holder.itemView.getTop() > ChatAttachAlertLocationLayout.this.mapHeight - ChatAttachAlertLocationLayout.this.overScrollHeight) {
+                        ChatAttachAlertLocationLayout.this.listView.smoothScrollBy(0, holder.itemView.getTop() - (ChatAttachAlertLocationLayout.this.mapHeight - ChatAttachAlertLocationLayout.this.overScrollHeight));
                     }
                 }
             }
@@ -695,10 +736,6 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         this.adapter.setOverScrollHeight(this.overScrollHeight);
         addView(this.mapViewClip, LayoutHelper.createFrame(-1, -1, 51));
         AnonymousClass9 r04 = new MapView(context2) {
-            public boolean onTouchEvent(MotionEvent motionEvent) {
-                return super.onTouchEvent(motionEvent);
-            }
-
             public boolean dispatchTouchEvent(MotionEvent motionEvent) {
                 MotionEvent motionEvent2;
                 if (ChatAttachAlertLocationLayout.this.yOffset != 0.0f) {
@@ -977,7 +1014,6 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             this.currentMapStyleDark = true;
             this.googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(ApplicationLoader.applicationContext, NUM));
         }
-        this.googleMap.setPadding(AndroidUtilities.dp(70.0f), 0, AndroidUtilities.dp(70.0f), AndroidUtilities.dp(10.0f));
         onMapInit();
     }
 
@@ -1103,17 +1139,6 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertLocationLayout.onDestroy():void");
     }
 
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(i, i2);
-    }
-
-    /* access modifiers changed from: protected */
-    public void measureChildWithMargins(View view, int i, int i2, int i3, int i4) {
-        ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-        view.measure(FrameLayout.getChildMeasureSpec(i, getPaddingLeft() + getPaddingRight() + marginLayoutParams.leftMargin + marginLayoutParams.rightMargin + i2, marginLayoutParams.width), FrameLayout.getChildMeasureSpec(i3, getPaddingTop() + getPaddingBottom() + marginLayoutParams.topMargin + marginLayoutParams.bottomMargin + i4, marginLayoutParams.height));
-    }
-
     /* access modifiers changed from: package-private */
     public void onHide() {
         this.searchItem.setVisibility(8);
@@ -1133,7 +1158,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         int i = 0;
         RecyclerListView.Holder holder = (RecyclerListView.Holder) this.listView.findViewHolderForAdapterPosition(0);
         if (holder != null) {
-            int y = (int) holder.itemView.getY();
+            int y = ((int) holder.itemView.getY()) - this.nonClipSize;
             i = Math.max(y, 0);
             if (y >= 0) {
                 i = y;
@@ -1159,7 +1184,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     /* access modifiers changed from: package-private */
-    /* JADX WARNING: Removed duplicated region for block: B:12:0x003b  */
+    /* JADX WARNING: Removed duplicated region for block: B:12:0x003e  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onPreMeasure(int r4, int r5) {
         /*
@@ -1169,49 +1194,54 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             boolean r4 = r4.isSearchFieldVisible()
             r0 = 1
             r1 = 0
-            if (r4 != 0) goto L_0x0042
+            if (r4 != 0) goto L_0x0045
             org.telegram.ui.Components.ChatAttachAlert r4 = r3.parentAlert
             org.telegram.ui.Components.SizeNotifierFrameLayout r4 = r4.sizeNotifierFrameLayout
             int r4 = r4.getKeyboardHeight()
             r2 = 1101004800(0x41a00000, float:20.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             if (r4 <= r2) goto L_0x001d
-            goto L_0x0042
+            goto L_0x0045
         L_0x001d:
             boolean r4 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r4 != 0) goto L_0x002e
+            if (r4 != 0) goto L_0x0031
             android.graphics.Point r4 = org.telegram.messenger.AndroidUtilities.displaySize
             int r2 = r4.x
             int r4 = r4.y
-            if (r2 <= r4) goto L_0x002e
-            int r5 = r5 / 6
-            goto L_0x0032
-        L_0x002e:
+            if (r2 <= r4) goto L_0x0031
+            float r4 = (float) r5
+            r5 = 1080033280(0x40600000, float:3.5)
+            float r4 = r4 / r5
+            int r4 = (int) r4
+            goto L_0x0035
+        L_0x0031:
             int r5 = r5 / 5
-            int r5 = r5 * 2
-        L_0x0032:
-            r4 = 1112539136(0x42500000, float:52.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r5 = r5 - r4
-            if (r5 >= 0) goto L_0x003c
-            r5 = 0
-        L_0x003c:
-            org.telegram.ui.Components.ChatAttachAlert r4 = r3.parentAlert
-            r4.setAllowNestedScroll(r0)
-            goto L_0x0048
-        L_0x0042:
-            org.telegram.ui.Components.ChatAttachAlert r4 = r3.parentAlert
-            r4.setAllowNestedScroll(r1)
-            r5 = 0
-        L_0x0048:
-            org.telegram.ui.Components.RecyclerListView r4 = r3.listView
-            int r4 = r4.getPaddingTop()
-            if (r4 == r5) goto L_0x0059
+            int r4 = r5 * 2
+        L_0x0035:
+            r5 = 1112539136(0x42500000, float:52.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            int r4 = r4 - r5
+            if (r4 >= 0) goto L_0x003f
+            r4 = 0
+        L_0x003f:
+            org.telegram.ui.Components.ChatAttachAlert r5 = r3.parentAlert
+            r5.setAllowNestedScroll(r0)
+            goto L_0x004f
+        L_0x0045:
+            int r4 = r3.mapHeight
+            int r5 = r3.overScrollHeight
+            int r4 = r4 - r5
+            org.telegram.ui.Components.ChatAttachAlert r5 = r3.parentAlert
+            r5.setAllowNestedScroll(r1)
+        L_0x004f:
+            org.telegram.ui.Components.RecyclerListView r5 = r3.listView
+            int r5 = r5.getPaddingTop()
+            if (r5 == r4) goto L_0x0060
             r3.ignoreLayout = r0
-            org.telegram.ui.Components.RecyclerListView r4 = r3.listView
-            r4.setPadding(r1, r5, r1, r1)
+            org.telegram.ui.Components.RecyclerListView r5 = r3.listView
+            r5.setPadding(r1, r4, r1, r1)
             r3.ignoreLayout = r1
-        L_0x0059:
+        L_0x0060:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertLocationLayout.onPreMeasure(int, int):void");
@@ -1457,8 +1487,11 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                     } catch (Exception e2) {
                         FileLog.e((Throwable) e2);
                     }
+                } else {
+                    return;
                 }
             }
+            updateClipView();
         }
     }
 
@@ -1577,69 +1610,80 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
 
     /* access modifiers changed from: private */
     public void updateClipView() {
-        boolean z;
         int i;
         int i2;
-        FrameLayout.LayoutParams layoutParams;
+        LatLng latLng;
         if (this.mapView != null && this.mapViewClip != null) {
             RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(0);
             if (findViewHolderForAdapterPosition != null) {
                 i2 = (int) findViewHolderForAdapterPosition.itemView.getY();
                 i = this.overScrollHeight + Math.min(i2, 0);
-                z = false;
             } else {
                 i2 = -this.mapViewClip.getMeasuredHeight();
                 i = 0;
-                z = true;
             }
-            if (((FrameLayout.LayoutParams) this.mapViewClip.getLayoutParams()) != null) {
-                if (i <= 0) {
-                    if (this.mapView.getVisibility() == 0) {
-                        this.mapView.setVisibility(4);
-                        this.mapViewClip.setVisibility(4);
-                        MapOverlayView mapOverlayView = this.overlayView;
-                        if (mapOverlayView != null) {
-                            mapOverlayView.setVisibility(4);
-                        }
-                    }
-                } else if (this.mapView.getVisibility() == 4) {
-                    this.mapView.setVisibility(0);
-                    this.mapViewClip.setVisibility(0);
-                    MapOverlayView mapOverlayView2 = this.overlayView;
-                    if (mapOverlayView2 != null) {
-                        mapOverlayView2.setVisibility(0);
+            if (((FrameLayout.LayoutParams) this.mapViewClip.getLayoutParams()) == null) {
+                return;
+            }
+            if (i <= 0) {
+                if (this.mapView.getVisibility() == 0) {
+                    this.mapView.setVisibility(4);
+                    this.mapViewClip.setVisibility(4);
+                    MapOverlayView mapOverlayView = this.overlayView;
+                    if (mapOverlayView != null) {
+                        mapOverlayView.setVisibility(4);
                     }
                 }
-                this.mapViewClip.setTranslationY((float) Math.min(this.listView.getPaddingTop(), i2));
-                if (z) {
-                    this.mapView.setTranslationY((float) i2);
+                this.mapView.setTranslationY((float) i2);
+                return;
+            }
+            if (this.mapView.getVisibility() == 4) {
+                this.mapView.setVisibility(0);
+                this.mapViewClip.setVisibility(0);
+                MapOverlayView mapOverlayView2 = this.overlayView;
+                if (mapOverlayView2 != null) {
+                    mapOverlayView2.setVisibility(0);
+                }
+            }
+            int max = Math.max(0, (-((i2 - this.mapHeight) + this.overScrollHeight)) / 2);
+            float f = (float) max;
+            this.mapView.setTranslationY(f);
+            float max2 = 1.0f - Math.max(0.0f, Math.min(1.0f, ((float) (this.listView.getPaddingTop() - i2)) / ((float) (this.listView.getPaddingTop() - (this.mapHeight - this.overScrollHeight)))));
+            int i3 = this.clipSize;
+            int i4 = this.mapHeight;
+            int i5 = this.overScrollHeight;
+            int i6 = (int) (((float) (i4 - i5)) * max2);
+            this.clipSize = i6;
+            this.nonClipSize = (i4 - i5) - i6;
+            this.mapViewClip.invalidate();
+            this.mapViewClip.setTranslationY((float) (i2 - this.nonClipSize));
+            GoogleMap googleMap2 = this.googleMap;
+            if (googleMap2 != null) {
+                googleMap2.setPadding(0, AndroidUtilities.dp(6.0f), 0, this.clipSize + AndroidUtilities.dp(6.0f));
+            }
+            MapOverlayView mapOverlayView3 = this.overlayView;
+            if (mapOverlayView3 != null) {
+                mapOverlayView3.setTranslationY(f);
+            }
+            float min = (float) Math.min(Math.max(this.nonClipSize - i2, 0), (this.mapHeight - this.mapTypeButton.getMeasuredHeight()) - AndroidUtilities.dp(80.0f));
+            this.mapTypeButton.setTranslationY(min);
+            this.searchAreaButton.setTranslation(min);
+            this.locationButton.setTranslationY((float) (-this.clipSize));
+            ImageView imageView = this.markerImageView;
+            int dp = (((this.mapHeight - this.clipSize) / 2) - AndroidUtilities.dp(48.0f)) + max;
+            this.markerTop = dp;
+            imageView.setTranslationY((float) dp);
+            if (i3 != this.clipSize) {
+                Marker marker = this.lastPressedMarker;
+                if (marker != null) {
+                    latLng = marker.getPosition();
+                } else if (this.userLocationMoved) {
+                    latLng = new LatLng(this.userLocation.getLatitude(), this.userLocation.getLongitude());
                 } else {
-                    this.mapView.setTranslationY((float) Math.max(0, (-i2) / 2));
+                    latLng = this.myLocation != null ? new LatLng(this.myLocation.getLatitude(), this.myLocation.getLongitude()) : null;
                 }
-                MapOverlayView mapOverlayView3 = this.overlayView;
-                if (mapOverlayView3 != null) {
-                    mapOverlayView3.setTranslationY((float) Math.max(0, (-i2) / 2));
-                }
-                float min = (float) Math.min((this.overScrollHeight - this.mapTypeButton.getMeasuredHeight()) - AndroidUtilities.dp(94.0f), -Math.min(i2, 0));
-                this.mapTypeButton.setTranslationY(min);
-                this.searchAreaButton.setTranslation(min);
-                ImageView imageView = this.markerImageView;
-                int dp = ((-Math.min(i2, 0)) - AndroidUtilities.dp(this.markerImageView.getTag() == null ? 48.0f : 69.0f)) + (i / 2);
-                this.markerTop = dp;
-                imageView.setTranslationY((float) dp);
-                FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.mapView.getLayoutParams();
-                if (!(layoutParams2 == null || layoutParams2.height == this.overScrollHeight + AndroidUtilities.dp(10.0f))) {
-                    layoutParams2.height = this.overScrollHeight + AndroidUtilities.dp(10.0f);
-                    GoogleMap googleMap2 = this.googleMap;
-                    if (googleMap2 != null) {
-                        googleMap2.setPadding(AndroidUtilities.dp(70.0f), 0, AndroidUtilities.dp(70.0f), AndroidUtilities.dp(10.0f));
-                    }
-                    this.mapView.setLayoutParams(layoutParams2);
-                }
-                MapOverlayView mapOverlayView4 = this.overlayView;
-                if (mapOverlayView4 != null && (layoutParams = (FrameLayout.LayoutParams) mapOverlayView4.getLayoutParams()) != null && layoutParams.height != this.overScrollHeight + AndroidUtilities.dp(10.0f)) {
-                    layoutParams.height = this.overScrollHeight + AndroidUtilities.dp(10.0f);
-                    this.overlayView.setLayoutParams(layoutParams);
+                if (latLng != null) {
+                    this.googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
                 }
             }
         }
@@ -1649,13 +1693,15 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         FrameLayout.LayoutParams layoutParams;
         if (getMeasuredHeight() != 0 && this.mapView != null) {
             int currentActionBarHeight = ActionBar.getCurrentActionBarHeight();
-            this.overScrollHeight = AndroidUtilities.dp(189.0f);
+            int dp = AndroidUtilities.dp(189.0f);
+            this.overScrollHeight = dp;
+            this.mapHeight = Math.max(dp, Math.min(AndroidUtilities.dp(310.0f), (AndroidUtilities.displaySize.y - AndroidUtilities.dp(66.0f)) - currentActionBarHeight));
             FrameLayout.LayoutParams layoutParams2 = (FrameLayout.LayoutParams) this.listView.getLayoutParams();
             layoutParams2.topMargin = currentActionBarHeight;
             this.listView.setLayoutParams(layoutParams2);
             FrameLayout.LayoutParams layoutParams3 = (FrameLayout.LayoutParams) this.mapViewClip.getLayoutParams();
             layoutParams3.topMargin = currentActionBarHeight;
-            layoutParams3.height = this.overScrollHeight;
+            layoutParams3.height = this.mapHeight;
             this.mapViewClip.setLayoutParams(layoutParams3);
             FrameLayout.LayoutParams layoutParams4 = (FrameLayout.LayoutParams) this.searchListView.getLayoutParams();
             layoutParams4.topMargin = currentActionBarHeight;
@@ -1663,16 +1709,12 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             this.adapter.setOverScrollHeight(this.overScrollHeight);
             FrameLayout.LayoutParams layoutParams5 = (FrameLayout.LayoutParams) this.mapView.getLayoutParams();
             if (layoutParams5 != null) {
-                layoutParams5.height = this.overScrollHeight + AndroidUtilities.dp(10.0f);
-                GoogleMap googleMap2 = this.googleMap;
-                if (googleMap2 != null) {
-                    googleMap2.setPadding(AndroidUtilities.dp(70.0f), 0, AndroidUtilities.dp(70.0f), AndroidUtilities.dp(10.0f));
-                }
+                layoutParams5.height = this.mapHeight + AndroidUtilities.dp(10.0f);
                 this.mapView.setLayoutParams(layoutParams5);
             }
             MapOverlayView mapOverlayView = this.overlayView;
             if (!(mapOverlayView == null || (layoutParams = (FrameLayout.LayoutParams) mapOverlayView.getLayoutParams()) == null)) {
-                layoutParams.height = this.overScrollHeight + AndroidUtilities.dp(10.0f);
+                layoutParams.height = this.mapHeight + AndroidUtilities.dp(10.0f);
                 this.overlayView.setLayoutParams(layoutParams);
             }
             this.adapter.notifyDataSetChanged();

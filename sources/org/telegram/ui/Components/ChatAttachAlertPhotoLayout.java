@@ -3002,9 +3002,9 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         checkCameraViewPosition();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:21:0x00bd  */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x00c6  */
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x00e3  */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x00c0  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x00c9  */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x00e6  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onPreMeasure(int r6, int r7) {
         /*
@@ -3090,46 +3090,49 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r6.notifyDataSetChanged()
         L_0x009f:
             boolean r6 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r6 != 0) goto L_0x00b0
+            if (r6 != 0) goto L_0x00b3
             android.graphics.Point r6 = org.telegram.messenger.AndroidUtilities.displaySize
             int r1 = r6.x
             int r6 = r6.y
-            if (r1 <= r6) goto L_0x00b0
-            int r7 = r7 / 6
-            goto L_0x00b4
-        L_0x00b0:
+            if (r1 <= r6) goto L_0x00b3
+            float r6 = (float) r7
+            r7 = 1080033280(0x40600000, float:3.5)
+            float r6 = r6 / r7
+            int r6 = (int) r6
+            goto L_0x00b7
+        L_0x00b3:
             int r7 = r7 / 5
-            int r7 = r7 * 2
-        L_0x00b4:
-            r6 = 1112539136(0x42500000, float:52.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            int r7 = r7 - r6
-            if (r7 >= 0) goto L_0x00be
-            r7 = 0
-        L_0x00be:
-            org.telegram.ui.Components.RecyclerListView r6 = r5.gridView
-            int r6 = r6.getPaddingTop()
-            if (r6 == r7) goto L_0x00db
-            org.telegram.ui.Components.RecyclerListView r6 = r5.gridView
+            int r6 = r7 * 2
+        L_0x00b7:
+            r7 = 1112539136(0x42500000, float:52.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r6 = r6 - r7
+            if (r6 >= 0) goto L_0x00c1
+            r6 = 0
+        L_0x00c1:
+            org.telegram.ui.Components.RecyclerListView r7 = r5.gridView
+            int r7 = r7.getPaddingTop()
+            if (r7 == r6) goto L_0x00de
+            org.telegram.ui.Components.RecyclerListView r7 = r5.gridView
             r1 = 1086324736(0x40CLASSNAME, float:6.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r1)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             r3 = 1111490560(0x42400000, float:48.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            r6.setPadding(r2, r7, r1, r3)
-        L_0x00db:
+            r7.setPadding(r2, r6, r1, r3)
+        L_0x00de:
             android.widget.TextView r6 = r5.dropDown
             boolean r7 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r7 != 0) goto L_0x00ee
+            if (r7 != 0) goto L_0x00f1
             android.graphics.Point r7 = org.telegram.messenger.AndroidUtilities.displaySize
             int r1 = r7.x
             int r7 = r7.y
-            if (r1 <= r7) goto L_0x00ee
+            if (r1 <= r7) goto L_0x00f1
             r7 = 1099956224(0x41900000, float:18.0)
-            goto L_0x00f0
-        L_0x00ee:
+            goto L_0x00f3
+        L_0x00f1:
             r7 = 1101004800(0x41a00000, float:20.0)
-        L_0x00f0:
+        L_0x00f3:
             r6.setTextSize(r7)
             r5.ignoreLayout = r0
             return
