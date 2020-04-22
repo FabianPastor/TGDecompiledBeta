@@ -2316,7 +2316,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
             bufferedWriter.write(str);
             bufferedWriter.close();
-            showDialog(new PhonebookShareAlert(this, (ContactsController.Contact) null, tLRPC$User, (Uri) null, file, ContactsController.formatName(str2, str3)));
+            showDialog(new PhonebookShareAlert(this, (ContactsController.Contact) null, tLRPC$User, (Uri) null, file, str2, str3));
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }

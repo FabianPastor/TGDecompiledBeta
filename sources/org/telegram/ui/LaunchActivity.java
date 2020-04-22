@@ -6285,16 +6285,16 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         handleIntent(intent, true, false, false);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x01d7  */
-    /* JADX WARNING: Removed duplicated region for block: B:109:0x01dc  */
-    /* JADX WARNING: Removed duplicated region for block: B:112:0x01e1  */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x01e6  */
-    /* JADX WARNING: Removed duplicated region for block: B:116:0x01ea  */
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x020f  */
-    /* JADX WARNING: Removed duplicated region for block: B:129:0x022b A[LOOP:2: B:127:0x0223->B:129:0x022b, LOOP_END] */
-    /* JADX WARNING: Removed duplicated region for block: B:132:0x024e  */
-    /* JADX WARNING: Removed duplicated region for block: B:143:0x025b A[SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x018b  */
+    /* JADX WARNING: Removed duplicated region for block: B:108:0x01d9  */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x01de  */
+    /* JADX WARNING: Removed duplicated region for block: B:112:0x01e3  */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x01e8  */
+    /* JADX WARNING: Removed duplicated region for block: B:116:0x01ec  */
+    /* JADX WARNING: Removed duplicated region for block: B:121:0x0211  */
+    /* JADX WARNING: Removed duplicated region for block: B:129:0x022d A[LOOP:2: B:127:0x0225->B:129:0x022d, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:132:0x0250  */
+    /* JADX WARNING: Removed duplicated region for block: B:143:0x025d A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x018d  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void didSelectDialogs(org.telegram.ui.DialogsActivity r27, java.util.ArrayList<java.lang.Long> r28, java.lang.CharSequence r29, boolean r30) {
         /*
@@ -6417,12 +6417,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r5 = r6
         L_0x00cf:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r8 = r0.contactsToSend
-            if (r8 == 0) goto L_0x0115
+            if (r8 == 0) goto L_0x0117
             int r8 = r8.size()
-            if (r8 != r7) goto L_0x0115
+            if (r8 != r7) goto L_0x0117
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r8 = mainFragmentsStack
             boolean r8 = r8.isEmpty()
-            if (r8 != 0) goto L_0x0115
+            if (r8 != 0) goto L_0x0117
             org.telegram.ui.Components.PhonebookShareAlert r4 = new org.telegram.ui.Components.PhonebookShareAlert
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r8 = mainFragmentsStack
             int r9 = r8.size()
@@ -6435,8 +6435,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             android.net.Uri r13 = r0.contactsToSendUri
             r14 = 0
             r15 = 0
+            r16 = 0
             r9 = r4
-            r9.<init>(r10, r11, r12, r13, r14, r15)
+            r9.<init>(r10, r11, r12, r13, r14, r15, r16)
             org.telegram.ui.-$$Lambda$LaunchActivity$m8ZmVX-T4i8xVmIqL49lKSr8rMc r8 = new org.telegram.ui.-$$Lambda$LaunchActivity$m8ZmVX-T4i8xVmIqL49lKSr8rMc
             r8.<init>(r5, r2, r3)
             r4.setDelegate(r8)
@@ -6446,56 +6447,56 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.Object r2 = r2.get(r3)
             org.telegram.ui.ActionBar.BaseFragment r2 = (org.telegram.ui.ActionBar.BaseFragment) r2
             r2.showDialog(r4)
-            goto L_0x0260
-        L_0x0115:
+            goto L_0x0262
+        L_0x0117:
             r8 = 0
-        L_0x0116:
+        L_0x0118:
             int r9 = r28.size()
-            if (r8 >= r9) goto L_0x0260
+            if (r8 >= r9) goto L_0x0262
             java.lang.Object r9 = r2.get(r8)
             java.lang.Long r9 = (java.lang.Long) r9
             long r23 = r9.longValue()
             int r9 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.messenger.AccountInstance r25 = org.telegram.messenger.AccountInstance.getInstance(r9)
             r15 = 1024(0x400, float:1.435E-42)
-            if (r5 == 0) goto L_0x014e
+            if (r5 == 0) goto L_0x0150
             org.telegram.ui.ActionBar.ActionBarLayout r9 = r0.actionBarLayout
-            if (r1 == 0) goto L_0x0136
+            if (r1 == 0) goto L_0x0138
             r11 = 1
-            goto L_0x0137
-        L_0x0136:
+            goto L_0x0139
+        L_0x0138:
             r11 = 0
-        L_0x0137:
-            if (r1 != 0) goto L_0x013b
+        L_0x0139:
+            if (r1 != 0) goto L_0x013d
             r12 = 1
-            goto L_0x013c
-        L_0x013b:
+            goto L_0x013e
+        L_0x013d:
             r12 = 0
-        L_0x013c:
+        L_0x013e:
             r13 = 1
             r14 = 0
             r10 = r5
             r9.presentFragment(r10, r11, r12, r13, r14)
             java.lang.String r9 = r0.videoPath
-            if (r9 == 0) goto L_0x0185
+            if (r9 == 0) goto L_0x0187
             java.lang.String r10 = r0.sendingText
             r5.openVideoEditor(r9, r10)
             r0.sendingText = r6
-            goto L_0x0185
-        L_0x014e:
+            goto L_0x0187
+        L_0x0150:
             java.lang.String r9 = r0.videoPath
-            if (r9 == 0) goto L_0x0185
+            if (r9 == 0) goto L_0x0187
             java.lang.String r9 = r0.sendingText
-            if (r9 == 0) goto L_0x0162
+            if (r9 == 0) goto L_0x0164
             int r9 = r9.length()
-            if (r9 > r15) goto L_0x0162
+            if (r9 > r15) goto L_0x0164
             java.lang.String r9 = r0.sendingText
             r0.sendingText = r6
             r14 = r9
-            goto L_0x0163
-        L_0x0162:
+            goto L_0x0165
+        L_0x0164:
             r14 = r6
-        L_0x0163:
+        L_0x0165:
             java.util.ArrayList r12 = new java.util.ArrayList
             r12.<init>()
             java.lang.String r9 = r0.videoPath
@@ -6513,19 +6514,19 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r15 = r9
             r16 = r23
             org.telegram.messenger.SendMessagesHelper.prepareSendingDocuments(r10, r11, r12, r13, r14, r15, r16, r18, r19, r20, r21, r22)
-            goto L_0x0187
-        L_0x0185:
-            r6 = 1024(0x400, float:1.435E-42)
+            goto L_0x0189
         L_0x0187:
+            r6 = 1024(0x400, float:1.435E-42)
+        L_0x0189:
             java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$SendingMediaInfo> r9 = r0.photoPathsArray
-            if (r9 == 0) goto L_0x01c1
+            if (r9 == 0) goto L_0x01c3
             java.lang.String r9 = r0.sendingText
-            if (r9 == 0) goto L_0x01ac
+            if (r9 == 0) goto L_0x01ae
             int r9 = r9.length()
-            if (r9 > r6) goto L_0x01ac
+            if (r9 > r6) goto L_0x01ae
             java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$SendingMediaInfo> r9 = r0.photoPathsArray
             int r9 = r9.size()
-            if (r9 != r7) goto L_0x01ac
+            if (r9 != r7) goto L_0x01ae
             java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$SendingMediaInfo> r9 = r0.photoPathsArray
             java.lang.Object r9 = r9.get(r4)
             org.telegram.messenger.SendMessagesHelper$SendingMediaInfo r9 = (org.telegram.messenger.SendMessagesHelper.SendingMediaInfo) r9
@@ -6533,7 +6534,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r9.caption = r10
             r9 = 0
             r0.sendingText = r9
-        L_0x01ac:
+        L_0x01ae:
             java.util.ArrayList<org.telegram.messenger.SendMessagesHelper$SendingMediaInfo> r11 = r0.photoPathsArray
             r14 = 0
             r15 = 0
@@ -6545,40 +6546,40 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r10 = r25
             r12 = r23
             org.telegram.messenger.SendMessagesHelper.prepareSendingMedia(r10, r11, r12, r14, r15, r16, r17, r18, r19, r20)
-        L_0x01c1:
+        L_0x01c3:
             java.util.ArrayList<java.lang.String> r9 = r0.documentsPathsArray
-            if (r9 != 0) goto L_0x01c9
+            if (r9 != 0) goto L_0x01cb
             java.util.ArrayList<android.net.Uri> r9 = r0.documentsUrisArray
-            if (r9 == 0) goto L_0x020b
-        L_0x01c9:
+            if (r9 == 0) goto L_0x020d
+        L_0x01cb:
             java.lang.String r9 = r0.sendingText
-            if (r9 == 0) goto L_0x01f1
+            if (r9 == 0) goto L_0x01f3
             int r9 = r9.length()
-            if (r9 > r6) goto L_0x01f1
+            if (r9 > r6) goto L_0x01f3
             java.util.ArrayList<java.lang.String> r6 = r0.documentsPathsArray
-            if (r6 == 0) goto L_0x01dc
+            if (r6 == 0) goto L_0x01de
             int r6 = r6.size()
-            goto L_0x01dd
-        L_0x01dc:
+            goto L_0x01df
+        L_0x01de:
             r6 = 0
-        L_0x01dd:
+        L_0x01df:
             java.util.ArrayList<android.net.Uri> r9 = r0.documentsUrisArray
-            if (r9 == 0) goto L_0x01e6
+            if (r9 == 0) goto L_0x01e8
             int r9 = r9.size()
-            goto L_0x01e7
-        L_0x01e6:
+            goto L_0x01e9
+        L_0x01e8:
             r9 = 0
-        L_0x01e7:
+        L_0x01e9:
             int r6 = r6 + r9
-            if (r6 != r7) goto L_0x01f1
+            if (r6 != r7) goto L_0x01f3
             java.lang.String r6 = r0.sendingText
             r9 = 0
             r0.sendingText = r9
             r14 = r6
-            goto L_0x01f2
-        L_0x01f1:
+            goto L_0x01f4
+        L_0x01f3:
             r14 = 0
-        L_0x01f2:
+        L_0x01f4:
             java.util.ArrayList<java.lang.String> r11 = r0.documentsPathsArray
             java.util.ArrayList<java.lang.String> r12 = r0.documentsOriginalPathsArray
             java.util.ArrayList<android.net.Uri> r13 = r0.documentsUrisArray
@@ -6591,24 +6592,24 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r10 = r25
             r16 = r23
             org.telegram.messenger.SendMessagesHelper.prepareSendingDocuments(r10, r11, r12, r13, r14, r15, r16, r18, r19, r20, r21, r22)
-        L_0x020b:
+        L_0x020d:
             java.lang.String r11 = r0.sendingText
-            if (r11 == 0) goto L_0x0218
+            if (r11 == 0) goto L_0x021a
             r14 = 1
             r15 = 0
             r10 = r25
             r12 = r23
             org.telegram.messenger.SendMessagesHelper.prepareSendingText(r10, r11, r12, r14, r15)
-        L_0x0218:
+        L_0x021a:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r6 = r0.contactsToSend
-            if (r6 == 0) goto L_0x0248
+            if (r6 == 0) goto L_0x024a
             boolean r6 = r6.isEmpty()
-            if (r6 != 0) goto L_0x0248
+            if (r6 != 0) goto L_0x024a
             r6 = 0
-        L_0x0223:
+        L_0x0225:
             java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r9 = r0.contactsToSend
             int r9 = r9.size()
-            if (r6 >= r9) goto L_0x0248
+            if (r6 >= r9) goto L_0x024a
             java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r9 = r0.contactsToSend
             java.lang.Object r9 = r9.get(r6)
             r11 = r9
@@ -6622,25 +6623,25 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r12 = r23
             r10.sendMessage((org.telegram.tgnet.TLRPC$User) r11, (long) r12, (org.telegram.messenger.MessageObject) r14, (org.telegram.tgnet.TLRPC$ReplyMarkup) r15, (java.util.HashMap<java.lang.String, java.lang.String>) r16, (boolean) r17, (int) r18)
             int r6 = r6 + 1
-            goto L_0x0223
-        L_0x0248:
+            goto L_0x0225
+        L_0x024a:
             boolean r6 = android.text.TextUtils.isEmpty(r29)
-            if (r6 != 0) goto L_0x025b
+            if (r6 != 0) goto L_0x025d
             java.lang.String r11 = r29.toString()
             r14 = 1
             r15 = 0
             r10 = r25
             r12 = r23
             org.telegram.messenger.SendMessagesHelper.prepareSendingText(r10, r11, r12, r14, r15)
-        L_0x025b:
+        L_0x025d:
             int r8 = r8 + 1
             r6 = 0
-            goto L_0x0116
-        L_0x0260:
-            if (r1 == 0) goto L_0x0267
-            if (r5 != 0) goto L_0x0267
+            goto L_0x0118
+        L_0x0262:
+            if (r1 == 0) goto L_0x0269
+            if (r5 != 0) goto L_0x0269
             r27.finishFragment()
-        L_0x0267:
+        L_0x0269:
             r1 = 0
             r0.photoPathsArray = r1
             r0.videoPath = r1

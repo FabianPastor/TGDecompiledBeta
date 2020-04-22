@@ -441,7 +441,10 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
     public /* synthetic */ void lambda$new$1$ChatAttachAlertContactsLayout(View view, int i) {
         Object obj;
         String str;
+        String str2;
         ContactsController.Contact contact;
+        String str3;
+        String str4;
         RecyclerView.Adapter adapter = this.listView.getAdapter();
         ShareSearchAdapter shareSearchAdapter = this.searchAdapter;
         if (adapter == shareSearchAdapter) {
@@ -459,19 +462,30 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             if (obj instanceof ContactsController.Contact) {
                 ContactsController.Contact contact2 = (ContactsController.Contact) obj;
                 TLRPC$User tLRPC$User = contact2.user;
+                if (tLRPC$User != null) {
+                    str4 = tLRPC$User.first_name;
+                    str3 = tLRPC$User.last_name;
+                } else {
+                    str4 = contact2.first_name;
+                    str3 = contact2.last_name;
+                }
                 contact = contact2;
-                str = tLRPC$User != null ? ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name) : "";
+                str = str3;
+                str2 = str4;
             } else {
                 TLRPC$User tLRPC$User2 = (TLRPC$User) obj;
                 ContactsController.Contact contact3 = new ContactsController.Contact();
-                contact3.first_name = tLRPC$User2.first_name;
-                contact3.last_name = tLRPC$User2.last_name;
+                String str5 = tLRPC$User2.first_name;
+                contact3.first_name = str5;
+                String str6 = tLRPC$User2.last_name;
+                contact3.last_name = str6;
                 contact3.phones.add(tLRPC$User2.phone);
                 contact3.user = tLRPC$User2;
-                str = ContactsController.formatName(contact3.first_name, contact3.last_name);
                 contact = contact3;
+                str2 = str5;
+                str = str6;
             }
-            PhonebookShareAlert phonebookShareAlert = new PhonebookShareAlert(this.parentAlert.baseFragment, contact, (TLRPC$User) null, (Uri) null, (File) null, str);
+            PhonebookShareAlert phonebookShareAlert = new PhonebookShareAlert(this.parentAlert.baseFragment, contact, (TLRPC$User) null, (Uri) null, (File) null, str2, str);
             phonebookShareAlert.setDelegate(new PhonebookShareAlertDelegate() {
                 public final void didSelectContact(TLRPC$User tLRPC$User, boolean z, int i) {
                     ChatAttachAlertContactsLayout.this.lambda$null$0$ChatAttachAlertContactsLayout(tLRPC$User, z, i);
@@ -1228,10 +1242,11 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         }
 
         public Object getItem(int i) {
-            if (i == 0) {
+            int i2 = i - 1;
+            if (i2 < 0 || i2 >= this.searchResult.size()) {
                 return null;
             }
-            return this.searchResult.get(i - 1);
+            return this.searchResult.get(i2);
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -1251,7 +1266,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             TLRPC$User tLRPC$User;
             if (viewHolder.getItemViewType() == 0) {
                 UserCell userCell = (UserCell) viewHolder.itemView;
-                boolean z = i != getItemCount() - 1;
+                boolean z = i != getItemCount() + -2;
                 Object item = getItem(i);
                 if (item instanceof ContactsController.Contact) {
                     ContactsController.Contact contact = (ContactsController.Contact) item;
