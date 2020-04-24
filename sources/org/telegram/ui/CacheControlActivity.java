@@ -11,7 +11,6 @@ import android.transition.ChangeBounds;
 import android.transition.Fade;
 import android.transition.TransitionManager;
 import android.transition.TransitionSet;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -533,8 +532,9 @@ public class CacheControlActivity extends BaseFragment {
                         }
                     };
                     this.bottomSheet = r2;
-                    r2.setApplyBottomPadding(false);
-                    final LinearLayout linearLayout = new LinearLayout(getParentActivity());
+                    r2.setAllowNestedScroll(true);
+                    this.bottomSheet.setApplyBottomPadding(false);
+                    LinearLayout linearLayout = new LinearLayout(getParentActivity());
                     this.bottomSheetView = linearLayout;
                     linearLayout.setOrientation(1);
                     StorageDiagramView storageDiagramView = new StorageDiagramView(context2);
@@ -611,17 +611,10 @@ public class CacheControlActivity extends BaseFragment {
                         }
                     });
                     linearLayout.addView(bottomSheetCell, LayoutHelper.createLinear(-1, 50));
-                    AnonymousClass3 r3 = new NestedScrollView(this, context2) {
-                        public boolean onTouchEvent(MotionEvent motionEvent) {
-                            if (getMeasuredHeight() == linearLayout.getMeasuredHeight()) {
-                                return false;
-                            }
-                            return super.onTouchEvent(motionEvent);
-                        }
-                    };
-                    r3.setVerticalScrollBarEnabled(false);
-                    r3.addView(linearLayout);
-                    this.bottomSheet.setCustomView(r3);
+                    NestedScrollView nestedScrollView = new NestedScrollView(context2);
+                    nestedScrollView.setVerticalScrollBarEnabled(false);
+                    nestedScrollView.addView(linearLayout);
+                    this.bottomSheet.setCustomView(nestedScrollView);
                     showDialog(this.bottomSheet);
                 }
             }

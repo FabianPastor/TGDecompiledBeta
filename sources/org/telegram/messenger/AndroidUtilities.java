@@ -3697,6 +3697,14 @@ public class AndroidUtilities {
         }
     }
 
+    public static void fixGoogleMapsBug() {
+        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("google_bug_NUM", 0);
+        if (!sharedPreferences.contains("fixed")) {
+            new File(ApplicationLoader.getFilesDirFixed(), "ZoomTables.data").delete();
+            sharedPreferences.edit().putBoolean("fixed", true).apply();
+        }
+    }
+
     public static CharSequence concat(CharSequence... charSequenceArr) {
         if (charSequenceArr.length == 0) {
             return "";

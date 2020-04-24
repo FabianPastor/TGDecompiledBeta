@@ -24070,7 +24070,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         } catch (Throwable unused) {
         }
         alertDialogArr[0] = null;
-        if (tLObject instanceof TLRPC$TL_payments_bankCardData) {
+        if ((tLObject instanceof TLRPC$TL_payments_bankCardData) && getParentActivity() != null) {
             TLRPC$TL_payments_bankCardData tLRPC$TL_payments_bankCardData = (TLRPC$TL_payments_bankCardData) tLObject;
             BottomSheet.Builder builder = new BottomSheet.Builder(getParentActivity());
             ArrayList arrayList = new ArrayList();

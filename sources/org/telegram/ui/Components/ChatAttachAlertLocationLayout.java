@@ -389,6 +389,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         this.mapHeight = currentActionBarHeight;
         this.first = true;
         this.bitmapCache = new Bitmap[7];
+        AndroidUtilities.fixGoogleMapsBug();
         ChatActivity chatActivity = (ChatActivity) this.parentAlert.baseFragment;
         this.dialogId = chatActivity.getDialogId();
         if (chatActivity.getCurrentEncryptedChat() != null || chatActivity.isInScheduleMode() || UserObject.isUserSelf(chatActivity.getCurrentUser())) {

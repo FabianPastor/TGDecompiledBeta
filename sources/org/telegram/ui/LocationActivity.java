@@ -416,6 +416,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
     public LocationActivity(int i) {
         this.locationType = i;
+        AndroidUtilities.fixGoogleMapsBug();
     }
 
     public boolean onFragmentCreate() {
