@@ -239,13 +239,15 @@ public class PollCreateActivity extends BaseFragment {
                         hashMap.put("answers", Utilities.bytesToHex(serializedData.toByteArray()));
                         tLRPC$TL_messageMediaPoll.results = new TLRPC$TL_pollResults();
                         CharSequence fixedString = ChatAttachAlertPollLayout.getFixedString(PollCreateActivity.this.solutionString);
-                        tLRPC$TL_messageMediaPoll.results.solution = fixedString.toString();
-                        ArrayList<TLRPC$MessageEntity> entities = PollCreateActivity.this.getMediaDataController().getEntities(new CharSequence[]{fixedString}, true);
-                        if (entities != null && !entities.isEmpty()) {
-                            tLRPC$TL_messageMediaPoll.results.solution_entities = entities;
-                        }
-                        if (!TextUtils.isEmpty(tLRPC$TL_messageMediaPoll.results.solution)) {
-                            tLRPC$TL_messageMediaPoll.results.flags |= 16;
+                        if (fixedString != null) {
+                            tLRPC$TL_messageMediaPoll.results.solution = fixedString.toString();
+                            ArrayList<TLRPC$MessageEntity> entities = PollCreateActivity.this.getMediaDataController().getEntities(new CharSequence[]{fixedString}, true);
+                            if (entities != null && !entities.isEmpty()) {
+                                tLRPC$TL_messageMediaPoll.results.solution_entities = entities;
+                            }
+                            if (!TextUtils.isEmpty(tLRPC$TL_messageMediaPoll.results.solution)) {
+                                tLRPC$TL_messageMediaPoll.results.flags |= 16;
+                            }
                         }
                         if (PollCreateActivity.this.parentFragment.isInScheduleMode()) {
                             AlertsCreator.createScheduleDatePickerDialog(PollCreateActivity.this.getParentActivity(), PollCreateActivity.this.parentFragment.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(tLRPC$TL_messageMediaPoll, hashMap) {

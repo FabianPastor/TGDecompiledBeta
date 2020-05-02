@@ -436,13 +436,15 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 hashMap.put("answers", Utilities.bytesToHex(serializedData.toByteArray()));
                 tLRPC$TL_messageMediaPoll.results = new TLRPC$TL_pollResults();
                 CharSequence fixedString = getFixedString(this.solutionString);
-                tLRPC$TL_messageMediaPoll.results.solution = fixedString.toString();
-                ArrayList<TLRPC$MessageEntity> entities = MediaDataController.getInstance(this.parentAlert.currentAccount).getEntities(new CharSequence[]{fixedString}, true);
-                if (entities != null && !entities.isEmpty()) {
-                    tLRPC$TL_messageMediaPoll.results.solution_entities = entities;
-                }
-                if (!TextUtils.isEmpty(tLRPC$TL_messageMediaPoll.results.solution)) {
-                    tLRPC$TL_messageMediaPoll.results.flags |= 16;
+                if (fixedString != null) {
+                    tLRPC$TL_messageMediaPoll.results.solution = fixedString.toString();
+                    ArrayList<TLRPC$MessageEntity> entities = MediaDataController.getInstance(this.parentAlert.currentAccount).getEntities(new CharSequence[]{fixedString}, true);
+                    if (entities != null && !entities.isEmpty()) {
+                        tLRPC$TL_messageMediaPoll.results.solution_entities = entities;
+                    }
+                    if (!TextUtils.isEmpty(tLRPC$TL_messageMediaPoll.results.solution)) {
+                        tLRPC$TL_messageMediaPoll.results.flags |= 16;
+                    }
                 }
                 ChatActivity chatActivity = (ChatActivity) this.parentAlert.baseFragment;
                 if (chatActivity.isInScheduleMode()) {
