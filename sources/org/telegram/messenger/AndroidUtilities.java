@@ -91,7 +91,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -319,9 +318,15 @@ public class AndroidUtilities {
         if (arrayList.size() == 0) {
             return false;
         }
-        Iterator it = arrayList.iterator();
-        while (it.hasNext()) {
-            LinkSpec linkSpec = (LinkSpec) it.next();
+        int size = arrayList.size();
+        for (int i2 = 0; i2 < size; i2++) {
+            LinkSpec linkSpec = (LinkSpec) arrayList.get(i2);
+            URLSpan[] uRLSpanArr2 = (URLSpan[]) spannable.getSpans(linkSpec.start, linkSpec.end, URLSpan.class);
+            if (uRLSpanArr2 != null && uRLSpanArr2.length > 0) {
+                for (URLSpan removeSpan : uRLSpanArr2) {
+                    spannable.removeSpan(removeSpan);
+                }
+            }
             spannable.setSpan(new URLSpan(linkSpec.url), linkSpec.start, linkSpec.end, 33);
         }
         return true;
@@ -4038,7 +4043,7 @@ public class AndroidUtilities {
             r7 = 97
             if (r6 < r7) goto L_0x0038
             r7 = 122(0x7a, float:1.71E-43)
-            if (r6 < r7) goto L_0x0040
+            if (r6 <= r7) goto L_0x0040
         L_0x0038:
             r7 = 65
             if (r6 < r7) goto L_0x0042

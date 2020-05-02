@@ -5055,7 +5055,7 @@ public class MediaDataController extends BaseController {
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r11)     // Catch:{ all -> 0x02b3 }
             android.content.pm.ShortcutInfo$Builder r0 = r10.setLongLabel(r0)     // Catch:{ all -> 0x02b3 }
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02b3 }
-            r11 = 2131165873(0x7var_b1, float:1.7945975E38)
+            r11 = 2131165874(0x7var_b2, float:1.7945977E38)
             android.graphics.drawable.Icon r10 = android.graphics.drawable.Icon.createWithResource(r10, r11)     // Catch:{ all -> 0x02b3 }
             android.content.pm.ShortcutInfo$Builder r0 = r0.setIcon(r10)     // Catch:{ all -> 0x02b3 }
             android.content.pm.ShortcutInfo$Builder r0 = r0.setIntent(r3)     // Catch:{ all -> 0x02b3 }
@@ -5270,7 +5270,7 @@ public class MediaDataController extends BaseController {
             goto L_0x0296
         L_0x028a:
             android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02b3 }
-            r6 = 2131165874(0x7var_b2, float:1.7945977E38)
+            r6 = 2131165875(0x7var_b3, float:1.794598E38)
             android.graphics.drawable.Icon r3 = android.graphics.drawable.Icon.createWithResource(r3, r6)     // Catch:{ all -> 0x02b3 }
             r1.setIcon(r3)     // Catch:{ all -> 0x02b3 }
         L_0x0296:
@@ -5870,7 +5870,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x023b }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131626607(0x7f0e0a6f, float:1.8880455E38)
+            r9 = 2131626618(0x7f0e0a7a, float:1.8880477E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x023b }
             r9 = r4
             r10 = 1
@@ -7035,13 +7035,20 @@ public class MediaDataController extends BaseController {
         Collections.sort(arrayList, entityComparator);
     }
 
-    private static boolean checkInclusion(int i, ArrayList<TLRPC$MessageEntity> arrayList) {
+    private static boolean checkInclusion(int i, ArrayList<TLRPC$MessageEntity> arrayList, boolean z) {
         if (arrayList != null && !arrayList.isEmpty()) {
             int size = arrayList.size();
             for (int i2 = 0; i2 < size; i2++) {
                 TLRPC$MessageEntity tLRPC$MessageEntity = arrayList.get(i2);
                 int i3 = tLRPC$MessageEntity.offset;
-                if (i3 <= i && i3 + tLRPC$MessageEntity.length > i) {
+                if (z) {
+                    if (i3 >= i) {
+                        continue;
+                    }
+                } else if (i3 > i) {
+                    continue;
+                }
+                if (tLRPC$MessageEntity.offset + tLRPC$MessageEntity.length > i) {
                     return true;
                 }
             }
@@ -7720,9 +7727,9 @@ public class MediaDataController extends BaseController {
             r6 = r4[r5]
             int r9 = r3.getSpanStart(r6)
             int r12 = r3.getSpanEnd(r6)
-            boolean r13 = checkInclusion(r9, r1)
+            boolean r13 = checkInclusion(r9, r1, r2)
             if (r13 != 0) goto L_0x024e
-            boolean r13 = checkInclusion(r12, r1)
+            boolean r13 = checkInclusion(r12, r1, r11)
             if (r13 != 0) goto L_0x024e
             boolean r13 = checkIntersection(r9, r12, r1)
             if (r13 == 0) goto L_0x01d8
@@ -7923,7 +7930,7 @@ public class MediaDataController extends BaseController {
             int r15 = r12 + -1
             char r14 = r14.charAt(r15)
         L_0x034e:
-            boolean r15 = checkInclusion(r12, r1)
+            boolean r15 = checkInclusion(r12, r1, r2)
             if (r15 != 0) goto L_0x0359
             if (r14 == r8) goto L_0x0358
             if (r14 != r7) goto L_0x0359
@@ -7946,7 +7953,7 @@ public class MediaDataController extends BaseController {
             goto L_0x035e
         L_0x0373:
             int r14 = r12 + 2
-            boolean r15 = checkInclusion(r12, r1)
+            boolean r15 = checkInclusion(r12, r1, r2)
             if (r15 != 0) goto L_0x0413
             boolean r15 = checkIntersection(r5, r12, r1)
             if (r15 == 0) goto L_0x0383

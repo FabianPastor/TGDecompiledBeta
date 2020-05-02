@@ -234,6 +234,10 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                     ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressHiddenForward(this, chatMessageCell);
                 }
 
+                public /* synthetic */ void didPressHint(ChatMessageCell chatMessageCell, int i) {
+                    ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressHint(this, chatMessageCell, i);
+                }
+
                 public /* synthetic */ void didPressImage(ChatMessageCell chatMessageCell, float f, float f2) {
                     ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressImage(this, chatMessageCell, f, f2);
                 }
@@ -244,10 +248,6 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
 
                 public /* synthetic */ void didPressOther(ChatMessageCell chatMessageCell, float f, float f2) {
                     ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressOther(this, chatMessageCell, f, f2);
-                }
-
-                public /* synthetic */ void didPressPollHint(ChatMessageCell chatMessageCell, int i, int i2) {
-                    ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressPollHint(this, chatMessageCell, i, i2);
                 }
 
                 public /* synthetic */ void didPressReaction(ChatMessageCell chatMessageCell, TLRPC$TL_reactionCount tLRPC$TL_reactionCount) {
@@ -1483,7 +1483,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r8) goto L_0x01b4
-                r12 = 2131627433(0x7f0e0da9, float:1.888213E38)
+                r12 = 2131627444(0x7f0e0db4, float:1.8882153E38)
                 java.lang.String r0 = "WhoCanCallMe"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1492,7 +1492,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r4) goto L_0x01ca
-                r12 = 2131627428(0x7f0e0da4, float:1.888212E38)
+                r12 = 2131627439(0x7f0e0daf, float:1.8882142E38)
                 java.lang.String r0 = "WhoCanAddMe"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1593,7 +1593,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r8) goto L_0x02ba
-                r12 = 2131627434(0x7f0e0daa, float:1.8882132E38)
+                r12 = 2131627445(0x7f0e0db5, float:1.8882155E38)
                 java.lang.String r0 = "WhoCanCallMeInfo"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)
@@ -1602,7 +1602,7 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                 org.telegram.ui.PrivacyControlActivity r12 = org.telegram.ui.PrivacyControlActivity.this
                 int r12 = r12.rulesType
                 if (r12 != r4) goto L_0x02cf
-                r12 = 2131627429(0x7f0e0da5, float:1.8882122E38)
+                r12 = 2131627440(0x7f0e0db0, float:1.8882144E38)
                 java.lang.String r0 = "WhoCanAddMeInfo"
                 java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r12)
                 r11.setText(r12)

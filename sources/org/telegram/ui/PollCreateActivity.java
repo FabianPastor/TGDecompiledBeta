@@ -26,7 +26,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.SerializedData;
 import org.telegram.tgnet.TLRPC$Chat;
-import org.telegram.tgnet.TLRPC$Poll;
+import org.telegram.tgnet.TLRPC$MessageEntity;
 import org.telegram.tgnet.TLRPC$TL_messageMediaPoll;
 import org.telegram.tgnet.TLRPC$TL_poll;
 import org.telegram.tgnet.TLRPC$TL_pollAnswer;
@@ -44,6 +44,7 @@ import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.TextCheckCell;
 import org.telegram.ui.Cells.TextInfoPrivacyCell;
 import org.telegram.ui.Components.AlertsCreator;
+import org.telegram.ui.Components.ChatAttachAlertPollLayout;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.HintView;
@@ -75,7 +76,8 @@ public class PollCreateActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public ActionBarMenuItem doneItem;
     private boolean hintShowed;
-    private HintView hintView;
+    /* access modifiers changed from: private */
+    public HintView hintView;
     /* access modifiers changed from: private */
     public ListAdapter listAdapter;
     /* access modifiers changed from: private */
@@ -113,7 +115,7 @@ public class PollCreateActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public int solutionRow;
     /* access modifiers changed from: private */
-    public String solutionString;
+    public CharSequence solutionString;
 
     public interface PollCreateActivityDelegate {
         void sendPoll(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap<String, String> hashMap, boolean z, int i);
@@ -218,16 +220,12 @@ public class PollCreateActivity extends BaseFragment {
                         tLRPC$TL_poll.multiple_choice = PollCreateActivity.this.multipleChoise;
                         tLRPC$TL_messageMediaPoll.poll.quiz = PollCreateActivity.this.quizPoll;
                         tLRPC$TL_messageMediaPoll.poll.public_voters = !PollCreateActivity.this.anonymousPoll;
-                        TLRPC$Poll tLRPC$Poll = tLRPC$TL_messageMediaPoll.poll;
-                        PollCreateActivity pollCreateActivity = PollCreateActivity.this;
-                        tLRPC$Poll.question = pollCreateActivity.getFixedString(pollCreateActivity.questionString);
+                        tLRPC$TL_messageMediaPoll.poll.question = ChatAttachAlertPollLayout.getFixedString(PollCreateActivity.this.questionString).toString();
                         SerializedData serializedData = new SerializedData(10);
                         for (int i2 = 0; i2 < PollCreateActivity.this.answers.length; i2++) {
-                            PollCreateActivity pollCreateActivity2 = PollCreateActivity.this;
-                            if (!TextUtils.isEmpty(pollCreateActivity2.getFixedString(pollCreateActivity2.answers[i2]))) {
+                            if (!TextUtils.isEmpty(ChatAttachAlertPollLayout.getFixedString(PollCreateActivity.this.answers[i2]))) {
                                 TLRPC$TL_pollAnswer tLRPC$TL_pollAnswer = new TLRPC$TL_pollAnswer();
-                                PollCreateActivity pollCreateActivity3 = PollCreateActivity.this;
-                                tLRPC$TL_pollAnswer.text = pollCreateActivity3.getFixedString(pollCreateActivity3.answers[i2]);
+                                tLRPC$TL_pollAnswer.text = ChatAttachAlertPollLayout.getFixedString(PollCreateActivity.this.answers[i2]).toString();
                                 byte[] bArr = new byte[1];
                                 tLRPC$TL_pollAnswer.option = bArr;
                                 bArr[0] = (byte) (tLRPC$TL_messageMediaPoll.poll.answers.size() + 48);
@@ -239,10 +237,13 @@ public class PollCreateActivity extends BaseFragment {
                         }
                         HashMap hashMap = new HashMap();
                         hashMap.put("answers", Utilities.bytesToHex(serializedData.toByteArray()));
-                        TLRPC$TL_pollResults tLRPC$TL_pollResults = new TLRPC$TL_pollResults();
-                        tLRPC$TL_messageMediaPoll.results = tLRPC$TL_pollResults;
-                        PollCreateActivity pollCreateActivity4 = PollCreateActivity.this;
-                        tLRPC$TL_pollResults.solution = pollCreateActivity4.getFixedString(pollCreateActivity4.solutionString);
+                        tLRPC$TL_messageMediaPoll.results = new TLRPC$TL_pollResults();
+                        CharSequence fixedString = ChatAttachAlertPollLayout.getFixedString(PollCreateActivity.this.solutionString);
+                        tLRPC$TL_messageMediaPoll.results.solution = fixedString.toString();
+                        ArrayList<TLRPC$MessageEntity> entities = PollCreateActivity.this.getMediaDataController().getEntities(new CharSequence[]{fixedString}, true);
+                        if (entities != null && !entities.isEmpty()) {
+                            tLRPC$TL_messageMediaPoll.results.solution_entities = entities;
+                        }
                         if (!TextUtils.isEmpty(tLRPC$TL_messageMediaPoll.results.solution)) {
                             tLRPC$TL_messageMediaPoll.results.flags |= 16;
                         }
@@ -268,8 +269,7 @@ public class PollCreateActivity extends BaseFragment {
                     }
                     int i3 = 0;
                     for (int i4 = 0; i4 < PollCreateActivity.this.answersChecks.length; i4++) {
-                        PollCreateActivity pollCreateActivity5 = PollCreateActivity.this;
-                        if (!TextUtils.isEmpty(pollCreateActivity5.getFixedString(pollCreateActivity5.answers[i4])) && PollCreateActivity.this.answersChecks[i4]) {
+                        if (!TextUtils.isEmpty(ChatAttachAlertPollLayout.getFixedString(PollCreateActivity.this.answers[i4])) && PollCreateActivity.this.answersChecks[i4]) {
                             i3++;
                         }
                     }
@@ -315,13 +315,14 @@ public class PollCreateActivity extends BaseFragment {
                 PollCreateActivity.this.lambda$createView$0$PollCreateActivity(view, i);
             }
         });
-        this.listView.setOnScrollListener(new RecyclerView.OnScrollListener(this) {
+        this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
-                super.onScrollStateChanged(recyclerView, i);
             }
 
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
-                super.onScrolled(recyclerView, i, i2);
+                if (i2 != 0 && PollCreateActivity.this.hintView != null) {
+                    PollCreateActivity.this.hintView.hide();
+                }
             }
         });
         HintView hintView2 = new HintView(context, 4);
@@ -431,21 +432,6 @@ public class PollCreateActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    public String getFixedString(String str) {
-        if (TextUtils.isEmpty(str)) {
-            return str;
-        }
-        String charSequence = AndroidUtilities.getTrimmedString(str).toString();
-        while (charSequence.contains("\n\n\n")) {
-            charSequence = charSequence.replace("\n\n\n", "\n\n");
-        }
-        while (charSequence.startsWith("\n\n\n")) {
-            charSequence = charSequence.replace("\n\n\n", "\n\n");
-        }
-        return charSequence;
-    }
-
-    /* access modifiers changed from: private */
     public void showQuizHint() {
         this.listView.getChildCount();
         for (int i = this.answerStartRow; i < this.answerStartRow + this.answersCount; i++) {
@@ -466,8 +452,8 @@ public class PollCreateActivity extends BaseFragment {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:44:0x0098  */
-    /* JADX WARNING: Removed duplicated region for block: B:45:0x009b  */
+    /* JADX WARNING: Removed duplicated region for block: B:44:0x009a  */
+    /* JADX WARNING: Removed duplicated region for block: B:45:0x009d  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void checkDoneButton() {
         /*
@@ -483,7 +469,7 @@ public class PollCreateActivity extends BaseFragment {
             if (r0 >= r3) goto L_0x0026
             java.lang.String[] r3 = r7.answers
             r3 = r3[r0]
-            java.lang.String r3 = r7.getFixedString(r3)
+            java.lang.CharSequence r3 = org.telegram.ui.Components.ChatAttachAlertPollLayout.getFixedString(r3)
             boolean r3 = android.text.TextUtils.isEmpty(r3)
             if (r3 != 0) goto L_0x0022
             boolean[] r3 = r7.answersChecks
@@ -496,78 +482,79 @@ public class PollCreateActivity extends BaseFragment {
         L_0x0025:
             r2 = 0
         L_0x0026:
-            java.lang.String r0 = r7.solutionString
-            java.lang.String r0 = r7.getFixedString(r0)
+            java.lang.CharSequence r0 = r7.solutionString
+            java.lang.CharSequence r0 = org.telegram.ui.Components.ChatAttachAlertPollLayout.getFixedString(r0)
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            r3 = 255(0xff, float:3.57E-43)
-            r4 = 1
+            r3 = 1
             if (r0 != 0) goto L_0x003e
-            java.lang.String r0 = r7.solutionString
+            java.lang.CharSequence r0 = r7.solutionString
             int r0 = r0.length()
-            if (r0 <= r3) goto L_0x003e
-            goto L_0x0085
+            r4 = 200(0xc8, float:2.8E-43)
+            if (r0 <= r4) goto L_0x003e
+            goto L_0x0087
         L_0x003e:
             java.lang.String r0 = r7.questionString
-            java.lang.String r0 = r7.getFixedString(r0)
+            java.lang.CharSequence r0 = org.telegram.ui.Components.ChatAttachAlertPollLayout.getFixedString(r0)
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 != 0) goto L_0x0085
+            if (r0 != 0) goto L_0x0087
             java.lang.String r0 = r7.questionString
             int r0 = r0.length()
-            if (r0 <= r3) goto L_0x0053
-            goto L_0x0085
-        L_0x0053:
-            r0 = 0
-            r3 = 0
+            r4 = 255(0xff, float:3.57E-43)
+            if (r0 <= r4) goto L_0x0055
+            goto L_0x0087
         L_0x0055:
+            r0 = 0
+            r4 = 0
+        L_0x0057:
             java.lang.String[] r5 = r7.answers
             int r6 = r5.length
-            if (r0 >= r6) goto L_0x0079
+            if (r0 >= r6) goto L_0x007b
             r5 = r5[r0]
-            java.lang.String r5 = r7.getFixedString(r5)
+            java.lang.CharSequence r5 = org.telegram.ui.Components.ChatAttachAlertPollLayout.getFixedString(r5)
             boolean r5 = android.text.TextUtils.isEmpty(r5)
-            if (r5 != 0) goto L_0x0076
+            if (r5 != 0) goto L_0x0078
             java.lang.String[] r5 = r7.answers
             r5 = r5[r0]
             int r5 = r5.length()
             r6 = 100
-            if (r5 <= r6) goto L_0x0074
-            r3 = 0
-            goto L_0x0079
-        L_0x0074:
-            int r3 = r3 + 1
+            if (r5 <= r6) goto L_0x0076
+            r4 = 0
+            goto L_0x007b
         L_0x0076:
+            int r4 = r4 + 1
+        L_0x0078:
             int r0 = r0 + 1
-            goto L_0x0055
-        L_0x0079:
+            goto L_0x0057
+        L_0x007b:
             r0 = 2
-            if (r3 < r0) goto L_0x0085
+            if (r4 < r0) goto L_0x0087
             boolean r0 = r7.quizPoll
-            if (r0 == 0) goto L_0x0083
-            if (r2 >= r4) goto L_0x0083
-            goto L_0x0085
-        L_0x0083:
-            r0 = 1
-            goto L_0x0086
+            if (r0 == 0) goto L_0x0085
+            if (r2 >= r3) goto L_0x0085
+            goto L_0x0087
         L_0x0085:
+            r0 = 1
+            goto L_0x0088
+        L_0x0087:
             r0 = 0
-        L_0x0086:
-            org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r7.doneItem
+        L_0x0088:
+            org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r7.doneItem
             boolean r5 = r7.quizPoll
-            if (r5 == 0) goto L_0x008e
-            if (r2 == 0) goto L_0x0090
-        L_0x008e:
-            if (r0 == 0) goto L_0x0091
+            if (r5 == 0) goto L_0x0090
+            if (r2 == 0) goto L_0x0092
         L_0x0090:
+            if (r0 == 0) goto L_0x0093
+        L_0x0092:
             r1 = 1
-        L_0x0091:
-            r3.setEnabled(r1)
+        L_0x0093:
+            r4.setEnabled(r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r7.doneItem
-            if (r0 == 0) goto L_0x009b
+            if (r0 == 0) goto L_0x009d
             r0 = 1065353216(0x3var_, float:1.0)
-            goto L_0x009d
-        L_0x009b:
-            r0 = 1056964608(0x3var_, float:0.5)
+            goto L_0x009f
         L_0x009d:
+            r0 = 1056964608(0x3var_, float:0.5)
+        L_0x009f:
             r1.setAlpha(r0)
             return
         */
@@ -653,10 +640,10 @@ public class PollCreateActivity extends BaseFragment {
 
     /* access modifiers changed from: private */
     public boolean checkDiscard() {
-        boolean isEmpty = TextUtils.isEmpty(getFixedString(this.questionString));
+        boolean isEmpty = TextUtils.isEmpty(ChatAttachAlertPollLayout.getFixedString(this.questionString));
         if (isEmpty) {
             int i = 0;
-            while (i < this.answersCount && (isEmpty = TextUtils.isEmpty(getFixedString(this.answers[i])))) {
+            while (i < this.answersCount && (isEmpty = TextUtils.isEmpty(ChatAttachAlertPollLayout.getFixedString(this.answers[i])))) {
                 i++;
             }
         }
@@ -685,38 +672,35 @@ public class PollCreateActivity extends BaseFragment {
 
     /* access modifiers changed from: private */
     public void setTextLeft(View view, int i) {
-        String str = "windowBackgroundWhiteRedText5";
-        if (view instanceof HeaderCell) {
-            HeaderCell headerCell = (HeaderCell) view;
-            if (i == -1) {
-                String str2 = this.questionString;
-                int length = 255 - (str2 != null ? str2.length() : 0);
-                if (((float) length) <= 76.5f) {
-                    headerCell.setText2(String.format("%d", new Object[]{Integer.valueOf(length)}));
-                    SimpleTextView textView2 = headerCell.getTextView2();
-                    if (length >= 0) {
-                        str = "windowBackgroundWhiteGrayText3";
-                    }
-                    textView2.setTextColor(Theme.getColor(str));
-                    textView2.setTag(str);
+        int i2;
+        if (view instanceof PollEditTextCell) {
+            PollEditTextCell pollEditTextCell = (PollEditTextCell) view;
+            int i3 = 100;
+            if (i == this.questionRow) {
+                String str = this.questionString;
+                i2 = 255 - (str != null ? str.length() : 0);
+                i3 = 255;
+            } else if (i == this.solutionRow) {
+                CharSequence charSequence = this.solutionString;
+                i2 = 200 - (charSequence != null ? charSequence.length() : 0);
+                i3 = 200;
+            } else {
+                int i4 = this.answerStartRow;
+                if (i >= i4 && i < this.answersCount + i4) {
+                    int i5 = i - i4;
+                    String[] strArr = this.answers;
+                    i2 = 100 - (strArr[i5] != null ? strArr[i5].length() : 0);
+                } else {
                     return;
                 }
-                headerCell.setText2("");
-                return;
             }
-            headerCell.setText2("");
-        } else if ((view instanceof PollEditTextCell) && i >= 0) {
-            PollEditTextCell pollEditTextCell = (PollEditTextCell) view;
-            String[] strArr = this.answers;
-            int length2 = 100 - (strArr[i] != null ? strArr[i].length() : 0);
-            if (((float) length2) <= 30.0f) {
-                pollEditTextCell.setText2(String.format("%d", new Object[]{Integer.valueOf(length2)}));
-                SimpleTextView textView22 = pollEditTextCell.getTextView2();
-                if (length2 >= 0) {
-                    str = "windowBackgroundWhiteGrayText3";
-                }
-                textView22.setTextColor(Theme.getColor(str));
-                textView22.setTag(str);
+            float f = (float) i3;
+            if (((float) i2) <= f - (0.7f * f)) {
+                pollEditTextCell.setText2(String.format("%d", new Object[]{Integer.valueOf(i2)}));
+                SimpleTextView textView2 = pollEditTextCell.getTextView2();
+                String str2 = i2 < 0 ? "windowBackgroundWhiteRedText5" : "windowBackgroundWhiteGrayText3";
+                textView2.setTextColor(Theme.getColor(str2));
+                textView2.setTag(str2);
                 return;
             }
             pollEditTextCell.setText2("");
@@ -759,19 +743,19 @@ public class PollCreateActivity extends BaseFragment {
                     TextCheckCell textCheckCell = (TextCheckCell) viewHolder.itemView;
                     if (i == PollCreateActivity.this.anonymousRow) {
                         String string = LocaleController.getString("PollAnonymous", NUM);
-                        boolean access$1000 = PollCreateActivity.this.anonymousPoll;
+                        boolean access$900 = PollCreateActivity.this.anonymousPoll;
                         if (!(PollCreateActivity.this.multipleRow == -1 && PollCreateActivity.this.quizRow == -1)) {
                             z2 = true;
                         }
-                        textCheckCell.setTextAndCheck(string, access$1000, z2);
+                        textCheckCell.setTextAndCheck(string, access$900, z2);
                         textCheckCell.setEnabled(true, (ArrayList<Animator>) null);
                     } else if (i == PollCreateActivity.this.multipleRow) {
                         String string2 = LocaleController.getString("PollMultiple", NUM);
-                        boolean access$900 = PollCreateActivity.this.multipleChoise;
+                        boolean access$800 = PollCreateActivity.this.multipleChoise;
                         if (PollCreateActivity.this.quizRow != -1) {
                             z2 = true;
                         }
-                        textCheckCell.setTextAndCheck(string2, access$900, z2);
+                        textCheckCell.setTextAndCheck(string2, access$800, z2);
                         textCheckCell.setEnabled(true, (ArrayList<Animator>) null);
                     } else if (i == PollCreateActivity.this.quizRow) {
                         textCheckCell.setTextAndCheck(LocaleController.getString("PollQuiz", NUM), PollCreateActivity.this.quizPoll, false);
@@ -782,15 +766,17 @@ public class PollCreateActivity extends BaseFragment {
                     }
                 } else if (itemViewType == 2) {
                     TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
+                    textInfoPrivacyCell.setFixedSize(0);
                     textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
                     if (i == PollCreateActivity.this.solutionInfoRow) {
                         textInfoPrivacyCell.setText(LocaleController.getString("AddAnExplanationInfo", NUM));
                     } else if (i == PollCreateActivity.this.settingsSectionRow) {
                         if (PollCreateActivity.this.quizOnly != 0) {
+                            textInfoPrivacyCell.setFixedSize(12);
                             textInfoPrivacyCell.setText((CharSequence) null);
-                        } else {
-                            textInfoPrivacyCell.setText(LocaleController.getString("QuizInfo", NUM));
+                            return;
                         }
+                        textInfoPrivacyCell.setText(LocaleController.getString("QuizInfo", NUM));
                     } else if (10 - PollCreateActivity.this.answersCount <= 0) {
                         textInfoPrivacyCell.setText(LocaleController.getString("AddAnOptionInfoMax", NUM));
                     } else {
@@ -823,18 +809,16 @@ public class PollCreateActivity extends BaseFragment {
 
         public void onViewAttachedToWindow(RecyclerView.ViewHolder viewHolder) {
             int itemViewType = viewHolder.getItemViewType();
-            if (itemViewType == 0 || itemViewType == 5) {
-                PollCreateActivity.this.setTextLeft(viewHolder.itemView, viewHolder.getAdapterPosition() == PollCreateActivity.this.questionHeaderRow ? -1 : 0);
-            }
-            String str = "";
+            CharSequence charSequence = "";
             if (itemViewType == 4) {
                 PollEditTextCell pollEditTextCell = (PollEditTextCell) viewHolder.itemView;
                 pollEditTextCell.setTag(1);
                 if (PollCreateActivity.this.questionString != null) {
-                    str = PollCreateActivity.this.questionString;
+                    charSequence = PollCreateActivity.this.questionString;
                 }
-                pollEditTextCell.setTextAndHint(str, LocaleController.getString("QuestionHint", NUM), false);
+                pollEditTextCell.setTextAndHint(charSequence, LocaleController.getString("QuestionHint", NUM), false);
                 pollEditTextCell.setTag((Object) null);
+                PollCreateActivity.this.setTextLeft(viewHolder.itemView, viewHolder.getAdapterPosition());
             } else if (itemViewType == 5) {
                 int adapterPosition = viewHolder.getAdapterPosition();
                 PollEditTextCell pollEditTextCell2 = (PollEditTextCell) viewHolder.itemView;
@@ -847,16 +831,16 @@ public class PollCreateActivity extends BaseFragment {
                     AndroidUtilities.showKeyboard(textView);
                     int unused = PollCreateActivity.this.requestFieldFocusAtPosition = -1;
                 }
-                PollCreateActivity pollCreateActivity = PollCreateActivity.this;
-                pollCreateActivity.setTextLeft(viewHolder.itemView, adapterPosition - pollCreateActivity.answerStartRow);
+                PollCreateActivity.this.setTextLeft(viewHolder.itemView, adapterPosition);
             } else if (itemViewType == 7) {
                 PollEditTextCell pollEditTextCell3 = (PollEditTextCell) viewHolder.itemView;
                 pollEditTextCell3.setTag(1);
                 if (PollCreateActivity.this.solutionString != null) {
-                    str = PollCreateActivity.this.solutionString;
+                    charSequence = PollCreateActivity.this.solutionString;
                 }
-                pollEditTextCell3.setTextAndHint(str, LocaleController.getString("AddAnExplanation", NUM), false);
+                pollEditTextCell3.setTextAndHint(charSequence, LocaleController.getString("AddAnExplanation", NUM), false);
                 pollEditTextCell3.setTag((Object) null);
+                PollCreateActivity.this.setTextLeft(viewHolder.itemView, viewHolder.getAdapterPosition());
             }
         }
 
@@ -878,8 +862,7 @@ public class PollCreateActivity extends BaseFragment {
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v1, resolved type: org.telegram.ui.Cells.HeaderCell} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v6, resolved type: org.telegram.ui.Cells.PollEditTextCell} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v7, resolved type: org.telegram.ui.Cells.TextCheckCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v8, resolved type: org.telegram.ui.Cells.PollEditTextCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v11, resolved type: org.telegram.ui.Cells.HeaderCell} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v10, resolved type: org.telegram.ui.Cells.HeaderCell} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v10, resolved type: org.telegram.ui.Cells.HeaderCell} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v11, resolved type: org.telegram.ui.Cells.HeaderCell} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v12, resolved type: org.telegram.ui.Cells.HeaderCell} */
@@ -890,36 +873,37 @@ public class PollCreateActivity extends BaseFragment {
         /* JADX WARNING: type inference failed for: r8v3, types: [org.telegram.ui.Cells.ShadowSectionCell] */
         /* JADX WARNING: type inference failed for: r8v4, types: [org.telegram.ui.Cells.TextInfoPrivacyCell] */
         /* JADX WARNING: type inference failed for: r8v5, types: [org.telegram.ui.Cells.TextCell, android.view.View] */
-        /* JADX WARNING: type inference failed for: r8v9, types: [org.telegram.ui.Cells.PollEditTextCell, org.telegram.ui.PollCreateActivity$ListAdapter$3, android.widget.FrameLayout] */
+        /* JADX WARNING: type inference failed for: r8v8, types: [org.telegram.ui.Cells.PollEditTextCell, org.telegram.ui.PollCreateActivity$ListAdapter$2, android.widget.FrameLayout] */
+        /* JADX WARNING: type inference failed for: r8v9, types: [org.telegram.ui.Cells.PollEditTextCell, org.telegram.ui.PollCreateActivity$ListAdapter$4, android.widget.FrameLayout] */
         /* JADX WARNING: Multi-variable type inference failed */
-        /* JADX WARNING: Unknown variable types count: 2 */
+        /* JADX WARNING: Unknown variable types count: 3 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r7, int r8) {
             /*
                 r6 = this;
                 java.lang.String r7 = "windowBackgroundWhite"
-                if (r8 == 0) goto L_0x00b0
+                if (r8 == 0) goto L_0x00b6
                 r0 = 1
-                if (r8 == r0) goto L_0x00a8
+                if (r8 == r0) goto L_0x00ae
                 r1 = 2
-                if (r8 == r1) goto L_0x00a0
+                if (r8 == r1) goto L_0x00a6
                 r1 = 3
-                if (r8 == r1) goto L_0x0091
+                if (r8 == r1) goto L_0x0097
                 r1 = 4
                 r2 = 0
-                if (r8 == r1) goto L_0x007a
+                if (r8 == r1) goto L_0x007d
                 r1 = 6
-                if (r8 == r1) goto L_0x006b
+                if (r8 == r1) goto L_0x006e
                 r1 = 7
                 if (r8 == r1) goto L_0x0054
-                org.telegram.ui.PollCreateActivity$ListAdapter$3 r8 = new org.telegram.ui.PollCreateActivity$ListAdapter$3
+                org.telegram.ui.PollCreateActivity$ListAdapter$4 r8 = new org.telegram.ui.PollCreateActivity$ListAdapter$4
                 android.content.Context r1 = r6.mContext
                 org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$xPCTWTnLONqvpxDTUQukvNxp8wU r2 = new org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$xPCTWTnLONqvpxDTUQukvNxp8wU
                 r2.<init>()
                 r8.<init>(r1, r2)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-                org.telegram.ui.PollCreateActivity$ListAdapter$4 r7 = new org.telegram.ui.PollCreateActivity$ListAdapter$4
+                org.telegram.ui.PollCreateActivity$ListAdapter$5 r7 = new org.telegram.ui.PollCreateActivity$ListAdapter$5
                 r7.<init>(r8)
                 r8.addTextWatcher(r7)
                 r8.setShowNextButton(r0)
@@ -933,63 +917,65 @@ public class PollCreateActivity extends BaseFragment {
                 org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$0Cdu-jo6aZB372n9nZKgtvUqB-g r0 = new org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$0Cdu-jo6aZB372n9nZKgtvUqB-g
                 r0.<init>()
                 r7.setOnKeyListener(r0)
-                goto L_0x00c6
+                goto L_0x00cc
             L_0x0054:
-                org.telegram.ui.Cells.PollEditTextCell r8 = new org.telegram.ui.Cells.PollEditTextCell
-                android.content.Context r0 = r6.mContext
-                r8.<init>(r0, r2)
+                org.telegram.ui.PollCreateActivity$ListAdapter$2 r8 = new org.telegram.ui.PollCreateActivity$ListAdapter$2
+                android.content.Context r1 = r6.mContext
+                r8.<init>(r1, r0, r2)
+                r8.createErrorTextView()
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-                org.telegram.ui.PollCreateActivity$ListAdapter$2 r7 = new org.telegram.ui.PollCreateActivity$ListAdapter$2
+                org.telegram.ui.PollCreateActivity$ListAdapter$3 r7 = new org.telegram.ui.PollCreateActivity$ListAdapter$3
                 r7.<init>(r8)
                 r8.addTextWatcher(r7)
-                goto L_0x00c6
-            L_0x006b:
+                goto L_0x00cc
+            L_0x006e:
                 org.telegram.ui.Cells.TextCheckCell r8 = new org.telegram.ui.Cells.TextCheckCell
                 android.content.Context r0 = r6.mContext
                 r8.<init>(r0)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-                goto L_0x00c6
-            L_0x007a:
+                goto L_0x00cc
+            L_0x007d:
                 org.telegram.ui.Cells.PollEditTextCell r8 = new org.telegram.ui.Cells.PollEditTextCell
                 android.content.Context r0 = r6.mContext
                 r8.<init>(r0, r2)
+                r8.createErrorTextView()
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
                 org.telegram.ui.PollCreateActivity$ListAdapter$1 r7 = new org.telegram.ui.PollCreateActivity$ListAdapter$1
                 r7.<init>(r8)
                 r8.addTextWatcher(r7)
-                goto L_0x00c6
-            L_0x0091:
+                goto L_0x00cc
+            L_0x0097:
                 org.telegram.ui.Cells.TextCell r8 = new org.telegram.ui.Cells.TextCell
                 android.content.Context r0 = r6.mContext
                 r8.<init>(r0)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-                goto L_0x00c6
-            L_0x00a0:
+                goto L_0x00cc
+            L_0x00a6:
                 org.telegram.ui.Cells.TextInfoPrivacyCell r8 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r7 = r6.mContext
                 r8.<init>(r7)
-                goto L_0x00c6
-            L_0x00a8:
+                goto L_0x00cc
+            L_0x00ae:
                 org.telegram.ui.Cells.ShadowSectionCell r8 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r7 = r6.mContext
                 r8.<init>(r7)
-                goto L_0x00c6
-            L_0x00b0:
+                goto L_0x00cc
+            L_0x00b6:
                 org.telegram.ui.Cells.HeaderCell r8 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r1 = r6.mContext
                 r3 = 21
                 r4 = 15
-                r5 = 1
+                r5 = 0
                 java.lang.String r2 = "windowBackgroundWhiteBlueHeader"
                 r0 = r8
                 r0.<init>(r1, r2, r3, r4, r5)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r8.setBackgroundColor(r7)
-            L_0x00c6:
+            L_0x00cc:
                 androidx.recyclerview.widget.RecyclerView$LayoutParams r7 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                 r0 = -1
                 r1 = -2

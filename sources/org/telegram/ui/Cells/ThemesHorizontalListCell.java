@@ -65,6 +65,8 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
     public HashMap<String, Theme.ThemeInfo> loadingThemes = new HashMap<>();
     /* access modifiers changed from: private */
     public HashMap<Theme.ThemeInfo, String> loadingWallpapers = new HashMap<>();
+    /* access modifiers changed from: private */
+    public int prevCount;
     private Theme.ThemeInfo prevThemeInfo;
 
     /* access modifiers changed from: protected */
@@ -115,7 +117,10 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
         }
 
         public int getItemCount() {
-            return ThemesHorizontalListCell.this.defaultThemes.size() + ThemesHorizontalListCell.this.darkThemes.size();
+            ThemesHorizontalListCell themesHorizontalListCell = ThemesHorizontalListCell.this;
+            int size = themesHorizontalListCell.defaultThemes.size() + ThemesHorizontalListCell.this.darkThemes.size();
+            int unused = themesHorizontalListCell.prevCount = size;
+            return size;
         }
     }
 
@@ -1035,9 +1040,11 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
     }
 
     public void notifyDataSetChanged(int i) {
-        this.adapter.notifyDataSetChanged();
-        if (this.prevThemeInfo != (this.currentType == 1 ? Theme.getCurrentNightTheme() : Theme.getCurrentTheme())) {
-            scrollToCurrentTheme(i, false);
+        if (this.prevCount != this.adapter.getItemCount()) {
+            this.adapter.notifyDataSetChanged();
+            if (this.prevThemeInfo != (this.currentType == 1 ? Theme.getCurrentNightTheme() : Theme.getCurrentTheme())) {
+                scrollToCurrentTheme(i, false);
+            }
         }
     }
 

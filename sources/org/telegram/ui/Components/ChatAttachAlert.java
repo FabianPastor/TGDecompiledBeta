@@ -743,7 +743,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
             java.lang.String r1 = "Search"
-            r2 = 2131626619(0x7f0e0a7b, float:1.888048E38)
+            r2 = 2131626630(0x7f0e0a86, float:1.8880502E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setContentDescription(r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
@@ -982,7 +982,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.setAlpha(r10)
             android.widget.FrameLayout r0 = r6.writeButtonContainer
             java.lang.String r2 = "Send"
-            r3 = 2131626667(0x7f0e0aab, float:1.8880577E38)
+            r3 = 2131626678(0x7f0e0ab6, float:1.8880599E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r0.setContentDescription(r2)
             android.view.ViewGroup r0 = r6.containerView
@@ -2651,9 +2651,9 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 this.currentAttachLayout.onHide();
                 this.currentAttachLayout.setVisibility(8);
                 this.currentAttachLayout.onHidden();
-                ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout = this.photoLayout;
-                this.currentAttachLayout = chatAttachAlertPhotoLayout;
-                if (chatAttachAlertPhotoLayout.getParent() == null) {
+                this.currentAttachLayout = this.photoLayout;
+                setAllowNestedScroll(true);
+                if (this.currentAttachLayout.getParent() == null) {
                     this.containerView.addView(this.currentAttachLayout, 0, LayoutHelper.createFrame(-1, -1.0f));
                 }
                 this.selectedId = 1;

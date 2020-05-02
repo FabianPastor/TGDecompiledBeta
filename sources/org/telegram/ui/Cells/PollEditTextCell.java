@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Property;
+import android.view.ActionMode;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -23,6 +24,7 @@ import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.EditTextBoldCursor;
+import org.telegram.ui.Components.EditTextCaption;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class PollEditTextCell extends FrameLayout {
@@ -48,6 +50,10 @@ public class PollEditTextCell extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
+    public void onActionModeStart(EditTextBoldCursor editTextBoldCursor, ActionMode actionMode) {
+    }
+
+    /* access modifiers changed from: protected */
     public void onEditTextDraw(EditTextBoldCursor editTextBoldCursor, Canvas canvas) {
     }
 
@@ -60,38 +66,83 @@ public class PollEditTextCell extends FrameLayout {
         return false;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public PollEditTextCell(Context context, View.OnClickListener onClickListener) {
+        this(context, false, onClickListener);
+    }
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    public PollEditTextCell(Context context, boolean z, View.OnClickListener onClickListener) {
         super(context);
         Context context2 = context;
         View.OnClickListener onClickListener2 = onClickListener;
-        AnonymousClass1 r3 = new EditTextBoldCursor(context2) {
-            public InputConnection onCreateInputConnection(EditorInfo editorInfo) {
-                InputConnection onCreateInputConnection = super.onCreateInputConnection(editorInfo);
-                if (PollEditTextCell.this.showNextButton) {
-                    editorInfo.imeOptions &= -NUM;
+        if (z) {
+            AnonymousClass1 r4 = new EditTextCaption(context2) {
+                public InputConnection onCreateInputConnection(EditorInfo editorInfo) {
+                    InputConnection onCreateInputConnection = super.onCreateInputConnection(editorInfo);
+                    if (PollEditTextCell.this.showNextButton) {
+                        editorInfo.imeOptions &= -NUM;
+                    }
+                    return onCreateInputConnection;
                 }
-                return onCreateInputConnection;
-            }
 
-            /* access modifiers changed from: protected */
-            public void onDraw(Canvas canvas) {
-                super.onDraw(canvas);
-                PollEditTextCell.this.onEditTextDraw(this, canvas);
-            }
+                /* access modifiers changed from: protected */
+                public void onDraw(Canvas canvas) {
+                    super.onDraw(canvas);
+                    PollEditTextCell.this.onEditTextDraw(this, canvas);
+                }
 
-            public boolean onTouchEvent(MotionEvent motionEvent) {
-                if (!isEnabled()) {
-                    return false;
+                public boolean onTouchEvent(MotionEvent motionEvent) {
+                    if (!isEnabled()) {
+                        return false;
+                    }
+                    if (motionEvent.getAction() == 1) {
+                        PollEditTextCell.this.onFieldTouchUp(this);
+                    }
+                    return super.onTouchEvent(motionEvent);
                 }
-                if (motionEvent.getAction() == 1) {
-                    PollEditTextCell.this.onFieldTouchUp(this);
+
+                public ActionMode startActionMode(ActionMode.Callback callback, int i) {
+                    ActionMode startActionMode = super.startActionMode(callback, i);
+                    PollEditTextCell.this.onActionModeStart(this, startActionMode);
+                    return startActionMode;
                 }
-                return super.onTouchEvent(motionEvent);
-            }
-        };
-        this.textView = r3;
-        r3.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+
+                public ActionMode startActionMode(ActionMode.Callback callback) {
+                    ActionMode startActionMode = super.startActionMode(callback);
+                    PollEditTextCell.this.onActionModeStart(this, startActionMode);
+                    return startActionMode;
+                }
+            };
+            this.textView = r4;
+            r4.setAllowTextEntitiesIntersection(true);
+        } else {
+            this.textView = new EditTextBoldCursor(context2) {
+                public InputConnection onCreateInputConnection(EditorInfo editorInfo) {
+                    InputConnection onCreateInputConnection = super.onCreateInputConnection(editorInfo);
+                    if (PollEditTextCell.this.showNextButton) {
+                        editorInfo.imeOptions &= -NUM;
+                    }
+                    return onCreateInputConnection;
+                }
+
+                /* access modifiers changed from: protected */
+                public void onDraw(Canvas canvas) {
+                    super.onDraw(canvas);
+                    PollEditTextCell.this.onEditTextDraw(this, canvas);
+                }
+
+                public boolean onTouchEvent(MotionEvent motionEvent) {
+                    if (!isEnabled()) {
+                        return false;
+                    }
+                    if (motionEvent.getAction() == 1) {
+                        PollEditTextCell.this.onFieldTouchUp(this);
+                    }
+                    return super.onTouchEvent(motionEvent);
+                }
+            };
+        }
+        this.textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.textView.setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
         this.textView.setTextSize(1, 16.0f);
         int i = 5;

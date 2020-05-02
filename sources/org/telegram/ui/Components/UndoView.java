@@ -304,7 +304,7 @@ public class UndoView extends FrameLayout {
             long r6 = android.os.SystemClock.elapsedRealtime()
             r0.lastUpdateTime = r6
             android.widget.TextView r6 = r0.undoTextView
-            r7 = 2131627058(0x7f0e0CLASSNAME, float:1.888137E38)
+            r7 = 2131627069(0x7f0e0c3d, float:1.8881392E38)
             java.lang.String r8 = "Undo"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             java.lang.String r7 = r7.toUpperCase()
@@ -386,10 +386,10 @@ public class UndoView extends FrameLayout {
             int r1 = r0.currentAction
             r4 = 13
             if (r1 != r4) goto L_0x00fd
-            r1 = 2131626479(0x7f0e09ef, float:1.8880195E38)
+            r1 = 2131626490(0x7f0e09fa, float:1.8880218E38)
             java.lang.String r2 = "QuizWellDone"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            r2 = 2131626480(0x7f0e09f0, float:1.8880197E38)
+            r2 = 2131626491(0x7f0e09fb, float:1.888022E38)
             java.lang.String r3 = "QuizWellDoneInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r3 = 2131558433(0x7f0d0021, float:1.8742182E38)
@@ -399,10 +399,10 @@ public class UndoView extends FrameLayout {
         L_0x00fd:
             r4 = 14
             if (r1 != r4) goto L_0x0117
-            r1 = 2131626481(0x7f0e09f1, float:1.88802E38)
+            r1 = 2131626492(0x7f0e09fc, float:1.8880222E38)
             java.lang.String r2 = "QuizWrongAnswer"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            r2 = 2131626482(0x7f0e09f2, float:1.8880201E38)
+            r2 = 2131626493(0x7f0e09fd, float:1.8880224E38)
             java.lang.String r3 = "QuizWrongAnswerInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r3 = 2131558441(0x7f0d0029, float:1.8742198E38)
@@ -720,7 +720,7 @@ public class UndoView extends FrameLayout {
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
             org.telegram.ui.Components.RLottieImageView r1 = r0.leftImageView
-            r2 = 2131165938(0x7var_f2, float:1.7946107E38)
+            r2 = 2131165939(0x7var_f3, float:1.794611E38)
             r1.setImageResource(r2)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)
             r6.leftMargin = r1
@@ -962,7 +962,7 @@ public class UndoView extends FrameLayout {
             r9.height = r1
         L_0x0632:
             android.widget.TextView r1 = r0.undoTextView
-            r2 = 2131626675(0x7f0e0ab3, float:1.8880593E38)
+            r2 = 2131626686(0x7f0e0abe, float:1.8880615E38)
             java.lang.String r3 = "SendDice"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)

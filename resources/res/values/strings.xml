@@ -2530,6 +2530,17 @@
     <string name="ProxyConnections">Connections</string>
     <string name="ProxyDetails">Proxy Details</string>
     <string name="ProxySettings">Proxy Settings</string>
+    <string name="PsaHide">Hide</string>
+    <string name="PsaHideChatAlertText">Are you sure you want to hide the selected chat?</string>
+    <string name="PsaHideChatAlertTitle">Hide chat</string>
+    <string name="PsaInfoDefault">PSA info test</string>
+    <string name="PsaInfo_covid">This message provides you with a public service announcement in relation to the ungoing Covid-19 pandemic. Learn more about this initiative at https://telegram.org/blog/coronavirus</string>
+    <string name="PsaMessageDefault">Important Notification</string>
+    <string name="PsaMessageInfoDefault">This is an important notification.</string>
+    <string name="PsaMessageInfo_covid">This message provides you with a public service announcement in relation to the ungoing Covid-19 pandemic. Learn more about this initiative at https://telegram.org/blog/coronavirus</string>
+    <string name="PsaMessage_covid">Covid-19 Notification</string>
+    <string name="PsaTypeDefault">PSA</string>
+    <string name="PsaType_covid">PSA</string>
     <string name="PublicChannelsTooMuch">Sorry, the target user has too many public groups or channels already. Please ask them to make one of their existing groups or channels private first.</string>
     <string name="PublicPoll">Poll</string>
     <string name="PublicPollCantForward">Sorry, public polls can’t be forwarded to channels.</string>

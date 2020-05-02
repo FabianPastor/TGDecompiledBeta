@@ -1132,6 +1132,9 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         L_0x004c:
             org.telegram.ui.Components.ChatAttachAlert r0 = r2.parentAlert
             org.telegram.ui.ActionBar.ActionBar r0 = r0.actionBar
+            r0.closeSearchField()
+            org.telegram.ui.Components.ChatAttachAlert r0 = r2.parentAlert
+            org.telegram.ui.ActionBar.ActionBar r0 = r0.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r2.searchItem
             r0.removeView(r1)

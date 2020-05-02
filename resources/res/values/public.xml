@@ -630,6 +630,7 @@
     <public type="drawable" name="msg_photo_shadow" id="NUM" />
     <public type="drawable" name="msg_pin" id="NUM" />
     <public type="drawable" name="msg_pollstop" id="NUM" />
+    <public type="drawable" name="msg_psa" id="NUM" />
     <public type="drawable" name="msg_reorder" id="NUM" />
     <public type="drawable" name="msg_reply" id="NUM" />
     <public type="drawable" name="msg_report" id="NUM" />
@@ -3648,6 +3649,17 @@
     <public type="string" name="ProxyConnections" id="NUM" />
     <public type="string" name="ProxyDetails" id="NUM" />
     <public type="string" name="ProxySettings" id="NUM" />
+    <public type="string" name="PsaHide" id="NUM" />
+    <public type="string" name="PsaHideChatAlertText" id="NUM" />
+    <public type="string" name="PsaHideChatAlertTitle" id="NUM" />
+    <public type="string" name="PsaInfoDefault" id="NUM" />
+    <public type="string" name="PsaInfo_covid" id="NUM" />
+    <public type="string" name="PsaMessageDefault" id="NUM" />
+    <public type="string" name="PsaMessageInfoDefault" id="NUM" />
+    <public type="string" name="PsaMessageInfo_covid" id="NUM" />
+    <public type="string" name="PsaMessage_covid" id="NUM" />
+    <public type="string" name="PsaTypeDefault" id="NUM" />
+    <public type="string" name="PsaType_covid" id="NUM" />
     <public type="string" name="PublicChannelsTooMuch" id="NUM" />
     <public type="string" name="PublicPoll" id="NUM" />
     <public type="string" name="PublicPollCantForward" id="NUM" />

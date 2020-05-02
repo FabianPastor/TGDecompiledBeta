@@ -611,6 +611,7 @@ public final class R {
         public static final int msg_photo_shadow = NUM;
         public static final int msg_pin = NUM;
         public static final int msg_pollstop = NUM;
+        public static final int msg_psa = NUM;
         public static final int msg_reorder = NUM;
         public static final int msg_reply = NUM;
         public static final int msg_report = NUM;
@@ -3787,6 +3788,17 @@ public final class R {
         public static final int ProxyConnections = NUM;
         public static final int ProxyDetails = NUM;
         public static final int ProxySettings = NUM;
+        public static final int PsaHide = NUM;
+        public static final int PsaHideChatAlertText = NUM;
+        public static final int PsaHideChatAlertTitle = NUM;
+        public static final int PsaInfoDefault = NUM;
+        public static final int PsaInfo_covid = NUM;
+        public static final int PsaMessageDefault = NUM;
+        public static final int PsaMessageInfoDefault = NUM;
+        public static final int PsaMessageInfo_covid = NUM;
+        public static final int PsaMessage_covid = NUM;
+        public static final int PsaTypeDefault = NUM;
+        public static final int PsaType_covid = NUM;
         public static final int PublicChannelsTooMuch = NUM;
         public static final int PublicPoll = NUM;
         public static final int PublicPollCantForward = NUM;

@@ -177,6 +177,10 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressHiddenForward(this, chatMessageCell);
                     }
 
+                    public /* synthetic */ void didPressHint(ChatMessageCell chatMessageCell, int i) {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressHint(this, chatMessageCell, i);
+                    }
+
                     public /* synthetic */ void didPressImage(ChatMessageCell chatMessageCell, float f, float f2) {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressImage(this, chatMessageCell, f, f2);
                     }
@@ -187,10 +191,6 @@ public class ThemePreviewMessagesCell extends LinearLayout {
 
                     public /* synthetic */ void didPressOther(ChatMessageCell chatMessageCell, float f, float f2) {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressOther(this, chatMessageCell, f, f2);
-                    }
-
-                    public /* synthetic */ void didPressPollHint(ChatMessageCell chatMessageCell, int i, int i2) {
-                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressPollHint(this, chatMessageCell, i, i2);
                     }
 
                     public /* synthetic */ void didPressReaction(ChatMessageCell chatMessageCell, TLRPC$TL_reactionCount tLRPC$TL_reactionCount) {

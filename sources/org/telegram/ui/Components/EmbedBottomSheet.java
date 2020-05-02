@@ -512,7 +512,7 @@ public class EmbedBottomSheet extends BottomSheet {
             android.widget.ImageView$ScaleType r8 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r8)
             android.widget.ImageView r2 = r0.pipButton
-            r8 = 2131165960(0x7var_, float:1.7946152E38)
+            r8 = 2131165961(0x7var_, float:1.7946154E38)
             r2.setImageResource(r8)
             android.widget.ImageView r2 = r0.pipButton
             r2.setEnabled(r5)
@@ -550,7 +550,7 @@ public class EmbedBottomSheet extends BottomSheet {
             r8.<init>(r1)
             android.widget.ImageView$ScaleType r10 = android.widget.ImageView.ScaleType.CENTER
             r8.setScaleType(r10)
-            r10 = 2131165953(0x7var_, float:1.7946138E38)
+            r10 = 2131165954(0x7var_, float:1.794614E38)
             r8.setImageResource(r10)
             android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
             int r13 = org.telegram.ui.ActionBar.Theme.getColor(r14)

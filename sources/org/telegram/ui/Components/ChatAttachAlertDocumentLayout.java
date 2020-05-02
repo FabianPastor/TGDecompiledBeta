@@ -479,6 +479,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
+        this.parentAlert.actionBar.closeSearchField();
         ActionBarMenu createMenu = this.parentAlert.actionBar.createMenu();
         createMenu.removeView(this.sortItem);
         createMenu.removeView(this.searchItem);
@@ -1033,7 +1034,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             r6 = 2131625188(0x7f0e04e4, float:1.8877577E38)
             java.lang.String r7 = "ExternalFolderInfo"
             r8 = 2131165374(0x7var_be, float:1.7944963E38)
-            r9 = 2131626618(0x7f0e0a7a, float:1.8880477E38)
+            r9 = 2131626629(0x7f0e0a85, float:1.88805E38)
             java.lang.String r10 = "SdCard"
             if (r5 != 0) goto L_0x003e
             java.lang.String r5 = "mounted_ro"

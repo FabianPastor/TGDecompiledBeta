@@ -1,6 +1,6 @@
 package org.telegram.tgnet;
 
-public class TLRPC$TL_help_proxyDataEmpty extends TLRPC$help_ProxyData {
+public class TLRPC$TL_help_promoDataEmpty extends TLRPC$help_PromoData {
     public static int constructor = -NUM;
     public int expires;
 

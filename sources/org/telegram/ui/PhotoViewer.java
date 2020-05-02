@@ -2861,7 +2861,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         L_0x00a7:
             android.app.Activity r1 = r6.parentActivity     // Catch:{ Exception -> 0x00c0 }
             java.lang.String r2 = "ShareFile"
-            r3 = 2131626751(0x7f0e0aff, float:1.8880747E38)
+            r3 = 2131626762(0x7f0e0b0a, float:1.888077E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ Exception -> 0x00c0 }
             android.content.Intent r0 = android.content.Intent.createChooser(r0, r2)     // Catch:{ Exception -> 0x00c0 }
             r2 = 500(0x1f4, float:7.0E-43)
@@ -8116,7 +8116,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         L_0x0183:
             long r14 = (long) r8
             long r14 = r14 * r9
-            r8 = 2131627518(0x7f0e0dfe, float:1.8882303E38)
+            r8 = 2131627529(0x7f0e0e09, float:1.8882325E38)
             r9 = 2
             java.lang.Object[] r10 = new java.lang.Object[r9]
             org.telegram.messenger.LocaleController r9 = org.telegram.messenger.LocaleController.getInstance()
@@ -8872,7 +8872,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             boolean r3 = r2.self
             if (r3 == 0) goto L_0x0755
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
-            r3 = 2131626607(0x7f0e0a6f, float:1.8880455E38)
+            r3 = 2131626618(0x7f0e0a7a, float:1.8880477E38)
             java.lang.String r7 = "SavedMessages"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r7, r3)
             r2.setTitle(r3)
@@ -10166,7 +10166,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (android.graphics.drawable.Drawable) r4, (int) r5, (java.lang.String) r6, (java.lang.Object) r7, (int) r8)
             goto L_0x04a0
         L_0x027f:
-            r3 = 2131165741(0x7var_d, float:1.7945708E38)
+            r3 = 2131165742(0x7var_e, float:1.794571E38)
             if (r2 == 0) goto L_0x02ae
             org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForWebFile(r2)
             if (r10 == 0) goto L_0x0293
@@ -10241,7 +10241,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r5 = 1
             r9 = 0
         L_0x02fc:
-            r4 = 2131165803(0x7var_b, float:1.7945833E38)
+            r4 = 2131165804(0x7var_c, float:1.7945835E38)
             r8 = 100
             if (r9 == 0) goto L_0x03e5
             boolean r10 = r9.isVideo()

@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_messageFwdHeader extends TLRPC$MessageFwdHeader {
-    public static int constructor = -NUM;
+    public static int constructor = NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -27,6 +27,9 @@ public class TLRPC$TL_messageFwdHeader extends TLRPC$MessageFwdHeader {
         }
         if ((this.flags & 16) != 0) {
             this.saved_from_msg_id = abstractSerializedData.readInt32(z);
+        }
+        if ((this.flags & 64) != 0) {
+            this.psa_type = abstractSerializedData.readString(z);
         }
     }
 
@@ -54,6 +57,9 @@ public class TLRPC$TL_messageFwdHeader extends TLRPC$MessageFwdHeader {
         }
         if ((this.flags & 16) != 0) {
             abstractSerializedData.writeInt32(this.saved_from_msg_id);
+        }
+        if ((this.flags & 64) != 0) {
+            abstractSerializedData.writeString(this.psa_type);
         }
     }
 }
