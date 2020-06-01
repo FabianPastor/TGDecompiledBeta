@@ -8,8 +8,9 @@ import org.telegram.messenger.AndroidUtilities;
 public class ExtendedGridLayoutManager extends GridLayoutManager {
     private int calculatedWidth;
     private int firstRowMax;
-    private SparseIntArray itemSpans = new SparseIntArray();
-    private SparseIntArray itemsToRow = new SparseIntArray();
+    private SparseIntArray itemSpans;
+    private SparseIntArray itemsToRow;
+    private final boolean lastRowFullWidth;
     private int rowsCount;
 
     /* access modifiers changed from: protected */
@@ -22,83 +23,110 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
     }
 
     public ExtendedGridLayoutManager(Context context, int i) {
+        this(context, i, false);
+    }
+
+    public ExtendedGridLayoutManager(Context context, int i, boolean z) {
         super(context, i);
+        this.itemSpans = new SparseIntArray();
+        this.itemsToRow = new SparseIntArray();
+        this.lastRowFullWidth = z;
     }
 
     private void prepareLayout(float f) {
-        if (f == 0.0f) {
-            f = 100.0f;
-        }
+        int i;
+        boolean z;
+        float f2 = f == 0.0f ? 100.0f : f;
         this.itemSpans.clear();
         this.itemsToRow.clear();
         this.rowsCount = 0;
         this.firstRowMax = 0;
-        int dp = AndroidUtilities.dp(100.0f);
         int flowItemCount = getFlowItemCount();
-        int spanCount = getSpanCount();
-        int i = spanCount;
-        int i2 = 0;
-        for (int i3 = 0; i3 < flowItemCount; i3++) {
-            Size sizeForItem = sizeForItem(i3);
-            int min = Math.min(spanCount, (int) Math.floor((double) (((float) spanCount) * (((sizeForItem.width / sizeForItem.height) * ((float) dp)) / f))));
-            if (i < min || (min > 33 && i < min + -15)) {
-                if (i != 0) {
-                    int i4 = i / i2;
-                    int i5 = i3 - i2;
-                    int i6 = i5;
-                    while (true) {
-                        int i7 = i5 + i2;
-                        if (i6 >= i7) {
-                            break;
-                        }
-                        if (i6 == i7 - 1) {
-                            SparseIntArray sparseIntArray = this.itemSpans;
-                            sparseIntArray.put(i6, sparseIntArray.get(i6) + i);
-                        } else {
-                            SparseIntArray sparseIntArray2 = this.itemSpans;
-                            sparseIntArray2.put(i6, sparseIntArray2.get(i6) + i4);
-                        }
-                        i -= i4;
-                        i6++;
-                    }
-                    this.itemsToRow.put(i3 - 1, this.rowsCount);
-                }
-                this.rowsCount++;
-                i = spanCount;
-                i2 = 0;
-            } else if (i < min) {
-                min = i;
-            }
-            if (this.rowsCount == 0) {
-                this.firstRowMax = Math.max(this.firstRowMax, i3);
-            }
-            if (i3 == flowItemCount - 1) {
-                this.itemsToRow.put(i3, this.rowsCount);
-            }
-            i2++;
-            i -= min;
-            this.itemSpans.put(i3, min);
-        }
         if (flowItemCount != 0) {
+            int dp = AndroidUtilities.dp(100.0f);
+            int spanCount = getSpanCount();
+            int i2 = (this.lastRowFullWidth ? 1 : 0) + flowItemCount;
+            int i3 = spanCount;
+            int i4 = 0;
+            int i5 = 0;
+            while (i4 < i2) {
+                Size sizeForItem = i4 < flowItemCount ? sizeForItem(i4) : null;
+                if (sizeForItem == null) {
+                    z = i5 != 0;
+                    i = spanCount;
+                } else {
+                    int min = Math.min(spanCount, (int) Math.floor((double) (((float) spanCount) * (((sizeForItem.width / sizeForItem.height) * ((float) dp)) / f2))));
+                    i = min;
+                    z = i3 < min || (min > 33 && i3 < min + -15);
+                }
+                if (z) {
+                    if (i3 != 0) {
+                        int i6 = i3 / i5;
+                        int i7 = i4 - i5;
+                        int i8 = i7;
+                        while (true) {
+                            int i9 = i7 + i5;
+                            if (i8 >= i9) {
+                                break;
+                            }
+                            if (i8 == i9 - 1) {
+                                SparseIntArray sparseIntArray = this.itemSpans;
+                                sparseIntArray.put(i8, sparseIntArray.get(i8) + i3);
+                            } else {
+                                SparseIntArray sparseIntArray2 = this.itemSpans;
+                                sparseIntArray2.put(i8, sparseIntArray2.get(i8) + i6);
+                            }
+                            i3 -= i6;
+                            i8++;
+                        }
+                        this.itemsToRow.put(i4 - 1, this.rowsCount);
+                    }
+                    if (i4 == flowItemCount) {
+                        break;
+                    }
+                    this.rowsCount++;
+                    i3 = spanCount;
+                    i5 = 0;
+                } else if (i3 < i) {
+                    i = i3;
+                }
+                if (this.rowsCount == 0) {
+                    this.firstRowMax = Math.max(this.firstRowMax, i4);
+                }
+                if (i4 == flowItemCount - 1 && !this.lastRowFullWidth) {
+                    this.itemsToRow.put(i4, this.rowsCount);
+                }
+                i5++;
+                i3 -= i;
+                this.itemSpans.put(i4, i);
+                i4++;
+            }
             this.rowsCount++;
         }
     }
 
     private Size sizeForItem(int i) {
-        Size sizeForItem = getSizeForItem(i);
-        if (sizeForItem.width == 0.0f) {
-            sizeForItem.width = 100.0f;
+        return fixSize(getSizeForItem(i));
+    }
+
+    /* access modifiers changed from: protected */
+    public Size fixSize(Size size) {
+        if (size == null) {
+            return null;
         }
-        if (sizeForItem.height == 0.0f) {
-            sizeForItem.height = 100.0f;
+        if (size.width == 0.0f) {
+            size.width = 100.0f;
         }
-        float f = sizeForItem.width / sizeForItem.height;
+        if (size.height == 0.0f) {
+            size.height = 100.0f;
+        }
+        float f = size.width / size.height;
         if (f > 4.0f || f < 0.2f) {
-            float max = Math.max(sizeForItem.width, sizeForItem.height);
-            sizeForItem.width = max;
-            sizeForItem.height = max;
+            float max = Math.max(size.width, size.height);
+            size.width = max;
+            size.height = max;
         }
-        return sizeForItem;
+        return size;
     }
 
     private void checkLayout() {

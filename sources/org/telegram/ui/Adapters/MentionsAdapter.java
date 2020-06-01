@@ -1719,7 +1719,6 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
 
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
         TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights;
-        boolean z = false;
         if (viewHolder.getItemViewType() == 3) {
             TextView textView = (TextView) viewHolder.itemView;
             TLRPC$Chat currentChat = this.parentFragment.getCurrentChat();
@@ -1734,20 +1733,13 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
                 textView.setText(LocaleController.formatString("AttachInlineRestricted", NUM, LocaleController.formatDateForBan((long) currentChat.banned_rights.until_date)));
             }
         } else if (this.searchResultBotContext != null) {
-            boolean z2 = this.searchResultBotContextSwitch != null;
+            boolean z = this.searchResultBotContextSwitch != null;
             if (viewHolder.getItemViewType() != 2) {
-                if (z2) {
+                if (z) {
                     i--;
                 }
-                ContextLinkCell contextLinkCell = (ContextLinkCell) viewHolder.itemView;
-                TLRPC$BotInlineResult tLRPC$BotInlineResult = this.searchResultBotContext.get(i);
-                boolean z3 = this.contextMedia;
-                boolean z4 = i != this.searchResultBotContext.size() - 1;
-                if (z2 && i == 0) {
-                    z = true;
-                }
-                contextLinkCell.setLink(tLRPC$BotInlineResult, z3, z4, z);
-            } else if (z2) {
+                ((ContextLinkCell) viewHolder.itemView).setLink(this.searchResultBotContext.get(i), this.contextMedia, i != this.searchResultBotContext.size() - 1, z && i == 0, "gif".equals(this.searchingContextUsername));
+            } else if (z) {
                 ((BotSwitchCell) viewHolder.itemView).setText(this.searchResultBotContextSwitch.text);
             }
         } else {

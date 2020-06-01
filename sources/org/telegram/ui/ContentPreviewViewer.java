@@ -38,6 +38,8 @@ import org.telegram.tgnet.TLRPC$DocumentAttribute;
 import org.telegram.tgnet.TLRPC$InputStickerSet;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeSticker;
+import org.telegram.tgnet.TLRPC$TL_videoSize;
+import org.telegram.tgnet.TLRPC$TL_webDocument;
 import org.telegram.tgnet.TLRPC$WebDocument;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -359,6 +361,10 @@ public class ContentPreviewViewer {
             public static void $default$gifAddedOrDeleted(ContentPreviewViewerDelegate contentPreviewViewerDelegate) {
             }
 
+            public static boolean $default$needMenu(ContentPreviewViewerDelegate contentPreviewViewerDelegate) {
+                return true;
+            }
+
             public static boolean $default$needOpen(ContentPreviewViewerDelegate contentPreviewViewerDelegate) {
                 return true;
             }
@@ -374,6 +380,8 @@ public class ContentPreviewViewer {
         void gifAddedOrDeleted();
 
         boolean isInScheduleMode();
+
+        boolean needMenu();
 
         boolean needOpen();
 
@@ -951,8 +959,8 @@ public class ContentPreviewViewer {
     }
 
     public void open(TLRPC$Document tLRPC$Document, TLRPC$BotInlineResult tLRPC$BotInlineResult, int i, boolean z, Object obj) {
-        TLRPC$WebDocument tLRPC$WebDocument;
         TLRPC$InputStickerSet tLRPC$InputStickerSet;
+        ContentPreviewViewerDelegate contentPreviewViewerDelegate;
         TLRPC$Document tLRPC$Document2 = tLRPC$Document;
         TLRPC$BotInlineResult tLRPC$BotInlineResult2 = tLRPC$BotInlineResult;
         int i2 = i;
@@ -978,7 +986,7 @@ public class ContentPreviewViewer {
                         }
                         i3++;
                     }
-                    if (tLRPC$InputStickerSet != null) {
+                    if (tLRPC$InputStickerSet != null && ((contentPreviewViewerDelegate = this.delegate) == null || contentPreviewViewerDelegate.needMenu())) {
                         try {
                             if (this.visibleDialog != null) {
                                 this.visibleDialog.setOnDismissListener((DialogInterface.OnDismissListener) null);
@@ -1012,9 +1020,21 @@ public class ContentPreviewViewer {
             } else {
                 if (tLRPC$Document2 != null) {
                     TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90);
-                    this.centerImage.setImage(ImageLocation.getForDocument(tLRPC$Document), (String) null, ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), "90_90_b", tLRPC$Document2.size, (String) null, "gif" + tLRPC$Document2, 0);
-                } else if (tLRPC$BotInlineResult2 != null && (tLRPC$WebDocument = tLRPC$BotInlineResult2.content) != null) {
-                    this.centerImage.setImage(ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$WebDocument)), (String) null, ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.thumb)), "90_90_b", tLRPC$BotInlineResult2.content.size, (String) null, "gif" + tLRPC$BotInlineResult2, 1);
+                    TLRPC$TL_videoSize documentVideoThumb = MessageObject.getDocumentVideoThumb(tLRPC$Document);
+                    ImageLocation forDocument = ImageLocation.getForDocument(tLRPC$Document);
+                    forDocument.imageType = 2;
+                    if (documentVideoThumb != null) {
+                        this.centerImage.setImage(forDocument, (String) null, ImageLocation.getForDocument(documentVideoThumb, tLRPC$Document2), (String) null, ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), "90_90_b", (Drawable) null, tLRPC$Document2.size, (String) null, "gif" + tLRPC$Document2, 0);
+                    } else {
+                        this.centerImage.setImage(forDocument, (String) null, ImageLocation.getForDocument(closestPhotoSizeWithSize, tLRPC$Document2), "90_90_b", tLRPC$Document2.size, (String) null, "gif" + tLRPC$Document2, 0);
+                    }
+                } else if (tLRPC$BotInlineResult2 != null && tLRPC$BotInlineResult2.content != null) {
+                    TLRPC$WebDocument tLRPC$WebDocument = tLRPC$BotInlineResult2.thumb;
+                    if (!(tLRPC$WebDocument instanceof TLRPC$TL_webDocument) || !"video/mp4".equals(tLRPC$WebDocument.mime_type)) {
+                        this.centerImage.setImage(ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.content)), (String) null, ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.thumb)), "90_90_b", tLRPC$BotInlineResult2.content.size, (String) null, "gif" + tLRPC$BotInlineResult2, 1);
+                    } else {
+                        this.centerImage.setImage(ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.content)), (String) null, ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.thumb)), (String) null, ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$BotInlineResult2.thumb)), "90_90_b", (Drawable) null, tLRPC$BotInlineResult2.content.size, (String) null, "gif" + tLRPC$BotInlineResult2, 1);
+                    }
                 } else {
                     return;
                 }
@@ -1148,8 +1168,9 @@ public class ContentPreviewViewer {
             float f2 = this.showProgress;
             int i6 = (int) (((float) i3) * ((f2 * 0.8f) / 0.8f));
             this.centerImage.setAlpha(f2);
-            int i7 = (-i6) / 2;
-            this.centerImage.setImageCoords(i7, i7, i6, i6);
+            float f3 = (float) ((-i6) / 2);
+            float f4 = (float) i6;
+            this.centerImage.setImageCoords(f3, f3, f4, f4);
             this.centerImage.draw(canvas);
             if (this.currentContentType == 1 && (drawable = this.slideUpDrawable) != null) {
                 int intrinsicWidth = drawable.getIntrinsicWidth();
@@ -1160,7 +1181,7 @@ public class ContentPreviewViewer {
                 this.slideUpDrawable.draw(canvas);
             }
             if (this.stickerEmojiLayout != null) {
-                canvas.translate((float) (-AndroidUtilities.dp(50.0f)), (float) (((-this.centerImage.getImageHeight()) / 2) - AndroidUtilities.dp(30.0f)));
+                canvas.translate((float) (-AndroidUtilities.dp(50.0f)), ((-this.centerImage.getImageHeight()) / 2.0f) - ((float) AndroidUtilities.dp(30.0f)));
                 this.stickerEmojiLayout.draw(canvas);
             }
             canvas.restore();

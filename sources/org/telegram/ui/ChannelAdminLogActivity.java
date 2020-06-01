@@ -114,6 +114,7 @@ import org.telegram.ui.PhotoViewer;
 
 public class ChannelAdminLogActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
     private ArrayList<TLRPC$ChannelParticipant> admins;
+    private int allowAnimationIndex;
     /* access modifiers changed from: private */
     public Paint aspectPaint;
     /* access modifiers changed from: private */
@@ -1758,7 +1759,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r2.putExtra(r5, r0)
         L_0x01fb:
             android.app.Activity r0 = r10.getParentActivity()
-            r3 = 2131626762(0x7f0e0b0a, float:1.888077E38)
+            r3 = 2131626774(0x7f0e0b16, float:1.8880794E38)
             java.lang.String r4 = "ShareFile"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.content.Intent r2 = android.content.Intent.createChooser(r2, r3)
@@ -1794,9 +1795,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             java.lang.String r1 = r1.toLowerCase()
             java.lang.String r2 = "attheme"
             boolean r1 = r1.endsWith(r2)
-            r2 = 2131626003(0x7f0e0813, float:1.887923E38)
+            r2 = 2131626008(0x7f0e0818, float:1.887924E38)
             java.lang.String r3 = "OK"
-            r4 = 2131624198(0x7f0e0106, float:1.8875569E38)
+            r4 = 2131624199(0x7f0e0107, float:1.887557E38)
             java.lang.String r5 = "AppName"
             if (r1 == 0) goto L_0x02dc
             androidx.recyclerview.widget.LinearLayoutManager r1 = r10.chatLayoutManager
@@ -1844,7 +1845,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131625469(0x7f0e05fd, float:1.8878147E38)
+            r1 = 2131625474(0x7f0e0602, float:1.8878157E38)
             java.lang.String r4 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -1873,7 +1874,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131625468(0x7f0e05fc, float:1.8878145E38)
+            r1 = 2131625473(0x7f0e0601, float:1.8878155E38)
             java.lang.String r4 = "IncorrectLocalization"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -2109,8 +2110,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                 MessageObject messageObject = chatMessageCell.getMessageObject();
                 if (this.roundVideoContainer != null && messageObject.isRoundVideo() && MediaController.getInstance().isPlayingMessage(messageObject)) {
                     ImageReceiver photoImage = chatMessageCell.getPhotoImage();
-                    this.roundVideoContainer.setTranslationX((float) photoImage.getImageX());
-                    this.roundVideoContainer.setTranslationY((float) (this.fragmentView.getPaddingTop() + chatMessageCell.getTop() + photoImage.getImageY()));
+                    this.roundVideoContainer.setTranslationX(photoImage.getImageX());
+                    this.roundVideoContainer.setTranslationY(((float) (this.fragmentView.getPaddingTop() + chatMessageCell.getTop())) + photoImage.getImageY());
                     this.fragmentView.invalidate();
                     this.roundVideoContainer.invalidate();
                     z = true;
@@ -2172,8 +2173,8 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     MessageObject messageObject2 = chatMessageCell2.getMessageObject();
                     if (this.roundVideoContainer != null && messageObject2.isRoundVideo() && MediaController.getInstance().isPlayingMessage(messageObject2)) {
                         ImageReceiver photoImage = chatMessageCell2.getPhotoImage();
-                        this.roundVideoContainer.setTranslationX((float) photoImage.getImageX());
-                        this.roundVideoContainer.setTranslationY((float) (this.fragmentView.getPaddingTop() + top + photoImage.getImageY()));
+                        this.roundVideoContainer.setTranslationX(photoImage.getImageX());
+                        this.roundVideoContainer.setTranslationY(((float) (this.fragmentView.getPaddingTop() + top)) + photoImage.getImageY());
                         this.fragmentView.invalidate();
                         this.roundVideoContainer.invalidate();
                         z2 = true;
@@ -2270,14 +2271,13 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
     public void onTransitionAnimationStart(boolean z, boolean z2) {
         if (z) {
-            NotificationCenter.getInstance(this.currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.chatInfoDidLoad, NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats, NotificationCenter.messagesDidLoad, NotificationCenter.botKeyboardDidLoad});
-            NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(true);
+            this.allowAnimationIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.allowAnimationIndex, new int[]{NotificationCenter.chatInfoDidLoad, NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats, NotificationCenter.messagesDidLoad, NotificationCenter.botKeyboardDidLoad});
         }
     }
 
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         if (z) {
-            NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(false);
+            NotificationCenter.getInstance(this.currentAccount).onAnimationFinish(this.allowAnimationIndex);
         }
     }
 

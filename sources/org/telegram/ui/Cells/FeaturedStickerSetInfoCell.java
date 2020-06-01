@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
@@ -15,20 +16,24 @@ import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$StickerSetCovered;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.ColorSpanUnderline;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.ProgressButton;
+import org.telegram.ui.Components.RecyclerListView;
 
 public class FeaturedStickerSetInfoCell extends FrameLayout {
     /* access modifiers changed from: private */
     public ProgressButton addButton;
     private AnimatorSet animatorSet;
+    private boolean canAddRemove;
     private int currentAccount;
     /* access modifiers changed from: private */
     public TextView delButton;
@@ -41,12 +46,20 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
     private boolean needDivider;
     private Paint paint;
     private TLRPC$StickerSetCovered set;
+    private int stickerSetNameSearchIndex;
+    private int stickerSetNameSearchLength;
+    private CharSequence url;
+    private int urlSearchLength;
 
     public FeaturedStickerSetInfoCell(Context context, int i) {
         this(context, i, false);
     }
 
     public FeaturedStickerSetInfoCell(Context context, int i, boolean z) {
+        this(context, i, z, true);
+    }
+
+    public FeaturedStickerSetInfoCell(Context context, int i, boolean z, boolean z2) {
         super(context);
         FrameLayout.LayoutParams layoutParams;
         FrameLayout.LayoutParams layoutParams2;
@@ -54,6 +67,7 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         FrameLayout.LayoutParams layoutParams4;
         this.currentAccount = UserConfig.selectedAccount;
         this.paint = new Paint(1);
+        this.canAddRemove = z2;
         TextView textView = new TextView(context);
         this.nameTextView = textView;
         textView.setTextColor(Theme.getColor("chat_emojiPanelTrendingTitle"));
@@ -79,56 +93,63 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
             layoutParams2 = LayoutHelper.createFrame(-2, -2.0f, 51, (float) i, 30.0f, 100.0f, 0.0f);
         }
         addView(this.infoTextView, layoutParams2);
-        ProgressButton progressButton = new ProgressButton(context);
-        this.addButton = progressButton;
-        progressButton.setProgressColor(Theme.getColor("featuredStickers_buttonProgress"));
-        this.addButton.setTextColor(Theme.getColor("featuredStickers_buttonText"));
-        this.addButton.setBackgroundRoundRect(Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed"));
-        this.addButton.setText(LocaleController.getString("Add", NUM));
-        if (z) {
-            layoutParams3 = LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 16.0f, 14.0f, 0.0f);
-        } else {
-            layoutParams3 = LayoutHelper.createFrame(-2, 28.0f, 53, 0.0f, 16.0f, 14.0f, 0.0f);
+        if (z2) {
+            ProgressButton progressButton = new ProgressButton(context);
+            this.addButton = progressButton;
+            progressButton.setTextColor(Theme.getColor("featuredStickers_buttonText"));
+            this.addButton.setText(LocaleController.getString("Add", NUM));
+            if (z) {
+                layoutParams3 = LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 16.0f, 14.0f, 0.0f);
+            } else {
+                layoutParams3 = LayoutHelper.createFrame(-2, 28.0f, 53, 0.0f, 16.0f, 14.0f, 0.0f);
+            }
+            addView(this.addButton, layoutParams3);
+            TextView textView3 = new TextView(context);
+            this.delButton = textView3;
+            textView3.setGravity(17);
+            this.delButton.setTextColor(Theme.getColor("featuredStickers_removeButtonText"));
+            this.delButton.setTextSize(1, 14.0f);
+            this.delButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            this.delButton.setText(LocaleController.getString("StickersRemove", NUM));
+            if (z) {
+                layoutParams4 = LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 16.0f, 14.0f, 0.0f);
+            } else {
+                layoutParams4 = LayoutHelper.createFrame(-2, 28.0f, 53, 0.0f, 16.0f, 14.0f, 0.0f);
+            }
+            addView(this.delButton, layoutParams4);
         }
-        addView(this.addButton, layoutParams3);
-        TextView textView3 = new TextView(context);
-        this.delButton = textView3;
-        textView3.setGravity(17);
-        this.delButton.setTextColor(Theme.getColor("featuredStickers_removeButtonText"));
-        this.delButton.setTextSize(1, 14.0f);
-        this.delButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.delButton.setText(LocaleController.getString("StickersRemove", NUM));
-        if (z) {
-            layoutParams4 = LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 16.0f, 14.0f, 0.0f);
-        } else {
-            layoutParams4 = LayoutHelper.createFrame(-2, 28.0f, 53, 0.0f, 16.0f, 14.0f, 0.0f);
-        }
-        addView(this.delButton, layoutParams4);
         setWillNotDraw(false);
+        updateColors();
     }
 
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(60.0f), NUM));
-        int measuredWidth = this.addButton.getMeasuredWidth();
-        int measuredWidth2 = this.delButton.getMeasuredWidth();
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.delButton.getLayoutParams();
-        if (measuredWidth2 < measuredWidth) {
-            layoutParams.rightMargin = AndroidUtilities.dp(14.0f) + ((measuredWidth - measuredWidth2) / 2);
-        } else {
-            layoutParams.rightMargin = AndroidUtilities.dp(14.0f);
+        if (this.canAddRemove) {
+            int measuredWidth = this.addButton.getMeasuredWidth();
+            int measuredWidth2 = this.delButton.getMeasuredWidth();
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.delButton.getLayoutParams();
+            if (measuredWidth2 < measuredWidth) {
+                layoutParams.rightMargin = AndroidUtilities.dp(14.0f) + ((measuredWidth - measuredWidth2) / 2);
+            } else {
+                layoutParams.rightMargin = AndroidUtilities.dp(14.0f);
+            }
+            measureChildWithMargins(this.nameTextView, i, measuredWidth, i2, 0);
         }
-        measureChildWithMargins(this.nameTextView, i, measuredWidth, i2, 0);
     }
 
     public void setAddOnClickListener(View.OnClickListener onClickListener) {
-        this.hasOnClick = true;
-        this.addButton.setOnClickListener(onClickListener);
-        this.delButton.setOnClickListener(onClickListener);
+        if (this.canAddRemove) {
+            this.hasOnClick = true;
+            this.addButton.setOnClickListener(onClickListener);
+            this.delButton.setOnClickListener(onClickListener);
+        }
     }
 
     public void setAddDrawProgress(boolean z, boolean z2) {
-        this.addButton.setDrawProgress(z, z2);
+        if (this.canAddRemove) {
+            this.addButton.setDrawProgress(z, z2);
+        }
     }
 
     public void setStickerSet(TLRPC$StickerSetCovered tLRPC$StickerSetCovered, boolean z) {
@@ -145,18 +166,19 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
             animatorSet2.cancel();
             this.animatorSet = null;
         }
+        this.set = tLRPC$StickerSetCovered;
+        this.stickerSetNameSearchIndex = i;
+        this.stickerSetNameSearchLength = i2;
         if (i2 != 0) {
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(tLRPC$StickerSetCovered.set.title);
-            try {
-                spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4")), i, i2 + i, 33);
-            } catch (Exception unused) {
-            }
-            this.nameTextView.setText(spannableStringBuilder);
+            updateStickerSetNameSearchSpan();
         } else {
             this.nameTextView.setText(tLRPC$StickerSetCovered.set.title);
         }
         this.infoTextView.setText(LocaleController.formatPluralString("Stickers", tLRPC$StickerSetCovered.set.count));
         this.isUnread = z;
+        if (!this.canAddRemove) {
+            return;
+        }
         if (this.hasOnClick) {
             this.addButton.setVisibility(0);
             boolean z4 = z3 || MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(tLRPC$StickerSetCovered.set.id);
@@ -240,15 +262,31 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         } else {
             this.addButton.setVisibility(8);
         }
-        this.set = tLRPC$StickerSetCovered;
+    }
+
+    private void updateStickerSetNameSearchSpan() {
+        if (this.stickerSetNameSearchLength != 0) {
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(this.set.set.title);
+            try {
+                spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4")), this.stickerSetNameSearchIndex, this.stickerSetNameSearchIndex + this.stickerSetNameSearchLength, 33);
+            } catch (Exception unused) {
+            }
+            this.nameTextView.setText(spannableStringBuilder);
+        }
     }
 
     public void setUrl(CharSequence charSequence, int i) {
-        if (charSequence != null) {
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(charSequence);
+        this.url = charSequence;
+        this.urlSearchLength = i;
+        updateUrlSearchSpan();
+    }
+
+    private void updateUrlSearchSpan() {
+        if (this.url != null) {
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(this.url);
             try {
-                spannableStringBuilder.setSpan(new ColorSpanUnderline(Theme.getColor("windowBackgroundWhiteBlueText4")), 0, i, 33);
-                spannableStringBuilder.setSpan(new ColorSpanUnderline(Theme.getColor("chat_emojiPanelTrendingDescription")), i, charSequence.length(), 33);
+                spannableStringBuilder.setSpan(new ColorSpanUnderline(Theme.getColor("windowBackgroundWhiteBlueText4")), 0, this.urlSearchLength, 33);
+                spannableStringBuilder.setSpan(new ColorSpanUnderline(Theme.getColor("chat_emojiPanelTrendingDescription")), this.urlSearchLength, this.url.length(), 33);
             } catch (Exception unused) {
             }
             this.infoTextView.setText(spannableStringBuilder);
@@ -276,5 +314,34 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         if (this.needDivider) {
             canvas.drawLine(0.0f, 0.0f, (float) getWidth(), 0.0f, Theme.dividerPaint);
         }
+    }
+
+    public void updateColors() {
+        if (this.canAddRemove) {
+            this.addButton.setProgressColor(Theme.getColor("featuredStickers_buttonProgress"));
+            this.addButton.setBackgroundRoundRect(Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed"));
+        }
+        updateStickerSetNameSearchSpan();
+        updateUrlSearchSpan();
+    }
+
+    public static void createThemeDescriptions(List<ThemeDescription> list, RecyclerListView recyclerListView, ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate) {
+        List<ThemeDescription> list2 = list;
+        list2.add(new ThemeDescription((View) recyclerListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FeaturedStickerSetInfoCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_emojiPanelTrendingTitle"));
+        RecyclerListView recyclerListView2 = recyclerListView;
+        list2.add(new ThemeDescription((View) recyclerListView2, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FeaturedStickerSetInfoCell.class}, new String[]{"infoTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_emojiPanelTrendingDescription"));
+        RecyclerListView recyclerListView3 = recyclerListView;
+        list2.add(new ThemeDescription((View) recyclerListView3, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FeaturedStickerSetInfoCell.class}, new String[]{"addButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_buttonText"));
+        list2.add(new ThemeDescription((View) recyclerListView2, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FeaturedStickerSetInfoCell.class}, new String[]{"delButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_removeButtonText"));
+        list2.add(new ThemeDescription(recyclerListView3, 0, new Class[]{FeaturedStickerSetInfoCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_unread"));
+        RecyclerListView recyclerListView4 = recyclerListView;
+        list2.add(new ThemeDescription(recyclerListView4, 0, new Class[]{FeaturedStickerSetInfoCell.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
+        list2.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDescriptionDelegate, "featuredStickers_buttonProgress"));
+        ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate2 = themeDescriptionDelegate;
+        list2.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDescriptionDelegate2, "featuredStickers_addButton"));
+        ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate3 = themeDescriptionDelegate;
+        list2.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDescriptionDelegate3, "featuredStickers_addButtonPressed"));
+        list2.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDescriptionDelegate2, "windowBackgroundWhiteBlueText4"));
+        list2.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDescriptionDelegate3, "chat_emojiPanelTrendingDescription"));
     }
 }

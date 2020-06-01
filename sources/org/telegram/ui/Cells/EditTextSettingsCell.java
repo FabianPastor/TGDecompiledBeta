@@ -50,10 +50,6 @@ public class EditTextSettingsCell extends FrameLayout {
         return this.textView.getText().toString();
     }
 
-    public int length() {
-        return this.textView.length();
-    }
-
     public void setTextColor(int i) {
         this.textView.setTextColor(i);
     }

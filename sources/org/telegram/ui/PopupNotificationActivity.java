@@ -158,7 +158,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 int size = View.MeasureSpec.getSize(i);
                 int size2 = View.MeasureSpec.getSize(i2);
                 setMeasuredDimension(size, size2);
-                if (getKeyboardHeight() <= AndroidUtilities.dp(20.0f)) {
+                if (measureKeyboardHeight() <= AndroidUtilities.dp(20.0f)) {
                     size2 -= PopupNotificationActivity.this.chatActivityEnterView.getEmojiPadding();
                 }
                 int childCount = getChildCount();
@@ -186,7 +186,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                 /*
                     r9 = this;
                     int r10 = r9.getChildCount()
-                    int r0 = r9.getKeyboardHeight()
+                    int r0 = r9.measureKeyboardHeight()
                     r1 = 1101004800(0x41a00000, float:20.0)
                     int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
                     r2 = 0
@@ -424,6 +424,10 @@ public class PopupNotificationActivity extends Activity implements NotificationC
 
             public /* synthetic */ void openScheduledMessages() {
                 ChatActivityEnterView.ChatActivityEnterViewDelegate.CC.$default$openScheduledMessages(this);
+            }
+
+            public /* synthetic */ void prepareMessageSending() {
+                ChatActivityEnterView.ChatActivityEnterViewDelegate.CC.$default$prepareMessageSending(this);
             }
 
             public /* synthetic */ void scrollToSendingMessage() {

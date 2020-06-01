@@ -116,6 +116,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     public int stickersStartRow;
     /* access modifiers changed from: private */
     public int suggestRow;
+    private TrendingStickersAlert trendingStickersAlert;
 
     static /* synthetic */ boolean lambda$createView$0(View view, MotionEvent motionEvent) {
         return true;
@@ -278,7 +279,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
     public /* synthetic */ void lambda$createView$2$StickersActivity(Context context, View view, int i) {
         if (i < this.stickersStartRow || i >= this.stickersEndRow || getParentActivity() == null) {
             if (i == this.featuredRow) {
-                new TrendingStickersAlert(context, this, new TrendingStickersLayout(context, new TrendingStickersLayout.Delegate() {
+                TrendingStickersAlert trendingStickersAlert2 = new TrendingStickersAlert(context, this, new TrendingStickersLayout(context, new TrendingStickersLayout.Delegate() {
                     public void onStickerSetAdd(TLRPC$StickerSetCovered tLRPC$StickerSetCovered, boolean z) {
                         MediaDataController.getInstance(StickersActivity.this.currentAccount).toggleStickerSet(StickersActivity.this.getParentActivity(), tLRPC$StickerSetCovered, 2, StickersActivity.this, false, false);
                     }
@@ -286,7 +287,9 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     public void onStickerSetRemove(TLRPC$StickerSetCovered tLRPC$StickerSetCovered) {
                         MediaDataController.getInstance(StickersActivity.this.currentAccount).toggleStickerSet(StickersActivity.this.getParentActivity(), tLRPC$StickerSetCovered, 0, StickersActivity.this, false, false);
                     }
-                })).show();
+                }));
+                this.trendingStickersAlert = trendingStickersAlert2;
+                trendingStickersAlert2.show();
             } else if (i == this.archivedRow) {
                 presentFragment(new ArchivedStickersActivity(this.currentType));
             } else if (i == this.masksRow) {
@@ -1065,6 +1068,10 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{StickerSetCell.class}, new String[]{"reorderButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "stickers_menu"));
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKBOX, new Class[]{StickerSetCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite"));
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKBOXCHECK, new Class[]{StickerSetCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "checkboxCheck"));
+        TrendingStickersAlert trendingStickersAlert2 = this.trendingStickersAlert;
+        if (trendingStickersAlert2 != null) {
+            arrayList.addAll(trendingStickersAlert2.getThemeDescriptions());
+        }
         return arrayList;
     }
 }

@@ -1670,7 +1670,7 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
         for (int i = 0; i < 4; i++) {
             String str = strArr[i];
             BottomSheet.BottomSheetCell bottomSheetCell = new BottomSheet.BottomSheetCell(this, 0);
-            bottomSheetCell.setTextAndIcon(str, 0);
+            bottomSheetCell.setTextAndIcon((CharSequence) str, 0);
             bottomSheetCell.setTextColor(-1);
             bottomSheetCell.setTag(str);
             bottomSheetCell.setOnClickListener(r8);
@@ -1678,7 +1678,7 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
         }
         FrameLayout frameLayout = new FrameLayout(this);
         BottomSheet.BottomSheetCell bottomSheetCell2 = new BottomSheet.BottomSheetCell(this, 0);
-        bottomSheetCell2.setTextAndIcon(LocaleController.getString("QuickReplyCustom", NUM), 0);
+        bottomSheetCell2.setTextAndIcon((CharSequence) LocaleController.getString("QuickReplyCustom", NUM), 0);
         bottomSheetCell2.setTextColor(-1);
         frameLayout.addView(bottomSheetCell2);
         FrameLayout frameLayout2 = new FrameLayout(this);

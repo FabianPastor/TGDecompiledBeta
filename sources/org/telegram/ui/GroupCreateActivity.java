@@ -1295,7 +1295,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             } else if (i != 1) {
                 view = new TextCell(this.context);
             } else {
-                view = new GroupCreateUserCell(this.context, true, 0);
+                view = new GroupCreateUserCell(this.context, true, 0, false);
             }
             return new RecyclerListView.Holder(view);
         }

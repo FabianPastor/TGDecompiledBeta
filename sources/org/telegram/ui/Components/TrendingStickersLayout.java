@@ -2,6 +2,8 @@ package org.telegram.ui.Components;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.view.MotionEvent;
@@ -31,6 +33,7 @@ import org.telegram.tgnet.TLRPC$TL_messages_getOldFeaturedStickers;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Adapters.StickersSearchAdapter;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.FeaturedStickerSetCell2;
@@ -89,12 +92,27 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
     public static abstract class Delegate {
         private String[] lastSearchKeyboardLanguage = new String[0];
 
+        public boolean canSchedule() {
+            return false;
+        }
+
+        public boolean canSendSticker() {
+            return false;
+        }
+
+        public boolean isInScheduleMode() {
+            return false;
+        }
+
         public boolean onListViewInterceptTouchEvent(RecyclerListView recyclerListView, MotionEvent motionEvent) {
             return false;
         }
 
         public boolean onListViewTouchEvent(RecyclerListView recyclerListView, RecyclerListView.OnItemClickListener onItemClickListener, MotionEvent motionEvent) {
             return false;
+        }
+
+        public void onStickerSelected(TLRPC$Document tLRPC$Document, Object obj, boolean z, boolean z2, int i) {
         }
 
         public abstract void onStickerSetAdd(TLRPC$StickerSetCovered tLRPC$StickerSetCovered, boolean z);
@@ -215,6 +233,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                 return TrendingStickersLayout.this.lambda$new$1$TrendingStickersLayout(this.f$1, this.f$2, view, motionEvent);
             }
         });
+        this.listView.setOverScrollMode(2);
         this.listView.setClipToPadding(false);
         this.listView.setItemAnimator((RecyclerView.ItemAnimator) null);
         this.listView.setLayoutAnimation((LayoutAnimationController) null);
@@ -267,7 +286,6 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
         });
         this.listView.setAdapter(this.adapter);
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) r10);
-        this.listView.setGlowColor(Theme.getColor("chat_emojiPanelBackground"));
         addView(this.listView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
         View view = new View(context2);
         this.shadowView = view;
@@ -277,6 +295,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
         layoutParams.topMargin = AndroidUtilities.dp(58.0f);
         addView(this.shadowView, layoutParams);
         addView(this.searchLayout, LayoutHelper.createFrame(-1, 58, 51));
+        updateColors();
         NotificationCenter instance = NotificationCenter.getInstance(this.currentAccount);
         instance.addObserver(this, NotificationCenter.stickersDidLoad);
         instance.addObserver(this, NotificationCenter.featuredStickersDidLoad);
@@ -343,7 +362,19 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
     }
 
     private void showStickerSet(final TLRPC$InputStickerSet tLRPC$InputStickerSet) {
-        AnonymousClass7 r0 = new StickersAlert(getContext(), this.parentFragment, tLRPC$InputStickerSet, (TLRPC$TL_messages_stickerSet) null, (StickersAlert.StickersAlertDelegate) null) {
+        AnonymousClass8 r1 = new StickersAlert(getContext(), this.parentFragment, tLRPC$InputStickerSet, (TLRPC$TL_messages_stickerSet) null, this.delegate.canSendSticker() ? new StickersAlert.StickersAlertDelegate() {
+            public void onStickerSelected(TLRPC$Document tLRPC$Document, Object obj, boolean z, boolean z2, int i) {
+                TrendingStickersLayout.this.delegate.onStickerSelected(tLRPC$Document, obj, z, z2, i);
+            }
+
+            public boolean canSchedule() {
+                return TrendingStickersLayout.this.delegate.canSchedule();
+            }
+
+            public boolean isInScheduleMode() {
+                return TrendingStickersLayout.this.delegate.isInScheduleMode();
+            }
+        } : null) {
             public void show() {
                 super.show();
                 if (TrendingStickersLayout.this.alertDelegate != null) {
@@ -358,8 +389,8 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                 }
             }
         };
-        r0.setShowTooltipWhenToggle(false);
-        r0.setInstallDelegate(new StickersAlert.StickersAlertInstallDelegate() {
+        r1.setShowTooltipWhenToggle(false);
+        r1.setInstallDelegate(new StickersAlert.StickersAlertInstallDelegate() {
             public void onStickerSetUninstalled() {
             }
 
@@ -377,7 +408,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                 TrendingStickersLayout.this.searchAdapter.installStickerSet(tLRPC$InputStickerSet);
             }
         });
-        this.parentFragment.showDialog(r0);
+        this.parentFragment.showDialog(r1);
     }
 
     public void recycle() {
@@ -490,6 +521,26 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
         }
     }
 
+    public void updateColors() {
+        RecyclerView.Adapter adapter2 = this.listView.getAdapter();
+        TrendingStickersAdapter trendingStickersAdapter = this.adapter;
+        if (adapter2 == trendingStickersAdapter) {
+            trendingStickersAdapter.updateColors(this.listView);
+        } else {
+            this.searchAdapter.updateColors(this.listView);
+        }
+    }
+
+    public void getThemeDescriptions(List<ThemeDescription> list, ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate) {
+        List<ThemeDescription> list2 = list;
+        ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate2 = themeDescriptionDelegate;
+        this.searchView.getThemeDescriptions(list2);
+        this.adapter.getThemeDescriptions(list2, this.listView, themeDescriptionDelegate2);
+        this.searchAdapter.getThemeDescriptions(list2, this.listView, themeDescriptionDelegate2);
+        list2.add(new ThemeDescription(this.shadowView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogShadowLine"));
+        list2.add(new ThemeDescription(this.searchLayout, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackground"));
+    }
+
     private class TrendingStickersAdapter extends RecyclerListView.SelectionAdapter {
         /* access modifiers changed from: private */
         public final SparseArray<Object> cache = new SparseArray<>();
@@ -513,7 +564,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
         }
 
         public int getItemCount() {
-            return this.cache.size() + 1;
+            return this.totalItems + 1;
         }
 
         public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
@@ -1061,6 +1112,24 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                 }
                 notifyDataSetChanged();
             }
+        }
+
+        public void updateColors(RecyclerListView recyclerListView) {
+            int childCount = recyclerListView.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View childAt = recyclerListView.getChildAt(i);
+                if (childAt instanceof FeaturedStickerSetInfoCell) {
+                    ((FeaturedStickerSetInfoCell) childAt).updateColors();
+                } else if (childAt instanceof FeaturedStickerSetCell2) {
+                    ((FeaturedStickerSetCell2) childAt).updateColors();
+                }
+            }
+        }
+
+        public void getThemeDescriptions(List<ThemeDescription> list, RecyclerListView recyclerListView, ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate) {
+            FeaturedStickerSetInfoCell.createThemeDescriptions(list, recyclerListView, themeDescriptionDelegate);
+            FeaturedStickerSetCell2.createThemeDescriptions(list, recyclerListView, themeDescriptionDelegate);
+            GraySectionCell.createThemeDescriptions(list, recyclerListView);
         }
     }
 }

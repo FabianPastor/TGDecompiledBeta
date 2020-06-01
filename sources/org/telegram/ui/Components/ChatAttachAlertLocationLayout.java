@@ -1201,7 +1201,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             if (r4 != 0) goto L_0x0045
             org.telegram.ui.Components.ChatAttachAlert r4 = r3.parentAlert
             org.telegram.ui.Components.SizeNotifierFrameLayout r4 = r4.sizeNotifierFrameLayout
-            int r4 = r4.getKeyboardHeight()
+            int r4 = r4.measureKeyboardHeight()
             r2 = 1101004800(0x41a00000, float:20.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             if (r4 <= r2) goto L_0x001d

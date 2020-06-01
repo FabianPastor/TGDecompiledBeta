@@ -2,18 +2,23 @@ package org.telegram.ui.Cells;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$StickerSetCovered;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.ProgressButton;
+import org.telegram.ui.Components.RecyclerListView;
 
 public class FeaturedStickerSetCell2 extends FrameLayout {
     private final ProgressButton addButton;
@@ -58,8 +63,6 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
         this.addButton = progressButton;
         progressButton.setText(LocaleController.getString("Add", NUM));
         this.addButton.setTextColor(Theme.getColor("featuredStickers_buttonText"));
-        this.addButton.setProgressColor(Theme.getColor("featuredStickers_buttonProgress"));
-        this.addButton.setBackgroundRoundRect(Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed"));
         addView(this.addButton, LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 18.0f, 14.0f, 0.0f));
         TextView textView4 = new TextView(context);
         this.delButton = textView4;
@@ -69,6 +72,7 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
         this.delButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.delButton.setText(LocaleController.getString("StickersRemove", NUM));
         addView(this.delButton, LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 16.0f, 14.0f, 0.0f));
+        updateColors();
     }
 
     /* access modifiers changed from: protected */
@@ -111,5 +115,23 @@ public class FeaturedStickerSetCell2 extends FrameLayout {
 
     public BackupImageView getImageView() {
         return this.imageView;
+    }
+
+    public void updateColors() {
+        this.addButton.setProgressColor(Theme.getColor("featuredStickers_buttonProgress"));
+        this.addButton.setBackgroundRoundRect(Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed"));
+    }
+
+    public static void createThemeDescriptions(List<ThemeDescription> list, RecyclerListView recyclerListView, ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate) {
+        List<ThemeDescription> list2 = list;
+        list2.add(new ThemeDescription((View) recyclerListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FeaturedStickerSetCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+        RecyclerListView recyclerListView2 = recyclerListView;
+        list2.add(new ThemeDescription((View) recyclerListView2, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FeaturedStickerSetCell.class}, new String[]{"valueTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
+        RecyclerListView recyclerListView3 = recyclerListView;
+        list2.add(new ThemeDescription((View) recyclerListView3, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FeaturedStickerSetCell.class}, new String[]{"addButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_buttonText"));
+        list2.add(new ThemeDescription((View) recyclerListView2, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{FeaturedStickerSetCell.class}, new String[]{"delButton"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "featuredStickers_removeButtonText"));
+        list2.add(new ThemeDescription(recyclerListView3, 0, new Class[]{FeaturedStickerSetCell.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
+        list2.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDescriptionDelegate, "featuredStickers_buttonProgress"));
+        list2.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDescriptionDelegate, "featuredStickers_addButtonPressed"));
     }
 }

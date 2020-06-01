@@ -57,11 +57,11 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         void onRelease();
     }
 
-    private class Item {
+    private static class Item {
         /* access modifiers changed from: private */
         public BackupImageView imageView;
 
-        private Item(ProfileGalleryView profileGalleryView) {
+        private Item() {
         }
     }
 
@@ -126,7 +126,8 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             } else if (action == 2) {
                 float x = motionEvent.getX() - this.downPoint.x;
                 float y = motionEvent.getY() - this.downPoint.y;
-                if (Math.abs(y) >= ((float) this.touchSlop) || Math.abs(x) >= ((float) this.touchSlop)) {
+                boolean z = Math.abs(y) >= ((float) this.touchSlop) || Math.abs(x) >= ((float) this.touchSlop);
+                if (z) {
                     this.isDownReleased = true;
                     this.callback.onRelease();
                 }
@@ -134,7 +135,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                     if (this.isSwipingViewPager && !canScrollHorizontally(-1) && x > ((float) this.touchSlop)) {
                         return false;
                     }
-                } else if (Math.abs(y) >= ((float) this.touchSlop) || Math.abs(x) >= ((float) this.touchSlop)) {
+                } else if (z) {
                     if (Math.abs(y) > Math.abs(x)) {
                         this.isSwipingViewPager = false;
                         MotionEvent obtain = MotionEvent.obtain(motionEvent);

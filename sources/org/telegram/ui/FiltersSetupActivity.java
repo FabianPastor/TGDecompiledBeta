@@ -801,7 +801,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 dialogFilter.flags |= MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED;
             }
             boolean unused = FiltersSetupActivity.this.ignoreUpdates = true;
-            FilterCreateActivity.saveFilterToServer(dialogFilter, dialogFilter.flags, dialogFilter.name, dialogFilter.alwaysShow, dialogFilter.neverShow, dialogFilter.pinnedDialogs, true, true, true, false, FiltersSetupActivity.this, new Runnable(suggestedFilter) {
+            FilterCreateActivity.saveFilterToServer(dialogFilter, dialogFilter.flags, dialogFilter.name, dialogFilter.alwaysShow, dialogFilter.neverShow, dialogFilter.pinnedDialogs, true, true, true, true, false, FiltersSetupActivity.this, new Runnable(suggestedFilter) {
                 private final /* synthetic */ TLRPC$TL_dialogFilterSuggested f$1;
 
                 {

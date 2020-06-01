@@ -447,7 +447,7 @@ public class ChatActionCell extends BaseCell {
         createLayout(charSequence, this.previousWidth);
         MessageObject messageObject2 = this.currentMessageObject;
         if (messageObject2 != null && messageObject2.type == 11) {
-            this.imageReceiver.setImageCoords((this.previousWidth - AndroidUtilities.dp(64.0f)) / 2, this.textHeight + AndroidUtilities.dp(15.0f), AndroidUtilities.dp(64.0f), AndroidUtilities.dp(64.0f));
+            this.imageReceiver.setImageCoords((float) ((this.previousWidth - AndroidUtilities.dp(64.0f)) / 2), (float) (this.textHeight + AndroidUtilities.dp(15.0f)), (float) AndroidUtilities.dp(64.0f), (float) AndroidUtilities.dp(64.0f));
         }
     }
 

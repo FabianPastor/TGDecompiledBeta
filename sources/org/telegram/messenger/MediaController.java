@@ -42,6 +42,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.ConnectionsManager;
@@ -64,6 +65,7 @@ import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$messages_Messages;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.EmbedBottomSheet;
 import org.telegram.ui.Components.PhotoFilterView;
@@ -563,7 +565,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     public void onAccuracyChanged(Sensor sensor, int i) {
     }
 
-    private class AudioBuffer {
+    private static class AudioBuffer {
         ByteBuffer buffer;
         byte[] bufferBytes;
         int finished;
@@ -625,29 +627,60 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
     }
 
-    public static class PhotoEntry {
-        public int bucketId;
-        public boolean canDeleteAfter;
+    public static class MediaEditState {
+        public long averageDuration;
         public CharSequence caption;
-        public long dateTaken;
-        public int duration;
+        public String croppedPath;
         public VideoEditedInfo editedInfo;
         public ArrayList<TLRPC$MessageEntity> entities;
-        public int height;
-        public int imageId;
+        public String filterPath;
+        public String fullPaintPath;
         public String imagePath;
         public boolean isCropped;
         public boolean isFiltered;
-        public boolean isMuted;
         public boolean isPainted;
+        public ArrayList<VideoEditedInfo.MediaEntity> mediaEntities;
+        public String paintPath;
+        public SavedFilterState savedFilterState;
+        public ArrayList<TLRPC$InputDocument> stickers;
+        public String thumbPath;
+        public int ttl;
+
+        public String getPath() {
+            return null;
+        }
+
+        public void reset() {
+            this.caption = null;
+            this.thumbPath = null;
+            this.filterPath = null;
+            this.imagePath = null;
+            this.paintPath = null;
+            this.isFiltered = false;
+            this.isPainted = false;
+            this.isCropped = false;
+            this.ttl = 0;
+            this.mediaEntities = null;
+            this.editedInfo = null;
+            this.entities = null;
+            this.savedFilterState = null;
+            this.croppedPath = null;
+            this.stickers = null;
+        }
+    }
+
+    public static class PhotoEntry extends MediaEditState {
+        public int bucketId;
+        public boolean canDeleteAfter;
+        public long dateTaken;
+        public int duration;
+        public int height;
+        public int imageId;
+        public boolean isMuted;
         public boolean isVideo;
         public int orientation;
         public String path;
-        public SavedFilterState savedFilterState;
         public long size;
-        public ArrayList<TLRPC$InputDocument> stickers = new ArrayList<>();
-        public String thumbPath;
-        public int ttl;
         public int width;
 
         public PhotoEntry(int i, int i2, long j, String str, int i3, boolean z, int i4, int i5, long j2) {
@@ -666,60 +699,50 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             this.isVideo = z;
         }
 
+        public String getPath() {
+            return this.path;
+        }
+
         public void reset() {
-            this.isFiltered = false;
-            this.isPainted = false;
-            this.isCropped = false;
-            this.ttl = 0;
-            this.imagePath = null;
-            if (!this.isVideo) {
-                this.thumbPath = null;
+            if (this.isVideo && this.filterPath != null) {
+                new File(this.filterPath).delete();
+                this.filterPath = null;
             }
-            this.editedInfo = null;
-            this.caption = null;
-            this.entities = null;
-            this.savedFilterState = null;
-            this.stickers.clear();
+            super.reset();
         }
     }
 
-    public static class SearchImage {
+    public static class SearchImage extends MediaEditState {
         public CharSequence caption;
         public int date;
         public TLRPC$Document document;
-        public ArrayList<TLRPC$MessageEntity> entities;
         public int height;
         public String id;
-        public String imagePath;
         public String imageUrl;
         public TLRPC$BotInlineResult inlineResult;
-        public boolean isCropped;
-        public boolean isFiltered;
-        public boolean isPainted;
         public HashMap<String, String> params;
         public TLRPC$Photo photo;
         public TLRPC$PhotoSize photoSize;
-        public SavedFilterState savedFilterState;
         public int size;
-        public ArrayList<TLRPC$InputDocument> stickers = new ArrayList<>();
-        public String thumbPath;
         public TLRPC$PhotoSize thumbPhotoSize;
         public String thumbUrl;
-        public int ttl;
         public int type;
         public int width;
 
+        public String getPath() {
+            TLRPC$PhotoSize tLRPC$PhotoSize = this.photoSize;
+            if (tLRPC$PhotoSize != null) {
+                return FileLoader.getPathToAttach(tLRPC$PhotoSize, true).getAbsolutePath();
+            }
+            TLRPC$Document tLRPC$Document = this.document;
+            if (tLRPC$Document != null) {
+                return FileLoader.getPathToAttach(tLRPC$Document, true).getAbsolutePath();
+            }
+            return ImageLoader.getHttpFilePath(this.imageUrl, "jpg").getAbsolutePath();
+        }
+
         public void reset() {
-            this.isFiltered = false;
-            this.isPainted = false;
-            this.isCropped = false;
-            this.ttl = 0;
-            this.imagePath = null;
-            this.thumbPath = null;
-            this.caption = null;
-            this.entities = null;
-            this.savedFilterState = null;
-            this.stickers.clear();
+            super.reset();
         }
 
         public String getAttachName() {
@@ -2133,6 +2156,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 FileLog.e((Throwable) e);
             }
             this.audioPlayer = null;
+            Theme.unrefAudioVisualizeDrawable(this.playingMessageObject);
         } else {
             VideoPlayer videoPlayer3 = this.videoPlayer;
             if (videoPlayer3 != null) {
@@ -2369,7 +2393,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Removed duplicated region for block: B:26:0x0057 A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x0105  */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x010a  */
     /* JADX WARNING: Removed duplicated region for block: B:63:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void playNextMessageWithoutOrder(boolean r8) {
@@ -2427,20 +2451,20 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         L_0x0054:
             r5 = 0
         L_0x0055:
-            if (r5 == 0) goto L_0x00fa
-            if (r8 == 0) goto L_0x00fa
+            if (r5 == 0) goto L_0x00ff
+            if (r8 == 0) goto L_0x00ff
             int r8 = org.telegram.messenger.SharedConfig.repeatMode
-            if (r8 != 0) goto L_0x00fa
+            if (r8 != 0) goto L_0x00ff
             boolean r8 = r7.forceLoopCurrentPlaylist
-            if (r8 != 0) goto L_0x00fa
+            if (r8 != 0) goto L_0x00ff
             org.telegram.ui.Components.VideoPlayer r8 = r7.audioPlayer
             if (r8 != 0) goto L_0x0069
             org.telegram.ui.Components.VideoPlayer r8 = r7.videoPlayer
-            if (r8 == 0) goto L_0x00f9
+            if (r8 == 0) goto L_0x00fe
         L_0x0069:
             org.telegram.ui.Components.VideoPlayer r8 = r7.audioPlayer
             r0 = 0
-            if (r8 == 0) goto L_0x0079
+            if (r8 == 0) goto L_0x007e
             r8.releasePlayer(r4)     // Catch:{ Exception -> 0x0072 }
             goto L_0x0076
         L_0x0072:
@@ -2448,25 +2472,27 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
         L_0x0076:
             r7.audioPlayer = r0
-            goto L_0x00b0
-        L_0x0079:
+            org.telegram.messenger.MessageObject r8 = r7.playingMessageObject
+            org.telegram.ui.ActionBar.Theme.unrefAudioVisualizeDrawable(r8)
+            goto L_0x00b5
+        L_0x007e:
             org.telegram.ui.Components.VideoPlayer r8 = r7.videoPlayer
-            if (r8 == 0) goto L_0x00b0
+            if (r8 == 0) goto L_0x00b5
             r7.currentAspectRatioFrameLayout = r0
             r7.currentTextureViewContainer = r0
             r7.currentAspectRatioFrameLayoutReady = r3
             r7.currentTextureView = r0
             r8.releasePlayer(r4)
             r7.videoPlayer = r0
-            android.app.Activity r8 = r7.baseActivity     // Catch:{ Exception -> 0x0096 }
-            android.view.Window r8 = r8.getWindow()     // Catch:{ Exception -> 0x0096 }
+            android.app.Activity r8 = r7.baseActivity     // Catch:{ Exception -> 0x009b }
+            android.view.Window r8 = r8.getWindow()     // Catch:{ Exception -> 0x009b }
             r0 = 128(0x80, float:1.794E-43)
-            r8.clearFlags(r0)     // Catch:{ Exception -> 0x0096 }
-            goto L_0x009a
-        L_0x0096:
+            r8.clearFlags(r0)     // Catch:{ Exception -> 0x009b }
+            goto L_0x009f
+        L_0x009b:
             r8 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
-        L_0x009a:
+        L_0x009f:
             java.lang.Runnable r8 = r7.setLoadingRunnable
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r8)
             org.telegram.messenger.MessageObject r8 = r7.playingMessageObject
@@ -2475,7 +2501,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             org.telegram.messenger.MessageObject r0 = r7.playingMessageObject
             org.telegram.tgnet.TLRPC$Document r0 = r0.getDocument()
             r8.removeLoadingVideo(r0, r4, r3)
-        L_0x00b0:
+        L_0x00b5:
             r7.stopProgressTimer()
             r5 = 0
             r7.lastProgress = r5
@@ -2504,25 +2530,25 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             r1[r3] = r2
             r8.postNotificationName(r0, r1)
-        L_0x00f9:
+        L_0x00fe:
             return
-        L_0x00fa:
+        L_0x00ff:
             int r8 = r7.currentPlaylistNum
-            if (r8 < 0) goto L_0x0119
+            if (r8 < 0) goto L_0x011e
             int r1 = r0.size()
-            if (r8 < r1) goto L_0x0105
-            goto L_0x0119
-        L_0x0105:
+            if (r8 < r1) goto L_0x010a
+            goto L_0x011e
+        L_0x010a:
             org.telegram.messenger.MessageObject r8 = r7.playingMessageObject
-            if (r8 == 0) goto L_0x010c
+            if (r8 == 0) goto L_0x0111
             r8.resetPlayingProgress()
-        L_0x010c:
+        L_0x0111:
             r7.playMusicAgain = r4
             int r8 = r7.currentPlaylistNum
             java.lang.Object r8 = r0.get(r8)
             org.telegram.messenger.MessageObject r8 = (org.telegram.messenger.MessageObject) r8
             r7.playMessage(r8)
-        L_0x0119:
+        L_0x011e:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.playNextMessageWithoutOrder(boolean):void");
@@ -3264,6 +3290,15 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                             }
                         }
                     });
+                    this.audioPlayer.setAudioVisualizerDelegate(new VideoPlayer.AudioVisualizerDelegate() {
+                        public void onVisualizerUpdate(boolean z, boolean z2, float[] fArr) {
+                            Theme.getCurrentAudiVisualizerDrawable().setWaveform(z, z2, fArr);
+                        }
+
+                        public boolean needUpdate() {
+                            return Theme.getCurrentAudiVisualizerDrawable().getParentView() != null;
+                        }
+                    });
                     if (z5) {
                         if (!messageObject2.mediaExists && file2 != file) {
                             AndroidUtilities.runOnUIThread(new Runnable(file2) {
@@ -3349,6 +3384,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     if (videoPlayer5 != null) {
                         videoPlayer5.releasePlayer(true);
                         this.audioPlayer = null;
+                        Theme.unrefAudioVisualizeDrawable(this.playingMessageObject);
                         this.isPaused = false;
                         this.playingMessageObject = null;
                         this.downloadingCurrentMessage = false;
@@ -4008,7 +4044,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r3 = 2
             r2.<init>(r10, r3)     // Catch:{ Exception -> 0x005e }
             java.lang.String r10 = "Loading"
-            r1 = 2131625586(0x7f0e0672, float:1.8878384E38)
+            r1 = 2131625591(0x7f0e0677, float:1.8878394E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r1)     // Catch:{ Exception -> 0x005b }
             r2.setMessage(r10)     // Catch:{ Exception -> 0x005b }
             r2.setCanceledOnTouchOutside(r0)     // Catch:{ Exception -> 0x005b }
@@ -4831,7 +4867,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r37 = r5
             java.lang.String r5 = "AllPhotos"
             r38 = r7
-            r7 = 2131624156(0x7f0e00dc, float:1.8875484E38)
+            r7 = 2131624157(0x7f0e00dd, float:1.8875486E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r7)     // Catch:{ all -> 0x020b }
             r7 = 0
             r4.<init>(r7, r5, r3)     // Catch:{ all -> 0x020b }
@@ -4846,7 +4882,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             if (r32 != 0) goto L_0x0186
             org.telegram.messenger.MediaController$AlbumEntry r5 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x0181 }
             r39 = r8
-            r7 = 2131624155(0x7f0e00db, float:1.8875482E38)
+            r7 = 2131624156(0x7f0e00dc, float:1.8875484E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r1, r7)     // Catch:{ all -> 0x0181 }
             r7 = 0
             r5.<init>(r7, r8, r3)     // Catch:{ all -> 0x0181 }
@@ -5142,7 +5178,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             org.telegram.messenger.MediaController$AlbumEntry r4 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x0438 }
             java.lang.String r5 = "AllVideos"
             r21 = r6
-            r6 = 2131624157(0x7f0e00dd, float:1.8875486E38)
+            r6 = 2131624158(0x7f0e00de, float:1.8875488E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)     // Catch:{ all -> 0x0438 }
             r6 = 0
             r4.<init>(r6, r5, r3)     // Catch:{ all -> 0x0438 }
@@ -5165,7 +5201,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             if (r32 != 0) goto L_0x03d8
             org.telegram.messenger.MediaController$AlbumEntry r5 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x03d3 }
             r20 = r7
-            r6 = 2131624155(0x7f0e00db, float:1.8875482E38)
+            r6 = 2131624156(0x7f0e00dc, float:1.8875484E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r1, r6)     // Catch:{ all -> 0x03d3 }
             r6 = 0
             r5.<init>(r6, r7, r3)     // Catch:{ all -> 0x03d3 }
@@ -5593,21 +5629,20 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     /* JADX WARNING: Removed duplicated region for block: B:29:0x0079  */
     /* JADX WARNING: Removed duplicated region for block: B:34:0x0088  */
     /* JADX WARNING: Removed duplicated region for block: B:36:0x008e  */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x00a8 A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x00ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x010d  */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x0143 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x011c  */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x012a  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x0160 A[ADDED_TO_REGION] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean convertVideo(org.telegram.messenger.MediaController.VideoConvertMessage r33) {
+    public boolean convertVideo(org.telegram.messenger.MediaController.VideoConvertMessage r36) {
         /*
-            r32 = this;
-            r9 = r32
-            r0 = r33
+            r35 = this;
+            r9 = r35
+            r0 = r36
             org.telegram.messenger.MessageObject r1 = r0.messageObject
             org.telegram.messenger.VideoEditedInfo r2 = r0.videoEditedInfo
-            if (r1 == 0) goto L_0x015c
+            if (r1 == 0) goto L_0x0178
             if (r2 != 0) goto L_0x000e
-            goto L_0x015c
+            goto L_0x0178
         L_0x000e:
             java.lang.String r4 = r2.originalPath
             long r5 = r2.startTime
@@ -5707,43 +5742,58 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r11 = r17
             r10 = 0
         L_0x00a6:
-            if (r12 != r13) goto L_0x00c0
-            if (r11 != r14) goto L_0x00c0
-            if (r10 != 0) goto L_0x00c0
-            boolean r10 = r2.roundVideo
-            if (r10 != 0) goto L_0x00c0
-            int r10 = android.os.Build.VERSION.SDK_INT
-            r13 = 18
-            if (r10 < r13) goto L_0x00bd
+            java.util.ArrayList<org.telegram.messenger.VideoEditedInfo$MediaEntity> r1 = r2.mediaEntities
+            if (r1 != 0) goto L_0x00cc
+            java.lang.String r1 = r2.paintPath
+            if (r1 != 0) goto L_0x00cc
+            org.telegram.messenger.MediaController$SavedFilterState r1 = r2.filterState
+            if (r1 != 0) goto L_0x00cc
+            if (r12 != r13) goto L_0x00cc
+            if (r11 != r14) goto L_0x00cc
+            if (r10 != 0) goto L_0x00cc
+            boolean r1 = r2.roundVideo
+            if (r1 != 0) goto L_0x00cc
+            int r1 = android.os.Build.VERSION.SDK_INT
+            r10 = 18
+            if (r1 < r10) goto L_0x00c9
             r13 = -1
-            int r10 = (r5 > r13 ? 1 : (r5 == r13 ? 0 : -1))
-            if (r10 == 0) goto L_0x00bd
-            goto L_0x00c0
-        L_0x00bd:
+            int r1 = (r5 > r13 ? 1 : (r5 == r13 ? 0 : -1))
+            if (r1 == 0) goto L_0x00c9
+            goto L_0x00cc
+        L_0x00c9:
             r23 = 0
-            goto L_0x00c2
-        L_0x00c0:
+            goto L_0x00ce
+        L_0x00cc:
             r23 = 1
-        L_0x00c2:
-            android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext
-            java.lang.String r13 = "videoconvert"
-            r14 = 0
-            android.content.SharedPreferences r28 = r10.getSharedPreferences(r13, r14)
-            long r29 = java.lang.System.currentTimeMillis()
-            org.telegram.messenger.MediaController$8 r10 = new org.telegram.messenger.MediaController$8
-            r26 = r10
+        L_0x00ce:
+            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext
+            java.lang.String r10 = "videoconvert"
+            r13 = 0
+            android.content.SharedPreferences r1 = r1.getSharedPreferences(r10, r13)
+            long r32 = java.lang.System.currentTimeMillis()
+            org.telegram.messenger.MediaController$9 r10 = new org.telegram.messenger.MediaController$9
+            r30 = r10
             r13 = r19
             r10.<init>(r2, r13, r0)
-            r1 = 1
-            r2.videoConvertFirstWrite = r1
+            r10 = 1
+            r2.videoConvertFirstWrite = r10
             org.telegram.messenger.video.MediaCodecVideoConvertor r14 = new org.telegram.messenger.video.MediaCodecVideoConvertor
+            r0 = 1
             r10 = r14
             r14.<init>()
+            org.telegram.messenger.MediaController$SavedFilterState r14 = r2.filterState
+            r26 = r14
+            java.lang.String r14 = r2.paintPath
+            r27 = r14
+            java.util.ArrayList<org.telegram.messenger.VideoEditedInfo$MediaEntity> r14 = r2.mediaEntities
+            r28 = r14
+            boolean r14 = r2.isPhoto
+            r29 = r14
             r16 = r11
-            r31 = r13
+            r34 = r13
             r11 = r4
             r17 = r12
-            r12 = r31
+            r12 = r34
             r13 = r15
             r14 = r18
             r15 = r17
@@ -5751,60 +5801,59 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r18 = r3
             r19 = r5
             r21 = r7
-            boolean r3 = r10.convertVideo(r11, r12, r13, r14, r15, r16, r17, r18, r19, r21, r23, r24, r26)
+            boolean r3 = r10.convertVideo(r11, r12, r13, r14, r15, r16, r17, r18, r19, r21, r23, r24, r26, r27, r28, r29, r30)
             boolean r4 = r2.canceled
-            if (r4 != 0) goto L_0x0109
+            if (r4 != 0) goto L_0x0126
             java.lang.Object r5 = r9.videoConvertSync
             monitor-enter(r5)
-            boolean r4 = r2.canceled     // Catch:{ all -> 0x0106 }
-            monitor-exit(r5)     // Catch:{ all -> 0x0106 }
-            goto L_0x0109
-        L_0x0106:
+            boolean r4 = r2.canceled     // Catch:{ all -> 0x0123 }
+            monitor-exit(r5)     // Catch:{ all -> 0x0123 }
+            goto L_0x0126
+        L_0x0123:
             r0 = move-exception
-            monitor-exit(r5)     // Catch:{ all -> 0x0106 }
+            monitor-exit(r5)     // Catch:{ all -> 0x0123 }
             throw r0
-        L_0x0109:
+        L_0x0126:
             boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r2 == 0) goto L_0x012f
+            if (r2 == 0) goto L_0x014c
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
             java.lang.String r5 = "time="
             r2.append(r5)
             long r5 = java.lang.System.currentTimeMillis()
-            long r5 = r5 - r29
+            long r5 = r5 - r32
             r2.append(r5)
             java.lang.String r5 = " canceled="
             r2.append(r5)
             r2.append(r4)
             java.lang.String r2 = r2.toString()
             org.telegram.messenger.FileLog.d(r2)
-        L_0x012f:
-            android.content.SharedPreferences$Editor r2 = r28.edit()
-            java.lang.String r5 = "isPreviousOk"
-            android.content.SharedPreferences$Editor r2 = r2.putBoolean(r5, r1)
-            r2.apply()
+        L_0x014c:
+            android.content.SharedPreferences$Editor r1 = r1.edit()
+            java.lang.String r2 = "isPreviousOk"
+            android.content.SharedPreferences$Editor r1 = r1.putBoolean(r2, r0)
+            r1.apply()
             r5 = 1
-            long r6 = r31.length()
-            if (r3 != 0) goto L_0x0149
-            if (r4 == 0) goto L_0x0146
-            goto L_0x0149
-        L_0x0146:
-            r27 = 0
-            goto L_0x014b
-        L_0x0149:
-            r27 = 1
-        L_0x014b:
+            long r6 = r34.length()
+            if (r3 != 0) goto L_0x0166
+            if (r4 == 0) goto L_0x0163
+            goto L_0x0166
+        L_0x0163:
+            r31 = 0
+            goto L_0x0168
+        L_0x0166:
+            r31 = 1
+        L_0x0168:
             r8 = 1065353216(0x3var_, float:1.0)
-            r10 = 1
-            r1 = r32
-            r2 = r33
-            r3 = r31
+            r1 = r35
+            r2 = r36
+            r3 = r34
             r4 = r5
             r5 = r6
-            r7 = r27
+            r7 = r31
             r1.didWriteData(r2, r3, r4, r5, r7, r8)
-            return r10
-        L_0x015c:
+            return r0
+        L_0x0178:
             r0 = 0
             return r0
         */
@@ -5884,9 +5933,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             if (r5 <= r0) goto L_0x005a
             return r0
         L_0x005a:
-            if (r5 >= r6) goto L_0x005d
-            return r6
-        L_0x005d:
+            int r5 = java.lang.Math.max(r5, r6)
             return r5
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.makeVideoBitrate(int, int, int, int, int):int");

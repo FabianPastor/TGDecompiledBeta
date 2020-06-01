@@ -40,7 +40,6 @@ public class RecyclerListView extends RecyclerView {
     private static boolean gotAttributes;
     /* access modifiers changed from: private */
     public boolean allowItemsInteractionDuringAnimation = true;
-    public boolean animationRunning;
     /* access modifiers changed from: private */
     public Runnable clickRunnable;
     /* access modifiers changed from: private */
@@ -108,6 +107,7 @@ public class RecyclerListView extends RecyclerView {
     private float pinnedHeaderShadowTargetAlpha;
     /* access modifiers changed from: private */
     public Runnable removeHighlighSelectionRunnable;
+    public boolean scrollAnimationRunning;
     private boolean scrollEnabled = true;
     /* access modifiers changed from: private */
     public boolean scrollingByUser;
@@ -2000,8 +2000,12 @@ public class RecyclerListView extends RecyclerView {
         return this.pinnedHeader;
     }
 
+    public boolean isScrollAnimationRunning() {
+        return this.scrollAnimationRunning;
+    }
+
     public void requestLayout() {
-        if (!this.animationRunning) {
+        if (!this.scrollAnimationRunning) {
             super.requestLayout();
         }
     }

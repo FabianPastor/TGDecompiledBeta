@@ -522,7 +522,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
             r2 = this;
             org.telegram.ui.Components.ChatAttachAlert r3 = r2.parentAlert
             org.telegram.ui.Components.SizeNotifierFrameLayout r3 = r3.sizeNotifierFrameLayout
-            int r3 = r3.getKeyboardHeight()
+            int r3 = r3.measureKeyboardHeight()
             r0 = 1101004800(0x41a00000, float:20.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             r1 = 0

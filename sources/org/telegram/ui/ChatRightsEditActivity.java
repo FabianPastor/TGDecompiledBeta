@@ -446,7 +446,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                         } else {
                             str = LocaleController.formatPluralString("Months", 1);
                         }
-                        bottomSheetCellArr[i3].setTextAndIcon(str, 0);
+                        bottomSheetCellArr[i3].setTextAndIcon((CharSequence) str, 0);
                         linearLayout2.addView(bottomSheetCellArr[i3], LayoutHelper.createLinear(-1, -2));
                         bottomSheetCellArr[i3].setOnClickListener(new View.OnClickListener(builder) {
                             private final /* synthetic */ BottomSheet.Builder f$1;
@@ -964,7 +964,7 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     public /* synthetic */ void lambda$null$9$ChatRightsEditActivity(DialogInterface dialogInterface, int i) {
-        TwoStepVerificationActivity twoStepVerificationActivity = new TwoStepVerificationActivity(0);
+        TwoStepVerificationActivity twoStepVerificationActivity = new TwoStepVerificationActivity();
         twoStepVerificationActivity.setDelegate(new TwoStepVerificationActivity.TwoStepVerificationActivityDelegate(twoStepVerificationActivity) {
             private final /* synthetic */ TwoStepVerificationActivity f$1;
 
@@ -980,7 +980,7 @@ public class ChatRightsEditActivity extends BaseFragment {
     }
 
     public /* synthetic */ void lambda$null$10$ChatRightsEditActivity(DialogInterface dialogInterface, int i) {
-        presentFragment(new TwoStepVerificationActivity(0));
+        presentFragment(new TwoStepVerificationSetupActivity(6, (TLRPC$TL_account_password) null));
     }
 
     public /* synthetic */ void lambda$null$12$ChatRightsEditActivity(TwoStepVerificationActivity twoStepVerificationActivity, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {

@@ -214,6 +214,10 @@ public class ActionBarPopupWindow extends PopupWindow {
             this.linearLayout.addView(view);
         }
 
+        public void addView(View view, LinearLayout.LayoutParams layoutParams) {
+            this.linearLayout.addView(view, layoutParams);
+        }
+
         public void removeInnerViews() {
             this.linearLayout.removeAllViews();
         }

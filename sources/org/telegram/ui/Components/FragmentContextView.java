@@ -315,7 +315,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     SendMessagesHelper.getInstance(LocationController.SharingLocationInfo.this.messageObject.currentAccount).sendMessage(tLRPC$MessageMedia, this.f$1, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i2);
                 }
             });
-            launchActivity.lambda$runLinkRequest$30$LaunchActivity(locationActivity);
+            launchActivity.lambda$runLinkRequest$32$LaunchActivity(locationActivity);
         }
     }
 

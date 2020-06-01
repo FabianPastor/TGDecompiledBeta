@@ -24,11 +24,7 @@ public class EntityView extends FrameLayout {
     public boolean hasReleased = false;
     /* access modifiers changed from: private */
     public boolean hasTransformed = false;
-    /* access modifiers changed from: private */
-    public int offsetX;
-    /* access modifiers changed from: private */
-    public int offsetY;
-    protected Point position = new Point();
+    protected Point position;
     /* access modifiers changed from: private */
     public float previousLocationX;
     /* access modifiers changed from: private */
@@ -93,11 +89,6 @@ public class EntityView extends FrameLayout {
         this.delegate = entityViewDelegate;
     }
 
-    public void setOffset(int i, int i2) {
-        this.offsetX = i;
-        this.offsetY = i2;
-    }
-
     public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
         return this.delegate.allowInteraction(this);
     }
@@ -105,11 +96,12 @@ public class EntityView extends FrameLayout {
     /* access modifiers changed from: private */
     public boolean onTouchMove(float f, float f2) {
         float scaleX = ((View) getParent()).getScaleX();
-        Point point = new Point((f - this.previousLocationX) / scaleX, (f2 - this.previousLocationY) / scaleX);
-        if (((float) Math.hypot((double) point.x, (double) point.y)) <= (this.hasPanned ? 6.0f : 16.0f)) {
+        float f3 = (f - this.previousLocationX) / scaleX;
+        float f4 = (f2 - this.previousLocationY) / scaleX;
+        if (((float) Math.hypot((double) f3, (double) f4)) <= (this.hasPanned ? 6.0f : 16.0f)) {
             return false;
         }
-        pan(point);
+        pan(f3, f4);
         this.previousLocationX = f;
         this.previousLocationY = f2;
         this.hasPanned = true;
@@ -188,17 +180,17 @@ public class EntityView extends FrameLayout {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Paint.Views.EntityView.onTouchEvent(android.view.MotionEvent):boolean");
     }
 
-    public void pan(Point point) {
-        Point point2 = this.position;
-        point2.x += point.x;
-        point2.y += point.y;
+    public void pan(float f, float f2) {
+        Point point = this.position;
+        point.x += f;
+        point.y += f2;
         updatePosition();
     }
 
     /* access modifiers changed from: protected */
     public void updatePosition() {
-        setX(this.position.x - (((float) getWidth()) / 2.0f));
-        setY(this.position.y - (((float) getHeight()) / 2.0f));
+        setX(this.position.x - (((float) getMeasuredWidth()) / 2.0f));
+        setY(this.position.y - (((float) getMeasuredHeight()) / 2.0f));
         updateSelectionView();
     }
 
@@ -277,8 +269,8 @@ public class EntityView extends FrameLayout {
         public void updatePosition() {
             Rect selectionBounds = EntityView.this.getSelectionBounds();
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) getLayoutParams();
-            layoutParams.leftMargin = ((int) selectionBounds.x) + EntityView.this.offsetX;
-            layoutParams.topMargin = ((int) selectionBounds.y) + EntityView.this.offsetY;
+            layoutParams.leftMargin = (int) selectionBounds.x;
+            layoutParams.topMargin = (int) selectionBounds.y;
             layoutParams.width = (int) selectionBounds.width;
             layoutParams.height = (int) selectionBounds.height;
             setLayoutParams(layoutParams);
@@ -286,166 +278,173 @@ public class EntityView extends FrameLayout {
         }
 
         /* JADX WARNING: Code restructure failed: missing block: B:9:0x0014, code lost:
-            if (r0 != 6) goto L_0x0130;
+            if (r0 != 6) goto L_0x0145;
          */
-        /* JADX WARNING: Removed duplicated region for block: B:31:0x0134  */
+        /* JADX WARNING: Removed duplicated region for block: B:37:0x0149  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public boolean onTouchEvent(android.view.MotionEvent r12) {
+        public boolean onTouchEvent(android.view.MotionEvent r14) {
             /*
-                r11 = this;
-                int r0 = r12.getActionMasked()
+                r13 = this;
+                int r0 = r14.getActionMasked()
                 r1 = 3
                 r2 = 0
                 r3 = 1
-                if (r0 == 0) goto L_0x0108
-                if (r0 == r3) goto L_0x00ff
+                if (r0 == 0) goto L_0x011d
+                if (r0 == r3) goto L_0x0114
                 r4 = 2
                 if (r0 == r4) goto L_0x0018
-                if (r0 == r1) goto L_0x00ff
+                if (r0 == r1) goto L_0x0114
                 r4 = 5
-                if (r0 == r4) goto L_0x0108
+                if (r0 == r4) goto L_0x011d
                 r4 = 6
-                if (r0 == r4) goto L_0x00ff
-                goto L_0x0130
+                if (r0 == r4) goto L_0x0114
+                goto L_0x0145
             L_0x0018:
-                int r0 = r11.currentHandle
+                int r0 = r13.currentHandle
                 if (r0 != r1) goto L_0x002c
-                float r0 = r12.getRawX()
-                float r2 = r12.getRawY()
+                float r0 = r14.getRawX()
+                float r2 = r14.getRawY()
                 org.telegram.ui.Components.Paint.Views.EntityView r3 = org.telegram.ui.Components.Paint.Views.EntityView.this
                 boolean r2 = r3.onTouchMove(r0, r2)
-                goto L_0x0130
+                goto L_0x0145
             L_0x002c:
-                if (r0 == 0) goto L_0x0130
-                org.telegram.ui.Components.Paint.Views.EntityView r0 = org.telegram.ui.Components.Paint.Views.EntityView.this
-                boolean unused = r0.hasTransformed = r3
-                org.telegram.ui.Components.Point r0 = new org.telegram.ui.Components.Point
-                float r2 = r12.getRawX()
+                if (r0 == 0) goto L_0x0145
+                float r0 = r14.getRawX()
+                org.telegram.ui.Components.Paint.Views.EntityView r2 = org.telegram.ui.Components.Paint.Views.EntityView.this
+                float r2 = r2.previousLocationX
+                float r0 = r0 - r2
+                float r2 = r14.getRawY()
                 org.telegram.ui.Components.Paint.Views.EntityView r5 = org.telegram.ui.Components.Paint.Views.EntityView.this
-                float r5 = r5.previousLocationX
+                float r5 = r5.previousLocationY
                 float r2 = r2 - r5
-                float r5 = r12.getRawY()
-                org.telegram.ui.Components.Paint.Views.EntityView r6 = org.telegram.ui.Components.Paint.Views.EntityView.this
-                float r6 = r6.previousLocationY
-                float r5 = r5 - r6
-                r0.<init>(r2, r5)
-                float r2 = r11.getRotation()
-                double r5 = (double) r2
-                double r5 = java.lang.Math.toRadians(r5)
-                float r2 = (float) r5
-                float r5 = r0.x
-                double r5 = (double) r5
-                double r7 = (double) r2
-                double r9 = java.lang.Math.cos(r7)
-                java.lang.Double.isNaN(r5)
-                double r5 = r5 * r9
-                float r0 = r0.y
-                double r9 = (double) r0
-                double r7 = java.lang.Math.sin(r7)
-                java.lang.Double.isNaN(r9)
-                double r9 = r9 * r7
-                double r5 = r5 + r9
-                float r0 = (float) r5
-                int r2 = r11.currentHandle
-                if (r2 != r3) goto L_0x007b
+                org.telegram.ui.Components.Paint.Views.EntityView r5 = org.telegram.ui.Components.Paint.Views.EntityView.this
+                boolean r5 = r5.hasTransformed
+                r6 = 1073741824(0x40000000, float:2.0)
+                if (r5 != 0) goto L_0x0068
+                float r5 = java.lang.Math.abs(r0)
+                int r7 = org.telegram.messenger.AndroidUtilities.dp(r6)
+                float r7 = (float) r7
+                int r5 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
+                if (r5 > 0) goto L_0x0068
+                float r5 = java.lang.Math.abs(r2)
+                int r7 = org.telegram.messenger.AndroidUtilities.dp(r6)
+                float r7 = (float) r7
+                int r5 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
+                if (r5 <= 0) goto L_0x011b
+            L_0x0068:
+                org.telegram.ui.Components.Paint.Views.EntityView r5 = org.telegram.ui.Components.Paint.Views.EntityView.this
+                boolean unused = r5.hasTransformed = r3
+                float r5 = r13.getRotation()
+                double r7 = (double) r5
+                double r7 = java.lang.Math.toRadians(r7)
+                float r5 = (float) r7
+                double r7 = (double) r0
+                double r9 = (double) r5
+                double r11 = java.lang.Math.cos(r9)
+                java.lang.Double.isNaN(r7)
+                double r7 = r7 * r11
+                double r11 = (double) r2
+                double r9 = java.lang.Math.sin(r9)
+                java.lang.Double.isNaN(r11)
+                double r11 = r11 * r9
+                double r7 = r7 + r11
+                float r0 = (float) r7
+                int r2 = r13.currentHandle
+                if (r2 != r3) goto L_0x0096
                 r2 = -1082130432(0xffffffffbvar_, float:-1.0)
                 float r0 = r0 * r2
-            L_0x007b:
+            L_0x0096:
                 r2 = 1065353216(0x3var_, float:1.0)
-                r5 = 1073741824(0x40000000, float:2.0)
-                float r0 = r0 * r5
-                int r5 = r11.getWidth()
+                float r0 = r0 * r6
+                int r5 = r13.getMeasuredWidth()
                 float r5 = (float) r5
                 float r0 = r0 / r5
                 float r0 = r0 + r2
                 org.telegram.ui.Components.Paint.Views.EntityView r2 = org.telegram.ui.Components.Paint.Views.EntityView.this
                 r2.scale(r0)
-                int r0 = r11.getLeft()
-                int r2 = r11.getWidth()
+                int r0 = r13.getLeft()
+                int r2 = r13.getMeasuredWidth()
                 int r2 = r2 / r4
                 int r0 = r0 + r2
                 float r0 = (float) r0
-                int r2 = r11.getTop()
-                int r5 = r11.getHeight()
+                int r2 = r13.getTop()
+                int r5 = r13.getMeasuredHeight()
                 int r5 = r5 / r4
                 int r2 = r2 + r5
                 float r2 = (float) r2
-                float r5 = r12.getRawX()
-                android.view.ViewParent r6 = r11.getParent()
+                float r5 = r14.getRawX()
+                android.view.ViewParent r6 = r13.getParent()
                 android.view.View r6 = (android.view.View) r6
                 int r6 = r6.getLeft()
                 float r6 = (float) r6
                 float r5 = r5 - r6
-                float r6 = r12.getRawY()
-                android.view.ViewParent r7 = r11.getParent()
+                float r6 = r14.getRawY()
+                android.view.ViewParent r7 = r13.getParent()
                 android.view.View r7 = (android.view.View) r7
                 int r7 = r7.getTop()
                 float r7 = (float) r7
                 float r6 = r6 - r7
-                int r7 = org.telegram.messenger.AndroidUtilities.statusBarHeight
-                float r7 = (float) r7
-                float r6 = r6 - r7
                 r7 = 0
-                int r8 = r11.currentHandle
-                if (r8 != r3) goto L_0x00d6
+                int r8 = r13.currentHandle
+                if (r8 != r3) goto L_0x00eb
                 float r2 = r2 - r6
                 double r6 = (double) r2
                 float r0 = r0 - r5
                 double r4 = (double) r0
                 double r4 = java.lang.Math.atan2(r6, r4)
-            L_0x00d4:
+            L_0x00e9:
                 float r7 = (float) r4
-                goto L_0x00e1
-            L_0x00d6:
-                if (r8 != r4) goto L_0x00e1
+                goto L_0x00f6
+            L_0x00eb:
+                if (r8 != r4) goto L_0x00f6
                 float r6 = r6 - r2
                 double r6 = (double) r6
                 float r5 = r5 - r0
                 double r4 = (double) r5
                 double r4 = java.lang.Math.atan2(r6, r4)
-                goto L_0x00d4
-            L_0x00e1:
+                goto L_0x00e9
+            L_0x00f6:
                 org.telegram.ui.Components.Paint.Views.EntityView r0 = org.telegram.ui.Components.Paint.Views.EntityView.this
                 double r4 = (double) r7
                 double r4 = java.lang.Math.toDegrees(r4)
                 float r2 = (float) r4
                 r0.rotate(r2)
                 org.telegram.ui.Components.Paint.Views.EntityView r0 = org.telegram.ui.Components.Paint.Views.EntityView.this
-                float r2 = r12.getRawX()
+                float r2 = r14.getRawX()
                 float unused = r0.previousLocationX = r2
                 org.telegram.ui.Components.Paint.Views.EntityView r0 = org.telegram.ui.Components.Paint.Views.EntityView.this
-                float r2 = r12.getRawY()
+                float r2 = r14.getRawY()
                 float unused = r0.previousLocationY = r2
-                goto L_0x0106
-            L_0x00ff:
+                goto L_0x011b
+            L_0x0114:
                 org.telegram.ui.Components.Paint.Views.EntityView r0 = org.telegram.ui.Components.Paint.Views.EntityView.this
                 r0.onTouchUp()
-                r11.currentHandle = r2
-            L_0x0106:
+                r13.currentHandle = r2
+            L_0x011b:
                 r2 = 1
-                goto L_0x0130
-            L_0x0108:
-                float r0 = r12.getX()
-                float r4 = r12.getY()
-                int r0 = r11.pointInsideHandle(r0, r4)
-                if (r0 == 0) goto L_0x0130
-                r11.currentHandle = r0
+                goto L_0x0145
+            L_0x011d:
+                float r0 = r14.getX()
+                float r4 = r14.getY()
+                int r0 = r13.pointInsideHandle(r0, r4)
+                if (r0 == 0) goto L_0x0145
+                r13.currentHandle = r0
                 org.telegram.ui.Components.Paint.Views.EntityView r0 = org.telegram.ui.Components.Paint.Views.EntityView.this
-                float r4 = r12.getRawX()
+                float r4 = r14.getRawX()
                 float unused = r0.previousLocationX = r4
                 org.telegram.ui.Components.Paint.Views.EntityView r0 = org.telegram.ui.Components.Paint.Views.EntityView.this
-                float r4 = r12.getRawY()
+                float r4 = r14.getRawY()
                 float unused = r0.previousLocationY = r4
                 org.telegram.ui.Components.Paint.Views.EntityView r0 = org.telegram.ui.Components.Paint.Views.EntityView.this
                 boolean unused = r0.hasReleased = r2
-                goto L_0x0106
-            L_0x0130:
-                int r0 = r11.currentHandle
-                if (r0 != r1) goto L_0x013d
+                goto L_0x011b
+            L_0x0145:
+                int r0 = r13.currentHandle
+                if (r0 != r1) goto L_0x0152
                 org.telegram.ui.Components.Paint.Views.EntityView r0 = org.telegram.ui.Components.Paint.Views.EntityView.this
                 android.view.GestureDetector r0 = r0.gestureDetector
-                r0.onTouchEvent(r12)
-            L_0x013d:
+                r0.onTouchEvent(r14)
+            L_0x0152:
                 return r2
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Paint.Views.EntityView.SelectionView.onTouchEvent(android.view.MotionEvent):boolean");

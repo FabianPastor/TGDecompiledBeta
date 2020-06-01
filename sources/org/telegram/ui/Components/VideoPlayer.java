@@ -5,18 +5,27 @@ import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.Looper;
+import android.view.Surface;
 import android.view.TextureView;
 import android.view.ViewGroup;
 import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.Renderer;
+import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.audio.AudioProcessor;
+import com.google.android.exoplayer2.audio.AudioRendererEventListener;
+import com.google.android.exoplayer2.audio.TeeAudioProcessor;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
+import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -29,9 +38,13 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.video.SurfaceNotValidException;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import org.telegram.messenger.ApplicationLoader;
+import org.telegram.messenger.FourierTransform;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.secretmedia.ExtendedDefaultDataSourceFactory;
+import org.telegram.ui.Components.VideoPlayer;
 
 @SuppressLint({"NewApi"})
 public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoListener, NotificationCenter.NotificationCenterDelegate {
@@ -40,24 +53,36 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     /* access modifiers changed from: private */
     public boolean audioPlayerReady;
     private String audioType;
+    Handler audioUpdateHandler = new Handler(Looper.getMainLooper());
     private Uri audioUri;
+    /* access modifiers changed from: private */
+    public AudioVisualizerDelegate audioVisualizerDelegate;
     private boolean autoplay;
     private Uri currentUri;
     private VideoPlayerDelegate delegate;
     private boolean isStreaming;
     private boolean lastReportedPlayWhenReady;
-    private int lastReportedPlaybackState = 1;
-    private boolean loop;
-    private Handler mainHandler = new Handler();
+    private int lastReportedPlaybackState;
+    private boolean looping;
+    private boolean loopingMediaSource;
+    private Handler mainHandler;
     private DataSource.Factory mediaDataSourceFactory;
     private boolean mixedAudio;
-    private boolean mixedPlayWhenReady;
+    /* access modifiers changed from: private */
+    public boolean mixedPlayWhenReady;
     private SimpleExoPlayer player;
+    private Surface surface;
     private TextureView textureView;
-    private MappingTrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(BANDWIDTH_METER));
+    private MappingTrackSelector trackSelector;
     private boolean videoPlayerReady;
     private String videoType;
     private Uri videoUri;
+
+    public interface AudioVisualizerDelegate {
+        boolean needUpdate();
+
+        void onVisualizerUpdate(boolean z, boolean z2, float[] fArr);
+    }
 
     public interface VideoPlayerDelegate {
         void onError(Exception exc);
@@ -90,6 +115,9 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     public void onPositionDiscontinuity(int i) {
     }
 
+    public void onRepeatModeChanged(int i) {
+    }
+
     public void onSeekProcessed() {
     }
 
@@ -106,6 +134,9 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
         Context context = ApplicationLoader.applicationContext;
         DefaultBandwidthMeter defaultBandwidthMeter = BANDWIDTH_METER;
         this.mediaDataSourceFactory = new ExtendedDefaultDataSourceFactory(context, (TransferListener) defaultBandwidthMeter, (DataSource.Factory) new DefaultHttpDataSourceFactory("Mozilla/5.0 (X11; Linux x86_64; rv:10.0) Gecko/20150101 Firefox/47.0 (Chrome)", defaultBandwidthMeter));
+        this.mainHandler = new Handler();
+        this.trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(BANDWIDTH_METER));
+        this.lastReportedPlaybackState = 1;
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.playerDidStartPlaying);
     }
 
@@ -116,14 +147,29 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     }
 
     private void ensurePleyaerCreated() {
+        RenderersFactory renderersFactory;
         DefaultLoadControl defaultLoadControl = new DefaultLoadControl(new DefaultAllocator(true, 65536), 15000, 50000, 100, 5000, -1, true);
         if (this.player == null) {
-            SimpleExoPlayer newSimpleInstance = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, (TrackSelector) this.trackSelector, (LoadControl) defaultLoadControl, (DrmSessionManager<FrameworkMediaCrypto>) null, 2);
+            if (this.audioVisualizerDelegate != null) {
+                renderersFactory = new AudioVisualizerRenderersFactory(ApplicationLoader.applicationContext);
+            } else {
+                renderersFactory = new DefaultRenderersFactory(ApplicationLoader.applicationContext);
+            }
+            SimpleExoPlayer newSimpleInstance = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, renderersFactory, (TrackSelector) this.trackSelector, (LoadControl) defaultLoadControl, (DrmSessionManager<FrameworkMediaCrypto>) null);
             this.player = newSimpleInstance;
             newSimpleInstance.addListener(this);
             this.player.setVideoListener(this);
-            this.player.setVideoTextureView(this.textureView);
+            TextureView textureView2 = this.textureView;
+            if (textureView2 != null) {
+                this.player.setVideoTextureView(textureView2);
+            } else {
+                Surface surface2 = this.surface;
+                if (surface2 != null) {
+                    this.player.setVideoSurface(surface2);
+                }
+            }
             this.player.setPlayWhenReady(this.autoplay);
+            this.player.setRepeatMode(this.looping ? 2 : 0);
         }
         if (this.mixedAudio && this.audioPlayer == null) {
             SimpleExoPlayer newSimpleInstance2 = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, (TrackSelector) this.trackSelector, (LoadControl) defaultLoadControl, (DrmSessionManager<FrameworkMediaCrypto>) null, 2);
@@ -147,6 +193,9 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
                 }
 
                 public void onPositionDiscontinuity(int i) {
+                }
+
+                public void onRepeatModeChanged(int i) {
                 }
 
                 public void onSeekProcessed() {
@@ -189,7 +238,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
             r4 = r22
             r0.audioType = r4
             r5 = 1
-            r0.loop = r5
+            r0.loopingMediaSource = r5
             r0.mixedAudio = r5
             r6 = 0
             r0.audioPlayerReady = r6
@@ -318,7 +367,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
             r8.audioUri = r2
             r8.audioType = r2
             r2 = 0
-            r8.loop = r2
+            r8.loopingMediaSource = r2
             r8.videoPlayerReady = r2
             r8.mixedAudio = r2
             r8.currentUri = r9
@@ -441,6 +490,16 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
         }
     }
 
+    public void setSurface(Surface surface2) {
+        if (this.surface != surface2) {
+            this.surface = surface2;
+            SimpleExoPlayer simpleExoPlayer = this.player;
+            if (simpleExoPlayer != null) {
+                simpleExoPlayer.setVideoSurface(surface2);
+            }
+        }
+    }
+
     public boolean getPlayWhenReady() {
         return this.player.getPlayWhenReady();
     }
@@ -486,6 +545,10 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
         SimpleExoPlayer simpleExoPlayer2 = this.audioPlayer;
         if (simpleExoPlayer2 != null) {
             simpleExoPlayer2.setPlayWhenReady(false);
+        }
+        if (this.audioVisualizerDelegate != null) {
+            this.audioUpdateHandler.removeCallbacksAndMessages((Object) null);
+            this.audioVisualizerDelegate.onVisualizerUpdate(false, true, (float[]) null);
         }
     }
 
@@ -582,6 +645,10 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
         this.delegate = videoPlayerDelegate;
     }
 
+    public void setAudioVisualizerDelegate(AudioVisualizerDelegate audioVisualizerDelegate2) {
+        this.audioVisualizerDelegate = audioVisualizerDelegate2;
+    }
+
     public long getBufferedPosition() {
         SimpleExoPlayer simpleExoPlayer = this.player;
         if (simpleExoPlayer != null) {
@@ -628,6 +695,16 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
         }
     }
 
+    public void setLooping(boolean z) {
+        if (this.looping != z) {
+            this.looping = z;
+            SimpleExoPlayer simpleExoPlayer = this.player;
+            if (simpleExoPlayer != null) {
+                simpleExoPlayer.setRepeatMode(z ? 2 : 0);
+            }
+        }
+    }
+
     /* access modifiers changed from: private */
     public void checkPlayersReady() {
         if (this.audioPlayerReady && this.videoPlayerReady && this.mixedPlayWhenReady) {
@@ -643,6 +720,13 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
         if (!this.videoPlayerReady && i == 3) {
             this.videoPlayerReady = true;
             checkPlayersReady();
+        }
+        if (i != 3) {
+            this.audioUpdateHandler.removeCallbacksAndMessages((Object) null);
+            AudioVisualizerDelegate audioVisualizerDelegate2 = this.audioVisualizerDelegate;
+            if (audioVisualizerDelegate2 != null) {
+                audioVisualizerDelegate2.onVisualizerUpdate(false, true, (float[]) null);
+            }
         }
     }
 
@@ -660,7 +744,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
             }
             this.player.clearVideoTextureView(this.textureView);
             this.player.setVideoTextureView(this.textureView);
-            if (this.loop) {
+            if (this.loopingMediaSource) {
                 preparePlayerLoop(this.videoUri, this.videoType, this.audioUri, this.audioType);
             } else {
                 preparePlayer(this.videoUri, this.videoType);
@@ -695,6 +779,129 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
                 this.lastReportedPlayWhenReady = playWhenReady;
                 this.lastReportedPlaybackState = playbackState;
             }
+        }
+    }
+
+    private class AudioVisualizerRenderersFactory extends DefaultRenderersFactory {
+        public AudioVisualizerRenderersFactory(Context context) {
+            super(context);
+        }
+
+        /* access modifiers changed from: protected */
+        public void buildAudioRenderers(Context context, int i, MediaCodecSelector mediaCodecSelector, DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, boolean z, boolean z2, AudioProcessor[] audioProcessorArr, Handler handler, AudioRendererEventListener audioRendererEventListener, ArrayList<Renderer> arrayList) {
+            super.buildAudioRenderers(context, i, mediaCodecSelector, drmSessionManager, z, z2, new AudioProcessor[]{new TeeAudioProcessor(new VisualizerBufferSink())}, handler, audioRendererEventListener, arrayList);
+        }
+    }
+
+    private class VisualizerBufferSink implements TeeAudioProcessor.AudioBufferSink {
+        ByteBuffer byteBuffer;
+        FourierTransform.FFT fft = new FourierTransform.FFT(1024, 48000.0f);
+        long lastUpdateTime;
+        int position = 0;
+        float[] real = new float[1024];
+
+        public VisualizerBufferSink() {
+            ByteBuffer allocateDirect = ByteBuffer.allocateDirect(8192);
+            this.byteBuffer = allocateDirect;
+            allocateDirect.position(0);
+        }
+
+        public void flush(int i, int i2, int i3) {
+            if (VideoPlayer.this.audioVisualizerDelegate != null) {
+                VideoPlayer.this.audioUpdateHandler.removeCallbacksAndMessages((Object) null);
+                VideoPlayer.this.audioVisualizerDelegate.onVisualizerUpdate(false, false, (float[]) null);
+            }
+        }
+
+        public void handleBuffer(ByteBuffer byteBuffer2) {
+            if (VideoPlayer.this.audioVisualizerDelegate != null) {
+                if (byteBuffer2 == AudioProcessor.EMPTY_BUFFER || !VideoPlayer.this.mixedPlayWhenReady) {
+                    VideoPlayer.this.audioUpdateHandler.postDelayed(new Runnable() {
+                        public final void run() {
+                            VideoPlayer.VisualizerBufferSink.this.lambda$handleBuffer$0$VideoPlayer$VisualizerBufferSink();
+                        }
+                    }, 80);
+                } else if (VideoPlayer.this.audioVisualizerDelegate.needUpdate()) {
+                    this.byteBuffer.put(byteBuffer2);
+                    int limit = this.position + byteBuffer2.limit();
+                    this.position = limit;
+                    if (limit >= 1024) {
+                        int i = 0;
+                        this.byteBuffer.position(0);
+                        for (int i2 = 0; i2 < 1024; i2++) {
+                            this.real[i2] = ((float) this.byteBuffer.getShort()) / 32768.0f;
+                        }
+                        this.byteBuffer.rewind();
+                        this.position = 0;
+                        this.fft.forward(this.real);
+                        int i3 = 0;
+                        float f = 0.0f;
+                        while (true) {
+                            float f2 = 1.0f;
+                            if (i3 >= 1024) {
+                                break;
+                            }
+                            float f3 = this.fft.getSpectrumReal()[i3];
+                            float f4 = this.fft.getSpectrumImaginary()[i3];
+                            float sqrt = ((float) Math.sqrt((double) ((f3 * f3) + (f4 * f4)))) / 30.0f;
+                            if (sqrt <= 1.0f) {
+                                f2 = sqrt < 0.0f ? 0.0f : sqrt;
+                            }
+                            f += f2 * f2;
+                            i3++;
+                        }
+                        float sqrt2 = (float) Math.sqrt((double) (f / ((float) 1024)));
+                        float[] fArr = new float[7];
+                        fArr[6] = sqrt2;
+                        if (sqrt2 < 0.4f) {
+                            while (i < 7) {
+                                fArr[i] = 0.0f;
+                                i++;
+                            }
+                        } else {
+                            while (i < 6) {
+                                int i4 = 170 * i;
+                                float f5 = this.fft.getSpectrumReal()[i4];
+                                float f6 = this.fft.getSpectrumImaginary()[i4];
+                                fArr[i] = (float) (Math.sqrt((double) ((f5 * f5) + (f6 * f6))) / 30.0d);
+                                if (fArr[i] > 1.0f) {
+                                    fArr[i] = 1.0f;
+                                } else if (fArr[i] < 0.0f) {
+                                    fArr[i] = 0.0f;
+                                }
+                                i++;
+                            }
+                        }
+                        int i5 = 64;
+                        if (fArr[6] >= 0.5f) {
+                            i5 = (int) (((float) 64) - ((fArr[6] * 8.0f) - 0.5f));
+                        }
+                        if (System.currentTimeMillis() - this.lastUpdateTime >= ((long) i5)) {
+                            this.lastUpdateTime = System.currentTimeMillis();
+                            VideoPlayer.this.audioUpdateHandler.postDelayed(new Runnable(fArr) {
+                                private final /* synthetic */ float[] f$1;
+
+                                {
+                                    this.f$1 = r2;
+                                }
+
+                                public final void run() {
+                                    VideoPlayer.VisualizerBufferSink.this.lambda$handleBuffer$1$VideoPlayer$VisualizerBufferSink(this.f$1);
+                                }
+                            }, 130);
+                        }
+                    }
+                }
+            }
+        }
+
+        public /* synthetic */ void lambda$handleBuffer$0$VideoPlayer$VisualizerBufferSink() {
+            VideoPlayer.this.audioUpdateHandler.removeCallbacksAndMessages((Object) null);
+            VideoPlayer.this.audioVisualizerDelegate.onVisualizerUpdate(false, true, (float[]) null);
+        }
+
+        public /* synthetic */ void lambda$handleBuffer$1$VideoPlayer$VisualizerBufferSink(float[] fArr) {
+            VideoPlayer.this.audioVisualizerDelegate.onVisualizerUpdate(true, true, fArr);
         }
     }
 }

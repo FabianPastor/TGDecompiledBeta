@@ -140,14 +140,6 @@ public class SeekBar {
         this.bufferedProgress = f;
     }
 
-    public float getProgress() {
-        return ((float) this.thumbX) / ((float) (this.width - thumbWidth));
-    }
-
-    public int getThumbX() {
-        return (this.pressed ? this.draggingThumbX : this.thumbX) + (thumbWidth / 2);
-    }
-
     public boolean isDragging() {
         return this.pressed;
     }
@@ -159,14 +151,6 @@ public class SeekBar {
     public void setSize(int i, int i2) {
         this.width = i;
         this.height = i2;
-    }
-
-    public int getWidth() {
-        return this.width - thumbWidth;
-    }
-
-    public void setLineHeight(int i) {
-        this.lineHeight = i;
     }
 
     public void draw(Canvas canvas) {

@@ -340,7 +340,7 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
     /* access modifiers changed from: package-private */
     public void onPreMeasure(int i, int i2) {
         int i3;
-        if (this.parentAlert.sizeNotifierFrameLayout.getKeyboardHeight() > AndroidUtilities.dp(20.0f)) {
+        if (this.parentAlert.sizeNotifierFrameLayout.measureKeyboardHeight() > AndroidUtilities.dp(20.0f)) {
             i3 = AndroidUtilities.dp(8.0f);
             this.parentAlert.setAllowNestedScroll(false);
         } else {

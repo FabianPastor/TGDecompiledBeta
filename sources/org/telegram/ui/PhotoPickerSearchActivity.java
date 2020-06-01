@@ -237,7 +237,7 @@ public class PhotoPickerSearchActivity extends BaseFragment {
                 int size2 = View.MeasureSpec.getSize(i2);
                 setMeasuredDimension(size, size2);
                 measureChildWithMargins(PhotoPickerSearchActivity.this.actionBar, i, 0, i2, 0);
-                if ((SharedConfig.smoothKeyboard ? 0 : getKeyboardHeight()) > AndroidUtilities.dp(20.0f)) {
+                if ((SharedConfig.smoothKeyboard ? 0 : measureKeyboardHeight()) > AndroidUtilities.dp(20.0f)) {
                     this.globalIgnoreLayout = true;
                     PhotoPickerSearchActivity.this.commentTextView.hideEmojiView();
                     this.globalIgnoreLayout = false;
@@ -286,7 +286,7 @@ public class PhotoPickerSearchActivity extends BaseFragment {
                     r0 = 0
                     goto L_0x000f
                 L_0x000b:
-                    int r0 = r10.getKeyboardHeight()
+                    int r0 = r10.measureKeyboardHeight()
                 L_0x000f:
                     r2 = 1101004800(0x41a00000, float:20.0)
                     int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)

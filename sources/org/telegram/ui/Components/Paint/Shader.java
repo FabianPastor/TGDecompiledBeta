@@ -58,11 +58,11 @@ public class Shader {
         }
     }
 
-    private class CompilationResult {
+    private static class CompilationResult {
         int shader;
         int status;
 
-        CompilationResult(Shader shader2, int i, int i2) {
+        CompilationResult(int i, int i2) {
             this.shader = i;
             this.status = i2;
         }
@@ -81,7 +81,7 @@ public class Shader {
         if (iArr[0] == 0 && BuildVars.LOGS_ENABLED) {
             FileLog.e(GLES20.glGetShaderInfoLog(glCreateShader));
         }
-        return new CompilationResult(this, glCreateShader, iArr[0]);
+        return new CompilationResult(glCreateShader, iArr[0]);
     }
 
     private int linkProgram(int i) {

@@ -146,7 +146,7 @@ public class SideMenultItemAnimator extends SimpleItemAnimator {
         }
     }
 
-    public boolean animateRemove(RecyclerView.ViewHolder viewHolder) {
+    public boolean animateRemove(RecyclerView.ViewHolder viewHolder, RecyclerView.ItemAnimator.ItemHolderInfo itemHolderInfo) {
         resetAnimation(viewHolder);
         this.mPendingRemovals.add(viewHolder);
         return true;
@@ -201,7 +201,7 @@ public class SideMenultItemAnimator extends SimpleItemAnimator {
         }).start();
     }
 
-    public boolean animateMove(RecyclerView.ViewHolder viewHolder, int i, int i2, int i3, int i4) {
+    public boolean animateMove(RecyclerView.ViewHolder viewHolder, RecyclerView.ItemAnimator.ItemHolderInfo itemHolderInfo, int i, int i2, int i3, int i4) {
         View view = viewHolder.itemView;
         int translationX = i + ((int) view.getTranslationX());
         int translationY = i2 + ((int) viewHolder.itemView.getTranslationY());
@@ -259,9 +259,9 @@ public class SideMenultItemAnimator extends SimpleItemAnimator {
         }).start();
     }
 
-    public boolean animateChange(RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder viewHolder2, int i, int i2, int i3, int i4) {
+    public boolean animateChange(RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder viewHolder2, RecyclerView.ItemAnimator.ItemHolderInfo itemHolderInfo, int i, int i2, int i3, int i4) {
         if (viewHolder == viewHolder2) {
-            return animateMove(viewHolder, i, i2, i3, i4);
+            return animateMove(viewHolder, (RecyclerView.ItemAnimator.ItemHolderInfo) null, i, i2, i3, i4);
         }
         float translationX = viewHolder.itemView.getTranslationX();
         float translationY = viewHolder.itemView.getTranslationY();

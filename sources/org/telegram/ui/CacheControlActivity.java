@@ -603,7 +603,7 @@ public class CacheControlActivity extends BaseFragment {
                     }
                     storageDiagramView.setData(this.clearViewData);
                     BottomSheet.BottomSheetCell bottomSheetCell = new BottomSheet.BottomSheetCell(getParentActivity(), 2);
-                    bottomSheetCell.setTextAndIcon(LocaleController.getString("ClearMediaCache", NUM), 0);
+                    bottomSheetCell.setTextAndIcon((CharSequence) LocaleController.getString("ClearMediaCache", NUM), 0);
                     this.actionTextView = bottomSheetCell.getTextView();
                     bottomSheetCell.getTextView().setOnClickListener(new View.OnClickListener() {
                         public final void onClick(View view) {

@@ -1149,7 +1149,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             r7 = r1
             java.lang.String r0 = r10.recordedFile
             r1 = 1
-            android.graphics.Bitmap r6 = android.media.ThumbnailUtils.createVideoThumbnail(r0, r1)
+            android.graphics.Bitmap r6 = org.telegram.messenger.SendMessagesHelper.createVideoThumbnail(r0, r1)
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r1 = "-2147483648_"

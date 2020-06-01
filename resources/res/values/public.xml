@@ -517,6 +517,7 @@
     <public type="drawable" name="menu_add" id="NUM" />
     <public type="drawable" name="menu_bookmarks_14" id="NUM" />
     <public type="drawable" name="menu_bookmarks_ny" id="NUM" />
+    <public type="drawable" name="menu_bots" id="NUM" />
     <public type="drawable" name="menu_broadcast" id="NUM" />
     <public type="drawable" name="menu_broadcast_14" id="NUM" />
     <public type="drawable" name="menu_calls" id="NUM" />
@@ -556,6 +557,7 @@
     <public type="drawable" name="menu_palette" id="NUM" />
     <public type="drawable" name="menu_passcode" id="NUM" />
     <public type="drawable" name="menu_policy" id="NUM" />
+    <public type="drawable" name="menu_private" id="NUM" />
     <public type="drawable" name="menu_read" id="NUM" />
     <public type="drawable" name="menu_recent" id="NUM" />
     <public type="drawable" name="menu_saved" id="NUM" />
@@ -572,6 +574,7 @@
     <public type="drawable" name="menu_support" id="NUM" />
     <public type="drawable" name="menu_support2" id="NUM" />
     <public type="drawable" name="menu_switch" id="NUM" />
+    <public type="drawable" name="menu_unread" id="NUM" />
     <public type="drawable" name="menu_wallet" id="NUM" />
     <public type="drawable" name="menu_wallet_ny" id="NUM" />
     <public type="drawable" name="menu_work" id="NUM" />
@@ -585,6 +588,7 @@
     <public type="drawable" name="msg_actions" id="NUM" />
     <public type="drawable" name="msg_addbot" id="NUM" />
     <public type="drawable" name="msg_addcontact" id="NUM" />
+    <public type="drawable" name="msg_addfolder" id="NUM" />
     <public type="drawable" name="msg_archive" id="NUM" />
     <public type="drawable" name="msg_block" id="NUM" />
     <public type="drawable" name="msg_calendar" id="NUM" />
@@ -631,6 +635,7 @@
     <public type="drawable" name="msg_pin" id="NUM" />
     <public type="drawable" name="msg_pollstop" id="NUM" />
     <public type="drawable" name="msg_psa" id="NUM" />
+    <public type="drawable" name="msg_removefolder" id="NUM" />
     <public type="drawable" name="msg_reorder" id="NUM" />
     <public type="drawable" name="msg_reply" id="NUM" />
     <public type="drawable" name="msg_report" id="NUM" />
@@ -650,6 +655,10 @@
     <public type="drawable" name="msg_start_secret" id="NUM" />
     <public type="drawable" name="msg_stats" id="NUM" />
     <public type="drawable" name="msg_sticker" id="NUM" />
+    <public type="drawable" name="msg_text_check" id="NUM" />
+    <public type="drawable" name="msg_text_framed" id="NUM" />
+    <public type="drawable" name="msg_text_outlined" id="NUM" />
+    <public type="drawable" name="msg_text_regular" id="NUM" />
     <public type="drawable" name="msg_theme" id="NUM" />
     <public type="drawable" name="msg_timer" id="NUM" />
     <public type="drawable" name="msg_unarchive" id="NUM" />
@@ -727,6 +736,7 @@
     <public type="drawable" name="photo_sticker" id="NUM" />
     <public type="drawable" name="photo_timer" id="NUM" />
     <public type="drawable" name="photo_tools" id="NUM" />
+    <public type="drawable" name="photo_tooltip2" id="NUM" />
     <public type="drawable" name="photo_undo" id="NUM" />
     <public type="drawable" name="photo_w" id="NUM" />
     <public type="drawable" name="photobadge" id="NUM" />
@@ -848,6 +858,8 @@
     <public type="drawable" name="stickers_back_right" id="NUM" />
     <public type="drawable" name="stickers_empty" id="NUM" />
     <public type="drawable" name="stickers_favorites" id="NUM" />
+    <public type="drawable" name="stickers_gifs_saved" id="NUM" />
+    <public type="drawable" name="stickers_gifs_trending" id="NUM" />
     <public type="drawable" name="stickers_recent" id="NUM" />
     <public type="drawable" name="stickers_trending1" id="NUM" />
     <public type="drawable" name="stickers_trending2" id="NUM" />
@@ -870,6 +882,8 @@
     <public type="drawable" name="tip5" id="NUM" />
     <public type="drawable" name="tip6" id="NUM" />
     <public type="drawable" name="tip6_dark" id="NUM" />
+    <public type="drawable" name="toast_folder" id="NUM" />
+    <public type="drawable" name="toast_folder_minus" id="NUM" />
     <public type="drawable" name="toast_pallete" id="NUM" />
     <public type="drawable" name="tool_blur" id="NUM" />
     <public type="drawable" name="tool_cropfix" id="NUM" />
@@ -892,11 +906,15 @@
     <public type="drawable" name="video_mini_cancel" id="NUM" />
     <public type="drawable" name="video_mute" id="NUM" />
     <public type="drawable" name="video_muted" id="NUM" />
+    <public type="drawable" name="video_pause1" id="NUM" />
     <public type="drawable" name="video_pip" id="NUM" />
+    <public type="drawable" name="video_play1" id="NUM" />
     <public type="drawable" name="video_png" id="NUM" />
     <public type="drawable" name="video_quality1" id="NUM" />
     <public type="drawable" name="video_quality2" id="NUM" />
     <public type="drawable" name="video_quality3" id="NUM" />
+    <public type="drawable" name="video_send_mute" id="NUM" />
+    <public type="drawable" name="video_send_unmute" id="NUM" />
     <public type="drawable" name="videopreview" id="NUM" />
     <public type="drawable" name="voice2x" id="NUM" />
     <public type="drawable" name="volume_off" id="NUM" />
@@ -1102,6 +1120,17 @@
     <public type="raw" name="sound_in" id="NUM" />
     <public type="raw" name="sound_out" id="NUM" />
     <public type="raw" name="statistic_preload" id="NUM" />
+    <public type="raw" name="tsv_monkey_close" id="NUM" />
+    <public type="raw" name="tsv_setup_email_sent" id="NUM" />
+    <public type="raw" name="tsv_setup_hint" id="NUM" />
+    <public type="raw" name="tsv_setup_intro" id="NUM" />
+    <public type="raw" name="tsv_setup_mail" id="NUM" />
+    <public type="raw" name="tsv_setup_monkey_close_and_peek" id="NUM" />
+    <public type="raw" name="tsv_setup_monkey_close_and_peek_to_idle" id="NUM" />
+    <public type="raw" name="tsv_setup_monkey_idle1" id="NUM" />
+    <public type="raw" name="tsv_setup_monkey_idle2" id="NUM" />
+    <public type="raw" name="tsv_setup_monkey_peek" id="NUM" />
+    <public type="raw" name="tsv_setup_monkey_tracking" id="NUM" />
     <public type="raw" name="voip_busy" id="NUM" />
     <public type="raw" name="voip_connecting" id="NUM" />
     <public type="raw" name="voip_end" id="NUM" />
@@ -1109,20 +1138,12 @@
     <public type="raw" name="voip_ringback" id="NUM" />
     <public type="raw" name="wallet_allset" id="NUM" />
     <public type="raw" name="wallet_congrats" id="NUM" />
-    <public type="raw" name="wallet_crystal" id="NUM" />
-    <public type="raw" name="wallet_egg" id="NUM" />
-    <public type="raw" name="wallet_gem" id="NUM" />
-    <public type="raw" name="wallet_lock" id="NUM" />
-    <public type="raw" name="wallet_money" id="NUM" />
-    <public type="raw" name="wallet_note" id="NUM" />
-    <public type="raw" name="wallet_perfect" id="NUM" />
     <public type="raw" name="wallet_science" id="NUM" />
-    <public type="raw" name="wallet_sync" id="NUM" />
-    <public type="raw" name="wallet_toobad" id="NUM" />
     <public type="string" name="ALongTimeAgo" id="NUM" />
     <public type="string" name="Abort" id="NUM" />
     <public type="string" name="AbortEmail" id="NUM" />
     <public type="string" name="AbortPassword" id="NUM" />
+    <public type="string" name="AbortPasswordMenu" id="NUM" />
     <public type="string" name="AccActionCancelDownload" id="NUM" />
     <public type="string" name="AccActionDownload" id="NUM" />
     <public type="string" name="AccActionEnterSelectionMode" id="NUM" />
@@ -1995,8 +2016,6 @@
     <public type="string" name="CreateEncryptedChatError" id="NUM" />
     <public type="string" name="CreateGroupError" id="NUM" />
     <public type="string" name="CreateLink" id="NUM" />
-    <public type="string" name="CreateMyWallet" id="NUM" />
-    <public type="string" name="CreateMyWalletTerms" id="NUM" />
     <public type="string" name="CreateNewContact" id="NUM" />
     <public type="string" name="CreateNewFilter" id="NUM" />
     <public type="string" name="CreateNewFilterInfo" id="NUM" />
@@ -2068,6 +2087,7 @@
     <public type="string" name="DeleteAll" id="NUM" />
     <public type="string" name="DeleteAllFrom" id="NUM" />
     <public type="string" name="DeleteAllMessagesAlert" id="NUM" />
+    <public type="string" name="DeleteAllMessagesSavedAlert" id="NUM" />
     <public type="string" name="DeleteAndExit" id="NUM" />
     <public type="string" name="DeleteAndExitButton" id="NUM" />
     <public type="string" name="DeleteAndStop" id="NUM" />
@@ -2122,12 +2142,6 @@
     <public type="string" name="DiceInfo2" id="NUM" />
     <public type="string" name="DidNotGetTheCode" id="NUM" />
     <public type="string" name="DidNotGetTheCodeSms" id="NUM" />
-    <public type="string" name="Digits_few" id="NUM" />
-    <public type="string" name="Digits_many" id="NUM" />
-    <public type="string" name="Digits_one" id="NUM" />
-    <public type="string" name="Digits_other" id="NUM" />
-    <public type="string" name="Digits_two" id="NUM" />
-    <public type="string" name="Digits_zero" id="NUM" />
     <public type="string" name="DirectShare" id="NUM" />
     <public type="string" name="DirectShareInfo" id="NUM" />
     <public type="string" name="Directions" id="NUM" />
@@ -2253,6 +2267,7 @@
     <public type="string" name="English" id="NUM" />
     <public type="string" name="Enhance" id="NUM" />
     <public type="string" name="EnterChannelName" id="NUM" />
+    <public type="string" name="EnterCode" id="NUM" />
     <public type="string" name="EnterCurrentPasscode" id="NUM" />
     <public type="string" name="EnterGroupNamePlaceholder" id="NUM" />
     <public type="string" name="EnterListName" id="NUM" />
@@ -2375,6 +2390,7 @@
     <public type="string" name="ExternalStorage" id="NUM" />
     <public type="string" name="Fade" id="NUM" />
     <public type="string" name="FavoriteStickers" id="NUM" />
+    <public type="string" name="FeaturedGifs" id="NUM" />
     <public type="string" name="FeaturedStickers" id="NUM" />
     <public type="string" name="FeaturedStickersInfo" id="NUM" />
     <public type="string" name="February" id="NUM" />
@@ -2388,6 +2404,9 @@
     <public type="string" name="Files_zero" id="NUM" />
     <public type="string" name="FilterAddChats" id="NUM" />
     <public type="string" name="FilterAddException" id="NUM" />
+    <public type="string" name="FilterAddTo" id="NUM" />
+    <public type="string" name="FilterAddToAlertFullText" id="NUM" />
+    <public type="string" name="FilterAddToAlertFullTitle" id="NUM" />
     <public type="string" name="FilterAddingChats" id="NUM" />
     <public type="string" name="FilterAddingChatsInfo" id="NUM" />
     <public type="string" name="FilterAllChats" id="NUM" />
@@ -2398,8 +2417,13 @@
     <public type="string" name="FilterAvailableTitle" id="NUM" />
     <public type="string" name="FilterBots" id="NUM" />
     <public type="string" name="FilterChannels" id="NUM" />
+    <public type="string" name="FilterChatAddedToExisting" id="NUM" />
+    <public type="string" name="FilterChatRemovedFrom" id="NUM" />
     <public type="string" name="FilterChatTypes" id="NUM" />
     <public type="string" name="FilterChats" id="NUM" />
+    <public type="string" name="FilterChatsAddedToExisting" id="NUM" />
+    <public type="string" name="FilterChatsRemovedFrom" id="NUM" />
+    <public type="string" name="FilterChoose" id="NUM" />
     <public type="string" name="FilterContact" id="NUM" />
     <public type="string" name="FilterContacts" id="NUM" />
     <public type="string" name="FilterDelete" id="NUM" />
@@ -2439,6 +2463,8 @@
     <public type="string" name="FilterRemoveExclusionText" id="NUM" />
     <public type="string" name="FilterRemoveExclusionTitle" id="NUM" />
     <public type="string" name="FilterRemoveExclusionUserText" id="NUM" />
+    <public type="string" name="FilterRemoveFrom" id="NUM" />
+    <public type="string" name="FilterRemoveFromAlertFullText" id="NUM" />
     <public type="string" name="FilterRemoveInclusionChatText" id="NUM" />
     <public type="string" name="FilterRemoveInclusionText" id="NUM" />
     <public type="string" name="FilterRemoveInclusionTitle" id="NUM" />
@@ -2452,6 +2478,8 @@
     <public type="string" name="FilterShowMoreChats_two" id="NUM" />
     <public type="string" name="FilterShowMoreChats_zero" id="NUM" />
     <public type="string" name="FilterUnread" id="NUM" />
+    <public type="string" name="FilterUserAddedToExisting" id="NUM" />
+    <public type="string" name="FilterUserRemovedFrom" id="NUM" />
     <public type="string" name="Filters" id="NUM" />
     <public type="string" name="FiltersSetup" id="NUM" />
     <public type="string" name="FiltersSetupPinAlert" id="NUM" />
@@ -2576,8 +2604,6 @@
     <public type="string" name="GpsDisabledAlertText" id="NUM" />
     <public type="string" name="GpsDisabledAlertTitle" id="NUM" />
     <public type="string" name="Grain" id="NUM" />
-    <public type="string" name="GramWallet" id="NUM" />
-    <public type="string" name="GramWalletInfo" id="NUM" />
     <public type="string" name="Gray" id="NUM" />
     <public type="string" name="Green" id="NUM" />
     <public type="string" name="GroupAddMembers" id="NUM" />
@@ -2641,7 +2667,6 @@
     <public type="string" name="IVInteractionsChartTitle" id="NUM" />
     <public type="string" name="ImagesTab2" id="NUM" />
     <public type="string" name="ImportContacts" id="NUM" />
-    <public type="string" name="ImportExistingWallet" id="NUM" />
     <public type="string" name="InAppNotifications" id="NUM" />
     <public type="string" name="InAppPreview" id="NUM" />
     <public type="string" name="InAppSounds" id="NUM" />
@@ -3251,6 +3276,7 @@
     <public type="string" name="PaintDelete" id="NUM" />
     <public type="string" name="PaintDuplicate" id="NUM" />
     <public type="string" name="PaintEdit" id="NUM" />
+    <public type="string" name="PaintFramed" id="NUM" />
     <public type="string" name="PaintOutlined" id="NUM" />
     <public type="string" name="PaintRegular" id="NUM" />
     <public type="string" name="Passcode" id="NUM" />
@@ -3442,7 +3468,10 @@
     <public type="string" name="PasswordDoNotMatch" id="NUM" />
     <public type="string" name="PasswordEmailInvalid" id="NUM" />
     <public type="string" name="PasswordHint" id="NUM" />
+    <public type="string" name="PasswordHintPlaceholder" id="NUM" />
     <public type="string" name="PasswordHintText" id="NUM" />
+    <public type="string" name="PasswordOff" id="NUM" />
+    <public type="string" name="PasswordOn" id="NUM" />
     <public type="string" name="PasswordRecovery" id="NUM" />
     <public type="string" name="PasswordReset" id="NUM" />
     <public type="string" name="PasteFromClipboard" id="NUM" />
@@ -3571,6 +3600,7 @@
     <public type="string" name="PleaseEnterCurrentPassword" id="NUM" />
     <public type="string" name="PleaseEnterCurrentPasswordTransfer" id="NUM" />
     <public type="string" name="PleaseEnterFirstPassword" id="NUM" />
+    <public type="string" name="PleaseEnterNewFirstPassword" id="NUM" />
     <public type="string" name="PleaseEnterPassword" id="NUM" />
     <public type="string" name="PleaseLoginPassport" id="NUM" />
     <public type="string" name="PleaseReEnterPassword" id="NUM" />
@@ -3664,6 +3694,7 @@
     <public type="string" name="PublicPoll" id="NUM" />
     <public type="string" name="PublicPollCantForward" id="NUM" />
     <public type="string" name="Purple" id="NUM" />
+    <public type="string" name="QRCodePermissionNoCamera" id="NUM" />
     <public type="string" name="QuestionHint" id="NUM" />
     <public type="string" name="QuickReplyCustom" id="NUM" />
     <public type="string" name="QuickReplyDefault1" id="NUM" />
@@ -3702,6 +3733,7 @@
     <public type="string" name="RecordingAudio" id="NUM" />
     <public type="string" name="RecordingRound" id="NUM" />
     <public type="string" name="RecoveryEmail" id="NUM" />
+    <public type="string" name="RecoveryEmailTitle" id="NUM" />
     <public type="string" name="Red" id="NUM" />
     <public type="string" name="RegisterText2" id="NUM" />
     <public type="string" name="Regular" id="NUM" />
@@ -3996,6 +4028,7 @@
     <public type="string" name="ShowInChat" id="NUM" />
     <public type="string" name="ShowNotificationsFor" id="NUM" />
     <public type="string" name="ShowNotificationsForInfo" id="NUM" />
+    <public type="string" name="ShowStickers" id="NUM" />
     <public type="string" name="ShowVotes_few" id="NUM" />
     <public type="string" name="ShowVotes_many" id="NUM" />
     <public type="string" name="ShowVotes_one" id="NUM" />
@@ -4032,6 +4065,7 @@
     <public type="string" name="SortedByName" id="NUM" />
     <public type="string" name="Sound" id="NUM" />
     <public type="string" name="SoundDefault" id="NUM" />
+    <public type="string" name="SoundMuted" id="NUM" />
     <public type="string" name="Start" id="NUM" />
     <public type="string" name="StartEncryptedChat" id="NUM" />
     <public type="string" name="StartMessaging" id="NUM" />
@@ -4234,6 +4268,11 @@
     <public type="string" name="TurnPasswordOffQuestion" id="NUM" />
     <public type="string" name="TurnPasswordOffQuestionTitle" id="NUM" />
     <public type="string" name="TwoStepVerification" id="NUM" />
+    <public type="string" name="TwoStepVerificationPasswordReturnPassport" id="NUM" />
+    <public type="string" name="TwoStepVerificationPasswordReturnSettings" id="NUM" />
+    <public type="string" name="TwoStepVerificationPasswordSet" id="NUM" />
+    <public type="string" name="TwoStepVerificationPasswordSetInfo" id="NUM" />
+    <public type="string" name="TwoStepVerificationSetPassword" id="NUM" />
     <public type="string" name="TwoStepVerificationTitle" id="NUM" />
     <public type="string" name="TypeLocationGroup" id="NUM" />
     <public type="string" name="TypeLocationGroupEdit" id="NUM" />
@@ -4373,6 +4412,7 @@
     <public type="string" name="Users_other" id="NUM" />
     <public type="string" name="Users_two" id="NUM" />
     <public type="string" name="Users_zero" id="NUM" />
+    <public type="string" name="VerificationCode" id="NUM" />
     <public type="string" name="ViaBot" id="NUM" />
     <public type="string" name="Vibrate" id="NUM" />
     <public type="string" name="VibrationDefault" id="NUM" />
@@ -4458,158 +4498,6 @@
     <public type="string" name="Vote_zero" id="NUM" />
     <public type="string" name="WaitMore" id="NUM" />
     <public type="string" name="WaitingForNetwork" id="NUM" />
-    <public type="string" name="Wallet" id="NUM" />
-    <public type="string" name="WalletAddressCopy" id="NUM" />
-    <public type="string" name="WalletAmount" id="NUM" />
-    <public type="string" name="WalletBiometricTooManyAttempts" id="NUM" />
-    <public type="string" name="WalletBlockchainConfigInvalid" id="NUM" />
-    <public type="string" name="WalletBlockchainConfigLoadError" id="NUM" />
-    <public type="string" name="WalletBlockchainFees" id="NUM" />
-    <public type="string" name="WalletBlockchainName" id="NUM" />
-    <public type="string" name="WalletBlockchainNameHint" id="NUM" />
-    <public type="string" name="WalletBlockchainNameInfo" id="NUM" />
-    <public type="string" name="WalletBlockchainNameWarning" id="NUM" />
-    <public type="string" name="WalletChangePasscode" id="NUM" />
-    <public type="string" name="WalletClose" id="NUM" />
-    <public type="string" name="WalletComment" id="NUM" />
-    <public type="string" name="WalletConfigType" id="NUM" />
-    <public type="string" name="WalletConfigTypeInfo" id="NUM" />
-    <public type="string" name="WalletConfigTypeJson" id="NUM" />
-    <public type="string" name="WalletConfigTypeJsonHeader" id="NUM" />
-    <public type="string" name="WalletConfigTypeJsonHint" id="NUM" />
-    <public type="string" name="WalletConfigTypeUrl" id="NUM" />
-    <public type="string" name="WalletConfigTypeUrlHeader" id="NUM" />
-    <public type="string" name="WalletConfigTypeUrlHint" id="NUM" />
-    <public type="string" name="WalletConfirm" id="NUM" />
-    <public type="string" name="WalletConfirmation" id="NUM" />
-    <public type="string" name="WalletConfirmationText" id="NUM" />
-    <public type="string" name="WalletCongratulations" id="NUM" />
-    <public type="string" name="WalletCongratulationsinfo" id="NUM" />
-    <public type="string" name="WalletContinue" id="NUM" />
-    <public type="string" name="WalletCopyAddress" id="NUM" />
-    <public type="string" name="WalletCreateBlockchainConfigLoadError" id="NUM" />
-    <public type="string" name="WalletCreateInvoice" id="NUM" />
-    <public type="string" name="WalletCreateInvoiceTitle" id="NUM" />
-    <public type="string" name="WalletCreated" id="NUM" />
-    <public type="string" name="WalletDate" id="NUM" />
-    <public type="string" name="WalletDelete" id="NUM" />
-    <public type="string" name="WalletDeleteInfo" id="NUM" />
-    <public type="string" name="WalletDeleteTitle" id="NUM" />
-    <public type="string" name="WalletDone" id="NUM" />
-    <public type="string" name="WalletEnterPasscode" id="NUM" />
-    <public type="string" name="WalletEnterWalletAddress" id="NUM" />
-    <public type="string" name="WalletError" id="NUM" />
-    <public type="string" name="WalletExport" id="NUM" />
-    <public type="string" name="WalletExportConfirmContinue" id="NUM" />
-    <public type="string" name="WalletExportConfirmCredentials" id="NUM" />
-    <public type="string" name="WalletFee" id="NUM" />
-    <public type="string" name="WalletFrom" id="NUM" />
-    <public type="string" name="WalletImportAlertText" id="NUM" />
-    <public type="string" name="WalletImportAlertTitle" id="NUM" />
-    <public type="string" name="WalletImportDontHave" id="NUM" />
-    <public type="string" name="WalletImportInfo" id="NUM" />
-    <public type="string" name="WalletInsufficientGramsText" id="NUM" />
-    <public type="string" name="WalletInsufficientGramsTitle" id="NUM" />
-    <public type="string" name="WalletInvoiceInfo" id="NUM" />
-    <public type="string" name="WalletKeystoreInvalidated" id="NUM" />
-    <public type="string" name="WalletPasscodeLength" id="NUM" />
-    <public type="string" name="WalletPendingTransactions" id="NUM" />
-    <public type="string" name="WalletPendingWait" id="NUM" />
-    <public type="string" name="WalletPerfect" id="NUM" />
-    <public type="string" name="WalletPerfectInfo" id="NUM" />
-    <public type="string" name="WalletPerfectSetPasscode" id="NUM" />
-    <public type="string" name="WalletPermissionNoCamera" id="NUM" />
-    <public type="string" name="WalletQRCode" id="NUM" />
-    <public type="string" name="WalletReady" id="NUM" />
-    <public type="string" name="WalletReadyInfo" id="NUM" />
-    <public type="string" name="WalletReceive" id="NUM" />
-    <public type="string" name="WalletReceiveYourAddress" id="NUM" />
-    <public type="string" name="WalletReleaseToRefresh" id="NUM" />
-    <public type="string" name="WalletScanCode" id="NUM" />
-    <public type="string" name="WalletScanCodeNotFound" id="NUM" />
-    <public type="string" name="WalletScanImageNotFound" id="NUM" />
-    <public type="string" name="WalletSecretWords" id="NUM" />
-    <public type="string" name="WalletSecretWordsAlertButton" id="NUM" />
-    <public type="string" name="WalletSecretWordsAlertText" id="NUM" />
-    <public type="string" name="WalletSecretWordsAlertTitle" id="NUM" />
-    <public type="string" name="WalletSecretWordsInfo" id="NUM" />
-    <public type="string" name="WalletSecretWordsTitle" id="NUM" />
-    <public type="string" name="WalletSecurityAlertCreateContinue" id="NUM" />
-    <public type="string" name="WalletSecurityAlertImportContinue" id="NUM" />
-    <public type="string" name="WalletSecurityAlertSetup" id="NUM" />
-    <public type="string" name="WalletSecurityAlertTextBiometric" id="NUM" />
-    <public type="string" name="WalletSecurityAlertTextLockscreen" id="NUM" />
-    <public type="string" name="WalletSecurityAlertTextLockscreenBiometric" id="NUM" />
-    <public type="string" name="WalletSecurityAlertTitle" id="NUM" />
-    <public type="string" name="WalletSend" id="NUM" />
-    <public type="string" name="WalletSendBalance" id="NUM" />
-    <public type="string" name="WalletSendConfirmCredentials" id="NUM" />
-    <public type="string" name="WalletSendDone" id="NUM" />
-    <public type="string" name="WalletSendDoneText" id="NUM" />
-    <public type="string" name="WalletSendGrams" id="NUM" />
-    <public type="string" name="WalletSendRecipient" id="NUM" />
-    <public type="string" name="WalletSendSameWalletProceed" id="NUM" />
-    <public type="string" name="WalletSendSameWalletText" id="NUM" />
-    <public type="string" name="WalletSendSyncInProgress" id="NUM" />
-    <public type="string" name="WalletSendWarningSendAnyway" id="NUM" />
-    <public type="string" name="WalletSendWarningText" id="NUM" />
-    <public type="string" name="WalletSendWarningTitle" id="NUM" />
-    <public type="string" name="WalletSendingGrams" id="NUM" />
-    <public type="string" name="WalletSendingGramsInfo" id="NUM" />
-    <public type="string" name="WalletServerSettings" id="NUM" />
-    <public type="string" name="WalletSetPasscode" id="NUM" />
-    <public type="string" name="WalletSetPasscode4Digit" id="NUM" />
-    <public type="string" name="WalletSetPasscode6Digit" id="NUM" />
-    <public type="string" name="WalletSetPasscodeChooseType" id="NUM" />
-    <public type="string" name="WalletSetPasscodeCustom" id="NUM" />
-    <public type="string" name="WalletSetPasscodeEnterCode" id="NUM" />
-    <public type="string" name="WalletSetPasscodeError" id="NUM" />
-    <public type="string" name="WalletSetPasscodeMinLength" id="NUM" />
-    <public type="string" name="WalletSetPasscodeOptions" id="NUM" />
-    <public type="string" name="WalletSetPasscodeRepeat" id="NUM" />
-    <public type="string" name="WalletSettings" id="NUM" />
-    <public type="string" name="WalletShareAddress" id="NUM" />
-    <public type="string" name="WalletShareInfo" id="NUM" />
-    <public type="string" name="WalletShareInvoiceUrl" id="NUM" />
-    <public type="string" name="WalletShareInvoiceUrlInfo" id="NUM" />
-    <public type="string" name="WalletShareQr" id="NUM" />
-    <public type="string" name="WalletStorageFee" id="NUM" />
-    <public type="string" name="WalletSwipeToRefresh" id="NUM" />
-    <public type="string" name="WalletTelegramLogout" id="NUM" />
-    <public type="string" name="WalletTestShareInfo" id="NUM" />
-    <public type="string" name="WalletTestShareInvoiceUrlInfo" id="NUM" />
-    <public type="string" name="WalletTestTime" id="NUM" />
-    <public type="string" name="WalletTestTimeAlertButtonSee" id="NUM" />
-    <public type="string" name="WalletTestTimeAlertButtonTry" id="NUM" />
-    <public type="string" name="WalletTestTimeAlertText" id="NUM" />
-    <public type="string" name="WalletTestTimeAlertTitle" id="NUM" />
-    <public type="string" name="WalletTestTimeInfo" id="NUM" />
-    <public type="string" name="WalletTestTimeTitle" id="NUM" />
-    <public type="string" name="WalletTo" id="NUM" />
-    <public type="string" name="WalletTonLinkNoWalletCreateWallet" id="NUM" />
-    <public type="string" name="WalletTonLinkNoWalletText" id="NUM" />
-    <public type="string" name="WalletTooBad" id="NUM" />
-    <public type="string" name="WalletTooBadCreate" id="NUM" />
-    <public type="string" name="WalletTooBadEnter" id="NUM" />
-    <public type="string" name="WalletTooBadInfo" id="NUM" />
-    <public type="string" name="WalletTosUrl" id="NUM" />
-    <public type="string" name="WalletTouchFingerprint" id="NUM" />
-    <public type="string" name="WalletTouchFingerprintNotRecognized" id="NUM" />
-    <public type="string" name="WalletTransaction" id="NUM" />
-    <public type="string" name="WalletTransactionAddressCopied" id="NUM" />
-    <public type="string" name="WalletTransactionComment" id="NUM" />
-    <public type="string" name="WalletTransactionFee" id="NUM" />
-    <public type="string" name="WalletTransactionRecipient" id="NUM" />
-    <public type="string" name="WalletTransactionSendGrams" id="NUM" />
-    <public type="string" name="WalletTransactionSender" id="NUM" />
-    <public type="string" name="WalletUpdatedFewSecondsAgo" id="NUM" />
-    <public type="string" name="WalletUpdatedTimeAgo" id="NUM" />
-    <public type="string" name="WalletUpdating" id="NUM" />
-    <public type="string" name="WalletUpdatingProgress" id="NUM" />
-    <public type="string" name="WalletView" id="NUM" />
-    <public type="string" name="WalletYourAddress" id="NUM" />
-    <public type="string" name="WalletYourBalance" id="NUM" />
-    <public type="string" name="WalletYourInvoice" id="NUM" />
     <public type="string" name="Warmth" id="NUM" />
     <public type="string" name="WebSessionsTitle" id="NUM" />
     <public type="string" name="Weeks_few" id="NUM" />
@@ -4664,6 +4552,7 @@
     <public type="string" name="YourLocatedChannelsTooMuch" id="NUM" />
     <public type="string" name="YourName" id="NUM" />
     <public type="string" name="YourPassword" id="NUM" />
+    <public type="string" name="YourPasswordChangedSuccessText" id="NUM" />
     <public type="string" name="YourPasswordSuccess" id="NUM" />
     <public type="string" name="YourPasswordSuccessText" id="NUM" />
     <public type="string" name="YourPhone" id="NUM" />

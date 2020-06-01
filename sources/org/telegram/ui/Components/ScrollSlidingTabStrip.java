@@ -529,6 +529,13 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         }
     }
 
+    public void invalidateTabs() {
+        int childCount = this.tabsContainer.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            this.tabsContainer.getChildAt(i).invalidate();
+        }
+    }
+
     public void setCurrentPosition(int i) {
         this.currentPosition = i;
     }

@@ -151,7 +151,7 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
         Iterator it = arrayList.iterator();
         while (it.hasNext()) {
             MoveInfo moveInfo = (MoveInfo) it.next();
-            animateMoveImpl(moveInfo.holder, moveInfo.fromX, moveInfo.fromY, moveInfo.toX, moveInfo.toY);
+            animateMoveImpl(moveInfo.holder, (RecyclerView.ItemAnimator.ItemHolderInfo) null, moveInfo.fromX, moveInfo.fromY, moveInfo.toX, moveInfo.toY);
         }
         arrayList.clear();
         this.mMovesList.remove(arrayList);
@@ -175,7 +175,7 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
         this.mAdditionsList.remove(arrayList);
     }
 
-    public boolean animateRemove(RecyclerView.ViewHolder viewHolder) {
+    public boolean animateRemove(RecyclerView.ViewHolder viewHolder, RecyclerView.ItemAnimator.ItemHolderInfo itemHolderInfo) {
         resetAnimation(viewHolder);
         this.mPendingRemovals.add(viewHolder);
         return true;
@@ -304,7 +304,7 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
         }).start();
     }
 
-    public boolean animateMove(RecyclerView.ViewHolder viewHolder, int i, int i2, int i3, int i4) {
+    public boolean animateMove(RecyclerView.ViewHolder viewHolder, RecyclerView.ItemAnimator.ItemHolderInfo itemHolderInfo, int i, int i2, int i3, int i4) {
         View view = viewHolder.itemView;
         int translationX = i + ((int) view.getTranslationX());
         int translationY = i2 + ((int) viewHolder.itemView.getTranslationY());
@@ -343,7 +343,7 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
     }
 
     /* access modifiers changed from: package-private */
-    public void animateMoveImpl(RecyclerView.ViewHolder viewHolder, int i, int i2, int i3, int i4) {
+    public void animateMoveImpl(RecyclerView.ViewHolder viewHolder, RecyclerView.ItemAnimator.ItemHolderInfo itemHolderInfo, int i, int i2, int i3, int i4) {
         final View view = viewHolder.itemView;
         final int i5 = i3 - i;
         final int i6 = i4 - i2;
@@ -399,7 +399,7 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
         }).start();
     }
 
-    public boolean animateChange(RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder viewHolder2, int i, int i2, int i3, int i4) {
+    public boolean animateChange(RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder viewHolder2, RecyclerView.ItemAnimator.ItemHolderInfo itemHolderInfo, int i, int i2, int i3, int i4) {
         if (!(viewHolder.itemView instanceof DialogCell)) {
             return false;
         }

@@ -23,7 +23,7 @@ public class SizeNotifierFrameLayout extends AdjustPanFrameLayout {
     private int backgroundTranslationY;
     private int bottomClip;
     private SizeNotifierFrameLayoutDelegate delegate;
-    private int keyboardHeight;
+    protected int keyboardHeight;
     private boolean occupyStatusBar;
     private Drawable oldBackgroundDrawable;
     private WallpaperParallaxEffect parallaxEffect;
@@ -130,7 +130,7 @@ public class SizeNotifierFrameLayout extends AdjustPanFrameLayout {
         notifyHeightChanged();
     }
 
-    public int getKeyboardHeight() {
+    public int measureKeyboardHeight() {
         View rootView = getRootView();
         getWindowVisibleDisplayFrame(this.rect);
         Rect rect2 = this.rect;
@@ -144,13 +144,17 @@ public class SizeNotifierFrameLayout extends AdjustPanFrameLayout {
         return max;
     }
 
+    public int getKeyboardHeight() {
+        return this.keyboardHeight;
+    }
+
     public void notifyHeightChanged() {
         WallpaperParallaxEffect wallpaperParallaxEffect = this.parallaxEffect;
         if (wallpaperParallaxEffect != null) {
             this.parallaxScale = wallpaperParallaxEffect.getScale(getMeasuredWidth(), getMeasuredHeight());
         }
         if (this.delegate != null) {
-            this.keyboardHeight = getKeyboardHeight();
+            this.keyboardHeight = measureKeyboardHeight();
             Point point = AndroidUtilities.displaySize;
             post(new Runnable(point.x > point.y) {
                 private final /* synthetic */ boolean f$1;

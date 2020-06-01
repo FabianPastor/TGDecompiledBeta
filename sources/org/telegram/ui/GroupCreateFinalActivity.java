@@ -258,7 +258,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 setMeasuredDimension(size, size2);
                 int paddingTop = size2 - getPaddingTop();
                 measureChildWithMargins(GroupCreateFinalActivity.this.actionBar, i, 0, i2, 0);
-                if ((SharedConfig.smoothKeyboard ? 0 : getKeyboardHeight()) > AndroidUtilities.dp(20.0f)) {
+                if ((SharedConfig.smoothKeyboard ? 0 : measureKeyboardHeight()) > AndroidUtilities.dp(20.0f)) {
                     this.ignoreLayout = true;
                     GroupCreateFinalActivity.this.editText.hideEmojiView();
                     this.ignoreLayout = false;
@@ -296,7 +296,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                     r0 = 0
                     goto L_0x000f
                 L_0x000b:
-                    int r0 = r10.getKeyboardHeight()
+                    int r0 = r10.measureKeyboardHeight()
                 L_0x000f:
                     r2 = 1101004800(0x41a00000, float:20.0)
                     int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
@@ -927,9 +927,9 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             L_0x0010:
                 org.telegram.ui.Cells.GroupCreateUserCell r5 = new org.telegram.ui.Cells.GroupCreateUserCell
                 android.content.Context r6 = r4.context
-                r0 = 0
-                r1 = 3
-                r5.<init>(r6, r0, r1)
+                r0 = 3
+                r1 = 0
+                r5.<init>(r6, r1, r0, r1)
                 goto L_0x0050
             L_0x001a:
                 org.telegram.ui.Cells.HeaderCell r5 = new org.telegram.ui.Cells.HeaderCell

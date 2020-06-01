@@ -15,13 +15,11 @@ public abstract class TLRPC$InputMedia extends TLObject {
     public int period;
     public String phone_number;
     public String provider;
-    public String q;
     public ArrayList<TLRPC$InputDocument> stickers = new ArrayList<>();
     public boolean stopped;
     public TLRPC$InputFile thumb;
     public String title;
     public int ttl_seconds;
-    public String url;
     public String vcard;
     public String venue_id;
     public String venue_type;
@@ -67,9 +65,6 @@ public abstract class TLRPC$InputMedia extends TLObject {
                 break;
             case 598418386:
                 tLRPC$InputMedia = new TLRPC$TL_inputMediaDocument();
-                break;
-            case 1212395773:
-                tLRPC$InputMedia = new TLRPC$TL_inputMediaGifExternal();
                 break;
             case 1530447553:
                 tLRPC$InputMedia = new TLRPC$TL_inputMediaUploadedDocument();

@@ -171,9 +171,10 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     }
 
     public /* synthetic */ void lambda$onFragmentCreate$1$StatisticActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        TLObject tLObject2 = tLObject;
         ChartViewData[] chartViewDataArr = new ChartViewData[9];
-        if (tLObject instanceof TLRPC$TL_stats_broadcastStats) {
-            TLRPC$TL_stats_broadcastStats tLRPC$TL_stats_broadcastStats = (TLRPC$TL_stats_broadcastStats) tLObject;
+        if (tLObject2 instanceof TLRPC$TL_stats_broadcastStats) {
+            TLRPC$TL_stats_broadcastStats tLRPC$TL_stats_broadcastStats = (TLRPC$TL_stats_broadcastStats) tLObject2;
             chartViewDataArr[0] = createViewData(tLRPC$TL_stats_broadcastStats.iv_interactions_graph, LocaleController.getString("IVInteractionsChartTitle", NUM), 1);
             chartViewDataArr[1] = createViewData(tLRPC$TL_stats_broadcastStats.followers_graph, LocaleController.getString("FollowersChartTitle", NUM), 0);
             chartViewDataArr[2] = createViewData(tLRPC$TL_stats_broadcastStats.top_hours_graph, LocaleController.getString("TopHoursChartTitle", NUM), 0);
@@ -193,7 +194,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             }
             if (this.recentPostsAll.size() > 0) {
                 int i2 = this.recentPostsAll.get(0).counters.msg_id;
-                getMessagesStorage().getMessages((long) (-this.chat.id), this.recentPostsAll.size(), i2, 0, 0, this.classGuid, 0, true, false, 0);
+                getMessagesStorage().getMessages((long) (-this.chat.id), 0, false, this.recentPostsAll.size(), i2, 0, 0, this.classGuid, 0, true, false, 0);
             }
             AndroidUtilities.runOnUIThread(new Runnable(chartViewDataArr) {
                 private final /* synthetic */ StatisticActivity.ChartViewData[] f$1;
@@ -2141,7 +2142,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     public static class OverviewData {
         String followersPrimary;
         String followersSecondary;
-        String followersTitle = LocaleController.getString("FollowersChartTitle", NUM);
+        String followersTitle;
         boolean followersUp;
         String notificationsPrimary;
         String notificationsTitle;
@@ -2155,6 +2156,9 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         boolean viewsUp;
 
         public OverviewData(TLRPC$TL_stats_broadcastStats tLRPC$TL_stats_broadcastStats) {
+            float f;
+            float f2;
+            float f3;
             String str;
             String str2;
             String str3;
@@ -2164,14 +2168,19 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             double d = tLRPC$TL_statsAbsValueAndPrev.current;
             double d2 = tLRPC$TL_statsAbsValueAndPrev.previous;
             int i = (int) (d - d2);
-            float abs = Math.abs((((float) i) / ((float) d2)) * 100.0f);
+            if (d2 == 0.0d) {
+                f = 0.0f;
+            } else {
+                f = Math.abs((((float) i) / ((float) d2)) * 100.0f);
+            }
+            this.followersTitle = LocaleController.getString("FollowersChartTitle", NUM);
             this.followersPrimary = AndroidUtilities.formatWholeNumber((int) tLRPC$TL_stats_broadcastStats2.followers.current, 0);
             String str5 = "+";
-            if (i == 0) {
+            if (i == 0 || f == 0.0f) {
                 this.followersSecondary = "";
             } else {
-                int i2 = (int) abs;
-                if (abs == ((float) i2)) {
+                int i2 = (int) f;
+                if (f == ((float) i2)) {
                     Locale locale = Locale.ENGLISH;
                     Object[] objArr = new Object[3];
                     StringBuilder sb = new StringBuilder();
@@ -2198,7 +2207,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     sb2.append(str3);
                     sb2.append(AndroidUtilities.formatWholeNumber(i, 0));
                     objArr2[0] = sb2.toString();
-                    objArr2[1] = Float.valueOf(abs);
+                    objArr2[1] = Float.valueOf(f);
                     objArr2[2] = "%";
                     this.followersSecondary = String.format(locale2, "%s (%.1f%s)", objArr2);
                 }
@@ -2208,14 +2217,18 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             double d3 = tLRPC$TL_statsAbsValueAndPrev2.current;
             double d4 = tLRPC$TL_statsAbsValueAndPrev2.previous;
             int i3 = (int) (d3 - d4);
-            float abs2 = Math.abs((((float) i3) / ((float) d4)) * 100.0f);
+            if (d4 == 0.0d) {
+                f2 = 0.0f;
+            } else {
+                f2 = Math.abs((((float) i3) / ((float) d4)) * 100.0f);
+            }
             this.sharesTitle = LocaleController.getString("SharesPerPost", NUM);
             this.sharesPrimary = AndroidUtilities.formatWholeNumber((int) tLRPC$TL_stats_broadcastStats2.shares_per_post.current, 0);
-            if (i3 == 0) {
+            if (i3 == 0 || f2 == 0.0f) {
                 this.sharesSecondary = "";
             } else {
-                int i4 = (int) abs2;
-                if (abs2 == ((float) i4)) {
+                int i4 = (int) f2;
+                if (f2 == ((float) i4)) {
                     Locale locale3 = Locale.ENGLISH;
                     Object[] objArr3 = new Object[3];
                     StringBuilder sb3 = new StringBuilder();
@@ -2242,7 +2255,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     sb4.append(str);
                     sb4.append(AndroidUtilities.formatWholeNumber(i3, 0));
                     objArr4[0] = sb4.toString();
-                    objArr4[1] = Float.valueOf(abs2);
+                    objArr4[1] = Float.valueOf(f2);
                     objArr4[2] = "%";
                     this.sharesSecondary = String.format(locale4, "%s (%.1f%s)", objArr4);
                 }
@@ -2252,14 +2265,18 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             double d5 = tLRPC$TL_statsAbsValueAndPrev3.current;
             double d6 = tLRPC$TL_statsAbsValueAndPrev3.previous;
             int i5 = (int) (d5 - d6);
-            float abs3 = Math.abs((((float) i5) / ((float) d6)) * 100.0f);
+            if (d6 == 0.0d) {
+                f3 = 0.0f;
+            } else {
+                f3 = Math.abs((((float) i5) / ((float) d6)) * 100.0f);
+            }
             this.viewsTitle = LocaleController.getString("ViewsPerPost", NUM);
             this.viewsPrimary = AndroidUtilities.formatWholeNumber((int) tLRPC$TL_stats_broadcastStats2.views_per_post.current, 0);
-            if (i5 == 0) {
+            if (i5 == 0 || f3 == 0.0f) {
                 this.viewsSecondary = "";
             } else {
-                int i6 = (int) abs3;
-                if (abs3 == ((float) i6)) {
+                int i6 = (int) f3;
+                if (f3 == ((float) i6)) {
                     Locale locale5 = Locale.ENGLISH;
                     Object[] objArr5 = new Object[3];
                     StringBuilder sb5 = new StringBuilder();
@@ -2276,20 +2293,20 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     sb6.append(i5 <= 0 ? "" : str5);
                     sb6.append(AndroidUtilities.formatWholeNumber(i5, 0));
                     objArr6[0] = sb6.toString();
-                    objArr6[1] = Float.valueOf(abs3);
+                    objArr6[1] = Float.valueOf(f3);
                     objArr6[2] = "%";
                     this.viewsSecondary = String.format(locale6, "%s (%.1f%s)", objArr6);
                 }
             }
             this.viewsUp = i5 >= 0;
             TLRPC$TL_statsPercentValue tLRPC$TL_statsPercentValue = tLRPC$TL_stats_broadcastStats2.enabled_notifications;
-            float f = (float) ((tLRPC$TL_statsPercentValue.part / tLRPC$TL_statsPercentValue.total) * 100.0d);
+            float f4 = (float) ((tLRPC$TL_statsPercentValue.part / tLRPC$TL_statsPercentValue.total) * 100.0d);
             this.notificationsTitle = LocaleController.getString("EnabledNotifications", NUM);
-            int i7 = (int) f;
-            if (f == ((float) i7)) {
+            int i7 = (int) f4;
+            if (f4 == ((float) i7)) {
                 this.notificationsPrimary = String.format(Locale.ENGLISH, "%d%s", new Object[]{Integer.valueOf(i7), "%"});
             } else {
-                this.notificationsPrimary = String.format(Locale.ENGLISH, "%.1f%s", new Object[]{Float.valueOf(f), "%"});
+                this.notificationsPrimary = String.format(Locale.ENGLISH, "%.2f%s", new Object[]{Float.valueOf(f4), "%"});
             }
         }
     }

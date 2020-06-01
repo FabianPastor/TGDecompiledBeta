@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.MediaController;
 import org.telegram.ui.Components.Crop.CropRotationWheel;
 import org.telegram.ui.Components.Crop.CropView;
 
@@ -75,9 +76,9 @@ public class PhotoCropView extends FrameLayout {
         this.cropView.rotate90Degrees();
     }
 
-    public void setBitmap(Bitmap bitmap, int i, boolean z, boolean z2) {
+    public void setBitmap(Bitmap bitmap, int i, boolean z, boolean z2, PaintingOverlay paintingOverlay) {
         requestLayout();
-        this.cropView.setBitmap(bitmap, i, z, z2);
+        this.cropView.setBitmap(bitmap, i, z, z2, paintingOverlay);
         int i2 = 0;
         if (this.showOnSetBitmap) {
             this.showOnSetBitmap = false;
@@ -153,12 +154,8 @@ public class PhotoCropView extends FrameLayout {
         return this.cropView.getCropHeight();
     }
 
-    public Bitmap getBitmap() {
-        CropView cropView2 = this.cropView;
-        if (cropView2 != null) {
-            return cropView2.getResult();
-        }
-        return null;
+    public Bitmap getBitmap(MediaController.MediaEditState mediaEditState) {
+        return this.cropView.getResult(mediaEditState);
     }
 
     public void setDelegate(PhotoCropViewDelegate photoCropViewDelegate) {

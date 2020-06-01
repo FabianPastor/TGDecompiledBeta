@@ -103,8 +103,4 @@ public class Slice {
     public int getHeight() {
         return (int) this.bounds.height();
     }
-
-    public RectF getBounds() {
-        return new RectF(this.bounds);
-    }
 }

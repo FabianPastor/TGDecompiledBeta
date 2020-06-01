@@ -63,6 +63,7 @@ import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.NotificationCenter;
@@ -93,7 +94,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     /* access modifiers changed from: private */
     public ChatActivity baseFragment;
     private BlurBehindDrawable blurBehindDrawable;
-    private FrameLayout cameraContainer;
+    private InstantViewCameraContainer cameraContainer;
     /* access modifiers changed from: private */
     public File cameraFile;
     /* access modifiers changed from: private */
@@ -206,7 +207,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         this.paint.setColor(-1);
         this.rect = new RectF();
         if (Build.VERSION.SDK_INT >= 21) {
-            AnonymousClass3 r142 = new FrameLayout(context) {
+            AnonymousClass3 r142 = new InstantViewCameraContainer(context) {
                 public void setScaleX(float f) {
                     super.setScaleX(f);
                     InstantCameraView.this.invalidate();
@@ -232,7 +233,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             final Paint paint2 = new Paint(1);
             paint2.setColor(-16777216);
             paint2.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-            AnonymousClass5 r0 = new FrameLayout(context) {
+            AnonymousClass5 r0 = new InstantViewCameraContainer(context) {
                 public void setScaleX(float f) {
                     super.setScaleX(f);
                     InstantCameraView.this.invalidate();
@@ -260,9 +261,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             r0.setWillNotDraw(false);
             this.cameraContainer.setLayerType(2, (Paint) null);
         }
-        FrameLayout frameLayout = this.cameraContainer;
+        InstantViewCameraContainer instantViewCameraContainer = this.cameraContainer;
         int i = AndroidUtilities.roundMessageSize;
-        addView(frameLayout, new FrameLayout.LayoutParams(i, i, 17));
+        addView(instantViewCameraContainer, new FrameLayout.LayoutParams(i, i, 17));
         ImageView imageView = new ImageView(context);
         this.switchCameraButton = imageView;
         imageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -454,10 +455,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         this.textureOverlayView.setScaleX(0.1f);
         this.textureOverlayView.setScaleY(0.1f);
         if (this.cameraContainer.getMeasuredWidth() != 0) {
-            FrameLayout frameLayout = this.cameraContainer;
-            frameLayout.setPivotX((float) (frameLayout.getMeasuredWidth() / 2));
-            FrameLayout frameLayout2 = this.cameraContainer;
-            frameLayout2.setPivotY((float) (frameLayout2.getMeasuredHeight() / 2));
+            InstantViewCameraContainer instantViewCameraContainer = this.cameraContainer;
+            instantViewCameraContainer.setPivotX((float) (instantViewCameraContainer.getMeasuredWidth() / 2));
+            InstantViewCameraContainer instantViewCameraContainer2 = this.cameraContainer;
+            instantViewCameraContainer2.setPivotY((float) (instantViewCameraContainer2.getMeasuredHeight() / 2));
             BackupImageView backupImageView = this.textureOverlayView;
             backupImageView.setPivotX((float) (backupImageView.getMeasuredWidth() / 2));
             BackupImageView backupImageView2 = this.textureOverlayView;
@@ -549,7 +550,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
     }
 
-    public FrameLayout getCameraContainer() {
+    public InstantViewCameraContainer getCameraContainer() {
         return this.cameraContainer;
     }
 
@@ -600,21 +601,21 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         int[] iArr = new int[1];
         iArr[0] = z ? 255 : 0;
         animatorArr[2] = ObjectAnimator.ofInt(paint2, property2, iArr);
-        FrameLayout frameLayout = this.cameraContainer;
+        InstantViewCameraContainer instantViewCameraContainer = this.cameraContainer;
         Property property3 = View.ALPHA;
         float[] fArr3 = new float[1];
         fArr3[0] = z ? 1.0f : 0.0f;
-        animatorArr[3] = ObjectAnimator.ofFloat(frameLayout, property3, fArr3);
-        FrameLayout frameLayout2 = this.cameraContainer;
+        animatorArr[3] = ObjectAnimator.ofFloat(instantViewCameraContainer, property3, fArr3);
+        InstantViewCameraContainer instantViewCameraContainer2 = this.cameraContainer;
         Property property4 = View.SCALE_X;
         float[] fArr4 = new float[1];
         fArr4[0] = z ? 1.0f : 0.1f;
-        animatorArr[4] = ObjectAnimator.ofFloat(frameLayout2, property4, fArr4);
-        FrameLayout frameLayout3 = this.cameraContainer;
+        animatorArr[4] = ObjectAnimator.ofFloat(instantViewCameraContainer2, property4, fArr4);
+        InstantViewCameraContainer instantViewCameraContainer3 = this.cameraContainer;
         Property property5 = View.SCALE_Y;
         float[] fArr5 = new float[1];
         fArr5[0] = z ? 1.0f : 0.1f;
-        animatorArr[5] = ObjectAnimator.ofFloat(frameLayout3, property5, fArr5);
+        animatorArr[5] = ObjectAnimator.ofFloat(instantViewCameraContainer3, property5, fArr5);
         animatorArr[6] = ObjectAnimator.ofFloat(this.cameraContainer, View.TRANSLATION_X, new float[]{dp});
         BackupImageView backupImageView = this.textureOverlayView;
         Property property6 = View.ALPHA;
@@ -843,6 +844,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             viewGroup.removeView(this.textureView);
         }
         this.textureView = null;
+        this.cameraContainer.setImageReceiver((ImageReceiver) null);
     }
 
     private void switchCamera() {
@@ -850,7 +852,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         Bitmap bitmap = this.lastBitmap;
         if (bitmap != null) {
             this.textureOverlayView.setImageBitmap(bitmap);
-            this.textureOverlayView.animate().setDuration(120).alpha(1.0f).setInterpolator(new DecelerateInterpolator()).start();
+            this.textureOverlayView.setAlpha(1.0f);
         }
         CameraSession cameraSession2 = this.cameraSession;
         if (cameraSession2 != null) {
@@ -1088,6 +1090,12 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
     public void cancelBlur() {
         this.blurBehindDrawable.show(false);
         invalidate();
+    }
+
+    public void onPanTranslationUpdate(int i) {
+        this.panTranslationY = ((float) i) / 2.0f;
+        updateTranslationY();
+        this.blurBehindDrawable.onPanTranslationUpdate(i);
     }
 
     public class CameraGLThread extends DispatchQueue {
@@ -2974,6 +2982,47 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
             } finally {
                 super.finalize();
+            }
+        }
+    }
+
+    public class InstantViewCameraContainer extends FrameLayout {
+        float imageProgress;
+        ImageReceiver imageReceiver;
+
+        public InstantViewCameraContainer(InstantCameraView instantCameraView, Context context) {
+            super(context);
+            instantCameraView.setWillNotDraw(false);
+        }
+
+        public void setImageReceiver(ImageReceiver imageReceiver2) {
+            if (this.imageReceiver == null) {
+                this.imageProgress = 0.0f;
+            }
+            this.imageReceiver = imageReceiver2;
+            invalidate();
+        }
+
+        /* access modifiers changed from: protected */
+        public void dispatchDraw(Canvas canvas) {
+            super.dispatchDraw(canvas);
+            float f = this.imageProgress;
+            if (f != 1.0f) {
+                float f2 = f + 0.064f;
+                this.imageProgress = f2;
+                if (f2 > 1.0f) {
+                    this.imageProgress = 1.0f;
+                }
+                invalidate();
+            }
+            if (this.imageReceiver != null) {
+                canvas.save();
+                canvas.translate(-this.imageReceiver.getImageX(), -this.imageReceiver.getImageY());
+                float alpha = this.imageReceiver.getAlpha();
+                this.imageReceiver.setAlpha(this.imageProgress);
+                this.imageReceiver.draw(canvas);
+                this.imageReceiver.setAlpha(alpha);
+                canvas.restore();
             }
         }
     }

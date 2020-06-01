@@ -9,18 +9,18 @@ import java.util.Random;
 public class CircleBezierDrawable {
     private final float L;
     private final int N;
-    float cubicBezierK = 1.0f;
+    public float cubicBezierK = 1.0f;
     float globalRotate = 0.0f;
     public float idleStateDiff = 0.0f;
     private Matrix m = new Matrix();
     private Path path = new Path();
     private float[] pointEnd = new float[4];
     private float[] pointStart = new float[4];
-    float radius;
-    float radiusDiff;
+    public float radius;
+    public float radiusDiff;
     final Random random = new Random();
     float[] randomAdditionals;
-    float randomK;
+    public float randomK;
 
     public CircleBezierDrawable(int i) {
         this.N = i;
@@ -37,7 +37,14 @@ public class CircleBezierDrawable {
         }
     }
 
-    /* access modifiers changed from: protected */
+    public void setAdditionals(int[] iArr) {
+        for (int i = 0; i < this.N; i += 2) {
+            float[] fArr = this.randomAdditionals;
+            fArr[i] = (float) iArr[i / 2];
+            fArr[i + 1] = 0.0f;
+        }
+    }
+
     public void draw(float f, float f2, Canvas canvas, Paint paint) {
         float f3 = f;
         float f4 = f2;

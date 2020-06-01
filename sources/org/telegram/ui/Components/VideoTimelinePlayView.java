@@ -342,13 +342,9 @@ public class VideoTimelinePlayView extends View {
                             }
                             Bitmap createBitmap = Bitmap.createBitmap(VideoTimelinePlayView.this.frameWidth, VideoTimelinePlayView.this.frameHeight, frameAtTime.getConfig());
                             Canvas canvas = new Canvas(createBitmap);
-                            float access$200 = ((float) VideoTimelinePlayView.this.frameWidth) / ((float) frameAtTime.getWidth());
-                            float access$300 = ((float) VideoTimelinePlayView.this.frameHeight) / ((float) frameAtTime.getHeight());
-                            if (access$200 <= access$300) {
-                                access$200 = access$300;
-                            }
-                            int width = (int) (((float) frameAtTime.getWidth()) * access$200);
-                            int height = (int) (((float) frameAtTime.getHeight()) * access$200);
+                            float max = Math.max(((float) VideoTimelinePlayView.this.frameWidth) / ((float) frameAtTime.getWidth()), ((float) VideoTimelinePlayView.this.frameHeight) / ((float) frameAtTime.getHeight()));
+                            int width = (int) (((float) frameAtTime.getWidth()) * max);
+                            int height = (int) (((float) frameAtTime.getHeight()) * max);
                             canvas.drawBitmap(frameAtTime, new Rect(0, 0, frameAtTime.getWidth(), frameAtTime.getHeight()), new Rect((VideoTimelinePlayView.this.frameWidth - width) / 2, (VideoTimelinePlayView.this.frameHeight - height) / 2, width, height), (Paint) null);
                             frameAtTime.recycle();
                             return createBitmap;

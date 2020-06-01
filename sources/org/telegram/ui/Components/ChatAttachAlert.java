@@ -51,7 +51,6 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC$BotInlineResult;
 import org.telegram.tgnet.TLRPC$Chat;
-import org.telegram.tgnet.TLRPC$InputDocument;
 import org.telegram.tgnet.TLRPC$MessageMedia;
 import org.telegram.tgnet.TLRPC$TL_messageMediaPoll;
 import org.telegram.tgnet.TLRPC$User;
@@ -196,6 +195,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
         void didPressedButton(int i, boolean z, boolean z2, int i2);
 
         void didSelectBot(TLRPC$User tLRPC$User);
+
+        void doOnIdle(Runnable runnable);
 
         void needEnterComment();
 
@@ -658,7 +659,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r1.setIcon((int) r2)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r6.selectedMenuItem
             java.lang.String r2 = "AccDescrMoreOptions"
-            r3 = 2131623980(0x7f0e002c, float:1.8875127E38)
+            r3 = 2131623981(0x7f0e002d, float:1.8875129E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r1.setContentDescription(r2)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r6.selectedMenuItem
@@ -710,7 +711,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r12.setLongClickEnabled(r9)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.doneItem
             java.lang.String r1 = "Create"
-            r2 = 2131624808(0x7f0e0368, float:1.8876806E38)
+            r2 = 2131624809(0x7f0e0369, float:1.8876808E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             java.lang.String r1 = r1.toUpperCase()
             r0.setText(r1)
@@ -743,7 +744,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
             java.lang.String r1 = "Search"
-            r2 = 2131626630(0x7f0e0a86, float:1.8880502E38)
+            r2 = 2131626642(0x7f0e0a92, float:1.8880526E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setContentDescription(r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
@@ -949,7 +950,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.setFilters(r1)
             org.telegram.ui.Components.EditTextEmoji r0 = r6.commentTextView
             java.lang.String r1 = "AddCaption"
-            r2 = 2131624110(0x7f0e00ae, float:1.887539E38)
+            r2 = 2131624111(0x7f0e00af, float:1.8875392E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setHint(r1)
             org.telegram.ui.Components.EditTextEmoji r0 = r6.commentTextView
@@ -982,7 +983,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.setAlpha(r10)
             android.widget.FrameLayout r0 = r6.writeButtonContainer
             java.lang.String r2 = "Send"
-            r3 = 2131626678(0x7f0e0ab6, float:1.8880599E38)
+            r3 = 2131626690(0x7f0e0ac2, float:1.8880623E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r0.setContentDescription(r2)
             android.view.ViewGroup r0 = r6.containerView
@@ -1167,14 +1168,12 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                         } else {
                             sendingMediaInfo.searchImage = searchImage;
                         }
+                        sendingMediaInfo.thumbPath = searchImage.thumbPath;
+                        sendingMediaInfo.videoEditedInfo = searchImage.editedInfo;
                         CharSequence charSequence = searchImage.caption;
-                        ArrayList<TLRPC$InputDocument> arrayList2 = null;
                         sendingMediaInfo.caption = charSequence != null ? charSequence.toString() : null;
                         sendingMediaInfo.entities = searchImage.entities;
-                        if (!searchImage.stickers.isEmpty()) {
-                            arrayList2 = new ArrayList<>(searchImage.stickers);
-                        }
-                        sendingMediaInfo.masks = arrayList2;
+                        sendingMediaInfo.masks = searchImage.stickers;
                         sendingMediaInfo.ttl = searchImage.ttl;
                         TLRPC$BotInlineResult tLRPC$BotInlineResult = searchImage.inlineResult;
                         if (tLRPC$BotInlineResult != null && searchImage.type == 1) {
@@ -2693,7 +2692,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
 
     public void onOpenAnimationEnd() {
         MediaController.AlbumEntry albumEntry;
-        NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(false);
         if (this.baseFragment instanceof ChatActivity) {
             albumEntry = MediaController.allMediaAlbumEntry;
         } else {
@@ -2862,6 +2860,15 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     }
 
     public void dismissInternal() {
+        this.delegate.doOnIdle(new Runnable() {
+            public final void run() {
+                ChatAttachAlert.this.removeFromRoot();
+            }
+        });
+    }
+
+    /* access modifiers changed from: private */
+    public void removeFromRoot() {
         ViewGroup viewGroup = this.containerView;
         if (viewGroup != null) {
             viewGroup.setVisibility(4);

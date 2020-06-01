@@ -77,8 +77,8 @@ public class DialogMeUrlCell extends BaseCell {
     /* JADX WARNING: Removed duplicated region for block: B:111:0x0376  */
     /* JADX WARNING: Removed duplicated region for block: B:121:0x03d0  */
     /* JADX WARNING: Removed duplicated region for block: B:126:0x03e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x0445  */
-    /* JADX WARNING: Removed duplicated region for block: B:159:0x04d3  */
+    /* JADX WARNING: Removed duplicated region for block: B:138:0x0449  */
+    /* JADX WARNING: Removed duplicated region for block: B:159:0x04d7  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void buildLayout() {
         /*
@@ -474,7 +474,7 @@ public class DialogMeUrlCell extends BaseCell {
             java.lang.String r12 = r0.toString()
             boolean r0 = android.text.TextUtils.isEmpty(r3)
             if (r0 == 0) goto L_0x0311
-            r0 = 2131625434(0x7f0e05da, float:1.8878076E38)
+            r0 = 2131625440(0x7f0e05e0, float:1.8878088E38)
             java.lang.String r3 = "HiddenName"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r0)
         L_0x0311:
@@ -602,10 +602,14 @@ public class DialogMeUrlCell extends BaseCell {
             int r3 = r3 - r4
         L_0x0405:
             org.telegram.messenger.ImageReceiver r4 = r1.avatarImage
+            float r3 = (float) r3
             int r5 = r1.avatarTop
+            float r5 = (float) r5
             r6 = 1112539136(0x42500000, float:52.0)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r7 = (float) r7
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            float r6 = (float) r6
             r4.setImageCoords(r3, r5, r7, r6)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r13)
             int r3 = java.lang.Math.max(r3, r0)
@@ -614,8 +618,8 @@ public class DialogMeUrlCell extends BaseCell {
             float r0 = (float) r0
             android.text.TextUtils$TruncateAt r4 = android.text.TextUtils.TruncateAt.END
             java.lang.CharSequence r7 = android.text.TextUtils.ellipsize(r12, r11, r0, r4)
-            android.text.StaticLayout r0 = new android.text.StaticLayout     // Catch:{ Exception -> 0x043d }
-            android.text.Layout$Alignment r10 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x043d }
+            android.text.StaticLayout r0 = new android.text.StaticLayout     // Catch:{ Exception -> 0x0441 }
+            android.text.Layout$Alignment r10 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x0441 }
             r4 = 1065353216(0x3var_, float:1.0)
             r12 = 0
             r13 = 0
@@ -623,20 +627,20 @@ public class DialogMeUrlCell extends BaseCell {
             r8 = r11
             r9 = r3
             r11 = r4
-            r6.<init>(r7, r8, r9, r10, r11, r12, r13)     // Catch:{ Exception -> 0x043d }
-            r1.messageLayout = r0     // Catch:{ Exception -> 0x043d }
-            goto L_0x0441
-        L_0x043d:
+            r6.<init>(r7, r8, r9, r10, r11, r12, r13)     // Catch:{ Exception -> 0x0441 }
+            r1.messageLayout = r0     // Catch:{ Exception -> 0x0441 }
+            goto L_0x0445
+        L_0x0441:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0441:
+        L_0x0445:
             boolean r0 = org.telegram.messenger.LocaleController.isRTL
-            if (r0 == 0) goto L_0x04d3
+            if (r0 == 0) goto L_0x04d7
             android.text.StaticLayout r0 = r1.nameLayout
             r4 = 0
-            if (r0 == 0) goto L_0x049f
+            if (r0 == 0) goto L_0x04a3
             int r0 = r0.getLineCount()
-            if (r0 <= 0) goto L_0x049f
+            if (r0 <= 0) goto L_0x04a3
             android.text.StaticLayout r0 = r1.nameLayout
             float r0 = r0.getLineLeft(r2)
             android.text.StaticLayout r5 = r1.nameLayout
@@ -644,7 +648,7 @@ public class DialogMeUrlCell extends BaseCell {
             double r5 = (double) r5
             double r5 = java.lang.Math.ceil(r5)
             boolean r7 = r1.drawVerified
-            if (r7 == 0) goto L_0x0488
+            if (r7 == 0) goto L_0x048c
             int r7 = r1.nameLeft
             double r7 = (double) r7
             double r9 = (double) r15
@@ -663,12 +667,12 @@ public class DialogMeUrlCell extends BaseCell {
             double r7 = r7 - r9
             int r7 = (int) r7
             r1.nameMuteLeft = r7
-        L_0x0488:
+        L_0x048c:
             int r0 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r0 != 0) goto L_0x049f
+            if (r0 != 0) goto L_0x04a3
             double r7 = (double) r15
             int r0 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
-            if (r0 >= 0) goto L_0x049f
+            if (r0 >= 0) goto L_0x04a3
             int r0 = r1.nameLeft
             double r9 = (double) r0
             java.lang.Double.isNaN(r7)
@@ -677,22 +681,22 @@ public class DialogMeUrlCell extends BaseCell {
             double r9 = r9 + r7
             int r0 = (int) r9
             r1.nameLeft = r0
-        L_0x049f:
+        L_0x04a3:
             android.text.StaticLayout r0 = r1.messageLayout
-            if (r0 == 0) goto L_0x054a
+            if (r0 == 0) goto L_0x054e
             int r0 = r0.getLineCount()
-            if (r0 <= 0) goto L_0x054a
+            if (r0 <= 0) goto L_0x054e
             android.text.StaticLayout r0 = r1.messageLayout
             float r0 = r0.getLineLeft(r2)
             int r0 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r0 != 0) goto L_0x054a
+            if (r0 != 0) goto L_0x054e
             android.text.StaticLayout r0 = r1.messageLayout
             float r0 = r0.getLineWidth(r2)
             double r4 = (double) r0
             double r4 = java.lang.Math.ceil(r4)
             double r2 = (double) r3
             int r0 = (r4 > r2 ? 1 : (r4 == r2 ? 0 : -1))
-            if (r0 >= 0) goto L_0x054a
+            if (r0 >= 0) goto L_0x054e
             int r0 = r1.messageLeft
             double r6 = (double) r0
             java.lang.Double.isNaN(r2)
@@ -701,24 +705,24 @@ public class DialogMeUrlCell extends BaseCell {
             double r6 = r6 + r2
             int r0 = (int) r6
             r1.messageLeft = r0
-            goto L_0x054a
-        L_0x04d3:
+            goto L_0x054e
+        L_0x04d7:
             android.text.StaticLayout r0 = r1.nameLayout
-            if (r0 == 0) goto L_0x0517
+            if (r0 == 0) goto L_0x051b
             int r0 = r0.getLineCount()
-            if (r0 <= 0) goto L_0x0517
+            if (r0 <= 0) goto L_0x051b
             android.text.StaticLayout r0 = r1.nameLayout
             float r0 = r0.getLineRight(r2)
             float r4 = (float) r15
             int r4 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r4 != 0) goto L_0x0506
+            if (r4 != 0) goto L_0x050a
             android.text.StaticLayout r4 = r1.nameLayout
             float r4 = r4.getLineWidth(r2)
             double r4 = (double) r4
             double r4 = java.lang.Math.ceil(r4)
             double r6 = (double) r15
             int r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r8 >= 0) goto L_0x0506
+            if (r8 >= 0) goto L_0x050a
             int r8 = r1.nameLeft
             double r8 = (double) r8
             java.lang.Double.isNaN(r6)
@@ -727,9 +731,9 @@ public class DialogMeUrlCell extends BaseCell {
             double r8 = r8 - r6
             int r4 = (int) r8
             r1.nameLeft = r4
-        L_0x0506:
+        L_0x050a:
             boolean r4 = r1.drawVerified
-            if (r4 == 0) goto L_0x0517
+            if (r4 == 0) goto L_0x051b
             int r4 = r1.nameLeft
             float r4 = (float) r4
             float r4 = r4 + r0
@@ -738,23 +742,23 @@ public class DialogMeUrlCell extends BaseCell {
             float r4 = r4 + r0
             int r0 = (int) r4
             r1.nameMuteLeft = r0
-        L_0x0517:
+        L_0x051b:
             android.text.StaticLayout r0 = r1.messageLayout
-            if (r0 == 0) goto L_0x054a
+            if (r0 == 0) goto L_0x054e
             int r0 = r0.getLineCount()
-            if (r0 <= 0) goto L_0x054a
+            if (r0 <= 0) goto L_0x054e
             android.text.StaticLayout r0 = r1.messageLayout
             float r0 = r0.getLineRight(r2)
             float r4 = (float) r3
             int r0 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r0 != 0) goto L_0x054a
+            if (r0 != 0) goto L_0x054e
             android.text.StaticLayout r0 = r1.messageLayout
             float r0 = r0.getLineWidth(r2)
             double r4 = (double) r0
             double r4 = java.lang.Math.ceil(r4)
             double r2 = (double) r3
             int r0 = (r4 > r2 ? 1 : (r4 == r2 ? 0 : -1))
-            if (r0 >= 0) goto L_0x054a
+            if (r0 >= 0) goto L_0x054e
             int r0 = r1.messageLeft
             double r6 = (double) r0
             java.lang.Double.isNaN(r2)
@@ -763,7 +767,7 @@ public class DialogMeUrlCell extends BaseCell {
             double r6 = r6 - r2
             int r0 = (int) r6
             r1.messageLeft = r0
-        L_0x054a:
+        L_0x054e:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DialogMeUrlCell.buildLayout():void");

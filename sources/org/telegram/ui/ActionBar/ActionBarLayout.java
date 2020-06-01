@@ -84,6 +84,10 @@ public class ActionBarLayout extends FrameLayout {
     /* access modifiers changed from: private */
     public View layoutToIgnore;
     private boolean maybeStartTracking;
+    /* access modifiers changed from: private */
+    public BaseFragment newFragment;
+    /* access modifiers changed from: private */
+    public BaseFragment oldFragment;
     private Runnable onCloseAnimationEndRunnable;
     private Runnable onOpenAnimationEndRunnable;
     private Runnable overlayAction;
@@ -835,6 +839,12 @@ public class ActionBarLayout extends FrameLayout {
                     if (ActionBarLayout.this.animationProgress > 1.0f) {
                         float unused5 = ActionBarLayout.this.animationProgress = 1.0f;
                     }
+                    if (ActionBarLayout.this.newFragment != null) {
+                        ActionBarLayout.this.newFragment.onTransitionAnimationProgress(true, ActionBarLayout.this.animationProgress);
+                    }
+                    if (ActionBarLayout.this.oldFragment != null) {
+                        ActionBarLayout.this.oldFragment.onTransitionAnimationProgress(false, ActionBarLayout.this.animationProgress);
+                    }
                     float interpolation = ActionBarLayout.this.decelerateInterpolator.getInterpolation(ActionBarLayout.this.animationProgress);
                     if (z) {
                         ActionBarLayout.this.containerView.setAlpha(interpolation);
@@ -842,7 +852,7 @@ public class ActionBarLayout extends FrameLayout {
                             float f = (0.1f * interpolation) + 0.9f;
                             ActionBarLayout.this.containerView.setScaleX(f);
                             ActionBarLayout.this.containerView.setScaleY(f);
-                            ActionBarLayout.this.previewBackgroundDrawable.setAlpha((int) (128.0f * interpolation));
+                            ActionBarLayout.this.previewBackgroundDrawable.setAlpha((int) (46.0f * interpolation));
                             Theme.moveUpDrawable.setAlpha((int) (interpolation * 255.0f));
                             ActionBarLayout.this.containerView.invalidate();
                             ActionBarLayout.this.invalidate();
@@ -856,7 +866,7 @@ public class ActionBarLayout extends FrameLayout {
                             float f3 = (0.1f * f2) + 0.9f;
                             ActionBarLayout.this.containerViewBack.setScaleX(f3);
                             ActionBarLayout.this.containerViewBack.setScaleY(f3);
-                            ActionBarLayout.this.previewBackgroundDrawable.setAlpha((int) (128.0f * f2));
+                            ActionBarLayout.this.previewBackgroundDrawable.setAlpha((int) (46.0f * f2));
                             Theme.moveUpDrawable.setAlpha((int) (f2 * 255.0f));
                             ActionBarLayout.this.containerView.invalidate();
                             ActionBarLayout.this.invalidate();
@@ -900,7 +910,7 @@ public class ActionBarLayout extends FrameLayout {
             return false;
         }
         baseFragment3.setInPreviewMode(z7);
-        if (this.parentActivity.getCurrentFocus() != null) {
+        if (this.parentActivity.getCurrentFocus() != null && baseFragment.hideKeyboardOnShow()) {
             AndroidUtilities.hideKeyboard(this.parentActivity.getCurrentFocus());
         }
         boolean z8 = z7 || (!z6 && MessagesController.getGlobalMainSettings().getBoolean("view_animations", true));
@@ -978,7 +988,7 @@ public class ActionBarLayout extends FrameLayout {
                 view.setElevation((float) AndroidUtilities.dp(4.0f));
             }
             if (this.previewBackgroundDrawable == null) {
-                this.previewBackgroundDrawable = new ColorDrawable(Integer.MIN_VALUE);
+                this.previewBackgroundDrawable = new ColorDrawable(NUM);
             }
             this.previewBackgroundDrawable.setAlpha(0);
             Theme.moveUpDrawable.setAlpha(0);
@@ -1033,6 +1043,8 @@ public class ActionBarLayout extends FrameLayout {
                 baseFragment2.onTransitionAnimationStart(false, false);
             }
             baseFragment3.onTransitionAnimationStart(true, false);
+            this.oldFragment = baseFragment2;
+            this.newFragment = baseFragment3;
             if (!z7) {
                 animatorSet = baseFragment3.onCustomTransitionAnimation(true, new Runnable() {
                     public final void run() {
@@ -1385,6 +1397,8 @@ public class ActionBarLayout extends FrameLayout {
                         baseFragment.actionBar.setTitleOverlayText(this.titleOverlayText, this.titleOverlayTextId, this.overlayAction);
                     }
                 }
+                this.newFragment = baseFragment;
+                this.oldFragment = baseFragment2;
                 baseFragment.onTransitionAnimationStart(true, true);
                 baseFragment2.onTransitionAnimationStart(false, true);
                 baseFragment.onResume();
@@ -1845,6 +1859,8 @@ public class ActionBarLayout extends FrameLayout {
             this.transitionAnimationStartTime = 0;
             this.onCloseAnimationEndRunnable.run();
             this.onCloseAnimationEndRunnable = null;
+            this.newFragment = null;
+            this.oldFragment = null;
             checkNeedRebuild();
         }
     }
@@ -1870,6 +1886,8 @@ public class ActionBarLayout extends FrameLayout {
             this.transitionAnimationStartTime = 0;
             this.onOpenAnimationEndRunnable.run();
             this.onOpenAnimationEndRunnable = null;
+            this.newFragment = null;
+            this.oldFragment = null;
             checkNeedRebuild();
         }
     }

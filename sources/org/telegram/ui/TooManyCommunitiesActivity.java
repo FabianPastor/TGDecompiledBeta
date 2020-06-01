@@ -493,7 +493,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 org.telegram.ui.Cells.GroupCreateUserCell r9 = new org.telegram.ui.Cells.GroupCreateUserCell
                 android.content.Context r8 = r8.getContext()
                 r1 = 0
-                r9.<init>(r8, r0, r1)
+                r9.<init>(r8, r0, r1, r1)
                 goto L_0x00dc
             L_0x0018:
                 org.telegram.ui.Cells.EmptyCell r9 = new org.telegram.ui.Cells.EmptyCell
@@ -513,7 +513,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 r1.<init>(r2, r3, r4, r5, r6)
                 r8 = 54
                 r9.setHeight(r8)
-                r8 = 2131625466(0x7f0e05fa, float:1.887814E38)
+                r8 = 2131625471(0x7f0e05ff, float:1.887815E38)
                 java.lang.String r0 = "InactiveChats"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 r9.setText(r8)
@@ -546,18 +546,18 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 org.telegram.ui.TooManyCommunitiesActivity r8 = org.telegram.ui.TooManyCommunitiesActivity.this
                 int r8 = r8.type
                 if (r8 != 0) goto L_0x009e
-                r8 = 2131627035(0x7f0e0c1b, float:1.8881323E38)
+                r8 = 2131627049(0x7f0e0CLASSNAME, float:1.8881351E38)
                 java.lang.String r0 = "TooManyCommunitiesHintJoin"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b3
             L_0x009e:
                 if (r8 != r0) goto L_0x00aa
-                r8 = 2131627034(0x7f0e0c1a, float:1.8881321E38)
+                r8 = 2131627048(0x7f0e0CLASSNAME, float:1.888135E38)
                 java.lang.String r0 = "TooManyCommunitiesHintEdit"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b3
             L_0x00aa:
-                r8 = 2131627033(0x7f0e0CLASSNAME, float:1.888132E38)
+                r8 = 2131627047(0x7f0e0CLASSNAME, float:1.8881347E38)
                 java.lang.String r0 = "TooManyCommunitiesHintCreate"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
             L_0x00b3:
@@ -642,7 +642,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            return new RecyclerListView.Holder(new GroupCreateUserCell(viewGroup.getContext(), true, 0));
+            return new RecyclerListView.Holder(new GroupCreateUserCell(viewGroup.getContext(), true, 0, false));
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {

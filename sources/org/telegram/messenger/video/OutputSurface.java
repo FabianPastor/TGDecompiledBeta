@@ -5,11 +5,14 @@ import android.opengl.GLES20;
 import android.view.Surface;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.egl.EGLSurface;
+import org.telegram.messenger.MediaController;
+import org.telegram.messenger.VideoEditedInfo;
 
 public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
     private static final int EGL_CONTEXT_CLIENT_VERSION = 12440;
@@ -40,15 +43,15 @@ public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
         allocateDirect.order(ByteOrder.LITTLE_ENDIAN);
         eglSetup(i, i2);
         makeCurrent();
-        setup();
+        setup((MediaController.SavedFilterState) null, (String) null, (String) null, (ArrayList<VideoEditedInfo.MediaEntity>) null, 0, 0, 0.0f, false);
     }
 
-    public OutputSurface() {
-        setup();
+    public OutputSurface(MediaController.SavedFilterState savedFilterState, String str, String str2, ArrayList<VideoEditedInfo.MediaEntity> arrayList, int i, int i2, float f, boolean z) {
+        setup(savedFilterState, str, str2, arrayList, i, i2, f, z);
     }
 
-    private void setup() {
-        TextureRenderer textureRenderer = new TextureRenderer(this.rotateRender);
+    private void setup(MediaController.SavedFilterState savedFilterState, String str, String str2, ArrayList<VideoEditedInfo.MediaEntity> arrayList, int i, int i2, float f, boolean z) {
+        TextureRenderer textureRenderer = new TextureRenderer(this.rotateRender, savedFilterState, str, str2, arrayList, i, i2, f, z);
         this.mTextureRender = textureRenderer;
         textureRenderer.surfaceCreated();
         SurfaceTexture surfaceTexture = new SurfaceTexture(this.mTextureRender.getTextureId());
@@ -97,6 +100,10 @@ public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
             }
             this.mEGL.eglDestroySurface(this.mEGLDisplay, this.mEGLSurface);
             this.mEGL.eglDestroyContext(this.mEGLDisplay, this.mEGLContext);
+        }
+        TextureRenderer textureRenderer = this.mTextureRender;
+        if (textureRenderer != null) {
+            textureRenderer.release();
         }
         this.mSurface.release();
         this.mEGLDisplay = null;

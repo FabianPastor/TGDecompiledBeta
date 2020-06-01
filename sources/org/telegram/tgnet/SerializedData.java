@@ -308,6 +308,17 @@ public class SerializedData extends AbstractSerializedData {
         }
     }
 
+    public void writeFloat(float f) {
+        try {
+            writeInt32(Float.floatToIntBits(f));
+        } catch (Exception e) {
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.e("write float error");
+                FileLog.e((Throwable) e);
+            }
+        }
+    }
+
     public int length() {
         if (!this.justCalc) {
             return this.isOut ? this.outbuf.size() : this.inbuf.available();
@@ -355,6 +366,24 @@ public class SerializedData extends AbstractSerializedData {
             return false;
         }
         throw new RuntimeException("Not bool value!");
+    }
+
+    public byte readByte(boolean z) {
+        try {
+            byte readByte = this.in.readByte();
+            this.len++;
+            return readByte;
+        } catch (Exception e) {
+            if (z) {
+                throw new RuntimeException("read byte error", e);
+            } else if (!BuildVars.LOGS_ENABLED) {
+                return 0;
+            } else {
+                FileLog.e("read byte error");
+                FileLog.e((Throwable) e);
+                return 0;
+            }
+        }
     }
 
     public void readBytes(byte[] bArr, boolean z) {
@@ -457,6 +486,22 @@ public class SerializedData extends AbstractSerializedData {
                 FileLog.e("read double error");
                 FileLog.e((Throwable) e);
                 return 0.0d;
+            }
+        }
+    }
+
+    public float readFloat(boolean z) {
+        try {
+            return Float.intBitsToFloat(readInt32(z));
+        } catch (Exception e) {
+            if (z) {
+                throw new RuntimeException("read float error", e);
+            } else if (!BuildVars.LOGS_ENABLED) {
+                return 0.0f;
+            } else {
+                FileLog.e("read float error");
+                FileLog.e((Throwable) e);
+                return 0.0f;
             }
         }
     }

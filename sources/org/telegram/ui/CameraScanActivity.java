@@ -49,7 +49,6 @@ import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
-import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.LayoutHelper;
@@ -380,17 +379,13 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             this.recognizedMrzView.setTypeface(Typeface.MONOSPACE);
             this.cameraView.addView(this.recognizedMrzView);
         } else {
-            if (this.needGalleryButton) {
-                this.titleTextView.setText(LocaleController.getString("WalletScanCode", NUM));
-            } else {
+            if (!this.needGalleryButton) {
                 this.titleTextView.setText(LocaleController.getString("AuthAnotherClientScan", NUM));
             }
             this.titleTextView.setTextColor(-1);
             this.recognizedMrzView.setTextSize(1, 16.0f);
             this.recognizedMrzView.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), AndroidUtilities.dp(10.0f));
-            if (this.needGalleryButton) {
-                this.recognizedMrzView.setText(LocaleController.getString("WalletScanCodeNotFound", NUM));
-            } else {
+            if (!this.needGalleryButton) {
                 this.recognizedMrzView.setText(LocaleController.getString("AuthAnotherClientNotFound", NUM));
             }
             r0.addView(this.recognizedMrzView);
@@ -556,53 +551,18 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
         });
     }
 
-    private void showErrorAlert() {
-        AlertsCreator.createSimpleAlert(getParentActivity(), LocaleController.getString("WalletQRCode", NUM), LocaleController.getString("WalletScanImageNotFound", NUM)).show();
-    }
-
-    private void onNoQrFound(boolean z) {
-        AndroidUtilities.runOnUIThread(new Runnable(z) {
-            private final /* synthetic */ boolean f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
+    private void onNoQrFound() {
+        AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                CameraScanActivity.this.lambda$onNoQrFound$5$CameraScanActivity(this.f$1);
+                CameraScanActivity.this.lambda$onNoQrFound$5$CameraScanActivity();
             }
         });
     }
 
-    public /* synthetic */ void lambda$onNoQrFound$5$CameraScanActivity(boolean z) {
-        if (z) {
-            showErrorAlert();
-        } else if (this.recognizedMrzView.getTag() != null) {
+    public /* synthetic */ void lambda$onNoQrFound$5$CameraScanActivity() {
+        if (this.recognizedMrzView.getTag() != null) {
             this.recognizedMrzView.setTag((Object) null);
             this.recognizedMrzView.animate().setDuration(200).alpha(0.0f).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
-        }
-    }
-
-    private void onNoWalletFound(boolean z) {
-        AndroidUtilities.runOnUIThread(new Runnable(z) {
-            private final /* synthetic */ boolean f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                CameraScanActivity.this.lambda$onNoWalletFound$6$CameraScanActivity(this.f$1);
-            }
-        });
-    }
-
-    public /* synthetic */ void lambda$onNoWalletFound$6$CameraScanActivity(boolean z) {
-        if (z) {
-            showErrorAlert();
-        } else if (this.recognizedMrzView.getTag() == null) {
-            this.recognizedMrzView.setTag(1);
-            this.recognizedMrzView.animate().setDuration(200).alpha(1.0f).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
         }
     }
 
@@ -617,12 +577,12 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             }
 
             public final void run() {
-                CameraScanActivity.this.lambda$onPreviewFrame$9$CameraScanActivity(this.f$1, this.f$2);
+                CameraScanActivity.this.lambda$onPreviewFrame$8$CameraScanActivity(this.f$1, this.f$2);
             }
         });
     }
 
-    public /* synthetic */ void lambda$onPreviewFrame$9$CameraScanActivity(byte[] bArr, Camera camera) {
+    public /* synthetic */ void lambda$onPreviewFrame$8$CameraScanActivity(byte[] bArr, Camera camera) {
         try {
             Size previewSize = this.cameraView.getPreviewSize();
             if (this.currentType == 0) {
@@ -639,7 +599,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                             }
 
                             public final void run() {
-                                CameraScanActivity.this.lambda$null$7$CameraScanActivity(this.f$1);
+                                CameraScanActivity.this.lambda$null$6$CameraScanActivity(this.f$1);
                             }
                         });
                         return;
@@ -662,16 +622,16 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                     }
 
                     public final void run() {
-                        CameraScanActivity.this.lambda$null$8$CameraScanActivity(this.f$1);
+                        CameraScanActivity.this.lambda$null$7$CameraScanActivity(this.f$1);
                     }
                 });
             }
         } catch (Throwable unused) {
-            onNoQrFound(false);
+            onNoQrFound();
         }
     }
 
-    public /* synthetic */ void lambda$null$7$CameraScanActivity(MrzRecognizer.Result result) {
+    public /* synthetic */ void lambda$null$6$CameraScanActivity(MrzRecognizer.Result result) {
         this.recognizedMrzView.setText(result.rawMRZ);
         this.recognizedMrzView.animate().setDuration(200).alpha(1.0f).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
         CameraScanActivityDelegate cameraScanActivityDelegate = this.delegate;
@@ -685,7 +645,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
         }, 1200);
     }
 
-    public /* synthetic */ void lambda$null$8$CameraScanActivity(String str) {
+    public /* synthetic */ void lambda$null$7$CameraScanActivity(String str) {
         CameraScanActivityDelegate cameraScanActivityDelegate = this.delegate;
         if (cameraScanActivityDelegate != null) {
             cameraScanActivityDelegate.didFindQr(str);
@@ -693,147 +653,122 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
         finishFragment();
     }
 
-    /* JADX WARNING: type inference failed for: r1v19, types: [com.google.zxing.RGBLuminanceSource] */
+    /* JADX WARNING: type inference failed for: r1v10, types: [com.google.zxing.RGBLuminanceSource] */
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public java.lang.String tryReadQr(byte[] r24, org.telegram.messenger.camera.Size r25, int r26, int r27, int r28, android.graphics.Bitmap r29) {
+    public java.lang.String tryReadQr(byte[] r22, org.telegram.messenger.camera.Size r23, int r24, int r25, int r26, android.graphics.Bitmap r27) {
         /*
-            r23 = this;
-            r0 = r23
-            r9 = r29
-            r10 = 1
-            r11 = 0
-            r12 = 0
-            com.google.android.gms.vision.barcode.BarcodeDetector r1 = r0.visionQrReader     // Catch:{ all -> 0x00fd }
-            boolean r1 = r1.isOperational()     // Catch:{ all -> 0x00fd }
-            if (r1 == 0) goto L_0x0052
-            if (r9 == 0) goto L_0x001e
-            com.google.android.gms.vision.Frame$Builder r1 = new com.google.android.gms.vision.Frame$Builder     // Catch:{ all -> 0x00fd }
-            r1.<init>()     // Catch:{ all -> 0x00fd }
-            r1.setBitmap(r9)     // Catch:{ all -> 0x00fd }
-            com.google.android.gms.vision.Frame r1 = r1.build()     // Catch:{ all -> 0x00fd }
-            goto L_0x0038
-        L_0x001e:
-            com.google.android.gms.vision.Frame$Builder r1 = new com.google.android.gms.vision.Frame$Builder     // Catch:{ all -> 0x00fd }
-            r1.<init>()     // Catch:{ all -> 0x00fd }
-            java.nio.ByteBuffer r2 = java.nio.ByteBuffer.wrap(r24)     // Catch:{ all -> 0x00fd }
-            int r3 = r25.getWidth()     // Catch:{ all -> 0x00fd }
-            int r4 = r25.getHeight()     // Catch:{ all -> 0x00fd }
-            r5 = 17
-            r1.setImageData(r2, r3, r4, r5)     // Catch:{ all -> 0x00fd }
-            com.google.android.gms.vision.Frame r1 = r1.build()     // Catch:{ all -> 0x00fd }
-        L_0x0038:
-            com.google.android.gms.vision.barcode.BarcodeDetector r2 = r0.visionQrReader     // Catch:{ all -> 0x00fd }
-            android.util.SparseArray r1 = r2.detect(r1)     // Catch:{ all -> 0x00fd }
+            r21 = this;
+            r0 = r21
+            r9 = r27
+            r10 = 0
+            com.google.android.gms.vision.barcode.BarcodeDetector r1 = r0.visionQrReader     // Catch:{ all -> 0x00e9 }
+            boolean r1 = r1.isOperational()     // Catch:{ all -> 0x00e9 }
             if (r1 == 0) goto L_0x0050
-            int r2 = r1.size()     // Catch:{ all -> 0x00fd }
-            if (r2 <= 0) goto L_0x0050
-            java.lang.Object r1 = r1.valueAt(r12)     // Catch:{ all -> 0x00fd }
-            com.google.android.gms.vision.barcode.Barcode r1 = (com.google.android.gms.vision.barcode.Barcode) r1     // Catch:{ all -> 0x00fd }
-            java.lang.String r1 = r1.rawValue     // Catch:{ all -> 0x00fd }
-            goto L_0x00bc
+            if (r9 == 0) goto L_0x001c
+            com.google.android.gms.vision.Frame$Builder r1 = new com.google.android.gms.vision.Frame$Builder     // Catch:{ all -> 0x00e9 }
+            r1.<init>()     // Catch:{ all -> 0x00e9 }
+            r1.setBitmap(r9)     // Catch:{ all -> 0x00e9 }
+            com.google.android.gms.vision.Frame r1 = r1.build()     // Catch:{ all -> 0x00e9 }
+            goto L_0x0036
+        L_0x001c:
+            com.google.android.gms.vision.Frame$Builder r1 = new com.google.android.gms.vision.Frame$Builder     // Catch:{ all -> 0x00e9 }
+            r1.<init>()     // Catch:{ all -> 0x00e9 }
+            java.nio.ByteBuffer r2 = java.nio.ByteBuffer.wrap(r22)     // Catch:{ all -> 0x00e9 }
+            int r3 = r23.getWidth()     // Catch:{ all -> 0x00e9 }
+            int r4 = r23.getHeight()     // Catch:{ all -> 0x00e9 }
+            r5 = 17
+            r1.setImageData(r2, r3, r4, r5)     // Catch:{ all -> 0x00e9 }
+            com.google.android.gms.vision.Frame r1 = r1.build()     // Catch:{ all -> 0x00e9 }
+        L_0x0036:
+            com.google.android.gms.vision.barcode.BarcodeDetector r2 = r0.visionQrReader     // Catch:{ all -> 0x00e9 }
+            android.util.SparseArray r1 = r2.detect(r1)     // Catch:{ all -> 0x00e9 }
+            if (r1 == 0) goto L_0x004e
+            int r2 = r1.size()     // Catch:{ all -> 0x00e9 }
+            if (r2 <= 0) goto L_0x004e
+            r2 = 0
+            java.lang.Object r1 = r1.valueAt(r2)     // Catch:{ all -> 0x00e9 }
+            com.google.android.gms.vision.barcode.Barcode r1 = (com.google.android.gms.vision.barcode.Barcode) r1     // Catch:{ all -> 0x00e9 }
+            java.lang.String r1 = r1.rawValue     // Catch:{ all -> 0x00e9 }
+            goto L_0x00b5
+        L_0x004e:
+            r1 = r10
+            goto L_0x00b5
         L_0x0050:
-            r1 = r11
-            goto L_0x00bc
-        L_0x0052:
-            if (r9 == 0) goto L_0x0083
-            int r1 = r29.getWidth()     // Catch:{ all -> 0x00fd }
-            int r2 = r29.getHeight()     // Catch:{ all -> 0x00fd }
+            if (r9 == 0) goto L_0x0081
+            int r1 = r27.getWidth()     // Catch:{ all -> 0x00e9 }
+            int r2 = r27.getHeight()     // Catch:{ all -> 0x00e9 }
             int r1 = r1 * r2
-            int[] r13 = new int[r1]     // Catch:{ all -> 0x00fd }
+            int[] r11 = new int[r1]     // Catch:{ all -> 0x00e9 }
             r3 = 0
-            int r4 = r29.getWidth()     // Catch:{ all -> 0x00fd }
+            int r4 = r27.getWidth()     // Catch:{ all -> 0x00e9 }
             r5 = 0
             r6 = 0
-            int r7 = r29.getWidth()     // Catch:{ all -> 0x00fd }
-            int r8 = r29.getHeight()     // Catch:{ all -> 0x00fd }
-            r1 = r29
-            r2 = r13
-            r1.getPixels(r2, r3, r4, r5, r6, r7, r8)     // Catch:{ all -> 0x00fd }
-            com.google.zxing.RGBLuminanceSource r1 = new com.google.zxing.RGBLuminanceSource     // Catch:{ all -> 0x00fd }
-            int r2 = r29.getWidth()     // Catch:{ all -> 0x00fd }
-            int r3 = r29.getHeight()     // Catch:{ all -> 0x00fd }
-            r1.<init>(r2, r3, r13)     // Catch:{ all -> 0x00fd }
-            goto L_0x009d
-        L_0x0083:
-            com.google.zxing.PlanarYUVLuminanceSource r1 = new com.google.zxing.PlanarYUVLuminanceSource     // Catch:{ all -> 0x00fd }
-            int r16 = r25.getWidth()     // Catch:{ all -> 0x00fd }
-            int r17 = r25.getHeight()     // Catch:{ all -> 0x00fd }
-            r22 = 0
-            r14 = r1
-            r15 = r24
+            int r7 = r27.getWidth()     // Catch:{ all -> 0x00e9 }
+            int r8 = r27.getHeight()     // Catch:{ all -> 0x00e9 }
+            r1 = r27
+            r2 = r11
+            r1.getPixels(r2, r3, r4, r5, r6, r7, r8)     // Catch:{ all -> 0x00e9 }
+            com.google.zxing.RGBLuminanceSource r1 = new com.google.zxing.RGBLuminanceSource     // Catch:{ all -> 0x00e9 }
+            int r2 = r27.getWidth()     // Catch:{ all -> 0x00e9 }
+            int r3 = r27.getHeight()     // Catch:{ all -> 0x00e9 }
+            r1.<init>(r2, r3, r11)     // Catch:{ all -> 0x00e9 }
+            goto L_0x009b
+        L_0x0081:
+            com.google.zxing.PlanarYUVLuminanceSource r1 = new com.google.zxing.PlanarYUVLuminanceSource     // Catch:{ all -> 0x00e9 }
+            int r14 = r23.getWidth()     // Catch:{ all -> 0x00e9 }
+            int r15 = r23.getHeight()     // Catch:{ all -> 0x00e9 }
+            r20 = 0
+            r12 = r1
+            r13 = r22
+            r16 = r24
+            r17 = r25
             r18 = r26
-            r19 = r27
-            r20 = r28
-            r21 = r28
-            r14.<init>(r15, r16, r17, r18, r19, r20, r21, r22)     // Catch:{ all -> 0x00fd }
-        L_0x009d:
-            com.google.zxing.qrcode.QRCodeReader r2 = r0.qrReader     // Catch:{ all -> 0x00fd }
-            com.google.zxing.BinaryBitmap r3 = new com.google.zxing.BinaryBitmap     // Catch:{ all -> 0x00fd }
-            com.google.zxing.common.GlobalHistogramBinarizer r4 = new com.google.zxing.common.GlobalHistogramBinarizer     // Catch:{ all -> 0x00fd }
-            r4.<init>(r1)     // Catch:{ all -> 0x00fd }
-            r3.<init>(r4)     // Catch:{ all -> 0x00fd }
-            com.google.zxing.Result r1 = r2.decode(r3)     // Catch:{ all -> 0x00fd }
-            if (r1 != 0) goto L_0x00b8
-            if (r9 == 0) goto L_0x00b3
-            r1 = 1
-            goto L_0x00b4
-        L_0x00b3:
-            r1 = 0
-        L_0x00b4:
-            r0.onNoQrFound(r1)     // Catch:{ all -> 0x00fd }
-            return r11
-        L_0x00b8:
-            java.lang.String r1 = r1.getText()     // Catch:{ all -> 0x00fd }
-        L_0x00bc:
-            boolean r2 = android.text.TextUtils.isEmpty(r1)     // Catch:{ all -> 0x00fd }
-            if (r2 == 0) goto L_0x00cb
-            if (r9 == 0) goto L_0x00c6
-            r1 = 1
-            goto L_0x00c7
-        L_0x00c6:
-            r1 = 0
-        L_0x00c7:
-            r0.onNoQrFound(r1)     // Catch:{ all -> 0x00fd }
-            return r11
-        L_0x00cb:
-            boolean r2 = r0.needGalleryButton     // Catch:{ all -> 0x00fd }
-            if (r2 == 0) goto L_0x00f0
+            r19 = r26
+            r12.<init>(r13, r14, r15, r16, r17, r18, r19, r20)     // Catch:{ all -> 0x00e9 }
+        L_0x009b:
+            com.google.zxing.qrcode.QRCodeReader r2 = r0.qrReader     // Catch:{ all -> 0x00e9 }
+            com.google.zxing.BinaryBitmap r3 = new com.google.zxing.BinaryBitmap     // Catch:{ all -> 0x00e9 }
+            com.google.zxing.common.GlobalHistogramBinarizer r4 = new com.google.zxing.common.GlobalHistogramBinarizer     // Catch:{ all -> 0x00e9 }
+            r4.<init>(r1)     // Catch:{ all -> 0x00e9 }
+            r3.<init>(r4)     // Catch:{ all -> 0x00e9 }
+            com.google.zxing.Result r1 = r2.decode(r3)     // Catch:{ all -> 0x00e9 }
+            if (r1 != 0) goto L_0x00b1
+            r21.onNoQrFound()     // Catch:{ all -> 0x00e9 }
+            return r10
+        L_0x00b1:
+            java.lang.String r1 = r1.getText()     // Catch:{ all -> 0x00e9 }
+        L_0x00b5:
+            boolean r2 = android.text.TextUtils.isEmpty(r1)     // Catch:{ all -> 0x00e9 }
+            if (r2 == 0) goto L_0x00bf
+            r21.onNoQrFound()     // Catch:{ all -> 0x00e9 }
+            return r10
+        L_0x00bf:
+            boolean r2 = r0.needGalleryButton     // Catch:{ all -> 0x00e9 }
+            if (r2 == 0) goto L_0x00dc
             java.lang.String r2 = "ton://transfer/"
-            boolean r2 = r1.startsWith(r2)     // Catch:{ all -> 0x00fd }
-            if (r2 != 0) goto L_0x00e0
-            if (r9 == 0) goto L_0x00db
-            r1 = 1
-            goto L_0x00dc
-        L_0x00db:
-            r1 = 0
-        L_0x00dc:
-            r0.onNoWalletFound(r1)     // Catch:{ all -> 0x00fd }
-            return r11
-        L_0x00e0:
-            android.net.Uri r2 = android.net.Uri.parse(r1)     // Catch:{ all -> 0x00fd }
-            java.lang.String r2 = r2.getPath()     // Catch:{ all -> 0x00fd }
+            boolean r2 = r1.startsWith(r2)     // Catch:{ all -> 0x00e9 }
+            if (r2 != 0) goto L_0x00cc
+            return r10
+        L_0x00cc:
+            android.net.Uri r2 = android.net.Uri.parse(r1)     // Catch:{ all -> 0x00e9 }
+            java.lang.String r2 = r2.getPath()     // Catch:{ all -> 0x00e9 }
             java.lang.String r3 = "/"
             java.lang.String r4 = ""
-            r2.replace(r3, r4)     // Catch:{ all -> 0x00fd }
-            goto L_0x00fc
-        L_0x00f0:
+            r2.replace(r3, r4)     // Catch:{ all -> 0x00e9 }
+            goto L_0x00e8
+        L_0x00dc:
             java.lang.String r2 = "tg://login?token="
-            boolean r2 = r1.startsWith(r2)     // Catch:{ all -> 0x00fd }
-            if (r2 != 0) goto L_0x00fc
-            r0.onNoWalletFound(r12)     // Catch:{ all -> 0x00fd }
-            return r11
-        L_0x00fc:
+            boolean r2 = r1.startsWith(r2)     // Catch:{ all -> 0x00e9 }
+            if (r2 != 0) goto L_0x00e8
+            r21.onNoQrFound()     // Catch:{ all -> 0x00e9 }
+            return r10
+        L_0x00e8:
             return r1
-        L_0x00fd:
-            if (r9 == 0) goto L_0x0101
-            goto L_0x0102
-        L_0x0101:
-            r10 = 0
-        L_0x0102:
-            r0.onNoQrFound(r10)
-            return r11
+        L_0x00e9:
+            r21.onNoQrFound()
+            return r10
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CameraScanActivity.tryReadQr(byte[], org.telegram.messenger.camera.Size, int, int, int, android.graphics.Bitmap):java.lang.String");
     }

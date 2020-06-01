@@ -310,6 +310,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     public ActionBar actionBar;
     /* access modifiers changed from: private */
     public WebpageAdapter[] adapter;
+    int allowAnimationIndex = -1;
     /* access modifiers changed from: private */
     public int anchorsOffsetMeasuredWidth;
     /* access modifiers changed from: private */
@@ -5432,7 +5433,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.photoContainerView.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 83));
         GroupedPhotosListView groupedPhotosListView2 = new GroupedPhotosListView(this.parentActivity);
         this.groupedPhotosListView = groupedPhotosListView2;
-        this.photoContainerView.addView(groupedPhotosListView2, LayoutHelper.createFrame(-1, 62.0f, 83, 0.0f, 0.0f, 0.0f, 0.0f));
+        groupedPhotosListView2.setAnimationsEnabled(false);
+        this.photoContainerView.addView(this.groupedPhotosListView, LayoutHelper.createFrame(-1, 62.0f, 83, 0.0f, 0.0f, 0.0f, 0.0f));
         this.groupedPhotosListView.setDelegate(new GroupedPhotosListView.GroupedPhotosListViewDelegate() {
             public int getAvatarsDialogId() {
                 return 0;
@@ -6864,8 +6866,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     public /* synthetic */ void lambda$open$33$ArticleViewer(AnimatorSet animatorSet) {
-        NotificationCenter.getInstance(this.currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats});
-        NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(true);
+        this.allowAnimationIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.allowAnimationIndex, new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats});
         animatorSet.start();
     }
 
@@ -9081,8 +9082,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
 
         /* access modifiers changed from: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:64:0x0160  */
-        /* JADX WARNING: Removed duplicated region for block: B:70:0x01ee  */
+        /* JADX WARNING: Removed duplicated region for block: B:64:0x0164  */
+        /* JADX WARNING: Removed duplicated region for block: B:70:0x01f2  */
         /* JADX WARNING: Removed duplicated region for block: B:9:0x0046  */
         @android.annotation.SuppressLint({"NewApi"})
         /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -9092,7 +9093,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r9 = r30
                 int r0 = android.view.View.MeasureSpec.getSize(r31)
                 int r1 = r9.currentType
-                r10 = 2
+                r11 = 2
                 r12 = 1
                 if (r1 != r12) goto L_0x0022
                 android.view.ViewParent r0 = r30.getParent()
@@ -9105,7 +9106,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r13 = r0
                 goto L_0x0042
             L_0x0022:
-                if (r1 != r10) goto L_0x0040
+                if (r1 != r11) goto L_0x0040
                 org.telegram.messenger.MessageObject$GroupedMessagePosition r1 = r9.groupPosition
                 float r1 = r1.ph
                 android.graphics.Point r2 = org.telegram.messenger.AndroidUtilities.displaySize
@@ -9125,7 +9126,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r1 = 0
             L_0x0042:
                 org.telegram.tgnet.TLRPC$TL_pageBlockVideo r0 = r9.currentBlock
-                if (r0 == 0) goto L_0x032a
+                if (r0 == 0) goto L_0x032c
                 int r2 = r9.currentType
                 r3 = 1099956224(0x41900000, float:18.0)
                 if (r2 != 0) goto L_0x0067
@@ -9153,7 +9154,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r0 = 0
             L_0x0078:
                 org.telegram.tgnet.TLRPC$Document r3 = r9.currentDocument
-                if (r3 == 0) goto L_0x024b
+                if (r3 == 0) goto L_0x024c
                 r3 = 1111490560(0x42400000, float:48.0)
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
                 org.telegram.tgnet.TLRPC$Document r4 = r9.currentDocument
@@ -9173,8 +9174,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$DocumentAttribute> r15 = r15.attributes
                 java.lang.Object r15 = r15.get(r7)
                 org.telegram.tgnet.TLRPC$DocumentAttribute r15 = (org.telegram.tgnet.TLRPC$DocumentAttribute) r15
-                boolean r11 = r15 instanceof org.telegram.tgnet.TLRPC$TL_documentAttributeVideo
-                if (r11 == 0) goto L_0x00b8
+                boolean r10 = r15 instanceof org.telegram.tgnet.TLRPC$TL_documentAttributeVideo
+                if (r10 == 0) goto L_0x00b8
                 float r1 = (float) r2
                 int r5 = r15.w
                 float r5 = (float) r5
@@ -9193,11 +9194,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             L_0x00bc:
                 r7 = 1120403456(0x42CLASSNAME, float:100.0)
                 if (r4 == 0) goto L_0x00c4
-                int r11 = r4.w
-                float r11 = (float) r11
+                int r10 = r4.w
+                float r10 = (float) r10
                 goto L_0x00c6
             L_0x00c4:
-                r11 = 1120403456(0x42CLASSNAME, float:100.0)
+                r10 = 1120403456(0x42CLASSNAME, float:100.0)
             L_0x00c6:
                 if (r4 == 0) goto L_0x00cc
                 int r15 = r4.h
@@ -9208,7 +9209,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             L_0x00ce:
                 if (r5 != 0) goto L_0x00d5
                 float r1 = (float) r2
-                float r1 = r1 / r11
+                float r1 = r1 / r10
                 float r1 = r1 * r15
                 int r1 = (int) r1
             L_0x00d5:
@@ -9232,11 +9233,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (r1 <= r5) goto L_0x0106
                 float r1 = (float) r5
                 float r1 = r1 / r15
-                float r1 = r1 * r11
+                float r1 = r1 * r10
                 int r1 = (int) r1
                 int r2 = r13 - r0
                 int r2 = r2 - r1
-                int r2 = r2 / r10
+                int r2 = r2 / r11
                 int r0 = r0 + r2
                 r2 = r1
                 r1 = r5
@@ -9249,10 +9250,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r1 = r3
                 goto L_0x0134
             L_0x0111:
-                if (r5 != r10) goto L_0x0134
+                if (r5 != r11) goto L_0x0134
                 org.telegram.messenger.MessageObject$GroupedMessagePosition r5 = r9.groupPosition
                 int r5 = r5.flags
-                r5 = r5 & r10
+                r5 = r5 & r11
                 if (r5 != 0) goto L_0x011f
                 int r5 = org.telegram.messenger.AndroidUtilities.dp(r6)
                 int r2 = r2 - r5
@@ -9273,29 +9274,33 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r2 = r1
             L_0x0136:
                 org.telegram.messenger.ImageReceiver r7 = r9.imageView
-                org.telegram.tgnet.TLRPC$Document r11 = r9.currentDocument
-                r7.setQualityThumbDocument(r11)
+                org.telegram.tgnet.TLRPC$Document r10 = r9.currentDocument
+                r7.setQualityThumbDocument(r10)
                 org.telegram.messenger.ImageReceiver r7 = r9.imageView
-                boolean r11 = r9.isFirst
-                if (r11 != 0) goto L_0x0157
-                int r11 = r9.currentType
-                if (r11 == r12) goto L_0x0157
-                if (r11 == r10) goto L_0x0157
-                org.telegram.tgnet.TLRPC$TL_pageBlockVideo r11 = r9.currentBlock
-                int r11 = r11.level
-                if (r11 <= 0) goto L_0x0150
-                goto L_0x0157
-            L_0x0150:
-                r11 = 1090519040(0x41000000, float:8.0)
-                int r14 = org.telegram.messenger.AndroidUtilities.dp(r11)
-                goto L_0x0158
-            L_0x0157:
-                r14 = 0
-            L_0x0158:
-                r7.setImageCoords(r0, r14, r5, r1)
+                float r0 = (float) r0
+                boolean r10 = r9.isFirst
+                if (r10 != 0) goto L_0x0159
+                int r10 = r9.currentType
+                if (r10 == r12) goto L_0x0159
+                if (r10 == r11) goto L_0x0159
+                org.telegram.tgnet.TLRPC$TL_pageBlockVideo r10 = r9.currentBlock
+                int r10 = r10.level
+                if (r10 <= 0) goto L_0x0151
+                goto L_0x0159
+            L_0x0151:
+                r10 = 1090519040(0x41000000, float:8.0)
+                int r14 = org.telegram.messenger.AndroidUtilities.dp(r10)
+                float r10 = (float) r14
+                goto L_0x015a
+            L_0x0159:
+                r10 = 0
+            L_0x015a:
+                float r5 = (float) r5
+                float r1 = (float) r1
+                r7.setImageCoords(r0, r10, r5, r1)
                 boolean r0 = r9.isGif
                 r1 = 0
-                if (r0 == 0) goto L_0x01ee
+                if (r0 == 0) goto L_0x01f2
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 int r0 = r0.currentAccount
                 org.telegram.messenger.DownloadController r0 = org.telegram.messenger.DownloadController.getInstance(r0)
@@ -9307,11 +9312,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.tgnet.TLRPC$Document r0 = r9.currentDocument
                 java.io.File r0 = org.telegram.messenger.FileLoader.getPathToAttach(r0, r12)
                 boolean r5 = r9.autoDownload
-                if (r5 != 0) goto L_0x01bb
+                if (r5 != 0) goto L_0x01bf
                 boolean r0 = r0.exists()
-                if (r0 == 0) goto L_0x0186
-                goto L_0x01bb
-            L_0x0186:
+                if (r0 == 0) goto L_0x018a
+                goto L_0x01bf
+            L_0x018a:
                 org.telegram.messenger.ImageReceiver r0 = r9.imageView
                 org.telegram.tgnet.TLRPC$Document r1 = r9.currentDocument
                 org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForDocument(r1)
@@ -9322,7 +9327,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r20 = 0
                 r21 = 0
                 org.telegram.tgnet.TLRPC$Document r1 = r9.currentDocument
-                org.telegram.messenger.ImageLocation r22 = org.telegram.messenger.ImageLocation.getForDocument(r4, r1)
+                org.telegram.messenger.ImageLocation r22 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r4, (org.telegram.tgnet.TLRPC$Document) r1)
                 r24 = 0
                 org.telegram.tgnet.TLRPC$Document r1 = r9.currentDocument
                 int r1 = r1.size
@@ -9334,8 +9339,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r17 = r0
                 r25 = r1
                 r17.setImage(r18, r19, r20, r21, r22, r23, r24, r25, r26, r27, r28)
-                goto L_0x0212
-            L_0x01bb:
+                goto L_0x0216
+            L_0x01bf:
                 org.telegram.messenger.ImageReceiver r0 = r9.imageView
                 r0.setStrippedLocation(r1)
                 org.telegram.messenger.ImageReceiver r0 = r9.imageView
@@ -9345,7 +9350,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r20 = 0
                 r21 = 0
                 org.telegram.tgnet.TLRPC$Document r1 = r9.currentDocument
-                org.telegram.messenger.ImageLocation r22 = org.telegram.messenger.ImageLocation.getForDocument(r4, r1)
+                org.telegram.messenger.ImageLocation r22 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r4, (org.telegram.tgnet.TLRPC$Document) r1)
                 r24 = 0
                 org.telegram.tgnet.TLRPC$Document r1 = r9.currentDocument
                 int r1 = r1.size
@@ -9357,15 +9362,15 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r17 = r0
                 r25 = r1
                 r17.setImage(r18, r19, r20, r21, r22, r23, r24, r25, r26, r27, r28)
-                goto L_0x0212
-            L_0x01ee:
+                goto L_0x0216
+            L_0x01f2:
                 org.telegram.messenger.ImageReceiver r0 = r9.imageView
                 r0.setStrippedLocation(r1)
                 org.telegram.messenger.ImageReceiver r0 = r9.imageView
                 r18 = 0
                 r19 = 0
                 org.telegram.tgnet.TLRPC$Document r1 = r9.currentDocument
-                org.telegram.messenger.ImageLocation r20 = org.telegram.messenger.ImageLocation.getForDocument(r4, r1)
+                org.telegram.messenger.ImageLocation r20 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r4, (org.telegram.tgnet.TLRPC$Document) r1)
                 r22 = 0
                 r23 = 0
                 org.telegram.ui.ArticleViewer$WebpageAdapter r1 = r9.parentAdapter
@@ -9374,27 +9379,24 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 java.lang.String r21 = "80_80_b"
                 r17 = r0
                 r17.setImage(r18, r19, r20, r21, r22, r23, r24, r25)
-            L_0x0212:
+            L_0x0216:
                 org.telegram.messenger.ImageReceiver r0 = r9.imageView
                 r0.setAspectFit(r12)
                 org.telegram.messenger.ImageReceiver r0 = r9.imageView
-                int r0 = r0.getImageX()
-                float r0 = (float) r0
+                float r0 = r0.getImageX()
                 org.telegram.messenger.ImageReceiver r1 = r9.imageView
-                int r1 = r1.getImageWidth()
-                int r1 = r1 - r3
-                float r1 = (float) r1
+                float r1 = r1.getImageWidth()
+                float r4 = (float) r3
+                float r1 = r1 - r4
                 float r1 = r1 / r6
                 float r0 = r0 + r1
                 int r0 = (int) r0
                 r9.buttonX = r0
                 org.telegram.messenger.ImageReceiver r0 = r9.imageView
-                int r0 = r0.getImageY()
-                float r0 = (float) r0
+                float r0 = r0.getImageY()
                 org.telegram.messenger.ImageReceiver r1 = r9.imageView
-                int r1 = r1.getImageHeight()
-                int r1 = r1 - r3
-                float r1 = (float) r1
+                float r1 = r1.getImageHeight()
+                float r1 = r1 - r4
                 float r1 = r1 / r6
                 float r0 = r0 + r1
                 int r0 = (int) r0
@@ -9404,22 +9406,24 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int r5 = r4 + r3
                 int r3 = r3 + r0
                 r1.setProgressRect(r4, r0, r5, r3)
-                r11 = r2
-                goto L_0x024c
-            L_0x024b:
-                r11 = r1
+                r10 = r2
+                goto L_0x024d
             L_0x024c:
+                r10 = r1
+            L_0x024d:
                 org.telegram.messenger.ImageReceiver r0 = r9.imageView
-                int r0 = r0.getImageY()
+                float r0 = r0.getImageY()
                 org.telegram.messenger.ImageReceiver r1 = r9.imageView
-                int r1 = r1.getImageHeight()
-                int r0 = r0 + r1
+                float r1 = r1.getImageHeight()
+                float r0 = r0 + r1
                 r1 = 1090519040(0x41000000, float:8.0)
                 int r2 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                int r5 = r0 + r2
+                float r1 = (float) r2
+                float r0 = r0 + r1
+                int r5 = (int) r0
                 r9.textY = r5
                 int r0 = r9.currentType
-                if (r0 != 0) goto L_0x02e2
+                if (r0 != 0) goto L_0x02e4
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 r2 = 0
                 org.telegram.tgnet.TLRPC$TL_pageBlockVideo r6 = r9.currentBlock
@@ -9431,7 +9435,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.ui.ArticleViewer$DrawingText r0 = r0.createLayoutForText(r1, r2, r3, r4, r5, r6, r7)
                 r9.captionLayout = r0
                 r14 = 1082130432(0x40800000, float:4.0)
-                if (r0 == 0) goto L_0x029c
+                if (r0 == 0) goto L_0x029e
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 org.telegram.ui.ArticleViewer$DrawingText r1 = r9.captionLayout
                 int r1 = r1.getHeight()
@@ -9439,13 +9443,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r9.creditOffset = r0
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 int r0 = r0 + r1
-                int r11 = r11 + r0
+                int r10 = r10 + r0
                 org.telegram.ui.ArticleViewer$DrawingText r0 = r9.captionLayout
                 int r1 = r9.textX
                 r0.x = r1
                 int r1 = r9.textY
                 r0.y = r1
-            L_0x029c:
+            L_0x029e:
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 r2 = 0
                 org.telegram.tgnet.TLRPC$TL_pageBlockVideo r6 = r9.currentBlock
@@ -9456,12 +9460,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int r5 = r1 + r4
                 org.telegram.ui.ArticleViewer$WebpageAdapter r1 = r9.parentAdapter
                 boolean r1 = r1.isRtl
-                if (r1 == 0) goto L_0x02b8
+                if (r1 == 0) goto L_0x02ba
                 android.text.Layout$Alignment r1 = org.telegram.ui.Components.StaticLayoutEx.ALIGN_RIGHT()
-                goto L_0x02ba
-            L_0x02b8:
-                android.text.Layout$Alignment r1 = android.text.Layout.Alignment.ALIGN_NORMAL
+                goto L_0x02bc
             L_0x02ba:
+                android.text.Layout$Alignment r1 = android.text.Layout.Alignment.ALIGN_NORMAL
+            L_0x02bc:
                 r7 = r1
                 org.telegram.ui.ArticleViewer$WebpageAdapter r15 = r9.parentAdapter
                 r1 = r30
@@ -9469,12 +9473,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r8 = r15
                 org.telegram.ui.ArticleViewer$DrawingText r0 = r0.createLayoutForText(r1, r2, r3, r4, r5, r6, r7, r8)
                 r9.creditLayout = r0
-                if (r0 == 0) goto L_0x02e2
+                if (r0 == 0) goto L_0x02e4
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 org.telegram.ui.ArticleViewer$DrawingText r1 = r9.creditLayout
                 int r1 = r1.getHeight()
                 int r0 = r0 + r1
-                int r11 = r11 + r0
+                int r10 = r10 + r0
                 org.telegram.ui.ArticleViewer$DrawingText r0 = r9.creditLayout
                 int r1 = r9.textX
                 r0.x = r1
@@ -9482,55 +9486,55 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int r2 = r9.creditOffset
                 int r1 = r1 + r2
                 r0.y = r1
-            L_0x02e2:
+            L_0x02e4:
                 boolean r0 = r9.isFirst
-                if (r0 != 0) goto L_0x02f7
+                if (r0 != 0) goto L_0x02f9
                 int r0 = r9.currentType
-                if (r0 != 0) goto L_0x02f7
+                if (r0 != 0) goto L_0x02f9
                 org.telegram.tgnet.TLRPC$TL_pageBlockVideo r0 = r9.currentBlock
                 int r0 = r0.level
-                if (r0 > 0) goto L_0x02f7
+                if (r0 > 0) goto L_0x02f9
                 r0 = 1090519040(0x41000000, float:8.0)
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r0)
-                int r11 = r11 + r1
-            L_0x02f7:
+                int r10 = r10 + r1
+            L_0x02f9:
                 org.telegram.tgnet.TLRPC$PageBlock r0 = r9.parentBlock
                 boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_pageBlockCover
-                if (r0 == 0) goto L_0x031a
+                if (r0 == 0) goto L_0x031c
                 org.telegram.ui.ArticleViewer$WebpageAdapter r0 = r9.parentAdapter
                 java.util.ArrayList r0 = r0.blocks
                 int r0 = r0.size()
-                if (r0 <= r12) goto L_0x031a
+                if (r0 <= r12) goto L_0x031c
                 org.telegram.ui.ArticleViewer$WebpageAdapter r0 = r9.parentAdapter
                 java.util.ArrayList r0 = r0.blocks
                 java.lang.Object r0 = r0.get(r12)
                 boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_pageBlockChannel
-                if (r0 == 0) goto L_0x031a
+                if (r0 == 0) goto L_0x031c
                 r16 = 1
-                goto L_0x031c
-            L_0x031a:
-                r16 = 0
+                goto L_0x031e
             L_0x031c:
+                r16 = 0
+            L_0x031e:
                 int r0 = r9.currentType
-                if (r0 == r10) goto L_0x0329
-                if (r16 != 0) goto L_0x0329
+                if (r0 == r11) goto L_0x032b
+                if (r16 != 0) goto L_0x032b
                 r0 = 1090519040(0x41000000, float:8.0)
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-                int r11 = r11 + r0
-            L_0x0329:
-                r12 = r11
-            L_0x032a:
+                int r10 = r10 + r0
+            L_0x032b:
+                r12 = r10
+            L_0x032c:
                 org.telegram.ui.ArticleViewer$BlockChannelCell r0 = r9.channelCell
                 r1 = r31
                 r2 = r32
                 r0.measure(r1, r2)
                 org.telegram.ui.ArticleViewer$BlockChannelCell r0 = r9.channelCell
                 org.telegram.messenger.ImageReceiver r1 = r9.imageView
-                int r1 = r1.getImageHeight()
+                float r1 = r1.getImageHeight()
                 r2 = 1109131264(0x421CLASSNAME, float:39.0)
                 int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-                int r1 = r1 - r2
-                float r1 = (float) r1
+                float r2 = (float) r2
+                float r1 = r1 - r2
                 r0.setTranslationY(r1)
                 r9.setMeasuredDimension(r13, r12)
                 return
@@ -10237,7 +10241,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             ImageReceiver imageReceiver = new ImageReceiver(this);
             this.avatarImageView = imageReceiver;
             imageReceiver.setRoundRadius(AndroidUtilities.dp(20.0f));
-            this.avatarImageView.setImageCoords(AndroidUtilities.dp(32.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
+            this.avatarImageView.setImageCoords((float) AndroidUtilities.dp(32.0f), (float) AndroidUtilities.dp(8.0f), (float) AndroidUtilities.dp(40.0f), (float) AndroidUtilities.dp(40.0f));
         }
 
         public void setBlock(TLRPC$TL_pageBlockEmbedPost tLRPC$TL_pageBlockEmbedPost) {
@@ -14002,8 +14006,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int dp3 = size - AndroidUtilities.dp(36.0f);
             if (this.drawImage) {
                 int dp4 = AndroidUtilities.dp(44.0f);
-                this.imageView.setImageCoords((size - dp4) - AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), dp4, dp4);
-                dp3 -= this.imageView.getImageWidth() + AndroidUtilities.dp(6.0f);
+                float f = (float) dp4;
+                this.imageView.setImageCoords((float) ((size - dp4) - AndroidUtilities.dp(8.0f)), (float) AndroidUtilities.dp(8.0f), f, f);
+                dp3 = (int) (((float) dp3) - (this.imageView.getImageWidth() + ((float) AndroidUtilities.dp(6.0f))));
             }
             int i6 = dp3;
             int dp5 = AndroidUtilities.dp(18.0f);
@@ -14719,12 +14724,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
 
         /* access modifiers changed from: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:54:0x0150  */
-        /* JADX WARNING: Removed duplicated region for block: B:55:0x0154  */
-        /* JADX WARNING: Removed duplicated region for block: B:58:0x0181  */
-        /* JADX WARNING: Removed duplicated region for block: B:59:0x0183  */
-        /* JADX WARNING: Removed duplicated region for block: B:64:0x0197  */
-        /* JADX WARNING: Removed duplicated region for block: B:65:0x01ce  */
+        /* JADX WARNING: Removed duplicated region for block: B:54:0x0154  */
+        /* JADX WARNING: Removed duplicated region for block: B:55:0x0158  */
+        /* JADX WARNING: Removed duplicated region for block: B:58:0x0185  */
+        /* JADX WARNING: Removed duplicated region for block: B:59:0x0187  */
+        /* JADX WARNING: Removed duplicated region for block: B:64:0x019b  */
+        /* JADX WARNING: Removed duplicated region for block: B:65:0x01d2  */
         /* JADX WARNING: Removed duplicated region for block: B:9:0x0047  */
         @android.annotation.SuppressLint({"NewApi"})
         /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -14768,7 +14773,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r1 = 0
             L_0x0043:
                 org.telegram.tgnet.TLRPC$TL_pageBlockPhoto r0 = r10.currentBlock
-                if (r0 == 0) goto L_0x0325
+                if (r0 == 0) goto L_0x0327
                 org.telegram.ui.ArticleViewer$WebpageAdapter r2 = r10.parentAdapter
                 long r3 = r0.photo_id
                 org.telegram.tgnet.TLRPC$Photo r0 = r2.getPhotoWithId(r3)
@@ -14804,9 +14809,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             L_0x008b:
                 org.telegram.tgnet.TLRPC$Photo r4 = r10.currentPhoto
                 r15 = 1090519040(0x41000000, float:8.0)
-                if (r4 == 0) goto L_0x0239
+                if (r4 == 0) goto L_0x023a
                 org.telegram.tgnet.TLRPC$PhotoSize r5 = r10.currentPhotoObject
-                if (r5 == 0) goto L_0x0239
+                if (r5 == 0) goto L_0x023a
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r4 = r4.sizes
                 r5 = 40
                 org.telegram.tgnet.TLRPC$PhotoSize r4 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r4, r5, r13)
@@ -14905,28 +14910,32 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r2 = r1
             L_0x0130:
                 org.telegram.messenger.ImageReceiver r5 = r10.imageView
+                float r3 = (float) r3
                 boolean r6 = r10.isFirst
-                if (r6 != 0) goto L_0x0148
+                if (r6 != 0) goto L_0x014a
                 int r6 = r10.currentType
-                if (r6 == r13) goto L_0x0148
-                if (r6 == r12) goto L_0x0148
+                if (r6 == r13) goto L_0x014a
+                if (r6 == r12) goto L_0x014a
                 org.telegram.tgnet.TLRPC$TL_pageBlockPhoto r6 = r10.currentBlock
                 int r6 = r6.level
-                if (r6 <= 0) goto L_0x0143
-                goto L_0x0148
-            L_0x0143:
+                if (r6 <= 0) goto L_0x0144
+                goto L_0x014a
+            L_0x0144:
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r15)
-                goto L_0x0149
-            L_0x0148:
+                float r6 = (float) r6
+                goto L_0x014b
+            L_0x014a:
                 r6 = 0
-            L_0x0149:
-                r5.setImageCoords(r3, r6, r4, r1)
+            L_0x014b:
+                float r7 = (float) r4
+                float r9 = (float) r1
+                r5.setImageCoords(r3, r6, r7, r9)
                 int r3 = r10.currentType
-                if (r3 != 0) goto L_0x0154
+                if (r3 != 0) goto L_0x0158
                 r3 = 0
                 r10.currentFilter = r3
-                goto L_0x016c
-            L_0x0154:
+                goto L_0x0170
+            L_0x0158:
                 java.util.Locale r3 = java.util.Locale.US
                 java.lang.Object[] r5 = new java.lang.Object[r12]
                 java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
@@ -14936,7 +14945,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 java.lang.String r1 = "%d_%d"
                 java.lang.String r1 = java.lang.String.format(r3, r1, r5)
                 r10.currentFilter = r1
-            L_0x016c:
+            L_0x0170:
                 java.lang.String r1 = "80_80_b"
                 r10.currentThumbFilter = r1
                 org.telegram.ui.ArticleViewer r1 = org.telegram.ui.ArticleViewer.this
@@ -14944,21 +14953,21 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.messenger.DownloadController r1 = org.telegram.messenger.DownloadController.getInstance(r1)
                 int r1 = r1.getCurrentDownloadMask()
                 r1 = r1 & r13
-                if (r1 == 0) goto L_0x0183
+                if (r1 == 0) goto L_0x0187
                 r1 = 1
-                goto L_0x0184
-            L_0x0183:
+                goto L_0x0188
+            L_0x0187:
                 r1 = 0
-            L_0x0184:
+            L_0x0188:
                 r10.autoDownload = r1
                 org.telegram.tgnet.TLRPC$PhotoSize r1 = r10.currentPhotoObject
                 java.io.File r1 = org.telegram.messenger.FileLoader.getPathToAttach(r1, r13)
                 boolean r3 = r10.autoDownload
-                if (r3 != 0) goto L_0x01ce
+                if (r3 != 0) goto L_0x01d2
                 boolean r1 = r1.exists()
-                if (r1 == 0) goto L_0x0197
-                goto L_0x01ce
-            L_0x0197:
+                if (r1 == 0) goto L_0x019b
+                goto L_0x01d2
+            L_0x019b:
                 org.telegram.messenger.ImageReceiver r1 = r10.imageView
                 org.telegram.tgnet.TLRPC$PhotoSize r3 = r10.currentPhotoObject
                 org.telegram.tgnet.TLRPC$Photo r4 = r10.currentPhoto
@@ -14982,8 +14991,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r21 = r4
                 r22 = r5
                 r17.setImage(r18, r19, r20, r21, r22, r23, r24, r25)
-                goto L_0x0203
-            L_0x01ce:
+                goto L_0x0207
+            L_0x01d2:
                 org.telegram.messenger.ImageReceiver r1 = r10.imageView
                 r3 = 0
                 r1.setStrippedLocation(r3)
@@ -15007,27 +15016,24 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r21 = r4
                 r22 = r5
                 r17.setImage(r18, r19, r20, r21, r22, r23, r24, r25)
-            L_0x0203:
+            L_0x0207:
                 org.telegram.messenger.ImageReceiver r1 = r10.imageView
-                int r1 = r1.getImageX()
-                float r1 = (float) r1
+                float r1 = r1.getImageX()
                 org.telegram.messenger.ImageReceiver r3 = r10.imageView
-                int r3 = r3.getImageWidth()
-                int r3 = r3 - r0
-                float r3 = (float) r3
-                r4 = 1073741824(0x40000000, float:2.0)
-                float r3 = r3 / r4
+                float r3 = r3.getImageWidth()
+                float r4 = (float) r0
+                float r3 = r3 - r4
+                r5 = 1073741824(0x40000000, float:2.0)
+                float r3 = r3 / r5
                 float r1 = r1 + r3
                 int r1 = (int) r1
                 r10.buttonX = r1
                 org.telegram.messenger.ImageReceiver r1 = r10.imageView
-                int r1 = r1.getImageY()
-                float r1 = (float) r1
+                float r1 = r1.getImageY()
                 org.telegram.messenger.ImageReceiver r3 = r10.imageView
-                int r3 = r3.getImageHeight()
-                int r3 = r3 - r0
-                float r3 = (float) r3
-                float r3 = r3 / r4
+                float r3 = r3.getImageHeight()
+                float r3 = r3 - r4
+                float r3 = r3 / r5
                 float r1 = r1 + r3
                 int r1 = (int) r1
                 r10.buttonY = r1
@@ -15037,20 +15043,22 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int r0 = r0 + r1
                 r3.setProgressRect(r4, r1, r5, r0)
                 r9 = r2
-                goto L_0x023a
-            L_0x0239:
-                r9 = r1
+                goto L_0x023b
             L_0x023a:
+                r9 = r1
+            L_0x023b:
                 org.telegram.messenger.ImageReceiver r0 = r10.imageView
-                int r0 = r0.getImageY()
+                float r0 = r0.getImageY()
                 org.telegram.messenger.ImageReceiver r1 = r10.imageView
-                int r1 = r1.getImageHeight()
-                int r0 = r0 + r1
+                float r1 = r1.getImageHeight()
+                float r0 = r0 + r1
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r15)
-                int r5 = r0 + r1
+                float r1 = (float) r1
+                float r0 = r0 + r1
+                int r5 = (int) r0
                 r10.textY = r5
                 int r0 = r10.currentType
-                if (r0 != 0) goto L_0x02c2
+                if (r0 != 0) goto L_0x02c4
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 r2 = 0
                 org.telegram.tgnet.TLRPC$TL_pageBlockPhoto r6 = r10.currentBlock
@@ -15062,7 +15070,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.ui.ArticleViewer$DrawingText r0 = r0.createLayoutForText(r1, r2, r3, r4, r5, r6, r7)
                 r10.captionLayout = r0
                 r16 = 1082130432(0x40800000, float:4.0)
-                if (r0 == 0) goto L_0x027e
+                if (r0 == 0) goto L_0x0280
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r16)
                 org.telegram.ui.ArticleViewer$DrawingText r1 = r10.captionLayout
                 int r1 = r1.getHeight()
@@ -15071,7 +15079,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r16)
                 int r0 = r0 + r1
                 int r9 = r9 + r0
-            L_0x027e:
+            L_0x0280:
                 r17 = r9
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 r2 = 0
@@ -15083,12 +15091,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int r5 = r1 + r4
                 org.telegram.ui.ArticleViewer$WebpageAdapter r1 = r10.parentAdapter
                 boolean r1 = r1.isRtl
-                if (r1 == 0) goto L_0x029c
+                if (r1 == 0) goto L_0x029e
                 android.text.Layout$Alignment r1 = org.telegram.ui.Components.StaticLayoutEx.ALIGN_RIGHT()
-                goto L_0x029e
-            L_0x029c:
-                android.text.Layout$Alignment r1 = android.text.Layout.Alignment.ALIGN_NORMAL
+                goto L_0x02a0
             L_0x029e:
+                android.text.Layout$Alignment r1 = android.text.Layout.Alignment.ALIGN_NORMAL
+            L_0x02a0:
                 r7 = r1
                 r9 = 0
                 org.telegram.ui.ArticleViewer$WebpageAdapter r4 = r10.parentAdapter
@@ -15099,77 +15107,77 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r9 = r18
                 org.telegram.ui.ArticleViewer$DrawingText r0 = r0.createLayoutForText(r1, r2, r3, r4, r5, r6, r7, r8, r9)
                 r10.creditLayout = r0
-                if (r0 == 0) goto L_0x02c0
+                if (r0 == 0) goto L_0x02c2
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r16)
                 org.telegram.ui.ArticleViewer$DrawingText r1 = r10.creditLayout
                 int r1 = r1.getHeight()
                 int r0 = r0 + r1
                 int r9 = r17 + r0
-                goto L_0x02c2
-            L_0x02c0:
-                r9 = r17
+                goto L_0x02c4
             L_0x02c2:
+                r9 = r17
+            L_0x02c4:
                 boolean r0 = r10.isFirst
-                if (r0 != 0) goto L_0x02d5
+                if (r0 != 0) goto L_0x02d7
                 int r0 = r10.currentType
-                if (r0 != 0) goto L_0x02d5
+                if (r0 != 0) goto L_0x02d7
                 org.telegram.tgnet.TLRPC$TL_pageBlockPhoto r0 = r10.currentBlock
                 int r0 = r0.level
-                if (r0 > 0) goto L_0x02d5
+                if (r0 > 0) goto L_0x02d7
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r15)
                 int r9 = r9 + r0
-            L_0x02d5:
+            L_0x02d7:
                 org.telegram.tgnet.TLRPC$PageBlock r0 = r10.parentBlock
                 boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_pageBlockCover
-                if (r0 == 0) goto L_0x02fe
+                if (r0 == 0) goto L_0x0300
                 org.telegram.ui.ArticleViewer$WebpageAdapter r0 = r10.parentAdapter
                 java.util.ArrayList r0 = r0.blocks
-                if (r0 == 0) goto L_0x02fe
+                if (r0 == 0) goto L_0x0300
                 org.telegram.ui.ArticleViewer$WebpageAdapter r0 = r10.parentAdapter
                 java.util.ArrayList r0 = r0.blocks
                 int r0 = r0.size()
-                if (r0 <= r13) goto L_0x02fe
+                if (r0 <= r13) goto L_0x0300
                 org.telegram.ui.ArticleViewer$WebpageAdapter r0 = r10.parentAdapter
                 java.util.ArrayList r0 = r0.blocks
                 java.lang.Object r0 = r0.get(r13)
                 boolean r0 = r0 instanceof org.telegram.tgnet.TLRPC$TL_pageBlockChannel
-                if (r0 == 0) goto L_0x02fe
+                if (r0 == 0) goto L_0x0300
                 r11 = 1
-            L_0x02fe:
+            L_0x0300:
                 int r0 = r10.currentType
-                if (r0 == r12) goto L_0x0309
-                if (r11 != 0) goto L_0x0309
+                if (r0 == r12) goto L_0x030b
+                if (r11 != 0) goto L_0x030b
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r15)
                 int r9 = r9 + r0
-            L_0x0309:
+            L_0x030b:
                 r13 = r9
                 org.telegram.ui.ArticleViewer$DrawingText r0 = r10.captionLayout
-                if (r0 == 0) goto L_0x0316
+                if (r0 == 0) goto L_0x0318
                 int r1 = r10.textX
                 r0.x = r1
                 int r1 = r10.textY
                 r0.y = r1
-            L_0x0316:
+            L_0x0318:
                 org.telegram.ui.ArticleViewer$DrawingText r0 = r10.creditLayout
-                if (r0 == 0) goto L_0x0325
+                if (r0 == 0) goto L_0x0327
                 int r1 = r10.textX
                 r0.x = r1
                 int r1 = r10.textY
                 int r2 = r10.creditOffset
                 int r1 = r1 + r2
                 r0.y = r1
-            L_0x0325:
+            L_0x0327:
                 org.telegram.ui.ArticleViewer$BlockChannelCell r0 = r10.channelCell
                 r1 = r28
                 r2 = r29
                 r0.measure(r1, r2)
                 org.telegram.ui.ArticleViewer$BlockChannelCell r0 = r10.channelCell
                 org.telegram.messenger.ImageReceiver r1 = r10.imageView
-                int r1 = r1.getImageHeight()
+                float r1 = r1.getImageHeight()
                 r2 = 1109131264(0x421CLASSNAME, float:39.0)
                 int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-                int r1 = r1 - r2
-                float r1 = (float) r1
+                float r2 = (float) r2
+                float r1 = r1 - r2
                 r0.setTranslationY(r1)
                 r10.setMeasuredDimension(r14, r13)
                 return
@@ -15182,7 +15190,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int i;
             if (this.currentBlock != null) {
                 if (!this.imageView.hasBitmapImage() || this.imageView.getCurrentAlpha() != 1.0f) {
-                    canvas.drawRect((float) this.imageView.getImageX(), (float) this.imageView.getImageY(), (float) this.imageView.getImageX2(), (float) this.imageView.getImageY2(), ArticleViewer.photoBackgroundPaint);
+                    canvas.drawRect(this.imageView.getImageX(), this.imageView.getImageY(), this.imageView.getImageX2(), this.imageView.getImageY2(), ArticleViewer.photoBackgroundPaint);
                 }
                 this.imageView.draw(canvas);
                 if (this.imageView.getVisible()) {
@@ -15190,7 +15198,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 if (!TextUtils.isEmpty(this.currentBlock.url)) {
                     int measuredWidth = getMeasuredWidth() - AndroidUtilities.dp(35.0f);
-                    int imageY = this.imageView.getImageY() + AndroidUtilities.dp(11.0f);
+                    int imageY = (int) (this.imageView.getImageY() + ((float) AndroidUtilities.dp(11.0f)));
                     this.linkDrawable.setBounds(measuredWidth, imageY, AndroidUtilities.dp(24.0f) + measuredWidth, AndroidUtilities.dp(24.0f) + imageY);
                     this.linkDrawable.draw(canvas);
                 }
@@ -15390,10 +15398,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
 
         /* access modifiers changed from: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:30:0x010e  */
-        /* JADX WARNING: Removed duplicated region for block: B:32:0x012a  */
-        /* JADX WARNING: Removed duplicated region for block: B:36:0x0152  */
-        /* JADX WARNING: Removed duplicated region for block: B:55:0x01e4  */
+        /* JADX WARNING: Code restructure failed: missing block: B:22:0x00a7, code lost:
+            r4 = r9.currentType;
+         */
+        /* JADX WARNING: Removed duplicated region for block: B:31:0x0111  */
+        /* JADX WARNING: Removed duplicated region for block: B:33:0x012d  */
+        /* JADX WARNING: Removed duplicated region for block: B:37:0x0156  */
+        /* JADX WARNING: Removed duplicated region for block: B:56:0x01e8  */
         @android.annotation.SuppressLint({"NewApi"})
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onMeasure(int r25, int r26) {
@@ -15402,10 +15413,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r9 = r24
                 int r0 = android.view.View.MeasureSpec.getSize(r25)
                 int r1 = r9.currentType
-                r2 = 1
-                r3 = 0
+                r2 = 0
+                r3 = 1
                 r10 = 2
-                if (r1 != r2) goto L_0x0024
+                if (r1 != r3) goto L_0x0024
                 android.view.ViewParent r0 = r24.getParent()
                 android.view.View r0 = (android.view.View) r0
                 int r0 = r0.getMeasuredWidth()
@@ -15423,7 +15434,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r0 = 0
             L_0x0029:
                 org.telegram.tgnet.TLRPC$TL_pageBlockMap r1 = r9.currentBlock
-                if (r1 == 0) goto L_0x01ea
+                if (r1 == 0) goto L_0x01ee
                 int r4 = r9.currentType
                 r5 = 1099956224(0x41900000, float:18.0)
                 if (r4 != 0) goto L_0x004e
@@ -15432,14 +15443,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int r1 = r1 * 14
                 float r1 = (float) r1
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                int r4 = org.telegram.messenger.AndroidUtilities.dp(r5)
-                int r1 = r1 + r4
-                r9.textX = r1
-                int r4 = org.telegram.messenger.AndroidUtilities.dp(r5)
-                int r4 = r4 + r1
-                int r4 = r11 - r4
-                r8 = r4
-                goto L_0x005f
+                int r2 = org.telegram.messenger.AndroidUtilities.dp(r5)
+                int r2 = r2 + r1
+                r9.textX = r2
+                int r1 = org.telegram.messenger.AndroidUtilities.dp(r5)
+                int r1 = r1 + r2
+                int r1 = r11 - r1
+                r8 = r1
+                goto L_0x005e
             L_0x004e:
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r5)
                 r9.textX = r1
@@ -15447,106 +15458,110 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
                 int r1 = r11 - r1
                 r8 = r1
-                r4 = r11
-                r1 = 0
-            L_0x005f:
-                int r5 = r9.currentType
-                if (r5 != 0) goto L_0x009e
-                float r0 = (float) r4
-                org.telegram.tgnet.TLRPC$TL_pageBlockMap r5 = r9.currentBlock
-                int r6 = r5.w
-                float r6 = (float) r6
-                float r0 = r0 / r6
-                int r5 = r5.h
-                float r5 = (float) r5
-                float r0 = r0 * r5
-                int r0 = (int) r0
-                android.graphics.Point r5 = org.telegram.messenger.AndroidUtilities.displaySize
-                int r6 = r5.x
-                int r5 = r5.y
-                int r5 = java.lang.Math.max(r6, r5)
-                r6 = 1113587712(0x42600000, float:56.0)
-                int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-                int r5 = r5 - r6
-                float r5 = (float) r5
-                r6 = 1063675494(0x3var_, float:0.9)
-                float r5 = r5 * r6
-                int r5 = (int) r5
-                if (r0 <= r5) goto L_0x009e
-                float r0 = (float) r5
+                r1 = r11
+            L_0x005e:
+                int r4 = r9.currentType
+                if (r4 != 0) goto L_0x009d
+                float r0 = (float) r1
                 org.telegram.tgnet.TLRPC$TL_pageBlockMap r4 = r9.currentBlock
-                int r6 = r4.h
-                float r6 = (float) r6
-                float r0 = r0 / r6
-                int r4 = r4.w
+                int r5 = r4.w
+                float r5 = (float) r5
+                float r0 = r0 / r5
+                int r4 = r4.h
                 float r4 = (float) r4
                 float r0 = r0 * r4
-                int r4 = (int) r0
-                int r0 = r11 - r1
-                int r0 = r0 - r4
+                int r0 = (int) r0
+                android.graphics.Point r4 = org.telegram.messenger.AndroidUtilities.displaySize
+                int r5 = r4.x
+                int r4 = r4.y
+                int r4 = java.lang.Math.max(r5, r4)
+                r5 = 1113587712(0x42600000, float:56.0)
+                int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+                int r4 = r4 - r5
+                float r4 = (float) r4
+                r5 = 1063675494(0x3var_, float:0.9)
+                float r4 = r4 * r5
+                int r4 = (int) r4
+                if (r0 <= r4) goto L_0x009d
+                float r0 = (float) r4
+                org.telegram.tgnet.TLRPC$TL_pageBlockMap r1 = r9.currentBlock
+                int r5 = r1.h
+                float r5 = (float) r5
+                float r0 = r0 / r5
+                int r1 = r1.w
+                float r1 = (float) r1
+                float r0 = r0 * r1
+                int r1 = (int) r0
+                int r0 = r11 - r2
+                int r0 = r0 - r1
                 int r0 = r0 / r10
-                int r1 = r1 + r0
-                r12 = r5
-                goto L_0x009f
-            L_0x009e:
+                int r2 = r2 + r0
+                r12 = r4
+                goto L_0x009e
+            L_0x009d:
                 r12 = r0
-            L_0x009f:
+            L_0x009e:
                 org.telegram.messenger.ImageReceiver r0 = r9.imageView
-                boolean r5 = r9.isFirst
+                float r2 = (float) r2
+                boolean r4 = r9.isFirst
                 r13 = 1090519040(0x41000000, float:8.0)
-                if (r5 != 0) goto L_0x00b8
-                int r5 = r9.currentType
-                if (r5 == r2) goto L_0x00b8
-                if (r5 == r10) goto L_0x00b8
-                org.telegram.tgnet.TLRPC$TL_pageBlockMap r2 = r9.currentBlock
-                int r2 = r2.level
-                if (r2 <= 0) goto L_0x00b4
-                goto L_0x00b8
+                if (r4 != 0) goto L_0x00ba
+                int r4 = r9.currentType
+                if (r4 == r3) goto L_0x00ba
+                if (r4 == r10) goto L_0x00ba
+                org.telegram.tgnet.TLRPC$TL_pageBlockMap r3 = r9.currentBlock
+                int r3 = r3.level
+                if (r3 <= 0) goto L_0x00b4
+                goto L_0x00ba
             L_0x00b4:
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            L_0x00b8:
-                r0.setImageCoords(r1, r3, r4, r12)
+                float r3 = (float) r3
+                goto L_0x00bb
+            L_0x00ba:
+                r3 = 0
+            L_0x00bb:
+                float r1 = (float) r1
+                float r4 = (float) r12
+                r0.setImageCoords(r2, r3, r1, r4)
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 int r14 = r0.currentAccount
                 org.telegram.tgnet.TLRPC$TL_pageBlockMap r0 = r9.currentBlock
                 org.telegram.tgnet.TLRPC$GeoPoint r0 = r0.geo
-                double r1 = r0.lat
+                double r2 = r0.lat
                 double r5 = r0._long
-                float r0 = (float) r4
-                float r3 = org.telegram.messenger.AndroidUtilities.density
-                float r4 = r0 / r3
-                int r4 = (int) r4
-                float r7 = (float) r12
-                float r3 = r7 / r3
-                int r3 = (int) r3
+                float r0 = org.telegram.messenger.AndroidUtilities.density
+                float r7 = r1 / r0
+                int r7 = (int) r7
+                float r0 = r4 / r0
+                int r0 = (int) r0
                 r21 = 1
                 r22 = 15
                 r23 = -1
-                r15 = r1
+                r15 = r2
                 r17 = r5
-                r19 = r4
-                r20 = r3
+                r19 = r7
+                r20 = r0
                 java.lang.String r16 = org.telegram.messenger.AndroidUtilities.formapMapUrl(r14, r15, r17, r19, r20, r21, r22, r23)
-                org.telegram.tgnet.TLRPC$TL_pageBlockMap r1 = r9.currentBlock
-                org.telegram.tgnet.TLRPC$GeoPoint r1 = r1.geo
+                org.telegram.tgnet.TLRPC$TL_pageBlockMap r0 = r9.currentBlock
+                org.telegram.tgnet.TLRPC$GeoPoint r0 = r0.geo
                 float r2 = org.telegram.messenger.AndroidUtilities.density
-                float r0 = r0 / r2
-                int r0 = (int) r0
-                float r7 = r7 / r2
-                int r3 = (int) r7
+                float r1 = r1 / r2
+                int r1 = (int) r1
+                float r4 = r4 / r2
+                int r3 = (int) r4
                 r4 = 15
                 double r5 = (double) r2
                 double r5 = java.lang.Math.ceil(r5)
                 int r2 = (int) r5
                 int r2 = java.lang.Math.min(r10, r2)
-                org.telegram.messenger.WebFile r0 = org.telegram.messenger.WebFile.createWithGeoPoint(r1, r0, r3, r4, r2)
+                org.telegram.messenger.WebFile r0 = org.telegram.messenger.WebFile.createWithGeoPoint(r0, r1, r3, r4, r2)
                 org.telegram.ui.ArticleViewer r1 = org.telegram.ui.ArticleViewer.this
                 int r1 = r1.currentAccount
                 org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
                 int r1 = r1.mapProvider
                 r9.currentMapProvider = r1
-                if (r1 != r10) goto L_0x012a
-                if (r0 == 0) goto L_0x0139
+                if (r1 != r10) goto L_0x012d
+                if (r0 == 0) goto L_0x013c
                 org.telegram.messenger.ImageReceiver r1 = r9.imageView
                 org.telegram.messenger.ImageLocation r18 = org.telegram.messenger.ImageLocation.getForWebFile(r0)
                 r19 = 0
@@ -15557,26 +15572,28 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r23 = 0
                 r17 = r1
                 r17.setImage(r18, r19, r20, r21, r22, r23)
-                goto L_0x0139
-            L_0x012a:
-                if (r16 == 0) goto L_0x0139
+                goto L_0x013c
+            L_0x012d:
+                if (r16 == 0) goto L_0x013c
                 org.telegram.messenger.ImageReceiver r15 = r9.imageView
                 r17 = 0
                 r18 = 0
                 r19 = 0
                 r20 = 0
                 r15.setImage(r16, r17, r18, r19, r20)
-            L_0x0139:
+            L_0x013c:
                 org.telegram.messenger.ImageReceiver r0 = r9.imageView
-                int r0 = r0.getImageY()
+                float r0 = r0.getImageY()
                 org.telegram.messenger.ImageReceiver r1 = r9.imageView
-                int r1 = r1.getImageHeight()
-                int r0 = r0 + r1
+                float r1 = r1.getImageHeight()
+                float r0 = r0 + r1
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r13)
-                int r5 = r0 + r1
+                float r1 = (float) r1
+                float r0 = r0 + r1
+                int r5 = (int) r0
                 r9.textY = r5
                 int r0 = r9.currentType
-                if (r0 != 0) goto L_0x01cd
+                if (r0 != 0) goto L_0x01d1
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 r2 = 0
                 org.telegram.tgnet.TLRPC$TL_pageBlockMap r6 = r9.currentBlock
@@ -15588,7 +15605,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.ui.ArticleViewer$DrawingText r0 = r0.createLayoutForText(r1, r2, r3, r4, r5, r6, r7)
                 r9.captionLayout = r0
                 r14 = 1082130432(0x40800000, float:4.0)
-                if (r0 == 0) goto L_0x0187
+                if (r0 == 0) goto L_0x018b
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 org.telegram.ui.ArticleViewer$DrawingText r1 = r9.captionLayout
                 int r1 = r1.getHeight()
@@ -15602,7 +15619,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r0.x = r1
                 int r1 = r9.textY
                 r0.y = r1
-            L_0x0187:
+            L_0x018b:
                 org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
                 r2 = 0
                 org.telegram.tgnet.TLRPC$TL_pageBlockMap r6 = r9.currentBlock
@@ -15613,12 +15630,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int r5 = r1 + r4
                 org.telegram.ui.ArticleViewer$WebpageAdapter r1 = r9.parentAdapter
                 boolean r1 = r1.isRtl
-                if (r1 == 0) goto L_0x01a3
+                if (r1 == 0) goto L_0x01a7
                 android.text.Layout$Alignment r1 = org.telegram.ui.Components.StaticLayoutEx.ALIGN_RIGHT()
-                goto L_0x01a5
-            L_0x01a3:
+                goto L_0x01a9
+            L_0x01a7:
                 android.text.Layout$Alignment r1 = android.text.Layout.Alignment.ALIGN_NORMAL
-            L_0x01a5:
+            L_0x01a9:
                 r7 = r1
                 org.telegram.ui.ArticleViewer$WebpageAdapter r15 = r9.parentAdapter
                 r1 = r24
@@ -15626,7 +15643,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r8 = r15
                 org.telegram.ui.ArticleViewer$DrawingText r0 = r0.createLayoutForText(r1, r2, r3, r4, r5, r6, r7, r8)
                 r9.creditLayout = r0
-                if (r0 == 0) goto L_0x01cd
+                if (r0 == 0) goto L_0x01d1
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 org.telegram.ui.ArticleViewer$DrawingText r1 = r9.creditLayout
                 int r1 = r1.getHeight()
@@ -15639,25 +15656,25 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int r2 = r9.creditOffset
                 int r1 = r1 + r2
                 r0.y = r1
-            L_0x01cd:
+            L_0x01d1:
                 boolean r0 = r9.isFirst
-                if (r0 != 0) goto L_0x01e0
+                if (r0 != 0) goto L_0x01e4
                 int r0 = r9.currentType
-                if (r0 != 0) goto L_0x01e0
+                if (r0 != 0) goto L_0x01e4
                 org.telegram.tgnet.TLRPC$TL_pageBlockMap r0 = r9.currentBlock
                 int r0 = r0.level
-                if (r0 > 0) goto L_0x01e0
+                if (r0 > 0) goto L_0x01e4
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r13)
                 int r12 = r12 + r0
-            L_0x01e0:
+            L_0x01e4:
                 int r0 = r9.currentType
-                if (r0 == r10) goto L_0x01e9
+                if (r0 == r10) goto L_0x01ed
                 int r0 = org.telegram.messenger.AndroidUtilities.dp(r13)
                 int r12 = r12 + r0
-            L_0x01e9:
-                r2 = r12
-            L_0x01ea:
-                r9.setMeasuredDimension(r11, r2)
+            L_0x01ed:
+                r3 = r12
+            L_0x01ee:
+                r9.setMeasuredDimension(r11, r3)
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.BlockMapCell.onMeasure(int, int):void");
@@ -15668,7 +15685,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int i;
             if (this.currentBlock != null) {
                 Theme.chat_docBackPaint.setColor(Theme.getColor("chat_inLocationBackground"));
-                canvas.drawRect((float) this.imageView.getImageX(), (float) this.imageView.getImageY(), (float) this.imageView.getImageX2(), (float) this.imageView.getImageY2(), Theme.chat_docBackPaint);
+                canvas.drawRect(this.imageView.getImageX(), this.imageView.getImageY(), this.imageView.getImageX2(), this.imageView.getImageY2(), Theme.chat_docBackPaint);
                 int i2 = 0;
                 int centerX = (int) (this.imageView.getCenterX() - ((float) (Theme.chat_locationDrawable[0].getIntrinsicWidth() / 2)));
                 int centerY = (int) (this.imageView.getCenterY() - ((float) (Theme.chat_locationDrawable[0].getIntrinsicHeight() / 2)));
@@ -15679,8 +15696,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (this.currentMapProvider == 2 && this.imageView.hasNotThumb()) {
                     int intrinsicWidth = (int) (((float) Theme.chat_redLocationIcon.getIntrinsicWidth()) * 0.8f);
                     int intrinsicHeight = (int) (((float) Theme.chat_redLocationIcon.getIntrinsicHeight()) * 0.8f);
-                    int imageX = this.imageView.getImageX() + ((this.imageView.getImageWidth() - intrinsicWidth) / 2);
-                    int imageY = this.imageView.getImageY() + ((this.imageView.getImageHeight() / 2) - intrinsicHeight);
+                    int imageX = (int) (this.imageView.getImageX() + ((this.imageView.getImageWidth() - ((float) intrinsicWidth)) / 2.0f));
+                    int imageY = (int) (this.imageView.getImageY() + ((this.imageView.getImageHeight() / 2.0f) - ((float) intrinsicHeight)));
                     Theme.chat_redLocationIcon.setAlpha((int) (this.imageView.getCurrentAlpha() * 255.0f));
                     Theme.chat_redLocationIcon.setBounds(imageX, imageY, intrinsicWidth + imageX, intrinsicHeight + imageY);
                     Theme.chat_redLocationIcon.draw(canvas);
@@ -16037,7 +16054,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (r4 == 0) goto L_0x0060
                 boolean r4 = android.text.TextUtils.isEmpty(r0)
                 if (r4 != 0) goto L_0x0060
-                r4 = 2131624277(0x7f0e0155, float:1.887573E38)
+                r4 = 2131624278(0x7f0e0156, float:1.8875731E38)
                 r7 = 2
                 java.lang.Object[] r7 = new java.lang.Object[r7]
                 org.telegram.messenger.LocaleController r8 = org.telegram.messenger.LocaleController.getInstance()
@@ -16055,7 +16072,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             L_0x0060:
                 boolean r4 = android.text.TextUtils.isEmpty(r0)
                 if (r4 != 0) goto L_0x0074
-                r4 = 2131624276(0x7f0e0154, float:1.8875727E38)
+                r4 = 2131624277(0x7f0e0155, float:1.887573E38)
                 java.lang.Object[] r15 = new java.lang.Object[r15]
                 r15[r3] = r0
                 java.lang.String r5 = "ArticleByAuthor"
@@ -16648,7 +16665,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 this.hasViews = true;
                 this.viewsTextView.setVisibility(0);
                 this.textView.setGravity(21);
-                this.viewsTextView.setText(LocaleController.formatPluralString("Views", i));
+                this.viewsTextView.setText(LocaleController.formatPluralStringComma("Views", i));
             }
             int color = Theme.getColor("switchTrack");
             this.textView.setTextColor(ArticleViewer.getGrayTextColor());
@@ -16896,7 +16913,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         L_0x0053:
             android.app.Activity r0 = r5.parentActivity     // Catch:{ Exception -> 0x009c }
             java.lang.String r2 = "ShareFile"
-            r3 = 2131626762(0x7f0e0b0a, float:1.888077E38)
+            r3 = 2131626774(0x7f0e0b16, float:1.8880794E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ Exception -> 0x009c }
             android.content.Intent r1 = android.content.Intent.createChooser(r1, r2)     // Catch:{ Exception -> 0x009c }
             r2 = 500(0x1f4, float:7.0E-43)
@@ -16907,16 +16924,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             android.app.Activity r1 = r5.parentActivity     // Catch:{ Exception -> 0x009c }
             r0.<init>((android.content.Context) r1)     // Catch:{ Exception -> 0x009c }
             java.lang.String r1 = "AppName"
-            r2 = 2131624198(0x7f0e0106, float:1.8875569E38)
+            r2 = 2131624199(0x7f0e0107, float:1.887557E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x009c }
             r0.setTitle(r1)     // Catch:{ Exception -> 0x009c }
             java.lang.String r1 = "OK"
-            r2 = 2131626003(0x7f0e0813, float:1.887923E38)
+            r2 = 2131626008(0x7f0e0818, float:1.887924E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x009c }
             r2 = 0
             r0.setPositiveButton(r1, r2)     // Catch:{ Exception -> 0x009c }
             java.lang.String r1 = "PleaseDownload"
-            r2 = 2131626384(0x7f0e0990, float:1.8880003E38)
+            r2 = 2131626393(0x7f0e0999, float:1.888002E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x009c }
             r0.setMessage(r1)     // Catch:{ Exception -> 0x009c }
             org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()     // Catch:{ Exception -> 0x009c }
@@ -17405,7 +17422,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.menuItem
             r0.showSubItem(r14)
             org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
-            r1 = 2131624288(0x7f0e0160, float:1.8875751E38)
+            r1 = 2131624289(0x7f0e0161, float:1.8875754E38)
             java.lang.String r2 = "AttachGif"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -17418,21 +17435,21 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (r0 != r10) goto L_0x010d
             if (r16 == 0) goto L_0x00fe
             org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
-            r1 = 2131624305(0x7f0e0171, float:1.8875786E38)
+            r1 = 2131624306(0x7f0e0172, float:1.8875788E38)
             java.lang.String r2 = "AttachVideo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x0132
         L_0x00fe:
             org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
-            r1 = 2131624299(0x7f0e016b, float:1.8875774E38)
+            r1 = 2131624300(0x7f0e016c, float:1.8875776E38)
             java.lang.String r2 = "AttachPhoto"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x0132
         L_0x010d:
             org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
-            r1 = 2131626005(0x7f0e0815, float:1.8879234E38)
+            r1 = 2131626010(0x7f0e081a, float:1.8879244E38)
             java.lang.Object[] r2 = new java.lang.Object[r11]
             int r3 = r7.currentIndex
             int r3 = r3 + r10
@@ -17814,9 +17831,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         if (placeForPhoto.imageReceiver.isAspectFit()) {
             i = 0;
         } else {
-            i = (int) Math.abs(drawRegion.left - ((float) placeForPhoto.imageReceiver.getImageX()));
+            i = (int) Math.abs(drawRegion.left - placeForPhoto.imageReceiver.getImageX());
         }
-        int abs = (int) Math.abs(drawRegion.top - ((float) placeForPhoto.imageReceiver.getImageY()));
+        int abs = (int) Math.abs(drawRegion.top - placeForPhoto.imageReceiver.getImageY());
         int[] iArr = new int[2];
         placeForPhoto.parentView.getLocationInWindow(iArr);
         int i2 = (int) ((((float) iArr[1]) - (((float) placeForPhoto.viewY) + drawRegion.top)) + ((float) placeForPhoto.clipTopAddition));
@@ -17884,7 +17901,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
 
             public /* synthetic */ void lambda$onAnimationEnd$0$ArticleViewer$34() {
-                NotificationCenter.getInstance(ArticleViewer.this.currentAccount).setAnimationInProgress(false);
+                NotificationCenter.getInstance(ArticleViewer.this.currentAccount).onAnimationFinish(ArticleViewer.this.allowAnimationIndex);
                 if (ArticleViewer.this.photoAnimationEndRunnable != null) {
                     ArticleViewer.this.photoAnimationEndRunnable.run();
                     Runnable unused = ArticleViewer.this.photoAnimationEndRunnable = null;
@@ -17943,8 +17960,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     public /* synthetic */ void lambda$openPhoto$46$ArticleViewer(AnimatorSet animatorSet) {
-        NotificationCenter.getInstance(this.currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats});
-        NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(true);
+        this.allowAnimationIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.allowAnimationIndex, new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats});
         animatorSet.start();
     }
 
@@ -18032,28 +18048,30 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             org.telegram.ui.Components.ClippingImageView r9 = r0.animatingImageView
             org.telegram.messenger.ImageReceiver$BitmapHolder r10 = r2.thumb
             r9.setImageBitmap(r10)
-            goto L_0x00c0
+            goto L_0x00c2
         L_0x00a4:
             org.telegram.messenger.ImageReceiver r8 = r0.centerImage
-            int r8 = r8.getImageWidth()
+            float r8 = r8.getImageWidth()
+            int r8 = (int) r8
             r7.width = r8
             org.telegram.messenger.ImageReceiver r8 = r0.centerImage
-            int r8 = r8.getImageHeight()
+            float r8 = r8.getImageHeight()
+            int r8 = (int) r8
             r7.height = r8
             org.telegram.ui.Components.ClippingImageView r8 = r0.animatingImageView
             org.telegram.messenger.ImageReceiver r9 = r0.centerImage
             org.telegram.messenger.ImageReceiver$BitmapHolder r9 = r9.getBitmapSafe()
             r8.setImageBitmap(r9)
             r8 = r3
-        L_0x00c0:
+        L_0x00c2:
             int r9 = r7.width
-            if (r9 != 0) goto L_0x00c6
+            if (r9 != 0) goto L_0x00c8
             r7.width = r5
-        L_0x00c6:
+        L_0x00c8:
             int r9 = r7.height
-            if (r9 != 0) goto L_0x00cc
+            if (r9 != 0) goto L_0x00ce
             r7.height = r5
-        L_0x00cc:
+        L_0x00ce:
             org.telegram.ui.Components.ClippingImageView r9 = r0.animatingImageView
             r9.setLayoutParams(r7)
             android.graphics.Point r9 = org.telegram.messenger.AndroidUtilities.displaySize
@@ -18085,16 +18103,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             float r11 = r11 / r10
             int r12 = android.os.Build.VERSION.SDK_INT
             r13 = 21
-            if (r12 < r13) goto L_0x0110
+            if (r12 < r13) goto L_0x0112
             java.lang.Object r12 = r0.lastInsets
-            if (r12 == 0) goto L_0x0110
+            if (r12 == 0) goto L_0x0112
             android.view.WindowInsets r12 = (android.view.WindowInsets) r12
             int r12 = r12.getSystemWindowInsetLeft()
             float r12 = (float) r12
             float r11 = r11 + r12
-        L_0x0110:
+        L_0x0112:
             boolean r12 = r0.hasCutout
-            if (r12 == 0) goto L_0x0120
+            if (r12 == 0) goto L_0x0122
             android.graphics.Point r12 = org.telegram.messenger.AndroidUtilities.displaySize
             int r12 = r12.y
             float r12 = (float) r12
@@ -18103,8 +18121,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int r7 = org.telegram.messenger.AndroidUtilities.statusBarHeight
             float r7 = (float) r7
             float r12 = r12 + r7
-            goto L_0x012a
-        L_0x0120:
+            goto L_0x012c
+        L_0x0122:
             android.graphics.Point r12 = org.telegram.messenger.AndroidUtilities.displaySize
             int r12 = r12.y
             int r13 = org.telegram.messenger.AndroidUtilities.statusBarHeight
@@ -18112,7 +18130,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             float r12 = (float) r12
             float r12 = r12 - r7
             float r12 = r12 / r10
-        L_0x012a:
+        L_0x012c:
             org.telegram.ui.Components.ClippingImageView r7 = r0.animatingImageView
             float r10 = r0.translationX
             float r11 = r11 + r10
@@ -18137,22 +18155,20 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r14.setVisible(r1, r5)
             org.telegram.messenger.ImageReceiver r14 = r2.imageReceiver
             boolean r14 = r14.isAspectFit()
-            if (r14 == 0) goto L_0x0160
+            if (r14 == 0) goto L_0x0162
             r14 = 0
-            goto L_0x016f
-        L_0x0160:
+            goto L_0x0170
+        L_0x0162:
             float r14 = r8.left
             org.telegram.messenger.ImageReceiver r15 = r2.imageReceiver
-            int r15 = r15.getImageX()
-            float r15 = (float) r15
+            float r15 = r15.getImageX()
             float r14 = r14 - r15
             float r14 = java.lang.Math.abs(r14)
             int r14 = (int) r14
-        L_0x016f:
+        L_0x0170:
             float r15 = r8.top
             org.telegram.messenger.ImageReceiver r3 = r2.imageReceiver
-            int r3 = r3.getImageY()
-            float r3 = (float) r3
+            float r3 = r3.getImageY()
             float r15 = r15 - r3
             float r3 = java.lang.Math.abs(r15)
             int r3 = (int) r3
@@ -18511,8 +18527,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     private void updateMinMax(float f) {
-        int imageWidth = ((int) ((((float) this.centerImage.getImageWidth()) * f) - ((float) getContainerViewWidth()))) / 2;
-        int imageHeight = ((int) ((((float) this.centerImage.getImageHeight()) * f) - ((float) getContainerViewHeight()))) / 2;
+        int imageWidth = ((int) ((this.centerImage.getImageWidth() * f) - ((float) getContainerViewWidth()))) / 2;
+        int imageHeight = ((int) ((this.centerImage.getImageHeight() * f) - ((float) getContainerViewHeight()))) / 2;
         if (imageWidth > 0) {
             this.minX = (float) (-imageWidth);
             this.maxX = (float) imageWidth;
@@ -19144,13 +19160,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     private void goToNext() {
-        float containerViewWidth = this.scale != 1.0f ? ((float) ((getContainerViewWidth() - this.centerImage.getImageWidth()) / 2)) * this.scale : 0.0f;
+        float containerViewWidth = this.scale != 1.0f ? ((((float) getContainerViewWidth()) - this.centerImage.getImageWidth()) / 2.0f) * this.scale : 0.0f;
         this.switchImageAfterAnimation = 1;
         animateTo(this.scale, ((this.minX - ((float) getContainerViewWidth())) - containerViewWidth) - ((float) (AndroidUtilities.dp(30.0f) / 2)), this.translationY, false);
     }
 
     private void goToPrev() {
-        float containerViewWidth = this.scale != 1.0f ? ((float) ((getContainerViewWidth() - this.centerImage.getImageWidth()) / 2)) * this.scale : 0.0f;
+        float containerViewWidth = this.scale != 1.0f ? ((((float) getContainerViewWidth()) - this.centerImage.getImageWidth()) / 2.0f) * this.scale : 0.0f;
         this.switchImageAfterAnimation = 2;
         animateTo(this.scale, this.maxX + ((float) getContainerViewWidth()) + containerViewWidth + ((float) (AndroidUtilities.dp(30.0f) / 2)), this.translationY, false);
     }
@@ -19193,26 +19209,27 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:100:0x027f  */
-    /* JADX WARNING: Removed duplicated region for block: B:136:0x03a3  */
-    /* JADX WARNING: Removed duplicated region for block: B:143:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:100:0x0283  */
+    /* JADX WARNING: Removed duplicated region for block: B:131:0x037f  */
+    /* JADX WARNING: Removed duplicated region for block: B:138:0x03b4  */
+    /* JADX WARNING: Removed duplicated region for block: B:144:? A[RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:84:0x01ad  */
-    /* JADX WARNING: Removed duplicated region for block: B:96:0x0274  */
-    /* JADX WARNING: Removed duplicated region for block: B:97:0x0276  */
+    /* JADX WARNING: Removed duplicated region for block: B:96:0x0278  */
+    /* JADX WARNING: Removed duplicated region for block: B:97:0x027a  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void drawContent(android.graphics.Canvas r18) {
+    public void drawContent(android.graphics.Canvas r19) {
         /*
-            r17 = this;
-            r0 = r17
-            r1 = r18
+            r18 = this;
+            r0 = r18
+            r1 = r19
             int r2 = r0.photoAnimationInProgress
             r3 = 1
-            if (r2 == r3) goto L_0x0454
+            if (r2 == r3) goto L_0x046b
             boolean r4 = r0.isPhotoVisible
             r5 = 2
             if (r4 != 0) goto L_0x0012
             if (r2 == r5) goto L_0x0012
-            goto L_0x0454
+            goto L_0x046b
         L_0x0012:
             android.animation.AnimatorSet r2 = r0.imageMoveAnimation
             r4 = -1082130432(0xffffffffbvar_, float:-1.0)
@@ -19348,7 +19365,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (r4 == 0) goto L_0x0130
             boolean r4 = r0.zoomAnimation
             if (r4 != 0) goto L_0x0130
-            int r4 = r17.getContainerViewHeight()
+            int r4 = r18.getContainerViewHeight()
             float r4 = (float) r4
             r9 = 1082130432(0x40800000, float:4.0)
             float r4 = r4 / r9
@@ -19409,20 +19426,20 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             org.telegram.messenger.ImageReceiver r4 = r0.rightImage
             r9 = 1050253722(0x3e99999a, float:0.3)
             r12 = 1106247680(0x41var_, float:30.0)
-            if (r2 != r4) goto L_0x0246
+            if (r2 != r4) goto L_0x024a
             boolean r4 = r0.zoomAnimation
             if (r4 != 0) goto L_0x01a3
             float r4 = r0.minX
             int r15 = (r13 > r4 ? 1 : (r13 == r4 ? 0 : -1))
             if (r15 >= 0) goto L_0x01a3
             float r4 = r4 - r13
-            int r15 = r18.getWidth()
+            int r15 = r19.getWidth()
             float r15 = (float) r15
             float r4 = r4 / r15
             float r4 = java.lang.Math.min(r8, r4)
             float r15 = r8 - r4
             float r15 = r15 * r9
-            int r7 = r18.getWidth()
+            int r7 = r19.getWidth()
             int r7 = -r7
             int r16 = org.telegram.messenger.AndroidUtilities.dp(r12)
             int r16 = r16 / 2
@@ -19435,16 +19452,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r15 = 0
         L_0x01a7:
             boolean r16 = r2.hasBitmapImage()
-            if (r16 == 0) goto L_0x0205
-            r18.save()
-            int r16 = r17.getContainerViewWidth()
+            if (r16 == 0) goto L_0x0209
+            r19.save()
+            int r16 = r18.getContainerViewWidth()
             int r9 = r16 / 2
             float r9 = (float) r9
-            int r16 = r17.getContainerViewHeight()
+            int r16 = r18.getContainerViewHeight()
             int r3 = r16 / 2
             float r3 = (float) r3
             r1.translate(r9, r3)
-            int r3 = r18.getWidth()
+            int r3 = r19.getWidth()
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r12)
             int r9 = r9 / r5
             int r3 = r3 + r9
@@ -19455,11 +19472,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r1.scale(r3, r3)
             int r3 = r2.getBitmapWidth()
             int r9 = r2.getBitmapHeight()
-            int r6 = r17.getContainerViewWidth()
+            int r6 = r18.getContainerViewWidth()
             float r6 = (float) r6
             float r3 = (float) r3
             float r6 = r6 / r3
-            int r11 = r17.getContainerViewHeight()
+            int r11 = r18.getContainerViewHeight()
             float r11 = (float) r11
             float r9 = (float) r9
             float r11 = r11 / r9
@@ -19471,19 +19488,23 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r2.setAlpha(r4)
             int r9 = -r3
             int r9 = r9 / r5
+            float r9 = (float) r9
             int r11 = -r6
             int r11 = r11 / r5
+            float r11 = (float) r11
+            float r3 = (float) r3
+            float r6 = (float) r6
             r2.setImageCoords(r9, r11, r3, r6)
             r2.draw(r1)
-            r18.restore()
-        L_0x0205:
+            r19.restore()
+        L_0x0209:
             org.telegram.ui.Components.GroupedPhotosListView r3 = r0.groupedPhotosListView
             float r6 = -r4
             r3.setMoveProgress(r6)
-            r18.save()
+            r19.save()
             float r3 = r14 / r10
             r1.translate(r7, r3)
-            int r3 = r18.getWidth()
+            int r3 = r19.getWidth()
             float r3 = (float) r3
             float r6 = r0.scale
             float r6 = r6 + r8
@@ -19507,15 +19528,15 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             org.telegram.ui.ArticleViewer$RadialProgressView[] r3 = r0.radialProgressViews
             r3 = r3[r6]
             r3.onDraw(r1)
-            r18.restore()
-        L_0x0246:
+            r19.restore()
+        L_0x024a:
             boolean r3 = r0.zoomAnimation
-            if (r3 != 0) goto L_0x0266
+            if (r3 != 0) goto L_0x026a
             float r3 = r0.maxX
             int r4 = (r13 > r3 ? 1 : (r13 == r3 ? 0 : -1))
-            if (r4 <= 0) goto L_0x0266
+            if (r4 <= 0) goto L_0x026a
             float r3 = r13 - r3
-            int r4 = r18.getWidth()
+            int r4 = r19.getWidth()
             float r4 = (float) r4
             float r3 = r3 / r4
             float r3 = java.lang.Math.min(r8, r3)
@@ -19523,29 +19544,29 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             float r4 = r4 * r3
             float r3 = r8 - r3
             float r6 = r0.maxX
-            goto L_0x026a
-        L_0x0266:
+            goto L_0x026e
+        L_0x026a:
             r6 = r13
             r3 = 1065353216(0x3var_, float:1.0)
             r4 = 0
-        L_0x026a:
+        L_0x026e:
             com.google.android.exoplayer2.ui.AspectRatioFrameLayout r7 = r0.aspectRatioFrameLayout
-            if (r7 == 0) goto L_0x0276
+            if (r7 == 0) goto L_0x027a
             int r7 = r7.getVisibility()
-            if (r7 != 0) goto L_0x0276
+            if (r7 != 0) goto L_0x027a
             r7 = 1
-            goto L_0x0277
-        L_0x0276:
+            goto L_0x027b
+        L_0x027a:
             r7 = 0
-        L_0x0277:
+        L_0x027b:
             org.telegram.messenger.ImageReceiver r9 = r0.centerImage
             boolean r9 = r9.hasBitmapImage()
-            if (r9 == 0) goto L_0x0370
-            r18.save()
-            int r9 = r17.getContainerViewWidth()
+            if (r9 == 0) goto L_0x037f
+            r19.save()
+            int r9 = r18.getContainerViewWidth()
             int r9 = r9 / r5
             float r9 = (float) r9
-            int r11 = r17.getContainerViewHeight()
+            int r11 = r18.getContainerViewHeight()
             int r11 = r11 / r5
             float r11 = (float) r11
             r1.translate(r9, r11)
@@ -19556,9 +19577,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int r9 = r9.getBitmapWidth()
             org.telegram.messenger.ImageReceiver r11 = r0.centerImage
             int r11 = r11.getBitmapHeight()
-            if (r7 == 0) goto L_0x02d5
+            if (r7 == 0) goto L_0x02d9
             boolean r15 = r0.textureUploaded
-            if (r15 == 0) goto L_0x02d5
+            if (r15 == 0) goto L_0x02d9
             float r15 = (float) r9
             float r12 = (float) r11
             float r15 = r15 / r12
@@ -19573,17 +19594,17 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             float r5 = java.lang.Math.abs(r15)
             r12 = 1008981770(0x3CLASSNAMEd70a, float:0.01)
             int r5 = (r5 > r12 ? 1 : (r5 == r12 ? 0 : -1))
-            if (r5 <= 0) goto L_0x02d5
+            if (r5 <= 0) goto L_0x02d9
             android.view.TextureView r5 = r0.videoTextureView
             int r9 = r5.getMeasuredWidth()
             android.view.TextureView r5 = r0.videoTextureView
             int r11 = r5.getMeasuredHeight()
-        L_0x02d5:
-            int r5 = r17.getContainerViewWidth()
+        L_0x02d9:
+            int r5 = r18.getContainerViewWidth()
             float r5 = (float) r5
             float r9 = (float) r9
             float r5 = r5 / r9
-            int r12 = r17.getContainerViewHeight()
+            int r12 = r18.getContainerViewHeight()
             float r12 = (float) r12
             float r11 = (float) r11
             float r12 = r12 / r11
@@ -19592,39 +19613,48 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int r9 = (int) r9
             float r11 = r11 * r5
             int r5 = (int) r11
-            if (r7 == 0) goto L_0x02fd
+            if (r7 == 0) goto L_0x0305
             boolean r11 = r0.textureUploaded
-            if (r11 == 0) goto L_0x02fd
+            if (r11 == 0) goto L_0x0305
             boolean r11 = r0.videoCrossfadeStarted
-            if (r11 == 0) goto L_0x02fd
+            if (r11 == 0) goto L_0x0305
             float r11 = r0.videoCrossfadeAlpha
             int r11 = (r11 > r8 ? 1 : (r11 == r8 ? 0 : -1))
-            if (r11 == 0) goto L_0x0311
-        L_0x02fd:
+            if (r11 == 0) goto L_0x0302
+            goto L_0x0305
+        L_0x0302:
+            r17 = r13
+            goto L_0x031f
+        L_0x0305:
             org.telegram.messenger.ImageReceiver r11 = r0.centerImage
             r11.setAlpha(r3)
             org.telegram.messenger.ImageReceiver r11 = r0.centerImage
             int r12 = -r9
             r15 = 2
             int r12 = r12 / r15
+            float r12 = (float) r12
             int r8 = -r5
             int r8 = r8 / r15
-            r11.setImageCoords(r12, r8, r9, r5)
+            float r8 = (float) r8
+            float r15 = (float) r9
+            r17 = r13
+            float r13 = (float) r5
+            r11.setImageCoords(r12, r8, r15, r13)
             org.telegram.messenger.ImageReceiver r8 = r0.centerImage
             r8.draw(r1)
-        L_0x0311:
-            if (r7 == 0) goto L_0x036d
+        L_0x031f:
+            if (r7 == 0) goto L_0x037b
             boolean r8 = r0.videoCrossfadeStarted
-            if (r8 != 0) goto L_0x0327
+            if (r8 != 0) goto L_0x0335
             boolean r8 = r0.textureUploaded
-            if (r8 == 0) goto L_0x0327
+            if (r8 == 0) goto L_0x0335
             r8 = 1
             r0.videoCrossfadeStarted = r8
             r8 = 0
             r0.videoCrossfadeAlpha = r8
             long r11 = java.lang.System.currentTimeMillis()
             r0.videoCrossfadeAlphaLastTime = r11
-        L_0x0327:
+        L_0x0335:
             int r8 = -r9
             r9 = 2
             int r8 = r8 / r9
@@ -19640,11 +19670,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             com.google.android.exoplayer2.ui.AspectRatioFrameLayout r5 = r0.aspectRatioFrameLayout
             r5.draw(r1)
             boolean r5 = r0.videoCrossfadeStarted
-            if (r5 == 0) goto L_0x036d
+            if (r5 == 0) goto L_0x037b
             float r5 = r0.videoCrossfadeAlpha
             r8 = 1065353216(0x3var_, float:1.0)
             int r5 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1))
-            if (r5 >= 0) goto L_0x036d
+            if (r5 >= 0) goto L_0x037b
             long r8 = java.lang.System.currentTimeMillis()
             long r11 = r0.videoCrossfadeAlphaLastTime
             long r11 = r8 - r11
@@ -19660,16 +19690,19 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             float r5 = r0.videoCrossfadeAlpha
             r8 = 1065353216(0x3var_, float:1.0)
             int r5 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1))
-            if (r5 <= 0) goto L_0x036d
+            if (r5 <= 0) goto L_0x037b
             r0.videoCrossfadeAlpha = r8
-        L_0x036d:
-            r18.restore()
-        L_0x0370:
-            if (r7 != 0) goto L_0x039f
+        L_0x037b:
+            r19.restore()
+            goto L_0x0381
+        L_0x037f:
+            r17 = r13
+        L_0x0381:
+            if (r7 != 0) goto L_0x03b0
             android.widget.FrameLayout r5 = r0.bottomLayout
             int r5 = r5.getVisibility()
-            if (r5 == 0) goto L_0x039f
-            r18.save()
+            if (r5 == 0) goto L_0x03b0
+            r19.save()
             float r5 = r14 / r10
             r1.translate(r6, r5)
             org.telegram.ui.ArticleViewer$RadialProgressView[] r5 = r0.radialProgressViews
@@ -19684,22 +19717,22 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             org.telegram.ui.ArticleViewer$RadialProgressView[] r4 = r0.radialProgressViews
             r4 = r4[r6]
             r4.onDraw(r1)
-            r18.restore()
-        L_0x039f:
+            r19.restore()
+        L_0x03b0:
             org.telegram.messenger.ImageReceiver r4 = r0.leftImage
-            if (r2 != r4) goto L_0x0454
+            if (r2 != r4) goto L_0x046b
             boolean r4 = r2.hasBitmapImage()
-            if (r4 == 0) goto L_0x040d
-            r18.save()
-            int r4 = r17.getContainerViewWidth()
+            if (r4 == 0) goto L_0x0422
+            r19.save()
+            int r4 = r18.getContainerViewWidth()
             r5 = 2
             int r4 = r4 / r5
             float r4 = (float) r4
-            int r6 = r17.getContainerViewHeight()
+            int r6 = r18.getContainerViewHeight()
             int r6 = r6 / r5
             float r5 = (float) r6
             r1.translate(r4, r5)
-            int r4 = r18.getWidth()
+            int r4 = r19.getWidth()
             float r4 = (float) r4
             float r5 = r0.scale
             r6 = 1065353216(0x3var_, float:1.0)
@@ -19712,16 +19745,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             float r4 = -r4
             r5 = 1073741824(0x40000000, float:2.0)
             float r4 = r4 / r5
-            float r4 = r4 + r13
+            float r4 = r4 + r17
             r5 = 0
             r1.translate(r4, r5)
             int r4 = r2.getBitmapWidth()
             int r5 = r2.getBitmapHeight()
-            int r6 = r17.getContainerViewWidth()
+            int r6 = r18.getContainerViewWidth()
             float r6 = (float) r6
             float r4 = (float) r4
             float r6 = r6 / r4
-            int r7 = r17.getContainerViewHeight()
+            int r7 = r18.getContainerViewHeight()
             float r7 = (float) r7
             float r5 = (float) r5
             float r7 = r7 / r5
@@ -19732,28 +19765,31 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int r5 = (int) r5
             r6 = 1065353216(0x3var_, float:1.0)
             r2.setAlpha(r6)
-            int r7 = -r4
-            r8 = 2
-            int r7 = r7 / r8
-            int r9 = -r5
-            int r9 = r9 / r8
-            r2.setImageCoords(r7, r9, r4, r5)
+            int r6 = -r4
+            r7 = 2
+            int r6 = r6 / r7
+            float r6 = (float) r6
+            int r8 = -r5
+            int r8 = r8 / r7
+            float r7 = (float) r8
+            float r4 = (float) r4
+            float r5 = (float) r5
+            r2.setImageCoords(r6, r7, r4, r5)
             r2.draw(r1)
-            r18.restore()
-            goto L_0x040f
-        L_0x040d:
-            r6 = 1065353216(0x3var_, float:1.0)
-        L_0x040f:
+            r19.restore()
+        L_0x0422:
             org.telegram.ui.Components.GroupedPhotosListView r2 = r0.groupedPhotosListView
-            float r8 = r6 - r3
+            r4 = 1065353216(0x3var_, float:1.0)
+            float r8 = r4 - r3
             r2.setMoveProgress(r8)
-            r18.save()
+            r19.save()
             float r2 = r14 / r10
+            r13 = r17
             r1.translate(r13, r2)
-            int r2 = r18.getWidth()
+            int r2 = r19.getWidth()
             float r2 = (float) r2
             float r3 = r0.scale
-            float r3 = r3 + r6
+            float r3 = r3 + r4
             float r2 = r2 * r3
             r3 = 1106247680(0x41var_, float:30.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
@@ -19776,8 +19812,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             org.telegram.ui.ArticleViewer$RadialProgressView[] r2 = r0.radialProgressViews
             r2 = r2[r3]
             r2.onDraw(r1)
-            r18.restore()
-        L_0x0454:
+            r19.restore()
+        L_0x046b:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.drawContent(android.graphics.Canvas):void");

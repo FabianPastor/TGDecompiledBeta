@@ -165,10 +165,10 @@ public class SharedLinkCell extends FrameLayout {
     /* JADX WARNING: Removed duplicated region for block: B:170:0x036d  */
     /* JADX WARNING: Removed duplicated region for block: B:171:0x0378  */
     /* JADX WARNING: Removed duplicated region for block: B:174:0x0391  */
-    /* JADX WARNING: Removed duplicated region for block: B:185:0x0413  */
-    /* JADX WARNING: Removed duplicated region for block: B:186:0x0425  */
-    /* JADX WARNING: Removed duplicated region for block: B:198:0x0460  */
-    /* JADX WARNING: Removed duplicated region for block: B:201:0x046d  */
+    /* JADX WARNING: Removed duplicated region for block: B:185:0x0416  */
+    /* JADX WARNING: Removed duplicated region for block: B:186:0x0428  */
+    /* JADX WARNING: Removed duplicated region for block: B:198:0x0463  */
+    /* JADX WARNING: Removed duplicated region for block: B:201:0x0470  */
     /* JADX WARNING: Removed duplicated region for block: B:24:0x0071  */
     /* JADX WARNING: Removed duplicated region for block: B:99:0x01db A[Catch:{ Exception -> 0x021b }] */
     @android.annotation.SuppressLint({"DrawAllocation"})
@@ -657,7 +657,7 @@ public class SharedLinkCell extends FrameLayout {
             r9 = 1115422720(0x427CLASSNAME, float:63.0)
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
             r5.setBounds(r4, r7, r8, r9)
-            if (r14 == 0) goto L_0x0409
+            if (r14 == 0) goto L_0x040c
             org.telegram.messenger.MessageObject r5 = r1.message
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r5 = r5.photoThumbs
             org.telegram.tgnet.TLRPC$PhotoSize r5 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r5, r0, r13)
@@ -674,8 +674,11 @@ public class SharedLinkCell extends FrameLayout {
             r7.size = r8
         L_0x03ad:
             org.telegram.messenger.ImageReceiver r8 = r1.linkImageView
+            float r4 = (float) r4
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            r8.setImageCoords(r4, r6, r0, r0)
+            float r6 = (float) r6
+            float r9 = (float) r0
+            r8.setImageCoords(r4, r6, r9, r9)
             org.telegram.messenger.FileLoader.getAttachFileName(r5)
             java.util.Locale r4 = java.util.Locale.US
             r6 = 2
@@ -709,11 +712,11 @@ public class SharedLinkCell extends FrameLayout {
             r24 = r4
             r17.setImage(r18, r19, r20, r21, r22, r23, r24, r25)
             r1.drawLinkImageView = r13
-        L_0x0409:
+        L_0x040c:
             android.text.StaticLayout r0 = r1.titleLayout
-            if (r0 == 0) goto L_0x0425
+            if (r0 == 0) goto L_0x0428
             int r0 = r0.getLineCount()
-            if (r0 == 0) goto L_0x0425
+            if (r0 == 0) goto L_0x0428
             android.text.StaticLayout r0 = r1.titleLayout
             int r4 = r0.getLineCount()
             int r4 = r4 - r13
@@ -721,14 +724,14 @@ public class SharedLinkCell extends FrameLayout {
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r15)
             int r0 = r0 + r4
             int r0 = r0 + r2
-            goto L_0x0426
-        L_0x0425:
+            goto L_0x0429
+        L_0x0428:
             r0 = 0
-        L_0x0426:
+        L_0x0429:
             android.text.StaticLayout r4 = r1.descriptionLayout
-            if (r4 == 0) goto L_0x0441
+            if (r4 == 0) goto L_0x0444
             int r4 = r4.getLineCount()
-            if (r4 == 0) goto L_0x0441
+            if (r4 == 0) goto L_0x0444
             android.text.StaticLayout r4 = r1.descriptionLayout
             int r5 = r4.getLineCount()
             int r5 = r5 - r13
@@ -736,11 +739,11 @@ public class SharedLinkCell extends FrameLayout {
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r16)
             int r4 = r4 + r5
             int r0 = r0 + r4
-        L_0x0441:
+        L_0x0444:
             android.text.StaticLayout r4 = r1.descriptionLayout2
-            if (r4 == 0) goto L_0x0465
+            if (r4 == 0) goto L_0x0468
             int r4 = r4.getLineCount()
-            if (r4 == 0) goto L_0x0465
+            if (r4 == 0) goto L_0x0468
             android.text.StaticLayout r4 = r1.descriptionLayout2
             int r5 = r4.getLineCount()
             int r5 = r5 - r13
@@ -749,26 +752,26 @@ public class SharedLinkCell extends FrameLayout {
             int r4 = r4 + r5
             int r0 = r0 + r4
             android.text.StaticLayout r4 = r1.descriptionLayout
-            if (r4 == 0) goto L_0x0465
+            if (r4 == 0) goto L_0x0468
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r0 = r0 + r3
-        L_0x0465:
+        L_0x0468:
             java.util.ArrayList<android.text.StaticLayout> r3 = r1.linkLayout
             int r3 = r3.size()
-            if (r2 >= r3) goto L_0x0488
+            if (r2 >= r3) goto L_0x048b
             java.util.ArrayList<android.text.StaticLayout> r3 = r1.linkLayout
             java.lang.Object r3 = r3.get(r2)
             android.text.StaticLayout r3 = (android.text.StaticLayout) r3
             int r4 = r3.getLineCount()
-            if (r4 <= 0) goto L_0x0485
+            if (r4 <= 0) goto L_0x0488
             int r4 = r3.getLineCount()
             int r4 = r4 - r13
             int r3 = r3.getLineBottom(r4)
             int r0 = r0 + r3
-        L_0x0485:
-            int r2 = r2 + 1
-            goto L_0x0465
         L_0x0488:
+            int r2 = r2 + 1
+            goto L_0x0468
+        L_0x048b:
             org.telegram.ui.Components.CheckBox2 r2 = r1.checkBox
             r3 = 1103101952(0x41CLASSNAME, float:24.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)

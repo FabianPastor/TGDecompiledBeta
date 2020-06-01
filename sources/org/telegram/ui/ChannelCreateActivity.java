@@ -349,7 +349,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                     setMeasuredDimension(size, size2);
                     int paddingTop = size2 - getPaddingTop();
                     measureChildWithMargins(ChannelCreateActivity.this.actionBar, i, 0, i2, 0);
-                    if ((SharedConfig.smoothKeyboard ? 0 : getKeyboardHeight()) > AndroidUtilities.dp(20.0f)) {
+                    if ((SharedConfig.smoothKeyboard ? 0 : measureKeyboardHeight()) > AndroidUtilities.dp(20.0f)) {
                         this.ignoreLayout = true;
                         ChannelCreateActivity.this.nameTextView.hideEmojiView();
                         this.ignoreLayout = false;
@@ -387,7 +387,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                         r0 = 0
                         goto L_0x000f
                     L_0x000b:
-                        int r0 = r10.getKeyboardHeight()
+                        int r0 = r10.measureKeyboardHeight()
                     L_0x000f:
                         r2 = 1101004800(0x41a00000, float:20.0)
                         int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)

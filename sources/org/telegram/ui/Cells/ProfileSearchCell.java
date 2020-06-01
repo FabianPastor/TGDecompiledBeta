@@ -351,7 +351,7 @@ public class ProfileSearchCell extends BaseCell {
         } else {
             i2 = AndroidUtilities.dp(11.0f) + getPaddingLeft();
         }
-        this.avatarImage.setImageCoords(i2, AndroidUtilities.dp(7.0f), AndroidUtilities.dp(46.0f), AndroidUtilities.dp(46.0f));
+        this.avatarImage.setImageCoords((float) i2, (float) AndroidUtilities.dp(7.0f), (float) AndroidUtilities.dp(46.0f), (float) AndroidUtilities.dp(46.0f));
         if (LocaleController.isRTL) {
             if (this.nameLayout.getLineCount() > 0 && this.nameLayout.getLineLeft(0) == 0.0f) {
                 double ceil = Math.ceil((double) this.nameLayout.getLineWidth(0));

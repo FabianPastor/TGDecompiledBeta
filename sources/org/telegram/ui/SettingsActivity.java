@@ -255,6 +255,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
     /* access modifiers changed from: private */
     public SimpleTextView titleTextView;
     private TopView topView;
+    private int transitionIndex;
     private final Interpolator transitionInterpolator = new DecelerateInterpolator();
     /* access modifiers changed from: private */
     public TLRPC$UserFull userInfo;
@@ -1364,8 +1365,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             this.openAnimationInProgress = true;
         }
         if (z) {
-            NotificationCenter.getInstance(this.currentAccount).setAllowedNotificationsDutingAnimation(new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats, NotificationCenter.mediaCountDidLoad, NotificationCenter.mediaCountsDidLoad, NotificationCenter.userInfoDidLoad});
-            NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(true);
+            this.transitionIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.transitionIndex, new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats, NotificationCenter.mediaCountDidLoad, NotificationCenter.mediaCountsDidLoad, NotificationCenter.userInfoDidLoad});
         }
     }
 
@@ -1375,7 +1375,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             if (!z2 && this.playProfileAnimation && this.allowProfileAnimation) {
                 this.openAnimationInProgress = false;
             }
-            NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(false);
+            NotificationCenter.getInstance(this.currentAccount).onAnimationFinish(this.transitionIndex);
         }
     }
 
@@ -2229,7 +2229,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public /* synthetic */ void lambda$new$24$SettingsActivity$SearchAdapter() {
-                    this.this$0.presentFragment(new TwoStepVerificationActivity(0));
+                    this.this$0.presentFragment(new TwoStepVerificationActivity());
                 }
 
                 public /* synthetic */ void lambda$new$25$SettingsActivity$SearchAdapter() {

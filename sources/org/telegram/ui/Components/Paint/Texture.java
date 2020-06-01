@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import org.telegram.ui.Components.Size;
 
 public class Texture {
@@ -43,6 +44,10 @@ public class Texture {
         GLES20.glTexParameteri(3553, 10240, 9729);
         GLES20.glTexParameteri(3553, 10241, 9729);
         GLUtils.texImage2D(3553, 0, this.bitmap, 0);
+        int pixel = this.bitmap.getPixel(0, 0);
+        ByteBuffer allocateDirect = ByteBuffer.allocateDirect(4);
+        allocateDirect.putInt(pixel).position(0);
+        GLES20.glTexSubImage2D(3553, 0, 0, 0, 1, 1, 6408, 5121, allocateDirect);
         Utils.HasGLError();
         return this.texture;
     }

@@ -88,7 +88,7 @@ public class StickerEmojiCell extends FrameLayout {
             if (r3 == 0) goto L_0x0032
             org.telegram.ui.Components.BackupImageView r5 = r0.imageView
             org.telegram.messenger.ImageLocation r6 = org.telegram.messenger.ImageLocation.getForDocument(r19)
-            org.telegram.messenger.ImageLocation r8 = org.telegram.messenger.ImageLocation.getForDocument(r3, r1)
+            org.telegram.messenger.ImageLocation r8 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r3, (org.telegram.tgnet.TLRPC$Document) r1)
             r9 = 0
             r10 = 0
             java.lang.Object r11 = r0.parentObject
@@ -108,7 +108,7 @@ public class StickerEmojiCell extends FrameLayout {
         L_0x0045:
             if (r3 == 0) goto L_0x0057
             org.telegram.ui.Components.BackupImageView r4 = r0.imageView
-            org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForDocument(r3, r1)
+            org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r3, (org.telegram.tgnet.TLRPC$Document) r1)
             r6 = 0
             r8 = 0
             java.lang.Object r9 = r0.parentObject

@@ -1575,18 +1575,6 @@ public class AndroidUtilities {
         }
     }
 
-    public static boolean isKeyboardShowed(View view) {
-        if (view == null) {
-            return false;
-        }
-        try {
-            return ((InputMethodManager) view.getContext().getSystemService("input_method")).isActive(view);
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
-            return false;
-        }
-    }
-
     /* JADX WARNING: Removed duplicated region for block: B:38:0x008a A[Catch:{ Exception -> 0x00a8 }] */
     /* JADX WARNING: Removed duplicated region for block: B:40:0x0096 A[Catch:{ Exception -> 0x00a8 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -2947,9 +2935,9 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0159
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0159
-            r7 = 2131626003(0x7f0e0813, float:1.887923E38)
+            r7 = 2131626008(0x7f0e0818, float:1.887924E38)
             java.lang.String r8 = "OK"
-            r9 = 2131624198(0x7f0e0106, float:1.8875569E38)
+            r9 = 2131624199(0x7f0e0107, float:1.887557E38)
             java.lang.String r10 = "AppName"
             r11 = 1
             if (r2 == 0) goto L_0x00a6
@@ -2970,7 +2958,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131625469(0x7f0e05fd, float:1.8878147E38)
+            r1 = 2131625474(0x7f0e0602, float:1.8878157E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3054,7 +3042,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131625812(0x7f0e0754, float:1.8878843E38)
+            r1 = 2131625817(0x7f0e0759, float:1.8878853E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3153,21 +3141,21 @@ public class AndroidUtilities {
             if (r8 != 0) goto L_0x00ca
             org.telegram.ui.ActionBar.AlertDialog$Builder r8 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r8.<init>((android.content.Context) r9)
-            r0 = 2131624198(0x7f0e0106, float:1.8875569E38)
+            r0 = 2131624199(0x7f0e0107, float:1.887557E38)
             java.lang.String r1 = "AppName"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setTitle(r0)
-            r0 = 2131624196(0x7f0e0104, float:1.8875565E38)
+            r0 = 2131624197(0x7f0e0105, float:1.8875567E38)
             java.lang.String r1 = "ApkRestricted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setMessage(r0)
-            r0 = 2131626338(0x7f0e0962, float:1.887991E38)
+            r0 = 2131626347(0x7f0e096b, float:1.8879928E38)
             java.lang.String r1 = "PermissionOpenSettings"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw
             r1.<init>(r9)
             r8.setPositiveButton(r0, r1)
-            r9 = 2131624489(0x7f0e0229, float:1.887616E38)
+            r9 = 2131624490(0x7f0e022a, float:1.8876161E38)
             java.lang.String r0 = "Cancel"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r0, r9)
             r8.setNegativeButton(r9, r2)

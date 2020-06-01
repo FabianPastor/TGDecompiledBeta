@@ -2699,7 +2699,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         int measuredHeight = (i6 - this.progressView.getMeasuredHeight()) / 2;
         RadialProgressView radialProgressView = this.progressView;
         radialProgressView.layout(measuredWidth2, measuredHeight, radialProgressView.getMeasuredWidth() + measuredWidth2, this.progressView.getMeasuredHeight() + measuredHeight);
-        this.controlsView.imageReceiver.setImageCoords(0, 0, getMeasuredWidth(), getMeasuredHeight() - AndroidUtilities.dp(10.0f));
+        this.controlsView.imageReceiver.setImageCoords(0.0f, 0.0f, (float) getMeasuredWidth(), (float) (getMeasuredHeight() - AndroidUtilities.dp(10.0f)));
     }
 
     /* access modifiers changed from: protected */

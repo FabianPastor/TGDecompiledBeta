@@ -30,6 +30,7 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.Magnifier;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import com.google.zxing.common.detector.MathUtils;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
@@ -642,13 +643,6 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
         return this.selectionStart >= 0 && this.selectionEnd >= 0;
     }
 
-    /* access modifiers changed from: package-private */
-    public float distance(int i, int i2, int i3, int i4) {
-        int i5 = i - i3;
-        int i6 = i2 - i4;
-        return (float) Math.sqrt((double) ((i5 * i5) + (i6 * i6)));
-    }
-
     /* access modifiers changed from: private */
     public void showActions() {
         int i;
@@ -863,7 +857,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                     this.pressedX = motionEvent.getX();
                     this.pressedY = motionEvent.getY();
                     this.pressedTime = System.currentTimeMillis();
-                } else if (action == 1 && System.currentTimeMillis() - this.pressedTime < 200 && TextSelectionHelper.this.distance((int) this.pressedX, (int) this.pressedY, (int) motionEvent.getX(), (int) motionEvent.getY()) < ((float) TextSelectionHelper.this.touchSlop)) {
+                } else if (action == 1 && System.currentTimeMillis() - this.pressedTime < 200 && MathUtils.distance((int) this.pressedX, (int) this.pressedY, (int) motionEvent.getX(), (int) motionEvent.getY()) < ((float) TextSelectionHelper.this.touchSlop)) {
                     TextSelectionHelper.this.hideActions();
                     TextSelectionHelper.this.clear();
                     return true;

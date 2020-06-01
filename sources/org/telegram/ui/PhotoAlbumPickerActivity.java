@@ -40,7 +40,6 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.TLRPC$BotInlineResult;
-import org.telegram.tgnet.TLRPC$InputDocument;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
@@ -191,7 +190,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 int size = View.MeasureSpec.getSize(i);
                 int size2 = View.MeasureSpec.getSize(i2);
                 setMeasuredDimension(size, size2);
-                if ((SharedConfig.smoothKeyboard ? 0 : getKeyboardHeight()) > AndroidUtilities.dp(20.0f)) {
+                if ((SharedConfig.smoothKeyboard ? 0 : measureKeyboardHeight()) > AndroidUtilities.dp(20.0f)) {
                     this.ignoreLayout = true;
                     PhotoAlbumPickerActivity.this.commentTextView.hideEmojiView();
                     this.ignoreLayout = false;
@@ -247,7 +246,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                     r11 = 0
                     goto L_0x0033
                 L_0x002f:
-                    int r11 = r9.getKeyboardHeight()
+                    int r11 = r9.measureKeyboardHeight()
                 L_0x0033:
                     r1 = 1101004800(0x41a00000, float:20.0)
                     int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -734,31 +733,25 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 Object obj = hashMap.get(arrayList.get(i2));
                 SendMessagesHelper.SendingMediaInfo sendingMediaInfo = new SendMessagesHelper.SendingMediaInfo();
                 arrayList2.add(sendingMediaInfo);
-                ArrayList<TLRPC$InputDocument> arrayList3 = null;
+                String str = null;
                 if (obj instanceof MediaController.PhotoEntry) {
                     MediaController.PhotoEntry photoEntry = (MediaController.PhotoEntry) obj;
-                    if (photoEntry.isVideo) {
-                        sendingMediaInfo.path = photoEntry.path;
-                        sendingMediaInfo.videoEditedInfo = photoEntry.editedInfo;
+                    String str2 = photoEntry.imagePath;
+                    if (str2 != null) {
+                        sendingMediaInfo.path = str2;
                     } else {
-                        String str = photoEntry.imagePath;
-                        if (str != null) {
-                            sendingMediaInfo.path = str;
-                        } else {
-                            String str2 = photoEntry.path;
-                            if (str2 != null) {
-                                sendingMediaInfo.path = str2;
-                            }
-                        }
+                        sendingMediaInfo.path = photoEntry.path;
                     }
+                    sendingMediaInfo.thumbPath = photoEntry.thumbPath;
+                    sendingMediaInfo.videoEditedInfo = photoEntry.editedInfo;
                     sendingMediaInfo.isVideo = photoEntry.isVideo;
                     CharSequence charSequence = photoEntry.caption;
-                    sendingMediaInfo.caption = charSequence != null ? charSequence.toString() : null;
-                    sendingMediaInfo.entities = photoEntry.entities;
-                    if (!photoEntry.stickers.isEmpty()) {
-                        arrayList3 = new ArrayList<>(photoEntry.stickers);
+                    if (charSequence != null) {
+                        str = charSequence.toString();
                     }
-                    sendingMediaInfo.masks = arrayList3;
+                    sendingMediaInfo.caption = str;
+                    sendingMediaInfo.entities = photoEntry.entities;
+                    sendingMediaInfo.masks = photoEntry.stickers;
                     sendingMediaInfo.ttl = photoEntry.ttl;
                 } else if (obj instanceof MediaController.SearchImage) {
                     MediaController.SearchImage searchImage = (MediaController.SearchImage) obj;
@@ -768,13 +761,15 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                     } else {
                         sendingMediaInfo.searchImage = searchImage;
                     }
+                    sendingMediaInfo.thumbPath = searchImage.thumbPath;
+                    sendingMediaInfo.videoEditedInfo = searchImage.editedInfo;
                     CharSequence charSequence2 = searchImage.caption;
-                    sendingMediaInfo.caption = charSequence2 != null ? charSequence2.toString() : null;
-                    sendingMediaInfo.entities = searchImage.entities;
-                    if (!searchImage.stickers.isEmpty()) {
-                        arrayList3 = new ArrayList<>(searchImage.stickers);
+                    if (charSequence2 != null) {
+                        str = charSequence2.toString();
                     }
-                    sendingMediaInfo.masks = arrayList3;
+                    sendingMediaInfo.caption = str;
+                    sendingMediaInfo.entities = searchImage.entities;
+                    sendingMediaInfo.masks = searchImage.stickers;
                     sendingMediaInfo.ttl = searchImage.ttl;
                     TLRPC$BotInlineResult tLRPC$BotInlineResult = searchImage.inlineResult;
                     if (tLRPC$BotInlineResult != null && searchImage.type == 1) {

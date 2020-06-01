@@ -1,6 +1,5 @@
 package org.telegram.ui.Components;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Build;
@@ -11,7 +10,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 
-@SuppressLint({"NewApi"})
 public class ForegroundDetector implements Application.ActivityLifecycleCallbacks {
     private static ForegroundDetector Instance;
     private long enterBackgroundTime = 0;
@@ -47,6 +45,22 @@ public class ForegroundDetector implements Application.ActivityLifecycleCallback
     public ForegroundDetector(Application application) {
         Instance = this;
         application.registerActivityLifecycleCallbacks(this);
+    }
+
+    public boolean isForeground() {
+        return this.refs > 0;
+    }
+
+    public boolean isBackground() {
+        return this.refs == 0;
+    }
+
+    public void addListener(Listener listener) {
+        this.listeners.add(listener);
+    }
+
+    public void removeListener(Listener listener) {
+        this.listeners.remove(listener);
     }
 
     public void onActivityStarted(Activity activity) {

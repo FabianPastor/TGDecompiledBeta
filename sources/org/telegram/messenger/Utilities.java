@@ -38,7 +38,7 @@ public class Utilities {
 
     public static native void blurBitmap(Object obj, int i, int i2, int i3, int i4, int i5);
 
-    public static native void calcCDT(ByteBuffer byteBuffer, int i, int i2, ByteBuffer byteBuffer2);
+    public static native void calcCDT(ByteBuffer byteBuffer, int i, int i2, ByteBuffer byteBuffer2, ByteBuffer byteBuffer3);
 
     public static native void clearDir(String str, int i, long j, boolean z);
 

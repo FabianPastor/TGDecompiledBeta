@@ -18,6 +18,7 @@ public abstract class TLRPC$Document extends TLObject {
     public ArrayList<TLRPC$PhotoSize> thumbs = new ArrayList<>();
     public int user_id;
     public int version;
+    public ArrayList<TLRPC$TL_videoSize> video_thumbs = new ArrayList<>();
 
     public static TLRPC$Document TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$Document tLRPC$Document;
@@ -26,13 +27,16 @@ public abstract class TLRPC$Document extends TLObject {
                 tLRPC$Document = new TLRPC$TL_document_layer82();
                 break;
             case -1683841855:
-                tLRPC$Document = new TLRPC$TL_document();
+                tLRPC$Document = new TLRPC$TL_document_layer113();
                 break;
             case -1627626714:
                 tLRPC$Document = new TLRPC$TL_document_old();
                 break;
             case -106717361:
                 tLRPC$Document = new TLRPC$TL_document_layer53();
+                break;
+            case 512177195:
+                tLRPC$Document = new TLRPC$TL_document();
                 break;
             case 922273905:
                 tLRPC$Document = new TLRPC$TL_documentEmpty();

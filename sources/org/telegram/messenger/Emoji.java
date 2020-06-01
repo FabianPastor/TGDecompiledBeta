@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import org.telegram.messenger.Emoji;
 
 public class Emoji {
     private static final int MAX_RECENT_EMOJI_COUNT = 48;
@@ -31,12 +30,11 @@ public class Emoji {
     /* access modifiers changed from: private */
     public static Bitmap[][] emojiBmp = new Bitmap[8][];
     public static HashMap<String, String> emojiColor = new HashMap<>();
-    private static int[] emojiCounts = {1620, 184, 115, 328, 125, 206, 288, 258};
+    private static int[] emojiCounts = {1620, 184, 115, 328, 125, 207, 288, 258};
     public static HashMap<String, Integer> emojiUseHistory = new HashMap<>();
     private static boolean inited = false;
     private static Runnable invalidateUiRunnable = $$Lambda$Emoji$evx_fdAb4NaXQ9KHlOHuPrE3OTE.INSTANCE;
-    /* access modifiers changed from: private */
-    public static boolean[][] loadingEmoji = new boolean[8][];
+    private static boolean[][] loadingEmoji = new boolean[8][];
     /* access modifiers changed from: private */
     public static Paint placeholderPaint;
     public static ArrayList<String> recentEmoji = new ArrayList<>();
@@ -71,8 +69,42 @@ public class Emoji {
         paint.setColor(0);
     }
 
+    public static void preloadEmoji(CharSequence charSequence) {
+        DrawableInfo drawableInfo = getDrawableInfo(charSequence);
+        if (drawableInfo != null) {
+            loadEmoji(drawableInfo.page, drawableInfo.page2);
+        }
+    }
+
     /* access modifiers changed from: private */
     public static void loadEmoji(byte b, short s) {
+        if (emojiBmp[b][s] == null) {
+            boolean[][] zArr = loadingEmoji;
+            if (!zArr[b][s]) {
+                zArr[b][s] = true;
+                Utilities.globalQueue.postRunnable(new Runnable(b, s) {
+                    private final /* synthetic */ byte f$0;
+                    private final /* synthetic */ short f$1;
+
+                    {
+                        this.f$0 = r1;
+                        this.f$1 = r2;
+                    }
+
+                    public final void run() {
+                        Emoji.lambda$loadEmoji$1(this.f$0, this.f$1);
+                    }
+                });
+            }
+        }
+    }
+
+    static /* synthetic */ void lambda$loadEmoji$1(byte b, short s) {
+        loadEmojiInternal(b, s);
+        loadingEmoji[b][s] = false;
+    }
+
+    private static void loadEmojiInternal(byte b, short s) {
         int i;
         try {
             if (AndroidUtilities.density <= 1.0f) {
@@ -170,11 +202,7 @@ public class Emoji {
     }
 
     public static EmojiDrawable getEmojiDrawable(CharSequence charSequence) {
-        CharSequence charSequence2;
-        DrawableInfo drawableInfo = rects.get(charSequence);
-        if (drawableInfo == null && (charSequence2 = EmojiData.emojiAliasMap.get(charSequence)) != null) {
-            drawableInfo = rects.get(charSequence2);
-        }
+        DrawableInfo drawableInfo = getDrawableInfo(charSequence);
         if (drawableInfo != null) {
             EmojiDrawable emojiDrawable = new EmojiDrawable(drawableInfo);
             int i = drawImgSize;
@@ -186,6 +214,30 @@ public class Emoji {
             FileLog.d("No drawable for emoji " + charSequence);
             return null;
         }
+    }
+
+    /* JADX WARNING: Code restructure failed: missing block: B:2:0x000a, code lost:
+        r2 = org.telegram.messenger.EmojiData.emojiAliasMap.get(r2);
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private static org.telegram.messenger.Emoji.DrawableInfo getDrawableInfo(java.lang.CharSequence r2) {
+        /*
+            java.util.HashMap<java.lang.CharSequence, org.telegram.messenger.Emoji$DrawableInfo> r0 = rects
+            java.lang.Object r0 = r0.get(r2)
+            org.telegram.messenger.Emoji$DrawableInfo r0 = (org.telegram.messenger.Emoji.DrawableInfo) r0
+            if (r0 != 0) goto L_0x001d
+            java.util.HashMap<java.lang.CharSequence, java.lang.CharSequence> r1 = org.telegram.messenger.EmojiData.emojiAliasMap
+            java.lang.Object r2 = r1.get(r2)
+            java.lang.CharSequence r2 = (java.lang.CharSequence) r2
+            if (r2 == 0) goto L_0x001d
+            java.util.HashMap<java.lang.CharSequence, org.telegram.messenger.Emoji$DrawableInfo> r0 = rects
+            java.lang.Object r2 = r0.get(r2)
+            r0 = r2
+            org.telegram.messenger.Emoji$DrawableInfo r0 = (org.telegram.messenger.Emoji.DrawableInfo) r0
+        L_0x001d:
+            return r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.Emoji.getDrawableInfo(java.lang.CharSequence):org.telegram.messenger.Emoji$DrawableInfo");
     }
 
     public static boolean isValidEmoji(CharSequence charSequence) {
@@ -252,21 +304,12 @@ public class Emoji {
             Rect rect2;
             Bitmap[][] access$300 = Emoji.emojiBmp;
             DrawableInfo drawableInfo = this.info;
-            if (access$300[drawableInfo.page][drawableInfo.page2] == null) {
-                boolean[][] access$400 = Emoji.loadingEmoji;
-                DrawableInfo drawableInfo2 = this.info;
-                if (!access$400[drawableInfo2.page][drawableInfo2.page2]) {
-                    boolean[][] access$4002 = Emoji.loadingEmoji;
-                    DrawableInfo drawableInfo3 = this.info;
-                    access$4002[drawableInfo3.page][drawableInfo3.page2] = true;
-                    Utilities.globalQueue.postRunnable(new Runnable() {
-                        public final void run() {
-                            Emoji.EmojiDrawable.this.lambda$draw$0$Emoji$EmojiDrawable();
-                        }
-                    });
-                    canvas.drawRect(getBounds(), Emoji.placeholderPaint);
-                    return;
-                }
+            byte b = drawableInfo.page;
+            Bitmap[] bitmapArr = access$300[b];
+            short s = drawableInfo.page2;
+            if (bitmapArr[s] == null) {
+                Emoji.loadEmoji(b, s);
+                canvas.drawRect(getBounds(), Emoji.placeholderPaint);
                 return;
             }
             if (this.fullSize) {
@@ -275,16 +318,8 @@ public class Emoji {
                 rect2 = getBounds();
             }
             Bitmap[][] access$3002 = Emoji.emojiBmp;
-            DrawableInfo drawableInfo4 = this.info;
-            canvas.drawBitmap(access$3002[drawableInfo4.page][drawableInfo4.page2], (Rect) null, rect2, paint);
-        }
-
-        public /* synthetic */ void lambda$draw$0$Emoji$EmojiDrawable() {
-            DrawableInfo drawableInfo = this.info;
-            Emoji.loadEmoji(drawableInfo.page, drawableInfo.page2);
-            boolean[][] access$400 = Emoji.loadingEmoji;
             DrawableInfo drawableInfo2 = this.info;
-            access$400[drawableInfo2.page][drawableInfo2.page2] = false;
+            canvas.drawBitmap(access$3002[drawableInfo2.page][drawableInfo2.page2], (Rect) null, rect2, paint);
         }
     }
 
@@ -748,14 +783,14 @@ public class Emoji {
         for (Map.Entry<String, Integer> key : emojiUseHistory.entrySet()) {
             recentEmoji.add(key.getKey());
         }
-        Collections.sort(recentEmoji, $$Lambda$Emoji$IRtAaHh32YY7tgie8_WycuV8i0.INSTANCE);
+        Collections.sort(recentEmoji, $$Lambda$Emoji$eNgcJk6mdk2laQBJsmjR3iGI4A.INSTANCE);
         while (recentEmoji.size() > 48) {
             ArrayList<String> arrayList = recentEmoji;
             arrayList.remove(arrayList.size() - 1);
         }
     }
 
-    static /* synthetic */ int lambda$sortEmoji$1(String str, String str2) {
+    static /* synthetic */ int lambda$sortEmoji$2(String str, String str2) {
         Integer num = emojiUseHistory.get(str);
         Integer num2 = emojiUseHistory.get(str2);
         if (num == null) {

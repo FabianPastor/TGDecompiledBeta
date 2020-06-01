@@ -1,11 +1,15 @@
 package org.telegram.ui.Adapters;
 
 import android.content.Context;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +29,7 @@ import org.telegram.tgnet.TLRPC$TL_messages_getStickers;
 import org.telegram.tgnet.TLRPC$TL_messages_searchStickerSets;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.tgnet.TLRPC$TL_messages_stickers;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Adapters.StickersSearchAdapter;
 import org.telegram.ui.Cells.EmptyCell;
 import org.telegram.ui.Cells.FeaturedStickerSetInfoCell;
@@ -47,6 +52,8 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
     public int emojiSearchId;
     /* access modifiers changed from: private */
     public HashMap<ArrayList<TLRPC$Document>, String> emojiStickers = new HashMap<>();
+    private ImageView emptyImageView;
+    private TextView emptyTextView;
     private final LongSparseArray<TLRPC$StickerSetCovered> installingStickerSets;
     /* access modifiers changed from: private */
     public ArrayList<TLRPC$TL_messages_stickerSet> localPacks = new ArrayList<>();
@@ -593,20 +600,20 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
     public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r7, int r8) {
         /*
             r6 = this;
-            if (r8 == 0) goto L_0x00c1
+            if (r8 == 0) goto L_0x00d1
             r7 = 1
-            if (r8 == r7) goto L_0x00b9
+            if (r8 == r7) goto L_0x00c9
             r0 = 2
-            if (r8 == r0) goto L_0x00af
+            if (r8 == r0) goto L_0x00bf
             r0 = 3
             r1 = 17
-            if (r8 == r0) goto L_0x009f
+            if (r8 == r0) goto L_0x00af
             r0 = 4
-            if (r8 == r0) goto L_0x0097
+            if (r8 == r0) goto L_0x00a7
             r0 = 5
             if (r8 == r0) goto L_0x0016
             r7 = 0
-            goto L_0x00c8
+            goto L_0x00d8
         L_0x0016:
             android.widget.LinearLayout r8 = new android.widget.LinearLayout
             android.content.Context r0 = r6.context
@@ -616,16 +623,20 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             android.widget.ImageView r0 = new android.widget.ImageView
             android.content.Context r1 = r6.context
             r0.<init>(r1)
+            r6.emptyImageView = r0
             android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
             r0.setScaleType(r1)
-            r1 = 2131165915(0x7var_db, float:1.794606E38)
+            android.widget.ImageView r0 = r6.emptyImageView
+            r1 = 2131165925(0x7var_e5, float:1.794608E38)
             r0.setImageResource(r1)
+            android.widget.ImageView r0 = r6.emptyImageView
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
             java.lang.String r2 = "chat_emojiPanelEmptyText"
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r2)
             android.graphics.PorterDuff$Mode r4 = android.graphics.PorterDuff.Mode.MULTIPLY
             r1.<init>(r3, r4)
             r0.setColorFilter(r1)
+            android.widget.ImageView r0 = r6.emptyImageView
             r1 = -2
             android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear(r1, r1)
             r8.addView(r0, r3)
@@ -639,54 +650,58 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
             android.widget.TextView r0 = new android.widget.TextView
             android.content.Context r3 = r6.context
             r0.<init>(r3)
-            r3 = 2131625844(0x7f0e0774, float:1.8878907E38)
+            r6.emptyTextView = r0
+            r3 = 2131625849(0x7f0e0779, float:1.8878918E38)
             java.lang.String r5 = "NoStickersFound"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r0.setText(r3)
+            android.widget.TextView r0 = r6.emptyTextView
             r3 = 1098907648(0x41800000, float:16.0)
             r0.setTextSize(r7, r3)
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r0.setTextColor(r7)
-            android.widget.LinearLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createLinear(r1, r1)
-            r8.addView(r0, r7)
+            android.widget.TextView r7 = r6.emptyTextView
+            int r0 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r7.setTextColor(r0)
+            android.widget.TextView r7 = r6.emptyTextView
+            android.widget.LinearLayout$LayoutParams r0 = org.telegram.ui.Components.LayoutHelper.createLinear(r1, r1)
+            r8.addView(r7, r0)
             r7 = 1121976320(0x42e00000, float:112.0)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             r8.setMinimumHeight(r7)
             r7 = -1082130432(0xffffffffbvar_, float:-1.0)
             android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r7)
             r8.setLayoutParams(r7)
-            goto L_0x00b7
-        L_0x0097:
+            goto L_0x00c7
+        L_0x00a7:
             android.view.View r7 = new android.view.View
             android.content.Context r8 = r6.context
             r7.<init>(r8)
-            goto L_0x00c8
-        L_0x009f:
+            goto L_0x00d8
+        L_0x00af:
             org.telegram.ui.Cells.FeaturedStickerSetInfoCell r8 = new org.telegram.ui.Cells.FeaturedStickerSetInfoCell
             android.content.Context r0 = r6.context
             r8.<init>(r0, r1, r7)
             org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$5BQQquM8yro4A6pm_PDpwuDjO6U r7 = new org.telegram.ui.Adapters.-$$Lambda$StickersSearchAdapter$5BQQquM8yro4A6pm_PDpwuDjO6U
             r7.<init>()
             r8.setAddOnClickListener(r7)
-            goto L_0x00b7
-        L_0x00af:
+            goto L_0x00c7
+        L_0x00bf:
             org.telegram.ui.Cells.StickerSetNameCell r8 = new org.telegram.ui.Cells.StickerSetNameCell
             android.content.Context r0 = r6.context
             r1 = 0
             r8.<init>(r0, r1, r7)
-        L_0x00b7:
+        L_0x00c7:
             r7 = r8
-            goto L_0x00c8
-        L_0x00b9:
+            goto L_0x00d8
+        L_0x00c9:
             org.telegram.ui.Cells.EmptyCell r7 = new org.telegram.ui.Cells.EmptyCell
             android.content.Context r8 = r6.context
             r7.<init>(r8)
-            goto L_0x00c8
-        L_0x00c1:
+            goto L_0x00d8
+        L_0x00d1:
             org.telegram.ui.Adapters.StickersSearchAdapter$2 r7 = new org.telegram.ui.Adapters.StickersSearchAdapter$2
             android.content.Context r8 = r6.context
             r7.<init>(r6, r8)
-        L_0x00c8:
+        L_0x00d8:
             org.telegram.ui.Components.RecyclerListView$Holder r8 = new org.telegram.ui.Components.RecyclerListView$Holder
             r8.<init>(r7)
             return r8
@@ -1109,5 +1124,25 @@ public class StickersSearchAdapter extends RecyclerListView.SelectionAdapter {
 
     public TLRPC$StickerSetCovered getSetForPosition(int i) {
         return this.positionsToSets.get(i);
+    }
+
+    public void updateColors(RecyclerListView recyclerListView) {
+        int childCount = recyclerListView.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View childAt = recyclerListView.getChildAt(i);
+            if (childAt instanceof FeaturedStickerSetInfoCell) {
+                ((FeaturedStickerSetInfoCell) childAt).updateColors();
+            } else if (childAt instanceof StickerSetNameCell) {
+                ((StickerSetNameCell) childAt).updateColors();
+            }
+        }
+    }
+
+    public void getThemeDescriptions(List<ThemeDescription> list, RecyclerListView recyclerListView, ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate) {
+        List<ThemeDescription> list2 = list;
+        FeaturedStickerSetInfoCell.createThemeDescriptions(list, recyclerListView, themeDescriptionDelegate);
+        StickerSetNameCell.createThemeDescriptions(list, recyclerListView, themeDescriptionDelegate);
+        list2.add(new ThemeDescription(this.emptyImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_emojiPanelEmptyText"));
+        list2.add(new ThemeDescription(this.emptyTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_emojiPanelEmptyText"));
     }
 }

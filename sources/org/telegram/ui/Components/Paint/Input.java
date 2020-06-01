@@ -7,14 +7,12 @@ import org.telegram.messenger.AndroidUtilities;
 
 public class Input {
     private boolean beganDrawing;
-    /* access modifiers changed from: private */
-    public boolean clearBuffer;
+    private boolean clearBuffer;
     private boolean hasMoved;
     private Matrix invertMatrix;
     private boolean isFirst;
     private Point lastLocation;
-    /* access modifiers changed from: private */
-    public double lastRemainder;
+    private double lastRemainder;
     private Point[] points = new Point[3];
     private int pointsCount;
     private RenderView renderView;
@@ -30,7 +28,7 @@ public class Input {
         matrix.invert(matrix2);
     }
 
-    public void process(MotionEvent motionEvent) {
+    public void process(MotionEvent motionEvent, float f) {
         int actionMasked = motionEvent.getActionMasked();
         float x = motionEvent.getX();
         float height = ((float) this.renderView.getHeight()) - motionEvent.getY();
@@ -57,6 +55,12 @@ public class Input {
                 this.renderView.onFinishedDrawing(this.hasMoved);
                 return;
             } else if (actionMasked != 2) {
+                if (actionMasked == 3) {
+                    this.renderView.getPainting().clearStroke();
+                    this.pointsCount = 0;
+                    this.beganDrawing = false;
+                    return;
+                }
                 return;
             }
         }
@@ -68,7 +72,7 @@ public class Input {
             this.points[0] = point;
             this.pointsCount = 1;
             this.clearBuffer = true;
-        } else if (point.getDistanceTo(this.lastLocation) >= ((float) AndroidUtilities.dp(5.0f))) {
+        } else if (point.getDistanceTo(this.lastLocation) >= ((float) AndroidUtilities.dp(5.0f)) / f) {
             if (!this.hasMoved) {
                 this.renderView.onBeganDrawing();
                 this.hasMoved = true;
@@ -155,21 +159,40 @@ public class Input {
         return new Point(d4 + (d5 * d2), d6 + (d7 * d) + (d8 * d2), 1.0d);
     }
 
-    private void paintPath(final Path path) {
+    private void paintPath(Path path) {
         path.setup(this.renderView.getCurrentColor(), this.renderView.getCurrentWeight(), this.renderView.getCurrentBrush());
         if (this.clearBuffer) {
             this.lastRemainder = 0.0d;
         }
         path.remainder = this.lastRemainder;
-        this.renderView.getPainting().paintStroke(path, this.clearBuffer, new Runnable() {
-            public void run() {
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public void run() {
-                        AnonymousClass1 r0 = AnonymousClass1.this;
-                        double unused = Input.this.lastRemainder = path.remainder;
-                        boolean unused2 = Input.this.clearBuffer = false;
-                    }
-                });
+        this.renderView.getPainting().paintStroke(path, this.clearBuffer, new Runnable(path) {
+            private final /* synthetic */ Path f$1;
+
+            {
+                this.f$1 = r2;
+            }
+
+            public final void run() {
+                Input.this.lambda$paintPath$1$Input(this.f$1);
+            }
+        });
+        this.clearBuffer = false;
+    }
+
+    public /* synthetic */ void lambda$null$0$Input(Path path) {
+        this.lastRemainder = path.remainder;
+    }
+
+    public /* synthetic */ void lambda$paintPath$1$Input(Path path) {
+        AndroidUtilities.runOnUIThread(new Runnable(path) {
+            private final /* synthetic */ Path f$1;
+
+            {
+                this.f$1 = r2;
+            }
+
+            public final void run() {
+                Input.this.lambda$null$0$Input(this.f$1);
             }
         });
     }

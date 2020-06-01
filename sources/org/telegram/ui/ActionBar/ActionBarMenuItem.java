@@ -68,7 +68,7 @@ public class ActionBarMenuItem extends FrameLayout {
     public TextView searchFieldCaption;
     private View selectedMenuView;
     private Runnable showMenuRunnable;
-    private ActionBarSumMenuItemDelegate subMenuDelegate;
+    private ActionBarSubMenuItemDelegate subMenuDelegate;
     private int subMenuOpenSide;
     protected TextView textView;
     private int yOffset;
@@ -109,7 +109,9 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
-    public interface ActionBarSumMenuItemDelegate {
+    public interface ActionBarSubMenuItemDelegate {
+        void onHideSubMenu();
+
         void onShowSubMenu();
     }
 
@@ -256,8 +258,8 @@ public class ActionBarMenuItem extends FrameLayout {
         this.delegate = actionBarMenuItemDelegate;
     }
 
-    public void setSubMenuDelegate(ActionBarSumMenuItemDelegate actionBarSumMenuItemDelegate) {
-        this.subMenuDelegate = actionBarSumMenuItemDelegate;
+    public void setSubMenuDelegate(ActionBarSubMenuItemDelegate actionBarSubMenuItemDelegate) {
+        this.subMenuDelegate = actionBarSubMenuItemDelegate;
     }
 
     public void setIconColor(int i) {
@@ -532,9 +534,9 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
                 ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
                 if (actionBarPopupWindow == null || !actionBarPopupWindow.isShowing()) {
-                    ActionBarSumMenuItemDelegate actionBarSumMenuItemDelegate = this.subMenuDelegate;
-                    if (actionBarSumMenuItemDelegate != null) {
-                        actionBarSumMenuItemDelegate.onShowSubMenu();
+                    ActionBarSubMenuItemDelegate actionBarSubMenuItemDelegate = this.subMenuDelegate;
+                    if (actionBarSubMenuItemDelegate != null) {
+                        actionBarSubMenuItemDelegate.onShowSubMenu();
                     }
                     if (this.popupWindow == null) {
                         ActionBarPopupWindow actionBarPopupWindow2 = new ActionBarPopupWindow(this.popupLayout, -2, -2);
@@ -563,7 +565,7 @@ public class ActionBarMenuItem extends FrameLayout {
                         });
                         this.popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                             public final void onDismiss() {
-                                ActionBarMenuItem.this.onDismiss();
+                                ActionBarMenuItem.this.lambda$toggleSubMenu$7$ActionBarMenuItem();
                             }
                         });
                     }
@@ -593,6 +595,14 @@ public class ActionBarMenuItem extends FrameLayout {
         }
         this.popupWindow.dismiss();
         return true;
+    }
+
+    public /* synthetic */ void lambda$toggleSubMenu$7$ActionBarMenuItem() {
+        onDismiss();
+        ActionBarSubMenuItemDelegate actionBarSubMenuItemDelegate = this.subMenuDelegate;
+        if (actionBarSubMenuItemDelegate != null) {
+            actionBarSubMenuItemDelegate.onHideSubMenu();
+        }
     }
 
     public void openSearch(boolean z) {
@@ -650,6 +660,11 @@ public class ActionBarMenuItem extends FrameLayout {
 
     public void setClearsTextOnSearchCollapse(boolean z) {
         this.clearsTextOnSearchCollapse = z;
+    }
+
+    public boolean isSubMenuShowing() {
+        ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
+        return actionBarPopupWindow != null && actionBarPopupWindow.isShowing();
     }
 
     public void closeSubMenu() {
@@ -816,7 +831,7 @@ public class ActionBarMenuItem extends FrameLayout {
             }
             this.searchField.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 public final boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
-                    return ActionBarMenuItem.this.lambda$setIsSearchField$7$ActionBarMenuItem(textView, i, keyEvent);
+                    return ActionBarMenuItem.this.lambda$setIsSearchField$8$ActionBarMenuItem(textView, i, keyEvent);
                 }
             });
             this.searchField.addTextChangedListener(new TextWatcher() {
@@ -919,7 +934,7 @@ public class ActionBarMenuItem extends FrameLayout {
             this.clearButton.setScaleY(0.0f);
             this.clearButton.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
-                    ActionBarMenuItem.this.lambda$setIsSearchField$8$ActionBarMenuItem(view);
+                    ActionBarMenuItem.this.lambda$setIsSearchField$9$ActionBarMenuItem(view);
                 }
             });
             this.clearButton.setContentDescription(LocaleController.getString("ClearButton", NUM));
@@ -929,7 +944,7 @@ public class ActionBarMenuItem extends FrameLayout {
         return this;
     }
 
-    public /* synthetic */ boolean lambda$setIsSearchField$7$ActionBarMenuItem(TextView textView2, int i, KeyEvent keyEvent) {
+    public /* synthetic */ boolean lambda$setIsSearchField$8$ActionBarMenuItem(TextView textView2, int i, KeyEvent keyEvent) {
         if (keyEvent == null) {
             return false;
         }
@@ -945,7 +960,7 @@ public class ActionBarMenuItem extends FrameLayout {
         return false;
     }
 
-    public /* synthetic */ void lambda$setIsSearchField$8$ActionBarMenuItem(View view) {
+    public /* synthetic */ void lambda$setIsSearchField$9$ActionBarMenuItem(View view) {
         if (this.searchField.length() != 0) {
             this.searchField.setText("");
         } else {

@@ -35,7 +35,6 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
-import org.telegram.tgnet.TLRPC$InputDocument;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -544,7 +543,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             if (r4 != 0) goto L_0x0045
             org.telegram.ui.Components.ChatAttachAlert r4 = r3.parentAlert
             org.telegram.ui.Components.SizeNotifierFrameLayout r4 = r4.sizeNotifierFrameLayout
-            int r4 = r4.getKeyboardHeight()
+            int r4 = r4.measureKeyboardHeight()
             r2 = 1101004800(0x41a00000, float:20.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             if (r4 <= r2) goto L_0x001d
@@ -681,29 +680,19 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 arrayList2.add(sendingMediaInfo);
                 if (obj instanceof MediaController.PhotoEntry) {
                     MediaController.PhotoEntry photoEntry = (MediaController.PhotoEntry) obj;
-                    if (photoEntry.isVideo) {
-                        sendingMediaInfo.path = photoEntry.path;
-                        sendingMediaInfo.videoEditedInfo = photoEntry.editedInfo;
+                    String str = photoEntry.imagePath;
+                    if (str != null) {
+                        sendingMediaInfo.path = str;
                     } else {
-                        String str = photoEntry.imagePath;
-                        if (str != null) {
-                            sendingMediaInfo.path = str;
-                        } else {
-                            String str2 = photoEntry.path;
-                            if (str2 != null) {
-                                sendingMediaInfo.path = str2;
-                            }
-                        }
+                        sendingMediaInfo.path = photoEntry.path;
                     }
+                    sendingMediaInfo.thumbPath = photoEntry.thumbPath;
+                    sendingMediaInfo.videoEditedInfo = photoEntry.editedInfo;
                     sendingMediaInfo.isVideo = photoEntry.isVideo;
                     CharSequence charSequence = photoEntry.caption;
-                    ArrayList<TLRPC$InputDocument> arrayList3 = null;
                     sendingMediaInfo.caption = charSequence != null ? charSequence.toString() : null;
                     sendingMediaInfo.entities = photoEntry.entities;
-                    if (!photoEntry.stickers.isEmpty()) {
-                        arrayList3 = new ArrayList<>(photoEntry.stickers);
-                    }
-                    sendingMediaInfo.masks = arrayList3;
+                    sendingMediaInfo.masks = photoEntry.stickers;
                     sendingMediaInfo.ttl = photoEntry.ttl;
                 }
             }
@@ -1031,10 +1020,10 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             java.lang.String r4 = android.os.Environment.getExternalStorageState()
             java.lang.String r5 = "mounted"
             boolean r5 = r4.equals(r5)
-            r6 = 2131625188(0x7f0e04e4, float:1.8877577E38)
+            r6 = 2131625183(0x7f0e04df, float:1.8877567E38)
             java.lang.String r7 = "ExternalFolderInfo"
             r8 = 2131165374(0x7var_be, float:1.7944963E38)
-            r9 = 2131626629(0x7f0e0a85, float:1.88805E38)
+            r9 = 2131626641(0x7f0e0a91, float:1.8880524E38)
             java.lang.String r10 = "SdCard"
             if (r5 != 0) goto L_0x003e
             java.lang.String r5 = "mounted_ro"
@@ -1052,13 +1041,13 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             r4.subtitle = r5
             goto L_0x0073
         L_0x0058:
-            r5 = 2131625477(0x7f0e0605, float:1.8878163E38)
+            r5 = 2131625482(0x7f0e060a, float:1.8878173E38)
             java.lang.String r11 = "InternalStorage"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r4.title = r5
             r5 = 2131165376(0x7var_c0, float:1.7944967E38)
             r4.icon = r5
-            r5 = 2131625476(0x7f0e0604, float:1.8878161E38)
+            r5 = 2131625481(0x7f0e0609, float:1.8878171E38)
             java.lang.String r11 = "InternalFolderInfo"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r4.subtitle = r5
@@ -1149,7 +1138,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             goto L_0x014c
         L_0x0141:
             java.lang.String r11 = "ExternalStorage"
-            r12 = 2131625189(0x7f0e04e5, float:1.8877579E38)
+            r12 = 2131625184(0x7f0e04e0, float:1.8877569E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r11, r12)     // Catch:{ Exception -> 0x0162 }
             r4.title = r11     // Catch:{ Exception -> 0x0162 }
         L_0x014c:
@@ -1196,7 +1185,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             r3.<init>()     // Catch:{ Exception -> 0x01ae }
             r3.title = r0     // Catch:{ Exception -> 0x01ae }
             java.lang.String r0 = "AppFolderInfo"
-            r4 = 2131624197(0x7f0e0105, float:1.8875567E38)
+            r4 = 2131624198(0x7f0e0106, float:1.8875569E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r4)     // Catch:{ Exception -> 0x01ae }
             r3.subtitle = r0     // Catch:{ Exception -> 0x01ae }
             r0 = 2131165372(0x7var_bc, float:1.794496E38)
@@ -1211,11 +1200,11 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         L_0x01b2:
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
             r0.<init>()
-            r2 = 2131625376(0x7f0e05a0, float:1.8877958E38)
+            r2 = 2131625384(0x7f0e05a8, float:1.8877974E38)
             java.lang.String r3 = "Gallery"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.title = r2
-            r2 = 2131625377(0x7f0e05a1, float:1.887796E38)
+            r2 = 2131625385(0x7f0e05a9, float:1.8877976E38)
             java.lang.String r3 = "GalleryInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.subtitle = r2
@@ -1228,11 +1217,11 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             if (r0 == 0) goto L_0x0204
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
             r0.<init>()
-            r2 = 2131624298(0x7f0e016a, float:1.8875772E38)
+            r2 = 2131624299(0x7f0e016b, float:1.8875774E38)
             java.lang.String r3 = "AttachMusic"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.title = r2
-            r2 = 2131625750(0x7f0e0716, float:1.8878717E38)
+            r2 = 2131625755(0x7f0e071b, float:1.8878727E38)
             java.lang.String r3 = "MusicInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.subtitle = r2

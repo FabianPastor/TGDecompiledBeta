@@ -16,6 +16,7 @@ import org.telegram.tgnet.TLRPC$TL_inputPeerChat;
 import org.telegram.tgnet.TLRPC$TL_inputPeerUser;
 import org.telegram.tgnet.TLRPC$TL_photoStrippedSize;
 import org.telegram.tgnet.TLRPC$TL_secureFile;
+import org.telegram.tgnet.TLRPC$TL_videoSize;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserProfilePhoto;
 import org.telegram.tgnet.TLRPC$WebPage;
@@ -171,6 +172,15 @@ public class ImageLocation {
             }
             return forPhoto;
         }
+    }
+
+    public static ImageLocation getForDocument(TLRPC$TL_videoSize tLRPC$TL_videoSize, TLRPC$Document tLRPC$Document) {
+        if (tLRPC$TL_videoSize == null || tLRPC$Document == null) {
+            return null;
+        }
+        ImageLocation forPhoto = getForPhoto(tLRPC$TL_videoSize.location, tLRPC$TL_videoSize.size, (TLRPC$Photo) null, tLRPC$Document, (TLRPC$InputPeer) null, false, tLRPC$Document.dc_id, (TLRPC$InputStickerSet) null, tLRPC$TL_videoSize.type);
+        forPhoto.imageType = 2;
+        return forPhoto;
     }
 
     public static ImageLocation getForDocument(TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$Document tLRPC$Document) {

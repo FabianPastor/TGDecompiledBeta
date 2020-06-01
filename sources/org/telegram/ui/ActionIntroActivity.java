@@ -725,7 +725,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 if (iArr.length <= 0 || iArr[0] != 0) {
                     AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
                     builder2.setTitle(LocaleController.getString("AppName", NUM));
-                    builder2.setMessage(LocaleController.getString("WalletPermissionNoCamera", NUM));
+                    builder2.setMessage(LocaleController.getString("QRCodePermissionNoCamera", NUM));
                     builder2.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {
                         public final void onClick(DialogInterface dialogInterface, int i) {
                             ActionIntroActivity.this.lambda$onRequestPermissionsResultFragment$5$ActionIntroActivity(dialogInterface, i);

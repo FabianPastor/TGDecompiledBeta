@@ -76,11 +76,15 @@ import org.telegram.tgnet.TLRPC$WebPage;
 
 public class FileRefController extends BaseController {
     private static volatile FileRefController[] Instance = new FileRefController[3];
+    private ArrayList<Waiter> favStickersWaiter = new ArrayList<>();
     private long lastCleanupTime = SystemClock.elapsedRealtime();
     private HashMap<String, ArrayList<Requester>> locationRequester = new HashMap<>();
     private HashMap<TLRPC$TL_messages_sendMultiMedia, Object[]> multiMediaCache = new HashMap<>();
     private HashMap<String, ArrayList<Requester>> parentRequester = new HashMap<>();
+    private ArrayList<Waiter> recentStickersWaiter = new ArrayList<>();
     private HashMap<String, CachedResult> responseCache = new HashMap<>();
+    private ArrayList<Waiter> savedGifsWaiters = new ArrayList<>();
+    private ArrayList<Waiter> wallpaperWaiters = new ArrayList<>();
 
     static /* synthetic */ void lambda$onUpdateObjectReference$23(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
@@ -114,6 +118,18 @@ public class FileRefController extends BaseController {
         public TLObject response;
 
         private CachedResult() {
+        }
+    }
+
+    private static class Waiter {
+        /* access modifiers changed from: private */
+        public String locationKey;
+        /* access modifiers changed from: private */
+        public String parentKey;
+
+        public Waiter(String str, String str2) {
+            this.locationKey = str;
+            this.parentKey = str2;
         }
     }
 
@@ -337,6 +353,17 @@ public class FileRefController extends BaseController {
         }
     }
 
+    private void broadcastWaitersData(ArrayList<Waiter> arrayList, TLObject tLObject) {
+        int size = arrayList.size();
+        int i = 0;
+        while (i < size) {
+            Waiter waiter = arrayList.get(i);
+            onRequestComplete(waiter.locationKey, waiter.parentKey, tLObject, i == size + -1);
+            i++;
+        }
+        arrayList.clear();
+    }
+
     private void requestReferenceFromServer(Object obj, String str, String str2, Object[] objArr) {
         if (obj instanceof MessageObject) {
             MessageObject messageObject = (MessageObject) obj;
@@ -504,61 +531,41 @@ public class FileRefController extends BaseController {
         } else if (obj instanceof String) {
             String str3 = (String) obj;
             if ("wallpaper".equals(str3)) {
-                getConnectionsManager().sendRequest(new TLRPC$TL_account_getWallPapers(), new RequestDelegate(str, str2) {
-                    private final /* synthetic */ String f$1;
-                    private final /* synthetic */ String f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        FileRefController.this.lambda$requestReferenceFromServer$9$FileRefController(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
-                    }
-                });
+                if (this.wallpaperWaiters.isEmpty()) {
+                    getConnectionsManager().sendRequest(new TLRPC$TL_account_getWallPapers(), new RequestDelegate() {
+                        public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                            FileRefController.this.lambda$requestReferenceFromServer$9$FileRefController(tLObject, tLRPC$TL_error);
+                        }
+                    });
+                }
+                this.wallpaperWaiters.add(new Waiter(str, str2));
             } else if (str3.startsWith("gif")) {
-                getConnectionsManager().sendRequest(new TLRPC$TL_messages_getSavedGifs(), new RequestDelegate(str, str2) {
-                    private final /* synthetic */ String f$1;
-                    private final /* synthetic */ String f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        FileRefController.this.lambda$requestReferenceFromServer$10$FileRefController(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
-                    }
-                });
+                if (this.savedGifsWaiters.isEmpty()) {
+                    getConnectionsManager().sendRequest(new TLRPC$TL_messages_getSavedGifs(), new RequestDelegate() {
+                        public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                            FileRefController.this.lambda$requestReferenceFromServer$10$FileRefController(tLObject, tLRPC$TL_error);
+                        }
+                    });
+                }
+                this.savedGifsWaiters.add(new Waiter(str, str2));
             } else if ("recent".equals(str3)) {
-                getConnectionsManager().sendRequest(new TLRPC$TL_messages_getRecentStickers(), new RequestDelegate(str, str2) {
-                    private final /* synthetic */ String f$1;
-                    private final /* synthetic */ String f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        FileRefController.this.lambda$requestReferenceFromServer$11$FileRefController(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
-                    }
-                });
+                if (this.recentStickersWaiter.isEmpty()) {
+                    getConnectionsManager().sendRequest(new TLRPC$TL_messages_getRecentStickers(), new RequestDelegate() {
+                        public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                            FileRefController.this.lambda$requestReferenceFromServer$11$FileRefController(tLObject, tLRPC$TL_error);
+                        }
+                    });
+                }
+                this.recentStickersWaiter.add(new Waiter(str, str2));
             } else if ("fav".equals(str3)) {
-                getConnectionsManager().sendRequest(new TLRPC$TL_messages_getFavedStickers(), new RequestDelegate(str, str2) {
-                    private final /* synthetic */ String f$1;
-                    private final /* synthetic */ String f$2;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r3;
-                    }
-
-                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        FileRefController.this.lambda$requestReferenceFromServer$12$FileRefController(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
-                    }
-                });
+                if (this.favStickersWaiter.isEmpty()) {
+                    getConnectionsManager().sendRequest(new TLRPC$TL_messages_getFavedStickers(), new RequestDelegate() {
+                        public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                            FileRefController.this.lambda$requestReferenceFromServer$12$FileRefController(tLObject, tLRPC$TL_error);
+                        }
+                    });
+                }
+                this.favStickersWaiter.add(new Waiter(str, str2));
             } else if (str3.startsWith("avatar_")) {
                 int intValue = Utilities.parseInt(str3).intValue();
                 if (intValue > 0) {
@@ -742,20 +749,20 @@ public class FileRefController extends BaseController {
         onRequestComplete(str, str2, tLObject, true);
     }
 
-    public /* synthetic */ void lambda$requestReferenceFromServer$9$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        onRequestComplete(str, str2, tLObject, true);
+    public /* synthetic */ void lambda$requestReferenceFromServer$9$FileRefController(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        broadcastWaitersData(this.wallpaperWaiters, tLObject);
     }
 
-    public /* synthetic */ void lambda$requestReferenceFromServer$10$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        onRequestComplete(str, str2, tLObject, true);
+    public /* synthetic */ void lambda$requestReferenceFromServer$10$FileRefController(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        broadcastWaitersData(this.savedGifsWaiters, tLObject);
     }
 
-    public /* synthetic */ void lambda$requestReferenceFromServer$11$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        onRequestComplete(str, str2, tLObject, true);
+    public /* synthetic */ void lambda$requestReferenceFromServer$11$FileRefController(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        broadcastWaitersData(this.recentStickersWaiter, tLObject);
     }
 
-    public /* synthetic */ void lambda$requestReferenceFromServer$12$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        onRequestComplete(str, str2, tLObject, true);
+    public /* synthetic */ void lambda$requestReferenceFromServer$12$FileRefController(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        broadcastWaitersData(this.favStickersWaiter, tLObject);
     }
 
     public /* synthetic */ void lambda$requestReferenceFromServer$13$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {

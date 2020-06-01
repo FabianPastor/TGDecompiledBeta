@@ -1,8 +1,10 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
@@ -10,17 +12,25 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.ColorSpanUnderline;
 import org.telegram.ui.Components.LayoutHelper;
+import org.telegram.ui.Components.RecyclerListView;
 
 public class StickerSetNameCell extends FrameLayout {
     private ImageView buttonView;
     private boolean empty;
     private boolean isEmoji;
+    private CharSequence stickerSetName;
+    private int stickerSetNameSearchIndex;
+    private int stickerSetNameSearchLength;
     private TextView textView;
+    private CharSequence url;
+    private int urlSearchLength;
     private TextView urlTextView;
 
     public StickerSetNameCell(Context context, boolean z) {
@@ -72,25 +82,36 @@ public class StickerSetNameCell extends FrameLayout {
     }
 
     public void setUrl(CharSequence charSequence, int i) {
-        if (charSequence != null) {
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(charSequence);
+        this.url = charSequence;
+        this.urlSearchLength = i;
+        this.urlTextView.setVisibility(charSequence != null ? 0 : 8);
+        updateUrlSearchSpan();
+    }
+
+    private void updateUrlSearchSpan() {
+        if (this.url != null) {
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(this.url);
             try {
-                spannableStringBuilder.setSpan(new ColorSpanUnderline(Theme.getColor("chat_emojiPanelStickerSetNameHighlight")), 0, i, 33);
-                spannableStringBuilder.setSpan(new ColorSpanUnderline(Theme.getColor("chat_emojiPanelStickerSetName")), i, charSequence.length(), 33);
+                spannableStringBuilder.setSpan(new ColorSpanUnderline(Theme.getColor("chat_emojiPanelStickerSetNameHighlight")), 0, this.urlSearchLength, 33);
+                spannableStringBuilder.setSpan(new ColorSpanUnderline(Theme.getColor("chat_emojiPanelStickerSetName")), this.urlSearchLength, this.url.length(), 33);
             } catch (Exception unused) {
             }
             this.urlTextView.setText(spannableStringBuilder);
-            this.urlTextView.setVisibility(0);
-            return;
         }
-        this.urlTextView.setVisibility(8);
     }
 
     public void setText(CharSequence charSequence, int i) {
         setText(charSequence, i, 0, 0);
     }
 
+    public void setTitleColor(int i) {
+        this.textView.setTextColor(i);
+    }
+
     public void setText(CharSequence charSequence, int i, int i2, int i3) {
+        this.stickerSetName = charSequence;
+        this.stickerSetNameSearchIndex = i2;
+        this.stickerSetNameSearchLength = i3;
         if (charSequence == null) {
             this.empty = true;
             this.textView.setText("");
@@ -98,12 +119,7 @@ public class StickerSetNameCell extends FrameLayout {
             return;
         }
         if (i3 != 0) {
-            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(charSequence);
-            try {
-                spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor("chat_emojiPanelStickerSetNameHighlight")), i2, i3 + i2, 33);
-            } catch (Exception unused) {
-            }
-            this.textView.setText(spannableStringBuilder);
+            updateTextSearchSpan();
         } else {
             TextView textView2 = this.textView;
             textView2.setText(Emoji.replaceEmoji(charSequence, textView2.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
@@ -114,6 +130,17 @@ public class StickerSetNameCell extends FrameLayout {
             return;
         }
         this.buttonView.setVisibility(4);
+    }
+
+    private void updateTextSearchSpan() {
+        if (this.stickerSetName != null && this.stickerSetNameSearchLength != 0) {
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(this.stickerSetName);
+            try {
+                spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor("chat_emojiPanelStickerSetNameHighlight")), this.stickerSetNameSearchIndex, this.stickerSetNameSearchIndex + this.stickerSetNameSearchLength, 33);
+            } catch (Exception unused) {
+            }
+            this.textView.setText(spannableStringBuilder);
+        }
     }
 
     public void setOnIconClickListener(View.OnClickListener onClickListener) {
@@ -140,5 +167,19 @@ public class StickerSetNameCell extends FrameLayout {
             i2 += this.textView.getMeasuredWidth() + AndroidUtilities.dp(16.0f);
         }
         super.measureChildWithMargins(view, i, i2, i3, i4);
+    }
+
+    public void updateColors() {
+        updateTextSearchSpan();
+        updateUrlSearchSpan();
+    }
+
+    public static void createThemeDescriptions(List<ThemeDescription> list, RecyclerListView recyclerListView, ThemeDescription.ThemeDescriptionDelegate themeDescriptionDelegate) {
+        List<ThemeDescription> list2 = list;
+        list2.add(new ThemeDescription((View) recyclerListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{StickerSetNameCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_emojiPanelStickerSetName"));
+        list2.add(new ThemeDescription((View) recyclerListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{StickerSetNameCell.class}, new String[]{"urlTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_emojiPanelStickerSetName"));
+        list2.add(new ThemeDescription((View) recyclerListView, ThemeDescription.FLAG_IMAGECOLOR, new Class[]{StickerSetNameCell.class}, new String[]{"buttonView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_emojiPanelStickerSetNameIcon"));
+        list2.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDescriptionDelegate, "chat_emojiPanelStickerSetNameHighlight"));
+        list2.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, themeDescriptionDelegate, "chat_emojiPanelStickerSetName"));
     }
 }

@@ -28,7 +28,6 @@ import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
-import org.telegram.tgnet.TLRPC$InputDocument;
 import org.telegram.tgnet.TLRPC$InputFile;
 import org.telegram.tgnet.TLRPC$Photo;
 import org.telegram.tgnet.TLRPC$PhotoSize;
@@ -176,14 +175,11 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                                 } else {
                                     sendingMediaInfo.searchImage = searchImage;
                                 }
+                                sendingMediaInfo.thumbPath = searchImage.thumbPath;
                                 CharSequence charSequence = searchImage.caption;
-                                ArrayList<TLRPC$InputDocument> arrayList2 = null;
                                 sendingMediaInfo.caption = charSequence != null ? charSequence.toString() : null;
                                 sendingMediaInfo.entities = searchImage.entities;
-                                if (!searchImage.stickers.isEmpty()) {
-                                    arrayList2 = new ArrayList<>(searchImage.stickers);
-                                }
-                                sendingMediaInfo.masks = arrayList2;
+                                sendingMediaInfo.masks = searchImage.stickers;
                                 sendingMediaInfo.ttl = searchImage.ttl;
                             }
                         }
@@ -315,7 +311,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 }
                 PhotoCropActivity photoCropActivity = new PhotoCropActivity(bundle);
                 photoCropActivity.setDelegate(this);
-                launchActivity.lambda$runLinkRequest$30$LaunchActivity(photoCropActivity);
+                launchActivity.lambda$runLinkRequest$32$LaunchActivity(photoCropActivity);
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);

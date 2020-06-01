@@ -72,6 +72,11 @@ public class BaseFragment {
         return false;
     }
 
+    /* access modifiers changed from: protected */
+    public boolean hideKeyboardOnShow() {
+        return true;
+    }
+
     public boolean isSwipeBackEnabled(MotionEvent motionEvent) {
         return true;
     }
@@ -131,6 +136,10 @@ public class BaseFragment {
 
     /* access modifiers changed from: protected */
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
+    }
+
+    /* access modifiers changed from: protected */
+    public void onTransitionAnimationProgress(boolean z, float f) {
     }
 
     /* access modifiers changed from: protected */

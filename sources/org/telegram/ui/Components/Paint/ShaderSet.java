@@ -41,13 +41,13 @@ public class ShaderSet {
         hashMap.put("blitWithMask", Collections.unmodifiableMap(hashMap6));
         HashMap hashMap7 = new HashMap();
         hashMap7.put("vertex", "precision highp float; uniform mat4 mvpMatrix; attribute vec4 inPosition; attribute vec2 inTexcoord; varying vec2 varTexcoord; void main (void) { gl_Position = mvpMatrix * inPosition; varTexcoord = inTexcoord; }");
-        hashMap7.put("fragment", "precision highp float; varying vec2 varTexcoord; uniform sampler2D mask; uniform vec4 color; void main(void) { float alpha = color.a * texture2D(mask, varTexcoord.st, 0.0).a; gl_FragColor.rgb = color.rgb; gl_FragColor.a = alpha; }");
+        hashMap7.put("fragment", "precision highp float; varying vec2 varTexcoord; uniform sampler2D texture; uniform sampler2D mask; uniform vec4 color; void main(void) { vec4 dst = texture2D(texture, varTexcoord.st, 0.0); float srcAlpha = color.a * texture2D(mask, varTexcoord.st, 0.0).a; float outAlpha = srcAlpha + dst.a * (1.0 - srcAlpha); gl_FragColor.rgb = (color.rgb * srcAlpha + dst.rgb * dst.a * (1.0 - srcAlpha)) / outAlpha; gl_FragColor.a = outAlpha; }");
         hashMap7.put("attributes", new String[]{"inPosition", "inTexcoord"});
-        hashMap7.put("uniforms", new String[]{"mvpMatrix", "mask", "color"});
+        hashMap7.put("uniforms", new String[]{"mvpMatrix", "texture", "mask", "color"});
         hashMap.put("compositeWithMask", Collections.unmodifiableMap(hashMap7));
         HashMap hashMap8 = new HashMap();
         hashMap8.put("vertex", "precision highp float; uniform mat4 mvpMatrix; attribute vec4 inPosition; attribute vec2 inTexcoord; varying vec2 varTexcoord; void main (void) { gl_Position = mvpMatrix * inPosition; varTexcoord = inTexcoord; }");
-        hashMap8.put("fragment", "precision highp float; varying vec2 varTexcoord; uniform sampler2D mask; uniform vec4 color; void main (void) { vec3 maskColor = texture2D(mask, varTexcoord.st, 0.0).rgb; float alpha = clamp(0.78 * maskColor.r + maskColor.b + maskColor.g, 0.0, 1.0); vec3 borderColor = mix(color.rgb, vec3(1.0, 1.0, 1.0), 0.86); vec3 finalColor = mix(color.rgb, borderColor, maskColor.g); finalColor = mix(finalColor.rgb, vec3(1.0, 1.0, 1.0), maskColor.b); gl_FragColor.rgb = finalColor; gl_FragColor.a = alpha; }");
+        hashMap8.put("fragment", "precision highp float; varying vec2 varTexcoord; uniform sampler2D texture; uniform sampler2D mask; uniform vec4 color; void main(void) { vec4 dst = texture2D(texture, varTexcoord.st, 0.0); vec3 maskColor = texture2D(mask, varTexcoord.st, 0.0).rgb; float srcAlpha = clamp(0.78 * maskColor.r + maskColor.b + maskColor.g, 0.0, 1.0); vec3 borderColor = mix(color.rgb, vec3(1.0, 1.0, 1.0), 0.86); vec3 finalColor = mix(color.rgb, borderColor, maskColor.g); finalColor = mix(finalColor.rgb, vec3(1.0, 1.0, 1.0), maskColor.b); float outAlpha = srcAlpha + dst.a * (1.0 - srcAlpha); gl_FragColor.rgb = (finalColor * srcAlpha + dst.rgb * dst.a * (1.0 - srcAlpha)) / outAlpha; gl_FragColor.a = outAlpha; }");
         hashMap8.put("attributes", new String[]{"inPosition", "inTexcoord"});
         hashMap8.put("uniforms", new String[]{"mvpMatrix", "texture", "mask", "color"});
         hashMap.put("compositeWithMaskLight", Collections.unmodifiableMap(hashMap8));

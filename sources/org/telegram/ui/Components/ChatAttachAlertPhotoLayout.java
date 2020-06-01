@@ -1589,7 +1589,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         L_0x003b:
             r6 = 2131165380(0x7var_c4, float:1.7944975E38)
             r5.setImageResource(r6)
-            r6 = 2131623954(0x7f0e0012, float:1.8875074E38)
+            r6 = 2131623955(0x7f0e0013, float:1.8875076E38)
             java.lang.String r0 = "AccDescrCameraFlashAuto"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r0, r6)
             r5.setContentDescription(r6)
@@ -1597,7 +1597,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         L_0x004e:
             r6 = 2131165382(0x7var_c6, float:1.794498E38)
             r5.setImageResource(r6)
-            r6 = 2131623956(0x7f0e0014, float:1.8875078E38)
+            r6 = 2131623957(0x7f0e0015, float:1.887508E38)
             java.lang.String r0 = "AccDescrCameraFlashOn"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r0, r6)
             r5.setContentDescription(r6)
@@ -1605,7 +1605,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         L_0x0061:
             r6 = 2131165381(0x7var_c5, float:1.7944978E38)
             r5.setImageResource(r6)
-            r6 = 2131623955(0x7f0e0013, float:1.8875076E38)
+            r6 = 2131623956(0x7f0e0014, float:1.8875078E38)
             java.lang.String r0 = "AccDescrCameraFlashOff"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r0, r6)
             r5.setContentDescription(r6)
@@ -2159,7 +2159,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             if (r2 == 0) goto L_0x0161
             r2.release()     // Catch:{ Exception -> 0x0147 }
         L_0x0161:
-            android.graphics.Bitmap r0 = android.media.ThumbnailUtils.createVideoThumbnail(r7, r14)
+            android.graphics.Bitmap r0 = org.telegram.messenger.SendMessagesHelper.createVideoThumbnail(r7, r14)
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
             java.lang.String r5 = "-2147483648_"

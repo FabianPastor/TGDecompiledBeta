@@ -147,11 +147,11 @@ public class BackupImageView extends View {
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (this.width == -1 || this.height == -1) {
-            this.imageReceiver.setImageCoords(0, 0, getWidth(), getHeight());
+            this.imageReceiver.setImageCoords(0.0f, 0.0f, (float) getWidth(), (float) getHeight());
         } else {
             int height2 = getHeight();
             int i = this.height;
-            this.imageReceiver.setImageCoords((getWidth() - this.width) / 2, (height2 - i) / 2, this.width, i);
+            this.imageReceiver.setImageCoords((float) ((getWidth() - this.width) / 2), (float) ((height2 - i) / 2), (float) this.width, (float) i);
         }
         this.imageReceiver.draw(canvas);
     }

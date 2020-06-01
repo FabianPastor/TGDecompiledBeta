@@ -45,6 +45,7 @@ public abstract class TLRPC$Message extends TLObject {
     public int seq_in;
     public int seq_out;
     public boolean silent;
+    public int stickerVerified = 1;
     public TLRPC$Peer to_id;
     public int ttl;
     public boolean unread;
@@ -335,8 +336,8 @@ public abstract class TLRPC$Message extends TLObject {
             if (this.params == null) {
                 this.params = new HashMap<>();
             }
-            this.layer = 113;
-            this.params.put("legacy_layer", "113");
+            this.layer = 114;
+            this.params.put("legacy_layer", "114");
         }
         if ((this.id < 0 || this.send_state == 3 || this.legacy) && (hashMap2 = this.params) != null && hashMap2.size() > 0) {
             for (Map.Entry next2 : this.params.entrySet()) {

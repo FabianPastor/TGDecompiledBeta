@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -155,12 +154,8 @@ public class LogoutActivity extends BaseFragment {
             showDialog(AlertsCreator.createSupportAlert(this));
         } else if (i == this.logoutRow && getParentActivity() != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-            UserConfig userConfig = getUserConfig();
-            if (TextUtils.isEmpty(userConfig.tonEncryptedData) || !userConfig.tonCreationFinished) {
-                builder.setMessage(LocaleController.getString("AreYouSureLogout", NUM));
-            } else {
-                builder.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("WalletTelegramLogout", NUM)));
-            }
+            getUserConfig();
+            builder.setMessage(LocaleController.getString("AreYouSureLogout", NUM));
             builder.setTitle(LocaleController.getString("LogOut", NUM));
             builder.setPositiveButton(LocaleController.getString("LogOut", NUM), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {

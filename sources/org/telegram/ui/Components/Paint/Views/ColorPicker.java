@@ -39,7 +39,7 @@ public class ColorPicker extends FrameLayout {
     private Paint swatchStrokePaint = new Paint(1);
     private ImageView undoButton;
     private boolean wasChangingWeight;
-    private float weight = 0.27f;
+    private float weight = 0.016773745f;
 
     public interface ColorPickerDelegate {
         void onBeganColorPicking();

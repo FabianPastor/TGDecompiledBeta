@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: iqMJGscJWMfmXU59kJZB8CLVRAE=
+SHA1-Digest-Manifest: SDZugkttO5TVw5RyB5kg2xYqZC8=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: 7FXXu+k6Nr/nacTM/COrtVXrh9M=
+SHA1-Digest: abSniDJVHj65V/gyNG0NsJmHW1U=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -7225,52 +7225,52 @@ Name: assets/emoji/4_99.png
 SHA1-Digest: 8qJky1gnfoofLTe22DpPtDtcQ1E=
 
 Name: assets/emoji/5_0.png
-SHA1-Digest: dluE/hbg7h91KKz0arMCSr57AEE=
+SHA1-Digest: wUzgbYt06N7MbqAIgP6ehoHAiT0=
 
 Name: assets/emoji/5_1.png
-SHA1-Digest: jRdtxma/ee5bRasCnwc02IKcZGM=
+SHA1-Digest: xQMYzqJNZHkPtm2EgpPQpOp2IwE=
 
 Name: assets/emoji/5_10.png
-SHA1-Digest: ZDfnPayGIxFC5oG6EHQYl4nOu/8=
+SHA1-Digest: N2XLfwr/cfvgoqWJ/ntMP6NWZUM=
 
 Name: assets/emoji/5_100.png
-SHA1-Digest: aRUkrWlFc/BLiouGTo7aNocLSAQ=
+SHA1-Digest: ueYR4WppE1HVKmn+ivCMEoMJdA8=
 
 Name: assets/emoji/5_101.png
 SHA1-Digest: m6eyAivbi+MyyALZvPy7VkwTMps=
 
 Name: assets/emoji/5_102.png
-SHA1-Digest: 4CfGIGV7+k4jpTiX5p1PONdUtOg=
+SHA1-Digest: UUkV4lW1ej7ULzctwu1USAOQHBs=
 
 Name: assets/emoji/5_103.png
-SHA1-Digest: OYiS9LrqR65JUTonxpXPg0IceKA=
+SHA1-Digest: oxcQDSr7c+UGSv26Je/VPkONvsM=
 
 Name: assets/emoji/5_104.png
-SHA1-Digest: Td5tMUFccrAU1/RCLK/tX5eBsb0=
+SHA1-Digest: bw9mFnmTVrvK9k4UlR8D/76UONQ=
 
 Name: assets/emoji/5_105.png
-SHA1-Digest: YNTMe5icvUYh4HYzLHRZo44PpPc=
+SHA1-Digest: YkS81iQ5AszGA81EI5ou0yZnsm0=
 
 Name: assets/emoji/5_106.png
-SHA1-Digest: 6Rz8DmTDMVFjsBL1fO2Am7OjlMI=
+SHA1-Digest: 6k9lBojjg6g6WDGZOqDQiDG6eAM=
 
 Name: assets/emoji/5_107.png
-SHA1-Digest: yVRmScmr0SAdKs2lfJKipkMPzLw=
+SHA1-Digest: 51Ja1Ezxw7VVKUnde8dIc/S5xBI=
 
 Name: assets/emoji/5_108.png
-SHA1-Digest: EgGQWXscZro2s2fPVd2Yy5X9BRw=
+SHA1-Digest: xTj+W9h28apQigziBYqaqk8kDqM=
 
 Name: assets/emoji/5_109.png
-SHA1-Digest: s76bo05XCDbL4aXxXGJra/Vadhc=
+SHA1-Digest: RSQduDc+6h2ULSvWUwCMNe3qUFk=
 
 Name: assets/emoji/5_11.png
-SHA1-Digest: htdqWaCoAG25WswU7OFLo88/h5E=
+SHA1-Digest: OQFvV3hmIGh7Dw/lLlrwvk/XpK0=
 
 Name: assets/emoji/5_110.png
-SHA1-Digest: q2pWDq7Pi26lgF8z/ROWvDG1rmA=
+SHA1-Digest: dAku7B5QMw6AsiB2F8Bb5N/1fFc=
 
 Name: assets/emoji/5_111.png
-SHA1-Digest: 1YR3aVx9N33faujYgm/MuJ1Oums=
+SHA1-Digest: i7dmnHaJxsdmN3lw2qnmukq7CaU=
 
 Name: assets/emoji/5_112.png
 SHA1-Digest: W2iidBCJpYvRoFAed8G8v6YL2fI=
@@ -7279,19 +7279,19 @@ Name: assets/emoji/5_113.png
 SHA1-Digest: KrEt+RwY9fd1+V97b/A6FWGy6H8=
 
 Name: assets/emoji/5_114.png
-SHA1-Digest: zZxWiv33YE03BWkWvvZJ5K5C7jI=
+SHA1-Digest: 3czumSIB7iNUdXsVqBZts1yNAi8=
 
 Name: assets/emoji/5_115.png
-SHA1-Digest: ozbOdWjf6i4rh3ixc2ybao/e3QM=
+SHA1-Digest: FvoGfcnjjrZbHzR67/0YpWBdP6c=
 
 Name: assets/emoji/5_116.png
-SHA1-Digest: ZX3FWCufmiw/Zq4E4CNOchxRsNM=
+SHA1-Digest: wyJqOK6rtN7XMB9JqhV0kSg50gM=
 
 Name: assets/emoji/5_117.png
 SHA1-Digest: G+zRguN7zT24Wl2Hm3xQU4vRXas=
 
 Name: assets/emoji/5_118.png
-SHA1-Digest: CB/eXPzrSpBjp4ZNldn9r7e/D+g=
+SHA1-Digest: xWzsG5nS4LknYnnVXUsQLkLFTK8=
 
 Name: assets/emoji/5_119.png
 SHA1-Digest: 5ZEaQNx78+kKzME1/WpJlj3eZjI=
@@ -7300,547 +7300,550 @@ Name: assets/emoji/5_12.png
 SHA1-Digest: u4B6RAgkIae98qyJIvjH1BB4PJ0=
 
 Name: assets/emoji/5_120.png
-SHA1-Digest: y+DcMwRq2H9rWK4kg0Z2JSBo8sY=
+SHA1-Digest: r5XJJ9qp2Q3ZJznK/pmyXsBd/mE=
 
 Name: assets/emoji/5_121.png
-SHA1-Digest: QoU5p4EUt8cvuPgULKyRiVlPXEI=
+SHA1-Digest: qs7Q1YqKjFryDGM7BJGd87zaI/c=
 
 Name: assets/emoji/5_122.png
-SHA1-Digest: Yvj8RcKA9kRI+XpLrPVL1HpttjA=
+SHA1-Digest: rX6NHLrLpYBPJfnUuESIqlaD5NQ=
 
 Name: assets/emoji/5_123.png
-SHA1-Digest: PpiD6HXq5mxWJDbZbj/yc+TkAmw=
+SHA1-Digest: YeM0Mq7YoUMwMO7RT8j2a1+EIPo=
 
 Name: assets/emoji/5_124.png
-SHA1-Digest: iZn4fDDpQ8RM/rrllBoYq6Z6gXU=
+SHA1-Digest: 2CwhMEMZVJxhH4NYN55W1kfqIy4=
 
 Name: assets/emoji/5_125.png
-SHA1-Digest: ODCxISTq5Hig+5ENHkSr98NGYd0=
+SHA1-Digest: lwADF1T5lOMMKNcv2B5N6KLI0o4=
 
 Name: assets/emoji/5_126.png
-SHA1-Digest: fBXTOpYsQdvNy8MxxGIZnXgPcDo=
+SHA1-Digest: 09UZxZrYQjbKGlmAH7MgYIXWh08=
 
 Name: assets/emoji/5_127.png
-SHA1-Digest: Nl0aAi1Fsox1x5mQJy5rNqPYBAk=
+SHA1-Digest: oZjLiD4bn4tLCJccRmGt5VpDzVQ=
 
 Name: assets/emoji/5_128.png
-SHA1-Digest: 69LiMeNoWN2r6k1aRCtaVJAtM5I=
+SHA1-Digest: Q2Lx7Wdc77uxnxGp6Vd5QwORUb4=
 
 Name: assets/emoji/5_129.png
-SHA1-Digest: xdEkRP83uRxiF+Jn9+y1NIq2lmQ=
+SHA1-Digest: FXcFc5uCiJqbgpWIdOixOeAjiwg=
 
 Name: assets/emoji/5_13.png
-SHA1-Digest: 4gYA0n4tmSEyeHHmPdLxi1KC5aU=
+SHA1-Digest: CacRg3ZEEmNcuBukHBZC145J8mI=
 
 Name: assets/emoji/5_130.png
-SHA1-Digest: X/SlI9JtkGHDCynnnvmgw0RSpJM=
+SHA1-Digest: au+Y0ORdC2UqK7wrCzX5K/FJt6k=
 
 Name: assets/emoji/5_131.png
-SHA1-Digest: ap9aFHmxgexsku6xOGdqZNDzZm4=
+SHA1-Digest: ujYpNbXqduLgDkqMnN3N8KGduac=
 
 Name: assets/emoji/5_132.png
-SHA1-Digest: Qhssl6yibJUnXe04vjJlR6TcrOM=
+SHA1-Digest: mQIBEj8SYBvZRUnoRFDkRI6cUgY=
 
 Name: assets/emoji/5_133.png
-SHA1-Digest: /QghlJPZtnDPeSRhO/Sf5w977M0=
+SHA1-Digest: ap3xq9OH+ekhBu8abjGYD+LhWnE=
 
 Name: assets/emoji/5_134.png
 SHA1-Digest: ND/Gql8cNqbxhFOegrVvBC73BPA=
 
 Name: assets/emoji/5_135.png
-SHA1-Digest: t6B0zw6I5LINIo6Z5t4xPlDmsd4=
+SHA1-Digest: 8EB2qxY8nNAvdjyO/AaGTZ/MZhU=
 
 Name: assets/emoji/5_136.png
-SHA1-Digest: pWy+cyZhC0MJ3gDEhCsl9ukCh7I=
+SHA1-Digest: 6lLMV+/IlVIG19ItxZJHE3iEL+k=
 
 Name: assets/emoji/5_137.png
-SHA1-Digest: yJSqWpiTny4O24JfEs1gVMaSMrU=
+SHA1-Digest: AiEJ3WWMCTwu0BvSEDb9kpQWiBg=
 
 Name: assets/emoji/5_138.png
-SHA1-Digest: hqBdaFXJ4tO/Mj2Z0a3Mol8LtUc=
+SHA1-Digest: c40v3YZ9dwKOw4a+HT0aNSxSb3c=
 
 Name: assets/emoji/5_139.png
-SHA1-Digest: PUTmylwy0OnZOczLVDoiqQdD4C4=
+SHA1-Digest: k56bXxnCQJy8RL3WXMlKsYj5gtk=
 
 Name: assets/emoji/5_14.png
-SHA1-Digest: pAM96V8DBHe9Y2L5Bf0HPhzd7HU=
+SHA1-Digest: n1BopljzIDrhS7o92iLBjuTlmKQ=
 
 Name: assets/emoji/5_140.png
-SHA1-Digest: dFj84Ws+dZ/7oaHRpjMYQJTz08Y=
+SHA1-Digest: ptzaz8rATqBdudfe+EsasMd7PQk=
 
 Name: assets/emoji/5_141.png
-SHA1-Digest: iIWOZPCSf7qUvt4ePUxIOBDtYc0=
+SHA1-Digest: 5oDNIEILLufflLLe7/spc9Rz/Lw=
 
 Name: assets/emoji/5_142.png
-SHA1-Digest: 2pJwE8ITQq23C5dzfm0489UWCm0=
+SHA1-Digest: rHzlM/nj2zW/RNdw5mxdc3eQ1gU=
 
 Name: assets/emoji/5_143.png
-SHA1-Digest: g/AlDFUy9vcqvgpTOxRxMGdnUmw=
+SHA1-Digest: oecjp5S95cfV5s+AQD3cRKRFP9o=
 
 Name: assets/emoji/5_144.png
 SHA1-Digest: e8aNf1Chy+t9zfJEOyb1LAVw/I0=
 
 Name: assets/emoji/5_145.png
-SHA1-Digest: ysR2SnUfDro/veyEHj2iaPG3j1k=
+SHA1-Digest: zwQtMfH4kL80rj8rxe4hLsHLgRA=
 
 Name: assets/emoji/5_146.png
-SHA1-Digest: mDSHQ9hTQllZ4t1hQ77BEJzpjY4=
+SHA1-Digest: G2TEpEIIB6FsK0VMgRFEuPD1R0A=
 
 Name: assets/emoji/5_147.png
-SHA1-Digest: hrmxQENPQXHQq41g47bulFeMJBs=
+SHA1-Digest: 9VrNUwzvVmtu/cBlt+CNuAQ9f4o=
 
 Name: assets/emoji/5_148.png
-SHA1-Digest: 6Txe4ZZZcQYa0qMkja5AK8213w0=
+SHA1-Digest: vyqbSvmyORDJwHO0TtdNasi3bM0=
 
 Name: assets/emoji/5_149.png
-SHA1-Digest: RJXuG9etDB6JymN4uqG9yBzN38o=
+SHA1-Digest: gNXaaVrGCpkKdnHg/9u1tg13D5w=
 
 Name: assets/emoji/5_15.png
-SHA1-Digest: OmWmZXSqONQOFzXNQXZteNLKmeQ=
+SHA1-Digest: j8TUkl61vypYF+4mBgujN0PoL4A=
 
 Name: assets/emoji/5_150.png
-SHA1-Digest: ADNz7OQZZkXlWrANEW6rOCl8PQo=
+SHA1-Digest: AIoV/Dl+mZJnrTW1jIcXMAKFQgA=
 
 Name: assets/emoji/5_151.png
-SHA1-Digest: biMk+U+MJ+Wswv93lXtCGWOal+0=
+SHA1-Digest: OaWVRwE+UFAshMrRMzIOxQsqNwA=
 
 Name: assets/emoji/5_152.png
-SHA1-Digest: ghS0J3IUlKCocGxvhZCI2uOvizg=
+SHA1-Digest: uugmJQzxYMs/JYTkqQl18D1qLUw=
 
 Name: assets/emoji/5_153.png
-SHA1-Digest: iM3soBWAFWfAMLlJKT23rLagfy4=
+SHA1-Digest: DozHAx/oAyQsXcC8/GuTFHuBwQQ=
 
 Name: assets/emoji/5_154.png
-SHA1-Digest: 9P9bRu6AxTiG8WzS0UogmujYWMw=
+SHA1-Digest: D9MM3dVa+/TXN6mCAhsX3ypl8+4=
 
 Name: assets/emoji/5_155.png
-SHA1-Digest: OvzBiS7/iTr9z2xPi9scBOYJqHc=
+SHA1-Digest: fPH5yMK/JhR61QI0hkaDVeI6SEo=
 
 Name: assets/emoji/5_156.png
-SHA1-Digest: Drtcupy43Nkg4Xv0DNdRDws0iU4=
+SHA1-Digest: 1uuT/0GfHlgfCk6IfGFyGCFOvCo=
 
 Name: assets/emoji/5_157.png
-SHA1-Digest: 2eiuC/eb+OYLEOkKHMmVGnS2sCk=
+SHA1-Digest: 9bCRCsZ6ppmRgdWZ+gIjFBa6+1Y=
 
 Name: assets/emoji/5_158.png
-SHA1-Digest: lg/MMZG1UtcepzYwc+zwrtUlrbA=
+SHA1-Digest: EFVaXZRmXt5M/zzjuJLmZ3ul5UU=
 
 Name: assets/emoji/5_159.png
-SHA1-Digest: yNlQ/U0/VbU47KJXah2PwNfT4FM=
+SHA1-Digest: /9p5LfKSigrOaSdUo+c2Vt6v0rA=
 
 Name: assets/emoji/5_16.png
-SHA1-Digest: QrTQySeL7+81HJQ0vCmd73maJuE=
+SHA1-Digest: fVdMjnAiQ3fYY2Ny3BKHrPg2bd0=
 
 Name: assets/emoji/5_160.png
-SHA1-Digest: 7MEj5cLUzTiqy/wTFXUuMi3T4Ho=
+SHA1-Digest: hCcsbwvUw1lx8VdKClysuRUjW/s=
 
 Name: assets/emoji/5_161.png
-SHA1-Digest: OqiOdceCA8rg9hudkNyTwWYLizQ=
+SHA1-Digest: yHZJDoSJIPh1nCEu+3zPm7nrAEQ=
 
 Name: assets/emoji/5_162.png
-SHA1-Digest: K7E95T0vJ31aldNcyTwYvM1xmc0=
+SHA1-Digest: RhW5Kx7LN4vQldGHB6/ipBrWpoo=
 
 Name: assets/emoji/5_163.png
-SHA1-Digest: u51sacNXytQckq0sSbQGpcB3jEo=
+SHA1-Digest: qMrIWvVI4U8K4mTUUtEAG4Ee3QE=
 
 Name: assets/emoji/5_164.png
-SHA1-Digest: 3fFn0ijVJcXAVPlpM4Tuxn21HSk=
+SHA1-Digest: 9360/E/idOdYehGx3N7N9ULt+Sg=
 
 Name: assets/emoji/5_165.png
-SHA1-Digest: iQTgFhcsXHzw6rbp+5G4rAd5IJM=
+SHA1-Digest: rRlCCv76L/h2NJgfCHXuU79mmFY=
 
 Name: assets/emoji/5_166.png
-SHA1-Digest: kYRoDADEBU70UCLMmWy2Ccd8zt4=
+SHA1-Digest: 9HV9CVF7qsNF72NjBuC/aCKeD44=
 
 Name: assets/emoji/5_167.png
-SHA1-Digest: Eww5Oyri4Ebe/2h0ga8SSUfumns=
+SHA1-Digest: OxeqgKp8KrLj/q2hnlbnlzri92M=
 
 Name: assets/emoji/5_168.png
-SHA1-Digest: VqydfVq3VUBJGm3CelDTh3kxuAc=
+SHA1-Digest: 65aRK11oLMJmPPunoiKjTVjZxsE=
 
 Name: assets/emoji/5_169.png
-SHA1-Digest: ADfu4K5wZl0uawUrcjBqPz6Tb1E=
+SHA1-Digest: 4XkX54iMTuumFEoim3SKn24fZIo=
 
 Name: assets/emoji/5_17.png
-SHA1-Digest: lhSPJagl92AiBROxkA1XWZVpd5s=
+SHA1-Digest: rCvSuDIP/0att8GFaTtQZ93+54Y=
 
 Name: assets/emoji/5_170.png
-SHA1-Digest: Wls611EvACue11BvObHmkTwmPxs=
+SHA1-Digest: n8t47rumY1jSl3NYMDa1ff5Imuc=
 
 Name: assets/emoji/5_171.png
-SHA1-Digest: dyq+qbgec6mV5Q7YUINZ6RLUWpw=
+SHA1-Digest: B3rOT6YA/JbTNXiZaAM7dCtDR1U=
 
 Name: assets/emoji/5_172.png
-SHA1-Digest: drPfI+C1hU5ecj5uYUXrHIOvCKk=
+SHA1-Digest: iVi/lJkyiKnvvi8CdN7FMBJjUHE=
 
 Name: assets/emoji/5_173.png
-SHA1-Digest: EltdRA4YbIETKC/tskoWRuQl8O4=
+SHA1-Digest: RRg0mDEZWPOSFdByhaoiz7v2gaE=
 
 Name: assets/emoji/5_174.png
-SHA1-Digest: u0v7bAMUs1R3BCF8a/5SQk7N29o=
+SHA1-Digest: k0nPL3C+SW1Y84tVCy1cA3mdzu0=
 
 Name: assets/emoji/5_175.png
-SHA1-Digest: AuLXPFN7BcH7Soral4pwy7NsY60=
+SHA1-Digest: 42XEBfhmRkDml9nssFIfYgye1MA=
 
 Name: assets/emoji/5_176.png
-SHA1-Digest: FayCxHGgEkzR87+ZuGgrbxQ29jY=
+SHA1-Digest: 5h4qaOuEPphDg+LGtvrhTLrffqM=
 
 Name: assets/emoji/5_177.png
-SHA1-Digest: +23dd1D5MIx+ay42nSFecXWlj5I=
+SHA1-Digest: urGeuuwmtL4LSPTzSW7zKLGtqWA=
 
 Name: assets/emoji/5_178.png
-SHA1-Digest: jA7nSx5u4bxQKD1BdDHF/P6G0Lk=
+SHA1-Digest: 8IE+qYfAx3mcAbiuCVRysOIXoeE=
 
 Name: assets/emoji/5_179.png
-SHA1-Digest: BmZkoN4hU8DR0PZWU6eojVf4j40=
+SHA1-Digest: q9/cpb2QjTgSmIuF5THhwkhIzYo=
 
 Name: assets/emoji/5_18.png
-SHA1-Digest: S3t9EWCXlKr6yeu3SVL4i+jRJZI=
+SHA1-Digest: WGlx/0Fa9IAiSzh3/JZKFFqoW5Q=
 
 Name: assets/emoji/5_180.png
-SHA1-Digest: VPrsictPiubEPVSzkd3AB9wPh3I=
+SHA1-Digest: 0QDJFVK2/l+VFcbKcgntkWfKQ2w=
 
 Name: assets/emoji/5_181.png
-SHA1-Digest: SP4PRMXKoxyBKBYRHEiXWUXShks=
+SHA1-Digest: MRFWxQpQsNVx/N63mABPKJWfBDQ=
 
 Name: assets/emoji/5_182.png
-SHA1-Digest: dnSxyrRV+biE58G92zRs6t4QhZc=
+SHA1-Digest: P8Q9Mvn7v2WDDKWhfETMbFrf53w=
 
 Name: assets/emoji/5_183.png
-SHA1-Digest: bndM0e8Y3eDdJl90Va1ZMvODFMo=
+SHA1-Digest: +2V1bIEcWa6gzYnI52SPB5vDfTA=
 
 Name: assets/emoji/5_184.png
-SHA1-Digest: 5vX/8VlR+/B7c4aowgLBA9px92I=
+SHA1-Digest: bAPhD7j1tByrjcKHQrIPYJNf5TI=
 
 Name: assets/emoji/5_185.png
-SHA1-Digest: Cxtvmigl0YOTNr/3+yNvHWYX69g=
+SHA1-Digest: jQJpBU9h8GqfW6VGyz3e9FykrXA=
 
 Name: assets/emoji/5_186.png
-SHA1-Digest: 1x2oqJu0gk/xWg7MCVT71M4UC7w=
+SHA1-Digest: bQWOlVzODUfJcxe4F4g01wEbAN0=
 
 Name: assets/emoji/5_187.png
-SHA1-Digest: SfM4WgYpSiX5YKiwh31MQWb6Q44=
+SHA1-Digest: 5TFbSqgb4BeHKpygjtxGHfvFmFQ=
 
 Name: assets/emoji/5_188.png
-SHA1-Digest: FDPe+DZc9oHiTxWXne2FH6QpcRI=
+SHA1-Digest: axpFrtB7EUYcItLC9Uz9OcSwcTU=
 
 Name: assets/emoji/5_189.png
-SHA1-Digest: 3uMIWWv3h2jCRbC2eVT/FR8Aur0=
+SHA1-Digest: NmG/O6LGJ/S980Z58gWSB6uT79Y=
 
 Name: assets/emoji/5_19.png
-SHA1-Digest: XkmO5cH7Xfv5FPX4o5Jo7uIHzt0=
+SHA1-Digest: C/za8qeJasS1xIJhsE2ZdZdt2Vk=
 
 Name: assets/emoji/5_190.png
-SHA1-Digest: PLZgM+/Tq7GTat+vMg3hX4gVx7M=
+SHA1-Digest: 1Uhk8WANTs7L5P58nK2R+cQrrpA=
 
 Name: assets/emoji/5_191.png
-SHA1-Digest: 3Rzz/kWZTzDgZ6TQ3oy4LWJT6uw=
+SHA1-Digest: UC2wlaEEozcpu4x5SbLHgH0hlBk=
 
 Name: assets/emoji/5_192.png
-SHA1-Digest: 1LveMvfez2LZGgtleQw/l65/cDU=
+SHA1-Digest: EvK7Y6dBUPHQhwa//HnlDHwebJM=
 
 Name: assets/emoji/5_193.png
-SHA1-Digest: yhBaBBl8r1N6YYiMQBddaNbUuzE=
+SHA1-Digest: 6vzz0cWtu43GcI+fu45JNIU/wY8=
 
 Name: assets/emoji/5_194.png
-SHA1-Digest: 7G+JfmoVijXzuV+chjt2vPO6M+8=
+SHA1-Digest: HD+bCikzwAiy6S9ifoo67fAQBvk=
 
 Name: assets/emoji/5_195.png
-SHA1-Digest: 84tOQkza77ahIqVMxrQ0ZrEbUqo=
+SHA1-Digest: YxRe/w2ka8jHz0R/wjZK0cdjsS0=
 
 Name: assets/emoji/5_196.png
-SHA1-Digest: MLg0hK2eh4BGQ/j1V4KgG7Un8/I=
+SHA1-Digest: tEtU/sJSE/nOSeob2AHeYDqLLpg=
 
 Name: assets/emoji/5_197.png
-SHA1-Digest: n7ItU5crkLaSDuqojYmuhpZO1q8=
+SHA1-Digest: Eo+dL8R6R0O2A7BUTXq8GsKXUk8=
 
 Name: assets/emoji/5_198.png
-SHA1-Digest: FetGPqsVVKzgBRNeRvEdeVnGVU4=
+SHA1-Digest: JyU/aNq6NhLcBi8SSr1cdvJvPbI=
 
 Name: assets/emoji/5_199.png
-SHA1-Digest: ayEgLut5VzzMjfYTmCt91bWi9ck=
+SHA1-Digest: qtybRWWpOWFOCGwi3nXyudgp2v0=
 
 Name: assets/emoji/5_2.png
-SHA1-Digest: 52a8fGjSCZvOsUaPRuVfJcIDE2I=
+SHA1-Digest: r4Odr5OSTgQpHk0OcDlPepyTSPc=
 
 Name: assets/emoji/5_20.png
-SHA1-Digest: xrKawl+PY3rLCitiTxktJ6vdIH4=
+SHA1-Digest: UE94NgD2aCxVTWQG9HlHGBB/CQ4=
 
 Name: assets/emoji/5_200.png
-SHA1-Digest: 7vgVkUCU18muUF8vYZTFvE3B9Es=
+SHA1-Digest: G0gqbCJsA0r/YrHS5N0WhCG4reY=
 
 Name: assets/emoji/5_201.png
-SHA1-Digest: 2HFEjDmCWTn3ktFWfqQI/OvQwsI=
+SHA1-Digest: 8kcNNKb+5oScVEeCo5BJiQxrc1o=
 
 Name: assets/emoji/5_202.png
-SHA1-Digest: n0fHFFmJRja7iXsHl2TUfQLNc6U=
+SHA1-Digest: jZjBp1VwssqlyvL2qiDXfEumFTA=
 
 Name: assets/emoji/5_203.png
-SHA1-Digest: 3fS9NwfGGzFPS9/340X7FuCdU30=
+SHA1-Digest: UrauQy0zH2KUsQBepCz/lKQaDcY=
 
 Name: assets/emoji/5_204.png
-SHA1-Digest: w9hvOm6D7250fMCHoziI2Az7ZPQ=
+SHA1-Digest: zlvhE/ThJo2+SJ3L2HETzelTpFA=
 
 Name: assets/emoji/5_205.png
-SHA1-Digest: TYMnTgxWqgmJbIMToNGxbbCWtqU=
+SHA1-Digest: G6a6XSmmlRoSvLjRNOxBY85mUc8=
+
+Name: assets/emoji/5_206.png
+SHA1-Digest: aouWfH1V1DaRHlwLQvo0gzcMTj8=
 
 Name: assets/emoji/5_21.png
 SHA1-Digest: 0Aq3P6AtmhTpeKL2CtxlRj60qDk=
 
 Name: assets/emoji/5_22.png
-SHA1-Digest: 7xK1eRlQXw+qN1fKIr1P3FCrHUs=
+SHA1-Digest: tVl8hp6WTxp6uroer07MF/UVw08=
 
 Name: assets/emoji/5_23.png
-SHA1-Digest: kDE/ITvKQoaSCpPOqn5oGPRyJek=
+SHA1-Digest: eaCetNliqWZMCA/Q2cR5Zb9nixE=
 
 Name: assets/emoji/5_24.png
-SHA1-Digest: thOrzXXnb7ZFaJb1vRkhM1ouLlQ=
+SHA1-Digest: LZieTYMkVMNyilu2/VpPfNvLV3k=
 
 Name: assets/emoji/5_25.png
-SHA1-Digest: sasMKyguB/nf6HtJEHBIfYdMQeU=
+SHA1-Digest: Ncxz6+ovcUHwIxzbSVqs1De4qz0=
 
 Name: assets/emoji/5_26.png
-SHA1-Digest: TpGMdpxkfKTmAehyDfQjDY9ydrQ=
+SHA1-Digest: JmC+vbNWlY3sAUmI51g+kh0KvoQ=
 
 Name: assets/emoji/5_27.png
-SHA1-Digest: kdppC7FroGlE5ynI+Wo7SPLZvzY=
+SHA1-Digest: WXw1vvSEUTPXzsMPUlGCj1/STco=
 
 Name: assets/emoji/5_28.png
-SHA1-Digest: 6VaxRE2n3dzXS7/HE3FXdaAf9RU=
+SHA1-Digest: erHFGkCOR4Fkan4jXRTZjpKWhus=
 
 Name: assets/emoji/5_29.png
-SHA1-Digest: rzJtgtHvXZAKtzJ7aHGIytRdgLw=
+SHA1-Digest: NVQI+K74n1WYsM2QUmU+HZQOFJ8=
 
 Name: assets/emoji/5_3.png
-SHA1-Digest: gkMzeBuQ20OQP3+iJoMEY84YxJQ=
+SHA1-Digest: O1SG7HPgjK2Dt1lJE0UJ1TDusXc=
 
 Name: assets/emoji/5_30.png
-SHA1-Digest: mUyVYtf2lqA/7DPeuG4QCxCzB0s=
+SHA1-Digest: Aw7qLzL6zKsoWFLZVJj2VO6FvFE=
 
 Name: assets/emoji/5_31.png
-SHA1-Digest: 6tkNOyQHf/NSLBue6XFBnUDneYs=
+SHA1-Digest: 7S82up3oSCNZFP4pYbJM/jinKgU=
 
 Name: assets/emoji/5_32.png
-SHA1-Digest: wkU2AdEeqsbbfxgyH4A2I3iRfD4=
+SHA1-Digest: 5MF/JyOaT5HGkVRpfi44xZhCaBk=
 
 Name: assets/emoji/5_33.png
-SHA1-Digest: OiJUMvoeTI75Ei8z4rJG8npJj6o=
+SHA1-Digest: Vx+nqHlKNh76Y68rqrZGvwtm8Wg=
 
 Name: assets/emoji/5_34.png
-SHA1-Digest: ie4UC3w53pyfpGOPYitkf5hYJug=
+SHA1-Digest: BhQxIwZyGYaJrGvJ1RT+ekeYp7E=
 
 Name: assets/emoji/5_35.png
-SHA1-Digest: OAVSpepv/qk3igJW/EQ0RlkYw5U=
+SHA1-Digest: TQHmJqiSnvUXX1tOUejRczEl/k0=
 
 Name: assets/emoji/5_36.png
-SHA1-Digest: ibzS2VQDIm7YUNEbEGhFemNKonI=
+SHA1-Digest: Wksxn5eWKahAD7x/FI3VvAkyurk=
 
 Name: assets/emoji/5_37.png
-SHA1-Digest: MImuSATPqT+oQ4dGP7+X0yGq7DM=
+SHA1-Digest: 1+QoknONoG+AVL3sTlxLBj5UPhc=
 
 Name: assets/emoji/5_38.png
-SHA1-Digest: hCV+d4/rzekZB3nfgPEXr+7EtdI=
+SHA1-Digest: SKUQsn1g03n7YEUK6bWJamuCTMQ=
 
 Name: assets/emoji/5_39.png
-SHA1-Digest: 5fkf8ivKouPs7X+iH0HPXtrwfrM=
+SHA1-Digest: rbLnk9Pj/nLFPFMWYhhTDEadTjc=
 
 Name: assets/emoji/5_4.png
-SHA1-Digest: pfem6Kh+7LlSA9q7NCdVj3oIod8=
+SHA1-Digest: MtnrOB4pdn0cxMbC+kINJ5eKSJ8=
 
 Name: assets/emoji/5_40.png
-SHA1-Digest: 65g2OjIKiyJO4LW8UwBqWggeYCM=
+SHA1-Digest: nVn7Quyzwx7Nu+MzWcnDOHb9HO4=
 
 Name: assets/emoji/5_41.png
-SHA1-Digest: I3SFeN4xK7VJfaIhAlC/iAVN5I0=
+SHA1-Digest: z2kj2RuciqJ0OhWxBYvJGtYmRWs=
 
 Name: assets/emoji/5_42.png
-SHA1-Digest: f1itXyv1MmEfIrH+xp4xMG4z0LI=
+SHA1-Digest: ZHR7hAHpelUyt5QTbrGS46f+cwY=
 
 Name: assets/emoji/5_43.png
-SHA1-Digest: quVzAqiPq/qgAw07VoKBjlWdmKY=
+SHA1-Digest: mkDpw6KbX/bpsOSGz8WVODBnitM=
 
 Name: assets/emoji/5_44.png
-SHA1-Digest: bM8gPhf1c+EW4Fkox5ecsZSHBCY=
+SHA1-Digest: bZV9W4/LkRScaUMbV59r4+U5AHo=
 
 Name: assets/emoji/5_45.png
-SHA1-Digest: CEYYn2aLH91TgoGFtrmT7kd3ZlU=
+SHA1-Digest: mu7eXLP7X3ebtqbFwpsxO1ehcic=
 
 Name: assets/emoji/5_46.png
-SHA1-Digest: 6/V95b/OLESp5dEkbHAiLq7ifhY=
+SHA1-Digest: f5qHra/v160Ug+CXIjJ0Lb6cvDQ=
 
 Name: assets/emoji/5_47.png
-SHA1-Digest: guRYw8BMpcb6VGtR+RtGhtaFksY=
+SHA1-Digest: xnjvohJqLBfnav31k9R19VQU7eg=
 
 Name: assets/emoji/5_48.png
-SHA1-Digest: 5ezcA4Uws9E+W/SoewCKxJY8V50=
+SHA1-Digest: r9HHHHesi9ie47+pRtoYJOt9/qA=
 
 Name: assets/emoji/5_49.png
-SHA1-Digest: DK+tzcwCJovu3vcgnLbbhGMSmjo=
+SHA1-Digest: 0K95kBxjKtvt2rLfhIQP+1f0Was=
 
 Name: assets/emoji/5_5.png
-SHA1-Digest: Y5ROTN5n5xd60B50t/l4S0RTL9E=
+SHA1-Digest: wlWKqjgH2Z5DygujNwJA64ac0Ws=
 
 Name: assets/emoji/5_50.png
-SHA1-Digest: aSLfl6vrUKFpPnh5CmgXxsdnuj8=
+SHA1-Digest: rCcfOmUTyC0M9xv7p1AMSvYd/UI=
 
 Name: assets/emoji/5_51.png
-SHA1-Digest: 4aQXKgWx1tB4FjFZSLlg2S0hURU=
+SHA1-Digest: EgVQyYh7yw3WCeTacJSGum7VNTE=
 
 Name: assets/emoji/5_52.png
-SHA1-Digest: MDSu0CYUX41G6BkxdVs9ipgpbjg=
+SHA1-Digest: X7y9w1Rup45hmZ7ENnpmi8eSS1U=
 
 Name: assets/emoji/5_53.png
-SHA1-Digest: fwb+2etepG1vM6l6yx4dcfmKpqU=
+SHA1-Digest: NdP8tvicZbbFZ6Zq6cUg6H3VBEQ=
 
 Name: assets/emoji/5_54.png
-SHA1-Digest: jWLaIA5mXBiYwPu4X10zUlGfn8I=
+SHA1-Digest: vHn3r6W0KuH6dlpShRe5hu4bU94=
 
 Name: assets/emoji/5_55.png
 SHA1-Digest: xcGesB42ybgQNkcWCVxNkrjotLM=
 
 Name: assets/emoji/5_56.png
-SHA1-Digest: 5LPVU5c6PmIti3L+BGBg2YlpOfs=
+SHA1-Digest: uosxlAwNlcOVjXWv4sBrqFNU9SA=
 
 Name: assets/emoji/5_57.png
-SHA1-Digest: YVYFU4ulMpH4YHh2XWHNRATnok4=
+SHA1-Digest: GagYDw6qkMF4/tyo0W4B9SruaqA=
 
 Name: assets/emoji/5_58.png
-SHA1-Digest: sjnUREOlV4jr9WZ8q4Iu+SNDkU8=
+SHA1-Digest: GzsKBEd+bmcnnFPGybxxGucxOds=
 
 Name: assets/emoji/5_59.png
-SHA1-Digest: XRBKFKBs+065IYb81C10tNIVCGY=
+SHA1-Digest: HQoH5viGi7Nw2KEP1LtD9ZpYn4U=
 
 Name: assets/emoji/5_6.png
 SHA1-Digest: AG3+5vRXIVmETpgTD5jaRMyN3+s=
 
 Name: assets/emoji/5_60.png
-SHA1-Digest: m2aceqaFRNaMjggmccYF0pyb6+w=
+SHA1-Digest: 4oLD6b8Gh4kqLoQ+DCAZJlAy8kY=
 
 Name: assets/emoji/5_61.png
-SHA1-Digest: BDBCrXzqn5iXeDgbxBAS5O8q9M0=
+SHA1-Digest: NXI8NCGlKs9OHuqxr4QrSNp0VP4=
 
 Name: assets/emoji/5_62.png
-SHA1-Digest: viK+Ir3d0EppAOlK53YyI7jIn5Q=
+SHA1-Digest: H0uw88ip1kNJzYvwOqX+ODegO4w=
 
 Name: assets/emoji/5_63.png
-SHA1-Digest: hyf2acq90lfozb7K+1cABUrweCE=
+SHA1-Digest: mQaVaT8vte8L1lGCTiXkrIWMo0A=
 
 Name: assets/emoji/5_64.png
-SHA1-Digest: UtJ6KC6x9aBFlcgxHY2MZJAZnvQ=
+SHA1-Digest: 5pLMJeSdwFBzV18qt/t3rbtJo4w=
 
 Name: assets/emoji/5_65.png
-SHA1-Digest: Emanl9HAS4O3F2wJE/RjxKC+2PY=
+SHA1-Digest: mZ46tOGc7alPRFu6B1IyIfMy7/0=
 
 Name: assets/emoji/5_66.png
-SHA1-Digest: 1ohuGs3GJ+y+NNdMD18TTfqe0FE=
+SHA1-Digest: BjqHMVG2n0w36+4msPdkbjpNKvA=
 
 Name: assets/emoji/5_67.png
 SHA1-Digest: EaRynthZRjCQ/zPT51V3NaOKNfY=
 
 Name: assets/emoji/5_68.png
-SHA1-Digest: 8BDeUWfxVOsUwIqlmtrdUGXByEA=
+SHA1-Digest: 6EH8wEa37ZvFTGocYs/zUnzEJL4=
 
 Name: assets/emoji/5_69.png
-SHA1-Digest: ZkcdUZLiDk3Jke+H8R32qYaucCY=
+SHA1-Digest: GueLea7hHfOjlNroSY5TzMK+C1M=
 
 Name: assets/emoji/5_7.png
 SHA1-Digest: KkmpWXMKdukWcG5CYEZ6iLUvvIM=
 
 Name: assets/emoji/5_70.png
-SHA1-Digest: RRFzIdC5YmHRgc1TDUMLGDqBtzA=
+SHA1-Digest: 1ILtaM3+o11jIm/jyIZRZEPwE6c=
 
 Name: assets/emoji/5_71.png
-SHA1-Digest: 4iQsj9KfM3P69bxz0/xsEAeB+ao=
+SHA1-Digest: jC6tcy+bsN+bBTBbW6vhoM/oLAQ=
 
 Name: assets/emoji/5_72.png
-SHA1-Digest: 4vMX9SKbAJ4j3EWWY5eBSyP+3Ec=
+SHA1-Digest: US3/y/pWCUdz9O1+aExC8rF5W+8=
 
 Name: assets/emoji/5_73.png
-SHA1-Digest: B8VhtX0fN5Q/Kp0fTQHaJedy21I=
+SHA1-Digest: AcsELn2UxnUhqHoNTxFKLPFV1BI=
 
 Name: assets/emoji/5_74.png
-SHA1-Digest: sqprnkFNrtZP2vR+TCtlB4Rh1bA=
+SHA1-Digest: biqCFdsSRNMqSTsh2Y0jV+GRSDA=
 
 Name: assets/emoji/5_75.png
 SHA1-Digest: lNGZp/1zeAKXpDYI+WUrfB3Bn2w=
 
 Name: assets/emoji/5_76.png
-SHA1-Digest: xwe0U8g3koXd3p/sKOKz/RKbtm8=
+SHA1-Digest: 1qsxu0OW0AS6eC1vKbmUU+PlRsk=
 
 Name: assets/emoji/5_77.png
-SHA1-Digest: 1u1xI7/yPxjjyjnNRp4nWneUrvM=
+SHA1-Digest: 24C/B5d8ruPaTJqNPB51R/LW3is=
 
 Name: assets/emoji/5_78.png
-SHA1-Digest: kbxvLjyEOBaO9nXpoQ3ac4Rl8yI=
+SHA1-Digest: 2R1xBNPS9SSCwvAoDSD59N8WIwk=
 
 Name: assets/emoji/5_79.png
-SHA1-Digest: CXmlDKuC3/EHtPFagXllPsc9bGM=
+SHA1-Digest: XrbpDJuwH6IeVW3MKy+jqQMBtHY=
 
 Name: assets/emoji/5_8.png
-SHA1-Digest: /VvBdeLwRPWfGGwNaEqUnxjZAlE=
+SHA1-Digest: oMWXt/FujaMAgHkOVcdyPN4LOcw=
 
 Name: assets/emoji/5_80.png
-SHA1-Digest: 1lXJb4XeuMJH7gJnmZqvt8z2Fuc=
+SHA1-Digest: Wk4If+Bh7MiXc0vD+SjjBOf0wkw=
 
 Name: assets/emoji/5_81.png
-SHA1-Digest: vK1W5zNTTO3b9qbyuWsk9LwZt/k=
+SHA1-Digest: 6OkJO7Jno44xIbKUOr18QlFUPwY=
 
 Name: assets/emoji/5_82.png
-SHA1-Digest: zMOGCBKlOhzicrsiXWfDmToulew=
+SHA1-Digest: WIlmCCADDdAwvZcq3XbOW1+mlog=
 
 Name: assets/emoji/5_83.png
-SHA1-Digest: KA2wbNqXlevmlxgTfHtsLOq3KVc=
+SHA1-Digest: l9tpwDBYn/kl2p6S/C3nXGlZO7E=
 
 Name: assets/emoji/5_84.png
-SHA1-Digest: hCNgQIdu1h1xaLCkOVialFGyeLQ=
+SHA1-Digest: AX+bw9bWzJHZuXZ6M5zJ1ZNDDrk=
 
 Name: assets/emoji/5_85.png
-SHA1-Digest: A+ffMePKRffbLCuQFaD3Pc9a9g0=
+SHA1-Digest: ThZ93pkd8ztP4MfFbbtj4cTbqyQ=
 
 Name: assets/emoji/5_86.png
 SHA1-Digest: i4K9//Vxet4B83jqdXknBjt+lMM=
 
 Name: assets/emoji/5_87.png
-SHA1-Digest: osZbs7n8PULz2UKDnRDqc+U1fJk=
+SHA1-Digest: zHfyNEjRsqzIQpji3lIpQsXIEsA=
 
 Name: assets/emoji/5_88.png
-SHA1-Digest: LCBPRHnd3EcpFyZare2mRAQTxRo=
+SHA1-Digest: jK7aUiOp59kreasA8oMC5eGph/U=
 
 Name: assets/emoji/5_89.png
-SHA1-Digest: Y7HBhk/YSxvXECL/KAfwJLpL04I=
+SHA1-Digest: SZ2ntdT9EM7ERwh6Bz/rDq34JKc=
 
 Name: assets/emoji/5_9.png
-SHA1-Digest: jNjclxHY1BntGpWfzNpeUQHeCmM=
+SHA1-Digest: 9qt6nigH38u9dXaCx60m26OQ0To=
 
 Name: assets/emoji/5_90.png
-SHA1-Digest: cMBiR0yCSnR/VTkrlEnTSdbBCZk=
+SHA1-Digest: 15AUaO9KtWtAK+aDNPLwzeY+pao=
 
 Name: assets/emoji/5_91.png
-SHA1-Digest: zW+FawSuAvjIiDPLzJpzKVzNgC0=
+SHA1-Digest: tdTM+SdzUouoEAeuMXavAmwPnRE=
 
 Name: assets/emoji/5_92.png
 SHA1-Digest: umPBz46eM3gSMdZZZOYG8T16hJY=
 
 Name: assets/emoji/5_93.png
-SHA1-Digest: /r6A/Ja0iVbUIwthdsEy0TrBcAY=
+SHA1-Digest: Txq03BOHYEuZ4b4+Ur/iLFOmtqY=
 
 Name: assets/emoji/5_94.png
-SHA1-Digest: UYbXHRaaDCSGbShSPQksSSkWDxg=
+SHA1-Digest: mlK0icox1usMEissTgZtpyNqT4E=
 
 Name: assets/emoji/5_95.png
-SHA1-Digest: 1Ifd8mTQF9wbR/9YA1g2n/DzGYI=
+SHA1-Digest: 8lB/Qrt6WlqkYn589hQuNKOpaQg=
 
 Name: assets/emoji/5_96.png
-SHA1-Digest: +Ow0Evs+lKsJj6u5xQVY39nxFfk=
+SHA1-Digest: usSkt/T3wKT4syFTxvyk2/M7028=
 
 Name: assets/emoji/5_97.png
-SHA1-Digest: hhvEVf959GtsCp1X3L7GiTS5Y3w=
+SHA1-Digest: 1tPR7QM2t38I/BoObk2jg86+Zn4=
 
 Name: assets/emoji/5_98.png
-SHA1-Digest: ZJa+GmDxCkgvc4DmMeJ2yJR8huQ=
+SHA1-Digest: +wHg7fqHaPkSiGC0CDNL1LK6Z/k=
 
 Name: assets/emoji/5_99.png
-SHA1-Digest: 93Ak6Z+ckfe2tLoDj1d+BZegv5w=
+SHA1-Digest: n1qsTmfnYqHvK18CrFcIh1RopnE=
 
 Name: assets/emoji/6_0.png
 SHA1-Digest: PJuqLbLJFQ3A17LrqnufKIUS3Ms=
@@ -9508,10 +9511,10 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: OHdC1ZRNndmSYAvWn1w52yCKI28=
+SHA1-Digest: HfsHEDkcy4/0h1UnU73W2qNxPg4=
 
 Name: classes2.dex
-SHA1-Digest: 3EvWFYb9pkIQFJzSxVRgKzMe+nM=
+SHA1-Digest: dT4ssiq8MlhZ5F75eyCHFfH1f+A=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -9541,58 +9544,58 @@ Name: firebase-iid-interop.properties
 SHA1-Digest: EG/NEOnrgZ0SQjjc64Xu8L+hd+o=
 
 Name: firebase-iid.properties
-SHA1-Digest: HOQIyH4cTXPKqs8aDNb+hNqQr98=
+SHA1-Digest: hqi5bYqZOoaaynlW3yfZ8YjefNM=
 
 Name: firebase-installations-interop.properties
 SHA1-Digest: 3Es+p6gO/fWYGiKinOPROdQ3lXY=
 
 Name: firebase-installations.properties
-SHA1-Digest: O5staRzbHTuJnBlN4pCFC3V1vyA=
+SHA1-Digest: hUdTW9Yd8WvAIzCFVs4bxskBmNI=
 
 Name: firebase-measurement-connector.properties
 SHA1-Digest: xGhmL53frvnh03/p4k58xibaXVQ=
 
 Name: firebase-messaging.properties
-SHA1-Digest: VJlThl6ZkUS0Pcrg1IGxxl53jRs=
+SHA1-Digest: oE7mnEXX4Z661GCHPHDXdALvElw=
 
 Name: isoparser-default.properties
 SHA1-Digest: ix2/FbuQDYdbrL/0Ibd5Tj5OTV0=
 
 Name: lib/arm64-v8a/libtgvoip1.1.so
-SHA1-Digest: RtGCkm1qQgpmZPhmzmE9OkeisnU=
+SHA1-Digest: hstz02/aUtAXRJnka5OTOB+8tY8=
 
 Name: lib/arm64-v8a/libtgvoip3.1.so
-SHA1-Digest: FE8qAVa36ZoqkMr4lvfDKq8G5FE=
+SHA1-Digest: YkybzpsYCtpDZttnXF3RvgAxtqQ=
 
 Name: lib/arm64-v8a/libtmessages.30.so
-SHA1-Digest: 8FytUuZPHgY6yeKH72xb+EQeaHM=
+SHA1-Digest: xS5qOaZ3Frlwhazm+jXp6bilKLE=
 
 Name: lib/armeabi-v7a/libtgvoip1.1.so
-SHA1-Digest: Y/DSqOH/7ldL83aD8vO0AYIMeH8=
+SHA1-Digest: KfTLu+ctfLwYSel8HnFw/HkTZ1k=
 
 Name: lib/armeabi-v7a/libtgvoip3.1.so
-SHA1-Digest: lh4MkbGjRy0U0dStWXQem6xp03E=
+SHA1-Digest: s3+uKB4j7CWbKyxyeyABTgmmVP8=
 
 Name: lib/armeabi-v7a/libtmessages.30.so
-SHA1-Digest: hpBPu+o7d6ZznufFWyL8kCrmdgs=
+SHA1-Digest: 74IytA0R3gJF3FLYqSpnVfEUwxY=
 
 Name: lib/x86/libtgvoip1.1.so
-SHA1-Digest: dU2M+zOyr9Hxurs0vQY3CS87ygM=
+SHA1-Digest: xPpOIMqHjhOG/reZO/XpOWo62nI=
 
 Name: lib/x86/libtgvoip3.1.so
-SHA1-Digest: iTYZIqL7Ng5bNDwVPIbQT/gO6E0=
+SHA1-Digest: HdBORU006xJ60rJmfiTcq++v9xQ=
 
 Name: lib/x86/libtmessages.30.so
-SHA1-Digest: ZcZyEJd6naNY2uXuyS1kE6z/JHE=
+SHA1-Digest: yikyX0a2fv045UHdiMbBtnNTLXU=
 
 Name: lib/x86_64/libtgvoip1.1.so
-SHA1-Digest: U1WF4rEutzITK4DJaXht7Y+q9zQ=
+SHA1-Digest: QIYHcFS5rLQhi3pwqrVfLsbsQtI=
 
 Name: lib/x86_64/libtgvoip3.1.so
-SHA1-Digest: 8oh++h0oorPlGbY7TgyKwSyL694=
+SHA1-Digest: kUQdgXrFiCmXoBm2fBwDg22COPU=
 
 Name: lib/x86_64/libtmessages.30.so
-SHA1-Digest: ppZBER6AVKGt/uRepvTMBMMD4U8=
+SHA1-Digest: LrD6Gij6zpTzqQ1qZOhVolZG7TI=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: 4xRXfC5wD7cP7zkWXYe1OQH2mf8=
@@ -9601,13 +9604,13 @@ Name: play-services-auth-base.properties
 SHA1-Digest: QntZi3AeElzLNKqS+drQH1CLpGU=
 
 Name: play-services-auth.properties
-SHA1-Digest: qd09EnR1O6Q8myroynEnMqeCKeo=
+SHA1-Digest: T9dPqREllaquVP/2K+a5acFhSG8=
 
 Name: play-services-base.properties
-SHA1-Digest: bSSz/hqfwpw7nZptfEScbrwxOlc=
+SHA1-Digest: orFpNTaGUkD8+66cHkyZDb0SXGg=
 
 Name: play-services-basement.properties
-SHA1-Digest: LhfE8aWyjIVAOlWqmWWqQWKJe+w=
+SHA1-Digest: DkjIX2cp6t6ZIQKoFW5y4J+/n9Q=
 
 Name: play-services-clearcut.properties
 SHA1-Digest: U5zBgb0GkC6c+gPV9mn8Ifq+kV0=
@@ -10648,6 +10651,9 @@ SHA1-Digest: YUCzCSaaeJz+EoT3oBpaM1EWlzs=
 Name: res/drawable-hdpi-v4/menu_bookmarks_ny.png
 SHA1-Digest: 03dgWBYkcFZLqK1wTcaTVw581nU=
 
+Name: res/drawable-hdpi-v4/menu_bots.png
+SHA1-Digest: zWMLHxXTu8J5XKNNnbbJi1+NvlU=
+
 Name: res/drawable-hdpi-v4/menu_broadcast.png
 SHA1-Digest: a3cmGsje3vdjwXz0kr7FE4y/Tm4=
 
@@ -10765,6 +10771,9 @@ SHA1-Digest: BRta6vTGzLlGblLx5ffX6+tpmqs=
 Name: res/drawable-hdpi-v4/menu_policy.png
 SHA1-Digest: kl9eayeWRICupU3Xph9Or9FwZ2E=
 
+Name: res/drawable-hdpi-v4/menu_private.png
+SHA1-Digest: kGi5EnZ1/4nlq3jwGAsnVCtdiGs=
+
 Name: res/drawable-hdpi-v4/menu_read.png
 SHA1-Digest: FWLGMumNnXg56sI1ULKO4bb/IoA=
 
@@ -10810,6 +10819,9 @@ SHA1-Digest: 04w0pTmSEFfPOOz33/4lVK+NV8s=
 Name: res/drawable-hdpi-v4/menu_switch.png
 SHA1-Digest: lngMzhmlMhRy1k/+MyeLeiJNE2k=
 
+Name: res/drawable-hdpi-v4/menu_unread.png
+SHA1-Digest: o6zAEoW46xsqIwiGp3mDXk8QSoo=
+
 Name: res/drawable-hdpi-v4/menu_wallet.png
 SHA1-Digest: 9VONQpE3IqWsr7oKf2Pk8ox7ykE=
 
@@ -10848,6 +10860,9 @@ SHA1-Digest: OkqFc6AfDilSBOGI5xVfb1bGPeM=
 
 Name: res/drawable-hdpi-v4/msg_addcontact.png
 SHA1-Digest: UOWS9orxPL85+Zk+unE+6SBjJJU=
+
+Name: res/drawable-hdpi-v4/msg_addfolder.png
+SHA1-Digest: VoiMjmyQCS8y8Z9OTGSok03QQek=
 
 Name: res/drawable-hdpi-v4/msg_archive.png
 SHA1-Digest: f7WrNV0os4eS0X73QMzgBdChP58=
@@ -10987,6 +11002,9 @@ SHA1-Digest: +4ji+SlLbvWBjOPptQ22bUYaTW0=
 Name: res/drawable-hdpi-v4/msg_psa.png
 SHA1-Digest: 2Ac7y5ztPXEIKqROtRMk6ldTzBU=
 
+Name: res/drawable-hdpi-v4/msg_removefolder.png
+SHA1-Digest: FFnDLs7n+SNmnCfrupdbPIV85VU=
+
 Name: res/drawable-hdpi-v4/msg_reorder.png
 SHA1-Digest: kxLan60ltMeWxUKIQnPjlUOhbpo=
 
@@ -11043,6 +11061,18 @@ SHA1-Digest: +qwWSxZPJCcVqzE5vx6WZdALNM4=
 
 Name: res/drawable-hdpi-v4/msg_sticker.png
 SHA1-Digest: ZffOFsmlWbt96Y1p+9WSXUSj71M=
+
+Name: res/drawable-hdpi-v4/msg_text_check.png
+SHA1-Digest: bbITPOtgvchnn5qsTiuDksu8Aew=
+
+Name: res/drawable-hdpi-v4/msg_text_framed.png
+SHA1-Digest: kcoUZx9vuyCZ4txb4ii1nk31U7A=
+
+Name: res/drawable-hdpi-v4/msg_text_outlined.png
+SHA1-Digest: D/3+7AIjpPPh1tpA3EdwxgAWmW0=
+
+Name: res/drawable-hdpi-v4/msg_text_regular.png
+SHA1-Digest: /liasgWMeBg/G8dn4tI1hK7F4g0=
 
 Name: res/drawable-hdpi-v4/msg_theme.png
 SHA1-Digest: wIMp3DtWmDvq7ghffJtC418fQaE=
@@ -11204,7 +11234,7 @@ Name: res/drawable-hdpi-v4/phone_activate.png
 SHA1-Digest: 49saH5Lgg8EO3ieMXWnxaCVh5jM=
 
 Name: res/drawable-hdpi-v4/photo_add.png
-SHA1-Digest: a4tgVV0r5/YDHQQScB1lsbh7OxE=
+SHA1-Digest: RDv2OHdnx7m9XSxvbOP4C45mLDA=
 
 Name: res/drawable-hdpi-v4/photo_crop.png
 SHA1-Digest: YBnGTxHWh+5XXWwnAlQFqJDnHT4=
@@ -11232,6 +11262,9 @@ SHA1-Digest: KDrqI0k+IjhcGlI1APcj4SzFulg=
 
 Name: res/drawable-hdpi-v4/photo_tools.png
 SHA1-Digest: Fp4on3UsBcoVZYzgwyHxnEPWydo=
+
+Name: res/drawable-hdpi-v4/photo_tooltip2.png
+SHA1-Digest: aPqkn76+ZXvDi9pI53+ll9PuwR4=
 
 Name: res/drawable-hdpi-v4/photo_undo.png
 SHA1-Digest: sDTpraNxgTyw1J4fnDdkF420e7I=
@@ -11423,7 +11456,7 @@ Name: res/drawable-hdpi-v4/search_web.png
 SHA1-Digest: xW9Lgk+P7GCoIUOLQriv/3HZ5Fs=
 
 Name: res/drawable-hdpi-v4/selectphoto_large.png
-SHA1-Digest: SNnXggDklw7ubct4D3kyfbSkT+c=
+SHA1-Digest: Tqqj7jZGcqmrQtH38Risb7W1SR8=
 
 Name: res/drawable-hdpi-v4/settings_arrow.png
 SHA1-Digest: tPCHmuADbnpOQDCuPXYdaR3G5tA=
@@ -11578,6 +11611,12 @@ SHA1-Digest: CFwKJbdvZk/fHviObKqjloca6iY=
 Name: res/drawable-hdpi-v4/stickers_favorites.png
 SHA1-Digest: rLJdvV1N1QAPVRRIFTpIJ6kAHiU=
 
+Name: res/drawable-hdpi-v4/stickers_gifs_saved.png
+SHA1-Digest: dPCQ8O4FIzlJXyMydOMdWKe/bac=
+
+Name: res/drawable-hdpi-v4/stickers_gifs_trending.png
+SHA1-Digest: OA8fjGMI2PIQmY/MrBDVa2Iq4eA=
+
 Name: res/drawable-hdpi-v4/stickers_recent.png
 SHA1-Digest: qGSiI6lA2IIwIbd8DnS/Jk0BLrY=
 
@@ -11635,6 +11674,12 @@ SHA1-Digest: ip+PrInQYFyv5XH+M8zkh2FFX5A=
 Name: res/drawable-hdpi-v4/tip6_dark.png
 SHA1-Digest: SUrlGzvQCB1MtrawZYDYR3wNXRM=
 
+Name: res/drawable-hdpi-v4/toast_folder.png
+SHA1-Digest: SXscm1Ybf338PniVXqUKd1a4yys=
+
+Name: res/drawable-hdpi-v4/toast_folder_minus.png
+SHA1-Digest: 0NHWLtDmZaKXr2iJPYNmH2h/qhU=
+
 Name: res/drawable-hdpi-v4/toast_pallete.png
 SHA1-Digest: oS6UzuGmYhDvwTCix6r17m8KuSs=
 
@@ -11681,10 +11726,10 @@ Name: res/drawable-hdpi-v4/video_copy.png
 SHA1-Digest: m968qi1G7RS66uEBtgCyirvd9sU=
 
 Name: res/drawable-hdpi-v4/video_cropleft.png
-SHA1-Digest: jtj+0kGSYXJuv841gQV4jB2mqrY=
+SHA1-Digest: VbyL6at/POiLMwEh503ULrUmcDI=
 
 Name: res/drawable-hdpi-v4/video_cropright.png
-SHA1-Digest: Ot64OGsHGfwyKbKFNdjsYHHk8G0=
+SHA1-Digest: zvs8yIj2S7Q5NmblxdAhp7MN0PQ=
 
 Name: res/drawable-hdpi-v4/video_mini_arrow.png
 SHA1-Digest: +OLjI2OLcTxFLO7v7noaL/cS67s=
@@ -11698,8 +11743,14 @@ SHA1-Digest: R8tcD+wVSMqieuQRYItz/3y3m6w=
 Name: res/drawable-hdpi-v4/video_muted.png
 SHA1-Digest: qttMWixPhaBVrmdp1FTmmy7Ch7c=
 
+Name: res/drawable-hdpi-v4/video_pause1.png
+SHA1-Digest: VjSHvAEU8LpKj78D79+w55ha6gA=
+
 Name: res/drawable-hdpi-v4/video_pip.png
 SHA1-Digest: i6WVMLpaqNs366UU0adSawxKOcQ=
+
+Name: res/drawable-hdpi-v4/video_play1.png
+SHA1-Digest: gxceP7Ydgmi+uUQKB5VFBYkFenk=
 
 Name: res/drawable-hdpi-v4/video_quality1.png
 SHA1-Digest: nW6qSsKav1tU8XGw0v64ycjIGDA=
@@ -11709,6 +11760,12 @@ SHA1-Digest: T7Mg6mqUm4DIswihBy+sc7GIAYI=
 
 Name: res/drawable-hdpi-v4/video_quality3.png
 SHA1-Digest: ssqUp5NRtkl99V1qJ9iIf9wOFQI=
+
+Name: res/drawable-hdpi-v4/video_send_mute.png
+SHA1-Digest: QbQXdN71PdjobsBemQejR/Qp64g=
+
+Name: res/drawable-hdpi-v4/video_send_unmute.png
+SHA1-Digest: 3hF90a/hap1M5tV1ThmL+qRSplU=
 
 Name: res/drawable-hdpi-v4/videopreview.9.png
 SHA1-Digest: uXst1j3dVhTesy8kqyCz47CXkyE=
@@ -12674,6 +12731,9 @@ SHA1-Digest: BmY5m4S7q8e78EvJ2twFaLw/AGA=
 Name: res/drawable-mdpi-v4/menu_bookmarks_ny.png
 SHA1-Digest: voTJVSSH+KPFiCXxE4xCAGgLs9Y=
 
+Name: res/drawable-mdpi-v4/menu_bots.png
+SHA1-Digest: rwcgOrIin5HyXQ3WTekJdJeAIi8=
+
 Name: res/drawable-mdpi-v4/menu_broadcast.png
 SHA1-Digest: 9guIwLtEnpsyMh3zDzNLpYkhOFs=
 
@@ -12791,6 +12851,9 @@ SHA1-Digest: 47n1HwtscIbDZwvFfx5y8uMzLpA=
 Name: res/drawable-mdpi-v4/menu_policy.png
 SHA1-Digest: GyBWCBcLGdiGv8RNnk6unqQmbcI=
 
+Name: res/drawable-mdpi-v4/menu_private.png
+SHA1-Digest: 6Muc+CHt42cLLqSaKM6ea0loRGM=
+
 Name: res/drawable-mdpi-v4/menu_read.png
 SHA1-Digest: nH7ksb7xg5P9AM7md3R3RQdTctg=
 
@@ -12836,6 +12899,9 @@ SHA1-Digest: heFOXXtvErySYatFUTamI77TOYM=
 Name: res/drawable-mdpi-v4/menu_switch.png
 SHA1-Digest: S1IQiEwlLgj3CTaoFeEfSL7LeUI=
 
+Name: res/drawable-mdpi-v4/menu_unread.png
+SHA1-Digest: nXK6AWzXdTVTTbDn7N0XZVeZ1nc=
+
 Name: res/drawable-mdpi-v4/menu_wallet.png
 SHA1-Digest: tCo2La/1iV0FZIvn5JPBidN8V5w=
 
@@ -12874,6 +12940,9 @@ SHA1-Digest: R0089LxquNCHSHFSd2kQao7Psj8=
 
 Name: res/drawable-mdpi-v4/msg_addcontact.png
 SHA1-Digest: NnOdhF/6q6UjDPY8GYiauzy+Djk=
+
+Name: res/drawable-mdpi-v4/msg_addfolder.png
+SHA1-Digest: wg5sOQBkuW2tAlQnyOdV7Xd52Ts=
 
 Name: res/drawable-mdpi-v4/msg_archive.png
 SHA1-Digest: GVcMZMmAYkpWqacNo9x6dVQpwVg=
@@ -13013,6 +13082,9 @@ SHA1-Digest: Th4q/eDr0pOmDo1JDTIam1ghZ2U=
 Name: res/drawable-mdpi-v4/msg_psa.png
 SHA1-Digest: zQoE1iDNgiQQ3NtZ7Mu/UFE2XEI=
 
+Name: res/drawable-mdpi-v4/msg_removefolder.png
+SHA1-Digest: vIxiCJyhiNv4QZMjgfdvR+yMn/g=
+
 Name: res/drawable-mdpi-v4/msg_reorder.png
 SHA1-Digest: 4d13lQ8Yeg0k4QhSyO8JYLg+CUQ=
 
@@ -13069,6 +13141,18 @@ SHA1-Digest: Ne4vWpgUo16Cpimv/IzDmgCWLKM=
 
 Name: res/drawable-mdpi-v4/msg_sticker.png
 SHA1-Digest: pZiDTaWinxu9fKHXI9w6bThA/sU=
+
+Name: res/drawable-mdpi-v4/msg_text_check.png
+SHA1-Digest: sbOsRW/L3dY13mPWWOzMo89WZgM=
+
+Name: res/drawable-mdpi-v4/msg_text_framed.png
+SHA1-Digest: xP8lflE1efgrgDpvNbLzkBTpGws=
+
+Name: res/drawable-mdpi-v4/msg_text_outlined.png
+SHA1-Digest: XVFNvejMkBbIK/lhlTYr0KMwrcI=
+
+Name: res/drawable-mdpi-v4/msg_text_regular.png
+SHA1-Digest: 5dOuC11cm5G7RtlwlPpyUGnbdhM=
 
 Name: res/drawable-mdpi-v4/msg_theme.png
 SHA1-Digest: OADO/I4Cs6azRuxrWvLJRy3o01I=
@@ -13230,7 +13314,7 @@ Name: res/drawable-mdpi-v4/phone_activate.png
 SHA1-Digest: 3f9ksk2oJ3rbcQ6T4tWLsaGh420=
 
 Name: res/drawable-mdpi-v4/photo_add.png
-SHA1-Digest: 6QoJzrUfXkmDLx7zqorVZWNTcw4=
+SHA1-Digest: 9bXq7PFCDvvfokWNiyBH4uzgndA=
 
 Name: res/drawable-mdpi-v4/photo_crop.png
 SHA1-Digest: WR2OUi6/0T/wnSePrU9tCS3tyOk=
@@ -13258,6 +13342,9 @@ SHA1-Digest: KQ7ufXfGgEVVUTsThkw7IOZBMtY=
 
 Name: res/drawable-mdpi-v4/photo_tools.png
 SHA1-Digest: MylW2ZCdnThc9aFhBLfYl6I2GiI=
+
+Name: res/drawable-mdpi-v4/photo_tooltip2.png
+SHA1-Digest: UspTdfpxHlvokd0BVE5Bps3X+U8=
 
 Name: res/drawable-mdpi-v4/photo_undo.png
 SHA1-Digest: gFj7ntWI+Jd6tr3Wu9GnGqre4Xo=
@@ -13449,7 +13536,7 @@ Name: res/drawable-mdpi-v4/search_web.png
 SHA1-Digest: yzD2ciuBUvu5JMBEwoRiciR+7Fo=
 
 Name: res/drawable-mdpi-v4/selectphoto_large.png
-SHA1-Digest: JR2XePT8ISsmjlBkE34mPqrSLJQ=
+SHA1-Digest: WzVYQlPYhKD1Cui5GiUc3RY60EA=
 
 Name: res/drawable-mdpi-v4/settings_arrow.png
 SHA1-Digest: /k3wWasfxqHgXoZ/OpSbN4TyQ+w=
@@ -13604,6 +13691,12 @@ SHA1-Digest: ISND6dKEt28Hg4JLAmlFWIXaDJI=
 Name: res/drawable-mdpi-v4/stickers_favorites.png
 SHA1-Digest: OSeJCFngZAviRosx0evkVb3Zt4Y=
 
+Name: res/drawable-mdpi-v4/stickers_gifs_saved.png
+SHA1-Digest: bUqj/nPDz3DrtD5+b8n67oiMGis=
+
+Name: res/drawable-mdpi-v4/stickers_gifs_trending.png
+SHA1-Digest: I3rXhOT28kC7IgV8682nJcWd1K4=
+
 Name: res/drawable-mdpi-v4/stickers_recent.png
 SHA1-Digest: K+uQG+q09KqTZoEUExxD6J6XRt4=
 
@@ -13661,6 +13754,12 @@ SHA1-Digest: jmxWncRavDjDzvjK9vQ7qh/JNi4=
 Name: res/drawable-mdpi-v4/tip6_dark.png
 SHA1-Digest: EjEcYnIKVJC5qwj1OrJnnV1mQSM=
 
+Name: res/drawable-mdpi-v4/toast_folder.png
+SHA1-Digest: 32Q4cFnbro90fjPhioIr28iBG38=
+
+Name: res/drawable-mdpi-v4/toast_folder_minus.png
+SHA1-Digest: /FcZ2IuNPYCQ+8CJJlZT8KSraEQ=
+
 Name: res/drawable-mdpi-v4/toast_pallete.png
 SHA1-Digest: 5tOs3r0abYjkuPvpGODHjfmv6ZQ=
 
@@ -13707,10 +13806,10 @@ Name: res/drawable-mdpi-v4/video_copy.png
 SHA1-Digest: EguINxpLALyPMkYNYOsycD6hktM=
 
 Name: res/drawable-mdpi-v4/video_cropleft.png
-SHA1-Digest: NTi4pKY768D0CowR/ejN1JGpEgQ=
+SHA1-Digest: 4RZ5Y7cqBaBgtPk5QKXMEVmWN1k=
 
 Name: res/drawable-mdpi-v4/video_cropright.png
-SHA1-Digest: VExwN4GXNgN881RnTmYZUbtPddc=
+SHA1-Digest: s7zdXUi4OTxaBCTt1X1bApLjuKY=
 
 Name: res/drawable-mdpi-v4/video_mini_arrow.png
 SHA1-Digest: gMQYORZcCmijs6r3X8Goa6tzjc0=
@@ -13724,8 +13823,14 @@ SHA1-Digest: BovBscy8FK+DDJ7ELy6yIwtQR9k=
 Name: res/drawable-mdpi-v4/video_muted.png
 SHA1-Digest: MonFHkai8lVMImGmyDv/Zxus7fI=
 
+Name: res/drawable-mdpi-v4/video_pause1.png
+SHA1-Digest: S7VyD0LA0x8ab7fpxgF+oB1IKEE=
+
 Name: res/drawable-mdpi-v4/video_pip.png
 SHA1-Digest: lndgyXFTv9x/mdFIYfBGtNvbrZI=
+
+Name: res/drawable-mdpi-v4/video_play1.png
+SHA1-Digest: yv2l8pejw3PVArgCw3OZcLPGRZk=
 
 Name: res/drawable-mdpi-v4/video_quality1.png
 SHA1-Digest: V1McNMjf9Bc8u24NBYVvnahQxRc=
@@ -13735,6 +13840,12 @@ SHA1-Digest: 8p4dq2eoBD8GKW5VCiTp17VX42A=
 
 Name: res/drawable-mdpi-v4/video_quality3.png
 SHA1-Digest: WAt9Oo7OPgyuSomlg1SW0It3OZo=
+
+Name: res/drawable-mdpi-v4/video_send_mute.png
+SHA1-Digest: 8UkBpPb14R7I4DGswsCJCjbWUQI=
+
+Name: res/drawable-mdpi-v4/video_send_unmute.png
+SHA1-Digest: LzKq99T3NFSYGQUttWcrbOABPis=
 
 Name: res/drawable-mdpi-v4/videopreview.9.png
 SHA1-Digest: oB6nAMJ6jI4k2RueBknl0Uv+u/k=
@@ -14745,6 +14856,9 @@ SHA1-Digest: DRvT12feM7fviQPFEU+4B1CmC9I=
 Name: res/drawable-xhdpi-v4/menu_bookmarks_ny.png
 SHA1-Digest: CkZlHrpN2UUFw7YInus8LL31QIw=
 
+Name: res/drawable-xhdpi-v4/menu_bots.png
+SHA1-Digest: GvRWGL+FETogfMToJ080bk6KKGs=
+
 Name: res/drawable-xhdpi-v4/menu_broadcast.png
 SHA1-Digest: v0Y7wDzORQKOqTULhWskvlRJlwo=
 
@@ -14862,6 +14976,9 @@ SHA1-Digest: l+ITkQvvFK6/JHFHpNjvyGh67s0=
 Name: res/drawable-xhdpi-v4/menu_policy.png
 SHA1-Digest: dgz6NnavUfDEu4gUWqEEj/9vhAA=
 
+Name: res/drawable-xhdpi-v4/menu_private.png
+SHA1-Digest: MkyrItmhR0sErHnzBCvyqiOv9Zo=
+
 Name: res/drawable-xhdpi-v4/menu_read.png
 SHA1-Digest: SafME3xEdE/gw2Wo7/Z36vnjeMs=
 
@@ -14907,6 +15024,9 @@ SHA1-Digest: r79aqkvzoRm8o5XVPMrEMXGZRho=
 Name: res/drawable-xhdpi-v4/menu_switch.png
 SHA1-Digest: JP7BdwmoAH69sBFZBJuIkTNjuJk=
 
+Name: res/drawable-xhdpi-v4/menu_unread.png
+SHA1-Digest: 7kKcd57J1q0n3td14tFDC0DGp1w=
+
 Name: res/drawable-xhdpi-v4/menu_wallet.png
 SHA1-Digest: dHT69mRqtBnyXEYcTyW4wzHtg2I=
 
@@ -14945,6 +15065,9 @@ SHA1-Digest: JrhOphBChQASmhlQOGp5ZBDxzG4=
 
 Name: res/drawable-xhdpi-v4/msg_addcontact.png
 SHA1-Digest: 7/0CEzOoTOFzVcDlBzefvkH46To=
+
+Name: res/drawable-xhdpi-v4/msg_addfolder.png
+SHA1-Digest: IZX7LyiLt50dFA40flYjkWnt8Ls=
 
 Name: res/drawable-xhdpi-v4/msg_archive.png
 SHA1-Digest: wi9wPCNPV9tpyAG7xazy96kiq60=
@@ -15084,6 +15207,9 @@ SHA1-Digest: 8jlAO4Ntpo3vCHnDRQwJRPZdlF4=
 Name: res/drawable-xhdpi-v4/msg_psa.png
 SHA1-Digest: e2tWtArdaZthQODswPcw98MxhZw=
 
+Name: res/drawable-xhdpi-v4/msg_removefolder.png
+SHA1-Digest: FFFh82n+0MM43zn5FIpTPdT/gSo=
+
 Name: res/drawable-xhdpi-v4/msg_reorder.png
 SHA1-Digest: aeUA8iYEOyc/YOXnIUpQHqsDMx4=
 
@@ -15140,6 +15266,18 @@ SHA1-Digest: v67XTEJli2tCHmuYt/bjL+QCte0=
 
 Name: res/drawable-xhdpi-v4/msg_sticker.png
 SHA1-Digest: I7pQmz4UiZ2vWbQhfGxmcTxgnnE=
+
+Name: res/drawable-xhdpi-v4/msg_text_check.png
+SHA1-Digest: 7iYk2OwLaoR8nk9QF2GihRJL1P0=
+
+Name: res/drawable-xhdpi-v4/msg_text_framed.png
+SHA1-Digest: P+QSLMx6+zjxPmPxMzQc9vbnwe8=
+
+Name: res/drawable-xhdpi-v4/msg_text_outlined.png
+SHA1-Digest: 2AUrY+XryvaegUQVbsr8h9NJxyA=
+
+Name: res/drawable-xhdpi-v4/msg_text_regular.png
+SHA1-Digest: CsRkGTQOe18DKqC4HrMDsJo+L2s=
 
 Name: res/drawable-xhdpi-v4/msg_theme.png
 SHA1-Digest: 9QeZmBik4Hlc/gCVkeLMFOY3Bxc=
@@ -15301,7 +15439,7 @@ Name: res/drawable-xhdpi-v4/phone_activate.png
 SHA1-Digest: eYXRzWrzeVFX+JKDWyhbeyGhLE0=
 
 Name: res/drawable-xhdpi-v4/photo_add.png
-SHA1-Digest: u9gB3hqbxq8EPmKQeyuFohofEg0=
+SHA1-Digest: uI5u7EqsQf9SrK8rkr7ktkP989c=
 
 Name: res/drawable-xhdpi-v4/photo_crop.png
 SHA1-Digest: 1mQP4ZwWzCpcsXwayco7NGeSSpA=
@@ -15329,6 +15467,9 @@ SHA1-Digest: J+kqYtUTaXUwfuLYgbqbs9FFMwI=
 
 Name: res/drawable-xhdpi-v4/photo_tools.png
 SHA1-Digest: OF8Mz9ZuS/K7POGTCCV1hJIXPQw=
+
+Name: res/drawable-xhdpi-v4/photo_tooltip2.png
+SHA1-Digest: bd4JTz0TY70AyhRlvy48KXCfrHg=
 
 Name: res/drawable-xhdpi-v4/photo_undo.png
 SHA1-Digest: D7diEcNue6SearANcLrw3jgKHnY=
@@ -15520,7 +15661,7 @@ Name: res/drawable-xhdpi-v4/search_web.png
 SHA1-Digest: s5Fh05yCK6Y39YZwW42wH7X1dc0=
 
 Name: res/drawable-xhdpi-v4/selectphoto_large.png
-SHA1-Digest: IvyCZD7GGJSJQmNYoi7/3cEZgSo=
+SHA1-Digest: +oHJ2Ls+4TO9p4TyQ5QpQnH1BiI=
 
 Name: res/drawable-xhdpi-v4/settings_arrow.png
 SHA1-Digest: X3TUcDrW9TTsYX2HV77ZF/GUQDU=
@@ -15675,6 +15816,12 @@ SHA1-Digest: 1Ay+jYRZn+rIX/X0e8JE3XRkMYE=
 Name: res/drawable-xhdpi-v4/stickers_favorites.png
 SHA1-Digest: XYsE15NDQMhu5PuNIf6rsEbRlYw=
 
+Name: res/drawable-xhdpi-v4/stickers_gifs_saved.png
+SHA1-Digest: ALJDPDGoB+/4Z/YFC0edo6B453o=
+
+Name: res/drawable-xhdpi-v4/stickers_gifs_trending.png
+SHA1-Digest: yg5ND81f72NnIK3eL9Lr9quydIk=
+
 Name: res/drawable-xhdpi-v4/stickers_recent.png
 SHA1-Digest: ZOzPOV99FCyzGkVYVztkMyLIzAM=
 
@@ -15732,6 +15879,12 @@ SHA1-Digest: ennsi69MiRcKnu86lvBan4RckGc=
 Name: res/drawable-xhdpi-v4/tip6_dark.png
 SHA1-Digest: 7cla40ACcM+ZKWJPclwr3lgx26o=
 
+Name: res/drawable-xhdpi-v4/toast_folder.png
+SHA1-Digest: RYOyg7TbZMTd6KpWX21dXwtBMHQ=
+
+Name: res/drawable-xhdpi-v4/toast_folder_minus.png
+SHA1-Digest: OHrvdqYn7l9BUVg/FXcmnpAXjDw=
+
 Name: res/drawable-xhdpi-v4/toast_pallete.png
 SHA1-Digest: Ynp4fsUuM9//wqH2wztmCan3oJA=
 
@@ -15775,10 +15928,10 @@ Name: res/drawable-xhdpi-v4/video_actions.png
 SHA1-Digest: bSciFtTsCn8HXshJ5qPRjt2LVr0=
 
 Name: res/drawable-xhdpi-v4/video_cropleft.png
-SHA1-Digest: x451wxXyjaNms1IZmlyUQa3RJHI=
+SHA1-Digest: juIlFBLmVCtRHUUt8Zv3vJaq9Ns=
 
 Name: res/drawable-xhdpi-v4/video_cropright.png
-SHA1-Digest: gAYGATS9n0TVOkLy9ZvGEp0BA7U=
+SHA1-Digest: oKDssKrqMs7sFC876YcI5+KZyuY=
 
 Name: res/drawable-xhdpi-v4/video_mini_arrow.png
 SHA1-Digest: 2dyNmiU+5scJNldT8ett6zXkwAA=
@@ -15792,8 +15945,14 @@ SHA1-Digest: SxM1SnJccnNhIetNUX8iB7v605w=
 Name: res/drawable-xhdpi-v4/video_muted.png
 SHA1-Digest: NtB+5gH5iAowp1mtaJEfhIf2YZ0=
 
+Name: res/drawable-xhdpi-v4/video_pause1.png
+SHA1-Digest: pzmv3KT0gUfi47Dz8xGxrDDaMow=
+
 Name: res/drawable-xhdpi-v4/video_pip.png
 SHA1-Digest: RABSmpnR+TbpbesylX5YzJd288I=
+
+Name: res/drawable-xhdpi-v4/video_play1.png
+SHA1-Digest: klv0YJDtaxD/586g+lkEkUYOIm8=
 
 Name: res/drawable-xhdpi-v4/video_png.png
 SHA1-Digest: tNpWYkmaDNzuaW44WccMLPEzQDE=
@@ -15806,6 +15965,12 @@ SHA1-Digest: c8YEVN386tWFoXtdEJHSyxMkEh8=
 
 Name: res/drawable-xhdpi-v4/video_quality3.png
 SHA1-Digest: EYOTc11do3D02GF+dPWZP7JTwC4=
+
+Name: res/drawable-xhdpi-v4/video_send_mute.png
+SHA1-Digest: I+3Ew1hdDsp1WLABu2PNbgP0M+U=
+
+Name: res/drawable-xhdpi-v4/video_send_unmute.png
+SHA1-Digest: bbWZ7SCrNgHq9/mWXgzUYu0f7qw=
 
 Name: res/drawable-xhdpi-v4/videopreview.9.png
 SHA1-Digest: FmgXjbbMS09d184BW5hLb2hXdr4=
@@ -16762,6 +16927,9 @@ SHA1-Digest: yxJqTR6b21gwoRhMCxjI2OXV+rU=
 Name: res/drawable-xxhdpi-v4/menu_bookmarks_ny.png
 SHA1-Digest: fH8p84XJOfpUUCVeGXVMBIE33Aw=
 
+Name: res/drawable-xxhdpi-v4/menu_bots.png
+SHA1-Digest: x3P3ne4iHhk45PxOlQTJjRRqS4I=
+
 Name: res/drawable-xxhdpi-v4/menu_broadcast.png
 SHA1-Digest: ICx49rwakfCp9ckfZFHmzZIAkLY=
 
@@ -16879,6 +17047,9 @@ SHA1-Digest: dUAtgluiyRGrWFu6wq6h6YjXoLo=
 Name: res/drawable-xxhdpi-v4/menu_policy.png
 SHA1-Digest: 30vrSWC54VXuhsTUbMHWJlWc82k=
 
+Name: res/drawable-xxhdpi-v4/menu_private.png
+SHA1-Digest: 0fAH8ulBDBqtkXBUaE5ZxkL8tBM=
+
 Name: res/drawable-xxhdpi-v4/menu_read.png
 SHA1-Digest: 3Vcpb9cKuRniwma5aen2EBa0WTs=
 
@@ -16924,6 +17095,9 @@ SHA1-Digest: uBzi5mcl+/0mf4mYrN3yjv7WHu0=
 Name: res/drawable-xxhdpi-v4/menu_switch.png
 SHA1-Digest: rzQKq69TLTVAjV8ODApnNB4elME=
 
+Name: res/drawable-xxhdpi-v4/menu_unread.png
+SHA1-Digest: d4jSUmN0n0LoPvTVdYGJg90jEsE=
+
 Name: res/drawable-xxhdpi-v4/menu_wallet.png
 SHA1-Digest: 8/revSAqkjsRCrGKhEqx/O+eUow=
 
@@ -16959,6 +17133,9 @@ SHA1-Digest: EPCKRyKPXqU40r/ANPR5nAZsfrY=
 
 Name: res/drawable-xxhdpi-v4/msg_addcontact.png
 SHA1-Digest: H4zkNUncPzh4vVwAG0lG3nltDow=
+
+Name: res/drawable-xxhdpi-v4/msg_addfolder.png
+SHA1-Digest: IrB9+VYbn4EXrkyigfCpFx0/kA8=
 
 Name: res/drawable-xxhdpi-v4/msg_archive.png
 SHA1-Digest: UU3c5acIXWASO3N11ppm07rszvE=
@@ -17098,6 +17275,9 @@ SHA1-Digest: UyQa2SKnYMyyGKH36KnL7g4+6W8=
 Name: res/drawable-xxhdpi-v4/msg_psa.png
 SHA1-Digest: KZ9gZYTJqqKMEJQdxCoURFqvY3o=
 
+Name: res/drawable-xxhdpi-v4/msg_removefolder.png
+SHA1-Digest: U4OTGAPUsh0gRYmGYzMHB70bByc=
+
 Name: res/drawable-xxhdpi-v4/msg_reorder.png
 SHA1-Digest: 9vhxM+HQUX/VzgXkydEINXKwut0=
 
@@ -17154,6 +17334,18 @@ SHA1-Digest: 0wy5TuQ/8OGOFKneinQDOYKKzvo=
 
 Name: res/drawable-xxhdpi-v4/msg_sticker.png
 SHA1-Digest: +IBxaq3Q1vkJ4WEvzUaZAW86bGc=
+
+Name: res/drawable-xxhdpi-v4/msg_text_check.png
+SHA1-Digest: kDWMz+fKXpCTJNJIr1G85ZtN9Bc=
+
+Name: res/drawable-xxhdpi-v4/msg_text_framed.png
+SHA1-Digest: svuI6GFv2ofjDMTWEqrLOct2zls=
+
+Name: res/drawable-xxhdpi-v4/msg_text_outlined.png
+SHA1-Digest: NLjSzKUXo+BgumjVJRwfFGz42Ac=
+
+Name: res/drawable-xxhdpi-v4/msg_text_regular.png
+SHA1-Digest: OTrkc1nHUFJjNvuRDTFXDIHSRHI=
 
 Name: res/drawable-xxhdpi-v4/msg_theme.png
 SHA1-Digest: /YIV1fAf4WROzjzTqmkpY1H6Ais=
@@ -17300,7 +17492,7 @@ Name: res/drawable-xxhdpi-v4/phone_activate.png
 SHA1-Digest: yWa4HWWAieeq0Pb+BTwoBv7Le80=
 
 Name: res/drawable-xxhdpi-v4/photo_add.png
-SHA1-Digest: 9K/1f42hY25SzW90+/Cq2xHZuR0=
+SHA1-Digest: lc7NFu4BiQloeiCijg0hGAYGZiI=
 
 Name: res/drawable-xxhdpi-v4/photo_crop.png
 SHA1-Digest: G7XgV6Joyn511eJ07huwp3WmKMU=
@@ -17328,6 +17520,9 @@ SHA1-Digest: KhwFg3a4XKyZUjODv/7XGVY8JIA=
 
 Name: res/drawable-xxhdpi-v4/photo_tools.png
 SHA1-Digest: J5zWGIAootsrSVtMthVt46/Fz/U=
+
+Name: res/drawable-xxhdpi-v4/photo_tooltip2.png
+SHA1-Digest: pg78CQuxurlXlXiJGzX+YJA0/L8=
 
 Name: res/drawable-xxhdpi-v4/photo_undo.png
 SHA1-Digest: uxFWz6QvIsnkIq65H8WeElzAgKA=
@@ -17519,7 +17714,7 @@ Name: res/drawable-xxhdpi-v4/search_web.png
 SHA1-Digest: JLTj74RgCPPyM5082OxQ7TgXZo8=
 
 Name: res/drawable-xxhdpi-v4/selectphoto_large.png
-SHA1-Digest: LCuj0zLOM2FKjLXfxOy18lXNQJU=
+SHA1-Digest: bKQMezvzNIbRWYg00MxhasSH5S0=
 
 Name: res/drawable-xxhdpi-v4/settings_arrow.png
 SHA1-Digest: GDRxadZJUhT5CE+YIqKx+oot5ak=
@@ -17674,6 +17869,12 @@ SHA1-Digest: zOiefqh8eb7N8gS8lY81/XGhUew=
 Name: res/drawable-xxhdpi-v4/stickers_favorites.png
 SHA1-Digest: QsY4fKWOLt5y2y7KdU+U97JQWGI=
 
+Name: res/drawable-xxhdpi-v4/stickers_gifs_saved.png
+SHA1-Digest: Jd/wwZRMxP6Ji66PbGWbqW1JKHk=
+
+Name: res/drawable-xxhdpi-v4/stickers_gifs_trending.png
+SHA1-Digest: tmtDpLHs6rXlg1KAofSk6x8IJ8c=
+
 Name: res/drawable-xxhdpi-v4/stickers_recent.png
 SHA1-Digest: tHUsYn0ou6uE3YwIDSPYB3X7KGA=
 
@@ -17734,6 +17935,12 @@ SHA1-Digest: GGmTp6uIb2mlb1pde4M5NellK+c=
 Name: res/drawable-xxhdpi-v4/tip6_dark.png
 SHA1-Digest: cyyDEupUlmdvZSxUArxKBr9v7vA=
 
+Name: res/drawable-xxhdpi-v4/toast_folder.png
+SHA1-Digest: cMsnqsIcArPMwxCQh3nSxDrlGgM=
+
+Name: res/drawable-xxhdpi-v4/toast_folder_minus.png
+SHA1-Digest: aWogHKiH4MoX0z6xUp8PgowFbHU=
+
 Name: res/drawable-xxhdpi-v4/toast_pallete.png
 SHA1-Digest: 5tRdFi63jsCNSkmCRiUL9kbveFw=
 
@@ -17780,10 +17987,10 @@ Name: res/drawable-xxhdpi-v4/video_copy.png
 SHA1-Digest: +kHGyFvotqWgB06f61qQJdcUpR4=
 
 Name: res/drawable-xxhdpi-v4/video_cropleft.png
-SHA1-Digest: IUIci0+3sKLBjAkJb1nHchqm2dU=
+SHA1-Digest: yWRw7Eid9hgbz+xF75OqFxYnWr4=
 
 Name: res/drawable-xxhdpi-v4/video_cropright.png
-SHA1-Digest: dSkfVuRwWmdYUbRB05dvroTC66w=
+SHA1-Digest: 7P/exl73v+N4CwSw8R7SxCmBnDo=
 
 Name: res/drawable-xxhdpi-v4/video_mini_arrow.png
 SHA1-Digest: YjAY8I1X6DmGyzpLP+XDSBAyFzU=
@@ -17797,8 +18004,14 @@ SHA1-Digest: j5V2IBZr7JAW3sT/wUsI+E/cxSI=
 Name: res/drawable-xxhdpi-v4/video_muted.png
 SHA1-Digest: nVsvlecY2r0k3VY4Lf+F1V4SSGE=
 
+Name: res/drawable-xxhdpi-v4/video_pause1.png
+SHA1-Digest: IoAu8YgMehXLzwKHzsuNXnnNd+Y=
+
 Name: res/drawable-xxhdpi-v4/video_pip.png
 SHA1-Digest: BIdaLPOOo5+TfEqAa/XYP96VysU=
+
+Name: res/drawable-xxhdpi-v4/video_play1.png
+SHA1-Digest: yb8cb/UeGFtWwEXdnnc7iCmL98E=
 
 Name: res/drawable-xxhdpi-v4/video_quality1.png
 SHA1-Digest: mcPHRMm4i7b49EYqc4DVPUiZK6U=
@@ -17808,6 +18021,12 @@ SHA1-Digest: FgHVy7Nm5q0kRWdRiEuR7ejB9cA=
 
 Name: res/drawable-xxhdpi-v4/video_quality3.png
 SHA1-Digest: w0eYrG7J2XDR9CN88i4YE1IzuC0=
+
+Name: res/drawable-xxhdpi-v4/video_send_mute.png
+SHA1-Digest: ucSFCFAEeTL8HvEik7Hq5KkrBow=
+
+Name: res/drawable-xxhdpi-v4/video_send_unmute.png
+SHA1-Digest: V2ecRY6/B5cOhDeV7Xu6Igt2Lk4=
 
 Name: res/drawable-xxhdpi-v4/videopreview.9.png
 SHA1-Digest: P6OpXaJc11k4xskcfKfpgbXRMVY=
@@ -18041,19 +18260,19 @@ Name: res/drawable/$fingerprint_dialog_fp_to_error__9.xml
 SHA1-Digest: MQinL9boLz9CBU0JaTF81ExZEkc=
 
 Name: res/drawable/bar_selector_lock.xml
-SHA1-Digest: N5bc/T1/HrVNDZ1lAPFMRFgW6CQ=
+SHA1-Digest: Gb1rsiUKYvs/midFlH3hqR6vFLE=
 
 Name: res/drawable/bar_selector_style.xml
-SHA1-Digest: a4iB5D80TTASXNu8P1fq2B0UodU=
+SHA1-Digest: G/E85UJqoEGtVN4hYHleEV+54/I=
 
 Name: res/drawable/bar_selector_white.xml
-SHA1-Digest: S01b7pjBBj9gNL1SrbQC4NAdXng=
+SHA1-Digest: I2wM2dXoD/iJxRux1dVUHhF6PPo=
 
 Name: res/drawable/bg_voip_icon_btn.xml
 SHA1-Digest: l2/JBKA7lYFWRMYxqSltUXRiQDg=
 
 Name: res/drawable/call_custom_notification_icon.xml
-SHA1-Digest: 3Wofo7N/ugk0gh1EGzD7Fbxpv/Y=
+SHA1-Digest: ICTb4olMc6nTWUxXu20VXFU3eQs=
 
 Name: res/drawable/call_notification_bg.xml
 SHA1-Digest: pqKbj4Be7C2zm3kiZdq49QZKAWU=
@@ -18152,7 +18371,7 @@ Name: res/drawable/icplaceholder.jpg
 SHA1-Digest: z6DEdLYpiw0H4tz/HdYnrk2Xt6c=
 
 Name: res/drawable/list_selector_ex.xml
-SHA1-Digest: WpwrDRS7TcuFZHuYYEXtSReE4nA=
+SHA1-Digest: 8GM+VCeHjTjRWmFxYzs1t4VbgiI=
 
 Name: res/drawable/loading_animation.xml
 SHA1-Digest: UF8JVFECuuglQsBzOSwqAXM8Wws=
@@ -18161,16 +18380,16 @@ Name: res/drawable/loading_animation2.xml
 SHA1-Digest: XfuQHG5Te3e5Rz3qUT/ble7k5CE=
 
 Name: res/drawable/notification_bg.xml
-SHA1-Digest: 6n7v5uxblwkCJL5py30rkaAxv4c=
+SHA1-Digest: sp7BXbcpCWra76+NomNIenKGruM=
 
 Name: res/drawable/notification_bg_low.xml
-SHA1-Digest: aS/gjjFwsDuiNCOHUsF9dKxl4zg=
+SHA1-Digest: VCw7s9ZjVvYVLkO56mXOTzIJ4sQ=
 
 Name: res/drawable/notification_icon_background.xml
 SHA1-Digest: 8l7eYEcOZS9u0FCiCIGn6Z4qsGM=
 
 Name: res/drawable/notification_tile_bg.xml
-SHA1-Digest: 9nn2+leL60nW1u97gU1wVrtBn0w=
+SHA1-Digest: SfeibiB1GA/U9Yv929q0lJXFjX4=
 
 Name: res/drawable/paint_elliptical_brush.png
 SHA1-Digest: VpOYFZxPOMSLqPtUwAe1LzAxEhE=
@@ -18200,10 +18419,10 @@ Name: res/drawable/scrollbar_vertical_thumb.xml
 SHA1-Digest: J62l6F+a5ekJYeI3jAzD1WYWbNI=
 
 Name: res/drawable/scrollbar_vertical_thumb_inset.xml
-SHA1-Digest: 2l4CC33v8vapU4Gda7gMDYS7zZ0=
+SHA1-Digest: nDZGX50zAXmSGcR+D/JoVK60iBU=
 
 Name: res/drawable/switch_thumb.xml
-SHA1-Digest: Da6uDZTb4UBQBbYLUch2oZnYmpo=
+SHA1-Digest: +fOsBDyG1w+Ge2RrW0ejsxJadCQ=
 
 Name: res/drawable/theme_preview_image.jpg
 SHA1-Digest: QEy+cMGdbCQRY0A7P2OBlLevTjg=
@@ -18272,7 +18491,7 @@ Name: res/layout/player_big_notification.xml
 SHA1-Digest: mdnL02YGocdD6lsnczlvd15T+nU=
 
 Name: res/layout/player_small_notification.xml
-SHA1-Digest: u5VBRUQ76dfIBwZm25U8uT/PgI8=
+SHA1-Digest: n2VPj4QkvcjC2ZDpz/DZIlbhDBk=
 
 Name: res/mipmap-anydpi-v26/ic_launcher.xml
 SHA1-Digest: G7ddlJzJpeU1rRMHtiXTxUyDMv0=
@@ -18451,6 +18670,39 @@ SHA1-Digest: HkBIZYOltF8/Mwm+tnzRtcKaAJ8=
 Name: res/raw/statistic_preload.tgs
 SHA1-Digest: DZDe3+MtLXUyDgAPN8/jAjj36p4=
 
+Name: res/raw/tsv_monkey_close.tgs
+SHA1-Digest: 8TybofqL8XQKJ57tYfpwBaAOEBY=
+
+Name: res/raw/tsv_setup_email_sent.tgs
+SHA1-Digest: xzLvCKdeP7KN7BKnkrXsux6pCKU=
+
+Name: res/raw/tsv_setup_hint.tgs
+SHA1-Digest: KD7VuuQQMbpEnmnj9qbGL403yQE=
+
+Name: res/raw/tsv_setup_intro.tgs
+SHA1-Digest: 4eRfreKYWNE99bO1Iu/WnSLxvlk=
+
+Name: res/raw/tsv_setup_mail.tgs
+SHA1-Digest: uPZfO3TnqY7Ze6JqYgFN1h47MsY=
+
+Name: res/raw/tsv_setup_monkey_close_and_peek.tgs
+SHA1-Digest: eb2KbTP6D8Nw7byjSvpzw+TSJnw=
+
+Name: res/raw/tsv_setup_monkey_close_and_peek_to_idle.tgs
+SHA1-Digest: 0zID994hux+zpykQjKjxMEMWF4E=
+
+Name: res/raw/tsv_setup_monkey_idle1.tgs
+SHA1-Digest: Uq02WyVS6hpd2JdoynwFoc4nhSA=
+
+Name: res/raw/tsv_setup_monkey_idle2.tgs
+SHA1-Digest: Tvx9TEqdVkE2ImwZLZtUqLrwqIU=
+
+Name: res/raw/tsv_setup_monkey_peek.tgs
+SHA1-Digest: IlMHM6JsPhP2cdt9Vd9IDoghpjw=
+
+Name: res/raw/tsv_setup_monkey_tracking.tgs
+SHA1-Digest: 0gvFZ7Y8LKD8vp9J97vcK61MObQ=
+
 Name: res/raw/voip_busy.mp3
 SHA1-Digest: uJILGWUE9868InKSCNMT4c3osv4=
 
@@ -18472,41 +18724,14 @@ SHA1-Digest: QVFce10zo9c/YgHouOv/Xna6TlI=
 Name: res/raw/wallet_congrats.tgs
 SHA1-Digest: fMAYHxmVFWCrWuB0Jsq6/TVsQ3s=
 
-Name: res/raw/wallet_crystal.tgs
-SHA1-Digest: jcOInSJWR6AkOKwn52TQARk5Q04=
-
-Name: res/raw/wallet_egg.tgs
-SHA1-Digest: VVdamSoeDveWKMoqYyaUhs2piHY=
-
-Name: res/raw/wallet_gem.tgs
-SHA1-Digest: SGjDfh1Re9IXw98byxkAP99N8eU=
-
-Name: res/raw/wallet_lock.tgs
-SHA1-Digest: RsZcEt6piUOaRmR67Z2jqxrEthc=
-
-Name: res/raw/wallet_money.tgs
-SHA1-Digest: eARsI3K6Iwdi8eciYg1fqQKyvNY=
-
-Name: res/raw/wallet_note.tgs
-SHA1-Digest: ua5Yh449oPI/Sy6VXcIEXoXw9+g=
-
-Name: res/raw/wallet_perfect.tgs
-SHA1-Digest: RiLuOHll0oSeeQ+Aomi3OSp5FM0=
-
 Name: res/raw/wallet_science.tgs
 SHA1-Digest: xcYXycYjGRsZcet5rKoz4b8trBo=
 
-Name: res/raw/wallet_sync.tgs
-SHA1-Digest: kpF5byGa7TaSFOK+zQRtr7gw9IQ=
-
-Name: res/raw/wallet_toobad.tgs
-SHA1-Digest: zW82Z1oPJDIfvErxFpNxEvp1XQA=
-
 Name: res/xml/auth.xml
-SHA1-Digest: yqj2/800Rw2hInGa7NWcLt8U02Q=
+SHA1-Digest: qM1FAtFo0/NbTd7IeFOs3sI9b20=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: tnTHMJbgbm82f1paSWmyIEPuXjs=
+SHA1-Digest: 5VdZ+iEN0a+CHB8HsG+Wp3Uh+mw=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: 9Hh95nQe6vvvIyVqqpGpBH5VMqA=
@@ -18521,7 +18746,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: AJBsogAcNxerfX1QdoRKOcBJvUY=
+SHA1-Digest: gORTYVhSsU/Y6RCxZVE4VNJcgP8=
 
 Name: transport-api.properties
 SHA1-Digest: KlRwAVirU5yXrBUVC3JeyHIPlcs=

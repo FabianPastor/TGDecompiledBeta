@@ -2,6 +2,7 @@ package org.telegram.tgnet;
 
 public class TLRPC$TL_inputMediaPhotoExternal extends TLRPC$InputMedia {
     public static int constructor = -NUM;
+    public String url;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.flags = abstractSerializedData.readInt32(z);

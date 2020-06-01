@@ -6,17 +6,20 @@ import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.view.MotionEvent;
 import android.view.View;
 import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.RecyclerView;
+import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.TrendingStickersAlert;
 import org.telegram.ui.Components.TrendingStickersLayout;
@@ -98,11 +101,26 @@ public class TrendingStickersAlert extends BottomSheet implements TrendingSticke
         }
     }
 
+    public ArrayList<ThemeDescription> getThemeDescriptions() {
+        ArrayList<ThemeDescription> arrayList = new ArrayList<>();
+        TrendingStickersLayout trendingStickersLayout = this.layout;
+        trendingStickersLayout.getClass();
+        trendingStickersLayout.getThemeDescriptions(arrayList, new ThemeDescription.ThemeDescriptionDelegate() {
+            public final void didSetColor() {
+                TrendingStickersLayout.this.updateColors();
+            }
+        });
+        arrayList.add(new ThemeDescription(this.alertContainerView, 0, (Class[]) null, (Paint) null, new Drawable[]{this.shadowDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackground"));
+        arrayList.add(new ThemeDescription(this.alertContainerView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_sheet_scrollUp"));
+        return arrayList;
+    }
+
     private class AlertContainerView extends SizeNotifierFrameLayout {
         /* access modifiers changed from: private */
         public boolean gluedToTop = false;
         private boolean ignoreLayout = false;
         private final Paint paint = new Paint(1);
+        private float[] radii = new float[8];
         private float statusBarAlpha = 0.0f;
         private ValueAnimator statusBarAnimator;
         private boolean statusBarVisible = false;
@@ -156,9 +174,9 @@ public class TrendingStickersAlert extends BottomSheet implements TrendingSticke
         public void onMeasure(int i, int i2) {
             int i3 = Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
             int size = (int) (((float) (View.MeasureSpec.getSize(i2) - i3)) * 0.2f);
-            int keyboardHeight = getKeyboardHeight();
+            int measureKeyboardHeight = measureKeyboardHeight();
             this.ignoreLayout = true;
-            if (keyboardHeight > AndroidUtilities.dp(20.0f)) {
+            if (measureKeyboardHeight > AndroidUtilities.dp(20.0f)) {
                 TrendingStickersAlert.this.layout.setContentViewPaddingTop(0);
                 TrendingStickersAlert.this.setAllowNestedScroll(false);
                 this.gluedToTop = true;
@@ -167,7 +185,7 @@ public class TrendingStickersAlert extends BottomSheet implements TrendingSticke
                 TrendingStickersAlert.this.setAllowNestedScroll(true);
                 this.gluedToTop = false;
             }
-            TrendingStickersAlert.this.layout.setContentViewPaddingBottom(keyboardHeight);
+            TrendingStickersAlert.this.layout.setContentViewPaddingBottom(measureKeyboardHeight);
             if (getPaddingTop() != i3) {
                 setPadding(TrendingStickersAlert.this.backgroundPaddingLeft, i3, TrendingStickersAlert.this.backgroundPaddingLeft, 0);
             }
@@ -200,7 +218,12 @@ public class TrendingStickersAlert extends BottomSheet implements TrendingSticke
             if (fraction > 0.0f && fraction < 1.0f) {
                 float dp = ((float) AndroidUtilities.dp(12.0f)) * fraction;
                 TrendingStickersAlert.this.shapeDrawable.setColor(Theme.getColor("dialogBackground"));
-                TrendingStickersAlert.this.shapeDrawable.setCornerRadii(new float[]{dp, dp, dp, dp, 0.0f, 0.0f, 0.0f, 0.0f});
+                float[] fArr = this.radii;
+                fArr[3] = dp;
+                fArr[2] = dp;
+                fArr[1] = dp;
+                fArr[0] = dp;
+                TrendingStickersAlert.this.shapeDrawable.setCornerRadii(this.radii);
                 TrendingStickersAlert.this.shapeDrawable.setBounds(TrendingStickersAlert.this.backgroundPaddingLeft, TrendingStickersAlert.this.scrollOffsetY + access$800, getWidth() - TrendingStickersAlert.this.backgroundPaddingLeft, TrendingStickersAlert.this.scrollOffsetY + access$800 + AndroidUtilities.dp(24.0f));
                 TrendingStickersAlert.this.shapeDrawable.draw(canvas);
             }
@@ -218,7 +241,8 @@ public class TrendingStickersAlert extends BottomSheet implements TrendingSticke
             int dp2 = AndroidUtilities.dp(4.0f);
             int i = (int) (((float) dp2) * 2.0f * (1.0f - fraction));
             TrendingStickersAlert.this.shapeDrawable.setCornerRadius((float) AndroidUtilities.dp(2.0f));
-            TrendingStickersAlert.this.shapeDrawable.setColor(ColorUtils.setAlphaComponent(Theme.getColor("key_sheet_scrollUp"), (int) (fraction * 255.0f)));
+            int color = Theme.getColor("key_sheet_scrollUp");
+            TrendingStickersAlert.this.shapeDrawable.setColor(ColorUtils.setAlphaComponent(color, (int) (((float) Color.alpha(color)) * fraction)));
             TrendingStickersAlert.this.shapeDrawable.setBounds((getWidth() - dp) / 2, TrendingStickersAlert.this.scrollOffsetY + AndroidUtilities.dp(10.0f) + i, (getWidth() + dp) / 2, TrendingStickersAlert.this.scrollOffsetY + AndroidUtilities.dp(10.0f) + i + dp2);
             TrendingStickersAlert.this.shapeDrawable.draw(canvas);
             canvas.restore();
@@ -227,8 +251,8 @@ public class TrendingStickersAlert extends BottomSheet implements TrendingSticke
             }
             setStatusBarVisible(z, !this.gluedToTop);
             if (this.statusBarAlpha > 0.0f) {
-                int color = Theme.getColor("dialogBackground");
-                this.paint.setColor(Color.argb((int) (this.statusBarAlpha * 255.0f), (int) (((float) Color.red(color)) * 0.8f), (int) (((float) Color.green(color)) * 0.8f), (int) (((float) Color.blue(color)) * 0.8f)));
+                int color2 = Theme.getColor("dialogBackground");
+                this.paint.setColor(Color.argb((int) (this.statusBarAlpha * 255.0f), (int) (((float) Color.red(color2)) * 0.8f), (int) (((float) Color.green(color2)) * 0.8f), (int) (((float) Color.blue(color2)) * 0.8f)));
                 canvas.drawRect((float) TrendingStickersAlert.this.backgroundPaddingLeft, 0.0f, (float) (getMeasuredWidth() - TrendingStickersAlert.this.backgroundPaddingLeft), (float) AndroidUtilities.statusBarHeight, this.paint);
             }
         }
