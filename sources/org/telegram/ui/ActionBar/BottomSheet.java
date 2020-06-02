@@ -67,6 +67,7 @@ public class BottomSheet extends Dialog {
     public boolean bigTitle;
     /* access modifiers changed from: private */
     public int bottomInset;
+    protected boolean calcMandatoryInsets;
     private boolean canDismissWithSwipe = true;
     protected ContainerView container;
     /* access modifiers changed from: protected */
@@ -122,6 +123,7 @@ public class BottomSheet extends Dialog {
     public boolean useFastDismiss;
     /* access modifiers changed from: private */
     public boolean useHardwareLayer = true;
+    protected boolean useLightStatusBar = true;
     protected boolean useSmoothKeyboard;
 
     public static class BottomSheetDelegate implements BottomSheetDelegateInterface {
@@ -884,8 +886,14 @@ public class BottomSheet extends Dialog {
 
     /* access modifiers changed from: private */
     public int getAdditionalMandatoryOffsets() {
+        if (!this.calcMandatoryInsets) {
+            return 0;
+        }
         Insets systemGestureInsets = this.lastInsets.getSystemGestureInsets();
-        if (this.keyboardVisible || !this.drawNavigationBar || systemGestureInsets == null || (systemGestureInsets.left == 0 && systemGestureInsets.right == 0)) {
+        if (this.keyboardVisible || !this.drawNavigationBar || systemGestureInsets == null) {
+            return 0;
+        }
+        if (systemGestureInsets.left == 0 && systemGestureInsets.right == 0) {
             return 0;
         }
         return systemGestureInsets.bottom;
@@ -1069,7 +1077,7 @@ public class BottomSheet extends Dialog {
         Window window = getWindow();
         window.setWindowAnimations(NUM);
         setContentView(this.container, new ViewGroup.LayoutParams(-1, -1));
-        if (Build.VERSION.SDK_INT >= 23 && Theme.getColor("actionBarDefault", (boolean[]) null, true) == -1) {
+        if (this.useLightStatusBar && Build.VERSION.SDK_INT >= 23 && Theme.getColor("actionBarDefault", (boolean[]) null, true) == -1) {
             this.container.setSystemUiVisibility(this.container.getSystemUiVisibility() | 8192);
         }
         if (this.containerView == null) {

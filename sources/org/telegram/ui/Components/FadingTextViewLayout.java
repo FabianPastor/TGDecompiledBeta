@@ -2,6 +2,7 @@ package org.telegram.ui.Components;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Paint;
@@ -9,7 +10,6 @@ import android.graphics.Point;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.core.view.ViewCompat;
@@ -56,7 +56,7 @@ public class FadingTextViewLayout extends FrameLayout {
         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
         this.animator = ofFloat;
         ofFloat.setDuration(200);
-        this.animator.setInterpolator(new LinearInterpolator());
+        this.animator.setInterpolator((TimeInterpolator) null);
         this.animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             public final void onAnimationUpdate(ValueAnimator valueAnimator) {
                 FadingTextViewLayout.this.lambda$new$0$FadingTextViewLayout(valueAnimator);
@@ -68,8 +68,8 @@ public class FadingTextViewLayout extends FrameLayout {
                 FadingTextViewLayout.this.nextView.setLayerType(0, (Paint) null);
                 FadingTextViewLayout.this.nextView.setVisibility(8);
                 if (FadingTextViewLayout.this.foregroundView != null) {
-                    FadingTextViewLayout.this.foregroundView.setVisibility(8);
                     FadingTextViewLayout.this.currentView.setText(FadingTextViewLayout.this.text);
+                    FadingTextViewLayout.this.foregroundView.setVisibility(8);
                 }
             }
 
@@ -88,8 +88,8 @@ public class FadingTextViewLayout extends FrameLayout {
 
     public /* synthetic */ void lambda$new$0$FadingTextViewLayout(ValueAnimator valueAnimator) {
         float animatedFraction = valueAnimator.getAnimatedFraction();
-        this.currentView.setAlpha(animatedFraction);
-        this.nextView.setAlpha(1.0f - animatedFraction);
+        this.currentView.setAlpha(CubicBezierInterpolator.DEFAULT.getInterpolation(animatedFraction));
+        this.nextView.setAlpha(CubicBezierInterpolator.DEFAULT.getInterpolation(1.0f - animatedFraction));
     }
 
     public void setText(CharSequence charSequence) {

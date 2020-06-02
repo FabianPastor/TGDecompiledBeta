@@ -300,26 +300,30 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             return !SharedMediaLayout.this.isActionModeShowed;
         }
 
-        public void onLinkLongPress(String str) {
-            BottomSheet.Builder builder = new BottomSheet.Builder(SharedMediaLayout.this.profileActivity.getParentActivity());
-            builder.setTitle(str);
-            builder.setItems(new CharSequence[]{LocaleController.getString("Open", NUM), LocaleController.getString("Copy", NUM)}, new DialogInterface.OnClickListener(str) {
-                private final /* synthetic */ String f$1;
+        public void onLinkPress(String str, boolean z) {
+            if (z) {
+                BottomSheet.Builder builder = new BottomSheet.Builder(SharedMediaLayout.this.profileActivity.getParentActivity());
+                builder.setTitle(str);
+                builder.setItems(new CharSequence[]{LocaleController.getString("Open", NUM), LocaleController.getString("Copy", NUM)}, new DialogInterface.OnClickListener(str) {
+                    private final /* synthetic */ String f$1;
 
-                {
-                    this.f$1 = r2;
-                }
+                    {
+                        this.f$1 = r2;
+                    }
 
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    SharedMediaLayout.AnonymousClass18.this.lambda$onLinkLongPress$0$SharedMediaLayout$18(this.f$1, dialogInterface, i);
-                }
-            });
-            SharedMediaLayout.this.profileActivity.showDialog(builder.create());
+                    public final void onClick(DialogInterface dialogInterface, int i) {
+                        SharedMediaLayout.AnonymousClass18.this.lambda$onLinkPress$0$SharedMediaLayout$18(this.f$1, dialogInterface, i);
+                    }
+                });
+                SharedMediaLayout.this.profileActivity.showDialog(builder.create());
+                return;
+            }
+            SharedMediaLayout.this.openUrl(str);
         }
 
-        public /* synthetic */ void lambda$onLinkLongPress$0$SharedMediaLayout$18(String str, DialogInterface dialogInterface, int i) {
+        public /* synthetic */ void lambda$onLinkPress$0$SharedMediaLayout$18(String str, DialogInterface dialogInterface, int i) {
             if (i == 0) {
-                Browser.openUrl((Context) SharedMediaLayout.this.profileActivity.getParentActivity(), str, true);
+                SharedMediaLayout.this.openUrl(str);
             } else if (i == 1) {
                 if (str.startsWith("mailto:")) {
                     str = str.substring(7);
@@ -3532,14 +3536,14 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.tgnet.TLRPC$ChatFull r0 = r0.chatInfo
             if (r0 != 0) goto L_0x013c
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r3 = 2131626799(0x7f0e0b2f, float:1.8880844E38)
+            r3 = 2131626800(0x7f0e0b30, float:1.8880846E38)
             java.lang.String r4 = "SharedMediaTabFull2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r1, r3)
             goto L_0x014a
         L_0x013c:
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r3 = 2131626798(0x7f0e0b2e, float:1.8880842E38)
+            r3 = 2131626799(0x7f0e0b2f, float:1.8880844E38)
             java.lang.String r4 = "SharedMediaTab2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r1, r3)
@@ -3551,14 +3555,14 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r2)
             if (r0 != 0) goto L_0x0166
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r3 = 2131626792(0x7f0e0b28, float:1.888083E38)
+            r3 = 2131626793(0x7f0e0b29, float:1.8880832E38)
             java.lang.String r4 = "SharedFilesTab2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r2, r3)
         L_0x0166:
             long r2 = r14.dialog_id
             int r0 = (int) r2
-            r2 = 2131626800(0x7f0e0b30, float:1.8880846E38)
+            r2 = 2131626801(0x7f0e0b31, float:1.8880848E38)
             java.lang.String r3 = "SharedMusicTab2"
             if (r0 == 0) goto L_0x01a4
             int[] r0 = r14.hasMedia
@@ -3568,7 +3572,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r7)
             if (r0 != 0) goto L_0x018c
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r4 = 2131626796(0x7f0e0b2c, float:1.8880838E38)
+            r4 = 2131626797(0x7f0e0b2d, float:1.888084E38)
             java.lang.String r5 = "SharedLinksTab2"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.addTextTab(r7, r4)
@@ -3612,7 +3616,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r9)
             if (r0 != 0) goto L_0x01f4
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r2 = 2131626803(0x7f0e0b33, float:1.8880853E38)
+            r2 = 2131626804(0x7f0e0b34, float:1.8880855E38)
             java.lang.String r3 = "SharedVoiceTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r9, r2)
@@ -3624,7 +3628,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r10)
             if (r0 != 0) goto L_0x0210
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r2 = 2131626793(0x7f0e0b29, float:1.8880832E38)
+            r2 = 2131626794(0x7f0e0b2a, float:1.8880834E38)
             java.lang.String r3 = "SharedGIFsTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r10, r2)
@@ -3636,7 +3640,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r11)
             if (r0 != 0) goto L_0x022c
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r2 = 2131626794(0x7f0e0b2a, float:1.8880834E38)
+            r2 = 2131626795(0x7f0e0b2b, float:1.8880836E38)
             java.lang.String r3 = "SharedGroupsTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r11, r2)
@@ -3719,7 +3723,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             if (r3 == 0) goto L_0x025a
             r3 = 1101004800(0x41a00000, float:20.0)
             r14 = 1106247680(0x41var_, float:30.0)
-            r15 = 2131625836(0x7f0e076c, float:1.8878891E38)
+            r15 = 2131625837(0x7f0e076d, float:1.8878893E38)
             java.lang.String r6 = "NoResult"
             if (r25 == 0) goto L_0x0173
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r10 = r0.mediaPages
@@ -3995,7 +3999,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625822(0x7f0e075e, float:1.8878863E38)
+            r3 = 2131625823(0x7f0e075f, float:1.8878865E38)
             java.lang.String r5 = "NoMediaSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4004,7 +4008,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625820(0x7f0e075c, float:1.8878859E38)
+            r3 = 2131625821(0x7f0e075d, float:1.887886E38)
             java.lang.String r5 = "NoMedia"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4034,7 +4038,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625841(0x7f0e0771, float:1.8878901E38)
+            r3 = 2131625842(0x7f0e0772, float:1.8878903E38)
             java.lang.String r5 = "NoSharedFilesSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4043,7 +4047,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625840(0x7f0e0770, float:1.88789E38)
+            r3 = 2131625841(0x7f0e0771, float:1.8878901E38)
             java.lang.String r5 = "NoSharedFiles"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4073,7 +4077,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625846(0x7f0e0776, float:1.8878911E38)
+            r3 = 2131625847(0x7f0e0777, float:1.8878914E38)
             java.lang.String r5 = "NoSharedVoiceSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4082,7 +4086,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625845(0x7f0e0775, float:1.887891E38)
+            r3 = 2131625846(0x7f0e0776, float:1.8878911E38)
             java.lang.String r5 = "NoSharedVoice"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4112,7 +4116,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625844(0x7f0e0774, float:1.8878907E38)
+            r3 = 2131625845(0x7f0e0775, float:1.887891E38)
             java.lang.String r5 = "NoSharedLinksSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4121,7 +4125,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625843(0x7f0e0773, float:1.8878905E38)
+            r3 = 2131625844(0x7f0e0774, float:1.8878907E38)
             java.lang.String r5 = "NoSharedLinks"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4151,7 +4155,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625839(0x7f0e076f, float:1.8878897E38)
+            r3 = 2131625840(0x7f0e0770, float:1.88789E38)
             java.lang.String r5 = "NoSharedAudioSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4160,7 +4164,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625838(0x7f0e076e, float:1.8878895E38)
+            r3 = 2131625839(0x7f0e076f, float:1.8878897E38)
             java.lang.String r5 = "NoSharedAudio"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4189,7 +4193,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625842(0x7f0e0772, float:1.8878903E38)
+            r3 = 2131625843(0x7f0e0773, float:1.8878905E38)
             java.lang.String r5 = "NoSharedGifSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4198,7 +4202,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625814(0x7f0e0756, float:1.8878847E38)
+            r3 = 2131625815(0x7f0e0757, float:1.8878849E38)
             java.lang.String r5 = "NoGIFs"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4224,7 +4228,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625816(0x7f0e0758, float:1.887885E38)
+            r3 = 2131625817(0x7f0e0759, float:1.8878853E38)
             java.lang.String r5 = "NoGroupsInCommon"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -4703,12 +4707,21 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                         str = ((SharedLinkCell) view2).getLink(0);
                     }
                     if (str != null) {
-                        Browser.openUrl((Context) this.profileActivity.getParentActivity(), str);
+                        openUrl(str);
                     }
                 } catch (Exception e) {
                     FileLog.e((Throwable) e);
                 }
             }
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public void openUrl(String str) {
+        if (AndroidUtilities.shouldShowUrlInAlert(str)) {
+            AlertsCreator.showOpenUrlAlert(this.profileActivity, str, true, true);
+        } else {
+            Browser.openUrl((Context) this.profileActivity.getParentActivity(), str);
         }
     }
 
@@ -5576,12 +5589,12 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         public void getChats(int i, int i2) {
             if (!this.loading) {
                 TLRPC$TL_messages_getCommonChats tLRPC$TL_messages_getCommonChats = new TLRPC$TL_messages_getCommonChats();
-                int access$5300 = (int) SharedMediaLayout.this.dialog_id;
-                int access$53002 = (int) (SharedMediaLayout.this.dialog_id >> 32);
-                if (access$5300 == 0) {
-                    access$5300 = SharedMediaLayout.this.profileActivity.getMessagesController().getEncryptedChat(Integer.valueOf(access$53002)).user_id;
+                int access$5400 = (int) SharedMediaLayout.this.dialog_id;
+                int access$54002 = (int) (SharedMediaLayout.this.dialog_id >> 32);
+                if (access$5400 == 0) {
+                    access$5400 = SharedMediaLayout.this.profileActivity.getMessagesController().getEncryptedChat(Integer.valueOf(access$54002)).user_id;
                 }
-                TLRPC$InputUser inputUser = SharedMediaLayout.this.profileActivity.getMessagesController().getInputUser(access$5300);
+                TLRPC$InputUser inputUser = SharedMediaLayout.this.profileActivity.getMessagesController().getInputUser(access$5400);
                 tLRPC$TL_messages_getCommonChats.user_id = inputUser;
                 if (!(inputUser instanceof TLRPC$TL_inputUserEmpty)) {
                     tLRPC$TL_messages_getCommonChats.limit = i2;

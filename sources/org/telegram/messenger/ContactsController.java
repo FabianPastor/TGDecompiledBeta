@@ -956,7 +956,7 @@ public class ContactsController extends BaseController {
             r1 = 0
             java.lang.Integer r2 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x01ed }
             r0.add(r2)     // Catch:{ all -> 0x01ed }
-            r0 = 2131626355(0x7f0e0973, float:1.8879944E38)
+            r0 = 2131626356(0x7f0e0974, float:1.8879946E38)
             java.lang.String r1 = "PhoneMobile"
             if (r14 != 0) goto L_0x0182
             r2 = 3
@@ -975,7 +975,7 @@ public class ContactsController extends BaseController {
             if (r14 != r2) goto L_0x0194
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01ed }
             java.lang.String r1 = "PhoneHome"
-            r3 = 2131626353(0x7f0e0971, float:1.887994E38)
+            r3 = 2131626354(0x7f0e0972, float:1.8879942E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01ed }
             r0.add(r1)     // Catch:{ all -> 0x01ed }
             goto L_0x01d4
@@ -991,7 +991,7 @@ public class ContactsController extends BaseController {
             if (r14 != r0) goto L_0x01b3
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01ed }
             java.lang.String r1 = "PhoneWork"
-            r3 = 2131626363(0x7f0e097b, float:1.887996E38)
+            r3 = 2131626364(0x7f0e097c, float:1.8879962E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01ed }
             r0.add(r1)     // Catch:{ all -> 0x01ed }
             goto L_0x01d4
@@ -1000,14 +1000,14 @@ public class ContactsController extends BaseController {
             if (r14 != r0) goto L_0x01c6
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01ed }
             java.lang.String r1 = "PhoneMain"
-            r3 = 2131626354(0x7f0e0972, float:1.8879942E38)
+            r3 = 2131626355(0x7f0e0973, float:1.8879944E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01ed }
             r0.add(r1)     // Catch:{ all -> 0x01ed }
             goto L_0x01d4
         L_0x01c6:
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01ed }
             java.lang.String r1 = "PhoneOther"
-            r3 = 2131626362(0x7f0e097a, float:1.8879958E38)
+            r3 = 2131626363(0x7f0e097b, float:1.887996E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01ed }
             r0.add(r1)     // Catch:{ all -> 0x01ed }
         L_0x01d4:

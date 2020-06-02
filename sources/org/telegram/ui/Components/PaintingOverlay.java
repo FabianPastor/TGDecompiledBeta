@@ -68,7 +68,7 @@ public class PaintingOverlay extends FrameLayout {
                 View view = mediaEntity.view;
                 if (view != null) {
                     if (view instanceof EditTextOutline) {
-                        view.measure(View.MeasureSpec.makeMeasureSpec(mediaEntity.viewWidth, NUM), View.MeasureSpec.makeMeasureSpec(mediaEntity.viewHeight, NUM));
+                        view.measure(View.MeasureSpec.makeMeasureSpec(0, 0), View.MeasureSpec.makeMeasureSpec(0, 0));
                         float f = (mediaEntity.textViewWidth * ((float) measuredWidth)) / ((float) mediaEntity.viewWidth);
                         mediaEntity.view.setScaleX(mediaEntity.scale * f);
                         mediaEntity.view.setScaleY(mediaEntity.scale * f);
@@ -171,7 +171,6 @@ public class PaintingOverlay extends FrameLayout {
                     r5.setPadding(AndroidUtilities.dp(7.0f), AndroidUtilities.dp(7.0f), AndroidUtilities.dp(7.0f), AndroidUtilities.dp(7.0f));
                     r5.setTextSize(0, (float) mediaEntity.fontSize);
                     r5.setText(mediaEntity.text);
-                    r5.setTextColor(mediaEntity.color);
                     r5.setTypeface((Typeface) null, 1);
                     r5.setGravity(17);
                     r5.setHorizontallyScrolling(false);

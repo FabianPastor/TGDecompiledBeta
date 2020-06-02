@@ -872,11 +872,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
                                 i++;
                             }
                         }
-                        int i5 = 64;
-                        if (fArr[6] >= 0.5f) {
-                            i5 = (int) (((float) 64) - ((fArr[6] * 8.0f) - 0.5f));
-                        }
-                        if (System.currentTimeMillis() - this.lastUpdateTime >= ((long) i5)) {
+                        if (System.currentTimeMillis() - this.lastUpdateTime >= ((long) 64)) {
                             this.lastUpdateTime = System.currentTimeMillis();
                             VideoPlayer.this.audioUpdateHandler.postDelayed(new Runnable(fArr) {
                                 private final /* synthetic */ float[] f$1;

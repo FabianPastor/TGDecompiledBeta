@@ -1080,6 +1080,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 size2 = systemWindowInsetBottom - windowInsets.getSystemWindowInsetTop();
             }
+            ArticleViewer.this.menuButton.setAdditionalYOffset(AndroidUtilities.statusBarHeight);
             boolean unused = ArticleViewer.this.keyboardVisible = size2 < AndroidUtilities.displaySize.y - AndroidUtilities.dp(100.0f);
             ArticleViewer.this.containerView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, NUM));
             ArticleViewer.this.photoContainerView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, NUM));
@@ -1278,23 +1279,23 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     prepareForMoving(motionEvent);
                 }
                 if (this.startedTracking) {
-                    View access$2500 = this.movingPage ? ArticleViewer.this.listView[0] : ArticleViewer.this.containerView;
-                    float x = access$2500.getX();
-                    final boolean z = x < ((float) access$2500.getMeasuredWidth()) / 3.0f && (xVelocity < 3500.0f || xVelocity < yVelocity);
+                    View access$2600 = this.movingPage ? ArticleViewer.this.listView[0] : ArticleViewer.this.containerView;
+                    float x = access$2600.getX();
+                    final boolean z = x < ((float) access$2600.getMeasuredWidth()) / 3.0f && (xVelocity < 3500.0f || xVelocity < yVelocity);
                     AnimatorSet animatorSet = new AnimatorSet();
                     if (!z) {
-                        x = ((float) access$2500.getMeasuredWidth()) - x;
+                        x = ((float) access$2600.getMeasuredWidth()) - x;
                         if (this.movingPage) {
-                            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ArticleViewer.this.listView[0], View.TRANSLATION_X, new float[]{(float) access$2500.getMeasuredWidth()})});
+                            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ArticleViewer.this.listView[0], View.TRANSLATION_X, new float[]{(float) access$2600.getMeasuredWidth()})});
                         } else {
-                            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ArticleViewer.this.containerView, View.TRANSLATION_X, new float[]{(float) access$2500.getMeasuredWidth()}), ObjectAnimator.ofFloat(this, ArticleViewer.ARTICLE_VIEWER_INNER_TRANSLATION_X, new float[]{(float) access$2500.getMeasuredWidth()})});
+                            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ArticleViewer.this.containerView, View.TRANSLATION_X, new float[]{(float) access$2600.getMeasuredWidth()}), ObjectAnimator.ofFloat(this, ArticleViewer.ARTICLE_VIEWER_INNER_TRANSLATION_X, new float[]{(float) access$2600.getMeasuredWidth()})});
                         }
                     } else if (this.movingPage) {
                         animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ArticleViewer.this.listView[0], View.TRANSLATION_X, new float[]{0.0f})});
                     } else {
                         animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ArticleViewer.this.containerView, View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this, ArticleViewer.ARTICLE_VIEWER_INNER_TRANSLATION_X, new float[]{0.0f})});
                     }
-                    animatorSet.setDuration((long) Math.max((int) ((200.0f / ((float) access$2500.getMeasuredWidth())) * x), 50));
+                    animatorSet.setDuration((long) Math.max((int) ((200.0f / ((float) access$2600.getMeasuredWidth())) * x), 50));
                     animatorSet.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             if (WindowView.this.movingPage) {
@@ -2324,9 +2325,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (tLRPC$TL_textAnchor != null) {
                 TLRPC$TL_pageBlockParagraph tLRPC$TL_pageBlockParagraph = new TLRPC$TL_pageBlockParagraph();
                 tLRPC$TL_pageBlockParagraph.text = tLRPC$TL_textAnchor.text;
-                int access$8100 = this.adapter[0].getTypeForBlock(tLRPC$TL_pageBlockParagraph);
-                RecyclerView.ViewHolder onCreateViewHolder = this.adapter[0].onCreateViewHolder((ViewGroup) null, access$8100);
-                this.adapter[0].bindBlockToHolder(access$8100, onCreateViewHolder, tLRPC$TL_pageBlockParagraph, 0, 0);
+                int access$8200 = this.adapter[0].getTypeForBlock(tLRPC$TL_pageBlockParagraph);
+                RecyclerView.ViewHolder onCreateViewHolder = this.adapter[0].onCreateViewHolder((ViewGroup) null, access$8200);
+                this.adapter[0].bindBlockToHolder(access$8200, onCreateViewHolder, tLRPC$TL_pageBlockParagraph, 0, 0);
                 BottomSheet.Builder builder = new BottomSheet.Builder(this.parentActivity);
                 builder.setApplyTopPadding(false);
                 builder.setApplyBottomPadding(false);
@@ -2419,9 +2420,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 Integer num3 = (Integer) this.adapter[0].anchorsOffset.get(lowerCase);
                 if (num3 != null) {
                     if (num3.intValue() == -1) {
-                        int access$81002 = this.adapter[0].getTypeForBlock(tLRPC$PageBlock);
-                        RecyclerView.ViewHolder onCreateViewHolder2 = this.adapter[0].onCreateViewHolder((ViewGroup) null, access$81002);
-                        this.adapter[0].bindBlockToHolder(access$81002, onCreateViewHolder2, tLRPC$PageBlock, 0, 0);
+                        int access$82002 = this.adapter[0].getTypeForBlock(tLRPC$PageBlock);
+                        RecyclerView.ViewHolder onCreateViewHolder2 = this.adapter[0].onCreateViewHolder((ViewGroup) null, access$82002);
+                        this.adapter[0].bindBlockToHolder(access$82002, onCreateViewHolder2, tLRPC$PageBlock, 0, 0);
                         onCreateViewHolder2.itemView.measure(View.MeasureSpec.makeMeasureSpec(this.listView[0].getMeasuredWidth(), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
                         Integer num4 = (Integer) this.adapter[0].anchorsOffset.get(lowerCase);
                         if (num4.intValue() != -1) {
@@ -5376,8 +5377,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 } else if (i == 1) {
                     if (Build.VERSION.SDK_INT < 23 || ArticleViewer.this.parentActivity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") == 0) {
                         ArticleViewer articleViewer = ArticleViewer.this;
-                        File access$11100 = articleViewer.getMediaFile(articleViewer.photoAdapter, ArticleViewer.this.currentIndex);
-                        if (access$11100 == null || !access$11100.exists()) {
+                        File access$11200 = articleViewer.getMediaFile(articleViewer.photoAdapter, ArticleViewer.this.currentIndex);
+                        if (access$11200 == null || !access$11200.exists()) {
                             AlertDialog.Builder builder = new AlertDialog.Builder((Context) ArticleViewer.this.parentActivity);
                             builder.setTitle(LocaleController.getString("AppName", NUM));
                             builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
@@ -5385,7 +5386,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                             ArticleViewer.this.showDialog(builder.create());
                             return;
                         }
-                        String file = access$11100.toString();
+                        String file = access$11200.toString();
                         Activity access$2200 = ArticleViewer.this.parentActivity;
                         ArticleViewer articleViewer2 = ArticleViewer.this;
                         MediaController.saveFile(file, access$2200, articleViewer2.isMediaVideo(articleViewer2.photoAdapter, ArticleViewer.this.currentIndex) ? 1 : 0, (String) null, (String) null);
@@ -5403,9 +5404,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     }
                 } else if (i == 4) {
                     ArticleViewer articleViewer3 = ArticleViewer.this;
-                    TLObject access$11400 = articleViewer3.getMedia(articleViewer3.photoAdapter, ArticleViewer.this.currentIndex);
-                    if (access$11400 instanceof TLRPC$Document) {
-                        TLRPC$Document tLRPC$Document = (TLRPC$Document) access$11400;
+                    TLObject access$11500 = articleViewer3.getMedia(articleViewer3.photoAdapter, ArticleViewer.this.currentIndex);
+                    if (access$11500 instanceof TLRPC$Document) {
+                        TLRPC$Document tLRPC$Document = (TLRPC$Document) access$11500;
                         MediaDataController.getInstance(ArticleViewer.this.currentAccount).addRecentGif(tLRPC$Document, (int) (System.currentTimeMillis() / 1000));
                         MessagesController.getInstance(ArticleViewer.this.currentAccount).saveGif(ArticleViewer.this.adapter[0].currentPage, tLRPC$Document);
                     }
@@ -5414,8 +5415,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
             public boolean canOpenMenu() {
                 ArticleViewer articleViewer = ArticleViewer.this;
-                File access$11100 = articleViewer.getMediaFile(articleViewer.photoAdapter, ArticleViewer.this.currentIndex);
-                return access$11100 != null && access$11100.exists();
+                File access$11200 = articleViewer.getMediaFile(articleViewer.photoAdapter, ArticleViewer.this.currentIndex);
+                return access$11200 != null && access$11200.exists();
             }
         });
         ActionBarMenu createMenu = this.actionBar.createMenu();
@@ -6220,7 +6221,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         if (openAllParentBlocks(r4) == false) goto L_0x006d;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:13:0x005b, code lost:
-        org.telegram.ui.ArticleViewer.WebpageAdapter.access$8600(r11.adapter[0]);
+        org.telegram.ui.ArticleViewer.WebpageAdapter.access$8700(r11.adapter[0]);
         r11.adapter[0].notifyDataSetChanged();
      */
     /* JADX WARNING: Multi-variable type inference failed */
@@ -8921,9 +8922,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public void setBlock(TLRPC$TL_pageBlockVideo tLRPC$TL_pageBlockVideo, boolean z, boolean z2) {
             this.currentBlock = tLRPC$TL_pageBlockVideo;
             this.parentBlock = null;
-            TLRPC$Document access$8900 = this.parentAdapter.getDocumentWithId(tLRPC$TL_pageBlockVideo.video_id);
-            this.currentDocument = access$8900;
-            this.isGif = MessageObject.isGifDocument(access$8900);
+            TLRPC$Document access$9000 = this.parentAdapter.getDocumentWithId(tLRPC$TL_pageBlockVideo.video_id);
+            this.currentDocument = access$9000;
+            this.isGif = MessageObject.isGifDocument(access$9000);
             this.isFirst = z;
             this.channelCell.setVisibility(4);
             updateButtonState(false);
@@ -11676,7 +11677,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int i10;
                 TLRPC$PhotoSize tLRPC$PhotoSize;
                 float f2;
-                TLRPC$Document access$8900;
+                TLRPC$Document access$9000;
                 this.posArray.clear();
                 this.positions.clear();
                 int size = BlockCollageCell.this.currentBlock.items.size();
@@ -11695,8 +11696,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                                 tLRPC$PhotoSize = FileLoader.getClosestPhotoSizeWithSize(access$16600.sizes, AndroidUtilities.getPhotoSize());
                             }
                         } else {
-                            if ((tLObject instanceof TLRPC$TL_pageBlockVideo) && (access$8900 = BlockCollageCell.this.parentAdapter.getDocumentWithId(((TLRPC$TL_pageBlockVideo) tLObject).video_id)) != null) {
-                                tLRPC$PhotoSize = FileLoader.getClosestPhotoSizeWithSize(access$8900.thumbs, 90);
+                            if ((tLObject instanceof TLRPC$TL_pageBlockVideo) && (access$9000 = BlockCollageCell.this.parentAdapter.getDocumentWithId(((TLRPC$TL_pageBlockVideo) tLObject).video_id)) != null) {
+                                tLRPC$PhotoSize = FileLoader.getClosestPhotoSizeWithSize(access$9000.thumbs, 90);
                             }
                             i11++;
                         }
@@ -12635,9 +12636,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     this.blockLayout = null;
                 }
                 if (this.currentBlock.blockItem != null) {
-                    int access$8100 = this.parentAdapter.getTypeForBlock(this.currentBlock.blockItem);
-                    this.currentBlockType = access$8100;
-                    RecyclerView.ViewHolder onCreateViewHolder = this.parentAdapter.onCreateViewHolder(this, access$8100);
+                    int access$8200 = this.parentAdapter.getTypeForBlock(this.currentBlock.blockItem);
+                    this.currentBlockType = access$8200;
+                    RecyclerView.ViewHolder onCreateViewHolder = this.parentAdapter.onCreateViewHolder(this, access$8200);
                     this.blockLayout = onCreateViewHolder;
                     addView(onCreateViewHolder.itemView);
                 }
@@ -13237,9 +13238,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     this.blockLayout = null;
                 }
                 if (this.currentBlock.blockItem != null) {
-                    int access$8100 = this.parentAdapter.getTypeForBlock(this.currentBlock.blockItem);
-                    this.currentBlockType = access$8100;
-                    RecyclerView.ViewHolder onCreateViewHolder = this.parentAdapter.onCreateViewHolder(this, access$8100);
+                    int access$8200 = this.parentAdapter.getTypeForBlock(this.currentBlock.blockItem);
+                    this.currentBlockType = access$8200;
+                    RecyclerView.ViewHolder onCreateViewHolder = this.parentAdapter.onCreateViewHolder(this, access$8200);
                     this.blockLayout = onCreateViewHolder;
                     addView(onCreateViewHolder.itemView);
                 }
@@ -16913,7 +16914,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         L_0x0053:
             android.app.Activity r0 = r5.parentActivity     // Catch:{ Exception -> 0x009c }
             java.lang.String r2 = "ShareFile"
-            r3 = 2131626774(0x7f0e0b16, float:1.8880794E38)
+            r3 = 2131626775(0x7f0e0b17, float:1.8880796E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ Exception -> 0x009c }
             android.content.Intent r1 = android.content.Intent.createChooser(r1, r2)     // Catch:{ Exception -> 0x009c }
             r2 = 500(0x1f4, float:7.0E-43)
@@ -16928,12 +16929,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x009c }
             r0.setTitle(r1)     // Catch:{ Exception -> 0x009c }
             java.lang.String r1 = "OK"
-            r2 = 2131626008(0x7f0e0818, float:1.887924E38)
+            r2 = 2131626009(0x7f0e0819, float:1.8879242E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x009c }
             r2 = 0
             r0.setPositiveButton(r1, r2)     // Catch:{ Exception -> 0x009c }
             java.lang.String r1 = "PleaseDownload"
-            r2 = 2131626393(0x7f0e0999, float:1.888002E38)
+            r2 = 2131626394(0x7f0e099a, float:1.8880023E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x009c }
             r0.setMessage(r1)     // Catch:{ Exception -> 0x009c }
             org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()     // Catch:{ Exception -> 0x009c }
@@ -17203,7 +17204,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
     /* access modifiers changed from: private */
     public File getMediaFile(WebpageAdapter webpageAdapter, int i) {
-        TLRPC$Document access$8900;
+        TLRPC$Document access$9000;
         TLRPC$PhotoSize closestPhotoSizeWithSize;
         if (!this.imagesArr.isEmpty() && i < this.imagesArr.size() && i >= 0) {
             TLRPC$PageBlock tLRPC$PageBlock = this.imagesArr.get(i);
@@ -17212,8 +17213,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (!(access$16600 == null || (closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(access$16600.sizes, AndroidUtilities.getPhotoSize())) == null)) {
                     return FileLoader.getPathToAttach(closestPhotoSizeWithSize, true);
                 }
-            } else if ((tLRPC$PageBlock instanceof TLRPC$TL_pageBlockVideo) && (access$8900 = webpageAdapter.getDocumentWithId(((TLRPC$TL_pageBlockVideo) tLRPC$PageBlock).video_id)) != null) {
-                return FileLoader.getPathToAttach(access$8900, true);
+            } else if ((tLRPC$PageBlock instanceof TLRPC$TL_pageBlockVideo) && (access$9000 = webpageAdapter.getDocumentWithId(((TLRPC$TL_pageBlockVideo) tLRPC$PageBlock).video_id)) != null) {
+                return FileLoader.getPathToAttach(access$9000, true);
             }
         }
         return null;
@@ -17221,11 +17222,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
     /* access modifiers changed from: private */
     public boolean isVideoBlock(WebpageAdapter webpageAdapter, TLRPC$PageBlock tLRPC$PageBlock) {
-        TLRPC$Document access$8900;
-        if (!(tLRPC$PageBlock instanceof TLRPC$TL_pageBlockVideo) || (access$8900 = webpageAdapter.getDocumentWithId(((TLRPC$TL_pageBlockVideo) tLRPC$PageBlock).video_id)) == null) {
+        TLRPC$Document access$9000;
+        if (!(tLRPC$PageBlock instanceof TLRPC$TL_pageBlockVideo) || (access$9000 = webpageAdapter.getDocumentWithId(((TLRPC$TL_pageBlockVideo) tLRPC$PageBlock).video_id)) == null) {
             return false;
         }
-        return MessageObject.isVideoDocument(access$8900);
+        return MessageObject.isVideoDocument(access$9000);
     }
 
     /* access modifiers changed from: private */
@@ -17234,11 +17235,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     private String getMediaMime(WebpageAdapter webpageAdapter, int i) {
-        TLRPC$Document access$8900;
+        TLRPC$Document access$9000;
         if (i < this.imagesArr.size() && i >= 0) {
             TLRPC$PageBlock tLRPC$PageBlock = this.imagesArr.get(i);
-            if ((tLRPC$PageBlock instanceof TLRPC$TL_pageBlockVideo) && (access$8900 = webpageAdapter.getDocumentWithId(((TLRPC$TL_pageBlockVideo) tLRPC$PageBlock).video_id)) != null) {
-                return access$8900.mime_type;
+            if ((tLRPC$PageBlock instanceof TLRPC$TL_pageBlockVideo) && (access$9000 = webpageAdapter.getDocumentWithId(((TLRPC$TL_pageBlockVideo) tLRPC$PageBlock).video_id)) != null) {
+                return access$9000.mime_type;
             }
         }
         return "image/jpeg";
@@ -17449,7 +17450,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             goto L_0x0132
         L_0x010d:
             org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
-            r1 = 2131626010(0x7f0e081a, float:1.8879244E38)
+            r1 = 2131626011(0x7f0e081b, float:1.8879246E38)
             java.lang.Object[] r2 = new java.lang.Object[r11]
             int r3 = r7.currentIndex
             int r3 = r3 + r10

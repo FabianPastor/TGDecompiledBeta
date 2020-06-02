@@ -64,7 +64,7 @@ public class ColorPicker extends FrameLayout {
         this.settingsButton = imageView;
         imageView.setScaleType(ImageView.ScaleType.CENTER);
         this.settingsButton.setImageResource(NUM);
-        addView(this.settingsButton, LayoutHelper.createFrame(60, 52.0f));
+        addView(this.settingsButton, LayoutHelper.createFrame(46, 52.0f));
         this.settingsButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 ColorPicker.this.lambda$new$0$ColorPicker(view);
@@ -74,7 +74,7 @@ public class ColorPicker extends FrameLayout {
         this.undoButton = imageView2;
         imageView2.setScaleType(ImageView.ScaleType.CENTER);
         this.undoButton.setImageResource(NUM);
-        addView(this.undoButton, LayoutHelper.createFrame(60, 52.0f));
+        addView(this.undoButton, LayoutHelper.createFrame(46, 52.0f));
         this.undoButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 ColorPicker.this.lambda$new$1$ColorPicker(view);

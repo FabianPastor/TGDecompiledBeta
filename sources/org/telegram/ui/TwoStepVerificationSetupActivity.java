@@ -56,7 +56,6 @@ import org.telegram.tgnet.TLRPC$TL_account_passwordInputSettings;
 import org.telegram.tgnet.TLRPC$TL_account_resendPasswordEmail;
 import org.telegram.tgnet.TLRPC$TL_account_updatePasswordSettings;
 import org.telegram.tgnet.TLRPC$TL_auth_recoverPassword;
-import org.telegram.tgnet.TLRPC$TL_boolTrue;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_inputCheckPasswordEmpty;
 import org.telegram.tgnet.TLRPC$TL_inputCheckPasswordSRP;
@@ -1022,7 +1021,11 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                             TwoStepVerificationSetupActivity.this.lambda$null$5$TwoStepVerificationSetupActivity(dialogInterface, i);
                         }
                     });
-                    builder.setMessage(LocaleController.getString("YourEmailSuccessText", NUM));
+                    if (this.currentPassword.has_recovery) {
+                        builder.setMessage(LocaleController.getString("YourEmailSuccessChangedText", NUM));
+                    } else {
+                        builder.setMessage(LocaleController.getString("YourEmailSuccessText", NUM));
+                    }
                     builder.setTitle(LocaleController.getString("YourPasswordSuccess", NUM));
                     Dialog showDialog = showDialog(builder.create());
                     if (showDialog != null) {
@@ -1474,7 +1477,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                 }
 
                 public final void run() {
-                    TwoStepVerificationSetupActivity.this.lambda$setNewPassword$25$TwoStepVerificationSetupActivity(this.f$1, this.f$2, this.f$3);
+                    TwoStepVerificationSetupActivity.this.lambda$setNewPassword$24$TwoStepVerificationSetupActivity(this.f$1, this.f$2, this.f$3);
                 }
             });
             return;
@@ -1514,7 +1517,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         }
     }
 
-    public /* synthetic */ void lambda$setNewPassword$25$TwoStepVerificationSetupActivity(TLRPC$TL_account_updatePasswordSettings tLRPC$TL_account_updatePasswordSettings, boolean z, String str) {
+    public /* synthetic */ void lambda$setNewPassword$24$TwoStepVerificationSetupActivity(TLRPC$TL_account_updatePasswordSettings tLRPC$TL_account_updatePasswordSettings, boolean z, String str) {
         byte[] bArr;
         byte[] bArr2;
         byte[] bArr3;
@@ -1536,7 +1539,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                 bArr2 = null;
             }
         }
-        $$Lambda$TwoStepVerificationSetupActivity$5dk_2NZJAxoy0JAQ7BqAT18MyBY r0 = new RequestDelegate(z, bArr2, str, tLRPC$TL_account_updatePasswordSettings) {
+        $$Lambda$TwoStepVerificationSetupActivity$Pt_0FtqfCrolb_Zdnn68JFMdNo r0 = new RequestDelegate(z, bArr2, str, tLRPC$TL_account_updatePasswordSettings) {
             private final /* synthetic */ boolean f$1;
             private final /* synthetic */ byte[] f$2;
             private final /* synthetic */ String f$3;
@@ -1550,7 +1553,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                TwoStepVerificationSetupActivity.this.lambda$null$24$TwoStepVerificationSetupActivity(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
+                TwoStepVerificationSetupActivity.this.lambda$null$23$TwoStepVerificationSetupActivity(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
             }
         };
         if (!z) {
@@ -1596,7 +1599,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_updatePasswordSettings2, r0, 10);
     }
 
-    public /* synthetic */ void lambda$null$24$TwoStepVerificationSetupActivity(boolean z, byte[] bArr, String str, TLRPC$TL_account_updatePasswordSettings tLRPC$TL_account_updatePasswordSettings, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$null$23$TwoStepVerificationSetupActivity(boolean z, byte[] bArr, String str, TLRPC$TL_account_updatePasswordSettings tLRPC$TL_account_updatePasswordSettings, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, z, tLObject, bArr, str, tLRPC$TL_account_updatePasswordSettings) {
             private final /* synthetic */ TLRPC$TL_error f$1;
             private final /* synthetic */ boolean f$2;
@@ -1615,129 +1618,298 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             }
 
             public final void run() {
-                TwoStepVerificationSetupActivity.this.lambda$null$23$TwoStepVerificationSetupActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+                TwoStepVerificationSetupActivity.this.lambda$null$22$TwoStepVerificationSetupActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
             }
         });
     }
 
-    public /* synthetic */ void lambda$null$23$TwoStepVerificationSetupActivity(TLRPC$TL_error tLRPC$TL_error, boolean z, TLObject tLObject, byte[] bArr, String str, TLRPC$TL_account_updatePasswordSettings tLRPC$TL_account_updatePasswordSettings) {
-        String str2;
-        byte[] bArr2;
-        TLRPC$TL_account_password tLRPC$TL_account_password;
-        if (tLRPC$TL_error == null || !"SRP_ID_INVALID".equals(tLRPC$TL_error.text)) {
-            needHideProgress();
-            if (tLRPC$TL_error != null || !(tLObject instanceof TLRPC$TL_boolTrue)) {
-                if (tLRPC$TL_error == null) {
-                    return;
-                }
-                if ("EMAIL_UNCONFIRMED".equals(tLRPC$TL_error.text) || tLRPC$TL_error.text.startsWith("EMAIL_UNCONFIRMED_")) {
-                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.twoStepPasswordChanged, new Object[0]);
-                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-                    builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(bArr, tLRPC$TL_account_updatePasswordSettings) {
-                        private final /* synthetic */ byte[] f$1;
-                        private final /* synthetic */ TLRPC$TL_account_updatePasswordSettings f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            TwoStepVerificationSetupActivity.this.lambda$null$22$TwoStepVerificationSetupActivity(this.f$1, this.f$2, dialogInterface, i);
-                        }
-                    });
-                    builder.setMessage(LocaleController.getString("YourEmailAlmostThereText", NUM));
-                    builder.setTitle(LocaleController.getString("YourEmailAlmostThere", NUM));
-                    Dialog showDialog = showDialog(builder.create());
-                    if (showDialog != null) {
-                        showDialog.setCanceledOnTouchOutside(false);
-                        showDialog.setCancelable(false);
-                    }
-                } else if ("EMAIL_INVALID".equals(tLRPC$TL_error.text)) {
-                    showAlertWithText(LocaleController.getString("AppName", NUM), LocaleController.getString("PasswordEmailInvalid", NUM));
-                } else if (tLRPC$TL_error.text.startsWith("FLOOD_WAIT")) {
-                    int intValue = Utilities.parseInt(tLRPC$TL_error.text).intValue();
-                    if (intValue < 60) {
-                        str2 = LocaleController.formatPluralString("Seconds", intValue);
-                    } else {
-                        str2 = LocaleController.formatPluralString("Minutes", intValue / 60);
-                    }
-                    showAlertWithText(LocaleController.getString("AppName", NUM), LocaleController.formatString("FloodWaitTime", NUM, str2));
-                } else {
-                    showAlertWithText(LocaleController.getString("AppName", NUM), tLRPC$TL_error.text);
-                }
-            } else if (z) {
-                int size = this.fragmentsToClose.size();
-                for (int i = 0; i < size; i++) {
-                    this.fragmentsToClose.get(i).removeSelfFromStack();
-                }
-                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didRemoveTwoStepPassword, new Object[0]);
-                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetOrRemoveTwoStepPassword, new Object[0]);
-                finishFragment();
-            } else if (getParentActivity() != null) {
-                if (this.currentPassword.has_password) {
-                    AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
-                    builder2.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(bArr) {
-                        private final /* synthetic */ byte[] f$1;
-
-                        {
-                            this.f$1 = r2;
-                        }
-
-                        public final void onClick(DialogInterface dialogInterface, int i) {
-                            TwoStepVerificationSetupActivity.this.lambda$null$21$TwoStepVerificationSetupActivity(this.f$1, dialogInterface, i);
-                        }
-                    });
-                    if (str != null || (tLRPC$TL_account_password = this.currentPassword) == null || !tLRPC$TL_account_password.has_password) {
-                        builder2.setMessage(LocaleController.getString("YourPasswordChangedSuccessText", NUM));
-                    } else {
-                        builder2.setMessage(LocaleController.getString("YourEmailSuccessText", NUM));
-                    }
-                    builder2.setTitle(LocaleController.getString("YourPasswordSuccess", NUM));
-                    Dialog showDialog2 = showDialog(builder2.create());
-                    if (showDialog2 != null) {
-                        showDialog2.setCanceledOnTouchOutside(false);
-                        showDialog2.setCancelable(false);
-                        return;
-                    }
-                    return;
-                }
-                int size2 = this.fragmentsToClose.size();
-                for (int i2 = 0; i2 < size2; i2++) {
-                    this.fragmentsToClose.get(i2).removeSelfFromStack();
-                }
-                TLRPC$TL_account_password tLRPC$TL_account_password2 = this.currentPassword;
-                tLRPC$TL_account_password2.has_password = true;
-                if (!tLRPC$TL_account_password2.has_recovery) {
-                    tLRPC$TL_account_password2.has_recovery = !TextUtils.isEmpty(tLRPC$TL_account_password2.email_unconfirmed_pattern);
-                }
-                if (this.closeAfterSet) {
-                    NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.twoStepPasswordChanged, new Object[0]);
-                }
-                TwoStepVerificationSetupActivity twoStepVerificationSetupActivity = new TwoStepVerificationSetupActivity(7, this.currentPassword);
-                if (bArr != null) {
-                    bArr2 = bArr;
-                } else {
-                    bArr2 = this.currentPasswordHash;
-                }
-                twoStepVerificationSetupActivity.setCurrentPasswordParams(bArr2, this.currentSecretId, this.currentSecret, this.emailOnly);
-                twoStepVerificationSetupActivity.closeAfterSet = this.closeAfterSet;
-                presentFragment(twoStepVerificationSetupActivity, true);
-                NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetOrRemoveTwoStepPassword, this.currentPassword);
-            }
-        } else {
-            ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_getPassword(), new RequestDelegate(z) {
-                private final /* synthetic */ boolean f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    TwoStepVerificationSetupActivity.this.lambda$null$20$TwoStepVerificationSetupActivity(this.f$1, tLObject, tLRPC$TL_error);
-                }
-            }, 8);
-        }
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v1, resolved type: java.lang.Object[]} */
+    /* JADX WARNING: Multi-variable type inference failed */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public /* synthetic */ void lambda$null$22$TwoStepVerificationSetupActivity(org.telegram.tgnet.TLRPC$TL_error r11, boolean r12, org.telegram.tgnet.TLObject r13, byte[] r14, java.lang.String r15, org.telegram.tgnet.TLRPC$TL_account_updatePasswordSettings r16) {
+        /*
+            r10 = this;
+            r0 = r10
+            r1 = r11
+            r2 = r12
+            r3 = r14
+            r4 = 8
+            if (r1 == 0) goto L_0x0026
+            java.lang.String r5 = r1.text
+            java.lang.String r6 = "SRP_ID_INVALID"
+            boolean r5 = r6.equals(r5)
+            if (r5 == 0) goto L_0x0026
+            org.telegram.tgnet.TLRPC$TL_account_getPassword r1 = new org.telegram.tgnet.TLRPC$TL_account_getPassword
+            r1.<init>()
+            int r3 = r0.currentAccount
+            org.telegram.tgnet.ConnectionsManager r3 = org.telegram.tgnet.ConnectionsManager.getInstance(r3)
+            org.telegram.ui.-$$Lambda$TwoStepVerificationSetupActivity$ybHjiYjfTJyLW163b0mAQVWMWUs r5 = new org.telegram.ui.-$$Lambda$TwoStepVerificationSetupActivity$ybHjiYjfTJyLW163b0mAQVWMWUs
+            r5.<init>(r12)
+            r3.sendRequest(r1, r5, r4)
+            return
+        L_0x0026:
+            r10.needHideProgress()
+            r5 = 7
+            r6 = 1
+            r7 = 0
+            if (r1 != 0) goto L_0x0142
+            r8 = r13
+            boolean r8 = r8 instanceof org.telegram.tgnet.TLRPC$TL_boolTrue
+            if (r8 == 0) goto L_0x0142
+            if (r2 == 0) goto L_0x006b
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r0.fragmentsToClose
+            int r1 = r1.size()
+            r2 = 0
+        L_0x003c:
+            if (r2 >= r1) goto L_0x004c
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r3 = r0.fragmentsToClose
+            java.lang.Object r3 = r3.get(r2)
+            org.telegram.ui.ActionBar.BaseFragment r3 = (org.telegram.ui.ActionBar.BaseFragment) r3
+            r3.removeSelfFromStack()
+            int r2 = r2 + 1
+            goto L_0x003c
+        L_0x004c:
+            int r1 = r0.currentAccount
+            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
+            int r2 = org.telegram.messenger.NotificationCenter.didRemoveTwoStepPassword
+            java.lang.Object[] r3 = new java.lang.Object[r7]
+            r1.postNotificationName(r2, r3)
+            int r1 = r0.currentAccount
+            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
+            int r2 = org.telegram.messenger.NotificationCenter.didSetOrRemoveTwoStepPassword
+            java.lang.Object[] r3 = new java.lang.Object[r7]
+            r1.postNotificationName(r2, r3)
+            r10.finishFragment()
+            goto L_0x0240
+        L_0x006b:
+            android.app.Activity r1 = r10.getParentActivity()
+            if (r1 != 0) goto L_0x0072
+            return
+        L_0x0072:
+            org.telegram.tgnet.TLRPC$TL_account_password r1 = r0.currentPassword
+            boolean r1 = r1.has_password
+            if (r1 == 0) goto L_0x00d3
+            org.telegram.ui.ActionBar.AlertDialog$Builder r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder
+            android.app.Activity r2 = r10.getParentActivity()
+            r1.<init>((android.content.Context) r2)
+            r2 = 2131626009(0x7f0e0819, float:1.8879242E38)
+            java.lang.String r4 = "OK"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
+            org.telegram.ui.-$$Lambda$TwoStepVerificationSetupActivity$GbSgWliJJsmRUBTq1WzYvxRc3XU r4 = new org.telegram.ui.-$$Lambda$TwoStepVerificationSetupActivity$GbSgWliJJsmRUBTq1WzYvxRc3XU
+            r4.<init>(r14)
+            r1.setPositiveButton(r2, r4)
+            if (r15 != 0) goto L_0x00a9
+            org.telegram.tgnet.TLRPC$TL_account_password r2 = r0.currentPassword
+            if (r2 == 0) goto L_0x00a9
+            boolean r2 = r2.has_password
+            if (r2 == 0) goto L_0x00a9
+            r2 = 2131627347(0x7f0e0d53, float:1.8881956E38)
+            java.lang.String r3 = "YourEmailSuccessText"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r1.setMessage(r2)
+            goto L_0x00b5
+        L_0x00a9:
+            r2 = 2131627351(0x7f0e0d57, float:1.8881964E38)
+            java.lang.String r3 = "YourPasswordChangedSuccessText"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r1.setMessage(r2)
+        L_0x00b5:
+            r2 = 2131627352(0x7f0e0d58, float:1.8881966E38)
+            java.lang.String r3 = "YourPasswordSuccess"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r1.setTitle(r2)
+            org.telegram.ui.ActionBar.AlertDialog r1 = r1.create()
+            android.app.Dialog r1 = r10.showDialog(r1)
+            if (r1 == 0) goto L_0x0240
+            r1.setCanceledOnTouchOutside(r7)
+            r1.setCancelable(r7)
+            goto L_0x0240
+        L_0x00d3:
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r0.fragmentsToClose
+            int r1 = r1.size()
+            r2 = 0
+        L_0x00da:
+            if (r2 >= r1) goto L_0x00ea
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r4 = r0.fragmentsToClose
+            java.lang.Object r4 = r4.get(r2)
+            org.telegram.ui.ActionBar.BaseFragment r4 = (org.telegram.ui.ActionBar.BaseFragment) r4
+            r4.removeSelfFromStack()
+            int r2 = r2 + 1
+            goto L_0x00da
+        L_0x00ea:
+            org.telegram.tgnet.TLRPC$TL_account_password r1 = r0.currentPassword
+            r1.has_password = r6
+            boolean r2 = r1.has_recovery
+            if (r2 != 0) goto L_0x00fb
+            java.lang.String r2 = r1.email_unconfirmed_pattern
+            boolean r2 = android.text.TextUtils.isEmpty(r2)
+            r2 = r2 ^ r6
+            r1.has_recovery = r2
+        L_0x00fb:
+            boolean r1 = r0.closeAfterSet
+            if (r1 == 0) goto L_0x010c
+            int r1 = r0.currentAccount
+            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
+            int r2 = org.telegram.messenger.NotificationCenter.twoStepPasswordChanged
+            java.lang.Object[] r4 = new java.lang.Object[r7]
+            r1.postNotificationName(r2, r4)
+        L_0x010c:
+            org.telegram.ui.TwoStepVerificationSetupActivity r1 = new org.telegram.ui.TwoStepVerificationSetupActivity
+            org.telegram.tgnet.TLRPC$TL_account_password r2 = r0.currentPassword
+            r1.<init>(r5, r2)
+            if (r3 == 0) goto L_0x0117
+            r2 = r3
+            goto L_0x0119
+        L_0x0117:
+            byte[] r2 = r0.currentPasswordHash
+        L_0x0119:
+            long r3 = r0.currentSecretId
+            byte[] r5 = r0.currentSecret
+            boolean r8 = r0.emailOnly
+            r11 = r1
+            r12 = r2
+            r13 = r3
+            r15 = r5
+            r16 = r8
+            r11.setCurrentPasswordParams(r12, r13, r15, r16)
+            boolean r2 = r0.closeAfterSet
+            r1.closeAfterSet = r2
+            r10.presentFragment(r1, r6)
+            int r1 = r0.currentAccount
+            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
+            int r2 = org.telegram.messenger.NotificationCenter.didSetOrRemoveTwoStepPassword
+            java.lang.Object[] r3 = new java.lang.Object[r6]
+            org.telegram.tgnet.TLRPC$TL_account_password r4 = r0.currentPassword
+            r3[r7] = r4
+            r1.postNotificationName(r2, r3)
+            goto L_0x0240
+        L_0x0142:
+            if (r1 == 0) goto L_0x0240
+            java.lang.String r2 = r1.text
+            java.lang.String r8 = "EMAIL_UNCONFIRMED"
+            boolean r2 = r8.equals(r2)
+            if (r2 != 0) goto L_0x01c1
+            java.lang.String r2 = r1.text
+            java.lang.String r8 = "EMAIL_UNCONFIRMED_"
+            boolean r2 = r2.startsWith(r8)
+            if (r2 == 0) goto L_0x0159
+            goto L_0x01c1
+        L_0x0159:
+            java.lang.String r2 = r1.text
+            java.lang.String r3 = "EMAIL_INVALID"
+            boolean r2 = r3.equals(r2)
+            r3 = 2131624199(0x7f0e0107, float:1.887557E38)
+            java.lang.String r4 = "AppName"
+            if (r2 == 0) goto L_0x017a
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r3)
+            r2 = 2131626264(0x7f0e0918, float:1.887976E38)
+            java.lang.String r3 = "PasswordEmailInvalid"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r10.showAlertWithText(r1, r2)
+            goto L_0x0240
+        L_0x017a:
+            java.lang.String r2 = r1.text
+            java.lang.String r5 = "FLOOD_WAIT"
+            boolean r2 = r2.startsWith(r5)
+            if (r2 == 0) goto L_0x01b6
+            java.lang.String r1 = r1.text
+            java.lang.Integer r1 = org.telegram.messenger.Utilities.parseInt(r1)
+            int r1 = r1.intValue()
+            r2 = 60
+            if (r1 >= r2) goto L_0x0199
+            java.lang.String r2 = "Seconds"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r2, r1)
+            goto L_0x01a0
+        L_0x0199:
+            int r1 = r1 / r2
+            java.lang.String r2 = "Minutes"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r2, r1)
+        L_0x01a0:
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r3)
+            r3 = 2131625286(0x7f0e0546, float:1.8877776E38)
+            java.lang.Object[] r4 = new java.lang.Object[r6]
+            r4[r7] = r1
+            java.lang.String r1 = "FloodWaitTime"
+            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r4)
+            r10.showAlertWithText(r2, r1)
+            goto L_0x0240
+        L_0x01b6:
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r3)
+            java.lang.String r1 = r1.text
+            r10.showAlertWithText(r2, r1)
+            goto L_0x0240
+        L_0x01c1:
+            int r1 = r0.currentAccount
+            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
+            int r2 = org.telegram.messenger.NotificationCenter.twoStepPasswordChanged
+            java.lang.Object[] r8 = new java.lang.Object[r7]
+            r1.postNotificationName(r2, r8)
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r1 = r0.fragmentsToClose
+            int r1 = r1.size()
+            r2 = 0
+        L_0x01d5:
+            if (r2 >= r1) goto L_0x01e5
+            java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r8 = r0.fragmentsToClose
+            java.lang.Object r8 = r8.get(r2)
+            org.telegram.ui.ActionBar.BaseFragment r8 = (org.telegram.ui.ActionBar.BaseFragment) r8
+            r8.removeSelfFromStack()
+            int r2 = r2 + 1
+            goto L_0x01d5
+        L_0x01e5:
+            int r1 = r0.currentAccount
+            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
+            int r2 = org.telegram.messenger.NotificationCenter.twoStepPasswordChanged
+            java.lang.Object[] r4 = new java.lang.Object[r4]
+            r4[r7] = r3
+            r7 = r16
+            org.telegram.tgnet.TLRPC$TL_account_passwordInputSettings r7 = r7.new_settings
+            org.telegram.tgnet.TLRPC$PasswordKdfAlgo r7 = r7.new_algo
+            r4[r6] = r7
+            r7 = 2
+            org.telegram.tgnet.TLRPC$TL_account_password r8 = r0.currentPassword
+            org.telegram.tgnet.TLRPC$SecurePasswordKdfAlgo r9 = r8.new_secure_algo
+            r4[r7] = r9
+            r7 = 3
+            byte[] r8 = r8.secure_random
+            r4[r7] = r8
+            r7 = 4
+            java.lang.String r8 = r0.email
+            r4[r7] = r8
+            java.lang.String r7 = r0.hint
+            r9 = 5
+            r4[r9] = r7
+            r7 = 6
+            r4[r7] = r8
+            java.lang.String r7 = r0.firstPassword
+            r4[r5] = r7
+            r1.postNotificationName(r2, r4)
+            org.telegram.tgnet.TLRPC$TL_account_password r1 = r0.currentPassword
+            java.lang.String r2 = r0.email
+            r1.email_unconfirmed_pattern = r2
+            org.telegram.ui.TwoStepVerificationSetupActivity r2 = new org.telegram.ui.TwoStepVerificationSetupActivity
+            r2.<init>(r9, r1)
+            if (r3 == 0) goto L_0x0228
+            r1 = r3
+            goto L_0x022a
+        L_0x0228:
+            byte[] r1 = r0.currentPasswordHash
+        L_0x022a:
+            long r3 = r0.currentSecretId
+            byte[] r5 = r0.currentSecret
+            boolean r7 = r0.emailOnly
+            r11 = r2
+            r12 = r1
+            r13 = r3
+            r15 = r5
+            r16 = r7
+            r11.setCurrentPasswordParams(r12, r13, r15, r16)
+            boolean r1 = r0.closeAfterSet
+            r2.closeAfterSet = r1
+            r10.presentFragment(r2, r6)
+        L_0x0240:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.TwoStepVerificationSetupActivity.lambda$null$22$TwoStepVerificationSetupActivity(org.telegram.tgnet.TLRPC$TL_error, boolean, org.telegram.tgnet.TLObject, byte[], java.lang.String, org.telegram.tgnet.TLRPC$TL_account_updatePasswordSettings):void");
     }
 
     public /* synthetic */ void lambda$null$20$TwoStepVerificationSetupActivity(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
@@ -1786,27 +1958,6 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         twoStepVerificationActivity.setCurrentPasswordParams(tLRPC$TL_account_password2, bArr, this.currentSecretId, this.currentSecret);
         presentFragment(twoStepVerificationActivity, true);
         NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didSetOrRemoveTwoStepPassword, this.currentPassword);
-    }
-
-    public /* synthetic */ void lambda$null$22$TwoStepVerificationSetupActivity(byte[] bArr, TLRPC$TL_account_updatePasswordSettings tLRPC$TL_account_updatePasswordSettings, DialogInterface dialogInterface, int i) {
-        int size = this.fragmentsToClose.size();
-        for (int i2 = 0; i2 < size; i2++) {
-            this.fragmentsToClose.get(i2).removeSelfFromStack();
-        }
-        NotificationCenter instance = NotificationCenter.getInstance(this.currentAccount);
-        int i3 = NotificationCenter.twoStepPasswordChanged;
-        TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
-        String str = this.email;
-        instance.postNotificationName(i3, bArr, tLRPC$TL_account_updatePasswordSettings.new_settings.new_algo, tLRPC$TL_account_password.new_secure_algo, tLRPC$TL_account_password.secure_random, str, this.hint, str, this.firstPassword);
-        TLRPC$TL_account_password tLRPC$TL_account_password2 = this.currentPassword;
-        tLRPC$TL_account_password2.email_unconfirmed_pattern = this.email;
-        TwoStepVerificationSetupActivity twoStepVerificationSetupActivity = new TwoStepVerificationSetupActivity(5, tLRPC$TL_account_password2);
-        if (bArr == null) {
-            bArr = this.currentPasswordHash;
-        }
-        twoStepVerificationSetupActivity.setCurrentPasswordParams(bArr, this.currentSecretId, this.currentSecret, this.emailOnly);
-        twoStepVerificationSetupActivity.closeAfterSet = this.closeAfterSet;
-        presentFragment(twoStepVerificationSetupActivity, true);
     }
 
     /* access modifiers changed from: protected */

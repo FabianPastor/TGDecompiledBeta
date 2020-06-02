@@ -3,6 +3,7 @@ package org.telegram.ui.Components.Paint.Views;
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
+import android.view.View;
 import android.widget.FrameLayout;
 import org.telegram.ui.Components.Paint.Views.RotationGestureDetector;
 
@@ -100,5 +101,14 @@ public class EntitiesContainerView extends FrameLayout implements ScaleGestureDe
         float angle = rotationGestureDetector2.getAngle();
         onSelectedEntityRequest.rotate(onSelectedEntityRequest.getRotation() + (this.previousAngle - angle));
         this.previousAngle = angle;
+    }
+
+    /* access modifiers changed from: protected */
+    public void measureChildWithMargins(View view, int i, int i2, int i3, int i4) {
+        if (view instanceof TextPaintView) {
+            view.measure(View.MeasureSpec.makeMeasureSpec(0, 0), View.MeasureSpec.makeMeasureSpec(0, 0));
+        } else {
+            super.measureChildWithMargins(view, i, i2, i3, i4);
+        }
     }
 }

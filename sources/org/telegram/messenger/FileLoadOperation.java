@@ -606,6 +606,11 @@ public class FileLoadOperation {
     }
 
     /* access modifiers changed from: protected */
+    public File getCacheFileFinal() {
+        return this.cacheFileFinal;
+    }
+
+    /* access modifiers changed from: protected */
     public File getCurrentFile() {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         File[] fileArr = new File[1];
@@ -686,9 +691,9 @@ public class FileLoadOperation {
     }
 
     /* access modifiers changed from: protected */
-    public int getDownloadedLengthFromOffset(int i, int i2) {
+    public int[] getDownloadedLengthFromOffset(int i, int i2) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
-        int[] iArr = new int[1];
+        int[] iArr = new int[2];
         Utilities.stageQueue.postRunnable(new Runnable(iArr, i, i2, countDownLatch) {
             private final /* synthetic */ int[] f$1;
             private final /* synthetic */ int f$2;
@@ -710,11 +715,14 @@ public class FileLoadOperation {
             countDownLatch.await();
         } catch (Exception unused) {
         }
-        return iArr[0];
+        return iArr;
     }
 
     public /* synthetic */ void lambda$getDownloadedLengthFromOffset$2$FileLoadOperation(int[] iArr, int i, int i2, CountDownLatch countDownLatch) {
         iArr[0] = getDownloadedLengthFromOffsetInternal(this.notLoadedBytesRanges, i, i2);
+        if (this.state == 3) {
+            iArr[1] = 1;
+        }
         countDownLatch.countDown();
     }
 

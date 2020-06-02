@@ -1,7 +1,10 @@
 package org.telegram.ui.Cells;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -38,9 +41,34 @@ public class PhotoPickerPhotoCell extends FrameLayout {
         FrameLayout frameLayout = new FrameLayout(context);
         this.checkFrame = frameLayout;
         addView(frameLayout, LayoutHelper.createFrame(42, 42, 53));
-        FrameLayout frameLayout2 = new FrameLayout(context);
-        this.videoInfoContainer = frameLayout2;
-        frameLayout2.setBackgroundResource(NUM);
+        AnonymousClass1 r1 = new FrameLayout(this, context) {
+            private Paint paint = new Paint(1);
+            private Path path = new Path();
+            float[] radii = new float[8];
+            private RectF rect = new RectF();
+
+            /* access modifiers changed from: protected */
+            public void onDraw(Canvas canvas) {
+                this.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight());
+                float[] fArr = this.radii;
+                fArr[3] = 0.0f;
+                fArr[2] = 0.0f;
+                fArr[1] = 0.0f;
+                fArr[0] = 0.0f;
+                float dp = (float) AndroidUtilities.dp(4.0f);
+                fArr[7] = dp;
+                fArr[6] = dp;
+                fArr[5] = dp;
+                fArr[4] = dp;
+                this.path.reset();
+                this.path.addRoundRect(this.rect, this.radii, Path.Direction.CW);
+                this.path.close();
+                this.paint.setColor(NUM);
+                canvas.drawPath(this.path, this.paint);
+            }
+        };
+        this.videoInfoContainer = r1;
+        r1.setWillNotDraw(false);
         this.videoInfoContainer.setPadding(AndroidUtilities.dp(3.0f), 0, AndroidUtilities.dp(3.0f), 0);
         addView(this.videoInfoContainer, LayoutHelper.createFrame(-1, 16, 83));
         ImageView imageView2 = new ImageView(context);

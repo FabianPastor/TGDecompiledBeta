@@ -139,7 +139,8 @@ public class StickerSetNameCell extends FrameLayout {
                 spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor("chat_emojiPanelStickerSetNameHighlight")), this.stickerSetNameSearchIndex, this.stickerSetNameSearchIndex + this.stickerSetNameSearchLength, 33);
             } catch (Exception unused) {
             }
-            this.textView.setText(spannableStringBuilder);
+            TextView textView2 = this.textView;
+            textView2.setText(Emoji.replaceEmoji(spannableStringBuilder, textView2.getPaint().getFontMetricsInt(), AndroidUtilities.dp(14.0f), false));
         }
     }
 

@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: SDZugkttO5TVw5RyB5kg2xYqZC8=
+SHA1-Digest-Manifest: al4VLeSQ4uMkaPezXC8yrC49QcA=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: abSniDJVHj65V/gyNG0NsJmHW1U=
+SHA1-Digest: e7msOJWB9cGKYLH+ilbnPqm7ZEA=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9511,10 +9511,10 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: HfsHEDkcy4/0h1UnU73W2qNxPg4=
+SHA1-Digest: KXAsHVRADPsBGvkKb1b2BPgeXOw=
 
 Name: classes2.dex
-SHA1-Digest: dT4ssiq8MlhZ5F75eyCHFfH1f+A=
+SHA1-Digest: Ohk8HYHHy2O/3M6hUIclAnMNqEk=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -9568,7 +9568,7 @@ Name: lib/arm64-v8a/libtgvoip3.1.so
 SHA1-Digest: YkybzpsYCtpDZttnXF3RvgAxtqQ=
 
 Name: lib/arm64-v8a/libtmessages.30.so
-SHA1-Digest: xS5qOaZ3Frlwhazm+jXp6bilKLE=
+SHA1-Digest: 1yDTiaM5PdpIOpQHUMAKSQGRw60=
 
 Name: lib/armeabi-v7a/libtgvoip1.1.so
 SHA1-Digest: KfTLu+ctfLwYSel8HnFw/HkTZ1k=
@@ -9577,7 +9577,7 @@ Name: lib/armeabi-v7a/libtgvoip3.1.so
 SHA1-Digest: s3+uKB4j7CWbKyxyeyABTgmmVP8=
 
 Name: lib/armeabi-v7a/libtmessages.30.so
-SHA1-Digest: 74IytA0R3gJF3FLYqSpnVfEUwxY=
+SHA1-Digest: t5Cz+QdTJ8X80laZm92D8eVmMwc=
 
 Name: lib/x86/libtgvoip1.1.so
 SHA1-Digest: xPpOIMqHjhOG/reZO/XpOWo62nI=
@@ -9586,7 +9586,7 @@ Name: lib/x86/libtgvoip3.1.so
 SHA1-Digest: HdBORU006xJ60rJmfiTcq++v9xQ=
 
 Name: lib/x86/libtmessages.30.so
-SHA1-Digest: yikyX0a2fv045UHdiMbBtnNTLXU=
+SHA1-Digest: LdLY3/EYPptwaR1bHy+6Un1YfKc=
 
 Name: lib/x86_64/libtgvoip1.1.so
 SHA1-Digest: QIYHcFS5rLQhi3pwqrVfLsbsQtI=
@@ -9595,7 +9595,7 @@ Name: lib/x86_64/libtgvoip3.1.so
 SHA1-Digest: kUQdgXrFiCmXoBm2fBwDg22COPU=
 
 Name: lib/x86_64/libtmessages.30.so
-SHA1-Digest: LrD6Gij6zpTzqQ1qZOhVolZG7TI=
+SHA1-Digest: WWSc9RO4K0Ny496szDEhIAQk0I0=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: 4xRXfC5wD7cP7zkWXYe1OQH2mf8=
@@ -18731,7 +18731,7 @@ Name: res/xml/auth.xml
 SHA1-Digest: qM1FAtFo0/NbTd7IeFOs3sI9b20=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: 5VdZ+iEN0a+CHB8HsG+Wp3Uh+mw=
+SHA1-Digest: LJLO+HWTTFnujHF02SHJlOqsHUs=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: 9Hh95nQe6vvvIyVqqpGpBH5VMqA=
@@ -18746,7 +18746,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: gORTYVhSsU/Y6RCxZVE4VNJcgP8=
+SHA1-Digest: RIogac3P7ytSMl9qB4ryRbQ17Eo=
 
 Name: transport-api.properties
 SHA1-Digest: KlRwAVirU5yXrBUVC3JeyHIPlcs=

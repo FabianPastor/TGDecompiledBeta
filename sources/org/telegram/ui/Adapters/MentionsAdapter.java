@@ -1738,7 +1738,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
                 if (z) {
                     i--;
                 }
-                ((ContextLinkCell) viewHolder.itemView).setLink(this.searchResultBotContext.get(i), this.contextMedia, i != this.searchResultBotContext.size() - 1, z && i == 0, "gif".equals(this.searchingContextUsername));
+                ((ContextLinkCell) viewHolder.itemView).setLink(this.searchResultBotContext.get(i), this.foundContextBot, this.contextMedia, i != this.searchResultBotContext.size() - 1, z && i == 0, "gif".equals(this.searchingContextUsername));
             } else if (z) {
                 ((BotSwitchCell) viewHolder.itemView).setText(this.searchResultBotContextSwitch.text);
             }

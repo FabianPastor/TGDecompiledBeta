@@ -8,11 +8,6 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 public class TextViewSwitcher extends ViewSwitcher {
-
-    public interface Applier {
-        void apply(TextView textView);
-    }
-
     public TextViewSwitcher(Context context) {
         super(context);
     }
@@ -49,8 +44,8 @@ public class TextViewSwitcher extends ViewSwitcher {
         return (TextView) super.getNextView();
     }
 
-    public void apply(Applier applier) {
-        applier.apply(getCurrentView());
-        applier.apply(getNextView());
+    public void invalidateViews() {
+        getCurrentView().invalidate();
+        getNextView().invalidate();
     }
 }

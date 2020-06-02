@@ -90,8 +90,8 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         public void openSet(TLRPC$InputStickerSet tLRPC$InputStickerSet, boolean z) {
         }
 
-        public /* synthetic */ void sendGif(Object obj, boolean z, int i) {
-            ContentPreviewViewer.ContentPreviewViewerDelegate.CC.$default$sendGif(this, obj, z, i);
+        public /* synthetic */ void sendGif(Object obj, Object obj2, boolean z, int i) {
+            ContentPreviewViewer.ContentPreviewViewerDelegate.CC.$default$sendGif(this, obj, obj2, z, i);
         }
 
         public void sendSticker(TLRPC$Document tLRPC$Document, Object obj, boolean z, int i) {
@@ -296,7 +296,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2.setImeOptions(r4)
                 if (r3 != 0) goto L_0x014c
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131626660(0x7f0e0aa4, float:1.8880562E38)
+                r3 = 2131626661(0x7f0e0aa5, float:1.8880564E38)
                 java.lang.String r4 = "SearchStickersHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -304,7 +304,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             L_0x014c:
                 if (r3 != r6) goto L_0x015d
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131626645(0x7f0e0a95, float:1.8880532E38)
+                r3 = 2131626646(0x7f0e0a96, float:1.8880534E38)
                 java.lang.String r4 = "SearchEmojiHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -313,7 +313,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2 = 2
                 if (r3 != r2) goto L_0x016e
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131626651(0x7f0e0a9b, float:1.8880544E38)
+                r3 = 2131626652(0x7f0e0a9c, float:1.8880546E38)
                 java.lang.String r4 = "SearchGifsTitle"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -409,6 +409,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         super(context, true);
         this.behindKeyboardColorKey = null;
         this.behindKeyboardColor = -14342875;
+        this.useLightStatusBar = false;
         this.currentType = 0;
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.stickersDidLoad);
@@ -1734,54 +1735,55 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                     goto L_0x0222
                 L_0x029e:
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r0 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
+                    java.lang.String r0 = r0.searchQuery
+                    boolean r0 = org.telegram.messenger.Emoji.isValidEmoji(r0)
+                    if (r0 == 0) goto L_0x02e0
+                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r4 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
+                    org.telegram.ui.Components.StickerMasksAlert r4 = org.telegram.ui.Components.StickerMasksAlert.this
+                    org.telegram.ui.Components.StickerMasksAlert$SearchField r4 = r4.stickersSearchField
+                    org.telegram.ui.Components.CloseProgressDrawable2 r4 = r4.progressDrawable
+                    r4.startAnimation()
+                    org.telegram.tgnet.TLRPC$TL_messages_getStickers r4 = new org.telegram.tgnet.TLRPC$TL_messages_getStickers
+                    r4.<init>()
+                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r5 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
+                    java.lang.String r5 = r5.searchQuery
+                    r4.emoticon = r5
+                    r4.hash = r1
+                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r1 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
+                    org.telegram.ui.Components.StickerMasksAlert r5 = org.telegram.ui.Components.StickerMasksAlert.this
+                    int r5 = r5.currentAccount
+                    org.telegram.tgnet.ConnectionsManager r5 = org.telegram.tgnet.ConnectionsManager.getInstance(r5)
+                    org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$nTEewqP7UjuvQF1u-WagaccIaig r6 = new org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$nTEewqP7UjuvQF1u-WagaccIaig
+                    r6.<init>(r13, r4, r2, r3)
+                    int r2 = r5.sendRequest(r4, r6)
+                    int unused = r1.reqId2 = r2
+                L_0x02e0:
+                    if (r0 == 0) goto L_0x02fa
+                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r0 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
                     java.util.ArrayList r0 = r0.localPacks
                     boolean r0 = r0.isEmpty()
-                    if (r0 == 0) goto L_0x02b6
+                    if (r0 == 0) goto L_0x02fa
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r0 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
                     java.util.HashMap r0 = r0.emojiStickers
                     boolean r0 = r0.isEmpty()
-                    if (r0 != 0) goto L_0x02df
-                L_0x02b6:
+                    if (r0 != 0) goto L_0x0323
+                L_0x02fa:
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r0 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
                     org.telegram.ui.Components.StickerMasksAlert r0 = org.telegram.ui.Components.StickerMasksAlert.this
                     org.telegram.ui.Components.RecyclerListView r0 = r0.gridView
                     androidx.recyclerview.widget.RecyclerView$Adapter r0 = r0.getAdapter()
-                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r4 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
-                    org.telegram.ui.Components.StickerMasksAlert r4 = org.telegram.ui.Components.StickerMasksAlert.this
-                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r4 = r4.stickersSearchGridAdapter
-                    if (r0 == r4) goto L_0x02df
+                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r1 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
+                    org.telegram.ui.Components.StickerMasksAlert r1 = org.telegram.ui.Components.StickerMasksAlert.this
+                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r1 = r1.stickersSearchGridAdapter
+                    if (r0 == r1) goto L_0x0323
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r0 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
                     org.telegram.ui.Components.StickerMasksAlert r0 = org.telegram.ui.Components.StickerMasksAlert.this
                     org.telegram.ui.Components.RecyclerListView r0 = r0.gridView
-                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r4 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
-                    org.telegram.ui.Components.StickerMasksAlert r4 = org.telegram.ui.Components.StickerMasksAlert.this
-                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r4 = r4.stickersSearchGridAdapter
-                    r0.setAdapter(r4)
-                L_0x02df:
-                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r0 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
-                    java.lang.String r0 = r0.searchQuery
-                    boolean r0 = org.telegram.messenger.Emoji.isValidEmoji(r0)
-                    if (r0 == 0) goto L_0x0321
-                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r0 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
-                    org.telegram.ui.Components.StickerMasksAlert r0 = org.telegram.ui.Components.StickerMasksAlert.this
-                    org.telegram.ui.Components.StickerMasksAlert$SearchField r0 = r0.stickersSearchField
-                    org.telegram.ui.Components.CloseProgressDrawable2 r0 = r0.progressDrawable
-                    r0.startAnimation()
-                    org.telegram.tgnet.TLRPC$TL_messages_getStickers r0 = new org.telegram.tgnet.TLRPC$TL_messages_getStickers
-                    r0.<init>()
-                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r4 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
-                    java.lang.String r4 = r4.searchQuery
-                    r0.emoticon = r4
-                    r0.hash = r1
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r1 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
-                    org.telegram.ui.Components.StickerMasksAlert r4 = org.telegram.ui.Components.StickerMasksAlert.this
-                    int r4 = r4.currentAccount
-                    org.telegram.tgnet.ConnectionsManager r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r4)
-                    org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$nTEewqP7UjuvQF1u-WagaccIaig r5 = new org.telegram.ui.Components.-$$Lambda$StickerMasksAlert$StickersSearchGridAdapter$1$nTEewqP7UjuvQF1u-WagaccIaig
-                    r5.<init>(r13, r0, r2, r3)
-                    int r0 = r4.sendRequest(r0, r5)
-                    int unused = r1.reqId2 = r0
-                L_0x0321:
+                    org.telegram.ui.Components.StickerMasksAlert r1 = org.telegram.ui.Components.StickerMasksAlert.this
+                    org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r1 = r1.stickersSearchGridAdapter
+                    r0.setAdapter(r1)
+                L_0x0323:
                     org.telegram.ui.Components.StickerMasksAlert$StickersSearchGridAdapter r0 = org.telegram.ui.Components.StickerMasksAlert.StickersSearchGridAdapter.this
                     r0.notifyDataSetChanged()
                     return
@@ -1942,6 +1944,9 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                                 StickersSearchGridAdapter.this.emojiArrays.add(arrayList);
                             }
                             StickersSearchGridAdapter.this.notifyDataSetChanged();
+                        }
+                        if (StickerMasksAlert.this.gridView.getAdapter() != StickerMasksAlert.this.stickersSearchGridAdapter) {
+                            StickerMasksAlert.this.gridView.setAdapter(StickerMasksAlert.this.stickersSearchGridAdapter);
                         }
                     }
                 }

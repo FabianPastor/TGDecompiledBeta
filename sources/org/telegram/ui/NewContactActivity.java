@@ -265,7 +265,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r4.setImeOptions(r5)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
             java.lang.String r5 = "LastName"
-            r6 = 2131625542(0x7f0e0646, float:1.8878295E38)
+            r6 = 2131625543(0x7f0e0647, float:1.8878297E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)
             r4.setHint(r5)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField

@@ -101,7 +101,7 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
                 if (!this.opened) {
                     break;
                 }
-                i3 = this.loadOperation.getDownloadedLengthFromOffset(this.currentOffset, i2);
+                i3 = this.loadOperation.getDownloadedLengthFromOffset(this.currentOffset, i2)[0];
                 if (i3 == 0) {
                     FileLoader.getInstance(this.currentAccount).loadStreamFile(this, this.document, this.parentObject, this.currentOffset, false);
                     CountDownLatch countDownLatch2 = new CountDownLatch(1);

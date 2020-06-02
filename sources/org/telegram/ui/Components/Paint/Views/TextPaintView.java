@@ -110,7 +110,7 @@ public class TextPaintView extends EntityView {
             public final void run() {
                 TextPaintView.this.lambda$beginEditing$0$TextPaintView();
             }
-        });
+        }, 300);
     }
 
     public /* synthetic */ void lambda$beginEditing$0$TextPaintView() {

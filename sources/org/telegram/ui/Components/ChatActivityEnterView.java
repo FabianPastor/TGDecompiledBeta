@@ -719,6 +719,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         Paint lockBackgroundPaint = new Paint(1);
         Paint lockOutlinePaint = new Paint(1);
         Paint lockPaint = new Paint(1);
+        private Paint p = new Paint(1);
         private int paintAlpha;
         Path path = new Path();
         private boolean pressed;
@@ -955,10 +956,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v5, resolved type: float} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v6, resolved type: float} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v54, resolved type: float} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v67, resolved type: float} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v66, resolved type: float} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v29, resolved type: float} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v65, resolved type: float} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v75, resolved type: float} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v74, resolved type: float} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v32, resolved type: float} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v33, resolved type: float} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v9, resolved type: float} */
@@ -1014,14 +1015,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         /* JADX WARNING: Removed duplicated region for block: B:174:0x05eb  */
         /* JADX WARNING: Removed duplicated region for block: B:179:0x0609  */
         /* JADX WARNING: Removed duplicated region for block: B:184:0x0636  */
-        /* JADX WARNING: Removed duplicated region for block: B:189:0x0780  */
-        /* JADX WARNING: Removed duplicated region for block: B:190:0x0785  */
-        /* JADX WARNING: Removed duplicated region for block: B:201:0x079f  */
-        /* JADX WARNING: Removed duplicated region for block: B:206:0x07b4  */
-        /* JADX WARNING: Removed duplicated region for block: B:213:0x07eb  */
-        /* JADX WARNING: Removed duplicated region for block: B:216:0x08e2  */
-        /* JADX WARNING: Removed duplicated region for block: B:219:0x08f1  */
-        /* JADX WARNING: Removed duplicated region for block: B:226:0x09c9  */
+        /* JADX WARNING: Removed duplicated region for block: B:189:0x0788  */
+        /* JADX WARNING: Removed duplicated region for block: B:190:0x078d  */
+        /* JADX WARNING: Removed duplicated region for block: B:201:0x07a7  */
+        /* JADX WARNING: Removed duplicated region for block: B:206:0x07bc  */
+        /* JADX WARNING: Removed duplicated region for block: B:213:0x07f3  */
+        /* JADX WARNING: Removed duplicated region for block: B:216:0x08ea  */
+        /* JADX WARNING: Removed duplicated region for block: B:219:0x08f9  */
+        /* JADX WARNING: Removed duplicated region for block: B:226:0x09d1  */
         /* JADX WARNING: Removed duplicated region for block: B:233:? A[RETURN, SYNTHETIC] */
         /* JADX WARNING: Removed duplicated region for block: B:64:0x01b9  */
         /* JADX WARNING: Removed duplicated region for block: B:69:0x01d1  */
@@ -1807,7 +1808,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 float r1 = r6.tooltipAlpha
                 r2 = 0
                 int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                if (r1 == 0) goto L_0x0755
+                if (r1 == 0) goto L_0x075d
             L_0x05cb:
                 r1 = 1061997773(0x3f4ccccd, float:0.8)
                 int r1 = (r26 > r1 ? 1 : (r26 == r1 ? 0 : -1))
@@ -1866,7 +1867,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 android.text.TextPaint r2 = r6.tooltipPaint
                 r2.setAlpha(r1)
                 android.text.StaticLayout r2 = r6.tooltipLayout
-                if (r2 == 0) goto L_0x0757
+                if (r2 == 0) goto L_0x075f
                 r36.save()
                 android.graphics.RectF r2 = r6.rectF
                 int r3 = r35.getMeasuredWidth()
@@ -1941,22 +1942,26 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 float r3 = org.telegram.messenger.AndroidUtilities.dpf2(r3)
                 float r10 = org.telegram.messenger.AndroidUtilities.dpf2(r21)
                 r2.lineTo(r3, r10)
-                android.graphics.Paint r2 = new android.graphics.Paint
-                r3 = 1
-                r2.<init>(r3)
+                android.graphics.Paint r2 = r6.p
                 r3 = -1
                 r2.setColor(r3)
+                android.graphics.Paint r2 = r6.p
                 r2.setAlpha(r1)
-                android.graphics.Paint$Style r1 = android.graphics.Paint.Style.STROKE
-                r2.setStyle(r1)
-                android.graphics.Paint$Cap r1 = android.graphics.Paint.Cap.ROUND
-                r2.setStrokeCap(r1)
-                android.graphics.Paint$Join r1 = android.graphics.Paint.Join.ROUND
-                r2.setStrokeJoin(r1)
-                r1 = 1069547520(0x3fCLASSNAME, float:1.5)
-                float r1 = org.telegram.messenger.AndroidUtilities.dpf2(r1)
-                r2.setStrokeWidth(r1)
+                android.graphics.Paint r1 = r6.p
+                android.graphics.Paint$Style r2 = android.graphics.Paint.Style.STROKE
+                r1.setStyle(r2)
+                android.graphics.Paint r1 = r6.p
+                android.graphics.Paint$Cap r2 = android.graphics.Paint.Cap.ROUND
+                r1.setStrokeCap(r2)
+                android.graphics.Paint r1 = r6.p
+                android.graphics.Paint$Join r2 = android.graphics.Paint.Join.ROUND
+                r1.setStrokeJoin(r2)
+                android.graphics.Paint r1 = r6.p
+                r2 = 1069547520(0x3fCLASSNAME, float:1.5)
+                float r2 = org.telegram.messenger.AndroidUtilities.dpf2(r2)
+                r1.setStrokeWidth(r2)
                 android.graphics.Path r1 = r6.path
+                android.graphics.Paint r2 = r6.p
                 r7.drawPath(r1, r2)
                 r36.restore()
                 r36.save()
@@ -1987,13 +1992,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 android.graphics.drawable.Drawable r1 = r6.tooltipBackgroundArrow
                 r1.draw(r7)
                 r36.restore()
-                goto L_0x075b
-            L_0x0755:
+                goto L_0x0763
+            L_0x075d:
                 r30 = r3
-            L_0x0757:
+            L_0x075f:
                 r28 = r10
                 r25 = r11
-            L_0x075b:
+            L_0x0763:
                 r36.save()
                 int r1 = r35.getMeasuredWidth()
                 int r2 = r35.getMeasuredHeight()
@@ -2008,55 +2013,55 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 float r15 = r2 - r1
                 r3 = 0
                 int r10 = (r15 > r3 ? 1 : (r15 == r3 ? 0 : -1))
-                if (r10 == 0) goto L_0x0785
+                if (r10 == 0) goto L_0x078d
                 float r27 = r2 - r1
                 r1 = r27
-                goto L_0x0794
-            L_0x0785:
+                goto L_0x079c
+            L_0x078d:
                 int r1 = (r23 > r3 ? 1 : (r23 == r3 ? 0 : -1))
-                if (r1 == 0) goto L_0x078c
+                if (r1 == 0) goto L_0x0794
                 r1 = r23
-                goto L_0x0794
-            L_0x078c:
-                int r1 = (r24 > r3 ? 1 : (r24 == r3 ? 0 : -1))
-                if (r1 == 0) goto L_0x0793
-                r1 = r24
-                goto L_0x0794
-            L_0x0793:
-                r1 = 0
+                goto L_0x079c
             L_0x0794:
+                int r1 = (r24 > r3 ? 1 : (r24 == r3 ? 0 : -1))
+                if (r1 == 0) goto L_0x079b
+                r1 = r24
+                goto L_0x079c
+            L_0x079b:
+                r1 = 0
+            L_0x079c:
                 float r2 = r6.slideToCancelProgress
                 int r2 = (r2 > r17 ? 1 : (r2 == r17 ? 0 : -1))
-                if (r2 < 0) goto L_0x07b4
+                if (r2 < 0) goto L_0x07bc
                 boolean r2 = r6.canceledByGesture
-                if (r2 == 0) goto L_0x079f
-                goto L_0x07b4
-            L_0x079f:
+                if (r2 == 0) goto L_0x07a7
+                goto L_0x07bc
+            L_0x07a7:
                 float r2 = r6.slideToCancelLockProgress
                 r3 = 1065353216(0x3var_, float:1.0)
                 int r10 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-                if (r10 == 0) goto L_0x07ca
+                if (r10 == 0) goto L_0x07d2
                 r10 = 1039516303(0x3df5CLASSNAMEf, float:0.12)
                 float r2 = r2 + r10
                 r6.slideToCancelLockProgress = r2
                 int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-                if (r2 <= 0) goto L_0x07ca
+                if (r2 <= 0) goto L_0x07d2
                 r6.slideToCancelLockProgress = r3
-                goto L_0x07ca
-            L_0x07b4:
+                goto L_0x07d2
+            L_0x07bc:
                 r2 = 0
                 r6.showTooltip = r2
                 float r2 = r6.slideToCancelLockProgress
                 r3 = 0
                 int r10 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-                if (r10 == 0) goto L_0x07ca
+                if (r10 == 0) goto L_0x07d2
                 r10 = 1039516303(0x3df5CLASSNAMEf, float:0.12)
                 float r2 = r2 - r10
                 r6.slideToCancelLockProgress = r2
                 int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-                if (r2 >= 0) goto L_0x07ca
+                if (r2 >= 0) goto L_0x07d2
                 r6.slideToCancelLockProgress = r3
-            L_0x07ca:
+            L_0x07d2:
                 r2 = 1116733440(0x42900000, float:72.0)
                 float r2 = org.telegram.messenger.AndroidUtilities.dpf2(r2)
                 float r3 = r2 * r1
@@ -2071,11 +2076,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 float r15 = r15 * r2
                 float r3 = r3 + r15
                 int r1 = (r3 > r2 ? 1 : (r3 == r2 ? 0 : -1))
-                if (r1 <= 0) goto L_0x07eb
-                goto L_0x07ec
-            L_0x07eb:
+                if (r1 <= 0) goto L_0x07f3
+                goto L_0x07f4
+            L_0x07f3:
                 r2 = r3
-            L_0x07ec:
+            L_0x07f4:
                 r1 = 0
                 r7.translate(r1, r2)
                 float r1 = r6.scale
@@ -2178,14 +2183,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r7.drawRoundRect(r9, r10, r8, r13)
                 r8 = 1065353216(0x3var_, float:1.0)
                 int r9 = (r30 > r8 ? 1 : (r30 == r8 ? 0 : -1))
-                if (r9 == 0) goto L_0x08ed
+                if (r9 == 0) goto L_0x08f5
                 float r9 = org.telegram.messenger.AndroidUtilities.dpf2(r20)
                 float r9 = r9 * r15
                 android.graphics.Paint r10 = r6.lockBackgroundPaint
                 r7.drawCircle(r0, r4, r9, r10)
-            L_0x08ed:
+            L_0x08f5:
                 int r0 = (r30 > r8 ? 1 : (r30 == r8 ? 0 : -1))
-                if (r0 == 0) goto L_0x09bb
+                if (r0 == 0) goto L_0x09c3
                 android.graphics.RectF r0 = r6.rectF
                 r4 = 1090519040(0x41000000, float:8.0)
                 float r8 = org.telegram.messenger.AndroidUtilities.dpf2(r4)
@@ -2224,17 +2229,17 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r7.translate(r3, r5)
                 r0 = 0
                 int r0 = (r14 > r0 ? 1 : (r14 == r0 ? 0 : -1))
-                if (r0 <= 0) goto L_0x095b
+                if (r0 <= 0) goto L_0x0963
                 r0 = 1090519040(0x41000000, float:8.0)
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r0)
                 float r1 = (float) r1
                 int r2 = org.telegram.messenger.AndroidUtilities.dp(r0)
                 float r2 = (float) r2
                 r7.rotate(r14, r1, r2)
-                goto L_0x095d
-            L_0x095b:
+                goto L_0x0965
+            L_0x0963:
                 r0 = 1090519040(0x41000000, float:8.0)
-            L_0x095d:
+            L_0x0965:
                 float r1 = org.telegram.messenger.AndroidUtilities.dpf2(r0)
                 float r2 = org.telegram.messenger.AndroidUtilities.dpf2(r21)
                 float r3 = org.telegram.messenger.AndroidUtilities.dpf2(r0)
@@ -2275,13 +2280,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r0 = r36
                 r0.drawLine(r1, r2, r3, r4, r5)
                 r36.restore()
-            L_0x09bb:
+            L_0x09c3:
                 r36.restore()
                 r36.restore()
                 float r0 = r6.scale
                 r1 = 1065353216(0x3var_, float:1.0)
                 int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-                if (r0 == 0) goto L_0x09fc
+                if (r0 == 0) goto L_0x0a04
                 int r0 = r6.slideDelta
                 int r12 = r12 + r0
                 float r0 = (float) r12
@@ -2292,15 +2297,15 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r3 = r16
                 r7.drawCircle(r0, r1, r3, r2)
                 boolean r0 = r6.canceledByGesture
-                if (r0 == 0) goto L_0x09e6
+                if (r0 == 0) goto L_0x09ee
                 float r0 = r6.slideToCancelProgress
                 r1 = 1065353216(0x3var_, float:1.0)
                 float r15 = r1 - r0
-                goto L_0x09ea
-            L_0x09e6:
+                goto L_0x09f2
+            L_0x09ee:
                 r1 = 1065353216(0x3var_, float:1.0)
                 r15 = 1065353216(0x3var_, float:1.0)
-            L_0x09ea:
+            L_0x09f2:
                 float r4 = r6.progressToSendButton
                 r0 = 1132396544(0x437var_, float:255.0)
                 float r15 = r15 * r0
@@ -2310,7 +2315,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r2 = r25
                 r3 = r28
                 r0.drawIcon(r1, r2, r3, r4, r5)
-            L_0x09fc:
+            L_0x0a04:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.RecordCircle.onDraw(android.graphics.Canvas):void");
@@ -5568,17 +5573,18 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (trimmedString.length() == 0) {
                 return false;
             }
-            ChatActivityEnterViewDelegate chatActivityEnterViewDelegate = this.delegate;
-            if (chatActivityEnterViewDelegate != null) {
-                chatActivityEnterViewDelegate.prepareMessageSending();
+            if (this.delegate != null) {
+                if ((i != 0) == this.parentFragment.isInScheduleMode()) {
+                    this.delegate.prepareMessageSending();
+                }
             }
             int ceil = (int) Math.ceil((double) (((float) trimmedString.length()) / ((float) i2)));
             int i3 = 0;
             while (i3 < ceil) {
-                int i4 = i3 * i2;
-                i3++;
-                CharSequence[] charSequenceArr = {trimmedString.subSequence(i4, Math.min(i3 * i2, trimmedString.length()))};
+                int i4 = i3 + 1;
+                CharSequence[] charSequenceArr = {trimmedString.subSequence(i3 * i2, Math.min(i4 * i2, trimmedString.length()))};
                 SendMessagesHelper.getInstance(this.currentAccount).sendMessage(charSequenceArr[0].toString(), this.dialog_id, this.replyingMessageObject, this.messageWebPage, this.messageWebPageSearch, MediaDataController.getInstance(this.currentAccount).getEntities(charSequenceArr, supportsSendingNewEntities), (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i);
+                i3 = i4;
             }
             return true;
         }
@@ -7811,7 +7817,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButton) {
                 SendMessagesHelper.getInstance(this.currentAccount).sendMessage(tLRPC$KeyboardButton2.text, this.dialog_id, messageObject, (TLRPC$WebPage) null, false, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
             } else if (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonUrl) {
-                this.parentFragment.showOpenUrlAlert(tLRPC$KeyboardButton2.url, false, true);
+                AlertsCreator.showOpenUrlAlert(this.parentFragment, tLRPC$KeyboardButton2.url, false, true);
             } else if (tLRPC$KeyboardButton2 instanceof TLRPC$TL_keyboardButtonRequestPhone) {
                 this.parentFragment.shareMyContact(2, messageObject3);
             } else {

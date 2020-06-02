@@ -105,6 +105,10 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     /* access modifiers changed from: private */
     public UndoStore undoStore;
 
+    /* access modifiers changed from: protected */
+    public void onOpenCloseStickersAlert(boolean z) {
+    }
+
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v18, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v21, resolved type: org.telegram.ui.Components.Paint.Views.StickerView} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v22, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
@@ -1016,7 +1020,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         EntityView entityView3 = this.currentEntityView;
         this.currentEntityView = entityView;
         if ((entityView3 instanceof TextPaintView) && TextUtils.isEmpty(((TextPaintView) entityView3).getText())) {
-            lambda$registerRemovalUndo$8$PhotoPaintView(entityView3);
+            lambda$registerRemovalUndo$9$PhotoPaintView(entityView3);
         }
         EntityView entityView4 = this.currentEntityView;
         if (entityView4 != null) {
@@ -1035,7 +1039,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
 
     /* access modifiers changed from: private */
     /* renamed from: removeEntity */
-    public void lambda$registerRemovalUndo$8$PhotoPaintView(EntityView entityView) {
+    public void lambda$registerRemovalUndo$9$PhotoPaintView(EntityView entityView) {
         EntityView entityView2 = this.currentEntityView;
         if (entityView == entityView2) {
             entityView2.deselect();
@@ -1080,11 +1084,21 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 PhotoPaintView.this.lambda$openStickersView$7$PhotoPaintView(obj, tLRPC$Document);
             }
         });
+        stickerMasksAlert.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            public final void onDismiss(DialogInterface dialogInterface) {
+                PhotoPaintView.this.lambda$openStickersView$8$PhotoPaintView(dialogInterface);
+            }
+        });
         stickerMasksAlert.show();
+        onOpenCloseStickersAlert(true);
     }
 
     public /* synthetic */ void lambda$openStickersView$7$PhotoPaintView(Object obj, TLRPC$Document tLRPC$Document) {
         createSticker(obj, tLRPC$Document, true);
+    }
+
+    public /* synthetic */ void lambda$openStickersView$8$PhotoPaintView(DialogInterface dialogInterface) {
+        onOpenCloseStickersAlert(false);
     }
 
     private Size baseStickerSize() {
@@ -1103,7 +1117,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             }
 
             public final void run() {
-                PhotoPaintView.this.lambda$registerRemovalUndo$8$PhotoPaintView(this.f$1);
+                PhotoPaintView.this.lambda$registerRemovalUndo$9$PhotoPaintView(this.f$1);
             }
         });
     }
@@ -1237,12 +1251,12 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             }
 
             public final void run() {
-                PhotoPaintView.this.lambda$showMenuForEntity$12$PhotoPaintView(this.f$1);
+                PhotoPaintView.this.lambda$showMenuForEntity$13$PhotoPaintView(this.f$1);
             }
         }, entityView, 17, (int) ((entityView.getPosition().x - ((float) (this.entitiesView.getWidth() / 2))) * this.entitiesView.getScaleX()), ((int) (((entityView.getPosition().y - ((((float) entityView.getHeight()) * entityView.getScale()) / 2.0f)) - ((float) (this.entitiesView.getHeight() / 2))) * this.entitiesView.getScaleY())) - AndroidUtilities.dp(32.0f));
     }
 
-    public /* synthetic */ void lambda$showMenuForEntity$12$PhotoPaintView(EntityView entityView) {
+    public /* synthetic */ void lambda$showMenuForEntity$13$PhotoPaintView(EntityView entityView) {
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(0);
         TextView textView = new TextView(getContext());
@@ -1261,7 +1275,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             }
 
             public final void onClick(View view) {
-                PhotoPaintView.this.lambda$null$9$PhotoPaintView(this.f$1, view);
+                PhotoPaintView.this.lambda$null$10$PhotoPaintView(this.f$1, view);
             }
         });
         linearLayout.addView(textView, LayoutHelper.createLinear(-2, 48));
@@ -1276,7 +1290,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             textView2.setText(LocaleController.getString("PaintEdit", NUM));
             textView2.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
-                    PhotoPaintView.this.lambda$null$10$PhotoPaintView(view);
+                    PhotoPaintView.this.lambda$null$11$PhotoPaintView(view);
                 }
             });
             linearLayout.addView(textView2, LayoutHelper.createLinear(-2, 48));
@@ -1291,7 +1305,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         textView3.setText(LocaleController.getString("PaintDuplicate", NUM));
         textView3.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                PhotoPaintView.this.lambda$null$11$PhotoPaintView(view);
+                PhotoPaintView.this.lambda$null$12$PhotoPaintView(view);
             }
         });
         linearLayout.addView(textView3, LayoutHelper.createLinear(-2, 48));
@@ -1302,16 +1316,8 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         linearLayout.setLayoutParams(layoutParams);
     }
 
-    public /* synthetic */ void lambda$null$9$PhotoPaintView(EntityView entityView, View view) {
-        lambda$registerRemovalUndo$8$PhotoPaintView(entityView);
-        ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
-        if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
-            this.popupWindow.dismiss(true);
-        }
-    }
-
-    public /* synthetic */ void lambda$null$10$PhotoPaintView(View view) {
-        editSelectedTextEntity();
+    public /* synthetic */ void lambda$null$10$PhotoPaintView(EntityView entityView, View view) {
+        lambda$registerRemovalUndo$9$PhotoPaintView(entityView);
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
             this.popupWindow.dismiss(true);
@@ -1319,6 +1325,14 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     }
 
     public /* synthetic */ void lambda$null$11$PhotoPaintView(View view) {
+        editSelectedTextEntity();
+        ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
+        if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
+            this.popupWindow.dismiss(true);
+        }
+    }
+
+    public /* synthetic */ void lambda$null$12$PhotoPaintView(View view) {
         duplicateSelectedEntity();
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
@@ -1337,7 +1351,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             }
 
             public final void onClick(View view) {
-                PhotoPaintView.this.lambda$buttonForBrush$13$PhotoPaintView(this.f$1, view);
+                PhotoPaintView.this.lambda$buttonForBrush$14$PhotoPaintView(this.f$1, view);
             }
         });
         ImageView imageView = new ImageView(getContext());
@@ -1353,7 +1367,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         return frameLayout;
     }
 
-    public /* synthetic */ void lambda$buttonForBrush$13$PhotoPaintView(int i, View view) {
+    public /* synthetic */ void lambda$buttonForBrush$14$PhotoPaintView(int i, View view) {
         setBrush(i);
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
@@ -1365,12 +1379,12 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     public void showBrushSettings() {
         showPopup(new Runnable() {
             public final void run() {
-                PhotoPaintView.this.lambda$showBrushSettings$14$PhotoPaintView();
+                PhotoPaintView.this.lambda$showBrushSettings$15$PhotoPaintView();
             }
         }, this, 85, 0, AndroidUtilities.dp(48.0f));
     }
 
-    public /* synthetic */ void lambda$showBrushSettings$14$PhotoPaintView() {
+    public /* synthetic */ void lambda$showBrushSettings$15$PhotoPaintView() {
         boolean z = false;
         FrameLayout buttonForBrush = buttonForBrush(0, NUM, this.currentBrush == 0);
         this.popupLayout.addView(buttonForBrush);
@@ -1411,7 +1425,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             }
 
             public final void onClick(View view) {
-                PhotoPaintView.this.lambda$buttonForText$15$PhotoPaintView(this.f$1, view);
+                PhotoPaintView.this.lambda$buttonForText$16$PhotoPaintView(this.f$1, view);
             }
         });
         ImageView imageView = new ImageView(getContext());
@@ -1434,7 +1448,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         return r0;
     }
 
-    public /* synthetic */ void lambda$buttonForText$15$PhotoPaintView(int i, View view) {
+    public /* synthetic */ void lambda$buttonForText$16$PhotoPaintView(int i, View view) {
         setType(i);
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
@@ -1446,12 +1460,12 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     public void showTextSettings() {
         showPopup(new Runnable() {
             public final void run() {
-                PhotoPaintView.this.lambda$showTextSettings$16$PhotoPaintView();
+                PhotoPaintView.this.lambda$showTextSettings$17$PhotoPaintView();
             }
         }, this, 85, 0, AndroidUtilities.dp(48.0f));
     }
 
-    public /* synthetic */ void lambda$showTextSettings$16$PhotoPaintView() {
+    public /* synthetic */ void lambda$showTextSettings$17$PhotoPaintView() {
         int i;
         String str;
         for (int i2 = 0; i2 < 3; i2++) {
@@ -1481,15 +1495,16 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 this.popupRect = new Rect();
                 ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext());
                 this.popupLayout = actionBarPopupWindowLayout;
-                actionBarPopupWindowLayout.setAnimationEnabled(false);
+                actionBarPopupWindowLayout.setBackgroundColor(-1);
+                this.popupLayout.setAnimationEnabled(false);
                 this.popupLayout.setOnTouchListener(new View.OnTouchListener() {
                     public final boolean onTouch(View view, MotionEvent motionEvent) {
-                        return PhotoPaintView.this.lambda$showPopup$17$PhotoPaintView(view, motionEvent);
+                        return PhotoPaintView.this.lambda$showPopup$18$PhotoPaintView(view, motionEvent);
                     }
                 });
                 this.popupLayout.setDispatchKeyEventListener(new ActionBarPopupWindow.OnDispatchKeyEventListener() {
                     public final void onDispatchKeyEvent(KeyEvent keyEvent) {
-                        PhotoPaintView.this.lambda$showPopup$18$PhotoPaintView(keyEvent);
+                        PhotoPaintView.this.lambda$showPopup$19$PhotoPaintView(keyEvent);
                     }
                 });
                 this.popupLayout.setShowedFromBotton(true);
@@ -1508,7 +1523,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 this.popupWindow.getContentView().setFocusableInTouchMode(true);
                 this.popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                     public final void onDismiss() {
-                        PhotoPaintView.this.lambda$showPopup$19$PhotoPaintView();
+                        PhotoPaintView.this.lambda$showPopup$20$PhotoPaintView();
                     }
                 });
             }
@@ -1521,7 +1536,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         this.popupWindow.dismiss();
     }
 
-    public /* synthetic */ boolean lambda$showPopup$17$PhotoPaintView(View view, MotionEvent motionEvent) {
+    public /* synthetic */ boolean lambda$showPopup$18$PhotoPaintView(View view, MotionEvent motionEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (motionEvent.getActionMasked() != 0 || (actionBarPopupWindow = this.popupWindow) == null || !actionBarPopupWindow.isShowing()) {
             return false;
@@ -1534,14 +1549,14 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         return false;
     }
 
-    public /* synthetic */ void lambda$showPopup$18$PhotoPaintView(KeyEvent keyEvent) {
+    public /* synthetic */ void lambda$showPopup$19$PhotoPaintView(KeyEvent keyEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && (actionBarPopupWindow = this.popupWindow) != null && actionBarPopupWindow.isShowing()) {
             this.popupWindow.dismiss();
         }
     }
 
-    public /* synthetic */ void lambda$showPopup$19$PhotoPaintView() {
+    public /* synthetic */ void lambda$showPopup$20$PhotoPaintView() {
         this.popupLayout.removeInnerViews();
     }
 
@@ -1564,12 +1579,12 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     private void detectFaces() {
         this.queue.postRunnable(new Runnable() {
             public final void run() {
-                PhotoPaintView.this.lambda$detectFaces$20$PhotoPaintView();
+                PhotoPaintView.this.lambda$detectFaces$21$PhotoPaintView();
             }
         });
     }
 
-    public /* synthetic */ void lambda$detectFaces$20$PhotoPaintView() {
+    public /* synthetic */ void lambda$detectFaces$21$PhotoPaintView() {
         FaceDetector faceDetector = null;
         try {
             FaceDetector.Builder builder = new FaceDetector.Builder(getContext());

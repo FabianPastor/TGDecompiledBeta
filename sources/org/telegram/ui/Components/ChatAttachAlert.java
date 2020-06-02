@@ -744,7 +744,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
             java.lang.String r1 = "Search"
-            r2 = 2131626642(0x7f0e0a92, float:1.8880526E38)
+            r2 = 2131626643(0x7f0e0a93, float:1.8880528E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setContentDescription(r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
@@ -983,7 +983,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.setAlpha(r10)
             android.widget.FrameLayout r0 = r6.writeButtonContainer
             java.lang.String r2 = "Send"
-            r3 = 2131626690(0x7f0e0ac2, float:1.8880623E38)
+            r3 = 2131626691(0x7f0e0ac3, float:1.8880625E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r0.setContentDescription(r2)
             android.view.ViewGroup r0 = r6.containerView
@@ -1470,6 +1470,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     public void show() {
         super.show();
         this.buttonPressed = false;
+        BaseFragment baseFragment2 = this.baseFragment;
+        if (baseFragment2 instanceof ChatActivity) {
+            this.calcMandatoryInsets = ((ChatActivity) baseFragment2).isKeyboardVisible();
+        }
     }
 
     public void setEditingMessageObject(MessageObject messageObject) {

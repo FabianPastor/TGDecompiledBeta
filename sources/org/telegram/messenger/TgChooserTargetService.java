@@ -182,7 +182,7 @@ public class TgChooserTargetService extends ChooserTargetService {
             r13.putLong(r8, r14)
             boolean r7 = org.telegram.messenger.UserObject.isUserSelf(r12)
             if (r7 == 0) goto L_0x0134
-            r7 = 2131626630(0x7f0e0a86, float:1.8880502E38)
+            r7 = 2131626631(0x7f0e0a87, float:1.8880504E38)
             java.lang.String r8 = "SavedMessages"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r8, r7)
             android.graphics.drawable.Icon r7 = r17.createSavedMessagesIcon()

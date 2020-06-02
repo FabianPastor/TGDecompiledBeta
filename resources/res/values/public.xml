@@ -2650,6 +2650,7 @@
     <public type="string" name="HistoryCleared" id="NUM" />
     <public type="string" name="HistoryClearedUndo" id="NUM" />
     <public type="string" name="HoldToAudio" id="NUM" />
+    <public type="string" name="HoldToAudioOnly" id="NUM" />
     <public type="string" name="HoldToVideo" id="NUM" />
     <public type="string" name="HoursBold_few" id="NUM" />
     <public type="string" name="HoursBold_many" id="NUM" />
@@ -4548,6 +4549,7 @@
     <public type="string" name="YourEmailSkip" id="NUM" />
     <public type="string" name="YourEmailSkipWarning" id="NUM" />
     <public type="string" name="YourEmailSkipWarningText" id="NUM" />
+    <public type="string" name="YourEmailSuccessChangedText" id="NUM" />
     <public type="string" name="YourEmailSuccessText" id="NUM" />
     <public type="string" name="YourLocatedChannelsTooMuch" id="NUM" />
     <public type="string" name="YourName" id="NUM" />

@@ -353,111 +353,114 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 return indexOf;
             }
 
-            /* JADX WARNING: Removed duplicated region for block: B:20:0x0089  */
-            /* JADX WARNING: Removed duplicated region for block: B:29:0x00b6  */
-            /* JADX WARNING: Removed duplicated region for block: B:33:0x00b1 A[EDGE_INSN: B:33:0x00b1->B:27:0x00b1 ?: BREAK  , SYNTHETIC] */
+            /* JADX WARNING: Removed duplicated region for block: B:21:0x008e  */
+            /* JADX WARNING: Removed duplicated region for block: B:30:0x00bb  */
+            /* JADX WARNING: Removed duplicated region for block: B:35:0x00b6 A[EDGE_INSN: B:35:0x00b6->B:28:0x00b6 ?: BREAK  , SYNTHETIC] */
             /* Code decompiled incorrectly, please refer to instructions dump. */
             public int setPhotoChecked(int r9, org.telegram.messenger.VideoEditedInfo r10) {
                 /*
                     r8 = this;
                     org.telegram.ui.PhotoPickerActivity r0 = org.telegram.ui.PhotoPickerActivity.this
                     org.telegram.messenger.MediaController$AlbumEntry r0 = r0.selectedAlbum
-                    r1 = 1
-                    r2 = 0
-                    r3 = -1
+                    r1 = 0
+                    r2 = 1
+                    r3 = 0
+                    r4 = -1
                     if (r0 == 0) goto L_0x004a
                     if (r9 < 0) goto L_0x0049
                     org.telegram.ui.PhotoPickerActivity r0 = org.telegram.ui.PhotoPickerActivity.this
                     org.telegram.messenger.MediaController$AlbumEntry r0 = r0.selectedAlbum
                     java.util.ArrayList<org.telegram.messenger.MediaController$PhotoEntry> r0 = r0.photos
                     int r0 = r0.size()
-                    if (r9 < r0) goto L_0x001c
+                    if (r9 < r0) goto L_0x001d
                     goto L_0x0049
-                L_0x001c:
+                L_0x001d:
                     org.telegram.ui.PhotoPickerActivity r0 = org.telegram.ui.PhotoPickerActivity.this
                     org.telegram.messenger.MediaController$AlbumEntry r0 = r0.selectedAlbum
                     java.util.ArrayList<org.telegram.messenger.MediaController$PhotoEntry> r0 = r0.photos
                     java.lang.Object r0 = r0.get(r9)
                     org.telegram.messenger.MediaController$PhotoEntry r0 = (org.telegram.messenger.MediaController.PhotoEntry) r0
-                    org.telegram.ui.PhotoPickerActivity r4 = org.telegram.ui.PhotoPickerActivity.this
-                    int r4 = r4.addToSelectedPhotos(r0, r3)
-                    if (r4 != r3) goto L_0x0045
+                    org.telegram.ui.PhotoPickerActivity r5 = org.telegram.ui.PhotoPickerActivity.this
+                    int r5 = r5.addToSelectedPhotos(r0, r4)
+                    if (r5 != r4) goto L_0x0046
                     r0.editedInfo = r10
                     org.telegram.ui.PhotoPickerActivity r10 = org.telegram.ui.PhotoPickerActivity.this
                     java.util.ArrayList r10 = r10.selectedPhotosOrder
                     int r0 = r0.imageId
                     java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
-                    int r4 = r10.indexOf(r0)
-                    goto L_0x0079
-                L_0x0045:
-                    r10 = 0
-                    r0.editedInfo = r10
-                    goto L_0x007b
-                L_0x0049:
-                    return r3
-                L_0x004a:
-                    if (r9 < 0) goto L_0x00c4
-                    org.telegram.ui.PhotoPickerActivity r10 = org.telegram.ui.PhotoPickerActivity.this
-                    java.util.ArrayList r10 = r10.searchResult
-                    int r10 = r10.size()
-                    if (r9 < r10) goto L_0x0059
-                    goto L_0x00c4
-                L_0x0059:
-                    org.telegram.ui.PhotoPickerActivity r10 = org.telegram.ui.PhotoPickerActivity.this
-                    java.util.ArrayList r10 = r10.searchResult
-                    java.lang.Object r10 = r10.get(r9)
-                    org.telegram.messenger.MediaController$SearchImage r10 = (org.telegram.messenger.MediaController.SearchImage) r10
-                    org.telegram.ui.PhotoPickerActivity r0 = org.telegram.ui.PhotoPickerActivity.this
-                    int r4 = r0.addToSelectedPhotos(r10, r3)
-                    if (r4 != r3) goto L_0x007b
-                    org.telegram.ui.PhotoPickerActivity r0 = org.telegram.ui.PhotoPickerActivity.this
-                    java.util.ArrayList r0 = r0.selectedPhotosOrder
-                    java.lang.String r10 = r10.id
-                    int r4 = r0.indexOf(r10)
-                L_0x0079:
-                    r10 = 1
+                    int r5 = r10.indexOf(r0)
                     goto L_0x007c
-                L_0x007b:
-                    r10 = 0
+                L_0x0046:
+                    r0.editedInfo = r1
+                    goto L_0x0080
+                L_0x0049:
+                    return r4
+                L_0x004a:
+                    if (r9 < 0) goto L_0x00c9
+                    org.telegram.ui.PhotoPickerActivity r0 = org.telegram.ui.PhotoPickerActivity.this
+                    java.util.ArrayList r0 = r0.searchResult
+                    int r0 = r0.size()
+                    if (r9 < r0) goto L_0x005a
+                    goto L_0x00c9
+                L_0x005a:
+                    org.telegram.ui.PhotoPickerActivity r0 = org.telegram.ui.PhotoPickerActivity.this
+                    java.util.ArrayList r0 = r0.searchResult
+                    java.lang.Object r0 = r0.get(r9)
+                    org.telegram.messenger.MediaController$SearchImage r0 = (org.telegram.messenger.MediaController.SearchImage) r0
+                    org.telegram.ui.PhotoPickerActivity r5 = org.telegram.ui.PhotoPickerActivity.this
+                    int r5 = r5.addToSelectedPhotos(r0, r4)
+                    if (r5 != r4) goto L_0x007e
+                    r0.editedInfo = r10
+                    org.telegram.ui.PhotoPickerActivity r10 = org.telegram.ui.PhotoPickerActivity.this
+                    java.util.ArrayList r10 = r10.selectedPhotosOrder
+                    java.lang.String r0 = r0.id
+                    int r5 = r10.indexOf(r0)
                 L_0x007c:
+                    r10 = 1
+                    goto L_0x0081
+                L_0x007e:
+                    r0.editedInfo = r1
+                L_0x0080:
+                    r10 = 0
+                L_0x0081:
                     org.telegram.ui.PhotoPickerActivity r0 = org.telegram.ui.PhotoPickerActivity.this
                     org.telegram.ui.Components.RecyclerListView r0 = r0.listView
                     int r0 = r0.getChildCount()
-                    r5 = 0
-                L_0x0087:
-                    if (r5 >= r0) goto L_0x00b1
+                    r1 = 0
+                L_0x008c:
+                    if (r1 >= r0) goto L_0x00b6
                     org.telegram.ui.PhotoPickerActivity r6 = org.telegram.ui.PhotoPickerActivity.this
                     org.telegram.ui.Components.RecyclerListView r6 = r6.listView
-                    android.view.View r6 = r6.getChildAt(r5)
+                    android.view.View r6 = r6.getChildAt(r1)
                     java.lang.Object r7 = r6.getTag()
                     java.lang.Integer r7 = (java.lang.Integer) r7
                     int r7 = r7.intValue()
-                    if (r7 != r9) goto L_0x00ae
+                    if (r7 != r9) goto L_0x00b3
                     org.telegram.ui.Cells.PhotoAttachPhotoCell r6 = (org.telegram.ui.Cells.PhotoAttachPhotoCell) r6
                     org.telegram.ui.PhotoPickerActivity r9 = org.telegram.ui.PhotoPickerActivity.this
                     boolean r9 = r9.allowIndices
-                    if (r9 == 0) goto L_0x00aa
-                    r3 = r4
-                L_0x00aa:
-                    r6.setChecked(r3, r10, r2)
-                    goto L_0x00b1
-                L_0x00ae:
-                    int r5 = r5 + 1
-                    goto L_0x0087
-                L_0x00b1:
-                    org.telegram.ui.PhotoPickerActivity r9 = org.telegram.ui.PhotoPickerActivity.this
-                    if (r10 == 0) goto L_0x00b6
-                    goto L_0x00b7
+                    if (r9 == 0) goto L_0x00af
+                    r4 = r5
+                L_0x00af:
+                    r6.setChecked(r4, r10, r3)
+                    goto L_0x00b6
+                L_0x00b3:
+                    int r1 = r1 + 1
+                    goto L_0x008c
                 L_0x00b6:
-                    r1 = 2
-                L_0x00b7:
-                    r9.updatePhotosButton(r1)
+                    org.telegram.ui.PhotoPickerActivity r9 = org.telegram.ui.PhotoPickerActivity.this
+                    if (r10 == 0) goto L_0x00bb
+                    goto L_0x00bc
+                L_0x00bb:
+                    r2 = 2
+                L_0x00bc:
+                    r9.updatePhotosButton(r2)
                     org.telegram.ui.PhotoPickerActivity r9 = org.telegram.ui.PhotoPickerActivity.this
                     org.telegram.ui.PhotoPickerActivity$PhotoPickerActivityDelegate r9 = r9.delegate
                     r9.selectedPhotosChanged()
+                    return r5
+                L_0x00c9:
                     return r4
-                L_0x00c4:
-                    return r3
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoPickerActivity.AnonymousClass1.setPhotoChecked(int, org.telegram.messenger.VideoEditedInfo):int");
             }
@@ -483,8 +486,9 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                             return;
                         }
                     } else if (i >= 0 && i < PhotoPickerActivity.this.searchResult.size()) {
-                        PhotoPickerActivity photoPickerActivity = PhotoPickerActivity.this;
-                        int unused2 = photoPickerActivity.addToSelectedPhotos(photoPickerActivity.searchResult.get(i), -1);
+                        MediaController.SearchImage searchImage = (MediaController.SearchImage) PhotoPickerActivity.this.searchResult.get(i);
+                        searchImage.editedInfo = videoEditedInfo;
+                        int unused2 = PhotoPickerActivity.this.addToSelectedPhotos(searchImage, -1);
                     } else {
                         return;
                     }

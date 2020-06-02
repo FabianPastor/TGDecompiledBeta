@@ -1511,6 +1511,7 @@
     <string name="HistoryCleared">History was cleared</string>
     <string name="HistoryClearedUndo">History cleared.</string>
     <string name="HoldToAudio">Hold to record audio. Tap to switch to video.</string>
+    <string name="HoldToAudioOnly">Hold to record audio.</string>
     <string name="HoldToVideo">Hold to record video. Tap to switch to audio.</string>
     <string name="HoursBold_few">**%1$d** hours</string>
     <string name="HoursBold_many">**%1$d** hours</string>
@@ -3409,6 +3410,7 @@
     <string name="YourEmailSkip">Skip</string>
     <string name="YourEmailSkipWarning">Warning</string>
     <string name="YourEmailSkipWarningText">No, seriously.\10\10If you forget your password, you will lose access to your Telegram account. There will be no way to restore it.</string>
+    <string name="YourEmailSuccessChangedText">Your recovery email for Two-Step Verification is changed.</string>
     <string name="YourEmailSuccessText">Your recovery email for Two-Step Verification is now active.</string>
     <string name="YourLocatedChannelsTooMuch">Sorry, you have too many location-based groups already. Please delete one of your existing ones first.</string>
     <string name="YourName">Your name</string>

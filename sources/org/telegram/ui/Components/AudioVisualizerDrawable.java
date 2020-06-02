@@ -19,6 +19,9 @@ public class AudioVisualizerDrawable {
     private final float[] dt = new float[8];
     private float idleScale;
     private boolean idleScaleInc;
+    private float[] lastAmplitude = new float[6];
+    private int lastAmplitudeCount;
+    private int lastAmplitudePointer;
     private final Paint p1;
     private View parentView;
     private final Random random = new Random();
@@ -40,8 +43,8 @@ public class AudioVisualizerDrawable {
 
     public void setWaveform(boolean z, boolean z2, float[] fArr) {
         float f;
-        int i = 0;
         float f2 = 0.0f;
+        int i = 0;
         if (z || z2) {
             boolean z3 = fArr != null && fArr[6] == 0.0f;
             if (fArr == null) {
@@ -49,14 +52,37 @@ public class AudioVisualizerDrawable {
             } else {
                 f = fArr[6];
             }
+            if (fArr != null) {
+                float[] fArr2 = this.lastAmplitude;
+                int i2 = this.lastAmplitudePointer;
+                fArr2[i2] = f;
+                int i3 = i2 + 1;
+                this.lastAmplitudePointer = i3;
+                if (i3 > 5) {
+                    this.lastAmplitudePointer = 0;
+                }
+                this.lastAmplitudeCount++;
+            } else {
+                this.lastAmplitudeCount = 0;
+            }
             if (z3) {
-                for (int i2 = 0; i2 < 6; i2++) {
-                    fArr[i2] = ((float) (this.random.nextInt() % 500)) / 1000.0f;
+                for (int i4 = 0; i4 < 6; i4++) {
+                    fArr[i4] = ((float) (this.random.nextInt() % 500)) / 1000.0f;
                 }
             }
-            float f3 = z3 ? this.ANIMATION_DURATION * 2.0f : this.ANIMATION_DURATION;
-            if (f > 0.5f) {
-                f3 -= (f - 0.5f) * 20.0f;
+            float f3 = this.ANIMATION_DURATION;
+            if (z3) {
+                f3 *= 2.0f;
+            }
+            if (this.lastAmplitudeCount > 6) {
+                float f4 = 0.0f;
+                for (int i5 = 0; i5 < 6; i5++) {
+                    f4 += this.lastAmplitude[i5];
+                }
+                float f5 = f4 / 6.0f;
+                if (f5 > 0.52f) {
+                    f3 -= this.ANIMATION_DURATION * (f5 - 0.4f);
+                }
             }
             while (i < 7) {
                 if (fArr == null) {
@@ -73,18 +99,18 @@ public class AudioVisualizerDrawable {
                 }
                 i++;
             }
-            float[] fArr2 = this.animateTo;
+            float[] fArr3 = this.animateTo;
             if (z) {
                 f2 = 1.0f;
             }
-            fArr2[7] = f2;
+            fArr3[7] = f2;
             this.dt[7] = (this.animateTo[7] - this.current[7]) / 120.0f;
             return;
         }
         while (i < 8) {
-            float[] fArr3 = this.animateTo;
+            float[] fArr4 = this.animateTo;
             this.current[i] = 0.0f;
-            fArr3[i] = 0.0f;
+            fArr4[i] = 0.0f;
             i++;
         }
     }

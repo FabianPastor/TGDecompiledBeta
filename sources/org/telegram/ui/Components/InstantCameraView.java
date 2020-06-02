@@ -1098,6 +1098,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         this.blurBehindDrawable.onPanTranslationUpdate(i);
     }
 
+    public TextureView getTextureView() {
+        return this.textureView;
+    }
+
     public class CameraGLThread extends DispatchQueue {
         private Integer cameraId = 0;
         private SurfaceTexture cameraSurface;

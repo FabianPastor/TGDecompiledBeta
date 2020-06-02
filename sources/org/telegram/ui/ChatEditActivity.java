@@ -1527,7 +1527,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         L_0x0119:
             java.lang.String r6 = r2.username
             boolean r6 = android.text.TextUtils.isEmpty(r6)
-            r7 = 2131625579(0x7f0e066b, float:1.887837E38)
+            r7 = 2131625580(0x7f0e066c, float:1.8878372E38)
             java.lang.String r8 = "LinkedChannel"
             if (r6 == 0) goto L_0x0132
             org.telegram.ui.Cells.TextDetailCell r6 = r0.linkedCell
@@ -1587,7 +1587,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             boolean r2 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelLocation
             if (r2 == 0) goto L_0x01f8
             if (r1 == 0) goto L_0x01a7
-            r1 = 2131627072(0x7f0e0CLASSNAME, float:1.8881398E38)
+            r1 = 2131627073(0x7f0e0CLASSNAME, float:1.88814E38)
             java.lang.String r2 = "TypeLocationGroupEdit"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             goto L_0x01d1
@@ -1610,7 +1610,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             java.lang.String r1 = java.lang.String.format(r1, r2)
         L_0x01d1:
             org.telegram.ui.Cells.TextDetailCell r2 = r0.typeCell
-            r6 = 2131627071(0x7f0e0c3f, float:1.8881396E38)
+            r6 = 2131627072(0x7f0e0CLASSNAME, float:1.8881398E38)
             java.lang.String r7 = "TypeLocationGroup"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             org.telegram.ui.Cells.TextDetailCell r7 = r0.historyCell
@@ -1634,22 +1634,22 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             boolean r2 = r0.isChannel
             if (r2 == 0) goto L_0x020e
             if (r1 == 0) goto L_0x0204
-            r1 = 2131627074(0x7f0e0CLASSNAME, float:1.8881402E38)
+            r1 = 2131627075(0x7f0e0CLASSNAME, float:1.8881404E38)
             java.lang.String r2 = "TypePrivate"
             goto L_0x0209
         L_0x0204:
-            r1 = 2131627076(0x7f0e0CLASSNAME, float:1.8881406E38)
+            r1 = 2131627077(0x7f0e0CLASSNAME, float:1.8881408E38)
             java.lang.String r2 = "TypePublic"
         L_0x0209:
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             goto L_0x021f
         L_0x020e:
             if (r1 == 0) goto L_0x0216
-            r1 = 2131627075(0x7f0e0CLASSNAME, float:1.8881404E38)
+            r1 = 2131627076(0x7f0e0CLASSNAME, float:1.8881406E38)
             java.lang.String r2 = "TypePrivateGroup"
             goto L_0x021b
         L_0x0216:
-            r1 = 2131627077(0x7f0e0CLASSNAME, float:1.8881408E38)
+            r1 = 2131627078(0x7f0e0CLASSNAME, float:1.888141E38)
             java.lang.String r2 = "TypePublicGroup"
         L_0x021b:
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)

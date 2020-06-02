@@ -40,6 +40,7 @@ import org.telegram.tgnet.TLRPC$TL_message;
 import org.telegram.tgnet.TLRPC$TL_messageMediaDocument;
 import org.telegram.tgnet.TLRPC$TL_peerUser;
 import org.telegram.tgnet.TLRPC$TL_webDocument;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.CheckBox2;
@@ -70,6 +71,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
     private boolean drawLinkImageView;
     /* access modifiers changed from: private */
     public float imageScale;
+    private TLRPC$User inlineBot;
     private TLRPC$BotInlineResult inlineResult;
     private boolean isForceGif;
     private long lastUpdateTime;
@@ -1088,9 +1090,10 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
         }
     }
 
-    public void setLink(TLRPC$BotInlineResult tLRPC$BotInlineResult, boolean z, boolean z2, boolean z3, boolean z4) {
+    public void setLink(TLRPC$BotInlineResult tLRPC$BotInlineResult, TLRPC$User tLRPC$User, boolean z, boolean z2, boolean z3, boolean z4) {
         this.needDivider = z2;
         this.needShadow = z3;
+        this.inlineBot = tLRPC$User;
         this.inlineResult = tLRPC$BotInlineResult;
         this.parentObject = tLRPC$BotInlineResult;
         if (tLRPC$BotInlineResult != null) {
@@ -1108,6 +1111,10 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
         }
         requestLayout();
         updateButtonState(false, false);
+    }
+
+    public TLRPC$User getInlineBot() {
+        return this.inlineBot;
     }
 
     public Object getParentObject() {

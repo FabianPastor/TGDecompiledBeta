@@ -55,28 +55,30 @@ public class FilterGLThread extends DispatchQueue {
                         FilterGLThread.this.filterShaders.onVideoFrameUpdate(FilterGLThread.this.videoTextureMatrix);
                         boolean unused9 = FilterGLThread.this.videoFrameAvailable = true;
                     }
-                    if (FilterGLThread.this.videoDelegate == null || FilterGLThread.this.videoFrameAvailable) {
-                        GLES20.glViewport(0, 0, FilterGLThread.this.renderBufferWidth, FilterGLThread.this.renderBufferHeight);
-                        FilterGLThread.this.filterShaders.drawEnhancePass();
-                        if (FilterGLThread.this.videoDelegate == null) {
-                            FilterGLThread.this.filterShaders.drawSharpenPass();
+                    if (FilterGLThread.this.renderDataSet) {
+                        if (FilterGLThread.this.videoDelegate == null || FilterGLThread.this.videoFrameAvailable) {
+                            GLES20.glViewport(0, 0, FilterGLThread.this.renderBufferWidth, FilterGLThread.this.renderBufferHeight);
+                            FilterGLThread.this.filterShaders.drawEnhancePass();
+                            if (FilterGLThread.this.videoDelegate == null) {
+                                FilterGLThread.this.filterShaders.drawSharpenPass();
+                            }
+                            FilterGLThread.this.filterShaders.drawCustomParamsPass();
+                            FilterGLThread filterGLThread7 = FilterGLThread.this;
+                            boolean unused10 = filterGLThread7.blurred = filterGLThread7.filterShaders.drawBlurPass();
                         }
-                        FilterGLThread.this.filterShaders.drawCustomParamsPass();
-                        FilterGLThread filterGLThread7 = FilterGLThread.this;
-                        boolean unused10 = filterGLThread7.blurred = filterGLThread7.filterShaders.drawBlurPass();
+                        GLES20.glViewport(0, 0, FilterGLThread.this.surfaceWidth, FilterGLThread.this.surfaceHeight);
+                        GLES20.glBindFramebuffer(36160, 0);
+                        GLES20.glUseProgram(FilterGLThread.this.simpleShaderProgram);
+                        GLES20.glActiveTexture(33984);
+                        GLES20.glBindTexture(3553, FilterGLThread.this.filterShaders.getRenderTexture(true ^ FilterGLThread.this.blurred ? 1 : 0));
+                        GLES20.glUniform1i(FilterGLThread.this.simpleSourceImageHandle, 0);
+                        GLES20.glEnableVertexAttribArray(FilterGLThread.this.simpleInputTexCoordHandle);
+                        GLES20.glVertexAttribPointer(FilterGLThread.this.simpleInputTexCoordHandle, 2, 5126, false, 8, FilterGLThread.this.filterShaders.getTextureBuffer());
+                        GLES20.glEnableVertexAttribArray(FilterGLThread.this.simplePositionHandle);
+                        GLES20.glVertexAttribPointer(FilterGLThread.this.simplePositionHandle, 2, 5126, false, 8, FilterGLThread.this.filterShaders.getVertexBuffer());
+                        GLES20.glDrawArrays(5, 0, 4);
+                        FilterGLThread.this.egl10.eglSwapBuffers(FilterGLThread.this.eglDisplay, FilterGLThread.this.eglSurface);
                     }
-                    GLES20.glViewport(0, 0, FilterGLThread.this.surfaceWidth, FilterGLThread.this.surfaceHeight);
-                    GLES20.glBindFramebuffer(36160, 0);
-                    GLES20.glUseProgram(FilterGLThread.this.simpleShaderProgram);
-                    GLES20.glActiveTexture(33984);
-                    GLES20.glBindTexture(3553, FilterGLThread.this.filterShaders.getRenderTexture(true ^ FilterGLThread.this.blurred ? 1 : 0));
-                    GLES20.glUniform1i(FilterGLThread.this.simpleSourceImageHandle, 0);
-                    GLES20.glEnableVertexAttribArray(FilterGLThread.this.simpleInputTexCoordHandle);
-                    GLES20.glVertexAttribPointer(FilterGLThread.this.simpleInputTexCoordHandle, 2, 5126, false, 8, FilterGLThread.this.filterShaders.getTextureBuffer());
-                    GLES20.glEnableVertexAttribArray(FilterGLThread.this.simplePositionHandle);
-                    GLES20.glVertexAttribPointer(FilterGLThread.this.simplePositionHandle, 2, 5126, false, 8, FilterGLThread.this.filterShaders.getVertexBuffer());
-                    GLES20.glDrawArrays(5, 0, 4);
-                    FilterGLThread.this.egl10.eglSwapBuffers(FilterGLThread.this.eglDisplay, FilterGLThread.this.eglSurface);
                 } else if (BuildVars.LOGS_ENABLED) {
                     FileLog.e("eglMakeCurrent failed " + GLUtils.getEGLErrorString(FilterGLThread.this.egl10.eglGetError()));
                 }

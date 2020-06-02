@@ -2789,6 +2789,7 @@ public final class R {
         public static final int HistoryCleared = NUM;
         public static final int HistoryClearedUndo = NUM;
         public static final int HoldToAudio = NUM;
+        public static final int HoldToAudioOnly = NUM;
         public static final int HoldToVideo = NUM;
         public static final int HoursBold_few = NUM;
         public static final int HoursBold_many = NUM;
@@ -4687,6 +4688,7 @@ public final class R {
         public static final int YourEmailSkip = NUM;
         public static final int YourEmailSkipWarning = NUM;
         public static final int YourEmailSkipWarningText = NUM;
+        public static final int YourEmailSuccessChangedText = NUM;
         public static final int YourEmailSuccessText = NUM;
         public static final int YourLocatedChannelsTooMuch = NUM;
         public static final int YourName = NUM;

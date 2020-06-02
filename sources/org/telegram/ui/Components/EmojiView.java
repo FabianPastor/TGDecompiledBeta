@@ -157,11 +157,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             }
         }
 
-        public void sendGif(Object obj, boolean z, int i) {
+        public void sendGif(Object obj, Object obj2, boolean z, int i) {
             if (EmojiView.this.gifGridView.getAdapter() == EmojiView.this.gifAdapter || EmojiView.this.gifGridView.getAdapter() == EmojiView.this.gifSavedAdapter) {
-                EmojiView.this.delegate.onGifSelected((View) null, obj, "gif", z, i);
+                EmojiView.this.delegate.onGifSelected((View) null, obj, obj2, z, i);
             } else if (EmojiView.this.gifGridView.getAdapter() == EmojiView.this.gifSearchAdapter) {
-                EmojiView.this.delegate.onGifSelected((View) null, obj, EmojiView.this.gifSearchAdapter.bot, z, i);
+                EmojiView.this.delegate.onGifSelected((View) null, obj, obj2, z, i);
             }
         }
 
@@ -694,9 +694,9 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 this.smoothScrolling = false;
             } else {
                 if (i == 1) {
-                    SearchField access$1600 = EmojiView.this.getSearchFieldForType(this.type);
-                    if (access$1600 != null) {
-                        access$1600.hideKeyboard();
+                    SearchField access$1500 = EmojiView.this.getSearchFieldForType(this.type);
+                    if (access$1500 != null) {
+                        access$1500.hideKeyboard();
                     }
                     this.smoothScrolling = false;
                 }
@@ -1029,10 +1029,10 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             this.arrowDrawable.draw(canvas);
             if (this.currentEmoji != null) {
                 while (i < 6) {
-                    int access$3000 = (EmojiView.this.emojiSize * i) + AndroidUtilities.dp((float) ((i * 4) + 5));
+                    int access$2900 = (EmojiView.this.emojiSize * i) + AndroidUtilities.dp((float) ((i * 4) + 5));
                     int dp4 = AndroidUtilities.dp(9.0f);
                     if (this.selection == i) {
-                        this.rect.set((float) access$3000, (float) (dp4 - ((int) AndroidUtilities.dpf2(3.5f))), (float) (EmojiView.this.emojiSize + access$3000), (float) (EmojiView.this.emojiSize + dp4 + AndroidUtilities.dp(3.0f)));
+                        this.rect.set((float) access$2900, (float) (dp4 - ((int) AndroidUtilities.dpf2(3.5f))), (float) (EmojiView.this.emojiSize + access$2900), (float) (EmojiView.this.emojiSize + dp4 + AndroidUtilities.dp(3.0f)));
                         canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.rectPaint);
                     }
                     String str = this.currentEmoji;
@@ -1041,7 +1041,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     }
                     Drawable emojiBigDrawable = Emoji.getEmojiBigDrawable(str);
                     if (emojiBigDrawable != null) {
-                        emojiBigDrawable.setBounds(access$3000, dp4, EmojiView.this.emojiSize + access$3000, EmojiView.this.emojiSize + dp4);
+                        emojiBigDrawable.setBounds(access$2900, dp4, EmojiView.this.emojiSize + access$2900, EmojiView.this.emojiSize + dp4);
                         emojiBigDrawable.draw(canvas);
                     }
                     i++;
@@ -1758,7 +1758,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             r2.setBackground(r6)
         L_0x0705:
             android.widget.ImageView r2 = r0.stickerSettingsButton
-            r6 = 2131626762(0x7f0e0b0a, float:1.888077E38)
+            r6 = 2131626763(0x7f0e0b0b, float:1.8880771E38)
             java.lang.String r7 = "Settings"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r2.setContentDescription(r6)
@@ -1813,7 +1813,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             android.widget.ImageView$ScaleType r6 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r6)
             android.widget.ImageView r2 = r0.searchButton
-            r6 = 2131626642(0x7f0e0a92, float:1.8880526E38)
+            r6 = 2131626643(0x7f0e0a93, float:1.8880528E38)
             java.lang.String r7 = "Search"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r2.setContentDescription(r6)
@@ -2134,8 +2134,8 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                         this.delegate.onGifSelected(view, this.recentGifs.get(i2), "gif", true, 0);
                         return;
                     }
-                    int access$13800 = (i2 - this.gifAdapter.recentItemsCount) - 1;
-                    if (access$13800 >= 0 && access$13800 < this.gifAdapter.results.size()) {
+                    int access$13700 = (i2 - this.gifAdapter.recentItemsCount) - 1;
+                    if (access$13700 >= 0 && access$13700 < this.gifAdapter.results.size()) {
                         this.delegate.onGifSelected(view, this.gifAdapter.results.get((i2 - this.gifAdapter.recentItemsCount) - 1), this.gifAdapter.bot, true, 0);
                     }
                 }
@@ -2541,7 +2541,10 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         if (currentItem == 2 && j2 != -1 && (stickerSetById = MediaDataController.getInstance(this.currentAccount).getStickerSetById(j2)) != null && (positionForPack = this.stickersGridAdapter.getPositionForPack(stickerSetById)) >= 0) {
             this.stickersLayoutManager.scrollToPositionWithOffset(positionForPack, AndroidUtilities.dp(60.0f));
         }
-        boolean unused = this.gifSearchAdapter.showTrendingWhenSearchEmpty = false;
+        GifAdapter gifAdapter2 = this.gifSearchAdapter;
+        if (gifAdapter2 != null) {
+            boolean unused = gifAdapter2.showTrendingWhenSearchEmpty = false;
+        }
         for (int i = 0; i < 3; i++) {
             if (i == 0) {
                 searchField = this.emojiSearchField;
@@ -4341,7 +4344,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
                 java.util.ArrayList r0 = r0.recentStickers
                 if (r8 != r0) goto L_0x00b7
-                r8 = 2131626518(0x7f0e0a16, float:1.8880274E38)
+                r8 = 2131626519(0x7f0e0a17, float:1.8880276E38)
                 java.lang.String r0 = "RecentStickers"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 r7.setText(r8, r1)
@@ -4457,11 +4460,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             this.positionToRow.clear();
             this.cache.clear();
             this.totalItems = 0;
-            ArrayList access$11000 = EmojiView.this.stickerSets;
+            ArrayList access$10900 = EmojiView.this.stickerSets;
             int i2 = -3;
             int i3 = -3;
             int i4 = 0;
-            while (i3 < access$11000.size()) {
+            while (i3 < access$10900.size()) {
                 if (i3 == i2) {
                     SparseArray<Object> sparseArray = this.cache;
                     int i5 = this.totalItems;
@@ -4479,7 +4482,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                         this.packStartPosition.put("recent", Integer.valueOf(this.totalItems));
                         obj = "recent";
                     } else {
-                        TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet2 = (TLRPC$TL_messages_stickerSet) access$11000.get(i3);
+                        TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet2 = (TLRPC$TL_messages_stickerSet) access$10900.get(i3);
                         ArrayList<TLRPC$Document> arrayList2 = tLRPC$TL_messages_stickerSet2.documents;
                         this.packStartPosition.put(tLRPC$TL_messages_stickerSet2, Integer.valueOf(this.totalItems));
                         tLRPC$TL_messages_stickerSet = tLRPC$TL_messages_stickerSet2;
@@ -4812,7 +4815,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                          org.telegram.ui.Components.EmojiView.EmojiSearchAdapter.2.1.this$2 org.telegram.ui.Components.EmojiView$EmojiSearchAdapter$2)
                                          org.telegram.ui.Components.EmojiView.EmojiSearchAdapter.2.this$1 org.telegram.ui.Components.EmojiView$EmojiSearchAdapter)
                                          org.telegram.ui.Components.EmojiView.EmojiSearchAdapter.this$0 org.telegram.ui.Components.EmojiView)
-                                         org.telegram.ui.Components.EmojiView.access$5600(org.telegram.ui.Components.EmojiView):int type: STATIC)
+                                         org.telegram.ui.Components.EmojiView.access$5500(org.telegram.ui.Components.EmojiView):int type: STATIC)
                                          org.telegram.tgnet.ConnectionsManager.getInstance(int):org.telegram.tgnet.ConnectionsManager type: STATIC)
                                           (r1v3 'tLRPC$TL_messages_getEmojiURL' org.telegram.tgnet.TLRPC$TL_messages_getEmojiURL)
                                           (wrap: org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$vESTLZoOoKr-laMmjTYW6gGhW9U : 0x0057: CONSTRUCTOR  (r3v1 org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$vESTLZoOoKr-laMmjTYW6gGhW9U) = 
@@ -4962,7 +4965,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                          org.telegram.ui.Components.EmojiView.EmojiSearchAdapter.2.1.this$2 org.telegram.ui.Components.EmojiView$EmojiSearchAdapter$2)
                                          org.telegram.ui.Components.EmojiView.EmojiSearchAdapter.2.this$1 org.telegram.ui.Components.EmojiView$EmojiSearchAdapter)
                                          org.telegram.ui.Components.EmojiView.EmojiSearchAdapter.this$0 org.telegram.ui.Components.EmojiView)
-                                         org.telegram.ui.Components.EmojiView.access$5600(org.telegram.ui.Components.EmojiView):int type: STATIC)
+                                         org.telegram.ui.Components.EmojiView.access$5500(org.telegram.ui.Components.EmojiView):int type: STATIC)
                                          org.telegram.tgnet.ConnectionsManager.getInstance(int):org.telegram.tgnet.ConnectionsManager type: STATIC)
                                           (r1v3 'tLRPC$TL_messages_getEmojiURL' org.telegram.tgnet.TLRPC$TL_messages_getEmojiURL)
                                           (wrap: org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$vESTLZoOoKr-laMmjTYW6gGhW9U : 0x0057: CONSTRUCTOR  (r3v1 org.telegram.ui.Components.-$$Lambda$EmojiView$EmojiSearchAdapter$2$1$vESTLZoOoKr-laMmjTYW6gGhW9U) = 
@@ -5450,7 +5453,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                         AnonymousClass3 r3 = new Runnable() {
                             public void run() {
                                 EmojiView.this.emojiSearchField.progressDrawable.startAnimation();
-                                final String access$10900 = EmojiSearchAdapter.this.lastSearchEmojiString;
+                                final String access$10800 = EmojiSearchAdapter.this.lastSearchEmojiString;
                                 String[] currentKeyboardLanguage = AndroidUtilities.getCurrentKeyboardLanguage();
                                 if (!Arrays.equals(EmojiView.this.lastSearchKeyboardLanguage, currentKeyboardLanguage)) {
                                     MediaDataController.getInstance(EmojiView.this.currentAccount).fetchNewEmojiKeywords(currentKeyboardLanguage);
@@ -5458,7 +5461,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                 String[] unused = EmojiView.this.lastSearchKeyboardLanguage = currentKeyboardLanguage;
                                 MediaDataController.getInstance(EmojiView.this.currentAccount).getEmojiSuggestions(EmojiView.this.lastSearchKeyboardLanguage, EmojiSearchAdapter.this.lastSearchEmojiString, false, new MediaDataController.KeywordResultCallback() {
                                     public void run(ArrayList<MediaDataController.KeywordResult> arrayList, String str) {
-                                        if (access$10900.equals(EmojiSearchAdapter.this.lastSearchEmojiString)) {
+                                        if (access$10800.equals(EmojiSearchAdapter.this.lastSearchEmojiString)) {
                                             String unused = EmojiSearchAdapter.this.lastSearchAlias = str;
                                             EmojiView.this.emojiSearchField.progressDrawable.stopAnimation();
                                             boolean unused2 = EmojiSearchAdapter.this.searchWas = true;
@@ -5632,7 +5635,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                         if (i2 < 0 || i < i2) {
                             contextLinkCell.setGif((TLRPC$Document) EmojiView.this.recentGifs.get(i - 1), false);
                         } else {
-                            contextLinkCell.setLink(this.results.get(i - i2), true, false, false, true);
+                            contextLinkCell.setLink(this.results.get(i - i2), this.bot, true, false, false, true);
                         }
                     }
                 }
@@ -6442,7 +6445,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             org.telegram.ui.Components.EmojiView$StickersSearchGridAdapter r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.this
                             r1 = 0
                             r0.cleared = r1
-                            int r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.access$14604(r0)
+                            int r0 = org.telegram.ui.Components.EmojiView.StickersSearchGridAdapter.access$14504(r0)
                             java.util.ArrayList r2 = new java.util.ArrayList
                             r2.<init>(r1)
                             android.util.LongSparseArray r3 = new android.util.LongSparseArray
@@ -7035,7 +7038,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                         return false;
                     }
 
-                    static /* synthetic */ int access$14604(StickersSearchGridAdapter stickersSearchGridAdapter) {
+                    static /* synthetic */ int access$14504(StickersSearchGridAdapter stickersSearchGridAdapter) {
                         int i = stickersSearchGridAdapter.emojiSearchId + 1;
                         stickersSearchGridAdapter.emojiSearchId = i;
                         return i;
@@ -7167,7 +7170,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             android.widget.TextView r0 = new android.widget.TextView
                             android.content.Context r2 = r13.context
                             r0.<init>(r2)
-                            r2 = 2131625849(0x7f0e0779, float:1.8878918E38)
+                            r2 = 2131625850(0x7f0e077a, float:1.887892E38)
                             java.lang.String r4 = "NoStickersFound"
                             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
                             r0.setText(r2)
