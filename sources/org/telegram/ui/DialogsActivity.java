@@ -4322,11 +4322,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             fArr9[0] = f3;
             arrayList.add(ObjectAnimator.ofFloat(emptyTextProgressView3, property9, fArr9));
             FilterTabsView filterTabsView2 = this.filterTabsView;
-            if (filterTabsView2 != null) {
+            if (filterTabsView2 != null && filterTabsView2.getVisibility() == 0) {
+                FilterTabsView filterTabsView3 = this.filterTabsView;
                 Property property10 = View.TRANSLATION_Y;
                 float[] fArr10 = new float[1];
                 fArr10[0] = z ? (float) (-AndroidUtilities.dp(44.0f)) : 0.0f;
-                arrayList.add(ObjectAnimator.ofFloat(filterTabsView2, property10, fArr10));
+                arrayList.add(ObjectAnimator.ofFloat(filterTabsView3, property10, fArr10));
                 RecyclerListView tabsContainer = this.filterTabsView.getTabsContainer();
                 Property property11 = View.ALPHA;
                 float[] fArr11 = new float[1];
@@ -4423,9 +4424,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             f4 = 1.0f;
         }
         emptyTextProgressView4.setScaleY(f4);
-        FilterTabsView filterTabsView3 = this.filterTabsView;
-        if (filterTabsView3 != null) {
-            filterTabsView3.setTranslationY(z ? (float) (-AndroidUtilities.dp(44.0f)) : 0.0f);
+        FilterTabsView filterTabsView4 = this.filterTabsView;
+        if (filterTabsView4 != null && filterTabsView4.getVisibility() == 0) {
+            this.filterTabsView.setTranslationY(z ? (float) (-AndroidUtilities.dp(44.0f)) : 0.0f);
             RecyclerListView tabsContainer2 = this.filterTabsView.getTabsContainer();
             if (!z) {
                 f2 = 1.0f;
@@ -5344,7 +5345,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             view.getLocationInWindow(this.scrimViewLocation);
         }
         this.actionBar.setTranslationY(f);
-        this.filterTabsView.setTranslationY(f);
+        FilterTabsView filterTabsView2 = this.filterTabsView;
+        if (filterTabsView2 != null) {
+            filterTabsView2.setTranslationY(f);
+        }
         FragmentContextView fragmentContextView2 = this.fragmentContextView;
         if (fragmentContextView2 != null) {
             fragmentContextView2.setTranslationY(((float) this.topPadding) + f);
