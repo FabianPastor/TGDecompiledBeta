@@ -5573,7 +5573,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (trimmedString.length() == 0) {
                 return false;
             }
-            if (this.delegate != null) {
+            if (!(this.delegate == null || this.parentFragment == null)) {
                 if ((i != 0) == this.parentFragment.isInScheduleMode()) {
                     this.delegate.prepareMessageSending();
                 }
