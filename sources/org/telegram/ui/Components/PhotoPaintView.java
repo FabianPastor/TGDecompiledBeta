@@ -1431,10 +1431,10 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         ImageView imageView = new ImageView(getContext());
         imageView.setScaleType(ImageView.ScaleType.CENTER);
         imageView.setImageResource(i2);
-        imageView.setColorFilter(-14606047);
+        imageView.setColorFilter(Theme.getColor("actionBarDefaultSubmenuItem"));
         r0.addView(imageView, LayoutHelper.createLinear(-2, -2, 19, 16, 0, 16, 0));
         TextView textView = new TextView(getContext());
-        textView.setTextColor(-14606047);
+        textView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
         textView.setTextSize(1, 16.0f);
         textView.setText(str);
         r0.addView(textView, LayoutHelper.createLinear(-2, -2, 19, 0, 0, 16, 0));
@@ -1442,7 +1442,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             ImageView imageView2 = new ImageView(getContext());
             imageView2.setImageResource(NUM);
             imageView2.setScaleType(ImageView.ScaleType.CENTER);
-            imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
+            imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("radioBackground"), PorterDuff.Mode.MULTIPLY));
             r0.addView(imageView2, LayoutHelper.createFrame(50, -1.0f));
         }
         return r0;
@@ -1495,8 +1495,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 this.popupRect = new Rect();
                 ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getContext());
                 this.popupLayout = actionBarPopupWindowLayout;
-                actionBarPopupWindowLayout.setBackgroundColor(-1);
-                this.popupLayout.setAnimationEnabled(false);
+                actionBarPopupWindowLayout.setAnimationEnabled(false);
                 this.popupLayout.setOnTouchListener(new View.OnTouchListener() {
                     public final boolean onTouch(View view, MotionEvent motionEvent) {
                         return PhotoPaintView.this.lambda$showPopup$18$PhotoPaintView(view, motionEvent);

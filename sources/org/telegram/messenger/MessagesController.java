@@ -1606,7 +1606,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
     /* JADX WARNING: type inference failed for: r4v2 */
     /* JADX WARNING: type inference failed for: r4v3 */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r4v1, types: [int, boolean] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r4v1, types: [boolean, int] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$null$8$MessagesController(int r21, java.util.ArrayList r22, java.util.ArrayList r23, java.util.ArrayList r24, org.telegram.tgnet.TLRPC$messages_Dialogs r25, java.util.ArrayList r26, android.util.LongSparseArray r27, android.util.LongSparseArray r28) {
         /*
@@ -11932,7 +11932,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
     /* JADX WARNING: type inference failed for: r1v18 */
     /* JADX WARNING: type inference failed for: r1v19 */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r1v12, types: [int, boolean] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r1v12, types: [boolean, int] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$null$156$MessagesController(org.telegram.tgnet.TLRPC$Message r23, int r24, org.telegram.tgnet.TLRPC$messages_Dialogs r25, java.util.ArrayList r26, boolean r27, int r28, android.util.LongSparseArray r29, android.util.LongSparseArray r30, android.util.SparseArray r31, int r32, boolean r33, int r34, java.util.ArrayList r35) {
         /*

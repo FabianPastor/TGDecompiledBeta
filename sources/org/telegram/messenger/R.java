@@ -839,7 +839,6 @@ public final class R {
         public static final int stickers_back_right = NUM;
         public static final int stickers_empty = NUM;
         public static final int stickers_favorites = NUM;
-        public static final int stickers_gifs_saved = NUM;
         public static final int stickers_gifs_trending = NUM;
         public static final int stickers_recent = NUM;
         public static final int stickers_trending1 = NUM;

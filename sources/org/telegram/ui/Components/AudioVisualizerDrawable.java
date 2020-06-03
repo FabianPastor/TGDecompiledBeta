@@ -52,7 +52,9 @@ public class AudioVisualizerDrawable {
             } else {
                 f = fArr[6];
             }
-            if (fArr != null) {
+            if (fArr == null || ((double) f) <= 0.4d) {
+                this.lastAmplitudeCount = 0;
+            } else {
                 float[] fArr2 = this.lastAmplitude;
                 int i2 = this.lastAmplitudePointer;
                 fArr2[i2] = f;
@@ -62,8 +64,6 @@ public class AudioVisualizerDrawable {
                     this.lastAmplitudePointer = 0;
                 }
                 this.lastAmplitudeCount++;
-            } else {
-                this.lastAmplitudeCount = 0;
             }
             if (z3) {
                 for (int i4 = 0; i4 < 6; i4++) {

@@ -71,7 +71,7 @@ public class FileUploadOperation {
         void didFinishUploadingFile(FileUploadOperation fileUploadOperation, TLRPC$InputFile tLRPC$InputFile, TLRPC$InputEncryptedFile tLRPC$InputEncryptedFile, byte[] bArr, byte[] bArr2);
     }
 
-    private class UploadCachedResult {
+    private static class UploadCachedResult {
         /* access modifiers changed from: private */
         public long bytesOffset;
         /* access modifiers changed from: private */

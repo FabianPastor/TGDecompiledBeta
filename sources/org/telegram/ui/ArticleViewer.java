@@ -1080,8 +1080,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 size2 = systemWindowInsetBottom - windowInsets.getSystemWindowInsetTop();
             }
-            ArticleViewer.this.menuButton.setAdditionalYOffset(AndroidUtilities.statusBarHeight);
-            boolean unused = ArticleViewer.this.keyboardVisible = size2 < AndroidUtilities.displaySize.y - AndroidUtilities.dp(100.0f);
+            boolean z = false;
+            ArticleViewer.this.menuButton.setAdditionalYOffset(((-(ArticleViewer.this.currentHeaderHeight - AndroidUtilities.dp(56.0f))) / 2) + (Build.VERSION.SDK_INT < 21 ? AndroidUtilities.statusBarHeight : 0));
+            ArticleViewer articleViewer = ArticleViewer.this;
+            if (size2 < AndroidUtilities.displaySize.y - AndroidUtilities.dp(100.0f)) {
+                z = true;
+            }
+            boolean unused = articleViewer.keyboardVisible = z;
             ArticleViewer.this.containerView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, NUM));
             ArticleViewer.this.photoContainerView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, NUM));
             ArticleViewer.this.photoContainerBackground.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, NUM));
@@ -1279,23 +1284,23 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     prepareForMoving(motionEvent);
                 }
                 if (this.startedTracking) {
-                    View access$2600 = this.movingPage ? ArticleViewer.this.listView[0] : ArticleViewer.this.containerView;
-                    float x = access$2600.getX();
-                    final boolean z = x < ((float) access$2600.getMeasuredWidth()) / 3.0f && (xVelocity < 3500.0f || xVelocity < yVelocity);
+                    View access$2700 = this.movingPage ? ArticleViewer.this.listView[0] : ArticleViewer.this.containerView;
+                    float x = access$2700.getX();
+                    final boolean z = x < ((float) access$2700.getMeasuredWidth()) / 3.0f && (xVelocity < 3500.0f || xVelocity < yVelocity);
                     AnimatorSet animatorSet = new AnimatorSet();
                     if (!z) {
-                        x = ((float) access$2600.getMeasuredWidth()) - x;
+                        x = ((float) access$2700.getMeasuredWidth()) - x;
                         if (this.movingPage) {
-                            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ArticleViewer.this.listView[0], View.TRANSLATION_X, new float[]{(float) access$2600.getMeasuredWidth()})});
+                            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ArticleViewer.this.listView[0], View.TRANSLATION_X, new float[]{(float) access$2700.getMeasuredWidth()})});
                         } else {
-                            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ArticleViewer.this.containerView, View.TRANSLATION_X, new float[]{(float) access$2600.getMeasuredWidth()}), ObjectAnimator.ofFloat(this, ArticleViewer.ARTICLE_VIEWER_INNER_TRANSLATION_X, new float[]{(float) access$2600.getMeasuredWidth()})});
+                            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ArticleViewer.this.containerView, View.TRANSLATION_X, new float[]{(float) access$2700.getMeasuredWidth()}), ObjectAnimator.ofFloat(this, ArticleViewer.ARTICLE_VIEWER_INNER_TRANSLATION_X, new float[]{(float) access$2700.getMeasuredWidth()})});
                         }
                     } else if (this.movingPage) {
                         animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ArticleViewer.this.listView[0], View.TRANSLATION_X, new float[]{0.0f})});
                     } else {
                         animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ArticleViewer.this.containerView, View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this, ArticleViewer.ARTICLE_VIEWER_INNER_TRANSLATION_X, new float[]{0.0f})});
                     }
-                    animatorSet.setDuration((long) Math.max((int) ((200.0f / ((float) access$2600.getMeasuredWidth())) * x), 50));
+                    animatorSet.setDuration((long) Math.max((int) ((200.0f / ((float) access$2700.getMeasuredWidth())) * x), 50));
                     animatorSet.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             if (WindowView.this.movingPage) {
@@ -6440,9 +6445,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             this.titleTextView.setTranslationY((float) ((dp - this.currentHeaderHeight) / 2));
             this.headerView.setTranslationY((float) (this.currentHeaderHeight - dp));
             this.searchShadow.setTranslationY((float) (this.currentHeaderHeight - dp));
-            this.menuButton.setAdditionalYOffset((-(this.currentHeaderHeight - dp)) / 2);
-            this.textSelectionHelper.setTopOffset(this.currentHeaderHeight);
             int i2 = 0;
+            this.menuButton.setAdditionalYOffset(((-(this.currentHeaderHeight - dp)) / 2) + (Build.VERSION.SDK_INT < 21 ? AndroidUtilities.statusBarHeight : 0));
+            this.textSelectionHelper.setTopOffset(this.currentHeaderHeight);
             while (true) {
                 RecyclerListView[] recyclerListViewArr = this.listView;
                 if (i2 < recyclerListViewArr.length) {

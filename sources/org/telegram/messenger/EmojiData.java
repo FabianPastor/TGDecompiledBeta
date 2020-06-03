@@ -14752,29 +14752,29 @@ public class EmojiData {
             r0.<init>(r1)
             emojiAliasMap = r0
             r0 = 0
-        L_0x7401:
+        L_0x7409:
             char[] r1 = emojiToFE0F
             int r2 = r1.length
-            if (r0 >= r2) goto L_0x7414
+            if (r0 >= r2) goto L_0x741c
             java.util.HashMap<java.lang.Character, java.lang.Boolean> r2 = emojiToFE0FMap
             char r1 = r1[r0]
             java.lang.Character r1 = java.lang.Character.valueOf(r1)
             r2.put(r1, r5)
             int r0 = r0 + 1
-            goto L_0x7401
-        L_0x7414:
+            goto L_0x7409
+        L_0x741c:
             r0 = 0
-        L_0x7415:
+        L_0x741d:
             char[] r1 = dataChars
             int r2 = r1.length
-            if (r0 >= r2) goto L_0x7428
+            if (r0 >= r2) goto L_0x7430
             java.util.HashMap<java.lang.Character, java.lang.Boolean> r2 = dataCharsMap
             char r1 = r1[r0]
             java.lang.Character r1 = java.lang.Character.valueOf(r1)
             r2.put(r1, r5)
             int r0 = r0 + 1
-            goto L_0x7415
-        L_0x7428:
+            goto L_0x741d
+        L_0x7430:
             java.util.HashSet<java.lang.String> r0 = emojiColoredMap
             java.lang.String[] r1 = emojiColored
             java.util.Collections.addAll(r0, r1)
@@ -14782,30 +14782,30 @@ public class EmojiData {
             java.lang.String[] r1 = emojiBigColored
             java.util.Collections.addAll(r0, r1)
             r0 = 0
-        L_0x7437:
+        L_0x743f:
             java.lang.String[] r1 = aliasNew
             int r2 = r1.length
-            if (r0 >= r2) goto L_0x744a
+            if (r0 >= r2) goto L_0x7452
             java.util.HashMap<java.lang.CharSequence, java.lang.CharSequence> r2 = emojiAliasMap
             java.lang.String[] r4 = aliasOld
             r4 = r4[r0]
             r1 = r1[r0]
             r2.put(r4, r1)
             int r0 = r0 + 1
-            goto L_0x7437
-        L_0x744a:
+            goto L_0x743f
+        L_0x7452:
             java.lang.String[][] r0 = dataColored
             int r1 = r0.length
-            if (r3 >= r1) goto L_0x745c
+            if (r3 >= r1) goto L_0x7464
             r1 = r0[r3]
-            if (r1 != 0) goto L_0x7459
+            if (r1 != 0) goto L_0x7461
             java.lang.String[][] r1 = data
             r1 = r1[r3]
             r0[r3] = r1
-        L_0x7459:
+        L_0x7461:
             int r3 = r3 + 1
-            goto L_0x744a
-        L_0x745c:
+            goto L_0x7452
+        L_0x7464:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.EmojiData.<clinit>():void");

@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: R9x4fCKRJtzoD4w7+qThpYxLfjE=
+SHA1-Digest-Manifest: vvp2vSVOMQVcP02wpOyjYv8oR0o=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: /JDRn1Hy587GCgEIUqwKPhWWxBY=
+SHA1-Digest: lephNPnR/ph7jxpg5LuE1xpzHrs=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9511,10 +9511,10 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: v719F5fXW/8trMnAotfV9DW0gOg=
+SHA1-Digest: 8+uWv2772xjIl90uvKqUUT9ZTv4=
 
 Name: classes2.dex
-SHA1-Digest: t9e4tvfDlixs6TTyIpQo7+iP4MU=
+SHA1-Digest: kn07t28G07oY+3SbM5JOlXeEG7o=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -11611,9 +11611,6 @@ SHA1-Digest: CFwKJbdvZk/fHviObKqjloca6iY=
 Name: res/drawable-hdpi-v4/stickers_favorites.png
 SHA1-Digest: rLJdvV1N1QAPVRRIFTpIJ6kAHiU=
 
-Name: res/drawable-hdpi-v4/stickers_gifs_saved.png
-SHA1-Digest: dPCQ8O4FIzlJXyMydOMdWKe/bac=
-
 Name: res/drawable-hdpi-v4/stickers_gifs_trending.png
 SHA1-Digest: OA8fjGMI2PIQmY/MrBDVa2Iq4eA=
 
@@ -13690,9 +13687,6 @@ SHA1-Digest: ISND6dKEt28Hg4JLAmlFWIXaDJI=
 
 Name: res/drawable-mdpi-v4/stickers_favorites.png
 SHA1-Digest: OSeJCFngZAviRosx0evkVb3Zt4Y=
-
-Name: res/drawable-mdpi-v4/stickers_gifs_saved.png
-SHA1-Digest: bUqj/nPDz3DrtD5+b8n67oiMGis=
 
 Name: res/drawable-mdpi-v4/stickers_gifs_trending.png
 SHA1-Digest: I3rXhOT28kC7IgV8682nJcWd1K4=
@@ -15816,9 +15810,6 @@ SHA1-Digest: 1Ay+jYRZn+rIX/X0e8JE3XRkMYE=
 Name: res/drawable-xhdpi-v4/stickers_favorites.png
 SHA1-Digest: XYsE15NDQMhu5PuNIf6rsEbRlYw=
 
-Name: res/drawable-xhdpi-v4/stickers_gifs_saved.png
-SHA1-Digest: ALJDPDGoB+/4Z/YFC0edo6B453o=
-
 Name: res/drawable-xhdpi-v4/stickers_gifs_trending.png
 SHA1-Digest: yg5ND81f72NnIK3eL9Lr9quydIk=
 
@@ -17869,9 +17860,6 @@ SHA1-Digest: zOiefqh8eb7N8gS8lY81/XGhUew=
 Name: res/drawable-xxhdpi-v4/stickers_favorites.png
 SHA1-Digest: QsY4fKWOLt5y2y7KdU+U97JQWGI=
 
-Name: res/drawable-xxhdpi-v4/stickers_gifs_saved.png
-SHA1-Digest: Jd/wwZRMxP6Ji66PbGWbqW1JKHk=
-
 Name: res/drawable-xxhdpi-v4/stickers_gifs_trending.png
 SHA1-Digest: tmtDpLHs6rXlg1KAofSk6x8IJ8c=
 
@@ -18260,13 +18248,13 @@ Name: res/drawable/$fingerprint_dialog_fp_to_error__9.xml
 SHA1-Digest: MQinL9boLz9CBU0JaTF81ExZEkc=
 
 Name: res/drawable/bar_selector_lock.xml
-SHA1-Digest: Gb1rsiUKYvs/midFlH3hqR6vFLE=
+SHA1-Digest: sBA9cVYjWaTSuG3qZnEpBrSKPhk=
 
 Name: res/drawable/bar_selector_style.xml
-SHA1-Digest: G/E85UJqoEGtVN4hYHleEV+54/I=
+SHA1-Digest: /VHe9dPIDu7/6JmGmzGTz6MW174=
 
 Name: res/drawable/bar_selector_white.xml
-SHA1-Digest: I2wM2dXoD/iJxRux1dVUHhF6PPo=
+SHA1-Digest: YmHFljMA8jZD0S/SoDZPIiWDDDo=
 
 Name: res/drawable/bg_voip_icon_btn.xml
 SHA1-Digest: l2/JBKA7lYFWRMYxqSltUXRiQDg=
@@ -18371,7 +18359,7 @@ Name: res/drawable/icplaceholder.jpg
 SHA1-Digest: z6DEdLYpiw0H4tz/HdYnrk2Xt6c=
 
 Name: res/drawable/list_selector_ex.xml
-SHA1-Digest: 8GM+VCeHjTjRWmFxYzs1t4VbgiI=
+SHA1-Digest: qxFhh7adJ2GHLJq9hYgumt2O+8g=
 
 Name: res/drawable/loading_animation.xml
 SHA1-Digest: UF8JVFECuuglQsBzOSwqAXM8Wws=
@@ -18422,7 +18410,7 @@ Name: res/drawable/scrollbar_vertical_thumb_inset.xml
 SHA1-Digest: nDZGX50zAXmSGcR+D/JoVK60iBU=
 
 Name: res/drawable/switch_thumb.xml
-SHA1-Digest: +fOsBDyG1w+Ge2RrW0ejsxJadCQ=
+SHA1-Digest: A5gCRr6eOJQ7x5b9O5sMEaS9BOs=
 
 Name: res/drawable/theme_preview_image.jpg
 SHA1-Digest: QEy+cMGdbCQRY0A7P2OBlLevTjg=
@@ -18491,7 +18479,7 @@ Name: res/layout/player_big_notification.xml
 SHA1-Digest: mdnL02YGocdD6lsnczlvd15T+nU=
 
 Name: res/layout/player_small_notification.xml
-SHA1-Digest: n2VPj4QkvcjC2ZDpz/DZIlbhDBk=
+SHA1-Digest: L136kAupFvEow7AwQQrYNX9Gq8c=
 
 Name: res/mipmap-anydpi-v26/ic_launcher.xml
 SHA1-Digest: G7ddlJzJpeU1rRMHtiXTxUyDMv0=
@@ -18746,7 +18734,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: RIogac3P7ytSMl9qB4ryRbQ17Eo=
+SHA1-Digest: 7+xHbtDn007v3yI3eIc/1T6w6dE=
 
 Name: transport-api.properties
 SHA1-Digest: KlRwAVirU5yXrBUVC3JeyHIPlcs=

@@ -569,11 +569,11 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                         TwoStepVerificationSetupActivity.this.imageView.layout(0, i11, TwoStepVerificationSetupActivity.this.imageView.getMeasuredWidth(), TwoStepVerificationSetupActivity.this.imageView.getMeasuredHeight() + i11);
                         int i12 = (int) (0.458f * f4);
                         TwoStepVerificationSetupActivity.this.titleTextView.layout(0, i12, TwoStepVerificationSetupActivity.this.titleTextView.getMeasuredWidth(), TwoStepVerificationSetupActivity.this.titleTextView.getMeasuredHeight() + i12);
-                        int i13 = (int) (0.52f * f4);
-                        TwoStepVerificationSetupActivity.this.descriptionText.layout(0, i13, TwoStepVerificationSetupActivity.this.descriptionText.getMeasuredWidth(), TwoStepVerificationSetupActivity.this.descriptionText.getMeasuredHeight() + i13);
+                        int measuredHeight2 = i12 + TwoStepVerificationSetupActivity.this.titleTextView.getMeasuredHeight() + AndroidUtilities.dp(12.0f);
+                        TwoStepVerificationSetupActivity.this.descriptionText.layout(0, measuredHeight2, TwoStepVerificationSetupActivity.this.descriptionText.getMeasuredWidth(), TwoStepVerificationSetupActivity.this.descriptionText.getMeasuredHeight() + measuredHeight2);
                         int measuredWidth2 = (i5 - TwoStepVerificationSetupActivity.this.buttonTextView.getMeasuredWidth()) / 2;
-                        int i14 = (int) (f4 * 0.791f);
-                        TwoStepVerificationSetupActivity.this.buttonTextView.layout(measuredWidth2, i14, TwoStepVerificationSetupActivity.this.buttonTextView.getMeasuredWidth() + measuredWidth2, TwoStepVerificationSetupActivity.this.buttonTextView.getMeasuredHeight() + i14);
+                        int i13 = (int) (f4 * 0.791f);
+                        TwoStepVerificationSetupActivity.this.buttonTextView.layout(measuredWidth2, i13, TwoStepVerificationSetupActivity.this.buttonTextView.getMeasuredWidth() + measuredWidth2, TwoStepVerificationSetupActivity.this.buttonTextView.getMeasuredHeight() + i13);
                     }
                 };
                 r22.setOnTouchListener($$Lambda$TwoStepVerificationSetupActivity$QESBApo1cX9YhjZV76X3UxINK8.INSTANCE);

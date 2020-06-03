@@ -1193,10 +1193,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         toggleMiniProgressInternal(true);
     }
 
-    public /* synthetic */ void lambda$new$1$PhotoViewer() {
-        updateContainerFlags(this.isActionBarVisible);
-    }
-
     private static class SavedVideoPosition {
         public final float position;
         public final long timestamp;
@@ -1241,6 +1237,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 FileLog.e((Throwable) e);
                 return false;
             }
+        }
+    }
+
+    public /* synthetic */ void lambda$new$1$PhotoViewer() {
+        if (this.isVisible && this.animationInProgress == 0) {
+            updateContainerFlags(this.isActionBarVisible);
         }
     }
 
@@ -5307,7 +5309,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         this.containerView.setPadding(windowInsets.getSystemWindowInsetLeft(), 0, windowInsets.getSystemWindowInsetRight(), 0);
         if (this.actionBar != null) {
             AndroidUtilities.cancelRunOnUIThread(this.updateContainerFlagsRunnable);
-            AndroidUtilities.runOnUIThread(this.updateContainerFlagsRunnable, 200);
+            if (this.isVisible && this.animationInProgress == 0) {
+                AndroidUtilities.runOnUIThread(this.updateContainerFlagsRunnable, 200);
+            }
         }
         return windowInsets.consumeSystemWindowInsets();
     }
@@ -6324,9 +6328,15 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             max2 = 1.0f;
         }
         int i3 = (int) (bitmapWidth2 / max2);
+        int i4 = (int) (bitmapHeight2 / max2);
+        if (i3 % 16 != 0) {
+            i3 = Math.round(((float) i3) / 16.0f) * 16;
+        }
+        if (i4 % 16 != 0) {
+            i4 = Math.round(((float) i4) / 16.0f) * 16;
+        }
         videoEditedInfo2.resultWidth = i3;
         videoEditedInfo2.originalWidth = i3;
-        int i4 = (int) (bitmapHeight2 / max2);
         videoEditedInfo2.resultHeight = i4;
         videoEditedInfo2.originalHeight = i4;
         videoEditedInfo2.bitrate = -1;
@@ -13587,7 +13597,6 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         AnimatedFileDrawable animation;
         Bitmap animatedBitmap;
         int i2;
-        int systemUiVisibility;
         int i3;
         PhotoPaintView photoPaintView2;
         if (z2 || (i3 = this.currentEditMode) == 0) {
@@ -13602,9 +13611,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 } catch (Exception e) {
                     FileLog.e((Throwable) e);
                 }
-                if (!(Build.VERSION.SDK_INT < 21 || this.actionBar == null || (systemUiVisibility = this.containerView.getSystemUiVisibility() & 4102) == 0)) {
-                    FrameLayoutDrawer frameLayoutDrawer = this.containerView;
-                    frameLayoutDrawer.setSystemUiVisibility((systemUiVisibility ^ -1) & frameLayoutDrawer.getSystemUiVisibility());
+                if (Build.VERSION.SDK_INT >= 21) {
+                    AndroidUtilities.cancelRunOnUIThread(this.updateContainerFlagsRunnable);
+                    updateContainerFlags(true);
                 }
                 int i4 = this.currentEditMode;
                 if (i4 != 0) {
@@ -13796,11 +13805,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                             int[] iArr3 = new int[1];
                             iArr3[i] = i;
                             arrayList.add(ObjectAnimator.ofInt(backgroundDrawable2, property, iArr3));
-                            FrameLayoutDrawer frameLayoutDrawer2 = this.containerView;
+                            FrameLayoutDrawer frameLayoutDrawer = this.containerView;
                             Property property2 = View.ALPHA;
                             float[] fArr6 = new float[1];
                             fArr6[i] = 0.0f;
-                            arrayList.add(ObjectAnimator.ofFloat(frameLayoutDrawer2, property2, fArr6));
+                            arrayList.add(ObjectAnimator.ofFloat(frameLayoutDrawer, property2, fArr6));
                             if (this.sendPhotoType == 1) {
                                 PhotoCropView photoCropView2 = this.photoCropView;
                                 Property property3 = View.ALPHA;

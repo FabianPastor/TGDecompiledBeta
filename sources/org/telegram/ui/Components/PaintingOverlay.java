@@ -68,7 +68,7 @@ public class PaintingOverlay extends FrameLayout {
                 View view = mediaEntity.view;
                 if (view != null) {
                     if (view instanceof EditTextOutline) {
-                        view.measure(View.MeasureSpec.makeMeasureSpec(0, 0), View.MeasureSpec.makeMeasureSpec(0, 0));
+                        view.measure(View.MeasureSpec.makeMeasureSpec(mediaEntity.viewWidth, NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
                         float f = (mediaEntity.textViewWidth * ((float) measuredWidth)) / ((float) mediaEntity.viewWidth);
                         mediaEntity.view.setScaleX(mediaEntity.scale * f);
                         mediaEntity.view.setScaleY(mediaEntity.scale * f);

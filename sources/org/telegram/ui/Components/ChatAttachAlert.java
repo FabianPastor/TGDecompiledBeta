@@ -2116,10 +2116,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x0082  */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x0099  */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x00a3  */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x0127  */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x006b  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x0082  */
+    /* JADX WARNING: Removed duplicated region for block: B:49:0x008c  */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x0110  */
     @android.annotation.SuppressLint({"NewApi"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void updateLayout(org.telegram.ui.Components.ChatAttachAlert.AttachAlertLayout r12, boolean r13) {
@@ -2129,94 +2129,86 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             return
         L_0x0003:
             int r0 = r12.getCurrentItemTop()
-            java.lang.StringBuilder r1 = new java.lang.StringBuilder
-            r1.<init>()
-            r1.append(r12)
-            java.lang.String r2 = " offset = "
-            r1.append(r2)
-            r1.append(r0)
-            java.lang.String r1 = r1.toString()
-            org.telegram.messenger.FileLog.d(r1)
             r1 = 2147483647(0x7fffffff, float:NaN)
-            if (r0 != r1) goto L_0x0024
+            if (r0 != r1) goto L_0x000d
             return
-        L_0x0024:
+        L_0x000d:
             org.telegram.ui.Components.ChatAttachAlert$AttachAlertLayout r1 = r11.currentAttachLayout
             r2 = 1
             r3 = 0
-            if (r12 != r1) goto L_0x0032
+            if (r12 != r1) goto L_0x001b
             int r1 = r12.getButtonsHideOffset()
-            if (r0 > r1) goto L_0x0032
+            if (r0 > r1) goto L_0x001b
             r1 = 1
-            goto L_0x0033
-        L_0x0032:
+            goto L_0x001c
+        L_0x001b:
             r1 = 0
-        L_0x0033:
+        L_0x001c:
             boolean r4 = r11.keyboardVisible
-            if (r4 == 0) goto L_0x003a
-            if (r13 == 0) goto L_0x003a
+            if (r4 == 0) goto L_0x0023
+            if (r13 == 0) goto L_0x0023
             r13 = 0
-        L_0x003a:
-            if (r1 == 0) goto L_0x0044
+        L_0x0023:
+            if (r1 == 0) goto L_0x002d
             org.telegram.ui.ActionBar.ActionBar r4 = r11.actionBar
             java.lang.Object r4 = r4.getTag()
-            if (r4 == 0) goto L_0x004e
-        L_0x0044:
-            if (r1 != 0) goto L_0x0175
+            if (r4 == 0) goto L_0x0037
+        L_0x002d:
+            if (r1 != 0) goto L_0x015e
             org.telegram.ui.ActionBar.ActionBar r4 = r11.actionBar
             java.lang.Object r4 = r4.getTag()
-            if (r4 == 0) goto L_0x0175
-        L_0x004e:
+            if (r4 == 0) goto L_0x015e
+        L_0x0037:
             org.telegram.ui.ActionBar.ActionBar r4 = r11.actionBar
             r5 = 0
-            if (r1 == 0) goto L_0x0058
+            if (r1 == 0) goto L_0x0041
             java.lang.Integer r6 = java.lang.Integer.valueOf(r2)
-            goto L_0x0059
-        L_0x0058:
+            goto L_0x0042
+        L_0x0041:
             r6 = r5
-        L_0x0059:
+        L_0x0042:
             r4.setTag(r6)
             android.animation.AnimatorSet r4 = r11.actionBarAnimation
-            if (r4 == 0) goto L_0x0065
+            if (r4 == 0) goto L_0x004e
             r4.cancel()
             r11.actionBarAnimation = r5
-        L_0x0065:
+        L_0x004e:
             org.telegram.ui.Components.ChatAttachAlert$AttachAlertLayout r4 = r11.currentAttachLayout
             org.telegram.ui.Components.ChatAttachAlertPhotoLayout r5 = r11.photoLayout
-            if (r4 != r5) goto L_0x007f
+            if (r4 != r5) goto L_0x0068
             boolean r4 = r11.menuShowed
-            if (r4 != 0) goto L_0x007f
+            if (r4 != 0) goto L_0x0068
             org.telegram.ui.ActionBar.BaseFragment r4 = r11.baseFragment
             boolean r5 = r4 instanceof org.telegram.ui.ChatActivity
-            if (r5 == 0) goto L_0x007f
+            if (r5 == 0) goto L_0x0068
             org.telegram.ui.ChatActivity r4 = (org.telegram.ui.ChatActivity) r4
             boolean r4 = r4.allowSendGifs()
-            if (r4 == 0) goto L_0x007f
+            if (r4 == 0) goto L_0x0068
             r4 = 1
-            goto L_0x0080
-        L_0x007f:
+            goto L_0x0069
+        L_0x0068:
             r4 = 0
-        L_0x0080:
-            if (r1 == 0) goto L_0x0099
-            if (r4 == 0) goto L_0x0089
+        L_0x0069:
+            if (r1 == 0) goto L_0x0082
+            if (r4 == 0) goto L_0x0072
             org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r11.searchItem
             r5.setVisibility(r3)
-        L_0x0089:
+        L_0x0072:
             boolean r5 = r11.menuShowed
-            if (r5 != 0) goto L_0x009e
+            if (r5 != 0) goto L_0x0087
             org.telegram.ui.Components.ChatAttachAlert$AttachAlertLayout r5 = r11.currentAttachLayout
             org.telegram.ui.Components.ChatAttachAlertPhotoLayout r6 = r11.photoLayout
-            if (r5 != r6) goto L_0x009e
+            if (r5 != r6) goto L_0x0087
             org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r11.selectedMenuItem
             r5.setVisibility(r3)
-            goto L_0x009e
-        L_0x0099:
+            goto L_0x0087
+        L_0x0082:
             org.telegram.ui.Components.RecyclerListView r5 = r11.buttonsRecyclerView
             r5.setVisibility(r3)
-        L_0x009e:
+        L_0x0087:
             r5 = 1065353216(0x3var_, float:1.0)
             r6 = 0
-            if (r13 == 0) goto L_0x0127
+            if (r13 == 0) goto L_0x0110
             android.animation.AnimatorSet r13 = new android.animation.AnimatorSet
             r13.<init>()
             r11.actionBarAnimation = r13
@@ -2227,58 +2219,58 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             org.telegram.ui.ActionBar.ActionBar r7 = r11.actionBar
             android.util.Property r8 = android.view.View.ALPHA
             float[] r9 = new float[r2]
-            if (r1 == 0) goto L_0x00bf
+            if (r1 == 0) goto L_0x00a8
             r10 = 1065353216(0x3var_, float:1.0)
-            goto L_0x00c0
-        L_0x00bf:
+            goto L_0x00a9
+        L_0x00a8:
             r10 = 0
-        L_0x00c0:
+        L_0x00a9:
             r9[r3] = r10
             android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r8, r9)
             r13.add(r7)
             android.view.View r7 = r11.actionBarShadow
             android.util.Property r8 = android.view.View.ALPHA
             float[] r9 = new float[r2]
-            if (r1 == 0) goto L_0x00d4
+            if (r1 == 0) goto L_0x00bd
             r10 = 1065353216(0x3var_, float:1.0)
-            goto L_0x00d5
-        L_0x00d4:
+            goto L_0x00be
+        L_0x00bd:
             r10 = 0
-        L_0x00d5:
+        L_0x00be:
             r9[r3] = r10
             android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r8, r9)
             r13.add(r7)
-            if (r4 == 0) goto L_0x00f5
+            if (r4 == 0) goto L_0x00de
             org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r11.searchItem
             android.util.Property r7 = android.view.View.ALPHA
             float[] r8 = new float[r2]
-            if (r1 == 0) goto L_0x00eb
+            if (r1 == 0) goto L_0x00d4
             r9 = 1065353216(0x3var_, float:1.0)
-            goto L_0x00ec
-        L_0x00eb:
+            goto L_0x00d5
+        L_0x00d4:
             r9 = 0
-        L_0x00ec:
+        L_0x00d5:
             r8[r3] = r9
             android.animation.ObjectAnimator r4 = android.animation.ObjectAnimator.ofFloat(r4, r7, r8)
             r13.add(r4)
-        L_0x00f5:
+        L_0x00de:
             boolean r4 = r11.menuShowed
-            if (r4 != 0) goto L_0x0112
+            if (r4 != 0) goto L_0x00fb
             org.telegram.ui.Components.ChatAttachAlert$AttachAlertLayout r4 = r11.currentAttachLayout
             org.telegram.ui.Components.ChatAttachAlertPhotoLayout r7 = r11.photoLayout
-            if (r4 != r7) goto L_0x0112
+            if (r4 != r7) goto L_0x00fb
             org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r11.selectedMenuItem
             android.util.Property r7 = android.view.View.ALPHA
             float[] r8 = new float[r2]
-            if (r1 == 0) goto L_0x0108
-            goto L_0x0109
-        L_0x0108:
+            if (r1 == 0) goto L_0x00f1
+            goto L_0x00f2
+        L_0x00f1:
             r5 = 0
-        L_0x0109:
+        L_0x00f2:
             r8[r3] = r5
             android.animation.ObjectAnimator r4 = android.animation.ObjectAnimator.ofFloat(r4, r7, r8)
             r13.add(r4)
-        L_0x0112:
+        L_0x00fb:
             android.animation.AnimatorSet r4 = r11.actionBarAnimation
             r4.playTogether(r13)
             android.animation.AnimatorSet r13 = r11.actionBarAnimation
@@ -2287,60 +2279,60 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r13.addListener(r4)
             android.animation.AnimatorSet r13 = r11.actionBarAnimation
             r13.start()
-            goto L_0x0175
-        L_0x0127:
+            goto L_0x015e
+        L_0x0110:
             r13 = 4
-            if (r1 == 0) goto L_0x012f
+            if (r1 == 0) goto L_0x0118
             org.telegram.ui.Components.RecyclerListView r7 = r11.buttonsRecyclerView
             r7.setVisibility(r13)
-        L_0x012f:
+        L_0x0118:
             org.telegram.ui.ActionBar.ActionBar r7 = r11.actionBar
-            if (r1 == 0) goto L_0x0136
+            if (r1 == 0) goto L_0x011f
             r8 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0137
-        L_0x0136:
+            goto L_0x0120
+        L_0x011f:
             r8 = 0
-        L_0x0137:
+        L_0x0120:
             r7.setAlpha(r8)
             android.view.View r7 = r11.actionBarShadow
-            if (r1 == 0) goto L_0x0141
+            if (r1 == 0) goto L_0x012a
             r8 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0142
-        L_0x0141:
+            goto L_0x012b
+        L_0x012a:
             r8 = 0
-        L_0x0142:
+        L_0x012b:
             r7.setAlpha(r8)
-            if (r4 == 0) goto L_0x0152
+            if (r4 == 0) goto L_0x013b
             org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r11.searchItem
-            if (r1 == 0) goto L_0x014e
+            if (r1 == 0) goto L_0x0137
             r7 = 1065353216(0x3var_, float:1.0)
-            goto L_0x014f
-        L_0x014e:
+            goto L_0x0138
+        L_0x0137:
             r7 = 0
-        L_0x014f:
+        L_0x0138:
             r4.setAlpha(r7)
-        L_0x0152:
+        L_0x013b:
             boolean r4 = r11.menuShowed
-            if (r4 != 0) goto L_0x0165
+            if (r4 != 0) goto L_0x014e
             org.telegram.ui.Components.ChatAttachAlert$AttachAlertLayout r4 = r11.currentAttachLayout
             org.telegram.ui.Components.ChatAttachAlertPhotoLayout r7 = r11.photoLayout
-            if (r4 != r7) goto L_0x0165
+            if (r4 != r7) goto L_0x014e
             org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r11.selectedMenuItem
-            if (r1 == 0) goto L_0x0161
-            goto L_0x0162
-        L_0x0161:
+            if (r1 == 0) goto L_0x014a
+            goto L_0x014b
+        L_0x014a:
             r5 = 0
-        L_0x0162:
+        L_0x014b:
             r4.setAlpha(r5)
-        L_0x0165:
-            if (r1 != 0) goto L_0x0175
+        L_0x014e:
+            if (r1 != 0) goto L_0x015e
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r11.searchItem
             r1.setVisibility(r13)
             boolean r1 = r11.menuShowed
-            if (r1 != 0) goto L_0x0175
+            if (r1 != 0) goto L_0x015e
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r11.selectedMenuItem
             r1.setVisibility(r13)
-        L_0x0175:
+        L_0x015e:
             android.view.ViewGroup$LayoutParams r13 = r12.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r13 = (android.widget.FrameLayout.LayoutParams) r13
             int r13 = r13.topMargin
@@ -2349,17 +2341,17 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             int r13 = r13 - r1
             int r0 = r0 + r13
             org.telegram.ui.Components.ChatAttachAlert$AttachAlertLayout r13 = r11.currentAttachLayout
-            if (r13 != r12) goto L_0x018a
+            if (r13 != r12) goto L_0x0173
             r2 = 0
-        L_0x018a:
+        L_0x0173:
             int[] r12 = r11.scrollOffsetY
             r13 = r12[r2]
-            if (r13 == r0) goto L_0x019a
+            if (r13 == r0) goto L_0x0183
             r12[r2] = r0
             r11.updateSelectedPosition(r2)
             android.view.ViewGroup r12 = r11.containerView
             r12.invalidate()
-        L_0x019a:
+        L_0x0183:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlert.updateLayout(org.telegram.ui.Components.ChatAttachAlert$AttachAlertLayout, boolean):void");

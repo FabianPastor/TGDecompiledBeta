@@ -1959,7 +1959,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 DialogsActivity.this.lambda$createView$3$DialogsActivity();
             }
         });
-        if (this.initialDialogsType == 0 && this.folderId == 0 && !this.onlySelect) {
+        if (this.initialDialogsType == 0 && this.folderId == 0 && !this.onlySelect && TextUtils.isEmpty(this.searchString)) {
             this.scrimPaint = new Paint() {
                 public void setAlpha(int i) {
                     super.setAlpha(i);
@@ -2238,7 +2238,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         r6 = 2131625266(0x7f0e0532, float:1.8877735E38)
                         java.lang.String r10 = "FilterReorder"
                         java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r10, r6)
-                        r10 = 2131165941(0x7var_f5, float:1.7946113E38)
+                        r10 = 2131165940(0x7var_f4, float:1.7946111E38)
                         r5.setTextAndIcon(r6, r10)
                         goto L_0x014f
                     L_0x011f:
@@ -4214,7 +4214,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (i < currentActionBarHeight / 2) {
                     setScrollY(0.0f);
                 } else if (this.viewPages[0].listView.canScrollVertically(1)) {
-                    setScrollY((float) currentActionBarHeight);
+                    setScrollY((float) (-currentActionBarHeight));
                 }
             }
         }

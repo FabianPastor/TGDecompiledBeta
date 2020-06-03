@@ -152,7 +152,7 @@ public class SeekBarWaveform {
                 float f = ((float) length) / dp;
                 Paint paint = paintInner;
                 MessageObject messageObject2 = this.messageObject;
-                paint.setColor((messageObject2 == null || messageObject2.isOutOwner() || !this.messageObject.isContentUnread()) ? this.selected ? this.selectedColor : this.innerColor : this.outerColor);
+                paint.setColor((messageObject2 == null || messageObject2.isOutOwner() || !this.messageObject.isContentUnread() || this.thumbX != 0) ? this.selected ? this.selectedColor : this.innerColor : this.outerColor);
                 paintOuter.setColor(this.outerColor);
                 int dp2 = (this.height - AndroidUtilities.dp(14.0f)) / 2;
                 int i7 = 0;

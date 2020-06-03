@@ -13,6 +13,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.util.Property;
 import android.view.MotionEvent;
 import android.view.View;
@@ -27,7 +28,9 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$PhotoSize;
+import org.telegram.tgnet.TLRPC$TL_videoSize;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox2;
@@ -231,12 +234,22 @@ public class PhotoAttachPhotoCell extends FrameLayout {
                 String str = searchImage.thumbPath;
                 if (str != null) {
                     this.imageView.setImage(str, (String) null, drawable);
+                } else if (!TextUtils.isEmpty(searchImage.thumbUrl)) {
+                    ImageLocation forPath = ImageLocation.getForPath(searchImage.thumbUrl);
+                    if (searchImage.type == 1 && searchImage.thumbUrl.endsWith("mp4")) {
+                        forPath.imageType = 2;
+                    }
+                    this.imageView.setImage(forPath, (String) null, drawable, (Object) searchImage);
                 } else {
-                    String str2 = searchImage.thumbUrl;
-                    if (str2 != null && str2.length() > 0) {
-                        this.imageView.setImage(searchImage.thumbUrl, (String) null, drawable);
-                    } else if (MessageObject.isDocumentHasThumb(searchImage.document)) {
-                        this.imageView.setImage(ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(searchImage.document.thumbs, 320), searchImage.document), (String) null, drawable, (Object) searchImage);
+                    TLRPC$Document tLRPC$Document = searchImage.document;
+                    if (tLRPC$Document != null) {
+                        MessageObject.getDocumentVideoThumb(tLRPC$Document);
+                        TLRPC$TL_videoSize documentVideoThumb = MessageObject.getDocumentVideoThumb(searchImage.document);
+                        if (documentVideoThumb != null) {
+                            this.imageView.setImage(ImageLocation.getForDocument(documentVideoThumb, searchImage.document), (String) null, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(searchImage.document.thumbs, 90), searchImage.document), "52_52", (String) null, -1, 1, searchImage);
+                        } else {
+                            this.imageView.setImage(ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(searchImage.document.thumbs, 320), searchImage.document), (String) null, drawable, (Object) searchImage);
+                        }
                     } else {
                         this.imageView.setImageDrawable(drawable);
                     }

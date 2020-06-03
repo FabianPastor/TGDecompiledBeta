@@ -447,7 +447,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     }
                     imageReceiverDelegate2.didSetImage(this, z7, z3, z4);
                 }
-                if (!this.canceledLoading && !this.forcePreview) {
+                if (!this.canceledLoading) {
                     return;
                 }
             }

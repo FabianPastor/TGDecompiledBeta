@@ -661,7 +661,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
             r4.setScaleType(r5)
             android.widget.ImageView r4 = r0.playbackSpeedButton
-            r5 = 2131165985(0x7var_, float:1.7946203E38)
+            r5 = 2131165984(0x7var_, float:1.79462E38)
             r4.setImageResource(r5)
             android.widget.ImageView r4 = r0.playbackSpeedButton
             r5 = 2131623996(0x7f0e003c, float:1.887516E38)

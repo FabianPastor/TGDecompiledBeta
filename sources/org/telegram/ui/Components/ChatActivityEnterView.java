@@ -8503,18 +8503,18 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
 
         /* JADX WARNING: Code restructure failed: missing block: B:2:0x0006, code lost:
-            r0 = r9.recordedAudioPanel;
+            r0 = r10.recordedAudioPanel;
          */
         /* JADX WARNING: Failed to insert additional move for type inference */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        private void setEmojiButtonImage(boolean r10, boolean r11) {
+        private void setEmojiButtonImage(boolean r11, boolean r12) {
             /*
-                r9 = this;
-                int r0 = r9.recordInterfaceState
+                r10 = this;
+                int r0 = r10.recordInterfaceState
                 r1 = 0
                 r2 = 1
                 if (r0 == r2) goto L_0x0013
-                android.widget.FrameLayout r0 = r9.recordedAudioPanel
+                android.widget.FrameLayout r0 = r10.recordedAudioPanel
                 if (r0 == 0) goto L_0x0011
                 int r0 = r0.getVisibility()
                 if (r0 != 0) goto L_0x0011
@@ -8527,187 +8527,200 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             L_0x0014:
                 r3 = 0
                 if (r0 == 0) goto L_0x0042
-                android.widget.ImageView[] r11 = r9.emojiButton
-                r11 = r11[r1]
-                r11.setScaleX(r3)
-                android.widget.ImageView[] r11 = r9.emojiButton
-                r11 = r11[r1]
-                r11.setScaleY(r3)
-                android.widget.ImageView[] r11 = r9.emojiButton
-                r11 = r11[r1]
-                r11.setAlpha(r3)
-                android.widget.ImageView[] r11 = r9.emojiButton
-                r11 = r11[r2]
-                r11.setScaleX(r3)
-                android.widget.ImageView[] r11 = r9.emojiButton
-                r11 = r11[r2]
-                r11.setScaleY(r3)
-                android.widget.ImageView[] r11 = r9.emojiButton
-                r11 = r11[r2]
-                r11.setAlpha(r3)
-                r11 = 0
+                android.widget.ImageView[] r12 = r10.emojiButton
+                r12 = r12[r1]
+                r12.setScaleX(r3)
+                android.widget.ImageView[] r12 = r10.emojiButton
+                r12 = r12[r1]
+                r12.setScaleY(r3)
+                android.widget.ImageView[] r12 = r10.emojiButton
+                r12 = r12[r1]
+                r12.setAlpha(r3)
+                android.widget.ImageView[] r12 = r10.emojiButton
+                r12 = r12[r2]
+                r12.setScaleX(r3)
+                android.widget.ImageView[] r12 = r10.emojiButton
+                r12 = r12[r2]
+                r12.setScaleY(r3)
+                android.widget.ImageView[] r12 = r10.emojiButton
+                r12 = r12[r2]
+                r12.setAlpha(r3)
+                r12 = 0
             L_0x0042:
-                if (r11 == 0) goto L_0x004a
-                int r0 = r9.currentEmojiIcon
+                if (r12 == 0) goto L_0x004a
+                int r0 = r10.currentEmojiIcon
                 r4 = -1
                 if (r0 != r4) goto L_0x004a
-                r11 = 0
+                r12 = 0
             L_0x004a:
                 r0 = 3
                 r4 = 2
-                if (r10 == 0) goto L_0x0054
-                int r10 = r9.currentPopupContentType
-                if (r10 != 0) goto L_0x0054
-                r10 = 0
+                if (r11 == 0) goto L_0x0054
+                int r11 = r10.currentPopupContentType
+                if (r11 != 0) goto L_0x0054
+                r11 = 0
                 goto L_0x0079
             L_0x0054:
-                org.telegram.ui.Components.EmojiView r10 = r9.emojiView
-                if (r10 != 0) goto L_0x0063
-                android.content.SharedPreferences r10 = org.telegram.messenger.MessagesController.getGlobalEmojiSettings()
+                org.telegram.ui.Components.EmojiView r11 = r10.emojiView
+                if (r11 != 0) goto L_0x0063
+                android.content.SharedPreferences r11 = org.telegram.messenger.MessagesController.getGlobalEmojiSettings()
                 java.lang.String r5 = "selected_page"
-                int r10 = r10.getInt(r5, r1)
+                int r11 = r11.getInt(r5, r1)
                 goto L_0x0067
             L_0x0063:
-                int r10 = r10.getCurrentPage()
+                int r11 = r11.getCurrentPage()
             L_0x0067:
-                if (r10 == 0) goto L_0x0078
-                boolean r5 = r9.allowStickers
+                if (r11 == 0) goto L_0x0078
+                boolean r5 = r10.allowStickers
                 if (r5 != 0) goto L_0x0072
-                boolean r5 = r9.allowGifs
+                boolean r5 = r10.allowGifs
                 if (r5 != 0) goto L_0x0072
                 goto L_0x0078
             L_0x0072:
-                if (r10 != r2) goto L_0x0076
-                r10 = 2
+                if (r11 != r2) goto L_0x0076
+                r11 = 2
                 goto L_0x0079
             L_0x0076:
-                r10 = 3
+                r11 = 3
                 goto L_0x0079
             L_0x0078:
-                r10 = 1
+                r11 = 1
             L_0x0079:
-                int r5 = r9.currentEmojiIcon
-                if (r5 != r10) goto L_0x007e
+                int r5 = r10.currentEmojiIcon
+                if (r5 != r11) goto L_0x007e
                 return
             L_0x007e:
-                android.animation.AnimatorSet r5 = r9.emojiButtonAnimation
+                android.animation.AnimatorSet r5 = r10.emojiButtonAnimation
                 r6 = 0
                 if (r5 == 0) goto L_0x0088
                 r5.cancel()
-                r9.emojiButtonAnimation = r6
+                r10.emojiButtonAnimation = r6
             L_0x0088:
-                if (r10 != 0) goto L_0x0095
-                android.widget.ImageView[] r5 = r9.emojiButton
-                r5 = r5[r11]
+                if (r11 != 0) goto L_0x0095
+                android.widget.ImageView[] r5 = r10.emojiButton
+                r5 = r5[r12]
                 r7 = 2131165504(0x7var_, float:1.7945227E38)
                 r5.setImageResource(r7)
                 goto L_0x00bb
             L_0x0095:
-                if (r10 != r2) goto L_0x00a2
-                android.widget.ImageView[] r5 = r9.emojiButton
-                r5 = r5[r11]
+                if (r11 != r2) goto L_0x00a2
+                android.widget.ImageView[] r5 = r10.emojiButton
+                r5 = r5[r12]
                 r7 = 2131165511(0x7var_, float:1.7945241E38)
                 r5.setImageResource(r7)
                 goto L_0x00bb
             L_0x00a2:
-                if (r10 != r4) goto L_0x00af
-                android.widget.ImageView[] r5 = r9.emojiButton
-                r5 = r5[r11]
+                if (r11 != r4) goto L_0x00af
+                android.widget.ImageView[] r5 = r10.emojiButton
+                r5 = r5[r12]
                 r7 = 2131165512(0x7var_, float:1.7945243E38)
                 r5.setImageResource(r7)
                 goto L_0x00bb
             L_0x00af:
-                if (r10 != r0) goto L_0x00bb
-                android.widget.ImageView[] r5 = r9.emojiButton
-                r5 = r5[r11]
+                if (r11 != r0) goto L_0x00bb
+                android.widget.ImageView[] r5 = r10.emojiButton
+                r5 = r5[r12]
                 r7 = 2131165503(0x7var_f, float:1.7945225E38)
                 r5.setImageResource(r7)
             L_0x00bb:
-                android.widget.ImageView[] r5 = r9.emojiButton
-                r5 = r5[r11]
-                if (r10 != r4) goto L_0x00c5
+                android.widget.ImageView[] r5 = r10.emojiButton
+                r5 = r5[r12]
+                if (r11 != r4) goto L_0x00c5
                 java.lang.Integer r6 = java.lang.Integer.valueOf(r2)
             L_0x00c5:
                 r5.setTag(r6)
-                r9.currentEmojiIcon = r10
-                if (r11 == 0) goto L_0x0172
-                android.widget.ImageView[] r10 = r9.emojiButton
-                r10 = r10[r2]
-                r10.setVisibility(r1)
-                android.widget.ImageView[] r10 = r9.emojiButton
-                r10 = r10[r2]
-                r10.setAlpha(r3)
-                android.widget.ImageView[] r10 = r9.emojiButton
-                r10 = r10[r2]
-                r11 = 1036831949(0x3dcccccd, float:0.1)
-                r10.setScaleX(r11)
-                android.widget.ImageView[] r10 = r9.emojiButton
-                r10 = r10[r2]
-                r10.setScaleY(r11)
-                android.animation.AnimatorSet r10 = new android.animation.AnimatorSet
-                r10.<init>()
-                r9.emojiButtonAnimation = r10
-                r5 = 6
-                android.animation.Animator[] r5 = new android.animation.Animator[r5]
-                android.widget.ImageView[] r6 = r9.emojiButton
-                r6 = r6[r1]
-                android.util.Property r7 = android.view.View.SCALE_X
+                r10.currentEmojiIcon = r11
+                if (r12 == 0) goto L_0x0172
+                android.widget.ImageView[] r12 = r10.emojiButton
+                r12 = r12[r2]
+                r12.setVisibility(r1)
+                android.widget.ImageView[] r12 = r10.emojiButton
+                r12 = r12[r2]
+                r12.setAlpha(r3)
+                android.widget.ImageView[] r12 = r10.emojiButton
+                r12 = r12[r2]
+                r5 = 1036831949(0x3dcccccd, float:0.1)
+                r12.setScaleX(r5)
+                android.widget.ImageView[] r12 = r10.emojiButton
+                r12 = r12[r2]
+                r12.setScaleY(r5)
+                android.animation.AnimatorSet r12 = new android.animation.AnimatorSet
+                r12.<init>()
+                r10.emojiButtonAnimation = r12
+                r6 = 6
+                android.animation.Animator[] r6 = new android.animation.Animator[r6]
+                android.widget.ImageView[] r7 = r10.emojiButton
+                r7 = r7[r1]
+                android.util.Property r8 = android.view.View.SCALE_X
+                float[] r9 = new float[r2]
+                r9[r1] = r5
+                android.animation.ObjectAnimator r7 = android.animation.ObjectAnimator.ofFloat(r7, r8, r9)
+                r6[r1] = r7
+                android.widget.ImageView[] r7 = r10.emojiButton
+                r7 = r7[r1]
+                android.util.Property r8 = android.view.View.SCALE_Y
+                float[] r9 = new float[r2]
+                r9[r1] = r5
+                android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r7, r8, r9)
+                r6[r2] = r5
+                android.widget.ImageView[] r5 = r10.emojiButton
+                r5 = r5[r1]
+                android.util.Property r7 = android.view.View.ALPHA
                 float[] r8 = new float[r2]
-                r8[r1] = r11
-                android.animation.ObjectAnimator r6 = android.animation.ObjectAnimator.ofFloat(r6, r7, r8)
-                r5[r1] = r6
-                android.widget.ImageView[] r6 = r9.emojiButton
-                r6 = r6[r1]
-                android.util.Property r7 = android.view.View.SCALE_Y
-                float[] r8 = new float[r2]
-                r8[r1] = r11
-                android.animation.ObjectAnimator r11 = android.animation.ObjectAnimator.ofFloat(r6, r7, r8)
-                r5[r2] = r11
-                android.widget.ImageView[] r11 = r9.emojiButton
-                r11 = r11[r1]
-                android.util.Property r6 = android.view.View.ALPHA
-                float[] r7 = new float[r2]
-                r7[r1] = r3
-                android.animation.ObjectAnimator r11 = android.animation.ObjectAnimator.ofFloat(r11, r6, r7)
-                r5[r4] = r11
-                android.widget.ImageView[] r11 = r9.emojiButton
-                r11 = r11[r2]
-                android.util.Property r3 = android.view.View.SCALE_X
-                float[] r4 = new float[r2]
-                r6 = 1065353216(0x3var_, float:1.0)
-                r4[r1] = r6
-                android.animation.ObjectAnimator r11 = android.animation.ObjectAnimator.ofFloat(r11, r3, r4)
-                r5[r0] = r11
-                r11 = 4
-                android.widget.ImageView[] r0 = r9.emojiButton
-                r0 = r0[r2]
-                android.util.Property r3 = android.view.View.SCALE_Y
-                float[] r4 = new float[r2]
-                r4[r1] = r6
-                android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r0, r3, r4)
-                r5[r11] = r0
-                r11 = 5
-                android.widget.ImageView[] r0 = r9.emojiButton
-                r0 = r0[r2]
-                android.util.Property r3 = android.view.View.ALPHA
+                r8[r1] = r3
+                android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r5, r7, r8)
+                r6[r4] = r3
+                android.widget.ImageView[] r3 = r10.emojiButton
+                r3 = r3[r2]
+                android.util.Property r4 = android.view.View.SCALE_X
+                float[] r5 = new float[r2]
+                r7 = 1065353216(0x3var_, float:1.0)
+                r5[r1] = r7
+                android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5)
+                r6[r0] = r3
+                r0 = 4
+                android.widget.ImageView[] r3 = r10.emojiButton
+                r3 = r3[r2]
+                android.util.Property r4 = android.view.View.SCALE_Y
+                float[] r5 = new float[r2]
+                r5[r1] = r7
+                android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r4, r5)
+                r6[r0] = r3
+                r0 = 5
+                android.widget.ImageView[] r3 = r10.emojiButton
+                r3 = r3[r2]
+                android.util.Property r4 = android.view.View.ALPHA
                 float[] r2 = new float[r2]
-                r2[r1] = r6
-                android.animation.ObjectAnimator r0 = android.animation.ObjectAnimator.ofFloat(r0, r3, r2)
-                r5[r11] = r0
-                r10.playTogether(r5)
-                android.animation.AnimatorSet r10 = r9.emojiButtonAnimation
-                org.telegram.ui.Components.ChatActivityEnterView$45 r11 = new org.telegram.ui.Components.ChatActivityEnterView$45
-                r11.<init>()
-                r10.addListener(r11)
-                android.animation.AnimatorSet r10 = r9.emojiButtonAnimation
+                r2[r1] = r7
+                android.animation.ObjectAnimator r1 = android.animation.ObjectAnimator.ofFloat(r3, r4, r2)
+                r6[r0] = r1
+                r12.playTogether(r6)
+                android.animation.AnimatorSet r12 = r10.emojiButtonAnimation
+                org.telegram.ui.Components.ChatActivityEnterView$45 r0 = new org.telegram.ui.Components.ChatActivityEnterView$45
+                r0.<init>()
+                r12.addListener(r0)
+                android.animation.AnimatorSet r12 = r10.emojiButtonAnimation
                 r0 = 150(0x96, double:7.4E-322)
-                r10.setDuration(r0)
-                android.animation.AnimatorSet r10 = r9.emojiButtonAnimation
-                r10.start()
+                r12.setDuration(r0)
+                android.animation.AnimatorSet r12 = r10.emojiButtonAnimation
+                r12.start()
             L_0x0172:
+                r10.onEmojiIconChanged(r11)
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.setEmojiButtonImage(boolean, boolean):void");
+        }
+
+        /* access modifiers changed from: protected */
+        public void onEmojiIconChanged(int i) {
+            if (i == 3 && this.emojiView == null) {
+                MediaDataController.getInstance(this.currentAccount).loadRecents(0, true, true, false);
+                ArrayList<String> arrayList = MessagesController.getInstance(this.currentAccount).gifSearchEmojies;
+                int min = Math.min(10, arrayList.size());
+                for (int i2 = 0; i2 < min; i2++) {
+                    Emoji.preloadEmoji(arrayList.get(i2));
+                }
+            }
         }
 
         public void hidePopup(boolean z) {

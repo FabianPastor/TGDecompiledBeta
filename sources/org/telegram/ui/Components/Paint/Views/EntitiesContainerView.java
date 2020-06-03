@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import org.telegram.ui.Components.Paint.Views.RotationGestureDetector;
 
@@ -106,9 +107,10 @@ public class EntitiesContainerView extends FrameLayout implements ScaleGestureDe
     /* access modifiers changed from: protected */
     public void measureChildWithMargins(View view, int i, int i2, int i3, int i4) {
         if (view instanceof TextPaintView) {
-            view.measure(View.MeasureSpec.makeMeasureSpec(0, 0), View.MeasureSpec.makeMeasureSpec(0, 0));
-        } else {
-            super.measureChildWithMargins(view, i, i2, i3, i4);
+            ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
+            view.measure(FrameLayout.getChildMeasureSpec(i, getPaddingLeft() + getPaddingRight() + marginLayoutParams.leftMargin + marginLayoutParams.rightMargin + i2, marginLayoutParams.width), View.MeasureSpec.makeMeasureSpec(0, 0));
+            return;
         }
+        super.measureChildWithMargins(view, i, i2, i3, i4);
     }
 }

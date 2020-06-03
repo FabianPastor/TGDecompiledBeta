@@ -2525,7 +2525,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     }
 
                     public final void run() {
-                        InstantCameraView.VideoRecorder.this.lambda$handleStopRecording$3$InstantCameraView$VideoRecorder(this.f$1);
+                        InstantCameraView.VideoRecorder.this.lambda$handleStopRecording$4$InstantCameraView$VideoRecorder(this.f$1);
                     }
                 });
             } else {
@@ -2553,7 +2553,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this.handler.exit();
         }
 
-        public /* synthetic */ void lambda$handleStopRecording$3$InstantCameraView$VideoRecorder(int i) {
+        public /* synthetic */ void lambda$handleStopRecording$4$InstantCameraView$VideoRecorder(int i) {
             VideoEditedInfo unused = InstantCameraView.this.videoEditedInfo = new VideoEditedInfo();
             InstantCameraView.this.videoEditedInfo.roundVideo = true;
             InstantCameraView.this.videoEditedInfo.startTime = -1;
@@ -2619,6 +2619,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     public final void didSelectDate(boolean z, int i) {
                         InstantCameraView.VideoRecorder.this.lambda$null$2$InstantCameraView$VideoRecorder(z, i);
                     }
+                }, new Runnable() {
+                    public final void run() {
+                        InstantCameraView.VideoRecorder.this.lambda$null$3$InstantCameraView$VideoRecorder();
+                    }
                 });
             } else {
                 ChatActivity access$3500 = InstantCameraView.this.baseFragment;
@@ -2632,6 +2636,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
         public /* synthetic */ void lambda$null$2$InstantCameraView$VideoRecorder(boolean z, int i) {
             InstantCameraView.this.baseFragment.sendMedia(new MediaController.PhotoEntry(0, 0, 0, this.videoFile.getAbsolutePath(), 0, true, 0, 0, 0), InstantCameraView.this.videoEditedInfo, z, i);
+            InstantCameraView.this.startAnimation(false);
+        }
+
+        public /* synthetic */ void lambda$null$3$InstantCameraView$VideoRecorder() {
             InstantCameraView.this.startAnimation(false);
         }
 
@@ -2688,7 +2696,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 this.mediaMuxer = new MP4Builder().createMovie(mp4Movie, InstantCameraView.this.isSecretChat);
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public final void run() {
-                        InstantCameraView.VideoRecorder.this.lambda$prepareEncoder$4$InstantCameraView$VideoRecorder();
+                        InstantCameraView.VideoRecorder.this.lambda$prepareEncoder$5$InstantCameraView$VideoRecorder();
                     }
                 });
                 if (this.eglDisplay == EGL14.EGL_NO_DISPLAY) {
@@ -2761,7 +2769,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
         }
 
-        public /* synthetic */ void lambda$prepareEncoder$4$InstantCameraView$VideoRecorder() {
+        public /* synthetic */ void lambda$prepareEncoder$5$InstantCameraView$VideoRecorder() {
             if (!InstantCameraView.this.cancelled) {
                 try {
                     InstantCameraView.this.performHapticFeedback(3, 2);
