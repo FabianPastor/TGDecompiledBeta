@@ -628,6 +628,10 @@ public class ActionBarMenuItem extends FrameLayout {
             customToggleTransition.start();
             return true;
         } else if (this.searchContainer.getVisibility() == 0) {
+            ActionBarMenuItemSearchListener actionBarMenuItemSearchListener2 = this.listener;
+            if (actionBarMenuItemSearchListener2 != null) {
+                actionBarMenuItemSearchListener2.onSearchCollapse();
+            }
             if (z) {
                 AndroidUtilities.hideKeyboard(this.searchField);
             }
@@ -637,22 +641,18 @@ public class ActionBarMenuItem extends FrameLayout {
             this.searchContainer.setVisibility(8);
             this.searchField.clearFocus();
             setVisibility(0);
-            ActionBarMenuItemSearchListener actionBarMenuItemSearchListener2 = this.listener;
-            if (actionBarMenuItemSearchListener2 != null) {
-                actionBarMenuItemSearchListener2.onSearchCollapse();
-            }
             return false;
         } else {
+            ActionBarMenuItemSearchListener actionBarMenuItemSearchListener3 = this.listener;
+            if (actionBarMenuItemSearchListener3 != null) {
+                actionBarMenuItemSearchListener3.onSearchExpand();
+            }
             this.searchContainer.setVisibility(0);
             setVisibility(8);
             this.searchField.setText("");
             this.searchField.requestFocus();
             if (z) {
                 AndroidUtilities.showKeyboard(this.searchField);
-            }
-            ActionBarMenuItemSearchListener actionBarMenuItemSearchListener3 = this.listener;
-            if (actionBarMenuItemSearchListener3 != null) {
-                actionBarMenuItemSearchListener3.onSearchExpand();
             }
             return true;
         }

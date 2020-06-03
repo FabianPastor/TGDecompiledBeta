@@ -8898,11 +8898,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     private void updateContainerFlags(boolean z) {
-        if (Build.VERSION.SDK_INT >= 21 && this.sendPhotoType != 1) {
+        FrameLayoutDrawer frameLayoutDrawer;
+        if (Build.VERSION.SDK_INT >= 21 && this.sendPhotoType != 1 && (frameLayoutDrawer = this.containerView) != null) {
             int i = 1792;
             if (!z) {
                 i = 1796;
-                if (this.containerView.getPaddingLeft() > 0 || this.containerView.getPaddingRight() > 0) {
+                if (frameLayoutDrawer.getPaddingLeft() > 0 || this.containerView.getPaddingRight() > 0) {
                     i = 5894;
                 }
             }
@@ -13611,7 +13612,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 } catch (Exception e) {
                     FileLog.e((Throwable) e);
                 }
-                if (Build.VERSION.SDK_INT >= 21) {
+                if (Build.VERSION.SDK_INT >= 21 && this.containerView != null) {
                     AndroidUtilities.cancelRunOnUIThread(this.updateContainerFlagsRunnable);
                     updateContainerFlags(true);
                 }

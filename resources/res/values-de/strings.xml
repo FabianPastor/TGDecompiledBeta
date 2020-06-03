@@ -4,6 +4,7 @@
     <string name="Abort">Abbrechen</string>
     <string name="AbortEmail">E-Mail-Einrichtung abbrechen</string>
     <string name="AbortPassword">Einrichtung abbrechen</string>
+    <string name="AbortPasswordMenu">Einrichtung abbrechen</string>
     <string name="AccActionCancelDownload">Download abbrechen</string>
     <string name="AccActionDownload">Download</string>
     <string name="AccActionEnterSelectionMode">Auswahlmodus aufrufen</string>
@@ -166,7 +167,7 @@
     <string name="AddAdminErrorBlacklisted">Du kannst diesen Nutzer nicht als Admin festlegen, da er sich in der Liste \"Entfernte Nutzer\" befindet und du ihn nicht entfernen darfst.</string>
     <string name="AddAdminErrorNotAMember">Du kannst diesen Nutzer nicht als Admin festlegen, da er kein Mitglied dieser Gruppe ist oder du keine Erlaubnis hast, ihn einzuladen.</string>
     <string name="AddAnExplanation">Eine Erklärung hinzufügen</string>
-    <string name="AddAnExplanationInfo">Nutzer sehen diesen Text, nachdem sie die falsche Antwort gewählt haben. Gut für Lehrzwecke.</string>
+    <string name="AddAnExplanationInfo">Nutzer sehen diesen Text, nachdem sie eine falsche Antwort gewählt haben. Gut für Lehrzwecke.</string>
     <string name="AddAnOption">Option hinzufügen...</string>
     <string name="AddAnOptionInfo">Noch %1$s</string>
     <string name="AddAnOptionInfoMax">Mehr Optionen gibt es derzeit leider nicht.</string>
@@ -947,6 +948,7 @@
     <string name="DeleteAll">Alles löschen</string>
     <string name="DeleteAllFrom">Lösche alles von %1$s</string>
     <string name="DeleteAllMessagesAlert">Warnung! Das wird **alle Nachrichten** in diesem Chat **für beide Teilnehmer löschen**.</string>
+    <string name="DeleteAllMessagesSavedAlert">Warnung! Das wird in diesem Chat **alle Nachrichten löschen**.</string>
     <string name="DeleteAndExit">Löschen und Gruppe verlassen</string>
     <string name="DeleteAndExitButton">Löschen und Gruppe verlassen</string>
     <string name="DeleteAndStop">Löschen und anhalten</string>
@@ -1126,6 +1128,7 @@
     <string name="English">Englisch</string>
     <string name="Enhance">Verbessern</string>
     <string name="EnterChannelName">Kanalname</string>
+    <string name="EnterCode">Code eingeben</string>
     <string name="EnterCurrentPasscode">Aktuellen Pincode eingeben</string>
     <string name="EnterGroupNamePlaceholder">Gruppenname</string>
     <string name="EnterListName">Listenname</string>
@@ -1248,6 +1251,7 @@
     <string name="ExternalStorage">Externer Speicher</string>
     <string name="Fade">Verblassen</string>
     <string name="FavoriteStickers">Favoriten</string>
+    <string name="FeaturedGifs">Angesagte GIFs</string>
     <string name="FeaturedStickers">Angesagte Sticker</string>
     <string name="FeaturedStickersInfo">Diese Sticker sind gerade auf Telegram angesagt. Du kannst eigene Sticker über den @stickers Bot hinzufügen.</string>
     <string name="February">Februar</string>
@@ -1261,6 +1265,9 @@
     <string name="Files_zero">%1$d Dateien</string>
     <string name="FilterAddChats">Chats hinzufügen</string>
     <string name="FilterAddException">Ausnahme hinzufügen</string>
+    <string name="FilterAddTo">Zu Ordner hinzufügen</string>
+    <string name="FilterAddToAlertFullText">Mehr als 100 Chats kann man leider nicht aus einem Ordner ausschließen.</string>
+    <string name="FilterAddToAlertFullTitle">Limt erreicht</string>
     <string name="FilterAddingChats">Chats werden hinzugefügt</string>
     <string name="FilterAddingChatsInfo">Bitte warte, bis wir den Ordner mit Chats füllen...</string>
     <string name="FilterAllChats">Alle Chats</string>
@@ -1268,11 +1275,16 @@
     <string name="FilterAlwaysShow">Chats einbeziehen</string>
     <string name="FilterArchived">Archiviert</string>
     <string name="FilterAvailableText">*Einstellungen &gt; Ordner* öffnen, um Chats in Ordnern zu sortieren.</string>
-    <string name="FilterAvailableTitle">Chat-Ordner</string>
+    <string name="FilterAvailableTitle">Ordner</string>
     <string name="FilterBots">Bots</string>
     <string name="FilterChannels">Kanäle</string>
+    <string name="FilterChatAddedToExisting">**%1$s** wurde **%2$s** hinzugefügt</string>
+    <string name="FilterChatRemovedFrom">**%1$s** wurde aus **%2$s** entfernt</string>
     <string name="FilterChatTypes">Chatarten</string>
     <string name="FilterChats">Chats</string>
+    <string name="FilterChatsAddedToExisting">**%1$s** wurde **%2$s** hinzugefügt</string>
+    <string name="FilterChatsRemovedFrom">**%1$s** wurde aus **%2$s** entfernt</string>
+    <string name="FilterChoose">Wähle einen Ordner</string>
     <string name="FilterContact">Kontakt</string>
     <string name="FilterContacts">Kontakte</string>
     <string name="FilterDelete">Ordner entfernen</string>
@@ -1312,6 +1324,8 @@
     <string name="FilterRemoveExclusionText">Wirklich \"%1$s\" aus der \'immer ausgeschlossen\' Liste entfernen?</string>
     <string name="FilterRemoveExclusionTitle">Ausnahme entfernen</string>
     <string name="FilterRemoveExclusionUserText">Wirklich \"%1$s\" aus der Liste \'immer ausgeschlossen\' entfernen?</string>
+    <string name="FilterRemoveFrom">Aus Ordner entfernen</string>
+    <string name="FilterRemoveFromAlertFullText">Mehr als 100 Chats kann man leider nicht einem Ordner hinzufügen.</string>
     <string name="FilterRemoveInclusionChatText">Wirklich \"%1$s\" aus den \'immer enthaltenen\' Chats entfernen?</string>
     <string name="FilterRemoveInclusionText">Wirklich \"%1$s\" aus der \'immer enthalten\' Liste entfernen?</string>
     <string name="FilterRemoveInclusionTitle">Ausnahme entfernen</string>
@@ -1325,6 +1339,8 @@
     <string name="FilterShowMoreChats_two">%1$d weitere Chats zeigen</string>
     <string name="FilterShowMoreChats_zero">%1$d weitere Chats zeigen</string>
     <string name="FilterUnread">Ungelesen</string>
+    <string name="FilterUserAddedToExisting">**%1$s** wurde **%2$s** hinzugefügt</string>
+    <string name="FilterUserRemovedFrom">**%1$s** wurde aus **%2$s** entfernt</string>
     <string name="Filters">Ordner</string>
     <string name="FiltersSetup">Bearbeiten</string>
     <string name="FiltersSetupPinAlert">Ordner einrichten</string>
@@ -1495,6 +1511,7 @@
     <string name="HistoryCleared">Verlauf wurde gelöscht</string>
     <string name="HistoryClearedUndo">Verlauf geleert.</string>
     <string name="HoldToAudio">Halten für Audioaufnahme. Tippen für Video.</string>
+    <string name="HoldToAudioOnly">Hold to record audio.</string>
     <string name="HoldToVideo">Halten für Videoaufnahme. Tippen für Audio.</string>
     <string name="HoursBold_few">**%1$d** Stunden</string>
     <string name="HoursBold_many">**%1$d** Stunden</string>
@@ -2121,6 +2138,7 @@
     <string name="PaintDelete">Löschen</string>
     <string name="PaintDuplicate">Klonen</string>
     <string name="PaintEdit">Bearbeiten</string>
+    <string name="PaintFramed">Gerahmt</string>
     <string name="PaintOutlined">Kontur</string>
     <string name="PaintRegular">Normal</string>
     <string name="Passcode">Pincode-Sperre</string>
@@ -2312,7 +2330,10 @@
     <string name="PasswordDoNotMatch">Kennwörter stimmen nicht überein</string>
     <string name="PasswordEmailInvalid">Ungültige E-Mail-Adresse. Bitte prüfe, ob du sie richtig eingetippt hast und versuche es erneut.</string>
     <string name="PasswordHint">Passwort-Erinnerung</string>
+    <string name="PasswordHintPlaceholder">Hinweis</string>
     <string name="PasswordHintText">Hinweis auf dein Passwort eingeben</string>
+    <string name="PasswordOff">Aus</string>
+    <string name="PasswordOn">Ein</string>
     <string name="PasswordRecovery">Passwort zurücksetzen</string>
     <string name="PasswordReset">Passwort deaktiviert</string>
     <string name="PasteFromClipboard">Aus Zwischenablage einfügen</string>
@@ -2441,6 +2462,7 @@
     <string name="PleaseEnterCurrentPassword">Dein Passwort eingeben</string>
     <string name="PleaseEnterCurrentPasswordTransfer">Um die Übertragung abzuschliessen, bitte dein Passwort eingeben.</string>
     <string name="PleaseEnterFirstPassword">Passwort eingeben</string>
+    <string name="PleaseEnterNewFirstPassword">Neues Passwort festlegen</string>
     <string name="PleaseEnterPassword">Neues Passwort eingeben</string>
     <string name="PleaseLoginPassport">Bitte melde dich mit deinem Telegram-Konto an, um Telegram Passport nutzen zu können.</string>
     <string name="PleaseReEnterPassword">Passwort erneut eingeben</string>
@@ -2519,10 +2541,22 @@
     <string name="ProxyConnections">Verbindungen</string>
     <string name="ProxyDetails">Proxy-Details</string>
     <string name="ProxySettings">Proxy-Einstellungen</string>
+    <string name="PsaHide">Verstecken</string>
+    <string name="PsaHideChatAlertText">Wirklich diesen Chat verstecken?</string>
+    <string name="PsaHideChatAlertTitle">Chat verstecken</string>
+    <string name="PsaInfoDefault">PSA info test</string>
+    <string name="PsaInfo_covid">Diese Nachricht enthält eine öffentliche Bekanntmachung hinsichtlich der aktuellen COVID-19 Pandemie. Erfahre mehr über diese Initiative unter https://telegram.org/blog/coronavirus</string>
+    <string name="PsaMessageDefault">Wichtige Benachrichtigung</string>
+    <string name="PsaMessageInfoDefault">Das ist eine wichtige Benachrichtigung.</string>
+    <string name="PsaMessageInfo_covid">Diese Nachricht enthält eine öffentliche Bekanntmachung hinsichtlich der aktuellen COVID-19 Pandemie. Erfahre mehr über diese Initiative unter https://telegram.org/blog/coronavirus</string>
+    <string name="PsaMessage_covid">COVID-19 Benachrichtigung</string>
+    <string name="PsaTypeDefault">PSA</string>
+    <string name="PsaType_covid">COVID-19</string>
     <string name="PublicChannelsTooMuch">Der ausgewählte Nutzer hat zu viele öffentliche Gruppen oder Kanäle. Bitte die Person, einfach einen Kanal oder eine Gruppe privat zu stellen.</string>
     <string name="PublicPoll">Umfrage</string>
     <string name="PublicPollCantForward">Leider können Umfragen mit sichtbaren Stimmen nicht an Kanäle weitergeleitet werden.</string>
     <string name="Purple">Violett</string>
+    <string name="QRCodePermissionNoCamera">Telegram benötigt zum Scannen von QR-Codes Zugriff auf deine Kamera.</string>
     <string name="QuestionHint">Stelle eine Frage</string>
     <string name="QuickReplyCustom">Eigene Nachricht...</string>
     <string name="QuickReplyDefault1">Kann nicht sprechen. Was gibt\'s?</string>
@@ -2547,7 +2581,7 @@
     <string name="ReEnterYourPasscode">Neuen Pincode erneut eingben</string>
     <string name="Recent">Letzte</string>
     <string name="RecentFiles">Letzte Dateien</string>
-    <string name="RecentFilesAZ">Files A-Z</string>
+    <string name="RecentFilesAZ">Dateien von A-Z</string>
     <string name="RecentPosts">Kürzliche Beiträge</string>
     <string name="RecentStickers">Kürzlich benutzt</string>
     <string name="RecentlyViewed">Kürzlich angeschaut</string>
@@ -2561,6 +2595,7 @@
     <string name="RecordingAudio">nimmt eine Sprachnachricht auf...</string>
     <string name="RecordingRound">nimmt eine Videonachricht auf...</string>
     <string name="RecoveryEmail">Wiederherstellung</string>
+    <string name="RecoveryEmailTitle">E-Mail-Adresse\10für Wiederherstellung</string>
     <string name="Red">Rot</string>
     <string name="RegisterText2">Namen eingeben und ein Profilbild hochladen.</string>
     <string name="Regular">Normal</string>
@@ -2688,7 +2723,7 @@
     <string name="SearchInSettings">Einstellungen durchsuchen</string>
     <string name="SearchMembers">Mitglieder suchen</string>
     <string name="SearchMessages">Nachrichten</string>
-    <string name="SearchMusic">Search music</string>
+    <string name="SearchMusic">Musik suchen</string>
     <string name="SearchRecentFiles">Letzte Dateien suchen</string>
     <string name="SearchStickersHint">Sticker suchen</string>
     <string name="SearchTrendingStickersHint">Angesagte Sticker durchsuchen</string>
@@ -2774,7 +2809,7 @@
     <string name="SessionsTitle">Aktive Sitzungen</string>
     <string name="Set">Wählen</string>
     <string name="SetAdditionalPassword">Zusätzliches Passwort festlegen</string>
-    <string name="SetAdditionalPasswordInfo">Du kannst ein eigenes Passwort festlegen, um dich an einem neuen Gerät anzumelden, zusätzlich zum SMS-Code.</string>
+    <string name="SetAdditionalPasswordInfo">Hier kannst du ein eigenes Passwort festlegen, um dich an einem neuen Gerät anzumelden, zusätzlich zum Code, der per SMS kommt.</string>
     <string name="SetAdmins">Administratoren</string>
     <string name="SetAsAdmin">Zum Admin machen</string>
     <string name="SetBackground">HINTERGRUND FESTLEGEN</string>
@@ -2855,6 +2890,7 @@
     <string name="ShowInChat">Im Chat zeigen</string>
     <string name="ShowNotificationsFor">Zeige Benachrichtigungen von</string>
     <string name="ShowNotificationsForInfo">Ausschalten, wenn du nur vom aktiven Konto Benachrichtigungen empfangen möchtest.</string>
+    <string name="ShowStickers">Sticker zeigen</string>
     <string name="ShowVotes_few">Mehr anzeigen (%1$d)</string>
     <string name="ShowVotes_many">Mehr anzeigen (%1$d)</string>
     <string name="ShowVotes_one">Mehr anzeigen (%1$d)</string>
@@ -2891,6 +2927,7 @@
     <string name="SortedByName">Nach Name sortiert</string>
     <string name="Sound">Ton</string>
     <string name="SoundDefault">Standard</string>
+    <string name="SoundMuted">Ton stumm</string>
     <string name="Start">Starten</string>
     <string name="StartEncryptedChat">Geheimen Chat starten</string>
     <string name="StartMessaging">JETZT BEGINNEN</string>
@@ -3093,6 +3130,11 @@
     <string name="TurnPasswordOffQuestion">Ganz sicher dein Passwort deaktivieren?</string>
     <string name="TurnPasswordOffQuestionTitle">Passwort deaktivieren</string>
     <string name="TwoStepVerification">Zweistufige Bestätigung</string>
+    <string name="TwoStepVerificationPasswordReturnPassport">Zurück zu Passport</string>
+    <string name="TwoStepVerificationPasswordReturnSettings">Zurück zu Einstellungen</string>
+    <string name="TwoStepVerificationPasswordSet">Passwort festgelegt!</string>
+    <string name="TwoStepVerificationPasswordSetInfo">Du benötigt dieses Passwort neben dem Code, der dir per SMS geschickt wird, sobald du dich mit einem neuen Gerät anmeldest.</string>
+    <string name="TwoStepVerificationSetPassword">Passwort festlegen</string>
     <string name="TwoStepVerificationTitle">Zweistufige Bestätigung</string>
     <string name="TypeLocationGroup">Link</string>
     <string name="TypeLocationGroupEdit">Für dauerhaften Link antippen</string>
@@ -3232,6 +3274,7 @@
     <string name="Users_other">%1$d Nutzer</string>
     <string name="Users_two">%1$d Nutzer</string>
     <string name="Users_zero">%1$d Nutzer</string>
+    <string name="VerificationCode">Verifizierungscode</string>
     <string name="ViaBot">via</string>
     <string name="Vibrate">Vibration</string>
     <string name="VibrationDefault">Standard</string>
@@ -3366,11 +3409,13 @@
     <string name="YourEmailInfo">Falls du dein Passwort vergisst, benötigen wir deine richtige E-Mail Adresse.</string>
     <string name="YourEmailSkip">Überspringen</string>
     <string name="YourEmailSkipWarning">Warnung</string>
-    <string name="YourEmailSkipWarningText">Keine gute Idee.\10\10Wenn du dein Passwort vergisst, verlierst du den Zugang zu deinem Telegram Konto. Für immer, ohne Ausnahme.</string>
+    <string name="YourEmailSkipWarningText">Das ist keine gute Idee.\10\10Wenn du dein Passwort vergisst, verlierst du den Zugang zu deinem Telegram-Konto. Für immer, ohne Ausnahme.</string>
+    <string name="YourEmailSuccessChangedText">Your recovery email for Two-Step Verification is changed.</string>
     <string name="YourEmailSuccessText">Deine Wiederherstellungs-E-Mail für die zweistufige Bestätigung ist jetzt aktiv.</string>
     <string name="YourLocatedChannelsTooMuch">Du hast bereits zu viele lokale Gruppen. Bitte lösche zuerst einen deiner bestehenden.</string>
     <string name="YourName">Dein Name</string>
     <string name="YourPassword">Dein Passwort</string>
+    <string name="YourPasswordChangedSuccessText">Dein Passwort für die zweistufige Bestätigung wurde geändert.</string>
     <string name="YourPasswordSuccess">Geschafft!</string>
     <string name="YourPasswordSuccessText">Dein Passwort für die zweistufige Bestätigung ist jetzt aktiv.</string>
     <string name="YourPhone">Dein Telefon</string>
