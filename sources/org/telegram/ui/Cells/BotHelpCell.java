@@ -20,6 +20,7 @@ import org.telegram.ui.Components.LinkPath;
 import org.telegram.ui.Components.TypefaceSpan;
 
 public class BotHelpCell extends View {
+    private boolean animating;
     private BotHelpCellDelegate delegate;
     private int height;
     private String oldText;
@@ -28,6 +29,7 @@ public class BotHelpCell extends View {
     private int textX;
     private int textY;
     private LinkPath urlPath = new LinkPath();
+    public boolean wasDraw;
     private int width;
 
     public interface BotHelpCellDelegate {
@@ -285,10 +287,25 @@ public class BotHelpCell extends View {
             staticLayout.draw(canvas);
         }
         canvas.restore();
+        this.wasDraw = true;
+    }
+
+    /* access modifiers changed from: protected */
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        this.wasDraw = false;
     }
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         accessibilityNodeInfo.setText(this.textLayout.getText());
+    }
+
+    public boolean animating() {
+        return this.animating;
+    }
+
+    public void setAnimating(boolean z) {
+        this.animating = z;
     }
 }

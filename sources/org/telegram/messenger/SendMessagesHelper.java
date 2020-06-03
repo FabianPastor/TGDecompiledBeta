@@ -8397,7 +8397,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             if (r6 == 0) goto L_0x1706
             boolean r6 = org.telegram.messenger.MessageObject.isStickerDocument(r8)     // Catch:{ Exception -> 0x17d3 }
             if (r6 != 0) goto L_0x168e
-            r6 = 0
+            r6 = 1
             boolean r13 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r8, r6)     // Catch:{ Exception -> 0x17d3 }
             if (r13 == 0) goto L_0x1706
         L_0x168e:

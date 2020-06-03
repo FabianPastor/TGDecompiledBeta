@@ -8366,7 +8366,10 @@ public class MessageObject {
     public static boolean isAnimatedStickerMessage(TLRPC$Message tLRPC$Message) {
         TLRPC$MessageMedia tLRPC$MessageMedia;
         boolean isSecretDialogId = DialogObject.isSecretDialogId(tLRPC$Message.dialog_id);
-        if ((!isSecretDialogId || tLRPC$Message.stickerVerified == 1) && (tLRPC$MessageMedia = tLRPC$Message.media) != null && isAnimatedStickerDocument(tLRPC$MessageMedia.document, !isSecretDialogId)) {
+        if ((isSecretDialogId && tLRPC$Message.stickerVerified != 1) || (tLRPC$MessageMedia = tLRPC$Message.media) == null) {
+            return false;
+        }
+        if (isAnimatedStickerDocument(tLRPC$MessageMedia.document, !isSecretDialogId || tLRPC$Message.out)) {
             return true;
         }
         return false;
@@ -8706,7 +8709,7 @@ public class MessageObject {
             return false;
         }
         TLRPC$Document document = getDocument();
-        if (this.emojiAnimatedSticker != null || !isSecretDialogId) {
+        if (this.emojiAnimatedSticker != null || !isSecretDialogId || isOut()) {
             z = true;
         }
         return isAnimatedStickerDocument(document, z);

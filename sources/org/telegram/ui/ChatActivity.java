@@ -22095,7 +22095,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         TLRPC$Document document = messageObject.getDocument();
         boolean z = false;
         if (!messageObject.isAnimatedEmoji()) {
-            if (this.currentEncryptedChat == null) {
+            if (this.currentEncryptedChat == null || messageObject.isOut()) {
                 z = true;
             }
             if (!MessageObject.isAnimatedStickerDocument(document, z) || SharedConfig.loopStickers) {
