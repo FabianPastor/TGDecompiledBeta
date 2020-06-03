@@ -451,7 +451,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
                         }
                     }
 
-                    public void onError(Exception exc) {
+                    public void onError(VideoPlayer videoPlayer, Exception exc) {
                         if (SecretMediaViewer.this.playerRetryPlayCount > 0) {
                             SecretMediaViewer.access$1110(SecretMediaViewer.this);
                             AndroidUtilities.runOnUIThread(new Runnable(file) {

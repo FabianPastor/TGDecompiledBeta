@@ -2623,7 +2623,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) (getMeasuredHeight() - AndroidUtilities.dp(10.0f)), this.backgroundPaint);
     }
 
-    public void onError(Exception exc) {
+    public void onError(VideoPlayer videoPlayer2, Exception exc) {
         FileLog.e((Throwable) exc);
         onInitFailed();
     }

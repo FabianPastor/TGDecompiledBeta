@@ -3736,6 +3736,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             boolean z2 = true;
             if (arrayList.isEmpty()) {
                 if (this.filterTabsView.getVisibility() != 8) {
+                    this.filterTabsView.setIsEditing(false);
+                    showDoneItem(false);
                     this.maybeStartTracking = false;
                     if (this.startedTracking) {
                         this.startedTracking = false;

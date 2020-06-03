@@ -477,7 +477,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
     private long totalChangeTime;
     private int totalHeight;
     private int totalVisibleBlocksCount;
-    private TransitionParams transitionParams;
+    private final TransitionParams transitionParams;
     private int unmovedTextX;
     private ArrayList<LinkPath> urlPath = new ArrayList<>();
     private ArrayList<LinkPath> urlPathCache = new ArrayList<>();
@@ -1540,25 +1540,25 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.messenger.MessageObject r0 = r1.currentMessageObject
             int r0 = r0.type
             r2 = 0
-            if (r0 != 0) goto L_0x038a
+            if (r0 != 0) goto L_0x036c
             boolean r0 = r1.hasLinkPreview
             if (r0 != 0) goto L_0x000f
-            goto L_0x038a
+            goto L_0x036c
         L_0x000f:
             float r0 = r17.getX()
             int r3 = (int) r0
             float r0 = r17.getY()
             int r4 = (int) r0
             int r0 = r1.unmovedTextX
-            if (r3 < r0) goto L_0x038a
+            if (r3 < r0) goto L_0x036c
             int r5 = r1.backgroundWidth
             int r0 = r0 + r5
-            if (r3 > r0) goto L_0x038a
+            if (r3 > r0) goto L_0x036c
             int r0 = r1.textY
             org.telegram.messenger.MessageObject r5 = r1.currentMessageObject
             int r5 = r5.textHeight
             int r6 = r0 + r5
-            if (r4 < r6) goto L_0x038a
+            if (r4 < r6) goto L_0x036c
             int r0 = r0 + r5
             int r5 = r1.linkPreviewHeight
             int r0 = r0 + r5
@@ -1573,7 +1573,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             float r5 = (float) r5
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r0 = r0 + r5
-            if (r4 > r0) goto L_0x038a
+            if (r4 > r0) goto L_0x036c
             int r0 = r17.getAction()
             r5 = 21
             r6 = -1
@@ -1663,7 +1663,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
         L_0x00ed:
             android.text.style.CharacterStyle r0 = r1.pressedLink
-            if (r0 != 0) goto L_0x038a
+            if (r0 != 0) goto L_0x036c
             r0 = 1111490560(0x42400000, float:48.0)
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r0)
             int r10 = r1.miniButtonState
@@ -1773,14 +1773,14 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             return r8
         L_0x01be:
             int r0 = r1.documentAttachType
-            if (r0 == r8) goto L_0x038a
+            if (r0 == r8) goto L_0x036c
             boolean r0 = r1.drawPhotoImage
-            if (r0 == 0) goto L_0x038a
+            if (r0 == 0) goto L_0x036c
             org.telegram.messenger.ImageReceiver r0 = r1.photoImage
             float r3 = (float) r3
             float r4 = (float) r4
             boolean r0 = r0.isInsideImage(r3, r4)
-            if (r0 == 0) goto L_0x038a
+            if (r0 == 0) goto L_0x036c
             r1.linkPreviewPressed = r8
             org.telegram.messenger.MessageObject r0 = r1.currentMessageObject
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
@@ -1805,7 +1805,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             return r8
         L_0x01fa:
             int r0 = r17.getAction()
-            if (r0 != r8) goto L_0x0373
+            if (r0 != r8) goto L_0x0355
             boolean r0 = r1.instantPressed
             if (r0 == 0) goto L_0x0226
             org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r0 = r1.delegate
@@ -1824,7 +1824,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r1.instantButtonPressed = r2
             r1.instantPressed = r2
             r16.invalidate()
-            goto L_0x038a
+            goto L_0x036c
         L_0x0226:
             int r0 = r1.pressedLinkType
             if (r0 == r7) goto L_0x0240
@@ -1839,7 +1839,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             goto L_0x0240
         L_0x023b:
             r1.resetPressedLink(r7)
-            goto L_0x038a
+            goto L_0x036c
         L_0x0240:
             int r0 = r1.videoButtonPressed
             if (r0 != r8) goto L_0x0251
@@ -1847,7 +1847,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r1.playSoundEffect(r2)
             r1.didPressButton(r8, r8)
             r16.invalidate()
-            goto L_0x038a
+            goto L_0x036c
         L_0x0251:
             int r0 = r1.buttonPressed
             if (r0 == 0) goto L_0x026a
@@ -1861,7 +1861,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r1.didPressButton(r8, r2)
         L_0x0265:
             r16.invalidate()
-            goto L_0x038a
+            goto L_0x036c
         L_0x026a:
             int r0 = r1.miniButtonPressed
             if (r0 == 0) goto L_0x027b
@@ -1869,71 +1869,59 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r1.playSoundEffect(r2)
             r1.didPressMiniButton(r8)
             r16.invalidate()
-            goto L_0x038a
+            goto L_0x036c
         L_0x027b:
             android.text.style.CharacterStyle r0 = r1.pressedLink
-            if (r0 == 0) goto L_0x02b5
-            boolean r3 = r0 instanceof android.text.style.URLSpan
-            if (r3 == 0) goto L_0x02a7
-            android.text.style.URLSpan r0 = (android.text.style.URLSpan) r0
-            java.lang.String r0 = r0.getURL()
-            boolean r0 = org.telegram.ui.ChatActivity.isClickableLink(r0)
             if (r0 == 0) goto L_0x0297
-            org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r0 = r1.delegate
-            android.text.style.CharacterStyle r3 = r1.pressedLink
-            r0.didPressUrl(r1, r3, r2)
-            goto L_0x02b0
-        L_0x0297:
-            android.content.Context r0 = r16.getContext()
-            android.text.style.CharacterStyle r3 = r1.pressedLink
-            android.text.style.URLSpan r3 = (android.text.style.URLSpan) r3
-            java.lang.String r3 = r3.getURL()
-            org.telegram.messenger.browser.Browser.openUrl((android.content.Context) r0, (java.lang.String) r3)
-            goto L_0x02b0
-        L_0x02a7:
+            boolean r3 = r0 instanceof android.text.style.URLSpan
+            if (r3 == 0) goto L_0x0289
+            org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r3 = r1.delegate
+            r3.didPressUrl(r1, r0, r2)
+            goto L_0x0292
+        L_0x0289:
             boolean r3 = r0 instanceof android.text.style.ClickableSpan
-            if (r3 == 0) goto L_0x02b0
+            if (r3 == 0) goto L_0x0292
             android.text.style.ClickableSpan r0 = (android.text.style.ClickableSpan) r0
             r0.onClick(r1)
-        L_0x02b0:
+        L_0x0292:
             r1.resetPressedLink(r7)
-            goto L_0x038a
-        L_0x02b5:
+            goto L_0x036c
+        L_0x0297:
             int r0 = r1.documentAttachType
             r3 = 7
-            if (r0 != r3) goto L_0x02e5
+            if (r0 != r3) goto L_0x02c7
             org.telegram.messenger.MediaController r0 = org.telegram.messenger.MediaController.getInstance()
             org.telegram.messenger.MessageObject r2 = r1.currentMessageObject
             boolean r0 = r0.isPlayingMessage(r2)
-            if (r0 == 0) goto L_0x02dc
+            if (r0 == 0) goto L_0x02be
             org.telegram.messenger.MediaController r0 = org.telegram.messenger.MediaController.getInstance()
             boolean r0 = r0.isMessagePaused()
-            if (r0 == 0) goto L_0x02d1
-            goto L_0x02dc
-        L_0x02d1:
+            if (r0 == 0) goto L_0x02b3
+            goto L_0x02be
+        L_0x02b3:
             org.telegram.messenger.MediaController r0 = org.telegram.messenger.MediaController.getInstance()
             org.telegram.messenger.MessageObject r2 = r1.currentMessageObject
             r0.lambda$startAudioAgain$7$MediaController(r2)
-            goto L_0x036f
-        L_0x02dc:
+            goto L_0x0351
+        L_0x02be:
             org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r0 = r1.delegate
             org.telegram.messenger.MessageObject r2 = r1.currentMessageObject
             r0.needPlayMessage(r2)
-            goto L_0x036f
-        L_0x02e5:
-            if (r0 != r7) goto L_0x032b
+            goto L_0x0351
+        L_0x02c7:
+            if (r0 != r7) goto L_0x030d
             boolean r0 = r1.drawImageButton
-            if (r0 == 0) goto L_0x032b
+            if (r0 == 0) goto L_0x030d
             int r0 = r1.buttonState
-            if (r0 != r6) goto L_0x0320
+            if (r0 != r6) goto L_0x0302
             boolean r0 = org.telegram.messenger.SharedConfig.autoplayGifs
-            if (r0 == 0) goto L_0x02fe
+            if (r0 == 0) goto L_0x02e0
             org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r0 = r1.delegate
             float r2 = r1.lastTouchX
             float r3 = r1.lastTouchY
             r0.didPressImage(r1, r2, r3)
-            goto L_0x036f
-        L_0x02fe:
+            goto L_0x0351
+        L_0x02e0:
             r1.buttonState = r7
             org.telegram.messenger.MessageObject r0 = r1.currentMessageObject
             r3 = 1065353216(0x3var_, float:1.0)
@@ -1947,23 +1935,23 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r0.setIcon(r3, r2, r8)
             r16.invalidate()
             r1.playSoundEffect(r2)
-            goto L_0x036f
-        L_0x0320:
-            if (r0 == r7) goto L_0x0324
-            if (r0 != 0) goto L_0x036f
-        L_0x0324:
+            goto L_0x0351
+        L_0x0302:
+            if (r0 == r7) goto L_0x0306
+            if (r0 != 0) goto L_0x0351
+        L_0x0306:
             r1.didPressButton(r8, r2)
             r1.playSoundEffect(r2)
-            goto L_0x036f
-        L_0x032b:
+            goto L_0x0351
+        L_0x030d:
             org.telegram.messenger.MessageObject r0 = r1.currentMessageObject
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r0 = r0.media
             org.telegram.tgnet.TLRPC$WebPage r0 = r0.webpage
-            if (r0 == 0) goto L_0x034f
+            if (r0 == 0) goto L_0x0331
             java.lang.String r3 = r0.embed_url
             boolean r3 = android.text.TextUtils.isEmpty(r3)
-            if (r3 != 0) goto L_0x034f
+            if (r3 != 0) goto L_0x0331
             org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r9 = r1.delegate
             java.lang.String r10 = r0.embed_url
             java.lang.String r11 = r0.site_name
@@ -1972,41 +1960,41 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r14 = r0.embed_width
             int r15 = r0.embed_height
             r9.needOpenWebView(r10, r11, r12, r13, r14, r15)
-            goto L_0x036f
-        L_0x034f:
+            goto L_0x0351
+        L_0x0331:
             int r3 = r1.buttonState
-            if (r3 == r6) goto L_0x0363
+            if (r3 == r6) goto L_0x0345
             r4 = 3
-            if (r3 != r4) goto L_0x0357
-            goto L_0x0363
-        L_0x0357:
-            if (r0 == 0) goto L_0x036f
+            if (r3 != r4) goto L_0x0339
+            goto L_0x0345
+        L_0x0339:
+            if (r0 == 0) goto L_0x0351
             android.content.Context r2 = r16.getContext()
             java.lang.String r0 = r0.url
             org.telegram.messenger.browser.Browser.openUrl((android.content.Context) r2, (java.lang.String) r0)
-            goto L_0x036f
-        L_0x0363:
+            goto L_0x0351
+        L_0x0345:
             org.telegram.ui.Cells.ChatMessageCell$ChatMessageCellDelegate r0 = r1.delegate
             float r3 = r1.lastTouchX
             float r4 = r1.lastTouchY
             r0.didPressImage(r1, r3, r4)
             r1.playSoundEffect(r2)
-        L_0x036f:
+        L_0x0351:
             r1.resetPressedLink(r7)
             return r8
-        L_0x0373:
+        L_0x0355:
             int r0 = r17.getAction()
-            if (r0 != r7) goto L_0x038a
+            if (r0 != r7) goto L_0x036c
             boolean r0 = r1.instantButtonPressed
-            if (r0 == 0) goto L_0x038a
+            if (r0 == 0) goto L_0x036c
             int r0 = android.os.Build.VERSION.SDK_INT
-            if (r0 < r5) goto L_0x038a
+            if (r0 < r5) goto L_0x036c
             android.graphics.drawable.Drawable r0 = r1.selectorDrawable
-            if (r0 == 0) goto L_0x038a
+            if (r0 == 0) goto L_0x036c
             float r3 = (float) r3
             float r4 = (float) r4
             r0.setHotspot(r3, r4)
-        L_0x038a:
+        L_0x036c:
             return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ChatMessageCell.checkLinkPreviewMotionEvent(android.view.MotionEvent):boolean");
@@ -28340,6 +28328,9 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             this.willRemoved = z2;
         } else {
             this.willRemoved = false;
+        }
+        if (getParent() == null && this.attachedToWindow) {
+            onDetachedFromWindow();
         }
     }
 

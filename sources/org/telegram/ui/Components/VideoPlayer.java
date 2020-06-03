@@ -85,7 +85,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     }
 
     public interface VideoPlayerDelegate {
-        void onError(Exception exc);
+        void onError(VideoPlayer videoPlayer, Exception exc);
 
         void onRenderedFirstFrame();
 
@@ -734,7 +734,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
         Throwable cause = exoPlaybackException.getCause();
         TextureView textureView2 = this.textureView;
         if (textureView2 == null || !(cause instanceof SurfaceNotValidException)) {
-            this.delegate.onError(exoPlaybackException);
+            this.delegate.onError(this, exoPlaybackException);
         } else if (this.player != null) {
             ViewGroup viewGroup = (ViewGroup) textureView2.getParent();
             if (viewGroup != null) {

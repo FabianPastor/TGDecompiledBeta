@@ -1857,10 +1857,12 @@ public class ActionBarLayout extends FrameLayout {
             }
             this.transitionAnimationPreviewMode = false;
             this.transitionAnimationStartTime = 0;
-            this.onCloseAnimationEndRunnable.run();
-            this.onCloseAnimationEndRunnable = null;
             this.newFragment = null;
             this.oldFragment = null;
+            Runnable runnable = this.onCloseAnimationEndRunnable;
+            this.onCloseAnimationEndRunnable = null;
+            runnable.run();
+            checkNeedRebuild();
             checkNeedRebuild();
         }
     }
@@ -1884,10 +1886,11 @@ public class ActionBarLayout extends FrameLayout {
             }
             this.transitionAnimationPreviewMode = false;
             this.transitionAnimationStartTime = 0;
-            this.onOpenAnimationEndRunnable.run();
-            this.onOpenAnimationEndRunnable = null;
             this.newFragment = null;
             this.oldFragment = null;
+            Runnable runnable = this.onOpenAnimationEndRunnable;
+            this.onOpenAnimationEndRunnable = null;
+            runnable.run();
             checkNeedRebuild();
         }
     }

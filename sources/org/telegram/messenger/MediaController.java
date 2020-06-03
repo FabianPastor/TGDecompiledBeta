@@ -2876,7 +2876,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     }
                 }
 
-                public void onError(Exception exc) {
+                public void onError(VideoPlayer videoPlayer, Exception exc) {
                     FileLog.e((Throwable) exc);
                 }
 
@@ -3081,7 +3081,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                         }
                     }
 
-                    public void onError(Exception exc) {
+                    public void onError(VideoPlayer videoPlayer, Exception exc) {
                         FileLog.e((Throwable) exc);
                     }
 
@@ -3252,7 +3252,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     this.playerNum = i2;
                     String str14 = "&name=";
                     videoPlayer4.setDelegate(new VideoPlayer.VideoPlayerDelegate() {
-                        public void onError(Exception exc) {
+                        public void onError(VideoPlayer videoPlayer, Exception exc) {
                         }
 
                         public void onRenderedFirstFrame() {

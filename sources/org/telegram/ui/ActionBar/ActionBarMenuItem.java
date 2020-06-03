@@ -628,6 +628,9 @@ public class ActionBarMenuItem extends FrameLayout {
             customToggleTransition.start();
             return true;
         } else if (this.searchContainer.getVisibility() == 0) {
+            this.searchContainer.setVisibility(8);
+            this.searchField.clearFocus();
+            setVisibility(0);
             ActionBarMenuItemSearchListener actionBarMenuItemSearchListener2 = this.listener;
             if (actionBarMenuItemSearchListener2 != null) {
                 actionBarMenuItemSearchListener2.onSearchCollapse();
@@ -638,9 +641,6 @@ public class ActionBarMenuItem extends FrameLayout {
             if (this.clearsTextOnSearchCollapse) {
                 this.searchField.setText("");
             }
-            this.searchContainer.setVisibility(8);
-            this.searchField.clearFocus();
-            setVisibility(0);
             return false;
         } else {
             ActionBarMenuItemSearchListener actionBarMenuItemSearchListener3 = this.listener;

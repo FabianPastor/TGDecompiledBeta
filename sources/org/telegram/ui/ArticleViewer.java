@@ -17045,7 +17045,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         }
                     }
 
-                    public void onError(Exception exc) {
+                    public void onError(VideoPlayer videoPlayer, Exception exc) {
                         FileLog.e((Throwable) exc);
                     }
 

@@ -97,7 +97,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     private ActionBarPopupWindow popupWindow;
     private DispatchQueue queue = new DispatchQueue("Paint");
     private RenderView renderView;
-    private int selectedTextType;
+    private int selectedTextType = 2;
     private FrameLayout selectionContainerView;
     /* access modifiers changed from: private */
     public FrameLayout textDimView;
@@ -139,6 +139,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r8 = 2
             r4[r8] = r5
             r0.brushes = r4
+            r0.selectedTextType = r8
             org.telegram.messenger.DispatchQueue r4 = new org.telegram.messenger.DispatchQueue
             java.lang.String r5 = "Paint"
             r4.<init>(r5)
@@ -378,47 +379,47 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             org.telegram.ui.Components.Paint.Swatch r1 = r1.getSwatch()
             r0.setCurrentSwatch(r1, r6)
             r19.updateSettingsButton()
-            if (r3 == 0) goto L_0x0359
+            if (r3 == 0) goto L_0x035b
             boolean r1 = r24.isEmpty()
-            if (r1 != 0) goto L_0x0359
+            if (r1 != 0) goto L_0x035b
             int r1 = r24.size()
             r2 = 0
-        L_0x0299:
-            if (r2 >= r1) goto L_0x0359
+        L_0x029b:
+            if (r2 >= r1) goto L_0x035b
             java.lang.Object r4 = r3.get(r2)
             org.telegram.messenger.VideoEditedInfo$MediaEntity r4 = (org.telegram.messenger.VideoEditedInfo.MediaEntity) r4
             byte r5 = r4.type
-            if (r5 != 0) goto L_0x02c2
+            if (r5 != 0) goto L_0x02c4
             java.lang.Object r5 = r4.parentObject
             org.telegram.tgnet.TLRPC$Document r9 = r4.document
             org.telegram.ui.Components.Paint.Views.StickerView r5 = r0.createSticker(r5, r9, r6)
             byte r9 = r4.subType
             r9 = r9 & r8
-            if (r9 == 0) goto L_0x02b5
+            if (r9 == 0) goto L_0x02b7
             r5.mirror()
-        L_0x02b5:
+        L_0x02b7:
             android.view.ViewGroup$LayoutParams r9 = r5.getLayoutParams()
             int r10 = r4.viewWidth
             r9.width = r10
             int r10 = r4.viewHeight
             r9.height = r10
-            goto L_0x02ea
-        L_0x02c2:
-            if (r5 != r7) goto L_0x0355
+            goto L_0x02ec
+        L_0x02c4:
+            if (r5 != r7) goto L_0x0357
             org.telegram.ui.Components.Paint.Views.TextPaintView r5 = r0.createText(r6)
             byte r9 = r4.subType
             r10 = r9 & 1
-            if (r10 == 0) goto L_0x02d0
+            if (r10 == 0) goto L_0x02d2
             r9 = 0
-            goto L_0x02d7
-        L_0x02d0:
+            goto L_0x02d9
+        L_0x02d2:
             r9 = r9 & 4
-            if (r9 == 0) goto L_0x02d6
+            if (r9 == 0) goto L_0x02d8
             r9 = 2
-            goto L_0x02d7
-        L_0x02d6:
+            goto L_0x02d9
+        L_0x02d8:
             r9 = 1
-        L_0x02d7:
+        L_0x02d9:
             r5.setType(r9)
             java.lang.String r9 = r4.text
             r5.setText(r9)
@@ -426,7 +427,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             int r10 = r4.color
             r9.color = r10
             r5.setSwatch(r9)
-        L_0x02ea:
+        L_0x02ec:
             float r9 = r4.x
             org.telegram.ui.Components.Size r10 = r0.paintingSize
             float r10 = r10.width
@@ -480,10 +481,10 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             double r9 = r9 * r11
             float r4 = (float) r9
             r5.setRotation(r4)
-        L_0x0355:
+        L_0x0357:
             int r2 = r2 + 1
-            goto L_0x0299
-        L_0x0359:
+            goto L_0x029b
+        L_0x035b:
             org.telegram.ui.Components.Paint.Views.EntitiesContainerView r1 = r0.entitiesView
             r2 = 4
             r1.setVisibility(r2)
@@ -1442,7 +1443,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             ImageView imageView2 = new ImageView(getContext());
             imageView2.setImageResource(NUM);
             imageView2.setScaleType(ImageView.ScaleType.CENTER);
-            imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("radioBackground"), PorterDuff.Mode.MULTIPLY));
+            imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("radioBackgroundChecked"), PorterDuff.Mode.MULTIPLY));
             r0.addView(imageView2, LayoutHelper.createFrame(50, -1.0f));
         }
         return r0;

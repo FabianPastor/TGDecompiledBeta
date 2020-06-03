@@ -739,7 +739,11 @@ public class FilterShaders {
     }
 
     public int getRenderFrameBuffer() {
-        return this.renderFrameBuffer[!this.isVideo];
+        int[] iArr = this.renderFrameBuffer;
+        if (iArr != null) {
+            return iArr[!this.isVideo];
+        }
+        return 0;
     }
 
     public void requestUpdateBlurTexture() {

@@ -881,48 +881,50 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
     }
 
     public void showAspectRatioDialog() {
-        if (this.areaView.getLockAspectRatio() > 0.0f) {
-            this.areaView.setLockedAspectRatio(0.0f);
-            CropViewListener cropViewListener = this.listener;
-            if (cropViewListener != null) {
-                cropViewListener.onAspectLock(false);
-            }
-        } else if (!this.hasAspectRatioDialog) {
-            this.hasAspectRatioDialog = true;
-            String[] strArr = new String[8];
-            Integer[][] numArr = {new Integer[]{3, 2}, new Integer[]{5, 3}, new Integer[]{4, 3}, new Integer[]{5, 4}, new Integer[]{7, 5}, new Integer[]{16, 9}};
-            strArr[0] = LocaleController.getString("CropOriginal", NUM);
-            strArr[1] = LocaleController.getString("CropSquare", NUM);
-            int i = 2;
-            for (int i2 = 0; i2 < 6; i2++) {
-                Integer[] numArr2 = numArr[i2];
-                if (this.areaView.getAspectRatio() > 1.0f) {
-                    strArr[i] = String.format("%d:%d", new Object[]{numArr2[0], numArr2[1]});
-                } else {
-                    strArr[i] = String.format("%d:%d", new Object[]{numArr2[1], numArr2[0]});
+        if (this.state != null) {
+            if (this.areaView.getLockAspectRatio() > 0.0f) {
+                this.areaView.setLockedAspectRatio(0.0f);
+                CropViewListener cropViewListener = this.listener;
+                if (cropViewListener != null) {
+                    cropViewListener.onAspectLock(false);
                 }
-                i++;
-            }
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setItems(strArr, new DialogInterface.OnClickListener(numArr) {
-                private final /* synthetic */ Integer[][] f$1;
+            } else if (!this.hasAspectRatioDialog) {
+                this.hasAspectRatioDialog = true;
+                String[] strArr = new String[8];
+                Integer[][] numArr = {new Integer[]{3, 2}, new Integer[]{5, 3}, new Integer[]{4, 3}, new Integer[]{5, 4}, new Integer[]{7, 5}, new Integer[]{16, 9}};
+                strArr[0] = LocaleController.getString("CropOriginal", NUM);
+                strArr[1] = LocaleController.getString("CropSquare", NUM);
+                int i = 2;
+                for (int i2 = 0; i2 < 6; i2++) {
+                    Integer[] numArr2 = numArr[i2];
+                    if (this.areaView.getAspectRatio() > 1.0f) {
+                        strArr[i] = String.format("%d:%d", new Object[]{numArr2[0], numArr2[1]});
+                    } else {
+                        strArr[i] = String.format("%d:%d", new Object[]{numArr2[1], numArr2[0]});
+                    }
+                    i++;
+                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setItems(strArr, new DialogInterface.OnClickListener(numArr) {
+                    private final /* synthetic */ Integer[][] f$1;
 
-                {
-                    this.f$1 = r2;
-                }
+                    {
+                        this.f$1 = r2;
+                    }
 
-                public final void onClick(DialogInterface dialogInterface, int i) {
-                    CropView.this.lambda$showAspectRatioDialog$2$CropView(this.f$1, dialogInterface, i);
-                }
-            });
-            AlertDialog create = builder.create();
-            create.setCanceledOnTouchOutside(true);
-            create.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                public final void onCancel(DialogInterface dialogInterface) {
-                    CropView.this.lambda$showAspectRatioDialog$3$CropView(dialogInterface);
-                }
-            });
-            create.show();
+                    public final void onClick(DialogInterface dialogInterface, int i) {
+                        CropView.this.lambda$showAspectRatioDialog$2$CropView(this.f$1, dialogInterface, i);
+                    }
+                });
+                AlertDialog create = builder.create();
+                create.setCanceledOnTouchOutside(true);
+                create.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    public final void onCancel(DialogInterface dialogInterface) {
+                        CropView.this.lambda$showAspectRatioDialog$3$CropView(dialogInterface);
+                    }
+                });
+                create.show();
+            }
         }
     }
 

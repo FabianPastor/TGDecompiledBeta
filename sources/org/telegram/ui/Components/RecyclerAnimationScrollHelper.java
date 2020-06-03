@@ -69,13 +69,21 @@ public class RecyclerAnimationScrollHelper {
         final ArrayList arrayList = new ArrayList();
         this.positionToOldView.clear();
         final RecyclerView.Adapter adapter = this.recyclerView.getAdapter();
+        this.oldStableIds.clear();
         for (int i3 = 0; i3 < childCount; i3++) {
             View childAt = this.recyclerView.getChildAt(0);
             arrayList.add(childAt);
             int position = this.layoutManager.getPosition(childAt);
             this.positionToOldView.put(position, childAt);
             if (adapter != null && adapter.hasStableIds()) {
-                this.oldStableIds.put(Long.valueOf(adapter.getItemId(position)), childAt);
+                if (childAt instanceof ChatMessageCell) {
+                    this.oldStableIds.put(Long.valueOf((long) ((ChatMessageCell) childAt).getMessageObject().stableId), childAt);
+                } else {
+                    this.oldStableIds.put(Long.valueOf(adapter.getItemId(position)), childAt);
+                }
+            }
+            if (childAt instanceof ChatMessageCell) {
+                ((ChatMessageCell) childAt).setAnimationRunning(true, true);
             }
             this.layoutManager.removeAndRecycleView(childAt, this.recyclerView.mRecycler);
         }
@@ -120,13 +128,17 @@ public class RecyclerAnimationScrollHelper {
                     if (childAt.getBottom() > i11) {
                         i11 = childAt.getBottom();
                     }
-                    if (childAt instanceof ChatMessageCell) {
+                    boolean z = childAt instanceof ChatMessageCell;
+                    if (z) {
                         ((ChatMessageCell) childAt).setAnimationRunning(true, false);
                     }
                     RecyclerView.Adapter adapter = adapter;
                     if (adapter != null && adapter.hasStableIds()) {
                         long itemId = adapter.getItemId(RecyclerAnimationScrollHelper.this.recyclerView.getChildAdapterPosition(childAt));
                         if (RecyclerAnimationScrollHelper.this.oldStableIds.containsKey(Long.valueOf(itemId)) && (view2 = (View) RecyclerAnimationScrollHelper.this.oldStableIds.get(Long.valueOf(itemId))) != null) {
+                            if (z) {
+                                ((ChatMessageCell) childAt).setAnimationRunning(false, false);
+                            }
                             arrayList.remove(view2);
                             int top = childAt.getTop() - view2.getTop();
                             if (top != 0) {
@@ -157,7 +169,7 @@ public class RecyclerAnimationScrollHelper {
                     }
                 }
                 if (arrayList.isEmpty()) {
-                    height = -i12;
+                    height = Math.abs(i12);
                 } else {
                     if (!z3) {
                         i9 = RecyclerAnimationScrollHelper.this.recyclerView.getHeight() - i14;
@@ -221,7 +233,11 @@ public class RecyclerAnimationScrollHelper {
                     }
                 });
                 RecyclerAnimationScrollHelper.this.recyclerView.removeOnLayoutChangeListener(this);
-                RecyclerAnimationScrollHelper.this.animator.setDuration(Math.min((long) (((((float) i15) / ((float) RecyclerAnimationScrollHelper.this.recyclerView.getMeasuredHeight())) + 1.0f) * 200.0f), 1300));
+                long measuredHeight = (long) (((((float) i15) / ((float) RecyclerAnimationScrollHelper.this.recyclerView.getMeasuredHeight())) + 1.0f) * 200.0f);
+                if (measuredHeight < 80) {
+                    measuredHeight = 80;
+                }
+                RecyclerAnimationScrollHelper.this.animator.setDuration(Math.min(measuredHeight, 1300));
                 RecyclerAnimationScrollHelper.this.animator.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
                 RecyclerAnimationScrollHelper.this.animator.start();
             }

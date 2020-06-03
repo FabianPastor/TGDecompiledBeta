@@ -2598,7 +2598,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         }
                     }
 
-                    public void onError(Exception exc) {
+                    public void onError(VideoPlayer videoPlayer, Exception exc) {
                         FileLog.e((Throwable) exc);
                     }
                 });

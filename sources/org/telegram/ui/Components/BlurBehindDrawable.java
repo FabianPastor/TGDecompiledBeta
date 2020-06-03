@@ -252,7 +252,10 @@ public class BlurBehindDrawable {
                     dp = measuredHeight;
                 }
                 if (bitmapArr[i].getHeight() != dp || bitmapArr[i].getWidth() != this.parentView.getMeasuredWidth()) {
-                    this.queue.cleanupQueue();
+                    DispatchQueue dispatchQueue = this.queue;
+                    if (dispatchQueue != null) {
+                        dispatchQueue.cleanupQueue();
+                    }
                     this.blurredBitmapTmp[i] = Bitmap.createBitmap((int) (((float) measuredWidth) / 6.0f), (int) (((float) dp) / 6.0f), Bitmap.Config.ARGB_8888);
                     this.blurCanvas[i] = new Canvas(this.blurredBitmapTmp[i]);
                     Bitmap[] bitmapArr2 = this.renderingBitmap;

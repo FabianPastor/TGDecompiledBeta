@@ -96,8 +96,8 @@ public class BotHelpCell extends View {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x0109 A[ORIG_RETURN, RETURN, SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:62:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x0109 A[ORIG_RETURN, RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:64:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r8) {
         /*
@@ -216,11 +216,12 @@ public class BotHelpCell extends View {
         L_0x00df:
             boolean r1 = r0 instanceof android.text.style.URLSpan     // Catch:{ Exception -> 0x00f7 }
             if (r1 == 0) goto L_0x00f3
-            android.content.Context r0 = r7.getContext()     // Catch:{ Exception -> 0x00f7 }
-            android.text.style.ClickableSpan r1 = r7.pressedLink     // Catch:{ Exception -> 0x00f7 }
-            android.text.style.URLSpan r1 = (android.text.style.URLSpan) r1     // Catch:{ Exception -> 0x00f7 }
-            java.lang.String r1 = r1.getURL()     // Catch:{ Exception -> 0x00f7 }
-            org.telegram.messenger.browser.Browser.openUrl((android.content.Context) r0, (java.lang.String) r1)     // Catch:{ Exception -> 0x00f7 }
+            org.telegram.ui.Cells.BotHelpCell$BotHelpCellDelegate r1 = r7.delegate     // Catch:{ Exception -> 0x00f7 }
+            if (r1 == 0) goto L_0x00fb
+            org.telegram.ui.Cells.BotHelpCell$BotHelpCellDelegate r1 = r7.delegate     // Catch:{ Exception -> 0x00f7 }
+            android.text.style.URLSpan r0 = (android.text.style.URLSpan) r0     // Catch:{ Exception -> 0x00f7 }
+            java.lang.String r0 = r0.getURL()     // Catch:{ Exception -> 0x00f7 }
+            r1.didPressUrl(r0)     // Catch:{ Exception -> 0x00f7 }
             goto L_0x00fb
         L_0x00f3:
             r0.onClick(r7)     // Catch:{ Exception -> 0x00f7 }
