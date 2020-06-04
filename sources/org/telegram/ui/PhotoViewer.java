@@ -14410,23 +14410,23 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:203:0x041b, code lost:
-        if (r1 > r4) goto L_0x0415;
+    /* JADX WARNING: Code restructure failed: missing block: B:206:0x041f, code lost:
+        if (r1 > r4) goto L_0x0419;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:208:0x042a, code lost:
-        if (r2 > r4) goto L_0x0424;
+    /* JADX WARNING: Code restructure failed: missing block: B:211:0x042e, code lost:
+        if (r2 > r4) goto L_0x0428;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:216:0x044f, code lost:
-        if (r3 > r4) goto L_0x0449;
+    /* JADX WARNING: Code restructure failed: missing block: B:219:0x0453, code lost:
+        if (r3 > r4) goto L_0x044d;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:221:0x0460, code lost:
-        if (r3 > r4) goto L_0x045a;
+    /* JADX WARNING: Code restructure failed: missing block: B:224:0x0464, code lost:
+        if (r3 > r4) goto L_0x045e;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:265:0x052a, code lost:
-        if (r3 > r4) goto L_0x0524;
+    /* JADX WARNING: Code restructure failed: missing block: B:268:0x052e, code lost:
+        if (r3 > r4) goto L_0x0528;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:270:0x053b, code lost:
-        if (r3 > r4) goto L_0x0535;
+    /* JADX WARNING: Code restructure failed: missing block: B:273:0x053f, code lost:
+        if (r3 > r4) goto L_0x0539;
      */
     /* JADX WARNING: Removed duplicated region for block: B:179:0x0361  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -14459,11 +14459,11 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         L_0x002b:
             int r2 = r0.animationInProgress
             r9 = 0
-            if (r2 != 0) goto L_0x064a
+            if (r2 != 0) goto L_0x064e
             long r10 = r0.animationStartTime
             int r2 = (r10 > r4 ? 1 : (r10 == r4 ? 0 : -1))
             if (r2 == 0) goto L_0x0038
-            goto L_0x064a
+            goto L_0x064e
         L_0x0038:
             int r2 = r0.currentEditMode
             if (r2 != r7) goto L_0x0042
@@ -14471,19 +14471,19 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r2.onTouch(r1)
             return r8
         L_0x0042:
-            if (r2 == r8) goto L_0x0649
+            if (r2 == r8) goto L_0x064d
             if (r2 == r6) goto L_0x004c
             int r2 = r0.sendPhotoType
             if (r2 != r8) goto L_0x004c
-            goto L_0x0649
+            goto L_0x064d
         L_0x004c:
             org.telegram.ui.Components.PhotoViewerCaptionEnterView r2 = r0.captionEditText
             boolean r2 = r2.isPopupShowing()
-            if (r2 != 0) goto L_0x0640
+            if (r2 != 0) goto L_0x0644
             org.telegram.ui.Components.PhotoViewerCaptionEnterView r2 = r0.captionEditText
             boolean r2 = r2.isKeyboardVisible()
             if (r2 == 0) goto L_0x005e
-            goto L_0x0640
+            goto L_0x0644
         L_0x005e:
             int r2 = r0.currentEditMode
             if (r2 != 0) goto L_0x0082
@@ -14508,10 +14508,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         L_0x0089:
             int r2 = r20.getActionMasked()
             r10 = 1073741824(0x40000000, float:2.0)
-            if (r2 == 0) goto L_0x0545
+            if (r2 == 0) goto L_0x0549
             int r2 = r20.getActionMasked()
             if (r2 != r3) goto L_0x0099
-            goto L_0x0545
+            goto L_0x0549
         L_0x0099:
             int r2 = r20.getActionMasked()
             r3 = 1077936128(0x40400000, float:3.0)
@@ -14667,10 +14667,10 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r0.updateMinMax(r1)
             org.telegram.ui.PhotoViewer$FrameLayoutDrawer r1 = r0.containerView
             r1.invalidate()
-            goto L_0x063f
+            goto L_0x0643
         L_0x01b6:
             int r2 = r20.getPointerCount()
-            if (r2 != r8) goto L_0x063f
+            if (r2 != r8) goto L_0x0643
             int r2 = r0.paintViewTouched
             if (r2 != r8) goto L_0x01de
             android.view.MotionEvent r1 = android.view.MotionEvent.obtain(r20)
@@ -14766,7 +14766,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r0.translationY = r1
             org.telegram.ui.PhotoViewer$FrameLayoutDrawer r1 = r0.containerView
             r1.invalidate()
-            goto L_0x063f
+            goto L_0x0643
         L_0x0288:
             boolean r2 = r0.invalidCoords
             if (r2 != 0) goto L_0x0373
@@ -14797,7 +14797,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         L_0x02c2:
             float r5 = r0.scale
             int r5 = (r5 > r11 ? 1 : (r5 == r11 ? 0 : -1))
-            if (r5 == 0) goto L_0x063f
+            if (r5 == 0) goto L_0x0643
         L_0x02c8:
             boolean r5 = r0.moving
             if (r5 != 0) goto L_0x02d5
@@ -14895,14 +14895,14 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         L_0x036c:
             org.telegram.ui.PhotoViewer$FrameLayoutDrawer r1 = r0.containerView
             r1.invalidate()
-            goto L_0x063f
+            goto L_0x0643
         L_0x0373:
             r0.invalidCoords = r9
             float r2 = r20.getX()
             r0.moveStartX = r2
             float r1 = r20.getY()
             r0.moveStartY = r1
-            goto L_0x063f
+            goto L_0x0643
         L_0x0383:
             int r2 = r20.getActionMasked()
             if (r2 == r6) goto L_0x0396
@@ -14910,10 +14910,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             if (r2 == r8) goto L_0x0396
             int r2 = r20.getActionMasked()
             r4 = 6
-            if (r2 != r4) goto L_0x063f
+            if (r2 != r4) goto L_0x0643
         L_0x0396:
             int r2 = r0.paintViewTouched
-            if (r2 != r8) goto L_0x03ba
+            if (r2 != r8) goto L_0x03be
+            org.telegram.ui.Components.PhotoPaintView r2 = r0.photoPaintView
+            if (r2 == 0) goto L_0x03bb
             android.view.MotionEvent r1 = android.view.MotionEvent.obtain(r20)
             org.telegram.ui.Components.PhotoPaintView r2 = r0.photoPaintView
             float r2 = r2.getX()
@@ -14925,22 +14927,23 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             org.telegram.ui.Components.PhotoPaintView r2 = r0.photoPaintView
             r2.onTouch(r1)
             r1.recycle()
+        L_0x03bb:
             r0.paintViewTouched = r9
             return r8
-        L_0x03ba:
+        L_0x03be:
             r0.paintViewTouched = r9
             boolean r2 = r0.zooming
-            if (r2 == 0) goto L_0x046e
+            if (r2 == 0) goto L_0x0472
             r0.invalidCoords = r8
             float r1 = r0.scale
             int r2 = (r1 > r11 ? 1 : (r1 == r11 ? 0 : -1))
-            if (r2 >= 0) goto L_0x03d0
+            if (r2 >= 0) goto L_0x03d4
             r0.updateMinMax(r11)
             r0.animateTo(r11, r12, r12, r8)
-            goto L_0x0468
-        L_0x03d0:
+            goto L_0x046c
+        L_0x03d4:
             int r1 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r1 <= 0) goto L_0x0431
+            if (r1 <= 0) goto L_0x0435
             float r1 = r0.pinchCenterX
             int r2 = r19.getContainerViewWidth()
             int r2 = r2 / r7
@@ -14976,34 +14979,34 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r0.updateMinMax(r3)
             float r4 = r0.minX
             int r5 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-            if (r5 >= 0) goto L_0x0417
-        L_0x0415:
+            if (r5 >= 0) goto L_0x041b
+        L_0x0419:
             r1 = r4
-            goto L_0x041e
-        L_0x0417:
+            goto L_0x0422
+        L_0x041b:
             float r4 = r0.maxX
             int r5 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-            if (r5 <= 0) goto L_0x041e
-            goto L_0x0415
-        L_0x041e:
+            if (r5 <= 0) goto L_0x0422
+            goto L_0x0419
+        L_0x0422:
             float r4 = r0.minY
             int r5 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r5 >= 0) goto L_0x0426
-        L_0x0424:
+            if (r5 >= 0) goto L_0x042a
+        L_0x0428:
             r2 = r4
-            goto L_0x042d
-        L_0x0426:
+            goto L_0x0431
+        L_0x042a:
             float r4 = r0.maxY
             int r5 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r5 <= 0) goto L_0x042d
-            goto L_0x0424
-        L_0x042d:
-            r0.animateTo(r3, r1, r2, r8)
-            goto L_0x0468
+            if (r5 <= 0) goto L_0x0431
+            goto L_0x0428
         L_0x0431:
+            r0.animateTo(r3, r1, r2, r8)
+            goto L_0x046c
+        L_0x0435:
             r0.checkMinMax(r8)
             int r1 = r0.currentEditMode
-            if (r1 != r6) goto L_0x0468
+            if (r1 != r6) goto L_0x046c
             float r1 = r0.translationX
             float r2 = r0.translationY
             float r3 = r0.scale
@@ -15011,38 +15014,38 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             float r3 = r0.translationX
             float r4 = r0.minX
             int r5 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-            if (r5 >= 0) goto L_0x044b
-        L_0x0449:
+            if (r5 >= 0) goto L_0x044f
+        L_0x044d:
             r1 = r4
-            goto L_0x0452
-        L_0x044b:
+            goto L_0x0456
+        L_0x044f:
             float r4 = r0.maxX
             int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-            if (r3 <= 0) goto L_0x0452
-            goto L_0x0449
-        L_0x0452:
+            if (r3 <= 0) goto L_0x0456
+            goto L_0x044d
+        L_0x0456:
             float r3 = r0.translationY
             float r4 = r0.minY
             int r5 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-            if (r5 >= 0) goto L_0x045c
-        L_0x045a:
+            if (r5 >= 0) goto L_0x0460
+        L_0x045e:
             r2 = r4
-            goto L_0x0463
-        L_0x045c:
+            goto L_0x0467
+        L_0x0460:
             float r4 = r0.maxY
             int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-            if (r3 <= 0) goto L_0x0463
-            goto L_0x045a
-        L_0x0463:
+            if (r3 <= 0) goto L_0x0467
+            goto L_0x045e
+        L_0x0467:
             float r3 = r0.scale
             r0.animateTo(r3, r1, r2, r9)
-        L_0x0468:
+        L_0x046c:
             r0.zooming = r9
             r0.moving = r9
-            goto L_0x063f
-        L_0x046e:
+            goto L_0x0643
+        L_0x0472:
             boolean r2 = r0.draggingDown
-            if (r2 == 0) goto L_0x04a2
+            if (r2 == 0) goto L_0x04a6
             float r2 = r0.dragY
             float r1 = r20.getY()
             float r2 = r2 - r1
@@ -15052,23 +15055,23 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r3 = 1086324736(0x40CLASSNAME, float:6.0)
             float r2 = r2 / r3
             int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r1 <= 0) goto L_0x048d
+            if (r1 <= 0) goto L_0x0491
             r0.closePhoto(r8, r9)
-            goto L_0x049e
-        L_0x048d:
+            goto L_0x04a2
+        L_0x0491:
             android.widget.FrameLayout r1 = r0.pickerView
             int r1 = r1.getVisibility()
-            if (r1 != 0) goto L_0x049b
+            if (r1 != 0) goto L_0x049f
             r0.toggleActionBar(r8, r8)
             r0.toggleCheckImageView(r8)
-        L_0x049b:
+        L_0x049f:
             r0.animateTo(r11, r12, r12, r9)
-        L_0x049e:
-            r0.draggingDown = r9
-            goto L_0x063f
         L_0x04a2:
+            r0.draggingDown = r9
+            goto L_0x0643
+        L_0x04a6:
             boolean r1 = r0.moving
-            if (r1 == 0) goto L_0x063f
+            if (r1 == 0) goto L_0x0643
             float r1 = r0.translationX
             float r2 = r0.translationY
             float r3 = r0.scale
@@ -15076,19 +15079,19 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r0.moving = r9
             r0.canDragDown = r8
             android.view.VelocityTracker r3 = r0.velocityTracker
-            if (r3 == 0) goto L_0x04c8
+            if (r3 == 0) goto L_0x04cc
             float r4 = r0.scale
             int r4 = (r4 > r11 ? 1 : (r4 == r11 ? 0 : -1))
-            if (r4 != 0) goto L_0x04c8
+            if (r4 != 0) goto L_0x04cc
             r4 = 1000(0x3e8, float:1.401E-42)
             r3.computeCurrentVelocity(r4)
             android.view.VelocityTracker r3 = r0.velocityTracker
             float r12 = r3.getXVelocity()
-        L_0x04c8:
+        L_0x04cc:
             int r3 = r0.currentEditMode
-            if (r3 != 0) goto L_0x051c
+            if (r3 != 0) goto L_0x0520
             int r3 = r0.sendPhotoType
-            if (r3 == r8) goto L_0x051c
+            if (r3 == r8) goto L_0x0520
             float r3 = r0.translationX
             float r4 = r0.minX
             int r5 = r19.getContainerViewWidth()
@@ -15097,19 +15100,19 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             float r4 = r4 - r5
             r5 = 1143111680(0x44228000, float:650.0)
             int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-            if (r3 < 0) goto L_0x04ec
+            if (r3 < 0) goto L_0x04f0
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r3 = -r3
             float r3 = (float) r3
             int r3 = (r12 > r3 ? 1 : (r12 == r3 ? 0 : -1))
-            if (r3 >= 0) goto L_0x04f8
-        L_0x04ec:
+            if (r3 >= 0) goto L_0x04fc
+        L_0x04f0:
             org.telegram.messenger.ImageReceiver r3 = r0.rightImage
             boolean r3 = r3.hasImageSet()
-            if (r3 == 0) goto L_0x04f8
+            if (r3 == 0) goto L_0x04fc
             r19.goToNext()
             return r8
-        L_0x04f8:
+        L_0x04fc:
             float r3 = r0.translationX
             float r4 = r0.maxX
             int r7 = r19.getContainerViewWidth()
@@ -15117,65 +15120,65 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             float r6 = (float) r7
             float r4 = r4 + r6
             int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-            if (r3 > 0) goto L_0x0510
+            if (r3 > 0) goto L_0x0514
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r5)
             float r3 = (float) r3
             int r3 = (r12 > r3 ? 1 : (r12 == r3 ? 0 : -1))
-            if (r3 <= 0) goto L_0x051c
-        L_0x0510:
+            if (r3 <= 0) goto L_0x0520
+        L_0x0514:
             org.telegram.messenger.ImageReceiver r3 = r0.leftImage
             boolean r3 = r3.hasImageSet()
-            if (r3 == 0) goto L_0x051c
+            if (r3 == 0) goto L_0x0520
             r19.goToPrev()
             return r8
-        L_0x051c:
+        L_0x0520:
             float r3 = r0.translationX
             float r4 = r0.minX
             int r5 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-            if (r5 >= 0) goto L_0x0526
-        L_0x0524:
+            if (r5 >= 0) goto L_0x052a
+        L_0x0528:
             r1 = r4
-            goto L_0x052d
-        L_0x0526:
+            goto L_0x0531
+        L_0x052a:
             float r4 = r0.maxX
             int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-            if (r3 <= 0) goto L_0x052d
-            goto L_0x0524
-        L_0x052d:
+            if (r3 <= 0) goto L_0x0531
+            goto L_0x0528
+        L_0x0531:
             float r3 = r0.translationY
             float r4 = r0.minY
             int r5 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-            if (r5 >= 0) goto L_0x0537
-        L_0x0535:
+            if (r5 >= 0) goto L_0x053b
+        L_0x0539:
             r2 = r4
-            goto L_0x053e
-        L_0x0537:
+            goto L_0x0542
+        L_0x053b:
             float r4 = r0.maxY
             int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-            if (r3 <= 0) goto L_0x053e
-            goto L_0x0535
-        L_0x053e:
+            if (r3 <= 0) goto L_0x0542
+            goto L_0x0539
+        L_0x0542:
             float r3 = r0.scale
             r0.animateTo(r3, r1, r2, r9)
-            goto L_0x063f
-        L_0x0545:
+            goto L_0x0643
+        L_0x0549:
             r0.discardTap = r9
             android.widget.Scroller r2 = r0.scroller
             boolean r2 = r2.isFinished()
-            if (r2 != 0) goto L_0x0554
+            if (r2 != 0) goto L_0x0558
             android.widget.Scroller r2 = r0.scroller
             r2.abortAnimation()
-        L_0x0554:
+        L_0x0558:
             boolean r2 = r0.draggingDown
-            if (r2 != 0) goto L_0x063f
+            if (r2 != 0) goto L_0x0643
             boolean r2 = r0.changingPage
-            if (r2 != 0) goto L_0x063f
+            if (r2 != 0) goto L_0x0643
             boolean r2 = r0.canZoom
-            if (r2 == 0) goto L_0x05df
+            if (r2 == 0) goto L_0x05e3
             int r2 = r20.getPointerCount()
-            if (r2 != r7) goto L_0x05df
+            if (r2 != r7) goto L_0x05e3
             int r2 = r0.paintViewTouched
-            if (r2 != r8) goto L_0x0583
+            if (r2 != r8) goto L_0x0587
             r11 = 0
             r13 = 0
             r15 = 3
@@ -15187,7 +15190,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r3.onTouch(r2)
             r2.recycle()
             r0.paintViewTouched = r7
-        L_0x0583:
+        L_0x0587:
             float r2 = r1.getX(r8)
             float r3 = r1.getX(r9)
             float r2 = r2 - r3
@@ -15218,25 +15221,25 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r0.zooming = r8
             r0.moving = r9
             int r1 = r0.currentEditMode
-            if (r1 != r6) goto L_0x05d4
+            if (r1 != r6) goto L_0x05d8
             float r1 = r0.pinchCenterX
             r0.moveStartX = r1
             r0.moveStartY = r2
             r0.draggingDown = r9
             r0.canDragDown = r9
-        L_0x05d4:
+        L_0x05d8:
             r19.hidePressedDrawables()
             android.view.VelocityTracker r1 = r0.velocityTracker
-            if (r1 == 0) goto L_0x063f
+            if (r1 == 0) goto L_0x0643
             r1.clear()
-            goto L_0x063f
-        L_0x05df:
+            goto L_0x0643
+        L_0x05e3:
             int r2 = r20.getPointerCount()
-            if (r2 != r8) goto L_0x063f
+            if (r2 != r8) goto L_0x0643
             int r2 = r0.currentEditMode
-            if (r2 != r6) goto L_0x0626
+            if (r2 != r6) goto L_0x062a
             int r2 = r0.paintViewTouched
-            if (r2 != 0) goto L_0x063f
+            if (r2 != 0) goto L_0x0643
             org.telegram.ui.Components.PhotoPaintView r2 = r0.photoPaintView
             android.graphics.Rect r3 = r0.hitRect
             r2.getHitRect(r3)
@@ -15246,7 +15249,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             float r4 = r20.getY()
             int r4 = (int) r4
             boolean r2 = r2.contains(r3, r4)
-            if (r2 == 0) goto L_0x063f
+            if (r2 == 0) goto L_0x0643
             android.view.MotionEvent r1 = android.view.MotionEvent.obtain(r20)
             org.telegram.ui.Components.PhotoPaintView r2 = r0.photoPaintView
             float r2 = r2.getX()
@@ -15259,8 +15262,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r2.onTouch(r1)
             r1.recycle()
             r0.paintViewTouched = r8
-            goto L_0x063f
-        L_0x0626:
+            goto L_0x0643
+        L_0x062a:
             float r2 = r20.getX()
             r0.moveStartX = r2
             float r1 = r20.getY()
@@ -15269,17 +15272,17 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r0.draggingDown = r9
             r0.canDragDown = r8
             android.view.VelocityTracker r1 = r0.velocityTracker
-            if (r1 == 0) goto L_0x063f
+            if (r1 == 0) goto L_0x0643
             r1.clear()
-        L_0x063f:
+        L_0x0643:
             return r9
-        L_0x0640:
+        L_0x0644:
             int r1 = r20.getAction()
-            if (r1 != r8) goto L_0x0649
+            if (r1 != r8) goto L_0x064d
             r0.closeCaptionEnter(r8)
-        L_0x0649:
+        L_0x064d:
             return r8
-        L_0x064a:
+        L_0x064e:
             return r9
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.onTouchEvent(android.view.MotionEvent):boolean");
