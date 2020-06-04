@@ -673,7 +673,10 @@ public class RenderView extends TextureView {
                 }
 
                 public /* synthetic */ void lambda$getTexture$3$RenderView$CanvasInternal(Bitmap[] bitmapArr, CountDownLatch countDownLatch) {
-                    bitmapArr[0] = RenderView.this.painting.getPaintingData(new RectF(0.0f, 0.0f, RenderView.this.painting.getSize().width, RenderView.this.painting.getSize().height), false).bitmap;
+                    Painting.PaintingData paintingData = RenderView.this.painting.getPaintingData(new RectF(0.0f, 0.0f, RenderView.this.painting.getSize().width, RenderView.this.painting.getSize().height), false);
+                    if (paintingData != null) {
+                        bitmapArr[0] = paintingData.bitmap;
+                    }
                     countDownLatch.countDown();
                 }
             }

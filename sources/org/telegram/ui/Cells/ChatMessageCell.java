@@ -29048,6 +29048,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
         public boolean ignoreAlpha;
         public boolean imageChangeBoundsTransition;
         public int[] imageRoundRadius = new int[4];
+        private boolean lastDrawBotButtons;
         public Rect lastDrawingBackgroundRect = new Rect();
         private StaticLayout lastDrawingCaptionLayout;
         public float lastDrawingCaptionX;
@@ -29081,6 +29082,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             this.lastDrawingCaptionX = ChatMessageCell.this.captionX;
             this.lastDrawingCaptionY = ChatMessageCell.this.captionY;
             this.lastDrawingCaptionLayout = ChatMessageCell.this.captionLayout;
+            this.lastDrawBotButtons = true ^ ChatMessageCell.this.botButtons.isEmpty();
         }
 
         public boolean animateChange() {
@@ -29176,6 +29178,10 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             this.transformGroupToSingleMessage = false;
             this.animateOutCaptionLayout = null;
             this.moveCaption = false;
+        }
+
+        public boolean supportChangeAnimation() {
+            return !this.lastDrawBotButtons && ChatMessageCell.this.botButtons.isEmpty();
         }
     }
 }

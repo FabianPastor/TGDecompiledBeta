@@ -672,7 +672,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         });
         this.listView.setVerticalScrollBarEnabled(false);
         RecyclerListView recyclerListView2 = this.listView;
-        AnonymousClass7 r03 = new FillLastLinearLayoutManager(context, 1, false, 0, recyclerListView2) {
+        AnonymousClass7 r03 = new FillLastLinearLayoutManager(context, 1, false, 0, this.listView) {
             public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int i) {
                 AnonymousClass1 r2 = new LinearSmoothScroller(recyclerView.getContext()) {
                     public int calculateDyToMakeVisible(View view, int i) {

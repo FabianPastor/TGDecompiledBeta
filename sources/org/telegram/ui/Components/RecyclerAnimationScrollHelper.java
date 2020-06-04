@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import org.telegram.messenger.BuildVars;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
 import org.telegram.ui.Components.RecyclerListView;
@@ -162,7 +163,6 @@ public class RecyclerAnimationScrollHelper {
                     }
                     if (view3.getParent() == null) {
                         RecyclerAnimationScrollHelper.this.recyclerView.addView(view3);
-                        RecyclerAnimationScrollHelper.this.recyclerView.mChildHelper.hideViewInternal(view3);
                     }
                     if (view3 instanceof ChatMessageCell) {
                         ((ChatMessageCell) view3).setAnimationRunning(true, true);
@@ -201,35 +201,45 @@ public class RecyclerAnimationScrollHelper {
                 });
                 RecyclerAnimationScrollHelper.this.animator.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
-                        RecyclerAnimationScrollHelper.this.recyclerView.scrollAnimationRunning = false;
-                        Iterator it = arrayList.iterator();
-                        while (it.hasNext()) {
-                            View view = (View) it.next();
-                            if (view instanceof ChatMessageCell) {
-                                ((ChatMessageCell) view).setAnimationRunning(false, true);
+                        if (RecyclerAnimationScrollHelper.this.animator != null) {
+                            RecyclerAnimationScrollHelper.this.recyclerView.scrollAnimationRunning = false;
+                            Iterator it = arrayList.iterator();
+                            while (it.hasNext()) {
+                                View view = (View) it.next();
+                                if (view instanceof ChatMessageCell) {
+                                    ((ChatMessageCell) view).setAnimationRunning(false, true);
+                                }
+                                view.setTranslationY(0.0f);
+                                RecyclerAnimationScrollHelper.this.recyclerView.removeView(view);
                             }
-                            view.setTranslationY(0.0f);
-                            RecyclerAnimationScrollHelper.this.recyclerView.mChildHelper.unhideViewInternal(view);
-                            RecyclerAnimationScrollHelper.this.recyclerView.removeView(view);
-                        }
-                        RecyclerAnimationScrollHelper.this.recyclerView.setVerticalScrollBarEnabled(true);
-                        int childCount = RecyclerAnimationScrollHelper.this.recyclerView.getChildCount();
-                        for (int i = 0; i < childCount; i++) {
-                            View childAt = RecyclerAnimationScrollHelper.this.recyclerView.getChildAt(i);
-                            if (childAt instanceof ChatMessageCell) {
-                                ((ChatMessageCell) childAt).setAnimationRunning(false, false);
+                            RecyclerAnimationScrollHelper.this.recyclerView.setVerticalScrollBarEnabled(true);
+                            if (BuildVars.DEBUG_VERSION) {
+                                if (RecyclerAnimationScrollHelper.this.recyclerView.mChildHelper.getChildCount() != RecyclerAnimationScrollHelper.this.recyclerView.getChildCount()) {
+                                    throw new RuntimeException("views count in child helper must be quals views count in recycler view");
+                                } else if (RecyclerAnimationScrollHelper.this.recyclerView.mChildHelper.getHiddenChildCount() != 0) {
+                                    throw new RuntimeException("hidden child count must be 0");
+                                } else if (RecyclerAnimationScrollHelper.this.recyclerView.getCachedChildCount() != 0) {
+                                    throw new RuntimeException("cached child count must be 0");
+                                }
                             }
-                            childAt.setTranslationY(0.0f);
+                            int childCount = RecyclerAnimationScrollHelper.this.recyclerView.getChildCount();
+                            for (int i = 0; i < childCount; i++) {
+                                View childAt = RecyclerAnimationScrollHelper.this.recyclerView.getChildAt(i);
+                                if (childAt instanceof ChatMessageCell) {
+                                    ((ChatMessageCell) childAt).setAnimationRunning(false, false);
+                                }
+                                childAt.setTranslationY(0.0f);
+                            }
+                            AnimatableAdapter animatableAdapter = animatableAdapter2;
+                            if (animatableAdapter != null) {
+                                animatableAdapter.onAnimationEnd();
+                            }
+                            if (RecyclerAnimationScrollHelper.this.animationCallback != null) {
+                                RecyclerAnimationScrollHelper.this.animationCallback.onEndAnimation();
+                            }
+                            RecyclerAnimationScrollHelper.this.positionToOldView.clear();
+                            ValueAnimator unused = RecyclerAnimationScrollHelper.this.animator = null;
                         }
-                        AnimatableAdapter animatableAdapter = animatableAdapter2;
-                        if (animatableAdapter != null) {
-                            animatableAdapter.onAnimationEnd();
-                        }
-                        if (RecyclerAnimationScrollHelper.this.animationCallback != null) {
-                            RecyclerAnimationScrollHelper.this.animationCallback.onEndAnimation();
-                        }
-                        RecyclerAnimationScrollHelper.this.positionToOldView.clear();
-                        ValueAnimator unused = RecyclerAnimationScrollHelper.this.animator = null;
                     }
                 });
                 RecyclerAnimationScrollHelper.this.recyclerView.removeOnLayoutChangeListener(this);

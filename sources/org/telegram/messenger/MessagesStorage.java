@@ -18932,25 +18932,23 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    public void replaceMessageIfExists(TLRPC$Message tLRPC$Message, int i, ArrayList<TLRPC$User> arrayList, ArrayList<TLRPC$Chat> arrayList2, boolean z) {
+    public void replaceMessageIfExists(TLRPC$Message tLRPC$Message, ArrayList<TLRPC$User> arrayList, ArrayList<TLRPC$Chat> arrayList2, boolean z) {
         if (tLRPC$Message != null) {
-            this.storageQueue.postRunnable(new Runnable(tLRPC$Message, z, arrayList, arrayList2, i) {
+            this.storageQueue.postRunnable(new Runnable(tLRPC$Message, z, arrayList, arrayList2) {
                 private final /* synthetic */ TLRPC$Message f$1;
                 private final /* synthetic */ boolean f$2;
                 private final /* synthetic */ ArrayList f$3;
                 private final /* synthetic */ ArrayList f$4;
-                private final /* synthetic */ int f$5;
 
                 {
                     this.f$1 = r2;
                     this.f$2 = r3;
                     this.f$3 = r4;
                     this.f$4 = r5;
-                    this.f$5 = r6;
                 }
 
                 public final void run() {
-                    MessagesStorage.this.lambda$replaceMessageIfExists$149$MessagesStorage(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                    MessagesStorage.this.lambda$replaceMessageIfExists$149$MessagesStorage(this.f$1, this.f$2, this.f$3, this.f$4);
                 }
             });
         }
@@ -19087,7 +19085,7 @@ public class MessagesStorage extends BaseController {
         r6 = r6 + 1;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:57:0x0160, code lost:
-        r2 = new org.telegram.messenger.MessageObject(r20, r16, (java.util.AbstractMap<java.lang.Integer, org.telegram.tgnet.TLRPC$User>) r5, (java.util.AbstractMap<java.lang.Integer, org.telegram.tgnet.TLRPC$Chat>) r0, true);
+        r2 = new org.telegram.messenger.MessageObject(r1.currentAccount, r16, (java.util.AbstractMap<java.lang.Integer, org.telegram.tgnet.TLRPC$User>) r5, (java.util.AbstractMap<java.lang.Integer, org.telegram.tgnet.TLRPC$Chat>) r0, true);
         r0 = new java.util.ArrayList();
         r0.add(r2);
         org.telegram.messenger.AndroidUtilities.runOnUIThread(new org.telegram.messenger.$$Lambda$MessagesStorage$PQVobzHRw1pohAjjrGTCYQN3uM(r15, r2, r0));
@@ -19100,7 +19098,7 @@ public class MessagesStorage extends BaseController {
      */
     /* JADX WARNING: No exception handlers in catch block: Catch:{  } */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$replaceMessageIfExists$149$MessagesStorage(org.telegram.tgnet.TLRPC$Message r16, boolean r17, java.util.ArrayList r18, java.util.ArrayList r19, int r20) {
+    public /* synthetic */ void lambda$replaceMessageIfExists$149$MessagesStorage(org.telegram.tgnet.TLRPC$Message r16, boolean r17, java.util.ArrayList r18, java.util.ArrayList r19) {
         /*
             r15 = this;
             r1 = r15
@@ -19283,9 +19281,9 @@ public class MessagesStorage extends BaseController {
             goto L_0x0146
         L_0x0160:
             org.telegram.messenger.MessageObject r8 = new org.telegram.messenger.MessageObject     // Catch:{ Exception -> 0x0183 }
+            int r3 = r1.currentAccount     // Catch:{ Exception -> 0x0183 }
             r7 = 1
             r2 = r8
-            r3 = r20
             r4 = r16
             r6 = r0
             r2.<init>((int) r3, (org.telegram.tgnet.TLRPC$Message) r4, (java.util.AbstractMap<java.lang.Integer, org.telegram.tgnet.TLRPC$User>) r5, (java.util.AbstractMap<java.lang.Integer, org.telegram.tgnet.TLRPC$Chat>) r6, (boolean) r7)     // Catch:{ Exception -> 0x0183 }
@@ -19307,7 +19305,7 @@ public class MessagesStorage extends BaseController {
         L_0x0187:
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$replaceMessageIfExists$149$MessagesStorage(org.telegram.tgnet.TLRPC$Message, boolean, java.util.ArrayList, java.util.ArrayList, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$replaceMessageIfExists$149$MessagesStorage(org.telegram.tgnet.TLRPC$Message, boolean, java.util.ArrayList, java.util.ArrayList):void");
     }
 
     public /* synthetic */ void lambda$null$148$MessagesStorage(MessageObject messageObject, ArrayList arrayList) {
