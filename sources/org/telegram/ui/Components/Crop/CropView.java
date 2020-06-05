@@ -786,7 +786,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         matrix.postTranslate((float) (bitmap3.getWidth() / 2), (float) (bitmap3.getHeight() / 2));
         canvas.drawBitmap(decodeFile, matrix, new Paint(2));
         FileOutputStream fileOutputStream = new FileOutputStream(new File(str));
-        bitmap4.compress(compressFormat, 83, fileOutputStream);
+        bitmap4.compress(compressFormat, 87, fileOutputStream);
         fileOutputStream.close();
         if (arrayList2 != null && !arrayList.isEmpty()) {
             float[] fArr = new float[4];

@@ -2283,30 +2283,32 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
         Theme.ThemeAccent themeAccent;
         int i;
         Theme.ThemeInfo previousTheme = Theme.getPreviousTheme();
-        if (previousTheme == null || (i = previousTheme.prevAccentId) < 0) {
-            themeAccent = previousTheme.getAccent(false);
-        } else {
-            themeAccent = previousTheme.themeAccentsMap.get(i);
-        }
-        if (this.accent != null) {
-            saveAccentWallpaper();
-            Theme.saveThemeAccents(this.applyingTheme, true, false, false, false);
-            Theme.clearPreviousTheme();
-            Theme.applyTheme(this.applyingTheme, this.nightTheme);
-            this.parentLayout.rebuildAllFragmentViews(false, false);
-        } else {
-            this.parentLayout.rebuildAllFragmentViews(false, false);
-            File file = new File(this.applyingTheme.pathToFile);
-            Theme.ThemeInfo themeInfo = this.applyingTheme;
-            Theme.applyThemeFile(file, themeInfo.name, themeInfo.info, false);
-            MessagesController.getInstance(this.applyingTheme.account).saveTheme(this.applyingTheme, (Theme.ThemeAccent) null, false, false);
-            SharedPreferences.Editor edit = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", 0).edit();
-            edit.putString("lastDayTheme", this.applyingTheme.getKey());
-            edit.commit();
-        }
-        finishFragment();
-        if (this.screenType == 0) {
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didApplyNewTheme, previousTheme, themeAccent, Boolean.valueOf(this.deleteOnCancel));
+        if (previousTheme != null) {
+            if (previousTheme == null || (i = previousTheme.prevAccentId) < 0) {
+                themeAccent = previousTheme.getAccent(false);
+            } else {
+                themeAccent = previousTheme.themeAccentsMap.get(i);
+            }
+            if (this.accent != null) {
+                saveAccentWallpaper();
+                Theme.saveThemeAccents(this.applyingTheme, true, false, false, false);
+                Theme.clearPreviousTheme();
+                Theme.applyTheme(this.applyingTheme, this.nightTheme);
+                this.parentLayout.rebuildAllFragmentViews(false, false);
+            } else {
+                this.parentLayout.rebuildAllFragmentViews(false, false);
+                File file = new File(this.applyingTheme.pathToFile);
+                Theme.ThemeInfo themeInfo = this.applyingTheme;
+                Theme.applyThemeFile(file, themeInfo.name, themeInfo.info, false);
+                MessagesController.getInstance(this.applyingTheme.account).saveTheme(this.applyingTheme, (Theme.ThemeAccent) null, false, false);
+                SharedPreferences.Editor edit = ApplicationLoader.applicationContext.getSharedPreferences("themeconfig", 0).edit();
+                edit.putString("lastDayTheme", this.applyingTheme.getKey());
+                edit.commit();
+            }
+            finishFragment();
+            if (this.screenType == 0) {
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didApplyNewTheme, previousTheme, themeAccent, Boolean.valueOf(this.deleteOnCancel));
+            }
         }
     }
 

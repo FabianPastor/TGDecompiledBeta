@@ -8772,7 +8772,6 @@ public class MessageObject {
     }
 
     public boolean hasAttachedStickers() {
-        TLRPC$Document tLRPC$Document;
         TLRPC$MessageMedia tLRPC$MessageMedia = this.messageOwner.media;
         if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaPhoto) {
             TLRPC$Photo tLRPC$Photo = tLRPC$MessageMedia.photo;
@@ -8780,8 +8779,15 @@ public class MessageObject {
                 return false;
             }
             return true;
+        } else if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaDocument) {
+            return isDocumentHasAttachedStickers(tLRPC$MessageMedia.document);
+        } else {
+            return false;
         }
-        if ((tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaDocument) && (tLRPC$Document = tLRPC$MessageMedia.document) != null) {
+    }
+
+    public static boolean isDocumentHasAttachedStickers(TLRPC$Document tLRPC$Document) {
+        if (tLRPC$Document != null) {
             for (int i = 0; i < tLRPC$Document.attributes.size(); i++) {
                 if (tLRPC$Document.attributes.get(i) instanceof TLRPC$TL_documentAttributeHasStickers) {
                     return true;

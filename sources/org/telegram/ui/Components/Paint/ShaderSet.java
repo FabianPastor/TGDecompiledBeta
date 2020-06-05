@@ -23,7 +23,7 @@ public class ShaderSet {
         hashMap.put("brushLight", Collections.unmodifiableMap(hashMap3));
         HashMap hashMap4 = new HashMap();
         hashMap4.put("vertex", "precision highp float; uniform mat4 mvpMatrix; attribute vec4 inPosition; attribute vec2 inTexcoord; varying vec2 varTexcoord; void main (void) { gl_Position = mvpMatrix * inPosition; varTexcoord = inTexcoord; }");
-        hashMap4.put("fragment", "precision highp float; varying vec2 varTexcoord; uniform sampler2D texture; void main (void) { vec4 tex = texture2D(texture, varTexcoord.st, 0.0); gl_FragColor = texture2D(texture, varTexcoord.st, 0.0); gl_FragColor.rgb *= gl_FragColor.a; }");
+        hashMap4.put("fragment", "precision highp float; varying vec2 varTexcoord; uniform sampler2D texture; void main (void) { gl_FragColor = texture2D(texture, varTexcoord.st, 0.0); gl_FragColor.rgb *= gl_FragColor.a; }");
         hashMap4.put("attributes", new String[]{"inPosition", "inTexcoord"});
         hashMap4.put("uniforms", new String[]{"mvpMatrix", "texture"});
         hashMap.put("blit", Collections.unmodifiableMap(hashMap4));

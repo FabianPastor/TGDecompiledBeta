@@ -5913,7 +5913,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 /* access modifiers changed from: private */
                 /* renamed from: processResponse */
                 public void lambda$null$2$EmojiView$GifAdapter(String str, String str2, boolean z, boolean z2, boolean z3, String str3, TLObject tLObject) {
-                    if (str.equals(this.lastSearchImageString)) {
+                    if (str != null && str.equals(this.lastSearchImageString)) {
                         boolean z4 = false;
                         this.reqId = 0;
                         if (!z3 || ((tLObject instanceof TLRPC$messages_BotResults) && !((TLRPC$messages_BotResults) tLObject).results.isEmpty())) {

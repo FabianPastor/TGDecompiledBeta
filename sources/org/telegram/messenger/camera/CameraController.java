@@ -1166,7 +1166,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ all -> 0x007a }
             r0.<init>(r5)     // Catch:{ all -> 0x007a }
             android.graphics.Bitmap$CompressFormat r1 = android.graphics.Bitmap.CompressFormat.JPEG     // Catch:{ all -> 0x007a }
-            r2 = 80
+            r2 = 87
             r6.compress(r1, r2, r0)     // Catch:{ all -> 0x007a }
             goto L_0x007e
         L_0x007a:

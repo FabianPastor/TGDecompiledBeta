@@ -218,8 +218,6 @@ public class RecyclerAnimationScrollHelper {
                                     throw new RuntimeException("views count in child helper must be quals views count in recycler view");
                                 } else if (RecyclerAnimationScrollHelper.this.recyclerView.mChildHelper.getHiddenChildCount() != 0) {
                                     throw new RuntimeException("hidden child count must be 0");
-                                } else if (RecyclerAnimationScrollHelper.this.recyclerView.getCachedChildCount() != 0) {
-                                    throw new RuntimeException("cached child count must be 0");
                                 }
                             }
                             int childCount = RecyclerAnimationScrollHelper.this.recyclerView.getChildCount();

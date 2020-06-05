@@ -796,8 +796,8 @@ public class ThemeEditorView {
             /* JADX WARNING: Removed duplicated region for block: B:42:0x00e4  */
             /* JADX WARNING: Removed duplicated region for block: B:56:0x0118  */
             /* JADX WARNING: Removed duplicated region for block: B:57:0x011b  */
-            /* JADX WARNING: Removed duplicated region for block: B:70:0x0145 A[LOOP:0: B:68:0x0137->B:70:0x0145, LOOP_END] */
-            /* JADX WARNING: Removed duplicated region for block: B:73:0x0171  */
+            /* JADX WARNING: Removed duplicated region for block: B:70:0x0145  */
+            /* JADX WARNING: Removed duplicated region for block: B:84:0x01a8  */
             /* Code decompiled incorrectly, please refer to instructions dump. */
             public boolean onTouchEvent(android.view.MotionEvent r17) {
                 /*
@@ -975,7 +975,7 @@ public class ThemeEditorView {
                     boolean r1 = r0.colorPressed
                     if (r1 != 0) goto L_0x012f
                     boolean r1 = r0.circlePressed
-                    if (r1 == 0) goto L_0x01ec
+                    if (r1 == 0) goto L_0x0223
                 L_0x012f:
                     r0.startColorChange(r4)
                     int r1 = r16.getColor()
@@ -985,7 +985,31 @@ public class ThemeEditorView {
                     org.telegram.ui.Components.ThemeEditorView r6 = r6.this$0
                     java.util.ArrayList r6 = r6.currentThemeDesription
                     int r6 = r6.size()
-                    if (r5 >= r6) goto L_0x0159
+                    if (r5 >= r6) goto L_0x0190
+                    org.telegram.ui.Components.ThemeEditorView$EditorAlert r6 = r0.this$1
+                    org.telegram.ui.Components.ThemeEditorView r6 = r6.this$0
+                    java.util.ArrayList r6 = r6.currentThemeDesription
+                    java.lang.Object r6 = r6.get(r5)
+                    org.telegram.ui.ActionBar.ThemeDescription r6 = (org.telegram.ui.ActionBar.ThemeDescription) r6
+                    java.lang.String r6 = r6.getCurrentKey()
+                    if (r5 != 0) goto L_0x0161
+                    java.lang.String r7 = "chat_wallpaper"
+                    boolean r7 = r6.equals(r7)
+                    if (r7 != 0) goto L_0x0179
+                L_0x0161:
+                    java.lang.String r7 = "chat_wallpaper_gradient_to"
+                    boolean r7 = r6.equals(r7)
+                    if (r7 != 0) goto L_0x0179
+                    java.lang.String r7 = "windowBackgroundWhite"
+                    boolean r7 = r6.equals(r7)
+                    if (r7 != 0) goto L_0x0179
+                    java.lang.String r7 = "windowBackgroundGray"
+                    boolean r6 = r6.equals(r7)
+                    if (r6 == 0) goto L_0x017c
+                L_0x0179:
+                    r6 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
+                    r1 = r1 | r6
+                L_0x017c:
                     org.telegram.ui.Components.ThemeEditorView$EditorAlert r6 = r0.this$1
                     org.telegram.ui.Components.ThemeEditorView r6 = r6.this$0
                     java.util.ArrayList r6 = r6.currentThemeDesription
@@ -994,14 +1018,14 @@ public class ThemeEditorView {
                     r6.setColor(r1, r3)
                     int r5 = r5 + 1
                     goto L_0x0137
-                L_0x0159:
+                L_0x0190:
                     int r5 = android.graphics.Color.red(r1)
                     int r6 = android.graphics.Color.green(r1)
                     int r7 = android.graphics.Color.blue(r1)
                     int r1 = android.graphics.Color.alpha(r1)
                     org.telegram.ui.Components.ThemeEditorView$EditorAlert r8 = r0.this$1
                     boolean r8 = r8.ignoreTextChange
-                    if (r8 != 0) goto L_0x01e9
+                    if (r8 != 0) goto L_0x0220
                     org.telegram.ui.Components.ThemeEditorView$EditorAlert r8 = r0.this$1
                     boolean unused = r8.ignoreTextChange = r4
                     org.telegram.ui.Components.EditTextBoldCursor[] r8 = r0.colorEditText
@@ -1039,21 +1063,21 @@ public class ThemeEditorView {
                     java.lang.String r1 = r5.toString()
                     r2.setText(r1)
                     r1 = 0
-                L_0x01d2:
-                    if (r1 >= r10) goto L_0x01e4
+                L_0x0209:
+                    if (r1 >= r10) goto L_0x021b
                     org.telegram.ui.Components.EditTextBoldCursor[] r2 = r0.colorEditText
                     r5 = r2[r1]
                     r2 = r2[r1]
                     int r2 = r2.length()
                     r5.setSelection(r2)
                     int r1 = r1 + 1
-                    goto L_0x01d2
-                L_0x01e4:
+                    goto L_0x0209
+                L_0x021b:
                     org.telegram.ui.Components.ThemeEditorView$EditorAlert r1 = r0.this$1
                     boolean unused = r1.ignoreTextChange = r3
-                L_0x01e9:
+                L_0x0220:
                     r16.invalidate()
-                L_0x01ec:
+                L_0x0223:
                     return r4
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ThemeEditorView.EditorAlert.ColorPicker.onTouchEvent(android.view.MotionEvent):boolean");

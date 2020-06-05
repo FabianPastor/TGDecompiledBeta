@@ -1341,7 +1341,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         }
     }
 
-    private FrameLayout buttonForBrush(int i, int i2, boolean z) {
+    private FrameLayout buttonForBrush(int i, int i2, boolean z, boolean z2) {
         FrameLayout frameLayout = new FrameLayout(getContext());
         frameLayout.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         frameLayout.setOnClickListener(new View.OnClickListener(i) {
@@ -1357,8 +1357,11 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         });
         ImageView imageView = new ImageView(getContext());
         imageView.setImageResource(i2);
-        frameLayout.addView(imageView, LayoutHelper.createFrame(165, 44.0f, 19, 46.0f, 0.0f, 8.0f, 0.0f));
         if (z) {
+            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultSubmenuItem"), PorterDuff.Mode.SRC_IN));
+        }
+        frameLayout.addView(imageView, LayoutHelper.createFrame(165, 44.0f, 19, 46.0f, 0.0f, 8.0f, 0.0f));
+        if (z2) {
             ImageView imageView2 = new ImageView(getContext());
             imageView2.setImageResource(NUM);
             imageView2.setScaleType(ImageView.ScaleType.CENTER);
@@ -1386,23 +1389,23 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     }
 
     public /* synthetic */ void lambda$showBrushSettings$15$PhotoPaintView() {
-        boolean z = false;
-        FrameLayout buttonForBrush = buttonForBrush(0, NUM, this.currentBrush == 0);
+        boolean z = true;
+        FrameLayout buttonForBrush = buttonForBrush(0, NUM, true, this.currentBrush == 0);
         this.popupLayout.addView(buttonForBrush);
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) buttonForBrush.getLayoutParams();
         layoutParams.width = -1;
         layoutParams.height = AndroidUtilities.dp(52.0f);
         buttonForBrush.setLayoutParams(layoutParams);
-        FrameLayout buttonForBrush2 = buttonForBrush(1, NUM, this.currentBrush == 1);
+        FrameLayout buttonForBrush2 = buttonForBrush(1, NUM, true, this.currentBrush == 1);
         this.popupLayout.addView(buttonForBrush2);
         LinearLayout.LayoutParams layoutParams2 = (LinearLayout.LayoutParams) buttonForBrush2.getLayoutParams();
         layoutParams2.width = -1;
         layoutParams2.height = AndroidUtilities.dp(52.0f);
         buttonForBrush2.setLayoutParams(layoutParams2);
-        if (this.currentBrush == 2) {
-            z = true;
+        if (this.currentBrush != 2) {
+            z = false;
         }
-        FrameLayout buttonForBrush3 = buttonForBrush(2, NUM, z);
+        FrameLayout buttonForBrush3 = buttonForBrush(2, NUM, false, z);
         this.popupLayout.addView(buttonForBrush3);
         LinearLayout.LayoutParams layoutParams3 = (LinearLayout.LayoutParams) buttonForBrush3.getLayoutParams();
         layoutParams3.width = -1;

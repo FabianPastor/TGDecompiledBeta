@@ -43,7 +43,7 @@ public class FilterGLThread extends DispatchQueue {
                                 int unused4 = filterGLThread4.videoHeight = filterGLThread4.videoHeight / 2;
                             }
                         }
-                        if (!(FilterGLThread.this.renderDataSet || FilterGLThread.this.videoWidth == 0 || FilterGLThread.this.videoHeight == 0)) {
+                        if (!FilterGLThread.this.renderDataSet && FilterGLThread.this.videoWidth > 0 && FilterGLThread.this.videoHeight > 0) {
                             FilterGLThread.this.filterShaders.setRenderData(FilterGLThread.this.currentBitmap, FilterGLThread.this.orientation, FilterGLThread.this.videoTexture[0], FilterGLThread.this.videoWidth, FilterGLThread.this.videoHeight);
                             boolean unused5 = FilterGLThread.this.renderDataSet = true;
                             FilterGLThread filterGLThread5 = FilterGLThread.this;
@@ -434,6 +434,22 @@ public class FilterGLThread extends DispatchQueue {
     }
 
     public void setSurfaceTextureSize(int i, int i2) {
+        postRunnable(new Runnable(i, i2) {
+            private final /* synthetic */ int f$1;
+            private final /* synthetic */ int f$2;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+            }
+
+            public final void run() {
+                FilterGLThread.this.lambda$setSurfaceTextureSize$6$FilterGLThread(this.f$1, this.f$2);
+            }
+        });
+    }
+
+    public /* synthetic */ void lambda$setSurfaceTextureSize$6$FilterGLThread(int i, int i2) {
         this.surfaceWidth = i;
         this.surfaceHeight = i2;
     }
@@ -460,12 +476,12 @@ public class FilterGLThread extends DispatchQueue {
             }
 
             public final void run() {
-                FilterGLThread.this.lambda$requestRender$6$FilterGLThread(this.f$1, this.f$2, this.f$3);
+                FilterGLThread.this.lambda$requestRender$7$FilterGLThread(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
-    public /* synthetic */ void lambda$requestRender$6$FilterGLThread(boolean z, boolean z2, boolean z3) {
+    public /* synthetic */ void lambda$requestRender$7$FilterGLThread(boolean z, boolean z2, boolean z3) {
         if (z) {
             this.filterShaders.requestUpdateBlurTexture();
         }

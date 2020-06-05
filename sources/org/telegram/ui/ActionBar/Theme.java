@@ -13773,8 +13773,8 @@ public class Theme {
                 return getDefaultColor(str);
             }
         }
-        if (str.equals("windowBackgroundWhite") || str.equals("windowBackgroundGray")) {
-            return -16777216 | num2.intValue();
+        if ("windowBackgroundWhite".equals(str) || "windowBackgroundGray".equals(str)) {
+            num2 = Integer.valueOf(num2.intValue() | -16777216);
         }
         return num2.intValue();
     }
