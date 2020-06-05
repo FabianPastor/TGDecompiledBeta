@@ -147,15 +147,16 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     }
 
     private void ensurePleyaerCreated() {
-        RenderersFactory renderersFactory;
+        DefaultRenderersFactory defaultRenderersFactory;
         DefaultLoadControl defaultLoadControl = new DefaultLoadControl(new DefaultAllocator(true, 65536), 15000, 50000, 100, 5000, -1, true);
         if (this.player == null) {
             if (this.audioVisualizerDelegate != null) {
-                renderersFactory = new AudioVisualizerRenderersFactory(ApplicationLoader.applicationContext);
+                defaultRenderersFactory = new AudioVisualizerRenderersFactory(ApplicationLoader.applicationContext);
             } else {
-                renderersFactory = new DefaultRenderersFactory(ApplicationLoader.applicationContext);
+                defaultRenderersFactory = new DefaultRenderersFactory(ApplicationLoader.applicationContext);
             }
-            SimpleExoPlayer newSimpleInstance = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, renderersFactory, (TrackSelector) this.trackSelector, (LoadControl) defaultLoadControl, (DrmSessionManager<FrameworkMediaCrypto>) null);
+            defaultRenderersFactory.setExtensionRendererMode(2);
+            SimpleExoPlayer newSimpleInstance = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, (RenderersFactory) defaultRenderersFactory, (TrackSelector) this.trackSelector, (LoadControl) defaultLoadControl, (DrmSessionManager<FrameworkMediaCrypto>) null);
             this.player = newSimpleInstance;
             newSimpleInstance.addListener(this);
             this.player.setVideoListener(this);

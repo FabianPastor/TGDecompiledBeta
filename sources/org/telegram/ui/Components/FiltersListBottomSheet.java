@@ -141,7 +141,7 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
                     int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
                     int r0 = r0 - r1
                     int r1 = r12.getMeasuredHeight()
-                    r2 = 1105199104(0x41e00000, float:28.0)
+                    r2 = 1108344832(0x42100000, float:36.0)
                     int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
                     int r1 = r1 + r2
                     org.telegram.ui.Components.FiltersListBottomSheet r2 = org.telegram.ui.Components.FiltersListBottomSheet.this
@@ -503,7 +503,8 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
         }
 
         public int getItemCount() {
-            return FiltersListBottomSheet.this.dialogFilters.size() + 1;
+            int size = FiltersListBottomSheet.this.dialogFilters.size();
+            return size < 10 ? size + 1 : size;
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {

@@ -280,10 +280,10 @@ public class ApplicationLoader extends Application {
         NetworkInfo.State state;
         try {
             ensureCurrentNetworkGet(false);
-            if (currentNetworkInfo != null && currentNetworkInfo.getType() == 1 && ((state = currentNetworkInfo.getState()) == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.CONNECTING || state == NetworkInfo.State.SUSPENDED)) {
-                return true;
+            if (currentNetworkInfo == null || ((currentNetworkInfo.getType() != 1 && currentNetworkInfo.getType() != 9) || ((state = currentNetworkInfo.getState()) != NetworkInfo.State.CONNECTED && state != NetworkInfo.State.CONNECTING && state != NetworkInfo.State.SUSPENDED))) {
+                return false;
             }
-            return false;
+            return true;
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
@@ -292,10 +292,10 @@ public class ApplicationLoader extends Application {
     public static boolean isConnectedToWiFi() {
         try {
             ensureCurrentNetworkGet(false);
-            if (currentNetworkInfo != null && currentNetworkInfo.getType() == 1 && currentNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                return true;
+            if (currentNetworkInfo == null || ((currentNetworkInfo.getType() != 1 && currentNetworkInfo.getType() != 9) || currentNetworkInfo.getState() != NetworkInfo.State.CONNECTED)) {
+                return false;
             }
-            return false;
+            return true;
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
@@ -317,16 +317,22 @@ public class ApplicationLoader extends Application {
 
     public static int getAutodownloadNetworkType() {
         try {
-            ConnectivityManager connectivityManager2 = (ConnectivityManager) applicationContext.getSystemService("connectivity");
-            NetworkInfo networkInfo = connectivityManager2.getNetworkInfo(1);
-            if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
-                return connectivityManager2.isActiveNetworkMetered() ? 0 : 1;
-            }
-            NetworkInfo activeNetworkInfo = connectivityManager2.getActiveNetworkInfo();
-            if (activeNetworkInfo == null || !activeNetworkInfo.isRoaming()) {
+            ensureCurrentNetworkGet(false);
+            if (currentNetworkInfo == null) {
                 return 0;
             }
-            return 2;
+            if (currentNetworkInfo.getType() != 1) {
+                if (currentNetworkInfo.getType() != 9) {
+                    if (currentNetworkInfo.isRoaming()) {
+                        return 2;
+                    }
+                    return 0;
+                }
+            }
+            if (connectivityManager.isActiveNetworkMetered()) {
+                return 0;
+            }
+            return 1;
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }

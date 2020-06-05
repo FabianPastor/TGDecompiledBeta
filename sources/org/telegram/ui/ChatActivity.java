@@ -19213,6 +19213,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                     }
                 }
             }
+            this.chatListView.setItemAnimator((RecyclerView.ItemAnimator) null);
         }
         updateBottomOverlay();
         updateSecretStatus();

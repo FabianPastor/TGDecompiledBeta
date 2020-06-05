@@ -629,6 +629,8 @@ public class DrawerLayoutContainer extends FrameLayout {
                 setPadding(0, 0, 0, 0);
             }
             this.inLayout = false;
+        } else {
+            AndroidUtilities.displaySize.y = size2 - AndroidUtilities.statusBarHeight;
         }
         boolean z = this.lastInsets != null && Build.VERSION.SDK_INT >= 21;
         int childCount = getChildCount();
