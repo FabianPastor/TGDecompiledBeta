@@ -630,12 +630,15 @@ public class DrawerLayoutContainer extends FrameLayout {
             }
             this.inLayout = false;
         } else {
-            AndroidUtilities.displaySize.y = size2 - AndroidUtilities.statusBarHeight;
+            int i3 = size2 - AndroidUtilities.statusBarHeight;
+            if (i3 > 0 && i3 < 4096) {
+                AndroidUtilities.displaySize.y = i3;
+            }
         }
         boolean z = this.lastInsets != null && Build.VERSION.SDK_INT >= 21;
         int childCount = getChildCount();
-        for (int i3 = 0; i3 < childCount; i3++) {
-            View childAt = getChildAt(i3);
+        for (int i4 = 0; i4 < childCount; i4++) {
+            View childAt = getChildAt(i4);
             if (childAt.getVisibility() != 8) {
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) childAt.getLayoutParams();
                 if (z) {

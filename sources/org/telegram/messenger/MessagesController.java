@@ -16913,7 +16913,7 @@ public class MessagesController extends BaseController implements NotificationCe
             }
             NativeByteBuffer nativeByteBuffer2 = null;
             sortDialogs((SparseArray<TLRPC$Chat>) null);
-            if (!z2 && dialogs.get(dialogs.size() - 1) == tLRPC$Dialog && !this.dialogsEndReached.get(i2)) {
+            if (!z2 && !dialogs.isEmpty() && dialogs.get(dialogs.size() - 1) == tLRPC$Dialog && !this.dialogsEndReached.get(i2)) {
                 dialogs.remove(dialogs.size() - 1);
             }
             getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);

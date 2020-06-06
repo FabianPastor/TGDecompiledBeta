@@ -3917,23 +3917,26 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
                 /* access modifiers changed from: protected */
                 public void onMeasure(int i, int i2) {
+                    int i3;
+                    int stableInsetBottom;
                     int size = View.MeasureSpec.getSize(i);
                     int size2 = View.MeasureSpec.getSize(i2);
                     if (Build.VERSION.SDK_INT < 21 || PhotoViewer.this.lastInsets == null) {
-                        int i3 = AndroidUtilities.displaySize.y;
-                        if (size2 > i3) {
-                            size2 = i3;
+                        int i4 = AndroidUtilities.displaySize.y;
+                        if (size2 > i4) {
+                            size2 = i4;
                         }
                     } else {
                         WindowInsets windowInsets = (WindowInsets) PhotoViewer.this.lastInsets;
                         if (AndroidUtilities.incorrectDisplaySizeFix) {
-                            int i4 = AndroidUtilities.displaySize.y;
-                            if (size2 > i4) {
-                                size2 = i4;
+                            int i5 = AndroidUtilities.displaySize.y;
+                            if (size2 > i5) {
+                                size2 = i5;
                             }
                             size2 += AndroidUtilities.statusBarHeight;
+                        } else if (windowInsets.getStableInsetBottom() >= 0 && (i3 = AndroidUtilities.statusBarHeight) >= 0 && (stableInsetBottom = (size2 - i3) - windowInsets.getStableInsetBottom()) > 0 && stableInsetBottom < 4096) {
+                            AndroidUtilities.displaySize.y = stableInsetBottom;
                         }
-                        AndroidUtilities.displaySize.y = (size2 - AndroidUtilities.statusBarHeight) - windowInsets.getStableInsetBottom();
                         size2 -= windowInsets.getSystemWindowInsetBottom();
                     }
                     setMeasuredDimension(size, size2);
