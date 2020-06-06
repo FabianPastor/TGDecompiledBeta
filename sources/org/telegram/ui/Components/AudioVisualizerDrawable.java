@@ -155,38 +155,40 @@ public class AudioVisualizerDrawable {
         float[] fArr4 = this.current;
         float f7 = fArr4[7];
         float f8 = fArr4[6] * fArr4[0];
-        for (int i2 = 0; i2 < 3; i2++) {
-            this.tmpWaveform[i2] = (int) (this.current[i2] * this.WAVE_RADIUS);
+        if (f7 != 0.0f || f8 != 0.0f) {
+            for (int i2 = 0; i2 < 3; i2++) {
+                this.tmpWaveform[i2] = (int) (this.current[i2] * this.WAVE_RADIUS);
+            }
+            this.drawables[0].setAdditionals(this.tmpWaveform);
+            for (int i3 = 0; i3 < 3; i3++) {
+                this.tmpWaveform[i3] = (int) (this.current[i3 + 3] * this.WAVE_RADIUS);
+            }
+            this.drawables[1].setAdditionals(this.tmpWaveform);
+            float dp = ((float) AndroidUtilities.dp(22.0f)) + (((float) AndroidUtilities.dp(4.0f)) * f8) + (this.IDLE_RADIUS * f7);
+            if (dp > ((float) AndroidUtilities.dp(26.0f))) {
+                dp = (float) AndroidUtilities.dp(26.0f);
+            }
+            CircleBezierDrawable[] circleBezierDrawableArr = this.drawables;
+            CircleBezierDrawable circleBezierDrawable = circleBezierDrawableArr[0];
+            circleBezierDrawableArr[1].radius = dp;
+            circleBezierDrawable.radius = dp;
+            canvas.save();
+            double d = (double) this.rotation;
+            Double.isNaN(d);
+            float f9 = (float) (d + 0.6d);
+            this.rotation = f9;
+            canvas.rotate(f9, f, f2);
+            canvas.save();
+            float var_ = (this.idleScale * 0.04f) + 1.0f;
+            canvas.scale(var_, var_, f, f2);
+            this.drawables[0].draw(f, f2, canvas, this.p1);
+            canvas.restore();
+            canvas.rotate(60.0f, f, f2);
+            float var_ = ((1.0f - this.idleScale) * 0.04f) + 1.0f;
+            canvas.scale(var_, var_, f, f2);
+            this.drawables[1].draw(f, f2, canvas, this.p1);
+            canvas.restore();
         }
-        this.drawables[0].setAdditionals(this.tmpWaveform);
-        for (int i3 = 0; i3 < 3; i3++) {
-            this.tmpWaveform[i3] = (int) (this.current[i3 + 3] * this.WAVE_RADIUS);
-        }
-        this.drawables[1].setAdditionals(this.tmpWaveform);
-        float dp = ((float) AndroidUtilities.dp(22.0f)) + (((float) AndroidUtilities.dp(4.0f)) * f8) + (this.IDLE_RADIUS * f7);
-        if (dp > ((float) AndroidUtilities.dp(26.0f))) {
-            dp = (float) AndroidUtilities.dp(26.0f);
-        }
-        CircleBezierDrawable[] circleBezierDrawableArr = this.drawables;
-        CircleBezierDrawable circleBezierDrawable = circleBezierDrawableArr[0];
-        circleBezierDrawableArr[1].radius = dp;
-        circleBezierDrawable.radius = dp;
-        canvas.save();
-        double d = (double) this.rotation;
-        Double.isNaN(d);
-        float f9 = (float) (d + 0.6d);
-        this.rotation = f9;
-        canvas.rotate(f9, f, f2);
-        canvas.save();
-        float var_ = (this.idleScale * 0.04f) + 1.0f;
-        canvas.scale(var_, var_, f, f2);
-        this.drawables[0].draw(f, f2, canvas, this.p1);
-        canvas.restore();
-        canvas.rotate(60.0f, f, f2);
-        float var_ = ((1.0f - this.idleScale) * 0.04f) + 1.0f;
-        canvas.scale(var_, var_, f, f2);
-        this.drawables[1].draw(f, f2, canvas, this.p1);
-        canvas.restore();
     }
 
     public void setParentView(ChatMessageCell chatMessageCell) {

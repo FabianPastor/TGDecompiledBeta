@@ -1050,7 +1050,7 @@ public class MediaDataController extends BaseController {
         return str != null ? str : "";
     }
 
-    private static int calcDocumentsHash(ArrayList<TLRPC$Document> arrayList) {
+    public static int calcDocumentsHash(ArrayList<TLRPC$Document> arrayList) {
         if (arrayList == null) {
             return 0;
         }

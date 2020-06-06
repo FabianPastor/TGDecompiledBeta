@@ -3896,14 +3896,16 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
     /* access modifiers changed from: private */
     public void updateRecentGifs() {
+        GifAdapter gifAdapter2;
         boolean isEmpty = this.recentGifs.isEmpty();
+        int calcDocumentsHash = MediaDataController.calcDocumentsHash(this.recentGifs);
         ArrayList<TLRPC$Document> recentGifs2 = MediaDataController.getInstance(this.currentAccount).getRecentGifs();
         this.recentGifs = recentGifs2;
-        if ((this.gifTabs != null && isEmpty && !recentGifs2.isEmpty()) || (!isEmpty && this.recentGifs.isEmpty())) {
+        int calcDocumentsHash2 = MediaDataController.calcDocumentsHash(recentGifs2);
+        if ((this.gifTabs != null && isEmpty && !this.recentGifs.isEmpty()) || (!isEmpty && this.recentGifs.isEmpty())) {
             updateGifTabs();
         }
-        GifAdapter gifAdapter2 = this.gifAdapter;
-        if (gifAdapter2 != null) {
+        if (calcDocumentsHash != calcDocumentsHash2 && (gifAdapter2 = this.gifAdapter) != null) {
             gifAdapter2.notifyDataSetChanged();
         }
     }

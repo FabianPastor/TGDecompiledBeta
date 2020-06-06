@@ -823,33 +823,39 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
                         }
                     }, 80);
                 } else if (VideoPlayer.this.audioVisualizerDelegate.needUpdate()) {
+                    int limit = byteBuffer2.limit();
+                    int i = 0;
+                    if (limit > 8192) {
+                        VideoPlayer.this.audioUpdateHandler.removeCallbacksAndMessages((Object) null);
+                        VideoPlayer.this.audioVisualizerDelegate.onVisualizerUpdate(false, true, (float[]) null);
+                        return;
+                    }
                     this.byteBuffer.put(byteBuffer2);
-                    int limit = this.position + byteBuffer2.limit();
-                    this.position = limit;
-                    if (limit >= 1024) {
-                        int i = 0;
+                    int i2 = this.position + limit;
+                    this.position = i2;
+                    if (i2 >= 1024) {
                         this.byteBuffer.position(0);
-                        for (int i2 = 0; i2 < 1024; i2++) {
-                            this.real[i2] = ((float) this.byteBuffer.getShort()) / 32768.0f;
+                        for (int i3 = 0; i3 < 1024; i3++) {
+                            this.real[i3] = ((float) this.byteBuffer.getShort()) / 32768.0f;
                         }
                         this.byteBuffer.rewind();
                         this.position = 0;
                         this.fft.forward(this.real);
-                        int i3 = 0;
+                        int i4 = 0;
                         float f = 0.0f;
                         while (true) {
                             float f2 = 1.0f;
-                            if (i3 >= 1024) {
+                            if (i4 >= 1024) {
                                 break;
                             }
-                            float f3 = this.fft.getSpectrumReal()[i3];
-                            float f4 = this.fft.getSpectrumImaginary()[i3];
+                            float f3 = this.fft.getSpectrumReal()[i4];
+                            float f4 = this.fft.getSpectrumImaginary()[i4];
                             float sqrt = ((float) Math.sqrt((double) ((f3 * f3) + (f4 * f4)))) / 30.0f;
                             if (sqrt <= 1.0f) {
                                 f2 = sqrt < 0.0f ? 0.0f : sqrt;
                             }
                             f += f2 * f2;
-                            i3++;
+                            i4++;
                         }
                         float sqrt2 = (float) Math.sqrt((double) (f / ((float) 1024)));
                         float[] fArr = new float[7];
@@ -861,9 +867,9 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
                             }
                         } else {
                             while (i < 6) {
-                                int i4 = 170 * i;
-                                float f5 = this.fft.getSpectrumReal()[i4];
-                                float f6 = this.fft.getSpectrumImaginary()[i4];
+                                int i5 = 170 * i;
+                                float f5 = this.fft.getSpectrumReal()[i5];
+                                float f6 = this.fft.getSpectrumImaginary()[i5];
                                 fArr[i] = (float) (Math.sqrt((double) ((f5 * f5) + (f6 * f6))) / 30.0d);
                                 if (fArr[i] > 1.0f) {
                                     fArr[i] = 1.0f;
