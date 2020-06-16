@@ -711,7 +711,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r12.setLongClickEnabled(r9)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.doneItem
             java.lang.String r1 = "Create"
-            r2 = 2131624817(0x7f0e0371, float:1.8876824E38)
+            r2 = 2131624820(0x7f0e0374, float:1.887683E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             java.lang.String r1 = r1.toUpperCase()
             r0.setText(r1)
@@ -744,7 +744,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
             java.lang.String r1 = "Search"
-            r2 = 2131626660(0x7f0e0aa4, float:1.8880562E38)
+            r2 = 2131626663(0x7f0e0aa7, float:1.8880569E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setContentDescription(r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
@@ -950,7 +950,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.setFilters(r1)
             org.telegram.ui.Components.EditTextEmoji r0 = r6.commentTextView
             java.lang.String r1 = "AddCaption"
-            r2 = 2131624119(0x7f0e00b7, float:1.8875409E38)
+            r2 = 2131624122(0x7f0e00ba, float:1.8875415E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setHint(r1)
             org.telegram.ui.Components.EditTextEmoji r0 = r6.commentTextView
@@ -983,7 +983,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.setAlpha(r10)
             android.widget.FrameLayout r0 = r6.writeButtonContainer
             java.lang.String r2 = "Send"
-            r3 = 2131626708(0x7f0e0ad4, float:1.888066E38)
+            r3 = 2131626711(0x7f0e0ad7, float:1.8880666E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r0.setContentDescription(r2)
             android.view.ViewGroup r0 = r6.containerView

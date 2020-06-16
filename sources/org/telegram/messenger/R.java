@@ -1328,6 +1328,8 @@ public final class R {
         public static final int AccDescrMoreOptions = NUM;
         public static final int AccDescrMsgNotPlayed = NUM;
         public static final int AccDescrMsgRead = NUM;
+        public static final int AccDescrMsgSending = NUM;
+        public static final int AccDescrMsgSendingError = NUM;
         public static final int AccDescrMsgUnread = NUM;
         public static final int AccDescrMusicInfo = NUM;
         public static final int AccDescrMuteMic = NUM;
@@ -1355,6 +1357,7 @@ public final class R {
         public static final int AccDescrRepeatOne = NUM;
         public static final int AccDescrReplying = NUM;
         public static final int AccDescrRotate = NUM;
+        public static final int AccDescrScheduledDate = NUM;
         public static final int AccDescrSearchByUser = NUM;
         public static final int AccDescrSearchNext = NUM;
         public static final int AccDescrSearchPrev = NUM;

@@ -184,6 +184,10 @@ public class MediaActionDrawable extends Drawable {
         invalidateSelf();
     }
 
+    public float getProgress() {
+        return this.downloadProgress;
+    }
+
     public float getTransitionProgress() {
         if (this.animatingTransition) {
             return this.transitionProgress;

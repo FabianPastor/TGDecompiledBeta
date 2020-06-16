@@ -1189,6 +1189,8 @@
     <public type="string" name="AccDescrMoreOptions" id="NUM" />
     <public type="string" name="AccDescrMsgNotPlayed" id="NUM" />
     <public type="string" name="AccDescrMsgRead" id="NUM" />
+    <public type="string" name="AccDescrMsgSending" id="NUM" />
+    <public type="string" name="AccDescrMsgSendingError" id="NUM" />
     <public type="string" name="AccDescrMsgUnread" id="NUM" />
     <public type="string" name="AccDescrMusicInfo" id="NUM" />
     <public type="string" name="AccDescrMuteMic" id="NUM" />
@@ -1216,6 +1218,7 @@
     <public type="string" name="AccDescrRepeatOne" id="NUM" />
     <public type="string" name="AccDescrReplying" id="NUM" />
     <public type="string" name="AccDescrRotate" id="NUM" />
+    <public type="string" name="AccDescrScheduledDate" id="NUM" />
     <public type="string" name="AccDescrSearchByUser" id="NUM" />
     <public type="string" name="AccDescrSearchNext" id="NUM" />
     <public type="string" name="AccDescrSearchPrev" id="NUM" />

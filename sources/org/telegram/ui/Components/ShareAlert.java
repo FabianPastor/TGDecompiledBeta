@@ -464,7 +464,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
             r3.showTextView()
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
-            r5 = 2131625819(0x7f0e075b, float:1.8878857E38)
+            r5 = 2131625822(0x7f0e075e, float:1.8878863E38)
             java.lang.String r11 = "NoChats"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r3.setText(r5)
@@ -566,7 +566,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r11 = 17
             r3.setGravity(r11)
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r11 = 2131624808(0x7f0e0368, float:1.8876806E38)
+            r11 = 2131624811(0x7f0e036b, float:1.8876812E38)
             java.lang.String r14 = "CopyLink"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r14, r11)
             java.lang.String r11 = r11.toUpperCase()
@@ -600,7 +600,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r5 = 0
             r3.<init>(r1, r2, r5, r4)
             r0.commentTextView = r3
-            r2 = 2131626789(0x7f0e0b25, float:1.8880824E38)
+            r2 = 2131626792(0x7f0e0b28, float:1.888083E38)
             java.lang.String r5 = "ShareComment"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
             r3.setHint(r2)
@@ -633,7 +633,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             android.widget.FrameLayout r2 = r0.writeButtonContainer
             r2.setAlpha(r12)
             android.widget.FrameLayout r2 = r0.writeButtonContainer
-            r5 = 2131626708(0x7f0e0ad4, float:1.888066E38)
+            r5 = 2131626711(0x7f0e0ad7, float:1.8880666E38)
             java.lang.String r6 = "Send"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r2.setContentDescription(r5)

@@ -164,6 +164,10 @@ public class RadialProgress2 {
         }
     }
 
+    public float getProgress() {
+        return (this.drawMiniIcon ? this.miniMediaActionDrawable : this.mediaActionDrawable).getProgress();
+    }
+
     private void invalidateParent() {
         int dp = AndroidUtilities.dp(2.0f);
         View view = this.parent;

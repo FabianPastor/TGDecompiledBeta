@@ -49,6 +49,8 @@
     <string name="AccDescrMoreOptions">More options</string>
     <string name="AccDescrMsgNotPlayed">Not played</string>
     <string name="AccDescrMsgRead">Seen</string>
+    <string name="AccDescrMsgSending">Sending</string>
+    <string name="AccDescrMsgSendingError">Sending error</string>
     <string name="AccDescrMsgUnread">Not seen</string>
     <string name="AccDescrMusicInfo">%2$s by %1$s</string>
     <string name="AccDescrMuteMic">Mute microphone</string>
@@ -76,6 +78,7 @@
     <string name="AccDescrRepeatOne">Repeat, one</string>
     <string name="AccDescrReplying">Replying to</string>
     <string name="AccDescrRotate">Rotate</string>
+    <string name="AccDescrScheduledDate">Scheduled for %s</string>
     <string name="AccDescrSearchByUser">Filter by user</string>
     <string name="AccDescrSearchNext">Next search result</string>
     <string name="AccDescrSearchPrev">Previous search result</string>
