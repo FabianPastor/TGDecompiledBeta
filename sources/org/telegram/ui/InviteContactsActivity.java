@@ -1215,19 +1215,19 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                     L_0x0035:
                         r2 = r4
                     L_0x0036:
-                        r3 = 0
-                        r5 = 1
+                        r3 = 1
+                        r5 = 0
                         if (r2 == 0) goto L_0x003c
                         r6 = 1
                         goto L_0x003d
                     L_0x003c:
                         r6 = 0
                     L_0x003d:
-                        int r6 = r6 + r5
+                        int r6 = r6 + r3
                         java.lang.String[] r7 = new java.lang.String[r6]
-                        r7[r3] = r1
+                        r7[r5] = r1
                         if (r2 == 0) goto L_0x0046
-                        r7[r5] = r2
+                        r7[r3] = r2
                     L_0x0046:
                         java.util.ArrayList r1 = new java.util.ArrayList
                         r1.<init>()
@@ -1292,11 +1292,11 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                         goto L_0x00de
                     L_0x00da:
                         int r12 = r12 + 1
-                        r3 = 0
+                        r3 = 1
                         goto L_0x008a
                     L_0x00de:
                         int r8 = r8 + 1
-                        r3 = 0
+                        r3 = 1
                         goto L_0x0051
                     L_0x00e3:
                         org.telegram.ui.InviteContactsActivity$InviteAdapter r3 = org.telegram.ui.InviteContactsActivity.InviteAdapter.this
@@ -1311,8 +1311,8 @@ public class InviteContactsActivity extends BaseFragment implements Notification
         /* access modifiers changed from: private */
         public void updateSearchResults(ArrayList<ContactsController.Contact> arrayList, ArrayList<CharSequence> arrayList2) {
             AndroidUtilities.runOnUIThread(new Runnable(arrayList, arrayList2) {
-                private final /* synthetic */ ArrayList f$1;
-                private final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ ArrayList f$2;
 
                 {
                     this.f$1 = r2;

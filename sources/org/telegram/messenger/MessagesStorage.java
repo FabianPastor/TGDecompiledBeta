@@ -329,7 +329,7 @@ public class MessagesStorage extends BaseController {
             SQLiteDatabase sQLiteDatabase = new SQLiteDatabase(this.cacheFile.getPath());
             this.database = sQLiteDatabase;
             sQLiteDatabase.executeFast("PRAGMA secure_delete = ON").stepThis().dispose();
-            this.database.executeFast("PRAGMA temp_store = 1").stepThis().dispose();
+            this.database.executeFast("PRAGMA temp_store = MEMORY").stepThis().dispose();
             this.database.executeFast("PRAGMA journal_mode = WAL").stepThis().dispose();
             if (z) {
                 if (BuildVars.LOGS_ENABLED) {
@@ -497,7 +497,7 @@ public class MessagesStorage extends BaseController {
 
     private void updateDbToLastVersion(int i) {
         this.storageQueue.postRunnable(new Runnable(i) {
-            private final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$1;
 
             {
                 this.f$1 = r2;
@@ -978,7 +978,7 @@ public class MessagesStorage extends BaseController {
             this.storageQueue.cleanupQueue();
         }
         this.storageQueue.postRunnable(new Runnable(z) {
-            private final /* synthetic */ boolean f$1;
+            public final /* synthetic */ boolean f$1;
 
             {
                 this.f$1 = r2;
@@ -1008,9 +1008,9 @@ public class MessagesStorage extends BaseController {
 
     public void saveSecretParams(int i, int i2, byte[] bArr) {
         this.storageQueue.postRunnable(new Runnable(i, i2, bArr) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ byte[] f$3;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ byte[] f$3;
 
             {
                 this.f$1 = r2;
@@ -1102,8 +1102,8 @@ public class MessagesStorage extends BaseController {
         }
         long andAdd = this.lastTaskId.getAndAdd(1);
         this.storageQueue.postRunnable(new Runnable(andAdd, nativeByteBuffer) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ NativeByteBuffer f$2;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ NativeByteBuffer f$2;
 
             {
                 this.f$1 = r2;
@@ -1135,7 +1135,7 @@ public class MessagesStorage extends BaseController {
 
     public void removePendingTask(long j) {
         this.storageQueue.postRunnable(new Runnable(j) {
-            private final /* synthetic */ long f$1;
+            public final /* synthetic */ long f$1;
 
             {
                 this.f$1 = r2;
@@ -1177,8 +1177,8 @@ public class MessagesStorage extends BaseController {
                             TLRPC$Chat TLdeserialize = TLRPC$Chat.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
                             if (TLdeserialize != null) {
                                 Utilities.stageQueue.postRunnable(new Runnable(TLdeserialize, longValue) {
-                                    private final /* synthetic */ TLRPC$Chat f$1;
-                                    private final /* synthetic */ long f$2;
+                                    public final /* synthetic */ TLRPC$Chat f$1;
+                                    public final /* synthetic */ long f$2;
 
                                     {
                                         this.f$1 = r2;
@@ -1194,9 +1194,9 @@ public class MessagesStorage extends BaseController {
                             break;
                         case 1:
                             Utilities.stageQueue.postRunnable(new Runnable(byteBufferValue.readInt32(false), byteBufferValue.readInt32(false), longValue) {
-                                private final /* synthetic */ int f$1;
-                                private final /* synthetic */ int f$2;
-                                private final /* synthetic */ long f$3;
+                                public final /* synthetic */ int f$1;
+                                public final /* synthetic */ int f$2;
+                                public final /* synthetic */ long f$3;
 
                                 {
                                     this.f$1 = r2;
@@ -1237,9 +1237,9 @@ public class MessagesStorage extends BaseController {
                                 tLRPC$TL_dialog.folder_id = byteBufferValue.readInt32(false);
                             }
                             AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_dialog, TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue) {
-                                private final /* synthetic */ TLRPC$Dialog f$1;
-                                private final /* synthetic */ TLRPC$InputPeer f$2;
-                                private final /* synthetic */ long f$3;
+                                public final /* synthetic */ TLRPC$Dialog f$1;
+                                public final /* synthetic */ TLRPC$InputPeer f$2;
+                                public final /* synthetic */ long f$3;
 
                                 {
                                     this.f$1 = r2;
@@ -1257,10 +1257,10 @@ public class MessagesStorage extends BaseController {
                             break;
                         case 4:
                             AndroidUtilities.runOnUIThread(new Runnable(byteBufferValue.readInt64(false), byteBufferValue.readBool(false), TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue) {
-                                private final /* synthetic */ long f$1;
-                                private final /* synthetic */ boolean f$2;
-                                private final /* synthetic */ TLRPC$InputPeer f$3;
-                                private final /* synthetic */ long f$4;
+                                public final /* synthetic */ long f$1;
+                                public final /* synthetic */ boolean f$2;
+                                public final /* synthetic */ TLRPC$InputPeer f$3;
+                                public final /* synthetic */ long f$4;
 
                                 {
                                     this.f$1 = r2;
@@ -1276,10 +1276,10 @@ public class MessagesStorage extends BaseController {
                             break;
                         case 6:
                             Utilities.stageQueue.postRunnable(new Runnable(byteBufferValue.readInt32(false), byteBufferValue.readInt32(false), longValue, TLRPC$InputChannel.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false)) {
-                                private final /* synthetic */ int f$1;
-                                private final /* synthetic */ int f$2;
-                                private final /* synthetic */ long f$3;
-                                private final /* synthetic */ TLRPC$InputChannel f$4;
+                                public final /* synthetic */ int f$1;
+                                public final /* synthetic */ int f$2;
+                                public final /* synthetic */ long f$3;
+                                public final /* synthetic */ TLRPC$InputChannel f$4;
 
                                 {
                                     this.f$1 = r2;
@@ -1300,9 +1300,9 @@ public class MessagesStorage extends BaseController {
                             TLObject TLdeserialize3 = TLdeserialize2 == null ? TLRPC$TL_channels_deleteMessages.TLdeserialize(byteBufferValue, readInt323, false) : TLdeserialize2;
                             if (TLdeserialize3 != null) {
                                 AndroidUtilities.runOnUIThread(new Runnable(readInt322, longValue, TLdeserialize3) {
-                                    private final /* synthetic */ int f$1;
-                                    private final /* synthetic */ long f$2;
-                                    private final /* synthetic */ TLObject f$3;
+                                    public final /* synthetic */ int f$1;
+                                    public final /* synthetic */ long f$2;
+                                    public final /* synthetic */ TLObject f$3;
 
                                     {
                                         this.f$1 = r2;
@@ -1321,9 +1321,9 @@ public class MessagesStorage extends BaseController {
                             }
                         case 9:
                             AndroidUtilities.runOnUIThread(new Runnable(byteBufferValue.readInt64(false), TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue) {
-                                private final /* synthetic */ long f$1;
-                                private final /* synthetic */ TLRPC$InputPeer f$2;
-                                private final /* synthetic */ long f$3;
+                                public final /* synthetic */ long f$1;
+                                public final /* synthetic */ TLRPC$InputPeer f$2;
+                                public final /* synthetic */ long f$3;
 
                                 {
                                     this.f$1 = r2;
@@ -1340,11 +1340,11 @@ public class MessagesStorage extends BaseController {
                             int readInt324 = byteBufferValue.readInt32(false);
                             int readInt325 = byteBufferValue.readInt32(false);
                             AndroidUtilities.runOnUIThread(new Runnable(readInt324, readInt325, readInt325 != 0 ? TLRPC$InputChannel.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false) : null, byteBufferValue.readInt32(false), longValue) {
-                                private final /* synthetic */ int f$1;
-                                private final /* synthetic */ int f$2;
-                                private final /* synthetic */ TLRPC$InputChannel f$3;
-                                private final /* synthetic */ int f$4;
-                                private final /* synthetic */ long f$5;
+                                public final /* synthetic */ int f$1;
+                                public final /* synthetic */ int f$2;
+                                public final /* synthetic */ TLRPC$InputChannel f$3;
+                                public final /* synthetic */ int f$4;
+                                public final /* synthetic */ long f$5;
 
                                 {
                                     this.f$1 = r2;
@@ -1366,13 +1366,13 @@ public class MessagesStorage extends BaseController {
                             break;
                         case 13:
                             AndroidUtilities.runOnUIThread(new Runnable(byteBufferValue.readInt64(false), byteBufferValue.readBool(false), byteBufferValue.readInt32(false), byteBufferValue.readInt32(false), byteBufferValue.readBool(false), TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue) {
-                                private final /* synthetic */ long f$1;
-                                private final /* synthetic */ boolean f$2;
-                                private final /* synthetic */ int f$3;
-                                private final /* synthetic */ int f$4;
-                                private final /* synthetic */ boolean f$5;
-                                private final /* synthetic */ TLRPC$InputPeer f$6;
-                                private final /* synthetic */ long f$7;
+                                public final /* synthetic */ long f$1;
+                                public final /* synthetic */ boolean f$2;
+                                public final /* synthetic */ int f$3;
+                                public final /* synthetic */ int f$4;
+                                public final /* synthetic */ boolean f$5;
+                                public final /* synthetic */ TLRPC$InputPeer f$6;
+                                public final /* synthetic */ long f$7;
 
                                 {
                                     this.f$1 = r2;
@@ -1391,8 +1391,8 @@ public class MessagesStorage extends BaseController {
                             break;
                         case 15:
                             Utilities.stageQueue.postRunnable(new Runnable(TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue) {
-                                private final /* synthetic */ TLRPC$InputPeer f$1;
-                                private final /* synthetic */ long f$2;
+                                public final /* synthetic */ TLRPC$InputPeer f$1;
+                                public final /* synthetic */ long f$2;
 
                                 {
                                     this.f$1 = r2;
@@ -1412,9 +1412,9 @@ public class MessagesStorage extends BaseController {
                                 arrayList.add(TLRPC$InputDialogPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false));
                             }
                             AndroidUtilities.runOnUIThread(new Runnable(readInt326, arrayList, longValue) {
-                                private final /* synthetic */ int f$1;
-                                private final /* synthetic */ ArrayList f$2;
-                                private final /* synthetic */ long f$3;
+                                public final /* synthetic */ int f$1;
+                                public final /* synthetic */ ArrayList f$2;
+                                public final /* synthetic */ long f$3;
 
                                 {
                                     this.f$1 = r2;
@@ -1435,9 +1435,9 @@ public class MessagesStorage extends BaseController {
                                 arrayList2.add(TLRPC$TL_inputFolderPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false));
                             }
                             AndroidUtilities.runOnUIThread(new Runnable(readInt328, arrayList2, longValue) {
-                                private final /* synthetic */ int f$1;
-                                private final /* synthetic */ ArrayList f$2;
-                                private final /* synthetic */ long f$3;
+                                public final /* synthetic */ int f$1;
+                                public final /* synthetic */ ArrayList f$2;
+                                public final /* synthetic */ long f$3;
 
                                 {
                                     this.f$1 = r2;
@@ -1456,10 +1456,10 @@ public class MessagesStorage extends BaseController {
                             TLRPC$TL_messages_deleteScheduledMessages TLdeserialize4 = TLRPC$TL_messages_deleteScheduledMessages.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
                             if (TLdeserialize4 != null) {
                                 AndroidUtilities.runOnUIThread(new Runnable(readInt64, readInt3210, longValue, TLdeserialize4) {
-                                    private final /* synthetic */ long f$1;
-                                    private final /* synthetic */ int f$2;
-                                    private final /* synthetic */ long f$3;
-                                    private final /* synthetic */ TLObject f$4;
+                                    public final /* synthetic */ long f$1;
+                                    public final /* synthetic */ int f$2;
+                                    public final /* synthetic */ long f$3;
+                                    public final /* synthetic */ TLObject f$4;
 
                                     {
                                         this.f$1 = r2;
@@ -1490,9 +1490,9 @@ public class MessagesStorage extends BaseController {
                             overrideWallpaperInfo.slug = byteBufferValue.readString(false);
                             overrideWallpaperInfo.originalFileName = byteBufferValue.readString(false);
                             AndroidUtilities.runOnUIThread(new Runnable(overrideWallpaperInfo, readBool, longValue) {
-                                private final /* synthetic */ Theme.OverrideWallpaperInfo f$1;
-                                private final /* synthetic */ boolean f$2;
-                                private final /* synthetic */ long f$3;
+                                public final /* synthetic */ Theme.OverrideWallpaperInfo f$1;
+                                public final /* synthetic */ boolean f$2;
+                                public final /* synthetic */ long f$3;
 
                                 {
                                     this.f$1 = r2;
@@ -1507,8 +1507,8 @@ public class MessagesStorage extends BaseController {
                             break;
                         case 22:
                             AndroidUtilities.runOnUIThread(new Runnable(TLRPC$InputPeer.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), longValue) {
-                                private final /* synthetic */ TLRPC$InputPeer f$1;
-                                private final /* synthetic */ long f$2;
+                                public final /* synthetic */ TLRPC$InputPeer f$1;
+                                public final /* synthetic */ long f$2;
 
                                 {
                                     this.f$1 = r2;
@@ -1592,8 +1592,8 @@ public class MessagesStorage extends BaseController {
 
     public void saveChannelPts(int i, int i2) {
         this.storageQueue.postRunnable(new Runnable(i2, i) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
 
             {
                 this.f$1 = r2;
@@ -1642,10 +1642,10 @@ public class MessagesStorage extends BaseController {
 
     public void saveDiffParams(int i, int i2, int i3, int i4) {
         this.storageQueue.postRunnable(new Runnable(i, i2, i3, i4) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ int f$3;
-            private final /* synthetic */ int f$4;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$3;
+            public final /* synthetic */ int f$4;
 
             {
                 this.f$1 = r2;
@@ -1674,8 +1674,8 @@ public class MessagesStorage extends BaseController {
 
     public void setDialogFlags(long j, long j2) {
         this.storageQueue.postRunnable(new Runnable(j, j2) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ long f$2;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ long f$2;
 
             {
                 this.f$1 = r2;
@@ -1705,7 +1705,7 @@ public class MessagesStorage extends BaseController {
 
     public void putPushMessage(MessageObject messageObject) {
         this.storageQueue.postRunnable(new Runnable(messageObject) {
-            private final /* synthetic */ MessageObject f$1;
+            public final /* synthetic */ MessageObject f$1;
 
             {
                 this.f$1 = r2;
@@ -1774,7 +1774,7 @@ public class MessagesStorage extends BaseController {
 
     public void readAllDialogs(int i) {
         this.storageQueue.postRunnable(new Runnable(i) {
-            private final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$1;
 
             {
                 this.f$1 = r2;
@@ -1836,10 +1836,10 @@ public class MessagesStorage extends BaseController {
                 getChatsInternal(TextUtils.join(",", arrayList2), arrayList5);
             }
             AndroidUtilities.runOnUIThread(new Runnable(arrayList4, arrayList5, arrayList6, longSparseArray) {
-                private final /* synthetic */ ArrayList f$1;
-                private final /* synthetic */ ArrayList f$2;
-                private final /* synthetic */ ArrayList f$3;
-                private final /* synthetic */ LongSparseArray f$4;
+                public final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ ArrayList f$3;
+                public final /* synthetic */ LongSparseArray f$4;
 
                 {
                     this.f$1 = r2;
@@ -2131,15 +2131,15 @@ public class MessagesStorage extends BaseController {
         return i < i2 ? -1 : 0;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:115:0x0346 A[Catch:{ Exception -> 0x0689 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:192:0x049b A[Catch:{ Exception -> 0x0689 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:325:0x0668 A[Catch:{ Exception -> 0x0689 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x0290 A[Catch:{ Exception -> 0x0689 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:114:0x032a A[Catch:{ Exception -> 0x066d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:191:0x047f A[Catch:{ Exception -> 0x066d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:324:0x064c A[Catch:{ Exception -> 0x066d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:84:0x027b A[Catch:{ Exception -> 0x066d }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private void calcUnreadCounters(boolean r27) {
+    private void calcUnreadCounters(boolean r26) {
         /*
-            r26 = this;
-            r1 = r26
+            r25 = this;
+            r1 = r25
             r0 = 0
             r2 = 0
         L_0x0004:
@@ -2148,952 +2148,942 @@ public class MessagesStorage extends BaseController {
             r4 = 0
         L_0x0008:
             if (r4 >= r3) goto L_0x002b
-            int[][] r5 = r1.contacts     // Catch:{ Exception -> 0x0689 }
-            r5 = r5[r2]     // Catch:{ Exception -> 0x0689 }
-            int[][] r6 = r1.nonContacts     // Catch:{ Exception -> 0x0689 }
-            r6 = r6[r2]     // Catch:{ Exception -> 0x0689 }
-            int[][] r7 = r1.bots     // Catch:{ Exception -> 0x0689 }
-            r7 = r7[r2]     // Catch:{ Exception -> 0x0689 }
-            int[][] r8 = r1.channels     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r2]     // Catch:{ Exception -> 0x0689 }
-            int[][] r9 = r1.groups     // Catch:{ Exception -> 0x0689 }
-            r9 = r9[r2]     // Catch:{ Exception -> 0x0689 }
-            r9[r4] = r0     // Catch:{ Exception -> 0x0689 }
-            r8[r4] = r0     // Catch:{ Exception -> 0x0689 }
-            r7[r4] = r0     // Catch:{ Exception -> 0x0689 }
-            r6[r4] = r0     // Catch:{ Exception -> 0x0689 }
-            r5[r4] = r0     // Catch:{ Exception -> 0x0689 }
+            int[][] r5 = r1.contacts     // Catch:{ Exception -> 0x066d }
+            r5 = r5[r2]     // Catch:{ Exception -> 0x066d }
+            int[][] r6 = r1.nonContacts     // Catch:{ Exception -> 0x066d }
+            r6 = r6[r2]     // Catch:{ Exception -> 0x066d }
+            int[][] r7 = r1.bots     // Catch:{ Exception -> 0x066d }
+            r7 = r7[r2]     // Catch:{ Exception -> 0x066d }
+            int[][] r8 = r1.channels     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r2]     // Catch:{ Exception -> 0x066d }
+            int[][] r9 = r1.groups     // Catch:{ Exception -> 0x066d }
+            r9 = r9[r2]     // Catch:{ Exception -> 0x066d }
+            r9[r4] = r0     // Catch:{ Exception -> 0x066d }
+            r8[r4] = r0     // Catch:{ Exception -> 0x066d }
+            r7[r4] = r0     // Catch:{ Exception -> 0x066d }
+            r6[r4] = r0     // Catch:{ Exception -> 0x066d }
+            r5[r4] = r0     // Catch:{ Exception -> 0x066d }
             int r4 = r4 + 1
             goto L_0x0008
         L_0x002b:
             int r2 = r2 + 1
             goto L_0x0004
         L_0x002e:
-            android.util.LongSparseArray<java.lang.Integer> r2 = r1.dialogsWithMentions     // Catch:{ Exception -> 0x0689 }
-            r2.clear()     // Catch:{ Exception -> 0x0689 }
-            android.util.LongSparseArray<java.lang.Integer> r2 = r1.dialogsWithUnread     // Catch:{ Exception -> 0x0689 }
-            r2.clear()     // Catch:{ Exception -> 0x0689 }
-            java.util.ArrayList r2 = new java.util.ArrayList     // Catch:{ Exception -> 0x0689 }
-            r2.<init>()     // Catch:{ Exception -> 0x0689 }
-            java.util.ArrayList r4 = new java.util.ArrayList     // Catch:{ Exception -> 0x0689 }
-            r4.<init>()     // Catch:{ Exception -> 0x0689 }
-            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ Exception -> 0x0689 }
-            r5.<init>()     // Catch:{ Exception -> 0x0689 }
-            java.util.ArrayList r6 = new java.util.ArrayList     // Catch:{ Exception -> 0x0689 }
-            r6.<init>()     // Catch:{ Exception -> 0x0689 }
-            java.util.ArrayList r7 = new java.util.ArrayList     // Catch:{ Exception -> 0x0689 }
-            r7.<init>()     // Catch:{ Exception -> 0x0689 }
-            java.util.ArrayList r8 = new java.util.ArrayList     // Catch:{ Exception -> 0x0689 }
-            r8.<init>()     // Catch:{ Exception -> 0x0689 }
-            android.util.LongSparseArray r9 = new android.util.LongSparseArray     // Catch:{ Exception -> 0x0689 }
-            r9.<init>()     // Catch:{ Exception -> 0x0689 }
-            org.telegram.SQLite.SQLiteDatabase r10 = r1.database     // Catch:{ Exception -> 0x0689 }
+            android.util.LongSparseArray<java.lang.Integer> r2 = r1.dialogsWithMentions     // Catch:{ Exception -> 0x066d }
+            r2.clear()     // Catch:{ Exception -> 0x066d }
+            android.util.LongSparseArray<java.lang.Integer> r2 = r1.dialogsWithUnread     // Catch:{ Exception -> 0x066d }
+            r2.clear()     // Catch:{ Exception -> 0x066d }
+            java.util.ArrayList r2 = new java.util.ArrayList     // Catch:{ Exception -> 0x066d }
+            r2.<init>()     // Catch:{ Exception -> 0x066d }
+            java.util.ArrayList r4 = new java.util.ArrayList     // Catch:{ Exception -> 0x066d }
+            r4.<init>()     // Catch:{ Exception -> 0x066d }
+            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ Exception -> 0x066d }
+            r5.<init>()     // Catch:{ Exception -> 0x066d }
+            java.util.ArrayList r6 = new java.util.ArrayList     // Catch:{ Exception -> 0x066d }
+            r6.<init>()     // Catch:{ Exception -> 0x066d }
+            java.util.ArrayList r7 = new java.util.ArrayList     // Catch:{ Exception -> 0x066d }
+            r7.<init>()     // Catch:{ Exception -> 0x066d }
+            java.util.ArrayList r8 = new java.util.ArrayList     // Catch:{ Exception -> 0x066d }
+            r8.<init>()     // Catch:{ Exception -> 0x066d }
+            android.util.LongSparseArray r9 = new android.util.LongSparseArray     // Catch:{ Exception -> 0x066d }
+            r9.<init>()     // Catch:{ Exception -> 0x066d }
+            org.telegram.SQLite.SQLiteDatabase r10 = r1.database     // Catch:{ Exception -> 0x066d }
             java.lang.String r11 = "SELECT did, folder_id, unread_count, unread_count_i FROM dialogs WHERE unread_count > 0 OR flags > 0 UNION ALL SELECT did, folder_id, unread_count, unread_count_i FROM dialogs WHERE unread_count_i > 0"
-            java.lang.Object[] r12 = new java.lang.Object[r0]     // Catch:{ Exception -> 0x0689 }
-            org.telegram.SQLite.SQLiteCursor r10 = r10.queryFinalized(r11, r12)     // Catch:{ Exception -> 0x0689 }
+            java.lang.Object[] r12 = new java.lang.Object[r0]     // Catch:{ Exception -> 0x066d }
+            org.telegram.SQLite.SQLiteCursor r10 = r10.queryFinalized(r11, r12)     // Catch:{ Exception -> 0x066d }
         L_0x0065:
-            boolean r11 = r10.next()     // Catch:{ Exception -> 0x0689 }
+            boolean r11 = r10.next()     // Catch:{ Exception -> 0x066d }
             r12 = 32
             r13 = 1
             if (r11 == 0) goto L_0x00dd
-            int r11 = r10.intValue(r13)     // Catch:{ Exception -> 0x0689 }
-            long r13 = r10.longValue(r0)     // Catch:{ Exception -> 0x0689 }
-            int r15 = r10.intValue(r3)     // Catch:{ Exception -> 0x0689 }
+            int r11 = r10.intValue(r13)     // Catch:{ Exception -> 0x066d }
+            long r13 = r10.longValue(r0)     // Catch:{ Exception -> 0x066d }
+            int r15 = r10.intValue(r3)     // Catch:{ Exception -> 0x066d }
             r3 = 3
-            int r3 = r10.intValue(r3)     // Catch:{ Exception -> 0x0689 }
+            int r3 = r10.intValue(r3)     // Catch:{ Exception -> 0x066d }
             if (r15 <= 0) goto L_0x008a
-            android.util.LongSparseArray<java.lang.Integer> r0 = r1.dialogsWithUnread     // Catch:{ Exception -> 0x0689 }
-            java.lang.Integer r15 = java.lang.Integer.valueOf(r15)     // Catch:{ Exception -> 0x0689 }
-            r0.put(r13, r15)     // Catch:{ Exception -> 0x0689 }
+            android.util.LongSparseArray<java.lang.Integer> r0 = r1.dialogsWithUnread     // Catch:{ Exception -> 0x066d }
+            java.lang.Integer r15 = java.lang.Integer.valueOf(r15)     // Catch:{ Exception -> 0x066d }
+            r0.put(r13, r15)     // Catch:{ Exception -> 0x066d }
         L_0x008a:
             if (r3 <= 0) goto L_0x0095
-            android.util.LongSparseArray<java.lang.Integer> r0 = r1.dialogsWithMentions     // Catch:{ Exception -> 0x0689 }
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r3)     // Catch:{ Exception -> 0x0689 }
-            r0.put(r13, r3)     // Catch:{ Exception -> 0x0689 }
+            android.util.LongSparseArray<java.lang.Integer> r0 = r1.dialogsWithMentions     // Catch:{ Exception -> 0x066d }
+            java.lang.Integer r3 = java.lang.Integer.valueOf(r3)     // Catch:{ Exception -> 0x066d }
+            r0.put(r13, r3)     // Catch:{ Exception -> 0x066d }
         L_0x0095:
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r11)     // Catch:{ Exception -> 0x0689 }
-            r9.put(r13, r0)     // Catch:{ Exception -> 0x0689 }
-            int r0 = (int) r13     // Catch:{ Exception -> 0x0689 }
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r11)     // Catch:{ Exception -> 0x066d }
+            r9.put(r13, r0)     // Catch:{ Exception -> 0x066d }
+            int r0 = (int) r13     // Catch:{ Exception -> 0x066d }
             long r11 = r13 >> r12
-            int r3 = (int) r11     // Catch:{ Exception -> 0x0689 }
+            int r3 = (int) r11     // Catch:{ Exception -> 0x066d }
             if (r0 == 0) goto L_0x00c9
             if (r0 >= 0) goto L_0x00b7
             int r0 = -r0
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x0689 }
-            boolean r3 = r7.contains(r3)     // Catch:{ Exception -> 0x0689 }
+            java.lang.Integer r3 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x066d }
+            boolean r3 = r7.contains(r3)     // Catch:{ Exception -> 0x066d }
             if (r3 != 0) goto L_0x00da
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x0689 }
-            r7.add(r0)     // Catch:{ Exception -> 0x0689 }
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x066d }
+            r7.add(r0)     // Catch:{ Exception -> 0x066d }
             goto L_0x00da
         L_0x00b7:
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x0689 }
-            boolean r3 = r6.contains(r3)     // Catch:{ Exception -> 0x0689 }
+            java.lang.Integer r3 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x066d }
+            boolean r3 = r6.contains(r3)     // Catch:{ Exception -> 0x066d }
             if (r3 != 0) goto L_0x00da
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x0689 }
-            r6.add(r0)     // Catch:{ Exception -> 0x0689 }
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x066d }
+            r6.add(r0)     // Catch:{ Exception -> 0x066d }
             goto L_0x00da
         L_0x00c9:
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r3)     // Catch:{ Exception -> 0x0689 }
-            boolean r0 = r8.contains(r0)     // Catch:{ Exception -> 0x0689 }
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r3)     // Catch:{ Exception -> 0x066d }
+            boolean r0 = r8.contains(r0)     // Catch:{ Exception -> 0x066d }
             if (r0 != 0) goto L_0x00da
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r3)     // Catch:{ Exception -> 0x0689 }
-            r8.add(r0)     // Catch:{ Exception -> 0x0689 }
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r3)     // Catch:{ Exception -> 0x066d }
+            r8.add(r0)     // Catch:{ Exception -> 0x066d }
         L_0x00da:
             r0 = 0
             r3 = 2
             goto L_0x0065
         L_0x00dd:
-            r10.dispose()     // Catch:{ Exception -> 0x0689 }
-            android.util.SparseArray r0 = new android.util.SparseArray     // Catch:{ Exception -> 0x0689 }
-            r0.<init>()     // Catch:{ Exception -> 0x0689 }
-            android.util.SparseArray r3 = new android.util.SparseArray     // Catch:{ Exception -> 0x0689 }
-            r3.<init>()     // Catch:{ Exception -> 0x0689 }
-            android.util.SparseArray r10 = new android.util.SparseArray     // Catch:{ Exception -> 0x0689 }
-            r10.<init>()     // Catch:{ Exception -> 0x0689 }
-            android.util.SparseArray r11 = new android.util.SparseArray     // Catch:{ Exception -> 0x0689 }
-            r11.<init>()     // Catch:{ Exception -> 0x0689 }
-            android.util.SparseArray r14 = new android.util.SparseArray     // Catch:{ Exception -> 0x0689 }
-            r14.<init>()     // Catch:{ Exception -> 0x0689 }
-            android.util.SparseArray r15 = new android.util.SparseArray     // Catch:{ Exception -> 0x0689 }
-            r15.<init>()     // Catch:{ Exception -> 0x0689 }
-            boolean r18 = r6.isEmpty()     // Catch:{ Exception -> 0x0689 }
+            r10.dispose()     // Catch:{ Exception -> 0x066d }
+            android.util.SparseArray r0 = new android.util.SparseArray     // Catch:{ Exception -> 0x066d }
+            r0.<init>()     // Catch:{ Exception -> 0x066d }
+            android.util.SparseArray r3 = new android.util.SparseArray     // Catch:{ Exception -> 0x066d }
+            r3.<init>()     // Catch:{ Exception -> 0x066d }
+            android.util.SparseArray r10 = new android.util.SparseArray     // Catch:{ Exception -> 0x066d }
+            r10.<init>()     // Catch:{ Exception -> 0x066d }
+            android.util.SparseArray r11 = new android.util.SparseArray     // Catch:{ Exception -> 0x066d }
+            r11.<init>()     // Catch:{ Exception -> 0x066d }
+            android.util.SparseArray r14 = new android.util.SparseArray     // Catch:{ Exception -> 0x066d }
+            r14.<init>()     // Catch:{ Exception -> 0x066d }
+            android.util.SparseArray r15 = new android.util.SparseArray     // Catch:{ Exception -> 0x066d }
+            r15.<init>()     // Catch:{ Exception -> 0x066d }
+            boolean r18 = r6.isEmpty()     // Catch:{ Exception -> 0x066d }
             java.lang.String r12 = ","
-            if (r18 != 0) goto L_0x019d
-            java.lang.String r6 = android.text.TextUtils.join(r12, r6)     // Catch:{ Exception -> 0x0689 }
-            r1.getUsersInternal(r6, r2)     // Catch:{ Exception -> 0x0689 }
-            int r6 = r2.size()     // Catch:{ Exception -> 0x0689 }
+            if (r18 != 0) goto L_0x0190
+            java.lang.String r6 = android.text.TextUtils.join(r12, r6)     // Catch:{ Exception -> 0x066d }
+            r1.getUsersInternal(r6, r2)     // Catch:{ Exception -> 0x066d }
+            int r6 = r2.size()     // Catch:{ Exception -> 0x066d }
             r13 = 0
         L_0x0112:
-            if (r13 >= r6) goto L_0x019d
-            java.lang.Object r20 = r2.get(r13)     // Catch:{ Exception -> 0x0689 }
+            if (r13 >= r6) goto L_0x0190
+            java.lang.Object r20 = r2.get(r13)     // Catch:{ Exception -> 0x066d }
             r21 = r2
             r2 = r20
-            org.telegram.tgnet.TLRPC$User r2 = (org.telegram.tgnet.TLRPC$User) r2     // Catch:{ Exception -> 0x0689 }
+            org.telegram.tgnet.TLRPC$User r2 = (org.telegram.tgnet.TLRPC$User) r2     // Catch:{ Exception -> 0x066d }
             r20 = r6
-            org.telegram.messenger.MessagesController r6 = r26.getMessagesController()     // Catch:{ Exception -> 0x0689 }
+            org.telegram.messenger.MessagesController r6 = r25.getMessagesController()     // Catch:{ Exception -> 0x066d }
             r22 = r3
-            int r3 = r2.id     // Catch:{ Exception -> 0x0689 }
+            int r3 = r2.id     // Catch:{ Exception -> 0x066d }
             r23 = r10
             r24 = r11
-            long r10 = (long) r3     // Catch:{ Exception -> 0x0689 }
-            boolean r3 = r6.isDialogMuted(r10)     // Catch:{ Exception -> 0x0689 }
-            int r6 = r2.id     // Catch:{ Exception -> 0x0689 }
-            long r10 = (long) r6     // Catch:{ Exception -> 0x0689 }
-            java.lang.Object r6 = r9.get(r10)     // Catch:{ Exception -> 0x0689 }
-            java.lang.Integer r6 = (java.lang.Integer) r6     // Catch:{ Exception -> 0x0689 }
-            int r6 = r6.intValue()     // Catch:{ Exception -> 0x0689 }
-            if (r3 == 0) goto L_0x014d
-            int r10 = r2.id     // Catch:{ Exception -> 0x0689 }
-            r25 = r5
+            long r10 = (long) r3     // Catch:{ Exception -> 0x066d }
+            boolean r3 = r6.isDialogMuted(r10)     // Catch:{ Exception -> 0x066d }
+            int r6 = r2.id     // Catch:{ Exception -> 0x066d }
+            long r10 = (long) r6     // Catch:{ Exception -> 0x066d }
+            java.lang.Object r6 = r9.get(r10)     // Catch:{ Exception -> 0x066d }
+            java.lang.Integer r6 = (java.lang.Integer) r6     // Catch:{ Exception -> 0x066d }
+            int r6 = r6.intValue()     // Catch:{ Exception -> 0x066d }
+            if (r3 == 0) goto L_0x0147
+            int r10 = r2.id     // Catch:{ Exception -> 0x066d }
+            java.lang.Boolean r11 = java.lang.Boolean.TRUE     // Catch:{ Exception -> 0x066d }
+            r14.put(r10, r11)     // Catch:{ Exception -> 0x066d }
+        L_0x0147:
+            r10 = 1
+            if (r6 != r10) goto L_0x0151
+            int r10 = r2.id     // Catch:{ Exception -> 0x066d }
+            java.lang.Boolean r11 = java.lang.Boolean.TRUE     // Catch:{ Exception -> 0x066d }
+            r15.put(r10, r11)     // Catch:{ Exception -> 0x066d }
+        L_0x0151:
+            boolean r10 = r2.bot     // Catch:{ Exception -> 0x066d }
+            if (r10 == 0) goto L_0x0160
+            int[][] r10 = r1.bots     // Catch:{ Exception -> 0x066d }
+            r6 = r10[r6]     // Catch:{ Exception -> 0x066d }
+            r10 = r6[r3]     // Catch:{ Exception -> 0x066d }
             r11 = 1
-            java.lang.Boolean r5 = java.lang.Boolean.valueOf(r11)     // Catch:{ Exception -> 0x0689 }
-            r14.put(r10, r5)     // Catch:{ Exception -> 0x0689 }
-            goto L_0x014f
-        L_0x014d:
-            r25 = r5
-        L_0x014f:
-            r5 = 1
-            if (r6 != r5) goto L_0x015b
-            int r10 = r2.id     // Catch:{ Exception -> 0x0689 }
-            java.lang.Boolean r11 = java.lang.Boolean.valueOf(r5)     // Catch:{ Exception -> 0x0689 }
-            r15.put(r10, r11)     // Catch:{ Exception -> 0x0689 }
-        L_0x015b:
-            boolean r5 = r2.bot     // Catch:{ Exception -> 0x0689 }
-            if (r5 == 0) goto L_0x016a
-            int[][] r5 = r1.bots     // Catch:{ Exception -> 0x0689 }
-            r5 = r5[r6]     // Catch:{ Exception -> 0x0689 }
-            r6 = r5[r3]     // Catch:{ Exception -> 0x0689 }
-            r10 = 1
-            int r6 = r6 + r10
-            r5[r3] = r6     // Catch:{ Exception -> 0x0689 }
-            goto L_0x0188
-        L_0x016a:
-            boolean r5 = r2.self     // Catch:{ Exception -> 0x0689 }
-            if (r5 != 0) goto L_0x017e
-            boolean r5 = r2.contact     // Catch:{ Exception -> 0x0689 }
-            if (r5 == 0) goto L_0x0173
+            int r10 = r10 + r11
+            r6[r3] = r10     // Catch:{ Exception -> 0x066d }
             goto L_0x017e
-        L_0x0173:
-            int[][] r5 = r1.nonContacts     // Catch:{ Exception -> 0x0689 }
-            r5 = r5[r6]     // Catch:{ Exception -> 0x0689 }
-            r6 = r5[r3]     // Catch:{ Exception -> 0x0689 }
-            r10 = 1
-            int r6 = r6 + r10
-            r5[r3] = r6     // Catch:{ Exception -> 0x0689 }
-            goto L_0x0188
+        L_0x0160:
+            boolean r10 = r2.self     // Catch:{ Exception -> 0x066d }
+            if (r10 != 0) goto L_0x0174
+            boolean r10 = r2.contact     // Catch:{ Exception -> 0x066d }
+            if (r10 == 0) goto L_0x0169
+            goto L_0x0174
+        L_0x0169:
+            int[][] r10 = r1.nonContacts     // Catch:{ Exception -> 0x066d }
+            r6 = r10[r6]     // Catch:{ Exception -> 0x066d }
+            r10 = r6[r3]     // Catch:{ Exception -> 0x066d }
+            r11 = 1
+            int r10 = r10 + r11
+            r6[r3] = r10     // Catch:{ Exception -> 0x066d }
+            goto L_0x017e
+        L_0x0174:
+            int[][] r10 = r1.contacts     // Catch:{ Exception -> 0x066d }
+            r6 = r10[r6]     // Catch:{ Exception -> 0x066d }
+            r10 = r6[r3]     // Catch:{ Exception -> 0x066d }
+            r11 = 1
+            int r10 = r10 + r11
+            r6[r3] = r10     // Catch:{ Exception -> 0x066d }
         L_0x017e:
-            int[][] r5 = r1.contacts     // Catch:{ Exception -> 0x0689 }
-            r5 = r5[r6]     // Catch:{ Exception -> 0x0689 }
-            r6 = r5[r3]     // Catch:{ Exception -> 0x0689 }
-            r10 = 1
-            int r6 = r6 + r10
-            r5[r3] = r6     // Catch:{ Exception -> 0x0689 }
-        L_0x0188:
-            int r3 = r2.id     // Catch:{ Exception -> 0x0689 }
-            r0.put(r3, r2)     // Catch:{ Exception -> 0x0689 }
+            int r3 = r2.id     // Catch:{ Exception -> 0x066d }
+            r0.put(r3, r2)     // Catch:{ Exception -> 0x066d }
             int r13 = r13 + 1
             r6 = r20
             r2 = r21
             r3 = r22
             r10 = r23
             r11 = r24
-            r5 = r25
             goto L_0x0112
-        L_0x019d:
+        L_0x0190:
             r22 = r3
-            r25 = r5
             r23 = r10
             r24 = r11
-            boolean r2 = r8.isEmpty()     // Catch:{ Exception -> 0x0689 }
-            if (r2 != 0) goto L_0x0284
-            java.util.ArrayList r2 = new java.util.ArrayList     // Catch:{ Exception -> 0x0689 }
-            r2.<init>()     // Catch:{ Exception -> 0x0689 }
-            java.util.ArrayList r3 = new java.util.ArrayList     // Catch:{ Exception -> 0x0689 }
-            r3.<init>()     // Catch:{ Exception -> 0x0689 }
-            java.lang.String r5 = android.text.TextUtils.join(r12, r8)     // Catch:{ Exception -> 0x0689 }
-            r1.getEncryptedChatsInternal(r5, r3, r2)     // Catch:{ Exception -> 0x0689 }
-            boolean r5 = r2.isEmpty()     // Catch:{ Exception -> 0x0689 }
-            if (r5 != 0) goto L_0x0284
-            java.lang.String r2 = android.text.TextUtils.join(r12, r2)     // Catch:{ Exception -> 0x0689 }
-            r1.getUsersInternal(r2, r4)     // Catch:{ Exception -> 0x0689 }
-            int r2 = r4.size()     // Catch:{ Exception -> 0x0689 }
-            r5 = 0
-        L_0x01ce:
-            if (r5 >= r2) goto L_0x01e2
-            java.lang.Object r6 = r4.get(r5)     // Catch:{ Exception -> 0x0689 }
-            org.telegram.tgnet.TLRPC$User r6 = (org.telegram.tgnet.TLRPC$User) r6     // Catch:{ Exception -> 0x0689 }
-            int r8 = r6.id     // Catch:{ Exception -> 0x0689 }
-            r10 = r23
-            r10.put(r8, r6)     // Catch:{ Exception -> 0x0689 }
-            int r5 = r5 + 1
-            r23 = r10
-            goto L_0x01ce
-        L_0x01e2:
-            r10 = r23
-            int r2 = r3.size()     // Catch:{ Exception -> 0x0689 }
+            boolean r2 = r8.isEmpty()     // Catch:{ Exception -> 0x066d }
+            if (r2 != 0) goto L_0x026f
+            java.util.ArrayList r2 = new java.util.ArrayList     // Catch:{ Exception -> 0x066d }
+            r2.<init>()     // Catch:{ Exception -> 0x066d }
+            java.util.ArrayList r3 = new java.util.ArrayList     // Catch:{ Exception -> 0x066d }
+            r3.<init>()     // Catch:{ Exception -> 0x066d }
+            java.lang.String r6 = android.text.TextUtils.join(r12, r8)     // Catch:{ Exception -> 0x066d }
+            r1.getEncryptedChatsInternal(r6, r3, r2)     // Catch:{ Exception -> 0x066d }
+            boolean r6 = r2.isEmpty()     // Catch:{ Exception -> 0x066d }
+            if (r6 != 0) goto L_0x026f
+            java.lang.String r2 = android.text.TextUtils.join(r12, r2)     // Catch:{ Exception -> 0x066d }
+            r1.getUsersInternal(r2, r4)     // Catch:{ Exception -> 0x066d }
+            int r2 = r4.size()     // Catch:{ Exception -> 0x066d }
+            r6 = 0
+        L_0x01bf:
+            if (r6 >= r2) goto L_0x01d3
+            java.lang.Object r8 = r4.get(r6)     // Catch:{ Exception -> 0x066d }
+            org.telegram.tgnet.TLRPC$User r8 = (org.telegram.tgnet.TLRPC$User) r8     // Catch:{ Exception -> 0x066d }
+            int r10 = r8.id     // Catch:{ Exception -> 0x066d }
+            r11 = r23
+            r11.put(r10, r8)     // Catch:{ Exception -> 0x066d }
+            int r6 = r6 + 1
+            r23 = r11
+            goto L_0x01bf
+        L_0x01d3:
+            r11 = r23
+            int r2 = r3.size()     // Catch:{ Exception -> 0x066d }
             r4 = 0
-        L_0x01e9:
-            if (r4 >= r2) goto L_0x0281
-            java.lang.Object r5 = r3.get(r4)     // Catch:{ Exception -> 0x0689 }
-            org.telegram.tgnet.TLRPC$EncryptedChat r5 = (org.telegram.tgnet.TLRPC$EncryptedChat) r5     // Catch:{ Exception -> 0x0689 }
-            int r6 = r5.user_id     // Catch:{ Exception -> 0x0689 }
-            java.lang.Object r6 = r10.get(r6)     // Catch:{ Exception -> 0x0689 }
-            org.telegram.tgnet.TLRPC$User r6 = (org.telegram.tgnet.TLRPC$User) r6     // Catch:{ Exception -> 0x0689 }
-            if (r6 != 0) goto L_0x0203
+        L_0x01da:
+            if (r4 >= r2) goto L_0x026c
+            java.lang.Object r6 = r3.get(r4)     // Catch:{ Exception -> 0x066d }
+            org.telegram.tgnet.TLRPC$EncryptedChat r6 = (org.telegram.tgnet.TLRPC$EncryptedChat) r6     // Catch:{ Exception -> 0x066d }
+            int r8 = r6.user_id     // Catch:{ Exception -> 0x066d }
+            java.lang.Object r8 = r11.get(r8)     // Catch:{ Exception -> 0x066d }
+            org.telegram.tgnet.TLRPC$User r8 = (org.telegram.tgnet.TLRPC$User) r8     // Catch:{ Exception -> 0x066d }
+            if (r8 != 0) goto L_0x01f4
             r20 = r0
-            r11 = r2
-            r8 = r3
+            r13 = r2
+            r10 = r3
             r2 = r24
-            goto L_0x0277
-        L_0x0203:
-            int r5 = r5.id     // Catch:{ Exception -> 0x0689 }
-            r11 = r2
-            r8 = r3
-            long r2 = (long) r5     // Catch:{ Exception -> 0x0689 }
-            r5 = 32
-            long r2 = r2 << r5
-            org.telegram.messenger.MessagesController r13 = r26.getMessagesController()     // Catch:{ Exception -> 0x0689 }
-            boolean r13 = r13.isDialogMuted(r2)     // Catch:{ Exception -> 0x0689 }
-            java.lang.Object r2 = r9.get(r2)     // Catch:{ Exception -> 0x0689 }
-            java.lang.Integer r2 = (java.lang.Integer) r2     // Catch:{ Exception -> 0x0689 }
-            int r2 = r2.intValue()     // Catch:{ Exception -> 0x0689 }
-            if (r13 == 0) goto L_0x022a
-            int r3 = r6.id     // Catch:{ Exception -> 0x0689 }
-            r18 = 1
-            java.lang.Boolean r5 = java.lang.Boolean.valueOf(r18)     // Catch:{ Exception -> 0x0689 }
-            r14.put(r3, r5)     // Catch:{ Exception -> 0x0689 }
-        L_0x022a:
+            goto L_0x0262
+        L_0x01f4:
+            int r6 = r6.id     // Catch:{ Exception -> 0x066d }
+            r13 = r2
+            r10 = r3
+            long r2 = (long) r6     // Catch:{ Exception -> 0x066d }
+            r6 = 32
+            long r2 = r2 << r6
+            org.telegram.messenger.MessagesController r6 = r25.getMessagesController()     // Catch:{ Exception -> 0x066d }
+            boolean r6 = r6.isDialogMuted(r2)     // Catch:{ Exception -> 0x066d }
+            java.lang.Object r2 = r9.get(r2)     // Catch:{ Exception -> 0x066d }
+            java.lang.Integer r2 = (java.lang.Integer) r2     // Catch:{ Exception -> 0x066d }
+            int r2 = r2.intValue()     // Catch:{ Exception -> 0x066d }
+            if (r6 == 0) goto L_0x021a
+            int r3 = r8.id     // Catch:{ Exception -> 0x066d }
+            r20 = r0
+            java.lang.Boolean r0 = java.lang.Boolean.TRUE     // Catch:{ Exception -> 0x066d }
+            r14.put(r3, r0)     // Catch:{ Exception -> 0x066d }
+            goto L_0x021c
+        L_0x021a:
+            r20 = r0
+        L_0x021c:
+            r0 = 1
+            if (r2 != r0) goto L_0x0226
+            int r0 = r8.id     // Catch:{ Exception -> 0x066d }
+            java.lang.Boolean r3 = java.lang.Boolean.TRUE     // Catch:{ Exception -> 0x066d }
+            r15.put(r0, r3)     // Catch:{ Exception -> 0x066d }
+        L_0x0226:
+            boolean r0 = r8.self     // Catch:{ Exception -> 0x066d }
+            if (r0 != 0) goto L_0x023a
+            boolean r0 = r8.contact     // Catch:{ Exception -> 0x066d }
+            if (r0 == 0) goto L_0x022f
+            goto L_0x023a
+        L_0x022f:
+            int[][] r0 = r1.nonContacts     // Catch:{ Exception -> 0x066d }
+            r0 = r0[r2]     // Catch:{ Exception -> 0x066d }
+            r2 = r0[r6]     // Catch:{ Exception -> 0x066d }
             r3 = 1
-            if (r2 != r3) goto L_0x0239
-            int r5 = r6.id     // Catch:{ Exception -> 0x0689 }
-            r20 = r0
-            java.lang.Boolean r0 = java.lang.Boolean.valueOf(r3)     // Catch:{ Exception -> 0x0689 }
-            r15.put(r5, r0)     // Catch:{ Exception -> 0x0689 }
-            goto L_0x023b
-        L_0x0239:
-            r20 = r0
-        L_0x023b:
-            boolean r0 = r6.self     // Catch:{ Exception -> 0x0689 }
-            if (r0 != 0) goto L_0x024f
-            boolean r0 = r6.contact     // Catch:{ Exception -> 0x0689 }
-            if (r0 == 0) goto L_0x0244
-            goto L_0x024f
+            int r2 = r2 + r3
+            r0[r6] = r2     // Catch:{ Exception -> 0x066d }
+            goto L_0x0244
+        L_0x023a:
+            int[][] r0 = r1.contacts     // Catch:{ Exception -> 0x066d }
+            r0 = r0[r2]     // Catch:{ Exception -> 0x066d }
+            r2 = r0[r6]     // Catch:{ Exception -> 0x066d }
+            r3 = 1
+            int r2 = r2 + r3
+            r0[r6] = r2     // Catch:{ Exception -> 0x066d }
         L_0x0244:
-            int[][] r0 = r1.nonContacts     // Catch:{ Exception -> 0x0689 }
-            r0 = r0[r2]     // Catch:{ Exception -> 0x0689 }
-            r2 = r0[r13]     // Catch:{ Exception -> 0x0689 }
-            r3 = 1
-            int r2 = r2 + r3
-            r0[r13] = r2     // Catch:{ Exception -> 0x0689 }
-            goto L_0x0259
-        L_0x024f:
-            int[][] r0 = r1.contacts     // Catch:{ Exception -> 0x0689 }
-            r0 = r0[r2]     // Catch:{ Exception -> 0x0689 }
-            r2 = r0[r13]     // Catch:{ Exception -> 0x0689 }
-            r3 = 1
-            int r2 = r2 + r3
-            r0[r13] = r2     // Catch:{ Exception -> 0x0689 }
-        L_0x0259:
-            int r0 = r6.id     // Catch:{ Exception -> 0x0689 }
+            int r0 = r8.id     // Catch:{ Exception -> 0x066d }
             r2 = 0
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r2)     // Catch:{ Exception -> 0x0689 }
+            java.lang.Integer r3 = java.lang.Integer.valueOf(r2)     // Catch:{ Exception -> 0x066d }
             r2 = r24
-            java.lang.Object r0 = r2.get(r0, r3)     // Catch:{ Exception -> 0x0689 }
-            java.lang.Integer r0 = (java.lang.Integer) r0     // Catch:{ Exception -> 0x0689 }
-            int r0 = r0.intValue()     // Catch:{ Exception -> 0x0689 }
-            int r3 = r6.id     // Catch:{ Exception -> 0x0689 }
-            r5 = 1
-            int r0 = r0 + r5
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x0689 }
-            r2.put(r3, r0)     // Catch:{ Exception -> 0x0689 }
-        L_0x0277:
-            int r4 = r4 + 1
-            r24 = r2
-            r3 = r8
-            r2 = r11
-            r0 = r20
-            goto L_0x01e9
-        L_0x0281:
-            r20 = r0
-            goto L_0x0288
-        L_0x0284:
-            r20 = r0
-            r10 = r23
-        L_0x0288:
-            r2 = r24
-            boolean r0 = r7.isEmpty()     // Catch:{ Exception -> 0x0689 }
-            if (r0 != 0) goto L_0x0339
-            java.lang.String r0 = android.text.TextUtils.join(r12, r7)     // Catch:{ Exception -> 0x0689 }
-            r3 = r25
-            r1.getChatsInternal(r0, r3)     // Catch:{ Exception -> 0x0689 }
-            int r0 = r3.size()     // Catch:{ Exception -> 0x0689 }
-            r4 = 0
-        L_0x029e:
-            if (r4 >= r0) goto L_0x0339
-            java.lang.Object r5 = r3.get(r4)     // Catch:{ Exception -> 0x0689 }
-            org.telegram.tgnet.TLRPC$Chat r5 = (org.telegram.tgnet.TLRPC$Chat) r5     // Catch:{ Exception -> 0x0689 }
-            org.telegram.tgnet.TLRPC$InputChannel r6 = r5.migrated_to     // Catch:{ Exception -> 0x0689 }
-            boolean r6 = r6 instanceof org.telegram.tgnet.TLRPC$TL_inputChannel     // Catch:{ Exception -> 0x0689 }
-            if (r6 != 0) goto L_0x031f
-            boolean r6 = org.telegram.messenger.ChatObject.isNotInChat(r5)     // Catch:{ Exception -> 0x0689 }
-            if (r6 == 0) goto L_0x02b3
-            goto L_0x031f
-        L_0x02b3:
-            org.telegram.messenger.MessagesController r6 = r26.getMessagesController()     // Catch:{ Exception -> 0x0689 }
-            int r7 = r5.id     // Catch:{ Exception -> 0x0689 }
-            int r7 = -r7
-            long r7 = (long) r7     // Catch:{ Exception -> 0x0689 }
-            boolean r6 = r6.isDialogMuted(r7, r5)     // Catch:{ Exception -> 0x0689 }
-            int r7 = r5.id     // Catch:{ Exception -> 0x0689 }
-            int r7 = -r7
-            long r7 = (long) r7     // Catch:{ Exception -> 0x0689 }
-            java.lang.Object r7 = r9.get(r7)     // Catch:{ Exception -> 0x0689 }
-            java.lang.Integer r7 = (java.lang.Integer) r7     // Catch:{ Exception -> 0x0689 }
-            int r7 = r7.intValue()     // Catch:{ Exception -> 0x0689 }
-            if (r6 == 0) goto L_0x02dd
-            android.util.LongSparseArray<java.lang.Integer> r8 = r1.dialogsWithMentions     // Catch:{ Exception -> 0x0689 }
-            int r11 = r5.id     // Catch:{ Exception -> 0x0689 }
-            int r11 = -r11
-            long r11 = (long) r11     // Catch:{ Exception -> 0x0689 }
-            int r8 = r8.indexOfKey(r11)     // Catch:{ Exception -> 0x0689 }
-            if (r8 >= 0) goto L_0x02dd
-            r8 = 1
-            goto L_0x02de
-        L_0x02dd:
-            r8 = 0
-        L_0x02de:
-            if (r6 == 0) goto L_0x02eb
-            int r6 = r5.id     // Catch:{ Exception -> 0x0689 }
-            int r6 = -r6
-            r11 = 1
-            java.lang.Boolean r12 = java.lang.Boolean.valueOf(r11)     // Catch:{ Exception -> 0x0689 }
-            r14.put(r6, r12)     // Catch:{ Exception -> 0x0689 }
-        L_0x02eb:
+            java.lang.Object r0 = r2.get(r0, r3)     // Catch:{ Exception -> 0x066d }
+            java.lang.Integer r0 = (java.lang.Integer) r0     // Catch:{ Exception -> 0x066d }
+            int r0 = r0.intValue()     // Catch:{ Exception -> 0x066d }
+            int r3 = r8.id     // Catch:{ Exception -> 0x066d }
             r6 = 1
-            if (r7 != r6) goto L_0x02f8
-            int r11 = r5.id     // Catch:{ Exception -> 0x0689 }
-            int r11 = -r11
-            java.lang.Boolean r12 = java.lang.Boolean.valueOf(r6)     // Catch:{ Exception -> 0x0689 }
-            r15.put(r11, r12)     // Catch:{ Exception -> 0x0689 }
-        L_0x02f8:
-            boolean r6 = org.telegram.messenger.ChatObject.isChannel(r5)     // Catch:{ Exception -> 0x0689 }
-            if (r6 == 0) goto L_0x030d
-            boolean r6 = r5.megagroup     // Catch:{ Exception -> 0x0689 }
-            if (r6 != 0) goto L_0x030d
-            int[][] r6 = r1.channels     // Catch:{ Exception -> 0x0689 }
-            r6 = r6[r7]     // Catch:{ Exception -> 0x0689 }
-            r7 = r6[r8]     // Catch:{ Exception -> 0x0689 }
-            r11 = 1
-            int r7 = r7 + r11
-            r6[r8] = r7     // Catch:{ Exception -> 0x0689 }
-            goto L_0x0317
-        L_0x030d:
-            int[][] r6 = r1.groups     // Catch:{ Exception -> 0x0689 }
-            r6 = r6[r7]     // Catch:{ Exception -> 0x0689 }
-            r7 = r6[r8]     // Catch:{ Exception -> 0x0689 }
-            r11 = 1
-            int r7 = r7 + r11
-            r6[r8] = r7     // Catch:{ Exception -> 0x0689 }
-        L_0x0317:
-            int r6 = r5.id     // Catch:{ Exception -> 0x0689 }
-            r7 = r22
-            r7.put(r6, r5)     // Catch:{ Exception -> 0x0689 }
-            goto L_0x0333
-        L_0x031f:
-            r7 = r22
-            android.util.LongSparseArray<java.lang.Integer> r6 = r1.dialogsWithUnread     // Catch:{ Exception -> 0x0689 }
-            int r8 = r5.id     // Catch:{ Exception -> 0x0689 }
-            int r8 = -r8
-            long r11 = (long) r8     // Catch:{ Exception -> 0x0689 }
-            r6.remove(r11)     // Catch:{ Exception -> 0x0689 }
-            android.util.LongSparseArray<java.lang.Integer> r6 = r1.dialogsWithMentions     // Catch:{ Exception -> 0x0689 }
-            int r5 = r5.id     // Catch:{ Exception -> 0x0689 }
-            int r5 = -r5
-            long r11 = (long) r5     // Catch:{ Exception -> 0x0689 }
-            r6.remove(r11)     // Catch:{ Exception -> 0x0689 }
-        L_0x0333:
+            int r0 = r0 + r6
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x066d }
+            r2.put(r3, r0)     // Catch:{ Exception -> 0x066d }
+        L_0x0262:
             int r4 = r4 + 1
-            r22 = r7
-            goto L_0x029e
-        L_0x0339:
-            r7 = r22
-            java.util.ArrayList<org.telegram.messenger.MessagesController$DialogFilter> r0 = r1.dialogFilters     // Catch:{ Exception -> 0x0689 }
-            int r0 = r0.size()     // Catch:{ Exception -> 0x0689 }
-            r3 = 0
-        L_0x0342:
-            int r4 = r0 + 2
-            if (r3 >= r4) goto L_0x068d
-            if (r3 >= r0) goto L_0x035f
-            java.util.ArrayList<org.telegram.messenger.MessagesController$DialogFilter> r4 = r1.dialogFilters     // Catch:{ Exception -> 0x0689 }
-            java.lang.Object r4 = r4.get(r3)     // Catch:{ Exception -> 0x0689 }
-            org.telegram.messenger.MessagesController$DialogFilter r4 = (org.telegram.messenger.MessagesController.DialogFilter) r4     // Catch:{ Exception -> 0x0689 }
-            int r5 = r4.pendingUnreadCount     // Catch:{ Exception -> 0x0689 }
-            if (r5 < 0) goto L_0x035c
             r24 = r2
-            r23 = r10
-            r16 = 0
-            goto L_0x0681
-        L_0x035c:
-            int r5 = r4.flags     // Catch:{ Exception -> 0x0689 }
-            goto L_0x0376
-        L_0x035f:
-            r4 = 0
-            int r5 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS     // Catch:{ Exception -> 0x0689 }
-            if (r3 != r0) goto L_0x0373
-            org.telegram.messenger.NotificationsController r6 = r26.getNotificationsController()     // Catch:{ Exception -> 0x0689 }
-            boolean r6 = r6.showBadgeMuted     // Catch:{ Exception -> 0x0689 }
-            if (r6 != 0) goto L_0x036f
-            int r6 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x0689 }
-            r5 = r5 | r6
-        L_0x036f:
-            int r6 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x0689 }
-        L_0x0371:
-            r5 = r5 | r6
-            goto L_0x0376
-        L_0x0373:
-            int r6 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED     // Catch:{ Exception -> 0x0689 }
-            goto L_0x0371
-        L_0x0376:
-            int r6 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS     // Catch:{ Exception -> 0x0689 }
-            r6 = r6 & r5
-            if (r6 == 0) goto L_0x03b2
-            int r6 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED     // Catch:{ Exception -> 0x0689 }
-            r6 = r6 & r5
-            if (r6 != 0) goto L_0x0396
-            int[][] r6 = r1.contacts     // Catch:{ Exception -> 0x0689 }
-            r8 = 0
-            r6 = r6[r8]     // Catch:{ Exception -> 0x0689 }
-            r6 = r6[r8]     // Catch:{ Exception -> 0x0689 }
-            int r6 = r6 + r8
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x0689 }
-            r9 = r9 & r5
-            if (r9 != 0) goto L_0x0397
-            int[][] r9 = r1.contacts     // Catch:{ Exception -> 0x0689 }
-            r9 = r9[r8]     // Catch:{ Exception -> 0x0689 }
+            r3 = r10
+            r2 = r13
+            r0 = r20
+            goto L_0x01da
+        L_0x026c:
+            r20 = r0
+            goto L_0x0273
+        L_0x026f:
+            r20 = r0
+            r11 = r23
+        L_0x0273:
+            r2 = r24
+            boolean r0 = r7.isEmpty()     // Catch:{ Exception -> 0x066d }
+            if (r0 != 0) goto L_0x031d
+            java.lang.String r0 = android.text.TextUtils.join(r12, r7)     // Catch:{ Exception -> 0x066d }
+            r1.getChatsInternal(r0, r5)     // Catch:{ Exception -> 0x066d }
+            int r0 = r5.size()     // Catch:{ Exception -> 0x066d }
+            r3 = 0
+        L_0x0287:
+            if (r3 >= r0) goto L_0x031d
+            java.lang.Object r4 = r5.get(r3)     // Catch:{ Exception -> 0x066d }
+            org.telegram.tgnet.TLRPC$Chat r4 = (org.telegram.tgnet.TLRPC$Chat) r4     // Catch:{ Exception -> 0x066d }
+            org.telegram.tgnet.TLRPC$InputChannel r6 = r4.migrated_to     // Catch:{ Exception -> 0x066d }
+            boolean r6 = r6 instanceof org.telegram.tgnet.TLRPC$TL_inputChannel     // Catch:{ Exception -> 0x066d }
+            if (r6 != 0) goto L_0x0303
+            boolean r6 = org.telegram.messenger.ChatObject.isNotInChat(r4)     // Catch:{ Exception -> 0x066d }
+            if (r6 == 0) goto L_0x029c
+            goto L_0x0303
+        L_0x029c:
+            org.telegram.messenger.MessagesController r6 = r25.getMessagesController()     // Catch:{ Exception -> 0x066d }
+            int r7 = r4.id     // Catch:{ Exception -> 0x066d }
+            int r7 = -r7
+            long r7 = (long) r7     // Catch:{ Exception -> 0x066d }
+            boolean r6 = r6.isDialogMuted(r7, r4)     // Catch:{ Exception -> 0x066d }
+            int r7 = r4.id     // Catch:{ Exception -> 0x066d }
+            int r7 = -r7
+            long r7 = (long) r7     // Catch:{ Exception -> 0x066d }
+            java.lang.Object r7 = r9.get(r7)     // Catch:{ Exception -> 0x066d }
+            java.lang.Integer r7 = (java.lang.Integer) r7     // Catch:{ Exception -> 0x066d }
+            int r7 = r7.intValue()     // Catch:{ Exception -> 0x066d }
+            if (r6 == 0) goto L_0x02c6
+            android.util.LongSparseArray<java.lang.Integer> r8 = r1.dialogsWithMentions     // Catch:{ Exception -> 0x066d }
+            int r10 = r4.id     // Catch:{ Exception -> 0x066d }
+            int r10 = -r10
+            long r12 = (long) r10     // Catch:{ Exception -> 0x066d }
+            int r8 = r8.indexOfKey(r12)     // Catch:{ Exception -> 0x066d }
+            if (r8 >= 0) goto L_0x02c6
             r8 = 1
-            r9 = r9[r8]     // Catch:{ Exception -> 0x0689 }
+            goto L_0x02c7
+        L_0x02c6:
+            r8 = 0
+        L_0x02c7:
+            if (r6 == 0) goto L_0x02d1
+            int r6 = r4.id     // Catch:{ Exception -> 0x066d }
+            int r6 = -r6
+            java.lang.Boolean r10 = java.lang.Boolean.TRUE     // Catch:{ Exception -> 0x066d }
+            r14.put(r6, r10)     // Catch:{ Exception -> 0x066d }
+        L_0x02d1:
+            r6 = 1
+            if (r7 != r6) goto L_0x02dc
+            int r6 = r4.id     // Catch:{ Exception -> 0x066d }
+            int r6 = -r6
+            java.lang.Boolean r10 = java.lang.Boolean.TRUE     // Catch:{ Exception -> 0x066d }
+            r15.put(r6, r10)     // Catch:{ Exception -> 0x066d }
+        L_0x02dc:
+            boolean r6 = org.telegram.messenger.ChatObject.isChannel(r4)     // Catch:{ Exception -> 0x066d }
+            if (r6 == 0) goto L_0x02f1
+            boolean r6 = r4.megagroup     // Catch:{ Exception -> 0x066d }
+            if (r6 != 0) goto L_0x02f1
+            int[][] r6 = r1.channels     // Catch:{ Exception -> 0x066d }
+            r6 = r6[r7]     // Catch:{ Exception -> 0x066d }
+            r7 = r6[r8]     // Catch:{ Exception -> 0x066d }
+            r10 = 1
+            int r7 = r7 + r10
+            r6[r8] = r7     // Catch:{ Exception -> 0x066d }
+            goto L_0x02fb
+        L_0x02f1:
+            int[][] r6 = r1.groups     // Catch:{ Exception -> 0x066d }
+            r6 = r6[r7]     // Catch:{ Exception -> 0x066d }
+            r7 = r6[r8]     // Catch:{ Exception -> 0x066d }
+            r10 = 1
+            int r7 = r7 + r10
+            r6[r8] = r7     // Catch:{ Exception -> 0x066d }
+        L_0x02fb:
+            int r6 = r4.id     // Catch:{ Exception -> 0x066d }
+            r7 = r22
+            r7.put(r6, r4)     // Catch:{ Exception -> 0x066d }
+            goto L_0x0317
+        L_0x0303:
+            r7 = r22
+            android.util.LongSparseArray<java.lang.Integer> r6 = r1.dialogsWithUnread     // Catch:{ Exception -> 0x066d }
+            int r8 = r4.id     // Catch:{ Exception -> 0x066d }
+            int r8 = -r8
+            long r12 = (long) r8     // Catch:{ Exception -> 0x066d }
+            r6.remove(r12)     // Catch:{ Exception -> 0x066d }
+            android.util.LongSparseArray<java.lang.Integer> r6 = r1.dialogsWithMentions     // Catch:{ Exception -> 0x066d }
+            int r4 = r4.id     // Catch:{ Exception -> 0x066d }
+            int r4 = -r4
+            long r12 = (long) r4     // Catch:{ Exception -> 0x066d }
+            r6.remove(r12)     // Catch:{ Exception -> 0x066d }
+        L_0x0317:
+            int r3 = r3 + 1
+            r22 = r7
+            goto L_0x0287
+        L_0x031d:
+            r7 = r22
+            java.util.ArrayList<org.telegram.messenger.MessagesController$DialogFilter> r0 = r1.dialogFilters     // Catch:{ Exception -> 0x066d }
+            int r0 = r0.size()     // Catch:{ Exception -> 0x066d }
+            r3 = 0
+        L_0x0326:
+            int r4 = r0 + 2
+            if (r3 >= r4) goto L_0x0671
+            if (r3 >= r0) goto L_0x0343
+            java.util.ArrayList<org.telegram.messenger.MessagesController$DialogFilter> r4 = r1.dialogFilters     // Catch:{ Exception -> 0x066d }
+            java.lang.Object r4 = r4.get(r3)     // Catch:{ Exception -> 0x066d }
+            org.telegram.messenger.MessagesController$DialogFilter r4 = (org.telegram.messenger.MessagesController.DialogFilter) r4     // Catch:{ Exception -> 0x066d }
+            int r5 = r4.pendingUnreadCount     // Catch:{ Exception -> 0x066d }
+            if (r5 < 0) goto L_0x0340
+            r24 = r2
+            r23 = r11
+            r16 = 0
+            goto L_0x0665
+        L_0x0340:
+            int r5 = r4.flags     // Catch:{ Exception -> 0x066d }
+            goto L_0x035a
+        L_0x0343:
+            r4 = 0
+            int r5 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS     // Catch:{ Exception -> 0x066d }
+            if (r3 != r0) goto L_0x0357
+            org.telegram.messenger.NotificationsController r6 = r25.getNotificationsController()     // Catch:{ Exception -> 0x066d }
+            boolean r6 = r6.showBadgeMuted     // Catch:{ Exception -> 0x066d }
+            if (r6 != 0) goto L_0x0353
+            int r6 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x066d }
+            r5 = r5 | r6
+        L_0x0353:
+            int r6 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x066d }
+        L_0x0355:
+            r5 = r5 | r6
+            goto L_0x035a
+        L_0x0357:
+            int r6 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED     // Catch:{ Exception -> 0x066d }
+            goto L_0x0355
+        L_0x035a:
+            int r6 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS     // Catch:{ Exception -> 0x066d }
+            r6 = r6 & r5
+            if (r6 == 0) goto L_0x0396
+            int r6 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED     // Catch:{ Exception -> 0x066d }
+            r6 = r6 & r5
+            if (r6 != 0) goto L_0x037a
+            int[][] r6 = r1.contacts     // Catch:{ Exception -> 0x066d }
+            r8 = 0
+            r6 = r6[r8]     // Catch:{ Exception -> 0x066d }
+            r6 = r6[r8]     // Catch:{ Exception -> 0x066d }
+            int r6 = r6 + r8
+            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x066d }
+            r9 = r9 & r5
+            if (r9 != 0) goto L_0x037b
+            int[][] r9 = r1.contacts     // Catch:{ Exception -> 0x066d }
+            r9 = r9[r8]     // Catch:{ Exception -> 0x066d }
+            r8 = 1
+            r9 = r9[r8]     // Catch:{ Exception -> 0x066d }
             int r6 = r6 + r9
+            goto L_0x037b
+        L_0x037a:
+            r6 = 0
+        L_0x037b:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x066d }
+            r8 = r8 & r5
+            if (r8 != 0) goto L_0x0397
+            int[][] r8 = r1.contacts     // Catch:{ Exception -> 0x066d }
+            r9 = 1
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
+            r10 = 0
+            r8 = r8[r10]     // Catch:{ Exception -> 0x066d }
+            int r6 = r6 + r8
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x066d }
+            r8 = r8 & r5
+            if (r8 != 0) goto L_0x0397
+            int[][] r8 = r1.contacts     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
+            int r6 = r6 + r8
             goto L_0x0397
         L_0x0396:
             r6 = 0
         L_0x0397:
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x0689 }
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS     // Catch:{ Exception -> 0x066d }
             r8 = r8 & r5
-            if (r8 != 0) goto L_0x03b3
-            int[][] r8 = r1.contacts     // Catch:{ Exception -> 0x0689 }
-            r9 = 1
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
-            r11 = 0
-            r8 = r8[r11]     // Catch:{ Exception -> 0x0689 }
-            int r6 = r6 + r8
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x0689 }
+            if (r8 == 0) goto L_0x03d0
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED     // Catch:{ Exception -> 0x066d }
             r8 = r8 & r5
-            if (r8 != 0) goto L_0x03b3
-            int[][] r8 = r1.contacts     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
-            int r6 = r6 + r8
-            goto L_0x03b3
-        L_0x03b2:
-            r6 = 0
-        L_0x03b3:
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS     // Catch:{ Exception -> 0x0689 }
-            r8 = r8 & r5
-            if (r8 == 0) goto L_0x03ec
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED     // Catch:{ Exception -> 0x0689 }
-            r8 = r8 & r5
-            if (r8 != 0) goto L_0x03d2
-            int[][] r8 = r1.nonContacts     // Catch:{ Exception -> 0x0689 }
+            if (r8 != 0) goto L_0x03b6
+            int[][] r8 = r1.nonContacts     // Catch:{ Exception -> 0x066d }
             r9 = 0
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
             int r6 = r6 + r8
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x0689 }
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x066d }
             r8 = r8 & r5
-            if (r8 != 0) goto L_0x03d2
-            int[][] r8 = r1.nonContacts     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
+            if (r8 != 0) goto L_0x03b6
+            int[][] r8 = r1.nonContacts     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
             r9 = 1
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
             int r6 = r6 + r8
-        L_0x03d2:
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x0689 }
+        L_0x03b6:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x066d }
             r8 = r8 & r5
-            if (r8 != 0) goto L_0x03ec
-            int[][] r8 = r1.nonContacts     // Catch:{ Exception -> 0x0689 }
+            if (r8 != 0) goto L_0x03d0
+            int[][] r8 = r1.nonContacts     // Catch:{ Exception -> 0x066d }
             r9 = 1
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
-            r11 = 0
-            r8 = r8[r11]     // Catch:{ Exception -> 0x0689 }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
+            r10 = 0
+            r8 = r8[r10]     // Catch:{ Exception -> 0x066d }
             int r6 = r6 + r8
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x0689 }
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x066d }
             r8 = r8 & r5
-            if (r8 != 0) goto L_0x03ec
-            int[][] r8 = r1.nonContacts     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
+            if (r8 != 0) goto L_0x03d0
+            int[][] r8 = r1.nonContacts     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
             int r6 = r6 + r8
-        L_0x03ec:
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS     // Catch:{ Exception -> 0x0689 }
+        L_0x03d0:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS     // Catch:{ Exception -> 0x066d }
             r8 = r8 & r5
-            if (r8 == 0) goto L_0x0425
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED     // Catch:{ Exception -> 0x0689 }
+            if (r8 == 0) goto L_0x0409
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED     // Catch:{ Exception -> 0x066d }
             r8 = r8 & r5
-            if (r8 != 0) goto L_0x040b
-            int[][] r8 = r1.groups     // Catch:{ Exception -> 0x0689 }
+            if (r8 != 0) goto L_0x03ef
+            int[][] r8 = r1.groups     // Catch:{ Exception -> 0x066d }
             r9 = 0
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
             int r6 = r6 + r8
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x0689 }
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x066d }
             r8 = r8 & r5
-            if (r8 != 0) goto L_0x040b
-            int[][] r8 = r1.groups     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
+            if (r8 != 0) goto L_0x03ef
+            int[][] r8 = r1.groups     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
             r9 = 1
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
             int r6 = r6 + r8
-        L_0x040b:
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x0689 }
+        L_0x03ef:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x066d }
             r8 = r8 & r5
-            if (r8 != 0) goto L_0x0425
-            int[][] r8 = r1.groups     // Catch:{ Exception -> 0x0689 }
+            if (r8 != 0) goto L_0x0409
+            int[][] r8 = r1.groups     // Catch:{ Exception -> 0x066d }
             r9 = 1
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
-            r11 = 0
-            r8 = r8[r11]     // Catch:{ Exception -> 0x0689 }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
+            r10 = 0
+            r8 = r8[r10]     // Catch:{ Exception -> 0x066d }
             int r6 = r6 + r8
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x0689 }
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x066d }
             r8 = r8 & r5
-            if (r8 != 0) goto L_0x0425
-            int[][] r8 = r1.groups     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
+            if (r8 != 0) goto L_0x0409
+            int[][] r8 = r1.groups     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
             int r6 = r6 + r8
-        L_0x0425:
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS     // Catch:{ Exception -> 0x0689 }
+        L_0x0409:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS     // Catch:{ Exception -> 0x066d }
             r8 = r8 & r5
-            if (r8 == 0) goto L_0x045e
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED     // Catch:{ Exception -> 0x0689 }
+            if (r8 == 0) goto L_0x0442
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED     // Catch:{ Exception -> 0x066d }
             r8 = r8 & r5
-            if (r8 != 0) goto L_0x0444
-            int[][] r8 = r1.channels     // Catch:{ Exception -> 0x0689 }
+            if (r8 != 0) goto L_0x0428
+            int[][] r8 = r1.channels     // Catch:{ Exception -> 0x066d }
             r9 = 0
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
             int r6 = r6 + r8
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x0689 }
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x066d }
             r8 = r8 & r5
-            if (r8 != 0) goto L_0x0444
-            int[][] r8 = r1.channels     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
+            if (r8 != 0) goto L_0x0428
+            int[][] r8 = r1.channels     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
             r9 = 1
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
             int r6 = r6 + r8
-        L_0x0444:
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x0689 }
+        L_0x0428:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x066d }
             r8 = r8 & r5
-            if (r8 != 0) goto L_0x045e
-            int[][] r8 = r1.channels     // Catch:{ Exception -> 0x0689 }
+            if (r8 != 0) goto L_0x0442
+            int[][] r8 = r1.channels     // Catch:{ Exception -> 0x066d }
             r9 = 1
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
-            r11 = 0
-            r8 = r8[r11]     // Catch:{ Exception -> 0x0689 }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
+            r10 = 0
+            r8 = r8[r10]     // Catch:{ Exception -> 0x066d }
             int r6 = r6 + r8
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x0689 }
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x066d }
             r8 = r8 & r5
-            if (r8 != 0) goto L_0x045e
-            int[][] r8 = r1.channels     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
+            if (r8 != 0) goto L_0x0442
+            int[][] r8 = r1.channels     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
             int r6 = r6 + r8
-        L_0x045e:
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS     // Catch:{ Exception -> 0x0689 }
+        L_0x0442:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS     // Catch:{ Exception -> 0x066d }
             r8 = r8 & r5
-            if (r8 == 0) goto L_0x0498
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED     // Catch:{ Exception -> 0x0689 }
+            if (r8 == 0) goto L_0x047c
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED     // Catch:{ Exception -> 0x066d }
+            r8 = r8 & r5
+            if (r8 != 0) goto L_0x0461
+            int[][] r8 = r1.bots     // Catch:{ Exception -> 0x066d }
+            r9 = 0
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
+            int r6 = r6 + r8
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x066d }
+            r8 = r8 & r5
+            if (r8 != 0) goto L_0x0461
+            int[][] r8 = r1.bots     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
+            r9 = 1
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
+            int r6 = r6 + r8
+        L_0x0461:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x066d }
+            r8 = r8 & r5
+            if (r8 != 0) goto L_0x047c
+            int[][] r8 = r1.bots     // Catch:{ Exception -> 0x066d }
+            r10 = 1
+            r8 = r8[r10]     // Catch:{ Exception -> 0x066d }
+            r9 = 0
+            r8 = r8[r9]     // Catch:{ Exception -> 0x066d }
+            int r6 = r6 + r8
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x066d }
             r8 = r8 & r5
             if (r8 != 0) goto L_0x047d
-            int[][] r8 = r1.bots     // Catch:{ Exception -> 0x0689 }
-            r9 = 0
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
+            int[][] r8 = r1.bots     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r10]     // Catch:{ Exception -> 0x066d }
+            r8 = r8[r10]     // Catch:{ Exception -> 0x066d }
             int r6 = r6 + r8
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x0689 }
-            r8 = r8 & r5
-            if (r8 != 0) goto L_0x047d
-            int[][] r8 = r1.bots     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
-            r9 = 1
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
-            int r6 = r6 + r8
+            goto L_0x047d
+        L_0x047c:
+            r10 = 1
         L_0x047d:
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x0689 }
-            r8 = r8 & r5
-            if (r8 != 0) goto L_0x0498
-            int[][] r8 = r1.bots     // Catch:{ Exception -> 0x0689 }
-            r11 = 1
-            r8 = r8[r11]     // Catch:{ Exception -> 0x0689 }
-            r9 = 0
-            r8 = r8[r9]     // Catch:{ Exception -> 0x0689 }
-            int r6 = r6 + r8
-            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x0689 }
-            r8 = r8 & r5
-            if (r8 != 0) goto L_0x0499
-            int[][] r8 = r1.bots     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r11]     // Catch:{ Exception -> 0x0689 }
-            r8 = r8[r11]     // Catch:{ Exception -> 0x0689 }
-            int r6 = r6 + r8
-            goto L_0x0499
-        L_0x0498:
-            r11 = 1
-        L_0x0499:
-            if (r4 == 0) goto L_0x0668
-            java.util.ArrayList<java.lang.Integer> r8 = r4.alwaysShow     // Catch:{ Exception -> 0x0689 }
-            int r8 = r8.size()     // Catch:{ Exception -> 0x0689 }
+            if (r4 == 0) goto L_0x064c
+            java.util.ArrayList<java.lang.Integer> r8 = r4.alwaysShow     // Catch:{ Exception -> 0x066d }
+            int r8 = r8.size()     // Catch:{ Exception -> 0x066d }
             r9 = r6
             r6 = 0
-        L_0x04a3:
-            if (r6 >= r8) goto L_0x0581
-            java.util.ArrayList<java.lang.Integer> r12 = r4.alwaysShow     // Catch:{ Exception -> 0x0689 }
-            java.lang.Object r12 = r12.get(r6)     // Catch:{ Exception -> 0x0689 }
-            java.lang.Integer r12 = (java.lang.Integer) r12     // Catch:{ Exception -> 0x0689 }
-            int r12 = r12.intValue()     // Catch:{ Exception -> 0x0689 }
-            if (r12 <= 0) goto L_0x052c
+        L_0x0487:
+            if (r6 >= r8) goto L_0x0565
+            java.util.ArrayList<java.lang.Integer> r12 = r4.alwaysShow     // Catch:{ Exception -> 0x066d }
+            java.lang.Object r12 = r12.get(r6)     // Catch:{ Exception -> 0x066d }
+            java.lang.Integer r12 = (java.lang.Integer) r12     // Catch:{ Exception -> 0x066d }
+            int r12 = r12.intValue()     // Catch:{ Exception -> 0x066d }
+            if (r12 <= 0) goto L_0x0510
             r13 = r9
             r9 = 0
-        L_0x04b5:
-            r11 = 2
-            if (r9 >= r11) goto L_0x0526
-            if (r9 != 0) goto L_0x04bd
-            r11 = r20
-            goto L_0x04be
-        L_0x04bd:
-            r11 = r10
-        L_0x04be:
-            java.lang.Object r11 = r11.get(r12)     // Catch:{ Exception -> 0x0689 }
-            org.telegram.tgnet.TLRPC$User r11 = (org.telegram.tgnet.TLRPC$User) r11     // Catch:{ Exception -> 0x0689 }
-            if (r11 == 0) goto L_0x051b
-            if (r9 != 0) goto L_0x04ce
+        L_0x0499:
+            r10 = 2
+            if (r9 >= r10) goto L_0x050a
+            if (r9 != 0) goto L_0x04a1
+            r10 = r20
+            goto L_0x04a2
+        L_0x04a1:
+            r10 = r11
+        L_0x04a2:
+            java.lang.Object r10 = r10.get(r12)     // Catch:{ Exception -> 0x066d }
+            org.telegram.tgnet.TLRPC$User r10 = (org.telegram.tgnet.TLRPC$User) r10     // Catch:{ Exception -> 0x066d }
+            if (r10 == 0) goto L_0x04ff
+            if (r9 != 0) goto L_0x04b2
             r19 = r8
-            r23 = r10
+            r23 = r11
             r8 = 1
-            goto L_0x04e5
-        L_0x04ce:
+            goto L_0x04c9
+        L_0x04b2:
             r19 = r8
             r17 = 0
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r17)     // Catch:{ Exception -> 0x0689 }
-            java.lang.Object r8 = r2.get(r12, r8)     // Catch:{ Exception -> 0x0689 }
-            java.lang.Integer r8 = (java.lang.Integer) r8     // Catch:{ Exception -> 0x0689 }
-            int r8 = r8.intValue()     // Catch:{ Exception -> 0x0689 }
-            r23 = r10
-            if (r8 != 0) goto L_0x04e5
-            goto L_0x051f
-        L_0x04e5:
-            boolean r10 = r11.bot     // Catch:{ Exception -> 0x0689 }
-            if (r10 == 0) goto L_0x04ec
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS     // Catch:{ Exception -> 0x0689 }
-            goto L_0x04fa
-        L_0x04ec:
-            boolean r10 = r11.self     // Catch:{ Exception -> 0x0689 }
-            if (r10 != 0) goto L_0x04f8
-            boolean r10 = r11.contact     // Catch:{ Exception -> 0x0689 }
-            if (r10 == 0) goto L_0x04f5
-            goto L_0x04f8
-        L_0x04f5:
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS     // Catch:{ Exception -> 0x0689 }
-            goto L_0x04fa
-        L_0x04f8:
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS     // Catch:{ Exception -> 0x0689 }
-        L_0x04fa:
-            r10 = r10 & r5
-            if (r10 != 0) goto L_0x04ff
-        L_0x04fd:
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r17)     // Catch:{ Exception -> 0x066d }
+            java.lang.Object r8 = r2.get(r12, r8)     // Catch:{ Exception -> 0x066d }
+            java.lang.Integer r8 = (java.lang.Integer) r8     // Catch:{ Exception -> 0x066d }
+            int r8 = r8.intValue()     // Catch:{ Exception -> 0x066d }
+            r23 = r11
+            if (r8 != 0) goto L_0x04c9
+            goto L_0x0503
+        L_0x04c9:
+            boolean r11 = r10.bot     // Catch:{ Exception -> 0x066d }
+            if (r11 == 0) goto L_0x04d0
+            int r11 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS     // Catch:{ Exception -> 0x066d }
+            goto L_0x04de
+        L_0x04d0:
+            boolean r11 = r10.self     // Catch:{ Exception -> 0x066d }
+            if (r11 != 0) goto L_0x04dc
+            boolean r11 = r10.contact     // Catch:{ Exception -> 0x066d }
+            if (r11 == 0) goto L_0x04d9
+            goto L_0x04dc
+        L_0x04d9:
+            int r11 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS     // Catch:{ Exception -> 0x066d }
+            goto L_0x04de
+        L_0x04dc:
+            int r11 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS     // Catch:{ Exception -> 0x066d }
+        L_0x04de:
+            r11 = r11 & r5
+            if (r11 != 0) goto L_0x04e3
+        L_0x04e1:
             int r13 = r13 + r8
-            goto L_0x051f
+            goto L_0x0503
+        L_0x04e3:
+            int r11 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x066d }
+            r11 = r11 & r5
+            if (r11 == 0) goto L_0x04f1
+            int r11 = r10.id     // Catch:{ Exception -> 0x066d }
+            int r11 = r14.indexOfKey(r11)     // Catch:{ Exception -> 0x066d }
+            if (r11 < 0) goto L_0x04f1
+            goto L_0x04e1
+        L_0x04f1:
+            int r11 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x066d }
+            r11 = r11 & r5
+            if (r11 == 0) goto L_0x0503
+            int r10 = r10.id     // Catch:{ Exception -> 0x066d }
+            int r10 = r15.indexOfKey(r10)     // Catch:{ Exception -> 0x066d }
+            if (r10 < 0) goto L_0x0503
+            goto L_0x04e1
         L_0x04ff:
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x0689 }
-            r10 = r10 & r5
-            if (r10 == 0) goto L_0x050d
-            int r10 = r11.id     // Catch:{ Exception -> 0x0689 }
-            int r10 = r14.indexOfKey(r10)     // Catch:{ Exception -> 0x0689 }
-            if (r10 < 0) goto L_0x050d
-            goto L_0x04fd
-        L_0x050d:
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x0689 }
-            r10 = r10 & r5
-            if (r10 == 0) goto L_0x051f
-            int r10 = r11.id     // Catch:{ Exception -> 0x0689 }
-            int r10 = r15.indexOfKey(r10)     // Catch:{ Exception -> 0x0689 }
-            if (r10 < 0) goto L_0x051f
-            goto L_0x04fd
-        L_0x051b:
             r19 = r8
-            r23 = r10
-        L_0x051f:
+            r23 = r11
+        L_0x0503:
             int r9 = r9 + 1
             r8 = r19
-            r10 = r23
-            goto L_0x04b5
-        L_0x0526:
+            r11 = r23
+            goto L_0x0499
+        L_0x050a:
             r19 = r8
-            r23 = r10
+            r23 = r11
             r9 = r13
-            goto L_0x0578
-        L_0x052c:
+            goto L_0x055c
+        L_0x0510:
             r19 = r8
-            r23 = r10
+            r23 = r11
             int r8 = -r12
-            java.lang.Object r8 = r7.get(r8)     // Catch:{ Exception -> 0x0689 }
-            org.telegram.tgnet.TLRPC$Chat r8 = (org.telegram.tgnet.TLRPC$Chat) r8     // Catch:{ Exception -> 0x0689 }
-            if (r8 == 0) goto L_0x0578
-            boolean r10 = org.telegram.messenger.ChatObject.isChannel(r8)     // Catch:{ Exception -> 0x0689 }
-            if (r10 == 0) goto L_0x0546
-            boolean r10 = r8.megagroup     // Catch:{ Exception -> 0x0689 }
-            if (r10 != 0) goto L_0x0546
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS     // Catch:{ Exception -> 0x0689 }
-            goto L_0x0548
-        L_0x0546:
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS     // Catch:{ Exception -> 0x0689 }
-        L_0x0548:
+            java.lang.Object r8 = r7.get(r8)     // Catch:{ Exception -> 0x066d }
+            org.telegram.tgnet.TLRPC$Chat r8 = (org.telegram.tgnet.TLRPC$Chat) r8     // Catch:{ Exception -> 0x066d }
+            if (r8 == 0) goto L_0x055c
+            boolean r10 = org.telegram.messenger.ChatObject.isChannel(r8)     // Catch:{ Exception -> 0x066d }
+            if (r10 == 0) goto L_0x052a
+            boolean r10 = r8.megagroup     // Catch:{ Exception -> 0x066d }
+            if (r10 != 0) goto L_0x052a
+            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS     // Catch:{ Exception -> 0x066d }
+            goto L_0x052c
+        L_0x052a:
+            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS     // Catch:{ Exception -> 0x066d }
+        L_0x052c:
             r10 = r10 & r5
-            if (r10 != 0) goto L_0x054e
-        L_0x054b:
+            if (r10 != 0) goto L_0x0532
+        L_0x052f:
             int r9 = r9 + 1
-            goto L_0x0578
-        L_0x054e:
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x0689 }
+            goto L_0x055c
+        L_0x0532:
+            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x066d }
             r10 = r10 & r5
-            if (r10 == 0) goto L_0x0569
-            int r10 = r8.id     // Catch:{ Exception -> 0x0689 }
+            if (r10 == 0) goto L_0x054d
+            int r10 = r8.id     // Catch:{ Exception -> 0x066d }
             int r10 = -r10
-            int r10 = r14.indexOfKey(r10)     // Catch:{ Exception -> 0x0689 }
-            if (r10 < 0) goto L_0x0569
-            android.util.LongSparseArray<java.lang.Integer> r10 = r1.dialogsWithMentions     // Catch:{ Exception -> 0x0689 }
-            int r11 = r8.id     // Catch:{ Exception -> 0x0689 }
+            int r10 = r14.indexOfKey(r10)     // Catch:{ Exception -> 0x066d }
+            if (r10 < 0) goto L_0x054d
+            android.util.LongSparseArray<java.lang.Integer> r10 = r1.dialogsWithMentions     // Catch:{ Exception -> 0x066d }
+            int r11 = r8.id     // Catch:{ Exception -> 0x066d }
             int r11 = -r11
-            long r11 = (long) r11     // Catch:{ Exception -> 0x0689 }
-            int r10 = r10.indexOfKey(r11)     // Catch:{ Exception -> 0x0689 }
-            if (r10 >= 0) goto L_0x0569
-            goto L_0x054b
-        L_0x0569:
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x0689 }
+            long r11 = (long) r11     // Catch:{ Exception -> 0x066d }
+            int r10 = r10.indexOfKey(r11)     // Catch:{ Exception -> 0x066d }
+            if (r10 >= 0) goto L_0x054d
+            goto L_0x052f
+        L_0x054d:
+            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x066d }
             r10 = r10 & r5
-            if (r10 == 0) goto L_0x0578
-            int r8 = r8.id     // Catch:{ Exception -> 0x0689 }
+            if (r10 == 0) goto L_0x055c
+            int r8 = r8.id     // Catch:{ Exception -> 0x066d }
             int r8 = -r8
-            int r8 = r15.indexOfKey(r8)     // Catch:{ Exception -> 0x0689 }
-            if (r8 < 0) goto L_0x0578
-            goto L_0x054b
-        L_0x0578:
+            int r8 = r15.indexOfKey(r8)     // Catch:{ Exception -> 0x066d }
+            if (r8 < 0) goto L_0x055c
+            goto L_0x052f
+        L_0x055c:
             int r6 = r6 + 1
             r8 = r19
-            r10 = r23
-            r11 = 1
-            goto L_0x04a3
-        L_0x0581:
-            r23 = r10
-            java.util.ArrayList<java.lang.Integer> r6 = r4.neverShow     // Catch:{ Exception -> 0x0689 }
-            int r6 = r6.size()     // Catch:{ Exception -> 0x0689 }
+            r11 = r23
+            r10 = 1
+            goto L_0x0487
+        L_0x0565:
+            r23 = r11
+            java.util.ArrayList<java.lang.Integer> r6 = r4.neverShow     // Catch:{ Exception -> 0x066d }
+            int r6 = r6.size()     // Catch:{ Exception -> 0x066d }
             r8 = 0
-        L_0x058a:
-            if (r8 >= r6) goto L_0x065d
-            java.util.ArrayList<java.lang.Integer> r10 = r4.neverShow     // Catch:{ Exception -> 0x0689 }
-            java.lang.Object r10 = r10.get(r8)     // Catch:{ Exception -> 0x0689 }
-            java.lang.Integer r10 = (java.lang.Integer) r10     // Catch:{ Exception -> 0x0689 }
-            int r10 = r10.intValue()     // Catch:{ Exception -> 0x0689 }
-            if (r10 <= 0) goto L_0x060e
+        L_0x056e:
+            if (r8 >= r6) goto L_0x0641
+            java.util.ArrayList<java.lang.Integer> r10 = r4.neverShow     // Catch:{ Exception -> 0x066d }
+            java.lang.Object r10 = r10.get(r8)     // Catch:{ Exception -> 0x066d }
+            java.lang.Integer r10 = (java.lang.Integer) r10     // Catch:{ Exception -> 0x066d }
+            int r10 = r10.intValue()     // Catch:{ Exception -> 0x066d }
+            if (r10 <= 0) goto L_0x05f2
             r11 = r9
             r9 = 0
-        L_0x059c:
+        L_0x0580:
             r12 = 2
-            if (r9 >= r12) goto L_0x0608
-            if (r9 != 0) goto L_0x05a4
+            if (r9 >= r12) goto L_0x05ec
+            if (r9 != 0) goto L_0x0588
             r13 = r20
-            goto L_0x05a6
-        L_0x05a4:
+            goto L_0x058a
+        L_0x0588:
             r13 = r23
-        L_0x05a6:
-            java.lang.Object r13 = r13.get(r10)     // Catch:{ Exception -> 0x0689 }
-            org.telegram.tgnet.TLRPC$User r13 = (org.telegram.tgnet.TLRPC$User) r13     // Catch:{ Exception -> 0x0689 }
-            if (r13 == 0) goto L_0x05ff
-            if (r9 != 0) goto L_0x05b6
+        L_0x058a:
+            java.lang.Object r13 = r13.get(r10)     // Catch:{ Exception -> 0x066d }
+            org.telegram.tgnet.TLRPC$User r13 = (org.telegram.tgnet.TLRPC$User) r13     // Catch:{ Exception -> 0x066d }
+            if (r13 == 0) goto L_0x05e3
+            if (r9 != 0) goto L_0x059a
             r24 = r2
             r12 = 1
             r16 = 0
-            goto L_0x05cb
+            goto L_0x05af
+        L_0x059a:
+            r16 = 0
+            java.lang.Integer r12 = java.lang.Integer.valueOf(r16)     // Catch:{ Exception -> 0x066d }
+            java.lang.Object r12 = r2.get(r10, r12)     // Catch:{ Exception -> 0x066d }
+            java.lang.Integer r12 = (java.lang.Integer) r12     // Catch:{ Exception -> 0x066d }
+            int r12 = r12.intValue()     // Catch:{ Exception -> 0x066d }
+            r24 = r2
+            if (r12 != 0) goto L_0x05af
+            goto L_0x05e7
+        L_0x05af:
+            boolean r2 = r13.bot     // Catch:{ Exception -> 0x066d }
+            if (r2 == 0) goto L_0x05b6
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS     // Catch:{ Exception -> 0x066d }
+            goto L_0x05c4
         L_0x05b6:
-            r16 = 0
-            java.lang.Integer r12 = java.lang.Integer.valueOf(r16)     // Catch:{ Exception -> 0x0689 }
-            java.lang.Object r12 = r2.get(r10, r12)     // Catch:{ Exception -> 0x0689 }
-            java.lang.Integer r12 = (java.lang.Integer) r12     // Catch:{ Exception -> 0x0689 }
-            int r12 = r12.intValue()     // Catch:{ Exception -> 0x0689 }
-            r24 = r2
-            if (r12 != 0) goto L_0x05cb
-            goto L_0x0603
-        L_0x05cb:
-            boolean r2 = r13.bot     // Catch:{ Exception -> 0x0689 }
-            if (r2 == 0) goto L_0x05d2
-            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS     // Catch:{ Exception -> 0x0689 }
-            goto L_0x05e0
-        L_0x05d2:
-            boolean r2 = r13.self     // Catch:{ Exception -> 0x0689 }
-            if (r2 != 0) goto L_0x05de
-            boolean r2 = r13.contact     // Catch:{ Exception -> 0x0689 }
-            if (r2 == 0) goto L_0x05db
-            goto L_0x05de
-        L_0x05db:
-            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS     // Catch:{ Exception -> 0x0689 }
-            goto L_0x05e0
-        L_0x05de:
-            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS     // Catch:{ Exception -> 0x0689 }
-        L_0x05e0:
+            boolean r2 = r13.self     // Catch:{ Exception -> 0x066d }
+            if (r2 != 0) goto L_0x05c2
+            boolean r2 = r13.contact     // Catch:{ Exception -> 0x066d }
+            if (r2 == 0) goto L_0x05bf
+            goto L_0x05c2
+        L_0x05bf:
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS     // Catch:{ Exception -> 0x066d }
+            goto L_0x05c4
+        L_0x05c2:
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS     // Catch:{ Exception -> 0x066d }
+        L_0x05c4:
             r2 = r2 & r5
-            if (r2 == 0) goto L_0x0603
-            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x0689 }
+            if (r2 == 0) goto L_0x05e7
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x066d }
             r2 = r2 & r5
-            if (r2 == 0) goto L_0x05f0
-            int r2 = r13.id     // Catch:{ Exception -> 0x0689 }
-            int r2 = r15.indexOfKey(r2)     // Catch:{ Exception -> 0x0689 }
-            if (r2 >= 0) goto L_0x0603
-        L_0x05f0:
-            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x0689 }
+            if (r2 == 0) goto L_0x05d4
+            int r2 = r13.id     // Catch:{ Exception -> 0x066d }
+            int r2 = r15.indexOfKey(r2)     // Catch:{ Exception -> 0x066d }
+            if (r2 >= 0) goto L_0x05e7
+        L_0x05d4:
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x066d }
             r2 = r2 & r5
-            if (r2 == 0) goto L_0x05fd
-            int r2 = r13.id     // Catch:{ Exception -> 0x0689 }
-            int r2 = r14.indexOfKey(r2)     // Catch:{ Exception -> 0x0689 }
-            if (r2 >= 0) goto L_0x0603
-        L_0x05fd:
+            if (r2 == 0) goto L_0x05e1
+            int r2 = r13.id     // Catch:{ Exception -> 0x066d }
+            int r2 = r14.indexOfKey(r2)     // Catch:{ Exception -> 0x066d }
+            if (r2 >= 0) goto L_0x05e7
+        L_0x05e1:
             int r11 = r11 - r12
-            goto L_0x0603
-        L_0x05ff:
+            goto L_0x05e7
+        L_0x05e3:
             r24 = r2
             r16 = 0
-        L_0x0603:
+        L_0x05e7:
             int r9 = r9 + 1
             r2 = r24
-            goto L_0x059c
-        L_0x0608:
+            goto L_0x0580
+        L_0x05ec:
             r24 = r2
             r16 = 0
             r9 = r11
-            goto L_0x0657
-        L_0x060e:
+            goto L_0x063b
+        L_0x05f2:
             r24 = r2
             r16 = 0
             int r2 = -r10
-            java.lang.Object r2 = r7.get(r2)     // Catch:{ Exception -> 0x0689 }
-            org.telegram.tgnet.TLRPC$Chat r2 = (org.telegram.tgnet.TLRPC$Chat) r2     // Catch:{ Exception -> 0x0689 }
-            if (r2 == 0) goto L_0x0657
-            boolean r10 = org.telegram.messenger.ChatObject.isChannel(r2)     // Catch:{ Exception -> 0x0689 }
-            if (r10 == 0) goto L_0x0628
-            boolean r10 = r2.megagroup     // Catch:{ Exception -> 0x0689 }
-            if (r10 != 0) goto L_0x0628
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS     // Catch:{ Exception -> 0x0689 }
-            goto L_0x062a
-        L_0x0628:
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS     // Catch:{ Exception -> 0x0689 }
-        L_0x062a:
-            r10 = r10 & r5
-            if (r10 == 0) goto L_0x0657
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x0689 }
+            java.lang.Object r2 = r7.get(r2)     // Catch:{ Exception -> 0x066d }
+            org.telegram.tgnet.TLRPC$Chat r2 = (org.telegram.tgnet.TLRPC$Chat) r2     // Catch:{ Exception -> 0x066d }
+            if (r2 == 0) goto L_0x063b
+            boolean r10 = org.telegram.messenger.ChatObject.isChannel(r2)     // Catch:{ Exception -> 0x066d }
+            if (r10 == 0) goto L_0x060c
+            boolean r10 = r2.megagroup     // Catch:{ Exception -> 0x066d }
+            if (r10 != 0) goto L_0x060c
+            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS     // Catch:{ Exception -> 0x066d }
+            goto L_0x060e
+        L_0x060c:
+            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS     // Catch:{ Exception -> 0x066d }
+        L_0x060e:
             r10 = r10 & r5
             if (r10 == 0) goto L_0x063b
-            int r10 = r2.id     // Catch:{ Exception -> 0x0689 }
-            int r10 = -r10
-            int r10 = r15.indexOfKey(r10)     // Catch:{ Exception -> 0x0689 }
-            if (r10 >= 0) goto L_0x0657
-        L_0x063b:
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x0689 }
+            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED     // Catch:{ Exception -> 0x066d }
             r10 = r10 & r5
-            if (r10 == 0) goto L_0x0655
-            int r10 = r2.id     // Catch:{ Exception -> 0x0689 }
+            if (r10 == 0) goto L_0x061f
+            int r10 = r2.id     // Catch:{ Exception -> 0x066d }
             int r10 = -r10
-            int r10 = r14.indexOfKey(r10)     // Catch:{ Exception -> 0x0689 }
-            if (r10 < 0) goto L_0x0655
-            android.util.LongSparseArray<java.lang.Integer> r10 = r1.dialogsWithMentions     // Catch:{ Exception -> 0x0689 }
-            int r2 = r2.id     // Catch:{ Exception -> 0x0689 }
+            int r10 = r15.indexOfKey(r10)     // Catch:{ Exception -> 0x066d }
+            if (r10 >= 0) goto L_0x063b
+        L_0x061f:
+            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED     // Catch:{ Exception -> 0x066d }
+            r10 = r10 & r5
+            if (r10 == 0) goto L_0x0639
+            int r10 = r2.id     // Catch:{ Exception -> 0x066d }
+            int r10 = -r10
+            int r10 = r14.indexOfKey(r10)     // Catch:{ Exception -> 0x066d }
+            if (r10 < 0) goto L_0x0639
+            android.util.LongSparseArray<java.lang.Integer> r10 = r1.dialogsWithMentions     // Catch:{ Exception -> 0x066d }
+            int r2 = r2.id     // Catch:{ Exception -> 0x066d }
             int r2 = -r2
-            long r11 = (long) r2     // Catch:{ Exception -> 0x0689 }
-            int r2 = r10.indexOfKey(r11)     // Catch:{ Exception -> 0x0689 }
-            if (r2 < 0) goto L_0x0657
-        L_0x0655:
+            long r11 = (long) r2     // Catch:{ Exception -> 0x066d }
+            int r2 = r10.indexOfKey(r11)     // Catch:{ Exception -> 0x066d }
+            if (r2 < 0) goto L_0x063b
+        L_0x0639:
             int r9 = r9 + -1
-        L_0x0657:
+        L_0x063b:
             int r8 = r8 + 1
             r2 = r24
-            goto L_0x058a
-        L_0x065d:
+            goto L_0x056e
+        L_0x0641:
             r24 = r2
             r16 = 0
-            r4.pendingUnreadCount = r9     // Catch:{ Exception -> 0x0689 }
-            if (r27 == 0) goto L_0x0681
-            r4.unreadCount = r9     // Catch:{ Exception -> 0x0689 }
-            goto L_0x0681
-        L_0x0668:
+            r4.pendingUnreadCount = r9     // Catch:{ Exception -> 0x066d }
+            if (r26 == 0) goto L_0x0665
+            r4.unreadCount = r9     // Catch:{ Exception -> 0x066d }
+            goto L_0x0665
+        L_0x064c:
             r24 = r2
-            r23 = r10
+            r23 = r11
             r16 = 0
-            if (r3 != r0) goto L_0x0677
-            r1.pendingMainUnreadCount = r6     // Catch:{ Exception -> 0x0689 }
-            if (r27 == 0) goto L_0x0681
-            r1.mainUnreadCount = r6     // Catch:{ Exception -> 0x0689 }
-            goto L_0x0681
-        L_0x0677:
+            if (r3 != r0) goto L_0x065b
+            r1.pendingMainUnreadCount = r6     // Catch:{ Exception -> 0x066d }
+            if (r26 == 0) goto L_0x0665
+            r1.mainUnreadCount = r6     // Catch:{ Exception -> 0x066d }
+            goto L_0x0665
+        L_0x065b:
             int r2 = r0 + 1
-            if (r3 != r2) goto L_0x0681
-            r1.pendingArchiveUnreadCount = r6     // Catch:{ Exception -> 0x0689 }
-            if (r27 == 0) goto L_0x0681
-            r1.archiveUnreadCount = r6     // Catch:{ Exception -> 0x0689 }
-        L_0x0681:
+            if (r3 != r2) goto L_0x0665
+            r1.pendingArchiveUnreadCount = r6     // Catch:{ Exception -> 0x066d }
+            if (r26 == 0) goto L_0x0665
+            r1.archiveUnreadCount = r6     // Catch:{ Exception -> 0x066d }
+        L_0x0665:
             int r3 = r3 + 1
-            r10 = r23
+            r11 = r23
             r2 = r24
-            goto L_0x0342
-        L_0x0689:
+            goto L_0x0326
+        L_0x066d:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x068d:
+        L_0x0671:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.calcUnreadCounters(boolean):void");
@@ -3163,7 +3153,7 @@ public class MessagesStorage extends BaseController {
 
     public void checkLoadedRemoteFilters(TLRPC$Vector tLRPC$Vector) {
         this.storageQueue.postRunnable(new Runnable(tLRPC$Vector) {
-            private final /* synthetic */ TLRPC$Vector f$1;
+            public final /* synthetic */ TLRPC$Vector f$1;
 
             {
                 this.f$1 = r2;
@@ -4063,16 +4053,16 @@ public class MessagesStorage extends BaseController {
     /* access modifiers changed from: protected */
     public void processLoadedFilterPeers(TLRPC$messages_Dialogs tLRPC$messages_Dialogs, TLRPC$messages_Dialogs tLRPC$messages_Dialogs2, ArrayList<TLRPC$User> arrayList, ArrayList<TLRPC$Chat> arrayList2, ArrayList<MessagesController.DialogFilter> arrayList3, SparseArray<MessagesController.DialogFilter> sparseArray, ArrayList<Integer> arrayList4, HashMap<Integer, HashSet<Integer>> hashMap, HashMap<Integer, HashSet<Integer>> hashMap2, HashSet<Integer> hashSet) {
         this.storageQueue.postRunnable(new Runnable(tLRPC$messages_Dialogs, tLRPC$messages_Dialogs2, arrayList, arrayList2, arrayList3, sparseArray, arrayList4, hashMap, hashMap2, hashSet) {
-            private final /* synthetic */ TLRPC$messages_Dialogs f$1;
-            private final /* synthetic */ HashSet f$10;
-            private final /* synthetic */ TLRPC$messages_Dialogs f$2;
-            private final /* synthetic */ ArrayList f$3;
-            private final /* synthetic */ ArrayList f$4;
-            private final /* synthetic */ ArrayList f$5;
-            private final /* synthetic */ SparseArray f$6;
-            private final /* synthetic */ ArrayList f$7;
-            private final /* synthetic */ HashMap f$8;
-            private final /* synthetic */ HashMap f$9;
+            public final /* synthetic */ TLRPC$messages_Dialogs f$1;
+            public final /* synthetic */ HashSet f$10;
+            public final /* synthetic */ TLRPC$messages_Dialogs f$2;
+            public final /* synthetic */ ArrayList f$3;
+            public final /* synthetic */ ArrayList f$4;
+            public final /* synthetic */ ArrayList f$5;
+            public final /* synthetic */ SparseArray f$6;
+            public final /* synthetic */ ArrayList f$7;
+            public final /* synthetic */ HashMap f$8;
+            public final /* synthetic */ HashMap f$9;
 
             {
                 this.f$1 = r2;
@@ -4112,7 +4102,7 @@ public class MessagesStorage extends BaseController {
 
     public void deleteDialogFilter(MessagesController.DialogFilter dialogFilter) {
         this.storageQueue.postRunnable(new Runnable(dialogFilter) {
-            private final /* synthetic */ MessagesController.DialogFilter f$1;
+            public final /* synthetic */ MessagesController.DialogFilter f$1;
 
             {
                 this.f$1 = r2;
@@ -4126,9 +4116,9 @@ public class MessagesStorage extends BaseController {
 
     public void saveDialogFilter(MessagesController.DialogFilter dialogFilter, boolean z, boolean z2) {
         this.storageQueue.postRunnable(new Runnable(dialogFilter, z, z2) {
-            private final /* synthetic */ MessagesController.DialogFilter f$1;
-            private final /* synthetic */ boolean f$2;
-            private final /* synthetic */ boolean f$3;
+            public final /* synthetic */ MessagesController.DialogFilter f$1;
+            public final /* synthetic */ boolean f$2;
+            public final /* synthetic */ boolean f$3;
 
             {
                 this.f$1 = r2;
@@ -4504,12 +4494,12 @@ public class MessagesStorage extends BaseController {
             }
             Collections.reverse(arrayList4);
             AndroidUtilities.runOnUIThread(new Runnable(longSparseArray, arrayList4, arrayList15, arrayList3, arrayList, arrayList2) {
-                private final /* synthetic */ LongSparseArray f$1;
-                private final /* synthetic */ ArrayList f$2;
-                private final /* synthetic */ ArrayList f$3;
-                private final /* synthetic */ ArrayList f$4;
-                private final /* synthetic */ ArrayList f$5;
-                private final /* synthetic */ ArrayList f$6;
+                public final /* synthetic */ LongSparseArray f$1;
+                public final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ ArrayList f$3;
+                public final /* synthetic */ ArrayList f$4;
+                public final /* synthetic */ ArrayList f$5;
+                public final /* synthetic */ ArrayList f$6;
 
                 {
                     this.f$1 = r2;
@@ -4535,8 +4525,8 @@ public class MessagesStorage extends BaseController {
 
     public void putWallpapers(ArrayList<TLRPC$WallPaper> arrayList, int i) {
         this.storageQueue.postRunnable(new Runnable(i, arrayList) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ ArrayList f$2;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ ArrayList f$2;
 
             {
                 this.f$1 = r2;
@@ -4610,7 +4600,7 @@ public class MessagesStorage extends BaseController {
                 }
             }
             AndroidUtilities.runOnUIThread(new Runnable(arrayList) {
-                private final /* synthetic */ ArrayList f$0;
+                public final /* synthetic */ ArrayList f$0;
 
                 {
                     this.f$0 = r1;
@@ -4641,9 +4631,9 @@ public class MessagesStorage extends BaseController {
         if (str != null && str.length() != 0) {
             if ((str2 != null && str2.length() != 0) || tLRPC$Document != null) {
                 this.storageQueue.postRunnable(new Runnable(tLRPC$Document, str, str2) {
-                    private final /* synthetic */ TLRPC$Document f$1;
-                    private final /* synthetic */ String f$2;
-                    private final /* synthetic */ String f$3;
+                    public final /* synthetic */ TLRPC$Document f$1;
+                    public final /* synthetic */ String f$2;
+                    public final /* synthetic */ String f$3;
 
                     {
                         this.f$1 = r2;
@@ -4686,8 +4676,8 @@ public class MessagesStorage extends BaseController {
 
     public void deleteUserChannelHistory(int i, int i2) {
         this.storageQueue.postRunnable(new Runnable(i, i2) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
 
             {
                 this.f$1 = r2;
@@ -4725,8 +4715,8 @@ public class MessagesStorage extends BaseController {
             }
             queryFinalized.dispose();
             AndroidUtilities.runOnUIThread(new Runnable(arrayList, i) {
-                private final /* synthetic */ ArrayList f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -4742,8 +4732,8 @@ public class MessagesStorage extends BaseController {
             getFileLoader().deleteFiles(arrayList2, 0);
             if (!arrayList.isEmpty()) {
                 AndroidUtilities.runOnUIThread(new Runnable(arrayList, i) {
-                    private final /* synthetic */ ArrayList f$1;
-                    private final /* synthetic */ int f$2;
+                    public final /* synthetic */ ArrayList f$1;
+                    public final /* synthetic */ int f$2;
 
                     {
                         this.f$1 = r2;
@@ -4765,7 +4755,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public /* synthetic */ void lambda$null$47$MessagesStorage(ArrayList arrayList, int i) {
-        getNotificationCenter().postNotificationName(NotificationCenter.messagesDeleted, arrayList, Integer.valueOf(i), false);
+        getNotificationCenter().postNotificationName(NotificationCenter.messagesDeleted, arrayList, Integer.valueOf(i), Boolean.FALSE);
     }
 
     private boolean addFilesToDelete(TLRPC$Message tLRPC$Message, ArrayList<File> arrayList, boolean z) {
@@ -4808,8 +4798,8 @@ public class MessagesStorage extends BaseController {
 
     public void deleteDialog(long j, int i) {
         this.storageQueue.postRunnable(new Runnable(i, j) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ long f$2;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ long f$2;
 
             {
                 this.f$1 = r2;
@@ -5219,7 +5209,7 @@ public class MessagesStorage extends BaseController {
 
     public void onDeleteQueryComplete(long j) {
         this.storageQueue.postRunnable(new Runnable(j) {
-            private final /* synthetic */ long f$1;
+            public final /* synthetic */ long f$1;
 
             {
                 this.f$1 = r2;
@@ -5242,10 +5232,10 @@ public class MessagesStorage extends BaseController {
 
     public void getDialogPhotos(int i, int i2, long j, int i3) {
         this.storageQueue.postRunnable(new Runnable(j, i, i2, i3) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ int f$3;
-            private final /* synthetic */ int f$4;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$3;
+            public final /* synthetic */ int f$4;
 
             {
                 this.f$1 = r2;
@@ -5283,11 +5273,11 @@ public class MessagesStorage extends BaseController {
         }
         sQLiteCursor.dispose();
         Utilities.stageQueue.postRunnable(new Runnable(tLRPC$TL_photos_photos, i, i2, j, i3) {
-            private final /* synthetic */ TLRPC$photos_Photos f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ int f$3;
-            private final /* synthetic */ long f$4;
-            private final /* synthetic */ int f$5;
+            public final /* synthetic */ TLRPC$photos_Photos f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$3;
+            public final /* synthetic */ long f$4;
+            public final /* synthetic */ int f$5;
 
             {
                 this.f$1 = r2;
@@ -5309,7 +5299,7 @@ public class MessagesStorage extends BaseController {
 
     public void clearUserPhotos(int i) {
         this.storageQueue.postRunnable(new Runnable(i) {
-            private final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$1;
 
             {
                 this.f$1 = r2;
@@ -5332,8 +5322,8 @@ public class MessagesStorage extends BaseController {
 
     public void clearUserPhoto(int i, long j) {
         this.storageQueue.postRunnable(new Runnable(i, j) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ long f$2;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ long f$2;
 
             {
                 this.f$1 = r2;
@@ -5357,16 +5347,16 @@ public class MessagesStorage extends BaseController {
 
     public void resetDialogs(TLRPC$messages_Dialogs tLRPC$messages_Dialogs, int i, int i2, int i3, int i4, int i5, LongSparseArray<TLRPC$Dialog> longSparseArray, LongSparseArray<MessageObject> longSparseArray2, TLRPC$Message tLRPC$Message, int i6) {
         this.storageQueue.postRunnable(new Runnable(tLRPC$messages_Dialogs, i6, i2, i3, i4, i5, tLRPC$Message, i, longSparseArray, longSparseArray2) {
-            private final /* synthetic */ TLRPC$messages_Dialogs f$1;
-            private final /* synthetic */ LongSparseArray f$10;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ int f$3;
-            private final /* synthetic */ int f$4;
-            private final /* synthetic */ int f$5;
-            private final /* synthetic */ int f$6;
-            private final /* synthetic */ TLRPC$Message f$7;
-            private final /* synthetic */ int f$8;
-            private final /* synthetic */ LongSparseArray f$9;
+            public final /* synthetic */ TLRPC$messages_Dialogs f$1;
+            public final /* synthetic */ LongSparseArray f$10;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$3;
+            public final /* synthetic */ int f$4;
+            public final /* synthetic */ int f$5;
+            public final /* synthetic */ int f$6;
+            public final /* synthetic */ TLRPC$Message f$7;
+            public final /* synthetic */ int f$8;
+            public final /* synthetic */ LongSparseArray f$9;
 
             {
                 this.f$1 = r2;
@@ -5423,7 +5413,7 @@ public class MessagesStorage extends BaseController {
                 }
             }
             Collections.sort(arrayList2, new Comparator(longSparseArray3) {
-                private final /* synthetic */ LongSparseArray f$0;
+                public final /* synthetic */ LongSparseArray f$0;
 
                 {
                     this.f$0 = r1;
@@ -5567,8 +5557,8 @@ public class MessagesStorage extends BaseController {
     public void putDialogPhotos(int i, TLRPC$photos_Photos tLRPC$photos_Photos) {
         if (tLRPC$photos_Photos != null) {
             this.storageQueue.postRunnable(new Runnable(i, tLRPC$photos_Photos) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ TLRPC$photos_Photos f$2;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ TLRPC$photos_Photos f$2;
 
                 {
                     this.f$1 = r2;
@@ -5609,7 +5599,7 @@ public class MessagesStorage extends BaseController {
 
     public void emptyMessagesMedia(ArrayList<Integer> arrayList) {
         this.storageQueue.postRunnable(new Runnable(arrayList) {
-            private final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ ArrayList f$1;
 
             {
                 this.f$1 = r2;
@@ -5809,9 +5799,9 @@ public class MessagesStorage extends BaseController {
 
     public void updateMessagePollResults(long j, TLRPC$Poll tLRPC$Poll, TLRPC$PollResults tLRPC$PollResults) {
         this.storageQueue.postRunnable(new Runnable(j, tLRPC$Poll, tLRPC$PollResults) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ TLRPC$Poll f$2;
-            private final /* synthetic */ TLRPC$PollResults f$3;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ TLRPC$Poll f$2;
+            public final /* synthetic */ TLRPC$PollResults f$3;
 
             {
                 this.f$1 = r2;
@@ -5881,9 +5871,9 @@ public class MessagesStorage extends BaseController {
 
     public void updateMessageReactions(long j, int i, int i2, TLRPC$TL_messageReactions tLRPC$TL_messageReactions) {
         this.storageQueue.postRunnable(new Runnable(i, i2, tLRPC$TL_messageReactions) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ TLRPC$TL_messageReactions f$3;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ TLRPC$TL_messageReactions f$3;
 
             {
                 this.f$1 = r2;
@@ -5932,7 +5922,7 @@ public class MessagesStorage extends BaseController {
 
     public void getNewTask(ArrayList<Integer> arrayList, int i) {
         this.storageQueue.postRunnable(new Runnable(arrayList) {
-            private final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ ArrayList f$1;
 
             {
                 this.f$1 = r2;
@@ -5976,9 +5966,9 @@ public class MessagesStorage extends BaseController {
 
     public void markMentionMessageAsRead(int i, int i2, long j) {
         this.storageQueue.postRunnable(new Runnable(i, i2, j) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ long f$3;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ long f$3;
 
             {
                 this.f$1 = r2;
@@ -6017,7 +6007,7 @@ public class MessagesStorage extends BaseController {
 
     public void markMessageAsMention(long j) {
         this.storageQueue.postRunnable(new Runnable(j) {
-            private final /* synthetic */ long f$1;
+            public final /* synthetic */ long f$1;
 
             {
                 this.f$1 = r2;
@@ -6039,8 +6029,8 @@ public class MessagesStorage extends BaseController {
 
     public void resetMentionsCount(long j, int i) {
         this.storageQueue.postRunnable(new Runnable(j, i) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ int f$2;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ int f$2;
 
             {
                 this.f$1 = r2;
@@ -6078,12 +6068,12 @@ public class MessagesStorage extends BaseController {
 
     public void createTaskForMid(int i, int i2, int i3, int i4, int i5, boolean z) {
         this.storageQueue.postRunnable(new Runnable(i3, i4, i5, i, i2, z) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ int f$3;
-            private final /* synthetic */ int f$4;
-            private final /* synthetic */ int f$5;
-            private final /* synthetic */ boolean f$6;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$3;
+            public final /* synthetic */ int f$4;
+            public final /* synthetic */ int f$5;
+            public final /* synthetic */ boolean f$6;
 
             {
                 this.f$1 = r2;
@@ -6112,8 +6102,8 @@ public class MessagesStorage extends BaseController {
             arrayList.add(Long.valueOf(j));
             sparseArray.put(max, arrayList);
             AndroidUtilities.runOnUIThread(new Runnable(z, arrayList) {
-                private final /* synthetic */ boolean f$1;
-                private final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ boolean f$1;
+                public final /* synthetic */ ArrayList f$2;
 
                 {
                     this.f$1 = r2;
@@ -6152,11 +6142,11 @@ public class MessagesStorage extends BaseController {
 
     public void createTaskForSecretChat(int i, int i2, int i3, int i4, ArrayList<Long> arrayList) {
         this.storageQueue.postRunnable(new Runnable(arrayList, i, i4, i2, i3) {
-            private final /* synthetic */ ArrayList f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ int f$3;
-            private final /* synthetic */ int f$4;
-            private final /* synthetic */ int f$5;
+            public final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$3;
+            public final /* synthetic */ int f$4;
+            public final /* synthetic */ int f$5;
 
             {
                 this.f$1 = r2;
@@ -6210,7 +6200,7 @@ public class MessagesStorage extends BaseController {
             sQLiteCursor.dispose();
             if (arrayList2 != null) {
                 AndroidUtilities.runOnUIThread(new Runnable(arrayList3) {
-                    private final /* synthetic */ ArrayList f$1;
+                    public final /* synthetic */ ArrayList f$1;
 
                     {
                         this.f$1 = r2;
@@ -6249,127 +6239,127 @@ public class MessagesStorage extends BaseController {
         getNotificationCenter().postNotificationName(NotificationCenter.messagesReadContent, arrayList);
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v1, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v2, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v3, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v4, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v5, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v6, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v7, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v28, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v29, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v30, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v31, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v34, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v23, resolved type: int[]} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v24, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v51, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v36, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v36, resolved type: int[]} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v37, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v57, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v39, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v25, resolved type: int[]} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v26, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v67, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v41, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v42, resolved type: int[]} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v43, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v44, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v45, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v46, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v47, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v49, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v50, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v29, resolved type: int[]} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v30, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v51, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v52, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v53, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v56, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v57, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v58, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v59, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v60, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v61, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v62, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v63, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v64, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v65, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v80, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v67, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v68, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v113, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v124, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v126, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v127, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v70, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v74, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v72, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v73, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v91, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v100, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v102, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v103, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v75, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v78, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v81, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v86, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v32, resolved type: int[]} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v33, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v139, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v142, resolved type: java.lang.Object[]} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v91, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v4, resolved type: int[]} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v4, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v92, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v93, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v94, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v39, resolved type: int[]} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v40, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v152, resolved type: java.lang.Object[]} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v96, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v97, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v5, resolved type: int[]} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v5, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v98, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v99, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v100, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v46, resolved type: int[]} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v47, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v102, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v103, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v105, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v164, resolved type: int} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v110, resolved type: int} */
-    /* JADX WARNING: Code restructure failed: missing block: B:159:0x03e9, code lost:
-        if (r2.indexOfKey((long) (-r4.id)) >= 0) goto L_0x03eb;
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v1, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v4, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v5, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v6, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v7, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v8, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v9, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v10, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v11, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v12, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v13, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v14, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v15, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v16, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v17, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v18, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v19, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v20, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v21, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v22, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v23, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v24, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v25, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v26, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v27, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v28, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v31, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v32, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v34, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v38, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v39, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v43, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v44, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v47, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v50, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v53, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v54, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v56, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v57, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v58, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v59, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v60, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v61, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v62, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v63, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v64, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v65, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v58, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v67, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v68, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v106, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v117, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v119, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v120, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v70, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v58, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v73, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v74, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v75, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v75, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v86, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v88, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v89, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v77, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v80, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v83, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v88, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v31, resolved type: int[]} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v32, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v114, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v117, resolved type: java.lang.Object[]} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v93, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v17, resolved type: int[]} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v18, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v94, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v95, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v96, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v38, resolved type: int[]} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v39, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v99, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v19, resolved type: int[]} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v20, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v100, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v101, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v102, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v45, resolved type: int[]} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v46, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v104, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v105, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v107, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v139, resolved type: int} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v112, resolved type: int} */
+    /* JADX WARNING: Code restructure failed: missing block: B:156:0x03c3, code lost:
+        if (r5.indexOfKey((long) (-r3.id)) >= 0) goto L_0x03c5;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:316:0x0650, code lost:
+        if (r0.dialogsWithMentions.indexOfKey((long) (-r1.id)) < 0) goto L_0x0662;
      */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:119:0x0320  */
-    /* JADX WARNING: Removed duplicated region for block: B:173:0x0444  */
-    /* JADX WARNING: Removed duplicated region for block: B:198:0x04a5  */
-    /* JADX WARNING: Removed duplicated region for block: B:212:0x04dc  */
-    /* JADX WARNING: Removed duplicated region for block: B:260:0x0595  */
-    /* JADX WARNING: Removed duplicated region for block: B:406:0x07bd  */
-    /* JADX WARNING: Removed duplicated region for block: B:420:0x07f3  */
-    /* JADX WARNING: Removed duplicated region for block: B:468:0x08a9  */
-    /* JADX WARNING: Removed duplicated region for block: B:574:0x0a51  */
-    /* JADX WARNING: Removed duplicated region for block: B:575:0x0a58  */
+    /* JADX WARNING: Removed duplicated region for block: B:118:0x0308  */
+    /* JADX WARNING: Removed duplicated region for block: B:170:0x041e  */
+    /* JADX WARNING: Removed duplicated region for block: B:195:0x0481  */
+    /* JADX WARNING: Removed duplicated region for block: B:209:0x04b7  */
+    /* JADX WARNING: Removed duplicated region for block: B:257:0x056d  */
+    /* JADX WARNING: Removed duplicated region for block: B:406:0x079a  */
+    /* JADX WARNING: Removed duplicated region for block: B:420:0x07d0  */
+    /* JADX WARNING: Removed duplicated region for block: B:468:0x0886  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    private void updateFiltersReadCounter(android.util.LongSparseArray<java.lang.Integer> r28, android.util.LongSparseArray<java.lang.Integer> r29, boolean r30) throws java.lang.Exception {
+    private void updateFiltersReadCounter(android.util.LongSparseArray<java.lang.Integer> r27, android.util.LongSparseArray<java.lang.Integer> r28, boolean r29) throws java.lang.Exception {
         /*
-            r27 = this;
-            r0 = r27
-            r1 = r29
-            if (r28 == 0) goto L_0x000c
-            int r2 = r28.size()
+            r26 = this;
+            r0 = r26
+            r1 = r28
+            if (r27 == 0) goto L_0x000c
+            int r2 = r27.size()
             if (r2 != 0) goto L_0x0016
         L_0x000c:
-            if (r1 == 0) goto L_0x0a79
-            int r2 = r29.size()
+            if (r1 == 0) goto L_0x0a55
+            int r2 = r28.size()
             if (r2 != 0) goto L_0x0016
-            goto L_0x0a79
+            goto L_0x0a55
         L_0x0016:
             r2 = 0
             r3 = 0
@@ -6424,7 +6414,7 @@ public class MessagesStorage extends BaseController {
         L_0x0073:
             if (r12 >= r4) goto L_0x0173
             if (r12 != 0) goto L_0x007a
-            r14 = r28
+            r14 = r27
             goto L_0x007b
         L_0x007a:
             r14 = r1
@@ -6441,7 +6431,7 @@ public class MessagesStorage extends BaseController {
             if (r15 >= r4) goto L_0x007d
             java.lang.Object r4 = r14.valueAt(r15)
             java.lang.Integer r4 = (java.lang.Integer) r4
-            if (r30 == 0) goto L_0x00a1
+            if (r29 == 0) goto L_0x00a1
             int r17 = r4.intValue()
             if (r17 != 0) goto L_0x0099
             goto L_0x00a1
@@ -6451,14 +6441,14 @@ public class MessagesStorage extends BaseController {
             r20 = r14
             goto L_0x015e
         L_0x00a1:
-            if (r30 != 0) goto L_0x00aa
+            if (r29 != 0) goto L_0x00aa
             int r17 = r4.intValue()
             if (r17 != 0) goto L_0x00aa
             goto L_0x0099
         L_0x00aa:
             r18 = r3
             long r2 = r14.keyAt(r15)
-            if (r30 == 0) goto L_0x00c0
+            if (r29 == 0) goto L_0x00c0
             if (r12 != 0) goto L_0x00ba
             android.util.LongSparseArray<java.lang.Integer> r4 = r0.dialogsWithUnread
             r4.remove(r2)
@@ -6570,21 +6560,21 @@ public class MessagesStorage extends BaseController {
             r13.<init>()
             boolean r14 = r7.isEmpty()
             java.lang.String r15 = ","
-            r28 = r3
-            if (r14 != 0) goto L_0x0233
+            r27 = r3
+            if (r14 != 0) goto L_0x0228
             java.lang.String r7 = android.text.TextUtils.join(r15, r7)
             r14 = r18
             r0.getUsersInternal(r7, r14)
             int r7 = r14.size()
             r3 = 0
         L_0x01ad:
-            if (r3 >= r7) goto L_0x0233
+            if (r3 >= r7) goto L_0x0228
             java.lang.Object r20 = r14.get(r3)
             r22 = r7
             r7 = r20
             org.telegram.tgnet.TLRPC$User r7 = (org.telegram.tgnet.TLRPC$User) r7
             r20 = r14
-            org.telegram.messenger.MessagesController r14 = r27.getMessagesController()
+            org.telegram.messenger.MessagesController r14 = r26.getMessagesController()
             int r1 = r7.id
             r24 = r4
             r23 = r5
@@ -6595,66 +6585,61 @@ public class MessagesStorage extends BaseController {
             java.lang.Object r4 = r10.get(r4)
             java.lang.Integer r4 = (java.lang.Integer) r4
             int r4 = r4.intValue()
-            if (r1 == 0) goto L_0x01e6
+            if (r1 == 0) goto L_0x01e0
             int r5 = r7.id
-            r25 = r6
-            r14 = 1
-            java.lang.Boolean r6 = java.lang.Boolean.valueOf(r14)
-            r12.put(r5, r6)
-            goto L_0x01e9
-        L_0x01e6:
-            r25 = r6
-            r14 = 1
-        L_0x01e9:
-            if (r4 != r14) goto L_0x01f4
-            int r5 = r7.id
-            java.lang.Boolean r6 = java.lang.Boolean.valueOf(r14)
-            r13.put(r5, r6)
-        L_0x01f4:
+            java.lang.Boolean r14 = java.lang.Boolean.TRUE
+            r12.put(r5, r14)
+        L_0x01e0:
+            r5 = 1
+            if (r4 != r5) goto L_0x01ea
+            int r14 = r7.id
+            java.lang.Boolean r5 = java.lang.Boolean.TRUE
+            r13.put(r14, r5)
+        L_0x01ea:
             boolean r5 = r7.bot
-            if (r5 == 0) goto L_0x0202
+            if (r5 == 0) goto L_0x01f9
             int[][] r5 = r0.bots
             r4 = r5[r4]
             r5 = r4[r1]
+            r14 = 1
             int r5 = r5 + r14
             r4[r1] = r5
-            goto L_0x021e
-        L_0x0202:
+            goto L_0x0216
+        L_0x01f9:
+            r14 = 1
             boolean r5 = r7.self
-            if (r5 != 0) goto L_0x0215
+            if (r5 != 0) goto L_0x020d
             boolean r5 = r7.contact
-            if (r5 == 0) goto L_0x020b
-            goto L_0x0215
-        L_0x020b:
+            if (r5 == 0) goto L_0x0203
+            goto L_0x020d
+        L_0x0203:
             int[][] r5 = r0.nonContacts
             r4 = r5[r4]
             r5 = r4[r1]
             int r5 = r5 + r14
             r4[r1] = r5
-            goto L_0x021e
-        L_0x0215:
+            goto L_0x0216
+        L_0x020d:
             int[][] r5 = r0.contacts
             r4 = r5[r4]
             r5 = r4[r1]
             int r5 = r5 + r14
             r4[r1] = r5
-        L_0x021e:
+        L_0x0216:
             int r1 = r7.id
             r2.put(r1, r7)
             int r3 = r3 + 1
-            r1 = r29
+            r1 = r28
             r14 = r20
             r7 = r22
             r5 = r23
             r4 = r24
-            r6 = r25
             goto L_0x01ad
-        L_0x0233:
+        L_0x0228:
             r24 = r4
             r23 = r5
-            r25 = r6
             boolean r1 = r9.isEmpty()
-            if (r1 != 0) goto L_0x0317
+            if (r1 != 0) goto L_0x02ff
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
             java.util.ArrayList r3 = new java.util.ArrayList
@@ -6662,1306 +6647,1293 @@ public class MessagesStorage extends BaseController {
             java.lang.String r4 = android.text.TextUtils.join(r15, r9)
             r0.getEncryptedChatsInternal(r4, r3, r1)
             boolean r4 = r1.isEmpty()
-            if (r4 != 0) goto L_0x0317
+            if (r4 != 0) goto L_0x02ff
             java.lang.String r1 = android.text.TextUtils.join(r15, r1)
             r4 = r23
             r0.getUsersInternal(r1, r4)
             int r1 = r4.size()
             r5 = 0
-        L_0x0264:
-            if (r5 >= r1) goto L_0x0276
-            java.lang.Object r6 = r4.get(r5)
-            org.telegram.tgnet.TLRPC$User r6 = (org.telegram.tgnet.TLRPC$User) r6
-            int r7 = r6.id
-            r9 = r24
-            r9.put(r7, r6)
+        L_0x0257:
+            if (r5 >= r1) goto L_0x0269
+            java.lang.Object r7 = r4.get(r5)
+            org.telegram.tgnet.TLRPC$User r7 = (org.telegram.tgnet.TLRPC$User) r7
+            int r9 = r7.id
+            r14 = r24
+            r14.put(r9, r7)
             int r5 = r5 + 1
-            goto L_0x0264
-        L_0x0276:
-            r9 = r24
+            goto L_0x0257
+        L_0x0269:
+            r14 = r24
             int r1 = r3.size()
             r4 = 0
-        L_0x027d:
-            if (r4 >= r1) goto L_0x0315
+        L_0x0270:
+            if (r4 >= r1) goto L_0x02fd
             java.lang.Object r5 = r3.get(r4)
             org.telegram.tgnet.TLRPC$EncryptedChat r5 = (org.telegram.tgnet.TLRPC$EncryptedChat) r5
-            int r6 = r5.user_id
-            java.lang.Object r6 = r9.get(r6)
-            org.telegram.tgnet.TLRPC$User r6 = (org.telegram.tgnet.TLRPC$User) r6
-            if (r6 != 0) goto L_0x0296
+            int r7 = r5.user_id
+            java.lang.Object r7 = r14.get(r7)
+            org.telegram.tgnet.TLRPC$User r7 = (org.telegram.tgnet.TLRPC$User) r7
+            if (r7 != 0) goto L_0x0288
             r20 = r1
-            r7 = r2
+            r9 = r2
             r22 = r3
-            goto L_0x030c
-        L_0x0296:
+            goto L_0x02f4
+        L_0x0288:
             int r5 = r5.id
-            r14 = r1
-            r7 = r2
+            r20 = r1
+            r9 = r2
             long r1 = (long) r5
             r5 = 32
             long r1 = r1 << r5
-            org.telegram.messenger.MessagesController r5 = r27.getMessagesController()
+            org.telegram.messenger.MessagesController r5 = r26.getMessagesController()
             boolean r5 = r5.isDialogMuted(r1)
             java.lang.Object r1 = r10.get(r1)
             java.lang.Integer r1 = (java.lang.Integer) r1
             int r1 = r1.intValue()
-            if (r5 == 0) goto L_0x02c0
-            int r2 = r6.id
+            if (r5 == 0) goto L_0x02af
+            int r2 = r7.id
             r22 = r3
-            r20 = 1
-            java.lang.Boolean r3 = java.lang.Boolean.valueOf(r20)
+            java.lang.Boolean r3 = java.lang.Boolean.TRUE
             r12.put(r2, r3)
-            goto L_0x02c2
-        L_0x02c0:
+            goto L_0x02b1
+        L_0x02af:
             r22 = r3
-        L_0x02c2:
+        L_0x02b1:
             r2 = 1
-            if (r1 != r2) goto L_0x02d1
-            int r3 = r6.id
-            r20 = r14
-            java.lang.Boolean r14 = java.lang.Boolean.valueOf(r2)
-            r13.put(r3, r14)
-            goto L_0x02d3
-        L_0x02d1:
-            r20 = r14
-        L_0x02d3:
-            boolean r2 = r6.self
-            if (r2 != 0) goto L_0x02e7
-            boolean r2 = r6.contact
-            if (r2 == 0) goto L_0x02dc
-            goto L_0x02e7
-        L_0x02dc:
+            if (r1 != r2) goto L_0x02bb
+            int r2 = r7.id
+            java.lang.Boolean r3 = java.lang.Boolean.TRUE
+            r13.put(r2, r3)
+        L_0x02bb:
+            boolean r2 = r7.self
+            if (r2 != 0) goto L_0x02cf
+            boolean r2 = r7.contact
+            if (r2 == 0) goto L_0x02c4
+            goto L_0x02cf
+        L_0x02c4:
             int[][] r2 = r0.nonContacts
             r1 = r2[r1]
             r2 = r1[r5]
             r3 = 1
             int r2 = r2 + r3
             r1[r5] = r2
-            goto L_0x02f1
-        L_0x02e7:
+            goto L_0x02d9
+        L_0x02cf:
             r3 = 1
             int[][] r2 = r0.contacts
             r1 = r2[r1]
             r2 = r1[r5]
             int r2 = r2 + r3
             r1[r5] = r2
-        L_0x02f1:
-            int r1 = r6.id
+        L_0x02d9:
+            int r1 = r7.id
             r2 = 0
             java.lang.Integer r5 = java.lang.Integer.valueOf(r2)
             java.lang.Object r1 = r11.get(r1, r5)
             java.lang.Integer r1 = (java.lang.Integer) r1
             int r1 = r1.intValue()
-            int r2 = r6.id
+            int r2 = r7.id
             int r1 = r1 + r3
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             r11.put(r2, r1)
-        L_0x030c:
+        L_0x02f4:
             int r4 = r4 + 1
-            r2 = r7
+            r2 = r9
             r1 = r20
             r3 = r22
-            goto L_0x027d
-        L_0x0315:
-            r7 = r2
-            goto L_0x031a
-        L_0x0317:
-            r7 = r2
-            r9 = r24
-        L_0x031a:
+            goto L_0x0270
+        L_0x02fd:
+            r9 = r2
+            goto L_0x0302
+        L_0x02ff:
+            r9 = r2
+            r14 = r24
+        L_0x0302:
             boolean r1 = r8.isEmpty()
-            if (r1 != 0) goto L_0x0431
+            if (r1 != 0) goto L_0x0409
             java.lang.String r1 = android.text.TextUtils.join(r15, r8)
-            r2 = r25
-            r0.getChatsInternal(r1, r2)
-            int r1 = r2.size()
-            r3 = 0
-        L_0x032e:
-            if (r3 >= r1) goto L_0x0431
-            java.lang.Object r4 = r2.get(r3)
-            org.telegram.tgnet.TLRPC$Chat r4 = (org.telegram.tgnet.TLRPC$Chat) r4
-            org.telegram.tgnet.TLRPC$InputChannel r5 = r4.migrated_to
-            boolean r5 = r5 instanceof org.telegram.tgnet.TLRPC$TL_inputChannel
-            if (r5 != 0) goto L_0x0415
-            boolean r5 = org.telegram.messenger.ChatObject.isNotInChat(r4)
-            if (r5 == 0) goto L_0x0344
-            goto L_0x0415
-        L_0x0344:
-            org.telegram.messenger.MessagesController r5 = r27.getMessagesController()
-            int r6 = r4.id
-            int r6 = -r6
-            long r14 = (long) r6
-            boolean r5 = r5.isDialogMuted(r14, r4)
-            android.util.LongSparseArray<java.lang.Integer> r6 = r0.dialogsWithUnread
-            int r8 = r4.id
-            int r8 = -r8
-            long r14 = (long) r8
-            int r6 = r6.indexOfKey(r14)
-            if (r6 < 0) goto L_0x035e
-            r6 = 1
-            goto L_0x035f
-        L_0x035e:
-            r6 = 0
-        L_0x035f:
-            android.util.LongSparseArray<java.lang.Integer> r8 = r0.dialogsWithMentions
-            int r14 = r4.id
-            int r14 = -r14
-            long r14 = (long) r14
-            int r8 = r8.indexOfKey(r14)
-            if (r8 < 0) goto L_0x036d
-            r8 = 1
-            goto L_0x036e
-        L_0x036d:
-            r8 = 0
-        L_0x036e:
-            int r14 = r4.id
-            int r14 = -r14
-            long r14 = (long) r14
-            java.lang.Object r14 = r10.get(r14)
-            java.lang.Integer r14 = (java.lang.Integer) r14
-            int r14 = r14.intValue()
-            if (r5 == 0) goto L_0x038d
-            int r15 = r4.id
-            int r15 = -r15
-            r19 = r1
-            r20 = 1
-            java.lang.Boolean r1 = java.lang.Boolean.valueOf(r20)
-            r12.put(r15, r1)
-            goto L_0x038f
-        L_0x038d:
-            r19 = r1
-        L_0x038f:
-            r1 = 1
-            if (r14 != r1) goto L_0x039f
-            int r15 = r4.id
-            int r15 = -r15
-            r25 = r2
-            java.lang.Boolean r2 = java.lang.Boolean.valueOf(r1)
-            r13.put(r15, r2)
-            goto L_0x03a1
-        L_0x039f:
-            r25 = r2
-        L_0x03a1:
-            r1 = r29
-            if (r5 == 0) goto L_0x03d0
-            if (r1 == 0) goto L_0x03d0
-            int r2 = r4.id
-            int r2 = -r2
-            r24 = r9
-            r15 = r10
-            long r9 = (long) r2
-            int r2 = r1.indexOfKey(r9)
-            if (r2 < 0) goto L_0x03d3
-            boolean r2 = org.telegram.messenger.ChatObject.isChannel(r4)
-            if (r2 == 0) goto L_0x03c7
-            boolean r2 = r4.megagroup
-            if (r2 != 0) goto L_0x03c7
-            int[] r2 = r0.mentionChannels
-            r9 = r2[r14]
-            r10 = 1
-            int r9 = r9 + r10
-            r2[r14] = r9
-            goto L_0x03d3
-        L_0x03c7:
-            r10 = 1
-            int[] r2 = r0.mentionGroups
-            r9 = r2[r14]
-            int r9 = r9 + r10
-            r2[r14] = r9
-            goto L_0x03d3
-        L_0x03d0:
-            r24 = r9
-            r15 = r10
-        L_0x03d3:
-            if (r30 == 0) goto L_0x03dd
-            if (r6 != 0) goto L_0x03dd
-            if (r8 == 0) goto L_0x03da
-            goto L_0x03dd
-        L_0x03da:
-            r2 = r21
-            goto L_0x03eb
-        L_0x03dd:
-            if (r30 != 0) goto L_0x040b
-            int r2 = r4.id
-            int r2 = -r2
-            long r8 = (long) r2
-            r2 = r21
-            int r6 = r2.indexOfKey(r8)
-            if (r6 < 0) goto L_0x040d
-        L_0x03eb:
-            boolean r6 = org.telegram.messenger.ChatObject.isChannel(r4)
-            if (r6 == 0) goto L_0x0400
-            boolean r6 = r4.megagroup
-            if (r6 != 0) goto L_0x0400
-            int[][] r6 = r0.channels
-            r6 = r6[r14]
-            r8 = r6[r5]
-            r9 = 1
-            int r8 = r8 + r9
-            r6[r5] = r8
-            goto L_0x040d
-        L_0x0400:
-            r9 = 1
-            int[][] r6 = r0.groups
-            r6 = r6[r14]
-            r8 = r6[r5]
-            int r8 = r8 + r9
-            r6[r5] = r8
-            goto L_0x040d
-        L_0x040b:
-            r2 = r21
-        L_0x040d:
-            int r5 = r4.id
-            r6 = r28
-            r6.put(r5, r4)
-            goto L_0x0422
-        L_0x0415:
-            r6 = r28
-            r19 = r1
-            r25 = r2
-            r24 = r9
-            r15 = r10
-            r2 = r21
-            r1 = r29
-        L_0x0422:
-            int r3 = r3 + 1
-            r21 = r2
-            r28 = r6
-            r10 = r15
-            r1 = r19
-            r9 = r24
-            r2 = r25
-            goto L_0x032e
-        L_0x0431:
-            r6 = r28
-            r1 = r29
-            r24 = r9
-            r2 = r21
-            java.util.ArrayList<org.telegram.messenger.MessagesController$DialogFilter> r3 = r0.dialogFilters
-            int r3 = r3.size()
-            r14 = 0
-        L_0x0440:
-            int r4 = r3 + 2
-            if (r14 >= r4) goto L_0x0a71
-            if (r14 >= r3) goto L_0x045f
-            java.util.ArrayList<org.telegram.messenger.MessagesController$DialogFilter> r4 = r0.dialogFilters
-            java.lang.Object r4 = r4.get(r14)
-            org.telegram.messenger.MessagesController$DialogFilter r4 = (org.telegram.messenger.MessagesController.DialogFilter) r4
-            int r5 = r4.pendingUnreadCount
-            if (r5 >= 0) goto L_0x045a
-            r1 = r3
-            r9 = r7
-            r3 = r14
-            r10 = r24
-            r7 = 0
-            goto L_0x0a67
-        L_0x045a:
-            int r5 = r4.pendingUnreadCount
-            int r8 = r4.flags
-            goto L_0x047e
-        L_0x045f:
-            r4 = 0
-            int r5 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS
-            if (r14 != r3) goto L_0x0474
-            int r8 = r0.pendingMainUnreadCount
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
-            r5 = r5 | r9
-            org.telegram.messenger.NotificationsController r9 = r27.getNotificationsController()
-            boolean r9 = r9.showBadgeMuted
-            if (r9 != 0) goto L_0x0479
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            goto L_0x0478
-        L_0x0474:
-            int r8 = r0.pendingArchiveUnreadCount
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
-        L_0x0478:
-            r5 = r5 | r9
-        L_0x0479:
-            r26 = r8
-            r8 = r5
-            r5 = r26
-        L_0x047e:
-            if (r30 == 0) goto L_0x0792
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
-            r9 = r9 & r8
-            if (r9 == 0) goto L_0x04b7
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
-            r9 = r9 & r8
-            if (r9 != 0) goto L_0x049e
-            int[][] r9 = r0.contacts
-            r10 = 0
-            r15 = r9[r10]
-            r15 = r15[r10]
-            int r5 = r5 - r15
-            int r15 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r15 = r15 & r8
-            if (r15 != 0) goto L_0x049f
-            r9 = r9[r10]
-            r15 = 1
-            r9 = r9[r15]
-            int r5 = r5 - r9
-            goto L_0x04a0
-        L_0x049e:
-            r10 = 0
-        L_0x049f:
-            r15 = 1
-        L_0x04a0:
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
-            r9 = r9 & r8
-            if (r9 != 0) goto L_0x04b7
-            int[][] r9 = r0.contacts
-            r17 = r9[r15]
-            r18 = r17[r10]
-            int r5 = r5 - r18
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r10 = r10 & r8
-            if (r10 != 0) goto L_0x04b7
-            r9 = r9[r15]
-            r9 = r9[r15]
-            int r5 = r5 - r9
-        L_0x04b7:
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
-            r9 = r9 & r8
-            if (r9 == 0) goto L_0x04ee
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
-            r9 = r9 & r8
-            if (r9 != 0) goto L_0x04d5
-            int[][] r9 = r0.nonContacts
-            r10 = 0
-            r15 = r9[r10]
-            r15 = r15[r10]
-            int r5 = r5 - r15
-            int r15 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r15 = r15 & r8
-            if (r15 != 0) goto L_0x04d6
-            r9 = r9[r10]
-            r15 = 1
-            r9 = r9[r15]
-            int r5 = r5 - r9
-            goto L_0x04d7
-        L_0x04d5:
-            r10 = 0
-        L_0x04d6:
-            r15 = 1
-        L_0x04d7:
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
-            r9 = r9 & r8
-            if (r9 != 0) goto L_0x04ee
-            int[][] r9 = r0.nonContacts
-            r17 = r9[r15]
-            r18 = r17[r10]
-            int r5 = r5 - r18
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r10 = r10 & r8
-            if (r10 != 0) goto L_0x04ee
-            r9 = r9[r15]
-            r9 = r9[r15]
-            int r5 = r5 - r9
-        L_0x04ee:
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
-            r9 = r9 & r8
-            if (r9 == 0) goto L_0x052f
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
-            r9 = r9 & r8
-            if (r9 != 0) goto L_0x0511
-            int[][] r9 = r0.groups
-            r10 = 0
-            r15 = r9[r10]
-            r15 = r15[r10]
-            int r5 = r5 - r15
-            int r15 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r15 = r15 & r8
-            if (r15 != 0) goto L_0x050b
-            r9 = r9[r10]
-            r15 = 1
-            r9 = r9[r15]
-            goto L_0x050f
-        L_0x050b:
-            int[] r9 = r0.mentionGroups
-            r9 = r9[r10]
-        L_0x050f:
-            int r5 = r5 - r9
-            goto L_0x0512
-        L_0x0511:
-            r10 = 0
-        L_0x0512:
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
-            r9 = r9 & r8
-            if (r9 != 0) goto L_0x052f
-            int[][] r9 = r0.groups
-            r15 = 1
-            r17 = r9[r15]
-            r18 = r17[r10]
-            int r5 = r5 - r18
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r10 = r10 & r8
-            if (r10 != 0) goto L_0x052a
-            r9 = r9[r15]
-            r9 = r9[r15]
-            goto L_0x052e
-        L_0x052a:
-            int[] r9 = r0.mentionGroups
-            r9 = r9[r15]
-        L_0x052e:
-            int r5 = r5 - r9
-        L_0x052f:
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
-            r9 = r9 & r8
-            if (r9 == 0) goto L_0x0570
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
-            r9 = r9 & r8
-            if (r9 != 0) goto L_0x0552
-            int[][] r9 = r0.channels
-            r10 = 0
-            r15 = r9[r10]
-            r15 = r15[r10]
-            int r5 = r5 - r15
-            int r15 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r15 = r15 & r8
-            if (r15 != 0) goto L_0x054c
-            r9 = r9[r10]
-            r15 = 1
-            r9 = r9[r15]
-            goto L_0x0550
-        L_0x054c:
-            int[] r9 = r0.mentionChannels
-            r9 = r9[r10]
-        L_0x0550:
-            int r5 = r5 - r9
-            goto L_0x0553
-        L_0x0552:
-            r10 = 0
-        L_0x0553:
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
-            r9 = r9 & r8
-            if (r9 != 0) goto L_0x0570
-            int[][] r9 = r0.channels
-            r15 = 1
-            r17 = r9[r15]
-            r18 = r17[r10]
-            int r5 = r5 - r18
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r10 = r10 & r8
-            if (r10 != 0) goto L_0x056b
-            r9 = r9[r15]
-            r9 = r9[r15]
-            goto L_0x056f
-        L_0x056b:
-            int[] r9 = r0.mentionChannels
-            r9 = r9[r15]
-        L_0x056f:
-            int r5 = r5 - r9
-        L_0x0570:
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
-            r9 = r9 & r8
-            if (r9 == 0) goto L_0x05a7
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
-            r9 = r9 & r8
-            if (r9 != 0) goto L_0x058e
-            int[][] r9 = r0.bots
-            r10 = 0
-            r15 = r9[r10]
-            r15 = r15[r10]
-            int r5 = r5 - r15
-            int r15 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r15 = r15 & r8
-            if (r15 != 0) goto L_0x058f
-            r9 = r9[r10]
-            r15 = 1
-            r9 = r9[r15]
-            int r5 = r5 - r9
-            goto L_0x0590
-        L_0x058e:
-            r10 = 0
-        L_0x058f:
-            r15 = 1
-        L_0x0590:
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
-            r9 = r9 & r8
-            if (r9 != 0) goto L_0x05a7
-            int[][] r9 = r0.bots
-            r17 = r9[r15]
-            r18 = r17[r10]
-            int r5 = r5 - r18
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r10 = r10 & r8
-            if (r10 != 0) goto L_0x05a7
-            r9 = r9[r15]
-            r9 = r9[r15]
-            int r5 = r5 - r9
-        L_0x05a7:
-            if (r4 == 0) goto L_0x077f
-            java.util.ArrayList<java.lang.Integer> r9 = r4.alwaysShow
-            int r9 = r9.size()
-            r10 = 0
-        L_0x05b0:
-            if (r10 >= r9) goto L_0x0698
-            java.util.ArrayList<java.lang.Integer> r15 = r4.alwaysShow
-            java.lang.Object r15 = r15.get(r10)
-            java.lang.Integer r15 = (java.lang.Integer) r15
-            int r15 = r15.intValue()
-            if (r15 <= 0) goto L_0x063c
-            r19 = r3
-            r28 = r9
-            r3 = 2
-            r9 = 0
-        L_0x05c6:
-            if (r9 >= r3) goto L_0x0637
-            if (r9 != 0) goto L_0x05cc
-            r3 = r7
-            goto L_0x05ce
-        L_0x05cc:
-            r3 = r24
-        L_0x05ce:
-            java.lang.Object r3 = r3.get(r15)
-            org.telegram.tgnet.TLRPC$User r3 = (org.telegram.tgnet.TLRPC$User) r3
-            if (r3 == 0) goto L_0x062b
-            if (r9 != 0) goto L_0x05de
-            r21 = r7
-            r20 = r14
-            r14 = 1
-            goto L_0x05f5
-        L_0x05de:
-            r20 = r14
-            r17 = 0
-            java.lang.Integer r14 = java.lang.Integer.valueOf(r17)
-            java.lang.Object r14 = r11.get(r15, r14)
-            java.lang.Integer r14 = (java.lang.Integer) r14
-            int r14 = r14.intValue()
-            r21 = r7
-            if (r14 != 0) goto L_0x05f5
-            goto L_0x062f
-        L_0x05f5:
-            boolean r7 = r3.bot
-            if (r7 == 0) goto L_0x05fc
-            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
-            goto L_0x060a
-        L_0x05fc:
-            boolean r7 = r3.self
-            if (r7 != 0) goto L_0x0608
-            boolean r7 = r3.contact
-            if (r7 == 0) goto L_0x0605
-            goto L_0x0608
-        L_0x0605:
-            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
-            goto L_0x060a
-        L_0x0608:
-            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
-        L_0x060a:
-            r7 = r7 & r8
-            if (r7 != 0) goto L_0x060f
-        L_0x060d:
-            int r5 = r5 - r14
-            goto L_0x062f
-        L_0x060f:
-            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r7 = r7 & r8
-            if (r7 == 0) goto L_0x061d
-            int r7 = r3.id
-            int r7 = r12.indexOfKey(r7)
-            if (r7 < 0) goto L_0x061d
-            goto L_0x060d
-        L_0x061d:
-            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
-            r7 = r7 & r8
-            if (r7 == 0) goto L_0x062f
-            int r3 = r3.id
-            int r3 = r13.indexOfKey(r3)
-            if (r3 < 0) goto L_0x062f
-            goto L_0x060d
-        L_0x062b:
-            r21 = r7
-            r20 = r14
-        L_0x062f:
-            int r9 = r9 + 1
-            r14 = r20
-            r7 = r21
-            r3 = 2
-            goto L_0x05c6
-        L_0x0637:
-            r21 = r7
-            r20 = r14
-            goto L_0x068c
-        L_0x063c:
-            r19 = r3
-            r21 = r7
-            r28 = r9
-            r20 = r14
-            int r3 = -r15
-            java.lang.Object r3 = r6.get(r3)
+            r0.getChatsInternal(r1, r6)
+            int r1 = r6.size()
+            r2 = 0
+        L_0x0314:
+            if (r2 >= r1) goto L_0x0409
+            java.lang.Object r3 = r6.get(r2)
             org.telegram.tgnet.TLRPC$Chat r3 = (org.telegram.tgnet.TLRPC$Chat) r3
-            if (r3 == 0) goto L_0x068c
-            boolean r7 = org.telegram.messenger.ChatObject.isChannel(r3)
-            if (r7 == 0) goto L_0x065a
-            boolean r7 = r3.megagroup
-            if (r7 != 0) goto L_0x065a
-            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
-            goto L_0x065c
-        L_0x065a:
-            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
-        L_0x065c:
-            r7 = r7 & r8
-            if (r7 != 0) goto L_0x0662
-        L_0x065f:
-            int r5 = r5 + -1
-            goto L_0x068c
-        L_0x0662:
-            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r7 = r7 & r8
-            if (r7 == 0) goto L_0x067d
+            org.telegram.tgnet.TLRPC$InputChannel r4 = r3.migrated_to
+            boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_inputChannel
+            if (r4 != 0) goto L_0x03ef
+            boolean r4 = org.telegram.messenger.ChatObject.isNotInChat(r3)
+            if (r4 == 0) goto L_0x032a
+            goto L_0x03ef
+        L_0x032a:
+            org.telegram.messenger.MessagesController r4 = r26.getMessagesController()
+            int r5 = r3.id
+            int r5 = -r5
+            long r7 = (long) r5
+            boolean r4 = r4.isDialogMuted(r7, r3)
+            android.util.LongSparseArray<java.lang.Integer> r5 = r0.dialogsWithUnread
             int r7 = r3.id
             int r7 = -r7
-            int r7 = r12.indexOfKey(r7)
-            if (r7 < 0) goto L_0x067d
-            android.util.LongSparseArray<java.lang.Integer> r7 = r0.dialogsWithMentions
-            int r9 = r3.id
-            int r9 = -r9
-            long r14 = (long) r9
-            int r7 = r7.indexOfKey(r14)
-            if (r7 >= 0) goto L_0x067d
-            goto L_0x065f
-        L_0x067d:
-            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
-            r7 = r7 & r8
-            if (r7 == 0) goto L_0x068c
-            int r3 = r3.id
-            int r3 = -r3
-            int r3 = r13.indexOfKey(r3)
-            if (r3 < 0) goto L_0x068c
-            goto L_0x065f
-        L_0x068c:
-            int r10 = r10 + 1
-            r9 = r28
-            r3 = r19
-            r14 = r20
-            r7 = r21
-            goto L_0x05b0
-        L_0x0698:
-            r19 = r3
-            r21 = r7
-            r20 = r14
-            java.util.ArrayList<java.lang.Integer> r3 = r4.neverShow
-            int r3 = r3.size()
-            r7 = 0
-        L_0x06a5:
-            if (r7 >= r3) goto L_0x0785
-            java.util.ArrayList<java.lang.Integer> r9 = r4.neverShow
-            java.lang.Object r9 = r9.get(r7)
-            java.lang.Integer r9 = (java.lang.Integer) r9
-            int r9 = r9.intValue()
-            if (r1 == 0) goto L_0x06c4
-            long r14 = (long) r9
-            int r10 = r1.indexOfKey(r14)
-            if (r10 < 0) goto L_0x06c4
-            int r10 = r12.indexOfKey(r9)
-            if (r10 >= 0) goto L_0x06c4
-            goto L_0x072f
-        L_0x06c4:
-            if (r9 <= 0) goto L_0x0732
-            r10 = 0
-        L_0x06c7:
-            r14 = 2
-            if (r10 >= r14) goto L_0x072f
-            if (r10 != 0) goto L_0x06cf
-            r15 = r21
-            goto L_0x06d1
-        L_0x06cf:
-            r15 = r24
-        L_0x06d1:
-            java.lang.Object r15 = r15.get(r9)
-            org.telegram.tgnet.TLRPC$User r15 = (org.telegram.tgnet.TLRPC$User) r15
-            if (r15 == 0) goto L_0x0728
-            if (r10 != 0) goto L_0x06df
-            r28 = r3
-            r14 = 1
-            goto L_0x06f4
-        L_0x06df:
-            r16 = 0
-            java.lang.Integer r14 = java.lang.Integer.valueOf(r16)
-            java.lang.Object r14 = r11.get(r9, r14)
-            java.lang.Integer r14 = (java.lang.Integer) r14
-            int r14 = r14.intValue()
-            if (r14 != 0) goto L_0x06f2
-            goto L_0x0728
-        L_0x06f2:
-            r28 = r3
-        L_0x06f4:
-            boolean r3 = r15.bot
-            if (r3 == 0) goto L_0x06fb
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
-            goto L_0x0709
-        L_0x06fb:
-            boolean r3 = r15.self
-            if (r3 != 0) goto L_0x0707
-            boolean r3 = r15.contact
-            if (r3 == 0) goto L_0x0704
-            goto L_0x0707
-        L_0x0704:
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
-            goto L_0x0709
-        L_0x0707:
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
-        L_0x0709:
-            r3 = r3 & r8
-            if (r3 == 0) goto L_0x072a
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
-            r3 = r3 & r8
-            if (r3 == 0) goto L_0x0719
-            int r3 = r15.id
-            int r3 = r13.indexOfKey(r3)
-            if (r3 >= 0) goto L_0x072a
-        L_0x0719:
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r3 = r3 & r8
-            if (r3 == 0) goto L_0x0726
-            int r3 = r15.id
-            int r3 = r12.indexOfKey(r3)
-            if (r3 >= 0) goto L_0x072a
-        L_0x0726:
-            int r5 = r5 + r14
-            goto L_0x072a
-        L_0x0728:
-            r28 = r3
-        L_0x072a:
-            int r10 = r10 + 1
-            r3 = r28
-            goto L_0x06c7
-        L_0x072f:
-            r28 = r3
-            goto L_0x0779
-        L_0x0732:
-            r28 = r3
-            int r3 = -r9
-            java.lang.Object r3 = r6.get(r3)
-            org.telegram.tgnet.TLRPC$Chat r3 = (org.telegram.tgnet.TLRPC$Chat) r3
-            if (r3 == 0) goto L_0x0779
-            boolean r9 = org.telegram.messenger.ChatObject.isChannel(r3)
-            if (r9 == 0) goto L_0x074a
-            boolean r9 = r3.megagroup
-            if (r9 != 0) goto L_0x074a
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
-            goto L_0x074c
-        L_0x074a:
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
-        L_0x074c:
-            r9 = r9 & r8
-            if (r9 == 0) goto L_0x0779
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
-            r9 = r9 & r8
-            if (r9 == 0) goto L_0x075d
-            int r9 = r3.id
-            int r9 = -r9
-            int r9 = r13.indexOfKey(r9)
-            if (r9 >= 0) goto L_0x0779
-        L_0x075d:
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r9 = r9 & r8
-            if (r9 == 0) goto L_0x0777
-            int r9 = r3.id
-            int r9 = -r9
-            int r9 = r12.indexOfKey(r9)
-            if (r9 < 0) goto L_0x0777
-            android.util.LongSparseArray<java.lang.Integer> r9 = r0.dialogsWithMentions
-            int r3 = r3.id
-            int r3 = -r3
-            long r14 = (long) r3
-            int r3 = r9.indexOfKey(r14)
-            if (r3 < 0) goto L_0x0779
-        L_0x0777:
-            int r5 = r5 + 1
-        L_0x0779:
-            int r7 = r7 + 1
-            r3 = r28
-            goto L_0x06a5
-        L_0x077f:
-            r19 = r3
-            r21 = r7
-            r20 = r14
-        L_0x0785:
-            if (r5 >= 0) goto L_0x078f
-            r9 = r21
-            r10 = r24
-            r7 = 0
-            r14 = 0
-            goto L_0x0a4f
-        L_0x078f:
-            r14 = r5
-            goto L_0x0a4a
-        L_0x0792:
-            r19 = r3
-            r21 = r7
-            r20 = r14
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
-            r3 = r3 & r8
-            if (r3 == 0) goto L_0x07ce
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
-            r3 = r3 & r8
-            if (r3 != 0) goto L_0x07b6
-            int[][] r3 = r0.contacts
-            r7 = 0
-            r9 = r3[r7]
-            r9 = r9[r7]
-            int r5 = r5 + r9
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r9 = r9 & r8
-            if (r9 != 0) goto L_0x07b7
-            r3 = r3[r7]
-            r9 = 1
-            r3 = r3[r9]
-            int r5 = r5 + r3
-            goto L_0x07b8
-        L_0x07b6:
-            r7 = 0
-        L_0x07b7:
-            r9 = 1
-        L_0x07b8:
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
-            r3 = r3 & r8
-            if (r3 != 0) goto L_0x07ce
-            int[][] r3 = r0.contacts
-            r10 = r3[r9]
-            r10 = r10[r7]
-            int r5 = r5 + r10
-            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r7 = r7 & r8
-            if (r7 != 0) goto L_0x07ce
-            r3 = r3[r9]
-            r3 = r3[r9]
-            int r5 = r5 + r3
-        L_0x07ce:
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
-            r3 = r3 & r8
-            if (r3 == 0) goto L_0x0804
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
-            r3 = r3 & r8
-            if (r3 != 0) goto L_0x07ec
-            int[][] r3 = r0.nonContacts
-            r7 = 0
-            r9 = r3[r7]
-            r9 = r9[r7]
-            int r5 = r5 + r9
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r9 = r9 & r8
-            if (r9 != 0) goto L_0x07ed
-            r3 = r3[r7]
-            r9 = 1
-            r3 = r3[r9]
-            int r5 = r5 + r3
-            goto L_0x07ee
-        L_0x07ec:
-            r7 = 0
-        L_0x07ed:
-            r9 = 1
-        L_0x07ee:
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
-            r3 = r3 & r8
-            if (r3 != 0) goto L_0x0804
-            int[][] r3 = r0.nonContacts
-            r10 = r3[r9]
-            r10 = r10[r7]
-            int r5 = r5 + r10
-            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r7 = r7 & r8
-            if (r7 != 0) goto L_0x0804
-            r3 = r3[r9]
-            r3 = r3[r9]
-            int r5 = r5 + r3
-        L_0x0804:
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
-            r3 = r3 & r8
-            if (r3 == 0) goto L_0x0844
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
-            r3 = r3 & r8
-            if (r3 != 0) goto L_0x0827
-            int[][] r3 = r0.groups
-            r7 = 0
-            r9 = r3[r7]
-            r9 = r9[r7]
-            int r5 = r5 + r9
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r9 = r9 & r8
-            if (r9 != 0) goto L_0x0821
-            r3 = r3[r7]
-            r9 = 1
-            r3 = r3[r9]
-            goto L_0x0825
-        L_0x0821:
-            int[] r3 = r0.mentionGroups
-            r3 = r3[r7]
-        L_0x0825:
-            int r5 = r5 + r3
-            goto L_0x0828
-        L_0x0827:
-            r7 = 0
-        L_0x0828:
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
-            r3 = r3 & r8
-            if (r3 != 0) goto L_0x0844
-            int[][] r3 = r0.groups
-            r9 = 1
-            r10 = r3[r9]
-            r10 = r10[r7]
-            int r5 = r5 + r10
-            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r7 = r7 & r8
-            if (r7 != 0) goto L_0x083f
-            r3 = r3[r9]
-            r3 = r3[r9]
-            goto L_0x0843
-        L_0x083f:
-            int[] r3 = r0.mentionGroups
-            r3 = r3[r9]
-        L_0x0843:
-            int r5 = r5 + r3
-        L_0x0844:
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
-            r3 = r3 & r8
-            if (r3 == 0) goto L_0x0884
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
-            r3 = r3 & r8
-            if (r3 != 0) goto L_0x0867
-            int[][] r3 = r0.channels
-            r7 = 0
-            r9 = r3[r7]
-            r9 = r9[r7]
-            int r5 = r5 + r9
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r9 = r9 & r8
-            if (r9 != 0) goto L_0x0861
-            r3 = r3[r7]
-            r9 = 1
-            r3 = r3[r9]
-            goto L_0x0865
-        L_0x0861:
-            int[] r3 = r0.mentionChannels
-            r3 = r3[r7]
-        L_0x0865:
-            int r5 = r5 + r3
-            goto L_0x0868
-        L_0x0867:
-            r7 = 0
-        L_0x0868:
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
-            r3 = r3 & r8
-            if (r3 != 0) goto L_0x0884
-            int[][] r3 = r0.channels
-            r9 = 1
-            r10 = r3[r9]
-            r10 = r10[r7]
-            int r5 = r5 + r10
-            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r7 = r7 & r8
-            if (r7 != 0) goto L_0x087f
-            r3 = r3[r9]
-            r3 = r3[r9]
-            goto L_0x0883
-        L_0x087f:
-            int[] r3 = r0.mentionChannels
-            r3 = r3[r9]
-        L_0x0883:
-            int r5 = r5 + r3
-        L_0x0884:
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
-            r3 = r3 & r8
-            if (r3 == 0) goto L_0x08bb
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
-            r3 = r3 & r8
-            if (r3 != 0) goto L_0x08a2
-            int[][] r3 = r0.bots
-            r7 = 0
-            r9 = r3[r7]
-            r9 = r9[r7]
-            int r5 = r5 + r9
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r9 = r9 & r8
-            if (r9 != 0) goto L_0x08a3
-            r3 = r3[r7]
-            r9 = 1
-            r3 = r3[r9]
-            int r5 = r5 + r3
-            goto L_0x08a4
-        L_0x08a2:
-            r7 = 0
-        L_0x08a3:
-            r9 = 1
-        L_0x08a4:
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
-            r3 = r3 & r8
-            if (r3 != 0) goto L_0x08bc
-            int[][] r3 = r0.bots
-            r10 = r3[r9]
-            r10 = r10[r7]
-            int r5 = r5 + r10
-            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r7 = r7 & r8
-            if (r7 != 0) goto L_0x08bc
-            r3 = r3[r9]
-            r3 = r3[r9]
-            int r5 = r5 + r3
-            goto L_0x08bc
-        L_0x08bb:
-            r9 = 1
-        L_0x08bc:
-            r14 = r5
-            if (r4 == 0) goto L_0x0a4a
-            java.util.ArrayList<java.lang.Integer> r3 = r4.alwaysShow
-            boolean r3 = r3.isEmpty()
-            if (r3 != 0) goto L_0x09f7
-            int r3 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r3 = r3 & r8
-            if (r3 == 0) goto L_0x090d
-            int r3 = r29.size()
+            long r7 = (long) r7
+            int r5 = r5.indexOfKey(r7)
+            if (r5 < 0) goto L_0x0344
+            r5 = 1
+            goto L_0x0345
+        L_0x0344:
             r5 = 0
-        L_0x08d1:
-            if (r5 >= r3) goto L_0x090d
-            long r9 = r1.keyAt(r5)
-            int r7 = (int) r9
-            int r9 = -r7
-            java.lang.Object r9 = r6.get(r9)
-            org.telegram.tgnet.TLRPC$Chat r9 = (org.telegram.tgnet.TLRPC$Chat) r9
-            boolean r10 = org.telegram.messenger.ChatObject.isChannel(r9)
-            if (r10 == 0) goto L_0x08ef
-            boolean r9 = r9.megagroup
-            if (r9 != 0) goto L_0x08ef
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
-            r9 = r9 & r8
-            if (r9 != 0) goto L_0x08f5
-            goto L_0x0909
-        L_0x08ef:
-            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
-            r9 = r9 & r8
-            if (r9 != 0) goto L_0x08f5
-            goto L_0x0909
-        L_0x08f5:
-            int r9 = r12.indexOfKey(r7)
-            if (r9 < 0) goto L_0x0909
-            java.util.ArrayList<java.lang.Integer> r9 = r4.alwaysShow
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
-            int r7 = r9.indexOf(r7)
-            if (r7 < 0) goto L_0x0909
-            int r14 = r14 + -1
-        L_0x0909:
-            int r5 = r5 + 1
+        L_0x0345:
+            android.util.LongSparseArray<java.lang.Integer> r7 = r0.dialogsWithMentions
+            int r8 = r3.id
+            int r8 = -r8
+            r24 = r14
+            long r14 = (long) r8
+            int r7 = r7.indexOfKey(r14)
+            if (r7 < 0) goto L_0x0355
+            r7 = 1
+            goto L_0x0356
+        L_0x0355:
+            r7 = 0
+        L_0x0356:
+            int r8 = r3.id
+            int r8 = -r8
+            long r14 = (long) r8
+            java.lang.Object r8 = r10.get(r14)
+            java.lang.Integer r8 = (java.lang.Integer) r8
+            int r8 = r8.intValue()
+            if (r4 == 0) goto L_0x036e
+            int r14 = r3.id
+            int r14 = -r14
+            java.lang.Boolean r15 = java.lang.Boolean.TRUE
+            r12.put(r14, r15)
+        L_0x036e:
+            r14 = 1
+            if (r8 != r14) goto L_0x0379
+            int r14 = r3.id
+            int r14 = -r14
+            java.lang.Boolean r15 = java.lang.Boolean.TRUE
+            r13.put(r14, r15)
+        L_0x0379:
+            r14 = r28
+            if (r4 == 0) goto L_0x03a9
+            if (r14 == 0) goto L_0x03a9
+            int r15 = r3.id
+            int r15 = -r15
+            r20 = r9
+            r19 = r10
+            long r9 = (long) r15
+            int r9 = r14.indexOfKey(r9)
+            if (r9 < 0) goto L_0x03ad
+            boolean r9 = org.telegram.messenger.ChatObject.isChannel(r3)
+            if (r9 == 0) goto L_0x03a0
+            boolean r9 = r3.megagroup
+            if (r9 != 0) goto L_0x03a0
+            int[] r9 = r0.mentionChannels
+            r10 = r9[r8]
+            r15 = 1
+            int r10 = r10 + r15
+            r9[r8] = r10
+            goto L_0x03ad
+        L_0x03a0:
+            r15 = 1
+            int[] r9 = r0.mentionGroups
+            r10 = r9[r8]
+            int r10 = r10 + r15
+            r9[r8] = r10
+            goto L_0x03ad
+        L_0x03a9:
+            r20 = r9
+            r19 = r10
+        L_0x03ad:
+            if (r29 == 0) goto L_0x03b7
+            if (r5 != 0) goto L_0x03b7
+            if (r7 == 0) goto L_0x03b4
+            goto L_0x03b7
+        L_0x03b4:
+            r5 = r21
+            goto L_0x03c5
+        L_0x03b7:
+            if (r29 != 0) goto L_0x03e5
+            int r5 = r3.id
+            int r5 = -r5
+            long r9 = (long) r5
+            r5 = r21
+            int r7 = r5.indexOfKey(r9)
+            if (r7 < 0) goto L_0x03e7
+        L_0x03c5:
+            boolean r7 = org.telegram.messenger.ChatObject.isChannel(r3)
+            if (r7 == 0) goto L_0x03da
+            boolean r7 = r3.megagroup
+            if (r7 != 0) goto L_0x03da
+            int[][] r7 = r0.channels
+            r7 = r7[r8]
+            r8 = r7[r4]
             r9 = 1
-            goto L_0x08d1
-        L_0x090d:
-            java.util.ArrayList<java.lang.Integer> r3 = r4.alwaysShow
-            int r3 = r3.size()
-            r5 = r14
-            r14 = 0
-        L_0x0915:
-            if (r14 >= r3) goto L_0x09f1
-            java.util.ArrayList<java.lang.Integer> r7 = r4.alwaysShow
-            java.lang.Object r7 = r7.get(r14)
-            java.lang.Integer r7 = (java.lang.Integer) r7
-            int r7 = r7.intValue()
-            long r9 = (long) r7
-            int r9 = r2.indexOfKey(r9)
-            if (r9 >= 0) goto L_0x0930
-            r9 = r21
-            r10 = r24
-            goto L_0x09e7
-        L_0x0930:
-            if (r7 <= 0) goto L_0x09b3
-            r9 = r21
-            java.lang.Object r10 = r9.get(r7)
-            org.telegram.tgnet.TLRPC$User r10 = (org.telegram.tgnet.TLRPC$User) r10
-            if (r10 == 0) goto L_0x096b
-            int r15 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r15 = r15 & r8
-            if (r15 == 0) goto L_0x094c
-            int r15 = r10.id
-            int r15 = r12.indexOfKey(r15)
-            if (r15 < 0) goto L_0x094c
-        L_0x0949:
-            int r5 = r5 + 1
-            goto L_0x096b
-        L_0x094c:
-            boolean r15 = r10.bot
-            if (r15 == 0) goto L_0x0956
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
-            r10 = r10 & r8
-            if (r10 != 0) goto L_0x096b
-            goto L_0x0949
-        L_0x0956:
-            boolean r15 = r10.self
-            if (r15 != 0) goto L_0x0965
-            boolean r10 = r10.contact
-            if (r10 == 0) goto L_0x095f
-            goto L_0x0965
-        L_0x095f:
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
-            r10 = r10 & r8
-            if (r10 != 0) goto L_0x096b
-            goto L_0x0949
-        L_0x0965:
-            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
-            r10 = r10 & r8
-            if (r10 != 0) goto L_0x096b
-            goto L_0x0949
-        L_0x096b:
-            r10 = r24
-            java.lang.Object r15 = r10.get(r7)
-            org.telegram.tgnet.TLRPC$User r15 = (org.telegram.tgnet.TLRPC$User) r15
-            if (r15 == 0) goto L_0x09e7
-            r16 = 0
-            java.lang.Integer r1 = java.lang.Integer.valueOf(r16)
-            java.lang.Object r1 = r11.get(r7, r1)
+            int r8 = r8 + r9
+            r7[r4] = r8
+            goto L_0x03e7
+        L_0x03da:
+            r9 = 1
+            int[][] r7 = r0.groups
+            r7 = r7[r8]
+            r8 = r7[r4]
+            int r8 = r8 + r9
+            r7[r4] = r8
+            goto L_0x03e7
+        L_0x03e5:
+            r5 = r21
+        L_0x03e7:
+            int r4 = r3.id
+            r7 = r27
+            r7.put(r4, r3)
+            goto L_0x03fb
+        L_0x03ef:
+            r7 = r27
+            r20 = r9
+            r19 = r10
+            r24 = r14
+            r5 = r21
+            r14 = r28
+        L_0x03fb:
+            int r2 = r2 + 1
+            r21 = r5
+            r27 = r7
+            r10 = r19
+            r9 = r20
+            r14 = r24
+            goto L_0x0314
+        L_0x0409:
+            r7 = r27
+            r20 = r9
+            r24 = r14
+            r5 = r21
+            r14 = r28
+            java.util.ArrayList<org.telegram.messenger.MessagesController$DialogFilter> r1 = r0.dialogFilters
+            int r1 = r1.size()
+            r2 = 0
+        L_0x041a:
+            int r3 = r1 + 2
+            if (r2 >= r3) goto L_0x0a4d
+            if (r2 >= r1) goto L_0x043b
+            java.util.ArrayList<org.telegram.messenger.MessagesController$DialogFilter> r3 = r0.dialogFilters
+            java.lang.Object r3 = r3.get(r2)
+            org.telegram.messenger.MessagesController$DialogFilter r3 = (org.telegram.messenger.MessagesController.DialogFilter) r3
+            int r4 = r3.pendingUnreadCount
+            if (r4 >= 0) goto L_0x0436
+            r10 = r7
+            r27 = r13
+            r9 = r20
+            r13 = r24
+            r6 = 0
+            goto L_0x0a40
+        L_0x0436:
+            int r4 = r3.pendingUnreadCount
+            int r6 = r3.flags
+            goto L_0x045a
+        L_0x043b:
+            r3 = 0
+            int r4 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS
+            if (r2 != r1) goto L_0x0450
+            int r6 = r0.pendingMainUnreadCount
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
+            r4 = r4 | r8
+            org.telegram.messenger.NotificationsController r8 = r26.getNotificationsController()
+            boolean r8 = r8.showBadgeMuted
+            if (r8 != 0) goto L_0x0455
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            goto L_0x0454
+        L_0x0450:
+            int r6 = r0.pendingArchiveUnreadCount
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
+        L_0x0454:
+            r4 = r4 | r8
+        L_0x0455:
+            r25 = r6
+            r6 = r4
+            r4 = r25
+        L_0x045a:
+            if (r29 == 0) goto L_0x0770
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
+            r8 = r8 & r6
+            if (r8 == 0) goto L_0x0492
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
+            r8 = r8 & r6
+            if (r8 != 0) goto L_0x047a
+            int[][] r8 = r0.contacts
+            r9 = 0
+            r10 = r8[r9]
+            r10 = r10[r9]
+            int r4 = r4 - r10
+            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r10 = r10 & r6
+            if (r10 != 0) goto L_0x047b
+            r8 = r8[r9]
+            r10 = 1
+            r8 = r8[r10]
+            int r4 = r4 - r8
+            goto L_0x047c
+        L_0x047a:
+            r9 = 0
+        L_0x047b:
+            r10 = 1
+        L_0x047c:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
+            r8 = r8 & r6
+            if (r8 != 0) goto L_0x0492
+            int[][] r8 = r0.contacts
+            r15 = r8[r10]
+            r15 = r15[r9]
+            int r4 = r4 - r15
+            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r9 = r9 & r6
+            if (r9 != 0) goto L_0x0492
+            r8 = r8[r10]
+            r8 = r8[r10]
+            int r4 = r4 - r8
+        L_0x0492:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
+            r8 = r8 & r6
+            if (r8 == 0) goto L_0x04c8
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
+            r8 = r8 & r6
+            if (r8 != 0) goto L_0x04b0
+            int[][] r8 = r0.nonContacts
+            r9 = 0
+            r10 = r8[r9]
+            r10 = r10[r9]
+            int r4 = r4 - r10
+            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r10 = r10 & r6
+            if (r10 != 0) goto L_0x04b1
+            r8 = r8[r9]
+            r10 = 1
+            r8 = r8[r10]
+            int r4 = r4 - r8
+            goto L_0x04b2
+        L_0x04b0:
+            r9 = 0
+        L_0x04b1:
+            r10 = 1
+        L_0x04b2:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
+            r8 = r8 & r6
+            if (r8 != 0) goto L_0x04c8
+            int[][] r8 = r0.nonContacts
+            r15 = r8[r10]
+            r15 = r15[r9]
+            int r4 = r4 - r15
+            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r9 = r9 & r6
+            if (r9 != 0) goto L_0x04c8
+            r8 = r8[r10]
+            r8 = r8[r10]
+            int r4 = r4 - r8
+        L_0x04c8:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
+            r8 = r8 & r6
+            if (r8 == 0) goto L_0x0508
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
+            r8 = r8 & r6
+            if (r8 != 0) goto L_0x04eb
+            int[][] r8 = r0.groups
+            r9 = 0
+            r10 = r8[r9]
+            r10 = r10[r9]
+            int r4 = r4 - r10
+            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r10 = r10 & r6
+            if (r10 != 0) goto L_0x04e5
+            r8 = r8[r9]
+            r10 = 1
+            r8 = r8[r10]
+            goto L_0x04e9
+        L_0x04e5:
+            int[] r8 = r0.mentionGroups
+            r8 = r8[r9]
+        L_0x04e9:
+            int r4 = r4 - r8
+            goto L_0x04ec
+        L_0x04eb:
+            r9 = 0
+        L_0x04ec:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
+            r8 = r8 & r6
+            if (r8 != 0) goto L_0x0508
+            int[][] r8 = r0.groups
+            r10 = 1
+            r15 = r8[r10]
+            r15 = r15[r9]
+            int r4 = r4 - r15
+            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r9 = r9 & r6
+            if (r9 != 0) goto L_0x0503
+            r8 = r8[r10]
+            r8 = r8[r10]
+            goto L_0x0507
+        L_0x0503:
+            int[] r8 = r0.mentionGroups
+            r8 = r8[r10]
+        L_0x0507:
+            int r4 = r4 - r8
+        L_0x0508:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
+            r8 = r8 & r6
+            if (r8 == 0) goto L_0x0548
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
+            r8 = r8 & r6
+            if (r8 != 0) goto L_0x052b
+            int[][] r8 = r0.channels
+            r9 = 0
+            r10 = r8[r9]
+            r10 = r10[r9]
+            int r4 = r4 - r10
+            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r10 = r10 & r6
+            if (r10 != 0) goto L_0x0525
+            r8 = r8[r9]
+            r10 = 1
+            r8 = r8[r10]
+            goto L_0x0529
+        L_0x0525:
+            int[] r8 = r0.mentionChannels
+            r8 = r8[r9]
+        L_0x0529:
+            int r4 = r4 - r8
+            goto L_0x052c
+        L_0x052b:
+            r9 = 0
+        L_0x052c:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
+            r8 = r8 & r6
+            if (r8 != 0) goto L_0x0548
+            int[][] r8 = r0.channels
+            r10 = 1
+            r15 = r8[r10]
+            r15 = r15[r9]
+            int r4 = r4 - r15
+            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r9 = r9 & r6
+            if (r9 != 0) goto L_0x0543
+            r8 = r8[r10]
+            r8 = r8[r10]
+            goto L_0x0547
+        L_0x0543:
+            int[] r8 = r0.mentionChannels
+            r8 = r8[r10]
+        L_0x0547:
+            int r4 = r4 - r8
+        L_0x0548:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
+            r8 = r8 & r6
+            if (r8 == 0) goto L_0x057e
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
+            r8 = r8 & r6
+            if (r8 != 0) goto L_0x0566
+            int[][] r8 = r0.bots
+            r9 = 0
+            r10 = r8[r9]
+            r10 = r10[r9]
+            int r4 = r4 - r10
+            int r10 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r10 = r10 & r6
+            if (r10 != 0) goto L_0x0567
+            r8 = r8[r9]
+            r10 = 1
+            r8 = r8[r10]
+            int r4 = r4 - r8
+            goto L_0x0568
+        L_0x0566:
+            r9 = 0
+        L_0x0567:
+            r10 = 1
+        L_0x0568:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
+            r8 = r8 & r6
+            if (r8 != 0) goto L_0x057e
+            int[][] r8 = r0.bots
+            r15 = r8[r10]
+            r15 = r15[r9]
+            int r4 = r4 - r15
+            int r9 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r9 = r9 & r6
+            if (r9 != 0) goto L_0x057e
+            r8 = r8[r10]
+            r8 = r8[r10]
+            int r4 = r4 - r8
+        L_0x057e:
+            if (r3 == 0) goto L_0x0755
+            java.util.ArrayList<java.lang.Integer> r8 = r3.alwaysShow
+            int r8 = r8.size()
+            r9 = 0
+        L_0x0587:
+            if (r9 >= r8) goto L_0x066f
+            java.util.ArrayList<java.lang.Integer> r10 = r3.alwaysShow
+            java.lang.Object r10 = r10.get(r9)
+            java.lang.Integer r10 = (java.lang.Integer) r10
+            int r10 = r10.intValue()
+            if (r10 <= 0) goto L_0x0613
+            r27 = r8
+            r8 = 2
+            r15 = 0
+        L_0x059b:
+            if (r15 >= r8) goto L_0x060d
+            if (r15 != 0) goto L_0x05a2
+            r8 = r20
+            goto L_0x05a4
+        L_0x05a2:
+            r8 = r24
+        L_0x05a4:
+            java.lang.Object r8 = r8.get(r10)
+            org.telegram.tgnet.TLRPC$User r8 = (org.telegram.tgnet.TLRPC$User) r8
+            if (r8 == 0) goto L_0x0601
+            if (r15 != 0) goto L_0x05b4
+            r19 = r1
+            r21 = r2
+            r1 = 1
+            goto L_0x05cb
+        L_0x05b4:
+            r19 = r1
+            r17 = 0
+            java.lang.Integer r1 = java.lang.Integer.valueOf(r17)
+            java.lang.Object r1 = r11.get(r10, r1)
             java.lang.Integer r1 = (java.lang.Integer) r1
             int r1 = r1.intValue()
-            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r7 = r7 & r8
-            if (r7 == 0) goto L_0x0994
-            int r7 = r15.id
-            int r7 = r12.indexOfKey(r7)
-            if (r7 < 0) goto L_0x0994
-        L_0x0992:
-            int r5 = r5 + r1
-            goto L_0x09e7
-        L_0x0994:
-            boolean r7 = r15.bot
-            if (r7 == 0) goto L_0x099e
-            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
-            r7 = r7 & r8
-            if (r7 != 0) goto L_0x09e7
-            goto L_0x0992
-        L_0x099e:
-            boolean r7 = r15.self
-            if (r7 != 0) goto L_0x09ad
-            boolean r7 = r15.contact
-            if (r7 == 0) goto L_0x09a7
-            goto L_0x09ad
-        L_0x09a7:
-            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
-            r7 = r7 & r8
-            if (r7 != 0) goto L_0x09e7
-            goto L_0x0992
-        L_0x09ad:
-            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
-            r7 = r7 & r8
-            if (r7 != 0) goto L_0x09e7
-            goto L_0x0992
-        L_0x09b3:
-            r9 = r21
-            r10 = r24
-            int r1 = -r7
-            java.lang.Object r1 = r6.get(r1)
+            r21 = r2
+            if (r1 != 0) goto L_0x05cb
+            goto L_0x0605
+        L_0x05cb:
+            boolean r2 = r8.bot
+            if (r2 == 0) goto L_0x05d2
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
+            goto L_0x05e0
+        L_0x05d2:
+            boolean r2 = r8.self
+            if (r2 != 0) goto L_0x05de
+            boolean r2 = r8.contact
+            if (r2 == 0) goto L_0x05db
+            goto L_0x05de
+        L_0x05db:
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
+            goto L_0x05e0
+        L_0x05de:
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
+        L_0x05e0:
+            r2 = r2 & r6
+            if (r2 != 0) goto L_0x05e5
+        L_0x05e3:
+            int r4 = r4 - r1
+            goto L_0x0605
+        L_0x05e5:
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r2 = r2 & r6
+            if (r2 == 0) goto L_0x05f3
+            int r2 = r8.id
+            int r2 = r12.indexOfKey(r2)
+            if (r2 < 0) goto L_0x05f3
+            goto L_0x05e3
+        L_0x05f3:
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
+            r2 = r2 & r6
+            if (r2 == 0) goto L_0x0605
+            int r2 = r8.id
+            int r2 = r13.indexOfKey(r2)
+            if (r2 < 0) goto L_0x0605
+            goto L_0x05e3
+        L_0x0601:
+            r19 = r1
+            r21 = r2
+        L_0x0605:
+            int r15 = r15 + 1
+            r1 = r19
+            r2 = r21
+            r8 = 2
+            goto L_0x059b
+        L_0x060d:
+            r19 = r1
+            r21 = r2
+        L_0x0611:
+            r10 = r7
+            goto L_0x0664
+        L_0x0613:
+            r19 = r1
+            r21 = r2
+            r27 = r8
+            int r1 = -r10
+            java.lang.Object r1 = r7.get(r1)
             org.telegram.tgnet.TLRPC$Chat r1 = (org.telegram.tgnet.TLRPC$Chat) r1
-            if (r1 == 0) goto L_0x09e7
+            if (r1 == 0) goto L_0x0611
+            boolean r2 = org.telegram.messenger.ChatObject.isChannel(r1)
+            if (r2 == 0) goto L_0x062f
+            boolean r2 = r1.megagroup
+            if (r2 != 0) goto L_0x062f
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
+            goto L_0x0631
+        L_0x062f:
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
+        L_0x0631:
+            r2 = r2 & r6
+            if (r2 != 0) goto L_0x0637
+            int r4 = r4 + -1
+            goto L_0x0611
+        L_0x0637:
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r2 = r2 & r6
+            if (r2 == 0) goto L_0x0653
+            int r2 = r1.id
+            int r2 = -r2
+            int r2 = r12.indexOfKey(r2)
+            if (r2 < 0) goto L_0x0653
+            android.util.LongSparseArray<java.lang.Integer> r2 = r0.dialogsWithMentions
+            int r8 = r1.id
+            int r8 = -r8
+            r10 = r7
+            long r7 = (long) r8
+            int r2 = r2.indexOfKey(r7)
+            if (r2 >= 0) goto L_0x0654
+            goto L_0x0662
+        L_0x0653:
+            r10 = r7
+        L_0x0654:
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
+            r2 = r2 & r6
+            if (r2 == 0) goto L_0x0664
+            int r1 = r1.id
+            int r1 = -r1
+            int r1 = r13.indexOfKey(r1)
+            if (r1 < 0) goto L_0x0664
+        L_0x0662:
+            int r4 = r4 + -1
+        L_0x0664:
+            int r9 = r9 + 1
+            r8 = r27
+            r7 = r10
+            r1 = r19
+            r2 = r21
+            goto L_0x0587
+        L_0x066f:
+            r19 = r1
+            r21 = r2
+            r10 = r7
+            java.util.ArrayList<java.lang.Integer> r1 = r3.neverShow
+            int r1 = r1.size()
+            r2 = 0
+        L_0x067b:
+            if (r2 >= r1) goto L_0x075a
+            java.util.ArrayList<java.lang.Integer> r7 = r3.neverShow
+            java.lang.Object r7 = r7.get(r2)
+            java.lang.Integer r7 = (java.lang.Integer) r7
+            int r7 = r7.intValue()
+            if (r14 == 0) goto L_0x069a
+            long r8 = (long) r7
+            int r8 = r14.indexOfKey(r8)
+            if (r8 < 0) goto L_0x069a
+            int r8 = r12.indexOfKey(r7)
+            if (r8 >= 0) goto L_0x069a
+            goto L_0x0705
+        L_0x069a:
+            if (r7 <= 0) goto L_0x0708
+            r8 = 0
+        L_0x069d:
+            r9 = 2
+            if (r8 >= r9) goto L_0x0705
+            if (r8 != 0) goto L_0x06a5
+            r15 = r20
+            goto L_0x06a7
+        L_0x06a5:
+            r15 = r24
+        L_0x06a7:
+            java.lang.Object r15 = r15.get(r7)
+            org.telegram.tgnet.TLRPC$User r15 = (org.telegram.tgnet.TLRPC$User) r15
+            if (r15 == 0) goto L_0x06fe
+            if (r8 != 0) goto L_0x06b5
+            r27 = r1
+            r9 = 1
+            goto L_0x06ca
+        L_0x06b5:
+            r16 = 0
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r16)
+            java.lang.Object r9 = r11.get(r7, r9)
+            java.lang.Integer r9 = (java.lang.Integer) r9
+            int r9 = r9.intValue()
+            if (r9 != 0) goto L_0x06c8
+            goto L_0x06fe
+        L_0x06c8:
+            r27 = r1
+        L_0x06ca:
+            boolean r1 = r15.bot
+            if (r1 == 0) goto L_0x06d1
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
+            goto L_0x06df
+        L_0x06d1:
+            boolean r1 = r15.self
+            if (r1 != 0) goto L_0x06dd
+            boolean r1 = r15.contact
+            if (r1 == 0) goto L_0x06da
+            goto L_0x06dd
+        L_0x06da:
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
+            goto L_0x06df
+        L_0x06dd:
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
+        L_0x06df:
+            r1 = r1 & r6
+            if (r1 == 0) goto L_0x0700
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
+            r1 = r1 & r6
+            if (r1 == 0) goto L_0x06ef
+            int r1 = r15.id
+            int r1 = r13.indexOfKey(r1)
+            if (r1 >= 0) goto L_0x0700
+        L_0x06ef:
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r1 = r1 & r6
+            if (r1 == 0) goto L_0x06fc
+            int r1 = r15.id
+            int r1 = r12.indexOfKey(r1)
+            if (r1 >= 0) goto L_0x0700
+        L_0x06fc:
+            int r4 = r4 + r9
+            goto L_0x0700
+        L_0x06fe:
+            r27 = r1
+        L_0x0700:
+            int r8 = r8 + 1
+            r1 = r27
+            goto L_0x069d
+        L_0x0705:
+            r27 = r1
+            goto L_0x074f
+        L_0x0708:
+            r27 = r1
+            int r1 = -r7
+            java.lang.Object r1 = r10.get(r1)
+            org.telegram.tgnet.TLRPC$Chat r1 = (org.telegram.tgnet.TLRPC$Chat) r1
+            if (r1 == 0) goto L_0x074f
+            boolean r7 = org.telegram.messenger.ChatObject.isChannel(r1)
+            if (r7 == 0) goto L_0x0720
+            boolean r7 = r1.megagroup
+            if (r7 != 0) goto L_0x0720
+            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
+            goto L_0x0722
+        L_0x0720:
+            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
+        L_0x0722:
+            r7 = r7 & r6
+            if (r7 == 0) goto L_0x074f
+            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
+            r7 = r7 & r6
+            if (r7 == 0) goto L_0x0733
+            int r7 = r1.id
+            int r7 = -r7
+            int r7 = r13.indexOfKey(r7)
+            if (r7 >= 0) goto L_0x074f
+        L_0x0733:
             int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
-            r7 = r7 & r8
-            if (r7 == 0) goto L_0x09d1
+            r7 = r7 & r6
+            if (r7 == 0) goto L_0x074d
             int r7 = r1.id
             int r7 = -r7
             int r7 = r12.indexOfKey(r7)
-            if (r7 < 0) goto L_0x09d1
-        L_0x09ce:
-            int r5 = r5 + 1
-            goto L_0x09e7
-        L_0x09d1:
-            boolean r7 = org.telegram.messenger.ChatObject.isChannel(r1)
-            if (r7 == 0) goto L_0x09e1
-            boolean r1 = r1.megagroup
-            if (r1 != 0) goto L_0x09e1
-            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
-            r1 = r1 & r8
-            if (r1 != 0) goto L_0x09e7
-            goto L_0x09ce
-        L_0x09e1:
-            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
-            r1 = r1 & r8
-            if (r1 != 0) goto L_0x09e7
-            goto L_0x09ce
-        L_0x09e7:
-            int r14 = r14 + 1
-            r1 = r29
-            r21 = r9
-            r24 = r10
-            goto L_0x0915
-        L_0x09f1:
-            r9 = r21
-            r10 = r24
-            r14 = r5
-            goto L_0x09fb
-        L_0x09f7:
-            r9 = r21
-            r10 = r24
-        L_0x09fb:
-            java.util.ArrayList<java.lang.Integer> r1 = r4.neverShow
-            int r1 = r1.size()
-            r3 = r14
+            if (r7 < 0) goto L_0x074d
+            android.util.LongSparseArray<java.lang.Integer> r7 = r0.dialogsWithMentions
+            int r1 = r1.id
+            int r1 = -r1
+            long r8 = (long) r1
+            int r1 = r7.indexOfKey(r8)
+            if (r1 < 0) goto L_0x074f
+        L_0x074d:
+            int r4 = r4 + 1
+        L_0x074f:
+            int r2 = r2 + 1
+            r1 = r27
+            goto L_0x067b
+        L_0x0755:
+            r19 = r1
+            r21 = r2
+            r10 = r7
+        L_0x075a:
+            if (r4 >= 0) goto L_0x0766
+            r27 = r13
+            r9 = r20
+            r13 = r24
+            r6 = 0
             r14 = 0
-        L_0x0a03:
-            if (r14 >= r1) goto L_0x0a47
-            java.util.ArrayList<java.lang.Integer> r5 = r4.neverShow
-            java.lang.Object r5 = r5.get(r14)
-            java.lang.Integer r5 = (java.lang.Integer) r5
-            int r5 = r5.intValue()
-            if (r5 <= 0) goto L_0x0a38
-            java.lang.Object r7 = r9.get(r5)
-            org.telegram.tgnet.TLRPC$User r7 = (org.telegram.tgnet.TLRPC$User) r7
-            if (r7 == 0) goto L_0x0a1d
-            int r3 = r3 + -1
+            goto L_0x0a28
+        L_0x0766:
+            r14 = r4
+            r27 = r13
+            r9 = r20
+            r13 = r24
+            r6 = 0
+            goto L_0x0a28
+        L_0x0770:
+            r19 = r1
+            r21 = r2
+            r10 = r7
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
+            r1 = r1 & r6
+            if (r1 == 0) goto L_0x07ab
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
+            r1 = r1 & r6
+            if (r1 != 0) goto L_0x0793
+            int[][] r1 = r0.contacts
+            r2 = 0
+            r7 = r1[r2]
+            r7 = r7[r2]
+            int r4 = r4 + r7
+            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r7 = r7 & r6
+            if (r7 != 0) goto L_0x0794
+            r1 = r1[r2]
+            r7 = 1
+            r1 = r1[r7]
+            int r4 = r4 + r1
+            goto L_0x0795
+        L_0x0793:
+            r2 = 0
+        L_0x0794:
+            r7 = 1
+        L_0x0795:
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
+            r1 = r1 & r6
+            if (r1 != 0) goto L_0x07ab
+            int[][] r1 = r0.contacts
+            r8 = r1[r7]
+            r8 = r8[r2]
+            int r4 = r4 + r8
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r2 = r2 & r6
+            if (r2 != 0) goto L_0x07ab
+            r1 = r1[r7]
+            r1 = r1[r7]
+            int r4 = r4 + r1
+        L_0x07ab:
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
+            r1 = r1 & r6
+            if (r1 == 0) goto L_0x07e1
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
+            r1 = r1 & r6
+            if (r1 != 0) goto L_0x07c9
+            int[][] r1 = r0.nonContacts
+            r2 = 0
+            r7 = r1[r2]
+            r7 = r7[r2]
+            int r4 = r4 + r7
+            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r7 = r7 & r6
+            if (r7 != 0) goto L_0x07ca
+            r1 = r1[r2]
+            r7 = 1
+            r1 = r1[r7]
+            int r4 = r4 + r1
+            goto L_0x07cb
+        L_0x07c9:
+            r2 = 0
+        L_0x07ca:
+            r7 = 1
+        L_0x07cb:
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
+            r1 = r1 & r6
+            if (r1 != 0) goto L_0x07e1
+            int[][] r1 = r0.nonContacts
+            r8 = r1[r7]
+            r8 = r8[r2]
+            int r4 = r4 + r8
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r2 = r2 & r6
+            if (r2 != 0) goto L_0x07e1
+            r1 = r1[r7]
+            r1 = r1[r7]
+            int r4 = r4 + r1
+        L_0x07e1:
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
+            r1 = r1 & r6
+            if (r1 == 0) goto L_0x0821
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
+            r1 = r1 & r6
+            if (r1 != 0) goto L_0x0804
+            int[][] r1 = r0.groups
+            r2 = 0
+            r7 = r1[r2]
+            r7 = r7[r2]
+            int r4 = r4 + r7
+            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r7 = r7 & r6
+            if (r7 != 0) goto L_0x07fe
+            r1 = r1[r2]
+            r7 = 1
+            r1 = r1[r7]
+            goto L_0x0802
+        L_0x07fe:
+            int[] r1 = r0.mentionGroups
+            r1 = r1[r2]
+        L_0x0802:
+            int r4 = r4 + r1
+            goto L_0x0805
+        L_0x0804:
+            r2 = 0
+        L_0x0805:
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
+            r1 = r1 & r6
+            if (r1 != 0) goto L_0x0821
+            int[][] r1 = r0.groups
+            r7 = 1
+            r8 = r1[r7]
+            r8 = r8[r2]
+            int r4 = r4 + r8
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r2 = r2 & r6
+            if (r2 != 0) goto L_0x081c
+            r1 = r1[r7]
+            r1 = r1[r7]
+            goto L_0x0820
+        L_0x081c:
+            int[] r1 = r0.mentionGroups
+            r1 = r1[r7]
+        L_0x0820:
+            int r4 = r4 + r1
+        L_0x0821:
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
+            r1 = r1 & r6
+            if (r1 == 0) goto L_0x0861
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
+            r1 = r1 & r6
+            if (r1 != 0) goto L_0x0844
+            int[][] r1 = r0.channels
+            r2 = 0
+            r7 = r1[r2]
+            r7 = r7[r2]
+            int r4 = r4 + r7
+            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r7 = r7 & r6
+            if (r7 != 0) goto L_0x083e
+            r1 = r1[r2]
+            r7 = 1
+            r1 = r1[r7]
+            goto L_0x0842
+        L_0x083e:
+            int[] r1 = r0.mentionChannels
+            r1 = r1[r2]
+        L_0x0842:
+            int r4 = r4 + r1
+            goto L_0x0845
+        L_0x0844:
+            r2 = 0
+        L_0x0845:
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
+            r1 = r1 & r6
+            if (r1 != 0) goto L_0x0861
+            int[][] r1 = r0.channels
+            r7 = 1
+            r8 = r1[r7]
+            r8 = r8[r2]
+            int r4 = r4 + r8
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r2 = r2 & r6
+            if (r2 != 0) goto L_0x085c
+            r1 = r1[r7]
+            r1 = r1[r7]
+            goto L_0x0860
+        L_0x085c:
+            int[] r1 = r0.mentionChannels
+            r1 = r1[r7]
+        L_0x0860:
+            int r4 = r4 + r1
+        L_0x0861:
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
+            r1 = r1 & r6
+            if (r1 == 0) goto L_0x0898
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_ONLY_ARCHIVED
+            r1 = r1 & r6
+            if (r1 != 0) goto L_0x087f
+            int[][] r1 = r0.bots
+            r2 = 0
+            r7 = r1[r2]
+            r7 = r7[r2]
+            int r4 = r4 + r7
+            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r7 = r7 & r6
+            if (r7 != 0) goto L_0x0880
+            r1 = r1[r2]
+            r7 = 1
+            r1 = r1[r7]
+            int r4 = r4 + r1
+            goto L_0x0881
+        L_0x087f:
+            r2 = 0
+        L_0x0880:
+            r7 = 1
+        L_0x0881:
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_ARCHIVED
+            r1 = r1 & r6
+            if (r1 != 0) goto L_0x0899
+            int[][] r1 = r0.bots
+            r8 = r1[r7]
+            r8 = r8[r2]
+            int r4 = r4 + r8
+            int r2 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r2 = r2 & r6
+            if (r2 != 0) goto L_0x0899
+            r1 = r1[r7]
+            r1 = r1[r7]
+            int r4 = r4 + r1
+            goto L_0x0899
+        L_0x0898:
+            r7 = 1
+        L_0x0899:
+            if (r3 == 0) goto L_0x0a20
+            java.util.ArrayList<java.lang.Integer> r1 = r3.alwaysShow
+            boolean r1 = r1.isEmpty()
+            if (r1 != 0) goto L_0x09cf
+            int r1 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r1 = r1 & r6
+            if (r1 == 0) goto L_0x08e8
+            int r1 = r28.size()
+            r2 = 0
+        L_0x08ad:
+            if (r2 >= r1) goto L_0x08e8
+            long r8 = r14.keyAt(r2)
+            int r9 = (int) r8
+            int r8 = -r9
+            java.lang.Object r8 = r10.get(r8)
+            org.telegram.tgnet.TLRPC$Chat r8 = (org.telegram.tgnet.TLRPC$Chat) r8
+            boolean r15 = org.telegram.messenger.ChatObject.isChannel(r8)
+            if (r15 == 0) goto L_0x08cb
+            boolean r8 = r8.megagroup
+            if (r8 != 0) goto L_0x08cb
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
+            r8 = r8 & r6
+            if (r8 != 0) goto L_0x08d1
+            goto L_0x08e5
+        L_0x08cb:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
+            r8 = r8 & r6
+            if (r8 != 0) goto L_0x08d1
+            goto L_0x08e5
+        L_0x08d1:
+            int r8 = r12.indexOfKey(r9)
+            if (r8 < 0) goto L_0x08e5
+            java.util.ArrayList<java.lang.Integer> r8 = r3.alwaysShow
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            int r8 = r8.indexOf(r9)
+            if (r8 < 0) goto L_0x08e5
+            int r4 = r4 + -1
+        L_0x08e5:
+            int r2 = r2 + 1
+            goto L_0x08ad
+        L_0x08e8:
+            java.util.ArrayList<java.lang.Integer> r1 = r3.alwaysShow
+            int r1 = r1.size()
+            r2 = 0
+        L_0x08ef:
+            if (r2 >= r1) goto L_0x09cf
+            java.util.ArrayList<java.lang.Integer> r8 = r3.alwaysShow
+            java.lang.Object r8 = r8.get(r2)
+            java.lang.Integer r8 = (java.lang.Integer) r8
+            int r8 = r8.intValue()
+            r27 = r13
+            long r13 = (long) r8
+            int r9 = r5.indexOfKey(r13)
+            if (r9 >= 0) goto L_0x090c
+            r9 = r20
+            r13 = r24
+            goto L_0x09c2
+        L_0x090c:
+            if (r8 <= 0) goto L_0x098e
+            r9 = r20
+            java.lang.Object r13 = r9.get(r8)
+            org.telegram.tgnet.TLRPC$User r13 = (org.telegram.tgnet.TLRPC$User) r13
+            if (r13 == 0) goto L_0x0947
+            int r14 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r14 = r14 & r6
+            if (r14 == 0) goto L_0x0928
+            int r14 = r13.id
+            int r14 = r12.indexOfKey(r14)
+            if (r14 < 0) goto L_0x0928
+        L_0x0925:
+            int r4 = r4 + 1
+            goto L_0x0947
+        L_0x0928:
+            boolean r14 = r13.bot
+            if (r14 == 0) goto L_0x0932
+            int r13 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
+            r13 = r13 & r6
+            if (r13 != 0) goto L_0x0947
+            goto L_0x0925
+        L_0x0932:
+            boolean r14 = r13.self
+            if (r14 != 0) goto L_0x0941
+            boolean r13 = r13.contact
+            if (r13 == 0) goto L_0x093b
+            goto L_0x0941
+        L_0x093b:
+            int r13 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
+            r13 = r13 & r6
+            if (r13 != 0) goto L_0x0947
+            goto L_0x0925
+        L_0x0941:
+            int r13 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
+            r13 = r13 & r6
+            if (r13 != 0) goto L_0x0947
+            goto L_0x0925
+        L_0x0947:
+            r13 = r24
+            java.lang.Object r14 = r13.get(r8)
+            org.telegram.tgnet.TLRPC$User r14 = (org.telegram.tgnet.TLRPC$User) r14
+            if (r14 == 0) goto L_0x09c2
+            r15 = 0
+            java.lang.Integer r7 = java.lang.Integer.valueOf(r15)
+            java.lang.Object r7 = r11.get(r8, r7)
+            java.lang.Integer r7 = (java.lang.Integer) r7
+            int r7 = r7.intValue()
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r8 = r8 & r6
+            if (r8 == 0) goto L_0x096f
+            int r8 = r14.id
+            int r8 = r12.indexOfKey(r8)
+            if (r8 < 0) goto L_0x096f
+        L_0x096d:
+            int r4 = r4 + r7
+            goto L_0x09c2
+        L_0x096f:
+            boolean r8 = r14.bot
+            if (r8 == 0) goto L_0x0979
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_BOTS
+            r8 = r8 & r6
+            if (r8 != 0) goto L_0x09c2
+            goto L_0x096d
+        L_0x0979:
+            boolean r8 = r14.self
+            if (r8 != 0) goto L_0x0988
+            boolean r8 = r14.contact
+            if (r8 == 0) goto L_0x0982
+            goto L_0x0988
+        L_0x0982:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_NON_CONTACTS
+            r8 = r8 & r6
+            if (r8 != 0) goto L_0x09c2
+            goto L_0x096d
+        L_0x0988:
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CONTACTS
+            r8 = r8 & r6
+            if (r8 != 0) goto L_0x09c2
+            goto L_0x096d
+        L_0x098e:
+            r9 = r20
+            r13 = r24
+            int r7 = -r8
+            java.lang.Object r7 = r10.get(r7)
+            org.telegram.tgnet.TLRPC$Chat r7 = (org.telegram.tgnet.TLRPC$Chat) r7
+            if (r7 == 0) goto L_0x09c2
+            int r8 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_EXCLUDE_MUTED
+            r8 = r8 & r6
+            if (r8 == 0) goto L_0x09ac
+            int r8 = r7.id
+            int r8 = -r8
+            int r8 = r12.indexOfKey(r8)
+            if (r8 < 0) goto L_0x09ac
+        L_0x09a9:
+            int r4 = r4 + 1
+            goto L_0x09c2
+        L_0x09ac:
+            boolean r8 = org.telegram.messenger.ChatObject.isChannel(r7)
+            if (r8 == 0) goto L_0x09bc
+            boolean r7 = r7.megagroup
+            if (r7 != 0) goto L_0x09bc
+            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_CHANNELS
+            r7 = r7 & r6
+            if (r7 != 0) goto L_0x09c2
+            goto L_0x09a9
+        L_0x09bc:
+            int r7 = org.telegram.messenger.MessagesController.DIALOG_FILTER_FLAG_GROUPS
+            r7 = r7 & r6
+            if (r7 != 0) goto L_0x09c2
+            goto L_0x09a9
+        L_0x09c2:
+            int r2 = r2 + 1
+            r14 = r28
+            r20 = r9
+            r24 = r13
+            r7 = 1
+            r13 = r27
+            goto L_0x08ef
+        L_0x09cf:
+            r27 = r13
+            r9 = r20
+            r13 = r24
+            java.util.ArrayList<java.lang.Integer> r1 = r3.neverShow
+            int r1 = r1.size()
+            r14 = 0
+        L_0x09dc:
+            if (r14 >= r1) goto L_0x0a26
+            java.util.ArrayList<java.lang.Integer> r2 = r3.neverShow
+            java.lang.Object r2 = r2.get(r14)
+            java.lang.Integer r2 = (java.lang.Integer) r2
+            int r2 = r2.intValue()
+            if (r2 <= 0) goto L_0x0a11
+            java.lang.Object r6 = r9.get(r2)
+            org.telegram.tgnet.TLRPC$User r6 = (org.telegram.tgnet.TLRPC$User) r6
+            if (r6 == 0) goto L_0x09f6
+            int r4 = r4 + -1
+        L_0x09f6:
+            java.lang.Object r6 = r13.get(r2)
+            org.telegram.tgnet.TLRPC$User r6 = (org.telegram.tgnet.TLRPC$User) r6
+            if (r6 == 0) goto L_0x0a0f
+            r6 = 0
+            java.lang.Integer r7 = java.lang.Integer.valueOf(r6)
+            java.lang.Object r2 = r11.get(r2, r7)
+            java.lang.Integer r2 = (java.lang.Integer) r2
+            int r2 = r2.intValue()
+            int r4 = r4 - r2
+            goto L_0x0a1d
+        L_0x0a0f:
+            r6 = 0
+            goto L_0x0a1d
+        L_0x0a11:
+            r6 = 0
+            int r2 = -r2
+            java.lang.Object r2 = r10.get(r2)
+            org.telegram.tgnet.TLRPC$Chat r2 = (org.telegram.tgnet.TLRPC$Chat) r2
+            if (r2 == 0) goto L_0x0a1d
+            int r4 = r4 + -1
         L_0x0a1d:
-            java.lang.Object r7 = r10.get(r5)
-            org.telegram.tgnet.TLRPC$User r7 = (org.telegram.tgnet.TLRPC$User) r7
-            if (r7 == 0) goto L_0x0a36
-            r7 = 0
-            java.lang.Integer r8 = java.lang.Integer.valueOf(r7)
-            java.lang.Object r5 = r11.get(r5, r8)
-            java.lang.Integer r5 = (java.lang.Integer) r5
-            int r5 = r5.intValue()
-            int r3 = r3 - r5
-            goto L_0x0a44
-        L_0x0a36:
-            r7 = 0
-            goto L_0x0a44
-        L_0x0a38:
-            r7 = 0
-            int r5 = -r5
-            java.lang.Object r5 = r6.get(r5)
-            org.telegram.tgnet.TLRPC$Chat r5 = (org.telegram.tgnet.TLRPC$Chat) r5
-            if (r5 == 0) goto L_0x0a44
-            int r3 = r3 + -1
-        L_0x0a44:
             int r14 = r14 + 1
-            goto L_0x0a03
-        L_0x0a47:
-            r7 = 0
-            r14 = r3
-            goto L_0x0a4f
-        L_0x0a4a:
-            r9 = r21
-            r10 = r24
-            r7 = 0
-        L_0x0a4f:
-            if (r4 == 0) goto L_0x0a58
-            r4.pendingUnreadCount = r14
+            goto L_0x09dc
+        L_0x0a20:
+            r27 = r13
+            r9 = r20
+            r13 = r24
+        L_0x0a26:
+            r6 = 0
+            r14 = r4
+        L_0x0a28:
+            if (r3 == 0) goto L_0x0a31
+            r3.pendingUnreadCount = r14
             r1 = r19
-            r3 = r20
-            goto L_0x0a67
-        L_0x0a58:
+            r2 = r21
+            goto L_0x0a40
+        L_0x0a31:
             r1 = r19
-            r3 = r20
-            if (r3 != r1) goto L_0x0a61
+            r2 = r21
+            if (r2 != r1) goto L_0x0a3a
             r0.pendingMainUnreadCount = r14
-            goto L_0x0a67
-        L_0x0a61:
-            int r4 = r1 + 1
-            if (r3 != r4) goto L_0x0a67
+            goto L_0x0a40
+        L_0x0a3a:
+            int r3 = r1 + 1
+            if (r2 != r3) goto L_0x0a40
             r0.pendingArchiveUnreadCount = r14
-        L_0x0a67:
-            int r14 = r3 + 1
-            r3 = r1
-            r7 = r9
-            r24 = r10
-            r1 = r29
-            goto L_0x0440
-        L_0x0a71:
+        L_0x0a40:
+            int r2 = r2 + 1
+            r14 = r28
+            r20 = r9
+            r7 = r10
+            r24 = r13
+            r13 = r27
+            goto L_0x041a
+        L_0x0a4d:
             org.telegram.messenger.-$$Lambda$MessagesStorage$MFo3cJoc6ta2B_wOa3RFWAMqdsk r1 = new org.telegram.messenger.-$$Lambda$MessagesStorage$MFo3cJoc6ta2B_wOa3RFWAMqdsk
             r1.<init>()
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
-        L_0x0a79:
+        L_0x0a55:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.updateFiltersReadCounter(android.util.LongSparseArray, android.util.LongSparseArray, boolean):void");
@@ -8338,9 +8310,9 @@ public class MessagesStorage extends BaseController {
         }
         if (z) {
             this.storageQueue.postRunnable(new Runnable(sparseLongArray, sparseLongArray2, arrayList) {
-                private final /* synthetic */ SparseLongArray f$1;
-                private final /* synthetic */ SparseLongArray f$2;
-                private final /* synthetic */ ArrayList f$3;
+                public final /* synthetic */ SparseLongArray f$1;
+                public final /* synthetic */ SparseLongArray f$2;
+                public final /* synthetic */ ArrayList f$3;
 
                 {
                     this.f$1 = r2;
@@ -8364,7 +8336,7 @@ public class MessagesStorage extends BaseController {
     public void updateChatParticipants(TLRPC$ChatParticipants tLRPC$ChatParticipants) {
         if (tLRPC$ChatParticipants != null) {
             this.storageQueue.postRunnable(new Runnable(tLRPC$ChatParticipants) {
-                private final /* synthetic */ TLRPC$ChatParticipants f$1;
+                public final /* synthetic */ TLRPC$ChatParticipants f$1;
 
                 {
                     this.f$1 = r2;
@@ -8394,7 +8366,7 @@ public class MessagesStorage extends BaseController {
             if (tLRPC$ChatFull instanceof TLRPC$TL_chatFull) {
                 tLRPC$ChatFull.participants = tLRPC$ChatParticipants;
                 AndroidUtilities.runOnUIThread(new Runnable(tLRPC$ChatFull) {
-                    private final /* synthetic */ TLRPC$ChatFull f$1;
+                    public final /* synthetic */ TLRPC$ChatFull f$1;
 
                     {
                         this.f$1 = r2;
@@ -8421,12 +8393,12 @@ public class MessagesStorage extends BaseController {
     }
 
     public /* synthetic */ void lambda$null$73$MessagesStorage(TLRPC$ChatFull tLRPC$ChatFull) {
-        getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, tLRPC$ChatFull, 0, false, null);
+        getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, tLRPC$ChatFull, 0, Boolean.FALSE, null);
     }
 
     public void loadChannelAdmins(int i) {
         this.storageQueue.postRunnable(new Runnable(i) {
-            private final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$1;
 
             {
                 this.f$1 = r2;
@@ -8455,8 +8427,8 @@ public class MessagesStorage extends BaseController {
 
     public void putChannelAdmins(int i, SparseArray<String> sparseArray) {
         this.storageQueue.postRunnable(new Runnable(i, sparseArray) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ SparseArray f$2;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ SparseArray f$2;
 
             {
                 this.f$1 = r2;
@@ -8492,8 +8464,8 @@ public class MessagesStorage extends BaseController {
 
     public void updateChannelUsers(int i, ArrayList<TLRPC$ChannelParticipant> arrayList) {
         this.storageQueue.postRunnable(new Runnable(i, arrayList) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ ArrayList f$2;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ ArrayList f$2;
 
             {
                 this.f$1 = r2;
@@ -8537,8 +8509,8 @@ public class MessagesStorage extends BaseController {
     public void saveBotCache(String str, TLObject tLObject) {
         if (tLObject != null && !TextUtils.isEmpty(str)) {
             this.storageQueue.postRunnable(new Runnable(tLObject, str) {
-                private final /* synthetic */ TLObject f$1;
-                private final /* synthetic */ String f$2;
+                public final /* synthetic */ TLObject f$1;
+                public final /* synthetic */ String f$2;
 
                 {
                     this.f$1 = r2;
@@ -8590,9 +8562,9 @@ public class MessagesStorage extends BaseController {
     public void getBotCache(String str, RequestDelegate requestDelegate) {
         if (str != null && requestDelegate != null) {
             this.storageQueue.postRunnable(new Runnable(getConnectionsManager().getCurrentTime(), str, requestDelegate) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ String f$2;
-                private final /* synthetic */ RequestDelegate f$3;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ String f$2;
+                public final /* synthetic */ RequestDelegate f$3;
 
                 {
                     this.f$1 = r2;
@@ -8698,9 +8670,9 @@ public class MessagesStorage extends BaseController {
     public void loadUserInfo(TLRPC$User tLRPC$User, boolean z, int i) {
         if (tLRPC$User != null) {
             this.storageQueue.postRunnable(new Runnable(tLRPC$User, z, i) {
-                private final /* synthetic */ TLRPC$User f$1;
-                private final /* synthetic */ boolean f$2;
-                private final /* synthetic */ int f$3;
+                public final /* synthetic */ TLRPC$User f$1;
+                public final /* synthetic */ boolean f$2;
+                public final /* synthetic */ int f$3;
 
                 {
                     this.f$1 = r2;
@@ -8761,8 +8733,8 @@ public class MessagesStorage extends BaseController {
 
     public void updateUserInfo(TLRPC$UserFull tLRPC$UserFull, boolean z) {
         this.storageQueue.postRunnable(new Runnable(z, tLRPC$UserFull) {
-            private final /* synthetic */ boolean f$1;
-            private final /* synthetic */ TLRPC$UserFull f$2;
+            public final /* synthetic */ boolean f$1;
+            public final /* synthetic */ TLRPC$UserFull f$2;
 
             {
                 this.f$1 = r2;
@@ -8810,8 +8782,8 @@ public class MessagesStorage extends BaseController {
 
     public void updateChatInfo(TLRPC$ChatFull tLRPC$ChatFull, boolean z) {
         this.storageQueue.postRunnable(new Runnable(tLRPC$ChatFull, z) {
-            private final /* synthetic */ TLRPC$ChatFull f$1;
-            private final /* synthetic */ boolean f$2;
+            public final /* synthetic */ TLRPC$ChatFull f$1;
+            public final /* synthetic */ boolean f$2;
 
             {
                 this.f$1 = r2;
@@ -8874,8 +8846,8 @@ public class MessagesStorage extends BaseController {
 
     public void updateUserPinnedMessage(int i, int i2) {
         this.storageQueue.postRunnable(new Runnable(i, i2) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
 
             {
                 this.f$1 = r2;
@@ -8903,8 +8875,8 @@ public class MessagesStorage extends BaseController {
                 tLRPC$UserFull.pinned_msg_id = i2;
                 tLRPC$UserFull.flags |= 64;
                 AndroidUtilities.runOnUIThread(new Runnable(i, tLRPC$UserFull) {
-                    private final /* synthetic */ int f$1;
-                    private final /* synthetic */ TLRPC$UserFull f$2;
+                    public final /* synthetic */ int f$1;
+                    public final /* synthetic */ TLRPC$UserFull f$2;
 
                     {
                         this.f$1 = r2;
@@ -8936,8 +8908,8 @@ public class MessagesStorage extends BaseController {
 
     public void updateChatOnlineCount(int i, int i2) {
         this.storageQueue.postRunnable(new Runnable(i2, i) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
 
             {
                 this.f$1 = r2;
@@ -8965,8 +8937,8 @@ public class MessagesStorage extends BaseController {
 
     public void updateChatPinnedMessage(int i, int i2) {
         this.storageQueue.postRunnable(new Runnable(i, i2) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
 
             {
                 this.f$1 = r2;
@@ -9000,7 +8972,7 @@ public class MessagesStorage extends BaseController {
                     tLRPC$ChatFull.flags |= 64;
                 }
                 AndroidUtilities.runOnUIThread(new Runnable(tLRPC$ChatFull) {
-                    private final /* synthetic */ TLRPC$ChatFull f$1;
+                    public final /* synthetic */ TLRPC$ChatFull f$1;
 
                     {
                         this.f$1 = r2;
@@ -9027,16 +8999,16 @@ public class MessagesStorage extends BaseController {
     }
 
     public /* synthetic */ void lambda$null$86$MessagesStorage(TLRPC$ChatFull tLRPC$ChatFull) {
-        getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, tLRPC$ChatFull, 0, false, null);
+        getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, tLRPC$ChatFull, 0, Boolean.FALSE, null);
     }
 
     public void updateChatInfo(int i, int i2, int i3, int i4, int i5) {
         this.storageQueue.postRunnable(new Runnable(i, i3, i2, i4, i5) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ int f$3;
-            private final /* synthetic */ int f$4;
-            private final /* synthetic */ int f$5;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$3;
+            public final /* synthetic */ int f$4;
+            public final /* synthetic */ int f$5;
 
             {
                 this.f$1 = r2;
@@ -9118,7 +9090,7 @@ public class MessagesStorage extends BaseController {
                 }
                 tLRPC$ChatFull.participants.version = i5;
                 AndroidUtilities.runOnUIThread(new Runnable(tLRPC$ChatFull) {
-                    private final /* synthetic */ TLRPC$ChatFull f$1;
+                    public final /* synthetic */ TLRPC$ChatFull f$1;
 
                     {
                         this.f$1 = r2;
@@ -9145,16 +9117,16 @@ public class MessagesStorage extends BaseController {
     }
 
     public /* synthetic */ void lambda$null$88$MessagesStorage(TLRPC$ChatFull tLRPC$ChatFull) {
-        getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, tLRPC$ChatFull, 0, false, null);
+        getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, tLRPC$ChatFull, 0, Boolean.FALSE, null);
     }
 
     public boolean isMigratedChat(int i) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         boolean[] zArr = new boolean[1];
         this.storageQueue.postRunnable(new Runnable(i, zArr, countDownLatch) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ boolean[] f$2;
-            private final /* synthetic */ CountDownLatch f$3;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ boolean[] f$2;
+            public final /* synthetic */ CountDownLatch f$3;
 
             {
                 this.f$1 = r2;
@@ -9324,11 +9296,11 @@ public class MessagesStorage extends BaseController {
     public TLRPC$ChatFull loadChatInfo(int i, CountDownLatch countDownLatch, boolean z, boolean z2) {
         TLRPC$ChatFull[] tLRPC$ChatFullArr = new TLRPC$ChatFull[1];
         this.storageQueue.postRunnable(new Runnable(tLRPC$ChatFullArr, i, z, z2, countDownLatch) {
-            private final /* synthetic */ TLRPC$ChatFull[] f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ boolean f$3;
-            private final /* synthetic */ boolean f$4;
-            private final /* synthetic */ CountDownLatch f$5;
+            public final /* synthetic */ TLRPC$ChatFull[] f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ boolean f$3;
+            public final /* synthetic */ boolean f$4;
+            public final /* synthetic */ CountDownLatch f$5;
 
             {
                 this.f$1 = r2;
@@ -9360,12 +9332,12 @@ public class MessagesStorage extends BaseController {
 
     public void processPendingRead(long j, long j2, long j3, boolean z, int i) {
         this.storageQueue.postRunnable(new Runnable(j, j2, z, i, this.lastSavedDate, j3) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ long f$2;
-            private final /* synthetic */ boolean f$3;
-            private final /* synthetic */ int f$4;
-            private final /* synthetic */ int f$5;
-            private final /* synthetic */ long f$6;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ long f$2;
+            public final /* synthetic */ boolean f$3;
+            public final /* synthetic */ int f$4;
+            public final /* synthetic */ int f$5;
+            public final /* synthetic */ long f$6;
 
             {
                 this.f$1 = r2;
@@ -9471,8 +9443,8 @@ public class MessagesStorage extends BaseController {
     public void putContacts(ArrayList<TLRPC$TL_contact> arrayList, boolean z) {
         if (!arrayList.isEmpty() || z) {
             this.storageQueue.postRunnable(new Runnable(z, new ArrayList(arrayList)) {
-                private final /* synthetic */ boolean f$1;
-                private final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ boolean f$1;
+                public final /* synthetic */ ArrayList f$2;
 
                 {
                     this.f$1 = r2;
@@ -9515,7 +9487,7 @@ public class MessagesStorage extends BaseController {
     public void deleteContacts(ArrayList<Integer> arrayList) {
         if (arrayList != null && !arrayList.isEmpty()) {
             this.storageQueue.postRunnable(new Runnable(arrayList) {
-                private final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ ArrayList f$1;
 
                 {
                     this.f$1 = r2;
@@ -9541,8 +9513,8 @@ public class MessagesStorage extends BaseController {
     public void applyPhoneBookUpdates(String str, String str2) {
         if (!TextUtils.isEmpty(str)) {
             this.storageQueue.postRunnable(new Runnable(str, str2) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ String f$2;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$2;
 
                 {
                     this.f$1 = r2;
@@ -9575,8 +9547,8 @@ public class MessagesStorage extends BaseController {
         }
         if (!hashMap.isEmpty() || z || z2) {
             this.storageQueue.postRunnable(new Runnable(hashMap, z) {
-                private final /* synthetic */ HashMap f$1;
-                private final /* synthetic */ boolean f$2;
+                public final /* synthetic */ HashMap f$1;
+                public final /* synthetic */ boolean f$2;
 
                 {
                     this.f$1 = r2;
@@ -9641,7 +9613,7 @@ public class MessagesStorage extends BaseController {
 
     public void getCachedPhoneBook(boolean z) {
         this.storageQueue.postRunnable(new Runnable(z) {
-            private final /* synthetic */ boolean f$1;
+            public final /* synthetic */ boolean f$1;
 
             {
                 this.f$1 = r2;
@@ -10117,7 +10089,7 @@ public class MessagesStorage extends BaseController {
 
     public void getUnsentMessages(int i) {
         this.storageQueue.postRunnable(new Runnable(i) {
-            private final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$1;
 
             {
                 this.f$1 = r2;
@@ -10282,9 +10254,9 @@ public class MessagesStorage extends BaseController {
         boolean[] zArr = new boolean[1];
         CountDownLatch countDownLatch = new CountDownLatch(1);
         this.storageQueue.postRunnable(new Runnable(j, zArr, countDownLatch) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ boolean[] f$2;
-            private final /* synthetic */ CountDownLatch f$3;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ boolean[] f$2;
+            public final /* synthetic */ CountDownLatch f$3;
 
             {
                 this.f$1 = r2;
@@ -10366,11 +10338,11 @@ public class MessagesStorage extends BaseController {
         boolean[] zArr = new boolean[1];
         CountDownLatch countDownLatch = new CountDownLatch(1);
         this.storageQueue.postRunnable(new Runnable(i, z, j, zArr, countDownLatch) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ boolean f$2;
-            private final /* synthetic */ long f$3;
-            private final /* synthetic */ boolean[] f$4;
-            private final /* synthetic */ CountDownLatch f$5;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ boolean f$2;
+            public final /* synthetic */ long f$3;
+            public final /* synthetic */ boolean[] f$4;
+            public final /* synthetic */ CountDownLatch f$5;
 
             {
                 this.f$1 = r2;
@@ -10462,8 +10434,8 @@ public class MessagesStorage extends BaseController {
 
     public void getUnreadMention(long j, IntCallback intCallback) {
         this.storageQueue.postRunnable(new Runnable(j, intCallback) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ MessagesStorage.IntCallback f$2;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ MessagesStorage.IntCallback f$2;
 
             {
                 this.f$1 = r2;
@@ -10485,7 +10457,7 @@ public class MessagesStorage extends BaseController {
             }
             queryFinalized.dispose();
             AndroidUtilities.runOnUIThread(new Runnable(i) {
-                private final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$1;
 
                 {
                     this.f$1 = r2;
@@ -10502,8 +10474,8 @@ public class MessagesStorage extends BaseController {
 
     public void getMessagesCount(long j, IntCallback intCallback) {
         this.storageQueue.postRunnable(new Runnable(j, intCallback) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ MessagesStorage.IntCallback f$2;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ MessagesStorage.IntCallback f$2;
 
             {
                 this.f$1 = r2;
@@ -10525,7 +10497,7 @@ public class MessagesStorage extends BaseController {
             }
             queryFinalized.dispose();
             AndroidUtilities.runOnUIThread(new Runnable(i) {
-                private final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$1;
 
                 {
                     this.f$1 = r2;
@@ -14000,18 +13972,18 @@ public class MessagesStorage extends BaseController {
         $$Lambda$MessagesStorage$B09IUzMvrVtsZnS3d9u8GjhHqE r16 = r0;
         DispatchQueue dispatchQueue = this.storageQueue;
         $$Lambda$MessagesStorage$B09IUzMvrVtsZnS3d9u8GjhHqE r0 = new Runnable(j2, j, z, i, i2, i3, i4, i5, i6, z2, z3, i7) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ boolean f$10;
-            private final /* synthetic */ boolean f$11;
-            private final /* synthetic */ int f$12;
-            private final /* synthetic */ long f$2;
-            private final /* synthetic */ boolean f$3;
-            private final /* synthetic */ int f$4;
-            private final /* synthetic */ int f$5;
-            private final /* synthetic */ int f$6;
-            private final /* synthetic */ int f$7;
-            private final /* synthetic */ int f$8;
-            private final /* synthetic */ int f$9;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ boolean f$10;
+            public final /* synthetic */ boolean f$11;
+            public final /* synthetic */ int f$12;
+            public final /* synthetic */ long f$2;
+            public final /* synthetic */ boolean f$3;
+            public final /* synthetic */ int f$4;
+            public final /* synthetic */ int f$5;
+            public final /* synthetic */ int f$6;
+            public final /* synthetic */ int f$7;
+            public final /* synthetic */ int f$8;
+            public final /* synthetic */ int f$9;
 
             {
                 this.f$1 = r2;
@@ -14072,10 +14044,10 @@ public class MessagesStorage extends BaseController {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Object[] objArr = new Object[2];
         this.storageQueue.postRunnable(new Runnable(str, i, objArr, countDownLatch) {
-            private final /* synthetic */ String f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ Object[] f$3;
-            private final /* synthetic */ CountDownLatch f$4;
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ Object[] f$3;
+            public final /* synthetic */ CountDownLatch f$4;
 
             {
                 this.f$1 = r2;
@@ -14131,10 +14103,10 @@ public class MessagesStorage extends BaseController {
     public void putSentFile(String str, TLObject tLObject, int i, String str2) {
         if (str != null && tLObject != null && str2 != null) {
             this.storageQueue.postRunnable(new Runnable(str, tLObject, i, str2) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ TLObject f$2;
-                private final /* synthetic */ int f$3;
-                private final /* synthetic */ String f$4;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ TLObject f$2;
+                public final /* synthetic */ int f$3;
+                public final /* synthetic */ String f$4;
 
                 {
                     this.f$1 = r2;
@@ -14238,8 +14210,8 @@ public class MessagesStorage extends BaseController {
     public void updateEncryptedChatSeq(TLRPC$EncryptedChat tLRPC$EncryptedChat, boolean z) {
         if (tLRPC$EncryptedChat != null) {
             this.storageQueue.postRunnable(new Runnable(tLRPC$EncryptedChat, z) {
-                private final /* synthetic */ TLRPC$EncryptedChat f$1;
-                private final /* synthetic */ boolean f$2;
+                public final /* synthetic */ TLRPC$EncryptedChat f$1;
+                public final /* synthetic */ boolean f$2;
 
                 {
                     this.f$1 = r2;
@@ -14287,7 +14259,7 @@ public class MessagesStorage extends BaseController {
     public void updateEncryptedChatTTL(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
         if (tLRPC$EncryptedChat != null) {
             this.storageQueue.postRunnable(new Runnable(tLRPC$EncryptedChat) {
-                private final /* synthetic */ TLRPC$EncryptedChat f$1;
+                public final /* synthetic */ TLRPC$EncryptedChat f$1;
 
                 {
                     this.f$1 = r2;
@@ -14327,7 +14299,7 @@ public class MessagesStorage extends BaseController {
     public void updateEncryptedChatLayer(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
         if (tLRPC$EncryptedChat != null) {
             this.storageQueue.postRunnable(new Runnable(tLRPC$EncryptedChat) {
-                private final /* synthetic */ TLRPC$EncryptedChat f$1;
+                public final /* synthetic */ TLRPC$EncryptedChat f$1;
 
                 {
                     this.f$1 = r2;
@@ -14367,7 +14339,7 @@ public class MessagesStorage extends BaseController {
     public void updateEncryptedChat(TLRPC$EncryptedChat tLRPC$EncryptedChat) {
         if (tLRPC$EncryptedChat != null) {
             this.storageQueue.postRunnable(new Runnable(tLRPC$EncryptedChat) {
-                private final /* synthetic */ TLRPC$EncryptedChat f$1;
+                public final /* synthetic */ TLRPC$EncryptedChat f$1;
 
                 {
                     this.f$1 = r2;
@@ -14447,8 +14419,8 @@ public class MessagesStorage extends BaseController {
 
     public void isDialogHasTopMessage(long j, Runnable runnable) {
         this.storageQueue.postRunnable(new Runnable(j, runnable) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ Runnable f$2;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ Runnable f$2;
 
             {
                 this.f$1 = r2;
@@ -14481,9 +14453,9 @@ public class MessagesStorage extends BaseController {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         boolean[] zArr = new boolean[1];
         this.storageQueue.postRunnable(new Runnable(j, zArr, countDownLatch) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ boolean[] f$2;
-            private final /* synthetic */ CountDownLatch f$3;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ boolean[] f$2;
+            public final /* synthetic */ CountDownLatch f$3;
 
             {
                 this.f$1 = r2;
@@ -14521,9 +14493,9 @@ public class MessagesStorage extends BaseController {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         boolean[] zArr = new boolean[1];
         this.storageQueue.postRunnable(new Runnable(i, zArr, countDownLatch) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ boolean[] f$2;
-            private final /* synthetic */ CountDownLatch f$3;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ boolean[] f$2;
+            public final /* synthetic */ CountDownLatch f$3;
 
             {
                 this.f$1 = r2;
@@ -14560,9 +14532,9 @@ public class MessagesStorage extends BaseController {
     public void getEncryptedChat(int i, CountDownLatch countDownLatch, ArrayList<TLObject> arrayList) {
         if (countDownLatch != null && arrayList != null) {
             this.storageQueue.postRunnable(new Runnable(i, arrayList, countDownLatch) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ ArrayList f$2;
-                private final /* synthetic */ CountDownLatch f$3;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ CountDownLatch f$3;
 
                 {
                     this.f$1 = r2;
@@ -14602,9 +14574,9 @@ public class MessagesStorage extends BaseController {
     public void putEncryptedChat(TLRPC$EncryptedChat tLRPC$EncryptedChat, TLRPC$User tLRPC$User, TLRPC$Dialog tLRPC$Dialog) {
         if (tLRPC$EncryptedChat != null) {
             this.storageQueue.postRunnable(new Runnable(tLRPC$EncryptedChat, tLRPC$User, tLRPC$Dialog) {
-                private final /* synthetic */ TLRPC$EncryptedChat f$1;
-                private final /* synthetic */ TLRPC$User f$2;
-                private final /* synthetic */ TLRPC$Dialog f$3;
+                public final /* synthetic */ TLRPC$EncryptedChat f$1;
+                public final /* synthetic */ TLRPC$User f$2;
+                public final /* synthetic */ TLRPC$Dialog f$3;
 
                 {
                     this.f$1 = r2;
@@ -14783,9 +14755,9 @@ public class MessagesStorage extends BaseController {
     public void updateChatDefaultBannedRights(int i, TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights, int i2) {
         if (tLRPC$TL_chatBannedRights != null && i != 0) {
             this.storageQueue.postRunnable(new Runnable(i, i2, tLRPC$TL_chatBannedRights) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ int f$2;
-                private final /* synthetic */ TLRPC$TL_chatBannedRights f$3;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$2;
+                public final /* synthetic */ TLRPC$TL_chatBannedRights f$3;
 
                 {
                     this.f$1 = r2;
@@ -15012,9 +14984,9 @@ public class MessagesStorage extends BaseController {
         }
         if (z2) {
             this.storageQueue.postRunnable(new Runnable(arrayList, arrayList2, z) {
-                private final /* synthetic */ ArrayList f$1;
-                private final /* synthetic */ ArrayList f$2;
-                private final /* synthetic */ boolean f$3;
+                public final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ boolean f$3;
 
                 {
                     this.f$1 = r2;
@@ -15033,9 +15005,9 @@ public class MessagesStorage extends BaseController {
 
     public void removeFromDownloadQueue(long j, int i, boolean z) {
         this.storageQueue.postRunnable(new Runnable(z, i, j) {
-            private final /* synthetic */ boolean f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ long f$3;
+            public final /* synthetic */ boolean f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ long f$3;
 
             {
                 this.f$1 = r2;
@@ -15068,7 +15040,7 @@ public class MessagesStorage extends BaseController {
 
     public void clearDownloadQueue(int i) {
         this.storageQueue.postRunnable(new Runnable(i) {
-            private final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$1;
 
             {
                 this.f$1 = r2;
@@ -15094,7 +15066,7 @@ public class MessagesStorage extends BaseController {
 
     public void getDownloadQueue(int i) {
         this.storageQueue.postRunnable(new Runnable(i) {
-            private final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$1;
 
             {
                 this.f$1 = r2;
@@ -15132,8 +15104,8 @@ public class MessagesStorage extends BaseController {
             }
             queryFinalized.dispose();
             AndroidUtilities.runOnUIThread(new Runnable(i, arrayList) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ ArrayList f$2;
 
                 {
                     this.f$1 = r2;
@@ -15179,7 +15151,7 @@ public class MessagesStorage extends BaseController {
     public void putWebPages(LongSparseArray<TLRPC$WebPage> longSparseArray) {
         if (!isEmpty((LongSparseArray<?>) longSparseArray)) {
             this.storageQueue.postRunnable(new Runnable(longSparseArray) {
-                private final /* synthetic */ LongSparseArray f$1;
+                public final /* synthetic */ LongSparseArray f$1;
 
                 {
                     this.f$1 = r2;
@@ -15248,7 +15220,7 @@ public class MessagesStorage extends BaseController {
                 executeFast2.dispose();
                 this.database.commitTransaction();
                 AndroidUtilities.runOnUIThread(new Runnable(arrayList) {
-                    private final /* synthetic */ ArrayList f$1;
+                    public final /* synthetic */ ArrayList f$1;
 
                     {
                         this.f$1 = r2;
@@ -15270,9 +15242,9 @@ public class MessagesStorage extends BaseController {
 
     public void overwriteChannel(int i, TLRPC$TL_updates_channelDifferenceTooLong tLRPC$TL_updates_channelDifferenceTooLong, int i2) {
         this.storageQueue.postRunnable(new Runnable(i, i2, tLRPC$TL_updates_channelDifferenceTooLong) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ TLRPC$TL_updates_channelDifferenceTooLong f$3;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ TLRPC$TL_updates_channelDifferenceTooLong f$3;
 
             {
                 this.f$1 = r2;
@@ -15435,14 +15407,14 @@ public class MessagesStorage extends BaseController {
     }
 
     public /* synthetic */ void lambda$null$130$MessagesStorage(long j) {
-        getNotificationCenter().postNotificationName(NotificationCenter.removeAllMessagesFromDialog, Long.valueOf(j), true);
+        getNotificationCenter().postNotificationName(NotificationCenter.removeAllMessagesFromDialog, Long.valueOf(j), Boolean.TRUE);
     }
 
     public void putChannelViews(SparseArray<SparseIntArray> sparseArray, boolean z) {
         if (!isEmpty((SparseArray<?>) sparseArray)) {
             this.storageQueue.postRunnable(new Runnable(sparseArray, z) {
-                private final /* synthetic */ SparseArray f$1;
-                private final /* synthetic */ boolean f$2;
+                public final /* synthetic */ SparseArray f$1;
+                public final /* synthetic */ boolean f$2;
 
                 {
                     this.f$1 = r2;
@@ -15490,7 +15462,7 @@ public class MessagesStorage extends BaseController {
 
     public void updateMessageVerifyFlags(ArrayList<TLRPC$Message> arrayList) {
         Utilities.stageQueue.postRunnable(new Runnable(arrayList) {
-            private final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ ArrayList f$1;
 
             {
                 this.f$1 = r2;
@@ -16973,12 +16945,12 @@ public class MessagesStorage extends BaseController {
         if (arrayList.size() != 0) {
             if (z2) {
                 this.storageQueue.postRunnable(new Runnable(arrayList, z, z3, i, z4, z5) {
-                    private final /* synthetic */ ArrayList f$1;
-                    private final /* synthetic */ boolean f$2;
-                    private final /* synthetic */ boolean f$3;
-                    private final /* synthetic */ int f$4;
-                    private final /* synthetic */ boolean f$5;
-                    private final /* synthetic */ boolean f$6;
+                    public final /* synthetic */ ArrayList f$1;
+                    public final /* synthetic */ boolean f$2;
+                    public final /* synthetic */ boolean f$3;
+                    public final /* synthetic */ int f$4;
+                    public final /* synthetic */ boolean f$5;
+                    public final /* synthetic */ boolean f$6;
 
                     {
                         this.f$1 = r2;
@@ -17001,8 +16973,8 @@ public class MessagesStorage extends BaseController {
 
     public void markMessageAsSendError(TLRPC$Message tLRPC$Message, boolean z) {
         this.storageQueue.postRunnable(new Runnable(tLRPC$Message, z) {
-            private final /* synthetic */ TLRPC$Message f$1;
-            private final /* synthetic */ boolean f$2;
+            public final /* synthetic */ TLRPC$Message f$1;
+            public final /* synthetic */ boolean f$2;
 
             {
                 this.f$1 = r2;
@@ -17035,9 +17007,9 @@ public class MessagesStorage extends BaseController {
 
     public void setMessageSeq(int i, int i2, int i3) {
         this.storageQueue.postRunnable(new Runnable(i, i2, i3) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ int f$3;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$3;
 
             {
                 this.f$1 = r2;
@@ -17643,12 +17615,12 @@ public class MessagesStorage extends BaseController {
     public long[] updateMessageStateAndId(long j, Integer num, int i, int i2, boolean z, int i3, int i4) {
         if (z) {
             this.storageQueue.postRunnable(new Runnable(j, num, i, i2, i3, i4) {
-                private final /* synthetic */ long f$1;
-                private final /* synthetic */ Integer f$2;
-                private final /* synthetic */ int f$3;
-                private final /* synthetic */ int f$4;
-                private final /* synthetic */ int f$5;
-                private final /* synthetic */ int f$6;
+                public final /* synthetic */ long f$1;
+                public final /* synthetic */ Integer f$2;
+                public final /* synthetic */ int f$3;
+                public final /* synthetic */ int f$4;
+                public final /* synthetic */ int f$5;
+                public final /* synthetic */ int f$6;
 
                 {
                     this.f$1 = r2;
@@ -17746,9 +17718,9 @@ public class MessagesStorage extends BaseController {
         if (arrayList != null && !arrayList.isEmpty()) {
             if (z3) {
                 this.storageQueue.postRunnable(new Runnable(arrayList, z, z2) {
-                    private final /* synthetic */ ArrayList f$1;
-                    private final /* synthetic */ boolean f$2;
-                    private final /* synthetic */ boolean f$3;
+                    public final /* synthetic */ ArrayList f$1;
+                    public final /* synthetic */ boolean f$2;
+                    public final /* synthetic */ boolean f$3;
 
                     {
                         this.f$1 = r2;
@@ -17812,8 +17784,8 @@ public class MessagesStorage extends BaseController {
     public void markMessagesContentAsRead(ArrayList<Long> arrayList, int i) {
         if (!isEmpty((List<?>) arrayList)) {
             this.storageQueue.postRunnable(new Runnable(arrayList, i) {
-                private final /* synthetic */ ArrayList f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -17853,9 +17825,9 @@ public class MessagesStorage extends BaseController {
     public void markMessagesAsRead(SparseLongArray sparseLongArray, SparseLongArray sparseLongArray2, SparseIntArray sparseIntArray, boolean z) {
         if (z) {
             this.storageQueue.postRunnable(new Runnable(sparseLongArray, sparseLongArray2, sparseIntArray) {
-                private final /* synthetic */ SparseLongArray f$1;
-                private final /* synthetic */ SparseLongArray f$2;
-                private final /* synthetic */ SparseIntArray f$3;
+                public final /* synthetic */ SparseLongArray f$1;
+                public final /* synthetic */ SparseLongArray f$2;
+                public final /* synthetic */ SparseIntArray f$3;
 
                 {
                     this.f$1 = r2;
@@ -17875,7 +17847,7 @@ public class MessagesStorage extends BaseController {
     public void markMessagesAsDeletedByRandoms(ArrayList<Long> arrayList) {
         if (!arrayList.isEmpty()) {
             this.storageQueue.postRunnable(new Runnable(arrayList) {
-                private final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ ArrayList f$1;
 
                 {
                     this.f$1 = r2;
@@ -17899,7 +17871,7 @@ public class MessagesStorage extends BaseController {
             queryFinalized.dispose();
             if (!arrayList2.isEmpty()) {
                 AndroidUtilities.runOnUIThread(new Runnable(arrayList2) {
-                    private final /* synthetic */ ArrayList f$1;
+                    public final /* synthetic */ ArrayList f$1;
 
                     {
                         this.f$1 = r2;
@@ -17919,7 +17891,7 @@ public class MessagesStorage extends BaseController {
     }
 
     public /* synthetic */ void lambda$null$142$MessagesStorage(ArrayList arrayList) {
-        getNotificationCenter().postNotificationName(NotificationCenter.messagesDeleted, arrayList, 0, false);
+        getNotificationCenter().postNotificationName(NotificationCenter.messagesDeleted, arrayList, 0, Boolean.FALSE);
     }
 
     /* access modifiers changed from: protected */
@@ -17940,8 +17912,8 @@ public class MessagesStorage extends BaseController {
             }
             queryFinalized.dispose();
             AndroidUtilities.runOnUIThread(new Runnable(l, i) {
-                private final /* synthetic */ Long f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ Long f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -18785,9 +18757,9 @@ public class MessagesStorage extends BaseController {
         }
         if (z) {
             this.storageQueue.postRunnable(new Runnable(arrayList, arrayList2, i) {
-                private final /* synthetic */ ArrayList f$1;
-                private final /* synthetic */ ArrayList f$2;
-                private final /* synthetic */ int f$3;
+                public final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ int f$3;
 
                 {
                     this.f$1 = r2;
@@ -18812,10 +18784,10 @@ public class MessagesStorage extends BaseController {
             return lambda$markMessagesAsDeleted$146$MessagesStorage(arrayList, i, z2, z3);
         }
         this.storageQueue.postRunnable(new Runnable(arrayList, i, z2, z3) {
-            private final /* synthetic */ ArrayList f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ boolean f$3;
-            private final /* synthetic */ boolean f$4;
+            public final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ boolean f$3;
+            public final /* synthetic */ boolean f$4;
 
             {
                 this.f$1 = r2;
@@ -18918,9 +18890,9 @@ public class MessagesStorage extends BaseController {
             return lambda$markMessagesAsDeleted$147$MessagesStorage(i, i2, z2);
         }
         this.storageQueue.postRunnable(new Runnable(i, i2, z2) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ boolean f$3;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ boolean f$3;
 
             {
                 this.f$1 = r2;
@@ -18942,14 +18914,14 @@ public class MessagesStorage extends BaseController {
                 if (tLRPC$MessageMedia.bytes.length == 0) {
                     byte[] bArr = new byte[1];
                     tLRPC$MessageMedia.bytes = bArr;
-                    bArr[0] = 114;
+                    bArr[0] = 115;
                 }
             } else if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaUnsupported) {
                 TLRPC$TL_messageMediaUnsupported_old tLRPC$TL_messageMediaUnsupported_old = new TLRPC$TL_messageMediaUnsupported_old();
                 tLRPC$Message.media = tLRPC$TL_messageMediaUnsupported_old;
                 byte[] bArr2 = new byte[1];
                 tLRPC$TL_messageMediaUnsupported_old.bytes = bArr2;
-                bArr2[0] = 114;
+                bArr2[0] = 115;
                 tLRPC$Message.flags |= 512;
             }
         }
@@ -19205,10 +19177,10 @@ public class MessagesStorage extends BaseController {
     public void replaceMessageIfExists(TLRPC$Message tLRPC$Message, ArrayList<TLRPC$User> arrayList, ArrayList<TLRPC$Chat> arrayList2, boolean z) {
         if (tLRPC$Message != null) {
             this.storageQueue.postRunnable(new Runnable(tLRPC$Message, z, arrayList, arrayList2) {
-                private final /* synthetic */ TLRPC$Message f$1;
-                private final /* synthetic */ boolean f$2;
-                private final /* synthetic */ ArrayList f$3;
-                private final /* synthetic */ ArrayList f$4;
+                public final /* synthetic */ TLRPC$Message f$1;
+                public final /* synthetic */ boolean f$2;
+                public final /* synthetic */ ArrayList f$3;
+                public final /* synthetic */ ArrayList f$4;
 
                 {
                     this.f$1 = r2;
@@ -19584,12 +19556,12 @@ public class MessagesStorage extends BaseController {
 
     public void putMessages(TLRPC$messages_Messages tLRPC$messages_Messages, long j, int i, int i2, boolean z, boolean z2) {
         this.storageQueue.postRunnable(new Runnable(z2, j, tLRPC$messages_Messages, i, i2, z) {
-            private final /* synthetic */ boolean f$1;
-            private final /* synthetic */ long f$2;
-            private final /* synthetic */ TLRPC$messages_Messages f$3;
-            private final /* synthetic */ int f$4;
-            private final /* synthetic */ int f$5;
-            private final /* synthetic */ boolean f$6;
+            public final /* synthetic */ boolean f$1;
+            public final /* synthetic */ long f$2;
+            public final /* synthetic */ TLRPC$messages_Messages f$3;
+            public final /* synthetic */ int f$4;
+            public final /* synthetic */ int f$5;
+            public final /* synthetic */ boolean f$6;
 
             {
                 this.f$1 = r2;
@@ -21640,8 +21612,8 @@ public class MessagesStorage extends BaseController {
 
     public void getDialogFolderId(long j, IntCallback intCallback) {
         this.storageQueue.postRunnable(new Runnable(j, intCallback) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ MessagesStorage.IntCallback f$2;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ MessagesStorage.IntCallback f$2;
 
             {
                 this.f$1 = r2;
@@ -21660,7 +21632,7 @@ public class MessagesStorage extends BaseController {
             int intValue = queryFinalized.next() ? queryFinalized.intValue(0) : -1;
             queryFinalized.dispose();
             AndroidUtilities.runOnUIThread(new Runnable(intValue) {
-                private final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$1;
 
                 {
                     this.f$1 = r2;
@@ -21678,10 +21650,10 @@ public class MessagesStorage extends BaseController {
     public void setDialogsFolderId(ArrayList<TLRPC$TL_folderPeer> arrayList, ArrayList<TLRPC$TL_inputFolderPeer> arrayList2, long j, int i) {
         if (arrayList != null || arrayList2 != null || j != 0) {
             this.storageQueue.postRunnable(new Runnable(arrayList, arrayList2, i, j) {
-                private final /* synthetic */ ArrayList f$1;
-                private final /* synthetic */ ArrayList f$2;
-                private final /* synthetic */ int f$3;
-                private final /* synthetic */ long f$4;
+                public final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ int f$3;
+                public final /* synthetic */ long f$4;
 
                 {
                     this.f$1 = r2;
@@ -21746,7 +21718,7 @@ public class MessagesStorage extends BaseController {
             SQLiteCursor queryFinalized = this.database.queryFinalized("SELECT did FROM dialogs WHERE folder_id = ?", Integer.valueOf(i));
             if (!queryFinalized.next()) {
                 AndroidUtilities.runOnUIThread(new Runnable(i) {
-                    private final /* synthetic */ int f$1;
+                    public final /* synthetic */ int f$1;
 
                     {
                         this.f$1 = r2;
@@ -21771,7 +21743,7 @@ public class MessagesStorage extends BaseController {
 
     public void checkIfFolderEmpty(int i) {
         this.storageQueue.postRunnable(new Runnable(i) {
-            private final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$1;
 
             {
                 this.f$1 = r2;
@@ -21785,8 +21757,8 @@ public class MessagesStorage extends BaseController {
 
     public void unpinAllDialogsExceptNew(ArrayList<Long> arrayList, int i) {
         this.storageQueue.postRunnable(new Runnable(arrayList, i) {
-            private final /* synthetic */ ArrayList f$1;
-            private final /* synthetic */ int f$2;
+            public final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ int f$2;
 
             {
                 this.f$1 = r2;
@@ -21828,8 +21800,8 @@ public class MessagesStorage extends BaseController {
 
     public void setDialogUnread(long j, boolean z) {
         this.storageQueue.postRunnable(new Runnable(j, z) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ boolean f$2;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ boolean f$2;
 
             {
                 this.f$1 = r2;
@@ -21965,8 +21937,8 @@ public class MessagesStorage extends BaseController {
 
     public void setDialogPinned(long j, int i) {
         this.storageQueue.postRunnable(new Runnable(i, j) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ long f$2;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ long f$2;
 
             {
                 this.f$1 = r2;
@@ -21994,8 +21966,8 @@ public class MessagesStorage extends BaseController {
     public void putDialogs(TLRPC$messages_Dialogs tLRPC$messages_Dialogs, int i) {
         if (!tLRPC$messages_Dialogs.dialogs.isEmpty()) {
             this.storageQueue.postRunnable(new Runnable(tLRPC$messages_Dialogs, i) {
-                private final /* synthetic */ TLRPC$messages_Dialogs f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ TLRPC$messages_Dialogs f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -22022,9 +21994,9 @@ public class MessagesStorage extends BaseController {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Integer[] numArr = {0};
         this.storageQueue.postRunnable(new Runnable(j, numArr, countDownLatch) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ Integer[] f$2;
-            private final /* synthetic */ CountDownLatch f$3;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ Integer[] f$2;
+            public final /* synthetic */ CountDownLatch f$3;
 
             {
                 this.f$1 = r2;
@@ -22107,10 +22079,10 @@ public class MessagesStorage extends BaseController {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Integer[] numArr = {0};
         this.storageQueue.postRunnable(new Runnable(z, j, numArr, countDownLatch) {
-            private final /* synthetic */ boolean f$1;
-            private final /* synthetic */ long f$2;
-            private final /* synthetic */ Integer[] f$3;
-            private final /* synthetic */ CountDownLatch f$4;
+            public final /* synthetic */ boolean f$1;
+            public final /* synthetic */ long f$2;
+            public final /* synthetic */ Integer[] f$3;
+            public final /* synthetic */ CountDownLatch f$4;
 
             {
                 this.f$1 = r2;
@@ -22208,9 +22180,9 @@ public class MessagesStorage extends BaseController {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Integer[] numArr = {0};
         this.storageQueue.postRunnable(new Runnable(i, numArr, countDownLatch) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ Integer[] f$2;
-            private final /* synthetic */ CountDownLatch f$3;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ Integer[] f$2;
+            public final /* synthetic */ CountDownLatch f$3;
 
             {
                 this.f$1 = r2;
@@ -22315,9 +22287,9 @@ public class MessagesStorage extends BaseController {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         TLRPC$User[] tLRPC$UserArr = new TLRPC$User[1];
         this.storageQueue.postRunnable(new Runnable(tLRPC$UserArr, i, countDownLatch) {
-            private final /* synthetic */ TLRPC$User[] f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ CountDownLatch f$3;
+            public final /* synthetic */ TLRPC$User[] f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ CountDownLatch f$3;
 
             {
                 this.f$1 = r2;
@@ -22346,9 +22318,9 @@ public class MessagesStorage extends BaseController {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         TLRPC$Chat[] tLRPC$ChatArr = new TLRPC$Chat[1];
         this.storageQueue.postRunnable(new Runnable(tLRPC$ChatArr, i, countDownLatch) {
-            private final /* synthetic */ TLRPC$Chat[] f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ CountDownLatch f$3;
+            public final /* synthetic */ TLRPC$Chat[] f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ CountDownLatch f$3;
 
             {
                 this.f$1 = r2;

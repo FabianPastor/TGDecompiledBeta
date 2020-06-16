@@ -457,8 +457,8 @@ public class WearDataLayerListenerService extends WearableListenerService {
 
     public static void sendMessageToWatch(String str, byte[] bArr, String str2) {
         Wearable.getCapabilityClient(ApplicationLoader.applicationContext).getCapability(str2, 1).addOnCompleteListener(new OnCompleteListener(str, bArr) {
-            private final /* synthetic */ String f$0;
-            private final /* synthetic */ byte[] f$1;
+            public final /* synthetic */ String f$0;
+            public final /* synthetic */ byte[] f$1;
 
             {
                 this.f$0 = r1;

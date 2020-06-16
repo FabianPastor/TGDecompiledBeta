@@ -115,8 +115,8 @@ public class FileLog {
             Log.e("tmessages", str, th);
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new Runnable(str, th) {
-                    private final /* synthetic */ String f$0;
-                    private final /* synthetic */ Throwable f$1;
+                    public final /* synthetic */ String f$0;
+                    public final /* synthetic */ Throwable f$1;
 
                     {
                         this.f$0 = r1;
@@ -148,7 +148,7 @@ public class FileLog {
             Log.e("tmessages", str);
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new Runnable(str) {
-                    private final /* synthetic */ String f$0;
+                    public final /* synthetic */ String f$0;
 
                     {
                         this.f$0 = r1;
@@ -178,7 +178,7 @@ public class FileLog {
             th.printStackTrace();
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new Runnable(th) {
-                    private final /* synthetic */ Throwable f$0;
+                    public final /* synthetic */ Throwable f$0;
 
                     {
                         this.f$0 = r1;
@@ -215,7 +215,7 @@ public class FileLog {
             Log.d("tmessages", str);
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new Runnable(str) {
-                    private final /* synthetic */ String f$0;
+                    public final /* synthetic */ String f$0;
 
                     {
                         this.f$0 = r1;
@@ -245,7 +245,7 @@ public class FileLog {
             Log.w("tmessages", str);
             if (getInstance().streamWriter != null) {
                 getInstance().logQueue.postRunnable(new Runnable(str) {
-                    private final /* synthetic */ String f$0;
+                    public final /* synthetic */ String f$0;
 
                     {
                         this.f$0 = r1;

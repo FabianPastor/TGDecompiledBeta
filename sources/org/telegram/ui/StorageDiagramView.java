@@ -302,7 +302,7 @@ public class StorageDiagramView extends View {
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
             this.valueAnimator = ofFloat;
             ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(clearViewDataArr) {
-                private final /* synthetic */ StorageDiagramView.ClearViewData[] f$1;
+                public final /* synthetic */ StorageDiagramView.ClearViewData[] f$1;
 
                 {
                     this.f$1 = r2;

@@ -135,7 +135,7 @@ public class BlurBehindDrawable {
                             this.blurCanvas[i].translate(0.0f, -this.panTranslationY);
                             this.behindView.draw(this.blurCanvas[i]);
                         }
-                        if (i == 1) {
+                        if (background != null && i == 1) {
                             Rect bounds = background.getBounds();
                             background.setBounds(0, 0, this.behindView.getMeasuredWidth(), this.behindView.getMeasuredHeight());
                             background.draw(this.blurCanvas[i]);

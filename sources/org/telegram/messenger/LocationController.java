@@ -312,7 +312,7 @@ public class LocationController extends BaseController implements NotificationCe
             startFusedLocationRequest(true);
         } else if (statusCode == 6) {
             Utilities.stageQueue.postRunnable(new Runnable(status) {
-                private final /* synthetic */ Status f$1;
+                public final /* synthetic */ Status f$1;
 
                 {
                     this.f$1 = r2;
@@ -334,7 +334,7 @@ public class LocationController extends BaseController implements NotificationCe
     public /* synthetic */ void lambda$null$2$LocationController(Status status) {
         if (this.lookingForPeopleNearby || !this.sharingLocations.isEmpty()) {
             AndroidUtilities.runOnUIThread(new Runnable(status) {
-                private final /* synthetic */ Status f$1;
+                public final /* synthetic */ Status f$1;
 
                 {
                     this.f$1 = r2;
@@ -352,7 +352,7 @@ public class LocationController extends BaseController implements NotificationCe
     }
 
     public /* synthetic */ void lambda$null$3$LocationController() {
-        this.playServicesAvailable = false;
+        this.playServicesAvailable = Boolean.FALSE;
         try {
             this.googleApiClient.disconnect();
             start();
@@ -362,7 +362,7 @@ public class LocationController extends BaseController implements NotificationCe
 
     public void startFusedLocationRequest(boolean z) {
         Utilities.stageQueue.postRunnable(new Runnable(z) {
-            private final /* synthetic */ boolean f$1;
+            public final /* synthetic */ boolean f$1;
 
             {
                 this.f$1 = r2;
@@ -376,7 +376,7 @@ public class LocationController extends BaseController implements NotificationCe
 
     public /* synthetic */ void lambda$startFusedLocationRequest$5$LocationController(boolean z) {
         if (!z) {
-            this.playServicesAvailable = false;
+            this.playServicesAvailable = Boolean.FALSE;
         }
         if (!this.shareMyCurrentLocation && !this.lookingForPeopleNearby && this.sharingLocations.isEmpty()) {
             return;
@@ -395,7 +395,7 @@ public class LocationController extends BaseController implements NotificationCe
 
     public void onConnectionFailed(ConnectionResult connectionResult) {
         if (!this.wasConnectedToPlayServices) {
-            this.playServicesAvailable = false;
+            this.playServicesAvailable = Boolean.FALSE;
             if (this.started) {
                 this.started = false;
                 start();
@@ -450,8 +450,8 @@ public class LocationController extends BaseController implements NotificationCe
                     tLRPC$TL_messages_editMessage.media.geo_point.lat = AndroidUtilities.fixLocationCoord(this.lastKnownLocation.getLatitude());
                     tLRPC$TL_messages_editMessage.media.geo_point._long = AndroidUtilities.fixLocationCoord(this.lastKnownLocation.getLongitude());
                     int[] iArr = {getConnectionsManager().sendRequest(tLRPC$TL_messages_editMessage, new RequestDelegate(sharingLocationInfo, iArr) {
-                        private final /* synthetic */ LocationController.SharingLocationInfo f$1;
-                        private final /* synthetic */ int[] f$2;
+                        public final /* synthetic */ LocationController.SharingLocationInfo f$1;
+                        public final /* synthetic */ int[] f$2;
 
                         {
                             this.f$1 = r2;
@@ -508,7 +508,7 @@ public class LocationController extends BaseController implements NotificationCe
             saveSharingLocation(sharingLocationInfo, 1);
             this.requests.delete(iArr[0]);
             AndroidUtilities.runOnUIThread(new Runnable(sharingLocationInfo) {
-                private final /* synthetic */ LocationController.SharingLocationInfo f$1;
+                public final /* synthetic */ LocationController.SharingLocationInfo f$1;
 
                 {
                     this.f$1 = r2;
@@ -558,7 +558,7 @@ public class LocationController extends BaseController implements NotificationCe
                     this.sharingLocationsMap.remove(sharingLocationInfo.did);
                     saveSharingLocation(sharingLocationInfo, 1);
                     AndroidUtilities.runOnUIThread(new Runnable(sharingLocationInfo) {
-                        private final /* synthetic */ LocationController.SharingLocationInfo f$1;
+                        public final /* synthetic */ LocationController.SharingLocationInfo f$1;
 
                         {
                             this.f$1 = r2;
@@ -674,8 +674,8 @@ public class LocationController extends BaseController implements NotificationCe
         saveSharingLocation(sharingLocationInfo, 0);
         this.lastLocationSendTime = (SystemClock.elapsedRealtime() - 30000) + 5000;
         AndroidUtilities.runOnUIThread(new Runnable(sharingLocationInfo2, sharingLocationInfo) {
-            private final /* synthetic */ LocationController.SharingLocationInfo f$1;
-            private final /* synthetic */ LocationController.SharingLocationInfo f$2;
+            public final /* synthetic */ LocationController.SharingLocationInfo f$1;
+            public final /* synthetic */ LocationController.SharingLocationInfo f$2;
 
             {
                 this.f$1 = r2;
@@ -761,9 +761,9 @@ public class LocationController extends BaseController implements NotificationCe
         }
         if (!arrayList.isEmpty()) {
             AndroidUtilities.runOnUIThread(new Runnable(arrayList2, arrayList3, arrayList) {
-                private final /* synthetic */ ArrayList f$1;
-                private final /* synthetic */ ArrayList f$2;
-                private final /* synthetic */ ArrayList f$3;
+                public final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ ArrayList f$3;
 
                 {
                     this.f$1 = r2;
@@ -782,7 +782,7 @@ public class LocationController extends BaseController implements NotificationCe
         getMessagesController().putUsers(arrayList, true);
         getMessagesController().putChats(arrayList2, true);
         Utilities.stageQueue.postRunnable(new Runnable(arrayList3) {
-            private final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ ArrayList f$1;
 
             {
                 this.f$1 = r2;
@@ -801,7 +801,7 @@ public class LocationController extends BaseController implements NotificationCe
             this.sharingLocationsMap.put(sharingLocationInfo.did, sharingLocationInfo);
         }
         AndroidUtilities.runOnUIThread(new Runnable(arrayList) {
-            private final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ ArrayList f$1;
 
             {
                 this.f$1 = r2;
@@ -825,8 +825,8 @@ public class LocationController extends BaseController implements NotificationCe
 
     private void saveSharingLocation(SharingLocationInfo sharingLocationInfo, int i) {
         getMessagesStorage().getStorageQueue().postRunnable(new Runnable(i, sharingLocationInfo) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ LocationController.SharingLocationInfo f$2;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ LocationController.SharingLocationInfo f$2;
 
             {
                 this.f$1 = r2;
@@ -869,7 +869,7 @@ public class LocationController extends BaseController implements NotificationCe
 
     public void removeSharingLocation(long j) {
         Utilities.stageQueue.postRunnable(new Runnable(j) {
-            private final /* synthetic */ long f$1;
+            public final /* synthetic */ long f$1;
 
             {
                 this.f$1 = r2;
@@ -901,7 +901,7 @@ public class LocationController extends BaseController implements NotificationCe
             this.sharingLocations.remove(sharingLocationInfo);
             saveSharingLocation(sharingLocationInfo, 1);
             AndroidUtilities.runOnUIThread(new Runnable(sharingLocationInfo) {
-                private final /* synthetic */ LocationController.SharingLocationInfo f$1;
+                public final /* synthetic */ LocationController.SharingLocationInfo f$1;
 
                 {
                     this.f$1 = r2;
@@ -1111,7 +1111,7 @@ public class LocationController extends BaseController implements NotificationCe
 
     public void startLocationLookupForPeopleNearby(boolean z) {
         Utilities.stageQueue.postRunnable(new Runnable(z) {
-            private final /* synthetic */ boolean f$1;
+            public final /* synthetic */ boolean f$1;
 
             {
                 this.f$1 = r2;
@@ -1139,12 +1139,12 @@ public class LocationController extends BaseController implements NotificationCe
 
     public void loadLiveLocations(long j) {
         if (this.cacheRequests.indexOfKey(j) < 0) {
-            this.cacheRequests.put(j, true);
+            this.cacheRequests.put(j, Boolean.TRUE);
             TLRPC$TL_messages_getRecentLocations tLRPC$TL_messages_getRecentLocations = new TLRPC$TL_messages_getRecentLocations();
             tLRPC$TL_messages_getRecentLocations.peer = getMessagesController().getInputPeer((int) j);
             tLRPC$TL_messages_getRecentLocations.limit = 100;
             getConnectionsManager().sendRequest(tLRPC$TL_messages_getRecentLocations, new RequestDelegate(j) {
-                private final /* synthetic */ long f$1;
+                public final /* synthetic */ long f$1;
 
                 {
                     this.f$1 = r2;
@@ -1160,8 +1160,8 @@ public class LocationController extends BaseController implements NotificationCe
     public /* synthetic */ void lambda$loadLiveLocations$26$LocationController(long j, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             AndroidUtilities.runOnUIThread(new Runnable(j, tLObject) {
-                private final /* synthetic */ long f$1;
-                private final /* synthetic */ TLObject f$2;
+                public final /* synthetic */ long f$1;
+                public final /* synthetic */ TLObject f$2;
 
                 {
                     this.f$1 = r2;
@@ -1304,8 +1304,8 @@ public class LocationController extends BaseController implements NotificationCe
             if (location != null) {
                 DispatchQueue dispatchQueue = Utilities.globalQueue;
                 $$Lambda$LocationController$tP3U4RW8B0Z7Wy3pdyZG8OOw918 r1 = new Runnable(location, locationFetchCallback) {
-                    private final /* synthetic */ Location f$0;
-                    private final /* synthetic */ LocationController.LocationFetchCallback f$1;
+                    public final /* synthetic */ Location f$0;
+                    public final /* synthetic */ LocationController.LocationFetchCallback f$1;
 
                     {
                         this.f$0 = r1;
@@ -1420,9 +1420,9 @@ public class LocationController extends BaseController implements NotificationCe
             str = str2;
         }
         AndroidUtilities.runOnUIThread(new Runnable(str, str2, location) {
-            private final /* synthetic */ String f$1;
-            private final /* synthetic */ String f$2;
-            private final /* synthetic */ Location f$3;
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ String f$2;
+            public final /* synthetic */ Location f$3;
 
             {
                 this.f$1 = r2;

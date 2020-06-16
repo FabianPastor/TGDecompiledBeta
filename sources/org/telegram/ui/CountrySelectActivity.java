@@ -385,7 +385,7 @@ public class CountrySelectActivity extends BaseFragment {
         /* access modifiers changed from: private */
         public void processSearch(String str) {
             Utilities.searchQueue.postRunnable(new Runnable(str) {
-                private final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
@@ -418,7 +418,7 @@ public class CountrySelectActivity extends BaseFragment {
 
         private void updateSearchResults(ArrayList<Country> arrayList) {
             AndroidUtilities.runOnUIThread(new Runnable(arrayList) {
-                private final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ ArrayList f$1;
 
                 {
                     this.f$1 = r2;

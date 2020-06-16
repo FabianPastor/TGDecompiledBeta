@@ -428,7 +428,7 @@ public class FilterTabsView extends FrameLayout {
         this.selectorDrawable.setCornerRadii(new float[]{dpf2, dpf2, dpf2, dpf2, 0.0f, 0.0f, 0.0f, 0.0f});
         this.selectorDrawable.setColor(Theme.getColor(this.tabLineColorKey));
         setHorizontalScrollBarEnabled(false);
-        AnonymousClass3 r2 = new RecyclerListView(context) {
+        AnonymousClass3 r3 = new RecyclerListView(context) {
             public void setAlpha(float f) {
                 super.setAlpha(f);
                 FilterTabsView.this.invalidate();
@@ -451,12 +451,12 @@ public class FilterTabsView extends FrameLayout {
                 return super.canHighlightChildAt(view, f, f2);
             }
         };
-        this.listView = r2;
-        ((DefaultItemAnimator) r2.getItemAnimator()).setDelayAnimations(false);
+        this.listView = r3;
+        ((DefaultItemAnimator) r3.getItemAnimator()).setDelayAnimations(false);
         this.listView.setSelectorType(7);
         this.listView.setSelectorDrawableColor(Theme.getColor(this.selectorColorKey));
         RecyclerListView recyclerListView = this.listView;
-        AnonymousClass4 r3 = new LinearLayoutManager(context, 0, false) {
+        AnonymousClass4 r32 = new LinearLayoutManager(context, 0, false) {
             public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int i) {
                 AnonymousClass1 r2 = new LinearSmoothScroller(recyclerView.getContext()) {
                     /* access modifiers changed from: protected */
@@ -485,8 +485,8 @@ public class FilterTabsView extends FrameLayout {
                 return super.scrollHorizontallyBy(i, recycler, state);
             }
         };
-        this.layoutManager = r3;
-        recyclerListView.setLayoutManager(r3);
+        this.layoutManager = r32;
+        recyclerListView.setLayoutManager(r32);
         new ItemTouchHelper(new TouchHelperCallback()).attachToRecyclerView(this.listView);
         this.listView.setPadding(AndroidUtilities.dp(7.0f), 0, AndroidUtilities.dp(7.0f), 0);
         this.listView.setClipToPadding(false);
@@ -986,20 +986,14 @@ public class FilterTabsView extends FrameLayout {
         if (!this.tabs.isEmpty()) {
             int size = (View.MeasureSpec.getSize(i) - AndroidUtilities.dp(7.0f)) - AndroidUtilities.dp(7.0f);
             Tab tab = this.tabs.get(0);
-            int i3 = NUM;
-            String str = "FilterAllChats";
-            tab.setTitle(LocaleController.getString(str, NUM));
+            tab.setTitle(LocaleController.getString("FilterAllChats", NUM));
             int width = tab.getWidth(false);
-            if (this.allTabsWidth > size) {
-                i3 = NUM;
-                str = "FilterAllChatsShort";
-            }
-            tab.setTitle(LocaleController.getString(str, i3));
+            tab.setTitle(this.allTabsWidth > size ? LocaleController.getString("FilterAllChatsShort", NUM) : LocaleController.getString("FilterAllChats", NUM));
             int width2 = (this.allTabsWidth - width) + tab.getWidth(false);
-            int i4 = this.additionalTabWidth;
+            int i3 = this.additionalTabWidth;
             int size2 = width2 < size ? (size - width2) / this.tabs.size() : 0;
             this.additionalTabWidth = size2;
-            if (i4 != size2) {
+            if (i3 != size2) {
                 this.ignoreLayout = true;
                 this.adapter.notifyDataSetChanged();
                 this.ignoreLayout = false;

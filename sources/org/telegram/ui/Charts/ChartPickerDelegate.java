@@ -322,10 +322,10 @@ public class ChartPickerDelegate {
                 this.moveToAnimator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                 this.view.onPickerJumpTo(f2, f, true);
                 this.moveToAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(f8, f2, f9, f) {
-                    private final /* synthetic */ float f$1;
-                    private final /* synthetic */ float f$2;
-                    private final /* synthetic */ float f$3;
-                    private final /* synthetic */ float f$4;
+                    public final /* synthetic */ float f$1;
+                    public final /* synthetic */ float f$2;
+                    public final /* synthetic */ float f$3;
+                    public final /* synthetic */ float f$4;
 
                     {
                         this.f$1 = r2;

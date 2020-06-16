@@ -22,8 +22,7 @@ import org.telegram.ui.Components.FilterShaders;
 public class FilterGLThread extends DispatchQueue {
     /* access modifiers changed from: private */
     public boolean blurred;
-    /* access modifiers changed from: private */
-    public Bitmap currentBitmap;
+    private Bitmap currentBitmap;
     private Runnable drawRunnable = new Runnable() {
         public void run() {
             if (FilterGLThread.this.initied) {
@@ -31,29 +30,10 @@ public class FilterGLThread extends DispatchQueue {
                     if (FilterGLThread.this.updateSurface) {
                         FilterGLThread.this.videoSurfaceTexture.updateTexImage();
                         FilterGLThread.this.videoSurfaceTexture.getTransformMatrix(FilterGLThread.this.videoTextureMatrix);
-                        if (FilterGLThread.this.videoWidth == 0 || FilterGLThread.this.videoHeight == 0) {
-                            FilterGLThread filterGLThread = FilterGLThread.this;
-                            int unused = filterGLThread.videoWidth = filterGLThread.surfaceWidth;
-                            FilterGLThread filterGLThread2 = FilterGLThread.this;
-                            int unused2 = filterGLThread2.videoHeight = filterGLThread2.surfaceHeight;
-                            if (FilterGLThread.this.videoWidth > 1280 || FilterGLThread.this.videoHeight > 1280) {
-                                FilterGLThread filterGLThread3 = FilterGLThread.this;
-                                int unused3 = filterGLThread3.videoWidth = filterGLThread3.videoWidth / 2;
-                                FilterGLThread filterGLThread4 = FilterGLThread.this;
-                                int unused4 = filterGLThread4.videoHeight = filterGLThread4.videoHeight / 2;
-                            }
-                        }
-                        if (!FilterGLThread.this.renderDataSet && FilterGLThread.this.videoWidth > 0 && FilterGLThread.this.videoHeight > 0) {
-                            FilterGLThread.this.filterShaders.setRenderData(FilterGLThread.this.currentBitmap, FilterGLThread.this.orientation, FilterGLThread.this.videoTexture[0], FilterGLThread.this.videoWidth, FilterGLThread.this.videoHeight);
-                            boolean unused5 = FilterGLThread.this.renderDataSet = true;
-                            FilterGLThread filterGLThread5 = FilterGLThread.this;
-                            int unused6 = filterGLThread5.renderBufferWidth = filterGLThread5.filterShaders.getRenderBufferWidth();
-                            FilterGLThread filterGLThread6 = FilterGLThread.this;
-                            int unused7 = filterGLThread6.renderBufferHeight = filterGLThread6.filterShaders.getRenderBufferHeight();
-                        }
-                        boolean unused8 = FilterGLThread.this.updateSurface = false;
+                        FilterGLThread.this.setRenderData();
+                        boolean unused = FilterGLThread.this.updateSurface = false;
                         FilterGLThread.this.filterShaders.onVideoFrameUpdate(FilterGLThread.this.videoTextureMatrix);
-                        boolean unused9 = FilterGLThread.this.videoFrameAvailable = true;
+                        boolean unused2 = FilterGLThread.this.videoFrameAvailable = true;
                     }
                     if (FilterGLThread.this.renderDataSet) {
                         if (FilterGLThread.this.videoDelegate == null || FilterGLThread.this.videoFrameAvailable) {
@@ -63,8 +43,8 @@ public class FilterGLThread extends DispatchQueue {
                                 FilterGLThread.this.filterShaders.drawSharpenPass();
                             }
                             FilterGLThread.this.filterShaders.drawCustomParamsPass();
-                            FilterGLThread filterGLThread7 = FilterGLThread.this;
-                            boolean unused10 = filterGLThread7.blurred = filterGLThread7.filterShaders.drawBlurPass();
+                            FilterGLThread filterGLThread = FilterGLThread.this;
+                            boolean unused3 = filterGLThread.blurred = filterGLThread.filterShaders.drawBlurPass();
                         }
                         GLES20.glViewport(0, 0, FilterGLThread.this.surfaceWidth, FilterGLThread.this.surfaceHeight);
                         GLES20.glBindFramebuffer(36160, 0);
@@ -98,8 +78,7 @@ public class FilterGLThread extends DispatchQueue {
     /* access modifiers changed from: private */
     public boolean initied;
     private long lastRenderCallTime;
-    /* access modifiers changed from: private */
-    public int orientation;
+    private int orientation;
     /* access modifiers changed from: private */
     public int renderBufferHeight;
     /* access modifiers changed from: private */
@@ -125,16 +104,13 @@ public class FilterGLThread extends DispatchQueue {
     public FilterGLThreadVideoDelegate videoDelegate;
     /* access modifiers changed from: private */
     public boolean videoFrameAvailable;
-    /* access modifiers changed from: private */
-    public int videoHeight;
+    private int videoHeight;
     /* access modifiers changed from: private */
     public SurfaceTexture videoSurfaceTexture;
-    /* access modifiers changed from: private */
-    public int[] videoTexture = new int[1];
+    private int[] videoTexture = new int[1];
     /* access modifiers changed from: private */
     public float[] videoTextureMatrix = new float[16];
-    /* access modifiers changed from: private */
-    public int videoWidth;
+    private int videoWidth;
 
     public interface FilterGLThreadVideoDelegate {
         void onVideoSurfaceCreated(SurfaceTexture surfaceTexture);
@@ -163,7 +139,7 @@ public class FilterGLThread extends DispatchQueue {
 
     public void setFilterGLThreadDelegate(FilterShaders.FilterShadersDelegate filterShadersDelegate) {
         postRunnable(new Runnable(filterShadersDelegate) {
-            private final /* synthetic */ FilterShaders.FilterShadersDelegate f$1;
+            public final /* synthetic */ FilterShaders.FilterShadersDelegate f$1;
 
             {
                 this.f$1 = r2;
@@ -320,8 +296,8 @@ public class FilterGLThread extends DispatchQueue {
 
     public void setVideoSize(int i, int i2) {
         postRunnable(new Runnable(i, i2) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
 
             {
                 this.f$1 = r2;
@@ -343,6 +319,8 @@ public class FilterGLThread extends DispatchQueue {
                 this.videoHeight /= 2;
             }
             this.renderDataSet = false;
+            setRenderData();
+            this.drawRunnable.run();
         }
     }
 
@@ -372,6 +350,18 @@ public class FilterGLThread extends DispatchQueue {
         }
     }
 
+    /* access modifiers changed from: private */
+    public void setRenderData() {
+        int i;
+        int i2;
+        if (!this.renderDataSet && (i = this.videoWidth) > 0 && (i2 = this.videoHeight) > 0) {
+            this.filterShaders.setRenderData(this.currentBitmap, this.orientation, this.videoTexture[0], i, i2);
+            this.renderDataSet = true;
+            this.renderBufferWidth = this.filterShaders.getRenderBufferWidth();
+            this.renderBufferHeight = this.filterShaders.getRenderBufferHeight();
+        }
+    }
+
     private Bitmap getRenderBufferBitmap() {
         ByteBuffer allocateDirect = ByteBuffer.allocateDirect(this.renderBufferWidth * this.renderBufferHeight * 4);
         GLES20.glReadPixels(0, 0, this.renderBufferWidth, this.renderBufferHeight, 6408, 5121, allocateDirect);
@@ -388,8 +378,8 @@ public class FilterGLThread extends DispatchQueue {
         Bitmap[] bitmapArr = new Bitmap[1];
         try {
             postRunnable(new Runnable(bitmapArr, countDownLatch) {
-                private final /* synthetic */ Bitmap[] f$1;
-                private final /* synthetic */ CountDownLatch f$2;
+                public final /* synthetic */ Bitmap[] f$1;
+                public final /* synthetic */ CountDownLatch f$2;
 
                 {
                     this.f$1 = r2;
@@ -435,8 +425,8 @@ public class FilterGLThread extends DispatchQueue {
 
     public void setSurfaceTextureSize(int i, int i2) {
         postRunnable(new Runnable(i, i2) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
 
             {
                 this.f$1 = r2;
@@ -465,9 +455,9 @@ public class FilterGLThread extends DispatchQueue {
 
     public void requestRender(boolean z, boolean z2, boolean z3) {
         postRunnable(new Runnable(z, z3, z2) {
-            private final /* synthetic */ boolean f$1;
-            private final /* synthetic */ boolean f$2;
-            private final /* synthetic */ boolean f$3;
+            public final /* synthetic */ boolean f$1;
+            public final /* synthetic */ boolean f$2;
+            public final /* synthetic */ boolean f$3;
 
             {
                 this.f$1 = r2;

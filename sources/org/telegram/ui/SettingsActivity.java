@@ -1047,9 +1047,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         this.searchListView.setEmptyView(this.emptyView);
         this.avatarContainer.setClickable(false);
         ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(ofFloat, i, z) {
-            private final /* synthetic */ ValueAnimator f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ boolean f$3;
+            public final /* synthetic */ ValueAnimator f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ boolean f$3;
 
             {
                 this.f$1 = r2;
@@ -1169,9 +1169,9 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
 
     public void didUploadPhoto(TLRPC$InputFile tLRPC$InputFile, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$InputFile, tLRPC$PhotoSize2, tLRPC$PhotoSize) {
-            private final /* synthetic */ TLRPC$InputFile f$1;
-            private final /* synthetic */ TLRPC$PhotoSize f$2;
-            private final /* synthetic */ TLRPC$PhotoSize f$3;
+            public final /* synthetic */ TLRPC$InputFile f$1;
+            public final /* synthetic */ TLRPC$PhotoSize f$2;
+            public final /* synthetic */ TLRPC$PhotoSize f$3;
 
             {
                 this.f$1 = r2;
@@ -1476,7 +1476,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         animatorSet.setInterpolator(CubicBezierInterpolator.EASE_OUT);
         animatorSet.getClass();
         AndroidUtilities.runOnUIThread(new Runnable(animatorSet) {
-            private final /* synthetic */ AnimatorSet f$0;
+            public final /* synthetic */ AnimatorSet f$0;
 
             {
                 this.f$0 = r1;
@@ -1660,7 +1660,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             alertDialog.setCanCacnel(false);
             alertDialog.show();
             Utilities.globalQueue.postRunnable(new Runnable(alertDialog) {
-                private final /* synthetic */ AlertDialog f$1;
+                public final /* synthetic */ AlertDialog f$1;
 
                 {
                     this.f$1 = r2;
@@ -2464,7 +2464,6 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 public SearchAdapter(SettingsActivity settingsActivity, Context context) {
                     this.this$0 = settingsActivity;
                     String str = "StorageUsage";
-                    String str2 = "DataSettings";
                     this.searchArray = new SearchResult[]{new SearchResult(this, 500, LocaleController.getString("EditName", NUM), 0, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$0$SettingsActivity$SearchAdapter();
@@ -2625,75 +2624,75 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$39$SettingsActivity$SearchAdapter();
                         }
-                    }), new SearchResult(204, LocaleController.getString("ClearMediaCache", NUM), "cacheRow", LocaleController.getString(str2, NUM), LocaleController.getString(str, NUM), NUM, new Runnable() {
+                    }), new SearchResult(204, LocaleController.getString("ClearMediaCache", NUM), "cacheRow", LocaleController.getString("DataSettings", NUM), LocaleController.getString(str, NUM), NUM, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$40$SettingsActivity$SearchAdapter();
                         }
-                    }), new SearchResult(205, LocaleController.getString("LocalDatabase", NUM), "databaseRow", LocaleController.getString(str2, NUM), LocaleController.getString(str, NUM), NUM, new Runnable() {
+                    }), new SearchResult(205, LocaleController.getString("LocalDatabase", NUM), "databaseRow", LocaleController.getString("DataSettings", NUM), LocaleController.getString(str, NUM), NUM, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$41$SettingsActivity$SearchAdapter();
                         }
-                    }), new SearchResult(this, 206, LocaleController.getString("NetworkUsage", NUM), LocaleController.getString(str2, NUM), NUM, new Runnable() {
+                    }), new SearchResult(this, 206, LocaleController.getString("NetworkUsage", NUM), LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$42$SettingsActivity$SearchAdapter();
                         }
-                    }), new SearchResult(this, 207, LocaleController.getString("AutomaticMediaDownload", NUM), "mediaDownloadSectionRow", LocaleController.getString(str2, NUM), NUM, new Runnable() {
+                    }), new SearchResult(this, 207, LocaleController.getString("AutomaticMediaDownload", NUM), "mediaDownloadSectionRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$43$SettingsActivity$SearchAdapter();
                         }
-                    }), new SearchResult(this, 208, LocaleController.getString("WhenUsingMobileData", NUM), LocaleController.getString(str2, NUM), NUM, new Runnable() {
+                    }), new SearchResult(this, 208, LocaleController.getString("WhenUsingMobileData", NUM), LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$44$SettingsActivity$SearchAdapter();
                         }
-                    }), new SearchResult(this, 209, LocaleController.getString("WhenConnectedOnWiFi", NUM), LocaleController.getString(str2, NUM), NUM, new Runnable() {
+                    }), new SearchResult(this, 209, LocaleController.getString("WhenConnectedOnWiFi", NUM), LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$45$SettingsActivity$SearchAdapter();
                         }
-                    }), new SearchResult(this, 210, LocaleController.getString("WhenRoaming", NUM), LocaleController.getString(str2, NUM), NUM, new Runnable() {
+                    }), new SearchResult(this, 210, LocaleController.getString("WhenRoaming", NUM), LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$46$SettingsActivity$SearchAdapter();
                         }
-                    }), new SearchResult(this, 211, LocaleController.getString("ResetAutomaticMediaDownload", NUM), "resetDownloadRow", LocaleController.getString(str2, NUM), NUM, new Runnable() {
+                    }), new SearchResult(this, 211, LocaleController.getString("ResetAutomaticMediaDownload", NUM), "resetDownloadRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$47$SettingsActivity$SearchAdapter();
                         }
-                    }), new SearchResult(this, 212, LocaleController.getString("AutoplayMedia", NUM), "autoplayHeaderRow", LocaleController.getString(str2, NUM), NUM, new Runnable() {
+                    }), new SearchResult(this, 212, LocaleController.getString("AutoplayMedia", NUM), "autoplayHeaderRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$48$SettingsActivity$SearchAdapter();
                         }
-                    }), new SearchResult(this, 213, LocaleController.getString("AutoplayGIF", NUM), "autoplayGifsRow", LocaleController.getString(str2, NUM), NUM, new Runnable() {
+                    }), new SearchResult(this, 213, LocaleController.getString("AutoplayGIF", NUM), "autoplayGifsRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$49$SettingsActivity$SearchAdapter();
                         }
-                    }), new SearchResult(this, 214, LocaleController.getString("AutoplayVideo", NUM), "autoplayVideoRow", LocaleController.getString(str2, NUM), NUM, new Runnable() {
+                    }), new SearchResult(this, 214, LocaleController.getString("AutoplayVideo", NUM), "autoplayVideoRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$50$SettingsActivity$SearchAdapter();
                         }
-                    }), new SearchResult(this, 215, LocaleController.getString("Streaming", NUM), "streamSectionRow", LocaleController.getString(str2, NUM), NUM, new Runnable() {
+                    }), new SearchResult(this, 215, LocaleController.getString("Streaming", NUM), "streamSectionRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$51$SettingsActivity$SearchAdapter();
                         }
-                    }), new SearchResult(this, 216, LocaleController.getString("EnableStreaming", NUM), "enableStreamRow", LocaleController.getString(str2, NUM), NUM, new Runnable() {
+                    }), new SearchResult(this, 216, LocaleController.getString("EnableStreaming", NUM), "enableStreamRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$52$SettingsActivity$SearchAdapter();
                         }
-                    }), new SearchResult(this, 217, LocaleController.getString("Calls", NUM), "callsSectionRow", LocaleController.getString(str2, NUM), NUM, new Runnable() {
+                    }), new SearchResult(this, 217, LocaleController.getString("Calls", NUM), "callsSectionRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$53$SettingsActivity$SearchAdapter();
                         }
-                    }), new SearchResult(this, 218, LocaleController.getString("VoipUseLessData", NUM), "useLessDataForCallsRow", LocaleController.getString(str2, NUM), NUM, new Runnable() {
+                    }), new SearchResult(this, 218, LocaleController.getString("VoipUseLessData", NUM), "useLessDataForCallsRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$54$SettingsActivity$SearchAdapter();
                         }
-                    }), new SearchResult(this, 219, LocaleController.getString("VoipQuickReplies", NUM), "quickRepliesRow", LocaleController.getString(str2, NUM), NUM, new Runnable() {
+                    }), new SearchResult(this, 219, LocaleController.getString("VoipQuickReplies", NUM), "quickRepliesRow", LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$55$SettingsActivity$SearchAdapter();
                         }
-                    }), new SearchResult(this, 220, LocaleController.getString("ProxySettings", NUM), LocaleController.getString(str2, NUM), NUM, new Runnable() {
+                    }), new SearchResult(this, 220, LocaleController.getString("ProxySettings", NUM), LocaleController.getString("DataSettings", NUM), NUM, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$56$SettingsActivity$SearchAdapter();
                         }
-                    }), new SearchResult(221, LocaleController.getString("UseProxyForCalls", NUM), "callsRow", LocaleController.getString(str2, NUM), LocaleController.getString("ProxySettings", NUM), NUM, new Runnable() {
+                    }), new SearchResult(221, LocaleController.getString("UseProxyForCalls", NUM), "callsRow", LocaleController.getString("DataSettings", NUM), LocaleController.getString("ProxySettings", NUM), NUM, new Runnable() {
                         public final void run() {
                             SettingsActivity.SearchAdapter.this.lambda$new$57$SettingsActivity$SearchAdapter();
                         }
@@ -3074,7 +3073,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                     }
                     DispatchQueue dispatchQueue = Utilities.searchQueue;
                     $$Lambda$SettingsActivity$SearchAdapter$gFQTg_CI3E60WOkp9EeNPvq3p0 r1 = new Runnable(str) {
-                        private final /* synthetic */ String f$1;
+                        public final /* synthetic */ String f$1;
 
                         {
                             this.f$1 = r2;
@@ -3214,10 +3213,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                         }
                     }
                     AndroidUtilities.runOnUIThread(new Runnable(str, arrayList, arrayList2, arrayList3) {
-                        private final /* synthetic */ String f$1;
-                        private final /* synthetic */ ArrayList f$2;
-                        private final /* synthetic */ ArrayList f$3;
-                        private final /* synthetic */ ArrayList f$4;
+                        public final /* synthetic */ String f$1;
+                        public final /* synthetic */ ArrayList f$2;
+                        public final /* synthetic */ ArrayList f$3;
+                        public final /* synthetic */ ArrayList f$4;
 
                         {
                             this.f$1 = r2;

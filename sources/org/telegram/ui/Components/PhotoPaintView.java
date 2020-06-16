@@ -68,7 +68,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     private float baseScale;
     private Bitmap bitmapToEdit;
     private Swatch brushSwatch;
-    private Brush[] brushes = {new Brush.Radial(), new Brush.Elliptical(), new Brush.Neon()};
+    private Brush[] brushes = {new Brush.Radial(), new Brush.Elliptical(), new Brush.Neon(), new Brush.Arrow()};
     private TextView cancelTextView;
     /* access modifiers changed from: private */
     public ColorPicker colorPicker;
@@ -109,90 +109,93 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     public void onOpenCloseStickersAlert(boolean z) {
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v18, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v21, resolved type: org.telegram.ui.Components.Paint.Views.StickerView} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v22, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v23, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v33, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v36, resolved type: org.telegram.ui.Components.Paint.Views.StickerView} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v37, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v38, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public PhotoPaintView(android.content.Context r20, android.graphics.Bitmap r21, android.graphics.Bitmap r22, int r23, java.util.ArrayList<org.telegram.messenger.VideoEditedInfo.MediaEntity> r24, java.lang.Runnable r25) {
+    public PhotoPaintView(android.content.Context r24, android.graphics.Bitmap r25, android.graphics.Bitmap r26, int r27, java.util.ArrayList<org.telegram.messenger.VideoEditedInfo.MediaEntity> r28, java.lang.Runnable r29) {
         /*
-            r19 = this;
-            r0 = r19
-            r1 = r20
-            r2 = r21
-            r3 = r24
-            r19.<init>(r20)
-            r4 = 3
-            org.telegram.ui.Components.Paint.Brush[] r4 = new org.telegram.ui.Components.Paint.Brush[r4]
-            org.telegram.ui.Components.Paint.Brush$Radial r5 = new org.telegram.ui.Components.Paint.Brush$Radial
-            r5.<init>()
-            r6 = 0
-            r4[r6] = r5
-            org.telegram.ui.Components.Paint.Brush$Elliptical r5 = new org.telegram.ui.Components.Paint.Brush$Elliptical
-            r5.<init>()
-            r7 = 1
-            r4[r7] = r5
-            org.telegram.ui.Components.Paint.Brush$Neon r5 = new org.telegram.ui.Components.Paint.Brush$Neon
-            r5.<init>()
-            r8 = 2
-            r4[r8] = r5
-            r0.brushes = r4
-            r0.selectedTextType = r8
-            org.telegram.messenger.DispatchQueue r4 = new org.telegram.messenger.DispatchQueue
-            java.lang.String r5 = "Paint"
-            r4.<init>(r5)
-            r0.queue = r4
-            r4 = r23
-            r0.originalBitmapRotation = r4
+            r23 = this;
+            r0 = r23
+            r1 = r24
+            r2 = r25
+            r3 = r28
+            r23.<init>(r24)
+            r4 = 4
+            org.telegram.ui.Components.Paint.Brush[] r5 = new org.telegram.ui.Components.Paint.Brush[r4]
+            org.telegram.ui.Components.Paint.Brush$Radial r6 = new org.telegram.ui.Components.Paint.Brush$Radial
+            r6.<init>()
+            r7 = 0
+            r5[r7] = r6
+            org.telegram.ui.Components.Paint.Brush$Elliptical r6 = new org.telegram.ui.Components.Paint.Brush$Elliptical
+            r6.<init>()
+            r8 = 1
+            r5[r8] = r6
+            org.telegram.ui.Components.Paint.Brush$Neon r6 = new org.telegram.ui.Components.Paint.Brush$Neon
+            r6.<init>()
+            r9 = 2
+            r5[r9] = r6
+            org.telegram.ui.Components.Paint.Brush$Arrow r6 = new org.telegram.ui.Components.Paint.Brush$Arrow
+            r6.<init>()
+            r10 = 3
+            r5[r10] = r6
+            r0.brushes = r5
+            r0.selectedTextType = r9
+            org.telegram.messenger.DispatchQueue r5 = new org.telegram.messenger.DispatchQueue
+            java.lang.String r6 = "Paint"
+            r5.<init>(r6)
+            r0.queue = r5
+            r5 = r27
+            r0.originalBitmapRotation = r5
             r0.bitmapToEdit = r2
-            r4 = r22
-            r0.facesBitmap = r4
-            org.telegram.ui.Components.Paint.UndoStore r4 = new org.telegram.ui.Components.Paint.UndoStore
-            r4.<init>()
-            r0.undoStore = r4
-            org.telegram.ui.Components.-$$Lambda$PhotoPaintView$R6Re0Kk5HfUX12qMoexuM_2zbtQ r5 = new org.telegram.ui.Components.-$$Lambda$PhotoPaintView$R6Re0Kk5HfUX12qMoexuM_2zbtQ
+            r5 = r26
+            r0.facesBitmap = r5
+            org.telegram.ui.Components.Paint.UndoStore r5 = new org.telegram.ui.Components.Paint.UndoStore
             r5.<init>()
-            r4.setDelegate(r5)
-            android.widget.FrameLayout r4 = new android.widget.FrameLayout
-            r4.<init>(r1)
-            r0.curtainView = r4
-            r5 = 570425344(0x22000000, float:1.7347235E-18)
-            r4.setBackgroundColor(r5)
-            android.widget.FrameLayout r4 = r0.curtainView
-            r5 = 4
-            r4.setVisibility(r5)
-            android.widget.FrameLayout r4 = r0.curtainView
-            r9 = -1
+            r0.undoStore = r5
+            org.telegram.ui.Components.-$$Lambda$PhotoPaintView$R6Re0Kk5HfUX12qMoexuM_2zbtQ r6 = new org.telegram.ui.Components.-$$Lambda$PhotoPaintView$R6Re0Kk5HfUX12qMoexuM_2zbtQ
+            r6.<init>()
+            r5.setDelegate(r6)
+            android.widget.FrameLayout r5 = new android.widget.FrameLayout
+            r5.<init>(r1)
+            r0.curtainView = r5
+            r6 = 570425344(0x22000000, float:1.7347235E-18)
+            r5.setBackgroundColor(r6)
+            android.widget.FrameLayout r5 = r0.curtainView
+            r5.setVisibility(r4)
+            android.widget.FrameLayout r5 = r0.curtainView
+            r6 = -1
             r10 = -1082130432(0xffffffffbvar_, float:-1.0)
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10)
-            r0.addView(r4, r10)
-            org.telegram.ui.Components.Paint.RenderView r4 = new org.telegram.ui.Components.Paint.RenderView
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r10)
+            r0.addView(r5, r10)
+            org.telegram.ui.Components.Paint.RenderView r5 = new org.telegram.ui.Components.Paint.RenderView
             org.telegram.ui.Components.Paint.Painting r10 = new org.telegram.ui.Components.Paint.Painting
-            org.telegram.ui.Components.Size r11 = r19.getPaintingSize()
+            org.telegram.ui.Components.Size r11 = r23.getPaintingSize()
             r10.<init>(r11)
-            r4.<init>(r1, r10, r2)
-            r0.renderView = r4
+            r5.<init>(r1, r10, r2)
+            r0.renderView = r5
             org.telegram.ui.Components.PhotoPaintView$1 r2 = new org.telegram.ui.Components.PhotoPaintView$1
-            r10 = r25
+            r10 = r29
             r2.<init>(r10)
-            r4.setDelegate(r2)
+            r5.setDelegate(r2)
             org.telegram.ui.Components.Paint.RenderView r2 = r0.renderView
-            org.telegram.ui.Components.Paint.UndoStore r4 = r0.undoStore
-            r2.setUndoStore(r4)
+            org.telegram.ui.Components.Paint.UndoStore r5 = r0.undoStore
+            r2.setUndoStore(r5)
             org.telegram.ui.Components.Paint.RenderView r2 = r0.renderView
-            org.telegram.messenger.DispatchQueue r4 = r0.queue
-            r2.setQueue(r4)
+            org.telegram.messenger.DispatchQueue r5 = r0.queue
+            r2.setQueue(r5)
             org.telegram.ui.Components.Paint.RenderView r2 = r0.renderView
-            r2.setVisibility(r5)
+            r2.setVisibility(r4)
             org.telegram.ui.Components.Paint.RenderView r2 = r0.renderView
-            org.telegram.ui.Components.Paint.Brush[] r4 = r0.brushes
-            r4 = r4[r6]
-            r2.setBrush(r4)
+            org.telegram.ui.Components.Paint.Brush[] r5 = r0.brushes
+            r5 = r5[r7]
+            r2.setBrush(r5)
             org.telegram.ui.Components.Paint.RenderView r2 = r0.renderView
-            r4 = 51
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r9, r4)
+            r5 = 51
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r6, r5)
             r0.addView(r2, r10)
             org.telegram.ui.Components.Paint.Views.EntitiesContainerView r2 = new org.telegram.ui.Components.Paint.Views.EntitiesContainerView
             org.telegram.ui.Components.PhotoPaintView$2 r10 = new org.telegram.ui.Components.PhotoPaintView$2
@@ -245,30 +248,30 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             android.widget.FrameLayout r2 = r0.toolsView
             r10 = 48
             r11 = 83
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11)
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r10, r11)
             r0.addView(r2, r10)
             android.widget.TextView r2 = new android.widget.TextView
             r2.<init>(r1)
             r0.cancelTextView = r2
             r10 = 1096810496(0x41600000, float:14.0)
-            r2.setTextSize(r7, r10)
+            r2.setTextSize(r8, r10)
             android.widget.TextView r2 = r0.cancelTextView
-            r2.setTextColor(r9)
+            r2.setTextColor(r6)
             android.widget.TextView r2 = r0.cancelTextView
             r11 = 17
             r2.setGravity(r11)
             android.widget.TextView r2 = r0.cancelTextView
             r12 = -12763843(0xffffffffff3d3d3d, float:-2.5154206E38)
-            android.graphics.drawable.Drawable r13 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r12, r6)
+            android.graphics.drawable.Drawable r13 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r12, r7)
             r2.setBackgroundDrawable(r13)
             android.widget.TextView r2 = r0.cancelTextView
             r13 = 1101004800(0x41a00000, float:20.0)
             int r14 = org.telegram.messenger.AndroidUtilities.dp(r13)
             int r15 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            r2.setPadding(r14, r6, r15, r6)
+            r2.setPadding(r14, r7, r15, r7)
             android.widget.TextView r2 = r0.cancelTextView
             java.lang.String r14 = "Cancel"
-            r15 = 2131624490(0x7f0e022a, float:1.8876161E38)
+            r15 = 2131624498(0x7f0e0232, float:1.8876177E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r14, r15)
             java.lang.String r14 = r14.toUpperCase()
             r2.setText(r14)
@@ -278,47 +281,47 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setTypeface(r15)
             android.widget.FrameLayout r2 = r0.toolsView
             android.widget.TextView r15 = r0.cancelTextView
-            r5 = -2
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r9, r4)
-            r2.addView(r15, r4)
+            r4 = -2
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r6, r5)
+            r2.addView(r15, r5)
             android.widget.TextView r2 = new android.widget.TextView
             r2.<init>(r1)
             r0.doneTextView = r2
-            r2.setTextSize(r7, r10)
+            r2.setTextSize(r8, r10)
             android.widget.TextView r2 = r0.doneTextView
-            java.lang.String r4 = "dialogFloatingButton"
-            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            r2.setTextColor(r4)
+            java.lang.String r5 = "dialogFloatingButton"
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            r2.setTextColor(r5)
             android.widget.TextView r2 = r0.doneTextView
             r2.setGravity(r11)
             android.widget.TextView r2 = r0.doneTextView
-            android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r12, r6)
-            r2.setBackgroundDrawable(r4)
+            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r12, r7)
+            r2.setBackgroundDrawable(r5)
             android.widget.TextView r2 = r0.doneTextView
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r13)
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r13)
-            r2.setPadding(r4, r6, r10, r6)
+            r2.setPadding(r5, r7, r10, r7)
             android.widget.TextView r2 = r0.doneTextView
-            java.lang.String r4 = "Done"
-            r10 = 2131624978(0x7f0e0412, float:1.887715E38)
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r10)
-            java.lang.String r4 = r4.toUpperCase()
-            r2.setText(r4)
+            java.lang.String r5 = "Done"
+            r10 = 2131624986(0x7f0e041a, float:1.8877167E38)
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r10)
+            java.lang.String r5 = r5.toUpperCase()
+            r2.setText(r5)
             android.widget.TextView r2 = r0.doneTextView
-            android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r14)
-            r2.setTypeface(r4)
+            android.graphics.Typeface r5 = org.telegram.messenger.AndroidUtilities.getTypeface(r14)
+            r2.setTypeface(r5)
             android.widget.FrameLayout r2 = r0.toolsView
-            android.widget.TextView r4 = r0.doneTextView
+            android.widget.TextView r5 = r0.doneTextView
             r10 = 53
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r9, r10)
-            r2.addView(r4, r5)
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r6, r10)
+            r2.addView(r5, r4)
             android.widget.ImageView r2 = new android.widget.ImageView
             r2.<init>(r1)
             r0.paintButton = r2
             android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r4)
             android.widget.ImageView r2 = r0.paintButton
-            r4 = 2131165798(0x7var_, float:1.7945823E38)
+            r4 = 2131165800(0x7var_, float:1.7945827E38)
             r2.setImageResource(r4)
             android.widget.ImageView r2 = r0.paintButton
             r4 = 1090519039(0x40ffffff, float:7.9999995)
@@ -326,14 +329,14 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setBackgroundDrawable(r5)
             android.widget.FrameLayout r2 = r0.toolsView
             android.widget.ImageView r5 = r0.paintButton
-            r12 = 54
-            r13 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r14 = 17
-            r15 = 0
-            r16 = 0
-            r17 = 1113587712(0x42600000, float:56.0)
-            r18 = 0
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
+            r16 = 54
+            r17 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r18 = 17
+            r19 = 0
+            r20 = 0
+            r21 = 1113587712(0x42600000, float:56.0)
+            r22 = 0
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
             r2.addView(r5, r10)
             android.widget.ImageView r2 = r0.paintButton
             org.telegram.ui.Components.-$$Lambda$PhotoPaintView$rvar_UpLc_844_0-ExvqyyhAN3g r5 = new org.telegram.ui.Components.-$$Lambda$PhotoPaintView$rvar_UpLc_844_0-ExvqyyhAN3g
@@ -343,14 +346,14 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.<init>(r1)
             android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r5)
-            r5 = 2131165802(0x7var_a, float:1.7945831E38)
+            r5 = 2131165804(0x7var_c, float:1.7945835E38)
             r2.setImageResource(r5)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
             r2.setBackgroundDrawable(r5)
             android.widget.FrameLayout r5 = r0.toolsView
             r10 = 54
-            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r9, r11)
-            r5.addView(r2, r9)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r6, r11)
+            r5.addView(r2, r6)
             org.telegram.ui.Components.-$$Lambda$PhotoPaintView$bh1PtB_nRqdfutcf4y5QOEZjU74 r5 = new org.telegram.ui.Components.-$$Lambda$PhotoPaintView$bh1PtB_nRqdfutcf4y5QOEZjU74
             r5.<init>()
             r2.setOnClickListener(r5)
@@ -358,80 +361,77 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.<init>(r1)
             android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r1)
-            r1 = 2131165800(0x7var_, float:1.7945827E38)
+            r1 = 2131165802(0x7var_a, float:1.7945831E38)
             r2.setImageResource(r1)
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
             r2.setBackgroundDrawable(r1)
             android.widget.FrameLayout r1 = r0.toolsView
-            r9 = 54
-            r10 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r12 = 1113587712(0x42600000, float:56.0)
-            r13 = 0
-            r14 = 0
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
+            r19 = 1113587712(0x42600000, float:56.0)
+            r21 = 0
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
             r1.addView(r2, r4)
             org.telegram.ui.Components.-$$Lambda$PhotoPaintView$SEafmfD5xvHbkIUST7pqiumb7sI r1 = new org.telegram.ui.Components.-$$Lambda$PhotoPaintView$SEafmfD5xvHbkIUST7pqiumb7sI
             r1.<init>()
             r2.setOnClickListener(r1)
             org.telegram.ui.Components.Paint.Views.ColorPicker r1 = r0.colorPicker
-            r1.setUndoEnabled(r6)
+            r1.setUndoEnabled(r7)
             org.telegram.ui.Components.Paint.Views.ColorPicker r1 = r0.colorPicker
             org.telegram.ui.Components.Paint.Swatch r1 = r1.getSwatch()
-            r0.setCurrentSwatch(r1, r6)
-            r19.updateSettingsButton()
-            if (r3 == 0) goto L_0x035b
-            boolean r1 = r24.isEmpty()
-            if (r1 != 0) goto L_0x035b
-            int r1 = r24.size()
+            r0.setCurrentSwatch(r1, r7)
+            r23.updateSettingsButton()
+            if (r3 == 0) goto L_0x035f
+            boolean r1 = r28.isEmpty()
+            if (r1 != 0) goto L_0x035f
+            int r1 = r28.size()
             r2 = 0
-        L_0x029b:
-            if (r2 >= r1) goto L_0x035b
+        L_0x029f:
+            if (r2 >= r1) goto L_0x035f
             java.lang.Object r4 = r3.get(r2)
             org.telegram.messenger.VideoEditedInfo$MediaEntity r4 = (org.telegram.messenger.VideoEditedInfo.MediaEntity) r4
             byte r5 = r4.type
-            if (r5 != 0) goto L_0x02c4
+            if (r5 != 0) goto L_0x02c8
             java.lang.Object r5 = r4.parentObject
-            org.telegram.tgnet.TLRPC$Document r9 = r4.document
-            org.telegram.ui.Components.Paint.Views.StickerView r5 = r0.createSticker(r5, r9, r6)
-            byte r9 = r4.subType
-            r9 = r9 & r8
-            if (r9 == 0) goto L_0x02b7
+            org.telegram.tgnet.TLRPC$Document r6 = r4.document
+            org.telegram.ui.Components.Paint.Views.StickerView r5 = r0.createSticker(r5, r6, r7)
+            byte r6 = r4.subType
+            r6 = r6 & r9
+            if (r6 == 0) goto L_0x02bb
             r5.mirror()
-        L_0x02b7:
-            android.view.ViewGroup$LayoutParams r9 = r5.getLayoutParams()
+        L_0x02bb:
+            android.view.ViewGroup$LayoutParams r6 = r5.getLayoutParams()
             int r10 = r4.viewWidth
-            r9.width = r10
+            r6.width = r10
             int r10 = r4.viewHeight
-            r9.height = r10
-            goto L_0x02ec
-        L_0x02c4:
-            if (r5 != r7) goto L_0x0357
-            org.telegram.ui.Components.Paint.Views.TextPaintView r5 = r0.createText(r6)
-            byte r9 = r4.subType
-            r10 = r9 & 1
-            if (r10 == 0) goto L_0x02d2
-            r9 = 0
-            goto L_0x02d9
-        L_0x02d2:
-            r9 = r9 & 4
-            if (r9 == 0) goto L_0x02d8
-            r9 = 2
-            goto L_0x02d9
-        L_0x02d8:
-            r9 = 1
-        L_0x02d9:
-            r5.setType(r9)
-            java.lang.String r9 = r4.text
-            r5.setText(r9)
-            org.telegram.ui.Components.Paint.Swatch r9 = r5.getSwatch()
+            r6.height = r10
+            goto L_0x02f0
+        L_0x02c8:
+            if (r5 != r8) goto L_0x035b
+            org.telegram.ui.Components.Paint.Views.TextPaintView r5 = r0.createText(r7)
+            byte r6 = r4.subType
+            r10 = r6 & 1
+            if (r10 == 0) goto L_0x02d6
+            r6 = 0
+            goto L_0x02dd
+        L_0x02d6:
+            r6 = r6 & 4
+            if (r6 == 0) goto L_0x02dc
+            r6 = 2
+            goto L_0x02dd
+        L_0x02dc:
+            r6 = 1
+        L_0x02dd:
+            r5.setType(r6)
+            java.lang.String r6 = r4.text
+            r5.setText(r6)
+            org.telegram.ui.Components.Paint.Swatch r6 = r5.getSwatch()
             int r10 = r4.color
-            r9.color = r10
-            r5.setSwatch(r9)
-        L_0x02ec:
-            float r9 = r4.x
+            r6.color = r10
+            r5.setSwatch(r6)
+        L_0x02f0:
+            float r6 = r4.x
             org.telegram.ui.Components.Size r10 = r0.paintingSize
             float r10 = r10.width
-            float r9 = r9 * r10
+            float r6 = r6 * r10
             int r10 = r4.viewWidth
             float r10 = (float) r10
             float r11 = r4.scale
@@ -440,51 +440,51 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             float r10 = r10 * r11
             r11 = 1073741824(0x40000000, float:2.0)
             float r10 = r10 / r11
-            float r9 = r9 - r10
-            r5.setX(r9)
-            float r9 = r4.y
+            float r6 = r6 - r10
+            r5.setX(r6)
+            float r6 = r4.y
             org.telegram.ui.Components.Size r10 = r0.paintingSize
             float r10 = r10.height
-            float r9 = r9 * r10
+            float r6 = r6 * r10
             int r10 = r4.viewHeight
             float r10 = (float) r10
             float r13 = r4.scale
             float r12 = r12 - r13
             float r10 = r10 * r12
             float r10 = r10 / r11
-            float r9 = r9 - r10
-            r5.setY(r9)
-            org.telegram.ui.Components.Point r9 = new org.telegram.ui.Components.Point
+            float r6 = r6 - r10
+            r5.setY(r6)
+            org.telegram.ui.Components.Point r6 = new org.telegram.ui.Components.Point
             float r10 = r5.getX()
             int r11 = r4.viewWidth
-            int r11 = r11 / r8
+            int r11 = r11 / r9
             float r11 = (float) r11
             float r10 = r10 + r11
             float r11 = r5.getY()
             int r12 = r4.viewHeight
-            int r12 = r12 / r8
+            int r12 = r12 / r9
             float r12 = (float) r12
             float r11 = r11 + r12
-            r9.<init>(r10, r11)
-            r5.setPosition(r9)
-            float r9 = r4.scale
-            r5.setScaleX(r9)
-            float r9 = r4.scale
-            r5.setScaleY(r9)
+            r6.<init>(r10, r11)
+            r5.setPosition(r6)
+            float r6 = r4.scale
+            r5.setScaleX(r6)
+            float r6 = r4.scale
+            r5.setScaleY(r6)
             float r4 = r4.rotation
             float r4 = -r4
-            double r9 = (double) r4
-            r11 = 4614256656552045848(0x400921fb54442d18, double:3.NUM)
-            java.lang.Double.isNaN(r9)
-            double r9 = r9 / r11
-            r11 = 4640537203540230144(0xNUM, double:180.0)
-            double r9 = r9 * r11
-            float r4 = (float) r9
+            double r10 = (double) r4
+            r12 = 4614256656552045848(0x400921fb54442d18, double:3.NUM)
+            java.lang.Double.isNaN(r10)
+            double r10 = r10 / r12
+            r12 = 4640537203540230144(0xNUM, double:180.0)
+            double r10 = r10 * r12
+            float r4 = (float) r10
             r5.setRotation(r4)
-        L_0x0357:
-            int r2 = r2 + 1
-            goto L_0x029b
         L_0x035b:
+            int r2 = r2 + 1
+            goto L_0x029f
+        L_0x035f:
             org.telegram.ui.Components.Paint.Views.EntitiesContainerView r1 = r0.entitiesView
             r2 = 4
             r1.setVisibility(r2)
@@ -755,7 +755,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             builder.setMessage(LocaleController.getString("DiscardChanges", NUM));
             builder.setTitle(LocaleController.getString("AppName", NUM));
             builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(runnable) {
-                private final /* synthetic */ Runnable f$0;
+                public final /* synthetic */ Runnable f$0;
 
                 {
                     this.f$0 = r1;
@@ -1111,7 +1111,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
 
     private void registerRemovalUndo(EntityView entityView) {
         this.undoStore.registerUndo(entityView.getUUID(), new Runnable(entityView) {
-            private final /* synthetic */ EntityView f$1;
+            public final /* synthetic */ EntityView f$1;
 
             {
                 this.f$1 = r2;
@@ -1245,7 +1245,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
 
     private void showMenuForEntity(EntityView entityView) {
         showPopup(new Runnable(entityView) {
-            private final /* synthetic */ EntityView f$1;
+            public final /* synthetic */ EntityView f$1;
 
             {
                 this.f$1 = r2;
@@ -1269,7 +1269,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         textView.setTag(0);
         textView.setText(LocaleController.getString("PaintDelete", NUM));
         textView.setOnClickListener(new View.OnClickListener(entityView) {
-            private final /* synthetic */ EntityView f$1;
+            public final /* synthetic */ EntityView f$1;
 
             {
                 this.f$1 = r2;
@@ -1341,11 +1341,17 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         }
     }
 
-    private FrameLayout buttonForBrush(int i, int i2, boolean z, boolean z2) {
-        FrameLayout frameLayout = new FrameLayout(getContext());
-        frameLayout.setBackgroundDrawable(Theme.getSelectorDrawable(false));
-        frameLayout.setOnClickListener(new View.OnClickListener(i) {
-            private final /* synthetic */ int f$1;
+    private LinearLayout buttonForBrush(int i, int i2, String str, boolean z) {
+        AnonymousClass7 r0 = new LinearLayout(this, getContext()) {
+            public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                return true;
+            }
+        };
+        int i3 = 0;
+        r0.setOrientation(0);
+        r0.setBackgroundDrawable(Theme.getSelectorDrawable(false));
+        r0.setOnClickListener(new View.OnClickListener(i) {
+            public final /* synthetic */ int f$1;
 
             {
                 this.f$1 = r2;
@@ -1356,19 +1362,26 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             }
         });
         ImageView imageView = new ImageView(getContext());
+        imageView.setScaleType(ImageView.ScaleType.CENTER);
         imageView.setImageResource(i2);
-        if (z) {
-            imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("actionBarDefaultSubmenuItem"), PorterDuff.Mode.SRC_IN));
+        imageView.setColorFilter(Theme.getColor("actionBarDefaultSubmenuItem"));
+        r0.addView(imageView, LayoutHelper.createLinear(-2, -2, 19, 16, 0, 16, 0));
+        TextView textView = new TextView(getContext());
+        textView.setTextColor(Theme.getColor("actionBarDefaultSubmenuItem"));
+        textView.setTextSize(1, 16.0f);
+        textView.setText(str);
+        textView.setMinWidth(AndroidUtilities.dp(70.0f));
+        r0.addView(textView, LayoutHelper.createLinear(-2, -2, 19, 0, 0, 16, 0));
+        ImageView imageView2 = new ImageView(getContext());
+        imageView2.setImageResource(NUM);
+        imageView2.setScaleType(ImageView.ScaleType.CENTER);
+        imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("radioBackgroundChecked"), PorterDuff.Mode.MULTIPLY));
+        if (!z) {
+            i3 = 4;
         }
-        frameLayout.addView(imageView, LayoutHelper.createFrame(165, 44.0f, 19, 46.0f, 0.0f, 8.0f, 0.0f));
-        if (z2) {
-            ImageView imageView2 = new ImageView(getContext());
-            imageView2.setImageResource(NUM);
-            imageView2.setScaleType(ImageView.ScaleType.CENTER);
-            imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
-            frameLayout.addView(imageView2, LayoutHelper.createFrame(50, -1.0f));
-        }
-        return frameLayout;
+        imageView2.setVisibility(i3);
+        r0.addView(imageView2, LayoutHelper.createLinear(50, -1));
+        return r0;
     }
 
     public /* synthetic */ void lambda$buttonForBrush$14$PhotoPaintView(int i, View view) {
@@ -1389,32 +1402,19 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     }
 
     public /* synthetic */ void lambda$showBrushSettings$15$PhotoPaintView() {
-        boolean z = true;
-        FrameLayout buttonForBrush = buttonForBrush(0, NUM, true, this.currentBrush == 0);
-        this.popupLayout.addView(buttonForBrush);
-        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) buttonForBrush.getLayoutParams();
-        layoutParams.width = -1;
-        layoutParams.height = AndroidUtilities.dp(52.0f);
-        buttonForBrush.setLayoutParams(layoutParams);
-        FrameLayout buttonForBrush2 = buttonForBrush(1, NUM, true, this.currentBrush == 1);
-        this.popupLayout.addView(buttonForBrush2);
-        LinearLayout.LayoutParams layoutParams2 = (LinearLayout.LayoutParams) buttonForBrush2.getLayoutParams();
-        layoutParams2.width = -1;
-        layoutParams2.height = AndroidUtilities.dp(52.0f);
-        buttonForBrush2.setLayoutParams(layoutParams2);
-        if (this.currentBrush != 2) {
-            z = false;
+        boolean z = false;
+        this.popupLayout.addView(buttonForBrush(0, NUM, LocaleController.getString("PaintPen", NUM), this.currentBrush == 0), LayoutHelper.createLinear(-1, 54));
+        this.popupLayout.addView(buttonForBrush(1, NUM, LocaleController.getString("PaintMarker", NUM), this.currentBrush == 1), LayoutHelper.createLinear(-1, 54));
+        this.popupLayout.addView(buttonForBrush(2, NUM, LocaleController.getString("PaintNeon", NUM), this.currentBrush == 2), LayoutHelper.createLinear(-1, 54));
+        String string = LocaleController.getString("PaintArrow", NUM);
+        if (this.currentBrush == 3) {
+            z = true;
         }
-        FrameLayout buttonForBrush3 = buttonForBrush(2, NUM, false, z);
-        this.popupLayout.addView(buttonForBrush3);
-        LinearLayout.LayoutParams layoutParams3 = (LinearLayout.LayoutParams) buttonForBrush3.getLayoutParams();
-        layoutParams3.width = -1;
-        layoutParams3.height = AndroidUtilities.dp(52.0f);
-        buttonForBrush3.setLayoutParams(layoutParams3);
+        this.popupLayout.addView(buttonForBrush(3, NUM, string, z), LayoutHelper.createLinear(-1, 54));
     }
 
     private LinearLayout buttonForText(int i, String str, int i2, boolean z) {
-        AnonymousClass7 r0 = new LinearLayout(this, getContext()) {
+        AnonymousClass8 r0 = new LinearLayout(this, getContext()) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 return true;
             }
@@ -1422,7 +1422,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         r0.setOrientation(0);
         r0.setBackgroundDrawable(Theme.getSelectorDrawable(false));
         r0.setOnClickListener(new View.OnClickListener(i) {
-            private final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$1;
 
             {
                 this.f$1 = r2;
@@ -1447,7 +1447,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             imageView2.setImageResource(NUM);
             imageView2.setScaleType(ImageView.ScaleType.CENTER);
             imageView2.setColorFilter(new PorterDuffColorFilter(Theme.getColor("radioBackgroundChecked"), PorterDuff.Mode.MULTIPLY));
-            r0.addView(imageView2, LayoutHelper.createFrame(50, -1.0f));
+            r0.addView(imageView2, LayoutHelper.createLinear(50, -1));
         }
         return r0;
     }
@@ -1590,11 +1590,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     public /* synthetic */ void lambda$detectFaces$21$PhotoPaintView() {
         FaceDetector faceDetector = null;
         try {
-            FaceDetector.Builder builder = new FaceDetector.Builder(getContext());
-            builder.setMode(1);
-            builder.setLandmarkType(1);
-            builder.setTrackingEnabled(false);
-            faceDetector = builder.build();
+            faceDetector = new FaceDetector.Builder(getContext()).setMode(1).setLandmarkType(1).setTrackingEnabled(false).build();
             if (!faceDetector.isOperational()) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.e("face detection is not operational");
@@ -1605,11 +1601,8 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 }
                 return;
             }
-            Frame.Builder builder2 = new Frame.Builder();
-            builder2.setBitmap(this.facesBitmap);
-            builder2.setRotation(getFrameRotation());
             try {
-                SparseArray<Face> detect = faceDetector.detect(builder2.build());
+                SparseArray<Face> detect = faceDetector.detect(new Frame.Builder().setBitmap(this.facesBitmap).setRotation(getFrameRotation()).build());
                 ArrayList<PhotoFace> arrayList = new ArrayList<>();
                 Size paintingSize2 = getPaintingSize();
                 for (int i = 0; i < detect.size(); i++) {

@@ -295,7 +295,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 frameLayout.addView(LocationActivity.this.lastPressedMarkerView, LayoutHelper.createFrame(-2, 71.0f));
                 LocationActivity.this.lastPressedMarkerView.setAlpha(0.0f);
                 LocationActivity.this.lastPressedMarkerView.setOnClickListener(new View.OnClickListener(venueLocation) {
-                    private final /* synthetic */ LocationActivity.VenueLocation f$1;
+                    public final /* synthetic */ LocationActivity.VenueLocation f$1;
 
                     {
                         this.f$1 = r2;
@@ -376,7 +376,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 return;
             }
             AlertsCreator.createScheduleDatePickerDialog(LocationActivity.this.getParentActivity(), LocationActivity.this.parentFragment.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(venueLocation) {
-                private final /* synthetic */ LocationActivity.VenueLocation f$1;
+                public final /* synthetic */ LocationActivity.VenueLocation f$1;
 
                 {
                     this.f$1 = r2;
@@ -929,7 +929,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         };
         this.mapView = r04;
         new Thread(new Runnable(r04) {
-            private final /* synthetic */ MapView f$1;
+            public final /* synthetic */ MapView f$1;
 
             {
                 this.f$1 = r2;
@@ -1110,8 +1110,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 tLRPC$TL_inputGeoPoint.lat = tLRPC$GeoPoint.lat;
                 tLRPC$TL_inputGeoPoint._long = tLRPC$GeoPoint._long;
                 alertDialogArr[0].setOnCancelListener(new DialogInterface.OnCancelListener(getConnectionsManager().sendRequest(tLRPC$TL_channels_editLocation, new RequestDelegate(alertDialogArr, tLRPC$TL_messageMediaVenue) {
-                    private final /* synthetic */ AlertDialog[] f$1;
-                    private final /* synthetic */ TLRPC$TL_messageMediaVenue f$2;
+                    public final /* synthetic */ AlertDialog[] f$1;
+                    public final /* synthetic */ TLRPC$TL_messageMediaVenue f$2;
 
                     {
                         this.f$1 = r2;
@@ -1122,7 +1122,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         LocationActivity.this.lambda$null$6$LocationActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
                     }
                 })) {
-                    private final /* synthetic */ int f$1;
+                    public final /* synthetic */ int f$1;
 
                     {
                         this.f$1 = r2;
@@ -1157,7 +1157,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         return;
                     }
                     AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), this.parentFragment.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(item) {
-                        private final /* synthetic */ Object f$1;
+                        public final /* synthetic */ Object f$1;
 
                         {
                             this.f$1 = r2;
@@ -1194,7 +1194,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 return;
             }
             AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), this.parentFragment.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(tLRPC$TL_messageMediaGeo) {
-                private final /* synthetic */ TLRPC$TL_messageMediaGeo f$1;
+                public final /* synthetic */ TLRPC$TL_messageMediaGeo f$1;
 
                 {
                     this.f$1 = r2;
@@ -1209,8 +1209,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
     public /* synthetic */ void lambda$null$6$LocationActivity(AlertDialog[] alertDialogArr, TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialogArr, tLRPC$TL_messageMediaVenue) {
-            private final /* synthetic */ AlertDialog[] f$1;
-            private final /* synthetic */ TLRPC$TL_messageMediaVenue f$2;
+            public final /* synthetic */ AlertDialog[] f$1;
+            public final /* synthetic */ TLRPC$TL_messageMediaVenue f$2;
 
             {
                 this.f$1 = r2;
@@ -1253,7 +1253,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         } catch (Exception unused) {
         }
         AndroidUtilities.runOnUIThread(new Runnable(mapView2) {
-            private final /* synthetic */ MapView f$1;
+            public final /* synthetic */ MapView f$1;
 
             {
                 this.f$1 = r2;
@@ -1310,7 +1310,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 return;
             }
             AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), this.parentFragment.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(item) {
-                private final /* synthetic */ TLRPC$TL_messageMediaVenue f$1;
+                public final /* synthetic */ TLRPC$TL_messageMediaVenue f$1;
 
                 {
                     this.f$1 = r2;
@@ -1959,7 +1959,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     this.layoutManager.scrollToPositionWithOffset(0, -AndroidUtilities.dp((float) i2));
                     updateClipView();
                     this.listView.post(new Runnable(i2) {
-                        private final /* synthetic */ int f$1;
+                        public final /* synthetic */ int f$1;
 
                         {
                             this.f$1 = r2;
@@ -2113,7 +2113,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         tLRPC$TL_messages_getRecentLocations.peer = getMessagesController().getInputPeer((int) dialogId2);
         tLRPC$TL_messages_getRecentLocations.limit = 100;
         getConnectionsManager().sendRequest(tLRPC$TL_messages_getRecentLocations, new RequestDelegate(dialogId2) {
-            private final /* synthetic */ long f$1;
+            public final /* synthetic */ long f$1;
 
             {
                 this.f$1 = r2;
@@ -2132,8 +2132,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     public /* synthetic */ void lambda$getRecentLocations$27$LocationActivity(long j, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable(tLObject, j) {
-                private final /* synthetic */ TLObject f$1;
-                private final /* synthetic */ long f$2;
+                public final /* synthetic */ TLObject f$1;
+                public final /* synthetic */ long f$2;
 
                 {
                     this.f$1 = r2;

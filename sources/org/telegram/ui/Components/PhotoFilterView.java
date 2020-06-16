@@ -143,7 +143,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
         public float[] interpolateCurve() {
             float f = this.blacksLevel;
             int i = 1;
-            float f2 = 0.5f;
+            float f2 = 0.0f;
             float f3 = this.whitesLevel;
             float[] fArr = {-0.001f, f / 100.0f, 0.0f, f / 100.0f, 0.25f, this.shadowsLevel / 100.0f, 0.5f, this.midtonesLevel / 100.0f, 0.75f, this.highlightsLevel / 100.0f, 1.0f, f3 / 100.0f, 1.001f, f3 / 100.0f};
             ArrayList arrayList = new ArrayList(100);
@@ -170,8 +170,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
                     float var_ = ((float) i8) * 0.01f;
                     float var_ = var_ * var_;
                     float var_ = var_ * var_;
-                    float var_ = ((f6 * 2.0f) + ((f8 - f4) * var_) + (((((f4 * 2.0f) - (f6 * 5.0f)) + (f8 * 4.0f)) - var_) * var_) + (((((f6 * 3.0f) - f4) - (f8 * 3.0f)) + var_) * var_)) * f2;
-                    float max = Math.max(0.0f, Math.min(1.0f, ((f7 * 2.0f) + ((f9 - f5) * var_) + (((((2.0f * f5) - (5.0f * f7)) + (4.0f * f9)) - var_) * var_) + (((((f7 * 3.0f) - f5) - (3.0f * f9)) + var_) * var_)) * f2));
+                    float var_ = ((f6 * 2.0f) + ((f8 - f4) * var_) + (((((f4 * 2.0f) - (f6 * 5.0f)) + (f8 * 4.0f)) - var_) * var_) + (((((f6 * 3.0f) - f4) - (f8 * 3.0f)) + var_) * var_)) * 0.5f;
+                    float max = Math.max(f2, Math.min(1.0f, ((f7 * 2.0f) + ((f9 - f5) * var_) + (((((2.0f * f5) - (5.0f * f7)) + (4.0f * f9)) - var_) * var_) + (((((f7 * 3.0f) - f5) - (3.0f * f9)) + var_) * var_)) * 0.5f));
                     if (var_ > f4) {
                         arrayList2.add(Float.valueOf(var_));
                         arrayList2.add(Float.valueOf(max));
@@ -180,13 +180,13 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
                         arrayList.add(Float.valueOf(max));
                     }
                     i8++;
-                    f2 = 0.5f;
+                    f2 = 0.0f;
                 }
                 arrayList2.add(Float.valueOf(f8));
                 arrayList2.add(Float.valueOf(f9));
                 i2 = i5;
-                f2 = 0.5f;
                 i = 1;
+                f2 = 0.0f;
             }
             arrayList2.add(Float.valueOf(fArr[12]));
             arrayList2.add(Float.valueOf(fArr[13]));

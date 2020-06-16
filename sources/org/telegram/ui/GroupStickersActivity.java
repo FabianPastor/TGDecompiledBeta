@@ -417,7 +417,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 return;
             }
             $$Lambda$GroupStickersActivity$4Rqel5HptCXt4RyUWgtwIaVXIfk r1 = new Runnable(obj) {
-                private final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
@@ -448,7 +448,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
 
     public /* synthetic */ void lambda$null$3$GroupStickersActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-            private final /* synthetic */ TLObject f$1;
+            public final /* synthetic */ TLObject f$1;
 
             {
                 this.f$1 = r2;
@@ -540,7 +540,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
 
     public /* synthetic */ void lambda$saveStickerSet$7$GroupStickersActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLRPC$TL_error f$1;
 
             {
                 this.f$1 = r2;
@@ -568,7 +568,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 tLRPC$ChatFull.flags &= -257;
             }
             MessagesStorage.getInstance(this.currentAccount).updateChatInfo(this.info, false);
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, this.info, 0, true, null);
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, this.info, 0, Boolean.TRUE, null);
             finishFragment();
             return;
         }

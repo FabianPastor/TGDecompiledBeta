@@ -599,11 +599,11 @@ public class PollVotesAlert extends BottomSheet {
                 ConnectionsManager connectionsManager = chatActivity2.getConnectionsManager();
                 i2 = i4;
                 $$Lambda$PollVotesAlert$lpnnrQFn8IKhhS43T4ZDEfqstlU r0 = new RequestDelegate(numArr, i4, chatActivity2, arrayList, tLRPC$TL_pollAnswerVoters) {
-                    private final /* synthetic */ Integer[] f$1;
-                    private final /* synthetic */ int f$2;
-                    private final /* synthetic */ ChatActivity f$3;
-                    private final /* synthetic */ ArrayList f$4;
-                    private final /* synthetic */ TLRPC$TL_pollAnswerVoters f$5;
+                    public final /* synthetic */ Integer[] f$1;
+                    public final /* synthetic */ int f$2;
+                    public final /* synthetic */ ChatActivity f$3;
+                    public final /* synthetic */ ArrayList f$4;
+                    public final /* synthetic */ TLRPC$TL_pollAnswerVoters f$5;
 
                     {
                         this.f$1 = r2;
@@ -810,7 +810,7 @@ public class PollVotesAlert extends BottomSheet {
         recyclerListView.setAdapter(adapter);
         this.listView.setGlowColor(Theme.getColor("dialogScrollGlow"));
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(chatActivity3) {
-            private final /* synthetic */ ChatActivity f$1;
+            public final /* synthetic */ ChatActivity f$1;
 
             {
                 this.f$1 = r2;
@@ -886,12 +886,12 @@ public class PollVotesAlert extends BottomSheet {
 
     public /* synthetic */ void lambda$new$1$PollVotesAlert(Integer[] numArr, int i, ChatActivity chatActivity2, ArrayList arrayList, TLRPC$TL_pollAnswerVoters tLRPC$TL_pollAnswerVoters, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(numArr, i, tLObject, chatActivity2, arrayList, tLRPC$TL_pollAnswerVoters) {
-            private final /* synthetic */ Integer[] f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ TLObject f$3;
-            private final /* synthetic */ ChatActivity f$4;
-            private final /* synthetic */ ArrayList f$5;
-            private final /* synthetic */ TLRPC$TL_pollAnswerVoters f$6;
+            public final /* synthetic */ Integer[] f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ TLObject f$3;
+            public final /* synthetic */ ChatActivity f$4;
+            public final /* synthetic */ ArrayList f$5;
+            public final /* synthetic */ TLRPC$TL_pollAnswerVoters f$6;
 
             {
                 this.f$1 = r2;
@@ -1003,8 +1003,8 @@ public class PollVotesAlert extends BottomSheet {
                                 tLRPC$TL_messages_getPollVotes.flags = i3 | 2;
                                 tLRPC$TL_messages_getPollVotes.offset = votesList.next_offset;
                                 this.chatActivity.getConnectionsManager().sendRequest(tLRPC$TL_messages_getPollVotes, new RequestDelegate(votesList, chatActivity2) {
-                                    private final /* synthetic */ PollVotesAlert.VotesList f$1;
-                                    private final /* synthetic */ ChatActivity f$2;
+                                    public final /* synthetic */ PollVotesAlert.VotesList f$1;
+                                    public final /* synthetic */ ChatActivity f$2;
 
                                     {
                                         this.f$1 = r2;
@@ -1046,9 +1046,9 @@ public class PollVotesAlert extends BottomSheet {
 
     public /* synthetic */ void lambda$null$3$PollVotesAlert(VotesList votesList, ChatActivity chatActivity2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(votesList, tLObject, chatActivity2) {
-            private final /* synthetic */ PollVotesAlert.VotesList f$1;
-            private final /* synthetic */ TLObject f$2;
-            private final /* synthetic */ ChatActivity f$3;
+            public final /* synthetic */ PollVotesAlert.VotesList f$1;
+            public final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ ChatActivity f$3;
 
             {
                 this.f$1 = r2;

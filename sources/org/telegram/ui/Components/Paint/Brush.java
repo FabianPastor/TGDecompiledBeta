@@ -100,4 +100,32 @@ public interface Brush {
             return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), NUM, options);
         }
     }
+
+    public static class Arrow implements Brush {
+        public float getAlpha() {
+            return 0.85f;
+        }
+
+        public float getAngle() {
+            return 0.0f;
+        }
+
+        public float getScale() {
+            return 1.0f;
+        }
+
+        public float getSpacing() {
+            return 0.15f;
+        }
+
+        public boolean isLightSaber() {
+            return false;
+        }
+
+        public Bitmap getStamp() {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inScaled = false;
+            return BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), NUM, options);
+        }
+    }
 }

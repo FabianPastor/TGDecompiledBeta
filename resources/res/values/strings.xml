@@ -32,6 +32,7 @@
     <string name="AccDescrClosePlayer">Close audio player</string>
     <string name="AccDescrCollapsePanel">Collapse panel</string>
     <string name="AccDescrContactSorting">Change sorting</string>
+    <string name="AccDescrDownloadProgress">Downloaded %1$s of %2$s</string>
     <string name="AccDescrEditing">Editing</string>
     <string name="AccDescrEmojiButton">Emoji, stickers, and GIFs</string>
     <string name="AccDescrExpandPanel">Expand panel</string>
@@ -52,6 +53,11 @@
     <string name="AccDescrMusicInfo">%2$s by %1$s</string>
     <string name="AccDescrMuteMic">Mute microphone</string>
     <string name="AccDescrMyLocation">My location</string>
+    <string name="AccDescrNumberOfViews_few">Viewed %1$d times</string>
+    <string name="AccDescrNumberOfViews_many">Viewed %1$d times</string>
+    <string name="AccDescrNumberOfViews_one">Viewed %1$d time</string>
+    <string name="AccDescrNumberOfViews_other">Viewed %1$d times</string>
+    <string name="AccDescrNumberOfViews_two">Viewed %1$d times</string>
     <string name="AccDescrOpenChat">Open chat</string>
     <string name="AccDescrOpenMenu">Open navigation menu</string>
     <string name="AccDescrPageDown">Go to bottom</string>
@@ -60,6 +66,7 @@
     <string name="AccDescrPhotoAdjust">Adjustments</string>
     <string name="AccDescrPhotoEditor">Photo editor</string>
     <string name="AccDescrPhotoViewer">Photo viewer</string>
+    <string name="AccDescrPlayerDuration">%1$s of %2$s</string>
     <string name="AccDescrPlayerSpeed">2X playback</string>
     <string name="AccDescrPrevious">Previous</string>
     <string name="AccDescrProfilePicture">Profile picture</string>
@@ -82,6 +89,7 @@
     <string name="AccDescrStopLiveLocation">Stop sharing live location</string>
     <string name="AccDescrSwitchCamera">Switch camera</string>
     <string name="AccDescrTakeMorePics">Take one more picture</string>
+    <string name="AccDescrUploadProgress">Uploaded %1$s of %2$s</string>
     <string name="AccDescrUserOptions">User options</string>
     <string name="AccDescrVideoCompressHigh">Higher quality</string>
     <string name="AccDescrVideoCompressLow">Smaller size</string>
@@ -1580,6 +1588,11 @@
     <string name="IsTypingGroup">%1$s is typing...</string>
     <string name="Italic">Italic</string>
     <string name="January">January</string>
+    <string name="JoinByPeekChannelText">This channel is private. Please join it now, otherwise you won\'t be able to view its content in the future.</string>
+    <string name="JoinByPeekChannelTitle">Join Channel</string>
+    <string name="JoinByPeekGroupText">This group is private. Please join it now, otherwise you won\'t be able to view its content in the future.</string>
+    <string name="JoinByPeekGroupTitle">Join Group</string>
+    <string name="JoinByPeekJoin">JOIN</string>
     <string name="JoinGroup">JOIN GROUP</string>
     <string name="JoinToGroupErrorFull">Sorry, this group is already full.</string>
     <string name="JoinToGroupErrorNotExist">Sorry, this chat does not seem to exist.</string>
@@ -2135,11 +2148,15 @@
     <string name="Page5Title">Powerful</string>
     <string name="Page6Message">**Telegram** lets you access your messages\10from multiple devices.</string>
     <string name="Page6Title">Cloud-Based</string>
+    <string name="PaintArrow">Arrow</string>
     <string name="PaintDelete">Delete</string>
     <string name="PaintDuplicate">Duplicate</string>
     <string name="PaintEdit">Edit</string>
     <string name="PaintFramed">Framed</string>
+    <string name="PaintMarker">Marker</string>
+    <string name="PaintNeon">Neon</string>
     <string name="PaintOutlined">Outlined</string>
+    <string name="PaintPen">Pen</string>
     <string name="PaintRegular">Regular</string>
     <string name="Passcode">Passcode Lock</string>
     <string name="PasscodeDoNotMatch">Passcodes do not match</string>

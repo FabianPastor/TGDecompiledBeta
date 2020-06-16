@@ -617,7 +617,7 @@ public class PieChartView extends StackLinearChartView<PieChartViewData> {
                             f3 = this.values[i] / f4;
                         }
                         ValueAnimator createAnimator = createAnimator(pieChartViewData.drawingPart, f3, new ValueAnimator.AnimatorUpdateListener(pieChartViewData) {
-                            private final /* synthetic */ PieChartViewData f$1;
+                            public final /* synthetic */ PieChartViewData f$1;
 
                             {
                                 this.f$1 = r2;

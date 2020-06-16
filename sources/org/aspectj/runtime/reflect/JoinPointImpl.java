@@ -1,11 +1,10 @@
 package org.aspectj.runtime.reflect;
 
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.reflect.SourceLocation;
 
-class JoinPointImpl implements ProceedingJoinPoint {
+class JoinPointImpl implements JoinPoint {
     Object _this;
     Object[] args;
     JoinPoint.StaticPart staticPart;

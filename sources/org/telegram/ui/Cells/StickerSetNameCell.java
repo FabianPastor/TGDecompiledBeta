@@ -50,10 +50,11 @@ public class StickerSetNameCell extends FrameLayout {
         this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         this.textView.setSingleLine(true);
+        float f = 17.0f;
         if (z2) {
             layoutParams = LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388659, z ? 15.0f : 17.0f, 4.0f, 57.0f, 0.0f);
         } else {
-            layoutParams = LayoutHelper.createFrame(-2, -2.0f, 51, z ? 15.0f : 17.0f, 4.0f, 57.0f, 0.0f);
+            layoutParams = LayoutHelper.createFrame(-2, -2.0f, 51, z ? 15.0f : f, 4.0f, 57.0f, 0.0f);
         }
         addView(this.textView, layoutParams);
         TextView textView3 = new TextView(context);

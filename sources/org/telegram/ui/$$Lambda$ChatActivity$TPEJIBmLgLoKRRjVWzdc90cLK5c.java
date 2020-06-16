@@ -5,12 +5,12 @@ import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$TL_error;
 
-/* renamed from: org.telegram.ui.-$$Lambda$ChatActivity$GNrgkdfmb0F1tpeM3C3bZe0sCac  reason: invalid class name */
+/* renamed from: org.telegram.ui.-$$Lambda$ChatActivity$TPEJIBmLgLoKRRjVWzdCLASSNAMEcLK5c  reason: invalid class name */
 /* compiled from: lambda */
-public final /* synthetic */ class $$Lambda$ChatActivity$GNrgkdfmb0F1tpeM3C3bZe0sCac implements RequestDelegate {
-    public static final /* synthetic */ $$Lambda$ChatActivity$GNrgkdfmb0F1tpeM3C3bZe0sCac INSTANCE = new $$Lambda$ChatActivity$GNrgkdfmb0F1tpeM3C3bZe0sCac();
+public final /* synthetic */ class $$Lambda$ChatActivity$TPEJIBmLgLoKRRjVWzdCLASSNAMEcLK5c implements RequestDelegate {
+    public static final /* synthetic */ $$Lambda$ChatActivity$TPEJIBmLgLoKRRjVWzdCLASSNAMEcLK5c INSTANCE = new $$Lambda$ChatActivity$TPEJIBmLgLoKRRjVWzdCLASSNAMEcLK5c();
 
-    private /* synthetic */ $$Lambda$ChatActivity$GNrgkdfmb0F1tpeM3C3bZe0sCac() {
+    private /* synthetic */ $$Lambda$ChatActivity$TPEJIBmLgLoKRRjVWzdCLASSNAMEcLK5c() {
     }
 
     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
@@ -19,7 +19,7 @@ public final /* synthetic */ class $$Lambda$ChatActivity$GNrgkdfmb0F1tpeM3C3bZe0
             jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0000: INVOKE  
               (r1v0 'tLObject' org.telegram.tgnet.TLObject)
               (r2v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
-             org.telegram.ui.ChatActivity.lambda$processSelectedOption$86(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void type: STATIC in method: org.telegram.ui.-$$Lambda$ChatActivity$GNrgkdfmb0F1tpeM3C3bZe0sCac.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+             org.telegram.ui.ChatActivity.lambda$processSelectedOption$90(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void type: STATIC in method: org.telegram.ui.-$$Lambda$ChatActivity$TPEJIBmLgLoKRRjVWzdCLASSNAMEcLK5c.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
             	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -51,15 +51,15 @@ public final /* synthetic */ class $$Lambda$ChatActivity$GNrgkdfmb0F1tpeM3C3bZe0
             	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
             	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
             Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0005: INVOKE  
-              (wrap: org.telegram.ui.-$$Lambda$ChatActivity$4MFHImFw3v7oLavy_HZ2uZhqY2U : 0x0002: CONSTRUCTOR  (r1v1 org.telegram.ui.-$$Lambda$ChatActivity$4MFHImFw3v7oLavy_HZ2uZhqY2U) = (r1v0 'tLObject' org.telegram.tgnet.TLObject) call: org.telegram.ui.-$$Lambda$ChatActivity$4MFHImFw3v7oLavy_HZ2uZhqY2U.<init>(org.telegram.tgnet.TLObject):void type: CONSTRUCTOR)
-             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.-$$Lambda$ChatActivity$GNrgkdfmb0F1tpeM3C3bZe0sCac.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+              (wrap: org.telegram.ui.-$$Lambda$ChatActivity$GcTRGLciocYKY2XPlgaTXaU3BeA : 0x0002: CONSTRUCTOR  (r1v1 org.telegram.ui.-$$Lambda$ChatActivity$GcTRGLciocYKY2XPlgaTXaU3BeA) = (r1v0 'tLObject' org.telegram.tgnet.TLObject) call: org.telegram.ui.-$$Lambda$ChatActivity$GcTRGLciocYKY2XPlgaTXaU3BeA.<init>(org.telegram.tgnet.TLObject):void type: CONSTRUCTOR)
+             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.-$$Lambda$ChatActivity$TPEJIBmLgLoKRRjVWzdCLASSNAMEcLK5c.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
             	at jadx.core.codegen.InsnGen.inlineMethod(InsnGen.java:924)
             	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:684)
             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
             	... 29 more
-            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0002: CONSTRUCTOR  (r1v1 org.telegram.ui.-$$Lambda$ChatActivity$4MFHImFw3v7oLavy_HZ2uZhqY2U) = (r1v0 'tLObject' org.telegram.tgnet.TLObject) call: org.telegram.ui.-$$Lambda$ChatActivity$4MFHImFw3v7oLavy_HZ2uZhqY2U.<init>(org.telegram.tgnet.TLObject):void type: CONSTRUCTOR in method: org.telegram.ui.-$$Lambda$ChatActivity$GNrgkdfmb0F1tpeM3C3bZe0sCac.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0002: CONSTRUCTOR  (r1v1 org.telegram.ui.-$$Lambda$ChatActivity$GcTRGLciocYKY2XPlgaTXaU3BeA) = (r1v0 'tLObject' org.telegram.tgnet.TLObject) call: org.telegram.ui.-$$Lambda$ChatActivity$GcTRGLciocYKY2XPlgaTXaU3BeA.<init>(org.telegram.tgnet.TLObject):void type: CONSTRUCTOR in method: org.telegram.ui.-$$Lambda$ChatActivity$TPEJIBmLgLoKRRjVWzdCLASSNAMEcLK5c.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -68,7 +68,7 @@ public final /* synthetic */ class $$Lambda$ChatActivity$GNrgkdfmb0F1tpeM3C3bZe0
             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
             	... 33 more
-            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$ChatActivity$4MFHImFw3v7oLavy_HZ2uZhqY2U, state: NOT_LOADED
+            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$ChatActivity$GcTRGLciocYKY2XPlgaTXaU3BeA, state: NOT_LOADED
             	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
             	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -77,9 +77,9 @@ public final /* synthetic */ class $$Lambda$ChatActivity$GNrgkdfmb0F1tpeM3C3bZe0
             */
         /*
             this = this;
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(new org.telegram.ui.$$Lambda$ChatActivity$4MFHImFw3v7oLavy_HZ2uZhqY2U(r1))
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(new org.telegram.ui.$$Lambda$ChatActivity$GcTRGLciocYKY2XPlgaTXaU3BeA(r1))
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.$$Lambda$ChatActivity$GNrgkdfmb0F1tpeM3C3bZe0sCac.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.$$Lambda$ChatActivity$TPEJIBmLgLoKRRjVWzdCLASSNAMEcLK5c.run(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
     }
 }

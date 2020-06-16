@@ -32,7 +32,7 @@ public class SmsReceiver extends BroadcastReceiver {
                                 edit.putString("sms_hash_code", string + "|" + replace).commit();
                             }
                             AndroidUtilities.runOnUIThread(new Runnable(replace) {
-                                private final /* synthetic */ String f$0;
+                                public final /* synthetic */ String f$0;
 
                                 {
                                     this.f$0 = r1;

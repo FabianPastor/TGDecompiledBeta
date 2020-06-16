@@ -148,8 +148,8 @@ public class ContentPreviewViewer {
                             iArr[i2] = ((Integer) arrayList3.get(i2)).intValue();
                         }
                         builder.setItems((CharSequence[]) arrayList.toArray(new CharSequence[0]), iArr, new DialogInterface.OnClickListener(arrayList2, isStickerInFavorites) {
-                            private final /* synthetic */ ArrayList f$1;
-                            private final /* synthetic */ boolean f$2;
+                            public final /* synthetic */ ArrayList f$1;
+                            public final /* synthetic */ boolean f$2;
 
                             {
                                 this.f$1 = r2;
@@ -224,7 +224,7 @@ public class ContentPreviewViewer {
                         iArr2[i3] = ((Integer) arrayList6.get(i3)).intValue();
                     }
                     ContentPreviewViewer.this.visibleDialog.setItems((CharSequence[]) arrayList4.toArray(new CharSequence[0]), iArr2, new DialogInterface.OnClickListener(arrayList5) {
-                        private final /* synthetic */ ArrayList f$1;
+                        public final /* synthetic */ ArrayList f$1;
 
                         {
                             this.f$1 = r2;
@@ -266,8 +266,8 @@ public class ContentPreviewViewer {
                     Object access$1600 = ContentPreviewViewer.this.parentObject;
                     ContentPreviewViewerDelegate access$500 = ContentPreviewViewer.this.delegate;
                     AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, access$500.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(access$300, access$1600) {
-                        private final /* synthetic */ TLRPC$Document f$1;
-                        private final /* synthetic */ Object f$2;
+                        public final /* synthetic */ TLRPC$Document f$1;
+                        public final /* synthetic */ Object f$2;
 
                         {
                             this.f$1 = r2;
@@ -306,9 +306,9 @@ public class ContentPreviewViewer {
                     Object access$1600 = ContentPreviewViewer.this.parentObject;
                     ContentPreviewViewerDelegate access$500 = ContentPreviewViewer.this.delegate;
                     AlertsCreator.createScheduleDatePickerDialog(ContentPreviewViewer.this.parentActivity, access$500.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(access$300, access$1500, access$1600) {
-                        private final /* synthetic */ TLRPC$Document f$1;
-                        private final /* synthetic */ TLRPC$BotInlineResult f$2;
-                        private final /* synthetic */ Object f$3;
+                        public final /* synthetic */ TLRPC$Document f$1;
+                        public final /* synthetic */ TLRPC$BotInlineResult f$2;
+                        public final /* synthetic */ Object f$3;
 
                         {
                             this.f$1 = r2;

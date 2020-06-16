@@ -301,7 +301,7 @@ public class ThemeEditorView {
                     r0.<init>(r13)
                     android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
                     r0.setScaleType(r1)
-                    r1 = 2131165895(0x7var_c7, float:1.794602E38)
+                    r1 = 2131165897(0x7var_c9, float:1.7946024E38)
                     r0.setImageResource(r1)
                     android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
                     android.graphics.PorterDuff$Mode r2 = android.graphics.PorterDuff.Mode.MULTIPLY
@@ -385,7 +385,7 @@ public class ThemeEditorView {
                     r13.setImeOptions(r0)
                     org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
                     java.lang.String r0 = "Search"
-                    r1 = 2131626643(0x7f0e0a93, float:1.8880528E38)
+                    r1 = 2131626660(0x7f0e0aa4, float:1.8880562E38)
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r1)
                     r13.setHint(r0)
                     org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
@@ -1133,7 +1133,7 @@ public class ThemeEditorView {
                 android.animation.AnimatorSet[] r4 = new android.animation.AnimatorSet[r4]
                 r0.shadowAnimation = r4
                 android.content.res.Resources r4 = r18.getResources()
-                r5 = 2131165883(0x7var_bb, float:1.7945996E38)
+                r5 = 2131165885(0x7var_bd, float:1.7946E38)
                 android.graphics.drawable.Drawable r4 = r4.getDrawable(r5)
                 android.graphics.drawable.Drawable r4 = r4.mutate()
                 r0.shadowDrawable = r4
@@ -1215,7 +1215,7 @@ public class ThemeEditorView {
                 r1.showTextView()
                 org.telegram.ui.Components.EmptyTextProgressView r1 = r0.searchEmptyView
                 java.lang.String r4 = "NoResult"
-                r9 = 2131625837(0x7f0e076d, float:1.8878893E38)
+                r9 = 2131625850(0x7f0e077a, float:1.887892E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
                 r1.setText(r4)
                 org.telegram.ui.Components.RecyclerListView r1 = r0.listView
@@ -1314,7 +1314,7 @@ public class ThemeEditorView {
                 int r9 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r1.setPadding(r15, r5, r9, r5)
                 java.lang.String r9 = "CloseEditor"
-                r15 = 2131624739(0x7f0e0323, float:1.8876666E38)
+                r15 = 2131624747(0x7f0e032b, float:1.8876682E38)
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r15)
                 java.lang.String r9 = r9.toUpperCase()
                 r1.setText(r9)
@@ -1339,7 +1339,7 @@ public class ThemeEditorView {
                 int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r1.setPadding(r4, r5, r15, r5)
                 java.lang.String r4 = "SaveTheme"
-                r15 = 2131626625(0x7f0e0a81, float:1.8880491E38)
+                r15 = 2131626642(0x7f0e0a92, float:1.8880526E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r15)
                 java.lang.String r4 = r4.toUpperCase()
                 r1.setText(r4)
@@ -1376,7 +1376,7 @@ public class ThemeEditorView {
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r1.setPadding(r4, r5, r8, r5)
                 java.lang.String r4 = "Cancel"
-                r8 = 2131624490(0x7f0e022a, float:1.8876161E38)
+                r8 = 2131624498(0x7f0e0232, float:1.8876177E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r8)
                 java.lang.String r4 = r4.toUpperCase()
                 r1.setText(r4)
@@ -1407,7 +1407,7 @@ public class ThemeEditorView {
                 int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r4.setPadding(r8, r5, r15, r5)
                 java.lang.String r8 = "Default"
-                r15 = 2131624875(0x7f0e03ab, float:1.8876942E38)
+                r15 = 2131624883(0x7f0e03b3, float:1.8876958E38)
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r15)
                 java.lang.String r8 = r8.toUpperCase()
                 r4.setText(r8)
@@ -1430,7 +1430,7 @@ public class ThemeEditorView {
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r4.setPadding(r2, r5, r3, r5)
                 java.lang.String r2 = "Save"
-                r3 = 2131626622(0x7f0e0a7e, float:1.8880485E38)
+                r3 = 2131626639(0x7f0e0a8f, float:1.888052E38)
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
                 java.lang.String r2 = r2.toUpperCase()
                 r4.setText(r2)
@@ -2627,16 +2627,16 @@ public class ThemeEditorView {
                 r16 = this;
                 r0 = r16
                 int r1 = r0.editorWidth
-                r2 = 0
+                r2 = 1
                 r3 = 0
-                r4 = 1
-                int r1 = getSideCoord(r4, r3, r2, r1)
+                r4 = 0
+                int r1 = getSideCoord(r2, r3, r4, r1)
                 int r5 = r0.editorWidth
-                int r5 = getSideCoord(r4, r4, r2, r5)
+                int r5 = getSideCoord(r2, r2, r4, r5)
                 int r6 = r0.editorHeight
-                int r6 = getSideCoord(r3, r3, r2, r6)
+                int r6 = getSideCoord(r3, r3, r4, r6)
                 int r7 = r0.editorHeight
-                int r7 = getSideCoord(r3, r4, r2, r7)
+                int r7 = getSideCoord(r3, r2, r4, r7)
                 android.content.SharedPreferences r8 = r0.preferences
                 android.content.SharedPreferences$Editor r8 = r8.edit()
                 r9 = 1101004800(0x41a00000, float:20.0)
@@ -2667,51 +2667,51 @@ public class ThemeEditorView {
                 int r10 = r10.x
                 android.graphics.Point r15 = org.telegram.messenger.AndroidUtilities.displaySize
                 int r15 = r15.x
-                int r2 = r0.editorWidth
-                int r11 = r15 - r2
+                int r4 = r0.editorWidth
+                int r11 = r15 - r4
                 if (r10 <= r11) goto L_0x006c
-                int r2 = r2 / 4
-                int r2 = r2 * 3
-                int r15 = r15 - r2
+                int r4 = r4 / 4
+                int r4 = r4 * 3
+                int r15 = r15 - r4
                 if (r10 >= r15) goto L_0x006c
                 goto L_0x00b5
             L_0x006c:
-                android.widget.FrameLayout r2 = r0.windowView
-                float r2 = r2.getAlpha()
-                int r2 = (r2 > r14 ? 1 : (r2 == r14 ? 0 : -1))
-                if (r2 == 0) goto L_0x00a1
+                android.widget.FrameLayout r4 = r0.windowView
+                float r4 = r4.getAlpha()
+                int r4 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1))
+                if (r4 == 0) goto L_0x00a1
                 java.util.ArrayList r1 = new java.util.ArrayList
                 r1.<init>()
-                android.view.WindowManager$LayoutParams r2 = r0.windowLayoutParams
-                int r2 = r2.x
-                if (r2 >= 0) goto L_0x0090
-                int[] r2 = new int[r4]
+                android.view.WindowManager$LayoutParams r4 = r0.windowLayoutParams
+                int r4 = r4.x
+                if (r4 >= 0) goto L_0x0090
+                int[] r4 = new int[r2]
                 int r5 = r0.editorWidth
                 int r5 = -r5
-                r2[r3] = r5
-                android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofInt(r0, r13, r2)
-                r1.add(r2)
+                r4[r3] = r5
+                android.animation.ObjectAnimator r4 = android.animation.ObjectAnimator.ofInt(r0, r13, r4)
+                r1.add(r4)
                 goto L_0x009f
             L_0x0090:
-                int[] r2 = new int[r4]
+                int[] r4 = new int[r2]
                 android.graphics.Point r5 = org.telegram.messenger.AndroidUtilities.displaySize
                 int r5 = r5.x
-                r2[r3] = r5
-                android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofInt(r0, r13, r2)
-                r1.add(r2)
+                r4[r3] = r5
+                android.animation.ObjectAnimator r4 = android.animation.ObjectAnimator.ofInt(r0, r13, r4)
+                r1.add(r4)
             L_0x009f:
-                r2 = 1
+                r4 = 1
                 goto L_0x0110
             L_0x00a1:
-                android.view.WindowManager$LayoutParams r2 = r0.windowLayoutParams
-                int r2 = r2.x
-                int r2 = r2 - r1
-                float r2 = (float) r2
+                android.view.WindowManager$LayoutParams r4 = r0.windowLayoutParams
+                int r4 = r4.x
+                int r4 = r4 - r1
+                float r4 = (float) r4
                 int r5 = r5 - r1
                 float r1 = (float) r5
-                float r2 = r2 / r1
+                float r4 = r4 / r1
                 java.lang.String r1 = "px"
-                r8.putFloat(r1, r2)
+                r8.putFloat(r1, r4)
                 r1 = 2
                 r8.putInt(r12, r1)
                 r1 = 0
@@ -2719,26 +2719,26 @@ public class ThemeEditorView {
             L_0x00b5:
                 java.util.ArrayList r1 = new java.util.ArrayList
                 r1.<init>()
-                r8.putInt(r12, r4)
-                android.widget.FrameLayout r2 = r0.windowView
-                float r2 = r2.getAlpha()
-                int r2 = (r2 > r14 ? 1 : (r2 == r14 ? 0 : -1))
-                if (r2 == 0) goto L_0x00d6
-                android.widget.FrameLayout r2 = r0.windowView
+                r8.putInt(r12, r2)
+                android.widget.FrameLayout r4 = r0.windowView
+                float r4 = r4.getAlpha()
+                int r4 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1))
+                if (r4 == 0) goto L_0x00d6
+                android.widget.FrameLayout r4 = r0.windowView
                 android.util.Property r10 = android.view.View.ALPHA
-                float[] r11 = new float[r4]
+                float[] r11 = new float[r2]
                 r11[r3] = r14
-                android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r10, r11)
-                r1.add(r2)
+                android.animation.ObjectAnimator r4 = android.animation.ObjectAnimator.ofFloat(r4, r10, r11)
+                r1.add(r4)
             L_0x00d6:
-                int[] r2 = new int[r4]
-                r2[r3] = r5
-                android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofInt(r0, r13, r2)
-                r1.add(r2)
+                int[] r4 = new int[r2]
+                r4[r3] = r5
+                android.animation.ObjectAnimator r4 = android.animation.ObjectAnimator.ofInt(r0, r13, r4)
+                r1.add(r4)
                 goto L_0x010f
             L_0x00e2:
-                java.util.ArrayList r2 = new java.util.ArrayList
-                r2.<init>()
+                java.util.ArrayList r4 = new java.util.ArrayList
+                r4.<init>()
                 r8.putInt(r12, r3)
                 android.widget.FrameLayout r5 = r0.windowView
                 float r5 = r5.getAlpha()
@@ -2746,20 +2746,20 @@ public class ThemeEditorView {
                 if (r5 == 0) goto L_0x0103
                 android.widget.FrameLayout r5 = r0.windowView
                 android.util.Property r10 = android.view.View.ALPHA
-                float[] r11 = new float[r4]
+                float[] r11 = new float[r2]
                 r11[r3] = r14
                 android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofFloat(r5, r10, r11)
-                r2.add(r5)
+                r4.add(r5)
             L_0x0103:
-                int[] r5 = new int[r4]
+                int[] r5 = new int[r2]
                 r5[r3] = r1
                 android.animation.ObjectAnimator r1 = android.animation.ObjectAnimator.ofInt(r0, r13, r5)
-                r2.add(r1)
-                r1 = r2
+                r4.add(r1)
+                r1 = r4
             L_0x010f:
-                r2 = 0
+                r4 = 0
             L_0x0110:
-                if (r2 != 0) goto L_0x017a
+                if (r4 != 0) goto L_0x017a
                 android.view.WindowManager$LayoutParams r5 = r0.windowLayoutParams
                 int r5 = r5.y
                 int r5 = r6 - r5
@@ -2782,8 +2782,8 @@ public class ThemeEditorView {
                 java.util.ArrayList r1 = new java.util.ArrayList
                 r1.<init>()
             L_0x0140:
-                r8.putInt(r11, r4)
-                int[] r5 = new int[r4]
+                r8.putInt(r11, r2)
+                int[] r5 = new int[r2]
                 r5[r3] = r7
                 android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofInt(r0, r10, r5)
                 r1.add(r5)
@@ -2807,7 +2807,7 @@ public class ThemeEditorView {
                 r1.<init>()
             L_0x0169:
                 r8.putInt(r11, r3)
-                int[] r5 = new int[r4]
+                int[] r5 = new int[r2]
                 r5[r3] = r6
                 android.animation.ObjectAnimator r5 = android.animation.ObjectAnimator.ofInt(r0, r10, r5)
                 r1.add(r5)
@@ -2827,13 +2827,13 @@ public class ThemeEditorView {
                 r5.setInterpolator(r6)
                 r6 = 150(0x96, double:7.4E-322)
                 r5.setDuration(r6)
-                if (r2 == 0) goto L_0x01b0
-                android.widget.FrameLayout r2 = r0.windowView
+                if (r4 == 0) goto L_0x01b0
+                android.widget.FrameLayout r4 = r0.windowView
                 android.util.Property r6 = android.view.View.ALPHA
-                float[] r4 = new float[r4]
+                float[] r2 = new float[r2]
                 r7 = 0
-                r4[r3] = r7
-                android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r2, r6, r4)
+                r2[r3] = r7
+                android.animation.ObjectAnimator r2 = android.animation.ObjectAnimator.ofFloat(r4, r6, r2)
                 r1.add(r2)
                 org.telegram.ui.Components.ThemeEditorView$4 r2 = new org.telegram.ui.Components.ThemeEditorView$4
                 r2.<init>()

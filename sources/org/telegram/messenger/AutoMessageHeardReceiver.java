@@ -18,10 +18,10 @@ public class AutoMessageHeardReceiver extends BroadcastReceiver {
             if (i > 0) {
                 if (instance.getMessagesController().getUser(Integer.valueOf(i)) == null) {
                     Utilities.globalQueue.postRunnable(new Runnable(i, intExtra2, longExtra, intExtra) {
-                        private final /* synthetic */ int f$1;
-                        private final /* synthetic */ int f$2;
-                        private final /* synthetic */ long f$3;
-                        private final /* synthetic */ int f$4;
+                        public final /* synthetic */ int f$1;
+                        public final /* synthetic */ int f$2;
+                        public final /* synthetic */ long f$3;
+                        public final /* synthetic */ int f$4;
 
                         {
                             this.f$1 = r2;
@@ -32,10 +32,10 @@ public class AutoMessageHeardReceiver extends BroadcastReceiver {
 
                         public final void run() {
                             AndroidUtilities.runOnUIThread(new Runnable(AccountInstance.this.getMessagesStorage().getUserSync(this.f$1), this.f$2, this.f$3, this.f$4) {
-                                private final /* synthetic */ TLRPC$User f$1;
-                                private final /* synthetic */ int f$2;
-                                private final /* synthetic */ long f$3;
-                                private final /* synthetic */ int f$4;
+                                public final /* synthetic */ TLRPC$User f$1;
+                                public final /* synthetic */ int f$2;
+                                public final /* synthetic */ long f$3;
+                                public final /* synthetic */ int f$4;
 
                                 {
                                     this.f$1 = r2;
@@ -54,10 +54,10 @@ public class AutoMessageHeardReceiver extends BroadcastReceiver {
                 }
             } else if (i < 0 && instance.getMessagesController().getChat(Integer.valueOf(-i)) == null) {
                 Utilities.globalQueue.postRunnable(new Runnable(i, intExtra2, longExtra, intExtra) {
-                    private final /* synthetic */ int f$1;
-                    private final /* synthetic */ int f$2;
-                    private final /* synthetic */ long f$3;
-                    private final /* synthetic */ int f$4;
+                    public final /* synthetic */ int f$1;
+                    public final /* synthetic */ int f$2;
+                    public final /* synthetic */ long f$3;
+                    public final /* synthetic */ int f$4;
 
                     {
                         this.f$1 = r2;
@@ -68,10 +68,10 @@ public class AutoMessageHeardReceiver extends BroadcastReceiver {
 
                     public final void run() {
                         AndroidUtilities.runOnUIThread(new Runnable(AccountInstance.this.getMessagesStorage().getChatSync(-this.f$1), this.f$2, this.f$3, this.f$4) {
-                            private final /* synthetic */ TLRPC$Chat f$1;
-                            private final /* synthetic */ int f$2;
-                            private final /* synthetic */ long f$3;
-                            private final /* synthetic */ int f$4;
+                            public final /* synthetic */ TLRPC$Chat f$1;
+                            public final /* synthetic */ int f$2;
+                            public final /* synthetic */ long f$3;
+                            public final /* synthetic */ int f$4;
 
                             {
                                 this.f$1 = r2;

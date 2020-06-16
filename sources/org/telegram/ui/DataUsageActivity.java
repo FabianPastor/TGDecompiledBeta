@@ -496,7 +496,7 @@ public class DataUsageActivity extends BaseFragment {
             ViewPage[] viewPageArr3 = this.viewPages;
             viewPageArr3[i].addView(viewPageArr3[i].listView, LayoutHelper.createFrame(-1, -1.0f));
             this.viewPages[i].listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(recyclerListView) {
-                private final /* synthetic */ RecyclerListView f$1;
+                public final /* synthetic */ RecyclerListView f$1;
 
                 {
                     this.f$1 = r2;
@@ -562,7 +562,7 @@ public class DataUsageActivity extends BaseFragment {
                 builder.setTitle(LocaleController.getString("ResetStatisticsAlertTitle", NUM));
                 builder.setMessage(LocaleController.getString("ResetStatisticsAlert", NUM));
                 builder.setPositiveButton(LocaleController.getString("Reset", NUM), new DialogInterface.OnClickListener(listAdapter) {
-                    private final /* synthetic */ DataUsageActivity.ListAdapter f$1;
+                    public final /* synthetic */ DataUsageActivity.ListAdapter f$1;
 
                     {
                         this.f$1 = r2;

@@ -375,8 +375,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         builder.setTitle(LocaleController.getString("AppName", NUM));
         builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(SharedConfig.proxyList.get(i - i2), i) {
-            private final /* synthetic */ SharedConfig.ProxyInfo f$1;
-            private final /* synthetic */ int f$2;
+            public final /* synthetic */ SharedConfig.ProxyInfo f$1;
+            public final /* synthetic */ int f$2;
 
             {
                 this.f$1 = r2;
@@ -480,7 +480,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 proxyInfo.proxyCheckPingId = ConnectionsManager.getInstance(this.currentAccount).checkProxy(proxyInfo.address, proxyInfo.port, proxyInfo.username, proxyInfo.password, proxyInfo.secret, new RequestTimeDelegate() {
                     public final void run(long j) {
                         AndroidUtilities.runOnUIThread(new Runnable(j) {
-                            private final /* synthetic */ long f$1;
+                            public final /* synthetic */ long f$1;
 
                             {
                                 this.f$1 = r2;

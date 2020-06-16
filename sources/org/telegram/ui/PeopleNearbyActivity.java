@@ -373,7 +373,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                         builder.setTitle(LocaleController.getString("MakeMyselfVisibleTitle", NUM));
                         builder.setMessage(LocaleController.getString("MakeMyselfVisibleInfo", NUM));
                         builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(userConfig) {
-                            private final /* synthetic */ UserConfig f$1;
+                            public final /* synthetic */ UserConfig f$1;
 
                             {
                                 this.f$1 = r2;
@@ -569,7 +569,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
 
     public /* synthetic */ void lambda$checkCanCreateGroup$4$PeopleNearbyActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLRPC$TL_error f$1;
 
             {
                 this.f$1 = r2;
@@ -683,7 +683,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                     tLRPC$TL_contacts_getLocated.self_expires = i2;
                 }
                 this.reqId = getConnectionsManager().sendRequest(tLRPC$TL_contacts_getLocated, new RequestDelegate(i) {
-                    private final /* synthetic */ int f$1;
+                    public final /* synthetic */ int f$1;
 
                     {
                         this.f$1 = r2;
@@ -705,9 +705,9 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
 
     public /* synthetic */ void lambda$sendRequest$7$PeopleNearbyActivity(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(i, tLRPC$TL_error, tLObject) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ TLRPC$TL_error f$2;
-            private final /* synthetic */ TLObject f$3;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ TLRPC$TL_error f$2;
+            public final /* synthetic */ TLObject f$3;
 
             {
                 this.f$1 = r2;
@@ -885,9 +885,9 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             long longValue = objArr[0].longValue();
             TLRPC$User tLRPC$User = objArr[1];
             $$Lambda$PeopleNearbyActivity$ZS_w_ALcZMiAOve6MJNKb6o40M r2 = new Runnable(objArr[2], longValue, objArr[3].booleanValue()) {
-                private final /* synthetic */ TLRPC$Chat f$1;
-                private final /* synthetic */ long f$2;
-                private final /* synthetic */ boolean f$3;
+                public final /* synthetic */ TLRPC$Chat f$1;
+                public final /* synthetic */ long f$2;
+                public final /* synthetic */ boolean f$3;
 
                 {
                     this.f$1 = r2;

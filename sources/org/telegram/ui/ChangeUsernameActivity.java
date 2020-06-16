@@ -314,7 +314,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                 this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText8"));
                 this.lastCheckName = str;
                 $$Lambda$ChangeUsernameActivity$a8ZrhEmIlukHAljdlSoaVTMTqDc r11 = new Runnable(str) {
-                    private final /* synthetic */ String f$1;
+                    public final /* synthetic */ String f$1;
 
                     {
                         this.f$1 = r2;
@@ -335,7 +335,7 @@ public class ChangeUsernameActivity extends BaseFragment {
         TLRPC$TL_account_checkUsername tLRPC$TL_account_checkUsername = new TLRPC$TL_account_checkUsername();
         tLRPC$TL_account_checkUsername.username = str;
         this.checkReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_checkUsername, new RequestDelegate(str) {
-            private final /* synthetic */ String f$1;
+            public final /* synthetic */ String f$1;
 
             {
                 this.f$1 = r2;
@@ -349,9 +349,9 @@ public class ChangeUsernameActivity extends BaseFragment {
 
     public /* synthetic */ void lambda$null$3$ChangeUsernameActivity(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(str, tLRPC$TL_error, tLObject) {
-            private final /* synthetic */ String f$1;
-            private final /* synthetic */ TLRPC$TL_error f$2;
-            private final /* synthetic */ TLObject f$3;
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ TLRPC$TL_error f$2;
+            public final /* synthetic */ TLObject f$3;
 
             {
                 this.f$1 = r2;
@@ -400,8 +400,8 @@ public class ChangeUsernameActivity extends BaseFragment {
                 tLRPC$TL_account_updateUsername.username = obj;
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, 1);
                 int sendRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_updateUsername, new RequestDelegate(alertDialog, tLRPC$TL_account_updateUsername) {
-                    private final /* synthetic */ AlertDialog f$1;
-                    private final /* synthetic */ TLRPC$TL_account_updateUsername f$2;
+                    public final /* synthetic */ AlertDialog f$1;
+                    public final /* synthetic */ TLRPC$TL_account_updateUsername f$2;
 
                     {
                         this.f$1 = r2;
@@ -414,7 +414,7 @@ public class ChangeUsernameActivity extends BaseFragment {
                 }, 2);
                 ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(sendRequest, this.classGuid);
                 alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener(sendRequest) {
-                    private final /* synthetic */ int f$1;
+                    public final /* synthetic */ int f$1;
 
                     {
                         this.f$1 = r2;
@@ -432,8 +432,8 @@ public class ChangeUsernameActivity extends BaseFragment {
     public /* synthetic */ void lambda$saveName$7$ChangeUsernameActivity(AlertDialog alertDialog, TLRPC$TL_account_updateUsername tLRPC$TL_account_updateUsername, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             AndroidUtilities.runOnUIThread(new Runnable(alertDialog, (TLRPC$User) tLObject) {
-                private final /* synthetic */ AlertDialog f$1;
-                private final /* synthetic */ TLRPC$User f$2;
+                public final /* synthetic */ AlertDialog f$1;
+                public final /* synthetic */ TLRPC$User f$2;
 
                 {
                     this.f$1 = r2;
@@ -446,9 +446,9 @@ public class ChangeUsernameActivity extends BaseFragment {
             });
         } else {
             AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLRPC$TL_error, tLRPC$TL_account_updateUsername) {
-                private final /* synthetic */ AlertDialog f$1;
-                private final /* synthetic */ TLRPC$TL_error f$2;
-                private final /* synthetic */ TLRPC$TL_account_updateUsername f$3;
+                public final /* synthetic */ AlertDialog f$1;
+                public final /* synthetic */ TLRPC$TL_error f$2;
+                public final /* synthetic */ TLRPC$TL_account_updateUsername f$3;
 
                 {
                     this.f$1 = r2;

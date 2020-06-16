@@ -148,7 +148,7 @@ public class TermsOfServiceView extends FrameLayout {
         TLRPC$TL_account_deleteAccount tLRPC$TL_account_deleteAccount = new TLRPC$TL_account_deleteAccount();
         tLRPC$TL_account_deleteAccount.reason = "Decline ToS update";
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_deleteAccount, new RequestDelegate(alertDialog) {
-            private final /* synthetic */ AlertDialog f$1;
+            public final /* synthetic */ AlertDialog f$1;
 
             {
                 this.f$1 = r2;
@@ -163,9 +163,9 @@ public class TermsOfServiceView extends FrameLayout {
 
     public /* synthetic */ void lambda$null$1$TermsOfServiceView(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLObject, tLRPC$TL_error) {
-            private final /* synthetic */ AlertDialog f$1;
-            private final /* synthetic */ TLObject f$2;
-            private final /* synthetic */ TLRPC$TL_error f$3;
+            public final /* synthetic */ AlertDialog f$1;
+            public final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_error f$3;
 
             {
                 this.f$1 = r2;

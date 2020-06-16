@@ -276,7 +276,7 @@ public class EditTextBoldCursor extends EditText {
                 ViewTreeObserver.OnPreDrawListener onPreDrawListener = this.listenerFixer;
                 onPreDrawListener.getClass();
                 AndroidUtilities.runOnUIThread(new Runnable(onPreDrawListener) {
-                    private final /* synthetic */ ViewTreeObserver.OnPreDrawListener f$0;
+                    public final /* synthetic */ ViewTreeObserver.OnPreDrawListener f$0;
 
                     {
                         this.f$0 = r1;
@@ -600,7 +600,7 @@ public class EditTextBoldCursor extends EditText {
                     canvas.save();
                     if (getVerticalOffsetMethod != null) {
                         if ((getGravity() & 112) != 48) {
-                            i2 = ((Integer) getVerticalOffsetMethod.invoke(this, new Object[]{true})).intValue();
+                            i2 = ((Integer) getVerticalOffsetMethod.invoke(this, new Object[]{Boolean.TRUE})).intValue();
                             canvas2.translate((float) getPaddingLeft(), (float) (getExtendedPaddingTop() + i2));
                             Layout layout = getLayout();
                             int lineForOffset = layout.getLineForOffset(getSelectionStart());

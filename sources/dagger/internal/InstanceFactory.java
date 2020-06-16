@@ -8,10 +8,6 @@ public final class InstanceFactory<T> implements Factory<T> {
         return new InstanceFactory(t);
     }
 
-    static {
-        new InstanceFactory((Object) null);
-    }
-
     private InstanceFactory(T t) {
         this.instance = t;
     }

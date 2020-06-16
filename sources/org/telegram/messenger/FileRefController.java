@@ -652,8 +652,8 @@ public class FileRefController extends BaseController {
                 tLRPC$TL_messages_getScheduledMessages.peer = getMessagesController().getInputPeer((int) messageObject.getDialogId());
                 tLRPC$TL_messages_getScheduledMessages.id.add(Integer.valueOf(messageObject.getRealId()));
                 getConnectionsManager().sendRequest(tLRPC$TL_messages_getScheduledMessages, new RequestDelegate(str, str2) {
-                    private final /* synthetic */ String f$1;
-                    private final /* synthetic */ String f$2;
+                    public final /* synthetic */ String f$1;
+                    public final /* synthetic */ String f$2;
 
                     {
                         this.f$1 = r2;
@@ -669,8 +669,8 @@ public class FileRefController extends BaseController {
                 tLRPC$TL_channels_getMessages.channel = getMessagesController().getInputChannel(channelId);
                 tLRPC$TL_channels_getMessages.id.add(Integer.valueOf(messageObject.getRealId()));
                 getConnectionsManager().sendRequest(tLRPC$TL_channels_getMessages, new RequestDelegate(str, str2) {
-                    private final /* synthetic */ String f$1;
-                    private final /* synthetic */ String f$2;
+                    public final /* synthetic */ String f$1;
+                    public final /* synthetic */ String f$2;
 
                     {
                         this.f$1 = r2;
@@ -685,8 +685,8 @@ public class FileRefController extends BaseController {
                 TLRPC$TL_messages_getMessages tLRPC$TL_messages_getMessages = new TLRPC$TL_messages_getMessages();
                 tLRPC$TL_messages_getMessages.id.add(Integer.valueOf(messageObject.getRealId()));
                 getConnectionsManager().sendRequest(tLRPC$TL_messages_getMessages, new RequestDelegate(str, str2) {
-                    private final /* synthetic */ String f$1;
-                    private final /* synthetic */ String f$2;
+                    public final /* synthetic */ String f$1;
+                    public final /* synthetic */ String f$2;
 
                     {
                         this.f$1 = r2;
@@ -706,8 +706,8 @@ public class FileRefController extends BaseController {
             tLRPC$TL_inputWallPaper.access_hash = tLRPC$TL_wallPaper.access_hash;
             tLRPC$TL_account_getWallPaper.wallpaper = tLRPC$TL_inputWallPaper;
             getConnectionsManager().sendRequest(tLRPC$TL_account_getWallPaper, new RequestDelegate(str, str2) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ String f$2;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$2;
 
                 {
                     this.f$1 = r2;
@@ -727,8 +727,8 @@ public class FileRefController extends BaseController {
             tLRPC$TL_account_getTheme.theme = tLRPC$TL_inputTheme;
             tLRPC$TL_account_getTheme.format = "android";
             getConnectionsManager().sendRequest(tLRPC$TL_account_getTheme, new RequestDelegate(str, str2) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ String f$2;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$2;
 
                 {
                     this.f$1 = r2;
@@ -744,8 +744,8 @@ public class FileRefController extends BaseController {
             tLRPC$TL_messages_getWebPage.url = ((TLRPC$WebPage) obj).url;
             tLRPC$TL_messages_getWebPage.hash = 0;
             getConnectionsManager().sendRequest(tLRPC$TL_messages_getWebPage, new RequestDelegate(str, str2) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ String f$2;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$2;
 
                 {
                     this.f$1 = r2;
@@ -760,8 +760,8 @@ public class FileRefController extends BaseController {
             TLRPC$TL_users_getUsers tLRPC$TL_users_getUsers = new TLRPC$TL_users_getUsers();
             tLRPC$TL_users_getUsers.id.add(getMessagesController().getInputUser((TLRPC$User) obj));
             getConnectionsManager().sendRequest(tLRPC$TL_users_getUsers, new RequestDelegate(str, str2) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ String f$2;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$2;
 
                 {
                     this.f$1 = r2;
@@ -778,8 +778,8 @@ public class FileRefController extends BaseController {
                 TLRPC$TL_messages_getChats tLRPC$TL_messages_getChats = new TLRPC$TL_messages_getChats();
                 tLRPC$TL_messages_getChats.id.add(Integer.valueOf(tLRPC$Chat.id));
                 getConnectionsManager().sendRequest(tLRPC$TL_messages_getChats, new RequestDelegate(str, str2) {
-                    private final /* synthetic */ String f$1;
-                    private final /* synthetic */ String f$2;
+                    public final /* synthetic */ String f$1;
+                    public final /* synthetic */ String f$2;
 
                     {
                         this.f$1 = r2;
@@ -794,8 +794,8 @@ public class FileRefController extends BaseController {
                 TLRPC$TL_channels_getChannels tLRPC$TL_channels_getChannels = new TLRPC$TL_channels_getChannels();
                 tLRPC$TL_channels_getChannels.id.add(MessagesController.getInputChannel(tLRPC$Chat));
                 getConnectionsManager().sendRequest(tLRPC$TL_channels_getChannels, new RequestDelegate(str, str2) {
-                    private final /* synthetic */ String f$1;
-                    private final /* synthetic */ String f$2;
+                    public final /* synthetic */ String f$1;
+                    public final /* synthetic */ String f$2;
 
                     {
                         this.f$1 = r2;
@@ -854,8 +854,8 @@ public class FileRefController extends BaseController {
                     tLRPC$TL_photos_getUserPhotos.max_id = 0;
                     tLRPC$TL_photos_getUserPhotos.user_id = getMessagesController().getInputUser(intValue);
                     getConnectionsManager().sendRequest(tLRPC$TL_photos_getUserPhotos, new RequestDelegate(str, str2) {
-                        private final /* synthetic */ String f$1;
-                        private final /* synthetic */ String f$2;
+                        public final /* synthetic */ String f$1;
+                        public final /* synthetic */ String f$2;
 
                         {
                             this.f$1 = r2;
@@ -875,8 +875,8 @@ public class FileRefController extends BaseController {
                 tLRPC$TL_messages_search.q = "";
                 tLRPC$TL_messages_search.peer = getMessagesController().getInputPeer(intValue);
                 getConnectionsManager().sendRequest(tLRPC$TL_messages_search, new RequestDelegate(str, str2) {
-                    private final /* synthetic */ String f$1;
-                    private final /* synthetic */ String f$2;
+                    public final /* synthetic */ String f$1;
+                    public final /* synthetic */ String f$2;
 
                     {
                         this.f$1 = r2;
@@ -896,8 +896,8 @@ public class FileRefController extends BaseController {
                         tLRPC$TL_channels_getMessages2.channel = getMessagesController().getInputChannel(intValue2);
                         tLRPC$TL_channels_getMessages2.id.add(Utilities.parseInt(split[2]));
                         getConnectionsManager().sendRequest(tLRPC$TL_channels_getMessages2, new RequestDelegate(str, str2) {
-                            private final /* synthetic */ String f$1;
-                            private final /* synthetic */ String f$2;
+                            public final /* synthetic */ String f$1;
+                            public final /* synthetic */ String f$2;
 
                             {
                                 this.f$1 = r2;
@@ -913,8 +913,8 @@ public class FileRefController extends BaseController {
                     TLRPC$TL_messages_getMessages tLRPC$TL_messages_getMessages2 = new TLRPC$TL_messages_getMessages();
                     tLRPC$TL_messages_getMessages2.id.add(Utilities.parseInt(split[2]));
                     getConnectionsManager().sendRequest(tLRPC$TL_messages_getMessages2, new RequestDelegate(str, str2) {
-                        private final /* synthetic */ String f$1;
-                        private final /* synthetic */ String f$2;
+                        public final /* synthetic */ String f$1;
+                        public final /* synthetic */ String f$2;
 
                         {
                             this.f$1 = r2;
@@ -939,8 +939,8 @@ public class FileRefController extends BaseController {
             tLRPC$TL_inputStickerSetID.id = tLRPC$StickerSet.id;
             tLRPC$TL_inputStickerSetID.access_hash = tLRPC$StickerSet.access_hash;
             getConnectionsManager().sendRequest(tLRPC$TL_messages_getStickerSet, new RequestDelegate(str, str2) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ String f$2;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$2;
 
                 {
                     this.f$1 = r2;
@@ -959,8 +959,8 @@ public class FileRefController extends BaseController {
             tLRPC$TL_inputStickerSetID2.id = tLRPC$StickerSet2.id;
             tLRPC$TL_inputStickerSetID2.access_hash = tLRPC$StickerSet2.access_hash;
             getConnectionsManager().sendRequest(tLRPC$TL_messages_getStickerSet2, new RequestDelegate(str, str2) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ String f$2;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$2;
 
                 {
                     this.f$1 = r2;
@@ -975,8 +975,8 @@ public class FileRefController extends BaseController {
             TLRPC$TL_messages_getStickerSet tLRPC$TL_messages_getStickerSet3 = new TLRPC$TL_messages_getStickerSet();
             tLRPC$TL_messages_getStickerSet3.stickerset = (TLRPC$InputStickerSet) obj;
             getConnectionsManager().sendRequest(tLRPC$TL_messages_getStickerSet3, new RequestDelegate(str, str2) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ String f$2;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$2;
 
                 {
                     this.f$1 = r2;
@@ -1100,8 +1100,8 @@ public class FileRefController extends BaseController {
                     if (z) {
                         this.multiMediaCache.remove(tLRPC$TL_messages_sendMultiMedia);
                         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_messages_sendMultiMedia, objArr) {
-                            private final /* synthetic */ TLRPC$TL_messages_sendMultiMedia f$1;
-                            private final /* synthetic */ Object[] f$2;
+                            public final /* synthetic */ TLRPC$TL_messages_sendMultiMedia f$1;
+                            public final /* synthetic */ Object[] f$2;
 
                             {
                                 this.f$1 = r2;
@@ -1123,7 +1123,7 @@ public class FileRefController extends BaseController {
                 ((TLRPC$TL_inputMediaPhoto) tLRPC$InputMedia2).id.file_reference = bArr;
             }
             AndroidUtilities.runOnUIThread(new Runnable(requester) {
-                private final /* synthetic */ FileRefController.Requester f$1;
+                public final /* synthetic */ FileRefController.Requester f$1;
 
                 {
                     this.f$1 = r2;
@@ -1141,7 +1141,7 @@ public class FileRefController extends BaseController {
                 ((TLRPC$TL_inputMediaPhoto) tLRPC$InputMedia3).id.file_reference = bArr;
             }
             AndroidUtilities.runOnUIThread(new Runnable(requester) {
-                private final /* synthetic */ FileRefController.Requester f$1;
+                public final /* synthetic */ FileRefController.Requester f$1;
 
                 {
                     this.f$1 = r2;
@@ -1203,8 +1203,8 @@ public class FileRefController extends BaseController {
             if (objArr2 != null) {
                 this.multiMediaCache.remove(tLRPC$TL_messages_sendMultiMedia);
                 AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_messages_sendMultiMedia, objArr2) {
-                    private final /* synthetic */ TLRPC$TL_messages_sendMultiMedia f$1;
-                    private final /* synthetic */ Object[] f$2;
+                    public final /* synthetic */ TLRPC$TL_messages_sendMultiMedia f$1;
+                    public final /* synthetic */ Object[] f$2;
 
                     {
                         this.f$1 = r2;
@@ -1218,7 +1218,7 @@ public class FileRefController extends BaseController {
             }
         } else if ((objArr[0] instanceof TLRPC$TL_messages_sendMedia) || (objArr[0] instanceof TLRPC$TL_messages_editMessage)) {
             AndroidUtilities.runOnUIThread(new Runnable(objArr) {
-                private final /* synthetic */ Object[] f$1;
+                public final /* synthetic */ Object[] f$1;
 
                 {
                     this.f$1 = r2;
@@ -1262,7 +1262,7 @@ public class FileRefController extends BaseController {
 
     /* JADX WARNING: type inference failed for: r8v0 */
     /* JADX WARNING: type inference failed for: r8v2 */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r8v1, types: [boolean, int] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r8v1, types: [int, boolean] */
     /* JADX WARNING: Removed duplicated region for block: B:202:0x0421  */
     /* JADX WARNING: Removed duplicated region for block: B:207:0x042e  */
     /* JADX WARNING: Removed duplicated region for block: B:221:0x0126 A[SYNTHETIC] */

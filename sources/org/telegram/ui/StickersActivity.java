@@ -258,7 +258,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(context) {
-            private final /* synthetic */ Context f$1;
+            public final /* synthetic */ Context f$1;
 
             {
                 this.f$1 = r2;
@@ -311,7 +311,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                         radioColorCell.setTextAndValue(strArr[i2], SharedConfig.suggestStickers == i2);
                         linearLayout.addView(radioColorCell);
                         radioColorCell.setOnClickListener(new View.OnClickListener(builder) {
-                            private final /* synthetic */ AlertDialog.Builder f$1;
+                            public final /* synthetic */ AlertDialog.Builder f$1;
 
                             {
                                 this.f$1 = r2;
@@ -601,9 +601,10 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             if (i == 0 || i == 1) {
                 ArrayList arrayList = new ArrayList(this.selectedItems.size());
                 int size = this.stickerSets.size();
-                for (int i2 = 0; i2 < size; i2++) {
-                    TLRPC$StickerSet tLRPC$StickerSet = this.stickerSets.get(i2).set;
-                    if (this.selectedItems.get(tLRPC$StickerSet.id, false).booleanValue()) {
+                int i2 = 0;
+                for (int i3 = 0; i3 < size; i3++) {
+                    TLRPC$StickerSet tLRPC$StickerSet = this.stickerSets.get(i3).set;
+                    if (this.selectedItems.get(tLRPC$StickerSet.id, Boolean.FALSE).booleanValue()) {
                         arrayList.add(tLRPC$StickerSet);
                     }
                 }
@@ -623,8 +624,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                         str = LocaleController.getString("Archive", NUM);
                     }
                     builder.setPositiveButton(str, new DialogInterface.OnClickListener(arrayList, i) {
-                        private final /* synthetic */ ArrayList f$1;
-                        private final /* synthetic */ int f$2;
+                        public final /* synthetic */ ArrayList f$1;
+                        public final /* synthetic */ int f$2;
 
                         {
                             this.f$1 = r2;
@@ -645,17 +646,16 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     return;
                 }
                 int size3 = this.stickerSets.size();
-                int i3 = 0;
                 while (true) {
-                    if (i3 >= size3) {
+                    if (i2 >= size3) {
                         break;
                     }
-                    TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = this.stickerSets.get(i3);
-                    if (this.selectedItems.get(tLRPC$TL_messages_stickerSet.set.id, false).booleanValue()) {
+                    TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = this.stickerSets.get(i2);
+                    if (this.selectedItems.get(tLRPC$TL_messages_stickerSet.set.id, Boolean.FALSE).booleanValue()) {
                         processSelectionOption(i, tLRPC$TL_messages_stickerSet);
                         break;
                     }
-                    i3++;
+                    i2++;
                 }
                 StickersActivity.this.listAdapter.clearSelected();
             }
@@ -707,7 +707,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     z = false;
                 }
                 stickerSetCell.setStickersSet(tLRPC$TL_messages_stickerSet, z);
-                stickerSetCell.setChecked(this.selectedItems.get(getItemId(i), false).booleanValue(), false);
+                stickerSetCell.setChecked(this.selectedItems.get(getItemId(i), Boolean.FALSE).booleanValue(), false);
                 stickerSetCell.setReorderable(hasSelected(), false);
             } else if (itemViewType == 1) {
                 TextInfoPrivacyCell textInfoPrivacyCell = (TextInfoPrivacyCell) viewHolder.itemView;
@@ -786,7 +786,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             } else if (i >= StickersActivity.this.stickersStartRow && i < StickersActivity.this.stickersEndRow) {
                 StickerSetCell stickerSetCell = (StickerSetCell) viewHolder.itemView;
                 if (list.contains(1)) {
-                    stickerSetCell.setChecked(this.selectedItems.get(getItemId(i), false).booleanValue());
+                    stickerSetCell.setChecked(this.selectedItems.get(getItemId(i), Boolean.FALSE).booleanValue());
                 }
                 if (list.contains(2)) {
                     stickerSetCell.setReorderable(hasSelected());
@@ -830,8 +830,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 charSequenceArr = new CharSequence[]{LocaleController.getString("StickersHide", NUM), LocaleController.getString("StickersCopy", NUM), LocaleController.getString("StickersReorder", NUM), LocaleController.getString("StickersShare", NUM), LocaleController.getString("StickersRemove", NUM)};
             }
             builder.setItems(charSequenceArr, iArr, new DialogInterface.OnClickListener(iArr2, stickersSet) {
-                private final /* synthetic */ int[] f$1;
-                private final /* synthetic */ TLRPC$TL_messages_stickerSet f$2;
+                public final /* synthetic */ int[] f$1;
+                public final /* synthetic */ TLRPC$TL_messages_stickerSet f$2;
 
                 {
                     this.f$1 = r2;
@@ -860,7 +860,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 StickerSetCell stickerSetCell = new StickerSetCell(this.mContext, 1);
                 stickerSetCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                 stickerSetCell.setOnReorderButtonTouchListener(new View.OnTouchListener(stickerSetCell) {
-                    private final /* synthetic */ StickerSetCell f$1;
+                    public final /* synthetic */ StickerSetCell f$1;
 
                     {
                         this.f$1 = r2;
@@ -940,7 +940,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         public void toggleSelected(int i) {
             long itemId = getItemId(i);
             LongSparseArray<Boolean> longSparseArray = this.selectedItems;
-            longSparseArray.put(itemId, Boolean.valueOf(!longSparseArray.get(itemId, false).booleanValue()));
+            longSparseArray.put(itemId, Boolean.valueOf(!longSparseArray.get(itemId, Boolean.FALSE).booleanValue()));
             notifyItemChanged(i, 1);
             checkActionMode();
         }
@@ -952,7 +952,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         }
 
         public boolean hasSelected() {
-            return this.selectedItems.indexOfValue(true) != -1;
+            return this.selectedItems.indexOfValue(Boolean.TRUE) != -1;
         }
 
         public int getSelectedCount() {
@@ -994,7 +994,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 int i2 = 0;
                 while (true) {
                     if (i2 < size) {
-                        if (this.selectedItems.get(this.stickerSets.get(i2).set.id, false).booleanValue() && this.stickerSets.get(i2).set.official) {
+                        if (this.selectedItems.get(this.stickerSets.get(i2).set.id, Boolean.FALSE).booleanValue() && this.stickerSets.get(i2).set.official) {
                             z = false;
                             break;
                         }

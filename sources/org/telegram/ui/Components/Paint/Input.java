@@ -4,6 +4,7 @@ import android.graphics.Matrix;
 import android.view.MotionEvent;
 import java.util.Vector;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.Components.Paint.Brush;
 
 public class Input {
     private boolean beganDrawing;
@@ -11,6 +12,7 @@ public class Input {
     private boolean hasMoved;
     private Matrix invertMatrix;
     private boolean isFirst;
+    private float lastAngle;
     private Point lastLocation;
     private double lastRemainder;
     private Point[] points = new Point[3];
@@ -48,6 +50,37 @@ public class Input {
                     reset();
                 } else if (this.pointsCount > 0) {
                     smoothenAndPaintPoints(true);
+                    if (this.renderView.getCurrentBrush() instanceof Brush.Arrow) {
+                        float f2 = this.lastAngle;
+                        Point point2 = this.points[this.pointsCount - 1];
+                        Point point3 = new Point(point2.x, point2.y, 0.800000011920929d);
+                        double d = point2.x;
+                        double d2 = (double) f2;
+                        Double.isNaN(d2);
+                        double cos = Math.cos(d2 - 2.356194490192345d);
+                        double currentWeight = (double) (this.renderView.getCurrentWeight() * 4.5f);
+                        Double.isNaN(currentWeight);
+                        double d3 = d + (cos * currentWeight);
+                        double d4 = point2.y;
+                        Double.isNaN(d2);
+                        double sin = Math.sin(d2 - 2.5132741228718345d);
+                        Double.isNaN(currentWeight);
+                        Point point4 = new Point(d3, d4 + (sin * currentWeight), 1.0d);
+                        point4.edge = true;
+                        paintPath(new Path(new Point[]{point3, point4}));
+                        double d5 = point2.x;
+                        Double.isNaN(d2);
+                        double cos2 = Math.cos(2.356194490192345d + d2);
+                        Double.isNaN(currentWeight);
+                        double d6 = d5 + (cos2 * currentWeight);
+                        double d7 = point2.y;
+                        Double.isNaN(d2);
+                        double sin2 = Math.sin(d2 + 2.5132741228718345d);
+                        Double.isNaN(currentWeight);
+                        Point point5 = new Point(d6, d7 + (sin2 * currentWeight), 1.0d);
+                        point5.edge = true;
+                        paintPath(new Path(new Point[]{point3, point5}));
+                    }
                 }
                 this.pointsCount = 0;
                 this.renderView.getPainting().commitStroke(this.renderView.getCurrentColor());
@@ -83,6 +116,7 @@ public class Input {
             int i2 = i + 1;
             this.pointsCount = i2;
             if (i2 == 3) {
+                this.lastAngle = (float) Math.atan2(pointArr[2].y - pointArr[1].y, pointArr[2].x - pointArr[1].x);
                 smoothenAndPaintPoints(false);
             }
             this.lastLocation = point;
@@ -166,7 +200,7 @@ public class Input {
         }
         path.remainder = this.lastRemainder;
         this.renderView.getPainting().paintStroke(path, this.clearBuffer, new Runnable(path) {
-            private final /* synthetic */ Path f$1;
+            public final /* synthetic */ Path f$1;
 
             {
                 this.f$1 = r2;
@@ -185,7 +219,7 @@ public class Input {
 
     public /* synthetic */ void lambda$paintPath$1$Input(Path path) {
         AndroidUtilities.runOnUIThread(new Runnable(path) {
-            private final /* synthetic */ Path f$1;
+            public final /* synthetic */ Path f$1;
 
             {
                 this.f$1 = r2;

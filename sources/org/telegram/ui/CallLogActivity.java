@@ -451,7 +451,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("Calls", NUM));
         builder.setItems((CharSequence[]) arrayList.toArray(new String[0]), new DialogInterface.OnClickListener(callLogRow) {
-            private final /* synthetic */ CallLogActivity.CallLogRow f$1;
+            public final /* synthetic */ CallLogActivity.CallLogRow f$1;
 
             {
                 this.f$1 = r2;
@@ -534,8 +534,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 
     public /* synthetic */ void lambda$getCalls$6$CallLogActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
 
             {
                 this.f$1 = r2;
@@ -610,7 +610,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             builder.setTitle(LocaleController.getString("AppName", NUM));
             builder.setMessage(LocaleController.getString("ConfirmDeleteCallLog", NUM));
             builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener(callLogRow) {
-                private final /* synthetic */ CallLogActivity.CallLogRow f$1;
+                public final /* synthetic */ CallLogActivity.CallLogRow f$1;
 
                 {
                     this.f$1 = r2;

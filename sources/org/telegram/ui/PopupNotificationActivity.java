@@ -1001,8 +1001,8 @@ public class PopupNotificationActivity extends Activity implements NotificationC
                         textView.setBackgroundDrawable(Theme.getSelectorDrawable(true));
                         linearLayout.addView(textView, LayoutHelper.createLinear(-1, -1, 100.0f / ((float) i2)));
                         textView.setOnClickListener(new View.OnClickListener(i7, messageObject) {
-                            private final /* synthetic */ int f$0;
-                            private final /* synthetic */ MessageObject f$1;
+                            public final /* synthetic */ int f$0;
+                            public final /* synthetic */ MessageObject f$1;
 
                             {
                                 this.f$0 = r1;

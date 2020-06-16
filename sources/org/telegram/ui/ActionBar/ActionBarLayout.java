@@ -1023,10 +1023,10 @@ public class ActionBarLayout extends FrameLayout {
             this.transitionAnimationInProgress = true;
             this.layoutToIgnore = this.containerView;
             this.onOpenAnimationEndRunnable = new Runnable(z4, z, baseFragment2, baseFragment) {
-                private final /* synthetic */ boolean f$1;
-                private final /* synthetic */ boolean f$2;
-                private final /* synthetic */ BaseFragment f$3;
-                private final /* synthetic */ BaseFragment f$4;
+                public final /* synthetic */ boolean f$1;
+                public final /* synthetic */ boolean f$2;
+                public final /* synthetic */ BaseFragment f$3;
+                public final /* synthetic */ BaseFragment f$4;
 
                 {
                     this.f$1 = r2;
@@ -1099,7 +1099,7 @@ public class ActionBarLayout extends FrameLayout {
             this.transitionAnimationInProgress = true;
             this.layoutToIgnore = this.containerView;
             this.onOpenAnimationEndRunnable = new Runnable(baseFragment3) {
-                private final /* synthetic */ BaseFragment f$1;
+                public final /* synthetic */ BaseFragment f$1;
 
                 {
                     this.f$1 = r2;
@@ -1417,8 +1417,8 @@ public class ActionBarLayout extends FrameLayout {
                     this.transitionAnimationInProgress = true;
                     this.layoutToIgnore = this.containerView;
                     this.onCloseAnimationEndRunnable = new Runnable(baseFragment2, baseFragment) {
-                        private final /* synthetic */ BaseFragment f$1;
-                        private final /* synthetic */ BaseFragment f$2;
+                        public final /* synthetic */ BaseFragment f$1;
+                        public final /* synthetic */ BaseFragment f$2;
 
                         {
                             this.f$1 = r2;
@@ -1462,7 +1462,7 @@ public class ActionBarLayout extends FrameLayout {
                 this.transitionAnimationInProgress = true;
                 this.layoutToIgnore = this.containerView;
                 this.onCloseAnimationEndRunnable = new Runnable(baseFragment2) {
-                    private final /* synthetic */ BaseFragment f$1;
+                    public final /* synthetic */ BaseFragment f$1;
 
                     {
                         this.f$1 = r2;

@@ -1119,12 +1119,12 @@ public class PasscodeView extends FrameLayout {
             int r1 = r1 - r2
             boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
             r4 = 2
-            if (r2 != 0) goto L_0x006d
+            if (r2 != 0) goto L_0x006c
             android.content.Context r2 = r12.getContext()
             android.content.res.Resources r2 = r2.getResources()
             android.content.res.Configuration r2 = r2.getConfiguration()
             int r2 = r2.orientation
-            if (r2 != r4) goto L_0x006d
+            if (r2 != r4) goto L_0x006c
             android.widget.FrameLayout r2 = r12.passwordFrameLayout
             android.view.ViewGroup$LayoutParams r2 = r2.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r2 = (android.widget.FrameLayout.LayoutParams) r2
@@ -1143,26 +1143,26 @@ public class PasscodeView extends FrameLayout {
             int r5 = r1 - r5
             int r5 = r5 / r4
             r2.topMargin = r5
-            android.widget.FrameLayout r4 = r12.passwordFrameLayout
-            r4.setLayoutParams(r2)
+            android.widget.FrameLayout r5 = r12.passwordFrameLayout
+            r5.setLayoutParams(r2)
             android.widget.FrameLayout r2 = r12.numbersFrameLayout
             android.view.ViewGroup$LayoutParams r2 = r2.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r2 = (android.widget.FrameLayout.LayoutParams) r2
             r2.height = r1
-            int r0 = r0 / 2
+            int r0 = r0 / r4
             r2.leftMargin = r0
             int r1 = r1 - r1
             r2.topMargin = r1
             r2.width = r0
             android.widget.FrameLayout r0 = r12.numbersFrameLayout
             r0.setLayoutParams(r2)
-            goto L_0x00e0
-        L_0x006d:
+            goto L_0x00df
+        L_0x006c:
             boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r2 == 0) goto L_0x00a4
+            if (r2 == 0) goto L_0x00a3
             r2 = 1140391936(0x43var_, float:498.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            if (r0 <= r5) goto L_0x0089
+            if (r0 <= r5) goto L_0x0088
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r0 = r0 - r5
             int r0 = r0 / r4
@@ -1170,13 +1170,13 @@ public class PasscodeView extends FrameLayout {
             r11 = r2
             r2 = r0
             r0 = r11
-            goto L_0x008a
-        L_0x0089:
+            goto L_0x0089
+        L_0x0088:
             r2 = 0
-        L_0x008a:
+        L_0x0089:
             r5 = 1141112832(0x44040000, float:528.0)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            if (r1 <= r6) goto L_0x00a1
+            if (r1 <= r6) goto L_0x00a0
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r1 = r1 - r6
             int r1 = r1 / r4
@@ -1185,15 +1185,15 @@ public class PasscodeView extends FrameLayout {
             r2 = r1
             r1 = r5
             r5 = r11
-            goto L_0x00a6
-        L_0x00a1:
+            goto L_0x00a5
+        L_0x00a0:
             r5 = r2
             r2 = 0
-            goto L_0x00a6
-        L_0x00a4:
+            goto L_0x00a5
+        L_0x00a3:
             r2 = 0
             r5 = 0
-        L_0x00a6:
+        L_0x00a5:
             android.widget.FrameLayout r6 = r12.passwordFrameLayout
             android.view.ViewGroup$LayoutParams r6 = r6.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r6 = (android.widget.FrameLayout.LayoutParams) r6
@@ -1220,7 +1220,7 @@ public class PasscodeView extends FrameLayout {
             android.widget.FrameLayout r0 = r12.numbersFrameLayout
             r0.setLayoutParams(r6)
             r2 = r6
-        L_0x00e0:
+        L_0x00df:
             int r0 = r2.width
             r1 = 1112014848(0x42480000, float:50.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r1)
@@ -1232,22 +1232,22 @@ public class PasscodeView extends FrameLayout {
             int r4 = r4 * 4
             int r2 = r2 - r4
             int r2 = r2 / 5
-        L_0x00f8:
+        L_0x00f7:
             r4 = 11
-            if (r3 >= r4) goto L_0x01ac
+            if (r3 >= r4) goto L_0x01ab
             r5 = 10
-            if (r3 != 0) goto L_0x0103
+            if (r3 != 0) goto L_0x0102
             r4 = 10
-            goto L_0x0108
-        L_0x0103:
-            if (r3 != r5) goto L_0x0106
-            goto L_0x0108
-        L_0x0106:
+            goto L_0x0107
+        L_0x0102:
+            if (r3 != r5) goto L_0x0105
+            goto L_0x0107
+        L_0x0105:
             int r4 = r3 + -1
-        L_0x0108:
+        L_0x0107:
             int r6 = r4 / 3
             int r4 = r4 % 3
-            if (r3 >= r5) goto L_0x0154
+            if (r3 >= r5) goto L_0x0153
             java.util.ArrayList<android.widget.TextView> r5 = r12.numberTextViews
             java.lang.Object r5 = r5.get(r3)
             android.widget.TextView r5 = (android.widget.TextView) r5
@@ -1277,8 +1277,8 @@ public class PasscodeView extends FrameLayout {
             r9.topMargin = r4
             r5.setLayoutParams(r8)
             r7.setLayoutParams(r9)
-            goto L_0x0183
-        L_0x0154:
+            goto L_0x0182
+        L_0x0153:
             android.widget.ImageView r5 = r12.eraseView
             android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
             r8 = r5
@@ -1300,7 +1300,7 @@ public class PasscodeView extends FrameLayout {
             int r10 = r5 - r4
             android.widget.ImageView r4 = r12.eraseView
             r4.setLayoutParams(r8)
-        L_0x0183:
+        L_0x0182:
             java.util.ArrayList<android.widget.FrameLayout> r4 = r12.numberFrameLayouts
             java.lang.Object r4 = r4.get(r3)
             android.widget.FrameLayout r4 = (android.widget.FrameLayout) r4
@@ -1317,8 +1317,8 @@ public class PasscodeView extends FrameLayout {
             r5.leftMargin = r6
             r4.setLayoutParams(r5)
             int r3 = r3 + 1
-            goto L_0x00f8
-        L_0x01ac:
+            goto L_0x00f7
+        L_0x01ab:
             super.onMeasure(r13, r14)
             return
         */

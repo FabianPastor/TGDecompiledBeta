@@ -289,7 +289,7 @@ public class ActionBarPopupWindow extends PopupWindow {
                 layoutInScreenMethod = declaredMethod;
                 declaredMethod.setAccessible(true);
             }
-            layoutInScreenMethod.invoke(this, new Object[]{true});
+            layoutInScreenMethod.invoke(this, new Object[]{Boolean.TRUE});
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }

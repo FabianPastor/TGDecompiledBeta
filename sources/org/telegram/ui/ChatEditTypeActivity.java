@@ -196,7 +196,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
     public /* synthetic */ void lambda$onFragmentCreate$1$ChatEditTypeActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLRPC$TL_error f$1;
 
             {
                 this.f$1 = r2;
@@ -617,7 +617,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
     public /* synthetic */ void lambda$loadAdminedChannels$15$ChatEditTypeActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-            private final /* synthetic */ TLObject f$1;
+            public final /* synthetic */ TLObject f$1;
 
             {
                 this.f$1 = r2;
@@ -667,7 +667,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         }
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new DialogInterface.OnClickListener(currentChannel) {
-            private final /* synthetic */ TLRPC$Chat f$1;
+            public final /* synthetic */ TLRPC$Chat f$1;
 
             {
                 this.f$1 = r2;
@@ -859,7 +859,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             this.checkTextView.setTextColor("windowBackgroundWhiteGrayText8");
             this.lastCheckName = str;
             $$Lambda$ChatEditTypeActivity$tnHlNioqDFNXIfOWJ9QLHYy5lRc r0 = new Runnable(str) {
-                private final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
@@ -880,7 +880,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         tLRPC$TL_channels_checkUsername.username = str;
         tLRPC$TL_channels_checkUsername.channel = getMessagesController().getInputChannel(this.chatId);
         this.checkReqId = getConnectionsManager().sendRequest(tLRPC$TL_channels_checkUsername, new RequestDelegate(str) {
-            private final /* synthetic */ String f$1;
+            public final /* synthetic */ String f$1;
 
             {
                 this.f$1 = r2;
@@ -894,9 +894,9 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
     public /* synthetic */ void lambda$null$17$ChatEditTypeActivity(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(str, tLRPC$TL_error, tLObject) {
-            private final /* synthetic */ String f$1;
-            private final /* synthetic */ TLRPC$TL_error f$2;
-            private final /* synthetic */ TLObject f$3;
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ TLRPC$TL_error f$2;
+            public final /* synthetic */ TLObject f$3;
 
             {
                 this.f$1 = r2;
@@ -935,7 +935,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         TLRPC$TL_messages_exportChatInvite tLRPC$TL_messages_exportChatInvite = new TLRPC$TL_messages_exportChatInvite();
         tLRPC$TL_messages_exportChatInvite.peer = getMessagesController().getInputPeer(-this.chatId);
         getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_exportChatInvite, new RequestDelegate(z) {
-            private final /* synthetic */ boolean f$1;
+            public final /* synthetic */ boolean f$1;
 
             {
                 this.f$1 = r2;
@@ -949,9 +949,9 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
     public /* synthetic */ void lambda$generateLink$20$ChatEditTypeActivity(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, z) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
-            private final /* synthetic */ boolean f$3;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ boolean f$3;
 
             {
                 this.f$1 = r2;

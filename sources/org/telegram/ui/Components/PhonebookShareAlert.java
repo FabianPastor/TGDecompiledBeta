@@ -434,10 +434,10 @@ public class PhonebookShareAlert extends BottomSheet {
                 org.telegram.ui.Components.Switch r2 = new org.telegram.ui.Components.Switch
                 r2.<init>(r1)
                 r0.checkBox = r2
-                java.lang.String r1 = "windowBackgroundWhite"
-                java.lang.String r3 = "switchTrack"
-                java.lang.String r4 = "switchTrackChecked"
-                r2.setColors(r3, r4, r1, r1)
+                java.lang.String r1 = "switchTrack"
+                java.lang.String r3 = "switchTrackChecked"
+                java.lang.String r4 = "windowBackgroundWhite"
+                r2.setColors(r1, r3, r4, r4)
                 org.telegram.ui.Components.Switch r1 = r0.checkBox
                 r7 = 37
                 r8 = 1109393408(0x42200000, float:40.0)
@@ -785,9 +785,9 @@ public class PhonebookShareAlert extends BottomSheet {
             r6 = 0
             r3.setAlpha(r6)
             boolean r3 = r0.isImport
-            r7 = 2131624116(0x7f0e00b4, float:1.8875403E38)
+            r7 = 2131624124(0x7f0e00bc, float:1.8875419E38)
             java.lang.String r9 = "AddContactPhonebookTitle"
-            r10 = 2131626774(0x7f0e0b16, float:1.8880794E38)
+            r10 = 2131626791(0x7f0e0b27, float:1.8880828E38)
             java.lang.String r11 = "ShareContactTitle"
             if (r3 == 0) goto L_0x022a
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
@@ -949,7 +949,7 @@ public class PhonebookShareAlert extends BottomSheet {
                 } else {
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.parentFragment.getParentActivity());
                     builder.setItems(new CharSequence[]{LocaleController.getString("Copy", NUM)}, new DialogInterface.OnClickListener(vcardItem) {
-                        private final /* synthetic */ AndroidUtilities.VcardItem f$1;
+                        public final /* synthetic */ AndroidUtilities.VcardItem f$1;
 
                         {
                             this.f$1 = r2;

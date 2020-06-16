@@ -264,7 +264,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         if (getParentActivity() != null) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setItems(this.currentType == 1 ? new CharSequence[]{LocaleController.getString("Unblock", NUM)} : new CharSequence[]{LocaleController.getString("Delete", NUM)}, new DialogInterface.OnClickListener(num) {
-                private final /* synthetic */ Integer f$1;
+                public final /* synthetic */ Integer f$1;
 
                 {
                     this.f$1 = r2;

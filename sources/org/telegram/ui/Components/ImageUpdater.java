@@ -102,7 +102,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 iArr = new int[]{NUM, NUM};
             }
             builder.setItems(charSequenceArr, iArr, new DialogInterface.OnClickListener(runnable) {
-                private final /* synthetic */ Runnable f$1;
+                public final /* synthetic */ Runnable f$1;
 
                 {
                     this.f$1 = r2;

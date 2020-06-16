@@ -125,7 +125,7 @@ public class FileUploadOperation {
     public void onNetworkChanged(boolean z) {
         if (this.state == 1) {
             Utilities.stageQueue.postRunnable(new Runnable(z) {
-                private final /* synthetic */ boolean f$1;
+                public final /* synthetic */ boolean f$1;
 
                 {
                     this.f$1 = r2;
@@ -224,8 +224,8 @@ public class FileUploadOperation {
     /* access modifiers changed from: protected */
     public void checkNewDataAvailable(long j, long j2) {
         Utilities.stageQueue.postRunnable(new Runnable(j2, j) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ long f$2;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ long f$2;
 
             {
                 this.f$1 = r2;

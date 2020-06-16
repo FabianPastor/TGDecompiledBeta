@@ -591,7 +591,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                         this.itemCells[i].setMinimumWidth(AndroidUtilities.dp(196.0f));
                         this.sendPopupLayout.addView(this.itemCells[i], LayoutHelper.createFrame(-1, 48.0f, LocaleController.isRTL ? 5 : 3, 0.0f, (float) (i * 48), 0.0f, 0.0f));
                         this.itemCells[i].setOnClickListener(new View.OnClickListener(i) {
-                            private final /* synthetic */ int f$1;
+                            public final /* synthetic */ int f$1;
 
                             {
                                 this.f$1 = r2;

@@ -85,7 +85,7 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
             try {
                 int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
                 Collections.sort(this.onlineContacts, new Comparator(currentTime) {
-                    private final /* synthetic */ int f$1;
+                    public final /* synthetic */ int f$1;
 
                     {
                         this.f$1 = r2;

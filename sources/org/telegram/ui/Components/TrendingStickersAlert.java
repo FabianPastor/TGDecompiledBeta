@@ -22,9 +22,8 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Components.SizeNotifierFrameLayout;
 import org.telegram.ui.Components.TrendingStickersAlert;
-import org.telegram.ui.Components.TrendingStickersLayout;
 
-public class TrendingStickersAlert extends BottomSheet implements TrendingStickersLayout.AlertDelegate {
+public class TrendingStickersAlert extends BottomSheet {
     private final AlertContainerView alertContainerView;
     /* access modifiers changed from: private */
     public final TrendingStickersLayout layout;
@@ -48,8 +47,7 @@ public class TrendingStickersAlert extends BottomSheet implements TrendingSticke
         this.containerView = this.alertContainerView;
         this.useSmoothKeyboard = true;
         this.layout = trendingStickersLayout;
-        trendingStickersLayout.setAlertDelegate(this);
-        this.layout.setParentFragment(baseFragment);
+        trendingStickersLayout.setParentFragment(baseFragment);
         this.layout.setOnScrollListener(new RecyclerView.OnScrollListener() {
             private int scrolledY;
 

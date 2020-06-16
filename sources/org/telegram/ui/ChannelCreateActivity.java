@@ -173,7 +173,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
     public /* synthetic */ void lambda$new$1$ChannelCreateActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLRPC$TL_error f$1;
 
             {
                 this.f$1 = r2;
@@ -283,7 +283,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                             int createChat = MessagesController.getInstance(ChannelCreateActivity.this.currentAccount).createChat(ChannelCreateActivity.this.nameTextView.getText().toString(), new ArrayList(), ChannelCreateActivity.this.descriptionTextView.getText().toString(), 2, (Location) null, (String) null, ChannelCreateActivity.this);
                             AlertDialog unused4 = ChannelCreateActivity.this.progressDialog = new AlertDialog(ChannelCreateActivity.this.getParentActivity(), 3);
                             ChannelCreateActivity.this.progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener(createChat) {
-                                private final /* synthetic */ int f$1;
+                                public final /* synthetic */ int f$1;
 
                                 {
                                     this.f$1 = r2;
@@ -834,8 +834,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
     public /* synthetic */ void lambda$generateLink$10$ChannelCreateActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
 
             {
                 this.f$1 = r2;
@@ -933,9 +933,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
     public void didUploadPhoto(TLRPC$InputFile tLRPC$InputFile, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$InputFile, tLRPC$PhotoSize2, tLRPC$PhotoSize) {
-            private final /* synthetic */ TLRPC$InputFile f$1;
-            private final /* synthetic */ TLRPC$PhotoSize f$2;
-            private final /* synthetic */ TLRPC$PhotoSize f$3;
+            public final /* synthetic */ TLRPC$InputFile f$1;
+            public final /* synthetic */ TLRPC$PhotoSize f$2;
+            public final /* synthetic */ TLRPC$PhotoSize f$3;
 
             {
                 this.f$1 = r2;
@@ -1119,7 +1119,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
     public /* synthetic */ void lambda$loadAdminedChannels$17$ChannelCreateActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-            private final /* synthetic */ TLObject f$1;
+            public final /* synthetic */ TLObject f$1;
 
             {
                 this.f$1 = r2;
@@ -1169,7 +1169,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         }
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new DialogInterface.OnClickListener(currentChannel) {
-            private final /* synthetic */ TLRPC$Chat f$1;
+            public final /* synthetic */ TLRPC$Chat f$1;
 
             {
                 this.f$1 = r2;
@@ -1269,7 +1269,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText8"));
             this.lastCheckName = str;
             $$Lambda$ChannelCreateActivity$mDP7DqCeyyygG_tNsvar_xfQvY r0 = new Runnable(str) {
-                private final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
@@ -1290,7 +1290,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         tLRPC$TL_channels_checkUsername.username = str;
         tLRPC$TL_channels_checkUsername.channel = MessagesController.getInstance(this.currentAccount).getInputChannel(this.chatId);
         this.checkReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_channels_checkUsername, new RequestDelegate(str) {
-            private final /* synthetic */ String f$1;
+            public final /* synthetic */ String f$1;
 
             {
                 this.f$1 = r2;
@@ -1304,9 +1304,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
     public /* synthetic */ void lambda$null$19$ChannelCreateActivity(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(str, tLRPC$TL_error, tLObject) {
-            private final /* synthetic */ String f$1;
-            private final /* synthetic */ TLRPC$TL_error f$2;
-            private final /* synthetic */ TLObject f$3;
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ TLRPC$TL_error f$2;
+            public final /* synthetic */ TLObject f$3;
 
             {
                 this.f$1 = r2;

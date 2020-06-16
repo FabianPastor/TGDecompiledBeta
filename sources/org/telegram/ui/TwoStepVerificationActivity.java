@@ -319,8 +319,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
 
     public /* synthetic */ void lambda$null$2$TwoStepVerificationActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
 
             {
                 this.f$1 = r2;
@@ -473,7 +473,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             }
         }
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_getPassword(), new RequestDelegate(z) {
-            private final /* synthetic */ boolean f$1;
+            public final /* synthetic */ boolean f$1;
 
             {
                 this.f$1 = r2;
@@ -487,9 +487,9 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
 
     public /* synthetic */ void lambda$loadPasswordInfo$8$TwoStepVerificationActivity(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, z) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
-            private final /* synthetic */ boolean f$3;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ boolean f$3;
 
             {
                 this.f$1 = r2;
@@ -686,7 +686,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         tLRPC$TL_account_updatePasswordSettings.new_settings.email = "";
         needShowProgress();
         Utilities.globalQueue.postRunnable(new Runnable(tLRPC$TL_account_updatePasswordSettings) {
-            private final /* synthetic */ TLRPC$TL_account_updatePasswordSettings f$1;
+            public final /* synthetic */ TLRPC$TL_account_updatePasswordSettings f$1;
 
             {
                 this.f$1 = r2;
@@ -719,8 +719,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
 
     public /* synthetic */ void lambda$null$11$TwoStepVerificationActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
 
             {
                 this.f$1 = r2;
@@ -745,8 +745,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
 
     public /* synthetic */ void lambda$null$15$TwoStepVerificationActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
 
             {
                 this.f$1 = r2;
@@ -794,8 +794,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
 
     public /* synthetic */ void lambda$null$13$TwoStepVerificationActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
 
             {
                 this.f$1 = r2;
@@ -885,7 +885,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             byte[] stringBytes = AndroidUtilities.getStringBytes(obj);
             needShowProgress();
             Utilities.globalQueue.postRunnable(new Runnable(stringBytes) {
-                private final /* synthetic */ byte[] f$1;
+                public final /* synthetic */ byte[] f$1;
 
                 {
                     this.f$1 = r2;
@@ -903,8 +903,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo = this.currentPassword.current_algo;
         byte[] x = tLRPC$PasswordKdfAlgo instanceof TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow ? SRPHelper.getX(bArr, (TLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow) tLRPC$PasswordKdfAlgo) : null;
         $$Lambda$TwoStepVerificationActivity$STOVUmKsJhQU2_K3Dvar_wQDe4 r2 = new RequestDelegate(bArr, x) {
-            private final /* synthetic */ byte[] f$1;
-            private final /* synthetic */ byte[] f$2;
+            public final /* synthetic */ byte[] f$1;
+            public final /* synthetic */ byte[] f$2;
 
             {
                 this.f$1 = r2;
@@ -937,9 +937,9 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
     public /* synthetic */ void lambda$null$23$TwoStepVerificationActivity(byte[] bArr, byte[] bArr2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             Utilities.globalQueue.postRunnable(new Runnable(bArr, tLObject, bArr2) {
-                private final /* synthetic */ byte[] f$1;
-                private final /* synthetic */ TLObject f$2;
-                private final /* synthetic */ byte[] f$3;
+                public final /* synthetic */ byte[] f$1;
+                public final /* synthetic */ TLObject f$2;
+                public final /* synthetic */ byte[] f$3;
 
                 {
                     this.f$1 = r2;
@@ -953,7 +953,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             });
         } else {
             AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error) {
-                private final /* synthetic */ TLRPC$TL_error f$1;
+                public final /* synthetic */ TLRPC$TL_error f$1;
 
                 {
                     this.f$1 = r2;
@@ -968,8 +968,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
 
     public /* synthetic */ void lambda$null$19$TwoStepVerificationActivity(byte[] bArr, TLObject tLObject, byte[] bArr2) {
         AndroidUtilities.runOnUIThread(new Runnable(checkSecretValues(bArr, (TLRPC$TL_account_passwordSettings) tLObject), bArr2) {
-            private final /* synthetic */ boolean f$1;
-            private final /* synthetic */ byte[] f$2;
+            public final /* synthetic */ boolean f$1;
+            public final /* synthetic */ byte[] f$2;
 
             {
                 this.f$1 = r2;
@@ -1039,8 +1039,8 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
 
     public /* synthetic */ void lambda$null$21$TwoStepVerificationActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
 
             {
                 this.f$1 = r2;

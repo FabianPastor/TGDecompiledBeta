@@ -251,7 +251,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             tLRPC$TL_messages_getAttachedStickers.media = tLRPC$TL_inputStickeredMediaDocument;
         }
         this.reqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getAttachedStickers, new RequestDelegate(obj, tLRPC$TL_messages_getAttachedStickers, new RequestDelegate(tLRPC$TL_messages_getAttachedStickers) {
-            private final /* synthetic */ TLRPC$TL_messages_getAttachedStickers f$1;
+            public final /* synthetic */ TLRPC$TL_messages_getAttachedStickers f$1;
 
             {
                 this.f$1 = r2;
@@ -261,9 +261,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 StickersAlert.this.lambda$new$1$StickersAlert(this.f$1, tLObject, tLRPC$TL_error);
             }
         }) {
-            private final /* synthetic */ Object f$1;
-            private final /* synthetic */ TLRPC$TL_messages_getAttachedStickers f$2;
-            private final /* synthetic */ RequestDelegate f$3;
+            public final /* synthetic */ Object f$1;
+            public final /* synthetic */ TLRPC$TL_messages_getAttachedStickers f$2;
+            public final /* synthetic */ RequestDelegate f$3;
 
             {
                 this.f$1 = r2;
@@ -280,9 +280,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
 
     public /* synthetic */ void lambda$new$1$StickersAlert(TLRPC$TL_messages_getAttachedStickers tLRPC$TL_messages_getAttachedStickers, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, tLRPC$TL_messages_getAttachedStickers) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
-            private final /* synthetic */ TLRPC$TL_messages_getAttachedStickers f$3;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_messages_getAttachedStickers f$3;
 
             {
                 this.f$1 = r2;
@@ -361,7 +361,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 TLRPC$TL_messages_getStickerSet tLRPC$TL_messages_getStickerSet = new TLRPC$TL_messages_getStickerSet();
                 tLRPC$TL_messages_getStickerSet.stickerset = this.inputStickerSet;
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getStickerSet, new RequestDelegate(instance) {
-                    private final /* synthetic */ MediaDataController f$1;
+                    public final /* synthetic */ MediaDataController f$1;
 
                     {
                         this.f$1 = r2;
@@ -388,9 +388,9 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
 
     public /* synthetic */ void lambda$loadStickerSet$4$StickersAlert(MediaDataController mediaDataController, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, mediaDataController) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
-            private final /* synthetic */ MediaDataController f$3;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ MediaDataController f$3;
 
             {
                 this.f$1 = r2;
@@ -859,7 +859,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         BackupImageView backupImageView = new BackupImageView(context2);
         this.stickerImageView = backupImageView;
         backupImageView.setAspectFit(true);
-        this.stickerImageView.setLayerNum(5);
+        this.stickerImageView.setLayerNum(7);
         this.stickerPreviewLayout.addView(this.stickerImageView);
         TextView textView4 = new TextView(context2);
         this.stickerEmojiTextView = textView4;
@@ -1116,7 +1116,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r10.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r1 = r0.set
             boolean r1 = r1.masks
-            r6 = 2131626540(0x7f0e0a2c, float:1.888032E38)
+            r6 = 2131626557(0x7f0e0a3d, float:1.8880354E38)
             java.lang.String r7 = "RemoveStickersCount"
             if (r1 == 0) goto L_0x00d1
             java.lang.Object[] r1 = new java.lang.Object[r5]
@@ -1154,7 +1154,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r10.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r6 = r0.set
             boolean r6 = r6.masks
-            r7 = 2131624135(0x7f0e00c7, float:1.8875441E38)
+            r7 = 2131624143(0x7f0e00cf, float:1.8875457E38)
             java.lang.String r8 = "AddStickersCount"
             if (r6 == 0) goto L_0x0127
             java.lang.Object[] r4 = new java.lang.Object[r5]
@@ -1182,7 +1182,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             r0.notifyDataSetChanged()
             goto L_0x0160
         L_0x014b:
-            r0 = 2131624738(0x7f0e0322, float:1.8876664E38)
+            r0 = 2131624746(0x7f0e032a, float:1.887668E38)
             java.lang.String r2 = "Close"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             java.lang.String r0 = r0.toUpperCase()
@@ -1214,8 +1214,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
 
     public /* synthetic */ void lambda$null$12$StickersAlert(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
 
             {
                 this.f$1 = r2;
@@ -1519,7 +1519,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                         super.onMeasure(View.MeasureSpec.makeMeasureSpec(StickersAlert.this.itemSize, NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(82.0f), NUM));
                     }
                 };
-                r4.getImageView().setLayerNum(5);
+                r4.getImageView().setLayerNum(7);
                 featuredStickerSetInfoCell = r4;
             } else if (i != 1) {
                 featuredStickerSetInfoCell = i != 2 ? null : new FeaturedStickerSetInfoCell(this.context, 8, true, false);

@@ -285,8 +285,8 @@ public class WallpaperCell extends FrameLayout {
                 wallpaperViewArr[i] = wallpaperView;
                 addView(wallpaperView);
                 wallpaperView.setOnClickListener(new View.OnClickListener(wallpaperView, i) {
-                    private final /* synthetic */ WallpaperCell.WallpaperView f$1;
-                    private final /* synthetic */ int f$2;
+                    public final /* synthetic */ WallpaperCell.WallpaperView f$1;
+                    public final /* synthetic */ int f$2;
 
                     {
                         this.f$1 = r2;
@@ -298,8 +298,8 @@ public class WallpaperCell extends FrameLayout {
                     }
                 });
                 wallpaperView.setOnLongClickListener(new View.OnLongClickListener(wallpaperView, i) {
-                    private final /* synthetic */ WallpaperCell.WallpaperView f$1;
-                    private final /* synthetic */ int f$2;
+                    public final /* synthetic */ WallpaperCell.WallpaperView f$1;
+                    public final /* synthetic */ int f$2;
 
                     {
                         this.f$1 = r2;

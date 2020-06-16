@@ -8,7 +8,7 @@ import com.google.protobuf.Parser;
 import java.io.IOException;
 
 /* compiled from: com.google.firebase:firebase-abt@@19.0.1 */
-public final class FirebaseAbt$ExperimentLite extends GeneratedMessageLite<FirebaseAbt$ExperimentLite, Builder> implements FirebaseAbt$ExperimentLiteOrBuilder {
+public final class FirebaseAbt$ExperimentLite extends GeneratedMessageLite<FirebaseAbt$ExperimentLite, Builder> implements Object {
     /* access modifiers changed from: private */
     public static final FirebaseAbt$ExperimentLite DEFAULT_INSTANCE;
     private static volatile Parser<FirebaseAbt$ExperimentLite> PARSER;
@@ -18,7 +18,7 @@ public final class FirebaseAbt$ExperimentLite extends GeneratedMessageLite<Fireb
     }
 
     /* compiled from: com.google.firebase:firebase-abt@@19.0.1 */
-    public static final class Builder extends GeneratedMessageLite.Builder<FirebaseAbt$ExperimentLite, Builder> implements FirebaseAbt$ExperimentLiteOrBuilder {
+    public static final class Builder extends GeneratedMessageLite.Builder<FirebaseAbt$ExperimentLite, Builder> implements Object {
         /* synthetic */ Builder(FirebaseAbt$1 firebaseAbt$1) {
             this();
         }

@@ -789,8 +789,8 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     boolean isSameTakePictureOrientation = ChatAttachAlertPhotoLayout.this.cameraView.getCameraSession().isSameTakePictureOrientation();
                     ChatAttachAlertPhotoLayout.this.cameraView.getCameraSession().setFlipFront(ChatAttachAlertPhotoLayout.this.parentAlert.baseFragment instanceof ChatActivity);
                     boolean unused = ChatAttachAlertPhotoLayout.this.takingPhoto = CameraController.getInstance().takePicture(generatePicturePath, ChatAttachAlertPhotoLayout.this.cameraView.getCameraSession(), new Runnable(generatePicturePath, isSameTakePictureOrientation) {
-                        private final /* synthetic */ File f$1;
-                        private final /* synthetic */ boolean f$2;
+                        public final /* synthetic */ File f$1;
+                        public final /* synthetic */ boolean f$2;
 
                         {
                             this.f$1 = r2;
@@ -1121,7 +1121,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             ArrayList<MediaController.AlbumEntry> arrayList2 = new ArrayList<>(arrayList);
             this.dropDownAlbums = arrayList2;
             Collections.sort(arrayList2, new Comparator(arrayList) {
-                private final /* synthetic */ ArrayList f$0;
+                public final /* synthetic */ ArrayList f$0;
 
                 {
                     this.f$0 = r1;
@@ -2495,7 +2495,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     layoutParams.height = i4;
                     this.cameraView.setLayoutParams(layoutParams);
                     AndroidUtilities.runOnUIThread(new Runnable(layoutParams) {
-                        private final /* synthetic */ FrameLayout.LayoutParams f$1;
+                        public final /* synthetic */ FrameLayout.LayoutParams f$1;
 
                         {
                             this.f$1 = r2;
@@ -2513,7 +2513,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 layoutParams2.height = i4;
                 this.cameraIcon.setLayoutParams(layoutParams2);
                 AndroidUtilities.runOnUIThread(new Runnable(layoutParams2) {
-                    private final /* synthetic */ FrameLayout.LayoutParams f$1;
+                    public final /* synthetic */ FrameLayout.LayoutParams f$1;
 
                     {
                         this.f$1 = r2;

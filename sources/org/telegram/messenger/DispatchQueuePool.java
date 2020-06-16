@@ -77,8 +77,8 @@ public class DispatchQueuePool {
         }
         this.busyQueuesMap.put(dispatchQueue, Integer.valueOf(num.intValue() + 1));
         dispatchQueue.postRunnable(new Runnable(runnable, dispatchQueue) {
-            private final /* synthetic */ Runnable f$1;
-            private final /* synthetic */ DispatchQueue f$2;
+            public final /* synthetic */ Runnable f$1;
+            public final /* synthetic */ DispatchQueue f$2;
 
             {
                 this.f$1 = r2;
@@ -94,7 +94,7 @@ public class DispatchQueuePool {
     public /* synthetic */ void lambda$execute$1$DispatchQueuePool(Runnable runnable, DispatchQueue dispatchQueue) {
         runnable.run();
         AndroidUtilities.runOnUIThread(new Runnable(dispatchQueue) {
-            private final /* synthetic */ DispatchQueue f$1;
+            public final /* synthetic */ DispatchQueue f$1;
 
             {
                 this.f$1 = r2;

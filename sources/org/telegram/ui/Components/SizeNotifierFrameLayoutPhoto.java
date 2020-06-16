@@ -70,7 +70,7 @@ public class SizeNotifierFrameLayoutPhoto extends AdjustPanFrameLayout {
             this.keyboardHeight = getKeyboardHeight();
             Point point = AndroidUtilities.displaySize;
             post(new Runnable(point.x > point.y) {
-                private final /* synthetic */ boolean f$1;
+                public final /* synthetic */ boolean f$1;
 
                 {
                     this.f$1 = r2;

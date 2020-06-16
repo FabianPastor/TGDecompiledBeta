@@ -208,7 +208,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         TLRPC$TL_messages_exportChatInvite tLRPC$TL_messages_exportChatInvite = new TLRPC$TL_messages_exportChatInvite();
         tLRPC$TL_messages_exportChatInvite.peer = MessagesController.getInstance(this.currentAccount).getInputPeer(-this.chat_id);
         ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_exportChatInvite, new RequestDelegate(z) {
-            private final /* synthetic */ boolean f$1;
+            public final /* synthetic */ boolean f$1;
 
             {
                 this.f$1 = r2;
@@ -226,9 +226,9 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
 
     public /* synthetic */ void lambda$generateLink$3$GroupInviteActivity(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, z) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
-            private final /* synthetic */ boolean f$3;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ boolean f$3;
 
             {
                 this.f$1 = r2;

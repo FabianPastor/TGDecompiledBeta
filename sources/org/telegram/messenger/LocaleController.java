@@ -1162,8 +1162,8 @@ public class LocaleController {
                 }
                 if (z2) {
                     AndroidUtilities.runOnUIThread(new Runnable(localeInfo, i) {
-                        private final /* synthetic */ LocaleController.LocaleInfo f$1;
-                        private final /* synthetic */ int f$2;
+                        public final /* synthetic */ LocaleController.LocaleInfo f$1;
+                        public final /* synthetic */ int f$2;
 
                         {
                             this.f$1 = r2;
@@ -1231,8 +1231,8 @@ public class LocaleController {
                 if (this.reloadLastFile) {
                     if (z2) {
                         AndroidUtilities.runOnUIThread(new Runnable(i, z4) {
-                            private final /* synthetic */ int f$1;
-                            private final /* synthetic */ boolean f$2;
+                            public final /* synthetic */ int f$1;
+                            public final /* synthetic */ boolean f$2;
 
                             {
                                 this.f$1 = r2;
@@ -2339,49 +2339,49 @@ public class LocaleController {
             r7 = 1
         L_0x0076:
             nameDisplayOrder = r7
-            r7 = 2131627409(0x7f0e0d91, float:1.8882082E38)
+            r7 = 2131627426(0x7f0e0da2, float:1.8882116E38)
             java.lang.String r8 = "formatterMonth"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd MMM"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterDayMonth = r7
-            r7 = 2131627415(0x7f0e0d97, float:1.8882094E38)
+            r7 = 2131627432(0x7f0e0da8, float:1.8882128E38)
             java.lang.String r8 = "formatterYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd.MM.yy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterYear = r7
-            r7 = 2131627416(0x7f0e0d98, float:1.8882096E38)
+            r7 = 2131627433(0x7f0e0da9, float:1.888213E38)
             java.lang.String r8 = "formatterYearMax"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd.MM.yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterYearMax = r7
-            r7 = 2131627377(0x7f0e0d71, float:1.8882017E38)
+            r7 = 2131627394(0x7f0e0d82, float:1.8882051E38)
             java.lang.String r8 = "chatDate"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "d MMMM"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.chatDate = r7
-            r7 = 2131627378(0x7f0e0d72, float:1.8882019E38)
+            r7 = 2131627395(0x7f0e0d83, float:1.8882053E38)
             java.lang.String r8 = "chatFullDate"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "d MMMM yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.chatFullDate = r7
-            r7 = 2131627414(0x7f0e0d96, float:1.8882092E38)
+            r7 = 2131627431(0x7f0e0da7, float:1.8882126E38)
             java.lang.String r8 = "formatterWeek"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "EEE"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterWeek = r7
-            r7 = 2131627401(0x7f0e0d89, float:1.8882065E38)
+            r7 = 2131627418(0x7f0e0d9a, float:1.88821E38)
             java.lang.String r8 = "formatDateSchedule"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM d"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterScheduleDay = r7
-            r7 = 2131627402(0x7f0e0d8a, float:1.8882067E38)
+            r7 = 2131627419(0x7f0e0d9b, float:1.8882102E38)
             java.lang.String r8 = "formatDateScheduleYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM d yyyy"
@@ -2402,11 +2402,11 @@ public class LocaleController {
         L_0x0119:
             boolean r2 = is24HourFormat
             if (r2 == 0) goto L_0x0123
-            r2 = 2131627408(0x7f0e0d90, float:1.888208E38)
+            r2 = 2131627425(0x7f0e0da1, float:1.8882114E38)
             java.lang.String r4 = "formatterDay24H"
             goto L_0x0128
         L_0x0123:
-            r2 = 2131627407(0x7f0e0d8f, float:1.8882078E38)
+            r2 = 2131627424(0x7f0e0da0, float:1.8882112E38)
             java.lang.String r4 = "formatterDay12H"
         L_0x0128:
             java.lang.String r2 = r9.getStringInternal(r4, r2)
@@ -2421,11 +2421,11 @@ public class LocaleController {
             r9.formatterDay = r1
             boolean r1 = is24HourFormat
             if (r1 == 0) goto L_0x0145
-            r1 = 2131627413(0x7f0e0d95, float:1.888209E38)
+            r1 = 2131627430(0x7f0e0da6, float:1.8882124E38)
             java.lang.String r2 = "formatterStats24H"
             goto L_0x014a
         L_0x0145:
-            r1 = 2131627412(0x7f0e0d94, float:1.8882088E38)
+            r1 = 2131627429(0x7f0e0da5, float:1.8882122E38)
             java.lang.String r2 = "formatterStats12H"
         L_0x014a:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
@@ -2442,11 +2442,11 @@ public class LocaleController {
             r9.formatterStats = r1
             boolean r1 = is24HourFormat
             if (r1 == 0) goto L_0x0169
-            r1 = 2131627404(0x7f0e0d8c, float:1.8882071E38)
+            r1 = 2131627421(0x7f0e0d9d, float:1.8882106E38)
             java.lang.String r2 = "formatterBannedUntil24H"
             goto L_0x016e
         L_0x0169:
-            r1 = 2131627403(0x7f0e0d8b, float:1.888207E38)
+            r1 = 2131627420(0x7f0e0d9c, float:1.8882104E38)
             java.lang.String r2 = "formatterBannedUntil12H"
         L_0x016e:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
@@ -2460,11 +2460,11 @@ public class LocaleController {
             r9.formatterBannedUntil = r1
             boolean r1 = is24HourFormat
             if (r1 == 0) goto L_0x0188
-            r1 = 2131627406(0x7f0e0d8e, float:1.8882076E38)
+            r1 = 2131627423(0x7f0e0d9f, float:1.888211E38)
             java.lang.String r2 = "formatterBannedUntilThisYear24H"
             goto L_0x018d
         L_0x0188:
-            r1 = 2131627405(0x7f0e0d8d, float:1.8882074E38)
+            r1 = 2131627422(0x7f0e0d9e, float:1.8882108E38)
             java.lang.String r2 = "formatterBannedUntilThisYear12H"
         L_0x018d:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
@@ -2478,21 +2478,21 @@ public class LocaleController {
             org.telegram.messenger.time.FastDateFormat r1 = r9.createFormatter(r0, r1, r2)
             r9.formatterBannedUntilThisYear = r1
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131626721(0x7f0e0ae1, float:1.8880686E38)
+            r2 = 2131626738(0x7f0e0af2, float:1.888072E38)
             java.lang.String r4 = "SendTodayAt"
             java.lang.String r2 = r9.getStringInternal(r4, r2)
             java.lang.String r4 = "'Send today at' HH:mm"
             org.telegram.messenger.time.FastDateFormat r2 = r9.createFormatter(r0, r2, r4)
             r1[r3] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131626697(0x7f0e0ac9, float:1.8880638E38)
+            r2 = 2131626714(0x7f0e0ada, float:1.8880672E38)
             java.lang.String r3 = "SendDayAt"
             java.lang.String r2 = r9.getStringInternal(r3, r2)
             java.lang.String r3 = "'Send on' MMM d 'at' HH:mm"
             org.telegram.messenger.time.FastDateFormat r2 = r9.createFormatter(r0, r2, r3)
             r1[r5] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131626698(0x7f0e0aca, float:1.888064E38)
+            r2 = 2131626715(0x7f0e0adb, float:1.8880674E38)
             java.lang.String r3 = "SendDayYearAt"
             java.lang.String r2 = r9.getStringInternal(r3, r2)
             java.lang.String r3 = "'Send on' MMM d yyyy 'at' HH:mm"
@@ -2500,7 +2500,7 @@ public class LocaleController {
             r1[r6] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 3
-            r3 = 2131626537(0x7f0e0a29, float:1.8880313E38)
+            r3 = 2131626554(0x7f0e0a3a, float:1.8880347E38)
             java.lang.String r4 = "RemindTodayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind today at' HH:mm"
@@ -2508,7 +2508,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 4
-            r3 = 2131626535(0x7f0e0a27, float:1.8880309E38)
+            r3 = 2131626552(0x7f0e0a38, float:1.8880343E38)
             java.lang.String r4 = "RemindDayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind on' MMM d 'at' HH:mm"
@@ -2516,7 +2516,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 5
-            r3 = 2131626536(0x7f0e0a28, float:1.888031E38)
+            r3 = 2131626553(0x7f0e0a39, float:1.8880345E38)
             java.lang.String r4 = "RemindDayYearAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind on' MMM d yyyy 'at' HH:mm"
@@ -2753,10 +2753,10 @@ public class LocaleController {
                         localeFileStrings.putAll(getLocaleFileStrings(localeInfo.getPathToFile()));
                     }
                     AndroidUtilities.runOnUIThread(new Runnable(localeInfo, i2, tLRPC$TL_langPackDifference, localeFileStrings) {
-                        private final /* synthetic */ LocaleController.LocaleInfo f$1;
-                        private final /* synthetic */ int f$2;
-                        private final /* synthetic */ TLRPC$TL_langPackDifference f$3;
-                        private final /* synthetic */ HashMap f$4;
+                        public final /* synthetic */ LocaleController.LocaleInfo f$1;
+                        public final /* synthetic */ int f$2;
+                        public final /* synthetic */ TLRPC$TL_langPackDifference f$3;
+                        public final /* synthetic */ HashMap f$4;
 
                         {
                             this.f$1 = r2;
@@ -2836,7 +2836,7 @@ public class LocaleController {
         if (!this.loadingRemoteLanguages) {
             this.loadingRemoteLanguages = true;
             ConnectionsManager.getInstance(i).sendRequest(new TLRPC$TL_langpack_getLanguages(), new RequestDelegate(i) {
-                private final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$1;
 
                 {
                     this.f$1 = r2;
@@ -2852,8 +2852,8 @@ public class LocaleController {
     public /* synthetic */ void lambda$loadRemoteLanguages$6$LocaleController(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable(tLObject, i) {
-                private final /* synthetic */ TLObject f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ TLObject f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -2942,8 +2942,8 @@ public class LocaleController {
                     TLRPC$TL_langpack_getLangPack tLRPC$TL_langpack_getLangPack = new TLRPC$TL_langpack_getLangPack();
                     tLRPC$TL_langpack_getLangPack.lang_code = localeInfo.getBaseLangCode();
                     ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_langpack_getLangPack, new RequestDelegate(localeInfo, i) {
-                        private final /* synthetic */ LocaleController.LocaleInfo f$1;
-                        private final /* synthetic */ int f$2;
+                        public final /* synthetic */ LocaleController.LocaleInfo f$1;
+                        public final /* synthetic */ int f$2;
 
                         {
                             this.f$1 = r2;
@@ -2960,8 +2960,8 @@ public class LocaleController {
                     tLRPC$TL_langpack_getDifference.lang_code = localeInfo.getBaseLangCode();
                     tLRPC$TL_langpack_getDifference.lang_pack = "";
                     ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_langpack_getDifference, new RequestDelegate(localeInfo, i) {
-                        private final /* synthetic */ LocaleController.LocaleInfo f$1;
-                        private final /* synthetic */ int f$2;
+                        public final /* synthetic */ LocaleController.LocaleInfo f$1;
+                        public final /* synthetic */ int f$2;
 
                         {
                             this.f$1 = r2;
@@ -2984,8 +2984,8 @@ public class LocaleController {
                 TLRPC$TL_langpack_getLangPack tLRPC$TL_langpack_getLangPack2 = new TLRPC$TL_langpack_getLangPack();
                 tLRPC$TL_langpack_getLangPack2.lang_code = localeInfo.getLangCode();
                 ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_langpack_getLangPack2, new RequestDelegate(localeInfo, i) {
-                    private final /* synthetic */ LocaleController.LocaleInfo f$1;
-                    private final /* synthetic */ int f$2;
+                    public final /* synthetic */ LocaleController.LocaleInfo f$1;
+                    public final /* synthetic */ int f$2;
 
                     {
                         this.f$1 = r2;
@@ -3003,8 +3003,8 @@ public class LocaleController {
             tLRPC$TL_langpack_getDifference2.lang_code = localeInfo.getLangCode();
             tLRPC$TL_langpack_getDifference2.lang_pack = "";
             ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_langpack_getDifference2, new RequestDelegate(localeInfo, i) {
-                private final /* synthetic */ LocaleController.LocaleInfo f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ LocaleController.LocaleInfo f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -3021,9 +3021,9 @@ public class LocaleController {
     public /* synthetic */ void lambda$applyRemoteLanguage$8$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable(localeInfo, tLObject, i) {
-                private final /* synthetic */ LocaleController.LocaleInfo f$1;
-                private final /* synthetic */ TLObject f$2;
-                private final /* synthetic */ int f$3;
+                public final /* synthetic */ LocaleController.LocaleInfo f$1;
+                public final /* synthetic */ TLObject f$2;
+                public final /* synthetic */ int f$3;
 
                 {
                     this.f$1 = r2;
@@ -3041,9 +3041,9 @@ public class LocaleController {
     public /* synthetic */ void lambda$applyRemoteLanguage$10$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable(localeInfo, tLObject, i) {
-                private final /* synthetic */ LocaleController.LocaleInfo f$1;
-                private final /* synthetic */ TLObject f$2;
-                private final /* synthetic */ int f$3;
+                public final /* synthetic */ LocaleController.LocaleInfo f$1;
+                public final /* synthetic */ TLObject f$2;
+                public final /* synthetic */ int f$3;
 
                 {
                     this.f$1 = r2;
@@ -3061,9 +3061,9 @@ public class LocaleController {
     public /* synthetic */ void lambda$applyRemoteLanguage$12$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable(localeInfo, tLObject, i) {
-                private final /* synthetic */ LocaleController.LocaleInfo f$1;
-                private final /* synthetic */ TLObject f$2;
-                private final /* synthetic */ int f$3;
+                public final /* synthetic */ LocaleController.LocaleInfo f$1;
+                public final /* synthetic */ TLObject f$2;
+                public final /* synthetic */ int f$3;
 
                 {
                     this.f$1 = r2;
@@ -3081,9 +3081,9 @@ public class LocaleController {
     public /* synthetic */ void lambda$applyRemoteLanguage$14$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable(localeInfo, tLObject, i) {
-                private final /* synthetic */ LocaleController.LocaleInfo f$1;
-                private final /* synthetic */ TLObject f$2;
-                private final /* synthetic */ int f$3;
+                public final /* synthetic */ LocaleController.LocaleInfo f$1;
+                public final /* synthetic */ TLObject f$2;
+                public final /* synthetic */ int f$3;
 
                 {
                     this.f$1 = r2;
@@ -3430,6 +3430,7 @@ public class LocaleController {
             this.translitChars.put("ề", "e");
             this.translitChars.put("ứ", obj26);
             this.translitChars.put("ƶ", obj25);
+            Object obj59 = obj51;
             this.translitChars.put("ĵ", "j");
             this.translitChars.put("ḍ", obj34);
             this.translitChars.put("ŭ", obj26);
@@ -3442,319 +3443,319 @@ public class LocaleController {
             this.translitChars.put("ḗ", "e");
             this.translitChars.put("ẝ", obj49);
             this.translitChars.put("ᶁ", obj34);
-            Object obj59 = obj48;
-            this.translitChars.put("ķ", obj59);
-            Object obj60 = obj56;
+            Object obj60 = obj48;
+            this.translitChars.put("ķ", obj60);
+            Object obj61 = obj56;
             this.translitChars.put("ᴂ", "ae");
             this.translitChars.put("ɘ", "e");
             this.translitChars.put("ợ", obj43);
             this.translitChars.put("ḿ", obj58);
             this.translitChars.put("ꜰ", "f");
-            Object obj61 = "a";
-            this.translitChars.put("ẵ", obj61);
-            Object obj62 = obj43;
+            Object obj62 = "a";
+            this.translitChars.put("ẵ", obj62);
+            Object obj63 = obj43;
             this.translitChars.put("ꝏ", "oo");
             this.translitChars.put("ᶆ", obj58);
-            Object obj63 = obj42;
-            this.translitChars.put("ᵽ", obj63);
+            Object obj64 = obj42;
+            this.translitChars.put("ᵽ", obj64);
             this.translitChars.put("ữ", obj26);
-            this.translitChars.put("ⱪ", obj59);
+            this.translitChars.put("ⱪ", obj60);
             this.translitChars.put("ḥ", obj53);
-            Object obj64 = obj59;
-            Object obj65 = obj57;
-            this.translitChars.put("ţ", obj65);
-            this.translitChars.put("ᵱ", obj63);
+            Object obj65 = obj60;
+            Object obj66 = obj57;
+            this.translitChars.put("ţ", obj66);
+            this.translitChars.put("ᵱ", obj64);
             this.translitChars.put("ṁ", obj58);
-            this.translitChars.put("á", obj61);
+            this.translitChars.put("á", obj62);
             this.translitChars.put("ᴎ", obj40);
-            Object obj66 = obj49;
-            Object obj67 = obj52;
-            this.translitChars.put("ꝟ", obj67);
+            Object obj67 = obj49;
+            Object obj68 = obj52;
+            this.translitChars.put("ꝟ", obj68);
             this.translitChars.put("è", "e");
             this.translitChars.put("ᶎ", obj25);
             this.translitChars.put("ꝺ", obj34);
-            this.translitChars.put("ᶈ", obj63);
-            Object obj68 = obj63;
-            Object obj69 = obj31;
-            this.translitChars.put("ɫ", obj69);
+            this.translitChars.put("ᶈ", obj64);
+            Object obj69 = obj64;
+            Object obj70 = obj31;
+            this.translitChars.put("ɫ", obj70);
             this.translitChars.put("ᴢ", obj25);
             this.translitChars.put("ɱ", obj58);
             this.translitChars.put("ṝ", obj9);
-            this.translitChars.put("ṽ", obj67);
+            this.translitChars.put("ṽ", obj68);
             this.translitChars.put("ũ", obj26);
-            Object obj70 = obj58;
+            Object obj71 = obj58;
             this.translitChars.put("ß", "ss");
             this.translitChars.put("ĥ", obj53);
-            this.translitChars.put("ᵵ", obj65);
+            this.translitChars.put("ᵵ", obj66);
             this.translitChars.put("ʐ", obj25);
             this.translitChars.put("ṟ", obj9);
             this.translitChars.put("ɲ", obj40);
-            this.translitChars.put("à", obj61);
+            this.translitChars.put("à", obj62);
             this.translitChars.put("ẙ", obj55);
             this.translitChars.put("ỳ", obj55);
             this.translitChars.put("ᴔ", "oe");
             this.translitChars.put("ₓ", "x");
             this.translitChars.put("ȗ", obj26);
             this.translitChars.put("ⱼ", "j");
-            this.translitChars.put("ẫ", obj61);
+            this.translitChars.put("ẫ", obj62);
             this.translitChars.put("ʑ", obj25);
-            Object obj71 = obj66;
-            this.translitChars.put("ẛ", obj71);
-            Object obj72 = obj40;
-            Object obj73 = obj60;
-            this.translitChars.put("ḭ", obj73);
-            Object obj74 = obj67;
+            Object obj72 = obj67;
+            this.translitChars.put("ẛ", obj72);
+            Object obj73 = obj40;
+            Object obj74 = obj61;
+            this.translitChars.put("ḭ", obj74);
+            Object obj75 = obj68;
             this.translitChars.put("ꜵ", "ao");
             this.translitChars.put("ɀ", obj25);
             this.translitChars.put("ÿ", obj55);
             this.translitChars.put("ǝ", "e");
-            Object obj75 = obj62;
-            this.translitChars.put("ǭ", obj75);
+            Object obj76 = obj63;
+            this.translitChars.put("ǭ", obj76);
             this.translitChars.put("ᴅ", obj34);
-            this.translitChars.put("ᶅ", obj69);
+            this.translitChars.put("ᶅ", obj70);
             this.translitChars.put("ù", obj26);
-            this.translitChars.put("ạ", obj61);
-            Object obj76 = obj34;
+            this.translitChars.put("ạ", obj62);
+            Object obj77 = obj34;
             this.translitChars.put("ḅ", obj54);
             this.translitChars.put("ụ", obj26);
-            this.translitChars.put("ằ", obj61);
-            this.translitChars.put("ᴛ", obj65);
+            this.translitChars.put("ằ", obj62);
+            this.translitChars.put("ᴛ", obj66);
             this.translitChars.put("ƴ", obj55);
-            this.translitChars.put("ⱦ", obj65);
-            this.translitChars.put("ⱡ", obj69);
+            this.translitChars.put("ⱦ", obj66);
+            this.translitChars.put("ⱡ", obj70);
             this.translitChars.put("ȷ", "j");
             this.translitChars.put("ᵶ", obj25);
             this.translitChars.put("ḫ", obj53);
-            Object obj77 = obj51;
-            this.translitChars.put("ⱳ", obj77);
-            Object obj78 = obj53;
-            this.translitChars.put("ḵ", obj64);
-            this.translitChars.put("ờ", obj75);
-            this.translitChars.put("î", obj73);
+            Object obj78 = obj59;
+            this.translitChars.put("ⱳ", obj78);
+            Object obj79 = obj53;
+            this.translitChars.put("ḵ", obj65);
+            this.translitChars.put("ờ", obj76);
+            this.translitChars.put("î", obj74);
             this.translitChars.put("ģ", obj44);
             this.translitChars.put("ȅ", "e");
-            this.translitChars.put("ȧ", obj61);
-            this.translitChars.put("ẳ", obj61);
+            this.translitChars.put("ȧ", obj62);
+            this.translitChars.put("ẳ", obj62);
             this.translitChars.put("ɋ", "q");
-            this.translitChars.put("ṭ", obj65);
+            this.translitChars.put("ṭ", obj66);
             this.translitChars.put("ꝸ", "um");
             this.translitChars.put("ᴄ", obj50);
             this.translitChars.put("ẍ", "x");
             this.translitChars.put("ủ", obj26);
-            this.translitChars.put("ỉ", obj73);
+            this.translitChars.put("ỉ", obj74);
             this.translitChars.put("ᴚ", obj9);
-            this.translitChars.put("ś", obj71);
-            this.translitChars.put("ꝋ", obj75);
+            this.translitChars.put("ś", obj72);
+            this.translitChars.put("ꝋ", obj76);
             this.translitChars.put("ỹ", obj55);
-            this.translitChars.put("ṡ", obj71);
+            this.translitChars.put("ṡ", obj72);
             this.translitChars.put("ǌ", "nj");
-            this.translitChars.put("ȁ", obj61);
-            this.translitChars.put("ẗ", obj65);
-            this.translitChars.put("ĺ", obj69);
+            this.translitChars.put("ȁ", obj62);
+            this.translitChars.put("ẗ", obj66);
+            this.translitChars.put("ĺ", obj70);
             this.translitChars.put("ž", obj25);
             this.translitChars.put("ᵺ", "th");
-            Object obj79 = obj76;
-            this.translitChars.put("ƌ", obj79);
-            this.translitChars.put("ș", obj71);
-            this.translitChars.put("š", obj71);
+            Object obj80 = obj77;
+            this.translitChars.put("ƌ", obj80);
+            this.translitChars.put("ș", obj72);
+            this.translitChars.put("š", obj72);
             this.translitChars.put("ᶙ", obj26);
             this.translitChars.put("ẽ", "e");
-            this.translitChars.put("ẜ", obj71);
+            this.translitChars.put("ẜ", obj72);
             this.translitChars.put("ɇ", "e");
             this.translitChars.put("ṷ", obj26);
-            this.translitChars.put("ố", obj75);
-            this.translitChars.put("ȿ", obj71);
-            Object obj80 = obj55;
-            Object obj81 = obj74;
-            this.translitChars.put("ᴠ", obj81);
-            Object obj82 = obj69;
+            this.translitChars.put("ố", obj76);
+            this.translitChars.put("ȿ", obj72);
+            Object obj81 = obj55;
+            Object obj82 = obj75;
+            this.translitChars.put("ᴠ", obj82);
+            Object obj83 = obj70;
             this.translitChars.put("ꝭ", "is");
-            this.translitChars.put("ᴏ", obj75);
+            this.translitChars.put("ᴏ", obj76);
             this.translitChars.put("ɛ", "e");
-            this.translitChars.put("ǻ", obj61);
+            this.translitChars.put("ǻ", obj62);
             this.translitChars.put("ﬄ", "ffl");
-            this.translitChars.put("ⱺ", obj75);
-            this.translitChars.put("ȋ", obj73);
+            this.translitChars.put("ⱺ", obj76);
+            this.translitChars.put("ȋ", obj74);
             this.translitChars.put("ᵫ", "ue");
-            this.translitChars.put("ȡ", obj79);
+            this.translitChars.put("ȡ", obj80);
             this.translitChars.put("ⱬ", obj25);
-            this.translitChars.put("ẁ", obj77);
-            this.translitChars.put("ᶏ", obj61);
-            this.translitChars.put("ꞇ", obj65);
-            Object obj83 = obj44;
-            this.translitChars.put("ğ", obj83);
-            Object obj84 = obj77;
-            Object obj85 = obj72;
-            this.translitChars.put("ɳ", obj85);
-            this.translitChars.put("ʛ", obj83);
+            this.translitChars.put("ẁ", obj78);
+            this.translitChars.put("ᶏ", obj62);
+            this.translitChars.put("ꞇ", obj66);
+            Object obj84 = obj44;
+            this.translitChars.put("ğ", obj84);
+            Object obj85 = obj78;
+            Object obj86 = obj73;
+            this.translitChars.put("ɳ", obj86);
+            this.translitChars.put("ʛ", obj84);
             this.translitChars.put("ᴜ", obj26);
-            this.translitChars.put("ẩ", obj61);
-            this.translitChars.put("ṅ", obj85);
-            this.translitChars.put("ɨ", obj73);
+            this.translitChars.put("ẩ", obj62);
+            this.translitChars.put("ṅ", obj86);
+            this.translitChars.put("ɨ", obj74);
             this.translitChars.put("ᴙ", obj9);
-            this.translitChars.put("ǎ", obj61);
-            this.translitChars.put("ſ", obj71);
-            this.translitChars.put("ȫ", obj75);
+            this.translitChars.put("ǎ", obj62);
+            this.translitChars.put("ſ", obj72);
+            this.translitChars.put("ȫ", obj76);
             this.translitChars.put("ɿ", obj9);
-            this.translitChars.put("ƭ", obj65);
-            this.translitChars.put("ḯ", obj73);
+            this.translitChars.put("ƭ", obj66);
+            this.translitChars.put("ḯ", obj74);
             this.translitChars.put("ǽ", "ae");
-            this.translitChars.put("ⱱ", obj81);
+            this.translitChars.put("ⱱ", obj82);
             this.translitChars.put("ɶ", "oe");
-            this.translitChars.put("ṃ", obj70);
+            this.translitChars.put("ṃ", obj71);
             this.translitChars.put("ż", obj25);
             this.translitChars.put("ĕ", "e");
             this.translitChars.put("ꜻ", "av");
-            this.translitChars.put("ở", obj75);
+            this.translitChars.put("ở", obj76);
             this.translitChars.put("ễ", "e");
-            Object obj86 = obj82;
-            this.translitChars.put("ɬ", obj86);
-            this.translitChars.put("ị", obj73);
-            this.translitChars.put("ᵭ", obj79);
-            Object obj87 = obj81;
+            Object obj87 = obj83;
+            this.translitChars.put("ɬ", obj87);
+            this.translitChars.put("ị", obj74);
+            this.translitChars.put("ᵭ", obj80);
+            Object obj88 = obj82;
             this.translitChars.put("ﬆ", "st");
-            this.translitChars.put("ḷ", obj86);
+            this.translitChars.put("ḷ", obj87);
             this.translitChars.put("ŕ", obj9);
             this.translitChars.put("ᴕ", "ou");
-            this.translitChars.put("ʈ", obj65);
-            this.translitChars.put("ā", obj61);
+            this.translitChars.put("ʈ", obj66);
+            this.translitChars.put("ā", obj62);
             this.translitChars.put("ḙ", "e");
-            this.translitChars.put("ᴑ", obj75);
-            Object obj88 = obj50;
-            this.translitChars.put("ç", obj88);
-            this.translitChars.put("ᶊ", obj71);
-            this.translitChars.put("ặ", obj61);
+            this.translitChars.put("ᴑ", obj76);
+            Object obj89 = obj50;
+            this.translitChars.put("ç", obj89);
+            this.translitChars.put("ᶊ", obj72);
+            this.translitChars.put("ặ", obj62);
             this.translitChars.put("ų", obj26);
-            this.translitChars.put("ả", obj61);
-            this.translitChars.put("ǥ", obj83);
-            Object obj89 = obj26;
-            Object obj90 = obj64;
-            this.translitChars.put("ꝁ", obj90);
+            this.translitChars.put("ả", obj62);
+            this.translitChars.put("ǥ", obj84);
+            Object obj90 = obj26;
+            Object obj91 = obj65;
+            this.translitChars.put("ꝁ", obj91);
             this.translitChars.put("ẕ", obj25);
-            this.translitChars.put("ŝ", obj71);
+            this.translitChars.put("ŝ", obj72);
             this.translitChars.put("ḕ", "e");
-            this.translitChars.put("ɠ", obj83);
-            this.translitChars.put("ꝉ", obj86);
+            this.translitChars.put("ɠ", obj84);
+            this.translitChars.put("ꝉ", obj87);
             this.translitChars.put("ꝼ", "f");
             this.translitChars.put("ᶍ", "x");
-            this.translitChars.put("ǒ", obj75);
+            this.translitChars.put("ǒ", obj76);
             this.translitChars.put("ę", "e");
-            this.translitChars.put("ổ", obj75);
-            this.translitChars.put("ƫ", obj65);
-            this.translitChars.put("ǫ", obj75);
-            this.translitChars.put("i̇", obj73);
-            Object obj91 = obj72;
-            this.translitChars.put("ṇ", obj91);
-            this.translitChars.put("ć", obj88);
-            this.translitChars.put("ᵷ", obj83);
-            Object obj92 = obj88;
-            Object obj93 = obj84;
-            this.translitChars.put("ẅ", obj93);
-            this.translitChars.put("ḑ", obj79);
-            this.translitChars.put("ḹ", obj86);
+            this.translitChars.put("ổ", obj76);
+            this.translitChars.put("ƫ", obj66);
+            this.translitChars.put("ǫ", obj76);
+            this.translitChars.put("i̇", obj74);
+            Object obj92 = obj73;
+            this.translitChars.put("ṇ", obj92);
+            this.translitChars.put("ć", obj89);
+            this.translitChars.put("ᵷ", obj84);
+            Object obj93 = obj89;
+            Object obj94 = obj85;
+            this.translitChars.put("ẅ", obj94);
+            this.translitChars.put("ḑ", obj80);
+            this.translitChars.put("ḹ", obj87);
             this.translitChars.put("œ", "oe");
             this.translitChars.put("ᵳ", obj9);
-            this.translitChars.put("ļ", obj86);
+            this.translitChars.put("ļ", obj87);
             this.translitChars.put("ȑ", obj9);
-            this.translitChars.put("ȭ", obj75);
-            this.translitChars.put("ᵰ", obj91);
+            this.translitChars.put("ȭ", obj76);
+            this.translitChars.put("ᵰ", obj92);
             this.translitChars.put("ᴁ", "ae");
-            this.translitChars.put("ŀ", obj86);
-            this.translitChars.put("ä", obj61);
-            Object obj94 = obj68;
-            this.translitChars.put("ƥ", obj94);
-            this.translitChars.put("ỏ", obj75);
-            this.translitChars.put("į", obj73);
+            this.translitChars.put("ŀ", obj87);
+            this.translitChars.put("ä", obj62);
+            Object obj95 = obj69;
+            this.translitChars.put("ƥ", obj95);
+            this.translitChars.put("ỏ", obj76);
+            this.translitChars.put("į", obj74);
             this.translitChars.put("ȓ", obj9);
-            Object obj95 = obj71;
+            Object obj96 = obj72;
             this.translitChars.put("ǆ", "dz");
-            this.translitChars.put("ḡ", obj83);
-            Object obj96 = obj89;
-            this.translitChars.put("ṻ", obj96);
-            this.translitChars.put("ō", obj75);
-            this.translitChars.put("ľ", obj86);
-            this.translitChars.put("ẃ", obj93);
-            this.translitChars.put("ț", obj65);
-            this.translitChars.put("ń", obj91);
-            this.translitChars.put("ɍ", obj9);
-            this.translitChars.put("ȃ", obj61);
-            this.translitChars.put("ü", obj96);
-            this.translitChars.put("ꞁ", obj86);
-            this.translitChars.put("ᴐ", obj75);
-            this.translitChars.put("ớ", obj75);
+            this.translitChars.put("ḡ", obj84);
             Object obj97 = obj90;
+            this.translitChars.put("ṻ", obj97);
+            this.translitChars.put("ō", obj76);
+            this.translitChars.put("ľ", obj87);
+            this.translitChars.put("ẃ", obj94);
+            this.translitChars.put("ț", obj66);
+            this.translitChars.put("ń", obj92);
+            this.translitChars.put("ɍ", obj9);
+            this.translitChars.put("ȃ", obj62);
+            this.translitChars.put("ü", obj97);
+            this.translitChars.put("ꞁ", obj87);
+            this.translitChars.put("ᴐ", obj76);
+            this.translitChars.put("ớ", obj76);
+            Object obj98 = obj91;
             this.translitChars.put("ᴃ", obj54);
             this.translitChars.put("ɹ", obj9);
             this.translitChars.put("ᵲ", obj9);
-            this.translitChars.put("ʏ", obj80);
+            this.translitChars.put("ʏ", obj81);
             this.translitChars.put("ᵮ", "f");
-            Object obj98 = obj78;
-            this.translitChars.put("ⱨ", obj98);
-            this.translitChars.put("ŏ", obj75);
-            this.translitChars.put("ú", obj96);
+            Object obj99 = obj79;
+            this.translitChars.put("ⱨ", obj99);
+            this.translitChars.put("ŏ", obj76);
+            this.translitChars.put("ú", obj97);
             this.translitChars.put("ṛ", obj9);
-            this.translitChars.put("ʮ", obj98);
-            this.translitChars.put("ó", obj75);
-            this.translitChars.put("ů", obj96);
-            this.translitChars.put("ỡ", obj75);
-            this.translitChars.put("ṕ", obj94);
-            this.translitChars.put("ᶖ", obj73);
-            this.translitChars.put("ự", obj96);
-            this.translitChars.put("ã", obj61);
-            this.translitChars.put("ᵢ", obj73);
-            this.translitChars.put("ṱ", obj65);
+            this.translitChars.put("ʮ", obj99);
+            this.translitChars.put("ó", obj76);
+            this.translitChars.put("ů", obj97);
+            this.translitChars.put("ỡ", obj76);
+            this.translitChars.put("ṕ", obj95);
+            this.translitChars.put("ᶖ", obj74);
+            this.translitChars.put("ự", obj97);
+            this.translitChars.put("ã", obj62);
+            this.translitChars.put("ᵢ", obj74);
+            this.translitChars.put("ṱ", obj66);
             this.translitChars.put("ể", "e");
-            this.translitChars.put("ử", obj96);
-            this.translitChars.put("í", obj73);
-            this.translitChars.put("ɔ", obj75);
+            this.translitChars.put("ử", obj97);
+            this.translitChars.put("í", obj74);
+            this.translitChars.put("ɔ", obj76);
             this.translitChars.put("ɺ", obj9);
-            this.translitChars.put("ɢ", obj83);
+            this.translitChars.put("ɢ", obj84);
             this.translitChars.put("ř", obj9);
-            this.translitChars.put("ẖ", obj98);
-            this.translitChars.put("ű", obj96);
-            this.translitChars.put("ȍ", obj75);
-            this.translitChars.put("ḻ", obj86);
-            this.translitChars.put("ḣ", obj98);
-            this.translitChars.put("ȶ", obj65);
-            this.translitChars.put("ņ", obj91);
+            this.translitChars.put("ẖ", obj99);
+            this.translitChars.put("ű", obj97);
+            this.translitChars.put("ȍ", obj76);
+            this.translitChars.put("ḻ", obj87);
+            this.translitChars.put("ḣ", obj99);
+            this.translitChars.put("ȶ", obj66);
+            this.translitChars.put("ņ", obj92);
             this.translitChars.put("ᶒ", "e");
-            this.translitChars.put("ì", obj73);
-            this.translitChars.put("ẉ", obj93);
+            this.translitChars.put("ì", obj74);
+            this.translitChars.put("ẉ", obj94);
             this.translitChars.put("ē", "e");
             this.translitChars.put("ᴇ", "e");
-            this.translitChars.put("ł", obj86);
-            this.translitChars.put("ộ", obj75);
-            this.translitChars.put("ɭ", obj86);
-            this.translitChars.put("ẏ", obj80);
+            this.translitChars.put("ł", obj87);
+            this.translitChars.put("ộ", obj76);
+            this.translitChars.put("ɭ", obj87);
+            this.translitChars.put("ẏ", obj81);
             this.translitChars.put("ᴊ", "j");
-            Object obj99 = obj97;
-            this.translitChars.put("ḱ", obj99);
-            Object obj100 = obj87;
-            this.translitChars.put("ṿ", obj100);
+            Object obj100 = obj98;
+            this.translitChars.put("ḱ", obj100);
+            Object obj101 = obj88;
+            this.translitChars.put("ṿ", obj101);
             this.translitChars.put("ȩ", "e");
-            this.translitChars.put("â", obj61);
-            Object obj101 = obj95;
-            this.translitChars.put("ş", obj101);
+            this.translitChars.put("â", obj62);
+            Object obj102 = obj96;
+            this.translitChars.put("ş", obj102);
             this.translitChars.put("ŗ", obj9);
-            this.translitChars.put("ʋ", obj100);
-            this.translitChars.put("ₐ", obj61);
-            Object obj102 = obj92;
-            this.translitChars.put("ↄ", obj102);
+            this.translitChars.put("ʋ", obj101);
+            this.translitChars.put("ₐ", obj62);
+            Object obj103 = obj93;
+            this.translitChars.put("ↄ", obj103);
             this.translitChars.put("ᶓ", "e");
-            this.translitChars.put("ɰ", obj70);
-            this.translitChars.put("ᴡ", obj93);
-            this.translitChars.put("ȏ", obj75);
-            this.translitChars.put("č", obj102);
-            this.translitChars.put("ǵ", obj83);
-            this.translitChars.put("ĉ", obj102);
-            this.translitChars.put("ᶗ", obj75);
-            this.translitChars.put("ꝃ", obj99);
+            this.translitChars.put("ɰ", obj71);
+            this.translitChars.put("ᴡ", obj94);
+            this.translitChars.put("ȏ", obj76);
+            this.translitChars.put("č", obj103);
+            this.translitChars.put("ǵ", obj84);
+            this.translitChars.put("ĉ", obj103);
+            this.translitChars.put("ᶗ", obj76);
+            this.translitChars.put("ꝃ", obj100);
             this.translitChars.put("ꝙ", "q");
-            this.translitChars.put("ṑ", obj75);
-            this.translitChars.put("ꜱ", obj101);
-            this.translitChars.put("ṓ", obj75);
-            this.translitChars.put("ȟ", obj98);
-            this.translitChars.put("ő", obj75);
+            this.translitChars.put("ṑ", obj76);
+            this.translitChars.put("ꜱ", obj102);
+            this.translitChars.put("ṓ", obj76);
+            this.translitChars.put("ȟ", obj99);
+            this.translitChars.put("ő", obj76);
             this.translitChars.put("ꜩ", "tz");
             this.translitChars.put("ẻ", "e");
         }
@@ -3960,7 +3961,7 @@ public class LocaleController {
                         useImperialSystemType = Boolean.valueOf(z);
                     }
                 } catch (Exception e) {
-                    useImperialSystemType = false;
+                    useImperialSystemType = Boolean.FALSE;
                     FileLog.e((Throwable) e);
                 }
             } else {

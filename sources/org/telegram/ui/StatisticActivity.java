@@ -197,7 +197,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 getMessagesStorage().getMessages((long) (-this.chat.id), 0, false, this.recentPostsAll.size(), i2, 0, 0, this.classGuid, 0, true, false, 0);
             }
             AndroidUtilities.runOnUIThread(new Runnable(chartViewDataArr) {
-                private final /* synthetic */ StatisticActivity.ChartViewData[] f$1;
+                public final /* synthetic */ StatisticActivity.ChartViewData[] f$1;
 
                 {
                     this.f$1 = r2;
@@ -945,7 +945,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             this.chartView.legendSignatureView.showProgress(false, false);
             this.chartView.legendSignatureView.setOnTouchListener(new RecyclerListView.FoucsableOnTouchListener());
             this.chartView.legendSignatureView.setOnClickListener(new View.OnClickListener(context) {
-                private final /* synthetic */ Context f$1;
+                public final /* synthetic */ Context f$1;
 
                 {
                     this.f$1 = r2;
@@ -1015,9 +1015,9 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                         zoomCancelable.adapterPosition = StatisticActivity.this.recyclerListView.getChildAdapterPosition(this);
                         this.chartView.legendSignatureView.showProgress(true, false);
                         ConnectionsManager.getInstance(StatisticActivity.this.currentAccount).bindRequestToGuid(ConnectionsManager.getInstance(StatisticActivity.this.currentAccount).sendRequest(tLRPC$TL_stats_loadAsyncGraph, new RequestDelegate(context, str, zoomCancelable) {
-                            private final /* synthetic */ Context f$1;
-                            private final /* synthetic */ String f$2;
-                            private final /* synthetic */ StatisticActivity.ZoomCancelable f$3;
+                            public final /* synthetic */ Context f$1;
+                            public final /* synthetic */ String f$2;
+                            public final /* synthetic */ StatisticActivity.ZoomCancelable f$3;
 
                             {
                                 this.f$1 = r2;
@@ -1046,9 +1046,9 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 Toast.makeText(context, ((TLRPC$TL_statsGraphError) tLObject).error, 1).show();
             }
             AndroidUtilities.runOnUIThread(new Runnable(chartData, str, zoomCancelable) {
-                private final /* synthetic */ ChartData f$1;
-                private final /* synthetic */ String f$2;
-                private final /* synthetic */ StatisticActivity.ZoomCancelable f$3;
+                public final /* synthetic */ ChartData f$1;
+                public final /* synthetic */ String f$2;
+                public final /* synthetic */ StatisticActivity.ZoomCancelable f$3;
 
                 {
                     this.f$1 = r2;
@@ -1259,8 +1259,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             fArr[1] = f4;
             ValueAnimator ofFloat = ValueAnimator.ofFloat(fArr);
             ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(transitionParams, f3) {
-                private final /* synthetic */ TransitionParams f$1;
-                private final /* synthetic */ float f$2;
+                public final /* synthetic */ TransitionParams f$1;
+                public final /* synthetic */ float f$2;
 
                 {
                     this.f$1 = r2;
@@ -1659,8 +1659,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 TLRPC$TL_stats_loadAsyncGraph tLRPC$TL_stats_loadAsyncGraph = new TLRPC$TL_stats_loadAsyncGraph();
                 tLRPC$TL_stats_loadAsyncGraph.token = this.token;
                 ConnectionsManager.getInstance(i).bindRequestToGuid(ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_stats_loadAsyncGraph, new RequestDelegate(recyclerListView, diffUtilsCallback) {
-                    private final /* synthetic */ RecyclerListView f$1;
-                    private final /* synthetic */ StatisticActivity.DiffUtilsCallback f$2;
+                    public final /* synthetic */ RecyclerListView f$1;
+                    public final /* synthetic */ StatisticActivity.DiffUtilsCallback f$2;
 
                     {
                         this.f$1 = r2;
@@ -1822,7 +1822,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             getMessagesStorage().putMessages(arrayList2, false, true, true, 0, false);
         }
         AndroidUtilities.runOnUIThread(new Runnable(arrayList) {
-            private final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ ArrayList f$1;
 
             {
                 this.f$1 = r2;

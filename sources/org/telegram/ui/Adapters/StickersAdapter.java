@@ -221,7 +221,7 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         String str = this.lastSticker;
         cancelEmojiSearch();
         this.searchRunnable = new Runnable(str) {
-            private final /* synthetic */ String f$1;
+            public final /* synthetic */ String f$1;
 
             {
                 this.f$1 = r2;
@@ -241,7 +241,7 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
 
     public /* synthetic */ void lambda$searchEmojiByKeyword$1$StickersAdapter(String str) {
         MediaDataController.getInstance(this.currentAccount).getEmojiSuggestions(this.lastSearchKeyboardLanguage, str, true, new MediaDataController.KeywordResultCallback(str) {
-            private final /* synthetic */ String f$1;
+            public final /* synthetic */ String f$1;
 
             {
                 this.f$1 = r2;
@@ -412,7 +412,7 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         tLRPC$TL_messages_getStickers.emoticon = str2;
         tLRPC$TL_messages_getStickers.hash = 0;
         this.lastReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getStickers, new RequestDelegate(str) {
-            private final /* synthetic */ String f$1;
+            public final /* synthetic */ String f$1;
 
             {
                 this.f$1 = r2;
@@ -426,8 +426,8 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
 
     public /* synthetic */ void lambda$searchServerStickers$3$StickersAdapter(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(str, tLObject) {
-            private final /* synthetic */ String f$1;
-            private final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ TLObject f$2;
 
             {
                 this.f$1 = r2;

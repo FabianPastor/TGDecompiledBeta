@@ -70,7 +70,8 @@ public class NumberPicker extends LinearLayout {
     /* access modifiers changed from: private */
     public int mTopSelectionDividerTop;
     private int mTouchSlop;
-    private int mValue;
+    /* access modifiers changed from: private */
+    public int mValue;
     private VelocityTracker mVelocityTracker;
     private boolean mWrapSelectorWheel;
     private int textOffset;
@@ -149,11 +150,38 @@ public class NumberPicker extends LinearLayout {
                 this.mFlingScroller = new Scroller(getContext(), (Interpolator) null, true);
                 this.mAdjustScroller = new Scroller(getContext(), new DecelerateInterpolator(2.5f));
                 updateInputTextView();
+                setImportantForAccessibility(1);
+                setAccessibilityDelegate(new SeekBarAccessibilityDelegate() {
+                    /* access modifiers changed from: protected */
+                    public boolean canScrollBackward(View view) {
+                        return true;
+                    }
+
+                    /* access modifiers changed from: protected */
+                    public boolean canScrollForward(View view) {
+                        return true;
+                    }
+
+                    /* access modifiers changed from: protected */
+                    public void doScroll(View view, boolean z) {
+                        NumberPicker.this.changeValueByOne(!z);
+                    }
+
+                    public CharSequence getContentDescription(View view) {
+                        NumberPicker numberPicker = NumberPicker.this;
+                        return numberPicker.getContentDescription(numberPicker.mValue);
+                    }
+                });
                 return;
             }
             throw new IllegalArgumentException("minWidth > maxWidth");
         }
         throw new IllegalArgumentException("minHeight > maxHeight");
+    }
+
+    /* access modifiers changed from: protected */
+    public CharSequence getContentDescription(int i) {
+        return this.mInputText.getText();
     }
 
     public void setTextColor(int i) {

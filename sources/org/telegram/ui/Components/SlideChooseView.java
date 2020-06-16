@@ -3,19 +3,23 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.text.TextPaint;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class SlideChooseView extends View {
+    private final SeekBarAccessibilityDelegate accessibilityDelegate;
     private Callback callback;
     private int circleSize;
     private int gapSize;
     private int lineSize;
     private boolean moving;
     private int[] optionsSizes;
-    private String[] optionsStr;
+    /* access modifiers changed from: private */
+    public String[] optionsStr;
     private Paint paint = new Paint(1);
     int selectedIndex;
     private int sideSide;
@@ -33,6 +37,27 @@ public class SlideChooseView extends View {
         TextPaint textPaint2 = new TextPaint(1);
         this.textPaint = textPaint2;
         textPaint2.setTextSize((float) AndroidUtilities.dp(13.0f));
+        this.accessibilityDelegate = new IntSeekBarAccessibilityDelegate() {
+            /* access modifiers changed from: protected */
+            public int getProgress() {
+                return SlideChooseView.this.selectedIndex;
+            }
+
+            /* access modifiers changed from: protected */
+            public void setProgress(int i) {
+                SlideChooseView.this.setOption(i);
+            }
+
+            /* access modifiers changed from: protected */
+            public int getMaxValue() {
+                return SlideChooseView.this.optionsStr.length - 1;
+            }
+
+            /* access modifiers changed from: protected */
+            public CharSequence getContentDescription(View view) {
+                return SlideChooseView.this.optionsStr[SlideChooseView.this.selectedIndex];
+            }
+        };
     }
 
     public void setCallback(Callback callback2) {
@@ -221,7 +246,8 @@ public class SlideChooseView extends View {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SlideChooseView.onTouchEvent(android.view.MotionEvent):boolean");
     }
 
-    private void setOption(int i) {
+    /* access modifiers changed from: private */
+    public void setOption(int i) {
         this.selectedIndex = i;
         Callback callback2 = this.callback;
         if (callback2 != null) {
@@ -284,5 +310,14 @@ public class SlideChooseView extends View {
             }
             i++;
         }
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        this.accessibilityDelegate.onInitializeAccessibilityNodeInfoInternal(this, accessibilityNodeInfo);
+    }
+
+    public boolean performAccessibilityAction(int i, Bundle bundle) {
+        return super.performAccessibilityAction(i, bundle) || this.accessibilityDelegate.performAccessibilityActionInternal(this, i, bundle);
     }
 }

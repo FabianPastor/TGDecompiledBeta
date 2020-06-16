@@ -302,8 +302,8 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
                     builder.setMessage(LocaleController.getString("ShareYouLocationInline", NUM));
                     boolean[] zArr = new boolean[1];
                     builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(zArr, tLRPC$User2) {
-                        private final /* synthetic */ boolean[] f$1;
-                        private final /* synthetic */ TLRPC$User f$2;
+                        public final /* synthetic */ boolean[] f$1;
+                        public final /* synthetic */ TLRPC$User f$2;
 
                         {
                             this.f$1 = r2;
@@ -315,7 +315,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
                         }
                     });
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), new DialogInterface.OnClickListener(zArr) {
-                        private final /* synthetic */ boolean[] f$1;
+                        public final /* synthetic */ boolean[] f$1;
 
                         {
                             this.f$1 = r2;
@@ -326,7 +326,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
                         }
                     });
                     this.parentFragment.showDialog(builder.create(), new DialogInterface.OnDismissListener(zArr) {
-                        private final /* synthetic */ boolean[] f$1;
+                        public final /* synthetic */ boolean[] f$1;
 
                         {
                             this.f$1 = r2;
@@ -456,9 +456,9 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
                             tLRPC$TL_contacts_resolveUsername.username = MentionsAdapter.this.searchingContextUsername;
                             MentionsAdapter mentionsAdapter = MentionsAdapter.this;
                             int unused3 = mentionsAdapter.contextUsernameReqid = ConnectionsManager.getInstance(mentionsAdapter.currentAccount).sendRequest(tLRPC$TL_contacts_resolveUsername, new RequestDelegate(str7, instance, instance2) {
-                                private final /* synthetic */ String f$1;
-                                private final /* synthetic */ MessagesController f$2;
-                                private final /* synthetic */ MessagesStorage f$3;
+                                public final /* synthetic */ String f$1;
+                                public final /* synthetic */ MessagesController f$2;
+                                public final /* synthetic */ MessagesStorage f$3;
 
                                 {
                                     this.f$1 = r2;
@@ -479,11 +479,11 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
 
                 public /* synthetic */ void lambda$run$1$MentionsAdapter$4(String str, MessagesController messagesController, MessagesStorage messagesStorage, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                     AndroidUtilities.runOnUIThread(new Runnable(str, tLRPC$TL_error, tLObject, messagesController, messagesStorage) {
-                        private final /* synthetic */ String f$1;
-                        private final /* synthetic */ TLRPC$TL_error f$2;
-                        private final /* synthetic */ TLObject f$3;
-                        private final /* synthetic */ MessagesController f$4;
-                        private final /* synthetic */ MessagesStorage f$5;
+                        public final /* synthetic */ String f$1;
+                        public final /* synthetic */ TLRPC$TL_error f$2;
+                        public final /* synthetic */ TLObject f$3;
+                        public final /* synthetic */ MessagesController f$4;
+                        public final /* synthetic */ MessagesStorage f$5;
 
                         {
                             this.f$1 = r2;
@@ -729,13 +729,13 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
 
     public /* synthetic */ void lambda$searchForContextBotResults$4$MentionsAdapter(String str, boolean z, TLRPC$User tLRPC$User, String str2, MessagesStorage messagesStorage, String str3, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(str, z, tLObject, tLRPC$User, str2, messagesStorage, str3) {
-            private final /* synthetic */ String f$1;
-            private final /* synthetic */ boolean f$2;
-            private final /* synthetic */ TLObject f$3;
-            private final /* synthetic */ TLRPC$User f$4;
-            private final /* synthetic */ String f$5;
-            private final /* synthetic */ MessagesStorage f$6;
-            private final /* synthetic */ String f$7;
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ boolean f$2;
+            public final /* synthetic */ TLObject f$3;
+            public final /* synthetic */ TLRPC$User f$4;
+            public final /* synthetic */ String f$5;
+            public final /* synthetic */ MessagesStorage f$6;
+            public final /* synthetic */ String f$7;
 
             {
                 this.f$1 = r2;

@@ -214,7 +214,7 @@ public class ColorPicker extends FrameLayout {
                     }
                 });
                 this.colorEditText[i].setOnFocusChangeListener(new View.OnFocusChangeListener(i) {
-                    private final /* synthetic */ int f$1;
+                    public final /* synthetic */ int f$1;
 
                     {
                         this.f$1 = r2;

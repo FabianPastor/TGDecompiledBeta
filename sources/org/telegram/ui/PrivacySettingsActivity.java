@@ -277,7 +277,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                             radioColorCell.setTextAndValue(strArr[i5], i4 == i5);
                             linearLayout.addView(radioColorCell);
                             radioColorCell.setOnClickListener(new View.OnClickListener(builder2) {
-                                private final /* synthetic */ AlertDialog.Builder f$1;
+                                public final /* synthetic */ AlertDialog.Builder f$1;
 
                                 {
                                     this.f$1 = r2;
@@ -368,7 +368,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         builder4.setTitle(LocaleController.getString("SuggestContactsTitle", NUM));
                         builder4.setMessage(LocaleController.getString("SuggestContactsAlert", NUM));
                         builder4.setPositiveButton(LocaleController.getString("MuteDisable", NUM), new DialogInterface.OnClickListener(textCheckCell2) {
-                            private final /* synthetic */ TextCheckCell f$1;
+                            public final /* synthetic */ TextCheckCell f$1;
 
                             {
                                 this.f$1 = r2;
@@ -493,8 +493,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         tLRPC$TL_account_setAccountTTL.ttl = tLRPC$TL_accountDaysTTL;
         tLRPC$TL_accountDaysTTL.days = i;
         getConnectionsManager().sendRequest(tLRPC$TL_account_setAccountTTL, new RequestDelegate(alertDialog, tLRPC$TL_account_setAccountTTL) {
-            private final /* synthetic */ AlertDialog f$1;
-            private final /* synthetic */ TLRPC$TL_account_setAccountTTL f$2;
+            public final /* synthetic */ AlertDialog f$1;
+            public final /* synthetic */ TLRPC$TL_account_setAccountTTL f$2;
 
             {
                 this.f$1 = r2;
@@ -509,9 +509,9 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
 
     public /* synthetic */ void lambda$null$5$PrivacySettingsActivity(AlertDialog alertDialog, TLRPC$TL_account_setAccountTTL tLRPC$TL_account_setAccountTTL, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLObject, tLRPC$TL_account_setAccountTTL) {
-            private final /* synthetic */ AlertDialog f$1;
-            private final /* synthetic */ TLObject f$2;
-            private final /* synthetic */ TLRPC$TL_account_setAccountTTL f$3;
+            public final /* synthetic */ AlertDialog f$1;
+            public final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_account_setAccountTTL f$3;
 
             {
                 this.f$1 = r2;
@@ -567,7 +567,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         getUserConfig().tmpPassword = null;
         getUserConfig().saveConfig(false);
         getConnectionsManager().sendRequest(tLRPC$TL_payments_clearSavedInfo, new RequestDelegate(textCheckCell) {
-            private final /* synthetic */ TextCheckCell f$1;
+            public final /* synthetic */ TextCheckCell f$1;
 
             {
                 this.f$1 = r2;
@@ -581,7 +581,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
 
     public /* synthetic */ void lambda$null$10$PrivacySettingsActivity(TextCheckCell textCheckCell, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(textCheckCell) {
-            private final /* synthetic */ TextCheckCell f$1;
+            public final /* synthetic */ TextCheckCell f$1;
 
             {
                 this.f$1 = r2;
@@ -788,7 +788,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     public /* synthetic */ void lambda$loadPasswordSettings$19$PrivacySettingsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable((TLRPC$TL_account_password) tLObject) {
-                private final /* synthetic */ TLRPC$TL_account_password f$1;
+                public final /* synthetic */ TLRPC$TL_account_password f$1;
 
                 {
                     this.f$1 = r2;

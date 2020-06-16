@@ -92,7 +92,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r2.setAllowOverlayTitle(r3)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
             java.lang.String r4 = "AddContactTitle"
-            r5 = 2131624117(0x7f0e00b5, float:1.8875405E38)
+            r5 = 2131624125(0x7f0e00bd, float:1.887542E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)
             r2.setTitle(r4)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
@@ -102,57 +102,57 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.ui.Components.AvatarDrawable r2 = new org.telegram.ui.Components.AvatarDrawable
             r2.<init>()
             r1.avatarDrawable = r2
-            java.lang.String r4 = ""
-            r5 = 5
-            r2.setInfo(r5, r4, r4)
+            r4 = 5
+            java.lang.String r5 = ""
+            r2.setInfo(r4, r5, r5)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r2 = r2.createMenu()
-            r4 = 1113587712(0x42600000, float:56.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r5 = 1113587712(0x42600000, float:56.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             r6 = 2131165462(0x7var_, float:1.7945142E38)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r2.addItemWithWidth(r3, r6, r4)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r2.addItemWithWidth(r3, r6, r5)
             r1.editDoneItem = r2
-            java.lang.String r4 = "Done"
-            r6 = 2131624978(0x7f0e0412, float:1.887715E38)
-            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r6)
-            r2.setContentDescription(r4)
+            java.lang.String r5 = "Done"
+            r6 = 2131624986(0x7f0e041a, float:1.8877167E38)
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)
+            r2.setContentDescription(r5)
             org.telegram.ui.Components.ContextProgressView r2 = new org.telegram.ui.Components.ContextProgressView
             r2.<init>(r0, r3)
             r1.editDoneItemProgress = r2
-            org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r1.editDoneItem
+            org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r1.editDoneItem
             r6 = -1
             r7 = -1082130432(0xffffffffbvar_, float:-1.0)
             android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r7)
-            r4.addView(r2, r7)
+            r5.addView(r2, r7)
             org.telegram.ui.Components.ContextProgressView r2 = r1.editDoneItemProgress
-            r4 = 4
-            r2.setVisibility(r4)
+            r5 = 4
+            r2.setVisibility(r5)
             android.widget.ScrollView r2 = new android.widget.ScrollView
             r2.<init>(r0)
             r1.fragmentView = r2
             android.widget.LinearLayout r2 = new android.widget.LinearLayout
             r2.<init>(r0)
             r1.contentLayout = r2
-            r4 = 1103101952(0x41CLASSNAME, float:24.0)
-            int r7 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r5 = 1103101952(0x41CLASSNAME, float:24.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             r8 = 0
-            r2.setPadding(r7, r8, r4, r8)
+            r2.setPadding(r7, r8, r5, r8)
             android.widget.LinearLayout r2 = r1.contentLayout
             r2.setOrientation(r3)
             android.view.View r2 = r1.fragmentView
             android.widget.ScrollView r2 = (android.widget.ScrollView) r2
-            android.widget.LinearLayout r4 = r1.contentLayout
+            android.widget.LinearLayout r5 = r1.contentLayout
             r7 = -2
             r9 = 51
             android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createScroll(r6, r7, r9)
-            r2.addView(r4, r9)
+            r2.addView(r5, r9)
             android.widget.LinearLayout r2 = r1.contentLayout
-            org.telegram.ui.-$$Lambda$NewContactActivity$dyt1ArQHbLSL06GO-wtQQZkRhQE r4 = org.telegram.ui.$$Lambda$NewContactActivity$dyt1ArQHbLSL06GOwtQQZkRhQE.INSTANCE
-            r2.setOnTouchListener(r4)
+            org.telegram.ui.-$$Lambda$NewContactActivity$dyt1ArQHbLSL06GO-wtQQZkRhQE r5 = org.telegram.ui.$$Lambda$NewContactActivity$dyt1ArQHbLSL06GOwtQQZkRhQE.INSTANCE
+            r2.setOnTouchListener(r5)
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
             r2.<init>(r0)
-            android.widget.LinearLayout r4 = r1.contentLayout
+            android.widget.LinearLayout r5 = r1.contentLayout
             r9 = -1
             r10 = -2
             r11 = 0
@@ -160,13 +160,13 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r13 = 0
             r14 = 0
             android.widget.LinearLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r10, r11, r12, r13, r14)
-            r4.addView(r2, r9)
-            org.telegram.ui.Components.BackupImageView r4 = new org.telegram.ui.Components.BackupImageView
-            r4.<init>(r0)
-            r1.avatarImage = r4
+            r5.addView(r2, r9)
+            org.telegram.ui.Components.BackupImageView r5 = new org.telegram.ui.Components.BackupImageView
+            r5.<init>(r0)
+            r1.avatarImage = r5
             org.telegram.ui.Components.AvatarDrawable r9 = r1.avatarDrawable
-            r4.setImageDrawable(r9)
-            org.telegram.ui.Components.BackupImageView r4 = r1.avatarImage
+            r5.setImageDrawable(r9)
+            org.telegram.ui.Components.BackupImageView r5 = r1.avatarImage
             r9 = 60
             r10 = 1114636288(0x42700000, float:60.0)
             r11 = 51
@@ -174,53 +174,53 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r13 = 1091567616(0x41100000, float:9.0)
             r15 = 0
             android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11, r12, r13, r14, r15)
-            r2.addView(r4, r9)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = new org.telegram.ui.Components.EditTextBoldCursor
-            r4.<init>(r0)
-            r1.firstNameField = r4
+            r2.addView(r5, r9)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = new org.telegram.ui.Components.EditTextBoldCursor
+            r5.<init>(r0)
+            r1.firstNameField = r5
             r9 = 1099956224(0x41900000, float:18.0)
-            r4.setTextSize(r3, r9)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
+            r5.setTextSize(r3, r9)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.firstNameField
             java.lang.String r10 = "windowBackgroundWhiteHintText"
             int r11 = org.telegram.ui.ActionBar.Theme.getColor(r10)
-            r4.setHintTextColor(r11)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
+            r5.setHintTextColor(r11)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.firstNameField
             java.lang.String r11 = "windowBackgroundWhiteBlackText"
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r11)
-            r4.setTextColor(r12)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
-            r4.setMaxLines(r3)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
-            r4.setLines(r3)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
-            r4.setSingleLine(r3)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
+            r5.setTextColor(r12)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.firstNameField
+            r5.setMaxLines(r3)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.firstNameField
+            r5.setLines(r3)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.firstNameField
+            r5.setSingleLine(r3)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.firstNameField
             android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.createEditTextDrawable(r0, r8)
-            r4.setBackgroundDrawable(r12)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
+            r5.setBackgroundDrawable(r12)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.firstNameField
             r12 = 3
-            r4.setGravity(r12)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
+            r5.setGravity(r12)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.firstNameField
             r13 = 49152(0xCLASSNAME, float:6.8877E-41)
-            r4.setInputType(r13)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
-            r4.setImeOptions(r5)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
+            r5.setInputType(r13)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.firstNameField
+            r5.setImeOptions(r4)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.firstNameField
             java.lang.String r14 = "FirstName"
-            r15 = 2131625284(0x7f0e0544, float:1.8877772E38)
+            r15 = 2131625292(0x7f0e054c, float:1.8877788E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r14, r15)
-            r4.setHint(r14)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
+            r5.setHint(r14)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.firstNameField
             int r14 = org.telegram.ui.ActionBar.Theme.getColor(r11)
-            r4.setCursorColor(r14)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
+            r5.setCursorColor(r14)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.firstNameField
             r14 = 1101004800(0x41a00000, float:20.0)
             int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            r4.setCursorSize(r15)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
+            r5.setCursorSize(r15)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.firstNameField
             r15 = 1069547520(0x3fCLASSNAME, float:1.5)
-            r4.setCursorWidth(r15)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
+            r5.setCursorWidth(r15)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.firstNameField
             r16 = -1
             r17 = 1107820544(0x42080000, float:34.0)
             r18 = 51
@@ -229,43 +229,43 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r21 = 0
             r22 = 0
             android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
-            r2.addView(r4, r6)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
+            r2.addView(r5, r6)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.firstNameField
             org.telegram.ui.-$$Lambda$NewContactActivity$OEffd5rsJU1asHgIO5gqt5wMyr4 r6 = new org.telegram.ui.-$$Lambda$NewContactActivity$OEffd5rsJU1asHgIO5gqt5wMyr4
             r6.<init>()
-            r4.setOnEditorActionListener(r6)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.firstNameField
+            r5.setOnEditorActionListener(r6)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.firstNameField
             org.telegram.ui.NewContactActivity$2 r6 = new org.telegram.ui.NewContactActivity$2
             r6.<init>()
-            r4.addTextChangedListener(r6)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = new org.telegram.ui.Components.EditTextBoldCursor
-            r4.<init>(r0)
-            r1.lastNameField = r4
-            r4.setTextSize(r3, r9)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
+            r5.addTextChangedListener(r6)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = new org.telegram.ui.Components.EditTextBoldCursor
+            r5.<init>(r0)
+            r1.lastNameField = r5
+            r5.setTextSize(r3, r9)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.lastNameField
             int r6 = org.telegram.ui.ActionBar.Theme.getColor(r10)
-            r4.setHintTextColor(r6)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
+            r5.setHintTextColor(r6)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.lastNameField
             int r6 = org.telegram.ui.ActionBar.Theme.getColor(r11)
-            r4.setTextColor(r6)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
+            r5.setTextColor(r6)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.lastNameField
             android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.createEditTextDrawable(r0, r8)
-            r4.setBackgroundDrawable(r6)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
-            r4.setMaxLines(r3)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
-            r4.setLines(r3)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
-            r4.setSingleLine(r3)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
-            r4.setGravity(r12)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
-            r4.setInputType(r13)
-            org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
-            r4.setImeOptions(r5)
+            r5.setBackgroundDrawable(r6)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.lastNameField
+            r5.setMaxLines(r3)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.lastNameField
+            r5.setLines(r3)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.lastNameField
+            r5.setSingleLine(r3)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.lastNameField
+            r5.setGravity(r12)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.lastNameField
+            r5.setInputType(r13)
+            org.telegram.ui.Components.EditTextBoldCursor r5 = r1.lastNameField
+            r5.setImeOptions(r4)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
             java.lang.String r5 = "LastName"
-            r6 = 2131625543(0x7f0e0647, float:1.8878297E38)
+            r6 = 2131625556(0x7f0e0654, float:1.8878323E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)
             r4.setHint(r5)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
@@ -553,7 +553,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             int r0 = r0.length()
             if (r0 != 0) goto L_0x04a0
             android.widget.TextView r0 = r1.countryButton
-            r2 = 2131624700(0x7f0e02fc, float:1.8876587E38)
+            r2 = 2131624708(0x7f0e0304, float:1.8876603E38)
             java.lang.String r4 = "ChooseCountry"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             r0.setText(r2)

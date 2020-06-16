@@ -2189,7 +2189,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
             }
             ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
             ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(z) {
-                private final /* synthetic */ boolean f$1;
+                public final /* synthetic */ boolean f$1;
 
                 {
                     this.f$1 = r2;
@@ -2404,7 +2404,7 @@ public abstract class TextSelectionHelper<Cell extends SelectableView> {
                 chatMessageCell.setSelectedBackgroundProgress(0.01f);
                 ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.01f, 1.0f});
                 ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(id) {
-                    private final /* synthetic */ int f$1;
+                    public final /* synthetic */ int f$1;
 
                     {
                         this.f$1 = r2;

@@ -195,7 +195,7 @@ public class EditTextOutline extends EditTextBoldCursor {
             r1.drawBitmap(r2, r3, r3, r6)
         L_0x00bd:
             int r2 = r0.mFrameColor
-            if (r2 == 0) goto L_0x03d5
+            if (r2 == 0) goto L_0x03d3
             android.graphics.Paint r6 = r0.paint
             r6.setColor(r2)
             android.text.Layout r2 = r25.getLayout()
@@ -327,7 +327,7 @@ public class EditTextOutline extends EditTextBoldCursor {
         L_0x01a1:
             float[] r10 = r0.lines
             int r10 = r10.length
-            if (r8 >= r10) goto L_0x03d5
+            if (r8 >= r10) goto L_0x03d3
             int r10 = r2.getLineBottom(r8)
             int r11 = r2.getLineTop(r8)
             int r10 = r10 - r11
@@ -649,13 +649,11 @@ public class EditTextOutline extends EditTextBoldCursor {
             r9 = 1
             goto L_0x01a1
         L_0x03cc:
-            r9 = 0
-            r3 = 0
             r4 = 1073741824(0x40000000, float:2.0)
             r5 = 0
             r11 = 1065353216(0x3var_, float:1.0)
             goto L_0x011f
-        L_0x03d5:
+        L_0x03d3:
             super.onDraw(r26)
             return
         */

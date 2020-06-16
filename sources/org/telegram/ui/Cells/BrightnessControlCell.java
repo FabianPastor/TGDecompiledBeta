@@ -3,8 +3,10 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import org.telegram.messenger.AndroidUtilities;
@@ -27,7 +29,7 @@ public class BrightnessControlCell extends FrameLayout {
         this.leftImageView = imageView;
         imageView.setImageResource(NUM);
         addView(this.leftImageView, LayoutHelper.createFrame(24, 24.0f, 51, 17.0f, 12.0f, 0.0f, 0.0f));
-        AnonymousClass1 r0 = new SeekBarView(this, context) {
+        AnonymousClass1 r0 = new SeekBarView(this, context, true) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (motionEvent.getAction() == 0) {
                     getParent().requestDisallowInterceptTouchEvent(true);
@@ -38,6 +40,14 @@ public class BrightnessControlCell extends FrameLayout {
         this.seekBarView = r0;
         r0.setReportChanges(true);
         this.seekBarView.setDelegate(new SeekBarView.SeekBarViewDelegate() {
+            public CharSequence getContentDescription() {
+                return " ";
+            }
+
+            public /* synthetic */ int getStepsCount() {
+                return SeekBarView.SeekBarViewDelegate.CC.$default$getStepsCount(this);
+            }
+
             public void onSeekBarPressed(boolean z) {
             }
 
@@ -45,6 +55,7 @@ public class BrightnessControlCell extends FrameLayout {
                 BrightnessControlCell.this.didChangedValue(f);
             }
         });
+        this.seekBarView.setImportantForAccessibility(2);
         addView(this.seekBarView, LayoutHelper.createFrame(-1, 38.0f, 51, 54.0f, 5.0f, 54.0f, 0.0f));
         ImageView imageView2 = new ImageView(context);
         this.rightImageView = imageView2;
@@ -66,5 +77,14 @@ public class BrightnessControlCell extends FrameLayout {
 
     public void setProgress(float f) {
         this.seekBarView.setProgress(f);
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        this.seekBarView.getSeekBarAccessibilityDelegate().onInitializeAccessibilityNodeInfoInternal(this, accessibilityNodeInfo);
+    }
+
+    public boolean performAccessibilityAction(int i, Bundle bundle) {
+        return super.performAccessibilityAction(i, bundle) || this.seekBarView.getSeekBarAccessibilityDelegate().performAccessibilityActionInternal(this, i, bundle);
     }
 }

@@ -152,10 +152,10 @@ public class SearchAdapterHelper {
             ConnectionsManager instance = ConnectionsManager.getInstance(this.currentAccount);
             $$Lambda$SearchAdapterHelper$TvNOKs_82NxNKUbKEl6ilcDLjOM r15 = r0;
             $$Lambda$SearchAdapterHelper$TvNOKs_82NxNKUbKEl6ilcDLjOM r0 = new RequestDelegate(i7, str, z4, i3) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ String f$2;
-                private final /* synthetic */ boolean f$3;
-                private final /* synthetic */ int f$4;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ String f$2;
+                public final /* synthetic */ boolean f$3;
+                public final /* synthetic */ int f$4;
 
                 {
                     this.f$1 = r2;
@@ -182,13 +182,13 @@ public class SearchAdapterHelper {
                 $$Lambda$SearchAdapterHelper$Pz3Yk9hHMq0c2qA_8xmmwKDyhTA r12 = r0;
                 ConnectionsManager instance2 = ConnectionsManager.getInstance(this.currentAccount);
                 $$Lambda$SearchAdapterHelper$Pz3Yk9hHMq0c2qA_8xmmwKDyhTA r02 = new RequestDelegate(i8, i3, z2, z5, z3, z4, str) {
-                    private final /* synthetic */ int f$1;
-                    private final /* synthetic */ int f$2;
-                    private final /* synthetic */ boolean f$3;
-                    private final /* synthetic */ boolean f$4;
-                    private final /* synthetic */ boolean f$5;
-                    private final /* synthetic */ boolean f$6;
-                    private final /* synthetic */ String f$7;
+                    public final /* synthetic */ int f$1;
+                    public final /* synthetic */ int f$2;
+                    public final /* synthetic */ boolean f$3;
+                    public final /* synthetic */ boolean f$4;
+                    public final /* synthetic */ boolean f$5;
+                    public final /* synthetic */ boolean f$6;
+                    public final /* synthetic */ String f$7;
 
                     {
                         this.f$1 = r2;
@@ -244,12 +244,12 @@ public class SearchAdapterHelper {
 
     public /* synthetic */ void lambda$queryServerSearch$1$SearchAdapterHelper(int i, String str, boolean z, int i2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(i, tLRPC$TL_error, tLObject, str, z, i2) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ TLRPC$TL_error f$2;
-            private final /* synthetic */ TLObject f$3;
-            private final /* synthetic */ String f$4;
-            private final /* synthetic */ boolean f$5;
-            private final /* synthetic */ int f$6;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ TLRPC$TL_error f$2;
+            public final /* synthetic */ TLObject f$3;
+            public final /* synthetic */ String f$4;
+            public final /* synthetic */ boolean f$5;
+            public final /* synthetic */ int f$6;
 
             {
                 this.f$1 = r2;
@@ -295,15 +295,15 @@ public class SearchAdapterHelper {
 
     public /* synthetic */ void lambda$queryServerSearch$3$SearchAdapterHelper(int i, int i2, boolean z, boolean z2, boolean z3, boolean z4, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(i, i2, tLRPC$TL_error, tLObject, z, z2, z3, z4, str) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ TLRPC$TL_error f$3;
-            private final /* synthetic */ TLObject f$4;
-            private final /* synthetic */ boolean f$5;
-            private final /* synthetic */ boolean f$6;
-            private final /* synthetic */ boolean f$7;
-            private final /* synthetic */ boolean f$8;
-            private final /* synthetic */ String f$9;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ TLRPC$TL_error f$3;
+            public final /* synthetic */ TLObject f$4;
+            public final /* synthetic */ boolean f$5;
+            public final /* synthetic */ boolean f$6;
+            public final /* synthetic */ boolean f$7;
+            public final /* synthetic */ boolean f$8;
+            public final /* synthetic */ String f$9;
 
             {
                 this.f$1 = r2;
@@ -470,8 +470,8 @@ public class SearchAdapterHelper {
             queryFinalized.dispose();
             Collections.sort(arrayList, $$Lambda$SearchAdapterHelper$lNnZPLbXEKTf0Mjca3cj25zrw.INSTANCE);
             AndroidUtilities.runOnUIThread(new Runnable(arrayList, hashMap) {
-                private final /* synthetic */ ArrayList f$1;
-                private final /* synthetic */ HashMap f$2;
+                public final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ HashMap f$2;
 
                 {
                     this.f$1 = r2;
@@ -585,7 +585,7 @@ public class SearchAdapterHelper {
 
     private void putRecentHashtags(ArrayList<HashtagObject> arrayList) {
         MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable(arrayList) {
-            private final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ ArrayList f$1;
 
             {
                 this.f$1 = r2;

@@ -961,8 +961,8 @@ public class RecyclerListView extends RecyclerView {
                     float x3 = motionEvent.getX();
                     float y3 = motionEvent.getY();
                     Runnable unused7 = RecyclerListView.this.selectChildRunnable = new Runnable(x3, y3) {
-                        private final /* synthetic */ float f$1;
-                        private final /* synthetic */ float f$2;
+                        public final /* synthetic */ float f$1;
+                        public final /* synthetic */ float f$2;
 
                         {
                             this.f$1 = r2;

@@ -166,7 +166,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         builder.setTitle(LocaleController.getString("DeleteLocalizationTitle", NUM));
         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("DeleteLocalizationText", NUM, currentLocale.name)));
         builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener(currentLocale) {
-            private final /* synthetic */ LocaleController.LocaleInfo f$1;
+            public final /* synthetic */ LocaleController.LocaleInfo f$1;
 
             {
                 this.f$1 = r2;
@@ -292,7 +292,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     /* access modifiers changed from: private */
     public void processSearch(String str) {
         Utilities.searchQueue.postRunnable(new Runnable(str) {
-            private final /* synthetic */ String f$1;
+            public final /* synthetic */ String f$1;
 
             {
                 this.f$1 = r2;
@@ -330,7 +330,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
 
     private void updateSearchResults(ArrayList<LocaleController.LocaleInfo> arrayList) {
         AndroidUtilities.runOnUIThread(new Runnable(arrayList) {
-            private final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ ArrayList f$1;
 
             {
                 this.f$1 = r2;
@@ -498,7 +498,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.lang.Object[] r3 = new java.lang.Object[r3]
                 java.lang.String r4 = r0.name
                 r3[r2] = r4
-                r4 = 2131625531(0x7f0e063b, float:1.8878273E38)
+                r4 = 2131625544(0x7f0e0648, float:1.8878299E38)
                 java.lang.String r5 = "LanguageCustom"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
                 r3[r1] = r4

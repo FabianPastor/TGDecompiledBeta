@@ -22,7 +22,8 @@ public class MaxFileSizeCell extends FrameLayout {
     private SeekBarView seekBarView;
     /* access modifiers changed from: private */
     public TextView sizeTextView;
-    private TextView textView;
+    /* access modifiers changed from: private */
+    public TextView textView;
 
     /* access modifiers changed from: protected */
     public void didChangedSizeValue(int i) {
@@ -41,6 +42,7 @@ public class MaxFileSizeCell extends FrameLayout {
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
+        this.textView.setImportantForAccessibility(2);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
         TextView textView3 = new TextView(context);
         this.sizeTextView = textView3;
@@ -50,6 +52,7 @@ public class MaxFileSizeCell extends FrameLayout {
         this.sizeTextView.setMaxLines(1);
         this.sizeTextView.setSingleLine(true);
         this.sizeTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
+        this.sizeTextView.setImportantForAccessibility(2);
         addView(this.sizeTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : i) | 48, 21.0f, 13.0f, 21.0f, 0.0f));
         AnonymousClass1 r0 = new SeekBarView(this, context) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
@@ -62,6 +65,10 @@ public class MaxFileSizeCell extends FrameLayout {
         this.seekBarView = r0;
         r0.setReportChanges(true);
         this.seekBarView.setDelegate(new SeekBarView.SeekBarViewDelegate() {
+            public /* synthetic */ int getStepsCount() {
+                return SeekBarView.SeekBarViewDelegate.CC.$default$getStepsCount(this);
+            }
+
             public void onSeekBarPressed(boolean z) {
             }
 
@@ -94,8 +101,15 @@ public class MaxFileSizeCell extends FrameLayout {
                 long unused = MaxFileSizeCell.this.currentSize = j;
                 MaxFileSizeCell.this.didChangedSizeValue(i);
             }
+
+            public CharSequence getContentDescription() {
+                return MaxFileSizeCell.this.textView.getText() + " " + MaxFileSizeCell.this.sizeTextView.getText();
+            }
         });
+        this.seekBarView.setImportantForAccessibility(2);
         addView(this.seekBarView, LayoutHelper.createFrame(-1, 38.0f, 51, 6.0f, 36.0f, 6.0f, 0.0f));
+        setImportantForAccessibility(1);
+        setAccessibilityDelegate(this.seekBarView.getSeekBarAccessibilityDelegate());
     }
 
     public void setText(String str) {

@@ -653,8 +653,8 @@ public class RenderView extends TextureView {
                     Bitmap[] bitmapArr = new Bitmap[1];
                     try {
                         postRunnable(new Runnable(bitmapArr, countDownLatch) {
-                            private final /* synthetic */ Bitmap[] f$1;
-                            private final /* synthetic */ CountDownLatch f$2;
+                            public final /* synthetic */ Bitmap[] f$1;
+                            public final /* synthetic */ CountDownLatch f$2;
 
                             {
                                 this.f$1 = r2;
@@ -693,7 +693,7 @@ public class RenderView extends TextureView {
                 CanvasInternal canvasInternal = this.internal;
                 if (canvasInternal != null) {
                     canvasInternal.postRunnable(new Runnable(runnable) {
-                        private final /* synthetic */ Runnable f$1;
+                        public final /* synthetic */ Runnable f$1;
 
                         {
                             this.f$1 = r2;

@@ -189,10 +189,10 @@ public class ChangeBioActivity extends BaseFragment {
             tLRPC$TL_account_updateProfile.about = replace;
             tLRPC$TL_account_updateProfile.flags |= 4;
             int sendRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_updateProfile, new RequestDelegate(alertDialog, userFull, replace, tLRPC$TL_account_updateProfile) {
-                private final /* synthetic */ AlertDialog f$1;
-                private final /* synthetic */ TLRPC$UserFull f$2;
-                private final /* synthetic */ String f$3;
-                private final /* synthetic */ TLRPC$TL_account_updateProfile f$4;
+                public final /* synthetic */ AlertDialog f$1;
+                public final /* synthetic */ TLRPC$UserFull f$2;
+                public final /* synthetic */ String f$3;
+                public final /* synthetic */ TLRPC$TL_account_updateProfile f$4;
 
                 {
                     this.f$1 = r2;
@@ -207,7 +207,7 @@ public class ChangeBioActivity extends BaseFragment {
             }, 2);
             ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(sendRequest, this.classGuid);
             alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener(sendRequest) {
-                private final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$1;
 
                 {
                     this.f$1 = r2;
@@ -224,10 +224,10 @@ public class ChangeBioActivity extends BaseFragment {
     public /* synthetic */ void lambda$saveName$4$ChangeBioActivity(AlertDialog alertDialog, TLRPC$UserFull tLRPC$UserFull, String str, TLRPC$TL_account_updateProfile tLRPC$TL_account_updateProfile, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLRPC$UserFull, str, (TLRPC$User) tLObject) {
-                private final /* synthetic */ AlertDialog f$1;
-                private final /* synthetic */ TLRPC$UserFull f$2;
-                private final /* synthetic */ String f$3;
-                private final /* synthetic */ TLRPC$User f$4;
+                public final /* synthetic */ AlertDialog f$1;
+                public final /* synthetic */ TLRPC$UserFull f$2;
+                public final /* synthetic */ String f$3;
+                public final /* synthetic */ TLRPC$User f$4;
 
                 {
                     this.f$1 = r2;
@@ -243,9 +243,9 @@ public class ChangeBioActivity extends BaseFragment {
             return;
         }
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLRPC$TL_error, tLRPC$TL_account_updateProfile) {
-            private final /* synthetic */ AlertDialog f$1;
-            private final /* synthetic */ TLRPC$TL_error f$2;
-            private final /* synthetic */ TLRPC$TL_account_updateProfile f$3;
+            public final /* synthetic */ AlertDialog f$1;
+            public final /* synthetic */ TLRPC$TL_error f$2;
+            public final /* synthetic */ TLRPC$TL_account_updateProfile f$3;
 
             {
                 this.f$1 = r2;

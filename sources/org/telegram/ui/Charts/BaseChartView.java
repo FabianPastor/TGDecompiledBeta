@@ -1432,7 +1432,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
                     }
                 }
                 ValueAnimator createAnimator = createAnimator(0.0f, 255.0f, new ValueAnimator.AnimatorUpdateListener(createHorizontalLinesData) {
-                    private final /* synthetic */ ChartHorizontalLinesData f$1;
+                    public final /* synthetic */ ChartHorizontalLinesData f$1;
 
                     {
                         this.f$1 = r2;
@@ -1872,7 +1872,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
                     this.bottomSignatureDate.remove(0);
                 }
                 ValueAnimator duration = createAnimator(0.0f, 1.0f, new ValueAnimator.AnimatorUpdateListener(chartBottomSignatureData3) {
-                    private final /* synthetic */ ChartBottomSignatureData f$1;
+                    public final /* synthetic */ ChartBottomSignatureData f$1;
 
                     {
                         this.f$1 = r2;
@@ -1933,7 +1933,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
                 ValueAnimator valueAnimator4 = lineViewData.animatorIn;
                 if (valueAnimator4 == null || !valueAnimator4.isRunning()) {
                     ValueAnimator createAnimator = createAnimator(lineViewData.alpha, 1.0f, new ValueAnimator.AnimatorUpdateListener(lineViewData) {
-                        private final /* synthetic */ LineViewData f$1;
+                        public final /* synthetic */ LineViewData f$1;
 
                         {
                             this.f$1 = r2;
@@ -1951,7 +1951,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             }
             if (!lineViewData.enabled && lineViewData.alpha != 0.0f && ((valueAnimator = lineViewData.animatorOut) == null || !valueAnimator.isRunning())) {
                 ValueAnimator createAnimator2 = createAnimator(lineViewData.alpha, 0.0f, new ValueAnimator.AnimatorUpdateListener(lineViewData) {
-                    private final /* synthetic */ LineViewData f$1;
+                    public final /* synthetic */ LineViewData f$1;
 
                     {
                         this.f$1 = r2;

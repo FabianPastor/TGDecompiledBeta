@@ -15,6 +15,7 @@ import org.telegram.ui.Components.Point;
 public class VideoEditedInfo {
     public int bitrate;
     public boolean canceled;
+    public MediaController.CropState cropState;
     public TLRPC$InputEncryptedFile encryptedFile;
     public float end;
     public long endTime;
@@ -102,6 +103,28 @@ public class VideoEditedInfo {
             serializedData.writeInt32(this.viewWidth);
             serializedData.writeInt32(this.viewHeight);
         }
+
+        public MediaEntity copy() {
+            MediaEntity mediaEntity = new MediaEntity();
+            mediaEntity.type = this.type;
+            mediaEntity.subType = this.subType;
+            mediaEntity.x = this.x;
+            mediaEntity.y = this.y;
+            mediaEntity.rotation = this.rotation;
+            mediaEntity.width = this.width;
+            mediaEntity.height = this.height;
+            mediaEntity.text = this.text;
+            mediaEntity.color = this.color;
+            mediaEntity.fontSize = this.fontSize;
+            mediaEntity.viewWidth = this.viewWidth;
+            mediaEntity.viewHeight = this.viewHeight;
+            mediaEntity.scale = this.scale;
+            mediaEntity.textViewWidth = this.textViewWidth;
+            mediaEntity.textViewHeight = this.textViewHeight;
+            mediaEntity.textViewX = this.textViewX;
+            mediaEntity.textViewY = this.textViewY;
+            return mediaEntity;
+        }
     }
 
     public String getString() {
@@ -109,7 +132,7 @@ public class VideoEditedInfo {
         byte[] bArr;
         PhotoFilterView.CurvesValue curvesValue;
         ArrayList<MediaEntity> arrayList;
-        if (this.filterState == null && this.paintPath == null && ((arrayList = this.mediaEntities) == null || arrayList.isEmpty())) {
+        if (this.filterState == null && this.paintPath == null && (((arrayList = this.mediaEntities) == null || arrayList.isEmpty()) && this.cropState == null)) {
             str = "";
         } else {
             int i = this.filterState != null ? 162 : 2;
@@ -121,7 +144,7 @@ public class VideoEditedInfo {
                 bArr = null;
             }
             SerializedData serializedData = new SerializedData(i);
-            serializedData.writeInt32(1);
+            serializedData.writeInt32(2);
             if (this.filterState != null) {
                 serializedData.writeByte(1);
                 serializedData.writeFloat(this.filterState.enhanceValue);
@@ -186,6 +209,20 @@ public class VideoEditedInfo {
                 }
                 serializedData.writeByte(this.isPhoto ? 1 : 0);
             }
+            if (this.cropState != null) {
+                serializedData.writeByte(1);
+                serializedData.writeFloat(this.cropState.cropPx);
+                serializedData.writeFloat(this.cropState.cropPy);
+                serializedData.writeFloat(this.cropState.cropPw);
+                serializedData.writeFloat(this.cropState.cropPh);
+                serializedData.writeFloat(this.cropState.cropScale);
+                serializedData.writeFloat(this.cropState.cropRotate);
+                serializedData.writeInt32(this.cropState.transformWidth);
+                serializedData.writeInt32(this.cropState.transformHeight);
+                serializedData.writeInt32(this.cropState.transformRotation);
+            } else {
+                serializedData.writeByte(0);
+            }
             str = Utilities.bytesToHex(serializedData.toByteArray());
             serializedData.cleanup();
         }
@@ -216,7 +253,7 @@ public class VideoEditedInfo {
                     String substring = split[11].substring(1);
                     if (substring.length() > 0) {
                         SerializedData serializedData = new SerializedData(Utilities.hexToBytes(substring));
-                        serializedData.readInt32(false);
+                        int readInt32 = serializedData.readInt32(false);
                         if (serializedData.readByte(false) != 0) {
                             MediaController.SavedFilterState savedFilterState = new MediaController.SavedFilterState();
                             this.filterState = savedFilterState;
@@ -259,12 +296,25 @@ public class VideoEditedInfo {
                             this.paintPath = new String(serializedData.readByteArray(false));
                         }
                         if (serializedData.readByte(false) != 0) {
-                            int readInt32 = serializedData.readInt32(false);
-                            this.mediaEntities = new ArrayList<>(readInt32);
-                            for (int i3 = 0; i3 < readInt32; i3++) {
+                            int readInt322 = serializedData.readInt32(false);
+                            this.mediaEntities = new ArrayList<>(readInt322);
+                            for (int i3 = 0; i3 < readInt322; i3++) {
                                 this.mediaEntities.add(new MediaEntity(serializedData));
                             }
                             this.isPhoto = serializedData.readByte(false) == 1;
+                        }
+                        if (readInt32 == 2 && serializedData.readByte(false) != 0) {
+                            MediaController.CropState cropState2 = new MediaController.CropState();
+                            this.cropState = cropState2;
+                            cropState2.cropPx = serializedData.readFloat(false);
+                            this.cropState.cropPy = serializedData.readFloat(false);
+                            this.cropState.cropPw = serializedData.readFloat(false);
+                            this.cropState.cropPh = serializedData.readFloat(false);
+                            this.cropState.cropScale = serializedData.readFloat(false);
+                            this.cropState.cropRotate = serializedData.readFloat(false);
+                            this.cropState.transformWidth = serializedData.readInt32(false);
+                            this.cropState.transformHeight = serializedData.readInt32(false);
+                            this.cropState.transformRotation = serializedData.readInt32(false);
                         }
                         serializedData.cleanup();
                     }
@@ -287,8 +337,8 @@ public class VideoEditedInfo {
     }
 
     public boolean needConvert() {
-        boolean z = this.roundVideo;
-        if (z) {
+        boolean z;
+        if (this.mediaEntities == null && this.paintPath == null && this.filterState == null && this.cropState == null && (z = this.roundVideo)) {
             if (z) {
                 if (this.startTime <= 0) {
                     long j = this.endTime;

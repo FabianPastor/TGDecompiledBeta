@@ -48,9 +48,9 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
                 org.telegram.ui.Components.BackupImageView r1 = new org.telegram.ui.Components.BackupImageView
                 r1.<init>(r2)
                 r0.imageView = r1
-                r3 = -1082130432(0xffffffffbvar_, float:-1.0)
-                r4 = -1
-                android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
+                r3 = -1
+                r4 = -1082130432(0xffffffffbvar_, float:-1.0)
+                android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r4)
                 r0.addView(r1, r5)
                 android.widget.LinearLayout r1 = new android.widget.LinearLayout
                 r1.<init>(r2)
@@ -60,23 +60,23 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
                 r1.setBackgroundResource(r6)
                 r6 = 60
                 r7 = 83
-                android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r6, r7)
+                android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r6, r7)
                 r0.addView(r1, r6)
                 android.widget.TextView r6 = new android.widget.TextView
                 r6.<init>(r2)
                 r0.nameTextView = r6
-                r7 = 1095761920(0x41500000, float:13.0)
-                r8 = 1
-                r6.setTextSize(r8, r7)
+                r7 = 1
+                r8 = 1095761920(0x41500000, float:13.0)
+                r6.setTextSize(r7, r8)
                 android.widget.TextView r6 = r0.nameTextView
-                r6.setTextColor(r4)
+                r6.setTextColor(r3)
                 android.widget.TextView r6 = r0.nameTextView
-                r6.setSingleLine(r8)
+                r6.setSingleLine(r7)
                 android.widget.TextView r6 = r0.nameTextView
                 android.text.TextUtils$TruncateAt r9 = android.text.TextUtils.TruncateAt.END
                 r6.setEllipsize(r9)
                 android.widget.TextView r6 = r0.nameTextView
-                r6.setMaxLines(r8)
+                r6.setMaxLines(r7)
                 android.widget.TextView r6 = r0.nameTextView
                 r9 = 80
                 r6.setGravity(r9)
@@ -93,16 +93,16 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
                 android.widget.TextView r6 = new android.widget.TextView
                 r6.<init>(r2)
                 r0.countTextView = r6
-                r6.setTextSize(r8, r7)
+                r6.setTextSize(r7, r8)
                 android.widget.TextView r6 = r0.countTextView
-                r6.setTextColor(r4)
+                r6.setTextColor(r3)
                 android.widget.TextView r6 = r0.countTextView
-                r6.setSingleLine(r8)
+                r6.setSingleLine(r7)
                 android.widget.TextView r6 = r0.countTextView
-                android.text.TextUtils$TruncateAt r7 = android.text.TextUtils.TruncateAt.END
-                r6.setEllipsize(r7)
+                android.text.TextUtils$TruncateAt r8 = android.text.TextUtils.TruncateAt.END
+                r6.setEllipsize(r8)
                 android.widget.TextView r6 = r0.countTextView
-                r6.setMaxLines(r8)
+                r6.setMaxLines(r7)
                 android.widget.TextView r6 = r0.countTextView
                 r6.setGravity(r9)
                 android.widget.TextView r6 = r0.countTextView
@@ -120,7 +120,7 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
                 android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r5)
                 r1.setBackgroundDrawable(r2)
                 android.view.View r1 = r0.selector
-                android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r3)
+                android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r3, r4)
                 r0.addView(r1, r2)
                 return
             */

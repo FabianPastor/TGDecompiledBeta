@@ -309,7 +309,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r6.<init>(r4)
             r0.textPaint = r6
             android.content.res.Resources r6 = r22.getResources()
-            r7 = 2131165883(0x7var_bb, float:1.7945996E38)
+            r7 = 2131165885(0x7var_bd, float:1.7946E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r7)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             r0.shadowDrawable = r6
@@ -394,9 +394,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             org.telegram.ui.Components.ShareAlert$SearchField r3 = new org.telegram.ui.Components.ShareAlert$SearchField
             r3.<init>(r1)
             android.widget.FrameLayout r5 = r0.frameLayout
-            r6 = 51
-            r9 = -1
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r9, r6)
+            r6 = -1
+            r9 = 51
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r6, r9)
             r5.addView(r3, r10)
             org.telegram.ui.Components.ShareAlert$2 r5 = new org.telegram.ui.Components.ShareAlert$2
             r5.<init>(r1)
@@ -464,7 +464,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
             r3.showTextView()
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.searchEmptyView
-            r5 = 2131625806(0x7f0e074e, float:1.887883E38)
+            r5 = 2131625819(0x7f0e075b, float:1.8878857E38)
             java.lang.String r11 = "NoChats"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r3.setText(r5)
@@ -478,7 +478,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r3.addView(r5, r11)
             android.widget.FrameLayout$LayoutParams r3 = new android.widget.FrameLayout$LayoutParams
             int r5 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            r3.<init>(r9, r5, r6)
+            r3.<init>(r6, r5, r9)
             r5 = 1114112000(0x42680000, float:58.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             r3.topMargin = r5
@@ -506,12 +506,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             android.view.ViewGroup r3 = r0.containerView
             android.widget.FrameLayout r5 = r0.frameLayout
             r14 = 58
-            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r14, r6)
-            r3.addView(r5, r6)
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r14, r9)
+            r3.addView(r5, r9)
             android.widget.FrameLayout$LayoutParams r3 = new android.widget.FrameLayout$LayoutParams
             int r5 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            r6 = 83
-            r3.<init>(r9, r5, r6)
+            r9 = 83
+            r3.<init>(r6, r5, r9)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r10)
             r3.bottomMargin = r5
             android.view.View[] r5 = r0.shadow
@@ -566,7 +566,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r11 = 17
             r3.setGravity(r11)
             android.widget.TextView r3 = r0.pickerBottomLayout
-            r11 = 2131624800(0x7f0e0360, float:1.887679E38)
+            r11 = 2131624808(0x7f0e0368, float:1.8876806E38)
             java.lang.String r14 = "CopyLink"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r14, r11)
             java.lang.String r11 = r11.toUpperCase()
@@ -577,7 +577,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r3.setOnClickListener(r11)
             android.view.ViewGroup r3 = r0.containerView
             android.widget.TextView r11 = r0.pickerBottomLayout
-            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r5, r6)
+            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r5, r9)
             r3.addView(r11, r14)
         L_0x02c5:
             android.widget.FrameLayout r3 = new android.widget.FrameLayout
@@ -591,7 +591,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r3.setVisibility(r13)
             android.view.ViewGroup r3 = r0.containerView
             android.widget.FrameLayout r8 = r0.frameLayout2
-            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r5, r6)
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r5, r9)
             r3.addView(r8, r5)
             android.widget.FrameLayout r3 = r0.frameLayout2
             org.telegram.ui.Components.-$$Lambda$ShareAlert$e30oQsfKYZ5WdxxCC6xZg65lanw r5 = org.telegram.ui.Components.$$Lambda$ShareAlert$e30oQsfKYZ5WdxxCC6xZg65lanw.INSTANCE
@@ -600,7 +600,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r5 = 0
             r3.<init>(r1, r2, r5, r4)
             r0.commentTextView = r3
-            r2 = 2131626772(0x7f0e0b14, float:1.888079E38)
+            r2 = 2131626789(0x7f0e0b25, float:1.8880824E38)
             java.lang.String r5 = "ShareComment"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
             r3.setHint(r2)
@@ -633,7 +633,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             android.widget.FrameLayout r2 = r0.writeButtonContainer
             r2.setAlpha(r12)
             android.widget.FrameLayout r2 = r0.writeButtonContainer
-            r5 = 2131626691(0x7f0e0ac3, float:1.8880625E38)
+            r5 = 2131626708(0x7f0e0ad4, float:1.888066E38)
             java.lang.String r6 = "Send"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r2.setContentDescription(r5)
@@ -788,8 +788,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
     public /* synthetic */ void lambda$new$1$ShareAlert(Context context, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject, context) {
-            private final /* synthetic */ TLObject f$1;
-            private final /* synthetic */ Context f$2;
+            public final /* synthetic */ TLObject f$1;
+            public final /* synthetic */ Context f$2;
 
             {
                 this.f$1 = r2;
@@ -1390,8 +1390,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         /* renamed from: searchDialogsInternal */
         public void lambda$searchDialogs$3$ShareAlert$ShareSearchAdapter(String str, int i) {
             MessagesStorage.getInstance(ShareAlert.this.currentAccount).getStorageQueue().postRunnable(new Runnable(str, i) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -1950,8 +1950,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
         private void updateSearchResults(ArrayList<DialogSearchResult> arrayList, int i) {
             AndroidUtilities.runOnUIThread(new Runnable(i, arrayList) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ ArrayList f$2;
 
                 {
                     this.f$1 = r2;
@@ -2023,8 +2023,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 int i = this.lastSearchId + 1;
                 this.lastSearchId = i;
                 this.searchRunnable = new Runnable(str, i) {
-                    private final /* synthetic */ String f$1;
-                    private final /* synthetic */ int f$2;
+                    public final /* synthetic */ String f$1;
+                    public final /* synthetic */ int f$2;
 
                     {
                         this.f$1 = r2;

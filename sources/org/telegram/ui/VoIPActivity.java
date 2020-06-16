@@ -1598,7 +1598,7 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
                     Bitmap unused = VoIPActivity.this.blurredPhoto1 = createBitmap;
                     Bitmap unused2 = VoIPActivity.this.blurredPhoto2 = createBitmap2;
                     VoIPActivity.this.runOnUiThread(new Runnable(bitmapHolder) {
-                        private final /* synthetic */ ImageReceiver.BitmapHolder f$1;
+                        public final /* synthetic */ ImageReceiver.BitmapHolder f$1;
 
                         {
                             this.f$1 = r2;
@@ -1623,7 +1623,7 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
     /* access modifiers changed from: private */
     public void sendTextMessage(String str) {
         AndroidUtilities.runOnUIThread(new Runnable(str) {
-            private final /* synthetic */ String f$1;
+            public final /* synthetic */ String f$1;
 
             {
                 this.f$1 = r2;
@@ -1657,7 +1657,7 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
             });
         }
         $$Lambda$VoIPActivity$vv9zFeTuMzmokkSgVZMX6jmBDQ r8 = new View.OnClickListener(bottomSheet) {
-            private final /* synthetic */ BottomSheet f$1;
+            public final /* synthetic */ BottomSheet f$1;
 
             {
                 this.f$1 = r2;
@@ -1707,8 +1707,8 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
         imageView.setAlpha(0.0f);
         frameLayout2.addView(imageView, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? 3 : 5) | 80));
         imageView.setOnClickListener(new View.OnClickListener(editTextBoldCursor, bottomSheet) {
-            private final /* synthetic */ EditTextBoldCursor f$1;
-            private final /* synthetic */ BottomSheet f$2;
+            public final /* synthetic */ EditTextBoldCursor f$1;
+            public final /* synthetic */ BottomSheet f$2;
 
             {
                 this.f$1 = r2;
@@ -1725,9 +1725,9 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
         imageView2.setImageDrawable(DarkTheme.getThemedDrawable(this, NUM, "chat_messagePanelIcons"));
         frameLayout2.addView(imageView2, LayoutHelper.createFrame(48, 48, (LocaleController.isRTL ? 3 : 5) | 80));
         imageView2.setOnClickListener(new View.OnClickListener(frameLayout2, bottomSheetCell2, editTextBoldCursor) {
-            private final /* synthetic */ FrameLayout f$1;
-            private final /* synthetic */ BottomSheet.BottomSheetCell f$2;
-            private final /* synthetic */ EditTextBoldCursor f$3;
+            public final /* synthetic */ FrameLayout f$1;
+            public final /* synthetic */ BottomSheet.BottomSheetCell f$2;
+            public final /* synthetic */ EditTextBoldCursor f$3;
 
             {
                 this.f$1 = r2;
@@ -1775,9 +1775,9 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
         frameLayout2.setVisibility(8);
         frameLayout.addView(frameLayout2);
         bottomSheetCell2.setOnClickListener(new View.OnClickListener(frameLayout2, bottomSheetCell2, editTextBoldCursor) {
-            private final /* synthetic */ FrameLayout f$1;
-            private final /* synthetic */ BottomSheet.BottomSheetCell f$2;
-            private final /* synthetic */ EditTextBoldCursor f$3;
+            public final /* synthetic */ FrameLayout f$1;
+            public final /* synthetic */ BottomSheet.BottomSheetCell f$2;
+            public final /* synthetic */ EditTextBoldCursor f$3;
 
             {
                 this.f$1 = r2;
@@ -1803,7 +1803,7 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
         bottomSheet.dismiss();
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().declineIncomingCall(4, new Runnable(view) {
-                private final /* synthetic */ View f$1;
+                public final /* synthetic */ View f$1;
 
                 {
                     this.f$1 = r2;

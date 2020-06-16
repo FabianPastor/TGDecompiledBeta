@@ -1087,6 +1087,7 @@ public class SharedLinkCell extends FrameLayout {
             sb.append(", ");
             sb.append(this.descriptionLayout2.getText());
         }
+        accessibilityNodeInfo.setText(sb.toString());
         if (this.checkBox.isChecked()) {
             accessibilityNodeInfo.setChecked(true);
             accessibilityNodeInfo.setCheckable(true);

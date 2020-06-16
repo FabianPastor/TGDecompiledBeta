@@ -260,7 +260,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                 frameLayout.addView(ChatAttachAlertLocationLayout.this.lastPressedMarkerView, LayoutHelper.createFrame(-2, 71.0f));
                 ChatAttachAlertLocationLayout.this.lastPressedMarkerView.setAlpha(0.0f);
                 ChatAttachAlertLocationLayout.this.lastPressedMarkerView.setOnClickListener(new View.OnClickListener(venueLocation) {
-                    private final /* synthetic */ ChatAttachAlertLocationLayout.VenueLocation f$1;
+                    public final /* synthetic */ ChatAttachAlertLocationLayout.VenueLocation f$1;
 
                     {
                         this.f$1 = r2;
@@ -338,7 +338,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             ChatActivity chatActivity = (ChatActivity) ChatAttachAlertLocationLayout.this.parentAlert.baseFragment;
             if (chatActivity.isInScheduleMode()) {
                 AlertsCreator.createScheduleDatePickerDialog(ChatAttachAlertLocationLayout.this.getParentActivity(), chatActivity.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(venueLocation) {
-                    private final /* synthetic */ ChatAttachAlertLocationLayout.VenueLocation f$1;
+                    public final /* synthetic */ ChatAttachAlertLocationLayout.VenueLocation f$1;
 
                     {
                         this.f$1 = r2;
@@ -719,7 +719,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         });
         ((DefaultItemAnimator) this.listView.getItemAnimator()).setDelayAnimations(false);
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(chatActivity) {
-            private final /* synthetic */ ChatActivity f$1;
+            public final /* synthetic */ ChatActivity f$1;
 
             {
                 this.f$1 = r2;
@@ -790,7 +790,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         };
         this.mapView = r04;
         new Thread(new Runnable(r04) {
-            private final /* synthetic */ MapView f$1;
+            public final /* synthetic */ MapView f$1;
 
             {
                 this.f$1 = r2;
@@ -834,7 +834,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             }
         });
         this.searchListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(chatActivity) {
-            private final /* synthetic */ ChatActivity f$1;
+            public final /* synthetic */ ChatActivity f$1;
 
             {
                 this.f$1 = r2;
@@ -911,7 +911,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                 tLRPC$TL_messageMediaGeo.geo._long = AndroidUtilities.fixLocationCoord(this.userLocation.getLongitude());
                 if (chatActivity.isInScheduleMode()) {
                     AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), chatActivity.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(tLRPC$TL_messageMediaGeo) {
-                        private final /* synthetic */ TLRPC$TL_messageMediaGeo f$1;
+                        public final /* synthetic */ TLRPC$TL_messageMediaGeo f$1;
 
                         {
                             this.f$1 = r2;
@@ -931,7 +931,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             if (item instanceof TLRPC$TL_messageMediaVenue) {
                 if (chatActivity.isInScheduleMode()) {
                     AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), chatActivity.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(item) {
-                        private final /* synthetic */ Object f$1;
+                        public final /* synthetic */ Object f$1;
 
                         {
                             this.f$1 = r2;
@@ -972,7 +972,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         } catch (Exception unused) {
         }
         AndroidUtilities.runOnUIThread(new Runnable(mapView2) {
-            private final /* synthetic */ MapView f$1;
+            public final /* synthetic */ MapView f$1;
 
             {
                 this.f$1 = r2;
@@ -1041,7 +1041,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
         if (item != null && this.delegate != null) {
             if (chatActivity.isInScheduleMode()) {
                 AlertsCreator.createScheduleDatePickerDialog(getParentActivity(), chatActivity.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(item) {
-                    private final /* synthetic */ TLRPC$TL_messageMediaVenue f$1;
+                    public final /* synthetic */ TLRPC$TL_messageMediaVenue f$1;
 
                     {
                         this.f$1 = r2;

@@ -365,7 +365,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                 tLRPC$TL_channels_setDiscussionGroup.group = MessagesController.getInputChannel(this.currentChat);
             }
             AndroidUtilities.runOnUIThread(new Runnable(alertDialogArr, getConnectionsManager().sendRequest(tLRPC$TL_channels_setDiscussionGroup, new RequestDelegate(alertDialogArr) {
-                private final /* synthetic */ AlertDialog[] f$1;
+                public final /* synthetic */ AlertDialog[] f$1;
 
                 {
                     this.f$1 = r2;
@@ -375,8 +375,8 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                     ChatLinkActivity.this.lambda$null$1$ChatLinkActivity(this.f$1, tLObject, tLRPC$TL_error);
                 }
             })) {
-                private final /* synthetic */ AlertDialog[] f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ AlertDialog[] f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -392,7 +392,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
 
     public /* synthetic */ void lambda$null$1$ChatLinkActivity(AlertDialog[] alertDialogArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialogArr) {
-            private final /* synthetic */ AlertDialog[] f$1;
+            public final /* synthetic */ AlertDialog[] f$1;
 
             {
                 this.f$1 = r2;
@@ -411,7 +411,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         }
         alertDialogArr[0] = null;
         this.info.linked_chat_id = 0;
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, this.info, 0, false, null);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, this.info, 0, Boolean.FALSE, null);
         getMessagesController().loadFullChat(this.currentChatId, 0, true);
         if (!this.isChannel) {
             finishFragment();
@@ -421,7 +421,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     public /* synthetic */ void lambda$null$3$ChatLinkActivity(AlertDialog[] alertDialogArr, int i) {
         if (alertDialogArr[0] != null) {
             alertDialogArr[0].setOnCancelListener(new DialogInterface.OnCancelListener(i) {
-                private final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$1;
 
                 {
                     this.f$1 = r2;
@@ -492,8 +492,8 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             avatarDrawable.setInfo(tLRPC$Chat2);
             backupImageView.setImage(ImageLocation.getForChat(tLRPC$Chat2, false), "50_50", (Drawable) avatarDrawable, (Object) tLRPC$Chat2);
             builder.setPositiveButton(LocaleController.getString("DiscussionLinkGroup", NUM), new DialogInterface.OnClickListener(chatFull, tLRPC$Chat2) {
-                private final /* synthetic */ TLRPC$ChatFull f$1;
-                private final /* synthetic */ TLRPC$Chat f$2;
+                public final /* synthetic */ TLRPC$ChatFull f$1;
+                public final /* synthetic */ TLRPC$Chat f$2;
 
                 {
                     this.f$1 = r2;
@@ -547,7 +547,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         if (tLRPC$Chat != null) {
             if (!ChatObject.isChannel(tLRPC$Chat)) {
                 MessagesController.getInstance(this.currentAccount).convertToMegaGroup(getParentActivity(), tLRPC$Chat.id, this, new MessagesStorage.IntCallback(baseFragment) {
-                    private final /* synthetic */ BaseFragment f$1;
+                    public final /* synthetic */ BaseFragment f$1;
 
                     {
                         this.f$1 = r2;
@@ -570,9 +570,9 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             tLRPC$TL_channels_setDiscussionGroup.broadcast = MessagesController.getInputChannel(this.currentChat);
             tLRPC$TL_channels_setDiscussionGroup.group = MessagesController.getInputChannel(tLRPC$Chat);
             AndroidUtilities.runOnUIThread(new Runnable(alertDialogArr, getConnectionsManager().sendRequest(tLRPC$TL_channels_setDiscussionGroup, new RequestDelegate(alertDialogArr, tLRPC$Chat, baseFragment) {
-                private final /* synthetic */ AlertDialog[] f$1;
-                private final /* synthetic */ TLRPC$Chat f$2;
-                private final /* synthetic */ BaseFragment f$3;
+                public final /* synthetic */ AlertDialog[] f$1;
+                public final /* synthetic */ TLRPC$Chat f$2;
+                public final /* synthetic */ BaseFragment f$3;
 
                 {
                     this.f$1 = r2;
@@ -584,8 +584,8 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                     ChatLinkActivity.this.lambda$linkChat$11$ChatLinkActivity(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
                 }
             })) {
-                private final /* synthetic */ AlertDialog[] f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ AlertDialog[] f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -608,9 +608,9 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
 
     public /* synthetic */ void lambda$linkChat$11$ChatLinkActivity(AlertDialog[] alertDialogArr, TLRPC$Chat tLRPC$Chat, BaseFragment baseFragment, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialogArr, tLRPC$Chat, baseFragment) {
-            private final /* synthetic */ AlertDialog[] f$1;
-            private final /* synthetic */ TLRPC$Chat f$2;
-            private final /* synthetic */ BaseFragment f$3;
+            public final /* synthetic */ AlertDialog[] f$1;
+            public final /* synthetic */ TLRPC$Chat f$2;
+            public final /* synthetic */ BaseFragment f$3;
 
             {
                 this.f$1 = r2;
@@ -633,7 +633,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             alertDialogArr[0] = null;
         }
         this.info.linked_chat_id = tLRPC$Chat.id;
-        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, this.info, 0, false, null);
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, this.info, 0, Boolean.FALSE, null);
         getMessagesController().loadFullChat(this.currentChatId, 0, true);
         if (baseFragment != null) {
             removeSelfFromStack();
@@ -646,7 +646,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
     public /* synthetic */ void lambda$linkChat$13$ChatLinkActivity(AlertDialog[] alertDialogArr, int i) {
         if (alertDialogArr[0] != null) {
             alertDialogArr[0].setOnCancelListener(new DialogInterface.OnCancelListener(i) {
-                private final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$1;
 
                 {
                     this.f$1 = r2;
@@ -692,7 +692,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
 
     public /* synthetic */ void lambda$loadChats$15$ChatLinkActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-            private final /* synthetic */ TLObject f$1;
+            public final /* synthetic */ TLObject f$1;
 
             {
                 this.f$1 = r2;
@@ -786,7 +786,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             }
             DispatchQueue dispatchQueue = Utilities.searchQueue;
             $$Lambda$ChatLinkActivity$SearchAdapter$TUvgAYvpvIggtszTT20rbb2gK0U r1 = new Runnable(str) {
-                private final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
@@ -804,7 +804,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         /* renamed from: processSearch */
         public void lambda$searchDialogs$0$ChatLinkActivity$SearchAdapter(String str) {
             AndroidUtilities.runOnUIThread(new Runnable(str) {
-                private final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
@@ -819,8 +819,8 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         public /* synthetic */ void lambda$processSearch$2$ChatLinkActivity$SearchAdapter(String str) {
             this.searchRunnable = null;
             Utilities.searchQueue.postRunnable(new Runnable(str, new ArrayList(ChatLinkActivity.this.chats)) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ ArrayList f$2;
 
                 {
                     this.f$1 = r2;
@@ -863,19 +863,19 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
             L_0x0032:
                 r2 = 0
             L_0x0033:
-                r3 = 0
-                r5 = 1
+                r3 = 1
+                r5 = 0
                 if (r2 == 0) goto L_0x0039
                 r6 = 1
                 goto L_0x003a
             L_0x0039:
                 r6 = 0
             L_0x003a:
-                int r6 = r6 + r5
+                int r6 = r6 + r3
                 java.lang.String[] r7 = new java.lang.String[r6]
-                r7[r3] = r1
+                r7[r5] = r1
                 if (r2 == 0) goto L_0x0043
-                r7[r5] = r2
+                r7[r3] = r2
             L_0x0043:
                 java.util.ArrayList r1 = new java.util.ArrayList
                 r1.<init>()
@@ -903,72 +903,72 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                 r15 = r7[r13]
                 boolean r16 = r11.startsWith(r15)
                 if (r16 != 0) goto L_0x00be
-                java.lang.StringBuilder r3 = new java.lang.StringBuilder
-                r3.<init>()
+                java.lang.StringBuilder r5 = new java.lang.StringBuilder
+                r5.<init>()
                 java.lang.String r4 = " "
-                r3.append(r4)
-                r3.append(r15)
-                java.lang.String r3 = r3.toString()
-                boolean r3 = r11.contains(r3)
-                if (r3 != 0) goto L_0x00be
+                r5.append(r4)
+                r5.append(r15)
+                java.lang.String r5 = r5.toString()
+                boolean r5 = r11.contains(r5)
+                if (r5 != 0) goto L_0x00be
                 if (r12 == 0) goto L_0x00b2
-                boolean r3 = r12.startsWith(r15)
-                if (r3 != 0) goto L_0x00be
-                java.lang.StringBuilder r3 = new java.lang.StringBuilder
-                r3.<init>()
-                r3.append(r4)
-                r3.append(r15)
-                java.lang.String r3 = r3.toString()
-                boolean r3 = r12.contains(r3)
-                if (r3 == 0) goto L_0x00b2
+                boolean r5 = r12.startsWith(r15)
+                if (r5 != 0) goto L_0x00be
+                java.lang.StringBuilder r5 = new java.lang.StringBuilder
+                r5.<init>()
+                r5.append(r4)
+                r5.append(r15)
+                java.lang.String r4 = r5.toString()
+                boolean r4 = r12.contains(r4)
+                if (r4 == 0) goto L_0x00b2
                 goto L_0x00be
             L_0x00b2:
-                java.lang.String r3 = r10.username
-                if (r3 == 0) goto L_0x00bf
-                boolean r3 = r3.startsWith(r15)
-                if (r3 == 0) goto L_0x00bf
+                java.lang.String r4 = r10.username
+                if (r4 == 0) goto L_0x00bf
+                boolean r4 = r4.startsWith(r15)
+                if (r4 == 0) goto L_0x00bf
                 r14 = 2
                 goto L_0x00bf
             L_0x00be:
                 r14 = 1
             L_0x00bf:
                 if (r14 == 0) goto L_0x00fd
-                if (r14 != r5) goto L_0x00cf
-                java.lang.String r3 = r10.title
-                r4 = 0
-                java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r3, r4, r15)
-                r2.add(r3)
+                if (r14 != r3) goto L_0x00cf
+                java.lang.String r4 = r10.title
+                r5 = 0
+                java.lang.CharSequence r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r5, r15)
+                r2.add(r4)
                 r15 = 0
                 goto L_0x00f9
             L_0x00cf:
-                java.lang.StringBuilder r3 = new java.lang.StringBuilder
-                r3.<init>()
-                java.lang.String r4 = "@"
-                r3.append(r4)
+                java.lang.StringBuilder r4 = new java.lang.StringBuilder
+                r4.<init>()
+                java.lang.String r5 = "@"
+                r4.append(r5)
                 java.lang.String r11 = r10.username
-                r3.append(r11)
-                java.lang.String r3 = r3.toString()
+                r4.append(r11)
+                java.lang.String r4 = r4.toString()
                 java.lang.StringBuilder r11 = new java.lang.StringBuilder
                 r11.<init>()
-                r11.append(r4)
+                r11.append(r5)
                 r11.append(r15)
-                java.lang.String r4 = r11.toString()
+                java.lang.String r5 = r11.toString()
                 r15 = 0
-                java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r3, r15, r4)
-                r2.add(r3)
+                java.lang.CharSequence r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r15, r5)
+                r2.add(r4)
             L_0x00f9:
                 r1.add(r10)
                 goto L_0x0104
             L_0x00fd:
                 r15 = 0
                 int r13 = r13 + 1
-                r3 = 0
+                r5 = 0
                 goto L_0x0073
             L_0x0103:
                 r15 = 0
             L_0x0104:
                 int r8 = r8 + 1
-                r3 = 0
+                r5 = 0
                 goto L_0x004e
             L_0x0109:
                 r0.updateSearchResults(r1, r2)
@@ -979,8 +979,8 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
 
         private void updateSearchResults(ArrayList<TLRPC$Chat> arrayList, ArrayList<CharSequence> arrayList2) {
             AndroidUtilities.runOnUIThread(new Runnable(arrayList, arrayList2) {
-                private final /* synthetic */ ArrayList f$1;
-                private final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ ArrayList f$2;
 
                 {
                     this.f$1 = r2;

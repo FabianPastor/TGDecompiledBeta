@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.SystemClock;
 import android.util.StateSet;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
@@ -18,15 +19,18 @@ public class SeekBarView extends FrameLayout {
     private float bufferedProgress;
     boolean captured;
     private float currentRadius;
-    private SeekBarViewDelegate delegate;
+    /* access modifiers changed from: private */
+    public SeekBarViewDelegate delegate;
     private Drawable hoverDrawable;
     private Paint innerPaint1;
     private long lastUpdateTime;
     private Paint outerPaint1;
-    private boolean pressed;
-    private int[] pressedState = {16842910, 16842919};
+    /* access modifiers changed from: private */
+    public boolean pressed;
+    private int[] pressedState;
     private float progressToSet;
     private boolean reportChanges;
+    private final SeekBarAccessibilityDelegate seekBarAccessibilityDelegate;
     private int selectorWidth;
     float sx;
     float sy;
@@ -35,13 +39,34 @@ public class SeekBarView extends FrameLayout {
     private int thumbX;
 
     public interface SeekBarViewDelegate {
+
+        /* renamed from: org.telegram.ui.Components.SeekBarView$SeekBarViewDelegate$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static CharSequence $default$getContentDescription(SeekBarViewDelegate seekBarViewDelegate) {
+                return null;
+            }
+
+            public static int $default$getStepsCount(SeekBarViewDelegate seekBarViewDelegate) {
+                return 0;
+            }
+        }
+
+        CharSequence getContentDescription();
+
+        int getStepsCount();
+
         void onSeekBarDrag(boolean z, float f);
 
         void onSeekBarPressed(boolean z);
     }
 
     public SeekBarView(Context context) {
+        this(context, false);
+    }
+
+    public SeekBarView(Context context, boolean z) {
         super(context);
+        this.pressedState = new int[]{16842910, 16842919};
         setWillNotDraw(false);
         Paint paint = new Paint(1);
         this.innerPaint1 = paint;
@@ -59,6 +84,39 @@ public class SeekBarView extends FrameLayout {
             createSelectorDrawable.setCallback(this);
             this.hoverDrawable.setVisible(true, false);
         }
+        setImportantForAccessibility(1);
+        AnonymousClass1 r6 = new FloatSeekBarAccessibilityDelegate(z) {
+            public float getProgress() {
+                return SeekBarView.this.getProgress();
+            }
+
+            public void setProgress(float f) {
+                boolean unused = SeekBarView.this.pressed = true;
+                SeekBarView.this.setProgress(f);
+                if (SeekBarView.this.delegate != null) {
+                    SeekBarView.this.delegate.onSeekBarDrag(true, f);
+                }
+                boolean unused2 = SeekBarView.this.pressed = false;
+            }
+
+            /* access modifiers changed from: protected */
+            public float getDelta() {
+                int stepsCount = SeekBarView.this.delegate.getStepsCount();
+                if (stepsCount > 0) {
+                    return 1.0f / ((float) stepsCount);
+                }
+                return super.getDelta();
+            }
+
+            public CharSequence getContentDescription(View view) {
+                if (SeekBarView.this.delegate != null) {
+                    return SeekBarView.this.delegate.getContentDescription();
+                }
+                return null;
+            }
+        };
+        this.seekBarAccessibilityDelegate = r6;
+        setAccessibilityDelegate(r6);
     }
 
     public void setInnerColor(int i) {
@@ -262,5 +320,9 @@ public class SeekBarView extends FrameLayout {
             invalidate();
         }
         canvas.drawCircle((float) (this.thumbX + (this.selectorWidth / 2)), (float) (measuredHeight + (this.thumbSize / 2)), this.currentRadius, this.outerPaint1);
+    }
+
+    public SeekBarAccessibilityDelegate getSeekBarAccessibilityDelegate() {
+        return this.seekBarAccessibilityDelegate;
     }
 }

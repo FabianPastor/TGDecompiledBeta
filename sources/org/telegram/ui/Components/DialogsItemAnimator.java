@@ -101,7 +101,7 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
                 this.mMovesList.add(arrayList);
                 this.mPendingMoves.clear();
                 new Runnable(arrayList) {
-                    private final /* synthetic */ ArrayList f$1;
+                    public final /* synthetic */ ArrayList f$1;
 
                     {
                         this.f$1 = r2;
@@ -117,7 +117,7 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
                 this.mChangesList.add(arrayList2);
                 this.mPendingChanges.clear();
                 new Runnable(arrayList2) {
-                    private final /* synthetic */ ArrayList f$1;
+                    public final /* synthetic */ ArrayList f$1;
 
                     {
                         this.f$1 = r2;
@@ -133,7 +133,7 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
                 this.mAdditionsList.add(arrayList3);
                 this.mPendingAdditions.clear();
                 new Runnable(arrayList3) {
-                    private final /* synthetic */ ArrayList f$1;
+                    public final /* synthetic */ ArrayList f$1;
 
                     {
                         this.f$1 = r2;

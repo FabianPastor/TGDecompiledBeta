@@ -53,7 +53,7 @@ public class RadialProgress2 {
         this.mediaActionDrawable = mediaActionDrawable2;
         view.getClass();
         mediaActionDrawable2.setDelegate(new MediaActionDrawable.MediaActionDrawableDelegate(view) {
-            private final /* synthetic */ View f$0;
+            public final /* synthetic */ View f$0;
 
             {
                 this.f$0 = r1;
@@ -67,7 +67,7 @@ public class RadialProgress2 {
         this.miniMediaActionDrawable = mediaActionDrawable3;
         view.getClass();
         mediaActionDrawable3.setDelegate(new MediaActionDrawable.MediaActionDrawableDelegate(view) {
-            private final /* synthetic */ View f$0;
+            public final /* synthetic */ View f$0;
 
             {
                 this.f$0 = r1;

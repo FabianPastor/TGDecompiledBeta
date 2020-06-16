@@ -32,10 +32,10 @@ public class TgChooserTargetService extends ChooserTargetService {
             ImageLoader.getInstance();
             CountDownLatch countDownLatch = new CountDownLatch(1);
             MessagesStorage.getInstance(i).getStorageQueue().postRunnable(new Runnable(i, arrayList, new ComponentName(getPackageName(), LaunchActivity.class.getCanonicalName()), countDownLatch) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ List f$2;
-                private final /* synthetic */ ComponentName f$3;
-                private final /* synthetic */ CountDownLatch f$4;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ List f$2;
+                public final /* synthetic */ ComponentName f$3;
+                public final /* synthetic */ CountDownLatch f$4;
 
                 {
                     this.f$1 = r2;
@@ -182,7 +182,7 @@ public class TgChooserTargetService extends ChooserTargetService {
             r13.putLong(r8, r14)
             boolean r7 = org.telegram.messenger.UserObject.isUserSelf(r12)
             if (r7 == 0) goto L_0x0134
-            r7 = 2131626631(0x7f0e0a87, float:1.8880504E38)
+            r7 = 2131626648(0x7f0e0a98, float:1.8880538E38)
             java.lang.String r8 = "SavedMessages"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r8, r7)
             android.graphics.drawable.Icon r7 = r17.createSavedMessagesIcon()

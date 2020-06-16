@@ -48,8 +48,6 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
     /* access modifiers changed from: private */
     public final TrendingStickersAdapter adapter;
     /* access modifiers changed from: private */
-    public AlertDelegate alertDelegate;
-    /* access modifiers changed from: private */
     public final int currentAccount;
     /* access modifiers changed from: private */
     public final Delegate delegate;
@@ -84,10 +82,6 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
     /* access modifiers changed from: private */
     public int topOffset;
     private boolean wasLayout;
-
-    public interface AlertDelegate {
-        void setHeavyOperationsEnabled(boolean z);
-    }
 
     public static abstract class Delegate {
         private String[] lastSearchKeyboardLanguage = new String[0];
@@ -221,8 +215,8 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
             }
         };
         this.listView.setOnTouchListener(new View.OnTouchListener(delegate3, r10) {
-            private final /* synthetic */ TrendingStickersLayout.Delegate f$1;
-            private final /* synthetic */ RecyclerListView.OnItemClickListener f$2;
+            public final /* synthetic */ TrendingStickersLayout.Delegate f$1;
+            public final /* synthetic */ RecyclerListView.OnItemClickListener f$2;
 
             {
                 this.f$1 = r2;
@@ -362,7 +356,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
     }
 
     private void showStickerSet(final TLRPC$InputStickerSet tLRPC$InputStickerSet) {
-        AnonymousClass8 r1 = new StickersAlert(getContext(), this.parentFragment, tLRPC$InputStickerSet, (TLRPC$TL_messages_stickerSet) null, this.delegate.canSendSticker() ? new StickersAlert.StickersAlertDelegate() {
+        StickersAlert stickersAlert = new StickersAlert(getContext(), this.parentFragment, tLRPC$InputStickerSet, (TLRPC$TL_messages_stickerSet) null, this.delegate.canSendSticker() ? new StickersAlert.StickersAlertDelegate() {
             public void onStickerSelected(TLRPC$Document tLRPC$Document, Object obj, boolean z, boolean z2, int i) {
                 TrendingStickersLayout.this.delegate.onStickerSelected(tLRPC$Document, obj, z, z2, i);
             }
@@ -374,23 +368,9 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
             public boolean isInScheduleMode() {
                 return TrendingStickersLayout.this.delegate.isInScheduleMode();
             }
-        } : null) {
-            public void show() {
-                super.show();
-                if (TrendingStickersLayout.this.alertDelegate != null) {
-                    TrendingStickersLayout.this.alertDelegate.setHeavyOperationsEnabled(true);
-                }
-            }
-
-            public void dismiss() {
-                super.dismiss();
-                if (TrendingStickersLayout.this.alertDelegate != null) {
-                    TrendingStickersLayout.this.alertDelegate.setHeavyOperationsEnabled(false);
-                }
-            }
-        };
-        r1.setShowTooltipWhenToggle(false);
-        r1.setInstallDelegate(new StickersAlert.StickersAlertInstallDelegate() {
+        } : null);
+        stickersAlert.setShowTooltipWhenToggle(false);
+        stickersAlert.setInstallDelegate(new StickersAlert.StickersAlertInstallDelegate() {
             public void onStickerSetUninstalled() {
             }
 
@@ -408,7 +388,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                 TrendingStickersLayout.this.searchAdapter.installStickerSet(tLRPC$InputStickerSet);
             }
         });
-        this.parentFragment.showDialog(r1);
+        this.parentFragment.showDialog(stickersAlert);
     }
 
     public void recycle() {
@@ -441,10 +421,6 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
 
     public void setOnScrollListener(RecyclerView.OnScrollListener onScrollListener2) {
         this.onScrollListener = onScrollListener2;
-    }
-
-    public void setAlertDelegate(AlertDelegate alertDelegate2) {
-        this.alertDelegate = alertDelegate2;
     }
 
     public void setParentFragment(BaseFragment baseFragment) {
@@ -1043,8 +1019,8 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
 
         public /* synthetic */ void lambda$loadMoreStickerSets$3$TrendingStickersLayout$TrendingStickersAdapter(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-                private final /* synthetic */ TLRPC$TL_error f$1;
-                private final /* synthetic */ TLObject f$2;
+                public final /* synthetic */ TLRPC$TL_error f$1;
+                public final /* synthetic */ TLObject f$2;
 
                 {
                     this.f$1 = r2;
@@ -1099,14 +1075,14 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                         }
                         int i8 = 0;
                         while (true) {
-                            i2 = this.stickersPerRow;
-                            if (i8 >= i * i2) {
+                            i2 = this.stickersPerRow * i;
+                            if (i8 >= i2) {
                                 break;
                             }
                             this.positionsToSets.put(this.totalItems + i8, tLRPC$StickerSetCovered);
                             i8++;
                         }
-                        this.totalItems += i * i2;
+                        this.totalItems += i2;
                         size = i6;
                     }
                 }

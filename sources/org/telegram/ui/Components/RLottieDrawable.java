@@ -65,8 +65,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     private boolean isInvalid;
     /* access modifiers changed from: private */
     public volatile boolean isRecycled;
-    /* access modifiers changed from: private */
-    public volatile boolean isRunning;
+    private volatile boolean isRunning;
     private long lastFrameTime;
     private Runnable loadFrameRunnable;
     /* access modifiers changed from: private */
@@ -224,14 +223,6 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.uiRunnable = new Runnable() {
             public void run() {
                 boolean unused = RLottieDrawable.this.singleFrameDecoded = true;
-                RLottieDrawable.this.invalidateInternal();
-                RLottieDrawable.this.decodeFrameFinishedInternal();
-            }
-        };
-        new Runnable() {
-            public void run() {
-                boolean unused = RLottieDrawable.this.singleFrameDecoded = true;
-                boolean unused2 = RLottieDrawable.this.isRunning = false;
                 RLottieDrawable.this.invalidateInternal();
                 RLottieDrawable.this.decodeFrameFinishedInternal();
             }
@@ -424,14 +415,6 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.uiRunnable = new Runnable() {
             public void run() {
                 boolean unused = RLottieDrawable.this.singleFrameDecoded = true;
-                RLottieDrawable.this.invalidateInternal();
-                RLottieDrawable.this.decodeFrameFinishedInternal();
-            }
-        };
-        new Runnable() {
-            public void run() {
-                boolean unused = RLottieDrawable.this.singleFrameDecoded = true;
-                boolean unused2 = RLottieDrawable.this.isRunning = false;
                 RLottieDrawable.this.invalidateInternal();
                 RLottieDrawable.this.decodeFrameFinishedInternal();
             }
@@ -660,14 +643,6 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.uiRunnable = new Runnable() {
             public void run() {
                 boolean unused = RLottieDrawable.this.singleFrameDecoded = true;
-                RLottieDrawable.this.invalidateInternal();
-                RLottieDrawable.this.decodeFrameFinishedInternal();
-            }
-        };
-        new Runnable() {
-            public void run() {
-                boolean unused = RLottieDrawable.this.singleFrameDecoded = true;
-                boolean unused2 = RLottieDrawable.this.isRunning = false;
                 RLottieDrawable.this.invalidateInternal();
                 RLottieDrawable.this.decodeFrameFinishedInternal();
             }

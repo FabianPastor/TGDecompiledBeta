@@ -159,7 +159,7 @@ public class SecretChatHelper extends BaseController {
     public void processPendingEncMessages() {
         if (!this.pendingEncMessagesToDelete.isEmpty()) {
             AndroidUtilities.runOnUIThread(new Runnable(new ArrayList(this.pendingEncMessagesToDelete)) {
-                private final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ ArrayList f$1;
 
                 {
                     this.f$1 = r2;
@@ -256,7 +256,7 @@ public class SecretChatHelper extends BaseController {
             tLRPC$TL_dialog.last_message_date = tLRPC$TL_updateEncryption.date;
             getMessagesController().putEncryptedChat(tLRPC$EncryptedChat, false);
             AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_dialog) {
-                private final /* synthetic */ TLRPC$Dialog f$1;
+                public final /* synthetic */ TLRPC$Dialog f$1;
 
                 {
                     this.f$1 = r2;
@@ -282,8 +282,8 @@ public class SecretChatHelper extends BaseController {
                 tLRPC$EncryptedChat.mtproto_seq = encryptedChatDB.mtproto_seq;
             }
             AndroidUtilities.runOnUIThread(new Runnable(encryptedChatDB, tLRPC$EncryptedChat) {
-                private final /* synthetic */ TLRPC$EncryptedChat f$1;
-                private final /* synthetic */ TLRPC$EncryptedChat f$2;
+                public final /* synthetic */ TLRPC$EncryptedChat f$1;
+                public final /* synthetic */ TLRPC$EncryptedChat f$2;
 
                 {
                     this.f$1 = r2;
@@ -622,12 +622,12 @@ public class SecretChatHelper extends BaseController {
         if (tLRPC$DecryptedMessage != null && tLRPC$EncryptedChat2.auth_key != null && !(tLRPC$EncryptedChat2 instanceof TLRPC$TL_encryptedChatRequested) && !(tLRPC$EncryptedChat2 instanceof TLRPC$TL_encryptedChatWaiting)) {
             getSendMessagesHelper().putToSendingMessages(tLRPC$Message, false);
             Utilities.stageQueue.postRunnable(new Runnable(tLRPC$EncryptedChat, tLRPC$DecryptedMessage, tLRPC$Message, tLRPC$InputEncryptedFile, messageObject, str) {
-                private final /* synthetic */ TLRPC$EncryptedChat f$1;
-                private final /* synthetic */ TLRPC$DecryptedMessage f$2;
-                private final /* synthetic */ TLRPC$Message f$3;
-                private final /* synthetic */ TLRPC$InputEncryptedFile f$4;
-                private final /* synthetic */ MessageObject f$5;
-                private final /* synthetic */ String f$6;
+                public final /* synthetic */ TLRPC$EncryptedChat f$1;
+                public final /* synthetic */ TLRPC$DecryptedMessage f$2;
+                public final /* synthetic */ TLRPC$Message f$3;
+                public final /* synthetic */ TLRPC$InputEncryptedFile f$4;
+                public final /* synthetic */ MessageObject f$5;
+                public final /* synthetic */ String f$6;
 
                 {
                     this.f$1 = r2;
@@ -995,10 +995,10 @@ public class SecretChatHelper extends BaseController {
                     updateMediaPaths(messageObject, tLRPC$EncryptedFile, tLRPC$DecryptedMessage, str);
                     i = messageObject.getMediaExistanceFlags();
                     getMessagesStorage().getStorageQueue().postRunnable(new Runnable(tLRPC$Message, tLRPC$messages_SentEncryptedMessage, i, str2) {
-                        private final /* synthetic */ TLRPC$Message f$1;
-                        private final /* synthetic */ TLRPC$messages_SentEncryptedMessage f$2;
-                        private final /* synthetic */ int f$3;
-                        private final /* synthetic */ String f$4;
+                        public final /* synthetic */ TLRPC$Message f$1;
+                        public final /* synthetic */ TLRPC$messages_SentEncryptedMessage f$2;
+                        public final /* synthetic */ int f$3;
+                        public final /* synthetic */ String f$4;
 
                         {
                             this.f$1 = r2;
@@ -1016,10 +1016,10 @@ public class SecretChatHelper extends BaseController {
             }
             i = 0;
             getMessagesStorage().getStorageQueue().postRunnable(new Runnable(tLRPC$Message, tLRPC$messages_SentEncryptedMessage, i, str2) {
-                private final /* synthetic */ TLRPC$Message f$1;
-                private final /* synthetic */ TLRPC$messages_SentEncryptedMessage f$2;
-                private final /* synthetic */ int f$3;
-                private final /* synthetic */ String f$4;
+                public final /* synthetic */ TLRPC$Message f$1;
+                public final /* synthetic */ TLRPC$messages_SentEncryptedMessage f$2;
+                public final /* synthetic */ int f$3;
+                public final /* synthetic */ String f$4;
 
                 {
                     this.f$1 = r2;
@@ -1036,7 +1036,7 @@ public class SecretChatHelper extends BaseController {
         }
         getMessagesStorage().markMessageAsSendError(tLRPC$Message, false);
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$Message) {
-            private final /* synthetic */ TLRPC$Message f$1;
+            public final /* synthetic */ TLRPC$Message f$1;
 
             {
                 this.f$1 = r2;
@@ -1054,9 +1054,9 @@ public class SecretChatHelper extends BaseController {
         }
         getMessagesStorage().updateMessageStateAndId(tLRPC$Message.random_id, Integer.valueOf(tLRPC$Message.id), tLRPC$Message.id, tLRPC$messages_SentEncryptedMessage.date, false, 0, 0);
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$Message, i, str) {
-            private final /* synthetic */ TLRPC$Message f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ String f$3;
+            public final /* synthetic */ TLRPC$Message f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ String f$3;
 
             {
                 this.f$1 = r2;
@@ -1072,7 +1072,7 @@ public class SecretChatHelper extends BaseController {
 
     public /* synthetic */ void lambda$null$3$SecretChatHelper(TLRPC$Message tLRPC$Message, int i, String str) {
         tLRPC$Message.send_state = 0;
-        getNotificationCenter().postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(tLRPC$Message.id), Integer.valueOf(tLRPC$Message.id), tLRPC$Message, Long.valueOf(tLRPC$Message.dialog_id), 0L, Integer.valueOf(i), false);
+        getNotificationCenter().postNotificationName(NotificationCenter.messageReceivedByServer, Integer.valueOf(tLRPC$Message.id), Integer.valueOf(tLRPC$Message.id), tLRPC$Message, Long.valueOf(tLRPC$Message.dialog_id), 0L, Integer.valueOf(i), Boolean.FALSE);
         getSendMessagesHelper().processSentMessage(tLRPC$Message.id);
         if (MessageObject.isVideoMessage(tLRPC$Message) || MessageObject.isNewGifMessage(tLRPC$Message) || MessageObject.isRoundVideoMessage(tLRPC$Message)) {
             getSendMessagesHelper().stopVideoService(str);
@@ -1111,7 +1111,7 @@ public class SecretChatHelper extends BaseController {
                 sendNotifyLayerMessage(tLRPC$EncryptedChat, (TLRPC$Message) null);
             }
             AndroidUtilities.runOnUIThread(new Runnable(tLRPC$EncryptedChat) {
-                private final /* synthetic */ TLRPC$EncryptedChat f$1;
+                public final /* synthetic */ TLRPC$EncryptedChat f$1;
 
                 {
                     this.f$1 = r2;
@@ -2309,7 +2309,7 @@ public class SecretChatHelper extends BaseController {
             getMessagesController().dialogMessage.remove(tLRPC$Dialog.id);
         }
         getMessagesStorage().getStorageQueue().postRunnable(new Runnable(j) {
-            private final /* synthetic */ long f$1;
+            public final /* synthetic */ long f$1;
 
             {
                 this.f$1 = r2;
@@ -2321,12 +2321,12 @@ public class SecretChatHelper extends BaseController {
         });
         getMessagesStorage().deleteDialog(j, 1);
         getNotificationCenter().postNotificationName(NotificationCenter.dialogsNeedReload, new Object[0]);
-        getNotificationCenter().postNotificationName(NotificationCenter.removeAllMessagesFromDialog, Long.valueOf(j), false);
+        getNotificationCenter().postNotificationName(NotificationCenter.removeAllMessagesFromDialog, Long.valueOf(j), Boolean.FALSE);
     }
 
     public /* synthetic */ void lambda$null$10$SecretChatHelper(long j) {
         AndroidUtilities.runOnUIThread(new Runnable(j) {
-            private final /* synthetic */ long f$1;
+            public final /* synthetic */ long f$1;
 
             {
                 this.f$1 = r2;
@@ -2375,9 +2375,9 @@ public class SecretChatHelper extends BaseController {
     private void resendMessages(int i, int i2, TLRPC$EncryptedChat tLRPC$EncryptedChat) {
         if (tLRPC$EncryptedChat != null && i2 - i >= 0) {
             getMessagesStorage().getStorageQueue().postRunnable(new Runnable(i, tLRPC$EncryptedChat, i2) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ TLRPC$EncryptedChat f$2;
-                private final /* synthetic */ int f$3;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ TLRPC$EncryptedChat f$2;
+                public final /* synthetic */ int f$3;
 
                 {
                     this.f$1 = r2;
@@ -2466,7 +2466,7 @@ public class SecretChatHelper extends BaseController {
                 arrayList4.add(tLRPC$EncryptedChat2);
                 try {
                     AndroidUtilities.runOnUIThread(new Runnable(arrayList3) {
-                        private final /* synthetic */ ArrayList f$1;
+                        public final /* synthetic */ ArrayList f$1;
 
                         {
                             this.f$1 = r2;
@@ -3124,7 +3124,7 @@ public class SecretChatHelper extends BaseController {
             tLRPC$TL_messages_getDhConfig.random_length = 256;
             tLRPC$TL_messages_getDhConfig.version = getMessagesStorage().getLastSecretVersion();
             getConnectionsManager().sendRequest(tLRPC$TL_messages_getDhConfig, new RequestDelegate(tLRPC$EncryptedChat) {
-                private final /* synthetic */ TLRPC$EncryptedChat f$1;
+                public final /* synthetic */ TLRPC$EncryptedChat f$1;
 
                 {
                     this.f$1 = r2;
@@ -3198,7 +3198,7 @@ public class SecretChatHelper extends BaseController {
                 tLRPC$TL_inputEncryptedChat.access_hash = tLRPC$EncryptedChat.access_hash;
                 tLRPC$TL_messages_acceptEncryption.key_fingerprint = Utilities.bytesToLong(bArr4);
                 getConnectionsManager().sendRequest(tLRPC$TL_messages_acceptEncryption, new RequestDelegate(tLRPC$EncryptedChat) {
-                    private final /* synthetic */ TLRPC$EncryptedChat f$1;
+                    public final /* synthetic */ TLRPC$EncryptedChat f$1;
 
                     {
                         this.f$1 = r2;
@@ -3224,7 +3224,7 @@ public class SecretChatHelper extends BaseController {
             tLRPC$TL_inputEncryptedChat2.access_hash = tLRPC$EncryptedChat.access_hash;
             tLRPC$TL_messages_acceptEncryption2.key_fingerprint = Utilities.bytesToLong(bArr42);
             getConnectionsManager().sendRequest(tLRPC$TL_messages_acceptEncryption2, new RequestDelegate(tLRPC$EncryptedChat) {
-                private final /* synthetic */ TLRPC$EncryptedChat f$1;
+                public final /* synthetic */ TLRPC$EncryptedChat f$1;
 
                 {
                     this.f$1 = r2;
@@ -3253,7 +3253,7 @@ public class SecretChatHelper extends BaseController {
             getMessagesStorage().updateEncryptedChat(tLRPC$EncryptedChat2);
             getMessagesController().putEncryptedChat(tLRPC$EncryptedChat2, false);
             AndroidUtilities.runOnUIThread(new Runnable(tLRPC$EncryptedChat2) {
-                private final /* synthetic */ TLRPC$EncryptedChat f$1;
+                public final /* synthetic */ TLRPC$EncryptedChat f$1;
 
                 {
                     this.f$1 = r2;
@@ -3279,9 +3279,9 @@ public class SecretChatHelper extends BaseController {
             tLRPC$TL_messages_getDhConfig.random_length = 256;
             tLRPC$TL_messages_getDhConfig.version = getMessagesStorage().getLastSecretVersion();
             alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener(getConnectionsManager().sendRequest(tLRPC$TL_messages_getDhConfig, new RequestDelegate(context, alertDialog, tLRPC$User) {
-                private final /* synthetic */ Context f$1;
-                private final /* synthetic */ AlertDialog f$2;
-                private final /* synthetic */ TLRPC$User f$3;
+                public final /* synthetic */ Context f$1;
+                public final /* synthetic */ AlertDialog f$2;
+                public final /* synthetic */ TLRPC$User f$3;
 
                 {
                     this.f$1 = r2;
@@ -3293,7 +3293,7 @@ public class SecretChatHelper extends BaseController {
                     SecretChatHelper.this.lambda$startSecretChat$29$SecretChatHelper(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
                 }
             }, 2)) {
-                private final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$1;
 
                 {
                     this.f$1 = r2;
@@ -3316,8 +3316,8 @@ public class SecretChatHelper extends BaseController {
             if (tLObject instanceof TLRPC$TL_messages_dhConfig) {
                 if (!Utilities.isGoodPrime(tLRPC$messages_DhConfig.p, tLRPC$messages_DhConfig.g)) {
                     AndroidUtilities.runOnUIThread(new Runnable(context, alertDialog) {
-                        private final /* synthetic */ Context f$0;
-                        private final /* synthetic */ AlertDialog f$1;
+                        public final /* synthetic */ Context f$0;
+                        public final /* synthetic */ AlertDialog f$1;
 
                         {
                             this.f$0 = r1;
@@ -3350,10 +3350,10 @@ public class SecretChatHelper extends BaseController {
             tLRPC$TL_messages_requestEncryption.user_id = getMessagesController().getInputUser(tLRPC$User);
             tLRPC$TL_messages_requestEncryption.random_id = Utilities.random.nextInt();
             getConnectionsManager().sendRequest(tLRPC$TL_messages_requestEncryption, new RequestDelegate(context, alertDialog, bArr, tLRPC$User) {
-                private final /* synthetic */ Context f$1;
-                private final /* synthetic */ AlertDialog f$2;
-                private final /* synthetic */ byte[] f$3;
-                private final /* synthetic */ TLRPC$User f$4;
+                public final /* synthetic */ Context f$1;
+                public final /* synthetic */ AlertDialog f$2;
+                public final /* synthetic */ byte[] f$3;
+                public final /* synthetic */ TLRPC$User f$4;
 
                 {
                     this.f$1 = r2;
@@ -3370,8 +3370,8 @@ public class SecretChatHelper extends BaseController {
         }
         this.delayedEncryptedChatUpdates.clear();
         AndroidUtilities.runOnUIThread(new Runnable(context, alertDialog) {
-            private final /* synthetic */ Context f$1;
-            private final /* synthetic */ AlertDialog f$2;
+            public final /* synthetic */ Context f$1;
+            public final /* synthetic */ AlertDialog f$2;
 
             {
                 this.f$1 = r2;
@@ -3397,11 +3397,11 @@ public class SecretChatHelper extends BaseController {
     public /* synthetic */ void lambda$null$27$SecretChatHelper(Context context, AlertDialog alertDialog, byte[] bArr, TLRPC$User tLRPC$User, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             AndroidUtilities.runOnUIThread(new Runnable(context, alertDialog, tLObject, bArr, tLRPC$User) {
-                private final /* synthetic */ Context f$1;
-                private final /* synthetic */ AlertDialog f$2;
-                private final /* synthetic */ TLObject f$3;
-                private final /* synthetic */ byte[] f$4;
-                private final /* synthetic */ TLRPC$User f$5;
+                public final /* synthetic */ Context f$1;
+                public final /* synthetic */ AlertDialog f$2;
+                public final /* synthetic */ TLObject f$3;
+                public final /* synthetic */ byte[] f$4;
+                public final /* synthetic */ TLRPC$User f$5;
 
                 {
                     this.f$1 = r2;
@@ -3419,8 +3419,8 @@ public class SecretChatHelper extends BaseController {
         }
         this.delayedEncryptedChatUpdates.clear();
         AndroidUtilities.runOnUIThread(new Runnable(context, alertDialog) {
-            private final /* synthetic */ Context f$1;
-            private final /* synthetic */ AlertDialog f$2;
+            public final /* synthetic */ Context f$1;
+            public final /* synthetic */ AlertDialog f$2;
 
             {
                 this.f$1 = r2;

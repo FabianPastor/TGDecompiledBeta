@@ -120,80 +120,80 @@ public class DrawerProfileCell extends FrameLayout {
         /*
             r7 = this;
             android.content.Context r8 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r0 = 0
-            java.lang.String r1 = "themeconfig"
-            android.content.SharedPreferences r8 = r8.getSharedPreferences(r1, r0)
-            java.lang.String r1 = "Blue"
-            java.lang.String r2 = "lastDayTheme"
-            java.lang.String r2 = r8.getString(r2, r1)
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = org.telegram.ui.ActionBar.Theme.getTheme(r2)
+            java.lang.String r0 = "themeconfig"
+            r1 = 0
+            android.content.SharedPreferences r8 = r8.getSharedPreferences(r0, r1)
+            java.lang.String r0 = "lastDayTheme"
+            java.lang.String r2 = "Blue"
+            java.lang.String r0 = r8.getString(r0, r2)
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = org.telegram.ui.ActionBar.Theme.getTheme(r0)
             if (r3 != 0) goto L_0x0018
-            r2 = r1
+            r0 = r2
         L_0x0018:
-            java.lang.String r3 = "Dark Blue"
-            java.lang.String r4 = "lastDarkTheme"
-            java.lang.String r8 = r8.getString(r4, r3)
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = org.telegram.ui.ActionBar.Theme.getTheme(r8)
-            if (r4 != 0) goto L_0x0027
-            r8 = r3
+            java.lang.String r3 = "lastDarkTheme"
+            java.lang.String r4 = "Dark Blue"
+            java.lang.String r8 = r8.getString(r3, r4)
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = org.telegram.ui.ActionBar.Theme.getTheme(r8)
+            if (r3 != 0) goto L_0x0027
+            r8 = r4
         L_0x0027:
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
-            boolean r5 = r2.equals(r8)
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
+            boolean r5 = r0.equals(r8)
             if (r5 == 0) goto L_0x0039
-            boolean r5 = r4.isDark()
+            boolean r5 = r3.isDark()
             if (r5 == 0) goto L_0x003a
-            r3 = r8
+            r4 = r8
             goto L_0x003b
         L_0x0039:
-            r3 = r8
+            r4 = r8
         L_0x003a:
-            r1 = r2
+            r2 = r0
         L_0x003b:
-            java.lang.String r8 = r4.getKey()
-            boolean r8 = r1.equals(r8)
+            java.lang.String r8 = r3.getKey()
+            boolean r8 = r2.equals(r8)
             if (r8 == 0) goto L_0x004a
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.getTheme(r3)
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.getTheme(r4)
             goto L_0x004e
         L_0x004a:
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.getTheme(r1)
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.getTheme(r2)
         L_0x004e:
-            int r1 = org.telegram.ui.ActionBar.Theme.selectedAutoNightType
-            if (r1 == 0) goto L_0x006e
-            android.content.Context r1 = r7.getContext()
-            r2 = 2131624371(0x7f0e01b3, float:1.887592E38)
+            int r0 = org.telegram.ui.ActionBar.Theme.selectedAutoNightType
+            if (r0 == 0) goto L_0x006e
+            android.content.Context r0 = r7.getContext()
+            r2 = 2131624379(0x7f0e01bb, float:1.8875936E38)
             java.lang.String r3 = "AutoNightModeOff"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
-            android.widget.Toast r1 = android.widget.Toast.makeText(r1, r2, r0)
-            r1.show()
-            org.telegram.ui.ActionBar.Theme.selectedAutoNightType = r0
+            android.widget.Toast r0 = android.widget.Toast.makeText(r0, r2, r1)
+            r0.show()
+            org.telegram.ui.ActionBar.Theme.selectedAutoNightType = r1
             org.telegram.ui.ActionBar.Theme.saveAutoNightThemeConfig()
             org.telegram.ui.ActionBar.Theme.cancelAutoNightThemeCallbacks()
         L_0x006e:
-            r1 = 2
-            int[] r2 = new int[r1]
+            r0 = 2
+            int[] r2 = new int[r0]
             android.widget.ImageView r3 = r7.darkThemeView
             r3.getLocationInWindow(r2)
-            r3 = r2[r0]
+            r3 = r2[r1]
             android.widget.ImageView r4 = r7.darkThemeView
             int r4 = r4.getMeasuredWidth()
-            int r4 = r4 / r1
+            int r4 = r4 / r0
             int r3 = r3 + r4
-            r2[r0] = r3
+            r2[r1] = r3
             r3 = 1
             r4 = r2[r3]
             android.widget.ImageView r5 = r7.darkThemeView
             int r5 = r5.getMeasuredHeight()
-            int r5 = r5 / r1
+            int r5 = r5 / r0
             int r4 = r4 + r5
             r2[r3] = r4
             org.telegram.messenger.NotificationCenter r4 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
             int r5 = org.telegram.messenger.NotificationCenter.needSetDayNightTheme
             r6 = 4
             java.lang.Object[] r6 = new java.lang.Object[r6]
-            r6[r0] = r8
-            java.lang.Boolean r8 = java.lang.Boolean.valueOf(r0)
+            r6[r1] = r8
+            java.lang.Boolean r8 = java.lang.Boolean.FALSE
             r6[r3] = r8
-            r6[r1] = r2
+            r6[r0] = r2
             r8 = 3
             r0 = -1
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)

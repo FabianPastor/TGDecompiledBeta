@@ -71,8 +71,8 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
         this.searchInProgress = true;
         DispatchQueue dispatchQueue = Utilities.searchQueue;
         $$Lambda$BaseLocationAdapter$T_85LSiVXaUUUWP3WNWn8qK1uUI r1 = new Runnable(str, location) {
-            private final /* synthetic */ String f$1;
-            private final /* synthetic */ Location f$2;
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ Location f$2;
 
             {
                 this.f$1 = r2;
@@ -89,8 +89,8 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
 
     public /* synthetic */ void lambda$searchDelayed$1$BaseLocationAdapter(String str, Location location) {
         AndroidUtilities.runOnUIThread(new Runnable(str, location) {
-            private final /* synthetic */ String f$1;
-            private final /* synthetic */ Location f$2;
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ Location f$2;
 
             {
                 this.f$1 = r2;
@@ -125,7 +125,7 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
     public /* synthetic */ void lambda$searchBotUser$3$BaseLocationAdapter(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-                private final /* synthetic */ TLObject f$1;
+                public final /* synthetic */ TLObject f$1;
 
                 {
                     this.f$1 = r2;
@@ -195,7 +195,7 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
                         tLRPC$TL_messages_getInlineBotResults.peer = new TLRPC$TL_inputPeerEmpty();
                     }
                     this.currentRequestNum = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getInlineBotResults, new RequestDelegate(str) {
-                        private final /* synthetic */ String f$1;
+                        public final /* synthetic */ String f$1;
 
                         {
                             this.f$1 = r2;
@@ -224,9 +224,9 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
 
     public /* synthetic */ void lambda$searchPlacesWithQuery$5$BaseLocationAdapter(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(str, tLRPC$TL_error, tLObject) {
-            private final /* synthetic */ String f$1;
-            private final /* synthetic */ TLRPC$TL_error f$2;
-            private final /* synthetic */ TLObject f$3;
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ TLRPC$TL_error f$2;
+            public final /* synthetic */ TLObject f$3;
 
             {
                 this.f$1 = r2;

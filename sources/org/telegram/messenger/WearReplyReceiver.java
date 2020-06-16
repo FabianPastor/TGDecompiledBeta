@@ -30,11 +30,11 @@ public class WearReplyReceiver extends BroadcastReceiver {
                     if (i > 0) {
                         if (instance.getMessagesController().getUser(Integer.valueOf(i)) == null) {
                             Utilities.globalQueue.postRunnable(new Runnable(instance, i, charSequence, longExtra, intExtra) {
-                                private final /* synthetic */ AccountInstance f$1;
-                                private final /* synthetic */ int f$2;
-                                private final /* synthetic */ CharSequence f$3;
-                                private final /* synthetic */ long f$4;
-                                private final /* synthetic */ int f$5;
+                                public final /* synthetic */ AccountInstance f$1;
+                                public final /* synthetic */ int f$2;
+                                public final /* synthetic */ CharSequence f$3;
+                                public final /* synthetic */ long f$4;
+                                public final /* synthetic */ int f$5;
 
                                 {
                                     this.f$1 = r2;
@@ -52,11 +52,11 @@ public class WearReplyReceiver extends BroadcastReceiver {
                         }
                     } else if (i < 0 && instance.getMessagesController().getChat(Integer.valueOf(-i)) == null) {
                         Utilities.globalQueue.postRunnable(new Runnable(instance, i, charSequence, longExtra, intExtra) {
-                            private final /* synthetic */ AccountInstance f$1;
-                            private final /* synthetic */ int f$2;
-                            private final /* synthetic */ CharSequence f$3;
-                            private final /* synthetic */ long f$4;
-                            private final /* synthetic */ int f$5;
+                            public final /* synthetic */ AccountInstance f$1;
+                            public final /* synthetic */ int f$2;
+                            public final /* synthetic */ CharSequence f$3;
+                            public final /* synthetic */ long f$4;
+                            public final /* synthetic */ int f$5;
 
                             {
                                 this.f$1 = r2;
@@ -80,11 +80,11 @@ public class WearReplyReceiver extends BroadcastReceiver {
 
     public /* synthetic */ void lambda$onReceive$1$WearReplyReceiver(AccountInstance accountInstance, int i, CharSequence charSequence, long j, int i2) {
         AndroidUtilities.runOnUIThread(new Runnable(accountInstance, accountInstance.getMessagesStorage().getUserSync(i), charSequence, j, i2) {
-            private final /* synthetic */ AccountInstance f$1;
-            private final /* synthetic */ TLRPC$User f$2;
-            private final /* synthetic */ CharSequence f$3;
-            private final /* synthetic */ long f$4;
-            private final /* synthetic */ int f$5;
+            public final /* synthetic */ AccountInstance f$1;
+            public final /* synthetic */ TLRPC$User f$2;
+            public final /* synthetic */ CharSequence f$3;
+            public final /* synthetic */ long f$4;
+            public final /* synthetic */ int f$5;
 
             {
                 this.f$1 = r2;
@@ -107,11 +107,11 @@ public class WearReplyReceiver extends BroadcastReceiver {
 
     public /* synthetic */ void lambda$onReceive$3$WearReplyReceiver(AccountInstance accountInstance, int i, CharSequence charSequence, long j, int i2) {
         AndroidUtilities.runOnUIThread(new Runnable(accountInstance, accountInstance.getMessagesStorage().getChatSync(-i), charSequence, j, i2) {
-            private final /* synthetic */ AccountInstance f$1;
-            private final /* synthetic */ TLRPC$Chat f$2;
-            private final /* synthetic */ CharSequence f$3;
-            private final /* synthetic */ long f$4;
-            private final /* synthetic */ int f$5;
+            public final /* synthetic */ AccountInstance f$1;
+            public final /* synthetic */ TLRPC$Chat f$2;
+            public final /* synthetic */ CharSequence f$3;
+            public final /* synthetic */ long f$4;
+            public final /* synthetic */ int f$5;
 
             {
                 this.f$1 = r2;

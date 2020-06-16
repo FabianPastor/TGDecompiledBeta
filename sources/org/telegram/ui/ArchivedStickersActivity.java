@@ -245,8 +245,8 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
 
     public /* synthetic */ void lambda$getStickers$2$ArchivedStickersActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
 
             {
                 this.f$1 = r2;
@@ -286,7 +286,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
             return;
         }
         this.doOnTransitionEnd = new Runnable(tLRPC$TL_messages_archivedStickers) {
-            private final /* synthetic */ TLRPC$TL_messages_archivedStickers f$1;
+            public final /* synthetic */ TLRPC$TL_messages_archivedStickers f$1;
 
             {
                 this.f$1 = r2;
@@ -395,7 +395,7 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
                     archivedStickerSetCell.setDrawProgress(z, false);
                 }
                 archivedStickerSetCell.setOnCheckedChangeListener(new ArchivedStickerSetCell.OnCheckedChangeListener(tLRPC$StickerSetCovered) {
-                    private final /* synthetic */ TLRPC$StickerSetCovered f$1;
+                    public final /* synthetic */ TLRPC$StickerSetCovered f$1;
 
                     {
                         this.f$1 = r2;

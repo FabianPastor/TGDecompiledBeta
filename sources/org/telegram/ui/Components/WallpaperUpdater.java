@@ -59,7 +59,7 @@ public class WallpaperUpdater {
             iArr = new int[]{NUM, NUM};
         }
         builder.setItems(charSequenceArr, iArr, new DialogInterface.OnClickListener(z) {
-            private final /* synthetic */ boolean f$1;
+            public final /* synthetic */ boolean f$1;
 
             {
                 this.f$1 = r2;

@@ -272,11 +272,11 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
                         return true;
                     } else if (activatedAccountsCount >= 2) {
                         AlertDialog createAccountSelectDialog = AlertsCreator.createAccountSelectDialog(this, new AlertsCreator.AccountSelectDelegate(i, intent, z, z2, z3) {
-                            private final /* synthetic */ int f$1;
-                            private final /* synthetic */ Intent f$2;
-                            private final /* synthetic */ boolean f$3;
-                            private final /* synthetic */ boolean f$4;
-                            private final /* synthetic */ boolean f$5;
+                            public final /* synthetic */ int f$1;
+                            public final /* synthetic */ Intent f$2;
+                            public final /* synthetic */ boolean f$3;
+                            public final /* synthetic */ boolean f$4;
+                            public final /* synthetic */ boolean f$5;
 
                             {
                                 this.f$1 = r2;
@@ -314,8 +314,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
                 int[] iArr = {0};
                 AlertDialog alertDialog = new AlertDialog(this, 3);
                 alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener(i3, iArr) {
-                    private final /* synthetic */ int f$0;
-                    private final /* synthetic */ int[] f$1;
+                    public final /* synthetic */ int f$0;
+                    public final /* synthetic */ int[] f$1;
 
                     {
                         this.f$0 = r1;
@@ -328,12 +328,12 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
                 });
                 alertDialog.show();
                 iArr[0] = ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_account_getAuthorizationForm, new RequestDelegate(iArr, i, alertDialog, tLRPC$TL_account_getAuthorizationForm, stringExtra2, stringExtra) {
-                    private final /* synthetic */ int[] f$1;
-                    private final /* synthetic */ int f$2;
-                    private final /* synthetic */ AlertDialog f$3;
-                    private final /* synthetic */ TLRPC$TL_account_getAuthorizationForm f$4;
-                    private final /* synthetic */ String f$5;
-                    private final /* synthetic */ String f$6;
+                    public final /* synthetic */ int[] f$1;
+                    public final /* synthetic */ int f$2;
+                    public final /* synthetic */ AlertDialog f$3;
+                    public final /* synthetic */ TLRPC$TL_account_getAuthorizationForm f$4;
+                    public final /* synthetic */ String f$5;
+                    public final /* synthetic */ String f$6;
 
                     {
                         this.f$1 = r2;
@@ -393,12 +393,12 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
         TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm = (TLRPC$TL_account_authorizationForm) tLObject;
         if (tLRPC$TL_account_authorizationForm != null) {
             iArr[0] = ConnectionsManager.getInstance(i).sendRequest(new TLRPC$TL_account_getPassword(), new RequestDelegate(alertDialog, i, tLRPC$TL_account_authorizationForm, tLRPC$TL_account_getAuthorizationForm, str, str2) {
-                private final /* synthetic */ AlertDialog f$1;
-                private final /* synthetic */ int f$2;
-                private final /* synthetic */ TLRPC$TL_account_authorizationForm f$3;
-                private final /* synthetic */ TLRPC$TL_account_getAuthorizationForm f$4;
-                private final /* synthetic */ String f$5;
-                private final /* synthetic */ String f$6;
+                public final /* synthetic */ AlertDialog f$1;
+                public final /* synthetic */ int f$2;
+                public final /* synthetic */ TLRPC$TL_account_authorizationForm f$3;
+                public final /* synthetic */ TLRPC$TL_account_getAuthorizationForm f$4;
+                public final /* synthetic */ String f$5;
+                public final /* synthetic */ String f$6;
 
                 {
                     this.f$1 = r2;
@@ -417,8 +417,8 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
         }
         AlertDialog alertDialog2 = alertDialog;
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLRPC$TL_error) {
-            private final /* synthetic */ AlertDialog f$1;
-            private final /* synthetic */ TLRPC$TL_error f$2;
+            public final /* synthetic */ AlertDialog f$1;
+            public final /* synthetic */ TLRPC$TL_error f$2;
 
             {
                 this.f$1 = r2;
@@ -433,13 +433,13 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
 
     public /* synthetic */ void lambda$null$7$ExternalActionActivity(AlertDialog alertDialog, int i, TLRPC$TL_account_authorizationForm tLRPC$TL_account_authorizationForm, TLRPC$TL_account_getAuthorizationForm tLRPC$TL_account_getAuthorizationForm, String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLObject, i, tLRPC$TL_account_authorizationForm, tLRPC$TL_account_getAuthorizationForm, str, str2) {
-            private final /* synthetic */ AlertDialog f$1;
-            private final /* synthetic */ TLObject f$2;
-            private final /* synthetic */ int f$3;
-            private final /* synthetic */ TLRPC$TL_account_authorizationForm f$4;
-            private final /* synthetic */ TLRPC$TL_account_getAuthorizationForm f$5;
-            private final /* synthetic */ String f$6;
-            private final /* synthetic */ String f$7;
+            public final /* synthetic */ AlertDialog f$1;
+            public final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ int f$3;
+            public final /* synthetic */ TLRPC$TL_account_authorizationForm f$4;
+            public final /* synthetic */ TLRPC$TL_account_getAuthorizationForm f$5;
+            public final /* synthetic */ String f$6;
+            public final /* synthetic */ String f$7;
 
             {
                 this.f$1 = r2;
@@ -490,7 +490,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
                 AlertDialog showUpdateAppAlert = AlertsCreator.showUpdateAppAlert(this, LocaleController.getString("UpdateAppAlert", NUM), true);
                 if (showUpdateAppAlert != null) {
                     showUpdateAppAlert.setOnDismissListener(new DialogInterface.OnDismissListener(tLRPC$TL_error) {
-                        private final /* synthetic */ TLRPC$TL_error f$1;
+                        public final /* synthetic */ TLRPC$TL_error f$1;
 
                         {
                             this.f$1 = r2;

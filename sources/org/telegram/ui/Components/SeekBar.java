@@ -140,6 +140,10 @@ public class SeekBar {
         this.bufferedProgress = f;
     }
 
+    public float getProgress() {
+        return ((float) this.thumbX) / ((float) (this.width - thumbWidth));
+    }
+
     public boolean isDragging() {
         return this.pressed;
     }

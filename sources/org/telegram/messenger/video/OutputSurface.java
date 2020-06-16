@@ -1,10 +1,7 @@
 package org.telegram.messenger.video;
 
 import android.graphics.SurfaceTexture;
-import android.opengl.GLES20;
 import android.view.Surface;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.util.ArrayList;
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -23,35 +20,12 @@ public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
     private EGLSurface mEGLSurface = null;
     private boolean mFrameAvailable;
     private final Object mFrameSyncObject = new Object();
-    private int mHeight;
-    private ByteBuffer mPixelBuf;
     private Surface mSurface;
     private SurfaceTexture mSurfaceTexture;
     private TextureRenderer mTextureRender;
-    private int mWidth;
-    private int rotateRender = 0;
 
-    public OutputSurface(int i, int i2, int i3) {
-        if (i <= 0 || i2 <= 0) {
-            throw new IllegalArgumentException();
-        }
-        this.mWidth = i;
-        this.mHeight = i2;
-        this.rotateRender = i3;
-        ByteBuffer allocateDirect = ByteBuffer.allocateDirect(i * i2 * 4);
-        this.mPixelBuf = allocateDirect;
-        allocateDirect.order(ByteOrder.LITTLE_ENDIAN);
-        eglSetup(i, i2);
-        makeCurrent();
-        setup((MediaController.SavedFilterState) null, (String) null, (String) null, (ArrayList<VideoEditedInfo.MediaEntity>) null, 0, 0, 0.0f, false);
-    }
-
-    public OutputSurface(MediaController.SavedFilterState savedFilterState, String str, String str2, ArrayList<VideoEditedInfo.MediaEntity> arrayList, int i, int i2, float f, boolean z) {
-        setup(savedFilterState, str, str2, arrayList, i, i2, f, z);
-    }
-
-    private void setup(MediaController.SavedFilterState savedFilterState, String str, String str2, ArrayList<VideoEditedInfo.MediaEntity> arrayList, int i, int i2, float f, boolean z) {
-        TextureRenderer textureRenderer = new TextureRenderer(this.rotateRender, savedFilterState, str, str2, arrayList, i, i2, f, z);
+    public OutputSurface(MediaController.SavedFilterState savedFilterState, String str, String str2, ArrayList<VideoEditedInfo.MediaEntity> arrayList, MediaController.CropState cropState, int i, int i2, int i3, float f, boolean z) {
+        TextureRenderer textureRenderer = new TextureRenderer(savedFilterState, str, str2, arrayList, cropState, i, i2, i3, f, z);
         this.mTextureRender = textureRenderer;
         textureRenderer.surfaceCreated();
         SurfaceTexture surfaceTexture = new SurfaceTexture(this.mTextureRender.getTextureId());
@@ -147,12 +121,11 @@ public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
             }
             this.mFrameAvailable = false;
         }
-        this.mTextureRender.checkGlError("before updateTexImage");
         this.mSurfaceTexture.updateTexImage();
     }
 
-    public void drawImage(boolean z) {
-        this.mTextureRender.drawFrame(this.mSurfaceTexture, z);
+    public void drawImage() {
+        this.mTextureRender.drawFrame(this.mSurfaceTexture);
     }
 
     public void onFrameAvailable(SurfaceTexture surfaceTexture) {
@@ -164,12 +137,6 @@ public class OutputSurface implements SurfaceTexture.OnFrameAvailableListener {
                 throw new RuntimeException("mFrameAvailable already set, frame could be dropped");
             }
         }
-    }
-
-    public ByteBuffer getFrame() {
-        this.mPixelBuf.rewind();
-        GLES20.glReadPixels(0, 0, this.mWidth, this.mHeight, 6408, 5121, this.mPixelBuf);
-        return this.mPixelBuf;
     }
 
     private void checkEglError(String str) {

@@ -149,9 +149,9 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             CountDownLatch countDownLatch = new CountDownLatch(1);
             ArrayList arrayList2 = new ArrayList();
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable(arrayList2, arrayList, countDownLatch) {
-                private final /* synthetic */ ArrayList f$1;
-                private final /* synthetic */ ArrayList f$2;
-                private final /* synthetic */ CountDownLatch f$3;
+                public final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ CountDownLatch f$3;
 
                 {
                     this.f$1 = r2;
@@ -462,7 +462,6 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.avatarDrawable.setInfo(5, (String) null, (String) null);
         this.avatarImage.setImageDrawable(this.avatarDrawable);
         this.avatarImage.setContentDescription(LocaleController.getString("ChoosePhoto", NUM));
-        int i2 = 3;
         this.editTextContainer.addView(this.avatarImage, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 16.0f, LocaleController.isRTL ? 16.0f : 0.0f, 16.0f));
         final Paint paint = new Paint(1);
         paint.setColor(NUM);
@@ -513,8 +512,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         showAvatarProgress(false, false);
         EditTextEmoji editTextEmoji2 = new EditTextEmoji(context2, r2, this, 0);
         this.editText = editTextEmoji2;
-        int i3 = this.chatType;
-        if (i3 == 0 || i3 == 4) {
+        int i2 = this.chatType;
+        if (i2 == 0 || i2 == 4) {
             i = NUM;
             str = "EnterGroupNamePlaceholder";
         } else {
@@ -576,14 +575,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 }
             });
         }
-        FrameLayout frameLayout2 = this.floatingButtonContainer;
-        int i4 = 56;
-        int i5 = Build.VERSION.SDK_INT >= 21 ? 56 : 60;
-        float f = Build.VERSION.SDK_INT >= 21 ? 56.0f : 60.0f;
-        if (!LocaleController.isRTL) {
-            i2 = 5;
-        }
-        r2.addView(frameLayout2, LayoutHelper.createFrame(i5, f, i2 | 80, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 14.0f, 14.0f));
+        int i3 = 56;
+        r2.addView(this.floatingButtonContainer, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 56 : 60, Build.VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, (LocaleController.isRTL ? 3 : 5) | 80, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 14.0f, 14.0f));
         this.floatingButtonContainer.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 GroupCreateFinalActivity.this.lambda$createView$6$GroupCreateFinalActivity(view);
@@ -596,12 +589,12 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.floatingButtonIcon.setImageResource(NUM);
         this.floatingButtonIcon.setPadding(0, AndroidUtilities.dp(2.0f), 0, 0);
         this.floatingButtonContainer.setContentDescription(LocaleController.getString("Done", NUM));
-        FrameLayout frameLayout3 = this.floatingButtonContainer;
+        FrameLayout frameLayout2 = this.floatingButtonContainer;
         ImageView imageView2 = this.floatingButtonIcon;
         if (Build.VERSION.SDK_INT < 21) {
-            i4 = 60;
+            i3 = 60;
         }
-        frameLayout3.addView(imageView2, LayoutHelper.createFrame(i4, Build.VERSION.SDK_INT >= 21 ? 56.0f : 60.0f));
+        frameLayout2.addView(imageView2, LayoutHelper.createFrame(i3, Build.VERSION.SDK_INT >= 21 ? 56.0f : 60.0f));
         ContextProgressView contextProgressView = new ContextProgressView(context2, 1);
         this.progressView = contextProgressView;
         contextProgressView.setAlpha(0.0f);
@@ -672,9 +665,9 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
 
     public void didUploadPhoto(TLRPC$InputFile tLRPC$InputFile, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$InputFile, tLRPC$PhotoSize2, tLRPC$PhotoSize) {
-            private final /* synthetic */ TLRPC$InputFile f$1;
-            private final /* synthetic */ TLRPC$PhotoSize f$2;
-            private final /* synthetic */ TLRPC$PhotoSize f$3;
+            public final /* synthetic */ TLRPC$InputFile f$1;
+            public final /* synthetic */ TLRPC$PhotoSize f$2;
+            public final /* synthetic */ TLRPC$PhotoSize f$3;
 
             {
                 this.f$1 = r2;

@@ -236,7 +236,7 @@ public class StickerSetCell extends FrameLayout {
             if (z2) {
                 this.reorderButton.setVisibility(0);
                 this.reorderButton.animate().alpha(fArr[0]).scaleX(fArr2[0]).scaleY(fArr2[0]).setDuration(200).setInterpolator(Easings.easeOutSine).withEndAction(new Runnable(z) {
-                    private final /* synthetic */ boolean f$1;
+                    public final /* synthetic */ boolean f$1;
 
                     {
                         this.f$1 = r2;
@@ -248,7 +248,7 @@ public class StickerSetCell extends FrameLayout {
                 }).start();
                 this.optionsButton.setVisibility(0);
                 this.optionsButton.animate().alpha(fArr[1]).scaleX(fArr2[1]).scaleY(fArr2[1]).setDuration(200).setInterpolator(Easings.easeOutSine).withEndAction(new Runnable(z) {
-                    private final /* synthetic */ boolean f$1;
+                    public final /* synthetic */ boolean f$1;
 
                     {
                         this.f$1 = r2;

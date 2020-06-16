@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.RectF;
 import android.text.TextPaint;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import org.telegram.messenger.AndroidUtilities;
@@ -31,10 +32,20 @@ public class ChatListCell extends LinearLayout {
 
         public ListView(ChatListCell chatListCell, Context context, boolean z) {
             super(context);
+            int i;
+            String str;
             boolean z2 = true;
             this.textPaint = new TextPaint(1);
             setWillNotDraw(false);
             this.isThreeLines = z;
+            if (z) {
+                i = NUM;
+                str = "ChatListExpanded";
+            } else {
+                i = NUM;
+                str = "ChatListDefault";
+            }
+            setContentDescription(LocaleController.getString(str, i));
             this.textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
             AnonymousClass1 r12 = new RadioButton(context, chatListCell) {
                 public void invalidate() {
@@ -118,6 +129,13 @@ public class ChatListCell extends LinearLayout {
                 i2++;
             }
         }
+
+        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+            super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+            accessibilityNodeInfo.setClassName(RadioButton.class.getName());
+            accessibilityNodeInfo.setChecked(this.button.isChecked());
+            accessibilityNodeInfo.setCheckable(true);
+        }
     }
 
     public ChatListCell(Context context) {
@@ -130,7 +148,7 @@ public class ChatListCell extends LinearLayout {
             this.listView[i] = new ListView(this, context, z);
             addView(this.listView[i], LayoutHelper.createLinear(-1, -1, 0.5f, i == 1 ? 10 : 0, 0, 0, 0));
             this.listView[i].setOnClickListener(new View.OnClickListener(z) {
-                private final /* synthetic */ boolean f$1;
+                public final /* synthetic */ boolean f$1;
 
                 {
                     this.f$1 = r2;

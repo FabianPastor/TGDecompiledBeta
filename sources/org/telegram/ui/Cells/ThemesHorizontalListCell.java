@@ -592,7 +592,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
 
         public /* synthetic */ void lambda$parseTheme$1$ThemesHorizontalListCell$InnerThemeView(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-                private final /* synthetic */ TLObject f$1;
+                public final /* synthetic */ TLObject f$1;
 
                 {
                     this.f$1 = r2;
@@ -1021,7 +1021,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 return;
             }
         } else if (themeInfo != Theme.getCurrentTheme()) {
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, themeInfo, false, null, -1);
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needSetDayNightTheme, themeInfo, Boolean.FALSE, null, -1);
         } else {
             return;
         }
@@ -1204,8 +1204,8 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
                 this.loadingThemes.remove(str);
                 if (this.loadingWallpapers.remove(themeInfo) != null) {
                     Utilities.globalQueue.postRunnable(new Runnable(themeInfo, file) {
-                        private final /* synthetic */ Theme.ThemeInfo f$1;
-                        private final /* synthetic */ File f$2;
+                        public final /* synthetic */ Theme.ThemeInfo f$1;
+                        public final /* synthetic */ File f$2;
 
                         {
                             this.f$1 = r2;
@@ -1228,7 +1228,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
     public /* synthetic */ void lambda$didReceivedNotification$3$ThemesHorizontalListCell(Theme.ThemeInfo themeInfo, File file) {
         themeInfo.badWallpaper = !themeInfo.createBackground(file, themeInfo.pathToWallpaper);
         AndroidUtilities.runOnUIThread(new Runnable(themeInfo) {
-            private final /* synthetic */ Theme.ThemeInfo f$1;
+            public final /* synthetic */ Theme.ThemeInfo f$1;
 
             {
                 this.f$1 = r2;

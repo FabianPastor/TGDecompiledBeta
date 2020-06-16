@@ -22,6 +22,7 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.LayoutAnimationController;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -214,7 +215,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         private int lastWidth;
         /* access modifiers changed from: private */
         public ThemePreviewMessagesCell messagesCell;
-        private SeekBarView sizeBar;
+        /* access modifiers changed from: private */
+        public SeekBarView sizeBar;
         /* access modifiers changed from: private */
         public int startFontSize = 12;
         private TextPaint textPaint;
@@ -236,11 +238,23 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     TextSizeCell textSizeCell = TextSizeCell.this;
                     boolean unused = ThemeActivity.this.setFontSize(Math.round(((float) textSizeCell.startFontSize) + (((float) (TextSizeCell.this.endFontSize - TextSizeCell.this.startFontSize)) * f)));
                 }
+
+                public CharSequence getContentDescription() {
+                    return String.valueOf(Math.round(((float) TextSizeCell.this.startFontSize) + (((float) (TextSizeCell.this.endFontSize - TextSizeCell.this.startFontSize)) * TextSizeCell.this.sizeBar.getProgress())));
+                }
+
+                public int getStepsCount() {
+                    return TextSizeCell.this.endFontSize - TextSizeCell.this.startFontSize;
+                }
             });
+            this.sizeBar.setImportantForAccessibility(2);
             addView(this.sizeBar, LayoutHelper.createFrame(-1, 38.0f, 51, 5.0f, 5.0f, 39.0f, 0.0f));
             ThemePreviewMessagesCell themePreviewMessagesCell = new ThemePreviewMessagesCell(context, ThemeActivity.this.parentLayout, 0);
             this.messagesCell = themePreviewMessagesCell;
-            addView(themePreviewMessagesCell, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 53.0f, 0.0f, 0.0f));
+            if (Build.VERSION.SDK_INT >= 19) {
+                themePreviewMessagesCell.setImportantForAccessibility(4);
+            }
+            addView(this.messagesCell, LayoutHelper.createFrame(-1, -2.0f, 51, 0.0f, 53.0f, 0.0f, 0.0f));
         }
 
         /* access modifiers changed from: protected */
@@ -267,12 +281,22 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             this.messagesCell.invalidate();
             this.sizeBar.invalidate();
         }
+
+        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+            super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+            this.sizeBar.getSeekBarAccessibilityDelegate().onInitializeAccessibilityNodeInfoInternal(this, accessibilityNodeInfo);
+        }
+
+        public boolean performAccessibilityAction(int i, Bundle bundle) {
+            return super.performAccessibilityAction(i, bundle) || this.sizeBar.getSeekBarAccessibilityDelegate().performAccessibilityActionInternal(this, i, bundle);
+        }
     }
 
     private class BubbleRadiusCell extends FrameLayout {
         /* access modifiers changed from: private */
         public int endRadius = 17;
-        private SeekBarView sizeBar;
+        /* access modifiers changed from: private */
+        public SeekBarView sizeBar;
         /* access modifiers changed from: private */
         public int startRadius = 0;
         private TextPaint textPaint;
@@ -294,7 +318,16 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     BubbleRadiusCell bubbleRadiusCell = BubbleRadiusCell.this;
                     boolean unused = ThemeActivity.this.setBubbleRadius(Math.round(((float) bubbleRadiusCell.startRadius) + (((float) (BubbleRadiusCell.this.endRadius - BubbleRadiusCell.this.startRadius)) * f)), false);
                 }
+
+                public CharSequence getContentDescription() {
+                    return String.valueOf(Math.round(((float) BubbleRadiusCell.this.startRadius) + (((float) (BubbleRadiusCell.this.endRadius - BubbleRadiusCell.this.startRadius)) * BubbleRadiusCell.this.sizeBar.getProgress())));
+                }
+
+                public int getStepsCount() {
+                    return BubbleRadiusCell.this.endRadius - BubbleRadiusCell.this.startRadius;
+                }
             });
+            this.sizeBar.setImportantForAccessibility(2);
             addView(this.sizeBar, LayoutHelper.createFrame(-1, 38.0f, 51, 5.0f, 5.0f, 39.0f, 0.0f));
         }
 
@@ -316,6 +349,15 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         public void invalidate() {
             super.invalidate();
             this.sizeBar.invalidate();
+        }
+
+        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+            super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+            this.sizeBar.getSeekBarAccessibilityDelegate().onInitializeAccessibilityNodeInfoInternal(this, accessibilityNodeInfo);
+        }
+
+        public boolean performAccessibilityAction(int i, Bundle bundle) {
+            return super.performAccessibilityAction(i, bundle) || this.sizeBar.getSeekBarAccessibilityDelegate().performAccessibilityActionInternal(this, i, bundle);
         }
     }
 
@@ -1014,7 +1056,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
                     builder2.setTitle(LocaleController.getString("SortBy", NUM));
                     builder2.setItems(new CharSequence[]{LocaleController.getString("Default", NUM), LocaleController.getString("SortFirstName", NUM), LocaleController.getString("SortLastName", NUM)}, new DialogInterface.OnClickListener(i) {
-                        private final /* synthetic */ int f$1;
+                        public final /* synthetic */ int f$1;
 
                         {
                             this.f$1 = r2;
@@ -1111,8 +1153,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         i2 = i3 / 60;
                     }
                     showDialog(new TimePickerDialog(getParentActivity(), new TimePickerDialog.OnTimeSetListener(i, (TextSettingsCell) view) {
-                        private final /* synthetic */ int f$1;
-                        private final /* synthetic */ TextSettingsCell f$2;
+                        public final /* synthetic */ int f$1;
+                        public final /* synthetic */ TextSettingsCell f$2;
 
                         {
                             this.f$1 = r2;
@@ -1290,7 +1332,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         } catch (Exception unused) {
         }
         AndroidUtilities.runOnUIThread(new Runnable(str) {
-            private final /* synthetic */ String f$1;
+            public final /* synthetic */ String f$1;
 
             {
                 this.f$1 = r2;
@@ -1600,7 +1642,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     charSequenceArr = charSequenceArr2;
                 }
                 builder.setItems(charSequenceArr, iArr, new DialogInterface.OnClickListener(themeInfo) {
-                    private final /* synthetic */ Theme.ThemeInfo f$1;
+                    public final /* synthetic */ Theme.ThemeInfo f$1;
 
                     {
                         this.f$1 = r2;
@@ -1803,7 +1845,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             L_0x0164:
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x017a }
                 java.lang.String r10 = "ShareFile"
-                r0 = 2131626775(0x7f0e0b17, float:1.8880796E38)
+                r0 = 2131626792(0x7f0e0b28, float:1.888083E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r0)     // Catch:{ Exception -> 0x017a }
                 android.content.Intent r8 = android.content.Intent.createChooser(r8, r10)     // Catch:{ Exception -> 0x017a }
                 r10 = 500(0x1f4, float:7.0E-43)
@@ -1846,21 +1888,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 android.app.Activity r10 = r10.getParentActivity()
                 r9.<init>((android.content.Context) r10)
-                r10 = 2131624923(0x7f0e03db, float:1.887704E38)
+                r10 = 2131624931(0x7f0e03e3, float:1.8877056E38)
                 java.lang.String r0 = "DeleteThemeTitle"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setTitle(r10)
-                r10 = 2131624922(0x7f0e03da, float:1.8877037E38)
+                r10 = 2131624930(0x7f0e03e2, float:1.8877054E38)
                 java.lang.String r0 = "DeleteThemeAlert"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setMessage(r10)
-                r10 = 2131624877(0x7f0e03ad, float:1.8876946E38)
+                r10 = 2131624885(0x7f0e03b5, float:1.8876962E38)
                 java.lang.String r0 = "Delete"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$HjGrFd2877SP2gFmUCLASSNAMEvuRyOmw r0 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$HjGrFd2877SP2gFmUCLASSNAMEvuRyOmw
                 r0.<init>(r8)
                 r9.setPositiveButton(r10, r0)
-                r8 = 2131624490(0x7f0e022a, float:1.8876161E38)
+                r8 = 2131624498(0x7f0e0232, float:1.8876177E38)
                 java.lang.String r10 = "Cancel"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r9.setNegativeButton(r8, r1)
@@ -1946,8 +1988,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     charSequenceArr[2] = (tLRPC$TL_theme == null || !tLRPC$TL_theme.creator) ? null : LocaleController.getString("ThemeSetUrl", NUM);
                     charSequenceArr[3] = LocaleController.getString("DeleteTheme", NUM);
                     builder.setItems(charSequenceArr, new int[]{NUM, NUM, NUM, NUM}, new DialogInterface.OnClickListener(themeAccent, themeAccentsListAdapter) {
-                        private final /* synthetic */ Theme.ThemeAccent f$1;
-                        private final /* synthetic */ ThemeActivity.ThemeAccentsListAdapter f$2;
+                        public final /* synthetic */ Theme.ThemeAccent f$1;
+                        public final /* synthetic */ ThemeActivity.ThemeAccentsListAdapter f$2;
 
                         {
                             this.f$1 = r2;
@@ -1991,8 +2033,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     builder.setTitle(LocaleController.getString("DeleteThemeTitle", NUM));
                     builder.setMessage(LocaleController.getString("DeleteThemeAlert", NUM));
                     builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener(themeAccentsListAdapter, themeAccent) {
-                        private final /* synthetic */ ThemeActivity.ThemeAccentsListAdapter f$1;
-                        private final /* synthetic */ Theme.ThemeAccent f$2;
+                        public final /* synthetic */ ThemeActivity.ThemeAccentsListAdapter f$1;
+                        public final /* synthetic */ Theme.ThemeAccent f$2;
 
                         {
                             this.f$1 = r2;
@@ -2122,9 +2164,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     };
                     ThemeActivity.this.themesHorizontalListCell.setDrawDivider(ThemeActivity.this.hasThemeAccents);
                     ThemeActivity.this.themesHorizontalListCell.setFocusable(false);
-                    ThemesHorizontalListCell access$1700 = ThemeActivity.this.themesHorizontalListCell;
-                    access$1700.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(148.0f)));
-                    bubbleRadiusCell = access$1700;
+                    ThemesHorizontalListCell access$1900 = ThemeActivity.this.themesHorizontalListCell;
+                    access$1900.setLayoutParams(new RecyclerView.LayoutParams(-1, AndroidUtilities.dp(148.0f)));
+                    bubbleRadiusCell = access$1900;
                     break;
                 case 12:
                     AnonymousClass4 r103 = new TintRecyclerListView(this, this.mContext) {
@@ -2147,8 +2189,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     ThemeAccentsListAdapter themeAccentsListAdapter = new ThemeAccentsListAdapter(this.mContext);
                     r103.setAdapter(themeAccentsListAdapter);
                     r103.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(themeAccentsListAdapter, r103) {
-                        private final /* synthetic */ ThemeActivity.ThemeAccentsListAdapter f$1;
-                        private final /* synthetic */ RecyclerListView f$2;
+                        public final /* synthetic */ ThemeActivity.ThemeAccentsListAdapter f$1;
+                        public final /* synthetic */ RecyclerListView f$2;
 
                         {
                             this.f$1 = r2;
@@ -2160,7 +2202,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                         }
                     });
                     r103.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener(themeAccentsListAdapter) {
-                        private final /* synthetic */ ThemeActivity.ThemeAccentsListAdapter f$1;
+                        public final /* synthetic */ ThemeActivity.ThemeAccentsListAdapter f$1;
 
                         {
                             this.f$1 = r2;
@@ -2395,12 +2437,12 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     RecyclerListView recyclerListView = (RecyclerListView) viewHolder2.itemView;
                     ThemeAccentsListAdapter themeAccentsListAdapter = (ThemeAccentsListAdapter) recyclerListView.getAdapter();
                     themeAccentsListAdapter.notifyDataSetChanged();
-                    int access$6100 = themeAccentsListAdapter.findCurrentAccent();
-                    if (access$6100 == -1) {
-                        access$6100 = themeAccentsListAdapter.getItemCount() - 1;
+                    int access$6300 = themeAccentsListAdapter.findCurrentAccent();
+                    if (access$6300 == -1) {
+                        access$6300 = themeAccentsListAdapter.getItemCount() - 1;
                     }
-                    if (access$6100 != -1) {
-                        ((LinearLayoutManager) recyclerListView.getLayoutManager()).scrollToPositionWithOffset(access$6100, (ThemeActivity.this.listView.getMeasuredWidth() / 2) - AndroidUtilities.dp(42.0f));
+                    if (access$6300 != -1) {
+                        ((LinearLayoutManager) recyclerListView.getLayoutManager()).scrollToPositionWithOffset(access$6300, (ThemeActivity.this.listView.getMeasuredWidth() / 2) - AndroidUtilities.dp(42.0f));
                         return;
                     }
                     return;

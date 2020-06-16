@@ -568,8 +568,8 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
 
     public void onPreviewFrame(byte[] bArr, Camera camera) {
         this.handler.post(new Runnable(bArr, camera) {
-            private final /* synthetic */ byte[] f$1;
-            private final /* synthetic */ Camera f$2;
+            public final /* synthetic */ byte[] f$1;
+            public final /* synthetic */ Camera f$2;
 
             {
                 this.f$1 = r2;
@@ -592,7 +592,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                         this.recognized = true;
                         camera.stopPreview();
                         AndroidUtilities.runOnUIThread(new Runnable(recognize) {
-                            private final /* synthetic */ MrzRecognizer.Result f$1;
+                            public final /* synthetic */ MrzRecognizer.Result f$1;
 
                             {
                                 this.f$1 = r2;
@@ -615,7 +615,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                 this.recognized = true;
                 camera.stopPreview();
                 AndroidUtilities.runOnUIThread(new Runnable(tryReadQr) {
-                    private final /* synthetic */ String f$1;
+                    public final /* synthetic */ String f$1;
 
                     {
                         this.f$1 = r2;

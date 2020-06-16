@@ -15,7 +15,7 @@ public class GoogleVoiceClientService extends SearchActionVerificationClientServ
     public void performAction(Intent intent, boolean z, Bundle bundle) {
         if (z) {
             AndroidUtilities.runOnUIThread(new Runnable(intent) {
-                private final /* synthetic */ Intent f$0;
+                public final /* synthetic */ Intent f$0;
 
                 {
                     this.f$0 = r1;

@@ -615,8 +615,8 @@ public class FileLoadOperation {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         File[] fileArr = new File[1];
         Utilities.stageQueue.postRunnable(new Runnable(fileArr, countDownLatch) {
-            private final /* synthetic */ File[] f$1;
-            private final /* synthetic */ CountDownLatch f$2;
+            public final /* synthetic */ File[] f$1;
+            public final /* synthetic */ CountDownLatch f$2;
 
             {
                 this.f$1 = r2;
@@ -695,10 +695,10 @@ public class FileLoadOperation {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         int[] iArr = new int[2];
         Utilities.stageQueue.postRunnable(new Runnable(iArr, i, i2, countDownLatch) {
-            private final /* synthetic */ int[] f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ int f$3;
-            private final /* synthetic */ CountDownLatch f$4;
+            public final /* synthetic */ int[] f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$3;
+            public final /* synthetic */ CountDownLatch f$4;
 
             {
                 this.f$1 = r2;
@@ -736,7 +736,7 @@ public class FileLoadOperation {
     /* access modifiers changed from: protected */
     public void removeStreamListener(FileLoadOperationStream fileLoadOperationStream) {
         Utilities.stageQueue.postRunnable(new Runnable(fileLoadOperationStream) {
-            private final /* synthetic */ FileLoadOperationStream f$1;
+            public final /* synthetic */ FileLoadOperationStream f$1;
 
             {
                 this.f$1 = r2;
@@ -1835,7 +1835,7 @@ public class FileLoadOperation {
             start();
         } else if (this.state == 1) {
             Utilities.stageQueue.postRunnable(new Runnable(z) {
-                private final /* synthetic */ boolean f$1;
+                public final /* synthetic */ boolean f$1;
 
                 {
                     this.f$1 = r2;
@@ -2029,7 +2029,7 @@ public class FileLoadOperation {
                             if (i < 3) {
                                 this.state = 1;
                                 Utilities.stageQueue.postRunnable(new Runnable(z) {
-                                    private final /* synthetic */ boolean f$1;
+                                    public final /* synthetic */ boolean f$1;
 
                                     {
                                         this.f$1 = r2;
@@ -2932,7 +2932,7 @@ public class FileLoadOperation {
         this.state = 2;
         if (z) {
             Utilities.stageQueue.postRunnable(new Runnable(i) {
-                private final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$1;
 
                 {
                     this.f$1 = r2;
@@ -3470,7 +3470,7 @@ public class FileLoadOperation {
                 tLRPC$TL_upload_reuploadCdnFile.file_token = this.cdnToken;
                 tLRPC$TL_upload_reuploadCdnFile.request_token = ((TLRPC$TL_upload_cdnFileReuploadNeeded) tLObject2).request_token;
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_upload_reuploadCdnFile, new RequestDelegate(requestInfo) {
-                    private final /* synthetic */ FileLoadOperation.RequestInfo f$1;
+                    public final /* synthetic */ FileLoadOperation.RequestInfo f$1;
 
                     {
                         this.f$1 = r2;

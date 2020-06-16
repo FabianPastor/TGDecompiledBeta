@@ -374,7 +374,7 @@ public class DownloadController extends BaseController implements NotificationCe
 
     public /* synthetic */ void lambda$loadAutoDownloadConfig$2$DownloadController(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-            private final /* synthetic */ TLObject f$1;
+            public final /* synthetic */ TLObject f$1;
 
             {
                 this.f$1 = r2;

@@ -325,7 +325,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
             this.createCell.setText(LocaleController.getString("UseDifferentTheme", NUM), false);
             linearLayout2.addView(this.createCell, LayoutHelper.createLinear(-1, -2));
             this.createCell.setOnClickListener(new View.OnClickListener(context2) {
-                private final /* synthetic */ Context f$1;
+                public final /* synthetic */ Context f$1;
 
                 {
                     this.f$1 = r2;
@@ -525,7 +525,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
                 setCheckText(LocaleController.getString("SetUrlChecking", NUM), "windowBackgroundWhiteGrayText8");
                 this.lastCheckName = str;
                 $$Lambda$ThemeSetUrlActivity$BOI1OGZjC9ZyL0GYbdTT_fDxcTk r13 = new Runnable(str) {
-                    private final /* synthetic */ String f$1;
+                    public final /* synthetic */ String f$1;
 
                     {
                         this.f$1 = r2;
@@ -548,7 +548,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         tLRPC$TL_account_createTheme.title = "";
         tLRPC$TL_account_createTheme.document = new TLRPC$TL_inputDocumentEmpty();
         this.checkReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_createTheme, new RequestDelegate(str) {
-            private final /* synthetic */ String f$1;
+            public final /* synthetic */ String f$1;
 
             {
                 this.f$1 = r2;
@@ -562,8 +562,8 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
 
     public /* synthetic */ void lambda$null$7$ThemeSetUrlActivity(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(str, tLRPC$TL_error) {
-            private final /* synthetic */ String f$1;
-            private final /* synthetic */ TLRPC$TL_error f$2;
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ TLRPC$TL_error f$2;
 
             {
                 this.f$1 = r2;
@@ -658,7 +658,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
                 tLRPC$TL_account_updateTheme.title = obj3;
                 tLRPC$TL_account_updateTheme.flags = i | 2;
                 int sendRequest = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_updateTheme, new RequestDelegate(tLRPC$TL_account_updateTheme) {
-                    private final /* synthetic */ TLRPC$TL_account_updateTheme f$1;
+                    public final /* synthetic */ TLRPC$TL_account_updateTheme f$1;
 
                     {
                         this.f$1 = r2;
@@ -670,7 +670,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
                 }, 2);
                 ConnectionsManager.getInstance(this.currentAccount).bindRequestToGuid(sendRequest, this.classGuid);
                 this.progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener(sendRequest) {
-                    private final /* synthetic */ int f$1;
+                    public final /* synthetic */ int f$1;
 
                     {
                         this.f$1 = r2;
@@ -690,7 +690,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
     public /* synthetic */ void lambda$saveTheme$12$ThemeSetUrlActivity(TLRPC$TL_account_updateTheme tLRPC$TL_account_updateTheme, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject instanceof TLRPC$TL_theme) {
             AndroidUtilities.runOnUIThread(new Runnable((TLRPC$TL_theme) tLObject) {
-                private final /* synthetic */ TLRPC$TL_theme f$1;
+                public final /* synthetic */ TLRPC$TL_theme f$1;
 
                 {
                     this.f$1 = r2;
@@ -702,8 +702,8 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
             });
         } else {
             AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLRPC$TL_account_updateTheme) {
-                private final /* synthetic */ TLRPC$TL_error f$1;
-                private final /* synthetic */ TLRPC$TL_account_updateTheme f$2;
+                public final /* synthetic */ TLRPC$TL_error f$1;
+                public final /* synthetic */ TLRPC$TL_account_updateTheme f$2;
 
                 {
                     this.f$1 = r2;

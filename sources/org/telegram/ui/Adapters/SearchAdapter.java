@@ -118,7 +118,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
     /* access modifiers changed from: private */
     public void processSearch(String str) {
         AndroidUtilities.runOnUIThread(new Runnable(str) {
-            private final /* synthetic */ String f$1;
+            public final /* synthetic */ String f$1;
 
             {
                 this.f$1 = r2;
@@ -136,9 +136,9 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         }
         int i = UserConfig.selectedAccount;
         Utilities.searchQueue.postRunnable(new Runnable(str, new ArrayList(ContactsController.getInstance(i).contacts), i) {
-            private final /* synthetic */ String f$1;
-            private final /* synthetic */ ArrayList f$2;
-            private final /* synthetic */ int f$3;
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ ArrayList f$2;
+            public final /* synthetic */ int f$3;
 
             {
                 this.f$1 = r2;
@@ -246,8 +246,8 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
 
     private void updateSearchResults(ArrayList<TLObject> arrayList, ArrayList<CharSequence> arrayList2) {
         AndroidUtilities.runOnUIThread(new Runnable(arrayList, arrayList2) {
-            private final /* synthetic */ ArrayList f$1;
-            private final /* synthetic */ ArrayList f$2;
+            public final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ ArrayList f$2;
 
             {
                 this.f$1 = r2;

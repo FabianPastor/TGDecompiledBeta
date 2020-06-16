@@ -99,8 +99,8 @@ public class VoIPHelper {
                 Intent intent = new Intent("android.settings.AIRPLANE_MODE_SETTINGS");
                 if (intent.resolveActivity(activity.getPackageManager()) != null) {
                     builder2.setNeutralButton(LocaleController.getString("VoipOfflineOpenSettings", NUM), new DialogInterface.OnClickListener(activity, intent) {
-                        private final /* synthetic */ Activity f$0;
-                        private final /* synthetic */ Intent f$1;
+                        public final /* synthetic */ Activity f$0;
+                        public final /* synthetic */ Intent f$1;
 
                         {
                             this.f$0 = r1;
@@ -130,7 +130,7 @@ public class VoIPHelper {
                     builder.setTitle(LocaleController.getString("VoipOngoingAlertTitle", NUM));
                     builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipOngoingAlert", NUM, ContactsController.formatName(user.first_name, user.last_name), ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name))));
                     builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(activity) {
-                        private final /* synthetic */ Activity f$1;
+                        public final /* synthetic */ Activity f$1;
 
                         {
                             this.f$1 = r2;
@@ -154,7 +154,7 @@ public class VoIPHelper {
     static /* synthetic */ void lambda$initiateCall$2(TLRPC$User tLRPC$User, Activity activity, DialogInterface dialogInterface, int i) {
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().hangUp(new Runnable(activity) {
-                private final /* synthetic */ Activity f$1;
+                public final /* synthetic */ Activity f$1;
 
                 {
                     this.f$1 = r2;
@@ -194,7 +194,7 @@ public class VoIPHelper {
             builder.setMessage(LocaleController.getString("VoipNeedMicPermission", NUM));
             builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
             builder.setNegativeButton(LocaleController.getString("Settings", NUM), new DialogInterface.OnClickListener(activity) {
-                private final /* synthetic */ Activity f$0;
+                public final /* synthetic */ Activity f$0;
 
                 {
                     this.f$0 = r1;
@@ -205,7 +205,7 @@ public class VoIPHelper {
                 }
             });
             builder.show().setOnDismissListener(new DialogInterface.OnDismissListener(runnable) {
-                private final /* synthetic */ Runnable f$0;
+                public final /* synthetic */ Runnable f$0;
 
                 {
                     this.f$0 = r1;

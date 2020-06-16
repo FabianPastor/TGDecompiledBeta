@@ -788,7 +788,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                                     builder2.setTitle(LocaleController.getString("AppName", NUM));
                                     builder2.setMessage(LocaleController.getString("AddBotAsAdmin", NUM));
                                     builder2.setPositiveButton(LocaleController.getString("MakeAdmin", NUM), new DialogInterface.OnClickListener(tLRPC$User) {
-                                        private final /* synthetic */ TLRPC$User f$1;
+                                        public final /* synthetic */ TLRPC$User f$1;
 
                                         {
                                             this.f$1 = r2;
@@ -1034,7 +1034,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 checkBoxCellArr[0].setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
                 linearLayout.addView(checkBoxCellArr[0], LayoutHelper.createLinear(-1, -2));
                 checkBoxCellArr[0].setOnClickListener(new View.OnClickListener(checkBoxCellArr) {
-                    private final /* synthetic */ CheckBoxCell[] f$0;
+                    public final /* synthetic */ CheckBoxCell[] f$0;
 
                     {
                         this.f$0 = r1;
@@ -1048,7 +1048,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                 builder.setView(linearLayout);
             }
             builder.setPositiveButton(LocaleController.getString("Add", NUM), new DialogInterface.OnClickListener(checkBoxCellArr) {
-                private final /* synthetic */ CheckBoxCell[] f$1;
+                public final /* synthetic */ CheckBoxCell[] f$1;
 
                 {
                     this.f$1 = r2;
@@ -1458,7 +1458,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             }
             DispatchQueue dispatchQueue = Utilities.searchQueue;
             $$Lambda$GroupCreateActivity$GroupCreateAdapter$9OX1wBUGkwo4l1vSorMnDVBQeb4 r1 = new Runnable(str) {
-                private final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
@@ -1474,7 +1474,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
 
         public /* synthetic */ void lambda$searchDialogs$3$GroupCreateActivity$GroupCreateAdapter(String str) {
             AndroidUtilities.runOnUIThread(new Runnable(str) {
-                private final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
@@ -1490,7 +1490,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             this.searchAdapterHelper.queryServerSearch(str, true, GroupCreateActivity.this.isAlwaysShare || GroupCreateActivity.this.isNeverShare, true, false, false, 0, false, 0, 0);
             DispatchQueue dispatchQueue = Utilities.searchQueue;
             $$Lambda$GroupCreateActivity$GroupCreateAdapter$0GX4ESbcO5iM0ilImNc3QCLvsKs r1 = new Runnable(str) {
-                private final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
@@ -1681,8 +1681,8 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
 
         private void updateSearchResults(ArrayList<TLObject> arrayList, ArrayList<CharSequence> arrayList2) {
             AndroidUtilities.runOnUIThread(new Runnable(arrayList, arrayList2) {
-                private final /* synthetic */ ArrayList f$1;
-                private final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ ArrayList f$2;
 
                 {
                     this.f$1 = r2;

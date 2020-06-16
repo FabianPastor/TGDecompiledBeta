@@ -157,7 +157,7 @@ public class SizeNotifierFrameLayout extends AdjustPanFrameLayout {
             this.keyboardHeight = measureKeyboardHeight();
             Point point = AndroidUtilities.displaySize;
             post(new Runnable(point.x > point.y) {
-                private final /* synthetic */ boolean f$1;
+                public final /* synthetic */ boolean f$1;
 
                 {
                     this.f$1 = r2;

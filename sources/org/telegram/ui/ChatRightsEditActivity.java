@@ -367,7 +367,7 @@ public class ChatRightsEditActivity extends BaseFragment {
             }
         });
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(context) {
-            private final /* synthetic */ Context f$1;
+            public final /* synthetic */ Context f$1;
 
             {
                 this.f$1 = r2;
@@ -449,7 +449,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                         bottomSheetCellArr[i3].setTextAndIcon((CharSequence) str, 0);
                         linearLayout2.addView(bottomSheetCellArr[i3], LayoutHelper.createLinear(-1, -2));
                         bottomSheetCellArr[i3].setOnClickListener(new View.OnClickListener(builder) {
-                            private final /* synthetic */ BottomSheet.Builder f$1;
+                            public final /* synthetic */ BottomSheet.Builder f$1;
 
                             {
                                 this.f$1 = r2;
@@ -653,7 +653,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                 datePickerDialog.setButton(-2, LocaleController.getString("Cancel", NUM), $$Lambda$ChatRightsEditActivity$nJ41ofgPd7pnNhbrTqNHlhWO7ws.INSTANCE);
                 if (Build.VERSION.SDK_INT >= 21) {
                     datePickerDialog.setOnShowListener(new DialogInterface.OnShowListener(datePicker) {
-                        private final /* synthetic */ DatePicker f$0;
+                        public final /* synthetic */ DatePicker f$0;
 
                         {
                             this.f$0 = r1;
@@ -678,7 +678,7 @@ public class ChatRightsEditActivity extends BaseFragment {
         instance.set(i, i2, i3);
         try {
             TimePickerDialog timePickerDialog = new TimePickerDialog(getParentActivity(), new TimePickerDialog.OnTimeSetListener((int) (instance.getTime().getTime() / 1000)) {
-                private final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$1;
 
                 {
                     this.f$1 = r2;
@@ -770,9 +770,9 @@ public class ChatRightsEditActivity extends BaseFragment {
                 tLRPC$TL_channels_editCreator.password = tLRPC$InputCheckPasswordSRP2;
                 tLRPC$TL_channels_editCreator.user_id = getMessagesController().getInputUser(this.currentUser);
                 getConnectionsManager().sendRequest(tLRPC$TL_channels_editCreator, new RequestDelegate(tLRPC$InputCheckPasswordSRP, twoStepVerificationActivity, tLRPC$TL_channels_editCreator) {
-                    private final /* synthetic */ TLRPC$InputCheckPasswordSRP f$1;
-                    private final /* synthetic */ TwoStepVerificationActivity f$2;
-                    private final /* synthetic */ TLRPC$TL_channels_editCreator f$3;
+                    public final /* synthetic */ TLRPC$InputCheckPasswordSRP f$1;
+                    public final /* synthetic */ TwoStepVerificationActivity f$2;
+                    public final /* synthetic */ TLRPC$TL_channels_editCreator f$3;
 
                     {
                         this.f$1 = r2;
@@ -787,8 +787,8 @@ public class ChatRightsEditActivity extends BaseFragment {
                 return;
             }
             MessagesController.getInstance(this.currentAccount).convertToMegaGroup(getParentActivity(), this.chatId, this, new MessagesStorage.IntCallback(tLRPC$InputCheckPasswordSRP, twoStepVerificationActivity) {
-                private final /* synthetic */ TLRPC$InputCheckPasswordSRP f$1;
-                private final /* synthetic */ TwoStepVerificationActivity f$2;
+                public final /* synthetic */ TLRPC$InputCheckPasswordSRP f$1;
+                public final /* synthetic */ TwoStepVerificationActivity f$2;
 
                 {
                     this.f$1 = r2;
@@ -812,10 +812,10 @@ public class ChatRightsEditActivity extends BaseFragment {
 
     public /* synthetic */ void lambda$initTransfer$14$ChatRightsEditActivity(TLRPC$InputCheckPasswordSRP tLRPC$InputCheckPasswordSRP, TwoStepVerificationActivity twoStepVerificationActivity, TLRPC$TL_channels_editCreator tLRPC$TL_channels_editCreator, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLRPC$InputCheckPasswordSRP, twoStepVerificationActivity, tLRPC$TL_channels_editCreator) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLRPC$InputCheckPasswordSRP f$2;
-            private final /* synthetic */ TwoStepVerificationActivity f$3;
-            private final /* synthetic */ TLRPC$TL_channels_editCreator f$4;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLRPC$InputCheckPasswordSRP f$2;
+            public final /* synthetic */ TwoStepVerificationActivity f$3;
+            public final /* synthetic */ TLRPC$TL_channels_editCreator f$4;
 
             {
                 this.f$1 = r2;
@@ -935,7 +935,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                     showDialog(builder2.create());
                 } else if ("SRP_ID_INVALID".equals(tLRPC$TL_error2.text)) {
                     ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_account_getPassword(), new RequestDelegate(twoStepVerificationActivity2) {
-                        private final /* synthetic */ TwoStepVerificationActivity f$1;
+                        public final /* synthetic */ TwoStepVerificationActivity f$1;
 
                         {
                             this.f$1 = r2;
@@ -966,7 +966,7 @@ public class ChatRightsEditActivity extends BaseFragment {
     public /* synthetic */ void lambda$null$9$ChatRightsEditActivity(DialogInterface dialogInterface, int i) {
         TwoStepVerificationActivity twoStepVerificationActivity = new TwoStepVerificationActivity();
         twoStepVerificationActivity.setDelegate(new TwoStepVerificationActivity.TwoStepVerificationActivityDelegate(twoStepVerificationActivity) {
-            private final /* synthetic */ TwoStepVerificationActivity f$1;
+            public final /* synthetic */ TwoStepVerificationActivity f$1;
 
             {
                 this.f$1 = r2;
@@ -985,9 +985,9 @@ public class ChatRightsEditActivity extends BaseFragment {
 
     public /* synthetic */ void lambda$null$12$ChatRightsEditActivity(TwoStepVerificationActivity twoStepVerificationActivity, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, twoStepVerificationActivity) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
-            private final /* synthetic */ TwoStepVerificationActivity f$3;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TwoStepVerificationActivity f$3;
 
             {
                 this.f$1 = r2;

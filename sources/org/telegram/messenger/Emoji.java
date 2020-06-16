@@ -83,8 +83,8 @@ public class Emoji {
             if (!zArr[b][s]) {
                 zArr[b][s] = true;
                 Utilities.globalQueue.postRunnable(new Runnable(b, s) {
-                    private final /* synthetic */ byte f$0;
-                    private final /* synthetic */ short f$1;
+                    public final /* synthetic */ byte f$0;
+                    public final /* synthetic */ short f$1;
 
                     {
                         this.f$0 = r1;

@@ -251,8 +251,8 @@ public class PollCreateActivity extends BaseFragment {
                         }
                         if (PollCreateActivity.this.parentFragment.isInScheduleMode()) {
                             AlertsCreator.createScheduleDatePickerDialog(PollCreateActivity.this.getParentActivity(), PollCreateActivity.this.parentFragment.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(tLRPC$TL_messageMediaPoll, hashMap) {
-                                private final /* synthetic */ TLRPC$TL_messageMediaPoll f$1;
-                                private final /* synthetic */ HashMap f$2;
+                                public final /* synthetic */ TLRPC$TL_messageMediaPoll f$1;
+                                public final /* synthetic */ HashMap f$2;
 
                                 {
                                     this.f$1 = r2;

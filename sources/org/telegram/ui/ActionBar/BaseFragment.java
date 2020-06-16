@@ -476,7 +476,7 @@ public class BaseFragment {
                 this.visibleDialog = dialog;
                 dialog.setCanceledOnTouchOutside(true);
                 this.visibleDialog.setOnDismissListener(new DialogInterface.OnDismissListener(onDismissListener) {
-                    private final /* synthetic */ DialogInterface.OnDismissListener f$1;
+                    public final /* synthetic */ DialogInterface.OnDismissListener f$1;
 
                     {
                         this.f$1 = r2;

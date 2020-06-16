@@ -6,6 +6,7 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.ContentObserver;
+import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -419,7 +420,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 }
             }
             MediaController.this.recordQueue.postRunnable(new Runnable(byteBuffer) {
-                private final /* synthetic */ ByteBuffer f$1;
+                public final /* synthetic */ ByteBuffer f$1;
 
                 {
                     this.f$1 = r2;
@@ -501,6 +502,25 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         public MessageObject messageObject;
         public String path;
         public String title;
+    }
+
+    public static class CropState {
+        public float cropPh;
+        public float cropPw;
+        public float cropPx;
+        public float cropPy;
+        public float cropRotate;
+        public float cropScale;
+        public boolean freeform;
+        public int height;
+        public float lockedAspectRatio;
+        public Matrix matrix;
+        public float scale;
+        public float stateScale;
+        public int transformHeight;
+        public int transformRotation;
+        public int transformWidth;
+        public int width;
     }
 
     public static class SavedFilterState {
@@ -630,6 +650,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     public static class MediaEditState {
         public long averageDuration;
         public CharSequence caption;
+        public CropState cropState;
+        public ArrayList<VideoEditedInfo.MediaEntity> croppedMediaEntities;
+        public String croppedPaintPath;
         public String croppedPath;
         public VideoEditedInfo editedInfo;
         public ArrayList<TLRPC$MessageEntity> entities;
@@ -656,6 +679,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             this.filterPath = null;
             this.imagePath = null;
             this.paintPath = null;
+            this.croppedPaintPath = null;
             this.isFiltered = false;
             this.isPainted = false;
             this.isCropped = false;
@@ -666,6 +690,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             this.savedFilterState = null;
             this.croppedPath = null;
             this.stickers = null;
+            this.cropState = null;
         }
     }
 
@@ -864,7 +889,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         AlbumEntry albumEntry;
         if (Build.VERSION.SDK_INT >= 24 && (albumEntry = allPhotosAlbumEntry) != null) {
             Utilities.globalQueue.postRunnable(new Runnable(albumEntry.photos.size()) {
-                private final /* synthetic */ int f$0;
+                public final /* synthetic */ int f$0;
 
                 {
                     this.f$0 = r1;
@@ -1156,7 +1181,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             AnonymousClass3 r1 = new PhoneStateListener() {
                 public void onCallStateChanged(int i, String str) {
                     AndroidUtilities.runOnUIThread(new Runnable(i) {
-                        private final /* synthetic */ int f$1;
+                        public final /* synthetic */ int f$1;
 
                         {
                             this.f$1 = r2;
@@ -1216,7 +1241,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public void onAudioFocusChange(int i) {
         AndroidUtilities.runOnUIThread(new Runnable(i) {
-            private final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$1;
 
             {
                 this.f$1 = r2;
@@ -1285,7 +1310,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 public void run() {
                     synchronized (MediaController.this.sync) {
                         AndroidUtilities.runOnUIThread(new Runnable(messageObject) {
-                            private final /* synthetic */ MessageObject f$1;
+                            public final /* synthetic */ MessageObject f$1;
 
                             {
                                 this.f$1 = r2;
@@ -1349,7 +1374,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                                 String unused2 = MediaController.this.shouldSavePositionForCurrentAudio;
                                 long unused3 = MediaController.this.lastSaveTime = SystemClock.elapsedRealtime();
                                 Utilities.globalQueue.postRunnable(new Runnable(f) {
-                                    private final /* synthetic */ float f$1;
+                                    public final /* synthetic */ float f$1;
 
                                     {
                                         this.f$1 = r2;
@@ -2015,7 +2040,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             }
             if (z2) {
                 AndroidUtilities.runOnUIThread(new Runnable(messageObject2) {
-                    private final /* synthetic */ MessageObject f$1;
+                    public final /* synthetic */ MessageObject f$1;
 
                     {
                         this.f$1 = r2;
@@ -2170,14 +2195,14 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     PhotoViewer.getInstance().injectVideoPlayer(this.videoPlayer);
                     MessageObject messageObject = this.playingMessageObject;
                     this.goingToShowMessageObject = messageObject;
-                    NotificationCenter.getInstance(messageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingGoingToStop, this.playingMessageObject, true);
+                    NotificationCenter.getInstance(messageObject.currentAccount).postNotificationName(NotificationCenter.messagePlayingGoingToStop, this.playingMessageObject, Boolean.TRUE);
                 } else {
                     long currentPosition = videoPlayer3.getCurrentPosition();
                     MessageObject messageObject2 = this.playingMessageObject;
                     if (messageObject2 != null && messageObject2.isVideo() && currentPosition > 0 && currentPosition != -9223372036854775807L) {
                         MessageObject messageObject3 = this.playingMessageObject;
                         messageObject3.audioProgressMs = (int) currentPosition;
-                        NotificationCenter.getInstance(messageObject3.currentAccount).postNotificationName(NotificationCenter.messagePlayingGoingToStop, this.playingMessageObject, false);
+                        NotificationCenter.getInstance(messageObject3.currentAccount).postNotificationName(NotificationCenter.messagePlayingGoingToStop, this.playingMessageObject, Boolean.FALSE);
                     }
                     this.videoPlayer.releasePlayer(true);
                     this.videoPlayer = null;
@@ -3189,7 +3214,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 if (z5) {
                     if (!messageObject2.mediaExists && file3 != file) {
                         AndroidUtilities.runOnUIThread(new Runnable(file3) {
-                            private final /* synthetic */ File f$1;
+                            public final /* synthetic */ File f$1;
 
                             {
                                 this.f$1 = r2;
@@ -3302,7 +3327,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                     if (z5) {
                         if (!messageObject2.mediaExists && file2 != file) {
                             AndroidUtilities.runOnUIThread(new Runnable(file2) {
-                                private final /* synthetic */ File f$1;
+                                public final /* synthetic */ File f$1;
 
                                 {
                                     this.f$1 = r2;
@@ -3612,10 +3637,10 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
         DispatchQueue dispatchQueue = this.recordQueue;
         $$Lambda$MediaController$mfuAZ38cha75Th9PPAwXrDA_YcI r2 = new Runnable(i, i2, j, messageObject) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ long f$3;
-            private final /* synthetic */ MessageObject f$4;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ long f$3;
+            public final /* synthetic */ MessageObject f$4;
 
             {
                 this.f$1 = r2;
@@ -3635,8 +3660,8 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     public /* synthetic */ void lambda$startRecording$18$MediaController(int i, int i2, long j, MessageObject messageObject) {
         if (this.audioRecorder != null) {
             AndroidUtilities.runOnUIThread(new Runnable(i, i2) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -3666,8 +3691,8 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         try {
             if (startRecord(file.getAbsolutePath(), 16000) == 0) {
                 AndroidUtilities.runOnUIThread(new Runnable(i, i2) {
-                    private final /* synthetic */ int f$1;
-                    private final /* synthetic */ int f$2;
+                    public final /* synthetic */ int f$1;
+                    public final /* synthetic */ int f$2;
 
                     {
                         this.f$1 = r2;
@@ -3691,8 +3716,8 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             this.audioRecorder.startRecording();
             this.recordQueue.postRunnable(this.recordRunnable);
             AndroidUtilities.runOnUIThread(new Runnable(i, i2) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -3716,8 +3741,8 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 FileLog.e((Throwable) e2);
             }
             AndroidUtilities.runOnUIThread(new Runnable(i, i2) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -3748,7 +3773,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public /* synthetic */ void lambda$null$17$MediaController(int i, int i2) {
         this.recordStartRunnable = null;
-        NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.recordStarted, Integer.valueOf(i2), true);
+        NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.recordStarted, Integer.valueOf(i2), Boolean.TRUE);
     }
 
     public void generateWaveform(MessageObject messageObject) {
@@ -3757,9 +3782,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         if (!this.generatingWaveform.containsKey(str)) {
             this.generatingWaveform.put(str, messageObject);
             Utilities.globalQueue.postRunnable(new Runnable(absolutePath, str, messageObject) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ String f$2;
-                private final /* synthetic */ MessageObject f$3;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$2;
+                public final /* synthetic */ MessageObject f$3;
 
                 {
                     this.f$1 = r2;
@@ -3776,9 +3801,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public /* synthetic */ void lambda$generateWaveform$20$MediaController(String str, String str2, MessageObject messageObject) {
         AndroidUtilities.runOnUIThread(new Runnable(str2, getWaveform(str), messageObject) {
-            private final /* synthetic */ String f$1;
-            private final /* synthetic */ byte[] f$2;
-            private final /* synthetic */ MessageObject f$3;
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ byte[] f$2;
+            public final /* synthetic */ MessageObject f$3;
 
             {
                 this.f$1 = r2;
@@ -3821,11 +3846,11 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     public void stopRecordingInternal(int i, boolean z, int i2) {
         if (i != 0) {
             this.fileEncodingQueue.postRunnable(new Runnable(this.recordingAudio, this.recordingAudioFile, i, z, i2) {
-                private final /* synthetic */ TLRPC$TL_document f$1;
-                private final /* synthetic */ File f$2;
-                private final /* synthetic */ int f$3;
-                private final /* synthetic */ boolean f$4;
-                private final /* synthetic */ int f$5;
+                public final /* synthetic */ TLRPC$TL_document f$1;
+                public final /* synthetic */ File f$2;
+                public final /* synthetic */ int f$3;
+                public final /* synthetic */ boolean f$4;
+                public final /* synthetic */ int f$5;
 
                 {
                     this.f$1 = r2;
@@ -3861,11 +3886,11 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     public /* synthetic */ void lambda$stopRecordingInternal$22$MediaController(TLRPC$TL_document tLRPC$TL_document, File file, int i, boolean z, int i2) {
         stopRecord();
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_document, file, i, z, i2) {
-            private final /* synthetic */ TLRPC$TL_document f$1;
-            private final /* synthetic */ File f$2;
-            private final /* synthetic */ int f$3;
-            private final /* synthetic */ boolean f$4;
-            private final /* synthetic */ int f$5;
+            public final /* synthetic */ TLRPC$TL_document f$1;
+            public final /* synthetic */ File f$2;
+            public final /* synthetic */ int f$3;
+            public final /* synthetic */ boolean f$4;
+            public final /* synthetic */ int f$5;
 
             {
                 this.f$1 = r2;
@@ -3921,7 +3946,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             instance.postNotificationName(i4, objArr);
         } else {
             z2 = false;
-            NotificationCenter.getInstance(this.recordingCurrentAccount).postNotificationName(NotificationCenter.audioRecordTooShort, Integer.valueOf(this.recordingGuid), false, Integer.valueOf((int) j));
+            NotificationCenter.getInstance(this.recordingCurrentAccount).postNotificationName(NotificationCenter.audioRecordTooShort, Integer.valueOf(this.recordingGuid), Boolean.FALSE, Integer.valueOf((int) j));
             file.delete();
         }
         requestAudioFocus(z2);
@@ -3934,9 +3959,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             this.recordStartRunnable = null;
         }
         this.recordQueue.postRunnable(new Runnable(i, z, i2) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ boolean f$2;
-            private final /* synthetic */ int f$3;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ boolean f$2;
+            public final /* synthetic */ int f$3;
 
             {
                 this.f$1 = r2;
@@ -3978,7 +4003,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             } catch (Exception unused) {
             }
             AndroidUtilities.runOnUIThread(new Runnable(i) {
-                private final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$1;
 
                 {
                     this.f$1 = r2;
@@ -4044,7 +4069,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r3 = 2
             r2.<init>(r10, r3)     // Catch:{ Exception -> 0x005e }
             java.lang.String r10 = "Loading"
-            r1 = 2131625592(0x7f0e0678, float:1.8878396E38)
+            r1 = 2131625605(0x7f0e0685, float:1.8878423E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r1)     // Catch:{ Exception -> 0x005b }
             r2.setMessage(r10)     // Catch:{ Exception -> 0x005b }
             r2.setCanceledOnTouchOutside(r0)     // Catch:{ Exception -> 0x005b }
@@ -4245,11 +4270,11 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r13)     // Catch:{ all -> 0x010a }
         L_0x00ff:
             long r12 = r3 + r0
-            r1 = r19
             r14 = r5
             r3 = 2
             r4 = 1
             r5 = 0
+            r1 = r19
             r6 = r21
             goto L_0x00c4
         L_0x010a:
@@ -4651,7 +4676,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public static void loadGalleryPhotosAlbums(int i) {
         Thread thread = new Thread(new Runnable(i) {
-            private final /* synthetic */ int f$0;
+            public final /* synthetic */ int f$0;
 
             {
                 this.f$0 = r1;
@@ -4867,7 +4892,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r37 = r5
             java.lang.String r5 = "AllPhotos"
             r38 = r7
-            r7 = 2131624157(0x7f0e00dd, float:1.8875486E38)
+            r7 = 2131624165(0x7f0e00e5, float:1.8875502E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r7)     // Catch:{ all -> 0x020b }
             r7 = 0
             r4.<init>(r7, r5, r3)     // Catch:{ all -> 0x020b }
@@ -4882,7 +4907,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             if (r32 != 0) goto L_0x0186
             org.telegram.messenger.MediaController$AlbumEntry r5 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x0181 }
             r39 = r8
-            r7 = 2131624156(0x7f0e00dc, float:1.8875484E38)
+            r7 = 2131624164(0x7f0e00e4, float:1.88755E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r1, r7)     // Catch:{ all -> 0x0181 }
             r7 = 0
             r5.<init>(r7, r8, r3)     // Catch:{ all -> 0x0181 }
@@ -5178,7 +5203,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             org.telegram.messenger.MediaController$AlbumEntry r4 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x0438 }
             java.lang.String r5 = "AllVideos"
             r21 = r6
-            r6 = 2131624158(0x7f0e00de, float:1.8875488E38)
+            r6 = 2131624166(0x7f0e00e6, float:1.8875504E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)     // Catch:{ all -> 0x0438 }
             r6 = 0
             r4.<init>(r6, r5, r3)     // Catch:{ all -> 0x0438 }
@@ -5201,7 +5226,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             if (r32 != 0) goto L_0x03d8
             org.telegram.messenger.MediaController$AlbumEntry r5 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x03d3 }
             r20 = r7
-            r6 = 2131624156(0x7f0e00dc, float:1.8875484E38)
+            r6 = 2131624164(0x7f0e00e4, float:1.88755E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r1, r6)     // Catch:{ all -> 0x03d3 }
             r6 = 0
             r5.<init>(r6, r7, r3)     // Catch:{ all -> 0x03d3 }
@@ -5355,13 +5380,13 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             AndroidUtilities.cancelRunOnUIThread(runnable);
         }
         $$Lambda$MediaController$sfYDVGl6HXU6g4wE30VsRlfsGw r1 = new Runnable(i, arrayList, arrayList2, num, albumEntry, albumEntry2, albumEntry3) {
-            private final /* synthetic */ int f$0;
-            private final /* synthetic */ ArrayList f$1;
-            private final /* synthetic */ ArrayList f$2;
-            private final /* synthetic */ Integer f$3;
-            private final /* synthetic */ MediaController.AlbumEntry f$4;
-            private final /* synthetic */ MediaController.AlbumEntry f$5;
-            private final /* synthetic */ MediaController.AlbumEntry f$6;
+            public final /* synthetic */ int f$0;
+            public final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ ArrayList f$2;
+            public final /* synthetic */ Integer f$3;
+            public final /* synthetic */ MediaController.AlbumEntry f$4;
+            public final /* synthetic */ MediaController.AlbumEntry f$5;
+            public final /* synthetic */ MediaController.AlbumEntry f$6;
 
             {
                 this.f$0 = r1;
@@ -5544,13 +5569,13 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             videoEditedInfo.videoConvertFirstWrite = false;
         }
         AndroidUtilities.runOnUIThread(new Runnable(z2, z, videoConvertMessage, file, f, z3, j) {
-            private final /* synthetic */ boolean f$1;
-            private final /* synthetic */ boolean f$2;
-            private final /* synthetic */ MediaController.VideoConvertMessage f$3;
-            private final /* synthetic */ File f$4;
-            private final /* synthetic */ float f$5;
-            private final /* synthetic */ boolean f$6;
-            private final /* synthetic */ long f$7;
+            public final /* synthetic */ boolean f$1;
+            public final /* synthetic */ boolean f$2;
+            public final /* synthetic */ MediaController.VideoConvertMessage f$3;
+            public final /* synthetic */ File f$4;
+            public final /* synthetic */ float f$5;
+            public final /* synthetic */ boolean f$6;
+            public final /* synthetic */ long f$7;
 
             {
                 this.f$1 = r2;
@@ -5627,30 +5652,29 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     /* access modifiers changed from: private */
     /* JADX WARNING: Removed duplicated region for block: B:28:0x0074  */
     /* JADX WARNING: Removed duplicated region for block: B:29:0x0079  */
-    /* JADX WARNING: Removed duplicated region for block: B:34:0x0088  */
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x008e  */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x011c  */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x012a  */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x0160 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x0089  */
+    /* JADX WARNING: Removed duplicated region for block: B:37:0x008e  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x0108  */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x0116  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean convertVideo(org.telegram.messenger.MediaController.VideoConvertMessage r36) {
+    public boolean convertVideo(org.telegram.messenger.MediaController.VideoConvertMessage r38) {
         /*
-            r35 = this;
-            r9 = r35
-            r0 = r36
+            r37 = this;
+            r9 = r37
+            r0 = r38
             org.telegram.messenger.MessageObject r1 = r0.messageObject
             org.telegram.messenger.VideoEditedInfo r2 = r0.videoEditedInfo
-            if (r1 == 0) goto L_0x0178
+            if (r1 == 0) goto L_0x0165
             if (r2 != 0) goto L_0x000e
-            goto L_0x0178
+            goto L_0x0165
         L_0x000e:
             java.lang.String r4 = r2.originalPath
             long r5 = r2.startTime
             long r7 = r2.endTime
             int r10 = r2.resultWidth
             int r11 = r2.resultHeight
-            int r12 = r2.rotationValue
-            int r13 = r2.originalWidth
+            int r13 = r2.rotationValue
+            int r12 = r2.originalWidth
             int r14 = r2.originalHeight
             int r15 = r2.framerate
             int r3 = r2.bitrate
@@ -5715,70 +5739,57 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         L_0x007e:
             r20 = r15
         L_0x0080:
-            r10 = 270(0x10e, float:3.78E-43)
-            r11 = 180(0xb4, float:2.52E-43)
-            r15 = 90
-            if (r12 != r15) goto L_0x008e
-            r11 = r16
-            r12 = r17
-        L_0x008c:
-            r15 = 0
-            goto L_0x00a6
-        L_0x008e:
-            if (r12 != r11) goto L_0x0097
-            r12 = r16
-            r11 = r17
-            r10 = 180(0xb4, float:2.52E-43)
-            goto L_0x008c
-        L_0x0097:
-            if (r12 != r10) goto L_0x00a0
-            r11 = r16
-            r12 = r17
             r10 = 90
-            goto L_0x008c
-        L_0x00a0:
-            r15 = r12
-            r12 = r16
+            if (r13 == r10) goto L_0x008e
+            r10 = 270(0x10e, float:3.78E-43)
+            if (r13 != r10) goto L_0x0089
+            goto L_0x008e
+        L_0x0089:
+            r15 = r16
             r11 = r17
-            r10 = 0
-        L_0x00a6:
-            java.util.ArrayList<org.telegram.messenger.VideoEditedInfo$MediaEntity> r1 = r2.mediaEntities
-            if (r1 != 0) goto L_0x00cc
-            java.lang.String r1 = r2.paintPath
-            if (r1 != 0) goto L_0x00cc
-            org.telegram.messenger.MediaController$SavedFilterState r1 = r2.filterState
-            if (r1 != 0) goto L_0x00cc
-            if (r12 != r13) goto L_0x00cc
-            if (r11 != r14) goto L_0x00cc
-            if (r10 != 0) goto L_0x00cc
-            boolean r1 = r2.roundVideo
-            if (r1 != 0) goto L_0x00cc
-            int r1 = android.os.Build.VERSION.SDK_INT
-            r10 = 18
-            if (r1 < r10) goto L_0x00c9
-            r13 = -1
-            int r1 = (r5 > r13 ? 1 : (r5 == r13 ? 0 : -1))
-            if (r1 == 0) goto L_0x00c9
-            goto L_0x00cc
-        L_0x00c9:
+            goto L_0x0092
+        L_0x008e:
+            r11 = r16
+            r15 = r17
+        L_0x0092:
+            org.telegram.messenger.MediaController$CropState r10 = r2.cropState
+            if (r10 != 0) goto L_0x00bc
+            java.util.ArrayList<org.telegram.messenger.VideoEditedInfo$MediaEntity> r10 = r2.mediaEntities
+            if (r10 != 0) goto L_0x00bc
+            java.lang.String r10 = r2.paintPath
+            if (r10 != 0) goto L_0x00bc
+            org.telegram.messenger.MediaController$SavedFilterState r10 = r2.filterState
+            if (r10 != 0) goto L_0x00bc
+            if (r15 != r12) goto L_0x00bc
+            if (r11 != r14) goto L_0x00bc
+            if (r13 != 0) goto L_0x00bc
+            boolean r10 = r2.roundVideo
+            if (r10 != 0) goto L_0x00bc
+            int r10 = android.os.Build.VERSION.SDK_INT
+            r12 = 18
+            if (r10 < r12) goto L_0x00b9
+            r16 = -1
+            int r10 = (r5 > r16 ? 1 : (r5 == r16 ? 0 : -1))
+            if (r10 == 0) goto L_0x00b9
+            goto L_0x00bc
+        L_0x00b9:
             r23 = 0
-            goto L_0x00ce
-        L_0x00cc:
+            goto L_0x00be
+        L_0x00bc:
             r23 = 1
-        L_0x00ce:
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext
-            java.lang.String r10 = "videoconvert"
-            r13 = 0
-            android.content.SharedPreferences r1 = r1.getSharedPreferences(r10, r13)
-            long r32 = java.lang.System.currentTimeMillis()
+        L_0x00be:
+            android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext
+            java.lang.String r12 = "videoconvert"
+            r14 = 0
+            android.content.SharedPreferences r33 = r10.getSharedPreferences(r12, r14)
+            long r34 = java.lang.System.currentTimeMillis()
             org.telegram.messenger.MediaController$9 r10 = new org.telegram.messenger.MediaController$9
-            r30 = r10
-            r13 = r19
-            r10.<init>(r2, r13, r0)
-            r10 = 1
-            r2.videoConvertFirstWrite = r10
+            r31 = r10
+            r12 = r19
+            r10.<init>(r2, r12, r0)
+            r1 = 1
+            r2.videoConvertFirstWrite = r1
             org.telegram.messenger.video.MediaCodecVideoConvertor r14 = new org.telegram.messenger.video.MediaCodecVideoConvertor
-            r0 = 1
             r10 = r14
             r14.<init>()
             org.telegram.messenger.MediaController$SavedFilterState r14 = r2.filterState
@@ -5789,71 +5800,70 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r28 = r14
             boolean r14 = r2.isPhoto
             r29 = r14
+            org.telegram.messenger.MediaController$CropState r14 = r2.cropState
+            r30 = r14
             r16 = r11
-            r34 = r13
+            r36 = r12
             r11 = r4
-            r17 = r12
-            r12 = r34
-            r13 = r15
             r14 = r18
-            r15 = r17
             r17 = r20
             r18 = r3
             r19 = r5
             r21 = r7
-            boolean r3 = r10.convertVideo(r11, r12, r13, r14, r15, r16, r17, r18, r19, r21, r23, r24, r26, r27, r28, r29, r30)
+            boolean r3 = r10.convertVideo(r11, r12, r13, r14, r15, r16, r17, r18, r19, r21, r23, r24, r26, r27, r28, r29, r30, r31)
             boolean r4 = r2.canceled
-            if (r4 != 0) goto L_0x0126
+            if (r4 != 0) goto L_0x0112
             java.lang.Object r5 = r9.videoConvertSync
             monitor-enter(r5)
-            boolean r4 = r2.canceled     // Catch:{ all -> 0x0123 }
-            monitor-exit(r5)     // Catch:{ all -> 0x0123 }
-            goto L_0x0126
-        L_0x0123:
+            boolean r4 = r2.canceled     // Catch:{ all -> 0x010f }
+            monitor-exit(r5)     // Catch:{ all -> 0x010f }
+            goto L_0x0112
+        L_0x010f:
             r0 = move-exception
-            monitor-exit(r5)     // Catch:{ all -> 0x0123 }
+            monitor-exit(r5)     // Catch:{ all -> 0x010f }
             throw r0
-        L_0x0126:
+        L_0x0112:
             boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r2 == 0) goto L_0x014c
+            if (r2 == 0) goto L_0x0138
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
             java.lang.String r5 = "time="
             r2.append(r5)
             long r5 = java.lang.System.currentTimeMillis()
-            long r5 = r5 - r32
+            long r5 = r5 - r34
             r2.append(r5)
             java.lang.String r5 = " canceled="
             r2.append(r5)
             r2.append(r4)
             java.lang.String r2 = r2.toString()
             org.telegram.messenger.FileLog.d(r2)
-        L_0x014c:
-            android.content.SharedPreferences$Editor r1 = r1.edit()
-            java.lang.String r2 = "isPreviousOk"
-            android.content.SharedPreferences$Editor r1 = r1.putBoolean(r2, r0)
-            r1.apply()
+        L_0x0138:
+            android.content.SharedPreferences$Editor r2 = r33.edit()
+            java.lang.String r5 = "isPreviousOk"
+            android.content.SharedPreferences$Editor r2 = r2.putBoolean(r5, r1)
+            r2.apply()
             r5 = 1
-            long r6 = r34.length()
-            if (r3 != 0) goto L_0x0166
-            if (r4 == 0) goto L_0x0163
-            goto L_0x0166
-        L_0x0163:
-            r31 = 0
-            goto L_0x0168
-        L_0x0166:
-            r31 = 1
-        L_0x0168:
+            long r6 = r36.length()
+            if (r3 != 0) goto L_0x0152
+            if (r4 == 0) goto L_0x014f
+            goto L_0x0152
+        L_0x014f:
+            r32 = 0
+            goto L_0x0154
+        L_0x0152:
+            r32 = 1
+        L_0x0154:
             r8 = 1065353216(0x3var_, float:1.0)
-            r1 = r35
-            r2 = r36
-            r3 = r34
+            r10 = 1
+            r1 = r37
+            r2 = r38
+            r3 = r36
             r4 = r5
             r5 = r6
-            r7 = r31
+            r7 = r32
             r1.didWriteData(r2, r3, r4, r5, r7, r8)
-            return r0
-        L_0x0178:
+            return r10
+        L_0x0165:
             r0 = 0
             return r0
         */

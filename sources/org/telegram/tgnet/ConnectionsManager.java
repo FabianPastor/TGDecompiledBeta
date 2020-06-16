@@ -259,7 +259,7 @@ public class ConnectionsManager extends BaseController {
         if (TextUtils.isEmpty(str10) && !TextUtils.isEmpty(SharedConfig.pushStringStatus)) {
             str10 = SharedConfig.pushStringStatus;
         }
-        init(BuildVars.BUILD_VERSION, 114, BuildVars.APP_ID, str7, str9, str8, str, str6, file2, FileLog.getNetworkLogPath(), str10, AndroidUtilities.getCertificateSHA256Fingerprint(), (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000, getUserConfig().getClientUserId(), isPushConnectionEnabled);
+        init(BuildVars.BUILD_VERSION, 115, BuildVars.APP_ID, str7, str9, str8, str, str6, file2, FileLog.getNetworkLogPath(), str10, AndroidUtilities.getCertificateSHA256Fingerprint(), (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000, getUserConfig().getClientUserId(), isPushConnectionEnabled);
     }
 
     public boolean isPushConnectionEnabled() {
@@ -301,15 +301,15 @@ public class ConnectionsManager extends BaseController {
     public int sendRequest(TLObject tLObject, RequestDelegate requestDelegate, QuickAckDelegate quickAckDelegate, WriteToSocketDelegate writeToSocketDelegate, int i, int i2, int i3, boolean z) {
         int andIncrement = this.lastRequestToken.getAndIncrement();
         Utilities.stageQueue.postRunnable(new Runnable(tLObject, andIncrement, requestDelegate, quickAckDelegate, writeToSocketDelegate, i, i2, i3, z) {
-            private final /* synthetic */ TLObject f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ RequestDelegate f$3;
-            private final /* synthetic */ QuickAckDelegate f$4;
-            private final /* synthetic */ WriteToSocketDelegate f$5;
-            private final /* synthetic */ int f$6;
-            private final /* synthetic */ int f$7;
-            private final /* synthetic */ int f$8;
-            private final /* synthetic */ boolean f$9;
+            public final /* synthetic */ TLObject f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ RequestDelegate f$3;
+            public final /* synthetic */ QuickAckDelegate f$4;
+            public final /* synthetic */ WriteToSocketDelegate f$5;
+            public final /* synthetic */ int f$6;
+            public final /* synthetic */ int f$7;
+            public final /* synthetic */ int f$8;
+            public final /* synthetic */ boolean f$9;
 
             {
                 this.f$1 = r2;
@@ -343,7 +343,7 @@ public class ConnectionsManager extends BaseController {
             tLObject.freeResources();
             try {
                 native_sendRequest(this.currentAccount, nativeByteBuffer.address, new RequestDelegateInternal(requestDelegate) {
-                    private final /* synthetic */ RequestDelegate f$1;
+                    public final /* synthetic */ RequestDelegate f$1;
 
                     {
                         this.f$1 = r2;
@@ -393,8 +393,8 @@ public class ConnectionsManager extends BaseController {
             FileLog.d("java received " + tLObject2 + " error = " + tLRPC$TL_error);
         }
         Utilities.stageQueue.postRunnable(new Runnable(tLObject2, tLRPC$TL_error) {
-            private final /* synthetic */ TLObject f$1;
-            private final /* synthetic */ TLRPC$TL_error f$2;
+            public final /* synthetic */ TLObject f$1;
+            public final /* synthetic */ TLRPC$TL_error f$2;
 
             {
                 this.f$1 = r2;
@@ -562,8 +562,8 @@ public class ConnectionsManager extends BaseController {
                 }
                 KeepAliveJob.finishJob();
                 Utilities.stageQueue.postRunnable(new Runnable(i, TLdeserialize) {
-                    private final /* synthetic */ int f$0;
-                    private final /* synthetic */ TLObject f$1;
+                    public final /* synthetic */ int f$0;
+                    public final /* synthetic */ TLObject f$1;
 
                     {
                         this.f$0 = r1;
@@ -584,7 +584,7 @@ public class ConnectionsManager extends BaseController {
 
     public static void onUpdate(int i) {
         Utilities.stageQueue.postRunnable(new Runnable(i) {
-            private final /* synthetic */ int f$0;
+            public final /* synthetic */ int f$0;
 
             {
                 this.f$0 = r1;
@@ -598,7 +598,7 @@ public class ConnectionsManager extends BaseController {
 
     public static void onSessionCreated(int i) {
         Utilities.stageQueue.postRunnable(new Runnable(i) {
-            private final /* synthetic */ int f$0;
+            public final /* synthetic */ int f$0;
 
             {
                 this.f$0 = r1;
@@ -612,8 +612,8 @@ public class ConnectionsManager extends BaseController {
 
     public static void onConnectionStateChanged(int i, int i2) {
         AndroidUtilities.runOnUIThread(new Runnable(i2, i) {
-            private final /* synthetic */ int f$0;
-            private final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$0;
+            public final /* synthetic */ int f$1;
 
             {
                 this.f$0 = r1;
@@ -633,7 +633,7 @@ public class ConnectionsManager extends BaseController {
 
     public static void onLogout(int i) {
         AndroidUtilities.runOnUIThread(new Runnable(i) {
-            private final /* synthetic */ int f$0;
+            public final /* synthetic */ int f$0;
 
             {
                 this.f$0 = r1;
@@ -672,8 +672,8 @@ public class ConnectionsManager extends BaseController {
 
     public static void onRequestNewServerIpAndPort(int i, int i2) {
         Utilities.stageQueue.postRunnable(new Runnable(i, i2) {
-            private final /* synthetic */ int f$0;
-            private final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$0;
+            public final /* synthetic */ int f$1;
 
             {
                 this.f$0 = r1;
@@ -729,8 +729,8 @@ public class ConnectionsManager extends BaseController {
 
     public static void getHostByName(String str, long j) {
         AndroidUtilities.runOnUIThread(new Runnable(str, j) {
-            private final /* synthetic */ String f$0;
-            private final /* synthetic */ long f$1;
+            public final /* synthetic */ String f$0;
+            public final /* synthetic */ long f$1;
 
             {
                 this.f$0 = r1;
@@ -779,8 +779,8 @@ public class ConnectionsManager extends BaseController {
             TLRPC$TL_config TLdeserialize = TLRPC$TL_config.TLdeserialize(wrap, wrap.readInt32(true), true);
             if (TLdeserialize != null) {
                 Utilities.stageQueue.postRunnable(new Runnable(i, TLdeserialize) {
-                    private final /* synthetic */ int f$0;
-                    private final /* synthetic */ TLRPC$TL_config f$1;
+                    public final /* synthetic */ int f$0;
+                    public final /* synthetic */ TLRPC$TL_config f$1;
 
                     {
                         this.f$0 = r1;
@@ -835,7 +835,7 @@ public class ConnectionsManager extends BaseController {
 
     public void setIsUpdating(boolean z) {
         AndroidUtilities.runOnUIThread(new Runnable(z) {
-            private final /* synthetic */ boolean f$1;
+            public final /* synthetic */ boolean f$1;
 
             {
                 this.f$1 = r2;
@@ -1340,7 +1340,7 @@ public class ConnectionsManager extends BaseController {
         /* access modifiers changed from: protected */
         public void onPostExecute(NativeByteBuffer nativeByteBuffer) {
             Utilities.stageQueue.postRunnable(new Runnable(nativeByteBuffer) {
-                private final /* synthetic */ NativeByteBuffer f$1;
+                public final /* synthetic */ NativeByteBuffer f$1;
 
                 {
                     this.f$1 = r2;
@@ -1578,7 +1578,7 @@ public class ConnectionsManager extends BaseController {
         /* access modifiers changed from: protected */
         public void onPostExecute(NativeByteBuffer nativeByteBuffer) {
             Utilities.stageQueue.postRunnable(new Runnable(nativeByteBuffer) {
-                private final /* synthetic */ NativeByteBuffer f$1;
+                public final /* synthetic */ NativeByteBuffer f$1;
 
                 {
                     this.f$1 = r2;
@@ -1819,7 +1819,7 @@ public class ConnectionsManager extends BaseController {
         /* access modifiers changed from: protected */
         public void onPostExecute(NativeByteBuffer nativeByteBuffer) {
             Utilities.stageQueue.postRunnable(new Runnable(nativeByteBuffer) {
-                private final /* synthetic */ NativeByteBuffer f$1;
+                public final /* synthetic */ NativeByteBuffer f$1;
 
                 {
                     this.f$1 = r2;
@@ -1887,7 +1887,7 @@ public class ConnectionsManager extends BaseController {
 
         public /* synthetic */ void lambda$doInBackground$1$ConnectionsManager$FirebaseTask(Task task) {
             Utilities.stageQueue.postRunnable(new Runnable(task.isSuccessful()) {
-                private final /* synthetic */ boolean f$1;
+                public final /* synthetic */ boolean f$1;
 
                 {
                     this.f$1 = r2;

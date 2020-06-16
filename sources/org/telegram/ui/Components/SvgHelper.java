@@ -1213,11 +1213,11 @@ public class SvgHelper {
                 if (r8 >= r9) goto L_0x00b2
                 r9 = r7[r8]
                 java.lang.String r9 = r9.trim()
-                java.lang.String r1 = ""
-                java.lang.String r4 = "\t"
-                java.lang.String r9 = r9.replace(r4, r1)
-                java.lang.String r4 = "\n"
-                java.lang.String r9 = r9.replace(r4, r1)
+                java.lang.String r1 = "\t"
+                java.lang.String r4 = ""
+                java.lang.String r9 = r9.replace(r1, r4)
+                java.lang.String r1 = "\n"
+                java.lang.String r9 = r9.replace(r1, r4)
                 r7[r8] = r9
                 r9 = r7[r8]
                 int r9 = r9.length()

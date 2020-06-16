@@ -918,7 +918,7 @@ public final class FloatingToolbar {
             this.mToArrow.setTint(i);
             this.mToOverflow.setTint(i);
             imageButton.setOnClickListener(new View.OnClickListener(imageButton) {
-                private final /* synthetic */ ImageButton f$1;
+                public final /* synthetic */ ImageButton f$1;
 
                 {
                     this.f$1 = r2;
@@ -954,7 +954,7 @@ public final class FloatingToolbar {
                 }
             });
             overflowPanel.setOnItemClickListener(new AdapterView.OnItemClickListener(overflowPanel) {
-                private final /* synthetic */ FloatingToolbar.FloatingToolbarPopup.OverflowPanel f$1;
+                public final /* synthetic */ FloatingToolbar.FloatingToolbarPopup.OverflowPanel f$1;
 
                 {
                     this.f$1 = r2;

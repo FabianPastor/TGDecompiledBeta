@@ -620,7 +620,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.TextView r0 = new android.widget.TextView
                 r0.<init>(r2)
                 r1.textView2 = r0
-                r2 = 2131624513(0x7f0e0241, float:1.8876208E38)
+                r2 = 2131624521(0x7f0e0249, float:1.8876224E38)
                 java.lang.String r5 = "ChangePhoneHelp"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
                 r0.setText(r2)
@@ -743,7 +743,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 int r0 = r0.length()
                 if (r0 != 0) goto L_0x0343
                 android.widget.TextView r0 = r1.countryButton
-                r2 = 2131624700(0x7f0e02fc, float:1.8876587E38)
+                r2 = 2131624708(0x7f0e0304, float:1.8876603E38)
                 java.lang.String r3 = "ChooseCountry"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r0.setText(r2)
@@ -932,8 +932,8 @@ public class ChangePhoneActivity extends BaseFragment {
                     this.nextPressed = true;
                     this.this$0.needShowProgress();
                     ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_account_sendChangePhoneCode, new RequestDelegate(bundle, tLRPC$TL_account_sendChangePhoneCode) {
-                        private final /* synthetic */ Bundle f$1;
-                        private final /* synthetic */ TLRPC$TL_account_sendChangePhoneCode f$2;
+                        public final /* synthetic */ Bundle f$1;
+                        public final /* synthetic */ TLRPC$TL_account_sendChangePhoneCode f$2;
 
                         {
                             this.f$1 = r2;
@@ -950,10 +950,10 @@ public class ChangePhoneActivity extends BaseFragment {
 
         public /* synthetic */ void lambda$onNextPressed$7$ChangePhoneActivity$PhoneView(Bundle bundle, TLRPC$TL_account_sendChangePhoneCode tLRPC$TL_account_sendChangePhoneCode, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, bundle, tLObject, tLRPC$TL_account_sendChangePhoneCode) {
-                private final /* synthetic */ TLRPC$TL_error f$1;
-                private final /* synthetic */ Bundle f$2;
-                private final /* synthetic */ TLObject f$3;
-                private final /* synthetic */ TLRPC$TL_account_sendChangePhoneCode f$4;
+                public final /* synthetic */ TLRPC$TL_error f$1;
+                public final /* synthetic */ Bundle f$2;
+                public final /* synthetic */ TLObject f$3;
+                public final /* synthetic */ TLRPC$TL_account_sendChangePhoneCode f$4;
 
                 {
                     this.f$1 = r2;
@@ -1157,7 +1157,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 r0.addView(r4, r8)
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
-                r14 = 2131165793(0x7var_, float:1.7945813E38)
+                r14 = 2131165795(0x7var_, float:1.7945817E38)
                 r8.setImageResource(r14)
                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
                 if (r14 == 0) goto L_0x00f9
@@ -1225,7 +1225,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.ImageView r14 = new android.widget.ImageView
                 r14.<init>(r2)
                 r0.blackImageView = r14
-                r11 = 2131165916(0x7var_dc, float:1.7946063E38)
+                r11 = 2131165918(0x7var_de, float:1.7946067E38)
                 r14.setImageResource(r11)
                 android.widget.ImageView r11 = r0.blackImageView
                 android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
@@ -1246,7 +1246,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131165914(0x7var_da, float:1.7946059E38)
+                r10 = 2131165916(0x7var_dc, float:1.7946063E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -1258,7 +1258,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131626734(0x7f0e0aee, float:1.8880713E38)
+                r8 = 2131626751(0x7f0e0aff, float:1.8880747E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -1267,7 +1267,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131165915(0x7var_db, float:1.794606E38)
+                r10 = 2131165917(0x7var_dd, float:1.7946065E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -1286,7 +1286,7 @@ public class ChangePhoneActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131626738(0x7f0e0af2, float:1.888072E38)
+                r8 = 2131626755(0x7f0e0b03, float:1.8880755E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -1404,14 +1404,14 @@ public class ChangePhoneActivity extends BaseFragment {
                 int r1 = r0.currentType
                 if (r1 != r3) goto L_0x02f5
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131624938(0x7f0e03ea, float:1.887707E38)
+                r2 = 2131624946(0x7f0e03f2, float:1.8877086E38)
                 java.lang.String r3 = "DidNotGetTheCodeSms"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
                 goto L_0x0303
             L_0x02f5:
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131624937(0x7f0e03e9, float:1.8877068E38)
+                r2 = 2131624945(0x7f0e03f1, float:1.8877084E38)
                 java.lang.String r3 = "DidNotGetTheCode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
@@ -1507,8 +1507,8 @@ public class ChangePhoneActivity extends BaseFragment {
             tLRPC$TL_auth_resendCode.phone_number = this.requestPhone;
             tLRPC$TL_auth_resendCode.phone_code_hash = this.phoneHash;
             ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_auth_resendCode, new RequestDelegate(bundle, tLRPC$TL_auth_resendCode) {
-                private final /* synthetic */ Bundle f$1;
-                private final /* synthetic */ TLRPC$TL_auth_resendCode f$2;
+                public final /* synthetic */ Bundle f$1;
+                public final /* synthetic */ TLRPC$TL_auth_resendCode f$2;
 
                 {
                     this.f$1 = r2;
@@ -1523,10 +1523,10 @@ public class ChangePhoneActivity extends BaseFragment {
 
         public /* synthetic */ void lambda$resendCode$3$ChangePhoneActivity$LoginActivitySmsView(Bundle bundle, TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, bundle, tLObject, tLRPC$TL_auth_resendCode) {
-                private final /* synthetic */ TLRPC$TL_error f$1;
-                private final /* synthetic */ Bundle f$2;
-                private final /* synthetic */ TLObject f$3;
-                private final /* synthetic */ TLRPC$TL_auth_resendCode f$4;
+                public final /* synthetic */ TLRPC$TL_error f$1;
+                public final /* synthetic */ Bundle f$2;
+                public final /* synthetic */ TLObject f$3;
+                public final /* synthetic */ TLRPC$TL_auth_resendCode f$4;
 
                 {
                     this.f$1 = r2;
@@ -1675,7 +1675,7 @@ public class ChangePhoneActivity extends BaseFragment {
                             }
                         });
                         this.codeField[i8].setOnKeyListener(new View.OnKeyListener(i8) {
-                            private final /* synthetic */ int f$1;
+                            public final /* synthetic */ int f$1;
 
                             {
                                 this.f$1 = r2;
@@ -2309,7 +2309,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                         if (r2 != r6) goto L_0x00a2
                                         org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r2 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131626854(0x7f0e0b66, float:1.8880956E38)
+                                        r3 = 2131626871(0x7f0e0b77, float:1.888099E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -2322,7 +2322,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                     L_0x0082:
                                         org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r2 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131624483(0x7f0e0223, float:1.8876147E38)
+                                        r3 = 2131624491(0x7f0e022b, float:1.8876163E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -2409,7 +2409,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                         if (r0 != r4) goto L_0x0164
                                         org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131624485(0x7f0e0225, float:1.8876151E38)
+                                        r1 = 2131624493(0x7f0e022d, float:1.8876167E38)
                                         java.lang.String r2 = "Calling"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)
@@ -2417,7 +2417,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                     L_0x0164:
                                         org.telegram.ui.ChangePhoneActivity$LoginActivitySmsView r0 = org.telegram.ui.ChangePhoneActivity.LoginActivitySmsView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131626730(0x7f0e0aea, float:1.8880704E38)
+                                        r1 = 2131626747(0x7f0e0afb, float:1.8880739E38)
                                         java.lang.String r2 = "SendingSms"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)
@@ -2641,7 +2641,7 @@ public class ChangePhoneActivity extends BaseFragment {
                                 destroyTimer();
                                 this.this$0.needShowProgress();
                                 ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_account_changePhone, new RequestDelegate(tLRPC$TL_account_changePhone) {
-                                    private final /* synthetic */ TLRPC$TL_account_changePhone f$1;
+                                    public final /* synthetic */ TLRPC$TL_account_changePhone f$1;
 
                                     {
                                         this.f$1 = r2;
@@ -2656,9 +2656,9 @@ public class ChangePhoneActivity extends BaseFragment {
 
                         public /* synthetic */ void lambda$onNextPressed$7$ChangePhoneActivity$LoginActivitySmsView(TLRPC$TL_account_changePhone tLRPC$TL_account_changePhone, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                             AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, tLRPC$TL_account_changePhone) {
-                                private final /* synthetic */ TLRPC$TL_error f$1;
-                                private final /* synthetic */ TLObject f$2;
-                                private final /* synthetic */ TLRPC$TL_account_changePhone f$3;
+                                public final /* synthetic */ TLRPC$TL_error f$1;
+                                public final /* synthetic */ TLObject f$2;
+                                public final /* synthetic */ TLRPC$TL_account_changePhone f$3;
 
                                 {
                                     this.f$1 = r2;

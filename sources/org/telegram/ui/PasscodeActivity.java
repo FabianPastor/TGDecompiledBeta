@@ -356,8 +356,8 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     numberPicker.setFormatter($$Lambda$PasscodeActivity$e1eIIUXJcHN6dWhbpJbTrxba_60.INSTANCE);
                     builder.setView(numberPicker);
                     builder.setNegativeButton(LocaleController.getString("Done", NUM), new DialogInterface.OnClickListener(numberPicker, i) {
-                        private final /* synthetic */ NumberPicker f$1;
-                        private final /* synthetic */ int f$2;
+                        public final /* synthetic */ NumberPicker f$1;
+                        public final /* synthetic */ int f$2;
 
                         {
                             this.f$1 = r2;

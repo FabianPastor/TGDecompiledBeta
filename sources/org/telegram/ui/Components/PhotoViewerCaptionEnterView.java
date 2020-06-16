@@ -111,7 +111,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
         this.lengthTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.lengthTextPaint.setColor(-2500135);
-        AnonymousClass1 r7 = new EditTextCaption(context2) {
+        AnonymousClass1 r6 = new EditTextCaption(context2) {
             /* access modifiers changed from: protected */
             public int getActionModeStyle() {
                 return 2;
@@ -147,8 +147,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 return super.requestRectangleOnScreen(rect);
             }
         };
-        this.messageEditText = r7;
-        r7.setWindowView(this.windowView);
+        this.messageEditText = r6;
+        r6.setWindowView(this.windowView);
         this.messageEditText.setHint(LocaleController.getString("AddCaption", NUM));
         this.messageEditText.setImeOptions(NUM);
         EditTextCaption editTextCaption = this.messageEditText;

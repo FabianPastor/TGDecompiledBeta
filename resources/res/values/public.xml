@@ -584,6 +584,7 @@
     <public type="drawable" name="miniplayer_close" id="NUM" />
     <public type="drawable" name="miniplayer_pause" id="NUM" />
     <public type="drawable" name="miniplayer_play" id="NUM" />
+    <public type="drawable" name="minithumb_play" id="NUM" />
     <public type="drawable" name="moon" id="NUM" />
     <public type="drawable" name="msg_actions" id="NUM" />
     <public type="drawable" name="msg_addbot" id="NUM" />
@@ -602,6 +603,10 @@
     <public type="drawable" name="msg_copy" id="NUM" />
     <public type="drawable" name="msg_delete" id="NUM" />
     <public type="drawable" name="msg_download" id="NUM" />
+    <public type="drawable" name="msg_draw_arrow" id="NUM" />
+    <public type="drawable" name="msg_draw_marker" id="NUM" />
+    <public type="drawable" name="msg_draw_neon" id="NUM" />
+    <public type="drawable" name="msg_draw_pen" id="NUM" />
     <public type="drawable" name="msg_edit" id="NUM" />
     <public type="drawable" name="msg_fave" id="NUM" />
     <public type="drawable" name="msg_forward" id="NUM" />
@@ -710,11 +715,8 @@
     <public type="drawable" name="pagedown" id="NUM" />
     <public type="drawable" name="pagedown_shadow" id="NUM" />
     <public type="drawable" name="paint_elliptical_brush" id="NUM" />
-    <public type="drawable" name="paint_elliptical_preview" id="NUM" />
     <public type="drawable" name="paint_neon_brush" id="NUM" />
-    <public type="drawable" name="paint_neon_preview" id="NUM" />
     <public type="drawable" name="paint_radial_brush" id="NUM" />
-    <public type="drawable" name="paint_radial_preview" id="NUM" />
     <public type="drawable" name="passcode_check" id="NUM" />
     <public type="drawable" name="passcode_delete" id="NUM" />
     <public type="drawable" name="passcode_logo" id="NUM" />
@@ -1170,6 +1172,7 @@
     <public type="string" name="AccDescrClosePlayer" id="NUM" />
     <public type="string" name="AccDescrCollapsePanel" id="NUM" />
     <public type="string" name="AccDescrContactSorting" id="NUM" />
+    <public type="string" name="AccDescrDownloadProgress" id="NUM" />
     <public type="string" name="AccDescrEditing" id="NUM" />
     <public type="string" name="AccDescrEmojiButton" id="NUM" />
     <public type="string" name="AccDescrExpandPanel" id="NUM" />
@@ -1190,6 +1193,11 @@
     <public type="string" name="AccDescrMusicInfo" id="NUM" />
     <public type="string" name="AccDescrMuteMic" id="NUM" />
     <public type="string" name="AccDescrMyLocation" id="NUM" />
+    <public type="string" name="AccDescrNumberOfViews_few" id="NUM" />
+    <public type="string" name="AccDescrNumberOfViews_many" id="NUM" />
+    <public type="string" name="AccDescrNumberOfViews_one" id="NUM" />
+    <public type="string" name="AccDescrNumberOfViews_other" id="NUM" />
+    <public type="string" name="AccDescrNumberOfViews_two" id="NUM" />
     <public type="string" name="AccDescrOpenChat" id="NUM" />
     <public type="string" name="AccDescrOpenMenu" id="NUM" />
     <public type="string" name="AccDescrPageDown" id="NUM" />
@@ -1198,6 +1206,7 @@
     <public type="string" name="AccDescrPhotoAdjust" id="NUM" />
     <public type="string" name="AccDescrPhotoEditor" id="NUM" />
     <public type="string" name="AccDescrPhotoViewer" id="NUM" />
+    <public type="string" name="AccDescrPlayerDuration" id="NUM" />
     <public type="string" name="AccDescrPlayerSpeed" id="NUM" />
     <public type="string" name="AccDescrPrevious" id="NUM" />
     <public type="string" name="AccDescrProfilePicture" id="NUM" />
@@ -1220,6 +1229,7 @@
     <public type="string" name="AccDescrStopLiveLocation" id="NUM" />
     <public type="string" name="AccDescrSwitchCamera" id="NUM" />
     <public type="string" name="AccDescrTakeMorePics" id="NUM" />
+    <public type="string" name="AccDescrUploadProgress" id="NUM" />
     <public type="string" name="AccDescrUserOptions" id="NUM" />
     <public type="string" name="AccDescrVideoCompressHigh" id="NUM" />
     <public type="string" name="AccDescrVideoCompressLow" id="NUM" />
@@ -2718,6 +2728,11 @@
     <public type="string" name="IsTypingGroup" id="NUM" />
     <public type="string" name="Italic" id="NUM" />
     <public type="string" name="January" id="NUM" />
+    <public type="string" name="JoinByPeekChannelText" id="NUM" />
+    <public type="string" name="JoinByPeekChannelTitle" id="NUM" />
+    <public type="string" name="JoinByPeekGroupText" id="NUM" />
+    <public type="string" name="JoinByPeekGroupTitle" id="NUM" />
+    <public type="string" name="JoinByPeekJoin" id="NUM" />
     <public type="string" name="JoinGroup" id="NUM" />
     <public type="string" name="JoinToGroupErrorFull" id="NUM" />
     <public type="string" name="JoinToGroupErrorNotExist" id="NUM" />
@@ -3273,11 +3288,15 @@
     <public type="string" name="Page5Title" id="NUM" />
     <public type="string" name="Page6Message" id="NUM" />
     <public type="string" name="Page6Title" id="NUM" />
+    <public type="string" name="PaintArrow" id="NUM" />
     <public type="string" name="PaintDelete" id="NUM" />
     <public type="string" name="PaintDuplicate" id="NUM" />
     <public type="string" name="PaintEdit" id="NUM" />
     <public type="string" name="PaintFramed" id="NUM" />
+    <public type="string" name="PaintMarker" id="NUM" />
+    <public type="string" name="PaintNeon" id="NUM" />
     <public type="string" name="PaintOutlined" id="NUM" />
+    <public type="string" name="PaintPen" id="NUM" />
     <public type="string" name="PaintRegular" id="NUM" />
     <public type="string" name="Passcode" id="NUM" />
     <public type="string" name="PasscodeDoNotMatch" id="NUM" />

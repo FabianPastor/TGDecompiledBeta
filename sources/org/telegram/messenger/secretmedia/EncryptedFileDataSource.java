@@ -2,12 +2,15 @@ package org.telegram.messenger.secretmedia;
 
 import android.net.Uri;
 import com.google.android.exoplayer2.upstream.BaseDataSource;
+import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.List;
+import java.util.Map;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.Utilities;
 
@@ -19,6 +22,10 @@ public final class EncryptedFileDataSource extends BaseDataSource {
     private byte[] key;
     private boolean opened;
     private Uri uri;
+
+    public /* bridge */ /* synthetic */ Map<String, List<String>> getResponseHeaders() {
+        return DataSource.CC.$default$getResponseHeaders(this);
+    }
 
     public static class EncryptedFileDataSourceException extends IOException {
         public EncryptedFileDataSourceException(IOException iOException) {

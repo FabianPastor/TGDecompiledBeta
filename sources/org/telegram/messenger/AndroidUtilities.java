@@ -2433,10 +2433,10 @@ public class AndroidUtilities {
         /*
             r0 = 1
             java.lang.String[] r3 = new java.lang.String[r0]
-            java.lang.String r0 = "_data"
-            r1 = 0
-            r3[r1] = r0
-            r7 = 0
+            r0 = 0
+            java.lang.String r7 = "_data"
+            r3[r0] = r7
+            r0 = 0
             android.content.ContentResolver r1 = r8.getContentResolver()     // Catch:{ Exception -> 0x0058 }
             r6 = 0
             r2 = r9
@@ -2446,7 +2446,7 @@ public class AndroidUtilities {
             if (r8 == 0) goto L_0x0053
             boolean r9 = r8.moveToFirst()     // Catch:{ all -> 0x004a }
             if (r9 == 0) goto L_0x0053
-            int r9 = r8.getColumnIndexOrThrow(r0)     // Catch:{ all -> 0x004a }
+            int r9 = r8.getColumnIndexOrThrow(r7)     // Catch:{ all -> 0x004a }
             java.lang.String r9 = r8.getString(r9)     // Catch:{ all -> 0x004a }
             java.lang.String r10 = "content://"
             boolean r10 = r9.startsWith(r10)     // Catch:{ all -> 0x004a }
@@ -2467,7 +2467,7 @@ public class AndroidUtilities {
             if (r8 == 0) goto L_0x0049
             r8.close()     // Catch:{ Exception -> 0x0058 }
         L_0x0049:
-            return r7
+            return r0
         L_0x004a:
             r9 = move-exception
             throw r9     // Catch:{ all -> 0x004c }
@@ -2481,7 +2481,7 @@ public class AndroidUtilities {
             if (r8 == 0) goto L_0x0058
             r8.close()     // Catch:{ Exception -> 0x0058 }
         L_0x0058:
-            return r7
+            return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.AndroidUtilities.getDataColumn(android.content.Context, android.net.Uri, java.lang.String, java.lang.String[]):java.lang.String");
     }
@@ -2935,9 +2935,9 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0159
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0159
-            r7 = 2131626009(0x7f0e0819, float:1.8879242E38)
+            r7 = 2131626022(0x7f0e0826, float:1.8879268E38)
             java.lang.String r8 = "OK"
-            r9 = 2131624199(0x7f0e0107, float:1.887557E38)
+            r9 = 2131624207(0x7f0e010f, float:1.8875587E38)
             java.lang.String r10 = "AppName"
             r11 = 1
             if (r2 == 0) goto L_0x00a6
@@ -2958,7 +2958,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131625475(0x7f0e0603, float:1.887816E38)
+            r1 = 2131625483(0x7f0e060b, float:1.8878175E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3042,7 +3042,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131625818(0x7f0e075a, float:1.8878855E38)
+            r1 = 2131625831(0x7f0e0767, float:1.8878881E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3141,21 +3141,21 @@ public class AndroidUtilities {
             if (r8 != 0) goto L_0x00ca
             org.telegram.ui.ActionBar.AlertDialog$Builder r8 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r8.<init>((android.content.Context) r9)
-            r0 = 2131624199(0x7f0e0107, float:1.887557E38)
+            r0 = 2131624207(0x7f0e010f, float:1.8875587E38)
             java.lang.String r1 = "AppName"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setTitle(r0)
-            r0 = 2131624197(0x7f0e0105, float:1.8875567E38)
+            r0 = 2131624205(0x7f0e010d, float:1.8875583E38)
             java.lang.String r1 = "ApkRestricted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setMessage(r0)
-            r0 = 2131626348(0x7f0e096c, float:1.887993E38)
+            r0 = 2131626365(0x7f0e097d, float:1.8879964E38)
             java.lang.String r1 = "PermissionOpenSettings"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw
             r1.<init>(r9)
             r8.setPositiveButton(r0, r1)
-            r9 = 2131624490(0x7f0e022a, float:1.8876161E38)
+            r9 = 2131624498(0x7f0e0232, float:1.8876177E38)
             java.lang.String r0 = "Cancel"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r0, r9)
             r8.setNegativeButton(r9, r2)
@@ -3219,6 +3219,30 @@ public class AndroidUtilities {
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
+    }
+
+    public static CharSequence replaceNewLines(CharSequence charSequence) {
+        int i = 0;
+        if (charSequence instanceof StringBuilder) {
+            StringBuilder sb = (StringBuilder) charSequence;
+            int length = charSequence.length();
+            while (i < length) {
+                if (charSequence.charAt(i) == 10) {
+                    sb.setCharAt(i, ' ');
+                }
+                i++;
+            }
+        } else if (charSequence instanceof SpannableStringBuilder) {
+            SpannableStringBuilder spannableStringBuilder = (SpannableStringBuilder) charSequence;
+            int length2 = charSequence.length();
+            while (i < length2) {
+                if (charSequence.charAt(i) == 10) {
+                    spannableStringBuilder.replace(i, i + 1, " ");
+                }
+                i++;
+            }
+        }
+        return charSequence.toString().replace(10, ' ');
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:15:0x004c, code lost:
@@ -3610,7 +3634,7 @@ public class AndroidUtilities {
         pickerBottomLayout.cancelButton.setTextColor(Theme.getColor("dialogTextBlue2"));
         pickerBottomLayout.cancelButton.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
         pickerBottomLayout.cancelButton.setOnClickListener(new View.OnClickListener(dismissRunnable) {
-            private final /* synthetic */ Runnable f$0;
+            public final /* synthetic */ Runnable f$0;
 
             {
                 this.f$0 = r1;
@@ -3625,12 +3649,12 @@ public class AndroidUtilities {
         pickerBottomLayout.doneButtonBadgeTextView.setVisibility(8);
         pickerBottomLayout.doneButtonTextView.setText(LocaleController.getString("ConnectingConnectProxy", NUM).toUpperCase());
         pickerBottomLayout.doneButton.setOnClickListener(new View.OnClickListener(str, str2, str5, str4, str3, dismissRunnable) {
-            private final /* synthetic */ String f$0;
-            private final /* synthetic */ String f$1;
-            private final /* synthetic */ String f$2;
-            private final /* synthetic */ String f$3;
-            private final /* synthetic */ String f$4;
-            private final /* synthetic */ Runnable f$5;
+            public final /* synthetic */ String f$0;
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ String f$2;
+            public final /* synthetic */ String f$3;
+            public final /* synthetic */ String f$4;
+            public final /* synthetic */ Runnable f$5;
 
             {
                 this.f$0 = r1;

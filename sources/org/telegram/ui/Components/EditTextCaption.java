@@ -36,6 +36,7 @@ public class EditTextCaption extends EditTextBoldCursor {
     public boolean copyPasteShowed;
     private EditTextCaptionDelegate delegate;
     private int hintColor;
+    private float offsetY;
     private int selectionEnd = -1;
     private int selectionStart = -1;
     private int userNameLength;
@@ -135,9 +136,9 @@ public class EditTextCaption extends EditTextBoldCursor {
             this.selectionStart = -1;
         }
         builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(i2, i, r1) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ EditTextBoldCursor f$3;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ EditTextBoldCursor f$3;
 
             {
                 this.f$1 = r2;
@@ -369,8 +370,19 @@ public class EditTextCaption extends EditTextBoldCursor {
         invalidate();
     }
 
+    public void setOffsetY(float f) {
+        this.offsetY = f;
+        invalidate();
+    }
+
+    public float getOffsetY() {
+        return this.offsetY;
+    }
+
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
+        canvas.save();
+        canvas.translate(0.0f, this.offsetY);
         super.onDraw(canvas);
         try {
             if (this.captionLayout != null && this.userNameLength == length()) {
@@ -386,6 +398,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
+        canvas.restore();
     }
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {

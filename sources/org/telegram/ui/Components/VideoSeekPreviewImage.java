@@ -86,8 +86,8 @@ public class VideoSeekPreviewImage extends View {
         }
         DispatchQueue dispatchQueue = Utilities.globalQueue;
         $$Lambda$VideoSeekPreviewImage$Os3KazHQPmAT5faayq_HBEMpGLU r2 = new Runnable(f, j) {
-            private final /* synthetic */ float f$1;
-            private final /* synthetic */ long f$2;
+            public final /* synthetic */ float f$1;
+            public final /* synthetic */ long f$2;
 
             {
                 this.f$1 = r2;
@@ -132,7 +132,7 @@ public class VideoSeekPreviewImage extends View {
             }
         }
         AndroidUtilities.runOnUIThread(new Runnable(frameAtTime) {
-            private final /* synthetic */ Bitmap f$1;
+            public final /* synthetic */ Bitmap f$1;
 
             {
                 this.f$1 = r2;
@@ -187,7 +187,7 @@ public class VideoSeekPreviewImage extends View {
             this.videoUri = uri;
             DispatchQueue dispatchQueue = Utilities.globalQueue;
             $$Lambda$VideoSeekPreviewImage$zy4HD28BPX6FxdovZogZ2Hvfeys r1 = new Runnable(uri) {
-                private final /* synthetic */ Uri f$1;
+                public final /* synthetic */ Uri f$1;
 
                 {
                     this.f$1 = r2;

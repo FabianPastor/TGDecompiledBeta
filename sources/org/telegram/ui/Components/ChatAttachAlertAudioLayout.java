@@ -823,8 +823,8 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
             int i = this.lastSearchId + 1;
             this.lastSearchId = i;
             $$Lambda$ChatAttachAlertAudioLayout$SearchAdapter$SXAHpYnQB4CSgTr02kewKQLL_s r1 = new Runnable(str, i) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -841,9 +841,9 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
 
         public /* synthetic */ void lambda$search$1$ChatAttachAlertAudioLayout$SearchAdapter(String str, int i) {
             Utilities.searchQueue.postRunnable(new Runnable(str, new ArrayList(ChatAttachAlertAudioLayout.this.audioEntries), i) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ ArrayList f$2;
-                private final /* synthetic */ int f$3;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ int f$3;
 
                 {
                     this.f$1 = r2;
@@ -900,9 +900,9 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
 
         private void updateSearchResults(ArrayList<MediaController.AudioEntry> arrayList, String str, int i) {
             AndroidUtilities.runOnUIThread(new Runnable(i, str, arrayList) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ String f$2;
-                private final /* synthetic */ ArrayList f$3;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ String f$2;
+                public final /* synthetic */ ArrayList f$3;
 
                 {
                     this.f$1 = r2;

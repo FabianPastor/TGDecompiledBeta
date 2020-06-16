@@ -439,8 +439,8 @@ public class MediaDataController extends BaseController {
                 }
                 tLRPC$TL_messages_faveSticker.unfave = z3;
                 getConnectionsManager().sendRequest(tLRPC$TL_messages_faveSticker, new RequestDelegate(obj2, tLRPC$TL_messages_faveSticker) {
-                    private final /* synthetic */ Object f$1;
-                    private final /* synthetic */ TLRPC$TL_messages_faveSticker f$2;
+                    public final /* synthetic */ Object f$1;
+                    public final /* synthetic */ TLRPC$TL_messages_faveSticker f$2;
 
                     {
                         this.f$1 = r2;
@@ -467,8 +467,8 @@ public class MediaDataController extends BaseController {
                     }
                     tLRPC$TL_messages_saveRecentSticker.unsave = true;
                     getConnectionsManager().sendRequest(tLRPC$TL_messages_saveRecentSticker, new RequestDelegate(obj2, tLRPC$TL_messages_saveRecentSticker) {
-                        private final /* synthetic */ Object f$1;
-                        private final /* synthetic */ TLRPC$TL_messages_saveRecentSticker f$2;
+                        public final /* synthetic */ Object f$1;
+                        public final /* synthetic */ TLRPC$TL_messages_saveRecentSticker f$2;
 
                         {
                             this.f$1 = r2;
@@ -490,8 +490,8 @@ public class MediaDataController extends BaseController {
                     tLRPC$Document2 = arrayListArr[i4].remove(arrayListArr[i4].size() - 1);
                 }
                 getMessagesStorage().getStorageQueue().postRunnable(new Runnable(i, tLRPC$Document2) {
-                    private final /* synthetic */ int f$1;
-                    private final /* synthetic */ TLRPC$Document f$2;
+                    public final /* synthetic */ int f$1;
+                    public final /* synthetic */ TLRPC$Document f$2;
 
                     {
                         this.f$1 = r2;
@@ -509,7 +509,7 @@ public class MediaDataController extends BaseController {
                 processLoadedRecentDocuments(i, arrayList, false, i2, false);
             }
             if (i4 == 2 || (i4 == 0 && z3)) {
-                getNotificationCenter().postNotificationName(NotificationCenter.recentDocumentsDidLoad, false, Integer.valueOf(i));
+                getNotificationCenter().postNotificationName(NotificationCenter.recentDocumentsDidLoad, Boolean.FALSE, Integer.valueOf(i));
             }
         }
     }
@@ -575,7 +575,7 @@ public class MediaDataController extends BaseController {
         }
         tLRPC$TL_messages_saveGif.unsave = true;
         getConnectionsManager().sendRequest(tLRPC$TL_messages_saveGif, new RequestDelegate(tLRPC$TL_messages_saveGif) {
-            private final /* synthetic */ TLRPC$TL_messages_saveGif f$1;
+            public final /* synthetic */ TLRPC$TL_messages_saveGif f$1;
 
             {
                 this.f$1 = r2;
@@ -586,7 +586,7 @@ public class MediaDataController extends BaseController {
             }
         });
         getMessagesStorage().getStorageQueue().postRunnable(new Runnable(tLRPC$Document) {
-            private final /* synthetic */ TLRPC$Document f$1;
+            public final /* synthetic */ TLRPC$Document f$1;
 
             {
                 this.f$1 = r2;
@@ -649,7 +649,7 @@ public class MediaDataController extends BaseController {
             if (this.recentGifs.size() > getMessagesController().maxRecentGifsCount) {
                 ArrayList<TLRPC$Document> arrayList = this.recentGifs;
                 getMessagesStorage().getStorageQueue().postRunnable(new Runnable(arrayList.remove(arrayList.size() - 1)) {
-                    private final /* synthetic */ TLRPC$Document f$1;
+                    public final /* synthetic */ TLRPC$Document f$1;
 
                     {
                         this.f$1 = r2;
@@ -854,7 +854,7 @@ public class MediaDataController extends BaseController {
     private void loadGroupStickerSet(TLRPC$StickerSet tLRPC$StickerSet, boolean z) {
         if (z) {
             getMessagesStorage().getStorageQueue().postRunnable(new Runnable(tLRPC$StickerSet) {
-                private final /* synthetic */ TLRPC$StickerSet f$1;
+                public final /* synthetic */ TLRPC$StickerSet f$1;
 
                 {
                     this.f$1 = r2;
@@ -894,7 +894,7 @@ public class MediaDataController extends BaseController {
             }
             if (tLRPC$TL_messages_stickerSet != null && tLRPC$TL_messages_stickerSet.set != null) {
                 AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_messages_stickerSet) {
-                    private final /* synthetic */ TLRPC$TL_messages_stickerSet f$1;
+                    public final /* synthetic */ TLRPC$TL_messages_stickerSet f$1;
 
                     {
                         this.f$1 = r2;
@@ -918,7 +918,7 @@ public class MediaDataController extends BaseController {
     public /* synthetic */ void lambda$loadGroupStickerSet$12$MediaDataController(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable((TLRPC$TL_messages_stickerSet) tLObject) {
-                private final /* synthetic */ TLRPC$TL_messages_stickerSet f$1;
+                public final /* synthetic */ TLRPC$TL_messages_stickerSet f$1;
 
                 {
                     this.f$1 = r2;
@@ -938,7 +938,7 @@ public class MediaDataController extends BaseController {
 
     private void putSetToCache(TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
         getMessagesStorage().getStorageQueue().postRunnable(new Runnable(tLRPC$TL_messages_stickerSet) {
-            private final /* synthetic */ TLRPC$TL_messages_stickerSet f$1;
+            public final /* synthetic */ TLRPC$TL_messages_stickerSet f$1;
 
             {
                 this.f$1 = r2;
@@ -1210,9 +1210,9 @@ public class MediaDataController extends BaseController {
             }
             queryFinalized.dispose();
             AndroidUtilities.runOnUIThread(new Runnable(z, arrayList, i) {
-                private final /* synthetic */ boolean f$1;
-                private final /* synthetic */ ArrayList f$2;
-                private final /* synthetic */ int f$3;
+                public final /* synthetic */ boolean f$1;
+                public final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ int f$3;
 
                 {
                     this.f$1 = r2;
@@ -1266,11 +1266,11 @@ public class MediaDataController extends BaseController {
     public void processLoadedRecentDocuments(int i, ArrayList<TLRPC$Document> arrayList, boolean z, int i2, boolean z2) {
         if (arrayList != null) {
             getMessagesStorage().getStorageQueue().postRunnable(new Runnable(z, i, arrayList, z2, i2) {
-                private final /* synthetic */ boolean f$1;
-                private final /* synthetic */ int f$2;
-                private final /* synthetic */ ArrayList f$3;
-                private final /* synthetic */ boolean f$4;
-                private final /* synthetic */ int f$5;
+                public final /* synthetic */ boolean f$1;
+                public final /* synthetic */ int f$2;
+                public final /* synthetic */ ArrayList f$3;
+                public final /* synthetic */ boolean f$4;
+                public final /* synthetic */ int f$5;
 
                 {
                     this.f$1 = r2;
@@ -1287,9 +1287,9 @@ public class MediaDataController extends BaseController {
         }
         if (i2 == 0) {
             AndroidUtilities.runOnUIThread(new Runnable(z, i, arrayList) {
-                private final /* synthetic */ boolean f$1;
-                private final /* synthetic */ int f$2;
-                private final /* synthetic */ ArrayList f$3;
+                public final /* synthetic */ boolean f$1;
+                public final /* synthetic */ int f$2;
+                public final /* synthetic */ ArrayList f$3;
 
                 {
                     this.f$1 = r2;
@@ -1398,7 +1398,7 @@ public class MediaDataController extends BaseController {
 
     public void reorderStickers(int i, ArrayList<Long> arrayList) {
         Collections.sort(this.stickerSets[i], new Comparator(arrayList) {
-            private final /* synthetic */ ArrayList f$0;
+            public final /* synthetic */ ArrayList f$0;
 
             {
                 this.f$0 = r1;
@@ -1489,7 +1489,7 @@ public class MediaDataController extends BaseController {
             }
             tLRPC$TL_messages_getFeaturedStickers.hash = i;
             getConnectionsManager().sendRequest(tLRPC$TL_messages_getFeaturedStickers, new RequestDelegate(tLRPC$TL_messages_getFeaturedStickers) {
-                private final /* synthetic */ TLRPC$TL_messages_getFeaturedStickers f$1;
+                public final /* synthetic */ TLRPC$TL_messages_getFeaturedStickers f$1;
 
                 {
                     this.f$1 = r2;
@@ -1618,8 +1618,8 @@ public class MediaDataController extends BaseController {
 
     public /* synthetic */ void lambda$loadFeaturedStickers$23$MediaDataController(TLRPC$TL_messages_getFeaturedStickers tLRPC$TL_messages_getFeaturedStickers, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject, tLRPC$TL_messages_getFeaturedStickers) {
-            private final /* synthetic */ TLObject f$1;
-            private final /* synthetic */ TLRPC$TL_messages_getFeaturedStickers f$2;
+            public final /* synthetic */ TLObject f$1;
+            public final /* synthetic */ TLRPC$TL_messages_getFeaturedStickers f$2;
 
             {
                 this.f$1 = r2;
@@ -1649,11 +1649,11 @@ public class MediaDataController extends BaseController {
             }
         });
         Utilities.stageQueue.postRunnable(new Runnable(z, arrayList, i, i2, arrayList2) {
-            private final /* synthetic */ boolean f$1;
-            private final /* synthetic */ ArrayList f$2;
-            private final /* synthetic */ int f$3;
-            private final /* synthetic */ int f$4;
-            private final /* synthetic */ ArrayList f$5;
+            public final /* synthetic */ boolean f$1;
+            public final /* synthetic */ ArrayList f$2;
+            public final /* synthetic */ int f$3;
+            public final /* synthetic */ int f$4;
+            public final /* synthetic */ ArrayList f$5;
 
             {
                 this.f$1 = r2;
@@ -1678,8 +1678,8 @@ public class MediaDataController extends BaseController {
         long j = 1000;
         if ((z && (arrayList == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) i)) >= 3600)) || (!z && arrayList == null && i2 == 0)) {
             $$Lambda$MediaDataController$FwEWZLiF9QRydv_6hT49S02xw r2 = new Runnable(arrayList, i2) {
-                private final /* synthetic */ ArrayList f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -1711,11 +1711,11 @@ public class MediaDataController extends BaseController {
                     putFeaturedStickersToCache(arrayList3, arrayList2, i, i2);
                 }
                 AndroidUtilities.runOnUIThread(new Runnable(arrayList2, longSparseArray, arrayList3, i2, i) {
-                    private final /* synthetic */ ArrayList f$1;
-                    private final /* synthetic */ LongSparseArray f$2;
-                    private final /* synthetic */ ArrayList f$3;
-                    private final /* synthetic */ int f$4;
-                    private final /* synthetic */ int f$5;
+                    public final /* synthetic */ ArrayList f$1;
+                    public final /* synthetic */ LongSparseArray f$2;
+                    public final /* synthetic */ ArrayList f$3;
+                    public final /* synthetic */ int f$4;
+                    public final /* synthetic */ int f$5;
 
                     {
                         this.f$1 = r2;
@@ -1734,7 +1734,7 @@ public class MediaDataController extends BaseController {
             }
         } else if (!z) {
             AndroidUtilities.runOnUIThread(new Runnable(i) {
-                private final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$1;
 
                 {
                     this.f$1 = r2;
@@ -1771,10 +1771,10 @@ public class MediaDataController extends BaseController {
 
     private void putFeaturedStickersToCache(ArrayList<TLRPC$StickerSetCovered> arrayList, ArrayList<Long> arrayList2, int i, int i2) {
         getMessagesStorage().getStorageQueue().postRunnable(new Runnable(arrayList != null ? new ArrayList(arrayList) : null, arrayList2, i, i2) {
-            private final /* synthetic */ ArrayList f$1;
-            private final /* synthetic */ ArrayList f$2;
-            private final /* synthetic */ int f$3;
-            private final /* synthetic */ int f$4;
+            public final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ ArrayList f$2;
+            public final /* synthetic */ int f$3;
+            public final /* synthetic */ int f$4;
 
             {
                 this.f$1 = r2;
@@ -1875,7 +1875,7 @@ public class MediaDataController extends BaseController {
             tLRPC$TL_messages_readFeaturedStickers.id.add(Long.valueOf(j));
             getConnectionsManager().sendRequest(tLRPC$TL_messages_readFeaturedStickers, $$Lambda$MediaDataController$03_yXj93NmYjr7N9Yky5sc7MnNY.INSTANCE);
             AndroidUtilities.runOnUIThread(new Runnable(j) {
-                private final /* synthetic */ long f$1;
+                public final /* synthetic */ long f$1;
 
                 {
                     this.f$1 = r2;
@@ -1921,8 +1921,8 @@ public class MediaDataController extends BaseController {
                     }
                 } else if (z) {
                     AndroidUtilities.runOnUIThread(new Runnable(tLRPC$Message, stickerSetName) {
-                        private final /* synthetic */ TLRPC$Message f$1;
-                        private final /* synthetic */ String f$2;
+                        public final /* synthetic */ TLRPC$Message f$1;
+                        public final /* synthetic */ String f$2;
 
                         {
                             this.f$1 = r2;
@@ -1952,7 +1952,7 @@ public class MediaDataController extends BaseController {
         TLRPC$TL_messages_getStickerSet tLRPC$TL_messages_getStickerSet = new TLRPC$TL_messages_getStickerSet();
         tLRPC$TL_messages_getStickerSet.stickerset = MessageObject.getInputStickerSet(tLRPC$Message);
         getConnectionsManager().sendRequest(tLRPC$TL_messages_getStickerSet, new RequestDelegate(str) {
-            private final /* synthetic */ String f$1;
+            public final /* synthetic */ String f$1;
 
             {
                 this.f$1 = r2;
@@ -1966,8 +1966,8 @@ public class MediaDataController extends BaseController {
 
     public /* synthetic */ void lambda$verifyAnimatedStickerMessageInternal$35$MediaDataController(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(str, tLObject) {
-            private final /* synthetic */ String f$1;
-            private final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ TLObject f$2;
 
             {
                 this.f$1 = r2;
@@ -2036,7 +2036,7 @@ public class MediaDataController extends BaseController {
         }
         tLRPC$TL_messages_getArchivedStickers.masks = z2;
         getConnectionsManager().sendRequest(tLRPC$TL_messages_getArchivedStickers, new RequestDelegate(i) {
-            private final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$1;
 
             {
                 this.f$1 = r2;
@@ -2050,9 +2050,9 @@ public class MediaDataController extends BaseController {
 
     public /* synthetic */ void lambda$loadArchivedStickersCount$37$MediaDataController(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, i) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
-            private final /* synthetic */ int f$3;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ int f$3;
 
             {
                 this.f$1 = r2;
@@ -2112,12 +2112,12 @@ public class MediaDataController extends BaseController {
                 $$Lambda$MediaDataController$cW1u3bkcnk0xDdPln8CZh5o3VNQ r10 = r0;
                 ConnectionsManager connectionsManager = getConnectionsManager();
                 $$Lambda$MediaDataController$cW1u3bkcnk0xDdPln8CZh5o3VNQ r0 = new RequestDelegate(arrayList, i2, longSparseArray, tLRPC$StickerSet, tLRPC$TL_messages_allStickers, i) {
-                    private final /* synthetic */ ArrayList f$1;
-                    private final /* synthetic */ int f$2;
-                    private final /* synthetic */ LongSparseArray f$3;
-                    private final /* synthetic */ TLRPC$StickerSet f$4;
-                    private final /* synthetic */ TLRPC$TL_messages_allStickers f$5;
-                    private final /* synthetic */ int f$6;
+                    public final /* synthetic */ ArrayList f$1;
+                    public final /* synthetic */ int f$2;
+                    public final /* synthetic */ LongSparseArray f$3;
+                    public final /* synthetic */ TLRPC$StickerSet f$4;
+                    public final /* synthetic */ TLRPC$TL_messages_allStickers f$5;
+                    public final /* synthetic */ int f$6;
 
                     {
                         this.f$1 = r2;
@@ -2141,13 +2141,13 @@ public class MediaDataController extends BaseController {
 
     public /* synthetic */ void lambda$processLoadStickersResponse$39$MediaDataController(ArrayList arrayList, int i, LongSparseArray longSparseArray, TLRPC$StickerSet tLRPC$StickerSet, TLRPC$TL_messages_allStickers tLRPC$TL_messages_allStickers, int i2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject, arrayList, i, longSparseArray, tLRPC$StickerSet, tLRPC$TL_messages_allStickers, i2) {
-            private final /* synthetic */ TLObject f$1;
-            private final /* synthetic */ ArrayList f$2;
-            private final /* synthetic */ int f$3;
-            private final /* synthetic */ LongSparseArray f$4;
-            private final /* synthetic */ TLRPC$StickerSet f$5;
-            private final /* synthetic */ TLRPC$TL_messages_allStickers f$6;
-            private final /* synthetic */ int f$7;
+            public final /* synthetic */ TLObject f$1;
+            public final /* synthetic */ ArrayList f$2;
+            public final /* synthetic */ int f$3;
+            public final /* synthetic */ LongSparseArray f$4;
+            public final /* synthetic */ TLRPC$StickerSet f$5;
+            public final /* synthetic */ TLRPC$TL_messages_allStickers f$6;
+            public final /* synthetic */ int f$7;
 
             {
                 this.f$1 = r2;
@@ -2187,7 +2187,7 @@ public class MediaDataController extends BaseController {
             this.loadingDiceStickerSets.add(str);
             if (z) {
                 getMessagesStorage().getStorageQueue().postRunnable(new Runnable(str) {
-                    private final /* synthetic */ String f$1;
+                    public final /* synthetic */ String f$1;
 
                     {
                         this.f$1 = r2;
@@ -2204,7 +2204,7 @@ public class MediaDataController extends BaseController {
             tLRPC$TL_inputStickerSetDice.emoticon = str;
             tLRPC$TL_messages_getStickerSet.stickerset = tLRPC$TL_inputStickerSetDice;
             getConnectionsManager().sendRequest(tLRPC$TL_messages_getStickerSet, new RequestDelegate(str) {
-                private final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
@@ -2289,8 +2289,8 @@ public class MediaDataController extends BaseController {
 
     public /* synthetic */ void lambda$loadDiceStickers$42$MediaDataController(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject, str) {
-            private final /* synthetic */ TLObject f$1;
-            private final /* synthetic */ String f$2;
+            public final /* synthetic */ TLObject f$1;
+            public final /* synthetic */ String f$2;
 
             {
                 this.f$1 = r2;
@@ -2313,7 +2313,7 @@ public class MediaDataController extends BaseController {
 
     private void processLoadedDiceStickers(String str, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet, boolean z, int i) {
         AndroidUtilities.runOnUIThread(new Runnable(str) {
-            private final /* synthetic */ String f$1;
+            public final /* synthetic */ String f$1;
 
             {
                 this.f$1 = r2;
@@ -2324,10 +2324,10 @@ public class MediaDataController extends BaseController {
             }
         });
         Utilities.stageQueue.postRunnable(new Runnable(z, tLRPC$TL_messages_stickerSet, i, str) {
-            private final /* synthetic */ boolean f$1;
-            private final /* synthetic */ TLRPC$TL_messages_stickerSet f$2;
-            private final /* synthetic */ int f$3;
-            private final /* synthetic */ String f$4;
+            public final /* synthetic */ boolean f$1;
+            public final /* synthetic */ TLRPC$TL_messages_stickerSet f$2;
+            public final /* synthetic */ int f$3;
+            public final /* synthetic */ String f$4;
 
             {
                 this.f$1 = r2;
@@ -2350,7 +2350,7 @@ public class MediaDataController extends BaseController {
         long j = 1000;
         if ((z && (tLRPC$TL_messages_stickerSet == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) i)) >= 86400)) || (!z && tLRPC$TL_messages_stickerSet == null)) {
             $$Lambda$MediaDataController$yyy88Px8fzBegOlVtF9FTNR8D7A r2 = new Runnable(str) {
-                private final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
@@ -2373,8 +2373,8 @@ public class MediaDataController extends BaseController {
                 putDiceStickersToCache(str, tLRPC$TL_messages_stickerSet, i);
             }
             AndroidUtilities.runOnUIThread(new Runnable(str, tLRPC$TL_messages_stickerSet) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ TLRPC$TL_messages_stickerSet f$2;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ TLRPC$TL_messages_stickerSet f$2;
 
                 {
                     this.f$1 = r2;
@@ -2403,9 +2403,9 @@ public class MediaDataController extends BaseController {
     private void putDiceStickersToCache(String str, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet, int i) {
         if (!TextUtils.isEmpty(str)) {
             getMessagesStorage().getStorageQueue().postRunnable(new Runnable(tLRPC$TL_messages_stickerSet, str, i) {
-                private final /* synthetic */ TLRPC$TL_messages_stickerSet f$1;
-                private final /* synthetic */ String f$2;
-                private final /* synthetic */ int f$3;
+                public final /* synthetic */ TLRPC$TL_messages_stickerSet f$1;
+                public final /* synthetic */ String f$2;
+                public final /* synthetic */ int f$3;
 
                 {
                     this.f$1 = r2;
@@ -2682,9 +2682,9 @@ public class MediaDataController extends BaseController {
 
     public /* synthetic */ void lambda$loadStickers$52$MediaDataController(int i, int i2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject, i, i2) {
-            private final /* synthetic */ TLObject f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ int f$3;
+            public final /* synthetic */ TLObject f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$3;
 
             {
                 this.f$1 = r2;
@@ -2708,10 +2708,10 @@ public class MediaDataController extends BaseController {
 
     private void putStickersToCache(int i, ArrayList<TLRPC$TL_messages_stickerSet> arrayList, int i2, int i3) {
         getMessagesStorage().getStorageQueue().postRunnable(new Runnable(arrayList != null ? new ArrayList(arrayList) : null, i, i2, i3) {
-            private final /* synthetic */ ArrayList f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ int f$3;
-            private final /* synthetic */ int f$4;
+            public final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$3;
+            public final /* synthetic */ int f$4;
 
             {
                 this.f$1 = r2;
@@ -2812,7 +2812,7 @@ public class MediaDataController extends BaseController {
 
     private void processLoadedStickers(int i, ArrayList<TLRPC$TL_messages_stickerSet> arrayList, boolean z, int i2, int i3) {
         AndroidUtilities.runOnUIThread(new Runnable(i) {
-            private final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$1;
 
             {
                 this.f$1 = r2;
@@ -2823,11 +2823,11 @@ public class MediaDataController extends BaseController {
             }
         });
         Utilities.stageQueue.postRunnable(new Runnable(z, arrayList, i2, i3, i) {
-            private final /* synthetic */ boolean f$1;
-            private final /* synthetic */ ArrayList f$2;
-            private final /* synthetic */ int f$3;
-            private final /* synthetic */ int f$4;
-            private final /* synthetic */ int f$5;
+            public final /* synthetic */ boolean f$1;
+            public final /* synthetic */ ArrayList f$2;
+            public final /* synthetic */ int f$3;
+            public final /* synthetic */ int f$4;
+            public final /* synthetic */ int f$5;
 
             {
                 this.f$1 = r2;
@@ -2863,9 +2863,9 @@ public class MediaDataController extends BaseController {
         long j = 1000;
         if ((z && (arrayList2 == null || Math.abs((System.currentTimeMillis() / 1000) - ((long) i5)) >= 3600)) || (!z && arrayList2 == null && i6 == 0)) {
             $$Lambda$MediaDataController$4XBqM433fvtMSi5PlqhVRpl7vzE r4 = new Runnable(arrayList2, i6, i7) {
-                private final /* synthetic */ ArrayList f$1;
-                private final /* synthetic */ int f$2;
-                private final /* synthetic */ int f$3;
+                public final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ int f$2;
+                public final /* synthetic */ int f$3;
 
                 {
                     this.f$1 = r2;
@@ -2967,15 +2967,15 @@ public class MediaDataController extends BaseController {
                     putStickersToCache(i7, arrayList3, i5, i6);
                 }
                 AndroidUtilities.runOnUIThread(new Runnable(i3, longSparseArray5, hashMap4, arrayList3, i2, i, longSparseArray3, hashMap2, longSparseArray2) {
-                    private final /* synthetic */ int f$1;
-                    private final /* synthetic */ LongSparseArray f$2;
-                    private final /* synthetic */ HashMap f$3;
-                    private final /* synthetic */ ArrayList f$4;
-                    private final /* synthetic */ int f$5;
-                    private final /* synthetic */ int f$6;
-                    private final /* synthetic */ LongSparseArray f$7;
-                    private final /* synthetic */ HashMap f$8;
-                    private final /* synthetic */ LongSparseArray f$9;
+                    public final /* synthetic */ int f$1;
+                    public final /* synthetic */ LongSparseArray f$2;
+                    public final /* synthetic */ HashMap f$3;
+                    public final /* synthetic */ ArrayList f$4;
+                    public final /* synthetic */ int f$5;
+                    public final /* synthetic */ int f$6;
+                    public final /* synthetic */ LongSparseArray f$7;
+                    public final /* synthetic */ HashMap f$8;
+                    public final /* synthetic */ LongSparseArray f$9;
 
                     {
                         this.f$1 = r2;
@@ -2998,8 +2998,8 @@ public class MediaDataController extends BaseController {
             }
         } else if (!z) {
             AndroidUtilities.runOnUIThread(new Runnable(i7, i5) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -3159,10 +3159,10 @@ public class MediaDataController extends BaseController {
             StickerSetBulletinLayout stickerSetBulletinLayout = new StickerSetBulletinLayout(context2, tLObject2, i3);
             Bulletin.UndoButton undoButton = new Bulletin.UndoButton(context2);
             undoButton.setUndoAction(new Runnable(tLRPC$StickerSet, i4, i2, tLRPC$TL_messages_stickerSet) {
-                private final /* synthetic */ TLRPC$StickerSet f$1;
-                private final /* synthetic */ int f$2;
-                private final /* synthetic */ int f$3;
-                private final /* synthetic */ TLRPC$TL_messages_stickerSet f$4;
+                public final /* synthetic */ TLRPC$StickerSet f$1;
+                public final /* synthetic */ int f$2;
+                public final /* synthetic */ int f$3;
+                public final /* synthetic */ TLRPC$TL_messages_stickerSet f$4;
 
                 {
                     this.f$1 = r2;
@@ -3176,13 +3176,13 @@ public class MediaDataController extends BaseController {
                 }
             });
             undoButton.setDelayedAction(new Runnable(context, i, baseFragment, z, tLObject, tLRPC$StickerSet, i4) {
-                private final /* synthetic */ Context f$1;
-                private final /* synthetic */ int f$2;
-                private final /* synthetic */ BaseFragment f$3;
-                private final /* synthetic */ boolean f$4;
-                private final /* synthetic */ TLObject f$5;
-                private final /* synthetic */ TLRPC$StickerSet f$6;
-                private final /* synthetic */ int f$7;
+                public final /* synthetic */ Context f$1;
+                public final /* synthetic */ int f$2;
+                public final /* synthetic */ BaseFragment f$3;
+                public final /* synthetic */ boolean f$4;
+                public final /* synthetic */ TLObject f$5;
+                public final /* synthetic */ TLRPC$StickerSet f$6;
+                public final /* synthetic */ int f$7;
 
                 {
                     this.f$1 = r2;
@@ -3242,13 +3242,13 @@ public class MediaDataController extends BaseController {
             }
             tLRPC$TL_messages_installStickerSet.archived = z3;
             getConnectionsManager().sendRequest(tLRPC$TL_messages_installStickerSet, new RequestDelegate(tLRPC$StickerSet, baseFragment, z, i2, z2, context, tLObject) {
-                private final /* synthetic */ TLRPC$StickerSet f$1;
-                private final /* synthetic */ BaseFragment f$2;
-                private final /* synthetic */ boolean f$3;
-                private final /* synthetic */ int f$4;
-                private final /* synthetic */ boolean f$5;
-                private final /* synthetic */ Context f$6;
-                private final /* synthetic */ TLObject f$7;
+                public final /* synthetic */ TLRPC$StickerSet f$1;
+                public final /* synthetic */ BaseFragment f$2;
+                public final /* synthetic */ boolean f$3;
+                public final /* synthetic */ int f$4;
+                public final /* synthetic */ boolean f$5;
+                public final /* synthetic */ Context f$6;
+                public final /* synthetic */ TLObject f$7;
 
                 {
                     this.f$1 = r2;
@@ -3269,8 +3269,8 @@ public class MediaDataController extends BaseController {
         TLRPC$TL_messages_uninstallStickerSet tLRPC$TL_messages_uninstallStickerSet = new TLRPC$TL_messages_uninstallStickerSet();
         tLRPC$TL_messages_uninstallStickerSet.stickerset = tLRPC$TL_inputStickerSetID;
         getConnectionsManager().sendRequest(tLRPC$TL_messages_uninstallStickerSet, new RequestDelegate(tLRPC$StickerSet2, i2) {
-            private final /* synthetic */ TLRPC$StickerSet f$1;
-            private final /* synthetic */ int f$2;
+            public final /* synthetic */ TLRPC$StickerSet f$1;
+            public final /* synthetic */ int f$2;
 
             {
                 this.f$1 = r2;
@@ -3285,15 +3285,15 @@ public class MediaDataController extends BaseController {
 
     public /* synthetic */ void lambda$toggleStickerSetInternal$62$MediaDataController(TLRPC$StickerSet tLRPC$StickerSet, BaseFragment baseFragment, boolean z, int i, boolean z2, Context context, TLObject tLObject, TLObject tLObject2, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$StickerSet, tLObject2, baseFragment, z, i, tLRPC$TL_error, z2, context, tLObject) {
-            private final /* synthetic */ TLRPC$StickerSet f$1;
-            private final /* synthetic */ TLObject f$2;
-            private final /* synthetic */ BaseFragment f$3;
-            private final /* synthetic */ boolean f$4;
-            private final /* synthetic */ int f$5;
-            private final /* synthetic */ TLRPC$TL_error f$6;
-            private final /* synthetic */ boolean f$7;
-            private final /* synthetic */ Context f$8;
-            private final /* synthetic */ TLObject f$9;
+            public final /* synthetic */ TLRPC$StickerSet f$1;
+            public final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ BaseFragment f$3;
+            public final /* synthetic */ boolean f$4;
+            public final /* synthetic */ int f$5;
+            public final /* synthetic */ TLRPC$TL_error f$6;
+            public final /* synthetic */ boolean f$7;
+            public final /* synthetic */ Context f$8;
+            public final /* synthetic */ TLObject f$9;
 
             {
                 this.f$1 = r2;
@@ -3326,8 +3326,8 @@ public class MediaDataController extends BaseController {
 
     public /* synthetic */ void lambda$toggleStickerSetInternal$64$MediaDataController(TLRPC$StickerSet tLRPC$StickerSet, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$StickerSet, i) {
-            private final /* synthetic */ TLRPC$StickerSet f$1;
-            private final /* synthetic */ int f$2;
+            public final /* synthetic */ TLRPC$StickerSet f$1;
+            public final /* synthetic */ int f$2;
 
             {
                 this.f$1 = r2;
@@ -3406,10 +3406,10 @@ public class MediaDataController extends BaseController {
             tLRPC$TL_messages_toggleStickerSets.unarchive = true;
         }
         getConnectionsManager().sendRequest(tLRPC$TL_messages_toggleStickerSets, new RequestDelegate(i2, baseFragment, z, i) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ BaseFragment f$2;
-            private final /* synthetic */ boolean f$3;
-            private final /* synthetic */ int f$4;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ BaseFragment f$2;
+            public final /* synthetic */ boolean f$3;
+            public final /* synthetic */ int f$4;
 
             {
                 this.f$1 = r2;
@@ -3426,11 +3426,11 @@ public class MediaDataController extends BaseController {
 
     public /* synthetic */ void lambda$toggleStickerSets$66$MediaDataController(int i, BaseFragment baseFragment, boolean z, int i2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(i, tLObject, baseFragment, z, i2) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ TLObject f$2;
-            private final /* synthetic */ BaseFragment f$3;
-            private final /* synthetic */ boolean f$4;
-            private final /* synthetic */ int f$5;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ BaseFragment f$3;
+            public final /* synthetic */ boolean f$4;
+            public final /* synthetic */ int f$5;
 
             {
                 this.f$1 = r2;
@@ -3519,7 +3519,7 @@ public class MediaDataController extends BaseController {
             NotificationCenter notificationCenter = getNotificationCenter();
             int i3 = NotificationCenter.chatSearchResultsAvailable;
             int[] iArr = this.messagesSearchCount;
-            notificationCenter.postNotificationName(i3, Integer.valueOf(i), Integer.valueOf(messageObject.getId()), Integer.valueOf(getMask()), Long.valueOf(messageObject.getDialogId()), Integer.valueOf(this.lastReturnedNum), Integer.valueOf(iArr[0] + iArr[1]), true);
+            notificationCenter.postNotificationName(i3, Integer.valueOf(i), Integer.valueOf(messageObject.getId()), Integer.valueOf(getMask()), Long.valueOf(messageObject.getDialogId()), Integer.valueOf(this.lastReturnedNum), Integer.valueOf(iArr[0] + iArr[1]), Boolean.TRUE);
         }
     }
 
@@ -3657,13 +3657,13 @@ public class MediaDataController extends BaseController {
                     tLRPC$TL_messages_search.filter = new TLRPC$TL_inputMessagesFilterEmpty();
                     $$Lambda$MediaDataController$b2lPY6PzegWDkDgPGJAX8u3pbII r11 = r0;
                     $$Lambda$MediaDataController$b2lPY6PzegWDkDgPGJAX8u3pbII r0 = new RequestDelegate(j2, tLRPC$TL_messages_search, j, i, i2, tLRPC$User, z2) {
-                        private final /* synthetic */ long f$1;
-                        private final /* synthetic */ TLRPC$TL_messages_search f$2;
-                        private final /* synthetic */ long f$3;
-                        private final /* synthetic */ int f$4;
-                        private final /* synthetic */ int f$5;
-                        private final /* synthetic */ TLRPC$User f$6;
-                        private final /* synthetic */ boolean f$7;
+                        public final /* synthetic */ long f$1;
+                        public final /* synthetic */ TLRPC$TL_messages_search f$2;
+                        public final /* synthetic */ long f$3;
+                        public final /* synthetic */ int f$4;
+                        public final /* synthetic */ int f$5;
+                        public final /* synthetic */ TLRPC$User f$6;
+                        public final /* synthetic */ boolean f$7;
 
                         {
                             this.f$1 = r2;
@@ -3714,14 +3714,14 @@ public class MediaDataController extends BaseController {
             ConnectionsManager connectionsManager = getConnectionsManager();
             $$Lambda$MediaDataController$ANP0Cnl_2mmvwh2d6ngBJru7ld0 r13 = r0;
             $$Lambda$MediaDataController$ANP0Cnl_2mmvwh2d6ngBJru7ld0 r02 = new RequestDelegate(i10, z2, tLRPC$TL_messages_search2, j3, j, i, j2, tLRPC$User) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ boolean f$2;
-                private final /* synthetic */ TLRPC$TL_messages_search f$3;
-                private final /* synthetic */ long f$4;
-                private final /* synthetic */ long f$5;
-                private final /* synthetic */ int f$6;
-                private final /* synthetic */ long f$7;
-                private final /* synthetic */ TLRPC$User f$8;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ boolean f$2;
+                public final /* synthetic */ TLRPC$TL_messages_search f$3;
+                public final /* synthetic */ long f$4;
+                public final /* synthetic */ long f$5;
+                public final /* synthetic */ int f$6;
+                public final /* synthetic */ long f$7;
+                public final /* synthetic */ TLRPC$User f$8;
 
                 {
                     this.f$1 = r2;
@@ -3744,14 +3744,14 @@ public class MediaDataController extends BaseController {
 
     public /* synthetic */ void lambda$searchMessagesInChat$68$MediaDataController(long j, TLRPC$TL_messages_search tLRPC$TL_messages_search, long j2, int i, int i2, TLRPC$User tLRPC$User, boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(j, tLObject, tLRPC$TL_messages_search, j2, i, i2, tLRPC$User, z) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ TLObject f$2;
-            private final /* synthetic */ TLRPC$TL_messages_search f$3;
-            private final /* synthetic */ long f$4;
-            private final /* synthetic */ int f$5;
-            private final /* synthetic */ int f$6;
-            private final /* synthetic */ TLRPC$User f$7;
-            private final /* synthetic */ boolean f$8;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_messages_search f$3;
+            public final /* synthetic */ long f$4;
+            public final /* synthetic */ int f$5;
+            public final /* synthetic */ int f$6;
+            public final /* synthetic */ TLRPC$User f$7;
+            public final /* synthetic */ boolean f$8;
 
             {
                 this.f$1 = r2;
@@ -3784,15 +3784,15 @@ public class MediaDataController extends BaseController {
 
     public /* synthetic */ void lambda$searchMessagesInChat$70$MediaDataController(int i, boolean z, TLRPC$TL_messages_search tLRPC$TL_messages_search, long j, long j2, int i2, long j3, TLRPC$User tLRPC$User, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(i, z, tLObject, tLRPC$TL_messages_search, j, j2, i2, j3, tLRPC$User) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ boolean f$2;
-            private final /* synthetic */ TLObject f$3;
-            private final /* synthetic */ TLRPC$TL_messages_search f$4;
-            private final /* synthetic */ long f$5;
-            private final /* synthetic */ long f$6;
-            private final /* synthetic */ int f$7;
-            private final /* synthetic */ long f$8;
-            private final /* synthetic */ TLRPC$User f$9;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ boolean f$2;
+            public final /* synthetic */ TLObject f$3;
+            public final /* synthetic */ TLRPC$TL_messages_search f$4;
+            public final /* synthetic */ long f$5;
+            public final /* synthetic */ long f$6;
+            public final /* synthetic */ int f$7;
+            public final /* synthetic */ long f$8;
+            public final /* synthetic */ TLRPC$User f$9;
 
             {
                 this.f$1 = r2;
@@ -4026,8 +4026,8 @@ public class MediaDataController extends BaseController {
 
     public void getMediaCounts(long j, int i) {
         getMessagesStorage().getStorageQueue().postRunnable(new Runnable(j, i) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ int f$2;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ int f$2;
 
             {
                 this.f$1 = r2;
@@ -4295,8 +4295,8 @@ public class MediaDataController extends BaseController {
         }
         if (z) {
             AndroidUtilities.runOnUIThread(new Runnable(j, iArr) {
-                private final /* synthetic */ long f$1;
-                private final /* synthetic */ int[] f$2;
+                public final /* synthetic */ long f$1;
+                public final /* synthetic */ int[] f$2;
 
                 {
                     this.f$1 = r2;
@@ -4345,9 +4345,9 @@ public class MediaDataController extends BaseController {
         tLRPC$TL_messages_search.peer = inputPeer;
         if (inputPeer != null) {
             getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_search, new RequestDelegate(j, i, i2) {
-                private final /* synthetic */ long f$1;
-                private final /* synthetic */ int f$2;
-                private final /* synthetic */ int f$3;
+                public final /* synthetic */ long f$1;
+                public final /* synthetic */ int f$2;
+                public final /* synthetic */ int f$3;
 
                 {
                     this.f$1 = r2;
@@ -4373,7 +4373,7 @@ public class MediaDataController extends BaseController {
                 i3 = tLRPC$messages_Messages.count;
             }
             AndroidUtilities.runOnUIThread(new Runnable(tLRPC$messages_Messages) {
-                private final /* synthetic */ TLRPC$messages_Messages f$1;
+                public final /* synthetic */ TLRPC$messages_Messages f$1;
 
                 {
                     this.f$1 = r2;
@@ -4477,12 +4477,12 @@ public class MediaDataController extends BaseController {
                 putMediaDatabase(j, i3, tLRPC$messages_Messages2.messages, i2, z2);
             }
             Utilities.searchQueue.postRunnable(new Runnable(tLRPC$messages_Messages, i4, j, i5, i3, z2) {
-                private final /* synthetic */ TLRPC$messages_Messages f$1;
-                private final /* synthetic */ int f$2;
-                private final /* synthetic */ long f$3;
-                private final /* synthetic */ int f$4;
-                private final /* synthetic */ int f$5;
-                private final /* synthetic */ boolean f$6;
+                public final /* synthetic */ TLRPC$messages_Messages f$1;
+                public final /* synthetic */ int f$2;
+                public final /* synthetic */ long f$3;
+                public final /* synthetic */ int f$4;
+                public final /* synthetic */ int f$5;
+                public final /* synthetic */ boolean f$6;
 
                 {
                     this.f$1 = r2;
@@ -4514,13 +4514,13 @@ public class MediaDataController extends BaseController {
             arrayList.add(new MessageObject(this.currentAccount, tLRPC$messages_Messages2.messages.get(i5), (SparseArray<TLRPC$User>) sparseArray, true));
         }
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$messages_Messages, i, j, arrayList, i2, i3, z) {
-            private final /* synthetic */ TLRPC$messages_Messages f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ long f$3;
-            private final /* synthetic */ ArrayList f$4;
-            private final /* synthetic */ int f$5;
-            private final /* synthetic */ int f$6;
-            private final /* synthetic */ boolean f$7;
+            public final /* synthetic */ TLRPC$messages_Messages f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ long f$3;
+            public final /* synthetic */ ArrayList f$4;
+            public final /* synthetic */ int f$5;
+            public final /* synthetic */ int f$6;
+            public final /* synthetic */ boolean f$7;
 
             {
                 this.f$1 = r2;
@@ -4547,12 +4547,12 @@ public class MediaDataController extends BaseController {
 
     private void processLoadedMediaCount(int i, long j, int i2, int i3, boolean z, int i4) {
         AndroidUtilities.runOnUIThread(new Runnable(j, z, i, i2, i4, i3) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ boolean f$2;
-            private final /* synthetic */ int f$3;
-            private final /* synthetic */ int f$4;
-            private final /* synthetic */ int f$5;
-            private final /* synthetic */ int f$6;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ boolean f$2;
+            public final /* synthetic */ int f$3;
+            public final /* synthetic */ int f$4;
+            public final /* synthetic */ int f$5;
+            public final /* synthetic */ int f$6;
 
             {
                 this.f$1 = r2;
@@ -4598,9 +4598,9 @@ public class MediaDataController extends BaseController {
 
     private void putMediaCountDatabase(long j, int i, int i2) {
         getMessagesStorage().getStorageQueue().postRunnable(new Runnable(j, i, i2) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ int f$3;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$3;
 
             {
                 this.f$1 = r2;
@@ -4631,9 +4631,9 @@ public class MediaDataController extends BaseController {
 
     private void getMediaCountDatabase(long j, int i, int i2) {
         getMessagesStorage().getStorageQueue().postRunnable(new Runnable(j, i, i2) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ int f$3;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$3;
 
             {
                 this.f$1 = r2;
@@ -4821,8 +4821,8 @@ public class MediaDataController extends BaseController {
                         z = z2;
                     }
                     r2 = new Runnable(this, i9) {
-                        private final /* synthetic */ Runnable f$1;
-                        private final /* synthetic */ int f$2;
+                        public final /* synthetic */ Runnable f$1;
+                        public final /* synthetic */ int f$2;
 
                         {
                             this.f$1 = r2;
@@ -4840,8 +4840,8 @@ public class MediaDataController extends BaseController {
                     tLRPC$TL_messages_messages.users.clear();
                     FileLog.e((Throwable) e);
                     r2 = new Runnable(this, i9) {
-                        private final /* synthetic */ Runnable f$1;
-                        private final /* synthetic */ int f$2;
+                        public final /* synthetic */ Runnable f$1;
+                        public final /* synthetic */ int f$2;
 
                         {
                             this.f$1 = r2;
@@ -4854,8 +4854,8 @@ public class MediaDataController extends BaseController {
                     };
                 } catch (Throwable th) {
                     AndroidUtilities.runOnUIThread(new Runnable(this, i9) {
-                        private final /* synthetic */ Runnable f$1;
-                        private final /* synthetic */ int f$2;
+                        public final /* synthetic */ Runnable f$1;
+                        public final /* synthetic */ int f$2;
 
                         {
                             this.f$1 = r2;
@@ -4884,11 +4884,11 @@ public class MediaDataController extends BaseController {
 
     private void putMediaDatabase(long j, int i, ArrayList<TLRPC$Message> arrayList, int i2, boolean z) {
         getMessagesStorage().getStorageQueue().postRunnable(new Runnable(arrayList, z, j, i2, i) {
-            private final /* synthetic */ ArrayList f$1;
-            private final /* synthetic */ boolean f$2;
-            private final /* synthetic */ long f$3;
-            private final /* synthetic */ int f$4;
-            private final /* synthetic */ int f$5;
+            public final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ boolean f$2;
+            public final /* synthetic */ long f$3;
+            public final /* synthetic */ int f$4;
+            public final /* synthetic */ int f$5;
 
             {
                 this.f$1 = r2;
@@ -4960,8 +4960,8 @@ public class MediaDataController extends BaseController {
 
     public void loadMusic(long j, long j2) {
         getMessagesStorage().getStorageQueue().postRunnable(new Runnable(j, j2) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ long f$2;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ long f$2;
 
             {
                 this.f$1 = r2;
@@ -5070,7 +5070,7 @@ public class MediaDataController extends BaseController {
                 }
             }
             Utilities.globalQueue.postRunnable(new Runnable(arrayList) {
-                private final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ ArrayList f$1;
 
                 {
                     this.f$1 = r2;
@@ -5184,13 +5184,13 @@ public class MediaDataController extends BaseController {
             android.content.pm.ShortcutInfo$Builder r10 = new android.content.pm.ShortcutInfo$Builder     // Catch:{ all -> 0x02b3 }
             android.content.Context r11 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02b3 }
             r10.<init>(r11, r9)     // Catch:{ all -> 0x02b3 }
-            r11 = 2131625776(0x7f0e0730, float:1.887877E38)
+            r11 = 2131625789(0x7f0e073d, float:1.8878796E38)
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r11)     // Catch:{ all -> 0x02b3 }
             android.content.pm.ShortcutInfo$Builder r10 = r10.setShortLabel(r12)     // Catch:{ all -> 0x02b3 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r11)     // Catch:{ all -> 0x02b3 }
             android.content.pm.ShortcutInfo$Builder r0 = r10.setLongLabel(r0)     // Catch:{ all -> 0x02b3 }
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02b3 }
-            r11 = 2131165884(0x7var_bc, float:1.7945998E38)
+            r11 = 2131165886(0x7var_be, float:1.7946002E38)
             android.graphics.drawable.Icon r10 = android.graphics.drawable.Icon.createWithResource(r10, r11)     // Catch:{ all -> 0x02b3 }
             android.content.pm.ShortcutInfo$Builder r0 = r0.setIcon(r10)     // Catch:{ all -> 0x02b3 }
             android.content.pm.ShortcutInfo$Builder r0 = r0.setIntent(r3)     // Catch:{ all -> 0x02b3 }
@@ -5405,7 +5405,7 @@ public class MediaDataController extends BaseController {
             goto L_0x0296
         L_0x028a:
             android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02b3 }
-            r6 = 2131165885(0x7var_bd, float:1.7946E38)
+            r6 = 2131165887(0x7var_bf, float:1.7946004E38)
             android.graphics.drawable.Icon r3 = android.graphics.drawable.Icon.createWithResource(r3, r6)     // Catch:{ all -> 0x02b3 }
             r1.setIcon(r3)     // Catch:{ all -> 0x02b3 }
         L_0x0296:
@@ -5502,10 +5502,10 @@ public class MediaDataController extends BaseController {
                 getMessagesStorage().getChatsInternal(TextUtils.join(",", arrayList6), arrayList4);
             }
             AndroidUtilities.runOnUIThread(new Runnable(arrayList3, arrayList4, arrayList, arrayList2) {
-                private final /* synthetic */ ArrayList f$1;
-                private final /* synthetic */ ArrayList f$2;
-                private final /* synthetic */ ArrayList f$3;
-                private final /* synthetic */ ArrayList f$4;
+                public final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ ArrayList f$3;
+                public final /* synthetic */ ArrayList f$4;
 
                 {
                     this.f$1 = r2;
@@ -5541,7 +5541,7 @@ public class MediaDataController extends BaseController {
     public /* synthetic */ void lambda$loadHints$94$MediaDataController(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject instanceof TLRPC$TL_contacts_topPeers) {
             AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-                private final /* synthetic */ TLObject f$1;
+                public final /* synthetic */ TLObject f$1;
 
                 {
                     this.f$1 = r2;
@@ -5591,7 +5591,7 @@ public class MediaDataController extends BaseController {
         getNotificationCenter().postNotificationName(NotificationCenter.reloadHints, new Object[0]);
         getNotificationCenter().postNotificationName(NotificationCenter.reloadInlineHints, new Object[0]);
         getMessagesStorage().getStorageQueue().postRunnable(new Runnable(tLRPC$TL_contacts_topPeers) {
-            private final /* synthetic */ TLRPC$TL_contacts_topPeers f$1;
+            public final /* synthetic */ TLRPC$TL_contacts_topPeers f$1;
 
             {
                 this.f$1 = r2;
@@ -5758,8 +5758,8 @@ public class MediaDataController extends BaseController {
             TLRPC$User user = i > 0 ? getMessagesController().getUser(Integer.valueOf(i)) : null;
             if (user != null && !user.bot && !user.self) {
                 getMessagesStorage().getStorageQueue().postRunnable(new Runnable(j, i) {
-                    private final /* synthetic */ long f$1;
-                    private final /* synthetic */ int f$2;
+                    public final /* synthetic */ long f$1;
+                    public final /* synthetic */ int f$2;
 
                     {
                         this.f$1 = r2;
@@ -5794,9 +5794,9 @@ public class MediaDataController extends BaseController {
             FileLog.e((Throwable) e);
         }
         AndroidUtilities.runOnUIThread(new Runnable(i, d, j) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ double f$2;
-            private final /* synthetic */ long f$3;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ double f$2;
+            public final /* synthetic */ long f$3;
 
             {
                 this.f$1 = r2;
@@ -5868,9 +5868,9 @@ public class MediaDataController extends BaseController {
 
     private void savePeer(int i, int i2, double d) {
         getMessagesStorage().getStorageQueue().postRunnable(new Runnable(i, i2, d) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ double f$3;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ double f$3;
 
             {
                 this.f$1 = r2;
@@ -5901,8 +5901,8 @@ public class MediaDataController extends BaseController {
 
     private void deletePeer(int i, int i2) {
         getMessagesStorage().getStorageQueue().postRunnable(new Runnable(i, i2) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$2;
 
             {
                 this.f$1 = r2;
@@ -6005,7 +6005,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x023b }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131626631(0x7f0e0a87, float:1.8880504E38)
+            r9 = 2131626648(0x7f0e0a98, float:1.8880538E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x023b }
             r9 = r4
             r10 = 1
@@ -6360,9 +6360,9 @@ public class MediaDataController extends BaseController {
             return loadPinnedMessageInternal(j, i, i2, true);
         }
         getMessagesStorage().getStorageQueue().postRunnable(new Runnable(j, i, i2) {
-            private final /* synthetic */ long f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ int f$3;
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ int f$3;
 
             {
                 this.f$1 = r2;
@@ -6648,7 +6648,7 @@ public class MediaDataController extends BaseController {
 
     private void savePinnedMessage(TLRPC$Message tLRPC$Message) {
         getMessagesStorage().getStorageQueue().postRunnable(new Runnable(tLRPC$Message) {
-            private final /* synthetic */ TLRPC$Message f$1;
+            public final /* synthetic */ TLRPC$Message f$1;
 
             {
                 this.f$1 = r2;
@@ -6720,12 +6720,12 @@ public class MediaDataController extends BaseController {
             return new MessageObject(this.currentAccount, tLRPC$Message, (SparseArray<TLRPC$User>) sparseArray, (SparseArray<TLRPC$Chat>) sparseArray2, false);
         }
         AndroidUtilities.runOnUIThread(new Runnable(arrayList, z, arrayList2, tLRPC$Message, sparseArray, sparseArray2) {
-            private final /* synthetic */ ArrayList f$1;
-            private final /* synthetic */ boolean f$2;
-            private final /* synthetic */ ArrayList f$3;
-            private final /* synthetic */ TLRPC$Message f$4;
-            private final /* synthetic */ SparseArray f$5;
-            private final /* synthetic */ SparseArray f$6;
+            public final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ boolean f$2;
+            public final /* synthetic */ ArrayList f$3;
+            public final /* synthetic */ TLRPC$Message f$4;
+            public final /* synthetic */ SparseArray f$5;
+            public final /* synthetic */ SparseArray f$6;
 
             {
                 this.f$1 = r2;
@@ -6785,10 +6785,10 @@ public class MediaDataController extends BaseController {
             }
             if (!arrayList3.isEmpty()) {
                 getMessagesStorage().getStorageQueue().postRunnable(new Runnable(arrayList3, j, longSparseArray, runnable) {
-                    private final /* synthetic */ ArrayList f$1;
-                    private final /* synthetic */ long f$2;
-                    private final /* synthetic */ LongSparseArray f$3;
-                    private final /* synthetic */ Runnable f$4;
+                    public final /* synthetic */ ArrayList f$1;
+                    public final /* synthetic */ long f$2;
+                    public final /* synthetic */ LongSparseArray f$3;
+                    public final /* synthetic */ Runnable f$4;
 
                     {
                         this.f$1 = r2;
@@ -6838,13 +6838,13 @@ public class MediaDataController extends BaseController {
             }
             if (!arrayList5.isEmpty()) {
                 getMessagesStorage().getStorageQueue().postRunnable(new Runnable(sb, j, arrayList5, sparseArray, i2, z, runnable) {
-                    private final /* synthetic */ StringBuilder f$1;
-                    private final /* synthetic */ long f$2;
-                    private final /* synthetic */ ArrayList f$3;
-                    private final /* synthetic */ SparseArray f$4;
-                    private final /* synthetic */ int f$5;
-                    private final /* synthetic */ boolean f$6;
-                    private final /* synthetic */ Runnable f$7;
+                    public final /* synthetic */ StringBuilder f$1;
+                    public final /* synthetic */ long f$2;
+                    public final /* synthetic */ ArrayList f$3;
+                    public final /* synthetic */ SparseArray f$4;
+                    public final /* synthetic */ int f$5;
+                    public final /* synthetic */ boolean f$6;
+                    public final /* synthetic */ Runnable f$7;
 
                     {
                         this.f$1 = r2;
@@ -6904,7 +6904,7 @@ public class MediaDataController extends BaseController {
                 }
             }
             AndroidUtilities.runOnUIThread(new Runnable(j) {
-                private final /* synthetic */ long f$1;
+                public final /* synthetic */ long f$1;
 
                 {
                     this.f$1 = r2;
@@ -6967,10 +6967,10 @@ public class MediaDataController extends BaseController {
                     tLRPC$TL_channels_getMessages.channel = getMessagesController().getInputChannel(i2);
                     tLRPC$TL_channels_getMessages.id = arrayList2;
                     getConnectionsManager().sendRequest(tLRPC$TL_channels_getMessages, new RequestDelegate(sparseArray, j, z, runnable) {
-                        private final /* synthetic */ SparseArray f$1;
-                        private final /* synthetic */ long f$2;
-                        private final /* synthetic */ boolean f$3;
-                        private final /* synthetic */ Runnable f$4;
+                        public final /* synthetic */ SparseArray f$1;
+                        public final /* synthetic */ long f$2;
+                        public final /* synthetic */ boolean f$3;
+                        public final /* synthetic */ Runnable f$4;
 
                         {
                             this.f$1 = r2;
@@ -6988,10 +6988,10 @@ public class MediaDataController extends BaseController {
                 TLRPC$TL_messages_getMessages tLRPC$TL_messages_getMessages = new TLRPC$TL_messages_getMessages();
                 tLRPC$TL_messages_getMessages.id = arrayList2;
                 getConnectionsManager().sendRequest(tLRPC$TL_messages_getMessages, new RequestDelegate(sparseArray, j, z, runnable) {
-                    private final /* synthetic */ SparseArray f$1;
-                    private final /* synthetic */ long f$2;
-                    private final /* synthetic */ boolean f$3;
-                    private final /* synthetic */ Runnable f$4;
+                    public final /* synthetic */ SparseArray f$1;
+                    public final /* synthetic */ long f$2;
+                    public final /* synthetic */ boolean f$3;
+                    public final /* synthetic */ Runnable f$4;
 
                     {
                         this.f$1 = r2;
@@ -7040,9 +7040,9 @@ public class MediaDataController extends BaseController {
 
     private void saveReplyMessages(SparseArray<ArrayList<MessageObject>> sparseArray, ArrayList<TLRPC$Message> arrayList, boolean z) {
         getMessagesStorage().getStorageQueue().postRunnable(new Runnable(z, arrayList, sparseArray) {
-            private final /* synthetic */ boolean f$1;
-            private final /* synthetic */ ArrayList f$2;
-            private final /* synthetic */ SparseArray f$3;
+            public final /* synthetic */ boolean f$1;
+            public final /* synthetic */ ArrayList f$2;
+            public final /* synthetic */ SparseArray f$3;
 
             {
                 this.f$1 = r2;
@@ -7106,14 +7106,14 @@ public class MediaDataController extends BaseController {
             sparseArray3.put(tLRPC$Chat.id, tLRPC$Chat);
         }
         AndroidUtilities.runOnUIThread(new Runnable(arrayList2, z, arrayList3, arrayList, sparseArray, sparseArray2, sparseArray3, j) {
-            private final /* synthetic */ ArrayList f$1;
-            private final /* synthetic */ boolean f$2;
-            private final /* synthetic */ ArrayList f$3;
-            private final /* synthetic */ ArrayList f$4;
-            private final /* synthetic */ SparseArray f$5;
-            private final /* synthetic */ SparseArray f$6;
-            private final /* synthetic */ SparseArray f$7;
-            private final /* synthetic */ long f$8;
+            public final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ boolean f$2;
+            public final /* synthetic */ ArrayList f$3;
+            public final /* synthetic */ ArrayList f$4;
+            public final /* synthetic */ SparseArray f$5;
+            public final /* synthetic */ SparseArray f$6;
+            public final /* synthetic */ SparseArray f$7;
+            public final /* synthetic */ long f$8;
 
             {
                 this.f$1 = r2;
@@ -8354,9 +8354,9 @@ public class MediaDataController extends BaseController {
                         i = 0;
                     }
                     getMessagesStorage().getStorageQueue().postRunnable(new Runnable(j2, i, j) {
-                        private final /* synthetic */ long f$1;
-                        private final /* synthetic */ int f$2;
-                        private final /* synthetic */ long f$3;
+                        public final /* synthetic */ long f$1;
+                        public final /* synthetic */ int f$2;
+                        public final /* synthetic */ long f$3;
 
                         {
                             this.f$1 = r2;
@@ -8392,7 +8392,7 @@ public class MediaDataController extends BaseController {
                 tLRPC$TL_channels_getMessages.channel = getMessagesController().getInputChannel(i);
                 tLRPC$TL_channels_getMessages.id.add(Integer.valueOf((int) j));
                 getConnectionsManager().sendRequest(tLRPC$TL_channels_getMessages, new RequestDelegate(j2) {
-                    private final /* synthetic */ long f$1;
+                    public final /* synthetic */ long f$1;
 
                     {
                         this.f$1 = r2;
@@ -8406,7 +8406,7 @@ public class MediaDataController extends BaseController {
                 TLRPC$TL_messages_getMessages tLRPC$TL_messages_getMessages = new TLRPC$TL_messages_getMessages();
                 tLRPC$TL_messages_getMessages.id.add(Integer.valueOf((int) j));
                 getConnectionsManager().sendRequest(tLRPC$TL_messages_getMessages, new RequestDelegate(j2) {
-                    private final /* synthetic */ long f$1;
+                    public final /* synthetic */ long f$1;
 
                     {
                         this.f$1 = r2;
@@ -8443,8 +8443,8 @@ public class MediaDataController extends BaseController {
     private void saveDraftReplyMessage(long j, TLRPC$Message tLRPC$Message) {
         if (tLRPC$Message != null) {
             AndroidUtilities.runOnUIThread(new Runnable(j, tLRPC$Message) {
-                private final /* synthetic */ long f$1;
-                private final /* synthetic */ TLRPC$Message f$2;
+                public final /* synthetic */ long f$1;
+                public final /* synthetic */ TLRPC$Message f$2;
 
                 {
                     this.f$1 = r2;
@@ -8509,8 +8509,8 @@ public class MediaDataController extends BaseController {
 
     public void clearBotKeyboard(long j, ArrayList<Integer> arrayList) {
         AndroidUtilities.runOnUIThread(new Runnable(arrayList, j) {
-            private final /* synthetic */ ArrayList f$1;
-            private final /* synthetic */ long f$2;
+            public final /* synthetic */ ArrayList f$1;
+            public final /* synthetic */ long f$2;
 
             {
                 this.f$1 = r2;
@@ -8546,7 +8546,7 @@ public class MediaDataController extends BaseController {
             return;
         }
         getMessagesStorage().getStorageQueue().postRunnable(new Runnable(j) {
-            private final /* synthetic */ long f$1;
+            public final /* synthetic */ long f$1;
 
             {
                 this.f$1 = r2;
@@ -8570,8 +8570,8 @@ public class MediaDataController extends BaseController {
             queryFinalized.dispose();
             if (tLRPC$Message != null) {
                 AndroidUtilities.runOnUIThread(new Runnable(tLRPC$Message, j) {
-                    private final /* synthetic */ TLRPC$Message f$1;
-                    private final /* synthetic */ long f$2;
+                    public final /* synthetic */ TLRPC$Message f$1;
+                    public final /* synthetic */ long f$2;
 
                     {
                         this.f$1 = r2;
@@ -8596,8 +8596,8 @@ public class MediaDataController extends BaseController {
         TLRPC$BotInfo tLRPC$BotInfo;
         if (!z || (tLRPC$BotInfo = this.botInfos.get(i)) == null) {
             getMessagesStorage().getStorageQueue().postRunnable(new Runnable(i, i2) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -8625,8 +8625,8 @@ public class MediaDataController extends BaseController {
             queryFinalized.dispose();
             if (tLRPC$BotInfo != null) {
                 AndroidUtilities.runOnUIThread(new Runnable(tLRPC$BotInfo, i2) {
-                    private final /* synthetic */ TLRPC$BotInfo f$1;
-                    private final /* synthetic */ int f$2;
+                    public final /* synthetic */ TLRPC$BotInfo f$1;
+                    public final /* synthetic */ int f$2;
 
                     {
                         this.f$1 = r2;
@@ -8668,8 +8668,8 @@ public class MediaDataController extends BaseController {
                     nativeByteBuffer.reuse();
                     executeFast.dispose();
                     AndroidUtilities.runOnUIThread(new Runnable(j, tLRPC$Message) {
-                        private final /* synthetic */ long f$1;
-                        private final /* synthetic */ TLRPC$Message f$2;
+                        public final /* synthetic */ long f$1;
+                        public final /* synthetic */ TLRPC$Message f$2;
 
                         {
                             this.f$1 = r2;
@@ -8701,7 +8701,7 @@ public class MediaDataController extends BaseController {
         if (tLRPC$BotInfo != null) {
             this.botInfos.put(tLRPC$BotInfo.user_id, tLRPC$BotInfo);
             getMessagesStorage().getStorageQueue().postRunnable(new Runnable(tLRPC$BotInfo) {
-                private final /* synthetic */ TLRPC$BotInfo f$1;
+                public final /* synthetic */ TLRPC$BotInfo f$1;
 
                 {
                     this.f$1 = r2;
@@ -8736,9 +8736,9 @@ public class MediaDataController extends BaseController {
             while (i < strArr.length) {
                 String str = strArr[i];
                 if (!TextUtils.isEmpty(str) && this.currentFetchingEmoji.get(str) == null) {
-                    this.currentFetchingEmoji.put(str, true);
+                    this.currentFetchingEmoji.put(str, Boolean.TRUE);
                     getMessagesStorage().getStorageQueue().postRunnable(new Runnable(str) {
-                        private final /* synthetic */ String f$1;
+                        public final /* synthetic */ String f$1;
 
                         {
                             this.f$1 = r2;
@@ -8843,7 +8843,7 @@ public class MediaDataController extends BaseController {
                 putEmojiKeywords(str2, tLRPC$TL_emojiKeywordsDifference);
             } else {
                 getMessagesStorage().getStorageQueue().postRunnable(new Runnable(str2) {
-                    private final /* synthetic */ String f$1;
+                    public final /* synthetic */ String f$1;
 
                     {
                         this.f$1 = r2;
@@ -8856,7 +8856,7 @@ public class MediaDataController extends BaseController {
             }
         } else {
             AndroidUtilities.runOnUIThread(new Runnable(str2) {
-                private final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
@@ -8876,7 +8876,7 @@ public class MediaDataController extends BaseController {
             executeFast.step();
             executeFast.dispose();
             AndroidUtilities.runOnUIThread(new Runnable(str) {
-                private final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
@@ -8903,8 +8903,8 @@ public class MediaDataController extends BaseController {
     private void putEmojiKeywords(String str, TLRPC$TL_emojiKeywordsDifference tLRPC$TL_emojiKeywordsDifference) {
         if (tLRPC$TL_emojiKeywordsDifference != null) {
             getMessagesStorage().getStorageQueue().postRunnable(new Runnable(tLRPC$TL_emojiKeywordsDifference, str) {
-                private final /* synthetic */ TLRPC$TL_emojiKeywordsDifference f$1;
-                private final /* synthetic */ String f$2;
+                public final /* synthetic */ TLRPC$TL_emojiKeywordsDifference f$1;
+                public final /* synthetic */ String f$2;
 
                 {
                     this.f$1 = r2;
@@ -8963,7 +8963,7 @@ public class MediaDataController extends BaseController {
             executeFast3.step();
             executeFast3.dispose();
             AndroidUtilities.runOnUIThread(new Runnable(str) {
-                private final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
@@ -8994,12 +8994,12 @@ public class MediaDataController extends BaseController {
                 return;
             }
             getMessagesStorage().getStorageQueue().postRunnable(new Runnable(strArr, keywordResultCallback, str, z, new ArrayList(Emoji.recentEmoji), countDownLatch) {
-                private final /* synthetic */ String[] f$1;
-                private final /* synthetic */ MediaDataController.KeywordResultCallback f$2;
-                private final /* synthetic */ String f$3;
-                private final /* synthetic */ boolean f$4;
-                private final /* synthetic */ ArrayList f$5;
-                private final /* synthetic */ CountDownLatch f$6;
+                public final /* synthetic */ String[] f$1;
+                public final /* synthetic */ MediaDataController.KeywordResultCallback f$2;
+                public final /* synthetic */ String f$3;
+                public final /* synthetic */ boolean f$4;
+                public final /* synthetic */ ArrayList f$5;
+                public final /* synthetic */ CountDownLatch f$6;
 
                 {
                     this.f$1 = r2;
@@ -9023,8 +9023,8 @@ public class MediaDataController extends BaseController {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x011e  */
-    /* JADX WARNING: Removed duplicated region for block: B:51:0x0125  */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x011c  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x0123  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$getEmojiSuggestions$144$MediaDataController(java.lang.String[] r15, org.telegram.messenger.MediaDataController.KeywordResultCallback r16, java.lang.String r17, boolean r18, java.util.ArrayList r19, java.util.concurrent.CountDownLatch r20) {
         /*
@@ -9041,21 +9041,21 @@ public class MediaDataController extends BaseController {
             r6 = 0
             r7 = 0
         L_0x0012:
-            int r9 = r0.length     // Catch:{ Exception -> 0x010d }
+            int r9 = r0.length     // Catch:{ Exception -> 0x010b }
             r10 = 1
             if (r6 >= r9) goto L_0x003d
-            org.telegram.messenger.MessagesStorage r9 = r14.getMessagesStorage()     // Catch:{ Exception -> 0x010d }
-            org.telegram.SQLite.SQLiteDatabase r9 = r9.getDatabase()     // Catch:{ Exception -> 0x010d }
+            org.telegram.messenger.MessagesStorage r9 = r14.getMessagesStorage()     // Catch:{ Exception -> 0x010b }
+            org.telegram.SQLite.SQLiteDatabase r9 = r9.getDatabase()     // Catch:{ Exception -> 0x010b }
             java.lang.String r11 = "SELECT alias FROM emoji_keywords_info_v2 WHERE lang = ?"
-            java.lang.Object[] r12 = new java.lang.Object[r10]     // Catch:{ Exception -> 0x010d }
-            r13 = r0[r6]     // Catch:{ Exception -> 0x010d }
-            r12[r5] = r13     // Catch:{ Exception -> 0x010d }
-            org.telegram.SQLite.SQLiteCursor r9 = r9.queryFinalized(r11, r12)     // Catch:{ Exception -> 0x010d }
-            boolean r11 = r9.next()     // Catch:{ Exception -> 0x010d }
+            java.lang.Object[] r12 = new java.lang.Object[r10]     // Catch:{ Exception -> 0x010b }
+            r13 = r0[r6]     // Catch:{ Exception -> 0x010b }
+            r12[r5] = r13     // Catch:{ Exception -> 0x010b }
+            org.telegram.SQLite.SQLiteCursor r9 = r9.queryFinalized(r11, r12)     // Catch:{ Exception -> 0x010b }
+            boolean r11 = r9.next()     // Catch:{ Exception -> 0x010b }
             if (r11 == 0) goto L_0x0034
-            java.lang.String r8 = r9.stringValue(r5)     // Catch:{ Exception -> 0x010d }
+            java.lang.String r8 = r9.stringValue(r5)     // Catch:{ Exception -> 0x010b }
         L_0x0034:
-            r9.dispose()     // Catch:{ Exception -> 0x010d }
+            r9.dispose()     // Catch:{ Exception -> 0x010b }
             if (r8 == 0) goto L_0x003a
             r7 = 1
         L_0x003a:
@@ -9063,121 +9063,121 @@ public class MediaDataController extends BaseController {
             goto L_0x0012
         L_0x003d:
             if (r7 != 0) goto L_0x0049
-            org.telegram.messenger.-$$Lambda$MediaDataController$TX_KIzS_cpkUebH3YKJRB3MMdfQ r3 = new org.telegram.messenger.-$$Lambda$MediaDataController$TX_KIzS_cpkUebH3YKJRB3MMdfQ     // Catch:{ Exception -> 0x010d }
+            org.telegram.messenger.-$$Lambda$MediaDataController$TX_KIzS_cpkUebH3YKJRB3MMdfQ r3 = new org.telegram.messenger.-$$Lambda$MediaDataController$TX_KIzS_cpkUebH3YKJRB3MMdfQ     // Catch:{ Exception -> 0x010b }
             r6 = r14
-            r3.<init>(r15, r1, r2)     // Catch:{ Exception -> 0x010b }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r3)     // Catch:{ Exception -> 0x010b }
+            r3.<init>(r15, r1, r2)     // Catch:{ Exception -> 0x0109 }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r3)     // Catch:{ Exception -> 0x0109 }
             return
         L_0x0049:
             r6 = r14
-            java.lang.String r0 = r17.toLowerCase()     // Catch:{ Exception -> 0x010b }
+            java.lang.String r0 = r17.toLowerCase()     // Catch:{ Exception -> 0x0109 }
             r7 = 0
         L_0x004f:
             r9 = 2
-            if (r7 >= r9) goto L_0x0112
+            if (r7 >= r9) goto L_0x0110
             if (r7 != r10) goto L_0x0065
-            org.telegram.messenger.LocaleController r11 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x010b }
-            java.lang.String r11 = r11.getTranslitString(r0, r5, r5)     // Catch:{ Exception -> 0x010b }
-            boolean r12 = r11.equals(r0)     // Catch:{ Exception -> 0x010b }
+            org.telegram.messenger.LocaleController r11 = org.telegram.messenger.LocaleController.getInstance()     // Catch:{ Exception -> 0x0109 }
+            java.lang.String r11 = r11.getTranslitString(r0, r5, r5)     // Catch:{ Exception -> 0x0109 }
+            boolean r12 = r11.equals(r0)     // Catch:{ Exception -> 0x0109 }
             if (r12 == 0) goto L_0x0064
-            goto L_0x0107
+            goto L_0x0105
         L_0x0064:
             r0 = r11
         L_0x0065:
-            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x010b }
-            r11.<init>(r0)     // Catch:{ Exception -> 0x010b }
-            int r12 = r11.length()     // Catch:{ Exception -> 0x010b }
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0109 }
+            r11.<init>(r0)     // Catch:{ Exception -> 0x0109 }
+            int r12 = r11.length()     // Catch:{ Exception -> 0x0109 }
         L_0x006e:
             if (r12 <= 0) goto L_0x0082
             int r12 = r12 + -1
-            char r13 = r11.charAt(r12)     // Catch:{ Exception -> 0x010b }
+            char r13 = r11.charAt(r12)     // Catch:{ Exception -> 0x0109 }
             int r13 = r13 + r10
-            char r13 = (char) r13     // Catch:{ Exception -> 0x010b }
-            r11.setCharAt(r12, r13)     // Catch:{ Exception -> 0x010b }
+            char r13 = (char) r13     // Catch:{ Exception -> 0x0109 }
+            r11.setCharAt(r12, r13)     // Catch:{ Exception -> 0x0109 }
             if (r13 == 0) goto L_0x006e
-            java.lang.String r11 = r11.toString()     // Catch:{ Exception -> 0x010b }
+            java.lang.String r11 = r11.toString()     // Catch:{ Exception -> 0x0109 }
             goto L_0x0083
         L_0x0082:
             r11 = r4
         L_0x0083:
             if (r18 == 0) goto L_0x0098
-            org.telegram.messenger.MessagesStorage r9 = r14.getMessagesStorage()     // Catch:{ Exception -> 0x010b }
-            org.telegram.SQLite.SQLiteDatabase r9 = r9.getDatabase()     // Catch:{ Exception -> 0x010b }
+            org.telegram.messenger.MessagesStorage r9 = r14.getMessagesStorage()     // Catch:{ Exception -> 0x0109 }
+            org.telegram.SQLite.SQLiteDatabase r9 = r9.getDatabase()     // Catch:{ Exception -> 0x0109 }
             java.lang.String r11 = "SELECT emoji, keyword FROM emoji_keywords_v2 WHERE keyword = ?"
-            java.lang.Object[] r12 = new java.lang.Object[r10]     // Catch:{ Exception -> 0x010b }
-            r12[r5] = r0     // Catch:{ Exception -> 0x010b }
-            org.telegram.SQLite.SQLiteCursor r9 = r9.queryFinalized(r11, r12)     // Catch:{ Exception -> 0x010b }
+            java.lang.Object[] r12 = new java.lang.Object[r10]     // Catch:{ Exception -> 0x0109 }
+            r12[r5] = r0     // Catch:{ Exception -> 0x0109 }
+            org.telegram.SQLite.SQLiteCursor r9 = r9.queryFinalized(r11, r12)     // Catch:{ Exception -> 0x0109 }
             goto L_0x00d2
         L_0x0098:
             if (r11 == 0) goto L_0x00af
-            org.telegram.messenger.MessagesStorage r12 = r14.getMessagesStorage()     // Catch:{ Exception -> 0x010b }
-            org.telegram.SQLite.SQLiteDatabase r12 = r12.getDatabase()     // Catch:{ Exception -> 0x010b }
+            org.telegram.messenger.MessagesStorage r12 = r14.getMessagesStorage()     // Catch:{ Exception -> 0x0109 }
+            org.telegram.SQLite.SQLiteDatabase r12 = r12.getDatabase()     // Catch:{ Exception -> 0x0109 }
             java.lang.String r13 = "SELECT emoji, keyword FROM emoji_keywords_v2 WHERE keyword >= ? AND keyword < ?"
-            java.lang.Object[] r9 = new java.lang.Object[r9]     // Catch:{ Exception -> 0x010b }
-            r9[r5] = r0     // Catch:{ Exception -> 0x010b }
-            r9[r10] = r11     // Catch:{ Exception -> 0x010b }
-            org.telegram.SQLite.SQLiteCursor r9 = r12.queryFinalized(r13, r9)     // Catch:{ Exception -> 0x010b }
+            java.lang.Object[] r9 = new java.lang.Object[r9]     // Catch:{ Exception -> 0x0109 }
+            r9[r5] = r0     // Catch:{ Exception -> 0x0109 }
+            r9[r10] = r11     // Catch:{ Exception -> 0x0109 }
+            org.telegram.SQLite.SQLiteCursor r9 = r12.queryFinalized(r13, r9)     // Catch:{ Exception -> 0x0109 }
             goto L_0x00d2
         L_0x00af:
-            java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x010b }
-            r9.<init>()     // Catch:{ Exception -> 0x010b }
-            r9.append(r0)     // Catch:{ Exception -> 0x010b }
+            java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0109 }
+            r9.<init>()     // Catch:{ Exception -> 0x0109 }
+            r9.append(r0)     // Catch:{ Exception -> 0x0109 }
             java.lang.String r0 = "%"
-            r9.append(r0)     // Catch:{ Exception -> 0x010b }
-            java.lang.String r0 = r9.toString()     // Catch:{ Exception -> 0x010b }
-            org.telegram.messenger.MessagesStorage r9 = r14.getMessagesStorage()     // Catch:{ Exception -> 0x010b }
-            org.telegram.SQLite.SQLiteDatabase r9 = r9.getDatabase()     // Catch:{ Exception -> 0x010b }
+            r9.append(r0)     // Catch:{ Exception -> 0x0109 }
+            java.lang.String r0 = r9.toString()     // Catch:{ Exception -> 0x0109 }
+            org.telegram.messenger.MessagesStorage r9 = r14.getMessagesStorage()     // Catch:{ Exception -> 0x0109 }
+            org.telegram.SQLite.SQLiteDatabase r9 = r9.getDatabase()     // Catch:{ Exception -> 0x0109 }
             java.lang.String r11 = "SELECT emoji, keyword FROM emoji_keywords_v2 WHERE keyword LIKE ?"
-            java.lang.Object[] r12 = new java.lang.Object[r10]     // Catch:{ Exception -> 0x010b }
-            r12[r5] = r0     // Catch:{ Exception -> 0x010b }
-            org.telegram.SQLite.SQLiteCursor r9 = r9.queryFinalized(r11, r12)     // Catch:{ Exception -> 0x010b }
+            java.lang.Object[] r12 = new java.lang.Object[r10]     // Catch:{ Exception -> 0x0109 }
+            r12[r5] = r0     // Catch:{ Exception -> 0x0109 }
+            org.telegram.SQLite.SQLiteCursor r9 = r9.queryFinalized(r11, r12)     // Catch:{ Exception -> 0x0109 }
         L_0x00d2:
-            boolean r11 = r9.next()     // Catch:{ Exception -> 0x010b }
-            if (r11 == 0) goto L_0x0104
-            java.lang.String r11 = r9.stringValue(r5)     // Catch:{ Exception -> 0x010b }
+            boolean r11 = r9.next()     // Catch:{ Exception -> 0x0109 }
+            if (r11 == 0) goto L_0x0102
+            java.lang.String r11 = r9.stringValue(r5)     // Catch:{ Exception -> 0x0109 }
             java.lang.String r12 = "️"
             java.lang.String r13 = ""
-            java.lang.String r11 = r11.replace(r12, r13)     // Catch:{ Exception -> 0x010b }
-            java.lang.Object r12 = r3.get(r11)     // Catch:{ Exception -> 0x010b }
+            java.lang.String r11 = r11.replace(r12, r13)     // Catch:{ Exception -> 0x0109 }
+            java.lang.Object r12 = r3.get(r11)     // Catch:{ Exception -> 0x0109 }
             if (r12 == 0) goto L_0x00ec
             goto L_0x00d2
         L_0x00ec:
-            java.lang.Boolean r12 = java.lang.Boolean.valueOf(r10)     // Catch:{ Exception -> 0x010b }
-            r3.put(r11, r12)     // Catch:{ Exception -> 0x010b }
-            org.telegram.messenger.MediaDataController$KeywordResult r12 = new org.telegram.messenger.MediaDataController$KeywordResult     // Catch:{ Exception -> 0x010b }
-            r12.<init>()     // Catch:{ Exception -> 0x010b }
-            r12.emoji = r11     // Catch:{ Exception -> 0x010b }
-            java.lang.String r11 = r9.stringValue(r10)     // Catch:{ Exception -> 0x010b }
-            r12.keyword = r11     // Catch:{ Exception -> 0x010b }
-            r2.add(r12)     // Catch:{ Exception -> 0x010b }
+            java.lang.Boolean r12 = java.lang.Boolean.TRUE     // Catch:{ Exception -> 0x0109 }
+            r3.put(r11, r12)     // Catch:{ Exception -> 0x0109 }
+            org.telegram.messenger.MediaDataController$KeywordResult r12 = new org.telegram.messenger.MediaDataController$KeywordResult     // Catch:{ Exception -> 0x0109 }
+            r12.<init>()     // Catch:{ Exception -> 0x0109 }
+            r12.emoji = r11     // Catch:{ Exception -> 0x0109 }
+            java.lang.String r11 = r9.stringValue(r10)     // Catch:{ Exception -> 0x0109 }
+            r12.keyword = r11     // Catch:{ Exception -> 0x0109 }
+            r2.add(r12)     // Catch:{ Exception -> 0x0109 }
             goto L_0x00d2
-        L_0x0104:
-            r9.dispose()     // Catch:{ Exception -> 0x010b }
-        L_0x0107:
+        L_0x0102:
+            r9.dispose()     // Catch:{ Exception -> 0x0109 }
+        L_0x0105:
             int r7 = r7 + 1
             goto L_0x004f
+        L_0x0109:
+            r0 = move-exception
+            goto L_0x010d
         L_0x010b:
             r0 = move-exception
-            goto L_0x010f
-        L_0x010d:
-            r0 = move-exception
             r6 = r14
-        L_0x010f:
+        L_0x010d:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0112:
+        L_0x0110:
             org.telegram.messenger.-$$Lambda$MediaDataController$w3R4VvfT9V5hoWnbxmOk1aoC1hI r0 = new org.telegram.messenger.-$$Lambda$MediaDataController$w3R4VvfT9V5hoWnbxmOk1aoC1hI
             r3 = r19
             r0.<init>(r3)
             java.util.Collections.sort(r2, r0)
-            if (r20 == 0) goto L_0x0125
+            if (r20 == 0) goto L_0x0123
             r1.run(r2, r8)
             r20.countDown()
-            goto L_0x012d
-        L_0x0125:
+            goto L_0x012b
+        L_0x0123:
             org.telegram.messenger.-$$Lambda$MediaDataController$vi5FyfJuMFStHL9bs0MXjDadRao r0 = new org.telegram.messenger.-$$Lambda$MediaDataController$vi5FyfJuMFStHL9bs0MXjDadRao
             r0.<init>(r2, r8)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-        L_0x012d:
+        L_0x012b:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.lambda$getEmojiSuggestions$144$MediaDataController(java.lang.String[], org.telegram.messenger.MediaDataController$KeywordResultCallback, java.lang.String, boolean, java.util.ArrayList, java.util.concurrent.CountDownLatch):void");

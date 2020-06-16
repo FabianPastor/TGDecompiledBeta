@@ -170,8 +170,8 @@ public class ImageLoader {
             }
             this.lastProgressTime = currentTimeMillis;
             Utilities.stageQueue.postRunnable(new Runnable(j, j2) {
-                private final /* synthetic */ long f$1;
-                private final /* synthetic */ long f$2;
+                public final /* synthetic */ long f$1;
+                public final /* synthetic */ long f$2;
 
                 {
                     this.f$1 = r2;
@@ -187,8 +187,8 @@ public class ImageLoader {
         public /* synthetic */ void lambda$reportProgress$1$ImageLoader$HttpFileTask(long j, long j2) {
             ImageLoader.this.fileProgresses.put(this.url, new long[]{j, j2});
             AndroidUtilities.runOnUIThread(new Runnable(j, j2) {
-                private final /* synthetic */ long f$1;
-                private final /* synthetic */ long f$2;
+                public final /* synthetic */ long f$1;
+                public final /* synthetic */ long f$2;
 
                 {
                     this.f$1 = r2;
@@ -762,8 +762,8 @@ public class ImageLoader {
             }
             this.lastProgressTime = currentTimeMillis;
             Utilities.stageQueue.postRunnable(new Runnable(j, j2) {
-                private final /* synthetic */ long f$1;
-                private final /* synthetic */ long f$2;
+                public final /* synthetic */ long f$1;
+                public final /* synthetic */ long f$2;
 
                 {
                     this.f$1 = r2;
@@ -779,8 +779,8 @@ public class ImageLoader {
         public /* synthetic */ void lambda$reportProgress$1$ImageLoader$HttpImageTask(long j, long j2) {
             ImageLoader.this.fileProgresses.put(this.cacheImage.url, new long[]{j, j2});
             AndroidUtilities.runOnUIThread(new Runnable(j, j2) {
-                private final /* synthetic */ long f$1;
-                private final /* synthetic */ long f$2;
+                public final /* synthetic */ long f$1;
+                public final /* synthetic */ long f$2;
 
                 {
                     this.f$1 = r2;
@@ -1098,7 +1098,7 @@ public class ImageLoader {
                 ImageLoader.this.httpFileLoadError(this.cacheImage.url);
             }
             Utilities.stageQueue.postRunnable(new Runnable(bool) {
-                private final /* synthetic */ Boolean f$1;
+                public final /* synthetic */ Boolean f$1;
 
                 {
                     this.f$1 = r2;
@@ -1118,7 +1118,7 @@ public class ImageLoader {
         public /* synthetic */ void lambda$onPostExecute$4$ImageLoader$HttpImageTask(Boolean bool) {
             ImageLoader.this.fileProgresses.remove(this.cacheImage.url);
             AndroidUtilities.runOnUIThread(new Runnable(bool) {
-                private final /* synthetic */ Boolean f$1;
+                public final /* synthetic */ Boolean f$1;
 
                 {
                     this.f$1 = r2;
@@ -1192,7 +1192,7 @@ public class ImageLoader {
             ThumbGenerateInfo thumbGenerateInfo = this.info;
             if (thumbGenerateInfo != null) {
                 ImageLoader.this.imageLoadQueue.postRunnable(new Runnable(FileLoader.getAttachFileName(thumbGenerateInfo.parentDocument)) {
-                    private final /* synthetic */ String f$1;
+                    public final /* synthetic */ String f$1;
 
                     {
                         this.f$1 = r2;
@@ -1267,10 +1267,10 @@ public class ImageLoader {
                                 bitmap.compress(Bitmap.CompressFormat.JPEG, this.info.big ? 83 : 60, fileOutputStream);
                                 fileOutputStream.close();
                                 AndroidUtilities.runOnUIThread(new Runnable(str, new ArrayList(this.info.imageReceiverArray), new BitmapDrawable(bitmap), new ArrayList(this.info.imageReceiverGuidsArray)) {
-                                    private final /* synthetic */ String f$1;
-                                    private final /* synthetic */ ArrayList f$2;
-                                    private final /* synthetic */ BitmapDrawable f$3;
-                                    private final /* synthetic */ ArrayList f$4;
+                                    public final /* synthetic */ String f$1;
+                                    public final /* synthetic */ ArrayList f$2;
+                                    public final /* synthetic */ BitmapDrawable f$3;
+                                    public final /* synthetic */ ArrayList f$4;
 
                                     {
                                         this.f$1 = r2;
@@ -1461,22 +1461,22 @@ public class ImageLoader {
             L_0x00cc:
                 int r13 = r12.length
                 if (r13 < r6) goto L_0x00f5
-                r13 = r12[r7]
-                java.lang.String r14 = "nr"
-                boolean r13 = r14.equals(r13)
+                java.lang.String r13 = "nr"
+                r14 = r12[r7]
+                boolean r13 = r13.equals(r14)
                 if (r13 == 0) goto L_0x00db
                 r6 = 2
                 goto L_0x00f6
             L_0x00db:
-                r13 = r12[r7]
-                java.lang.String r14 = "nrs"
-                boolean r13 = r14.equals(r13)
+                java.lang.String r13 = "nrs"
+                r14 = r12[r7]
+                boolean r13 = r13.equals(r14)
                 if (r13 == 0) goto L_0x00e6
                 goto L_0x00f6
             L_0x00e6:
-                r13 = r12[r7]
-                java.lang.String r14 = "dice"
-                boolean r13 = r14.equals(r13)
+                java.lang.String r13 = "dice"
+                r14 = r12[r7]
+                boolean r13 = r13.equals(r14)
                 if (r13 == 0) goto L_0x00f5
                 r6 = r12[r6]
                 r7 = r6
@@ -1489,9 +1489,9 @@ public class ImageLoader {
             L_0x00f7:
                 int r8 = r12.length
                 if (r8 < r3) goto L_0x0154
-                r3 = r12[r5]
-                java.lang.String r8 = "c1"
-                boolean r3 = r8.equals(r3)
+                java.lang.String r3 = "c1"
+                r8 = r12[r5]
+                boolean r3 = r3.equals(r8)
                 if (r3 == 0) goto L_0x0114
                 int[] r4 = new int[r10]
                 r4 = {16219713, 13275258, 16757049, 15582629, 16765248, 16245699, 16768889, 16510934} // fill-array
@@ -1505,33 +1505,33 @@ public class ImageLoader {
                 r17 = r11
                 goto L_0x0166
             L_0x0114:
-                r3 = r12[r5]
-                java.lang.String r8 = "c2"
-                boolean r3 = r8.equals(r3)
+                java.lang.String r3 = "c2"
+                r8 = r12[r5]
+                boolean r3 = r3.equals(r8)
                 if (r3 == 0) goto L_0x0124
                 int[] r4 = new int[r10]
                 r4 = {16219713, 11172960, 16757049, 13150599, 16765248, 14534815, 16768889, 15128242} // fill-array
                 goto L_0x0109
             L_0x0124:
-                r3 = r12[r5]
-                java.lang.String r8 = "c3"
-                boolean r3 = r8.equals(r3)
+                java.lang.String r3 = "c3"
+                r8 = r12[r5]
+                boolean r3 = r3.equals(r8)
                 if (r3 == 0) goto L_0x0134
                 int[] r4 = new int[r10]
                 r4 = {16219713, 9199944, 16757049, 11371874, 16765248, 12885622, 16768889, 13939080} // fill-array
                 goto L_0x0109
             L_0x0134:
-                r3 = r12[r5]
-                java.lang.String r8 = "c4"
-                boolean r3 = r8.equals(r3)
+                java.lang.String r3 = "c4"
+                r8 = r12[r5]
+                boolean r3 = r3.equals(r8)
                 if (r3 == 0) goto L_0x0144
                 int[] r4 = new int[r10]
                 r4 = {16219713, 7224364, 16757049, 9591348, 16765248, 10579526, 16768889, 11303506} // fill-array
                 goto L_0x0109
             L_0x0144:
-                r3 = r12[r5]
-                java.lang.String r5 = "c5"
-                boolean r3 = r5.equals(r3)
+                java.lang.String r3 = "c5"
+                r5 = r12[r5]
+                boolean r3 = r3.equals(r5)
                 if (r3 == 0) goto L_0x0154
                 int[] r4 = new int[r10]
                 r4 = {16219713, 2694162, 16757049, 4663842, 16765248, 5716784, 16768889, 6834492} // fill-array
@@ -1569,8 +1569,8 @@ public class ImageLoader {
                 goto L_0x0a4c
             L_0x0180:
                 if (r2 != r7) goto L_0x01df
-                java.lang.String r0 = r0.filter
                 java.lang.String r2 = "g"
+                java.lang.String r0 = r0.filter
                 boolean r0 = r2.equals(r0)
                 if (r0 == 0) goto L_0x01b7
                 org.telegram.messenger.ImageLoader$CacheImage r0 = r1.cacheImage
@@ -1604,8 +1604,8 @@ public class ImageLoader {
                 org.telegram.ui.Components.AnimatedFileDrawable r0 = new org.telegram.ui.Components.AnimatedFileDrawable
                 org.telegram.messenger.ImageLoader$CacheImage r2 = r1.cacheImage
                 java.io.File r15 = r2.finalFilePath
-                java.lang.String r2 = r2.filter
                 java.lang.String r3 = "d"
+                java.lang.String r2 = r2.filter
                 boolean r16 = r3.equals(r2)
                 r17 = 0
                 r19 = 0
@@ -1766,11 +1766,11 @@ public class ImageLoader {
                 java.lang.String r12 = "vthumb://"
                 boolean r12 = r0.startsWith(r12)
                 if (r12 == 0) goto L_0x02e3
-                r12 = 9
-                java.lang.String r14 = ":"
-                int r14 = r0.indexOf(r14, r12)
-                if (r14 < 0) goto L_0x02db
-                java.lang.String r0 = r0.substring(r12, r14)
+                java.lang.String r12 = ":"
+                r14 = 9
+                int r12 = r0.indexOf(r12, r14)
+                if (r12 < 0) goto L_0x02db
+                java.lang.String r0 = r0.substring(r14, r12)
                 long r14 = java.lang.Long.parseLong(r0)
                 java.lang.Long r0 = java.lang.Long.valueOf(r14)
                 r14 = r0
@@ -2967,7 +2967,7 @@ public class ImageLoader {
 
         private void onPostExecute(Drawable drawable) {
             AndroidUtilities.runOnUIThread(new Runnable(drawable) {
-                private final /* synthetic */ Drawable f$1;
+                public final /* synthetic */ Drawable f$1;
 
                 {
                     this.f$1 = r2;
@@ -3248,10 +3248,10 @@ public class ImageLoader {
         public void setImageAndClear(Drawable drawable, String str) {
             if (drawable != null) {
                 AndroidUtilities.runOnUIThread(new Runnable(drawable, new ArrayList(this.imageReceiverArray), new ArrayList(this.imageReceiverGuidsArray), str) {
-                    private final /* synthetic */ Drawable f$1;
-                    private final /* synthetic */ ArrayList f$2;
-                    private final /* synthetic */ ArrayList f$3;
-                    private final /* synthetic */ String f$4;
+                    public final /* synthetic */ Drawable f$1;
+                    public final /* synthetic */ ArrayList f$2;
+                    public final /* synthetic */ ArrayList f$3;
+                    public final /* synthetic */ String f$4;
 
                     {
                         this.f$1 = r2;
@@ -3400,11 +3400,11 @@ public class ImageLoader {
                     if (ImageLoader.this.lastProgressUpdateTime == 0 || ImageLoader.this.lastProgressUpdateTime < currentTimeMillis - 500) {
                         long unused = ImageLoader.this.lastProgressUpdateTime = currentTimeMillis;
                         AndroidUtilities.runOnUIThread(new Runnable(i, str, j, j2, z) {
-                            private final /* synthetic */ int f$0;
-                            private final /* synthetic */ String f$1;
-                            private final /* synthetic */ long f$2;
-                            private final /* synthetic */ long f$3;
-                            private final /* synthetic */ boolean f$4;
+                            public final /* synthetic */ int f$0;
+                            public final /* synthetic */ String f$1;
+                            public final /* synthetic */ long f$2;
+                            public final /* synthetic */ long f$3;
+                            public final /* synthetic */ boolean f$4;
 
                             {
                                 this.f$0 = r1;
@@ -3423,13 +3423,13 @@ public class ImageLoader {
 
                 public void fileDidUploaded(String str, TLRPC$InputFile tLRPC$InputFile, TLRPC$InputEncryptedFile tLRPC$InputEncryptedFile, byte[] bArr, byte[] bArr2, long j) {
                     Utilities.stageQueue.postRunnable(new Runnable(i, str, tLRPC$InputFile, tLRPC$InputEncryptedFile, bArr, bArr2, j) {
-                        private final /* synthetic */ int f$1;
-                        private final /* synthetic */ String f$2;
-                        private final /* synthetic */ TLRPC$InputFile f$3;
-                        private final /* synthetic */ TLRPC$InputEncryptedFile f$4;
-                        private final /* synthetic */ byte[] f$5;
-                        private final /* synthetic */ byte[] f$6;
-                        private final /* synthetic */ long f$7;
+                        public final /* synthetic */ int f$1;
+                        public final /* synthetic */ String f$2;
+                        public final /* synthetic */ TLRPC$InputFile f$3;
+                        public final /* synthetic */ TLRPC$InputEncryptedFile f$4;
+                        public final /* synthetic */ byte[] f$5;
+                        public final /* synthetic */ byte[] f$6;
+                        public final /* synthetic */ long f$7;
 
                         {
                             this.f$1 = r2;
@@ -3449,13 +3449,13 @@ public class ImageLoader {
 
                 public /* synthetic */ void lambda$fileDidUploaded$2$ImageLoader$3(int i, String str, TLRPC$InputFile tLRPC$InputFile, TLRPC$InputEncryptedFile tLRPC$InputEncryptedFile, byte[] bArr, byte[] bArr2, long j) {
                     AndroidUtilities.runOnUIThread(new Runnable(i, str, tLRPC$InputFile, tLRPC$InputEncryptedFile, bArr, bArr2, j) {
-                        private final /* synthetic */ int f$0;
-                        private final /* synthetic */ String f$1;
-                        private final /* synthetic */ TLRPC$InputFile f$2;
-                        private final /* synthetic */ TLRPC$InputEncryptedFile f$3;
-                        private final /* synthetic */ byte[] f$4;
-                        private final /* synthetic */ byte[] f$5;
-                        private final /* synthetic */ long f$6;
+                        public final /* synthetic */ int f$0;
+                        public final /* synthetic */ String f$1;
+                        public final /* synthetic */ TLRPC$InputFile f$2;
+                        public final /* synthetic */ TLRPC$InputEncryptedFile f$3;
+                        public final /* synthetic */ byte[] f$4;
+                        public final /* synthetic */ byte[] f$5;
+                        public final /* synthetic */ long f$6;
 
                         {
                             this.f$0 = r1;
@@ -3476,9 +3476,9 @@ public class ImageLoader {
 
                 public void fileDidFailedUpload(String str, boolean z) {
                     Utilities.stageQueue.postRunnable(new Runnable(i, str, z) {
-                        private final /* synthetic */ int f$1;
-                        private final /* synthetic */ String f$2;
-                        private final /* synthetic */ boolean f$3;
+                        public final /* synthetic */ int f$1;
+                        public final /* synthetic */ String f$2;
+                        public final /* synthetic */ boolean f$3;
 
                         {
                             this.f$1 = r2;
@@ -3494,9 +3494,9 @@ public class ImageLoader {
 
                 public /* synthetic */ void lambda$fileDidFailedUpload$4$ImageLoader$3(int i, String str, boolean z) {
                     AndroidUtilities.runOnUIThread(new Runnable(i, str, z) {
-                        private final /* synthetic */ int f$0;
-                        private final /* synthetic */ String f$1;
-                        private final /* synthetic */ boolean f$2;
+                        public final /* synthetic */ int f$0;
+                        public final /* synthetic */ String f$1;
+                        public final /* synthetic */ boolean f$2;
 
                         {
                             this.f$0 = r1;
@@ -3514,10 +3514,10 @@ public class ImageLoader {
                 public void fileDidLoaded(String str, File file, int i) {
                     ImageLoader.this.fileProgresses.remove(str);
                     AndroidUtilities.runOnUIThread(new Runnable(file, str, i, i) {
-                        private final /* synthetic */ File f$1;
-                        private final /* synthetic */ String f$2;
-                        private final /* synthetic */ int f$3;
-                        private final /* synthetic */ int f$4;
+                        public final /* synthetic */ File f$1;
+                        public final /* synthetic */ String f$2;
+                        public final /* synthetic */ int f$3;
+                        public final /* synthetic */ int f$4;
 
                         {
                             this.f$1 = r2;
@@ -3543,9 +3543,9 @@ public class ImageLoader {
                 public void fileDidFailedLoad(String str, int i) {
                     ImageLoader.this.fileProgresses.remove(str);
                     AndroidUtilities.runOnUIThread(new Runnable(str, i, i) {
-                        private final /* synthetic */ String f$1;
-                        private final /* synthetic */ int f$2;
-                        private final /* synthetic */ int f$3;
+                        public final /* synthetic */ String f$1;
+                        public final /* synthetic */ int f$2;
+                        public final /* synthetic */ int f$3;
 
                         {
                             this.f$1 = r2;
@@ -3570,10 +3570,10 @@ public class ImageLoader {
                     if (ImageLoader.this.lastProgressUpdateTime == 0 || ImageLoader.this.lastProgressUpdateTime < currentTimeMillis - 500 || j == 0) {
                         long unused = ImageLoader.this.lastProgressUpdateTime = currentTimeMillis;
                         AndroidUtilities.runOnUIThread(new Runnable(i, str, j, j2) {
-                            private final /* synthetic */ int f$0;
-                            private final /* synthetic */ String f$1;
-                            private final /* synthetic */ long f$2;
-                            private final /* synthetic */ long f$3;
+                            public final /* synthetic */ int f$0;
+                            public final /* synthetic */ String f$1;
+                            public final /* synthetic */ long f$2;
+                            public final /* synthetic */ long f$3;
 
                             {
                                 this.f$0 = r1;
@@ -3640,7 +3640,7 @@ public class ImageLoader {
 
     public /* synthetic */ void lambda$checkMediaPaths$1$ImageLoader() {
         AndroidUtilities.runOnUIThread(new Runnable(createMediaPaths()) {
-            private final /* synthetic */ SparseArray f$0;
+            public final /* synthetic */ SparseArray f$0;
 
             {
                 this.f$0 = r1;
@@ -3957,8 +3957,8 @@ public class ImageLoader {
     public void cancelLoadingForImageReceiver(ImageReceiver imageReceiver, boolean z) {
         if (imageReceiver != null) {
             this.imageLoadQueue.postRunnable(new Runnable(z, imageReceiver) {
-                private final /* synthetic */ boolean f$1;
-                private final /* synthetic */ ImageReceiver f$2;
+                public final /* synthetic */ boolean f$1;
+                public final /* synthetic */ ImageReceiver f$2;
 
                 {
                     this.f$1 = r2;
@@ -4058,9 +4058,9 @@ public class ImageLoader {
     public void replaceImageInCache(String str, String str2, ImageLocation imageLocation, boolean z) {
         if (z) {
             AndroidUtilities.runOnUIThread(new Runnable(str, str2, imageLocation) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ String f$2;
-                private final /* synthetic */ ImageLocation f$3;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$2;
+                public final /* synthetic */ ImageLocation f$3;
 
                 {
                     this.f$1 = r2;
@@ -4093,7 +4093,7 @@ public class ImageLoader {
         String imageKey;
         if (imageReceiver != null && (imageKey = imageReceiver.getImageKey()) != null) {
             this.imageLoadQueue.postRunnable(new Runnable(imageKey) {
-                private final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
@@ -4134,25 +4134,25 @@ public class ImageLoader {
             $$Lambda$ImageLoader$NAwQrHUBEJ5v2N5PPZ_I1OIh4Js r20 = r0;
             DispatchQueue dispatchQueue = this.imageLoadQueue;
             $$Lambda$ImageLoader$NAwQrHUBEJ5v2N5PPZ_I1OIh4Js r0 = new Runnable(this, i4, str2, str, i8, imageReceiver, i5, str4, i3, imageLocation, z, parentObject, qulityThumbDocument, isNeedsQualityThumb, isShouldGenerateQualityThumb, i2, i, str3, currentAccount) {
-                private final /* synthetic */ ImageLoader f$0;
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ boolean f$10;
-                private final /* synthetic */ Object f$11;
-                private final /* synthetic */ TLRPC$Document f$12;
-                private final /* synthetic */ boolean f$13;
-                private final /* synthetic */ boolean f$14;
-                private final /* synthetic */ int f$15;
-                private final /* synthetic */ int f$16;
-                private final /* synthetic */ String f$17;
-                private final /* synthetic */ int f$18;
-                private final /* synthetic */ String f$2;
-                private final /* synthetic */ String f$3;
-                private final /* synthetic */ int f$4;
-                private final /* synthetic */ ImageReceiver f$5;
-                private final /* synthetic */ int f$6;
-                private final /* synthetic */ String f$7;
-                private final /* synthetic */ int f$8;
-                private final /* synthetic */ ImageLocation f$9;
+                public final /* synthetic */ ImageLoader f$0;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ boolean f$10;
+                public final /* synthetic */ Object f$11;
+                public final /* synthetic */ TLRPC$Document f$12;
+                public final /* synthetic */ boolean f$13;
+                public final /* synthetic */ boolean f$14;
+                public final /* synthetic */ int f$15;
+                public final /* synthetic */ int f$16;
+                public final /* synthetic */ String f$17;
+                public final /* synthetic */ int f$18;
+                public final /* synthetic */ String f$2;
+                public final /* synthetic */ String f$3;
+                public final /* synthetic */ int f$4;
+                public final /* synthetic */ ImageReceiver f$5;
+                public final /* synthetic */ int f$6;
+                public final /* synthetic */ String f$7;
+                public final /* synthetic */ int f$8;
+                public final /* synthetic */ ImageLocation f$9;
 
                 {
                     this.f$0 = r3;
@@ -5710,7 +5710,7 @@ public class ImageLoader {
     /* access modifiers changed from: private */
     public void httpFileLoadError(String str) {
         this.imageLoadQueue.postRunnable(new Runnable(str) {
-            private final /* synthetic */ String f$1;
+            public final /* synthetic */ String f$1;
 
             {
                 this.f$1 = r2;
@@ -5736,7 +5736,7 @@ public class ImageLoader {
     /* access modifiers changed from: private */
     public void artworkLoadError(String str) {
         this.imageLoadQueue.postRunnable(new Runnable(str) {
-            private final /* synthetic */ String f$1;
+            public final /* synthetic */ String f$1;
 
             {
                 this.f$1 = r2;
@@ -5761,9 +5761,9 @@ public class ImageLoader {
     /* access modifiers changed from: private */
     public void fileDidLoaded(String str, File file, int i) {
         this.imageLoadQueue.postRunnable(new Runnable(str, i, file) {
-            private final /* synthetic */ String f$1;
-            private final /* synthetic */ int f$2;
-            private final /* synthetic */ File f$3;
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ File f$3;
 
             {
                 this.f$1 = r2;
@@ -5828,7 +5828,7 @@ public class ImageLoader {
     public void fileDidFailedLoad(String str, int i) {
         if (i != 1) {
             this.imageLoadQueue.postRunnable(new Runnable(str) {
-                private final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
@@ -5921,8 +5921,8 @@ public class ImageLoader {
     /* access modifiers changed from: private */
     public void runHttpFileLoadTasks(HttpFileTask httpFileTask, int i) {
         AndroidUtilities.runOnUIThread(new Runnable(httpFileTask, i) {
-            private final /* synthetic */ ImageLoader.HttpFileTask f$1;
-            private final /* synthetic */ int f$2;
+            public final /* synthetic */ ImageLoader.HttpFileTask f$1;
+            public final /* synthetic */ int f$2;
 
             {
                 this.f$1 = r2;
@@ -5943,7 +5943,7 @@ public class ImageLoader {
             if (i == 1) {
                 if (httpFileTask.canRetry) {
                     $$Lambda$ImageLoader$NIWBUvKKa0U_8_0TQJUIDKfrzig r3 = new Runnable(new HttpFileTask(httpFileTask.url, httpFileTask.tempFile, httpFileTask.ext, httpFileTask.currentAccount)) {
-                        private final /* synthetic */ ImageLoader.HttpFileTask f$1;
+                        public final /* synthetic */ ImageLoader.HttpFileTask f$1;
 
                         {
                             this.f$1 = r2;

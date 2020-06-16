@@ -565,6 +565,7 @@ public final class R {
         public static final int miniplayer_close = NUM;
         public static final int miniplayer_pause = NUM;
         public static final int miniplayer_play = NUM;
+        public static final int minithumb_play = NUM;
         public static final int moon = NUM;
         public static final int msg_actions = NUM;
         public static final int msg_addbot = NUM;
@@ -583,6 +584,10 @@ public final class R {
         public static final int msg_copy = NUM;
         public static final int msg_delete = NUM;
         public static final int msg_download = NUM;
+        public static final int msg_draw_arrow = NUM;
+        public static final int msg_draw_marker = NUM;
+        public static final int msg_draw_neon = NUM;
+        public static final int msg_draw_pen = NUM;
         public static final int msg_edit = NUM;
         public static final int msg_fave = NUM;
         public static final int msg_forward = NUM;
@@ -691,11 +696,8 @@ public final class R {
         public static final int pagedown = NUM;
         public static final int pagedown_shadow = NUM;
         public static final int paint_elliptical_brush = NUM;
-        public static final int paint_elliptical_preview = NUM;
         public static final int paint_neon_brush = NUM;
-        public static final int paint_neon_preview = NUM;
         public static final int paint_radial_brush = NUM;
-        public static final int paint_radial_preview = NUM;
         public static final int passcode_check = NUM;
         public static final int passcode_delete = NUM;
         public static final int passcode_logo = NUM;
@@ -1309,6 +1311,7 @@ public final class R {
         public static final int AccDescrClosePlayer = NUM;
         public static final int AccDescrCollapsePanel = NUM;
         public static final int AccDescrContactSorting = NUM;
+        public static final int AccDescrDownloadProgress = NUM;
         public static final int AccDescrEditing = NUM;
         public static final int AccDescrEmojiButton = NUM;
         public static final int AccDescrExpandPanel = NUM;
@@ -1329,6 +1332,11 @@ public final class R {
         public static final int AccDescrMusicInfo = NUM;
         public static final int AccDescrMuteMic = NUM;
         public static final int AccDescrMyLocation = NUM;
+        public static final int AccDescrNumberOfViews_few = NUM;
+        public static final int AccDescrNumberOfViews_many = NUM;
+        public static final int AccDescrNumberOfViews_one = NUM;
+        public static final int AccDescrNumberOfViews_other = NUM;
+        public static final int AccDescrNumberOfViews_two = NUM;
         public static final int AccDescrOpenChat = NUM;
         public static final int AccDescrOpenMenu = NUM;
         public static final int AccDescrPageDown = NUM;
@@ -1337,6 +1345,7 @@ public final class R {
         public static final int AccDescrPhotoAdjust = NUM;
         public static final int AccDescrPhotoEditor = NUM;
         public static final int AccDescrPhotoViewer = NUM;
+        public static final int AccDescrPlayerDuration = NUM;
         public static final int AccDescrPlayerSpeed = NUM;
         public static final int AccDescrPrevious = NUM;
         public static final int AccDescrProfilePicture = NUM;
@@ -1359,6 +1368,7 @@ public final class R {
         public static final int AccDescrStopLiveLocation = NUM;
         public static final int AccDescrSwitchCamera = NUM;
         public static final int AccDescrTakeMorePics = NUM;
+        public static final int AccDescrUploadProgress = NUM;
         public static final int AccDescrUserOptions = NUM;
         public static final int AccDescrVideoCompressHigh = NUM;
         public static final int AccDescrVideoCompressLow = NUM;
@@ -2857,6 +2867,11 @@ public final class R {
         public static final int IsTypingGroup = NUM;
         public static final int Italic = NUM;
         public static final int January = NUM;
+        public static final int JoinByPeekChannelText = NUM;
+        public static final int JoinByPeekChannelTitle = NUM;
+        public static final int JoinByPeekGroupText = NUM;
+        public static final int JoinByPeekGroupTitle = NUM;
+        public static final int JoinByPeekJoin = NUM;
         public static final int JoinGroup = NUM;
         public static final int JoinToGroupErrorFull = NUM;
         public static final int JoinToGroupErrorNotExist = NUM;
@@ -3412,11 +3427,15 @@ public final class R {
         public static final int Page5Title = NUM;
         public static final int Page6Message = NUM;
         public static final int Page6Title = NUM;
+        public static final int PaintArrow = NUM;
         public static final int PaintDelete = NUM;
         public static final int PaintDuplicate = NUM;
         public static final int PaintEdit = NUM;
         public static final int PaintFramed = NUM;
+        public static final int PaintMarker = NUM;
+        public static final int PaintNeon = NUM;
         public static final int PaintOutlined = NUM;
+        public static final int PaintPen = NUM;
         public static final int PaintRegular = NUM;
         public static final int Passcode = NUM;
         public static final int PasscodeDoNotMatch = NUM;

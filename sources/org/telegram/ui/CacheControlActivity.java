@@ -237,7 +237,7 @@ public class CacheControlActivity extends BaseFragment {
         alertDialog.setCanCacnel(false);
         alertDialog.showDelayed(500);
         Utilities.globalQueue.postRunnable(new Runnable(alertDialog) {
-            private final /* synthetic */ AlertDialog f$1;
+            public final /* synthetic */ AlertDialog f$1;
 
             {
                 this.f$1 = r2;
@@ -497,7 +497,7 @@ public class CacheControlActivity extends BaseFragment {
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         this.listView.setAdapter(this.listAdapter);
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener(context) {
-            private final /* synthetic */ Context f$1;
+            public final /* synthetic */ Context f$1;
 
             {
                 this.f$1 = r2;
@@ -680,7 +680,7 @@ public class CacheControlActivity extends BaseFragment {
             alertDialog.setCanCacnel(false);
             alertDialog.showDelayed(500);
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable(alertDialog) {
-                private final /* synthetic */ AlertDialog f$1;
+                public final /* synthetic */ AlertDialog f$1;
 
                 {
                     this.f$1 = r2;

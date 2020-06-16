@@ -526,6 +526,7 @@ public class ThemeDescription {
             if (i2 < clsArr.length) {
                 if (clsArr[i2].isInstance(view)) {
                     view.invalidate();
+                    boolean z2 = true;
                     if ((this.changeFlags & FLAG_CHECKTAG) == 0 || checkTag(this.currentKey, view)) {
                         view.invalidate();
                         if (this.listClassesFieldName != null || (this.changeFlags & FLAG_BACKGROUNDFILTER) == 0) {
@@ -588,9 +589,9 @@ public class ThemeDescription {
                                         }
                                         Drawable drawable = obj;
                                         if ((this.changeFlags & FLAG_USEBACKGROUNDDRAWABLE) != 0) {
-                                            boolean z2 = obj instanceof View;
+                                            boolean z3 = obj instanceof View;
                                             drawable = obj;
-                                            if (z2) {
+                                            if (z3) {
                                                 drawable = ((View) obj).getBackground();
                                             }
                                         }
@@ -679,7 +680,11 @@ public class ThemeDescription {
                                                         }
                                                     }
                                                 }
-                                                Theme.setSelectorDrawableColor((Drawable) drawable, i, (this.changeFlags & FLAG_DRAWABLESELECTEDSTATE) != 0);
+                                                Drawable drawable3 = (Drawable) drawable;
+                                                if ((this.changeFlags & FLAG_DRAWABLESELECTEDSTATE) == 0) {
+                                                    z2 = false;
+                                                }
+                                                Theme.setSelectorDrawableColor(drawable3, i, z2);
                                             } else if ((this.changeFlags & FLAG_BACKGROUNDFILTER) != 0) {
                                                 ((CombinedDrawable) drawable).getBackground().setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
                                             } else {
@@ -731,7 +736,7 @@ public class ThemeDescription {
                                 }
                             } catch (Throwable th) {
                                 FileLog.e(th);
-                                this.notFoundCachedFields.put(str, true);
+                                this.notFoundCachedFields.put(str, Boolean.TRUE);
                             }
                         }
                     } else if (view instanceof GroupCreateSpan) {

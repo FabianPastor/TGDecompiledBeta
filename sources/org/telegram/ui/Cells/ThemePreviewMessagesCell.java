@@ -60,11 +60,6 @@ public class ThemePreviewMessagesCell extends LinearLayout {
     public ThemePreviewMessagesCell(Context context, ActionBarLayout actionBarLayout, int i) {
         super(context);
         Context context2 = context;
-        new Runnable() {
-            public final void run() {
-                ThemePreviewMessagesCell.this.invalidate();
-            }
-        };
         this.parentLayout = actionBarLayout;
         setWillNotDraw(false);
         setOrientation(1);

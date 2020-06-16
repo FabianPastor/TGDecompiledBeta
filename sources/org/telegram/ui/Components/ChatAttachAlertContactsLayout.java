@@ -284,7 +284,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 boolean r11 = android.text.TextUtils.isEmpty(r11)
                 if (r11 == 0) goto L_0x00ee
                 org.telegram.ui.ActionBar.SimpleTextView r11 = r10.statusTextView
-                r1 = 2131626008(0x7f0e0818, float:1.887924E38)
+                r1 = 2131626021(0x7f0e0825, float:1.8879266E38)
                 java.lang.String r3 = "NumberUnknown"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                 r11.setText(r1)
@@ -816,8 +816,8 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             this.lastSearchId = i;
             DispatchQueue dispatchQueue = Utilities.searchQueue;
             $$Lambda$ChatAttachAlertContactsLayout$ShareSearchAdapter$Jkc3b5IDn73gkiH5og64P_JheOE r2 = new Runnable(str, i) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -836,8 +836,8 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         /* renamed from: processSearch */
         public void lambda$search$0$ChatAttachAlertContactsLayout$ShareSearchAdapter(String str, int i) {
             AndroidUtilities.runOnUIThread(new Runnable(str, i) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -853,11 +853,11 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         public /* synthetic */ void lambda$processSearch$2$ChatAttachAlertContactsLayout$ShareSearchAdapter(String str, int i) {
             int i2 = UserConfig.selectedAccount;
             Utilities.searchQueue.postRunnable(new Runnable(str, new ArrayList(ContactsController.getInstance(i2).contactsBook.values()), new ArrayList(ContactsController.getInstance(i2).contacts), i2, i) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ ArrayList f$2;
-                private final /* synthetic */ ArrayList f$3;
-                private final /* synthetic */ int f$4;
-                private final /* synthetic */ int f$5;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ ArrayList f$3;
+                public final /* synthetic */ int f$4;
+                public final /* synthetic */ int f$5;
 
                 {
                     this.f$1 = r2;
@@ -885,10 +885,10 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             if (r6.contains(" " + r0) != false) goto L_0x00e3;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:55:0x012b, code lost:
-            if (r12.contains(" " + r0) != false) goto L_0x0131;
+            if (r14.contains(" " + r0) != false) goto L_0x0131;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:91:0x0222, code lost:
-            if (r6.contains(" " + r12) != false) goto L_0x0231;
+            if (r6.contains(" " + r14) != false) goto L_0x0231;
          */
         /* JADX WARNING: Multi-variable type inference failed */
         /* JADX WARNING: Removed duplicated region for block: B:104:0x0270 A[LOOP:3: B:82:0x01e8->B:104:0x0270, LOOP_END] */
@@ -948,18 +948,18 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 r10 = 0
             L_0x005a:
                 int r11 = r20.size()
-                java.lang.String r13 = "@"
-                java.lang.String r14 = " "
+                java.lang.String r12 = "@"
+                java.lang.String r13 = " "
                 if (r10 >= r11) goto L_0x01a2
                 r11 = r20
                 java.lang.Object r15 = r11.get(r10)
                 org.telegram.messenger.ContactsController$Contact r15 = (org.telegram.messenger.ContactsController.Contact) r15
                 java.lang.String r4 = r15.first_name
-                java.lang.String r12 = r15.last_name
-                java.lang.String r4 = org.telegram.messenger.ContactsController.formatName(r4, r12)
+                java.lang.String r14 = r15.last_name
+                java.lang.String r4 = org.telegram.messenger.ContactsController.formatName(r4, r14)
                 java.lang.String r4 = r4.toLowerCase()
-                org.telegram.messenger.LocaleController r12 = org.telegram.messenger.LocaleController.getInstance()
-                java.lang.String r12 = r12.getTranslitString(r4)
+                org.telegram.messenger.LocaleController r14 = org.telegram.messenger.LocaleController.getInstance()
+                java.lang.String r14 = r14.getTranslitString(r4)
                 org.telegram.tgnet.TLRPC$User r5 = r15.user
                 if (r5 == 0) goto L_0x0099
                 java.lang.String r6 = r5.first_name
@@ -973,9 +973,9 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 r5 = 0
                 r6 = 0
             L_0x009b:
-                boolean r16 = r4.equals(r12)
+                boolean r16 = r4.equals(r14)
                 if (r16 == 0) goto L_0x00a2
-                r12 = 0
+                r14 = 0
             L_0x00a2:
                 r11 = 0
                 r16 = 0
@@ -987,7 +987,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 if (r17 != 0) goto L_0x00e3
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
                 r1.<init>()
-                r1.append(r14)
+                r1.append(r13)
                 r1.append(r0)
                 java.lang.String r1 = r1.toString()
                 boolean r1 = r5.contains(r1)
@@ -998,7 +998,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 if (r1 != 0) goto L_0x00e3
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
                 r1.<init>()
-                r1.append(r14)
+                r1.append(r13)
                 r1.append(r0)
                 java.lang.String r1 = r1.toString()
                 boolean r1 = r6.contains(r1)
@@ -1020,20 +1020,20 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 if (r1 != 0) goto L_0x0131
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
                 r1.<init>()
-                r1.append(r14)
+                r1.append(r13)
                 r1.append(r0)
                 java.lang.String r1 = r1.toString()
                 boolean r1 = r4.contains(r1)
                 if (r1 != 0) goto L_0x0131
-                if (r12 == 0) goto L_0x012e
-                boolean r1 = r12.startsWith(r0)
+                if (r14 == 0) goto L_0x012e
+                boolean r1 = r14.startsWith(r0)
                 if (r1 != 0) goto L_0x0131
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
                 r1.<init>()
-                r1.append(r14)
+                r1.append(r13)
                 r1.append(r0)
                 java.lang.String r1 = r1.toString()
-                boolean r1 = r12.contains(r1)
+                boolean r1 = r14.contains(r1)
                 if (r1 == 0) goto L_0x012e
                 goto L_0x0131
             L_0x012e:
@@ -1062,14 +1062,14 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             L_0x0154:
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
                 r1.<init>()
-                r1.append(r13)
+                r1.append(r12)
                 org.telegram.tgnet.TLRPC$User r4 = r15.user
                 java.lang.String r4 = r4.username
                 r1.append(r4)
                 java.lang.String r1 = r1.toString()
                 java.lang.StringBuilder r4 = new java.lang.StringBuilder
                 r4.<init>()
-                r4.append(r13)
+                r4.append(r12)
                 r4.append(r0)
                 java.lang.String r0 = r4.toString()
                 r4 = 0
@@ -1110,7 +1110,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 int r5 = r9.indexOfKey(r5)
                 if (r5 < 0) goto L_0x01bd
             L_0x01b9:
-                r12 = 0
+                r14 = 0
                 r15 = 1
                 goto L_0x0276
             L_0x01bd:
@@ -1132,23 +1132,23 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 r11 = 0
             L_0x01e8:
                 if (r11 >= r7) goto L_0x01b9
-                r12 = r8[r11]
-                boolean r15 = r5.startsWith(r12)
+                r14 = r8[r11]
+                boolean r15 = r5.startsWith(r14)
                 if (r15 != 0) goto L_0x0231
                 java.lang.StringBuilder r15 = new java.lang.StringBuilder
                 r15.<init>()
+                r15.append(r13)
                 r15.append(r14)
-                r15.append(r12)
                 java.lang.String r15 = r15.toString()
                 boolean r15 = r5.contains(r15)
                 if (r15 != 0) goto L_0x0231
                 if (r6 == 0) goto L_0x0225
-                boolean r15 = r6.startsWith(r12)
+                boolean r15 = r6.startsWith(r14)
                 if (r15 != 0) goto L_0x0231
                 java.lang.StringBuilder r15 = new java.lang.StringBuilder
                 r15.<init>()
+                r15.append(r13)
                 r15.append(r14)
-                r15.append(r12)
                 java.lang.String r15 = r15.toString()
                 boolean r15 = r6.contains(r15)
                 if (r15 == 0) goto L_0x0225
@@ -1156,7 +1156,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             L_0x0225:
                 java.lang.String r15 = r4.username
                 if (r15 == 0) goto L_0x0232
-                boolean r15 = r15.startsWith(r12)
+                boolean r15 = r15.startsWith(r14)
                 if (r15 == 0) goto L_0x0232
                 r10 = 2
                 goto L_0x0232
@@ -1168,30 +1168,30 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 if (r10 != r15) goto L_0x0244
                 java.lang.String r5 = r4.first_name
                 java.lang.String r6 = r4.last_name
-                java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r6, r12)
+                java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r6, r14)
                 r3.add(r5)
-                r12 = 0
+                r14 = 0
                 goto L_0x026c
             L_0x0244:
                 java.lang.StringBuilder r5 = new java.lang.StringBuilder
                 r5.<init>()
-                r5.append(r13)
+                r5.append(r12)
                 java.lang.String r6 = r4.username
                 r5.append(r6)
                 java.lang.String r5 = r5.toString()
                 java.lang.StringBuilder r6 = new java.lang.StringBuilder
                 r6.<init>()
-                r6.append(r13)
                 r6.append(r12)
+                r6.append(r14)
                 java.lang.String r6 = r6.toString()
-                r12 = 0
-                java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r12, r6)
+                r14 = 0
+                java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r14, r6)
                 r3.add(r5)
             L_0x026c:
                 r2.add(r4)
                 goto L_0x0276
             L_0x0270:
-                r12 = 0
+                r14 = 0
                 r15 = 1
                 int r11 = r11 + 1
                 goto L_0x01e8
@@ -1210,9 +1210,9 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
 
         private void updateSearchResults(String str, ArrayList<Object> arrayList, ArrayList<CharSequence> arrayList2, int i) {
             AndroidUtilities.runOnUIThread(new Runnable(i, arrayList, arrayList2) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ ArrayList f$2;
-                private final /* synthetic */ ArrayList f$3;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ ArrayList f$3;
 
                 {
                     this.f$1 = r2;

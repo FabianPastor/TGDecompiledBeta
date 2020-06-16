@@ -446,8 +446,8 @@ public class SharedConfig {
         if (Math.abs(currentTimeMillis - lastKeepMediaCheckTime) >= 3600) {
             lastKeepMediaCheckTime = currentTimeMillis;
             Utilities.globalQueue.postRunnable(new Runnable(currentTimeMillis, FileLoader.checkDirectory(4)) {
-                private final /* synthetic */ int f$0;
-                private final /* synthetic */ File f$1;
+                public final /* synthetic */ int f$0;
+                public final /* synthetic */ File f$1;
 
                 {
                     this.f$0 = r1;
@@ -547,7 +547,7 @@ public class SharedConfig {
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putBoolean("useThreeLinesLayout", useThreeLinesLayout);
         edit.commit();
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.dialogsNeedReload, true);
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.dialogsNeedReload, Boolean.TRUE);
     }
 
     public static void toggleArchiveHidden() {

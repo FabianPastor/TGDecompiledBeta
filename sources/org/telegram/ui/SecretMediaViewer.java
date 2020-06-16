@@ -455,7 +455,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
                         if (SecretMediaViewer.this.playerRetryPlayCount > 0) {
                             SecretMediaViewer.access$1110(SecretMediaViewer.this);
                             AndroidUtilities.runOnUIThread(new Runnable(file) {
-                                private final /* synthetic */ File f$1;
+                                public final /* synthetic */ File f$1;
 
                                 {
                                     this.f$1 = r2;
@@ -857,7 +857,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             this.imageMoveAnimation.setInterpolator(new DecelerateInterpolator());
             int unused = this.photoBackgroundDrawable.frame = 0;
             Runnable unused2 = this.photoBackgroundDrawable.drawRunnable = new Runnable(placeForPhoto) {
-                private final /* synthetic */ PhotoViewer.PlaceProviderObject f$1;
+                public final /* synthetic */ PhotoViewer.PlaceProviderObject f$1;
 
                 {
                     this.f$1 = r2;

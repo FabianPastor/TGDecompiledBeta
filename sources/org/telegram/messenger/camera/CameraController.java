@@ -76,8 +76,8 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             if (!this.loadingCameras && !this.cameraInitied) {
                 this.loadingCameras = true;
                 this.threadPool.execute(new Runnable(z, runnable) {
-                    private final /* synthetic */ boolean f$1;
-                    private final /* synthetic */ Runnable f$2;
+                    public final /* synthetic */ boolean f$1;
+                    public final /* synthetic */ Runnable f$2;
 
                     {
                         this.f$1 = r2;
@@ -232,11 +232,11 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             r18 = r0
         L_0x011c:
             int r14 = r14 + 1
+            r6 = 0
             r1 = r19
             r7 = r16
             r13 = r17
             r0 = r18
-            r6 = 0
             goto L_0x00be
         L_0x0128:
             r18 = r0
@@ -435,7 +435,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         this.cameraInitied = false;
         if (!z && "APP_PAUSED".equals(exc.getMessage())) {
             AndroidUtilities.runOnUIThread(new Runnable(runnable) {
-                private final /* synthetic */ Runnable f$1;
+                public final /* synthetic */ Runnable f$1;
 
                 {
                     this.f$1 = r2;
@@ -463,9 +463,9 @@ public class CameraController implements MediaRecorder.OnInfoListener {
     public void close(CameraSession cameraSession, CountDownLatch countDownLatch, Runnable runnable) {
         cameraSession.destroy();
         this.threadPool.execute(new Runnable(runnable, cameraSession, countDownLatch) {
-            private final /* synthetic */ Runnable f$0;
-            private final /* synthetic */ CameraSession f$1;
-            private final /* synthetic */ CountDownLatch f$2;
+            public final /* synthetic */ Runnable f$0;
+            public final /* synthetic */ CameraSession f$1;
+            public final /* synthetic */ CountDownLatch f$2;
 
             {
                 this.f$0 = r1;
@@ -759,10 +759,10 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         boolean isFlipFront = cameraSession.isFlipFront();
         try {
             cameraInfo.camera.takePicture((Camera.ShutterCallback) null, (Camera.PictureCallback) null, new Camera.PictureCallback(file, cameraInfo, isFlipFront, runnable) {
-                private final /* synthetic */ File f$0;
-                private final /* synthetic */ CameraInfo f$1;
-                private final /* synthetic */ boolean f$2;
-                private final /* synthetic */ Runnable f$3;
+                public final /* synthetic */ File f$0;
+                public final /* synthetic */ CameraInfo f$1;
+                public final /* synthetic */ boolean f$2;
+                public final /* synthetic */ Runnable f$3;
 
                 {
                     this.f$0 = r1;
@@ -908,9 +908,9 @@ public class CameraController implements MediaRecorder.OnInfoListener {
     public void openRound(CameraSession cameraSession, SurfaceTexture surfaceTexture, Runnable runnable, Runnable runnable2) {
         if (cameraSession != null && surfaceTexture != null) {
             this.threadPool.execute(new Runnable(runnable2, surfaceTexture, runnable) {
-                private final /* synthetic */ Runnable f$1;
-                private final /* synthetic */ SurfaceTexture f$2;
-                private final /* synthetic */ Runnable f$3;
+                public final /* synthetic */ Runnable f$1;
+                public final /* synthetic */ SurfaceTexture f$2;
+                public final /* synthetic */ Runnable f$3;
 
                 {
                     this.f$1 = r2;
@@ -964,10 +964,10 @@ public class CameraController implements MediaRecorder.OnInfoListener {
     public void open(CameraSession cameraSession, SurfaceTexture surfaceTexture, Runnable runnable, Runnable runnable2) {
         if (cameraSession != null && surfaceTexture != null) {
             this.threadPool.execute(new Runnable(cameraSession, runnable2, surfaceTexture, runnable) {
-                private final /* synthetic */ CameraSession f$1;
-                private final /* synthetic */ Runnable f$2;
-                private final /* synthetic */ SurfaceTexture f$3;
-                private final /* synthetic */ Runnable f$4;
+                public final /* synthetic */ CameraSession f$1;
+                public final /* synthetic */ Runnable f$2;
+                public final /* synthetic */ SurfaceTexture f$3;
+                public final /* synthetic */ Runnable f$4;
 
                 {
                     this.f$1 = r2;
@@ -1026,12 +1026,12 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         if (cameraSession != null) {
             CameraInfo cameraInfo = cameraSession.cameraInfo;
             this.threadPool.execute(new Runnable(cameraInfo.camera, cameraSession, file, cameraInfo, videoTakeCallback, runnable) {
-                private final /* synthetic */ Camera f$1;
-                private final /* synthetic */ CameraSession f$2;
-                private final /* synthetic */ File f$3;
-                private final /* synthetic */ CameraInfo f$4;
-                private final /* synthetic */ CameraController.VideoTakeCallback f$5;
-                private final /* synthetic */ Runnable f$6;
+                public final /* synthetic */ Camera f$1;
+                public final /* synthetic */ CameraSession f$2;
+                public final /* synthetic */ File f$3;
+                public final /* synthetic */ CameraInfo f$4;
+                public final /* synthetic */ CameraController.VideoTakeCallback f$5;
+                public final /* synthetic */ Runnable f$6;
 
                 {
                     this.f$1 = r2;
@@ -1222,8 +1222,8 @@ public class CameraController implements MediaRecorder.OnInfoListener {
 
     public void stopVideoRecording(CameraSession cameraSession, boolean z) {
         this.threadPool.execute(new Runnable(cameraSession, z) {
-            private final /* synthetic */ CameraSession f$1;
-            private final /* synthetic */ boolean f$2;
+            public final /* synthetic */ CameraSession f$1;
+            public final /* synthetic */ boolean f$2;
 
             {
                 this.f$1 = r2;
@@ -1272,8 +1272,8 @@ public class CameraController implements MediaRecorder.OnInfoListener {
                 FileLog.e((Throwable) e5);
             }
             this.threadPool.execute(new Runnable(camera, cameraSession) {
-                private final /* synthetic */ Camera f$0;
-                private final /* synthetic */ CameraSession f$1;
+                public final /* synthetic */ Camera f$0;
+                public final /* synthetic */ CameraSession f$1;
 
                 {
                     this.f$0 = r1;

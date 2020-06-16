@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: ZZVB6sUcrVcWLO+Udz6zSvwYTwk=
+SHA1-Digest-Manifest: p3lO6MYOw5bDs+GWOK8TMvnxLRM=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: n9aAbRevdk5Yqo8CGZ8uKAlpJKw=
+SHA1-Digest: M8/yncDBsqlcTF5qO6EgYij6pXQ=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9511,10 +9511,10 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: iVlc5O4r34Hsh8g0q/b3z71lkDE=
+SHA1-Digest: OTsviDxAAN3gdd77Zz5vlcYMCCk=
 
 Name: classes2.dex
-SHA1-Digest: nLcuUoDKfRhSYly667dNVSD0B7o=
+SHA1-Digest: +SBmB5ZP0CcTv6gI7NPh8rfg+Mo=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -9562,40 +9562,40 @@ Name: isoparser-default.properties
 SHA1-Digest: ix2/FbuQDYdbrL/0Ibd5Tj5OTV0=
 
 Name: lib/arm64-v8a/libtgvoip1.1.so
-SHA1-Digest: hstz02/aUtAXRJnka5OTOB+8tY8=
+SHA1-Digest: ntE53yujZjkcFlD4HuFKpGFSqI0=
 
 Name: lib/arm64-v8a/libtgvoip3.1.so
-SHA1-Digest: YkybzpsYCtpDZttnXF3RvgAxtqQ=
+SHA1-Digest: inltNNSDrjb3U4W7pE9FbtHVyDw=
 
 Name: lib/arm64-v8a/libtmessages.30.so
-SHA1-Digest: 1yDTiaM5PdpIOpQHUMAKSQGRw60=
+SHA1-Digest: jXxfIlSr/J8wyxPfLZ5u5jLw/go=
 
 Name: lib/armeabi-v7a/libtgvoip1.1.so
-SHA1-Digest: KfTLu+ctfLwYSel8HnFw/HkTZ1k=
+SHA1-Digest: UqYHDKRlxO2qq2r964oaatWslow=
 
 Name: lib/armeabi-v7a/libtgvoip3.1.so
-SHA1-Digest: s3+uKB4j7CWbKyxyeyABTgmmVP8=
+SHA1-Digest: 4qjUjci2obTcU6R7CPTbatuPrhk=
 
 Name: lib/armeabi-v7a/libtmessages.30.so
-SHA1-Digest: t5Cz+QdTJ8X80laZm92D8eVmMwc=
+SHA1-Digest: vDiJNPNRUFfe2aZU+aFPpPMav+o=
 
 Name: lib/x86/libtgvoip1.1.so
-SHA1-Digest: xPpOIMqHjhOG/reZO/XpOWo62nI=
+SHA1-Digest: 1jWv0nGgUsMXlkk8S2w4V0inmUw=
 
 Name: lib/x86/libtgvoip3.1.so
-SHA1-Digest: HdBORU006xJ60rJmfiTcq++v9xQ=
+SHA1-Digest: et3NkeOx2P3tSXHAwQYeBl1ae+4=
 
 Name: lib/x86/libtmessages.30.so
-SHA1-Digest: LdLY3/EYPptwaR1bHy+6Un1YfKc=
+SHA1-Digest: zwZ8o2UnuJRHtPaXaJqXtYhBszw=
 
 Name: lib/x86_64/libtgvoip1.1.so
-SHA1-Digest: QIYHcFS5rLQhi3pwqrVfLsbsQtI=
+SHA1-Digest: mAPHZgLq/LIKMupZyg4qc1D1c6I=
 
 Name: lib/x86_64/libtgvoip3.1.so
-SHA1-Digest: kUQdgXrFiCmXoBm2fBwDg22COPU=
+SHA1-Digest: XVWHF8CGKyS9xl4gprqIhr6fTfE=
 
 Name: lib/x86_64/libtmessages.30.so
-SHA1-Digest: WWSc9RO4K0Ny496szDEhIAQk0I0=
+SHA1-Digest: QRQ90mANOAtkvp8mbJ1KAB2EVUA=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: 4xRXfC5wD7cP7zkWXYe1OQH2mf8=
@@ -10849,6 +10849,9 @@ SHA1-Digest: FE1TaQcB9YIvAZxbkfXKoRTn6fM=
 Name: res/drawable-hdpi-v4/miniplayer_play.png
 SHA1-Digest: +UtDUz39NGD1Me9lXJkm3t9iSMs=
 
+Name: res/drawable-hdpi-v4/minithumb_play.png
+SHA1-Digest: udAdnHm7S56fzYzYO+bdWJEkZHQ=
+
 Name: res/drawable-hdpi-v4/moon.png
 SHA1-Digest: lRQewGdELOqJ3+RjfX6LxAI1kEM=
 
@@ -10902,6 +10905,18 @@ SHA1-Digest: ypc9LCqNB8vpJ3kkmSfAozZOUd4=
 
 Name: res/drawable-hdpi-v4/msg_download.png
 SHA1-Digest: EAw75ZqAGuvToRQVzmb+twwUJXA=
+
+Name: res/drawable-hdpi-v4/msg_draw_arrow.png
+SHA1-Digest: A4/VBU90qZZ5HRtMpNnyxAlqU1k=
+
+Name: res/drawable-hdpi-v4/msg_draw_marker.png
+SHA1-Digest: jJi2ygjqcnzpeHaaIRe+uHlkW7U=
+
+Name: res/drawable-hdpi-v4/msg_draw_neon.png
+SHA1-Digest: F0j2AglogE+GA9aKMetXJJ8LSRs=
+
+Name: res/drawable-hdpi-v4/msg_draw_pen.png
+SHA1-Digest: BthVfn+o6W/4z37/WlQcbo71NJo=
 
 Name: res/drawable-hdpi-v4/msg_edit.png
 SHA1-Digest: MqpdIMjF3P94wlqhrBkCt8dYnMs=
@@ -11750,13 +11765,13 @@ Name: res/drawable-hdpi-v4/video_play1.png
 SHA1-Digest: gxceP7Ydgmi+uUQKB5VFBYkFenk=
 
 Name: res/drawable-hdpi-v4/video_quality1.png
-SHA1-Digest: nW6qSsKav1tU8XGw0v64ycjIGDA=
+SHA1-Digest: d9Gl+5SpZURa21CipdRbhy2PwRk=
 
 Name: res/drawable-hdpi-v4/video_quality2.png
-SHA1-Digest: T7Mg6mqUm4DIswihBy+sc7GIAYI=
+SHA1-Digest: fAUoI6gciFTny7Xm2Lx1igzv3M4=
 
 Name: res/drawable-hdpi-v4/video_quality3.png
-SHA1-Digest: ssqUp5NRtkl99V1qJ9iIf9wOFQI=
+SHA1-Digest: fFg8gpWivNACnDzrNkL4OrJDKWI=
 
 Name: res/drawable-hdpi-v4/video_send_mute.png
 SHA1-Digest: QbQXdN71PdjobsBemQejR/Qp64g=
@@ -12926,6 +12941,9 @@ SHA1-Digest: 5sVyXltAScopSF+yimF/d+h86tA=
 Name: res/drawable-mdpi-v4/miniplayer_play.png
 SHA1-Digest: zfWhMTWFnF/aeb4h9f7RpyXpcAU=
 
+Name: res/drawable-mdpi-v4/minithumb_play.png
+SHA1-Digest: XXNs9fKHT9RUOTYohrzp3E6yk3U=
+
 Name: res/drawable-mdpi-v4/moon.png
 SHA1-Digest: knbHvf263uucv3I+CIbjPDx12j0=
 
@@ -12979,6 +12997,18 @@ SHA1-Digest: +aSzW1ceEFXn8/pWAIXo+IZ5Cvs=
 
 Name: res/drawable-mdpi-v4/msg_download.png
 SHA1-Digest: +OZGtJYOyyYqvz0afUgYmKoER7w=
+
+Name: res/drawable-mdpi-v4/msg_draw_arrow.png
+SHA1-Digest: c74naLKJBaz8NJdkH5YCvdyrYu0=
+
+Name: res/drawable-mdpi-v4/msg_draw_marker.png
+SHA1-Digest: cKWkwFV6r/SYwrNDdFTUipjTMaU=
+
+Name: res/drawable-mdpi-v4/msg_draw_neon.png
+SHA1-Digest: zo4MDMjJn7jyKMEBnt94y5E5p4o=
+
+Name: res/drawable-mdpi-v4/msg_draw_pen.png
+SHA1-Digest: ACAtvX4mRv+u1ydntHsbg/52sUQ=
 
 Name: res/drawable-mdpi-v4/msg_edit.png
 SHA1-Digest: BGmQZidGdY6YavF9k2zmzW1RO/w=
@@ -13827,13 +13857,13 @@ Name: res/drawable-mdpi-v4/video_play1.png
 SHA1-Digest: yv2l8pejw3PVArgCw3OZcLPGRZk=
 
 Name: res/drawable-mdpi-v4/video_quality1.png
-SHA1-Digest: V1McNMjf9Bc8u24NBYVvnahQxRc=
+SHA1-Digest: GXd0/L85xpOEKKVz2kk47nvyCMg=
 
 Name: res/drawable-mdpi-v4/video_quality2.png
-SHA1-Digest: 8p4dq2eoBD8GKW5VCiTp17VX42A=
+SHA1-Digest: wDmvdW506xO/SubH/AktCgd4lOg=
 
 Name: res/drawable-mdpi-v4/video_quality3.png
-SHA1-Digest: WAt9Oo7OPgyuSomlg1SW0It3OZo=
+SHA1-Digest: VBOSUQyDtZoegpmqvA3Il3g7oo8=
 
 Name: res/drawable-mdpi-v4/video_send_mute.png
 SHA1-Digest: 8UkBpPb14R7I4DGswsCJCjbWUQI=
@@ -15048,6 +15078,9 @@ SHA1-Digest: iM9NDSLLUJMIaytgyBvx+JBMvQY=
 Name: res/drawable-xhdpi-v4/miniplayer_play.png
 SHA1-Digest: d0OdQzAXizpKEH1wZPC1Bh1s0Ao=
 
+Name: res/drawable-xhdpi-v4/minithumb_play.png
+SHA1-Digest: tf30LL8HuYjjw+CPBA4V40uLvYw=
+
 Name: res/drawable-xhdpi-v4/moon.png
 SHA1-Digest: N0Gj07m1h5GefmE6Eb8311AraKw=
 
@@ -15101,6 +15134,18 @@ SHA1-Digest: yrfFVe1Lrz3MCR3z2/VxcSCJWQQ=
 
 Name: res/drawable-xhdpi-v4/msg_download.png
 SHA1-Digest: TyGV5g1rIG9Abs/TeoPJlVkBrEk=
+
+Name: res/drawable-xhdpi-v4/msg_draw_arrow.png
+SHA1-Digest: tM7evlTqthK2v85m/m+Z21THMhU=
+
+Name: res/drawable-xhdpi-v4/msg_draw_marker.png
+SHA1-Digest: ns3GLMJpffqnlDdbrmyc8LEWuys=
+
+Name: res/drawable-xhdpi-v4/msg_draw_neon.png
+SHA1-Digest: u0aU3a10OrvijhPxCXhyuRP/5Ow=
+
+Name: res/drawable-xhdpi-v4/msg_draw_pen.png
+SHA1-Digest: Q3gjsaZMkyub0ATKRhw6Y4Dt1A8=
 
 Name: res/drawable-xhdpi-v4/msg_edit.png
 SHA1-Digest: VFZCRSCPoAp4sZhqPnJmup/0qCw=
@@ -15949,13 +15994,13 @@ Name: res/drawable-xhdpi-v4/video_png.png
 SHA1-Digest: tNpWYkmaDNzuaW44WccMLPEzQDE=
 
 Name: res/drawable-xhdpi-v4/video_quality1.png
-SHA1-Digest: WRtp/iUTf3ggX73yk292COg8RdM=
+SHA1-Digest: q6wiuPzckDDvRt/ZebU43r80spY=
 
 Name: res/drawable-xhdpi-v4/video_quality2.png
-SHA1-Digest: c8YEVN386tWFoXtdEJHSyxMkEh8=
+SHA1-Digest: ghJdEsfgVMZ4ExAlqqLhcHAsVMQ=
 
 Name: res/drawable-xhdpi-v4/video_quality3.png
-SHA1-Digest: EYOTc11do3D02GF+dPWZP7JTwC4=
+SHA1-Digest: fmesIYEV4iJwwsmWmGa31tGsJG4=
 
 Name: res/drawable-xhdpi-v4/video_send_mute.png
 SHA1-Digest: I+3Ew1hdDsp1WLABu2PNbgP0M+U=
@@ -17113,6 +17158,9 @@ SHA1-Digest: xxw7D9QeQQNaTiqGQPSUjbCUY64=
 Name: res/drawable-xxhdpi-v4/miniplayer_play.png
 SHA1-Digest: MTncPE7WjN67nLCJNkP6OLwGr5w=
 
+Name: res/drawable-xxhdpi-v4/minithumb_play.png
+SHA1-Digest: 8nPO0a9wUVuhAFB/ylsVRYXM01g=
+
 Name: res/drawable-xxhdpi-v4/moon.png
 SHA1-Digest: x/M+EKrRBfcM0BdIEi+tvk2SRo4=
 
@@ -17166,6 +17214,18 @@ SHA1-Digest: rbo3OyYOfzGBiuc1oMynML+q3uw=
 
 Name: res/drawable-xxhdpi-v4/msg_download.png
 SHA1-Digest: myoX8v5RWxlfS2SVAQ7KApHxzC0=
+
+Name: res/drawable-xxhdpi-v4/msg_draw_arrow.png
+SHA1-Digest: TzB1tG62WsI8Wz596oNrK0BWNOM=
+
+Name: res/drawable-xxhdpi-v4/msg_draw_marker.png
+SHA1-Digest: lwtpOiZD4iy/REwZxab+vh3VK50=
+
+Name: res/drawable-xxhdpi-v4/msg_draw_neon.png
+SHA1-Digest: y+ismi4UxE0ZRZdsUHiTZGkW7+Q=
+
+Name: res/drawable-xxhdpi-v4/msg_draw_pen.png
+SHA1-Digest: xLKWpp4VaV/14u1476eoXcdeS68=
 
 Name: res/drawable-xxhdpi-v4/msg_edit.png
 SHA1-Digest: 8gO71Joy3F/7f2wyIyQnvbXcfyo=
@@ -18002,13 +18062,13 @@ Name: res/drawable-xxhdpi-v4/video_play1.png
 SHA1-Digest: yb8cb/UeGFtWwEXdnnc7iCmL98E=
 
 Name: res/drawable-xxhdpi-v4/video_quality1.png
-SHA1-Digest: mcPHRMm4i7b49EYqc4DVPUiZK6U=
+SHA1-Digest: JdeFn1nt2xVpjVsGoVfBveFU1A0=
 
 Name: res/drawable-xxhdpi-v4/video_quality2.png
-SHA1-Digest: FgHVy7Nm5q0kRWdRiEuR7ejB9cA=
+SHA1-Digest: xes2CdiFMgM6HPv8nQuDkNy4IVk=
 
 Name: res/drawable-xxhdpi-v4/video_quality3.png
-SHA1-Digest: w0eYrG7J2XDR9CN88i4YE1IzuC0=
+SHA1-Digest: 8ImMeZRJ/fN0jMel6IS48p6apEk=
 
 Name: res/drawable-xxhdpi-v4/video_send_mute.png
 SHA1-Digest: ucSFCFAEeTL8HvEik7Hq5KkrBow=
@@ -18248,19 +18308,19 @@ Name: res/drawable/$fingerprint_dialog_fp_to_error__9.xml
 SHA1-Digest: MQinL9boLz9CBU0JaTF81ExZEkc=
 
 Name: res/drawable/bar_selector_lock.xml
-SHA1-Digest: sBA9cVYjWaTSuG3qZnEpBrSKPhk=
+SHA1-Digest: qm/TS0urI0vPJr8QTViqWtiuNno=
 
 Name: res/drawable/bar_selector_style.xml
-SHA1-Digest: /VHe9dPIDu7/6JmGmzGTz6MW174=
+SHA1-Digest: lN2LlNR1Ub4A5SF3bYszoIKqTD4=
 
 Name: res/drawable/bar_selector_white.xml
-SHA1-Digest: YmHFljMA8jZD0S/SoDZPIiWDDDo=
+SHA1-Digest: TGf7aFnf3SiBeXGlCkvMVy5UtZ8=
 
 Name: res/drawable/bg_voip_icon_btn.xml
 SHA1-Digest: l2/JBKA7lYFWRMYxqSltUXRiQDg=
 
 Name: res/drawable/call_custom_notification_icon.xml
-SHA1-Digest: ICTb4olMc6nTWUxXu20VXFU3eQs=
+SHA1-Digest: 0GpZGE5YkuBrQLzMzqhlvg6dUi4=
 
 Name: res/drawable/call_notification_bg.xml
 SHA1-Digest: pqKbj4Be7C2zm3kiZdq49QZKAWU=
@@ -18359,7 +18419,7 @@ Name: res/drawable/icplaceholder.jpg
 SHA1-Digest: z6DEdLYpiw0H4tz/HdYnrk2Xt6c=
 
 Name: res/drawable/list_selector_ex.xml
-SHA1-Digest: qxFhh7adJ2GHLJq9hYgumt2O+8g=
+SHA1-Digest: Uy1pAIex9lioPBImr4ZtQQA6zAI=
 
 Name: res/drawable/loading_animation.xml
 SHA1-Digest: UF8JVFECuuglQsBzOSwqAXM8Wws=
@@ -18368,34 +18428,25 @@ Name: res/drawable/loading_animation2.xml
 SHA1-Digest: XfuQHG5Te3e5Rz3qUT/ble7k5CE=
 
 Name: res/drawable/notification_bg.xml
-SHA1-Digest: sp7BXbcpCWra76+NomNIenKGruM=
+SHA1-Digest: YBAuS9L1Rgj+F9RD9aU8xw1iE3o=
 
 Name: res/drawable/notification_bg_low.xml
-SHA1-Digest: VCw7s9ZjVvYVLkO56mXOTzIJ4sQ=
+SHA1-Digest: 8mLA8SeqQZAM4Gy29+ZjeWKt+Wk=
 
 Name: res/drawable/notification_icon_background.xml
 SHA1-Digest: 8l7eYEcOZS9u0FCiCIGn6Z4qsGM=
 
 Name: res/drawable/notification_tile_bg.xml
-SHA1-Digest: SfeibiB1GA/U9Yv929q0lJXFjX4=
+SHA1-Digest: /9/K+4NbCnX+EKbzbSIqS4EzT1g=
 
 Name: res/drawable/paint_elliptical_brush.png
 SHA1-Digest: VpOYFZxPOMSLqPtUwAe1LzAxEhE=
 
-Name: res/drawable/paint_elliptical_preview.png
-SHA1-Digest: dnAk4pbaeOn5aW1bccI3bh5ChjY=
-
 Name: res/drawable/paint_neon_brush.png
 SHA1-Digest: xV/jx7GNHI2M4X2n+9p4yx+7oDc=
 
-Name: res/drawable/paint_neon_preview.png
-SHA1-Digest: rtyUBRgBPQWhA0TxT+3oBLTb1Qk=
-
 Name: res/drawable/paint_radial_brush.png
 SHA1-Digest: emKVVG+rfjZ1GTMHEgxSzHrPv9M=
-
-Name: res/drawable/paint_radial_preview.png
-SHA1-Digest: 4/dygzesaBr7Osizu0m9XngIcBI=
 
 Name: res/drawable/photo_placeholder_in.xml
 SHA1-Digest: SN/W5xggyh4LL6m0gpmw861ss2Y=
@@ -18407,10 +18458,10 @@ Name: res/drawable/scrollbar_vertical_thumb.xml
 SHA1-Digest: J62l6F+a5ekJYeI3jAzD1WYWbNI=
 
 Name: res/drawable/scrollbar_vertical_thumb_inset.xml
-SHA1-Digest: nDZGX50zAXmSGcR+D/JoVK60iBU=
+SHA1-Digest: hZ+vZFt7ZjtbxxxTPFcoExCxETI=
 
 Name: res/drawable/switch_thumb.xml
-SHA1-Digest: A5gCRr6eOJQ7x5b9O5sMEaS9BOs=
+SHA1-Digest: 8vYsPf/xW8PuOZHQFTOAetl3HZ8=
 
 Name: res/drawable/theme_preview_image.jpg
 SHA1-Digest: QEy+cMGdbCQRY0A7P2OBlLevTjg=
@@ -18479,7 +18530,7 @@ Name: res/layout/player_big_notification.xml
 SHA1-Digest: mdnL02YGocdD6lsnczlvd15T+nU=
 
 Name: res/layout/player_small_notification.xml
-SHA1-Digest: L136kAupFvEow7AwQQrYNX9Gq8c=
+SHA1-Digest: VgX0PkmZOfgXhnlXwvd4/qZ6D7M=
 
 Name: res/mipmap-anydpi-v26/ic_launcher.xml
 SHA1-Digest: G7ddlJzJpeU1rRMHtiXTxUyDMv0=
@@ -18716,10 +18767,10 @@ Name: res/raw/wallet_science.tgs
 SHA1-Digest: xcYXycYjGRsZcet5rKoz4b8trBo=
 
 Name: res/xml/auth.xml
-SHA1-Digest: qM1FAtFo0/NbTd7IeFOs3sI9b20=
+SHA1-Digest: UKfCXQw/7Az+CNk5vtH9C7S/PyM=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: LJLO+HWTTFnujHF02SHJlOqsHUs=
+SHA1-Digest: 5zG/6hgscnN2egvohBleG/oQiVg=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: 9Hh95nQe6vvvIyVqqpGpBH5VMqA=
@@ -18734,7 +18785,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: MNhUptHK6+myHB7RO+uo1h/DB6s=
+SHA1-Digest: N6gjZQ2Qmq861bCoNfqFlpYLleI=
 
 Name: transport-api.properties
 SHA1-Digest: KlRwAVirU5yXrBUVC3JeyHIPlcs=

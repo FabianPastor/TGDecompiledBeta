@@ -308,8 +308,8 @@ public class DataSettingsActivity extends BaseFragment {
                     i2 = 1;
                 }
                 Dialog createSingleChoiceDialog = AlertsCreator.createSingleChoiceDialog(getParentActivity(), new String[]{LocaleController.getString("UseLessDataNever", NUM), LocaleController.getString("UseLessDataOnRoaming", NUM), LocaleController.getString("UseLessDataOnMobile", NUM), LocaleController.getString("UseLessDataAlways", NUM)}, LocaleController.getString("VoipUseLessData", NUM), i2, new DialogInterface.OnClickListener(globalMainSettings, i) {
-                    private final /* synthetic */ SharedPreferences f$1;
-                    private final /* synthetic */ int f$2;
+                    public final /* synthetic */ SharedPreferences f$1;
+                    public final /* synthetic */ int f$2;
 
                     {
                         this.f$1 = r2;
@@ -325,8 +325,8 @@ public class DataSettingsActivity extends BaseFragment {
             }
             i2 = 0;
             Dialog createSingleChoiceDialog2 = AlertsCreator.createSingleChoiceDialog(getParentActivity(), new String[]{LocaleController.getString("UseLessDataNever", NUM), LocaleController.getString("UseLessDataOnRoaming", NUM), LocaleController.getString("UseLessDataOnMobile", NUM), LocaleController.getString("UseLessDataAlways", NUM)}, LocaleController.getString("VoipUseLessData", NUM), i2, new DialogInterface.OnClickListener(globalMainSettings, i) {
-                private final /* synthetic */ SharedPreferences f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ SharedPreferences f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;

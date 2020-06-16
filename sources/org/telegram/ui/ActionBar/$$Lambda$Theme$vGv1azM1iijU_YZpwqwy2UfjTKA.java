@@ -11,6 +11,6 @@ public final /* synthetic */ class $$Lambda$Theme$vGv1azM1iijU_YZpwqwy2UfjTKA im
     }
 
     public final void run() {
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetNewTheme, false);
+        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didSetNewTheme, Boolean.FALSE);
     }
 }

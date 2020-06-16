@@ -474,7 +474,7 @@ public class DialogMeUrlCell extends BaseCell {
             java.lang.String r12 = r0.toString()
             boolean r0 = android.text.TextUtils.isEmpty(r3)
             if (r0 == 0) goto L_0x0311
-            r0 = 2131625440(0x7f0e05e0, float:1.8878088E38)
+            r0 = 2131625448(0x7f0e05e8, float:1.8878104E38)
             java.lang.String r3 = "HiddenName"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r0)
         L_0x0311:

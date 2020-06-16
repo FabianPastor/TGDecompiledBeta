@@ -1070,10 +1070,10 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v10, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v17, resolved type: android.text.SpannableString} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v6, resolved type: java.lang.String} */
+    /* JADX WARNING: type inference failed for: r8v13 */
     /* JADX WARNING: type inference failed for: r8v14 */
-    /* JADX WARNING: type inference failed for: r8v15 */
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r8v7, types: [boolean, int] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r8v6, types: [int, boolean] */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:22:0x00dc  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -1091,12 +1091,12 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r4.addFlags(r5)
             android.app.Notification$Builder r5 = new android.app.Notification$Builder
             r5.<init>(r0)
-            r6 = 2131627264(0x7f0e0d00, float:1.8881788E38)
-            java.lang.String r7 = "VoipInCallBranding"
-            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r7, r6)
+            java.lang.String r6 = "VoipInCallBranding"
+            r7 = 2131627281(0x7f0e0d11, float:1.8881822E38)
+            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r6, r7)
             android.app.Notification$Builder r5 = r5.setContentTitle(r8)
             android.app.Notification$Builder r5 = r5.setContentText(r1)
-            r8 = 2131165753(0x7var_, float:1.7945732E38)
+            r8 = 2131165758(0x7var_e, float:1.7945742E38)
             android.app.Notification$Builder r5 = r5.setSmallIcon(r8)
             android.app.Notification$Builder r5 = r5.setSubText(r2)
             r8 = 0
@@ -1110,19 +1110,19 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             android.content.SharedPreferences r10 = org.telegram.messenger.MessagesController.getGlobalNotificationsSettings()
             java.lang.String r14 = "calls_notification_channel"
             int r15 = r10.getInt(r14, r8)
-            java.lang.String r6 = "notification"
-            java.lang.Object r6 = r0.getSystemService(r6)
-            android.app.NotificationManager r6 = (android.app.NotificationManager) r6
+            java.lang.String r7 = "notification"
+            java.lang.Object r7 = r0.getSystemService(r7)
+            android.app.NotificationManager r7 = (android.app.NotificationManager) r7
             java.lang.StringBuilder r13 = new java.lang.StringBuilder
             r13.<init>()
             java.lang.String r11 = "incoming_calls"
             r13.append(r11)
             r13.append(r15)
             java.lang.String r11 = r13.toString()
-            android.app.NotificationChannel r11 = r6.getNotificationChannel(r11)
+            android.app.NotificationChannel r11 = r7.getNotificationChannel(r11)
             if (r11 == 0) goto L_0x007a
             java.lang.String r11 = r11.getId()
-            r6.deleteNotificationChannel(r11)
+            r7.deleteNotificationChannel(r11)
         L_0x007a:
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
             r11.<init>()
@@ -1130,7 +1130,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r11.append(r13)
             r11.append(r15)
             java.lang.String r11 = r11.toString()
-            android.app.NotificationChannel r11 = r6.getNotificationChannel(r11)
+            android.app.NotificationChannel r11 = r7.getNotificationChannel(r11)
             r12 = 4
             if (r11 == 0) goto L_0x00d9
             int r8 = r11.getImportance()
@@ -1157,7 +1157,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r8.append(r13)
             r8.append(r15)
             java.lang.String r8 = r8.toString()
-            r6.deleteNotificationChannel(r8)
+            r7.deleteNotificationChannel(r8)
             int r15 = r15 + 1
             android.content.SharedPreferences$Editor r8 = r10.edit()
             android.content.SharedPreferences$Editor r8 = r8.putInt(r14, r15)
@@ -1177,7 +1177,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r11.append(r13)
             r11.append(r15)
             java.lang.String r11 = r11.toString()
-            r14 = 2131625473(0x7f0e0601, float:1.8878155E38)
+            r14 = 2131625481(0x7f0e0609, float:1.8878171E38)
             java.lang.String r2 = "IncomingCalls"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r14)
             r10.<init>(r11, r2, r12)
@@ -1185,7 +1185,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r2 = 0
             r10.enableVibration(r2)
             r10.enableLights(r2)
-            r6.createNotificationChannel(r10)
+            r7.createNotificationChannel(r10)
         L_0x0114:
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
@@ -1201,22 +1201,22 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r5.setSound(r9, r2)
         L_0x012f:
             android.content.Intent r2 = new android.content.Intent
-            java.lang.Class<org.telegram.messenger.voip.VoIPActionsReceiver> r6 = org.telegram.messenger.voip.VoIPActionsReceiver.class
-            r2.<init>(r0, r6)
-            java.lang.StringBuilder r6 = new java.lang.StringBuilder
-            r6.<init>()
+            java.lang.Class<org.telegram.messenger.voip.VoIPActionsReceiver> r7 = org.telegram.messenger.voip.VoIPActionsReceiver.class
+            r2.<init>(r0, r7)
+            java.lang.StringBuilder r7 = new java.lang.StringBuilder
+            r7.<init>()
             java.lang.String r8 = r16.getPackageName()
-            r6.append(r8)
+            r7.append(r8)
             java.lang.String r8 = ".DECLINE_CALL"
-            r6.append(r8)
-            java.lang.String r6 = r6.toString()
-            r2.setAction(r6)
-            long r8 = r16.getCallID()
-            java.lang.String r6 = "call_id"
-            r2.putExtra(r6, r8)
-            r8 = 2131627257(0x7f0e0cf9, float:1.8881773E38)
-            java.lang.String r9 = "VoipDeclineCall"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r9, r8)
+            r7.append(r8)
+            java.lang.String r7 = r7.toString()
+            r2.setAction(r7)
+            long r7 = r16.getCallID()
+            java.lang.String r9 = "call_id"
+            r2.putExtra(r9, r7)
+            java.lang.String r7 = "VoipDeclineCall"
+            r8 = 2131627274(0x7f0e0d0a, float:1.8881808E38)
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r8)
             int r11 = android.os.Build.VERSION.SDK_INT
             r12 = 24
             if (r11 < r12) goto L_0x017d
@@ -1249,10 +1249,10 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             java.lang.String r13 = r13.toString()
             r10.setAction(r13)
             long r13 = r16.getCallID()
-            r10.putExtra(r6, r13)
-            r6 = 2131627249(0x7f0e0cf1, float:1.8881757E38)
-            java.lang.String r13 = "VoipAnswerCall"
-            java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r13, r6)
+            r10.putExtra(r9, r13)
+            java.lang.String r9 = "VoipAnswerCall"
+            r13 = 2131627266(0x7f0e0d02, float:1.8881792E38)
+            java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r9, r13)
             int r15 = android.os.Build.VERSION.SDK_INT
             if (r15 < r12) goto L_0x01d4
             android.text.SpannableString r12 = new android.text.SpannableString
@@ -1334,7 +1334,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             int r1 = r0.currentAccount
             org.telegram.messenger.UserConfig r1 = org.telegram.messenger.UserConfig.getInstance(r1)
             org.telegram.tgnet.TLRPC$User r1 = r1.getCurrentUser()
-            r7 = 2131627265(0x7f0e0d01, float:1.888179E38)
+            r6 = 2131627282(0x7f0e0d12, float:1.8881824E38)
             java.lang.Object[] r11 = new java.lang.Object[r11]
             java.lang.String r14 = r1.first_name
             java.lang.String r1 = r1.last_name
@@ -1342,30 +1342,30 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r14 = 0
             r11[r14] = r1
             java.lang.String r1 = "VoipInCallBrandingWithName"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r1, r7, r11)
+            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r1, r6, r11)
             r8.setTextViewText(r12, r1)
             goto L_0x02cc
         L_0x028e:
-            r1 = 2131627264(0x7f0e0d00, float:1.8881788E38)
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r7, r1)
+            r1 = 2131627281(0x7f0e0d11, float:1.8881822E38)
+            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
             r8.setTextViewText(r12, r1)
             goto L_0x02cc
         L_0x0299:
             int r1 = org.telegram.messenger.UserConfig.getActivatedAccountsCount()
-            r7 = 1
-            if (r1 <= r7) goto L_0x02c4
+            r6 = 1
+            if (r1 <= r6) goto L_0x02c4
             int r1 = r0.currentAccount
             org.telegram.messenger.UserConfig r1 = org.telegram.messenger.UserConfig.getInstance(r1)
             org.telegram.tgnet.TLRPC$User r1 = r1.getCurrentUser()
-            r11 = 2131627250(0x7f0e0cf2, float:1.888176E38)
-            java.lang.Object[] r7 = new java.lang.Object[r7]
+            r11 = 2131627267(0x7f0e0d03, float:1.8881794E38)
+            java.lang.Object[] r6 = new java.lang.Object[r6]
             java.lang.String r15 = r1.first_name
             java.lang.String r1 = r1.last_name
             java.lang.String r1 = org.telegram.messenger.ContactsController.formatName(r15, r1)
             r15 = 0
-            r7[r15] = r1
+            r6[r15] = r1
             java.lang.String r1 = "VoipAnsweringAsAccount"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r1, r11, r7)
+            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r1, r11, r6)
             r8.setTextViewText(r14, r1)
             goto L_0x02c7
         L_0x02c4:
@@ -1376,11 +1376,11 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         L_0x02cc:
             android.graphics.Bitmap r1 = r0.getRoundAvatarBitmap(r3)
             r3 = 2131230765(0x7var_d, float:1.8077592E38)
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r13, r6)
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r13)
             r8.setTextViewText(r3, r6)
             r3 = 2131230780(0x7var_c, float:1.8077622E38)
-            r6 = 2131627257(0x7f0e0cf9, float:1.8881773E38)
-            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r9, r6)
+            r6 = 2131627274(0x7f0e0d0a, float:1.8881808E38)
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r8.setTextViewText(r3, r6)
             r3 = 2131230826(0x7var_a, float:1.8077716E38)
             r8.setImageViewBitmap(r3, r1)

@@ -449,8 +449,8 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 ChatActivity chatActivity = (ChatActivity) this.parentAlert.baseFragment;
                 if (chatActivity.isInScheduleMode()) {
                     AlertsCreator.createScheduleDatePickerDialog(chatActivity.getParentActivity(), chatActivity.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate(tLRPC$TL_messageMediaPoll, hashMap) {
-                        private final /* synthetic */ TLRPC$TL_messageMediaPoll f$1;
-                        private final /* synthetic */ HashMap f$2;
+                        public final /* synthetic */ TLRPC$TL_messageMediaPoll f$1;
+                        public final /* synthetic */ HashMap f$2;
 
                         {
                             this.f$1 = r2;

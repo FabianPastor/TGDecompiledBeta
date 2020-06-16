@@ -135,7 +135,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         r0.setImageDrawable(drawable);
         r0.setScaleType(ImageView.ScaleType.CENTER);
         r0.setOnClickListener(new View.OnClickListener(i) {
-            private final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$1;
 
             {
                 this.f$1 = r2;

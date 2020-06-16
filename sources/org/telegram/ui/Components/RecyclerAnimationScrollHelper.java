@@ -75,14 +75,9 @@ public class RecyclerAnimationScrollHelper {
         for (int i3 = 0; i3 < childCount; i3++) {
             View childAt = this.recyclerView.getChildAt(i3);
             arrayList.add(childAt);
-            int position = this.layoutManager.getPosition(childAt);
-            this.positionToOldView.put(position, childAt);
+            this.positionToOldView.put(this.layoutManager.getPosition(childAt), childAt);
             if (adapter != null && adapter.hasStableIds()) {
-                if (childAt instanceof ChatMessageCell) {
-                    this.oldStableIds.put(Long.valueOf((long) ((ChatMessageCell) childAt).getMessageObject().stableId), childAt);
-                } else {
-                    this.oldStableIds.put(Long.valueOf(adapter.getItemId(position)), childAt);
-                }
+                this.oldStableIds.put(Long.valueOf(((RecyclerView.LayoutParams) childAt.getLayoutParams()).mViewHolder.getItemId()), childAt);
             }
             if (childAt instanceof ChatMessageCell) {
                 ((ChatMessageCell) childAt).setAnimationRunning(true, true);
@@ -183,10 +178,10 @@ public class RecyclerAnimationScrollHelper {
                 }
                 ValueAnimator unused = RecyclerAnimationScrollHelper.this.animator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                 RecyclerAnimationScrollHelper.this.animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(arrayList, z3, i15, arrayList) {
-                    private final /* synthetic */ ArrayList f$1;
-                    private final /* synthetic */ boolean f$2;
-                    private final /* synthetic */ int f$3;
-                    private final /* synthetic */ ArrayList f$4;
+                    public final /* synthetic */ ArrayList f$1;
+                    public final /* synthetic */ boolean f$2;
+                    public final /* synthetic */ int f$3;
+                    public final /* synthetic */ ArrayList f$4;
 
                     {
                         this.f$1 = r2;

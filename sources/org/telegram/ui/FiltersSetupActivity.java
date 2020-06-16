@@ -566,7 +566,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             textPaint.setTextSize((float) AndroidUtilities.dp(20.0f));
             builder.setTitle(Emoji.replaceEmoji(currentFilter.name, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
             builder.setItems(new CharSequence[]{LocaleController.getString("FilterEditItem", NUM), LocaleController.getString("FilterDeleteItem", NUM)}, new int[]{NUM, NUM}, new DialogInterface.OnClickListener(currentFilter) {
-                private final /* synthetic */ MessagesController.DialogFilter f$1;
+                public final /* synthetic */ MessagesController.DialogFilter f$1;
 
                 {
                     this.f$1 = r2;
@@ -590,7 +590,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 builder.setMessage(LocaleController.getString("FilterDeleteAlert", NUM));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                 builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener(dialogFilter) {
-                    private final /* synthetic */ MessagesController.DialogFilter f$1;
+                    public final /* synthetic */ MessagesController.DialogFilter f$1;
 
                     {
                         this.f$1 = r2;
@@ -621,8 +621,8 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             TLRPC$TL_messages_updateDialogFilter tLRPC$TL_messages_updateDialogFilter = new TLRPC$TL_messages_updateDialogFilter();
             tLRPC$TL_messages_updateDialogFilter.id = dialogFilter.id;
             FiltersSetupActivity.this.getConnectionsManager().sendRequest(tLRPC$TL_messages_updateDialogFilter, new RequestDelegate(alertDialog, dialogFilter) {
-                private final /* synthetic */ AlertDialog f$1;
-                private final /* synthetic */ MessagesController.DialogFilter f$2;
+                public final /* synthetic */ AlertDialog f$1;
+                public final /* synthetic */ MessagesController.DialogFilter f$2;
 
                 {
                     this.f$1 = r2;
@@ -637,8 +637,8 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
 
         public /* synthetic */ void lambda$null$2$FiltersSetupActivity$ListAdapter(AlertDialog alertDialog, MessagesController.DialogFilter dialogFilter, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             AndroidUtilities.runOnUIThread(new Runnable(alertDialog, dialogFilter) {
-                private final /* synthetic */ AlertDialog f$1;
-                private final /* synthetic */ MessagesController.DialogFilter f$2;
+                public final /* synthetic */ AlertDialog f$1;
+                public final /* synthetic */ MessagesController.DialogFilter f$2;
 
                 {
                     this.f$1 = r2;
@@ -704,7 +704,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 FilterCell filterCell = new FilterCell(this.mContext);
                 filterCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                 filterCell.setOnReorderButtonTouchListener(new View.OnTouchListener(filterCell) {
-                    private final /* synthetic */ FiltersSetupActivity.FilterCell f$1;
+                    public final /* synthetic */ FiltersSetupActivity.FilterCell f$1;
 
                     {
                         this.f$1 = r2;
@@ -726,7 +726,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
                 SuggestedFilterCell suggestedFilterCell2 = new SuggestedFilterCell(this.mContext);
                 suggestedFilterCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                 suggestedFilterCell2.setAddOnClickListener(new View.OnClickListener(suggestedFilterCell2) {
-                    private final /* synthetic */ FiltersSetupActivity.SuggestedFilterCell f$1;
+                    public final /* synthetic */ FiltersSetupActivity.SuggestedFilterCell f$1;
 
                     {
                         this.f$1 = r2;
@@ -802,7 +802,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             }
             boolean unused = FiltersSetupActivity.this.ignoreUpdates = true;
             FilterCreateActivity.saveFilterToServer(dialogFilter, dialogFilter.flags, dialogFilter.name, dialogFilter.alwaysShow, dialogFilter.neverShow, dialogFilter.pinnedDialogs, true, true, true, true, false, FiltersSetupActivity.this, new Runnable(suggestedFilter) {
-                private final /* synthetic */ TLRPC$TL_dialogFilterSuggested f$1;
+                public final /* synthetic */ TLRPC$TL_dialogFilterSuggested f$1;
 
                 {
                     this.f$1 = r2;

@@ -2738,7 +2738,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
 
     public void onAudioFocusChange(int i) {
         AndroidUtilities.runOnUIThread(new Runnable(i) {
-            private final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$1;
 
             {
                 this.f$1 = r2;

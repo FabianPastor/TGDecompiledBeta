@@ -378,7 +378,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                         Theme.reloadWallpaper();
                     }
                     ConnectionsManager.getInstance(WallpapersListActivity.this.currentAccount).sendRequest(tLRPC$TL_account_saveWallPaper, new RequestDelegate(iArr) {
-                        private final /* synthetic */ int[] f$1;
+                        public final /* synthetic */ int[] f$1;
 
                         {
                             this.f$1 = r2;
@@ -396,7 +396,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
 
             public /* synthetic */ void lambda$null$1$WallpapersListActivity$2(int[] iArr, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                 AndroidUtilities.runOnUIThread(new Runnable(iArr) {
-                    private final /* synthetic */ int[] f$1;
+                    public final /* synthetic */ int[] f$1;
 
                     {
                         this.f$1 = r2;
@@ -963,7 +963,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
 
     public /* synthetic */ void lambda$loadWallpapers$5$WallpapersListActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-            private final /* synthetic */ TLObject f$1;
+            public final /* synthetic */ TLObject f$1;
 
             {
                 this.f$1 = r2;
@@ -1111,9 +1111,9 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             org.telegram.ui.WallpapersListActivity$FileWallpaper r0 = r15.themeWallpaper
             if (r0 != 0) goto L_0x00bc
             org.telegram.ui.WallpapersListActivity$FileWallpaper r0 = new org.telegram.ui.WallpapersListActivity$FileWallpaper
-            r1 = -2
-            java.lang.String r6 = "t"
-            r0.<init>((java.lang.String) r6, (int) r1, (int) r1)
+            java.lang.String r1 = "t"
+            r6 = -2
+            r0.<init>((java.lang.String) r1, (int) r6, (int) r6)
             r15.themeWallpaper = r0
         L_0x00bc:
             java.util.ArrayList<java.lang.Object> r0 = r15.wallPapers
@@ -1443,7 +1443,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     doSearch(str);
                 } else {
                     $$Lambda$WallpapersListActivity$SearchAdapter$A_mUNZ6ShjO2kmNuqCpt4p0OR4 r4 = new Runnable(str) {
-                        private final /* synthetic */ String f$1;
+                        public final /* synthetic */ String f$1;
 
                         {
                             this.f$1 = r2;
@@ -1490,7 +1490,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
         public /* synthetic */ void lambda$searchBotUser$2$WallpapersListActivity$SearchAdapter(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             if (tLObject != null) {
                 AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-                    private final /* synthetic */ TLObject f$1;
+                    public final /* synthetic */ TLObject f$1;
 
                     {
                         this.f$1 = r2;
@@ -1535,7 +1535,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 int i = this.lastSearchToken + 1;
                 this.lastSearchToken = i;
                 this.imageReqId = ConnectionsManager.getInstance(WallpapersListActivity.this.currentAccount).sendRequest(tLRPC$TL_messages_getInlineBotResults, new RequestDelegate(i) {
-                    private final /* synthetic */ int f$1;
+                    public final /* synthetic */ int f$1;
 
                     {
                         this.f$1 = r2;
@@ -1553,8 +1553,8 @@ public class WallpapersListActivity extends BaseFragment implements Notification
 
         public /* synthetic */ void lambda$searchImages$4$WallpapersListActivity$SearchAdapter(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
             AndroidUtilities.runOnUIThread(new Runnable(i, tLObject) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ TLObject f$2;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ TLObject f$2;
 
                 {
                     this.f$1 = r2;

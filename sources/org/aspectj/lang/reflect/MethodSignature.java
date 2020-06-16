@@ -1,4 +1,6 @@
 package org.aspectj.lang.reflect;
 
-public interface MethodSignature extends CodeSignature {
+import org.aspectj.lang.Signature;
+
+public interface MethodSignature extends Signature {
 }

@@ -336,8 +336,8 @@ public abstract class TLRPC$Message extends TLObject {
             if (this.params == null) {
                 this.params = new HashMap<>();
             }
-            this.layer = 114;
-            this.params.put("legacy_layer", "114");
+            this.layer = 115;
+            this.params.put("legacy_layer", "115");
         }
         if ((this.id < 0 || this.send_state == 3 || this.legacy) && (hashMap2 = this.params) != null && hashMap2.size() > 0) {
             for (Map.Entry next2 : this.params.entrySet()) {

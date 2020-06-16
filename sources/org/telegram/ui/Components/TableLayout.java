@@ -2056,16 +2056,6 @@ public class TableLayout extends View {
         END = r0;
         createSwitchingAlignment(alignment);
         createSwitchingAlignment(END);
-        new Alignment() {
-            public int getAlignmentValue(Child child, int i) {
-                return i >> 1;
-            }
-
-            /* access modifiers changed from: package-private */
-            public int getGravityOffset(Child child, int i) {
-                return i >> 1;
-            }
-        };
     }
 
     private static Alignment createSwitchingAlignment(final Alignment alignment) {

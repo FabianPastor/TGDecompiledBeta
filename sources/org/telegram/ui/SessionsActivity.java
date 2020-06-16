@@ -214,7 +214,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                         TLRPC$TL_account_resetAuthorization tLRPC$TL_account_resetAuthorization = new TLRPC$TL_account_resetAuthorization();
                         tLRPC$TL_account_resetAuthorization.hash = tLRPC$TL_authorization.hash;
                         ConnectionsManager.getInstance(SessionsActivity.this.currentAccount).sendRequest(tLRPC$TL_account_resetAuthorization, new RequestDelegate(tLRPC$TL_authorization) {
-                            private final /* synthetic */ TLRPC$TL_authorization f$1;
+                            public final /* synthetic */ TLRPC$TL_authorization f$1;
 
                             {
                                 this.f$1 = r2;
@@ -230,8 +230,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
                 public /* synthetic */ void lambda$hide$1$SessionsActivity$2(TLRPC$TL_authorization tLRPC$TL_authorization, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                     AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLRPC$TL_authorization) {
-                        private final /* synthetic */ TLRPC$TL_error f$1;
-                        private final /* synthetic */ TLRPC$TL_authorization f$2;
+                        public final /* synthetic */ TLRPC$TL_error f$1;
+                        public final /* synthetic */ TLRPC$TL_authorization f$2;
 
                         {
                             this.f$1 = r2;
@@ -325,7 +325,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 checkBoxCell.setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
                 frameLayout.addView(checkBoxCell, LayoutHelper.createFrame(-1, 48.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
                 checkBoxCell.setOnClickListener(new View.OnClickListener(zArr) {
-                    private final /* synthetic */ boolean[] f$0;
+                    public final /* synthetic */ boolean[] f$0;
 
                     {
                         this.f$0 = r1;
@@ -340,8 +340,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 str = string;
             }
             builder2.setPositiveButton(str, new DialogInterface.OnClickListener(i2, zArr) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ boolean[] f$2;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ boolean[] f$2;
 
                 {
                     this.f$1 = r2;
@@ -370,7 +370,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         TLRPC$TL_auth_acceptLoginToken tLRPC$TL_auth_acceptLoginToken = new TLRPC$TL_auth_acceptLoginToken();
         tLRPC$TL_auth_acceptLoginToken.token = decode;
         getConnectionsManager().sendRequest(tLRPC$TL_auth_acceptLoginToken, new RequestDelegate(alertDialog) {
-            private final /* synthetic */ AlertDialog f$1;
+            public final /* synthetic */ AlertDialog f$1;
 
             {
                 this.f$1 = r2;
@@ -384,9 +384,9 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     public /* synthetic */ void lambda$null$2$SessionsActivity(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLObject, tLRPC$TL_error) {
-            private final /* synthetic */ AlertDialog f$1;
-            private final /* synthetic */ TLObject f$2;
-            private final /* synthetic */ TLRPC$TL_error f$3;
+            public final /* synthetic */ AlertDialog f$1;
+            public final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_error f$3;
 
             {
                 this.f$1 = r2;
@@ -413,7 +413,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             return;
         }
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLRPC$TL_error f$1;
 
             {
                 this.f$1 = r2;
@@ -448,8 +448,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     public /* synthetic */ void lambda$null$5$SessionsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
 
             {
                 this.f$1 = r2;
@@ -480,8 +480,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     public /* synthetic */ void lambda$null$7$SessionsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
 
             {
                 this.f$1 = r2;
@@ -528,8 +528,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 TLRPC$TL_account_resetAuthorization tLRPC$TL_account_resetAuthorization = new TLRPC$TL_account_resetAuthorization();
                 tLRPC$TL_account_resetAuthorization.hash = tLRPC$TL_authorization.hash;
                 ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_resetAuthorization, new RequestDelegate(alertDialog, tLRPC$TL_authorization) {
-                    private final /* synthetic */ AlertDialog f$1;
-                    private final /* synthetic */ TLRPC$TL_authorization f$2;
+                    public final /* synthetic */ AlertDialog f$1;
+                    public final /* synthetic */ TLRPC$TL_authorization f$2;
 
                     {
                         this.f$1 = r2;
@@ -546,8 +546,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             TLRPC$TL_account_resetWebAuthorization tLRPC$TL_account_resetWebAuthorization = new TLRPC$TL_account_resetWebAuthorization();
             tLRPC$TL_account_resetWebAuthorization.hash = tLRPC$TL_webAuthorization.hash;
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_resetWebAuthorization, new RequestDelegate(alertDialog, tLRPC$TL_webAuthorization) {
-                private final /* synthetic */ AlertDialog f$1;
-                private final /* synthetic */ TLRPC$TL_webAuthorization f$2;
+                public final /* synthetic */ AlertDialog f$1;
+                public final /* synthetic */ TLRPC$TL_webAuthorization f$2;
 
                 {
                     this.f$1 = r2;
@@ -566,9 +566,9 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     public /* synthetic */ void lambda$null$11$SessionsActivity(AlertDialog alertDialog, TLRPC$TL_authorization tLRPC$TL_authorization, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLRPC$TL_error, tLRPC$TL_authorization) {
-            private final /* synthetic */ AlertDialog f$1;
-            private final /* synthetic */ TLRPC$TL_error f$2;
-            private final /* synthetic */ TLRPC$TL_authorization f$3;
+            public final /* synthetic */ AlertDialog f$1;
+            public final /* synthetic */ TLRPC$TL_error f$2;
+            public final /* synthetic */ TLRPC$TL_authorization f$3;
 
             {
                 this.f$1 = r2;
@@ -601,9 +601,9 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     public /* synthetic */ void lambda$null$13$SessionsActivity(AlertDialog alertDialog, TLRPC$TL_webAuthorization tLRPC$TL_webAuthorization, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLRPC$TL_error, tLRPC$TL_webAuthorization) {
-            private final /* synthetic */ AlertDialog f$1;
-            private final /* synthetic */ TLRPC$TL_error f$2;
-            private final /* synthetic */ TLRPC$TL_webAuthorization f$3;
+            public final /* synthetic */ AlertDialog f$1;
+            public final /* synthetic */ TLRPC$TL_error f$2;
+            public final /* synthetic */ TLRPC$TL_webAuthorization f$3;
 
             {
                 this.f$1 = r2;
@@ -687,8 +687,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     public /* synthetic */ void lambda$loadSessions$17$SessionsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
 
             {
                 this.f$1 = r2;
@@ -728,8 +728,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
 
     public /* synthetic */ void lambda$loadSessions$19$SessionsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
 
             {
                 this.f$1 = r2;
@@ -1011,7 +1011,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.currentSessionSectionRow
                 if (r7 != r0) goto L_0x0112
-                r7 = 2131624826(0x7f0e037a, float:1.8876843E38)
+                r7 = 2131624834(0x7f0e0382, float:1.8876859E38)
                 java.lang.String r0 = "CurrentSession"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1023,13 +1023,13 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r7 = org.telegram.ui.SessionsActivity.this
                 int r7 = r7.currentType
                 if (r7 != 0) goto L_0x0130
-                r7 = 2131626046(0x7f0e083e, float:1.8879317E38)
+                r7 = 2131626059(0x7f0e084b, float:1.8879343E38)
                 java.lang.String r0 = "OtherSessions"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
                 goto L_0x026f
             L_0x0130:
-                r7 = 2131626048(0x7f0e0840, float:1.8879321E38)
+                r7 = 2131626061(0x7f0e084d, float:1.8879348E38)
                 java.lang.String r0 = "OtherWebSessions"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1038,7 +1038,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.passwordSessionsSectionRow
                 if (r7 != r0) goto L_0x026f
-                r7 = 2131625615(0x7f0e068f, float:1.8878443E38)
+                r7 = 2131625628(0x7f0e069c, float:1.887847E38)
                 java.lang.String r0 = "LoginAttempts"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1054,13 +1054,13 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r7 = org.telegram.ui.SessionsActivity.this
                 int r7 = r7.currentType
                 if (r7 != 0) goto L_0x017a
-                r7 = 2131624726(0x7f0e0316, float:1.887664E38)
+                r7 = 2131624734(0x7f0e031e, float:1.8876656E38)
                 java.lang.String r0 = "ClearOtherSessionsHelp"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
                 goto L_0x0186
             L_0x017a:
-                r7 = 2131624727(0x7f0e0317, float:1.8876642E38)
+                r7 = 2131624735(0x7f0e031f, float:1.8876658E38)
                 java.lang.String r0 = "ClearOtherWebSessionsHelp"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1085,13 +1085,13 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 r6.setText(r7)
                 goto L_0x01cf
             L_0x01b6:
-                r7 = 2131626969(0x7f0e0bd9, float:1.888119E38)
+                r7 = 2131626986(0x7f0e0bea, float:1.8881224E38)
                 java.lang.String r0 = "TerminateSessionInfo"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
                 goto L_0x01cf
             L_0x01c3:
-                r7 = 2131626972(0x7f0e0bdc, float:1.8881195E38)
+                r7 = 2131626989(0x7f0e0bed, float:1.888123E38)
                 java.lang.String r0 = "TerminateWebSessionInfo"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1104,7 +1104,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.passwordSessionsDetailRow
                 if (r7 != r0) goto L_0x026f
-                r7 = 2131625616(0x7f0e0690, float:1.8878445E38)
+                r7 = 2131625629(0x7f0e069d, float:1.8878471E38)
                 java.lang.String r0 = "LoginAttemptsInfo"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1133,13 +1133,13 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r7 = org.telegram.ui.SessionsActivity.this
                 int r7 = r7.currentType
                 if (r7 != 0) goto L_0x0237
-                r7 = 2131626967(0x7f0e0bd7, float:1.8881185E38)
+                r7 = 2131626984(0x7f0e0be8, float:1.888122E38)
                 java.lang.String r0 = "TerminateAllSessions"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7, r1)
                 goto L_0x026f
             L_0x0237:
-                r7 = 2131626968(0x7f0e0bd8, float:1.8881187E38)
+                r7 = 2131626985(0x7f0e0be9, float:1.8881222E38)
                 java.lang.String r0 = "TerminateAllWebSessions"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7, r1)
@@ -1152,7 +1152,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r6.setTextColor(r0)
                 r6.setTag(r7)
-                r7 = 2131624313(0x7f0e0179, float:1.8875802E38)
+                r7 = 2131624321(0x7f0e0181, float:1.8875818E38)
                 java.lang.String r0 = "AuthAnotherClient"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this

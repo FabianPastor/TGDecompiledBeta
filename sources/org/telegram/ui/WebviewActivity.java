@@ -96,7 +96,7 @@ public class WebviewActivity extends BaseFragment {
         @JavascriptInterface
         public void postEvent(String str, String str2) {
             AndroidUtilities.runOnUIThread(new Runnable(str) {
-                private final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
@@ -349,7 +349,7 @@ public class WebviewActivity extends BaseFragment {
 
     public /* synthetic */ void lambda$reloadStats$1$WebviewActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-            private final /* synthetic */ TLObject f$1;
+            public final /* synthetic */ TLObject f$1;
 
             {
                 this.f$1 = r2;

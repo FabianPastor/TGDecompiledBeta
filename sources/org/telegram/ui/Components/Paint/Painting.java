@@ -126,9 +126,9 @@ public class Painting {
 
     public void paintStroke(Path path, boolean z, Runnable runnable) {
         this.renderView.performInContext(new Runnable(path, z, runnable) {
-            private final /* synthetic */ Path f$1;
-            private final /* synthetic */ boolean f$2;
-            private final /* synthetic */ Runnable f$3;
+            public final /* synthetic */ Path f$1;
+            public final /* synthetic */ boolean f$2;
+            public final /* synthetic */ Runnable f$3;
 
             {
                 this.f$1 = r2;
@@ -195,7 +195,7 @@ public class Painting {
 
     public void commitStroke(int i) {
         this.renderView.performInContext(new Runnable(i) {
-            private final /* synthetic */ int f$1;
+            public final /* synthetic */ int f$1;
 
             {
                 this.f$1 = r2;
@@ -275,7 +275,7 @@ public class Painting {
     private void registerUndo(RectF rectF) {
         if (rectF != null && rectF.setIntersect(rectF, getBounds())) {
             this.delegate.requestUndoStore().registerUndo(UUID.randomUUID(), new Runnable(new Slice(getPaintingData(rectF, true).data, rectF, this.delegate.requestDispatchQueue())) {
-                private final /* synthetic */ Slice f$1;
+                public final /* synthetic */ Slice f$1;
 
                 {
                     this.f$1 = r2;
@@ -292,7 +292,7 @@ public class Painting {
     /* renamed from: restoreSlice */
     public void lambda$registerUndo$3$Painting(Slice slice) {
         this.renderView.performInContext(new Runnable(slice) {
-            private final /* synthetic */ Slice f$1;
+            public final /* synthetic */ Slice f$1;
 
             {
                 this.f$1 = r2;
@@ -448,7 +448,7 @@ public class Painting {
 
     public void onPause(Runnable runnable) {
         this.renderView.performInContext(new Runnable(runnable) {
-            private final /* synthetic */ Runnable f$1;
+            public final /* synthetic */ Runnable f$1;
 
             {
                 this.f$1 = r2;

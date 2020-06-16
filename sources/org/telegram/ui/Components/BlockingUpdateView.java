@@ -206,7 +206,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         builder.setTitle(LocaleController.getString("AppName", NUM));
         builder.setMessage(LocaleController.getString("ApkRestricted", NUM));
         builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener(context) {
-            private final /* synthetic */ Context f$0;
+            public final /* synthetic */ Context f$0;
 
             {
                 this.f$0 = r1;
@@ -333,7 +333,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
 
     public /* synthetic */ void lambda$show$4$BlockingUpdateView(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
-            private final /* synthetic */ TLObject f$1;
+            public final /* synthetic */ TLObject f$1;
 
             {
                 this.f$1 = r2;

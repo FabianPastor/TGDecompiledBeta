@@ -156,14 +156,14 @@ public class BackgroundGradientDrawable extends GradientDrawable {
         }
         IntSize intSize = new IntSize(width, height);
         this.bitmaps.put(intSize, null);
-        this.isForExactBounds.put(intSize, true);
+        this.isForExactBounds.put(intSize, Boolean.TRUE);
         Disposable put = this.disposables.put(view, new Disposable(view, startDitheringInternal(new IntSize[]{intSize}, new ListenerAdapter() {
             public void onAllSizesReady() {
                 view.invalidate();
             }
         }, 0)) {
-            private final /* synthetic */ View f$1;
-            private final /* synthetic */ BackgroundGradientDrawable.Disposable f$2;
+            public final /* synthetic */ View f$1;
+            public final /* synthetic */ BackgroundGradientDrawable.Disposable f$2;
 
             {
                 this.f$1 = r2;
@@ -238,10 +238,10 @@ public class BackgroundGradientDrawable extends GradientDrawable {
             IntSize intSize = intSizeArr[i];
             DispatchQueue dispatchQueue = Utilities.globalQueue;
             $$Lambda$BackgroundGradientDrawable$hxdrjDm4pRekbnxNfgt2P7Oug r1 = new Runnable(intSize, runnableArr, i, listenerArr) {
-                private final /* synthetic */ IntSize f$1;
-                private final /* synthetic */ Runnable[] f$2;
-                private final /* synthetic */ int f$3;
-                private final /* synthetic */ BackgroundGradientDrawable.Listener[] f$4;
+                public final /* synthetic */ IntSize f$1;
+                public final /* synthetic */ Runnable[] f$2;
+                public final /* synthetic */ int f$3;
+                public final /* synthetic */ BackgroundGradientDrawable.Listener[] f$4;
 
                 {
                     this.f$1 = r2;
@@ -258,9 +258,9 @@ public class BackgroundGradientDrawable extends GradientDrawable {
             dispatchQueue.postRunnable(r1, j);
         }
         return new Disposable(listenerArr, runnableArr, intSizeArr) {
-            private final /* synthetic */ BackgroundGradientDrawable.Listener[] f$1;
-            private final /* synthetic */ Runnable[] f$2;
-            private final /* synthetic */ IntSize[] f$3;
+            public final /* synthetic */ BackgroundGradientDrawable.Listener[] f$1;
+            public final /* synthetic */ Runnable[] f$2;
+            public final /* synthetic */ IntSize[] f$3;
 
             {
                 this.f$1 = r2;
@@ -277,11 +277,11 @@ public class BackgroundGradientDrawable extends GradientDrawable {
     public /* synthetic */ void lambda$startDitheringInternal$2$BackgroundGradientDrawable(IntSize intSize, Runnable[] runnableArr, int i, Listener[] listenerArr) {
         try {
             AndroidUtilities.runOnUIThread(new Runnable(runnableArr, createDitheredGradientBitmap(getOrientation(), this.colors, intSize.width, intSize.height), intSize, i, listenerArr) {
-                private final /* synthetic */ Runnable[] f$1;
-                private final /* synthetic */ Bitmap f$2;
-                private final /* synthetic */ IntSize f$3;
-                private final /* synthetic */ int f$4;
-                private final /* synthetic */ BackgroundGradientDrawable.Listener[] f$5;
+                public final /* synthetic */ Runnable[] f$1;
+                public final /* synthetic */ Bitmap f$2;
+                public final /* synthetic */ IntSize f$3;
+                public final /* synthetic */ int f$4;
+                public final /* synthetic */ BackgroundGradientDrawable.Listener[] f$5;
 
                 {
                     this.f$1 = r2;
@@ -297,11 +297,11 @@ public class BackgroundGradientDrawable extends GradientDrawable {
             });
         } catch (Throwable th) {
             AndroidUtilities.runOnUIThread(new Runnable(runnableArr, (Bitmap) null, intSize, i, listenerArr) {
-                private final /* synthetic */ Runnable[] f$1;
-                private final /* synthetic */ Bitmap f$2;
-                private final /* synthetic */ IntSize f$3;
-                private final /* synthetic */ int f$4;
-                private final /* synthetic */ BackgroundGradientDrawable.Listener[] f$5;
+                public final /* synthetic */ Runnable[] f$1;
+                public final /* synthetic */ Bitmap f$2;
+                public final /* synthetic */ IntSize f$3;
+                public final /* synthetic */ int f$4;
+                public final /* synthetic */ BackgroundGradientDrawable.Listener[] f$5;
 
                 {
                     this.f$1 = r2;

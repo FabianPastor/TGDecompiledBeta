@@ -119,9 +119,9 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                 this.loadingChats = true;
                 MessagesStorage instance = MessagesStorage.getInstance(this.currentAccount);
                 instance.getStorageQueue().postRunnable(new Runnable(instance, str, result) {
-                    private final /* synthetic */ MessagesStorage f$1;
-                    private final /* synthetic */ String f$2;
-                    private final /* synthetic */ MediaBrowserService.Result f$3;
+                    public final /* synthetic */ MessagesStorage f$1;
+                    public final /* synthetic */ String f$2;
+                    public final /* synthetic */ MediaBrowserService.Result f$3;
 
                     {
                         this.f$1 = r2;
@@ -211,8 +211,8 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             FileLog.e((Throwable) e);
         }
         AndroidUtilities.runOnUIThread(new Runnable(str, result) {
-            private final /* synthetic */ String f$1;
-            private final /* synthetic */ MediaBrowserService.Result f$2;
+            public final /* synthetic */ String f$1;
+            public final /* synthetic */ MediaBrowserService.Result f$2;
 
             {
                 this.f$1 = r2;

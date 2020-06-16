@@ -14,12 +14,13 @@ public class PhotoCropView extends FrameLayout {
     public CropView cropView;
     /* access modifiers changed from: private */
     public PhotoCropViewDelegate delegate;
-    private boolean showOnSetBitmap;
     /* access modifiers changed from: private */
     public CropRotationWheel wheelView;
 
     public interface PhotoCropViewDelegate {
         void onChange(boolean z);
+
+        void onUpdate();
     }
 
     public PhotoCropView(Context context) {
@@ -30,6 +31,12 @@ public class PhotoCropView extends FrameLayout {
             public void onChange(boolean z) {
                 if (PhotoCropView.this.delegate != null) {
                     PhotoCropView.this.delegate.onChange(z);
+                }
+            }
+
+            public void onUpdate() {
+                if (PhotoCropView.this.delegate != null) {
+                    PhotoCropView.this.delegate.onUpdate();
                 }
             }
 
@@ -76,16 +83,15 @@ public class PhotoCropView extends FrameLayout {
         this.cropView.rotate90Degrees();
     }
 
-    public void setBitmap(Bitmap bitmap, int i, boolean z, boolean z2, PaintingOverlay paintingOverlay) {
+    public void setBitmap(Bitmap bitmap, int i, boolean z, boolean z2, PaintingOverlay paintingOverlay, VideoEditTextureView videoEditTextureView, MediaController.CropState cropState) {
         requestLayout();
-        this.cropView.setBitmap(bitmap, i, z, z2, paintingOverlay);
-        int i2 = 0;
-        if (this.showOnSetBitmap) {
-            this.showOnSetBitmap = false;
-            this.cropView.show();
-        }
+        this.cropView.setBitmap(bitmap, i, z, z2, paintingOverlay, videoEditTextureView, cropState);
         this.wheelView.setFreeform(z);
         this.wheelView.reset();
+        int i2 = 0;
+        if (cropState != null) {
+            this.wheelView.setRotation(cropState.cropRotate, false);
+        }
         CropRotationWheel cropRotationWheel = this.wheelView;
         if (!z) {
             i2 = 4;
@@ -123,19 +129,19 @@ public class PhotoCropView extends FrameLayout {
     }
 
     public void onAppeared() {
-        CropView cropView2 = this.cropView;
-        if (cropView2 != null) {
-            cropView2.show();
-        } else {
-            this.showOnSetBitmap = true;
-        }
+        this.cropView.show();
     }
 
     public void onDisappear() {
-        CropView cropView2 = this.cropView;
-        if (cropView2 != null) {
-            cropView2.hide();
-        }
+        this.cropView.hide();
+    }
+
+    public void onShow() {
+        this.cropView.onShow();
+    }
+
+    public void onHide() {
+        this.cropView.onHide();
     }
 
     public float getRectX() {

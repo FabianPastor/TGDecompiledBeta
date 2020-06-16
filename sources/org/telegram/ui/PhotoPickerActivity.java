@@ -1399,7 +1399,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                         this.itemCells[i].setMinimumWidth(AndroidUtilities.dp(196.0f));
                         this.sendPopupLayout.addView(this.itemCells[i], LayoutHelper.createFrame(-1, 48.0f, LocaleController.isRTL ? 5 : 3, 0.0f, (float) (i * 48), 0.0f, 0.0f));
                         this.itemCells[i].setOnClickListener(new View.OnClickListener(i) {
-                            private final /* synthetic */ int f$1;
+                            public final /* synthetic */ int f$1;
 
                             {
                                 this.f$1 = r2;
@@ -1931,7 +1931,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             MessagesController instance = MessagesController.getInstance(this.currentAccount);
             tLRPC$TL_contacts_resolveUsername.username = z ? instance.gifSearchBot : instance.imageSearchBot;
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_contacts_resolveUsername, new RequestDelegate(z) {
-                private final /* synthetic */ boolean f$1;
+                public final /* synthetic */ boolean f$1;
 
                 {
                     this.f$1 = r2;
@@ -1947,8 +1947,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
     public /* synthetic */ void lambda$searchBotUser$9$PhotoPickerActivity(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable(tLObject, z) {
-                private final /* synthetic */ TLObject f$1;
-                private final /* synthetic */ boolean f$2;
+                public final /* synthetic */ TLObject f$1;
+                public final /* synthetic */ boolean f$2;
 
                 {
                     this.f$1 = r2;
@@ -2009,9 +2009,9 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             int i = this.lastSearchToken + 1;
             this.lastSearchToken = i;
             this.imageReqId = ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_getInlineBotResults, new RequestDelegate(i, z, tLRPC$User) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ boolean f$2;
-                private final /* synthetic */ TLRPC$User f$3;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ boolean f$2;
+                public final /* synthetic */ TLRPC$User f$3;
 
                 {
                     this.f$1 = r2;
@@ -2031,10 +2031,10 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
 
     public /* synthetic */ void lambda$searchImages$11$PhotoPickerActivity(int i, boolean z, TLRPC$User tLRPC$User, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(i, tLObject, z, tLRPC$User) {
-            private final /* synthetic */ int f$1;
-            private final /* synthetic */ TLObject f$2;
-            private final /* synthetic */ boolean f$3;
-            private final /* synthetic */ TLRPC$User f$4;
+            public final /* synthetic */ int f$1;
+            public final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ boolean f$3;
+            public final /* synthetic */ TLRPC$User f$4;
 
             {
                 this.f$1 = r2;

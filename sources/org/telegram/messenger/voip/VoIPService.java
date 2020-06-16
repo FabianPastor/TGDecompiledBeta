@@ -156,14 +156,14 @@ public class VoIPService extends VoIPBaseService {
                     instance.createOrUpdateConnectionServiceContact(tLRPC$User.id, tLRPC$User.first_name, tLRPC$User.last_name);
                     ((TelecomManager) getSystemService("telecom")).placeCall(Uri.fromParts("tel", "+99084" + this.user.id, (String) null), bundle);
                 } else {
-                    AnonymousClass1 r0 = new Runnable() {
+                    AnonymousClass1 r9 = new Runnable() {
                         public void run() {
                             Runnable unused = VoIPService.this.delayedStartOutgoingCall = null;
                             VoIPService.this.startOutgoingCall();
                         }
                     };
-                    this.delayedStartOutgoingCall = r0;
-                    AndroidUtilities.runOnUIThread(r0, 2000);
+                    this.delayedStartOutgoingCall = r9;
+                    AndroidUtilities.runOnUIThread(r9, 2000);
                 }
                 if (intent.getBooleanExtra("start_incall_activity", false)) {
                     startActivity(new Intent(this, VoIPActivity.class).addFlags(NUM));
@@ -198,7 +198,7 @@ public class VoIPService extends VoIPBaseService {
         SharedPreferences mainSettings = MessagesController.getMainSettings(this.currentAccount);
         TgVoip.setGlobalServerConfig(mainSettings.getString("voip_server_config", "{}"));
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_phone_getCallConfig(), new RequestDelegate(mainSettings) {
-            private final /* synthetic */ SharedPreferences f$0;
+            public final /* synthetic */ SharedPreferences f$0;
 
             {
                 this.f$0 = r1;

@@ -362,8 +362,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 }
             }
             AndroidUtilities.runOnUIThread(new Runnable(arrayList, tLRPC$TL_messages_inactiveChats) {
-                private final /* synthetic */ ArrayList f$1;
-                private final /* synthetic */ TLRPC$TL_messages_inactiveChats f$2;
+                public final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ TLRPC$TL_messages_inactiveChats f$2;
 
                 {
                     this.f$1 = r2;
@@ -513,7 +513,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 r1.<init>(r2, r3, r4, r5, r6)
                 r8 = 54
                 r9.setHeight(r8)
-                r8 = 2131625472(0x7f0e0600, float:1.8878153E38)
+                r8 = 2131625480(0x7f0e0608, float:1.887817E38)
                 java.lang.String r0 = "InactiveChats"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 r9.setText(r8)
@@ -546,18 +546,18 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 org.telegram.ui.TooManyCommunitiesActivity r8 = org.telegram.ui.TooManyCommunitiesActivity.this
                 int r8 = r8.type
                 if (r8 != 0) goto L_0x009e
-                r8 = 2131627050(0x7f0e0c2a, float:1.8881353E38)
+                r8 = 2131627067(0x7f0e0c3b, float:1.8881388E38)
                 java.lang.String r0 = "TooManyCommunitiesHintJoin"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b3
             L_0x009e:
                 if (r8 != r0) goto L_0x00aa
-                r8 = 2131627049(0x7f0e0CLASSNAME, float:1.8881351E38)
+                r8 = 2131627066(0x7f0e0c3a, float:1.8881386E38)
                 java.lang.String r0 = "TooManyCommunitiesHintEdit"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b3
             L_0x00aa:
-                r8 = 2131627048(0x7f0e0CLASSNAME, float:1.888135E38)
+                r8 = 2131627065(0x7f0e0CLASSNAME, float:1.8881384E38)
                 java.lang.String r0 = "TooManyCommunitiesHintCreate"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
             L_0x00b3:
@@ -678,8 +678,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
             this.lastSearchId = i;
             DispatchQueue dispatchQueue = Utilities.searchQueue;
             $$Lambda$TooManyCommunitiesActivity$SearchAdapter$eIpwWzy4U0BhWnY_eYQGtDTWMw r2 = new Runnable(str, i) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -697,8 +697,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         /* renamed from: processSearch */
         public void lambda$search$0$TooManyCommunitiesActivity$SearchAdapter(String str, int i) {
             Utilities.searchQueue.postRunnable(new Runnable(str, i) {
-                private final /* synthetic */ String f$1;
-                private final /* synthetic */ int f$2;
+                public final /* synthetic */ String f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
@@ -771,9 +771,9 @@ public class TooManyCommunitiesActivity extends BaseFragment {
 
         private void updateSearchResults(ArrayList<TLRPC$Chat> arrayList, ArrayList<String> arrayList2, int i) {
             AndroidUtilities.runOnUIThread(new Runnable(i, arrayList, arrayList2) {
-                private final /* synthetic */ int f$1;
-                private final /* synthetic */ ArrayList f$2;
-                private final /* synthetic */ ArrayList f$3;
+                public final /* synthetic */ int f$1;
+                public final /* synthetic */ ArrayList f$2;
+                public final /* synthetic */ ArrayList f$3;
 
                 {
                     this.f$1 = r2;

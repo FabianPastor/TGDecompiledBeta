@@ -203,7 +203,7 @@ public class JoinGroupAlert extends BottomSheet {
             int r7 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             r1.setTextColor(r7)
             android.widget.TextView r1 = r5.cancelButton
-            r7 = 2131624490(0x7f0e022a, float:1.8876161E38)
+            r7 = 2131624498(0x7f0e0232, float:1.8876177E38)
             java.lang.String r8 = "Cancel"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             java.lang.String r7 = r7.toUpperCase()
@@ -237,7 +237,7 @@ public class JoinGroupAlert extends BottomSheet {
             if (r1 != 0) goto L_0x01fa
         L_0x01e7:
             android.widget.TextView r1 = r5.doneButtonTextView
-            r2 = 2131626469(0x7f0e09e5, float:1.8880175E38)
+            r2 = 2131626486(0x7f0e09f6, float:1.888021E38)
             java.lang.String r3 = "ProfileJoinChannel"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r2 = r2.toUpperCase()
@@ -245,7 +245,7 @@ public class JoinGroupAlert extends BottomSheet {
             goto L_0x0208
         L_0x01fa:
             android.widget.TextView r1 = r5.doneButtonTextView
-            r2 = 2131625516(0x7f0e062c, float:1.8878242E38)
+            r2 = 2131625529(0x7f0e0639, float:1.8878269E38)
             java.lang.String r3 = "JoinGroup"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -268,7 +268,7 @@ public class JoinGroupAlert extends BottomSheet {
         TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite = new TLRPC$TL_messages_importChatInvite();
         tLRPC$TL_messages_importChatInvite.hash = this.hash;
         ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_messages_importChatInvite, new RequestDelegate(tLRPC$TL_messages_importChatInvite) {
-            private final /* synthetic */ TLRPC$TL_messages_importChatInvite f$1;
+            public final /* synthetic */ TLRPC$TL_messages_importChatInvite f$1;
 
             {
                 this.f$1 = r2;
@@ -285,9 +285,9 @@ public class JoinGroupAlert extends BottomSheet {
             MessagesController.getInstance(this.currentAccount).processUpdates((TLRPC$Updates) tLObject, false);
         }
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, tLRPC$TL_messages_importChatInvite) {
-            private final /* synthetic */ TLRPC$TL_error f$1;
-            private final /* synthetic */ TLObject f$2;
-            private final /* synthetic */ TLRPC$TL_messages_importChatInvite f$3;
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
+            public final /* synthetic */ TLRPC$TL_messages_importChatInvite f$3;
 
             {
                 this.f$1 = r2;

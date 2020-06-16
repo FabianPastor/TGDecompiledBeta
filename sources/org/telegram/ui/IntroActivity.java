@@ -340,7 +340,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
             }
             tLRPC$TL_langpack_getStrings.keys.add("ContinueOnThisLanguage");
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_langpack_getStrings, new RequestDelegate(str) {
-                private final /* synthetic */ String f$1;
+                public final /* synthetic */ String f$1;
 
                 {
                     this.f$1 = r2;
@@ -360,8 +360,8 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 TLRPC$LangPackString tLRPC$LangPackString = (TLRPC$LangPackString) tLRPC$Vector.objects.get(0);
                 if (tLRPC$LangPackString instanceof TLRPC$TL_langPackString) {
                     AndroidUtilities.runOnUIThread(new Runnable(tLRPC$LangPackString, str) {
-                        private final /* synthetic */ TLRPC$LangPackString f$1;
-                        private final /* synthetic */ String f$2;
+                        public final /* synthetic */ TLRPC$LangPackString f$1;
+                        public final /* synthetic */ String f$2;
 
                         {
                             this.f$1 = r2;

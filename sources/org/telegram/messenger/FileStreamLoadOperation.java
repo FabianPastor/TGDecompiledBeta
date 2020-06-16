@@ -2,11 +2,14 @@ package org.telegram.messenger;
 
 import android.net.Uri;
 import com.google.android.exoplayer2.upstream.BaseDataSource;
+import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$TL_document;
@@ -25,6 +28,10 @@ public class FileStreamLoadOperation extends BaseDataSource implements FileLoadO
     private boolean opened;
     private Object parentObject;
     private Uri uri;
+
+    public /* bridge */ /* synthetic */ Map<String, List<String>> getResponseHeaders() {
+        return DataSource.CC.$default$getResponseHeaders(this);
+    }
 
     public FileStreamLoadOperation() {
         super(false);
