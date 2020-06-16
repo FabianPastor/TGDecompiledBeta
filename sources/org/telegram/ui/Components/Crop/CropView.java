@@ -301,6 +301,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         this.paintingOverlay = paintingOverlay2;
         this.videoEditTextureView = videoEditTextureView2;
         this.bitmap = bitmap2;
+        this.areaView.setIsVideo(videoEditTextureView2 != null);
         Bitmap bitmap3 = null;
         if (bitmap2 == null && videoEditTextureView2 == null) {
             this.state = null;

@@ -6650,12 +6650,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 MediaController.CropState cropState4 = videoEditedInfo.cropState;
                 int i4 = cropState4.transformWidth;
                 if (i4 % 16 != 0) {
-                    cropState4.transformWidth = Math.round(((float) i4) / 16.0f) * 16;
+                    cropState4.transformWidth = Math.min(1, Math.round(((float) i4) / 16.0f)) * 16;
                 }
                 MediaController.CropState cropState5 = videoEditedInfo.cropState;
                 int i5 = cropState5.transformHeight;
                 if (i5 % 16 != 0) {
-                    cropState5.transformHeight = Math.round(((float) i5) / 16.0f) * 16;
+                    cropState5.transformHeight = Math.min(1, Math.round(((float) i5) / 16.0f)) * 16;
                 }
             }
             videoEditedInfo.muted = this.muteVideo;
@@ -8198,31 +8198,31 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             android.graphics.Bitmap r3 = android.graphics.Bitmap.createBitmap(r4, r3, r5)
             android.graphics.Canvas r4 = new android.graphics.Canvas
             r4.<init>(r3)
+            android.view.TextureView r5 = r7.videoTextureView
+            org.telegram.ui.Components.VideoEditTextureView r5 = (org.telegram.ui.Components.VideoEditTextureView) r5
             r24 = 0
             android.graphics.Bitmap$CompressFormat r27 = android.graphics.Bitmap.CompressFormat.PNG
-            org.telegram.messenger.MediaController$CropState r5 = r9.cropState
-            android.graphics.Matrix r5 = r5.matrix
-            android.view.TextureView r10 = r7.videoTextureView
-            int r29 = r10.getMeasuredWidth()
-            android.view.TextureView r10 = r7.videoTextureView
-            int r30 = r10.getMeasuredHeight()
             org.telegram.messenger.MediaController$CropState r10 = r9.cropState
-            float r11 = r10.stateScale
-            float r2 = r10.cropRotate
-            int r13 = r10.transformRotation
+            android.graphics.Matrix r10 = r10.matrix
+            int r29 = r5.getVideoWidth()
+            int r30 = r5.getVideoHeight()
+            org.telegram.messenger.MediaController$CropState r5 = r9.cropState
+            float r11 = r5.stateScale
+            float r2 = r5.cropRotate
+            int r13 = r5.transformRotation
             float r13 = (float) r13
-            float r10 = r10.scale
+            float r5 = r5.scale
             org.telegram.ui.PhotoViewer$EditState r8 = r7.editState
             java.util.ArrayList<org.telegram.messenger.VideoEditedInfo$MediaEntity> r8 = r8.croppedMediaEntities
             r36 = 0
             r23 = r1
             r25 = r4
             r26 = r3
-            r28 = r5
+            r28 = r10
             r31 = r11
             r32 = r2
             r33 = r13
-            r34 = r10
+            r34 = r5
             r35 = r8
             org.telegram.ui.Components.Crop.CropView.editBitmap(r23, r24, r25, r26, r27, r28, r29, r30, r31, r32, r33, r34, r35, r36)
             r3.recycle()

@@ -116,6 +116,10 @@ public class CropAreaView extends View {
         this.eraserPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
     }
 
+    public void setIsVideo(boolean z) {
+        this.minWidth = (float) AndroidUtilities.dp(z ? 64.0f : 32.0f);
+    }
+
     public boolean isDragging() {
         return this.isDragging;
     }
