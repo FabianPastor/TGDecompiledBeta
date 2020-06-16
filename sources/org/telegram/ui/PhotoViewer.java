@@ -8721,10 +8721,14 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r0.setParentView(r12)
             r7.ignoreDidSetImage = r1
             boolean r0 = r7.isCurrentVideo
-            if (r0 != 0) goto L_0x0841
+            if (r0 != 0) goto L_0x0830
             int r0 = r7.currentEditMode
             r2 = 3
-            if (r0 == r2) goto L_0x0841
+            if (r0 != r2) goto L_0x0834
+        L_0x0830:
+            int r0 = r7.currentEditMode
+            if (r0 != r1) goto L_0x0845
+        L_0x0834:
             org.telegram.messenger.ImageReceiver r0 = r7.centerImage
             r0.setImageBitmap((android.graphics.Bitmap) r11)
             org.telegram.messenger.ImageReceiver r0 = r7.centerImage
@@ -8732,18 +8736,18 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             r0.setOrientation(r2, r1)
             org.telegram.ui.PhotoViewer$FrameLayoutDrawer r0 = r7.containerView
             r0.requestLayout()
-            goto L_0x0842
-        L_0x0841:
+            goto L_0x0846
+        L_0x0845:
             r2 = 0
-        L_0x0842:
+        L_0x0846:
             r7.ignoreDidSetImage = r2
             org.telegram.messenger.ImageReceiver r0 = r7.centerImage
             org.telegram.ui.PhotoViewer$FrameLayoutDrawer r2 = r7.containerView
             r0.setParentView(r2)
             int r0 = r7.sendPhotoType
-            if (r0 != r1) goto L_0x0852
+            if (r0 != r1) goto L_0x0856
             r38.setCropBitmap()
-        L_0x0852:
+        L_0x0856:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.applyCurrentEditMode():void");
@@ -14572,8 +14576,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
     }
 
     /* JADX WARNING: type inference failed for: r3v1, types: [android.view.View, org.telegram.ui.Components.AnimatedFileDrawable, android.graphics.drawable.Drawable] */
-    /* JADX WARNING: type inference failed for: r3v15 */
-    /* JADX WARNING: type inference failed for: r3v56 */
+    /* JADX WARNING: type inference failed for: r3v9 */
+    /* JADX WARNING: type inference failed for: r3v16 */
     public void closePhoto(boolean z, boolean z2) {
         ? r3;
         boolean z3;
@@ -14904,6 +14908,9 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
             this.qualityPicker.cancelButton.callOnClick();
         } else if (i3 != 3 || (photoPaintView2 = this.photoPaintView) == null) {
+            if (this.currentEditMode == 1 && this.isCurrentVideo) {
+                ((VideoEditTextureView) this.videoTextureView).setViewTransform(this.previousHasTransform, this.previousCropPx, this.previousCropPy, this.previousCropRotation, this.previousCropOrientation, this.previousCropScale, this.previousCropPw, this.previousCropPh, 0.0f, 0.0f);
+            }
             switchToEditMode(0);
         } else {
             photoPaintView2.maybeShowDismissalAlert(this, this.parentActivity, new Runnable() {

@@ -4361,7 +4361,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 canvas.save();
                 if (view == this.textFieldContainer) {
                     int dp = this.animatedTop + AndroidUtilities.dp(2.0f);
-                    if (this.topView.getVisibility() == 0) {
+                    View view2 = this.topView;
+                    if (view2 != null && view2.getVisibility() == 0) {
                         dp += this.topView.getHeight();
                     }
                     canvas.clipRect(0, dp, getMeasuredWidth(), getMeasuredHeight() - AndroidUtilities.dp(6.0f));
