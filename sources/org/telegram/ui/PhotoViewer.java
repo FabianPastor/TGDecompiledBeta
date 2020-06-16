@@ -3799,7 +3799,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         L_0x00a7:
             android.app.Activity r1 = r6.parentActivity     // Catch:{ Exception -> 0x00c0 }
             java.lang.String r2 = "ShareFile"
-            r3 = 2131626795(0x7f0e0b2b, float:1.8880836E38)
+            r3 = 2131626797(0x7f0e0b2d, float:1.888084E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ Exception -> 0x00c0 }
             android.content.Intent r0 = android.content.Intent.createChooser(r0, r2)     // Catch:{ Exception -> 0x00c0 }
             r2 = 500(0x1f4, float:7.0E-43)
@@ -6653,12 +6653,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 MediaController.CropState cropState4 = videoEditedInfo.cropState;
                 int i4 = cropState4.transformWidth;
                 if (i4 % 16 != 0) {
-                    cropState4.transformWidth = Math.max(2, Math.round(((float) i4) / 16.0f)) * 16;
+                    cropState4.transformWidth = Math.max(64, Math.round(((float) i4) / 16.0f) * 16);
                 }
                 MediaController.CropState cropState5 = videoEditedInfo.cropState;
                 int i5 = cropState5.transformHeight;
                 if (i5 % 16 != 0) {
-                    cropState5.transformHeight = Math.max(2, Math.round(((float) i5) / 16.0f)) * 16;
+                    cropState5.transformHeight = Math.max(64, Math.round(((float) i5) / 16.0f) * 16);
                 }
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("fixed transformed w = " + videoEditedInfo.cropState.transformWidth + " h = " + videoEditedInfo.cropState.transformHeight);
@@ -11064,7 +11064,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             long r9 = (long) r7
             r17 = 1000(0x3e8, double:4.94E-321)
             long r9 = r9 * r17
-            r7 = 2131627420(0x7f0e0d9c, float:1.8882104E38)
+            r7 = 2131627423(0x7f0e0d9f, float:1.888211E38)
             r14 = 2
             java.lang.Object[] r13 = new java.lang.Object[r14]
             org.telegram.messenger.LocaleController r14 = org.telegram.messenger.LocaleController.getInstance()
@@ -11901,7 +11901,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             boolean r3 = r2.self
             if (r3 == 0) goto L_0x082c
             org.telegram.ui.ActionBar.ActionBar r2 = r0.actionBar
-            r3 = 2131626651(0x7f0e0a9b, float:1.8880544E38)
+            r3 = 2131626653(0x7f0e0a9d, float:1.8880548E38)
             java.lang.String r6 = "SavedMessages"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
             r2.setTitle(r3)
@@ -13002,934 +13002,948 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
         return 0;
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v0, resolved type: java.lang.Object} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v0, resolved type: org.telegram.messenger.WebFile} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v0, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v0, resolved type: java.lang.Object} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v0, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v12, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v14, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v18, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v47, resolved type: org.telegram.messenger.ImageLocation} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v19, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v55, resolved type: org.telegram.messenger.ImageLocation} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v1, resolved type: org.telegram.messenger.WebFile} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v36, resolved type: org.telegram.messenger.WebFile} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v34, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v36, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v37, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v30, resolved type: org.telegram.messenger.ImageLocation} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v38, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v39, resolved type: org.telegram.messenger.ImageLocation} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v1, resolved type: java.lang.Object} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v1, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v63, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v65, resolved type: org.telegram.messenger.WebFile} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v2, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v2, resolved type: org.telegram.messenger.WebFile} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v3, resolved type: org.telegram.messenger.WebFile} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v2, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v3, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v69, resolved type: java.lang.Object} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v4, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v4, resolved type: org.telegram.messenger.WebFile} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v4, resolved type: java.lang.Object} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v17, resolved type: org.telegram.tgnet.TLRPC$Document} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v9, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v14, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v10, resolved type: org.telegram.tgnet.TLRPC$Photo} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v11, resolved type: org.telegram.tgnet.TLRPC$Photo} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v69, resolved type: org.telegram.tgnet.TLRPC$Document} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v16, resolved type: org.telegram.tgnet.TLRPC$Photo} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v19, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v10, resolved type: org.telegram.tgnet.TLObject} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v76, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v11, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v77, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v21, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v10, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v18, resolved type: org.telegram.messenger.WebFile} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v5, resolved type: org.telegram.messenger.WebFile} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v70, resolved type: org.telegram.tgnet.TLRPC$Document} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v12, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v6, resolved type: org.telegram.messenger.WebFile} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v19, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v18, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v5, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v78, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v12, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v6, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v19, resolved type: org.telegram.tgnet.TLRPC$Photo} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v11, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v17, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v72, resolved type: org.telegram.messenger.WebFile} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v16, resolved type: org.telegram.tgnet.TLObject} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v80, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v82, resolved type: java.lang.Object} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v12, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v20, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v7, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v18, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v21, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v7, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v23, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v85, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v21, resolved type: org.telegram.tgnet.TLRPC$Photo} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v13, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v8, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v20, resolved type: org.telegram.tgnet.TLObject} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v24, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v9, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v8, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v24, resolved type: org.telegram.tgnet.TLRPC$Photo} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v9, resolved type: java.lang.Object} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v15, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v10, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v25, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v34, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v10, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v25, resolved type: org.telegram.tgnet.TLRPC$Photo} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v16, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v26, resolved type: org.telegram.tgnet.TLObject} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r14v30, resolved type: org.telegram.tgnet.TLObject} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v87, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v51, resolved type: org.telegram.tgnet.TLRPC$Document} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v17, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v26, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v11, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v27, resolved type: org.telegram.tgnet.TLObject} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v26, resolved type: org.telegram.tgnet.TLRPC$Photo} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v11, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v89, resolved type: java.lang.Object} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r15v18, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v12, resolved type: org.telegram.messenger.WebFile} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v49, resolved type: org.telegram.tgnet.TLRPC$Photo} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v31, resolved type: org.telegram.tgnet.TLRPC$Photo} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v54, resolved type: org.telegram.tgnet.TLRPC$Photo} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v98, resolved type: org.telegram.tgnet.TLRPC$Document} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v100, resolved type: org.telegram.tgnet.TLRPC$Photo} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v55, resolved type: org.telegram.tgnet.TLRPC$Photo} */
-    /* JADX WARNING: type inference failed for: r12v5, types: [java.lang.String] */
-    /* JADX WARNING: type inference failed for: r12v19 */
-    /* JADX WARNING: type inference failed for: r12v21 */
-    /* JADX WARNING: type inference failed for: r12v23, types: [java.lang.String] */
-    /* JADX WARNING: type inference failed for: r13v38, types: [org.telegram.messenger.ImageLocation] */
-    /* JADX WARNING: type inference failed for: r14v28, types: [java.lang.String] */
-    /* JADX WARNING: type inference failed for: r14v32 */
-    /* JADX WARNING: type inference failed for: r14v33 */
-    /* JADX WARNING: type inference failed for: r14v34, types: [org.telegram.messenger.ImageLocation] */
-    /* JADX WARNING: type inference failed for: r2v84 */
-    /* JADX WARNING: type inference failed for: r2v87, types: [java.lang.String] */
-    /* JADX WARNING: type inference failed for: r2v89 */
-    /* JADX WARNING: type inference failed for: r6v36, types: [android.graphics.drawable.Drawable] */
-    /* JADX WARNING: type inference failed for: r5v51, types: [android.graphics.drawable.BitmapDrawable] */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v93, resolved type: org.telegram.messenger.WebFile} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v12, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v5, resolved type: org.telegram.tgnet.TLRPC$PhotoSize} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v103, resolved type: org.telegram.messenger.WebFile} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v104, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v105, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v106, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v107, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v108, resolved type: java.lang.Object} */
+    /* JADX WARNING: type inference failed for: r14v33, types: [java.lang.String] */
+    /* JADX WARNING: type inference failed for: r1v92 */
+    /* JADX WARNING: type inference failed for: r1v95, types: [java.lang.String] */
+    /* JADX WARNING: type inference failed for: r1v97 */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:256:0x0513  */
-    /* JADX WARNING: Removed duplicated region for block: B:264:0x0540  */
-    /* JADX WARNING: Unknown variable types count: 2 */
+    /* JADX WARNING: Removed duplicated region for block: B:260:0x052c  */
+    /* JADX WARNING: Removed duplicated region for block: B:268:0x0558  */
+    /* JADX WARNING: Unknown variable types count: 1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void setIndexToImage(org.telegram.messenger.ImageReceiver r22, int r23) {
         /*
             r21 = this;
             r0 = r21
-            r1 = r22
-            r2 = r23
+            r11 = r22
+            r1 = r23
+            r12 = 0
+            r11.setOrientation(r12, r12)
+            java.util.ArrayList<org.telegram.messenger.SecureDocument> r2 = r0.secureDocuments
+            boolean r2 = r2.isEmpty()
             r3 = 0
-            r1.setOrientation(r3, r3)
-            java.util.ArrayList<org.telegram.messenger.SecureDocument> r4 = r0.secureDocuments
-            boolean r4 = r4.isEmpty()
-            r5 = 0
-            if (r4 != 0) goto L_0x0066
-            if (r2 < 0) goto L_0x0582
-            java.util.ArrayList<org.telegram.messenger.SecureDocument> r3 = r0.secureDocuments
-            int r3 = r3.size()
-            if (r2 >= r3) goto L_0x0582
-            java.util.ArrayList<org.telegram.messenger.SecureDocument> r3 = r0.secureDocuments
-            r3.get(r2)
+            if (r2 != 0) goto L_0x006a
+            if (r1 < 0) goto L_0x0596
+            java.util.ArrayList<org.telegram.messenger.SecureDocument> r2 = r0.secureDocuments
+            int r2 = r2.size()
+            if (r1 >= r2) goto L_0x0596
+            java.util.ArrayList<org.telegram.messenger.SecureDocument> r2 = r0.secureDocuments
+            r2.get(r1)
             org.telegram.messenger.AndroidUtilities.getPhotoSize()
-            float r3 = org.telegram.messenger.AndroidUtilities.density
-            org.telegram.messenger.ImageReceiver$BitmapHolder r3 = r0.currentThumb
-            if (r3 == 0) goto L_0x0030
+            float r2 = org.telegram.messenger.AndroidUtilities.density
+            org.telegram.messenger.ImageReceiver$BitmapHolder r2 = r0.currentThumb
+            if (r2 == 0) goto L_0x0030
             org.telegram.messenger.ImageReceiver r4 = r0.centerImage
-            if (r1 != r4) goto L_0x0030
+            if (r11 != r4) goto L_0x0030
             goto L_0x0031
         L_0x0030:
-            r3 = r5
+            r2 = r3
         L_0x0031:
-            if (r3 != 0) goto L_0x0039
-            org.telegram.ui.PhotoViewer$PhotoViewerProvider r3 = r0.placeProvider
-            org.telegram.messenger.ImageReceiver$BitmapHolder r3 = r3.getThumbForPhoto(r5, r5, r2)
+            if (r2 != 0) goto L_0x0039
+            org.telegram.ui.PhotoViewer$PhotoViewerProvider r2 = r0.placeProvider
+            org.telegram.messenger.ImageReceiver$BitmapHolder r2 = r2.getThumbForPhoto(r3, r3, r1)
         L_0x0039:
             java.util.ArrayList<org.telegram.messenger.SecureDocument> r4 = r0.secureDocuments
-            java.lang.Object r2 = r4.get(r2)
-            org.telegram.messenger.SecureDocument r2 = (org.telegram.messenger.SecureDocument) r2
-            org.telegram.tgnet.TLRPC$TL_secureFile r4 = r2.secureFile
+            java.lang.Object r1 = r4.get(r1)
+            org.telegram.messenger.SecureDocument r1 = (org.telegram.messenger.SecureDocument) r1
+            org.telegram.tgnet.TLRPC$TL_secureFile r4 = r1.secureFile
             int r7 = r4.size
-            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForSecureDocument(r2)
-            r4 = 0
+            org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForSecureDocument(r1)
+            r5 = 0
             r6 = 0
-            if (r3 == 0) goto L_0x0054
-            android.graphics.drawable.BitmapDrawable r5 = new android.graphics.drawable.BitmapDrawable
-            android.graphics.Bitmap r3 = r3.bitmap
-            r5.<init>(r3)
-        L_0x0054:
-            r8 = r5
+            if (r2 == 0) goto L_0x0056
+            android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable
+            android.graphics.Bitmap r2 = r2.bitmap
+            r1.<init>(r2)
+            r8 = r1
+            goto L_0x0057
+        L_0x0056:
+            r8 = r3
+        L_0x0057:
             r9 = 0
             r10 = 0
-            r11 = 0
+            r12 = 0
             java.lang.String r3 = "d"
             r1 = r22
+            r2 = r4
+            r4 = r5
             r5 = r6
             r6 = r8
             r8 = r9
             r9 = r10
-            r10 = r11
+            r10 = r12
             r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
-            goto L_0x0582
-        L_0x0066:
-            java.util.ArrayList<java.lang.Object> r4 = r0.imagesArrLocals
-            boolean r4 = r4.isEmpty()
-            r6 = 2
-            java.lang.String r7 = "%d_%d"
-            r8 = 1
-            if (r4 != 0) goto L_0x0373
-            if (r2 < 0) goto L_0x036d
-            java.util.ArrayList<java.lang.Object> r4 = r0.imagesArrLocals
-            int r4 = r4.size()
-            if (r2 >= r4) goto L_0x036d
-            java.util.ArrayList<java.lang.Object> r4 = r0.imagesArrLocals
-            java.lang.Object r11 = r4.get(r2)
-            int r4 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
-            float r4 = (float) r4
-            float r9 = org.telegram.messenger.AndroidUtilities.density
-            float r4 = r4 / r9
-            int r4 = (int) r4
-            org.telegram.messenger.ImageReceiver$BitmapHolder r9 = r0.currentThumb
-            if (r9 == 0) goto L_0x0094
-            org.telegram.messenger.ImageReceiver r10 = r0.centerImage
-            if (r1 != r10) goto L_0x0094
-            goto L_0x0095
-        L_0x0094:
-            r9 = r5
-        L_0x0095:
-            if (r9 != 0) goto L_0x009d
-            org.telegram.ui.PhotoViewer$PhotoViewerProvider r9 = r0.placeProvider
-            org.telegram.messenger.ImageReceiver$BitmapHolder r9 = r9.getThumbForPhoto(r5, r5, r2)
-        L_0x009d:
-            boolean r2 = r11 instanceof org.telegram.messenger.MediaController.PhotoEntry
-            r10 = 90
-            java.lang.String r12 = "d"
-            if (r2 == 0) goto L_0x0103
-            r2 = r11
-            org.telegram.messenger.MediaController$PhotoEntry r2 = (org.telegram.messenger.MediaController.PhotoEntry) r2
-            boolean r12 = r2.isVideo
-            if (r12 == 0) goto L_0x00d0
-            java.lang.String r13 = r2.thumbPath
-            if (r13 == 0) goto L_0x00b1
-            goto L_0x00ce
-        L_0x00b1:
-            java.lang.StringBuilder r13 = new java.lang.StringBuilder
-            r13.<init>()
+            goto L_0x0596
+        L_0x006a:
+            java.util.ArrayList<java.lang.Object> r2 = r0.imagesArrLocals
+            boolean r2 = r2.isEmpty()
+            r4 = 2
+            java.lang.String r5 = "%d_%d"
+            r6 = 1
+            if (r2 != 0) goto L_0x0378
+            if (r1 < 0) goto L_0x0372
+            java.util.ArrayList<java.lang.Object> r2 = r0.imagesArrLocals
+            int r2 = r2.size()
+            if (r1 >= r2) goto L_0x0372
+            java.util.ArrayList<java.lang.Object> r2 = r0.imagesArrLocals
+            java.lang.Object r13 = r2.get(r1)
+            int r2 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
+            float r2 = (float) r2
+            float r7 = org.telegram.messenger.AndroidUtilities.density
+            float r2 = r2 / r7
+            int r2 = (int) r2
+            org.telegram.messenger.ImageReceiver$BitmapHolder r7 = r0.currentThumb
+            if (r7 == 0) goto L_0x0098
+            org.telegram.messenger.ImageReceiver r8 = r0.centerImage
+            if (r11 != r8) goto L_0x0098
+            goto L_0x0099
+        L_0x0098:
+            r7 = r3
+        L_0x0099:
+            if (r7 != 0) goto L_0x00a1
+            org.telegram.ui.PhotoViewer$PhotoViewerProvider r7 = r0.placeProvider
+            org.telegram.messenger.ImageReceiver$BitmapHolder r7 = r7.getThumbForPhoto(r3, r3, r1)
+        L_0x00a1:
+            boolean r1 = r13 instanceof org.telegram.messenger.MediaController.PhotoEntry
+            r8 = 90
+            java.lang.String r9 = "d"
+            if (r1 == 0) goto L_0x0107
+            r1 = r13
+            org.telegram.messenger.MediaController$PhotoEntry r1 = (org.telegram.messenger.MediaController.PhotoEntry) r1
+            boolean r9 = r1.isVideo
+            if (r9 == 0) goto L_0x00d4
+            java.lang.String r10 = r1.thumbPath
+            if (r10 == 0) goto L_0x00b5
+            goto L_0x00d2
+        L_0x00b5:
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder
+            r10.<init>()
             java.lang.String r14 = "vthumb://"
-            r13.append(r14)
-            int r14 = r2.imageId
-            r13.append(r14)
+            r10.append(r14)
+            int r14 = r1.imageId
+            r10.append(r14)
             java.lang.String r14 = ":"
-            r13.append(r14)
-            java.lang.String r2 = r2.path
-            r13.append(r2)
-            java.lang.String r13 = r13.toString()
-        L_0x00ce:
-            r2 = r5
-            goto L_0x00f6
-        L_0x00d0:
-            java.lang.String r13 = r2.filterPath
-            if (r13 == 0) goto L_0x00d5
-            goto L_0x00e2
-        L_0x00d5:
-            java.lang.String r13 = r2.croppedPath
-            if (r13 == 0) goto L_0x00da
-            goto L_0x00e2
-        L_0x00da:
-            int r13 = r2.orientation
-            r1.setOrientation(r13, r3)
-            java.lang.String r2 = r2.path
-            r13 = r2
-        L_0x00e2:
-            java.util.Locale r2 = java.util.Locale.US
-            java.lang.Object[] r14 = new java.lang.Object[r6]
-            java.lang.Integer r15 = java.lang.Integer.valueOf(r4)
-            r14[r3] = r15
-            java.lang.Integer r15 = java.lang.Integer.valueOf(r4)
-            r14[r8] = r15
-            java.lang.String r2 = java.lang.String.format(r2, r7, r14)
-        L_0x00f6:
-            r15 = r2
-            r2 = r5
-            r8 = r2
-            r17 = r8
+            r10.append(r14)
+            java.lang.String r1 = r1.path
+            r10.append(r1)
+            java.lang.String r10 = r10.toString()
+        L_0x00d2:
+            r1 = r3
+            goto L_0x00fa
+        L_0x00d4:
+            java.lang.String r10 = r1.filterPath
+            if (r10 == 0) goto L_0x00d9
+            goto L_0x00e6
+        L_0x00d9:
+            java.lang.String r10 = r1.croppedPath
+            if (r10 == 0) goto L_0x00de
+            goto L_0x00e6
+        L_0x00de:
+            int r10 = r1.orientation
+            r11.setOrientation(r10, r12)
+            java.lang.String r1 = r1.path
+            r10 = r1
+        L_0x00e6:
+            java.util.Locale r1 = java.util.Locale.US
+            java.lang.Object[] r14 = new java.lang.Object[r4]
+            java.lang.Integer r15 = java.lang.Integer.valueOf(r2)
+            r14[r12] = r15
+            java.lang.Integer r15 = java.lang.Integer.valueOf(r2)
+            r14[r6] = r15
+            java.lang.String r1 = java.lang.String.format(r1, r5, r14)
+        L_0x00fa:
+            r15 = r1
+            r1 = r3
+            r6 = r1
+            r17 = r6
             r19 = r17
-            r18 = r12
-            r12 = 0
+            r18 = r9
+            r9 = 0
             r14 = 0
-            goto L_0x0252
-        L_0x0103:
-            boolean r2 = r11 instanceof org.telegram.tgnet.TLRPC$BotInlineResult
-            if (r2 == 0) goto L_0x01f8
-            r2 = r11
-            org.telegram.tgnet.TLRPC$BotInlineResult r2 = (org.telegram.tgnet.TLRPC$BotInlineResult) r2
-            java.lang.String r13 = r2.type
+            goto L_0x0256
+        L_0x0107:
+            boolean r1 = r13 instanceof org.telegram.tgnet.TLRPC$BotInlineResult
+            if (r1 == 0) goto L_0x01fc
+            r1 = r13
+            org.telegram.tgnet.TLRPC$BotInlineResult r1 = (org.telegram.tgnet.TLRPC$BotInlineResult) r1
+            java.lang.String r10 = r1.type
             java.lang.String r14 = "video"
-            boolean r13 = r13.equals(r14)
-            if (r13 != 0) goto L_0x01c0
-            org.telegram.tgnet.TLRPC$Document r13 = r2.document
-            boolean r13 = org.telegram.messenger.MessageObject.isVideoDocument(r13)
-            if (r13 == 0) goto L_0x011e
-            goto L_0x01c0
-        L_0x011e:
-            java.lang.String r13 = r2.type
+            boolean r10 = r10.equals(r14)
+            if (r10 != 0) goto L_0x01c4
+            org.telegram.tgnet.TLRPC$Document r10 = r1.document
+            boolean r10 = org.telegram.messenger.MessageObject.isVideoDocument(r10)
+            if (r10 == 0) goto L_0x0122
+            goto L_0x01c4
+        L_0x0122:
+            java.lang.String r10 = r1.type
             java.lang.String r14 = "gif"
-            boolean r13 = r13.equals(r14)
-            if (r13 == 0) goto L_0x0145
-            org.telegram.tgnet.TLRPC$Document r13 = r2.document
-            if (r13 == 0) goto L_0x0145
-            int r2 = r13.size
-            org.telegram.tgnet.TLRPC$TL_videoSize r14 = org.telegram.messenger.MessageObject.getDocumentVideoThumb(r13)
-            if (r14 == 0) goto L_0x0139
-            org.telegram.messenger.ImageLocation r14 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$TL_videoSize) r14, (org.telegram.tgnet.TLRPC$Document) r13)
-            goto L_0x013a
-        L_0x0139:
-            r14 = r5
-        L_0x013a:
-            r15 = r12
-            r16 = r13
+            boolean r10 = r10.equals(r14)
+            if (r10 == 0) goto L_0x0149
+            org.telegram.tgnet.TLRPC$Document r10 = r1.document
+            if (r10 == 0) goto L_0x0149
+            int r1 = r10.size
+            org.telegram.tgnet.TLRPC$TL_videoSize r14 = org.telegram.messenger.MessageObject.getDocumentVideoThumb(r10)
+            if (r14 == 0) goto L_0x013d
+            org.telegram.messenger.ImageLocation r14 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$TL_videoSize) r14, (org.telegram.tgnet.TLRPC$Document) r10)
+            goto L_0x013e
+        L_0x013d:
+            r14 = r3
+        L_0x013e:
+            r15 = r9
+            r16 = r10
             r17 = r14
-            r13 = r2
-            r2 = r5
-            r12 = r2
-        L_0x0142:
-            r14 = r12
-            goto L_0x01ec
-        L_0x0145:
-            org.telegram.tgnet.TLRPC$Photo r13 = r2.photo
-            if (r13 == 0) goto L_0x0172
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r12 = r13.sizes
-            int r13 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
-            org.telegram.tgnet.TLRPC$PhotoSize r12 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r12, r13)
-            org.telegram.tgnet.TLRPC$Photo r2 = r2.photo
-            int r13 = r12.size
+            r10 = r1
+            r1 = r3
+            r9 = r1
+        L_0x0146:
+            r14 = r9
+            goto L_0x01f0
+        L_0x0149:
+            org.telegram.tgnet.TLRPC$Photo r10 = r1.photo
+            if (r10 == 0) goto L_0x0176
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r9 = r10.sizes
+            int r10 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
+            org.telegram.tgnet.TLRPC$PhotoSize r9 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r9, r10)
+            org.telegram.tgnet.TLRPC$Photo r1 = r1.photo
+            int r10 = r9.size
             java.util.Locale r14 = java.util.Locale.US
-            java.lang.Object[] r15 = new java.lang.Object[r6]
-            java.lang.Integer r16 = java.lang.Integer.valueOf(r4)
-            r15[r3] = r16
-            java.lang.Integer r16 = java.lang.Integer.valueOf(r4)
-            r15[r8] = r16
-            java.lang.String r14 = java.lang.String.format(r14, r7, r15)
-            r16 = r5
+            java.lang.Object[] r15 = new java.lang.Object[r4]
+            java.lang.Integer r16 = java.lang.Integer.valueOf(r2)
+            r15[r12] = r16
+            java.lang.Integer r16 = java.lang.Integer.valueOf(r2)
+            r15[r6] = r16
+            java.lang.String r14 = java.lang.String.format(r14, r5, r15)
+            r16 = r3
             r17 = r16
             r15 = r14
-            r14 = r12
-            goto L_0x01d3
-        L_0x0172:
-            org.telegram.tgnet.TLRPC$WebDocument r13 = r2.content
-            boolean r13 = r13 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
-            if (r13 == 0) goto L_0x01e3
-            java.lang.String r13 = r2.type
-            boolean r13 = r13.equals(r14)
-            if (r13 == 0) goto L_0x019c
-            org.telegram.tgnet.TLRPC$WebDocument r13 = r2.thumb
-            boolean r14 = r13 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
-            if (r14 == 0) goto L_0x01b0
-            java.lang.String r13 = r13.mime_type
+            r14 = r9
+            goto L_0x01d7
+        L_0x0176:
+            org.telegram.tgnet.TLRPC$WebDocument r10 = r1.content
+            boolean r10 = r10 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
+            if (r10 == 0) goto L_0x01e7
+            java.lang.String r10 = r1.type
+            boolean r10 = r10.equals(r14)
+            if (r10 == 0) goto L_0x01a0
+            org.telegram.tgnet.TLRPC$WebDocument r10 = r1.thumb
+            boolean r14 = r10 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
+            if (r14 == 0) goto L_0x01b4
+            java.lang.String r10 = r10.mime_type
             java.lang.String r14 = "video/mp4"
-            boolean r13 = r14.equals(r13)
-            if (r13 == 0) goto L_0x01b0
-            org.telegram.tgnet.TLRPC$WebDocument r13 = r2.thumb
-            org.telegram.messenger.WebFile r13 = org.telegram.messenger.WebFile.createWithWebDocument(r13)
-            org.telegram.messenger.ImageLocation r13 = org.telegram.messenger.ImageLocation.getForWebFile(r13)
-            r14 = r13
-            goto L_0x01b1
-        L_0x019c:
-            java.util.Locale r12 = java.util.Locale.US
-            java.lang.Object[] r13 = new java.lang.Object[r6]
-            java.lang.Integer r14 = java.lang.Integer.valueOf(r4)
-            r13[r3] = r14
-            java.lang.Integer r14 = java.lang.Integer.valueOf(r4)
-            r13[r8] = r14
-            java.lang.String r12 = java.lang.String.format(r12, r7, r13)
-        L_0x01b0:
-            r14 = r5
-        L_0x01b1:
-            org.telegram.tgnet.TLRPC$WebDocument r2 = r2.content
-            org.telegram.messenger.WebFile r2 = org.telegram.messenger.WebFile.createWithWebDocument(r2)
-            r16 = r5
-            r15 = r12
+            boolean r10 = r14.equals(r10)
+            if (r10 == 0) goto L_0x01b4
+            org.telegram.tgnet.TLRPC$WebDocument r10 = r1.thumb
+            org.telegram.messenger.WebFile r10 = org.telegram.messenger.WebFile.createWithWebDocument(r10)
+            org.telegram.messenger.ImageLocation r10 = org.telegram.messenger.ImageLocation.getForWebFile(r10)
+            r14 = r10
+            goto L_0x01b5
+        L_0x01a0:
+            java.util.Locale r9 = java.util.Locale.US
+            java.lang.Object[] r10 = new java.lang.Object[r4]
+            java.lang.Integer r14 = java.lang.Integer.valueOf(r2)
+            r10[r12] = r14
+            java.lang.Integer r14 = java.lang.Integer.valueOf(r2)
+            r10[r6] = r14
+            java.lang.String r9 = java.lang.String.format(r9, r5, r10)
+        L_0x01b4:
+            r14 = r3
+        L_0x01b5:
+            org.telegram.tgnet.TLRPC$WebDocument r1 = r1.content
+            org.telegram.messenger.WebFile r1 = org.telegram.messenger.WebFile.createWithWebDocument(r1)
+            r16 = r3
+            r15 = r9
             r17 = r14
-            r13 = 0
-            r12 = r16
-            goto L_0x0142
-        L_0x01c0:
-            org.telegram.tgnet.TLRPC$Document r12 = r2.document
-            if (r12 == 0) goto L_0x01d7
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r12 = r12.thumbs
-            org.telegram.tgnet.TLRPC$PhotoSize r12 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r12, r10)
-            org.telegram.tgnet.TLRPC$Document r2 = r2.document
-            r15 = r5
+            r10 = 0
+            r9 = r16
+            goto L_0x0146
+        L_0x01c4:
+            org.telegram.tgnet.TLRPC$Document r9 = r1.document
+            if (r9 == 0) goto L_0x01db
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r9 = r9.thumbs
+            org.telegram.tgnet.TLRPC$PhotoSize r9 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r9, r8)
+            org.telegram.tgnet.TLRPC$Document r1 = r1.document
+            r15 = r3
             r16 = r15
             r17 = r16
-            r14 = r12
-            r13 = 0
-        L_0x01d3:
-            r12 = r2
-            r2 = r17
-            goto L_0x01ec
+            r14 = r9
+            r10 = 0
         L_0x01d7:
-            org.telegram.tgnet.TLRPC$WebDocument r2 = r2.thumb
-            boolean r12 = r2 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
-            if (r12 == 0) goto L_0x01e3
-            org.telegram.messenger.WebFile r2 = org.telegram.messenger.WebFile.createWithWebDocument(r2)
-            r12 = r5
-            goto L_0x01e5
-        L_0x01e3:
-            r2 = r5
-            r12 = r2
-        L_0x01e5:
-            r14 = r12
+            r9 = r1
+            r1 = r17
+            goto L_0x01f0
+        L_0x01db:
+            org.telegram.tgnet.TLRPC$WebDocument r1 = r1.thumb
+            boolean r9 = r1 instanceof org.telegram.tgnet.TLRPC$TL_webDocument
+            if (r9 == 0) goto L_0x01e7
+            org.telegram.messenger.WebFile r1 = org.telegram.messenger.WebFile.createWithWebDocument(r1)
+            r9 = r3
+            goto L_0x01e9
+        L_0x01e7:
+            r1 = r3
+            r9 = r1
+        L_0x01e9:
+            r14 = r9
             r15 = r14
             r16 = r15
             r17 = r16
-            r13 = 0
-        L_0x01ec:
+            r10 = 0
+        L_0x01f0:
             r19 = r14
-            r8 = r16
+            r6 = r16
             r14 = 1
             r18 = 0
-            r20 = r13
-            r13 = r5
-            r5 = r12
-            goto L_0x0243
-        L_0x01f8:
-            boolean r2 = r11 instanceof org.telegram.messenger.MediaController.SearchImage
-            if (r2 == 0) goto L_0x0246
-            r2 = r11
-            org.telegram.messenger.MediaController$SearchImage r2 = (org.telegram.messenger.MediaController.SearchImage) r2
-            org.telegram.tgnet.TLRPC$PhotoSize r13 = r2.photoSize
-            if (r13 == 0) goto L_0x020e
-            org.telegram.tgnet.TLRPC$Photo r2 = r2.photo
-            int r14 = r13.size
-            r16 = r5
+            r20 = r10
+            r10 = r3
+            r3 = r9
+            goto L_0x0247
+        L_0x01fc:
+            boolean r1 = r13 instanceof org.telegram.messenger.MediaController.SearchImage
+            if (r1 == 0) goto L_0x024a
+            r1 = r13
+            org.telegram.messenger.MediaController$SearchImage r1 = (org.telegram.messenger.MediaController.SearchImage) r1
+            org.telegram.tgnet.TLRPC$PhotoSize r10 = r1.photoSize
+            if (r10 == 0) goto L_0x0212
+            org.telegram.tgnet.TLRPC$Photo r1 = r1.photo
+            int r14 = r10.size
+            r16 = r3
             r15 = r14
-            r14 = r13
-            r13 = r16
-            goto L_0x0234
-        L_0x020e:
-            java.lang.String r13 = r2.filterPath
-            if (r13 == 0) goto L_0x0218
+            r14 = r10
+            r10 = r16
+            goto L_0x0238
         L_0x0212:
-            r2 = r5
-            r14 = r2
+            java.lang.String r10 = r1.filterPath
+            if (r10 == 0) goto L_0x021c
+        L_0x0216:
+            r1 = r3
+            r14 = r1
             r16 = r14
             r15 = 0
-            goto L_0x0234
-        L_0x0218:
-            java.lang.String r13 = r2.croppedPath
-            if (r13 == 0) goto L_0x021d
-            goto L_0x0212
-        L_0x021d:
-            org.telegram.tgnet.TLRPC$Document r13 = r2.document
-            if (r13 == 0) goto L_0x022a
-            int r14 = r13.size
-            r2 = r5
-            r16 = r13
+            goto L_0x0238
+        L_0x021c:
+            java.lang.String r10 = r1.croppedPath
+            if (r10 == 0) goto L_0x0221
+            goto L_0x0216
+        L_0x0221:
+            org.telegram.tgnet.TLRPC$Document r10 = r1.document
+            if (r10 == 0) goto L_0x022e
+            int r14 = r10.size
+            r1 = r3
+            r16 = r10
             r15 = r14
-            r13 = r2
-            r14 = r13
-            goto L_0x0234
-        L_0x022a:
-            java.lang.String r13 = r2.imageUrl
-            int r14 = r2.size
-            r2 = r5
-            r16 = r2
+            r10 = r1
+            r14 = r10
+            goto L_0x0238
+        L_0x022e:
+            java.lang.String r10 = r1.imageUrl
+            int r14 = r1.size
+            r1 = r3
+            r16 = r1
             r15 = r14
             r14 = r16
-        L_0x0234:
-            r17 = r5
+        L_0x0238:
+            r17 = r3
             r19 = r14
-            r8 = r16
+            r6 = r16
             r14 = 1
             r18 = 0
-            r5 = r2
-            r2 = r17
+            r3 = r1
+            r1 = r17
             r20 = r15
-            r15 = r12
-        L_0x0243:
-            r12 = r20
-            goto L_0x0252
-        L_0x0246:
-            r2 = r5
-            r8 = r2
-            r13 = r8
-            r15 = r13
+            r15 = r9
+        L_0x0247:
+            r9 = r20
+            goto L_0x0256
+        L_0x024a:
+            r1 = r3
+            r6 = r1
+            r10 = r6
+            r15 = r10
             r17 = r15
             r19 = r17
-            r12 = 0
+            r9 = 0
             r14 = 0
             r18 = 0
-        L_0x0252:
-            if (r8 == 0) goto L_0x02e4
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r8.thumbs
-            org.telegram.tgnet.TLRPC$PhotoSize r2 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r2, r10)
-            if (r17 == 0) goto L_0x02a1
-            org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForDocument(r8)
-            r10 = 0
-            if (r9 != 0) goto L_0x0269
-            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r2, (org.telegram.tgnet.TLRPC$Document) r8)
-            r8 = r2
-            goto L_0x026a
-        L_0x0269:
+        L_0x0256:
+            if (r6 == 0) goto L_0x02e8
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r6.thumbs
+            org.telegram.tgnet.TLRPC$PhotoSize r1 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r1, r8)
+            if (r17 == 0) goto L_0x02a6
+            org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForDocument(r6)
             r8 = 0
-        L_0x026a:
-            java.util.Locale r2 = java.util.Locale.US
-            java.lang.Object[] r6 = new java.lang.Object[r6]
-            java.lang.Integer r13 = java.lang.Integer.valueOf(r4)
-            r6[r3] = r13
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r4)
-            r4 = 1
-            r6[r4] = r3
-            java.lang.String r7 = java.lang.String.format(r2, r7, r6)
-            if (r9 == 0) goto L_0x028b
-            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable
-            android.graphics.Bitmap r3 = r9.bitmap
-            r2.<init>(r3)
-            r16 = r2
-            goto L_0x028d
-        L_0x028b:
+            if (r7 != 0) goto L_0x026d
+            org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r1, (org.telegram.tgnet.TLRPC$Document) r6)
+            r6 = r1
+            goto L_0x026e
+        L_0x026d:
+            r6 = 0
+        L_0x026e:
+            java.util.Locale r1 = java.util.Locale.US
+            java.lang.Object[] r4 = new java.lang.Object[r4]
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r2)
+            r4[r12] = r10
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
+            r10 = 1
+            r4[r10] = r2
+            java.lang.String r10 = java.lang.String.format(r1, r5, r4)
+            if (r7 == 0) goto L_0x028f
+            android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable
+            android.graphics.Bitmap r2 = r7.bitmap
+            r1.<init>(r2)
+            r16 = r1
+            goto L_0x0291
+        L_0x028f:
             r16 = 0
-        L_0x028d:
-            r13 = 0
-            java.lang.String r3 = "d"
+        L_0x0291:
+            r12 = 0
+            java.lang.String r4 = "d"
             r1 = r22
-            r2 = r5
+            r2 = r3
+            r3 = r4
             r4 = r17
-            r5 = r10
-            r6 = r8
+            r5 = r8
+            r7 = r10
             r8 = r16
-            r9 = r12
-            r10 = r13
+            r10 = r12
+            r11 = r13
             r12 = r14
             r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12)
-            goto L_0x0582
-        L_0x02a1:
-            org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForDocument(r8)
-            if (r9 != 0) goto L_0x02ad
-            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r2, (org.telegram.tgnet.TLRPC$Document) r8)
-            r8 = r2
-            goto L_0x02ae
-        L_0x02ad:
-            r8 = 0
-        L_0x02ae:
-            java.util.Locale r2 = java.util.Locale.US
-            java.lang.Object[] r6 = new java.lang.Object[r6]
-            java.lang.Integer r10 = java.lang.Integer.valueOf(r4)
-            r6[r3] = r10
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r4)
-            r4 = 1
-            r6[r4] = r3
-            java.lang.String r6 = java.lang.String.format(r2, r7, r6)
-            if (r9 == 0) goto L_0x02cf
-            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable
-            android.graphics.Bitmap r3 = r9.bitmap
-            r2.<init>(r3)
-            r16 = r2
-            goto L_0x02d1
-        L_0x02cf:
+            goto L_0x0596
+        L_0x02a6:
+            org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForDocument(r6)
+            if (r7 != 0) goto L_0x02b2
+            org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r1, (org.telegram.tgnet.TLRPC$Document) r6)
+            r6 = r1
+            goto L_0x02b3
+        L_0x02b2:
+            r6 = 0
+        L_0x02b3:
+            java.util.Locale r1 = java.util.Locale.US
+            java.lang.Object[] r4 = new java.lang.Object[r4]
+            java.lang.Integer r8 = java.lang.Integer.valueOf(r2)
+            r4[r12] = r8
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
+            r8 = 1
+            r4[r8] = r2
+            java.lang.String r5 = java.lang.String.format(r1, r5, r4)
+            if (r7 == 0) goto L_0x02d4
+            android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable
+            android.graphics.Bitmap r2 = r7.bitmap
+            r1.<init>(r2)
+            r16 = r1
+            goto L_0x02d6
+        L_0x02d4:
             r16 = 0
-        L_0x02d1:
-            r9 = 0
-            java.lang.String r3 = "d"
+        L_0x02d6:
+            r8 = 0
+            java.lang.String r4 = "d"
             r1 = r22
-            r2 = r5
-            r4 = r8
-            r5 = r6
+            r2 = r3
+            r3 = r4
+            r4 = r6
             r6 = r16
-            r7 = r12
-            r8 = r9
-            r9 = r11
+            r7 = r9
+            r9 = r13
             r10 = r14
             r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
-            goto L_0x0582
-        L_0x02e4:
-            r3 = r19
-            if (r3 == 0) goto L_0x0304
-            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForObject(r3, r5)
-            if (r9 == 0) goto L_0x02f7
-            android.graphics.drawable.BitmapDrawable r3 = new android.graphics.drawable.BitmapDrawable
-            android.graphics.Bitmap r4 = r9.bitmap
-            r3.<init>(r4)
-            r4 = r3
-            goto L_0x02f8
-        L_0x02f7:
+            goto L_0x0596
+        L_0x02e8:
+            r2 = r19
+            if (r2 == 0) goto L_0x0308
+            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForObject(r2, r3)
+            if (r7 == 0) goto L_0x02fb
+            android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable
+            android.graphics.Bitmap r3 = r7.bitmap
+            r1.<init>(r3)
+            r4 = r1
+            goto L_0x02fc
+        L_0x02fb:
             r4 = 0
-        L_0x02f8:
+        L_0x02fc:
             r6 = 0
             r1 = r22
             r3 = r15
-            r5 = r12
-            r7 = r11
+            r5 = r9
+            r7 = r13
             r8 = r14
             r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (android.graphics.drawable.Drawable) r4, (int) r5, (java.lang.String) r6, (java.lang.Object) r7, (int) r8)
-            goto L_0x0582
-        L_0x0304:
-            r3 = 2131165756(0x7var_c, float:1.7945738E38)
-            if (r2 == 0) goto L_0x0347
-            if (r17 == 0) goto L_0x031d
-            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForWebFile(r2)
+            goto L_0x0596
+        L_0x0308:
+            r2 = 2131165754(0x7var_a, float:1.7945734E38)
+            if (r1 == 0) goto L_0x034c
+            if (r17 == 0) goto L_0x0321
+            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForWebFile(r1)
             r5 = 0
             r6 = 0
             r1 = r22
             r3 = r15
             r4 = r17
-            r7 = r11
+            r7 = r13
             r8 = r14
             r1.setImage((org.telegram.messenger.ImageLocation) r2, (java.lang.String) r3, (org.telegram.messenger.ImageLocation) r4, (java.lang.String) r5, (java.lang.String) r6, (java.lang.Object) r7, (int) r8)
-            goto L_0x0582
-        L_0x031d:
-            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForWebFile(r2)
-            if (r9 == 0) goto L_0x032c
-            android.graphics.drawable.BitmapDrawable r3 = new android.graphics.drawable.BitmapDrawable
-            android.graphics.Bitmap r4 = r9.bitmap
-            r3.<init>(r4)
-        L_0x032a:
-            r4 = r3
-            goto L_0x033c
-        L_0x032c:
-            if (r18 == 0) goto L_0x033b
-            android.app.Activity r4 = r0.parentActivity
-            if (r4 == 0) goto L_0x033b
-            android.content.res.Resources r4 = r4.getResources()
-            android.graphics.drawable.Drawable r3 = r4.getDrawable(r3)
-            goto L_0x032a
-        L_0x033b:
+            goto L_0x0596
+        L_0x0321:
+            org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForWebFile(r1)
+            if (r7 == 0) goto L_0x0330
+            android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable
+            android.graphics.Bitmap r2 = r7.bitmap
+            r1.<init>(r2)
+        L_0x032e:
+            r4 = r1
+            goto L_0x0340
+        L_0x0330:
+            if (r18 == 0) goto L_0x033f
+            android.app.Activity r1 = r0.parentActivity
+            if (r1 == 0) goto L_0x033f
+            android.content.res.Resources r1 = r1.getResources()
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r2)
+            goto L_0x032e
+        L_0x033f:
             r4 = 0
-        L_0x033c:
+        L_0x0340:
             r5 = 0
             r1 = r22
+            r2 = r3
             r3 = r15
-            r6 = r11
+            r6 = r13
             r7 = r14
             r1.setImage(r2, r3, r4, r5, r6, r7)
-            goto L_0x0582
-        L_0x0347:
-            if (r9 == 0) goto L_0x0352
-            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable
-            android.graphics.Bitmap r3 = r9.bitmap
-            r2.<init>(r3)
-        L_0x0350:
-            r4 = r2
-            goto L_0x0362
-        L_0x0352:
-            if (r18 == 0) goto L_0x0361
-            android.app.Activity r2 = r0.parentActivity
-            if (r2 == 0) goto L_0x0361
-            android.content.res.Resources r2 = r2.getResources()
-            android.graphics.drawable.Drawable r2 = r2.getDrawable(r3)
-            goto L_0x0350
-        L_0x0361:
+            goto L_0x0596
+        L_0x034c:
+            if (r7 == 0) goto L_0x0357
+            android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable
+            android.graphics.Bitmap r2 = r7.bitmap
+            r1.<init>(r2)
+        L_0x0355:
+            r4 = r1
+            goto L_0x0367
+        L_0x0357:
+            if (r18 == 0) goto L_0x0366
+            android.app.Activity r1 = r0.parentActivity
+            if (r1 == 0) goto L_0x0366
+            android.content.res.Resources r1 = r1.getResources()
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r2)
+            goto L_0x0355
+        L_0x0366:
             r4 = 0
-        L_0x0362:
+        L_0x0367:
             r5 = 0
             r1 = r22
-            r2 = r13
+            r2 = r10
             r3 = r15
-            r6 = r12
+            r6 = r9
             r1.setImage(r2, r3, r4, r5, r6)
-            goto L_0x0582
-        L_0x036d:
-            r2 = r5
-            r1.setImageBitmap((android.graphics.Bitmap) r2)
-            goto L_0x0582
-        L_0x0373:
-            java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r0.imagesArr
-            boolean r4 = r4.isEmpty()
-            if (r4 != 0) goto L_0x0393
-            if (r2 < 0) goto L_0x0393
-            java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r0.imagesArr
-            int r4 = r4.size()
-            if (r2 >= r4) goto L_0x0393
-            java.util.ArrayList<org.telegram.messenger.MessageObject> r4 = r0.imagesArr
-            java.lang.Object r4 = r4.get(r2)
-            org.telegram.messenger.MessageObject r4 = (org.telegram.messenger.MessageObject) r4
-            r5 = 1
-            r1.setShouldGenerateQualityThumb(r5)
-            r9 = r4
-            goto L_0x0394
-        L_0x0393:
-            r9 = 0
-        L_0x0394:
-            r4 = 2131165816(0x7var_, float:1.794586E38)
-            r5 = 100
-            if (r9 == 0) goto L_0x0480
-            boolean r8 = r9.isVideo()
-            if (r8 == 0) goto L_0x03fc
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r9.photoThumbs
-            if (r2 == 0) goto L_0x03ee
+            goto L_0x0596
+        L_0x0372:
+            r1 = r3
+            r11.setImageBitmap((android.graphics.Bitmap) r1)
+            goto L_0x0596
+        L_0x0378:
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.imagesArr
             boolean r2 = r2.isEmpty()
-            if (r2 != 0) goto L_0x03ee
-            org.telegram.messenger.ImageReceiver$BitmapHolder r2 = r0.currentThumb
-            if (r2 == 0) goto L_0x03b4
-            org.telegram.messenger.ImageReceiver r4 = r0.centerImage
-            if (r1 != r4) goto L_0x03b4
-            goto L_0x03b5
-        L_0x03b4:
-            r2 = 0
-        L_0x03b5:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r4 = r9.photoThumbs
-            r6 = 320(0x140, float:4.48E-43)
-            org.telegram.tgnet.TLRPC$PhotoSize r4 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r4, r6)
-            int r6 = r4.w
-            if (r6 >= r5) goto L_0x03c6
-            int r6 = r4.h
-            if (r6 >= r5) goto L_0x03c6
+            if (r2 != 0) goto L_0x0398
+            if (r1 < 0) goto L_0x0398
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.imagesArr
+            int r2 = r2.size()
+            if (r1 >= r2) goto L_0x0398
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r0.imagesArr
+            java.lang.Object r2 = r2.get(r1)
+            org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
             r3 = 1
-        L_0x03c6:
-            r1.setNeedsQualityThumb(r3)
-            r3 = 0
-            r5 = 0
-            if (r2 != 0) goto L_0x03d4
-            org.telegram.tgnet.TLObject r6 = r9.photoThumbsObject
-            org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForObject(r4, r6)
-            goto L_0x03d5
-        L_0x03d4:
-            r4 = 0
-        L_0x03d5:
-            if (r2 == 0) goto L_0x03df
-            android.graphics.drawable.BitmapDrawable r6 = new android.graphics.drawable.BitmapDrawable
-            android.graphics.Bitmap r2 = r2.bitmap
-            r6.<init>(r2)
-            goto L_0x03e0
-        L_0x03df:
+            r11.setShouldGenerateQualityThumb(r3)
+            r9 = r2
+            goto L_0x0399
+        L_0x0398:
+            r9 = 0
+        L_0x0399:
+            r2 = 2131165814(0x7var_, float:1.7945856E38)
+            r3 = 100
+            if (r9 == 0) goto L_0x0498
+            boolean r6 = r9.isVideo()
+            if (r6 == 0) goto L_0x040f
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r9.photoThumbs
+            if (r1 == 0) goto L_0x0401
+            boolean r1 = r1.isEmpty()
+            if (r1 != 0) goto L_0x0401
+            org.telegram.messenger.ImageReceiver$BitmapHolder r1 = r0.currentThumb
+            if (r1 == 0) goto L_0x03b9
+            org.telegram.messenger.ImageReceiver r2 = r0.centerImage
+            if (r11 != r2) goto L_0x03b9
+            goto L_0x03ba
+        L_0x03b9:
+            r1 = 0
+        L_0x03ba:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r9.photoThumbs
+            r4 = 320(0x140, float:4.48E-43)
+            org.telegram.tgnet.TLRPC$PhotoSize r2 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r2, r4)
+            int r4 = r2.w
+            if (r4 >= r3) goto L_0x03cc
+            int r4 = r2.h
+            if (r4 >= r3) goto L_0x03cc
+            r6 = 1
+            goto L_0x03cd
+        L_0x03cc:
             r6 = 0
-        L_0x03e0:
+        L_0x03cd:
+            r11.setNeedsQualityThumb(r6)
+            r3 = 0
+            r4 = 0
+            if (r1 != 0) goto L_0x03dc
+            org.telegram.tgnet.TLObject r5 = r9.photoThumbsObject
+            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForObject(r2, r5)
+            r5 = r2
+            goto L_0x03dd
+        L_0x03dc:
+            r5 = 0
+        L_0x03dd:
+            if (r1 == 0) goto L_0x03e8
+            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable
+            android.graphics.Bitmap r1 = r1.bitmap
+            r2.<init>(r1)
+            r6 = r2
+            goto L_0x03e9
+        L_0x03e8:
+            r6 = 0
+        L_0x03e9:
             r7 = 0
             r8 = 0
             r10 = 1
-            java.lang.String r11 = "b"
+            java.lang.String r13 = "b"
             r1 = r22
             r2 = r3
-            r3 = r5
-            r5 = r11
-            r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
-            goto L_0x03fb
-        L_0x03ee:
-            android.app.Activity r2 = r0.parentActivity
-            android.content.res.Resources r2 = r2.getResources()
-            android.graphics.drawable.Drawable r2 = r2.getDrawable(r4)
-            r1.setImageBitmap((android.graphics.drawable.Drawable) r2)
-        L_0x03fb:
-            return
-        L_0x03fc:
-            org.telegram.ui.Components.AnimatedFileDrawable r8 = r0.currentAnimation
-            if (r8 == 0) goto L_0x040b
-            org.telegram.ui.PhotoViewer$FrameLayoutDrawer r2 = r0.containerView
-            r8.setSecondParentView(r2)
-            org.telegram.ui.Components.AnimatedFileDrawable r2 = r0.currentAnimation
-            r1.setImageBitmap((android.graphics.drawable.Drawable) r2)
-            return
-        L_0x040b:
-            int r8 = r0.sharedMediaType
-            r10 = 1
-            if (r8 != r10) goto L_0x0480
-            boolean r2 = r9.canPreviewDocument()
-            if (r2 == 0) goto L_0x0473
-            org.telegram.tgnet.TLRPC$Document r2 = r9.getDocument()
-            r1.setNeedsQualityThumb(r10)
-            org.telegram.messenger.ImageReceiver$BitmapHolder r4 = r0.currentThumb
-            if (r4 == 0) goto L_0x0426
-            org.telegram.messenger.ImageReceiver r8 = r0.centerImage
-            if (r1 != r8) goto L_0x0426
-            goto L_0x0427
-        L_0x0426:
-            r4 = 0
-        L_0x0427:
-            if (r9 == 0) goto L_0x0430
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r8 = r9.photoThumbs
-            org.telegram.tgnet.TLRPC$PhotoSize r5 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r8, r5)
-            goto L_0x0431
-        L_0x0430:
-            r5 = 0
-        L_0x0431:
-            r8 = 1157627904(0x45000000, float:2048.0)
-            float r10 = org.telegram.messenger.AndroidUtilities.density
-            float r8 = r8 / r10
-            int r8 = (int) r8
-            org.telegram.messenger.ImageLocation r10 = org.telegram.messenger.ImageLocation.getForDocument(r2)
-            java.util.Locale r11 = java.util.Locale.US
-            java.lang.Object[] r6 = new java.lang.Object[r6]
-            java.lang.Integer r12 = java.lang.Integer.valueOf(r8)
-            r6[r3] = r12
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r8)
-            r8 = 1
-            r6[r8] = r3
-            java.lang.String r3 = java.lang.String.format(r11, r7, r6)
-            if (r4 != 0) goto L_0x0457
-            org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r5, (org.telegram.tgnet.TLRPC$Document) r2)
-            goto L_0x0458
-        L_0x0457:
-            r5 = 0
-        L_0x0458:
-            if (r4 == 0) goto L_0x0462
-            android.graphics.drawable.BitmapDrawable r6 = new android.graphics.drawable.BitmapDrawable
-            android.graphics.Bitmap r4 = r4.bitmap
-            r6.<init>(r4)
-            goto L_0x0463
-        L_0x0462:
-            r6 = 0
-        L_0x0463:
-            int r7 = r2.size
-            r8 = 0
-            r11 = 0
-            java.lang.String r12 = "b"
-            r1 = r22
-            r2 = r10
+            r3 = r4
             r4 = r5
-            r5 = r12
-            r10 = r11
+            r5 = r13
             r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
-            goto L_0x047f
-        L_0x0473:
-            org.telegram.ui.Components.OtherDocumentPlaceholderDrawable r2 = new org.telegram.ui.Components.OtherDocumentPlaceholderDrawable
-            android.app.Activity r3 = r0.parentActivity
-            org.telegram.ui.PhotoViewer$FrameLayoutDrawer r4 = r0.containerView
-            r2.<init>(r3, r4, r9)
-            r1.setImageBitmap((android.graphics.drawable.Drawable) r2)
-        L_0x047f:
+            org.telegram.messenger.ImageReceiver$BitmapHolder r1 = r0.currentThumb
+            if (r1 == 0) goto L_0x040e
+            int r1 = r1.orientation
+            r11.setOrientation(r1, r12)
+            goto L_0x040e
+        L_0x0401:
+            android.app.Activity r1 = r0.parentActivity
+            android.content.res.Resources r1 = r1.getResources()
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r2)
+            r11.setImageBitmap((android.graphics.drawable.Drawable) r1)
+        L_0x040e:
             return
-        L_0x0480:
-            r6 = 1
-            int[] r7 = new int[r6]
-            org.telegram.messenger.ImageLocation r8 = r0.getImageLocation(r2, r7)
-            org.telegram.tgnet.TLObject r2 = r0.getFileLocation(r2, r7)
-            r1.setNeedsQualityThumb(r6)
-            if (r8 == 0) goto L_0x056c
-            org.telegram.messenger.ImageReceiver$BitmapHolder r4 = r0.currentThumb
-            if (r4 == 0) goto L_0x0499
-            org.telegram.messenger.ImageReceiver r10 = r0.centerImage
-            if (r1 != r10) goto L_0x0499
-            goto L_0x049a
-        L_0x0499:
-            r4 = 0
-        L_0x049a:
-            r10 = r7[r3]
-            if (r10 != 0) goto L_0x04a1
-            r10 = -1
-            r7[r3] = r10
-        L_0x04a1:
-            if (r9 == 0) goto L_0x04ac
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r10 = r9.photoThumbs
-            org.telegram.tgnet.TLRPC$PhotoSize r5 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r10, r5)
-            org.telegram.tgnet.TLObject r10 = r9.photoThumbsObject
-            goto L_0x04ae
-        L_0x04ac:
-            r5 = 0
-            r10 = 0
-        L_0x04ae:
-            if (r5 == 0) goto L_0x04b4
-            if (r5 != r2) goto L_0x04b4
+        L_0x040f:
+            org.telegram.ui.Components.AnimatedFileDrawable r6 = r0.currentAnimation
+            if (r6 == 0) goto L_0x041e
+            org.telegram.ui.PhotoViewer$FrameLayoutDrawer r1 = r0.containerView
+            r6.setSecondParentView(r1)
+            org.telegram.ui.Components.AnimatedFileDrawable r1 = r0.currentAnimation
+            r11.setImageBitmap((android.graphics.drawable.Drawable) r1)
+            return
+        L_0x041e:
+            int r6 = r0.sharedMediaType
+            r7 = 1
+            if (r6 != r7) goto L_0x0498
+            boolean r1 = r9.canPreviewDocument()
+            if (r1 == 0) goto L_0x048b
+            org.telegram.tgnet.TLRPC$Document r1 = r9.getDocument()
+            r11.setNeedsQualityThumb(r7)
+            org.telegram.messenger.ImageReceiver$BitmapHolder r2 = r0.currentThumb
+            if (r2 == 0) goto L_0x0439
+            org.telegram.messenger.ImageReceiver r6 = r0.centerImage
+            if (r11 != r6) goto L_0x0439
+            goto L_0x043a
+        L_0x0439:
             r2 = 0
-            goto L_0x04b5
-        L_0x04b4:
-            r2 = r5
-        L_0x04b5:
-            if (r9 == 0) goto L_0x04bd
-            boolean r5 = r9.isWebpage()
-            if (r5 != 0) goto L_0x04c8
-        L_0x04bd:
-            int r5 = r0.avatarsDialogId
-            if (r5 != 0) goto L_0x04c8
-            boolean r5 = r0.isEvent
-            if (r5 == 0) goto L_0x04c6
-            goto L_0x04c8
-        L_0x04c6:
-            r12 = 0
-            goto L_0x04c9
-        L_0x04c8:
-            r12 = 1
-        L_0x04c9:
-            if (r9 == 0) goto L_0x04e5
-            int r5 = r0.sharedMediaType
-            r6 = 5
-            if (r5 != r6) goto L_0x04e2
-            org.telegram.tgnet.TLRPC$Document r5 = r9.getDocument()
-            org.telegram.tgnet.TLRPC$TL_videoSize r6 = org.telegram.messenger.MessageObject.getDocumentVideoThumb(r5)
-            if (r6 == 0) goto L_0x04df
-            org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$TL_videoSize) r6, (org.telegram.tgnet.TLRPC$Document) r5)
-            goto L_0x04e0
-        L_0x04df:
-            r5 = 0
-        L_0x04e0:
-            r11 = r9
-            goto L_0x0511
-        L_0x04e2:
-            r11 = r9
-        L_0x04e3:
-            r5 = 0
-            goto L_0x0511
-        L_0x04e5:
-            int r5 = r0.avatarsDialogId
-            if (r5 == 0) goto L_0x050f
-            if (r5 <= 0) goto L_0x04fc
-            int r5 = r0.currentAccount
-            org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r5)
-            int r6 = r0.avatarsDialogId
+        L_0x043a:
+            if (r9 == 0) goto L_0x0443
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r6 = r9.photoThumbs
+            org.telegram.tgnet.TLRPC$PhotoSize r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r6, r3)
+            goto L_0x0444
+        L_0x0443:
+            r3 = 0
+        L_0x0444:
+            r6 = 1157627904(0x45000000, float:2048.0)
+            float r7 = org.telegram.messenger.AndroidUtilities.density
+            float r6 = r6 / r7
+            int r6 = (int) r6
+            org.telegram.messenger.ImageLocation r7 = org.telegram.messenger.ImageLocation.getForDocument(r1)
+            java.util.Locale r8 = java.util.Locale.US
+            java.lang.Object[] r4 = new java.lang.Object[r4]
+            java.lang.Integer r10 = java.lang.Integer.valueOf(r6)
+            r4[r12] = r10
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            org.telegram.tgnet.TLRPC$User r5 = r5.getUser(r6)
-            goto L_0x050d
-        L_0x04fc:
-            int r5 = r0.currentAccount
-            org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r5)
-            int r6 = r0.avatarsDialogId
-            int r6 = -r6
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
-            org.telegram.tgnet.TLRPC$Chat r5 = r5.getChat(r6)
-        L_0x050d:
-            r11 = r5
-            goto L_0x04e3
-        L_0x050f:
+            r10 = 1
+            r4[r10] = r6
+            java.lang.String r4 = java.lang.String.format(r8, r5, r4)
+            if (r2 != 0) goto L_0x046b
+            org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r3, (org.telegram.tgnet.TLRPC$Document) r1)
+            r5 = r3
+            goto L_0x046c
+        L_0x046b:
             r5 = 0
-            r11 = 0
-        L_0x0511:
-            if (r5 == 0) goto L_0x0540
+        L_0x046c:
+            if (r2 == 0) goto L_0x0477
+            android.graphics.drawable.BitmapDrawable r3 = new android.graphics.drawable.BitmapDrawable
+            android.graphics.Bitmap r2 = r2.bitmap
+            r3.<init>(r2)
+            r6 = r3
+            goto L_0x0478
+        L_0x0477:
             r6 = 0
-            r9 = 0
-            if (r4 != 0) goto L_0x051d
-            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForObject(r2, r10)
-            r10 = r2
-            goto L_0x051e
-        L_0x051d:
+        L_0x0478:
+            int r8 = r1.size
             r10 = 0
-        L_0x051e:
-            if (r4 == 0) goto L_0x052a
-            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable
-            android.graphics.Bitmap r4 = r4.bitmap
-            r2.<init>(r4)
-            r16 = r2
-            goto L_0x052c
-        L_0x052a:
-            r16 = 0
-        L_0x052c:
-            r13 = r7[r3]
-            r14 = 0
-            java.lang.String r7 = "b"
+            r12 = 0
+            java.lang.String r13 = "b"
             r1 = r22
-            r2 = r8
-            r3 = r6
+            r2 = r7
+            r3 = r4
             r4 = r5
-            r5 = r9
-            r6 = r10
-            r8 = r16
-            r9 = r13
-            r10 = r14
-            r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12)
-            goto L_0x0582
-        L_0x0540:
-            r5 = 0
-            if (r4 != 0) goto L_0x0549
-            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForObject(r2, r10)
-            r6 = r2
-            goto L_0x054a
-        L_0x0549:
-            r6 = 0
-        L_0x054a:
-            if (r4 == 0) goto L_0x0556
-            android.graphics.drawable.BitmapDrawable r2 = new android.graphics.drawable.BitmapDrawable
-            android.graphics.Bitmap r4 = r4.bitmap
-            r2.<init>(r4)
-            r16 = r2
-            goto L_0x0558
-        L_0x0556:
-            r16 = 0
-        L_0x0558:
-            r7 = r7[r3]
-            r9 = 0
-            java.lang.String r10 = "b"
-            r1 = r22
-            r2 = r8
-            r3 = r5
-            r4 = r6
-            r5 = r10
-            r6 = r16
-            r8 = r9
-            r9 = r11
+            r5 = r13
+            r7 = r8
+            r8 = r10
             r10 = r12
             r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
-            goto L_0x0582
-        L_0x056c:
-            r2 = r7[r3]
-            if (r2 != 0) goto L_0x0575
-            r2 = 0
-            r1.setImageBitmap((android.graphics.Bitmap) r2)
-            goto L_0x0582
-        L_0x0575:
+            goto L_0x0497
+        L_0x048b:
+            org.telegram.ui.Components.OtherDocumentPlaceholderDrawable r1 = new org.telegram.ui.Components.OtherDocumentPlaceholderDrawable
             android.app.Activity r2 = r0.parentActivity
-            android.content.res.Resources r2 = r2.getResources()
-            android.graphics.drawable.Drawable r2 = r2.getDrawable(r4)
-            r1.setImageBitmap((android.graphics.drawable.Drawable) r2)
-        L_0x0582:
+            org.telegram.ui.PhotoViewer$FrameLayoutDrawer r3 = r0.containerView
+            r1.<init>(r2, r3, r9)
+            r11.setImageBitmap((android.graphics.drawable.Drawable) r1)
+        L_0x0497:
+            return
+        L_0x0498:
+            r4 = 1
+            int[] r5 = new int[r4]
+            org.telegram.messenger.ImageLocation r6 = r0.getImageLocation(r1, r5)
+            org.telegram.tgnet.TLObject r1 = r0.getFileLocation(r1, r5)
+            r11.setNeedsQualityThumb(r4)
+            if (r6 == 0) goto L_0x0580
+            org.telegram.messenger.ImageReceiver$BitmapHolder r2 = r0.currentThumb
+            if (r2 == 0) goto L_0x04b1
+            org.telegram.messenger.ImageReceiver r7 = r0.centerImage
+            if (r11 != r7) goto L_0x04b1
+            goto L_0x04b2
+        L_0x04b1:
+            r2 = 0
+        L_0x04b2:
+            r7 = r5[r12]
+            if (r7 != 0) goto L_0x04b9
+            r7 = -1
+            r5[r12] = r7
+        L_0x04b9:
+            if (r9 == 0) goto L_0x04c4
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r7 = r9.photoThumbs
+            org.telegram.tgnet.TLRPC$PhotoSize r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r7, r3)
+            org.telegram.tgnet.TLObject r7 = r9.photoThumbsObject
+            goto L_0x04c6
+        L_0x04c4:
+            r3 = 0
+            r7 = 0
+        L_0x04c6:
+            if (r3 == 0) goto L_0x04cc
+            if (r3 != r1) goto L_0x04cc
+            r1 = 0
+            goto L_0x04cd
+        L_0x04cc:
+            r1 = r3
+        L_0x04cd:
+            if (r9 == 0) goto L_0x04d5
+            boolean r3 = r9.isWebpage()
+            if (r3 != 0) goto L_0x04e0
+        L_0x04d5:
+            int r3 = r0.avatarsDialogId
+            if (r3 != 0) goto L_0x04e0
+            boolean r3 = r0.isEvent
+            if (r3 == 0) goto L_0x04de
+            goto L_0x04e0
+        L_0x04de:
+            r13 = 0
+            goto L_0x04e1
+        L_0x04e0:
+            r13 = 1
+        L_0x04e1:
+            if (r9 == 0) goto L_0x04fe
+            int r3 = r0.sharedMediaType
+            r4 = 5
+            if (r3 != r4) goto L_0x04fb
+            org.telegram.tgnet.TLRPC$Document r3 = r9.getDocument()
+            org.telegram.tgnet.TLRPC$TL_videoSize r4 = org.telegram.messenger.MessageObject.getDocumentVideoThumb(r3)
+            if (r4 == 0) goto L_0x04f7
+            org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$TL_videoSize) r4, (org.telegram.tgnet.TLRPC$Document) r3)
+            goto L_0x04f8
+        L_0x04f7:
+            r3 = 0
+        L_0x04f8:
+            r4 = r3
+            r14 = r9
+            goto L_0x052a
+        L_0x04fb:
+            r14 = r9
+        L_0x04fc:
+            r4 = 0
+            goto L_0x052a
+        L_0x04fe:
+            int r3 = r0.avatarsDialogId
+            if (r3 == 0) goto L_0x0528
+            if (r3 <= 0) goto L_0x0515
+            int r3 = r0.currentAccount
+            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
+            int r4 = r0.avatarsDialogId
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+            org.telegram.tgnet.TLRPC$User r3 = r3.getUser(r4)
+            goto L_0x0526
+        L_0x0515:
+            int r3 = r0.currentAccount
+            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r3)
+            int r4 = r0.avatarsDialogId
+            int r4 = -r4
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
+            org.telegram.tgnet.TLRPC$Chat r3 = r3.getChat(r4)
+        L_0x0526:
+            r14 = r3
+            goto L_0x04fc
+        L_0x0528:
+            r4 = 0
+            r14 = 0
+        L_0x052a:
+            if (r4 == 0) goto L_0x0558
+            r3 = 0
+            r8 = 0
+            if (r2 != 0) goto L_0x0536
+            org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForObject(r1, r7)
+            r7 = r1
+            goto L_0x0537
+        L_0x0536:
+            r7 = 0
+        L_0x0537:
+            if (r2 == 0) goto L_0x0543
+            android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable
+            android.graphics.Bitmap r2 = r2.bitmap
+            r1.<init>(r2)
+            r16 = r1
+            goto L_0x0545
+        L_0x0543:
+            r16 = 0
+        L_0x0545:
+            r9 = r5[r12]
+            r10 = 0
+            java.lang.String r12 = "b"
+            r1 = r22
+            r2 = r6
+            r5 = r8
+            r6 = r7
+            r7 = r12
+            r8 = r16
+            r11 = r14
+            r12 = r13
+            r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12)
+            goto L_0x0596
+        L_0x0558:
+            r3 = 0
+            if (r2 != 0) goto L_0x0561
+            org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForObject(r1, r7)
+            r4 = r1
+            goto L_0x0562
+        L_0x0561:
+            r4 = 0
+        L_0x0562:
+            if (r2 == 0) goto L_0x056e
+            android.graphics.drawable.BitmapDrawable r1 = new android.graphics.drawable.BitmapDrawable
+            android.graphics.Bitmap r2 = r2.bitmap
+            r1.<init>(r2)
+            r16 = r1
+            goto L_0x0570
+        L_0x056e:
+            r16 = 0
+        L_0x0570:
+            r7 = r5[r12]
+            r8 = 0
+            java.lang.String r5 = "b"
+            r1 = r22
+            r2 = r6
+            r6 = r16
+            r9 = r14
+            r10 = r13
+            r1.setImage(r2, r3, r4, r5, r6, r7, r8, r9, r10)
+            goto L_0x0596
+        L_0x0580:
+            r1 = r5[r12]
+            if (r1 != 0) goto L_0x0589
+            r1 = 0
+            r11.setImageBitmap((android.graphics.Bitmap) r1)
+            goto L_0x0596
+        L_0x0589:
+            android.app.Activity r1 = r0.parentActivity
+            android.content.res.Resources r1 = r1.getResources()
+            android.graphics.drawable.Drawable r1 = r1.getDrawable(r2)
+            r11.setImageBitmap((android.graphics.drawable.Drawable) r1)
+        L_0x0596:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoViewer.setIndexToImage(org.telegram.messenger.ImageReceiver, int):void");

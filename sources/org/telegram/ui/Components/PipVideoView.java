@@ -283,7 +283,7 @@ public class PipVideoView {
             private float startX;
             private float startY;
 
-            public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+            public boolean dispatchTouchEvent(MotionEvent motionEvent) {
                 float rawX = motionEvent.getRawX();
                 float rawY = motionEvent.getRawY();
                 if (motionEvent.getAction() == 0) {
@@ -298,15 +298,9 @@ public class PipVideoView {
                     }
                     return true;
                 }
-                return super.onInterceptTouchEvent(motionEvent);
-            }
-
-            public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (!this.dragging) {
-                    return false;
+                    return super.dispatchTouchEvent(motionEvent);
                 }
-                float rawX = motionEvent.getRawX();
-                float rawY = motionEvent.getRawY();
                 if (motionEvent.getAction() == 2) {
                     WindowManager.LayoutParams access$500 = PipVideoView.this.windowLayoutParams;
                     access$500.x = (int) (((float) access$500.x) + (rawX - this.startX));
@@ -336,11 +330,15 @@ public class PipVideoView {
                     PipVideoView.this.windowManager.updateViewLayout(PipVideoView.this.windowView, PipVideoView.this.windowLayoutParams);
                     this.startX = rawX;
                     this.startY = rawY;
-                } else if (motionEvent.getAction() == 1) {
+                } else if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
                     this.dragging = false;
                     PipVideoView.this.animateToBoundsMaybe();
                 }
-                return super.onTouchEvent(motionEvent);
+                return true;
+            }
+
+            public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                return super.onInterceptTouchEvent(motionEvent);
             }
         };
         if (f > 1.0f) {

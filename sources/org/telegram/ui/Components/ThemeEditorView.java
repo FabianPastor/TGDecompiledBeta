@@ -301,7 +301,7 @@ public class ThemeEditorView {
                     r0.<init>(r13)
                     android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
                     r0.setScaleType(r1)
-                    r1 = 2131165897(0x7var_c9, float:1.7946024E38)
+                    r1 = 2131165896(0x7var_c8, float:1.7946022E38)
                     r0.setImageResource(r1)
                     android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
                     android.graphics.PorterDuff$Mode r2 = android.graphics.PorterDuff.Mode.MULTIPLY
@@ -385,7 +385,7 @@ public class ThemeEditorView {
                     r13.setImeOptions(r0)
                     org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
                     java.lang.String r0 = "Search"
-                    r1 = 2131626663(0x7f0e0aa7, float:1.8880569E38)
+                    r1 = 2131626665(0x7f0e0aa9, float:1.8880573E38)
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r1)
                     r13.setHint(r0)
                     org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
@@ -1133,7 +1133,7 @@ public class ThemeEditorView {
                 android.animation.AnimatorSet[] r4 = new android.animation.AnimatorSet[r4]
                 r0.shadowAnimation = r4
                 android.content.res.Resources r4 = r18.getResources()
-                r5 = 2131165885(0x7var_bd, float:1.7946E38)
+                r5 = 2131165884(0x7var_bc, float:1.7945998E38)
                 android.graphics.drawable.Drawable r4 = r4.getDrawable(r5)
                 android.graphics.drawable.Drawable r4 = r4.mutate()
                 r0.shadowDrawable = r4
@@ -1339,7 +1339,7 @@ public class ThemeEditorView {
                 int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r1.setPadding(r4, r5, r15, r5)
                 java.lang.String r4 = "SaveTheme"
-                r15 = 2131626645(0x7f0e0a95, float:1.8880532E38)
+                r15 = 2131626647(0x7f0e0a97, float:1.8880536E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r15)
                 java.lang.String r4 = r4.toUpperCase()
                 r1.setText(r4)
@@ -1430,7 +1430,7 @@ public class ThemeEditorView {
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r4.setPadding(r2, r5, r3, r5)
                 java.lang.String r2 = "Save"
-                r3 = 2131626642(0x7f0e0a92, float:1.8880526E38)
+                r3 = 2131626644(0x7f0e0a94, float:1.888053E38)
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
                 java.lang.String r2 = r2.toUpperCase()
                 r4.setText(r2)

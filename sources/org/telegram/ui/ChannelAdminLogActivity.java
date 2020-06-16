@@ -1776,7 +1776,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r2.putExtra(r5, r0)
         L_0x01fb:
             android.app.Activity r0 = r10.getParentActivity()
-            r3 = 2131626795(0x7f0e0b2b, float:1.8880836E38)
+            r3 = 2131626797(0x7f0e0b2d, float:1.888084E38)
             java.lang.String r4 = "ShareFile"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.content.Intent r2 = android.content.Intent.createChooser(r2, r3)
@@ -2755,7 +2755,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                         org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r5 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                         org.telegram.ui.ChannelAdminLogActivity r5 = org.telegram.ui.ChannelAdminLogActivity.this
                                         android.app.Activity r5 = r5.getParentActivity()
-                                        r6 = 2131626999(0x7f0e0bf7, float:1.888125E38)
+                                        r6 = 2131627002(0x7f0e0bfa, float:1.8881256E38)
                                         java.lang.String r7 = "TextCopied"
                                         java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                                         android.widget.Toast r5 = android.widget.Toast.makeText(r5, r6, r1)

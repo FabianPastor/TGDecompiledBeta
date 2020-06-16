@@ -11,6 +11,7 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.view.View;
 import androidx.annotation.Keep;
+import java.util.Arrays;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
@@ -280,24 +281,15 @@ public class ClippingImageView extends View {
     public void setRadius(int[] iArr) {
         if (iArr == null) {
             this.needRadius = false;
-            int i = 0;
-            while (true) {
-                int[] iArr2 = this.radius;
-                if (i < iArr2.length) {
-                    iArr2[i] = 0;
-                    i++;
-                } else {
-                    return;
-                }
-            }
-        } else {
-            System.arraycopy(iArr, 0, this.radius, 0, iArr.length);
-            this.needRadius = false;
-            for (int i2 : iArr) {
-                if (i2 != 0) {
-                    this.needRadius = true;
-                    return;
-                }
+            Arrays.fill(this.radius, 0);
+            return;
+        }
+        System.arraycopy(iArr, 0, this.radius, 0, iArr.length);
+        this.needRadius = false;
+        for (int i : iArr) {
+            if (i != 0) {
+                this.needRadius = true;
+                return;
             }
         }
     }

@@ -71,6 +71,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     /* access modifiers changed from: private */
     public boolean mixedPlayWhenReady;
     private SimpleExoPlayer player;
+    private int reapeatedCount;
     private Surface surface;
     private TextureView textureView;
     private MappingTrackSelector trackSelector;
@@ -110,9 +111,6 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
 
     public /* synthetic */ void onPlaybackSuppressionReasonChanged(int i) {
         Player.EventListener.CC.$default$onPlaybackSuppressionReasonChanged(this, i);
-    }
-
-    public void onPositionDiscontinuity(int i) {
     }
 
     public void onRepeatModeChanged(int i) {
@@ -728,6 +726,12 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
             if (audioVisualizerDelegate2 != null) {
                 audioVisualizerDelegate2.onVisualizerUpdate(false, true, (float[]) null);
             }
+        }
+    }
+
+    public void onPositionDiscontinuity(int i) {
+        if (i == 0) {
+            this.reapeatedCount++;
         }
     }
 

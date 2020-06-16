@@ -3443,13 +3443,13 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.widget.FrameLayout r0 = (android.widget.FrameLayout) r0
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             java.lang.String r1 = "TelegramPassport"
-            r2 = 2131626979(0x7f0e0be3, float:1.888121E38)
+            r2 = 2131626982(0x7f0e0be6, float:1.8881216E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setTitle(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
             r8 = 1
-            r1 = 2131165852(0x7var_c, float:1.7945933E38)
+            r1 = 2131165851(0x7var_b, float:1.794593E38)
             r0.addItem((int) r8, (int) r1)
             org.telegram.ui.Cells.HeaderCell r0 = new org.telegram.ui.Cells.HeaderCell
             r0.<init>(r7)
@@ -3508,7 +3508,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r0.setBackgroundDrawable(r9)
             org.telegram.ui.Cells.TextSettingsCell r0 = r6.deletePassportCell
             java.lang.String r9 = "TelegramPassportDelete"
-            r10 = 2131626982(0x7f0e0be6, float:1.8881216E38)
+            r10 = 2131626985(0x7f0e0be9, float:1.8881222E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r10 = 0
             r0.setText(r9, r10)
@@ -3566,7 +3566,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r7)
             r6.emptyImageView = r0
-            r2 = 2131165751(0x7var_, float:1.7945728E38)
+            r2 = 2131165750(0x7var_, float:1.7945726E38)
             r0.setImageResource(r2)
             android.widget.ImageView r0 = r6.emptyImageView
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
@@ -10461,7 +10461,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 r0.addView(r4, r8)
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
-                r14 = 2131165795(0x7var_, float:1.7945817E38)
+                r14 = 2131165793(0x7var_, float:1.7945813E38)
                 r8.setImageResource(r14)
                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
                 if (r14 == 0) goto L_0x00f9
@@ -10529,7 +10529,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.ImageView r14 = new android.widget.ImageView
                 r14.<init>(r2)
                 r0.blackImageView = r14
-                r11 = 2131165918(0x7var_de, float:1.7946067E38)
+                r11 = 2131165917(0x7var_dd, float:1.7946065E38)
                 r14.setImageResource(r11)
                 android.widget.ImageView r11 = r0.blackImageView
                 android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
@@ -10550,7 +10550,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131165916(0x7var_dc, float:1.7946063E38)
+                r10 = 2131165915(0x7var_db, float:1.794606E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -10562,7 +10562,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131626754(0x7f0e0b02, float:1.8880753E38)
+                r8 = 2131626756(0x7f0e0b04, float:1.8880757E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -10571,7 +10571,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131165917(0x7var_dd, float:1.7946065E38)
+                r10 = 2131165916(0x7var_dc, float:1.7946063E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -10590,7 +10590,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131626758(0x7f0e0b06, float:1.8880761E38)
+                r8 = 2131626760(0x7f0e0b08, float:1.8880765E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -11595,7 +11595,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         if (r2 != r6) goto L_0x007e
                                         org.telegram.ui.PassportActivity$PhoneConfirmationView r2 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131626874(0x7f0e0b7a, float:1.8880997E38)
+                                        r3 = 2131626877(0x7f0e0b7d, float:1.8881003E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -11703,7 +11703,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                     L_0x0140:
                                         org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131626750(0x7f0e0afe, float:1.8880745E38)
+                                        r1 = 2131626752(0x7f0e0b00, float:1.888075E38)
                                         java.lang.String r2 = "SendingSms"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)

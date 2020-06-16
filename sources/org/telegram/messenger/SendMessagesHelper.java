@@ -13862,7 +13862,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         if (r59.size() == 1) goto L_0x0885;
      */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r5v30, types: [int, boolean] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r5v30, types: [boolean, int] */
     /* JADX WARNING: Missing exception handler attribute for start block: B:230:0x0603 */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Removed duplicated region for block: B:125:0x02db A[Catch:{ Exception -> 0x02cc }] */

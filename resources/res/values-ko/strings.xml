@@ -2897,7 +2897,6 @@
     <string name="ShowVotes_other">더 보기 (%1$d명)</string>
     <string name="ShowVotes_two">더 보기 (%1$d명)</string>
     <string name="ShowVotes_zero">더 보기 (%1$d명)</string>
-    <string name="Shuffle">섞기</string>
     <string name="SignUp">가입</string>
     <string name="SinglePhotosHelp">미디어를 개별 메시지로 보내기</string>
     <string name="SlideToCancel">밀어서 취소</string>

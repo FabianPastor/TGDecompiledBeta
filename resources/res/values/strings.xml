@@ -2634,8 +2634,10 @@
     <string name="RemovedUser_two">%1$d removed users</string>
     <string name="RemovedUser_zero">%1$d removed users</string>
     <string name="RepeatDisabled">Off</string>
+    <string name="RepeatList">Repeat list</string>
     <string name="RepeatNotifications">Repeat Notifications</string>
     <string name="RepeatNotificationsNever">Never</string>
+    <string name="RepeatSong">Repeat song</string>
     <string name="Reply">Reply</string>
     <string name="ReplyToGroup">Reply to %1$s</string>
     <string name="ReplyToUser">Reply to %1$s</string>
@@ -2917,7 +2919,7 @@
     <string name="ShowVotes_other">Show More (%1$d)</string>
     <string name="ShowVotes_two">Show More (%1$d)</string>
     <string name="ShowVotes_zero">Show More (%1$d)</string>
-    <string name="Shuffle">Shuffle</string>
+    <string name="ShuffleList">Shuffle list</string>
     <string name="SignUp">Sign Up</string>
     <string name="SinglePhotosHelp">Show media as separate messages</string>
     <string name="SlideToCancel">SLIDE TO CANCEL</string>

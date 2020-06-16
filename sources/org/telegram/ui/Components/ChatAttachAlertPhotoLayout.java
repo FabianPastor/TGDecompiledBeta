@@ -2319,25 +2319,16 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 
     @Keep
     public void setCameraOpenProgress(float f) {
-        int i;
-        int i2;
-        float f2;
         if (this.cameraView != null) {
             this.cameraOpenProgress = f;
             int[] iArr = this.animateCameraValues;
-            float f3 = (float) iArr[1];
-            float f4 = (float) iArr[2];
+            float f2 = (float) iArr[1];
+            float f3 = (float) iArr[2];
             Point point = AndroidUtilities.displaySize;
-            if (point.x < point.y) {
-                f2 = (float) ((this.parentAlert.getContainer().getWidth() - this.parentAlert.getLeftInset()) - this.parentAlert.getRightInset());
-                i2 = this.parentAlert.getContainer().getHeight();
-                i = this.parentAlert.getBottomInset();
-            } else {
-                f2 = (float) ((this.parentAlert.getContainer().getWidth() - this.parentAlert.getLeftInset()) - this.parentAlert.getRightInset());
-                i2 = this.parentAlert.getContainer().getHeight();
-                i = this.parentAlert.getBottomInset();
-            }
-            float f5 = (float) (i2 - i);
+            int i = point.x;
+            int i2 = point.y;
+            float width = (float) ((this.parentAlert.getContainer().getWidth() - this.parentAlert.getLeftInset()) - this.parentAlert.getRightInset());
+            float height = (float) (this.parentAlert.getContainer().getHeight() - this.parentAlert.getBottomInset());
             if (f == 0.0f) {
                 this.cameraView.setClipTop(this.cameraViewOffsetY);
                 this.cameraView.setClipBottom(this.cameraViewOffsetBottomY);
@@ -2350,16 +2341,16 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 this.cameraView.setTranslationY(0.0f);
             }
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.cameraView.getLayoutParams();
-            layoutParams.width = (int) (f3 + ((f2 - f3) * f));
-            layoutParams.height = (int) (f4 + ((f5 - f4) * f));
+            layoutParams.width = (int) (f2 + ((width - f2) * f));
+            layoutParams.height = (int) (f3 + ((height - f3) * f));
             if (f != 0.0f) {
-                float f6 = 1.0f - f;
-                this.cameraView.setClipTop((int) (((float) this.cameraViewOffsetY) * f6));
-                this.cameraView.setClipBottom((int) (((float) this.cameraViewOffsetBottomY) * f6));
+                float f4 = 1.0f - f;
+                this.cameraView.setClipTop((int) (((float) this.cameraViewOffsetY) * f4));
+                this.cameraView.setClipBottom((int) (((float) this.cameraViewOffsetBottomY) * f4));
                 int[] iArr2 = this.cameraViewLocation;
-                layoutParams.leftMargin = (int) (((float) iArr2[0]) * f6);
+                layoutParams.leftMargin = (int) (((float) iArr2[0]) * f4);
                 int[] iArr3 = this.animateCameraValues;
-                layoutParams.topMargin = (int) (((float) iArr3[0]) + (((float) (iArr2[1] - iArr3[0])) * f6));
+                layoutParams.topMargin = (int) (((float) iArr3[0]) + (((float) (iArr2[1] - iArr3[0])) * f4));
             } else {
                 layoutParams.leftMargin = 0;
                 layoutParams.topMargin = 0;

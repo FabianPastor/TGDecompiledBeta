@@ -1262,7 +1262,7 @@ public class FileRefController extends BaseController {
 
     /* JADX WARNING: type inference failed for: r8v0 */
     /* JADX WARNING: type inference failed for: r8v2 */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r8v1, types: [int, boolean] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r8v1, types: [boolean, int] */
     /* JADX WARNING: Removed duplicated region for block: B:202:0x0421  */
     /* JADX WARNING: Removed duplicated region for block: B:207:0x042e  */
     /* JADX WARNING: Removed duplicated region for block: B:221:0x0126 A[SYNTHETIC] */

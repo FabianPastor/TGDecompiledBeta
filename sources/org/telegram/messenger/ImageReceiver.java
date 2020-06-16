@@ -137,11 +137,13 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     public static class BitmapHolder {
         public Bitmap bitmap;
         private String key;
+        public int orientation;
         private boolean recycleOnRelease;
 
-        public BitmapHolder(Bitmap bitmap2, String str) {
+        public BitmapHolder(Bitmap bitmap2, String str, int i) {
             this.bitmap = bitmap2;
             this.key = str;
+            this.orientation = i;
             if (str != null) {
                 ImageLoader.getInstance().incrementUseCount(this.key);
             }
@@ -1559,81 +1561,84 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         return null;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x007f  */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x0085  */
     /* JADX WARNING: Removed duplicated region for block: B:38:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public org.telegram.messenger.ImageReceiver.BitmapHolder getBitmapSafe() {
         /*
-            r4 = this;
-            org.telegram.ui.Components.AnimatedFileDrawable r0 = r4.getAnimation()
-            org.telegram.ui.Components.RLottieDrawable r1 = r4.getLottieAnimation()
+            r5 = this;
+            org.telegram.ui.Components.AnimatedFileDrawable r0 = r5.getAnimation()
+            org.telegram.ui.Components.RLottieDrawable r1 = r5.getLottieAnimation()
             r2 = 0
-            if (r1 == 0) goto L_0x0018
-            boolean r3 = r1.hasBitmap()
-            if (r3 == 0) goto L_0x0018
+            r3 = 0
+            if (r1 == 0) goto L_0x0019
+            boolean r4 = r1.hasBitmap()
+            if (r4 == 0) goto L_0x0019
             android.graphics.Bitmap r0 = r1.getAnimatedBitmap()
-        L_0x0015:
+        L_0x0016:
             r1 = r2
-            goto L_0x007d
-        L_0x0018:
-            if (r0 == 0) goto L_0x0025
+            goto L_0x0083
+        L_0x0019:
+            if (r0 == 0) goto L_0x002b
             boolean r1 = r0.hasBitmap()
-            if (r1 == 0) goto L_0x0025
-            android.graphics.Bitmap r0 = r0.getAnimatedBitmap()
-            goto L_0x0015
-        L_0x0025:
-            android.graphics.drawable.Drawable r0 = r4.currentMediaDrawable
+            if (r1 == 0) goto L_0x002b
+            android.graphics.Bitmap r1 = r0.getAnimatedBitmap()
+            int r3 = r0.getOrientation()
+            r0 = r1
+            goto L_0x0016
+        L_0x002b:
+            android.graphics.drawable.Drawable r0 = r5.currentMediaDrawable
             boolean r1 = r0 instanceof android.graphics.drawable.BitmapDrawable
-            if (r1 == 0) goto L_0x003c
+            if (r1 == 0) goto L_0x0042
             boolean r1 = r0 instanceof org.telegram.ui.Components.AnimatedFileDrawable
-            if (r1 != 0) goto L_0x003c
+            if (r1 != 0) goto L_0x0042
             boolean r1 = r0 instanceof org.telegram.ui.Components.RLottieDrawable
-            if (r1 != 0) goto L_0x003c
+            if (r1 != 0) goto L_0x0042
             android.graphics.drawable.BitmapDrawable r0 = (android.graphics.drawable.BitmapDrawable) r0
             android.graphics.Bitmap r0 = r0.getBitmap()
-            java.lang.String r1 = r4.currentMediaKey
-            goto L_0x007d
-        L_0x003c:
-            android.graphics.drawable.Drawable r0 = r4.currentImageDrawable
+            java.lang.String r1 = r5.currentMediaKey
+            goto L_0x0083
+        L_0x0042:
+            android.graphics.drawable.Drawable r0 = r5.currentImageDrawable
             boolean r1 = r0 instanceof android.graphics.drawable.BitmapDrawable
-            if (r1 == 0) goto L_0x0055
+            if (r1 == 0) goto L_0x005b
             boolean r1 = r0 instanceof org.telegram.ui.Components.AnimatedFileDrawable
-            if (r1 != 0) goto L_0x0055
-            android.graphics.drawable.Drawable r1 = r4.currentMediaDrawable
+            if (r1 != 0) goto L_0x005b
+            android.graphics.drawable.Drawable r1 = r5.currentMediaDrawable
             boolean r1 = r1 instanceof org.telegram.ui.Components.RLottieDrawable
-            if (r1 != 0) goto L_0x0055
+            if (r1 != 0) goto L_0x005b
             android.graphics.drawable.BitmapDrawable r0 = (android.graphics.drawable.BitmapDrawable) r0
             android.graphics.Bitmap r0 = r0.getBitmap()
-            java.lang.String r1 = r4.currentImageKey
-            goto L_0x007d
-        L_0x0055:
-            android.graphics.drawable.Drawable r0 = r4.currentThumbDrawable
+            java.lang.String r1 = r5.currentImageKey
+            goto L_0x0083
+        L_0x005b:
+            android.graphics.drawable.Drawable r0 = r5.currentThumbDrawable
             boolean r1 = r0 instanceof android.graphics.drawable.BitmapDrawable
-            if (r1 == 0) goto L_0x006e
+            if (r1 == 0) goto L_0x0074
             boolean r1 = r0 instanceof org.telegram.ui.Components.AnimatedFileDrawable
-            if (r1 != 0) goto L_0x006e
-            android.graphics.drawable.Drawable r1 = r4.currentMediaDrawable
+            if (r1 != 0) goto L_0x0074
+            android.graphics.drawable.Drawable r1 = r5.currentMediaDrawable
             boolean r1 = r1 instanceof org.telegram.ui.Components.RLottieDrawable
-            if (r1 != 0) goto L_0x006e
+            if (r1 != 0) goto L_0x0074
             android.graphics.drawable.BitmapDrawable r0 = (android.graphics.drawable.BitmapDrawable) r0
             android.graphics.Bitmap r0 = r0.getBitmap()
-            java.lang.String r1 = r4.currentThumbKey
-            goto L_0x007d
-        L_0x006e:
-            android.graphics.drawable.Drawable r0 = r4.staticThumbDrawable
+            java.lang.String r1 = r5.currentThumbKey
+            goto L_0x0083
+        L_0x0074:
+            android.graphics.drawable.Drawable r0 = r5.staticThumbDrawable
             boolean r1 = r0 instanceof android.graphics.drawable.BitmapDrawable
-            if (r1 == 0) goto L_0x007b
+            if (r1 == 0) goto L_0x0081
             android.graphics.drawable.BitmapDrawable r0 = (android.graphics.drawable.BitmapDrawable) r0
             android.graphics.Bitmap r0 = r0.getBitmap()
-            goto L_0x0015
-        L_0x007b:
+            goto L_0x0016
+        L_0x0081:
             r0 = r2
             r1 = r0
-        L_0x007d:
-            if (r0 == 0) goto L_0x0084
+        L_0x0083:
+            if (r0 == 0) goto L_0x008a
             org.telegram.messenger.ImageReceiver$BitmapHolder r2 = new org.telegram.messenger.ImageReceiver$BitmapHolder
-            r2.<init>(r0, r1)
-        L_0x0084:
+            r2.<init>(r0, r1, r3)
+        L_0x008a:
             return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageReceiver.getBitmapSafe():org.telegram.messenger.ImageReceiver$BitmapHolder");
@@ -1669,7 +1674,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             }
         }
         if (bitmap != null) {
-            return new BitmapHolder(bitmap, str);
+            return new BitmapHolder(bitmap, str, 0);
         }
         return null;
     }

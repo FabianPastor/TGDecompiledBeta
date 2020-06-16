@@ -74,9 +74,6 @@ public class VideoTimelineView extends View {
     public void setKeyframes(ArrayList<Bitmap> arrayList) {
         this.keyframes.clear();
         this.keyframes.addAll(arrayList);
-        if (this.isRoundFrames && !arrayList.isEmpty()) {
-            this.rect1 = new Rect(AndroidUtilities.dp(0.0f), AndroidUtilities.dp(0.0f), AndroidUtilities.dp(36.0f), AndroidUtilities.dp(36.0f));
-        }
     }
 
     public VideoTimelineView(Context context) {

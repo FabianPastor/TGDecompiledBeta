@@ -16936,7 +16936,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         L_0x0053:
             android.app.Activity r0 = r5.parentActivity     // Catch:{ Exception -> 0x009c }
             java.lang.String r2 = "ShareFile"
-            r3 = 2131626795(0x7f0e0b2b, float:1.8880836E38)
+            r3 = 2131626797(0x7f0e0b2d, float:1.888084E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ Exception -> 0x009c }
             android.content.Intent r1 = android.content.Intent.createChooser(r1, r2)     // Catch:{ Exception -> 0x009c }
             r2 = 500(0x1f4, float:7.0E-43)

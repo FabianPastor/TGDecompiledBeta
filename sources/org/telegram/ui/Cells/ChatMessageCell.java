@@ -12525,7 +12525,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             if (r3 == 0) goto L_0x39f5
             org.telegram.messenger.ImageReceiver r2 = r1.photoImage
             android.content.res.Resources r3 = r65.getResources()
-            r4 = 2131165944(0x7var_f8, float:1.794612E38)
+            r4 = 2131165943(0x7var_f7, float:1.7946117E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r4)
             r2.setImageBitmap((android.graphics.drawable.Drawable) r3)
         L_0x39f2:
@@ -21414,7 +21414,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r6 = r0.via_bot_id
             java.lang.String r7 = " %s <b>%s</b>"
             java.lang.String r8 = "@"
-            r9 = 2131627231(0x7f0e0cdf, float:1.888172E38)
+            r9 = 2131627234(0x7f0e0ce2, float:1.8881727E38)
             java.lang.String r10 = "ViaBot"
             r11 = 2
             if (r6 == 0) goto L_0x0108
@@ -21647,7 +21647,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             int r8 = org.telegram.ui.ActionBar.Theme.getColor(r8)
         L_0x0287:
             r11 = r20
-            r10 = 2131627231(0x7f0e0cdf, float:1.888172E38)
+            r10 = 2131627234(0x7f0e0ce2, float:1.8881727E38)
             goto L_0x029f
         L_0x028d:
             org.telegram.messenger.MessageObject r8 = r1.currentMessageObject
@@ -21961,7 +21961,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
             r8 = 3
             java.lang.Object[] r8 = new java.lang.Object[r8]
             r8[r5] = r12
-            r13 = 2131627231(0x7f0e0cdf, float:1.888172E38)
+            r13 = 2131627234(0x7f0e0ce2, float:1.8881727E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r11, r13)
             r13 = 1
             r8[r13] = r11

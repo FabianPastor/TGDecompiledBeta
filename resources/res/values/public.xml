@@ -675,7 +675,6 @@
     <public type="drawable" name="msg_views" id="NUM" />
     <public type="drawable" name="msg_warning" id="NUM" />
     <public type="drawable" name="music_empty" id="NUM" />
-    <public type="drawable" name="music_reverse" id="NUM" />
     <public type="drawable" name="navigate" id="NUM" />
     <public type="drawable" name="nearby_l" id="NUM" />
     <public type="drawable" name="nearby_m" id="NUM" />
@@ -684,7 +683,6 @@
     <public type="drawable" name="no_apps" id="NUM" />
     <public type="drawable" name="no_passport" id="NUM" />
     <public type="drawable" name="no_password" id="NUM" />
-    <public type="drawable" name="nocover" id="NUM" />
     <public type="drawable" name="nocover_big" id="NUM" />
     <public type="drawable" name="nocover_small" id="NUM" />
     <public type="drawable" name="nophotos" id="NUM" />
@@ -749,18 +747,19 @@
     <public type="drawable" name="phototime" id="NUM" />
     <public type="drawable" name="photoview_placeholder" id="NUM" />
     <public type="drawable" name="pin" id="NUM" />
-    <public type="drawable" name="pl_next" id="NUM" />
-    <public type="drawable" name="pl_pause" id="NUM" />
-    <public type="drawable" name="pl_play" id="NUM" />
-    <public type="drawable" name="pl_previous" id="NUM" />
-    <public type="drawable" name="pl_repeat" id="NUM" />
-    <public type="drawable" name="pl_repeat1" id="NUM" />
-    <public type="drawable" name="pl_shuffle" id="NUM" />
     <public type="drawable" name="place_x" id="NUM" />
     <public type="drawable" name="places_btn" id="NUM" />
     <public type="drawable" name="play_big" id="NUM" />
     <public type="drawable" name="play_mini_video" id="NUM" />
     <public type="drawable" name="player" id="NUM" />
+    <public type="drawable" name="player_new_next" id="NUM" />
+    <public type="drawable" name="player_new_order" id="NUM" />
+    <public type="drawable" name="player_new_pause" id="NUM" />
+    <public type="drawable" name="player_new_play" id="NUM" />
+    <public type="drawable" name="player_new_previous" id="NUM" />
+    <public type="drawable" name="player_new_repeatall" id="NUM" />
+    <public type="drawable" name="player_new_repeatone" id="NUM" />
+    <public type="drawable" name="player_new_shuffle" id="NUM" />
     <public type="drawable" name="plus" id="NUM" />
     <public type="drawable" name="poll_add_circle" id="NUM" />
     <public type="drawable" name="poll_add_plus" id="NUM" />
@@ -3774,8 +3773,10 @@
     <public type="string" name="RemovedUser_two" id="NUM" />
     <public type="string" name="RemovedUser_zero" id="NUM" />
     <public type="string" name="RepeatDisabled" id="NUM" />
+    <public type="string" name="RepeatList" id="NUM" />
     <public type="string" name="RepeatNotifications" id="NUM" />
     <public type="string" name="RepeatNotificationsNever" id="NUM" />
+    <public type="string" name="RepeatSong" id="NUM" />
     <public type="string" name="Reply" id="NUM" />
     <public type="string" name="ReplyToGroup" id="NUM" />
     <public type="string" name="ReplyToUser" id="NUM" />
@@ -4057,7 +4058,7 @@
     <public type="string" name="ShowVotes_other" id="NUM" />
     <public type="string" name="ShowVotes_two" id="NUM" />
     <public type="string" name="ShowVotes_zero" id="NUM" />
-    <public type="string" name="Shuffle" id="NUM" />
+    <public type="string" name="ShuffleList" id="NUM" />
     <public type="string" name="SignUp" id="NUM" />
     <public type="string" name="SinglePhotosHelp" id="NUM" />
     <public type="string" name="SlideToCancel" id="NUM" />

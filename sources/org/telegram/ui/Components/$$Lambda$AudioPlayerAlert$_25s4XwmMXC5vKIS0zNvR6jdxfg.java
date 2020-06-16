@@ -12,6 +12,6 @@ public final /* synthetic */ class $$Lambda$AudioPlayerAlert$_25s4XwmMXC5vKIS0zN
     }
 
     public final void onClick(View view) {
-        MediaController.getInstance().playPreviousMessage();
+        MediaController.getInstance().playNextMessage();
     }
 }

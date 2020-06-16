@@ -516,10 +516,9 @@ public class SharedConfig {
         edit.commit();
     }
 
-    public static void toggleRepeatMode() {
-        int i = repeatMode + 1;
+    public static void setRepeatMode(int i) {
         repeatMode = i;
-        if (i > 2) {
+        if (i < 0 || i > 2) {
             repeatMode = 0;
         }
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();

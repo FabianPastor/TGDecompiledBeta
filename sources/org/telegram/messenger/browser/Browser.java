@@ -390,7 +390,7 @@ public class Browser {
             r3 = 2131165243(0x7var_b, float:1.7944698E38)
             android.graphics.Bitmap r1 = android.graphics.BitmapFactory.decodeResource(r1, r3)     // Catch:{ Exception -> 0x0223 }
             java.lang.String r3 = "ShareFile"
-            r4 = 2131626795(0x7f0e0b2b, float:1.8880836E38)
+            r4 = 2131626797(0x7f0e0b2d, float:1.888084E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x0223 }
             android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0223 }
             android.app.PendingIntent r0 = android.app.PendingIntent.getBroadcast(r4, r12, r0, r12)     // Catch:{ Exception -> 0x0223 }

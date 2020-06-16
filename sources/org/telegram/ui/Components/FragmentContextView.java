@@ -786,6 +786,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 } else {
                     ((FrameLayout.LayoutParams) getLayoutParams()).topMargin = -AndroidUtilities.dp(72.0f);
                 }
+                FragmentContextViewDelegate fragmentContextViewDelegate2 = this.delegate;
+                if (fragmentContextViewDelegate2 != null) {
+                    fragmentContextViewDelegate2.onAnimation(true, true);
+                    this.delegate.onAnimation(false, true);
+                }
             }
             if (!this.visible) {
                 if (!z) {
@@ -801,9 +806,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     } else {
                         ((FrameLayout.LayoutParams) getLayoutParams()).topMargin = -AndroidUtilities.dp(72.0f);
                     }
-                    FragmentContextViewDelegate fragmentContextViewDelegate2 = this.delegate;
-                    if (fragmentContextViewDelegate2 != null) {
-                        fragmentContextViewDelegate2.onAnimation(true, true);
+                    FragmentContextViewDelegate fragmentContextViewDelegate3 = this.delegate;
+                    if (fragmentContextViewDelegate3 != null) {
+                        fragmentContextViewDelegate3.onAnimation(true, true);
                     }
                     this.animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, "topPadding", new float[]{(float) AndroidUtilities.dp2(36.0f)})});
                     this.animatorSet.setDuration(200);

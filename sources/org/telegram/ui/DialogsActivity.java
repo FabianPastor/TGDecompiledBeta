@@ -2169,7 +2169,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         org.telegram.ui.DialogsActivity r0 = org.telegram.ui.DialogsActivity.this
                         android.app.Activity r0 = r0.getParentActivity()
                         android.content.res.Resources r0 = r0.getResources()
-                        r1 = 2131165838(0x7var_e, float:1.7945904E38)
+                        r1 = 2131165837(0x7var_d, float:1.7945902E38)
                         android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
                         android.graphics.drawable.Drawable r0 = r0.mutate()
                         r0.getPadding(r13)
@@ -2238,7 +2238,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                         r6 = 2131625277(0x7f0e053d, float:1.8877757E38)
                         java.lang.String r10 = "FilterReorder"
                         java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r10, r6)
-                        r10 = 2131165942(0x7var_f6, float:1.7946115E38)
+                        r10 = 2131165941(0x7var_f5, float:1.7946113E38)
                         r5.setTextAndIcon(r6, r10)
                         goto L_0x014f
                     L_0x011f:
@@ -2463,7 +2463,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (AccountInstance.getInstance(i2).getUserConfig().getCurrentUser() != null) {
                     AccountSelectCell accountSelectCell = new AccountSelectCell(context2);
                     accountSelectCell.setAccount(i2, true);
-                    this.switchItem.addSubItem(i2 + 10, accountSelectCell, AndroidUtilities.dp(230.0f), AndroidUtilities.dp(48.0f));
+                    this.switchItem.addSubItem(i2 + 10, (View) accountSelectCell, AndroidUtilities.dp(230.0f), AndroidUtilities.dp(48.0f));
                 }
             }
         }
@@ -3557,9 +3557,9 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             this.actionBar.setSearchTextColor(Theme.getColor("actionBarDefaultSearchArchivedPlaceholder"), true);
         }
         if (!this.onlySelect && this.initialDialogsType == 0) {
-            ImageView imageView2 = new ImageView(context2);
-            this.blurredView = imageView2;
-            imageView2.setVisibility(8);
+            View view = new View(context2);
+            this.blurredView = view;
+            view.setVisibility(8);
             contentView.addView(this.blurredView, LayoutHelper.createFrame(-1, -1.0f));
         }
         updateFilterTabs(false);
@@ -5090,7 +5090,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int r4 = r4.clientUserId
             if (r8 != r4) goto L_0x0117
             java.lang.Object[] r8 = new java.lang.Object[r2]
-            r0 = 2131626651(0x7f0e0a9b, float:1.8880544E38)
+            r0 = 2131626653(0x7f0e0a9d, float:1.8880548E38)
             java.lang.String r3 = "SavedMessages"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             r8[r1] = r0
@@ -6863,7 +6863,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             int r3 = r0.canUnarchiveCount
             if (r3 == 0) goto L_0x024d
             org.telegram.ui.ActionBar.ActionBarMenuSubItem r3 = r0.archiveItem
-            r4 = 2131627102(0x7f0e0c5e, float:1.8881459E38)
+            r4 = 2131627105(0x7f0e0CLASSNAME, float:1.8881465E38)
             java.lang.String r5 = "Unarchive"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r5 = 2131165735(0x7var_, float:1.7945696E38)
@@ -7051,7 +7051,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             r2 = 2131165738(0x7var_a, float:1.7945702E38)
             r1.setIcon((int) r2)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.pinItem
-            r2 = 2131627116(0x7f0e0c6c, float:1.8881487E38)
+            r2 = 2131627119(0x7f0e0c6f, float:1.8881493E38)
             java.lang.String r3 = "UnpinFromTop"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setContentDescription(r2)
@@ -8489,8 +8489,6 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_progressBackground"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_player_progressCachedBackground"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_progress"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_placeholder"));
-        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_placeholderBackground"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_button"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_buttonActive"));
         return arrayList;
