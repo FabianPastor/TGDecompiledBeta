@@ -371,7 +371,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     /* access modifiers changed from: private */
     public AnimatorSet writeButtonAnimation;
 
-    public static class AvatarImageView extends BackupImageView {
+    public class AvatarImageView extends BackupImageView {
         private float foregroundAlpha;
         private ImageReceiver foregroundImageReceiver = new ImageReceiver(this);
         private final Paint placeholderPaint;
@@ -444,6 +444,14 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             float f = (float) this.foregroundImageReceiver.getRoundRadius()[0];
             canvas.drawRoundRect(this.rect, f, f, this.placeholderPaint);
         }
+
+        public void invalidate() {
+            super.invalidate();
+            if (ProfileActivity.this.avatarsViewPager != null) {
+                ProfileActivity.this.avatarsViewPager.getCurrentItemView();
+                ProfileActivity.this.avatarsViewPager.invalidate();
+            }
+        }
     }
 
     private class TopView extends View {
@@ -469,19 +477,19 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         /* access modifiers changed from: protected */
         public void onDraw(Canvas canvas) {
-            float access$700 = ProfileActivity.this.extraHeight + ((float) (ActionBar.getCurrentActionBarHeight() + (ProfileActivity.this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0)));
-            int access$800 = (int) ((1.0f - ProfileActivity.this.mediaHeaderAnimationProgress) * access$700);
-            if (access$800 != 0) {
+            float access$800 = ProfileActivity.this.extraHeight + ((float) (ActionBar.getCurrentActionBarHeight() + (ProfileActivity.this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0)));
+            int access$900 = (int) ((1.0f - ProfileActivity.this.mediaHeaderAnimationProgress) * access$800);
+            if (access$900 != 0) {
                 this.paint.setColor(this.currentColor);
-                canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) access$800, this.paint);
+                canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) access$900, this.paint);
             }
-            float f = (float) access$800;
-            if (f != access$700) {
+            float f = (float) access$900;
+            if (f != access$800) {
                 this.paint.setColor(Theme.getColor("windowBackgroundWhite"));
-                canvas.drawRect(0.0f, f, (float) getMeasuredWidth(), access$700, this.paint);
+                canvas.drawRect(0.0f, f, (float) getMeasuredWidth(), access$800, this.paint);
             }
             if (ProfileActivity.this.parentLayout != null) {
-                ProfileActivity.this.parentLayout.drawHeaderShadow(canvas, (int) (ProfileActivity.this.headerShadowAlpha * 255.0f), (int) access$700);
+                ProfileActivity.this.parentLayout.drawHeaderShadow(canvas, (int) (ProfileActivity.this.headerShadowAlpha * 255.0f), (int) access$800);
             }
         }
     }

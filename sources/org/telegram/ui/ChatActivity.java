@@ -20406,11 +20406,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     }
 
     private void createDeleteMessagesAlert(MessageObject messageObject, MessageObject.GroupedMessages groupedMessages, int i) {
-        AlertsCreator.createDeleteMessagesAlert(this, this.currentUser, this.currentChat, this.currentEncryptedChat, this.chatInfo, this.mergeDialogId, messageObject, this.selectedMessagesIds, groupedMessages, this.inScheduleMode, i, new Runnable() {
-            public final void run() {
-                ChatActivity.this.lambda$createDeleteMessagesAlert$88$ChatActivity();
-            }
-        });
+        if (messageObject != null || this.selectedMessagesIds[0].size() + this.selectedMessagesIds[1].size() != 0) {
+            AlertsCreator.createDeleteMessagesAlert(this, this.currentUser, this.currentChat, this.currentEncryptedChat, this.chatInfo, this.mergeDialogId, messageObject, this.selectedMessagesIds, groupedMessages, this.inScheduleMode, i, new Runnable() {
+                public final void run() {
+                    ChatActivity.this.lambda$createDeleteMessagesAlert$88$ChatActivity();
+                }
+            });
+        }
     }
 
     public /* synthetic */ void lambda$createDeleteMessagesAlert$88$ChatActivity() {

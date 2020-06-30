@@ -1748,8 +1748,8 @@ public class MediaCodecVideoConvertor {
             if (r94 == 0) goto L_0x0582
             int r32 = (r85 > r6 ? 1 : (r85 == r6 ? 0 : -1))
             if (r32 < 0) goto L_0x0062
-            r1 = 1677721(0x199999, float:2.350988E-39)
-            r9 = 1677721(0x199999, float:2.350988E-39)
+            r1 = 1560000(0x17cdc0, float:2.186026E-39)
+            r9 = 1560000(0x17cdc0, float:2.186026E-39)
             goto L_0x0067
         L_0x0062:
             if (r9 > 0) goto L_0x0067

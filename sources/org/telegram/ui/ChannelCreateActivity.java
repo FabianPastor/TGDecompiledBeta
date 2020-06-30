@@ -226,7 +226,10 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             editTextEmoji.onResume();
         }
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
-        this.imageUpdater.onResume();
+        ImageUpdater imageUpdater2 = this.imageUpdater;
+        if (imageUpdater2 != null) {
+            imageUpdater2.onResume();
+        }
     }
 
     public void onPause() {
@@ -235,21 +238,29 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         if (editTextEmoji != null) {
             editTextEmoji.onPause();
         }
-        this.imageUpdater.onPause();
+        ImageUpdater imageUpdater2 = this.imageUpdater;
+        if (imageUpdater2 != null) {
+            imageUpdater2.onPause();
+        }
     }
 
     public void dismissCurrentDialog() {
-        if (!this.imageUpdater.dismissCurrentDialog(this.visibleDialog)) {
+        ImageUpdater imageUpdater2 = this.imageUpdater;
+        if (imageUpdater2 == null || !imageUpdater2.dismissCurrentDialog(this.visibleDialog)) {
             super.dismissCurrentDialog();
         }
     }
 
     public boolean dismissDialogOnPause(Dialog dialog) {
-        return this.imageUpdater.dismissDialogOnPause(dialog) && super.dismissDialogOnPause(dialog);
+        ImageUpdater imageUpdater2 = this.imageUpdater;
+        return (imageUpdater2 == null || imageUpdater2.dismissDialogOnPause(dialog)) && super.dismissDialogOnPause(dialog);
     }
 
     public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
-        this.imageUpdater.onRequestPermissionsResultFragment(i, strArr, iArr);
+        ImageUpdater imageUpdater2 = this.imageUpdater;
+        if (imageUpdater2 != null) {
+            imageUpdater2.onRequestPermissionsResultFragment(i, strArr, iArr);
+        }
     }
 
     public boolean onBackPressed() {
