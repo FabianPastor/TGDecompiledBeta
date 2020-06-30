@@ -13,6 +13,9 @@ public abstract class TLRPC$Update extends TLObject {
             case -2046916883:
                 tLRPC$Update = new TLRPC$TL_updateGroupCall();
                 break;
+            case -2036781845:
+                tLRPC$Update = new TLRPC$TL_updateChannelParticipant();
+                break;
             case -2027964103:
                 tLRPC$Update = new TLRPC$TL_updateGeoLiveViewed();
                 break;
@@ -27,9 +30,6 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case -1821035490:
                 tLRPC$Update = new TLRPC$TL_updateSavedGifs();
-                break;
-            case -1812551503:
-                tLRPC$Update = new TLRPC$TL_updateChannelParticipant();
                 break;
             case -1791935732:
                 tLRPC$Update = new TLRPC$TL_updateUserPhoto();

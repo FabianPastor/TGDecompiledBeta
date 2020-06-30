@@ -38,8 +38,8 @@ import org.telegram.tgnet.TLRPC$DocumentAttribute;
 import org.telegram.tgnet.TLRPC$InputStickerSet;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeSticker;
-import org.telegram.tgnet.TLRPC$TL_videoSize;
 import org.telegram.tgnet.TLRPC$TL_webDocument;
+import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.tgnet.TLRPC$WebDocument;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
@@ -1021,7 +1021,7 @@ public class ContentPreviewViewer {
             } else {
                 if (tLRPC$Document2 != null) {
                     TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90);
-                    TLRPC$TL_videoSize documentVideoThumb = MessageObject.getDocumentVideoThumb(tLRPC$Document);
+                    TLRPC$VideoSize documentVideoThumb = MessageObject.getDocumentVideoThumb(tLRPC$Document);
                     ImageLocation forDocument = ImageLocation.getForDocument(tLRPC$Document);
                     forDocument.imageType = 2;
                     if (documentVideoThumb != null) {

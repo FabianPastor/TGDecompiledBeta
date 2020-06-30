@@ -16,9 +16,9 @@ import org.telegram.tgnet.TLRPC$TL_inputPeerChat;
 import org.telegram.tgnet.TLRPC$TL_inputPeerUser;
 import org.telegram.tgnet.TLRPC$TL_photoStrippedSize;
 import org.telegram.tgnet.TLRPC$TL_secureFile;
-import org.telegram.tgnet.TLRPC$TL_videoSize;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserProfilePhoto;
+import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.tgnet.TLRPC$WebPage;
 import org.telegram.ui.ActionBar.Theme;
 
@@ -42,6 +42,7 @@ public class ImageLocation {
     public SecureDocument secureDocument;
     public TLRPC$InputStickerSet stickerSet;
     public String thumbSize;
+    public long videoSeekTo;
     public WebFile webFile;
 
     public static ImageLocation getForPath(String str) {
@@ -174,21 +175,24 @@ public class ImageLocation {
         }
     }
 
-    public static ImageLocation getForDocument(TLRPC$TL_videoSize tLRPC$TL_videoSize, TLRPC$Document tLRPC$Document) {
-        if (tLRPC$TL_videoSize == null || tLRPC$Document == null) {
+    public static ImageLocation getForDocument(TLRPC$VideoSize tLRPC$VideoSize, TLRPC$Document tLRPC$Document) {
+        if (tLRPC$VideoSize == null || tLRPC$Document == null) {
             return null;
         }
-        ImageLocation forPhoto = getForPhoto(tLRPC$TL_videoSize.location, tLRPC$TL_videoSize.size, (TLRPC$Photo) null, tLRPC$Document, (TLRPC$InputPeer) null, false, tLRPC$Document.dc_id, (TLRPC$InputStickerSet) null, tLRPC$TL_videoSize.type);
+        ImageLocation forPhoto = getForPhoto(tLRPC$VideoSize.location, tLRPC$VideoSize.size, (TLRPC$Photo) null, tLRPC$Document, (TLRPC$InputPeer) null, false, tLRPC$Document.dc_id, (TLRPC$InputStickerSet) null, tLRPC$VideoSize.type);
         forPhoto.imageType = 2;
         return forPhoto;
     }
 
-    public static ImageLocation getForPhoto(TLRPC$TL_videoSize tLRPC$TL_videoSize, TLRPC$Photo tLRPC$Photo) {
-        if (tLRPC$TL_videoSize == null || tLRPC$Photo == null) {
+    public static ImageLocation getForPhoto(TLRPC$VideoSize tLRPC$VideoSize, TLRPC$Photo tLRPC$Photo) {
+        if (tLRPC$VideoSize == null || tLRPC$Photo == null) {
             return null;
         }
-        ImageLocation forPhoto = getForPhoto(tLRPC$TL_videoSize.location, tLRPC$TL_videoSize.size, tLRPC$Photo, (TLRPC$Document) null, (TLRPC$InputPeer) null, false, tLRPC$Photo.dc_id, (TLRPC$InputStickerSet) null, tLRPC$TL_videoSize.type);
+        ImageLocation forPhoto = getForPhoto(tLRPC$VideoSize.location, tLRPC$VideoSize.size, tLRPC$Photo, (TLRPC$Document) null, (TLRPC$InputPeer) null, false, tLRPC$Photo.dc_id, (TLRPC$InputStickerSet) null, tLRPC$VideoSize.type);
         forPhoto.imageType = 2;
+        if ((tLRPC$VideoSize.flags & 1) != 0) {
+            forPhoto.videoSeekTo = (long) ((int) (tLRPC$VideoSize.video_start_ts * 1000.0d));
+        }
         return forPhoto;
     }
 

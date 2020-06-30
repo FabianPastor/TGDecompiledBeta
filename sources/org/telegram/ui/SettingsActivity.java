@@ -96,10 +96,10 @@ import org.telegram.tgnet.TLRPC$TL_photos_photo;
 import org.telegram.tgnet.TLRPC$TL_photos_uploadProfilePhoto;
 import org.telegram.tgnet.TLRPC$TL_userProfilePhoto;
 import org.telegram.tgnet.TLRPC$TL_userProfilePhotoEmpty;
-import org.telegram.tgnet.TLRPC$TL_videoSize;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserFull;
 import org.telegram.tgnet.TLRPC$UserProfilePhoto;
+import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.tgnet.TLRPC$WebPage;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
@@ -1174,29 +1174,31 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
-    public void didUploadPhoto(TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, String str, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$InputFile, tLRPC$InputFile2, str, tLRPC$PhotoSize2, tLRPC$PhotoSize) {
+    public void didUploadPhoto(TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, double d, String str, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
+        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$InputFile, tLRPC$InputFile2, d, str, tLRPC$PhotoSize2, tLRPC$PhotoSize) {
             public final /* synthetic */ TLRPC$InputFile f$1;
             public final /* synthetic */ TLRPC$InputFile f$2;
-            public final /* synthetic */ String f$3;
-            public final /* synthetic */ TLRPC$PhotoSize f$4;
+            public final /* synthetic */ double f$3;
+            public final /* synthetic */ String f$4;
             public final /* synthetic */ TLRPC$PhotoSize f$5;
+            public final /* synthetic */ TLRPC$PhotoSize f$6;
 
             {
                 this.f$1 = r2;
                 this.f$2 = r3;
                 this.f$3 = r4;
-                this.f$4 = r5;
-                this.f$5 = r6;
+                this.f$4 = r6;
+                this.f$5 = r7;
+                this.f$6 = r8;
             }
 
             public final void run() {
-                SettingsActivity.this.lambda$didUploadPhoto$11$SettingsActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                SettingsActivity.this.lambda$didUploadPhoto$11$SettingsActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
             }
         });
     }
 
-    public /* synthetic */ void lambda$didUploadPhoto$11$SettingsActivity(TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, String str, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
+    public /* synthetic */ void lambda$didUploadPhoto$11$SettingsActivity(TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, double d, String str, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
         if (tLRPC$InputFile != null) {
             TLRPC$TL_photos_uploadProfilePhoto tLRPC$TL_photos_uploadProfilePhoto = new TLRPC$TL_photos_uploadProfilePhoto();
             tLRPC$TL_photos_uploadProfilePhoto.file = tLRPC$InputFile;
@@ -1204,7 +1206,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             tLRPC$TL_photos_uploadProfilePhoto.flags = i;
             if (tLRPC$InputFile2 != null) {
                 tLRPC$TL_photos_uploadProfilePhoto.video = tLRPC$InputFile2;
-                tLRPC$TL_photos_uploadProfilePhoto.flags = i | 2;
+                int i2 = i | 2;
+                tLRPC$TL_photos_uploadProfilePhoto.flags = i2;
+                tLRPC$TL_photos_uploadProfilePhoto.video_start_ts = d;
+                tLRPC$TL_photos_uploadProfilePhoto.flags = i2 | 4;
             }
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_photos_uploadProfilePhoto, new RequestDelegate(tLRPC$InputFile, str) {
                 public final /* synthetic */ TLRPC$InputFile f$1;
@@ -1245,7 +1250,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             ArrayList<TLRPC$PhotoSize> arrayList = tLRPC$TL_photos_photo.photo.sizes;
             TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(arrayList, 150);
             TLRPC$PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(arrayList, 800);
-            TLRPC$TL_videoSize tLRPC$TL_videoSize = tLRPC$TL_photos_photo.photo.video_sizes.isEmpty() ? null : tLRPC$TL_photos_photo.photo.video_sizes.get(0);
+            TLRPC$VideoSize tLRPC$VideoSize = tLRPC$TL_photos_photo.photo.video_sizes.isEmpty() ? null : tLRPC$TL_photos_photo.photo.video_sizes.get(0);
             TLRPC$TL_userProfilePhoto tLRPC$TL_userProfilePhoto = new TLRPC$TL_userProfilePhoto();
             user.photo = tLRPC$TL_userProfilePhoto;
             tLRPC$TL_userProfilePhoto.photo_id = tLRPC$TL_photos_photo.photo.id;
@@ -1265,8 +1270,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 if (!(closestPhotoSizeWithSize2 == null || this.avatarBig == null)) {
                     FileLoader.getPathToAttach(this.avatarBig, true).renameTo(FileLoader.getPathToAttach(closestPhotoSizeWithSize2, true));
                 }
-                if (!(tLRPC$TL_videoSize == null || str == null)) {
-                    new File(str).renameTo(FileLoader.getPathToAttach(tLRPC$TL_videoSize, "mp4", true));
+                if (!(tLRPC$VideoSize == null || str == null)) {
+                    new File(str).renameTo(FileLoader.getPathToAttach(tLRPC$VideoSize, "mp4", true));
                 }
             }
             MessagesStorage.getInstance(this.currentAccount).clearUserPhotos(user.id);

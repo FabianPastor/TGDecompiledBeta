@@ -18,7 +18,7 @@ public abstract class TLRPC$Document extends TLObject {
     public ArrayList<TLRPC$PhotoSize> thumbs = new ArrayList<>();
     public int user_id;
     public int version;
-    public ArrayList<TLRPC$TL_videoSize> video_thumbs = new ArrayList<>();
+    public ArrayList<TLRPC$VideoSize> video_thumbs = new ArrayList<>();
 
     public static TLRPC$Document TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$Document tLRPC$Document;

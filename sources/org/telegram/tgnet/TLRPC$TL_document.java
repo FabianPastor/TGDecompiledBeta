@@ -38,7 +38,7 @@ public class TLRPC$TL_document extends TLRPC$Document {
                 int readInt324 = abstractSerializedData.readInt32(z);
                 int i3 = 0;
                 while (i3 < readInt324) {
-                    TLRPC$TL_videoSize TLdeserialize2 = TLRPC$TL_videoSize.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                    TLRPC$VideoSize TLdeserialize2 = TLRPC$VideoSize.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
                     if (TLdeserialize2 != null) {
                         this.video_thumbs.add(TLdeserialize2);
                         i3++;

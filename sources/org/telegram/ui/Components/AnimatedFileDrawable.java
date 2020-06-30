@@ -24,6 +24,7 @@ import org.telegram.messenger.AnimatedFileDrawableStream;
 import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.ImageLocation;
 import org.telegram.tgnet.TLRPC$Document;
 
 public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
@@ -315,18 +316,14 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         }
     }
 
-    public AnimatedFileDrawable(File file, boolean z, long j, TLRPC$Document tLRPC$Document, Object obj, int i, boolean z2) {
+    public AnimatedFileDrawable(File file, boolean z, long j, TLRPC$Document tLRPC$Document, ImageLocation imageLocation, Object obj, int i, boolean z2) {
         long j2 = j;
-        TLRPC$Document tLRPC$Document2 = tLRPC$Document;
-        int i2 = i;
         this.path = file;
         this.streamFileSize = j2;
-        this.currentAccount = i2;
+        this.currentAccount = i;
         getPaint().setFlags(3);
-        if (j2 == 0 || tLRPC$Document2 == null) {
-            boolean z3 = z2;
-        } else {
-            this.stream = new AnimatedFileDrawableStream(tLRPC$Document2, obj, i2, z2);
+        if (!(j2 == 0 || (tLRPC$Document == null && imageLocation == null))) {
+            this.stream = new AnimatedFileDrawableStream(tLRPC$Document, imageLocation, obj, i, z2);
         }
         if (z) {
             this.nativePtr = createDecoder(file.getAbsolutePath(), this.metaData, this.currentAccount, this.streamFileSize, this.stream, z2);
@@ -776,12 +773,13 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
             File file = this.path;
             long j = this.streamFileSize;
             TLRPC$Document document = animatedFileDrawableStream.getDocument();
+            ImageLocation location = this.stream.getLocation();
             Object parentObject = this.stream.getParentObject();
             int i = this.currentAccount;
             AnimatedFileDrawableStream animatedFileDrawableStream2 = this.stream;
-            animatedFileDrawable = new AnimatedFileDrawable(file, false, j, document, parentObject, i, animatedFileDrawableStream2 != null && animatedFileDrawableStream2.isPreview());
+            animatedFileDrawable = new AnimatedFileDrawable(file, false, j, document, location, parentObject, i, animatedFileDrawableStream2 != null && animatedFileDrawableStream2.isPreview());
         } else {
-            animatedFileDrawable = new AnimatedFileDrawable(this.path, false, this.streamFileSize, (TLRPC$Document) null, (Object) null, this.currentAccount, animatedFileDrawableStream != null && animatedFileDrawableStream.isPreview());
+            animatedFileDrawable = new AnimatedFileDrawable(this.path, false, this.streamFileSize, (TLRPC$Document) null, (ImageLocation) null, (Object) null, this.currentAccount, animatedFileDrawableStream != null && animatedFileDrawableStream.isPreview());
         }
         int[] iArr = animatedFileDrawable.metaData;
         int[] iArr2 = this.metaData;

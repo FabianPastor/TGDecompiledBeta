@@ -73,6 +73,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     private String uploadingVideo;
     private boolean useAttachMenu;
     private String videoPath;
+    private double videoTimestamp;
 
     public interface ImageUpdaterDelegate {
 
@@ -83,7 +84,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             }
         }
 
-        void didUploadPhoto(TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, String str, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2);
+        void didUploadPhoto(TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, double d, String str, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2);
 
         String getInitialSearchString();
     }
@@ -675,8 +676,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             this.smallPhoto = scaleAndSaveImage;
             if (scaleAndSaveImage != null) {
                 try {
-                    Bitmap decodeFile = BitmapFactory.decodeFile(FileLoader.getPathToAttach(scaleAndSaveImage, true).getAbsolutePath());
-                    ImageLoader.getInstance().putImageToCache(new BitmapDrawable(decodeFile), this.smallPhoto.location.volume_id + "_" + this.smallPhoto.location.local_id + "@50_50");
+                    ImageLoader.getInstance().putImageToCache(new BitmapDrawable(BitmapFactory.decodeFile(FileLoader.getPathToAttach(scaleAndSaveImage, true).getAbsolutePath())), this.smallPhoto.location.volume_id + "_" + this.smallPhoto.location.local_id + "@50_50");
                 } catch (Throwable unused) {
                 }
             }
@@ -687,6 +687,13 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 if (this.uploadAfterSelect) {
                     if (messageObject != null) {
                         this.convertingVideo = messageObject;
+                        long j = messageObject.videoEditedInfo.startTime;
+                        if (j < 0) {
+                            j = 0;
+                        }
+                        double d = (double) (messageObject.videoEditedInfo.avatarStartTime - j);
+                        Double.isNaN(d);
+                        this.videoTimestamp = d / 1000000.0d;
                         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.filePreparingStarted);
                         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.filePreparingFailed);
                         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileNewChunkAvailable);
@@ -698,7 +705,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 }
                 ImageUpdaterDelegate imageUpdaterDelegate = this.delegate;
                 if (imageUpdaterDelegate != null) {
-                    imageUpdaterDelegate.didUploadPhoto((TLRPC$InputFile) null, (TLRPC$InputFile) null, (String) null, this.bigPhoto, this.smallPhoto);
+                    imageUpdaterDelegate.didUploadPhoto((TLRPC$InputFile) null, (TLRPC$InputFile) null, 0.0d, (String) null, this.bigPhoto, this.smallPhoto);
                 }
             }
         }
@@ -739,7 +746,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidUpload);
                 NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileDidFailUpload);
                 if (i == NotificationCenter.FileDidUpload && (imageUpdaterDelegate = this.delegate) != null) {
-                    imageUpdaterDelegate.didUploadPhoto(this.uploadedPhoto, this.uploadedVideo, this.videoPath, this.bigPhoto, this.smallPhoto);
+                    imageUpdaterDelegate.didUploadPhoto(this.uploadedPhoto, this.uploadedVideo, this.videoTimestamp, this.videoPath, this.bigPhoto, this.smallPhoto);
                 }
                 cleanup();
             }

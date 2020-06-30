@@ -143,10 +143,10 @@ import org.telegram.tgnet.TLRPC$TL_secureValueTypePhone;
 import org.telegram.tgnet.TLRPC$TL_secureValueTypeRentalAgreement;
 import org.telegram.tgnet.TLRPC$TL_secureValueTypeTemporaryRegistration;
 import org.telegram.tgnet.TLRPC$TL_secureValueTypeUtilityBill;
-import org.telegram.tgnet.TLRPC$TL_videoSize;
 import org.telegram.tgnet.TLRPC$TL_webPage;
 import org.telegram.tgnet.TLRPC$TL_webPageAttributeTheme;
 import org.telegram.tgnet.TLRPC$User;
+import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.tgnet.TLRPC$WebDocument;
 import org.telegram.tgnet.TLRPC$WebPage;
 import org.telegram.ui.ActionBar.Theme;
@@ -8296,7 +8296,7 @@ public class MessageObject {
         return false;
     }
 
-    public static TLRPC$TL_videoSize getDocumentVideoThumb(TLRPC$Document tLRPC$Document) {
+    public static TLRPC$VideoSize getDocumentVideoThumb(TLRPC$Document tLRPC$Document) {
         if (tLRPC$Document == null || tLRPC$Document.video_thumbs.isEmpty()) {
             return null;
         }

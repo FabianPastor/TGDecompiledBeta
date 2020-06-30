@@ -230,6 +230,9 @@ public class FileLoadOperation {
                 tLRPC$TL_inputPhotoFileLocation.access_hash = imageLocation.access_hash;
                 tLRPC$TL_inputPhotoFileLocation.file_reference = imageLocation.file_reference;
                 tLRPC$TL_inputPhotoFileLocation.thumb_size = imageLocation.thumbSize;
+                if (imageLocation.imageType == 2) {
+                    this.allowDisordererFileSave = true;
+                }
             } else {
                 TLRPC$TL_inputDocumentFileLocation tLRPC$TL_inputDocumentFileLocation = new TLRPC$TL_inputDocumentFileLocation();
                 this.location = tLRPC$TL_inputDocumentFileLocation;

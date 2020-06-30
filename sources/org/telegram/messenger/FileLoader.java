@@ -1142,17 +1142,18 @@ public class FileLoader extends BaseController {
     }
 
     /* access modifiers changed from: protected */
-    public FileLoadOperation loadStreamFile(FileLoadOperationStream fileLoadOperationStream, TLRPC$Document tLRPC$Document, Object obj, int i, boolean z) {
+    public FileLoadOperation loadStreamFile(FileLoadOperationStream fileLoadOperationStream, TLRPC$Document tLRPC$Document, ImageLocation imageLocation, Object obj, int i, boolean z) {
         CountDownLatch countDownLatch = new CountDownLatch(1);
         FileLoadOperation[] fileLoadOperationArr = new FileLoadOperation[1];
-        fileLoaderQueue.postRunnable(new Runnable(fileLoadOperationArr, tLRPC$Document, obj, fileLoadOperationStream, i, z, countDownLatch) {
+        fileLoaderQueue.postRunnable(new Runnable(fileLoadOperationArr, tLRPC$Document, imageLocation, obj, fileLoadOperationStream, i, z, countDownLatch) {
             public final /* synthetic */ FileLoadOperation[] f$1;
             public final /* synthetic */ TLRPC$Document f$2;
-            public final /* synthetic */ Object f$3;
-            public final /* synthetic */ FileLoadOperationStream f$4;
-            public final /* synthetic */ int f$5;
-            public final /* synthetic */ boolean f$6;
-            public final /* synthetic */ CountDownLatch f$7;
+            public final /* synthetic */ ImageLocation f$3;
+            public final /* synthetic */ Object f$4;
+            public final /* synthetic */ FileLoadOperationStream f$5;
+            public final /* synthetic */ int f$6;
+            public final /* synthetic */ boolean f$7;
+            public final /* synthetic */ CountDownLatch f$8;
 
             {
                 this.f$1 = r2;
@@ -1162,10 +1163,11 @@ public class FileLoader extends BaseController {
                 this.f$5 = r6;
                 this.f$6 = r7;
                 this.f$7 = r8;
+                this.f$8 = r9;
             }
 
             public final void run() {
-                FileLoader.this.lambda$loadStreamFile$8$FileLoader(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
+                FileLoader.this.lambda$loadStreamFile$8$FileLoader(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
             }
         });
         try {
@@ -1176,8 +1178,14 @@ public class FileLoader extends BaseController {
         return fileLoadOperationArr[0];
     }
 
-    public /* synthetic */ void lambda$loadStreamFile$8$FileLoader(FileLoadOperation[] fileLoadOperationArr, TLRPC$Document tLRPC$Document, Object obj, FileLoadOperationStream fileLoadOperationStream, int i, boolean z, CountDownLatch countDownLatch) {
-        fileLoadOperationArr[0] = loadFileInternal(tLRPC$Document, (SecureDocument) null, (WebFile) null, (TLRPC$TL_fileLocationToBeDeprecated) null, (ImageLocation) null, obj, (String) null, 0, 1, fileLoadOperationStream, i, z, 0);
+    public /* synthetic */ void lambda$loadStreamFile$8$FileLoader(FileLoadOperation[] fileLoadOperationArr, TLRPC$Document tLRPC$Document, ImageLocation imageLocation, Object obj, FileLoadOperationStream fileLoadOperationStream, int i, boolean z, CountDownLatch countDownLatch) {
+        ImageLocation imageLocation2 = imageLocation;
+        String str = null;
+        TLRPC$TL_fileLocationToBeDeprecated tLRPC$TL_fileLocationToBeDeprecated = (tLRPC$Document != null || imageLocation2 == null) ? null : imageLocation2.location;
+        if (tLRPC$Document == null && imageLocation2 != null) {
+            str = "mp4";
+        }
+        fileLoadOperationArr[0] = loadFileInternal(tLRPC$Document, (SecureDocument) null, (WebFile) null, tLRPC$TL_fileLocationToBeDeprecated, imageLocation, obj, str, (tLRPC$Document != null || imageLocation2 == null) ? 0 : imageLocation2.currentSize, 1, fileLoadOperationStream, i, z, tLRPC$Document == null ? 1 : 0);
         countDownLatch.countDown();
     }
 

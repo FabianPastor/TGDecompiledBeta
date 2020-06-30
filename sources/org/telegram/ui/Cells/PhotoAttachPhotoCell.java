@@ -30,7 +30,7 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$PhotoSize;
-import org.telegram.tgnet.TLRPC$TL_videoSize;
+import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox2;
@@ -244,7 +244,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
                     TLRPC$Document tLRPC$Document = searchImage.document;
                     if (tLRPC$Document != null) {
                         MessageObject.getDocumentVideoThumb(tLRPC$Document);
-                        TLRPC$TL_videoSize documentVideoThumb = MessageObject.getDocumentVideoThumb(searchImage.document);
+                        TLRPC$VideoSize documentVideoThumb = MessageObject.getDocumentVideoThumb(searchImage.document);
                         if (documentVideoThumb != null) {
                             this.imageView.setImage(ImageLocation.getForDocument(documentVideoThumb, searchImage.document), (String) null, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(searchImage.document.thumbs, 90), searchImage.document), "52_52", (String) null, -1, 1, searchImage);
                         } else {

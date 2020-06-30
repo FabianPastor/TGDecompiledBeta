@@ -452,14 +452,14 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.thumbsLocations
             org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r11, (org.telegram.tgnet.TLRPC$Photo) r9)
             r3.add(r4)
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_videoSize> r3 = r9.video_sizes
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r3 = r9.video_sizes
             boolean r3 = r3.isEmpty()
             if (r3 != 0) goto L_0x012a
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.videoLocations
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_videoSize> r4 = r9.video_sizes
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r4 = r9.video_sizes
             java.lang.Object r4 = r4.get(r5)
-            org.telegram.tgnet.TLRPC$TL_videoSize r4 = (org.telegram.tgnet.TLRPC$TL_videoSize) r4
-            org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$TL_videoSize) r4, (org.telegram.tgnet.TLRPC$Photo) r9)
+            org.telegram.tgnet.TLRPC$VideoSize r4 = (org.telegram.tgnet.TLRPC$VideoSize) r4
+            org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$VideoSize) r4, (org.telegram.tgnet.TLRPC$Photo) r9)
             r3.add(r4)
             r4 = 0
             goto L_0x0130
@@ -622,7 +622,8 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                         if (realPosition == 0) {
                             Drawable drawable = ViewPagerAdapter.this.parentAvatarImageView.getImageReceiver().getDrawable();
                             if (!(drawable instanceof AnimatedFileDrawable) || !((AnimatedFileDrawable) drawable).hasBitmap()) {
-                                setImageMedia((ImageLocation) ProfileGalleryView.this.videoLocations.get(realPosition), (String) null, (ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, ViewPagerAdapter.this.parentAvatarImageView.getImageReceiver().getBitmap(), ((Integer) ProfileGalleryView.this.imagesLocationsSizes.get(realPosition)).intValue(), 1, (Object) null);
+                                ImageLocation imageLocation = (ImageLocation) ProfileGalleryView.this.videoLocations.get(realPosition);
+                                setImageMedia((ImageLocation) ProfileGalleryView.this.videoLocations.get(realPosition), (imageLocation == null || imageLocation.imageType != 2) ? null : "g", (ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, ViewPagerAdapter.this.parentAvatarImageView.getImageReceiver().getBitmap(), ((Integer) ProfileGalleryView.this.imagesLocationsSizes.get(realPosition)).intValue(), 1, (Object) null);
                             } else {
                                 setImageDrawable(drawable);
                             }

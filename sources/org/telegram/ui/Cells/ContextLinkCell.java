@@ -692,11 +692,11 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             if (r12 != r10) goto L_0x042f
             org.telegram.tgnet.TLRPC$Document r0 = r7.documentAttach
             if (r0 == 0) goto L_0x03eb
-            org.telegram.tgnet.TLRPC$TL_videoSize r0 = org.telegram.messenger.MessageObject.getDocumentVideoThumb(r0)
+            org.telegram.tgnet.TLRPC$VideoSize r0 = org.telegram.messenger.MessageObject.getDocumentVideoThumb(r0)
             if (r0 == 0) goto L_0x03bc
             org.telegram.messenger.ImageReceiver r2 = r7.linkImageView
             org.telegram.tgnet.TLRPC$Document r11 = r7.documentAttach
-            org.telegram.messenger.ImageLocation r21 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$TL_videoSize) r0, (org.telegram.tgnet.TLRPC$Document) r11)
+            org.telegram.messenger.ImageLocation r21 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$VideoSize) r0, (org.telegram.tgnet.TLRPC$Document) r11)
             r22 = 0
             org.telegram.tgnet.TLRPC$PhotoSize r0 = r7.currentPhotoObject
             org.telegram.tgnet.TLRPC$Document r11 = r7.documentAttach
@@ -1644,7 +1644,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             if (r8 == 0) goto L_0x00f9
             int r9 = r10.documentAttachType
             if (r9 != r2) goto L_0x00f9
-            org.telegram.tgnet.TLRPC$TL_videoSize r8 = org.telegram.messenger.MessageObject.getDocumentVideoThumb(r8)
+            org.telegram.tgnet.TLRPC$VideoSize r8 = org.telegram.messenger.MessageObject.getDocumentVideoThumb(r8)
             if (r8 == 0) goto L_0x00f9
             goto L_0x00fa
         L_0x00f9:
