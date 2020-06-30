@@ -556,7 +556,6 @@
     <string name="CameraPermissionText">Tik om toegang tot je camera toe te staan</string>
     <string name="Cancel">Annuleren</string>
     <string name="CancelAccountReset">Account reset annuleren</string>
-    <string name="CancelAccountResetInfo">Iemand met toegang tot nummer **%1$s** heeft geprobeerd om je Telegram account te verwijderen en je twee-staps-verificatie wachtwoord te resetten.\10\10Als jij dit niet was, geef dan de code in die we zojuist per SMS hebben gestuurd.</string>
     <string name="CancelEmailQuestion">Instellen van herstel-e-mailadres annuleren?</string>
     <string name="CancelEmailQuestionTitle">Installatie annuleren</string>
     <string name="CancelLinkExpired">Deze link is ongeldig of verlopen.</string>
@@ -2492,7 +2491,6 @@
     <string name="PreviewFeedback2">Verkeerde lay-out?</string>
     <string name="PriorityInfo">Meldingen met hoge prioriteit werken ook als je telefoon op \"Niet storen\" staat.</string>
     <string name="PrivacyAddAnException">Voeg gebruikers of groepen toe.</string>
-    <string name="PrivacyAdvanced">Geavanceerd</string>
     <string name="PrivacyBots">Bots en websites</string>
     <string name="PrivacyBotsInfo">Websites waarop je Telegram hebt gebruikt om in te loggen.</string>
     <string name="PrivacyCallsP2PHelp">peer-to-peer uitschakelen zorgt ervoor dat alle gesprekken verlopen via Telegram-servers, dit voorkomt dat je IP-adres zichtbaar is maar verlaagt de audio-kwaliteit enigszins.</string>

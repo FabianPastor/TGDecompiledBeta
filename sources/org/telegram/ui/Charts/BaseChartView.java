@@ -1820,10 +1820,14 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             this.startXIndex = findStartIndex;
             int findEndIndex = this.chartData.findEndIndex(findStartIndex, Math.min(this.pickerDelegate.pickerEnd, 1.0f));
             this.endXIndex = findEndIndex;
+            int i = this.startXIndex;
+            if (findEndIndex < i) {
+                this.endXIndex = i;
+            }
             ChartHeaderView chartHeaderView2 = this.chartHeaderView;
             if (chartHeaderView2 != null) {
                 long[] jArr = this.chartData.x;
-                chartHeaderView2.setDates(jArr[this.startXIndex], jArr[findEndIndex]);
+                chartHeaderView2.setDates(jArr[this.startXIndex], jArr[this.endXIndex]);
             }
             updateLineSignature();
         }

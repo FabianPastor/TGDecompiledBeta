@@ -1006,7 +1006,7 @@ public class DownloadController extends BaseController implements NotificationCe
             r18 = 0
         L_0x0081:
             org.telegram.messenger.FileLoader r13 = r20.getFileLoader()
-            org.telegram.messenger.ImageLocation r14 = org.telegram.messenger.ImageLocation.getForPhoto(r10, r11)
+            org.telegram.messenger.ImageLocation r14 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r10, (org.telegram.tgnet.TLRPC$Photo) r11)
             java.lang.String r15 = r8.parent
             r16 = 0
             r17 = 0

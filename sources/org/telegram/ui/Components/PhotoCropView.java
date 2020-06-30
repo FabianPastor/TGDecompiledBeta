@@ -1,31 +1,82 @@
 package org.telegram.ui.Components;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.util.Property;
+import android.view.View;
+import android.view.animation.OvershootInterpolator;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MediaController;
+import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.Crop.CropRotationWheel;
 import org.telegram.ui.Components.Crop.CropView;
 
 public class PhotoCropView extends FrameLayout {
+    public final Property<PhotoCropView, Float> ANIMATION_VALUE = new AnimationProperties.FloatProperty<PhotoCropView>("thumbAnimationProgress") {
+        public void setValue(PhotoCropView photoCropView, float f) {
+            float unused = PhotoCropView.this.thumbAnimationProgress = f;
+            photoCropView.invalidate();
+        }
+
+        public Float get(PhotoCropView photoCropView) {
+            return Float.valueOf(PhotoCropView.this.thumbAnimationProgress);
+        }
+    };
+    public final Property<PhotoCropView, Float> PROGRESS_VALUE = new AnimationProperties.FloatProperty<PhotoCropView>("thumbImageVisibleProgress") {
+        public void setValue(PhotoCropView photoCropView, float f) {
+            float unused = PhotoCropView.this.thumbImageVisibleProgress = f;
+            photoCropView.invalidate();
+        }
+
+        public Float get(PhotoCropView photoCropView) {
+            return Float.valueOf(PhotoCropView.this.thumbImageVisibleProgress);
+        }
+    };
+    private Paint circlePaint = new Paint(1);
     /* access modifiers changed from: private */
     public CropView cropView;
     /* access modifiers changed from: private */
     public PhotoCropViewDelegate delegate;
+    private float flashAlpha = 0.0f;
+    /* access modifiers changed from: private */
+    public AnimatorSet thumbAnimation;
+    /* access modifiers changed from: private */
+    public float thumbAnimationProgress = 1.0f;
+    private ImageReceiver thumbImageView;
+    private boolean thumbImageVisible;
+    private boolean thumbImageVisibleOverride = true;
+    /* access modifiers changed from: private */
+    public float thumbImageVisibleProgress;
+    /* access modifiers changed from: private */
+    public AnimatorSet thumbOverrideAnimation;
     /* access modifiers changed from: private */
     public CropRotationWheel wheelView;
 
     public interface PhotoCropViewDelegate {
+        int getVideoThumbX();
+
         void onChange(boolean z);
+
+        void onTapUp();
 
         void onUpdate();
     }
 
     public PhotoCropView(Context context) {
         super(context);
-        CropView cropView2 = new CropView(getContext());
+        CropView cropView2 = new CropView(context);
         this.cropView = cropView2;
         cropView2.setListener(new CropView.CropViewListener() {
             public void onChange(boolean z) {
@@ -43,10 +94,17 @@ public class PhotoCropView extends FrameLayout {
             public void onAspectLock(boolean z) {
                 PhotoCropView.this.wheelView.setAspectLock(z);
             }
+
+            public void onTapUp() {
+                if (PhotoCropView.this.delegate != null) {
+                    PhotoCropView.this.delegate.onTapUp();
+                }
+            }
         });
         this.cropView.setBottomPadding((float) AndroidUtilities.dp(64.0f));
         addView(this.cropView);
-        CropRotationWheel cropRotationWheel = new CropRotationWheel(getContext());
+        this.thumbImageView = new ImageReceiver(this);
+        CropRotationWheel cropRotationWheel = new CropRotationWheel(context);
         this.wheelView = cropRotationWheel;
         cropRotationWheel.setListener(new CropRotationWheel.RotationWheelListener() {
             public void onStart() {
@@ -75,6 +133,38 @@ public class PhotoCropView extends FrameLayout {
         addView(this.wheelView, LayoutHelper.createFrame(-1, -2.0f, 81, 0.0f, 0.0f, 0.0f, 0.0f));
     }
 
+    /* access modifiers changed from: protected */
+    public boolean drawChild(Canvas canvas, View view, long j) {
+        CropView cropView2;
+        boolean drawChild = super.drawChild(canvas, view, j);
+        if (this.thumbImageVisible && view == (cropView2 = this.cropView)) {
+            RectF actualRect = cropView2.getActualRect();
+            int dp = AndroidUtilities.dp(32.0f);
+            int i = dp / 2;
+            int videoThumbX = (this.delegate.getVideoThumbX() - i) + AndroidUtilities.dp(2.0f);
+            int measuredHeight = getMeasuredHeight() - AndroidUtilities.dp(156.0f);
+            float f = actualRect.left;
+            float f2 = this.thumbAnimationProgress;
+            float f3 = f + ((((float) videoThumbX) - f) * f2);
+            float f4 = actualRect.top;
+            float f5 = f4 + ((((float) measuredHeight) - f4) * f2);
+            float width = actualRect.width() + ((((float) dp) - actualRect.width()) * this.thumbAnimationProgress);
+            this.thumbImageView.setRoundRadius((int) (width / 2.0f));
+            this.thumbImageView.setImageCoords(f3, f5, width, width);
+            this.thumbImageView.setAlpha(this.thumbImageVisibleProgress);
+            this.thumbImageView.draw(canvas);
+            if (this.flashAlpha > 0.0f) {
+                this.circlePaint.setColor(-1);
+                this.circlePaint.setAlpha((int) (this.flashAlpha * 255.0f));
+                canvas.drawCircle(actualRect.centerX(), actualRect.centerY(), actualRect.width() / 2.0f, this.circlePaint);
+            }
+            this.circlePaint.setColor(Theme.getColor("dialogFloatingButton"));
+            this.circlePaint.setAlpha((int) (this.thumbAnimationProgress * 255.0f * this.thumbImageVisibleProgress));
+            canvas.drawCircle((float) (videoThumbX + i), (float) (measuredHeight + dp + AndroidUtilities.dp(8.0f)), (float) AndroidUtilities.dp(3.0f), this.circlePaint);
+        }
+        return drawChild;
+    }
+
     public void rotate() {
         CropRotationWheel cropRotationWheel = this.wheelView;
         if (cropRotationWheel != null) {
@@ -84,19 +174,80 @@ public class PhotoCropView extends FrameLayout {
     }
 
     public void setBitmap(Bitmap bitmap, int i, boolean z, boolean z2, PaintingOverlay paintingOverlay, VideoEditTextureView videoEditTextureView, MediaController.CropState cropState) {
+        boolean z3 = z;
+        MediaController.CropState cropState2 = cropState;
         requestLayout();
+        int i2 = 0;
+        this.thumbImageVisible = false;
+        this.thumbImageView.setImageBitmap((Drawable) null);
         this.cropView.setBitmap(bitmap, i, z, z2, paintingOverlay, videoEditTextureView, cropState);
         this.wheelView.setFreeform(z);
         this.wheelView.reset();
-        int i2 = 0;
-        if (cropState != null) {
-            this.wheelView.setRotation(cropState.cropRotate, false);
+        if (cropState2 != null) {
+            this.wheelView.setRotation(cropState2.cropRotate, false);
         }
         CropRotationWheel cropRotationWheel = this.wheelView;
-        if (!z) {
+        if (!z3) {
             i2 = 4;
         }
         cropRotationWheel.setVisibility(i2);
+    }
+
+    public void setVideoThumbFlashAlpha(float f) {
+        this.flashAlpha = f;
+        invalidate();
+    }
+
+    public void setVideoThumb(Bitmap bitmap, int i) {
+        this.thumbImageVisible = bitmap != null;
+        this.thumbImageView.setImageBitmap(bitmap);
+        this.thumbImageView.setOrientation(i, false);
+        AnimatorSet animatorSet = this.thumbAnimation;
+        if (animatorSet != null) {
+            animatorSet.cancel();
+        }
+        AnimatorSet animatorSet2 = this.thumbOverrideAnimation;
+        if (animatorSet2 != null) {
+            animatorSet2.cancel();
+        }
+        this.thumbImageVisibleOverride = true;
+        this.thumbImageVisibleProgress = 1.0f;
+        AnimatorSet animatorSet3 = new AnimatorSet();
+        this.thumbAnimation = animatorSet3;
+        animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, this.ANIMATION_VALUE, new float[]{0.0f, 1.0f})});
+        this.thumbAnimation.setDuration(250);
+        this.thumbAnimation.setInterpolator(new OvershootInterpolator(1.01f));
+        this.thumbAnimation.addListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animator) {
+                AnimatorSet unused = PhotoCropView.this.thumbAnimation = null;
+            }
+        });
+        this.thumbAnimation.start();
+    }
+
+    public void setVideoThumbVisible(boolean z) {
+        if (this.thumbImageVisibleOverride != z) {
+            this.thumbImageVisibleOverride = z;
+            AnimatorSet animatorSet = this.thumbOverrideAnimation;
+            if (animatorSet != null) {
+                animatorSet.cancel();
+            }
+            AnimatorSet animatorSet2 = new AnimatorSet();
+            this.thumbOverrideAnimation = animatorSet2;
+            Animator[] animatorArr = new Animator[1];
+            Property<PhotoCropView, Float> property = this.PROGRESS_VALUE;
+            float[] fArr = new float[1];
+            fArr[0] = z ? 1.0f : 0.0f;
+            animatorArr[0] = ObjectAnimator.ofFloat(this, property, fArr);
+            animatorSet2.playTogether(animatorArr);
+            this.thumbOverrideAnimation.setDuration(180);
+            this.thumbOverrideAnimation.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    AnimatorSet unused = PhotoCropView.this.thumbOverrideAnimation = null;
+                }
+            });
+            this.thumbOverrideAnimation.start();
+        }
     }
 
     public boolean isReady() {
@@ -114,14 +265,6 @@ public class PhotoCropView extends FrameLayout {
 
     public void setAspectRatio(float f) {
         this.cropView.setAspectRatio(f);
-    }
-
-    public void hideBackView() {
-        this.cropView.hideBackView();
-    }
-
-    public void showBackView() {
-        this.cropView.showBackView();
     }
 
     public void setFreeform(boolean z) {

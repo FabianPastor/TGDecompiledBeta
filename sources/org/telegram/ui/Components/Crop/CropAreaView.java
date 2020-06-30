@@ -90,7 +90,7 @@ public class CropAreaView extends View {
         super(context);
         Paint paint = new Paint();
         this.dimPaint = paint;
-        paint.setColor(-NUM);
+        paint.setColor(NUM);
         Paint paint2 = new Paint();
         this.shadowPaint = paint2;
         paint2.setStyle(Paint.Style.FILL);
@@ -370,14 +370,16 @@ public class CropAreaView extends View {
                 } catch (Throwable unused) {
                 }
             }
-            canvas.drawRect(0.0f, 0.0f, (float) getWidth(), (float) ((int) this.actualRect.top), this.dimPaint);
-            RectF rectF2 = this.actualRect;
-            canvas.drawRect(0.0f, (float) ((int) rectF2.top), (float) ((int) rectF2.left), (float) ((int) rectF2.bottom), this.dimPaint);
-            RectF rectF3 = this.actualRect;
-            canvas.drawRect((float) ((int) rectF3.right), (float) ((int) rectF3.top), (float) getWidth(), (float) ((int) this.actualRect.bottom), this.dimPaint);
-            canvas.drawRect(0.0f, (float) ((int) this.actualRect.bottom), (float) getWidth(), (float) getHeight(), this.dimPaint);
-            Bitmap bitmap3 = this.circleBitmap;
-            if (bitmap3 != null) {
+            if (this.circleBitmap != null) {
+                Canvas canvas10 = canvas;
+                canvas10.drawRect(0.0f, 0.0f, (float) getWidth(), (float) ((int) this.actualRect.top), this.dimPaint);
+                RectF rectF2 = this.actualRect;
+                Canvas canvas11 = canvas;
+                canvas11.drawRect(0.0f, (float) ((int) rectF2.top), (float) ((int) rectF2.left), (float) ((int) rectF2.bottom), this.dimPaint);
+                RectF rectF3 = this.actualRect;
+                canvas10.drawRect((float) ((int) rectF3.right), (float) ((int) rectF3.top), (float) getWidth(), (float) ((int) this.actualRect.bottom), this.dimPaint);
+                canvas11.drawRect(0.0f, (float) ((int) this.actualRect.bottom), (float) getWidth(), (float) getHeight(), this.dimPaint);
+                Bitmap bitmap3 = this.circleBitmap;
                 RectF rectF4 = this.actualRect;
                 canvas.drawBitmap(bitmap3, (float) ((int) rectF4.left), (float) ((int) rectF4.top), (Paint) null);
             }

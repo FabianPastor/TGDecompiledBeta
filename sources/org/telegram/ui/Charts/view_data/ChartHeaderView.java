@@ -25,6 +25,7 @@ public class ChartHeaderView extends FrameLayout {
     private boolean showDate = true;
     int textMargin;
     private TextView title;
+    private boolean useWeekInterval;
     private Drawable zoomIcon;
 
     public ChartHeaderView(Context context) {
@@ -95,6 +96,9 @@ public class ChartHeaderView extends FrameLayout {
             this.datesTmp.setVisibility(8);
             return;
         }
+        if (this.useWeekInterval) {
+            j2 += NUM;
+        }
         if (j2 - j >= 86400000) {
             str = this.formatter.format(new Date(j)) + " — " + this.formatter.format(new Date(j2));
         } else {
@@ -156,6 +160,10 @@ public class ChartHeaderView extends FrameLayout {
         this.title.setScaleX(1.0f);
         this.title.setScaleY(1.0f);
         this.back.setAlpha(0.0f);
+    }
+
+    public void setUseWeekInterval(boolean z) {
+        this.useWeekInterval = z;
     }
 
     public void showDate(boolean z) {

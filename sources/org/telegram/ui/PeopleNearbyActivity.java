@@ -28,6 +28,7 @@ import org.telegram.messenger.ChatObject;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.LocationController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.RequestDelegate;
@@ -392,11 +393,14 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                     updateRows();
                 }
             } else if (view instanceof ManageChatUserCell) {
+                TLRPC$TL_peerLocated tLRPC$TL_peerLocated = this.users.get(i - i3);
                 Bundle bundle2 = new Bundle();
-                bundle2.putInt("user_id", this.users.get(i - i3).peer.user_id);
+                bundle2.putInt("user_id", tLRPC$TL_peerLocated.peer.user_id);
                 if (((ManageChatUserCell) view).hasAvatarSet()) {
                     bundle2.putBoolean("expandPhoto", true);
                 }
+                bundle2.putInt("nearby_distance", tLRPC$TL_peerLocated.distance);
+                MessagesController.getInstance(this.currentAccount).ensureMessagesLoaded((long) tLRPC$TL_peerLocated.peer.user_id, false, 0, (Runnable) null, (Runnable) null);
                 presentFragment(new ProfileActivity(bundle2));
             }
         }
@@ -1078,7 +1082,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         }
 
         private String formatDistance(TLRPC$TL_peerLocated tLRPC$TL_peerLocated) {
-            return LocaleController.formatDistance((float) tLRPC$TL_peerLocated.distance);
+            return LocaleController.formatDistance((float) tLRPC$TL_peerLocated.distance, 0);
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {

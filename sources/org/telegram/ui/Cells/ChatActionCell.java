@@ -114,22 +114,33 @@ public class ChatActionCell extends BaseCell {
             if (charSequence == null || !TextUtils.equals(str, charSequence)) {
                 this.customDate = i;
                 this.customText = str;
-                if (getMeasuredWidth() != 0) {
-                    createLayout(this.customText, getMeasuredWidth());
-                    invalidate();
-                }
-                if (this.wasLayout) {
-                    buildLayout();
-                } else if (z2) {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public final void run() {
-                            ChatActionCell.this.requestLayout();
-                        }
-                    });
-                } else {
-                    requestLayout();
-                }
+                updateTextInternal(z2);
             }
+        }
+    }
+
+    private void updateTextInternal(boolean z) {
+        if (getMeasuredWidth() != 0) {
+            createLayout(this.customText, getMeasuredWidth());
+            invalidate();
+        }
+        if (this.wasLayout) {
+            buildLayout();
+        } else if (z) {
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public final void run() {
+                    ChatActionCell.this.requestLayout();
+                }
+            });
+        } else {
+            requestLayout();
+        }
+    }
+
+    public void setCustomText(String str) {
+        this.customText = str;
+        if (str != null) {
+            updateTextInternal(false);
         }
     }
 

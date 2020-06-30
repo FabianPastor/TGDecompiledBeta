@@ -71,7 +71,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     /* access modifiers changed from: private */
     public boolean mixedPlayWhenReady;
     private SimpleExoPlayer player;
-    private int reapeatedCount;
+    private int repeatCount;
     private Surface surface;
     private TextureView textureView;
     private MappingTrackSelector trackSelector;
@@ -731,7 +731,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
 
     public void onPositionDiscontinuity(int i) {
         if (i == 0) {
-            this.reapeatedCount++;
+            this.repeatCount++;
         }
     }
 
@@ -785,6 +785,10 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
                 this.lastReportedPlaybackState = playbackState;
             }
         }
+    }
+
+    public int getRepeatCount() {
+        return this.repeatCount;
     }
 
     private class AudioVisualizerRenderersFactory extends DefaultRenderersFactory {

@@ -424,7 +424,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
     public /* synthetic */ void lambda$createView$2$CameraScanActivity(View view) {
         if (getParentActivity() != null) {
             if (Build.VERSION.SDK_INT < 23 || getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
-                PhotoAlbumPickerActivity photoAlbumPickerActivity = new PhotoAlbumPickerActivity(10, false, false, (ChatActivity) null);
+                PhotoAlbumPickerActivity photoAlbumPickerActivity = new PhotoAlbumPickerActivity(PhotoAlbumPickerActivity.SELECT_TYPE_QR, false, false, (ChatActivity) null);
                 photoAlbumPickerActivity.setMaxSelectedPhotos(1, false);
                 photoAlbumPickerActivity.setAllowSearchImages(false);
                 photoAlbumPickerActivity.setDelegate(new PhotoAlbumPickerActivity.PhotoAlbumPickerActivityDelegate() {

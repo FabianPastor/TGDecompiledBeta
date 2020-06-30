@@ -35,6 +35,7 @@ import org.telegram.tgnet.TLRPC$TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC$TL_messageService;
 import org.telegram.tgnet.TLRPC$TL_photoStrippedSize;
 import org.telegram.tgnet.TLRPC$TL_secureFile;
+import org.telegram.tgnet.TLRPC$TL_videoSize;
 import org.telegram.tgnet.TLRPC$WebDocument;
 import org.telegram.tgnet.TLRPC$WebPage;
 
@@ -1420,9 +1421,17 @@ public class FileLoader extends BaseController {
                             directory = getDirectory(0);
                         }
                     }
+                } else if (tLObject instanceof TLRPC$TL_videoSize) {
+                    TLRPC$TL_videoSize tLRPC$TL_videoSize = (TLRPC$TL_videoSize) tLObject;
+                    TLRPC$FileLocation tLRPC$FileLocation2 = tLRPC$TL_videoSize.location;
+                    if (tLRPC$FileLocation2 == null || tLRPC$FileLocation2.key != null || ((tLRPC$FileLocation2.volume_id == -2147483648L && tLRPC$FileLocation2.local_id < 0) || tLRPC$TL_videoSize.size < 0)) {
+                        directory = getDirectory(4);
+                    } else {
+                        directory = getDirectory(0);
+                    }
                 } else if (tLObject instanceof TLRPC$FileLocation) {
-                    TLRPC$FileLocation tLRPC$FileLocation2 = (TLRPC$FileLocation) tLObject;
-                    if (tLRPC$FileLocation2.key != null || (tLRPC$FileLocation2.volume_id == -2147483648L && tLRPC$FileLocation2.local_id < 0)) {
+                    TLRPC$FileLocation tLRPC$FileLocation3 = (TLRPC$FileLocation) tLObject;
+                    if (tLRPC$FileLocation3.key != null || (tLRPC$FileLocation3.volume_id == -2147483648L && tLRPC$FileLocation3.local_id < 0)) {
                         directory = getDirectory(4);
                     } else {
                         directory = getDirectory(0);
@@ -1651,20 +1660,36 @@ public class FileLoader extends BaseController {
             }
             sb.append(str);
             return sb.toString();
-        } else if (!(tLObject instanceof TLRPC$FileLocation) || (tLObject instanceof TLRPC$TL_fileLocationUnavailable)) {
-            return str2;
-        } else {
-            TLRPC$FileLocation tLRPC$FileLocation2 = (TLRPC$FileLocation) tLObject;
+        } else if (tLObject instanceof TLRPC$TL_videoSize) {
+            TLRPC$TL_videoSize tLRPC$TL_videoSize = (TLRPC$TL_videoSize) tLObject;
+            TLRPC$FileLocation tLRPC$FileLocation2 = tLRPC$TL_videoSize.location;
+            if (tLRPC$FileLocation2 == null || (tLRPC$FileLocation2 instanceof TLRPC$TL_fileLocationUnavailable)) {
+                return str2;
+            }
             StringBuilder sb2 = new StringBuilder();
-            sb2.append(tLRPC$FileLocation2.volume_id);
+            sb2.append(tLRPC$TL_videoSize.location.volume_id);
             sb2.append("_");
-            sb2.append(tLRPC$FileLocation2.local_id);
+            sb2.append(tLRPC$TL_videoSize.location.local_id);
             sb2.append(".");
             if (str == null) {
-                str = "jpg";
+                str = "mp4";
             }
             sb2.append(str);
             return sb2.toString();
+        } else if (!(tLObject instanceof TLRPC$FileLocation) || (tLObject instanceof TLRPC$TL_fileLocationUnavailable)) {
+            return str2;
+        } else {
+            TLRPC$FileLocation tLRPC$FileLocation3 = (TLRPC$FileLocation) tLObject;
+            StringBuilder sb3 = new StringBuilder();
+            sb3.append(tLRPC$FileLocation3.volume_id);
+            sb3.append("_");
+            sb3.append(tLRPC$FileLocation3.local_id);
+            sb3.append(".");
+            if (str == null) {
+                str = "jpg";
+            }
+            sb3.append(str);
+            return sb3.toString();
         }
     }
 

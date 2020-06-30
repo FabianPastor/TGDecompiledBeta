@@ -556,7 +556,6 @@
     <string name="CameraPermissionText">Tocca per permettere l\'accesso alla tua Fotocamera</string>
     <string name="Cancel">Annulla</string>
     <string name="CancelAccountReset">Annulla ripristino account</string>
-    <string name="CancelAccountResetInfo">Qualcuno con accesso al tuo numero di telefono **%1$s** ha richiesto l\'eliminazione del tuo account Telegram e il ripristino della password della verifica in due passaggi.\10\10Se non sei stato tu, per favore inserisci il codice che abbiamo appena inviato tramite SMS al tuo numero.</string>
     <string name="CancelEmailQuestion">Sei sicuro di voler interrompere la configurazione dell\'email di recupero?</string>
     <string name="CancelEmailQuestionTitle">Interrompi configurazione</string>
     <string name="CancelLinkExpired">Link non valido o scaduto.</string>
@@ -2492,7 +2491,6 @@
     <string name="PreviewFeedback2">Layout errato?</string>
     <string name="PriorityInfo">Le notifiche con priorità più alta funzioneranno anche se il telefono è in modalità Non disturbare.</string>
     <string name="PrivacyAddAnException">Aggiungi utenti o gruppi</string>
-    <string name="PrivacyAdvanced">Avanzate</string>
     <string name="PrivacyBots">Bot e siti web</string>
     <string name="PrivacyBotsInfo">Siti web in cui hai usato Telegram per accedere.</string>
     <string name="PrivacyCallsP2PHelp">Disattivando il peer-to-peer, tutte le chiamate saranno inviate tramite i server di Telegram per evitare di rivelare l\'indirizzo IP, ma la qualità audio diminuirà leggermente.</string>

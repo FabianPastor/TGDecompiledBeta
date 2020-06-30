@@ -641,7 +641,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     if (ProfileNotificationsActivity.this.adapter != null) {
                         ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.smartRow);
                     }
-                    ProfileNotificationsActivity.this.dismissCurrentDialig();
+                    ProfileNotificationsActivity.this.dismissCurrentDialog();
                 }
             }
 
@@ -651,7 +651,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 if (ProfileNotificationsActivity.this.adapter != null) {
                     ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.smartRow);
                 }
-                ProfileNotificationsActivity.this.dismissCurrentDialig();
+                ProfileNotificationsActivity.this.dismissCurrentDialog();
             }
 
             public /* synthetic */ void lambda$onItemClick$5$ProfileNotificationsActivity$3() {

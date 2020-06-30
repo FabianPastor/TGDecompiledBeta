@@ -322,7 +322,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
         this.path = file;
         this.streamFileSize = j2;
         this.currentAccount = i2;
-        getPaint().setFlags(2);
+        getPaint().setFlags(3);
         if (j2 == 0 || tLRPC$Document2 == null) {
             boolean z3 = z2;
         } else {
@@ -342,6 +342,10 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     }
 
     public Bitmap getFrameAtTime(long j) {
+        return getFrameAtTime(j, false);
+    }
+
+    public Bitmap getFrameAtTime(long j, boolean z) {
         if (!this.decoderCreated || this.nativePtr == 0) {
             return null;
         }
@@ -350,7 +354,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
             animatedFileDrawableStream.cancel(false);
             this.stream.reset();
         }
-        seekToMs(this.nativePtr, j, false);
+        seekToMs(this.nativePtr, j, z);
         if (this.backgroundBitmap == null) {
             int[] iArr = this.metaData;
             this.backgroundBitmap = Bitmap.createBitmap(iArr[0], iArr[1], Bitmap.Config.ARGB_8888);
@@ -739,7 +743,6 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
             z = iArr[i] != this.roundRadius[i];
             this.roundRadius[i] = iArr[i];
         }
-        getPaint().setFlags(3);
         this.invalidatePath = z;
     }
 

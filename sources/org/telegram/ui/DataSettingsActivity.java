@@ -19,6 +19,10 @@ import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.tgnet.RequestDelegate;
+import org.telegram.tgnet.TLObject;
+import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_messages_clearAllDrafts;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -48,6 +52,10 @@ public class DataSettingsActivity extends BaseFragment {
     public int callsSection2Row;
     /* access modifiers changed from: private */
     public int callsSectionRow;
+    /* access modifiers changed from: private */
+    public int clearDraftsRow;
+    /* access modifiers changed from: private */
+    public int clearDraftsSectionRow;
     /* access modifiers changed from: private */
     public int dataUsageRow;
     /* access modifiers changed from: private */
@@ -180,8 +188,14 @@ public class DataSettingsActivity extends BaseFragment {
         int i25 = i24 + 1;
         this.rowCount = i25;
         this.proxyRow = i24;
-        this.rowCount = i25 + 1;
+        int i26 = i25 + 1;
+        this.rowCount = i26;
         this.proxySection2Row = i25;
+        int i27 = i26 + 1;
+        this.rowCount = i27;
+        this.clearDraftsRow = i26;
+        this.rowCount = i27 + 1;
+        this.clearDraftsSectionRow = i27;
         return true;
     }
 
@@ -211,13 +225,13 @@ public class DataSettingsActivity extends BaseFragment {
         this.listView.setAdapter(this.listAdapter);
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new RecyclerListView.OnItemClickListenerExtended() {
             public final void onItemClick(View view, int i, float f, float f2) {
-                DataSettingsActivity.this.lambda$createView$2$DataSettingsActivity(view, i, f, f2);
+                DataSettingsActivity.this.lambda$createView$5$DataSettingsActivity(view, i, f, f2);
             }
         });
         return this.fragmentView;
     }
 
-    public /* synthetic */ void lambda$createView$2$DataSettingsActivity(View view, int i, float f, float f2) {
+    public /* synthetic */ void lambda$createView$5$DataSettingsActivity(View view, int i, float f, float f2) {
         String str;
         String str2;
         DownloadController.Preset preset;
@@ -367,6 +381,22 @@ public class DataSettingsActivity extends BaseFragment {
             if (view instanceof TextCheckCell) {
                 ((TextCheckCell) view).setChecked(SharedConfig.autoplayVideo);
             }
+        } else if (i == this.clearDraftsRow) {
+            AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
+            builder2.setTitle(LocaleController.getString("AreYouSureClearDraftsTitle", NUM));
+            builder2.setMessage(LocaleController.getString("AreYouSureClearDrafts", NUM));
+            builder2.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener() {
+                public final void onClick(DialogInterface dialogInterface, int i) {
+                    DataSettingsActivity.this.lambda$null$4$DataSettingsActivity(dialogInterface, i);
+                }
+            });
+            builder2.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+            AlertDialog create2 = builder2.create();
+            showDialog(create2);
+            TextView textView2 = (TextView) create2.getButton(-1);
+            if (textView2 != null) {
+                textView2.setTextColor(Theme.getColor("dialogTextRed2"));
+            }
         }
     }
 
@@ -421,6 +451,26 @@ public class DataSettingsActivity extends BaseFragment {
         if (listAdapter2 != null) {
             listAdapter2.notifyItemChanged(i);
         }
+    }
+
+    public /* synthetic */ void lambda$null$4$DataSettingsActivity(DialogInterface dialogInterface, int i) {
+        getConnectionsManager().sendRequest(new TLRPC$TL_messages_clearAllDrafts(), new RequestDelegate() {
+            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                DataSettingsActivity.this.lambda$null$3$DataSettingsActivity(tLObject, tLRPC$TL_error);
+            }
+        });
+    }
+
+    public /* synthetic */ void lambda$null$2$DataSettingsActivity() {
+        getMediaDataController().clearAllDrafts(true);
+    }
+
+    public /* synthetic */ void lambda$null$3$DataSettingsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public final void run() {
+                DataSettingsActivity.this.lambda$null$2$DataSettingsActivity();
+            }
+        });
     }
 
     /* access modifiers changed from: protected */
@@ -487,6 +537,8 @@ public class DataSettingsActivity extends BaseFragment {
                         textSettingsCell.setText(LocaleController.getString("ResetAutomaticMediaDownload", NUM), false);
                     } else if (i2 == DataSettingsActivity.this.quickRepliesRow) {
                         textSettingsCell.setText(LocaleController.getString("VoipQuickReplies", NUM), false);
+                    } else if (i2 == DataSettingsActivity.this.clearDraftsRow) {
+                        textSettingsCell.setText(LocaleController.getString("PrivacyDeleteCloudDrafts", NUM), false);
                     }
                 } else if (itemViewType == 2) {
                     HeaderCell headerCell = (HeaderCell) viewHolder2.itemView;
@@ -599,7 +651,7 @@ public class DataSettingsActivity extends BaseFragment {
                     }
                     notificationsCheckCell.setTextAndValueAndCheck(str, sb, (z4 || z5 || z6) && z, 0, true, true);
                 }
-            } else if (i2 == DataSettingsActivity.this.proxySection2Row) {
+            } else if (i2 == DataSettingsActivity.this.clearDraftsSectionRow) {
                 viewHolder2.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
             } else {
                 viewHolder2.itemView.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
@@ -633,7 +685,7 @@ public class DataSettingsActivity extends BaseFragment {
                     return true;
                 }
                 return false;
-            } else if (i == DataSettingsActivity.this.mobileRow || i == DataSettingsActivity.this.roamingRow || i == DataSettingsActivity.this.wifiRow || i == DataSettingsActivity.this.storageUsageRow || i == DataSettingsActivity.this.useLessDataForCallsRow || i == DataSettingsActivity.this.dataUsageRow || i == DataSettingsActivity.this.proxyRow || i == DataSettingsActivity.this.enableCacheStreamRow || i == DataSettingsActivity.this.enableStreamRow || i == DataSettingsActivity.this.enableAllStreamRow || i == DataSettingsActivity.this.enableMkvRow || i == DataSettingsActivity.this.quickRepliesRow || i == DataSettingsActivity.this.autoplayVideoRow || i == DataSettingsActivity.this.autoplayGifsRow) {
+            } else if (i == DataSettingsActivity.this.mobileRow || i == DataSettingsActivity.this.roamingRow || i == DataSettingsActivity.this.wifiRow || i == DataSettingsActivity.this.storageUsageRow || i == DataSettingsActivity.this.useLessDataForCallsRow || i == DataSettingsActivity.this.dataUsageRow || i == DataSettingsActivity.this.proxyRow || i == DataSettingsActivity.this.clearDraftsRow || i == DataSettingsActivity.this.enableCacheStreamRow || i == DataSettingsActivity.this.enableStreamRow || i == DataSettingsActivity.this.enableAllStreamRow || i == DataSettingsActivity.this.enableMkvRow || i == DataSettingsActivity.this.quickRepliesRow || i == DataSettingsActivity.this.autoplayVideoRow || i == DataSettingsActivity.this.autoplayGifsRow) {
                 return true;
             } else {
                 return false;
@@ -676,7 +728,7 @@ public class DataSettingsActivity extends BaseFragment {
         }
 
         public int getItemViewType(int i) {
-            if (i == DataSettingsActivity.this.mediaDownloadSection2Row || i == DataSettingsActivity.this.usageSection2Row || i == DataSettingsActivity.this.callsSection2Row || i == DataSettingsActivity.this.proxySection2Row || i == DataSettingsActivity.this.autoplaySectionRow) {
+            if (i == DataSettingsActivity.this.mediaDownloadSection2Row || i == DataSettingsActivity.this.usageSection2Row || i == DataSettingsActivity.this.callsSection2Row || i == DataSettingsActivity.this.proxySection2Row || i == DataSettingsActivity.this.autoplaySectionRow || i == DataSettingsActivity.this.clearDraftsSectionRow) {
                 return 0;
             }
             if (i == DataSettingsActivity.this.mediaDownloadSectionRow || i == DataSettingsActivity.this.streamSectionRow || i == DataSettingsActivity.this.callsSectionRow || i == DataSettingsActivity.this.usageSectionRow || i == DataSettingsActivity.this.proxySectionRow || i == DataSettingsActivity.this.autoplayHeaderRow) {

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import androidx.core.view.ViewCompat;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -53,6 +54,7 @@ public class HeaderCell extends FrameLayout {
             this.textView2.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
             addView(this.textView2, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 3 : i4) | 48, f, 21.0f, f, 0.0f));
         }
+        ViewCompat.setAccessibilityHeading(this, true);
     }
 
     public void setHeight(int i) {

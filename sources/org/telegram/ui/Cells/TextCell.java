@@ -6,7 +6,9 @@ import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import org.telegram.messenger.AndroidUtilities;
@@ -39,12 +41,14 @@ public class TextCell extends FrameLayout {
         this.textView.setTextSize(16);
         int i2 = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
+        this.textView.setImportantForAccessibility(2);
         addView(this.textView);
         SimpleTextView simpleTextView2 = new SimpleTextView(context);
         this.valueTextView = simpleTextView2;
         simpleTextView2.setTextColor(Theme.getColor(z ? "dialogTextBlue2" : "windowBackgroundWhiteValueText"));
         this.valueTextView.setTextSize(16);
         this.valueTextView.setGravity(LocaleController.isRTL ? 3 : i2);
+        this.valueTextView.setImportantForAccessibility(2);
         addView(this.valueTextView);
         ImageView imageView2 = new ImageView(context);
         this.imageView = imageView2;
@@ -226,6 +230,19 @@ public class TextCell extends FrameLayout {
                 i = 0;
             }
             canvas.drawLine(f, measuredHeight, (float) (measuredWidth - i), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+        }
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        CharSequence text = this.textView.getText();
+        if (!TextUtils.isEmpty(text)) {
+            CharSequence text2 = this.valueTextView.getText();
+            if (!TextUtils.isEmpty(text2)) {
+                accessibilityNodeInfo.setText(text + ": " + text2);
+                return;
+            }
+            accessibilityNodeInfo.setText(text);
         }
     }
 }

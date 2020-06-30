@@ -1,6 +1,7 @@
 package org.telegram.ui.Components.Crop;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.VelocityTracker;
@@ -12,14 +13,15 @@ public class CropGestureDetector {
     private int mActivePointerIndex = 0;
     private ScaleGestureDetector mDetector;
     private boolean mIsDragging;
-    float mLastTouchX;
-    float mLastTouchY;
+    private float mLastTouchX;
+    private float mLastTouchY;
     /* access modifiers changed from: private */
     public CropGestureListener mListener;
-    final float mMinimumVelocity;
-    final float mTouchSlop = ((float) AndroidUtilities.dp(1.0f));
+    private final float mMinimumVelocity;
+    private final float mTouchSlop = ((float) AndroidUtilities.dp(1.0f));
     private VelocityTracker mVelocityTracker;
     private boolean started;
+    private long touchTime;
 
     public interface CropGestureListener {
         void onDrag(float f, float f2);
@@ -27,6 +29,8 @@ public class CropGestureDetector {
         void onFling(float f, float f2, float f3, float f4);
 
         void onScale(float f, float f2, float f3);
+
+        void onTapUp();
     }
 
     public CropGestureDetector(Context context) {
@@ -86,7 +90,11 @@ public class CropGestureDetector {
         boolean z = false;
         if (action == 0) {
             this.mActivePointerId = motionEvent.getPointerId(0);
+            this.touchTime = SystemClock.elapsedRealtime();
         } else if (action == 1 || action == 3) {
+            if (!this.mIsDragging && SystemClock.elapsedRealtime() - this.touchTime < 800) {
+                this.mListener.onTapUp();
+            }
             this.mActivePointerId = -1;
         } else if (action == 6) {
             int action2 = (65280 & motionEvent.getAction()) >> 8;

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.graphics.Matrix;
 import android.graphics.SurfaceTexture;
@@ -45,6 +46,7 @@ import org.telegram.messenger.MediaController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.VideoEditedInfo;
 import org.telegram.messenger.audioinfo.AudioInfo;
+import org.telegram.messenger.video.MediaCodecVideoConvertor;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC$BotInlineResult;
@@ -1638,14 +1640,22 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        MessageObject messageObject;
         ArrayList<MessageObject> arrayList;
         int i3 = 0;
         if (i == NotificationCenter.fileDidLoad || i == NotificationCenter.httpFileDidLoad) {
             String str = objArr[0];
-            if (this.downloadingCurrentMessage && (messageObject = this.playingMessageObject) != null && messageObject.currentAccount == i2 && FileLoader.getAttachFileName(messageObject.getDocument()).equals(str)) {
-                this.playMusicAgain = true;
-                playMessage(this.playingMessageObject);
+            MessageObject messageObject = this.playingMessageObject;
+            if (messageObject != null && messageObject.currentAccount == i2 && FileLoader.getAttachFileName(messageObject.getDocument()).equals(str)) {
+                if (this.downloadingCurrentMessage) {
+                    this.playMusicAgain = true;
+                    playMessage(this.playingMessageObject);
+                } else if (this.audioInfo == null) {
+                    try {
+                        this.audioInfo = AudioInfo.getAudioInfo(FileLoader.getPathToMessage(this.playingMessageObject.messageOwner));
+                    } catch (Exception e) {
+                        FileLog.e((Throwable) e);
+                    }
+                }
             }
         } else if (i == NotificationCenter.messagesDeleted) {
             if (!objArr[2].booleanValue()) {
@@ -4069,7 +4079,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r3 = 2
             r2.<init>(r10, r3)     // Catch:{ Exception -> 0x005e }
             java.lang.String r10 = "Loading"
-            r1 = 2131625608(0x7f0e0688, float:1.8878429E38)
+            r1 = 2131625648(0x7f0e06b0, float:1.887851E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r1)     // Catch:{ Exception -> 0x005b }
             r2.setMessage(r10)     // Catch:{ Exception -> 0x005b }
             r2.setCanceledOnTouchOutside(r0)     // Catch:{ Exception -> 0x005b }
@@ -4892,7 +4902,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r37 = r5
             java.lang.String r5 = "AllPhotos"
             r38 = r7
-            r7 = 2131624168(0x7f0e00e8, float:1.8875508E38)
+            r7 = 2131624169(0x7f0e00e9, float:1.887551E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r7)     // Catch:{ all -> 0x020b }
             r7 = 0
             r4.<init>(r7, r5, r3)     // Catch:{ all -> 0x020b }
@@ -4907,7 +4917,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             if (r32 != 0) goto L_0x0186
             org.telegram.messenger.MediaController$AlbumEntry r5 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x0181 }
             r39 = r8
-            r7 = 2131624167(0x7f0e00e7, float:1.8875506E38)
+            r7 = 2131624168(0x7f0e00e8, float:1.8875508E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r1, r7)     // Catch:{ all -> 0x0181 }
             r7 = 0
             r5.<init>(r7, r8, r3)     // Catch:{ all -> 0x0181 }
@@ -5203,7 +5213,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             org.telegram.messenger.MediaController$AlbumEntry r4 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x0438 }
             java.lang.String r5 = "AllVideos"
             r21 = r6
-            r6 = 2131624169(0x7f0e00e9, float:1.887551E38)
+            r6 = 2131624170(0x7f0e00ea, float:1.8875512E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)     // Catch:{ all -> 0x0438 }
             r6 = 0
             r4.<init>(r6, r5, r3)     // Catch:{ all -> 0x0438 }
@@ -5226,7 +5236,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             if (r32 != 0) goto L_0x03d8
             org.telegram.messenger.MediaController$AlbumEntry r5 = new org.telegram.messenger.MediaController$AlbumEntry     // Catch:{ all -> 0x03d3 }
             r20 = r7
-            r6 = 2131624167(0x7f0e00e7, float:1.8875506E38)
+            r6 = 2131624168(0x7f0e00e8, float:1.8875508E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r1, r6)     // Catch:{ all -> 0x03d3 }
             r6 = 0
             r5.<init>(r6, r7, r3)     // Catch:{ all -> 0x03d3 }
@@ -5650,224 +5660,110 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:28:0x0074  */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x0079  */
-    /* JADX WARNING: Removed duplicated region for block: B:36:0x0089  */
-    /* JADX WARNING: Removed duplicated region for block: B:37:0x008e  */
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x0108  */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x0116  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean convertVideo(org.telegram.messenger.MediaController.VideoConvertMessage r38) {
-        /*
-            r37 = this;
-            r9 = r37
-            r0 = r38
-            org.telegram.messenger.MessageObject r1 = r0.messageObject
-            org.telegram.messenger.VideoEditedInfo r2 = r0.videoEditedInfo
-            if (r1 == 0) goto L_0x0165
-            if (r2 != 0) goto L_0x000e
-            goto L_0x0165
-        L_0x000e:
-            java.lang.String r4 = r2.originalPath
-            long r5 = r2.startTime
-            long r7 = r2.endTime
-            int r10 = r2.resultWidth
-            int r11 = r2.resultHeight
-            int r13 = r2.rotationValue
-            int r12 = r2.originalWidth
-            int r14 = r2.originalHeight
-            int r15 = r2.framerate
-            int r3 = r2.bitrate
-            r16 = r10
-            r17 = r11
-            long r10 = r1.getDialogId()
-            int r11 = (int) r10
-            if (r11 != 0) goto L_0x0030
-            r18 = 1
-            goto L_0x0032
-        L_0x0030:
-            r18 = 0
-        L_0x0032:
-            java.io.File r11 = new java.io.File
-            org.telegram.tgnet.TLRPC$Message r1 = r1.messageOwner
-            java.lang.String r1 = r1.attachPath
-            r11.<init>(r1)
-            boolean r1 = r11.exists()
-            if (r1 == 0) goto L_0x0044
-            r11.delete()
-        L_0x0044:
-            if (r4 != 0) goto L_0x0048
-            java.lang.String r4 = ""
-        L_0x0048:
-            r19 = 0
-            int r1 = (r5 > r19 ? 1 : (r5 == r19 ? 0 : -1))
-            if (r1 <= 0) goto L_0x0057
-            int r1 = (r7 > r19 ? 1 : (r7 == r19 ? 0 : -1))
-            if (r1 <= 0) goto L_0x0057
-            long r19 = r7 - r5
-            r24 = r19
-            goto L_0x005d
-        L_0x0057:
-            int r1 = (r7 > r19 ? 1 : (r7 == r19 ? 0 : -1))
-            if (r1 <= 0) goto L_0x0060
-            r24 = r7
-        L_0x005d:
-            r19 = r11
-            goto L_0x0070
-        L_0x0060:
-            int r1 = (r5 > r19 ? 1 : (r5 == r19 ? 0 : -1))
-            if (r1 <= 0) goto L_0x006a
-            r19 = r11
-            long r10 = r2.originalDuration
-            long r10 = r10 - r5
-            goto L_0x006e
-        L_0x006a:
-            r19 = r11
-            long r10 = r2.originalDuration
-        L_0x006e:
-            r24 = r10
-        L_0x0070:
-            r10 = 59
-            if (r15 != 0) goto L_0x0079
-            r10 = 25
-            r20 = 25
-            goto L_0x0080
-        L_0x0079:
-            if (r15 <= r10) goto L_0x007e
-            r20 = 59
-            goto L_0x0080
-        L_0x007e:
-            r20 = r15
-        L_0x0080:
-            r10 = 90
-            if (r13 == r10) goto L_0x008e
-            r10 = 270(0x10e, float:3.78E-43)
-            if (r13 != r10) goto L_0x0089
-            goto L_0x008e
-        L_0x0089:
-            r15 = r16
-            r11 = r17
-            goto L_0x0092
-        L_0x008e:
-            r11 = r16
-            r15 = r17
-        L_0x0092:
-            org.telegram.messenger.MediaController$CropState r10 = r2.cropState
-            if (r10 != 0) goto L_0x00bc
-            java.util.ArrayList<org.telegram.messenger.VideoEditedInfo$MediaEntity> r10 = r2.mediaEntities
-            if (r10 != 0) goto L_0x00bc
-            java.lang.String r10 = r2.paintPath
-            if (r10 != 0) goto L_0x00bc
-            org.telegram.messenger.MediaController$SavedFilterState r10 = r2.filterState
-            if (r10 != 0) goto L_0x00bc
-            if (r15 != r12) goto L_0x00bc
-            if (r11 != r14) goto L_0x00bc
-            if (r13 != 0) goto L_0x00bc
-            boolean r10 = r2.roundVideo
-            if (r10 != 0) goto L_0x00bc
-            int r10 = android.os.Build.VERSION.SDK_INT
-            r12 = 18
-            if (r10 < r12) goto L_0x00b9
-            r16 = -1
-            int r10 = (r5 > r16 ? 1 : (r5 == r16 ? 0 : -1))
-            if (r10 == 0) goto L_0x00b9
-            goto L_0x00bc
-        L_0x00b9:
-            r23 = 0
-            goto L_0x00be
-        L_0x00bc:
-            r23 = 1
-        L_0x00be:
-            android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext
-            java.lang.String r12 = "videoconvert"
-            r14 = 0
-            android.content.SharedPreferences r33 = r10.getSharedPreferences(r12, r14)
-            long r34 = java.lang.System.currentTimeMillis()
-            org.telegram.messenger.MediaController$9 r10 = new org.telegram.messenger.MediaController$9
-            r31 = r10
-            r12 = r19
-            r10.<init>(r2, r12, r0)
-            r1 = 1
-            r2.videoConvertFirstWrite = r1
-            org.telegram.messenger.video.MediaCodecVideoConvertor r14 = new org.telegram.messenger.video.MediaCodecVideoConvertor
-            r10 = r14
-            r14.<init>()
-            org.telegram.messenger.MediaController$SavedFilterState r14 = r2.filterState
-            r26 = r14
-            java.lang.String r14 = r2.paintPath
-            r27 = r14
-            java.util.ArrayList<org.telegram.messenger.VideoEditedInfo$MediaEntity> r14 = r2.mediaEntities
-            r28 = r14
-            boolean r14 = r2.isPhoto
-            r29 = r14
-            org.telegram.messenger.MediaController$CropState r14 = r2.cropState
-            r30 = r14
-            r16 = r11
-            r36 = r12
-            r11 = r4
-            r14 = r18
-            r17 = r20
-            r18 = r3
-            r19 = r5
-            r21 = r7
-            boolean r3 = r10.convertVideo(r11, r12, r13, r14, r15, r16, r17, r18, r19, r21, r23, r24, r26, r27, r28, r29, r30, r31)
-            boolean r4 = r2.canceled
-            if (r4 != 0) goto L_0x0112
-            java.lang.Object r5 = r9.videoConvertSync
-            monitor-enter(r5)
-            boolean r4 = r2.canceled     // Catch:{ all -> 0x010f }
-            monitor-exit(r5)     // Catch:{ all -> 0x010f }
-            goto L_0x0112
-        L_0x010f:
-            r0 = move-exception
-            monitor-exit(r5)     // Catch:{ all -> 0x010f }
-            throw r0
-        L_0x0112:
-            boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r2 == 0) goto L_0x0138
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder
-            r2.<init>()
-            java.lang.String r5 = "time="
-            r2.append(r5)
-            long r5 = java.lang.System.currentTimeMillis()
-            long r5 = r5 - r34
-            r2.append(r5)
-            java.lang.String r5 = " canceled="
-            r2.append(r5)
-            r2.append(r4)
-            java.lang.String r2 = r2.toString()
-            org.telegram.messenger.FileLog.d(r2)
-        L_0x0138:
-            android.content.SharedPreferences$Editor r2 = r33.edit()
-            java.lang.String r5 = "isPreviousOk"
-            android.content.SharedPreferences$Editor r2 = r2.putBoolean(r5, r1)
-            r2.apply()
-            r5 = 1
-            long r6 = r36.length()
-            if (r3 != 0) goto L_0x0152
-            if (r4 == 0) goto L_0x014f
-            goto L_0x0152
-        L_0x014f:
-            r32 = 0
-            goto L_0x0154
-        L_0x0152:
-            r32 = 1
-        L_0x0154:
-            r8 = 1065353216(0x3var_, float:1.0)
-            r10 = 1
-            r1 = r37
-            r2 = r38
-            r3 = r36
-            r4 = r5
-            r5 = r6
-            r7 = r32
-            r1.didWriteData(r2, r3, r4, r5, r7, r8)
-            return r10
-        L_0x0165:
-            r0 = 0
-            return r0
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaController.convertVideo(org.telegram.messenger.MediaController$VideoConvertMessage):boolean");
+    public boolean convertVideo(VideoConvertMessage videoConvertMessage) {
+        long j;
+        File file;
+        int i;
+        int i2;
+        long j2;
+        final VideoConvertMessage videoConvertMessage2 = videoConvertMessage;
+        MessageObject messageObject = videoConvertMessage2.messageObject;
+        final VideoEditedInfo videoEditedInfo = videoConvertMessage2.videoEditedInfo;
+        if (messageObject == null || videoEditedInfo == null) {
+            return false;
+        }
+        String str = videoEditedInfo.originalPath;
+        long j3 = videoEditedInfo.startTime;
+        long j4 = videoEditedInfo.avatarStartTime;
+        long j5 = videoEditedInfo.endTime;
+        int i3 = videoEditedInfo.resultWidth;
+        int i4 = videoEditedInfo.resultHeight;
+        int i5 = videoEditedInfo.rotationValue;
+        int i6 = videoEditedInfo.originalWidth;
+        int i7 = videoEditedInfo.originalHeight;
+        int i8 = i3;
+        int i9 = videoEditedInfo.framerate;
+        int i10 = i4;
+        int i11 = videoEditedInfo.bitrate;
+        int i12 = videoEditedInfo.originalBitrate;
+        int i13 = i6;
+        boolean z = ((int) messageObject.getDialogId()) == 0;
+        File file2 = new File(messageObject.messageOwner.attachPath);
+        if (file2.exists()) {
+            file2.delete();
+        }
+        if (str == null) {
+            str = "";
+        }
+        if (j3 > 0 && j5 > 0) {
+            j = j5 - j3;
+            file = file2;
+        } else if (j5 > 0) {
+            file = file2;
+            j = j5;
+        } else {
+            if (j3 > 0) {
+                file = file2;
+                j2 = videoEditedInfo.originalDuration - j3;
+            } else {
+                file = file2;
+                j2 = videoEditedInfo.originalDuration;
+            }
+            j = j2;
+        }
+        int i14 = i9 == 0 ? 25 : i9 > 59 ? 59 : i9;
+        if (i5 == 90 || i5 == 270) {
+            i2 = i8;
+            i = i10;
+        } else {
+            i = i8;
+            i2 = i10;
+        }
+        boolean z2 = (j4 == -1 && videoEditedInfo.cropState == null && videoEditedInfo.mediaEntities == null && videoEditedInfo.paintPath == null && videoEditedInfo.filterState == null && i == i13 && i2 == i7 && i5 == 0 && !videoEditedInfo.roundVideo && j3 == -1) ? false : true;
+        SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("videoconvert", 0);
+        long currentTimeMillis = System.currentTimeMillis();
+        AnonymousClass9 r34 = r1;
+        final File file3 = file;
+        AnonymousClass9 r1 = new VideoConvertorListener() {
+            long lastAvailableSize = 0;
+
+            public boolean checkConversionCanceled() {
+                return videoEditedInfo.canceled;
+            }
+
+            public void didWriteData(long j, float f) {
+                if (!videoEditedInfo.canceled) {
+                    if (j < 0) {
+                        j = file3.length();
+                    }
+                    long j2 = j;
+                    if (videoEditedInfo.needUpdateProgress || this.lastAvailableSize != j2) {
+                        this.lastAvailableSize = j2;
+                        MediaController.this.didWriteData(videoConvertMessage2, file3, false, j2, false, f);
+                    }
+                }
+            }
+        };
+        videoEditedInfo.videoConvertFirstWrite = true;
+        File file4 = file3;
+        MediaCodecVideoConvertor mediaCodecVideoConvertor = r16;
+        MediaCodecVideoConvertor mediaCodecVideoConvertor2 = new MediaCodecVideoConvertor();
+        int i15 = i11;
+        String str2 = str;
+        File file5 = file4;
+        boolean convertVideo = mediaCodecVideoConvertor.convertVideo(str2, file5, i5, z, i, i2, i14, i11, i12, j3, j5, j4, z2, j, videoEditedInfo.filterState, videoEditedInfo.paintPath, videoEditedInfo.mediaEntities, videoEditedInfo.isPhoto, videoEditedInfo.cropState, r34);
+        boolean z3 = videoEditedInfo.canceled;
+        if (!z3) {
+            synchronized (this.videoConvertSync) {
+                z3 = videoEditedInfo.canceled;
+            }
+        }
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("time=" + (System.currentTimeMillis() - currentTimeMillis) + " canceled=" + z3);
+        }
+        sharedPreferences.edit().putBoolean("isPreviousOk", true).apply();
+        didWriteData(videoConvertMessage, file5, true, file5.length(), convertVideo || z3, 1.0f);
+        return true;
     }
 
     public static int getVideoBitrate(String str) {

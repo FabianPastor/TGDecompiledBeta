@@ -672,6 +672,7 @@
     <public type="drawable" name="msg_unpin" id="NUM" />
     <public type="drawable" name="msg_unvote" id="NUM" />
     <public type="drawable" name="msg_usersearch" id="NUM" />
+    <public type="drawable" name="msg_video" id="NUM" />
     <public type="drawable" name="msg_views" id="NUM" />
     <public type="drawable" name="msg_warning" id="NUM" />
     <public type="drawable" name="music_empty" id="NUM" />
@@ -1312,6 +1313,7 @@
     <public type="string" name="ActionYouRemovedPhoto" id="NUM" />
     <public type="string" name="ActionYouScored" id="NUM" />
     <public type="string" name="ActionYouScoredInGame" id="NUM" />
+    <public type="string" name="ActionsChartTitle" id="NUM" />
     <public type="string" name="Add" id="NUM" />
     <public type="string" name="AddAccount" id="NUM" />
     <public type="string" name="AddAdminErrorBlacklisted" id="NUM" />
@@ -1421,6 +1423,8 @@
     <public type="string" name="ApplyThemeFile" id="NUM" />
     <public type="string" name="April" id="NUM" />
     <public type="string" name="Archive" id="NUM" />
+    <public type="string" name="ArchiveAndMute" id="NUM" />
+    <public type="string" name="ArchiveAndMuteInfo" id="NUM" />
     <public type="string" name="ArchiveHidden" id="NUM" />
     <public type="string" name="ArchiveHiddenInfo" id="NUM" />
     <public type="string" name="ArchiveHintHeader1" id="NUM" />
@@ -1633,6 +1637,12 @@
     <public type="string" name="BadgeNumberUnread" id="NUM" />
     <public type="string" name="BanFromTheGroup" id="NUM" />
     <public type="string" name="BannedPhoneNumber" id="NUM" />
+    <public type="string" name="Bans_few" id="NUM" />
+    <public type="string" name="Bans_many" id="NUM" />
+    <public type="string" name="Bans_one" id="NUM" />
+    <public type="string" name="Bans_other" id="NUM" />
+    <public type="string" name="Bans_two" id="NUM" />
+    <public type="string" name="Bans_zero" id="NUM" />
     <public type="string" name="Black" id="NUM" />
     <public type="string" name="BlockContact" id="NUM" />
     <public type="string" name="BlockUser" id="NUM" />
@@ -1706,7 +1716,7 @@
     <public type="string" name="CameraPermissionText" id="NUM" />
     <public type="string" name="Cancel" id="NUM" />
     <public type="string" name="CancelAccountReset" id="NUM" />
-    <public type="string" name="CancelAccountResetInfo" id="NUM" />
+    <public type="string" name="CancelAccountResetInfo2" id="NUM" />
     <public type="string" name="CancelEmailQuestion" id="NUM" />
     <public type="string" name="CancelEmailQuestionTitle" id="NUM" />
     <public type="string" name="CancelLinkExpired" id="NUM" />
@@ -1845,12 +1855,20 @@
     <public type="string" name="Channels_other" id="NUM" />
     <public type="string" name="Channels_two" id="NUM" />
     <public type="string" name="Channels_zero" id="NUM" />
+    <public type="string" name="CharactersPerMessage" id="NUM" />
+    <public type="string" name="Characters_few" id="NUM" />
+    <public type="string" name="Characters_many" id="NUM" />
+    <public type="string" name="Characters_one" id="NUM" />
+    <public type="string" name="Characters_other" id="NUM" />
+    <public type="string" name="Characters_two" id="NUM" />
+    <public type="string" name="Characters_zero" id="NUM" />
     <public type="string" name="ChatAdmin" id="NUM" />
     <public type="string" name="ChatArchived" id="NUM" />
     <public type="string" name="ChatArchivedInfo" id="NUM" />
     <public type="string" name="ChatBackground" id="NUM" />
     <public type="string" name="ChatCamera" id="NUM" />
     <public type="string" name="ChatDeletedUndo" id="NUM" />
+    <public type="string" name="ChatDistanceToPeer" id="NUM" />
     <public type="string" name="ChatDocument" id="NUM" />
     <public type="string" name="ChatGallery" id="NUM" />
     <public type="string" name="ChatHints" id="NUM" />
@@ -1872,6 +1890,7 @@
     <public type="string" name="ChatSetThisLocation" id="NUM" />
     <public type="string" name="ChatSettings" id="NUM" />
     <public type="string" name="ChatVideo" id="NUM" />
+    <public type="string" name="ChatWasMovedToMainList" id="NUM" />
     <public type="string" name="ChatYourSelf" id="NUM" />
     <public type="string" name="ChatYourSelfDescription1" id="NUM" />
     <public type="string" name="ChatYourSelfDescription2" id="NUM" />
@@ -1915,10 +1934,12 @@
     <public type="string" name="Chats_zero" id="NUM" />
     <public type="string" name="Checking" id="NUM" />
     <public type="string" name="ChooseCountry" id="NUM" />
+    <public type="string" name="ChooseCover" id="NUM" />
     <public type="string" name="ChooseFromGallery" id="NUM" />
     <public type="string" name="ChooseFromSearch" id="NUM" />
     <public type="string" name="ChooseFromYourStickers" id="NUM" />
     <public type="string" name="ChoosePhoto" id="NUM" />
+    <public type="string" name="ChooseRecordVideo" id="NUM" />
     <public type="string" name="ChooseStickerSet" id="NUM" />
     <public type="string" name="ChooseStickerSetMy" id="NUM" />
     <public type="string" name="ChooseStickerSetNotFound" id="NUM" />
@@ -2094,6 +2115,7 @@
     <public type="string" name="Delete" id="NUM" />
     <public type="string" name="DeleteAccountHelp" id="NUM" />
     <public type="string" name="DeleteAccountIfAwayFor2" id="NUM" />
+    <public type="string" name="DeleteAccountIfAwayFor3" id="NUM" />
     <public type="string" name="DeleteAccountTitle" id="NUM" />
     <public type="string" name="DeleteAll" id="NUM" />
     <public type="string" name="DeleteAllFrom" id="NUM" />
@@ -2129,6 +2151,7 @@
     <public type="string" name="DeleteMessagesTextGroup" id="NUM" />
     <public type="string" name="DeleteMessagesTextGroupPart" id="NUM" />
     <public type="string" name="DeleteMessagesTitle" id="NUM" />
+    <public type="string" name="DeleteMyAccount" id="NUM" />
     <public type="string" name="DeletePhoto" id="NUM" />
     <public type="string" name="DeleteProxy" id="NUM" />
     <public type="string" name="DeleteReportSpam" id="NUM" />
@@ -2142,6 +2165,12 @@
     <public type="string" name="DeleteThisChat" id="NUM" />
     <public type="string" name="DeleteThisChatBothSides" id="NUM" />
     <public type="string" name="DeleteThisGroup" id="NUM" />
+    <public type="string" name="Deletions_few" id="NUM" />
+    <public type="string" name="Deletions_many" id="NUM" />
+    <public type="string" name="Deletions_one" id="NUM" />
+    <public type="string" name="Deletions_other" id="NUM" />
+    <public type="string" name="Deletions_two" id="NUM" />
+    <public type="string" name="Deletions_zero" id="NUM" />
     <public type="string" name="DescriptionInfo" id="NUM" />
     <public type="string" name="DescriptionOptionalPlaceholder" id="NUM" />
     <public type="string" name="DescriptionPlaceholder" id="NUM" />
@@ -2235,8 +2264,10 @@
     <public type="string" name="EditMessageError" id="NUM" />
     <public type="string" name="EditMessageMedia" id="NUM" />
     <public type="string" name="EditName" id="NUM" />
+    <public type="string" name="EditPhoto" id="NUM" />
     <public type="string" name="EditThemeColors" id="NUM" />
     <public type="string" name="EditThemeTitle" id="NUM" />
+    <public type="string" name="EditVideo" id="NUM" />
     <public type="string" name="EditedMessage" id="NUM" />
     <public type="string" name="EmailCopied" id="NUM" />
     <public type="string" name="EmailPasswordConfirmText2" id="NUM" />
@@ -2510,6 +2541,7 @@
     <public type="string" name="FontSizePreviewReply" id="NUM" />
     <public type="string" name="FontType" id="NUM" />
     <public type="string" name="FootsAway" id="NUM" />
+    <public type="string" name="FootsFromYou" id="NUM" />
     <public type="string" name="ForgotPassword" id="NUM" />
     <public type="string" name="Forward" id="NUM" />
     <public type="string" name="ForwardTo" id="NUM" />
@@ -2627,6 +2659,7 @@
     <public type="string" name="GroupEmptyTitle1" id="NUM" />
     <public type="string" name="GroupEmptyTitle2" id="NUM" />
     <public type="string" name="GroupMembers" id="NUM" />
+    <public type="string" name="GroupMembersChartTitle" id="NUM" />
     <public type="string" name="GroupName" id="NUM" />
     <public type="string" name="GroupNotifications" id="NUM" />
     <public type="string" name="GroupPhotosHelp" id="NUM" />
@@ -2703,6 +2736,12 @@
     <public type="string" name="InvalidLastName" id="NUM" />
     <public type="string" name="InvalidPhoneNumber" id="NUM" />
     <public type="string" name="Invisible" id="NUM" />
+    <public type="string" name="Invitations_few" id="NUM" />
+    <public type="string" name="Invitations_many" id="NUM" />
+    <public type="string" name="Invitations_one" id="NUM" />
+    <public type="string" name="Invitations_other" id="NUM" />
+    <public type="string" name="Invitations_two" id="NUM" />
+    <public type="string" name="Invitations_zero" id="NUM" />
     <public type="string" name="Invite" id="NUM" />
     <public type="string" name="InviteFriends" id="NUM" />
     <public type="string" name="InviteFriendsHelp" id="NUM" />
@@ -2742,6 +2781,7 @@
     <public type="string" name="JumpToDate" id="NUM" />
     <public type="string" name="June" id="NUM" />
     <public type="string" name="KMetersAway2" id="NUM" />
+    <public type="string" name="KMetersFromYou2" id="NUM" />
     <public type="string" name="KeepMedia" id="NUM" />
     <public type="string" name="KeepMediaForever" id="NUM" />
     <public type="string" name="KeepMediaInfo" id="NUM" />
@@ -2845,6 +2885,8 @@
     <public type="string" name="LowDiskSpaceNeverRemove" id="NUM" />
     <public type="string" name="LowDiskSpaceTitle" id="NUM" />
     <public type="string" name="LowDiskSpaceTitle2" id="NUM" />
+    <public type="string" name="MainProfilePhotoSetHint" id="NUM" />
+    <public type="string" name="MainProfileVideoSetHint" id="NUM" />
     <public type="string" name="MakeAdmin" id="NUM" />
     <public type="string" name="MakeMyselfVisible" id="NUM" />
     <public type="string" name="MakeMyselfVisibleInfo" id="NUM" />
@@ -2909,6 +2951,8 @@
     <public type="string" name="MembersCountSelected_two" id="NUM" />
     <public type="string" name="MembersCountSelected_zero" id="NUM" />
     <public type="string" name="MembersCountZero" id="NUM" />
+    <public type="string" name="MembersLanguageChartTitle" id="NUM" />
+    <public type="string" name="MembersOverviewTitle" id="NUM" />
     <public type="string" name="Members_few" id="NUM" />
     <public type="string" name="Members_many" id="NUM" />
     <public type="string" name="Members_one" id="NUM" />
@@ -2936,9 +2980,12 @@
     <public type="string" name="MessageScheduledUntilOnline" id="NUM" />
     <public type="string" name="MessageScheduledVote" id="NUM" />
     <public type="string" name="MessageScheduledVoteResults" id="NUM" />
+    <public type="string" name="MessagesChartTitle" id="NUM" />
     <public type="string" name="MessagesDataUsage" id="NUM" />
+    <public type="string" name="MessagesOverview" id="NUM" />
     <public type="string" name="MessagesSettings" id="NUM" />
     <public type="string" name="MetersAway2" id="NUM" />
+    <public type="string" name="MetersFromYou2" id="NUM" />
     <public type="string" name="Meters_few" id="NUM" />
     <public type="string" name="Meters_many" id="NUM" />
     <public type="string" name="Meters_one" id="NUM" />
@@ -2946,6 +2993,7 @@
     <public type="string" name="Meters_two" id="NUM" />
     <public type="string" name="Meters_zero" id="NUM" />
     <public type="string" name="MilesAway" id="NUM" />
+    <public type="string" name="MilesFromYou" id="NUM" />
     <public type="string" name="MinutesBold_few" id="NUM" />
     <public type="string" name="MinutesBold_many" id="NUM" />
     <public type="string" name="MinutesBold_one" id="NUM" />
@@ -2982,6 +3030,8 @@
     <public type="string" name="NearbyCreateGroup" id="NUM" />
     <public type="string" name="NearbyCreateGroupInfo" id="NUM" />
     <public type="string" name="NearbyCreateGroupInfo2" id="NUM" />
+    <public type="string" name="NearbyPeopleGreetingsDescription" id="NUM" />
+    <public type="string" name="NearbyPeopleGreetingsMessage" id="NUM" />
     <public type="string" name="NearbyStartGroup" id="NUM" />
     <public type="string" name="NearbyVenue" id="NUM" />
     <public type="string" name="NetworkUsage" id="NUM" />
@@ -2994,10 +3044,12 @@
     <public type="string" name="NeverShareWithTitle" id="NUM" />
     <public type="string" name="NewBroadcastList" id="NUM" />
     <public type="string" name="NewChannel" id="NUM" />
+    <public type="string" name="NewChatsFromNonContacts" id="NUM" />
     <public type="string" name="NewContact" id="NUM" />
     <public type="string" name="NewConversationShortcut" id="NUM" />
     <public type="string" name="NewFollowersBySourceChartTitle" id="NUM" />
     <public type="string" name="NewGroup" id="NUM" />
+    <public type="string" name="NewMembersBySourceChartTitle" id="NUM" />
     <public type="string" name="NewMessageTitle" id="NUM" />
     <public type="string" name="NewMessages_few" id="NUM" />
     <public type="string" name="NewMessages_many" id="NUM" />
@@ -3020,6 +3072,7 @@
     <public type="string" name="NoAudioFilesInfo" id="NUM" />
     <public type="string" name="NoAudioFound" id="NUM" />
     <public type="string" name="NoAudioFoundInfo" id="NUM" />
+    <public type="string" name="NoAudioFoundPlayerInfo" id="NUM" />
     <public type="string" name="NoBlocked" id="NUM" />
     <public type="string" name="NoBlockedChannel2" id="NUM" />
     <public type="string" name="NoBlockedGroup2" id="NUM" />
@@ -3589,6 +3642,7 @@
     <public type="string" name="PhoneOther" id="NUM" />
     <public type="string" name="PhoneWork" id="NUM" />
     <public type="string" name="PhotoCaption" id="NUM" />
+    <public type="string" name="PhotoEditorDiscardAlert" id="NUM" />
     <public type="string" name="PhotosSelected_few" id="NUM" />
     <public type="string" name="PhotosSelected_many" id="NUM" />
     <public type="string" name="PhotosSelected_one" id="NUM" />
@@ -3648,10 +3702,10 @@
     <public type="string" name="PopupDisabled" id="NUM" />
     <public type="string" name="PopupEnabled" id="NUM" />
     <public type="string" name="PopupNotification" id="NUM" />
+    <public type="string" name="PostingMembers" id="NUM" />
     <public type="string" name="PreviewFeedback2" id="NUM" />
     <public type="string" name="PriorityInfo" id="NUM" />
     <public type="string" name="PrivacyAddAnException" id="NUM" />
-    <public type="string" name="PrivacyAdvanced" id="NUM" />
     <public type="string" name="PrivacyBots" id="NUM" />
     <public type="string" name="PrivacyBotsInfo" id="NUM" />
     <public type="string" name="PrivacyCallsP2PHelp" id="NUM" />
@@ -3831,10 +3885,17 @@
     <public type="string" name="RestoreEmailSentInfo" id="NUM" />
     <public type="string" name="RestoreEmailSentTitle" id="NUM" />
     <public type="string" name="RestoreEmailTrouble" id="NUM" />
+    <public type="string" name="RestoreEmailTroubleNoEmail" id="NUM" />
     <public type="string" name="RestoreEmailTroubleText" id="NUM" />
     <public type="string" name="RestorePasswordNoEmailText" id="NUM" />
     <public type="string" name="RestorePasswordNoEmailTitle" id="NUM" />
     <public type="string" name="RestorePasswordResetAccount" id="NUM" />
+    <public type="string" name="Restrictions_few" id="NUM" />
+    <public type="string" name="Restrictions_many" id="NUM" />
+    <public type="string" name="Restrictions_one" id="NUM" />
+    <public type="string" name="Restrictions_other" id="NUM" />
+    <public type="string" name="Restrictions_two" id="NUM" />
+    <public type="string" name="Restrictions_zero" id="NUM" />
     <public type="string" name="Retry" id="NUM" />
     <public type="string" name="ReturnToCall" id="NUM" />
     <public type="string" name="ReverseOrder" id="NUM" />
@@ -3903,6 +3964,11 @@
     <public type="string" name="SecretChat" id="NUM" />
     <public type="string" name="SecretChatContextBotAlert" id="NUM" />
     <public type="string" name="SecretChatName" id="NUM" />
+    <public type="string" name="SecretChatTimerDays" id="NUM" />
+    <public type="string" name="SecretChatTimerHours" id="NUM" />
+    <public type="string" name="SecretChatTimerMinutes" id="NUM" />
+    <public type="string" name="SecretChatTimerSeconds" id="NUM" />
+    <public type="string" name="SecretChatTimerWeeks" id="NUM" />
     <public type="string" name="SecretLinkPreviewAlert" id="NUM" />
     <public type="string" name="SecretWebPage" id="NUM" />
     <public type="string" name="SecretWebPageInfo" id="NUM" />
@@ -3973,6 +4039,7 @@
     <public type="string" name="SetAdditionalPasswordInfo" id="NUM" />
     <public type="string" name="SetAdmins" id="NUM" />
     <public type="string" name="SetAsAdmin" id="NUM" />
+    <public type="string" name="SetAsMain" id="NUM" />
     <public type="string" name="SetBackground" id="NUM" />
     <public type="string" name="SetColor" id="NUM" />
     <public type="string" name="SetPasscode" id="NUM" />
@@ -4277,7 +4344,11 @@
     <public type="string" name="TooManyCommunitiesHintEdit" id="NUM" />
     <public type="string" name="TooManyCommunitiesHintJoin" id="NUM" />
     <public type="string" name="TooManyTries" id="NUM" />
+    <public type="string" name="TopAdmins" id="NUM" />
+    <public type="string" name="TopDaysOfWeekChartTitle" id="NUM" />
     <public type="string" name="TopHoursChartTitle" id="NUM" />
+    <public type="string" name="TopInviters" id="NUM" />
+    <public type="string" name="TopMembers" id="NUM" />
     <public type="string" name="TosAgeText" id="NUM" />
     <public type="string" name="TosAgeTitle" id="NUM" />
     <public type="string" name="TosDecline" id="NUM" />
@@ -4459,6 +4530,7 @@
     <public type="string" name="ViewContact" id="NUM" />
     <public type="string" name="ViewExceptions" id="NUM" />
     <public type="string" name="ViewPackPreview" id="NUM" />
+    <public type="string" name="ViewingMembers" id="NUM" />
     <public type="string" name="ViewsBySourceChartTitle" id="NUM" />
     <public type="string" name="ViewsPerPost" id="NUM" />
     <public type="string" name="Views_few" id="NUM" />

@@ -7,6 +7,8 @@ public abstract class TLRPC$EncryptedChat extends TLObject {
     public byte[] auth_key;
     public int date;
     public long exchange_id;
+    public int flags;
+    public int folder_id;
     public byte[] future_auth_key;
     public long future_key_fingerprint;
     public byte[] g_a;
@@ -34,7 +36,7 @@ public abstract class TLRPC$EncryptedChat extends TLObject {
                 tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatEmpty();
                 break;
             case -931638658:
-                tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatRequested();
+                tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatRequested_layer115();
                 break;
             case -94974410:
                 tLRPC$EncryptedChat = new TLRPC$TL_encryptedChat();
@@ -47,6 +49,9 @@ public abstract class TLRPC$EncryptedChat extends TLObject {
                 break;
             case 1006044124:
                 tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatWaiting();
+                break;
+            case 1651608194:
+                tLRPC$EncryptedChat = new TLRPC$TL_encryptedChatRequested();
                 break;
             case 1711395151:
                 tLRPC$EncryptedChat = new TLRPC$TL_encryptedChat_old();

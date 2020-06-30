@@ -16,11 +16,13 @@ import org.telegram.messenger.MessageObject;
 import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.StatisticActivity;
 
 public class StatisticPostInfoCell extends FrameLayout {
+    private AvatarDrawable avatarDrawable = new AvatarDrawable();
     private final TLRPC$ChatFull chat;
     private TextView date;
     private BackupImageView imageView;
@@ -72,8 +74,8 @@ public class StatisticPostInfoCell extends FrameLayout {
         addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f, 0, 72.0f, 0.0f, 12.0f, 0.0f));
         this.message.setTextColor(Theme.getColor("dialogTextBlack"));
         this.views.setTextColor(Theme.getColor("dialogTextBlack"));
-        this.date.setTextColor(Theme.getColor("dialogTextGray4"));
-        this.shares.setTextColor(Theme.getColor("dialogTextGray4"));
+        this.date.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
+        this.shares.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
     }
 
     /* access modifiers changed from: protected */
@@ -107,5 +109,15 @@ public class StatisticPostInfoCell extends FrameLayout {
         this.views.setText(String.format(LocaleController.getPluralString("Views", recentPostInfo.counters.views), new Object[]{AndroidUtilities.formatCount(recentPostInfo.counters.views)}));
         this.date.setText(LocaleController.formatDateAudio((long) recentPostInfo.message.messageOwner.date, false));
         this.shares.setText(String.format(LocaleController.getPluralString("Shares", recentPostInfo.counters.forwards), new Object[]{AndroidUtilities.formatCount(recentPostInfo.counters.forwards)}));
+    }
+
+    public void setData(StatisticActivity.MemberData memberData) {
+        this.avatarDrawable.setInfo(memberData.user);
+        this.imageView.setImage(ImageLocation.getForUser(memberData.user, false), "50_50", (Drawable) this.avatarDrawable, (Object) memberData.user);
+        this.imageView.setRoundRadius(AndroidUtilities.dp(46.0f) >> 1);
+        this.message.setText(memberData.user.first_name);
+        this.date.setText(memberData.description);
+        this.views.setVisibility(8);
+        this.shares.setVisibility(8);
     }
 }

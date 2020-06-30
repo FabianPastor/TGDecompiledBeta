@@ -4,8 +4,10 @@ import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import androidx.core.view.ViewCompat;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -29,12 +31,17 @@ public class GraySectionCell extends FrameLayout {
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, 16.0f, 0.0f, 16.0f, 0.0f));
-        TextView textView3 = new TextView(getContext());
-        this.rightTextView = textView3;
-        textView3.setTextSize(1, 14.0f);
+        AnonymousClass1 r14 = new TextView(this, getContext()) {
+            public CharSequence getAccessibilityClassName() {
+                return Button.class.getName();
+            }
+        };
+        this.rightTextView = r14;
+        r14.setTextSize(1, 14.0f);
         this.rightTextView.setTextColor(Theme.getColor("key_graySectionText"));
         this.rightTextView.setGravity((LocaleController.isRTL ? 3 : 5) | 16);
         addView(this.rightTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : i) | 48, 16.0f, 0.0f, 16.0f, 0.0f));
+        ViewCompat.setAccessibilityHeading(this, true);
     }
 
     /* access modifiers changed from: protected */

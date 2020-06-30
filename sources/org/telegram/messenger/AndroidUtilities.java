@@ -163,34 +163,6 @@ public class AndroidUtilities {
     private static boolean waitingForCall = false;
     private static boolean waitingForSms = false;
 
-    public static float[] RGBtoHSB(int i, int i2, int i3) {
-        float[] fArr = new float[3];
-        int i4 = i > i2 ? i : i2;
-        if (i3 > i4) {
-            i4 = i3;
-        }
-        int i5 = i < i2 ? i : i2;
-        if (i3 < i5) {
-            i5 = i3;
-        }
-        float f = (float) i4;
-        float f2 = f / 255.0f;
-        float f3 = 0.0f;
-        float f4 = i4 != 0 ? ((float) (i4 - i5)) / f : 0.0f;
-        if (f4 != 0.0f) {
-            float f5 = (float) (i4 - i5);
-            float f6 = ((float) (i4 - i)) / f5;
-            float f7 = ((float) (i4 - i2)) / f5;
-            float f8 = ((float) (i4 - i3)) / f5;
-            float f9 = (i == i4 ? f8 - f7 : i2 == i4 ? (f6 + 2.0f) - f8 : (f7 + 4.0f) - f6) / 6.0f;
-            f3 = f9 < 0.0f ? f9 + 1.0f : f9;
-        }
-        fArr[0] = f3;
-        fArr[1] = f4;
-        fArr[2] = f2;
-        return fArr;
-    }
-
     public static int compare(int i, int i2) {
         if (i == i2) {
             return 0;
@@ -464,36 +436,46 @@ public class AndroidUtilities {
         double d;
         double d2;
         double d3;
-        double d4 = (double) i;
-        Double.isNaN(d4);
-        double d5 = d4 / 255.0d;
-        double d6 = (double) i2;
+        double d4;
+        double d5;
+        double d6 = (double) i;
         Double.isNaN(d6);
         double d7 = d6 / 255.0d;
-        double d8 = (double) i3;
+        double d8 = (double) i2;
         Double.isNaN(d8);
         double d9 = d8 / 255.0d;
-        double d10 = (d5 <= d7 || d5 <= d9) ? d7 > d9 ? d7 : d9 : d5;
-        double d11 = (d5 >= d7 || d5 >= d9) ? d7 < d9 ? d7 : d9 : d5;
-        double d12 = d10 - d11;
-        double d13 = 0.0d;
-        double d14 = d10 == 0.0d ? 0.0d : d12 / d10;
-        if (d10 != d11) {
-            if (d5 > d7 && d5 > d9) {
-                d3 = (d7 - d9) / d12;
-                d2 = (double) (d7 < d9 ? 6 : 0);
-                Double.isNaN(d2);
-            } else if (d7 > d9) {
-                d = 2.0d + ((d9 - d5) / d12);
-                d13 = d / 6.0d;
-            } else {
-                d3 = (d5 - d7) / d12;
-                d2 = 4.0d;
-            }
-            d = d3 + d2;
-            d13 = d / 6.0d;
+        double d10 = (double) i3;
+        Double.isNaN(d10);
+        double d11 = d10 / 255.0d;
+        if (d7 <= d9 || d7 <= d11) {
+            d = Math.max(d9, d11);
+        } else {
+            d = d7;
         }
-        return new double[]{d13, d14, d10};
+        if (d7 >= d9 || d7 >= d11) {
+            d2 = Math.min(d9, d11);
+        } else {
+            d2 = d7;
+        }
+        double d12 = d - d2;
+        double d13 = 0.0d;
+        double d14 = d == 0.0d ? 0.0d : d12 / d;
+        if (d != d2) {
+            if (d7 > d9 && d7 > d11) {
+                d5 = (d9 - d11) / d12;
+                d4 = (double) (d9 < d11 ? 6 : 0);
+                Double.isNaN(d4);
+            } else if (d9 > d11) {
+                d3 = 2.0d + ((d11 - d7) / d12);
+                d13 = d3 / 6.0d;
+            } else {
+                d5 = (d7 - d9) / d12;
+                d4 = 4.0d;
+            }
+            d3 = d5 + d4;
+            d13 = d3 / 6.0d;
+        }
+        return new double[]{d13, d14, d};
     }
 
     public static int hsvToColor(double d, double d2, double d3) {
@@ -2935,9 +2917,9 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0159
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0159
-            r7 = 2131626025(0x7f0e0829, float:1.8879275E38)
+            r7 = 2131626078(0x7f0e085e, float:1.8879382E38)
             java.lang.String r8 = "OK"
-            r9 = 2131624210(0x7f0e0112, float:1.8875593E38)
+            r9 = 2131624211(0x7f0e0113, float:1.8875595E38)
             java.lang.String r10 = "AppName"
             r11 = 1
             if (r2 == 0) goto L_0x00a6
@@ -2958,7 +2940,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131625486(0x7f0e060e, float:1.8878181E38)
+            r1 = 2131625519(0x7f0e062f, float:1.8878248E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3042,7 +3024,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131625834(0x7f0e076a, float:1.8878887E38)
+            r1 = 2131625887(0x7f0e079f, float:1.8878995E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3141,21 +3123,21 @@ public class AndroidUtilities {
             if (r8 != 0) goto L_0x00ca
             org.telegram.ui.ActionBar.AlertDialog$Builder r8 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r8.<init>((android.content.Context) r9)
-            r0 = 2131624210(0x7f0e0112, float:1.8875593E38)
+            r0 = 2131624211(0x7f0e0113, float:1.8875595E38)
             java.lang.String r1 = "AppName"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setTitle(r0)
-            r0 = 2131624208(0x7f0e0110, float:1.887559E38)
+            r0 = 2131624209(0x7f0e0111, float:1.8875591E38)
             java.lang.String r1 = "ApkRestricted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setMessage(r0)
-            r0 = 2131626368(0x7f0e0980, float:1.887997E38)
+            r0 = 2131626421(0x7f0e09b5, float:1.8880078E38)
             java.lang.String r1 = "PermissionOpenSettings"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw
             r1.<init>(r9)
             r8.setPositiveButton(r0, r1)
-            r9 = 2131624501(0x7f0e0235, float:1.8876183E38)
+            r9 = 2131624510(0x7f0e023e, float:1.8876202E38)
             java.lang.String r0 = "Cancel"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r0, r9)
             r8.setNegativeButton(r9, r2)
@@ -3763,6 +3745,34 @@ public class AndroidUtilities {
             i++;
         }
         return sb.toString();
+    }
+
+    public static float[] RGBtoHSB(int i, int i2, int i3) {
+        float[] fArr = new float[3];
+        int max = Math.max(i, i2);
+        if (i3 > max) {
+            max = i3;
+        }
+        int min = Math.min(i, i2);
+        if (i3 < min) {
+            min = i3;
+        }
+        float f = (float) max;
+        float f2 = f / 255.0f;
+        float f3 = 0.0f;
+        float f4 = max != 0 ? ((float) (max - min)) / f : 0.0f;
+        if (f4 != 0.0f) {
+            float f5 = (float) (max - min);
+            float f6 = ((float) (max - i)) / f5;
+            float f7 = ((float) (max - i2)) / f5;
+            float f8 = ((float) (max - i3)) / f5;
+            float f9 = (i == max ? f8 - f7 : i2 == max ? (f6 + 2.0f) - f8 : (f7 + 4.0f) - f6) / 6.0f;
+            f3 = f9 < 0.0f ? f9 + 1.0f : f9;
+        }
+        fArr[0] = f3;
+        fArr[1] = f4;
+        fArr[2] = f2;
+        return fArr;
     }
 
     public static int HSBtoRGB(float f, float f2, float f3) {

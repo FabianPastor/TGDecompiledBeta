@@ -415,7 +415,7 @@ public class BaseFragment {
         }
     }
 
-    public void dismissCurrentDialig() {
+    public void dismissCurrentDialog() {
         Dialog dialog = this.visibleDialog;
         if (dialog != null) {
             try {

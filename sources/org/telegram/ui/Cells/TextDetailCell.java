@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
@@ -13,6 +14,7 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class TextDetailCell extends FrameLayout {
+    private boolean contentDescriptionValueFirst;
     private boolean needDivider;
     private TextView textView;
     private TextView valueTextView;
@@ -28,6 +30,7 @@ public class TextDetailCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
+        this.textView.setImportantForAccessibility(2);
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, 23.0f, 8.0f, 23.0f, 0.0f));
         TextView textView3 = new TextView(context);
         this.valueTextView = textView3;
@@ -37,6 +40,7 @@ public class TextDetailCell extends FrameLayout {
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        this.valueTextView.setImportantForAccessibility(2);
         addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, 23.0f, 33.0f, 23.0f, 0.0f));
     }
 
@@ -60,6 +64,10 @@ public class TextDetailCell extends FrameLayout {
         setWillNotDraw(!z);
     }
 
+    public void setContentDescriptionValueFirst(boolean z) {
+        this.contentDescriptionValueFirst = z;
+    }
+
     public void invalidate() {
         super.invalidate();
         this.textView.invalidate();
@@ -69,6 +77,22 @@ public class TextDetailCell extends FrameLayout {
     public void onDraw(Canvas canvas) {
         if (this.needDivider) {
             canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(20.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(20.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+        }
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        CharSequence text = this.textView.getText();
+        CharSequence text2 = this.valueTextView.getText();
+        if (!TextUtils.isEmpty(text) && !TextUtils.isEmpty(text2)) {
+            StringBuilder sb = new StringBuilder();
+            sb.append(this.contentDescriptionValueFirst ? text2 : text);
+            sb.append(": ");
+            if (!this.contentDescriptionValueFirst) {
+                text = text2;
+            }
+            sb.append(text);
+            accessibilityNodeInfo.setText(sb.toString());
         }
     }
 }

@@ -73,7 +73,7 @@ public class SeekBar {
                     } else {
                         int i8 = this.width;
                         if (i7 > i8 - i6) {
-                            this.thumbX = i6 - i8;
+                            this.thumbX = i8 - i6;
                         }
                     }
                 }

@@ -68,6 +68,7 @@ public class ActionBarMenuItem extends FrameLayout {
     public TextView searchFieldCaption;
     private View selectedMenuView;
     private Runnable showMenuRunnable;
+    private boolean showSubmenuByMove;
     private ActionBarSubMenuItemDelegate subMenuDelegate;
     private int subMenuOpenSide;
     protected TextView textView;
@@ -130,6 +131,7 @@ public class ActionBarMenuItem extends FrameLayout {
         this.animateClear = true;
         this.clearsTextOnSearchCollapse = true;
         this.measurePopup = true;
+        this.showSubmenuByMove = true;
         if (i != 0) {
             setBackgroundDrawable(Theme.createSelectorDrawable(i, z ? 5 : 1));
         }
@@ -199,7 +201,7 @@ public class ActionBarMenuItem extends FrameLayout {
                     this.popupWindow.dismiss();
                 }
             }
-        } else if (!hasSubMenu() || ((actionBarPopupWindow = this.popupWindow) != null && (actionBarPopupWindow == null || actionBarPopupWindow.isShowing()))) {
+        } else if (!this.showSubmenuByMove || !hasSubMenu() || ((actionBarPopupWindow = this.popupWindow) != null && (actionBarPopupWindow == null || actionBarPopupWindow.isShowing()))) {
             ActionBarPopupWindow actionBarPopupWindow4 = this.popupWindow;
             if (actionBarPopupWindow4 != null && actionBarPopupWindow4.isShowing()) {
                 getLocationOnScreen(this.location);
@@ -260,6 +262,10 @@ public class ActionBarMenuItem extends FrameLayout {
 
     public void setSubMenuDelegate(ActionBarSubMenuItemDelegate actionBarSubMenuItemDelegate) {
         this.subMenuDelegate = actionBarSubMenuItemDelegate;
+    }
+
+    public void setShowSubmenuByMove(boolean z) {
+        this.showSubmenuByMove = z;
     }
 
     public void setIconColor(int i) {

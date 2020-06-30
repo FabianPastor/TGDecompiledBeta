@@ -556,7 +556,6 @@
     <string name="CameraPermissionText">Toque para permitir o acesso à sua Câmera</string>
     <string name="Cancel">Cancelar</string>
     <string name="CancelAccountReset">Cancelar Exclusão da Conta</string>
-    <string name="CancelAccountResetInfo">Alguém com acesso ao seu número de telefone **%1$s** solicitou a exclusão de sua conta do Telegram e a redefinição de sua senha de Verificação em Duas Etapas.\10\10Se não foi você, por favor insira o código que te enviamos via SMS.</string>
     <string name="CancelEmailQuestion">Deseja mesmo desistir de configurar o email de recuperação?</string>
     <string name="CancelEmailQuestionTitle">Cancelar configuração</string>
     <string name="CancelLinkExpired">O link expirou ou está inválido.</string>
@@ -2492,7 +2491,6 @@
     <string name="PreviewFeedback2">Layout incorreto?</string>
     <string name="PriorityInfo">Nas prioridades mais altas as notificações irão funcionar mesmo que o seu celular esteja no modo Não Perturbe.</string>
     <string name="PrivacyAddAnException">Adicionar Usuários ou Grupos</string>
-    <string name="PrivacyAdvanced">Avançado</string>
     <string name="PrivacyBots">Bots e sites</string>
     <string name="PrivacyBotsInfo">Sites em que você logou usando o Telegram.</string>
     <string name="PrivacyCallsP2PHelp">Desativar a conexão de ponta a ponta irá transmitir as chamadas através dos servidores do Telegram para evitar que seu endereço de IP seja revelado, mas irá diminuir a qualidade do áudio.</string>

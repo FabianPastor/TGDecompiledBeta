@@ -31,6 +31,7 @@ import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserFull;
 import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -67,7 +68,9 @@ public class ChangeBioActivity extends BaseFragment {
                 }
             }
         });
-        this.doneButton = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
+        ActionBarMenuItem addItemWithWidth = this.actionBar.createMenu().addItemWithWidth(1, NUM, AndroidUtilities.dp(56.0f));
+        this.doneButton = addItemWithWidth;
+        addItemWithWidth.setContentDescription(LocaleController.getString("Done", NUM));
         LinearLayout linearLayout = new LinearLayout(context2);
         this.fragmentView = linearLayout;
         LinearLayout linearLayout2 = linearLayout;
@@ -137,10 +140,12 @@ public class ChangeBioActivity extends BaseFragment {
         textView.setTextSize(1, 15.0f);
         this.checkTextView.setText(String.format("%d", new Object[]{70}));
         this.checkTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
+        this.checkTextView.setImportantForAccessibility(2);
         frameLayout.addView(this.checkTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 3 : 5, 0.0f, 4.0f, 4.0f, 0.0f));
         TextView textView2 = new TextView(context2);
         this.helpTextView = textView2;
-        textView2.setTextSize(1, 15.0f);
+        textView2.setFocusable(true);
+        this.helpTextView.setTextSize(1, 15.0f);
         this.helpTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText8"));
         this.helpTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.helpTextView.setText(AndroidUtilities.replaceTags(LocaleController.getString("UserBioInfo", NUM)));

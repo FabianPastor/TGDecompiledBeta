@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: Sxyn+9gWVrkV/010+lm4MVSm89U=
+SHA1-Digest-Manifest: UU8B45IX77+dSt3UxyBWw5+hmKA=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: Acvaly2bzY+JVcJNMxWN8lqzU+0=
+SHA1-Digest: pDvGZAgXQT4b6T9w1cSJTHi5aek=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9511,10 +9511,10 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: BNgnCLzoSc7TfAMcuH/220BC2JM=
+SHA1-Digest: k8cz8Ke9Lr1XExwUt0o6H092eDg=
 
 Name: classes2.dex
-SHA1-Digest: ZD6H7oyNDWkDZD0tcxiI/hENJLU=
+SHA1-Digest: CsxAb5B4MRyLLEQzQvYD48EtAiI=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -9544,19 +9544,19 @@ Name: firebase-iid-interop.properties
 SHA1-Digest: EG/NEOnrgZ0SQjjc64Xu8L+hd+o=
 
 Name: firebase-iid.properties
-SHA1-Digest: hqi5bYqZOoaaynlW3yfZ8YjefNM=
+SHA1-Digest: NIeBlCxKcPIa6leO0NfM7oplDEk=
 
 Name: firebase-installations-interop.properties
 SHA1-Digest: 3Es+p6gO/fWYGiKinOPROdQ3lXY=
 
 Name: firebase-installations.properties
-SHA1-Digest: hUdTW9Yd8WvAIzCFVs4bxskBmNI=
+SHA1-Digest: Ty7y4f2JwBPmDvz5nVGsRwP/ZqA=
 
 Name: firebase-measurement-connector.properties
 SHA1-Digest: xGhmL53frvnh03/p4k58xibaXVQ=
 
 Name: firebase-messaging.properties
-SHA1-Digest: oE7mnEXX4Z661GCHPHDXdALvElw=
+SHA1-Digest: MqnWL4wyKrrhWBmCGHgQwjnnbzo=
 
 Name: isoparser-default.properties
 SHA1-Digest: ix2/FbuQDYdbrL/0Ibd5Tj5OTV0=
@@ -11112,6 +11112,9 @@ SHA1-Digest: b2E10arLFgGiV74vZGk0mRaMLgg=
 
 Name: res/drawable-hdpi-v4/msg_usersearch.png
 SHA1-Digest: lrN9HgM1h7z75YFkg9pmSku9Llk=
+
+Name: res/drawable-hdpi-v4/msg_video.png
+SHA1-Digest: pekP4Ga4jJwmWRj2bDvQElkKL1g=
 
 Name: res/drawable-hdpi-v4/msg_views.png
 SHA1-Digest: eoQRA1KabBuAc5Ts4YNMPV7+eCs=
@@ -13201,6 +13204,9 @@ SHA1-Digest: OiycJVAkLjXz7c2XxxIp68KKosw=
 
 Name: res/drawable-mdpi-v4/msg_usersearch.png
 SHA1-Digest: PkaJYgFESx92n95y8kB/PmZldsg=
+
+Name: res/drawable-mdpi-v4/msg_video.png
+SHA1-Digest: K4HTPjzjDQBwF89ieBjt/RRdJGw=
 
 Name: res/drawable-mdpi-v4/msg_views.png
 SHA1-Digest: rh5bmqSlRKTQHyf00wae36tgk1Y=
@@ -15336,6 +15342,9 @@ SHA1-Digest: qDxsdtZ+Z6FKIoQLVxUMDdkQdCg=
 Name: res/drawable-xhdpi-v4/msg_usersearch.png
 SHA1-Digest: rvNYnOrSkBNDNsovySpvbxhLn9o=
 
+Name: res/drawable-xhdpi-v4/msg_video.png
+SHA1-Digest: 5Cpv+qs9IW7KAUZL9vfWyDCx5fg=
+
 Name: res/drawable-xhdpi-v4/msg_views.png
 SHA1-Digest: AO/3YQYpwQ1J8XmoV176cqi0g6Q=
 
@@ -17413,6 +17422,9 @@ SHA1-Digest: uB8cZAeKMchc3UG1YRNQkZLzSgg=
 Name: res/drawable-xxhdpi-v4/msg_usersearch.png
 SHA1-Digest: WICKlt0STP2JcZx1mhwdGv6JFyc=
 
+Name: res/drawable-xxhdpi-v4/msg_video.png
+SHA1-Digest: KdYBdt9V87D45x9q+8vQYA0xW18=
+
 Name: res/drawable-xxhdpi-v4/msg_views.png
 SHA1-Digest: b3L2mxXIAYLVJmcMGk6MAxbLyM4=
 
@@ -18296,19 +18308,19 @@ Name: res/drawable/$fingerprint_dialog_fp_to_error__9.xml
 SHA1-Digest: MQinL9boLz9CBU0JaTF81ExZEkc=
 
 Name: res/drawable/bar_selector_lock.xml
-SHA1-Digest: Gb1rsiUKYvs/midFlH3hqR6vFLE=
+SHA1-Digest: qm/TS0urI0vPJr8QTViqWtiuNno=
 
 Name: res/drawable/bar_selector_style.xml
-SHA1-Digest: G/E85UJqoEGtVN4hYHleEV+54/I=
+SHA1-Digest: lN2LlNR1Ub4A5SF3bYszoIKqTD4=
 
 Name: res/drawable/bar_selector_white.xml
-SHA1-Digest: I2wM2dXoD/iJxRux1dVUHhF6PPo=
+SHA1-Digest: TGf7aFnf3SiBeXGlCkvMVy5UtZ8=
 
 Name: res/drawable/bg_voip_icon_btn.xml
 SHA1-Digest: l2/JBKA7lYFWRMYxqSltUXRiQDg=
 
 Name: res/drawable/call_custom_notification_icon.xml
-SHA1-Digest: n3SXyx3PfB6wjmFxYRcLmOCybhU=
+SHA1-Digest: hCjkiskLHucATdS5rcC7RIGxEZ0=
 
 Name: res/drawable/call_notification_bg.xml
 SHA1-Digest: pqKbj4Be7C2zm3kiZdq49QZKAWU=
@@ -18407,7 +18419,7 @@ Name: res/drawable/icplaceholder.jpg
 SHA1-Digest: z6DEdLYpiw0H4tz/HdYnrk2Xt6c=
 
 Name: res/drawable/list_selector_ex.xml
-SHA1-Digest: 8GM+VCeHjTjRWmFxYzs1t4VbgiI=
+SHA1-Digest: Uy1pAIex9lioPBImr4ZtQQA6zAI=
 
 Name: res/drawable/loading_animation.xml
 SHA1-Digest: UF8JVFECuuglQsBzOSwqAXM8Wws=
@@ -18416,16 +18428,16 @@ Name: res/drawable/loading_animation2.xml
 SHA1-Digest: XfuQHG5Te3e5Rz3qUT/ble7k5CE=
 
 Name: res/drawable/notification_bg.xml
-SHA1-Digest: DGO0xK5t1OIR9LXTXQTcf0duNbw=
+SHA1-Digest: Y8VDDJShgpdeJzGKyClX9QCZXdQ=
 
 Name: res/drawable/notification_bg_low.xml
-SHA1-Digest: i1GHaHPmmmztk871nb+UiV+24e0=
+SHA1-Digest: CjgJdlrTFlILHkya8JnOU4su3g0=
 
 Name: res/drawable/notification_icon_background.xml
 SHA1-Digest: 8l7eYEcOZS9u0FCiCIGn6Z4qsGM=
 
 Name: res/drawable/notification_tile_bg.xml
-SHA1-Digest: xBo/XiGFXf+UIgimfc/43vl8dTI=
+SHA1-Digest: hAiovrroxSJ5ZDa4xhfk0SqJY/0=
 
 Name: res/drawable/paint_elliptical_brush.png
 SHA1-Digest: VpOYFZxPOMSLqPtUwAe1LzAxEhE=
@@ -18446,10 +18458,10 @@ Name: res/drawable/scrollbar_vertical_thumb.xml
 SHA1-Digest: J62l6F+a5ekJYeI3jAzD1WYWbNI=
 
 Name: res/drawable/scrollbar_vertical_thumb_inset.xml
-SHA1-Digest: 67ZeFiR68XHg4v29Si0EsW2H9vc=
+SHA1-Digest: hZ+vZFt7ZjtbxxxTPFcoExCxETI=
 
 Name: res/drawable/switch_thumb.xml
-SHA1-Digest: +fOsBDyG1w+Ge2RrW0ejsxJadCQ=
+SHA1-Digest: 8vYsPf/xW8PuOZHQFTOAetl3HZ8=
 
 Name: res/drawable/theme_preview_image.jpg
 SHA1-Digest: QEy+cMGdbCQRY0A7P2OBlLevTjg=
@@ -18518,7 +18530,7 @@ Name: res/layout/player_big_notification.xml
 SHA1-Digest: mdnL02YGocdD6lsnczlvd15T+nU=
 
 Name: res/layout/player_small_notification.xml
-SHA1-Digest: n2VPj4QkvcjC2ZDpz/DZIlbhDBk=
+SHA1-Digest: VgX0PkmZOfgXhnlXwvd4/qZ6D7M=
 
 Name: res/mipmap-anydpi-v26/ic_launcher.xml
 SHA1-Digest: G7ddlJzJpeU1rRMHtiXTxUyDMv0=
@@ -18755,10 +18767,10 @@ Name: res/raw/wallet_science.tgs
 SHA1-Digest: xcYXycYjGRsZcet5rKoz4b8trBo=
 
 Name: res/xml/auth.xml
-SHA1-Digest: qH78RB5rMI5YmME6h2xBDtobml4=
+SHA1-Digest: D7S00A7skZHwdycirwihzJLuwXI=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: lnns3y6myRFZZomV4y9sfqJBu7Y=
+SHA1-Digest: lAo2da6pPRJ5CAxNwLOUUjotbio=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: 9Hh95nQe6vvvIyVqqpGpBH5VMqA=
@@ -18773,7 +18785,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: hDxctEPjF+Q1R9VwCLdIbz5j2QM=
+SHA1-Digest: iJkkpVDnDSHcu/kvqHMtgbo18u4=
 
 Name: transport-api.properties
 SHA1-Digest: KlRwAVirU5yXrBUVC3JeyHIPlcs=

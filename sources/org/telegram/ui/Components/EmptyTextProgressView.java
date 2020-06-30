@@ -30,28 +30,28 @@ public class EmptyTextProgressView extends FrameLayout {
         super(context);
         RadialProgressView radialProgressView = new RadialProgressView(context);
         this.progressBar = radialProgressView;
-        radialProgressView.setVisibility(4);
-        addView(this.progressBar, LayoutHelper.createFrame(-2, -2.0f));
+        addView(radialProgressView, LayoutHelper.createFrame(-2, -2.0f));
         TextView textView2 = new TextView(context);
         this.textView = textView2;
         textView2.setTextSize(1, 20.0f);
         this.textView.setTextColor(Theme.getColor("emptyListPlaceholder"));
         this.textView.setGravity(17);
-        this.textView.setVisibility(4);
         this.textView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
         this.textView.setText(LocaleController.getString("NoResult", NUM));
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f));
+        this.progressBar.setAlpha(0.0f);
+        this.textView.setAlpha(0.0f);
         setOnTouchListener($$Lambda$EmptyTextProgressView$AeVTSCBshpCl6wf4siSABV33AKw.INSTANCE);
     }
 
     public void showProgress() {
-        this.textView.setVisibility(4);
-        this.progressBar.setVisibility(0);
+        this.textView.animate().alpha(0.0f).setDuration(150).start();
+        this.progressBar.animate().alpha(1.0f).setDuration(150).start();
     }
 
     public void showTextView() {
-        this.textView.setVisibility(0);
-        this.progressBar.setVisibility(4);
+        this.textView.animate().alpha(1.0f).setDuration(150).start();
+        this.progressBar.animate().alpha(0.0f).setDuration(150).start();
     }
 
     public void setText(String str) {

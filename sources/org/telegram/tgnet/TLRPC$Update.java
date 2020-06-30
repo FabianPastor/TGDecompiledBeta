@@ -28,6 +28,9 @@ public abstract class TLRPC$Update extends TLObject {
             case -1821035490:
                 tLRPC$Update = new TLRPC$TL_updateSavedGifs();
                 break;
+            case -1812551503:
+                tLRPC$Update = new TLRPC$TL_updateChannelParticipant();
+                break;
             case -1791935732:
                 tLRPC$Update = new TLRPC$TL_updateUserPhoto();
                 break;
@@ -147,6 +150,9 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case 634833351:
                 tLRPC$Update = new TLRPC$TL_updateReadChannelOutbox();
+                break;
+            case 643940105:
+                tLRPC$Update = new TLRPC$TL_updatePhoneCallSignalingData();
                 break;
             case 654302845:
                 tLRPC$Update = new TLRPC$TL_updateDialogFilter();

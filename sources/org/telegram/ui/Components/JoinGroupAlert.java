@@ -89,7 +89,7 @@ public class JoinGroupAlert extends BottomSheet {
             r12 = 50
             org.telegram.tgnet.TLRPC$PhotoSize r9 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r9, r12)
             org.telegram.tgnet.TLRPC$Photo r12 = r2.photo
-            org.telegram.messenger.ImageLocation r9 = org.telegram.messenger.ImageLocation.getForPhoto(r9, r12)
+            org.telegram.messenger.ImageLocation r9 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r9, (org.telegram.tgnet.TLRPC$Photo) r12)
             r6.setImage((org.telegram.messenger.ImageLocation) r9, (java.lang.String) r8, (android.graphics.drawable.Drawable) r7, (java.lang.Object) r2)
         L_0x0086:
             android.widget.TextView r6 = new android.widget.TextView
@@ -203,7 +203,7 @@ public class JoinGroupAlert extends BottomSheet {
             int r7 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             r1.setTextColor(r7)
             android.widget.TextView r1 = r5.cancelButton
-            r7 = 2131624501(0x7f0e0235, float:1.8876183E38)
+            r7 = 2131624510(0x7f0e023e, float:1.8876202E38)
             java.lang.String r8 = "Cancel"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             java.lang.String r7 = r7.toUpperCase()
@@ -237,7 +237,7 @@ public class JoinGroupAlert extends BottomSheet {
             if (r1 != 0) goto L_0x01fa
         L_0x01e7:
             android.widget.TextView r1 = r5.doneButtonTextView
-            r2 = 2131626489(0x7f0e09f9, float:1.8880216E38)
+            r2 = 2131626544(0x7f0e0a30, float:1.8880327E38)
             java.lang.String r3 = "ProfileJoinChannel"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r2 = r2.toUpperCase()
@@ -245,7 +245,7 @@ public class JoinGroupAlert extends BottomSheet {
             goto L_0x0208
         L_0x01fa:
             android.widget.TextView r1 = r5.doneButtonTextView
-            r2 = 2131625532(0x7f0e063c, float:1.8878275E38)
+            r2 = 2131625571(0x7f0e0663, float:1.8878354E38)
             java.lang.String r3 = "JoinGroup"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)

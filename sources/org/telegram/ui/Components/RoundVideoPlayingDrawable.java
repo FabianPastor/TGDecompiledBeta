@@ -21,7 +21,7 @@ public class RoundVideoPlayingDrawable extends Drawable {
     private boolean started = false;
 
     public int getOpacity() {
-        return 0;
+        return -2;
     }
 
     public void setAlpha(int i) {
@@ -87,7 +87,7 @@ public class RoundVideoPlayingDrawable extends Drawable {
     }
 
     public void draw(Canvas canvas) {
-        this.paint.setColor(Theme.getColor("chat_mediaTimeText"));
+        this.paint.setColor(Theme.getColor("chat_serviceText"));
         int i = getBounds().left;
         int i2 = getBounds().top;
         for (int i3 = 0; i3 < 3; i3++) {

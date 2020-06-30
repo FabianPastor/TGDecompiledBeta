@@ -556,7 +556,6 @@
     <string name="CameraPermissionText">Antippen, um Zugriff auf deine Kamera zu erlauben</string>
     <string name="Cancel">Abbrechen</string>
     <string name="CancelAccountReset">Zurücksetzung abbrechen</string>
-    <string name="CancelAccountResetInfo">Jemand mit Zugang zu deiner Telefonnummer **%1$s** hat die Kontolöschung und Zurücksetzung der zweistufigen Bestätigung beantragt. Wenn du das nicht selbst gewesen bist, tippe den Code der SMS ein, den wir dir gerade gesendet haben.</string>
     <string name="CancelEmailQuestion">Wirklich die E-Mail-Einrichtung abbrechen?</string>
     <string name="CancelEmailQuestionTitle">Einrichtung abbrechen</string>
     <string name="CancelLinkExpired">Link ist ungültig oder abgelaufen.</string>
@@ -2492,7 +2491,6 @@
     <string name="PreviewFeedback2">Falsches Layout?</string>
     <string name="PriorityInfo">Mitteilungen höherer Priorität funktionieren auch, wenn sich dein Telefon im \"Bitte nicht stören\"-Modus befindet.</string>
     <string name="PrivacyAddAnException">Nutzer oder Gruppen hinzufügen</string>
-    <string name="PrivacyAdvanced">Erweitert</string>
     <string name="PrivacyBots">Bots und Webseiten</string>
     <string name="PrivacyBotsInfo">Webseiten, bei denen du mit Telegram angemeldet bist.</string>
     <string name="PrivacyCallsP2PHelp">Deaktivierst du Peer-to-Peer, werden alle Anrufe über die Telegram Server geleitet. Dadurch ist deine IP-Adresse nicht mehr beim Gesprächspartner sichtbar, die Gesprächsqualität wird jedoch leicht abnehmen.</string>

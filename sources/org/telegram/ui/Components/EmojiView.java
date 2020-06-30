@@ -1128,18 +1128,18 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             java.lang.String r13 = "chat_emojiPanelIconSelected"
             int r14 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165913(0x7var_d9, float:1.7946057E38)
+            r15 = 2131165914(0x7var_da, float:1.7946059E38)
             android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r12, r14)
             r14 = 0
             r11[r14] = r12
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             int r15 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r5 = 2131165910(0x7var_d6, float:1.794605E38)
+            r5 = 2131165911(0x7var_d7, float:1.7946052E38)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r5, r12, r15)
             r11[r3] = r5
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165914(0x7var_da, float:1.7946059E38)
+            r15 = 2131165915(0x7var_db, float:1.794606E38)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r5, r12)
             r11[r8] = r5
             r0.tabIcons = r11
@@ -1148,51 +1148,51 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             java.lang.String r11 = "chat_emojiPanelIcon"
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             int r15 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r4 = 2131165904(0x7var_d0, float:1.7946038E38)
+            r4 = 2131165905(0x7var_d1, float:1.794604E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r4, r12, r15)
             r5[r14] = r4
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165905(0x7var_d1, float:1.794604E38)
+            r15 = 2131165906(0x7var_d2, float:1.7946042E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r4, r12)
             r5[r3] = r4
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165898(0x7var_ca, float:1.7946026E38)
+            r15 = 2131165899(0x7var_cb, float:1.7946028E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r4, r12)
             r5[r8] = r4
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165900(0x7var_cc, float:1.794603E38)
+            r15 = 2131165901(0x7var_cd, float:1.7946032E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r4, r12)
             r5[r7] = r4
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165897(0x7var_c9, float:1.7946024E38)
+            r15 = 2131165898(0x7var_ca, float:1.7946026E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r4, r12)
             r12 = 4
             r5[r12] = r4
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             int r15 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r6 = 2131165906(0x7var_d2, float:1.7946042E38)
+            r6 = 2131165907(0x7var_d3, float:1.7946044E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r6, r4, r15)
             r6 = 5
             r5[r6] = r4
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             int r15 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r6 = 2131165901(0x7var_cd, float:1.7946032E38)
+            r6 = 2131165902(0x7var_ce, float:1.7946034E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r6, r4, r15)
             r6 = 6
             r5[r6] = r4
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             int r6 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165902(0x7var_ce, float:1.7946034E38)
+            r15 = 2131165903(0x7var_cf, float:1.7946036E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r4, r6)
             r6 = 7
             r5[r6] = r4
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             int r6 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r11 = 2131165899(0x7var_cb, float:1.7946028E38)
+            r11 = 2131165900(0x7var_cc, float:1.794603E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r11, r4, r6)
             r6 = 8
             r5[r6] = r4
@@ -1200,30 +1200,30 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             android.graphics.drawable.Drawable[] r4 = new android.graphics.drawable.Drawable[r12]
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             int r11 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165929(0x7var_e9, float:1.7946089E38)
+            r15 = 2131165930(0x7var_ea, float:1.794609E38)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r5, r11)
             r4[r14] = r5
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             int r11 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165927(0x7var_e7, float:1.7946085E38)
+            r15 = 2131165928(0x7var_e8, float:1.7946087E38)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r5, r11)
             r4[r3] = r5
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             int r11 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165932(0x7var_ec, float:1.7946095E38)
+            r15 = 2131165933(0x7var_ed, float:1.7946097E38)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r5, r11)
             r4[r8] = r5
             android.graphics.drawable.LayerDrawable r5 = new android.graphics.drawable.LayerDrawable
             android.graphics.drawable.Drawable[] r11 = new android.graphics.drawable.Drawable[r8]
             int r15 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r6 = 2131165930(0x7var_ea, float:1.794609E38)
+            r6 = 2131165931(0x7var_eb, float:1.7946093E38)
             android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r6, r15, r12)
             r11[r14] = r6
             java.lang.String r6 = "chat_emojiPanelStickerPackSelectorLine"
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             int r15 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            r14 = 2131165931(0x7var_eb, float:1.7946093E38)
+            r14 = 2131165932(0x7var_ec, float:1.7946095E38)
             android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r14, r12, r15)
             r11[r3] = r12
             r5.<init>(r11)
@@ -1232,51 +1232,51 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             android.graphics.drawable.Drawable[] r4 = new android.graphics.drawable.Drawable[r8]
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             int r11 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r12 = 2131165929(0x7var_e9, float:1.7946089E38)
+            r12 = 2131165930(0x7var_ea, float:1.794609E38)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r12, r5, r11)
             r11 = 0
             r4[r11] = r5
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             int r9 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r12 = 2131165928(0x7var_e8, float:1.7946087E38)
+            r12 = 2131165929(0x7var_e9, float:1.7946089E38)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r12, r5, r9)
             r4[r3] = r5
             r0.gifIcons = r4
             r4 = 8
             java.lang.String[] r5 = new java.lang.String[r4]
             java.lang.String r4 = "Emoji1"
-            r9 = 2131625039(0x7f0e044f, float:1.8877275E38)
+            r9 = 2131625070(0x7f0e046e, float:1.8877338E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
             r5[r11] = r4
             java.lang.String r4 = "Emoji2"
-            r9 = 2131625040(0x7f0e0450, float:1.8877277E38)
+            r9 = 2131625071(0x7f0e046f, float:1.887734E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
             r5[r3] = r4
             java.lang.String r4 = "Emoji3"
-            r9 = 2131625041(0x7f0e0451, float:1.8877279E38)
+            r9 = 2131625072(0x7f0e0470, float:1.8877342E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
             r5[r8] = r4
             java.lang.String r4 = "Emoji4"
-            r9 = 2131625042(0x7f0e0452, float:1.887728E38)
+            r9 = 2131625073(0x7f0e0471, float:1.8877344E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
             r5[r7] = r4
             java.lang.String r4 = "Emoji5"
-            r9 = 2131625043(0x7f0e0453, float:1.8877283E38)
+            r9 = 2131625074(0x7f0e0472, float:1.8877346E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
             r9 = 4
             r5[r9] = r4
             java.lang.String r4 = "Emoji6"
-            r9 = 2131625044(0x7f0e0454, float:1.8877285E38)
+            r9 = 2131625075(0x7f0e0473, float:1.8877348E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
             r9 = 5
             r5[r9] = r4
             java.lang.String r4 = "Emoji7"
-            r9 = 2131625045(0x7f0e0455, float:1.8877287E38)
+            r9 = 2131625076(0x7f0e0474, float:1.887735E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
             r9 = 6
             r5[r9] = r4
             java.lang.String r4 = "Emoji8"
-            r9 = 2131625046(0x7f0e0456, float:1.8877289E38)
+            r9 = 2131625077(0x7f0e0475, float:1.8877352E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
             r9 = 7
             r5[r9] = r4
@@ -1652,7 +1652,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             org.telegram.ui.Components.EmojiView$17 r4 = new org.telegram.ui.Components.EmojiView$17
             r4.<init>(r1)
             r0.backspaceButton = r4
-            r6 = 2131165909(0x7var_d5, float:1.7946048E38)
+            r6 = 2131165910(0x7var_d6, float:1.794605E38)
             r4.setImageResource(r6)
             android.widget.ImageView r4 = r0.backspaceButton
             android.graphics.PorterDuffColorFilter r6 = new android.graphics.PorterDuffColorFilter
@@ -1725,7 +1725,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             android.widget.ImageView r2 = new android.widget.ImageView
             r2.<init>(r1)
             r0.stickerSettingsButton = r2
-            r7 = 2131165912(0x7var_d8, float:1.7946055E38)
+            r7 = 2131165913(0x7var_d9, float:1.7946057E38)
             r2.setImageResource(r7)
             android.widget.ImageView r2 = r0.stickerSettingsButton
             android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
@@ -1746,7 +1746,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             r2.setBackground(r7)
         L_0x06ea:
             android.widget.ImageView r2 = r0.stickerSettingsButton
-            r7 = 2131626785(0x7f0e0b21, float:1.8880816E38)
+            r7 = 2131626853(0x7f0e0b65, float:1.8880954E38)
             java.lang.String r8 = "Settings"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r2.setContentDescription(r7)
@@ -1789,7 +1789,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             android.widget.ImageView r2 = new android.widget.ImageView
             r2.<init>(r1)
             r0.searchButton = r2
-            r7 = 2131165911(0x7var_d7, float:1.7946052E38)
+            r7 = 2131165912(0x7var_d8, float:1.7946055E38)
             r2.setImageResource(r7)
             android.widget.ImageView r2 = r0.searchButton
             android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
@@ -1802,7 +1802,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             android.widget.ImageView$ScaleType r7 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r7)
             android.widget.ImageView r2 = r0.searchButton
-            r7 = 2131626665(0x7f0e0aa9, float:1.8880573E38)
+            r7 = 2131626727(0x7f0e0ae7, float:1.8880698E38)
             java.lang.String r8 = "Search"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r2.setContentDescription(r7)
@@ -3447,22 +3447,25 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         this.gifFirstEmojiTabNum = -2;
         if (z3) {
             this.gifRecentTabNum = 0;
-            this.gifTabs.addIconTab(0, this.gifIcons[0]);
+            this.gifTabs.addIconTab(0, this.gifIcons[0]).setContentDescription(LocaleController.getString("RecentStickers", NUM));
             i = 1;
         } else {
             i = 0;
         }
         this.gifTrendingTabNum = i;
-        this.gifTabs.addIconTab(1, this.gifIcons[1]);
+        this.gifTabs.addIconTab(1, this.gifIcons[1]).setContentDescription(LocaleController.getString("FeaturedGifs", NUM));
         this.gifFirstEmojiTabNum = i + 1;
         int dp = AndroidUtilities.dp(13.0f);
         int dp2 = AndroidUtilities.dp(11.0f);
         ArrayList<String> arrayList = MessagesController.getInstance(this.currentAccount).gifSearchEmojies;
         int size = arrayList.size();
         for (int i2 = 0; i2 < size; i2++) {
-            Emoji.EmojiDrawable emojiDrawable = Emoji.getEmojiDrawable(arrayList.get(i2));
+            String str = arrayList.get(i2);
+            Emoji.EmojiDrawable emojiDrawable = Emoji.getEmojiDrawable(str);
             if (emojiDrawable != null) {
-                this.gifTabs.addIconTab(i2 + 3, emojiDrawable).setPadding(dp, dp2, dp, dp2);
+                ImageView addIconTab = this.gifTabs.addIconTab(i2 + 3, emojiDrawable);
+                addIconTab.setPadding(dp, dp2, dp, dp2);
+                addIconTab.setContentDescription(str);
             }
         }
         this.gifTabs.commitUpdate();
@@ -3897,15 +3900,15 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     /* access modifiers changed from: private */
     public void updateRecentGifs() {
         GifAdapter gifAdapter2;
-        boolean isEmpty = this.recentGifs.isEmpty();
-        int calcDocumentsHash = MediaDataController.calcDocumentsHash(this.recentGifs);
+        int size = this.recentGifs.size();
+        int calcDocumentsHash = MediaDataController.calcDocumentsHash(this.recentGifs, Integer.MAX_VALUE);
         ArrayList<TLRPC$Document> recentGifs2 = MediaDataController.getInstance(this.currentAccount).getRecentGifs();
         this.recentGifs = recentGifs2;
-        int calcDocumentsHash2 = MediaDataController.calcDocumentsHash(recentGifs2);
-        if ((this.gifTabs != null && isEmpty && !this.recentGifs.isEmpty()) || (!isEmpty && this.recentGifs.isEmpty())) {
+        int calcDocumentsHash2 = MediaDataController.calcDocumentsHash(recentGifs2, Integer.MAX_VALUE);
+        if ((this.gifTabs != null && size == 0 && !this.recentGifs.isEmpty()) || (size != 0 && this.recentGifs.isEmpty())) {
             updateGifTabs();
         }
-        if (calcDocumentsHash != calcDocumentsHash2 && (gifAdapter2 = this.gifAdapter) != null) {
+        if ((size != this.recentGifs.size() || calcDocumentsHash != calcDocumentsHash2) && (gifAdapter2 = this.gifAdapter) != null) {
             gifAdapter2.notifyDataSetChanged();
         }
     }
@@ -4287,10 +4290,10 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 org.telegram.ui.Components.EmojiView r8 = org.telegram.ui.Components.EmojiView.this
                 org.telegram.tgnet.TLRPC$TL_messages_stickerSet r8 = r8.groupStickerSet
                 if (r8 == 0) goto L_0x004c
-                r8 = 2131165933(0x7var_ed, float:1.7946097E38)
+                r8 = 2131165934(0x7var_ee, float:1.79461E38)
                 goto L_0x004f
             L_0x004c:
-                r8 = 2131165934(0x7var_ee, float:1.79461E38)
+                r8 = 2131165935(0x7var_ef, float:1.7946101E38)
             L_0x004f:
                 org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
                 org.telegram.tgnet.TLRPC$ChatFull r0 = r0.info
@@ -4304,7 +4307,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
                 org.telegram.tgnet.TLRPC$Chat r2 = r0.getChat(r2)
             L_0x0071:
-                r0 = 2131624836(0x7f0e0384, float:1.8876863E38)
+                r0 = 2131624857(0x7f0e0399, float:1.8876906E38)
                 java.lang.Object[] r3 = new java.lang.Object[r3]
                 if (r2 == 0) goto L_0x007b
                 java.lang.String r2 = r2.title
@@ -4332,7 +4335,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
                 java.util.ArrayList r0 = r0.recentStickers
                 if (r8 != r0) goto L_0x00b7
-                r8 = 2131626539(0x7f0e0a2b, float:1.8880317E38)
+                r8 = 2131626594(0x7f0e0a62, float:1.8880429E38)
                 java.lang.String r0 = "RecentStickers"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 r7.setText(r8, r1)
@@ -4341,7 +4344,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
                 java.util.ArrayList r0 = r0.favouriteStickers
                 if (r8 != r0) goto L_0x0176
-                r8 = 2131625197(0x7f0e04ed, float:1.8877595E38)
+                r8 = 2131625228(0x7f0e050c, float:1.8877658E38)
                 java.lang.String r0 = "FavoriteStickers"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 r7.setText(r8, r1)
@@ -5560,10 +5563,6 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 public int trendingSectionItem;
                 private final boolean withRecent;
 
-                public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
-                    return false;
-                }
-
                 public GifAdapter(EmojiView emojiView, Context context2) {
                     this(context2, false, 0);
                 }
@@ -5590,6 +5589,10 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     this.progressEmptyView = gifProgressEmptyView;
                 }
 
+                public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
+                    return viewHolder.getItemViewType() == 0;
+                }
+
                 public int getItemCount() {
                     return this.itemsCount;
                 }
@@ -5608,7 +5611,6 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                     GifProgressEmptyView gifProgressEmptyView;
                     if (i == 0) {
                         ContextLinkCell contextLinkCell = new ContextLinkCell(this.context);
-                        contextLinkCell.setContentDescription(LocaleController.getString("AttachGif", NUM));
                         contextLinkCell.setCanPreviewGif(true);
                         gifProgressEmptyView = contextLinkCell;
                     } else if (i == 1) {
@@ -7077,7 +7079,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             r0.<init>(r2)
                             android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
                             r0.setScaleType(r2)
-                            r2 = 2131165926(0x7var_e6, float:1.7946083E38)
+                            r2 = 2131165927(0x7var_e7, float:1.7946085E38)
                             r0.setImageResource(r2)
                             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
                             java.lang.String r3 = "chat_emojiPanelEmptyText"
@@ -7097,7 +7099,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             android.widget.TextView r0 = new android.widget.TextView
                             android.content.Context r2 = r13.context
                             r0.<init>(r2)
-                            r2 = 2131625866(0x7f0e078a, float:1.8878952E38)
+                            r2 = 2131625919(0x7f0e07bf, float:1.887906E38)
                             java.lang.String r4 = "NoStickersFound"
                             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
                             r0.setText(r2)

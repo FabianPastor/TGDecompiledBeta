@@ -42,7 +42,6 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
     public boolean animating = false;
     /* access modifiers changed from: private */
     public CropAreaView areaView;
-    private View backView;
     private Bitmap bitmap;
     private float bottomPadding;
     RectF cropRect = new RectF();
@@ -73,6 +72,8 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         void onAspectLock(boolean z);
 
         void onChange(boolean z);
+
+        void onTapUp();
 
         void onUpdate();
     }
@@ -248,11 +249,6 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
 
     public CropView(Context context) {
         super(context);
-        View view = new View(context);
-        this.backView = view;
-        view.setBackgroundColor(-16777216);
-        this.backView.setVisibility(4);
-        addView(this.backView);
         ImageView imageView2 = new ImageView(context);
         this.imageView = imageView2;
         imageView2.setDrawingCacheEnabled(true);
@@ -391,16 +387,6 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         this.areaView.invalidate();
     }
 
-    public void hideBackView() {
-        this.backView.setVisibility(4);
-    }
-
-    public void showBackView() {
-        if (this.videoEditTextureView != null) {
-            this.backView.setVisibility(0);
-        }
-    }
-
     public void setFreeform(boolean z) {
         this.areaView.setFreeform(z);
         this.freeform = z;
@@ -417,9 +403,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
     }
 
     public void show() {
-        if (this.videoEditTextureView == null) {
-            this.backView.setVisibility(0);
-        } else {
+        if (this.videoEditTextureView != null) {
             updateVideoTextureView();
         }
         this.imageView.setVisibility(0);
@@ -429,7 +413,6 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
     }
 
     public void hide() {
-        this.backView.setVisibility(4);
         this.imageView.setVisibility(4);
         this.areaView.setDimVisibility(false);
         this.areaView.setFrameVisibility(false);
@@ -467,7 +450,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         this.overlayMatrix.postRotate((float) this.state.getOrientationOnly());
         this.state.getConcatMatrix(this.overlayMatrix);
         this.overlayMatrix.postTranslate(this.areaView.getCropCenterX(), this.areaView.getCropCenterY());
-        if (this.isVisible && this.videoEditTextureView != null) {
+        if ((!this.freeform || this.isVisible) && this.videoEditTextureView != null) {
             updateVideoTextureView();
             this.listener.onUpdate();
         }
@@ -831,6 +814,13 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         }
     }
 
+    public void onTapUp() {
+        CropViewListener cropViewListener = this.listener;
+        if (cropViewListener != null) {
+            cropViewListener.onTapUp();
+        }
+    }
+
     public void onScrollChangeBegan() {
         if (!this.animating) {
             this.areaView.setGridType(CropAreaView.GridType.MAJOR, true);
@@ -992,12 +982,13 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         } else {
             f2 = Math.max(targetRectToFill.width() / f4, targetRectToFill.height() / f6);
         }
-        float access$3300 = (this.state.scale / this.state.minimumScale) / (f2 / this.state.minimumScale);
-        float access$33002 = (this.values[2] / f4) / this.state.scale;
-        float access$33003 = (this.values[5] / f6) / this.state.scale;
+        float access$3300 = this.state.scale / f2;
+        float access$33002 = this.state.scale / this.state.minimumScale;
+        float access$33003 = (this.values[2] / f4) / this.state.scale;
+        float access$33004 = (this.values[5] / f6) / this.state.scale;
         float access$3400 = this.state.rotation;
         RectF targetRectToFill2 = this.areaView.getTargetRectToFill();
-        this.videoEditTextureView.setViewTransform(this.state.hasChanges() || this.state.getBaseRotation() >= 1.0E-5f, access$33002, access$33003, access$3400, this.state.getOrientationOnly(), access$3300, f8, f9, this.areaView.getCropCenterX() - targetRectToFill2.centerX(), this.areaView.getCropCenterY() - targetRectToFill2.centerY());
+        this.videoEditTextureView.setViewTransform(this.state.hasChanges() || this.state.getBaseRotation() >= 1.0E-5f, access$33003, access$33004, access$3400, this.state.getOrientationOnly(), access$3300, access$33002, this.state.minimumScale / f2, f8, f9, this.areaView.getCropCenterX() - targetRectToFill2.centerX(), this.areaView.getCropCenterY() - targetRectToFill2.centerY());
     }
 
     public static String getPathOrCopy(boolean z, String str) {
@@ -1249,5 +1240,10 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
 
     public float getCropHeight() {
         return this.areaView.getCropHeight();
+    }
+
+    public RectF getActualRect() {
+        this.areaView.getCropRect(this.cropRect);
+        return this.cropRect;
     }
 }

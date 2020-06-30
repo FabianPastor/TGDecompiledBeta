@@ -556,7 +556,6 @@
     <string name="CameraPermissionText">انقر للسماح بالوصول إلى الكاميرا</string>
     <string name="Cancel">إلغاء</string>
     <string name="CancelAccountReset">إلغاء إعادة تعيين الحساب</string>
-    <string name="CancelAccountResetInfo">شخص ما لديه صلاحية الوصول لرقمك **%1$s** طلب حذف حسابك وتعطيل التحقق بخطوتين من حسابك.\10\10إذا لم تكن أنت من قام بذلك فقم رجاء بإدخال الرمز الذي أرسلناه للتوِّ برسالة SMS قصيرة.</string>
     <string name="CancelEmailQuestion">هل ترغب حقًا في إلغاء عملية إعداد بريد الاسترداد؟</string>
     <string name="CancelEmailQuestionTitle">إلغاء عملية الإعداد</string>
     <string name="CancelLinkExpired">رابط غير صحيح أو منتهي الصلاحية.</string>
@@ -2492,7 +2491,6 @@
     <string name="PreviewFeedback2">التنسيق غير سليم؟</string>
     <string name="PriorityInfo">ستعمل الإشعارات الأكثر أهمية حتى في حال تفعيل وضعية عدم الإزعاج.</string>
     <string name="PrivacyAddAnException">إضافة مستخدمين أو مجموعات</string>
-    <string name="PrivacyAdvanced">إعدادات متقدمة</string>
     <string name="PrivacyBots">البوتات والمواقع</string>
     <string name="PrivacyBotsInfo">المواقع التي سجلتَ دخولك إليها عبر تيليجرام.</string>
     <string name="PrivacyCallsP2PHelp">سيجعل تعطيل الند للند جميع المكالمات معتمِدة على خوادم تيليجرام؛ وذلك لتجنب الكشف عن عنوان الـ IP الخاص بجهازك، لكنَّ جودة الصوت ستنخفض قليلا.</string>

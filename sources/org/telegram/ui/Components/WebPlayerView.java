@@ -3179,7 +3179,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
             org.telegram.messenger.ImageReceiver r16 = r15.imageReceiver
             r17 = 0
             r18 = 0
-            org.telegram.messenger.ImageLocation r19 = org.telegram.messenger.ImageLocation.getForPhoto(r14, r3)
+            org.telegram.messenger.ImageLocation r19 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r14, (org.telegram.tgnet.TLRPC$Photo) r3)
             r21 = 0
             r22 = 0
             r24 = 1

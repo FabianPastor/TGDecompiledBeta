@@ -160,7 +160,7 @@ public class DrawerProfileCell extends FrameLayout {
             int r0 = org.telegram.ui.ActionBar.Theme.selectedAutoNightType
             if (r0 == 0) goto L_0x006e
             android.content.Context r0 = r7.getContext()
-            r2 = 2131624382(0x7f0e01be, float:1.8875942E38)
+            r2 = 2131624385(0x7f0e01c1, float:1.8875948E38)
             java.lang.String r3 = "AutoNightModeOff"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             android.widget.Toast r0 = android.widget.Toast.makeText(r0, r2, r1)
@@ -264,16 +264,12 @@ public class DrawerProfileCell extends FrameLayout {
                 i2 = Theme.getColor("listSelectorSDK21");
             } else if (cachedWallpaper instanceof BitmapDrawable) {
                 Bitmap bitmap = ((BitmapDrawable) cachedWallpaper).getBitmap();
-                float measuredWidth = ((float) getMeasuredWidth()) / ((float) bitmap.getWidth());
-                float measuredHeight = ((float) getMeasuredHeight()) / ((float) bitmap.getHeight());
-                if (measuredWidth < measuredHeight) {
-                    measuredWidth = measuredHeight;
-                }
-                int measuredWidth2 = (int) (((float) getMeasuredWidth()) / measuredWidth);
-                int measuredHeight2 = (int) (((float) getMeasuredHeight()) / measuredWidth);
-                int width = (bitmap.getWidth() - measuredWidth2) / 2;
-                int height = (bitmap.getHeight() - measuredHeight2) / 2;
-                this.srcRect.set(width, height, measuredWidth2 + width, measuredHeight2 + height);
+                float max = Math.max(((float) getMeasuredWidth()) / ((float) bitmap.getWidth()), ((float) getMeasuredHeight()) / ((float) bitmap.getHeight()));
+                int measuredWidth = (int) (((float) getMeasuredWidth()) / max);
+                int measuredHeight = (int) (((float) getMeasuredHeight()) / max);
+                int width = (bitmap.getWidth() - measuredWidth) / 2;
+                int height = (bitmap.getHeight() - measuredHeight) / 2;
+                this.srcRect.set(width, height, measuredWidth + width, measuredHeight + height);
                 this.destRect.set(0, 0, getMeasuredWidth(), getMeasuredHeight());
                 try {
                     canvas.drawBitmap(bitmap, this.srcRect, this.destRect, this.paint);

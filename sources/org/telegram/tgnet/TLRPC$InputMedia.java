@@ -8,6 +8,7 @@ public abstract class TLRPC$InputMedia extends TLObject {
     public TLRPC$InputFile file;
     public String first_name;
     public int flags;
+    public boolean force_file;
     public TLRPC$InputGeoPoint geo_point;
     public String last_name;
     public String mime_type;

@@ -3,6 +3,7 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.util.SparseIntArray;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import org.telegram.messenger.AndroidUtilities;
 
 public class ExtendedGridLayoutManager extends GridLayoutManager {
@@ -12,6 +13,10 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
     private SparseIntArray itemsToRow;
     private final boolean lastRowFullWidth;
     private int rowsCount;
+
+    public int getColumnCountForAccessibility(RecyclerView.Recycler recycler, RecyclerView.State state) {
+        return 1;
+    }
 
     /* access modifiers changed from: protected */
     public Size getSizeForItem(int i) {
@@ -161,5 +166,9 @@ public class ExtendedGridLayoutManager extends GridLayoutManager {
     /* access modifiers changed from: protected */
     public int getFlowItemCount() {
         return getItemCount();
+    }
+
+    public int getRowCountForAccessibility(RecyclerView.Recycler recycler, RecyclerView.State state) {
+        return state.getItemCount();
     }
 }

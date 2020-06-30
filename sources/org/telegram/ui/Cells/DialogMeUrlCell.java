@@ -374,7 +374,7 @@ public class DialogMeUrlCell extends BaseCell {
             org.telegram.tgnet.TLRPC$RecentMeUrl r4 = r1.recentMeUrl
             org.telegram.tgnet.TLRPC$ChatInvite r4 = r4.chat_invite
             org.telegram.tgnet.TLRPC$Photo r4 = r4.photo
-            org.telegram.messenger.ImageLocation r13 = org.telegram.messenger.ImageLocation.getForPhoto(r3, r4)
+            org.telegram.messenger.ImageLocation r13 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r3, (org.telegram.tgnet.TLRPC$Photo) r4)
             org.telegram.ui.Components.AvatarDrawable r15 = r1.avatarDrawable
             r16 = 0
             org.telegram.tgnet.TLRPC$RecentMeUrl r3 = r1.recentMeUrl
@@ -474,7 +474,7 @@ public class DialogMeUrlCell extends BaseCell {
             java.lang.String r12 = r0.toString()
             boolean r0 = android.text.TextUtils.isEmpty(r3)
             if (r0 == 0) goto L_0x0311
-            r0 = 2131625451(0x7f0e05eb, float:1.887811E38)
+            r0 = 2131625484(0x7f0e060c, float:1.8878177E38)
             java.lang.String r3 = "HiddenName"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r0)
         L_0x0311:

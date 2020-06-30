@@ -3,7 +3,7 @@ Built-By: Generated-by-ADT
 Created-By: Android Gradle 4.0.0
 
 Name: AndroidManifest.xml
-SHA1-Digest: HSUO+bgo9uxNBk9IpxPRrhUfjHA=
+SHA1-Digest: bRBUebnLYafNbpvYL/5J/0s0fHE=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9510,10 +9510,10 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: Tq404E9MOUi39ID4BcJRnmJlqbU=
+SHA1-Digest: CChwyP2Aq4uY/5N4css27HuTgZM=
 
 Name: classes2.dex
-SHA1-Digest: UlLqpa7PQXRA9fzOARAtILH/OTk=
+SHA1-Digest: tPJV9WqneLucWdJWjfb+sDXHAIc=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -9543,19 +9543,19 @@ Name: firebase-iid-interop.properties
 SHA1-Digest: 8p8Bh8qGwQDEjO9Ye/uB8fO/OPk=
 
 Name: firebase-iid.properties
-SHA1-Digest: nfRCp8j6TwObojorpsVHaI2lT9c=
+SHA1-Digest: 4ETWguqtxH+ZTEQ5bfgAeN6pmTE=
 
 Name: firebase-installations-interop.properties
 SHA1-Digest: E3tQvbAsW57PNKubPkOnn3fVTDo=
 
 Name: firebase-installations.properties
-SHA1-Digest: vcJQZicqhHDTMq991Npmvhwyzzk=
+SHA1-Digest: gtG2Mi2a9FnXnMYOtvXfyRqDums=
 
 Name: firebase-measurement-connector.properties
 SHA1-Digest: rI0eJI7ADE6hbdEmx8SGtYvQkUw=
 
 Name: firebase-messaging.properties
-SHA1-Digest: FdJLz/EVJY5Ltvp7XSDIzMSJf34=
+SHA1-Digest: 9dVtULGqmFtKEby98Ne1PNMZQzQ=
 
 Name: isoparser-default.properties
 SHA1-Digest: 6/KBb+rGX/5O2/xNP3HN6XIg3lI=
@@ -11111,6 +11111,9 @@ SHA1-Digest: r0NQHlltt73Kz5PIFFLPpTu1SQs=
 
 Name: res/drawable-hdpi-v4/msg_usersearch.png
 SHA1-Digest: +OhPx3CZ9x6R/8ycIBvQCQTWUnI=
+
+Name: res/drawable-hdpi-v4/msg_video.png
+SHA1-Digest: OnQ+Wi/gHjvK1Zt9CrXubB38H2g=
 
 Name: res/drawable-hdpi-v4/msg_views.png
 SHA1-Digest: y/GA2v1A0zGDuzYfLApJgELUhP8=
@@ -13200,6 +13203,9 @@ SHA1-Digest: xs29SjwCPSNrYZKDqtgZZuS9vIM=
 
 Name: res/drawable-mdpi-v4/msg_usersearch.png
 SHA1-Digest: 6yQVrtAy3vUEHG9cfnrvU05/JzE=
+
+Name: res/drawable-mdpi-v4/msg_video.png
+SHA1-Digest: B3znNXu46pLAv3FXGNIpkznJps8=
 
 Name: res/drawable-mdpi-v4/msg_views.png
 SHA1-Digest: fqtUQ9I3v2bzCqc5oJvx2iY6uZM=
@@ -15335,6 +15341,9 @@ SHA1-Digest: TN8uGy7KeDJ8NigDn8gWkdxveew=
 Name: res/drawable-xhdpi-v4/msg_usersearch.png
 SHA1-Digest: pm1Dshhfauw6ik6q3qRV0PBbGpE=
 
+Name: res/drawable-xhdpi-v4/msg_video.png
+SHA1-Digest: ZUe67OGP6Nt1vtJjywI0zzQ6B5c=
+
 Name: res/drawable-xhdpi-v4/msg_views.png
 SHA1-Digest: afaEYBAwqKBp/PZmsB7wCU0mwVA=
 
@@ -17412,6 +17421,9 @@ SHA1-Digest: VK8mFSZNzu3zIjd79OsjABMwJZM=
 Name: res/drawable-xxhdpi-v4/msg_usersearch.png
 SHA1-Digest: +tD4i8KRfCxF50DsLbTtQTstXgk=
 
+Name: res/drawable-xxhdpi-v4/msg_video.png
+SHA1-Digest: LtfSjxuqaWWxUWnk8kHg7CHcj+U=
+
 Name: res/drawable-xxhdpi-v4/msg_views.png
 SHA1-Digest: fsmp0XU0p4GIxL186XqBQlVAuok=
 
@@ -18295,19 +18307,19 @@ Name: res/drawable/$fingerprint_dialog_fp_to_error__9.xml
 SHA1-Digest: 1JpfWGRUfkDt/s1Z3UAR2/1PHhg=
 
 Name: res/drawable/bar_selector_lock.xml
-SHA1-Digest: y7Sx2ryahkZlgbbdP50lsLuG4fo=
+SHA1-Digest: sa7Kw3c4Cw5xjnV2n1okFWBc0mQ=
 
 Name: res/drawable/bar_selector_style.xml
-SHA1-Digest: 77Azm5CJ5EnlalGAF+o6RPjA2mA=
+SHA1-Digest: 3/a6EfqpTsyhFGXr+pnnixB9xZI=
 
 Name: res/drawable/bar_selector_white.xml
-SHA1-Digest: O2rhvTqlGqLi0BbDE26b3vPXhas=
+SHA1-Digest: /nz2rfhrbDYLaPCcb16jyrDs1Ec=
 
 Name: res/drawable/bg_voip_icon_btn.xml
 SHA1-Digest: J22G2/eAoKY4/nC3pxuofnAITl0=
 
 Name: res/drawable/call_custom_notification_icon.xml
-SHA1-Digest: EyaWvZqeeeK6c0xOT5vnh9rl/MY=
+SHA1-Digest: Bwcr81/3Tus4gjNo7cJq3OYYj+E=
 
 Name: res/drawable/call_notification_bg.xml
 SHA1-Digest: nOCyiIo3P4selyXXFDwXgqcotxQ=
@@ -18406,7 +18418,7 @@ Name: res/drawable/icplaceholder.jpg
 SHA1-Digest: VRZDALhEB9AR7MDc2CvTjZwpK30=
 
 Name: res/drawable/list_selector_ex.xml
-SHA1-Digest: IKsJu6dvI35WLva3wtbN6/wTWXY=
+SHA1-Digest: Ukntn0meSuBqX84wHz9IBetJbMo=
 
 Name: res/drawable/loading_animation.xml
 SHA1-Digest: P3cooXxWG66o3duqwuet+Fb9WmY=
@@ -18415,16 +18427,16 @@ Name: res/drawable/loading_animation2.xml
 SHA1-Digest: Pp18a/ZPl891T5LHiz70i0T98DM=
 
 Name: res/drawable/notification_bg.xml
-SHA1-Digest: s4MPbMe6kgsdVh0GdDAx0KVcIcw=
+SHA1-Digest: lyUpEjkXvefCuxxu59Asz39T0H8=
 
 Name: res/drawable/notification_bg_low.xml
-SHA1-Digest: 2DIL9+07CU+nXlF+D5SkKJFvhww=
+SHA1-Digest: f8zOqYEfnYh0/5xGlbzuKiRmoFg=
 
 Name: res/drawable/notification_icon_background.xml
 SHA1-Digest: XphkVRKAPV4NsZ3rAjbi2TNKmuM=
 
 Name: res/drawable/notification_tile_bg.xml
-SHA1-Digest: L7+BtBN76aTbl51Busqwt9LQHmM=
+SHA1-Digest: tRMQZXvoXZuPxtfHl9lDFpe0EMU=
 
 Name: res/drawable/paint_elliptical_brush.png
 SHA1-Digest: YxcHWgcRA6mcbCx1dnjhkOsV8yo=
@@ -18445,10 +18457,10 @@ Name: res/drawable/scrollbar_vertical_thumb.xml
 SHA1-Digest: cIMtnFnvAhj5T9tJg+qXs7oxLn0=
 
 Name: res/drawable/scrollbar_vertical_thumb_inset.xml
-SHA1-Digest: snujdzbxnHq1riz1XZ6K1qkEjcs=
+SHA1-Digest: tIE2puBADa0PQcXIZdMWOM/A8VQ=
 
 Name: res/drawable/switch_thumb.xml
-SHA1-Digest: hTOWoSoDYtwD03GKPy3iyCrIQg0=
+SHA1-Digest: z+Mdl0IDlJHT7BZ7UwYKa75A6Ng=
 
 Name: res/drawable/theme_preview_image.jpg
 SHA1-Digest: ML0+EZSOfk6uQTRUBePSKF60syA=
@@ -18517,7 +18529,7 @@ Name: res/layout/player_big_notification.xml
 SHA1-Digest: Avi7IdKJhzL3AZDbe27c4MqEOFg=
 
 Name: res/layout/player_small_notification.xml
-SHA1-Digest: Wd8hxQxNZ5xhQb/JwfHovMA2ROw=
+SHA1-Digest: OdX/knVwAQlbObjdCc5d2P0N70M=
 
 Name: res/mipmap-anydpi-v26/ic_launcher.xml
 SHA1-Digest: f5ZJP3thwJfrQSFormC85H7px44=
@@ -18754,10 +18766,10 @@ Name: res/raw/wallet_science.tgs
 SHA1-Digest: 7hpfUbUIaGItHgHPayfu77P2q3g=
 
 Name: res/xml/auth.xml
-SHA1-Digest: 3haelM8R/gS+Xl7M6m5maeDe6r4=
+SHA1-Digest: 3w/Iq8im4lxR+QNB5yyhES0Vh/I=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: DNXH1rnckbrySqwhCrr26oDlKWc=
+SHA1-Digest: 2xEViKYLFqNZSUDX5O7thEhW//c=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: vNxeRePtnY64Hxd7k8wXLkWhqV0=
@@ -18772,7 +18784,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: 3DxQjOQ0epdiIngozYe2X3Tjp1o=
+SHA1-Digest: udzgMEf96q7+eb5F9z9dTUwOmw0=
 
 Name: transport-api.properties
 SHA1-Digest: 1ihjJr5LtYfq/sGtDlVEQK4Ajxg=

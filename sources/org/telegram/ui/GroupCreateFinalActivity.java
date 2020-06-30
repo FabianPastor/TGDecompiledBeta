@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.StateListAnimator;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -133,10 +134,10 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatDidCreated);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatDidFailCreate);
-        ImageUpdater imageUpdater2 = new ImageUpdater();
+        ImageUpdater imageUpdater2 = new ImageUpdater(false);
         this.imageUpdater = imageUpdater2;
         imageUpdater2.parentFragment = this;
-        imageUpdater2.delegate = this;
+        imageUpdater2.setDelegate(this);
         this.selectedContacts = getArguments().getIntegerArrayList("result");
         ArrayList arrayList = new ArrayList();
         for (int i = 0; i < this.selectedContacts.size(); i++) {
@@ -210,6 +211,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         if (groupCreateAdapter != null) {
             groupCreateAdapter.notifyDataSetChanged();
         }
+        this.imageUpdater.onResume();
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
     }
 
@@ -219,6 +221,21 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         if (editTextEmoji != null) {
             editTextEmoji.onPause();
         }
+        this.imageUpdater.onPause();
+    }
+
+    public void dismissCurrentDialog() {
+        if (!this.imageUpdater.dismissCurrentDialog(this.visibleDialog)) {
+            super.dismissCurrentDialog();
+        }
+    }
+
+    public boolean dismissDialogOnPause(Dialog dialog) {
+        return this.imageUpdater.dismissDialogOnPause(dialog) && super.dismissDialogOnPause(dialog);
+    }
+
+    public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
+        this.imageUpdater.onRequestPermissionsResultFragment(i, strArr, iArr);
     }
 
     public boolean onBackPressed() {
@@ -663,7 +680,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         }
     }
 
-    public void didUploadPhoto(TLRPC$InputFile tLRPC$InputFile, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
+    public void didUploadPhoto(TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, String str, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$InputFile, tLRPC$PhotoSize2, tLRPC$PhotoSize) {
             public final /* synthetic */ TLRPC$InputFile f$1;
             public final /* synthetic */ TLRPC$PhotoSize f$2;

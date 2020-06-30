@@ -21,6 +21,8 @@ public class VideoEditTextureView extends TextureView implements TextureView.Sur
     private VideoEditTextureViewDelegate delegate;
     private FilterGLThread eglThread;
     private boolean hasTransform;
+    private float minScale;
+    private float trueCropScale;
     private int videoHeight;
     private int videoWidth;
     private Rect viewRect = new Rect();
@@ -126,7 +128,7 @@ public class VideoEditTextureView extends TextureView implements TextureView.Sur
         return true;
     }
 
-    public void setViewTransform(boolean z, float f, float f2, float f3, int i, float f4, float f5, float f6, float f7, float f8) {
+    public void setViewTransform(boolean z, float f, float f2, float f3, int i, float f4, float f5, float f6, float f7, float f8, float f9, float var_) {
         this.hasTransform = z;
         this.cropPx = f;
         this.cropPy = f2;
@@ -145,10 +147,12 @@ public class VideoEditTextureView extends TextureView implements TextureView.Sur
             if (i3 >= 360) {
                 this.cropOrientation = i3 - 360;
             } else {
-                this.cropPw = f5;
-                this.cropPh = f6;
-                this.cropAreaX = f7;
-                this.cropAreaY = f8;
+                this.cropPw = f7;
+                this.cropPh = f8;
+                this.cropAreaX = f9;
+                this.cropAreaY = var_;
+                this.trueCropScale = f5;
+                this.minScale = f6;
                 return;
             }
         }
@@ -184,6 +188,14 @@ public class VideoEditTextureView extends TextureView implements TextureView.Sur
 
     public int getOrientation() {
         return this.cropOrientation;
+    }
+
+    public float getTrueCropScale() {
+        return this.trueCropScale;
+    }
+
+    public float getMinScale() {
+        return this.minScale;
     }
 
     public float getCropPw() {

@@ -387,7 +387,7 @@ public class ActionBarLayout extends FrameLayout {
     public void dismissDialogs() {
         if (!this.fragmentsStack.isEmpty()) {
             ArrayList<BaseFragment> arrayList = this.fragmentsStack;
-            arrayList.get(arrayList.size() - 1).dismissCurrentDialig();
+            arrayList.get(arrayList.size() - 1).dismissCurrentDialog();
         }
     }
 
@@ -901,8 +901,8 @@ public class ActionBarLayout extends FrameLayout {
 
     public boolean presentFragment(BaseFragment baseFragment, boolean z, boolean z2, boolean z3, boolean z4) {
         ActionBarLayoutDelegate actionBarLayoutDelegate;
-        BaseFragment baseFragment2;
-        BaseFragment baseFragment3 = baseFragment;
+        final BaseFragment baseFragment2;
+        final BaseFragment baseFragment3 = baseFragment;
         boolean z5 = z;
         boolean z6 = z2;
         final boolean z7 = z4;
@@ -1039,10 +1039,12 @@ public class ActionBarLayout extends FrameLayout {
                     ActionBarLayout.this.lambda$presentFragment$1$ActionBarLayout(this.f$1, this.f$2, this.f$3, this.f$4);
                 }
             };
-            if (baseFragment2 != null) {
-                baseFragment2.onTransitionAnimationStart(false, false);
+            if (!baseFragment.needDelayOpenAnimation()) {
+                if (baseFragment2 != null) {
+                    baseFragment2.onTransitionAnimationStart(false, false);
+                }
+                baseFragment3.onTransitionAnimationStart(true, false);
             }
-            baseFragment3.onTransitionAnimationStart(true, false);
             this.oldFragment = baseFragment2;
             this.newFragment = baseFragment3;
             if (!z7) {
@@ -1079,6 +1081,11 @@ public class ActionBarLayout extends FrameLayout {
                         public void run() {
                             if (ActionBarLayout.this.delayedOpenAnimationRunnable == this) {
                                 Runnable unused = ActionBarLayout.this.delayedOpenAnimationRunnable = null;
+                                BaseFragment baseFragment = baseFragment2;
+                                if (baseFragment != null) {
+                                    baseFragment.onTransitionAnimationStart(false, false);
+                                }
+                                baseFragment3.onTransitionAnimationStart(true, false);
                                 ActionBarLayout.this.startLayoutAnimation(true, true, z7);
                             }
                         }
@@ -1896,8 +1903,7 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public void startActivityForResult(Intent intent, int i) {
-        Activity activity = this.parentActivity;
-        if (activity != null) {
+        if (this.parentActivity != null) {
             if (this.transitionAnimationInProgress) {
                 AnimatorSet animatorSet = this.currentAnimation;
                 if (animatorSet != null) {
@@ -1910,11 +1916,9 @@ public class ActionBarLayout extends FrameLayout {
                     onOpenAnimationEnd();
                 }
                 this.containerView.invalidate();
-                if (intent != null) {
-                    this.parentActivity.startActivityForResult(intent, i);
-                }
-            } else if (intent != null) {
-                activity.startActivityForResult(intent, i);
+            }
+            if (intent != null) {
+                this.parentActivity.startActivityForResult(intent, i);
             }
         }
     }

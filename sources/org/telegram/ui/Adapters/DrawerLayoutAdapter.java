@@ -197,16 +197,16 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
                 }
                 i = NUM;
             }
-            this.items.add(new Item(this, 2, LocaleController.getString("NewGroup", NUM), i8));
-            this.items.add(new Item(this, 3, LocaleController.getString("NewSecretChat", NUM), i10));
-            this.items.add(new Item(this, 4, LocaleController.getString("NewChannel", NUM), i7));
-            this.items.add(new Item(this, 6, LocaleController.getString("Contacts", NUM), i6));
-            this.items.add(new Item(this, 10, LocaleController.getString("Calls", NUM), i5));
-            this.items.add(new Item(this, 11, LocaleController.getString("SavedMessages", NUM), i4));
-            this.items.add(new Item(this, 8, LocaleController.getString("Settings", NUM), i3));
+            this.items.add(new Item(2, LocaleController.getString("NewGroup", NUM), i8));
+            this.items.add(new Item(3, LocaleController.getString("NewSecretChat", NUM), i10));
+            this.items.add(new Item(4, LocaleController.getString("NewChannel", NUM), i7));
+            this.items.add(new Item(6, LocaleController.getString("Contacts", NUM), i6));
+            this.items.add(new Item(10, LocaleController.getString("Calls", NUM), i5));
+            this.items.add(new Item(11, LocaleController.getString("SavedMessages", NUM), i4));
+            this.items.add(new Item(8, LocaleController.getString("Settings", NUM), i3));
             this.items.add((Object) null);
-            this.items.add(new Item(this, 7, LocaleController.getString("InviteFriends", NUM), i2));
-            this.items.add(new Item(this, 9, LocaleController.getString("TelegramFAQ", NUM), i));
+            this.items.add(new Item(7, LocaleController.getString("InviteFriends", NUM), i2));
+            this.items.add(new Item(9, LocaleController.getString("TelegramFAQ", NUM), i));
         }
     }
 
@@ -231,12 +231,12 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         return item.id;
     }
 
-    private class Item {
+    private static class Item {
         public int icon;
         public int id;
         public String text;
 
-        public Item(DrawerLayoutAdapter drawerLayoutAdapter, int i, String str, int i2) {
+        public Item(int i, String str, int i2) {
             this.icon = i2;
             this.id = i;
             this.text = str;

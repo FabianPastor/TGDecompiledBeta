@@ -10,6 +10,7 @@ import android.text.StaticLayout;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
@@ -50,6 +51,7 @@ public class AboutLinkCell extends FrameLayout {
         this.valueTextView.setSingleLine(true);
         int i = 5;
         this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        this.valueTextView.setImportantForAccessibility(2);
         addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, (!LocaleController.isRTL ? 3 : i) | 80, 23.0f, 0.0f, 23.0f, 10.0f));
         setWillNotDraw(false);
     }
@@ -279,5 +281,17 @@ public class AboutLinkCell extends FrameLayout {
             FileLog.e((Throwable) e);
         }
         canvas.restore();
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        if (!TextUtils.isEmpty(this.oldText)) {
+            CharSequence text = this.valueTextView.getText();
+            if (TextUtils.isEmpty(text)) {
+                accessibilityNodeInfo.setText(this.oldText);
+                return;
+            }
+            accessibilityNodeInfo.setText(text + ": " + this.oldText);
+        }
     }
 }

@@ -4996,51 +4996,49 @@ public class ImageLoader {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageLoader.lambda$createLoadOperationForImageReceiver$5$ImageLoader(int, java.lang.String, java.lang.String, int, org.telegram.messenger.ImageReceiver, int, java.lang.String, int, org.telegram.messenger.ImageLocation, boolean, java.lang.Object, org.telegram.tgnet.TLRPC$Document, boolean, boolean, int, int, java.lang.String, int):void");
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:131:0x0219, code lost:
-        if (r6.local_id >= 0) goto L_0x02f2;
+    /* JADX WARNING: Code restructure failed: missing block: B:130:0x021a, code lost:
+        if (r6.local_id >= 0) goto L_0x02f3;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:153:0x029b  */
-    /* JADX WARNING: Removed duplicated region for block: B:159:0x02b9  */
-    /* JADX WARNING: Removed duplicated region for block: B:168:0x02e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:169:0x02eb  */
-    /* JADX WARNING: Removed duplicated region for block: B:181:0x0323  */
-    /* JADX WARNING: Removed duplicated region for block: B:196:0x038a  */
-    /* JADX WARNING: Removed duplicated region for block: B:199:0x0392 A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:206:0x03c2 A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:211:0x03de  */
-    /* JADX WARNING: Removed duplicated region for block: B:219:0x0416  */
-    /* JADX WARNING: Removed duplicated region for block: B:221:0x041b  */
-    /* JADX WARNING: Removed duplicated region for block: B:239:0x0481  */
-    /* JADX WARNING: Removed duplicated region for block: B:252:0x0319 A[EDGE_INSN: B:252:0x0319->B:179:0x0319 ?: BREAK  , SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:152:0x029c  */
+    /* JADX WARNING: Removed duplicated region for block: B:158:0x02ba  */
+    /* JADX WARNING: Removed duplicated region for block: B:167:0x02ea  */
+    /* JADX WARNING: Removed duplicated region for block: B:168:0x02ec  */
+    /* JADX WARNING: Removed duplicated region for block: B:180:0x0324  */
+    /* JADX WARNING: Removed duplicated region for block: B:195:0x038d  */
+    /* JADX WARNING: Removed duplicated region for block: B:205:0x03c2 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:210:0x03de  */
+    /* JADX WARNING: Removed duplicated region for block: B:218:0x041d  */
+    /* JADX WARNING: Removed duplicated region for block: B:220:0x0424  */
+    /* JADX WARNING: Removed duplicated region for block: B:238:0x0484  */
+    /* JADX WARNING: Removed duplicated region for block: B:251:0x031a A[EDGE_INSN: B:251:0x031a->B:178:0x031a ?: BREAK  , SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:31:0x0070  */
     /* JADX WARNING: Removed duplicated region for block: B:32:0x0079  */
     /* JADX WARNING: Removed duplicated region for block: B:36:0x008a  */
     /* JADX WARNING: Removed duplicated region for block: B:44:0x00a7  */
     /* JADX WARNING: Removed duplicated region for block: B:71:0x011d  */
     /* JADX WARNING: Removed duplicated region for block: B:73:0x012a  */
-    /* JADX WARNING: Removed duplicated region for block: B:80:0x013d  */
-    /* JADX WARNING: Removed duplicated region for block: B:81:0x013f  */
-    /* JADX WARNING: Removed duplicated region for block: B:89:0x0154  */
-    /* JADX WARNING: Removed duplicated region for block: B:91:0x0157  */
-    /* JADX WARNING: Removed duplicated region for block: B:92:0x015a  */
-    /* JADX WARNING: Removed duplicated region for block: B:94:0x015e  */
-    /* JADX WARNING: Removed duplicated region for block: B:95:0x0161  */
-    /* JADX WARNING: Removed duplicated region for block: B:99:0x0178  */
+    /* JADX WARNING: Removed duplicated region for block: B:80:0x013e  */
+    /* JADX WARNING: Removed duplicated region for block: B:81:0x0141  */
+    /* JADX WARNING: Removed duplicated region for block: B:89:0x0156  */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x0159  */
+    /* JADX WARNING: Removed duplicated region for block: B:92:0x015c  */
+    /* JADX WARNING: Removed duplicated region for block: B:94:0x0160  */
+    /* JADX WARNING: Removed duplicated region for block: B:98:0x0179  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void loadImageForImageReceiver(org.telegram.messenger.ImageReceiver r36) {
+    public void loadImageForImageReceiver(org.telegram.messenger.ImageReceiver r37) {
         /*
-            r35 = this;
-            r12 = r35
-            r13 = r36
+            r36 = this;
+            r12 = r36
+            r13 = r37
             if (r13 != 0) goto L_0x0007
             return
         L_0x0007:
-            java.lang.String r6 = r36.getMediaKey()
-            int r14 = r36.getNewGuid()
+            java.lang.String r6 = r37.getMediaKey()
+            int r14 = r37.getNewGuid()
             r7 = 0
             r8 = 1
             if (r6 == 0) goto L_0x0055
-            org.telegram.messenger.ImageLocation r0 = r36.getMediaLocation()
+            org.telegram.messenger.ImageLocation r0 = r37.getMediaLocation()
             if (r0 == 0) goto L_0x002e
             org.telegram.tgnet.TLRPC$Document r1 = r0.document
             boolean r1 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r1, r8)
@@ -5065,11 +5063,11 @@ public class ImageLoader {
             r12.cancelLoadingForImageReceiver(r13, r8)
             r3 = 3
             r4 = 1
-            r0 = r36
+            r0 = r37
             r2 = r6
             r5 = r14
             r0.setImageBitmapByKey(r1, r2, r3, r4, r5)
-            boolean r0 = r36.isForcePreview()
+            boolean r0 = r37.isForcePreview()
             if (r0 != 0) goto L_0x0053
             return
         L_0x0053:
@@ -5078,10 +5076,10 @@ public class ImageLoader {
         L_0x0055:
             r0 = 0
         L_0x0056:
-            java.lang.String r2 = r36.getImageKey()
+            java.lang.String r2 = r37.getImageKey()
             if (r0 != 0) goto L_0x00a0
             if (r2 == 0) goto L_0x00a0
-            org.telegram.messenger.ImageLocation r1 = r36.getImageLocation()
+            org.telegram.messenger.ImageLocation r1 = r37.getImageLocation()
             if (r1 == 0) goto L_0x0079
             org.telegram.tgnet.TLRPC$Document r3 = r1.document
             boolean r3 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r3, r8)
@@ -5105,10 +5103,10 @@ public class ImageLoader {
             r12.cancelLoadingForImageReceiver(r13, r8)
             r3 = 0
             r4 = 1
-            r0 = r36
+            r0 = r37
             r5 = r14
             r0.setImageBitmapByKey(r1, r2, r3, r4, r5)
-            boolean r0 = r36.isForcePreview()
+            boolean r0 = r37.isForcePreview()
             if (r0 != 0) goto L_0x009e
             if (r6 != 0) goto L_0x009e
             return
@@ -5118,9 +5116,9 @@ public class ImageLoader {
         L_0x00a0:
             r15 = r0
         L_0x00a1:
-            java.lang.String r2 = r36.getThumbKey()
+            java.lang.String r2 = r37.getThumbKey()
             if (r2 == 0) goto L_0x00ea
-            org.telegram.messenger.ImageLocation r0 = r36.getThumbLocation()
+            org.telegram.messenger.ImageLocation r0 = r37.getThumbLocation()
             if (r0 == 0) goto L_0x00c2
             org.telegram.tgnet.TLRPC$Document r1 = r0.document
             boolean r1 = org.telegram.messenger.MessageObject.isAnimatedStickerDocument(r1, r8)
@@ -5144,12 +5142,12 @@ public class ImageLoader {
             if (r1 == 0) goto L_0x00ea
             r3 = 1
             r4 = 1
-            r0 = r36
+            r0 = r37
             r5 = r14
             r0.setImageBitmapByKey(r1, r2, r3, r4, r5)
             r12.cancelLoadingForImageReceiver(r13, r7)
             if (r15 == 0) goto L_0x00e8
-            boolean r0 = r36.isForcePreview()
+            boolean r0 = r37.isForcePreview()
             if (r0 == 0) goto L_0x00e8
             return
         L_0x00e8:
@@ -5158,319 +5156,317 @@ public class ImageLoader {
         L_0x00ea:
             r0 = 0
         L_0x00eb:
-            java.lang.Object r1 = r36.getParentObject()
-            org.telegram.tgnet.TLRPC$Document r2 = r36.getQulityThumbDocument()
-            org.telegram.messenger.ImageLocation r5 = r36.getThumbLocation()
-            java.lang.String r6 = r36.getThumbFilter()
-            org.telegram.messenger.ImageLocation r3 = r36.getMediaLocation()
-            java.lang.String r11 = r36.getMediaFilter()
-            org.telegram.messenger.ImageLocation r4 = r36.getImageLocation()
-            java.lang.String r10 = r36.getImageFilter()
+            java.lang.Object r1 = r37.getParentObject()
+            org.telegram.tgnet.TLRPC$Document r2 = r37.getQulityThumbDocument()
+            org.telegram.messenger.ImageLocation r5 = r37.getThumbLocation()
+            java.lang.String r6 = r37.getThumbFilter()
+            org.telegram.messenger.ImageLocation r3 = r37.getMediaLocation()
+            java.lang.String r11 = r37.getMediaFilter()
+            org.telegram.messenger.ImageLocation r4 = r37.getImageLocation()
+            java.lang.String r10 = r37.getImageFilter()
             if (r4 != 0) goto L_0x0131
-            boolean r9 = r36.isNeedsQualityThumb()
+            boolean r9 = r37.isNeedsQualityThumb()
             if (r9 == 0) goto L_0x0131
-            boolean r9 = r36.isCurrentKeyQuality()
+            boolean r9 = r37.isCurrentKeyQuality()
             if (r9 == 0) goto L_0x0131
             boolean r9 = r1 instanceof org.telegram.messenger.MessageObject
             if (r9 == 0) goto L_0x012a
             r2 = r1
             org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
             org.telegram.tgnet.TLRPC$Document r2 = r2.getDocument()
-            org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForDocument(r2)
+            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForDocument(r2)
         L_0x0128:
-            r2 = 1
-            goto L_0x0132
+            r9 = 1
+            goto L_0x0133
         L_0x012a:
             if (r2 == 0) goto L_0x0131
-            org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForDocument(r2)
+            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForDocument(r2)
             goto L_0x0128
         L_0x0131:
-            r2 = 0
-        L_0x0132:
-            java.lang.String r9 = "mp4"
-            r8 = 2
-            r17 = 0
-            if (r4 == 0) goto L_0x013f
-            int r7 = r4.imageType
-            if (r7 != r8) goto L_0x013f
-            r7 = r9
-            goto L_0x0141
-        L_0x013f:
-            r7 = r17
-        L_0x0141:
-            r19 = r4
-            if (r3 == 0) goto L_0x014a
-            int r4 = r3.imageType
-            if (r4 != r8) goto L_0x014a
-            goto L_0x014c
-        L_0x014a:
-            r9 = r17
-        L_0x014c:
-            java.lang.String r4 = r36.getExt()
-            java.lang.String r8 = "jpg"
-            if (r4 != 0) goto L_0x0155
-            r4 = r8
-        L_0x0155:
-            if (r7 != 0) goto L_0x015a
-            r21 = r4
-            goto L_0x015c
-        L_0x015a:
-            r21 = r7
-        L_0x015c:
-            if (r9 != 0) goto L_0x0161
-            r22 = r4
-            goto L_0x0163
-        L_0x0161:
-            r22 = r9
-        L_0x0163:
-            r24 = r3
-            r7 = r17
-            r12 = r7
-            r23 = r12
-            r9 = r19
-            r3 = 0
-            r25 = 0
-            r19 = r23
-        L_0x0171:
-            java.lang.String r13 = "."
-            r26 = r15
-            r15 = 2
-            if (r3 >= r15) goto L_0x0319
-            if (r3 != 0) goto L_0x0180
-            r15 = r9
-            r27 = r14
-            r14 = r21
-            goto L_0x0186
-        L_0x0180:
-            r27 = r14
-            r14 = r22
-            r15 = r24
-        L_0x0186:
-            if (r15 != 0) goto L_0x018d
-            r28 = r0
-            r29 = r9
-            goto L_0x01a0
-        L_0x018d:
-            r28 = r0
-            if (r24 == 0) goto L_0x0196
-            r29 = r9
-            r0 = r24
-            goto L_0x0199
-        L_0x0196:
-            r0 = r9
-            r29 = r0
-        L_0x0199:
+            r2 = r4
             r9 = 0
-            java.lang.String r0 = r15.getKey(r1, r0, r9)
-            if (r0 != 0) goto L_0x01a6
-        L_0x01a0:
-            r30 = r6
-        L_0x01a2:
-            r9 = r29
-            goto L_0x030d
-        L_0x01a6:
-            r30 = r6
-            if (r24 == 0) goto L_0x01ad
-            r9 = r24
-            goto L_0x01af
-        L_0x01ad:
-            r9 = r29
-        L_0x01af:
+        L_0x0133:
+            java.lang.String r16 = "mp4"
+            r8 = 2
+            r18 = 0
+            if (r2 == 0) goto L_0x0141
+            int r7 = r2.imageType
+            if (r7 != r8) goto L_0x0141
+            r7 = r16
+            goto L_0x0143
+        L_0x0141:
+            r7 = r18
+        L_0x0143:
+            r20 = r2
+            if (r3 == 0) goto L_0x014c
+            int r2 = r3.imageType
+            if (r2 != r8) goto L_0x014c
+            goto L_0x014e
+        L_0x014c:
+            r16 = r18
+        L_0x014e:
+            java.lang.String r2 = r37.getExt()
+            java.lang.String r8 = "jpg"
+            if (r2 != 0) goto L_0x0157
+            r2 = r8
+        L_0x0157:
+            if (r7 != 0) goto L_0x015c
+            r22 = r2
+            goto L_0x015e
+        L_0x015c:
+            r22 = r7
+        L_0x015e:
+            if (r16 != 0) goto L_0x0162
+            r16 = r2
+        L_0x0162:
+            r24 = r3
+            r25 = r4
+            r4 = r18
+            r12 = r4
+            r23 = r12
+            r7 = r20
+            r3 = 0
+            r26 = 0
+            r20 = r23
+        L_0x0172:
+            java.lang.String r13 = "."
+            r27 = r15
+            r15 = 2
+            if (r3 >= r15) goto L_0x031a
+            if (r3 != 0) goto L_0x0181
+            r15 = r7
+            r28 = r14
+            r14 = r22
+            goto L_0x0187
+        L_0x0181:
+            r28 = r14
+            r14 = r16
+            r15 = r24
+        L_0x0187:
+            if (r15 != 0) goto L_0x018e
+            r29 = r0
+            r30 = r7
+            goto L_0x01a1
+        L_0x018e:
+            r29 = r0
+            if (r24 == 0) goto L_0x0197
+            r30 = r7
+            r0 = r24
+            goto L_0x019a
+        L_0x0197:
+            r0 = r7
+            r30 = r0
+        L_0x019a:
+            r7 = 0
+            java.lang.String r0 = r15.getKey(r1, r0, r7)
+            if (r0 != 0) goto L_0x01a7
+        L_0x01a1:
+            r31 = r6
+        L_0x01a3:
+            r7 = r30
+            goto L_0x030e
+        L_0x01a7:
+            r31 = r6
+            if (r24 == 0) goto L_0x01ae
+            r7 = r24
+            goto L_0x01b0
+        L_0x01ae:
+            r7 = r30
+        L_0x01b0:
             r6 = 1
-            java.lang.String r9 = r15.getKey(r1, r9, r6)
+            java.lang.String r7 = r15.getKey(r1, r7, r6)
             java.lang.String r6 = r15.path
-            if (r6 == 0) goto L_0x01d2
+            if (r6 == 0) goto L_0x01d3
             java.lang.StringBuilder r6 = new java.lang.StringBuilder
             r6.<init>()
-            r6.append(r9)
+            r6.append(r7)
             r6.append(r13)
-            java.lang.String r9 = r15.path
-            java.lang.String r9 = getHttpUrlExtension(r9, r8)
-            r6.append(r9)
-            java.lang.String r9 = r6.toString()
-            goto L_0x02f2
-        L_0x01d2:
+            java.lang.String r7 = r15.path
+            java.lang.String r7 = getHttpUrlExtension(r7, r8)
+            r6.append(r7)
+            java.lang.String r7 = r6.toString()
+            goto L_0x02f3
+        L_0x01d3:
             org.telegram.tgnet.TLRPC$PhotoSize r6 = r15.photoSize
             boolean r6 = r6 instanceof org.telegram.tgnet.TLRPC$TL_photoStrippedSize
-            if (r6 == 0) goto L_0x01ec
+            if (r6 == 0) goto L_0x01ed
             java.lang.StringBuilder r6 = new java.lang.StringBuilder
             r6.<init>()
-            r6.append(r9)
+            r6.append(r7)
             r6.append(r13)
             r6.append(r14)
-            java.lang.String r9 = r6.toString()
-            goto L_0x02f2
-        L_0x01ec:
+            java.lang.String r7 = r6.toString()
+            goto L_0x02f3
+        L_0x01ed:
             org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated r6 = r15.location
-            if (r6 == 0) goto L_0x021f
+            if (r6 == 0) goto L_0x0220
             java.lang.StringBuilder r6 = new java.lang.StringBuilder
             r6.<init>()
-            r6.append(r9)
+            r6.append(r7)
             r6.append(r13)
             r6.append(r14)
-            java.lang.String r9 = r6.toString()
-            java.lang.String r6 = r36.getExt()
-            if (r6 != 0) goto L_0x021b
+            java.lang.String r7 = r6.toString()
+            java.lang.String r6 = r37.getExt()
+            if (r6 != 0) goto L_0x021c
             org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated r6 = r15.location
             byte[] r13 = r6.key
-            if (r13 != 0) goto L_0x021b
+            if (r13 != 0) goto L_0x021c
             long r13 = r6.volume_id
-            r31 = -2147483648(0xfffffffvar_, double:NaN)
-            int r33 = (r13 > r31 ? 1 : (r13 == r31 ? 0 : -1))
-            if (r33 != 0) goto L_0x02f2
+            r32 = -2147483648(0xfffffffvar_, double:NaN)
+            int r34 = (r13 > r32 ? 1 : (r13 == r32 ? 0 : -1))
+            if (r34 != 0) goto L_0x02f3
             int r6 = r6.local_id
-            if (r6 >= 0) goto L_0x02f2
-        L_0x021b:
-            r25 = 1
-            goto L_0x02f2
-        L_0x021f:
+            if (r6 >= 0) goto L_0x02f3
+        L_0x021c:
+            r26 = 1
+            goto L_0x02f3
+        L_0x0220:
             org.telegram.messenger.WebFile r6 = r15.webFile
-            if (r6 == 0) goto L_0x0245
+            if (r6 == 0) goto L_0x0246
             java.lang.String r6 = r6.mime_type
             java.lang.String r6 = org.telegram.messenger.FileLoader.getMimeTypePart(r6)
             java.lang.StringBuilder r14 = new java.lang.StringBuilder
             r14.<init>()
-            r14.append(r9)
+            r14.append(r7)
             r14.append(r13)
-            org.telegram.messenger.WebFile r9 = r15.webFile
-            java.lang.String r9 = r9.url
-            java.lang.String r6 = getHttpUrlExtension(r9, r6)
+            org.telegram.messenger.WebFile r7 = r15.webFile
+            java.lang.String r7 = r7.url
+            java.lang.String r6 = getHttpUrlExtension(r7, r6)
             r14.append(r6)
-            java.lang.String r9 = r14.toString()
-            goto L_0x02f2
-        L_0x0245:
+            java.lang.String r7 = r14.toString()
+            goto L_0x02f3
+        L_0x0246:
             org.telegram.messenger.SecureDocument r6 = r15.secureDocument
-            if (r6 == 0) goto L_0x025d
+            if (r6 == 0) goto L_0x025e
             java.lang.StringBuilder r6 = new java.lang.StringBuilder
             r6.<init>()
-            r6.append(r9)
+            r6.append(r7)
             r6.append(r13)
             r6.append(r14)
-            java.lang.String r9 = r6.toString()
-            goto L_0x02f2
-        L_0x025d:
+            java.lang.String r7 = r6.toString()
+            goto L_0x02f3
+        L_0x025e:
             org.telegram.tgnet.TLRPC$Document r6 = r15.document
-            if (r6 == 0) goto L_0x02f2
-            if (r3 != 0) goto L_0x0276
-            if (r2 == 0) goto L_0x0276
+            if (r6 == 0) goto L_0x02f3
+            if (r3 != 0) goto L_0x0277
+            if (r9 == 0) goto L_0x0277
             java.lang.StringBuilder r6 = new java.lang.StringBuilder
             r6.<init>()
             java.lang.String r13 = "q_"
             r6.append(r13)
             r6.append(r0)
             java.lang.String r0 = r6.toString()
-        L_0x0276:
+        L_0x0277:
             org.telegram.tgnet.TLRPC$Document r6 = r15.document
             java.lang.String r6 = org.telegram.messenger.FileLoader.getDocumentFileName(r6)
             java.lang.String r13 = ""
-            if (r6 == 0) goto L_0x0291
+            if (r6 == 0) goto L_0x0292
             r14 = 46
             int r14 = r6.lastIndexOf(r14)
-            r25 = r0
+            r26 = r0
             r0 = -1
-            if (r14 != r0) goto L_0x028c
-            goto L_0x0293
-        L_0x028c:
-            java.lang.String r0 = r6.substring(r14)
+            if (r14 != r0) goto L_0x028d
             goto L_0x0294
-        L_0x0291:
-            r25 = r0
-        L_0x0293:
-            r0 = r13
+        L_0x028d:
+            java.lang.String r0 = r6.substring(r14)
+            goto L_0x0295
+        L_0x0292:
+            r26 = r0
         L_0x0294:
+            r0 = r13
+        L_0x0295:
             int r6 = r0.length()
             r14 = 1
-            if (r6 > r14) goto L_0x02b9
+            if (r6 > r14) goto L_0x02ba
             org.telegram.tgnet.TLRPC$Document r0 = r15.document
             java.lang.String r0 = r0.mime_type
             java.lang.String r6 = "video/mp4"
             boolean r0 = r6.equals(r0)
-            if (r0 == 0) goto L_0x02aa
+            if (r0 == 0) goto L_0x02ab
             java.lang.String r13 = ".mp4"
-            goto L_0x02ba
-        L_0x02aa:
+            goto L_0x02bb
+        L_0x02ab:
             org.telegram.tgnet.TLRPC$Document r0 = r15.document
             java.lang.String r0 = r0.mime_type
             java.lang.String r6 = "video/x-matroska"
             boolean r0 = r6.equals(r0)
-            if (r0 == 0) goto L_0x02ba
+            if (r0 == 0) goto L_0x02bb
             java.lang.String r13 = ".mkv"
-            goto L_0x02ba
-        L_0x02b9:
-            r13 = r0
+            goto L_0x02bb
         L_0x02ba:
+            r13 = r0
+        L_0x02bb:
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
-            r0.append(r9)
+            r0.append(r7)
             r0.append(r13)
-            java.lang.String r9 = r0.toString()
+            java.lang.String r7 = r0.toString()
             org.telegram.tgnet.TLRPC$Document r0 = r15.document
             boolean r0 = org.telegram.messenger.MessageObject.isVideoDocument(r0)
-            if (r0 != 0) goto L_0x02eb
+            if (r0 != 0) goto L_0x02ec
             org.telegram.tgnet.TLRPC$Document r0 = r15.document
             boolean r0 = org.telegram.messenger.MessageObject.isGifDocument((org.telegram.tgnet.TLRPC$Document) r0)
-            if (r0 != 0) goto L_0x02eb
+            if (r0 != 0) goto L_0x02ec
             org.telegram.tgnet.TLRPC$Document r0 = r15.document
             boolean r0 = org.telegram.messenger.MessageObject.isRoundVideoDocument(r0)
-            if (r0 != 0) goto L_0x02eb
+            if (r0 != 0) goto L_0x02ec
             org.telegram.tgnet.TLRPC$Document r0 = r15.document
             boolean r0 = org.telegram.messenger.MessageObject.canPreviewDocument(r0)
-            if (r0 != 0) goto L_0x02eb
+            if (r0 != 0) goto L_0x02ec
             r0 = 1
-            goto L_0x02ec
-        L_0x02eb:
-            r0 = 0
+            goto L_0x02ed
         L_0x02ec:
-            r34 = r25
-            r25 = r0
-            r0 = r34
-        L_0x02f2:
-            if (r3 != 0) goto L_0x02f8
+            r0 = 0
+        L_0x02ed:
+            r35 = r26
+            r26 = r0
+            r0 = r35
+        L_0x02f3:
+            if (r3 != 0) goto L_0x02f9
             r12 = r0
-            r19 = r9
-            goto L_0x02fb
-        L_0x02f8:
-            r7 = r0
-            r23 = r9
-        L_0x02fb:
-            if (r15 != r5) goto L_0x01a2
-            if (r3 != 0) goto L_0x0305
-            r9 = r17
-            r12 = r9
-            r19 = r12
-            goto L_0x030d
-        L_0x0305:
-            r7 = r17
+            r20 = r7
+            goto L_0x02fc
+        L_0x02f9:
+            r4 = r0
             r23 = r7
+        L_0x02fc:
+            if (r15 != r5) goto L_0x01a3
+            if (r3 != 0) goto L_0x0306
+            r7 = r18
+            r12 = r7
+            r20 = r12
+            goto L_0x030e
+        L_0x0306:
+            r4 = r18
+            r23 = r4
             r24 = r23
-            goto L_0x01a2
-        L_0x030d:
+            goto L_0x01a3
+        L_0x030e:
             int r3 = r3 + 1
-            r15 = r26
-            r14 = r27
-            r0 = r28
-            r6 = r30
-            goto L_0x0171
-        L_0x0319:
-            r28 = r0
-            r30 = r6
-            r29 = r9
-            r27 = r14
-            if (r5 == 0) goto L_0x038a
-            org.telegram.messenger.ImageLocation r0 = r36.getStrippedLocation()
+            r15 = r27
+            r14 = r28
+            r0 = r29
+            r6 = r31
+            goto L_0x0172
+        L_0x031a:
+            r29 = r0
+            r31 = r6
+            r30 = r7
+            r28 = r14
+            if (r5 == 0) goto L_0x038d
+            org.telegram.messenger.ImageLocation r0 = r37.getStrippedLocation()
             if (r0 != 0) goto L_0x0330
             if (r24 == 0) goto L_0x032e
-            r0 = r24
-            goto L_0x0330
+            r25 = r24
         L_0x032e:
-            r0 = r29
+            r0 = r25
         L_0x0330:
-            r2 = 0
-            java.lang.String r17 = r5.getKey(r1, r0, r2)
-            r2 = 1
-            java.lang.String r0 = r5.getKey(r1, r0, r2)
+            r3 = 0
+            java.lang.String r18 = r5.getKey(r1, r0, r3)
+            r3 = 1
+            java.lang.String r0 = r5.getKey(r1, r0, r3)
             java.lang.String r1 = r5.path
-            if (r1 == 0) goto L_0x035a
+            if (r1 == 0) goto L_0x035d
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             r1.append(r0)
@@ -5480,225 +5476,222 @@ public class ImageLoader {
             r1.append(r0)
             java.lang.String r0 = r1.toString()
         L_0x0356:
-            r3 = r0
-            r0 = r17
-            goto L_0x038e
-        L_0x035a:
+            r35 = r18
+            r18 = r0
+            r0 = r35
+            goto L_0x0390
+        L_0x035d:
             org.telegram.tgnet.TLRPC$PhotoSize r1 = r5.photoSize
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_photoStrippedSize
-            if (r1 == 0) goto L_0x0373
+            if (r1 == 0) goto L_0x0376
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             r1.append(r0)
             r1.append(r13)
-            r1.append(r4)
+            r1.append(r2)
             java.lang.String r0 = r1.toString()
             goto L_0x0356
-        L_0x0373:
+        L_0x0376:
             org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated r1 = r5.location
             if (r1 == 0) goto L_0x0356
             java.lang.StringBuilder r1 = new java.lang.StringBuilder
             r1.<init>()
             r1.append(r0)
             r1.append(r13)
-            r1.append(r4)
+            r1.append(r2)
             java.lang.String r0 = r1.toString()
             goto L_0x0356
-        L_0x038a:
-            r2 = 1
-            r0 = r17
-            r3 = r0
-        L_0x038e:
+        L_0x038d:
+            r3 = 1
+            r0 = r18
+        L_0x0390:
             java.lang.String r1 = "@"
-            if (r7 == 0) goto L_0x03a8
+            if (r4 == 0) goto L_0x03a8
             if (r11 == 0) goto L_0x03a8
             java.lang.StringBuilder r6 = new java.lang.StringBuilder
             r6.<init>()
-            r6.append(r7)
+            r6.append(r4)
             r6.append(r1)
             r6.append(r11)
-            java.lang.String r6 = r6.toString()
-            r13 = r6
-            goto L_0x03a9
+            java.lang.String r4 = r6.toString()
         L_0x03a8:
-            r13 = r7
-        L_0x03a9:
+            r13 = r4
             if (r12 == 0) goto L_0x03c0
             if (r10 == 0) goto L_0x03c0
-            java.lang.StringBuilder r6 = new java.lang.StringBuilder
-            r6.<init>()
-            r6.append(r12)
-            r6.append(r1)
-            r6.append(r10)
-            java.lang.String r6 = r6.toString()
-            r12 = r6
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder
+            r4.<init>()
+            r4.append(r12)
+            r4.append(r1)
+            r4.append(r10)
+            java.lang.String r4 = r4.toString()
+            r12 = r4
         L_0x03c0:
             if (r0 == 0) goto L_0x03d9
-            if (r30 == 0) goto L_0x03d9
-            java.lang.StringBuilder r6 = new java.lang.StringBuilder
-            r6.<init>()
-            r6.append(r0)
-            r6.append(r1)
-            r7 = r30
-            r6.append(r7)
-            java.lang.String r0 = r6.toString()
+            if (r31 == 0) goto L_0x03d9
+            java.lang.StringBuilder r4 = new java.lang.StringBuilder
+            r4.<init>()
+            r4.append(r0)
+            r4.append(r1)
+            r6 = r31
+            r4.append(r6)
+            java.lang.String r0 = r4.toString()
             goto L_0x03db
         L_0x03d9:
-            r7 = r30
+            r6 = r31
         L_0x03db:
-            r6 = r0
-            if (r29 == 0) goto L_0x0416
-            r9 = r29
-            java.lang.String r0 = r9.path
-            if (r0 == 0) goto L_0x0413
+            r4 = r0
+            if (r30 == 0) goto L_0x041d
+            r7 = r30
+            java.lang.String r0 = r7.path
+            if (r0 == 0) goto L_0x0418
             r8 = 0
+            r9 = 1
             r11 = 1
-            r13 = 1
-            if (r28 == 0) goto L_0x03ec
-            r20 = 2
+            if (r29 == 0) goto L_0x03ec
+            r21 = 2
             goto L_0x03ee
         L_0x03ec:
-            r20 = 1
+            r21 = 1
         L_0x03ee:
-            r0 = r35
-            r1 = r36
-            r2 = r6
-            r6 = r7
+            r0 = r36
+            r1 = r37
+            r14 = r2
+            r2 = r4
+            r3 = r18
+            r4 = r14
+            r15 = r7
             r7 = r8
-            r8 = r11
-            r14 = r9
-            r9 = r13
-            r15 = r10
-            r10 = r20
-            r11 = r27
+            r8 = r9
+            r9 = r11
+            r17 = r10
+            r10 = r21
+            r11 = r28
             r0.createLoadOperationForImageReceiver(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)
-            int r7 = r36.getSize()
+            int r7 = r37.getSize()
             r8 = 1
             r9 = 0
             r10 = 0
             r2 = r12
-            r3 = r19
-            r4 = r21
-            r5 = r14
-            r6 = r15
+            r3 = r20
+            r4 = r22
+            r5 = r15
+            r6 = r17
             r0.createLoadOperationForImageReceiver(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)
             goto L_0x04ba
-        L_0x0413:
-            r14 = r9
-            r15 = r10
-            goto L_0x0419
-        L_0x0416:
-            r15 = r10
-            r14 = r29
-        L_0x0419:
-            if (r24 == 0) goto L_0x0481
-            int r0 = r36.getCacheType()
-            r16 = 1
-            if (r0 != 0) goto L_0x0428
-            if (r25 == 0) goto L_0x0428
-            r17 = 1
-            goto L_0x042a
-        L_0x0428:
-            r17 = r0
-        L_0x042a:
-            if (r17 != 0) goto L_0x042e
+        L_0x0418:
+            r14 = r2
+            r15 = r7
+            r17 = r10
+            goto L_0x0422
+        L_0x041d:
+            r14 = r2
+            r17 = r10
+            r15 = r30
+        L_0x0422:
+            if (r24 == 0) goto L_0x0484
+            int r0 = r37.getCacheType()
+            r19 = 1
+            if (r0 != 0) goto L_0x0431
+            if (r26 == 0) goto L_0x0431
+            r25 = 1
+            goto L_0x0433
+        L_0x0431:
+            r25 = r0
+        L_0x0433:
+            if (r25 != 0) goto L_0x0437
             r8 = 1
-            goto L_0x0430
-        L_0x042e:
-            r8 = r17
-        L_0x0430:
-            if (r28 != 0) goto L_0x044d
-            r9 = 0
-            r10 = 1
-            if (r28 == 0) goto L_0x0439
-            r20 = 2
-            goto L_0x043b
+            goto L_0x0439
+        L_0x0437:
+            r8 = r25
         L_0x0439:
-            r20 = 1
-        L_0x043b:
-            r0 = r35
-            r1 = r36
-            r2 = r6
-            r6 = r7
-            r7 = r9
-            r9 = r10
-            r10 = r20
-            r18 = r11
-            r11 = r27
+            if (r29 != 0) goto L_0x0451
+            r7 = 0
+            r9 = 1
+            if (r29 == 0) goto L_0x0441
+            r10 = 2
+            goto L_0x0442
+        L_0x0441:
+            r10 = 1
+        L_0x0442:
+            r0 = r36
+            r1 = r37
+            r2 = r4
+            r3 = r18
+            r4 = r14
+            r14 = r11
+            r11 = r28
             r0.createLoadOperationForImageReceiver(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)
-            goto L_0x044f
-        L_0x044d:
-            r18 = r11
-        L_0x044f:
-            if (r26 != 0) goto L_0x0466
+            goto L_0x0452
+        L_0x0451:
+            r14 = r11
+        L_0x0452:
+            if (r27 != 0) goto L_0x046a
             r7 = 0
             r9 = 0
             r10 = 0
-            r0 = r35
-            r1 = r36
+            r0 = r36
+            r1 = r37
             r2 = r12
-            r3 = r19
-            r4 = r21
-            r5 = r14
-            r6 = r15
-            r8 = r16
-            r11 = r27
+            r3 = r20
+            r4 = r22
+            r5 = r15
+            r6 = r17
+            r8 = r19
+            r11 = r28
             r0.createLoadOperationForImageReceiver(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)
-        L_0x0466:
-            int r7 = r36.getSize()
+        L_0x046a:
+            int r7 = r37.getSize()
             r9 = 3
             r10 = 0
-            r0 = r35
-            r1 = r36
+            r0 = r36
+            r1 = r37
             r2 = r13
             r3 = r23
-            r4 = r22
+            r4 = r16
             r5 = r24
-            r6 = r18
-            r8 = r17
-            r11 = r27
+            r6 = r14
+            r8 = r25
+            r11 = r28
             r0.createLoadOperationForImageReceiver(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)
             goto L_0x04ba
-        L_0x0481:
-            int r0 = r36.getCacheType()
-            if (r0 != 0) goto L_0x048b
-            if (r25 == 0) goto L_0x048b
+        L_0x0484:
+            int r0 = r37.getCacheType()
+            if (r0 != 0) goto L_0x048e
+            if (r26 == 0) goto L_0x048e
             r13 = 1
-            goto L_0x048c
-        L_0x048b:
+            goto L_0x048f
+        L_0x048e:
             r13 = r0
-        L_0x048c:
-            if (r13 != 0) goto L_0x0490
+        L_0x048f:
+            if (r13 != 0) goto L_0x0493
             r8 = 1
-            goto L_0x0491
-        L_0x0490:
+            goto L_0x0494
+        L_0x0493:
             r8 = r13
-        L_0x0491:
-            r9 = 0
-            r10 = 1
-            if (r28 == 0) goto L_0x0498
-            r20 = 2
-            goto L_0x049a
-        L_0x0498:
-            r20 = 1
+        L_0x0494:
+            r7 = 0
+            r9 = 1
+            if (r29 == 0) goto L_0x049a
+            r10 = 2
+            goto L_0x049b
         L_0x049a:
-            r0 = r35
-            r1 = r36
-            r2 = r6
-            r6 = r7
-            r7 = r9
-            r9 = r10
-            r10 = r20
-            r11 = r27
+            r10 = 1
+        L_0x049b:
+            r0 = r36
+            r1 = r37
+            r2 = r4
+            r3 = r18
+            r4 = r14
+            r11 = r28
             r0.createLoadOperationForImageReceiver(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)
-            int r7 = r36.getSize()
+            int r7 = r37.getSize()
             r9 = 0
             r10 = 0
             r2 = r12
-            r3 = r19
-            r4 = r21
-            r5 = r14
-            r6 = r15
+            r3 = r20
+            r4 = r22
+            r5 = r15
+            r6 = r17
             r8 = r13
             r0.createLoadOperationForImageReceiver(r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11)
         L_0x04ba:

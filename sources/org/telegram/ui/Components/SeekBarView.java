@@ -68,12 +68,10 @@ public class SeekBarView extends FrameLayout {
         super(context);
         this.pressedState = new int[]{16842910, 16842919};
         setWillNotDraw(false);
+        this.innerPaint1 = new Paint(1);
         Paint paint = new Paint(1);
-        this.innerPaint1 = paint;
-        paint.setColor(Theme.getColor("player_progressBackground"));
-        Paint paint2 = new Paint(1);
-        this.outerPaint1 = paint2;
-        paint2.setColor(Theme.getColor("player_progress"));
+        this.outerPaint1 = paint;
+        paint.setColor(Theme.getColor("player_progress"));
         this.selectorWidth = AndroidUtilities.dp(32.0f);
         this.thumbSize = AndroidUtilities.dp(24.0f);
         this.currentRadius = (float) AndroidUtilities.dp(6.0f);
@@ -286,8 +284,10 @@ public class SeekBarView extends FrameLayout {
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         int measuredHeight = (getMeasuredHeight() - this.thumbSize) / 2;
+        this.innerPaint1.setColor(Theme.getColor("player_progressBackground"));
         canvas.drawRect((float) (this.selectorWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (float) (getMeasuredWidth() - (this.selectorWidth / 2)), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.innerPaint1);
         if (this.bufferedProgress > 0.0f) {
+            this.innerPaint1.setColor(Theme.getColor("key_player_progressCachedBackground"));
             canvas.drawRect((float) (this.selectorWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), ((float) (this.selectorWidth / 2)) + (this.bufferedProgress * ((float) (getMeasuredWidth() - this.selectorWidth))), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.innerPaint1);
         }
         canvas.drawRect((float) (this.selectorWidth / 2), (float) ((getMeasuredHeight() / 2) - AndroidUtilities.dp(1.0f)), (float) ((this.selectorWidth / 2) + this.thumbX), (float) ((getMeasuredHeight() / 2) + AndroidUtilities.dp(1.0f)), this.outerPaint1);

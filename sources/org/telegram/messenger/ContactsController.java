@@ -18,6 +18,7 @@ import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ import org.telegram.tgnet.TLRPC$InputUser;
 import org.telegram.tgnet.TLRPC$PrivacyRule;
 import org.telegram.tgnet.TLRPC$TL_accountDaysTTL;
 import org.telegram.tgnet.TLRPC$TL_account_getAccountTTL;
+import org.telegram.tgnet.TLRPC$TL_account_getGlobalPrivacySettings;
 import org.telegram.tgnet.TLRPC$TL_account_getPrivacy;
 import org.telegram.tgnet.TLRPC$TL_account_privacyRules;
 import org.telegram.tgnet.TLRPC$TL_contact;
@@ -45,6 +47,7 @@ import org.telegram.tgnet.TLRPC$TL_contacts_importContacts;
 import org.telegram.tgnet.TLRPC$TL_contacts_importedContacts;
 import org.telegram.tgnet.TLRPC$TL_contacts_resetSaved;
 import org.telegram.tgnet.TLRPC$TL_error;
+import org.telegram.tgnet.TLRPC$TL_globalPrivacySettings;
 import org.telegram.tgnet.TLRPC$TL_help_getInviteText;
 import org.telegram.tgnet.TLRPC$TL_help_inviteText;
 import org.telegram.tgnet.TLRPC$TL_inputPrivacyKeyAddedByPhone;
@@ -92,6 +95,7 @@ public class ContactsController extends BaseController {
     private ArrayList<Integer> delayedContactsUpdate = new ArrayList<>();
     private int deleteAccountTTL;
     private ArrayList<TLRPC$PrivacyRule> forwardsPrivacyRules;
+    private TLRPC$TL_globalPrivacySettings globalPrivacySettings;
     private ArrayList<TLRPC$PrivacyRule> groupPrivacyRules;
     /* access modifiers changed from: private */
     public boolean ignoreChanges;
@@ -101,6 +105,7 @@ public class ContactsController extends BaseController {
     private final Object loadContactsSync = new Object();
     private boolean loadingContacts;
     private int loadingDeleteInfo;
+    private int loadingGlobalSettings;
     private int[] loadingPrivacyInfo = new int[8];
     private boolean migratingContacts;
     /* access modifiers changed from: private */
@@ -262,30 +267,22 @@ public class ContactsController extends BaseController {
         this.contactsLoaded = false;
         this.contactsBookLoaded = false;
         this.lastContactsVersions = "";
+        this.loadingGlobalSettings = 0;
         this.loadingDeleteInfo = 0;
         this.deleteAccountTTL = 0;
-        int i = 0;
-        while (true) {
-            int[] iArr = this.loadingPrivacyInfo;
-            if (i < iArr.length) {
-                iArr[i] = 0;
-                i++;
-            } else {
-                this.lastseenPrivacyRules = null;
-                this.groupPrivacyRules = null;
-                this.callPrivacyRules = null;
-                this.p2pPrivacyRules = null;
-                this.profilePhotoPrivacyRules = null;
-                this.forwardsPrivacyRules = null;
-                this.phonePrivacyRules = null;
-                Utilities.globalQueue.postRunnable(new Runnable() {
-                    public final void run() {
-                        ContactsController.this.lambda$cleanup$1$ContactsController();
-                    }
-                });
-                return;
+        Arrays.fill(this.loadingPrivacyInfo, 0);
+        this.lastseenPrivacyRules = null;
+        this.groupPrivacyRules = null;
+        this.callPrivacyRules = null;
+        this.p2pPrivacyRules = null;
+        this.profilePhotoPrivacyRules = null;
+        this.forwardsPrivacyRules = null;
+        this.phonePrivacyRules = null;
+        Utilities.globalQueue.postRunnable(new Runnable() {
+            public final void run() {
+                ContactsController.this.lambda$cleanup$1$ContactsController();
             }
-        }
+        });
     }
 
     public /* synthetic */ void lambda$cleanup$1$ContactsController() {
@@ -956,7 +953,7 @@ public class ContactsController extends BaseController {
             r1 = 0
             java.lang.Integer r2 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x01eb }
             r0.add(r2)     // Catch:{ all -> 0x01eb }
-            r0 = 2131626376(0x7f0e0988, float:1.8879986E38)
+            r0 = 2131626429(0x7f0e09bd, float:1.8880094E38)
             java.lang.String r1 = "PhoneMobile"
             if (r14 != 0) goto L_0x0182
             r2 = 3
@@ -975,7 +972,7 @@ public class ContactsController extends BaseController {
             if (r14 != r2) goto L_0x0194
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneHome"
-            r3 = 2131626374(0x7f0e0986, float:1.8879982E38)
+            r3 = 2131626427(0x7f0e09bb, float:1.888009E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
             goto L_0x01d4
@@ -991,7 +988,7 @@ public class ContactsController extends BaseController {
             if (r14 != r0) goto L_0x01b3
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneWork"
-            r3 = 2131626384(0x7f0e0990, float:1.8880003E38)
+            r3 = 2131626437(0x7f0e09c5, float:1.888011E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
             goto L_0x01d4
@@ -1000,14 +997,14 @@ public class ContactsController extends BaseController {
             if (r14 != r0) goto L_0x01c6
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneMain"
-            r3 = 2131626375(0x7f0e0987, float:1.8879984E38)
+            r3 = 2131626428(0x7f0e09bc, float:1.8880092E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
             goto L_0x01d4
         L_0x01c6:
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneOther"
-            r3 = 2131626383(0x7f0e098f, float:1.888E38)
+            r3 = 2131626436(0x7f0e09c4, float:1.8880108E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
         L_0x01d4:
@@ -3698,6 +3695,14 @@ public class ContactsController extends BaseController {
                 }
             });
         }
+        if (this.loadingGlobalSettings == 0) {
+            this.loadingGlobalSettings = 1;
+            getConnectionsManager().sendRequest(new TLRPC$TL_account_getGlobalPrivacySettings(), new RequestDelegate() {
+                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                    ContactsController.this.lambda$loadPrivacySettings$59$ContactsController(tLObject, tLRPC$TL_error);
+                }
+            });
+        }
         int i = 0;
         while (true) {
             int[] iArr = this.loadingPrivacyInfo;
@@ -3739,7 +3744,7 @@ public class ContactsController extends BaseController {
                         }
 
                         public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                            ContactsController.this.lambda$loadPrivacySettings$59$ContactsController(this.f$1, tLObject, tLRPC$TL_error);
+                            ContactsController.this.lambda$loadPrivacySettings$61$ContactsController(this.f$1, tLObject, tLRPC$TL_error);
                         }
                     });
                 }
@@ -3777,7 +3782,33 @@ public class ContactsController extends BaseController {
         getNotificationCenter().postNotificationName(NotificationCenter.privacyRulesUpdated, new Object[0]);
     }
 
-    public /* synthetic */ void lambda$loadPrivacySettings$59$ContactsController(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$loadPrivacySettings$59$ContactsController(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
+            public final /* synthetic */ TLRPC$TL_error f$1;
+            public final /* synthetic */ TLObject f$2;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r3;
+            }
+
+            public final void run() {
+                ContactsController.this.lambda$null$58$ContactsController(this.f$1, this.f$2);
+            }
+        });
+    }
+
+    public /* synthetic */ void lambda$null$58$ContactsController(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
+        if (tLRPC$TL_error == null) {
+            this.globalPrivacySettings = (TLRPC$TL_globalPrivacySettings) tLObject;
+            this.loadingGlobalSettings = 2;
+        } else {
+            this.loadingGlobalSettings = 0;
+        }
+        getNotificationCenter().postNotificationName(NotificationCenter.privacyRulesUpdated, new Object[0]);
+    }
+
+    public /* synthetic */ void lambda$loadPrivacySettings$61$ContactsController(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, i) {
             public final /* synthetic */ TLRPC$TL_error f$1;
             public final /* synthetic */ TLObject f$2;
@@ -3790,12 +3821,12 @@ public class ContactsController extends BaseController {
             }
 
             public final void run() {
-                ContactsController.this.lambda$null$58$ContactsController(this.f$1, this.f$2, this.f$3);
+                ContactsController.this.lambda$null$60$ContactsController(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
-    public /* synthetic */ void lambda$null$58$ContactsController(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i) {
+    public /* synthetic */ void lambda$null$60$ContactsController(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i) {
         if (tLRPC$TL_error == null) {
             TLRPC$TL_account_privacyRules tLRPC$TL_account_privacyRules = (TLRPC$TL_account_privacyRules) tLObject;
             getMessagesController().putUsers(tLRPC$TL_account_privacyRules.users, false);
@@ -3845,8 +3876,16 @@ public class ContactsController extends BaseController {
         return this.loadingDeleteInfo != 2;
     }
 
+    public boolean getLoadingGlobalSettings() {
+        return this.loadingGlobalSettings != 2;
+    }
+
     public boolean getLoadingPrivicyInfo(int i) {
         return this.loadingPrivacyInfo[i] != 2;
+    }
+
+    public TLRPC$TL_globalPrivacySettings getGlobalPrivacySettings() {
+        return this.globalPrivacySettings;
     }
 
     public ArrayList<TLRPC$PrivacyRule> getPrivacyRules(int i) {

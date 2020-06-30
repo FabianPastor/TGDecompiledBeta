@@ -183,6 +183,15 @@ public class ImageLocation {
         return forPhoto;
     }
 
+    public static ImageLocation getForPhoto(TLRPC$TL_videoSize tLRPC$TL_videoSize, TLRPC$Photo tLRPC$Photo) {
+        if (tLRPC$TL_videoSize == null || tLRPC$Photo == null) {
+            return null;
+        }
+        ImageLocation forPhoto = getForPhoto(tLRPC$TL_videoSize.location, tLRPC$TL_videoSize.size, tLRPC$Photo, (TLRPC$Document) null, (TLRPC$InputPeer) null, false, tLRPC$Photo.dc_id, (TLRPC$InputStickerSet) null, tLRPC$TL_videoSize.type);
+        forPhoto.imageType = 2;
+        return forPhoto;
+    }
+
     public static ImageLocation getForDocument(TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$Document tLRPC$Document) {
         if (tLRPC$PhotoSize instanceof TLRPC$TL_photoStrippedSize) {
             ImageLocation imageLocation = new ImageLocation();

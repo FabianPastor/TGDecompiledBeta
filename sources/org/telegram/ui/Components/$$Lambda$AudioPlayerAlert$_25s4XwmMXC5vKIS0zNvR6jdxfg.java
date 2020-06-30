@@ -1,7 +1,6 @@
 package org.telegram.ui.Components;
 
 import android.view.View;
-import org.telegram.messenger.MediaController;
 
 /* renamed from: org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$_25s4XwmMXC5vKIS0zNvR6jdxfg  reason: invalid class name */
 /* compiled from: lambda */
@@ -12,6 +11,6 @@ public final /* synthetic */ class $$Lambda$AudioPlayerAlert$_25s4XwmMXC5vKIS0zN
     }
 
     public final void onClick(View view) {
-        MediaController.getInstance().playNextMessage();
+        AudioPlayerAlert.lambda$new$5(view);
     }
 }

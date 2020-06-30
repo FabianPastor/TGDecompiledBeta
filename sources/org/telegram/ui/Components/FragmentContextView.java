@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
@@ -70,6 +71,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private String lastString;
     private ImageView playButton;
     private ImageView playbackSpeedButton;
+    private View selector;
     private TextView titleTextView;
     private float topPadding;
     private boolean visible;
@@ -109,8 +111,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         frameLayout2.setWillNotDraw(false);
         addView(this.frameLayout, LayoutHelper.createFrame(-1, 36.0f, 51, 0.0f, 0.0f, 0.0f, 0.0f));
         View view3 = new View(context2);
-        view3.setBackgroundResource(NUM);
-        addView(view3, LayoutHelper.createFrame(-1, 3.0f, 51, 0.0f, 36.0f, 0.0f, 0.0f));
+        this.selector = view3;
+        this.frameLayout.addView(view3, LayoutHelper.createFrame(-1, -1.0f));
+        View view4 = new View(context2);
+        view4.setBackgroundResource(NUM);
+        addView(view4, LayoutHelper.createFrame(-1, 3.0f, 51, 0.0f, 36.0f, 0.0f, 0.0f));
         ImageView imageView = new ImageView(context2);
         this.playButton = imageView;
         imageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -441,7 +446,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         if (this.currentStyle != i) {
             this.currentStyle = i;
             if (i == 0 || i == 2) {
-                this.frameLayout.setBackground(Theme.getSelectorDrawable(Theme.getColor("listSelectorSDK21"), "inappPlayerBackground"));
+                this.selector.setBackground(Theme.getSelectorDrawable(false));
+                this.frameLayout.setBackgroundColor(Theme.getColor("inappPlayerBackground"));
                 this.frameLayout.setTag("inappPlayerBackground");
                 this.titleTextView.setTextColor(Theme.getColor("inappPlayerTitle"));
                 this.titleTextView.setTag("inappPlayerTitle");
@@ -463,9 +469,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     this.closeButton.setContentDescription(LocaleController.getString("AccDescrStopLiveLocation", NUM));
                 }
             } else if (i == 1) {
-                this.titleTextView.setText(LocaleController.getString("ReturnToCall", NUM));
+                this.selector.setBackground((Drawable) null);
                 this.frameLayout.setBackgroundColor(Theme.getColor("returnToCallBackground"));
                 this.frameLayout.setTag("returnToCallBackground");
+                this.titleTextView.setText(LocaleController.getString("ReturnToCall", NUM));
                 this.titleTextView.setTextColor(Theme.getColor("returnToCallText"));
                 this.titleTextView.setTag("returnToCallText");
                 this.closeButton.setVisibility(8);

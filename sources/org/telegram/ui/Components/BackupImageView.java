@@ -38,7 +38,11 @@ public class BackupImageView extends View {
         setImage(imageLocation, str, (ImageLocation) null, (String) null, drawable, (Bitmap) null, (String) null, 0, obj);
     }
 
-    public void setImage(ImageLocation imageLocation, String str, Bitmap bitmap, int i, int i2, Object obj) {
+    public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, Drawable drawable, Object obj) {
+        this.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, (ImageLocation) null, (String) null, drawable, 0, (String) null, obj, 1);
+    }
+
+    public void setImageMedia(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, Bitmap bitmap, int i, int i2, Object obj) {
         BitmapDrawable bitmapDrawable;
         BackupImageView backupImageView;
         Bitmap bitmap2 = bitmap;
@@ -50,7 +54,7 @@ public class BackupImageView extends View {
             backupImageView = this;
             bitmapDrawable = null;
         }
-        backupImageView.imageReceiver.setImage(imageLocation, str, (ImageLocation) null, (String) null, bitmapDrawable, i, (String) null, obj, i2);
+        backupImageView.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, (ImageLocation) null, (String) null, bitmapDrawable, i, (String) null, obj, i2);
     }
 
     public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, int i, Object obj) {
@@ -82,6 +86,10 @@ public class BackupImageView extends View {
 
     public void setImage(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, String str3, int i, int i2, Object obj) {
         this.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, (Drawable) null, i, str3, obj, i2);
+    }
+
+    public void setImageMedia(ImageLocation imageLocation, String str, ImageLocation imageLocation2, String str2, ImageLocation imageLocation3, String str3, String str4, int i, int i2, Object obj) {
+        this.imageReceiver.setImage(imageLocation, str, imageLocation2, str2, imageLocation3, str3, (Drawable) null, i, str4, obj, i2);
     }
 
     public void setImageBitmap(Bitmap bitmap) {

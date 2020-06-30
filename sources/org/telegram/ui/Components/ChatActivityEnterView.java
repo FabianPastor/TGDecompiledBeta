@@ -6522,27 +6522,33 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         this.runningAnimationAudio.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.recordDot, View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDot, View.SCALE_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordCircle, this.recordCircleScale, new float[]{0.0f}), ObjectAnimator.ofFloat(this.audioVideoButtonContainer, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.recordTimerView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordCircle, this.recordCircleScale, new float[]{0.0f}), ObjectAnimator.ofFloat(this.audioVideoButtonContainer, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.messageEditText, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.messageEditText, View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordCircle, "slideToCancelProgress", new float[]{1.0f})});
                         ImageView imageView7 = this.audioSendButton;
                         if (imageView7 != null) {
+                            imageView7.setScaleX(1.0f);
+                            this.audioSendButton.setScaleY(1.0f);
                             AnimatorSet animatorSet8 = this.runningAnimationAudio;
                             Animator[] animatorArr = new Animator[1];
+                            ImageView imageView8 = this.audioSendButton;
                             Property property = View.ALPHA;
                             float[] fArr = new float[1];
                             fArr[0] = isInVideoMode() ? 0.0f : 1.0f;
-                            animatorArr[0] = ObjectAnimator.ofFloat(imageView7, property, fArr);
+                            animatorArr[0] = ObjectAnimator.ofFloat(imageView8, property, fArr);
                             animatorSet8.playTogether(animatorArr);
                         }
-                        ImageView imageView8 = this.videoSendButton;
-                        if (imageView8 != null) {
+                        ImageView imageView9 = this.videoSendButton;
+                        if (imageView9 != null) {
+                            imageView9.setScaleX(1.0f);
+                            this.videoSendButton.setScaleY(1.0f);
                             AnimatorSet animatorSet9 = this.runningAnimationAudio;
                             Animator[] animatorArr2 = new Animator[1];
+                            ImageView imageView10 = this.videoSendButton;
                             Property property2 = View.ALPHA;
                             float[] fArr2 = new float[1];
                             fArr2[0] = isInVideoMode() ? 1.0f : 0.0f;
-                            animatorArr2[0] = ObjectAnimator.ofFloat(imageView8, property2, fArr2);
+                            animatorArr2[0] = ObjectAnimator.ofFloat(imageView10, property2, fArr2);
                             animatorSet9.playTogether(animatorArr2);
                         }
-                        ImageView imageView9 = this.scheduledButton;
-                        if (imageView9 != null) {
-                            this.runningAnimationAudio.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView9, View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.scheduledButton, View.ALPHA, new float[]{1.0f})});
+                        ImageView imageView11 = this.scheduledButton;
+                        if (imageView11 != null) {
+                            this.runningAnimationAudio.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView11, View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.scheduledButton, View.ALPHA, new float[]{1.0f})});
                         }
                         LinearLayout linearLayout2 = this.attachLayout;
                         if (linearLayout2 != null) {
@@ -6605,24 +6611,24 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         this.recordDeleteImageView.setScaleY(0.0f);
                         AnimatorSet animatorSet10 = new AnimatorSet();
                         animatorSet10.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.recordDot, View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDot, View.SCALE_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordTimerView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordTimerView, View.TRANSLATION_X, new float[]{(float) (-AndroidUtilities.dp(20.0f))}), ObjectAnimator.ofFloat(this.slideText, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.messageEditText, View.ALPHA, new float[]{0.0f})});
-                        ImageView imageView10 = this.videoSendButton;
-                        if (imageView10 != null) {
+                        ImageView imageView12 = this.videoSendButton;
+                        if (imageView12 != null) {
                             Animator[] animatorArr3 = new Animator[3];
                             Property property3 = View.ALPHA;
                             float[] fArr3 = new float[1];
                             fArr3[0] = isInVideoMode() ? 1.0f : 0.0f;
-                            animatorArr3[0] = ObjectAnimator.ofFloat(imageView10, property3, fArr3);
+                            animatorArr3[0] = ObjectAnimator.ofFloat(imageView12, property3, fArr3);
                             animatorArr3[1] = ObjectAnimator.ofFloat(this.videoSendButton, View.SCALE_X, new float[]{1.0f});
                             animatorArr3[2] = ObjectAnimator.ofFloat(this.videoSendButton, View.SCALE_Y, new float[]{1.0f});
                             animatorSet10.playTogether(animatorArr3);
                         }
-                        ImageView imageView11 = this.audioSendButton;
-                        if (imageView11 != null) {
+                        ImageView imageView13 = this.audioSendButton;
+                        if (imageView13 != null) {
                             Animator[] animatorArr4 = new Animator[3];
                             Property property4 = View.ALPHA;
                             float[] fArr4 = new float[1];
                             fArr4[0] = isInVideoMode() ? 0.0f : 1.0f;
-                            animatorArr4[0] = ObjectAnimator.ofFloat(imageView11, property4, fArr4);
+                            animatorArr4[0] = ObjectAnimator.ofFloat(imageView13, property4, fArr4);
                             animatorArr4[1] = ObjectAnimator.ofFloat(this.audioSendButton, View.SCALE_X, new float[]{1.0f});
                             animatorArr4[2] = ObjectAnimator.ofFloat(this.audioSendButton, View.SCALE_Y, new float[]{1.0f});
                             animatorSet10.playTogether(animatorArr4);
@@ -6664,13 +6670,18 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                 ChatActivityEnterView.this.recordedAudioPlayButton.setScaleY(1.0f);
                                 ChatActivityEnterView.this.recordedAudioPlayButton.setScaleX(1.0f);
                                 ChatActivityEnterView.this.recordedAudioSeekBar.setAlpha(1.0f);
+                                for (int i = 0; i < 2; i++) {
+                                    ChatActivityEnterView.this.emojiButton[i].setScaleY(0.0f);
+                                    ChatActivityEnterView.this.emojiButton[i].setScaleX(0.0f);
+                                    ChatActivityEnterView.this.emojiButton[i].setAlpha(0.0f);
+                                }
                             }
                         });
                     } else if (i2 == 2 || i2 == 5) {
                         if (this.videoSendButton == null || !isInVideoMode()) {
-                            ImageView imageView12 = this.audioSendButton;
-                            if (imageView12 != null) {
-                                imageView12.setVisibility(0);
+                            ImageView imageView14 = this.audioSendButton;
+                            if (imageView14 != null) {
+                                imageView14.setVisibility(0);
                             }
                         } else {
                             this.videoSendButton.setVisibility(0);
@@ -6696,35 +6707,35 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             if (linearLayout3 != null) {
                                 animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(linearLayout3, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.attachLayout, View.TRANSLATION_X, new float[]{0.0f})});
                             }
-                            ImageView imageView13 = this.attachButton;
-                            if (imageView13 != null) {
+                            ImageView imageView15 = this.attachButton;
+                            if (imageView15 != null) {
                                 f2 = 1.0f;
-                                animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView13, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.attachButton, View.SCALE_Y, new float[]{1.0f})});
+                                animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView15, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.attachButton, View.SCALE_Y, new float[]{1.0f})});
                             } else {
                                 f2 = 1.0f;
                             }
-                            ImageView imageView14 = this.botButton;
-                            if (imageView14 != null) {
-                                animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView14, View.SCALE_X, new float[]{f2}), ObjectAnimator.ofFloat(this.botButton, View.SCALE_Y, new float[]{f2})});
+                            ImageView imageView16 = this.botButton;
+                            if (imageView16 != null) {
+                                animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView16, View.SCALE_X, new float[]{f2}), ObjectAnimator.ofFloat(this.botButton, View.SCALE_Y, new float[]{f2})});
                             }
-                            ImageView imageView15 = this.videoSendButton;
-                            if (imageView15 != null) {
+                            ImageView imageView17 = this.videoSendButton;
+                            if (imageView17 != null) {
                                 Animator[] animatorArr5 = new Animator[1];
                                 Property property5 = View.ALPHA;
                                 float[] fArr5 = new float[1];
                                 fArr5[0] = isInVideoMode() ? 1.0f : 0.0f;
-                                animatorArr5[0] = ObjectAnimator.ofFloat(imageView15, property5, fArr5);
+                                animatorArr5[0] = ObjectAnimator.ofFloat(imageView17, property5, fArr5);
                                 animatorSet12.playTogether(animatorArr5);
                                 animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.videoSendButton, View.SCALE_X, new float[]{1.0f})});
                                 animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.videoSendButton, View.SCALE_Y, new float[]{1.0f})});
                             }
-                            ImageView imageView16 = this.audioSendButton;
-                            if (imageView16 != null) {
+                            ImageView imageView18 = this.audioSendButton;
+                            if (imageView18 != null) {
                                 Animator[] animatorArr6 = new Animator[1];
                                 Property property6 = View.ALPHA;
                                 float[] fArr6 = new float[1];
                                 fArr6[0] = isInVideoMode() ? 0.0f : 1.0f;
-                                animatorArr6[0] = ObjectAnimator.ofFloat(imageView16, property6, fArr6);
+                                animatorArr6[0] = ObjectAnimator.ofFloat(imageView18, property6, fArr6);
                                 animatorSet12.playTogether(animatorArr6);
                                 f3 = 1.0f;
                                 animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.audioSendButton, View.SCALE_X, new float[]{1.0f})});
@@ -6732,9 +6743,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             } else {
                                 f3 = 1.0f;
                             }
-                            ImageView imageView17 = this.scheduledButton;
-                            if (imageView17 != null) {
-                                animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView17, View.ALPHA, new float[]{f3}), ObjectAnimator.ofFloat(this.scheduledButton, View.TRANSLATION_X, new float[]{0.0f})});
+                            ImageView imageView19 = this.scheduledButton;
+                            if (imageView19 != null) {
+                                animatorSet12.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView19, View.ALPHA, new float[]{f3}), ObjectAnimator.ofFloat(this.scheduledButton, View.TRANSLATION_X, new float[]{0.0f})});
                             }
                             j = 150;
                         } else {
@@ -6747,9 +6758,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             } else {
                                 f = 1.0f;
                             }
-                            ImageView imageView18 = this.scheduledButton;
-                            if (imageView18 != null) {
-                                animatorSet14.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView18, View.ALPHA, new float[]{f}), ObjectAnimator.ofFloat(this.scheduledButton, View.TRANSLATION_X, new float[]{0.0f})});
+                            ImageView imageView20 = this.scheduledButton;
+                            if (imageView20 != null) {
+                                animatorSet14.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView20, View.ALPHA, new float[]{f}), ObjectAnimator.ofFloat(this.scheduledButton, View.TRANSLATION_X, new float[]{0.0f})});
                             }
                             j = 150;
                             animatorSet14.setDuration(150);
@@ -6797,40 +6808,46 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         this.recordDot.playDeleteAnimation();
                     } else {
                         if (this.videoSendButton == null || !isInVideoMode()) {
-                            ImageView imageView19 = this.audioSendButton;
-                            if (imageView19 != null) {
-                                imageView19.setVisibility(0);
+                            ImageView imageView21 = this.audioSendButton;
+                            if (imageView21 != null) {
+                                imageView21.setVisibility(0);
                             }
                         } else {
                             this.videoSendButton.setVisibility(0);
                         }
                         AnimatorSet animatorSet16 = new AnimatorSet();
                         animatorSet16.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.recordDot, View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDot, View.SCALE_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.audioVideoButtonContainer, View.ALPHA, new float[]{1.0f})});
-                        ImageView imageView20 = this.audioSendButton;
-                        if (imageView20 != null) {
+                        ImageView imageView22 = this.audioSendButton;
+                        if (imageView22 != null) {
+                            imageView22.setScaleX(1.0f);
+                            this.audioSendButton.setScaleY(1.0f);
                             Animator[] animatorArr7 = new Animator[1];
+                            ImageView imageView23 = this.audioSendButton;
                             Property property7 = View.ALPHA;
                             float[] fArr7 = new float[1];
                             fArr7[0] = isInVideoMode() ? 0.0f : 1.0f;
-                            animatorArr7[0] = ObjectAnimator.ofFloat(imageView20, property7, fArr7);
+                            animatorArr7[0] = ObjectAnimator.ofFloat(imageView23, property7, fArr7);
                             animatorSet16.playTogether(animatorArr7);
                         }
-                        ImageView imageView21 = this.videoSendButton;
-                        if (imageView21 != null) {
+                        ImageView imageView24 = this.videoSendButton;
+                        if (imageView24 != null) {
+                            imageView24.setScaleX(1.0f);
+                            this.videoSendButton.setScaleY(1.0f);
                             Animator[] animatorArr8 = new Animator[1];
+                            ImageView imageView25 = this.videoSendButton;
                             Property property8 = View.ALPHA;
                             float[] fArr8 = new float[1];
                             fArr8[0] = isInVideoMode() ? 1.0f : 0.0f;
-                            animatorArr8[0] = ObjectAnimator.ofFloat(imageView21, property8, fArr8);
+                            animatorArr8[0] = ObjectAnimator.ofFloat(imageView25, property8, fArr8);
                             animatorSet16.playTogether(animatorArr8);
                         }
                         LinearLayout linearLayout5 = this.attachLayout;
                         if (linearLayout5 != null) {
                             animatorSet16.playTogether(new Animator[]{ObjectAnimator.ofFloat(linearLayout5, View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.attachLayout, View.ALPHA, new float[]{1.0f})});
                         }
-                        ImageView imageView22 = this.scheduledButton;
-                        if (imageView22 != null) {
-                            animatorSet16.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView22, View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.scheduledButton, View.ALPHA, new float[]{1.0f})});
+                        ImageView imageView26 = this.scheduledButton;
+                        if (imageView26 != null) {
+                            animatorSet16.playTogether(new Animator[]{ObjectAnimator.ofFloat(imageView26, View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.scheduledButton, View.ALPHA, new float[]{1.0f})});
                         }
                         animatorSet16.setDuration(150);
                         animatorSet16.setStartDelay(200);
@@ -8284,10 +8301,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             int unused3 = chatActivityEnterView.stickersExpandedHeight = (((height - i) - ActionBar.getCurrentActionBarHeight()) - ChatActivityEnterView.this.getHeight()) + Theme.chat_composeShadowDrawable.getIntrinsicHeight();
                             if (ChatActivityEnterView.this.searchingType == 2) {
                                 ChatActivityEnterView chatActivityEnterView2 = ChatActivityEnterView.this;
-                                int access$11700 = chatActivityEnterView2.stickersExpandedHeight;
+                                int access$11800 = chatActivityEnterView2.stickersExpandedHeight;
                                 int dp = AndroidUtilities.dp(120.0f);
                                 Point point = AndroidUtilities.displaySize;
-                                int unused4 = chatActivityEnterView2.stickersExpandedHeight = Math.min(access$11700, dp + (point.x > point.y ? ChatActivityEnterView.this.keyboardHeightLand : ChatActivityEnterView.this.keyboardHeight));
+                                int unused4 = chatActivityEnterView2.stickersExpandedHeight = Math.min(access$11800, dp + (point.x > point.y ? ChatActivityEnterView.this.keyboardHeightLand : ChatActivityEnterView.this.keyboardHeight));
                             }
                             ChatActivityEnterView.this.emojiView.getLayoutParams().height = ChatActivityEnterView.this.stickersExpandedHeight;
                             ChatActivityEnterView.this.emojiView.setLayerType(2, (Paint) null);
@@ -8321,12 +8338,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     public void onDrag(int i) {
                         if (allowDragging()) {
                             Point point = AndroidUtilities.displaySize;
-                            int access$11800 = point.x > point.y ? ChatActivityEnterView.this.keyboardHeightLand : ChatActivityEnterView.this.keyboardHeight;
-                            float max = (float) Math.max(Math.min(i + this.initialOffset, 0), -(ChatActivityEnterView.this.stickersExpandedHeight - access$11800));
+                            int access$11900 = point.x > point.y ? ChatActivityEnterView.this.keyboardHeightLand : ChatActivityEnterView.this.keyboardHeight;
+                            float max = (float) Math.max(Math.min(i + this.initialOffset, 0), -(ChatActivityEnterView.this.stickersExpandedHeight - access$11900));
                             ChatActivityEnterView.this.emojiView.setTranslationY(max);
                             ChatActivityEnterView.this.setTranslationY(max);
                             ChatActivityEnterView chatActivityEnterView = ChatActivityEnterView.this;
-                            float unused = chatActivityEnterView.stickersExpansionProgress = max / ((float) (-(chatActivityEnterView.stickersExpandedHeight - access$11800)));
+                            float unused = chatActivityEnterView.stickersExpansionProgress = max / ((float) (-(chatActivityEnterView.stickersExpandedHeight - access$11900)));
                             ChatActivityEnterView.this.sizeNotifierLayout.invalidate();
                         }
                     }

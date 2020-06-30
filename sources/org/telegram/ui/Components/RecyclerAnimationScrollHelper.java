@@ -38,6 +38,10 @@ public class RecyclerAnimationScrollHelper {
 
         public void onStartAnimation() {
         }
+
+        public void recycleView(View view) {
+            throw null;
+        }
     }
 
     public interface ScrollListener {
@@ -51,7 +55,7 @@ public class RecyclerAnimationScrollHelper {
 
     public void scrollToPosition(int i, int i2, boolean z, boolean z2) {
         RecyclerListView recyclerListView = this.recyclerView;
-        if (recyclerListView.scrollAnimationRunning) {
+        if (recyclerListView.fastScrollAnimationRunning) {
             return;
         }
         if (recyclerListView.getItemAnimator() != null && this.recyclerView.getItemAnimator().isRunning()) {
@@ -99,21 +103,23 @@ public class RecyclerAnimationScrollHelper {
         if (animationCallback2 != null) {
             animationCallback2.onStartAnimation();
         }
-        this.recyclerView.scrollAnimationRunning = true;
+        this.recyclerView.fastScrollAnimationRunning = true;
         if (animatableAdapter2 != null) {
             animatableAdapter2.onAnimationStart();
         }
         this.recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             public void onLayoutChange(View view, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
                 int height;
+                long j;
                 View view2;
-                ArrayList arrayList = new ArrayList();
+                final ArrayList arrayList = new ArrayList();
                 RecyclerAnimationScrollHelper.this.recyclerView.stopScroll();
                 int childCount = RecyclerAnimationScrollHelper.this.recyclerView.getChildCount();
                 int i9 = 0;
                 int i10 = 0;
                 int i11 = 0;
                 int i12 = 0;
+                boolean z = false;
                 for (int i13 = 0; i13 < childCount; i13++) {
                     View childAt = RecyclerAnimationScrollHelper.this.recyclerView.getChildAt(i13);
                     arrayList.add(childAt);
@@ -123,34 +129,38 @@ public class RecyclerAnimationScrollHelper {
                     if (childAt.getBottom() > i11) {
                         i11 = childAt.getBottom();
                     }
-                    boolean z = childAt instanceof ChatMessageCell;
-                    if (z) {
+                    if (childAt instanceof ChatMessageCell) {
                         ((ChatMessageCell) childAt).setAnimationRunning(true, false);
                     }
                     RecyclerView.Adapter adapter = adapter;
                     if (adapter != null && adapter.hasStableIds()) {
                         long itemId = adapter.getItemId(RecyclerAnimationScrollHelper.this.recyclerView.getChildAdapterPosition(childAt));
                         if (RecyclerAnimationScrollHelper.this.oldStableIds.containsKey(Long.valueOf(itemId)) && (view2 = (View) RecyclerAnimationScrollHelper.this.oldStableIds.get(Long.valueOf(itemId))) != null) {
-                            if (z) {
-                                ((ChatMessageCell) childAt).setAnimationRunning(false, false);
+                            if (view2 instanceof ChatMessageCell) {
+                                ((ChatMessageCell) view2).setAnimationRunning(false, false);
                             }
                             arrayList.remove(view2);
+                            if (RecyclerAnimationScrollHelper.this.animationCallback != null) {
+                                RecyclerAnimationScrollHelper.this.animationCallback.recycleView(view2);
+                            }
                             int top = childAt.getTop() - view2.getTop();
                             if (top != 0) {
                                 i12 = top;
                             }
+                            z = true;
                         }
                     }
                 }
                 RecyclerAnimationScrollHelper.this.oldStableIds.clear();
                 Iterator it = arrayList.iterator();
-                int i14 = 0;
+                int i14 = Integer.MAX_VALUE;
+                int i15 = 0;
                 while (it.hasNext()) {
                     View view3 = (View) it.next();
                     int bottom = view3.getBottom();
                     int top2 = view3.getTop();
-                    if (bottom > i9) {
-                        i9 = bottom;
+                    if (bottom > i15) {
+                        i15 = bottom;
                     }
                     if (top2 < i14) {
                         i14 = top2;
@@ -163,21 +173,24 @@ public class RecyclerAnimationScrollHelper {
                         ((ChatMessageCell) view3).setAnimationRunning(true, true);
                     }
                 }
+                if (i14 != Integer.MAX_VALUE) {
+                    i9 = i14;
+                }
                 if (arrayList.isEmpty()) {
                     height = Math.abs(i12);
                 } else {
                     if (!z3) {
-                        i9 = RecyclerAnimationScrollHelper.this.recyclerView.getHeight() - i14;
+                        i15 = RecyclerAnimationScrollHelper.this.recyclerView.getHeight() - i9;
                     }
-                    height = (z3 ? -i10 : i11 - RecyclerAnimationScrollHelper.this.recyclerView.getHeight()) + i9;
+                    height = (z3 ? -i10 : i11 - RecyclerAnimationScrollHelper.this.recyclerView.getHeight()) + i15;
                 }
-                int i15 = height;
+                int i16 = height;
                 if (RecyclerAnimationScrollHelper.this.animator != null) {
                     RecyclerAnimationScrollHelper.this.animator.removeAllListeners();
                     RecyclerAnimationScrollHelper.this.animator.cancel();
                 }
                 ValueAnimator unused = RecyclerAnimationScrollHelper.this.animator = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                RecyclerAnimationScrollHelper.this.animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(arrayList, z3, i15, arrayList) {
+                RecyclerAnimationScrollHelper.this.animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(arrayList, z3, i16, arrayList) {
                     public final /* synthetic */ ArrayList f$1;
                     public final /* synthetic */ boolean f$2;
                     public final /* synthetic */ int f$3;
@@ -197,7 +210,7 @@ public class RecyclerAnimationScrollHelper {
                 RecyclerAnimationScrollHelper.this.animator.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
                         if (RecyclerAnimationScrollHelper.this.animator != null) {
-                            RecyclerAnimationScrollHelper.this.recyclerView.scrollAnimationRunning = false;
+                            RecyclerAnimationScrollHelper.this.recyclerView.fastScrollAnimationRunning = false;
                             Iterator it = arrayList.iterator();
                             while (it.hasNext()) {
                                 View view = (View) it.next();
@@ -207,6 +220,9 @@ public class RecyclerAnimationScrollHelper {
                                 view.setTranslationY(0.0f);
                                 RecyclerAnimationScrollHelper.this.layoutManager.stopIgnoringView(view);
                                 RecyclerAnimationScrollHelper.this.recyclerView.removeView(view);
+                                if (RecyclerAnimationScrollHelper.this.animationCallback != null) {
+                                    RecyclerAnimationScrollHelper.this.animationCallback.recycleView(view);
+                                }
                             }
                             RecyclerAnimationScrollHelper.this.recyclerView.setVerticalScrollBarEnabled(true);
                             if (BuildVars.DEBUG_VERSION) {
@@ -214,8 +230,6 @@ public class RecyclerAnimationScrollHelper {
                                     throw new RuntimeException("views count in child helper must be quals views count in recycler view");
                                 } else if (RecyclerAnimationScrollHelper.this.recyclerView.mChildHelper.getHiddenChildCount() != 0) {
                                     throw new RuntimeException("hidden child count must be 0");
-                                } else if (RecyclerAnimationScrollHelper.this.recyclerView.getCachedChildCount() != 0) {
-                                    throw new RuntimeException("recycler cached child count must be 0");
                                 }
                             }
                             int childCount = RecyclerAnimationScrollHelper.this.recyclerView.getChildCount();
@@ -225,6 +239,14 @@ public class RecyclerAnimationScrollHelper {
                                     ((ChatMessageCell) childAt).setAnimationRunning(false, false);
                                 }
                                 childAt.setTranslationY(0.0f);
+                            }
+                            Iterator it2 = arrayList.iterator();
+                            while (it2.hasNext()) {
+                                View view2 = (View) it2.next();
+                                if (view2 instanceof ChatMessageCell) {
+                                    ((ChatMessageCell) view2).setAnimationRunning(false, false);
+                                }
+                                view2.setTranslationY(0.0f);
                             }
                             AnimatableAdapter animatableAdapter = animatableAdapter2;
                             if (animatableAdapter != null) {
@@ -239,11 +261,16 @@ public class RecyclerAnimationScrollHelper {
                     }
                 });
                 RecyclerAnimationScrollHelper.this.recyclerView.removeOnLayoutChangeListener(this);
-                long measuredHeight = (long) (((((float) i15) / ((float) RecyclerAnimationScrollHelper.this.recyclerView.getMeasuredHeight())) + 1.0f) * 200.0f);
-                if (measuredHeight < 80) {
-                    measuredHeight = 80;
+                if (z) {
+                    j = 600;
+                } else {
+                    long measuredHeight = (long) (((((float) i16) / ((float) RecyclerAnimationScrollHelper.this.recyclerView.getMeasuredHeight())) + 1.0f) * 200.0f);
+                    if (measuredHeight < 300) {
+                        measuredHeight = 300;
+                    }
+                    j = Math.min(measuredHeight, 1300);
                 }
-                RecyclerAnimationScrollHelper.this.animator.setDuration(Math.min(measuredHeight, 1300));
+                RecyclerAnimationScrollHelper.this.animator.setDuration(j);
                 RecyclerAnimationScrollHelper.this.animator.setInterpolator(CubicBezierInterpolator.EASE_OUT_QUINT);
                 RecyclerAnimationScrollHelper.this.animator.start();
             }
@@ -290,7 +317,7 @@ public class RecyclerAnimationScrollHelper {
     private void clear() {
         this.recyclerView.setVerticalScrollBarEnabled(true);
         RecyclerListView recyclerListView = this.recyclerView;
-        recyclerListView.scrollAnimationRunning = false;
+        recyclerListView.fastScrollAnimationRunning = false;
         RecyclerView.Adapter adapter = recyclerListView.getAdapter();
         if (adapter instanceof AnimatableAdapter) {
             ((AnimatableAdapter) adapter).onAnimationEnd();

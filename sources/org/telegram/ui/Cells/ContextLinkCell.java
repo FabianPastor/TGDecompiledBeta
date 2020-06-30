@@ -144,7 +144,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
         setWillNotDraw(false);
     }
 
-    /* JADX WARNING: type inference failed for: r6v2, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r6v2, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r11v40, types: [org.telegram.tgnet.TLRPC$WebDocument] */
     /* JADX WARNING: type inference failed for: r11v43, types: [org.telegram.tgnet.TLRPC$WebDocument] */
     /* JADX WARNING: type inference failed for: r6v10 */
@@ -739,7 +739,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             r22 = 0
             org.telegram.tgnet.TLRPC$PhotoSize r2 = r7.currentPhotoObject
             org.telegram.tgnet.TLRPC$Photo r11 = r7.photoAttach
-            org.telegram.messenger.ImageLocation r23 = org.telegram.messenger.ImageLocation.getForPhoto(r2, r11)
+            org.telegram.messenger.ImageLocation r23 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r2, (org.telegram.tgnet.TLRPC$Photo) r11)
             r25 = -1
             java.lang.Object r2 = r7.parentObject
             r28 = 1
@@ -754,7 +754,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             r22 = 0
             org.telegram.tgnet.TLRPC$PhotoSize r2 = r7.currentPhotoObject
             org.telegram.tgnet.TLRPC$Photo r11 = r7.photoAttach
-            org.telegram.messenger.ImageLocation r23 = org.telegram.messenger.ImageLocation.getForPhoto(r2, r11)
+            org.telegram.messenger.ImageLocation r23 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r2, (org.telegram.tgnet.TLRPC$Photo) r11)
             r25 = -1
             java.lang.Object r2 = r7.parentObject
             r28 = 1
@@ -793,7 +793,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             org.telegram.tgnet.TLRPC$PhotoSize r12 = r7.currentPhotoObject
             org.telegram.messenger.ImageLocation r21 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r12, (org.telegram.tgnet.TLRPC$Document) r2)
             org.telegram.tgnet.TLRPC$Photo r2 = r7.photoAttach
-            org.telegram.messenger.ImageLocation r23 = org.telegram.messenger.ImageLocation.getForPhoto(r0, r2)
+            org.telegram.messenger.ImageLocation r23 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r0, (org.telegram.tgnet.TLRPC$Photo) r2)
             org.telegram.tgnet.TLRPC$PhotoSize r0 = r7.currentPhotoObject
             int r0 = r0.size
             java.lang.Object r2 = r7.parentObject
@@ -809,9 +809,9 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             org.telegram.messenger.ImageReceiver r2 = r7.linkImageView
             org.telegram.tgnet.TLRPC$PhotoSize r11 = r7.currentPhotoObject
             org.telegram.tgnet.TLRPC$Photo r12 = r7.photoAttach
-            org.telegram.messenger.ImageLocation r21 = org.telegram.messenger.ImageLocation.getForPhoto(r11, r12)
+            org.telegram.messenger.ImageLocation r21 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r11, (org.telegram.tgnet.TLRPC$Photo) r12)
             org.telegram.tgnet.TLRPC$Photo r11 = r7.photoAttach
-            org.telegram.messenger.ImageLocation r23 = org.telegram.messenger.ImageLocation.getForPhoto(r0, r11)
+            org.telegram.messenger.ImageLocation r23 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r0, (org.telegram.tgnet.TLRPC$Photo) r11)
             org.telegram.tgnet.TLRPC$PhotoSize r0 = r7.currentPhotoObject
             int r0 = r0.size
             java.lang.Object r11 = r7.parentObject
@@ -828,7 +828,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             org.telegram.messenger.ImageReceiver r11 = r7.linkImageView
             org.telegram.messenger.ImageLocation r21 = org.telegram.messenger.ImageLocation.getForWebFile(r2)
             org.telegram.tgnet.TLRPC$Photo r2 = r7.photoAttach
-            org.telegram.messenger.ImageLocation r23 = org.telegram.messenger.ImageLocation.getForPhoto(r0, r2)
+            org.telegram.messenger.ImageLocation r23 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r0, (org.telegram.tgnet.TLRPC$Photo) r2)
             r25 = -1
             java.lang.Object r0 = r7.parentObject
             r28 = 1
@@ -842,7 +842,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             org.telegram.messenger.ImageReceiver r2 = r7.linkImageView
             org.telegram.messenger.ImageLocation r21 = org.telegram.messenger.ImageLocation.getForPath(r11)
             org.telegram.tgnet.TLRPC$Photo r11 = r7.photoAttach
-            org.telegram.messenger.ImageLocation r23 = org.telegram.messenger.ImageLocation.getForPhoto(r0, r11)
+            org.telegram.messenger.ImageLocation r23 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r0, (org.telegram.tgnet.TLRPC$Photo) r11)
             r25 = -1
             java.lang.Object r0 = r7.parentObject
             r28 = 1

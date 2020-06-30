@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -149,7 +150,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         this.currentStep = i;
         if (i == 0) {
             this.avatarDrawable = new AvatarDrawable();
-            this.imageUpdater = new ImageUpdater();
+            this.imageUpdater = new ImageUpdater(false);
             TLRPC$TL_channels_checkUsername tLRPC$TL_channels_checkUsername = new TLRPC$TL_channels_checkUsername();
             tLRPC$TL_channels_checkUsername.username = "1";
             tLRPC$TL_channels_checkUsername.channel = new TLRPC$TL_inputChannelEmpty();
@@ -198,7 +199,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         ImageUpdater imageUpdater2 = this.imageUpdater;
         if (imageUpdater2 != null) {
             imageUpdater2.parentFragment = this;
-            imageUpdater2.delegate = this;
+            imageUpdater2.setDelegate(this);
         }
         return super.onFragmentCreate();
     }
@@ -225,6 +226,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             editTextEmoji.onResume();
         }
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
+        this.imageUpdater.onResume();
     }
 
     public void onPause() {
@@ -233,6 +235,21 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         if (editTextEmoji != null) {
             editTextEmoji.onPause();
         }
+        this.imageUpdater.onPause();
+    }
+
+    public void dismissCurrentDialog() {
+        if (!this.imageUpdater.dismissCurrentDialog(this.visibleDialog)) {
+            super.dismissCurrentDialog();
+        }
+    }
+
+    public boolean dismissDialogOnPause(Dialog dialog) {
+        return this.imageUpdater.dismissDialogOnPause(dialog) && super.dismissDialogOnPause(dialog);
+    }
+
+    public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
+        this.imageUpdater.onRequestPermissionsResultFragment(i, strArr, iArr);
     }
 
     public boolean onBackPressed() {
@@ -931,7 +948,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         }
     }
 
-    public void didUploadPhoto(TLRPC$InputFile tLRPC$InputFile, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
+    public void didUploadPhoto(TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, String str, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$InputFile, tLRPC$PhotoSize2, tLRPC$PhotoSize) {
             public final /* synthetic */ TLRPC$InputFile f$1;
             public final /* synthetic */ TLRPC$PhotoSize f$2;

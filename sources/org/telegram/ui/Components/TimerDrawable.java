@@ -10,6 +10,7 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 
 public class TimerDrawable extends Drawable {
@@ -22,7 +23,7 @@ public class TimerDrawable extends Drawable {
     private float timeWidth = 0.0f;
 
     public int getOpacity() {
-        return 0;
+        return -2;
     }
 
     public void setAlpha(int i) {
@@ -50,32 +51,32 @@ public class TimerDrawable extends Drawable {
                     if (i4 < 86400 || i4 >= 604800) {
                         str = "" + ((((i / 60) / 60) / 24) / 7);
                         if (str.length() < 2) {
-                            str = str + "w";
+                            str = str + LocaleController.getString("SecretChatTimerWeeks", NUM);
                         } else if (str.length() > 2) {
                             str = "c";
                         }
                     } else {
                         str = "" + (((i / 60) / 60) / 24);
                         if (str.length() < 2) {
-                            str = str + "d";
+                            str = str + LocaleController.getString("SecretChatTimerDays", NUM);
                         }
                     }
                 } else {
                     str = "" + ((i / 60) / 60);
                     if (str.length() < 2) {
-                        str = str + "h";
+                        str = str + LocaleController.getString("SecretChatTimerHours", NUM);
                     }
                 }
             } else {
                 str = "" + (i / 60);
                 if (str.length() < 2) {
-                    str = str + "m";
+                    str = str + LocaleController.getString("SecretChatTimerMinutes", NUM);
                 }
             }
         } else {
             str = "" + i;
             if (str.length() < 2) {
-                str = str + "s";
+                str = str + LocaleController.getString("SecretChatTimerSeconds", NUM);
             }
         }
         String str2 = str;

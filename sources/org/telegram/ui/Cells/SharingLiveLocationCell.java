@@ -178,9 +178,9 @@ public class SharingLiveLocationCell extends FrameLayout {
         if (location2 != null) {
             float distanceTo = this.location.distanceTo(location2);
             if (str2 != null) {
-                this.distanceTextView.setText(String.format("%s - %s", new Object[]{str2, LocaleController.formatDistance(distanceTo)}));
+                this.distanceTextView.setText(String.format("%s - %s", new Object[]{str2, LocaleController.formatDistance(distanceTo, 0)}));
             } else {
-                this.distanceTextView.setText(LocaleController.formatDistance(distanceTo));
+                this.distanceTextView.setText(LocaleController.formatDistance(distanceTo, 0));
             }
         } else if (str2 != null) {
             this.distanceTextView.setText(str2);
@@ -214,7 +214,7 @@ public class SharingLiveLocationCell extends FrameLayout {
         int i2 = tLRPC$Message.edit_date;
         String formatLocationUpdateDate = LocaleController.formatLocationUpdateDate(i2 != 0 ? (long) i2 : (long) tLRPC$Message.date);
         if (location2 != null) {
-            this.distanceTextView.setText(String.format("%s - %s", new Object[]{formatLocationUpdateDate, LocaleController.formatDistance(this.location.distanceTo(location2))}));
+            this.distanceTextView.setText(String.format("%s - %s", new Object[]{formatLocationUpdateDate, LocaleController.formatDistance(this.location.distanceTo(location2), 0)}));
         } else {
             this.distanceTextView.setText(formatLocationUpdateDate);
         }

@@ -81,7 +81,10 @@ public class DrawerLayoutContainer extends FrameLayout {
         if (AndroidUtilities.statusBarHeight != windowInsets.getSystemWindowInsetTop()) {
             drawerLayoutContainer.requestLayout();
         }
-        AndroidUtilities.statusBarHeight = windowInsets.getSystemWindowInsetTop();
+        int systemWindowInsetTop = windowInsets.getSystemWindowInsetTop();
+        if (!(systemWindowInsetTop == 0 || AndroidUtilities.statusBarHeight == systemWindowInsetTop)) {
+            AndroidUtilities.statusBarHeight = systemWindowInsetTop;
+        }
         this.lastInsets = windowInsets;
         boolean z = true;
         drawerLayoutContainer.setWillNotDraw(windowInsets.getSystemWindowInsetTop() <= 0 && getBackground() == null);

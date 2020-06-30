@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.BitmapDrawable;
@@ -14,10 +15,12 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Property;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +32,8 @@ import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLoader;
+import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
@@ -41,8 +46,10 @@ import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$DocumentAttribute;
 import org.telegram.tgnet.TLRPC$MessageEntity;
+import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$ReplyMarkup;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeAudio;
+import org.telegram.tgnet.TLRPC$TL_photoSize;
 import org.telegram.tgnet.TLRPC$WebPage;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
@@ -50,6 +57,7 @@ import org.telegram.ui.ActionBar.ActionBarMenuSubItem;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.AudioPlayerCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.AudioPlayerAlert;
@@ -74,10 +82,16 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     public FrameLayout blurredView;
     /* access modifiers changed from: private */
     public View[] buttons = new View[5];
+    private String currentFile;
     /* access modifiers changed from: private */
     public boolean draggingSeekBar;
     /* access modifiers changed from: private */
     public TextView durationTextView;
+    private ImageView emptyImageView;
+    /* access modifiers changed from: private */
+    public TextView emptySubtitleTextView;
+    private TextView emptyTitleTextView;
+    private LinearLayout emptyView;
     /* access modifiers changed from: private */
     public boolean inFullSize;
     /* access modifiers changed from: private */
@@ -90,6 +104,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     public ListAdapter listAdapter;
     /* access modifiers changed from: private */
     public RecyclerListView listView;
+    private ImageView nextButton;
     private ActionBarMenuItem optionsButton;
     private LaunchActivity parentActivity;
     private BackupImageView placeholderImageView;
@@ -102,6 +117,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     public View playerShadow;
     /* access modifiers changed from: private */
     public ArrayList<MessageObject> playlist;
+    private ImageView prevButton;
     private LineProgressView progressView;
     private ActionBarMenuItem repeatButton;
     private ActionBarMenuSubItem repeatListItem;
@@ -111,6 +127,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     public int scrollOffsetY = Integer.MAX_VALUE;
     /* access modifiers changed from: private */
     public boolean scrollToSong = true;
+    private ActionBarMenuItem searchItem;
     /* access modifiers changed from: private */
     public int searchOpenOffset;
     /* access modifiers changed from: private */
@@ -123,6 +140,10 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     private ActionBarMenuSubItem shuffleListItem;
     private SimpleTextView timeTextView;
     private TextView titleTextView;
+
+    static /* synthetic */ boolean lambda$new$8(View view, MotionEvent motionEvent) {
+        return true;
+    }
 
     /* access modifiers changed from: protected */
     public boolean canDismissWithSwipe() {
@@ -140,11 +161,11 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
 
     /* JADX WARNING: Illegal instructions before constructor call */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public AudioPlayerAlert(android.content.Context r21) {
+    public AudioPlayerAlert(android.content.Context r30) {
         /*
-            r20 = this;
-            r0 = r20
-            r1 = r21
+            r29 = this;
+            r0 = r29
+            r1 = r30
             r2 = 1
             r0.<init>(r1, r2)
             r3 = 5
@@ -190,6 +211,10 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             r5.addObserver(r0, r6)
             int r5 = r0.currentAccount
             org.telegram.messenger.NotificationCenter r5 = org.telegram.messenger.NotificationCenter.getInstance(r5)
+            int r6 = org.telegram.messenger.NotificationCenter.fileDidLoad
+            r5.addObserver(r0, r6)
+            int r5 = r0.currentAccount
+            org.telegram.messenger.NotificationCenter r5 = org.telegram.messenger.NotificationCenter.getInstance(r5)
             int r6 = org.telegram.messenger.NotificationCenter.musicDidLoad
             r5.addObserver(r0, r6)
             org.telegram.ui.Components.AudioPlayerAlert$1 r5 = new org.telegram.ui.Components.AudioPlayerAlert$1
@@ -221,7 +246,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             int r8 = org.telegram.ui.ActionBar.Theme.getColor(r7)
             r5.setTitleColor(r8)
             org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
-            r8 = 2131624310(0x7f0e0176, float:1.8875796E38)
+            r8 = 2131624313(0x7f0e0179, float:1.8875802E38)
             java.lang.String r9 = "AttachMusic"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r5.setTitle(r8)
@@ -234,54 +259,54 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
             r8 = 0
             r5.setAlpha(r8)
-            if (r4 == 0) goto L_0x0154
+            if (r4 == 0) goto L_0x015f
             long r4 = r4.getDialogId()
             int r9 = (int) r4
             r10 = 32
             long r4 = r4 >> r10
             int r5 = (int) r4
-            if (r9 == 0) goto L_0x0125
-            if (r9 <= 0) goto L_0x010c
+            if (r9 == 0) goto L_0x0130
+            if (r9 <= 0) goto L_0x0117
             int r4 = r0.currentAccount
             org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
             java.lang.Integer r5 = java.lang.Integer.valueOf(r9)
             org.telegram.tgnet.TLRPC$User r4 = r4.getUser(r5)
-            if (r4 == 0) goto L_0x0154
+            if (r4 == 0) goto L_0x015f
             org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
             java.lang.String r9 = r4.first_name
             java.lang.String r4 = r4.last_name
             java.lang.String r4 = org.telegram.messenger.ContactsController.formatName(r9, r4)
             r5.setTitle(r4)
-            goto L_0x0154
-        L_0x010c:
+            goto L_0x015f
+        L_0x0117:
             int r4 = r0.currentAccount
             org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
             int r5 = -r9
             java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
             org.telegram.tgnet.TLRPC$Chat r4 = r4.getChat(r5)
-            if (r4 == 0) goto L_0x0154
+            if (r4 == 0) goto L_0x015f
             org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
             java.lang.String r4 = r4.title
             r5.setTitle(r4)
-            goto L_0x0154
-        L_0x0125:
+            goto L_0x015f
+        L_0x0130:
             int r4 = r0.currentAccount
             org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
             java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
             org.telegram.tgnet.TLRPC$EncryptedChat r4 = r4.getEncryptedChat(r5)
-            if (r4 == 0) goto L_0x0154
+            if (r4 == 0) goto L_0x015f
             int r5 = r0.currentAccount
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r5)
             int r4 = r4.user_id
             java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
             org.telegram.tgnet.TLRPC$User r4 = r5.getUser(r4)
-            if (r4 == 0) goto L_0x0154
+            if (r4 == 0) goto L_0x015f
             org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
             java.lang.String r9 = r4.first_name
             java.lang.String r4 = r4.last_name
             java.lang.String r4 = org.telegram.messenger.ContactsController.formatName(r9, r4)
             r5.setTitle(r4)
-        L_0x0154:
+        L_0x015f:
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r4 = r4.createMenu()
             r5 = 2131165442(0x7var_, float:1.7945101E38)
@@ -290,10 +315,12 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             org.telegram.ui.Components.AudioPlayerAlert$3 r5 = new org.telegram.ui.Components.AudioPlayerAlert$3
             r5.<init>()
             r4.setActionBarMenuItemSearchListener(r5)
+            r0.searchItem = r4
             java.lang.String r5 = "Search"
-            r9 = 2131626665(0x7f0e0aa9, float:1.8880573E38)
+            r9 = 2131626727(0x7f0e0ae7, float:1.8880698E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r5, r9)
             r4.setContentDescription(r10)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r0.searchItem
             org.telegram.ui.Components.EditTextBoldCursor r4 = r4.getSearchField()
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r9)
             r4.setHint(r5)
@@ -304,15 +331,6 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             r4.setHintTextColor(r9)
             int r9 = org.telegram.ui.ActionBar.Theme.getColor(r7)
             r4.setCursorColor(r9)
-            boolean r4 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r4 != 0) goto L_0x01b0
-            org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
-            r4.showActionModeTop()
-            org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
-            java.lang.String r9 = "player_actionBarTop"
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r9)
-            r4.setActionModeTopColor(r9)
-        L_0x01b0:
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
             org.telegram.ui.Components.AudioPlayerAlert$4 r9 = new org.telegram.ui.Components.AudioPlayerAlert$4
             r9.<init>()
@@ -336,6 +354,11 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             org.telegram.ui.Components.AudioPlayerAlert$6 r4 = new org.telegram.ui.Components.AudioPlayerAlert$6
             r4.<init>(r1)
             r0.placeholderImageView = r4
+            org.telegram.messenger.ImageReceiver r4 = r4.getImageReceiver()
+            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$Ij3VgNGSO2JGjeC-t6EfuSpOyvw r9 = new org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$Ij3VgNGSO2JGjeC-t6EfuSpOyvw
+            r9.<init>()
+            r4.setDelegate(r9)
+            org.telegram.ui.Components.BackupImageView r4 = r0.placeholderImageView
             r9 = 1082130432(0x40800000, float:4.0)
             int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
             r4.setRoundRadius(r9)
@@ -353,118 +376,118 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             android.widget.TextView r4 = new android.widget.TextView
             r4.<init>(r1)
             r0.titleTextView = r4
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r7)
-            r4.setTextColor(r9)
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
+            r4.setTextColor(r7)
             android.widget.TextView r4 = r0.titleTextView
-            r9 = 1099431936(0x41880000, float:17.0)
-            r4.setTextSize(r2, r9)
+            r7 = 1099431936(0x41880000, float:17.0)
+            r4.setTextSize(r2, r7)
             android.widget.TextView r4 = r0.titleTextView
             java.lang.String r9 = "fonts/rmedium.ttf"
-            android.graphics.Typeface r9 = org.telegram.messenger.AndroidUtilities.getTypeface(r9)
-            r4.setTypeface(r9)
+            android.graphics.Typeface r10 = org.telegram.messenger.AndroidUtilities.getTypeface(r9)
+            r4.setTypeface(r10)
             android.widget.TextView r4 = r0.titleTextView
-            android.text.TextUtils$TruncateAt r9 = android.text.TextUtils.TruncateAt.END
-            r4.setEllipsize(r9)
+            android.text.TextUtils$TruncateAt r10 = android.text.TextUtils.TruncateAt.END
+            r4.setEllipsize(r10)
             android.widget.TextView r4 = r0.titleTextView
             r4.setSingleLine(r2)
             android.widget.FrameLayout r4 = r0.playerLayout
-            android.widget.TextView r9 = r0.titleTextView
-            r10 = -1
-            r11 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r12 = 51
-            r13 = 1101004800(0x41a00000, float:20.0)
-            r15 = 1114636288(0x42700000, float:60.0)
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
-            r4.addView(r9, r10)
-            android.widget.TextView r4 = new android.widget.TextView
-            r4.<init>(r1)
-            r0.authorTextView = r4
-            int r9 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-            r4.setTextColor(r9)
-            android.widget.TextView r4 = r0.authorTextView
-            r9 = 1095761920(0x41500000, float:13.0)
-            r4.setTextSize(r2, r9)
-            android.widget.TextView r4 = r0.authorTextView
-            android.text.TextUtils$TruncateAt r9 = android.text.TextUtils.TruncateAt.END
-            r4.setEllipsize(r9)
-            android.widget.TextView r4 = r0.authorTextView
-            r4.setSingleLine(r2)
-            android.widget.FrameLayout r4 = r0.playerLayout
-            android.widget.TextView r9 = r0.authorTextView
-            r10 = -1
-            r14 = 1111228416(0x423CLASSNAME, float:47.0)
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
-            r4.addView(r9, r10)
-            org.telegram.ui.Components.SeekBarView r4 = new org.telegram.ui.Components.SeekBarView
-            r4.<init>(r1)
-            r0.seekBarView = r4
-            org.telegram.ui.Components.AudioPlayerAlert$7 r9 = new org.telegram.ui.Components.AudioPlayerAlert$7
-            r9.<init>()
-            r4.setDelegate(r9)
-            org.telegram.ui.Components.SeekBarView r4 = r0.seekBarView
-            r4.setReportChanges(r2)
-            android.widget.FrameLayout r4 = r0.playerLayout
-            org.telegram.ui.Components.SeekBarView r9 = r0.seekBarView
-            r10 = -1
-            r11 = 1108869120(0x42180000, float:38.0)
-            r13 = 1084227584(0x40a00000, float:5.0)
-            r14 = 1116471296(0x428CLASSNAME, float:70.0)
-            r15 = 1084227584(0x40a00000, float:5.0)
-            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r11, r12, r13, r14, r15, r16)
-            r4.addView(r9, r10)
-            org.telegram.ui.Components.LineProgressView r4 = new org.telegram.ui.Components.LineProgressView
-            r4.<init>(r1)
-            r0.progressView = r4
-            r9 = 4
-            r4.setVisibility(r9)
-            org.telegram.ui.Components.LineProgressView r4 = r0.progressView
-            java.lang.String r10 = "player_progressBackground"
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
-            r4.setBackgroundColor(r10)
-            org.telegram.ui.Components.LineProgressView r4 = r0.progressView
-            java.lang.String r10 = "player_progress"
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r10)
-            r4.setProgressColor(r10)
-            android.widget.FrameLayout r4 = r0.playerLayout
-            org.telegram.ui.Components.LineProgressView r10 = r0.progressView
+            android.widget.TextView r10 = r0.titleTextView
             r11 = -1
-            r12 = 1073741824(0x40000000, float:2.0)
+            r12 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
             r13 = 51
-            r14 = 1101529088(0x41a80000, float:21.0)
-            r15 = 1119092736(0x42b40000, float:90.0)
-            r16 = 1101529088(0x41a80000, float:21.0)
+            r16 = 1116733440(0x42900000, float:72.0)
             r17 = 0
             android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
             r4.addView(r10, r11)
-            org.telegram.ui.ActionBar.SimpleTextView r4 = new org.telegram.ui.ActionBar.SimpleTextView
+            android.widget.TextView r4 = new android.widget.TextView
             r4.<init>(r1)
-            r0.timeTextView = r4
-            r10 = 12
-            r4.setTextSize(r10)
-            org.telegram.ui.ActionBar.SimpleTextView r4 = r0.timeTextView
-            java.lang.String r10 = "0:00"
-            r4.setText(r10)
-            org.telegram.ui.ActionBar.SimpleTextView r4 = r0.timeTextView
+            r0.authorTextView = r4
             int r10 = org.telegram.ui.ActionBar.Theme.getColor(r5)
             r4.setTextColor(r10)
-            org.telegram.ui.ActionBar.SimpleTextView r4 = r0.timeTextView
-            r10 = 2
-            r4.setImportantForAccessibility(r10)
+            android.widget.TextView r4 = r0.authorTextView
+            r10 = 1095761920(0x41500000, float:13.0)
+            r4.setTextSize(r2, r10)
+            android.widget.TextView r4 = r0.authorTextView
+            android.text.TextUtils$TruncateAt r10 = android.text.TextUtils.TruncateAt.END
+            r4.setEllipsize(r10)
+            android.widget.TextView r4 = r0.authorTextView
+            r4.setSingleLine(r2)
             android.widget.FrameLayout r4 = r0.playerLayout
-            org.telegram.ui.ActionBar.SimpleTextView r11 = r0.timeTextView
-            r12 = 100
-            r13 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            android.widget.TextView r10 = r0.authorTextView
+            r11 = -1
+            r15 = 1111228416(0x423CLASSNAME, float:47.0)
+            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
+            r4.addView(r10, r11)
+            org.telegram.ui.Components.SeekBarView r4 = new org.telegram.ui.Components.SeekBarView
+            r4.<init>(r1)
+            r0.seekBarView = r4
+            org.telegram.ui.Components.AudioPlayerAlert$7 r10 = new org.telegram.ui.Components.AudioPlayerAlert$7
+            r10.<init>()
+            r4.setDelegate(r10)
+            org.telegram.ui.Components.SeekBarView r4 = r0.seekBarView
+            r4.setReportChanges(r2)
+            android.widget.FrameLayout r4 = r0.playerLayout
+            org.telegram.ui.Components.SeekBarView r10 = r0.seekBarView
+            r11 = -1
+            r12 = 1108869120(0x42180000, float:38.0)
+            r14 = 1084227584(0x40a00000, float:5.0)
+            r15 = 1116471296(0x428CLASSNAME, float:70.0)
+            r16 = 1084227584(0x40a00000, float:5.0)
+            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
+            r4.addView(r10, r11)
+            org.telegram.ui.Components.LineProgressView r4 = new org.telegram.ui.Components.LineProgressView
+            r4.<init>(r1)
+            r0.progressView = r4
+            r10 = 4
+            r4.setVisibility(r10)
+            org.telegram.ui.Components.LineProgressView r4 = r0.progressView
+            java.lang.String r11 = "player_progressBackground"
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r4.setBackgroundColor(r11)
+            org.telegram.ui.Components.LineProgressView r4 = r0.progressView
+            java.lang.String r11 = "player_progress"
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r4.setProgressColor(r11)
+            android.widget.FrameLayout r4 = r0.playerLayout
+            org.telegram.ui.Components.LineProgressView r11 = r0.progressView
+            r12 = -1
+            r13 = 1073741824(0x40000000, float:2.0)
             r14 = 51
-            r15 = 1101004800(0x41a00000, float:20.0)
-            r16 = 1120141312(0x42CLASSNAME, float:98.0)
+            r15 = 1101529088(0x41a80000, float:21.0)
+            r16 = 1119092736(0x42b40000, float:90.0)
+            r17 = 1101529088(0x41a80000, float:21.0)
             r18 = 0
             android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
             r4.addView(r11, r12)
+            org.telegram.ui.ActionBar.SimpleTextView r4 = new org.telegram.ui.ActionBar.SimpleTextView
+            r4.<init>(r1)
+            r0.timeTextView = r4
+            r11 = 12
+            r4.setTextSize(r11)
+            org.telegram.ui.ActionBar.SimpleTextView r4 = r0.timeTextView
+            java.lang.String r11 = "0:00"
+            r4.setText(r11)
+            org.telegram.ui.ActionBar.SimpleTextView r4 = r0.timeTextView
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            r4.setTextColor(r11)
+            org.telegram.ui.ActionBar.SimpleTextView r4 = r0.timeTextView
+            r11 = 2
+            r4.setImportantForAccessibility(r11)
+            android.widget.FrameLayout r4 = r0.playerLayout
+            org.telegram.ui.ActionBar.SimpleTextView r12 = r0.timeTextView
+            r13 = 100
+            r14 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r15 = 51
+            r16 = 1101004800(0x41a00000, float:20.0)
+            r17 = 1120141312(0x42CLASSNAME, float:98.0)
+            r19 = 0
+            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r14, r15, r16, r17, r18, r19)
+            r4.addView(r12, r13)
             android.widget.TextView r4 = new android.widget.TextView
             r4.<init>(r1)
             r0.durationTextView = r4
-            r11 = 1094713344(0x41400000, float:12.0)
-            r4.setTextSize(r2, r11)
+            r12 = 1094713344(0x41400000, float:12.0)
+            r4.setTextSize(r2, r12)
             android.widget.TextView r4 = r0.durationTextView
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
             r4.setTextColor(r5)
@@ -472,299 +495,318 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             r5 = 17
             r4.setGravity(r5)
             android.widget.TextView r4 = r0.durationTextView
-            r4.setImportantForAccessibility(r10)
+            r4.setImportantForAccessibility(r11)
             android.widget.FrameLayout r4 = r0.playerLayout
-            android.widget.TextView r5 = r0.durationTextView
-            r11 = -2
-            r12 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r13 = 53
-            r14 = 0
-            r15 = 1119879168(0x42CLASSNAME, float:96.0)
-            r16 = 1101004800(0x41a00000, float:20.0)
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r11, r12, r13, r14, r15, r16, r17)
-            r4.addView(r5, r11)
+            android.widget.TextView r12 = r0.durationTextView
+            r13 = -2
+            r15 = 53
+            r16 = 0
+            r17 = 1119879168(0x42CLASSNAME, float:96.0)
+            r18 = 1101004800(0x41a00000, float:20.0)
+            android.widget.FrameLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r14, r15, r16, r17, r18, r19)
+            r4.addView(r12, r13)
             android.widget.ImageView r4 = new android.widget.ImageView
             r4.<init>(r1)
             r0.playbackSpeedButton = r4
-            android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
-            r4.setScaleType(r5)
+            android.widget.ImageView$ScaleType r12 = android.widget.ImageView.ScaleType.CENTER
+            r4.setScaleType(r12)
             android.widget.ImageView r4 = r0.playbackSpeedButton
-            r5 = 2131165985(0x7var_, float:1.7946203E38)
-            r4.setImageResource(r5)
+            r12 = 2131165986(0x7var_, float:1.7946205E38)
+            r4.setImageResource(r12)
             android.widget.ImageView r4 = r0.playbackSpeedButton
-            r5 = 2131624005(0x7f0e0045, float:1.8875177E38)
-            java.lang.String r11 = "AccDescrPlayerSpeed"
-            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
-            r4.setContentDescription(r5)
+            r12 = 2131624005(0x7f0e0045, float:1.8875177E38)
+            java.lang.String r13 = "AccDescrPlayerSpeed"
+            java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
+            r4.setContentDescription(r12)
             float r4 = org.telegram.messenger.AndroidUtilities.density
-            r5 = 1077936128(0x40400000, float:3.0)
-            int r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
-            if (r4 < 0) goto L_0x0379
+            r12 = 1077936128(0x40400000, float:3.0)
+            int r4 = (r4 > r12 ? 1 : (r4 == r12 ? 0 : -1))
+            if (r4 < 0) goto L_0x037f
             android.widget.ImageView r4 = r0.playbackSpeedButton
             r4.setPadding(r6, r2, r6, r6)
-        L_0x0379:
+        L_0x037f:
             android.widget.FrameLayout r4 = r0.playerLayout
-            android.widget.ImageView r11 = r0.playbackSpeedButton
-            r12 = 36
-            r13 = 1108344832(0x42100000, float:36.0)
-            r14 = 53
-            r15 = 0
-            r16 = 1118568448(0x42aCLASSNAME, float:86.0)
-            r17 = 1101004800(0x41a00000, float:20.0)
-            r18 = 0
-            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
-            r4.addView(r11, r12)
+            android.widget.ImageView r13 = r0.playbackSpeedButton
+            r14 = 36
+            r15 = 1108344832(0x42100000, float:36.0)
+            r16 = 53
+            r17 = 0
+            r18 = 1118568448(0x42aCLASSNAME, float:86.0)
+            r19 = 1101004800(0x41a00000, float:20.0)
+            r20 = 0
+            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
+            r4.addView(r13, r14)
             android.widget.ImageView r4 = r0.playbackSpeedButton
-            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$rAc8YAca3eZCLAfei_UTWtnjvbQ r11 = new org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$rAc8YAca3eZCLAfei_UTWtnjvbQ
-            r11.<init>()
-            r4.setOnClickListener(r11)
-            r20.updatePlaybackButton()
+            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$L6a3eFAcdzUb5tmijbnBD0GiP9c r13 = new org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$L6a3eFAcdzUb5tmijbnBD0GiP9c
+            r13.<init>()
+            r4.setOnClickListener(r13)
+            r29.updatePlaybackButton()
             org.telegram.ui.Components.AudioPlayerAlert$8 r4 = new org.telegram.ui.Components.AudioPlayerAlert$8
             r4.<init>(r1)
-            android.widget.FrameLayout r11 = r0.playerLayout
-            r12 = -1
-            r13 = 1115947008(0x42840000, float:66.0)
-            r14 = 51
-            r16 = 1121845248(0x42de0000, float:111.0)
-            r17 = 0
-            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
-            r11.addView(r4, r12)
-            android.view.View[] r11 = r0.buttons
-            org.telegram.ui.ActionBar.ActionBarMenuItem r12 = new org.telegram.ui.ActionBar.ActionBarMenuItem
-            r13 = 0
-            r12.<init>(r1, r13, r6, r6)
-            r0.repeatButton = r12
-            r11[r6] = r12
-            r12.setLongClickEnabled(r6)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r11 = r0.repeatButton
-            r11.setPopupAnimationEnabled(r6)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r11 = r0.repeatButton
-            r12 = 1126563840(0x43260000, float:166.0)
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            int r12 = -r12
-            r11.setAdditionalYOffset(r12)
-            int r11 = android.os.Build.VERSION.SDK_INT
-            r12 = 1099956224(0x41900000, float:18.0)
+            android.widget.FrameLayout r13 = r0.playerLayout
+            r14 = -1
+            r15 = 1115947008(0x42840000, float:66.0)
+            r16 = 51
+            r18 = 1121845248(0x42de0000, float:111.0)
+            r19 = 0
+            android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
+            r13.addView(r4, r14)
+            android.view.View[] r13 = r0.buttons
+            org.telegram.ui.ActionBar.ActionBarMenuItem r14 = new org.telegram.ui.ActionBar.ActionBarMenuItem
+            r15 = 0
+            r14.<init>(r1, r15, r6, r6)
+            r0.repeatButton = r14
+            r13[r6] = r14
+            r14.setLongClickEnabled(r6)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r13 = r0.repeatButton
+            r13.setPopupAnimationEnabled(r6)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r13 = r0.repeatButton
+            r13.setShowSubmenuByMove(r6)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r13 = r0.repeatButton
+            r14 = 1126563840(0x43260000, float:166.0)
+            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
+            int r14 = -r14
+            r13.setAdditionalYOffset(r14)
+            int r13 = android.os.Build.VERSION.SDK_INT
             java.lang.String r14 = "listSelectorSDK21"
-            r15 = 21
-            if (r11 < r15) goto L_0x03f0
-            org.telegram.ui.ActionBar.ActionBarMenuItem r11 = r0.repeatButton
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r14)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r8, r2, r5)
-            r11.setBackgroundDrawable(r5)
-        L_0x03f0:
-            org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r0.repeatButton
-            r8 = 48
-            r11 = 51
-            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r8, r11)
-            r4.addView(r5, r3)
+            r8 = 21
+            if (r13 < r8) goto L_0x03fc
+            org.telegram.ui.ActionBar.ActionBarMenuItem r13 = r0.repeatButton
+            int r12 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+            r18 = 1099956224(0x41900000, float:18.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r12, r2, r7)
+            r13.setBackgroundDrawable(r7)
+        L_0x03fc:
+            org.telegram.ui.ActionBar.ActionBarMenuItem r7 = r0.repeatButton
+            r12 = 48
+            r13 = 51
+            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r12, r13)
+            r4.addView(r7, r3)
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.repeatButton
-            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$L6a3eFAcdzUb5tmijbnBD0GiP9c r5 = new org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$L6a3eFAcdzUb5tmijbnBD0GiP9c
-            r5.<init>()
-            r3.setOnClickListener(r5)
-            org.telegram.ui.ActionBar.ActionBarMenuSubItem[] r3 = new org.telegram.ui.ActionBar.ActionBarMenuSubItem[r9]
-            org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r0.repeatButton
-            r12 = 2131165827(0x7var_, float:1.7945882E38)
-            r13 = 2131626573(0x7f0e0a4d, float:1.8880386E38)
-            java.lang.String r8 = "RepeatSong"
-            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r13)
-            r13 = 3
-            org.telegram.ui.ActionBar.ActionBarMenuSubItem r5 = r5.addSubItem((int) r13, (int) r12, (java.lang.CharSequence) r8, (boolean) r2)
+            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$lbtPQBFbXxQUDmU4R4w6uSm1EGI r7 = new org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$lbtPQBFbXxQUDmU4R4w6uSm1EGI
+            r7.<init>()
+            r3.setOnClickListener(r7)
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem[] r3 = new org.telegram.ui.ActionBar.ActionBarMenuSubItem[r10]
+            org.telegram.ui.ActionBar.ActionBarMenuItem r7 = r0.repeatButton
+            r5 = 2131165828(0x7var_, float:1.7945884E38)
+            r15 = 2131626628(0x7f0e0a84, float:1.8880498E38)
+            java.lang.String r12 = "RepeatSong"
+            java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r12, r15)
+            r15 = 3
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r5 = r7.addSubItem((int) r15, (int) r5, (java.lang.CharSequence) r12, (boolean) r2)
             r3[r6] = r5
             r0.repeatSongItem = r5
             org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r0.repeatButton
-            r8 = 2131165826(0x7var_, float:1.794588E38)
-            r12 = 2131626570(0x7f0e0a4a, float:1.888038E38)
+            r7 = 2131165827(0x7var_, float:1.7945882E38)
+            r12 = 2131626625(0x7f0e0a81, float:1.8880491E38)
             java.lang.String r6 = "RepeatList"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r12)
-            org.telegram.ui.ActionBar.ActionBarMenuSubItem r5 = r5.addSubItem((int) r9, (int) r8, (java.lang.CharSequence) r6, (boolean) r2)
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r5 = r5.addSubItem((int) r10, (int) r7, (java.lang.CharSequence) r6, (boolean) r2)
             r3[r2] = r5
             r0.repeatListItem = r5
             org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r0.repeatButton
-            r6 = 2131165828(0x7var_, float:1.7945884E38)
-            r8 = 2131626856(0x7f0e0b68, float:1.888096E38)
+            r6 = 2131165829(0x7var_, float:1.7945886E38)
+            r7 = 2131626924(0x7f0e0bac, float:1.8881098E38)
             java.lang.String r12 = "ShuffleList"
-            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r12, r8)
-            org.telegram.ui.ActionBar.ActionBarMenuSubItem r5 = r5.addSubItem((int) r10, (int) r6, (java.lang.CharSequence) r8, (boolean) r2)
-            r3[r10] = r5
+            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r12, r7)
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r5 = r5.addSubItem((int) r11, (int) r6, (java.lang.CharSequence) r7, (boolean) r2)
+            r3[r11] = r5
             r0.shuffleListItem = r5
             org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r0.repeatButton
-            r6 = 2131165822(0x7var_e, float:1.7945872E38)
-            r8 = 2131626634(0x7f0e0a8a, float:1.888051E38)
+            r6 = 2131165823(0x7var_f, float:1.7945874E38)
+            r7 = 2131626696(0x7f0e0ac8, float:1.8880635E38)
             java.lang.String r12 = "ReverseOrder"
-            java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r12, r8)
-            org.telegram.ui.ActionBar.ActionBarMenuSubItem r5 = r5.addSubItem((int) r2, (int) r6, (java.lang.CharSequence) r8, (boolean) r2)
-            r3[r13] = r5
+            java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r12, r7)
+            org.telegram.ui.ActionBar.ActionBarMenuSubItem r5 = r5.addSubItem((int) r2, (int) r6, (java.lang.CharSequence) r7, (boolean) r2)
+            r3[r15] = r5
             r0.reverseOrderItem = r5
             r5 = 0
             r6 = 0
-        L_0x0464:
-            if (r5 >= r9) goto L_0x0498
-            r8 = r3[r5]
-            android.widget.TextView r8 = r8.getTextView()
-            int r12 = r8.getPaddingLeft()
-            int r19 = r8.getPaddingRight()
-            int r12 = r12 + r19
-            android.text.TextPaint r13 = r8.getPaint()
-            java.lang.CharSequence r8 = r8.getText()
-            java.lang.String r8 = r8.toString()
-            float r8 = r13.measureText(r8)
-            double r10 = (double) r8
-            double r10 = java.lang.Math.ceil(r10)
-            int r8 = (int) r10
-            int r12 = r12 + r8
+        L_0x0470:
+            if (r5 >= r10) goto L_0x04a5
+            r7 = r3[r5]
+            android.widget.TextView r7 = r7.getTextView()
+            int r12 = r7.getPaddingLeft()
+            int r21 = r7.getPaddingRight()
+            int r12 = r12 + r21
+            android.text.TextPaint r15 = r7.getPaint()
+            java.lang.CharSequence r7 = r7.getText()
+            java.lang.String r7 = r7.toString()
+            float r7 = r15.measureText(r7)
+            r15 = r14
+            double r13 = (double) r7
+            double r13 = java.lang.Math.ceil(r13)
+            int r7 = (int) r13
+            int r12 = r12 + r7
             int r6 = java.lang.Math.max(r6, r12)
             int r5 = r5 + 1
-            r10 = 2
-            r11 = 51
-            r13 = 3
-            goto L_0x0464
-        L_0x0498:
+            r14 = r15
+            r13 = 51
+            r15 = 3
+            goto L_0x0470
+        L_0x04a5:
+            r15 = r14
             r5 = 1111490560(0x42400000, float:48.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r6 = r6 + r5
             r5 = 0
-        L_0x04a0:
-            if (r5 >= r9) goto L_0x04b1
-            r8 = r3[r5]
-            android.widget.TextView r8 = r8.getTextView()
-            r8.setMinimumWidth(r6)
-            r8.setMinWidth(r6)
+        L_0x04ae:
+            if (r5 >= r10) goto L_0x04bf
+            r7 = r3[r5]
+            android.widget.TextView r7 = r7.getTextView()
+            r7.setMinimumWidth(r6)
+            r7.setMinWidth(r6)
             int r5 = r5 + 1
-            goto L_0x04a0
-        L_0x04b1:
+            goto L_0x04ae
+        L_0x04bf:
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.repeatButton
-            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$lZ69jfhPOaoo51qR3Yh6sSR56wc r5 = new org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$lZ69jfhPOaoo51qR3Yh6sSR56wc
+            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$IevMM0nISen7ZvHChKpl6gdg6G8 r5 = new org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$IevMM0nISen7ZvHChKpl6gdg6G8
             r5.<init>()
             r3.setDelegate(r5)
             android.view.View[] r3 = r0.buttons
             android.widget.ImageView r5 = new android.widget.ImageView
             r5.<init>(r1)
+            r0.prevButton = r5
             r3[r2] = r5
             android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.CENTER
             r5.setScaleType(r3)
-            android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
+            android.widget.ImageView r3 = r0.prevButton
+            android.graphics.PorterDuffColorFilter r5 = new android.graphics.PorterDuffColorFilter
             java.lang.String r6 = "player_button"
-            int r8 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            android.graphics.PorterDuff$Mode r10 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r3.<init>(r8, r10)
-            r5.setColorFilter(r3)
-            r3 = 2131165825(0x7var_, float:1.7945878E38)
-            r5.setImageResource(r3)
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            android.graphics.PorterDuff$Mode r12 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r5.<init>(r7, r12)
+            r3.setColorFilter(r5)
+            android.widget.ImageView r3 = r0.prevButton
+            r5 = 2131165826(0x7var_, float:1.794588E38)
+            r3.setImageResource(r5)
             int r3 = android.os.Build.VERSION.SDK_INT
-            r8 = 1102053376(0x41b00000, float:22.0)
-            if (r3 < r15) goto L_0x04f4
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r14)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r3, r2, r10)
-            r5.setBackgroundDrawable(r3)
-        L_0x04f4:
-            r3 = 51
-            r10 = 48
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r10, r3)
-            r4.addView(r5, r11)
-            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$Ag-QGm7oY1scXMvar_yQTJPlAakA r3 = org.telegram.ui.Components.$$Lambda$AudioPlayerAlert$AgQGm7oY1scXMvar_yQTJPlAakA.INSTANCE
-            r5.setOnClickListener(r3)
-            r3 = 2131624006(0x7f0e0046, float:1.887518E38)
-            java.lang.String r10 = "AccDescrPrevious"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r10, r3)
-            r5.setContentDescription(r3)
+            if (r3 < r8) goto L_0x050a
+            android.widget.ImageView r3 = r0.prevButton
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r15)
+            r7 = 1102053376(0x41b00000, float:22.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r5, r2, r7)
+            r3.setBackgroundDrawable(r5)
+        L_0x050a:
+            android.widget.ImageView r3 = r0.prevButton
+            r5 = 51
+            r7 = 48
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r7, r5)
+            r4.addView(r3, r12)
+            android.widget.ImageView r3 = r0.prevButton
+            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$4DMl9_Is0AQM3ngWCdPt5fhxPmc r5 = org.telegram.ui.Components.$$Lambda$AudioPlayerAlert$4DMl9_Is0AQM3ngWCdPt5fhxPmc.INSTANCE
+            r3.setOnClickListener(r5)
+            android.widget.ImageView r3 = r0.prevButton
+            r5 = 2131624006(0x7f0e0046, float:1.887518E38)
+            java.lang.String r7 = "AccDescrPrevious"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
+            r3.setContentDescription(r5)
             android.view.View[] r3 = r0.buttons
             android.widget.ImageView r5 = new android.widget.ImageView
             r5.<init>(r1)
             r0.playButton = r5
-            r10 = 2
-            r3[r10] = r5
+            r3[r11] = r5
             android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.CENTER
             r5.setScaleType(r3)
             android.widget.ImageView r3 = r0.playButton
-            r5 = 2131165824(0x7var_, float:1.7945876E38)
+            r5 = 2131165825(0x7var_, float:1.7945878E38)
             r3.setImageResource(r5)
             android.widget.ImageView r3 = r0.playButton
             android.graphics.PorterDuffColorFilter r5 = new android.graphics.PorterDuffColorFilter
-            int r10 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            android.graphics.PorterDuff$Mode r11 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r5.<init>(r10, r11)
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            android.graphics.PorterDuff$Mode r12 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r5.<init>(r7, r12)
             r3.setColorFilter(r5)
             int r3 = android.os.Build.VERSION.SDK_INT
-            if (r3 < r15) goto L_0x0550
+            if (r3 < r8) goto L_0x056b
             android.widget.ImageView r3 = r0.playButton
-            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r14)
-            r10 = 1103101952(0x41CLASSNAME, float:24.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r5, r2, r10)
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r15)
+            r7 = 1103101952(0x41CLASSNAME, float:24.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r5, r2, r7)
             r3.setBackgroundDrawable(r5)
-        L_0x0550:
+        L_0x056b:
             android.widget.ImageView r3 = r0.playButton
             r5 = 51
-            r10 = 48
-            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r10, r5)
-            r4.addView(r3, r11)
+            r7 = 48
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r7, r5)
+            r4.addView(r3, r12)
             android.widget.ImageView r3 = r0.playButton
-            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$4DMl9_Is0AQM3ngWCdPt5fhxPmc r5 = org.telegram.ui.Components.$$Lambda$AudioPlayerAlert$4DMl9_Is0AQM3ngWCdPt5fhxPmc.INSTANCE
+            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$_25s4XwmMXC5vKIS0zNvR6jdxfg r5 = org.telegram.ui.Components.$$Lambda$AudioPlayerAlert$_25s4XwmMXC5vKIS0zNvR6jdxfg.INSTANCE
             r3.setOnClickListener(r5)
             android.view.View[] r3 = r0.buttons
             android.widget.ImageView r5 = new android.widget.ImageView
             r5.<init>(r1)
-            r10 = 3
-            r3[r10] = r5
+            r0.nextButton = r5
+            r7 = 3
+            r3[r7] = r5
             android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.CENTER
             r5.setScaleType(r3)
-            android.graphics.PorterDuffColorFilter r3 = new android.graphics.PorterDuffColorFilter
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            android.graphics.PorterDuff$Mode r10 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r3.<init>(r6, r10)
-            r5.setColorFilter(r3)
-            r3 = 2131165821(0x7var_d, float:1.794587E38)
-            r5.setImageResource(r3)
+            android.widget.ImageView r3 = r0.nextButton
+            android.graphics.PorterDuffColorFilter r5 = new android.graphics.PorterDuffColorFilter
+            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            android.graphics.PorterDuff$Mode r12 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r5.<init>(r7, r12)
+            r3.setColorFilter(r5)
+            android.widget.ImageView r3 = r0.nextButton
+            r5 = 2131165822(0x7var_e, float:1.7945872E38)
+            r3.setImageResource(r5)
             int r3 = android.os.Build.VERSION.SDK_INT
-            if (r3 < r15) goto L_0x059a
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r14)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r8)
-            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r3, r2, r6)
-            r5.setBackgroundDrawable(r3)
-        L_0x059a:
-            r3 = 51
-            r6 = 48
-            android.widget.FrameLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r6, r3)
-            r4.addView(r5, r8)
-            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$_25s4XwmMXC5vKIS0zNvR6jdxfg r3 = org.telegram.ui.Components.$$Lambda$AudioPlayerAlert$_25s4XwmMXC5vKIS0zNvR6jdxfg.INSTANCE
-            r5.setOnClickListener(r3)
-            r3 = 2131625812(0x7f0e0754, float:1.8878843E38)
-            java.lang.String r6 = "Next"
-            java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
-            r5.setContentDescription(r3)
+            if (r3 < r8) goto L_0x05bf
+            android.widget.ImageView r3 = r0.nextButton
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r15)
+            r7 = 1102053376(0x41b00000, float:22.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r5, r2, r7)
+            r3.setBackgroundDrawable(r5)
+        L_0x05bf:
+            android.widget.ImageView r3 = r0.nextButton
+            r5 = 51
+            r7 = 48
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r7, r5)
+            r4.addView(r3, r12)
+            android.widget.ImageView r3 = r0.nextButton
+            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$TTY43GWhuW3FlUWxplw8ac-chYU r5 = org.telegram.ui.Components.$$Lambda$AudioPlayerAlert$TTY43GWhuW3FlUWxplw8acchYU.INSTANCE
+            r3.setOnClickListener(r5)
+            android.widget.ImageView r3 = r0.nextButton
+            r5 = 2131625864(0x7f0e0788, float:1.8878948E38)
+            java.lang.String r7 = "Next"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r7, r5)
+            r3.setContentDescription(r5)
             android.view.View[] r3 = r0.buttons
-            org.telegram.ui.ActionBar.ActionBarMenuItem r6 = new org.telegram.ui.ActionBar.ActionBarMenuItem
-            int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
-            r8 = 0
-            r10 = 0
-            r6.<init>(r1, r8, r10, r7)
-            r0.optionsButton = r6
-            r3[r9] = r6
-            r6.setLongClickEnabled(r10)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r5 = new org.telegram.ui.ActionBar.ActionBarMenuItem
+            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+            r7 = 0
+            r12 = 0
+            r5.<init>(r1, r7, r12, r6)
+            r0.optionsButton = r5
+            r3[r10] = r5
+            r5.setLongClickEnabled(r12)
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.optionsButton
-            r6 = 2131165439(0x7var_ff, float:1.7945095E38)
-            r3.setIcon((int) r6)
+            r3.setShowSubmenuByMove(r12)
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.optionsButton
-            r6 = 2
-            r3.setSubMenuOpenSide(r6)
+            r5 = 2131165439(0x7var_ff, float:1.7945095E38)
+            r3.setIcon((int) r5)
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.optionsButton
-            r3.setPopupAnimationEnabled(r10)
+            r3.setSubMenuOpenSide(r11)
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.optionsButton
-            r6 = 1121583104(0x42da0000, float:109.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            int r6 = -r6
-            r3.setAdditionalYOffset(r6)
+            r3.setPopupAnimationEnabled(r12)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.optionsButton
+            r5 = 1121583104(0x42da0000, float:109.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            int r5 = -r5
+            r3.setAdditionalYOffset(r5)
             int r3 = android.os.Build.VERSION.SDK_INT
-            if (r3 < r15) goto L_0x05fe
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r14)
+            if (r3 < r8) goto L_0x062f
+            org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.optionsButton
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r15)
             r6 = 1099956224(0x41900000, float:18.0)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r3, r2, r6)
-            r5.setBackgroundDrawable(r3)
-        L_0x05fe:
+            android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r5, r2, r6)
+            r3.setBackgroundDrawable(r5)
+        L_0x062f:
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.optionsButton
             r5 = 51
             r6 = 48
@@ -772,25 +814,24 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             r4.addView(r3, r6)
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.optionsButton
             r4 = 2131165678(0x7var_ee, float:1.794558E38)
-            r5 = 2131625308(0x7f0e055c, float:1.887782E38)
+            r5 = 2131625340(0x7f0e057c, float:1.8877885E38)
             java.lang.String r6 = "Forward"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
             r3.addSubItem(r2, r4, r5)
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.optionsButton
             r4 = 2131165725(0x7var_d, float:1.7945675E38)
-            r5 = 2131626797(0x7f0e0b2d, float:1.888084E38)
+            r5 = 2131626865(0x7f0e0b71, float:1.8880978E38)
             java.lang.String r6 = "ShareFile"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            r6 = 2
-            r3.addSubItem(r6, r4, r5)
+            r3.addSubItem(r11, r4, r5)
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.optionsButton
             r4 = 2131165698(0x7var_, float:1.794562E38)
-            r5 = 2131626845(0x7f0e0b5d, float:1.8880938E38)
+            r5 = 2131626913(0x7f0e0ba1, float:1.8881076E38)
             java.lang.String r6 = "ShowInChat"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            r3.addSubItem(r9, r4, r5)
+            r3.addSubItem(r10, r4, r5)
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.optionsButton
-            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$rl-WKm2X4aPzFohQGvIAPMJDY84 r4 = new org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$rl-WKm2X4aPzFohQGvIAPMJDY84
+            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$RQkUm9w15pKsPCtwRprruwdsZN8 r4 = new org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$RQkUm9w15pKsPCtwRprruwdsZN8
             r4.<init>()
             r3.setOnClickListener(r4)
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.optionsButton
@@ -802,6 +843,102 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             java.lang.String r5 = "AccDescrMoreOptions"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r3.setContentDescription(r4)
+            android.widget.LinearLayout r3 = new android.widget.LinearLayout
+            r3.<init>(r1)
+            r0.emptyView = r3
+            r3.setOrientation(r2)
+            android.widget.LinearLayout r3 = r0.emptyView
+            r4 = 17
+            r3.setGravity(r4)
+            android.widget.LinearLayout r3 = r0.emptyView
+            r4 = 8
+            r3.setVisibility(r4)
+            android.view.ViewGroup r3 = r0.containerView
+            android.widget.LinearLayout r4 = r0.emptyView
+            r5 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r6 = -1
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r5)
+            r3.addView(r4, r5)
+            android.widget.LinearLayout r3 = r0.emptyView
+            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$6h_bOIEKm9jaLMN61FOO2fjdx4I r4 = org.telegram.ui.Components.$$Lambda$AudioPlayerAlert$6h_bOIEKm9jaLMN61FOO2fjdx4I.INSTANCE
+            r3.setOnTouchListener(r4)
+            android.widget.ImageView r3 = new android.widget.ImageView
+            r3.<init>(r1)
+            r0.emptyImageView = r3
+            r4 = 2131165744(0x7var_, float:1.7945714E38)
+            r3.setImageResource(r4)
+            android.widget.ImageView r3 = r0.emptyImageView
+            android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r5 = "dialogEmptyImage"
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r4.<init>(r5, r6)
+            r3.setColorFilter(r4)
+            android.widget.LinearLayout r3 = r0.emptyView
+            android.widget.ImageView r4 = r0.emptyImageView
+            r5 = -2
+            r6 = -2
+            android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear(r5, r6)
+            r3.addView(r4, r5)
+            android.widget.TextView r3 = new android.widget.TextView
+            r3.<init>(r1)
+            r0.emptyTitleTextView = r3
+            java.lang.String r4 = "dialogEmptyText"
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            r3.setTextColor(r4)
+            android.widget.TextView r3 = r0.emptyTitleTextView
+            r4 = 17
+            r3.setGravity(r4)
+            android.widget.TextView r3 = r0.emptyTitleTextView
+            r4 = 2131625867(0x7f0e078b, float:1.8878954E38)
+            java.lang.String r5 = "NoAudioFound"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            r3.setText(r4)
+            android.widget.TextView r3 = r0.emptyTitleTextView
+            android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r9)
+            r3.setTypeface(r4)
+            android.widget.TextView r3 = r0.emptyTitleTextView
+            r4 = 1099431936(0x41880000, float:17.0)
+            r3.setTextSize(r2, r4)
+            android.widget.TextView r3 = r0.emptyTitleTextView
+            r4 = 1109393408(0x42200000, float:40.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r7 = 0
+            r3.setPadding(r5, r7, r6, r7)
+            android.widget.LinearLayout r3 = r0.emptyView
+            android.widget.TextView r5 = r0.emptyTitleTextView
+            r22 = -2
+            r23 = -2
+            r24 = 17
+            r25 = 0
+            r26 = 11
+            r27 = 0
+            r28 = 0
+            android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r22, (int) r23, (int) r24, (int) r25, (int) r26, (int) r27, (int) r28)
+            r3.addView(r5, r6)
+            android.widget.TextView r3 = new android.widget.TextView
+            r3.<init>(r1)
+            r0.emptySubtitleTextView = r3
+            java.lang.String r5 = "dialogEmptyText"
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            r3.setTextColor(r5)
+            android.widget.TextView r3 = r0.emptySubtitleTextView
+            r5 = 17
+            r3.setGravity(r5)
+            android.widget.TextView r3 = r0.emptySubtitleTextView
+            r5 = 1097859072(0x41700000, float:15.0)
+            r3.setTextSize(r2, r5)
+            android.widget.TextView r3 = r0.emptySubtitleTextView
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r6 = 0
+            r3.setPadding(r5, r6, r4, r6)
+            android.widget.LinearLayout r3 = r0.emptyView
+            android.widget.TextView r4 = r0.emptySubtitleTextView
+            r26 = 6
+            android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r22, (int) r23, (int) r24, (int) r25, (int) r26, (int) r27, (int) r28)
+            r3.addView(r4, r5)
             org.telegram.ui.Components.AudioPlayerAlert$9 r3 = new org.telegram.ui.Components.AudioPlayerAlert$9
             r3.<init>(r1)
             r0.listView = r3
@@ -809,7 +946,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             r3.setClipToPadding(r4)
             org.telegram.ui.Components.RecyclerListView r3 = r0.listView
             androidx.recyclerview.widget.LinearLayoutManager r5 = new androidx.recyclerview.widget.LinearLayoutManager
-            android.content.Context r6 = r20.getContext()
+            android.content.Context r6 = r29.getContext()
             r5.<init>(r6, r2, r4)
             r0.layoutManager = r5
             r3.setLayoutManager(r5)
@@ -833,7 +970,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             r3.setGlowColor(r4)
             org.telegram.ui.Components.RecyclerListView r3 = r0.listView
-            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$Pu3CGhOEdVpK-Q05Oh0i-XMJ5Dc r4 = org.telegram.ui.Components.$$Lambda$AudioPlayerAlert$Pu3CGhOEdVpKQ05Oh0iXMJ5Dc.INSTANCE
+            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$48MEuBkln-g5kGMLmNUMeP-Rsutc r4 = org.telegram.ui.Components.$$Lambda$AudioPlayerAlert$48MEuBklng5kGMLmNUMePRsutc.INSTANCE
             r3.setOnItemClickListener((org.telegram.ui.Components.RecyclerListView.OnItemClickListener) r4)
             org.telegram.ui.Components.RecyclerListView r3 = r0.listView
             org.telegram.ui.Components.AudioPlayerAlert$10 r4 = new org.telegram.ui.Components.AudioPlayerAlert$10
@@ -854,8 +991,9 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             android.view.ViewGroup r3 = r0.containerView
             android.view.View r4 = r0.playerShadow
             android.widget.FrameLayout$LayoutParams r5 = new android.widget.FrameLayout$LayoutParams
-            int r8 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
-            r5.<init>(r7, r8, r6)
+            int r6 = org.telegram.messenger.AndroidUtilities.getShadowHeight()
+            r8 = 83
+            r5.<init>(r7, r6, r8)
             r3.addView(r4, r5)
             android.view.View r3 = r0.playerShadow
             android.view.ViewGroup$LayoutParams r3 = r3.getLayoutParams()
@@ -871,20 +1009,24 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             android.view.ViewGroup r3 = r0.containerView
             org.telegram.ui.ActionBar.ActionBar r4 = r0.actionBar
             r3.addView(r4)
-            android.widget.FrameLayout r3 = new android.widget.FrameLayout
+            org.telegram.ui.Components.AudioPlayerAlert$11 r3 = new org.telegram.ui.Components.AudioPlayerAlert$11
             r3.<init>(r1)
             r0.blurredView = r3
             r4 = 0
             r3.setAlpha(r4)
             android.widget.FrameLayout r3 = r0.blurredView
-            r3.setVisibility(r9)
-            android.widget.FrameLayout r3 = r20.getContainer()
+            r3.setVisibility(r10)
+            android.widget.FrameLayout r3 = r29.getContainer()
             android.widget.FrameLayout r4 = r0.blurredView
             r3.addView(r4)
             org.telegram.ui.Components.BackupImageView r3 = new org.telegram.ui.Components.BackupImageView
             r3.<init>(r1)
             r0.bigAlbumConver = r3
             r3.setAspectFit(r2)
+            org.telegram.ui.Components.BackupImageView r1 = r0.bigAlbumConver
+            r2 = 1090519040(0x41000000, float:8.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            r1.setRoundRadius(r2)
             android.widget.FrameLayout r1 = r0.blurredView
             org.telegram.ui.Components.BackupImageView r2 = r0.bigAlbumConver
             r3 = -1
@@ -898,14 +1040,20 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             r1.addView(r2, r3)
             r1 = 0
             r0.updateTitle(r1)
-            r20.updateRepeatButton()
-            r20.updateRepeatButton()
+            r29.updateRepeatButton()
+            r29.updateEmptyView()
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AudioPlayerAlert.<init>(android.content.Context):void");
     }
 
-    public /* synthetic */ void lambda$new$0$AudioPlayerAlert(View view) {
+    public /* synthetic */ void lambda$new$0$AudioPlayerAlert(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
+        if (this.blurredView.getTag() != null) {
+            this.bigAlbumConver.setImageBitmap(this.placeholderImageView.imageReceiver.getBitmap());
+        }
+    }
+
+    public /* synthetic */ void lambda$new$1$AudioPlayerAlert(View view) {
         if (MediaController.getInstance().getPlaybackSpeed(true) > 1.0f) {
             MediaController.getInstance().setPlaybackSpeed(true, 1.0f);
         } else {
@@ -914,12 +1062,12 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         updatePlaybackButton();
     }
 
-    public /* synthetic */ void lambda$new$1$AudioPlayerAlert(View view) {
+    public /* synthetic */ void lambda$new$2$AudioPlayerAlert(View view) {
         updateSubMenu();
         this.repeatButton.toggleSubMenu();
     }
 
-    public /* synthetic */ void lambda$new$2$AudioPlayerAlert(int i) {
+    public /* synthetic */ void lambda$new$3$AudioPlayerAlert(int i) {
         if (i == 1 || i == 2) {
             MediaController.getInstance().toggleShuffleMusic(i);
             this.listAdapter.notifyDataSetChanged();
@@ -939,7 +1087,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         updateRepeatButton();
     }
 
-    static /* synthetic */ void lambda$new$4(View view) {
+    static /* synthetic */ void lambda$new$5(View view) {
         if (!MediaController.getInstance().isDownloadingCurrentMessage()) {
             if (MediaController.getInstance().isMessagePaused()) {
                 MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
@@ -949,14 +1097,29 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         }
     }
 
-    public /* synthetic */ void lambda$new$6$AudioPlayerAlert(View view) {
+    public /* synthetic */ void lambda$new$7$AudioPlayerAlert(View view) {
         this.optionsButton.toggleSubMenu();
     }
 
-    static /* synthetic */ void lambda$new$7(View view, int i) {
+    static /* synthetic */ void lambda$new$9(View view, int i) {
         if (view instanceof AudioPlayerCell) {
             ((AudioPlayerCell) view).didPressedButton();
         }
+    }
+
+    /* access modifiers changed from: private */
+    public void updateEmptyViewPosition() {
+        if (this.emptyView.getVisibility() == 0) {
+            int dp = this.playerLayout.getVisibility() == 0 ? AndroidUtilities.dp(150.0f) : -AndroidUtilities.dp(30.0f);
+            LinearLayout linearLayout = this.emptyView;
+            linearLayout.setTranslationY((float) (((linearLayout.getMeasuredHeight() - this.containerView.getMeasuredHeight()) - dp) / 2));
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public void updateEmptyView() {
+        this.emptyView.setVisibility((!this.searching || this.listAdapter.getItemCount() != 0) ? 8 : 0);
+        updateEmptyViewPosition();
     }
 
     public boolean onCustomMeasure(View view, int i, int i2) {
@@ -994,10 +1157,12 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
 
     private void updatePlaybackButton() {
         if (MediaController.getInstance().getPlaybackSpeed(true) > 1.0f) {
+            this.playbackSpeedButton.setTag("inappPlayerPlayPause");
             this.playbackSpeedButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("inappPlayerPlayPause"), PorterDuff.Mode.MULTIPLY));
-        } else {
-            this.playbackSpeedButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("inappPlayerClose"), PorterDuff.Mode.MULTIPLY));
+            return;
         }
+        this.playbackSpeedButton.setTag("inappPlayerClose");
+        this.playbackSpeedButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("inappPlayerClose"), PorterDuff.Mode.MULTIPLY));
     }
 
     /* access modifiers changed from: private */
@@ -1036,7 +1201,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
             r6.add(r0)
-            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$EnpAFaSP83SQxwWX9b9xc6nshxI r0 = new org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$EnpAFaSP83SQxwWX9b9xc6nshxI
+            org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$bZwv44or3-083Y0MYIMNRo1ORcQ r0 = new org.telegram.ui.Components.-$$Lambda$AudioPlayerAlert$bZwv44or3-083Y0MYIMNRo1ORcQ
             r0.<init>(r6)
             r1.setDelegate(r0)
             org.telegram.ui.LaunchActivity r6 = r5.parentActivity
@@ -1097,7 +1262,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         L_0x00b3:
             org.telegram.ui.LaunchActivity r6 = r5.parentActivity     // Catch:{ Exception -> 0x00f9 }
             java.lang.String r0 = "ShareFile"
-            r2 = 2131626797(0x7f0e0b2d, float:1.888084E38)
+            r2 = 2131626865(0x7f0e0b71, float:1.8880978E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r2)     // Catch:{ Exception -> 0x00f9 }
             android.content.Intent r0 = android.content.Intent.createChooser(r1, r0)     // Catch:{ Exception -> 0x00f9 }
             r1 = 500(0x1f4, float:7.0E-43)
@@ -1108,15 +1273,15 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             org.telegram.ui.LaunchActivity r0 = r5.parentActivity     // Catch:{ Exception -> 0x00f9 }
             r6.<init>((android.content.Context) r0)     // Catch:{ Exception -> 0x00f9 }
             java.lang.String r0 = "AppName"
-            r2 = 2131624210(0x7f0e0112, float:1.8875593E38)
+            r2 = 2131624211(0x7f0e0113, float:1.8875595E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r2)     // Catch:{ Exception -> 0x00f9 }
             r6.setTitle(r0)     // Catch:{ Exception -> 0x00f9 }
             java.lang.String r0 = "OK"
-            r2 = 2131626025(0x7f0e0829, float:1.8879275E38)
+            r2 = 2131626078(0x7f0e085e, float:1.8879382E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r2)     // Catch:{ Exception -> 0x00f9 }
             r6.setPositiveButton(r0, r1)     // Catch:{ Exception -> 0x00f9 }
             java.lang.String r0 = "PleaseDownload"
-            r1 = 2131626414(0x7f0e09ae, float:1.8880064E38)
+            r1 = 2131626468(0x7f0e09e4, float:1.8880173E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r1)     // Catch:{ Exception -> 0x00f9 }
             r6.setMessage(r0)     // Catch:{ Exception -> 0x00f9 }
             r6.show()     // Catch:{ Exception -> 0x00f9 }
@@ -1189,7 +1354,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AudioPlayerAlert.onSubItemClick(int):void");
     }
 
-    public /* synthetic */ void lambda$onSubItemClick$8$AudioPlayerAlert(ArrayList arrayList, DialogsActivity dialogsActivity, ArrayList arrayList2, CharSequence charSequence, boolean z) {
+    public /* synthetic */ void lambda$onSubItemClick$10$AudioPlayerAlert(ArrayList arrayList, DialogsActivity dialogsActivity, ArrayList arrayList2, CharSequence charSequence, boolean z) {
         ArrayList arrayList3 = arrayList2;
         if (arrayList2.size() > 1 || ((Long) arrayList3.get(0)).longValue() == ((long) UserConfig.getInstance(this.currentAccount).getClientUserId()) || charSequence != null) {
             ArrayList arrayList4 = arrayList;
@@ -1225,9 +1390,10 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     }
 
     /* access modifiers changed from: private */
-    public void showAlbumCover(boolean z) {
+    public void showAlbumCover(boolean z, boolean z2) {
         if (z) {
             if (this.blurredView.getVisibility() != 0 && !this.blurredAnimationInProgress) {
+                this.blurredView.setTag(1);
                 this.bigAlbumConver.setImageBitmap(this.placeholderImageView.imageReceiver.getBitmap());
                 this.blurredAnimationInProgress = true;
                 View fragmentView = this.parentActivity.getActionBarLayout().fragmentsStack.get(this.parentActivity.getActionBarLayout().fragmentsStack.size() - 1).getFragmentView();
@@ -1249,14 +1415,21 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                 }).start();
             }
         } else if (this.blurredView.getVisibility() == 0) {
-            this.blurredAnimationInProgress = true;
-            this.blurredView.animate().alpha(0.0f).setDuration(180).setListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    AudioPlayerAlert.this.blurredView.setVisibility(4);
-                    AudioPlayerAlert.this.bigAlbumConver.setImageBitmap((Bitmap) null);
-                    boolean unused = AudioPlayerAlert.this.blurredAnimationInProgress = false;
-                }
-            }).start();
+            this.blurredView.setTag((Object) null);
+            if (z2) {
+                this.blurredAnimationInProgress = true;
+                this.blurredView.animate().alpha(0.0f).setDuration(180).setListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animator) {
+                        AudioPlayerAlert.this.blurredView.setVisibility(4);
+                        AudioPlayerAlert.this.bigAlbumConver.setImageBitmap((Bitmap) null);
+                        boolean unused = AudioPlayerAlert.this.blurredAnimationInProgress = false;
+                    }
+                }).start();
+                return;
+            }
+            this.blurredView.setAlpha(0.0f);
+            this.blurredView.setVisibility(4);
+            this.bigAlbumConver.setImageBitmap((Bitmap) null);
         }
     }
 
@@ -1292,6 +1465,8 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         } else if (i == NotificationCenter.musicDidLoad) {
             this.playlist = MediaController.getInstance().getPlaylist();
             this.listAdapter.notifyDataSetChanged();
+        } else if (i == NotificationCenter.fileDidLoad && objArr[0].equals(this.currentFile)) {
+            updateTitle(false);
         }
     }
 
@@ -1366,16 +1541,19 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidStart);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidLoad);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.musicDidLoad);
         DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
     }
 
     public void onBackPressed() {
         ActionBar actionBar2 = this.actionBar;
-        if (actionBar2 == null || !actionBar2.isSearchFieldVisible()) {
-            super.onBackPressed();
-        } else {
+        if (actionBar2 != null && actionBar2.isSearchFieldVisible()) {
             this.actionBar.closeSearchField();
+        } else if (this.blurredView.getTag() != null) {
+            showAlbumCover(false, true);
+        } else {
+            super.onBackPressed();
         }
     }
 
@@ -1481,15 +1659,28 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             musicAuthor + " " + musicTitle;
             AudioInfo audioInfo = MediaController.getInstance().getAudioInfo();
             if (audioInfo == null || audioInfo.getCover() == null) {
+                TLRPC$Document document = playingMessageObject.getDocument();
+                this.currentFile = FileLoader.getAttachFileName(document);
+                TLRPC$PhotoSize closestPhotoSizeWithSize = document != null ? FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 240) : null;
+                if (!(closestPhotoSizeWithSize instanceof TLRPC$TL_photoSize)) {
+                    closestPhotoSizeWithSize = null;
+                }
                 String artworkUrl = playingMessageObject.getArtworkUrl(false);
                 if (!TextUtils.isEmpty(artworkUrl)) {
-                    this.placeholderImageView.setImage(artworkUrl, (String) null, (Drawable) null);
+                    if (closestPhotoSizeWithSize != null) {
+                        this.placeholderImageView.setImage(ImageLocation.getForPath(artworkUrl), (String) null, ImageLocation.getForDocument(closestPhotoSizeWithSize, document), (String) null, (String) null, 0, 1, playingMessageObject);
+                    } else {
+                        this.placeholderImageView.setImage(artworkUrl, (String) null, (Drawable) null);
+                    }
+                } else if (closestPhotoSizeWithSize != null) {
+                    this.placeholderImageView.setImage((ImageLocation) null, (String) null, ImageLocation.getForDocument(closestPhotoSizeWithSize, document), (String) null, (String) null, 0, 1, playingMessageObject);
                 } else {
                     this.placeholderImageView.setImageDrawable((Drawable) null);
                 }
                 this.placeholderImageView.invalidate();
             } else {
                 this.placeholderImageView.setImageBitmap(audioInfo.getCover());
+                this.currentFile = null;
             }
             int duration = playingMessageObject.getDuration();
             this.lastDuration = duration;
@@ -1528,11 +1719,12 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                 AudioPlayerAlert.this.playerLayout.setBackgroundColor(Theme.getColor("player_background"));
                 AudioPlayerAlert.this.playerShadow.setVisibility(0);
                 AudioPlayerAlert.this.listView.setPadding(0, AudioPlayerAlert.this.listView.getPaddingTop(), 0, AndroidUtilities.dp(179.0f));
-                return;
+            } else {
+                AudioPlayerAlert.this.playerLayout.setBackground((Drawable) null);
+                AudioPlayerAlert.this.playerShadow.setVisibility(4);
+                AudioPlayerAlert.this.listView.setPadding(0, AudioPlayerAlert.this.listView.getPaddingTop(), 0, 0);
             }
-            AudioPlayerAlert.this.playerLayout.setBackground((Drawable) null);
-            AudioPlayerAlert.this.playerShadow.setVisibility(4);
-            AudioPlayerAlert.this.listView.setPadding(0, AudioPlayerAlert.this.listView.getPaddingTop(), 0, 0);
+            AudioPlayerAlert.this.updateEmptyView();
         }
 
         public int getItemCount() {
@@ -1627,7 +1819,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             String str2;
             String lowerCase = str.trim().toLowerCase();
             if (lowerCase.length() == 0) {
-                updateSearchResults(new ArrayList());
+                updateSearchResults(new ArrayList(), str);
                 return;
             }
             String translitString = LocaleController.getInstance().getTranslitString(lowerCase);
@@ -1685,30 +1877,114 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
                     i3++;
                 }
             }
-            updateSearchResults(arrayList2);
+            updateSearchResults(arrayList2, str);
         }
 
-        private void updateSearchResults(ArrayList<MessageObject> arrayList) {
-            AndroidUtilities.runOnUIThread(new Runnable(arrayList) {
+        private void updateSearchResults(ArrayList<MessageObject> arrayList, String str) {
+            AndroidUtilities.runOnUIThread(new Runnable(arrayList, str) {
                 public final /* synthetic */ ArrayList f$1;
+                public final /* synthetic */ String f$2;
 
                 {
                     this.f$1 = r2;
+                    this.f$2 = r3;
                 }
 
                 public final void run() {
-                    AudioPlayerAlert.ListAdapter.this.lambda$updateSearchResults$3$AudioPlayerAlert$ListAdapter(this.f$1);
+                    AudioPlayerAlert.ListAdapter.this.lambda$updateSearchResults$3$AudioPlayerAlert$ListAdapter(this.f$1, this.f$2);
                 }
             });
         }
 
-        public /* synthetic */ void lambda$updateSearchResults$3$AudioPlayerAlert$ListAdapter(ArrayList arrayList) {
+        public /* synthetic */ void lambda$updateSearchResults$3$AudioPlayerAlert$ListAdapter(ArrayList arrayList, String str) {
             if (AudioPlayerAlert.this.searching) {
                 boolean unused = AudioPlayerAlert.this.searchWas = true;
                 this.searchResult = arrayList;
                 notifyDataSetChanged();
                 AudioPlayerAlert.this.layoutManager.scrollToPosition(0);
+                AudioPlayerAlert.this.emptySubtitleTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("NoAudioFoundPlayerInfo", NUM, str)));
             }
         }
+    }
+
+    public ArrayList<ThemeDescription> getThemeDescriptions() {
+        ArrayList<ThemeDescription> arrayList = new ArrayList<>();
+        $$Lambda$AudioPlayerAlert$xB68ynKhd2Fqgxsd3klAZLmbP4Q r10 = new ThemeDescription.ThemeDescriptionDelegate() {
+            public final void didSetColor() {
+                AudioPlayerAlert.this.lambda$getThemeDescriptions$11$AudioPlayerAlert();
+            }
+        };
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_actionBar"));
+        $$Lambda$AudioPlayerAlert$xB68ynKhd2Fqgxsd3klAZLmbP4Q r8 = r10;
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "player_actionBarTitle"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_actionBarTitle"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBTITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_actionBarTitle"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_actionBarSelector"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCH, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_actionBarTitle"));
+        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_time"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{AudioPlayerCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inLoader"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{AudioPlayerCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outLoader"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{AudioPlayerCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inLoaderSelected"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{AudioPlayerCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inMediaIcon"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{AudioPlayerCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inMediaIconSelected"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{AudioPlayerCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText2"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{AudioPlayerCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inAudioSelectedProgress"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{AudioPlayerCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inAudioProgress"));
+        arrayList.add(new ThemeDescription(this.containerView, 0, (Class[]) null, (Paint) null, new Drawable[]{this.shadowDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackground"));
+        arrayList.add(new ThemeDescription(this.progressView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_progressBackground"));
+        arrayList.add(new ThemeDescription(this.progressView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_progress"));
+        arrayList.add(new ThemeDescription(this.seekBarView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_progressBackground"));
+        arrayList.add(new ThemeDescription(this.seekBarView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_progress"));
+        arrayList.add(new ThemeDescription(this.seekBarView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_player_progressCachedBackground"));
+        arrayList.add(new ThemeDescription(this.playbackSpeedButton, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "inappPlayerPlayPause"));
+        arrayList.add(new ThemeDescription(this.playbackSpeedButton, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "inappPlayerClose"));
+        arrayList.add(new ThemeDescription(this.repeatButton, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "player_button"));
+        arrayList.add(new ThemeDescription(this.repeatButton, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "player_buttonActive"));
+        arrayList.add(new ThemeDescription(this.repeatButton, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "listSelectorSDK21"));
+        arrayList.add(new ThemeDescription(this.repeatButton, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "actionBarDefaultSubmenuItem"));
+        arrayList.add(new ThemeDescription(this.repeatButton, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "actionBarDefaultSubmenuBackground"));
+        arrayList.add(new ThemeDescription(this.optionsButton, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "player_button"));
+        arrayList.add(new ThemeDescription(this.optionsButton, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "listSelectorSDK21"));
+        arrayList.add(new ThemeDescription(this.optionsButton, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "actionBarDefaultSubmenuItem"));
+        arrayList.add(new ThemeDescription(this.optionsButton, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "actionBarDefaultSubmenuBackground"));
+        arrayList.add(new ThemeDescription(this.prevButton, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_button"));
+        arrayList.add(new ThemeDescription(this.prevButton, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
+        arrayList.add(new ThemeDescription(this.playButton, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_button"));
+        arrayList.add(new ThemeDescription(this.playButton, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
+        arrayList.add(new ThemeDescription(this.nextButton, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_button"));
+        arrayList.add(new ThemeDescription(this.nextButton, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
+        arrayList.add(new ThemeDescription(this.playerLayout, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_background"));
+        arrayList.add(new ThemeDescription(this.playerShadow, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogShadowLine"));
+        arrayList.add(new ThemeDescription(this.emptyImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogEmptyImage"));
+        arrayList.add(new ThemeDescription(this.emptyTitleTextView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogEmptyText"));
+        arrayList.add(new ThemeDescription(this.emptySubtitleTextView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogEmptyText"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogScrollGlow"));
+        arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_SELECTOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
+        arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{View.class}, Theme.dividerPaint, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
+        arrayList.add(new ThemeDescription(this.progressView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "emptyListPlaceholder"));
+        arrayList.add(new ThemeDescription(this.progressView, ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"));
+        arrayList.add(new ThemeDescription(this.durationTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_time"));
+        arrayList.add(new ThemeDescription(this.timeTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_time"));
+        arrayList.add(new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_actionBarTitle"));
+        arrayList.add(new ThemeDescription(this.authorTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "player_time"));
+        arrayList.add(new ThemeDescription(this.containerView, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_sheet_scrollUp"));
+        return arrayList;
+    }
+
+    public /* synthetic */ void lambda$getThemeDescriptions$11$AudioPlayerAlert() {
+        this.searchItem.getSearchField().setCursorColor(Theme.getColor("player_actionBarTitle"));
+        ActionBarMenuItem actionBarMenuItem = this.repeatButton;
+        actionBarMenuItem.setIconColor(Theme.getColor((String) actionBarMenuItem.getTag()));
+        Theme.setSelectorDrawableColor(this.repeatButton.getBackground(), Theme.getColor("listSelectorSDK21"), true);
+        this.optionsButton.setIconColor(Theme.getColor("player_button"));
+        Theme.setSelectorDrawableColor(this.optionsButton.getBackground(), Theme.getColor("listSelectorSDK21"), true);
+        this.progressView.setBackgroundColor(Theme.getColor("player_progressBackground"));
+        this.progressView.setProgressColor(Theme.getColor("player_progress"));
+        this.repeatButton.setPopupItemsColor(Theme.getColor("actionBarDefaultSubmenuItem"), false);
+        this.repeatButton.setPopupItemsColor(Theme.getColor("actionBarDefaultSubmenuItem"), true);
+        this.repeatButton.redrawPopup(Theme.getColor("actionBarDefaultSubmenuBackground"));
+        this.optionsButton.setPopupItemsColor(Theme.getColor("actionBarDefaultSubmenuItem"), false);
+        this.optionsButton.setPopupItemsColor(Theme.getColor("actionBarDefaultSubmenuItem"), true);
+        this.optionsButton.redrawPopup(Theme.getColor("actionBarDefaultSubmenuBackground"));
     }
 }

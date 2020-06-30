@@ -114,7 +114,7 @@ public class WallpaperUpdater {
             intent.setType("image/*");
             this.parentActivity.startActivityForResult(intent, 11);
         } else if (Build.VERSION.SDK_INT < 23 || baseFragment.getParentActivity() == null || this.parentFragment.getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
-            PhotoAlbumPickerActivity photoAlbumPickerActivity = new PhotoAlbumPickerActivity(2, false, false, (ChatActivity) null);
+            PhotoAlbumPickerActivity photoAlbumPickerActivity = new PhotoAlbumPickerActivity(PhotoAlbumPickerActivity.SELECT_TYPE_WALLPAPER, false, false, (ChatActivity) null);
             photoAlbumPickerActivity.setAllowSearchImages(false);
             photoAlbumPickerActivity.setDelegate(new PhotoAlbumPickerActivity.PhotoAlbumPickerActivityDelegate() {
                 public void didSelectPhotos(ArrayList<SendMessagesHelper.SendingMediaInfo> arrayList, boolean z, int i) {

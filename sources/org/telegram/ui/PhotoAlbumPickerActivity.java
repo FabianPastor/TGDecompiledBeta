@@ -62,6 +62,11 @@ import org.telegram.ui.PhotoAlbumPickerActivity;
 import org.telegram.ui.PhotoPickerActivity;
 
 public class PhotoAlbumPickerActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
+    public static int SELECT_TYPE_ALL = 0;
+    public static int SELECT_TYPE_AVATAR = 1;
+    public static int SELECT_TYPE_AVATAR_VIDEO = 3;
+    public static int SELECT_TYPE_QR = 10;
+    public static int SELECT_TYPE_WALLPAPER = 2;
     /* access modifiers changed from: private */
     public ArrayList<MediaController.AlbumEntry> albumsSorted = null;
     private boolean allowCaption;
@@ -130,7 +135,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     }
 
     public boolean onFragmentCreate() {
-        if (this.selectPhotoType != 0 || !this.allowSearchImages) {
+        int i = this.selectPhotoType;
+        if (i == SELECT_TYPE_AVATAR || i == SELECT_TYPE_WALLPAPER || i == SELECT_TYPE_QR || !this.allowSearchImages) {
             this.albumsSorted = MediaController.allPhotoAlbums;
         } else {
             this.albumsSorted = MediaController.allMediaAlbums;
@@ -509,7 +515,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         this.selectedCountView.setScaleX(0.2f);
         this.selectedCountView.setScaleY(0.2f);
         this.sizeNotifierFrameLayout.addView(this.selectedCountView, LayoutHelper.createFrame(42, 24.0f, 85, 0.0f, 0.0f, -2.0f, 9.0f));
-        if (this.selectPhotoType != 0) {
+        if (this.selectPhotoType != SELECT_TYPE_ALL) {
             this.commentTextView.setVisibility(8);
         }
         if (!this.loading || ((arrayList = this.albumsSorted) != null && (arrayList == null || !arrayList.isEmpty()))) {
@@ -678,7 +684,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     public void didReceivedNotification(int i, int i2, Object... objArr) {
         if (i == NotificationCenter.albumsDidLoad) {
             if (this.classGuid == objArr[0].intValue()) {
-                if (this.selectPhotoType != 0 || !this.allowSearchImages) {
+                int i3 = this.selectPhotoType;
+                if (i3 == SELECT_TYPE_AVATAR || i3 == SELECT_TYPE_WALLPAPER || i3 == SELECT_TYPE_QR || !this.allowSearchImages) {
                     this.albumsSorted = objArr[2];
                 } else {
                     this.albumsSorted = objArr[1];

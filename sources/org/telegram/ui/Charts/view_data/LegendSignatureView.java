@@ -31,6 +31,8 @@ public class LegendSignatureView extends FrameLayout {
     LinearLayout content;
     SimpleDateFormat format = new SimpleDateFormat("E, ");
     SimpleDateFormat format2 = new SimpleDateFormat("MMM dd");
+    SimpleDateFormat format3 = new SimpleDateFormat("d MMM yyyy");
+    SimpleDateFormat format4 = new SimpleDateFormat("d MMM");
     Holder[] holdes;
     SimpleDateFormat hourFormat = new SimpleDateFormat(" HH:mm");
     TextView hourTime;
@@ -52,6 +54,7 @@ public class LegendSignatureView extends FrameLayout {
     };
     TextView time;
     public boolean useHour;
+    public boolean useWeek;
     public boolean zoomEnabled;
 
     public LegendSignatureView(Context context) {
@@ -119,7 +122,11 @@ public class LegendSignatureView extends FrameLayout {
         if (this.isTopHourChart) {
             this.time.setText(String.format(Locale.ENGLISH, "%02d:00", new Object[]{Long.valueOf(j)}));
         } else {
-            this.time.setText(formatData(new Date(j)));
+            if (this.useWeek) {
+                this.time.setText(String.format("%s — %s", new Object[]{this.format4.format(new Date(j)), this.format3.format(new Date(NUM + j))}));
+            } else {
+                this.time.setText(formatData(new Date(j)));
+            }
             if (this.useHour) {
                 this.hourTime.setText(this.hourFormat.format(Long.valueOf(j)));
             }
@@ -222,6 +229,10 @@ public class LegendSignatureView extends FrameLayout {
                 }
             }).start();
         }
+    }
+
+    public void setUseWeek(boolean z) {
+        this.useWeek = z;
     }
 
     class Holder {

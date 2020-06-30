@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -72,6 +73,7 @@ import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgressView;
 import org.telegram.ui.Components.SlideView;
+import org.telegram.ui.Components.URLSpanNoUnderline;
 
 public class CancelAccountDeletionActivity extends BaseFragment {
     /* access modifiers changed from: private */
@@ -81,8 +83,6 @@ public class CancelAccountDeletionActivity extends BaseFragment {
     public Dialog errorDialog;
     /* access modifiers changed from: private */
     public String hash;
-    private Dialog permissionsDialog;
-    private ArrayList<String> permissionsItems = new ArrayList<>();
     /* access modifiers changed from: private */
     public String phone;
     private AlertDialog progressDialog;
@@ -91,12 +91,12 @@ public class CancelAccountDeletionActivity extends BaseFragment {
     /* access modifiers changed from: private */
     public SlideView[] views = new SlideView[5];
 
-    private class ProgressView extends View {
+    private static class ProgressView extends View {
         private Paint paint = new Paint();
         private Paint paint2 = new Paint();
         private float progress;
 
-        public ProgressView(CancelAccountDeletionActivity cancelAccountDeletionActivity, Context context) {
+        public ProgressView(Context context) {
             super(context);
             this.paint.setColor(Theme.getColor("login_progressInner"));
             this.paint2.setColor(Theme.getColor("login_progressOuter"));
@@ -203,18 +203,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
     }
 
-    public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
-        int i2;
-        if (i == 6 && (i2 = this.currentViewNum) == 0) {
-            this.views[i2].onNextPressed();
-        }
-    }
-
     /* access modifiers changed from: protected */
     public void onDialogDismiss(Dialog dialog) {
-        if (Build.VERSION.SDK_INT >= 23 && dialog == this.permissionsDialog && !this.permissionsItems.isEmpty()) {
-            getParentActivity().requestPermissions((String[]) this.permissionsItems.toArray(new String[0]), 6);
-        }
         if (dialog == this.errorDialog) {
             finishFragment();
         }
@@ -356,10 +346,6 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         public void onNextPressed() {
             if (CancelAccountDeletionActivity.this.getParentActivity() != null && !this.nextPressed) {
                 TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
-                if (telephonyManager.getSimState() != 1) {
-                    int phoneType = telephonyManager.getPhoneType();
-                }
-                int i = Build.VERSION.SDK_INT;
                 TLRPC$TL_account_sendConfirmPhoneCode tLRPC$TL_account_sendConfirmPhoneCode = new TLRPC$TL_account_sendConfirmPhoneCode();
                 tLRPC$TL_account_sendConfirmPhoneCode.hash = CancelAccountDeletionActivity.this.hash;
                 TLRPC$TL_codeSettings tLRPC$TL_codeSettings = new TLRPC$TL_codeSettings();
@@ -460,7 +446,6 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         private Timer codeTimer;
         /* access modifiers changed from: private */
         public TextView confirmTextView;
-        private Bundle currentParams;
         /* access modifiers changed from: private */
         public int currentType;
         /* access modifiers changed from: private */
@@ -532,9 +517,17 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.TextView r4 = new android.widget.TextView
                 r4.<init>(r2)
                 r0.confirmTextView = r4
+                java.lang.String r5 = "windowBackgroundWhiteLinkText"
+                int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+                r4.setLinkTextColor(r5)
+                android.widget.TextView r4 = r0.confirmTextView
                 java.lang.String r5 = "windowBackgroundWhiteGrayText6"
                 int r6 = org.telegram.ui.ActionBar.Theme.getColor(r5)
                 r4.setTextColor(r6)
+                android.widget.TextView r4 = r0.confirmTextView
+                java.lang.String r6 = "windowBackgroundWhiteLinkSelection"
+                int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
+                r4.setHighlightColor(r6)
                 android.widget.TextView r4 = r0.confirmTextView
                 r6 = 1096810496(0x41600000, float:14.0)
                 r4.setTextSize(r3, r6)
@@ -560,12 +553,12 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.TextView r4 = r0.titleTextView
                 boolean r10 = org.telegram.messenger.LocaleController.isRTL
                 r12 = 3
-                if (r10 == 0) goto L_0x007b
+                if (r10 == 0) goto L_0x0091
                 r10 = 5
-                goto L_0x007c
-            L_0x007b:
+                goto L_0x0092
+            L_0x0091:
                 r10 = 3
-            L_0x007c:
+            L_0x0092:
                 r4.setGravity(r10)
                 android.widget.TextView r4 = r0.titleTextView
                 int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
@@ -576,34 +569,34 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r4.setGravity(r10)
                 int r4 = r0.currentType
                 r13 = -2
-                if (r4 != r12) goto L_0x012a
+                if (r4 != r12) goto L_0x0140
                 android.widget.TextView r4 = r0.confirmTextView
                 boolean r8 = org.telegram.messenger.LocaleController.isRTL
-                if (r8 == 0) goto L_0x009d
+                if (r8 == 0) goto L_0x00b3
                 r8 = 5
-                goto L_0x009e
-            L_0x009d:
+                goto L_0x00b4
+            L_0x00b3:
                 r8 = 3
-            L_0x009e:
+            L_0x00b4:
                 r8 = r8 | 48
                 r4.setGravity(r8)
                 android.widget.FrameLayout r4 = new android.widget.FrameLayout
                 r4.<init>(r2)
                 boolean r8 = org.telegram.messenger.LocaleController.isRTL
-                if (r8 == 0) goto L_0x00ae
+                if (r8 == 0) goto L_0x00c4
                 r8 = 5
-                goto L_0x00af
-            L_0x00ae:
+                goto L_0x00c5
+            L_0x00c4:
                 r8 = 3
-            L_0x00af:
+            L_0x00c5:
                 android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r8)
                 r0.addView(r4, r8)
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
-                r14 = 2131165793(0x7var_, float:1.7945813E38)
+                r14 = 2131165794(0x7var_, float:1.7945815E38)
                 r8.setImageResource(r14)
                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
-                if (r14 == 0) goto L_0x00f9
+                if (r14 == 0) goto L_0x010f
                 r15 = 64
                 r16 = 1117257728(0x42980000, float:76.0)
                 r17 = 19
@@ -617,29 +610,29 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r14 = -1
                 r15 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
                 boolean r16 = org.telegram.messenger.LocaleController.isRTL
-                if (r16 == 0) goto L_0x00e6
+                if (r16 == 0) goto L_0x00fc
                 r16 = 5
-                goto L_0x00e8
-            L_0x00e6:
+                goto L_0x00fe
+            L_0x00fc:
                 r16 = 3
-            L_0x00e8:
+            L_0x00fe:
                 r17 = 1118044160(0x42a40000, float:82.0)
                 r18 = 0
                 r19 = 0
                 r20 = 0
                 android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
                 r4.addView(r8, r14)
-                goto L_0x020e
-            L_0x00f9:
+                goto L_0x0224
+            L_0x010f:
                 android.widget.TextView r15 = r0.confirmTextView
                 r16 = -1
                 r17 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-                if (r14 == 0) goto L_0x0104
+                if (r14 == 0) goto L_0x011a
                 r18 = 5
-                goto L_0x0106
-            L_0x0104:
+                goto L_0x011c
+            L_0x011a:
                 r18 = 3
-            L_0x0106:
+            L_0x011c:
                 r19 = 0
                 r20 = 0
                 r21 = 1118044160(0x42a40000, float:82.0)
@@ -654,8 +647,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r22 = 1073741824(0x40000000, float:2.0)
                 android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
                 r4.addView(r8, r14)
-                goto L_0x020e
-            L_0x012a:
+                goto L_0x0224
+            L_0x0140:
                 android.widget.TextView r4 = r0.confirmTextView
                 r4.setGravity(r10)
                 android.widget.FrameLayout r4 = new android.widget.FrameLayout
@@ -664,11 +657,11 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r0.addView(r4, r14)
                 int r14 = r0.currentType
                 java.lang.String r15 = "chats_actionBackground"
-                if (r14 != r3) goto L_0x01aa
+                if (r14 != r3) goto L_0x01c0
                 android.widget.ImageView r14 = new android.widget.ImageView
                 r14.<init>(r2)
                 r0.blackImageView = r14
-                r11 = 2131165917(0x7var_dd, float:1.7946065E38)
+                r11 = 2131165918(0x7var_de, float:1.7946067E38)
                 r14.setImageResource(r11)
                 android.widget.ImageView r11 = r0.blackImageView
                 android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
@@ -689,7 +682,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131165915(0x7var_db, float:1.794606E38)
+                r10 = 2131165916(0x7var_dc, float:1.7946063E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -701,16 +694,16 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131626756(0x7f0e0b04, float:1.8880757E38)
+                r8 = 2131626823(0x7f0e0b47, float:1.8880893E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
-                goto L_0x01ec
-            L_0x01aa:
+                goto L_0x0202
+            L_0x01c0:
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131165916(0x7var_dc, float:1.7946063E38)
+                r10 = 2131165917(0x7var_dd, float:1.7946065E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -729,11 +722,11 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131626760(0x7f0e0b08, float:1.8880765E38)
+                r8 = 2131626827(0x7f0e0b4b, float:1.8880901E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
-            L_0x01ec:
+            L_0x0202:
                 android.widget.TextView r4 = r0.titleTextView
                 r17 = -2
                 r18 = -2
@@ -748,7 +741,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r21 = 17
                 android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r17, (int) r18, (int) r19, (int) r20, (int) r21, (int) r22, (int) r23)
                 r0.addView(r4, r8)
-            L_0x020e:
+            L_0x0224:
                 android.widget.LinearLayout r4 = new android.widget.LinearLayout
                 r4.<init>(r2)
                 r0.codeFieldContainer = r4
@@ -759,11 +752,11 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r10, (int) r3)
                 r0.addView(r4, r10)
                 int r4 = r0.currentType
-                if (r4 != r12) goto L_0x022f
+                if (r4 != r12) goto L_0x0245
                 android.widget.LinearLayout r4 = r0.codeFieldContainer
                 r10 = 8
                 r4.setVisibility(r10)
-            L_0x022f:
+            L_0x0245:
                 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$1 r4 = new org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$1
                 r4.<init>(r0, r2, r1)
                 r0.timeText = r4
@@ -776,30 +769,30 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 int r4 = r0.currentType
                 r5 = 1097859072(0x41700000, float:15.0)
                 r10 = 1092616192(0x41200000, float:10.0)
-                if (r4 != r12) goto L_0x028d
+                if (r4 != r12) goto L_0x02a3
                 android.widget.TextView r4 = r0.timeText
                 r4.setTextSize(r3, r6)
                 android.widget.TextView r4 = r0.timeText
                 boolean r6 = org.telegram.messenger.LocaleController.isRTL
-                if (r6 == 0) goto L_0x025c
+                if (r6 == 0) goto L_0x0272
                 r6 = 5
-                goto L_0x025d
-            L_0x025c:
+                goto L_0x0273
+            L_0x0272:
                 r6 = 3
-            L_0x025d:
+            L_0x0273:
                 android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r6)
                 r0.addView(r4, r6)
                 org.telegram.ui.CancelAccountDeletionActivity$ProgressView r4 = new org.telegram.ui.CancelAccountDeletionActivity$ProgressView
-                r4.<init>(r1, r2)
+                r4.<init>(r2)
                 r0.progressView = r4
                 android.widget.TextView r4 = r0.timeText
                 boolean r6 = org.telegram.messenger.LocaleController.isRTL
-                if (r6 == 0) goto L_0x0273
+                if (r6 == 0) goto L_0x0289
                 r11 = 5
-                goto L_0x0274
-            L_0x0273:
+                goto L_0x028a
+            L_0x0289:
                 r11 = 3
-            L_0x0274:
+            L_0x028a:
                 r4.setGravity(r11)
                 org.telegram.ui.CancelAccountDeletionActivity$ProgressView r4 = r0.progressView
                 r17 = -1
@@ -810,8 +803,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r22 = 0
                 android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r17, r18, r19, r20, r21, r22)
                 r0.addView(r4, r6)
-                goto L_0x02af
-            L_0x028d:
+                goto L_0x02c5
+            L_0x02a3:
                 android.widget.TextView r4 = r0.timeText
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r7)
                 int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
@@ -824,7 +817,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.TextView r4 = r0.timeText
                 android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r6)
                 r0.addView(r4, r11)
-            L_0x02af:
+            L_0x02c5:
                 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$2 r4 = new org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$2
                 r4.<init>(r0, r2, r1)
                 r0.problemText = r4
@@ -845,20 +838,20 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r2 = 49
                 r1.setGravity(r2)
                 int r1 = r0.currentType
-                if (r1 != r3) goto L_0x02f5
+                if (r1 != r3) goto L_0x030b
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131624949(0x7f0e03f5, float:1.8877092E38)
+                r2 = 2131624978(0x7f0e0412, float:1.887715E38)
                 java.lang.String r3 = "DidNotGetTheCodeSms"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x0303
-            L_0x02f5:
+                goto L_0x0319
+            L_0x030b:
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131624948(0x7f0e03f4, float:1.887709E38)
+                r2 = 2131624977(0x7f0e0411, float:1.8877149E38)
                 java.lang.String r3 = "DidNotGetTheCode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-            L_0x0303:
+            L_0x0319:
                 android.widget.TextView r1 = r0.problemText
                 r2 = 49
                 android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r2)
@@ -899,14 +892,15 @@ public class CancelAccountDeletionActivity extends BaseFragment {
             super.onMeasure(i, i2);
             if (this.currentType != 3 && (imageView = this.blueImageView) != null) {
                 int measuredHeight = imageView.getMeasuredHeight() + this.titleTextView.getMeasuredHeight() + this.confirmTextView.getMeasuredHeight() + AndroidUtilities.dp(35.0f);
+                if (this.timeText.getVisibility() == 0) {
+                    measuredHeight += this.timeText.getMeasuredHeight();
+                }
                 int dp = AndroidUtilities.dp(80.0f);
-                int dp2 = AndroidUtilities.dp(291.0f);
+                int dp2 = AndroidUtilities.dp(340.0f);
                 if (this.this$0.scrollHeight - measuredHeight < dp) {
                     setMeasuredDimension(getMeasuredWidth(), measuredHeight + dp);
-                } else if (this.this$0.scrollHeight > dp2) {
-                    setMeasuredDimension(getMeasuredWidth(), dp2);
                 } else {
-                    setMeasuredDimension(getMeasuredWidth(), this.this$0.scrollHeight);
+                    setMeasuredDimension(getMeasuredWidth(), Math.min(this.this$0.scrollHeight, dp2));
                 }
             }
         }
@@ -1012,7 +1006,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
         public void setParams(Bundle bundle, boolean z) {
             int i;
             int i2;
-            if (bundle != null) {
+            Bundle bundle2 = bundle;
+            if (bundle2 != null) {
                 this.waitingForEvent = true;
                 int i3 = this.currentType;
                 if (i3 == 2) {
@@ -1022,16 +1017,14 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                     AndroidUtilities.setWaitingForCall(true);
                     NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveCall);
                 }
-                this.currentParams = bundle;
-                this.phone = bundle.getString("phone");
-                this.phoneHash = bundle.getString("phoneHash");
-                int i4 = bundle.getInt("timeout");
+                this.phone = bundle2.getString("phone");
+                this.phoneHash = bundle2.getString("phoneHash");
+                int i4 = bundle2.getInt("timeout");
                 this.time = i4;
                 this.timeout = i4;
-                long currentTimeMillis = System.currentTimeMillis() / 1000;
-                this.nextType = bundle.getInt("nextType");
-                this.pattern = bundle.getString("pattern");
-                int i5 = bundle.getInt("length");
+                this.nextType = bundle2.getInt("nextType");
+                this.pattern = bundle2.getString("pattern");
+                int i5 = bundle2.getInt("length");
                 this.length = i5;
                 if (i5 == 0) {
                     this.length = 5;
@@ -1132,7 +1125,16 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 if (this.phone != null) {
                     String format = PhoneFormat.getInstance().format(this.phone);
                     PhoneFormat instance = PhoneFormat.getInstance();
-                    this.confirmTextView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("CancelAccountResetInfo", NUM, instance.format("+" + format))));
+                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(AndroidUtilities.replaceTags(LocaleController.formatString("CancelAccountResetInfo2", NUM, instance.format("+" + format))));
+                    int indexOf = TextUtils.indexOf(spannableStringBuilder, '*');
+                    int lastIndexOf = TextUtils.lastIndexOf(spannableStringBuilder, '*');
+                    if (!(indexOf == -1 || lastIndexOf == -1 || indexOf == lastIndexOf)) {
+                        this.confirmTextView.setMovementMethod(new AndroidUtilities.LinkMovementMethodMy());
+                        spannableStringBuilder.replace(lastIndexOf, lastIndexOf + 1, "");
+                        spannableStringBuilder.replace(indexOf, indexOf + 1, "");
+                        spannableStringBuilder.setSpan(new URLSpanNoUnderline("tg://settings/change_number"), indexOf, lastIndexOf - 1, 33);
+                    }
+                    this.confirmTextView.setText(spannableStringBuilder);
                     if (this.currentType != 3) {
                         AndroidUtilities.showKeyboard(this.codeField[0]);
                         this.codeField[0].requestFocus();
@@ -1371,675 +1373,774 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 timer.schedule(new TimerTask() {
                     public void run() {
                         if (LoginActivitySmsView.this.timeTimer != null) {
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public void run() {
-                                    double currentTimeMillis = (double) System.currentTimeMillis();
-                                    double access$2000 = LoginActivitySmsView.this.lastCurrentTime;
-                                    Double.isNaN(currentTimeMillis);
-                                    LoginActivitySmsView loginActivitySmsView = LoginActivitySmsView.this;
-                                    double access$2100 = (double) loginActivitySmsView.time;
-                                    Double.isNaN(access$2100);
-                                    int unused = loginActivitySmsView.time = (int) (access$2100 - (currentTimeMillis - access$2000));
-                                    double unused2 = LoginActivitySmsView.this.lastCurrentTime = currentTimeMillis;
-                                    if (LoginActivitySmsView.this.time >= 1000) {
-                                        int access$21002 = (LoginActivitySmsView.this.time / 1000) / 60;
-                                        int access$21003 = (LoginActivitySmsView.this.time / 1000) - (access$21002 * 60);
-                                        if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 3) {
-                                            LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallText", NUM, Integer.valueOf(access$21002), Integer.valueOf(access$21003)));
-                                        } else if (LoginActivitySmsView.this.nextType == 2) {
-                                            LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", NUM, Integer.valueOf(access$21002), Integer.valueOf(access$21003)));
-                                        }
-                                        if (LoginActivitySmsView.this.progressView != null) {
-                                            LoginActivitySmsView.this.progressView.setProgress(1.0f - (((float) LoginActivitySmsView.this.time) / ((float) LoginActivitySmsView.this.timeout)));
-                                            return;
-                                        }
-                                        return;
-                                    }
-                                    if (LoginActivitySmsView.this.progressView != null) {
-                                        LoginActivitySmsView.this.progressView.setProgress(1.0f);
-                                    }
-                                    LoginActivitySmsView.this.destroyTimer();
-                                    if (LoginActivitySmsView.this.currentType == 3) {
-                                        AndroidUtilities.setWaitingForCall(false);
-                                        NotificationCenter.getGlobalInstance().removeObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveCall);
-                                        boolean unused3 = LoginActivitySmsView.this.waitingForEvent = false;
-                                        LoginActivitySmsView.this.destroyCodeTimer();
-                                        LoginActivitySmsView.this.resendCode();
-                                    } else if (LoginActivitySmsView.this.currentType != 2 && LoginActivitySmsView.this.currentType != 4) {
-                                    } else {
-                                        if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 2) {
-                                            if (LoginActivitySmsView.this.nextType == 4) {
-                                                LoginActivitySmsView.this.timeText.setText(LocaleController.getString("Calling", NUM));
-                                            } else {
-                                                LoginActivitySmsView.this.timeText.setText(LocaleController.getString("SendingSms", NUM));
-                                            }
-                                            LoginActivitySmsView.this.createCodeTimer();
-                                            TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode = new TLRPC$TL_auth_resendCode();
-                                            tLRPC$TL_auth_resendCode.phone_number = LoginActivitySmsView.this.phone;
-                                            tLRPC$TL_auth_resendCode.phone_code_hash = LoginActivitySmsView.this.phoneHash;
-                                            ConnectionsManager.getInstance(LoginActivitySmsView.this.this$0.currentAccount).sendRequest(tLRPC$TL_auth_resendCode, 
-                                            /*  JADX ERROR: Method code generation error
-                                                jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x01ef: INVOKE  
-                                                  (wrap: org.telegram.tgnet.ConnectionsManager : 0x01e6: INVOKE  (r1v11 org.telegram.tgnet.ConnectionsManager) = 
-                                                  (wrap: int : 0x01e2: INVOKE  (r1v10 int) = 
-                                                  (wrap: org.telegram.ui.CancelAccountDeletionActivity : 0x01e0: IGET  (r1v9 org.telegram.ui.CancelAccountDeletionActivity) = 
-                                                  (wrap: org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView : 0x01de: IGET  (r1v8 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView) = 
-                                                  (wrap: org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 : 0x01dc: IGET  (r1v7 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5) = 
-                                                  (r9v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5$1 A[THIS])
-                                                 org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.1.this$2 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5)
-                                                 org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.this$1 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView)
-                                                 org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this$0 org.telegram.ui.CancelAccountDeletionActivity)
-                                                 org.telegram.ui.CancelAccountDeletionActivity.access$3200(org.telegram.ui.CancelAccountDeletionActivity):int type: STATIC)
-                                                 org.telegram.tgnet.ConnectionsManager.getInstance(int):org.telegram.tgnet.ConnectionsManager type: STATIC)
-                                                  (r0v24 'tLRPC$TL_auth_resendCode' org.telegram.tgnet.TLRPC$TL_auth_resendCode)
-                                                  (wrap: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$1$TKosr_VcccEYaoxCJjoMXxLoY3g : 0x01ec: CONSTRUCTOR  (r2v8 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$1$TKosr_VcccEYaoxCJjoMXxLoY3g) = 
-                                                  (r9v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5$1 A[THIS])
-                                                 call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$1$TKosr_VcccEYaoxCJjoMXxLoY3g.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5$1):void type: CONSTRUCTOR)
-                                                  (2 int)
-                                                 org.telegram.tgnet.ConnectionsManager.sendRequest(org.telegram.tgnet.TLObject, org.telegram.tgnet.RequestDelegate, int):int type: VIRTUAL in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.1.run():void, dex: classes.dex
-                                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                                                	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                                                	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                                                	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:156)
-                                                	at jadx.core.codegen.RegionGen.connectElseIf(RegionGen.java:175)
-                                                	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:152)
-                                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                                                	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                                                	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                                                	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                                                	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                                	at java.util.ArrayList.forEach(ArrayList.java:1257)
-                                                	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                                	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                                	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                                	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                                	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                                	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                                	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                                	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                                	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                                	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                                                	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                                                	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                                                	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                                                	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                                                	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                                                	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                                                	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                                                	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                                                	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                                                	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                                                	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                                	at java.util.ArrayList.forEach(ArrayList.java:1257)
-                                                	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                                	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                                	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                                	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                                	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                                	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                                	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                                	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                                	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                                	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                                                	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                                                	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                                                	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                                                	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                                                	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                                                	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                                                	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                                                	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                                                	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                                                	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                                                	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                                	at java.util.ArrayList.forEach(ArrayList.java:1257)
-                                                	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                                	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                                	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                                	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                                	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                                	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                                	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                                	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                                	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                                	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                                                	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                                                	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                                	at java.util.ArrayList.forEach(ArrayList.java:1257)
-                                                	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                                	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                                	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                                	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                                	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                                	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                                	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                                	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                                	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                                	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                                                	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                                                	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                                                	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                                                	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                                                	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                                                	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x01ec: CONSTRUCTOR  (r2v8 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$1$TKosr_VcccEYaoxCJjoMXxLoY3g) = 
-                                                  (r9v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5$1 A[THIS])
-                                                 call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$1$TKosr_VcccEYaoxCJjoMXxLoY3g.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5$1):void type: CONSTRUCTOR in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.1.run():void, dex: classes.dex
-                                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                                                	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                                                	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                                                	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                                                	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                                                	... 138 more
-                                                Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$1$TKosr_VcccEYaoxCJjoMXxLoY3g, state: NOT_LOADED
-                                                	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                                                	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                                                	... 144 more
-                                                */
-                                            /*
-                                                this = this;
-                                                long r0 = java.lang.System.currentTimeMillis()
-                                                double r0 = (double) r0
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                double r2 = r2.lastCurrentTime
-                                                java.lang.Double.isNaN(r0)
-                                                double r2 = r0 - r2
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r4 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r4 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                int r5 = r4.time
-                                                double r5 = (double) r5
-                                                java.lang.Double.isNaN(r5)
-                                                double r5 = r5 - r2
-                                                int r2 = (int) r5
-                                                int unused = r4.time = r2
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                double unused = r2.lastCurrentTime = r0
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                int r0 = r0.time
-                                                r1 = 1065353216(0x3var_, float:1.0)
-                                                r2 = 3
-                                                r3 = 1000(0x3e8, float:1.401E-42)
-                                                r4 = 4
-                                                r5 = 0
-                                                r6 = 2
-                                                if (r0 < r3) goto L_0x00e3
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                int r0 = r0.time
-                                                int r0 = r0 / r3
-                                                int r0 = r0 / 60
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r7 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r7 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                int r7 = r7.time
-                                                int r7 = r7 / r3
-                                                int r3 = r0 * 60
-                                                int r7 = r7 - r3
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r3 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r3 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                int r3 = r3.nextType
-                                                r8 = 1
-                                                if (r3 == r4) goto L_0x0096
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r3 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r3 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                int r3 = r3.nextType
-                                                if (r3 != r2) goto L_0x0069
-                                                goto L_0x0096
-                                            L_0x0069:
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                int r2 = r2.nextType
-                                                if (r2 != r6) goto L_0x00b8
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                android.widget.TextView r2 = r2.timeText
-                                                r3 = 2131626877(0x7f0e0b7d, float:1.8881003E38)
-                                                java.lang.Object[] r4 = new java.lang.Object[r6]
-                                                java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
-                                                r4[r5] = r0
-                                                java.lang.Integer r0 = java.lang.Integer.valueOf(r7)
-                                                r4[r8] = r0
-                                                java.lang.String r0 = "SmsText"
-                                                java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r3, r4)
-                                                r2.setText(r0)
-                                                goto L_0x00b8
-                                            L_0x0096:
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                android.widget.TextView r2 = r2.timeText
-                                                r3 = 2131624494(0x7f0e022e, float:1.887617E38)
-                                                java.lang.Object[] r4 = new java.lang.Object[r6]
-                                                java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
-                                                r4[r5] = r0
-                                                java.lang.Integer r0 = java.lang.Integer.valueOf(r7)
-                                                r4[r8] = r0
-                                                java.lang.String r0 = "CallText"
-                                                java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r3, r4)
-                                                r2.setText(r0)
-                                            L_0x00b8:
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$ProgressView r0 = r0.progressView
-                                                if (r0 == 0) goto L_0x01f2
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$ProgressView r0 = r0.progressView
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                int r2 = r2.time
-                                                float r2 = (float) r2
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r3 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r3 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                int r3 = r3.timeout
-                                                float r3 = (float) r3
-                                                float r2 = r2 / r3
-                                                float r1 = r1 - r2
-                                                r0.setProgress(r1)
-                                                goto L_0x01f2
-                                            L_0x00e3:
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$ProgressView r0 = r0.progressView
-                                                if (r0 == 0) goto L_0x00f8
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$ProgressView r0 = r0.progressView
-                                                r0.setProgress(r1)
-                                            L_0x00f8:
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                r0.destroyTimer()
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                int r0 = r0.currentType
-                                                if (r0 != r2) goto L_0x0130
-                                                org.telegram.messenger.AndroidUtilities.setWaitingForCall(r5)
-                                                org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r1 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r1 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                int r2 = org.telegram.messenger.NotificationCenter.didReceiveCall
-                                                r0.removeObserver(r1, r2)
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                boolean unused = r0.waitingForEvent = r5
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                r0.destroyCodeTimer()
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                r0.resendCode()
-                                                goto L_0x01f2
-                                            L_0x0130:
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                int r0 = r0.currentType
-                                                if (r0 == r6) goto L_0x0144
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                int r0 = r0.currentType
-                                                if (r0 != r4) goto L_0x01f2
-                                            L_0x0144:
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                int r0 = r0.nextType
-                                                if (r0 == r4) goto L_0x0189
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                int r0 = r0.nextType
-                                                if (r0 != r6) goto L_0x0159
-                                                goto L_0x0189
-                                            L_0x0159:
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                int r0 = r0.nextType
-                                                if (r0 != r2) goto L_0x01f2
-                                                org.telegram.messenger.AndroidUtilities.setWaitingForSms(r5)
-                                                org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r1 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r1 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                int r2 = org.telegram.messenger.NotificationCenter.didReceiveSmsCode
-                                                r0.removeObserver(r1, r2)
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                boolean unused = r0.waitingForEvent = r5
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                r0.destroyCodeTimer()
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                r0.resendCode()
-                                                goto L_0x01f2
-                                            L_0x0189:
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                int r0 = r0.nextType
-                                                if (r0 != r4) goto L_0x01a8
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                android.widget.TextView r0 = r0.timeText
-                                                r1 = 2131624496(0x7f0e0230, float:1.8876173E38)
-                                                java.lang.String r2 = "Calling"
-                                                java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-                                                r0.setText(r1)
-                                                goto L_0x01bc
-                                            L_0x01a8:
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                android.widget.TextView r0 = r0.timeText
-                                                r1 = 2131626752(0x7f0e0b00, float:1.888075E38)
-                                                java.lang.String r2 = "SendingSms"
-                                                java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-                                                r0.setText(r1)
-                                            L_0x01bc:
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                r0.createCodeTimer()
-                                                org.telegram.tgnet.TLRPC$TL_auth_resendCode r0 = new org.telegram.tgnet.TLRPC$TL_auth_resendCode
-                                                r0.<init>()
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r1 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r1 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                java.lang.String r1 = r1.phone
-                                                r0.phone_number = r1
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r1 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r1 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                java.lang.String r1 = r1.phoneHash
-                                                r0.phone_code_hash = r1
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 r1 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.this
-                                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r1 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
-                                                org.telegram.ui.CancelAccountDeletionActivity r1 = r1.this$0
-                                                int r1 = r1.currentAccount
-                                                org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
-                                                org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$1$TKosr_VcccEYaoxCJjoMXxLoY3g r2 = new org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$1$TKosr_VcccEYaoxCJjoMXxLoY3g
-                                                r2.<init>(r9)
-                                                r1.sendRequest(r0, r2, r6)
-                                            L_0x01f2:
-                                                return
-                                            */
-                                            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.AnonymousClass1.run():void");
-                                        }
+                            AndroidUtilities.runOnUIThread(
+                            /*  JADX ERROR: Method code generation error
+                                jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000e: INVOKE  
+                                  (wrap: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$v9twc-vDEj-DtCLASSNAMES85mxcBjlRU : 0x000b: CONSTRUCTOR  (r0v2 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$v9twc-vDEj-DtCLASSNAMES85mxcBjlRU) = 
+                                  (r1v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 A[THIS])
+                                 call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$v9twc-vDEj-DtCLASSNAMES85mxcBjlRU.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5):void type: CONSTRUCTOR)
+                                 org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.run():void, dex: classes.dex
+                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                                	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                                	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                                	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                                	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                                	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
+                                	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
+                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                                	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                                	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                                	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                                	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                                	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                                	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                                	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                                	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                                	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
+                                	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
+                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
+                                	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
+                                	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
+                                	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
+                                	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+                                	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
+                                Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000b: CONSTRUCTOR  (r0v2 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$v9twc-vDEj-DtCLASSNAMES85mxcBjlRU) = 
+                                  (r1v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 A[THIS])
+                                 call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$v9twc-vDEj-DtCLASSNAMES85mxcBjlRU.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5):void type: CONSTRUCTOR in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.run():void, dex: classes.dex
+                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                                	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                                	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                                	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                                	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                                	... 90 more
+                                Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$v9twc-vDEj-DtCLASSNAMES85mxcBjlRU, state: NOT_LOADED
+                                	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
+                                	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
+                                	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                                	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                                	... 96 more
+                                */
+                            /*
+                                this = this;
+                                org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                java.util.Timer r0 = r0.timeTimer
+                                if (r0 != 0) goto L_0x0009
+                                return
+                            L_0x0009:
+                                org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$v9twc-vDEj-DtCLASSNAMES85mxcBjlRU r0 = new org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$v9twc-vDEj-DtCLASSNAMES85mxcBjlRU
+                                r0.<init>(r1)
+                                org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
+                                return
+                            */
+                            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.run():void");
+                        }
 
-                                        public /* synthetic */ void lambda$run$1$CancelAccountDeletionActivity$LoginActivitySmsView$5$1(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                                            if (tLRPC$TL_error != null && tLRPC$TL_error.text != null) {
-                                                AndroidUtilities.runOnUIThread(
-                                                /*  JADX ERROR: Method code generation error
-                                                    jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000b: INVOKE  
-                                                      (wrap: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$1$z9uNBVal4-U1kKMzrr3JL-AbWI4 : 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$1$z9uNBVal4-U1kKMzrr3JL-AbWI4) = 
-                                                      (r0v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5$1 A[THIS])
-                                                      (r2v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
-                                                     call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$1$z9uNBVal4-U1kKMzrr3JL-AbWI4.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5$1, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR)
-                                                     org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.1.lambda$run$1$CancelAccountDeletionActivity$LoginActivitySmsView$5$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
-                                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                                                    	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                    	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                                                    	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                    	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                                                    	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                                                    	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                                                    	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                                                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                                    	at java.util.ArrayList.forEach(ArrayList.java:1257)
-                                                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                                    	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                                                    	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                                                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                                                    	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                                                    	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                                                    	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                                                    	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                                                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                                                    	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                    	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                                                    	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                    	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                                                    	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                                                    	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                                                    	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                                                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                                    	at java.util.ArrayList.forEach(ArrayList.java:1257)
-                                                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                                    	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
-                                                    	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
-                                                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                                                    	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                                                    	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                                                    	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                                                    	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                                                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
-                                                    	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
-                                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
-                                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                    	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
-                                                    	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
-                                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
-                                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
-                                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
-                                                    	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
-                                                    	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
-                                                    	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
-                                                    	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
-                                                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
-                                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                                    	at java.util.ArrayList.forEach(ArrayList.java:1257)
-                                                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                                                    	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
-                                                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
-                                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                                    	at java.util.ArrayList.forEach(ArrayList.java:1257)
-                                                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
-                                                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
-                                                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
-                                                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
-                                                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
-                                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
-                                                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
-                                                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
-                                                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
-                                                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
-                                                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
-                                                    	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
-                                                    	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
-                                                    	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
-                                                    	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
-                                                    	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
-                                                    	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$1$z9uNBVal4-U1kKMzrr3JL-AbWI4) = 
-                                                      (r0v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5$1 A[THIS])
-                                                      (r2v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
-                                                     call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$1$z9uNBVal4-U1kKMzrr3JL-AbWI4.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5$1, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.1.lambda$run$1$CancelAccountDeletionActivity$LoginActivitySmsView$5$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
-                                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
-                                                    	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
-                                                    	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
-                                                    	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
-                                                    	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
-                                                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
-                                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
-                                                    	... 129 more
-                                                    Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$1$z9uNBVal4-U1kKMzrr3JL-AbWI4, state: NOT_LOADED
-                                                    	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
-                                                    	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
-                                                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
-                                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
-                                                    	... 135 more
-                                                    */
-                                                /*
-                                                    this = this;
-                                                    if (r2 == 0) goto L_0x000e
-                                                    java.lang.String r1 = r2.text
-                                                    if (r1 == 0) goto L_0x000e
-                                                    org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$1$z9uNBVal4-U1kKMzrr3JL-AbWI4 r1 = new org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$1$z9uNBVal4-U1kKMzrr3JL-AbWI4
-                                                    r1.<init>(r0, r2)
-                                                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
-                                                L_0x000e:
-                                                    return
-                                                */
-                                                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.AnonymousClass1.lambda$run$1$CancelAccountDeletionActivity$LoginActivitySmsView$5$1(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
-                                            }
-
-                                            public /* synthetic */ void lambda$null$0$CancelAccountDeletionActivity$LoginActivitySmsView$5$1(TLRPC$TL_error tLRPC$TL_error) {
-                                                String unused = LoginActivitySmsView.this.lastError = tLRPC$TL_error.text;
-                                            }
-                                        });
-                                    }
+                        public /* synthetic */ void lambda$run$2$CancelAccountDeletionActivity$LoginActivitySmsView$5() {
+                            double currentTimeMillis = (double) System.currentTimeMillis();
+                            double access$2000 = LoginActivitySmsView.this.lastCurrentTime;
+                            Double.isNaN(currentTimeMillis);
+                            LoginActivitySmsView loginActivitySmsView = LoginActivitySmsView.this;
+                            double access$2100 = (double) loginActivitySmsView.time;
+                            Double.isNaN(access$2100);
+                            int unused = loginActivitySmsView.time = (int) (access$2100 - (currentTimeMillis - access$2000));
+                            double unused2 = LoginActivitySmsView.this.lastCurrentTime = currentTimeMillis;
+                            if (LoginActivitySmsView.this.time >= 1000) {
+                                int access$21002 = (LoginActivitySmsView.this.time / 1000) / 60;
+                                int access$21003 = (LoginActivitySmsView.this.time / 1000) - (access$21002 * 60);
+                                if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 3) {
+                                    LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("CallText", NUM, Integer.valueOf(access$21002), Integer.valueOf(access$21003)));
+                                } else if (LoginActivitySmsView.this.nextType == 2) {
+                                    LoginActivitySmsView.this.timeText.setText(LocaleController.formatString("SmsText", NUM, Integer.valueOf(access$21002), Integer.valueOf(access$21003)));
                                 }
-                            }, 0, 1000);
-                        }
-                    }
-
-                    /* access modifiers changed from: private */
-                    public void destroyTimer() {
-                        try {
-                            synchronized (this.timerSync) {
-                                if (this.timeTimer != null) {
-                                    this.timeTimer.cancel();
-                                    this.timeTimer = null;
+                                if (LoginActivitySmsView.this.progressView != null) {
+                                    LoginActivitySmsView.this.progressView.setProgress(1.0f - (((float) LoginActivitySmsView.this.time) / ((float) LoginActivitySmsView.this.timeout)));
+                                    return;
                                 }
-                            }
-                        } catch (Exception e) {
-                            FileLog.e((Throwable) e);
-                        }
-                    }
-
-                    /* access modifiers changed from: private */
-                    public String getCode() {
-                        if (this.codeField == null) {
-                            return "";
-                        }
-                        StringBuilder sb = new StringBuilder();
-                        int i = 0;
-                        while (true) {
-                            EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
-                            if (i >= editTextBoldCursorArr.length) {
-                                return sb.toString();
-                            }
-                            sb.append(PhoneFormat.stripExceptNumbers(editTextBoldCursorArr[i].getText().toString()));
-                            i++;
-                        }
-                    }
-
-                    public void onNextPressed() {
-                        if (!this.nextPressed) {
-                            String code = getCode();
-                            if (TextUtils.isEmpty(code)) {
-                                AndroidUtilities.shakeView(this.codeFieldContainer, 2.0f, 0);
                                 return;
                             }
-                            this.nextPressed = true;
+                            if (LoginActivitySmsView.this.progressView != null) {
+                                LoginActivitySmsView.this.progressView.setProgress(1.0f);
+                            }
+                            LoginActivitySmsView.this.destroyTimer();
+                            if (LoginActivitySmsView.this.currentType == 3) {
+                                AndroidUtilities.setWaitingForCall(false);
+                                NotificationCenter.getGlobalInstance().removeObserver(LoginActivitySmsView.this, NotificationCenter.didReceiveCall);
+                                boolean unused3 = LoginActivitySmsView.this.waitingForEvent = false;
+                                LoginActivitySmsView.this.destroyCodeTimer();
+                                LoginActivitySmsView.this.resendCode();
+                            } else if (LoginActivitySmsView.this.currentType != 2 && LoginActivitySmsView.this.currentType != 4) {
+                            } else {
+                                if (LoginActivitySmsView.this.nextType == 4 || LoginActivitySmsView.this.nextType == 2) {
+                                    if (LoginActivitySmsView.this.nextType == 4) {
+                                        LoginActivitySmsView.this.timeText.setText(LocaleController.getString("Calling", NUM));
+                                    } else {
+                                        LoginActivitySmsView.this.timeText.setText(LocaleController.getString("SendingSms", NUM));
+                                    }
+                                    LoginActivitySmsView.this.createCodeTimer();
+                                    TLRPC$TL_auth_resendCode tLRPC$TL_auth_resendCode = new TLRPC$TL_auth_resendCode();
+                                    tLRPC$TL_auth_resendCode.phone_number = LoginActivitySmsView.this.phone;
+                                    tLRPC$TL_auth_resendCode.phone_code_hash = LoginActivitySmsView.this.phoneHash;
+                                    ConnectionsManager.getInstance(LoginActivitySmsView.this.this$0.currentAccount).sendRequest(tLRPC$TL_auth_resendCode, 
+                                    /*  JADX ERROR: Method code generation error
+                                        jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x01a1: INVOKE  
+                                          (wrap: org.telegram.tgnet.ConnectionsManager : 0x0198: INVOKE  (r1v8 org.telegram.tgnet.ConnectionsManager) = 
+                                          (wrap: int : 0x0194: INVOKE  (r1v7 int) = 
+                                          (wrap: org.telegram.ui.CancelAccountDeletionActivity : 0x0192: IGET  (r1v6 org.telegram.ui.CancelAccountDeletionActivity) = 
+                                          (wrap: org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView : 0x0190: IGET  (r1v5 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView) = 
+                                          (r9v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 A[THIS])
+                                         org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.this$1 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView)
+                                         org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this$0 org.telegram.ui.CancelAccountDeletionActivity)
+                                         org.telegram.ui.CancelAccountDeletionActivity.access$3200(org.telegram.ui.CancelAccountDeletionActivity):int type: STATIC)
+                                         org.telegram.tgnet.ConnectionsManager.getInstance(int):org.telegram.tgnet.ConnectionsManager type: STATIC)
+                                          (r0v16 'tLRPC$TL_auth_resendCode' org.telegram.tgnet.TLRPC$TL_auth_resendCode)
+                                          (wrap: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$QP1BdKb2RoxYIoOcp4Zhi4s3kCA : 0x019e: CONSTRUCTOR  (r2v6 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$QP1BdKb2RoxYIoOcp4Zhi4s3kCA) = 
+                                          (r9v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 A[THIS])
+                                         call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$QP1BdKb2RoxYIoOcp4Zhi4s3kCA.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5):void type: CONSTRUCTOR)
+                                          (2 int)
+                                         org.telegram.tgnet.ConnectionsManager.sendRequest(org.telegram.tgnet.TLObject, org.telegram.tgnet.RequestDelegate, int):int type: VIRTUAL in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.lambda$run$2$CancelAccountDeletionActivity$LoginActivitySmsView$5():void, dex: classes.dex
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                        	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                        	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                        	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                        	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:156)
+                                        	at jadx.core.codegen.RegionGen.connectElseIf(RegionGen.java:175)
+                                        	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:152)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                        	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
+                                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
+                                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                        	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                        	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                        	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                        	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                        	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                                        	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                                        	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                                        	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                        	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
+                                        	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
+                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                        	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                        	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                        	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                        	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                        	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                        	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                        	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                        	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                        	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                        	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                        	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                        	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
+                                        	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
+                                        	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
+                                        	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
+                                        	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+                                        	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
+                                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x019e: CONSTRUCTOR  (r2v6 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$QP1BdKb2RoxYIoOcp4Zhi4s3kCA) = 
+                                          (r9v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 A[THIS])
+                                         call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$QP1BdKb2RoxYIoOcp4Zhi4s3kCA.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5):void type: CONSTRUCTOR in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.lambda$run$2$CancelAccountDeletionActivity$LoginActivitySmsView$5():void, dex: classes.dex
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                                        	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                                        	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                                        	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                                        	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                                        	... 99 more
+                                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$QP1BdKb2RoxYIoOcp4Zhi4s3kCA, state: NOT_LOADED
+                                        	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
+                                        	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
+                                        	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                                        	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                                        	... 105 more
+                                        */
+                                    /*
+                                        this = this;
+                                        long r0 = java.lang.System.currentTimeMillis()
+                                        double r0 = (double) r0
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        double r2 = r2.lastCurrentTime
+                                        java.lang.Double.isNaN(r0)
+                                        double r2 = r0 - r2
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r4 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        int r5 = r4.time
+                                        double r5 = (double) r5
+                                        java.lang.Double.isNaN(r5)
+                                        double r5 = r5 - r2
+                                        int r2 = (int) r5
+                                        int unused = r4.time = r2
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        double unused = r2.lastCurrentTime = r0
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        int r0 = r0.time
+                                        r1 = 1065353216(0x3var_, float:1.0)
+                                        r2 = 3
+                                        r3 = 1000(0x3e8, float:1.401E-42)
+                                        r4 = 4
+                                        r5 = 0
+                                        r6 = 2
+                                        if (r0 < r3) goto L_0x00c5
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        int r0 = r0.time
+                                        int r0 = r0 / r3
+                                        int r0 = r0 / 60
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r7 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        int r7 = r7.time
+                                        int r7 = r7 / r3
+                                        int r3 = r0 * 60
+                                        int r7 = r7 - r3
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r3 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        int r3 = r3.nextType
+                                        r8 = 1
+                                        if (r3 == r4) goto L_0x0082
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r3 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        int r3 = r3.nextType
+                                        if (r3 != r2) goto L_0x0059
+                                        goto L_0x0082
+                                    L_0x0059:
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        int r2 = r2.nextType
+                                        if (r2 != r6) goto L_0x00a2
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        android.widget.TextView r2 = r2.timeText
+                                        r3 = 2131626945(0x7f0e0bc1, float:1.888114E38)
+                                        java.lang.Object[] r4 = new java.lang.Object[r6]
+                                        java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
+                                        r4[r5] = r0
+                                        java.lang.Integer r0 = java.lang.Integer.valueOf(r7)
+                                        r4[r8] = r0
+                                        java.lang.String r0 = "SmsText"
+                                        java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r3, r4)
+                                        r2.setText(r0)
+                                        goto L_0x00a2
+                                    L_0x0082:
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        android.widget.TextView r2 = r2.timeText
+                                        r3 = 2131624503(0x7f0e0237, float:1.8876188E38)
+                                        java.lang.Object[] r4 = new java.lang.Object[r6]
+                                        java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
+                                        r4[r5] = r0
+                                        java.lang.Integer r0 = java.lang.Integer.valueOf(r7)
+                                        r4[r8] = r0
+                                        java.lang.String r0 = "CallText"
+                                        java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r0, r3, r4)
+                                        r2.setText(r0)
+                                    L_0x00a2:
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        org.telegram.ui.CancelAccountDeletionActivity$ProgressView r0 = r0.progressView
+                                        if (r0 == 0) goto L_0x01a4
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        org.telegram.ui.CancelAccountDeletionActivity$ProgressView r0 = r0.progressView
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        int r2 = r2.time
+                                        float r2 = (float) r2
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r3 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        int r3 = r3.timeout
+                                        float r3 = (float) r3
+                                        float r2 = r2 / r3
+                                        float r1 = r1 - r2
+                                        r0.setProgress(r1)
+                                        goto L_0x01a4
+                                    L_0x00c5:
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        org.telegram.ui.CancelAccountDeletionActivity$ProgressView r0 = r0.progressView
+                                        if (r0 == 0) goto L_0x00d6
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        org.telegram.ui.CancelAccountDeletionActivity$ProgressView r0 = r0.progressView
+                                        r0.setProgress(r1)
+                                    L_0x00d6:
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        r0.destroyTimer()
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        int r0 = r0.currentType
+                                        if (r0 != r2) goto L_0x0102
+                                        org.telegram.messenger.AndroidUtilities.setWaitingForCall(r5)
+                                        org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r1 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        int r2 = org.telegram.messenger.NotificationCenter.didReceiveCall
+                                        r0.removeObserver(r1, r2)
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        boolean unused = r0.waitingForEvent = r5
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        r0.destroyCodeTimer()
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        r0.resendCode()
+                                        goto L_0x01a4
+                                    L_0x0102:
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        int r0 = r0.currentType
+                                        if (r0 == r6) goto L_0x0112
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        int r0 = r0.currentType
+                                        if (r0 != r4) goto L_0x01a4
+                                    L_0x0112:
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        int r0 = r0.nextType
+                                        if (r0 == r4) goto L_0x0149
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        int r0 = r0.nextType
+                                        if (r0 != r6) goto L_0x0123
+                                        goto L_0x0149
+                                    L_0x0123:
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        int r0 = r0.nextType
+                                        if (r0 != r2) goto L_0x01a4
+                                        org.telegram.messenger.AndroidUtilities.setWaitingForSms(r5)
+                                        org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r1 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        int r2 = org.telegram.messenger.NotificationCenter.didReceiveSmsCode
+                                        r0.removeObserver(r1, r2)
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        boolean unused = r0.waitingForEvent = r5
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        r0.destroyCodeTimer()
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        r0.resendCode()
+                                        goto L_0x01a4
+                                    L_0x0149:
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        int r0 = r0.nextType
+                                        if (r0 != r4) goto L_0x0164
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        android.widget.TextView r0 = r0.timeText
+                                        r1 = 2131624505(0x7f0e0239, float:1.8876192E38)
+                                        java.lang.String r2 = "Calling"
+                                        java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+                                        r0.setText(r1)
+                                        goto L_0x0176
+                                    L_0x0164:
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        android.widget.TextView r0 = r0.timeText
+                                        r1 = 2131626819(0x7f0e0b43, float:1.8880885E38)
+                                        java.lang.String r2 = "SendingSms"
+                                        java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
+                                        r0.setText(r1)
+                                    L_0x0176:
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        r0.createCodeTimer()
+                                        org.telegram.tgnet.TLRPC$TL_auth_resendCode r0 = new org.telegram.tgnet.TLRPC$TL_auth_resendCode
+                                        r0.<init>()
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r1 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        java.lang.String r1 = r1.phone
+                                        r0.phone_number = r1
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r1 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        java.lang.String r1 = r1.phoneHash
+                                        r0.phone_code_hash = r1
+                                        org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r1 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
+                                        org.telegram.ui.CancelAccountDeletionActivity r1 = r1.this$0
+                                        int r1 = r1.currentAccount
+                                        org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)
+                                        org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$QP1BdKb2RoxYIoOcp4Zhi4s3kCA r2 = new org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$QP1BdKb2RoxYIoOcp4Zhi4s3kCA
+                                        r2.<init>(r9)
+                                        r1.sendRequest(r0, r2, r6)
+                                    L_0x01a4:
+                                        return
+                                    */
+                                    throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.lambda$run$2$CancelAccountDeletionActivity$LoginActivitySmsView$5():void");
+                                }
+
+                                public /* synthetic */ void lambda$null$1$CancelAccountDeletionActivity$LoginActivitySmsView$5(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                                    if (tLRPC$TL_error != null && tLRPC$TL_error.text != null) {
+                                        AndroidUtilities.runOnUIThread(
+                                        /*  JADX ERROR: Method code generation error
+                                            jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x000b: INVOKE  
+                                              (wrap: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$NQWF_jcL11igcRRfHG6mqbnPvc4 : 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$NQWF_jcL11igcRRfHG6mqbnPvc4) = 
+                                              (r0v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 A[THIS])
+                                              (r2v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
+                                             call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$NQWF_jcL11igcRRfHG6mqbnPvc4.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR)
+                                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.lambda$null$1$CancelAccountDeletionActivity$LoginActivitySmsView$5(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                                            	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                            	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                            	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                            	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                                            	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                                            	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                                            	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                            	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
+                                            	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
+                                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                                            	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                                            	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                                            	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                                            	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                            	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                            	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                            	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                                            	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                                            	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                                            	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                            	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                            	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
+                                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
+                                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                            	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                            	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
+                                            	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
+                                            	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
+                                            	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
+                                            	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+                                            	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
+                                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$NQWF_jcL11igcRRfHG6mqbnPvc4) = 
+                                              (r0v0 'this' org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5 A[THIS])
+                                              (r2v0 'tLRPC$TL_error' org.telegram.tgnet.TLRPC$TL_error)
+                                             call: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$NQWF_jcL11igcRRfHG6mqbnPvc4.<init>(org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$5, org.telegram.tgnet.TLRPC$TL_error):void type: CONSTRUCTOR in method: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.5.lambda$null$1$CancelAccountDeletionActivity$LoginActivitySmsView$5(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void, dex: classes.dex
+                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                                            	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                                            	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                                            	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                                            	... 90 more
+                                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$NQWF_jcL11igcRRfHG6mqbnPvc4, state: NOT_LOADED
+                                            	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
+                                            	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
+                                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                                            	... 96 more
+                                            */
+                                        /*
+                                            this = this;
+                                            if (r2 == 0) goto L_0x000e
+                                            java.lang.String r1 = r2.text
+                                            if (r1 == 0) goto L_0x000e
+                                            org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$NQWF_jcL11igcRRfHG6mqbnPvc4 r1 = new org.telegram.ui.-$$Lambda$CancelAccountDeletionActivity$LoginActivitySmsView$5$NQWF_jcL11igcRRfHG6mqbnPvc4
+                                            r1.<init>(r0, r2)
+                                            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
+                                        L_0x000e:
+                                            return
+                                        */
+                                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.AnonymousClass5.lambda$null$1$CancelAccountDeletionActivity$LoginActivitySmsView$5(org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
+                                    }
+
+                                    public /* synthetic */ void lambda$null$0$CancelAccountDeletionActivity$LoginActivitySmsView$5(TLRPC$TL_error tLRPC$TL_error) {
+                                        String unused = LoginActivitySmsView.this.lastError = tLRPC$TL_error.text;
+                                    }
+                                }, 0, 1000);
+                            }
+                        }
+
+                        /* access modifiers changed from: private */
+                        public void destroyTimer() {
+                            try {
+                                synchronized (this.timerSync) {
+                                    if (this.timeTimer != null) {
+                                        this.timeTimer.cancel();
+                                        this.timeTimer = null;
+                                    }
+                                }
+                            } catch (Exception e) {
+                                FileLog.e((Throwable) e);
+                            }
+                        }
+
+                        /* access modifiers changed from: private */
+                        public String getCode() {
+                            if (this.codeField == null) {
+                                return "";
+                            }
+                            StringBuilder sb = new StringBuilder();
+                            int i = 0;
+                            while (true) {
+                                EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
+                                if (i >= editTextBoldCursorArr.length) {
+                                    return sb.toString();
+                                }
+                                sb.append(PhoneFormat.stripExceptNumbers(editTextBoldCursorArr[i].getText().toString()));
+                                i++;
+                            }
+                        }
+
+                        public void onNextPressed() {
+                            if (!this.nextPressed) {
+                                String code = getCode();
+                                if (TextUtils.isEmpty(code)) {
+                                    AndroidUtilities.shakeView(this.codeFieldContainer, 2.0f, 0);
+                                    return;
+                                }
+                                this.nextPressed = true;
+                                int i = this.currentType;
+                                if (i == 2) {
+                                    AndroidUtilities.setWaitingForSms(false);
+                                    NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
+                                } else if (i == 3) {
+                                    AndroidUtilities.setWaitingForCall(false);
+                                    NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
+                                }
+                                this.waitingForEvent = false;
+                                TLRPC$TL_account_confirmPhone tLRPC$TL_account_confirmPhone = new TLRPC$TL_account_confirmPhone();
+                                tLRPC$TL_account_confirmPhone.phone_code = code;
+                                tLRPC$TL_account_confirmPhone.phone_code_hash = this.phoneHash;
+                                destroyTimer();
+                                this.this$0.needShowProgress();
+                                ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_account_confirmPhone, new RequestDelegate(tLRPC$TL_account_confirmPhone) {
+                                    public final /* synthetic */ TLRPC$TL_account_confirmPhone f$1;
+
+                                    {
+                                        this.f$1 = r2;
+                                    }
+
+                                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                                        CancelAccountDeletionActivity.LoginActivitySmsView.this.lambda$onNextPressed$7$CancelAccountDeletionActivity$LoginActivitySmsView(this.f$1, tLObject, tLRPC$TL_error);
+                                    }
+                                }, 2);
+                            }
+                        }
+
+                        public /* synthetic */ void lambda$onNextPressed$7$CancelAccountDeletionActivity$LoginActivitySmsView(TLRPC$TL_account_confirmPhone tLRPC$TL_account_confirmPhone, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                            AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLRPC$TL_account_confirmPhone) {
+                                public final /* synthetic */ TLRPC$TL_error f$1;
+                                public final /* synthetic */ TLRPC$TL_account_confirmPhone f$2;
+
+                                {
+                                    this.f$1 = r2;
+                                    this.f$2 = r3;
+                                }
+
+                                public final void run() {
+                                    CancelAccountDeletionActivity.LoginActivitySmsView.this.lambda$null$6$CancelAccountDeletionActivity$LoginActivitySmsView(this.f$1, this.f$2);
+                                }
+                            });
+                        }
+
+                        public /* synthetic */ void lambda$null$6$CancelAccountDeletionActivity$LoginActivitySmsView(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_confirmPhone tLRPC$TL_account_confirmPhone) {
+                            int i;
+                            int i2;
+                            this.this$0.needHideProgress();
+                            this.nextPressed = false;
+                            if (tLRPC$TL_error == null) {
+                                CancelAccountDeletionActivity cancelAccountDeletionActivity = this.this$0;
+                                PhoneFormat instance = PhoneFormat.getInstance();
+                                Dialog unused = cancelAccountDeletionActivity.errorDialog = AlertsCreator.showSimpleAlert(cancelAccountDeletionActivity, LocaleController.formatString("CancelLinkSuccess", NUM, instance.format("+" + this.phone)));
+                                return;
+                            }
+                            this.lastError = tLRPC$TL_error.text;
+                            if ((this.currentType == 3 && ((i2 = this.nextType) == 4 || i2 == 2)) || ((this.currentType == 2 && ((i = this.nextType) == 4 || i == 3)) || (this.currentType == 4 && this.nextType == 2))) {
+                                createTimer();
+                            }
+                            int i3 = this.currentType;
+                            if (i3 == 2) {
+                                AndroidUtilities.setWaitingForSms(true);
+                                NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveSmsCode);
+                            } else if (i3 == 3) {
+                                AndroidUtilities.setWaitingForCall(true);
+                                NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveCall);
+                            }
+                            this.waitingForEvent = true;
+                            if (this.currentType != 3) {
+                                AlertsCreator.processError(this.this$0.currentAccount, tLRPC$TL_error, this.this$0, tLRPC$TL_account_confirmPhone, new Object[0]);
+                            }
+                            if (tLRPC$TL_error.text.contains("PHONE_CODE_EMPTY") || tLRPC$TL_error.text.contains("PHONE_CODE_INVALID")) {
+                                int i4 = 0;
+                                while (true) {
+                                    EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
+                                    if (i4 < editTextBoldCursorArr.length) {
+                                        editTextBoldCursorArr[i4].setText("");
+                                        i4++;
+                                    } else {
+                                        editTextBoldCursorArr[0].requestFocus();
+                                        return;
+                                    }
+                                }
+                            } else if (tLRPC$TL_error.text.contains("PHONE_CODE_EXPIRED")) {
+                                onBackPressed(true);
+                                this.this$0.setPage(0, true, (Bundle) null, true);
+                            }
+                        }
+
+                        public void onDestroyActivity() {
+                            super.onDestroyActivity();
                             int i = this.currentType;
                             if (i == 2) {
                                 AndroidUtilities.setWaitingForSms(false);
@@ -2049,218 +2150,128 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                 NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
                             }
                             this.waitingForEvent = false;
-                            TLRPC$TL_account_confirmPhone tLRPC$TL_account_confirmPhone = new TLRPC$TL_account_confirmPhone();
-                            tLRPC$TL_account_confirmPhone.phone_code = code;
-                            tLRPC$TL_account_confirmPhone.phone_code_hash = this.phoneHash;
                             destroyTimer();
-                            this.this$0.needShowProgress();
-                            ConnectionsManager.getInstance(this.this$0.currentAccount).sendRequest(tLRPC$TL_account_confirmPhone, new RequestDelegate(tLRPC$TL_account_confirmPhone) {
-                                public final /* synthetic */ TLRPC$TL_account_confirmPhone f$1;
-
-                                {
-                                    this.f$1 = r2;
-                                }
-
-                                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                                    CancelAccountDeletionActivity.LoginActivitySmsView.this.lambda$onNextPressed$7$CancelAccountDeletionActivity$LoginActivitySmsView(this.f$1, tLObject, tLRPC$TL_error);
-                                }
-                            }, 2);
+                            destroyCodeTimer();
                         }
-                    }
 
-                    public /* synthetic */ void lambda$onNextPressed$7$CancelAccountDeletionActivity$LoginActivitySmsView(TLRPC$TL_account_confirmPhone tLRPC$TL_account_confirmPhone, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLRPC$TL_account_confirmPhone) {
-                            public final /* synthetic */ TLRPC$TL_error f$1;
-                            public final /* synthetic */ TLRPC$TL_account_confirmPhone f$2;
-
-                            {
-                                this.f$1 = r2;
-                                this.f$2 = r3;
+                        public void onShow() {
+                            super.onShow();
+                            if (this.currentType != 3) {
+                                AndroidUtilities.runOnUIThread(new Runnable() {
+                                    public final void run() {
+                                        CancelAccountDeletionActivity.LoginActivitySmsView.this.lambda$onShow$8$CancelAccountDeletionActivity$LoginActivitySmsView();
+                                    }
+                                }, 100);
                             }
+                        }
 
-                            public final void run() {
-                                CancelAccountDeletionActivity.LoginActivitySmsView.this.lambda$null$6$CancelAccountDeletionActivity$LoginActivitySmsView(this.f$1, this.f$2);
-                            }
-                        });
-                    }
-
-                    public /* synthetic */ void lambda$null$6$CancelAccountDeletionActivity$LoginActivitySmsView(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_confirmPhone tLRPC$TL_account_confirmPhone) {
-                        int i;
-                        int i2;
-                        this.this$0.needHideProgress();
-                        this.nextPressed = false;
-                        if (tLRPC$TL_error == null) {
-                            CancelAccountDeletionActivity cancelAccountDeletionActivity = this.this$0;
-                            PhoneFormat instance = PhoneFormat.getInstance();
-                            Dialog unused = cancelAccountDeletionActivity.errorDialog = AlertsCreator.showSimpleAlert(cancelAccountDeletionActivity, LocaleController.formatString("CancelLinkSuccess", NUM, instance.format("+" + this.phone)));
-                            return;
-                        }
-                        this.lastError = tLRPC$TL_error.text;
-                        if ((this.currentType == 3 && ((i2 = this.nextType) == 4 || i2 == 2)) || ((this.currentType == 2 && ((i = this.nextType) == 4 || i == 3)) || (this.currentType == 4 && this.nextType == 2))) {
-                            createTimer();
-                        }
-                        int i3 = this.currentType;
-                        if (i3 == 2) {
-                            AndroidUtilities.setWaitingForSms(true);
-                            NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveSmsCode);
-                        } else if (i3 == 3) {
-                            AndroidUtilities.setWaitingForCall(true);
-                            NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.didReceiveCall);
-                        }
-                        this.waitingForEvent = true;
-                        if (this.currentType != 3) {
-                            AlertsCreator.processError(this.this$0.currentAccount, tLRPC$TL_error, this.this$0, tLRPC$TL_account_confirmPhone, new Object[0]);
-                        }
-                        if (tLRPC$TL_error.text.contains("PHONE_CODE_EMPTY") || tLRPC$TL_error.text.contains("PHONE_CODE_INVALID")) {
-                            int i4 = 0;
-                            while (true) {
-                                EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
-                                if (i4 < editTextBoldCursorArr.length) {
-                                    editTextBoldCursorArr[i4].setText("");
-                                    i4++;
-                                } else {
-                                    editTextBoldCursorArr[0].requestFocus();
-                                    return;
-                                }
-                            }
-                        } else if (tLRPC$TL_error.text.contains("PHONE_CODE_EXPIRED")) {
-                            onBackPressed(true);
-                            this.this$0.setPage(0, true, (Bundle) null, true);
-                        }
-                    }
-
-                    public void onDestroyActivity() {
-                        super.onDestroyActivity();
-                        int i = this.currentType;
-                        if (i == 2) {
-                            AndroidUtilities.setWaitingForSms(false);
-                            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveSmsCode);
-                        } else if (i == 3) {
-                            AndroidUtilities.setWaitingForCall(false);
-                            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didReceiveCall);
-                        }
-                        this.waitingForEvent = false;
-                        destroyTimer();
-                        destroyCodeTimer();
-                    }
-
-                    public void onShow() {
-                        super.onShow();
-                        if (this.currentType != 3) {
-                            AndroidUtilities.runOnUIThread(new Runnable() {
-                                public final void run() {
-                                    CancelAccountDeletionActivity.LoginActivitySmsView.this.lambda$onShow$8$CancelAccountDeletionActivity$LoginActivitySmsView();
-                                }
-                            }, 100);
-                        }
-                    }
-
-                    public /* synthetic */ void lambda$onShow$8$CancelAccountDeletionActivity$LoginActivitySmsView() {
-                        EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
-                        if (editTextBoldCursorArr != null) {
-                            for (int length2 = editTextBoldCursorArr.length - 1; length2 >= 0; length2--) {
-                                if (length2 == 0 || this.codeField[length2].length() != 0) {
-                                    this.codeField[length2].requestFocus();
-                                    EditTextBoldCursor[] editTextBoldCursorArr2 = this.codeField;
-                                    editTextBoldCursorArr2[length2].setSelection(editTextBoldCursorArr2[length2].length());
-                                    AndroidUtilities.showKeyboard(this.codeField[length2]);
-                                    return;
+                        public /* synthetic */ void lambda$onShow$8$CancelAccountDeletionActivity$LoginActivitySmsView() {
+                            EditTextBoldCursor[] editTextBoldCursorArr = this.codeField;
+                            if (editTextBoldCursorArr != null) {
+                                for (int length2 = editTextBoldCursorArr.length - 1; length2 >= 0; length2--) {
+                                    if (length2 == 0 || this.codeField[length2].length() != 0) {
+                                        this.codeField[length2].requestFocus();
+                                        EditTextBoldCursor[] editTextBoldCursorArr2 = this.codeField;
+                                        editTextBoldCursorArr2[length2].setSelection(editTextBoldCursorArr2[length2].length());
+                                        AndroidUtilities.showKeyboard(this.codeField[length2]);
+                                        return;
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    public void didReceivedNotification(int i, int i2, Object... objArr) {
-                        EditTextBoldCursor[] editTextBoldCursorArr;
-                        if (this.waitingForEvent && (editTextBoldCursorArr = this.codeField) != null) {
-                            if (i == NotificationCenter.didReceiveSmsCode) {
-                                editTextBoldCursorArr[0].setText("" + objArr[0]);
-                                onNextPressed();
-                            } else if (i == NotificationCenter.didReceiveCall) {
-                                String str = "" + objArr[0];
-                                if (AndroidUtilities.checkPhonePattern(this.pattern, str)) {
-                                    this.ignoreOnTextChange = true;
-                                    this.codeField[0].setText(str);
-                                    this.ignoreOnTextChange = false;
+                        public void didReceivedNotification(int i, int i2, Object... objArr) {
+                            EditTextBoldCursor[] editTextBoldCursorArr;
+                            if (this.waitingForEvent && (editTextBoldCursorArr = this.codeField) != null) {
+                                if (i == NotificationCenter.didReceiveSmsCode) {
+                                    editTextBoldCursorArr[0].setText("" + objArr[0]);
                                     onNextPressed();
+                                } else if (i == NotificationCenter.didReceiveCall) {
+                                    String str = "" + objArr[0];
+                                    if (AndroidUtilities.checkPhonePattern(this.pattern, str)) {
+                                        this.ignoreOnTextChange = true;
+                                        this.codeField[0].setText(str);
+                                        this.ignoreOnTextChange = false;
+                                        onNextPressed();
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                public ArrayList<ThemeDescription> getThemeDescriptions() {
-                    SlideView[] slideViewArr = this.views;
-                    LoginActivitySmsView loginActivitySmsView = (LoginActivitySmsView) slideViewArr[1];
-                    LoginActivitySmsView loginActivitySmsView2 = (LoginActivitySmsView) slideViewArr[2];
-                    LoginActivitySmsView loginActivitySmsView3 = (LoginActivitySmsView) slideViewArr[3];
-                    LoginActivitySmsView loginActivitySmsView4 = (LoginActivitySmsView) slideViewArr[4];
-                    ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-                    ThemeDescription themeDescription = r9;
-                    ThemeDescription themeDescription2 = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite");
-                    arrayList.add(themeDescription);
-                    arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
-                    arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
-                    arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
-                    arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"));
-                    arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
-                    arrayList.add(new ThemeDescription(((PhoneView) slideViewArr[0]).progressBar, ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                    if (loginActivitySmsView.codeField != null) {
-                        for (int i = 0; i < loginActivitySmsView.codeField.length; i++) {
-                            arrayList.add(new ThemeDescription(loginActivitySmsView.codeField[i], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                            arrayList.add(new ThemeDescription(loginActivitySmsView.codeField[i], ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+                    public ArrayList<ThemeDescription> getThemeDescriptions() {
+                        SlideView[] slideViewArr = this.views;
+                        LoginActivitySmsView loginActivitySmsView = (LoginActivitySmsView) slideViewArr[1];
+                        LoginActivitySmsView loginActivitySmsView2 = (LoginActivitySmsView) slideViewArr[2];
+                        LoginActivitySmsView loginActivitySmsView3 = (LoginActivitySmsView) slideViewArr[3];
+                        LoginActivitySmsView loginActivitySmsView4 = (LoginActivitySmsView) slideViewArr[4];
+                        ArrayList<ThemeDescription> arrayList = new ArrayList<>();
+                        ThemeDescription themeDescription = r9;
+                        ThemeDescription themeDescription2 = new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhite");
+                        arrayList.add(themeDescription);
+                        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
+                        arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefault"));
+                        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_ITEMSCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultIcon"));
+                        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_TITLECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultTitle"));
+                        arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultSelector"));
+                        arrayList.add(new ThemeDescription(((PhoneView) slideViewArr[0]).progressBar, ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView.confirmTextView, ThemeDescription.FLAG_LINKCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteLinkText"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        if (loginActivitySmsView.codeField != null) {
+                            for (int i = 0; i < loginActivitySmsView.codeField.length; i++) {
+                                arrayList.add(new ThemeDescription(loginActivitySmsView.codeField[i], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                                arrayList.add(new ThemeDescription(loginActivitySmsView.codeField[i], ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+                            }
                         }
-                    }
-                    arrayList.add(new ThemeDescription(loginActivitySmsView.timeText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView.problemText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
-                    arrayList.add(new ThemeDescription((View) loginActivitySmsView.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressInner"));
-                    arrayList.add(new ThemeDescription((View) loginActivitySmsView.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressOuter"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionBackground"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView2.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView2.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                    if (loginActivitySmsView2.codeField != null) {
-                        for (int i2 = 0; i2 < loginActivitySmsView2.codeField.length; i2++) {
-                            arrayList.add(new ThemeDescription(loginActivitySmsView2.codeField[i2], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                            arrayList.add(new ThemeDescription(loginActivitySmsView2.codeField[i2], ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView.timeText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView.problemText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
+                        arrayList.add(new ThemeDescription((View) loginActivitySmsView.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressInner"));
+                        arrayList.add(new ThemeDescription((View) loginActivitySmsView.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressOuter"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionBackground"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView2.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView2.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        if (loginActivitySmsView2.codeField != null) {
+                            for (int i2 = 0; i2 < loginActivitySmsView2.codeField.length; i2++) {
+                                arrayList.add(new ThemeDescription(loginActivitySmsView2.codeField[i2], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                                arrayList.add(new ThemeDescription(loginActivitySmsView2.codeField[i2], ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+                            }
                         }
-                    }
-                    arrayList.add(new ThemeDescription(loginActivitySmsView2.timeText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView2.problemText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
-                    arrayList.add(new ThemeDescription((View) loginActivitySmsView2.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressInner"));
-                    arrayList.add(new ThemeDescription((View) loginActivitySmsView2.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressOuter"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView2.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView2.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionBackground"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView3.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView3.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                    if (loginActivitySmsView3.codeField != null) {
-                        for (int i3 = 0; i3 < loginActivitySmsView3.codeField.length; i3++) {
-                            arrayList.add(new ThemeDescription(loginActivitySmsView3.codeField[i3], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                            arrayList.add(new ThemeDescription(loginActivitySmsView3.codeField[i3], ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView2.timeText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView2.problemText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
+                        arrayList.add(new ThemeDescription((View) loginActivitySmsView2.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressInner"));
+                        arrayList.add(new ThemeDescription((View) loginActivitySmsView2.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressOuter"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView2.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView2.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionBackground"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView3.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView3.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        if (loginActivitySmsView3.codeField != null) {
+                            for (int i3 = 0; i3 < loginActivitySmsView3.codeField.length; i3++) {
+                                arrayList.add(new ThemeDescription(loginActivitySmsView3.codeField[i3], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                                arrayList.add(new ThemeDescription(loginActivitySmsView3.codeField[i3], ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+                            }
                         }
-                    }
-                    arrayList.add(new ThemeDescription(loginActivitySmsView3.timeText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView3.problemText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
-                    arrayList.add(new ThemeDescription((View) loginActivitySmsView3.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressInner"));
-                    arrayList.add(new ThemeDescription((View) loginActivitySmsView3.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressOuter"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView3.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView3.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionBackground"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView4.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView4.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                    if (loginActivitySmsView4.codeField != null) {
-                        for (int i4 = 0; i4 < loginActivitySmsView4.codeField.length; i4++) {
-                            arrayList.add(new ThemeDescription(loginActivitySmsView4.codeField[i4], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                            arrayList.add(new ThemeDescription(loginActivitySmsView4.codeField[i4], ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView3.timeText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView3.problemText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
+                        arrayList.add(new ThemeDescription((View) loginActivitySmsView3.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressInner"));
+                        arrayList.add(new ThemeDescription((View) loginActivitySmsView3.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressOuter"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView3.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView3.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionBackground"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView4.confirmTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView4.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        if (loginActivitySmsView4.codeField != null) {
+                            for (int i4 = 0; i4 < loginActivitySmsView4.codeField.length; i4++) {
+                                arrayList.add(new ThemeDescription(loginActivitySmsView4.codeField[i4], ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                                arrayList.add(new ThemeDescription(loginActivitySmsView4.codeField[i4], ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
+                            }
                         }
+                        arrayList.add(new ThemeDescription(loginActivitySmsView4.timeText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView4.problemText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
+                        arrayList.add(new ThemeDescription((View) loginActivitySmsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressInner"));
+                        arrayList.add(new ThemeDescription((View) loginActivitySmsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressOuter"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView4.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                        arrayList.add(new ThemeDescription(loginActivitySmsView4.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionBackground"));
+                        return arrayList;
                     }
-                    arrayList.add(new ThemeDescription(loginActivitySmsView4.timeText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText6"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView4.problemText, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlueText4"));
-                    arrayList.add(new ThemeDescription((View) loginActivitySmsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressInner"));
-                    arrayList.add(new ThemeDescription((View) loginActivitySmsView4.progressView, 0, new Class[]{ProgressView.class}, new String[]{"paint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "login_progressOuter"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView4.blackImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                    arrayList.add(new ThemeDescription(loginActivitySmsView4.blueImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_actionBackground"));
-                    return arrayList;
                 }
-            }

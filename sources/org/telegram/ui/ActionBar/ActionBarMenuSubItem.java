@@ -53,7 +53,7 @@ public class ActionBarMenuSubItem extends FrameLayout {
             imageView3.setImageResource(NUM);
             this.checkView.setScaleType(ImageView.ScaleType.CENTER);
             this.checkView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("radioBackgroundChecked"), PorterDuff.Mode.MULTIPLY));
-            addView(this.checkView, LayoutHelper.createFrame(50, -1, 51));
+            addView(this.checkView, LayoutHelper.createFrame(26, -1, 51));
         }
     }
 
@@ -68,9 +68,9 @@ public class ActionBarMenuSubItem extends FrameLayout {
         super.onLayout(z, i, i2, i3, i4);
         if (this.checkView != null) {
             if (LocaleController.isRTL) {
-                i5 = 0;
+                i5 = getPaddingRight();
             } else {
-                i5 = getMeasuredWidth() - this.checkView.getMeasuredWidth();
+                i5 = (getMeasuredWidth() - this.checkView.getMeasuredWidth()) - getPaddingLeft();
             }
             ImageView imageView2 = this.checkView;
             imageView2.layout(i5, imageView2.getTop(), this.checkView.getMeasuredWidth() + i5, this.checkView.getBottom());

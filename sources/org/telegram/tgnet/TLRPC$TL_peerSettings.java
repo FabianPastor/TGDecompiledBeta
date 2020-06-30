@@ -1,10 +1,12 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_peerSettings extends TLObject {
-    public static int constructor = -NUM;
+    public static int constructor = NUM;
     public boolean add_contact;
+    public boolean autoarchived;
     public boolean block_contact;
     public int flags;
+    public int geo_distance;
     public boolean need_contacts_exception;
     public boolean report_geo;
     public boolean report_spam;
@@ -31,10 +33,14 @@ public class TLRPC$TL_peerSettings extends TLObject {
         this.block_contact = (this.flags & 4) != 0;
         this.share_contact = (this.flags & 8) != 0;
         this.need_contacts_exception = (this.flags & 16) != 0;
-        if ((this.flags & 32) == 0) {
+        this.report_geo = (this.flags & 32) != 0;
+        if ((this.flags & 128) == 0) {
             z2 = false;
         }
-        this.report_geo = z2;
+        this.autoarchived = z2;
+        if ((this.flags & 64) != 0) {
+            this.geo_distance = abstractSerializedData.readInt32(z);
+        }
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -51,6 +57,11 @@ public class TLRPC$TL_peerSettings extends TLObject {
         this.flags = i5;
         int i6 = this.report_geo ? i5 | 32 : i5 & -33;
         this.flags = i6;
-        abstractSerializedData.writeInt32(i6);
+        int i7 = this.autoarchived ? i6 | 128 : i6 & -129;
+        this.flags = i7;
+        abstractSerializedData.writeInt32(i7);
+        if ((this.flags & 64) != 0) {
+            abstractSerializedData.writeInt32(this.geo_distance);
+        }
     }
 }

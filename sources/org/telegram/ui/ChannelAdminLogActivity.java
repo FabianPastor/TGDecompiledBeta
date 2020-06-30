@@ -32,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.LayoutAnimationController;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -1101,6 +1102,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
         ChatActionCell chatActionCell = new ChatActionCell(context2);
         this.floatingDateView = chatActionCell;
         chatActionCell.setAlpha(0.0f);
+        this.floatingDateView.setImportantForAccessibility(2);
         this.contentView.addView(this.floatingDateView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 4.0f, 0.0f, 0.0f));
         this.contentView.addView(this.actionBar);
         AnonymousClass8 r44 = new FrameLayout(this, context2) {
@@ -1776,7 +1778,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r2.putExtra(r5, r0)
         L_0x01fb:
             android.app.Activity r0 = r10.getParentActivity()
-            r3 = 2131626797(0x7f0e0b2d, float:1.888084E38)
+            r3 = 2131626865(0x7f0e0b71, float:1.8880978E38)
             java.lang.String r4 = "ShareFile"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.content.Intent r2 = android.content.Intent.createChooser(r2, r3)
@@ -1812,9 +1814,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             java.lang.String r1 = r1.toLowerCase()
             java.lang.String r2 = "attheme"
             boolean r1 = r1.endsWith(r2)
-            r2 = 2131626025(0x7f0e0829, float:1.8879275E38)
+            r2 = 2131626078(0x7f0e085e, float:1.8879382E38)
             java.lang.String r3 = "OK"
-            r4 = 2131624210(0x7f0e0112, float:1.8875593E38)
+            r4 = 2131624211(0x7f0e0113, float:1.8875595E38)
             java.lang.String r5 = "AppName"
             if (r1 == 0) goto L_0x02dc
             androidx.recyclerview.widget.LinearLayoutManager r1 = r10.chatLayoutManager
@@ -1862,7 +1864,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131625486(0x7f0e060e, float:1.8878181E38)
+            r1 = 2131625519(0x7f0e062f, float:1.8878248E38)
             java.lang.String r4 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -1891,7 +1893,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131625485(0x7f0e060d, float:1.887818E38)
+            r1 = 2131625518(0x7f0e062e, float:1.8878246E38)
             java.lang.String r4 = "IncorrectLocalization"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -2755,7 +2757,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                         org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r5 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                         org.telegram.ui.ChannelAdminLogActivity r5 = org.telegram.ui.ChannelAdminLogActivity.this
                                         android.app.Activity r5 = r5.getParentActivity()
-                                        r6 = 2131627002(0x7f0e0bfa, float:1.8881256E38)
+                                        r6 = 2131627070(0x7f0e0c3e, float:1.8881394E38)
                                         java.lang.String r7 = "TextCopied"
                                         java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                                         android.widget.Toast r5 = android.widget.Toast.makeText(r5, r6, r1)
@@ -2820,11 +2822,11 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                         r5.setTitle(r0)
                                         r6 = 2
                                         java.lang.CharSequence[] r6 = new java.lang.CharSequence[r6]
-                                        r7 = 2131626039(0x7f0e0837, float:1.8879303E38)
+                                        r7 = 2131626092(0x7f0e086c, float:1.887941E38)
                                         java.lang.String r2 = "Open"
                                         java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r2, r7)
                                         r6[r1] = r7
-                                        r7 = 2131624809(0x7f0e0369, float:1.8876808E38)
+                                        r7 = 2131624830(0x7f0e037e, float:1.887685E38)
                                         java.lang.String r1 = "Copy"
                                         java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r1, r7)
                                         r6[r3] = r7
@@ -3176,8 +3178,13 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             chatMessageCell3.setAllowAssistant(true);
                             chatMessageCell = chatMessageCell2;
                         } else if (i == 1) {
-                            ChatActionCell chatActionCell = new ChatActionCell(this.mContext);
-                            chatActionCell.setDelegate(new ChatActionCell.ChatActionCellDelegate() {
+                            AnonymousClass2 r4 = new ChatActionCell(this, this.mContext) {
+                                public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+                                    super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+                                    accessibilityNodeInfo.setVisibleToUser(true);
+                                }
+                            };
+                            r4.setDelegate(new ChatActionCell.ChatActionCellDelegate() {
                                 public void didPressReplyMessage(ChatActionCell chatActionCell, int i) {
                                 }
 
@@ -3213,7 +3220,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                     }
                                 }
                             });
-                            chatMessageCell = chatActionCell;
+                            chatMessageCell = r4;
                         } else if (i == 2) {
                             chatMessageCell = new ChatUnreadCell(this.mContext);
                         } else {
