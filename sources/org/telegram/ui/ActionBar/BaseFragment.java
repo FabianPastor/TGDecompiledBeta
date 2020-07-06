@@ -146,9 +146,6 @@ public class BaseFragment {
     public void onTransitionAnimationStart(boolean z, boolean z2) {
     }
 
-    public void restoreSelfArgs(Bundle bundle) {
-    }
-
     public void saveSelfArgs(Bundle bundle) {
     }
 

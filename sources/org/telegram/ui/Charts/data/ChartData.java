@@ -1,6 +1,7 @@
 package org.telegram.ui.Charts.data;
 
 import android.graphics.Color;
+import android.text.TextUtils;
 import androidx.core.graphics.ColorUtils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -85,7 +86,7 @@ public class ChartData {
             if (optJSONObject != null) {
                 Matcher matcher = compile.matcher(optJSONObject.getString(line2.id));
                 if (matcher.matches()) {
-                    if (matcher.group(1) != null) {
+                    if (!TextUtils.isEmpty(matcher.group(1))) {
                         line2.colorKey = "statisticChartLine_" + matcher.group(1).toLowerCase();
                     }
                     int parseColor = Color.parseColor(matcher.group(2));

@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -97,6 +98,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
     public int helpRow;
     /* access modifiers changed from: private */
     public int helpSectionRow;
+    private DefaultItemAnimator itemAnimator;
     private Location lastLoadedLocation;
     private long lastLoadedLocationTime;
     private LinearLayoutManager layoutManager;
@@ -142,10 +144,10 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
 
     public PeopleNearbyActivity() {
         checkForExpiredLocations(false);
-        updateRows();
+        updateRows(true);
     }
 
-    private void updateRows() {
+    private void updateRows(boolean z) {
         int i;
         this.rowCount = 0;
         this.usersStartRow = -1;
@@ -202,9 +204,9 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         int i12 = this.rowCount;
         this.rowCount = i12 + 1;
         this.chatsSectionRow = i12;
-        ListAdapter listAdapter = this.listViewAdapter;
-        if (listAdapter != null) {
-            listAdapter.notifyDataSetChanged();
+        if (z && this.listViewAdapter != null) {
+            this.listView.setItemAnimator((RecyclerView.ItemAnimator) null);
+            this.listViewAdapter.notifyDataSetChanged();
         }
     }
 
@@ -253,7 +255,6 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         this.actionBar.setItemsBackgroundColor(Theme.getColor("listSelectorSDK21"), false);
         this.actionBar.setCastShadows(false);
         this.actionBar.setAddToContainer(false);
-        int i = 1;
         this.actionBar.setOccupyStatusBar(Build.VERSION.SDK_INT >= 21 && !AndroidUtilities.isTablet());
         this.actionBar.setTitle(LocaleController.getString("PeopleNearby", NUM));
         this.actionBar.getTitleTextView().setAlpha(0.0f);
@@ -295,12 +296,14 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         ListAdapter listAdapter = new ListAdapter(context);
         this.listViewAdapter = listAdapter;
         recyclerListView3.setAdapter(listAdapter);
-        RecyclerListView recyclerListView4 = this.listView;
-        if (!LocaleController.isRTL) {
-            i = 2;
-        }
-        recyclerListView4.setVerticalScrollbarPosition(i);
+        this.listView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
         frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
+        this.itemAnimator = new DefaultItemAnimator(this) {
+            /* access modifiers changed from: protected */
+            public long getAddAnimationDelay(long j, long j2, long j3) {
+                return j;
+            }
+        };
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
             public final void onItemClick(View view, int i) {
                 PeopleNearbyActivity.this.lambda$createView$2$PeopleNearbyActivity(view, i);
@@ -311,7 +314,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                 PeopleNearbyActivity.this.checkScroll(true);
             }
         });
-        AnonymousClass5 r2 = new View(context) {
+        AnonymousClass6 r2 = new View(context) {
             private Paint paint = new Paint();
 
             /* access modifiers changed from: protected */
@@ -329,7 +332,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         UndoView undoView2 = new UndoView(context);
         this.undoView = undoView2;
         frameLayout.addView(undoView2, LayoutHelper.createFrame(-1, -2.0f, 83, 8.0f, 0.0f, 8.0f, 8.0f));
-        updateRows();
+        updateRows(true);
         return this.fragmentView;
     }
 
@@ -368,7 +371,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                         userConfig.sharingMyLocationUntil = 0;
                         userConfig.saveConfig(false);
                         sendRequest(false, 2);
-                        updateRows();
+                        updateRows(true);
                     } else {
                         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                         builder.setTitle(LocaleController.getString("MakeMyselfVisibleTitle", NUM));
@@ -390,7 +393,10 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                     userConfig.saveConfig(false);
                 } else if (i == this.showMoreRow) {
                     this.expanded = true;
-                    updateRows();
+                    updateRows(false);
+                    this.listView.setItemAnimator(this.itemAnimator);
+                    this.listViewAdapter.notifyItemRemoved(i);
+                    this.listViewAdapter.notifyItemRangeInserted(i, this.users.size() - Math.min(5, this.users.size()));
                 }
             } else if (view instanceof ManageChatUserCell) {
                 TLRPC$TL_peerLocated tLRPC$TL_peerLocated = this.users.get(i - i3);
@@ -414,7 +420,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
         userConfig.sharingMyLocationUntil = Integer.MAX_VALUE;
         userConfig.saveConfig(false);
         sendRequest(false, 1);
-        updateRows();
+        updateRows(true);
     }
 
     /* access modifiers changed from: private */
@@ -517,7 +523,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             r0 = 150(0x96, double:7.4E-322)
             r11.setDuration(r0)
             android.animation.AnimatorSet r11 = r10.actionBarAnimator
-            org.telegram.ui.PeopleNearbyActivity$6 r0 = new org.telegram.ui.PeopleNearbyActivity$6
+            org.telegram.ui.PeopleNearbyActivity$7 r0 = new org.telegram.ui.PeopleNearbyActivity$7
             r0.<init>()
             r11.addListener(r0)
             android.animation.AnimatorSet r11 = r10.actionBarAnimator
@@ -739,7 +745,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             z = false;
         } else {
             userConfig.sharingMyLocationUntil = 0;
-            updateRows();
+            updateRows(true);
             z = true;
         }
         if (!(tLObject == null || i == 2)) {
@@ -785,7 +791,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                 z = true;
             }
             checkForExpiredLocations(true);
-            updateRows();
+            updateRows(true);
         }
         if (z) {
             userConfig.saveConfig(false);
@@ -884,7 +890,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                 }
             }
             checkForExpiredLocations(true);
-            updateRows();
+            updateRows(true);
         } else if (i == NotificationCenter.needDeleteDialog && this.fragmentView != null && !this.isPaused) {
             long longValue = objArr[0].longValue();
             TLRPC$User tLRPC$User = objArr[1];
@@ -951,7 +957,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
             i++;
         }
         if (z2 && this.listViewAdapter != null) {
-            updateRows();
+            updateRows(true);
         }
         if (z2 || z) {
             getLocationController().setCachedNearbyUsersAndChats(this.users, this.chats);

@@ -207,6 +207,7 @@
     <string name="AddOneMemberAlertTitle">Add member</string>
     <string name="AddOneMemberForwardMessages">Show the last 100 messages to **%1$s**</string>
     <string name="AddPeopleNearby">Add People Nearby</string>
+    <string name="AddPhoto">Set new photo</string>
     <string name="AddProxy">Add Proxy</string>
     <string name="AddRecipient">Add recipient</string>
     <string name="AddShortcut">Add to Home screen</string>
@@ -799,6 +800,7 @@
     <string name="ChooseFromSearch">Search web</string>
     <string name="ChooseFromYourStickers">Choose from your stickers</string>
     <string name="ChoosePhoto">Choose photo</string>
+    <string name="ChoosePhotoOrVideo">Choose photo or video</string>
     <string name="ChooseRecordVideo">Record video</string>
     <string name="ChooseStickerSet">CHOOSE STICKER SET</string>
     <string name="ChooseStickerSetMy">You can create your own custom sticker sets using the @stickers bot.</string>
@@ -1124,10 +1126,9 @@
     <string name="EditMessageError">Sorry, you can\'t edit this message.</string>
     <string name="EditMessageMedia">Tap to edit media</string>
     <string name="EditName">Edit name</string>
-    <string name="EditPhoto">Edit photo</string>
+    <string name="EditPhoto">Open in editor</string>
     <string name="EditThemeColors">Edit colors</string>
     <string name="EditThemeTitle">Edit Theme</string>
-    <string name="EditVideo">Edit video</string>
     <string name="EditedMessage">edited</string>
     <string name="EmailCopied">Email copied to clipboard</string>
     <string name="EmailPasswordConfirmText2">To complete Two-Step Verification Setup, check your email (don\'t forget the spam folder) and enter the code we just sent you.</string>
@@ -1503,6 +1504,7 @@
     <string name="GlobalAttachStickersRestricted">Stickers aren\'t allowed in this group.</string>
     <string name="GlobalSearch">Global search</string>
     <string name="GlobalSendMessageRestricted">Writing messages isn\'t allowed in this group.</string>
+    <string name="GoToSettings">GO TO SETTINGS</string>
     <string name="GotAQuestion">Got a question\10about Telegram?</string>
     <string name="GpsDisabledAlertText">Please enable your GPS to access location-based features.</string>
     <string name="GpsDisabledAlertTitle">Enable GPS</string>
@@ -1549,6 +1551,8 @@
     <string name="HidAccount">The account was hidden by the user</string>
     <string name="HiddenName">Deleted Account</string>
     <string name="HideAboveTheList">Hide above the list</string>
+    <string name="HideNewChatsAlertText">You are receiving lots of new chats from users who are not in your Contacts List. Do you want have such chats **automatically muted** and **archived**?</string>
+    <string name="HideNewChatsAlertTitle">Hide new chats?</string>
     <string name="HideOnTop">Hide</string>
     <string name="Highlights">Highlights</string>
     <string name="HistoryCleared">History was cleared</string>
@@ -2904,6 +2908,7 @@
     <string name="SetColor">Set a color</string>
     <string name="SetPasscode">Set a Passcode</string>
     <string name="SetPasscodeInfo">Lock the app with a passcode so that others can\'t open it.</string>
+    <string name="SetProfilePhoto">Set Profile Photo</string>
     <string name="SetRecoveryEmail">Set Recovery Email</string>
     <string name="SetReminder">Set a reminder</string>
     <string name="SetTimer">Set self-destruct timer</string>
@@ -3020,7 +3025,9 @@
     <string name="StartEncryptedChat">Start Secret Chat</string>
     <string name="StartMessaging">Start Messaging</string>
     <string name="StartText">Please confirm your country code and enter your phone number.</string>
+    <string name="StatisticOpenProfile">Open Profile</string>
     <string name="StatisticOverview">Overview</string>
+    <string name="StatisticSearchUserHistory">View Messages</string>
     <string name="Statistics">Statistics</string>
     <string name="StickerSets_few">%1$s sticker sets</string>
     <string name="StickerSets_many">%1$s sticker sets</string>

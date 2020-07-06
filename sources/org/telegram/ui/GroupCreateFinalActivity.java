@@ -99,6 +99,9 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     /* access modifiers changed from: private */
     public ImageView floatingButtonIcon;
     private ImageUpdater imageUpdater;
+    private TLRPC$InputFile inputPhoto;
+    private TLRPC$InputFile inputVideo;
+    private String inputVideoPath;
     /* access modifiers changed from: private */
     public RecyclerListView listView;
     private String nameToSet;
@@ -109,7 +112,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     public ArrayList<Integer> selectedContacts;
     /* access modifiers changed from: private */
     public Drawable shadowDrawable;
-    private TLRPC$InputFile uploadedAvatar;
+    private double videoTimestamp;
 
     public interface GroupCreateFinalActivityDelegate {
         void didFailChatCreation();
@@ -134,7 +137,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateInterfaces);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatDidCreated);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.chatDidFailCreate);
-        ImageUpdater imageUpdater2 = new ImageUpdater(false);
+        ImageUpdater imageUpdater2 = new ImageUpdater(true);
         this.imageUpdater = imageUpdater2;
         imageUpdater2.parentFragment = this;
         imageUpdater2.setDelegate(this);
@@ -633,7 +636,10 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     public /* synthetic */ void lambda$null$2$GroupCreateFinalActivity() {
         this.avatar = null;
         this.avatarBig = null;
-        this.uploadedAvatar = null;
+        this.inputPhoto = null;
+        this.inputVideo = null;
+        this.inputVideoPath = null;
+        this.videoTimestamp = 0.0d;
         showAvatarProgress(false, true);
         this.avatarImage.setImage((ImageLocation) null, (String) null, (Drawable) this.avatarDrawable, (Object) null);
         this.avatarEditor.setImageResource(NUM);
@@ -681,26 +687,36 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     }
 
     public void didUploadPhoto(TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, double d, String str, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$InputFile, tLRPC$PhotoSize2, tLRPC$PhotoSize) {
+        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$InputFile, tLRPC$InputFile2, str, d, tLRPC$PhotoSize2, tLRPC$PhotoSize) {
             public final /* synthetic */ TLRPC$InputFile f$1;
-            public final /* synthetic */ TLRPC$PhotoSize f$2;
-            public final /* synthetic */ TLRPC$PhotoSize f$3;
+            public final /* synthetic */ TLRPC$InputFile f$2;
+            public final /* synthetic */ String f$3;
+            public final /* synthetic */ double f$4;
+            public final /* synthetic */ TLRPC$PhotoSize f$5;
+            public final /* synthetic */ TLRPC$PhotoSize f$6;
 
             {
                 this.f$1 = r2;
                 this.f$2 = r3;
                 this.f$3 = r4;
+                this.f$4 = r5;
+                this.f$5 = r7;
+                this.f$6 = r8;
             }
 
             public final void run() {
-                GroupCreateFinalActivity.this.lambda$didUploadPhoto$7$GroupCreateFinalActivity(this.f$1, this.f$2, this.f$3);
+                GroupCreateFinalActivity.this.lambda$didUploadPhoto$7$GroupCreateFinalActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
             }
         });
     }
 
-    public /* synthetic */ void lambda$didUploadPhoto$7$GroupCreateFinalActivity(TLRPC$InputFile tLRPC$InputFile, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
-        if (tLRPC$InputFile != null) {
-            this.uploadedAvatar = tLRPC$InputFile;
+    public /* synthetic */ void lambda$didUploadPhoto$7$GroupCreateFinalActivity(TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, String str, double d, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
+        TLRPC$InputFile tLRPC$InputFile3 = tLRPC$InputFile;
+        if (tLRPC$InputFile3 != null) {
+            this.inputPhoto = tLRPC$InputFile3;
+            this.inputVideo = tLRPC$InputFile2;
+            this.inputVideoPath = str;
+            this.videoTimestamp = d;
             if (this.createAfterUpload) {
                 GroupCreateFinalActivityDelegate groupCreateFinalActivityDelegate = this.delegate;
                 if (groupCreateFinalActivityDelegate != null) {
@@ -852,8 +868,8 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
                 bundle.putInt("chat_id", intValue2);
                 presentFragment(new ChatActivity(bundle), true);
             }
-            if (this.uploadedAvatar != null) {
-                MessagesController.getInstance(this.currentAccount).changeChatAvatar(intValue2, this.uploadedAvatar, this.avatar, this.avatarBig);
+            if (this.inputPhoto != null) {
+                MessagesController.getInstance(this.currentAccount).changeChatAvatar(intValue2, this.inputPhoto, this.inputVideo, this.videoTimestamp, this.inputVideoPath, this.avatar, this.avatarBig);
             }
         }
     }

@@ -4548,7 +4548,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             android.app.Activity r4 = r17.getParentActivity()
             r3.<init>((android.content.Context) r4)
             r3.setTitle(r1)
-            r1 = 2131626078(0x7f0e085e, float:1.8879382E38)
+            r1 = 2131626082(0x7f0e0862, float:1.887939E38)
             java.lang.String r4 = "OK"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r3.setPositiveButton(r1, r7)
@@ -16102,62 +16102,71 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         return createVideoThumbnailAtTime(str, j, (int[]) null, false);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:14:0x003f, code lost:
-        r11 = move-exception;
+    /* JADX WARNING: Code restructure failed: missing block: B:17:0x004d, code lost:
+        r0 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:16:?, code lost:
-        r14.release();
+    /* JADX WARNING: Code restructure failed: missing block: B:19:?, code lost:
+        r3.release();
      */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:12:0x003b */
-    /* JADX WARNING: Removed duplicated region for block: B:14:0x003f A[ExcHandler: all (r11v3 'th' java.lang.Throwable A[CUSTOM_DECLARE]), Splitter:B:6:0x002c] */
+    /* JADX WARNING: Removed duplicated region for block: B:17:0x004d A[ExcHandler: all (r0v1 'th' java.lang.Throwable A[CUSTOM_DECLARE]), Splitter:B:7:0x0039] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static android.graphics.Bitmap createVideoThumbnailAtTime(java.lang.String r11, long r12, int[] r14, boolean r15) {
+    public static android.graphics.Bitmap createVideoThumbnailAtTime(java.lang.String r16, long r17, int[] r19, boolean r20) {
         /*
-            if (r15 == 0) goto L_0x0026
-            org.telegram.ui.Components.AnimatedFileDrawable r10 = new org.telegram.ui.Components.AnimatedFileDrawable
-            java.io.File r1 = new java.io.File
-            r1.<init>(r11)
-            r2 = 1
-            r3 = 0
-            r5 = 0
-            r6 = 0
+            r0 = r16
+            r1 = r17
+            r3 = r20
+            if (r3 == 0) goto L_0x0033
+            org.telegram.ui.Components.AnimatedFileDrawable r15 = new org.telegram.ui.Components.AnimatedFileDrawable
+            java.io.File r5 = new java.io.File
+            r5.<init>(r0)
+            r6 = 1
             r7 = 0
-            r8 = 0
-            r9 = 1
-            r0 = r10
-            r0.<init>(r1, r2, r3, r5, r6, r7, r8, r9)
-            android.graphics.Bitmap r11 = r10.getFrameAtTime(r12, r15)
-            if (r14 == 0) goto L_0x0022
+            r9 = 0
+            r10 = 0
+            r11 = 0
             r12 = 0
-            int r13 = r10.getOrientation()
-            r14[r12] = r13
-        L_0x0022:
-            r10.recycle()
-            goto L_0x0046
-        L_0x0026:
-            android.media.MediaMetadataRetriever r14 = new android.media.MediaMetadataRetriever
-            r14.<init>()
-            r15 = 0
-            r14.setDataSource(r11)     // Catch:{ Exception -> 0x0044, all -> 0x003f }
-            r11 = 1
-            android.graphics.Bitmap r11 = r14.getFrameAtTime(r12, r11)     // Catch:{ Exception -> 0x0044, all -> 0x003f }
-            if (r11 != 0) goto L_0x003b
-            r15 = 3
-            android.graphics.Bitmap r11 = r14.getFrameAtTime(r12, r15)     // Catch:{ Exception -> 0x003b, all -> 0x003f }
-        L_0x003b:
-            r14.release()     // Catch:{ RuntimeException -> 0x0046 }
-            goto L_0x0046
-        L_0x003f:
-            r11 = move-exception
-            r14.release()     // Catch:{ RuntimeException -> 0x0043 }
-        L_0x0043:
-            throw r11
-        L_0x0044:
-            r11 = r15
-            goto L_0x003b
-        L_0x0046:
-            return r11
+            r14 = 0
+            r0 = 1
+            r4 = r15
+            r1 = r15
+            r15 = r0
+            r4.<init>(r5, r6, r7, r9, r10, r11, r12, r14, r15)
+            r0 = r1
+            r1 = r17
+            android.graphics.Bitmap r1 = r0.getFrameAtTime(r1, r3)
+            if (r19 == 0) goto L_0x002f
+            r2 = 0
+            int r3 = r0.getOrientation()
+            r19[r2] = r3
+        L_0x002f:
+            r0.recycle()
+            goto L_0x0054
+        L_0x0033:
+            android.media.MediaMetadataRetriever r3 = new android.media.MediaMetadataRetriever
+            r3.<init>()
+            r4 = 0
+            r3.setDataSource(r0)     // Catch:{ Exception -> 0x0052, all -> 0x004d }
+            r0 = 1
+            android.graphics.Bitmap r0 = r3.getFrameAtTime(r1, r0)     // Catch:{ Exception -> 0x0052, all -> 0x004d }
+            if (r0 != 0) goto L_0x0048
+            r4 = 3
+            android.graphics.Bitmap r0 = r3.getFrameAtTime(r1, r4)     // Catch:{ Exception -> 0x0048, all -> 0x004d }
+        L_0x0048:
+            r1 = r0
+        L_0x0049:
+            r3.release()     // Catch:{ RuntimeException -> 0x0054 }
+            goto L_0x0054
+        L_0x004d:
+            r0 = move-exception
+            r3.release()     // Catch:{ RuntimeException -> 0x0051 }
+        L_0x0051:
+            throw r0
+        L_0x0052:
+            r1 = r4
+            goto L_0x0049
+        L_0x0054:
+            return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.createVideoThumbnailAtTime(java.lang.String, long, int[], boolean):android.graphics.Bitmap");
     }

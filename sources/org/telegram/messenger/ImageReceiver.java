@@ -2187,7 +2187,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 this.imageOrientation = ((ExtendedBitmapDrawable) drawable).getOrientation();
             }
             updateDrawableRadius(drawable);
-            if ((z || this.forcePreview) && !this.forceCrossfade) {
+            if (!this.isVisible || ((z || this.forcePreview) && !this.forceCrossfade)) {
                 this.currentAlpha = 1.0f;
             } else {
                 Drawable drawable3 = this.currentMediaDrawable;

@@ -164,6 +164,10 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         boolean z2 = getUserConfig().suggestContacts;
         this.newSuggest = z2;
         this.currentSuggest = z2;
+        TLRPC$TL_globalPrivacySettings globalPrivacySettings = getContactsController().getGlobalPrivacySettings();
+        if (globalPrivacySettings != null) {
+            this.archiveChats = globalPrivacySettings.archive_and_mute_new_noncontact_peers;
+        }
         updateRows();
         loadPasswordSettings();
         getNotificationCenter().addObserver(this, NotificationCenter.privacyRulesUpdated);
@@ -715,18 +719,24 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         int i13 = i12 + 1;
         this.rowCount = i13;
         this.sessionsRow = i12;
-        int i14 = i13 + 1;
-        this.rowCount = i14;
+        this.rowCount = i13 + 1;
         this.sessionsDetailRow = i13;
-        int i15 = i14 + 1;
-        this.rowCount = i15;
-        this.newChatsHeaderRow = i14;
-        int i16 = i15 + 1;
-        this.rowCount = i16;
-        this.newChatsRow = i15;
-        int i17 = i16 + 1;
-        this.rowCount = i17;
-        this.newChatsSectionRow = i16;
+        if (getMessagesController().autoarchiveAvailable) {
+            int i14 = this.rowCount;
+            int i15 = i14 + 1;
+            this.rowCount = i15;
+            this.newChatsHeaderRow = i14;
+            int i16 = i15 + 1;
+            this.rowCount = i16;
+            this.newChatsRow = i15;
+            this.rowCount = i16 + 1;
+            this.newChatsSectionRow = i16;
+        } else {
+            this.newChatsHeaderRow = -1;
+            this.newChatsRow = -1;
+            this.newChatsSectionRow = -1;
+        }
+        int i17 = this.rowCount;
         int i18 = i17 + 1;
         this.rowCount = i18;
         this.advancedSectionRow = i17;

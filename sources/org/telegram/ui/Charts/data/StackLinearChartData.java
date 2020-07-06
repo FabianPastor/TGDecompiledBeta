@@ -3,6 +3,7 @@ package org.telegram.ui.Charts.data;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.telegram.messenger.SegmentTree;
@@ -13,16 +14,46 @@ public class StackLinearChartData extends ChartData {
     public int[][] simplifiedY;
     int[] ySum;
 
-    public StackLinearChartData(JSONObject jSONObject) throws JSONException {
+    public StackLinearChartData(JSONObject jSONObject, boolean z) throws JSONException {
         super(jSONObject);
-        int length = this.lines.get(0).y.length;
+        if (z) {
+            long[] jArr = new long[this.lines.size()];
+            int[] iArr = new int[this.lines.size()];
+            long j = 0;
+            for (int i = 0; i < this.lines.size(); i++) {
+                int length = this.x.length;
+                for (int i2 = 0; i2 < length; i2++) {
+                    int i3 = this.lines.get(i).y[i2];
+                    jArr[i] = jArr[i] + ((long) i3);
+                    if (i3 == 0) {
+                        iArr[i] = iArr[i] + 1;
+                    }
+                }
+                j += jArr[i];
+            }
+            ArrayList arrayList = new ArrayList();
+            for (int i4 = 0; i4 < this.lines.size(); i4++) {
+                double d = (double) jArr[i4];
+                double d2 = (double) j;
+                Double.isNaN(d);
+                Double.isNaN(d2);
+                if (d / d2 < 0.01d && ((float) iArr[i4]) > ((float) this.x.length) / 2.0f) {
+                    arrayList.add(this.lines.get(i4));
+                }
+            }
+            Iterator it = arrayList.iterator();
+            while (it.hasNext()) {
+                this.lines.remove((ChartData.Line) it.next());
+            }
+        }
+        int length2 = this.lines.get(0).y.length;
         int size = this.lines.size();
-        this.ySum = new int[length];
-        for (int i = 0; i < length; i++) {
-            this.ySum[i] = 0;
-            for (int i2 = 0; i2 < size; i2++) {
-                int[] iArr = this.ySum;
-                iArr[i] = iArr[i] + this.lines.get(i2).y[i];
+        this.ySum = new int[length2];
+        for (int i5 = 0; i5 < length2; i5++) {
+            this.ySum[i5] = 0;
+            for (int i6 = 0; i6 < size; i6++) {
+                int[] iArr2 = this.ySum;
+                iArr2[i5] = iArr2[i5] + this.lines.get(i6).y[i5];
             }
         }
         new SegmentTree(this.ySum);

@@ -215,8 +215,9 @@ public class SharedConfig {
                 raiseToSpeak = sharedPreferences2.getBoolean("raise_to_speak", true);
                 customTabs = sharedPreferences2.getBoolean("custom_tabs", true);
                 directShare = sharedPreferences2.getBoolean("direct_share", true);
-                shuffleMusic = sharedPreferences2.getBoolean("shuffleMusic", false);
-                playOrderReversed = sharedPreferences2.getBoolean("playOrderReversed", false);
+                boolean z = sharedPreferences2.getBoolean("shuffleMusic", false);
+                shuffleMusic = z;
+                playOrderReversed = !z && sharedPreferences2.getBoolean("playOrderReversed", false);
                 inappCamera = sharedPreferences2.getBoolean("inappCamera", true);
                 hasCameraCache = sharedPreferences2.contains("cameraCache");
                 roundCamera16to9 = true;
@@ -503,11 +504,16 @@ public class SharedConfig {
         edit.commit();
     }
 
-    public static void toggleShuffleMusic(int i) {
+    public static void setPlaybackOrderType(int i) {
         if (i == 2) {
-            shuffleMusic = !shuffleMusic;
+            shuffleMusic = true;
+            playOrderReversed = false;
+        } else if (i == 1) {
+            playOrderReversed = true;
+            shuffleMusic = false;
         } else {
-            playOrderReversed = !playOrderReversed;
+            playOrderReversed = false;
+            shuffleMusic = false;
         }
         MediaController.getInstance().checkIsNextMediaFileDownloaded();
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();

@@ -1507,7 +1507,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 
     /* access modifiers changed from: private */
     public void updatePhotosCounter(boolean z) {
-        if (this.counterTextView != null) {
+        if (this.counterTextView != null && this.parentAlert.avatarPicker == 0) {
             boolean z2 = false;
             boolean z3 = false;
             for (Map.Entry<Object, Object> value : selectedPhotos.entrySet()) {

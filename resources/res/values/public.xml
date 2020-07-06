@@ -524,6 +524,7 @@
     <public type="drawable" name="menu_calls_14" id="NUM" />
     <public type="drawable" name="menu_calls_ny" id="NUM" />
     <public type="drawable" name="menu_camera" id="NUM" />
+    <public type="drawable" name="menu_camera2" id="NUM" />
     <public type="drawable" name="menu_camera_av" id="NUM" />
     <public type="drawable" name="menu_channel_ny" id="NUM" />
     <public type="drawable" name="menu_chats" id="NUM" />
@@ -590,6 +591,7 @@
     <public type="drawable" name="msg_addbot" id="NUM" />
     <public type="drawable" name="msg_addcontact" id="NUM" />
     <public type="drawable" name="msg_addfolder" id="NUM" />
+    <public type="drawable" name="msg_addphoto" id="NUM" />
     <public type="drawable" name="msg_archive" id="NUM" />
     <public type="drawable" name="msg_block" id="NUM" />
     <public type="drawable" name="msg_calendar" id="NUM" />
@@ -758,6 +760,8 @@
     <public type="drawable" name="player_new_pause" id="NUM" />
     <public type="drawable" name="player_new_play" id="NUM" />
     <public type="drawable" name="player_new_previous" id="NUM" />
+    <public type="drawable" name="player_new_repeat_reverse" id="NUM" />
+    <public type="drawable" name="player_new_repeat_shuffle" id="NUM" />
     <public type="drawable" name="player_new_repeatall" id="NUM" />
     <public type="drawable" name="player_new_repeatone" id="NUM" />
     <public type="drawable" name="player_new_shuffle" id="NUM" />
@@ -1347,6 +1351,7 @@
     <public type="string" name="AddOneMemberAlertTitle" id="NUM" />
     <public type="string" name="AddOneMemberForwardMessages" id="NUM" />
     <public type="string" name="AddPeopleNearby" id="NUM" />
+    <public type="string" name="AddPhoto" id="NUM" />
     <public type="string" name="AddProxy" id="NUM" />
     <public type="string" name="AddRecipient" id="NUM" />
     <public type="string" name="AddShortcut" id="NUM" />
@@ -1939,6 +1944,7 @@
     <public type="string" name="ChooseFromSearch" id="NUM" />
     <public type="string" name="ChooseFromYourStickers" id="NUM" />
     <public type="string" name="ChoosePhoto" id="NUM" />
+    <public type="string" name="ChoosePhotoOrVideo" id="NUM" />
     <public type="string" name="ChooseRecordVideo" id="NUM" />
     <public type="string" name="ChooseStickerSet" id="NUM" />
     <public type="string" name="ChooseStickerSetMy" id="NUM" />
@@ -2267,7 +2273,6 @@
     <public type="string" name="EditPhoto" id="NUM" />
     <public type="string" name="EditThemeColors" id="NUM" />
     <public type="string" name="EditThemeTitle" id="NUM" />
-    <public type="string" name="EditVideo" id="NUM" />
     <public type="string" name="EditedMessage" id="NUM" />
     <public type="string" name="EmailCopied" id="NUM" />
     <public type="string" name="EmailPasswordConfirmText2" id="NUM" />
@@ -2643,6 +2648,7 @@
     <public type="string" name="GlobalAttachStickersRestricted" id="NUM" />
     <public type="string" name="GlobalSearch" id="NUM" />
     <public type="string" name="GlobalSendMessageRestricted" id="NUM" />
+    <public type="string" name="GoToSettings" id="NUM" />
     <public type="string" name="GotAQuestion" id="NUM" />
     <public type="string" name="GpsDisabledAlertText" id="NUM" />
     <public type="string" name="GpsDisabledAlertTitle" id="NUM" />
@@ -2689,6 +2695,8 @@
     <public type="string" name="HidAccount" id="NUM" />
     <public type="string" name="HiddenName" id="NUM" />
     <public type="string" name="HideAboveTheList" id="NUM" />
+    <public type="string" name="HideNewChatsAlertText" id="NUM" />
+    <public type="string" name="HideNewChatsAlertTitle" id="NUM" />
     <public type="string" name="HideOnTop" id="NUM" />
     <public type="string" name="Highlights" id="NUM" />
     <public type="string" name="HistoryCleared" id="NUM" />
@@ -4044,6 +4052,7 @@
     <public type="string" name="SetColor" id="NUM" />
     <public type="string" name="SetPasscode" id="NUM" />
     <public type="string" name="SetPasscodeInfo" id="NUM" />
+    <public type="string" name="SetProfilePhoto" id="NUM" />
     <public type="string" name="SetRecoveryEmail" id="NUM" />
     <public type="string" name="SetReminder" id="NUM" />
     <public type="string" name="SetTimer" id="NUM" />
@@ -4160,7 +4169,9 @@
     <public type="string" name="StartEncryptedChat" id="NUM" />
     <public type="string" name="StartMessaging" id="NUM" />
     <public type="string" name="StartText" id="NUM" />
+    <public type="string" name="StatisticOpenProfile" id="NUM" />
     <public type="string" name="StatisticOverview" id="NUM" />
+    <public type="string" name="StatisticSearchUserHistory" id="NUM" />
     <public type="string" name="Statistics" id="NUM" />
     <public type="string" name="StickerSets_few" id="NUM" />
     <public type="string" name="StickerSets_many" id="NUM" />

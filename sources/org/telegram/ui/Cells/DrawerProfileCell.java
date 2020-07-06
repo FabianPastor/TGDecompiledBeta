@@ -160,7 +160,7 @@ public class DrawerProfileCell extends FrameLayout {
             int r0 = org.telegram.ui.ActionBar.Theme.selectedAutoNightType
             if (r0 == 0) goto L_0x006e
             android.content.Context r0 = r7.getContext()
-            r2 = 2131624385(0x7f0e01c1, float:1.8875948E38)
+            r2 = 2131624386(0x7f0e01c2, float:1.887595E38)
             java.lang.String r3 = "AutoNightModeOff"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             android.widget.Toast r0 = android.widget.Toast.makeText(r0, r2, r1)
@@ -308,6 +308,14 @@ public class DrawerProfileCell extends FrameLayout {
         if (snowflakesEffect2 != null) {
             snowflakesEffect2.onDraw(this, canvas);
         }
+    }
+
+    public boolean isInAvatar(float f, float f2) {
+        return f >= ((float) this.avatarImageView.getLeft()) && f <= ((float) this.avatarImageView.getRight()) && f2 >= ((float) this.avatarImageView.getTop()) && f2 <= ((float) this.avatarImageView.getBottom());
+    }
+
+    public boolean hasAvatar() {
+        return this.avatarImageView.getImageReceiver().hasNotThumb();
     }
 
     public void setAccountsShown(boolean z, boolean z2) {

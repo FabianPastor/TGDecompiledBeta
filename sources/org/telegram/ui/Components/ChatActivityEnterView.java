@@ -9726,6 +9726,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         public class TimerView extends View {
             StaticLayout inLayout;
             boolean isRunning;
+            long lastSendTypingTime;
             float left;
             String oldString;
             StaticLayout outLayout;
@@ -9748,7 +9749,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
             public void start() {
                 this.isRunning = true;
-                this.startTime = System.currentTimeMillis();
+                long currentTimeMillis = System.currentTimeMillis();
+                this.startTime = currentTimeMillis;
+                this.lastSendTypingTime = currentTimeMillis;
                 invalidate();
             }
 
@@ -9760,6 +9763,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                     invalidate();
                 }
+                this.lastSendTypingTime = 0;
             }
 
             /* access modifiers changed from: protected */
@@ -9768,19 +9772,24 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 String str;
                 String str2;
                 Canvas canvas2 = canvas;
-                long currentTimeMillis = (this.isRunning ? System.currentTimeMillis() : this.stopTime) - this.startTime;
-                long j = currentTimeMillis / 1000;
-                int i = ((int) (currentTimeMillis % 1000)) / 10;
-                if (ChatActivityEnterView.this.videoSendButton != null && ChatActivityEnterView.this.videoSendButton.getTag() != null && currentTimeMillis >= 59500 && !this.stoppedInternal) {
+                long currentTimeMillis = System.currentTimeMillis();
+                long j = this.isRunning ? currentTimeMillis - this.startTime : this.stopTime - this.startTime;
+                long j2 = j / 1000;
+                int i = ((int) (j % 1000)) / 10;
+                if (ChatActivityEnterView.this.videoSendButton != null && ChatActivityEnterView.this.videoSendButton.getTag() != null && j >= 59500 && !this.stoppedInternal) {
                     float unused = ChatActivityEnterView.this.startedDraggingX = -1.0f;
                     ChatActivityEnterView.this.delegate.needStartRecordVideo(3, true, 0);
                     this.stoppedInternal = true;
                 }
-                long j2 = j / 60;
-                if (j2 >= 60) {
-                    str = String.format(Locale.US, "%01d:%02d:%02d,%d", new Object[]{Long.valueOf(j2 / 60), Long.valueOf(j2 % 60), Long.valueOf(j % 60), Integer.valueOf(i / 10)});
+                if (this.isRunning && currentTimeMillis > this.lastSendTypingTime + 5000) {
+                    this.lastSendTypingTime = currentTimeMillis;
+                    MessagesController.getInstance(ChatActivityEnterView.this.currentAccount).sendTyping(ChatActivityEnterView.this.dialog_id, (ChatActivityEnterView.this.videoSendButton == null || ChatActivityEnterView.this.videoSendButton.getTag() == null) ? 1 : 7, 0);
+                }
+                long j3 = j2 / 60;
+                if (j3 >= 60) {
+                    str = String.format(Locale.US, "%01d:%02d:%02d,%d", new Object[]{Long.valueOf(j3 / 60), Long.valueOf(j3 % 60), Long.valueOf(j2 % 60), Integer.valueOf(i / 10)});
                 } else {
-                    str = String.format(Locale.US, "%01d:%02d,%d", new Object[]{Long.valueOf(j2), Long.valueOf(j % 60), Integer.valueOf(i / 10)});
+                    str = String.format(Locale.US, "%01d:%02d,%d", new Object[]{Long.valueOf(j3), Long.valueOf(j2 % 60), Integer.valueOf(i / 10)});
                 }
                 if (str.length() < 3 || (str2 = this.oldString) == null || str2.length() < 3 || str.length() != this.oldString.length() || str.charAt(str.length() - 3) == this.oldString.charAt(str.length() - 3)) {
                     if (this.replaceStable == null) {

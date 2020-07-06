@@ -14,20 +14,24 @@ import android.text.style.URLSpan;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessageObject;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$MessageMedia;
 import org.telegram.tgnet.TLRPC$Peer;
+import org.telegram.tgnet.TLRPC$Photo;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_documentEmpty;
 import org.telegram.tgnet.TLRPC$TL_messageActionUserUpdatedPhoto;
 import org.telegram.tgnet.TLRPC$TL_photoEmpty;
+import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.PhotoViewer;
@@ -151,28 +155,41 @@ public class ChatActionCell extends BaseCell {
 
     public void setMessageObject(MessageObject messageObject) {
         int i;
-        if (this.currentMessageObject != messageObject || (!this.hasReplyMessage && messageObject.replyMessageObject != null)) {
-            this.currentMessageObject = messageObject;
-            this.hasReplyMessage = messageObject.replyMessageObject != null;
+        MessageObject messageObject2 = messageObject;
+        if (this.currentMessageObject != messageObject2 || (!this.hasReplyMessage && messageObject2.replyMessageObject != null)) {
+            this.currentMessageObject = messageObject2;
+            this.hasReplyMessage = messageObject2.replyMessageObject != null;
             this.previousWidth = 0;
+            TLRPC$VideoSize tLRPC$VideoSize = null;
             if (this.currentMessageObject.type == 11) {
-                TLRPC$Peer tLRPC$Peer = messageObject.messageOwner.to_id;
+                TLRPC$Peer tLRPC$Peer = messageObject2.messageOwner.to_id;
                 if (tLRPC$Peer != null) {
                     i = tLRPC$Peer.chat_id;
                     if (i == 0 && (i = tLRPC$Peer.channel_id) == 0 && (i = tLRPC$Peer.user_id) == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                        i = messageObject.messageOwner.from_id;
+                        i = messageObject2.messageOwner.from_id;
                     }
                 } else {
                     i = 0;
                 }
                 this.avatarDrawable.setInfo(i, (String) null, (String) null);
-                MessageObject messageObject2 = this.currentMessageObject;
-                if (messageObject2.messageOwner.action instanceof TLRPC$TL_messageActionUserUpdatedPhoto) {
-                    this.imageReceiver.setImage((ImageLocation) null, (String) null, this.avatarDrawable, (String) null, messageObject2, 0);
+                MessageObject messageObject3 = this.currentMessageObject;
+                if (messageObject3.messageOwner.action instanceof TLRPC$TL_messageActionUserUpdatedPhoto) {
+                    this.imageReceiver.setImage((ImageLocation) null, (String) null, this.avatarDrawable, (String) null, messageObject3, 0);
                 } else {
-                    TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(messageObject2.photoThumbs, AndroidUtilities.dp(64.0f));
+                    TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(messageObject3.photoThumbs, AndroidUtilities.dp(64.0f));
                     if (closestPhotoSizeWithSize != null) {
-                        this.imageReceiver.setImage(ImageLocation.getForObject(closestPhotoSizeWithSize, this.currentMessageObject.photoThumbsObject), "50_50", this.avatarDrawable, (String) null, this.currentMessageObject, 0);
+                        TLRPC$Photo tLRPC$Photo = messageObject2.messageOwner.action.photo;
+                        if (!tLRPC$Photo.video_sizes.isEmpty() && SharedConfig.autoplayGifs) {
+                            TLRPC$VideoSize tLRPC$VideoSize2 = tLRPC$Photo.video_sizes.get(0);
+                            if (DownloadController.getInstance(this.currentAccount).canDownloadMedia(4, tLRPC$VideoSize2.size)) {
+                                tLRPC$VideoSize = tLRPC$VideoSize2;
+                            }
+                        }
+                        if (tLRPC$VideoSize != null) {
+                            this.imageReceiver.setImage(ImageLocation.getForPhoto(tLRPC$VideoSize, tLRPC$Photo), "g", ImageLocation.getForObject(closestPhotoSizeWithSize, this.currentMessageObject.photoThumbsObject), "50_50", this.avatarDrawable, 0, (String) null, this.currentMessageObject, 1);
+                        } else {
+                            this.imageReceiver.setImage(ImageLocation.getForObject(closestPhotoSizeWithSize, this.currentMessageObject.photoThumbsObject), "50_50", this.avatarDrawable, (String) null, this.currentMessageObject, 0);
+                        }
                     } else {
                         this.imageReceiver.setImageBitmap((Drawable) this.avatarDrawable);
                     }

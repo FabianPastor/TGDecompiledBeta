@@ -588,6 +588,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         photoEntry.isVideo = z;
         photoEntry.thumbPath = str2;
         arrayList.add(photoEntry);
+        PhotoViewer.getInstance().setParentActivity(this.parentFragment.getParentActivity());
         PhotoViewer.getInstance().openPhotoForSelect(arrayList, 0, 1, false, new PhotoViewer.EmptyPhotoViewerProvider() {
             public boolean allowCaption() {
                 return false;
@@ -670,6 +671,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
 
     /* access modifiers changed from: private */
     public void processBitmap(Bitmap bitmap, MessageObject messageObject) {
+        VideoEditedInfo videoEditedInfo;
         if (bitmap != null) {
             this.bigPhoto = ImageLoader.scaleAndSaveImage(bitmap, 800.0f, 800.0f, 80, false, 320, 320);
             TLRPC$PhotoSize scaleAndSaveImage = ImageLoader.scaleAndSaveImage(bitmap, 150.0f, 150.0f, 80, false, 150, 150);
@@ -685,9 +687,9 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 UserConfig.getInstance(this.currentAccount).saveConfig(false);
                 this.uploadingImage = FileLoader.getDirectory(4) + "/" + this.bigPhoto.location.volume_id + "_" + this.bigPhoto.location.local_id + ".jpg";
                 if (this.uploadAfterSelect) {
-                    if (messageObject != null) {
+                    if (!(messageObject == null || (videoEditedInfo = messageObject.videoEditedInfo) == null)) {
                         this.convertingVideo = messageObject;
-                        long j = messageObject.videoEditedInfo.startTime;
+                        long j = videoEditedInfo.startTime;
                         if (j < 0) {
                             j = 0;
                         }

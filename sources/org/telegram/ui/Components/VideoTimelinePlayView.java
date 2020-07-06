@@ -11,6 +11,7 @@ import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadataRetriever;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.view.MotionEvent;
 import android.view.View;
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ public class VideoTimelinePlayView extends View {
     private VideoTimelineViewDelegate delegate;
     private Drawable drawableLeft;
     private Drawable drawableRight;
+    private ArrayList<Rect> exclusionRects = new ArrayList<>();
+    private Rect exclustionRect = new Rect();
     /* access modifiers changed from: private */
     public int frameHeight;
     /* access modifiers changed from: private */
@@ -80,6 +83,7 @@ public class VideoTimelinePlayView extends View {
         Drawable drawable2 = context.getResources().getDrawable(NUM);
         this.drawableRight = drawable2;
         drawable2.setColorFilter(new PorterDuffColorFilter(-16777216, PorterDuff.Mode.MULTIPLY));
+        this.exclusionRects.add(this.exclustionRect);
     }
 
     public float getProgress() {
@@ -112,6 +116,15 @@ public class VideoTimelinePlayView extends View {
         if (f2 - f3 > f) {
             this.progressRight = f3 + f;
             invalidate();
+        }
+    }
+
+    /* access modifiers changed from: protected */
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        super.onLayout(z, i, i2, i3, i4);
+        if (Build.VERSION.SDK_INT >= 29) {
+            this.exclustionRect.set(i, 0, i3, getMeasuredHeight());
+            setSystemGestureExclusionRects(this.exclusionRects);
         }
     }
 

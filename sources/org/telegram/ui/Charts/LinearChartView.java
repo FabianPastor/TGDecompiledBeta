@@ -17,10 +17,10 @@ public class LinearChartView extends BaseChartView<ChartData, LineViewData> {
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x015a  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x0162  */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x016d  */
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x0176  */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x0157  */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x015f  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x016a  */
+    /* JADX WARNING: Removed duplicated region for block: B:57:0x0173  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void drawChart(android.graphics.Canvas r19) {
         /*
@@ -28,53 +28,50 @@ public class LinearChartView extends BaseChartView<ChartData, LineViewData> {
             r0 = r18
             r1 = r19
             T r2 = r0.chartData
-            if (r2 == 0) goto L_0x0188
-            int r2 = r0.chartWidth
-            float r2 = (float) r2
+            if (r2 == 0) goto L_0x0185
+            float r2 = r0.chartWidth
             org.telegram.ui.Charts.ChartPickerDelegate r3 = r0.pickerDelegate
             float r4 = r3.pickerEnd
             float r3 = r3.pickerStart
             float r4 = r4 - r3
             float r2 = r2 / r4
             float r3 = r3 * r2
-            int r4 = org.telegram.ui.Charts.BaseChartView.HORIZONTAL_PADDING
-            float r4 = (float) r4
+            float r4 = org.telegram.ui.Charts.BaseChartView.HORIZONTAL_PADDING
             float r3 = r3 - r4
             r4 = 0
             r5 = 0
-        L_0x001b:
+        L_0x0019:
             java.util.ArrayList<L> r6 = r0.lines
             int r6 = r6.size()
-            if (r5 >= r6) goto L_0x0188
+            if (r5 >= r6) goto L_0x0185
             java.util.ArrayList<L> r6 = r0.lines
             java.lang.Object r6 = r6.get(r5)
             org.telegram.ui.Charts.view_data.LineViewData r6 = (org.telegram.ui.Charts.view_data.LineViewData) r6
             boolean r7 = r6.enabled
             r8 = 0
-            if (r7 != 0) goto L_0x003b
+            if (r7 != 0) goto L_0x0039
             float r7 = r6.alpha
             int r7 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
-            if (r7 != 0) goto L_0x003b
+            if (r7 != 0) goto L_0x0039
             r17 = r2
             r6 = 0
-            goto L_0x0181
-        L_0x003b:
+            goto L_0x017e
+        L_0x0039:
             T r7 = r0.chartData
             float[] r7 = r7.xPercentage
             int r9 = r7.length
             r10 = 2
             r11 = 1
-            if (r9 >= r10) goto L_0x0046
+            if (r9 >= r10) goto L_0x0044
             r7 = 0
-            goto L_0x004a
-        L_0x0046:
+            goto L_0x0048
+        L_0x0044:
             r7 = r7[r11]
             float r7 = r7 * r2
-        L_0x004a:
+        L_0x0048:
             org.telegram.ui.Charts.data.ChartData$Line r9 = r6.line
             int[] r9 = r9.y
-            int r12 = org.telegram.ui.Charts.BaseChartView.HORIZONTAL_PADDING
-            float r12 = (float) r12
+            float r12 = org.telegram.ui.Charts.BaseChartView.HORIZONTAL_PADDING
             float r12 = r12 / r7
             int r7 = (int) r12
             int r7 = r7 + r11
@@ -92,14 +89,14 @@ public class LinearChartView extends BaseChartView<ChartData, LineViewData> {
             int r7 = java.lang.Math.min(r13, r14)
             r13 = 1
             r14 = 0
-        L_0x006f:
+        L_0x006c:
             r15 = 1073741824(0x40000000, float:2.0)
-            if (r12 > r7) goto L_0x00e9
+            if (r12 > r7) goto L_0x00e6
             r16 = r9[r12]
-            if (r16 >= 0) goto L_0x007a
+            if (r16 >= 0) goto L_0x0077
             r17 = r2
-            goto L_0x00e0
-        L_0x007a:
+            goto L_0x00dd
+        L_0x0077:
             T r8 = r0.chartData
             float[] r8 = r8.xPercentage
             r8 = r8[r12]
@@ -131,15 +128,15 @@ public class LinearChartView extends BaseChartView<ChartData, LineViewData> {
             float r4 = r4 * r2
             float r11 = r11 - r4
             boolean r2 = org.telegram.ui.Charts.BaseChartView.USE_LINES
-            if (r2 == 0) goto L_0x00d2
-            if (r14 != 0) goto L_0x00bf
+            if (r2 == 0) goto L_0x00cf
+            if (r14 != 0) goto L_0x00bc
             float[] r2 = r6.linesPath
             int r4 = r14 + 1
             r2[r14] = r8
             int r14 = r4 + 1
             r2[r4] = r11
-            goto L_0x00e0
-        L_0x00bf:
+            goto L_0x00dd
+        L_0x00bc:
             float[] r2 = r6.linesPath
             int r4 = r14 + 1
             r2[r14] = r8
@@ -149,42 +146,42 @@ public class LinearChartView extends BaseChartView<ChartData, LineViewData> {
             r2[r10] = r8
             int r14 = r4 + 1
             r2[r4] = r11
-            goto L_0x00e0
-        L_0x00d2:
-            if (r13 == 0) goto L_0x00db
+            goto L_0x00dd
+        L_0x00cf:
+            if (r13 == 0) goto L_0x00d8
             android.graphics.Path r2 = r6.chartPath
             r2.moveTo(r8, r11)
             r13 = 0
-            goto L_0x00e0
-        L_0x00db:
+            goto L_0x00dd
+        L_0x00d8:
             android.graphics.Path r2 = r6.chartPath
             r2.lineTo(r8, r11)
-        L_0x00e0:
+        L_0x00dd:
             int r12 = r12 + 1
             r2 = r17
             r4 = 0
             r8 = 0
             r10 = 2
             r11 = 1
-            goto L_0x006f
-        L_0x00e9:
+            goto L_0x006c
+        L_0x00e6:
             r17 = r2
             r19.save()
             int r2 = r0.transitionMode
             r4 = 1065353216(0x3var_, float:1.0)
             r7 = 2
-            if (r2 != r7) goto L_0x0115
+            if (r2 != r7) goto L_0x0112
             org.telegram.ui.Charts.view_data.TransitionParams r2 = r0.transitionParams
             float r2 = r2.progress
             r7 = 1056964608(0x3var_, float:0.5)
             int r7 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
-            if (r7 <= 0) goto L_0x0101
+            if (r7 <= 0) goto L_0x00fe
             r8 = 0
-            goto L_0x0105
-        L_0x0101:
+            goto L_0x0102
+        L_0x00fe:
             float r2 = r2 * r15
             float r8 = r4 - r2
-        L_0x0105:
+        L_0x0102:
             org.telegram.ui.Charts.view_data.TransitionParams r2 = r0.transitionParams
             float r7 = r2.progress
             float r7 = r7 * r15
@@ -192,40 +189,40 @@ public class LinearChartView extends BaseChartView<ChartData, LineViewData> {
             float r9 = r2.pX
             float r2 = r2.pY
             r1.scale(r7, r4, r9, r2)
-        L_0x0113:
+        L_0x0110:
             r4 = r8
-            goto L_0x0143
-        L_0x0115:
+            goto L_0x0140
+        L_0x0112:
             r7 = 1
-            if (r2 != r7) goto L_0x013c
+            if (r2 != r7) goto L_0x0139
             org.telegram.ui.Charts.view_data.TransitionParams r2 = r0.transitionParams
             float r2 = r2.progress
             r7 = 1050253722(0x3e99999a, float:0.3)
             int r7 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
-            if (r7 >= 0) goto L_0x0125
+            if (r7 >= 0) goto L_0x0122
             r8 = 0
-            goto L_0x0126
-        L_0x0125:
+            goto L_0x0123
+        L_0x0122:
             r8 = r2
-        L_0x0126:
+        L_0x0123:
             r19.save()
             org.telegram.ui.Charts.view_data.TransitionParams r2 = r0.transitionParams
             float r7 = r2.progress
             boolean r2 = r2.needScaleY
-            if (r2 == 0) goto L_0x0132
+            if (r2 == 0) goto L_0x012f
             r4 = r7
-        L_0x0132:
+        L_0x012f:
             org.telegram.ui.Charts.view_data.TransitionParams r2 = r0.transitionParams
             float r9 = r2.pX
             float r2 = r2.pY
             r1.scale(r7, r4, r9, r2)
-            goto L_0x0113
-        L_0x013c:
+            goto L_0x0110
+        L_0x0139:
             r7 = 3
-            if (r2 != r7) goto L_0x0143
+            if (r2 != r7) goto L_0x0140
             org.telegram.ui.Charts.view_data.TransitionParams r2 = r0.transitionParams
             float r4 = r2.progress
-        L_0x0143:
+        L_0x0140:
             android.graphics.Paint r2 = r6.paint
             r7 = 1132396544(0x437var_, float:255.0)
             float r8 = r6.alpha
@@ -237,36 +234,36 @@ public class LinearChartView extends BaseChartView<ChartData, LineViewData> {
             int r4 = r0.startXIndex
             int r2 = r2 - r4
             r4 = 100
-            if (r2 <= r4) goto L_0x0162
+            if (r2 <= r4) goto L_0x015f
             android.graphics.Paint r2 = r6.paint
             android.graphics.Paint$Cap r4 = android.graphics.Paint.Cap.SQUARE
             r2.setStrokeCap(r4)
-            goto L_0x0169
-        L_0x0162:
+            goto L_0x0166
+        L_0x015f:
             android.graphics.Paint r2 = r6.paint
             android.graphics.Paint$Cap r4 = android.graphics.Paint.Cap.ROUND
             r2.setStrokeCap(r4)
-        L_0x0169:
+        L_0x0166:
             boolean r2 = org.telegram.ui.Charts.BaseChartView.USE_LINES
-            if (r2 != 0) goto L_0x0176
+            if (r2 != 0) goto L_0x0173
             android.graphics.Path r2 = r6.chartPath
             android.graphics.Paint r4 = r6.paint
             r1.drawPath(r2, r4)
             r6 = 0
-            goto L_0x017e
-        L_0x0176:
+            goto L_0x017b
+        L_0x0173:
             float[] r2 = r6.linesPath
             android.graphics.Paint r4 = r6.paint
             r6 = 0
             r1.drawLines(r2, r6, r14, r4)
-        L_0x017e:
+        L_0x017b:
             r19.restore()
-        L_0x0181:
+        L_0x017e:
             int r5 = r5 + 1
             r2 = r17
             r4 = 0
-            goto L_0x001b
-        L_0x0188:
+            goto L_0x0019
+        L_0x0185:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Charts.LinearChartView.drawChart(android.graphics.Canvas):void");
@@ -289,7 +286,7 @@ public class LinearChartView extends BaseChartView<ChartData, LineViewData> {
                     for (int i3 = 0; i3 < length; i3++) {
                         if (iArr[i3] >= 0) {
                             T t = this.chartData;
-                            float f = t.xPercentage[i3] * ((float) this.pickerWidth);
+                            float f = t.xPercentage[i3] * this.pickerWidth;
                             float f2 = BaseChartView.ANIMATE_PICKER_SIZES ? this.pickerMaxHeight : (float) t.maxValue;
                             float f3 = BaseChartView.ANIMATE_PICKER_SIZES ? this.pickerMinHeight : (float) this.chartData.minValue;
                             float f4 = (1.0f - ((((float) iArr[i3]) - f3) / (f2 - f3))) * ((float) this.pikerHeight);

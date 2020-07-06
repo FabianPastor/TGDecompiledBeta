@@ -505,6 +505,7 @@ public final class R {
         public static final int menu_calls_14 = NUM;
         public static final int menu_calls_ny = NUM;
         public static final int menu_camera = NUM;
+        public static final int menu_camera2 = NUM;
         public static final int menu_camera_av = NUM;
         public static final int menu_channel_ny = NUM;
         public static final int menu_chats = NUM;
@@ -571,6 +572,7 @@ public final class R {
         public static final int msg_addbot = NUM;
         public static final int msg_addcontact = NUM;
         public static final int msg_addfolder = NUM;
+        public static final int msg_addphoto = NUM;
         public static final int msg_archive = NUM;
         public static final int msg_block = NUM;
         public static final int msg_calendar = NUM;
@@ -739,6 +741,8 @@ public final class R {
         public static final int player_new_pause = NUM;
         public static final int player_new_play = NUM;
         public static final int player_new_previous = NUM;
+        public static final int player_new_repeat_reverse = NUM;
+        public static final int player_new_repeat_shuffle = NUM;
         public static final int player_new_repeatall = NUM;
         public static final int player_new_repeatone = NUM;
         public static final int player_new_shuffle = NUM;
@@ -1486,6 +1490,7 @@ public final class R {
         public static final int AddOneMemberAlertTitle = NUM;
         public static final int AddOneMemberForwardMessages = NUM;
         public static final int AddPeopleNearby = NUM;
+        public static final int AddPhoto = NUM;
         public static final int AddProxy = NUM;
         public static final int AddRecipient = NUM;
         public static final int AddShortcut = NUM;
@@ -2078,6 +2083,7 @@ public final class R {
         public static final int ChooseFromSearch = NUM;
         public static final int ChooseFromYourStickers = NUM;
         public static final int ChoosePhoto = NUM;
+        public static final int ChoosePhotoOrVideo = NUM;
         public static final int ChooseRecordVideo = NUM;
         public static final int ChooseStickerSet = NUM;
         public static final int ChooseStickerSetMy = NUM;
@@ -2406,7 +2412,6 @@ public final class R {
         public static final int EditPhoto = NUM;
         public static final int EditThemeColors = NUM;
         public static final int EditThemeTitle = NUM;
-        public static final int EditVideo = NUM;
         public static final int EditedMessage = NUM;
         public static final int EmailCopied = NUM;
         public static final int EmailPasswordConfirmText2 = NUM;
@@ -2782,6 +2787,7 @@ public final class R {
         public static final int GlobalAttachStickersRestricted = NUM;
         public static final int GlobalSearch = NUM;
         public static final int GlobalSendMessageRestricted = NUM;
+        public static final int GoToSettings = NUM;
         public static final int GotAQuestion = NUM;
         public static final int GpsDisabledAlertText = NUM;
         public static final int GpsDisabledAlertTitle = NUM;
@@ -2828,6 +2834,8 @@ public final class R {
         public static final int HidAccount = NUM;
         public static final int HiddenName = NUM;
         public static final int HideAboveTheList = NUM;
+        public static final int HideNewChatsAlertText = NUM;
+        public static final int HideNewChatsAlertTitle = NUM;
         public static final int HideOnTop = NUM;
         public static final int Highlights = NUM;
         public static final int HistoryCleared = NUM;
@@ -4183,6 +4191,7 @@ public final class R {
         public static final int SetColor = NUM;
         public static final int SetPasscode = NUM;
         public static final int SetPasscodeInfo = NUM;
+        public static final int SetProfilePhoto = NUM;
         public static final int SetRecoveryEmail = NUM;
         public static final int SetReminder = NUM;
         public static final int SetTimer = NUM;
@@ -4299,7 +4308,9 @@ public final class R {
         public static final int StartEncryptedChat = NUM;
         public static final int StartMessaging = NUM;
         public static final int StartText = NUM;
+        public static final int StatisticOpenProfile = NUM;
         public static final int StatisticOverview = NUM;
+        public static final int StatisticSearchUserHistory = NUM;
         public static final int Statistics = NUM;
         public static final int StickerSets_few = NUM;
         public static final int StickerSets_many = NUM;

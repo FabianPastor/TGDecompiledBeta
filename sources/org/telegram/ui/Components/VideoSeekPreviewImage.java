@@ -225,9 +225,9 @@ public class VideoSeekPreviewImage extends View {
             } else {
                 str = FileLoader.getPathToAttach(tLRPC$TL_document, false).getAbsolutePath();
             }
-            this.fileDrawable = new AnimatedFileDrawable(new File(str), true, (long) tLRPC$TL_document.size, tLRPC$TL_document, (ImageLocation) null, parentObject, intValue, true);
+            this.fileDrawable = new AnimatedFileDrawable(new File(str), true, (long) tLRPC$TL_document.size, tLRPC$TL_document, (ImageLocation) null, parentObject, 0, intValue, true);
         } else {
-            this.fileDrawable = new AnimatedFileDrawable(new File(uri.getPath()), true, 0, (TLRPC$Document) null, (ImageLocation) null, (Object) null, 0, true);
+            this.fileDrawable = new AnimatedFileDrawable(new File(uri.getPath()), true, 0, (TLRPC$Document) null, (ImageLocation) null, (Object) null, 0, 0, true);
         }
         this.duration = (long) this.fileDrawable.getDurationMs();
         float f = this.pendingProgress;

@@ -46,21 +46,22 @@ public class StackBarChartView extends BaseChartView<StackBarChartData, StackBar
         Canvas canvas2 = canvas;
         T t = this.chartData;
         if (t != null) {
+            float f5 = this.chartWidth;
             ChartPickerDelegate chartPickerDelegate = this.pickerDelegate;
-            float f5 = chartPickerDelegate.pickerEnd;
-            float f6 = chartPickerDelegate.pickerStart;
-            float f7 = ((float) this.chartWidth) / (f5 - f6);
-            float f8 = (f6 * f7) - ((float) BaseChartView.HORIZONTAL_PADDING);
+            float f6 = chartPickerDelegate.pickerEnd;
+            float f7 = chartPickerDelegate.pickerStart;
+            float f8 = f5 / (f6 - f7);
+            float f9 = (f7 * f8) - BaseChartView.HORIZONTAL_PADDING;
             boolean z = true;
             if (((StackBarChartData) t).xPercentage.length < 2) {
                 f2 = 1.0f;
                 f = 1.0f;
             } else {
-                float f9 = ((StackBarChartData) t).xPercentage[1] * f7;
-                f2 = ((StackBarChartData) t).xPercentage[1] * (f7 - f9);
-                f = f9;
+                float var_ = ((StackBarChartData) t).xPercentage[1] * f8;
+                f2 = ((StackBarChartData) t).xPercentage[1] * (f8 - var_);
+                f = var_;
             }
-            int i2 = ((int) (((float) BaseChartView.HORIZONTAL_PADDING) / f)) + 1;
+            int i2 = ((int) (BaseChartView.HORIZONTAL_PADDING / f)) + 1;
             int max = Math.max(0, (this.startXIndex - i2) - 2);
             int min = Math.min(((StackBarChartData) this.chartData).xPercentage.length - 1, this.endXIndex + i2 + 2);
             for (int i3 = 0; i3 < this.lines.size(); i3++) {
@@ -95,12 +96,12 @@ public class StackBarChartView extends BaseChartView<StackBarChartData, StackBar
                         LineViewData lineViewData = (LineViewData) this.lines.get(i5);
                         if (lineViewData.enabled || lineViewData.alpha != var_) {
                             int[] iArr = lineViewData.line.y;
-                            float var_ = ((f / var_) + (((StackBarChartData) this.chartData).xPercentage[max] * (f7 - f))) - f8;
+                            float var_ = ((f / var_) + (((StackBarChartData) this.chartData).xPercentage[max] * (f8 - f))) - f9;
                             float measuredHeight = (((float) iArr[max]) / this.currentMaxHeight) * ((float) ((getMeasuredHeight() - this.chartBottom) - BaseChartView.SIGNATURE_TEXT_HEIGHT)) * lineViewData.alpha;
                             float[] fArr = lineViewData.linesPath;
                             i = min;
                             int i6 = lineViewData.linesPathBottomSize;
-                            f4 = f8;
+                            f4 = f9;
                             int i7 = i6 + 1;
                             lineViewData.linesPathBottomSize = i7;
                             fArr[i6] = var_;
@@ -115,22 +116,22 @@ public class StackBarChartView extends BaseChartView<StackBarChartData, StackBar
                             var_ += measuredHeight;
                         } else {
                             i = min;
-                            f4 = f8;
+                            f4 = f9;
                         }
                         i5++;
                         min = i;
-                        f8 = f4;
+                        f9 = f4;
                         var_ = 2.0f;
                         var_ = 0.0f;
                     }
                 }
                 max++;
                 min = min;
-                f8 = f8;
+                f9 = f9;
                 var_ = 2.0f;
                 var_ = 0.0f;
             }
-            float var_ = f8;
+            float var_ = f9;
             for (int i10 = 0; i10 < this.lines.size(); i10++) {
                 StackBarViewData stackBarViewData = (StackBarViewData) this.lines.get(i10);
                 Paint paint = (z || this.postTransition) ? stackBarViewData.unselectedPaint : stackBarViewData.paint;
@@ -155,7 +156,7 @@ public class StackBarChartView extends BaseChartView<StackBarChartData, StackBar
                     int[] iArr2 = lineViewData2.line.y;
                     float[] fArr2 = ((StackBarChartData) this.chartData).xPercentage;
                     int i12 = this.selectedIndex;
-                    float var_ = ((f / 2.0f) + (fArr2[i12] * (f7 - f))) - var_;
+                    float var_ = ((f / 2.0f) + (fArr2[i12] * (f8 - f))) - var_;
                     float measuredHeight2 = (((float) iArr2[i12]) / this.currentMaxHeight) * ((float) ((getMeasuredHeight() - this.chartBottom) - BaseChartView.SIGNATURE_TEXT_HEIGHT)) * lineViewData2.alpha;
                     lineViewData2.paint.setStrokeWidth(f2);
                     lineViewData2.paint.setAlpha((int) (f3 * 255.0f));
@@ -173,7 +174,7 @@ public class StackBarChartView extends BaseChartView<StackBarChartData, StackBar
         T t = this.chartData;
         if (t != null) {
             float f2 = this.chartFullWidth;
-            float f3 = (this.pickerDelegate.pickerStart * f2) - ((float) BaseChartView.HORIZONTAL_PADDING);
+            float f3 = (this.pickerDelegate.pickerStart * f2) - BaseChartView.HORIZONTAL_PADDING;
             if (((StackBarChartData) t).xPercentage.length < 2) {
                 f = 1.0f;
             } else {
@@ -225,7 +226,7 @@ public class StackBarChartView extends BaseChartView<StackBarChartData, StackBar
                 this.yMaxPoints = new int[size];
             }
             for (int i2 = 0; i2 < length; i2++) {
-                float f3 = ((StackBarChartData) this.chartData).xPercentage[i2] * ((float) this.pickerWidth);
+                float f3 = ((StackBarChartData) this.chartData).xPercentage[i2] * this.pickerWidth;
                 int i3 = 0;
                 while (true) {
                     f2 = 0.0f;
@@ -278,7 +279,7 @@ public class StackBarChartView extends BaseChartView<StackBarChartData, StackBar
             if (((StackBarChartData) t2).xPercentage.length < 2) {
                 f = 1.0f;
             } else {
-                f = ((StackBarChartData) t2).xPercentage[1] * ((float) this.pickerWidth);
+                f = ((StackBarChartData) t2).xPercentage[1] * this.pickerWidth;
             }
             for (int i11 = 0; i11 < size; i11++) {
                 LineViewData lineViewData3 = (LineViewData) this.lines.get(i11);

@@ -116,6 +116,7 @@ public class NotificationCenter {
     public static final int newLocationAvailable;
     public static final int newPeopleNearbyAvailable;
     public static final int newSessionReceived;
+    public static final int newSuggestionsAvailable;
     public static final int notificationsCountUpdated;
     public static final int notificationsSettingsUpdated;
     public static final int openArticle;
@@ -173,11 +174,17 @@ public class NotificationCenter {
     private int currentAccount;
     private int currentHeavyOperationFlags;
     private ArrayList<DelayedPost> delayedPosts = new ArrayList<>(10);
+    private ArrayList<DelayedPost> delayedPostsTmp = new ArrayList<>(10);
     private SparseArray<ArrayList<NotificationCenterDelegate>> observers = new SparseArray<>();
+    private ArrayList<PostponeNotificationCallback> postponeCallbackList = new ArrayList<>(10);
     private SparseArray<ArrayList<NotificationCenterDelegate>> removeAfterBroadcast = new SparseArray<>();
 
     public interface NotificationCenterDelegate {
         void didReceivedNotification(int i, int i2, Object... objArr);
+    }
+
+    public interface PostponeNotificationCallback {
+        boolean needPostpone(int i, int i2, Object[] objArr);
     }
 
     static {
@@ -428,225 +435,228 @@ public class NotificationCenter {
         scheduledMessagesUpdated = i81;
         int i83 = i82 + 1;
         totalEvents = i83;
-        walletPendingTransactionsChanged = i82;
+        newSuggestionsAvailable = i82;
         int i84 = i83 + 1;
         totalEvents = i84;
-        walletSyncProgressChanged = i83;
+        walletPendingTransactionsChanged = i83;
         int i85 = i84 + 1;
         totalEvents = i85;
-        httpFileDidLoad = i84;
+        walletSyncProgressChanged = i84;
         int i86 = i85 + 1;
         totalEvents = i86;
-        httpFileDidFailedLoad = i85;
+        httpFileDidLoad = i85;
         int i87 = i86 + 1;
         totalEvents = i87;
-        didUpdateConnectionState = i86;
+        httpFileDidFailedLoad = i86;
         int i88 = i87 + 1;
         totalEvents = i88;
-        FileDidUpload = i87;
+        didUpdateConnectionState = i87;
         int i89 = i88 + 1;
         totalEvents = i89;
-        FileDidFailUpload = i88;
+        FileDidUpload = i88;
         int i90 = i89 + 1;
         totalEvents = i90;
-        FileUploadProgressChanged = i89;
+        FileDidFailUpload = i89;
         int i91 = i90 + 1;
         totalEvents = i91;
-        FileLoadProgressChanged = i90;
+        FileUploadProgressChanged = i90;
         int i92 = i91 + 1;
         totalEvents = i92;
-        fileDidLoad = i91;
+        FileLoadProgressChanged = i91;
         int i93 = i92 + 1;
         totalEvents = i93;
-        fileDidFailToLoad = i92;
+        fileDidLoad = i92;
         int i94 = i93 + 1;
         totalEvents = i94;
-        filePreparingStarted = i93;
+        fileDidFailToLoad = i93;
         int i95 = i94 + 1;
         totalEvents = i95;
-        fileNewChunkAvailable = i94;
+        filePreparingStarted = i94;
         int i96 = i95 + 1;
         totalEvents = i96;
-        filePreparingFailed = i95;
+        fileNewChunkAvailable = i95;
         int i97 = i96 + 1;
         totalEvents = i97;
-        dialogsUnreadCounterChanged = i96;
+        filePreparingFailed = i96;
         int i98 = i97 + 1;
         totalEvents = i98;
-        messagePlayingProgressDidChanged = i97;
+        dialogsUnreadCounterChanged = i97;
         int i99 = i98 + 1;
         totalEvents = i99;
-        messagePlayingDidReset = i98;
+        messagePlayingProgressDidChanged = i98;
         int i100 = i99 + 1;
         totalEvents = i100;
-        messagePlayingPlayStateChanged = i99;
+        messagePlayingDidReset = i99;
         int i101 = i100 + 1;
         totalEvents = i101;
-        messagePlayingDidStart = i100;
+        messagePlayingPlayStateChanged = i100;
         int i102 = i101 + 1;
         totalEvents = i102;
-        messagePlayingDidSeek = i101;
+        messagePlayingDidStart = i101;
         int i103 = i102 + 1;
         totalEvents = i103;
-        messagePlayingGoingToStop = i102;
+        messagePlayingDidSeek = i102;
         int i104 = i103 + 1;
         totalEvents = i104;
-        recordProgressChanged = i103;
+        messagePlayingGoingToStop = i103;
         int i105 = i104 + 1;
         totalEvents = i105;
-        recordStarted = i104;
+        recordProgressChanged = i104;
         int i106 = i105 + 1;
         totalEvents = i106;
-        recordStartError = i105;
+        recordStarted = i105;
         int i107 = i106 + 1;
         totalEvents = i107;
-        recordStopped = i106;
+        recordStartError = i106;
         int i108 = i107 + 1;
         totalEvents = i108;
-        screenshotTook = i107;
+        recordStopped = i107;
         int i109 = i108 + 1;
         totalEvents = i109;
-        albumsDidLoad = i108;
+        screenshotTook = i108;
         int i110 = i109 + 1;
         totalEvents = i110;
-        audioDidSent = i109;
+        albumsDidLoad = i109;
         int i111 = i110 + 1;
         totalEvents = i111;
-        audioRecordTooShort = i110;
+        audioDidSent = i110;
         int i112 = i111 + 1;
         totalEvents = i112;
-        audioRouteChanged = i111;
+        audioRecordTooShort = i111;
         int i113 = i112 + 1;
         totalEvents = i113;
-        didStartedCall = i112;
+        audioRouteChanged = i112;
         int i114 = i113 + 1;
         totalEvents = i114;
-        didEndCall = i113;
+        didStartedCall = i113;
         int i115 = i114 + 1;
         totalEvents = i115;
-        closeInCallActivity = i114;
+        didEndCall = i114;
         int i116 = i115 + 1;
         totalEvents = i116;
-        appDidLogout = i115;
+        closeInCallActivity = i115;
         int i117 = i116 + 1;
         totalEvents = i117;
-        configLoaded = i116;
+        appDidLogout = i116;
         int i118 = i117 + 1;
         totalEvents = i118;
-        needDeleteDialog = i117;
+        configLoaded = i117;
         int i119 = i118 + 1;
         totalEvents = i119;
-        newEmojiSuggestionsAvailable = i118;
+        needDeleteDialog = i118;
         int i120 = i119 + 1;
         totalEvents = i120;
-        themeUploadedToServer = i119;
+        newEmojiSuggestionsAvailable = i119;
         int i121 = i120 + 1;
         totalEvents = i121;
-        themeUploadError = i120;
+        themeUploadedToServer = i120;
         int i122 = i121 + 1;
         totalEvents = i122;
-        dialogFiltersUpdated = i121;
+        themeUploadError = i121;
         int i123 = i122 + 1;
         totalEvents = i123;
-        filterSettingsUpdated = i122;
+        dialogFiltersUpdated = i122;
         int i124 = i123 + 1;
         totalEvents = i124;
-        suggestedFiltersLoaded = i123;
+        filterSettingsUpdated = i123;
         int i125 = i124 + 1;
         totalEvents = i125;
-        pushMessagesUpdated = i124;
+        suggestedFiltersLoaded = i124;
         int i126 = i125 + 1;
         totalEvents = i126;
-        stopEncodingService = i125;
+        pushMessagesUpdated = i125;
         int i127 = i126 + 1;
         totalEvents = i127;
-        wallpapersDidLoad = i126;
+        stopEncodingService = i126;
         int i128 = i127 + 1;
         totalEvents = i128;
-        wallpapersNeedReload = i127;
+        wallpapersDidLoad = i127;
         int i129 = i128 + 1;
         totalEvents = i129;
-        didReceiveSmsCode = i128;
+        wallpapersNeedReload = i128;
         int i130 = i129 + 1;
         totalEvents = i130;
-        didReceiveCall = i129;
+        didReceiveSmsCode = i129;
         int i131 = i130 + 1;
         totalEvents = i131;
-        emojiDidLoad = i130;
+        didReceiveCall = i130;
         int i132 = i131 + 1;
         totalEvents = i132;
-        closeOtherAppActivities = i131;
+        emojiDidLoad = i131;
         int i133 = i132 + 1;
         totalEvents = i133;
-        cameraInitied = i132;
+        closeOtherAppActivities = i132;
         int i134 = i133 + 1;
         totalEvents = i134;
-        didReplacedPhotoInMemCache = i133;
+        cameraInitied = i133;
         int i135 = i134 + 1;
         totalEvents = i135;
-        didSetNewTheme = i134;
+        didReplacedPhotoInMemCache = i134;
         int i136 = i135 + 1;
         totalEvents = i136;
-        themeListUpdated = i135;
+        didSetNewTheme = i135;
         int i137 = i136 + 1;
         totalEvents = i137;
-        didApplyNewTheme = i136;
+        themeListUpdated = i136;
         int i138 = i137 + 1;
         totalEvents = i138;
-        themeAccentListUpdated = i137;
+        didApplyNewTheme = i137;
         int i139 = i138 + 1;
         totalEvents = i139;
-        needCheckSystemBarColors = i138;
+        themeAccentListUpdated = i138;
         int i140 = i139 + 1;
         totalEvents = i140;
-        needShareTheme = i139;
+        needCheckSystemBarColors = i139;
         int i141 = i140 + 1;
         totalEvents = i141;
-        needSetDayNightTheme = i140;
+        needShareTheme = i140;
         int i142 = i141 + 1;
         totalEvents = i142;
-        goingToPreviewTheme = i141;
+        needSetDayNightTheme = i141;
         int i143 = i142 + 1;
         totalEvents = i143;
-        locationPermissionGranted = i142;
+        goingToPreviewTheme = i142;
         int i144 = i143 + 1;
         totalEvents = i144;
-        reloadInterface = i143;
+        locationPermissionGranted = i143;
         int i145 = i144 + 1;
         totalEvents = i145;
-        suggestedLangpack = i144;
+        reloadInterface = i144;
         int i146 = i145 + 1;
         totalEvents = i146;
-        didSetNewWallpapper = i145;
+        suggestedLangpack = i145;
         int i147 = i146 + 1;
         totalEvents = i147;
-        proxySettingsChanged = i146;
+        didSetNewWallpapper = i146;
         int i148 = i147 + 1;
         totalEvents = i148;
-        proxyCheckDone = i147;
+        proxySettingsChanged = i147;
         int i149 = i148 + 1;
         totalEvents = i149;
-        liveLocationsChanged = i148;
+        proxyCheckDone = i148;
         int i150 = i149 + 1;
         totalEvents = i150;
-        newLocationAvailable = i149;
+        liveLocationsChanged = i149;
         int i151 = i150 + 1;
         totalEvents = i151;
-        liveLocationsCacheChanged = i150;
+        newLocationAvailable = i150;
         int i152 = i151 + 1;
         totalEvents = i152;
-        notificationsCountUpdated = i151;
+        liveLocationsCacheChanged = i151;
         int i153 = i152 + 1;
         totalEvents = i153;
-        playerDidStartPlaying = i152;
+        notificationsCountUpdated = i152;
         int i154 = i153 + 1;
         totalEvents = i154;
-        closeSearchByActiveAction = i153;
+        playerDidStartPlaying = i153;
         int i155 = i154 + 1;
         totalEvents = i155;
-        messagePlayingSpeedChanged = i154;
-        totalEvents = i155 + 1;
-        screenStateChanged = i155;
+        closeSearchByActiveAction = i154;
+        int i156 = i155 + 1;
+        totalEvents = i156;
+        messagePlayingSpeedChanged = i155;
+        totalEvents = i156 + 1;
+        screenStateChanged = i156;
     }
 
     private static class DelayedPost {
@@ -724,14 +734,21 @@ public class NotificationCenter {
             this.animationInProgressCount = i2;
             if (i2 == 0) {
                 getGlobalInstance().postNotificationName(startAllHeavyOperations, 512);
-                if (!this.delayedPosts.isEmpty()) {
-                    for (int i3 = 0; i3 < this.delayedPosts.size(); i3++) {
-                        DelayedPost delayedPost = this.delayedPosts.get(i3);
-                        postNotificationNameInternal(delayedPost.id, true, delayedPost.args);
-                    }
-                    this.delayedPosts.clear();
-                }
+                runDelayedNotifications();
             }
+        }
+    }
+
+    public void runDelayedNotifications() {
+        if (!this.delayedPosts.isEmpty()) {
+            this.delayedPostsTmp.clear();
+            this.delayedPostsTmp.addAll(this.delayedPosts);
+            this.delayedPosts.clear();
+            for (int i = 0; i < this.delayedPostsTmp.size(); i++) {
+                DelayedPost delayedPost = this.delayedPostsTmp.get(i);
+                postNotificationNameInternal(delayedPost.id, true, delayedPost.args);
+            }
+            this.delayedPostsTmp.clear();
         }
     }
 
@@ -781,32 +798,40 @@ public class NotificationCenter {
         if (BuildVars.DEBUG_VERSION && Thread.currentThread() != ApplicationLoader.applicationHandler.getLooper().getThread()) {
             throw new RuntimeException("postNotificationName allowed only from MAIN thread");
         } else if (z || !isAnimationInProgress()) {
+            if (!this.postponeCallbackList.isEmpty()) {
+                for (int i2 = 0; i2 < this.postponeCallbackList.size(); i2++) {
+                    if (this.postponeCallbackList.get(i2).needPostpone(i, this.currentAccount, objArr)) {
+                        this.delayedPosts.add(new DelayedPost(i, objArr));
+                        return;
+                    }
+                }
+            }
             this.broadcasting++;
             ArrayList arrayList = this.observers.get(i);
             if (arrayList != null && !arrayList.isEmpty()) {
-                for (int i2 = 0; i2 < arrayList.size(); i2++) {
-                    ((NotificationCenterDelegate) arrayList.get(i2)).didReceivedNotification(i, this.currentAccount, objArr);
+                for (int i3 = 0; i3 < arrayList.size(); i3++) {
+                    ((NotificationCenterDelegate) arrayList.get(i3)).didReceivedNotification(i, this.currentAccount, objArr);
                 }
             }
-            int i3 = this.broadcasting - 1;
-            this.broadcasting = i3;
-            if (i3 == 0) {
+            int i4 = this.broadcasting - 1;
+            this.broadcasting = i4;
+            if (i4 == 0) {
                 if (this.removeAfterBroadcast.size() != 0) {
-                    for (int i4 = 0; i4 < this.removeAfterBroadcast.size(); i4++) {
-                        int keyAt = this.removeAfterBroadcast.keyAt(i4);
+                    for (int i5 = 0; i5 < this.removeAfterBroadcast.size(); i5++) {
+                        int keyAt = this.removeAfterBroadcast.keyAt(i5);
                         ArrayList arrayList2 = this.removeAfterBroadcast.get(keyAt);
-                        for (int i5 = 0; i5 < arrayList2.size(); i5++) {
-                            removeObserver((NotificationCenterDelegate) arrayList2.get(i5), keyAt);
+                        for (int i6 = 0; i6 < arrayList2.size(); i6++) {
+                            removeObserver((NotificationCenterDelegate) arrayList2.get(i6), keyAt);
                         }
                     }
                     this.removeAfterBroadcast.clear();
                 }
                 if (this.addAfterBroadcast.size() != 0) {
-                    for (int i6 = 0; i6 < this.addAfterBroadcast.size(); i6++) {
-                        int keyAt2 = this.addAfterBroadcast.keyAt(i6);
+                    for (int i7 = 0; i7 < this.addAfterBroadcast.size(); i7++) {
+                        int keyAt2 = this.addAfterBroadcast.keyAt(i7);
                         ArrayList arrayList3 = this.addAfterBroadcast.get(keyAt2);
-                        for (int i7 = 0; i7 < arrayList3.size(); i7++) {
-                            addObserver((NotificationCenterDelegate) arrayList3.get(i7), keyAt2);
+                        for (int i8 = 0; i8 < arrayList3.size(); i8++) {
+                            addObserver((NotificationCenterDelegate) arrayList3.get(i8), keyAt2);
                         }
                     }
                     this.addAfterBroadcast.clear();
@@ -864,5 +889,21 @@ public class NotificationCenter {
 
     public boolean hasObservers(int i) {
         return this.observers.indexOfKey(i) >= 0;
+    }
+
+    public void addPostponeNotificationsCallback(PostponeNotificationCallback postponeNotificationCallback) {
+        if (BuildVars.DEBUG_VERSION && Thread.currentThread() != ApplicationLoader.applicationHandler.getLooper().getThread()) {
+            throw new RuntimeException("PostponeNotificationsCallback allowed only from MAIN thread");
+        } else if (!this.postponeCallbackList.contains(postponeNotificationCallback)) {
+            this.postponeCallbackList.add(postponeNotificationCallback);
+        }
+    }
+
+    public void removePostponeNotificationsCallback(PostponeNotificationCallback postponeNotificationCallback) {
+        if (BuildVars.DEBUG_VERSION && Thread.currentThread() != ApplicationLoader.applicationHandler.getLooper().getThread()) {
+            throw new RuntimeException("removePostponeNotificationsCallback allowed only from MAIN thread");
+        } else if (this.postponeCallbackList.remove(postponeNotificationCallback)) {
+            runDelayedNotifications();
+        }
     }
 }

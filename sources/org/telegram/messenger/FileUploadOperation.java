@@ -19,6 +19,7 @@ import org.telegram.tgnet.TLRPC$TL_inputFileBig;
 public class FileUploadOperation {
     private static final int initialRequestsCount = 8;
     private static final int initialRequestsSlowNetworkCount = 1;
+    private static final int maxUploadParts = 4000;
     private static final int maxUploadingKBytes = 2048;
     private static final int maxUploadingSlowNetworkKBytes = 32;
     private static final int minUploadChunkSize = 128;
@@ -347,7 +348,7 @@ public class FileUploadOperation {
             r9 = 128(0x80, double:6.32E-322)
         L_0x0054:
             long r13 = r12.totalFileSize     // Catch:{ Exception -> 0x0499 }
-            r15 = 3072000(0x2ee000, double:1.5177697E-317)
+            r15 = 4096000(0x3e8000, double:2.023693E-317)
             long r13 = r13 + r15
             r17 = 1
             long r13 = r13 - r17

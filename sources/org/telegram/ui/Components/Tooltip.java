@@ -59,7 +59,7 @@ public class Tooltip extends TextView {
             }
             int width = (i2 + (this.anchor.getWidth() / 2)) - (getMeasuredWidth() / 2);
             if (width >= 0) {
-                i = width;
+                i = getMeasuredWidth() + width > view.getMeasuredWidth() ? (view.getMeasuredWidth() - getMeasuredWidth()) - AndroidUtilities.dp(16.0f) : width;
             }
             setTranslationX((float) i);
             setTranslationY((float) (i3 - getMeasuredHeight()));

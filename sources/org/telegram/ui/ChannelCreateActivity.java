@@ -114,6 +114,9 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     private TextView helpTextView;
     /* access modifiers changed from: private */
     public ImageUpdater imageUpdater;
+    private TLRPC$InputFile inputPhoto;
+    private TLRPC$InputFile inputVideo;
+    private String inputVideoPath;
     private TLRPC$ExportedChatInvite invite;
     /* access modifiers changed from: private */
     public boolean isPrivate;
@@ -138,7 +141,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     private RadioButtonCell radioButtonCell2;
     private ShadowSectionCell sectionCell;
     private TextInfoPrivacyCell typeInfoCell;
-    private TLRPC$InputFile uploadedAvatar;
+    private double videoTimestamp;
 
     static /* synthetic */ boolean lambda$createView$2(View view, MotionEvent motionEvent) {
         return true;
@@ -150,7 +153,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         this.currentStep = i;
         if (i == 0) {
             this.avatarDrawable = new AvatarDrawable();
-            this.imageUpdater = new ImageUpdater(false);
+            this.imageUpdater = new ImageUpdater(true);
             TLRPC$TL_channels_checkUsername tLRPC$TL_channels_checkUsername = new TLRPC$TL_channels_checkUsername();
             tLRPC$TL_channels_checkUsername.username = "1";
             tLRPC$TL_channels_checkUsername.channel = new TLRPC$TL_inputChannelEmpty();
@@ -808,7 +811,10 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     public /* synthetic */ void lambda$null$3$ChannelCreateActivity() {
         this.avatar = null;
         this.avatarBig = null;
-        this.uploadedAvatar = null;
+        this.inputPhoto = null;
+        this.inputVideo = null;
+        this.inputVideoPath = null;
+        this.videoTimestamp = 0.0d;
         showAvatarProgress(false, true);
         this.avatarImage.setImage((ImageLocation) null, (String) null, (Drawable) this.avatarDrawable, (Object) null);
     }
@@ -960,26 +966,35 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     public void didUploadPhoto(TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, double d, String str, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$InputFile, tLRPC$PhotoSize2, tLRPC$PhotoSize) {
+        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$InputFile, tLRPC$InputFile2, str, d, tLRPC$PhotoSize2, tLRPC$PhotoSize) {
             public final /* synthetic */ TLRPC$InputFile f$1;
-            public final /* synthetic */ TLRPC$PhotoSize f$2;
-            public final /* synthetic */ TLRPC$PhotoSize f$3;
+            public final /* synthetic */ TLRPC$InputFile f$2;
+            public final /* synthetic */ String f$3;
+            public final /* synthetic */ double f$4;
+            public final /* synthetic */ TLRPC$PhotoSize f$5;
+            public final /* synthetic */ TLRPC$PhotoSize f$6;
 
             {
                 this.f$1 = r2;
                 this.f$2 = r3;
                 this.f$3 = r4;
+                this.f$4 = r5;
+                this.f$5 = r7;
+                this.f$6 = r8;
             }
 
             public final void run() {
-                ChannelCreateActivity.this.lambda$didUploadPhoto$11$ChannelCreateActivity(this.f$1, this.f$2, this.f$3);
+                ChannelCreateActivity.this.lambda$didUploadPhoto$11$ChannelCreateActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
             }
         });
     }
 
-    public /* synthetic */ void lambda$didUploadPhoto$11$ChannelCreateActivity(TLRPC$InputFile tLRPC$InputFile, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
+    public /* synthetic */ void lambda$didUploadPhoto$11$ChannelCreateActivity(TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, String str, double d, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
         if (tLRPC$InputFile != null) {
-            this.uploadedAvatar = tLRPC$InputFile;
+            this.inputPhoto = tLRPC$InputFile;
+            this.inputVideo = tLRPC$InputFile2;
+            this.inputVideoPath = str;
+            this.videoTimestamp = d;
             if (this.createAfterUpload) {
                 try {
                     if (this.progressDialog != null && this.progressDialog.isShowing()) {
@@ -1126,8 +1141,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             bundle.putInt("step", 1);
             bundle.putInt("chat_id", intValue);
             bundle.putBoolean("canCreatePublic", this.canCreatePublic);
-            if (this.uploadedAvatar != null) {
-                MessagesController.getInstance(this.currentAccount).changeChatAvatar(intValue, this.uploadedAvatar, this.avatar, this.avatarBig);
+            if (this.inputPhoto != null) {
+                MessagesController.getInstance(this.currentAccount).changeChatAvatar(intValue, this.inputPhoto, this.inputVideo, this.videoTimestamp, this.inputVideoPath, this.avatar, this.avatarBig);
             }
             presentFragment(new ChannelCreateActivity(bundle), true);
         }

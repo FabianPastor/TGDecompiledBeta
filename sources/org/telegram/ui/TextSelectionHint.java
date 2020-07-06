@@ -123,8 +123,13 @@ class TextSelectionHint extends View {
                 show();
             }
             this.showOnMeasure = false;
-            this.lastW = getMeasuredHeight();
+            this.lastW = getMeasuredWidth();
         }
+        int height = this.textLayout.getHeight() + (AndroidUtilities.dp(8.0f) * 2);
+        if (height < AndroidUtilities.dp(56.0f)) {
+            height = AndroidUtilities.dp(56.0f);
+        }
+        setMeasuredDimension(getMeasuredWidth(), height);
     }
 
     /* access modifiers changed from: protected */

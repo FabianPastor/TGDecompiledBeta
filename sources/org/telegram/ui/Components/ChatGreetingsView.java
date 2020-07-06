@@ -54,7 +54,6 @@ public class ChatGreetingsView extends LinearLayout {
         addView(this.titleView, LayoutHelper.createLinear(-1, -2, 20.0f, 14.0f, 20.0f, 14.0f));
         addView(this.descriptionView, LayoutHelper.createLinear(-1, -2, 20.0f, 12.0f, 20.0f, 0.0f));
         addView(this.stickerToSendView, LayoutHelper.createLinear(112, 112, 1, 0, 16, 0, 16));
-        setBackgroundResource(NUM);
         updateColors();
         this.titleView.setText(LocaleController.formatString("NearbyPeopleGreetingsMessage", NUM, tLRPC$User.first_name, LocaleController.formatDistance((float) i, 1)));
         this.descriptionView.setText(LocaleController.getString("NearbyPeopleGreetingsDescription", NUM));
@@ -167,7 +166,7 @@ public class ChatGreetingsView extends LinearLayout {
     private void updateColors() {
         this.titleView.setTextColor(Theme.getColor("chat_serviceText"));
         this.descriptionView.setTextColor(Theme.getColor("chat_serviceText"));
-        getBackground().setColorFilter(Theme.colorFilter);
+        setBackground(Theme.createRoundRectDrawable(AndroidUtilities.dp(10.0f), Theme.getColor("chat_serviceBackground")));
     }
 
     public void setListener(Listener listener2) {

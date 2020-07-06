@@ -47,7 +47,7 @@ public class FileLoadOperation {
     private static final int cdnChunkCheckSize = 131072;
     private static final int downloadChunkSize = 32768;
     private static final int downloadChunkSizeBig = 131072;
-    private static final int maxCdnParts = 12288;
+    private static final int maxCdnParts = 16000;
     private static final int maxDownloadRequests = 4;
     private static final int maxDownloadRequestsBig = 4;
     private static final int preloadMaxBytes = 2097152;
@@ -3434,7 +3434,7 @@ public class FileLoadOperation {
                 if (this.notCheckedCdnRanges == null) {
                     ArrayList<Range> arrayList = new ArrayList<>();
                     this.notCheckedCdnRanges = arrayList;
-                    arrayList.add(new Range(0, 12288));
+                    arrayList.add(new Range(0, 16000));
                 }
                 this.cdnDatacenterId = tLRPC$TL_upload_fileCdnRedirect.dc_id;
                 this.cdnIv = tLRPC$TL_upload_fileCdnRedirect.encryption_iv;

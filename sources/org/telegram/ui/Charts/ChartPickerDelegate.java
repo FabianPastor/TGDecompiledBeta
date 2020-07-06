@@ -17,7 +17,7 @@ public class ChartPickerDelegate {
     public float moveToY;
     public float pickerEnd = 1.0f;
     public float pickerStart = 0.7f;
-    public int pickerWidth;
+    public float pickerWidth;
     public Rect rightPickerArea = new Rect();
     public long startTapTime;
     public boolean tryMoveTo;
@@ -240,7 +240,7 @@ public class ChartPickerDelegate {
         int i5 = capturesData.capturedX;
         capturesData.lastMovingX = i;
         if (i4 == 1) {
-            float f3 = f - (((float) (i5 - i)) / ((float) this.pickerWidth));
+            float f3 = f - (((float) (i5 - i)) / this.pickerWidth);
             this.pickerStart = f3;
             if (f3 < 0.0f) {
                 this.pickerStart = 0.0f;
@@ -253,7 +253,7 @@ public class ChartPickerDelegate {
             z = true;
         }
         if (i4 == 2) {
-            float f6 = f2 - (((float) (i5 - i)) / ((float) this.pickerWidth));
+            float f6 = f2 - (((float) (i5 - i)) / this.pickerWidth);
             this.pickerEnd = f6;
             if (f6 > 1.0f) {
                 this.pickerEnd = 1.0f;
@@ -268,10 +268,10 @@ public class ChartPickerDelegate {
         }
         if (i4 == 4) {
             float var_ = (float) (i5 - i);
-            int i6 = this.pickerWidth;
-            float var_ = f - (var_ / ((float) i6));
+            float var_ = this.pickerWidth;
+            float var_ = f - (var_ / var_);
             this.pickerStart = var_;
-            this.pickerEnd = f2 - (var_ / ((float) i6));
+            this.pickerEnd = f2 - (var_ / var_);
             if (var_ < 0.0f) {
                 this.pickerStart = 0.0f;
                 this.pickerEnd = f2 - f;
@@ -302,7 +302,7 @@ public class ChartPickerDelegate {
             float x = this.moveToX - motionEvent.getX();
             float y = this.moveToY - motionEvent.getY();
             if (motionEvent.getAction() == 1 && System.currentTimeMillis() - this.startTapTime < 300 && Math.sqrt((double) ((x * x) + (y * y))) < ((double) AndroidUtilities.dp(10.0f))) {
-                float f3 = (this.moveToX - ((float) BaseChartView.HORIZONTAL_PADDING)) / ((float) this.pickerWidth);
+                float f3 = (this.moveToX - BaseChartView.HORIZONTAL_PADDING) / this.pickerWidth;
                 float f4 = this.pickerEnd - this.pickerStart;
                 float f5 = f4 / 2.0f;
                 float f6 = f3 - f5;

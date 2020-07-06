@@ -2,6 +2,8 @@ package org.telegram.tgnet;
 
 public abstract class TLRPC$UserProfilePhoto extends TLObject {
     public int dc_id;
+    public int flags;
+    public boolean has_video;
     public TLRPC$FileLocation photo_big;
     public long photo_id;
     public TLRPC$FileLocation photo_small;
@@ -16,10 +18,13 @@ public abstract class TLRPC$UserProfilePhoto extends TLObject {
                 tLRPC$UserProfilePhoto = new TLRPC$TL_userProfilePhoto_layer97();
                 break;
             case -321430132:
-                tLRPC$UserProfilePhoto = new TLRPC$TL_userProfilePhoto();
+                tLRPC$UserProfilePhoto = new TLRPC$TL_userProfilePhoto_layer115();
                 break;
             case 1326562017:
                 tLRPC$UserProfilePhoto = new TLRPC$TL_userProfilePhotoEmpty();
+                break;
+            case 1775479590:
+                tLRPC$UserProfilePhoto = new TLRPC$TL_userProfilePhoto();
                 break;
             default:
                 tLRPC$UserProfilePhoto = null;

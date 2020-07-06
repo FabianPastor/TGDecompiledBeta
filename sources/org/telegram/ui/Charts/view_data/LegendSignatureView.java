@@ -112,13 +112,13 @@ public class LegendSignatureView extends FrameLayout {
         TextView textView;
         int length = this.holdes.length;
         boolean z2 = true;
+        int i2 = 0;
         if (z && Build.VERSION.SDK_INT >= 19) {
             TransitionSet transitionSet = new TransitionSet();
-            transitionSet.addTransition(new Fade(2).setDuration(100)).addTransition(new ChangeBounds().setDuration(150)).addTransition(new Fade(1).setDuration(100));
-            transitionSet.setOrdering(1);
+            transitionSet.addTransition(new Fade(2).setDuration(150)).addTransition(new ChangeBounds().setDuration(150)).addTransition(new Fade(1).setDuration(150));
+            transitionSet.setOrdering(0);
             TransitionManager.beginDelayedTransition(this, transitionSet);
         }
-        int i2 = 0;
         if (this.isTopHourChart) {
             this.time.setText(String.format(Locale.ENGLISH, "%02d:00", new Object[]{Long.valueOf(j)}));
         } else {
