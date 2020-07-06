@@ -3,7 +3,7 @@ Built-By: Generated-by-ADT
 Created-By: Android Gradle 4.0.0
 
 Name: AndroidManifest.xml
-SHA1-Digest: R4xnS7SUnfPLZwVLyYvKE0B3WFM=
+SHA1-Digest: xRrP5zg2bcHIr9LFM3rDCOZxQgw=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9510,7 +9510,7 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: zFrHhGm3XfaBnDCo4mW3oc7zE0s=
+SHA1-Digest: x/wMMkYofIgLa63hjHFPAUFWtzQ=
 
 Name: classes2.dex
 SHA1-Digest: B5IQ/eQMdYPBamLPFZzVEOLq32A=
@@ -9567,7 +9567,7 @@ Name: lib/arm64-v8a/libtgvoip3.1.so
 SHA1-Digest: AJwp0QLCC60rAFOk2NMqELyxENA=
 
 Name: lib/arm64-v8a/libtmessages.30.so
-SHA1-Digest: uhQdjKcSTJGPXiTjuI40BPFxtBM=
+SHA1-Digest: AX9dbbVhDBLfclbFkOu/TBcN7Yg=
 
 Name: lib/armeabi-v7a/libtgvoip1.1.so
 SHA1-Digest: s2WEsCDcvf2il4IjToItuDUjfVM=
@@ -9576,7 +9576,7 @@ Name: lib/armeabi-v7a/libtgvoip3.1.so
 SHA1-Digest: nGcm/THrVoPFoznKg7SptXWBEgk=
 
 Name: lib/armeabi-v7a/libtmessages.30.so
-SHA1-Digest: QrRrRSE1GR2DjdFoq+vJ/jdMmUE=
+SHA1-Digest: vRF6FxovAfoPF08d9X8Cpz0JdmM=
 
 Name: lib/x86/libtgvoip1.1.so
 SHA1-Digest: ejFbje6NNUX1utXLexF4gDXO/Sc=
@@ -9585,7 +9585,7 @@ Name: lib/x86/libtgvoip3.1.so
 SHA1-Digest: KsCEkiRSL6PhePXPIIKknPK6hxE=
 
 Name: lib/x86/libtmessages.30.so
-SHA1-Digest: HWT1Nebjs8JUCTMJtkrAuEpAloA=
+SHA1-Digest: 25NY8CQdzIWeE5LmakZxBKqb4pw=
 
 Name: lib/x86_64/libtgvoip1.1.so
 SHA1-Digest: cDTo7N/IogbG83kaGu8nPx1XPTM=
@@ -9594,7 +9594,7 @@ Name: lib/x86_64/libtgvoip3.1.so
 SHA1-Digest: ODUAA/oZs7FPlotUxCtSLlOtqXI=
 
 Name: lib/x86_64/libtmessages.30.so
-SHA1-Digest: sbfethgpfIirtuNGhFxmQmlV5wo=
+SHA1-Digest: X7LU8hZUH2KYIr3gbxXKShSa7F8=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: /3UPL+65RV1bQ1opEtJnBMah8ZI=
