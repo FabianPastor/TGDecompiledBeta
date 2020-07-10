@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: bDrUBXX/1XIcOhtt0lgPrN3bhho=
+SHA1-Digest-Manifest: ieEp8jFBjo+ztka5TqLdzhWqAv4=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: 70ryvVXwA23922JYhKT5nGEyWLw=
+SHA1-Digest: c2Q/iTl9UdD3FKjKu+LJPSw0rE4=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9511,7 +9511,7 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: y1TxKFGWOwlhgXCXPtbX2E4IZi0=
+SHA1-Digest: GtZt5yRBi85RJYbPmT3nBUdieFc=
 
 Name: classes2.dex
 SHA1-Digest: oT1lEYpUN6OhsVJx980axmxXj5w=
@@ -9595,7 +9595,7 @@ Name: lib/arm64-v8a/libtgvoip3.1.so
 SHA1-Digest: inltNNSDrjb3U4W7pE9FbtHVyDw=
 
 Name: lib/arm64-v8a/libtmessages.30.so
-SHA1-Digest: NXcqBH/WvHXOmSsj7LrxZuwAZXg=
+SHA1-Digest: aKhjsVCoqZTn9SRXkQAmmoNKVhk=
 
 Name: lib/armeabi-v7a/libtgvoip1.1.so
 SHA1-Digest: UqYHDKRlxO2qq2r964oaatWslow=
@@ -9604,7 +9604,7 @@ Name: lib/armeabi-v7a/libtgvoip3.1.so
 SHA1-Digest: 4qjUjci2obTcU6R7CPTbatuPrhk=
 
 Name: lib/armeabi-v7a/libtmessages.30.so
-SHA1-Digest: pPZuhecVqGRQw3omnP9OiI7pEFo=
+SHA1-Digest: xgiExkhoA+1KQFRQz+yuccmghu8=
 
 Name: lib/x86/libtgvoip1.1.so
 SHA1-Digest: 1jWv0nGgUsMXlkk8S2w4V0inmUw=
@@ -9613,7 +9613,7 @@ Name: lib/x86/libtgvoip3.1.so
 SHA1-Digest: et3NkeOx2P3tSXHAwQYeBl1ae+4=
 
 Name: lib/x86/libtmessages.30.so
-SHA1-Digest: q321y027rM2HxKrbBP/iGbZ/fq4=
+SHA1-Digest: 4qVrK8szBMqNaS8M/pfiZ7O0gqE=
 
 Name: lib/x86_64/libtgvoip1.1.so
 SHA1-Digest: mAPHZgLq/LIKMupZyg4qc1D1c6I=
@@ -9622,7 +9622,7 @@ Name: lib/x86_64/libtgvoip3.1.so
 SHA1-Digest: XVWHF8CGKyS9xl4gprqIhr6fTfE=
 
 Name: lib/x86_64/libtmessages.30.so
-SHA1-Digest: dQCm+/BGBh23mTfyVpTLbDk+XkM=
+SHA1-Digest: h+/+DSz5BncP5aKbW03qlGEn+zs=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: 4xRXfC5wD7cP7zkWXYe1OQH2mf8=
@@ -18860,7 +18860,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: 3THphvyOtmSK7OO15JoGe9MX9Yg=
+SHA1-Digest: wwSjUN6t97W7Wd+xoK3RFA32AIk=
 
 Name: transport-api.properties
 SHA1-Digest: KlRwAVirU5yXrBUVC3JeyHIPlcs=

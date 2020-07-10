@@ -1557,7 +1557,7 @@
     <string name="HidAccount">The account was hidden by the user</string>
     <string name="HiddenName">Deleted Account</string>
     <string name="HideAboveTheList">Hide above the list</string>
-    <string name="HideNewChatsAlertText">You are receiving lots of new chats from users who are not in your Contacts List. Do you want have such chats **automatically muted** and **archived**?</string>
+    <string name="HideNewChatsAlertText">You are receiving many new chats from users who are not in your Contacts List. Do you want have such chats **automatically muted** and **archived**?</string>
     <string name="HideNewChatsAlertTitle">Hide new chats?</string>
     <string name="HideOnTop">Hide</string>
     <string name="Highlights">Highlights</string>
@@ -1639,9 +1639,9 @@
     <string name="IsTypingGroup">%1$s is typing...</string>
     <string name="Italic">Italic</string>
     <string name="January">January</string>
-    <string name="JoinByPeekChannelText">This channel is private. Please join it now, otherwise you won\'t be able to view its content in the future.</string>
+    <string name="JoinByPeekChannelText">This channel is private. Please join it to continue viewing its content.</string>
     <string name="JoinByPeekChannelTitle">Join Channel</string>
-    <string name="JoinByPeekGroupText">This group is private. Please join it now, otherwise you won\'t be able to view its content in the future.</string>
+    <string name="JoinByPeekGroupText">This group is private. Please join it to continue viewing its content.</string>
     <string name="JoinByPeekGroupTitle">Join Group</string>
     <string name="JoinByPeekJoin">JOIN</string>
     <string name="JoinGroup">JOIN GROUP</string>
@@ -1755,12 +1755,12 @@
     <string name="LowDiskSpaceNeverRemove">Never remove</string>
     <string name="LowDiskSpaceTitle">Attention</string>
     <string name="LowDiskSpaceTitle2">Remove media after</string>
-    <string name="MainChannelProfilePhotoSetHint">This is now main channel profile photo.</string>
-    <string name="MainChannelProfileVideoSetHint">This is now main channel profile video.</string>
-    <string name="MainGroupProfilePhotoSetHint">This is now main group profile photo.</string>
-    <string name="MainGroupProfileVideoSetHint">This is now main group profile video.</string>
-    <string name="MainProfilePhotoSetHint">This is now your main profile photo.</string>
-    <string name="MainProfileVideoSetHint">This is now your main profile video.</string>
+    <string name="MainChannelProfilePhotoSetHint">This is the main channel photo now.</string>
+    <string name="MainChannelProfileVideoSetHint">This is the main channel video now.</string>
+    <string name="MainGroupProfilePhotoSetHint">This is the main group photo now.</string>
+    <string name="MainGroupProfileVideoSetHint">This is the main group video now.</string>
+    <string name="MainProfilePhotoSetHint">This is your main profile photo now.</string>
+    <string name="MainProfileVideoSetHint">This is your main profile video now.</string>
     <string name="MakeAdmin">MAKE ADMIN</string>
     <string name="MakeMyselfVisible">Make Myself Visible</string>
     <string name="MakeMyselfVisibleInfo">Users nearby will be able to view your profile and send you messages. This may help you find new friends, but could also attract excessive attention. You can stop sharing your profile at any time.\10\10Your phone number will remain hidden.</string>
@@ -1904,7 +1904,7 @@
     <string name="NearbyCreateGroup">Create a Local Group</string>
     <string name="NearbyCreateGroupInfo">Anyone close to this location (neighbors, co-workers, fellow students, event attendees, visitors of a venue) will be able to see your group in the People Nearby section.</string>
     <string name="NearbyCreateGroupInfo2">If you start an unrelated group at this location, you may lose the ability to create location-based groups.</string>
-    <string name="NearbyPeopleGreetingsDescription">Send a message or tap on the greeting bellow to show that you are ready to chat</string>
+    <string name="NearbyPeopleGreetingsDescription">Send a message or tap on the greeting below to show that you are ready to chat</string>
     <string name="NearbyPeopleGreetingsMessage">%1$s is in %2$s</string>
     <string name="NearbyStartGroup">Start Group</string>
     <string name="NearbyVenue">Or choose a venue</string>
@@ -1946,7 +1946,7 @@
     <string name="NoAudioFilesInfo">Your music library is empty.</string>
     <string name="NoAudioFound">No results found</string>
     <string name="NoAudioFoundInfo">There are no matches with **%1$s** in your music library.</string>
-    <string name="NoAudioFoundPlayerInfo">There are no matches with **%1$s**.</string>
+    <string name="NoAudioFoundPlayerInfo">There are no matches for **%1$s**.</string>
     <string name="NoBlocked">No blocked users yet</string>
     <string name="NoBlockedChannel2">Users removed from the channel by the admins can\'t rejoin via invite links.</string>
     <string name="NoBlockedGroup2">Users removed from the group by the admins can\'t rejoin via invite links.</string>

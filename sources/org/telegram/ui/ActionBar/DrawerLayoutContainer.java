@@ -82,7 +82,7 @@ public class DrawerLayoutContainer extends FrameLayout {
             drawerLayoutContainer.requestLayout();
         }
         int systemWindowInsetTop = windowInsets.getSystemWindowInsetTop();
-        if (!(systemWindowInsetTop == 0 || AndroidUtilities.statusBarHeight == systemWindowInsetTop)) {
+        if ((systemWindowInsetTop != 0 || AndroidUtilities.isInMultiwindow) && AndroidUtilities.statusBarHeight != systemWindowInsetTop) {
             AndroidUtilities.statusBarHeight = systemWindowInsetTop;
         }
         this.lastInsets = windowInsets;

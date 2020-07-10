@@ -3,7 +3,7 @@ Built-By: Generated-by-ADT
 Created-By: Android Gradle 4.0.0
 
 Name: AndroidManifest.xml
-SHA1-Digest: qzYpqk/8HzFxRDToqFm1d5cp440=
+SHA1-Digest: Af2n9/xWI3nI7ynIiQF83MeJq88=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9510,7 +9510,7 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: GNaLXI2fvgqkVos4tX++HlyBwtA=
+SHA1-Digest: A8pcn5+Z/Z+QjPkfFyR8x3ZHGAA=
 
 Name: classes2.dex
 SHA1-Digest: QNycHdenimKF3m1S9YmZrcT1bVA=
@@ -9594,7 +9594,7 @@ Name: lib/arm64-v8a/libtgvoip3.1.so
 SHA1-Digest: AJwp0QLCC60rAFOk2NMqELyxENA=
 
 Name: lib/arm64-v8a/libtmessages.30.so
-SHA1-Digest: 3Ikm2jTD054ocdhk3u8R3mLbuvM=
+SHA1-Digest: qNHXuY/ErL87CW9Ti9KIr4+UJF0=
 
 Name: lib/armeabi-v7a/libtgvoip1.1.so
 SHA1-Digest: s2WEsCDcvf2il4IjToItuDUjfVM=
@@ -9603,7 +9603,7 @@ Name: lib/armeabi-v7a/libtgvoip3.1.so
 SHA1-Digest: nGcm/THrVoPFoznKg7SptXWBEgk=
 
 Name: lib/armeabi-v7a/libtmessages.30.so
-SHA1-Digest: 1WSftv2VMiHdy1t3djpVUymKres=
+SHA1-Digest: dIhdbD9bgSZKx47LXVL2c/dNCnA=
 
 Name: lib/x86/libtgvoip1.1.so
 SHA1-Digest: ejFbje6NNUX1utXLexF4gDXO/Sc=
@@ -9612,7 +9612,7 @@ Name: lib/x86/libtgvoip3.1.so
 SHA1-Digest: KsCEkiRSL6PhePXPIIKknPK6hxE=
 
 Name: lib/x86/libtmessages.30.so
-SHA1-Digest: Oh6Wk2XNSvJjLazPjpvrsiHV8AM=
+SHA1-Digest: Jgc0FJUZrLQAQLxBFblUEcgIkV4=
 
 Name: lib/x86_64/libtgvoip1.1.so
 SHA1-Digest: cDTo7N/IogbG83kaGu8nPx1XPTM=
@@ -9621,7 +9621,7 @@ Name: lib/x86_64/libtgvoip3.1.so
 SHA1-Digest: ODUAA/oZs7FPlotUxCtSLlOtqXI=
 
 Name: lib/x86_64/libtmessages.30.so
-SHA1-Digest: 8ztuaMhyiUOZV+t8cx6AIEeGMpk=
+SHA1-Digest: 4EDgQSwYQpz5z6cnAN0aVD/jcjE=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: /3UPL+65RV1bQ1opEtJnBMah8ZI=
@@ -18859,7 +18859,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: zUM+igKY+2lROVVJvat7a4N7wQg=
+SHA1-Digest: B7ZoSrliysqdYZ+nyFQsOU7jZ+U=
 
 Name: transport-api.properties
 SHA1-Digest: 1ihjJr5LtYfq/sGtDlVEQK4Ajxg=

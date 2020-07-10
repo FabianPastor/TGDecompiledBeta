@@ -9444,6 +9444,10 @@ public class MessageObject {
     }
 
     public static boolean canDeleteMessage(int i, boolean z, TLRPC$Message tLRPC$Message, TLRPC$Chat tLRPC$Chat) {
+        TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights;
+        if (tLRPC$Message == null) {
+            return false;
+        }
         if (tLRPC$Message.id < 0) {
             return true;
         }
@@ -9452,37 +9456,28 @@ public class MessageObject {
         }
         if (ChatObject.isChannel(tLRPC$Chat)) {
             if (!z || tLRPC$Chat.megagroup) {
-                if (z) {
-                    return true;
-                }
-                if (tLRPC$Message.id != 1) {
-                    if (tLRPC$Chat.creator) {
-                        return true;
-                    }
-                    TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights = tLRPC$Chat.admin_rights;
-                    if (tLRPC$TL_chatAdminRights != null) {
-                        if (tLRPC$TL_chatAdminRights.delete_messages) {
-                            return true;
-                        }
-                        if (tLRPC$Message.out && (tLRPC$Chat.megagroup || tLRPC$TL_chatAdminRights.post_messages)) {
-                            return true;
-                        }
-                    }
-                    if (!tLRPC$Chat.megagroup || !tLRPC$Message.out || tLRPC$Message.from_id <= 0) {
+                if (!z) {
+                    if (tLRPC$Message.id == 1) {
                         return false;
                     }
-                    return true;
-                }
-                return false;
-            } else if (tLRPC$Chat.creator) {
-                return true;
-            } else {
-                TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights2 = tLRPC$Chat.admin_rights;
-                if (tLRPC$TL_chatAdminRights2 == null || (!tLRPC$TL_chatAdminRights2.delete_messages && !tLRPC$Message.out)) {
+                    if (tLRPC$Chat.creator || (((tLRPC$TL_chatAdminRights = tLRPC$Chat.admin_rights) != null && (tLRPC$TL_chatAdminRights.delete_messages || (tLRPC$Message.out && (tLRPC$Chat.megagroup || tLRPC$TL_chatAdminRights.post_messages)))) || (tLRPC$Chat.megagroup && tLRPC$Message.out && tLRPC$Message.from_id > 0))) {
+                        return true;
+                    }
                     return false;
                 }
                 return true;
             }
+            if (!tLRPC$Chat.creator) {
+                TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights2 = tLRPC$Chat.admin_rights;
+                if (tLRPC$TL_chatAdminRights2 == null) {
+                    return false;
+                }
+                if (tLRPC$TL_chatAdminRights2.delete_messages || tLRPC$Message.out) {
+                    return true;
+                }
+                return false;
+            }
+            return true;
         } else if (z || isOut(tLRPC$Message) || !ChatObject.isChannel(tLRPC$Chat)) {
             return true;
         } else {

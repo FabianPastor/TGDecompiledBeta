@@ -5677,7 +5677,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
     public /* synthetic */ WindowInsets lambda$setParentActivity$2$PhotoViewer(View view, WindowInsets windowInsets) {
         int systemWindowInsetTop = windowInsets.getSystemWindowInsetTop();
-        if (!(systemWindowInsetTop == 0 || AndroidUtilities.statusBarHeight == systemWindowInsetTop)) {
+        if ((systemWindowInsetTop != 0 || AndroidUtilities.isInMultiwindow) && AndroidUtilities.statusBarHeight != systemWindowInsetTop) {
             AndroidUtilities.statusBarHeight = systemWindowInsetTop;
             ((LaunchActivity) this.parentActivity).drawerLayoutContainer.requestLayout();
         }

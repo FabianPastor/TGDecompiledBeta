@@ -5289,7 +5289,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r9.policyRow = r3
             boolean r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED
             if (r3 != 0) goto L_0x015b
-            boolean r3 = org.telegram.messenger.BuildVars.DEBUG_VERSION
+            boolean r3 = org.telegram.messenger.BuildVars.DEBUG_PRIVATE_VERSION
             if (r3 == 0) goto L_0x0169
         L_0x015b:
             int r3 = r9.rowCount
