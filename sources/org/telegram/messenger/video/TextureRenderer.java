@@ -107,33 +107,30 @@ public class TextureRenderer {
             for (int i10 = 4; i9 < i10; i10 = 4) {
                 int i11 = i9 * 2;
                 int i12 = i11 + 1;
-                float f5 = f2;
                 double d2 = (double) (fArr2[i11] - ((float) (i5 / 2)));
+                float f5 = f2;
                 double d3 = (double) f4;
                 double cos = Math.cos(d3);
                 Double.isNaN(d2);
                 double d4 = (double) (fArr2[i12] - ((float) (i6 / 2)));
                 double sin = Math.sin(d3);
                 Double.isNaN(d4);
-                double d5 = (cos * d2) - (sin * d4);
-                float f6 = f4;
-                double d6 = (double) (cropState2.cropPx * f5);
-                Double.isNaN(d6);
+                double d5 = (double) (cropState2.cropPx * f5);
+                Double.isNaN(d5);
+                float f6 = ((float) (((cos * d2) - (sin * d4)) + d5)) * cropState2.cropScale;
                 double sin2 = Math.sin(d3);
                 Double.isNaN(d2);
                 double cos2 = Math.cos(d3);
                 Double.isNaN(d4);
-                double d7 = (d2 * sin2) + (d4 * cos2);
-                double d8 = (double) (cropState2.cropPy * f3);
-                Double.isNaN(d8);
-                float f7 = ((float) (d7 - d8)) * cropState2.cropScale;
-                fArr2[i11] = ((((float) (d5 + d6)) * cropState2.cropScale) / ((float) this.transformedWidth)) * 2.0f;
+                double d6 = (double) (cropState2.cropPy * f3);
+                Double.isNaN(d6);
+                float f7 = ((float) (((d2 * sin2) + (d4 * cos2)) - d6)) * cropState2.cropScale;
+                fArr2[i11] = (f6 / ((float) this.transformedWidth)) * 2.0f;
                 fArr2[i12] = (f7 / ((float) this.transformedHeight)) * 2.0f;
                 i9++;
                 f2 = f5;
                 i5 = i;
                 i6 = i2;
-                f4 = f6;
             }
             FloatBuffer asFloatBuffer3 = ByteBuffer.allocateDirect(32).order(ByteOrder.nativeOrder()).asFloatBuffer();
             this.verticesBuffer = asFloatBuffer3;
@@ -162,6 +159,18 @@ public class TextureRenderer {
             fArr = new float[]{0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f};
         } else {
             fArr = new float[]{0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
+        }
+        if (cropState2 != null && cropState2.mirrored) {
+            int i13 = 0;
+            for (int i14 = 4; i13 < i14; i14 = 4) {
+                int i15 = i13 * 2;
+                if (fArr[i15] > 0.5f) {
+                    fArr[i15] = 0.0f;
+                } else {
+                    fArr[i15] = 1.0f;
+                }
+                i13++;
+            }
         }
         FloatBuffer asFloatBuffer5 = ByteBuffer.allocateDirect(fArr.length * 4).order(ByteOrder.nativeOrder()).asFloatBuffer();
         this.renderTextureBuffer = asFloatBuffer5;

@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: o1J9cMUO/d8ffK8C951iooFrGfY=
+SHA1-Digest-Manifest: bDrUBXX/1XIcOhtt0lgPrN3bhho=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: HcaNnbsTchKwuG3M14lMGunfr5k=
+SHA1-Digest: 70ryvVXwA23922JYhKT5nGEyWLw=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -17,7 +17,7 @@ Name: META-INF/androidx.coordinatorlayout_coordinatorlayout.version
 SHA1-Digest: ERHZEzpSAkP4u0Q4r4kuzOm6fRQ=
 
 Name: META-INF/androidx.core_core.version
-SHA1-Digest: bj21lpfAgoydN3gzSXoRWExkkmg=
+SHA1-Digest: +rEJzQzfLvWVgq0bkp6fKHyIUVM=
 
 Name: META-INF/androidx.cursoradapter_cursoradapter.version
 SHA1-Digest: 52+fw7GKKOOmtXCrnrPrtGPTVjM=
@@ -82,7 +82,7 @@ SHA1-Digest: vISue0XyGeEFMixEq2S9gO/P19s=
 
 Name: META-INF/androidx.versionedparcelable_versionedparcelable.versio
  n
-SHA1-Digest: S01jKztYnwQiH7ejLE6LiL7ejEw=
+SHA1-Digest: 9fe0ekwsnzJKjcc7O0Iw5c0aa2Y=
 
 Name: META-INF/androidx.viewpager_viewpager.version
 SHA1-Digest: Z6PEVwMu6dlOivFDm82mN1PA+/g=
@@ -9511,10 +9511,10 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: hkLhJdT25Pq4q8Hv43TFDfUvmqw=
+SHA1-Digest: y1TxKFGWOwlhgXCXPtbX2E4IZi0=
 
 Name: classes2.dex
-SHA1-Digest: o79BJTz9J2zezRmv83au/oSRje8=
+SHA1-Digest: oT1lEYpUN6OhsVJx980axmxXj5w=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -9523,7 +9523,7 @@ Name: fabric/com.stripe.stripe-android.properties
 SHA1-Digest: meJMBKLUSTmOentmkKD9WbS/j5I=
 
 Name: firebase-abt.properties
-SHA1-Digest: p3YRHeG0EqmCiPlIAoxMCbI0jzs=
+SHA1-Digest: P5jJ//z7U2H0lr8vST3ZFIUZBhU=
 
 Name: firebase-common.properties
 SHA1-Digest: VMxmYX4DGYEhfnGMMTrlKMiusIM=
@@ -9532,7 +9532,7 @@ Name: firebase-components.properties
 SHA1-Digest: 7nJZu/LQX5U2bBDAyc/clgxQ1W8=
 
 Name: firebase-config.properties
-SHA1-Digest: T50d8LneRxclAsXcCcnLuKKu4pw=
+SHA1-Digest: i/QhmbXqGyacgfsdiGSc2ZGM4Jc=
 
 Name: firebase-datatransport.properties
 SHA1-Digest: 4t91AT8SD1SMyoeqkMFWFqpcDcw=
@@ -9544,7 +9544,7 @@ Name: firebase-iid-interop.properties
 SHA1-Digest: EG/NEOnrgZ0SQjjc64Xu8L+hd+o=
 
 Name: firebase-iid.properties
-SHA1-Digest: NIeBlCxKcPIa6leO0NfM7oplDEk=
+SHA1-Digest: zQisNy6T/gPI1qBzNrQPDgjs+YM=
 
 Name: firebase-installations-interop.properties
 SHA1-Digest: 3Es+p6gO/fWYGiKinOPROdQ3lXY=
@@ -9556,7 +9556,34 @@ Name: firebase-measurement-connector.properties
 SHA1-Digest: xGhmL53frvnh03/p4k58xibaXVQ=
 
 Name: firebase-messaging.properties
-SHA1-Digest: MqnWL4wyKrrhWBmCGHgQwjnnbzo=
+SHA1-Digest: /75SWMlsbGhmfxTZp6PH4c0AbtU=
+
+Name: google/protobuf/any.proto
+SHA1-Digest: sIctPf5jF94IMQVwNaE5poIhR4w=
+
+Name: google/protobuf/api.proto
+SHA1-Digest: hzX6vkQmy8zKzx2vW1f2Q7NA6JA=
+
+Name: google/protobuf/empty.proto
+SHA1-Digest: gRjS6NJMJIREnYxAp+xyHWbOayA=
+
+Name: google/protobuf/field_mask.proto
+SHA1-Digest: onl7bJqTafmRihDT8INfBMFnReQ=
+
+Name: google/protobuf/source_context.proto
+SHA1-Digest: 67lVRWMklByYO8aDJmpzv5Qyvvk=
+
+Name: google/protobuf/struct.proto
+SHA1-Digest: N5KtJhPH3pri4bPODvzcUbTLs1c=
+
+Name: google/protobuf/timestamp.proto
+SHA1-Digest: DVg+1vte0lTmEAddFsbLmzoOIBk=
+
+Name: google/protobuf/type.proto
+SHA1-Digest: NR/CrHpqSfpGWudQwEBWOSKX2JA=
+
+Name: google/protobuf/wrappers.proto
+SHA1-Digest: dsK/Cof2WB1oMKQcWahu0k0ZJ6g=
 
 Name: isoparser-default.properties
 SHA1-Digest: ix2/FbuQDYdbrL/0Ibd5Tj5OTV0=
@@ -9568,7 +9595,7 @@ Name: lib/arm64-v8a/libtgvoip3.1.so
 SHA1-Digest: inltNNSDrjb3U4W7pE9FbtHVyDw=
 
 Name: lib/arm64-v8a/libtmessages.30.so
-SHA1-Digest: Q/185tvxMvcIvsT3Yw+CSENHS+0=
+SHA1-Digest: NXcqBH/WvHXOmSsj7LrxZuwAZXg=
 
 Name: lib/armeabi-v7a/libtgvoip1.1.so
 SHA1-Digest: UqYHDKRlxO2qq2r964oaatWslow=
@@ -9577,7 +9604,7 @@ Name: lib/armeabi-v7a/libtgvoip3.1.so
 SHA1-Digest: 4qjUjci2obTcU6R7CPTbatuPrhk=
 
 Name: lib/armeabi-v7a/libtmessages.30.so
-SHA1-Digest: 4Tstm5H+qU9Kw1MB2mb20O5AM+Q=
+SHA1-Digest: pPZuhecVqGRQw3omnP9OiI7pEFo=
 
 Name: lib/x86/libtgvoip1.1.so
 SHA1-Digest: 1jWv0nGgUsMXlkk8S2w4V0inmUw=
@@ -9586,7 +9613,7 @@ Name: lib/x86/libtgvoip3.1.so
 SHA1-Digest: et3NkeOx2P3tSXHAwQYeBl1ae+4=
 
 Name: lib/x86/libtmessages.30.so
-SHA1-Digest: 1pExTGEaHiDxVDp3FZiqwtfw3yw=
+SHA1-Digest: q321y027rM2HxKrbBP/iGbZ/fq4=
 
 Name: lib/x86_64/libtgvoip1.1.so
 SHA1-Digest: mAPHZgLq/LIKMupZyg4qc1D1c6I=
@@ -9595,7 +9622,7 @@ Name: lib/x86_64/libtgvoip3.1.so
 SHA1-Digest: XVWHF8CGKyS9xl4gprqIhr6fTfE=
 
 Name: lib/x86_64/libtmessages.30.so
-SHA1-Digest: 7evouEthv1KkgeocXzkFT+y0WCw=
+SHA1-Digest: dQCm+/BGBh23mTfyVpTLbDk+XkM=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: 4xRXfC5wD7cP7zkWXYe1OQH2mf8=
@@ -9610,7 +9637,7 @@ Name: play-services-base.properties
 SHA1-Digest: orFpNTaGUkD8+66cHkyZDb0SXGg=
 
 Name: play-services-basement.properties
-SHA1-Digest: DkjIX2cp6t6ZIQKoFW5y4J+/n9Q=
+SHA1-Digest: A4ZteJzB+Fbg1f0aEQdxgDJn62c=
 
 Name: play-services-clearcut.properties
 SHA1-Digest: U5zBgb0GkC6c+gPV9mn8Ifq+kV0=
@@ -9634,7 +9661,7 @@ Name: play-services-stats.properties
 SHA1-Digest: OEj3Sr+QRrnSWPsT/xj5GUwIQUs=
 
 Name: play-services-tasks.properties
-SHA1-Digest: KQEOX5k/FMyrOeoBl1Md+ZTtgjo=
+SHA1-Digest: igLUtiuRdAuMy4wlk/Dvlaa6Ee4=
 
 Name: play-services-vision-common.properties
 SHA1-Digest: Gza6CU/85yD5v757VwXf1S/GGrA=
@@ -18815,10 +18842,10 @@ Name: res/raw/wallet_science.tgs
 SHA1-Digest: xcYXycYjGRsZcet5rKoz4b8trBo=
 
 Name: res/xml/auth.xml
-SHA1-Digest: CBMIxRRWHhpKiLhG/iO6OZ1XNws=
+SHA1-Digest: FHSVkLidLs5ebVJ21qDIQhatX6U=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: X0pW+99VfDMMqTcXXqt6H/GGTEQ=
+SHA1-Digest: /Aes9yJalG6Nm7J1Z4m2ZtWtpv0=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: 9Hh95nQe6vvvIyVqqpGpBH5VMqA=
@@ -18833,7 +18860,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: ANZBWOjbfHSiKzeth7tKS/2srnc=
+SHA1-Digest: 3THphvyOtmSK7OO15JoGe9MX9Yg=
 
 Name: transport-api.properties
 SHA1-Digest: KlRwAVirU5yXrBUVC3JeyHIPlcs=

@@ -781,12 +781,12 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
             int[] iArr3 = this.roundRadiusBackup;
             System.arraycopy(iArr2, 0, iArr3, 0, iArr3.length);
         }
-        boolean z = false;
         for (int i = 0; i < 4; i++) {
-            z = iArr[i] != this.roundRadius[i];
+            if (!this.invalidatePath && iArr[i] != this.roundRadius[i]) {
+                this.invalidatePath = true;
+            }
             this.roundRadius[i] = iArr[i];
         }
-        this.invalidatePath = z;
     }
 
     /* access modifiers changed from: private */

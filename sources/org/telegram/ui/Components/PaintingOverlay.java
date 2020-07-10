@@ -227,6 +227,14 @@ public class PaintingOverlay extends FrameLayout {
         return this.paintBitmap;
     }
 
+    public void setAlpha(float f) {
+        super.setAlpha(f);
+        Drawable drawable = this.backgroundDrawable;
+        if (drawable != null) {
+            drawable.setAlpha((int) (f * 255.0f));
+        }
+    }
+
     public Bitmap getThumb() {
         float measuredWidth = (float) getMeasuredWidth();
         float measuredHeight = (float) getMeasuredHeight();

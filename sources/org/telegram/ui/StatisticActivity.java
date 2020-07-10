@@ -49,6 +49,7 @@ import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$StatsGraph;
+import org.telegram.tgnet.TLRPC$TL_channels_channelParticipant;
 import org.telegram.tgnet.TLRPC$TL_channels_getMessages;
 import org.telegram.tgnet.TLRPC$TL_chatAdminRights;
 import org.telegram.tgnet.TLRPC$TL_chatBannedRights;
@@ -71,6 +72,7 @@ import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$messages_Messages;
 import org.telegram.tgnet.WriteToSocketDelegate;
 import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.SimpleTextView;
@@ -162,6 +164,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
     public OverviewChannelData overviewChannelData;
     /* access modifiers changed from: private */
     public OverviewChatData overviewChatData;
+    private AlertDialog[] progressDialog = new AlertDialog[1];
     /* access modifiers changed from: private */
     public LinearLayout progressLayout;
     private final SparseIntArray recentPostIdtoIndexMap = new SparseIntArray();
@@ -392,6 +395,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
 
     public void onFragmentDestroy() {
         getNotificationCenter().removeObserver(this, NotificationCenter.messagesDidLoad);
+        AlertDialog[] alertDialogArr = this.progressDialog;
+        if (alertDialogArr[0] != null) {
+            alertDialogArr[0].dismiss();
+            this.progressDialog[0] = null;
+        }
         super.onFragmentDestroy();
     }
 
@@ -600,13 +608,13 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 if (i < i4 || i > adapter4.topInviterEndRow) {
                     return false;
                 }
-                this.topInviters.get(i - i4).onLongClick(this.chat, this);
+                this.topInviters.get(i - i4).onLongClick(this.chat, this, this.progressDialog);
                 return true;
             }
-            this.topMembersVisible.get(i - i3).onLongClick(this.chat, this);
+            this.topMembersVisible.get(i - i3).onLongClick(this.chat, this, this.progressDialog);
             return true;
         }
-        this.topMembersVisible.get(i - i2).onLongClick(this.chat, this);
+        this.topMembersVisible.get(i - i2).onLongClick(this.chat, this, this.progressDialog);
         return true;
     }
 
@@ -3263,148 +3271,302 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             baseFragment.presentFragment(new ProfileActivity(bundle));
         }
 
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v6, resolved type: org.telegram.tgnet.TLRPC$ChatParticipant} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v10, resolved type: org.telegram.tgnet.TLRPC$TL_chatChannelParticipant} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v19, resolved type: org.telegram.tgnet.TLRPC$TL_chatChannelParticipant} */
-        /* JADX WARNING: Multi-variable type inference failed */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void onLongClick(org.telegram.tgnet.TLRPC$ChatFull r12, org.telegram.ui.StatisticActivity r13) {
-            /*
-                r11 = this;
-                int r0 = org.telegram.messenger.UserConfig.selectedAccount
-                org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
-                org.telegram.tgnet.TLRPC$User r1 = r11.user
-                r2 = 0
-                r0.putUser(r1, r2)
-                java.util.ArrayList r0 = new java.util.ArrayList
-                r0.<init>()
-                java.util.ArrayList r5 = new java.util.ArrayList
-                r5.<init>()
-                java.util.ArrayList r1 = new java.util.ArrayList
-                r1.<init>()
-                org.telegram.tgnet.TLRPC$ChatParticipants r3 = r12.participants
-                java.util.ArrayList<org.telegram.tgnet.TLRPC$ChatParticipant> r3 = r3.participants
-                r4 = 0
-                if (r3 == 0) goto L_0x005c
-                int r3 = r3.size()
-                r6 = r4
-                r7 = 0
-            L_0x0028:
-                if (r7 >= r3) goto L_0x0059
-                org.telegram.tgnet.TLRPC$ChatParticipants r8 = r12.participants
-                java.util.ArrayList<org.telegram.tgnet.TLRPC$ChatParticipant> r8 = r8.participants
-                java.lang.Object r8 = r8.get(r7)
-                org.telegram.tgnet.TLRPC$ChatParticipant r8 = (org.telegram.tgnet.TLRPC$ChatParticipant) r8
-                int r9 = r8.user_id
-                org.telegram.tgnet.TLRPC$User r10 = r11.user
-                int r10 = r10.id
-                if (r9 != r10) goto L_0x0043
-                boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_chatChannelParticipant
-                if (r9 == 0) goto L_0x0043
-                r4 = r8
-                org.telegram.tgnet.TLRPC$TL_chatChannelParticipant r4 = (org.telegram.tgnet.TLRPC$TL_chatChannelParticipant) r4
-            L_0x0043:
-                int r9 = r8.user_id
-                int r10 = org.telegram.messenger.UserConfig.selectedAccount
-                org.telegram.messenger.UserConfig r10 = org.telegram.messenger.UserConfig.getInstance(r10)
-                int r10 = r10.clientUserId
-                if (r9 != r10) goto L_0x0056
-                boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_chatChannelParticipant
-                if (r9 == 0) goto L_0x0056
-                r6 = r8
-                org.telegram.tgnet.TLRPC$TL_chatChannelParticipant r6 = (org.telegram.tgnet.TLRPC$TL_chatChannelParticipant) r6
-            L_0x0056:
-                int r7 = r7 + 1
-                goto L_0x0028
-            L_0x0059:
-                r7 = r4
-                r4 = r6
-                goto L_0x005d
-            L_0x005c:
-                r7 = r4
-            L_0x005d:
-                r3 = 2131626964(0x7f0e0bd4, float:1.888118E38)
-                java.lang.String r6 = "StatisticOpenProfile"
-                java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
-                r0.add(r3)
-                r3 = 2131165256(0x7var_, float:1.7944724E38)
-                java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
-                r1.add(r3)
-                r3 = 2
-                java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
-                r5.add(r3)
-                r3 = 2131626966(0x7f0e0bd6, float:1.8881183E38)
-                java.lang.String r6 = "StatisticSearchUserHistory"
-                java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r6, r3)
-                r0.add(r3)
-                r3 = 2131165725(0x7var_d, float:1.7945675E38)
-                java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
-                r1.add(r3)
-                r3 = 1
-                java.lang.Integer r6 = java.lang.Integer.valueOf(r3)
-                r5.add(r6)
-                if (r7 == 0) goto L_0x00dc
-                if (r4 == 0) goto L_0x00dc
-                org.telegram.tgnet.TLRPC$ChannelParticipant r4 = r4.channelParticipant
-                org.telegram.tgnet.TLRPC$TL_chatAdminRights r4 = r4.admin_rights
-                if (r4 == 0) goto L_0x00dc
-                boolean r4 = r4.add_admins
-                if (r4 == 0) goto L_0x00dc
-                org.telegram.tgnet.TLRPC$ChannelParticipant r4 = r7.channelParticipant
-                org.telegram.tgnet.TLRPC$TL_chatAdminRights r4 = r4.admin_rights
-                if (r4 != 0) goto L_0x00ae
-                goto L_0x00af
-            L_0x00ae:
-                r3 = 0
-            L_0x00af:
-                if (r3 == 0) goto L_0x00b7
-                r4 = 2131626840(0x7f0e0b58, float:1.8880928E38)
-                java.lang.String r6 = "SetAsAdmin"
-                goto L_0x00bc
-            L_0x00b7:
-                r4 = 2131625042(0x7f0e0452, float:1.887728E38)
-                java.lang.String r6 = "EditAdminRights"
-            L_0x00bc:
-                java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r6, r4)
-                r0.add(r4)
-                if (r3 == 0) goto L_0x00c9
-                r4 = 2131165247(0x7var_f, float:1.7944706E38)
-                goto L_0x00cc
-            L_0x00c9:
-                r4 = 2131165252(0x7var_, float:1.7944716E38)
-            L_0x00cc:
-                java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
-                r1.add(r4)
-                java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
-                r5.add(r2)
-                r8 = r3
-                goto L_0x00dd
-            L_0x00dc:
-                r8 = 0
-            L_0x00dd:
-                org.telegram.ui.ActionBar.AlertDialog$Builder r2 = new org.telegram.ui.ActionBar.AlertDialog$Builder
-                android.app.Activity r3 = r13.getParentActivity()
-                r2.<init>((android.content.Context) r3)
-                int r3 = r5.size()
-                java.lang.CharSequence[] r3 = new java.lang.CharSequence[r3]
-                java.lang.Object[] r0 = r0.toArray(r3)
-                java.lang.CharSequence[] r0 = (java.lang.CharSequence[]) r0
-                int[] r1 = org.telegram.messenger.AndroidUtilities.toIntArray(r1)
-                org.telegram.ui.-$$Lambda$StatisticActivity$MemberData$s_yZQATsa4PvUmQlVzSUctNHzek r10 = new org.telegram.ui.-$$Lambda$StatisticActivity$MemberData$s_yZQATsa4PvUmQlVzSUctNHzek
-                r3 = r10
-                r4 = r11
-                r6 = r12
-                r9 = r13
-                r3.<init>(r5, r6, r7, r8, r9)
-                r2.setItems(r0, r1, r10)
-                org.telegram.ui.ActionBar.AlertDialog r12 = r2.create()
-                r13.showDialog(r12)
-                return
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.StatisticActivity.MemberData.onLongClick(org.telegram.tgnet.TLRPC$ChatFull, org.telegram.ui.StatisticActivity):void");
+        public void onLongClick(TLRPC$ChatFull tLRPC$ChatFull, StatisticActivity statisticActivity, AlertDialog[] alertDialogArr) {
+            onLongClick(tLRPC$ChatFull, statisticActivity, alertDialogArr, true);
         }
 
-        public /* synthetic */ void lambda$onLongClick$0$StatisticActivity$MemberData(ArrayList arrayList, TLRPC$ChatFull tLRPC$ChatFull, TLRPC$TL_chatChannelParticipant tLRPC$TL_chatChannelParticipant, boolean z, StatisticActivity statisticActivity, DialogInterface dialogInterface, int i) {
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v5, resolved type: org.telegram.tgnet.TLRPC$ChatParticipant} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v7, resolved type: org.telegram.tgnet.TLRPC$TL_chatChannelParticipant} */
+        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v5, resolved type: org.telegram.tgnet.TLRPC$TL_chatChannelParticipant} */
+        /* JADX WARNING: Multi-variable type inference failed */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        private void onLongClick(org.telegram.tgnet.TLRPC$ChatFull r17, org.telegram.ui.StatisticActivity r18, org.telegram.ui.ActionBar.AlertDialog[] r19, boolean r20) {
+            /*
+                r16 = this;
+                r7 = r16
+                r3 = r17
+                r8 = r18
+                r0 = r19
+                int r1 = org.telegram.messenger.UserConfig.selectedAccount
+                org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
+                org.telegram.tgnet.TLRPC$User r2 = r7.user
+                r4 = 0
+                r1.putUser(r2, r4)
+                java.util.ArrayList r1 = new java.util.ArrayList
+                r1.<init>()
+                java.util.ArrayList r2 = new java.util.ArrayList
+                r2.<init>()
+                java.util.ArrayList r5 = new java.util.ArrayList
+                r5.<init>()
+                r6 = 0
+                if (r20 == 0) goto L_0x0064
+                org.telegram.tgnet.TLRPC$ChatParticipants r9 = r3.participants
+                java.util.ArrayList<org.telegram.tgnet.TLRPC$ChatParticipant> r9 = r9.participants
+                if (r9 == 0) goto L_0x0064
+                int r9 = r9.size()
+                r11 = r6
+                r12 = r11
+                r10 = 0
+            L_0x0033:
+                if (r10 >= r9) goto L_0x0066
+                org.telegram.tgnet.TLRPC$ChatParticipants r13 = r3.participants
+                java.util.ArrayList<org.telegram.tgnet.TLRPC$ChatParticipant> r13 = r13.participants
+                java.lang.Object r13 = r13.get(r10)
+                org.telegram.tgnet.TLRPC$ChatParticipant r13 = (org.telegram.tgnet.TLRPC$ChatParticipant) r13
+                int r14 = r13.user_id
+                org.telegram.tgnet.TLRPC$User r15 = r7.user
+                int r15 = r15.id
+                if (r14 != r15) goto L_0x004e
+                boolean r14 = r13 instanceof org.telegram.tgnet.TLRPC$TL_chatChannelParticipant
+                if (r14 == 0) goto L_0x004e
+                r11 = r13
+                org.telegram.tgnet.TLRPC$TL_chatChannelParticipant r11 = (org.telegram.tgnet.TLRPC$TL_chatChannelParticipant) r11
+            L_0x004e:
+                int r14 = r13.user_id
+                int r15 = org.telegram.messenger.UserConfig.selectedAccount
+                org.telegram.messenger.UserConfig r15 = org.telegram.messenger.UserConfig.getInstance(r15)
+                int r15 = r15.clientUserId
+                if (r14 != r15) goto L_0x0061
+                boolean r14 = r13 instanceof org.telegram.tgnet.TLRPC$TL_chatChannelParticipant
+                if (r14 == 0) goto L_0x0061
+                r12 = r13
+                org.telegram.tgnet.TLRPC$TL_chatChannelParticipant r12 = (org.telegram.tgnet.TLRPC$TL_chatChannelParticipant) r12
+            L_0x0061:
+                int r10 = r10 + 1
+                goto L_0x0033
+            L_0x0064:
+                r11 = r6
+                r12 = r11
+            L_0x0066:
+                r9 = 2131626974(0x7f0e0bde, float:1.88812E38)
+                java.lang.String r10 = "StatisticOpenProfile"
+                java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
+                r1.add(r9)
+                r9 = 2131165627(0x7var_bb, float:1.7945476E38)
+                java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+                r5.add(r9)
+                r9 = 2
+                java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+                r2.add(r9)
+                r9 = 2131626976(0x7f0e0be0, float:1.8881203E38)
+                java.lang.String r10 = "StatisticSearchUserHistory"
+                java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
+                r1.add(r9)
+                r9 = 2131165596(0x7var_c, float:1.7945414E38)
+                java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+                r5.add(r9)
+                r9 = 1
+                java.lang.Integer r10 = java.lang.Integer.valueOf(r9)
+                r2.add(r10)
+                r13 = 300(0x12c, double:1.48E-321)
+                r10 = 3
+                if (r20 == 0) goto L_0x00f3
+                if (r11 != 0) goto L_0x00f3
+                r1 = r0[r4]
+                if (r1 != 0) goto L_0x00c1
+                org.telegram.ui.ActionBar.AlertDialog r1 = new org.telegram.ui.ActionBar.AlertDialog
+                android.view.View r2 = r18.getFragmentView()
+                android.content.Context r2 = r2.getContext()
+                r1.<init>(r2, r10)
+                r0[r4] = r1
+                r1 = r0[r4]
+                r1.showDelayed(r13)
+            L_0x00c1:
+                org.telegram.tgnet.TLRPC$TL_channels_getParticipant r1 = new org.telegram.tgnet.TLRPC$TL_channels_getParticipant
+                r1.<init>()
+                int r2 = org.telegram.messenger.UserConfig.selectedAccount
+                org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
+                int r4 = r3.id
+                org.telegram.tgnet.TLRPC$InputChannel r2 = r2.getInputChannel((int) r4)
+                r1.channel = r2
+                int r2 = org.telegram.messenger.UserConfig.selectedAccount
+                org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
+                org.telegram.tgnet.TLRPC$User r4 = r7.user
+                int r4 = r4.id
+                org.telegram.tgnet.TLRPC$InputUser r2 = r2.getInputUser((int) r4)
+                r1.user_id = r2
+                int r2 = org.telegram.messenger.UserConfig.selectedAccount
+                org.telegram.tgnet.ConnectionsManager r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2)
+                org.telegram.ui.-$$Lambda$StatisticActivity$MemberData$xMdy99s2pBJPoRDmhlWlHT7bhrc r4 = new org.telegram.ui.-$$Lambda$StatisticActivity$MemberData$xMdy99s2pBJPoRDmhlWlHT7bhrc
+                r4.<init>(r8, r0, r3)
+                r2.sendRequest(r1, r4)
+                return
+            L_0x00f3:
+                if (r20 == 0) goto L_0x0145
+                if (r12 != 0) goto L_0x0145
+                r1 = r0[r4]
+                if (r1 != 0) goto L_0x010f
+                org.telegram.ui.ActionBar.AlertDialog r1 = new org.telegram.ui.ActionBar.AlertDialog
+                android.view.View r2 = r18.getFragmentView()
+                android.content.Context r2 = r2.getContext()
+                r1.<init>(r2, r10)
+                r0[r4] = r1
+                r1 = r0[r4]
+                r1.showDelayed(r13)
+            L_0x010f:
+                org.telegram.tgnet.TLRPC$TL_channels_getParticipant r1 = new org.telegram.tgnet.TLRPC$TL_channels_getParticipant
+                r1.<init>()
+                int r2 = org.telegram.messenger.UserConfig.selectedAccount
+                org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
+                int r4 = r3.id
+                org.telegram.tgnet.TLRPC$InputChannel r2 = r2.getInputChannel((int) r4)
+                r1.channel = r2
+                int r2 = org.telegram.messenger.UserConfig.selectedAccount
+                org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r2)
+                int r4 = org.telegram.messenger.UserConfig.selectedAccount
+                org.telegram.messenger.UserConfig r4 = org.telegram.messenger.UserConfig.getInstance(r4)
+                int r4 = r4.clientUserId
+                org.telegram.tgnet.TLRPC$InputUser r2 = r2.getInputUser((int) r4)
+                r1.user_id = r2
+                int r2 = org.telegram.messenger.UserConfig.selectedAccount
+                org.telegram.tgnet.ConnectionsManager r2 = org.telegram.tgnet.ConnectionsManager.getInstance(r2)
+                org.telegram.ui.-$$Lambda$StatisticActivity$MemberData$7hFIPgIPDZ-5ZoGhVpzg7tvzYyM r4 = new org.telegram.ui.-$$Lambda$StatisticActivity$MemberData$7hFIPgIPDZ-5ZoGhVpzg7tvzYyM
+                r4.<init>(r8, r0, r3)
+                r2.sendRequest(r1, r4)
+                return
+            L_0x0145:
+                r10 = r0[r4]
+                if (r10 == 0) goto L_0x0150
+                r10 = r0[r4]
+                r10.dismiss()
+                r0[r4] = r6
+            L_0x0150:
+                if (r12 == 0) goto L_0x0192
+                if (r11 == 0) goto L_0x0192
+                org.telegram.tgnet.TLRPC$ChannelParticipant r0 = r12.channelParticipant
+                org.telegram.tgnet.TLRPC$TL_chatAdminRights r0 = r0.admin_rights
+                if (r0 == 0) goto L_0x0192
+                boolean r0 = r0.add_admins
+                if (r0 == 0) goto L_0x0192
+                org.telegram.tgnet.TLRPC$ChannelParticipant r0 = r11.channelParticipant
+                org.telegram.tgnet.TLRPC$TL_chatAdminRights r0 = r0.admin_rights
+                if (r0 != 0) goto L_0x0165
+                goto L_0x0166
+            L_0x0165:
+                r9 = 0
+            L_0x0166:
+                if (r9 == 0) goto L_0x016e
+                r0 = 2131626850(0x7f0e0b62, float:1.8880948E38)
+                java.lang.String r6 = "SetAsAdmin"
+                goto L_0x0173
+            L_0x016e:
+                r0 = 2131625048(0x7f0e0458, float:1.8877293E38)
+                java.lang.String r6 = "EditAdminRights"
+            L_0x0173:
+                java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)
+                r1.add(r0)
+                if (r9 == 0) goto L_0x0180
+                r0 = 2131165247(0x7var_f, float:1.7944706E38)
+                goto L_0x0183
+            L_0x0180:
+                r0 = 2131165252(0x7var_, float:1.7944716E38)
+            L_0x0183:
+                java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
+                r5.add(r0)
+                java.lang.Integer r0 = java.lang.Integer.valueOf(r4)
+                r2.add(r0)
+                goto L_0x0193
+            L_0x0192:
+                r9 = 0
+            L_0x0193:
+                org.telegram.ui.ActionBar.AlertDialog$Builder r10 = new org.telegram.ui.ActionBar.AlertDialog$Builder
+                android.app.Activity r0 = r18.getParentActivity()
+                r10.<init>((android.content.Context) r0)
+                int r0 = r2.size()
+                java.lang.CharSequence[] r0 = new java.lang.CharSequence[r0]
+                java.lang.Object[] r0 = r1.toArray(r0)
+                r12 = r0
+                java.lang.CharSequence[] r12 = (java.lang.CharSequence[]) r12
+                int[] r13 = org.telegram.messenger.AndroidUtilities.toIntArray(r5)
+                org.telegram.ui.-$$Lambda$StatisticActivity$MemberData$NcYx40wk_cQ-zX1tCcqRw4sbHgY r14 = new org.telegram.ui.-$$Lambda$StatisticActivity$MemberData$NcYx40wk_cQ-zX1tCcqRw4sbHgY
+                r0 = r14
+                r1 = r16
+                r3 = r17
+                r4 = r11
+                r5 = r9
+                r6 = r18
+                r0.<init>(r2, r3, r4, r5, r6)
+                r10.setItems(r12, r13, r14)
+                org.telegram.ui.ActionBar.AlertDialog r0 = r10.create()
+                r8.showDialog(r0)
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.StatisticActivity.MemberData.onLongClick(org.telegram.tgnet.TLRPC$ChatFull, org.telegram.ui.StatisticActivity, org.telegram.ui.ActionBar.AlertDialog[], boolean):void");
+        }
+
+        public /* synthetic */ void lambda$onLongClick$1$StatisticActivity$MemberData(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$ChatFull tLRPC$ChatFull, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new Runnable(statisticActivity, alertDialogArr, tLRPC$TL_error, tLObject, tLRPC$ChatFull) {
+                public final /* synthetic */ StatisticActivity f$1;
+                public final /* synthetic */ AlertDialog[] f$2;
+                public final /* synthetic */ TLRPC$TL_error f$3;
+                public final /* synthetic */ TLObject f$4;
+                public final /* synthetic */ TLRPC$ChatFull f$5;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                    this.f$3 = r4;
+                    this.f$4 = r5;
+                    this.f$5 = r6;
+                }
+
+                public final void run() {
+                    StatisticActivity.MemberData.this.lambda$null$0$StatisticActivity$MemberData(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                }
+            });
+        }
+
+        public /* synthetic */ void lambda$null$0$StatisticActivity$MemberData(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$ChatFull tLRPC$ChatFull) {
+            if (!statisticActivity.isFinishing() && statisticActivity.getFragmentView() != null && alertDialogArr[0] != null) {
+                if (tLRPC$TL_error == null) {
+                    TLRPC$TL_chatChannelParticipant tLRPC$TL_chatChannelParticipant = new TLRPC$TL_chatChannelParticipant();
+                    tLRPC$TL_chatChannelParticipant.channelParticipant = ((TLRPC$TL_channels_channelParticipant) tLObject).participant;
+                    tLRPC$TL_chatChannelParticipant.user_id = this.user.id;
+                    tLRPC$ChatFull.participants.participants.add(0, tLRPC$TL_chatChannelParticipant);
+                    onLongClick(tLRPC$ChatFull, statisticActivity, alertDialogArr);
+                    return;
+                }
+                onLongClick(tLRPC$ChatFull, statisticActivity, alertDialogArr, false);
+            }
+        }
+
+        public /* synthetic */ void lambda$onLongClick$3$StatisticActivity$MemberData(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$ChatFull tLRPC$ChatFull, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            AndroidUtilities.runOnUIThread(new Runnable(statisticActivity, alertDialogArr, tLRPC$TL_error, tLObject, tLRPC$ChatFull) {
+                public final /* synthetic */ StatisticActivity f$1;
+                public final /* synthetic */ AlertDialog[] f$2;
+                public final /* synthetic */ TLRPC$TL_error f$3;
+                public final /* synthetic */ TLObject f$4;
+                public final /* synthetic */ TLRPC$ChatFull f$5;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                    this.f$3 = r4;
+                    this.f$4 = r5;
+                    this.f$5 = r6;
+                }
+
+                public final void run() {
+                    StatisticActivity.MemberData.this.lambda$null$2$StatisticActivity$MemberData(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                }
+            });
+        }
+
+        public /* synthetic */ void lambda$null$2$StatisticActivity$MemberData(StatisticActivity statisticActivity, AlertDialog[] alertDialogArr, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$ChatFull tLRPC$ChatFull) {
+            if (!statisticActivity.isFinishing() && statisticActivity.getFragmentView() != null && alertDialogArr[0] != null) {
+                if (tLRPC$TL_error == null) {
+                    TLRPC$TL_chatChannelParticipant tLRPC$TL_chatChannelParticipant = new TLRPC$TL_chatChannelParticipant();
+                    tLRPC$TL_chatChannelParticipant.channelParticipant = ((TLRPC$TL_channels_channelParticipant) tLObject).participant;
+                    tLRPC$TL_chatChannelParticipant.user_id = UserConfig.getInstance(UserConfig.selectedAccount).clientUserId;
+                    tLRPC$ChatFull.participants.participants.add(0, tLRPC$TL_chatChannelParticipant);
+                    onLongClick(tLRPC$ChatFull, statisticActivity, alertDialogArr);
+                    return;
+                }
+                onLongClick(tLRPC$ChatFull, statisticActivity, alertDialogArr, false);
+            }
+        }
+
+        public /* synthetic */ void lambda$onLongClick$4$StatisticActivity$MemberData(ArrayList arrayList, TLRPC$ChatFull tLRPC$ChatFull, TLRPC$TL_chatChannelParticipant tLRPC$TL_chatChannelParticipant, boolean z, StatisticActivity statisticActivity, DialogInterface dialogInterface, int i) {
             ArrayList arrayList2 = arrayList;
             TLRPC$ChatFull tLRPC$ChatFull2 = tLRPC$ChatFull;
             final TLRPC$TL_chatChannelParticipant tLRPC$TL_chatChannelParticipant2 = tLRPC$TL_chatChannelParticipant;
@@ -3432,15 +3594,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     }
                 });
                 statisticActivity2.presentFragment(chatRightsEditActivity);
-            }
-            if (((Integer) arrayList2.get(i2)).intValue() == 2) {
+            } else if (((Integer) arrayList2.get(i2)).intValue() == 2) {
                 onClick(statisticActivity2);
-                return;
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putInt("chat_id", tLRPC$ChatFull2.id);
+                bundle.putInt("search_from_user_id", this.user.id);
+                statisticActivity2.presentFragment(new ChatActivity(bundle));
             }
-            Bundle bundle = new Bundle();
-            bundle.putInt("chat_id", tLRPC$ChatFull2.id);
-            bundle.putInt("search_from_user_id", this.user.id);
-            statisticActivity2.presentFragment(new ChatActivity(bundle));
         }
     }
 }

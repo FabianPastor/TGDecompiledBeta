@@ -311,6 +311,12 @@ public class Track {
         return this.samples;
     }
 
+    public long getLastFrameTimestamp() {
+        long j = this.duration;
+        long[] jArr = this.sampleDurations;
+        return (((j - jArr[jArr.length - 1]) * 1000000) - 500000) / ((long) this.timeScale);
+    }
+
     public long getDuration() {
         return this.duration;
     }

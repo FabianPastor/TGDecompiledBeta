@@ -41,6 +41,7 @@ import android.view.ViewOutlineProvider;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import com.google.android.exoplayer2.analytics.AnalyticsListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.ref.WeakReference;
@@ -2758,6 +2759,18 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     VideoPlayer unused2 = InstantCameraView.this.videoPlayer = new VideoPlayer();
                     InstantCameraView.this.videoPlayer.setDelegate(new VideoPlayer.VideoPlayerDelegate() {
                         public void onRenderedFirstFrame() {
+                        }
+
+                        public /* synthetic */ void onRenderedFirstFrame(AnalyticsListener.EventTime eventTime) {
+                            VideoPlayer.VideoPlayerDelegate.CC.$default$onRenderedFirstFrame(this, eventTime);
+                        }
+
+                        public /* synthetic */ void onSeekFinished(AnalyticsListener.EventTime eventTime) {
+                            VideoPlayer.VideoPlayerDelegate.CC.$default$onSeekFinished(this, eventTime);
+                        }
+
+                        public /* synthetic */ void onSeekStarted(AnalyticsListener.EventTime eventTime) {
+                            VideoPlayer.VideoPlayerDelegate.CC.$default$onSeekStarted(this, eventTime);
                         }
 
                         public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {

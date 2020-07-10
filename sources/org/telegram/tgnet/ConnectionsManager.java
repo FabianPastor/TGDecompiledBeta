@@ -671,7 +671,7 @@ public class ConnectionsManager extends BaseController {
     }
 
     public static void onRequestNewServerIpAndPort(int i, int i2) {
-        Utilities.stageQueue.postRunnable(new Runnable(i, i2) {
+        Utilities.globalQueue.postRunnable(new Runnable(i, i2) {
             public final /* synthetic */ int f$0;
             public final /* synthetic */ int f$1;
 
@@ -681,13 +681,27 @@ public class ConnectionsManager extends BaseController {
             }
 
             public final void run() {
-                ConnectionsManager.lambda$onRequestNewServerIpAndPort$8(this.f$0, this.f$1);
+                Utilities.stageQueue.postRunnable(new Runnable(this.f$0, ApplicationLoader.isNetworkOnline(), this.f$1) {
+                    public final /* synthetic */ int f$0;
+                    public final /* synthetic */ boolean f$1;
+                    public final /* synthetic */ int f$2;
+
+                    {
+                        this.f$0 = r1;
+                        this.f$1 = r2;
+                        this.f$2 = r3;
+                    }
+
+                    public final void run() {
+                        ConnectionsManager.lambda$null$8(this.f$0, this.f$1, this.f$2);
+                    }
+                });
             }
         });
     }
 
-    static /* synthetic */ void lambda$onRequestNewServerIpAndPort$8(int i, int i2) {
-        if (currentTask == null && ((i != 0 || Math.abs(lastDnsRequestTime - System.currentTimeMillis()) >= 10000) && ApplicationLoader.isNetworkOnline())) {
+    static /* synthetic */ void lambda$null$8(int i, boolean z, int i2) {
+        if (currentTask == null && ((i != 0 || Math.abs(lastDnsRequestTime - System.currentTimeMillis()) >= 10000) && z)) {
             lastDnsRequestTime = System.currentTimeMillis();
             if (i == 3) {
                 if (BuildVars.LOGS_ENABLED) {
@@ -724,7 +738,7 @@ public class ConnectionsManager extends BaseController {
     }
 
     public static void onProxyError() {
-        AndroidUtilities.runOnUIThread($$Lambda$ConnectionsManager$24reh3bpM2JkWgNeS0uACIxcdSU.INSTANCE);
+        AndroidUtilities.runOnUIThread($$Lambda$ConnectionsManager$mCKnTBWbUnfNosYqFdRo4Jn0cQ.INSTANCE);
     }
 
     public static void getHostByName(String str, long j) {
@@ -738,12 +752,12 @@ public class ConnectionsManager extends BaseController {
             }
 
             public final void run() {
-                ConnectionsManager.lambda$getHostByName$10(this.f$0, this.f$1);
+                ConnectionsManager.lambda$getHostByName$11(this.f$0, this.f$1);
             }
         });
     }
 
-    static /* synthetic */ void lambda$getHostByName$10(String str, long j) {
+    static /* synthetic */ void lambda$getHostByName$11(String str, long j) {
         ResolvedDomain resolvedDomain = dnsCache.get(str);
         if (resolvedDomain == null || SystemClock.elapsedRealtime() - resolvedDomain.ttl >= 300000) {
             ResolveHostByNameTask resolveHostByNameTask = resolvingHostnameTasks.get(str);
@@ -842,12 +856,12 @@ public class ConnectionsManager extends BaseController {
             }
 
             public final void run() {
-                ConnectionsManager.this.lambda$setIsUpdating$12$ConnectionsManager(this.f$1);
+                ConnectionsManager.this.lambda$setIsUpdating$13$ConnectionsManager(this.f$1);
             }
         });
     }
 
-    public /* synthetic */ void lambda$setIsUpdating$12$ConnectionsManager(boolean z) {
+    public /* synthetic */ void lambda$setIsUpdating$13$ConnectionsManager(boolean z) {
         if (this.isUpdating != z) {
             this.isUpdating = z;
             if (this.connectionState == 3) {

@@ -63,7 +63,7 @@ public final class ExtendedDefaultDataSource implements DataSource {
 
     @Deprecated
     public ExtendedDefaultDataSource(Context context2, TransferListener transferListener, String str, int i, int i2, boolean z) {
-        this(context2, transferListener, (DataSource) new DefaultHttpDataSource(str, (Predicate<String>) null, transferListener, i, i2, z, (HttpDataSource.RequestProperties) null));
+        this(context2, transferListener, (DataSource) new DefaultHttpDataSource(str, i, i2, z, (HttpDataSource.RequestProperties) null));
     }
 
     @Deprecated
@@ -71,6 +71,7 @@ public final class ExtendedDefaultDataSource implements DataSource {
         this(context2, dataSource2);
         if (transferListener != null) {
             this.transferListeners.add(transferListener);
+            dataSource2.addTransferListener(transferListener);
         }
     }
 

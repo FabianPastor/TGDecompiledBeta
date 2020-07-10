@@ -30,6 +30,7 @@ import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import androidx.annotation.Keep;
+import com.google.android.exoplayer2.analytics.AnalyticsListener;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import java.io.File;
 import java.util.ArrayList;
@@ -407,6 +408,18 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
                 this.videoPlayer = videoPlayer2;
                 videoPlayer2.setTextureView(this.videoTextureView);
                 this.videoPlayer.setDelegate(new VideoPlayer.VideoPlayerDelegate() {
+                    public /* synthetic */ void onRenderedFirstFrame(AnalyticsListener.EventTime eventTime) {
+                        VideoPlayer.VideoPlayerDelegate.CC.$default$onRenderedFirstFrame(this, eventTime);
+                    }
+
+                    public /* synthetic */ void onSeekFinished(AnalyticsListener.EventTime eventTime) {
+                        VideoPlayer.VideoPlayerDelegate.CC.$default$onSeekFinished(this, eventTime);
+                    }
+
+                    public /* synthetic */ void onSeekStarted(AnalyticsListener.EventTime eventTime) {
+                        VideoPlayer.VideoPlayerDelegate.CC.$default$onSeekStarted(this, eventTime);
+                    }
+
                     public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
                         return false;
                     }

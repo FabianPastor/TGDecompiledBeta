@@ -127,6 +127,10 @@ public class MP4Builder {
         return this.fc.position();
     }
 
+    public long getLastFrameTimestamp(int i) {
+        return this.currentMp4Movie.getLastFrameTimestamp(i);
+    }
+
     public int addTrack(MediaFormat mediaFormat, boolean z) {
         return this.currentMp4Movie.addTrack(mediaFormat, z);
     }

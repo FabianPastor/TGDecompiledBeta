@@ -31,6 +31,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import com.google.android.exoplayer2.analytics.AnalyticsListener;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -178,6 +179,18 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         void onVideoSizeChanged(float f, int i);
 
         void prepareToSwitchInlineMode(boolean z, Runnable runnable, float f, boolean z2);
+    }
+
+    public /* synthetic */ void onRenderedFirstFrame(AnalyticsListener.EventTime eventTime) {
+        VideoPlayer.VideoPlayerDelegate.CC.$default$onRenderedFirstFrame(this, eventTime);
+    }
+
+    public /* synthetic */ void onSeekFinished(AnalyticsListener.EventTime eventTime) {
+        VideoPlayer.VideoPlayerDelegate.CC.$default$onSeekFinished(this, eventTime);
+    }
+
+    public /* synthetic */ void onSeekStarted(AnalyticsListener.EventTime eventTime) {
+        VideoPlayer.VideoPlayerDelegate.CC.$default$onSeekStarted(this, eventTime);
     }
 
     private static class JSExtractor {

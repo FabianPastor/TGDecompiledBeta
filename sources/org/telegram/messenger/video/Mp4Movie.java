@@ -64,4 +64,11 @@ public class Mp4Movie {
         this.tracks.add(new Track(this.tracks.size(), mediaFormat, z));
         return this.tracks.size() - 1;
     }
+
+    public long getLastFrameTimestamp(int i) {
+        if (i < 0 || i >= this.tracks.size()) {
+            return 0;
+        }
+        return this.tracks.get(i).getLastFrameTimestamp();
+    }
 }

@@ -146,7 +146,7 @@ public class VideoEditedInfo {
                 bArr = null;
             }
             SerializedData serializedData = new SerializedData(i);
-            serializedData.writeInt32(3);
+            serializedData.writeInt32(4);
             serializedData.writeInt64(this.avatarStartTime);
             serializedData.writeInt32(this.originalBitrate);
             if (this.filterState != null) {
@@ -224,6 +224,7 @@ public class VideoEditedInfo {
                 serializedData.writeInt32(this.cropState.transformWidth);
                 serializedData.writeInt32(this.cropState.transformHeight);
                 serializedData.writeInt32(this.cropState.transformRotation);
+                serializedData.writeBool(this.cropState.mirrored);
             } else {
                 serializedData.writeByte(0);
             }
@@ -258,7 +259,7 @@ public class VideoEditedInfo {
                     if (substring.length() > 0) {
                         SerializedData serializedData = new SerializedData(Utilities.hexToBytes(substring));
                         int readInt32 = serializedData.readInt32(false);
-                        if (readInt32 == 3) {
+                        if (readInt32 >= 3) {
                             this.avatarStartTime = serializedData.readInt64(false);
                             this.originalBitrate = serializedData.readInt32(false);
                         }
@@ -323,6 +324,9 @@ public class VideoEditedInfo {
                             this.cropState.transformWidth = serializedData.readInt32(false);
                             this.cropState.transformHeight = serializedData.readInt32(false);
                             this.cropState.transformRotation = serializedData.readInt32(false);
+                            if (readInt32 >= 4) {
+                                this.cropState.mirrored = serializedData.readBool(false);
+                            }
                         }
                         serializedData.cleanup();
                     }

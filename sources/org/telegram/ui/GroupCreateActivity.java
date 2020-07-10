@@ -80,6 +80,7 @@ import org.telegram.ui.Components.GroupCreateSpan;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.TypefaceSpan;
+import org.telegram.ui.Components.VerticalPositionAutoAnimator;
 import org.telegram.ui.GroupCreateActivity;
 
 public class GroupCreateActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate, View.OnClickListener {
@@ -455,6 +456,23 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
             }
         });
         AnonymousClass2 r2 = new ViewGroup(context) {
+            private VerticalPositionAutoAnimator verticalPositionAutoAnimator;
+
+            public void onViewAdded(View view) {
+                if (view == GroupCreateActivity.this.floatingButton && this.verticalPositionAutoAnimator == null) {
+                    this.verticalPositionAutoAnimator = VerticalPositionAutoAnimator.attach(view);
+                }
+            }
+
+            /* access modifiers changed from: protected */
+            public void onAttachedToWindow() {
+                super.onAttachedToWindow();
+                VerticalPositionAutoAnimator verticalPositionAutoAnimator2 = this.verticalPositionAutoAnimator;
+                if (verticalPositionAutoAnimator2 != null) {
+                    verticalPositionAutoAnimator2.ignoreNextLayout();
+                }
+            }
+
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 int i3;

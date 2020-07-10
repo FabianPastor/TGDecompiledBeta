@@ -20,8 +20,10 @@ public class CropRotationWheel extends FrameLayout {
     private ImageView aspectRatioButton;
     private Paint bluePaint;
     private TextView degreesLabel;
+    private ImageView mirrorButton;
     private float prevX;
     protected float rotation;
+    private ImageView rotation90Button;
     private RotationWheelListener rotationListener;
     private RectF tempRect = new RectF(0.0f, 0.0f, 0.0f, 0.0f);
     private Paint whitePaint;
@@ -29,13 +31,18 @@ public class CropRotationWheel extends FrameLayout {
     public interface RotationWheelListener {
         void aspectRatioPressed();
 
+        boolean mirror();
+
         void onChange(float f);
 
         void onEnd(float f);
 
         void onStart();
 
-        void rotate90Pressed();
+        boolean rotate90Pressed();
+    }
+
+    public void setFreeform(boolean z) {
     }
 
     public CropRotationWheel(Context context) {
@@ -53,28 +60,42 @@ public class CropRotationWheel extends FrameLayout {
         this.bluePaint.setAlpha(255);
         this.bluePaint.setAntiAlias(true);
         ImageView imageView = new ImageView(context);
-        this.aspectRatioButton = imageView;
+        this.mirrorButton = imageView;
         imageView.setImageResource(NUM);
-        this.aspectRatioButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
-        this.aspectRatioButton.setScaleType(ImageView.ScaleType.CENTER);
-        this.aspectRatioButton.setOnClickListener(new View.OnClickListener() {
+        this.mirrorButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
+        this.mirrorButton.setScaleType(ImageView.ScaleType.CENTER);
+        this.mirrorButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 CropRotationWheel.this.lambda$new$0$CropRotationWheel(view);
             }
         });
-        this.aspectRatioButton.setContentDescription(LocaleController.getString("AccDescrAspectRatio", NUM));
-        addView(this.aspectRatioButton, LayoutHelper.createFrame(70, 64, 19));
+        this.mirrorButton.setContentDescription(LocaleController.getString("AccDescrMirror", NUM));
+        addView(this.mirrorButton, LayoutHelper.createFrame(70, 64, 19));
         ImageView imageView2 = new ImageView(context);
+        this.aspectRatioButton = imageView2;
         imageView2.setImageResource(NUM);
-        imageView2.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
-        imageView2.setScaleType(ImageView.ScaleType.CENTER);
-        imageView2.setOnClickListener(new View.OnClickListener() {
+        this.aspectRatioButton.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
+        this.aspectRatioButton.setScaleType(ImageView.ScaleType.CENTER);
+        this.aspectRatioButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 CropRotationWheel.this.lambda$new$1$CropRotationWheel(view);
             }
         });
-        imageView2.setContentDescription(LocaleController.getString("AccDescrRotate", NUM));
-        addView(imageView2, LayoutHelper.createFrame(70, 64, 21));
+        this.aspectRatioButton.setVisibility(8);
+        this.aspectRatioButton.setContentDescription(LocaleController.getString("AccDescrAspectRatio", NUM));
+        addView(this.aspectRatioButton, LayoutHelper.createFrame(70, 64, 19));
+        ImageView imageView3 = new ImageView(context);
+        this.rotation90Button = imageView3;
+        imageView3.setImageResource(NUM);
+        this.rotation90Button.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
+        this.rotation90Button.setScaleType(ImageView.ScaleType.CENTER);
+        this.rotation90Button.setOnClickListener(new View.OnClickListener() {
+            public final void onClick(View view) {
+                CropRotationWheel.this.lambda$new$2$CropRotationWheel(view);
+            }
+        });
+        this.rotation90Button.setContentDescription(LocaleController.getString("AccDescrRotate", NUM));
+        addView(this.rotation90Button, LayoutHelper.createFrame(70, 64, 21));
         TextView textView = new TextView(context);
         this.degreesLabel = textView;
         textView.setTextColor(-1);
@@ -86,19 +107,30 @@ public class CropRotationWheel extends FrameLayout {
     public /* synthetic */ void lambda$new$0$CropRotationWheel(View view) {
         RotationWheelListener rotationWheelListener = this.rotationListener;
         if (rotationWheelListener != null) {
-            rotationWheelListener.aspectRatioPressed();
+            setMirrored(rotationWheelListener.mirror());
         }
     }
 
     public /* synthetic */ void lambda$new$1$CropRotationWheel(View view) {
         RotationWheelListener rotationWheelListener = this.rotationListener;
         if (rotationWheelListener != null) {
-            rotationWheelListener.rotate90Pressed();
+            rotationWheelListener.aspectRatioPressed();
         }
     }
 
-    public void setFreeform(boolean z) {
-        this.aspectRatioButton.setVisibility(z ? 0 : 8);
+    public /* synthetic */ void lambda$new$2$CropRotationWheel(View view) {
+        RotationWheelListener rotationWheelListener = this.rotationListener;
+        if (rotationWheelListener != null) {
+            setRotated(rotationWheelListener.rotate90Pressed());
+        }
+    }
+
+    public void setMirrored(boolean z) {
+        this.mirrorButton.setColorFilter(z ? new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY) : null);
+    }
+
+    public void setRotated(boolean z) {
+        this.rotation90Button.setColorFilter(z ? new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY) : null);
     }
 
     /* access modifiers changed from: protected */
@@ -108,6 +140,8 @@ public class CropRotationWheel extends FrameLayout {
 
     public void reset() {
         setRotation(0.0f, false);
+        setMirrored(false);
+        setRotated(false);
     }
 
     public void setListener(RotationWheelListener rotationWheelListener) {

@@ -13,6 +13,7 @@ import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.Format;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
@@ -20,12 +21,17 @@ import com.google.android.exoplayer2.Renderer;
 import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.analytics.AnalyticsListener;
+import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.audio.AudioProcessor;
 import com.google.android.exoplayer2.audio.AudioRendererEventListener;
 import com.google.android.exoplayer2.audio.TeeAudioProcessor;
+import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
+import com.google.android.exoplayer2.metadata.Metadata;
+import com.google.android.exoplayer2.source.MediaSourceEventListener;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
@@ -38,6 +44,7 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.video.SurfaceNotValidException;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import org.telegram.messenger.ApplicationLoader;
@@ -47,7 +54,7 @@ import org.telegram.messenger.secretmedia.ExtendedDefaultDataSourceFactory;
 import org.telegram.ui.Components.VideoPlayer;
 
 @SuppressLint({"NewApi"})
-public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoListener, NotificationCenter.NotificationCenterDelegate {
+public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoListener, AnalyticsListener, NotificationCenter.NotificationCenterDelegate {
     private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
     private SimpleExoPlayer audioPlayer;
     /* access modifiers changed from: private */
@@ -86,9 +93,28 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     }
 
     public interface VideoPlayerDelegate {
+
+        /* renamed from: org.telegram.ui.Components.VideoPlayer$VideoPlayerDelegate$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static void $default$onRenderedFirstFrame(VideoPlayerDelegate videoPlayerDelegate, AnalyticsListener.EventTime eventTime) {
+            }
+
+            public static void $default$onSeekFinished(VideoPlayerDelegate videoPlayerDelegate, AnalyticsListener.EventTime eventTime) {
+            }
+
+            public static void $default$onSeekStarted(VideoPlayerDelegate videoPlayerDelegate, AnalyticsListener.EventTime eventTime) {
+            }
+        }
+
         void onError(VideoPlayer videoPlayer, Exception exc);
 
         void onRenderedFirstFrame();
+
+        void onRenderedFirstFrame(AnalyticsListener.EventTime eventTime);
+
+        void onSeekFinished(AnalyticsListener.EventTime eventTime);
+
+        void onSeekStarted(AnalyticsListener.EventTime eventTime);
 
         void onStateChanged(boolean z, int i);
 
@@ -99,21 +125,145 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
         void onVideoSizeChanged(int i, int i2, int i3, float f);
     }
 
+    public /* synthetic */ void onAudioAttributesChanged(AnalyticsListener.EventTime eventTime, AudioAttributes audioAttributes) {
+        AnalyticsListener.CC.$default$onAudioAttributesChanged(this, eventTime, audioAttributes);
+    }
+
+    public /* synthetic */ void onAudioSessionId(AnalyticsListener.EventTime eventTime, int i) {
+        AnalyticsListener.CC.$default$onAudioSessionId(this, eventTime, i);
+    }
+
+    public /* synthetic */ void onAudioUnderrun(AnalyticsListener.EventTime eventTime, int i, long j, long j2) {
+        AnalyticsListener.CC.$default$onAudioUnderrun(this, eventTime, i, j, j2);
+    }
+
+    public /* synthetic */ void onBandwidthEstimate(AnalyticsListener.EventTime eventTime, int i, long j, long j2) {
+        AnalyticsListener.CC.$default$onBandwidthEstimate(this, eventTime, i, j, j2);
+    }
+
+    public /* synthetic */ void onDecoderDisabled(AnalyticsListener.EventTime eventTime, int i, DecoderCounters decoderCounters) {
+        AnalyticsListener.CC.$default$onDecoderDisabled(this, eventTime, i, decoderCounters);
+    }
+
+    public /* synthetic */ void onDecoderEnabled(AnalyticsListener.EventTime eventTime, int i, DecoderCounters decoderCounters) {
+        AnalyticsListener.CC.$default$onDecoderEnabled(this, eventTime, i, decoderCounters);
+    }
+
+    public /* synthetic */ void onDecoderInitialized(AnalyticsListener.EventTime eventTime, int i, String str, long j) {
+        AnalyticsListener.CC.$default$onDecoderInitialized(this, eventTime, i, str, j);
+    }
+
+    public /* synthetic */ void onDecoderInputFormatChanged(AnalyticsListener.EventTime eventTime, int i, Format format) {
+        AnalyticsListener.CC.$default$onDecoderInputFormatChanged(this, eventTime, i, format);
+    }
+
+    public /* synthetic */ void onDownstreamFormatChanged(AnalyticsListener.EventTime eventTime, MediaSourceEventListener.MediaLoadData mediaLoadData) {
+        AnalyticsListener.CC.$default$onDownstreamFormatChanged(this, eventTime, mediaLoadData);
+    }
+
+    public /* synthetic */ void onDrmKeysLoaded(AnalyticsListener.EventTime eventTime) {
+        AnalyticsListener.CC.$default$onDrmKeysLoaded(this, eventTime);
+    }
+
+    public /* synthetic */ void onDrmKeysRestored(AnalyticsListener.EventTime eventTime) {
+        AnalyticsListener.CC.$default$onDrmKeysRestored(this, eventTime);
+    }
+
+    public /* synthetic */ void onDrmSessionAcquired(AnalyticsListener.EventTime eventTime) {
+        AnalyticsListener.CC.$default$onDrmSessionAcquired(this, eventTime);
+    }
+
+    public /* synthetic */ void onDrmSessionManagerError(AnalyticsListener.EventTime eventTime, Exception exc) {
+        AnalyticsListener.CC.$default$onDrmSessionManagerError(this, eventTime, exc);
+    }
+
+    public /* synthetic */ void onDrmSessionReleased(AnalyticsListener.EventTime eventTime) {
+        AnalyticsListener.CC.$default$onDrmSessionReleased(this, eventTime);
+    }
+
+    public /* synthetic */ void onDroppedVideoFrames(AnalyticsListener.EventTime eventTime, int i, long j) {
+        AnalyticsListener.CC.$default$onDroppedVideoFrames(this, eventTime, i, j);
+    }
+
+    public /* synthetic */ void onIsPlayingChanged(AnalyticsListener.EventTime eventTime, boolean z) {
+        AnalyticsListener.CC.$default$onIsPlayingChanged(this, eventTime, z);
+    }
+
     public /* synthetic */ void onIsPlayingChanged(boolean z) {
         Player.EventListener.CC.$default$onIsPlayingChanged(this, z);
+    }
+
+    public /* synthetic */ void onLoadCanceled(AnalyticsListener.EventTime eventTime, MediaSourceEventListener.LoadEventInfo loadEventInfo, MediaSourceEventListener.MediaLoadData mediaLoadData) {
+        AnalyticsListener.CC.$default$onLoadCanceled(this, eventTime, loadEventInfo, mediaLoadData);
+    }
+
+    public /* synthetic */ void onLoadCompleted(AnalyticsListener.EventTime eventTime, MediaSourceEventListener.LoadEventInfo loadEventInfo, MediaSourceEventListener.MediaLoadData mediaLoadData) {
+        AnalyticsListener.CC.$default$onLoadCompleted(this, eventTime, loadEventInfo, mediaLoadData);
+    }
+
+    public /* synthetic */ void onLoadError(AnalyticsListener.EventTime eventTime, MediaSourceEventListener.LoadEventInfo loadEventInfo, MediaSourceEventListener.MediaLoadData mediaLoadData, IOException iOException, boolean z) {
+        AnalyticsListener.CC.$default$onLoadError(this, eventTime, loadEventInfo, mediaLoadData, iOException, z);
+    }
+
+    public /* synthetic */ void onLoadStarted(AnalyticsListener.EventTime eventTime, MediaSourceEventListener.LoadEventInfo loadEventInfo, MediaSourceEventListener.MediaLoadData mediaLoadData) {
+        AnalyticsListener.CC.$default$onLoadStarted(this, eventTime, loadEventInfo, mediaLoadData);
+    }
+
+    public /* synthetic */ void onLoadingChanged(AnalyticsListener.EventTime eventTime, boolean z) {
+        AnalyticsListener.CC.$default$onLoadingChanged(this, eventTime, z);
     }
 
     public void onLoadingChanged(boolean z) {
     }
 
+    public /* synthetic */ void onMediaPeriodCreated(AnalyticsListener.EventTime eventTime) {
+        AnalyticsListener.CC.$default$onMediaPeriodCreated(this, eventTime);
+    }
+
+    public /* synthetic */ void onMediaPeriodReleased(AnalyticsListener.EventTime eventTime) {
+        AnalyticsListener.CC.$default$onMediaPeriodReleased(this, eventTime);
+    }
+
+    public /* synthetic */ void onMetadata(AnalyticsListener.EventTime eventTime, Metadata metadata) {
+        AnalyticsListener.CC.$default$onMetadata(this, eventTime, metadata);
+    }
+
     public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+    }
+
+    public /* synthetic */ void onPlaybackParametersChanged(AnalyticsListener.EventTime eventTime, PlaybackParameters playbackParameters) {
+        AnalyticsListener.CC.$default$onPlaybackParametersChanged(this, eventTime, playbackParameters);
     }
 
     public /* synthetic */ void onPlaybackSuppressionReasonChanged(int i) {
         Player.EventListener.CC.$default$onPlaybackSuppressionReasonChanged(this, i);
     }
 
+    public /* synthetic */ void onPlaybackSuppressionReasonChanged(AnalyticsListener.EventTime eventTime, int i) {
+        AnalyticsListener.CC.$default$onPlaybackSuppressionReasonChanged(this, eventTime, i);
+    }
+
+    public /* synthetic */ void onPlayerError(AnalyticsListener.EventTime eventTime, ExoPlaybackException exoPlaybackException) {
+        AnalyticsListener.CC.$default$onPlayerError(this, eventTime, exoPlaybackException);
+    }
+
+    public /* synthetic */ void onPlayerStateChanged(AnalyticsListener.EventTime eventTime, boolean z, int i) {
+        AnalyticsListener.CC.$default$onPlayerStateChanged(this, eventTime, z, i);
+    }
+
+    public /* synthetic */ void onPositionDiscontinuity(AnalyticsListener.EventTime eventTime, int i) {
+        AnalyticsListener.CC.$default$onPositionDiscontinuity(this, eventTime, i);
+    }
+
+    public /* synthetic */ void onReadingStarted(AnalyticsListener.EventTime eventTime) {
+        AnalyticsListener.CC.$default$onReadingStarted(this, eventTime);
+    }
+
     public void onRepeatModeChanged(int i) {
+    }
+
+    public /* synthetic */ void onRepeatModeChanged(AnalyticsListener.EventTime eventTime, int i) {
+        AnalyticsListener.CC.$default$onRepeatModeChanged(this, eventTime, i);
     }
 
     public void onSeekProcessed() {
@@ -122,10 +272,38 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     public void onSurfaceSizeChanged(int i, int i2) {
     }
 
+    public /* synthetic */ void onSurfaceSizeChanged(AnalyticsListener.EventTime eventTime, int i, int i2) {
+        AnalyticsListener.CC.$default$onSurfaceSizeChanged(this, eventTime, i, i2);
+    }
+
+    public /* synthetic */ void onTimelineChanged(Timeline timeline, int i) {
+        Player.EventListener.CC.$default$onTimelineChanged(this, timeline, i);
+    }
+
     public void onTimelineChanged(Timeline timeline, Object obj, int i) {
     }
 
+    public /* synthetic */ void onTimelineChanged(AnalyticsListener.EventTime eventTime, int i) {
+        AnalyticsListener.CC.$default$onTimelineChanged(this, eventTime, i);
+    }
+
+    public /* synthetic */ void onTracksChanged(AnalyticsListener.EventTime eventTime, TrackGroupArray trackGroupArray, TrackSelectionArray trackSelectionArray) {
+        AnalyticsListener.CC.$default$onTracksChanged(this, eventTime, trackGroupArray, trackSelectionArray);
+    }
+
     public void onTracksChanged(TrackGroupArray trackGroupArray, TrackSelectionArray trackSelectionArray) {
+    }
+
+    public /* synthetic */ void onUpstreamDiscarded(AnalyticsListener.EventTime eventTime, MediaSourceEventListener.MediaLoadData mediaLoadData) {
+        AnalyticsListener.CC.$default$onUpstreamDiscarded(this, eventTime, mediaLoadData);
+    }
+
+    public /* synthetic */ void onVideoSizeChanged(AnalyticsListener.EventTime eventTime, int i, int i2, int i3, float f) {
+        AnalyticsListener.CC.$default$onVideoSizeChanged(this, eventTime, i, i2, i3, f);
+    }
+
+    public /* synthetic */ void onVolumeChanged(AnalyticsListener.EventTime eventTime, float f) {
+        AnalyticsListener.CC.$default$onVolumeChanged(this, eventTime, f);
     }
 
     public VideoPlayer() {
@@ -156,7 +334,8 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
             defaultRenderersFactory.setExtensionRendererMode(2);
             SimpleExoPlayer newSimpleInstance = ExoPlayerFactory.newSimpleInstance(ApplicationLoader.applicationContext, (RenderersFactory) defaultRenderersFactory, (TrackSelector) this.trackSelector, (LoadControl) defaultLoadControl, (DrmSessionManager<FrameworkMediaCrypto>) null);
             this.player = newSimpleInstance;
-            newSimpleInstance.addListener(this);
+            newSimpleInstance.addAnalyticsListener(this);
+            this.player.addListener(this);
             this.player.setVideoListener(this);
             TextureView textureView2 = this.textureView;
             if (textureView2 != null) {
@@ -198,6 +377,10 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
                 }
 
                 public void onSeekProcessed() {
+                }
+
+                public /* synthetic */ void onTimelineChanged(Timeline timeline, int i) {
+                    Player.EventListener.CC.$default$onTimelineChanged(this, timeline, i);
                 }
 
                 public void onTimelineChanged(Timeline timeline, Object obj, int i) {
@@ -479,6 +662,27 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
         NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.playerDidStartPlaying);
     }
 
+    public void onSeekStarted(AnalyticsListener.EventTime eventTime) {
+        VideoPlayerDelegate videoPlayerDelegate = this.delegate;
+        if (videoPlayerDelegate != null) {
+            videoPlayerDelegate.onSeekStarted(eventTime);
+        }
+    }
+
+    public void onSeekProcessed(AnalyticsListener.EventTime eventTime) {
+        VideoPlayerDelegate videoPlayerDelegate = this.delegate;
+        if (videoPlayerDelegate != null) {
+            videoPlayerDelegate.onSeekFinished(eventTime);
+        }
+    }
+
+    public void onRenderedFirstFrame(AnalyticsListener.EventTime eventTime, Surface surface2) {
+        VideoPlayerDelegate videoPlayerDelegate = this.delegate;
+        if (videoPlayerDelegate != null) {
+            videoPlayerDelegate.onRenderedFirstFrame(eventTime);
+        }
+    }
+
     public void setTextureView(TextureView textureView2) {
         if (this.textureView != textureView2) {
             this.textureView = textureView2;
@@ -604,7 +808,8 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     }
 
     public boolean isMuted() {
-        return this.player.getVolume() == 0.0f;
+        SimpleExoPlayer simpleExoPlayer = this.player;
+        return simpleExoPlayer != null && simpleExoPlayer.getVolume() == 0.0f;
     }
 
     public void setMute(boolean z) {
@@ -713,7 +918,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
 
     public void onPlayerStateChanged(boolean z, int i) {
         maybeReportPlayerState();
-        if (z && i == 3) {
+        if (z && i == 3 && !isMuted()) {
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.playerDidStartPlaying, this);
         }
         if (!this.videoPlayerReady && i == 3) {

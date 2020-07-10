@@ -1190,6 +1190,7 @@
     <public type="string" name="AccDescrIVTitle" id="NUM" />
     <public type="string" name="AccDescrInstantCamera" id="NUM" />
     <public type="string" name="AccDescrMentionDown" id="NUM" />
+    <public type="string" name="AccDescrMirror" id="NUM" />
     <public type="string" name="AccDescrMoreOptions" id="NUM" />
     <public type="string" name="AccDescrMsgNotPlayed" id="NUM" />
     <public type="string" name="AccDescrMsgRead" id="NUM" />
@@ -1475,8 +1476,10 @@
     <public type="string" name="AreYouSureDeleteFewMessages" id="NUM" />
     <public type="string" name="AreYouSureDeleteFewMessagesMega" id="NUM" />
     <public type="string" name="AreYouSureDeleteGIF" id="NUM" />
+    <public type="string" name="AreYouSureDeleteGIFEveryone" id="NUM" />
     <public type="string" name="AreYouSureDeleteGIFTitle" id="NUM" />
     <public type="string" name="AreYouSureDeletePhoto" id="NUM" />
+    <public type="string" name="AreYouSureDeletePhotoEveryone" id="NUM" />
     <public type="string" name="AreYouSureDeletePhotoTitle" id="NUM" />
     <public type="string" name="AreYouSureDeleteSingleMessage" id="NUM" />
     <public type="string" name="AreYouSureDeleteSingleMessageMega" id="NUM" />
@@ -1487,6 +1490,7 @@
     <public type="string" name="AreYouSureDeleteThisChatWithSecretUser" id="NUM" />
     <public type="string" name="AreYouSureDeleteThisChatWithUser" id="NUM" />
     <public type="string" name="AreYouSureDeleteVideo" id="NUM" />
+    <public type="string" name="AreYouSureDeleteVideoEveryone" id="NUM" />
     <public type="string" name="AreYouSureDeleteVideoTitle" id="NUM" />
     <public type="string" name="AreYouSureLogout" id="NUM" />
     <public type="string" name="AreYouSureRegistration" id="NUM" />
@@ -1892,6 +1896,8 @@
     <public type="string" name="ChatLocation" id="NUM" />
     <public type="string" name="ChatSetLocation" id="NUM" />
     <public type="string" name="ChatSetLocationInfo" id="NUM" />
+    <public type="string" name="ChatSetNewPhoto" id="NUM" />
+    <public type="string" name="ChatSetPhotoOrVideo" id="NUM" />
     <public type="string" name="ChatSetThisLocation" id="NUM" />
     <public type="string" name="ChatSettings" id="NUM" />
     <public type="string" name="ChatVideo" id="NUM" />
@@ -2893,6 +2899,10 @@
     <public type="string" name="LowDiskSpaceNeverRemove" id="NUM" />
     <public type="string" name="LowDiskSpaceTitle" id="NUM" />
     <public type="string" name="LowDiskSpaceTitle2" id="NUM" />
+    <public type="string" name="MainChannelProfilePhotoSetHint" id="NUM" />
+    <public type="string" name="MainChannelProfileVideoSetHint" id="NUM" />
+    <public type="string" name="MainGroupProfilePhotoSetHint" id="NUM" />
+    <public type="string" name="MainGroupProfileVideoSetHint" id="NUM" />
     <public type="string" name="MainProfilePhotoSetHint" id="NUM" />
     <public type="string" name="MainProfileVideoSetHint" id="NUM" />
     <public type="string" name="MakeAdmin" id="NUM" />

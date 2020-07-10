@@ -12,6 +12,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.os.Build;
+import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ public class CropAreaView extends View {
     private RectF actualRect = new RectF();
     /* access modifiers changed from: private */
     public Animator animator;
+    private Paint bitmapPaint;
     private RectF bottomEdge = new RectF();
     private RectF bottomLeftCorner = new RectF();
     private float bottomPadding;
@@ -33,6 +35,7 @@ public class CropAreaView extends View {
     private Paint dimPaint;
     private boolean dimVisibile = true;
     private Paint eraserPaint;
+    private float frameAlpha = 1.0f;
     private Paint framePaint;
     private boolean frameVisible = true;
     private boolean freeform = true;
@@ -43,6 +46,7 @@ public class CropAreaView extends View {
     private Paint handlePaint;
     private AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
     private boolean isDragging;
+    private long lastUpdateTime;
     private RectF leftEdge = new RectF();
     private Paint linePaint;
     private AreaViewListener listener;
@@ -114,6 +118,9 @@ public class CropAreaView extends View {
         paint6.setColor(0);
         this.eraserPaint.setStyle(Paint.Style.FILL);
         this.eraserPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        Paint paint7 = new Paint(2);
+        this.bitmapPaint = paint7;
+        paint7.setColor(-1);
     }
 
     public void setIsVideo(boolean z) {
@@ -128,8 +135,19 @@ public class CropAreaView extends View {
         this.dimVisibile = z;
     }
 
-    public void setFrameVisibility(boolean z) {
+    public void setFrameVisibility(boolean z, boolean z2) {
         this.frameVisible = z;
+        float f = 1.0f;
+        if (z) {
+            if (z2) {
+                f = 0.0f;
+            }
+            this.frameAlpha = f;
+            this.lastUpdateTime = SystemClock.elapsedRealtime();
+            invalidate();
+            return;
+        }
+        this.frameAlpha = 1.0f;
     }
 
     public void setBottomPadding(float f) {
@@ -194,14 +212,14 @@ public class CropAreaView extends View {
             int i13 = ((int) (rectF.bottom - f2)) + i11;
             if (this.dimVisibile) {
                 float f3 = (float) (i10 + dp);
+                canvas.drawRect(0.0f, 0.0f, (float) getWidth(), f3, this.dimPaint);
+                float f4 = (float) ((i10 + i13) - dp);
                 Canvas canvas2 = canvas;
-                canvas2.drawRect(0.0f, 0.0f, (float) getWidth(), f3, this.dimPaint);
-                Canvas canvas3 = canvas;
-                float f4 = f3;
-                float f5 = (float) ((i10 + i13) - dp);
-                canvas3.drawRect(0.0f, f4, (float) (i9 + dp), f5, this.dimPaint);
-                canvas3.drawRect((float) ((i9 + i12) - dp), f4, (float) getWidth(), f5, this.dimPaint);
-                canvas.drawRect(0.0f, f5, (float) getWidth(), (float) getHeight(), this.dimPaint);
+                float f5 = f3;
+                float f6 = f4;
+                canvas2.drawRect(0.0f, f5, (float) (i9 + dp), f6, this.dimPaint);
+                canvas2.drawRect((float) ((i9 + i12) - dp), f5, (float) getWidth(), f6, this.dimPaint);
+                canvas.drawRect(0.0f, f4, (float) getWidth(), (float) getHeight(), this.dimPaint);
             }
             if (this.frameVisible) {
                 int i14 = dp3 - dp;
@@ -212,150 +230,143 @@ public class CropAreaView extends View {
                 if (gridType2 == GridType.NONE && this.gridProgress > 0.0f) {
                     gridType2 = this.previousGridType;
                 }
-                this.shadowPaint.setAlpha((int) (this.gridProgress * 26.0f));
-                this.linePaint.setAlpha((int) (this.gridProgress * 178.0f));
+                this.shadowPaint.setAlpha((int) (this.gridProgress * 26.0f * this.frameAlpha));
+                this.linePaint.setAlpha((int) (this.gridProgress * 178.0f * this.frameAlpha));
+                this.framePaint.setAlpha((int) (this.frameAlpha * 178.0f));
+                this.handlePaint.setAlpha((int) (this.frameAlpha * 255.0f));
                 int i18 = 0;
                 while (true) {
                     int i19 = 3;
-                    if (i18 < 3) {
-                        if (gridType2 == GridType.MINOR) {
-                            int i20 = 1;
-                            while (i20 < 4) {
-                                if (i18 == 2 && i20 == i19) {
-                                    i6 = dp;
-                                    i8 = dp2;
-                                    i7 = i13;
-                                    i5 = i12;
-                                } else {
-                                    int i21 = i9 + dp3;
-                                    int i22 = i16 / 3;
-                                    float f6 = (float) (i21 + ((i22 / 3) * i20) + (i22 * i18));
-                                    i8 = dp2;
-                                    int i23 = i10 + dp3;
-                                    i7 = i13;
-                                    i6 = dp;
-                                    i5 = i12;
-                                    Canvas canvas4 = canvas;
-                                    float f7 = f6;
-                                    float f8 = (float) i23;
-                                    float f9 = f6;
-                                    float var_ = (float) (i23 + i17);
-                                    canvas4.drawLine(f7, f8, f9, var_, this.shadowPaint);
-                                    canvas4.drawLine(f7, f8, f9, var_, this.linePaint);
-                                    int i24 = i17 / 3;
-                                    int i25 = i23 + ((i24 / 3) * i20) + (i24 * i18);
-                                    float var_ = (float) i25;
-                                    float var_ = (float) i21;
-                                    float var_ = var_;
-                                    float var_ = (float) (i21 + i16);
-                                    float var_ = var_;
-                                    canvas4.drawLine(var_, var_, var_, var_, this.shadowPaint);
-                                    canvas4.drawLine(var_, var_, var_, var_, this.linePaint);
-                                }
-                                i20++;
-                                dp2 = i8;
-                                i13 = i7;
-                                dp = i6;
-                                i12 = i5;
-                                i19 = 3;
-                            }
-                            i2 = dp;
-                            i4 = dp2;
-                            i3 = i13;
-                            i = i12;
-                        } else {
-                            i2 = dp;
-                            i4 = dp2;
-                            i3 = i13;
-                            i = i12;
-                            if (gridType2 == GridType.MAJOR && i18 > 0) {
-                                int i26 = i9 + dp3;
-                                float var_ = (float) (((i16 / 3) * i18) + i26);
-                                int i27 = i10 + dp3;
-                                Canvas canvas5 = canvas;
-                                float var_ = var_;
-                                float var_ = (float) i27;
-                                float var_ = var_;
-                                float var_ = (float) (i27 + i17);
-                                canvas5.drawLine(var_, var_, var_, var_, this.shadowPaint);
-                                canvas5.drawLine(var_, var_, var_, var_, this.linePaint);
-                                float var_ = (float) (i27 + ((i17 / 3) * i18));
-                                float var_ = (float) i26;
-                                float var_ = var_;
-                                float var_ = (float) (i26 + i16);
-                                float var_ = var_;
-                                canvas5.drawLine(var_, var_, var_, var_, this.shadowPaint);
-                                canvas5.drawLine(var_, var_, var_, var_, this.linePaint);
-                            }
-                        }
-                        i18++;
-                        dp2 = i4;
-                        i13 = i3;
-                        dp = i2;
-                        i12 = i;
-                    } else {
-                        int i28 = dp;
-                        int i29 = dp2;
-                        int i30 = i13;
-                        int i31 = i12;
-                        int i32 = i9 + i14;
-                        int i33 = i10 + i14;
-                        float var_ = (float) i33;
-                        int i34 = i9 + i31;
-                        int i35 = i34 - i14;
-                        float var_ = (float) i35;
-                        Canvas canvas6 = canvas;
-                        float var_ = (float) i32;
-                        float var_ = var_;
-                        float var_ = var_;
-                        float var_ = var_;
-                        float var_ = (float) (i33 + i28);
-                        int i36 = i35;
-                        canvas6.drawRect(var_, var_, var_, var_, this.framePaint);
-                        float var_ = (float) (i32 + i28);
-                        int i37 = i10 + i30;
-                        int i38 = i37 - i14;
-                        float var_ = (float) i38;
-                        canvas6.drawRect(var_, var_, var_, var_, this.framePaint);
-                        float var_ = var_;
-                        float var_ = var_;
-                        canvas6.drawRect(var_, (float) (i38 - i28), var_, var_, this.framePaint);
-                        canvas6.drawRect((float) (i36 - i28), var_, var_, var_, this.framePaint);
-                        float var_ = (float) i10;
-                        float var_ = (float) (i9 + i29);
-                        float var_ = (float) (i10 + dp3);
-                        Canvas canvas7 = canvas;
-                        float var_ = (float) i9;
-                        float var_ = var_;
-                        canvas7.drawRect(var_, var_, var_, var_, this.handlePaint);
-                        float var_ = (float) (i9 + dp3);
-                        float var_ = (float) (i10 + i29);
-                        canvas7.drawRect(var_, var_, var_, var_, this.handlePaint);
-                        float var_ = (float) (i34 - i29);
-                        float var_ = (float) i34;
-                        float var_ = var_;
-                        float var_ = var_;
-                        canvas6.drawRect(var_, var_, var_, var_, this.handlePaint);
-                        float var_ = (float) (i34 - dp3);
-                        canvas6.drawRect(var_, var_, var_, var_, this.handlePaint);
-                        float var_ = (float) (i37 - dp3);
-                        float var_ = (float) i37;
-                        float var_ = var_;
-                        canvas7.drawRect(var_, var_, var_, var_, this.handlePaint);
-                        float var_ = (float) (i37 - i29);
-                        canvas7.drawRect(var_, var_, var_, var_, this.handlePaint);
-                        Canvas canvas8 = canvas;
-                        float var_ = var_;
-                        float var_ = var_;
-                        canvas8.drawRect(var_, var_, var_, var_, this.handlePaint);
-                        canvas8.drawRect(var_, var_, var_, var_, this.handlePaint);
-                        return;
+                    if (i18 >= 3) {
+                        break;
                     }
+                    if (gridType2 == GridType.MINOR) {
+                        int i20 = 1;
+                        while (i20 < 4) {
+                            if (i18 == 2 && i20 == i19) {
+                                i6 = dp;
+                                i8 = dp2;
+                                i7 = i13;
+                                i5 = i12;
+                            } else {
+                                int i21 = i9 + dp3;
+                                int i22 = i16 / 3;
+                                float f7 = (float) (i21 + ((i22 / 3) * i20) + (i22 * i18));
+                                i8 = dp2;
+                                int i23 = i10 + dp3;
+                                i7 = i13;
+                                i6 = dp;
+                                i5 = i12;
+                                Canvas canvas3 = canvas;
+                                float f8 = f7;
+                                float f9 = (float) i23;
+                                float var_ = f7;
+                                float var_ = (float) (i23 + i17);
+                                canvas3.drawLine(f8, f9, var_, var_, this.shadowPaint);
+                                canvas3.drawLine(f8, f9, var_, var_, this.linePaint);
+                                int i24 = i17 / 3;
+                                float var_ = (float) (i23 + ((i24 / 3) * i20) + (i24 * i18));
+                                float var_ = (float) i21;
+                                float var_ = var_;
+                                float var_ = (float) (i21 + i16);
+                                float var_ = var_;
+                                canvas3.drawLine(var_, var_, var_, var_, this.shadowPaint);
+                                canvas3.drawLine(var_, var_, var_, var_, this.linePaint);
+                            }
+                            i20++;
+                            dp2 = i8;
+                            i13 = i7;
+                            dp = i6;
+                            i12 = i5;
+                            i19 = 3;
+                        }
+                        i2 = dp;
+                        i4 = dp2;
+                        i3 = i13;
+                        i = i12;
+                    } else {
+                        i2 = dp;
+                        i4 = dp2;
+                        i3 = i13;
+                        i = i12;
+                        if (gridType2 == GridType.MAJOR && i18 > 0) {
+                            int i25 = i9 + dp3;
+                            float var_ = (float) (((i16 / 3) * i18) + i25);
+                            int i26 = i10 + dp3;
+                            Canvas canvas4 = canvas;
+                            float var_ = var_;
+                            float var_ = (float) i26;
+                            float var_ = var_;
+                            float var_ = (float) (i26 + i17);
+                            canvas4.drawLine(var_, var_, var_, var_, this.shadowPaint);
+                            canvas4.drawLine(var_, var_, var_, var_, this.linePaint);
+                            float var_ = (float) (i26 + ((i17 / 3) * i18));
+                            float var_ = (float) i25;
+                            float var_ = var_;
+                            float var_ = (float) (i25 + i16);
+                            float var_ = var_;
+                            canvas4.drawLine(var_, var_, var_, var_, this.shadowPaint);
+                            canvas4.drawLine(var_, var_, var_, var_, this.linePaint);
+                        }
+                    }
+                    i18++;
+                    dp2 = i4;
+                    i13 = i3;
+                    dp = i2;
+                    i12 = i;
                 }
+                int i27 = dp;
+                int i28 = dp2;
+                int i29 = i13;
+                int i30 = i9 + i14;
+                int i31 = i10 + i14;
+                float var_ = (float) i31;
+                int i32 = i9 + i12;
+                int i33 = i32 - i14;
+                float var_ = (float) i33;
+                Canvas canvas5 = canvas;
+                float var_ = (float) i30;
+                float var_ = var_;
+                canvas5.drawRect(var_, var_, var_, (float) (i31 + i27), this.framePaint);
+                int i34 = i10 + i29;
+                int i35 = i34 - i14;
+                float var_ = (float) i35;
+                canvas5.drawRect(var_, var_, (float) (i30 + i27), var_, this.framePaint);
+                float var_ = var_;
+                canvas5.drawRect(var_, (float) (i35 - i27), var_, var_, this.framePaint);
+                canvas5.drawRect((float) (i33 - i27), var_, var_, var_, this.framePaint);
+                float var_ = (float) i9;
+                float var_ = (float) (i9 + i28);
+                float var_ = (float) (i10 + dp3);
+                Canvas canvas6 = canvas;
+                float var_ = var_;
+                float var_ = (float) i10;
+                canvas6.drawRect(var_, var_, var_, var_, this.handlePaint);
+                float var_ = (float) (i9 + dp3);
+                float var_ = (float) (i10 + i28);
+                canvas6.drawRect(var_, var_, var_, var_, this.handlePaint);
+                float var_ = (float) (i32 - i28);
+                float var_ = (float) i32;
+                float var_ = var_;
+                canvas6.drawRect(var_, var_, var_, var_, this.handlePaint);
+                float var_ = (float) (i32 - dp3);
+                canvas6.drawRect(var_, var_, var_, var_, this.handlePaint);
+                float var_ = (float) (i34 - dp3);
+                float var_ = (float) i34;
+                float var_ = var_;
+                float var_ = var_;
+                canvas6.drawRect(var_, var_, var_, var_, this.handlePaint);
+                float var_ = (float) (i34 - i28);
+                canvas6.drawRect(var_, var_, var_, var_, this.handlePaint);
+                canvas.drawRect(var_, var_, var_, var_, this.handlePaint);
+                canvas6.drawRect(var_, var_, var_, var_, this.handlePaint);
+            } else {
+                return;
             }
         } else {
             Bitmap bitmap = this.circleBitmap;
             if (bitmap == null || ((float) bitmap.getWidth()) != this.actualRect.width()) {
+                boolean z = this.circleBitmap != null;
                 Bitmap bitmap2 = this.circleBitmap;
                 if (bitmap2 != null) {
                     bitmap2.recycle();
@@ -363,26 +374,45 @@ public class CropAreaView extends View {
                 }
                 try {
                     this.circleBitmap = Bitmap.createBitmap((int) this.actualRect.width(), (int) this.actualRect.height(), Bitmap.Config.ARGB_8888);
-                    Canvas canvas9 = new Canvas(this.circleBitmap);
-                    canvas9.drawRect(0.0f, 0.0f, this.actualRect.width(), this.actualRect.height(), this.dimPaint);
-                    canvas9.drawCircle(this.actualRect.width() / 2.0f, this.actualRect.height() / 2.0f, this.actualRect.width() / 2.0f, this.eraserPaint);
-                    canvas9.setBitmap((Bitmap) null);
+                    Canvas canvas7 = new Canvas(this.circleBitmap);
+                    canvas7.drawRect(0.0f, 0.0f, this.actualRect.width(), this.actualRect.height(), this.dimPaint);
+                    canvas7.drawCircle(this.actualRect.width() / 2.0f, this.actualRect.height() / 2.0f, this.actualRect.width() / 2.0f, this.eraserPaint);
+                    canvas7.setBitmap((Bitmap) null);
+                    if (!z) {
+                        this.frameAlpha = 0.0f;
+                        this.lastUpdateTime = SystemClock.elapsedRealtime();
+                    }
                 } catch (Throwable unused) {
                 }
             }
             if (this.circleBitmap != null) {
-                Canvas canvas10 = canvas;
-                canvas10.drawRect(0.0f, 0.0f, (float) getWidth(), (float) ((int) this.actualRect.top), this.dimPaint);
+                this.bitmapPaint.setAlpha((int) (this.frameAlpha * 255.0f));
+                Canvas canvas8 = canvas;
+                canvas8.drawRect(0.0f, 0.0f, (float) getWidth(), (float) ((int) this.actualRect.top), this.dimPaint);
                 RectF rectF2 = this.actualRect;
-                Canvas canvas11 = canvas;
-                canvas11.drawRect(0.0f, (float) ((int) rectF2.top), (float) ((int) rectF2.left), (float) ((int) rectF2.bottom), this.dimPaint);
+                Canvas canvas9 = canvas;
+                canvas9.drawRect(0.0f, (float) ((int) rectF2.top), (float) ((int) rectF2.left), (float) ((int) rectF2.bottom), this.dimPaint);
                 RectF rectF3 = this.actualRect;
-                canvas10.drawRect((float) ((int) rectF3.right), (float) ((int) rectF3.top), (float) getWidth(), (float) ((int) this.actualRect.bottom), this.dimPaint);
-                canvas11.drawRect(0.0f, (float) ((int) this.actualRect.bottom), (float) getWidth(), (float) getHeight(), this.dimPaint);
+                canvas8.drawRect((float) ((int) rectF3.right), (float) ((int) rectF3.top), (float) getWidth(), (float) ((int) this.actualRect.bottom), this.dimPaint);
+                canvas9.drawRect(0.0f, (float) ((int) this.actualRect.bottom), (float) getWidth(), (float) getHeight(), this.dimPaint);
                 Bitmap bitmap3 = this.circleBitmap;
                 RectF rectF4 = this.actualRect;
-                canvas.drawBitmap(bitmap3, (float) ((int) rectF4.left), (float) ((int) rectF4.top), (Paint) null);
+                canvas.drawBitmap(bitmap3, (float) ((int) rectF4.left), (float) ((int) rectF4.top), this.bitmapPaint);
             }
+        }
+        if (this.frameAlpha < 1.0f) {
+            long elapsedRealtime = SystemClock.elapsedRealtime();
+            long j = elapsedRealtime - this.lastUpdateTime;
+            if (j > 17) {
+                j = 17;
+            }
+            this.lastUpdateTime = elapsedRealtime;
+            float var_ = this.frameAlpha + (((float) j) / 180.0f);
+            this.frameAlpha = var_;
+            if (var_ > 1.0f) {
+                this.frameAlpha = 1.0f;
+            }
+            invalidate();
         }
     }
 

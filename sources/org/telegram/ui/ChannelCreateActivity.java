@@ -51,6 +51,7 @@ import org.telegram.tgnet.TLRPC$TL_channels_getAdminedPublicChannels;
 import org.telegram.tgnet.TLRPC$TL_channels_updateUsername;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_inputChannelEmpty;
+import org.telegram.tgnet.TLRPC$TL_inputChatPhoto;
 import org.telegram.tgnet.TLRPC$TL_messages_chats;
 import org.telegram.tgnet.TLRPC$TL_messages_exportChatInvite;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -300,7 +301,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                                 return;
                             }
                             boolean unused = ChannelCreateActivity.this.donePressed = true;
-                            if (ChannelCreateActivity.this.imageUpdater.uploadingImage != null) {
+                            if (ChannelCreateActivity.this.imageUpdater.isUploadingImage()) {
                                 boolean unused2 = ChannelCreateActivity.this.createAfterUpload = true;
                                 AlertDialog unused3 = ChannelCreateActivity.this.progressDialog = new AlertDialog(ChannelCreateActivity.this.getParentActivity(), 3);
                                 ChannelCreateActivity.this.progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -965,6 +966,21 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         }
     }
 
+    public void onUploadProgressChanged(float f) {
+        RadialProgressView radialProgressView = this.avatarProgressView;
+        if (radialProgressView != null) {
+            radialProgressView.setProgress(f);
+        }
+    }
+
+    public void didStartUpload(boolean z) {
+        RadialProgressView radialProgressView = this.avatarProgressView;
+        if (radialProgressView != null) {
+            radialProgressView.setNoProgress(!z);
+            this.avatarProgressView.setProgress(0.0f);
+        }
+    }
+
     public void didUploadPhoto(TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, double d, String str, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$InputFile, tLRPC$InputFile2, str, d, tLRPC$PhotoSize2, tLRPC$PhotoSize) {
             public final /* synthetic */ TLRPC$InputFile f$1;
@@ -1141,8 +1157,8 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
             bundle.putInt("step", 1);
             bundle.putInt("chat_id", intValue);
             bundle.putBoolean("canCreatePublic", this.canCreatePublic);
-            if (this.inputPhoto != null) {
-                MessagesController.getInstance(this.currentAccount).changeChatAvatar(intValue, this.inputPhoto, this.inputVideo, this.videoTimestamp, this.inputVideoPath, this.avatar, this.avatarBig);
+            if (!(this.inputPhoto == null && this.inputVideo == null)) {
+                MessagesController.getInstance(this.currentAccount).changeChatAvatar(intValue, (TLRPC$TL_inputChatPhoto) null, this.inputPhoto, this.inputVideo, this.videoTimestamp, this.inputVideoPath, this.avatar, this.avatarBig);
             }
             presentFragment(new ChannelCreateActivity(bundle), true);
         }

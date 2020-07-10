@@ -31,6 +31,7 @@ import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_documentEmpty;
 import org.telegram.tgnet.TLRPC$TL_messageActionUserUpdatedPhoto;
 import org.telegram.tgnet.TLRPC$TL_photoEmpty;
+import org.telegram.tgnet.TLRPC$TL_photoStrippedSize;
 import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
@@ -96,7 +97,7 @@ public class ChatActionCell extends BaseCell {
         super(context);
         ImageReceiver imageReceiver2 = new ImageReceiver(this);
         this.imageReceiver = imageReceiver2;
-        imageReceiver2.setRoundRadius(AndroidUtilities.dp(32.0f));
+        imageReceiver2.setRoundRadius(AndroidUtilities.roundMessageSize / 2);
         this.avatarDrawable = new AvatarDrawable();
     }
 
@@ -155,6 +156,7 @@ public class ChatActionCell extends BaseCell {
 
     public void setMessageObject(MessageObject messageObject) {
         int i;
+        TLRPC$PhotoSize tLRPC$PhotoSize;
         MessageObject messageObject2 = messageObject;
         if (this.currentMessageObject != messageObject2 || (!this.hasReplyMessage && messageObject2.replyMessageObject != null)) {
             this.currentMessageObject = messageObject2;
@@ -176,7 +178,20 @@ public class ChatActionCell extends BaseCell {
                 if (messageObject3.messageOwner.action instanceof TLRPC$TL_messageActionUserUpdatedPhoto) {
                     this.imageReceiver.setImage((ImageLocation) null, (String) null, this.avatarDrawable, (String) null, messageObject3, 0);
                 } else {
-                    TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(messageObject3.photoThumbs, AndroidUtilities.dp(64.0f));
+                    int size = messageObject3.photoThumbs.size();
+                    int i2 = 0;
+                    while (true) {
+                        if (i2 >= size) {
+                            tLRPC$PhotoSize = null;
+                            break;
+                        }
+                        tLRPC$PhotoSize = this.currentMessageObject.photoThumbs.get(i2);
+                        if (tLRPC$PhotoSize instanceof TLRPC$TL_photoStrippedSize) {
+                            break;
+                        }
+                        i2++;
+                    }
+                    TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(this.currentMessageObject.photoThumbs, 640);
                     if (closestPhotoSizeWithSize != null) {
                         TLRPC$Photo tLRPC$Photo = messageObject2.messageOwner.action.photo;
                         if (!tLRPC$Photo.video_sizes.isEmpty() && SharedConfig.autoplayGifs) {
@@ -186,9 +201,9 @@ public class ChatActionCell extends BaseCell {
                             }
                         }
                         if (tLRPC$VideoSize != null) {
-                            this.imageReceiver.setImage(ImageLocation.getForPhoto(tLRPC$VideoSize, tLRPC$Photo), "g", ImageLocation.getForObject(closestPhotoSizeWithSize, this.currentMessageObject.photoThumbsObject), "50_50", this.avatarDrawable, 0, (String) null, this.currentMessageObject, 1);
+                            this.imageReceiver.setImage(ImageLocation.getForPhoto(tLRPC$VideoSize, tLRPC$Photo), "g", ImageLocation.getForObject(tLRPC$PhotoSize, this.currentMessageObject.photoThumbsObject), "50_50_b", this.avatarDrawable, 0, (String) null, this.currentMessageObject, 1);
                         } else {
-                            this.imageReceiver.setImage(ImageLocation.getForObject(closestPhotoSizeWithSize, this.currentMessageObject.photoThumbsObject), "50_50", this.avatarDrawable, (String) null, this.currentMessageObject, 0);
+                            this.imageReceiver.setImage(ImageLocation.getForObject(closestPhotoSizeWithSize, this.currentMessageObject.photoThumbsObject), "150_150", ImageLocation.getForObject(tLRPC$PhotoSize, this.currentMessageObject.photoThumbsObject), "50_50_b", this.avatarDrawable, 0, (String) null, this.currentMessageObject, 1);
                         }
                     } else {
                         this.imageReceiver.setImageBitmap((Drawable) this.avatarDrawable);
@@ -451,7 +466,7 @@ public class ChatActionCell extends BaseCell {
         }
         int i3 = this.textHeight;
         MessageObject messageObject = this.currentMessageObject;
-        setMeasuredDimension(max, i3 + AndroidUtilities.dp((float) (14 + ((messageObject == null || messageObject.type != 11) ? 0 : 70))));
+        setMeasuredDimension(max, i3 + ((messageObject == null || messageObject.type != 11) ? 0 : AndroidUtilities.roundMessageSize + AndroidUtilities.dp(10.0f)) + AndroidUtilities.dp(14.0f));
     }
 
     private void buildLayout() {
@@ -475,7 +490,8 @@ public class ChatActionCell extends BaseCell {
         createLayout(charSequence, this.previousWidth);
         MessageObject messageObject2 = this.currentMessageObject;
         if (messageObject2 != null && messageObject2.type == 11) {
-            this.imageReceiver.setImageCoords((float) ((this.previousWidth - AndroidUtilities.dp(64.0f)) / 2), (float) (this.textHeight + AndroidUtilities.dp(15.0f)), (float) AndroidUtilities.dp(64.0f), (float) AndroidUtilities.dp(64.0f));
+            int i = AndroidUtilities.roundMessageSize;
+            this.imageReceiver.setImageCoords((float) ((this.previousWidth - AndroidUtilities.roundMessageSize) / 2), (float) (this.textHeight + AndroidUtilities.dp(19.0f)), (float) i, (float) i);
         }
     }
 

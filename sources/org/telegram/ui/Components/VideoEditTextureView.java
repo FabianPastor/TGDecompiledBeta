@@ -21,6 +21,7 @@ public class VideoEditTextureView extends TextureView implements TextureView.Sur
     private VideoEditTextureViewDelegate delegate;
     private FilterGLThread eglThread;
     private boolean hasTransform;
+    private boolean isMirrored;
     private float minScale;
     private float trueCropScale;
     private int videoHeight;
@@ -128,7 +129,7 @@ public class VideoEditTextureView extends TextureView implements TextureView.Sur
         return true;
     }
 
-    public void setViewTransform(boolean z, float f, float f2, float f3, int i, float f4, float f5, float f6, float f7, float f8, float f9, float var_) {
+    public void setViewTransform(boolean z, float f, float f2, float f3, int i, float f4, float f5, float f6, float f7, float f8, float f9, float var_, boolean z2) {
         this.hasTransform = z;
         this.cropPx = f;
         this.cropPy = f2;
@@ -153,6 +154,7 @@ public class VideoEditTextureView extends TextureView implements TextureView.Sur
                 this.cropAreaY = var_;
                 this.trueCropScale = f5;
                 this.minScale = f6;
+                this.isMirrored = z2;
                 return;
             }
         }
@@ -204,6 +206,10 @@ public class VideoEditTextureView extends TextureView implements TextureView.Sur
 
     public float getCropPh() {
         return this.cropPh;
+    }
+
+    public boolean isMirrored() {
+        return this.isMirrored;
     }
 
     public void release() {

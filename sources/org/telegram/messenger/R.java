@@ -1329,6 +1329,7 @@ public final class R {
         public static final int AccDescrIVTitle = NUM;
         public static final int AccDescrInstantCamera = NUM;
         public static final int AccDescrMentionDown = NUM;
+        public static final int AccDescrMirror = NUM;
         public static final int AccDescrMoreOptions = NUM;
         public static final int AccDescrMsgNotPlayed = NUM;
         public static final int AccDescrMsgRead = NUM;
@@ -1614,8 +1615,10 @@ public final class R {
         public static final int AreYouSureDeleteFewMessages = NUM;
         public static final int AreYouSureDeleteFewMessagesMega = NUM;
         public static final int AreYouSureDeleteGIF = NUM;
+        public static final int AreYouSureDeleteGIFEveryone = NUM;
         public static final int AreYouSureDeleteGIFTitle = NUM;
         public static final int AreYouSureDeletePhoto = NUM;
+        public static final int AreYouSureDeletePhotoEveryone = NUM;
         public static final int AreYouSureDeletePhotoTitle = NUM;
         public static final int AreYouSureDeleteSingleMessage = NUM;
         public static final int AreYouSureDeleteSingleMessageMega = NUM;
@@ -1626,6 +1629,7 @@ public final class R {
         public static final int AreYouSureDeleteThisChatWithSecretUser = NUM;
         public static final int AreYouSureDeleteThisChatWithUser = NUM;
         public static final int AreYouSureDeleteVideo = NUM;
+        public static final int AreYouSureDeleteVideoEveryone = NUM;
         public static final int AreYouSureDeleteVideoTitle = NUM;
         public static final int AreYouSureLogout = NUM;
         public static final int AreYouSureRegistration = NUM;
@@ -2031,6 +2035,8 @@ public final class R {
         public static final int ChatLocation = NUM;
         public static final int ChatSetLocation = NUM;
         public static final int ChatSetLocationInfo = NUM;
+        public static final int ChatSetNewPhoto = NUM;
+        public static final int ChatSetPhotoOrVideo = NUM;
         public static final int ChatSetThisLocation = NUM;
         public static final int ChatSettings = NUM;
         public static final int ChatVideo = NUM;
@@ -3032,6 +3038,10 @@ public final class R {
         public static final int LowDiskSpaceNeverRemove = NUM;
         public static final int LowDiskSpaceTitle = NUM;
         public static final int LowDiskSpaceTitle2 = NUM;
+        public static final int MainChannelProfilePhotoSetHint = NUM;
+        public static final int MainChannelProfileVideoSetHint = NUM;
+        public static final int MainGroupProfilePhotoSetHint = NUM;
+        public static final int MainGroupProfileVideoSetHint = NUM;
         public static final int MainProfilePhotoSetHint = NUM;
         public static final int MainProfileVideoSetHint = NUM;
         public static final int MakeAdmin = NUM;

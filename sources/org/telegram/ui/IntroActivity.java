@@ -206,7 +206,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 IntroActivity.this.lambda$onCreate$0$IntroActivity(view);
             }
         });
-        if (BuildVars.DEBUG_VERSION) {
+        if (BuildVars.DEBUG_PRIVATE_VERSION) {
             this.startMessagingButton.setOnLongClickListener(new View.OnLongClickListener() {
                 public final boolean onLongClick(View view) {
                     return IntroActivity.this.lambda$onCreate$1$IntroActivity(view);

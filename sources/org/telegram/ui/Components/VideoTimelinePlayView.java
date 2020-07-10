@@ -64,7 +64,7 @@ public class VideoTimelinePlayView extends View {
 
         void onLeftProgressChanged(float f);
 
-        void onPlayProgressChanged(boolean z, float f);
+        void onPlayProgressChanged(float f);
 
         void onRightProgressChanged(float f);
     }
@@ -179,49 +179,54 @@ public class VideoTimelinePlayView extends View {
                     videoTimelineViewDelegate4.didStartDragging(TYPE_PROGRESS);
                 }
                 this.pressedPlay = true;
-                this.playProgress = (x - ((float) AndroidUtilities.dp(16.0f))) / f;
+                float dp6 = (x - ((float) AndroidUtilities.dp(16.0f))) / f;
+                this.playProgress = dp6;
+                VideoTimelineViewDelegate videoTimelineViewDelegate5 = this.delegate;
+                if (videoTimelineViewDelegate5 != null) {
+                    videoTimelineViewDelegate5.onPlayProgressChanged(dp6);
+                }
                 this.pressDx = 0.0f;
                 invalidate();
                 return true;
             }
         } else if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
             if (this.pressedLeft) {
-                VideoTimelineViewDelegate videoTimelineViewDelegate5 = this.delegate;
-                if (videoTimelineViewDelegate5 != null) {
-                    videoTimelineViewDelegate5.didStopDragging(TYPE_LEFT);
+                VideoTimelineViewDelegate videoTimelineViewDelegate6 = this.delegate;
+                if (videoTimelineViewDelegate6 != null) {
+                    videoTimelineViewDelegate6.didStopDragging(TYPE_LEFT);
                 }
                 this.pressedLeft = false;
                 return true;
             } else if (this.pressedRight) {
-                VideoTimelineViewDelegate videoTimelineViewDelegate6 = this.delegate;
-                if (videoTimelineViewDelegate6 != null) {
-                    videoTimelineViewDelegate6.didStopDragging(TYPE_RIGHT);
+                VideoTimelineViewDelegate videoTimelineViewDelegate7 = this.delegate;
+                if (videoTimelineViewDelegate7 != null) {
+                    videoTimelineViewDelegate7.didStopDragging(TYPE_RIGHT);
                 }
                 this.pressedRight = false;
                 return true;
             } else if (this.pressedPlay) {
-                VideoTimelineViewDelegate videoTimelineViewDelegate7 = this.delegate;
-                if (videoTimelineViewDelegate7 != null) {
-                    videoTimelineViewDelegate7.didStopDragging(TYPE_PROGRESS);
+                VideoTimelineViewDelegate videoTimelineViewDelegate8 = this.delegate;
+                if (videoTimelineViewDelegate8 != null) {
+                    videoTimelineViewDelegate8.didStopDragging(TYPE_PROGRESS);
                 }
                 this.pressedPlay = false;
             }
         } else if (motionEvent.getAction() == 2) {
             if (this.pressedPlay) {
-                float dp6 = ((float) (((int) (x - this.pressDx)) - AndroidUtilities.dp(16.0f))) / f;
-                this.playProgress = dp6;
+                float dp7 = ((float) (((int) (x - this.pressDx)) - AndroidUtilities.dp(16.0f))) / f;
+                this.playProgress = dp7;
                 float f2 = this.progressLeft;
-                if (dp6 < f2) {
+                if (dp7 < f2) {
                     this.playProgress = f2;
                 } else {
                     float f3 = this.progressRight;
-                    if (dp6 > f3) {
+                    if (dp7 > f3) {
                         this.playProgress = f3;
                     }
                 }
-                VideoTimelineViewDelegate videoTimelineViewDelegate8 = this.delegate;
-                if (videoTimelineViewDelegate8 != null) {
-                    videoTimelineViewDelegate8.onPlayProgressChanged(false, this.playProgress);
+                VideoTimelineViewDelegate videoTimelineViewDelegate9 = this.delegate;
+                if (videoTimelineViewDelegate9 != null) {
+                    videoTimelineViewDelegate9.onPlayProgressChanged(this.playProgress);
                 }
                 invalidate();
                 return true;
@@ -232,15 +237,15 @@ public class VideoTimelinePlayView extends View {
                 } else if (i <= dp3) {
                     dp3 = i;
                 }
-                float dp7 = ((float) (dp3 - AndroidUtilities.dp(16.0f))) / f;
-                this.progressLeft = dp7;
+                float dp8 = ((float) (dp3 - AndroidUtilities.dp(16.0f))) / f;
+                this.progressLeft = dp8;
                 float f4 = this.progressRight;
                 float f5 = this.maxProgressDiff;
-                if (f4 - dp7 > f5) {
-                    this.progressRight = dp7 + f5;
+                if (f4 - dp8 > f5) {
+                    this.progressRight = dp8 + f5;
                 } else {
                     float f6 = this.minProgressDiff;
-                    if (f6 != 0.0f && f4 - dp7 < f6) {
+                    if (f6 != 0.0f && f4 - dp8 < f6) {
                         float f7 = f4 - f6;
                         this.progressLeft = f7;
                         if (f7 < 0.0f) {
@@ -252,23 +257,15 @@ public class VideoTimelinePlayView extends View {
                 float f9 = this.playProgress;
                 if (f8 > f9) {
                     this.playProgress = f8;
-                    VideoTimelineViewDelegate videoTimelineViewDelegate9 = this.delegate;
-                    if (videoTimelineViewDelegate9 != null) {
-                        videoTimelineViewDelegate9.onPlayProgressChanged(true, f8);
-                    }
                 } else {
                     float var_ = this.progressRight;
                     if (var_ < f9) {
                         this.playProgress = var_;
-                        VideoTimelineViewDelegate videoTimelineViewDelegate10 = this.delegate;
-                        if (videoTimelineViewDelegate10 != null) {
-                            videoTimelineViewDelegate10.onPlayProgressChanged(true, var_);
-                        }
                     }
                 }
-                VideoTimelineViewDelegate videoTimelineViewDelegate11 = this.delegate;
-                if (videoTimelineViewDelegate11 != null) {
-                    videoTimelineViewDelegate11.onLeftProgressChanged(this.progressLeft);
+                VideoTimelineViewDelegate videoTimelineViewDelegate10 = this.delegate;
+                if (videoTimelineViewDelegate10 != null) {
+                    videoTimelineViewDelegate10.onLeftProgressChanged(this.progressLeft);
                 }
                 invalidate();
                 return true;
@@ -277,15 +274,15 @@ public class VideoTimelinePlayView extends View {
                 if (i2 >= dp) {
                     dp = i2 > AndroidUtilities.dp(16.0f) + measuredWidth ? measuredWidth + AndroidUtilities.dp(16.0f) : i2;
                 }
-                float dp8 = ((float) (dp - AndroidUtilities.dp(16.0f))) / f;
-                this.progressRight = dp8;
+                float dp9 = ((float) (dp - AndroidUtilities.dp(16.0f))) / f;
+                this.progressRight = dp9;
                 float var_ = this.progressLeft;
                 float var_ = this.maxProgressDiff;
-                if (dp8 - var_ > var_) {
-                    this.progressLeft = dp8 - var_;
+                if (dp9 - var_ > var_) {
+                    this.progressLeft = dp9 - var_;
                 } else {
                     float var_ = this.minProgressDiff;
-                    if (var_ != 0.0f && dp8 - var_ < var_) {
+                    if (var_ != 0.0f && dp9 - var_ < var_) {
                         float var_ = var_ + var_;
                         this.progressRight = var_;
                         if (var_ > 1.0f) {
@@ -297,23 +294,15 @@ public class VideoTimelinePlayView extends View {
                 float var_ = this.playProgress;
                 if (var_ > var_) {
                     this.playProgress = var_;
-                    VideoTimelineViewDelegate videoTimelineViewDelegate12 = this.delegate;
-                    if (videoTimelineViewDelegate12 != null) {
-                        videoTimelineViewDelegate12.onPlayProgressChanged(true, var_);
-                    }
                 } else {
                     float var_ = this.progressRight;
                     if (var_ < var_) {
                         this.playProgress = var_;
-                        VideoTimelineViewDelegate videoTimelineViewDelegate13 = this.delegate;
-                        if (videoTimelineViewDelegate13 != null) {
-                            videoTimelineViewDelegate13.onPlayProgressChanged(true, var_);
-                        }
                     }
                 }
-                VideoTimelineViewDelegate videoTimelineViewDelegate14 = this.delegate;
-                if (videoTimelineViewDelegate14 != null) {
-                    videoTimelineViewDelegate14.onRightProgressChanged(this.progressRight);
+                VideoTimelineViewDelegate videoTimelineViewDelegate11 = this.delegate;
+                if (videoTimelineViewDelegate11 != null) {
+                    videoTimelineViewDelegate11.onRightProgressChanged(this.progressRight);
                 }
                 invalidate();
                 return true;
