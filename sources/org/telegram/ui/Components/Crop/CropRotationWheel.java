@@ -138,9 +138,11 @@ public class CropRotationWheel extends FrameLayout {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(Math.min(View.MeasureSpec.getSize(i), AndroidUtilities.dp(400.0f)), NUM), i2);
     }
 
-    public void reset() {
+    public void reset(boolean z) {
         setRotation(0.0f, false);
-        setMirrored(false);
+        if (z) {
+            setMirrored(false);
+        }
         setRotated(false);
     }
 

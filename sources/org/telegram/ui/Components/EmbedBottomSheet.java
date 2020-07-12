@@ -249,7 +249,7 @@ public class EmbedBottomSheet extends BottomSheet {
             r3.setOnTouchListener(r11)
             android.widget.FrameLayout r3 = r0.containerLayout
             r0.setCustomView(r3)
-            android.webkit.WebView r3 = new android.webkit.WebView
+            org.telegram.ui.Components.EmbedBottomSheet$3 r3 = new org.telegram.ui.Components.EmbedBottomSheet$3
             r3.<init>(r1)
             r0.webView = r3
             android.webkit.WebSettings r3 = r3.getSettings()
@@ -274,11 +274,11 @@ public class EmbedBottomSheet extends BottomSheet {
             r3.setAcceptThirdPartyCookies(r9, r8)
         L_0x00e6:
             android.webkit.WebView r3 = r0.webView
-            org.telegram.ui.Components.EmbedBottomSheet$3 r9 = new org.telegram.ui.Components.EmbedBottomSheet$3
+            org.telegram.ui.Components.EmbedBottomSheet$4 r9 = new org.telegram.ui.Components.EmbedBottomSheet$4
             r9.<init>()
             r3.setWebChromeClient(r9)
             android.webkit.WebView r3 = r0.webView
-            org.telegram.ui.Components.EmbedBottomSheet$4 r9 = new org.telegram.ui.Components.EmbedBottomSheet$4
+            org.telegram.ui.Components.EmbedBottomSheet$5 r9 = new org.telegram.ui.Components.EmbedBottomSheet$5
             r9.<init>()
             r3.setWebViewClient(r9)
             android.widget.FrameLayout r3 = r0.containerLayout
@@ -303,7 +303,7 @@ public class EmbedBottomSheet extends BottomSheet {
             android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r13, r14, r15, r16, r17, r18, r19)
             r3.addView(r9, r11)
             org.telegram.ui.Components.WebPlayerView r3 = new org.telegram.ui.Components.WebPlayerView
-            org.telegram.ui.Components.EmbedBottomSheet$5 r9 = new org.telegram.ui.Components.EmbedBottomSheet$5
+            org.telegram.ui.Components.EmbedBottomSheet$6 r9 = new org.telegram.ui.Components.EmbedBottomSheet$6
             r9.<init>()
             r3.<init>(r1, r8, r5, r9)
             r0.videoView = r3
@@ -485,7 +485,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r6)
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r13.setPadding(r3, r5, r8, r5)
-            r3 = 2131624778(0x7f0e034a, float:1.8876745E38)
+            r3 = 2131624782(0x7f0e034e, float:1.8876753E38)
             java.lang.String r8 = "Close"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r8, r3)
             java.lang.String r3 = r3.toUpperCase()
@@ -590,7 +590,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r7.setPadding(r8, r5, r10, r5)
             android.widget.TextView r7 = r0.copyTextButton
-            r8 = 2131624838(0x7f0e0386, float:1.8876867E38)
+            r8 = 2131624842(0x7f0e038a, float:1.8876875E38)
             java.lang.String r10 = "Copy"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
             java.lang.String r8 = r8.toUpperCase()
@@ -622,7 +622,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r6)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r2.setPadding(r1, r5, r6, r5)
-            r1 = 2131626111(0x7f0e087f, float:1.8879449E38)
+            r1 = 2131626118(0x7f0e0886, float:1.8879463E38)
             java.lang.String r6 = "OpenInBrowser"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -635,10 +635,10 @@ public class EmbedBottomSheet extends BottomSheet {
             org.telegram.ui.Components.-$$Lambda$EmbedBottomSheet$xNtglytXCFyYO3cCP1Moj3HVHKg r1 = new org.telegram.ui.Components.-$$Lambda$EmbedBottomSheet$xNtglytXCFyYO3cCP1Moj3HVHKg
             r1.<init>()
             r2.setOnClickListener(r1)
-            org.telegram.ui.Components.EmbedBottomSheet$7 r1 = new org.telegram.ui.Components.EmbedBottomSheet$7
+            org.telegram.ui.Components.EmbedBottomSheet$8 r1 = new org.telegram.ui.Components.EmbedBottomSheet$8
             r1.<init>()
             r0.setDelegate(r1)
-            org.telegram.ui.Components.EmbedBottomSheet$8 r1 = new org.telegram.ui.Components.EmbedBottomSheet$8
+            org.telegram.ui.Components.EmbedBottomSheet$9 r1 = new org.telegram.ui.Components.EmbedBottomSheet$9
             android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
             r1.<init>(r2)
             r0.orientationEventListener = r1

@@ -394,6 +394,8 @@ public class MessagesController extends BaseController implements NotificationCe
     public boolean enableJoined;
     private ConcurrentHashMap<Integer, TLRPC$EncryptedChat> encryptedChats = new ConcurrentHashMap<>(10, 1.0f, 2);
     private SparseArray<TLRPC$ExportedChatInvite> exportedChats = new SparseArray<>();
+    public ArrayList<FaqSearchResult> faqSearchArray;
+    public TLRPC$WebPage faqWebPage;
     public boolean filtersEnabled;
     public boolean firstGettingTask;
     private SparseArray<TLRPC$ChatFull> fullChats;
@@ -590,6 +592,48 @@ public class MessagesController extends BaseController implements NotificationCe
 
     public /* synthetic */ void lambda$new$0$MessagesController() {
         getUserConfig().checkSavedPassword();
+    }
+
+    public static class FaqSearchResult {
+        public int num;
+        public String[] path;
+        public String title;
+        public String url;
+
+        public FaqSearchResult(String str, String[] strArr, String str2) {
+            this.title = str;
+            this.path = strArr;
+            this.url = str2;
+        }
+
+        public boolean equals(Object obj) {
+            if (!(obj instanceof FaqSearchResult)) {
+                return false;
+            }
+            return this.title.equals(((FaqSearchResult) obj).title);
+        }
+
+        public String toString() {
+            SerializedData serializedData = new SerializedData();
+            serializedData.writeInt32(this.num);
+            int i = 0;
+            serializedData.writeInt32(0);
+            serializedData.writeString(this.title);
+            String[] strArr = this.path;
+            serializedData.writeInt32(strArr != null ? strArr.length : 0);
+            if (this.path != null) {
+                while (true) {
+                    String[] strArr2 = this.path;
+                    if (i >= strArr2.length) {
+                        break;
+                    }
+                    serializedData.writeString(strArr2[i]);
+                    i++;
+                }
+            }
+            serializedData.writeString(this.url);
+            return Utilities.bytesToHex(serializedData.toByteArray());
+        }
     }
 
     public static class DiceFrameSuccess {
@@ -878,6 +922,7 @@ public class MessagesController extends BaseController implements NotificationCe
         this.serverDialogsEndReached = new SparseBooleanArray();
         this.getDifferenceFirstSync = true;
         this.loadingPinnedDialogs = new SparseIntArray();
+        this.faqSearchArray = new ArrayList<>();
         this.suggestContacts = true;
         this.themeCheckRunnable = $$Lambda$RQB0Jwr1FTqp6hrbGUHuOs9k1I.INSTANCE;
         this.passwordCheckRunnable = new Runnable() {

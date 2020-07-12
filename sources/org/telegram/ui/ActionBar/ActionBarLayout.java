@@ -619,7 +619,7 @@ public class ActionBarLayout extends FrameLayout {
                 int max = Math.max(0, (int) (motionEvent.getX() - ((float) this.startedTrackingX)));
                 int abs = Math.abs(((int) motionEvent.getY()) - this.startedTrackingY);
                 this.velocityTracker.addMovement(motionEvent);
-                if (!this.inPreviewMode && this.maybeStartTracking && !this.startedTracking && ((float) max) >= AndroidUtilities.getPixelsInCM(0.4f, true) && Math.abs(max) / 3 > abs) {
+                if (!this.transitionAnimationInProgress && !this.inPreviewMode && this.maybeStartTracking && !this.startedTracking && ((float) max) >= AndroidUtilities.getPixelsInCM(0.4f, true) && Math.abs(max) / 3 > abs) {
                     ArrayList<BaseFragment> arrayList2 = this.fragmentsStack;
                     if (arrayList2.get(arrayList2.size() - 1).canBeginSlide()) {
                         prepareForMoving(motionEvent);

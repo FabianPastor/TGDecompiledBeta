@@ -195,7 +195,7 @@ public class PhotoCropView extends FrameLayout {
     public boolean rotate() {
         CropRotationWheel cropRotationWheel = this.wheelView;
         if (cropRotationWheel != null) {
-            cropRotationWheel.reset();
+            cropRotationWheel.reset(false);
         }
         return this.cropView.rotate90Degrees();
     }
@@ -213,20 +213,25 @@ public class PhotoCropView extends FrameLayout {
         this.thumbImageView.setImageBitmap((Drawable) null);
         this.cropView.setBitmap(bitmap, i, z, z2, paintingOverlay, videoEditTextureView, cropState);
         this.wheelView.setFreeform(z);
-        this.wheelView.reset();
+        boolean z4 = true;
+        this.wheelView.reset(true);
         if (cropState2 != null) {
             this.wheelView.setRotation(cropState2.cropRotate, false);
-            this.wheelView.setRotated(cropState2.transformRotation != 0);
+            CropRotationWheel cropRotationWheel = this.wheelView;
+            if (cropState2.transformRotation == 0) {
+                z4 = false;
+            }
+            cropRotationWheel.setRotated(z4);
             this.wheelView.setMirrored(cropState2.mirrored);
         } else {
             this.wheelView.setRotated(false);
             this.wheelView.setMirrored(false);
         }
-        CropRotationWheel cropRotationWheel = this.wheelView;
+        CropRotationWheel cropRotationWheel2 = this.wheelView;
         if (!z3) {
             i2 = 4;
         }
-        cropRotationWheel.setVisibility(i2);
+        cropRotationWheel2.setVisibility(i2);
     }
 
     public void setVideoThumbFlashAlpha(float f) {
@@ -307,7 +312,7 @@ public class PhotoCropView extends FrameLayout {
     }
 
     public void reset() {
-        this.wheelView.reset();
+        this.wheelView.reset(true);
         this.cropView.reset();
     }
 

@@ -687,6 +687,10 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     public void processBitmap(Bitmap bitmap, MessageObject messageObject) {
         VideoEditedInfo videoEditedInfo;
         if (bitmap != null) {
+            this.uploadedVideo = null;
+            this.uploadedPhoto = null;
+            this.convertingVideo = null;
+            this.videoPath = null;
             this.bigPhoto = ImageLoader.scaleAndSaveImage(bitmap, 800.0f, 800.0f, 80, false, 320, 320);
             TLRPC$PhotoSize scaleAndSaveImage = ImageLoader.scaleAndSaveImage(bitmap, 150.0f, 150.0f, 80, false, 150, 150);
             this.smallPhoto = scaleAndSaveImage;

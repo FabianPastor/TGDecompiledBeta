@@ -2994,7 +2994,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             } else {
                 f2 = Math.abs((((float) i3) / ((float) d4)) * 100.0f);
             }
-            this.viewingMembersTitle = LocaleController.getString("MessagesOverview", NUM);
+            this.viewingMembersTitle = LocaleController.getString("ViewingMembers", NUM);
             this.viewingMembersPrimary = AndroidUtilities.formatWholeNumber((int) tLRPC$TL_stats_megagroupStats2.viewers.current, 0);
             if (i3 == 0 || f2 == 0.0f) {
                 this.viewingMembersSecondary = "";
@@ -3022,7 +3022,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             } else {
                 f3 = Math.abs((((float) i4) / ((float) d6)) * 100.0f);
             }
-            this.postingMembersTitle = LocaleController.getString("ViewingMembers", NUM);
+            this.postingMembersTitle = LocaleController.getString("PostingMembers", NUM);
             this.postingMembersPrimary = AndroidUtilities.formatWholeNumber((int) tLRPC$TL_stats_megagroupStats2.posters.current, 0);
             if (i4 == 0 || f3 == 0.0f) {
                 this.postingMembersSecondary = "";
@@ -3050,7 +3050,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             } else {
                 f4 = Math.abs((((float) i5) / ((float) d8)) * 100.0f);
             }
-            this.messagesTitle = LocaleController.getString("PostingMembers", NUM);
+            this.messagesTitle = LocaleController.getString("MessagesOverview", NUM);
             this.messagesPrimary = AndroidUtilities.formatWholeNumber((int) tLRPC$TL_stats_megagroupStats2.messages.current, 0);
             if (i5 == 0 || f4 == 0.0f) {
                 this.messagesSecondary = "";
@@ -3338,7 +3338,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r11 = r6
                 r12 = r11
             L_0x0066:
-                r9 = 2131626974(0x7f0e0bde, float:1.88812E38)
+                r9 = 2131626981(0x7f0e0be5, float:1.8881214E38)
                 java.lang.String r10 = "StatisticOpenProfile"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
@@ -3348,7 +3348,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r9 = 2
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r2.add(r9)
-                r9 = 2131626976(0x7f0e0be0, float:1.8881203E38)
+                r9 = 2131626983(0x7f0e0be7, float:1.8881218E38)
                 java.lang.String r10 = "StatisticSearchUserHistory"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
@@ -3446,11 +3446,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r9 = 0
             L_0x0166:
                 if (r9 == 0) goto L_0x016e
-                r0 = 2131626850(0x7f0e0b62, float:1.8880948E38)
+                r0 = 2131626857(0x7f0e0b69, float:1.8880962E38)
                 java.lang.String r6 = "SetAsAdmin"
                 goto L_0x0173
             L_0x016e:
-                r0 = 2131625048(0x7f0e0458, float:1.8877293E38)
+                r0 = 2131625052(0x7f0e045c, float:1.8877301E38)
                 java.lang.String r6 = "EditAdminRights"
             L_0x0173:
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)

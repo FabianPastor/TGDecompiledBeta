@@ -33,6 +33,7 @@ import org.telegram.tgnet.TLRPC$TL_messageMediaInvoice;
 import org.telegram.tgnet.TLRPC$TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC$TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC$TL_messageService;
+import org.telegram.tgnet.TLRPC$TL_photo;
 import org.telegram.tgnet.TLRPC$TL_photoStrippedSize;
 import org.telegram.tgnet.TLRPC$TL_secureFile;
 import org.telegram.tgnet.TLRPC$TL_videoSize;
@@ -1792,5 +1793,18 @@ public class FileLoader extends BaseController {
         fileOutputStream.getFD().sync();
         fileOutputStream.close();
         return true;
+    }
+
+    public static boolean isSamePhoto(TLRPC$FileLocation tLRPC$FileLocation, TLRPC$Photo tLRPC$Photo) {
+        if (tLRPC$FileLocation != null && (tLRPC$Photo instanceof TLRPC$TL_photo)) {
+            int size = tLRPC$Photo.sizes.size();
+            for (int i = 0; i < size; i++) {
+                TLRPC$FileLocation tLRPC$FileLocation2 = tLRPC$Photo.sizes.get(i).location;
+                if (tLRPC$FileLocation2 != null && tLRPC$FileLocation2.local_id == tLRPC$FileLocation.local_id && tLRPC$FileLocation2.volume_id == tLRPC$FileLocation.volume_id) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

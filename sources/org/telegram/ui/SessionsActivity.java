@@ -1011,7 +1011,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.currentSessionSectionRow
                 if (r7 != r0) goto L_0x0112
-                r7 = 2131624866(0x7f0e03a2, float:1.8876924E38)
+                r7 = 2131624870(0x7f0e03a6, float:1.8876932E38)
                 java.lang.String r0 = "CurrentSession"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1023,13 +1023,13 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r7 = org.telegram.ui.SessionsActivity.this
                 int r7 = r7.currentType
                 if (r7 != 0) goto L_0x0130
-                r7 = 2131626129(0x7f0e0891, float:1.8879485E38)
+                r7 = 2131626136(0x7f0e0898, float:1.88795E38)
                 java.lang.String r0 = "OtherSessions"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
                 goto L_0x026f
             L_0x0130:
-                r7 = 2131626131(0x7f0e0893, float:1.887949E38)
+                r7 = 2131626138(0x7f0e089a, float:1.8879504E38)
                 java.lang.String r0 = "OtherWebSessions"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1038,7 +1038,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.passwordSessionsSectionRow
                 if (r7 != r0) goto L_0x026f
-                r7 = 2131625681(0x7f0e06d1, float:1.8878577E38)
+                r7 = 2131625687(0x7f0e06d7, float:1.887859E38)
                 java.lang.String r0 = "LoginAttempts"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1054,13 +1054,13 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r7 = org.telegram.ui.SessionsActivity.this
                 int r7 = r7.currentType
                 if (r7 != 0) goto L_0x017a
-                r7 = 2131624766(0x7f0e033e, float:1.887672E38)
+                r7 = 2131624770(0x7f0e0342, float:1.887673E38)
                 java.lang.String r0 = "ClearOtherSessionsHelp"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
                 goto L_0x0186
             L_0x017a:
-                r7 = 2131624767(0x7f0e033f, float:1.8876723E38)
+                r7 = 2131624771(0x7f0e0343, float:1.8876731E38)
                 java.lang.String r0 = "ClearOtherWebSessionsHelp"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1085,13 +1085,13 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 r6.setText(r7)
                 goto L_0x01cf
             L_0x01b6:
-                r7 = 2131627077(0x7f0e0CLASSNAME, float:1.8881408E38)
+                r7 = 2131627084(0x7f0e0c4c, float:1.8881422E38)
                 java.lang.String r0 = "TerminateSessionInfo"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
                 goto L_0x01cf
             L_0x01c3:
-                r7 = 2131627080(0x7f0e0CLASSNAME, float:1.8881414E38)
+                r7 = 2131627087(0x7f0e0c4f, float:1.8881429E38)
                 java.lang.String r0 = "TerminateWebSessionInfo"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1104,7 +1104,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.passwordSessionsDetailRow
                 if (r7 != r0) goto L_0x026f
-                r7 = 2131625682(0x7f0e06d2, float:1.8878579E38)
+                r7 = 2131625688(0x7f0e06d8, float:1.8878591E38)
                 java.lang.String r0 = "LoginAttemptsInfo"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1133,13 +1133,13 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r7 = org.telegram.ui.SessionsActivity.this
                 int r7 = r7.currentType
                 if (r7 != 0) goto L_0x0237
-                r7 = 2131627075(0x7f0e0CLASSNAME, float:1.8881404E38)
+                r7 = 2131627082(0x7f0e0c4a, float:1.8881418E38)
                 java.lang.String r0 = "TerminateAllSessions"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7, r1)
                 goto L_0x026f
             L_0x0237:
-                r7 = 2131627076(0x7f0e0CLASSNAME, float:1.8881406E38)
+                r7 = 2131627083(0x7f0e0c4b, float:1.888142E38)
                 java.lang.String r0 = "TerminateAllWebSessions"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7, r1)
@@ -1152,7 +1152,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r6.setTextColor(r0)
                 r6.setTag(r7)
-                r7 = 2131624332(0x7f0e018c, float:1.887584E38)
+                r7 = 2131624335(0x7f0e018f, float:1.8875847E38)
                 java.lang.String r0 = "AuthAnotherClient"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this

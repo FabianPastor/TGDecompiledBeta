@@ -1275,8 +1275,10 @@
     <public type="string" name="ActionBotDocuments" id="NUM" />
     <public type="string" name="ActionChangedPhoto" id="NUM" />
     <public type="string" name="ActionChangedTitle" id="NUM" />
+    <public type="string" name="ActionChangedVideo" id="NUM" />
     <public type="string" name="ActionChannelChangedPhoto" id="NUM" />
     <public type="string" name="ActionChannelChangedTitle" id="NUM" />
+    <public type="string" name="ActionChannelChangedVideo" id="NUM" />
     <public type="string" name="ActionChannelRemovedPhoto" id="NUM" />
     <public type="string" name="ActionCreateChannel" id="NUM" />
     <public type="string" name="ActionCreateGroup" id="NUM" />
@@ -1312,6 +1314,7 @@
     <public type="string" name="ActionYouAddUser" id="NUM" />
     <public type="string" name="ActionYouChangedPhoto" id="NUM" />
     <public type="string" name="ActionYouChangedTitle" id="NUM" />
+    <public type="string" name="ActionYouChangedVideo" id="NUM" />
     <public type="string" name="ActionYouCreateGroup" id="NUM" />
     <public type="string" name="ActionYouKickUser" id="NUM" />
     <public type="string" name="ActionYouLeftUser" id="NUM" />
@@ -1858,6 +1861,7 @@
     <public type="string" name="ChannelUsernameHelp" id="NUM" />
     <public type="string" name="ChannelUsernamePlaceholder" id="NUM" />
     <public type="string" name="ChannelVerifiedWarning" id="NUM" />
+    <public type="string" name="ChannelVideoEditNotification" id="NUM" />
     <public type="string" name="Channels_few" id="NUM" />
     <public type="string" name="Channels_many" id="NUM" />
     <public type="string" name="Channels_one" id="NUM" />
@@ -2356,9 +2360,11 @@
     <public type="string" name="EventLogEditedChannelDescription" id="NUM" />
     <public type="string" name="EventLogEditedChannelPhoto" id="NUM" />
     <public type="string" name="EventLogEditedChannelTitle" id="NUM" />
+    <public type="string" name="EventLogEditedChannelVideo" id="NUM" />
     <public type="string" name="EventLogEditedGroupDescription" id="NUM" />
     <public type="string" name="EventLogEditedGroupPhoto" id="NUM" />
     <public type="string" name="EventLogEditedGroupTitle" id="NUM" />
+    <public type="string" name="EventLogEditedGroupVideo" id="NUM" />
     <public type="string" name="EventLogEditedMedia" id="NUM" />
     <public type="string" name="EventLogEditedMediaCaption" id="NUM" />
     <public type="string" name="EventLogEditedMessages" id="NUM" />
@@ -3190,6 +3196,7 @@
     <public type="string" name="NotificationContactNewPhoto" id="NUM" />
     <public type="string" name="NotificationEditedGroupName" id="NUM" />
     <public type="string" name="NotificationEditedGroupPhoto" id="NUM" />
+    <public type="string" name="NotificationEditedGroupVideo" id="NUM" />
     <public type="string" name="NotificationGroupAddMember" id="NUM" />
     <public type="string" name="NotificationGroupAddSelf" id="NUM" />
     <public type="string" name="NotificationGroupAddSelfMega" id="NUM" />

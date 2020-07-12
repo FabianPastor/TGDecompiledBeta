@@ -1778,7 +1778,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r2.putExtra(r5, r0)
         L_0x01fb:
             android.app.Activity r0 = r10.getParentActivity()
-            r3 = 2131626880(0x7f0e0b80, float:1.8881009E38)
+            r3 = 2131626887(0x7f0e0b87, float:1.8881023E38)
             java.lang.String r4 = "ShareFile"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.content.Intent r2 = android.content.Intent.createChooser(r2, r3)
@@ -1814,9 +1814,9 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             java.lang.String r1 = r1.toLowerCase()
             java.lang.String r2 = "attheme"
             boolean r1 = r1.endsWith(r2)
-            r2 = 2131626092(0x7f0e086c, float:1.887941E38)
+            r2 = 2131626099(0x7f0e0873, float:1.8879425E38)
             java.lang.String r3 = "OK"
-            r4 = 2131624213(0x7f0e0115, float:1.88756E38)
+            r4 = 2131624216(0x7f0e0118, float:1.8875605E38)
             java.lang.String r5 = "AppName"
             if (r1 == 0) goto L_0x02dc
             androidx.recyclerview.widget.LinearLayoutManager r1 = r10.chatLayoutManager
@@ -1864,7 +1864,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131625529(0x7f0e0639, float:1.8878269E38)
+            r1 = 2131625535(0x7f0e063f, float:1.887828E38)
             java.lang.String r4 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -1893,7 +1893,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131625528(0x7f0e0638, float:1.8878266E38)
+            r1 = 2131625534(0x7f0e063e, float:1.8878279E38)
             java.lang.String r4 = "IncorrectLocalization"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -2757,12 +2757,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                         org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r5 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                         org.telegram.ui.ChannelAdminLogActivity r5 = org.telegram.ui.ChannelAdminLogActivity.this
                                         android.app.Activity r5 = r5.getParentActivity()
-                                        r6 = 2131627087(0x7f0e0c4f, float:1.8881429E38)
+                                        r6 = 2131627094(0x7f0e0CLASSNAME, float:1.8881443E38)
                                         java.lang.String r7 = "TextCopied"
                                         java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                                         android.widget.Toast r5 = android.widget.Toast.makeText(r5, r6, r1)
                                         r5.show()
-                                        goto L_0x016c
+                                        goto L_0x016a
                                     L_0x002b:
                                         boolean r0 = r6 instanceof org.telegram.ui.Components.URLSpanUserMention
                                         r2 = 0
@@ -2775,11 +2775,11 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                         java.lang.String r6 = r6.getURL()
                                         java.lang.Integer r6 = org.telegram.messenger.Utilities.parseInt(r6)
                                         org.telegram.tgnet.TLRPC$User r5 = r5.getUser(r6)
-                                        if (r5 == 0) goto L_0x016c
+                                        if (r5 == 0) goto L_0x016a
                                         org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r6 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                         org.telegram.ui.ChannelAdminLogActivity r6 = org.telegram.ui.ChannelAdminLogActivity.this
                                         org.telegram.messenger.MessagesController.openChatOrProfileWith(r5, r2, r6, r1, r1)
-                                        goto L_0x016c
+                                        goto L_0x016a
                                     L_0x0055:
                                         boolean r0 = r6 instanceof org.telegram.ui.Components.URLSpanNoUnderline
                                         r3 = 1
@@ -2797,18 +2797,18 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                         org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r7 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                         org.telegram.ui.ChannelAdminLogActivity r7 = org.telegram.ui.ChannelAdminLogActivity.this
                                         r6.openByUserName(r5, r7, r1)
-                                        goto L_0x016c
+                                        goto L_0x016a
                                     L_0x0081:
                                         java.lang.String r6 = "#"
                                         boolean r6 = r5.startsWith(r6)
-                                        if (r6 == 0) goto L_0x016c
+                                        if (r6 == 0) goto L_0x016a
                                         org.telegram.ui.DialogsActivity r6 = new org.telegram.ui.DialogsActivity
                                         r6.<init>(r2)
                                         r6.setSearchString(r5)
                                         org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r5 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                         org.telegram.ui.ChannelAdminLogActivity r5 = org.telegram.ui.ChannelAdminLogActivity.this
                                         r5.presentFragment(r6)
-                                        goto L_0x016c
+                                        goto L_0x016a
                                     L_0x009a:
                                         r0 = r6
                                         android.text.style.URLSpan r0 = (android.text.style.URLSpan) r0
@@ -2822,11 +2822,11 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                         r5.setTitle(r0)
                                         r6 = 2
                                         java.lang.CharSequence[] r6 = new java.lang.CharSequence[r6]
-                                        r7 = 2131626106(0x7f0e087a, float:1.8879439E38)
+                                        r7 = 2131626113(0x7f0e0881, float:1.8879453E38)
                                         java.lang.String r2 = "Open"
                                         java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r2, r7)
                                         r6[r1] = r7
-                                        r7 = 2131624838(0x7f0e0386, float:1.8876867E38)
+                                        r7 = 2131624842(0x7f0e038a, float:1.8876875E38)
                                         java.lang.String r1 = "Copy"
                                         java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r1, r7)
                                         r6[r3] = r7
@@ -2837,7 +2837,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                         org.telegram.ui.ChannelAdminLogActivity r6 = org.telegram.ui.ChannelAdminLogActivity.this
                                         org.telegram.ui.ActionBar.BottomSheet r5 = r5.create()
                                         r6.showDialog(r5)
-                                        goto L_0x016c
+                                        goto L_0x016a
                                     L_0x00e1:
                                         boolean r7 = r6 instanceof org.telegram.ui.Components.URLSpanReplacement
                                         if (r7 == 0) goto L_0x00f4
@@ -2846,36 +2846,35 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                         org.telegram.ui.Components.URLSpanReplacement r6 = (org.telegram.ui.Components.URLSpanReplacement) r6
                                         java.lang.String r6 = r6.getURL()
                                         r5.showOpenUrlAlert(r6, r3)
-                                        goto L_0x016c
+                                        goto L_0x016a
                                     L_0x00f4:
                                         boolean r7 = r6 instanceof android.text.style.URLSpan
-                                        if (r7 == 0) goto L_0x015b
+                                        if (r7 == 0) goto L_0x0159
                                         org.telegram.tgnet.TLRPC$Message r6 = r5.messageOwner
                                         org.telegram.tgnet.TLRPC$MessageMedia r6 = r6.media
                                         boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaWebPage
-                                        if (r7 == 0) goto L_0x014f
+                                        if (r7 == 0) goto L_0x014d
                                         org.telegram.tgnet.TLRPC$WebPage r6 = r6.webpage
-                                        if (r6 == 0) goto L_0x014f
+                                        if (r6 == 0) goto L_0x014d
                                         org.telegram.tgnet.TLRPC$Page r6 = r6.cached_page
-                                        if (r6 == 0) goto L_0x014f
+                                        if (r6 == 0) goto L_0x014d
                                         java.lang.String r6 = r0.toLowerCase()
                                         org.telegram.tgnet.TLRPC$Message r7 = r5.messageOwner
                                         org.telegram.tgnet.TLRPC$MessageMedia r7 = r7.media
                                         org.telegram.tgnet.TLRPC$WebPage r7 = r7.webpage
                                         java.lang.String r7 = r7.url
                                         java.lang.String r7 = r7.toLowerCase()
-                                        java.lang.String r1 = "telegra.ph"
-                                        boolean r1 = r6.contains(r1)
-                                        if (r1 != 0) goto L_0x0128
+                                        boolean r1 = org.telegram.messenger.browser.Browser.isTelegraphUrl(r6, r1)
+                                        if (r1 != 0) goto L_0x0126
                                         java.lang.String r1 = "t.me/iv"
                                         boolean r1 = r6.contains(r1)
-                                        if (r1 == 0) goto L_0x014f
-                                    L_0x0128:
+                                        if (r1 == 0) goto L_0x014d
+                                    L_0x0126:
                                         boolean r1 = r6.contains(r7)
-                                        if (r1 != 0) goto L_0x0134
+                                        if (r1 != 0) goto L_0x0132
                                         boolean r6 = r7.contains(r6)
-                                        if (r6 == 0) goto L_0x014f
-                                    L_0x0134:
+                                        if (r6 == 0) goto L_0x014d
+                                    L_0x0132:
                                         org.telegram.ui.ArticleViewer r6 = org.telegram.ui.ArticleViewer.getInstance()
                                         org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r7 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                         org.telegram.ui.ChannelAdminLogActivity r7 = org.telegram.ui.ChannelAdminLogActivity.this
@@ -2886,21 +2885,21 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                         org.telegram.ui.ArticleViewer r6 = org.telegram.ui.ArticleViewer.getInstance()
                                         r6.open(r5)
                                         return
-                                    L_0x014f:
+                                    L_0x014d:
                                         org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r5 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                         org.telegram.ui.ChannelAdminLogActivity r5 = org.telegram.ui.ChannelAdminLogActivity.this
                                         android.app.Activity r5 = r5.getParentActivity()
                                         org.telegram.messenger.browser.Browser.openUrl((android.content.Context) r5, (java.lang.String) r0, (boolean) r3)
-                                        goto L_0x016c
-                                    L_0x015b:
+                                        goto L_0x016a
+                                    L_0x0159:
                                         boolean r5 = r6 instanceof android.text.style.ClickableSpan
-                                        if (r5 == 0) goto L_0x016c
+                                        if (r5 == 0) goto L_0x016a
                                         android.text.style.ClickableSpan r6 = (android.text.style.ClickableSpan) r6
                                         org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r5 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                         org.telegram.ui.ChannelAdminLogActivity r5 = org.telegram.ui.ChannelAdminLogActivity.this
                                         android.view.View r5 = r5.fragmentView
                                         r6.onClick(r5)
-                                    L_0x016c:
+                                    L_0x016a:
                                         return
                                     */
                                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.AnonymousClass1.didPressUrl(org.telegram.ui.Cells.ChatMessageCell, android.text.style.CharacterStyle, boolean):void");

@@ -227,7 +227,6 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
             this.matrix.reset();
             this.x = 0.0f;
             this.y = 0.0f;
-            this.mirrored = false;
             this.rotation = 0.0f;
             this.orientation = f;
             updateMinimumScale();
@@ -437,6 +436,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         this.areaView.setBitmap(getCurrentWidth(), getCurrentHeight(), this.state.getBaseRotation() % 180.0f != 0.0f, this.freeform);
         this.areaView.setLockedAspectRatio(this.freeform ? 0.0f : 1.0f);
         this.state.reset(this.areaView, 0.0f, this.freeform);
+        boolean unused = this.state.mirrored = false;
         this.areaView.getCropRect(this.initialAreaRect);
         updateMatrix();
         resetRotationStartScale();
@@ -769,8 +769,9 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         cropState.mirror();
         updateMatrix();
         if (this.listener != null) {
+            float access$2100 = (this.state.getOrientation() - this.state.getBaseRotation()) % 360.0f;
             CropViewListener cropViewListener = this.listener;
-            if ((this.state.getOrientation() - this.state.getBaseRotation()) % 360.0f == 0.0f && this.areaView.getLockAspectRatio() == 0.0f && !this.state.mirrored) {
+            if (!this.state.hasChanges() && access$2100 == 0.0f && this.areaView.getLockAspectRatio() == 0.0f && !this.state.mirrored) {
                 z = true;
             }
             cropViewListener.onChange(z);
@@ -1064,13 +1065,13 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         } else {
             f2 = Math.max(targetRectToFill.width() / f4, targetRectToFill.height() / f6);
         }
-        float access$3600 = this.state.scale / f2;
-        float access$36002 = this.state.scale / this.state.minimumScale;
-        float access$36003 = (this.values[2] / f4) / this.state.scale;
-        float access$36004 = (this.values[5] / f6) / this.state.scale;
-        float access$3700 = this.state.rotation;
+        float access$3700 = this.state.scale / f2;
+        float access$37002 = this.state.scale / this.state.minimumScale;
+        float access$37003 = (this.values[2] / f4) / this.state.scale;
+        float access$37004 = (this.values[5] / f6) / this.state.scale;
+        float access$3800 = this.state.rotation;
         RectF targetRectToFill2 = this.areaView.getTargetRectToFill();
-        this.videoEditTextureView.setViewTransform(this.state.mirrored || this.state.hasChanges() || this.state.getBaseRotation() >= 1.0E-5f, access$36003, access$36004, access$3700, this.state.getOrientationOnly(), access$3600, access$36002, this.state.minimumScale / f2, f8, f9, this.areaView.getCropCenterX() - targetRectToFill2.centerX(), this.areaView.getCropCenterY() - targetRectToFill2.centerY(), this.state.mirrored);
+        this.videoEditTextureView.setViewTransform(this.state.mirrored || this.state.hasChanges() || this.state.getBaseRotation() >= 1.0E-5f, access$37003, access$37004, access$3800, this.state.getOrientationOnly(), access$3700, access$37002, this.state.minimumScale / f2, f8, f9, this.areaView.getCropCenterX() - targetRectToFill2.centerX(), this.areaView.getCropCenterY() - targetRectToFill2.centerY(), this.state.mirrored);
     }
 
     public static String getPathOrCopy(boolean z, String str) {

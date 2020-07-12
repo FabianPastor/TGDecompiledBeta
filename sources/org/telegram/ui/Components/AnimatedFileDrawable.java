@@ -283,6 +283,8 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     /* access modifiers changed from: private */
     public static native void destroyDecoder(long j);
 
+    private static native int getFrameAtTime(long j, long j2, Bitmap bitmap, int[] iArr, int i);
+
     /* access modifiers changed from: private */
     public static native int getVideoFrame(long j, Bitmap bitmap, int[] iArr, int i, boolean z, float f, float f2);
 
@@ -362,6 +364,7 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
     }
 
     public Bitmap getFrameAtTime(long j, boolean z) {
+        int i;
         if (!this.decoderCreated || this.nativePtr == 0) {
             return null;
         }
@@ -370,14 +373,23 @@ public class AnimatedFileDrawable extends BitmapDrawable implements Animatable {
             animatedFileDrawableStream.cancel(false);
             this.stream.reset();
         }
-        seekToMs(this.nativePtr, j, z);
+        if (!z) {
+            seekToMs(this.nativePtr, j, z);
+        }
         if (this.backgroundBitmap == null) {
             int[] iArr = this.metaData;
             this.backgroundBitmap = Bitmap.createBitmap(iArr[0], iArr[1], Bitmap.Config.ARGB_8888);
         }
-        long j2 = this.nativePtr;
-        Bitmap bitmap = this.backgroundBitmap;
-        if (getVideoFrame(j2, bitmap, this.metaData, bitmap.getRowBytes(), true, 0.0f, 0.0f) != 0) {
+        if (z) {
+            long j2 = this.nativePtr;
+            Bitmap bitmap = this.backgroundBitmap;
+            i = getFrameAtTime(j2, j, bitmap, this.metaData, bitmap.getRowBytes());
+        } else {
+            long j3 = this.nativePtr;
+            Bitmap bitmap2 = this.backgroundBitmap;
+            i = getVideoFrame(j3, bitmap2, this.metaData, bitmap2.getRowBytes(), true, 0.0f, 0.0f);
+        }
+        if (i != 0) {
             return this.backgroundBitmap;
         }
         return null;

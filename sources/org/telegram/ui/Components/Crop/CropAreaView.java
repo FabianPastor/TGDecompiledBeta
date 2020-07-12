@@ -646,7 +646,19 @@ public class CropAreaView extends View {
             f4 = f9 - var_;
             f3 = measuredWidth3 + var_;
             f5 = f9 + var_;
-        } else if (((double) (f - measuredWidth)) > 1.0E-4d) {
+        } else {
+            if (((double) (f - measuredWidth)) <= 1.0E-4d) {
+                float var_ = f8 * f;
+                if (var_ <= measuredWidth2) {
+                    float var_ = var_ / 2.0f;
+                    f2 = measuredWidth3 - var_;
+                    float var_ = f8 / 2.0f;
+                    float var_ = f9 - var_;
+                    f3 = measuredWidth3 + var_;
+                    f5 = f9 + var_;
+                    f4 = var_;
+                }
+            }
             float var_ = measuredWidth2 / 2.0f;
             float var_ = measuredWidth3 - var_;
             float var_ = (measuredWidth2 / f) / 2.0f;
@@ -655,15 +667,6 @@ public class CropAreaView extends View {
             f5 = f9 + var_;
             f4 = var_;
             f2 = var_;
-        } else {
-            float var_ = (f * f8) / 2.0f;
-            float var_ = measuredWidth3 - var_;
-            float var_ = f8 / 2.0f;
-            float var_ = f9 - var_;
-            f3 = measuredWidth3 + var_;
-            f5 = f9 + var_;
-            f2 = var_;
-            f4 = var_;
         }
         rectF.set(f2, f4, f3, f5);
     }

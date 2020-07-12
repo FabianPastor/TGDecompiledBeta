@@ -21,10 +21,8 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$ChatFull;
-import org.telegram.tgnet.TLRPC$FileLocation;
 import org.telegram.tgnet.TLRPC$Photo;
 import org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated;
-import org.telegram.tgnet.TLRPC$TL_photo;
 import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.Components.CircularViewPager;
@@ -236,22 +234,9 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         return false;
     }
 
-    private boolean isSamePhoto(TLRPC$FileLocation tLRPC$FileLocation, TLRPC$Photo tLRPC$Photo) {
-        if (tLRPC$FileLocation != null && (tLRPC$Photo instanceof TLRPC$TL_photo)) {
-            int size = tLRPC$Photo.sizes.size();
-            for (int i = 0; i < size; i++) {
-                TLRPC$FileLocation tLRPC$FileLocation2 = tLRPC$Photo.sizes.get(i).location;
-                if (tLRPC$FileLocation2 != null && tLRPC$FileLocation2.local_id == tLRPC$FileLocation.local_id && tLRPC$FileLocation2.volume_id == tLRPC$FileLocation.volume_id) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     public void setChatInfo(TLRPC$ChatFull tLRPC$ChatFull) {
         this.chatInfo = tLRPC$ChatFull;
-        if (!this.photos.isEmpty() && this.photos.get(0) == null && this.chatInfo != null && isSamePhoto(this.imagesLocations.get(0).location, this.chatInfo.chat_photo)) {
+        if (!this.photos.isEmpty() && this.photos.get(0) == null && this.chatInfo != null && FileLoader.isSamePhoto(this.imagesLocations.get(0).location, this.chatInfo.chat_photo)) {
             this.photos.set(0, this.chatInfo.chat_photo);
             if (!this.chatInfo.chat_photo.video_sizes.isEmpty()) {
                 TLRPC$VideoSize tLRPC$VideoSize = this.chatInfo.chat_photo.video_sizes.get(0);
@@ -375,7 +360,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         return this.photos.get(i);
     }
 
-    public void movePhotoToBegin(int i) {
+    public void beginPhotoToBegin(int i) {
         if (i > 0 && i < this.photos.size()) {
             this.photos.remove(i);
             this.photos.add(0, this.photos.get(i));
@@ -392,9 +377,12 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             this.imagesLocationsSizes.remove(i);
             this.imagesLocationsSizes.add(0, this.imagesLocationsSizes.get(i));
             this.prevImageLocation = this.imagesLocations.get(0);
-            this.adapter.notifyDataSetChanged();
-            resetCurrentItem();
         }
+    }
+
+    public void commitMoveToBegin() {
+        this.adapter.notifyDataSetChanged();
+        resetCurrentItem();
     }
 
     public boolean removePhotoAtIndex(int i) {
@@ -512,7 +500,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             if (r6 == 0) goto L_0x00d3
             org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated r9 = r8.location
             org.telegram.tgnet.TLRPC$Photo r6 = r6.chat_photo
-            boolean r6 = r0.isSamePhoto(r9, r6)
+            boolean r6 = org.telegram.messenger.FileLoader.isSamePhoto(r9, r6)
             if (r6 == 0) goto L_0x00d3
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r6 = r0.photos
             org.telegram.tgnet.TLRPC$ChatFull r9 = r0.chatInfo

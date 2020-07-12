@@ -261,6 +261,7 @@ public class SeekBarView extends FrameLayout {
 
     public void setBufferedProgress(float f) {
         this.bufferedProgress = f;
+        invalidate();
     }
 
     /* access modifiers changed from: protected */

@@ -5923,7 +5923,7 @@ public class Theme {
             java.lang.String r5 = "player_time"
             r0.put(r5, r4)
             java.util.HashMap<java.lang.String, java.lang.Integer> r0 = defaultColors
-            r4 = -1445899(0xffffffffffe9eff5, float:NaN)
+            r4 = -1315344(0xffffffffffebedf0, float:NaN)
             java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
             java.lang.String r5 = "player_progressBackground"
             r0.put(r5, r4)
@@ -5933,12 +5933,12 @@ public class Theme {
             java.lang.String r5 = "player_progressBackground2"
             r0.put(r5, r4)
             java.util.HashMap<java.lang.String, java.lang.Integer> r0 = defaultColors
-            r4 = -1445899(0xffffffffffe9eff5, float:NaN)
+            r4 = -3810064(0xffffffffffc5dcf0, float:NaN)
             java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
             java.lang.String r5 = "key_player_progressCachedBackground"
             r0.put(r5, r4)
             java.util.HashMap<java.lang.String, java.lang.Integer> r0 = defaultColors
-            r4 = -11821085(0xffffffffff4b9fe3, float:-2.7066346E38)
+            r4 = -11228437(0xfffffffffvar_aaeb, float:-2.826838E38)
             java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
             java.lang.String r5 = "player_progress"
             r0.put(r5, r4)

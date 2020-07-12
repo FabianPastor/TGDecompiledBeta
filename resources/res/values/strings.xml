@@ -131,8 +131,10 @@
     <string name="ActionBotDocuments">%1$s received the following documents: %2$s</string>
     <string name="ActionChangedPhoto">un1 changed the group photo</string>
     <string name="ActionChangedTitle">un1 changed the group name to un2</string>
+    <string name="ActionChangedVideo">un1 changed the group video</string>
     <string name="ActionChannelChangedPhoto">Channel photo changed</string>
     <string name="ActionChannelChangedTitle">Channel name changed to un2</string>
+    <string name="ActionChannelChangedVideo">Channel video changed</string>
     <string name="ActionChannelRemovedPhoto">Channel photo removed</string>
     <string name="ActionCreateChannel">Channel created</string>
     <string name="ActionCreateGroup">un1 created the group</string>
@@ -168,6 +170,7 @@
     <string name="ActionYouAddUser">You added un2</string>
     <string name="ActionYouChangedPhoto">You changed the group photo</string>
     <string name="ActionYouChangedTitle">You changed the group name to un2</string>
+    <string name="ActionYouChangedVideo">You changed the group video</string>
     <string name="ActionYouCreateGroup">You created the group</string>
     <string name="ActionYouKickUser">You removed un2</string>
     <string name="ActionYouLeftUser">You left the group</string>
@@ -714,6 +717,7 @@
     <string name="ChannelUsernameHelp">If you set a permanent link, other people will be able to find and join your channel.\10\10You can use a-z, 0-9 and underscores.\10Minimum length is 5 characters.</string>
     <string name="ChannelUsernamePlaceholder">link</string>
     <string name="ChannelVerifiedWarning">Warning</string>
+    <string name="ChannelVideoEditNotification">Channel %1$s updated its video</string>
     <string name="Channels_few">%1$d channels</string>
     <string name="Channels_many">%1$d channels</string>
     <string name="Channels_one">%1$d channel</string>
@@ -1212,9 +1216,11 @@
     <string name="EventLogEditedChannelDescription">un1 edited the channel description:</string>
     <string name="EventLogEditedChannelPhoto">un1 set a new channel photo</string>
     <string name="EventLogEditedChannelTitle">un1 renamed the channel to \"%1$s\"</string>
+    <string name="EventLogEditedChannelVideo">un1 set a new channel video</string>
     <string name="EventLogEditedGroupDescription">un1 edited the group description:</string>
     <string name="EventLogEditedGroupPhoto">un1 set a new group photo</string>
     <string name="EventLogEditedGroupTitle">un1 renamed the group to \"%1$s\"</string>
+    <string name="EventLogEditedGroupVideo">un1 set a new group video</string>
     <string name="EventLogEditedMedia">un1 edited media:</string>
     <string name="EventLogEditedMediaCaption">un1 edited media and caption:</string>
     <string name="EventLogEditedMessages">un1 edited this message:</string>
@@ -2046,6 +2052,7 @@
     <string name="NotificationContactNewPhoto">%1$s updated profile photo</string>
     <string name="NotificationEditedGroupName">%1$s renamed the group %2$s</string>
     <string name="NotificationEditedGroupPhoto">%1$s changed the group photo for %2$s</string>
+    <string name="NotificationEditedGroupVideo">%1$s changed the group video for %2$s</string>
     <string name="NotificationGroupAddMember">%1$s invited %3$s to the group %2$s</string>
     <string name="NotificationGroupAddSelf">%1$s returned to the group %2$s</string>
     <string name="NotificationGroupAddSelfMega">%1$s joined the group %2$s</string>
@@ -2576,7 +2583,7 @@
     <string name="PopupDisabled">Disabled</string>
     <string name="PopupEnabled">Enabled</string>
     <string name="PopupNotification">Popup Notifications</string>
-    <string name="PostingMembers">PostingMembers</string>
+    <string name="PostingMembers">Posting Members</string>
     <string name="PreviewFeedback2">Wrong layout?</string>
     <string name="PriorityInfo">Higher priority notifications will work even if your phone is in Do Not Disturb mode.</string>
     <string name="PrivacyAddAnException">Add Users or Groups</string>
@@ -3407,7 +3414,7 @@
     <string name="ViewContact">VIEW CONTACT</string>
     <string name="ViewExceptions">View Exceptions</string>
     <string name="ViewPackPreview">View Pack</string>
-    <string name="ViewingMembers">Viewing members</string>
+    <string name="ViewingMembers">Viewing Members</string>
     <string name="ViewsBySourceChartTitle">Views by source</string>
     <string name="ViewsPerPost">Views Per Post</string>
     <string name="Views_few">%1$s views</string>

@@ -1414,8 +1414,10 @@ public final class R {
         public static final int ActionBotDocuments = NUM;
         public static final int ActionChangedPhoto = NUM;
         public static final int ActionChangedTitle = NUM;
+        public static final int ActionChangedVideo = NUM;
         public static final int ActionChannelChangedPhoto = NUM;
         public static final int ActionChannelChangedTitle = NUM;
+        public static final int ActionChannelChangedVideo = NUM;
         public static final int ActionChannelRemovedPhoto = NUM;
         public static final int ActionCreateChannel = NUM;
         public static final int ActionCreateGroup = NUM;
@@ -1451,6 +1453,7 @@ public final class R {
         public static final int ActionYouAddUser = NUM;
         public static final int ActionYouChangedPhoto = NUM;
         public static final int ActionYouChangedTitle = NUM;
+        public static final int ActionYouChangedVideo = NUM;
         public static final int ActionYouCreateGroup = NUM;
         public static final int ActionYouKickUser = NUM;
         public static final int ActionYouLeftUser = NUM;
@@ -1997,6 +2000,7 @@ public final class R {
         public static final int ChannelUsernameHelp = NUM;
         public static final int ChannelUsernamePlaceholder = NUM;
         public static final int ChannelVerifiedWarning = NUM;
+        public static final int ChannelVideoEditNotification = NUM;
         public static final int Channels_few = NUM;
         public static final int Channels_many = NUM;
         public static final int Channels_one = NUM;
@@ -2495,9 +2499,11 @@ public final class R {
         public static final int EventLogEditedChannelDescription = NUM;
         public static final int EventLogEditedChannelPhoto = NUM;
         public static final int EventLogEditedChannelTitle = NUM;
+        public static final int EventLogEditedChannelVideo = NUM;
         public static final int EventLogEditedGroupDescription = NUM;
         public static final int EventLogEditedGroupPhoto = NUM;
         public static final int EventLogEditedGroupTitle = NUM;
+        public static final int EventLogEditedGroupVideo = NUM;
         public static final int EventLogEditedMedia = NUM;
         public static final int EventLogEditedMediaCaption = NUM;
         public static final int EventLogEditedMessages = NUM;
@@ -3329,6 +3335,7 @@ public final class R {
         public static final int NotificationContactNewPhoto = NUM;
         public static final int NotificationEditedGroupName = NUM;
         public static final int NotificationEditedGroupPhoto = NUM;
+        public static final int NotificationEditedGroupVideo = NUM;
         public static final int NotificationGroupAddMember = NUM;
         public static final int NotificationGroupAddSelf = NUM;
         public static final int NotificationGroupAddSelfMega = NUM;
