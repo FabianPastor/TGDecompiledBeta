@@ -681,6 +681,7 @@
     <string name="ChannelNotifyMembersInfoOff">Members will receive a silent notification</string>
     <string name="ChannelNotifyMembersInfoOn">Members will be notified when you post</string>
     <string name="ChannelOtherMembers">Other members</string>
+    <string name="ChannelOtherSubscriberJoined">joined %1$s</string>
     <string name="ChannelOtherSubscribers">Other subscribers</string>
     <string name="ChannelPermissions">Permissions</string>
     <string name="ChannelPermissionsHeader">What can members of this group do?</string>
@@ -3030,6 +3031,7 @@
     <string name="SmartNotificationsInfo">%1$d / %2$s</string>
     <string name="SmsText">Sending you an SMS in %1$d:%2$02d</string>
     <string name="SoftUserLimitAlert">You will be able to add more users after you finish creating the group and convert it to a supergroup.</string>
+    <string name="SoftenSkin">Soften Skin</string>
     <string name="SortBy">Sort By</string>
     <string name="SortFirstName">First name</string>
     <string name="SortLastName">Last name</string>

@@ -1964,6 +1964,7 @@ public final class R {
         public static final int ChannelNotifyMembersInfoOff = NUM;
         public static final int ChannelNotifyMembersInfoOn = NUM;
         public static final int ChannelOtherMembers = NUM;
+        public static final int ChannelOtherSubscriberJoined = NUM;
         public static final int ChannelOtherSubscribers = NUM;
         public static final int ChannelPermissions = NUM;
         public static final int ChannelPermissionsHeader = NUM;
@@ -4313,6 +4314,7 @@ public final class R {
         public static final int SmartNotificationsInfo = NUM;
         public static final int SmsText = NUM;
         public static final int SoftUserLimitAlert = NUM;
+        public static final int SoftenSkin = NUM;
         public static final int SortBy = NUM;
         public static final int SortFirstName = NUM;
         public static final int SortLastName = NUM;

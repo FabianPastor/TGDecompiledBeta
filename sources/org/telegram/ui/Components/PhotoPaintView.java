@@ -106,6 +106,10 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     public UndoStore undoStore;
 
     /* access modifiers changed from: protected */
+    public void didSetAnimatedSticker(RLottieDrawable rLottieDrawable) {
+    }
+
+    /* access modifiers changed from: protected */
     public void onOpenCloseStickersAlert(boolean z) {
     }
 
@@ -303,7 +307,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setPadding(r5, r7, r10, r7)
             android.widget.TextView r2 = r0.doneTextView
             java.lang.String r5 = "Done"
-            r10 = 2131625030(0x7f0e0446, float:1.8877256E38)
+            r10 = 2131625031(0x7f0e0447, float:1.8877258E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r10)
             java.lang.String r5 = r5.toUpperCase()
             r2.setText(r5)
@@ -1125,14 +1129,19 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
 
     private StickerView createSticker(Object obj, TLRPC$Document tLRPC$Document, boolean z) {
         StickerPosition calculateStickerPosition = calculateStickerPosition(tLRPC$Document);
-        StickerView stickerView = new StickerView(getContext(), calculateStickerPosition.position, calculateStickerPosition.angle, calculateStickerPosition.scale, baseStickerSize(), tLRPC$Document, obj);
-        stickerView.setDelegate(this);
-        this.entitiesView.addView(stickerView);
+        AnonymousClass7 r1 = new StickerView(getContext(), calculateStickerPosition.position, calculateStickerPosition.angle, calculateStickerPosition.scale, baseStickerSize(), tLRPC$Document, obj) {
+            /* access modifiers changed from: protected */
+            public void didSetAnimatedSticker(RLottieDrawable rLottieDrawable) {
+                PhotoPaintView.this.didSetAnimatedSticker(rLottieDrawable);
+            }
+        };
+        r1.setDelegate(this);
+        this.entitiesView.addView(r1);
         if (z) {
-            registerRemovalUndo(stickerView);
-            selectEntity(stickerView);
+            registerRemovalUndo(r1);
+            selectEntity(r1);
         }
-        return stickerView;
+        return r1;
     }
 
     /* access modifiers changed from: private */
@@ -1342,7 +1351,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     }
 
     private LinearLayout buttonForBrush(int i, int i2, String str, boolean z) {
-        AnonymousClass7 r0 = new LinearLayout(this, getContext()) {
+        AnonymousClass8 r0 = new LinearLayout(this, getContext()) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 return true;
             }
@@ -1414,7 +1423,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     }
 
     private LinearLayout buttonForText(int i, String str, int i2, boolean z) {
-        AnonymousClass8 r0 = new LinearLayout(this, getContext()) {
+        AnonymousClass9 r0 = new LinearLayout(this, getContext()) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 return true;
             }

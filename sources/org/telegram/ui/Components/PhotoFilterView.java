@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.SurfaceTexture;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.MotionEvent;
@@ -15,9 +14,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -29,9 +26,6 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.PhotoEditRadioCell;
 import org.telegram.ui.Cells.PhotoEditToolCell;
 import org.telegram.ui.Components.FilterShaders;
-import org.telegram.ui.Components.PhotoFilterBlurControl;
-import org.telegram.ui.Components.PhotoFilterCurvesControl;
-import org.telegram.ui.Components.PhotoFilterView;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.VideoEditTextureView;
 
@@ -83,6 +77,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
     public int highlightsTool;
     /* access modifiers changed from: private */
     public float highlightsValue;
+    /* access modifiers changed from: private */
+    public boolean isMirrored;
     private MediaController.SavedFilterState lastState;
     /* access modifiers changed from: private */
     public int orientation;
@@ -105,6 +101,10 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
     /* access modifiers changed from: private */
     public float sharpenValue;
     private boolean showOriginal;
+    /* access modifiers changed from: private */
+    public int softenSkinTool;
+    /* access modifiers changed from: private */
+    public float softenSkinValue;
     private TextureView textureView;
     /* access modifiers changed from: private */
     public int tintHighlightsColor;
@@ -248,325 +248,692 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    public PhotoFilterView(Context context, VideoEditTextureView videoEditTextureView, Bitmap bitmap, int i, MediaController.SavedFilterState savedFilterState, PaintingOverlay paintingOverlay2) {
-        super(context);
-        Context context2 = context;
-        VideoEditTextureView videoEditTextureView2 = videoEditTextureView;
-        MediaController.SavedFilterState savedFilterState2 = savedFilterState;
-        this.paintingOverlay = paintingOverlay2;
-        this.rowsCount = 0;
-        int i2 = 0 + 1;
-        this.rowsCount = i2;
-        this.enhanceTool = 0;
-        int i3 = i2 + 1;
-        this.rowsCount = i3;
-        this.exposureTool = i2;
-        int i4 = i3 + 1;
-        this.rowsCount = i4;
-        this.contrastTool = i3;
-        int i5 = i4 + 1;
-        this.rowsCount = i5;
-        this.saturationTool = i4;
-        int i6 = i5 + 1;
-        this.rowsCount = i6;
-        this.warmthTool = i5;
-        int i7 = i6 + 1;
-        this.rowsCount = i7;
-        this.fadeTool = i6;
-        int i8 = i7 + 1;
-        this.rowsCount = i8;
-        this.highlightsTool = i7;
-        int i9 = i8 + 1;
-        this.rowsCount = i9;
-        this.shadowsTool = i8;
-        int i10 = i9 + 1;
-        this.rowsCount = i10;
-        this.vignetteTool = i9;
-        if (videoEditTextureView2 == null) {
-            int i11 = i10 + 1;
-            this.rowsCount = i11;
-            this.grainTool = i10;
-            this.rowsCount = i11 + 1;
-            this.sharpenTool = i11;
-        } else {
-            this.grainTool = -1;
-            this.sharpenTool = -1;
-        }
-        int i12 = this.rowsCount;
-        int i13 = i12 + 1;
-        this.rowsCount = i13;
-        this.tintShadowsTool = i12;
-        this.rowsCount = i13 + 1;
-        this.tintHighlightsTool = i13;
-        if (savedFilterState2 != null) {
-            this.enhanceValue = savedFilterState2.enhanceValue;
-            this.exposureValue = savedFilterState2.exposureValue;
-            this.contrastValue = savedFilterState2.contrastValue;
-            this.warmthValue = savedFilterState2.warmthValue;
-            this.saturationValue = savedFilterState2.saturationValue;
-            this.fadeValue = savedFilterState2.fadeValue;
-            this.tintShadowsColor = savedFilterState2.tintShadowsColor;
-            this.tintHighlightsColor = savedFilterState2.tintHighlightsColor;
-            this.highlightsValue = savedFilterState2.highlightsValue;
-            this.shadowsValue = savedFilterState2.shadowsValue;
-            this.vignetteValue = savedFilterState2.vignetteValue;
-            this.grainValue = savedFilterState2.grainValue;
-            this.blurType = savedFilterState2.blurType;
-            this.sharpenValue = savedFilterState2.sharpenValue;
-            this.curvesToolValue = savedFilterState2.curvesToolValue;
-            this.blurExcludeSize = savedFilterState2.blurExcludeSize;
-            this.blurExcludePoint = savedFilterState2.blurExcludePoint;
-            this.blurExcludeBlurSize = savedFilterState2.blurExcludeBlurSize;
-            this.blurAngle = savedFilterState2.blurAngle;
-            this.lastState = savedFilterState2;
-        } else {
-            this.curvesToolValue = new CurvesToolValue();
-            this.blurExcludeSize = 0.35f;
-            this.blurExcludePoint = new Point(0.5f, 0.5f);
-            this.blurExcludeBlurSize = 0.15f;
-            this.blurAngle = 1.5707964f;
-        }
-        this.bitmapToEdit = bitmap;
-        this.orientation = i;
-        if (videoEditTextureView2 != null) {
-            this.textureView = videoEditTextureView2;
-            videoEditTextureView2.setDelegate(new VideoEditTextureView.VideoEditTextureViewDelegate() {
-                public final void onEGLThreadAvailable(FilterGLThread filterGLThread) {
-                    PhotoFilterView.this.lambda$new$0$PhotoFilterView(filterGLThread);
-                }
-            });
-        } else {
-            this.ownsTextureView = true;
-            TextureView textureView2 = new TextureView(context2);
-            this.textureView = textureView2;
-            addView(textureView2, LayoutHelper.createFrame(-1, -1, 51));
-            this.textureView.setVisibility(4);
-            this.textureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
-                public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
-                }
-
-                public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i2) {
-                    if (PhotoFilterView.this.eglThread == null && surfaceTexture != null) {
-                        FilterGLThread unused = PhotoFilterView.this.eglThread = new FilterGLThread(surfaceTexture, PhotoFilterView.this.bitmapToEdit, PhotoFilterView.this.orientation);
-                        PhotoFilterView.this.eglThread.setFilterGLThreadDelegate(PhotoFilterView.this);
-                        PhotoFilterView.this.eglThread.setSurfaceTextureSize(i, i2);
-                        PhotoFilterView.this.eglThread.requestRender(true, true, false);
-                    }
-                }
-
-                public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int i, int i2) {
-                    if (PhotoFilterView.this.eglThread != null) {
-                        PhotoFilterView.this.eglThread.setSurfaceTextureSize(i, i2);
-                        PhotoFilterView.this.eglThread.requestRender(false, true, false);
-                        PhotoFilterView.this.eglThread.postRunnable(new Runnable() {
-                            public final void run() {
-                                PhotoFilterView.AnonymousClass1.this.lambda$onSurfaceTextureSizeChanged$0$PhotoFilterView$1();
-                            }
-                        });
-                    }
-                }
-
-                public /* synthetic */ void lambda$onSurfaceTextureSizeChanged$0$PhotoFilterView$1() {
-                    if (PhotoFilterView.this.eglThread != null) {
-                        PhotoFilterView.this.eglThread.requestRender(false, true, false);
-                    }
-                }
-
-                public boolean onSurfaceTextureDestroyed(SurfaceTexture surfaceTexture) {
-                    if (PhotoFilterView.this.eglThread == null) {
-                        return true;
-                    }
-                    PhotoFilterView.this.eglThread.shutdown();
-                    FilterGLThread unused = PhotoFilterView.this.eglThread = null;
-                    return true;
-                }
-            });
-        }
-        PhotoFilterBlurControl photoFilterBlurControl = new PhotoFilterBlurControl(context2);
-        this.blurControl = photoFilterBlurControl;
-        photoFilterBlurControl.setVisibility(4);
-        addView(this.blurControl, LayoutHelper.createFrame(-1, -1, 51));
-        this.blurControl.setDelegate(new PhotoFilterBlurControl.PhotoFilterLinearBlurControlDelegate() {
-            public final void valueChanged(Point point, float f, float f2, float f3) {
-                PhotoFilterView.this.lambda$new$1$PhotoFilterView(point, f, f2, f3);
-            }
-        });
-        PhotoFilterCurvesControl photoFilterCurvesControl = new PhotoFilterCurvesControl(context2, this.curvesToolValue);
-        this.curvesControl = photoFilterCurvesControl;
-        photoFilterCurvesControl.setDelegate(new PhotoFilterCurvesControl.PhotoFilterCurvesControlDelegate() {
-            public final void valueChanged() {
-                PhotoFilterView.this.lambda$new$2$PhotoFilterView();
-            }
-        });
-        this.curvesControl.setVisibility(4);
-        addView(this.curvesControl, LayoutHelper.createFrame(-1, -1, 51));
-        FrameLayout frameLayout = new FrameLayout(context2);
-        this.toolsView = frameLayout;
-        addView(frameLayout, LayoutHelper.createFrame(-1, 186, 83));
-        FrameLayout frameLayout2 = new FrameLayout(context2);
-        frameLayout2.setBackgroundColor(-16777216);
-        this.toolsView.addView(frameLayout2, LayoutHelper.createFrame(-1, 48, 83));
-        TextView textView = new TextView(context2);
-        this.cancelTextView = textView;
-        textView.setTextSize(1, 14.0f);
-        this.cancelTextView.setTextColor(-1);
-        this.cancelTextView.setGravity(17);
-        this.cancelTextView.setBackgroundDrawable(Theme.createSelectorDrawable(-12763843, 0));
-        this.cancelTextView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
-        this.cancelTextView.setText(LocaleController.getString("Cancel", NUM).toUpperCase());
-        this.cancelTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        frameLayout2.addView(this.cancelTextView, LayoutHelper.createFrame(-2, -1, 51));
-        TextView textView2 = new TextView(context2);
-        this.doneTextView = textView2;
-        textView2.setTextSize(1, 14.0f);
-        this.doneTextView.setTextColor(Theme.getColor("dialogFloatingButton"));
-        this.doneTextView.setGravity(17);
-        this.doneTextView.setBackgroundDrawable(Theme.createSelectorDrawable(-12763843, 0));
-        this.doneTextView.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
-        this.doneTextView.setText(LocaleController.getString("Done", NUM).toUpperCase());
-        this.doneTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        frameLayout2.addView(this.doneTextView, LayoutHelper.createFrame(-2, -1, 53));
-        LinearLayout linearLayout = new LinearLayout(context2);
-        frameLayout2.addView(linearLayout, LayoutHelper.createFrame(-2, -1, 1));
-        ImageView imageView = new ImageView(context2);
-        this.tuneItem = imageView;
-        imageView.setScaleType(ImageView.ScaleType.CENTER);
-        this.tuneItem.setImageResource(NUM);
-        this.tuneItem.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingButton"), PorterDuff.Mode.MULTIPLY));
-        this.tuneItem.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
-        linearLayout.addView(this.tuneItem, LayoutHelper.createLinear(56, 48));
-        this.tuneItem.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PhotoFilterView.this.lambda$new$3$PhotoFilterView(view);
-            }
-        });
-        ImageView imageView2 = new ImageView(context2);
-        this.blurItem = imageView2;
-        imageView2.setScaleType(ImageView.ScaleType.CENTER);
-        this.blurItem.setImageResource(NUM);
-        this.blurItem.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
-        linearLayout.addView(this.blurItem, LayoutHelper.createLinear(56, 48));
-        this.blurItem.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PhotoFilterView.this.lambda$new$4$PhotoFilterView(view);
-            }
-        });
-        if (videoEditTextureView2 != null) {
-            this.blurItem.setVisibility(8);
-        }
-        ImageView imageView3 = new ImageView(context2);
-        this.curveItem = imageView3;
-        imageView3.setScaleType(ImageView.ScaleType.CENTER);
-        this.curveItem.setImageResource(NUM);
-        this.curveItem.setBackgroundDrawable(Theme.createSelectorDrawable(NUM));
-        linearLayout.addView(this.curveItem, LayoutHelper.createLinear(56, 48));
-        this.curveItem.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PhotoFilterView.this.lambda$new$5$PhotoFilterView(view);
-            }
-        });
-        this.recyclerListView = new RecyclerListView(context2);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context2);
-        linearLayoutManager.setOrientation(1);
-        this.recyclerListView.setLayoutManager(linearLayoutManager);
-        this.recyclerListView.setClipToPadding(false);
-        this.recyclerListView.setOverScrollMode(2);
-        this.recyclerListView.setAdapter(new ToolsAdapter(context2));
-        this.toolsView.addView(this.recyclerListView, LayoutHelper.createFrame(-1, 120, 51));
-        FrameLayout frameLayout3 = new FrameLayout(context2);
-        this.curveLayout = frameLayout3;
-        frameLayout3.setVisibility(4);
-        this.toolsView.addView(this.curveLayout, LayoutHelper.createFrame(-1, 78.0f, 1, 0.0f, 40.0f, 0.0f, 0.0f));
-        LinearLayout linearLayout2 = new LinearLayout(context2);
-        linearLayout2.setOrientation(0);
-        this.curveLayout.addView(linearLayout2, LayoutHelper.createFrame(-2, -2, 1));
-        int i14 = 0;
-        while (i14 < 4) {
-            FrameLayout frameLayout4 = new FrameLayout(context2);
-            frameLayout4.setTag(Integer.valueOf(i14));
-            this.curveRadioButton[i14] = new RadioButton(context2);
-            this.curveRadioButton[i14].setSize(AndroidUtilities.dp(20.0f));
-            frameLayout4.addView(this.curveRadioButton[i14], LayoutHelper.createFrame(30, 30, 49));
-            TextView textView3 = new TextView(context2);
-            textView3.setTextSize(1, 12.0f);
-            textView3.setGravity(16);
-            if (i14 == 0) {
-                String string = LocaleController.getString("CurvesAll", NUM);
-                textView3.setText(string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase());
-                textView3.setTextColor(-1);
-                this.curveRadioButton[i14].setColor(-1, -1);
-            } else if (i14 == 1) {
-                String string2 = LocaleController.getString("CurvesRed", NUM);
-                textView3.setText(string2.substring(0, 1).toUpperCase() + string2.substring(1).toLowerCase());
-                textView3.setTextColor(-1684147);
-                this.curveRadioButton[i14].setColor(-1684147, -1684147);
-            } else if (i14 == 2) {
-                String string3 = LocaleController.getString("CurvesGreen", NUM);
-                textView3.setText(string3.substring(0, 1).toUpperCase() + string3.substring(1).toLowerCase());
-                textView3.setTextColor(-10831009);
-                this.curveRadioButton[i14].setColor(-10831009, -10831009);
-            } else if (i14 == 3) {
-                String string4 = LocaleController.getString("CurvesBlue", NUM);
-                textView3.setText(string4.substring(0, 1).toUpperCase() + string4.substring(1).toLowerCase());
-                textView3.setTextColor(-12734994);
-                this.curveRadioButton[i14].setColor(-12734994, -12734994);
-            }
-            frameLayout4.addView(textView3, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 38.0f, 0.0f, 0.0f));
-            linearLayout2.addView(frameLayout4, LayoutHelper.createLinear(-2, -2, i14 == 0 ? 0.0f : 30.0f, 0.0f, 0.0f, 0.0f));
-            frameLayout4.setOnClickListener(new View.OnClickListener() {
-                public final void onClick(View view) {
-                    PhotoFilterView.this.lambda$new$6$PhotoFilterView(view);
-                }
-            });
-            i14++;
-        }
-        FrameLayout frameLayout5 = new FrameLayout(context2);
-        this.blurLayout = frameLayout5;
-        frameLayout5.setVisibility(4);
-        this.toolsView.addView(this.blurLayout, LayoutHelper.createFrame(280, 60.0f, 1, 0.0f, 40.0f, 0.0f, 0.0f));
-        TextView textView4 = new TextView(context2);
-        this.blurOffButton = textView4;
-        textView4.setCompoundDrawablePadding(AndroidUtilities.dp(2.0f));
-        this.blurOffButton.setTextSize(1, 13.0f);
-        this.blurOffButton.setGravity(1);
-        this.blurOffButton.setText(LocaleController.getString("BlurOff", NUM));
-        this.blurLayout.addView(this.blurOffButton, LayoutHelper.createFrame(80, 60.0f));
-        this.blurOffButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PhotoFilterView.this.lambda$new$7$PhotoFilterView(view);
-            }
-        });
-        TextView textView5 = new TextView(context2);
-        this.blurRadialButton = textView5;
-        textView5.setCompoundDrawablePadding(AndroidUtilities.dp(2.0f));
-        this.blurRadialButton.setTextSize(1, 13.0f);
-        this.blurRadialButton.setGravity(1);
-        this.blurRadialButton.setText(LocaleController.getString("BlurRadial", NUM));
-        this.blurLayout.addView(this.blurRadialButton, LayoutHelper.createFrame(80, 80.0f, 51, 100.0f, 0.0f, 0.0f, 0.0f));
-        this.blurRadialButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PhotoFilterView.this.lambda$new$8$PhotoFilterView(view);
-            }
-        });
-        TextView textView6 = new TextView(context2);
-        this.blurLinearButton = textView6;
-        textView6.setCompoundDrawablePadding(AndroidUtilities.dp(2.0f));
-        this.blurLinearButton.setTextSize(1, 13.0f);
-        this.blurLinearButton.setGravity(1);
-        this.blurLinearButton.setText(LocaleController.getString("BlurLinear", NUM));
-        this.blurLayout.addView(this.blurLinearButton, LayoutHelper.createFrame(80, 80.0f, 51, 200.0f, 0.0f, 0.0f, 0.0f));
-        this.blurLinearButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                PhotoFilterView.this.lambda$new$9$PhotoFilterView(view);
-            }
-        });
-        updateSelectedBlurType();
-        if (Build.VERSION.SDK_INT >= 21) {
-            if (this.ownsTextureView) {
-                ((FrameLayout.LayoutParams) this.textureView.getLayoutParams()).topMargin = AndroidUtilities.statusBarHeight;
-            }
-            ((FrameLayout.LayoutParams) this.curvesControl.getLayoutParams()).topMargin = AndroidUtilities.statusBarHeight;
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x04cd  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x04cf  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public PhotoFilterView(android.content.Context r24, org.telegram.ui.Components.VideoEditTextureView r25, android.graphics.Bitmap r26, int r27, org.telegram.messenger.MediaController.SavedFilterState r28, org.telegram.ui.Components.PaintingOverlay r29, int r30, boolean r31) {
+        /*
+            r23 = this;
+            r0 = r23
+            r1 = r24
+            r2 = r25
+            r3 = r28
+            r4 = r30
+            r23.<init>(r24)
+            r5 = 4
+            org.telegram.ui.Components.RadioButton[] r6 = new org.telegram.ui.Components.RadioButton[r5]
+            r0.curveRadioButton = r6
+            r6 = r29
+            r0.paintingOverlay = r6
+            r6 = r31
+            r0.isMirrored = r6
+            r6 = 0
+            r0.rowsCount = r6
+            r7 = -1
+            r8 = 1
+            if (r4 != r8) goto L_0x0028
+            r9 = 0
+            int r9 = r9 + r8
+            r0.rowsCount = r9
+            r0.softenSkinTool = r6
+            goto L_0x002c
+        L_0x0028:
+            if (r4 != 0) goto L_0x002c
+            r0.softenSkinTool = r7
+        L_0x002c:
+            int r9 = r0.rowsCount
+            int r10 = r9 + 1
+            r0.rowsCount = r10
+            r0.enhanceTool = r9
+            int r9 = r10 + 1
+            r0.rowsCount = r9
+            r0.exposureTool = r10
+            int r10 = r9 + 1
+            r0.rowsCount = r10
+            r0.contrastTool = r9
+            int r9 = r10 + 1
+            r0.rowsCount = r9
+            r0.saturationTool = r10
+            int r10 = r9 + 1
+            r0.rowsCount = r10
+            r0.warmthTool = r9
+            int r9 = r10 + 1
+            r0.rowsCount = r9
+            r0.fadeTool = r10
+            int r10 = r9 + 1
+            r0.rowsCount = r10
+            r0.highlightsTool = r9
+            int r9 = r10 + 1
+            r0.rowsCount = r9
+            r0.shadowsTool = r10
+            int r10 = r9 + 1
+            r0.rowsCount = r10
+            r0.vignetteTool = r9
+            r9 = 2
+            if (r4 != r9) goto L_0x006d
+            int r4 = r10 + 1
+            r0.rowsCount = r4
+            r0.softenSkinTool = r10
+        L_0x006d:
+            if (r2 != 0) goto L_0x0078
+            int r4 = r0.rowsCount
+            int r10 = r4 + 1
+            r0.rowsCount = r10
+            r0.grainTool = r4
+            goto L_0x007a
+        L_0x0078:
+            r0.grainTool = r7
+        L_0x007a:
+            int r4 = r0.rowsCount
+            int r10 = r4 + 1
+            r0.rowsCount = r10
+            r0.sharpenTool = r4
+            int r4 = r10 + 1
+            r0.rowsCount = r4
+            r0.tintShadowsTool = r10
+            int r10 = r4 + 1
+            r0.rowsCount = r10
+            r0.tintHighlightsTool = r4
+            if (r3 == 0) goto L_0x00e3
+            float r4 = r3.enhanceValue
+            r0.enhanceValue = r4
+            float r4 = r3.softenSkinValue
+            r0.softenSkinValue = r4
+            float r4 = r3.exposureValue
+            r0.exposureValue = r4
+            float r4 = r3.contrastValue
+            r0.contrastValue = r4
+            float r4 = r3.warmthValue
+            r0.warmthValue = r4
+            float r4 = r3.saturationValue
+            r0.saturationValue = r4
+            float r4 = r3.fadeValue
+            r0.fadeValue = r4
+            int r4 = r3.tintShadowsColor
+            r0.tintShadowsColor = r4
+            int r4 = r3.tintHighlightsColor
+            r0.tintHighlightsColor = r4
+            float r4 = r3.highlightsValue
+            r0.highlightsValue = r4
+            float r4 = r3.shadowsValue
+            r0.shadowsValue = r4
+            float r4 = r3.vignetteValue
+            r0.vignetteValue = r4
+            float r4 = r3.grainValue
+            r0.grainValue = r4
+            int r4 = r3.blurType
+            r0.blurType = r4
+            float r4 = r3.sharpenValue
+            r0.sharpenValue = r4
+            org.telegram.ui.Components.PhotoFilterView$CurvesToolValue r4 = r3.curvesToolValue
+            r0.curvesToolValue = r4
+            float r4 = r3.blurExcludeSize
+            r0.blurExcludeSize = r4
+            org.telegram.ui.Components.Point r4 = r3.blurExcludePoint
+            r0.blurExcludePoint = r4
+            float r4 = r3.blurExcludeBlurSize
+            r0.blurExcludeBlurSize = r4
+            float r4 = r3.blurAngle
+            r0.blurAngle = r4
+            r0.lastState = r3
+            goto L_0x0102
+        L_0x00e3:
+            org.telegram.ui.Components.PhotoFilterView$CurvesToolValue r3 = new org.telegram.ui.Components.PhotoFilterView$CurvesToolValue
+            r3.<init>()
+            r0.curvesToolValue = r3
+            r3 = 1051931443(0x3eb33333, float:0.35)
+            r0.blurExcludeSize = r3
+            org.telegram.ui.Components.Point r3 = new org.telegram.ui.Components.Point
+            r4 = 1056964608(0x3var_, float:0.5)
+            r3.<init>(r4, r4)
+            r0.blurExcludePoint = r3
+            r3 = 1041865114(0x3e19999a, float:0.15)
+            r0.blurExcludeBlurSize = r3
+            r3 = 1070141403(0x3fCLASSNAMEfdb, float:1.5707964)
+            r0.blurAngle = r3
+        L_0x0102:
+            r3 = r26
+            r0.bitmapToEdit = r3
+            r3 = r27
+            r0.orientation = r3
+            r3 = 51
+            if (r2 == 0) goto L_0x0119
+            r0.textureView = r2
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$DM8YJ6s12uOi6ZSpSnTSAp73ot4 r4 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$DM8YJ6s12uOi6ZSpSnTSAp73ot4
+            r4.<init>()
+            r2.setDelegate(r4)
+            goto L_0x0138
+        L_0x0119:
+            r0.ownsTextureView = r8
+            android.view.TextureView r4 = new android.view.TextureView
+            r4.<init>(r1)
+            r0.textureView = r4
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r7, r3)
+            r0.addView(r4, r10)
+            android.view.TextureView r4 = r0.textureView
+            r4.setVisibility(r5)
+            android.view.TextureView r4 = r0.textureView
+            org.telegram.ui.Components.PhotoFilterView$1 r10 = new org.telegram.ui.Components.PhotoFilterView$1
+            r10.<init>()
+            r4.setSurfaceTextureListener(r10)
+        L_0x0138:
+            org.telegram.ui.Components.PhotoFilterBlurControl r4 = new org.telegram.ui.Components.PhotoFilterBlurControl
+            r4.<init>(r1)
+            r0.blurControl = r4
+            r4.setVisibility(r5)
+            org.telegram.ui.Components.PhotoFilterBlurControl r4 = r0.blurControl
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r7, r3)
+            r0.addView(r4, r10)
+            org.telegram.ui.Components.PhotoFilterBlurControl r4 = r0.blurControl
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$8VU5PrpjZ-nDQ5Z_bY7_yKXxwtA r10 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$8VU5PrpjZ-nDQ5Z_bY7_yKXxwtA
+            r10.<init>()
+            r4.setDelegate(r10)
+            org.telegram.ui.Components.PhotoFilterCurvesControl r4 = new org.telegram.ui.Components.PhotoFilterCurvesControl
+            org.telegram.ui.Components.PhotoFilterView$CurvesToolValue r10 = r0.curvesToolValue
+            r4.<init>(r1, r10)
+            r0.curvesControl = r4
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$EooN5LYvszly22nJWhvm4KHNfEg r10 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$EooN5LYvszly22nJWhvm4KHNfEg
+            r10.<init>()
+            r4.setDelegate(r10)
+            org.telegram.ui.Components.PhotoFilterCurvesControl r4 = r0.curvesControl
+            r4.setVisibility(r5)
+            org.telegram.ui.Components.PhotoFilterCurvesControl r4 = r0.curvesControl
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r7, r3)
+            r0.addView(r4, r10)
+            android.widget.FrameLayout r4 = new android.widget.FrameLayout
+            r4.<init>(r1)
+            r0.toolsView = r4
+            r10 = 186(0xba, float:2.6E-43)
+            r11 = 83
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r10, r11)
+            r0.addView(r4, r10)
+            android.widget.FrameLayout r4 = new android.widget.FrameLayout
+            r4.<init>(r1)
+            r10 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
+            r4.setBackgroundColor(r10)
+            android.widget.FrameLayout r10 = r0.toolsView
+            r12 = 48
+            android.widget.FrameLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r12, r11)
+            r10.addView(r4, r11)
+            android.widget.TextView r10 = new android.widget.TextView
+            r10.<init>(r1)
+            r0.cancelTextView = r10
+            r11 = 1096810496(0x41600000, float:14.0)
+            r10.setTextSize(r8, r11)
+            android.widget.TextView r10 = r0.cancelTextView
+            r10.setTextColor(r7)
+            android.widget.TextView r10 = r0.cancelTextView
+            r13 = 17
+            r10.setGravity(r13)
+            android.widget.TextView r10 = r0.cancelTextView
+            r14 = -12763843(0xffffffffff3d3d3d, float:-2.5154206E38)
+            android.graphics.drawable.Drawable r15 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r14, r6)
+            r10.setBackgroundDrawable(r15)
+            android.widget.TextView r10 = r0.cancelTextView
+            r15 = 1101004800(0x41a00000, float:20.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            r10.setPadding(r5, r6, r9, r6)
+            android.widget.TextView r5 = r0.cancelTextView
+            r9 = 2131624518(0x7f0e0246, float:1.8876218E38)
+            java.lang.String r10 = "Cancel"
+            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
+            java.lang.String r9 = r9.toUpperCase()
+            r5.setText(r9)
+            android.widget.TextView r5 = r0.cancelTextView
+            java.lang.String r9 = "fonts/rmedium.ttf"
+            android.graphics.Typeface r10 = org.telegram.messenger.AndroidUtilities.getTypeface(r9)
+            r5.setTypeface(r10)
+            android.widget.TextView r5 = r0.cancelTextView
+            r10 = -2
+            android.widget.FrameLayout$LayoutParams r12 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r7, r3)
+            r4.addView(r5, r12)
+            android.widget.TextView r5 = new android.widget.TextView
+            r5.<init>(r1)
+            r0.doneTextView = r5
+            r5.setTextSize(r8, r11)
+            android.widget.TextView r5 = r0.doneTextView
+            java.lang.String r11 = "dialogFloatingButton"
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            r5.setTextColor(r11)
+            android.widget.TextView r5 = r0.doneTextView
+            r5.setGravity(r13)
+            android.widget.TextView r5 = r0.doneTextView
+            android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r14, r6)
+            r5.setBackgroundDrawable(r11)
+            android.widget.TextView r5 = r0.doneTextView
+            int r11 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            r5.setPadding(r11, r6, r12, r6)
+            android.widget.TextView r5 = r0.doneTextView
+            r11 = 2131625031(0x7f0e0447, float:1.8877258E38)
+            java.lang.String r12 = "Done"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
+            java.lang.String r11 = r11.toUpperCase()
+            r5.setText(r11)
+            android.widget.TextView r5 = r0.doneTextView
+            android.graphics.Typeface r9 = org.telegram.messenger.AndroidUtilities.getTypeface(r9)
+            r5.setTypeface(r9)
+            android.widget.TextView r5 = r0.doneTextView
+            r9 = 53
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r7, r9)
+            r4.addView(r5, r9)
+            android.widget.LinearLayout r5 = new android.widget.LinearLayout
+            r5.<init>(r1)
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r7, r8)
+            r4.addView(r5, r9)
+            android.widget.ImageView r4 = new android.widget.ImageView
+            r4.<init>(r1)
+            r0.tuneItem = r4
+            android.widget.ImageView$ScaleType r9 = android.widget.ImageView.ScaleType.CENTER
+            r4.setScaleType(r9)
+            android.widget.ImageView r4 = r0.tuneItem
+            r9 = 2131165807(0x7var_f, float:1.7945842E38)
+            r4.setImageResource(r9)
+            android.widget.ImageView r4 = r0.tuneItem
+            android.graphics.PorterDuffColorFilter r9 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r11 = "dialogFloatingButton"
+            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
+            android.graphics.PorterDuff$Mode r12 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r9.<init>(r11, r12)
+            r4.setColorFilter(r9)
+            android.widget.ImageView r4 = r0.tuneItem
+            r9 = 1090519039(0x40ffffff, float:7.9999995)
+            android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r9)
+            r4.setBackgroundDrawable(r11)
+            android.widget.ImageView r4 = r0.tuneItem
+            r11 = 56
+            r12 = 48
+            android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r12)
+            r5.addView(r4, r13)
+            android.widget.ImageView r4 = r0.tuneItem
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$DKhAjcvz5psQCw7kBhsHKlWIYQM r12 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$DKhAjcvz5psQCw7kBhsHKlWIYQM
+            r12.<init>()
+            r4.setOnClickListener(r12)
+            android.widget.ImageView r4 = new android.widget.ImageView
+            r4.<init>(r1)
+            r0.blurItem = r4
+            android.widget.ImageView$ScaleType r12 = android.widget.ImageView.ScaleType.CENTER
+            r4.setScaleType(r12)
+            android.widget.ImageView r4 = r0.blurItem
+            r12 = 2131165959(0x7var_, float:1.794615E38)
+            r4.setImageResource(r12)
+            android.widget.ImageView r4 = r0.blurItem
+            android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r9)
+            r4.setBackgroundDrawable(r12)
+            android.widget.ImageView r4 = r0.blurItem
+            r12 = 48
+            android.widget.LinearLayout$LayoutParams r13 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r12)
+            r5.addView(r4, r13)
+            android.widget.ImageView r4 = r0.blurItem
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$F_KOwGrCZ7lau2u49edpZx3V5ug r12 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$F_KOwGrCZ7lau2u49edpZx3V5ug
+            r12.<init>()
+            r4.setOnClickListener(r12)
+            if (r2 == 0) goto L_0x02db
+            android.widget.ImageView r2 = r0.blurItem
+            r4 = 8
+            r2.setVisibility(r4)
+        L_0x02db:
+            android.widget.ImageView r2 = new android.widget.ImageView
+            r2.<init>(r1)
+            r0.curveItem = r2
+            android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
+            r2.setScaleType(r4)
+            android.widget.ImageView r2 = r0.curveItem
+            r4 = 2131165961(0x7var_, float:1.7946154E38)
+            r2.setImageResource(r4)
+            android.widget.ImageView r2 = r0.curveItem
+            android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r9)
+            r2.setBackgroundDrawable(r4)
+            android.widget.ImageView r2 = r0.curveItem
+            r4 = 48
+            android.widget.LinearLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createLinear(r11, r4)
+            r5.addView(r2, r4)
+            android.widget.ImageView r2 = r0.curveItem
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$L20A01o2AsZwohbyfeeuMPbGEQI r4 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$L20A01o2AsZwohbyfeeuMPbGEQI
+            r4.<init>()
+            r2.setOnClickListener(r4)
+            org.telegram.ui.Components.RecyclerListView r2 = new org.telegram.ui.Components.RecyclerListView
+            r2.<init>(r1)
+            r0.recyclerListView = r2
+            androidx.recyclerview.widget.LinearLayoutManager r2 = new androidx.recyclerview.widget.LinearLayoutManager
+            r2.<init>(r1)
+            r2.setOrientation(r8)
+            org.telegram.ui.Components.RecyclerListView r4 = r0.recyclerListView
+            r4.setLayoutManager(r2)
+            org.telegram.ui.Components.RecyclerListView r2 = r0.recyclerListView
+            r2.setClipToPadding(r6)
+            org.telegram.ui.Components.RecyclerListView r2 = r0.recyclerListView
+            r4 = 2
+            r2.setOverScrollMode(r4)
+            org.telegram.ui.Components.RecyclerListView r2 = r0.recyclerListView
+            org.telegram.ui.Components.PhotoFilterView$ToolsAdapter r4 = new org.telegram.ui.Components.PhotoFilterView$ToolsAdapter
+            r4.<init>(r1)
+            r2.setAdapter(r4)
+            android.widget.FrameLayout r2 = r0.toolsView
+            org.telegram.ui.Components.RecyclerListView r4 = r0.recyclerListView
+            r5 = 120(0x78, float:1.68E-43)
+            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r5, r3)
+            r2.addView(r4, r3)
+            android.widget.FrameLayout r2 = new android.widget.FrameLayout
+            r2.<init>(r1)
+            r0.curveLayout = r2
+            r3 = 4
+            r2.setVisibility(r3)
+            android.widget.FrameLayout r2 = r0.toolsView
+            android.widget.FrameLayout r3 = r0.curveLayout
+            r16 = -1
+            r17 = 1117519872(0x429CLASSNAME, float:78.0)
+            r18 = 1
+            r19 = 0
+            r20 = 1109393408(0x42200000, float:40.0)
+            r21 = 0
+            r22 = 0
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
+            r2.addView(r3, r4)
+            android.widget.LinearLayout r2 = new android.widget.LinearLayout
+            r2.<init>(r1)
+            r2.setOrientation(r6)
+            android.widget.FrameLayout r3 = r0.curveLayout
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r10, r8)
+            r3.addView(r2, r4)
+            r3 = 0
+        L_0x0379:
+            r4 = 4
+            if (r3 >= r4) goto L_0x04f3
+            android.widget.FrameLayout r4 = new android.widget.FrameLayout
+            r4.<init>(r1)
+            java.lang.Integer r5 = java.lang.Integer.valueOf(r3)
+            r4.setTag(r5)
+            org.telegram.ui.Components.RadioButton[] r5 = r0.curveRadioButton
+            org.telegram.ui.Components.RadioButton r9 = new org.telegram.ui.Components.RadioButton
+            r9.<init>(r1)
+            r5[r3] = r9
+            org.telegram.ui.Components.RadioButton[] r5 = r0.curveRadioButton
+            r5 = r5[r3]
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r15)
+            r5.setSize(r9)
+            org.telegram.ui.Components.RadioButton[] r5 = r0.curveRadioButton
+            r5 = r5[r3]
+            r9 = 30
+            r10 = 30
+            r11 = 49
+            android.widget.FrameLayout$LayoutParams r9 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r10, r11)
+            r4.addView(r5, r9)
+            android.widget.TextView r5 = new android.widget.TextView
+            r5.<init>(r1)
+            r9 = 1094713344(0x41400000, float:12.0)
+            r5.setTextSize(r8, r9)
+            r9 = 16
+            r5.setGravity(r9)
+            if (r3 != 0) goto L_0x03f6
+            r9 = 2131624872(0x7f0e03a8, float:1.8876936E38)
+            java.lang.String r10 = "CurvesAll"
+            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder
+            r10.<init>()
+            java.lang.String r11 = r9.substring(r6, r8)
+            java.lang.String r11 = r11.toUpperCase()
+            r10.append(r11)
+            java.lang.String r9 = r9.substring(r8)
+            java.lang.String r9 = r9.toLowerCase()
+            r10.append(r9)
+            java.lang.String r9 = r10.toString()
+            r5.setText(r9)
+            r5.setTextColor(r7)
+            org.telegram.ui.Components.RadioButton[] r9 = r0.curveRadioButton
+            r9 = r9[r3]
+            r9.setColor(r7, r7)
+        L_0x03f3:
+            r9 = 2
+            goto L_0x04a8
+        L_0x03f6:
+            if (r3 != r8) goto L_0x0431
+            r9 = 2131624875(0x7f0e03ab, float:1.8876942E38)
+            java.lang.String r10 = "CurvesRed"
+            java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
+            java.lang.StringBuilder r10 = new java.lang.StringBuilder
+            r10.<init>()
+            java.lang.String r11 = r9.substring(r6, r8)
+            java.lang.String r11 = r11.toUpperCase()
+            r10.append(r11)
+            java.lang.String r9 = r9.substring(r8)
+            java.lang.String r9 = r9.toLowerCase()
+            r10.append(r9)
+            java.lang.String r9 = r10.toString()
+            r5.setText(r9)
+            r9 = -1684147(0xffffffffffe64d4d, float:NaN)
+            r5.setTextColor(r9)
+            org.telegram.ui.Components.RadioButton[] r10 = r0.curveRadioButton
+            r10 = r10[r3]
+            r10.setColor(r9, r9)
+            goto L_0x03f3
+        L_0x0431:
+            r9 = 2
+            if (r3 != r9) goto L_0x046d
+            r10 = 2131624874(0x7f0e03aa, float:1.887694E38)
+            java.lang.String r11 = "CurvesGreen"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder
+            r11.<init>()
+            java.lang.String r12 = r10.substring(r6, r8)
+            java.lang.String r12 = r12.toUpperCase()
+            r11.append(r12)
+            java.lang.String r10 = r10.substring(r8)
+            java.lang.String r10 = r10.toLowerCase()
+            r11.append(r10)
+            java.lang.String r10 = r11.toString()
+            r5.setText(r10)
+            r10 = -10831009(0xffffffffff5abb5f, float:-2.9074459E38)
+            r5.setTextColor(r10)
+            org.telegram.ui.Components.RadioButton[] r11 = r0.curveRadioButton
+            r11 = r11[r3]
+            r11.setColor(r10, r10)
+            goto L_0x04a8
+        L_0x046d:
+            r10 = 3
+            if (r3 != r10) goto L_0x04a8
+            r10 = 2131624873(0x7f0e03a9, float:1.8876938E38)
+            java.lang.String r11 = "CurvesBlue"
+            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
+            java.lang.StringBuilder r11 = new java.lang.StringBuilder
+            r11.<init>()
+            java.lang.String r12 = r10.substring(r6, r8)
+            java.lang.String r12 = r12.toUpperCase()
+            r11.append(r12)
+            java.lang.String r10 = r10.substring(r8)
+            java.lang.String r10 = r10.toLowerCase()
+            r11.append(r10)
+            java.lang.String r10 = r11.toString()
+            r5.setText(r10)
+            r10 = -12734994(0xffffffffff3dadee, float:-2.5212719E38)
+            r5.setTextColor(r10)
+            org.telegram.ui.Components.RadioButton[] r11 = r0.curveRadioButton
+            r11 = r11[r3]
+            r11.setColor(r10, r10)
+        L_0x04a8:
+            r10 = -2
+            r11 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r12 = 49
+            r13 = 0
+            r14 = 1108869120(0x42180000, float:38.0)
+            r16 = 0
+            r17 = 0
+            r25 = r10
+            r26 = r11
+            r27 = r12
+            r28 = r13
+            r29 = r14
+            r30 = r16
+            r31 = r17
+            android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r25, r26, r27, r28, r29, r30, r31)
+            r4.addView(r5, r10)
+            r5 = -2
+            r10 = -2
+            if (r3 != 0) goto L_0x04cf
+            r11 = 0
+            goto L_0x04d1
+        L_0x04cf:
+            r11 = 1106247680(0x41var_, float:30.0)
+        L_0x04d1:
+            r12 = 0
+            r13 = 0
+            r14 = 0
+            r25 = r5
+            r26 = r10
+            r27 = r11
+            r28 = r12
+            r29 = r13
+            r30 = r14
+            android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear(r25, r26, r27, r28, r29, r30)
+            r2.addView(r4, r5)
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$EHBGA4T-Wcgx03trAGzstG0gXqg r5 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$EHBGA4T-Wcgx03trAGzstG0gXqg
+            r5.<init>()
+            r4.setOnClickListener(r5)
+            int r3 = r3 + 1
+            goto L_0x0379
+        L_0x04f3:
+            android.widget.FrameLayout r2 = new android.widget.FrameLayout
+            r2.<init>(r1)
+            r0.blurLayout = r2
+            r3 = 4
+            r2.setVisibility(r3)
+            android.widget.FrameLayout r2 = r0.toolsView
+            android.widget.FrameLayout r3 = r0.blurLayout
+            r4 = 280(0x118, float:3.92E-43)
+            r5 = 1114636288(0x42700000, float:60.0)
+            r6 = 1
+            r7 = 0
+            r9 = 1109393408(0x42200000, float:40.0)
+            r10 = 0
+            r11 = 0
+            r25 = r4
+            r26 = r5
+            r27 = r6
+            r28 = r7
+            r29 = r9
+            r30 = r10
+            r31 = r11
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r25, r26, r27, r28, r29, r30, r31)
+            r2.addView(r3, r4)
+            android.widget.TextView r2 = new android.widget.TextView
+            r2.<init>(r1)
+            r0.blurOffButton = r2
+            r3 = 1073741824(0x40000000, float:2.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r2.setCompoundDrawablePadding(r4)
+            android.widget.TextView r2 = r0.blurOffButton
+            r4 = 1095761920(0x41500000, float:13.0)
+            r2.setTextSize(r8, r4)
+            android.widget.TextView r2 = r0.blurOffButton
+            r2.setGravity(r8)
+            android.widget.TextView r2 = r0.blurOffButton
+            r5 = 2131624469(0x7f0e0215, float:1.8876119E38)
+            java.lang.String r6 = "BlurOff"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
+            r2.setText(r5)
+            android.widget.FrameLayout r2 = r0.blurLayout
+            android.widget.TextView r5 = r0.blurOffButton
+            r6 = 80
+            r7 = 1114636288(0x42700000, float:60.0)
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r6, r7)
+            r2.addView(r5, r6)
+            android.widget.TextView r2 = r0.blurOffButton
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$SHP9jNXWESNEp5KZC_qRcZYRL1Y r5 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$SHP9jNXWESNEp5KZC_qRcZYRL1Y
+            r5.<init>()
+            r2.setOnClickListener(r5)
+            android.widget.TextView r2 = new android.widget.TextView
+            r2.<init>(r1)
+            r0.blurRadialButton = r2
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r2.setCompoundDrawablePadding(r5)
+            android.widget.TextView r2 = r0.blurRadialButton
+            r2.setTextSize(r8, r4)
+            android.widget.TextView r2 = r0.blurRadialButton
+            r2.setGravity(r8)
+            android.widget.TextView r2 = r0.blurRadialButton
+            r5 = 2131624470(0x7f0e0216, float:1.887612E38)
+            java.lang.String r6 = "BlurRadial"
+            java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
+            r2.setText(r5)
+            android.widget.FrameLayout r2 = r0.blurLayout
+            android.widget.TextView r5 = r0.blurRadialButton
+            r6 = 80
+            r7 = 1117782016(0x42a00000, float:80.0)
+            r9 = 51
+            r10 = 1120403456(0x42CLASSNAME, float:100.0)
+            r12 = 0
+            r13 = 0
+            r25 = r6
+            r26 = r7
+            r27 = r9
+            r28 = r10
+            r29 = r11
+            r30 = r12
+            r31 = r13
+            android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r25, r26, r27, r28, r29, r30, r31)
+            r2.addView(r5, r6)
+            android.widget.TextView r2 = r0.blurRadialButton
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$TdTpIDy0jwl-mIhu0bpchkPiKg8 r5 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$TdTpIDy0jwl-mIhu0bpchkPiKg8
+            r5.<init>()
+            r2.setOnClickListener(r5)
+            android.widget.TextView r2 = new android.widget.TextView
+            r2.<init>(r1)
+            r0.blurLinearButton = r2
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r2.setCompoundDrawablePadding(r1)
+            android.widget.TextView r1 = r0.blurLinearButton
+            r1.setTextSize(r8, r4)
+            android.widget.TextView r1 = r0.blurLinearButton
+            r1.setGravity(r8)
+            android.widget.TextView r1 = r0.blurLinearButton
+            r2 = 2131624468(0x7f0e0214, float:1.8876117E38)
+            java.lang.String r3 = "BlurLinear"
+            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
+            r1.setText(r2)
+            android.widget.FrameLayout r1 = r0.blurLayout
+            android.widget.TextView r2 = r0.blurLinearButton
+            r3 = 80
+            r4 = 1117782016(0x42a00000, float:80.0)
+            r5 = 51
+            r6 = 1128792064(0x43480000, float:200.0)
+            r7 = 0
+            r8 = 0
+            r9 = 0
+            r24 = r3
+            r25 = r4
+            r26 = r5
+            r27 = r6
+            r28 = r7
+            r29 = r8
+            r30 = r9
+            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r24, r25, r26, r27, r28, r29, r30)
+            r1.addView(r2, r3)
+            android.widget.TextView r1 = r0.blurLinearButton
+            org.telegram.ui.Components.-$$Lambda$PhotoFilterView$fT_3EC9v10r4fqUbIw1Hl8jz3ZM r2 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$fT_3EC9v10r4fqUbIw1Hl8jz3ZM
+            r2.<init>()
+            r1.setOnClickListener(r2)
+            r23.updateSelectedBlurType()
+            int r1 = android.os.Build.VERSION.SDK_INT
+            r2 = 21
+            if (r1 < r2) goto L_0x0630
+            boolean r1 = r0.ownsTextureView
+            if (r1 == 0) goto L_0x0624
+            android.view.TextureView r1 = r0.textureView
+            android.view.ViewGroup$LayoutParams r1 = r1.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r1 = (android.widget.FrameLayout.LayoutParams) r1
+            int r2 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+            r1.topMargin = r2
+        L_0x0624:
+            org.telegram.ui.Components.PhotoFilterCurvesControl r1 = r0.curvesControl
+            android.view.ViewGroup$LayoutParams r1 = r1.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r1 = (android.widget.FrameLayout.LayoutParams) r1
+            int r2 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+            r1.topMargin = r2
+        L_0x0630:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoFilterView.<init>(android.content.Context, org.telegram.ui.Components.VideoEditTextureView, android.graphics.Bitmap, int, org.telegram.messenger.MediaController$SavedFilterState, org.telegram.ui.Components.PaintingOverlay, int, boolean):void");
     }
 
     public /* synthetic */ void lambda$new$0$PhotoFilterView(FilterGLThread filterGLThread) {
@@ -719,6 +1086,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
         savedFilterState.warmthValue = this.warmthValue;
         savedFilterState.saturationValue = this.saturationValue;
         savedFilterState.fadeValue = this.fadeValue;
+        savedFilterState.softenSkinValue = this.softenSkinValue;
         savedFilterState.tintShadowsColor = this.tintShadowsColor;
         savedFilterState.tintHighlightsColor = this.tintHighlightsColor;
         savedFilterState.highlightsValue = this.highlightsValue;
@@ -739,11 +1107,11 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
     public boolean hasChanges() {
         MediaController.SavedFilterState savedFilterState = this.lastState;
         if (savedFilterState != null) {
-            if (this.enhanceValue == savedFilterState.enhanceValue && this.contrastValue == savedFilterState.contrastValue && this.highlightsValue == savedFilterState.highlightsValue && this.exposureValue == savedFilterState.exposureValue && this.warmthValue == savedFilterState.warmthValue && this.saturationValue == savedFilterState.saturationValue && this.vignetteValue == savedFilterState.vignetteValue && this.shadowsValue == savedFilterState.shadowsValue && this.grainValue == savedFilterState.grainValue && this.sharpenValue == savedFilterState.sharpenValue && this.fadeValue == savedFilterState.fadeValue && this.tintHighlightsColor == savedFilterState.tintHighlightsColor && this.tintShadowsColor == savedFilterState.tintShadowsColor && this.curvesToolValue.shouldBeSkipped()) {
+            if (this.enhanceValue == savedFilterState.enhanceValue && this.contrastValue == savedFilterState.contrastValue && this.highlightsValue == savedFilterState.highlightsValue && this.exposureValue == savedFilterState.exposureValue && this.warmthValue == savedFilterState.warmthValue && this.saturationValue == savedFilterState.saturationValue && this.vignetteValue == savedFilterState.vignetteValue && this.shadowsValue == savedFilterState.shadowsValue && this.grainValue == savedFilterState.grainValue && this.sharpenValue == savedFilterState.sharpenValue && this.fadeValue == savedFilterState.fadeValue && this.softenSkinValue == savedFilterState.softenSkinValue && this.tintHighlightsColor == savedFilterState.tintHighlightsColor && this.tintShadowsColor == savedFilterState.tintShadowsColor && this.curvesToolValue.shouldBeSkipped()) {
                 return false;
             }
             return true;
-        } else if (this.enhanceValue == 0.0f && this.contrastValue == 0.0f && this.highlightsValue == 0.0f && this.exposureValue == 0.0f && this.warmthValue == 0.0f && this.saturationValue == 0.0f && this.vignetteValue == 0.0f && this.shadowsValue == 0.0f && this.grainValue == 0.0f && this.sharpenValue == 0.0f && this.fadeValue == 0.0f && this.tintHighlightsColor == 0 && this.tintShadowsColor == 0 && this.curvesToolValue.shouldBeSkipped()) {
+        } else if (this.enhanceValue == 0.0f && this.contrastValue == 0.0f && this.highlightsValue == 0.0f && this.exposureValue == 0.0f && this.warmthValue == 0.0f && this.saturationValue == 0.0f && this.vignetteValue == 0.0f && this.shadowsValue == 0.0f && this.grainValue == 0.0f && this.sharpenValue == 0.0f && this.fadeValue == 0.0f && this.softenSkinValue == 0.0f && this.tintHighlightsColor == 0 && this.tintShadowsColor == 0 && this.curvesToolValue.shouldBeSkipped()) {
             return false;
         } else {
             return true;
@@ -966,6 +1334,10 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
         return this.fadeValue / 100.0f;
     }
 
+    public float getSoftenSkinValue() {
+        return this.softenSkinValue / 100.0f;
+    }
+
     public float getTintHighlightsIntensityValue() {
         return this.tintHighlightsColor == 0 ? 0.0f : 0.5f;
     }
@@ -1117,6 +1489,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
                 float unused10 = PhotoFilterView.this.sharpenValue = (float) i2;
             } else if (i == PhotoFilterView.this.fadeTool) {
                 float unused11 = PhotoFilterView.this.fadeValue = (float) i2;
+            } else if (i == PhotoFilterView.this.softenSkinTool) {
+                float unused12 = PhotoFilterView.this.softenSkinValue = (float) i2;
             }
             if (PhotoFilterView.this.eglThread != null) {
                 PhotoFilterView.this.eglThread.requestRender(true);
@@ -1162,6 +1536,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
                     photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Sharpen", NUM), PhotoFilterView.this.sharpenValue, 0, 100);
                 } else if (i == PhotoFilterView.this.fadeTool) {
                     photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("Fade", NUM), PhotoFilterView.this.fadeValue, 0, 100);
+                } else if (i == PhotoFilterView.this.softenSkinTool) {
+                    photoEditToolCell.setIconAndTextAndValue(LocaleController.getString("SoftenSkin", NUM), PhotoFilterView.this.softenSkinValue, 0, 100);
                 }
             } else if (itemViewType == 1) {
                 PhotoEditRadioCell photoEditRadioCell = (PhotoEditRadioCell) viewHolder.itemView;

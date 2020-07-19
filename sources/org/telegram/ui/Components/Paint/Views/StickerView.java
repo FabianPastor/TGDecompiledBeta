@@ -31,6 +31,10 @@ public class StickerView extends EntityView {
     private Object parentObject;
     private TLRPC$Document sticker;
 
+    /* access modifiers changed from: protected */
+    public void didSetAnimatedSticker(RLottieDrawable rLottieDrawable) {
+    }
+
     private class FrameLayoutDrawer extends FrameLayout {
         public FrameLayoutDrawer(Context context) {
             super(context);
@@ -75,7 +79,23 @@ public class StickerView extends EntityView {
         this.centerImage.setInvalidateAll(true);
         this.centerImage.setParentView(this.containerView);
         this.centerImage.setImage(ImageLocation.getForDocument(tLRPC$Document), (String) null, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document), (String) null, "webp", obj, 1);
+        this.centerImage.setDelegate(new ImageReceiver.ImageReceiverDelegate() {
+            public final void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
+                StickerView.this.lambda$new$0$StickerView(imageReceiver, z, z2, z3);
+            }
+
+            public /* synthetic */ void onAnimationReady(ImageReceiver imageReceiver) {
+                ImageReceiver.ImageReceiverDelegate.CC.$default$onAnimationReady(this, imageReceiver);
+            }
+        });
         updatePosition();
+    }
+
+    public /* synthetic */ void lambda$new$0$StickerView(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
+        RLottieDrawable lottieAnimation;
+        if (z && !z2 && (lottieAnimation = imageReceiver.getLottieAnimation()) != null) {
+            didSetAnimatedSticker(lottieAnimation);
+        }
     }
 
     public StickerView(Context context, StickerView stickerView, Point point) {

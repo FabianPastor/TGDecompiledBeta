@@ -23,6 +23,7 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$Photo;
 import org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated;
+import org.telegram.tgnet.TLRPC$TL_photoStrippedSize;
 import org.telegram.tgnet.TLRPC$VideoSize;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.Components.CircularViewPager;
@@ -149,6 +150,28 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                     Drawable drawable = backupImageView.getImageReceiver().getDrawable();
                     if (drawable instanceof AnimatedFileDrawable) {
                         ((AnimatedFileDrawable) drawable).removeSecondParentView(backupImageView);
+                    }
+                }
+            }
+        }
+    }
+
+    public void setAnimatedFileMaybe(AnimatedFileDrawable animatedFileDrawable) {
+        AnimatedFileDrawable animation;
+        if (animatedFileDrawable != null) {
+            int childCount = getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View childAt = getChildAt(i);
+                if (childAt instanceof BackupImageView) {
+                    ViewPagerAdapter viewPagerAdapter = this.adapter;
+                    BackupImageView backupImageView = (BackupImageView) childAt;
+                    if (viewPagerAdapter.getRealPosition(viewPagerAdapter.imageViews.indexOf(backupImageView)) == 0 && (animation = backupImageView.getImageReceiver().getAnimation()) != animatedFileDrawable) {
+                        if (animation != null) {
+                            animation.removeSecondParentView(backupImageView);
+                        }
+                        backupImageView.setImageDrawable(animatedFileDrawable);
+                        animatedFileDrawable.addSecondParentView(this);
+                        animatedFileDrawable.setInvalidateParentViewWithSecond(true);
                     }
                 }
             }
@@ -305,6 +328,18 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         return ((Item) this.adapter.objects.get(getCurrentItem())).imageView;
     }
 
+    public boolean isLoadingCurrentVideo() {
+        BackupImageView currentItemView;
+        if (this.videoLocations.get(getRealPosition()) == null || (currentItemView = getCurrentItemView()) == null) {
+            return false;
+        }
+        AnimatedFileDrawable animation = currentItemView.getImageReceiver().getAnimation();
+        if (animation == null || !animation.hasBitmap()) {
+            return true;
+        }
+        return false;
+    }
+
     public float getCurrentItemProgress() {
         AnimatedFileDrawable animation;
         BackupImageView currentItemView = getCurrentItemView();
@@ -318,21 +353,38 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         return this.videoLocations.get(getRealPosition()) != null;
     }
 
-    public ImageLocation getCurrentVideoLocation(ImageLocation imageLocation) {
+    public ImageLocation getCurrentVideoLocation(ImageLocation imageLocation, ImageLocation imageLocation2) {
+        TLRPC$TL_fileLocationToBeDeprecated tLRPC$TL_fileLocationToBeDeprecated;
         if (imageLocation == null) {
             return null;
         }
-        int size = this.thumbsLocations.size();
-        for (int i = 0; i < size; i++) {
-            ImageLocation imageLocation2 = this.thumbsLocations.get(i);
-            if (imageLocation2.dc_id == imageLocation.dc_id) {
-                TLRPC$TL_fileLocationToBeDeprecated tLRPC$TL_fileLocationToBeDeprecated = imageLocation2.location;
-                int i2 = tLRPC$TL_fileLocationToBeDeprecated.local_id;
-                TLRPC$TL_fileLocationToBeDeprecated tLRPC$TL_fileLocationToBeDeprecated2 = imageLocation.location;
-                if (i2 == tLRPC$TL_fileLocationToBeDeprecated2.local_id && tLRPC$TL_fileLocationToBeDeprecated.volume_id == tLRPC$TL_fileLocationToBeDeprecated2.volume_id) {
-                    return this.videoLocations.get(i);
+        int i = 0;
+        while (i < 2) {
+            ArrayList<ImageLocation> arrayList = i == 0 ? this.thumbsLocations : this.imagesLocations;
+            int size = arrayList.size();
+            for (int i2 = 0; i2 < size; i2++) {
+                ImageLocation imageLocation3 = arrayList.get(i2);
+                if (!(imageLocation3 == null || (tLRPC$TL_fileLocationToBeDeprecated = imageLocation3.location) == null)) {
+                    if (imageLocation3.dc_id == imageLocation.dc_id) {
+                        int i3 = tLRPC$TL_fileLocationToBeDeprecated.local_id;
+                        TLRPC$TL_fileLocationToBeDeprecated tLRPC$TL_fileLocationToBeDeprecated2 = imageLocation.location;
+                        if (i3 == tLRPC$TL_fileLocationToBeDeprecated2.local_id && tLRPC$TL_fileLocationToBeDeprecated.volume_id == tLRPC$TL_fileLocationToBeDeprecated2.volume_id) {
+                            return this.videoLocations.get(i2);
+                        }
+                    }
+                    if (imageLocation3.dc_id == imageLocation2.dc_id) {
+                        TLRPC$TL_fileLocationToBeDeprecated tLRPC$TL_fileLocationToBeDeprecated3 = imageLocation3.location;
+                        int i4 = tLRPC$TL_fileLocationToBeDeprecated3.local_id;
+                        TLRPC$TL_fileLocationToBeDeprecated tLRPC$TL_fileLocationToBeDeprecated4 = imageLocation2.location;
+                        if (i4 == tLRPC$TL_fileLocationToBeDeprecated4.local_id && tLRPC$TL_fileLocationToBeDeprecated3.volume_id == tLRPC$TL_fileLocationToBeDeprecated4.volume_id) {
+                            return this.videoLocations.get(i2);
+                        }
+                    } else {
+                        continue;
+                    }
                 }
             }
+            i++;
         }
         return null;
     }
@@ -360,7 +412,14 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         return this.photos.get(i);
     }
 
-    public void beginPhotoToBegin(int i) {
+    public void replaceFirstPhoto(TLRPC$Photo tLRPC$Photo, TLRPC$Photo tLRPC$Photo2) {
+        int indexOf;
+        if (!this.photos.isEmpty() && (indexOf = this.photos.indexOf(tLRPC$Photo)) >= 0) {
+            this.photos.set(indexOf, tLRPC$Photo2);
+        }
+    }
+
+    public void startMovePhotoToBegin(int i) {
         if (i > 0 && i < this.photos.size()) {
             this.photos.remove(i);
             this.photos.add(0, this.photos.get(i));
@@ -433,38 +492,38 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:46:0x0162, code lost:
-        if (r3 != false) goto L_0x01d0;
+    /* JADX WARNING: Code restructure failed: missing block: B:51:0x0174, code lost:
+        if (r3 != false) goto L_0x01f2;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void didReceivedNotification(int r18, int r19, java.lang.Object... r20) {
+    public void didReceivedNotification(int r17, int r18, java.lang.Object... r19) {
         /*
-            r17 = this;
-            r0 = r17
-            r1 = r18
+            r16 = this;
+            r0 = r16
+            r1 = r17
             int r2 = org.telegram.messenger.NotificationCenter.dialogPhotosLoaded
             r3 = 2
             r4 = 1
             r5 = 0
-            if (r1 != r2) goto L_0x0205
+            if (r1 != r2) goto L_0x0227
             r1 = 3
-            r1 = r20[r1]
+            r1 = r19[r1]
             java.lang.Integer r1 = (java.lang.Integer) r1
             int r1 = r1.intValue()
-            r2 = r20[r5]
+            r2 = r19[r5]
             java.lang.Integer r2 = (java.lang.Integer) r2
             int r7 = r2.intValue()
             long r8 = (long) r7
             long r10 = r0.dialogId
             int r2 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r2 != 0) goto L_0x02ad
+            if (r2 != 0) goto L_0x02cf
             int r2 = r0.parentClassGuid
-            if (r2 != r1) goto L_0x02ad
-            r1 = r20[r3]
+            if (r2 != r1) goto L_0x02cf
+            r1 = r19[r3]
             java.lang.Boolean r1 = (java.lang.Boolean) r1
             boolean r1 = r1.booleanValue()
             r2 = 4
-            r2 = r20[r2]
+            r2 = r19[r2]
             java.util.ArrayList r2 = (java.util.ArrayList) r2
             java.util.ArrayList<java.lang.String> r3 = r0.thumbsFileNames
             r3.clear()
@@ -550,130 +609,153 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             r6 = 0
         L_0x00ef:
             int r9 = r2.size()
-            if (r6 >= r9) goto L_0x01d9
+            if (r6 >= r9) goto L_0x01fb
             java.lang.Object r9 = r2.get(r6)
             org.telegram.tgnet.TLRPC$Photo r9 = (org.telegram.tgnet.TLRPC$Photo) r9
-            if (r9 == 0) goto L_0x01d2
+            if (r9 == 0) goto L_0x01f4
             boolean r10 = r9 instanceof org.telegram.tgnet.TLRPC$TL_photoEmpty
-            if (r10 != 0) goto L_0x01d2
+            if (r10 != 0) goto L_0x01f4
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r10 = r9.sizes
             if (r10 != 0) goto L_0x0107
-            goto L_0x01d2
+            goto L_0x01f4
         L_0x0107:
-            r11 = 640(0x280, float:8.97E-43)
+            r11 = 50
             org.telegram.tgnet.TLRPC$PhotoSize r10 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r10, r11)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r11 = r9.sizes
-            r12 = 50
-            org.telegram.tgnet.TLRPC$PhotoSize r11 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r11, r12)
-            if (r8 == 0) goto L_0x0165
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r12 = r9.sizes
-            int r12 = r12.size()
-            r13 = 0
-        L_0x011e:
-            if (r13 >= r12) goto L_0x0161
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r14 = r9.sizes
-            java.lang.Object r14 = r14.get(r13)
-            org.telegram.tgnet.TLRPC$PhotoSize r14 = (org.telegram.tgnet.TLRPC$PhotoSize) r14
-            org.telegram.tgnet.TLRPC$FileLocation r14 = r14.location
-            if (r14 == 0) goto L_0x015c
-            int r15 = r14.local_id
-            org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated r4 = r8.location
-            int r3 = r4.local_id
-            if (r15 != r3) goto L_0x015c
-            long r14 = r14.volume_id
-            long r3 = r4.volume_id
-            int r16 = (r14 > r3 ? 1 : (r14 == r3 ? 0 : -1))
-            if (r16 != 0) goto L_0x015c
+            int r11 = r11.size()
+            r12 = 0
+        L_0x0114:
+            if (r12 >= r11) goto L_0x0127
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r13 = r9.sizes
+            java.lang.Object r13 = r13.get(r12)
+            org.telegram.tgnet.TLRPC$PhotoSize r13 = (org.telegram.tgnet.TLRPC$PhotoSize) r13
+            boolean r14 = r13 instanceof org.telegram.tgnet.TLRPC$TL_photoStrippedSize
+            if (r14 == 0) goto L_0x0124
+            r10 = r13
+            goto L_0x0127
+        L_0x0124:
+            int r12 = r12 + 1
+            goto L_0x0114
+        L_0x0127:
+            if (r8 == 0) goto L_0x0178
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r11 = r9.sizes
+            int r11 = r11.size()
+            r12 = 0
+        L_0x0130:
+            if (r12 >= r11) goto L_0x0173
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r13 = r9.sizes
+            java.lang.Object r13 = r13.get(r12)
+            org.telegram.tgnet.TLRPC$PhotoSize r13 = (org.telegram.tgnet.TLRPC$PhotoSize) r13
+            org.telegram.tgnet.TLRPC$FileLocation r13 = r13.location
+            if (r13 == 0) goto L_0x016e
+            int r14 = r13.local_id
+            org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated r15 = r8.location
+            int r4 = r15.local_id
+            if (r14 != r4) goto L_0x016e
+            long r13 = r13.volume_id
+            long r3 = r15.volume_id
+            int r15 = (r13 > r3 ? 1 : (r13 == r3 ? 0 : -1))
+            if (r15 != 0) goto L_0x016e
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r3 = r0.photos
             r3.set(r5, r9)
             java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r3 = r9.video_sizes
             boolean r3 = r3.isEmpty()
-            if (r3 != 0) goto L_0x015a
+            if (r3 != 0) goto L_0x016c
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.videoLocations
             java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r4 = r9.video_sizes
             java.lang.Object r4 = r4.get(r5)
             org.telegram.tgnet.TLRPC$VideoSize r4 = (org.telegram.tgnet.TLRPC$VideoSize) r4
             org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$VideoSize) r4, (org.telegram.tgnet.TLRPC$Photo) r9)
             r3.set(r5, r4)
-        L_0x015a:
+        L_0x016c:
             r3 = 1
-            goto L_0x0162
-        L_0x015c:
-            int r13 = r13 + 1
+            goto L_0x0174
+        L_0x016e:
+            int r12 = r12 + 1
             r3 = 0
             r4 = 1
-            goto L_0x011e
-        L_0x0161:
-            r3 = 0
-        L_0x0162:
-            if (r3 == 0) goto L_0x0165
-            goto L_0x01d0
-        L_0x0165:
-            if (r10 == 0) goto L_0x01d0
-            int r3 = r9.dc_id
-            if (r3 == 0) goto L_0x0173
-            org.telegram.tgnet.TLRPC$FileLocation r4 = r10.location
-            r4.dc_id = r3
-            byte[] r3 = r9.file_reference
-            r4.file_reference = r3
+            goto L_0x0130
         L_0x0173:
-            org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r10, (org.telegram.tgnet.TLRPC$Photo) r9)
-            if (r3 == 0) goto L_0x01d0
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r4 = r0.imagesLocations
-            r4.add(r3)
-            java.util.ArrayList<java.lang.String> r3 = r0.thumbsFileNames
-            java.lang.String r4 = org.telegram.messenger.FileLoader.getAttachFileName(r11)
-            r3.add(r4)
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.thumbsLocations
-            org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r11, (org.telegram.tgnet.TLRPC$Photo) r9)
-            r3.add(r4)
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r3 = r9.video_sizes
-            boolean r3 = r3.isEmpty()
-            if (r3 != 0) goto L_0x01b4
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r3 = r9.video_sizes
-            java.lang.Object r3 = r3.get(r5)
-            org.telegram.tgnet.TLRPC$VideoSize r3 = (org.telegram.tgnet.TLRPC$VideoSize) r3
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r4 = r0.videoLocations
-            org.telegram.messenger.ImageLocation r11 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$VideoSize) r3, (org.telegram.tgnet.TLRPC$Photo) r9)
+            r3 = 0
+        L_0x0174:
+            if (r3 == 0) goto L_0x0178
+            goto L_0x01f2
+        L_0x0178:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r3 = r9.sizes
+            r4 = 640(0x280, float:8.97E-43)
+            org.telegram.tgnet.TLRPC$PhotoSize r3 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r3, r4)
+            if (r3 == 0) goto L_0x01f2
+            int r4 = r9.dc_id
+            if (r4 == 0) goto L_0x018e
+            org.telegram.tgnet.TLRPC$FileLocation r11 = r3.location
+            r11.dc_id = r4
+            byte[] r4 = r9.file_reference
+            r11.file_reference = r4
+        L_0x018e:
+            org.telegram.messenger.ImageLocation r4 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r3, (org.telegram.tgnet.TLRPC$Photo) r9)
+            if (r4 == 0) goto L_0x01f2
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r11 = r0.imagesLocations
+            r11.add(r4)
+            java.util.ArrayList<java.lang.String> r4 = r0.thumbsFileNames
+            boolean r11 = r10 instanceof org.telegram.tgnet.TLRPC$TL_photoStrippedSize
+            if (r11 == 0) goto L_0x01a1
+            r11 = r3
+            goto L_0x01a2
+        L_0x01a1:
+            r11 = r10
+        L_0x01a2:
+            java.lang.String r11 = org.telegram.messenger.FileLoader.getAttachFileName(r11)
             r4.add(r11)
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r4 = r0.thumbsLocations
+            org.telegram.messenger.ImageLocation r10 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r10, (org.telegram.tgnet.TLRPC$Photo) r9)
+            r4.add(r10)
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r4 = r9.video_sizes
+            boolean r4 = r4.isEmpty()
+            if (r4 != 0) goto L_0x01d6
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$VideoSize> r4 = r9.video_sizes
+            java.lang.Object r4 = r4.get(r5)
+            org.telegram.tgnet.TLRPC$VideoSize r4 = (org.telegram.tgnet.TLRPC$VideoSize) r4
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r10 = r0.videoLocations
+            org.telegram.messenger.ImageLocation r11 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$VideoSize) r4, (org.telegram.tgnet.TLRPC$Photo) r9)
+            r10.add(r11)
+            java.util.ArrayList<java.lang.String> r10 = r0.videoFileNames
+            java.lang.String r4 = org.telegram.messenger.FileLoader.getAttachFileName(r4)
+            r10.add(r4)
+            r10 = 0
+            goto L_0x01e1
+        L_0x01d6:
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r4 = r0.videoLocations
+            r10 = 0
+            r4.add(r10)
             java.util.ArrayList<java.lang.String> r4 = r0.videoFileNames
-            java.lang.String r3 = org.telegram.messenger.FileLoader.getAttachFileName(r3)
+            r4.add(r10)
+        L_0x01e1:
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r4 = r0.photos
+            r4.add(r9)
+            java.util.ArrayList<java.lang.Integer> r4 = r0.imagesLocationsSizes
+            int r3 = r3.size
+            java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
             r4.add(r3)
-            r4 = 0
-            goto L_0x01bf
-        L_0x01b4:
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.videoLocations
-            r4 = 0
-            r3.add(r4)
-            java.util.ArrayList<java.lang.String> r3 = r0.videoFileNames
-            r3.add(r4)
-        L_0x01bf:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Photo> r3 = r0.photos
-            r3.add(r9)
-            java.util.ArrayList<java.lang.Integer> r3 = r0.imagesLocationsSizes
-            int r9 = r10.size
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
-            r3.add(r9)
-            goto L_0x01d3
-        L_0x01d0:
-            r4 = 0
-            goto L_0x01d3
-        L_0x01d2:
-            r4 = r3
-        L_0x01d3:
+            goto L_0x01f5
+        L_0x01f2:
+            r10 = 0
+            goto L_0x01f5
+        L_0x01f4:
+            r10 = r3
+        L_0x01f5:
             int r6 = r6 + 1
-            r3 = r4
+            r3 = r10
             r4 = 1
             goto L_0x00ef
-        L_0x01d9:
-            r17.loadNeighboringThumbs()
-            androidx.viewpager.widget.PagerAdapter r2 = r17.getAdapter()
+        L_0x01fb:
+            r16.loadNeighboringThumbs()
+            androidx.viewpager.widget.PagerAdapter r2 = r16.getAdapter()
             r2.notifyDataSetChanged()
             boolean r2 = r0.scrolledByUser
-            if (r2 != 0) goto L_0x01ea
-            r17.resetCurrentItem()
-        L_0x01ea:
-            if (r1 == 0) goto L_0x01fc
+            if (r2 != 0) goto L_0x020c
+            r16.resetCurrentItem()
+        L_0x020c:
+            if (r1 == 0) goto L_0x021e
             int r1 = r0.currentAccount
             org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r1)
             r8 = 80
@@ -681,69 +763,69 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             r11 = 0
             int r12 = r0.parentClassGuid
             r6.loadDialogPhotos(r7, r8, r9, r11, r12)
-        L_0x01fc:
+        L_0x021e:
             org.telegram.ui.Components.ProfileGalleryView$Callback r1 = r0.callback
-            if (r1 == 0) goto L_0x02ad
+            if (r1 == 0) goto L_0x02cf
             r1.onPhotosLoaded()
-            goto L_0x02ad
-        L_0x0205:
+            goto L_0x02cf
+        L_0x0227:
             int r2 = org.telegram.messenger.NotificationCenter.fileDidLoad
             r4 = 1065353216(0x3var_, float:1.0)
-            if (r1 != r2) goto L_0x0242
-            r1 = r20[r5]
+            if (r1 != r2) goto L_0x0264
+            r1 = r19[r5]
             java.lang.String r1 = (java.lang.String) r1
-        L_0x020f:
+        L_0x0231:
             java.util.ArrayList<java.lang.String> r2 = r0.thumbsFileNames
             int r2 = r2.size()
-            if (r5 >= r2) goto L_0x02ad
+            if (r5 >= r2) goto L_0x02cf
             java.util.ArrayList<java.lang.String> r2 = r0.videoFileNames
             java.lang.Object r2 = r2.get(r5)
             java.lang.String r2 = (java.lang.String) r2
-            if (r2 != 0) goto L_0x0229
+            if (r2 != 0) goto L_0x024b
             java.util.ArrayList<java.lang.String> r2 = r0.thumbsFileNames
             java.lang.Object r2 = r2.get(r5)
             java.lang.String r2 = (java.lang.String) r2
-        L_0x0229:
-            if (r2 == 0) goto L_0x023f
+        L_0x024b:
+            if (r2 == 0) goto L_0x0261
             boolean r2 = android.text.TextUtils.equals(r1, r2)
-            if (r2 == 0) goto L_0x023f
+            if (r2 == 0) goto L_0x0261
             android.util.SparseArray<org.telegram.ui.Components.RadialProgress2> r2 = r0.radialProgresses
             java.lang.Object r2 = r2.get(r5)
             org.telegram.ui.Components.RadialProgress2 r2 = (org.telegram.ui.Components.RadialProgress2) r2
-            if (r2 == 0) goto L_0x023f
+            if (r2 == 0) goto L_0x0261
             r3 = 1
             r2.setProgress(r4, r3)
-        L_0x023f:
+        L_0x0261:
             int r5 = r5 + 1
-            goto L_0x020f
-        L_0x0242:
+            goto L_0x0231
+        L_0x0264:
             int r2 = org.telegram.messenger.NotificationCenter.FileLoadProgressChanged
-            if (r1 != r2) goto L_0x0296
-            r1 = r20[r5]
+            if (r1 != r2) goto L_0x02b8
+            r1 = r19[r5]
             java.lang.String r1 = (java.lang.String) r1
-        L_0x024a:
+        L_0x026c:
             java.util.ArrayList<java.lang.String> r2 = r0.thumbsFileNames
             int r2 = r2.size()
-            if (r5 >= r2) goto L_0x02ad
+            if (r5 >= r2) goto L_0x02cf
             java.util.ArrayList<java.lang.String> r2 = r0.videoFileNames
             java.lang.Object r2 = r2.get(r5)
             java.lang.String r2 = (java.lang.String) r2
-            if (r2 != 0) goto L_0x0264
+            if (r2 != 0) goto L_0x0286
             java.util.ArrayList<java.lang.String> r2 = r0.thumbsFileNames
             java.lang.Object r2 = r2.get(r5)
             java.lang.String r2 = (java.lang.String) r2
-        L_0x0264:
-            if (r2 == 0) goto L_0x0292
+        L_0x0286:
+            if (r2 == 0) goto L_0x02b4
             boolean r2 = android.text.TextUtils.equals(r1, r2)
-            if (r2 == 0) goto L_0x0292
+            if (r2 == 0) goto L_0x02b4
             android.util.SparseArray<org.telegram.ui.Components.RadialProgress2> r2 = r0.radialProgresses
             java.lang.Object r2 = r2.get(r5)
             org.telegram.ui.Components.RadialProgress2 r2 = (org.telegram.ui.Components.RadialProgress2) r2
-            if (r2 == 0) goto L_0x0292
+            if (r2 == 0) goto L_0x02b4
             r6 = 1
-            r7 = r20[r6]
+            r7 = r19[r6]
             java.lang.Long r7 = (java.lang.Long) r7
-            r8 = r20[r3]
+            r8 = r19[r3]
             java.lang.Long r8 = (java.lang.Long) r8
             long r9 = r7.longValue()
             float r7 = (float) r9
@@ -752,15 +834,15 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             float r7 = r7 / r8
             float r7 = java.lang.Math.min(r4, r7)
             r2.setProgress(r7, r6)
-            goto L_0x0293
-        L_0x0292:
+            goto L_0x02b5
+        L_0x02b4:
             r6 = 1
-        L_0x0293:
+        L_0x02b5:
             int r5 = r5 + 1
-            goto L_0x024a
-        L_0x0296:
+            goto L_0x026c
+        L_0x02b8:
             int r2 = org.telegram.messenger.NotificationCenter.reloadDialogPhotos
-            if (r1 != r2) goto L_0x02ad
+            if (r1 != r2) goto L_0x02cf
             int r1 = r0.currentAccount
             org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r1)
             long r3 = r0.dialogId
@@ -770,7 +852,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             r7 = 1
             int r8 = r0.parentClassGuid
             r2.loadDialogPhotos(r3, r4, r5, r7, r8)
-        L_0x02ad:
+        L_0x02cf:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ProfileGalleryView.didReceivedNotification(int, int, java.lang.Object[]):void");
@@ -817,7 +899,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         public Item instantiateItem(ViewGroup viewGroup, final int i) {
             Item item = this.objects.get(i);
             if (item.imageView == null) {
-                BackupImageView unused = item.imageView = new BackupImageView(this.context) {
+                BackupImageView unused = item.imageView = new BackupImageView(this, this.context) {
                     private long firstDrawTime = -1;
                     private boolean isVideo;
                     /* access modifiers changed from: private */
@@ -825,13 +907,16 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                     private ValueAnimator radialProgressHideAnimator;
                     private float radialProgressHideAnimatorStartValue;
                     private final int radialProgressSize = AndroidUtilities.dp(64.0f);
+                    final /* synthetic */ ViewPagerAdapter this$1;
 
                     {
+                        this.this$1 = r17;
                         boolean z = true;
                         getImageReceiver().setAllowDecodeSingleFrame(true);
-                        int realPosition = ViewPagerAdapter.this.getRealPosition(i);
+                        int realPosition = this.this$1.getRealPosition(i);
+                        String str = null;
                         if (realPosition == 0) {
-                            Drawable drawable = ViewPagerAdapter.this.parentAvatarImageView.getImageReceiver().getDrawable();
+                            Drawable drawable = this.this$1.parentAvatarImageView.getImageReceiver().getDrawable();
                             if (drawable instanceof AnimatedFileDrawable) {
                                 AnimatedFileDrawable animatedFileDrawable = (AnimatedFileDrawable) drawable;
                                 if (animatedFileDrawable.hasBitmap()) {
@@ -841,11 +926,14 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                                 }
                             }
                             ImageLocation imageLocation = (ImageLocation) ProfileGalleryView.this.videoLocations.get(realPosition);
-                            setImageMedia((ImageLocation) ProfileGalleryView.this.videoLocations.get(realPosition), (imageLocation == null || imageLocation.imageType != 2) ? null : "g", (ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, ViewPagerAdapter.this.parentAvatarImageView.getImageReceiver().getBitmap(), ((Integer) ProfileGalleryView.this.imagesLocationsSizes.get(realPosition)).intValue(), 1, (Object) null);
+                            if (imageLocation != null && imageLocation.imageType == 2) {
+                                str = "g";
+                            }
+                            setImageMedia((ImageLocation) ProfileGalleryView.this.videoLocations.get(realPosition), str, (ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, this.this$1.parentAvatarImageView.getImageReceiver().getBitmap(), ((Integer) ProfileGalleryView.this.imagesLocationsSizes.get(realPosition)).intValue(), 1, (Object) null);
                         } else {
                             ImageLocation imageLocation2 = (ImageLocation) ProfileGalleryView.this.videoLocations.get(realPosition);
                             this.isVideo = imageLocation2 == null ? false : z;
-                            setImageMedia(imageLocation2, (String) null, (ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, (ImageLocation) ProfileGalleryView.this.thumbsLocations.get(realPosition), (String) null, (String) null, 0, 1, ProfileGalleryView.this.imagesLocationsSizes.get(realPosition));
+                            setImageMedia(imageLocation2, (String) null, (ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, (ImageLocation) ProfileGalleryView.this.thumbsLocations.get(realPosition), ((ImageLocation) ProfileGalleryView.this.thumbsLocations.get(realPosition)).photoSize instanceof TLRPC$TL_photoStrippedSize ? "b" : str, (String) null, 0, 1, ProfileGalleryView.this.imagesLocationsSizes.get(realPosition));
                             RadialProgress2 radialProgress2 = (RadialProgress2) ProfileGalleryView.this.radialProgresses.get(realPosition);
                             this.radialProgress = radialProgress2;
                             if (radialProgress2 == null) {
@@ -872,7 +960,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                     public void onSizeChanged(int i, int i2, int i3, int i4) {
                         super.onSizeChanged(i, i2, i3, i4);
                         if (this.radialProgress != null) {
-                            int currentActionBarHeight = (ViewPagerAdapter.this.parentActionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + ActionBar.getCurrentActionBarHeight();
+                            int currentActionBarHeight = (this.this$1.parentActionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0) + ActionBar.getCurrentActionBarHeight();
                             int dp2 = AndroidUtilities.dp2(80.0f);
                             RadialProgress2 radialProgress2 = this.radialProgress;
                             int i5 = this.radialProgressSize;
@@ -1100,7 +1188,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                                     float r5 = (float) r0
                                     int r0 = r8.getHeight()
                                     float r6 = (float) r0
-                                    org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter r0 = org.telegram.ui.Components.ProfileGalleryView.ViewPagerAdapter.this
+                                    org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter r0 = r8.this$1
                                     android.graphics.Paint r7 = r0.placeholderPaint
                                     r2 = r9
                                     r2.drawRect(r3, r4, r5, r6, r7)

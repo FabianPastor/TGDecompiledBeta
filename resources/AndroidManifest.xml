@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="20199" android:versionName="6.3.0" android:installLocation="auto" android:compileSdkVersion="29" android:compileSdkVersionCodename="10" package="org.telegram.messenger.beta" platformBuildVersionCode="29" platformBuildVersionName="10">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="20299" android:versionName="6.3.0" android:installLocation="auto" android:compileSdkVersion="29" android:compileSdkVersionCodename="10" package="org.telegram.messenger.beta" platformBuildVersionCode="29" platformBuildVersionName="10">
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="28"/>
     <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
     <uses-feature android:name="android.hardware.location.network" android:required="false"/>
@@ -312,7 +312,7 @@
         </receiver>
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
         <activity android:theme="@style/Theme.Translucent.NoTitleBar" android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity" android:exported="false" android:excludeFromRecents="true"/>
-        <service android:name="com.google.android.gms.auth.api.signin.RevocationBoundService" android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION" android:exported="true"/>
+        <service android:name="com.google.android.gms.auth.api.signin.RevocationBoundService" android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION" android:exported="true" android:visibleToInstantApps="true"/>
         <activity android:theme="@style/Theme.Translucent.NoTitleBar" android:name="com.google.android.gms.common.api.GoogleApiActivity" android:exported="false"/>
         <provider android:name="com.google.firebase.provider.FirebaseInitProvider" android:exported="false" android:authorities="org.telegram.messenger.beta.firebaseinitprovider" android:initOrder="100"/>
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>

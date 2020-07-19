@@ -18,9 +18,11 @@ import org.telegram.tgnet.TLRPC$PhotoSize;
 
 public class GroupedPhotosListView extends View implements GestureDetector.OnGestureListener {
     private boolean animateAllLine;
+    private boolean animateBackground;
     private int animateToDX;
     private int animateToDXStart;
     private int animateToItem;
+    private boolean animateToItemFast;
     private boolean animationsEnabled;
     private Paint backgroundPaint;
     private long currentGroupId;
@@ -28,10 +30,12 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
     private float currentItemProgress;
     private ArrayList<Object> currentObjects;
     public ArrayList<ImageLocation> currentPhotos;
-    private GroupedPhotosListViewDelegate delegate;
+    /* access modifiers changed from: private */
+    public GroupedPhotosListViewDelegate delegate;
     private float drawAlpha;
     private int drawDx;
     private GestureDetector gestureDetector;
+    private boolean hasPhotos;
     /* access modifiers changed from: private */
     public ValueAnimator hideAnimator;
     private boolean ignoreChanges;
@@ -42,6 +46,7 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
     private int itemY;
     private long lastUpdateTime;
     private float moveLineProgress;
+    private boolean moving;
     private int nextImage;
     private float nextItemProgress;
     private int nextPhotoScrolling;
@@ -69,6 +74,8 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
 
         int getSlideshowMessageId();
 
+        void onShowAnimationStart();
+
         void setCurrentIndex(int i);
     }
 
@@ -94,7 +101,7 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
         this.animateToItem = -1;
         this.animationsEnabled = true;
         this.nextPhotoScrolling = -1;
-        this.drawAlpha = 0.0f;
+        this.animateBackground = true;
         this.gestureDetector = new GestureDetector(context, this);
         this.scroll = new Scroller(context);
         this.itemWidth = AndroidUtilities.dp(42.0f);
@@ -128,9 +135,12 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v22, resolved type: org.telegram.tgnet.TLRPC$PageBlock} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v23, resolved type: org.telegram.messenger.ImageLocation} */
     /* JADX WARNING: type inference failed for: r11v12 */
+    /* JADX WARNING: Code restructure failed: missing block: B:101:0x0207, code lost:
+        if (r3 == (r7 + 1)) goto L_0x020b;
+     */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:103:0x022b  */
-    /* JADX WARNING: Removed duplicated region for block: B:178:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:111:0x024d  */
+    /* JADX WARNING: Removed duplicated region for block: B:186:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void fillList() {
         /*
@@ -154,101 +164,106 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             int r6 = r6.getSlideshowMessageId()
             org.telegram.ui.Components.GroupedPhotosListView$GroupedPhotosListViewDelegate r7 = r0.delegate
             r7.getCurrentAccount()
+            r0.hasPhotos = r2
             r7 = 0
             r8 = 0
-            if (r3 == 0) goto L_0x0046
+            r10 = 1
+            if (r3 == 0) goto L_0x004d
             boolean r11 = r3.isEmpty()
-            if (r11 != 0) goto L_0x0046
+            if (r11 != 0) goto L_0x004d
             java.lang.Object r11 = r3.get(r1)
             org.telegram.messenger.ImageLocation r11 = (org.telegram.messenger.ImageLocation) r11
             int r12 = r3.size()
+            r0.hasPhotos = r10
             r17 = r3
-            goto L_0x0136
-        L_0x0046:
-            if (r4 == 0) goto L_0x00d2
+            r15 = r12
+            r12 = 0
+            goto L_0x013d
+        L_0x004d:
+            if (r4 == 0) goto L_0x00d9
             boolean r11 = r4.isEmpty()
-            if (r11 != 0) goto L_0x00d2
+            if (r11 != 0) goto L_0x00d9
             java.lang.Object r11 = r4.get(r1)
             org.telegram.messenger.MessageObject r11 = (org.telegram.messenger.MessageObject) r11
             long r12 = r11.getGroupIdForUse()
             long r14 = r0.currentGroupId
             int r16 = (r12 > r14 ? 1 : (r12 == r14 ? 0 : -1))
-            if (r16 == 0) goto L_0x0066
+            if (r16 == 0) goto L_0x006d
             long r12 = r11.getGroupIdForUse()
             r0.currentGroupId = r12
             r12 = 1
-            goto L_0x0067
-        L_0x0066:
+            goto L_0x006e
+        L_0x006d:
             r12 = 0
-        L_0x0067:
+        L_0x006e:
             long r13 = r0.currentGroupId
             int r15 = (r13 > r8 ? 1 : (r13 == r8 ? 0 : -1))
-            if (r15 == 0) goto L_0x00c7
+            if (r15 == 0) goto L_0x00d1
+            r0.hasPhotos = r10
             int r13 = r1 + 10
             int r14 = r4.size()
             int r13 = java.lang.Math.min(r13, r14)
             r14 = r1
             r15 = 0
-        L_0x0079:
-            if (r14 >= r13) goto L_0x0099
+        L_0x0082:
+            if (r14 >= r13) goto L_0x00a3
             java.lang.Object r16 = r4.get(r14)
             org.telegram.messenger.MessageObject r16 = (org.telegram.messenger.MessageObject) r16
-            if (r6 != 0) goto L_0x0090
+            if (r6 != 0) goto L_0x0099
             long r16 = r16.getGroupIdForUse()
             r18 = r11
             long r10 = r0.currentGroupId
             int r19 = (r16 > r10 ? 1 : (r16 == r10 ? 0 : -1))
-            if (r19 != 0) goto L_0x009b
-            goto L_0x0092
-        L_0x0090:
-            r18 = r11
-        L_0x0092:
-            int r15 = r15 + 1
-            int r14 = r14 + 1
-            r11 = r18
-            goto L_0x0079
+            if (r19 != 0) goto L_0x00a5
+            goto L_0x009b
         L_0x0099:
             r18 = r11
         L_0x009b:
+            int r15 = r15 + 1
+            int r14 = r14 + 1
+            r11 = r18
+            r10 = 1
+            goto L_0x0082
+        L_0x00a3:
+            r18 = r11
+        L_0x00a5:
             int r10 = r1 + -10
             int r10 = java.lang.Math.max(r10, r2)
             int r11 = r1 + -1
-        L_0x00a3:
-            if (r11 < r10) goto L_0x00c4
+        L_0x00ad:
+            if (r11 < r10) goto L_0x00ce
             java.lang.Object r13 = r4.get(r11)
             org.telegram.messenger.MessageObject r13 = (org.telegram.messenger.MessageObject) r13
-            if (r6 != 0) goto L_0x00ba
+            if (r6 != 0) goto L_0x00c4
             long r13 = r13.getGroupIdForUse()
             r17 = r3
             long r2 = r0.currentGroupId
             int r19 = (r13 > r2 ? 1 : (r13 == r2 ? 0 : -1))
-            if (r19 != 0) goto L_0x00cc
-            goto L_0x00bc
-        L_0x00ba:
+            if (r19 != 0) goto L_0x00d6
+            goto L_0x00c6
+        L_0x00c4:
             r17 = r3
-        L_0x00bc:
+        L_0x00c6:
             int r15 = r15 + 1
             int r11 = r11 + -1
             r3 = r17
             r2 = 0
-            goto L_0x00a3
-        L_0x00c4:
+            goto L_0x00ad
+        L_0x00ce:
             r17 = r3
-            goto L_0x00cc
-        L_0x00c7:
+            goto L_0x00d6
+        L_0x00d1:
             r17 = r3
             r18 = r11
             r15 = 0
-        L_0x00cc:
-            r2 = r12
-            r12 = r15
+        L_0x00d6:
             r11 = r18
-            goto L_0x0136
-        L_0x00d2:
+            goto L_0x013d
+        L_0x00d9:
             r17 = r3
-            if (r5 == 0) goto L_0x0133
+            if (r5 == 0) goto L_0x013a
             boolean r2 = r5.isEmpty()
-            if (r2 != 0) goto L_0x0133
+            if (r2 != 0) goto L_0x013a
             java.lang.Object r2 = r5.get(r1)
             r11 = r2
             org.telegram.tgnet.TLRPC$PageBlock r11 = (org.telegram.tgnet.TLRPC$PageBlock) r11
@@ -256,88 +271,87 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             long r12 = (long) r2
             long r14 = r0.currentGroupId
             int r3 = (r12 > r14 ? 1 : (r12 == r14 ? 0 : -1))
-            if (r3 == 0) goto L_0x00f1
+            if (r3 == 0) goto L_0x00f8
             long r2 = (long) r2
             r0.currentGroupId = r2
             r12 = 1
-            goto L_0x00f2
-        L_0x00f1:
+            goto L_0x00f9
+        L_0x00f8:
             r12 = 0
-        L_0x00f2:
+        L_0x00f9:
             long r2 = r0.currentGroupId
             int r10 = (r2 > r8 ? 1 : (r2 == r8 ? 0 : -1))
-            if (r10 == 0) goto L_0x0131
+            if (r10 == 0) goto L_0x013c
+            r2 = 1
+            r0.hasPhotos = r2
             int r2 = r5.size()
             r10 = r1
             r3 = 0
-        L_0x00fe:
-            if (r10 >= r2) goto L_0x0116
+        L_0x0108:
+            if (r10 >= r2) goto L_0x0120
             java.lang.Object r13 = r5.get(r10)
             org.telegram.tgnet.TLRPC$PageBlock r13 = (org.telegram.tgnet.TLRPC$PageBlock) r13
             int r13 = r13.groupId
             long r13 = (long) r13
             long r8 = r0.currentGroupId
             int r15 = (r13 > r8 ? 1 : (r13 == r8 ? 0 : -1))
-            if (r15 != 0) goto L_0x0116
+            if (r15 != 0) goto L_0x0120
             int r3 = r3 + 1
             int r10 = r10 + 1
             r8 = 0
-            goto L_0x00fe
-        L_0x0116:
+            goto L_0x0108
+        L_0x0120:
             int r2 = r1 + -1
-        L_0x0118:
-            if (r2 < 0) goto L_0x012e
+        L_0x0122:
+            if (r2 < 0) goto L_0x0138
             java.lang.Object r8 = r5.get(r2)
             org.telegram.tgnet.TLRPC$PageBlock r8 = (org.telegram.tgnet.TLRPC$PageBlock) r8
             int r8 = r8.groupId
             long r8 = (long) r8
             long r13 = r0.currentGroupId
             int r10 = (r8 > r13 ? 1 : (r8 == r13 ? 0 : -1))
-            if (r10 != 0) goto L_0x012e
+            if (r10 != 0) goto L_0x0138
             int r3 = r3 + 1
             int r2 = r2 + -1
-            goto L_0x0118
-        L_0x012e:
-            r2 = r12
-            r12 = r3
-            goto L_0x0136
-        L_0x0131:
-            r2 = r12
-            goto L_0x0135
-        L_0x0133:
+            goto L_0x0122
+        L_0x0138:
+            r15 = r3
+            goto L_0x013d
+        L_0x013a:
             r11 = r7
-            r2 = 0
-        L_0x0135:
             r12 = 0
-        L_0x0136:
-            if (r11 != 0) goto L_0x0139
+        L_0x013c:
+            r15 = 0
+        L_0x013d:
+            if (r11 != 0) goto L_0x0140
             return
-        L_0x0139:
-            boolean r3 = r0.animationsEnabled
-            if (r3 == 0) goto L_0x01d4
+        L_0x0140:
+            boolean r2 = r0.animationsEnabled
+            if (r2 == 0) goto L_0x01d9
+            boolean r2 = r0.hasPhotos
             r3 = 1128792064(0x43480000, float:200.0)
             r8 = 2
+            if (r2 != 0) goto L_0x0199
+            android.animation.ValueAnimator r2 = r0.showAnimator
+            if (r2 == 0) goto L_0x0154
+            r2.cancel()
+            r0.showAnimator = r7
+        L_0x0154:
+            float r2 = r0.drawAlpha
+            r7 = 0
+            int r2 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
+            if (r2 <= 0) goto L_0x01d9
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r2 = r0.currentPhotos
+            int r2 = r2.size()
             r9 = 1
-            if (r12 > r9) goto L_0x018f
-            android.animation.ValueAnimator r7 = r0.showAnimator
-            if (r7 == 0) goto L_0x014a
-            r7.cancel()
-        L_0x014a:
-            float r7 = r0.drawAlpha
-            r9 = 0
-            int r7 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r7 <= 0) goto L_0x01d4
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r7 = r0.currentPhotos
-            int r7 = r7.size()
-            r10 = 1
-            if (r7 <= r10) goto L_0x01d4
+            if (r2 <= r9) goto L_0x01d9
             android.animation.ValueAnimator r1 = r0.hideAnimator
-            if (r1 != 0) goto L_0x018e
+            if (r1 != 0) goto L_0x0198
             float[] r1 = new float[r8]
             float r2 = r0.drawAlpha
             r4 = 0
             r1[r4] = r2
-            r1[r10] = r9
+            r1[r9] = r7
             android.animation.ValueAnimator r1 = android.animation.ValueAnimator.ofFloat(r1)
             r0.hideAnimator = r1
             float r2 = r0.drawAlpha
@@ -354,138 +368,159 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             r1.addUpdateListener(r2)
             android.animation.ValueAnimator r1 = r0.hideAnimator
             r1.start()
-        L_0x018e:
-            return
-        L_0x018f:
-            android.animation.ValueAnimator r9 = r0.hideAnimator
-            if (r9 == 0) goto L_0x0198
-            r0.hideAnimator = r7
-            r9.cancel()
         L_0x0198:
-            float r7 = r0.drawAlpha
-            r9 = 1065353216(0x3var_, float:1.0)
-            int r10 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r10 >= 0) goto L_0x01d4
-            android.animation.ValueAnimator r10 = r0.showAnimator
-            if (r10 != 0) goto L_0x01d4
+            return
+        L_0x0199:
+            android.animation.ValueAnimator r2 = r0.hideAnimator
+            if (r2 == 0) goto L_0x01a2
+            r0.hideAnimator = r7
+            r2.cancel()
+        L_0x01a2:
+            float r2 = r0.drawAlpha
+            r7 = 1065353216(0x3var_, float:1.0)
+            int r9 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
+            if (r9 >= 0) goto L_0x01d9
+            android.animation.ValueAnimator r9 = r0.showAnimator
+            if (r9 != 0) goto L_0x01d9
             float[] r8 = new float[r8]
-            r10 = 0
-            r8[r10] = r7
-            r7 = 1
-            r8[r7] = r9
-            android.animation.ValueAnimator r7 = android.animation.ValueAnimator.ofFloat(r8)
-            r0.showAnimator = r7
+            r9 = 0
+            r8[r9] = r2
+            r2 = 1
+            r8[r2] = r7
+            android.animation.ValueAnimator r2 = android.animation.ValueAnimator.ofFloat(r8)
+            r0.showAnimator = r2
             float r8 = r0.drawAlpha
-            float r9 = r9 - r8
-            float r9 = r9 * r3
-            long r8 = (long) r9
-            r7.setDuration(r8)
-            android.animation.ValueAnimator r3 = r0.showAnimator
-            org.telegram.ui.Components.GroupedPhotosListView$2 r7 = new org.telegram.ui.Components.GroupedPhotosListView$2
-            r7.<init>()
-            r3.addListener(r7)
-            android.animation.ValueAnimator r3 = r0.showAnimator
-            org.telegram.ui.Components.-$$Lambda$GroupedPhotosListView$H2T7TekXeN9aho0wrMVwvUXchbE r7 = new org.telegram.ui.Components.-$$Lambda$GroupedPhotosListView$H2T7TekXeN9aho0wrMVwvUXchbE
-            r7.<init>()
-            r3.addUpdateListener(r7)
-            android.animation.ValueAnimator r3 = r0.showAnimator
-            r3.start()
-        L_0x01d4:
-            r3 = -1
-            if (r2 != 0) goto L_0x0228
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r7 = r0.currentPhotos
-            int r7 = r7.size()
-            if (r12 != r7) goto L_0x0225
-            java.util.ArrayList<java.lang.Object> r7 = r0.currentObjects
-            int r7 = r7.indexOf(r11)
-            if (r7 != r3) goto L_0x01e8
-            goto L_0x0225
-        L_0x01e8:
-            java.util.ArrayList<java.lang.Object> r7 = r0.currentObjects
-            int r7 = r7.indexOf(r11)
-            int r8 = r0.currentImage
-            if (r8 == r7) goto L_0x0228
-            if (r7 == r3) goto L_0x0228
-            boolean r9 = r0.animateAllLine
-            if (r9 == 0) goto L_0x0213
-            r0.animateToItem = r7
-            r0.nextImage = r7
-            int r8 = r8 - r7
-            int r7 = r0.itemWidth
-            int r9 = r0.itemSpacing
+            float r7 = r7 - r8
+            float r7 = r7 * r3
+            long r7 = (long) r7
+            r2.setDuration(r7)
+            android.animation.ValueAnimator r2 = r0.showAnimator
+            org.telegram.ui.Components.GroupedPhotosListView$2 r3 = new org.telegram.ui.Components.GroupedPhotosListView$2
+            r3.<init>()
+            r2.addListener(r3)
+            android.animation.ValueAnimator r2 = r0.showAnimator
+            org.telegram.ui.Components.-$$Lambda$GroupedPhotosListView$H2T7TekXeN9aho0wrMVwvUXchbE r3 = new org.telegram.ui.Components.-$$Lambda$GroupedPhotosListView$H2T7TekXeN9aho0wrMVwvUXchbE
+            r3.<init>()
+            r2.addUpdateListener(r3)
+        L_0x01d9:
+            r2 = -1
+            if (r12 != 0) goto L_0x024a
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.currentPhotos
+            int r3 = r3.size()
+            if (r15 != r3) goto L_0x0247
+            java.util.ArrayList<java.lang.Object> r3 = r0.currentObjects
+            int r3 = r3.indexOf(r11)
+            if (r3 != r2) goto L_0x01ed
+            goto L_0x0247
+        L_0x01ed:
+            java.util.ArrayList<java.lang.Object> r3 = r0.currentObjects
+            int r3 = r3.indexOf(r11)
+            int r7 = r0.currentImage
+            if (r7 == r3) goto L_0x024a
+            if (r3 == r2) goto L_0x024a
+            boolean r8 = r0.animateAllLine
+            if (r8 != 0) goto L_0x020e
+            boolean r9 = r0.moving
+            if (r9 != 0) goto L_0x020e
+            int r9 = r7 + -1
+            if (r3 == r9) goto L_0x020a
+            r9 = 1
             int r7 = r7 + r9
-            int r8 = r8 * r7
-            r0.animateToDX = r8
-            r7 = 0
-            r0.animateAllLine = r7
+            if (r3 != r7) goto L_0x020e
+            goto L_0x020b
+        L_0x020a:
+            r9 = 1
+        L_0x020b:
+            r0.animateToItemFast = r9
+            r8 = 1
+        L_0x020e:
+            if (r8 == 0) goto L_0x0231
+            r0.animateToItem = r3
+            r0.nextImage = r3
+            int r7 = r0.currentImage
+            int r7 = r7 - r3
+            int r3 = r0.itemWidth
+            int r8 = r0.itemSpacing
+            int r3 = r3 + r8
+            int r7 = r7 * r3
+            r0.animateToDX = r7
+            r3 = 1
+            r0.moving = r3
+            r3 = 0
+            r0.animateAllLine = r3
             long r7 = java.lang.System.currentTimeMillis()
             r0.lastUpdateTime = r7
             r20.invalidate()
-            goto L_0x0221
-        L_0x0213:
-            int r8 = r8 - r7
-            int r9 = r0.itemWidth
-            int r10 = r0.itemSpacing
-            int r9 = r9 + r10
-            int r8 = r8 * r9
-            r9 = 1
-            r0.fillImages(r9, r8)
-            r0.currentImage = r7
-        L_0x0221:
-            r7 = 0
-            r0.drawDx = r7
-            goto L_0x0229
-        L_0x0225:
-            r7 = 0
-            r2 = 1
-            goto L_0x0229
-        L_0x0228:
-            r7 = 0
-        L_0x0229:
-            if (r2 == 0) goto L_0x0376
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r2 = r0.currentPhotos
-            int r2 = r2.size()
-            r0.animateAllLine = r7
+            r3 = 0
+            goto L_0x0244
+        L_0x0231:
+            int r7 = r0.currentImage
+            int r7 = r7 - r3
+            int r8 = r0.itemWidth
+            int r9 = r0.itemSpacing
+            int r8 = r8 + r9
+            int r7 = r7 * r8
+            r8 = 1
+            r0.fillImages(r8, r7)
+            r0.currentImage = r3
+            r3 = 0
+            r0.moving = r3
+        L_0x0244:
+            r0.drawDx = r3
+            goto L_0x024b
+        L_0x0247:
+            r3 = 0
+            r12 = 1
+            goto L_0x024b
+        L_0x024a:
+            r3 = 0
+        L_0x024b:
+            if (r12 == 0) goto L_0x039f
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r7 = r0.currentPhotos
-            r7.clear()
-            java.util.ArrayList<java.lang.Object> r7 = r0.currentObjects
-            r7.clear()
-            if (r17 == 0) goto L_0x0257
-            boolean r7 = r17.isEmpty()
-            if (r7 != 0) goto L_0x0257
-            java.util.ArrayList<java.lang.Object> r4 = r0.currentObjects
-            r5 = r17
-            r4.addAll(r5)
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r4 = r0.currentPhotos
-            r4.addAll(r5)
+            int r7 = r7.size()
+            r0.animateAllLine = r3
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.currentPhotos
+            r3.clear()
+            java.util.ArrayList<java.lang.Object> r3 = r0.currentObjects
+            r3.clear()
+            if (r17 == 0) goto L_0x027c
+            boolean r3 = r17.isEmpty()
+            if (r3 != 0) goto L_0x027c
+            java.util.ArrayList<java.lang.Object> r3 = r0.currentObjects
+            r4 = r17
+            r3.addAll(r4)
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.currentPhotos
+            r3.addAll(r4)
             r0.currentImage = r1
-            r0.animateToItem = r3
-            goto L_0x0354
-        L_0x0257:
-            if (r4 == 0) goto L_0x02e5
-            boolean r7 = r4.isEmpty()
-            if (r7 != 0) goto L_0x02e5
-            long r7 = r0.currentGroupId
-            r9 = 0
-            int r5 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r5 != 0) goto L_0x0269
-            if (r6 == 0) goto L_0x0354
-        L_0x0269:
-            int r5 = r1 + 10
-            int r7 = r4.size()
-            int r5 = java.lang.Math.min(r5, r7)
-            r7 = r1
-        L_0x0274:
+            r0.animateToItem = r2
+            r1 = 0
+            r0.animateToItemFast = r1
+            goto L_0x037d
+        L_0x027c:
+            if (r4 == 0) goto L_0x030c
+            boolean r3 = r4.isEmpty()
+            if (r3 != 0) goto L_0x030c
+            long r8 = r0.currentGroupId
+            r10 = 0
+            int r3 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
+            if (r3 != 0) goto L_0x028e
+            if (r6 == 0) goto L_0x037d
+        L_0x028e:
+            int r3 = r1 + 10
+            int r5 = r4.size()
+            int r3 = java.lang.Math.min(r3, r5)
+            r5 = r1
+        L_0x0299:
             r8 = 56
-            if (r7 >= r5) goto L_0x02a4
-            java.lang.Object r9 = r4.get(r7)
+            if (r5 >= r3) goto L_0x02c9
+            java.lang.Object r9 = r4.get(r5)
             org.telegram.messenger.MessageObject r9 = (org.telegram.messenger.MessageObject) r9
-            if (r6 != 0) goto L_0x028a
+            if (r6 != 0) goto L_0x02af
             long r10 = r9.getGroupIdForUse()
             long r12 = r0.currentGroupId
             int r14 = (r10 > r12 ? 1 : (r10 == r12 ? 0 : -1))
-            if (r14 != 0) goto L_0x02a4
-        L_0x028a:
+            if (r14 != 0) goto L_0x02c9
+        L_0x02af:
             java.util.ArrayList<java.lang.Object> r10 = r0.currentObjects
             r10.add(r9)
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r10 = r0.currentPhotos
@@ -495,116 +530,118 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             org.telegram.tgnet.TLObject r9 = r9.photoThumbsObject
             org.telegram.messenger.ImageLocation r8 = org.telegram.messenger.ImageLocation.getForObject(r8, r9)
             r10.add(r8)
-            int r7 = r7 + 1
-            goto L_0x0274
-        L_0x02a4:
-            r5 = 0
-            r0.currentImage = r5
-            r0.animateToItem = r3
-            int r3 = r1 + -10
-            int r3 = java.lang.Math.max(r3, r5)
-            r5 = 1
-            int r1 = r1 - r5
-        L_0x02b1:
-            if (r1 < r3) goto L_0x0354
-            java.lang.Object r5 = r4.get(r1)
-            org.telegram.messenger.MessageObject r5 = (org.telegram.messenger.MessageObject) r5
-            if (r6 != 0) goto L_0x02c5
-            long r9 = r5.getGroupIdForUse()
+            int r5 = r5 + 1
+            goto L_0x0299
+        L_0x02c9:
+            r3 = 0
+            r0.currentImage = r3
+            r0.animateToItem = r2
+            r0.animateToItemFast = r3
+            int r2 = r1 + -10
+            int r2 = java.lang.Math.max(r2, r3)
+            r3 = 1
+            int r1 = r1 - r3
+        L_0x02d8:
+            if (r1 < r2) goto L_0x037d
+            java.lang.Object r3 = r4.get(r1)
+            org.telegram.messenger.MessageObject r3 = (org.telegram.messenger.MessageObject) r3
+            if (r6 != 0) goto L_0x02ec
+            long r9 = r3.getGroupIdForUse()
             long r11 = r0.currentGroupId
-            int r7 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1))
-            if (r7 != 0) goto L_0x0354
-        L_0x02c5:
-            java.util.ArrayList<java.lang.Object> r7 = r0.currentObjects
+            int r5 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1))
+            if (r5 != 0) goto L_0x037d
+        L_0x02ec:
+            java.util.ArrayList<java.lang.Object> r5 = r0.currentObjects
             r9 = 0
-            r7.add(r9, r5)
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r7 = r0.currentPhotos
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r10 = r5.photoThumbs
+            r5.add(r9, r3)
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r5 = r0.currentPhotos
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r10 = r3.photoThumbs
             r11 = 1
             org.telegram.tgnet.TLRPC$PhotoSize r10 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r10, r8, r11)
-            org.telegram.tgnet.TLObject r5 = r5.photoThumbsObject
-            org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForObject(r10, r5)
-            r7.add(r9, r5)
-            int r5 = r0.currentImage
-            int r5 = r5 + r11
-            r0.currentImage = r5
+            org.telegram.tgnet.TLObject r3 = r3.photoThumbsObject
+            org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForObject(r10, r3)
+            r5.add(r9, r3)
+            int r3 = r0.currentImage
+            int r3 = r3 + r11
+            r0.currentImage = r3
             int r1 = r1 + -1
-            goto L_0x02b1
-        L_0x02e5:
-            if (r5 == 0) goto L_0x0354
-            boolean r4 = r5.isEmpty()
-            if (r4 != 0) goto L_0x0354
-            long r6 = r0.currentGroupId
+            goto L_0x02d8
+        L_0x030c:
+            if (r5 == 0) goto L_0x037d
+            boolean r3 = r5.isEmpty()
+            if (r3 != 0) goto L_0x037d
+            long r3 = r0.currentGroupId
             r8 = 0
-            int r4 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r4 == 0) goto L_0x0354
-            int r4 = r5.size()
-            r6 = r1
-        L_0x02fa:
-            if (r6 >= r4) goto L_0x0320
-            java.lang.Object r7 = r5.get(r6)
-            org.telegram.tgnet.TLRPC$PageBlock r7 = (org.telegram.tgnet.TLRPC$PageBlock) r7
-            int r8 = r7.groupId
+            int r6 = (r3 > r8 ? 1 : (r3 == r8 ? 0 : -1))
+            if (r6 == 0) goto L_0x037d
+            int r3 = r5.size()
+            r4 = r1
+        L_0x0321:
+            if (r4 >= r3) goto L_0x0347
+            java.lang.Object r6 = r5.get(r4)
+            org.telegram.tgnet.TLRPC$PageBlock r6 = (org.telegram.tgnet.TLRPC$PageBlock) r6
+            int r8 = r6.groupId
             long r8 = (long) r8
             long r10 = r0.currentGroupId
             int r12 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r12 != 0) goto L_0x0320
+            if (r12 != 0) goto L_0x0347
             java.util.ArrayList<java.lang.Object> r8 = r0.currentObjects
-            r8.add(r7)
+            r8.add(r6)
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r8 = r0.currentPhotos
-            org.telegram.tgnet.TLRPC$PhotoSize r9 = r7.thumb
-            org.telegram.tgnet.TLObject r7 = r7.thumbObject
-            org.telegram.messenger.ImageLocation r7 = org.telegram.messenger.ImageLocation.getForObject(r9, r7)
-            r8.add(r7)
-            int r6 = r6 + 1
-            goto L_0x02fa
-        L_0x0320:
-            r4 = 0
-            r0.currentImage = r4
-            r0.animateToItem = r3
-            r3 = 1
-            int r1 = r1 - r3
-        L_0x0327:
-            if (r1 < 0) goto L_0x0354
-            java.lang.Object r3 = r5.get(r1)
-            org.telegram.tgnet.TLRPC$PageBlock r3 = (org.telegram.tgnet.TLRPC$PageBlock) r3
-            int r4 = r3.groupId
-            long r6 = (long) r4
-            long r8 = r0.currentGroupId
-            int r4 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r4 != 0) goto L_0x0354
-            java.util.ArrayList<java.lang.Object> r4 = r0.currentObjects
-            r6 = 0
-            r4.add(r6, r3)
-            java.util.ArrayList<org.telegram.messenger.ImageLocation> r4 = r0.currentPhotos
-            org.telegram.tgnet.TLRPC$PhotoSize r7 = r3.thumb
-            org.telegram.tgnet.TLObject r3 = r3.thumbObject
-            org.telegram.messenger.ImageLocation r3 = org.telegram.messenger.ImageLocation.getForObject(r7, r3)
-            r4.add(r6, r3)
-            int r3 = r0.currentImage
-            r4 = 1
-            int r3 = r3 + r4
+            org.telegram.tgnet.TLRPC$PhotoSize r9 = r6.thumb
+            org.telegram.tgnet.TLObject r6 = r6.thumbObject
+            org.telegram.messenger.ImageLocation r6 = org.telegram.messenger.ImageLocation.getForObject(r9, r6)
+            r8.add(r6)
+            int r4 = r4 + 1
+            goto L_0x0321
+        L_0x0347:
+            r3 = 0
             r0.currentImage = r3
+            r0.animateToItem = r2
+            r0.animateToItemFast = r3
+            r2 = 1
+            int r1 = r1 - r2
+        L_0x0350:
+            if (r1 < 0) goto L_0x037d
+            java.lang.Object r2 = r5.get(r1)
+            org.telegram.tgnet.TLRPC$PageBlock r2 = (org.telegram.tgnet.TLRPC$PageBlock) r2
+            int r3 = r2.groupId
+            long r3 = (long) r3
+            long r8 = r0.currentGroupId
+            int r6 = (r3 > r8 ? 1 : (r3 == r8 ? 0 : -1))
+            if (r6 != 0) goto L_0x037d
+            java.util.ArrayList<java.lang.Object> r3 = r0.currentObjects
+            r4 = 0
+            r3.add(r4, r2)
+            java.util.ArrayList<org.telegram.messenger.ImageLocation> r3 = r0.currentPhotos
+            org.telegram.tgnet.TLRPC$PhotoSize r6 = r2.thumb
+            org.telegram.tgnet.TLObject r2 = r2.thumbObject
+            org.telegram.messenger.ImageLocation r2 = org.telegram.messenger.ImageLocation.getForObject(r6, r2)
+            r3.add(r4, r2)
+            int r2 = r0.currentImage
+            r3 = 1
+            int r2 = r2 + r3
+            r0.currentImage = r2
             int r1 = r1 + -1
-            goto L_0x0327
-        L_0x0354:
+            goto L_0x0350
+        L_0x037d:
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r1 = r0.currentPhotos
             int r1 = r1.size()
-            r3 = 1
-            if (r1 != r3) goto L_0x0367
+            r2 = 1
+            if (r1 != r2) goto L_0x0390
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r1 = r0.currentPhotos
             r1.clear()
             java.util.ArrayList<java.lang.Object> r1 = r0.currentObjects
             r1.clear()
-        L_0x0367:
+        L_0x0390:
             java.util.ArrayList<org.telegram.messenger.ImageLocation> r1 = r0.currentPhotos
             int r1 = r1.size()
-            if (r1 == r2) goto L_0x0372
+            if (r1 == r7) goto L_0x039b
             r20.requestLayout()
-        L_0x0372:
+        L_0x039b:
             r1 = 0
             r0.fillImages(r1, r1)
-        L_0x0376:
+        L_0x039f:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupedPhotosListView.fillList():void");
@@ -634,7 +671,7 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
                 this.currentItemProgress = 1.0f - Math.abs(f);
             }
             this.nextItemProgress = 1.0f - this.currentItemProgress;
-            int i2 = (f > 0.0f ? 1 : (f == 0.0f ? 0 : -1));
+            this.moving = f != 0.0f;
             invalidate();
             if (this.currentPhotos.isEmpty()) {
                 return;
@@ -643,9 +680,9 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
                 return;
             }
             if (f <= 0.0f || this.currentImage != 0) {
-                int i3 = (int) (f * ((float) (this.itemWidth + this.itemSpacing)));
-                this.drawDx = i3;
-                fillImages(true, i3);
+                int i2 = (int) (f * ((float) (this.itemWidth + this.itemSpacing)));
+                this.drawDx = i2;
+                fillImages(true, i2);
             }
         }
     }
@@ -671,6 +708,7 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
         if (!z && !this.imagesToDraw.isEmpty()) {
             this.unusedReceivers.addAll(this.imagesToDraw);
             this.imagesToDraw.clear();
+            this.moving = false;
             this.moveLineProgress = 1.0f;
             this.currentItemProgress = 1.0f;
             this.nextItemProgress = 0.0f;
@@ -729,24 +767,27 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
                 while (i2 >= 0) {
                     int i8 = this.itemWidth;
                     int i9 = ((i2 - this.currentImage) * (this.itemSpacing + i8)) + measuredWidth2 + i + i8;
-                    if (i9 > 0) {
-                        ImageLocation imageLocation2 = this.currentPhotos.get(i2);
-                        ImageReceiver freeReceiver2 = getFreeReceiver();
-                        freeReceiver2.setImageCoords((float) i9, (float) this.itemY, (float) this.itemWidth, (float) this.itemHeight);
-                        if (this.currentObjects.get(0) instanceof MessageObject) {
-                            obj = this.currentObjects.get(i2);
-                        } else if (this.currentObjects.get(0) instanceof TLRPC$PageBlock) {
-                            obj = this.delegate.getParentObject();
-                        } else {
-                            obj = "avatar_" + this.delegate.getAvatarsDialogId();
-                        }
-                        freeReceiver2.setImage((ImageLocation) null, (String) null, imageLocation2, "80_80", 0, (String) null, obj, 1);
-                        freeReceiver2.setParam(i2);
-                        i2--;
-                    } else {
-                        return;
+                    if (i9 <= 0) {
+                        break;
                     }
+                    ImageLocation imageLocation2 = this.currentPhotos.get(i2);
+                    ImageReceiver freeReceiver2 = getFreeReceiver();
+                    freeReceiver2.setImageCoords((float) i9, (float) this.itemY, (float) this.itemWidth, (float) this.itemHeight);
+                    if (this.currentObjects.get(0) instanceof MessageObject) {
+                        obj = this.currentObjects.get(i2);
+                    } else if (this.currentObjects.get(0) instanceof TLRPC$PageBlock) {
+                        obj = this.delegate.getParentObject();
+                    } else {
+                        obj = "avatar_" + this.delegate.getAvatarsDialogId();
+                    }
+                    freeReceiver2.setImage((ImageLocation) null, (String) null, imageLocation2, "80_80", 0, (String) null, obj, 1);
+                    freeReceiver2.setParam(i2);
+                    i2--;
                 }
+            }
+            ValueAnimator valueAnimator = this.showAnimator;
+            if (valueAnimator != null && !valueAnimator.isStarted()) {
+                this.showAnimator.start();
             }
         }
     }
@@ -756,6 +797,7 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             this.scroll.abortAnimation();
         }
         this.animateToItem = -1;
+        this.animateToItemFast = false;
         return true;
     }
 
@@ -888,6 +930,7 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
         int i = this.nextPhotoScrolling;
         if (i >= 0 && i < this.currentObjects.size()) {
             this.stopedScrolling = true;
+            this.animateToItemFast = false;
             int i2 = this.nextPhotoScrolling;
             this.animateToItem = i2;
             this.nextImage = i2;
@@ -932,155 +975,162 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
         int i2;
         TLRPC$PhotoSize tLRPC$PhotoSize;
         TLRPC$PhotoSize tLRPC$PhotoSize2;
-        if (!this.imagesToDraw.isEmpty()) {
-            this.backgroundPaint.setAlpha((int) (this.drawAlpha * 127.0f));
+        if (this.hasPhotos || !this.imagesToDraw.isEmpty()) {
+            float f = this.drawAlpha;
+            if (!this.animateBackground) {
+                f = this.hasPhotos ? 1.0f : 0.0f;
+            }
+            this.backgroundPaint.setAlpha((int) (f * 127.0f));
             canvas.drawRect(0.0f, 0.0f, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.backgroundPaint);
-            int size = this.imagesToDraw.size();
-            int i3 = this.drawDx;
-            int i4 = (int) (((float) this.itemWidth) * 2.0f);
-            int dp = AndroidUtilities.dp(8.0f);
-            ImageLocation imageLocation = this.currentPhotos.get(this.currentImage);
-            if (imageLocation == null || (tLRPC$PhotoSize2 = imageLocation.photoSize) == null) {
-                i = this.itemHeight;
-            } else {
-                i = Math.max(this.itemWidth, (int) (((float) tLRPC$PhotoSize2.w) * (((float) this.itemHeight) / ((float) tLRPC$PhotoSize2.h))));
-            }
-            int min = Math.min(i4, i);
-            float f = (float) (dp * 2);
-            float f2 = this.currentItemProgress;
-            int i5 = (int) (f * f2);
-            int i6 = this.itemWidth;
-            int i7 = i6 + ((int) (((float) (min - i6)) * f2)) + i5;
-            int i8 = this.nextImage;
-            if (i8 < 0 || i8 >= this.currentPhotos.size()) {
-                i2 = this.itemWidth;
-            } else {
-                ImageLocation imageLocation2 = this.currentPhotos.get(this.nextImage);
-                if (imageLocation2 == null || (tLRPC$PhotoSize = imageLocation2.photoSize) == null) {
-                    i2 = this.itemHeight;
+            if (!this.imagesToDraw.isEmpty()) {
+                int size = this.imagesToDraw.size();
+                int i3 = this.drawDx;
+                int i4 = (int) (((float) this.itemWidth) * 2.0f);
+                int dp = AndroidUtilities.dp(8.0f);
+                ImageLocation imageLocation = this.currentPhotos.get(this.currentImage);
+                if (imageLocation == null || (tLRPC$PhotoSize2 = imageLocation.photoSize) == null) {
+                    i = this.itemHeight;
                 } else {
-                    i2 = Math.max(this.itemWidth, (int) (((float) tLRPC$PhotoSize.w) * (((float) this.itemHeight) / ((float) tLRPC$PhotoSize.h))));
+                    i = Math.max(this.itemWidth, (int) (((float) tLRPC$PhotoSize2.w) * (((float) this.itemHeight) / ((float) tLRPC$PhotoSize2.h))));
                 }
-            }
-            int min2 = Math.min(i4, i2);
-            float f3 = this.nextItemProgress;
-            int i9 = (int) (f * f3);
-            int i10 = (int) (((float) i3) + (((float) (((min2 + i9) - this.itemWidth) / 2)) * f3 * ((float) (this.nextImage > this.currentImage ? -1 : 1))));
-            int i11 = this.itemWidth;
-            int i12 = i11 + ((int) (((float) (min2 - i11)) * this.nextItemProgress)) + i9;
-            int measuredWidth = (getMeasuredWidth() - i7) / 2;
-            for (int i13 = 0; i13 < size; i13++) {
-                ImageReceiver imageReceiver = this.imagesToDraw.get(i13);
-                int param = imageReceiver.getParam();
-                int i14 = this.currentImage;
-                if (param == i14) {
-                    imageReceiver.setImageX(measuredWidth + i10 + (i5 / 2));
-                    imageReceiver.setImageWidth(i7 - i5);
+                int min = Math.min(i4, i);
+                float f2 = (float) (dp * 2);
+                float f3 = this.currentItemProgress;
+                int i5 = (int) (f2 * f3);
+                int i6 = this.itemWidth;
+                int i7 = i6 + ((int) (((float) (min - i6)) * f3)) + i5;
+                int i8 = this.nextImage;
+                if (i8 < 0 || i8 >= this.currentPhotos.size()) {
+                    i2 = this.itemWidth;
                 } else {
-                    int i15 = this.nextImage;
-                    if (i15 < i14) {
-                        if (param >= i14) {
-                            imageReceiver.setImageX(measuredWidth + i7 + this.itemSpacing + (((imageReceiver.getParam() - this.currentImage) - 1) * (this.itemWidth + this.itemSpacing)) + i10);
-                        } else if (param <= i15) {
-                            int i16 = this.itemWidth;
-                            int i17 = this.itemSpacing;
-                            imageReceiver.setImageX((((((imageReceiver.getParam() - this.currentImage) + 1) * (i16 + i17)) + measuredWidth) - (i17 + i12)) + i10);
-                        } else {
-                            imageReceiver.setImageX(((imageReceiver.getParam() - this.currentImage) * (this.itemWidth + this.itemSpacing)) + measuredWidth + i10);
-                        }
-                    } else if (param < i14) {
-                        imageReceiver.setImageX(((imageReceiver.getParam() - this.currentImage) * (this.itemWidth + this.itemSpacing)) + measuredWidth + i10);
-                    } else if (param <= i15) {
-                        imageReceiver.setImageX(measuredWidth + i7 + this.itemSpacing + (((imageReceiver.getParam() - this.currentImage) - 1) * (this.itemWidth + this.itemSpacing)) + i10);
+                    ImageLocation imageLocation2 = this.currentPhotos.get(this.nextImage);
+                    if (imageLocation2 == null || (tLRPC$PhotoSize = imageLocation2.photoSize) == null) {
+                        i2 = this.itemHeight;
                     } else {
-                        int i18 = this.itemWidth;
-                        int i19 = this.itemSpacing;
-                        imageReceiver.setImageX(measuredWidth + i7 + this.itemSpacing + (((imageReceiver.getParam() - this.currentImage) - 2) * (i18 + i19)) + i19 + i12 + i10);
-                    }
-                    if (param == this.nextImage) {
-                        imageReceiver.setImageWidth(i12 - i9);
-                        imageReceiver.setImageX((int) (imageReceiver.getImageX() + ((float) (i9 / 2))));
-                    } else {
-                        imageReceiver.setImageWidth(this.itemWidth);
+                        i2 = Math.max(this.itemWidth, (int) (((float) tLRPC$PhotoSize.w) * (((float) this.itemHeight) / ((float) tLRPC$PhotoSize.h))));
                     }
                 }
-                imageReceiver.setAlpha(this.drawAlpha);
-                imageReceiver.draw(canvas);
-            }
-            long currentTimeMillis = System.currentTimeMillis();
-            long j = currentTimeMillis - this.lastUpdateTime;
-            if (j > 17) {
-                j = 17;
-            }
-            this.lastUpdateTime = currentTimeMillis;
-            int i20 = this.animateToItem;
-            if (i20 >= 0) {
-                float f4 = this.moveLineProgress;
-                if (f4 > 0.0f) {
-                    float f5 = ((float) j) / 200.0f;
-                    float f6 = f4 - f5;
-                    this.moveLineProgress = f6;
-                    if (i20 == this.currentImage) {
-                        float f7 = this.currentItemProgress;
-                        if (f7 < 1.0f) {
-                            float f8 = f7 + f5;
-                            this.currentItemProgress = f8;
-                            if (f8 > 1.0f) {
-                                this.currentItemProgress = 1.0f;
+                int min2 = Math.min(i4, i2);
+                float f4 = this.nextItemProgress;
+                int i9 = (int) (f2 * f4);
+                int i10 = (int) (((float) i3) + (((float) (((min2 + i9) - this.itemWidth) / 2)) * f4 * ((float) (this.nextImage > this.currentImage ? -1 : 1))));
+                int i11 = this.itemWidth;
+                int i12 = i11 + ((int) (((float) (min2 - i11)) * this.nextItemProgress)) + i9;
+                int measuredWidth = (getMeasuredWidth() - i7) / 2;
+                for (int i13 = 0; i13 < size; i13++) {
+                    ImageReceiver imageReceiver = this.imagesToDraw.get(i13);
+                    int param = imageReceiver.getParam();
+                    int i14 = this.currentImage;
+                    if (param == i14) {
+                        imageReceiver.setImageX(measuredWidth + i10 + (i5 / 2));
+                        imageReceiver.setImageWidth(i7 - i5);
+                    } else {
+                        int i15 = this.nextImage;
+                        if (i15 < i14) {
+                            if (param >= i14) {
+                                imageReceiver.setImageX(measuredWidth + i7 + this.itemSpacing + (((imageReceiver.getParam() - this.currentImage) - 1) * (this.itemWidth + this.itemSpacing)) + i10);
+                            } else if (param <= i15) {
+                                int i16 = this.itemWidth;
+                                int i17 = this.itemSpacing;
+                                imageReceiver.setImageX((((((imageReceiver.getParam() - this.currentImage) + 1) * (i16 + i17)) + measuredWidth) - (i17 + i12)) + i10);
+                            } else {
+                                imageReceiver.setImageX(((imageReceiver.getParam() - this.currentImage) * (this.itemWidth + this.itemSpacing)) + measuredWidth + i10);
                             }
+                        } else if (param < i14) {
+                            imageReceiver.setImageX(((imageReceiver.getParam() - this.currentImage) * (this.itemWidth + this.itemSpacing)) + measuredWidth + i10);
+                        } else if (param <= i15) {
+                            imageReceiver.setImageX(measuredWidth + i7 + this.itemSpacing + (((imageReceiver.getParam() - this.currentImage) - 1) * (this.itemWidth + this.itemSpacing)) + i10);
+                        } else {
+                            int i18 = this.itemWidth;
+                            int i19 = this.itemSpacing;
+                            imageReceiver.setImageX(measuredWidth + i7 + this.itemSpacing + (((imageReceiver.getParam() - this.currentImage) - 2) * (i18 + i19)) + i19 + i12 + i10);
                         }
-                        int i21 = this.animateToDXStart;
-                        this.drawDx = i21 + ((int) Math.ceil((double) (this.currentItemProgress * ((float) (this.animateToDX - i21)))));
-                    } else {
-                        this.nextItemProgress = CubicBezierInterpolator.EASE_OUT.getInterpolation(1.0f - f6);
-                        if (this.stopedScrolling) {
-                            float f9 = this.currentItemProgress;
-                            if (f9 > 0.0f) {
-                                float var_ = f9 - f5;
-                                this.currentItemProgress = var_;
-                                if (var_ < 0.0f) {
-                                    this.currentItemProgress = 0.0f;
+                        if (param == this.nextImage) {
+                            imageReceiver.setImageWidth(i12 - i9);
+                            imageReceiver.setImageX((int) (imageReceiver.getImageX() + ((float) (i9 / 2))));
+                        } else {
+                            imageReceiver.setImageWidth(this.itemWidth);
+                        }
+                    }
+                    imageReceiver.setAlpha(this.drawAlpha);
+                    imageReceiver.draw(canvas);
+                }
+                long currentTimeMillis = System.currentTimeMillis();
+                long j = currentTimeMillis - this.lastUpdateTime;
+                if (j > 17) {
+                    j = 17;
+                }
+                this.lastUpdateTime = currentTimeMillis;
+                if (this.animateToItem >= 0) {
+                    float f5 = this.moveLineProgress;
+                    if (f5 > 0.0f) {
+                        float f6 = (float) j;
+                        float f7 = f5 - (f6 / (this.animateToItemFast ? 100.0f : 200.0f));
+                        this.moveLineProgress = f7;
+                        if (this.animateToItem == this.currentImage) {
+                            float f8 = this.currentItemProgress;
+                            if (f8 < 1.0f) {
+                                float f9 = f8 + (f6 / 200.0f);
+                                this.currentItemProgress = f9;
+                                if (f9 > 1.0f) {
+                                    this.currentItemProgress = 1.0f;
                                 }
                             }
-                            int i22 = this.animateToDXStart;
-                            this.drawDx = i22 + ((int) Math.ceil((double) (this.nextItemProgress * ((float) (this.animateToDX - i22)))));
+                            int i20 = this.animateToDXStart;
+                            this.drawDx = i20 + ((int) Math.ceil((double) (this.currentItemProgress * ((float) (this.animateToDX - i20)))));
                         } else {
-                            this.currentItemProgress = CubicBezierInterpolator.EASE_OUT.getInterpolation(this.moveLineProgress);
-                            this.drawDx = (int) Math.ceil((double) (this.nextItemProgress * ((float) this.animateToDX)));
+                            this.nextItemProgress = CubicBezierInterpolator.EASE_OUT.getInterpolation(1.0f - f7);
+                            if (this.stopedScrolling) {
+                                float var_ = this.currentItemProgress;
+                                if (var_ > 0.0f) {
+                                    float var_ = var_ - (f6 / 200.0f);
+                                    this.currentItemProgress = var_;
+                                    if (var_ < 0.0f) {
+                                        this.currentItemProgress = 0.0f;
+                                    }
+                                }
+                                int i21 = this.animateToDXStart;
+                                this.drawDx = i21 + ((int) Math.ceil((double) (this.nextItemProgress * ((float) (this.animateToDX - i21)))));
+                            } else {
+                                this.currentItemProgress = CubicBezierInterpolator.EASE_OUT.getInterpolation(this.moveLineProgress);
+                                this.drawDx = (int) Math.ceil((double) (this.nextItemProgress * ((float) this.animateToDX)));
+                            }
+                        }
+                        if (this.moveLineProgress <= 0.0f) {
+                            this.currentImage = this.animateToItem;
+                            this.moveLineProgress = 1.0f;
+                            this.currentItemProgress = 1.0f;
+                            this.nextItemProgress = 0.0f;
+                            this.moving = false;
+                            this.stopedScrolling = false;
+                            this.drawDx = 0;
+                            this.animateToItem = -1;
+                            this.animateToItemFast = false;
                         }
                     }
-                    if (this.moveLineProgress <= 0.0f) {
-                        this.currentImage = this.animateToItem;
-                        this.moveLineProgress = 1.0f;
-                        this.currentItemProgress = 1.0f;
-                        this.nextItemProgress = 0.0f;
-                        this.stopedScrolling = false;
-                        this.drawDx = 0;
-                        this.animateToItem = -1;
-                    }
-                }
-                fillImages(true, this.drawDx);
-                invalidate();
-            }
-            if (this.scrolling) {
-                float var_ = this.currentItemProgress;
-                if (var_ > 0.0f) {
-                    float var_ = var_ - (((float) j) / 200.0f);
-                    this.currentItemProgress = var_;
-                    if (var_ < 0.0f) {
-                        this.currentItemProgress = 0.0f;
-                    }
+                    fillImages(true, this.drawDx);
                     invalidate();
                 }
-            }
-            if (!this.scroll.isFinished()) {
-                if (this.scroll.computeScrollOffset()) {
-                    this.drawDx = this.scroll.getCurrX();
-                    updateAfterScroll();
-                    invalidate();
+                if (this.scrolling) {
+                    float var_ = this.currentItemProgress;
+                    if (var_ > 0.0f) {
+                        float var_ = var_ - (((float) j) / 200.0f);
+                        this.currentItemProgress = var_;
+                        if (var_ < 0.0f) {
+                            this.currentItemProgress = 0.0f;
+                        }
+                        invalidate();
+                    }
                 }
-                if (this.scroll.isFinished()) {
-                    stopScrolling();
+                if (!this.scroll.isFinished()) {
+                    if (this.scroll.computeScrollOffset()) {
+                        this.drawDx = this.scroll.getCurrX();
+                        updateAfterScroll();
+                        invalidate();
+                    }
+                    if (this.scroll.isFinished()) {
+                        stopScrolling();
+                    }
                 }
             }
         }
@@ -1090,8 +1140,36 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
         this.delegate = groupedPhotosListViewDelegate;
     }
 
+    /* JADX WARNING: Code restructure failed: missing block: B:8:0x0013, code lost:
+        r0 = r2.showAnimator;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean hasPhotos() {
-        return !this.currentPhotos.isEmpty() && this.hideAnimator == null;
+        /*
+            r2 = this;
+            boolean r0 = r2.hasPhotos
+            if (r0 == 0) goto L_0x001f
+            android.animation.ValueAnimator r0 = r2.hideAnimator
+            if (r0 != 0) goto L_0x001f
+            float r0 = r2.drawAlpha
+            r1 = 0
+            int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
+            if (r0 > 0) goto L_0x001d
+            boolean r0 = r2.animateBackground
+            if (r0 == 0) goto L_0x001d
+            android.animation.ValueAnimator r0 = r2.showAnimator
+            if (r0 == 0) goto L_0x001f
+            boolean r0 = r0.isStarted()
+            if (r0 == 0) goto L_0x001f
+        L_0x001d:
+            r0 = 1
+            goto L_0x0020
+        L_0x001f:
+            r0 = 0
+        L_0x0020:
+            return r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.GroupedPhotosListView.hasPhotos():boolean");
     }
 
     public void setAnimationsEnabled(boolean z) {
@@ -1108,13 +1186,18 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
                     valueAnimator2.cancel();
                     this.hideAnimator = null;
                 }
-                this.drawAlpha = 1.0f;
+                this.drawAlpha = 0.0f;
                 invalidate();
             }
         }
     }
 
+    public void setAnimateBackground(boolean z) {
+        this.animateBackground = z;
+    }
+
     public void reset() {
+        this.hasPhotos = false;
         if (this.animationsEnabled) {
             this.drawAlpha = 0.0f;
         }

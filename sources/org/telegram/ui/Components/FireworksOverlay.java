@@ -20,13 +20,13 @@ import org.telegram.messenger.Utilities;
 
 public class FireworksOverlay extends View {
     private static int[] colors;
-    private static final int fallParticlesCount = (SharedConfig.getDevicePerfomanceClass() == 0 ? 20 : 30);
+    private static final int fallParticlesCount = (SharedConfig.getDevicePerformanceClass() == 0 ? 20 : 30);
     private static int[] heartColors = {-1944197, -10498574, -9623, -2399389, -1870160};
     /* access modifiers changed from: private */
     public static Drawable[] heartDrawable;
     /* access modifiers changed from: private */
     public static Paint[] paint;
-    private static final int particlesCount = (SharedConfig.getDevicePerfomanceClass() == 0 ? 50 : 60);
+    private static final int particlesCount = (SharedConfig.getDevicePerformanceClass() == 0 ? 50 : 60);
     private int fallingDownCount;
     private boolean isFebruary14;
     private long lastUpdateTime;

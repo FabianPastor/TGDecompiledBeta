@@ -73,6 +73,7 @@ public class MaxFileSizeCell extends FrameLayout {
             }
 
             public void onSeekBarDrag(boolean z, float f) {
+                int i;
                 float f2;
                 float f3;
                 if (f <= 0.25f) {
@@ -89,16 +90,18 @@ public class MaxFileSizeCell extends FrameLayout {
                             f2 = (float) 10485760;
                             f3 = 9.437184E7f;
                         } else {
-                            f -= 0.25f;
-                            f2 = (float) NUM;
-                            f3 = 1.50575514E9f;
+                            i = (int) (((float) NUM) + (((float) (NUM - ((long) NUM))) * ((f - 0.25f) / 0.25f)));
+                            long j = (long) i;
+                            MaxFileSizeCell.this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", NUM, AndroidUtilities.formatFileSize(j)));
+                            long unused = MaxFileSizeCell.this.currentSize = j;
+                            MaxFileSizeCell.this.didChangedSizeValue(i);
                         }
                     }
                 }
-                int i = (int) (f2 + ((f / 0.25f) * f3));
-                long j = (long) i;
-                MaxFileSizeCell.this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", NUM, AndroidUtilities.formatFileSize(j)));
-                long unused = MaxFileSizeCell.this.currentSize = j;
+                i = (int) (f2 + ((f / 0.25f) * f3));
+                long j2 = (long) i;
+                MaxFileSizeCell.this.sizeTextView.setText(LocaleController.formatString("AutodownloadSizeLimitUpTo", NUM, AndroidUtilities.formatFileSize(j2)));
+                long unused2 = MaxFileSizeCell.this.currentSize = j2;
                 MaxFileSizeCell.this.didChangedSizeValue(i);
             }
 
@@ -170,12 +173,12 @@ public class MaxFileSizeCell extends FrameLayout {
                     f2 = Math.max(0.0f, ((float) j4) / 9.437184E7f);
                 } else {
                     f3 = 0.75f;
-                    f2 = Math.max(0.0f, ((float) (j4 - 94371840)) / 1.50575514E9f);
+                    f2 = Math.max(0.0f, ((float) (j4 - 94371840)) / 1.9922944E9f);
                 }
                 f = (f2 * 0.25f) + f3;
             }
         }
-        this.seekBarView.setProgress(f);
+        this.seekBarView.setProgress(Math.min(1.0f, f));
     }
 
     public void setEnabled(boolean z, ArrayList<Animator> arrayList) {

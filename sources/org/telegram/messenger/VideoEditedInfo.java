@@ -146,12 +146,13 @@ public class VideoEditedInfo {
                 bArr = null;
             }
             SerializedData serializedData = new SerializedData(i);
-            serializedData.writeInt32(4);
+            serializedData.writeInt32(5);
             serializedData.writeInt64(this.avatarStartTime);
             serializedData.writeInt32(this.originalBitrate);
             if (this.filterState != null) {
                 serializedData.writeByte(1);
                 serializedData.writeFloat(this.filterState.enhanceValue);
+                serializedData.writeFloat(this.filterState.softenSkinValue);
                 serializedData.writeFloat(this.filterState.exposureValue);
                 serializedData.writeFloat(this.filterState.contrastValue);
                 serializedData.writeFloat(this.filterState.warmthValue);
@@ -267,6 +268,9 @@ public class VideoEditedInfo {
                             MediaController.SavedFilterState savedFilterState = new MediaController.SavedFilterState();
                             this.filterState = savedFilterState;
                             savedFilterState.enhanceValue = serializedData.readFloat(false);
+                            if (readInt32 >= 5) {
+                                this.filterState.softenSkinValue = serializedData.readFloat(false);
+                            }
                             this.filterState.exposureValue = serializedData.readFloat(false);
                             this.filterState.contrastValue = serializedData.readFloat(false);
                             this.filterState.warmthValue = serializedData.readFloat(false);

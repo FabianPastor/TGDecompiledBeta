@@ -364,8 +364,11 @@ public class CropAreaView extends View {
                 return;
             }
         } else {
+            float measuredWidth = ((float) getMeasuredWidth()) - (this.sidePadding * 2.0f);
+            float measuredHeight = ((((float) getMeasuredHeight()) - this.bottomPadding) - ((float) (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0))) - (this.sidePadding * 2.0f);
+            int min = (int) Math.min(measuredWidth, measuredHeight);
             Bitmap bitmap = this.circleBitmap;
-            if (bitmap == null || ((float) bitmap.getWidth()) != this.actualRect.width()) {
+            if (bitmap == null || bitmap.getWidth() != min) {
                 boolean z = this.circleBitmap != null;
                 Bitmap bitmap2 = this.circleBitmap;
                 if (bitmap2 != null) {
@@ -373,10 +376,11 @@ public class CropAreaView extends View {
                     this.circleBitmap = null;
                 }
                 try {
-                    this.circleBitmap = Bitmap.createBitmap((int) this.actualRect.width(), (int) this.actualRect.height(), Bitmap.Config.ARGB_8888);
+                    this.circleBitmap = Bitmap.createBitmap(min, min, Bitmap.Config.ARGB_8888);
                     Canvas canvas7 = new Canvas(this.circleBitmap);
-                    canvas7.drawRect(0.0f, 0.0f, this.actualRect.width(), this.actualRect.height(), this.dimPaint);
-                    canvas7.drawCircle(this.actualRect.width() / 2.0f, this.actualRect.height() / 2.0f, this.actualRect.width() / 2.0f, this.eraserPaint);
+                    float var_ = (float) min;
+                    canvas7.drawRect(0.0f, 0.0f, var_, var_, this.dimPaint);
+                    canvas7.drawCircle((float) (min / 2), (float) (min / 2), (float) (min / 2), this.eraserPaint);
                     canvas7.setBitmap((Bitmap) null);
                     if (!z) {
                         this.frameAlpha = 0.0f;
@@ -387,17 +391,24 @@ public class CropAreaView extends View {
             }
             if (this.circleBitmap != null) {
                 this.bitmapPaint.setAlpha((int) (this.frameAlpha * 255.0f));
+                this.dimPaint.setAlpha((int) (this.frameAlpha * 127.0f));
+                float var_ = this.sidePadding;
+                float var_ = (float) min;
+                float var_ = ((measuredWidth - var_) / 2.0f) + var_;
+                float var_ = var_ + ((measuredHeight - var_) / 2.0f) + ((float) (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0));
+                float var_ = var_ + var_;
+                float var_ = var_ + var_;
+                float var_ = (float) ((int) var_);
                 Canvas canvas8 = canvas;
-                canvas8.drawRect(0.0f, 0.0f, (float) getWidth(), (float) ((int) this.actualRect.top), this.dimPaint);
-                RectF rectF2 = this.actualRect;
+                canvas8.drawRect(0.0f, 0.0f, (float) getWidth(), var_, this.dimPaint);
+                float var_ = (float) ((int) var_);
                 Canvas canvas9 = canvas;
-                canvas9.drawRect(0.0f, (float) ((int) rectF2.top), (float) ((int) rectF2.left), (float) ((int) rectF2.bottom), this.dimPaint);
-                RectF rectF3 = this.actualRect;
-                canvas8.drawRect((float) ((int) rectF3.right), (float) ((int) rectF3.top), (float) getWidth(), (float) ((int) this.actualRect.bottom), this.dimPaint);
-                canvas9.drawRect(0.0f, (float) ((int) this.actualRect.bottom), (float) getWidth(), (float) getHeight(), this.dimPaint);
-                Bitmap bitmap3 = this.circleBitmap;
-                RectF rectF4 = this.actualRect;
-                canvas.drawBitmap(bitmap3, (float) ((int) rectF4.left), (float) ((int) rectF4.top), this.bitmapPaint);
+                float var_ = var_;
+                float var_ = (float) ((int) var_);
+                canvas9.drawRect(0.0f, var_, var_, var_, this.dimPaint);
+                canvas9.drawRect((float) ((int) var_), var_, (float) getWidth(), var_, this.dimPaint);
+                canvas.drawRect(0.0f, var_, (float) getWidth(), (float) getHeight(), this.dimPaint);
+                canvas8.drawBitmap(this.circleBitmap, var_, var_, this.bitmapPaint);
             }
         }
         if (this.frameAlpha < 1.0f) {

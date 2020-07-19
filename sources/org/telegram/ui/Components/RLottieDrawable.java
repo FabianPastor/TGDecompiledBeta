@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.DispatchQueuePool;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.Utilities;
 import org.telegram.ui.Components.RLottieDrawable;
 
 public class RLottieDrawable extends BitmapDrawable implements Animatable {
@@ -47,6 +48,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     /* access modifiers changed from: private */
     public int customEndFrame;
     private boolean decodeSingleFrame;
+    private boolean destroyAfterLoading;
     /* access modifiers changed from: private */
     public boolean destroyWhenDone;
     /* access modifiers changed from: private */
@@ -70,6 +72,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     private Runnable loadFrameRunnable;
     /* access modifiers changed from: private */
     public Runnable loadFrameTask;
+    private boolean loadingInBackground;
     /* access modifiers changed from: private */
     public final int[] metaData;
     /* access modifiers changed from: private */
@@ -93,6 +96,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     private float scaleY;
     /* access modifiers changed from: private */
     public int secondFramesCount;
+    private boolean secondLoadingInBackground;
     /* access modifiers changed from: private */
     public volatile long secondNativePtr;
     /* access modifiers changed from: private */
@@ -578,43 +582,123 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     public boolean setBaseDice(File file) {
-        if (this.nativePtr != 0) {
-            return true;
+        if (this.nativePtr == 0 && !this.loadingInBackground) {
+            String readRes = readRes(file, 0);
+            if (TextUtils.isEmpty(readRes)) {
+                return false;
+            }
+            this.loadingInBackground = true;
+            Utilities.globalQueue.postRunnable(new Runnable(readRes) {
+                public final /* synthetic */ String f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void run() {
+                    RLottieDrawable.this.lambda$setBaseDice$1$RLottieDrawable(this.f$1);
+                }
+            });
         }
-        String readRes = readRes(file, 0);
-        if (TextUtils.isEmpty(readRes)) {
-            return false;
+        return true;
+    }
+
+    public /* synthetic */ void lambda$setBaseDice$1$RLottieDrawable(String str) {
+        this.nativePtr = createWithJson(str, "dice", this.metaData, (int[]) null);
+        AndroidUtilities.runOnUIThread(new Runnable() {
+            public final void run() {
+                RLottieDrawable.this.lambda$null$0$RLottieDrawable();
+            }
+        });
+    }
+
+    public /* synthetic */ void lambda$null$0$RLottieDrawable() {
+        this.loadingInBackground = false;
+        if (this.secondLoadingInBackground || !this.destroyAfterLoading) {
+            this.timeBetweenFrames = Math.max(16, (int) (1000.0f / ((float) this.metaData[1])));
+            if (this.isRunning) {
+                scheduleNextGetFrame();
+                invalidateInternal();
+                return;
+            }
+            return;
         }
-        this.nativePtr = createWithJson(readRes, "dice", this.metaData, (int[]) null);
-        this.timeBetweenFrames = Math.max(16, (int) (1000.0f / ((float) this.metaData[1])));
+        recycle();
+    }
+
+    public boolean hasBaseDice() {
+        return this.nativePtr != 0 || this.loadingInBackground;
+    }
+
+    public boolean setDiceNumber(File file, boolean z) {
+        if (this.secondNativePtr == 0 && !this.secondLoadingInBackground) {
+            String readRes = readRes(file, 0);
+            if (TextUtils.isEmpty(readRes)) {
+                return false;
+            }
+            if (z && this.nextRenderingBitmap == null && this.renderingBitmap == null && this.loadFrameTask == null) {
+                this.isDice = 2;
+                this.setLastFrame = true;
+            }
+            this.secondLoadingInBackground = true;
+            Utilities.globalQueue.postRunnable(new Runnable(readRes) {
+                public final /* synthetic */ String f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void run() {
+                    RLottieDrawable.this.lambda$setDiceNumber$4$RLottieDrawable(this.f$1);
+                }
+            });
+        }
+        return true;
+    }
+
+    public /* synthetic */ void lambda$setDiceNumber$4$RLottieDrawable(String str) {
+        if (this.destroyAfterLoading) {
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public final void run() {
+                    RLottieDrawable.this.lambda$null$2$RLottieDrawable();
+                }
+            });
+            return;
+        }
+        int[] iArr = new int[3];
+        this.secondNativePtr = createWithJson(str, "dice", iArr, (int[]) null);
+        AndroidUtilities.runOnUIThread(new Runnable(iArr) {
+            public final /* synthetic */ int[] f$1;
+
+            {
+                this.f$1 = r2;
+            }
+
+            public final void run() {
+                RLottieDrawable.this.lambda$null$3$RLottieDrawable(this.f$1);
+            }
+        });
+    }
+
+    public /* synthetic */ void lambda$null$2$RLottieDrawable() {
+        this.secondLoadingInBackground = false;
+        if (!this.loadingInBackground && this.destroyAfterLoading) {
+            recycle();
+        }
+    }
+
+    public /* synthetic */ void lambda$null$3$RLottieDrawable(int[] iArr) {
+        this.secondLoadingInBackground = false;
+        if (this.destroyAfterLoading) {
+            recycle();
+            return;
+        }
+        this.secondFramesCount = iArr[0];
+        this.timeBetweenFrames = Math.max(16, (int) (1000.0f / ((float) iArr[1])));
         if (this.isRunning) {
             scheduleNextGetFrame();
             invalidateInternal();
         }
-        return true;
-    }
-
-    public boolean hasBaseDice() {
-        return this.nativePtr != 0;
-    }
-
-    public boolean setDiceNumber(File file, boolean z) {
-        if (this.secondNativePtr != 0) {
-            return true;
-        }
-        String readRes = readRes(file, 0);
-        if (TextUtils.isEmpty(readRes)) {
-            return false;
-        }
-        if (z && this.nextRenderingBitmap == null && this.renderingBitmap == null && this.loadFrameTask == null) {
-            this.isDice = 2;
-            this.setLastFrame = true;
-        }
-        int[] iArr = new int[3];
-        this.secondNativePtr = createWithJson(readRes, "dice", iArr, (int[]) null);
-        this.secondFramesCount = iArr[0];
-        this.timeBetweenFrames = Math.max(16, (int) (1000.0f / ((float) iArr[1])));
-        return true;
     }
 
     public RLottieDrawable(int i, String str, int i2, int i3, boolean z, int[] iArr) {
@@ -987,7 +1071,9 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         this.isRunning = false;
         this.isRecycled = true;
         checkRunningTasks();
-        if (this.loadFrameTask == null && this.cacheGenerateTask == null) {
+        if (this.loadingInBackground || this.secondLoadingInBackground) {
+            this.destroyAfterLoading = true;
+        } else if (this.loadFrameTask == null && this.cacheGenerateTask == null) {
             if (this.nativePtr != 0) {
                 destroy(this.nativePtr);
                 this.nativePtr = 0;
@@ -997,9 +1083,9 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                 this.secondNativePtr = 0;
             }
             recycleResources();
-            return;
+        } else {
+            this.destroyWhenDone = true;
         }
-        this.destroyWhenDone = true;
     }
 
     public void setAutoRepeat(int i) {
@@ -1094,7 +1180,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     private boolean scheduleNextGetFrame() {
-        if (this.loadFrameTask != null || this.nextRenderingBitmap != null || this.nativePtr == 0 || this.destroyWhenDone) {
+        if (this.loadFrameTask != null || this.nextRenderingBitmap != null || this.nativePtr == 0 || this.loadingInBackground || this.destroyWhenDone) {
             return false;
         }
         if (!this.isRunning) {
@@ -1127,6 +1213,10 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     public void setCurrentFrame(int i, boolean z) {
+        setCurrentFrame(i, true, false);
+    }
+
+    public void setCurrentFrame(int i, boolean z, boolean z2) {
         if (i >= 0 && i <= this.metaData[0]) {
             this.currentFrame = i;
             this.nextFrameIsLast = false;
@@ -1137,16 +1227,14 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                     this.doNotRemoveInvalidOnFrameReady = true;
                 }
             }
-            if (!z) {
-                if (this.waitingForNextTask && this.nextRenderingBitmap != null) {
-                    this.backgroundBitmap = this.nextRenderingBitmap;
-                    this.nextRenderingBitmap = null;
-                    this.loadFrameTask = null;
-                    this.waitingForNextTask = false;
-                }
-                if (this.loadFrameTask == null) {
-                    this.frameWaitSync = new CountDownLatch(1);
-                }
+            if ((!z || z2) && this.waitingForNextTask && this.nextRenderingBitmap != null) {
+                this.backgroundBitmap = this.nextRenderingBitmap;
+                this.nextRenderingBitmap = null;
+                this.loadFrameTask = null;
+                this.waitingForNextTask = false;
+            }
+            if (!z && this.loadFrameTask == null) {
+                this.frameWaitSync = new CountDownLatch(1);
             }
             if (!scheduleNextGetFrame()) {
                 this.forceFrameRedraw = true;
@@ -1160,6 +1248,10 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
             }
             invalidateSelf();
         }
+    }
+
+    public void setProgressMs(long j) {
+        setCurrentFrame((int) ((Math.max(0, j) / ((long) this.timeBetweenFrames)) % ((long) this.metaData[0])), true, true);
     }
 
     public void setProgress(float f) {

@@ -1006,31 +1006,31 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
     }
 
     public /* synthetic */ void lambda$didUploadPhoto$11$ChannelCreateActivity(TLRPC$InputFile tLRPC$InputFile, TLRPC$InputFile tLRPC$InputFile2, String str, double d, TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$PhotoSize tLRPC$PhotoSize2) {
-        if (tLRPC$InputFile != null) {
-            this.inputPhoto = tLRPC$InputFile;
-            this.inputVideo = tLRPC$InputFile2;
-            this.inputVideoPath = str;
-            this.videoTimestamp = d;
-            if (this.createAfterUpload) {
-                try {
-                    if (this.progressDialog != null && this.progressDialog.isShowing()) {
-                        this.progressDialog.dismiss();
-                        this.progressDialog = null;
-                    }
-                } catch (Exception e) {
-                    FileLog.e((Throwable) e);
-                }
-                this.donePressed = false;
-                this.doneButton.performClick();
-            }
-            showAvatarProgress(false, true);
+        if (tLRPC$InputFile == null && tLRPC$InputFile2 == null) {
+            TLRPC$FileLocation tLRPC$FileLocation = tLRPC$PhotoSize.location;
+            this.avatar = tLRPC$FileLocation;
+            this.avatarBig = tLRPC$PhotoSize2.location;
+            this.avatarImage.setImage(ImageLocation.getForLocal(tLRPC$FileLocation), "50_50", (Drawable) this.avatarDrawable, (Object) null);
+            showAvatarProgress(true, false);
             return;
         }
-        TLRPC$FileLocation tLRPC$FileLocation = tLRPC$PhotoSize.location;
-        this.avatar = tLRPC$FileLocation;
-        this.avatarBig = tLRPC$PhotoSize2.location;
-        this.avatarImage.setImage(ImageLocation.getForLocal(tLRPC$FileLocation), "50_50", (Drawable) this.avatarDrawable, (Object) null);
-        showAvatarProgress(true, false);
+        this.inputPhoto = tLRPC$InputFile;
+        this.inputVideo = tLRPC$InputFile2;
+        this.inputVideoPath = str;
+        this.videoTimestamp = d;
+        if (this.createAfterUpload) {
+            try {
+                if (this.progressDialog != null && this.progressDialog.isShowing()) {
+                    this.progressDialog.dismiss();
+                    this.progressDialog = null;
+                }
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
+            }
+            this.donePressed = false;
+            this.doneButton.performClick();
+        }
+        showAvatarProgress(false, true);
     }
 
     public String getInitialSearchString() {

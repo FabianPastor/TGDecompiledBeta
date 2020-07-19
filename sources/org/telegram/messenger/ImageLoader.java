@@ -1473,7 +1473,7 @@ public class ImageLoader {
                 r2 = r13
                 r3 = 0
             L_0x00c3:
-                int r13 = org.telegram.messenger.SharedConfig.getDevicePerfomanceClass()
+                int r13 = org.telegram.messenger.SharedConfig.getDevicePerformanceClass()
                 if (r13 == r8) goto L_0x00cc
                 r10 = 1
                 goto L_0x00cc

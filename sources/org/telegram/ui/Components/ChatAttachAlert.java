@@ -724,7 +724,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r11.setLongClickEnabled(r8)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.doneItem
             java.lang.String r1 = "Create"
-            r2 = 2131624853(0x7f0e0395, float:1.8876897E38)
+            r2 = 2131624854(0x7f0e0396, float:1.88769E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             java.lang.String r1 = r1.toUpperCase()
             r0.setText(r1)
@@ -757,7 +757,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.setIcon((int) r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
             java.lang.String r1 = "Search"
-            r2 = 2131626748(0x7f0e0afc, float:1.888074E38)
+            r2 = 2131626749(0x7f0e0afd, float:1.8880743E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setContentDescription(r1)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
@@ -994,7 +994,7 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             r0.setAlpha(r9)
             android.widget.FrameLayout r0 = r6.writeButtonContainer
             java.lang.String r2 = "Send"
-            r3 = 2131626801(0x7f0e0b31, float:1.8880848E38)
+            r3 = 2131626802(0x7f0e0b32, float:1.888085E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r0.setContentDescription(r2)
             android.view.ViewGroup r0 = r6.containerView
@@ -1356,7 +1356,6 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
     }
 
     public /* synthetic */ boolean lambda$new$15$ChatAttachAlert(View view) {
-        View view2 = view;
         BaseFragment baseFragment2 = this.baseFragment;
         if ((baseFragment2 instanceof ChatActivity) && this.editingMessageObject == null) {
             ChatActivity chatActivity = (ChatActivity) baseFragment2;
@@ -1388,26 +1387,25 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 });
                 this.sendPopupLayout.setShowedFromBotton(false);
                 this.itemCells = new ActionBarMenuSubItem[2];
-                int i = 0;
-                for (int i2 = 0; i2 < 2; i2++) {
-                    if (i2 == 0) {
+                for (int i = 0; i < 2; i++) {
+                    if (i == 0) {
                         if (!this.currentAttachLayout.canScheduleMessages()) {
                         }
-                    } else if (i2 == 1 && UserObject.isUserSelf(currentUser)) {
+                    } else if (i == 1 && UserObject.isUserSelf(currentUser)) {
                     }
-                    this.itemCells[i2] = new ActionBarMenuSubItem(getContext());
-                    if (i2 == 0) {
+                    this.itemCells[i] = new ActionBarMenuSubItem(getContext());
+                    if (i == 0) {
                         if (UserObject.isUserSelf(currentUser)) {
-                            this.itemCells[i2].setTextAndIcon(LocaleController.getString("SetReminder", NUM), NUM);
+                            this.itemCells[i].setTextAndIcon(LocaleController.getString("SetReminder", NUM), NUM);
                         } else {
-                            this.itemCells[i2].setTextAndIcon(LocaleController.getString("ScheduleMessage", NUM), NUM);
+                            this.itemCells[i].setTextAndIcon(LocaleController.getString("ScheduleMessage", NUM), NUM);
                         }
-                    } else if (i2 == 1) {
-                        this.itemCells[i2].setTextAndIcon(LocaleController.getString("SendWithoutSound", NUM), NUM);
+                    } else if (i == 1) {
+                        this.itemCells[i].setTextAndIcon(LocaleController.getString("SendWithoutSound", NUM), NUM);
                     }
-                    this.itemCells[i2].setMinimumWidth(AndroidUtilities.dp(196.0f));
-                    this.sendPopupLayout.addView(this.itemCells[i2], LayoutHelper.createFrame(-1, 48.0f, LocaleController.isRTL ? 5 : 3, 0.0f, (float) (i * 48), 0.0f, 0.0f));
-                    this.itemCells[i2].setOnClickListener(new View.OnClickListener(i2, chatActivity) {
+                    this.itemCells[i].setMinimumWidth(AndroidUtilities.dp(196.0f));
+                    this.sendPopupLayout.addView(this.itemCells[i], LayoutHelper.createLinear(-1, 48));
+                    this.itemCells[i].setOnClickListener(new View.OnClickListener(i, chatActivity) {
                         public final /* synthetic */ int f$1;
                         public final /* synthetic */ ChatActivity f$2;
 
@@ -1420,8 +1418,8 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                             ChatAttachAlert.this.lambda$null$14$ChatAttachAlert(this.f$1, this.f$2, view);
                         }
                     });
-                    i++;
                 }
+                this.sendPopupLayout.setupRadialSelectors(Theme.getColor("dialogButtonSelector"));
                 ActionBarPopupWindow actionBarPopupWindow = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2);
                 this.sendPopupWindow = actionBarPopupWindow;
                 actionBarPopupWindow.setAnimationEnabled(false);
@@ -1434,10 +1432,10 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
                 this.sendPopupLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
                 this.sendPopupWindow.setFocusable(true);
                 int[] iArr = new int[2];
-                view2.getLocationInWindow(iArr);
-                this.sendPopupWindow.showAtLocation(view2, 51, ((iArr[0] + view.getMeasuredWidth()) - this.sendPopupLayout.getMeasuredWidth()) + AndroidUtilities.dp(8.0f), (iArr[1] - this.sendPopupLayout.getMeasuredHeight()) - AndroidUtilities.dp(2.0f));
+                view.getLocationInWindow(iArr);
+                this.sendPopupWindow.showAtLocation(view, 51, ((iArr[0] + view.getMeasuredWidth()) - this.sendPopupLayout.getMeasuredWidth()) + AndroidUtilities.dp(8.0f), (iArr[1] - this.sendPopupLayout.getMeasuredHeight()) - AndroidUtilities.dp(2.0f));
                 this.sendPopupWindow.dimBehind();
-                view2.performHapticFeedback(3, 2);
+                view.performHapticFeedback(3, 2);
             }
         }
         return false;

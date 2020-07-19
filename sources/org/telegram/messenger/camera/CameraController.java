@@ -36,6 +36,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
     protected volatile ArrayList<CameraInfo> cameraInfos;
     private boolean cameraInitied;
     private boolean loadingCameras;
+    private boolean mirrorRecorderVideo;
     private ArrayList<Runnable> onFinishCameraInitRunnables = new ArrayList<>();
     private VideoTakeCallback onVideoTakeCallback;
     private String recordedFile;
@@ -1022,16 +1023,18 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         }
     }
 
-    public void recordVideo(CameraSession cameraSession, File file, VideoTakeCallback videoTakeCallback, Runnable runnable) {
-        if (cameraSession != null) {
-            CameraInfo cameraInfo = cameraSession.cameraInfo;
-            this.threadPool.execute(new Runnable(cameraInfo.camera, cameraSession, file, cameraInfo, videoTakeCallback, runnable) {
+    public void recordVideo(CameraSession cameraSession, File file, boolean z, VideoTakeCallback videoTakeCallback, Runnable runnable) {
+        CameraSession cameraSession2 = cameraSession;
+        if (cameraSession2 != null) {
+            CameraInfo cameraInfo = cameraSession2.cameraInfo;
+            this.threadPool.execute(new Runnable(cameraInfo.camera, cameraSession, z, file, cameraInfo, videoTakeCallback, runnable) {
                 public final /* synthetic */ Camera f$1;
                 public final /* synthetic */ CameraSession f$2;
-                public final /* synthetic */ File f$3;
-                public final /* synthetic */ CameraInfo f$4;
-                public final /* synthetic */ CameraController.VideoTakeCallback f$5;
-                public final /* synthetic */ Runnable f$6;
+                public final /* synthetic */ boolean f$3;
+                public final /* synthetic */ File f$4;
+                public final /* synthetic */ CameraInfo f$5;
+                public final /* synthetic */ CameraController.VideoTakeCallback f$6;
+                public final /* synthetic */ Runnable f$7;
 
                 {
                     this.f$1 = r2;
@@ -1040,16 +1043,17 @@ public class CameraController implements MediaRecorder.OnInfoListener {
                     this.f$4 = r5;
                     this.f$5 = r6;
                     this.f$6 = r7;
+                    this.f$7 = r8;
                 }
 
                 public final void run() {
-                    CameraController.this.lambda$recordVideo$11$CameraController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
+                    CameraController.this.lambda$recordVideo$11$CameraController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7);
                 }
             });
         }
     }
 
-    public /* synthetic */ void lambda$recordVideo$11$CameraController(Camera camera, CameraSession cameraSession, File file, CameraInfo cameraInfo, VideoTakeCallback videoTakeCallback, Runnable runnable) {
+    public /* synthetic */ void lambda$recordVideo$11$CameraController(Camera camera, CameraSession cameraSession, boolean z, File file, CameraInfo cameraInfo, VideoTakeCallback videoTakeCallback, Runnable runnable) {
         if (camera != null) {
             try {
                 Camera.Parameters parameters = camera.getParameters();
@@ -1065,6 +1069,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             }
             camera.unlock();
             try {
+                this.mirrorRecorderVideo = z;
                 MediaRecorder mediaRecorder = new MediaRecorder();
                 this.recorder = mediaRecorder;
                 mediaRecorder.setCamera(camera);
@@ -1094,62 +1099,87 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x0039 A[SYNTHETIC, Splitter:B:19:0x0039] */
-    /* JADX WARNING: Removed duplicated region for block: B:32:0x008f A[SYNTHETIC, Splitter:B:32:0x008f] */
+    /* JADX WARNING: Removed duplicated region for block: B:19:0x0038 A[SYNTHETIC, Splitter:B:19:0x0038] */
+    /* JADX WARNING: Removed duplicated region for block: B:25:0x004c  */
+    /* JADX WARNING: Removed duplicated region for block: B:26:0x007d  */
+    /* JADX WARNING: Removed duplicated region for block: B:36:0x00c4 A[SYNTHETIC, Splitter:B:36:0x00c4] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void finishRecordingVideo() {
         /*
             r10 = this;
             r0 = 0
             r1 = 0
-            android.media.MediaMetadataRetriever r3 = new android.media.MediaMetadataRetriever     // Catch:{ Exception -> 0x0030, all -> 0x002c }
-            r3.<init>()     // Catch:{ Exception -> 0x0030, all -> 0x002c }
-            java.lang.String r0 = r10.recordedFile     // Catch:{ Exception -> 0x002a }
-            r3.setDataSource(r0)     // Catch:{ Exception -> 0x002a }
-            r0 = 9
-            java.lang.String r0 = r3.extractMetadata(r0)     // Catch:{ Exception -> 0x002a }
-            if (r0 == 0) goto L_0x0024
-            long r4 = java.lang.Long.parseLong(r0)     // Catch:{ Exception -> 0x002a }
-            float r0 = (float) r4     // Catch:{ Exception -> 0x002a }
-            r4 = 1148846080(0x447a0000, float:1000.0)
-            float r0 = r0 / r4
-            double r4 = (double) r0     // Catch:{ Exception -> 0x002a }
-            double r0 = java.lang.Math.ceil(r4)     // Catch:{ Exception -> 0x002a }
-            int r0 = (int) r0
-            long r1 = (long) r0
+            android.media.MediaMetadataRetriever r3 = new android.media.MediaMetadataRetriever     // Catch:{ Exception -> 0x0031, all -> 0x002c }
+            r3.<init>()     // Catch:{ Exception -> 0x0031, all -> 0x002c }
+            java.lang.String r4 = r10.recordedFile     // Catch:{ Exception -> 0x002a }
+            r3.setDataSource(r4)     // Catch:{ Exception -> 0x002a }
+            r4 = 9
+            java.lang.String r4 = r3.extractMetadata(r4)     // Catch:{ Exception -> 0x002a }
+            if (r4 == 0) goto L_0x0024
+            long r4 = java.lang.Long.parseLong(r4)     // Catch:{ Exception -> 0x002a }
+            float r4 = (float) r4     // Catch:{ Exception -> 0x002a }
+            r5 = 1148846080(0x447a0000, float:1000.0)
+            float r4 = r4 / r5
+            double r4 = (double) r4     // Catch:{ Exception -> 0x002a }
+            double r1 = java.lang.Math.ceil(r4)     // Catch:{ Exception -> 0x002a }
+            int r1 = (int) r1
+            long r1 = (long) r1
         L_0x0024:
             r3.release()     // Catch:{ Exception -> 0x0028 }
-            goto L_0x0041
+            goto L_0x0040
         L_0x0028:
-            r0 = move-exception
-            goto L_0x003e
+            r3 = move-exception
+            goto L_0x003d
         L_0x002a:
-            r0 = move-exception
-            goto L_0x0034
+            r4 = move-exception
+            goto L_0x0033
         L_0x002c:
             r1 = move-exception
             r3 = r0
             r0 = r1
-            goto L_0x008d
-        L_0x0030:
-            r3 = move-exception
-            r9 = r3
+            goto L_0x00c2
+        L_0x0031:
+            r4 = move-exception
             r3 = r0
-            r0 = r9
-        L_0x0034:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ all -> 0x008c }
-            if (r3 == 0) goto L_0x0041
-            r3.release()     // Catch:{ Exception -> 0x003d }
-            goto L_0x0041
+        L_0x0033:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r4)     // Catch:{ all -> 0x00c1 }
+            if (r3 == 0) goto L_0x0040
+            r3.release()     // Catch:{ Exception -> 0x003c }
+            goto L_0x0040
+        L_0x003c:
+            r3 = move-exception
         L_0x003d:
-            r0 = move-exception
-        L_0x003e:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0041:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)
+        L_0x0040:
+            r8 = r1
+            java.lang.String r1 = r10.recordedFile
+            r2 = 1
+            android.graphics.Bitmap r1 = org.telegram.messenger.SendMessagesHelper.createVideoThumbnail(r1, r2)
+            boolean r2 = r10.mirrorRecorderVideo
+            if (r2 == 0) goto L_0x007d
+            int r2 = r1.getWidth()
+            int r3 = r1.getHeight()
+            android.graphics.Bitmap$Config r4 = android.graphics.Bitmap.Config.ARGB_8888
+            android.graphics.Bitmap r2 = android.graphics.Bitmap.createBitmap(r2, r3, r4)
+            android.graphics.Canvas r3 = new android.graphics.Canvas
+            r3.<init>(r2)
+            r4 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r5 = 1065353216(0x3var_, float:1.0)
+            int r6 = r2.getWidth()
+            int r6 = r6 / 2
+            float r6 = (float) r6
+            int r7 = r2.getHeight()
+            int r7 = r7 / 2
+            float r7 = (float) r7
+            r3.scale(r4, r5, r6, r7)
+            r4 = 0
+            r3.drawBitmap(r1, r4, r4, r0)
+            r1.recycle()
+            r7 = r2
+            goto L_0x007e
+        L_0x007d:
             r7 = r1
-            java.lang.String r0 = r10.recordedFile
-            r1 = 1
-            android.graphics.Bitmap r6 = org.telegram.messenger.SendMessagesHelper.createVideoThumbnail(r0, r1)
+        L_0x007e:
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r1 = "-2147483648_"
@@ -1159,37 +1189,37 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             java.lang.String r1 = ".jpg"
             r0.append(r1)
             java.lang.String r0 = r0.toString()
-            java.io.File r5 = new java.io.File
+            java.io.File r6 = new java.io.File
             r1 = 4
             java.io.File r1 = org.telegram.messenger.FileLoader.getDirectory(r1)
-            r5.<init>(r1, r0)
-            java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ all -> 0x007a }
-            r0.<init>(r5)     // Catch:{ all -> 0x007a }
-            android.graphics.Bitmap$CompressFormat r1 = android.graphics.Bitmap.CompressFormat.JPEG     // Catch:{ all -> 0x007a }
+            r6.<init>(r1, r0)
+            java.io.FileOutputStream r0 = new java.io.FileOutputStream     // Catch:{ all -> 0x00af }
+            r0.<init>(r6)     // Catch:{ all -> 0x00af }
+            android.graphics.Bitmap$CompressFormat r1 = android.graphics.Bitmap.CompressFormat.JPEG     // Catch:{ all -> 0x00af }
             r2 = 87
-            r6.compress(r1, r2, r0)     // Catch:{ all -> 0x007a }
-            goto L_0x007e
-        L_0x007a:
+            r7.compress(r1, r2, r0)     // Catch:{ all -> 0x00af }
+            goto L_0x00b3
+        L_0x00af:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x007e:
+        L_0x00b3:
             org.telegram.messenger.SharedConfig.saveConfig()
             org.telegram.messenger.camera.-$$Lambda$CameraController$Z2e0QjeyPqVck_gD_FIZx1BqCLASSNAME r0 = new org.telegram.messenger.camera.-$$Lambda$CameraController$Z2e0QjeyPqVck_gD_FIZx1BqCLASSNAME
-            r3 = r0
-            r4 = r10
-            r3.<init>(r5, r6, r7)
+            r4 = r0
+            r5 = r10
+            r4.<init>(r6, r7, r8)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             return
-        L_0x008c:
+        L_0x00c1:
             r0 = move-exception
-        L_0x008d:
-            if (r3 == 0) goto L_0x0097
-            r3.release()     // Catch:{ Exception -> 0x0093 }
-            goto L_0x0097
-        L_0x0093:
+        L_0x00c2:
+            if (r3 == 0) goto L_0x00cc
+            r3.release()     // Catch:{ Exception -> 0x00c8 }
+            goto L_0x00cc
+        L_0x00c8:
             r1 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r1)
-        L_0x0097:
+        L_0x00cc:
             throw r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraController.finishRecordingVideo():void");

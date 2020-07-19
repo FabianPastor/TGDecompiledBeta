@@ -22,6 +22,7 @@ import org.telegram.messenger.MediaController;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.Crop.CropRotationWheel;
+import org.telegram.ui.Components.Crop.CropTransform;
 import org.telegram.ui.Components.Crop.CropView;
 
 public class PhotoCropView extends FrameLayout {
@@ -204,15 +205,15 @@ public class PhotoCropView extends FrameLayout {
         return this.cropView.mirror();
     }
 
-    public void setBitmap(Bitmap bitmap, int i, boolean z, boolean z2, PaintingOverlay paintingOverlay, VideoEditTextureView videoEditTextureView, MediaController.CropState cropState) {
+    public void setBitmap(Bitmap bitmap, int i, boolean z, boolean z2, PaintingOverlay paintingOverlay, CropTransform cropTransform, VideoEditTextureView videoEditTextureView, MediaController.CropState cropState) {
         boolean z3 = z;
         MediaController.CropState cropState2 = cropState;
         requestLayout();
         int i2 = 0;
         this.thumbImageVisible = false;
         this.thumbImageView.setImageBitmap((Drawable) null);
-        this.cropView.setBitmap(bitmap, i, z, z2, paintingOverlay, videoEditTextureView, cropState);
-        this.wheelView.setFreeform(z);
+        this.cropView.setBitmap(bitmap, i, z, z2, paintingOverlay, cropTransform, videoEditTextureView, cropState);
+        this.wheelView.setFreeform(z3);
         boolean z4 = true;
         this.wheelView.reset(true);
         if (cropState2 != null) {
@@ -360,8 +361,8 @@ public class PhotoCropView extends FrameLayout {
         return this.cropView.getCropHeight();
     }
 
-    public Bitmap getBitmap(MediaController.MediaEditState mediaEditState) {
-        return this.cropView.getResult(mediaEditState);
+    public void makeCrop(MediaController.MediaEditState mediaEditState) {
+        this.cropView.makeCrop(mediaEditState);
     }
 
     public void setDelegate(PhotoCropViewDelegate photoCropViewDelegate) {
@@ -374,6 +375,14 @@ public class PhotoCropView extends FrameLayout {
         CropView cropView2 = this.cropView;
         if (cropView2 != null) {
             cropView2.updateLayout();
+        }
+    }
+
+    public void invalidate() {
+        super.invalidate();
+        CropView cropView2 = this.cropView;
+        if (cropView2 != null) {
+            cropView2.invalidate();
         }
     }
 }

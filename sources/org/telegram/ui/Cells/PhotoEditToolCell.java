@@ -20,8 +20,8 @@ public class PhotoEditToolCell extends FrameLayout {
         public void run() {
             PhotoEditToolCell.this.valueTextView.setTag((Object) null);
             AnimatorSet unused = PhotoEditToolCell.this.valueAnimation = new AnimatorSet();
-            PhotoEditToolCell.this.valueAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(PhotoEditToolCell.this.valueTextView, "alpha", new float[]{0.0f}), ObjectAnimator.ofFloat(PhotoEditToolCell.this.nameTextView, "alpha", new float[]{1.0f})});
-            PhotoEditToolCell.this.valueAnimation.setDuration(180);
+            PhotoEditToolCell.this.valueAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(PhotoEditToolCell.this.valueTextView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(PhotoEditToolCell.this.nameTextView, View.ALPHA, new float[]{1.0f})});
+            PhotoEditToolCell.this.valueAnimation.setDuration(250);
             PhotoEditToolCell.this.valueAnimation.setInterpolator(new DecelerateInterpolator());
             PhotoEditToolCell.this.valueAnimation.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
@@ -64,38 +64,50 @@ public class PhotoEditToolCell extends FrameLayout {
         addView(photoEditorSeekBar, LayoutHelper.createFrame(-1, 40.0f, 19, 96.0f, 0.0f, 24.0f, 0.0f));
     }
 
-    public void setSeekBarDelegate(final PhotoEditorSeekBar.PhotoEditorSeekBarDelegate photoEditorSeekBarDelegate) {
-        this.seekBar.setDelegate(new PhotoEditorSeekBar.PhotoEditorSeekBarDelegate() {
-            public void onProgressChanged(int i, int i2) {
-                photoEditorSeekBarDelegate.onProgressChanged(i, i2);
-                if (i2 > 0) {
-                    TextView access$000 = PhotoEditToolCell.this.valueTextView;
-                    access$000.setText("+" + i2);
-                } else {
-                    TextView access$0002 = PhotoEditToolCell.this.valueTextView;
-                    access$0002.setText("" + i2);
-                }
-                if (PhotoEditToolCell.this.valueTextView.getTag() == null) {
-                    if (PhotoEditToolCell.this.valueAnimation != null) {
-                        PhotoEditToolCell.this.valueAnimation.cancel();
-                    }
-                    PhotoEditToolCell.this.valueTextView.setTag(1);
-                    AnimatorSet unused = PhotoEditToolCell.this.valueAnimation = new AnimatorSet();
-                    PhotoEditToolCell.this.valueAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(PhotoEditToolCell.this.valueTextView, "alpha", new float[]{1.0f}), ObjectAnimator.ofFloat(PhotoEditToolCell.this.nameTextView, "alpha", new float[]{0.0f})});
-                    PhotoEditToolCell.this.valueAnimation.setDuration(180);
-                    PhotoEditToolCell.this.valueAnimation.setInterpolator(new DecelerateInterpolator());
-                    PhotoEditToolCell.this.valueAnimation.addListener(new AnimatorListenerAdapter() {
-                        public void onAnimationEnd(Animator animator) {
-                            AndroidUtilities.runOnUIThread(PhotoEditToolCell.this.hideValueRunnable, 1000);
-                        }
-                    });
-                    PhotoEditToolCell.this.valueAnimation.start();
-                    return;
-                }
-                AndroidUtilities.cancelRunOnUIThread(PhotoEditToolCell.this.hideValueRunnable);
-                AndroidUtilities.runOnUIThread(PhotoEditToolCell.this.hideValueRunnable, 1000);
+    public void setSeekBarDelegate(PhotoEditorSeekBar.PhotoEditorSeekBarDelegate photoEditorSeekBarDelegate) {
+        this.seekBar.setDelegate(new PhotoEditorSeekBar.PhotoEditorSeekBarDelegate(photoEditorSeekBarDelegate) {
+            public final /* synthetic */ PhotoEditorSeekBar.PhotoEditorSeekBarDelegate f$1;
+
+            {
+                this.f$1 = r2;
+            }
+
+            public final void onProgressChanged(int i, int i2) {
+                PhotoEditToolCell.this.lambda$setSeekBarDelegate$0$PhotoEditToolCell(this.f$1, i, i2);
             }
         });
+    }
+
+    public /* synthetic */ void lambda$setSeekBarDelegate$0$PhotoEditToolCell(PhotoEditorSeekBar.PhotoEditorSeekBarDelegate photoEditorSeekBarDelegate, int i, int i2) {
+        photoEditorSeekBarDelegate.onProgressChanged(i, i2);
+        if (i2 > 0) {
+            TextView textView = this.valueTextView;
+            textView.setText("+" + i2);
+        } else {
+            TextView textView2 = this.valueTextView;
+            textView2.setText("" + i2);
+        }
+        if (this.valueTextView.getTag() == null) {
+            AnimatorSet animatorSet = this.valueAnimation;
+            if (animatorSet != null) {
+                animatorSet.cancel();
+            }
+            this.valueTextView.setTag(1);
+            AnimatorSet animatorSet2 = new AnimatorSet();
+            this.valueAnimation = animatorSet2;
+            animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.valueTextView, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.nameTextView, View.ALPHA, new float[]{0.0f})});
+            this.valueAnimation.setDuration(250);
+            this.valueAnimation.setInterpolator(new DecelerateInterpolator());
+            this.valueAnimation.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    AndroidUtilities.runOnUIThread(PhotoEditToolCell.this.hideValueRunnable, 1000);
+                }
+            });
+            this.valueAnimation.start();
+            return;
+        }
+        AndroidUtilities.cancelRunOnUIThread(this.hideValueRunnable);
+        AndroidUtilities.runOnUIThread(this.hideValueRunnable, 1000);
     }
 
     public void setTag(Object obj) {

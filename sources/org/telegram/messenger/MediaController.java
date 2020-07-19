@@ -507,14 +507,15 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     }
 
     public static class CropState {
-        public float cropPh;
-        public float cropPw;
+        public float cropPh = 1.0f;
+        public float cropPw = 1.0f;
         public float cropPx;
         public float cropPy;
         public float cropRotate;
-        public float cropScale;
+        public float cropScale = 1.0f;
         public boolean freeform;
         public int height;
+        public boolean initied;
         public float lockedAspectRatio;
         public Matrix matrix;
         public boolean mirrored;
@@ -542,6 +543,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         public float saturationValue;
         public float shadowsValue;
         public float sharpenValue;
+        public float softenSkinValue;
         public int tintHighlightsColor;
         public int tintShadowsColor;
         public float vignetteValue;
@@ -656,7 +658,6 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         public CropState cropState;
         public ArrayList<VideoEditedInfo.MediaEntity> croppedMediaEntities;
         public String croppedPaintPath;
-        public String croppedPath;
         public VideoEditedInfo editedInfo;
         public ArrayList<TLRPC$MessageEntity> entities;
         public String filterPath;
@@ -691,7 +692,6 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             this.editedInfo = null;
             this.entities = null;
             this.savedFilterState = null;
-            this.croppedPath = null;
             this.stickers = null;
             this.cropState = null;
         }
@@ -1691,6 +1691,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             if (messageObject5 != null && messageObject5.isMusic() && this.playingMessageObject.getDialogId() == longValue2 && !this.playingMessageObject.scheduled) {
                 ArrayList arrayList4 = objArr[1];
                 this.playlist.addAll(0, arrayList4);
+                this.playlist.addAll(objArr[2]);
                 if (SharedConfig.shuffleMusic) {
                     buildShuffledPlayList();
                     this.currentPlaylistNum = 0;
@@ -2395,7 +2396,11 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 this.currentPlaylistNum = 0;
             }
             if (z) {
-                MediaDataController.getInstance(messageObject.currentAccount).loadMusic(messageObject.getDialogId(), this.playlist.get(0).getIdWithChannel());
+                MediaDataController instance = MediaDataController.getInstance(messageObject.currentAccount);
+                long dialogId = messageObject.getDialogId();
+                long idWithChannel = this.playlist.get(0).getIdWithChannel();
+                ArrayList<MessageObject> arrayList2 = this.playlist;
+                instance.loadMusic(dialogId, idWithChannel, arrayList2.get(arrayList2.size() - 1).getIdWithChannel());
             }
         }
         return playMessage(messageObject);
@@ -4122,7 +4127,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r3 = 2
             r2.<init>(r10, r3)     // Catch:{ Exception -> 0x005e }
             java.lang.String r10 = "Loading"
-            r1 = 2131625664(0x7f0e06c0, float:1.8878542E38)
+            r1 = 2131625665(0x7f0e06c1, float:1.8878544E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r1)     // Catch:{ Exception -> 0x005b }
             r2.setMessage(r10)     // Catch:{ Exception -> 0x005b }
             r2.setCanceledOnTouchOutside(r0)     // Catch:{ Exception -> 0x005b }

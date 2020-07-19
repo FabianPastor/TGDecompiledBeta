@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.util.LongSparseArray;
+import android.util.Pair;
 import android.util.SparseArray;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$Photo;
+import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_account_autoDownloadSettings;
 import org.telegram.tgnet.TLRPC$TL_account_getAutoDownloadSettings;
 import org.telegram.tgnet.TLRPC$TL_account_saveAutoDownloadSettings;
@@ -46,6 +48,7 @@ public class DownloadController extends BaseController implements NotificationCe
     private ArrayList<FileDownloadProgressListener> deleteLaterArray = new ArrayList<>();
     private ArrayList<DownloadObject> documentDownloadQueue = new ArrayList<>();
     private HashMap<String, DownloadObject> downloadQueueKeys = new HashMap<>();
+    private HashMap<Pair<Long, Integer>, DownloadObject> downloadQueuePairs = new HashMap<>();
     public Preset highPreset;
     private int lastCheckMask = 0;
     private int lastTag = 0;
@@ -475,6 +478,7 @@ public class DownloadController extends BaseController implements NotificationCe
         this.documentDownloadQueue.clear();
         this.videoDownloadQueue.clear();
         this.downloadQueueKeys.clear();
+        this.downloadQueuePairs.clear();
         this.typingTimes.clear();
     }
 
@@ -918,8 +922,25 @@ public class DownloadController extends BaseController implements NotificationCe
     }
 
     /* access modifiers changed from: protected */
+    public void cancelDownloading(ArrayList<Pair<Long, Integer>> arrayList) {
+        TLRPC$PhotoSize closestPhotoSizeWithSize;
+        int size = arrayList.size();
+        for (int i = 0; i < size; i++) {
+            DownloadObject downloadObject = this.downloadQueuePairs.get(arrayList.get(i));
+            if (downloadObject != null) {
+                TLObject tLObject = downloadObject.object;
+                if (tLObject instanceof TLRPC$Document) {
+                    getFileLoader().cancelLoadFile((TLRPC$Document) tLObject);
+                } else if ((tLObject instanceof TLRPC$Photo) && (closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(((TLRPC$Photo) tLObject).sizes, AndroidUtilities.getPhotoSize())) != null) {
+                    getFileLoader().cancelLoadFile(closestPhotoSizeWithSize);
+                }
+            }
+        }
+    }
+
+    /* access modifiers changed from: protected */
     /* JADX WARNING: Removed duplicated region for block: B:47:0x00b0  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x00b8 A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x00ce A[SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void processDownloadObjects(int r21, java.util.ArrayList<org.telegram.messenger.DownloadObject> r22) {
         /*
@@ -957,7 +978,7 @@ public class DownloadController extends BaseController implements NotificationCe
             r6 = 0
         L_0x0028:
             int r7 = r22.size()
-            if (r6 >= r7) goto L_0x00bc
+            if (r6 >= r7) goto L_0x00d2
             r7 = r22
             java.lang.Object r8 = r7.get(r6)
             org.telegram.messenger.DownloadObject r8 = (org.telegram.messenger.DownloadObject) r8
@@ -984,11 +1005,11 @@ public class DownloadController extends BaseController implements NotificationCe
             r9 = r3
             r10 = r9
         L_0x0060:
-            if (r9 == 0) goto L_0x00b8
+            if (r9 == 0) goto L_0x00ce
             java.util.HashMap<java.lang.String, org.telegram.messenger.DownloadObject> r11 = r0.downloadQueueKeys
             boolean r11 = r11.containsKey(r9)
             if (r11 == 0) goto L_0x006b
-            goto L_0x00b8
+            goto L_0x00ce
         L_0x006b:
             if (r10 == 0) goto L_0x0093
             org.telegram.tgnet.TLObject r11 = r8.object
@@ -1033,14 +1054,22 @@ public class DownloadController extends BaseController implements NotificationCe
         L_0x00ad:
             r10 = 0
         L_0x00ae:
-            if (r10 == 0) goto L_0x00b8
+            if (r10 == 0) goto L_0x00ce
             r1.add(r8)
             java.util.HashMap<java.lang.String, org.telegram.messenger.DownloadObject> r10 = r0.downloadQueueKeys
             r10.put(r9, r8)
-        L_0x00b8:
+            java.util.HashMap<android.util.Pair<java.lang.Long, java.lang.Integer>, org.telegram.messenger.DownloadObject> r9 = r0.downloadQueuePairs
+            android.util.Pair r10 = new android.util.Pair
+            long r11 = r8.id
+            java.lang.Long r11 = java.lang.Long.valueOf(r11)
+            int r12 = r8.type
+            java.lang.Integer r12 = java.lang.Integer.valueOf(r12)
+            r10.<init>(r11, r12)
+            r9.put(r10, r8)
+        L_0x00ce:
             int r6 = r6 + 1
             goto L_0x0028
-        L_0x00bc:
+        L_0x00d2:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.DownloadController.processDownloadObjects(int, java.util.ArrayList):void");
@@ -1067,6 +1096,7 @@ public class DownloadController extends BaseController implements NotificationCe
         DownloadObject downloadObject = this.downloadQueueKeys.get(str);
         if (downloadObject != null) {
             this.downloadQueueKeys.remove(str);
+            this.downloadQueuePairs.remove(new Pair(Long.valueOf(downloadObject.id), Integer.valueOf(downloadObject.type)));
             if (i == 0 || i == 2) {
                 getMessagesStorage().removeFromDownloadQueue(downloadObject.id, downloadObject.type, false);
             }

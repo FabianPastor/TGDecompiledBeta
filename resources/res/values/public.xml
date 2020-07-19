@@ -1825,6 +1825,7 @@
     <public type="string" name="ChannelNotifyMembersInfoOff" id="NUM" />
     <public type="string" name="ChannelNotifyMembersInfoOn" id="NUM" />
     <public type="string" name="ChannelOtherMembers" id="NUM" />
+    <public type="string" name="ChannelOtherSubscriberJoined" id="NUM" />
     <public type="string" name="ChannelOtherSubscribers" id="NUM" />
     <public type="string" name="ChannelPermissions" id="NUM" />
     <public type="string" name="ChannelPermissionsHeader" id="NUM" />
@@ -4174,6 +4175,7 @@
     <public type="string" name="SmartNotificationsInfo" id="NUM" />
     <public type="string" name="SmsText" id="NUM" />
     <public type="string" name="SoftUserLimitAlert" id="NUM" />
+    <public type="string" name="SoftenSkin" id="NUM" />
     <public type="string" name="SortBy" id="NUM" />
     <public type="string" name="SortFirstName" id="NUM" />
     <public type="string" name="SortLastName" id="NUM" />

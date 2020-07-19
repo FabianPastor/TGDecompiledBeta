@@ -817,7 +817,7 @@ public class SharedConfig {
         }
     }
 
-    public static int getDevicePerfomanceClass() {
+    public static int getDevicePerformanceClass() {
         int i;
         if (devicePerformanceClass == -1) {
             try {

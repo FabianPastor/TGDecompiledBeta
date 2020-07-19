@@ -271,6 +271,21 @@ public class ActionBarPopupWindow extends PopupWindow {
                 scrollView2.scrollTo(0, 0);
             }
         }
+
+        public void setupRadialSelectors(int i) {
+            int childCount = this.linearLayout.getChildCount();
+            int i2 = 0;
+            while (i2 < childCount) {
+                View childAt = this.linearLayout.getChildAt(i2);
+                int i3 = 6;
+                int i4 = i2 == 0 ? 6 : 0;
+                if (i2 != childCount - 1) {
+                    i3 = 0;
+                }
+                childAt.setBackground(Theme.createRadSelectorDrawable(i, i4, i3));
+                i2++;
+            }
+        }
     }
 
     public ActionBarPopupWindow(View view, int i, int i2) {

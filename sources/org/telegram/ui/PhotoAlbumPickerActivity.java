@@ -548,7 +548,6 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
     }
 
     public /* synthetic */ boolean lambda$createView$7$PhotoAlbumPickerActivity(View view) {
-        View view2 = view;
         ChatActivity chatActivity2 = this.chatActivity;
         if (!(chatActivity2 == null || this.maxSelectedPhotos == 1)) {
             chatActivity2.getCurrentChat();
@@ -595,7 +594,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                             this.itemCells[i].setTextAndIcon(LocaleController.getString("SendWithoutSound", NUM), NUM);
                         }
                         this.itemCells[i].setMinimumWidth(AndroidUtilities.dp(196.0f));
-                        this.sendPopupLayout.addView(this.itemCells[i], LayoutHelper.createFrame(-1, 48.0f, LocaleController.isRTL ? 5 : 3, 0.0f, (float) (i * 48), 0.0f, 0.0f));
+                        this.sendPopupLayout.addView(this.itemCells[i], LayoutHelper.createLinear(-1, 48));
                         this.itemCells[i].setOnClickListener(new View.OnClickListener(i) {
                             public final /* synthetic */ int f$1;
 
@@ -609,6 +608,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                         });
                     }
                 }
+                this.sendPopupLayout.setupRadialSelectors(Theme.getColor("dialogButtonSelector"));
                 ActionBarPopupWindow actionBarPopupWindow = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2);
                 this.sendPopupWindow = actionBarPopupWindow;
                 actionBarPopupWindow.setAnimationEnabled(false);
@@ -622,10 +622,10 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
             this.sendPopupLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
             this.sendPopupWindow.setFocusable(true);
             int[] iArr = new int[2];
-            view2.getLocationInWindow(iArr);
-            this.sendPopupWindow.showAtLocation(view2, 51, ((iArr[0] + view.getMeasuredWidth()) - this.sendPopupLayout.getMeasuredWidth()) + AndroidUtilities.dp(8.0f), (iArr[1] - this.sendPopupLayout.getMeasuredHeight()) - AndroidUtilities.dp(2.0f));
+            view.getLocationInWindow(iArr);
+            this.sendPopupWindow.showAtLocation(view, 51, ((iArr[0] + view.getMeasuredWidth()) - this.sendPopupLayout.getMeasuredWidth()) + AndroidUtilities.dp(8.0f), (iArr[1] - this.sendPopupLayout.getMeasuredHeight()) - AndroidUtilities.dp(2.0f));
             this.sendPopupWindow.dimBehind();
-            view2.performHapticFeedback(3, 2);
+            view.performHapticFeedback(3, 2);
         }
         return false;
     }

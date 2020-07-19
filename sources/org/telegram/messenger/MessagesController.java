@@ -5665,6 +5665,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
     public /* synthetic */ void lambda$deleteUserPhoto$78$MessagesController(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
+            TLRPC$TL_photos_photo tLRPC$TL_photos_photo = (TLRPC$TL_photos_photo) tLObject;
             TLRPC$User user = getUser(Integer.valueOf(getUserConfig().getClientUserId()));
             if (user == null) {
                 user = getUserConfig().getCurrentUser();
@@ -5677,7 +5678,19 @@ public class MessagesController extends BaseController implements NotificationCe
                 ArrayList arrayList = new ArrayList();
                 arrayList.add(user);
                 getMessagesStorage().putUsersAndChats(arrayList, (ArrayList<TLRPC$Chat>) null, false, true);
-                user.photo = (TLRPC$UserProfilePhoto) tLObject;
+                if (tLRPC$TL_photos_photo.photo instanceof TLRPC$TL_photo) {
+                    TLRPC$TL_userProfilePhoto tLRPC$TL_userProfilePhoto = new TLRPC$TL_userProfilePhoto();
+                    user.photo = tLRPC$TL_userProfilePhoto;
+                    tLRPC$TL_userProfilePhoto.has_video = !tLRPC$TL_photos_photo.photo.video_sizes.isEmpty();
+                    TLRPC$UserProfilePhoto tLRPC$UserProfilePhoto = user.photo;
+                    TLRPC$Photo tLRPC$Photo = tLRPC$TL_photos_photo.photo;
+                    tLRPC$UserProfilePhoto.photo_id = tLRPC$Photo.id;
+                    tLRPC$UserProfilePhoto.photo_small = FileLoader.getClosestPhotoSizeWithSize(tLRPC$Photo.sizes, 150).location;
+                    user.photo.photo_big = FileLoader.getClosestPhotoSizeWithSize(tLRPC$TL_photos_photo.photo.sizes, 800).location;
+                    user.photo.dc_id = tLRPC$TL_photos_photo.photo.dc_id;
+                } else {
+                    user.photo = new TLRPC$TL_userProfilePhotoEmpty();
+                }
                 AndroidUtilities.runOnUIThread(new Runnable() {
                     public final void run() {
                         MessagesController.this.lambda$null$77$MessagesController();
@@ -25063,7 +25076,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         if (i3 == NotificationCenter.messagesDidLoad && objArr[10].intValue() == i3) {
                             boolean booleanValue = objArr[3].booleanValue();
                             if (!objArr[2].isEmpty() || !booleanValue) {
-                                MessagesController.this.getNotificationCenter().removeObserver(this, NotificationCenter.didReceiveNewMessages);
+                                MessagesController.this.getNotificationCenter().removeObserver(this, NotificationCenter.messagesDidLoad);
                                 MessagesController.this.getNotificationCenter().removeObserver(this, NotificationCenter.loadingMessagesFailed);
                                 runnable3.run();
                             } else {
@@ -25071,7 +25084,7 @@ public class MessagesController extends BaseController implements NotificationCe
                             }
                         }
                         if (i3 == NotificationCenter.loadingMessagesFailed && objArr[0].intValue() == i3) {
-                            MessagesController.this.getNotificationCenter().removeObserver(this, NotificationCenter.didReceiveNewMessages);
+                            MessagesController.this.getNotificationCenter().removeObserver(this, NotificationCenter.messagesDidLoad);
                             MessagesController.this.getNotificationCenter().removeObserver(this, NotificationCenter.loadingMessagesFailed);
                             Runnable runnable = runnable4;
                             if (runnable != null) {

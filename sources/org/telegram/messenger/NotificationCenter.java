@@ -767,7 +767,7 @@ public class NotificationCenter {
     public void postNotificationName(int i, Object... objArr) {
         int[] iArr;
         boolean z = true;
-        boolean z2 = i == startAllHeavyOperations || i == stopAllHeavyOperations;
+        boolean z2 = i == startAllHeavyOperations || i == stopAllHeavyOperations || i == didReplacedPhotoInMemCache;
         if (!z2 && !this.allowedNotifications.isEmpty()) {
             int size = this.allowedNotifications.size();
             Iterator<Integer> it = this.allowedNotifications.keySet().iterator();

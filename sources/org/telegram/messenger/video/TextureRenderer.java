@@ -203,6 +203,7 @@ public class TextureRenderer {
             if (filterShaders2 != null) {
                 filterShaders2.onVideoFrameUpdate(this.mSTMatrix);
                 GLES20.glViewport(0, 0, this.originalWidth, this.originalHeight);
+                this.filterShaders.drawSkinSmoothPass();
                 this.filterShaders.drawEnhancePass();
                 this.filterShaders.drawSharpenPass();
                 this.filterShaders.drawCustomParamsPass();

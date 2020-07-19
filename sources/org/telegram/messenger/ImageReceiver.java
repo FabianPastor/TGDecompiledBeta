@@ -136,12 +136,22 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
 
     public static class BitmapHolder {
         public Bitmap bitmap;
+        public Drawable drawable;
         private String key;
         public int orientation;
         private boolean recycleOnRelease;
 
         public BitmapHolder(Bitmap bitmap2, String str, int i) {
             this.bitmap = bitmap2;
+            this.key = str;
+            this.orientation = i;
+            if (str != null) {
+                ImageLoader.getInstance().incrementUseCount(this.key);
+            }
+        }
+
+        public BitmapHolder(Drawable drawable2, String str, int i) {
+            this.drawable = drawable2;
             this.key = str;
             this.orientation = i;
             if (str != null) {
@@ -182,14 +192,30 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     bitmap2.recycle();
                 }
                 this.bitmap = null;
+                this.drawable = null;
                 return;
             }
             boolean decrementUseCount = ImageLoader.getInstance().decrementUseCount(this.key);
             if (!ImageLoader.getInstance().isInMemCache(this.key, false) && decrementUseCount) {
-                this.bitmap.recycle();
+                Bitmap bitmap3 = this.bitmap;
+                if (bitmap3 != null) {
+                    bitmap3.recycle();
+                } else {
+                    Drawable drawable2 = this.drawable;
+                    if (drawable2 != null) {
+                        if (drawable2 instanceof RLottieDrawable) {
+                            ((RLottieDrawable) drawable2).recycle();
+                        } else if (drawable2 instanceof AnimatedFileDrawable) {
+                            ((AnimatedFileDrawable) drawable2).recycle();
+                        } else if (drawable2 instanceof BitmapDrawable) {
+                            ((BitmapDrawable) drawable2).getBitmap().recycle();
+                        }
+                    }
+                }
             }
             this.key = null;
             this.bitmap = null;
+            this.drawable = null;
         }
     }
 
@@ -1591,7 +1617,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             if (r3 == 0) goto L_0x0035
             org.telegram.messenger.ImageReceiver$BitmapHolder r0 = new org.telegram.messenger.ImageReceiver$BitmapHolder
             android.graphics.Bitmap r1 = android.graphics.Bitmap.createBitmap(r1)
-            r0.<init>(r1, r2, r3)
+            r0.<init>((android.graphics.Bitmap) r1, (java.lang.String) r2, (int) r3)
             return r0
         L_0x0035:
             r0 = r1
@@ -1647,11 +1673,41 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         L_0x008f:
             if (r0 == 0) goto L_0x0096
             org.telegram.messenger.ImageReceiver$BitmapHolder r2 = new org.telegram.messenger.ImageReceiver$BitmapHolder
-            r2.<init>(r0, r1, r3)
+            r2.<init>((android.graphics.Bitmap) r0, (java.lang.String) r1, (int) r3)
         L_0x0096:
             return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageReceiver.getBitmapSafe():org.telegram.messenger.ImageReceiver$BitmapHolder");
+    }
+
+    public BitmapHolder getDrawableSafe() {
+        String str;
+        Drawable drawable = this.currentMediaDrawable;
+        if (!(drawable instanceof BitmapDrawable) || (drawable instanceof AnimatedFileDrawable) || (drawable instanceof RLottieDrawable)) {
+            drawable = this.currentImageDrawable;
+            if (!(drawable instanceof BitmapDrawable) || (drawable instanceof AnimatedFileDrawable) || (this.currentMediaDrawable instanceof RLottieDrawable)) {
+                drawable = this.currentThumbDrawable;
+                if (!(drawable instanceof BitmapDrawable) || (drawable instanceof AnimatedFileDrawable) || (this.currentMediaDrawable instanceof RLottieDrawable)) {
+                    drawable = this.staticThumbDrawable;
+                    if (drawable instanceof BitmapDrawable) {
+                        str = null;
+                    } else {
+                        drawable = null;
+                        str = null;
+                    }
+                } else {
+                    str = this.currentThumbKey;
+                }
+            } else {
+                str = this.currentImageKey;
+            }
+        } else {
+            str = this.currentMediaKey;
+        }
+        if (drawable != null) {
+            return new BitmapHolder(drawable, str, 0);
+        }
+        return null;
     }
 
     public Bitmap getThumbBitmap() {
@@ -2315,14 +2371,13 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             str2 = this.currentImageKey;
             obj = this.currentImageDrawable;
         }
-        if (!(str2 == null || !str2.startsWith("-") || (replacedKey = ImageLoader.getInstance().getReplacedKey(str2)) == null)) {
+        if (str2 != null && ((str2.startsWith("-") || str2.startsWith("strippedmessage-")) && (replacedKey = ImageLoader.getInstance().getReplacedKey(str2)) != null)) {
             str2 = replacedKey;
         }
         boolean z = obj instanceof RLottieDrawable;
         if (z) {
             ((RLottieDrawable) obj).removeParentView(this.parentView);
         }
-        ImageLoader.getInstance().getReplacedKey(str2);
         if (str2 != null && ((str == null || !str.equals(str2)) && obj != null)) {
             if (z) {
                 RLottieDrawable rLottieDrawable = (RLottieDrawable) obj;

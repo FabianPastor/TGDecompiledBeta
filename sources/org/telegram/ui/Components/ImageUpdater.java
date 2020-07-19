@@ -63,6 +63,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
     public ImageUpdaterDelegate delegate;
     private String finalPath;
     private ImageReceiver imageReceiver;
+    private boolean openWithFrontfaceCamera;
     public BaseFragment parentFragment;
     private boolean searchAvailable;
     private TLRPC$PhotoSize smallPhoto;
@@ -115,6 +116,10 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             chatAttachAlert2.dismissInternal();
             this.chatAttachAlert.onDestroy();
         }
+    }
+
+    public void setOpenWithFrontfaceCamera(boolean z) {
+        this.openWithFrontfaceCamera = z;
     }
 
     public ImageUpdater(boolean z) {
@@ -298,7 +303,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         BaseFragment baseFragment = this.parentFragment;
         if (baseFragment != null && baseFragment.getParentActivity() != null) {
             createChatAttachView();
-            this.chatAttachAlert.setOpenWithFrontFaceCamera(true);
+            this.chatAttachAlert.setOpenWithFrontFaceCamera(this.openWithFrontfaceCamera);
             this.chatAttachAlert.setMaxSelectedPhotos(1, false);
             this.chatAttachAlert.getPhotoLayout().loadGalleryPhotos();
             int i = Build.VERSION.SDK_INT;

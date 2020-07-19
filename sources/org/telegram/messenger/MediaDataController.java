@@ -4963,104 +4963,119 @@ public class MediaDataController extends BaseController {
         }
     }
 
-    public void loadMusic(long j, long j2) {
-        getMessagesStorage().getStorageQueue().postRunnable(new Runnable(j, j2) {
+    public void loadMusic(long j, long j2, long j3) {
+        getMessagesStorage().getStorageQueue().postRunnable(new Runnable(j, j2, j3) {
             public final /* synthetic */ long f$1;
             public final /* synthetic */ long f$2;
+            public final /* synthetic */ long f$3;
 
             {
                 this.f$1 = r2;
                 this.f$2 = r4;
+                this.f$3 = r6;
             }
 
             public final void run() {
-                MediaDataController.this.lambda$loadMusic$86$MediaDataController(this.f$1, this.f$2);
+                MediaDataController.this.lambda$loadMusic$86$MediaDataController(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:7:0x0068 A[Catch:{ Exception -> 0x009f }] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$loadMusic$86$MediaDataController(long r11, long r13) {
-        /*
-            r10 = this;
-            java.util.ArrayList r0 = new java.util.ArrayList
-            r0.<init>()
-            int r1 = (int) r11
-            r2 = 4
-            r3 = 2
-            r4 = 3
-            r5 = 1
-            r6 = 0
-            if (r1 == 0) goto L_0x0038
-            org.telegram.messenger.MessagesStorage r1 = r10.getMessagesStorage()     // Catch:{ Exception -> 0x009f }
-            org.telegram.SQLite.SQLiteDatabase r1 = r1.getDatabase()     // Catch:{ Exception -> 0x009f }
-            java.util.Locale r7 = java.util.Locale.US     // Catch:{ Exception -> 0x009f }
-            java.lang.String r8 = "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid < %d AND type = %d ORDER BY date DESC, mid DESC LIMIT 1000"
-            java.lang.Object[] r4 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x009f }
-            java.lang.Long r9 = java.lang.Long.valueOf(r11)     // Catch:{ Exception -> 0x009f }
-            r4[r6] = r9     // Catch:{ Exception -> 0x009f }
-            java.lang.Long r13 = java.lang.Long.valueOf(r13)     // Catch:{ Exception -> 0x009f }
-            r4[r5] = r13     // Catch:{ Exception -> 0x009f }
-            java.lang.Integer r13 = java.lang.Integer.valueOf(r2)     // Catch:{ Exception -> 0x009f }
-            r4[r3] = r13     // Catch:{ Exception -> 0x009f }
-            java.lang.String r13 = java.lang.String.format(r7, r8, r4)     // Catch:{ Exception -> 0x009f }
-            java.lang.Object[] r14 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x009f }
-            org.telegram.SQLite.SQLiteCursor r13 = r1.queryFinalized(r13, r14)     // Catch:{ Exception -> 0x009f }
-            goto L_0x0062
-        L_0x0038:
-            org.telegram.messenger.MessagesStorage r1 = r10.getMessagesStorage()     // Catch:{ Exception -> 0x009f }
-            org.telegram.SQLite.SQLiteDatabase r1 = r1.getDatabase()     // Catch:{ Exception -> 0x009f }
-            java.util.Locale r7 = java.util.Locale.US     // Catch:{ Exception -> 0x009f }
-            java.lang.String r8 = "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid > %d AND type = %d ORDER BY date DESC, mid DESC LIMIT 1000"
-            java.lang.Object[] r4 = new java.lang.Object[r4]     // Catch:{ Exception -> 0x009f }
-            java.lang.Long r9 = java.lang.Long.valueOf(r11)     // Catch:{ Exception -> 0x009f }
-            r4[r6] = r9     // Catch:{ Exception -> 0x009f }
-            java.lang.Long r13 = java.lang.Long.valueOf(r13)     // Catch:{ Exception -> 0x009f }
-            r4[r5] = r13     // Catch:{ Exception -> 0x009f }
-            java.lang.Integer r13 = java.lang.Integer.valueOf(r2)     // Catch:{ Exception -> 0x009f }
-            r4[r3] = r13     // Catch:{ Exception -> 0x009f }
-            java.lang.String r13 = java.lang.String.format(r7, r8, r4)     // Catch:{ Exception -> 0x009f }
-            java.lang.Object[] r14 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x009f }
-            org.telegram.SQLite.SQLiteCursor r13 = r1.queryFinalized(r13, r14)     // Catch:{ Exception -> 0x009f }
-        L_0x0062:
-            boolean r14 = r13.next()     // Catch:{ Exception -> 0x009f }
-            if (r14 == 0) goto L_0x009b
-            org.telegram.tgnet.NativeByteBuffer r14 = r13.byteBufferValue(r6)     // Catch:{ Exception -> 0x009f }
-            if (r14 == 0) goto L_0x0062
-            int r1 = r14.readInt32(r6)     // Catch:{ Exception -> 0x009f }
-            org.telegram.tgnet.TLRPC$Message r1 = org.telegram.tgnet.TLRPC$Message.TLdeserialize(r14, r1, r6)     // Catch:{ Exception -> 0x009f }
-            org.telegram.messenger.UserConfig r2 = r10.getUserConfig()     // Catch:{ Exception -> 0x009f }
-            int r2 = r2.clientUserId     // Catch:{ Exception -> 0x009f }
-            r1.readAttachPath(r14, r2)     // Catch:{ Exception -> 0x009f }
-            r14.reuse()     // Catch:{ Exception -> 0x009f }
-            boolean r14 = org.telegram.messenger.MessageObject.isMusicMessage(r1)     // Catch:{ Exception -> 0x009f }
-            if (r14 == 0) goto L_0x0062
-            int r14 = r13.intValue(r5)     // Catch:{ Exception -> 0x009f }
-            r1.id = r14     // Catch:{ Exception -> 0x009f }
-            r1.dialog_id = r11     // Catch:{ Exception -> 0x009f }
-            org.telegram.messenger.MessageObject r14 = new org.telegram.messenger.MessageObject     // Catch:{ Exception -> 0x009f }
-            int r2 = r10.currentAccount     // Catch:{ Exception -> 0x009f }
-            r14.<init>(r2, r1, r6)     // Catch:{ Exception -> 0x009f }
-            r0.add(r6, r14)     // Catch:{ Exception -> 0x009f }
-            goto L_0x0062
-        L_0x009b:
-            r13.dispose()     // Catch:{ Exception -> 0x009f }
-            goto L_0x00a3
-        L_0x009f:
-            r13 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)
-        L_0x00a3:
-            org.telegram.messenger.-$$Lambda$MediaDataController$5GXz880qGUSqWT63QNZ2ksXMMt8 r13 = new org.telegram.messenger.-$$Lambda$MediaDataController$5GXz880qGUSqWT63QNZ2ksXMMt8
-            r13.<init>(r11, r0)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r13)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.lambda$loadMusic$86$MediaDataController(long, long):void");
+    public /* synthetic */ void lambda$loadMusic$86$MediaDataController(long j, long j2, long j3) {
+        SQLiteCursor sQLiteCursor;
+        long j4 = j;
+        ArrayList arrayList = new ArrayList();
+        ArrayList arrayList2 = new ArrayList();
+        int i = (int) j4;
+        int i2 = 0;
+        while (i2 < 2) {
+            ArrayList arrayList3 = i2 == 0 ? arrayList : arrayList2;
+            if (i2 == 0) {
+                if (i != 0) {
+                    try {
+                        sQLiteCursor = getMessagesStorage().getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid < %d AND type = %d ORDER BY date DESC, mid DESC LIMIT 1000", new Object[]{Long.valueOf(j), Long.valueOf(j2), 4}), new Object[0]);
+                    } catch (Exception e) {
+                        e = e;
+                        FileLog.e((Throwable) e);
+                        AndroidUtilities.runOnUIThread(new Runnable(j, arrayList, arrayList2) {
+                            public final /* synthetic */ long f$1;
+                            public final /* synthetic */ ArrayList f$2;
+                            public final /* synthetic */ ArrayList f$3;
+
+                            {
+                                this.f$1 = r2;
+                                this.f$2 = r4;
+                                this.f$3 = r5;
+                            }
+
+                            public final void run() {
+                                MediaDataController.this.lambda$null$85$MediaDataController(this.f$1, this.f$2, this.f$3);
+                            }
+                        });
+                    }
+                } else {
+                    sQLiteCursor = getMessagesStorage().getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid > %d AND type = %d ORDER BY date DESC, mid DESC LIMIT 1000", new Object[]{Long.valueOf(j), Long.valueOf(j2), 4}), new Object[0]);
+                }
+            } else if (i != 0) {
+                sQLiteCursor = getMessagesStorage().getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid > %d AND type = %d ORDER BY date DESC, mid DESC LIMIT 1000", new Object[]{Long.valueOf(j), Long.valueOf(j3), 4}), new Object[0]);
+            } else {
+                sQLiteCursor = getMessagesStorage().getDatabase().queryFinalized(String.format(Locale.US, "SELECT data, mid FROM media_v2 WHERE uid = %d AND mid < %d AND type = %d ORDER BY date DESC, mid DESC LIMIT 1000", new Object[]{Long.valueOf(j), Long.valueOf(j3), 4}), new Object[0]);
+            }
+            while (sQLiteCursor.next()) {
+                NativeByteBuffer byteBufferValue = sQLiteCursor.byteBufferValue(0);
+                if (byteBufferValue != null) {
+                    TLRPC$Message TLdeserialize = TLRPC$Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false);
+                    TLdeserialize.readAttachPath(byteBufferValue, getUserConfig().clientUserId);
+                    byteBufferValue.reuse();
+                    if (MessageObject.isMusicMessage(TLdeserialize)) {
+                        TLdeserialize.id = sQLiteCursor.intValue(1);
+                        TLdeserialize.dialog_id = j4;
+                        try {
+                            arrayList3.add(0, new MessageObject(this.currentAccount, TLdeserialize, false));
+                        } catch (Exception e2) {
+                            e = e2;
+                            FileLog.e((Throwable) e);
+                            AndroidUtilities.runOnUIThread(new Runnable(j, arrayList, arrayList2) {
+                                public final /* synthetic */ long f$1;
+                                public final /* synthetic */ ArrayList f$2;
+                                public final /* synthetic */ ArrayList f$3;
+
+                                {
+                                    this.f$1 = r2;
+                                    this.f$2 = r4;
+                                    this.f$3 = r5;
+                                }
+
+                                public final void run() {
+                                    MediaDataController.this.lambda$null$85$MediaDataController(this.f$1, this.f$2, this.f$3);
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+            sQLiteCursor.dispose();
+            i2++;
+        }
+        AndroidUtilities.runOnUIThread(new Runnable(j, arrayList, arrayList2) {
+            public final /* synthetic */ long f$1;
+            public final /* synthetic */ ArrayList f$2;
+            public final /* synthetic */ ArrayList f$3;
+
+            {
+                this.f$1 = r2;
+                this.f$2 = r4;
+                this.f$3 = r5;
+            }
+
+            public final void run() {
+                MediaDataController.this.lambda$null$85$MediaDataController(this.f$1, this.f$2, this.f$3);
+            }
+        });
     }
 
-    public /* synthetic */ void lambda$null$85$MediaDataController(long j, ArrayList arrayList) {
-        getNotificationCenter().postNotificationName(NotificationCenter.musicDidLoad, Long.valueOf(j), arrayList);
+    public /* synthetic */ void lambda$null$85$MediaDataController(long j, ArrayList arrayList, ArrayList arrayList2) {
+        getNotificationCenter().postNotificationName(NotificationCenter.musicDidLoad, Long.valueOf(j), arrayList, arrayList2);
     }
 
     public void buildShortcuts() {
@@ -5189,7 +5204,7 @@ public class MediaDataController extends BaseController {
             android.content.pm.ShortcutInfo$Builder r10 = new android.content.pm.ShortcutInfo$Builder     // Catch:{ all -> 0x02b3 }
             android.content.Context r11 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02b3 }
             r10.<init>(r11, r9)     // Catch:{ all -> 0x02b3 }
-            r11 = 2131625863(0x7f0e0787, float:1.8878946E38)
+            r11 = 2131625864(0x7f0e0788, float:1.8878948E38)
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r0, r11)     // Catch:{ all -> 0x02b3 }
             android.content.pm.ShortcutInfo$Builder r10 = r10.setShortLabel(r12)     // Catch:{ all -> 0x02b3 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r11)     // Catch:{ all -> 0x02b3 }
@@ -6010,7 +6025,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x023b }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131626736(0x7f0e0af0, float:1.8880717E38)
+            r9 = 2131626737(0x7f0e0af1, float:1.8880719E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x023b }
             r9 = r4
             r10 = 1

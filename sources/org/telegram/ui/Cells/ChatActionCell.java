@@ -37,10 +37,12 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.AvatarDrawable;
 import org.telegram.ui.PhotoViewer;
 
-public class ChatActionCell extends BaseCell {
+public class ChatActionCell extends BaseCell implements DownloadController.FileDownloadProgressListener {
+    private int TAG;
     private AvatarDrawable avatarDrawable;
     private int currentAccount = UserConfig.selectedAccount;
     private MessageObject currentMessageObject;
+    private ImageLocation currentVideoLocation;
     private int customDate;
     private CharSequence customText;
     private ChatActionCellDelegate delegate;
@@ -89,8 +91,17 @@ public class ChatActionCell extends BaseCell {
         void needOpenUserProfile(int i);
     }
 
+    public void onFailedDownload(String str, boolean z) {
+    }
+
     /* access modifiers changed from: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+    }
+
+    public void onProgressDownload(String str, long j, long j2) {
+    }
+
+    public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
     public ChatActionCell(Context context) {
@@ -99,6 +110,7 @@ public class ChatActionCell extends BaseCell {
         this.imageReceiver = imageReceiver2;
         imageReceiver2.setRoundRadius(AndroidUtilities.roundMessageSize / 2);
         this.avatarDrawable = new AvatarDrawable();
+        this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
     }
 
     public void setDelegate(ChatActionCellDelegate chatActionCellDelegate) {
@@ -161,6 +173,7 @@ public class ChatActionCell extends BaseCell {
         if (this.currentMessageObject != messageObject2 || (!this.hasReplyMessage && messageObject2.replyMessageObject != null)) {
             this.currentMessageObject = messageObject2;
             this.hasReplyMessage = messageObject2.replyMessageObject != null;
+            DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
             this.previousWidth = 0;
             TLRPC$VideoSize tLRPC$VideoSize = null;
             if (this.currentMessageObject.type == 11) {
@@ -196,8 +209,11 @@ public class ChatActionCell extends BaseCell {
                         TLRPC$Photo tLRPC$Photo = messageObject2.messageOwner.action.photo;
                         if (!tLRPC$Photo.video_sizes.isEmpty() && SharedConfig.autoplayGifs) {
                             TLRPC$VideoSize tLRPC$VideoSize2 = tLRPC$Photo.video_sizes.get(0);
-                            if (DownloadController.getInstance(this.currentAccount).canDownloadMedia(4, tLRPC$VideoSize2.size)) {
+                            if (messageObject2.mediaExists || DownloadController.getInstance(this.currentAccount).canDownloadMedia(4, tLRPC$VideoSize2.size)) {
                                 tLRPC$VideoSize = tLRPC$VideoSize2;
+                            } else {
+                                this.currentVideoLocation = ImageLocation.getForPhoto(tLRPC$VideoSize2, tLRPC$Photo);
+                                DownloadController.getInstance(this.currentAccount).addLoadingFileObserver(FileLoader.getAttachFileName(tLRPC$VideoSize2), this.currentMessageObject, this);
                             }
                         }
                         if (tLRPC$VideoSize != null) {
@@ -236,6 +252,7 @@ public class ChatActionCell extends BaseCell {
     /* access modifiers changed from: protected */
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
+        DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
         this.wasLayout = false;
     }
 
@@ -890,6 +907,32 @@ public class ChatActionCell extends BaseCell {
                 Theme.chat_actionTextPaint.setColor(Theme.getColor("chat_serviceText"));
             }
         }
+    }
+
+    public void onSuccessDownload(String str) {
+        MessageObject messageObject = this.currentMessageObject;
+        if (messageObject != null && messageObject.type == 11) {
+            TLRPC$PhotoSize tLRPC$PhotoSize = null;
+            int i = 0;
+            int size = messageObject.photoThumbs.size();
+            while (true) {
+                if (i >= size) {
+                    break;
+                }
+                TLRPC$PhotoSize tLRPC$PhotoSize2 = this.currentMessageObject.photoThumbs.get(i);
+                if (tLRPC$PhotoSize2 instanceof TLRPC$TL_photoStrippedSize) {
+                    tLRPC$PhotoSize = tLRPC$PhotoSize2;
+                    break;
+                }
+                i++;
+            }
+            this.imageReceiver.setImage(this.currentVideoLocation, "g", ImageLocation.getForObject(tLRPC$PhotoSize, this.currentMessageObject.photoThumbsObject), "50_50_b", this.avatarDrawable, 0, (String) null, this.currentMessageObject, 1);
+            DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+        }
+    }
+
+    public int getObserverTag() {
+        return this.TAG;
     }
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {

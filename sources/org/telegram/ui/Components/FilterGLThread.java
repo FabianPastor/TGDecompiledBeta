@@ -7,6 +7,8 @@ import android.opengl.GLUtils;
 import android.opengl.Matrix;
 import android.os.Looper;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 import java.util.concurrent.CountDownLatch;
 import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
@@ -38,6 +40,7 @@ public class FilterGLThread extends DispatchQueue {
                     if (FilterGLThread.this.renderDataSet) {
                         if (FilterGLThread.this.videoDelegate == null || FilterGLThread.this.videoFrameAvailable) {
                             GLES20.glViewport(0, 0, FilterGLThread.this.renderBufferWidth, FilterGLThread.this.renderBufferHeight);
+                            FilterGLThread.this.filterShaders.drawSkinSmoothPass();
                             FilterGLThread.this.filterShaders.drawEnhancePass();
                             if (FilterGLThread.this.videoDelegate == null) {
                                 FilterGLThread.this.filterShaders.drawSharpenPass();
@@ -53,7 +56,7 @@ public class FilterGLThread extends DispatchQueue {
                         GLES20.glBindTexture(3553, FilterGLThread.this.filterShaders.getRenderTexture(true ^ FilterGLThread.this.blurred ? 1 : 0));
                         GLES20.glUniform1i(FilterGLThread.this.simpleSourceImageHandle, 0);
                         GLES20.glEnableVertexAttribArray(FilterGLThread.this.simpleInputTexCoordHandle);
-                        GLES20.glVertexAttribPointer(FilterGLThread.this.simpleInputTexCoordHandle, 2, 5126, false, 8, FilterGLThread.this.filterShaders.getTextureBuffer());
+                        GLES20.glVertexAttribPointer(FilterGLThread.this.simpleInputTexCoordHandle, 2, 5126, false, 8, FilterGLThread.this.textureBuffer != null ? FilterGLThread.this.textureBuffer : FilterGLThread.this.filterShaders.getTextureBuffer());
                         GLES20.glEnableVertexAttribArray(FilterGLThread.this.simplePositionHandle);
                         GLES20.glVertexAttribPointer(FilterGLThread.this.simplePositionHandle, 2, 5126, false, 8, FilterGLThread.this.filterShaders.getVertexBuffer());
                         GLES20.glDrawArrays(5, 0, 4);
@@ -99,6 +102,8 @@ public class FilterGLThread extends DispatchQueue {
     /* access modifiers changed from: private */
     public volatile int surfaceWidth;
     /* access modifiers changed from: private */
+    public FloatBuffer textureBuffer;
+    /* access modifiers changed from: private */
     public boolean updateSurface;
     /* access modifiers changed from: private */
     public FilterGLThreadVideoDelegate videoDelegate;
@@ -116,12 +121,27 @@ public class FilterGLThread extends DispatchQueue {
         void onVideoSurfaceCreated(SurfaceTexture surfaceTexture);
     }
 
-    public FilterGLThread(SurfaceTexture surfaceTexture2, Bitmap bitmap, int i) {
+    public FilterGLThread(SurfaceTexture surfaceTexture2, Bitmap bitmap, int i, boolean z) {
         super("PhotoFilterGLThread", false);
         this.surfaceTexture = surfaceTexture2;
         this.currentBitmap = bitmap;
         this.orientation = i;
         this.filterShaders = new FilterShaders(false);
+        float[] fArr = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
+        if (z) {
+            float f = fArr[2];
+            fArr[2] = fArr[0];
+            fArr[0] = f;
+            float f2 = fArr[6];
+            fArr[6] = fArr[4];
+            fArr[4] = f2;
+        }
+        ByteBuffer allocateDirect = ByteBuffer.allocateDirect(32);
+        allocateDirect.order(ByteOrder.nativeOrder());
+        FloatBuffer asFloatBuffer = allocateDirect.asFloatBuffer();
+        this.textureBuffer = asFloatBuffer;
+        asFloatBuffer.put(fArr);
+        this.textureBuffer.position(0);
         start();
     }
 
@@ -363,7 +383,12 @@ public class FilterGLThread extends DispatchQueue {
     }
 
     private Bitmap getRenderBufferBitmap() {
-        ByteBuffer allocateDirect = ByteBuffer.allocateDirect(this.renderBufferWidth * this.renderBufferHeight * 4);
+        int i;
+        int i2 = this.renderBufferWidth;
+        if (i2 == 0 || (i = this.renderBufferHeight) == 0) {
+            return null;
+        }
+        ByteBuffer allocateDirect = ByteBuffer.allocateDirect(i2 * i * 4);
         GLES20.glReadPixels(0, 0, this.renderBufferWidth, this.renderBufferHeight, 6408, 5121, allocateDirect);
         Bitmap createBitmap = Bitmap.createBitmap(this.renderBufferWidth, this.renderBufferHeight, Bitmap.Config.ARGB_8888);
         createBitmap.copyPixelsFromBuffer(allocateDirect);

@@ -1014,17 +1014,13 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
         int position = 0;
         float[] real = new float[1024];
 
+        public void flush(int i, int i2, int i3) {
+        }
+
         public VisualizerBufferSink() {
             ByteBuffer allocateDirect = ByteBuffer.allocateDirect(8192);
             this.byteBuffer = allocateDirect;
             allocateDirect.position(0);
-        }
-
-        public void flush(int i, int i2, int i3) {
-            if (VideoPlayer.this.audioVisualizerDelegate != null) {
-                VideoPlayer.this.audioUpdateHandler.removeCallbacksAndMessages((Object) null);
-                VideoPlayer.this.audioVisualizerDelegate.onVisualizerUpdate(false, false, (float[]) null);
-            }
         }
 
         public void handleBuffer(ByteBuffer byteBuffer2) {

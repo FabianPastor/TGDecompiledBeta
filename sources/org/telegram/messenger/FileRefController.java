@@ -162,7 +162,7 @@ public class FileRefController extends BaseController {
             TLRPC$Message tLRPC$Message = (TLRPC$Message) obj;
             TLRPC$Peer tLRPC$Peer = tLRPC$Message.to_id;
             int i = tLRPC$Peer != null ? tLRPC$Peer.channel_id : 0;
-            return "message" + tLRPC$Message.id + "_" + i;
+            return "message" + tLRPC$Message.id + "_" + i + "_" + tLRPC$Message.from_scheduled;
         } else if (obj instanceof TLRPC$WebPage) {
             return "webpage" + ((TLRPC$WebPage) obj).id;
         } else if (obj instanceof TLRPC$User) {

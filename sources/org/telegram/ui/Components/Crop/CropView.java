@@ -13,7 +13,6 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,7 +25,6 @@ import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
 import org.telegram.messenger.SharedConfig;
@@ -46,21 +44,20 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
     /* access modifiers changed from: private */
     public CropAreaView areaView;
     private Bitmap bitmap;
+    private int bitmapRotation;
     private float bottomPadding;
     RectF cropRect = new RectF();
+    private CropTransform cropTransform;
     private CropGestureDetector detector;
     /* access modifiers changed from: private */
     public boolean freeform;
     private boolean hasAspectRatioDialog;
-    /* access modifiers changed from: private */
-    public ImageView imageView;
+    private ImageView imageView;
     private RectF initialAreaRect = new RectF();
     private boolean isVisible;
     /* access modifiers changed from: private */
     public CropViewListener listener;
     private Matrix overlayMatrix = new Matrix();
-    private PaintingOverlay paintingOverlay;
-    private Matrix presentationMatrix = new Matrix();
     private RectF previousAreaRect = new RectF();
     private float rotationStartScale;
     RectF sizeRect = new RectF(0.0f, 0.0f, 1280.0f, 1280.0f);
@@ -89,8 +86,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
     }
 
     private class CropState {
-        /* access modifiers changed from: private */
-        public float baseRotation;
+        private float baseRotation;
         /* access modifiers changed from: private */
         public float height;
         /* access modifiers changed from: private */
@@ -262,8 +258,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         super(context);
         ImageView imageView2 = new ImageView(context);
         this.imageView = imageView2;
-        imageView2.setDrawingCacheEnabled(true);
-        this.imageView.setScaleType(ImageView.ScaleType.MATRIX);
+        imageView2.setScaleType(ImageView.ScaleType.MATRIX);
         addView(this.imageView);
         CropGestureDetector cropGestureDetector = new CropGestureDetector(context);
         this.detector = cropGestureDetector;
@@ -272,18 +267,6 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         this.areaView = cropAreaView;
         cropAreaView.setListener(this);
         addView(this.areaView);
-    }
-
-    /* access modifiers changed from: protected */
-    public boolean drawChild(Canvas canvas, View view, long j) {
-        boolean drawChild = super.drawChild(canvas, view, j);
-        if (view == this.imageView && this.paintingOverlay != null && this.videoEditTextureView == null) {
-            canvas.save();
-            canvas.setMatrix(this.overlayMatrix);
-            this.paintingOverlay.draw(canvas);
-            canvas.restore();
-        }
-        return drawChild;
     }
 
     public boolean isReady() {
@@ -303,10 +286,11 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         this.areaView.setActualRect(f);
     }
 
-    public void setBitmap(Bitmap bitmap2, int i, boolean z, boolean z2, PaintingOverlay paintingOverlay2, VideoEditTextureView videoEditTextureView2, final MediaController.CropState cropState) {
+    public void setBitmap(Bitmap bitmap2, int i, boolean z, boolean z2, PaintingOverlay paintingOverlay, CropTransform cropTransform2, VideoEditTextureView videoEditTextureView2, final MediaController.CropState cropState) {
         this.freeform = z;
-        this.paintingOverlay = paintingOverlay2;
         this.videoEditTextureView = videoEditTextureView2;
+        this.cropTransform = cropTransform2;
+        this.bitmapRotation = i;
         this.bitmap = bitmap2;
         this.areaView.setIsVideo(videoEditTextureView2 != null);
         Bitmap bitmap3 = null;
@@ -319,8 +303,8 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         final int currentHeight = getCurrentHeight();
         CropState cropState2 = this.state;
         if (cropState2 == null || !z2) {
-            this.state = new CropState(currentWidth, currentHeight, i);
-            this.imageView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            this.state = new CropState(currentWidth, currentHeight, 0);
+            this.areaView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                 public boolean onPreDraw() {
                     int i;
                     int i2;
@@ -379,7 +363,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
                             CropView.this.listener.onChange(false);
                         }
                     }
-                    CropView.this.imageView.getViewTreeObserver().removeOnPreDrawListener(this);
+                    CropView.this.areaView.getViewTreeObserver().removeOnPreDrawListener(this);
                     return false;
                 }
             });
@@ -410,15 +394,11 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
 
     public void onHide() {
         this.videoEditTextureView = null;
-        this.paintingOverlay = null;
         this.isVisible = false;
     }
 
     public void show() {
-        if (this.videoEditTextureView != null) {
-            updateVideoTextureView();
-        }
-        this.imageView.setVisibility(0);
+        updateCropTransform();
         this.areaView.setDimVisibility(true);
         this.areaView.setFrameVisibility(true, true);
         this.areaView.invalidate();
@@ -448,19 +428,6 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
     }
 
     public void updateMatrix() {
-        this.presentationMatrix.reset();
-        this.presentationMatrix.postTranslate((-this.state.getWidth()) / 2.0f, (-this.state.getHeight()) / 2.0f);
-        if (this.state.mirrored) {
-            if (this.state.baseRotation == 90.0f || this.state.baseRotation == 270.0f) {
-                this.presentationMatrix.postScale(1.0f, -1.0f);
-            } else {
-                this.presentationMatrix.postScale(-1.0f, 1.0f);
-            }
-        }
-        this.presentationMatrix.postRotate(this.state.getOrientation());
-        this.state.getConcatMatrix(this.presentationMatrix);
-        this.presentationMatrix.postTranslate(this.areaView.getCropCenterX(), this.areaView.getCropCenterY());
-        this.imageView.setImageMatrix(this.presentationMatrix);
         this.overlayMatrix.reset();
         if (this.state.getBaseRotation() == 90.0f || this.state.getBaseRotation() == 270.0f) {
             this.overlayMatrix.postTranslate((-this.state.getHeight()) / 2.0f, (-this.state.getWidth()) / 2.0f);
@@ -470,8 +437,8 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         this.overlayMatrix.postRotate((float) this.state.getOrientationOnly());
         this.state.getConcatMatrix(this.overlayMatrix);
         this.overlayMatrix.postTranslate(this.areaView.getCropCenterX(), this.areaView.getCropCenterY());
-        if ((!this.freeform || this.isVisible) && this.videoEditTextureView != null) {
-            updateVideoTextureView();
+        if (!this.freeform || this.isVisible) {
+            updateCropTransform();
             this.listener.onUpdate();
         }
         invalidate();
@@ -494,10 +461,10 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
             i = AndroidUtilities.statusBarHeight;
         }
         float f2 = (float) i;
-        float access$2500 = this.state.getOrientedWidth() * ((rectF.centerX() - ((float) (this.imageView.getWidth() / 2))) / this.areaView.getCropWidth());
+        float access$2200 = this.state.getOrientedWidth() * ((rectF.centerX() - ((float) (this.imageView.getWidth() / 2))) / this.areaView.getCropWidth());
         float centerY = ((rectF.centerY() - (((((float) this.imageView.getHeight()) - this.bottomPadding) + f2) / 2.0f)) / this.areaView.getCropHeight()) * this.state.getOrientedHeight();
         ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(f, fArr, access$2500, centerY) {
+        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(f, fArr, access$2200, centerY) {
             public final /* synthetic */ float f$1;
             public final /* synthetic */ float[] f$2;
             public final /* synthetic */ float f$3;
@@ -646,48 +613,48 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         if (this.state != null) {
             float cropWidth = this.areaView.getCropWidth();
             float cropHeight = this.areaView.getCropHeight();
-            float access$2500 = this.state.getOrientedWidth();
-            float access$2600 = this.state.getOrientedHeight();
-            float access$2800 = this.state.getRotation();
-            float radians = (float) Math.toRadians((double) access$2800);
-            RectF calculateBoundingBox = calculateBoundingBox(cropWidth, cropHeight, access$2800);
-            RectF rectF = new RectF(0.0f, 0.0f, access$2500, access$2600);
-            float access$2400 = this.state.getScale();
+            float access$2200 = this.state.getOrientedWidth();
+            float access$2300 = this.state.getOrientedHeight();
+            float access$2500 = this.state.getRotation();
+            float radians = (float) Math.toRadians((double) access$2500);
+            RectF calculateBoundingBox = calculateBoundingBox(cropWidth, cropHeight, access$2500);
+            RectF rectF = new RectF(0.0f, 0.0f, access$2200, access$2300);
+            float access$2100 = this.state.getScale();
             this.tempRect.setRect(rectF);
-            Matrix access$2900 = this.state.getMatrix();
-            access$2900.preTranslate(((cropWidth - access$2500) / 2.0f) / access$2400, ((cropHeight - access$2600) / 2.0f) / access$2400);
+            Matrix access$2600 = this.state.getMatrix();
+            access$2600.preTranslate(((cropWidth - access$2200) / 2.0f) / access$2100, ((cropHeight - access$2300) / 2.0f) / access$2100);
             this.tempMatrix.reset();
             this.tempMatrix.setTranslate(rectF.centerX(), rectF.centerY());
             Matrix matrix = this.tempMatrix;
-            matrix.setConcat(matrix, access$2900);
+            matrix.setConcat(matrix, access$2600);
             this.tempMatrix.preTranslate(-rectF.centerX(), -rectF.centerY());
             this.tempRect.applyMatrix(this.tempMatrix);
             this.tempMatrix.reset();
-            this.tempMatrix.preRotate(-access$2800, access$2500 / 2.0f, access$2600 / 2.0f);
+            this.tempMatrix.preRotate(-access$2500, access$2200 / 2.0f, access$2300 / 2.0f);
             this.tempRect.applyMatrix(this.tempMatrix);
             this.tempRect.getRect(rectF);
             PointF pointF = new PointF(this.state.getX(), this.state.getY());
             if (!rectF.contains(calculateBoundingBox)) {
-                f = (!z || (calculateBoundingBox.width() <= rectF.width() && calculateBoundingBox.height() <= rectF.height())) ? access$2400 : fitScale(rectF, access$2400, calculateBoundingBox.width() / scaleWidthToMaxSize(calculateBoundingBox, rectF));
+                f = (!z || (calculateBoundingBox.width() <= rectF.width() && calculateBoundingBox.height() <= rectF.height())) ? access$2100 : fitScale(rectF, access$2100, calculateBoundingBox.width() / scaleWidthToMaxSize(calculateBoundingBox, rectF));
                 fitTranslation(rectF, calculateBoundingBox, pointF, radians);
             } else if (!z2 || this.rotationStartScale <= 0.0f) {
-                f = access$2400;
+                f = access$2100;
             } else {
                 float width = calculateBoundingBox.width() / scaleWidthToMaxSize(calculateBoundingBox, rectF);
                 if (this.state.getScale() * width < this.rotationStartScale) {
                     width = 1.0f;
                 }
-                f = fitScale(rectF, access$2400, width);
+                f = fitScale(rectF, access$2100, width);
                 fitTranslation(rectF, calculateBoundingBox, pointF, radians);
             }
-            float access$3000 = pointF.x - this.state.getX();
-            float access$3100 = pointF.y - this.state.getY();
+            float access$2700 = pointF.x - this.state.getX();
+            float access$2800 = pointF.y - this.state.getY();
             if (z3) {
-                float f2 = f / access$2400;
-                if (Math.abs(f2 - 1.0f) >= 1.0E-5f || Math.abs(access$3000) >= 1.0E-5f || Math.abs(access$3100) >= 1.0E-5f) {
+                float f2 = f / access$2100;
+                if (Math.abs(f2 - 1.0f) >= 1.0E-5f || Math.abs(access$2700) >= 1.0E-5f || Math.abs(access$2800) >= 1.0E-5f) {
                     this.animating = true;
                     ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(access$3000, new float[]{1.0f, 0.0f, 0.0f}, access$3100, f2) {
+                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(access$2700, new float[]{1.0f, 0.0f, 0.0f}, access$2800, f2) {
                         public final /* synthetic */ float f$1;
                         public final /* synthetic */ float[] f$2;
                         public final /* synthetic */ float f$3;
@@ -723,8 +690,8 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
                 }
                 return;
             }
-            this.state.translate(access$3000, access$3100);
-            this.state.scale(f / access$2400, 0.0f, 0.0f);
+            this.state.translate(access$2700, access$2800);
+            this.state.scale(f / access$2100, 0.0f, 0.0f);
             updateMatrix();
         }
     }
@@ -748,7 +715,8 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         if (videoEditTextureView2 != null) {
             return videoEditTextureView2.getVideoWidth();
         }
-        return this.bitmap.getWidth();
+        int i = this.bitmapRotation;
+        return (i == 90 || i == 270) ? this.bitmap.getHeight() : this.bitmap.getWidth();
     }
 
     /* access modifiers changed from: private */
@@ -757,7 +725,8 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         if (videoEditTextureView2 != null) {
             return videoEditTextureView2.getVideoHeight();
         }
-        return this.bitmap.getHeight();
+        int i = this.bitmapRotation;
+        return (i == 90 || i == 270) ? this.bitmap.getWidth() : this.bitmap.getHeight();
     }
 
     public boolean mirror() {
@@ -769,9 +738,9 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         cropState.mirror();
         updateMatrix();
         if (this.listener != null) {
-            float access$2100 = (this.state.getOrientation() - this.state.getBaseRotation()) % 360.0f;
+            float access$3200 = (this.state.getOrientation() - this.state.getBaseRotation()) % 360.0f;
             CropViewListener cropViewListener = this.listener;
-            if (!this.state.hasChanges() && access$2100 == 0.0f && this.areaView.getLockAspectRatio() == 0.0f && !this.state.mirrored) {
+            if (!this.state.hasChanges() && access$3200 == 0.0f && this.areaView.getLockAspectRatio() == 0.0f && !this.state.mirrored) {
                 z = true;
             }
             cropViewListener.onChange(z);
@@ -785,10 +754,10 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         }
         this.areaView.resetAnimator();
         resetRotationStartScale();
-        float access$2100 = ((this.state.getOrientation() - this.state.getBaseRotation()) - 90.0f) % 360.0f;
+        float access$3200 = ((this.state.getOrientation() - this.state.getBaseRotation()) - 90.0f) % 360.0f;
         boolean z = this.freeform;
         if (!z || this.areaView.getLockAspectRatio() <= 0.0f) {
-            this.areaView.setBitmap(getCurrentWidth(), getCurrentHeight(), (this.state.getBaseRotation() + access$2100) % 180.0f != 0.0f, this.freeform);
+            this.areaView.setBitmap(getCurrentWidth(), getCurrentHeight(), (this.state.getBaseRotation() + access$3200) % 180.0f != 0.0f, this.freeform);
         } else {
             CropAreaView cropAreaView = this.areaView;
             cropAreaView.setLockedAspectRatio(1.0f / cropAreaView.getLockAspectRatio());
@@ -796,11 +765,11 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
             cropAreaView2.setActualRect(cropAreaView2.getLockAspectRatio());
             z = false;
         }
-        this.state.reset(this.areaView, access$2100, z);
+        this.state.reset(this.areaView, access$3200, z);
         updateMatrix();
         CropViewListener cropViewListener = this.listener;
         if (cropViewListener != null) {
-            cropViewListener.onChange(access$2100 == 0.0f && this.areaView.getLockAspectRatio() == 0.0f && !this.state.mirrored);
+            cropViewListener.onChange(access$3200 == 0.0f && this.areaView.getLockAspectRatio() == 0.0f && !this.state.mirrored);
         }
         if (this.state.getOrientationOnly() != 0) {
             return true;
@@ -1020,64 +989,63 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         decodeFile.recycle();
     }
 
-    private void updateVideoTextureView() {
+    private void updateCropTransform() {
         float f;
         int i;
         float f2;
-        this.areaView.getCropRect(this.cropRect);
-        int ceil = (int) Math.ceil((double) scaleWidthToMaxSize(this.cropRect, this.sizeRect));
-        float f3 = (float) ceil;
-        int ceil2 = (int) Math.ceil((double) (f3 / this.areaView.getAspectRatio()));
-        float cropWidth = f3 / this.areaView.getCropWidth();
-        this.state.matrix.getValues(this.values);
-        float access$1300 = this.state.minimumScale * cropWidth;
-        int access$2300 = this.state.getOrientationOnly();
-        while (access$2300 < 0) {
-            access$2300 += 360;
+        if (this.cropTransform != null) {
+            this.areaView.getCropRect(this.cropRect);
+            int ceil = (int) Math.ceil((double) scaleWidthToMaxSize(this.cropRect, this.sizeRect));
+            float f3 = (float) ceil;
+            int ceil2 = (int) Math.ceil((double) (f3 / this.areaView.getAspectRatio()));
+            float cropWidth = f3 / this.areaView.getCropWidth();
+            this.state.matrix.getValues(this.values);
+            float access$1300 = this.state.minimumScale * cropWidth;
+            int access$1900 = this.state.getOrientationOnly();
+            while (access$1900 < 0) {
+                access$1900 += 360;
+            }
+            if (access$1900 == 90 || access$1900 == 270) {
+                i = (int) this.state.height;
+                f = this.state.width;
+            } else {
+                i = (int) this.state.width;
+                f = this.state.height;
+            }
+            double d = (double) ceil;
+            float f4 = (float) i;
+            double ceil3 = Math.ceil((double) (f4 * access$1300));
+            Double.isNaN(d);
+            float f5 = (float) (d / ceil3);
+            double d2 = (double) ceil2;
+            float f6 = (float) ((int) f);
+            double ceil4 = Math.ceil((double) (access$1300 * f6));
+            Double.isNaN(d2);
+            float f7 = (float) (d2 / ceil4);
+            if (f5 > 1.0f || f7 > 1.0f) {
+                float max = Math.max(f5, f7);
+                f5 /= max;
+                f7 /= max;
+            }
+            float f8 = f5;
+            float f9 = f7;
+            RectF targetRectToFill = this.areaView.getTargetRectToFill(f4 / f6);
+            if (this.freeform) {
+                f2 = targetRectToFill.width() / f4;
+            } else {
+                f2 = Math.max(targetRectToFill.width() / f4, targetRectToFill.height() / f6);
+            }
+            float access$3500 = this.state.scale / f2;
+            float access$35002 = this.state.scale / this.state.minimumScale;
+            float access$35003 = (this.values[2] / f4) / this.state.scale;
+            float access$35004 = (this.values[5] / f6) / this.state.scale;
+            float access$3600 = this.state.rotation;
+            RectF targetRectToFill2 = this.areaView.getTargetRectToFill();
+            this.cropTransform.setViewTransform(this.state.mirrored || this.state.hasChanges() || this.state.getBaseRotation() >= 1.0E-5f, access$35003, access$35004, access$3600, this.state.getOrientationOnly(), access$3500, access$35002, this.state.minimumScale / f2, f8, f9, this.areaView.getCropCenterX() - targetRectToFill2.centerX(), this.areaView.getCropCenterY() - targetRectToFill2.centerY(), this.state.mirrored);
         }
-        if (access$2300 == 90 || access$2300 == 270) {
-            i = (int) this.state.height;
-            f = this.state.width;
-        } else {
-            i = (int) this.state.width;
-            f = this.state.height;
-        }
-        double d = (double) ceil;
-        float f4 = (float) i;
-        double ceil3 = Math.ceil((double) (f4 * access$1300));
-        Double.isNaN(d);
-        float f5 = (float) (d / ceil3);
-        double d2 = (double) ceil2;
-        float f6 = (float) ((int) f);
-        double ceil4 = Math.ceil((double) (access$1300 * f6));
-        Double.isNaN(d2);
-        float f7 = (float) (d2 / ceil4);
-        if (f5 > 1.0f || f7 > 1.0f) {
-            float max = Math.max(f5, f7);
-            f5 /= max;
-            f7 /= max;
-        }
-        float f8 = f5;
-        float f9 = f7;
-        RectF targetRectToFill = this.areaView.getTargetRectToFill(f4 / f6);
-        if (this.freeform) {
-            f2 = targetRectToFill.width() / f4;
-        } else {
-            f2 = Math.max(targetRectToFill.width() / f4, targetRectToFill.height() / f6);
-        }
-        float access$3700 = this.state.scale / f2;
-        float access$37002 = this.state.scale / this.state.minimumScale;
-        float access$37003 = (this.values[2] / f4) / this.state.scale;
-        float access$37004 = (this.values[5] / f6) / this.state.scale;
-        float access$3800 = this.state.rotation;
-        RectF targetRectToFill2 = this.areaView.getTargetRectToFill();
-        this.videoEditTextureView.setViewTransform(this.state.mirrored || this.state.hasChanges() || this.state.getBaseRotation() >= 1.0E-5f, access$37003, access$37004, access$3800, this.state.getOrientationOnly(), access$3700, access$37002, this.state.minimumScale / f2, f8, f9, this.areaView.getCropCenterX() - targetRectToFill2.centerX(), this.areaView.getCropCenterY() - targetRectToFill2.centerY(), this.state.mirrored);
     }
 
-    public static String getPathOrCopy(boolean z, String str) {
-        if (!z) {
-            return str;
-        }
+    public static String getCopy(String str) {
         File directory = FileLoader.getDirectory(4);
         File file = new File(directory, SharedConfig.getLastLocalId() + "_temp.jpg");
         try {
@@ -1088,81 +1056,37 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         return file.getAbsolutePath();
     }
 
-    public Bitmap getResult(MediaController.MediaEditState mediaEditState) {
-        Matrix matrix;
-        float f;
-        Canvas canvas;
-        boolean z;
+    public void makeCrop(MediaController.MediaEditState mediaEditState) {
         int i;
-        float f2;
+        float f;
         int i2;
         MediaController.MediaEditState mediaEditState2 = mediaEditState;
-        CropState cropState = this.state;
-        if (cropState != null && (this.videoEditTextureView != null || cropState.hasChanges() || this.state.getBaseRotation() >= 1.0E-5f || !this.freeform || this.state.mirrored)) {
+        if (this.state != null) {
             this.areaView.getCropRect(this.cropRect);
             int ceil = (int) Math.ceil((double) scaleWidthToMaxSize(this.cropRect, this.sizeRect));
-            float f3 = (float) ceil;
-            int ceil2 = (int) Math.ceil((double) (f3 / this.areaView.getAspectRatio()));
-            float cropWidth = f3 / this.areaView.getCropWidth();
-            Bitmap createBitmap = Bitmap.createBitmap(ceil, ceil2, Bitmap.Config.ARGB_8888);
-            Matrix matrix2 = new Matrix();
-            matrix2.postTranslate((-this.state.getWidth()) / 2.0f, (-this.state.getHeight()) / 2.0f);
-            if (this.state.mirrored) {
-                if (this.state.baseRotation == 90.0f || this.state.baseRotation == 270.0f) {
-                    matrix2.postScale(1.0f, -1.0f);
-                } else {
-                    matrix2.postScale(-1.0f, 1.0f);
-                }
-            }
-            matrix2.postRotate(this.state.getOrientation());
-            this.state.getConcatMatrix(matrix2);
-            matrix2.postScale(cropWidth, cropWidth);
-            matrix2.postTranslate((float) (ceil / 2), (float) (ceil2 / 2));
-            Canvas canvas2 = new Canvas(createBitmap);
+            float f2 = (float) ceil;
+            int ceil2 = (int) Math.ceil((double) (f2 / this.areaView.getAspectRatio()));
+            float cropWidth = f2 / this.areaView.getCropWidth();
             if (mediaEditState2.paintPath != null) {
-                String pathOrCopy = getPathOrCopy(this.videoEditTextureView != null, mediaEditState2.paintPath);
-                if (this.videoEditTextureView != null) {
-                    if (mediaEditState2.croppedPaintPath != null) {
-                        new File(mediaEditState2.croppedPaintPath).delete();
-                        mediaEditState2.croppedPaintPath = null;
-                    }
-                    mediaEditState2.croppedPaintPath = pathOrCopy;
-                    ArrayList<VideoEditedInfo.MediaEntity> arrayList = mediaEditState2.mediaEntities;
-                    if (arrayList == null || arrayList.isEmpty()) {
-                        mediaEditState2.croppedMediaEntities = null;
-                    } else {
-                        mediaEditState2.croppedMediaEntities = new ArrayList<>(mediaEditState2.mediaEntities.size());
-                        int size = mediaEditState2.mediaEntities.size();
-                        for (int i3 = 0; i3 < size; i3++) {
-                            mediaEditState2.croppedMediaEntities.add(mediaEditState2.mediaEntities.get(i3).copy());
-                        }
-                    }
-                } else {
+                Bitmap createBitmap = Bitmap.createBitmap(ceil, ceil2, Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(createBitmap);
+                String copy = getCopy(mediaEditState2.paintPath);
+                if (mediaEditState2.croppedPaintPath != null) {
+                    new File(mediaEditState2.croppedPaintPath).delete();
+                    mediaEditState2.croppedPaintPath = null;
+                }
+                mediaEditState2.croppedPaintPath = copy;
+                ArrayList<VideoEditedInfo.MediaEntity> arrayList = mediaEditState2.mediaEntities;
+                if (arrayList == null || arrayList.isEmpty()) {
                     mediaEditState2.croppedMediaEntities = null;
+                } else {
+                    mediaEditState2.croppedMediaEntities = new ArrayList<>(mediaEditState2.mediaEntities.size());
+                    int size = mediaEditState2.mediaEntities.size();
+                    for (int i3 = 0; i3 < size; i3++) {
+                        mediaEditState2.croppedMediaEntities.add(mediaEditState2.mediaEntities.get(i3).copy());
+                    }
                 }
-                z = true;
-                canvas = canvas2;
-                f = 1.0f;
-                matrix = matrix2;
-                editBitmap(getContext(), pathOrCopy, (Bitmap) null, canvas2, createBitmap, Bitmap.CompressFormat.PNG, this.state.matrix, getCurrentWidth(), getCurrentHeight(), this.state.scale, this.state.rotation, (float) this.state.getOrientationOnly(), cropWidth, false, mediaEditState2.croppedMediaEntities, false);
-                if (this.videoEditTextureView == null && !mediaEditState2.paintPath.equals(mediaEditState2.fullPaintPath)) {
-                    editBitmap(getContext(), mediaEditState2.fullPaintPath, (Bitmap) null, canvas, createBitmap, Bitmap.CompressFormat.PNG, this.state.matrix, getCurrentWidth(), getCurrentHeight(), this.state.scale, this.state.rotation, (float) this.state.getOrientationOnly(), cropWidth, false, mediaEditState2.mediaEntities, true);
-                }
-            } else {
-                canvas = canvas2;
-                matrix = matrix2;
-                z = true;
-                f = 1.0f;
-            }
-            if (mediaEditState2.filterPath != null && this.videoEditTextureView == null) {
-                if (mediaEditState2.croppedPath == null) {
-                    mediaEditState2.croppedPath = new File(FileLoader.getDirectory(4), SharedConfig.getLastLocalId() + "_temp.jpg").getAbsolutePath();
-                }
-                editBitmap(getContext(), mediaEditState2.croppedPath, ImageLoader.loadBitmap(mediaEditState.getPath(), (Uri) null, (float) getCurrentWidth(), (float) getCurrentHeight(), z), canvas, createBitmap, Bitmap.CompressFormat.JPEG, this.state.matrix, getCurrentWidth(), getCurrentHeight(), this.state.scale, this.state.rotation, (float) this.state.getOrientationOnly(), cropWidth, this.state.mirrored, (ArrayList<VideoEditedInfo.MediaEntity>) null, false);
-            }
-            if (this.videoEditTextureView == null) {
-                canvas.drawBitmap(this.bitmap, matrix, new Paint(2));
-                return createBitmap;
+                editBitmap(getContext(), copy, (Bitmap) null, canvas, createBitmap, Bitmap.CompressFormat.PNG, this.state.matrix, getCurrentWidth(), getCurrentHeight(), this.state.scale, this.state.rotation, (float) this.state.getOrientationOnly(), cropWidth, false, mediaEditState2.croppedMediaEntities, false);
             }
             if (mediaEditState2.cropState == null) {
                 mediaEditState2.cropState = new MediaController.CropState();
@@ -1171,59 +1095,55 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
             float access$1300 = this.state.minimumScale * cropWidth;
             mediaEditState2.cropState.transformRotation = this.state.getOrientationOnly();
             while (true) {
-                MediaController.CropState cropState2 = mediaEditState2.cropState;
-                i = cropState2.transformRotation;
+                MediaController.CropState cropState = mediaEditState2.cropState;
+                i = cropState.transformRotation;
                 if (i >= 0) {
                     break;
                 }
-                cropState2.transformRotation = i + 360;
+                cropState.transformRotation = i + 360;
             }
             if (i == 90 || i == 270) {
                 i2 = (int) this.state.height;
-                f2 = this.state.width;
+                f = this.state.width;
             } else {
                 i2 = (int) this.state.width;
-                f2 = this.state.height;
+                f = this.state.height;
             }
-            MediaController.CropState cropState3 = mediaEditState2.cropState;
+            MediaController.CropState cropState2 = mediaEditState2.cropState;
             double d = (double) ceil;
-            float f4 = (float) i2;
-            double ceil3 = Math.ceil((double) (f4 * access$1300));
+            float f3 = (float) i2;
+            double ceil3 = Math.ceil((double) (f3 * access$1300));
             Double.isNaN(d);
-            cropState3.cropPw = (float) (d / ceil3);
-            MediaController.CropState cropState4 = mediaEditState2.cropState;
+            cropState2.cropPw = (float) (d / ceil3);
+            MediaController.CropState cropState3 = mediaEditState2.cropState;
             double d2 = (double) ceil2;
-            float f5 = (float) ((int) f2);
-            double ceil4 = Math.ceil((double) (access$1300 * f5));
+            float f4 = (float) ((int) f);
+            double ceil4 = Math.ceil((double) (access$1300 * f4));
             Double.isNaN(d2);
-            cropState4.cropPh = (float) (d2 / ceil4);
-            MediaController.CropState cropState5 = mediaEditState2.cropState;
-            if (cropState5.cropPw > f || cropState5.cropPh > f) {
+            cropState3.cropPh = (float) (d2 / ceil4);
+            MediaController.CropState cropState4 = mediaEditState2.cropState;
+            if (cropState4.cropPw > 1.0f || cropState4.cropPh > 1.0f) {
+                MediaController.CropState cropState5 = mediaEditState2.cropState;
+                float max = Math.max(cropState5.cropPw, cropState5.cropPh);
                 MediaController.CropState cropState6 = mediaEditState2.cropState;
-                float max = Math.max(cropState6.cropPw, cropState6.cropPh);
-                MediaController.CropState cropState7 = mediaEditState2.cropState;
-                cropState7.cropPw /= max;
-                cropState7.cropPh /= max;
+                cropState6.cropPw /= max;
+                cropState6.cropPh /= max;
             }
-            mediaEditState2.cropState.cropScale = this.state.scale * Math.min(f4 / this.areaView.getCropWidth(), f5 / this.areaView.getCropHeight());
-            mediaEditState2.cropState.cropPx = (this.values[2] / f4) / this.state.scale;
-            mediaEditState2.cropState.cropPy = (this.values[5] / f5) / this.state.scale;
+            mediaEditState2.cropState.cropScale = this.state.scale * Math.min(f3 / this.areaView.getCropWidth(), f4 / this.areaView.getCropHeight());
+            mediaEditState2.cropState.cropPx = (this.values[2] / f3) / this.state.scale;
+            mediaEditState2.cropState.cropPy = (this.values[5] / f4) / this.state.scale;
             mediaEditState2.cropState.cropRotate = this.state.rotation;
             mediaEditState2.cropState.stateScale = this.state.scale;
             mediaEditState2.cropState.mirrored = this.state.mirrored;
+            MediaController.CropState cropState7 = mediaEditState2.cropState;
+            cropState7.scale = cropWidth;
+            cropState7.matrix = this.state.matrix;
             MediaController.CropState cropState8 = mediaEditState2.cropState;
-            cropState8.scale = cropWidth;
-            cropState8.matrix = this.state.matrix;
-            MediaController.CropState cropState9 = mediaEditState2.cropState;
-            cropState9.width = ceil;
-            cropState9.height = ceil2;
-            cropState9.freeform = this.freeform;
-            cropState9.lockedAspectRatio = this.areaView.getLockAspectRatio();
-            return null;
-        } else if (this.videoEditTextureView != null) {
-            return null;
-        } else {
-            return this.bitmap;
+            cropState8.width = ceil;
+            cropState8.height = ceil2;
+            cropState8.freeform = this.freeform;
+            cropState8.lockedAspectRatio = this.areaView.getLockAspectRatio();
+            mediaEditState2.cropState.initied = true;
         }
     }
 

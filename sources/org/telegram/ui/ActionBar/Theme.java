@@ -8394,7 +8394,7 @@ public class Theme {
             applyTheme(r7, r2, r2, r1)
             org.telegram.ui.ActionBar.-$$Lambda$RQB0Jwr1FTqp6hrbGUHuOs-9k1I r0 = org.telegram.ui.ActionBar.$$Lambda$RQB0Jwr1FTqp6hrbGUHuOs9k1I.INSTANCE
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-            org.telegram.ui.ActionBar.Theme$7 r0 = new org.telegram.ui.ActionBar.Theme$7
+            org.telegram.ui.ActionBar.Theme$8 r0 = new org.telegram.ui.ActionBar.Theme$8
             r0.<init>()
             ambientSensorListener = r0
             return
@@ -8885,6 +8885,50 @@ public class Theme {
             return r11
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.createSelectorDrawable(int, int, int):android.graphics.drawable.Drawable");
+    }
+
+    public static Drawable createRadSelectorDrawable(int i, final int i2, final int i3) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            maskPaint.setColor(-1);
+            return new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{i}), (Drawable) null, new Drawable() {
+                private Path path = new Path();
+                private float[] radii = new float[8];
+                private RectF rect = new RectF();
+
+                public int getOpacity() {
+                    return 0;
+                }
+
+                public void setAlpha(int i) {
+                }
+
+                public void setColorFilter(ColorFilter colorFilter) {
+                }
+
+                public void draw(Canvas canvas) {
+                    float[] fArr = this.radii;
+                    float dp = (float) AndroidUtilities.dp((float) i2);
+                    fArr[3] = dp;
+                    fArr[2] = dp;
+                    fArr[1] = dp;
+                    fArr[0] = dp;
+                    float[] fArr2 = this.radii;
+                    float dp2 = (float) AndroidUtilities.dp((float) i3);
+                    fArr2[7] = dp2;
+                    fArr2[6] = dp2;
+                    fArr2[5] = dp2;
+                    fArr2[4] = dp2;
+                    this.rect.set(getBounds());
+                    this.path.addRoundRect(this.rect, this.radii, Path.Direction.CW);
+                    canvas.drawPath(this.path, Theme.maskPaint);
+                }
+            });
+        }
+        StateListDrawable stateListDrawable = new StateListDrawable();
+        stateListDrawable.addState(new int[]{16842919}, new ColorDrawable(i));
+        stateListDrawable.addState(new int[]{16842913}, new ColorDrawable(i));
+        stateListDrawable.addState(StateSet.WILD_CARD, new ColorDrawable(0));
+        return stateListDrawable;
     }
 
     public static void applyPreviousTheme() {
@@ -10997,7 +11041,7 @@ public class Theme {
             r12 = 0
         L_0x00d1:
             if (r12 >= r10) goto L_0x00fe
-            org.telegram.ui.ActionBar.Theme$8 r10 = new org.telegram.ui.ActionBar.Theme$8     // Catch:{ all -> 0x0539 }
+            org.telegram.ui.ActionBar.Theme$9 r10 = new org.telegram.ui.ActionBar.Theme$9     // Catch:{ all -> 0x0539 }
             r22 = r13
             r13 = 1
             r23 = r8
@@ -14097,7 +14141,7 @@ public class Theme {
             android.graphics.drawable.GradientDrawable$Orientation r8 = org.telegram.ui.Components.BackgroundGradientDrawable.getGradientOrientation(r8)     // Catch:{ all -> 0x021d }
             org.telegram.ui.Components.BackgroundGradientDrawable r9 = new org.telegram.ui.Components.BackgroundGradientDrawable     // Catch:{ all -> 0x021d }
             r9.<init>(r8, r1)     // Catch:{ all -> 0x021d }
-            org.telegram.ui.ActionBar.Theme$9 r8 = new org.telegram.ui.ActionBar.Theme$9     // Catch:{ all -> 0x021d }
+            org.telegram.ui.ActionBar.Theme$10 r8 = new org.telegram.ui.ActionBar.Theme$10     // Catch:{ all -> 0x021d }
             r8.<init>()     // Catch:{ all -> 0x021d }
             org.telegram.ui.Components.BackgroundGradientDrawable$Sizes r10 = org.telegram.ui.Components.BackgroundGradientDrawable.Sizes.ofDeviceScreen()     // Catch:{ all -> 0x021d }
             org.telegram.ui.Components.BackgroundGradientDrawable$Disposable r8 = r9.startDithering(r10, r8, r4)     // Catch:{ all -> 0x021d }
@@ -14210,7 +14254,7 @@ public class Theme {
             android.graphics.drawable.GradientDrawable$Orientation r7 = org.telegram.ui.Components.BackgroundGradientDrawable.getGradientOrientation(r7)     // Catch:{ all -> 0x0201 }
             org.telegram.ui.Components.BackgroundGradientDrawable r10 = new org.telegram.ui.Components.BackgroundGradientDrawable     // Catch:{ all -> 0x0201 }
             r10.<init>(r7, r9)     // Catch:{ all -> 0x0201 }
-            org.telegram.ui.ActionBar.Theme$10 r7 = new org.telegram.ui.ActionBar.Theme$10     // Catch:{ all -> 0x0201 }
+            org.telegram.ui.ActionBar.Theme$11 r7 = new org.telegram.ui.ActionBar.Theme$11     // Catch:{ all -> 0x0201 }
             r7.<init>()     // Catch:{ all -> 0x0201 }
             org.telegram.ui.Components.BackgroundGradientDrawable$Sizes r9 = org.telegram.ui.Components.BackgroundGradientDrawable.Sizes.ofDeviceScreen()     // Catch:{ all -> 0x0201 }
             org.telegram.ui.Components.BackgroundGradientDrawable$Disposable r7 = r10.startDithering(r9, r7, r4)     // Catch:{ all -> 0x0201 }
@@ -14409,7 +14453,7 @@ public class Theme {
             org.telegram.ui.Components.BackgroundGradientDrawable$Sizes r0 = org.telegram.ui.Components.BackgroundGradientDrawable.Sizes.ofDeviceScreen(r0, r2)
         L_0x0086:
             if (r9 == 0) goto L_0x008d
-            org.telegram.ui.ActionBar.Theme$11 r3 = new org.telegram.ui.ActionBar.Theme$11
+            org.telegram.ui.ActionBar.Theme$12 r3 = new org.telegram.ui.ActionBar.Theme$12
             r3.<init>(r8, r9)
         L_0x008d:
             r1.startDithering(r0, r3)
