@@ -10152,7 +10152,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         TLRPC$Message tLRPC$Message2 = tLRPC$Message;
         getMessagesStorage().updateMessageStateAndId(tLRPC$Message2.random_id, Integer.valueOf(i), tLRPC$Message2.id, 0, false, tLRPC$Message2.to_id.channel_id, z ? 1 : 0);
         getMessagesStorage().putMessages((ArrayList<TLRPC$Message>) arrayList, true, false, false, 0, z);
-        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$Message, i, j, i2, z) {
+        AndroidUtilities.runOnUIThread(new Runnable(tLRPC$Message2, i, j, i2, z) {
             public final /* synthetic */ TLRPC$Message f$1;
             public final /* synthetic */ int f$2;
             public final /* synthetic */ long f$3;
@@ -10468,8 +10468,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         removeFromSendingMessages(tLRPC$Message.id, z);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x01c2  */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x01d5  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x01c3  */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x01d6  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$null$53$SendMessagesHelper(boolean r26, org.telegram.tgnet.TLRPC$TL_error r27, org.telegram.tgnet.TLRPC$Message r28, org.telegram.tgnet.TLObject r29, org.telegram.messenger.MessageObject r30, java.lang.String r31, org.telegram.tgnet.TLObject r32) {
         /*
@@ -10479,7 +10479,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r0 = r27
             r10 = r28
             r1 = r29
-            if (r0 != 0) goto L_0x0287
+            if (r0 != 0) goto L_0x0288
             int r6 = r10.id
             java.util.ArrayList r7 = new java.util.ArrayList
             r7.<init>()
@@ -10493,7 +10493,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r0 = 0
         L_0x001f:
             boolean r4 = r1 instanceof org.telegram.tgnet.TLRPC$TL_updateShortSentMessage
-            if (r4 == 0) goto L_0x00c8
+            if (r4 == 0) goto L_0x00c7
             r15 = r1
             org.telegram.tgnet.TLRPC$TL_updateShortSentMessage r15 = (org.telegram.tgnet.TLRPC$TL_updateShortSentMessage) r15
             r2 = 0
@@ -10569,23 +10569,22 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r2.<init>(r15)
             r1.postRunnable(r2)
             r7.add(r10)
-            r11 = r0
-            r12 = 0
-            goto L_0x01bb
-        L_0x00c8:
+            r13 = 0
+            goto L_0x01ba
+        L_0x00c7:
             boolean r4 = r1 instanceof org.telegram.tgnet.TLRPC$Updates
-            if (r4 == 0) goto L_0x01b9
+            if (r4 == 0) goto L_0x01b8
             r15 = r1
             org.telegram.tgnet.TLRPC$Updates r15 = (org.telegram.tgnet.TLRPC$Updates) r15
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Update> r1 = r15.updates
             r4 = 0
-        L_0x00d2:
+        L_0x00d1:
             int r5 = r1.size()
-            if (r4 >= r5) goto L_0x013d
+            if (r4 >= r5) goto L_0x013c
             java.lang.Object r5 = r1.get(r4)
             org.telegram.tgnet.TLRPC$Update r5 = (org.telegram.tgnet.TLRPC$Update) r5
             boolean r2 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateNewMessage
-            if (r2 == 0) goto L_0x00f8
+            if (r2 == 0) goto L_0x00f6
             org.telegram.tgnet.TLRPC$TL_updateNewMessage r5 = (org.telegram.tgnet.TLRPC$TL_updateNewMessage) r5
             org.telegram.tgnet.TLRPC$Message r2 = r5.message
             r7.add(r2)
@@ -10594,71 +10593,71 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r13.<init>(r5)
             r11.postRunnable(r13)
             r1.remove(r4)
+            goto L_0x0137
         L_0x00f6:
-            r11 = r2
-            goto L_0x013e
-        L_0x00f8:
             boolean r2 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateNewChannelMessage
             r11 = -2147483648(0xfffffffvar_, float:-0.0)
-            if (r2 == 0) goto L_0x011f
+            if (r2 == 0) goto L_0x011d
             org.telegram.tgnet.TLRPC$TL_updateNewChannelMessage r5 = (org.telegram.tgnet.TLRPC$TL_updateNewChannelMessage) r5
             org.telegram.tgnet.TLRPC$Message r2 = r5.message
             r7.add(r2)
             int r13 = r10.flags
             r13 = r13 & r11
-            if (r13 == 0) goto L_0x0111
+            if (r13 == 0) goto L_0x010f
             org.telegram.tgnet.TLRPC$Message r13 = r5.message
             int r12 = r13.flags
             r11 = r11 | r12
             r13.flags = r11
-        L_0x0111:
+        L_0x010f:
             org.telegram.messenger.DispatchQueue r11 = org.telegram.messenger.Utilities.stageQueue
             org.telegram.messenger.-$$Lambda$SendMessagesHelper$J5q1I3isB_7mHF_GOlITqCLASSNAMECBM r12 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$J5q1I3isB_7mHF_GOlITqCLASSNAMECBM
             r12.<init>(r5)
             r11.postRunnable(r12)
             r1.remove(r4)
-            goto L_0x00f6
-        L_0x011f:
+            goto L_0x0137
+        L_0x011d:
             boolean r2 = r5 instanceof org.telegram.tgnet.TLRPC$TL_updateNewScheduledMessage
-            if (r2 == 0) goto L_0x013a
+            if (r2 == 0) goto L_0x0139
             org.telegram.tgnet.TLRPC$TL_updateNewScheduledMessage r5 = (org.telegram.tgnet.TLRPC$TL_updateNewScheduledMessage) r5
             org.telegram.tgnet.TLRPC$Message r2 = r5.message
             r7.add(r2)
             int r12 = r10.flags
             r12 = r12 & r11
-            if (r12 == 0) goto L_0x0136
+            if (r12 == 0) goto L_0x0134
             org.telegram.tgnet.TLRPC$Message r5 = r5.message
             int r12 = r5.flags
             r11 = r11 | r12
             r5.flags = r11
-        L_0x0136:
+        L_0x0134:
             r1.remove(r4)
-            goto L_0x00f6
-        L_0x013a:
+        L_0x0137:
+            r11 = r2
+            goto L_0x013d
+        L_0x0139:
             int r4 = r4 + 1
-            goto L_0x00d2
-        L_0x013d:
+            goto L_0x00d1
+        L_0x013c:
             r11 = 0
-        L_0x013e:
-            if (r11 == 0) goto L_0x01a9
+        L_0x013d:
+            if (r11 == 0) goto L_0x01a8
             org.telegram.messenger.MessageObject.getDialogId(r11)
-            if (r0 == 0) goto L_0x014b
+            if (r0 == 0) goto L_0x014a
             int r0 = r11.date
-            if (r0 == r3) goto L_0x014b
+            if (r0 == r3) goto L_0x014a
             r12 = 0
-            goto L_0x014c
-        L_0x014b:
+            goto L_0x014b
+        L_0x014a:
             r12 = r9
-        L_0x014c:
+        L_0x014b:
             org.telegram.messenger.ImageLoader.saveMessageThumbs(r11)
-            if (r12 != 0) goto L_0x0191
+            if (r12 != 0) goto L_0x0190
             org.telegram.messenger.MessagesController r0 = r25.getMessagesController()
             java.util.concurrent.ConcurrentHashMap<java.lang.Long, java.lang.Integer> r0 = r0.dialogs_read_outbox_max
             long r1 = r11.dialog_id
             java.lang.Long r1 = java.lang.Long.valueOf(r1)
             java.lang.Object r0 = r0.get(r1)
             java.lang.Integer r0 = (java.lang.Integer) r0
-            if (r0 != 0) goto L_0x0184
+            if (r0 != 0) goto L_0x0183
             org.telegram.messenger.MessagesStorage r0 = r25.getMessagesStorage()
             boolean r1 = r11.out
             long r2 = r11.dialog_id
@@ -10669,17 +10668,17 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             long r2 = r11.dialog_id
             java.lang.Long r2 = java.lang.Long.valueOf(r2)
             r1.put(r2, r0)
-        L_0x0184:
+        L_0x0183:
             int r0 = r0.intValue()
             int r1 = r11.id
-            if (r0 >= r1) goto L_0x018e
+            if (r0 >= r1) goto L_0x018d
             r0 = 1
-            goto L_0x018f
-        L_0x018e:
+            goto L_0x018e
+        L_0x018d:
             r0 = 0
-        L_0x018f:
+        L_0x018e:
             r11.unread = r0
-        L_0x0191:
+        L_0x0190:
             int r3 = r11.id
             r5 = 0
             r0 = r25
@@ -10692,27 +10691,29 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r10.id = r1
             r1 = r0
             r0 = 0
-            goto L_0x01ac
-        L_0x01a9:
+            goto L_0x01ab
+        L_0x01a8:
             r12 = r9
             r0 = 1
             r1 = 0
-        L_0x01ac:
+        L_0x01ab:
             org.telegram.messenger.DispatchQueue r2 = org.telegram.messenger.Utilities.stageQueue
             org.telegram.messenger.-$$Lambda$SendMessagesHelper$H7kFSx54lJTtlm7kQrNM8o6_tVQ r3 = new org.telegram.messenger.-$$Lambda$SendMessagesHelper$H7kFSx54lJTtlm7kQrNM8o6_tVQ
             r3.<init>(r15)
             r2.postRunnable(r3)
             r13 = r0
             r11 = r1
-            goto L_0x01bc
-        L_0x01b9:
-            r12 = r9
-            r11 = 0
-        L_0x01bb:
+            goto L_0x01bd
+        L_0x01b8:
+            r13 = r9
+            r0 = 0
+        L_0x01ba:
+            r11 = r0
+            r12 = r13
             r13 = 0
-        L_0x01bc:
+        L_0x01bd:
             boolean r0 = org.telegram.messenger.MessageObject.isLiveLocationMessage(r28)
-            if (r0 == 0) goto L_0x01d3
+            if (r0 == 0) goto L_0x01d4
             org.telegram.messenger.LocationController r0 = r25.getLocationController()
             long r1 = r10.dialog_id
             int r3 = r10.id
@@ -10720,16 +10721,16 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             int r4 = r4.period
             r5 = r28
             r0.addSharingLocation(r1, r3, r4, r5)
-        L_0x01d3:
-            if (r13 != 0) goto L_0x0293
+        L_0x01d4:
+            if (r13 != 0) goto L_0x0294
             org.telegram.messenger.StatsController r0 = r25.getStatsController()
             int r1 = org.telegram.messenger.ApplicationLoader.getCurrentNetworkType()
             r2 = 1
             r0.incrementSentItemsCount(r1, r2, r2)
             r0 = 0
             r10.send_state = r0
-            if (r9 == 0) goto L_0x022c
-            if (r12 != 0) goto L_0x022c
+            if (r9 == 0) goto L_0x022d
+            if (r12 != 0) goto L_0x022d
             java.util.ArrayList r0 = new java.util.ArrayList
             r0.<init>()
             java.lang.Integer r1 = java.lang.Integer.valueOf(r6)
@@ -10759,8 +10760,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r7 = r14
             r0.<init>(r2, r3, r4, r5, r6, r7)
             r11.postRunnable(r12)
-            goto L_0x0293
-        L_0x022c:
+            goto L_0x0294
+        L_0x022d:
             org.telegram.messenger.NotificationCenter r0 = r25.getNotificationCenter()
             int r1 = org.telegram.messenger.NotificationCenter.messageReceivedByServer
             r2 = 7
@@ -10802,8 +10803,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r7 = r14
             r0.<init>(r2, r3, r4, r5, r6, r7)
             r12.postRunnable(r15)
-            goto L_0x0293
-        L_0x0287:
+            goto L_0x0294
+        L_0x0288:
             int r1 = r8.currentAccount
             r2 = 0
             java.lang.Object[] r3 = new java.lang.Object[r2]
@@ -10811,8 +10812,8 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             r4 = 0
             org.telegram.ui.Components.AlertsCreator.processError(r1, r0, r4, r2, r3)
             r13 = 1
-        L_0x0293:
-            if (r13 == 0) goto L_0x02d5
+        L_0x0294:
+            if (r13 == 0) goto L_0x02d6
             org.telegram.messenger.MessagesStorage r0 = r25.getMessagesStorage()
             r0.markMessageAsSendError(r10, r9)
             r0 = 2
@@ -10829,18 +10830,18 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
             int r0 = r10.id
             r8.processSentMessage(r0)
             boolean r0 = org.telegram.messenger.MessageObject.isVideoMessage(r28)
-            if (r0 != 0) goto L_0x02cb
+            if (r0 != 0) goto L_0x02cc
             boolean r0 = org.telegram.messenger.MessageObject.isRoundVideoMessage(r28)
-            if (r0 != 0) goto L_0x02cb
+            if (r0 != 0) goto L_0x02cc
             boolean r0 = org.telegram.messenger.MessageObject.isNewGifMessage(r28)
-            if (r0 == 0) goto L_0x02d0
-        L_0x02cb:
+            if (r0 == 0) goto L_0x02d1
+        L_0x02cc:
             java.lang.String r0 = r10.attachPath
             r8.stopVideoService(r0)
-        L_0x02d0:
+        L_0x02d1:
             int r0 = r10.id
             r8.removeFromSendingMessages(r0, r9)
-        L_0x02d5:
+        L_0x02d6:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SendMessagesHelper.lambda$null$53$SendMessagesHelper(boolean, org.telegram.tgnet.TLRPC$TL_error, org.telegram.tgnet.TLRPC$Message, org.telegram.tgnet.TLObject, org.telegram.messenger.MessageObject, java.lang.String, org.telegram.tgnet.TLObject):void");

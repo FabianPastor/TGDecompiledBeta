@@ -885,7 +885,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x0070 A[SYNTHETIC, Splitter:B:33:0x0070] */
+    /* JADX WARNING: Removed duplicated region for block: B:31:0x006a A[SYNTHETIC, Splitter:B:31:0x006a] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private java.lang.String readRes(java.io.File r8, int r9) {
         /*
@@ -901,42 +901,42 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
         L_0x0013:
             r1 = 0
             if (r8 == 0) goto L_0x001c
-            java.io.FileInputStream r9 = new java.io.FileInputStream     // Catch:{ all -> 0x0069 }
-            r9.<init>(r8)     // Catch:{ all -> 0x0069 }
+            java.io.FileInputStream r9 = new java.io.FileInputStream     // Catch:{ all -> 0x0067 }
+            r9.<init>(r8)     // Catch:{ all -> 0x0067 }
             goto L_0x0026
         L_0x001c:
-            android.content.Context r8 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0069 }
-            android.content.res.Resources r8 = r8.getResources()     // Catch:{ all -> 0x0069 }
-            java.io.InputStream r9 = r8.openRawResource(r9)     // Catch:{ all -> 0x0069 }
+            android.content.Context r8 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x0067 }
+            android.content.res.Resources r8 = r8.getResources()     // Catch:{ all -> 0x0067 }
+            java.io.InputStream r9 = r8.openRawResource(r9)     // Catch:{ all -> 0x0067 }
         L_0x0026:
-            java.lang.ThreadLocal<byte[]> r8 = bufferLocal     // Catch:{ all -> 0x0067 }
-            java.lang.Object r8 = r8.get()     // Catch:{ all -> 0x0067 }
-            byte[] r8 = (byte[]) r8     // Catch:{ all -> 0x0067 }
+            java.lang.ThreadLocal<byte[]> r8 = bufferLocal     // Catch:{ all -> 0x0068 }
+            java.lang.Object r8 = r8.get()     // Catch:{ all -> 0x0068 }
+            byte[] r8 = (byte[]) r8     // Catch:{ all -> 0x0068 }
             r2 = 0
             if (r8 != 0) goto L_0x003a
             r8 = 4096(0x1000, float:5.74E-42)
-            byte[] r8 = new byte[r8]     // Catch:{ all -> 0x0067 }
-            java.lang.ThreadLocal<byte[]> r3 = bufferLocal     // Catch:{ all -> 0x0067 }
-            r3.set(r8)     // Catch:{ all -> 0x0067 }
+            byte[] r8 = new byte[r8]     // Catch:{ all -> 0x0068 }
+            java.lang.ThreadLocal<byte[]> r3 = bufferLocal     // Catch:{ all -> 0x0068 }
+            r3.set(r8)     // Catch:{ all -> 0x0068 }
         L_0x003a:
             r3 = 0
         L_0x003b:
-            int r4 = r8.length     // Catch:{ all -> 0x0067 }
-            int r4 = r9.read(r8, r2, r4)     // Catch:{ all -> 0x0067 }
+            int r4 = r8.length     // Catch:{ all -> 0x0068 }
+            int r4 = r9.read(r8, r2, r4)     // Catch:{ all -> 0x0068 }
             if (r4 < 0) goto L_0x005c
-            int r5 = r0.length     // Catch:{ all -> 0x0067 }
+            int r5 = r0.length     // Catch:{ all -> 0x0068 }
             int r6 = r3 + r4
             if (r5 >= r6) goto L_0x0055
-            int r5 = r0.length     // Catch:{ all -> 0x0067 }
+            int r5 = r0.length     // Catch:{ all -> 0x0068 }
             int r5 = r5 * 2
-            byte[] r5 = new byte[r5]     // Catch:{ all -> 0x0067 }
-            java.lang.System.arraycopy(r0, r2, r5, r2, r3)     // Catch:{ all -> 0x0067 }
-            java.lang.ThreadLocal<byte[]> r0 = readBufferLocal     // Catch:{ all -> 0x0067 }
-            r0.set(r5)     // Catch:{ all -> 0x0067 }
+            byte[] r5 = new byte[r5]     // Catch:{ all -> 0x0068 }
+            java.lang.System.arraycopy(r0, r2, r5, r2, r3)     // Catch:{ all -> 0x0068 }
+            java.lang.ThreadLocal<byte[]> r0 = readBufferLocal     // Catch:{ all -> 0x0068 }
+            r0.set(r5)     // Catch:{ all -> 0x0068 }
             r0 = r5
         L_0x0055:
             if (r4 <= 0) goto L_0x003b
-            java.lang.System.arraycopy(r8, r2, r0, r3, r4)     // Catch:{ all -> 0x0067 }
+            java.lang.System.arraycopy(r8, r2, r0, r3, r4)     // Catch:{ all -> 0x0068 }
             r3 = r6
             goto L_0x003b
         L_0x005c:
@@ -947,27 +947,12 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
             r8.<init>(r0, r2, r3)
             return r8
         L_0x0067:
-            r8 = move-exception
-            goto L_0x006b
-        L_0x0069:
-            r8 = move-exception
             r9 = r1
-        L_0x006b:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)     // Catch:{ all -> 0x0074 }
-            if (r9 == 0) goto L_0x0073
-            r9.close()     // Catch:{ all -> 0x0073 }
-        L_0x0073:
+        L_0x0068:
+            if (r9 == 0) goto L_0x006d
+            r9.close()     // Catch:{ all -> 0x006d }
+        L_0x006d:
             return r1
-        L_0x0074:
-            r8 = move-exception
-            if (r9 == 0) goto L_0x007a
-            r9.close()     // Catch:{ all -> 0x007a }
-        L_0x007a:
-            goto L_0x007c
-        L_0x007b:
-            throw r8
-        L_0x007c:
-            goto L_0x007b
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.RLottieDrawable.readRes(java.io.File, int):java.lang.String");
     }

@@ -2114,11 +2114,18 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     /* JADX WARNING: Can't fix incorrect switch cases order */
-    /* JADX WARNING: Code restructure failed: missing block: B:144:0x034d, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:149:0x0369, code lost:
         r7 = true;
         r8 = true;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:63:0x0125, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:170:0x03ea, code lost:
+        r7 = true;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:63:0x011f, code lost:
+        r17 = r4;
+        r18 = r5;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:64:0x0125, code lost:
         r17 = r4;
         r18 = r5;
      */
@@ -2130,7 +2137,7 @@ public class MessagesController extends BaseController implements NotificationCe
             r0 = r23
             boolean r2 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonObject
             r3 = 0
-            if (r2 == 0) goto L_0x040b
+            if (r2 == 0) goto L_0x0409
             android.content.SharedPreferences r2 = r1.mainPreferences
             android.content.SharedPreferences$Editor r2 = r2.edit()
             r4 = r0
@@ -2141,7 +2148,7 @@ public class MessagesController extends BaseController implements NotificationCe
             r7 = 0
             r8 = 0
         L_0x001b:
-            if (r6 >= r5) goto L_0x03f6
+            if (r6 >= r5) goto L_0x03f4
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_jsonObjectValue> r0 = r4.value
             java.lang.Object r0 = r0.get(r6)
             org.telegram.tgnet.TLRPC$TL_jsonObjectValue r0 = (org.telegram.tgnet.TLRPC$TL_jsonObjectValue) r0
@@ -2247,18 +2254,18 @@ public class MessagesController extends BaseController implements NotificationCe
             java.lang.String r9 = ""
             java.lang.String r11 = "️"
             switch(r10) {
-                case 0: goto L_0x03ce;
+                case 0: goto L_0x03cd;
                 case 1: goto L_0x03b3;
-                case 2: goto L_0x038c;
-                case 3: goto L_0x036b;
-                case 4: goto L_0x0351;
-                case 5: goto L_0x0334;
-                case 6: goto L_0x031a;
+                case 2: goto L_0x038d;
+                case 3: goto L_0x036d;
+                case 4: goto L_0x0350;
+                case 5: goto L_0x0336;
+                case 6: goto L_0x031b;
                 case 7: goto L_0x0300;
-                case 8: goto L_0x02ba;
+                case 8: goto L_0x02bb;
                 case 9: goto L_0x0245;
                 case 10: goto L_0x012b;
-                case 11: goto L_0x010f;
+                case 11: goto L_0x010a;
                 case 12: goto L_0x00c3;
                 default: goto L_0x00c2;
             }
@@ -2298,10 +2305,8 @@ public class MessagesController extends BaseController implements NotificationCe
             int r7 = org.telegram.messenger.NotificationCenter.newSuggestionsAvailable
             java.lang.Object[] r9 = new java.lang.Object[r3]
             r0.postNotificationName(r7, r9)
-            r17 = r4
-            r18 = r5
-            goto L_0x02fd
-        L_0x010f:
+            goto L_0x011f
+        L_0x010a:
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r9 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
             if (r9 == 0) goto L_0x0125
@@ -2312,11 +2317,14 @@ public class MessagesController extends BaseController implements NotificationCe
             r1.autoarchiveAvailable = r0
             java.lang.String r7 = "autoarchiveAvailable"
             r2.putBoolean(r7, r0)
-            r7 = 1
+        L_0x011f:
+            r17 = r4
+            r18 = r5
+            goto L_0x03ea
         L_0x0125:
             r17 = r4
             r18 = r5
-            goto L_0x03ed
+            goto L_0x03eb
         L_0x012b:
             java.util.HashMap r10 = new java.util.HashMap     // Catch:{ Exception -> 0x023b }
             r10.<init>()     // Catch:{ Exception -> 0x023b }
@@ -2413,7 +2421,7 @@ public class MessagesController extends BaseController implements NotificationCe
             r18 = r5
             java.util.HashMap<java.lang.String, org.telegram.messenger.MessagesController$DiceFrameSuccess> r0 = r1.diceSuccess     // Catch:{ Exception -> 0x0239 }
             boolean r0 = r0.equals(r10)     // Catch:{ Exception -> 0x0239 }
-            if (r0 != 0) goto L_0x03ed
+            if (r0 != 0) goto L_0x03eb
             r1.diceSuccess = r10     // Catch:{ Exception -> 0x0239 }
             org.telegram.tgnet.SerializedData r0 = new org.telegram.tgnet.SerializedData     // Catch:{ Exception -> 0x0239 }
             r0.<init>()     // Catch:{ Exception -> 0x0239 }
@@ -2445,7 +2453,7 @@ public class MessagesController extends BaseController implements NotificationCe
             java.lang.String r4 = android.util.Base64.encodeToString(r4, r5)     // Catch:{ Exception -> 0x0239 }
             r2.putString(r3, r4)     // Catch:{ Exception -> 0x0239 }
             r0.cleanup()     // Catch:{ Exception -> 0x0239 }
-            goto L_0x02fd
+            goto L_0x03ea
         L_0x0239:
             r0 = move-exception
             goto L_0x0240
@@ -2455,7 +2463,7 @@ public class MessagesController extends BaseController implements NotificationCe
             r18 = r5
         L_0x0240:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            goto L_0x03ed
+            goto L_0x03eb
         L_0x0245:
             r17 = r4
             r18 = r5
@@ -2485,7 +2493,7 @@ public class MessagesController extends BaseController implements NotificationCe
         L_0x0279:
             java.util.ArrayList<java.lang.String> r0 = r1.gifSearchEmojies
             boolean r0 = r0.equals(r3)
-            if (r0 != 0) goto L_0x03ed
+            if (r0 != 0) goto L_0x03eb
             r1.gifSearchEmojies = r3
             org.telegram.tgnet.SerializedData r0 = new org.telegram.tgnet.SerializedData
             r0.<init>()
@@ -2510,128 +2518,126 @@ public class MessagesController extends BaseController implements NotificationCe
             java.lang.String r4 = "gifSearchEmojies"
             r2.putString(r4, r3)
             r0.cleanup()
-            goto L_0x02fd
-        L_0x02ba:
+            goto L_0x03ea
+        L_0x02bb:
             r17 = r4
             r18 = r5
             java.util.HashSet r3 = new java.util.HashSet
             r3.<init>()
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r4 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonArray
-            if (r4 == 0) goto L_0x02ee
+            if (r4 == 0) goto L_0x02ef
             org.telegram.tgnet.TLRPC$TL_jsonArray r0 = (org.telegram.tgnet.TLRPC$TL_jsonArray) r0
             java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r4 = r0.value
             int r4 = r4.size()
             r5 = 0
-        L_0x02d2:
-            if (r5 >= r4) goto L_0x02ee
+        L_0x02d3:
+            if (r5 >= r4) goto L_0x02ef
             java.util.ArrayList<org.telegram.tgnet.TLRPC$JSONValue> r10 = r0.value
             java.lang.Object r10 = r10.get(r5)
             org.telegram.tgnet.TLRPC$JSONValue r10 = (org.telegram.tgnet.TLRPC$JSONValue) r10
             boolean r12 = r10 instanceof org.telegram.tgnet.TLRPC$TL_jsonString
-            if (r12 == 0) goto L_0x02eb
+            if (r12 == 0) goto L_0x02ec
             org.telegram.tgnet.TLRPC$TL_jsonString r10 = (org.telegram.tgnet.TLRPC$TL_jsonString) r10
             java.lang.String r10 = r10.value
             java.lang.String r10 = r10.replace(r11, r9)
             r3.add(r10)
-        L_0x02eb:
+        L_0x02ec:
             int r5 = r5 + 1
-            goto L_0x02d2
-        L_0x02ee:
+            goto L_0x02d3
+        L_0x02ef:
             java.util.HashSet<java.lang.String> r0 = r1.diceEmojies
             boolean r0 = r0.equals(r3)
-            if (r0 != 0) goto L_0x03ed
+            if (r0 != 0) goto L_0x03eb
             r1.diceEmojies = r3
             java.lang.String r0 = "diceEmojies"
             r2.putStringSet(r0, r3)
-        L_0x02fd:
-            r7 = 1
-            goto L_0x03ed
+            goto L_0x03ea
         L_0x0300:
             r17 = r4
             r18 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
-            if (r3 == 0) goto L_0x03ed
+            if (r3 == 0) goto L_0x03eb
             org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
             boolean r0 = r0.value
             boolean r3 = r1.saveGifsWithStickers
-            if (r0 == r3) goto L_0x03ed
+            if (r0 == r3) goto L_0x03eb
             r1.saveGifsWithStickers = r0
             java.lang.String r3 = "saveGifsWithStickers"
             r2.putBoolean(r3, r0)
-            goto L_0x02fd
-        L_0x031a:
+            goto L_0x03ea
+        L_0x031b:
             r17 = r4
             r18 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
-            if (r3 == 0) goto L_0x03ed
+            if (r3 == 0) goto L_0x03eb
             org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
             boolean r0 = r0.value
             boolean r3 = r1.qrLoginCamera
-            if (r0 == r3) goto L_0x03ed
+            if (r0 == r3) goto L_0x03eb
             r1.qrLoginCamera = r0
             java.lang.String r3 = "qrLoginCamera"
             r2.putBoolean(r3, r0)
-            goto L_0x02fd
-        L_0x0334:
+            goto L_0x03ea
+        L_0x0336:
             r17 = r4
             r18 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
-            if (r3 == 0) goto L_0x03ed
+            if (r3 == 0) goto L_0x03eb
             org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
             boolean r0 = r0.value
             boolean r3 = r1.keepAliveService
-            if (r0 == r3) goto L_0x03ed
+            if (r0 == r3) goto L_0x03eb
             r1.keepAliveService = r0
             java.lang.String r3 = "keepAliveService"
             r2.putBoolean(r3, r0)
-        L_0x034d:
-            r7 = 1
-            r8 = 1
-            goto L_0x03ed
-        L_0x0351:
+            goto L_0x0369
+        L_0x0350:
             r17 = r4
             r18 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
-            if (r3 == 0) goto L_0x03ed
+            if (r3 == 0) goto L_0x03eb
             org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
             boolean r0 = r0.value
             boolean r3 = r1.backgroundConnection
-            if (r0 == r3) goto L_0x03ed
+            if (r0 == r3) goto L_0x03eb
             r1.backgroundConnection = r0
             java.lang.String r3 = "backgroundConnection"
             r2.putBoolean(r3, r0)
-            goto L_0x034d
-        L_0x036b:
+        L_0x0369:
+            r7 = 1
+            r8 = 1
+            goto L_0x03eb
+        L_0x036d:
             r17 = r4
             r18 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonString
-            if (r3 == 0) goto L_0x03ed
+            if (r3 == 0) goto L_0x03eb
             org.telegram.tgnet.TLRPC$TL_jsonString r0 = (org.telegram.tgnet.TLRPC$TL_jsonString) r0
             java.lang.String r3 = r0.value
             java.lang.String r4 = r1.youtubePipType
             boolean r3 = r3.equals(r4)
-            if (r3 != 0) goto L_0x03ed
+            if (r3 != 0) goto L_0x03eb
             java.lang.String r0 = r0.value
             r1.youtubePipType = r0
             java.lang.String r3 = "youtubePipType"
             r2.putString(r3, r0)
-            goto L_0x02fd
-        L_0x038c:
+            goto L_0x03ea
+        L_0x038d:
             r17 = r4
             r18 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
-            if (r3 == 0) goto L_0x03ed
+            if (r3 == 0) goto L_0x03eb
             org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
             boolean r0 = r0.value
             boolean r3 = r1.showFiltersTooltip
-            if (r0 == r3) goto L_0x03ed
+            if (r0 == r3) goto L_0x03eb
             r1.showFiltersTooltip = r0
             java.lang.String r3 = "showFiltersTooltip"
             r2.putBoolean(r3, r0)
@@ -2640,54 +2646,55 @@ public class MessagesController extends BaseController implements NotificationCe
             r4 = 0
             java.lang.Object[] r5 = new java.lang.Object[r4]
             r0.postNotificationName(r3, r5)
-            goto L_0x02fd
+            goto L_0x03ea
         L_0x03b3:
             r17 = r4
             r18 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonBool
-            if (r3 == 0) goto L_0x03ed
+            if (r3 == 0) goto L_0x03eb
             org.telegram.tgnet.TLRPC$TL_jsonBool r0 = (org.telegram.tgnet.TLRPC$TL_jsonBool) r0
             boolean r0 = r0.value
             boolean r3 = r1.filtersEnabled
-            if (r0 == r3) goto L_0x03ed
+            if (r0 == r3) goto L_0x03eb
             r1.filtersEnabled = r0
             java.lang.String r3 = "filtersEnabled"
             r2.putBoolean(r3, r0)
-            goto L_0x02fd
-        L_0x03ce:
+            goto L_0x03ea
+        L_0x03cd:
             r17 = r4
             r18 = r5
             org.telegram.tgnet.TLRPC$JSONValue r0 = r0.value
             boolean r3 = r0 instanceof org.telegram.tgnet.TLRPC$TL_jsonNumber
-            if (r3 == 0) goto L_0x03ed
+            if (r3 == 0) goto L_0x03eb
             org.telegram.tgnet.TLRPC$TL_jsonNumber r0 = (org.telegram.tgnet.TLRPC$TL_jsonNumber) r0
             float r3 = r1.animatedEmojisZoom
             double r3 = (double) r3
             double r9 = r0.value
             int r0 = (r3 > r9 ? 1 : (r3 == r9 ? 0 : -1))
-            if (r0 == 0) goto L_0x03ed
+            if (r0 == 0) goto L_0x03eb
             float r0 = (float) r9
             r1.animatedEmojisZoom = r0
             java.lang.String r3 = "animatedEmojisZoom"
             r2.putFloat(r3, r0)
-            goto L_0x02fd
-        L_0x03ed:
+        L_0x03ea:
+            r7 = 1
+        L_0x03eb:
             int r6 = r6 + 1
             r4 = r17
             r5 = r18
             r3 = 0
             goto L_0x001b
-        L_0x03f6:
-            if (r7 == 0) goto L_0x03fb
+        L_0x03f4:
+            if (r7 == 0) goto L_0x03f9
             r2.commit()
-        L_0x03fb:
-            if (r8 == 0) goto L_0x040b
+        L_0x03f9:
+            if (r8 == 0) goto L_0x0409
             org.telegram.messenger.ApplicationLoader.startPushService()
             org.telegram.tgnet.ConnectionsManager r0 = r22.getConnectionsManager()
             boolean r2 = r0.isPushConnectionEnabled()
             r0.setPushConnectionEnabled(r2)
-        L_0x040b:
+        L_0x0409:
             r2 = 0
             r1.loadingAppConfig = r2
             return
@@ -7499,8 +7506,8 @@ public class MessagesController extends BaseController implements NotificationCe
         getNotificationCenter().postNotificationName(NotificationCenter.didUpdateMessagesViews, sparseArray);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:21:0x0062  */
-    /* JADX WARNING: Removed duplicated region for block: B:25:0x0074  */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x0061  */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x0073  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$updateTimerProc$110$MessagesController(int r18) {
         /*
@@ -7513,62 +7520,60 @@ public class MessagesController extends BaseController implements NotificationCe
             r6 = 2147483647(0x7fffffff, float:NaN)
             r7 = 0
         L_0x0012:
-            if (r7 >= r4) goto L_0x00ca
+            if (r7 >= r4) goto L_0x00c8
             android.util.LongSparseArray<android.util.SparseArray<org.telegram.messenger.MessageObject>> r8 = r0.pollsToCheck
             java.lang.Object r8 = r8.valueAt(r7)
             android.util.SparseArray r8 = (android.util.SparseArray) r8
-            if (r8 != 0) goto L_0x0021
-        L_0x001e:
-            r5 = 1
-            goto L_0x00c7
-        L_0x0021:
+            if (r8 != 0) goto L_0x0020
+            goto L_0x00c4
+        L_0x0020:
             int r10 = r8.size()
             r11 = 0
-        L_0x0026:
+        L_0x0025:
             r12 = 1000(0x3e8, float:1.401E-42)
-            if (r11 >= r10) goto L_0x009d
+            if (r11 >= r10) goto L_0x009c
             java.lang.Object r13 = r8.valueAt(r11)
             org.telegram.messenger.MessageObject r13 = (org.telegram.messenger.MessageObject) r13
             org.telegram.tgnet.TLRPC$Message r14 = r13.messageOwner
             org.telegram.tgnet.TLRPC$MessageMedia r14 = r14.media
             org.telegram.tgnet.TLRPC$TL_messageMediaPoll r14 = (org.telegram.tgnet.TLRPC$TL_messageMediaPoll) r14
-            org.telegram.tgnet.TLRPC$Poll r5 = r14.poll
-            int r15 = r5.close_date
-            if (r15 == 0) goto L_0x0042
-            boolean r5 = r5.closed
-            if (r5 != 0) goto L_0x0042
+            org.telegram.tgnet.TLRPC$Poll r15 = r14.poll
+            int r5 = r15.close_date
+            if (r5 == 0) goto L_0x0041
+            boolean r5 = r15.closed
+            if (r5 != 0) goto L_0x0041
             r5 = 1
-            goto L_0x0043
-        L_0x0042:
+            goto L_0x0042
+        L_0x0041:
             r5 = 0
-        L_0x0043:
-            if (r5 == 0) goto L_0x0051
+        L_0x0042:
+            if (r5 == 0) goto L_0x0050
             org.telegram.tgnet.TLRPC$Poll r14 = r14.poll
             int r14 = r14.close_date
-            if (r14 > r1) goto L_0x004c
-            goto L_0x0053
-        L_0x004c:
+            if (r14 > r1) goto L_0x004b
+            goto L_0x0052
+        L_0x004b:
             int r14 = r14 - r1
             int r6 = java.lang.Math.min(r6, r14)
-        L_0x0051:
+        L_0x0050:
             r12 = 30000(0x7530, float:4.2039E-41)
-        L_0x0053:
+        L_0x0052:
             long r14 = r13.pollLastCheckTime
             long r14 = r2 - r14
             long r14 = java.lang.Math.abs(r14)
             r16 = r10
             long r9 = (long) r12
             int r12 = (r14 > r9 ? 1 : (r14 == r9 ? 0 : -1))
-            if (r12 >= 0) goto L_0x0074
+            if (r12 >= 0) goto L_0x0073
             boolean r9 = r13.pollVisibleOnScreen
-            if (r9 != 0) goto L_0x0098
-            if (r5 != 0) goto L_0x0098
+            if (r9 != 0) goto L_0x0097
+            if (r5 != 0) goto L_0x0097
             int r5 = r13.getId()
             r8.remove(r5)
             int r10 = r16 + -1
             int r11 = r11 + -1
-            goto L_0x009a
-        L_0x0074:
+            goto L_0x0099
+        L_0x0073:
             r13.pollLastCheckTime = r2
             org.telegram.tgnet.TLRPC$TL_messages_getPollResults r9 = new org.telegram.tgnet.TLRPC$TL_messages_getPollResults
             r9.<init>()
@@ -7582,15 +7587,15 @@ public class MessagesController extends BaseController implements NotificationCe
             org.telegram.messenger.-$$Lambda$MessagesController$sqVgh5AvvDT9XOb7-OTATyob-rk r12 = new org.telegram.messenger.-$$Lambda$MessagesController$sqVgh5AvvDT9XOb7-OTATyob-rk
             r12.<init>(r5)
             r10.sendRequest(r9, r12)
-        L_0x0098:
+        L_0x0097:
             r10 = r16
-        L_0x009a:
+        L_0x0099:
             r5 = 1
             int r11 = r11 + r5
-            goto L_0x0026
-        L_0x009d:
+            goto L_0x0025
+        L_0x009c:
             r5 = 5
-            if (r6 >= r5) goto L_0x00b2
+            if (r6 >= r5) goto L_0x00b1
             long r9 = r0.lastViewsCheckTime
             long r13 = java.lang.System.currentTimeMillis()
             int r5 = 5 - r6
@@ -7599,19 +7604,19 @@ public class MessagesController extends BaseController implements NotificationCe
             long r13 = r13 - r11
             long r9 = java.lang.Math.min(r9, r13)
             r0.lastViewsCheckTime = r9
-        L_0x00b2:
+        L_0x00b1:
             int r5 = r8.size()
-            if (r5 != 0) goto L_0x001e
+            if (r5 != 0) goto L_0x00c4
             android.util.LongSparseArray<android.util.SparseArray<org.telegram.messenger.MessageObject>> r5 = r0.pollsToCheck
             long r8 = r5.keyAt(r7)
             r5.remove(r8)
             int r4 = r4 + -1
             int r7 = r7 + -1
-            goto L_0x001e
-        L_0x00c7:
+        L_0x00c4:
+            r5 = 1
             int r7 = r7 + r5
             goto L_0x0012
-        L_0x00ca:
+        L_0x00c8:
             android.util.LongSparseArray<android.util.SparseArray<org.telegram.messenger.MessageObject>> r1 = r0.pollsToCheck
             int r1 = r1.size()
             r0.pollsToCheckSize = r1
@@ -8783,8 +8788,9 @@ public class MessagesController extends BaseController implements NotificationCe
                 } else {
                     ArrayList<TLRPC$Message> arrayList = tLRPC$messages_Messages.messages;
                     int i14 = arrayList.get(arrayList.size() - 1).id;
-                    int size = tLRPC$messages_Messages.messages.size() - 1;
+                    int size = tLRPC$messages_Messages.messages.size();
                     while (true) {
+                        size--;
                         if (size < 0) {
                             break;
                         }
@@ -8793,7 +8799,6 @@ public class MessagesController extends BaseController implements NotificationCe
                             i14 = tLRPC$Message.id;
                             break;
                         }
-                        size--;
                     }
                     i12 = i14;
                 }
@@ -13850,21 +13855,19 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public /* synthetic */ void lambda$null$179$MessagesController(long j, int i, int i2, boolean z) {
+        int i3;
         long j2 = j;
-        int i3 = i2;
+        int i4 = i2;
         TLRPC$Dialog tLRPC$Dialog = this.dialogs_dict.get(j2);
         if (tLRPC$Dialog != null) {
-            int i4 = tLRPC$Dialog.unread_count;
-            if (i == 0 || i3 >= tLRPC$Dialog.top_message) {
+            int i5 = tLRPC$Dialog.unread_count;
+            if (i == 0 || i4 >= tLRPC$Dialog.top_message) {
                 tLRPC$Dialog.unread_count = 0;
             } else {
-                int max = Math.max(i4 - i, 0);
+                int max = Math.max(i5 - i, 0);
                 tLRPC$Dialog.unread_count = max;
-                if (i3 != Integer.MIN_VALUE) {
-                    int i5 = tLRPC$Dialog.top_message;
-                    if (max > i5 - i3) {
-                        tLRPC$Dialog.unread_count = i5 - i3;
-                    }
+                if (i4 != Integer.MIN_VALUE && max > (i3 = tLRPC$Dialog.top_message - i4)) {
+                    tLRPC$Dialog.unread_count = i3;
                 }
             }
             boolean z2 = tLRPC$Dialog.unread_mark;
@@ -13872,7 +13875,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 tLRPC$Dialog.unread_mark = false;
                 getMessagesStorage().setDialogUnread(tLRPC$Dialog.id, false);
             }
-            if ((i4 != 0 || z2) && tLRPC$Dialog.unread_count == 0) {
+            if ((i5 != 0 || z2) && tLRPC$Dialog.unread_count == 0) {
                 if (!isDialogMuted(j)) {
                     this.unreadUnmutedDialogs--;
                 }
@@ -13929,20 +13932,18 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public /* synthetic */ void lambda$null$181$MessagesController(long j, int i, boolean z, int i2, int i3) {
+        int i4;
         getNotificationsController().processReadMessages((SparseLongArray) null, j, i, 0, z);
         TLRPC$Dialog tLRPC$Dialog = this.dialogs_dict.get(j);
         if (tLRPC$Dialog != null) {
-            int i4 = tLRPC$Dialog.unread_count;
+            int i5 = tLRPC$Dialog.unread_count;
             if (i2 == 0 || i3 <= tLRPC$Dialog.top_message) {
                 tLRPC$Dialog.unread_count = 0;
             } else {
-                int max = Math.max(i4 - i2, 0);
+                int max = Math.max(i5 - i2, 0);
                 tLRPC$Dialog.unread_count = max;
-                if (i3 != Integer.MAX_VALUE) {
-                    int i5 = tLRPC$Dialog.top_message;
-                    if (max > i3 - i5) {
-                        tLRPC$Dialog.unread_count = i3 - i5;
-                    }
+                if (i3 != Integer.MAX_VALUE && max > (i4 = i3 - tLRPC$Dialog.top_message)) {
+                    tLRPC$Dialog.unread_count = i4;
                 }
             }
             boolean z2 = tLRPC$Dialog.unread_mark;
@@ -13950,7 +13951,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 tLRPC$Dialog.unread_mark = false;
                 getMessagesStorage().setDialogUnread(tLRPC$Dialog.id, false);
             }
-            if ((i4 != 0 || z2) && tLRPC$Dialog.unread_count == 0) {
+            if ((i5 != 0 || z2) && tLRPC$Dialog.unread_count == 0) {
                 if (!isDialogMuted(j)) {
                     this.unreadUnmutedDialogs--;
                 }

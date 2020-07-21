@@ -2428,7 +2428,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 BottomSheet create = builder.create();
                 this.linkSheet = create;
                 showDialog(create);
-                return true;
             } else if (num2.intValue() >= 0 && num2.intValue() < this.adapter[0].blocks.size()) {
                 TLRPC$PageBlock tLRPC$PageBlock = (TLRPC$PageBlock) this.adapter[0].blocks.get(num2.intValue());
                 TLRPC$PageBlock lastNonListPageBlock = getLastNonListPageBlock(tLRPC$PageBlock);
@@ -2456,8 +2455,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     }
                 }
                 this.layoutManager[0].scrollToPositionWithOffset(num2.intValue(), (this.currentHeaderHeight - AndroidUtilities.dp(56.0f)) - num.intValue());
-                return true;
             }
+            return true;
         }
         return false;
     }
@@ -3235,206 +3234,204 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
     private TextPaint getTextPaint(TLRPC$RichText tLRPC$RichText, TLRPC$RichText tLRPC$RichText2, TLRPC$PageBlock tLRPC$PageBlock) {
         int i;
-        SparseArray<TextPaint> sparseArray;
-        int dp;
-        int textColor;
         int i2;
-        SparseArray<TextPaint> sparseArray2;
+        SparseArray<TextPaint> sparseArray;
         int i3;
-        SparseArray<TextPaint> sparseArray3;
+        SparseArray<TextPaint> sparseArray2;
         int i4;
-        SparseArray<TextPaint> sparseArray4;
+        SparseArray<TextPaint> sparseArray3;
         int i5;
-        SparseArray<TextPaint> sparseArray5;
+        SparseArray<TextPaint> sparseArray4;
         int i6;
+        SparseArray<TextPaint> sparseArray5;
+        int i7;
         SparseArray<TextPaint> sparseArray6;
+        int i8;
+        SparseArray<TextPaint> sparseArray7;
         int textFlags = getTextFlags(tLRPC$RichText2);
-        int dp2 = AndroidUtilities.dp(14.0f);
-        int dp3 = AndroidUtilities.dp((float) (SharedConfig.ivFontSize - 16));
-        SparseArray<TextPaint> sparseArray7 = null;
+        int dp = AndroidUtilities.dp(14.0f);
+        int dp2 = AndroidUtilities.dp((float) (SharedConfig.ivFontSize - 16));
+        SparseArray<TextPaint> sparseArray8 = null;
         if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockPhoto) {
             TLRPC$RichText tLRPC$RichText3 = ((TLRPC$TL_pageBlockPhoto) tLRPC$PageBlock).caption.text;
             if (tLRPC$RichText3 == tLRPC$RichText2 || tLRPC$RichText3 == tLRPC$RichText) {
-                sparseArray6 = photoCaptionTextPaints;
-                i6 = AndroidUtilities.dp(14.0f);
+                sparseArray7 = photoCaptionTextPaints;
+                i8 = AndroidUtilities.dp(14.0f);
             } else {
-                sparseArray6 = photoCreditTextPaints;
-                i6 = AndroidUtilities.dp(12.0f);
+                sparseArray7 = photoCreditTextPaints;
+                i8 = AndroidUtilities.dp(12.0f);
             }
-            sparseArray7 = sparseArray6;
-            dp2 = i6;
+            sparseArray8 = sparseArray7;
+            dp = i8;
             i = getGrayTextColor();
         } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockMap) {
             TLRPC$RichText tLRPC$RichText4 = ((TLRPC$TL_pageBlockMap) tLRPC$PageBlock).caption.text;
             if (tLRPC$RichText4 == tLRPC$RichText2 || tLRPC$RichText4 == tLRPC$RichText) {
-                sparseArray5 = photoCaptionTextPaints;
-                i5 = AndroidUtilities.dp(14.0f);
+                sparseArray6 = photoCaptionTextPaints;
+                i7 = AndroidUtilities.dp(14.0f);
             } else {
-                sparseArray5 = photoCreditTextPaints;
-                i5 = AndroidUtilities.dp(12.0f);
+                sparseArray6 = photoCreditTextPaints;
+                i7 = AndroidUtilities.dp(12.0f);
             }
-            sparseArray7 = sparseArray5;
-            dp2 = i5;
+            sparseArray8 = sparseArray6;
+            dp = i7;
             i = getGrayTextColor();
         } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockTitle) {
-            sparseArray7 = titleTextPaints;
-            dp2 = AndroidUtilities.dp(23.0f);
+            sparseArray8 = titleTextPaints;
+            dp = AndroidUtilities.dp(23.0f);
             i = getTextColor();
         } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockKicker) {
-            sparseArray7 = kickerTextPaints;
-            dp2 = AndroidUtilities.dp(14.0f);
+            sparseArray8 = kickerTextPaints;
+            dp = AndroidUtilities.dp(14.0f);
             i = getTextColor();
         } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockAuthorDate) {
-            sparseArray7 = authorTextPaints;
-            dp2 = AndroidUtilities.dp(14.0f);
+            sparseArray8 = authorTextPaints;
+            dp = AndroidUtilities.dp(14.0f);
             i = getGrayTextColor();
         } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockFooter) {
-            sparseArray7 = footerTextPaints;
-            dp2 = AndroidUtilities.dp(14.0f);
+            sparseArray8 = footerTextPaints;
+            dp = AndroidUtilities.dp(14.0f);
             i = getGrayTextColor();
         } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockSubtitle) {
-            sparseArray7 = subtitleTextPaints;
-            dp2 = AndroidUtilities.dp(20.0f);
+            sparseArray8 = subtitleTextPaints;
+            dp = AndroidUtilities.dp(20.0f);
             i = getTextColor();
         } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockHeader) {
-            sparseArray7 = headerTextPaints;
-            dp2 = AndroidUtilities.dp(20.0f);
+            sparseArray8 = headerTextPaints;
+            dp = AndroidUtilities.dp(20.0f);
             i = getTextColor();
         } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockSubheader) {
-            sparseArray7 = subheaderTextPaints;
-            dp2 = AndroidUtilities.dp(17.0f);
+            sparseArray8 = subheaderTextPaints;
+            dp = AndroidUtilities.dp(17.0f);
             i = getTextColor();
         } else {
             if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockBlockquote) {
                 TLRPC$TL_pageBlockBlockquote tLRPC$TL_pageBlockBlockquote = (TLRPC$TL_pageBlockBlockquote) tLRPC$PageBlock;
                 if (tLRPC$TL_pageBlockBlockquote.text == tLRPC$RichText) {
-                    sparseArray7 = quoteTextPaints;
-                    dp2 = AndroidUtilities.dp(15.0f);
+                    sparseArray8 = quoteTextPaints;
+                    dp = AndroidUtilities.dp(15.0f);
                     i = getTextColor();
                 } else if (tLRPC$TL_pageBlockBlockquote.caption == tLRPC$RichText) {
-                    sparseArray7 = photoCaptionTextPaints;
-                    dp2 = AndroidUtilities.dp(14.0f);
+                    sparseArray8 = photoCaptionTextPaints;
+                    dp = AndroidUtilities.dp(14.0f);
                     i = getGrayTextColor();
                 }
             } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockPullquote) {
                 TLRPC$TL_pageBlockPullquote tLRPC$TL_pageBlockPullquote = (TLRPC$TL_pageBlockPullquote) tLRPC$PageBlock;
                 if (tLRPC$TL_pageBlockPullquote.text == tLRPC$RichText) {
-                    sparseArray7 = quoteTextPaints;
-                    dp2 = AndroidUtilities.dp(15.0f);
+                    sparseArray8 = quoteTextPaints;
+                    dp = AndroidUtilities.dp(15.0f);
                     i = getTextColor();
                 } else if (tLRPC$TL_pageBlockPullquote.caption == tLRPC$RichText) {
-                    sparseArray7 = photoCaptionTextPaints;
-                    dp2 = AndroidUtilities.dp(14.0f);
+                    sparseArray8 = photoCaptionTextPaints;
+                    dp = AndroidUtilities.dp(14.0f);
                     i = getGrayTextColor();
                 }
             } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockPreformatted) {
-                sparseArray7 = preformattedTextPaints;
-                dp2 = AndroidUtilities.dp(14.0f);
+                sparseArray8 = preformattedTextPaints;
+                dp = AndroidUtilities.dp(14.0f);
                 i = getTextColor();
             } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockParagraph) {
-                sparseArray7 = paragraphTextPaints;
-                dp2 = AndroidUtilities.dp(16.0f);
+                sparseArray8 = paragraphTextPaints;
+                dp = AndroidUtilities.dp(16.0f);
                 i = getTextColor();
             } else if (isListItemBlock(tLRPC$PageBlock)) {
-                sparseArray7 = listTextPaints;
-                dp2 = AndroidUtilities.dp(16.0f);
+                sparseArray8 = listTextPaints;
+                dp = AndroidUtilities.dp(16.0f);
                 i = getTextColor();
             } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockEmbed) {
                 TLRPC$RichText tLRPC$RichText5 = ((TLRPC$TL_pageBlockEmbed) tLRPC$PageBlock).caption.text;
                 if (tLRPC$RichText5 == tLRPC$RichText2 || tLRPC$RichText5 == tLRPC$RichText) {
-                    sparseArray4 = photoCaptionTextPaints;
-                    i4 = AndroidUtilities.dp(14.0f);
+                    sparseArray5 = photoCaptionTextPaints;
+                    i6 = AndroidUtilities.dp(14.0f);
                 } else {
-                    sparseArray4 = photoCreditTextPaints;
-                    i4 = AndroidUtilities.dp(12.0f);
+                    sparseArray5 = photoCreditTextPaints;
+                    i6 = AndroidUtilities.dp(12.0f);
                 }
-                sparseArray7 = sparseArray4;
-                dp2 = i4;
+                sparseArray8 = sparseArray5;
+                dp = i6;
                 i = getGrayTextColor();
             } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockSlideshow) {
                 TLRPC$RichText tLRPC$RichText6 = ((TLRPC$TL_pageBlockSlideshow) tLRPC$PageBlock).caption.text;
                 if (tLRPC$RichText6 == tLRPC$RichText2 || tLRPC$RichText6 == tLRPC$RichText) {
-                    sparseArray3 = photoCaptionTextPaints;
-                    i3 = AndroidUtilities.dp(14.0f);
+                    sparseArray4 = photoCaptionTextPaints;
+                    i5 = AndroidUtilities.dp(14.0f);
                 } else {
-                    sparseArray3 = photoCreditTextPaints;
-                    i3 = AndroidUtilities.dp(12.0f);
+                    sparseArray4 = photoCreditTextPaints;
+                    i5 = AndroidUtilities.dp(12.0f);
                 }
-                sparseArray7 = sparseArray3;
-                dp2 = i3;
+                sparseArray8 = sparseArray4;
+                dp = i5;
                 i = getGrayTextColor();
             } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockCollage) {
                 TLRPC$RichText tLRPC$RichText7 = ((TLRPC$TL_pageBlockCollage) tLRPC$PageBlock).caption.text;
                 if (tLRPC$RichText7 == tLRPC$RichText2 || tLRPC$RichText7 == tLRPC$RichText) {
-                    sparseArray2 = photoCaptionTextPaints;
-                    i2 = AndroidUtilities.dp(14.0f);
+                    sparseArray3 = photoCaptionTextPaints;
+                    i4 = AndroidUtilities.dp(14.0f);
                 } else {
-                    sparseArray2 = photoCreditTextPaints;
-                    i2 = AndroidUtilities.dp(12.0f);
+                    sparseArray3 = photoCreditTextPaints;
+                    i4 = AndroidUtilities.dp(12.0f);
                 }
-                sparseArray7 = sparseArray2;
-                dp2 = i2;
+                sparseArray8 = sparseArray3;
+                dp = i4;
                 i = getGrayTextColor();
             } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockEmbedPost) {
                 TLRPC$TL_pageCaption tLRPC$TL_pageCaption = ((TLRPC$TL_pageBlockEmbedPost) tLRPC$PageBlock).caption;
                 if (tLRPC$RichText2 == tLRPC$TL_pageCaption.text) {
-                    sparseArray7 = photoCaptionTextPaints;
-                    dp2 = AndroidUtilities.dp(14.0f);
+                    sparseArray8 = photoCaptionTextPaints;
+                    dp = AndroidUtilities.dp(14.0f);
                     i = getGrayTextColor();
                 } else if (tLRPC$RichText2 == tLRPC$TL_pageCaption.credit) {
-                    sparseArray7 = photoCreditTextPaints;
-                    dp2 = AndroidUtilities.dp(12.0f);
+                    sparseArray8 = photoCreditTextPaints;
+                    dp = AndroidUtilities.dp(12.0f);
                     i = getGrayTextColor();
                 } else if (tLRPC$RichText2 != null) {
-                    sparseArray7 = embedPostTextPaints;
-                    dp2 = AndroidUtilities.dp(14.0f);
+                    sparseArray8 = embedPostTextPaints;
+                    dp = AndroidUtilities.dp(14.0f);
                     i = getTextColor();
                 }
-            } else {
-                if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockVideo) {
-                    if (tLRPC$RichText2 == ((TLRPC$TL_pageBlockVideo) tLRPC$PageBlock).caption.text) {
-                        sparseArray = mediaCaptionTextPaints;
-                        dp = AndroidUtilities.dp(14.0f);
-                        textColor = getTextColor();
-                    } else {
-                        sparseArray = mediaCreditTextPaints;
-                        dp = AndroidUtilities.dp(12.0f);
-                        textColor = getTextColor();
-                    }
-                } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockAudio) {
-                    if (tLRPC$RichText2 == ((TLRPC$TL_pageBlockAudio) tLRPC$PageBlock).caption.text) {
-                        sparseArray = mediaCaptionTextPaints;
-                        dp = AndroidUtilities.dp(14.0f);
-                        textColor = getTextColor();
-                    } else {
-                        sparseArray = mediaCreditTextPaints;
-                        dp = AndroidUtilities.dp(12.0f);
-                        textColor = getTextColor();
-                    }
-                } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockRelatedArticles) {
-                    sparseArray7 = relatedArticleTextPaints;
-                    dp2 = AndroidUtilities.dp(15.0f);
-                    i = getGrayTextColor();
-                } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockDetails) {
-                    sparseArray7 = detailsTextPaints;
-                    dp2 = AndroidUtilities.dp(15.0f);
-                    i = getTextColor();
-                } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockTable) {
-                    sparseArray7 = tableTextPaints;
-                    dp2 = AndroidUtilities.dp(15.0f);
-                    i = getTextColor();
+            } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockVideo) {
+                if (tLRPC$RichText2 == ((TLRPC$TL_pageBlockVideo) tLRPC$PageBlock).caption.text) {
+                    sparseArray2 = mediaCaptionTextPaints;
+                    i3 = AndroidUtilities.dp(14.0f);
+                } else {
+                    sparseArray2 = mediaCreditTextPaints;
+                    i3 = AndroidUtilities.dp(12.0f);
                 }
-                sparseArray7 = sparseArray;
-                i = textColor;
-                dp2 = dp;
+                sparseArray8 = sparseArray2;
+                dp = i3;
+                i = getTextColor();
+            } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockAudio) {
+                if (tLRPC$RichText2 == ((TLRPC$TL_pageBlockAudio) tLRPC$PageBlock).caption.text) {
+                    sparseArray = mediaCaptionTextPaints;
+                    i2 = AndroidUtilities.dp(14.0f);
+                } else {
+                    sparseArray = mediaCreditTextPaints;
+                    i2 = AndroidUtilities.dp(12.0f);
+                }
+                sparseArray8 = sparseArray;
+                dp = i2;
+                i = getTextColor();
+            } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockRelatedArticles) {
+                sparseArray8 = relatedArticleTextPaints;
+                dp = AndroidUtilities.dp(15.0f);
+                i = getGrayTextColor();
+            } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockDetails) {
+                sparseArray8 = detailsTextPaints;
+                dp = AndroidUtilities.dp(15.0f);
+                i = getTextColor();
+            } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockTable) {
+                sparseArray8 = tableTextPaints;
+                dp = AndroidUtilities.dp(15.0f);
+                i = getTextColor();
             }
             i = -65536;
         }
-        int i7 = textFlags & 256;
-        if (!(i7 == 0 && (textFlags & 128) == 0)) {
-            dp2 -= AndroidUtilities.dp(4.0f);
+        int i9 = textFlags & 256;
+        if (!(i9 == 0 && (textFlags & 128) == 0)) {
+            dp -= AndroidUtilities.dp(4.0f);
         }
-        if (sparseArray7 == null) {
+        if (sparseArray8 == null) {
             if (errorTextPaint == null) {
                 TextPaint textPaint = new TextPaint(1);
                 errorTextPaint = textPaint;
@@ -3443,7 +3440,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             errorTextPaint.setTextSize((float) AndroidUtilities.dp(14.0f));
             return errorTextPaint;
         }
-        TextPaint textPaint2 = sparseArray7.get(textFlags);
+        TextPaint textPaint2 = sparseArray8.get(textFlags);
         if (textPaint2 == null) {
             textPaint2 = new TextPaint(1);
             if ((textFlags & 4) != 0) {
@@ -3451,10 +3448,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockRelatedArticles) {
                 textPaint2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             } else if (this.selectedFont != 1 && !(tLRPC$PageBlock instanceof TLRPC$TL_pageBlockTitle) && !(tLRPC$PageBlock instanceof TLRPC$TL_pageBlockKicker) && !(tLRPC$PageBlock instanceof TLRPC$TL_pageBlockHeader) && !(tLRPC$PageBlock instanceof TLRPC$TL_pageBlockSubtitle) && !(tLRPC$PageBlock instanceof TLRPC$TL_pageBlockSubheader)) {
-                int i8 = textFlags & 1;
-                if (i8 != 0 && (textFlags & 2) != 0) {
+                int i10 = textFlags & 1;
+                if (i10 != 0 && (textFlags & 2) != 0) {
                     textPaint2.setTypeface(AndroidUtilities.getTypeface("fonts/rmediumitalic.ttf"));
-                } else if (i8 != 0) {
+                } else if (i10 != 0) {
                     textPaint2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 } else if ((textFlags & 2) != 0) {
                     textPaint2.setTypeface(AndroidUtilities.getTypeface("fonts/ritalic.ttf"));
@@ -3462,10 +3459,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             } else if ((tLRPC$PageBlock instanceof TLRPC$TL_pageBlockTitle) || (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockHeader) || (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockSubtitle) || (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockSubheader)) {
                 textPaint2.setTypeface(AndroidUtilities.getTypeface("fonts/mw_bold.ttf"));
             } else {
-                int i9 = textFlags & 1;
-                if (i9 != 0 && (textFlags & 2) != 0) {
+                int i11 = textFlags & 1;
+                if (i11 != 0 && (textFlags & 2) != 0) {
                     textPaint2.setTypeface(Typeface.create("serif", 3));
-                } else if (i9 != 0) {
+                } else if (i11 != 0) {
                     textPaint2.setTypeface(Typeface.create("serif", 1));
                 } else if ((textFlags & 2) != 0) {
                     textPaint2.setTypeface(Typeface.create("serif", 2));
@@ -3483,15 +3480,15 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 textPaint2.setFlags(textPaint2.getFlags());
                 i = getLinkTextColor();
             }
-            if (i7 != 0) {
+            if (i9 != 0) {
                 textPaint2.baselineShift -= AndroidUtilities.dp(6.0f);
             } else if ((textFlags & 128) != 0) {
                 textPaint2.baselineShift += AndroidUtilities.dp(2.0f);
             }
             textPaint2.setColor(i);
-            sparseArray7.put(textFlags, textPaint2);
+            sparseArray8.put(textFlags, textPaint2);
         }
-        textPaint2.setTextSize((float) (dp2 + dp3));
+        textPaint2.setTextSize((float) (dp + dp2));
         return textPaint2;
     }
 
@@ -6487,7 +6484,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     private void openPreviewsChat(TLRPC$User tLRPC$User, long j) {
-        if (tLRPC$User != null && this.parentActivity != null) {
+        if (tLRPC$User != null && (this.parentActivity instanceof LaunchActivity)) {
             Bundle bundle = new Bundle();
             bundle.putInt("user_id", tLRPC$User.id);
             bundle.putString("botUser", "webpage" + j);
@@ -9630,7 +9627,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             boolean exists = FileLoader.getPathToAttach(this.currentDocument, true).exists();
             if (TextUtils.isEmpty(attachFileName)) {
                 this.radialProgress.setIcon(4, false, false);
-            } else if (exists) {
+                return;
+            }
+            if (exists) {
                 DownloadController.getInstance(ArticleViewer.this.currentAccount).removeLoadingFileObserver(this);
                 if (!this.isGif) {
                     this.buttonState = 3;
@@ -9638,7 +9637,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     this.buttonState = -1;
                 }
                 this.radialProgress.setIcon(getIconForCurrentState(), false, z);
-                invalidate();
             } else {
                 DownloadController.getInstance(ArticleViewer.this.currentAccount).addLoadingFileObserver(attachFileName, (MessageObject) null, this);
                 float f = 0.0f;
@@ -9656,8 +9654,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 this.radialProgress.setIcon(getIconForCurrentState(), z2, z);
                 this.radialProgress.setProgress(f, false);
-                invalidate();
             }
+            invalidate();
         }
 
         private void didPressedButton(boolean z) {
@@ -15288,11 +15286,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             boolean exists = FileLoader.getPathToAttach(this.currentPhotoObject, true).exists();
             if (TextUtils.isEmpty(attachFileName)) {
                 this.radialProgress.setIcon(4, false, false);
-            } else if (exists) {
+                return;
+            }
+            if (exists) {
                 DownloadController.getInstance(ArticleViewer.this.currentAccount).removeLoadingFileObserver(this);
                 this.buttonState = -1;
                 this.radialProgress.setIcon(getIconForCurrentState(), false, z);
-                invalidate();
             } else {
                 DownloadController.getInstance(ArticleViewer.this.currentAccount).addLoadingFileObserver(attachFileName, (MessageObject) null, this);
                 float f = 0.0f;
@@ -15307,8 +15306,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 this.radialProgress.setIcon(getIconForCurrentState(), true, z);
                 this.radialProgress.setProgress(f, false);
-                invalidate();
             }
+            invalidate();
         }
 
         /* access modifiers changed from: protected */

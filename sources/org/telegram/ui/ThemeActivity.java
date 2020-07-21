@@ -1323,14 +1323,26 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
     }
 
     public /* synthetic */ void lambda$updateSunTime$8$ThemeActivity() {
-        String str = null;
+        String str;
         try {
             List<Address> fromLocation = new Geocoder(ApplicationLoader.applicationContext, Locale.getDefault()).getFromLocation(Theme.autoNightLocationLatitude, Theme.autoNightLocationLongitude, 1);
             if (fromLocation.size() > 0) {
                 str = fromLocation.get(0).getLocality();
+                AndroidUtilities.runOnUIThread(new Runnable(str) {
+                    public final /* synthetic */ String f$1;
+
+                    {
+                        this.f$1 = r2;
+                    }
+
+                    public final void run() {
+                        ThemeActivity.this.lambda$null$7$ThemeActivity(this.f$1);
+                    }
+                });
             }
         } catch (Exception unused) {
         }
+        str = null;
         AndroidUtilities.runOnUIThread(new Runnable(str) {
             public final /* synthetic */ String f$1;
 

@@ -49,6 +49,8 @@ public class BaseFragment {
     public View fragmentView;
     protected boolean hasOwnBackground;
     /* access modifiers changed from: protected */
+    public boolean inBubbleMode;
+    /* access modifiers changed from: protected */
     public boolean inPreviewMode;
     private boolean isFinished;
     protected boolean isPaused;
@@ -164,6 +166,14 @@ public class BaseFragment {
         this.classGuid = ConnectionsManager.generateClassGuid();
     }
 
+    public void setCurrentAccount(int i) {
+        if (this.fragmentView == null) {
+            this.currentAccount = i;
+            return;
+        }
+        throw new IllegalStateException("trying to set current account when fragment UI already created");
+    }
+
     public ActionBar getActionBar() {
         return this.actionBar;
     }
@@ -182,6 +192,14 @@ public class BaseFragment {
 
     public int getClassGuid() {
         return this.classGuid;
+    }
+
+    public void setInBubbleMode(boolean z) {
+        this.inBubbleMode = z;
+    }
+
+    public boolean isInBubbleMode() {
+        return this.inBubbleMode;
     }
 
     /* access modifiers changed from: protected */
@@ -241,6 +259,8 @@ public class BaseFragment {
         ViewGroup viewGroup;
         if (this.parentLayout != actionBarLayout) {
             this.parentLayout = actionBarLayout;
+            boolean z = true;
+            this.inBubbleMode = actionBarLayout != null && actionBarLayout.isInBubbleMode();
             View view = this.fragmentView;
             if (view != null) {
                 ViewGroup viewGroup2 = (ViewGroup) view.getParent();
@@ -259,7 +279,9 @@ public class BaseFragment {
             }
             if (this.actionBar != null) {
                 ActionBarLayout actionBarLayout3 = this.parentLayout;
-                boolean z = (actionBarLayout3 == null || actionBarLayout3.getContext() == this.actionBar.getContext()) ? false : true;
+                if (actionBarLayout3 == null || actionBarLayout3.getContext() == this.actionBar.getContext()) {
+                    z = false;
+                }
                 if ((this.actionBar.shouldAddToContainer() || z) && (viewGroup = (ViewGroup) this.actionBar.getParent()) != null) {
                     try {
                         viewGroup.removeViewInLayout(this.actionBar);
@@ -288,7 +310,7 @@ public class BaseFragment {
         actionBar2.setItemsBackgroundColor(Theme.getColor("actionBarActionModeDefaultSelector"), true);
         actionBar2.setItemsColor(Theme.getColor("actionBarDefaultIcon"), false);
         actionBar2.setItemsColor(Theme.getColor("actionBarActionModeDefaultIcon"), true);
-        if (this.inPreviewMode) {
+        if (this.inPreviewMode || this.inBubbleMode) {
             actionBar2.setOccupyStatusBar(false);
         }
         return actionBar2;

@@ -77,6 +77,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
     public int highlightsTool;
     /* access modifiers changed from: private */
     public float highlightsValue;
+    private boolean inBubbleMode;
     /* access modifiers changed from: private */
     public boolean isMirrored;
     private MediaController.SavedFilterState lastState;
@@ -248,8 +249,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x04cd  */
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x04cf  */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x04d1  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x04d3  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public PhotoFilterView(android.content.Context r24, org.telegram.ui.Components.VideoEditTextureView r25, android.graphics.Bitmap r26, int r27, org.telegram.messenger.MediaController.SavedFilterState r28, org.telegram.ui.Components.PaintingOverlay r29, int r30, boolean r31) {
         /*
@@ -263,6 +264,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             r5 = 4
             org.telegram.ui.Components.RadioButton[] r6 = new org.telegram.ui.Components.RadioButton[r5]
             r0.curveRadioButton = r6
+            boolean r6 = r1 instanceof org.telegram.ui.BubbleActivity
+            r0.inBubbleMode = r6
             r6 = r29
             r0.paintingOverlay = r6
             r6 = r31
@@ -271,16 +274,16 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             r0.rowsCount = r6
             r7 = -1
             r8 = 1
-            if (r4 != r8) goto L_0x0028
+            if (r4 != r8) goto L_0x002c
             r9 = 0
             int r9 = r9 + r8
             r0.rowsCount = r9
             r0.softenSkinTool = r6
-            goto L_0x002c
-        L_0x0028:
-            if (r4 != 0) goto L_0x002c
-            r0.softenSkinTool = r7
+            goto L_0x0030
         L_0x002c:
+            if (r4 != 0) goto L_0x0030
+            r0.softenSkinTool = r7
+        L_0x0030:
             int r9 = r0.rowsCount
             int r10 = r9 + 1
             r0.rowsCount = r10
@@ -310,20 +313,20 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             r0.rowsCount = r10
             r0.vignetteTool = r9
             r9 = 2
-            if (r4 != r9) goto L_0x006d
+            if (r4 != r9) goto L_0x0071
             int r4 = r10 + 1
             r0.rowsCount = r4
             r0.softenSkinTool = r10
-        L_0x006d:
-            if (r2 != 0) goto L_0x0078
+        L_0x0071:
+            if (r2 != 0) goto L_0x007c
             int r4 = r0.rowsCount
             int r10 = r4 + 1
             r0.rowsCount = r10
             r0.grainTool = r4
-            goto L_0x007a
-        L_0x0078:
+            goto L_0x007e
+        L_0x007c:
             r0.grainTool = r7
-        L_0x007a:
+        L_0x007e:
             int r4 = r0.rowsCount
             int r10 = r4 + 1
             r0.rowsCount = r10
@@ -334,7 +337,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             int r10 = r4 + 1
             r0.rowsCount = r10
             r0.tintHighlightsTool = r4
-            if (r3 == 0) goto L_0x00e3
+            if (r3 == 0) goto L_0x00e7
             float r4 = r3.enhanceValue
             r0.enhanceValue = r4
             float r4 = r3.softenSkinValue
@@ -376,8 +379,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             float r4 = r3.blurAngle
             r0.blurAngle = r4
             r0.lastState = r3
-            goto L_0x0102
-        L_0x00e3:
+            goto L_0x0106
+        L_0x00e7:
             org.telegram.ui.Components.PhotoFilterView$CurvesToolValue r3 = new org.telegram.ui.Components.PhotoFilterView$CurvesToolValue
             r3.<init>()
             r0.curvesToolValue = r3
@@ -391,19 +394,19 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             r0.blurExcludeBlurSize = r3
             r3 = 1070141403(0x3fCLASSNAMEfdb, float:1.5707964)
             r0.blurAngle = r3
-        L_0x0102:
+        L_0x0106:
             r3 = r26
             r0.bitmapToEdit = r3
             r3 = r27
             r0.orientation = r3
             r3 = 51
-            if (r2 == 0) goto L_0x0119
+            if (r2 == 0) goto L_0x011d
             r0.textureView = r2
             org.telegram.ui.Components.-$$Lambda$PhotoFilterView$DM8YJ6s12uOi6ZSpSnTSAp73ot4 r4 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$DM8YJ6s12uOi6ZSpSnTSAp73ot4
             r4.<init>()
             r2.setDelegate(r4)
-            goto L_0x0138
-        L_0x0119:
+            goto L_0x013c
+        L_0x011d:
             r0.ownsTextureView = r8
             android.view.TextureView r4 = new android.view.TextureView
             r4.<init>(r1)
@@ -416,7 +419,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             org.telegram.ui.Components.PhotoFilterView$1 r10 = new org.telegram.ui.Components.PhotoFilterView$1
             r10.<init>()
             r4.setSurfaceTextureListener(r10)
-        L_0x0138:
+        L_0x013c:
             org.telegram.ui.Components.PhotoFilterBlurControl r4 = new org.telegram.ui.Components.PhotoFilterBlurControl
             r4.<init>(r1)
             r0.blurControl = r4
@@ -569,11 +572,11 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             org.telegram.ui.Components.-$$Lambda$PhotoFilterView$F_KOwGrCZ7lau2u49edpZx3V5ug r12 = new org.telegram.ui.Components.-$$Lambda$PhotoFilterView$F_KOwGrCZ7lau2u49edpZx3V5ug
             r12.<init>()
             r4.setOnClickListener(r12)
-            if (r2 == 0) goto L_0x02db
+            if (r2 == 0) goto L_0x02df
             android.widget.ImageView r2 = r0.blurItem
             r4 = 8
             r2.setVisibility(r4)
-        L_0x02db:
+        L_0x02df:
             android.widget.ImageView r2 = new android.widget.ImageView
             r2.<init>(r1)
             r0.curveItem = r2
@@ -638,9 +641,9 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r10, r8)
             r3.addView(r2, r4)
             r3 = 0
-        L_0x0379:
+        L_0x037d:
             r4 = 4
-            if (r3 >= r4) goto L_0x04f3
+            if (r3 >= r4) goto L_0x04f7
             android.widget.FrameLayout r4 = new android.widget.FrameLayout
             r4.<init>(r1)
             java.lang.Integer r5 = java.lang.Integer.valueOf(r3)
@@ -666,7 +669,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             r5.setTextSize(r8, r9)
             r9 = 16
             r5.setGravity(r9)
-            if (r3 != 0) goto L_0x03f6
+            if (r3 != 0) goto L_0x03fa
             r9 = 2131624872(0x7f0e03a8, float:1.8876936E38)
             java.lang.String r10 = "CurvesAll"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
@@ -684,11 +687,11 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             org.telegram.ui.Components.RadioButton[] r9 = r0.curveRadioButton
             r9 = r9[r3]
             r9.setColor(r7, r7)
-        L_0x03f3:
+        L_0x03f7:
             r9 = 2
-            goto L_0x04a8
-        L_0x03f6:
-            if (r3 != r8) goto L_0x0431
+            goto L_0x04ac
+        L_0x03fa:
+            if (r3 != r8) goto L_0x0435
             r9 = 2131624875(0x7f0e03ab, float:1.8876942E38)
             java.lang.String r10 = "CurvesRed"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
@@ -707,10 +710,10 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             org.telegram.ui.Components.RadioButton[] r10 = r0.curveRadioButton
             r10 = r10[r3]
             r10.setColor(r9, r9)
-            goto L_0x03f3
-        L_0x0431:
+            goto L_0x03f7
+        L_0x0435:
             r9 = 2
-            if (r3 != r9) goto L_0x046d
+            if (r3 != r9) goto L_0x0471
             r10 = 2131624874(0x7f0e03aa, float:1.887694E38)
             java.lang.String r11 = "CurvesGreen"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
@@ -729,10 +732,10 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             org.telegram.ui.Components.RadioButton[] r11 = r0.curveRadioButton
             r11 = r11[r3]
             r11.setColor(r10, r10)
-            goto L_0x04a8
-        L_0x046d:
+            goto L_0x04ac
+        L_0x0471:
             r10 = 3
-            if (r3 != r10) goto L_0x04a8
+            if (r3 != r10) goto L_0x04ac
             r10 = 2131624873(0x7f0e03a9, float:1.8876938E38)
             java.lang.String r11 = "CurvesBlue"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
@@ -751,7 +754,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             org.telegram.ui.Components.RadioButton[] r11 = r0.curveRadioButton
             r11 = r11[r3]
             r11.setColor(r10, r10)
-        L_0x04a8:
+        L_0x04ac:
             r10 = -2
             r11 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
             r12 = 49
@@ -770,12 +773,12 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             r4.addView(r5, r10)
             r5 = -2
             r10 = -2
-            if (r3 != 0) goto L_0x04cf
+            if (r3 != 0) goto L_0x04d3
             r11 = 0
-            goto L_0x04d1
-        L_0x04cf:
+            goto L_0x04d5
+        L_0x04d3:
             r11 = 1106247680(0x41var_, float:30.0)
-        L_0x04d1:
+        L_0x04d5:
             r12 = 0
             r13 = 0
             r14 = 0
@@ -791,8 +794,8 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             r5.<init>()
             r4.setOnClickListener(r5)
             int r3 = r3 + 1
-            goto L_0x0379
-        L_0x04f3:
+            goto L_0x037d
+        L_0x04f7:
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
             r2.<init>(r1)
             r0.blurLayout = r2
@@ -916,21 +919,23 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             r23.updateSelectedBlurType()
             int r1 = android.os.Build.VERSION.SDK_INT
             r2 = 21
-            if (r1 < r2) goto L_0x0630
+            if (r1 < r2) goto L_0x0638
+            boolean r1 = r0.inBubbleMode
+            if (r1 != 0) goto L_0x0638
             boolean r1 = r0.ownsTextureView
-            if (r1 == 0) goto L_0x0624
+            if (r1 == 0) goto L_0x062c
             android.view.TextureView r1 = r0.textureView
             android.view.ViewGroup$LayoutParams r1 = r1.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r1 = (android.widget.FrameLayout.LayoutParams) r1
             int r2 = org.telegram.messenger.AndroidUtilities.statusBarHeight
             r1.topMargin = r2
-        L_0x0624:
+        L_0x062c:
             org.telegram.ui.Components.PhotoFilterCurvesControl r1 = r0.curvesControl
             android.view.ViewGroup$LayoutParams r1 = r1.getLayoutParams()
             android.widget.FrameLayout$LayoutParams r1 = (android.widget.FrameLayout.LayoutParams) r1
             int r2 = org.telegram.messenger.AndroidUtilities.statusBarHeight
             r1.topMargin = r2
-        L_0x0630:
+        L_0x0638:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoFilterView.<init>(android.content.Context, org.telegram.ui.Components.VideoEditTextureView, android.graphics.Bitmap, int, org.telegram.messenger.MediaController$SavedFilterState, org.telegram.ui.Components.PaintingOverlay, int, boolean):void");
@@ -1217,7 +1222,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
         float f2;
         float f3;
         int dp = i - AndroidUtilities.dp(28.0f);
-        int dp2 = i2 - (AndroidUtilities.dp(214.0f) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0));
+        int dp2 = i2 - (AndroidUtilities.dp(214.0f) + ((Build.VERSION.SDK_INT < 21 || this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight));
         Bitmap bitmap = this.bitmapToEdit;
         if (bitmap != null) {
             int i4 = this.orientation;
@@ -1245,7 +1250,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             f3 = f5;
         }
         int ceil = (int) Math.ceil((double) (((f5 - f3) / 2.0f) + ((float) AndroidUtilities.dp(14.0f))));
-        int ceil2 = (int) Math.ceil((double) (((f7 - f2) / 2.0f) + ((float) AndroidUtilities.dp(14.0f)) + ((float) (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0))));
+        int ceil2 = (int) Math.ceil((double) (((f7 - f2) / 2.0f) + ((float) AndroidUtilities.dp(14.0f)) + ((float) ((Build.VERSION.SDK_INT < 21 || this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight))));
         int i5 = (int) f3;
         int i6 = (int) f2;
         if (this.ownsTextureView) {
@@ -1257,7 +1262,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
         }
         float f9 = (float) i5;
         float var_ = (float) i6;
-        this.curvesControl.setActualArea((float) ceil, (float) (ceil2 - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)), f9, var_);
+        this.curvesControl.setActualArea((float) ceil, (float) (ceil2 - ((Build.VERSION.SDK_INT < 21 || this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight)), f9, var_);
         this.blurControl.setActualAreaSize(f9, var_);
         ((FrameLayout.LayoutParams) this.blurControl.getLayoutParams()).height = AndroidUtilities.dp(38.0f) + dp2;
         ((FrameLayout.LayoutParams) this.curvesControl.getLayoutParams()).height = dp2 + AndroidUtilities.dp(28.0f);

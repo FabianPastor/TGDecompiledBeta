@@ -87,6 +87,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     private ArrayList<PhotoFace> faces;
     private Bitmap facesBitmap;
     private boolean ignoreLayout;
+    private boolean inBubbleMode;
     private String initialText;
     private BigInteger lcm;
     private int originalBitmapRotation;
@@ -95,7 +96,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     private ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout;
     private Rect popupRect;
     private ActionBarPopupWindow popupWindow;
-    private DispatchQueue queue = new DispatchQueue("Paint");
+    private DispatchQueue queue;
     private RenderView renderView;
     private int selectedTextType = 2;
     private FrameLayout selectionContainerView;
@@ -113,10 +114,10 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     public void onOpenCloseStickersAlert(boolean z) {
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v33, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v36, resolved type: org.telegram.ui.Components.Paint.Views.StickerView} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v37, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v34, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v37, resolved type: org.telegram.ui.Components.Paint.Views.StickerView} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v38, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v39, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -148,6 +149,8 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r5[r10] = r6
             r0.brushes = r5
             r0.selectedTextType = r9
+            boolean r5 = r1 instanceof org.telegram.ui.BubbleActivity
+            r0.inBubbleMode = r5
             org.telegram.messenger.DispatchQueue r5 = new org.telegram.messenger.DispatchQueue
             java.lang.String r6 = "Paint"
             r5.<init>(r6)
@@ -383,47 +386,47 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             org.telegram.ui.Components.Paint.Swatch r1 = r1.getSwatch()
             r0.setCurrentSwatch(r1, r7)
             r23.updateSettingsButton()
-            if (r3 == 0) goto L_0x035f
+            if (r3 == 0) goto L_0x0363
             boolean r1 = r28.isEmpty()
-            if (r1 != 0) goto L_0x035f
+            if (r1 != 0) goto L_0x0363
             int r1 = r28.size()
             r2 = 0
-        L_0x029f:
-            if (r2 >= r1) goto L_0x035f
+        L_0x02a3:
+            if (r2 >= r1) goto L_0x0363
             java.lang.Object r4 = r3.get(r2)
             org.telegram.messenger.VideoEditedInfo$MediaEntity r4 = (org.telegram.messenger.VideoEditedInfo.MediaEntity) r4
             byte r5 = r4.type
-            if (r5 != 0) goto L_0x02c8
+            if (r5 != 0) goto L_0x02cc
             java.lang.Object r5 = r4.parentObject
             org.telegram.tgnet.TLRPC$Document r6 = r4.document
             org.telegram.ui.Components.Paint.Views.StickerView r5 = r0.createSticker(r5, r6, r7)
             byte r6 = r4.subType
             r6 = r6 & r9
-            if (r6 == 0) goto L_0x02bb
+            if (r6 == 0) goto L_0x02bf
             r5.mirror()
-        L_0x02bb:
+        L_0x02bf:
             android.view.ViewGroup$LayoutParams r6 = r5.getLayoutParams()
             int r10 = r4.viewWidth
             r6.width = r10
             int r10 = r4.viewHeight
             r6.height = r10
-            goto L_0x02f0
-        L_0x02c8:
-            if (r5 != r8) goto L_0x035b
+            goto L_0x02f4
+        L_0x02cc:
+            if (r5 != r8) goto L_0x035f
             org.telegram.ui.Components.Paint.Views.TextPaintView r5 = r0.createText(r7)
             byte r6 = r4.subType
             r10 = r6 & 1
-            if (r10 == 0) goto L_0x02d6
+            if (r10 == 0) goto L_0x02da
             r6 = 0
-            goto L_0x02dd
-        L_0x02d6:
+            goto L_0x02e1
+        L_0x02da:
             r6 = r6 & 4
-            if (r6 == 0) goto L_0x02dc
+            if (r6 == 0) goto L_0x02e0
             r6 = 2
-            goto L_0x02dd
-        L_0x02dc:
+            goto L_0x02e1
+        L_0x02e0:
             r6 = 1
-        L_0x02dd:
+        L_0x02e1:
             r5.setType(r6)
             java.lang.String r6 = r4.text
             r5.setText(r6)
@@ -431,7 +434,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             int r10 = r4.color
             r6.color = r10
             r5.setSwatch(r6)
-        L_0x02f0:
+        L_0x02f4:
             float r6 = r4.x
             org.telegram.ui.Components.Size r10 = r0.paintingSize
             float r10 = r10.width
@@ -485,10 +488,10 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             double r10 = r10 * r12
             float r4 = (float) r10
             r5.setRotation(r4)
-        L_0x035b:
-            int r2 = r2 + 1
-            goto L_0x029f
         L_0x035f:
+            int r2 = r2 + 1
+            goto L_0x02a3
+        L_0x0363:
             org.telegram.ui.Components.Paint.Views.EntitiesContainerView r1 = r0.entitiesView
             r2 = 4
             r1.setVisibility(r2)
@@ -888,7 +891,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         int i5 = i3 - i;
         int i6 = i4 - i2;
-        int i7 = Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
+        int i7 = (Build.VERSION.SDK_INT < 21 || this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight;
         ActionBar.getCurrentActionBarHeight();
         int currentActionBarHeight = ActionBar.getCurrentActionBarHeight() + i7;
         int i8 = AndroidUtilities.displaySize.y;

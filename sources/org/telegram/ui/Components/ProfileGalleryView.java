@@ -52,6 +52,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
     /* access modifiers changed from: private */
     public final SparseArray<RadialProgress2> radialProgresses = new SparseArray<>();
     private boolean scrolledByUser;
+    private int settingMainPhoto;
     private ArrayList<String> thumbsFileNames = new ArrayList<>();
     /* access modifiers changed from: private */
     public ArrayList<ImageLocation> thumbsLocations = new ArrayList<>();
@@ -107,9 +108,8 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                     for (int i3 = 0; i3 < childCount; i3++) {
                         View childAt = ProfileGalleryView.this.getChildAt(i3);
                         if (childAt instanceof BackupImageView) {
-                            BackupImageView backupImageView = (BackupImageView) childAt;
-                            int realPosition2 = ProfileGalleryView.this.adapter.getRealPosition(ProfileGalleryView.this.adapter.imageViews.indexOf(backupImageView));
-                            ImageReceiver imageReceiver = backupImageView.getImageReceiver();
+                            int realPosition2 = ProfileGalleryView.this.adapter.getRealPosition(ProfileGalleryView.this.adapter.imageViews.indexOf(childAt));
+                            ImageReceiver imageReceiver = ((BackupImageView) childAt).getImageReceiver();
                             boolean allowStartAnimation = imageReceiver.getAllowStartAnimation();
                             if (realPosition2 == realPosition) {
                                 if (!allowStartAnimation) {
@@ -157,21 +157,23 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
     }
 
     public void setAnimatedFileMaybe(AnimatedFileDrawable animatedFileDrawable) {
-        AnimatedFileDrawable animation;
         if (animatedFileDrawable != null) {
             int childCount = getChildCount();
             for (int i = 0; i < childCount; i++) {
                 View childAt = getChildAt(i);
                 if (childAt instanceof BackupImageView) {
                     ViewPagerAdapter viewPagerAdapter = this.adapter;
-                    BackupImageView backupImageView = (BackupImageView) childAt;
-                    if (viewPagerAdapter.getRealPosition(viewPagerAdapter.imageViews.indexOf(backupImageView)) == 0 && (animation = backupImageView.getImageReceiver().getAnimation()) != animatedFileDrawable) {
-                        if (animation != null) {
-                            animation.removeSecondParentView(backupImageView);
+                    if (viewPagerAdapter.getRealPosition(viewPagerAdapter.imageViews.indexOf(childAt)) == 0) {
+                        BackupImageView backupImageView = (BackupImageView) childAt;
+                        AnimatedFileDrawable animation = backupImageView.getImageReceiver().getAnimation();
+                        if (animation != animatedFileDrawable) {
+                            if (animation != null) {
+                                animation.removeSecondParentView(backupImageView);
+                            }
+                            backupImageView.setImageDrawable(animatedFileDrawable);
+                            animatedFileDrawable.addSecondParentView(this);
+                            animatedFileDrawable.setInvalidateParentViewWithSecond(true);
                         }
-                        backupImageView.setImageDrawable(animatedFileDrawable);
-                        animatedFileDrawable.addSecondParentView(this);
-                        animatedFileDrawable.setInvalidateParentViewWithSecond(true);
                     }
                 }
             }
@@ -276,7 +278,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
 
     public boolean initIfEmpty(ImageLocation imageLocation, ImageLocation imageLocation2) {
         ImageLocation imageLocation3;
-        if (imageLocation == null || imageLocation2 == null) {
+        if (imageLocation == null || imageLocation2 == null || this.settingMainPhoto != 0) {
             return false;
         }
         if ((this.prevImageLocation == null && imageLocation != null) || !((imageLocation3 = this.prevImageLocation) == null || imageLocation3.location.local_id == imageLocation.location.local_id)) {
@@ -419,8 +421,13 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         }
     }
 
+    public void finishSettingMainPhoto() {
+        this.settingMainPhoto--;
+    }
+
     public void startMovePhotoToBegin(int i) {
         if (i > 0 && i < this.photos.size()) {
+            this.settingMainPhoto++;
             this.photos.remove(i);
             this.photos.add(0, this.photos.get(i));
             this.thumbsFileNames.remove(i);
@@ -516,9 +523,9 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             long r8 = (long) r7
             long r10 = r0.dialogId
             int r2 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r2 != 0) goto L_0x02cf
+            if (r2 != 0) goto L_0x02d4
             int r2 = r0.parentClassGuid
-            if (r2 != r1) goto L_0x02cf
+            if (r2 != r1) goto L_0x02d4
             r1 = r19[r3]
             java.lang.Boolean r1 = (java.lang.Boolean) r1
             boolean r1 = r1.booleanValue()
@@ -765,9 +772,9 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             r6.loadDialogPhotos(r7, r8, r9, r11, r12)
         L_0x021e:
             org.telegram.ui.Components.ProfileGalleryView$Callback r1 = r0.callback
-            if (r1 == 0) goto L_0x02cf
+            if (r1 == 0) goto L_0x02d4
             r1.onPhotosLoaded()
-            goto L_0x02cf
+            goto L_0x02d4
         L_0x0227:
             int r2 = org.telegram.messenger.NotificationCenter.fileDidLoad
             r4 = 1065353216(0x3var_, float:1.0)
@@ -777,7 +784,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         L_0x0231:
             java.util.ArrayList<java.lang.String> r2 = r0.thumbsFileNames
             int r2 = r2.size()
-            if (r5 >= r2) goto L_0x02cf
+            if (r5 >= r2) goto L_0x02d4
             java.util.ArrayList<java.lang.String> r2 = r0.videoFileNames
             java.lang.Object r2 = r2.get(r5)
             java.lang.String r2 = (java.lang.String) r2
@@ -806,7 +813,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
         L_0x026c:
             java.util.ArrayList<java.lang.String> r2 = r0.thumbsFileNames
             int r2 = r2.size()
-            if (r5 >= r2) goto L_0x02cf
+            if (r5 >= r2) goto L_0x02d4
             java.util.ArrayList<java.lang.String> r2 = r0.videoFileNames
             java.lang.Object r2 = r2.get(r5)
             java.lang.String r2 = (java.lang.String) r2
@@ -842,7 +849,11 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             goto L_0x026c
         L_0x02b8:
             int r2 = org.telegram.messenger.NotificationCenter.reloadDialogPhotos
-            if (r1 != r2) goto L_0x02cf
+            if (r1 != r2) goto L_0x02d4
+            int r1 = r0.settingMainPhoto
+            if (r1 == 0) goto L_0x02c1
+            return
+        L_0x02c1:
             int r1 = r0.currentAccount
             org.telegram.messenger.MessagesController r2 = org.telegram.messenger.MessagesController.getInstance(r1)
             long r3 = r0.dialogId
@@ -852,7 +863,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             r7 = 1
             int r8 = r0.parentClassGuid
             r2.loadDialogPhotos(r3, r4, r5, r7, r8)
-        L_0x02cf:
+        L_0x02d4:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ProfileGalleryView.didReceivedNotification(int, int, java.lang.Object[]):void");

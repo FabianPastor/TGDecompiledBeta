@@ -111,10 +111,10 @@ public class DrawerProfileCell extends FrameLayout {
     }
 
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v1, resolved type: java.lang.Object[]} */
+    /* JADX WARNING: Code restructure failed: missing block: B:9:0x0035, code lost:
+        if (r4.isDark() != false) goto L_0x003b;
+     */
     /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:15:0x0045  */
-    /* JADX WARNING: Removed duplicated region for block: B:16:0x004a  */
-    /* JADX WARNING: Removed duplicated region for block: B:19:0x0052  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$new$0$DrawerProfileCell(android.view.View r8) {
         /*
@@ -130,29 +130,29 @@ public class DrawerProfileCell extends FrameLayout {
             if (r3 != 0) goto L_0x0018
             r0 = r2
         L_0x0018:
-            java.lang.String r3 = "lastDarkTheme"
-            java.lang.String r4 = "Dark Blue"
-            java.lang.String r8 = r8.getString(r3, r4)
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = org.telegram.ui.ActionBar.Theme.getTheme(r8)
-            if (r3 != 0) goto L_0x0027
-            r8 = r4
+            java.lang.String r3 = "Dark Blue"
+            java.lang.String r4 = "lastDarkTheme"
+            java.lang.String r8 = r8.getString(r4, r3)
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = org.telegram.ui.ActionBar.Theme.getTheme(r8)
+            if (r4 != 0) goto L_0x0027
+            r8 = r3
         L_0x0027:
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
             boolean r5 = r0.equals(r8)
+            if (r5 == 0) goto L_0x0038
+            boolean r5 = r4.isDark()
             if (r5 == 0) goto L_0x0039
-            boolean r5 = r3.isDark()
-            if (r5 == 0) goto L_0x003a
-            r4 = r8
             goto L_0x003b
+        L_0x0038:
+            r3 = r8
         L_0x0039:
-            r4 = r8
-        L_0x003a:
             r2 = r0
+            r8 = r3
         L_0x003b:
-            java.lang.String r8 = r3.getKey()
-            boolean r8 = r2.equals(r8)
-            if (r8 == 0) goto L_0x004a
-            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.getTheme(r4)
+            java.lang.String r0 = r4.getKey()
+            boolean r0 = r2.equals(r0)
+            if (r0 == 0) goto L_0x004a
+            org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.getTheme(r8)
             goto L_0x004e
         L_0x004a:
             org.telegram.ui.ActionBar.Theme$ThemeInfo r8 = org.telegram.ui.ActionBar.Theme.getTheme(r2)

@@ -755,7 +755,8 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     MediaController.PhotoEntry photoEntry = new MediaController.PhotoEntry(0, ChatAttachAlertPhotoLayout.access$3110(), 0, this.outputFile.getAbsolutePath(), 0, true, 0, 0, 0);
                     photoEntry.duration = (int) j;
                     photoEntry.thumbPath = str;
-                    if (ChatAttachAlertPhotoLayout.this.parentAlert.avatarPicker != 0) {
+                    ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout = ChatAttachAlertPhotoLayout.this;
+                    if (chatAttachAlertPhotoLayout.parentAlert.avatarPicker != 0 && chatAttachAlertPhotoLayout.cameraView.isFrontface()) {
                         MediaController.CropState cropState = new MediaController.CropState();
                         photoEntry.cropState = cropState;
                         cropState.mirrored = true;
@@ -2454,7 +2455,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                     } else {
                         this.cameraViewOffsetX = 0;
                     }
-                    int currentActionBarHeight = (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0) + ActionBar.getCurrentActionBarHeight();
+                    int currentActionBarHeight = ((Build.VERSION.SDK_INT < 21 || this.parentAlert.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight) + ActionBar.getCurrentActionBarHeight();
                     int[] iArr3 = this.cameraViewLocation;
                     if (iArr3[1] < currentActionBarHeight) {
                         int i3 = currentActionBarHeight - iArr3[1];

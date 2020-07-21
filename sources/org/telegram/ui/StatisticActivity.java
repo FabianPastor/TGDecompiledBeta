@@ -1537,8 +1537,8 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         }
 
         public /* synthetic */ void lambda$null$3$StatisticActivity$ChartCell(Context context, String str, ZoomCancelable zoomCancelable, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            ChartData chartData;
             boolean z = true;
-            ChartData chartData = null;
             if (tLObject instanceof TLRPC$TL_statsGraph) {
                 try {
                     JSONObject jSONObject = new JSONObject(((TLRPC$TL_statsGraph) tLObject).json.data);
@@ -1550,8 +1550,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            } else if (tLObject instanceof TLRPC$TL_statsGraphError) {
-                Toast.makeText(context, ((TLRPC$TL_statsGraphError) tLObject).error, 1).show();
+            } else {
+                if (tLObject instanceof TLRPC$TL_statsGraphError) {
+                    Toast.makeText(context, ((TLRPC$TL_statsGraphError) tLObject).error, 1).show();
+                }
+                chartData = null;
             }
             AndroidUtilities.runOnUIThread(new Runnable(chartData, str, zoomCancelable) {
                 public final /* synthetic */ ChartData f$1;

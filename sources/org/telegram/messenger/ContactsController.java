@@ -555,7 +555,7 @@ public class ContactsController extends BaseController {
             r3 = 0
             r4 = 0
             android.accounts.Account[] r5 = r2.getAccountsByType(r0)     // Catch:{ all -> 0x0049 }
-            r12.systemAccount = r3     // Catch:{ all -> 0x0049 }
+            r12.systemAccount = r4     // Catch:{ all -> 0x0049 }
             r6 = 0
         L_0x0013:
             int r7 = r5.length     // Catch:{ all -> 0x0049 }
@@ -577,7 +577,7 @@ public class ContactsController extends BaseController {
             java.lang.String r9 = r11.toString()     // Catch:{ all -> 0x0049 }
             boolean r9 = r10.equals(r9)     // Catch:{ all -> 0x0049 }
             if (r9 == 0) goto L_0x0043
-            r2.removeAccount(r7, r3, r3)     // Catch:{ all -> 0x0049 }
+            r2.removeAccount(r7, r4, r4)     // Catch:{ all -> 0x0049 }
             goto L_0x0046
         L_0x0043:
             int r8 = r8 + 1
@@ -596,13 +596,13 @@ public class ContactsController extends BaseController {
             java.lang.String r6 = r6.toString()     // Catch:{ Exception -> 0x006a }
             r5.<init>(r6, r0)     // Catch:{ Exception -> 0x006a }
             r12.systemAccount = r5     // Catch:{ Exception -> 0x006a }
-            r2.addAccountExplicitly(r5, r1, r3)     // Catch:{ Exception -> 0x006a }
+            r2.addAccountExplicitly(r5, r1, r4)     // Catch:{ Exception -> 0x006a }
         L_0x006a:
             org.telegram.messenger.MessagesStorage r0 = r12.getMessagesStorage()
             java.util.HashMap r1 = new java.util.HashMap
             r1.<init>()
             r2 = 1
-            r0.putCachedPhoneBook(r1, r4, r2)
+            r0.putCachedPhoneBook(r1, r3, r2)
             org.telegram.messenger.MessagesStorage r0 = r12.getMessagesStorage()
             java.util.ArrayList r1 = new java.util.ArrayList
             r1.<init>()
@@ -633,9 +633,9 @@ public class ContactsController extends BaseController {
             r0.clear()
             org.telegram.messenger.NotificationCenter r0 = r12.getNotificationCenter()
             int r1 = org.telegram.messenger.NotificationCenter.contactsDidLoad
-            java.lang.Object[] r2 = new java.lang.Object[r4]
+            java.lang.Object[] r2 = new java.lang.Object[r3]
             r0.postNotificationName(r1, r2)
-            r12.loadContacts(r4, r4)
+            r12.loadContacts(r3, r3)
             r13.run()
             return
         */

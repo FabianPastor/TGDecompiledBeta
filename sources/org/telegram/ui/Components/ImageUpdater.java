@@ -294,6 +294,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                     }
                 }
             });
+            photoPickerActivity.setMaxSelectedPhotos(1, false);
             photoPickerActivity.setInitialSearchString(this.delegate.getInitialSearchString());
             this.parentFragment.presentFragment(photoPickerActivity);
         }

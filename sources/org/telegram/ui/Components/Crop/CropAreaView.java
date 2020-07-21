@@ -20,6 +20,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.BubbleActivity;
 
 public class CropAreaView extends View {
     private Control activeControl;
@@ -33,17 +34,18 @@ public class CropAreaView extends View {
     private RectF bottomRightCorner = new RectF();
     private Bitmap circleBitmap;
     private Paint dimPaint;
-    private boolean dimVisibile = true;
+    private boolean dimVisibile;
     private Paint eraserPaint;
     private float frameAlpha = 1.0f;
     private Paint framePaint;
-    private boolean frameVisible = true;
+    private boolean frameVisible;
     private boolean freeform = true;
     /* access modifiers changed from: private */
     public Animator gridAnimator;
     private float gridProgress;
-    private GridType gridType = GridType.NONE;
+    private GridType gridType;
     private Paint handlePaint;
+    private boolean inBubbleMode;
     private AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
     private boolean isDragging;
     private long lastUpdateTime;
@@ -51,13 +53,13 @@ public class CropAreaView extends View {
     private Paint linePaint;
     private AreaViewListener listener;
     private float lockAspectRatio;
-    private float minWidth = ((float) AndroidUtilities.dp(32.0f));
+    private float minWidth;
     private GridType previousGridType;
     private int previousX;
     private int previousY;
     private RectF rightEdge = new RectF();
     private Paint shadowPaint;
-    private float sidePadding = ((float) AndroidUtilities.dp(16.0f));
+    private float sidePadding;
     private RectF targetRect = new RectF();
     private RectF tempRect = new RectF();
     private RectF topEdge = new RectF();
@@ -92,6 +94,12 @@ public class CropAreaView extends View {
 
     public CropAreaView(Context context) {
         super(context);
+        this.inBubbleMode = context instanceof BubbleActivity;
+        this.frameVisible = true;
+        this.dimVisibile = true;
+        this.sidePadding = (float) AndroidUtilities.dp(16.0f);
+        this.minWidth = (float) AndroidUtilities.dp(32.0f);
+        this.gridType = GridType.NONE;
         Paint paint = new Paint();
         this.dimPaint = paint;
         paint.setColor(NUM);
@@ -365,7 +373,7 @@ public class CropAreaView extends View {
             }
         } else {
             float measuredWidth = ((float) getMeasuredWidth()) - (this.sidePadding * 2.0f);
-            float measuredHeight = ((((float) getMeasuredHeight()) - this.bottomPadding) - ((float) (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0))) - (this.sidePadding * 2.0f);
+            float measuredHeight = ((((float) getMeasuredHeight()) - this.bottomPadding) - ((float) ((Build.VERSION.SDK_INT < 21 || this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight))) - (this.sidePadding * 2.0f);
             int min = (int) Math.min(measuredWidth, measuredHeight);
             Bitmap bitmap = this.circleBitmap;
             if (bitmap == null || bitmap.getWidth() != min) {
@@ -395,7 +403,7 @@ public class CropAreaView extends View {
                 float var_ = this.sidePadding;
                 float var_ = (float) min;
                 float var_ = ((measuredWidth - var_) / 2.0f) + var_;
-                float var_ = var_ + ((measuredHeight - var_) / 2.0f) + ((float) (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0));
+                float var_ = var_ + ((measuredHeight - var_) / 2.0f) + ((float) ((Build.VERSION.SDK_INT < 21 || this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight));
                 float var_ = var_ + var_;
                 float var_ = var_ + var_;
                 float var_ = (float) ((int) var_);
@@ -642,7 +650,7 @@ public class CropAreaView extends View {
         float f3;
         float f4;
         float f5;
-        float f6 = (float) (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+        float f6 = (float) ((Build.VERSION.SDK_INT < 21 || this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight);
         float measuredHeight = (((float) getMeasuredHeight()) - this.bottomPadding) - f6;
         float measuredWidth = ((float) getMeasuredWidth()) / measuredHeight;
         float min = Math.min((float) getMeasuredWidth(), measuredHeight) - (this.sidePadding * 2.0f);
@@ -686,7 +694,7 @@ public class CropAreaView extends View {
         int x = (int) (motionEvent.getX() - ((ViewGroup) getParent()).getX());
         int y = (int) (motionEvent.getY() - ((ViewGroup) getParent()).getY());
         boolean z = false;
-        float f = (float) (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+        float f = (float) ((Build.VERSION.SDK_INT < 21 || this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight);
         int actionMasked = motionEvent.getActionMasked();
         if (actionMasked == 0) {
             if (this.freeform) {

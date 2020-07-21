@@ -1558,13 +1558,14 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                         break;
                     }
                     String str5 = strArr[i4];
-                    int i5 = 0;
+                    int i5 = 3;
+                    int i6 = 0;
                     while (true) {
-                        if (i5 >= 3) {
+                        if (i6 >= i5) {
                             i = i2;
                             break;
                         }
-                        String str6 = strArr2[i5];
+                        String str6 = strArr2[i6];
                         if (str6 != null) {
                             if (str6.startsWith(str5)) {
                                 i = i2;
@@ -1580,8 +1581,9 @@ public class FilterUsersActivity extends BaseFragment implements NotificationCen
                         } else {
                             i = i2;
                         }
-                        i5++;
+                        i6++;
                         i2 = i;
+                        i5 = 3;
                     }
                     c3 = 1;
                     if (c3 == 0 && str2 != null && str2.toLowerCase().startsWith(str5)) {

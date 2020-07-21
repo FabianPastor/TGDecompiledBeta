@@ -103,6 +103,8 @@ public final class R {
     }
 
     public static final class color {
+        public static final int androidx_core_ripple_material_light = NUM;
+        public static final int androidx_core_secondary_text_default_material_light = NUM;
         public static final int common_google_signin_btn_text_dark = NUM;
         public static final int common_google_signin_btn_text_dark_default = NUM;
         public static final int common_google_signin_btn_text_dark_disabled = NUM;
@@ -117,8 +119,6 @@ public final class R {
         public static final int divider = NUM;
         public static final int notification_action_color_filter = NUM;
         public static final int notification_icon_bg_color = NUM;
-        public static final int ripple_material_light = NUM;
-        public static final int secondary_text_default_material_light = NUM;
 
         private color() {
         }
@@ -5038,6 +5038,7 @@ public final class R {
         public static final int automotive_app_desc = NUM;
         public static final int contacts = NUM;
         public static final int provider_paths = NUM;
+        public static final int shortcuts = NUM;
         public static final int sync_contacts = NUM;
 
         private xml() {

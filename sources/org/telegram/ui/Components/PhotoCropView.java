@@ -20,6 +20,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.MediaController;
 import org.telegram.ui.ActionBar.Theme;
+import org.telegram.ui.BubbleActivity;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.Crop.CropRotationWheel;
 import org.telegram.ui.Components.Crop.CropTransform;
@@ -52,6 +53,7 @@ public class PhotoCropView extends FrameLayout {
     /* access modifiers changed from: private */
     public PhotoCropViewDelegate delegate;
     private float flashAlpha = 0.0f;
+    private boolean inBubbleMode;
     /* access modifiers changed from: private */
     public AnimatorSet thumbAnimation;
     /* access modifiers changed from: private */
@@ -80,6 +82,7 @@ public class PhotoCropView extends FrameLayout {
 
     public PhotoCropView(Context context) {
         super(context);
+        this.inBubbleMode = context instanceof BubbleActivity;
         CropView cropView2 = new CropView(context);
         this.cropView = cropView2;
         cropView2.setListener(new CropView.CropViewListener() {
@@ -350,7 +353,7 @@ public class PhotoCropView extends FrameLayout {
     }
 
     public float getRectY() {
-        return (this.cropView.getCropTop() - ((float) AndroidUtilities.dp(14.0f))) - ((float) (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0));
+        return (this.cropView.getCropTop() - ((float) AndroidUtilities.dp(14.0f))) - ((float) ((Build.VERSION.SDK_INT < 21 || this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight));
     }
 
     public float getRectSizeX() {

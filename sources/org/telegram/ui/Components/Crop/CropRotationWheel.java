@@ -69,6 +69,11 @@ public class CropRotationWheel extends FrameLayout {
                 CropRotationWheel.this.lambda$new$0$CropRotationWheel(view);
             }
         });
+        this.mirrorButton.setOnLongClickListener(new View.OnLongClickListener() {
+            public final boolean onLongClick(View view) {
+                return CropRotationWheel.this.lambda$new$1$CropRotationWheel(view);
+            }
+        });
         this.mirrorButton.setContentDescription(LocaleController.getString("AccDescrMirror", NUM));
         addView(this.mirrorButton, LayoutHelper.createFrame(70, 64, 19));
         ImageView imageView2 = new ImageView(context);
@@ -78,7 +83,7 @@ public class CropRotationWheel extends FrameLayout {
         this.aspectRatioButton.setScaleType(ImageView.ScaleType.CENTER);
         this.aspectRatioButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                CropRotationWheel.this.lambda$new$1$CropRotationWheel(view);
+                CropRotationWheel.this.lambda$new$2$CropRotationWheel(view);
             }
         });
         this.aspectRatioButton.setVisibility(8);
@@ -91,7 +96,7 @@ public class CropRotationWheel extends FrameLayout {
         this.rotation90Button.setScaleType(ImageView.ScaleType.CENTER);
         this.rotation90Button.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                CropRotationWheel.this.lambda$new$2$CropRotationWheel(view);
+                CropRotationWheel.this.lambda$new$3$CropRotationWheel(view);
             }
         });
         this.rotation90Button.setContentDescription(LocaleController.getString("AccDescrRotate", NUM));
@@ -111,14 +116,19 @@ public class CropRotationWheel extends FrameLayout {
         }
     }
 
-    public /* synthetic */ void lambda$new$1$CropRotationWheel(View view) {
+    public /* synthetic */ boolean lambda$new$1$CropRotationWheel(View view) {
+        this.aspectRatioButton.callOnClick();
+        return true;
+    }
+
+    public /* synthetic */ void lambda$new$2$CropRotationWheel(View view) {
         RotationWheelListener rotationWheelListener = this.rotationListener;
         if (rotationWheelListener != null) {
             rotationWheelListener.aspectRatioPressed();
         }
     }
 
-    public /* synthetic */ void lambda$new$2$CropRotationWheel(View view) {
+    public /* synthetic */ void lambda$new$3$CropRotationWheel(View view) {
         RotationWheelListener rotationWheelListener = this.rotationListener;
         if (rotationWheelListener != null) {
             setRotated(rotationWheelListener.rotate90Pressed());

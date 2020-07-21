@@ -76,6 +76,8 @@
     <public type="attr" name="zOrderOnTop" id="NUM" />
     <public type="bool" name="isTablet" id="NUM" />
     <public type="bool" name="useHardwareAcceleration" id="NUM" />
+    <public type="color" name="androidx_core_ripple_material_light" id="NUM" />
+    <public type="color" name="androidx_core_secondary_text_default_material_light" id="NUM" />
     <public type="color" name="common_google_signin_btn_text_dark" id="NUM" />
     <public type="color" name="common_google_signin_btn_text_dark_default" id="NUM" />
     <public type="color" name="common_google_signin_btn_text_dark_disabled" id="NUM" />
@@ -90,8 +92,6 @@
     <public type="color" name="divider" id="NUM" />
     <public type="color" name="notification_action_color_filter" id="NUM" />
     <public type="color" name="notification_icon_bg_color" id="NUM" />
-    <public type="color" name="ripple_material_light" id="NUM" />
-    <public type="color" name="secondary_text_default_material_light" id="NUM" />
     <public type="dimen" name="compat_button_inset_horizontal_material" id="NUM" />
     <public type="dimen" name="compat_button_inset_vertical_material" id="NUM" />
     <public type="dimen" name="compat_button_padding_horizontal_material" id="NUM" />
@@ -4799,5 +4799,6 @@
     <public type="xml" name="automotive_app_desc" id="NUM" />
     <public type="xml" name="contacts" id="NUM" />
     <public type="xml" name="provider_paths" id="NUM" />
+    <public type="xml" name="shortcuts" id="NUM" />
     <public type="xml" name="sync_contacts" id="NUM" />
 </resources>

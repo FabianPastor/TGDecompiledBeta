@@ -76,6 +76,7 @@ public class ActionBarLayout extends FrameLayout {
     private DrawerLayoutContainer drawerLayoutContainer;
     public ArrayList<BaseFragment> fragmentsStack;
     private boolean inActionMode;
+    private boolean inBubbleMode;
     /* access modifiers changed from: private */
     public boolean inPreviewMode;
     public float innerTranslationX;
@@ -362,6 +363,14 @@ public class ActionBarLayout extends FrameLayout {
 
     public void drawHeaderShadow(Canvas canvas, int i) {
         drawHeaderShadow(canvas, 255, i);
+    }
+
+    public void setInBubbleMode(boolean z) {
+        this.inBubbleMode = z;
+    }
+
+    public boolean isInBubbleMode() {
+        return this.inBubbleMode;
     }
 
     public void drawHeaderShadow(Canvas canvas, int i, int i2) {

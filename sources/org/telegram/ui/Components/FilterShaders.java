@@ -1353,7 +1353,7 @@ public class FilterShaders {
         this.hsvGenerated = false;
     }
 
-    private Bitmap createBitmap(Bitmap bitmap, int i, int i2, int i3, float f) {
+    private Bitmap createBitmap(Bitmap bitmap, int i, float f) {
         Matrix matrix = new Matrix();
         matrix.setScale(f, f);
         matrix.postRotate((float) i);
@@ -1361,8 +1361,7 @@ public class FilterShaders {
     }
 
     private void loadTexture(Bitmap bitmap, int i, int i2, int i3) {
-        Bitmap bitmap2;
-        float f;
+        Bitmap bitmap2 = bitmap;
         int i4 = i;
         this.renderBufferWidth = i2;
         this.renderBufferHeight = i3;
@@ -1372,24 +1371,22 @@ public class FilterShaders {
             GLES20.glGenFramebuffers(4, iArr, 0);
             GLES20.glGenTextures(4, this.renderTexture, 0);
         }
-        if (bitmap != null && !bitmap.isRecycled()) {
+        if (bitmap2 != null && !bitmap.isRecycled()) {
             GLES20.glGenTextures(1, this.bitmapTextre, 0);
             float photoSize = (float) AndroidUtilities.getPhotoSize();
             if (((float) this.renderBufferWidth) > photoSize || ((float) this.renderBufferHeight) > photoSize || i4 % 360 != 0) {
+                float f = 1.0f;
                 if (((float) this.renderBufferWidth) > photoSize || ((float) this.renderBufferHeight) > photoSize) {
-                    float width = photoSize / ((float) bitmap.getWidth());
+                    f = photoSize / ((float) bitmap.getWidth());
                     float height = photoSize / ((float) bitmap.getHeight());
-                    if (width < height) {
+                    if (f < height) {
                         this.renderBufferWidth = (int) photoSize;
-                        this.renderBufferHeight = (int) (((float) bitmap.getHeight()) * width);
-                        f = width;
+                        this.renderBufferHeight = (int) (((float) bitmap.getHeight()) * f);
                     } else {
                         this.renderBufferHeight = (int) photoSize;
                         this.renderBufferWidth = (int) (((float) bitmap.getWidth()) * height);
                         f = height;
                     }
-                } else {
-                    f = 1.0f;
                 }
                 int i5 = i4 % 360;
                 if (i5 == 90 || i5 == 270) {
@@ -1397,9 +1394,7 @@ public class FilterShaders {
                     this.renderBufferWidth = this.renderBufferHeight;
                     this.renderBufferHeight = i6;
                 }
-                bitmap2 = createBitmap(bitmap, i, this.renderBufferWidth, this.renderBufferHeight, f);
-            } else {
-                bitmap2 = bitmap;
+                bitmap2 = createBitmap(bitmap2, i4, f);
             }
             GLES20.glBindTexture(3553, this.bitmapTextre[0]);
             GLES20.glTexParameteri(3553, 10241, 9729);

@@ -1047,11 +1047,13 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 PhotoPickerActivity.this.lambda$createView$1$PhotoPickerActivity(view, i);
             }
         });
-        this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
-            public final boolean onItemClick(View view, int i) {
-                return PhotoPickerActivity.this.lambda$createView$2$PhotoPickerActivity(view, i);
-            }
-        });
+        if (this.maxSelectedPhotos != 1) {
+            this.listView.setOnItemLongClickListener((RecyclerListView.OnItemLongClickListener) new RecyclerListView.OnItemLongClickListener() {
+                public final boolean onItemClick(View view, int i) {
+                    return PhotoPickerActivity.this.lambda$createView$2$PhotoPickerActivity(view, i);
+                }
+            });
+        }
         RecyclerViewItemRangeSelector recyclerViewItemRangeSelector = new RecyclerViewItemRangeSelector(new RecyclerViewItemRangeSelector.RecyclerViewItemRangeSelectorDelegate() {
             public void setSelected(View view, int i, boolean z) {
                 if (z == PhotoPickerActivity.this.shouldSelect && (view instanceof PhotoAttachPhotoCell)) {
@@ -1082,7 +1084,9 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             }
         });
         this.itemRangeSelector = recyclerViewItemRangeSelector;
-        this.listView.addOnItemTouchListener(recyclerViewItemRangeSelector);
+        if (this.maxSelectedPhotos != 1) {
+            this.listView.addOnItemTouchListener(recyclerViewItemRangeSelector);
+        }
         EmptyTextProgressView emptyTextProgressView = new EmptyTextProgressView(context2);
         this.emptyView = emptyTextProgressView;
         emptyTextProgressView.setTextColor(-7104099);

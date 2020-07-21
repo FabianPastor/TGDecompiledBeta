@@ -2167,9 +2167,9 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             } else {
                 ArrayList<String> arrayList2 = MessagesController.getInstance(this.currentAccount).gifSearchEmojies;
                 this.gifSearchAdapter.searchEmoji(arrayList2.get(i - this.gifFirstEmojiTabNum));
-                int i3 = this.gifFirstEmojiTabNum;
-                if (i - i3 > 0) {
-                    this.gifSearchPreloader.preload(arrayList2.get((i - i3) - 1));
+                int i3 = i - this.gifFirstEmojiTabNum;
+                if (i3 > 0) {
+                    this.gifSearchPreloader.preload(arrayList2.get(i3 - 1));
                 }
                 if (i - this.gifFirstEmojiTabNum < arrayList2.size() - 1) {
                     this.gifSearchPreloader.preload(arrayList2.get((i - this.gifFirstEmojiTabNum) + 1));

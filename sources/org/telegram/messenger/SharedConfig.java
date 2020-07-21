@@ -8,6 +8,7 @@ import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.SparseArray;
+import androidx.core.content.pm.ShortcutManagerCompat;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
@@ -30,12 +31,13 @@ public class SharedConfig {
     public static boolean autoplayVideo = true;
     public static int badPasscodeTries = 0;
     public static int bubbleRadius = 10;
+    public static boolean chatBubbles = false;
     private static boolean configLoaded = false;
     public static ProxyInfo currentProxy = null;
     public static boolean customTabs = true;
     private static int devicePerformanceClass = 0;
     public static boolean directShare = true;
-    public static long directShareHash = 0;
+    public static String directShareHash = null;
     public static int distanceSystemType = 0;
     public static boolean drawDialogIcons = false;
     public static int fontSize = 16;
@@ -210,6 +212,7 @@ public class SharedConfig {
                 SharedPreferences sharedPreferences2 = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
                 saveToGallery = sharedPreferences2.getBoolean("save_gallery", false);
                 autoplayGifs = sharedPreferences2.getBoolean("autoplay_gif", true);
+                chatBubbles = sharedPreferences2.getBoolean("chatBubbles", false);
                 autoplayVideo = sharedPreferences2.getBoolean("autoplay_video", true);
                 mapPreviewType = sharedPreferences2.getInt("mapPreviewType", 2);
                 raiseToSpeak = sharedPreferences2.getBoolean("raise_to_speak", true);
@@ -237,7 +240,7 @@ public class SharedConfig {
                 sortContactsByName = sharedPreferences2.getBoolean("sortContactsByName", false);
                 sortFilesByName = sharedPreferences2.getBoolean("sortFilesByName", false);
                 noSoundHintShowed = sharedPreferences2.getBoolean("noSoundHintShowed", false);
-                directShareHash = sharedPreferences2.getLong("directShareHash", 0);
+                directShareHash = sharedPreferences2.getString("directShareHash2", (String) null);
                 useThreeLinesLayout = sharedPreferences2.getBoolean("useThreeLinesLayout", false);
                 archiveHidden = sharedPreferences2.getBoolean("archiveHidden", false);
                 distanceSystemType = sharedPreferences2.getInt("distanceSystemType", 0);
@@ -547,6 +550,13 @@ public class SharedConfig {
         edit.commit();
     }
 
+    public static void toggleChatBubbles() {
+        chatBubbles = !chatBubbles;
+        SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("chatBubbles", chatBubbles);
+        edit.commit();
+    }
+
     public static void setUseThreeLinesLayout(boolean z) {
         useThreeLinesLayout = z;
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
@@ -608,6 +618,8 @@ public class SharedConfig {
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putBoolean("direct_share", directShare);
         edit.commit();
+        ShortcutManagerCompat.removeAllDynamicShortcuts(ApplicationLoader.applicationContext);
+        MediaDataController.getInstance(UserConfig.selectedAccount).buildShortcuts();
     }
 
     public static void toggleStreamMedia() {

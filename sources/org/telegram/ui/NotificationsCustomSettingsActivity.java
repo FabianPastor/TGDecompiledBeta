@@ -1359,10 +1359,10 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v17, resolved type: org.telegram.tgnet.TLRPC$Chat} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v18, resolved type: org.telegram.tgnet.TLRPC$Chat} */
         /* JADX WARNING: Code restructure failed: missing block: B:54:0x0148, code lost:
-            if (r10[r5].contains(" " + r3) == false) goto L_0x014d;
+            if (r10[r3].contains(" " + r5) == false) goto L_0x014d;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:60:0x0168, code lost:
-            if (r4.contains(" " + r3) != false) goto L_0x016a;
+            if (r4.contains(" " + r5) != false) goto L_0x016a;
          */
         /* JADX WARNING: Multi-variable type inference failed */
         /* JADX WARNING: Removed duplicated region for block: B:49:0x011f  */
@@ -1396,19 +1396,19 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
             L_0x0037:
                 r2 = 0
             L_0x0038:
-                r3 = 1
-                r5 = 0
+                r3 = 0
+                r5 = 1
                 if (r2 == 0) goto L_0x003e
                 r6 = 1
                 goto L_0x003f
             L_0x003e:
                 r6 = 0
             L_0x003f:
-                int r6 = r6 + r3
+                int r6 = r6 + r5
                 java.lang.String[] r7 = new java.lang.String[r6]
-                r7[r5] = r1
+                r7[r3] = r1
                 if (r2 == 0) goto L_0x0048
-                r7[r3] = r2
+                r7[r5] = r2
             L_0x0048:
                 java.util.ArrayList r1 = new java.util.ArrayList
                 r1.<init>()
@@ -1444,9 +1444,9 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 java.lang.String r14 = r9.first_name
                 java.lang.String r15 = r9.last_name
                 java.lang.String r14 = org.telegram.messenger.ContactsController.formatName(r14, r15)
-                r10[r5] = r14
-                java.lang.String r14 = r9.username
                 r10[r3] = r14
+                java.lang.String r14 = r9.username
+                r10[r5] = r14
                 goto L_0x00f9
             L_0x0099:
                 org.telegram.ui.NotificationsCustomSettingsActivity r14 = org.telegram.ui.NotificationsCustomSettingsActivity.this
@@ -1464,14 +1464,14 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 goto L_0x00c0
             L_0x00b7:
                 java.lang.String r14 = r9.title
-                r10[r5] = r14
-                java.lang.String r14 = r9.username
                 r10[r3] = r14
+                java.lang.String r14 = r9.username
+                r10[r5] = r14
                 goto L_0x00f9
             L_0x00c0:
                 r19 = r6
                 r18 = r7
-                r5 = 1
+                r3 = 1
                 r7 = 0
                 goto L_0x01cc
             L_0x00c8:
@@ -1489,22 +1489,22 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 java.lang.String r14 = r9.first_name
                 java.lang.String r15 = r9.last_name
                 java.lang.String r14 = org.telegram.messenger.ContactsController.formatName(r14, r15)
-                r10[r5] = r14
+                r10[r3] = r14
                 java.lang.String r9 = r9.username
-                r10[r3] = r9
+                r10[r5] = r9
             L_0x00f8:
                 r9 = 0
             L_0x00f9:
-                r14 = r10[r5]
-                r15 = r10[r5]
+                r14 = r10[r3]
+                r15 = r10[r3]
                 java.lang.String r15 = r15.toLowerCase()
-                r10[r5] = r15
+                r10[r3] = r15
                 org.telegram.messenger.LocaleController r15 = org.telegram.messenger.LocaleController.getInstance()
-                r4 = r10[r5]
+                r4 = r10[r3]
                 java.lang.String r4 = r15.getTranslitString(r4)
-                r15 = r10[r5]
+                r15 = r10[r3]
                 if (r15 == 0) goto L_0x011a
-                r15 = r10[r5]
+                r15 = r10[r3]
                 boolean r15 = r15.equals(r4)
                 if (r15 == 0) goto L_0x011a
                 r4 = 0
@@ -1513,47 +1513,47 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 r17 = 0
             L_0x011d:
                 if (r15 >= r6) goto L_0x00c0
-                r3 = r7[r15]
-                r18 = r10[r5]
+                r5 = r7[r15]
+                r18 = r10[r3]
                 r19 = r6
                 java.lang.String r6 = " "
                 if (r18 == 0) goto L_0x014b
                 r18 = r7
-                r7 = r10[r5]
-                boolean r7 = r7.startsWith(r3)
+                r7 = r10[r3]
+                boolean r7 = r7.startsWith(r5)
                 if (r7 != 0) goto L_0x016a
-                r7 = r10[r5]
-                java.lang.StringBuilder r5 = new java.lang.StringBuilder
-                r5.<init>()
-                r5.append(r6)
-                r5.append(r3)
-                java.lang.String r5 = r5.toString()
-                boolean r5 = r7.contains(r5)
-                if (r5 != 0) goto L_0x016a
+                r7 = r10[r3]
+                java.lang.StringBuilder r3 = new java.lang.StringBuilder
+                r3.<init>()
+                r3.append(r6)
+                r3.append(r5)
+                java.lang.String r3 = r3.toString()
+                boolean r3 = r7.contains(r3)
+                if (r3 != 0) goto L_0x016a
                 goto L_0x014d
             L_0x014b:
                 r18 = r7
             L_0x014d:
                 if (r4 == 0) goto L_0x016d
-                boolean r5 = r4.startsWith(r3)
-                if (r5 != 0) goto L_0x016a
-                java.lang.StringBuilder r5 = new java.lang.StringBuilder
-                r5.<init>()
-                r5.append(r6)
-                r5.append(r3)
-                java.lang.String r5 = r5.toString()
-                boolean r5 = r4.contains(r5)
-                if (r5 == 0) goto L_0x016d
+                boolean r3 = r4.startsWith(r5)
+                if (r3 != 0) goto L_0x016a
+                java.lang.StringBuilder r3 = new java.lang.StringBuilder
+                r3.<init>()
+                r3.append(r6)
+                r3.append(r5)
+                java.lang.String r3 = r3.toString()
+                boolean r3 = r4.contains(r3)
+                if (r3 == 0) goto L_0x016d
             L_0x016a:
-                r5 = 1
+                r3 = 1
                 r6 = 1
                 goto L_0x017e
             L_0x016d:
-                r5 = 1
-                r6 = r10[r5]
+                r3 = 1
+                r6 = r10[r3]
                 if (r6 == 0) goto L_0x017c
-                r6 = r10[r5]
-                boolean r6 = r6.startsWith(r3)
+                r6 = r10[r3]
+                boolean r6 = r6.startsWith(r5)
                 if (r6 == 0) goto L_0x017c
                 r6 = 2
                 goto L_0x017e
@@ -1561,10 +1561,10 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 r6 = r17
             L_0x017e:
                 if (r6 == 0) goto L_0x01bf
-                if (r6 != r5) goto L_0x018c
+                if (r6 != r3) goto L_0x018c
                 r4 = 0
-                java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r14, r4, r3)
-                r8.add(r3)
+                java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r14, r4, r5)
+                r8.add(r5)
                 r7 = 0
                 goto L_0x01b6
             L_0x018c:
@@ -1572,17 +1572,17 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 r4.<init>()
                 java.lang.String r6 = "@"
                 r4.append(r6)
-                r7 = r10[r5]
+                r7 = r10[r3]
                 r4.append(r7)
                 java.lang.String r4 = r4.toString()
                 java.lang.StringBuilder r7 = new java.lang.StringBuilder
                 r7.<init>()
                 r7.append(r6)
-                r7.append(r3)
-                java.lang.String r3 = r7.toString()
+                r7.append(r5)
+                java.lang.String r5 = r7.toString()
                 r7 = 0
-                java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r7, r3)
-                r8.add(r3)
+                java.lang.CharSequence r4 = org.telegram.messenger.AndroidUtilities.generateSearchName(r4, r7, r5)
+                r8.add(r4)
             L_0x01b6:
                 r2.add(r13)
                 if (r9 == 0) goto L_0x01cc
@@ -1594,15 +1594,15 @@ public class NotificationsCustomSettingsActivity extends BaseFragment {
                 r17 = r6
                 r7 = r18
                 r6 = r19
-                r3 = 1
-                r5 = 0
+                r3 = 0
+                r5 = 1
                 goto L_0x011d
             L_0x01cc:
                 int r11 = r11 + 1
                 r7 = r18
                 r6 = r19
-                r3 = 1
-                r5 = 0
+                r3 = 0
+                r5 = 1
                 r9 = 2
                 goto L_0x005b
             L_0x01d7:

@@ -8,6 +8,7 @@ import android.os.Build;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.ui.BubbleActivity;
 
 public class PhotoFilterBlurControl extends FrameLayout {
     private static final float BlurInsetProximity = ((float) AndroidUtilities.dp(20.0f));
@@ -23,6 +24,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
     private boolean checkForZooming;
     private PhotoFilterLinearBlurControlDelegate delegate;
     private float falloff = 0.15f;
+    private boolean inBubbleMode;
     private boolean isMoving;
     private boolean isZooming;
     private Paint paint = new Paint(1);
@@ -63,6 +65,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
         this.arcPaint.setColor(-1);
         this.arcPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
         this.arcPaint.setStyle(Paint.Style.STROKE);
+        this.inBubbleMode = context instanceof BubbleActivity;
     }
 
     public void setType(int i) {
@@ -384,7 +387,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
                     float f8 = x - this.pointerStartX;
                     float f9 = y - this.pointerStartY;
                     float width = (((float) getWidth()) - this.actualAreaSize.width) / 2.0f;
-                    if (Build.VERSION.SDK_INT >= 21) {
+                    if (Build.VERSION.SDK_INT >= 21 && !this.inBubbleMode) {
                         i3 = AndroidUtilities.statusBarHeight;
                     }
                     Size size3 = this.actualAreaSize;
@@ -421,7 +424,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
                     float var_ = x - this.pointerStartX;
                     float var_ = y - this.pointerStartY;
                     float width2 = (((float) getWidth()) - this.actualAreaSize.width) / 2.0f;
-                    if (Build.VERSION.SDK_INT >= 21) {
+                    if (Build.VERSION.SDK_INT >= 21 && !this.inBubbleMode) {
                         i3 = AndroidUtilities.statusBarHeight;
                     }
                     Size size5 = this.actualAreaSize;
@@ -600,7 +603,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
     private Point getActualCenterPoint() {
         float f = this.actualAreaSize.width;
         float width = ((((float) getWidth()) - f) / 2.0f) + (this.centerPoint.x * f);
-        int i = Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
+        int i = (Build.VERSION.SDK_INT < 21 || this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight;
         Size size2 = this.actualAreaSize;
         float f2 = size2.height;
         float height = ((float) i) + ((((float) getHeight()) - f2) / 2.0f);

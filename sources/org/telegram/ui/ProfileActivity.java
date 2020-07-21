@@ -515,7 +515,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
 
         public void setForegroundImageDrawable(ImageReceiver.BitmapHolder bitmapHolder) {
-            this.foregroundImageReceiver.setImageBitmap(bitmapHolder.drawable);
+            if (bitmapHolder != null) {
+                this.foregroundImageReceiver.setImageBitmap(bitmapHolder.drawable);
+            }
             ImageReceiver.BitmapHolder bitmapHolder2 = this.drawableHolder;
             if (bitmapHolder2 != null) {
                 bitmapHolder2.release();
@@ -671,7 +673,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         public OverlaysView(Context context) {
             super(context);
-            this.statusBarHeight = ProfileActivity.this.actionBar.getOccupyStatusBar() ? AndroidUtilities.statusBarHeight : 0;
+            this.statusBarHeight = (!ProfileActivity.this.actionBar.getOccupyStatusBar() || ProfileActivity.this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight;
             this.topOverlayRect = new Rect();
             this.bottomOverlayRect = new Rect();
             this.rect = new RectF();
@@ -803,10 +805,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
 
         /* access modifiers changed from: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:66:0x021a  */
-        /* JADX WARNING: Removed duplicated region for block: B:70:0x0242  */
-        /* JADX WARNING: Removed duplicated region for block: B:73:0x025c  */
-        /* JADX WARNING: Removed duplicated region for block: B:74:0x025f  */
+        /* JADX WARNING: Removed duplicated region for block: B:68:0x0222  */
+        /* JADX WARNING: Removed duplicated region for block: B:72:0x024a  */
+        /* JADX WARNING: Removed duplicated region for block: B:75:0x0264  */
+        /* JADX WARNING: Removed duplicated region for block: B:76:0x0267  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onDraw(android.graphics.Canvas r22) {
             /*
@@ -877,9 +879,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r0.lastTime = r7
                 r8 = 1
                 r11 = 1065353216(0x3var_, float:1.0)
-                if (r3 <= r8) goto L_0x02d5
+                if (r3 <= r8) goto L_0x02dd
                 r12 = 20
-                if (r3 > r12) goto L_0x02d5
+                if (r3 > r12) goto L_0x02dd
                 org.telegram.ui.ProfileActivity r12 = org.telegram.ui.ProfileActivity.this
                 int r12 = r12.overlayCountVisible
                 r13 = 3
@@ -925,18 +927,21 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 int r15 = org.telegram.messenger.AndroidUtilities.dp(r15)
                 int r2 = android.os.Build.VERSION.SDK_INT
                 r8 = 21
-                if (r2 < r8) goto L_0x00e9
+                if (r2 < r8) goto L_0x00f1
+                org.telegram.ui.ProfileActivity r2 = org.telegram.ui.ProfileActivity.this
+                boolean r2 = r2.inBubbleMode
+                if (r2 != 0) goto L_0x00f1
                 int r2 = org.telegram.messenger.AndroidUtilities.statusBarHeight
-                goto L_0x00ea
-            L_0x00e9:
+                goto L_0x00f2
+            L_0x00f1:
                 r2 = 0
-            L_0x00ea:
+            L_0x00f2:
                 int r15 = r15 + r2
                 r2 = 0
                 r8 = 0
-            L_0x00ed:
+            L_0x00f5:
                 r16 = 1140457472(0x43fa0000, float:500.0)
-                if (r2 >= r3) goto L_0x0272
+                if (r2 >= r3) goto L_0x027a
                 int r17 = r2 * 2
                 int r7 = r17 + 5
                 float r7 = (float) r7
@@ -947,13 +952,13 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 int r5 = r0.previousSelectedPotision
                 r18 = 80
                 r19 = 1073741824(0x40000000, float:2.0)
-                if (r2 != r5) goto L_0x0161
+                if (r2 != r5) goto L_0x0169
                 float r5 = r0.previousSelectedProgress
                 float r5 = r5 - r11
                 float r5 = java.lang.Math.abs(r5)
                 r20 = 953267991(0x38d1b717, float:1.0E-4)
                 int r5 = (r5 > r20 ? 1 : (r5 == r20 ? 0 : -1))
-                if (r5 <= 0) goto L_0x0161
+                if (r5 <= 0) goto L_0x0169
                 float r5 = r0.previousSelectedProgress
                 r22.save()
                 float r8 = (float) r7
@@ -989,32 +994,32 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r13 = r15
                 r4 = 80
                 r6 = 1118437376(0x42aa0000, float:85.0)
-            L_0x015e:
+            L_0x0166:
                 r8 = 1
-                goto L_0x0205
-            L_0x0161:
+                goto L_0x020d
+            L_0x0169:
                 int r4 = r0.selectedPosition
-                if (r2 != r4) goto L_0x01fe
+                if (r2 != r4) goto L_0x0206
                 org.telegram.ui.ProfileActivity r4 = org.telegram.ui.ProfileActivity.this
                 org.telegram.ui.Components.ProfileGalleryView r4 = r4.avatarsViewPager
                 boolean r4 = r4.isCurrentItemVideo()
-                if (r4 == 0) goto L_0x01f6
+                if (r4 == 0) goto L_0x01fe
                 org.telegram.ui.ProfileActivity r4 = org.telegram.ui.ProfileActivity.this
                 org.telegram.ui.Components.ProfileGalleryView r4 = r4.avatarsViewPager
                 float r5 = r4.getCurrentItemProgress()
                 r0.currentProgress = r5
                 r4 = 0
                 int r6 = (r5 > r4 ? 1 : (r5 == r4 ? 0 : -1))
-                if (r6 > 0) goto L_0x018e
+                if (r6 > 0) goto L_0x0196
                 org.telegram.ui.ProfileActivity r6 = org.telegram.ui.ProfileActivity.this
                 org.telegram.ui.Components.ProfileGalleryView r6 = r6.avatarsViewPager
                 boolean r6 = r6.isLoadingCurrentVideo()
-                if (r6 != 0) goto L_0x0194
-            L_0x018e:
+                if (r6 != 0) goto L_0x019c
+            L_0x0196:
                 float r6 = r0.currentLoadingAnimationProgress
                 int r6 = (r6 > r4 ? 1 : (r6 == r4 ? 0 : -1))
-                if (r6 <= 0) goto L_0x01bb
-            L_0x0194:
+                if (r6 <= 0) goto L_0x01c3
+            L_0x019c:
                 float r4 = r0.currentLoadingAnimationProgress
                 int r6 = r0.currentLoadingAnimationDirection
                 r13 = r15
@@ -1026,22 +1031,22 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r0.currentLoadingAnimationProgress = r4
                 r8 = 1065353216(0x3var_, float:1.0)
                 int r14 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1))
-                if (r14 <= 0) goto L_0x01af
+                if (r14 <= 0) goto L_0x01b7
                 r0.currentLoadingAnimationProgress = r8
                 int r6 = r6 * -1
                 r0.currentLoadingAnimationDirection = r6
-                goto L_0x01bc
-            L_0x01af:
+                goto L_0x01c4
+            L_0x01b7:
                 r8 = 0
                 int r4 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1))
-                if (r4 > 0) goto L_0x01bc
+                if (r4 > 0) goto L_0x01c4
                 r0.currentLoadingAnimationProgress = r8
                 int r6 = r6 * -1
                 r0.currentLoadingAnimationDirection = r6
-                goto L_0x01bc
-            L_0x01bb:
+                goto L_0x01c4
+            L_0x01c3:
                 r13 = r15
-            L_0x01bc:
+            L_0x01c4:
                 android.graphics.RectF r4 = r0.rect
                 float r6 = (float) r7
                 float r8 = (float) r13
@@ -1070,20 +1075,20 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 android.graphics.Paint r15 = r0.barPaint
                 r1.drawRoundRect(r4, r8, r14, r15)
                 r4 = 80
-                goto L_0x015e
-            L_0x01f6:
+                goto L_0x0166
+            L_0x01fe:
                 r13 = r15
                 r6 = 1118437376(0x42aa0000, float:85.0)
                 r11 = 1065353216(0x3var_, float:1.0)
                 r0.currentProgress = r11
-                goto L_0x0201
-            L_0x01fe:
+                goto L_0x0209
+            L_0x0206:
                 r13 = r15
                 r6 = 1118437376(0x42aa0000, float:85.0)
-            L_0x0201:
+            L_0x0209:
                 r4 = 85
                 r5 = 1065353216(0x3var_, float:1.0)
-            L_0x0205:
+            L_0x020d:
                 android.graphics.RectF r11 = r0.rect
                 float r7 = (float) r7
                 float r14 = (float) r13
@@ -1095,11 +1100,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 float r5 = (float) r5
                 r11.set(r7, r14, r15, r5)
                 int r5 = r0.selectedPosition
-                if (r2 == r5) goto L_0x0242
+                if (r2 == r5) goto L_0x024a
                 org.telegram.ui.ProfileActivity r5 = org.telegram.ui.ProfileActivity.this
                 int r5 = r5.overlayCountVisible
                 r7 = 3
-                if (r5 != r7) goto L_0x023f
+                if (r5 != r7) goto L_0x0247
                 android.graphics.Paint r5 = r0.barPaint
                 float r4 = (float) r4
                 org.telegram.ui.Components.CubicBezierInterpolator r7 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_BOTH
@@ -1112,16 +1117,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 float r4 = r4 * r7
                 int r4 = (int) r4
                 r5.setAlpha(r4)
-                goto L_0x024a
-            L_0x023f:
+                goto L_0x0252
+            L_0x0247:
                 r11 = 1132396544(0x437var_, float:255.0)
-                goto L_0x024a
-            L_0x0242:
+                goto L_0x0252
+            L_0x024a:
                 r11 = 1132396544(0x437var_, float:255.0)
                 float[] r4 = r0.alphas
                 r5 = 1061158912(0x3var_, float:0.75)
                 r4[r2] = r5
-            L_0x024a:
+            L_0x0252:
                 android.graphics.RectF r4 = r0.rect
                 r5 = 1065353216(0x3var_, float:1.0)
                 int r7 = org.telegram.messenger.AndroidUtilities.dp(r5)
@@ -1129,12 +1134,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 int r14 = org.telegram.messenger.AndroidUtilities.dp(r5)
                 float r5 = (float) r14
                 int r14 = r0.selectedPosition
-                if (r2 != r14) goto L_0x025f
+                if (r2 != r14) goto L_0x0267
                 android.graphics.Paint r14 = r0.selectedBarPaint
-                goto L_0x0261
-            L_0x025f:
+                goto L_0x0269
+            L_0x0267:
                 android.graphics.Paint r14 = r0.barPaint
-            L_0x0261:
+            L_0x0269:
                 r1.drawRoundRect(r4, r7, r5, r14)
                 int r2 = r2 + 1
                 r15 = r13
@@ -1144,49 +1149,49 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r11 = 1065353216(0x3var_, float:1.0)
                 r13 = 3
                 r14 = 1118437376(0x42aa0000, float:85.0)
-                goto L_0x00ed
-            L_0x0272:
+                goto L_0x00f5
+            L_0x027a:
                 org.telegram.ui.ProfileActivity r1 = org.telegram.ui.ProfileActivity.this
                 int r1 = r1.overlayCountVisible
                 r2 = 2
-                if (r1 != r2) goto L_0x0299
+                if (r1 != r2) goto L_0x02a1
                 float r1 = r0.alpha
                 r2 = 1065353216(0x3var_, float:1.0)
                 int r3 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                if (r3 >= 0) goto L_0x0292
+                if (r3 >= 0) goto L_0x029a
                 float r3 = (float) r9
                 r4 = 1127481344(0x43340000, float:180.0)
                 float r3 = r3 / r4
                 float r1 = r1 + r3
                 r0.alpha = r1
                 int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                if (r1 <= 0) goto L_0x0290
+                if (r1 <= 0) goto L_0x0298
                 r0.alpha = r2
-            L_0x0290:
+            L_0x0298:
                 r8 = 1
-                goto L_0x02d6
-            L_0x0292:
+                goto L_0x02de
+            L_0x029a:
                 org.telegram.ui.ProfileActivity r1 = org.telegram.ui.ProfileActivity.this
                 r2 = 3
                 int unused = r1.overlayCountVisible = r2
-                goto L_0x02d6
-            L_0x0299:
+                goto L_0x02de
+            L_0x02a1:
                 r2 = 3
                 org.telegram.ui.ProfileActivity r1 = org.telegram.ui.ProfileActivity.this
                 int r1 = r1.overlayCountVisible
-                if (r1 != r2) goto L_0x02d6
+                if (r1 != r2) goto L_0x02de
                 r1 = 0
-            L_0x02a3:
+            L_0x02ab:
                 float[] r2 = r0.alphas
                 int r3 = r2.length
-                if (r1 >= r3) goto L_0x02d6
+                if (r1 >= r3) goto L_0x02de
                 int r3 = r0.selectedPosition
                 r4 = -1
-                if (r1 == r3) goto L_0x02cc
+                if (r1 == r3) goto L_0x02d4
                 r3 = r2[r1]
                 r5 = 0
                 int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-                if (r3 <= 0) goto L_0x02cc
+                if (r3 <= 0) goto L_0x02d4
                 r3 = r2[r1]
                 float r6 = (float) r9
                 float r6 = r6 / r16
@@ -1194,36 +1199,36 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r2[r1] = r3
                 r3 = r2[r1]
                 int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-                if (r3 > 0) goto L_0x02ca
+                if (r3 > 0) goto L_0x02d2
                 r2[r1] = r5
-                int r2 = r0.previousSelectedPotision
-                if (r1 != r2) goto L_0x02ca
-                r0.previousSelectedPotision = r4
-            L_0x02ca:
-                r8 = 1
-                goto L_0x02d2
-            L_0x02cc:
                 int r2 = r0.previousSelectedPotision
                 if (r1 != r2) goto L_0x02d2
                 r0.previousSelectedPotision = r4
             L_0x02d2:
+                r8 = 1
+                goto L_0x02da
+            L_0x02d4:
+                int r2 = r0.previousSelectedPotision
+                if (r1 != r2) goto L_0x02da
+                r0.previousSelectedPotision = r4
+            L_0x02da:
                 int r1 = r1 + 1
-                goto L_0x02a3
-            L_0x02d5:
+                goto L_0x02ab
+            L_0x02dd:
                 r8 = 0
-            L_0x02d6:
+            L_0x02de:
                 r1 = 2
                 r2 = 0
-            L_0x02d8:
-                if (r2 >= r1) goto L_0x0322
+            L_0x02e0:
+                if (r2 >= r1) goto L_0x032a
                 boolean[] r3 = r0.pressedOverlayVisible
                 boolean r3 = r3[r2]
-                if (r3 == 0) goto L_0x0302
+                if (r3 == 0) goto L_0x030a
                 float[] r3 = r0.pressedOverlayAlpha
                 r4 = r3[r2]
                 r5 = 1065353216(0x3var_, float:1.0)
                 int r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
-                if (r4 >= 0) goto L_0x0300
+                if (r4 >= 0) goto L_0x0308
                 r4 = r3[r2]
                 float r6 = (float) r9
                 r7 = 1127481344(0x43340000, float:180.0)
@@ -1232,24 +1237,24 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r3[r2] = r4
                 r4 = r3[r2]
                 int r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
-                if (r4 <= 0) goto L_0x02fb
+                if (r4 <= 0) goto L_0x0303
                 r3[r2] = r5
-            L_0x02fb:
+            L_0x0303:
                 r6 = 0
                 r8 = 1
-            L_0x02fd:
+            L_0x0305:
                 r11 = 1127481344(0x43340000, float:180.0)
-                goto L_0x031f
-            L_0x0300:
+                goto L_0x0327
+            L_0x0308:
                 r6 = 0
-                goto L_0x02fd
-            L_0x0302:
+                goto L_0x0305
+            L_0x030a:
                 r5 = 1065353216(0x3var_, float:1.0)
                 float[] r3 = r0.pressedOverlayAlpha
                 r4 = r3[r2]
                 r6 = 0
                 int r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-                if (r4 <= 0) goto L_0x02fd
+                if (r4 <= 0) goto L_0x0305
                 r4 = r3[r2]
                 float r7 = (float) r9
                 r11 = 1127481344(0x43340000, float:180.0)
@@ -1258,17 +1263,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 r3[r2] = r4
                 r4 = r3[r2]
                 int r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-                if (r4 >= 0) goto L_0x031e
+                if (r4 >= 0) goto L_0x0326
                 r3[r2] = r6
-            L_0x031e:
+            L_0x0326:
                 r8 = 1
-            L_0x031f:
-                int r2 = r2 + 1
-                goto L_0x02d8
-            L_0x0322:
-                if (r8 == 0) goto L_0x0327
-                r21.postInvalidateOnAnimation()
             L_0x0327:
+                int r2 = r2 + 1
+                goto L_0x02e0
+            L_0x032a:
+                if (r8 == 0) goto L_0x032f
+                r21.postInvalidateOnAnimation()
+            L_0x032f:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.OverlaysView.onDraw(android.graphics.Canvas):void");
@@ -1418,9 +1423,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             this.animator.addListener(new AnimatorListenerAdapter(ProfileActivity.this) {
                 public void onAnimationEnd(Animator animator) {
                     if (PagerIndicatorView.this.isIndicatorVisible) {
-                        ActionBarMenuItem access$2300 = PagerIndicatorView.this.getSecondaryMenuItem();
-                        if (access$2300 != null) {
-                            access$2300.setVisibility(8);
+                        ActionBarMenuItem access$2500 = PagerIndicatorView.this.getSecondaryMenuItem();
+                        if (access$2500 != null) {
+                            access$2500.setVisibility(8);
                             return;
                         }
                         return;
@@ -1429,9 +1434,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 }
 
                 public void onAnimationStart(Animator animator) {
-                    ActionBarMenuItem access$2300 = PagerIndicatorView.this.getSecondaryMenuItem();
-                    if (access$2300 != null) {
-                        access$2300.setVisibility(0);
+                    ActionBarMenuItem access$2500 = PagerIndicatorView.this.getSecondaryMenuItem();
+                    if (access$2500 != null) {
+                        access$2500.setVisibility(0);
                     }
                     PagerIndicatorView.this.setVisibility(0);
                 }
@@ -1480,17 +1485,31 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
 
         /* access modifiers changed from: private */
+        public void updateAvatarItemsInternal() {
+            if (ProfileActivity.this.otherItem != null && ProfileActivity.this.avatarsViewPager != null && ProfileActivity.this.isPulledDown) {
+                if (ProfileActivity.this.avatarsViewPager.getRealPosition() == 0) {
+                    ProfileActivity.this.otherItem.hideSubItem(33);
+                    ProfileActivity.this.otherItem.showSubItem(36);
+                    return;
+                }
+                ProfileActivity.this.otherItem.showSubItem(33);
+                ProfileActivity.this.otherItem.hideSubItem(36);
+            }
+        }
+
+        /* access modifiers changed from: private */
         public void updateAvatarItems() {
-            if (ProfileActivity.this.imageUpdater == null || !ProfileActivity.this.isPulledDown) {
-                return;
+            if (ProfileActivity.this.imageUpdater != null) {
+                if (ProfileActivity.this.otherItem.isSubMenuShowing()) {
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public final void run() {
+                            ProfileActivity.PagerIndicatorView.this.updateAvatarItemsInternal();
+                        }
+                    }, 500);
+                } else {
+                    updateAvatarItemsInternal();
+                }
             }
-            if (ProfileActivity.this.avatarsViewPager.getRealPosition() == 0) {
-                ProfileActivity.this.otherItem.hideSubItem(33);
-                ProfileActivity.this.otherItem.showSubItem(36);
-                return;
-            }
-            ProfileActivity.this.otherItem.showSubItem(33);
-            ProfileActivity.this.otherItem.hideSubItem(36);
         }
 
         public boolean isIndicatorFullyVisible() {
@@ -1888,7 +1907,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         r0.setCastShadows(false);
         r0.setAddToContainer(false);
         r0.setClipContent(true);
-        if (Build.VERSION.SDK_INT >= 21 && !AndroidUtilities.isTablet()) {
+        if (Build.VERSION.SDK_INT >= 21 && !AndroidUtilities.isTablet() && !this.inBubbleMode) {
             z = true;
         }
         r0.setOccupyStatusBar(z);
@@ -2954,8 +2973,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             java.lang.Integer r8 = java.lang.Integer.valueOf(r8)
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
             boolean r0 = r0.searchWas
-            r1 = 0
-            r2 = 1
+            r1 = 1
+            r2 = 0
             if (r0 == 0) goto L_0x0050
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
             java.util.ArrayList r0 = r0.searchResults
@@ -2969,7 +2988,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
             java.util.ArrayList r0 = r0.searchResults
             int r0 = r0.size()
-            int r0 = r0 + r2
+            int r0 = r0 + r1
             int r9 = r9 - r0
             if (r9 < 0) goto L_0x009d
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
@@ -3000,7 +3019,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
             java.util.ArrayList r0 = r0.recentSearches
             int r0 = r0.size()
-            int r0 = r0 + r2
+            int r0 = r0 + r1
             int r9 = r9 - r0
             if (r9 < 0) goto L_0x009d
             org.telegram.ui.ProfileActivity$SearchAdapter r0 = r7.searchAdapter
@@ -3033,9 +3052,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             java.lang.Object[] r5 = new java.lang.Object[r5]
             org.telegram.ui.ProfileActivity$SearchAdapter r6 = r7.searchAdapter
             org.telegram.tgnet.TLRPC$WebPage r6 = r6.faqWebPage
-            r5[r1] = r6
+            r5[r2] = r6
             java.lang.String r0 = r0.url
-            r5[r2] = r0
+            r5[r1] = r0
             r3.postNotificationName(r4, r5)
         L_0x00ca:
             if (r9 == 0) goto L_0x00d3
@@ -3980,9 +3999,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 searchItem2.setVisibility(0);
                             }
                             AnimatorSet unused = ProfileActivity.this.headerShadowAnimatorSet = new AnimatorSet();
-                            AnimatorSet access$11300 = ProfileActivity.this.headerShadowAnimatorSet;
+                            AnimatorSet access$11500 = ProfileActivity.this.headerShadowAnimatorSet;
                             ProfileActivity profileActivity = ProfileActivity.this;
-                            access$11300.playTogether(new Animator[]{ObjectAnimator.ofFloat(profileActivity, profileActivity.HEADER_SHADOW, new float[]{1.0f})});
+                            access$11500.playTogether(new Animator[]{ObjectAnimator.ofFloat(profileActivity, profileActivity.HEADER_SHADOW, new float[]{1.0f})});
                             ProfileActivity.this.headerShadowAnimatorSet.setDuration(100);
                             ProfileActivity.this.headerShadowAnimatorSet.addListener(new AnimatorListenerAdapter() {
                                 public void onAnimationEnd(Animator animator) {
@@ -5809,9 +5828,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             int r6 = r6.user_id
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             org.telegram.tgnet.TLRPC$User r6 = r0.getUser(r6)
-            r0 = 50000(0xCLASSNAME, float:7.0065E-41)
-            r1 = -110(0xfffffffffffffvar_, float:NaN)
-            r2 = 0
+            r0 = -110(0xfffffffffffffvar_, float:NaN)
+            r1 = 0
+            r2 = 50000(0xCLASSNAME, float:7.0065E-41)
             if (r7 == 0) goto L_0x0059
             boolean r3 = r7.bot
             if (r3 == 0) goto L_0x004b
@@ -5820,7 +5839,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x004b:
             boolean r3 = r7.self
             if (r3 == 0) goto L_0x0052
-            int r7 = r5 + r0
+            int r7 = r5 + r2
             goto L_0x005a
         L_0x0052:
             org.telegram.tgnet.TLRPC$UserStatus r7 = r7.status
@@ -5835,57 +5854,57 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (r3 == 0) goto L_0x0061
             goto L_0x0070
         L_0x0061:
-            boolean r1 = r6.self
-            if (r1 == 0) goto L_0x0068
-            int r1 = r5 + r0
+            boolean r0 = r6.self
+            if (r0 == 0) goto L_0x0068
+            int r0 = r5 + r2
             goto L_0x0070
         L_0x0068:
             org.telegram.tgnet.TLRPC$UserStatus r5 = r6.status
             if (r5 == 0) goto L_0x006f
-            int r1 = r5.expires
+            int r0 = r5.expires
             goto L_0x0070
         L_0x006f:
-            r1 = 0
+            r0 = 0
         L_0x0070:
             r5 = -1
             r6 = 1
             if (r7 <= 0) goto L_0x007d
-            if (r1 <= 0) goto L_0x007d
-            if (r7 <= r1) goto L_0x0079
+            if (r0 <= 0) goto L_0x007d
+            if (r7 <= r0) goto L_0x0079
             return r6
         L_0x0079:
-            if (r7 >= r1) goto L_0x007c
+            if (r7 >= r0) goto L_0x007c
             return r5
         L_0x007c:
-            return r2
+            return r1
         L_0x007d:
             if (r7 >= 0) goto L_0x0088
-            if (r1 >= 0) goto L_0x0088
-            if (r7 <= r1) goto L_0x0084
+            if (r0 >= 0) goto L_0x0088
+            if (r7 <= r0) goto L_0x0084
             return r6
         L_0x0084:
-            if (r7 >= r1) goto L_0x0087
+            if (r7 >= r0) goto L_0x0087
             return r5
         L_0x0087:
-            return r2
+            return r1
         L_0x0088:
             if (r7 >= 0) goto L_0x008c
-            if (r1 > 0) goto L_0x0090
+            if (r0 > 0) goto L_0x0090
         L_0x008c:
             if (r7 != 0) goto L_0x0091
-            if (r1 == 0) goto L_0x0091
+            if (r0 == 0) goto L_0x0091
         L_0x0090:
             return r5
         L_0x0091:
-            if (r1 >= 0) goto L_0x0095
+            if (r0 >= 0) goto L_0x0095
             if (r7 > 0) goto L_0x0099
         L_0x0095:
-            if (r1 != 0) goto L_0x009a
+            if (r0 != 0) goto L_0x009a
             if (r7 == 0) goto L_0x009a
         L_0x0099:
             return r6
         L_0x009a:
-            return r2
+            return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.lambda$updateOnlineCount$27$ProfileActivity(int, java.lang.Integer, java.lang.Integer):int");
     }
@@ -8070,64 +8089,56 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v1, resolved type: java.io.BufferedInputStream} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v0, resolved type: java.io.BufferedInputStream} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v1, resolved type: java.util.zip.ZipOutputStream} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v2, resolved type: java.util.zip.ZipOutputStream} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v3, resolved type: java.util.zip.ZipOutputStream} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v6, resolved type: java.io.BufferedInputStream} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v7, resolved type: java.io.BufferedInputStream} */
-    /* JADX WARNING: type inference failed for: r1v0, types: [java.io.BufferedInputStream, java.lang.String] */
-    /* JADX WARNING: type inference failed for: r1v4 */
-    /* JADX WARNING: Multi-variable type inference failed */
-    /* JADX WARNING: Removed duplicated region for block: B:38:0x0099 A[SYNTHETIC, Splitter:B:38:0x0099] */
-    /* JADX WARNING: Removed duplicated region for block: B:41:0x009e A[Catch:{ Exception -> 0x00b5 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x00ac A[Catch:{ Exception -> 0x00b5 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x00b1 A[Catch:{ Exception -> 0x00b5 }] */
+    /* JADX WARNING: Code restructure failed: missing block: B:35:0x0093, code lost:
+        if (r6 == null) goto L_0x0098;
+     */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x0090 A[SYNTHETIC, Splitter:B:33:0x0090] */
+    /* JADX WARNING: Removed duplicated region for block: B:41:0x00a5 A[Catch:{ Exception -> 0x00ae }] */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x00aa A[Catch:{ Exception -> 0x00ae }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$sendLogs$33$ProfileActivity(org.telegram.ui.ActionBar.AlertDialog r14) {
         /*
             r13 = this;
-            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x00b5 }
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x00ae }
             r1 = 0
-            java.io.File r0 = r0.getExternalFilesDir(r1)     // Catch:{ Exception -> 0x00b5 }
-            java.io.File r2 = new java.io.File     // Catch:{ Exception -> 0x00b5 }
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x00b5 }
-            r3.<init>()     // Catch:{ Exception -> 0x00b5 }
-            java.lang.String r0 = r0.getAbsolutePath()     // Catch:{ Exception -> 0x00b5 }
-            r3.append(r0)     // Catch:{ Exception -> 0x00b5 }
+            java.io.File r0 = r0.getExternalFilesDir(r1)     // Catch:{ Exception -> 0x00ae }
+            java.io.File r2 = new java.io.File     // Catch:{ Exception -> 0x00ae }
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x00ae }
+            r3.<init>()     // Catch:{ Exception -> 0x00ae }
+            java.lang.String r0 = r0.getAbsolutePath()     // Catch:{ Exception -> 0x00ae }
+            r3.append(r0)     // Catch:{ Exception -> 0x00ae }
             java.lang.String r0 = "/logs"
-            r3.append(r0)     // Catch:{ Exception -> 0x00b5 }
-            java.lang.String r0 = r3.toString()     // Catch:{ Exception -> 0x00b5 }
-            r2.<init>(r0)     // Catch:{ Exception -> 0x00b5 }
-            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x00b5 }
+            r3.append(r0)     // Catch:{ Exception -> 0x00ae }
+            java.lang.String r0 = r3.toString()     // Catch:{ Exception -> 0x00ae }
+            r2.<init>(r0)     // Catch:{ Exception -> 0x00ae }
+            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x00ae }
             java.lang.String r3 = "logs.zip"
-            r0.<init>(r2, r3)     // Catch:{ Exception -> 0x00b5 }
-            boolean r3 = r0.exists()     // Catch:{ Exception -> 0x00b5 }
+            r0.<init>(r2, r3)     // Catch:{ Exception -> 0x00ae }
+            boolean r3 = r0.exists()     // Catch:{ Exception -> 0x00ae }
             if (r3 == 0) goto L_0x0031
-            r0.delete()     // Catch:{ Exception -> 0x00b5 }
+            r0.delete()     // Catch:{ Exception -> 0x00ae }
         L_0x0031:
-            java.io.File[] r2 = r2.listFiles()     // Catch:{ Exception -> 0x00b5 }
+            java.io.File[] r2 = r2.listFiles()     // Catch:{ Exception -> 0x00ae }
             r3 = 1
-            boolean[] r4 = new boolean[r3]     // Catch:{ Exception -> 0x00b5 }
-            java.io.FileOutputStream r5 = new java.io.FileOutputStream     // Catch:{ Exception -> 0x0090, all -> 0x008d }
-            r5.<init>(r0)     // Catch:{ Exception -> 0x0090, all -> 0x008d }
-            java.util.zip.ZipOutputStream r6 = new java.util.zip.ZipOutputStream     // Catch:{ Exception -> 0x0090, all -> 0x008d }
-            java.io.BufferedOutputStream r7 = new java.io.BufferedOutputStream     // Catch:{ Exception -> 0x0090, all -> 0x008d }
-            r7.<init>(r5)     // Catch:{ Exception -> 0x0090, all -> 0x008d }
-            r6.<init>(r7)     // Catch:{ Exception -> 0x0090, all -> 0x008d }
+            boolean[] r4 = new boolean[r3]     // Catch:{ Exception -> 0x00ae }
+            java.io.FileOutputStream r5 = new java.io.FileOutputStream     // Catch:{ Exception -> 0x0087, all -> 0x0084 }
+            r5.<init>(r0)     // Catch:{ Exception -> 0x0087, all -> 0x0084 }
+            java.util.zip.ZipOutputStream r6 = new java.util.zip.ZipOutputStream     // Catch:{ Exception -> 0x0087, all -> 0x0084 }
+            java.io.BufferedOutputStream r7 = new java.io.BufferedOutputStream     // Catch:{ Exception -> 0x0087, all -> 0x0084 }
+            r7.<init>(r5)     // Catch:{ Exception -> 0x0087, all -> 0x0084 }
+            r6.<init>(r7)     // Catch:{ Exception -> 0x0087, all -> 0x0084 }
             r5 = 65536(0x10000, float:9.18355E-41)
-            byte[] r7 = new byte[r5]     // Catch:{ Exception -> 0x008a, all -> 0x0088 }
+            byte[] r7 = new byte[r5]     // Catch:{ Exception -> 0x0082, all -> 0x0080 }
             r8 = 0
             r9 = 0
         L_0x004d:
-            int r10 = r2.length     // Catch:{ Exception -> 0x008a, all -> 0x0088 }
+            int r10 = r2.length     // Catch:{ Exception -> 0x0082, all -> 0x0080 }
             if (r9 >= r10) goto L_0x007d
-            java.io.FileInputStream r10 = new java.io.FileInputStream     // Catch:{ Exception -> 0x008a, all -> 0x0088 }
-            r11 = r2[r9]     // Catch:{ Exception -> 0x008a, all -> 0x0088 }
-            r10.<init>(r11)     // Catch:{ Exception -> 0x008a, all -> 0x0088 }
-            java.io.BufferedInputStream r11 = new java.io.BufferedInputStream     // Catch:{ Exception -> 0x008a, all -> 0x0088 }
-            r11.<init>(r10, r5)     // Catch:{ Exception -> 0x008a, all -> 0x0088 }
+            java.io.FileInputStream r10 = new java.io.FileInputStream     // Catch:{ Exception -> 0x0082, all -> 0x0080 }
+            r11 = r2[r9]     // Catch:{ Exception -> 0x0082, all -> 0x0080 }
+            r10.<init>(r11)     // Catch:{ Exception -> 0x0082, all -> 0x0080 }
+            java.io.BufferedInputStream r11 = new java.io.BufferedInputStream     // Catch:{ Exception -> 0x0082, all -> 0x0080 }
+            r11.<init>(r10, r5)     // Catch:{ Exception -> 0x0082, all -> 0x0080 }
             java.util.zip.ZipEntry r10 = new java.util.zip.ZipEntry     // Catch:{ Exception -> 0x007b }
             r12 = r2[r9]     // Catch:{ Exception -> 0x007b }
             java.lang.String r12 = r12.getName()     // Catch:{ Exception -> 0x007b }
@@ -8145,58 +8156,54 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             goto L_0x004d
         L_0x007b:
             r1 = move-exception
-            goto L_0x0094
+            goto L_0x008b
         L_0x007d:
-            r4[r8] = r3     // Catch:{ Exception -> 0x008a, all -> 0x0088 }
-            if (r1 == 0) goto L_0x0084
-            r1.close()     // Catch:{ Exception -> 0x00b5 }
+            r4[r8] = r3     // Catch:{ Exception -> 0x0082, all -> 0x0080 }
+            goto L_0x0095
+        L_0x0080:
+            r14 = move-exception
+            goto L_0x00a3
+        L_0x0082:
+            r2 = move-exception
+            goto L_0x0089
         L_0x0084:
-            r6.close()     // Catch:{ Exception -> 0x00b5 }
-            goto L_0x009f
-        L_0x0088:
             r14 = move-exception
-            goto L_0x00aa
-        L_0x008a:
+            r6 = r1
+            goto L_0x00a3
+        L_0x0087:
             r2 = move-exception
+            r6 = r1
+        L_0x0089:
             r11 = r1
-            goto L_0x0093
-        L_0x008d:
-            r14 = move-exception
-            r6 = r1
-            goto L_0x00aa
-        L_0x0090:
-            r2 = move-exception
-            r6 = r1
-            r11 = r6
-        L_0x0093:
             r1 = r2
-        L_0x0094:
-            r1.printStackTrace()     // Catch:{ all -> 0x00a8 }
-            if (r11 == 0) goto L_0x009c
-            r11.close()     // Catch:{ Exception -> 0x00b5 }
-        L_0x009c:
-            if (r6 == 0) goto L_0x009f
-            goto L_0x0084
-        L_0x009f:
-            org.telegram.ui.-$$Lambda$ProfileActivity$dQMjNt0EfauLlULU8ECjqZrYNVY r1 = new org.telegram.ui.-$$Lambda$ProfileActivity$dQMjNt0EfauLlULU8ECjqZrYNVY     // Catch:{ Exception -> 0x00b5 }
-            r1.<init>(r14, r4, r0)     // Catch:{ Exception -> 0x00b5 }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ Exception -> 0x00b5 }
-            goto L_0x00b9
-        L_0x00a8:
+        L_0x008b:
+            r1.printStackTrace()     // Catch:{ all -> 0x00a1 }
+            if (r11 == 0) goto L_0x0093
+            r11.close()     // Catch:{ Exception -> 0x00ae }
+        L_0x0093:
+            if (r6 == 0) goto L_0x0098
+        L_0x0095:
+            r6.close()     // Catch:{ Exception -> 0x00ae }
+        L_0x0098:
+            org.telegram.ui.-$$Lambda$ProfileActivity$dQMjNt0EfauLlULU8ECjqZrYNVY r1 = new org.telegram.ui.-$$Lambda$ProfileActivity$dQMjNt0EfauLlULU8ECjqZrYNVY     // Catch:{ Exception -> 0x00ae }
+            r1.<init>(r14, r4, r0)     // Catch:{ Exception -> 0x00ae }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)     // Catch:{ Exception -> 0x00ae }
+            goto L_0x00b2
+        L_0x00a1:
             r14 = move-exception
             r1 = r11
-        L_0x00aa:
-            if (r1 == 0) goto L_0x00af
-            r1.close()     // Catch:{ Exception -> 0x00b5 }
-        L_0x00af:
-            if (r6 == 0) goto L_0x00b4
-            r6.close()     // Catch:{ Exception -> 0x00b5 }
-        L_0x00b4:
-            throw r14     // Catch:{ Exception -> 0x00b5 }
-        L_0x00b5:
+        L_0x00a3:
+            if (r1 == 0) goto L_0x00a8
+            r1.close()     // Catch:{ Exception -> 0x00ae }
+        L_0x00a8:
+            if (r6 == 0) goto L_0x00ad
+            r6.close()     // Catch:{ Exception -> 0x00ae }
+        L_0x00ad:
+            throw r14     // Catch:{ Exception -> 0x00ae }
+        L_0x00ae:
             r14 = move-exception
             r14.printStackTrace()
-        L_0x00b9:
+        L_0x00b2:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.lambda$sendLogs$33$ProfileActivity(org.telegram.ui.ActionBar.AlertDialog):void");
@@ -11545,12 +11552,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         Object obj = this.recentSearches.get(i);
                         if (obj instanceof SearchResult) {
                             SearchResult searchResult = (SearchResult) obj;
-                            String access$19200 = searchResult.searchTitle;
-                            String[] access$19100 = searchResult.path;
+                            String access$19400 = searchResult.searchTitle;
+                            String[] access$19300 = searchResult.path;
                             if (i >= this.recentSearches.size() - 1) {
                                 z = false;
                             }
-                            settingsSearchCell.setTextAndValue(access$19200, access$19100, false, z);
+                            settingsSearchCell.setTextAndValue(access$19400, access$19300, false, z);
                         } else if (obj instanceof MessagesController.FaqSearchResult) {
                             MessagesController.FaqSearchResult faqSearchResult = (MessagesController.FaqSearchResult) obj;
                             String str = faqSearchResult.title;
@@ -11579,11 +11586,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         i2 = 0;
                     }
                     CharSequence charSequence = this.resultNames.get(i);
-                    String[] access$191002 = searchResult2.path;
+                    String[] access$193002 = searchResult2.path;
                     if (i >= this.searchResults.size() - 1) {
                         z = false;
                     }
-                    settingsSearchCell.setTextAndValueAndIcon(charSequence, access$191002, i2, z);
+                    settingsSearchCell.setTextAndValueAndIcon(charSequence, access$193002, i2, z);
                 } else {
                     int size2 = i - (this.searchResults.size() + 1);
                     CharSequence charSequence2 = this.resultNames.get(this.searchResults.size() + size2);
@@ -11705,85 +11712,86 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
         public /* synthetic */ void lambda$search$87$ProfileActivity$SearchAdapter(String str) {
             SpannableStringBuilder spannableStringBuilder;
-            int i;
             String str2;
+            int i;
+            int i2;
             String str3;
+            String str4;
             SpannableStringBuilder spannableStringBuilder2;
             ArrayList arrayList = new ArrayList();
             ArrayList arrayList2 = new ArrayList();
             ArrayList arrayList3 = new ArrayList();
-            String str4 = " ";
-            String[] split = str.split(str4);
+            String str5 = " ";
+            String[] split = str.split(str5);
             String[] strArr = new String[split.length];
-            int i2 = 0;
-            while (true) {
-                spannableStringBuilder = null;
-                if (i2 >= split.length) {
-                    break;
-                }
-                strArr[i2] = LocaleController.getInstance().getTranslitString(split[i2]);
-                if (strArr[i2].equals(split[i2])) {
-                    strArr[i2] = null;
-                }
-                i2++;
-            }
             int i3 = 0;
             while (true) {
-                SearchResult[] searchResultArr = this.searchArray;
-                if (i3 >= searchResultArr.length) {
+                spannableStringBuilder = null;
+                if (i3 >= split.length) {
                     break;
                 }
-                SearchResult searchResult = searchResultArr[i3];
+                strArr[i3] = LocaleController.getInstance().getTranslitString(split[i3]);
+                if (strArr[i3].equals(split[i3])) {
+                    strArr[i3] = null;
+                }
+                i3++;
+            }
+            int i4 = 0;
+            while (true) {
+                SearchResult[] searchResultArr = this.searchArray;
+                if (i4 >= searchResultArr.length) {
+                    break;
+                }
+                SearchResult searchResult = searchResultArr[i4];
                 if (searchResult != null) {
-                    String str5 = str4 + searchResult.searchTitle.toLowerCase();
+                    String str6 = str5 + searchResult.searchTitle.toLowerCase();
                     SpannableStringBuilder spannableStringBuilder3 = spannableStringBuilder;
-                    int i4 = 0;
-                    while (i4 < split.length) {
-                        if (split[i4].length() != 0) {
-                            String str6 = split[i4];
-                            int indexOf = str5.indexOf(str4 + str6);
-                            if (indexOf < 0 && strArr[i4] != null) {
-                                str6 = strArr[i4];
-                                indexOf = str5.indexOf(str4 + str6);
+                    int i5 = 0;
+                    while (i5 < split.length) {
+                        if (split[i5].length() != 0) {
+                            String str7 = split[i5];
+                            int indexOf = str6.indexOf(str5 + str7);
+                            if (indexOf < 0 && strArr[i5] != null) {
+                                str7 = strArr[i5];
+                                indexOf = str6.indexOf(str5 + str7);
                             }
                             if (indexOf < 0) {
                                 break;
                             }
                             spannableStringBuilder2 = spannableStringBuilder3 == null ? new SpannableStringBuilder(searchResult.searchTitle) : spannableStringBuilder3;
-                            str3 = str5;
-                            spannableStringBuilder2.setSpan(new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4")), indexOf, str6.length() + indexOf, 33);
+                            str4 = str6;
+                            spannableStringBuilder2.setSpan(new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4")), indexOf, str7.length() + indexOf, 33);
                         } else {
-                            str3 = str5;
+                            str4 = str6;
                             spannableStringBuilder2 = spannableStringBuilder3;
                         }
-                        if (spannableStringBuilder2 != null && i4 == split.length - 1) {
+                        if (spannableStringBuilder2 != null && i5 == split.length - 1) {
                             if (searchResult.guid == 502) {
-                                int i5 = -1;
                                 int i6 = 0;
                                 while (true) {
                                     if (i6 >= 3) {
+                                        i6 = -1;
                                         break;
-                                    } else if (!UserConfig.getInstance(i3).isClientActivated()) {
-                                        i5 = i6;
+                                    } else if (!UserConfig.getInstance(i4).isClientActivated()) {
                                         break;
                                     } else {
                                         i6++;
                                     }
                                 }
-                                if (i5 < 0) {
+                                if (i6 < 0) {
                                 }
                             }
                             arrayList.add(searchResult);
                             arrayList3.add(spannableStringBuilder2);
                         }
-                        i4++;
-                        String str7 = str;
+                        i5++;
+                        String str8 = str;
                         spannableStringBuilder3 = spannableStringBuilder2;
-                        str5 = str3;
+                        str6 = str4;
                     }
                 }
-                i3++;
-                String str8 = str;
+                i4++;
+                String str9 = str;
                 spannableStringBuilder = null;
             }
             if (this.faqWebPage != null) {
@@ -11791,43 +11799,52 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 int i7 = 0;
                 while (i7 < size) {
                     MessagesController.FaqSearchResult faqSearchResult = this.faqSearchArray.get(i7);
-                    String str9 = str4 + faqSearchResult.title.toLowerCase();
+                    String str10 = str5 + faqSearchResult.title.toLowerCase();
                     int i8 = 0;
                     SpannableStringBuilder spannableStringBuilder4 = null;
-                    while (i8 < split.length) {
+                    while (true) {
+                        if (i8 >= split.length) {
+                            str2 = str5;
+                            i = size;
+                            break;
+                        }
                         if (split[i8].length() != 0) {
-                            String str10 = split[i8];
-                            int indexOf2 = str9.indexOf(str4 + str10);
+                            String str11 = split[i8];
+                            int indexOf2 = str10.indexOf(str5 + str11);
                             if (indexOf2 < 0 && strArr[i8] != null) {
-                                str10 = strArr[i8];
-                                indexOf2 = str9.indexOf(str4 + str10);
+                                str11 = strArr[i8];
+                                indexOf2 = str10.indexOf(str5 + str11);
                             }
                             if (indexOf2 < 0) {
+                                str2 = str5;
+                                i = size;
                                 break;
                             }
                             if (spannableStringBuilder4 == null) {
-                                str2 = str4;
+                                str3 = str5;
                                 spannableStringBuilder4 = new SpannableStringBuilder(faqSearchResult.title);
                             } else {
-                                str2 = str4;
+                                str3 = str5;
                             }
-                            i = size;
-                            spannableStringBuilder4.setSpan(new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4")), indexOf2, str10.length() + indexOf2, 33);
+                            i2 = size;
+                            spannableStringBuilder4.setSpan(new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4")), indexOf2, str11.length() + indexOf2, 33);
                         } else {
-                            str2 = str4;
-                            i = size;
+                            str3 = str5;
+                            i2 = size;
                         }
-                        if (spannableStringBuilder4 != null && i8 == split.length - 1) {
-                            arrayList2.add(faqSearchResult);
-                            arrayList3.add(spannableStringBuilder4);
+                        if (spannableStringBuilder4 != null) {
+                            if (i8 == split.length - 1) {
+                                arrayList2.add(faqSearchResult);
+                                arrayList3.add(spannableStringBuilder4);
+                            }
                         }
                         i8++;
-                        str4 = str2;
-                        size = i;
+                        str5 = str3;
+                        size = i2;
                     }
                     i7++;
-                    str4 = str4;
-                    size = size;
+                    str5 = str2;
+                    size = i;
                 }
             }
             AndroidUtilities.runOnUIThread(new Runnable(str, arrayList, arrayList2, arrayList3) {

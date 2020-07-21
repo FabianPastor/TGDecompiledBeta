@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Built-By: Generated-by-ADT
-Created-By: Android Gradle 4.0.0
+Created-By: Android Gradle 4.0.1
 
 Name: AndroidManifest.xml
-SHA1-Digest: 3S4OGbYSK2/3npYUdFyJqRWN3+Y=
+SHA1-Digest: yZgZHfkweduLJEIFE17ZjSungfQ=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -16,7 +16,7 @@ Name: META-INF/androidx.coordinatorlayout_coordinatorlayout.version
 SHA1-Digest: xTi2bHEQyjoCjM/kItDx+iAKmTU=
 
 Name: META-INF/androidx.core_core.version
-SHA1-Digest: z3RL0AeFCwRgHchlgV7A9eYMaXA=
+SHA1-Digest: L999BPA3IFXJ13ykPZo8CHmJBfM=
 
 Name: META-INF/androidx.cursoradapter_cursoradapter.version
 SHA1-Digest: xTi2bHEQyjoCjM/kItDx+iAKmTU=
@@ -73,6 +73,9 @@ SHA1-Digest: xTi2bHEQyjoCjM/kItDx+iAKmTU=
 Name: META-INF/androidx.print_print.version
 SHA1-Digest: xTi2bHEQyjoCjM/kItDx+iAKmTU=
 
+Name: META-INF/androidx.sharetarget_sharetarget.version
+SHA1-Digest: xTi2bHEQyjoCjM/kItDx+iAKmTU=
+
 Name: META-INF/androidx.slidingpanelayout_slidingpanelayout.version
 SHA1-Digest: xTi2bHEQyjoCjM/kItDx+iAKmTU=
 
@@ -87,7 +90,7 @@ Name: META-INF/androidx.viewpager_viewpager.version
 SHA1-Digest: xTi2bHEQyjoCjM/kItDx+iAKmTU=
 
 Name: androidsupportmultidexversion.txt
-SHA1-Digest: To1o1bOMXMkmQuzlKpvyTVGvKe0=
+SHA1-Digest: gF8/SvLp1eokrdixUBupaQNqKyE=
 
 Name: assets/PhoneFormats.dat
 SHA1-Digest: NB5qrgOwV9q1QyThZqw6X5lId+0=
@@ -9510,10 +9513,10 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: xqY/DvdScxiroE6ampofG+cFopM=
+SHA1-Digest: cT78jdJa/NP5qPLl/bXWFM+cKtY=
 
 Name: classes2.dex
-SHA1-Digest: KQwyKR7mVIIiNNy4VI8vKH/tb5E=
+SHA1-Digest: duvPbC3qmcVu6fFUb0kVLs4Kb4g=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -9738,10 +9741,10 @@ Name: res/anim/popup_out.xml
 SHA1-Digest: Kpowd3/aNuftCgDFnHHi3CThmh0=
 
 Name: res/color/common_google_signin_btn_text_dark.xml
-SHA1-Digest: ZCq7bMuH0O5+HI+v2r3cGxzlgYU=
+SHA1-Digest: MHDWUdFT+i4aIcfNwLUUTgrv7NE=
 
 Name: res/color/common_google_signin_btn_text_light.xml
-SHA1-Digest: nO0YxCpoaPzv9xVjki3gDLCdI44=
+SHA1-Digest: 8K1izDEJvNG0nbmK/oJZUxqp+fI=
 
 Name: res/color/common_google_signin_btn_tint.xml
 SHA1-Digest: elhoOc3UWXzn0vP7UecXov0rbKQ=
@@ -13997,7 +14000,7 @@ Name: res/drawable-v21/list_selector_ex.xml
 SHA1-Digest: M4v4L1NDq6vxqtHS4+ij+1DA2oo=
 
 Name: res/drawable-v21/notification_action_background.xml
-SHA1-Digest: ebNvM6PsCMBoAZGkIHGjDbD7fwY=
+SHA1-Digest: KqRcwaWlheJ0xb2HQgTIBcD4fMY=
 
 Name: res/drawable-watch-v20/common_google_signin_btn_text_dark_normal
  .xml
@@ -18508,7 +18511,7 @@ Name: res/drawable/notification_bg_low.xml
 SHA1-Digest: /dnlH7c0whPsgnaBGsmmBx4FBlY=
 
 Name: res/drawable/notification_icon_background.xml
-SHA1-Digest: XphkVRKAPV4NsZ3rAjbi2TNKmuM=
+SHA1-Digest: 9FZYFGFDvlbidismpgzrJSb5rhQ=
 
 Name: res/drawable/notification_tile_bg.xml
 SHA1-Digest: fpZf0TAsf98Z+y26vBVcYo1ndY8=
@@ -18855,11 +18858,14 @@ SHA1-Digest: vqHhs6r9DeUe5nnV6unrA/JQC2E=
 Name: res/xml/provider_paths.xml
 SHA1-Digest: vzcx0lPmeHoGxo5+mbF9D1rkbeY=
 
+Name: res/xml/shortcuts.xml
+SHA1-Digest: jaKX1L6zgYHnR+yZDO5oBh/THlw=
+
 Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: rOWvKlptkuVgcE2mL1ByCI/iyZs=
+SHA1-Digest: PvTf4CzaPzXZXluOoFniAzqXQTo=
 
 Name: transport-api.properties
 SHA1-Digest: 1ihjJr5LtYfq/sGtDlVEQK4Ajxg=
