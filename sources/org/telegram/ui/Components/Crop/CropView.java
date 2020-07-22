@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -1103,6 +1104,9 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
             this.state.matrix.getValues(this.values);
             float access$1300 = this.state.minimumScale * cropWidth;
             mediaEditState2.cropState.transformRotation = this.state.getOrientationOnly();
+            if (BuildVars.LOGS_ENABLED) {
+                FileLog.d("set transformRotation = " + mediaEditState2.cropState.transformRotation);
+            }
             while (true) {
                 MediaController.CropState cropState = mediaEditState2.cropState;
                 i = cropState.transformRotation;

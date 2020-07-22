@@ -751,7 +751,7 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
                         MessageObject unused = ChatAttachAlertAudioLayout.this.playingAudio = messageObject;
                         ArrayList arrayList = new ArrayList();
                         arrayList.add(messageObject);
-                        return MediaController.getInstance().setPlaylist(arrayList, messageObject);
+                        return MediaController.getInstance().setPlaylist(arrayList, messageObject, 0);
                     }
                 };
                 r4.setCheckForButtonPress(true);
@@ -953,7 +953,7 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
                         MessageObject unused = ChatAttachAlertAudioLayout.this.playingAudio = messageObject;
                         ArrayList arrayList = new ArrayList();
                         arrayList.add(messageObject);
-                        return MediaController.getInstance().setPlaylist(arrayList, messageObject);
+                        return MediaController.getInstance().setPlaylist(arrayList, messageObject, 0);
                     }
                 };
                 r4.setCheckForButtonPress(true);

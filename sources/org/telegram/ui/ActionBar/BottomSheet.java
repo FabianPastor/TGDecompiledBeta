@@ -899,6 +899,11 @@ public class BottomSheet extends Dialog {
         return systemGestureInsets.bottom;
     }
 
+    public void setCalcMandatoryInsets(boolean z) {
+        this.calcMandatoryInsets = z;
+        this.drawNavigationBar = z;
+    }
+
     public static class BottomSheetCell extends FrameLayout {
         int currentType;
         /* access modifiers changed from: private */

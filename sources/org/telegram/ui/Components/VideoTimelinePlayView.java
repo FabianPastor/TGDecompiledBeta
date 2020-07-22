@@ -326,6 +326,23 @@ public class VideoTimelinePlayView extends View {
         invalidate();
     }
 
+    public void setRightProgress(float f) {
+        this.progressRight = f;
+        VideoTimelineViewDelegate videoTimelineViewDelegate = this.delegate;
+        if (videoTimelineViewDelegate != null) {
+            videoTimelineViewDelegate.didStartDragging(TYPE_RIGHT);
+        }
+        VideoTimelineViewDelegate videoTimelineViewDelegate2 = this.delegate;
+        if (videoTimelineViewDelegate2 != null) {
+            videoTimelineViewDelegate2.onRightProgressChanged(this.progressRight);
+        }
+        VideoTimelineViewDelegate videoTimelineViewDelegate3 = this.delegate;
+        if (videoTimelineViewDelegate3 != null) {
+            videoTimelineViewDelegate3.didStopDragging(TYPE_RIGHT);
+        }
+        invalidate();
+    }
+
     public void setDelegate(VideoTimelineViewDelegate videoTimelineViewDelegate) {
         this.delegate = videoTimelineViewDelegate;
     }

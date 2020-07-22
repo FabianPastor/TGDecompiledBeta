@@ -2956,6 +2956,69 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
         return null;
     }
 
+    public boolean canHandleUrl(String str) {
+        if (str == null) {
+            return false;
+        }
+        if (str.endsWith(".mp4")) {
+            return true;
+        }
+        String str2 = null;
+        try {
+            Matcher matcher = youtubeIdRegex.matcher(str);
+            if ((matcher.find() ? matcher.group(1) : null) != null) {
+                return true;
+            }
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
+        try {
+            Matcher matcher2 = vimeoIdRegex.matcher(str);
+            if ((matcher2.find() ? matcher2.group(3) : null) != null) {
+                return true;
+            }
+        } catch (Exception e2) {
+            FileLog.e((Throwable) e2);
+        }
+        try {
+            Matcher matcher3 = aparatIdRegex.matcher(str);
+            if ((matcher3.find() ? matcher3.group(1) : null) != null) {
+                return true;
+            }
+        } catch (Exception e3) {
+            FileLog.e((Throwable) e3);
+        }
+        try {
+            Matcher matcher4 = twitchClipIdRegex.matcher(str);
+            if ((matcher4.find() ? matcher4.group(1) : null) != null) {
+                return true;
+            }
+        } catch (Exception e4) {
+            FileLog.e((Throwable) e4);
+        }
+        try {
+            Matcher matcher5 = twitchStreamIdRegex.matcher(str);
+            if ((matcher5.find() ? matcher5.group(1) : null) != null) {
+                return true;
+            }
+        } catch (Exception e5) {
+            FileLog.e((Throwable) e5);
+        }
+        try {
+            Matcher matcher6 = coubIdRegex.matcher(str);
+            if (matcher6.find()) {
+                str2 = matcher6.group(1);
+            }
+            if (str2 != null) {
+                return true;
+            }
+            return false;
+        } catch (Exception e6) {
+            FileLog.e((Throwable) e6);
+            return false;
+        }
+    }
+
     /* JADX WARNING: Removed duplicated region for block: B:40:0x00a9 A[SYNTHETIC, Splitter:B:40:0x00a9] */
     /* JADX WARNING: Removed duplicated region for block: B:52:0x00c8 A[SYNTHETIC, Splitter:B:52:0x00c8] */
     /* JADX WARNING: Removed duplicated region for block: B:64:0x00e7 A[SYNTHETIC, Splitter:B:64:0x00e7] */

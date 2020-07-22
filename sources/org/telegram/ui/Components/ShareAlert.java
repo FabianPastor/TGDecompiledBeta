@@ -171,6 +171,9 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                 public boolean dispatchTouchEvent(MotionEvent motionEvent) {
                     MotionEvent obtain = MotionEvent.obtain(motionEvent);
                     obtain.setLocation(obtain.getRawX(), obtain.getRawY() - ShareAlert.this.containerView.getTranslationY());
+                    if (obtain.getAction() == 1) {
+                        obtain.setAction(3);
+                    }
                     ShareAlert.this.gridView.dispatchTouchEvent(obtain);
                     obtain.recycle();
                     return super.dispatchTouchEvent(motionEvent);
@@ -262,10 +265,6 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
 
         public void hideKeyboard() {
             AndroidUtilities.hideKeyboard(this.searchEditText);
-        }
-
-        public void requestDisallowInterceptTouchEvent(boolean z) {
-            super.requestDisallowInterceptTouchEvent(z);
         }
     }
 

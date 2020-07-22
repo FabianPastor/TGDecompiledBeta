@@ -939,7 +939,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         int i2;
         if (this.mediaEnabled && (baseFragment = this.parentAlert.baseFragment) != null && baseFragment.getParentActivity() != null) {
             if (Build.VERSION.SDK_INT >= 23) {
-                if (i == 0 && this.noCameraPermissions) {
+                if (this.adapter.needCamera && this.selectedAlbumEntry == this.galleryAlbumEntry && i == 0 && this.noCameraPermissions) {
                     try {
                         this.parentAlert.baseFragment.getParentActivity().requestPermissions(new String[]{"android.permission.CAMERA"}, 18);
                         return;

@@ -4437,7 +4437,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         /* JADX WARNING: Removed duplicated region for block: B:235:0x0641  */
         /* JADX WARNING: Removed duplicated region for block: B:269:0x06e6  */
         /* JADX WARNING: Removed duplicated region for block: B:270:0x06e9  */
-        /* JADX WARNING: Removed duplicated region for block: B:317:? A[RETURN, SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:318:? A[RETURN, SYNTHETIC] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onBindViewHolder(androidx.recyclerview.widget.RecyclerView.ViewHolder r17, int r18) {
             /*
@@ -4468,7 +4468,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                     default: goto L_0x001b;
                 }
             L_0x001b:
-                goto L_0x070d
+                goto L_0x070f
             L_0x001d:
                 android.view.View r1 = r1.itemView
                 org.telegram.ui.Cells.GraySectionCell r1 = (org.telegram.ui.Cells.GraySectionCell) r1
@@ -4487,13 +4487,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r3 = "ChannelOtherSubscribers"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x070d
+                goto L_0x070f
             L_0x004d:
                 r2 = 2131624617(0x7f0e02a9, float:1.8876419E38)
                 java.lang.String r3 = "ChannelOtherMembers"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x070d
+                goto L_0x070f
             L_0x005b:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.botHeaderRow
@@ -4502,11 +4502,11 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r3 = "ChannelBots"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x070d
+                goto L_0x070f
             L_0x0071:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.contactsHeaderRow
-                if (r2 != r3) goto L_0x070d
+                if (r2 != r3) goto L_0x070f
                 org.telegram.ui.ChatUsersActivity r2 = org.telegram.ui.ChatUsersActivity.this
                 org.telegram.tgnet.TLRPC$Chat r2 = r2.currentChat
                 boolean r2 = org.telegram.messenger.ChatObject.isChannel(r2)
@@ -4519,13 +4519,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r3 = "ChannelContacts"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x070d
+                goto L_0x070f
             L_0x009d:
                 r2 = 2131625462(0x7f0e05f6, float:1.8878133E38)
                 java.lang.String r3 = "GroupContacts"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x070d
+                goto L_0x070f
             L_0x00ab:
                 android.view.View r1 = r1.itemView
                 org.telegram.ui.Cells.TextCheckCell2 r1 = (org.telegram.ui.Cells.TextCheckCell2) r1
@@ -4733,13 +4733,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
             L_0x027c:
                 r2 = 2131165790(0x7var_e, float:1.7945807E38)
                 r1.setIcon(r2)
-                goto L_0x070d
+                goto L_0x070f
             L_0x0284:
                 r1.setIcon(r11)
-                goto L_0x070d
+                goto L_0x070f
             L_0x0289:
                 r1.setIcon(r11)
-                goto L_0x070d
+                goto L_0x070f
             L_0x028e:
                 android.view.View r1 = r1.itemView
                 org.telegram.ui.Cells.TextSettingsCell r1 = (org.telegram.ui.Cells.TextSettingsCell) r1
@@ -4762,7 +4762,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r4 = "%d"
                 java.lang.String r3 = java.lang.String.format(r4, r3)
                 r1.setTextAndValue(r2, r3, r11)
-                goto L_0x070d
+                goto L_0x070f
             L_0x02c0:
                 android.view.View r1 = r1.itemView
                 org.telegram.ui.Cells.HeaderCell r1 = (org.telegram.ui.Cells.HeaderCell) r1
@@ -4788,19 +4788,19 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r3 = "RemovedUser"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.formatPluralString(r3, r2)
                 r1.setText(r2)
-                goto L_0x070d
+                goto L_0x070f
             L_0x02fc:
                 r2 = 2131624567(0x7f0e0277, float:1.8876317E38)
                 java.lang.String r3 = "ChannelBlockedUsers"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x070d
+                goto L_0x070f
             L_0x030a:
                 r2 = 2131624632(0x7f0e02b8, float:1.887645E38)
                 java.lang.String r3 = "ChannelRestrictedUsers"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x070d
+                goto L_0x070f
             L_0x0318:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.permissionsSectionRow
@@ -4809,16 +4809,16 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r3 = "ChannelPermissionsHeader"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x070d
+                goto L_0x070f
             L_0x032e:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.slowmodeRow
-                if (r2 != r3) goto L_0x070d
+                if (r2 != r3) goto L_0x070f
                 r2 = 2131626953(0x7f0e0bc9, float:1.8881157E38)
                 java.lang.String r3 = "Slowmode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x070d
+                goto L_0x070f
             L_0x0344:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.addNewSectionRow
@@ -4841,13 +4841,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 android.content.Context r2 = r0.mContext
                 android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r4, (java.lang.String) r9)
                 r1.setBackgroundDrawable(r2)
-                goto L_0x070d
+                goto L_0x070f
             L_0x037a:
                 android.view.View r1 = r1.itemView
                 android.content.Context r2 = r0.mContext
                 android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r6, (java.lang.String) r9)
                 r1.setBackgroundDrawable(r2)
-                goto L_0x070d
+                goto L_0x070f
             L_0x0387:
                 android.view.View r1 = r1.itemView
                 org.telegram.ui.Cells.ManageChatTextCell r1 = (org.telegram.ui.Cells.ManageChatTextCell) r1
@@ -4873,7 +4873,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 r11 = 1
             L_0x03be:
                 r1.setText(r2, r10, r3, r11)
-                goto L_0x070d
+                goto L_0x070f
             L_0x03c3:
                 org.telegram.ui.ChatUsersActivity r2 = org.telegram.ui.ChatUsersActivity.this
                 int r2 = r2.type
@@ -4883,7 +4883,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r3 = 2131165254(0x7var_, float:1.794472E38)
                 r1.setText(r2, r10, r3, r11)
-                goto L_0x070d
+                goto L_0x070f
             L_0x03dc:
                 org.telegram.ui.ChatUsersActivity r2 = org.telegram.ui.ChatUsersActivity.this
                 int r2 = r2.type
@@ -4903,11 +4903,11 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r3 = 2131165258(0x7var_a, float:1.7944728E38)
                 r1.setText(r2, r10, r3, r11)
-                goto L_0x070d
+                goto L_0x070f
             L_0x0409:
                 org.telegram.ui.ChatUsersActivity r2 = org.telegram.ui.ChatUsersActivity.this
                 int r2 = r2.type
-                if (r2 != r5) goto L_0x070d
+                if (r2 != r5) goto L_0x070f
                 r1.setColors(r6, r4)
                 org.telegram.ui.ChatUsersActivity r2 = org.telegram.ui.ChatUsersActivity.this
                 boolean r2 = r2.loadingUsers
@@ -4932,13 +4932,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r4 = "AddSubscriber"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
                 r1.setText(r2, r10, r3, r11)
-                goto L_0x070d
+                goto L_0x070f
             L_0x044f:
                 r2 = 2131624138(0x7f0e00ca, float:1.8875447E38)
                 java.lang.String r4 = "AddMember"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
                 r1.setText(r2, r10, r3, r11)
-                goto L_0x070d
+                goto L_0x070f
             L_0x045d:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.recentActionsRow
@@ -4948,17 +4948,17 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r3 = 2131165423(0x7var_ef, float:1.7945063E38)
                 r1.setText(r2, r10, r3, r11)
-                goto L_0x070d
+                goto L_0x070f
             L_0x0476:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.addNew2Row
-                if (r2 != r3) goto L_0x070d
+                if (r2 != r3) goto L_0x070f
                 r2 = 2131624586(0x7f0e028a, float:1.8876356E38)
                 java.lang.String r3 = "ChannelInviteViaLink"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r3 = 2131165857(0x7var_a1, float:1.7945943E38)
                 r1.setText(r2, r10, r3, r12)
-                goto L_0x070d
+                goto L_0x070f
             L_0x048f:
                 android.view.View r1 = r1.itemView
                 org.telegram.ui.Cells.TextInfoPrivacyCell r1 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r1
@@ -5000,11 +5000,11 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 android.content.Context r2 = r0.mContext
                 android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r6, (java.lang.String) r9)
                 r1.setBackgroundDrawable(r2)
-                goto L_0x070d
+                goto L_0x070f
             L_0x04ef:
                 org.telegram.ui.ChatUsersActivity r2 = org.telegram.ui.ChatUsersActivity.this
                 int r2 = r2.type
-                if (r2 != r5) goto L_0x070d
+                if (r2 != r5) goto L_0x070f
                 org.telegram.ui.ChatUsersActivity r2 = org.telegram.ui.ChatUsersActivity.this
                 boolean r2 = r2.isChannel
                 if (r2 == 0) goto L_0x0515
@@ -5024,7 +5024,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 android.content.Context r2 = r0.mContext
                 android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r6, (java.lang.String) r9)
                 r1.setBackgroundDrawable(r2)
-                goto L_0x070d
+                goto L_0x070f
             L_0x0523:
                 org.telegram.ui.ChatUsersActivity r2 = org.telegram.ui.ChatUsersActivity.this
                 boolean r2 = r2.isChannel
@@ -5043,11 +5043,11 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 android.content.Context r2 = r0.mContext
                 android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r6, (java.lang.String) r9)
                 r1.setBackgroundDrawable(r2)
-                goto L_0x070d
+                goto L_0x070f
             L_0x054f:
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.slowmodeInfoRow
-                if (r2 != r3) goto L_0x070d
+                if (r2 != r3) goto L_0x070f
                 android.content.Context r2 = r0.mContext
                 android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r4, (java.lang.String) r9)
                 r1.setBackgroundDrawable(r2)
@@ -5068,13 +5068,13 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 java.lang.String r2 = "SlowmodeInfoSelected"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.formatString(r2, r3, r4)
                 r1.setText(r2)
-                goto L_0x070d
+                goto L_0x070f
             L_0x058d:
                 r2 = 2131626955(0x7f0e0bcb, float:1.888116E38)
                 java.lang.String r3 = "SlowmodeInfoOff"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x070d
+                goto L_0x070f
             L_0x059b:
                 android.view.View r1 = r1.itemView
                 org.telegram.ui.Cells.ManageChatUserCell r1 = (org.telegram.ui.Cells.ManageChatUserCell) r1
@@ -5151,7 +5151,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 org.telegram.messenger.MessagesController r10 = r10.getMessagesController()
                 java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
                 org.telegram.tgnet.TLRPC$User r7 = r10.getUser(r7)
-                if (r7 == 0) goto L_0x070d
+                if (r7 == 0) goto L_0x070f
                 org.telegram.ui.ChatUsersActivity r10 = org.telegram.ui.ChatUsersActivity.this
                 int r10 = r10.type
                 if (r10 != r8) goto L_0x065c
@@ -5167,7 +5167,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 r11 = 0
             L_0x0657:
                 r1.setData(r7, r2, r3, r11)
-                goto L_0x070d
+                goto L_0x070f
             L_0x065c:
                 org.telegram.ui.ChatUsersActivity r8 = org.telegram.ui.ChatUsersActivity.this
                 int r8 = r8.type
@@ -5199,7 +5199,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 r11 = 0
             L_0x0692:
                 r1.setData(r7, r2, r3, r11)
-                goto L_0x070d
+                goto L_0x070f
             L_0x0697:
                 org.telegram.ui.ChatUsersActivity r5 = org.telegram.ui.ChatUsersActivity.this
                 int r5 = r5.type
@@ -5248,31 +5248,32 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
                 r11 = 0
             L_0x06eb:
                 r1.setData(r7, r2, r3, r11)
-                goto L_0x070d
+                goto L_0x070f
             L_0x06ef:
                 r8 = 0
                 org.telegram.ui.ChatUsersActivity r3 = org.telegram.ui.ChatUsersActivity.this
                 int r3 = r3.type
                 r5 = 2
-                if (r3 != r5) goto L_0x070d
-                if (r6 == 0) goto L_0x0701
+                if (r3 != r5) goto L_0x070f
+                if (r6 == 0) goto L_0x0703
+                if (r15 == 0) goto L_0x0703
                 long r5 = (long) r15
                 java.lang.String r3 = org.telegram.messenger.LocaleController.formatJoined(r5)
-                goto L_0x0702
-            L_0x0701:
+                goto L_0x0704
+            L_0x0703:
                 r3 = 0
-            L_0x0702:
+            L_0x0704:
                 int r4 = r4 - r12
-                if (r2 == r4) goto L_0x0708
+                if (r2 == r4) goto L_0x070a
                 r2 = 0
                 r11 = 1
-                goto L_0x070a
-            L_0x0708:
+                goto L_0x070c
+            L_0x070a:
                 r2 = 0
                 r11 = 0
-            L_0x070a:
+            L_0x070c:
                 r1.setData(r7, r2, r3, r11)
-            L_0x070d:
+            L_0x070f:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ChatUsersActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

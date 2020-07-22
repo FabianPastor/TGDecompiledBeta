@@ -196,7 +196,8 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
     public boolean maybeStartTracking;
     /* access modifiers changed from: private */
     public MediaPage[] mediaPages = new MediaPage[2];
-    private long mergeDialogId;
+    /* access modifiers changed from: private */
+    public long mergeDialogId;
     private SharedPhotoVideoAdapter photoVideoAdapter;
     private Drawable pinnedHeaderShadowDrawable;
     /* access modifiers changed from: private */
@@ -1221,7 +1222,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                             MediaController.getInstance().setVoiceMessagesPlaylist(playMessage ? SharedMediaLayout.this.sharedMediaData[4].messages : null, false);
                             return playMessage;
                         } else if (messageObject.isMusic()) {
-                            return MediaController.getInstance().setPlaylist(SharedMediaLayout.this.sharedMediaData[4].messages, messageObject);
+                            return MediaController.getInstance().setPlaylist(SharedMediaLayout.this.sharedMediaData[4].messages, messageObject, SharedMediaLayout.this.mergeDialogId);
                         } else {
                             return false;
                         }
@@ -4793,7 +4794,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
 
     /* access modifiers changed from: private */
     public void openWebView(TLRPC$WebPage tLRPC$WebPage) {
-        EmbedBottomSheet.show(this.profileActivity.getParentActivity(), tLRPC$WebPage.site_name, tLRPC$WebPage.description, tLRPC$WebPage.url, tLRPC$WebPage.embed_url, tLRPC$WebPage.embed_width, tLRPC$WebPage.embed_height);
+        EmbedBottomSheet.show(this.profileActivity.getParentActivity(), tLRPC$WebPage.site_name, tLRPC$WebPage.description, tLRPC$WebPage.url, tLRPC$WebPage.embed_url, tLRPC$WebPage.embed_width, tLRPC$WebPage.embed_height, false);
     }
 
     private void recycleAdapter(RecyclerView.Adapter adapter) {
@@ -5037,7 +5038,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                                 MediaController.getInstance().setVoiceMessagesPlaylist(playMessage ? SharedMediaLayout.this.sharedMediaData[SharedDocumentsAdapter.this.currentType].messages : null, false);
                                 return playMessage;
                             } else if (messageObject.isMusic()) {
-                                return MediaController.getInstance().setPlaylist(SharedMediaLayout.this.sharedMediaData[SharedDocumentsAdapter.this.currentType].messages, messageObject);
+                                return MediaController.getInstance().setPlaylist(SharedMediaLayout.this.sharedMediaData[SharedDocumentsAdapter.this.currentType].messages, messageObject, SharedMediaLayout.this.mergeDialogId);
                             } else {
                                 return false;
                             }
@@ -5175,9 +5176,9 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                 sharedPhotoVideoCell.setItemsCount(SharedMediaLayout.this.columnsCount);
                 sharedPhotoVideoCell.setIsFirst(i == 0);
                 for (int i2 = 0; i2 < SharedMediaLayout.this.columnsCount; i2++) {
-                    int access$2500 = (SharedMediaLayout.this.columnsCount * i) + i2;
-                    if (access$2500 < arrayList.size()) {
-                        MessageObject messageObject = arrayList.get(access$2500);
+                    int access$2600 = (SharedMediaLayout.this.columnsCount * i) + i2;
+                    if (access$2600 < arrayList.size()) {
+                        MessageObject messageObject = arrayList.get(access$2600);
                         sharedPhotoVideoCell.setItem(i2, SharedMediaLayout.this.sharedMediaData[0].messages.indexOf(messageObject), messageObject);
                         if (SharedMediaLayout.this.isActionModeShowed) {
                             sharedPhotoVideoCell.setChecked(i2, SharedMediaLayout.this.selectedFiles[(messageObject.getDialogId() > SharedMediaLayout.this.dialog_id ? 1 : (messageObject.getDialogId() == SharedMediaLayout.this.dialog_id ? 0 : -1)) == 0 ? (char) 0 : 1].indexOfKey(messageObject.getId()) >= 0, !SharedMediaLayout.this.scrolling);
@@ -5185,7 +5186,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                             sharedPhotoVideoCell.setChecked(i2, false, !SharedMediaLayout.this.scrolling);
                         }
                     } else {
-                        sharedPhotoVideoCell.setItem(i2, access$2500, (MessageObject) null);
+                        sharedPhotoVideoCell.setItem(i2, access$2600, (MessageObject) null);
                     }
                 }
                 sharedPhotoVideoCell.requestLayout();
@@ -5517,7 +5518,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
                             }
                             return playMessage;
                         } else if (messageObject.isMusic()) {
-                            return MediaController.getInstance().setPlaylist(MediaSearchAdapter.this.searchResult, messageObject);
+                            return MediaController.getInstance().setPlaylist(MediaSearchAdapter.this.searchResult, messageObject, SharedMediaLayout.this.mergeDialogId);
                         } else {
                             return false;
                         }
@@ -5654,12 +5655,12 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
         public void getChats(int i, int i2) {
             if (!this.loading) {
                 TLRPC$TL_messages_getCommonChats tLRPC$TL_messages_getCommonChats = new TLRPC$TL_messages_getCommonChats();
-                int access$5500 = (int) SharedMediaLayout.this.dialog_id;
-                int access$55002 = (int) (SharedMediaLayout.this.dialog_id >> 32);
-                if (access$5500 == 0) {
-                    access$5500 = SharedMediaLayout.this.profileActivity.getMessagesController().getEncryptedChat(Integer.valueOf(access$55002)).user_id;
+                int access$5600 = (int) SharedMediaLayout.this.dialog_id;
+                int access$56002 = (int) (SharedMediaLayout.this.dialog_id >> 32);
+                if (access$5600 == 0) {
+                    access$5600 = SharedMediaLayout.this.profileActivity.getMessagesController().getEncryptedChat(Integer.valueOf(access$56002)).user_id;
                 }
-                TLRPC$InputUser inputUser = SharedMediaLayout.this.profileActivity.getMessagesController().getInputUser(access$5500);
+                TLRPC$InputUser inputUser = SharedMediaLayout.this.profileActivity.getMessagesController().getInputUser(access$5600);
                 tLRPC$TL_messages_getCommonChats.user_id = inputUser;
                 if (!(inputUser instanceof TLRPC$TL_inputUserEmpty)) {
                     tLRPC$TL_messages_getCommonChats.limit = i2;

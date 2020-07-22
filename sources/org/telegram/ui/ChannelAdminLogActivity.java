@@ -2546,7 +2546,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                             MediaController.getInstance().setVoiceMessagesPlaylist((ArrayList<MessageObject>) null, false);
                             return playMessage;
                         } else if (messageObject.isMusic()) {
-                            return MediaController.getInstance().setPlaylist(ChannelAdminLogActivity.this.messages, messageObject);
+                            return MediaController.getInstance().setPlaylist(ChannelAdminLogActivity.this.messages, messageObject, 0);
                         } else {
                             return false;
                         }
@@ -2919,7 +2919,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                 }
 
                                 public void needOpenWebView(String str, String str2, String str3, String str4, int i, int i2) {
-                                    EmbedBottomSheet.show(ChatActivityAdapter.this.mContext, str2, str3, str4, str, i, i2);
+                                    EmbedBottomSheet.show(ChatActivityAdapter.this.mContext, str2, str3, str4, str, i, i2, false);
                                 }
 
                                 /* JADX WARNING: Code restructure failed: missing block: B:49:0x0105, code lost:

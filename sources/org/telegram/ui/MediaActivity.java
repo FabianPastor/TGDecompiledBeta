@@ -2833,7 +2833,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
 
     /* access modifiers changed from: private */
     public void openWebView(TLRPC$WebPage tLRPC$WebPage) {
-        EmbedBottomSheet.show(getParentActivity(), tLRPC$WebPage.site_name, tLRPC$WebPage.description, tLRPC$WebPage.url, tLRPC$WebPage.embed_url, tLRPC$WebPage.embed_width, tLRPC$WebPage.embed_height);
+        EmbedBottomSheet.show(getParentActivity(), tLRPC$WebPage.site_name, tLRPC$WebPage.description, tLRPC$WebPage.url, tLRPC$WebPage.embed_url, tLRPC$WebPage.embed_width, tLRPC$WebPage.embed_height, false);
     }
 
     private void recycleAdapter(RecyclerView.Adapter adapter) {
@@ -3100,7 +3100,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                                 MediaController.getInstance().setVoiceMessagesPlaylist(playMessage ? MediaActivity.this.sharedMediaData[SharedDocumentsAdapter.this.currentType].messages : null, false);
                                 return playMessage;
                             } else if (messageObject.isMusic()) {
-                                return MediaController.getInstance().setPlaylist(MediaActivity.this.sharedMediaData[SharedDocumentsAdapter.this.currentType].messages, messageObject);
+                                return MediaController.getInstance().setPlaylist(MediaActivity.this.sharedMediaData[SharedDocumentsAdapter.this.currentType].messages, messageObject, MediaActivity.this.mergeDialogId);
                             } else {
                                 return false;
                             }
@@ -3621,7 +3621,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
                             }
                             return playMessage;
                         } else if (messageObject.isMusic()) {
-                            return MediaController.getInstance().setPlaylist(MediaSearchAdapter.this.searchResult, messageObject);
+                            return MediaController.getInstance().setPlaylist(MediaSearchAdapter.this.searchResult, messageObject, MediaActivity.this.mergeDialogId);
                         } else {
                             return false;
                         }

@@ -10172,7 +10172,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         private void didPressedButton(boolean z) {
             int i = this.buttonState;
             if (i == 0) {
-                if (MediaController.getInstance().setPlaylist(this.parentAdapter.audioMessages, this.currentMessageObject, false)) {
+                if (MediaController.getInstance().setPlaylist(this.parentAdapter.audioMessages, this.currentMessageObject, 0, false)) {
                     this.buttonState = 1;
                     this.radialProgress.setIcon(getIconForCurrentState(), false, z);
                     invalidate();

@@ -224,6 +224,10 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             org.telegram.messenger.NotificationCenter r6 = org.telegram.messenger.NotificationCenter.getInstance(r6)
             int r7 = org.telegram.messenger.NotificationCenter.musicDidLoad
             r6.addObserver(r0, r7)
+            int r6 = r0.currentAccount
+            org.telegram.messenger.NotificationCenter r6 = org.telegram.messenger.NotificationCenter.getInstance(r6)
+            int r7 = org.telegram.messenger.NotificationCenter.moreMusicDidLoad
+            r6.addObserver(r0, r7)
             org.telegram.ui.Components.AudioPlayerAlert$1 r6 = new org.telegram.ui.Components.AudioPlayerAlert$1
             r6.<init>(r1)
             r0.containerView = r6
@@ -266,54 +270,54 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             org.telegram.ui.ActionBar.ActionBar r6 = r0.actionBar
             r9 = 0
             r6.setAlpha(r9)
-            if (r5 == 0) goto L_0x016a
+            if (r5 == 0) goto L_0x0175
             long r5 = r5.getDialogId()
             int r10 = (int) r5
             r11 = 32
             long r5 = r5 >> r11
             int r6 = (int) r5
-            if (r10 == 0) goto L_0x013b
-            if (r10 <= 0) goto L_0x0122
+            if (r10 == 0) goto L_0x0146
+            if (r10 <= 0) goto L_0x012d
             int r5 = r0.currentAccount
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r5)
             java.lang.Integer r6 = java.lang.Integer.valueOf(r10)
             org.telegram.tgnet.TLRPC$User r5 = r5.getUser(r6)
-            if (r5 == 0) goto L_0x016a
+            if (r5 == 0) goto L_0x0175
             org.telegram.ui.ActionBar.ActionBar r6 = r0.actionBar
             java.lang.String r10 = r5.first_name
             java.lang.String r5 = r5.last_name
             java.lang.String r5 = org.telegram.messenger.ContactsController.formatName(r10, r5)
             r6.setTitle(r5)
-            goto L_0x016a
-        L_0x0122:
+            goto L_0x0175
+        L_0x012d:
             int r5 = r0.currentAccount
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r5)
             int r6 = -r10
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             org.telegram.tgnet.TLRPC$Chat r5 = r5.getChat(r6)
-            if (r5 == 0) goto L_0x016a
+            if (r5 == 0) goto L_0x0175
             org.telegram.ui.ActionBar.ActionBar r6 = r0.actionBar
             java.lang.String r5 = r5.title
             r6.setTitle(r5)
-            goto L_0x016a
-        L_0x013b:
+            goto L_0x0175
+        L_0x0146:
             int r5 = r0.currentAccount
             org.telegram.messenger.MessagesController r5 = org.telegram.messenger.MessagesController.getInstance(r5)
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             org.telegram.tgnet.TLRPC$EncryptedChat r5 = r5.getEncryptedChat(r6)
-            if (r5 == 0) goto L_0x016a
+            if (r5 == 0) goto L_0x0175
             int r6 = r0.currentAccount
             org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r6)
             int r5 = r5.user_id
             java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
             org.telegram.tgnet.TLRPC$User r5 = r6.getUser(r5)
-            if (r5 == 0) goto L_0x016a
+            if (r5 == 0) goto L_0x0175
             org.telegram.ui.ActionBar.ActionBar r6 = r0.actionBar
             java.lang.String r10 = r5.first_name
             java.lang.String r5 = r5.last_name
             java.lang.String r5 = org.telegram.messenger.ContactsController.formatName(r10, r5)
             r6.setTitle(r5)
-        L_0x016a:
+        L_0x0175:
             org.telegram.ui.ActionBar.ActionBar r5 = r0.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r5 = r5.createMenu()
             r6 = 2131165442(0x7var_, float:1.7945101E38)
@@ -528,10 +532,10 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             float r5 = org.telegram.messenger.AndroidUtilities.density
             r13 = 1077936128(0x40400000, float:3.0)
             int r5 = (r5 > r13 ? 1 : (r5 == r13 ? 0 : -1))
-            if (r5 < 0) goto L_0x038a
+            if (r5 < 0) goto L_0x0395
             android.widget.ImageView r5 = r0.playbackSpeedButton
             r5.setPadding(r7, r2, r7, r7)
-        L_0x038a:
+        L_0x0395:
             android.widget.FrameLayout r5 = r0.playerLayout
             android.widget.ImageView r14 = r0.playbackSpeedButton
             r15 = 36
@@ -575,14 +579,14 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             int r14 = android.os.Build.VERSION.SDK_INT
             java.lang.String r15 = "listSelectorSDK21"
             r13 = 21
-            if (r14 < r13) goto L_0x0402
+            if (r14 < r13) goto L_0x040d
             org.telegram.ui.ActionBar.ActionBarMenuItem r14 = r0.repeatButton
             int r8 = org.telegram.ui.ActionBar.Theme.getColor(r15)
             r19 = 1099956224(0x41900000, float:18.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r19)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r8, r2, r4)
             r14.setBackgroundDrawable(r4)
-        L_0x0402:
+        L_0x040d:
             org.telegram.ui.ActionBar.ActionBarMenuItem r4 = r0.repeatButton
             r8 = 48
             r14 = 51
@@ -645,14 +649,14 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             r4 = 2131165828(0x7var_, float:1.7945884E38)
             r3.setImageResource(r4)
             int r3 = android.os.Build.VERSION.SDK_INT
-            if (r3 < r13) goto L_0x04ba
+            if (r3 < r13) goto L_0x04c5
             android.widget.ImageView r3 = r0.prevButton
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r15)
             r7 = 1102053376(0x41b00000, float:22.0)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4, r2, r7)
             r3.setBackgroundDrawable(r4)
-        L_0x04ba:
+        L_0x04c5:
             android.widget.ImageView r3 = r0.prevButton
             android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r8, r14)
             r5.addView(r3, r4)
@@ -681,14 +685,14 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             r4.<init>(r7, r9)
             r3.setColorFilter(r4)
             int r3 = android.os.Build.VERSION.SDK_INT
-            if (r3 < r13) goto L_0x0517
+            if (r3 < r13) goto L_0x0522
             android.widget.ImageView r3 = r0.playButton
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r15)
             r7 = 1103101952(0x41CLASSNAME, float:24.0)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4, r2, r7)
             r3.setBackgroundDrawable(r4)
-        L_0x0517:
+        L_0x0522:
             android.widget.ImageView r3 = r0.playButton
             android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r8, r14)
             r5.addView(r3, r4)
@@ -713,14 +717,14 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             r4 = 2131165824(0x7var_, float:1.7945876E38)
             r3.setImageResource(r4)
             int r3 = android.os.Build.VERSION.SDK_INT
-            if (r3 < r13) goto L_0x0567
+            if (r3 < r13) goto L_0x0572
             android.widget.ImageView r3 = r0.nextButton
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r15)
             r7 = 1102053376(0x41b00000, float:22.0)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4, r2, r7)
             r3.setBackgroundDrawable(r4)
-        L_0x0567:
+        L_0x0572:
             android.widget.ImageView r3 = r0.nextButton
             android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r8, r14)
             r5.addView(r3, r4)
@@ -754,14 +758,14 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
             int r4 = -r4
             r3.setAdditionalYOffset(r4)
             int r3 = android.os.Build.VERSION.SDK_INT
-            if (r3 < r13) goto L_0x05ce
+            if (r3 < r13) goto L_0x05d9
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.optionsButton
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r15)
             r6 = 1099956224(0x41900000, float:18.0)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4, r2, r6)
             r3.setBackgroundDrawable(r4)
-        L_0x05ce:
+        L_0x05d9:
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r0.optionsButton
             android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r8, r8, r14)
             r5.addView(r3, r4)
@@ -1030,12 +1034,17 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
 
     public /* synthetic */ void lambda$new$3$AudioPlayerAlert(int i) {
         if (i == 1 || i == 2) {
-            if ((!SharedConfig.playOrderReversed || i != 1) && (!SharedConfig.shuffleMusic || i != 2)) {
+            boolean z = SharedConfig.playOrderReversed;
+            if ((!z || i != 1) && (!SharedConfig.shuffleMusic || i != 2)) {
                 MediaController.getInstance().setPlaybackOrderType(i);
             } else {
                 MediaController.getInstance().setPlaybackOrderType(0);
             }
             this.listAdapter.notifyDataSetChanged();
+            if (z != SharedConfig.playOrderReversed) {
+                this.listView.stopScroll();
+                scrollToCurrentSong(false);
+            }
         } else if (i == 4) {
             if (SharedConfig.repeatMode == 1) {
                 SharedConfig.setRepeatMode(0);
@@ -1083,6 +1092,67 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
     public void updateEmptyView() {
         this.emptyView.setVisibility((!this.searching || this.listAdapter.getItemCount() != 0) ? 8 : 0);
         updateEmptyViewPosition();
+    }
+
+    /* access modifiers changed from: private */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x004a  */
+    /* JADX WARNING: Removed duplicated region for block: B:21:0x0050  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public boolean scrollToCurrentSong(boolean r7) {
+        /*
+            r6 = this;
+            org.telegram.messenger.MediaController r0 = org.telegram.messenger.MediaController.getInstance()
+            org.telegram.messenger.MessageObject r0 = r0.getPlayingMessageObject()
+            r1 = 0
+            if (r0 == 0) goto L_0x005d
+            r2 = 1
+            if (r7 == 0) goto L_0x003b
+            org.telegram.ui.Components.RecyclerListView r7 = r6.listView
+            int r7 = r7.getChildCount()
+            r3 = 0
+        L_0x0015:
+            if (r3 >= r7) goto L_0x003b
+            org.telegram.ui.Components.RecyclerListView r4 = r6.listView
+            android.view.View r4 = r4.getChildAt(r3)
+            boolean r5 = r4 instanceof org.telegram.ui.Cells.AudioPlayerCell
+            if (r5 == 0) goto L_0x0038
+            r5 = r4
+            org.telegram.ui.Cells.AudioPlayerCell r5 = (org.telegram.ui.Cells.AudioPlayerCell) r5
+            org.telegram.messenger.MessageObject r5 = r5.getMessageObject()
+            if (r5 != r0) goto L_0x0038
+            int r7 = r4.getBottom()
+            org.telegram.ui.Components.RecyclerListView r3 = r6.listView
+            int r3 = r3.getMeasuredHeight()
+            if (r7 > r3) goto L_0x003b
+            r7 = 1
+            goto L_0x003c
+        L_0x0038:
+            int r3 = r3 + 1
+            goto L_0x0015
+        L_0x003b:
+            r7 = 0
+        L_0x003c:
+            if (r7 != 0) goto L_0x005d
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r7 = r6.playlist
+            int r7 = r7.indexOf(r0)
+            if (r7 < 0) goto L_0x005d
+            boolean r0 = org.telegram.messenger.SharedConfig.playOrderReversed
+            if (r0 == 0) goto L_0x0050
+            androidx.recyclerview.widget.LinearLayoutManager r0 = r6.layoutManager
+            r0.scrollToPosition(r7)
+            goto L_0x005c
+        L_0x0050:
+            androidx.recyclerview.widget.LinearLayoutManager r0 = r6.layoutManager
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r6.playlist
+            int r1 = r1.size()
+            int r1 = r1 - r7
+            r0.scrollToPosition(r1)
+        L_0x005c:
+            return r2
+        L_0x005d:
+            return r1
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AudioPlayerAlert.scrollToCurrentSong(boolean):boolean");
     }
 
     public boolean onCustomMeasure(View view, int i, int i2) {
@@ -1465,20 +1535,21 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         AudioPlayerCell audioPlayerCell2;
         MessageObject messageObject2;
         MessageObject playingMessageObject;
+        int i3 = 0;
         if (i == NotificationCenter.messagePlayingDidStart || i == NotificationCenter.messagePlayingPlayStateChanged || i == NotificationCenter.messagePlayingDidReset) {
             updateTitle(i == NotificationCenter.messagePlayingDidReset && objArr[1].booleanValue());
             if (i == NotificationCenter.messagePlayingDidReset || i == NotificationCenter.messagePlayingPlayStateChanged) {
                 int childCount = this.listView.getChildCount();
-                for (int i3 = 0; i3 < childCount; i3++) {
-                    View childAt = this.listView.getChildAt(i3);
+                for (int i4 = 0; i4 < childCount; i4++) {
+                    View childAt = this.listView.getChildAt(i4);
                     if ((childAt instanceof AudioPlayerCell) && (messageObject = audioPlayerCell.getMessageObject()) != null && (messageObject.isVoice() || messageObject.isMusic())) {
                         (audioPlayerCell = (AudioPlayerCell) childAt).updateButtonState(false, true);
                     }
                 }
             } else if (i == NotificationCenter.messagePlayingDidStart && objArr[0].eventId == 0) {
                 int childCount2 = this.listView.getChildCount();
-                for (int i4 = 0; i4 < childCount2; i4++) {
-                    View childAt2 = this.listView.getChildAt(i4);
+                for (int i5 = 0; i5 < childCount2; i5++) {
+                    View childAt2 = this.listView.getChildAt(i5);
                     if ((childAt2 instanceof AudioPlayerCell) && (messageObject2 = audioPlayerCell2.getMessageObject()) != null && (messageObject2.isVoice() || messageObject2.isMusic())) {
                         (audioPlayerCell2 = (AudioPlayerCell) childAt2).updateButtonState(false, true);
                     }
@@ -1492,6 +1563,22 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         } else if (i == NotificationCenter.musicDidLoad) {
             this.playlist = MediaController.getInstance().getPlaylist();
             this.listAdapter.notifyDataSetChanged();
+        } else if (i == NotificationCenter.moreMusicDidLoad) {
+            this.playlist = MediaController.getInstance().getPlaylist();
+            this.listAdapter.notifyDataSetChanged();
+            if (SharedConfig.playOrderReversed) {
+                this.listView.stopScroll();
+                int intValue = objArr[0].intValue();
+                this.layoutManager.findFirstVisibleItemPosition();
+                int findLastVisibleItemPosition = this.layoutManager.findLastVisibleItemPosition();
+                if (findLastVisibleItemPosition != -1) {
+                    View findViewByPosition = this.layoutManager.findViewByPosition(findLastVisibleItemPosition);
+                    if (findViewByPosition != null) {
+                        i3 = findViewByPosition.getTop();
+                    }
+                    this.layoutManager.scrollToPositionWithOffset(findLastVisibleItemPosition + intValue, i3);
+                }
+            }
         } else if (i == NotificationCenter.fileDidLoad) {
             if (objArr[0].equals(this.currentFile)) {
                 updateTitle(false);
@@ -1592,6 +1679,7 @@ public class AudioPlayerAlert extends BottomSheet implements NotificationCenter.
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileDidLoad);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.FileLoadProgressChanged);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.musicDidLoad);
+        NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.moreMusicDidLoad);
         DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
     }
 

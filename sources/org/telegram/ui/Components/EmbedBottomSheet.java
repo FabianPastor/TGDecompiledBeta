@@ -144,16 +144,18 @@ public class EmbedBottomSheet extends BottomSheet {
         }
     }
 
-    public static void show(Context context, String str, String str2, String str3, String str4, int i, int i2) {
-        show(context, str, str2, str3, str4, i, i2, -1);
+    public static void show(Context context, String str, String str2, String str3, String str4, int i, int i2, boolean z) {
+        show(context, str, str2, str3, str4, i, i2, -1, z);
     }
 
-    public static void show(Context context, String str, String str2, String str3, String str4, int i, int i2, int i3) {
+    public static void show(Context context, String str, String str2, String str3, String str4, int i, int i2, int i3, boolean z) {
         EmbedBottomSheet embedBottomSheet = instance;
         if (embedBottomSheet != null) {
             embedBottomSheet.destroy();
         }
-        new EmbedBottomSheet(context, str, str2, str3, str4, i, i2, i3).show();
+        EmbedBottomSheet embedBottomSheet2 = new EmbedBottomSheet(context, str, str2, str3, str4, i, i2, i3);
+        embedBottomSheet2.setCalcMandatoryInsets(z);
+        embedBottomSheet2.show();
     }
 
     /* JADX WARNING: Illegal instructions before constructor call */
@@ -635,68 +637,81 @@ public class EmbedBottomSheet extends BottomSheet {
             org.telegram.ui.Components.-$$Lambda$EmbedBottomSheet$xNtglytXCFyYO3cCP1Moj3HVHKg r1 = new org.telegram.ui.Components.-$$Lambda$EmbedBottomSheet$xNtglytXCFyYO3cCP1Moj3HVHKg
             r1.<init>()
             r2.setOnClickListener(r1)
-            org.telegram.ui.Components.EmbedBottomSheet$8 r1 = new org.telegram.ui.Components.EmbedBottomSheet$8
-            r1.<init>()
-            r0.setDelegate(r1)
-            org.telegram.ui.Components.EmbedBottomSheet$9 r1 = new org.telegram.ui.Components.EmbedBottomSheet$9
-            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r1.<init>(r2)
-            r0.orientationEventListener = r1
             org.telegram.ui.Components.WebPlayerView r1 = r0.videoView
             java.lang.String r2 = r0.embedUrl
-            java.lang.String r1 = r1.getYouTubeVideoId(r2)
-            if (r1 == 0) goto L_0x04e9
+            boolean r1 = r1.canHandleUrl(r2)
+            if (r1 != 0) goto L_0x047f
+            org.telegram.ui.Components.WebPlayerView r2 = r0.videoView
+            r3 = 4
+            r2.setVisibility(r3)
+        L_0x047f:
+            org.telegram.ui.Components.EmbedBottomSheet$8 r2 = new org.telegram.ui.Components.EmbedBottomSheet$8
+            r2.<init>(r1)
+            r0.setDelegate(r2)
+            org.telegram.ui.Components.EmbedBottomSheet$9 r2 = new org.telegram.ui.Components.EmbedBottomSheet$9
+            android.content.Context r3 = org.telegram.messenger.ApplicationLoader.applicationContext
+            r2.<init>(r3)
+            r0.orientationEventListener = r2
+            org.telegram.ui.Components.WebPlayerView r2 = r0.videoView
+            java.lang.String r3 = r0.embedUrl
+            java.lang.String r2 = r2.getYouTubeVideoId(r3)
+            if (r2 != 0) goto L_0x049c
+            if (r1 != 0) goto L_0x04ff
+        L_0x049c:
             org.telegram.ui.Components.RadialProgressView r1 = r0.progressBar
             r1.setVisibility(r5)
             android.webkit.WebView r1 = r0.webView
             r1.setVisibility(r5)
             android.widget.LinearLayout r1 = r0.imageButtonsContainer
             r1.setVisibility(r5)
+            if (r2 == 0) goto L_0x04b2
             android.view.View r1 = r0.progressBarBlackBackground
             r1.setVisibility(r5)
+        L_0x04b2:
             android.widget.TextView r1 = r0.copyTextButton
-            r2 = 4
-            r1.setVisibility(r2)
+            r3 = 4
+            r1.setVisibility(r3)
             android.webkit.WebView r1 = r0.webView
-            r3 = 1
-            r1.setKeepScreenOn(r3)
+            r4 = 1
+            r1.setKeepScreenOn(r4)
             org.telegram.ui.Components.WebPlayerView r1 = r0.videoView
-            r1.setVisibility(r2)
+            r1.setVisibility(r3)
             org.telegram.ui.Components.WebPlayerView r1 = r0.videoView
             android.view.View r1 = r1.getControlsView()
-            r1.setVisibility(r2)
+            r1.setVisibility(r3)
             org.telegram.ui.Components.WebPlayerView r1 = r0.videoView
             android.view.TextureView r1 = r1.getTextureView()
-            r1.setVisibility(r2)
+            r1.setVisibility(r3)
             org.telegram.ui.Components.WebPlayerView r1 = r0.videoView
             android.widget.ImageView r1 = r1.getTextureImageView()
-            if (r1 == 0) goto L_0x04d2
+            if (r1 == 0) goto L_0x04e6
             org.telegram.ui.Components.WebPlayerView r1 = r0.videoView
             android.widget.ImageView r1 = r1.getTextureImageView()
-            r1.setVisibility(r2)
-        L_0x04d2:
+            r1.setVisibility(r3)
+        L_0x04e6:
+            if (r2 == 0) goto L_0x04ff
             int r1 = r0.currentAccount
             org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
             java.lang.String r1 = r1.youtubePipType
             java.lang.String r2 = "disabled"
             boolean r1 = r2.equals(r1)
-            if (r1 == 0) goto L_0x04e9
+            if (r1 == 0) goto L_0x04ff
             android.widget.ImageView r1 = r0.pipButton
             r2 = 8
             r1.setVisibility(r2)
-        L_0x04e9:
+        L_0x04ff:
             android.view.OrientationEventListener r1 = r0.orientationEventListener
             boolean r1 = r1.canDetectOrientation()
-            if (r1 == 0) goto L_0x04f7
+            if (r1 == 0) goto L_0x050d
             android.view.OrientationEventListener r1 = r0.orientationEventListener
             r1.enable()
-            goto L_0x04ff
-        L_0x04f7:
+            goto L_0x0515
+        L_0x050d:
             android.view.OrientationEventListener r1 = r0.orientationEventListener
             r1.disable()
             r1 = 0
             r0.orientationEventListener = r1
-        L_0x04ff:
+        L_0x0515:
             instance = r0
             return
         */
