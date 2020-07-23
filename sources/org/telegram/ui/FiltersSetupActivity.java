@@ -276,6 +276,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             this.moveImageView.setScaleType(ImageView.ScaleType.CENTER);
             this.moveImageView.setImageResource(NUM);
             this.moveImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("stickers_menu"), PorterDuff.Mode.MULTIPLY));
+            this.moveImageView.setContentDescription(LocaleController.getString("FilterReorder", NUM));
             this.moveImageView.setClickable(true);
             int i = 5;
             addView(this.moveImageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 16, 6.0f, 0.0f, 6.0f, 0.0f));
@@ -308,6 +309,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             this.optionsImageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("stickers_menuSelector")));
             this.optionsImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("stickers_menu"), PorterDuff.Mode.MULTIPLY));
             this.optionsImageView.setImageResource(NUM);
+            this.optionsImageView.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
             addView(this.optionsImageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 3 : i) | 16, 6.0f, 0.0f, 6.0f, 0.0f));
         }
 

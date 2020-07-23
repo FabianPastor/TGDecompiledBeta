@@ -493,7 +493,7 @@ public class PhotoAttachPhotoCell extends FrameLayout {
         if (photoEntry2 == null || !photoEntry2.isVideo) {
             accessibilityNodeInfo.setText(LocaleController.getString("AttachPhoto", NUM));
         } else {
-            accessibilityNodeInfo.setText(LocaleController.getString("AttachVideo", NUM) + ", " + LocaleController.formatCallDuration(this.photoEntry.duration));
+            accessibilityNodeInfo.setText(LocaleController.getString("AttachVideo", NUM) + ", " + LocaleController.formatDuration(this.photoEntry.duration));
         }
         if (this.checkBox.isChecked()) {
             accessibilityNodeInfo.setSelected(true);

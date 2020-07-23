@@ -3934,6 +3934,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         ChatActivityEnterView.this.sendButtonInverseDrawable.draw(canvas);
                     }
                 }
+
+                public boolean onTouchEvent(MotionEvent motionEvent) {
+                    if (getAlpha() <= 0.0f) {
+                        return false;
+                    }
+                    return super.onTouchEvent(motionEvent);
+                }
             };
             this.sendButton = r22;
             r22.setVisibility(4);
@@ -3979,13 +3986,20 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     return ChatActivityEnterView.this.lambda$new$16$ChatActivityEnterView(view);
                 }
             });
-            ImageView imageView12 = new ImageView(activity2);
-            this.expandStickersButton = imageView12;
-            imageView12.setScaleType(ImageView.ScaleType.CENTER);
-            ImageView imageView13 = this.expandStickersButton;
+            AnonymousClass17 r23 = new ImageView(this, activity2) {
+                public boolean onTouchEvent(MotionEvent motionEvent) {
+                    if (getAlpha() <= 0.0f) {
+                        return false;
+                    }
+                    return super.onTouchEvent(motionEvent);
+                }
+            };
+            this.expandStickersButton = r23;
+            r23.setScaleType(ImageView.ScaleType.CENTER);
+            ImageView imageView12 = this.expandStickersButton;
             AnimatedArrowDrawable animatedArrowDrawable = new AnimatedArrowDrawable(Theme.getColor("chat_messagePanelIcons"), false);
             this.stickersArrow = animatedArrowDrawable;
-            imageView13.setImageDrawable(animatedArrowDrawable);
+            imageView12.setImageDrawable(animatedArrowDrawable);
             this.expandStickersButton.setVisibility(8);
             this.expandStickersButton.setScaleX(0.1f);
             this.expandStickersButton.setScaleY(0.1f);
@@ -4014,9 +4028,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             mutate3.setColorFilter(new PorterDuffColorFilter(Theme.getColor("chat_messagePanelVoicePressed"), PorterDuff.Mode.MULTIPLY));
             CombinedDrawable combinedDrawable2 = new CombinedDrawable(createCircleDrawable, mutate3, 0, AndroidUtilities.dp(1.0f));
             combinedDrawable2.setCustomSize(AndroidUtilities.dp(32.0f), AndroidUtilities.dp(32.0f));
-            ImageView imageView14 = new ImageView(activity2);
-            this.doneButtonImage = imageView14;
-            imageView14.setScaleType(ImageView.ScaleType.CENTER);
+            ImageView imageView13 = new ImageView(activity2);
+            this.doneButtonImage = imageView13;
+            imageView13.setScaleType(ImageView.ScaleType.CENTER);
             this.doneButtonImage.setImageDrawable(combinedDrawable2);
             this.doneButtonImage.setContentDescription(LocaleController.getString("Done", NUM));
             this.doneButtonContainer.addView(this.doneButtonImage, LayoutHelper.createFrame(48, 48.0f));
@@ -4457,7 +4471,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         }
                     }
                     this.sendPopupLayout.setupRadialSelectors(Theme.getColor("dialogButtonSelector"));
-                    AnonymousClass18 r0 = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2) {
+                    AnonymousClass19 r0 = new ActionBarPopupWindow(this.sendPopupLayout, -2, -2) {
                         public void dismiss() {
                             super.dismiss();
                             ChatActivityEnterView.this.sendButton.invalidate();
@@ -4677,7 +4691,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r5[r1] = r12
                 r13.playTogether(r5)
                 android.animation.AnimatorSet r12 = r11.audioVideoButtonAnimation
-                org.telegram.ui.Components.ChatActivityEnterView$19 r13 = new org.telegram.ui.Components.ChatActivityEnterView$19
+                org.telegram.ui.Components.ChatActivityEnterView$20 r13 = new org.telegram.ui.Components.ChatActivityEnterView$20
                 r13.<init>()
                 r12.addListener(r13)
                 android.animation.AnimatorSet r12 = r11.audioVideoButtonAnimation
@@ -7545,7 +7559,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r0 = 180(0xb4, double:8.9E-322)
                 r14.setDuration(r0)
                 android.animation.AnimatorSet r14 = r13.scheduledButtonAnimation
-                org.telegram.ui.Components.ChatActivityEnterView$38 r0 = new org.telegram.ui.Components.ChatActivityEnterView$38
+                org.telegram.ui.Components.ChatActivityEnterView$39 r0 = new org.telegram.ui.Components.ChatActivityEnterView$39
                 r0.<init>(r4)
                 r14.addListener(r0)
                 android.animation.AnimatorSet r14 = r13.scheduledButtonAnimation
@@ -7654,7 +7668,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r1 = 2131165504(0x7var_, float:1.7945227E38)
                 r0.setImageResource(r1)
                 android.widget.ImageView r0 = r4.botButton
-                r1 = 2131624022(0x7f0e0056, float:1.8875212E38)
+                r1 = 2131624044(0x7f0e006c, float:1.8875257E38)
                 java.lang.String r3 = "AccDescrShowKeyboard"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                 r0.setContentDescription(r1)
@@ -7760,7 +7774,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r1 = 0
                 r2 = 1
                 if (r0 != 0) goto L_0x004b
-                org.telegram.ui.Components.ChatActivityEnterView$39 r0 = new org.telegram.ui.Components.ChatActivityEnterView$39
+                org.telegram.ui.Components.ChatActivityEnterView$40 r0 = new org.telegram.ui.Components.ChatActivityEnterView$40
                 android.app.Activity r3 = r6.parentActivity
                 r0.<init>(r3)
                 r6.botKeyboardView = r0
@@ -8038,7 +8052,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         private void createEmojiView() {
             if (this.emojiView == null) {
-                AnonymousClass40 r1 = new EmojiView(this.allowStickers, this.allowGifs, this.parentActivity, true, this.info) {
+                AnonymousClass41 r1 = new EmojiView(this.allowStickers, this.allowGifs, this.parentActivity, true, this.info) {
                     public void setTranslationY(float f) {
                         super.setTranslationY(f);
                         if (ChatActivityEnterView.this.panelAnimation != null) {
@@ -8111,7 +8125,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
 
                     /* renamed from: onGifSelected */
-                    public void lambda$onGifSelected$0$ChatActivityEnterView$41(View view, Object obj, Object obj2, boolean z, int i) {
+                    public void lambda$onGifSelected$0$ChatActivityEnterView$42(View view, Object obj, Object obj2, boolean z, int i) {
                         View view2 = view;
                         Object obj3 = obj;
                         Object obj4 = obj2;
@@ -8129,7 +8143,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                 }
 
                                 public final void didSelectDate(boolean z, int i) {
-                                    ChatActivityEnterView.AnonymousClass41.this.lambda$onGifSelected$0$ChatActivityEnterView$41(this.f$1, this.f$2, this.f$3, z, i);
+                                    ChatActivityEnterView.AnonymousClass42.this.lambda$onGifSelected$0$ChatActivityEnterView$42(this.f$1, this.f$2, this.f$3, z, i);
                                 }
                             });
                         } else if (ChatActivityEnterView.this.slowModeTimer <= 0 || isInScheduleMode()) {
@@ -8191,7 +8205,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             builder.setMessage(LocaleController.getString("ClearRecentEmoji", NUM));
                             builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new DialogInterface.OnClickListener() {
                                 public final void onClick(DialogInterface dialogInterface, int i) {
-                                    ChatActivityEnterView.AnonymousClass41.this.lambda$onClearEmojiRecent$1$ChatActivityEnterView$41(dialogInterface, i);
+                                    ChatActivityEnterView.AnonymousClass42.this.lambda$onClearEmojiRecent$1$ChatActivityEnterView$42(dialogInterface, i);
                                 }
                             });
                             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -8199,7 +8213,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         }
                     }
 
-                    public /* synthetic */ void lambda$onClearEmojiRecent$1$ChatActivityEnterView$41(DialogInterface dialogInterface, int i) {
+                    public /* synthetic */ void lambda$onClearEmojiRecent$1$ChatActivityEnterView$42(DialogInterface dialogInterface, int i) {
                         ChatActivityEnterView.this.emojiView.clearRecentEmoji();
                     }
 
@@ -8785,7 +8799,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r6[r0] = r1
                 r12.playTogether(r6)
                 android.animation.AnimatorSet r12 = r10.emojiButtonAnimation
-                org.telegram.ui.Components.ChatActivityEnterView$46 r0 = new org.telegram.ui.Components.ChatActivityEnterView$46
+                org.telegram.ui.Components.ChatActivityEnterView$47 r0 = new org.telegram.ui.Components.ChatActivityEnterView$47
                 r0.<init>()
                 r12.addListener(r0)
                 android.animation.AnimatorSet r12 = r10.emojiButtonAnimation

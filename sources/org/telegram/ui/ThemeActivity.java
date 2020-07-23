@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.LayoutAnimationController;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -1409,6 +1410,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
 
     private static class InnerAccentView extends View {
         private ObjectAnimator checkAnimator;
+        private boolean checked;
         private float checkedState;
         private Theme.ThemeAccent currentAccent;
         private Theme.ThemeInfo currentTheme;
@@ -1427,7 +1429,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
 
         /* access modifiers changed from: package-private */
         public void updateCheckedState(boolean z) {
-            boolean z2 = this.currentTheme.currentAccentId == this.currentAccent.id;
+            this.checked = this.currentTheme.currentAccentId == this.currentAccent.id;
             ObjectAnimator objectAnimator = this.checkAnimator;
             if (objectAnimator != null) {
                 objectAnimator.cancel();
@@ -1435,7 +1437,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             float f = 1.0f;
             if (z) {
                 float[] fArr = new float[1];
-                if (!z2) {
+                if (!this.checked) {
                     f = 0.0f;
                 }
                 fArr[0] = f;
@@ -1445,7 +1447,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 this.checkAnimator.start();
                 return;
             }
-            if (!z2) {
+            if (!this.checked) {
                 f = 0.0f;
             }
             setCheckedState(f);
@@ -1499,6 +1501,15 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 canvas.drawCircle(measuredWidth, measuredHeight, ((float) AndroidUtilities.dp(8.0f)) * (1.0f - this.checkedState), this.paint);
             }
         }
+
+        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+            super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+            accessibilityNodeInfo.setText(LocaleController.getString("ColorPickerMainColor", NUM));
+            accessibilityNodeInfo.setClassName(Button.class.getName());
+            accessibilityNodeInfo.setChecked(this.checked);
+            accessibilityNodeInfo.setCheckable(true);
+            accessibilityNodeInfo.setEnabled(true);
+        }
     }
 
     private static class InnerCustomAccentView extends View {
@@ -1540,6 +1551,13 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 canvas.drawCircle((((float) Math.sin(d)) * dp2) + measuredWidth, measuredHeight - (((float) Math.cos(d)) * dp2), dp, this.paint);
                 d += 1.0471975511965976d;
             }
+        }
+
+        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+            super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+            accessibilityNodeInfo.setText(LocaleController.getString("ColorPickerMainColor", NUM));
+            accessibilityNodeInfo.setClassName(Button.class.getName());
+            accessibilityNodeInfo.setEnabled(true);
         }
     }
 
@@ -1857,7 +1875,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             L_0x0164:
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x017a }
                 java.lang.String r10 = "ShareFile"
-                r0 = 2131626888(0x7f0e0b88, float:1.8881025E38)
+                r0 = 2131626910(0x7f0e0b9e, float:1.888107E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r0)     // Catch:{ Exception -> 0x017a }
                 android.content.Intent r8 = android.content.Intent.createChooser(r8, r10)     // Catch:{ Exception -> 0x017a }
                 r10 = 500(0x1f4, float:7.0E-43)
@@ -1900,21 +1918,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 android.app.Activity r10 = r10.getParentActivity()
                 r9.<init>((android.content.Context) r10)
-                r10 = 2131624970(0x7f0e040a, float:1.8877135E38)
+                r10 = 2131624992(0x7f0e0420, float:1.887718E38)
                 java.lang.String r0 = "DeleteThemeTitle"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setTitle(r10)
-                r10 = 2131624969(0x7f0e0409, float:1.8877133E38)
+                r10 = 2131624991(0x7f0e041f, float:1.8877177E38)
                 java.lang.String r0 = "DeleteThemeAlert"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setMessage(r10)
-                r10 = 2131624922(0x7f0e03da, float:1.8877037E38)
+                r10 = 2131624944(0x7f0e03f0, float:1.8877082E38)
                 java.lang.String r0 = "Delete"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$HjGrFd2877SP2gFmUCLASSNAMEvuRyOmw r0 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$HjGrFd2877SP2gFmUCLASSNAMEvuRyOmw
                 r0.<init>(r8)
                 r9.setPositiveButton(r10, r0)
-                r8 = 2131624518(0x7f0e0246, float:1.8876218E38)
+                r8 = 2131624540(0x7f0e025c, float:1.8876263E38)
                 java.lang.String r10 = "Cancel"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r9.setNegativeButton(r8, r1)

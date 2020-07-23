@@ -27,6 +27,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.Keep;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import org.telegram.messenger.AndroidUtilities;
@@ -824,9 +825,8 @@ public class EditTextBoldCursor extends EditText {
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
         accessibilityNodeInfo.setClassName("android.widget.EditText");
-        StaticLayout staticLayout = this.hintLayout;
-        if (staticLayout != null) {
-            accessibilityNodeInfo.setContentDescription(staticLayout.getText());
+        if (this.hintLayout != null) {
+            AccessibilityNodeInfoCompat.wrap(accessibilityNodeInfo).setHintText(this.hintLayout.getText());
         }
     }
 }

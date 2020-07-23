@@ -1852,11 +1852,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
                 break;
             case 5:
                 sb.append(LocaleController.getString("AttachMusic", NUM));
-                if (!(this.descriptionLayout == null || this.titleLayout == null)) {
-                    sb.append(", ");
-                    sb.append(LocaleController.formatString("AccDescrMusicInfo", NUM, this.descriptionLayout.getText(), this.titleLayout.getText()));
-                    break;
-                }
+                break;
             case 6:
                 sb.append(LocaleController.getString("AttachSticker", NUM));
                 break;
@@ -1866,19 +1862,27 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             case 8:
                 sb.append(LocaleController.getString("AttachLocation", NUM));
                 break;
-            default:
-                StaticLayout staticLayout = this.titleLayout;
-                if (staticLayout != null && !TextUtils.isEmpty(staticLayout.getText())) {
-                    sb.append(this.titleLayout.getText());
+        }
+        StaticLayout staticLayout = this.titleLayout;
+        boolean z = staticLayout != null && !TextUtils.isEmpty(staticLayout.getText());
+        StaticLayout staticLayout2 = this.descriptionLayout;
+        boolean z2 = staticLayout2 != null && !TextUtils.isEmpty(staticLayout2.getText());
+        if (this.documentAttachType != 5 || !z || !z2) {
+            if (z) {
+                if (sb.length() > 0) {
+                    sb.append(", ");
                 }
-                StaticLayout staticLayout2 = this.descriptionLayout;
-                if (staticLayout2 != null && !TextUtils.isEmpty(staticLayout2.getText())) {
-                    if (sb.length() > 0) {
-                        sb.append(", ");
-                    }
-                    sb.append(this.descriptionLayout.getText());
-                    break;
+                sb.append(this.titleLayout.getText());
+            }
+            if (z2) {
+                if (sb.length() > 0) {
+                    sb.append(", ");
                 }
+                sb.append(this.descriptionLayout.getText());
+            }
+        } else {
+            sb.append(", ");
+            sb.append(LocaleController.formatString("AccDescrMusicInfo", NUM, this.descriptionLayout.getText(), this.titleLayout.getText()));
         }
         accessibilityNodeInfo.setText(sb);
         CheckBox2 checkBox2 = this.checkBox;

@@ -180,6 +180,7 @@ public class PollEditTextCell extends FrameLayout {
             CheckBox2 checkBox2 = new CheckBox2(context2, 21);
             this.checkBox = checkBox2;
             checkBox2.setColor((String) null, "windowBackgroundWhiteGrayIcon", "checkboxCheck");
+            this.checkBox.setContentDescription(LocaleController.getString("AccDescrQuizCorrectAnswer", NUM));
             this.checkBox.setDrawUnchecked(true);
             this.checkBox.setChecked(true, false);
             this.checkBox.setAlpha(0.0f);

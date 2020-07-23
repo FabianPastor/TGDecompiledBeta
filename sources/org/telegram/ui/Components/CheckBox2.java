@@ -3,6 +3,8 @@ package org.telegram.ui.Components;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.CheckBox;
 import org.telegram.ui.Components.CheckBoxBase;
 
 public class CheckBox2 extends View {
@@ -75,5 +77,12 @@ public class CheckBox2 extends View {
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         this.checkBoxBase.draw(canvas);
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        accessibilityNodeInfo.setClassName(CheckBox.class.getName());
+        accessibilityNodeInfo.setChecked(isChecked());
+        accessibilityNodeInfo.setCheckable(true);
     }
 }

@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.StaticLayout;
@@ -20,6 +21,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.FrameLayout;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
+import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
@@ -245,40 +248,14 @@ public class EditTextCaption extends EditTextBoldCursor {
             }
 
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-                if (menuItem.getItemId() == NUM) {
-                    EditTextCaption.this.makeSelectedRegular();
+                if (EditTextCaption.this.performMenuAction(menuItem.getItemId())) {
                     actionMode.finish();
                     return true;
-                } else if (menuItem.getItemId() == NUM) {
-                    EditTextCaption.this.makeSelectedBold();
-                    actionMode.finish();
+                }
+                try {
+                    return callback.onActionItemClicked(actionMode, menuItem);
+                } catch (Exception unused) {
                     return true;
-                } else if (menuItem.getItemId() == NUM) {
-                    EditTextCaption.this.makeSelectedItalic();
-                    actionMode.finish();
-                    return true;
-                } else if (menuItem.getItemId() == NUM) {
-                    EditTextCaption.this.makeSelectedMono();
-                    actionMode.finish();
-                    return true;
-                } else if (menuItem.getItemId() == NUM) {
-                    EditTextCaption.this.makeSelectedUrl();
-                    actionMode.finish();
-                    return true;
-                } else if (menuItem.getItemId() == NUM) {
-                    EditTextCaption.this.makeSelectedStrike();
-                    actionMode.finish();
-                    return true;
-                } else if (menuItem.getItemId() == NUM) {
-                    EditTextCaption.this.makeSelectedUnderline();
-                    actionMode.finish();
-                    return true;
-                } else {
-                    try {
-                        return callback.onActionItemClicked(actionMode, menuItem);
-                    } catch (Exception unused) {
-                        return true;
-                    }
                 }
             }
 
@@ -313,6 +290,34 @@ public class EditTextCaption extends EditTextBoldCursor {
                 }
             }
         } : r0;
+    }
+
+    /* access modifiers changed from: private */
+    public boolean performMenuAction(int i) {
+        if (i == NUM) {
+            makeSelectedRegular();
+            return true;
+        } else if (i == NUM) {
+            makeSelectedBold();
+            return true;
+        } else if (i == NUM) {
+            makeSelectedItalic();
+            return true;
+        } else if (i == NUM) {
+            makeSelectedMono();
+            return true;
+        } else if (i == NUM) {
+            makeSelectedUrl();
+            return true;
+        } else if (i == NUM) {
+            makeSelectedStrike();
+            return true;
+        } else if (i != NUM) {
+            return false;
+        } else {
+            makeSelectedUnderline();
+            return true;
+        }
     }
 
     public ActionMode startActionMode(ActionMode.Callback callback, int i) {
@@ -403,13 +408,36 @@ public class EditTextCaption extends EditTextBoldCursor {
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-        if (TextUtils.isEmpty(this.caption)) {
-            return;
+        AccessibilityNodeInfoCompat wrap = AccessibilityNodeInfoCompat.wrap(accessibilityNodeInfo);
+        if (!TextUtils.isEmpty(this.caption)) {
+            wrap.setHintText(this.caption);
         }
-        if (Build.VERSION.SDK_INT >= 26) {
-            accessibilityNodeInfo.setHintText(this.caption);
-            return;
+        List<AccessibilityNodeInfoCompat.AccessibilityActionCompat> actionList = wrap.getActionList();
+        int i = 0;
+        int size = actionList.size();
+        while (true) {
+            if (i >= size) {
+                break;
+            }
+            AccessibilityNodeInfoCompat.AccessibilityActionCompat accessibilityActionCompat = actionList.get(i);
+            if (accessibilityActionCompat.getId() == NUM) {
+                wrap.removeAction(accessibilityActionCompat);
+                break;
+            }
+            i++;
         }
-        accessibilityNodeInfo.setText(accessibilityNodeInfo.getText() + ", " + this.caption);
+        if (hasSelection()) {
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Bold", NUM)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Italic", NUM)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Mono", NUM)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Strike", NUM)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Underline", NUM)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("CreateLink", NUM)));
+            wrap.addAction(new AccessibilityNodeInfoCompat.AccessibilityActionCompat(NUM, LocaleController.getString("Regular", NUM)));
+        }
+    }
+
+    public boolean performAccessibilityAction(int i, Bundle bundle) {
+        return performMenuAction(i) || super.performAccessibilityAction(i, bundle);
     }
 }

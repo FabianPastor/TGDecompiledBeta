@@ -17,13 +17,16 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.SystemClock;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.animation.LayoutAnimationController;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import androidx.annotation.Keep;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -807,11 +810,7 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             float f = (float) dp;
             float f2 = (float) dp2;
             this.rect.set(f, f2, (float) (AndroidUtilities.dp(76.0f) + dp), (float) (dp2 + AndroidUtilities.dp(97.0f)));
-            String name = this.themeInfo.getName();
-            if (name.toLowerCase().endsWith(".attheme")) {
-                name = name.substring(0, name.lastIndexOf(46));
-            }
-            String charSequence = TextUtils.ellipsize(name, this.textPaint, (float) ((getMeasuredWidth() - AndroidUtilities.dp(this.isFirst ? 10.0f : 15.0f)) - (this.isLast ? AndroidUtilities.dp(7.0f) : 0)), TextUtils.TruncateAt.END).toString();
+            String charSequence = TextUtils.ellipsize(getThemeName(), this.textPaint, (float) ((getMeasuredWidth() - AndroidUtilities.dp(this.isFirst ? 10.0f : 15.0f)) - (this.isLast ? AndroidUtilities.dp(7.0f) : 0)), TextUtils.TruncateAt.END).toString();
             int ceil = (int) Math.ceil((double) this.textPaint.measureText(charSequence));
             this.textPaint.setColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             canvas.drawText(charSequence, (float) (((AndroidUtilities.dp(76.0f) - ceil) / 2) + dp), (float) AndroidUtilities.dp(131.0f), this.textPaint);
@@ -933,12 +932,30 @@ public class ThemesHorizontalListCell extends RecyclerListView implements Notifi
             }
         }
 
+        private String getThemeName() {
+            String name = this.themeInfo.getName();
+            return name.toLowerCase().endsWith(".attheme") ? name.substring(0, name.lastIndexOf(46)) : name;
+        }
+
         private int blend(int i, int i2) {
             float f = this.accentState;
             if (f == 1.0f) {
                 return i2;
             }
             return ((Integer) this.evaluator.evaluate(f, Integer.valueOf(i), Integer.valueOf(i2))).intValue();
+        }
+
+        public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+            super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+            accessibilityNodeInfo.setText(getThemeName());
+            accessibilityNodeInfo.setClassName(Button.class.getName());
+            accessibilityNodeInfo.setChecked(this.button.isChecked());
+            accessibilityNodeInfo.setCheckable(true);
+            accessibilityNodeInfo.setEnabled(true);
+            if (Build.VERSION.SDK_INT >= 21) {
+                accessibilityNodeInfo.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_CLICK);
+                accessibilityNodeInfo.addAction(new AccessibilityNodeInfo.AccessibilityAction(32, LocaleController.getString("AccDescrMoreOptions", NUM)));
+            }
         }
     }
 

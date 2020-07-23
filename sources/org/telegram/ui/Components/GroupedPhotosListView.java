@@ -76,6 +76,8 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
 
         void onShowAnimationStart();
 
+        void onStopScrolling();
+
         void setCurrentIndex(int i);
     }
 
@@ -938,6 +940,10 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             this.animateToDXStart = this.drawDx;
             this.moveLineProgress = 1.0f;
             this.nextPhotoScrolling = -1;
+            GroupedPhotosListViewDelegate groupedPhotosListViewDelegate = this.delegate;
+            if (groupedPhotosListViewDelegate != null) {
+                groupedPhotosListViewDelegate.onStopScrolling();
+            }
         }
         invalidate();
     }

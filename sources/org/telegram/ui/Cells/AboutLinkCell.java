@@ -68,10 +68,7 @@ public class AboutLinkCell extends FrameLayout {
     }
 
     public void setTextAndValue(String str, String str2, boolean z) {
-        if (TextUtils.isEmpty(str)) {
-            return;
-        }
-        if (str == null || !str.equals(this.oldText)) {
+        if (!TextUtils.isEmpty(str) && !TextUtils.equals(str, this.oldText)) {
             this.oldText = str;
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(this.oldText);
             this.stringBuilder = spannableStringBuilder;
@@ -285,13 +282,15 @@ public class AboutLinkCell extends FrameLayout {
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-        if (!TextUtils.isEmpty(this.oldText)) {
-            CharSequence text = this.valueTextView.getText();
-            if (TextUtils.isEmpty(text)) {
-                accessibilityNodeInfo.setText(this.oldText);
+        StaticLayout staticLayout = this.textLayout;
+        if (staticLayout != null) {
+            CharSequence text = staticLayout.getText();
+            CharSequence text2 = this.valueTextView.getText();
+            if (TextUtils.isEmpty(text2)) {
+                accessibilityNodeInfo.setText(text);
                 return;
             }
-            accessibilityNodeInfo.setText(text + ": " + this.oldText);
+            accessibilityNodeInfo.setText(text2 + ": " + text);
         }
     }
 }

@@ -1213,10 +1213,12 @@
     <public type="string" name="AccDescrPhotoAdjust" id="NUM" />
     <public type="string" name="AccDescrPhotoEditor" id="NUM" />
     <public type="string" name="AccDescrPhotoViewer" id="NUM" />
+    <public type="string" name="AccDescrPipMode" id="NUM" />
     <public type="string" name="AccDescrPlayerDuration" id="NUM" />
     <public type="string" name="AccDescrPlayerSpeed" id="NUM" />
     <public type="string" name="AccDescrPrevious" id="NUM" />
     <public type="string" name="AccDescrProfilePicture" id="NUM" />
+    <public type="string" name="AccDescrQuizCorrectAnswer" id="NUM" />
     <public type="string" name="AccDescrReceivedDate" id="NUM" />
     <public type="string" name="AccDescrRepeatList" id="NUM" />
     <public type="string" name="AccDescrRepeatOff" id="NUM" />
@@ -1228,7 +1230,27 @@
     <public type="string" name="AccDescrSearchNext" id="NUM" />
     <public type="string" name="AccDescrSearchPrev" id="NUM" />
     <public type="string" name="AccDescrSecretChat" id="NUM" />
+    <public type="string" name="AccDescrSendAudio_few" id="NUM" />
+    <public type="string" name="AccDescrSendAudio_many" id="NUM" />
+    <public type="string" name="AccDescrSendAudio_one" id="NUM" />
+    <public type="string" name="AccDescrSendAudio_other" id="NUM" />
+    <public type="string" name="AccDescrSendAudio_two" id="NUM" />
+    <public type="string" name="AccDescrSendFiles_few" id="NUM" />
+    <public type="string" name="AccDescrSendFiles_many" id="NUM" />
+    <public type="string" name="AccDescrSendFiles_one" id="NUM" />
+    <public type="string" name="AccDescrSendFiles_other" id="NUM" />
+    <public type="string" name="AccDescrSendFiles_two" id="NUM" />
+    <public type="string" name="AccDescrSendPhotos_few" id="NUM" />
+    <public type="string" name="AccDescrSendPhotos_many" id="NUM" />
+    <public type="string" name="AccDescrSendPhotos_one" id="NUM" />
+    <public type="string" name="AccDescrSendPhotos_other" id="NUM" />
+    <public type="string" name="AccDescrSendPhotos_two" id="NUM" />
     <public type="string" name="AccDescrSentDate" id="NUM" />
+    <public type="string" name="AccDescrShareInChats_few" id="NUM" />
+    <public type="string" name="AccDescrShareInChats_many" id="NUM" />
+    <public type="string" name="AccDescrShareInChats_one" id="NUM" />
+    <public type="string" name="AccDescrShareInChats_other" id="NUM" />
+    <public type="string" name="AccDescrShareInChats_two" id="NUM" />
     <public type="string" name="AccDescrShowAccounts" id="NUM" />
     <public type="string" name="AccDescrShowKeyboard" id="NUM" />
     <public type="string" name="AccDescrShutter" id="NUM" />

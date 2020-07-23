@@ -143,6 +143,7 @@ public class ActionBarMenuItem extends FrameLayout {
             this.textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.textView.setGravity(17);
             this.textView.setPadding(AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f), 0);
+            this.textView.setImportantForAccessibility(2);
             if (i2 != 0) {
                 this.textView.setTextColor(i2);
             }
@@ -152,6 +153,7 @@ public class ActionBarMenuItem extends FrameLayout {
         ImageView imageView = new ImageView(context);
         this.iconView = imageView;
         imageView.setScaleType(ImageView.ScaleType.CENTER);
+        this.iconView.setImportantForAccessibility(2);
         addView(this.iconView, LayoutHelper.createFrame(-1, -1.0f));
         if (i2 != 0) {
             this.iconView.setColorFilter(new PorterDuffColorFilter(i2, PorterDuff.Mode.MULTIPLY));
@@ -1187,6 +1189,13 @@ public class ActionBarMenuItem extends FrameLayout {
 
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
         super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
-        accessibilityNodeInfo.setClassName("android.widget.ImageButton");
+        if (this.iconView != null) {
+            accessibilityNodeInfo.setClassName("android.widget.ImageButton");
+        } else if (this.textView != null) {
+            accessibilityNodeInfo.setClassName("android.widget.Button");
+            if (TextUtils.isEmpty(accessibilityNodeInfo.getText())) {
+                accessibilityNodeInfo.setText(this.textView.getText());
+            }
+        }
     }
 }

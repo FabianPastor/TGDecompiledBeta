@@ -22,6 +22,8 @@ import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -441,13 +443,22 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         if (charSequence != null) {
             this.commentTextView.setText(charSequence);
         }
-        FrameLayout frameLayout4 = new FrameLayout(context2);
-        this.writeButtonContainer = frameLayout4;
-        frameLayout4.setVisibility(4);
+        AnonymousClass3 r22 = new FrameLayout(context2) {
+            public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+                super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+                accessibilityNodeInfo.setText(LocaleController.formatPluralString("AccDescrSendPhotos", PhotoAlbumPickerActivity.this.selectedPhotos.size()));
+                accessibilityNodeInfo.setClassName(Button.class.getName());
+                accessibilityNodeInfo.setLongClickable(true);
+                accessibilityNodeInfo.setClickable(true);
+            }
+        };
+        this.writeButtonContainer = r22;
+        r22.setFocusable(true);
+        this.writeButtonContainer.setFocusableInTouchMode(true);
+        this.writeButtonContainer.setVisibility(4);
         this.writeButtonContainer.setScaleX(0.2f);
         this.writeButtonContainer.setScaleY(0.2f);
         this.writeButtonContainer.setAlpha(0.0f);
-        this.writeButtonContainer.setContentDescription(LocaleController.getString("Send", NUM));
         this.sizeNotifierFrameLayout.addView(this.writeButtonContainer, LayoutHelper.createFrame(60, 60.0f, 85, 0.0f, 0.0f, 12.0f, 10.0f));
         this.writeButton = new ImageView(context2);
         int dp = AndroidUtilities.dp(56.0f);
@@ -466,6 +477,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         }
         this.writeButton.setBackgroundDrawable(this.writeButtonDrawable);
         this.writeButton.setImageResource(NUM);
+        this.writeButton.setImportantForAccessibility(2);
         this.writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingIcon"), PorterDuff.Mode.MULTIPLY));
         this.writeButton.setScaleType(ImageView.ScaleType.CENTER);
         if (Build.VERSION.SDK_INT >= 21) {
@@ -489,7 +501,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         });
         this.textPaint.setTextSize((float) AndroidUtilities.dp(12.0f));
         this.textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        AnonymousClass5 r22 = new View(context2) {
+        AnonymousClass6 r23 = new View(context2) {
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 String format = String.format("%d", new Object[]{Integer.valueOf(Math.max(1, PhotoAlbumPickerActivity.this.selectedPhotosOrder.size()))});
@@ -510,8 +522,8 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 canvas.drawText(format, (float) (measuredWidth - (ceil / 2)), (float) AndroidUtilities.dp(16.2f), PhotoAlbumPickerActivity.this.textPaint);
             }
         };
-        this.selectedCountView = r22;
-        r22.setAlpha(0.0f);
+        this.selectedCountView = r23;
+        r23.setAlpha(0.0f);
         this.selectedCountView.setScaleX(0.2f);
         this.selectedCountView.setScaleY(0.2f);
         this.sizeNotifierFrameLayout.addView(this.selectedCountView, LayoutHelper.createFrame(42, 24.0f, 85, 0.0f, 0.0f, -2.0f, 9.0f));
