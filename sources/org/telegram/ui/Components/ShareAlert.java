@@ -1063,7 +1063,10 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             this.frameLayout2.setVisibility(0);
             this.writeButtonContainer.setVisibility(0);
         }
-        ViewCompat.setImportantForAccessibility(this.pickerBottomLayout, z ? 4 : 1);
+        TextView textView = this.pickerBottomLayout;
+        if (textView != null) {
+            ViewCompat.setImportantForAccessibility(textView, z ? 4 : 1);
+        }
         this.animatorSet = new AnimatorSet();
         ArrayList arrayList = new ArrayList();
         FrameLayout frameLayout3 = this.frameLayout2;
@@ -1106,8 +1109,8 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
         float[] fArr7 = new float[1];
         fArr7[0] = z ? 1.0f : 0.0f;
         arrayList.add(ObjectAnimator.ofFloat(view3, property7, fArr7));
-        TextView textView = this.pickerBottomLayout;
-        if (textView == null || textView.getVisibility() != 0) {
+        TextView textView2 = this.pickerBottomLayout;
+        if (textView2 == null || textView2.getVisibility() != 0) {
             View view4 = this.shadow[1];
             Property property8 = View.ALPHA;
             float[] fArr8 = new float[1];

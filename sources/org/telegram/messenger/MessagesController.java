@@ -1023,7 +1023,7 @@ public class MessagesController extends BaseController implements NotificationCe
         this.saveGifsWithStickers = this.mainPreferences.getBoolean("saveGifsWithStickers", false);
         this.filtersEnabled = this.mainPreferences.getBoolean("filtersEnabled", false);
         this.showFiltersTooltip = this.mainPreferences.getBoolean("showFiltersTooltip", false);
-        this.autoarchiveAvailable = this.mainPreferences.getBoolean("autoarchive_setting_available", false);
+        this.autoarchiveAvailable = this.mainPreferences.getBoolean("autoarchiveAvailable", false);
         Set<String> stringSet = this.mainPreferences.getStringSet("pendingSuggestions", (Set) null);
         this.pendingSuggestions = stringSet;
         if (stringSet != null) {
