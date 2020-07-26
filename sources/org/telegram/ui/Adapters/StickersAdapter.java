@@ -505,14 +505,17 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
 
     public Object getItem(int i) {
         ArrayList<MediaDataController.KeywordResult> arrayList = this.keywordResults;
-        if (arrayList != null && !arrayList.isEmpty()) {
+        if (arrayList == null || arrayList.isEmpty()) {
+            ArrayList<StickerResult> arrayList2 = this.stickers;
+            if (arrayList2 == null || i < 0 || i >= arrayList2.size()) {
+                return null;
+            }
+            return this.stickers.get(i).sticker;
+        } else if (i < 0 || i >= this.keywordResults.size()) {
+            return null;
+        } else {
             return this.keywordResults.get(i).emoji;
         }
-        ArrayList<StickerResult> arrayList2 = this.stickers;
-        if (arrayList2 == null || i < 0 || i >= arrayList2.size()) {
-            return null;
-        }
-        return this.stickers.get(i).sticker;
     }
 
     public Object getItemParent(int i) {

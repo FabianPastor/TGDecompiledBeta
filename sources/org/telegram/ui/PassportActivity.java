@@ -1269,7 +1269,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     org.telegram.ui.PassportActivity r1 = org.telegram.ui.PassportActivity.this
                     org.telegram.ui.Components.EditTextBoldCursor[] r1 = r1.inputFields
                     r1 = r1[r12]
-                    r2 = 2131626377(0x7f0e0989, float:1.8879988E38)
+                    r2 = 2131626376(0x7f0e0988, float:1.8879986E38)
                     java.lang.String r3 = "PassportUseLatinOnly"
                     java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                     r1.setErrorText(r2)
@@ -1341,7 +1341,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     org.telegram.ui.PassportActivity r0 = org.telegram.ui.PassportActivity.this
                     android.app.Activity r0 = r0.getParentActivity()
                     r13.<init>((android.content.Context) r0)
-                    r0 = 2131626323(0x7f0e0953, float:1.8879879E38)
+                    r0 = 2131626322(0x7f0e0952, float:1.8879877E38)
                     java.lang.Object[] r1 = new java.lang.Object[r9]
                     r1[r8] = r2
                     r1[r11] = r3
@@ -1353,7 +1353,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     java.lang.String r1 = "AppName"
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                     r13.setTitle(r0)
-                    r0 = 2131625053(0x7f0e045d, float:1.8877303E38)
+                    r0 = 2131625052(0x7f0e045c, float:1.8877301E38)
                     java.lang.String r1 = "Done"
                     java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r1, r0)
                     org.telegram.ui.-$$Lambda$PassportActivity$3$hBvwZ-d4QGDnNuXdFnmSB9952Bs r15 = new org.telegram.ui.-$$Lambda$PassportActivity$3$hBvwZ-d4QGDnNuXdFnmSB9952Bs
@@ -1363,7 +1363,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     r6 = r27
                     r0.<init>(r2, r3, r4, r5, r6)
                     r13.setPositiveButton(r14, r15)
-                    r0 = 2131625055(0x7f0e045f, float:1.8877307E38)
+                    r0 = 2131625054(0x7f0e045e, float:1.8877305E38)
                     java.lang.String r1 = "Edit"
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                     org.telegram.ui.-$$Lambda$PassportActivity$3$tZIb58L3Zb4a9cJUHmxI2DCu8M8 r1 = new org.telegram.ui.-$$Lambda$PassportActivity$3$tZIb58L3Zb4a9cJUHmxI2DCu8M8
@@ -1722,7 +1722,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     org.telegram.ui.PassportActivity r2 = org.telegram.ui.PassportActivity.this
                     android.app.Activity r2 = r2.getParentActivity()
                     r1.<init>(r2)
-                    r2 = 2131626267(0x7f0e091b, float:1.8879765E38)
+                    r2 = 2131626266(0x7f0e091a, float:1.8879763E38)
                     java.lang.String r7 = "PassportInfo2"
                     java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r7, r2)
                     android.text.SpannableStringBuilder r7 = new android.text.SpannableStringBuilder
@@ -1738,7 +1738,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     int r3 = r9 + 1
                     r7.replace(r9, r3, r8)
                     org.telegram.ui.PassportActivity$3$1 r3 = new org.telegram.ui.PassportActivity$3$1
-                    r8 = 2131626269(0x7f0e091d, float:1.887977E38)
+                    r8 = 2131626268(0x7f0e091c, float:1.8879767E38)
                     java.lang.String r10 = "PassportInfoUrl"
                     java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                     r3.<init>(r8)
@@ -1770,11 +1770,11 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                     android.app.Activity r3 = r3.getParentActivity()
                     r2.<init>((android.content.Context) r3)
                     r2.setView(r1)
-                    r1 = 2131626268(0x7f0e091c, float:1.8879767E38)
+                    r1 = 2131626267(0x7f0e091b, float:1.8879765E38)
                     java.lang.String r3 = "PassportInfoTitle"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                     r2.setTitle(r1)
-                    r1 = 2131624805(0x7f0e0365, float:1.88768E38)
+                    r1 = 2131624804(0x7f0e0364, float:1.8876798E38)
                     java.lang.String r3 = "Close"
                     java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                     r2.setNegativeButton(r1, r5)
@@ -3443,7 +3443,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.widget.FrameLayout r0 = (android.widget.FrameLayout) r0
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             java.lang.String r1 = "TelegramPassport"
-            r2 = 2131627098(0x7f0e0c5a, float:1.888145E38)
+            r2 = 2131627095(0x7f0e0CLASSNAME, float:1.8881445E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setTitle(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
@@ -3455,7 +3455,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r0.<init>(r7)
             r6.headerCell = r0
             java.lang.String r1 = "PassportProvidedInformation"
-            r2 = 2131626347(0x7f0e096b, float:1.8879928E38)
+            r2 = 2131626346(0x7f0e096a, float:1.8879926E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)
             r0.setText(r1)
             org.telegram.ui.Cells.HeaderCell r0 = r6.headerCell
@@ -3486,7 +3486,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r0.setBackgroundDrawable(r1)
             org.telegram.ui.Cells.TextSettingsCell r0 = r6.addDocumentCell
             java.lang.String r1 = "PassportNoDocumentsAdd"
-            r5 = 2131626330(0x7f0e095a, float:1.8879893E38)
+            r5 = 2131626329(0x7f0e0959, float:1.8879891E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r1, r5)
             r0.setText(r9, r8)
             android.widget.LinearLayout r0 = r6.linearLayout2
@@ -3508,7 +3508,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r0.setBackgroundDrawable(r9)
             org.telegram.ui.Cells.TextSettingsCell r0 = r6.deletePassportCell
             java.lang.String r9 = "TelegramPassportDelete"
-            r10 = 2131627101(0x7f0e0c5d, float:1.8881457E38)
+            r10 = 2131627098(0x7f0e0c5a, float:1.888145E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r10 = 0
             r0.setText(r9, r10)
@@ -3595,7 +3595,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.graphics.Typeface r9 = org.telegram.messenger.AndroidUtilities.getTypeface(r4)
             r0.setTypeface(r9)
             android.widget.TextView r0 = r6.emptyTextView1
-            r9 = 2131626329(0x7f0e0959, float:1.8879891E38)
+            r9 = 2131626328(0x7f0e0958, float:1.887989E38)
             java.lang.String r12 = "PassportNoDocuments"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r12, r9)
             r0.setText(r9)
@@ -3626,7 +3626,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             r0.setPadding(r9, r10, r2, r10)
             android.widget.TextView r0 = r6.emptyTextView2
-            r2 = 2131626331(0x7f0e095b, float:1.8879895E38)
+            r2 = 2131626330(0x7f0e095a, float:1.8879893E38)
             java.lang.String r9 = "PassportNoDocumentsInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r9, r2)
             r0.setText(r2)
@@ -4116,7 +4116,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r2 = r25
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
             java.lang.String r3 = "PassportPhone"
-            r4 = 2131626338(0x7f0e0962, float:1.887991E38)
+            r4 = 2131626337(0x7f0e0961, float:1.8879907E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)
             r0.setTitle(r3)
             java.util.HashMap r0 = new java.util.HashMap
@@ -4183,7 +4183,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7.setTextColor(r8)
             android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r5)
             r7.setBackgroundDrawable(r8)
-            r8 = 2131626342(0x7f0e0966, float:1.8879917E38)
+            r8 = 2131626341(0x7f0e0965, float:1.8879915E38)
             java.lang.Object[] r9 = new java.lang.Object[r5]
             org.telegram.PhoneFormat.PhoneFormat r10 = org.telegram.PhoneFormat.PhoneFormat.getInstance()
             java.lang.StringBuilder r11 = new java.lang.StringBuilder
@@ -4213,7 +4213,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.graphics.drawable.Drawable r11 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r7, (java.lang.String) r10)
             r0.setBackgroundDrawable(r11)
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r1.bottomCell
-            r11 = 2131626344(0x7f0e0968, float:1.8879922E38)
+            r11 = 2131626343(0x7f0e0967, float:1.887992E38)
             java.lang.String r13 = "PassportPhoneUseSameInfo"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
             r0.setText(r11)
@@ -4224,7 +4224,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.ui.Cells.HeaderCell r0 = new org.telegram.ui.Cells.HeaderCell
             r0.<init>(r2)
             r1.headerCell = r0
-            r11 = 2131626341(0x7f0e0965, float:1.8879915E38)
+            r11 = 2131626340(0x7f0e0964, float:1.8879913E38)
             java.lang.String r13 = "PassportPhoneUseOther"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r13, r11)
             r0.setText(r11)
@@ -4324,7 +4324,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7.setOnTouchListener(r8)
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r8 = 2131624764(0x7f0e033c, float:1.8876717E38)
+            r8 = 2131624763(0x7f0e033b, float:1.8876715E38)
             java.lang.String r13 = "ChooseCountry"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r13, r8)
             r7.setText(r8)
@@ -4419,7 +4419,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7.setHintText(r8)
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r8 = 2131626436(0x7f0e09c4, float:1.8880108E38)
+            r8 = 2131626435(0x7f0e09c3, float:1.8880106E38)
             java.lang.String r9 = "PaymentShippingPhoneNumber"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r7.setHint(r8)
@@ -4537,7 +4537,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r10)
             r0.setBackgroundDrawable(r2)
             org.telegram.ui.Cells.TextInfoPrivacyCell r0 = r1.bottomCell
-            r2 = 2131626340(0x7f0e0964, float:1.8879913E38)
+            r2 = 2131626339(0x7f0e0963, float:1.8879911E38)
             java.lang.String r3 = "PassportPhoneUploadInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -6515,9 +6515,9 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
     public void updateUploadText(int r9) {
         /*
             r8 = this;
-            r0 = 2131626373(0x7f0e0985, float:1.887998E38)
+            r0 = 2131626372(0x7f0e0984, float:1.8879978E38)
             java.lang.String r1 = "PassportUploadAdditinalDocument"
-            r2 = 2131626374(0x7f0e0986, float:1.8879982E38)
+            r2 = 2131626373(0x7f0e0985, float:1.887998E38)
             java.lang.String r3 = "PassportUploadDocument"
             r4 = 1
             r5 = 0
@@ -6599,20 +6599,20 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             goto L_0x00ac
         L_0x0094:
             org.telegram.ui.Cells.TextDetailSettingsCell r9 = r8.uploadFrontCell
-            r0 = 2131626258(0x7f0e0912, float:1.8879747E38)
+            r0 = 2131626257(0x7f0e0911, float:1.8879745E38)
             java.lang.String r1 = "PassportFrontSide"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r1 = 2131626259(0x7f0e0913, float:1.887975E38)
+            r1 = 2131626258(0x7f0e0912, float:1.8879747E38)
             java.lang.String r2 = "PassportFrontSideInfo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r9.setTextAndValue(r0, r1, r4)
             goto L_0x00c3
         L_0x00ac:
             org.telegram.ui.Cells.TextDetailSettingsCell r9 = r8.uploadFrontCell
-            r0 = 2131626316(0x7f0e094c, float:1.8879865E38)
+            r0 = 2131626315(0x7f0e094b, float:1.8879863E38)
             java.lang.String r1 = "PassportMainPage"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
-            r1 = 2131626317(0x7f0e094d, float:1.8879867E38)
+            r1 = 2131626316(0x7f0e094c, float:1.8879865E38)
             java.lang.String r2 = "PassportMainPageInfo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r9.setTextAndValue(r0, r1, r4)
@@ -6802,7 +6802,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r7[r3] = r4
             r7[r5] = r4
             r7[r4] = r4
-            r7 = 2131626332(0x7f0e095c, float:1.8879897E38)
+            r7 = 2131626331(0x7f0e095b, float:1.8879895E38)
             java.lang.String r0 = "PassportNoExpireDate"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r8.setText(r7)
@@ -6812,7 +6812,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r0.equals(r7)
             if (r0 == 0) goto L_0x00b6
             r6.currentGender = r7
-            r7 = 2131626318(0x7f0e094e, float:1.8879869E38)
+            r7 = 2131626317(0x7f0e094d, float:1.8879867E38)
             java.lang.String r0 = "PassportMale"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r8.setText(r7)
@@ -6822,7 +6822,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r0.equals(r7)
             if (r0 == 0) goto L_0x00ec
             r6.currentGender = r7
-            r7 = 2131626257(0x7f0e0911, float:1.8879745E38)
+            r7 = 2131626256(0x7f0e0910, float:1.8879743E38)
             java.lang.String r0 = "PassportFemale"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r8.setText(r7)
@@ -7300,7 +7300,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r3 = 0
             r7.languageMap = r3
         L_0x00cb:
-            r5 = 2131626250(0x7f0e090a, float:1.887973E38)
+            r5 = 2131626249(0x7f0e0909, float:1.8879729E38)
             java.lang.String r14 = "PassportDocuments"
             if (r9 == 0) goto L_0x010b
             org.telegram.tgnet.TLRPC$SecureValueType r0 = r8.type
@@ -7672,7 +7672,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r1 = r1.equals(r4)     // Catch:{ Exception -> 0x0393 }
             if (r1 == 0) goto L_0x0360
             java.lang.String r1 = "PassportMale"
-            r4 = 2131626318(0x7f0e094e, float:1.8879869E38)
+            r4 = 2131626317(0x7f0e094d, float:1.8879867E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r4)     // Catch:{ Exception -> 0x0393 }
             r12.append(r1)     // Catch:{ Exception -> 0x0393 }
             goto L_0x0390
@@ -7681,7 +7681,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r1 = r1.equals(r4)     // Catch:{ Exception -> 0x0393 }
             if (r1 == 0) goto L_0x0390
             java.lang.String r1 = "PassportFemale"
-            r4 = 2131626257(0x7f0e0911, float:1.8879745E38)
+            r4 = 2131626256(0x7f0e0910, float:1.8879743E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r4)     // Catch:{ Exception -> 0x0393 }
             r12.append(r1)     // Catch:{ Exception -> 0x0393 }
             goto L_0x0390
@@ -7819,7 +7819,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x04b9
             if (r3 != 0) goto L_0x0460
-            r0 = 2131626336(0x7f0e0960, float:1.8879905E38)
+            r0 = 2131626335(0x7f0e095f, float:1.8879903E38)
             java.lang.String r1 = "PassportPersonalDetailsInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
         L_0x045b:
@@ -7831,7 +7831,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r2 = 8
             if (r1 != r2) goto L_0x0470
             r2 = r25
-            r1 = 2131626250(0x7f0e090a, float:1.887973E38)
+            r1 = 2131626249(0x7f0e0909, float:1.8879729E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r1)
             goto L_0x045b
         L_0x0470:
@@ -7841,33 +7841,33 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePassport
             if (r2 == 0) goto L_0x0485
-            r0 = 2131626266(0x7f0e091a, float:1.8879763E38)
+            r0 = 2131626265(0x7f0e0919, float:1.8879761E38)
             java.lang.String r1 = "PassportIdentityPassport"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x045b
         L_0x0485:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeInternalPassport
             if (r2 == 0) goto L_0x0493
-            r0 = 2131626265(0x7f0e0919, float:1.8879761E38)
+            r0 = 2131626264(0x7f0e0918, float:1.887976E38)
             java.lang.String r1 = "PassportIdentityInternalPassport"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x045b
         L_0x0493:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeDriverLicense
             if (r2 == 0) goto L_0x04a1
-            r0 = 2131626263(0x7f0e0917, float:1.8879757E38)
+            r0 = 2131626262(0x7f0e0916, float:1.8879755E38)
             java.lang.String r1 = "PassportIdentityDriverLicence"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x045b
         L_0x04a1:
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeIdentityCard
             if (r1 == 0) goto L_0x04b9
-            r0 = 2131626264(0x7f0e0918, float:1.887976E38)
+            r0 = 2131626263(0x7f0e0917, float:1.8879757E38)
             java.lang.String r1 = "PassportIdentityID"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x045b
         L_0x04af:
-            r0 = 2131626262(0x7f0e0916, float:1.8879755E38)
+            r0 = 2131626261(0x7f0e0915, float:1.8879753E38)
             java.lang.String r1 = "PassportIdentityDocumentInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x045b
@@ -7882,7 +7882,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x04b9
             if (r3 != 0) goto L_0x04d6
-            r0 = 2131626226(0x7f0e08f2, float:1.8879682E38)
+            r0 = 2131626225(0x7f0e08f1, float:1.887968E38)
             java.lang.String r1 = "PassportAddressNoUploadInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x045b
@@ -7890,7 +7890,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             int r1 = r7.currentActivityType
             r5 = 8
             if (r1 != r5) goto L_0x04e5
-            r1 = 2131626250(0x7f0e090a, float:1.887973E38)
+            r1 = 2131626249(0x7f0e0909, float:1.8879729E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r1)
             goto L_0x045b
         L_0x04e5:
@@ -7899,40 +7899,40 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             org.telegram.tgnet.TLRPC$SecureValueType r1 = r3.type
             boolean r4 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeRentalAgreement
             if (r4 == 0) goto L_0x04f9
-            r0 = 2131626200(0x7f0e08d8, float:1.887963E38)
+            r0 = 2131626199(0x7f0e08d7, float:1.8879627E38)
             java.lang.String r1 = "PassportAddAgreementInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0563
         L_0x04f9:
             boolean r4 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeUtilityBill
             if (r4 == 0) goto L_0x0507
-            r0 = 2131626204(0x7f0e08dc, float:1.8879638E38)
+            r0 = 2131626203(0x7f0e08db, float:1.8879636E38)
             java.lang.String r1 = "PassportAddBillInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0563
         L_0x0507:
             boolean r4 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePassportRegistration
             if (r4 == 0) goto L_0x0515
-            r0 = 2131626214(0x7f0e08e6, float:1.8879658E38)
+            r0 = 2131626213(0x7f0e08e5, float:1.8879656E38)
             java.lang.String r1 = "PassportAddPassportRegistrationInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0563
         L_0x0515:
             boolean r4 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeTemporaryRegistration
             if (r4 == 0) goto L_0x0523
-            r0 = 2131626216(0x7f0e08e8, float:1.8879662E38)
+            r0 = 2131626215(0x7f0e08e7, float:1.887966E38)
             java.lang.String r1 = "PassportAddTemporaryRegistrationInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0563
         L_0x0523:
             boolean r1 = r1 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeBankStatement
             if (r1 == 0) goto L_0x0563
-            r0 = 2131626202(0x7f0e08da, float:1.8879634E38)
+            r0 = 2131626201(0x7f0e08d9, float:1.8879632E38)
             java.lang.String r1 = "PassportAddBankInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0563
         L_0x0531:
-            r0 = 2131626225(0x7f0e08f1, float:1.887968E38)
+            r0 = 2131626224(0x7f0e08f0, float:1.8879678E38)
             java.lang.String r1 = "PassportAddressInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0563
@@ -7942,7 +7942,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (r4 == 0) goto L_0x0550
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x0563
-            r0 = 2131626339(0x7f0e0963, float:1.8879911E38)
+            r0 = 2131626338(0x7f0e0962, float:1.887991E38)
             java.lang.String r1 = "PassportPhoneInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             goto L_0x0563
@@ -7951,7 +7951,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             if (r1 == 0) goto L_0x0563
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x0563
-            r0 = 2131626253(0x7f0e090d, float:1.8879737E38)
+            r0 = 2131626252(0x7f0e090c, float:1.8879735E38)
             java.lang.String r1 = "PassportEmailInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
         L_0x0563:
@@ -8644,7 +8644,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             r9.setBackgroundDrawable(r4)
             org.telegram.tgnet.TLRPC$SecureValueType r4 = r1.type
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePersonalDetails
-            r10 = 2131626372(0x7f0e0984, float:1.8879978E38)
+            r10 = 2131626371(0x7f0e0983, float:1.8879976E38)
             java.lang.String r11 = "PassportTwoDocuments"
             r12 = 2
             java.lang.String r13 = ""
@@ -8680,12 +8680,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r11, r10, r4)
             goto L_0x008b
         L_0x0078:
-            r4 = 2131626261(0x7f0e0915, float:1.8879753E38)
+            r4 = 2131626260(0x7f0e0914, float:1.8879751E38)
             java.lang.String r5 = "PassportIdentityDocument"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x008b
         L_0x0082:
-            r4 = 2131626335(0x7f0e095f, float:1.8879903E38)
+            r4 = 2131626334(0x7f0e095e, float:1.8879901E38)
             java.lang.String r5 = "PassportPersonalDetails"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
         L_0x008b:
@@ -8726,12 +8726,12 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
             java.lang.String r4 = org.telegram.messenger.LocaleController.formatString(r11, r10, r4)
             goto L_0x00f2
         L_0x00df:
-            r4 = 2131626353(0x7f0e0971, float:1.887994E38)
+            r4 = 2131626352(0x7f0e0970, float:1.8879938E38)
             java.lang.String r5 = "PassportResidentialAddress"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             goto L_0x00f2
         L_0x00e9:
-            r4 = 2131626223(0x7f0e08ef, float:1.8879676E38)
+            r4 = 2131626222(0x7f0e08ee, float:1.8879674E38)
             java.lang.String r5 = "PassportAddress"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
         L_0x00f2:
@@ -8741,7 +8741,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         L_0x00f8:
             boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypePhone
             if (r5 == 0) goto L_0x010b
-            r4 = 2131626338(0x7f0e0962, float:1.887991E38)
+            r4 = 2131626337(0x7f0e0961, float:1.8879907E38)
             java.lang.String r5 = "PassportPhone"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r5 = r21 ^ 1
@@ -8750,7 +8750,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
         L_0x010b:
             boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_secureValueTypeEmail
             if (r4 == 0) goto L_0x011d
-            r4 = 2131626251(0x7f0e090b, float:1.8879733E38)
+            r4 = 2131626250(0x7f0e090a, float:1.887973E38)
             java.lang.String r5 = "PassportEmail"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r5 = r21 ^ 1
@@ -10562,7 +10562,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131626867(0x7f0e0b73, float:1.8880982E38)
+                r8 = 2131626865(0x7f0e0b71, float:1.8880978E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -10590,7 +10590,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131626871(0x7f0e0b77, float:1.888099E38)
+                r8 = 2131626869(0x7f0e0b75, float:1.8880986E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -10708,14 +10708,14 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                 int r1 = r0.verificationType
                 if (r1 != r3) goto L_0x02f5
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625013(0x7f0e0435, float:1.8877222E38)
+                r2 = 2131625012(0x7f0e0434, float:1.887722E38)
                 java.lang.String r3 = "DidNotGetTheCodeSms"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
                 goto L_0x0303
             L_0x02f5:
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625012(0x7f0e0434, float:1.887722E38)
+                r2 = 2131625011(0x7f0e0433, float:1.8877218E38)
                 java.lang.String r3 = "DidNotGetTheCode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
@@ -11595,7 +11595,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                         if (r2 != r6) goto L_0x007e
                                         org.telegram.ui.PassportActivity$PhoneConfirmationView r2 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131626990(0x7f0e0bee, float:1.8881232E38)
+                                        r3 = 2131626987(0x7f0e0beb, float:1.8881226E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -11703,7 +11703,7 @@ public class PassportActivity extends BaseFragment implements NotificationCenter
                                     L_0x0140:
                                         org.telegram.ui.PassportActivity$PhoneConfirmationView r0 = org.telegram.ui.PassportActivity.PhoneConfirmationView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131626863(0x7f0e0b6f, float:1.8880974E38)
+                                        r1 = 2131626861(0x7f0e0b6d, float:1.888097E38)
                                         java.lang.String r2 = "SendingSms"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)

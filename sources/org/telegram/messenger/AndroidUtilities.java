@@ -2920,7 +2920,7 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0159
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0159
-            r7 = 2131626122(0x7f0e088a, float:1.8879471E38)
+            r7 = 2131626121(0x7f0e0889, float:1.887947E38)
             java.lang.String r8 = "OK"
             r9 = 2131624238(0x7f0e012e, float:1.887565E38)
             java.lang.String r10 = "AppName"
@@ -2943,7 +2943,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131625558(0x7f0e0656, float:1.8878327E38)
+            r1 = 2131625557(0x7f0e0655, float:1.8878325E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3027,7 +3027,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131625930(0x7f0e07ca, float:1.8879082E38)
+            r1 = 2131625929(0x7f0e07c9, float:1.887908E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3134,7 +3134,7 @@ public class AndroidUtilities {
             java.lang.String r1 = "ApkRestricted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setMessage(r0)
-            r0 = 2131626465(0x7f0e09e1, float:1.8880167E38)
+            r0 = 2131626464(0x7f0e09e0, float:1.8880165E38)
             java.lang.String r1 = "PermissionOpenSettings"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw

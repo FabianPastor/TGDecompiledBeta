@@ -497,7 +497,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
             public void onDraw(Canvas canvas) {
                 if (GroupCreateFinalActivity.this.avatarImage != null && GroupCreateFinalActivity.this.avatarProgressView.getVisibility() == 0) {
                     paint.setAlpha((int) (GroupCreateFinalActivity.this.avatarImage.getImageReceiver().getCurrentAlpha() * 85.0f * GroupCreateFinalActivity.this.avatarProgressView.getAlpha()));
-                    canvas.drawCircle(((float) getMeasuredWidth()) / 2.0f, ((float) getMeasuredHeight()) / 2.0f, AndroidUtilities.dpf2(32.0f), paint);
+                    canvas.drawCircle(((float) getMeasuredWidth()) / 2.0f, ((float) getMeasuredHeight()) / 2.0f, ((float) getMeasuredWidth()) / 2.0f, paint);
                 }
             }
         };
@@ -535,6 +535,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
         this.avatarProgressView = r73;
         r73.setSize(AndroidUtilities.dp(30.0f));
         this.avatarProgressView.setProgressColor(-1);
+        this.avatarProgressView.setNoProgress(false);
         this.editTextContainer.addView(this.avatarProgressView, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 16.0f, LocaleController.isRTL ? 16.0f : 0.0f, 16.0f));
         showAvatarProgress(false, false);
         EditTextEmoji editTextEmoji2 = new EditTextEmoji(context2, r2, this, 0);
@@ -704,8 +705,7 @@ public class GroupCreateFinalActivity extends BaseFragment implements Notificati
     public void didStartUpload(boolean z) {
         RadialProgressView radialProgressView = this.avatarProgressView;
         if (radialProgressView != null) {
-            radialProgressView.setNoProgress(!z);
-            this.avatarProgressView.setProgress(0.0f);
+            radialProgressView.setProgress(0.0f);
         }
     }
 

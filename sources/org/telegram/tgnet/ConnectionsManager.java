@@ -122,7 +122,7 @@ public class ConnectionsManager extends BaseController {
 
     public static native int native_getTimeDifference(int i);
 
-    public static native void native_init(int i, int i2, int i3, int i4, String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, String str9, int i5, int i6, boolean z, boolean z2, int i7);
+    public static native void native_init(int i, int i2, int i3, int i4, String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, String str9, String str10, int i5, int i6, boolean z, boolean z2, int i7);
 
     public static native int native_isTestBackend(int i);
 
@@ -455,6 +455,8 @@ public class ConnectionsManager extends BaseController {
     }
 
     public void init(int i, int i2, int i3, String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, String str9, int i4, int i5, boolean z) {
+        String str10;
+        String str11;
         SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
         String string = sharedPreferences.getString("proxy_ip", "");
         String string2 = sharedPreferences.getString("proxy_user", "");
@@ -464,7 +466,17 @@ public class ConnectionsManager extends BaseController {
         if (sharedPreferences.getBoolean("proxy_enabled", false) && !TextUtils.isEmpty(string)) {
             native_setProxySettings(this.currentAccount, string, i6, string2, string3, string4);
         }
-        native_init(this.currentAccount, i, i2, i3, str, str2, str3, str4, str5, str6, str7, str8, str9, i4, i5, z, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
+        try {
+            str10 = ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName());
+        } catch (Throwable unused) {
+            str10 = "";
+        }
+        if (str10 == null) {
+            str11 = "";
+        } else {
+            str11 = str10;
+        }
+        native_init(this.currentAccount, i, i2, i3, str, str2, str3, str4, str5, str6, str7, str8, str9, str11, i4, i5, z, ApplicationLoader.isNetworkOnline(), ApplicationLoader.getCurrentNetworkType());
         checkConnection();
     }
 
@@ -654,12 +666,7 @@ public class ConnectionsManager extends BaseController {
     }
 
     public static int getInitFlags() {
-        int i = EmuDetector.with(ApplicationLoader.applicationContext).detect() ? 1024 : 0;
-        try {
-            return "com.android.vending".equals(ApplicationLoader.applicationContext.getPackageManager().getInstallerPackageName(ApplicationLoader.applicationContext.getPackageName())) ? i | 2048 : i;
-        } catch (Throwable unused) {
-            return i;
-        }
+        return EmuDetector.with(ApplicationLoader.applicationContext).detect() ? 1024 : 0;
     }
 
     public static void onBytesSent(int i, int i2, int i3) {

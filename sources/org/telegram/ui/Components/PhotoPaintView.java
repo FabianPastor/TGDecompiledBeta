@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
@@ -39,6 +40,7 @@ import org.telegram.messenger.DispatchQueue;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.VideoEditedInfo;
@@ -73,6 +75,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     /* access modifiers changed from: private */
     public ColorPicker colorPicker;
     int currentBrush;
+    private MediaController.CropState currentCropState;
     /* access modifiers changed from: private */
     public EntityView currentEntityView;
     private FrameLayout curtainView;
@@ -96,13 +99,17 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     private ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout;
     private Rect popupRect;
     private ActionBarPopupWindow popupWindow;
+    private int[] pos = new int[2];
     private DispatchQueue queue;
     private RenderView renderView;
     private int selectedTextType = 2;
     private FrameLayout selectionContainerView;
+    private float[] temp = new float[2];
     /* access modifiers changed from: private */
     public FrameLayout textDimView;
     private FrameLayout toolsView;
+    private float transformX;
+    private float transformY;
     /* access modifiers changed from: private */
     public UndoStore undoStore;
 
@@ -114,14 +121,14 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
     public void onOpenCloseStickersAlert(boolean z) {
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v34, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v37, resolved type: org.telegram.ui.Components.Paint.Views.StickerView} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v38, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v39, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v37, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v40, resolved type: org.telegram.ui.Components.Paint.Views.StickerView} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v41, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v42, resolved type: org.telegram.ui.Components.Paint.Views.TextPaintView} */
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public PhotoPaintView(android.content.Context r24, android.graphics.Bitmap r25, android.graphics.Bitmap r26, int r27, java.util.ArrayList<org.telegram.messenger.VideoEditedInfo.MediaEntity> r28, java.lang.Runnable r29) {
+    public PhotoPaintView(android.content.Context r24, android.graphics.Bitmap r25, android.graphics.Bitmap r26, int r27, java.util.ArrayList<org.telegram.messenger.VideoEditedInfo.MediaEntity> r28, org.telegram.messenger.MediaController.CropState r29, java.lang.Runnable r30) {
         /*
             r23 = this;
             r0 = r23
@@ -148,9 +155,15 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r10 = 3
             r5[r10] = r6
             r0.brushes = r5
+            float[] r5 = new float[r9]
+            r0.temp = r5
             r0.selectedTextType = r9
+            int[] r5 = new int[r9]
+            r0.pos = r5
             boolean r5 = r1 instanceof org.telegram.ui.BubbleActivity
             r0.inBubbleMode = r5
+            r5 = r29
+            r0.currentCropState = r5
             org.telegram.messenger.DispatchQueue r5 = new org.telegram.messenger.DispatchQueue
             java.lang.String r6 = "Paint"
             r5.<init>(r6)
@@ -185,7 +198,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r5.<init>(r1, r10, r2)
             r0.renderView = r5
             org.telegram.ui.Components.PhotoPaintView$1 r2 = new org.telegram.ui.Components.PhotoPaintView$1
-            r10 = r29
+            r10 = r30
             r2.<init>(r10)
             r5.setDelegate(r2)
             org.telegram.ui.Components.Paint.RenderView r2 = r0.renderView
@@ -310,7 +323,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setPadding(r5, r7, r10, r7)
             android.widget.TextView r2 = r0.doneTextView
             java.lang.String r5 = "Done"
-            r10 = 2131625053(0x7f0e045d, float:1.8877303E38)
+            r10 = 2131625052(0x7f0e045c, float:1.8877301E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r10)
             java.lang.String r5 = r5.toUpperCase()
             r2.setText(r5)
@@ -386,47 +399,47 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             org.telegram.ui.Components.Paint.Swatch r1 = r1.getSwatch()
             r0.setCurrentSwatch(r1, r7)
             r23.updateSettingsButton()
-            if (r3 == 0) goto L_0x0363
+            if (r3 == 0) goto L_0x036f
             boolean r1 = r28.isEmpty()
-            if (r1 != 0) goto L_0x0363
+            if (r1 != 0) goto L_0x036f
             int r1 = r28.size()
             r2 = 0
-        L_0x02a3:
-            if (r2 >= r1) goto L_0x0363
+        L_0x02af:
+            if (r2 >= r1) goto L_0x036f
             java.lang.Object r4 = r3.get(r2)
             org.telegram.messenger.VideoEditedInfo$MediaEntity r4 = (org.telegram.messenger.VideoEditedInfo.MediaEntity) r4
             byte r5 = r4.type
-            if (r5 != 0) goto L_0x02cc
+            if (r5 != 0) goto L_0x02d8
             java.lang.Object r5 = r4.parentObject
             org.telegram.tgnet.TLRPC$Document r6 = r4.document
             org.telegram.ui.Components.Paint.Views.StickerView r5 = r0.createSticker(r5, r6, r7)
             byte r6 = r4.subType
             r6 = r6 & r9
-            if (r6 == 0) goto L_0x02bf
+            if (r6 == 0) goto L_0x02cb
             r5.mirror()
-        L_0x02bf:
+        L_0x02cb:
             android.view.ViewGroup$LayoutParams r6 = r5.getLayoutParams()
             int r10 = r4.viewWidth
             r6.width = r10
             int r10 = r4.viewHeight
             r6.height = r10
-            goto L_0x02f4
-        L_0x02cc:
-            if (r5 != r8) goto L_0x035f
+            goto L_0x0300
+        L_0x02d8:
+            if (r5 != r8) goto L_0x036b
             org.telegram.ui.Components.Paint.Views.TextPaintView r5 = r0.createText(r7)
             byte r6 = r4.subType
             r10 = r6 & 1
-            if (r10 == 0) goto L_0x02da
+            if (r10 == 0) goto L_0x02e6
             r6 = 0
-            goto L_0x02e1
-        L_0x02da:
+            goto L_0x02ed
+        L_0x02e6:
             r6 = r6 & 4
-            if (r6 == 0) goto L_0x02e0
+            if (r6 == 0) goto L_0x02ec
             r6 = 2
-            goto L_0x02e1
-        L_0x02e0:
+            goto L_0x02ed
+        L_0x02ec:
             r6 = 1
-        L_0x02e1:
+        L_0x02ed:
             r5.setType(r6)
             java.lang.String r6 = r4.text
             r5.setText(r6)
@@ -434,7 +447,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             int r10 = r4.color
             r6.color = r10
             r5.setSwatch(r6)
-        L_0x02f4:
+        L_0x0300:
             float r6 = r4.x
             org.telegram.ui.Components.Size r10 = r0.paintingSize
             float r10 = r10.width
@@ -488,16 +501,16 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             double r10 = r10 * r12
             float r4 = (float) r10
             r5.setRotation(r4)
-        L_0x035f:
+        L_0x036b:
             int r2 = r2 + 1
-            goto L_0x02a3
-        L_0x0363:
+            goto L_0x02af
+        L_0x036f:
             org.telegram.ui.Components.Paint.Views.EntitiesContainerView r1 = r0.entitiesView
             r2 = 4
             r1.setVisibility(r2)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoPaintView.<init>(android.content.Context, android.graphics.Bitmap, android.graphics.Bitmap, int, java.util.ArrayList, java.lang.Runnable):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoPaintView.<init>(android.content.Context, android.graphics.Bitmap, android.graphics.Bitmap, int, java.util.ArrayList, org.telegram.messenger.MediaController$CropState, java.lang.Runnable):void");
     }
 
     public /* synthetic */ void lambda$new$0$PhotoPaintView() {
@@ -532,7 +545,21 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 selectEntity((EntityView) null);
             }
         }
-        MotionEvent obtain = MotionEvent.obtain(0, 0, motionEvent.getActionMasked(), ((float) (this.renderView.getMeasuredWidth() / 2)) + (((motionEvent.getX() - this.renderView.getTranslationX()) - ((float) (getMeasuredWidth() / 2))) / this.renderView.getScaleX()), ((float) (this.renderView.getMeasuredHeight() / 2)) + ((((motionEvent.getY() - this.renderView.getTranslationY()) - ((float) (getMeasuredHeight() / 2))) + ((float) AndroidUtilities.dp(32.0f))) / this.renderView.getScaleY()), 0);
+        float x = ((motionEvent.getX() - this.renderView.getTranslationX()) - ((float) (getMeasuredWidth() / 2))) / this.renderView.getScaleX();
+        float y = (((motionEvent.getY() - this.renderView.getTranslationY()) - ((float) (getMeasuredHeight() / 2))) + ((float) AndroidUtilities.dp(32.0f))) / this.renderView.getScaleY();
+        double d = (double) x;
+        double radians = (double) ((float) Math.toRadians((double) (-this.renderView.getRotation())));
+        double cos = Math.cos(radians);
+        Double.isNaN(d);
+        double d2 = (double) y;
+        double sin = Math.sin(radians);
+        Double.isNaN(d2);
+        float measuredWidth = ((float) ((cos * d) - (sin * d2))) + ((float) (this.renderView.getMeasuredWidth() / 2));
+        double sin2 = Math.sin(radians);
+        Double.isNaN(d);
+        double cos2 = Math.cos(radians);
+        Double.isNaN(d2);
+        MotionEvent obtain = MotionEvent.obtain(0, 0, motionEvent.getActionMasked(), measuredWidth, ((float) ((d * sin2) + (d2 * cos2))) + ((float) (this.renderView.getMeasuredHeight() / 2)), 0);
         this.renderView.onTouch(obtain);
         obtain.recycle();
         return true;
@@ -892,12 +919,11 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         int i5 = i3 - i;
         int i6 = i4 - i2;
         int i7 = (Build.VERSION.SDK_INT < 21 || this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight;
-        ActionBar.getCurrentActionBarHeight();
         int currentActionBarHeight = ActionBar.getCurrentActionBarHeight() + i7;
         int i8 = AndroidUtilities.displaySize.y;
         AndroidUtilities.dp(48.0f);
         int ceil = (int) Math.ceil((double) ((i5 - this.renderView.getMeasuredWidth()) / 2));
-        int dp = ((((((i6 - currentActionBarHeight) - AndroidUtilities.dp(48.0f)) - this.renderView.getMeasuredHeight()) / 2) + currentActionBarHeight) - ActionBar.getCurrentActionBarHeight()) + AndroidUtilities.dp(8.0f);
+        int dp = ((((i6 - currentActionBarHeight) - AndroidUtilities.dp(48.0f)) - this.renderView.getMeasuredHeight()) / 2) + AndroidUtilities.dp(8.0f) + i7;
         RenderView renderView2 = this.renderView;
         renderView2.layout(ceil, dp, renderView2.getMeasuredWidth() + ceil, this.renderView.getMeasuredHeight() + dp);
         int measuredWidth = ((this.renderView.getMeasuredWidth() - this.entitiesView.getMeasuredWidth()) / 2) + ceil;
@@ -931,19 +957,112 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         return true;
     }
 
+    public float[] getTransformedTouch(float f, float f2) {
+        Point point = AndroidUtilities.displaySize;
+        float f3 = f - ((float) (point.x / 2));
+        float f4 = f2 - ((float) (point.y / 2));
+        float[] fArr = this.temp;
+        double d = (double) f3;
+        double radians = (double) ((float) Math.toRadians((double) (-this.entitiesView.getRotation())));
+        double cos = Math.cos(radians);
+        Double.isNaN(d);
+        double d2 = (double) f4;
+        double sin = Math.sin(radians);
+        Double.isNaN(d2);
+        fArr[0] = ((float) ((cos * d) - (sin * d2))) + ((float) (AndroidUtilities.displaySize.x / 2));
+        float[] fArr2 = this.temp;
+        double sin2 = Math.sin(radians);
+        Double.isNaN(d);
+        double cos2 = Math.cos(radians);
+        Double.isNaN(d2);
+        fArr2[1] = ((float) ((d * sin2) + (d2 * cos2))) + ((float) (AndroidUtilities.displaySize.y / 2));
+        return this.temp;
+    }
+
+    public int[] getCenterLocation(EntityView entityView) {
+        return getCenterLocationInWindow(entityView);
+    }
+
     public boolean allowInteraction(EntityView entityView) {
         return !this.editingText;
     }
 
+    /* access modifiers changed from: protected */
+    public boolean drawChild(Canvas canvas, View view, long j) {
+        int i = 0;
+        if ((view == this.renderView || view == this.entitiesView || view == this.selectionContainerView) && this.currentCropState != null) {
+            canvas.save();
+            if (Build.VERSION.SDK_INT >= 21 && !this.inBubbleMode) {
+                i = AndroidUtilities.statusBarHeight;
+            }
+            int currentActionBarHeight = ActionBar.getCurrentActionBarHeight() + i;
+            int measuredWidth = view.getMeasuredWidth();
+            int measuredHeight = view.getMeasuredHeight();
+            int i2 = this.currentCropState.transformRotation;
+            if (i2 == 90 || i2 == 270) {
+                int i3 = measuredHeight;
+                measuredHeight = measuredWidth;
+                measuredWidth = i3;
+            }
+            float scaleX = ((float) measuredWidth) * this.currentCropState.cropPw * view.getScaleX();
+            MediaController.CropState cropState = this.currentCropState;
+            int i4 = (int) (scaleX / cropState.cropScale);
+            int scaleY = (int) (((((float) measuredHeight) * cropState.cropPh) * view.getScaleY()) / this.currentCropState.cropScale);
+            float ceil = ((float) Math.ceil((double) ((getMeasuredWidth() - i4) / 2))) + this.transformX;
+            float measuredHeight2 = ((float) (((((getMeasuredHeight() - currentActionBarHeight) - AndroidUtilities.dp(48.0f)) - scaleY) / 2) + AndroidUtilities.dp(8.0f) + i)) + this.transformY;
+            canvas.clipRect(Math.max(0.0f, ceil), Math.max(0.0f, measuredHeight2), Math.min(ceil + ((float) i4), (float) getMeasuredWidth()), Math.min((float) getMeasuredHeight(), measuredHeight2 + ((float) scaleY)));
+            i = 1;
+        }
+        boolean drawChild = super.drawChild(canvas, view, j);
+        if (i != 0) {
+            canvas.restore();
+        }
+        return drawChild;
+    }
+
     private Point centerPositionForEntity() {
         Size paintingSize2 = getPaintingSize();
-        return new Point(paintingSize2.width / 2.0f, paintingSize2.height / 2.0f);
+        float f = paintingSize2.width / 2.0f;
+        float f2 = paintingSize2.height / 2.0f;
+        MediaController.CropState cropState = this.currentCropState;
+        if (cropState != null) {
+            float radians = (float) Math.toRadians((double) (-(((float) cropState.transformRotation) + cropState.cropRotate)));
+            double d = (double) this.currentCropState.cropPx;
+            double d2 = (double) radians;
+            double cos = Math.cos(d2);
+            Double.isNaN(d);
+            double d3 = d * cos;
+            double d4 = (double) this.currentCropState.cropPy;
+            double sin = Math.sin(d2);
+            Double.isNaN(d4);
+            float f3 = (float) (d3 - (d4 * sin));
+            double d5 = (double) this.currentCropState.cropPx;
+            double sin2 = Math.sin(d2);
+            Double.isNaN(d5);
+            double d6 = d5 * sin2;
+            double d7 = (double) this.currentCropState.cropPy;
+            double cos2 = Math.cos(d2);
+            Double.isNaN(d7);
+            f -= f3 * paintingSize2.width;
+            f2 -= ((float) (d6 + (d7 * cos2))) * paintingSize2.height;
+        }
+        return new Point(f, f2);
     }
 
     private Point startPositionRelativeToEntity(EntityView entityView) {
+        MediaController.CropState cropState = this.currentCropState;
+        float f = 200.0f;
+        if (cropState != null) {
+            f = 200.0f / cropState.cropScale;
+        }
         if (entityView != null) {
             Point position = entityView.getPosition();
-            return new Point(position.x + 200.0f, position.y + 200.0f);
+            return new Point(position.x + f, position.y + f);
+        }
+        float f2 = 100.0f;
+        MediaController.CropState cropState2 = this.currentCropState;
+        if (cropState2 != null) {
+            f2 = 100.0f / cropState2.cropScale;
         }
         Point centerPositionForEntity = centerPositionForEntity();
         while (true) {
@@ -952,7 +1071,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 View childAt = this.entitiesView.getChildAt(i);
                 if (childAt instanceof EntityView) {
                     Point position2 = ((EntityView) childAt).getPosition();
-                    if (((float) Math.sqrt(Math.pow((double) (position2.x - centerPositionForEntity.x), 2.0d) + Math.pow((double) (position2.y - centerPositionForEntity.y), 2.0d))) < 100.0f) {
+                    if (((float) Math.sqrt(Math.pow((double) (position2.x - centerPositionForEntity.x), 2.0d) + Math.pow((double) (position2.y - centerPositionForEntity.y), 2.0d))) < f2) {
                         z = true;
                     }
                 }
@@ -960,7 +1079,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             if (!z) {
                 return centerPositionForEntity;
             }
-            centerPositionForEntity = new Point(centerPositionForEntity.x + 200.0f, centerPositionForEntity.y + 200.0f);
+            centerPositionForEntity = new Point(centerPositionForEntity.x + f, centerPositionForEntity.y + f);
         }
     }
 
@@ -988,25 +1107,64 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         return arrayList;
     }
 
-    public void setTransform(float f, float f2, float f3) {
+    public void setTransform(float f, float f2, float f3, float f4, float f5) {
         View view;
+        float f6;
+        float f7;
+        float f8;
+        float f9;
+        float var_ = f2;
+        float var_ = f3;
+        this.transformX = var_;
+        this.transformY = var_;
         for (int i = 0; i < 3; i++) {
+            float var_ = 1.0f;
             if (i == 0) {
                 view = this.entitiesView;
-                view.setScaleX(this.baseScale * f);
-                view.setScaleY(this.baseScale * f);
+            } else if (i == 1) {
+                view = this.selectionContainerView;
             } else {
-                if (i == 1) {
-                    view = this.selectionContainerView;
-                } else {
-                    view = this.renderView;
-                }
-                view.setScaleX(f);
-                view.setScaleY(f);
+                view = this.renderView;
             }
-            view.setTranslationX(f2);
-            view.setTranslationY(f3);
+            MediaController.CropState cropState = this.currentCropState;
+            if (cropState != null) {
+                float var_ = cropState.cropScale * 1.0f;
+                int measuredWidth = view.getMeasuredWidth();
+                int measuredHeight = view.getMeasuredHeight();
+                int i2 = this.currentCropState.transformRotation;
+                if (i2 == 90 || i2 == 270) {
+                    int i3 = measuredHeight;
+                    measuredHeight = measuredWidth;
+                    measuredWidth = i3;
+                }
+                float var_ = (float) measuredWidth;
+                MediaController.CropState cropState2 = this.currentCropState;
+                float var_ = (float) measuredHeight;
+                float max = Math.max(f4 / ((float) ((int) (cropState2.cropPw * var_))), f5 / ((float) ((int) (cropState2.cropPh * var_))));
+                f8 = var_ * max;
+                MediaController.CropState cropState3 = this.currentCropState;
+                float var_ = cropState3.cropScale;
+                f6 = (cropState3.cropPx * var_ * f * max * var_) + var_;
+                f9 = var_ + (cropState3.cropPy * var_ * f * max * var_);
+                f7 = cropState3.cropRotate + ((float) i2);
+            } else {
+                if (i == 0) {
+                    var_ = 1.0f * this.baseScale;
+                }
+                f6 = var_;
+                f8 = var_;
+                f7 = 0.0f;
+                f9 = var_;
+            }
+            float var_ = f8 * f;
+            view.setScaleX(var_);
+            view.setScaleY(var_);
+            view.setTranslationX(f6);
+            view.setTranslationY(f9);
+            view.setRotation(f7);
+            view.invalidate();
         }
+        invalidate();
     }
 
     /* access modifiers changed from: private */
@@ -1155,10 +1313,6 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         }
     }
 
-    private int baseFontSize() {
-        return (int) (getPaintingSize().width / 9.0f);
-    }
-
     private TextPaintView createText(boolean z) {
         Swatch swatch;
         Swatch swatch2 = this.colorPicker.getSwatch();
@@ -1170,10 +1324,17 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         } else {
             swatch = new Swatch(-1, 1.0f, swatch2.brushWeight);
         }
-        TextPaintView textPaintView = new TextPaintView(getContext(), startPositionRelativeToEntity((EntityView) null), baseFontSize(), "", swatch, this.selectedTextType);
+        Size paintingSize2 = getPaintingSize();
+        TextPaintView textPaintView = new TextPaintView(getContext(), startPositionRelativeToEntity((EntityView) null), (int) (paintingSize2.width / 9.0f), "", swatch, this.selectedTextType);
         textPaintView.setDelegate(this);
-        textPaintView.setMaxWidth((int) (getPaintingSize().width - 20.0f));
+        textPaintView.setMaxWidth((int) (paintingSize2.width - 20.0f));
         this.entitiesView.addView(textPaintView, LayoutHelper.createFrame(-2, -2.0f));
+        MediaController.CropState cropState = this.currentCropState;
+        if (cropState != null) {
+            textPaintView.scale(1.0f / cropState.cropScale);
+            MediaController.CropState cropState2 = this.currentCropState;
+            textPaintView.rotate(-(((float) cropState2.transformRotation) + cropState2.cropRotate));
+        }
         if (z) {
             registerRemovalUndo(textPaintView);
             selectEntity(textPaintView);
@@ -1193,8 +1354,14 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             this.editedTextRotation = textPaintView.getRotation();
             this.editedTextScale = textPaintView.getScale();
             textPaintView.setPosition(centerPositionForEntity());
-            textPaintView.setRotation(0.0f);
-            textPaintView.setScale(1.0f);
+            MediaController.CropState cropState = this.currentCropState;
+            if (cropState != null) {
+                textPaintView.setRotation(-(((float) cropState.transformRotation) + cropState.cropRotate));
+                textPaintView.setScale(1.0f / this.currentCropState.cropScale);
+            } else {
+                textPaintView.setRotation(0.0f);
+                textPaintView.setScale(1.0f);
+            }
             this.toolsView.setVisibility(8);
             setTextDimVisibility(true, textPaintView);
             textPaintView.beginEditing();
@@ -1255,7 +1422,39 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         }
     }
 
+    private int[] getCenterLocationInWindow(View view) {
+        view.getLocationInWindow(this.pos);
+        float rotation = view.getRotation();
+        MediaController.CropState cropState = this.currentCropState;
+        float f = cropState != null ? cropState.cropRotate + ((float) cropState.transformRotation) : 0.0f;
+        double width = (double) (((float) view.getWidth()) * view.getScaleX() * this.entitiesView.getScaleX());
+        double radians = (double) ((float) Math.toRadians((double) (rotation + f)));
+        double cos = Math.cos(radians);
+        Double.isNaN(width);
+        double height = (double) (((float) view.getHeight()) * view.getScaleY() * this.entitiesView.getScaleY());
+        double sin = Math.sin(radians);
+        Double.isNaN(height);
+        float f2 = (float) ((cos * width) - (sin * height));
+        double sin2 = Math.sin(radians);
+        Double.isNaN(width);
+        double cos2 = Math.cos(radians);
+        Double.isNaN(height);
+        int[] iArr = this.pos;
+        iArr[0] = (int) (((float) iArr[0]) + (f2 / 2.0f));
+        iArr[1] = (int) (((float) iArr[1]) + (((float) ((width * sin2) + (height * cos2))) / 2.0f));
+        return iArr;
+    }
+
+    public float getCropRotation() {
+        MediaController.CropState cropState = this.currentCropState;
+        if (cropState != null) {
+            return cropState.cropRotate + ((float) cropState.transformRotation);
+        }
+        return 0.0f;
+    }
+
     private void showMenuForEntity(EntityView entityView) {
+        int[] centerLocationInWindow = getCenterLocationInWindow(entityView);
         showPopup(new Runnable(entityView) {
             public final /* synthetic */ EntityView f$1;
 
@@ -1266,7 +1465,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             public final void run() {
                 PhotoPaintView.this.lambda$showMenuForEntity$13$PhotoPaintView(this.f$1);
             }
-        }, entityView, 17, (int) ((entityView.getPosition().x - ((float) (this.entitiesView.getWidth() / 2))) * this.entitiesView.getScaleX()), ((int) (((entityView.getPosition().y - ((((float) entityView.getHeight()) * entityView.getScale()) / 2.0f)) - ((float) (this.entitiesView.getHeight() / 2))) * this.entitiesView.getScaleY())) - AndroidUtilities.dp(32.0f));
+        }, this, 51, centerLocationInWindow[0], centerLocationInWindow[1] - AndroidUtilities.dp(32.0f));
     }
 
     public /* synthetic */ void lambda$showMenuForEntity$13$PhotoPaintView(EntityView entityView) {
@@ -1544,6 +1743,10 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             }
             this.popupLayout.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(1000.0f), Integer.MIN_VALUE));
             this.popupWindow.setFocusable(true);
+            if ((i & 48) != 0) {
+                i2 -= this.popupLayout.getMeasuredWidth() / 2;
+                i3 -= this.popupLayout.getMeasuredHeight();
+            }
             this.popupWindow.showAtLocation(view, i, i2, i3);
             this.popupWindow.startAnimation();
             return;
@@ -1645,7 +1848,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:14:0x003a, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:18:0x0049, code lost:
         r4 = r2.n;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -1672,24 +1875,36 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         L_0x001f:
             r2 = 0
         L_0x0020:
+            org.telegram.messenger.MediaController$CropState r3 = r0.currentCropState
+            r4 = 1061158912(0x3var_, float:0.75)
+            if (r3 == 0) goto L_0x0031
+            int r5 = r3.transformRotation
+            float r5 = (float) r5
+            float r6 = r3.cropRotate
+            float r5 = r5 + r6
+            float r5 = -r5
+            float r3 = r3.cropScale
+            float r4 = r4 / r3
+            goto L_0x0032
+        L_0x0031:
+            r5 = 0
+        L_0x0032:
             org.telegram.ui.Components.PhotoPaintView$StickerPosition r3 = new org.telegram.ui.Components.PhotoPaintView$StickerPosition
-            org.telegram.ui.Components.Point r4 = r16.centerPositionForEntity()
-            r5 = 1061158912(0x3var_, float:0.75)
-            r6 = 0
-            r3.<init>(r4, r5, r6)
-            if (r2 == 0) goto L_0x00c8
+            org.telegram.ui.Components.Point r6 = r16.centerPositionForEntity()
+            r3.<init>(r6, r4, r5)
+            if (r2 == 0) goto L_0x00d7
             java.util.ArrayList<org.telegram.ui.Components.Paint.PhotoFace> r4 = r0.faces
-            if (r4 == 0) goto L_0x00c8
+            if (r4 == 0) goto L_0x00d7
             int r4 = r4.size()
-            if (r4 != 0) goto L_0x003a
-            goto L_0x00c8
-        L_0x003a:
+            if (r4 != 0) goto L_0x0049
+            goto L_0x00d7
+        L_0x0049:
             int r4 = r2.n
             long r5 = r1.id
             org.telegram.ui.Components.Paint.PhotoFace r1 = r0.getRandomFaceWithVacantAnchor(r4, r5, r2)
-            if (r1 != 0) goto L_0x0045
+            if (r1 != 0) goto L_0x0054
             return r3
-        L_0x0045:
+        L_0x0054:
             org.telegram.ui.Components.Point r3 = r1.getPointForAnchor(r4)
             float r4 = r1.getWidthForAnchor(r4)
             float r1 = r1.getAngle()
@@ -1747,7 +1962,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r4.<init>(r6, r3)
             r2.<init>(r4, r5, r1)
             return r2
-        L_0x00c8:
+        L_0x00d7:
             return r3
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoPaintView.calculateStickerPosition(org.telegram.tgnet.TLRPC$Document):org.telegram.ui.Components.PhotoPaintView$StickerPosition");

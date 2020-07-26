@@ -556,7 +556,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                 public void onDraw(Canvas canvas) {
                     if (ChatEditActivity.this.avatarImage != null && ChatEditActivity.this.avatarImage.getImageReceiver().hasNotThumb()) {
                         paint.setAlpha((int) (ChatEditActivity.this.avatarImage.getImageReceiver().getCurrentAlpha() * 85.0f));
-                        canvas.drawCircle(((float) getMeasuredWidth()) / 2.0f, ((float) getMeasuredHeight()) / 2.0f, AndroidUtilities.dpf2(32.0f), paint);
+                        canvas.drawCircle(((float) getMeasuredWidth()) / 2.0f, ((float) getMeasuredHeight()) / 2.0f, ((float) getMeasuredWidth()) / 2.0f, paint);
                     }
                 }
             };
@@ -566,6 +566,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             this.avatarProgressView = radialProgressView;
             radialProgressView.setSize(AndroidUtilities.dp(30.0f));
             this.avatarProgressView.setProgressColor(-1);
+            this.avatarProgressView.setNoProgress(false);
             frameLayout.addView(this.avatarProgressView, LayoutHelper.createFrame(64, 64.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 12.0f, LocaleController.isRTL ? 16.0f : 0.0f, 8.0f));
             showAvatarProgress(false, false);
             this.avatarContainer.setOnClickListener(new View.OnClickListener() {
@@ -1180,8 +1181,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     public void didStartUpload(boolean z) {
         RadialProgressView radialProgressView = this.avatarProgressView;
         if (radialProgressView != null) {
-            radialProgressView.setNoProgress(!z);
-            this.avatarProgressView.setProgress(0.0f);
+            radialProgressView.setProgress(0.0f);
         }
     }
 
@@ -1634,12 +1634,12 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r2.setVisibility(r4)
             org.telegram.tgnet.TLRPC$ChatFull r2 = r0.info
             int r2 = r2.linked_chat_id
-            r6 = 2131625029(0x7f0e0445, float:1.8877254E38)
+            r6 = 2131625028(0x7f0e0444, float:1.8877252E38)
             java.lang.String r7 = "Discussion"
             if (r2 != 0) goto L_0x00cc
             org.telegram.ui.Cells.TextDetailCell r2 = r0.linkedCell
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
-            r7 = 2131625036(0x7f0e044c, float:1.8877269E38)
+            r7 = 2131625035(0x7f0e044b, float:1.8877267E38)
             java.lang.String r8 = "DiscussionInfo"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r2.setTextAndValue(r6, r7, r5)
@@ -1680,7 +1680,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         L_0x0119:
             java.lang.String r6 = r2.username
             boolean r6 = android.text.TextUtils.isEmpty(r6)
-            r7 = 2131625675(0x7f0e06cb, float:1.8878565E38)
+            r7 = 2131625674(0x7f0e06ca, float:1.8878563E38)
             java.lang.String r8 = "LinkedChannel"
             if (r6 == 0) goto L_0x0132
             org.telegram.ui.Cells.TextDetailCell r6 = r0.linkedCell
@@ -1740,7 +1740,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             boolean r2 = r2 instanceof org.telegram.tgnet.TLRPC$TL_channelLocation
             if (r2 == 0) goto L_0x01f8
             if (r1 == 0) goto L_0x01a7
-            r1 = 2131627216(0x7f0e0cd0, float:1.888169E38)
+            r1 = 2131627213(0x7f0e0ccd, float:1.8881684E38)
             java.lang.String r2 = "TypeLocationGroupEdit"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             goto L_0x01d1
@@ -1763,7 +1763,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             java.lang.String r1 = java.lang.String.format(r1, r2)
         L_0x01d1:
             org.telegram.ui.Cells.TextDetailCell r2 = r0.typeCell
-            r6 = 2131627215(0x7f0e0ccf, float:1.8881688E38)
+            r6 = 2131627212(0x7f0e0ccc, float:1.8881682E38)
             java.lang.String r7 = "TypeLocationGroup"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             org.telegram.ui.Cells.TextDetailCell r7 = r0.historyCell
@@ -1787,22 +1787,22 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             boolean r2 = r0.isChannel
             if (r2 == 0) goto L_0x020e
             if (r1 == 0) goto L_0x0204
-            r1 = 2131627218(0x7f0e0cd2, float:1.8881694E38)
+            r1 = 2131627215(0x7f0e0ccf, float:1.8881688E38)
             java.lang.String r2 = "TypePrivate"
             goto L_0x0209
         L_0x0204:
-            r1 = 2131627220(0x7f0e0cd4, float:1.8881698E38)
+            r1 = 2131627217(0x7f0e0cd1, float:1.8881692E38)
             java.lang.String r2 = "TypePublic"
         L_0x0209:
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             goto L_0x021f
         L_0x020e:
             if (r1 == 0) goto L_0x0216
-            r1 = 2131627219(0x7f0e0cd3, float:1.8881696E38)
+            r1 = 2131627216(0x7f0e0cd0, float:1.888169E38)
             java.lang.String r2 = "TypePrivateGroup"
             goto L_0x021b
         L_0x0216:
-            r1 = 2131627221(0x7f0e0cd5, float:1.88817E38)
+            r1 = 2131627218(0x7f0e0cd2, float:1.8881694E38)
             java.lang.String r2 = "TypePublicGroup"
         L_0x021b:
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
@@ -1810,7 +1810,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             boolean r2 = r0.isChannel
             if (r2 == 0) goto L_0x0249
             org.telegram.ui.Cells.TextDetailCell r2 = r0.typeCell
-            r6 = 2131624666(0x7f0e02da, float:1.8876518E38)
+            r6 = 2131624665(0x7f0e02d9, float:1.8876516E38)
             java.lang.String r7 = "ChannelType"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             org.telegram.ui.Cells.TextDetailCell r7 = r0.historyCell
@@ -1832,7 +1832,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             goto L_0x026e
         L_0x0249:
             org.telegram.ui.Cells.TextDetailCell r2 = r0.typeCell
-            r6 = 2131625501(0x7f0e061d, float:1.8878212E38)
+            r6 = 2131625500(0x7f0e061c, float:1.887821E38)
             java.lang.String r7 = "GroupType"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             org.telegram.ui.Cells.TextDetailCell r7 = r0.historyCell
@@ -1858,22 +1858,22 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             if (r1 == 0) goto L_0x0297
             boolean r1 = r0.historyHidden
             if (r1 == 0) goto L_0x0280
-            r1 = 2131624705(0x7f0e0301, float:1.8876597E38)
+            r1 = 2131624704(0x7f0e0300, float:1.8876595E38)
             java.lang.String r2 = "ChatHistoryHidden"
             goto L_0x0285
         L_0x0280:
-            r1 = 2131624708(0x7f0e0304, float:1.8876603E38)
+            r1 = 2131624707(0x7f0e0303, float:1.8876601E38)
             java.lang.String r2 = "ChatHistoryVisible"
         L_0x0285:
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.Cells.TextDetailCell r2 = r0.historyCell
-            r6 = 2131624704(0x7f0e0300, float:1.8876595E38)
+            r6 = 2131624703(0x7f0e02ff, float:1.8876593E38)
             java.lang.String r7 = "ChatHistory"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r2.setTextAndValue(r6, r1, r4)
         L_0x0297:
             org.telegram.ui.Cells.TextSettingsCell r1 = r0.stickersCell
-            r2 = 2131625499(0x7f0e061b, float:1.8878208E38)
+            r2 = 2131625498(0x7f0e061a, float:1.8878206E38)
             java.lang.String r6 = "GroupStickers"
             if (r1 == 0) goto L_0x02bb
             org.telegram.tgnet.TLRPC$ChatFull r7 = r0.info
@@ -1894,11 +1894,11 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             org.telegram.tgnet.TLRPC$ChatFull r7 = r0.info
             java.lang.String r8 = "ChannelPermissions"
             r9 = 2131165254(0x7var_, float:1.794472E38)
-            r10 = 2131624587(0x7f0e028b, float:1.8876358E38)
+            r10 = 2131624586(0x7f0e028a, float:1.8876356E38)
             java.lang.String r11 = "ChannelBlacklist"
-            r12 = 2131624662(0x7f0e02d6, float:1.887651E38)
+            r12 = 2131624661(0x7f0e02d5, float:1.8876508E38)
             java.lang.String r13 = "ChannelSubscribers"
-            r14 = 2131624617(0x7f0e02a9, float:1.8876419E38)
+            r14 = 2131624616(0x7f0e02a8, float:1.8876417E38)
             java.lang.String r15 = "ChannelMembers"
             r2 = 2131165256(0x7var_, float:1.7944724E38)
             if (r7 == 0) goto L_0x042b
@@ -2035,7 +2035,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r1 = 8
         L_0x03d6:
             org.telegram.ui.Cells.TextCell r2 = r0.blockCell
-            r7 = 2131624642(0x7f0e02c2, float:1.887647E38)
+            r7 = 2131624641(0x7f0e02c1, float:1.8876467E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r8 = 2
             java.lang.Object[] r8 = new java.lang.Object[r8]
@@ -2050,7 +2050,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r2.setTextAndValueAndIcon(r7, r1, r8, r5)
         L_0x03fc:
             org.telegram.ui.Cells.TextCell r1 = r0.adminCell
-            r2 = 2131624582(0x7f0e0286, float:1.8876348E38)
+            r2 = 2131624581(0x7f0e0285, float:1.8876346E38)
             java.lang.String r7 = "ChannelAdministrators"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r7, r2)
             java.lang.Object[] r7 = new java.lang.Object[r5]
@@ -2100,13 +2100,13 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         L_0x045e:
             r1.setTextAndIcon((java.lang.String) r3, (int) r2, (boolean) r7)
             org.telegram.ui.Cells.TextCell r1 = r0.blockCell
-            r2 = 2131624642(0x7f0e02c2, float:1.887647E38)
+            r2 = 2131624641(0x7f0e02c1, float:1.8876467E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r8, r2)
             r3 = 2131165252(0x7var_, float:1.7944716E38)
             r1.setTextAndIcon((java.lang.String) r2, (int) r3, (boolean) r5)
         L_0x0470:
             org.telegram.ui.Cells.TextCell r1 = r0.adminCell
-            r2 = 2131624582(0x7f0e0286, float:1.8876348E38)
+            r2 = 2131624581(0x7f0e0285, float:1.8876346E38)
             java.lang.String r3 = "ChannelAdministrators"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r3 = 2131165247(0x7var_f, float:1.7944706E38)
@@ -2118,7 +2118,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             if (r2 == 0) goto L_0x04a8
             org.telegram.tgnet.TLRPC$StickerSet r2 = r2.stickerset
             if (r2 == 0) goto L_0x049e
-            r2 = 2131625499(0x7f0e061b, float:1.8878208E38)
+            r2 = 2131625498(0x7f0e061a, float:1.8878206E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             org.telegram.tgnet.TLRPC$ChatFull r3 = r0.info
             org.telegram.tgnet.TLRPC$StickerSet r3 = r3.stickerset
@@ -2126,7 +2126,7 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
             r1.setTextAndValue(r2, r3, r4)
             goto L_0x04a8
         L_0x049e:
-            r2 = 2131625499(0x7f0e061b, float:1.8878208E38)
+            r2 = 2131625498(0x7f0e061a, float:1.8878206E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             r1.setText(r2, r4)
         L_0x04a8:

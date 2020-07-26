@@ -55,7 +55,11 @@ public class SlideChooseView extends View {
 
             /* access modifiers changed from: protected */
             public CharSequence getContentDescription(View view) {
-                return SlideChooseView.this.optionsStr[SlideChooseView.this.selectedIndex];
+                SlideChooseView slideChooseView = SlideChooseView.this;
+                if (slideChooseView.selectedIndex < slideChooseView.optionsStr.length) {
+                    return SlideChooseView.this.optionsStr[SlideChooseView.this.selectedIndex];
+                }
+                return null;
             }
         };
     }

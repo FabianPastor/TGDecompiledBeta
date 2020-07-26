@@ -934,17 +934,21 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                                     setImageDrawable(drawable);
                                     animatedFileDrawable.addSecondParentView(this);
                                     animatedFileDrawable.setInvalidateParentViewWithSecond(true);
+                                    z = false;
                                 }
                             }
                             ImageLocation imageLocation = (ImageLocation) ProfileGalleryView.this.videoLocations.get(realPosition);
+                            this.isVideo = imageLocation != null;
                             if (imageLocation != null && imageLocation.imageType == 2) {
                                 str = "g";
                             }
                             setImageMedia((ImageLocation) ProfileGalleryView.this.videoLocations.get(realPosition), str, (ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, this.this$1.parentAvatarImageView.getImageReceiver().getBitmap(), ((Integer) ProfileGalleryView.this.imagesLocationsSizes.get(realPosition)).intValue(), 1, (Object) null);
                         } else {
                             ImageLocation imageLocation2 = (ImageLocation) ProfileGalleryView.this.videoLocations.get(realPosition);
-                            this.isVideo = imageLocation2 == null ? false : z;
+                            this.isVideo = imageLocation2 != null;
                             setImageMedia(imageLocation2, (String) null, (ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, (ImageLocation) ProfileGalleryView.this.thumbsLocations.get(realPosition), ((ImageLocation) ProfileGalleryView.this.thumbsLocations.get(realPosition)).photoSize instanceof TLRPC$TL_photoStrippedSize ? "b" : str, (String) null, 0, 1, ProfileGalleryView.this.imagesLocationsSizes.get(realPosition));
+                        }
+                        if (z) {
                             RadialProgress2 radialProgress2 = (RadialProgress2) ProfileGalleryView.this.radialProgresses.get(realPosition);
                             this.radialProgress = radialProgress2;
                             if (radialProgress2 == null) {
@@ -955,6 +959,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                                 this.radialProgress.setColors(NUM, NUM, -1, -1);
                                 ProfileGalleryView.this.radialProgresses.append(realPosition, this.radialProgress);
                             }
+                            postInvalidateOnAnimation();
                         }
                         getImageReceiver().setDelegate(new ImageReceiver.ImageReceiverDelegate() {
                             public void didSetImage(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
@@ -984,29 +989,36 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                     public void onDraw(Canvas canvas) {
                         if (this.radialProgress != null) {
                             Drawable drawable = getImageReceiver().getDrawable();
-                            if (drawable == null || (this.isVideo && !(drawable instanceof AnimatedFileDrawable))) {
+                            long j = 0;
+                            if (drawable == null || (this.isVideo && (!(drawable instanceof AnimatedFileDrawable) || ((AnimatedFileDrawable) drawable).getDurationMs() <= 0))) {
                                 if (this.firstDrawTime < 0) {
                                     this.firstDrawTime = System.currentTimeMillis();
                                 } else {
                                     long currentTimeMillis = System.currentTimeMillis() - this.firstDrawTime;
-                                    if (currentTimeMillis <= 1000 && currentTimeMillis > 750) {
-                                        this.radialProgress.setOverrideAlpha(CubicBezierInterpolator.DEFAULT.getInterpolation(((float) (currentTimeMillis - 750)) / 250.0f));
+                                    long j2 = this.isVideo ? 250 : 750;
+                                    if (currentTimeMillis <= 250 + j2 && currentTimeMillis > j2) {
+                                        this.radialProgress.setOverrideAlpha(CubicBezierInterpolator.DEFAULT.getInterpolation(((float) (currentTimeMillis - j2)) / 250.0f));
                                     }
                                 }
                                 postInvalidateOnAnimation();
                             } else if (this.radialProgressHideAnimator == null) {
+                                if (this.radialProgress.getProgress() < 1.0f) {
+                                    this.radialProgress.setProgress(1.0f, true);
+                                    j = 100;
+                                }
                                 this.radialProgressHideAnimatorStartValue = this.radialProgress.getOverrideAlpha();
                                 ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
                                 this.radialProgressHideAnimator = ofFloat;
-                                ofFloat.setDuration((long) (this.radialProgressHideAnimatorStartValue * 250.0f));
+                                ofFloat.setStartDelay(j);
+                                this.radialProgressHideAnimator.setDuration((long) (this.radialProgressHideAnimatorStartValue * 250.0f));
                                 this.radialProgressHideAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
                                 this.radialProgressHideAnimator.addUpdateListener(
                                 /*  JADX ERROR: Method code generation error
-                                    jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0046: INVOKE  
-                                      (wrap: android.animation.ValueAnimator : 0x003f: IGET  (r0v22 android.animation.ValueAnimator) = 
+                                    jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0069: INVOKE  
+                                      (wrap: android.animation.ValueAnimator : 0x0062: IGET  (r0v27 android.animation.ValueAnimator) = 
                                       (r8v0 'this' org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter$1 A[THIS])
                                      org.telegram.ui.Components.ProfileGalleryView.ViewPagerAdapter.1.radialProgressHideAnimator android.animation.ValueAnimator)
-                                      (wrap: org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$wvZBxr78pLdwArB7T9Z7FL-LYVM : 0x0043: CONSTRUCTOR  (r1v5 org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$wvZBxr78pLdwArB7T9Z7FL-LYVM) = 
+                                      (wrap: org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$wvZBxr78pLdwArB7T9Z7FL-LYVM : 0x0066: CONSTRUCTOR  (r1v5 org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$wvZBxr78pLdwArB7T9Z7FL-LYVM) = 
                                       (r8v0 'this' org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter$1 A[THIS])
                                      call: org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$wvZBxr78pLdwArB7T9Z7FL-LYVM.<init>(org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter$1):void type: CONSTRUCTOR)
                                      android.animation.ValueAnimator.addUpdateListener(android.animation.ValueAnimator$AnimatorUpdateListener):void type: VIRTUAL in method: org.telegram.ui.Components.ProfileGalleryView.ViewPagerAdapter.1.onDraw(android.graphics.Canvas):void, dex: classes2.dex
@@ -1106,7 +1118,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                                     	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                     	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                     	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0043: CONSTRUCTOR  (r1v5 org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$wvZBxr78pLdwArB7T9Z7FL-LYVM) = 
+                                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0066: CONSTRUCTOR  (r1v5 org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$wvZBxr78pLdwArB7T9Z7FL-LYVM) = 
                                       (r8v0 'this' org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter$1 A[THIS])
                                      call: org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$wvZBxr78pLdwArB7T9Z7FL-LYVM.<init>(org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter$1):void type: CONSTRUCTOR in method: org.telegram.ui.Components.ProfileGalleryView.ViewPagerAdapter.1.onDraw(android.graphics.Canvas):void, dex: classes2.dex
                                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
@@ -1127,18 +1139,32 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                                 /*
                                     this = this;
                                     org.telegram.ui.Components.RadialProgress2 r0 = r8.radialProgress
-                                    if (r0 == 0) goto L_0x00a2
+                                    if (r0 == 0) goto L_0x00ca
                                     org.telegram.messenger.ImageReceiver r0 = r8.getImageReceiver()
                                     android.graphics.drawable.Drawable r0 = r0.getDrawable()
                                     r1 = 1132068864(0x437a0000, float:250.0)
-                                    if (r0 == 0) goto L_0x0059
-                                    boolean r2 = r8.isVideo
-                                    if (r2 == 0) goto L_0x0018
-                                    boolean r0 = r0 instanceof org.telegram.ui.Components.AnimatedFileDrawable
-                                    if (r0 == 0) goto L_0x0059
-                                L_0x0018:
+                                    r2 = 0
+                                    if (r0 == 0) goto L_0x007c
+                                    boolean r4 = r8.isVideo
+                                    if (r4 == 0) goto L_0x0022
+                                    boolean r4 = r0 instanceof org.telegram.ui.Components.AnimatedFileDrawable
+                                    if (r4 == 0) goto L_0x007c
+                                    org.telegram.ui.Components.AnimatedFileDrawable r0 = (org.telegram.ui.Components.AnimatedFileDrawable) r0
+                                    int r0 = r0.getDurationMs()
+                                    if (r0 <= 0) goto L_0x007c
+                                L_0x0022:
                                     android.animation.ValueAnimator r0 = r8.radialProgressHideAnimator
-                                    if (r0 != 0) goto L_0x008c
+                                    if (r0 != 0) goto L_0x00b4
+                                    org.telegram.ui.Components.RadialProgress2 r0 = r8.radialProgress
+                                    float r0 = r0.getProgress()
+                                    r4 = 1065353216(0x3var_, float:1.0)
+                                    int r0 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
+                                    if (r0 >= 0) goto L_0x003a
+                                    org.telegram.ui.Components.RadialProgress2 r0 = r8.radialProgress
+                                    r2 = 1
+                                    r0.setProgress(r4, r2)
+                                    r2 = 100
+                                L_0x003a:
                                     org.telegram.ui.Components.RadialProgress2 r0 = r8.radialProgress
                                     float r0 = r0.getOverrideAlpha()
                                     r8.radialProgressHideAnimatorStartValue = r0
@@ -1147,6 +1173,8 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                                     r0 = {0, NUM} // fill-array
                                     android.animation.ValueAnimator r0 = android.animation.ValueAnimator.ofFloat(r0)
                                     r8.radialProgressHideAnimator = r0
+                                    r0.setStartDelay(r2)
+                                    android.animation.ValueAnimator r0 = r8.radialProgressHideAnimator
                                     float r2 = r8.radialProgressHideAnimatorStartValue
                                     float r2 = r2 * r1
                                     long r1 = (long) r2
@@ -1164,35 +1192,41 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                                     r0.addListener(r1)
                                     android.animation.ValueAnimator r0 = r8.radialProgressHideAnimator
                                     r0.start()
-                                    goto L_0x008c
-                                L_0x0059:
-                                    long r2 = r8.firstDrawTime
-                                    r4 = 0
-                                    int r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-                                    if (r0 >= 0) goto L_0x0068
+                                    goto L_0x00b4
+                                L_0x007c:
+                                    long r4 = r8.firstDrawTime
+                                    int r0 = (r4 > r2 ? 1 : (r4 == r2 ? 0 : -1))
+                                    if (r0 >= 0) goto L_0x0089
                                     long r0 = java.lang.System.currentTimeMillis()
                                     r8.firstDrawTime = r0
-                                    goto L_0x0089
-                                L_0x0068:
+                                    goto L_0x00b1
+                                L_0x0089:
                                     long r2 = java.lang.System.currentTimeMillis()
                                     long r4 = r8.firstDrawTime
                                     long r2 = r2 - r4
-                                    r4 = 1000(0x3e8, double:4.94E-321)
+                                    boolean r0 = r8.isVideo
+                                    r4 = 250(0xfa, double:1.235E-321)
+                                    if (r0 == 0) goto L_0x0098
+                                    r6 = r4
+                                    goto L_0x009a
+                                L_0x0098:
+                                    r6 = 750(0x2ee, double:3.705E-321)
+                                L_0x009a:
+                                    long r4 = r4 + r6
                                     int r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-                                    if (r0 > 0) goto L_0x0089
-                                    r4 = 750(0x2ee, double:3.705E-321)
-                                    int r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-                                    if (r0 <= 0) goto L_0x0089
+                                    if (r0 > 0) goto L_0x00b1
+                                    int r0 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
+                                    if (r0 <= 0) goto L_0x00b1
                                     org.telegram.ui.Components.RadialProgress2 r0 = r8.radialProgress
-                                    org.telegram.ui.Components.CubicBezierInterpolator r6 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
-                                    long r2 = r2 - r4
+                                    org.telegram.ui.Components.CubicBezierInterpolator r4 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
+                                    long r2 = r2 - r6
                                     float r2 = (float) r2
                                     float r2 = r2 / r1
-                                    float r1 = r6.getInterpolation(r2)
+                                    float r1 = r4.getInterpolation(r2)
                                     r0.setOverrideAlpha(r1)
-                                L_0x0089:
+                                L_0x00b1:
                                     r8.postInvalidateOnAnimation()
-                                L_0x008c:
+                                L_0x00b4:
                                     r3 = 0
                                     r4 = 0
                                     int r0 = r8.getWidth()
@@ -1203,17 +1237,17 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                                     android.graphics.Paint r7 = r0.placeholderPaint
                                     r2 = r9
                                     r2.drawRect(r3, r4, r5, r6, r7)
-                                L_0x00a2:
+                                L_0x00ca:
                                     super.onDraw(r9)
                                     org.telegram.ui.Components.RadialProgress2 r0 = r8.radialProgress
-                                    if (r0 == 0) goto L_0x00b7
+                                    if (r0 == 0) goto L_0x00df
                                     float r0 = r0.getOverrideAlpha()
                                     r1 = 0
                                     int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-                                    if (r0 <= 0) goto L_0x00b7
+                                    if (r0 <= 0) goto L_0x00df
                                     org.telegram.ui.Components.RadialProgress2 r0 = r8.radialProgress
                                     r0.draw(r9)
-                                L_0x00b7:
+                                L_0x00df:
                                     return
                                 */
                                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ProfileGalleryView.ViewPagerAdapter.AnonymousClass1.onDraw(android.graphics.Canvas):void");

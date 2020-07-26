@@ -357,7 +357,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r5.<init>(r0)
             r3.setActionBarMenuItemSearchListener(r5)
             java.lang.String r5 = "Search"
-            r6 = 2131626771(0x7f0e0b13, float:1.8880788E38)
+            r6 = 2131626769(0x7f0e0b11, float:1.8880784E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)
             r3.setSearchFieldHint(r5)
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
@@ -368,7 +368,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r3.setAddToContainer(r4)
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
             java.lang.String r5 = "ThemePreview"
-            r6 = 2131627142(0x7f0e0CLASSNAME, float:1.888154E38)
+            r6 = 2131627139(0x7f0e0CLASSNAME, float:1.8881534E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)
             r3.setTitle(r5)
             org.telegram.ui.ThemePreviewActivity$2 r3 = new org.telegram.ui.ThemePreviewActivity$2
@@ -653,7 +653,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ActionBar.ActionBar r8 = r0.actionBar2
             org.telegram.ui.ActionBar.ActionBarMenu r8 = r8.createMenu()
             r15 = 4
-            r14 = 2131626750(0x7f0e0afe, float:1.8880745E38)
+            r14 = 2131626748(0x7f0e0afc, float:1.888074E38)
             java.lang.String r13 = "Save"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r13, r14)
             java.lang.String r13 = r13.toUpperCase()
@@ -664,17 +664,17 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r0.dropDownContainer = r13
             r13.setSubMenuOpenSide(r2)
             org.telegram.ui.ActionBar.ActionBarMenuItem r8 = r0.dropDownContainer
-            r13 = 2131624815(0x7f0e036f, float:1.887682E38)
+            r13 = 2131624814(0x7f0e036e, float:1.8876818E38)
             java.lang.String r14 = "ColorPickerMainColor"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r8.addSubItem(r2, r13)
             org.telegram.ui.ActionBar.ActionBarMenuItem r8 = r0.dropDownContainer
-            r13 = 2131624814(0x7f0e036e, float:1.8876818E38)
+            r13 = 2131624813(0x7f0e036d, float:1.8876816E38)
             java.lang.String r14 = "ColorPickerBackground"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r8.addSubItem(r9, r13)
             org.telegram.ui.ActionBar.ActionBarMenuItem r8 = r0.dropDownContainer
-            r13 = 2131624816(0x7f0e0370, float:1.8876822E38)
+            r13 = 2131624815(0x7f0e036f, float:1.887682E38)
             java.lang.String r14 = "ColorPickerMyMessages"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r8.addSubItem(r12, r13)
@@ -725,7 +725,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             android.graphics.Typeface r12 = org.telegram.messenger.AndroidUtilities.getTypeface(r11)
             r8.setTypeface(r12)
             android.widget.TextView r8 = r0.dropDown
-            r12 = 2131624815(0x7f0e036f, float:1.887682E38)
+            r12 = 2131624814(0x7f0e036e, float:1.8876818E38)
             java.lang.String r13 = "ColorPickerMainColor"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             r8.setText(r12)
@@ -934,7 +934,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             int r8 = org.telegram.ui.ActionBar.Theme.getColor(r10)
             r6.setTextColor(r8)
             android.widget.TextView r6 = r0.bottomOverlayChatText
-            r8 = 2131626882(0x7f0e0b82, float:1.8881013E38)
+            r8 = 2131626880(0x7f0e0b80, float:1.8881009E38)
             java.lang.String r12 = "SetBackground"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r12, r8)
             r6.setText(r8)
@@ -2597,21 +2597,21 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r1 = r7.getParentActivity()
             r0.<init>((android.content.Context) r1)
-            r1 = 2131626752(0x7f0e0b00, float:1.888075E38)
+            r1 = 2131626750(0x7f0e0afe, float:1.8880745E38)
             java.lang.String r2 = "SaveChangesAlertTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            r1 = 2131626751(0x7f0e0aff, float:1.8880747E38)
+            r1 = 2131626749(0x7f0e0afd, float:1.8880743E38)
             java.lang.String r2 = "SaveChangesAlertText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setMessage(r1)
-            r1 = 2131626750(0x7f0e0afe, float:1.8880745E38)
+            r1 = 2131626748(0x7f0e0afc, float:1.888074E38)
             java.lang.String r2 = "Save"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.-$$Lambda$ThemePreviewActivity$VhuCSQ0ekK36xL0S9AHA-K57wyo r2 = new org.telegram.ui.-$$Lambda$ThemePreviewActivity$VhuCSQ0ekK36xL0S9AHA-K57wyo
             r2.<init>()
             r0.setPositiveButton(r1, r2)
-            r1 = 2131626246(0x7f0e0906, float:1.8879723E38)
+            r1 = 2131626245(0x7f0e0905, float:1.887972E38)
             java.lang.String r2 = "PassportDiscard"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.-$$Lambda$ThemePreviewActivity$6MCYHNXt8AHlTpbo4JBN0Y_054c r2 = new org.telegram.ui.-$$Lambda$ThemePreviewActivity$6MCYHNXt8AHlTpbo4JBN0Y_054c

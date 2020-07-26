@@ -797,7 +797,8 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
             }
         } else if (i3 == NotificationCenter.FileUploadProgressChanged) {
             String str2 = objArr[0];
-            if (this.delegate != null && str2.equals(this.uploadingVideo)) {
+            String str3 = this.convertingVideo != null ? this.uploadingVideo : this.uploadingImage;
+            if (this.delegate != null && str2.equals(str3)) {
                 this.delegate.onUploadProgressChanged(Math.min(1.0f, ((float) objArr[1].longValue()) / ((float) objArr[2].longValue())));
             }
         } else if (i3 == NotificationCenter.fileDidLoad || i3 == NotificationCenter.fileDidFailToLoad || i3 == NotificationCenter.httpFileDidLoad || i3 == NotificationCenter.httpFileDidFailedLoad) {
@@ -825,10 +826,10 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
         } else if (i3 == NotificationCenter.fileNewChunkAvailable) {
             MessageObject messageObject2 = objArr[0];
             if (messageObject2 == this.convertingVideo && this.parentFragment != null) {
-                String str3 = objArr[1];
+                String str4 = objArr[1];
                 long longValue = objArr[2].longValue();
                 long longValue2 = objArr[3].longValue();
-                this.parentFragment.getFileLoader().checkUploadNewDataAvailable(str3, false, longValue, longValue2);
+                this.parentFragment.getFileLoader().checkUploadNewDataAvailable(str4, false, longValue, longValue2);
                 if (longValue2 != 0) {
                     double longValue3 = (double) objArr[5].longValue();
                     Double.isNaN(longValue3);
@@ -836,7 +837,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                     if (this.videoTimestamp > d) {
                         this.videoTimestamp = d;
                     }
-                    Bitmap createVideoThumbnailAtTime = SendMessagesHelper.createVideoThumbnailAtTime(str3, (long) (this.videoTimestamp * 1000.0d), (int[]) null, true);
+                    Bitmap createVideoThumbnailAtTime = SendMessagesHelper.createVideoThumbnailAtTime(str4, (long) (this.videoTimestamp * 1000.0d), (int[]) null, true);
                     if (createVideoThumbnailAtTime != null) {
                         File pathToAttach = FileLoader.getPathToAttach(this.smallPhoto, true);
                         if (pathToAttach != null) {
@@ -862,8 +863,8 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                     NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.filePreparingFailed);
                     NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.fileNewChunkAvailable);
                     this.parentFragment.getSendMessagesHelper().stopVideoService(messageObject2.messageOwner.attachPath);
-                    this.videoPath = str3;
-                    this.uploadingVideo = str3;
+                    this.videoPath = str4;
+                    this.uploadingVideo = str4;
                     this.convertingVideo = null;
                 }
             }
