@@ -285,7 +285,7 @@ class Camera2Session implements CameraSession {
         this.events.onCameraOpening();
         try {
             this.cameraManager.openCamera(this.cameraId, new CameraStateCallback(), this.cameraThreadHandler);
-        } catch (CameraAccessException e) {
+        } catch (Exception e) {
             reportError("Failed to open camera: " + e);
         }
     }

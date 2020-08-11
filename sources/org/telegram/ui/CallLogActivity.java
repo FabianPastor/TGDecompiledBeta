@@ -493,6 +493,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 
     public /* synthetic */ void lambda$null$3$CallLogActivity(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity) {
         TLRPC$UserFull userFull = getMessagesController().getUserFull(tLRPC$User.id);
+        this.lastCallUser = tLRPC$User;
         VoIPHelper.startCall(tLRPC$User, false, userFull != null && userFull.video_calls_available, getParentActivity(), (TLRPC$UserFull) null);
     }
 
@@ -667,7 +668,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                 VoIPHelper.permissionDenied(getParentActivity(), (Runnable) null, i);
                 return;
             }
-            TLRPC$UserFull userFull = getMessagesController().getUserFull(this.lastCallUser.id);
+            TLRPC$UserFull userFull = this.lastCallUser != null ? getMessagesController().getUserFull(this.lastCallUser.id) : null;
             TLRPC$User tLRPC$User = this.lastCallUser;
             boolean z3 = i == 102;
             if (i == 102 || (userFull != null && userFull.video_calls_available)) {

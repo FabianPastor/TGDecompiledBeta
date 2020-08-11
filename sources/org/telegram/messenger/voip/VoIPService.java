@@ -225,9 +225,9 @@ public class VoIPService extends VoIPBaseService {
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeInCallActivity, new Object[0]);
                 TLRPC$PhoneCall tLRPC$PhoneCall = callIShouldHavePutIntoIntent;
                 this.call = tLRPC$PhoneCall;
-                boolean z = tLRPC$PhoneCall.video;
+                boolean z = tLRPC$PhoneCall != null && tLRPC$PhoneCall.video;
                 this.videoCall = z;
-                if (!z || checkSelfPermission("android.permission.CAMERA") != 0) {
+                if (!z || (Build.VERSION.SDK_INT >= 23 && checkSelfPermission("android.permission.CAMERA") != 0)) {
                     this.videoState = 0;
                 } else {
                     this.videoCapturer = NativeInstance.createVideoCapturer(this.localSink);

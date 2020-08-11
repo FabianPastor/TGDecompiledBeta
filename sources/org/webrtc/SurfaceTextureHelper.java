@@ -277,10 +277,25 @@ public class SurfaceTextureHelper {
     }
 
     /* access modifiers changed from: private */
+    /* JADX WARNING: Exception block dominator not found, dom blocks: [] */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:4:0x0008 */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     public void updateTexImage() {
-        synchronized (EglBase.lock) {
-            this.surfaceTexture.updateTexImage();
-        }
+        /*
+            r2 = this;
+            java.lang.Object r0 = org.webrtc.EglBase.lock
+            monitor-enter(r0)
+            android.graphics.SurfaceTexture r1 = r2.surfaceTexture     // Catch:{ all -> 0x0008 }
+            r1.updateTexImage()     // Catch:{ all -> 0x0008 }
+        L_0x0008:
+            monitor-exit(r0)     // Catch:{ all -> 0x000a }
+            return
+        L_0x000a:
+            r1 = move-exception
+            monitor-exit(r0)     // Catch:{ all -> 0x000a }
+            throw r1
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.webrtc.SurfaceTextureHelper.updateTexImage():void");
     }
 
     private void tryDeliverTextureFrame() {

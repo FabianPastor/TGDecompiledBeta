@@ -13,14 +13,12 @@ import org.webrtc.CameraEnumerator;
 import org.webrtc.CameraVideoCapturer;
 import org.webrtc.CapturerObserver;
 import org.webrtc.EglBase;
-import org.webrtc.NativeCapturerObserver;
 import org.webrtc.SurfaceTextureHelper;
-import org.webrtc.VideoSource;
 
 @TargetApi(18)
 public class VideoCameraCapturer {
     private static final int CAPTURE_FPS = 30;
-    private static final int CAPTURE_HEIGHT = 960;
+    private static final int CAPTURE_HEIGHT = 720;
     private static final int CAPTURE_WIDTH = 1280;
     public static EglBase eglBase;
     private static VideoCameraCapturer instance;
@@ -32,6 +30,9 @@ public class VideoCameraCapturer {
     private SurfaceTextureHelper videoCapturerSurfaceTextureHelper;
 
     private static native CapturerObserver nativeGetJavaVideoCapturerObserver(long j);
+
+    private void onAspectRatioRequested(float f) {
+    }
 
     public static VideoCameraCapturer getInstance() {
         return instance;
@@ -77,45 +78,46 @@ public class VideoCameraCapturer {
         CameraEnumerator camera2Enumerator = Camera2Enumerator.isSupported(ApplicationLoader.applicationContext) ? new Camera2Enumerator(ApplicationLoader.applicationContext) : new Camera1Enumerator();
         String[] deviceNames = camera2Enumerator.getDeviceNames();
         int i = 0;
-        int i2 = 0;
         while (true) {
-            if (i2 >= deviceNames.length) {
+            if (i >= deviceNames.length) {
+                i = -1;
                 break;
-            } else if (camera2Enumerator.isFrontFacing(deviceNames[i2]) == z) {
-                i = i2;
+            } else if (camera2Enumerator.isFrontFacing(deviceNames[i]) == z) {
                 break;
             } else {
-                i2++;
+                i++;
             }
         }
-        String str = deviceNames[i];
-        if (this.videoCapturer == null) {
-            this.videoCapturer = camera2Enumerator.createCapturer(str, (CameraVideoCapturer.CameraEventsHandler) null);
-            this.videoCapturerSurfaceTextureHelper = SurfaceTextureHelper.create("VideoCapturerThread", eglBase.getEglBaseContext());
-            this.handler.post(new Runnable() {
+        if (i != -1) {
+            String str = deviceNames[i];
+            if (this.videoCapturer == null) {
+                this.videoCapturer = camera2Enumerator.createCapturer(str, (CameraVideoCapturer.CameraEventsHandler) null);
+                this.videoCapturerSurfaceTextureHelper = SurfaceTextureHelper.create("VideoCapturerThread", eglBase.getEglBaseContext());
+                this.handler.post(new Runnable() {
+                    public final void run() {
+                        VideoCameraCapturer.this.lambda$null$1$VideoCameraCapturer();
+                    }
+                });
+                return;
+            }
+            this.handler.post(new Runnable(str) {
+                public final /* synthetic */ String f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
                 public final void run() {
-                    VideoCameraCapturer.this.lambda$null$1$VideoCameraCapturer();
+                    VideoCameraCapturer.this.lambda$null$2$VideoCameraCapturer(this.f$1);
                 }
             });
-            return;
         }
-        this.handler.post(new Runnable(str) {
-            public final /* synthetic */ String f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                VideoCameraCapturer.this.lambda$null$2$VideoCameraCapturer(this.f$1);
-            }
-        });
     }
 
     public /* synthetic */ void lambda$null$1$VideoCameraCapturer() {
         this.nativeCapturerObserver = nativeGetJavaVideoCapturerObserver(this.nativePtr);
         this.videoCapturer.initialize(this.videoCapturerSurfaceTextureHelper, ApplicationLoader.applicationContext, this.nativeCapturerObserver);
-        this.videoCapturer.startCapture(1280, 960, 30);
+        this.videoCapturer.startCapture(1280, 720, 30);
     }
 
     public /* synthetic */ void lambda$null$2$VideoCameraCapturer(String str) {
@@ -145,40 +147,6 @@ public class VideoCameraCapturer {
         }, str);
     }
 
-    private void onAspectRatioRequested(float f) {
-        if (f >= 1.0E-4f) {
-            this.handler.post(new Runnable(f) {
-                public final /* synthetic */ float f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void run() {
-                    VideoCameraCapturer.this.lambda$onAspectRatioRequested$4$VideoCameraCapturer(this.f$1);
-                }
-            });
-        }
-    }
-
-    public /* synthetic */ void lambda$onAspectRatioRequested$4$VideoCameraCapturer(float f) {
-        int i;
-        int i2;
-        if (this.nativeCapturerObserver instanceof NativeCapturerObserver) {
-            if (f < 1.0f) {
-                i2 = 960;
-                i = (int) (((float) 960) / f);
-            } else {
-                i2 = (int) (((float) 1280) * f);
-                i = 1280;
-            }
-            if (i > 0 && i2 > 0) {
-                int i3 = i * i2;
-                ((NativeCapturerObserver) this.nativeCapturerObserver).getNativeAndroidVideoTrackSource().adaptOutputFormat(new VideoSource.AspectRatio(i, i2), Integer.valueOf(i3), new VideoSource.AspectRatio(i2, i), Integer.valueOf(i3), 30);
-            }
-        }
-    }
-
     private void onStateChanged(long j, int i) {
         AndroidUtilities.runOnUIThread(new Runnable(j, i) {
             public final /* synthetic */ long f$1;
@@ -190,12 +158,12 @@ public class VideoCameraCapturer {
             }
 
             public final void run() {
-                VideoCameraCapturer.this.lambda$onStateChanged$6$VideoCameraCapturer(this.f$1, this.f$2);
+                VideoCameraCapturer.this.lambda$onStateChanged$5$VideoCameraCapturer(this.f$1, this.f$2);
             }
         });
     }
 
-    public /* synthetic */ void lambda$onStateChanged$6$VideoCameraCapturer(long j, int i) {
+    public /* synthetic */ void lambda$onStateChanged$5$VideoCameraCapturer(long j, int i) {
         if (this.nativePtr == j) {
             this.handler.post(new Runnable(i) {
                 public final /* synthetic */ int f$1;
@@ -205,33 +173,36 @@ public class VideoCameraCapturer {
                 }
 
                 public final void run() {
-                    VideoCameraCapturer.this.lambda$null$5$VideoCameraCapturer(this.f$1);
+                    VideoCameraCapturer.this.lambda$null$4$VideoCameraCapturer(this.f$1);
                 }
             });
         }
     }
 
-    public /* synthetic */ void lambda$null$5$VideoCameraCapturer(int i) {
-        if (i == 2) {
-            this.videoCapturer.startCapture(1280, 960, 30);
-            return;
-        }
-        try {
-            this.videoCapturer.stopCapture();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+    public /* synthetic */ void lambda$null$4$VideoCameraCapturer(int i) {
+        CameraVideoCapturer cameraVideoCapturer = this.videoCapturer;
+        if (cameraVideoCapturer != null) {
+            if (i == 2) {
+                cameraVideoCapturer.startCapture(1280, 720, 30);
+                return;
+            }
+            try {
+                cameraVideoCapturer.stopCapture();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
     private void onDestroy() {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                VideoCameraCapturer.this.lambda$onDestroy$8$VideoCameraCapturer();
+                VideoCameraCapturer.this.lambda$onDestroy$7$VideoCameraCapturer();
             }
         });
     }
 
-    public /* synthetic */ void lambda$onDestroy$8$VideoCameraCapturer() {
+    public /* synthetic */ void lambda$onDestroy$7$VideoCameraCapturer() {
         EglBase eglBase2 = eglBase;
         if (eglBase2 != null) {
             eglBase2.release();
@@ -242,7 +213,7 @@ public class VideoCameraCapturer {
         }
         this.handler.post(new Runnable() {
             public final void run() {
-                VideoCameraCapturer.this.lambda$null$7$VideoCameraCapturer();
+                VideoCameraCapturer.this.lambda$null$6$VideoCameraCapturer();
             }
         });
         try {
@@ -252,7 +223,7 @@ public class VideoCameraCapturer {
         }
     }
 
-    public /* synthetic */ void lambda$null$7$VideoCameraCapturer() {
+    public /* synthetic */ void lambda$null$6$VideoCameraCapturer() {
         CameraVideoCapturer cameraVideoCapturer = this.videoCapturer;
         if (cameraVideoCapturer != null) {
             try {
