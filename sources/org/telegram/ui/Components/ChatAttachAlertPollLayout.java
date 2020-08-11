@@ -1115,7 +1115,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 android.content.Context r12 = r10.mContext
                 r11.<init>(r12)
                 android.content.Context r12 = r10.mContext
-                r2 = 2131165412(0x7var_e4, float:1.794504E38)
+                r2 = 2131165424(0x7var_f0, float:1.7945065E38)
                 java.lang.String r3 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r2, (java.lang.String) r3)
                 org.telegram.ui.Components.CombinedDrawable r2 = new org.telegram.ui.Components.CombinedDrawable

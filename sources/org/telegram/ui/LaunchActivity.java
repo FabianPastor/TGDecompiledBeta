@@ -376,7 +376,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r4.<init>(r12)
             r12.backgroundTablet = r4
             android.content.res.Resources r4 = r12.getResources()
-            r6 = 2131165311(0x7var_f, float:1.7944836E38)
+            r6 = 2131165323(0x7var_b, float:1.794486E38)
             android.graphics.drawable.Drawable r4 = r4.getDrawable(r6)
             android.graphics.drawable.BitmapDrawable r4 = (android.graphics.drawable.BitmapDrawable) r4
             android.graphics.Shader$TileMode r6 = android.graphics.Shader.TileMode.REPEAT
@@ -1289,10 +1289,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v23, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v49, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v70, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v16, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v17, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v24, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v173, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v175, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v176, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v178, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v15, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r11v6, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v19, resolved type: java.lang.String} */
@@ -1312,9 +1312,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v26, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v54, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v78, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v30, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v31, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v29, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v200, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v203, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v2, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v2, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v2, resolved type: java.lang.String} */
@@ -1328,7 +1328,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v4, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v24, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v30, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v201, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v204, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r20v2, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v4, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v5, resolved type: java.lang.String} */
@@ -1341,13 +1341,13 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v28, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v56, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v80, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v31, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v31, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v202, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v23, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v203, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v32, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v32, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v31, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v205, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v23, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v206, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v32, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v33, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v57, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v29, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v25, resolved type: java.lang.String} */
@@ -1364,18 +1364,18 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v31, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v61, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v83, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v33, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v34, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v33, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v204, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v207, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r20v4, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v26, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v34, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v35, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v36, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v37, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v207, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v34, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v38, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v210, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v34, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v39, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v88, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v71, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v33, resolved type: java.lang.String} */
@@ -1387,19 +1387,19 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v8, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v7, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r20v5, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v39, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v40, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v41, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v42, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v43, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v44, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v49, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v45, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v50, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v45, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v31, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v8, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v28, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v28, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v212, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v215, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v46, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v78, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v35, resolved type: java.lang.String} */
@@ -1408,20 +1408,20 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v9, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r20v6, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v98, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v50, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v47, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v51, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v99, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v47, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v52, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v99, resolved type: java.lang.Object} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v53, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v54, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v48, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v51, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v214, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v217, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r20v7, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v9, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v215, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v218, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v53, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v58, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v59, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v105, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v81, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v36, resolved type: java.lang.String} */
@@ -1430,14 +1430,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v30, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v10, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v10, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v59, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v62, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v1, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v60, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v63, resolved type: java.lang.Integer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r43v1, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v64, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v31, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v222, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v225, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v57, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v65, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v66, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v82, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v37, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v30, resolved type: java.lang.String} */
@@ -1447,14 +1447,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v11, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v44, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v58, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v67, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v68, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v83, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v38, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v31, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v31, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r12v34, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v32, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v68, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v69, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v108, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v84, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v39, resolved type: java.lang.String} */
@@ -1466,10 +1466,10 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v10, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r20v8, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v61, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v226, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v229, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v40, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v62, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v70, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v71, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v85, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v33, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v13, resolved type: java.lang.String} */
@@ -1480,29 +1480,29 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v41, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v86, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v110, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v71, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v72, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v63, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v229, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v232, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v12, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v35, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v47, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v42, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v87, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v111, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v72, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v73, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v64, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v230, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v233, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v14, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v36, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v43, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v88, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v112, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v73, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v74, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v65, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v36, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v89, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v66, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v75, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v76, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v44, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v13, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v15, resolved type: java.lang.String} */
@@ -1513,14 +1513,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v45, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v90, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v114, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v76, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v77, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v67, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v234, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v237, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v11, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v16, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v236, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v239, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v68, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v78, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v79, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v91, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v39, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v37, resolved type: java.lang.String} */
@@ -1530,8 +1530,8 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v14, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v27, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v15, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v237, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v80, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v240, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v81, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v94, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v47, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v40, resolved type: java.lang.String} */
@@ -1553,9 +1553,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v56, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v114, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v145, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v115, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v116, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v71, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v246, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v249, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v3, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v4, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v4, resolved type: java.lang.String} */
@@ -1570,9 +1570,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v57, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v115, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v146, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v116, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v117, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v72, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v247, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v250, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v5, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v5, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v15, resolved type: java.lang.String} */
@@ -1584,9 +1584,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v58, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v116, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v147, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v117, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v118, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v73, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v248, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v251, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v5, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v5, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v6, resolved type: java.lang.String} */
@@ -1599,9 +1599,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v59, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v117, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v148, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v118, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v119, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v74, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v249, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v252, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v6, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v17, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v20, resolved type: java.util.HashMap} */
@@ -1612,9 +1612,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v60, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v118, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v149, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v119, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v120, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v75, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v250, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v253, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v7, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v18, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v21, resolved type: java.util.HashMap} */
@@ -1625,9 +1625,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v61, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v119, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v150, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v120, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v121, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v76, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v251, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v254, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v19, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v22, resolved type: java.util.HashMap} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v24, resolved type: java.lang.String} */
@@ -1637,9 +1637,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v62, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v120, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v151, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v121, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v122, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v77, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v252, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v255, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v20, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v25, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v47, resolved type: java.lang.String} */
@@ -1648,9 +1648,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v63, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v121, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v152, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v122, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v123, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v78, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v253, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v256, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v23, resolved type: java.util.HashMap} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v24, resolved type: java.util.HashMap} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v26, resolved type: java.lang.String} */
@@ -1660,9 +1660,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v64, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v122, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v153, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v123, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v124, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v79, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v254, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v257, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v21, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v27, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v49, resolved type: java.lang.String} */
@@ -1671,13 +1671,13 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v65, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v123, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v154, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v124, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v80, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v255, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v25, resolved type: java.util.HashMap} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v256, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v82, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v125, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v80, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v258, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v25, resolved type: java.util.HashMap} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v259, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v82, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v126, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v155, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v124, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v66, resolved type: java.lang.String} */
@@ -1685,15 +1685,15 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v65, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v50, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v28, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v261, resolved type: java.lang.Integer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v264, resolved type: java.lang.Integer} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v22, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v29, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v69, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v57, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v51, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v262, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v265, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v87, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v130, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v131, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v158, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v127, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v66, resolved type: java.lang.String} */
@@ -1701,9 +1701,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v70, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v58, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v52, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v263, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v266, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v88, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v131, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v132, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v159, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v128, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v67, resolved type: java.lang.String} */
@@ -1711,38 +1711,38 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v71, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v129, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v162, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v134, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v135, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v90, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v265, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v268, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v68, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v53, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v31, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v130, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v163, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v135, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v136, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v91, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v266, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v269, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v72, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v70, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v164, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v136, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v92, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v267, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v131, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v137, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v92, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v270, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v131, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v138, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v93, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v268, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v271, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v165, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v98, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v273, resolved type: java.lang.Integer} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v274, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v276, resolved type: java.lang.Integer} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v277, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v99, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v140, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v141, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r13v69, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v23, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v275, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v278, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v100, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v142, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v143, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v166, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v132, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v73, resolved type: java.lang.String} */
@@ -1750,9 +1750,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v54, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v32, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r33v5, resolved type: org.telegram.tgnet.TLRPC$TL_wallPaper} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v279, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v282, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v104, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v147, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v148, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v167, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v133, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v74, resolved type: java.lang.String} */
@@ -1765,37 +1765,37 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v7, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v6, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v194, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v291, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v294, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v108, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v180, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v149, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v296, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v112, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v181, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v195, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v149, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v299, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v112, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v182, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v195, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v183, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v303, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v304, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v184, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v306, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v307, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v113, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v305, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v185, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v308, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v186, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v204, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v151, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v83, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r7v92, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v306, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v188, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v309, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v189, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v190, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v313, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v192, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v191, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v316, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v193, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v120, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v7, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r32v7, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v318, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v321, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v129, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v194, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v195, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v211, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v154, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v84, resolved type: java.lang.String} */
@@ -1807,9 +1807,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v25, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v9, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v8, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v324, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v327, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v139, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v198, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v199, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v213, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v155, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v85, resolved type: java.lang.String} */
@@ -1820,9 +1820,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v29, resolved type: java.util.HashMap} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v26, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v10, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v336, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v339, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v162, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v203, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v204, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v216, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v156, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v86, resolved type: java.lang.String} */
@@ -1832,9 +1832,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v36, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v27, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r34v4, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v341, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v344, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v170, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v204, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v205, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v217, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v157, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v87, resolved type: java.lang.String} */
@@ -1845,9 +1845,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r29v11, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v9, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r31v8, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v344, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v347, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v182, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v205, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v206, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v218, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v158, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v88, resolved type: java.lang.String} */
@@ -1856,9 +1856,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v60, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v38, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v29, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v346, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v349, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v183, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v206, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v207, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v219, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v159, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v89, resolved type: java.lang.String} */
@@ -1867,9 +1867,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v61, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v39, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v30, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v347, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v350, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v184, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v207, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v208, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v220, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v160, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v90, resolved type: java.lang.String} */
@@ -1878,9 +1878,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r16v62, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v40, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v31, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v348, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v351, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v185, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v208, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v209, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v221, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v161, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v91, resolved type: java.lang.String} */
@@ -1890,9 +1890,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r17v41, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r19v32, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r30v10, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v352, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v355, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v192, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v209, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r3v210, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v222, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v162, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r6v92, resolved type: java.lang.String} */
@@ -1905,16 +1905,16 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v267, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v268, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v215, resolved type: java.lang.String} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v406, resolved type: java.lang.String} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v409, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r18v37, resolved type: java.util.HashMap} */
     /* JADX WARNING: type inference failed for: r4v1, types: [android.os.Bundle, java.lang.String] */
     /* JADX WARNING: type inference failed for: r4v5 */
     /* JADX WARNING: type inference failed for: r4v25 */
-    /* JADX WARNING: type inference failed for: r3v12 */
+    /* JADX WARNING: type inference failed for: r3v13 */
     /* JADX WARNING: type inference failed for: r13v31, types: [java.util.HashMap] */
     /* JADX WARNING: type inference failed for: r18v1, types: [org.telegram.tgnet.TLRPC$TL_wallPaper] */
     /* JADX WARNING: type inference failed for: r9v20 */
-    /* JADX WARNING: type inference failed for: r3v57 */
+    /* JADX WARNING: type inference failed for: r3v58 */
     /* JADX WARNING: type inference failed for: r1v69, types: [org.telegram.tgnet.TLRPC$TL_wallPaper, org.telegram.tgnet.TLRPC$WallPaper] */
     /* JADX WARNING: type inference failed for: r28v7 */
     /* JADX WARNING: type inference failed for: r28v8 */
@@ -1924,7 +1924,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     /* JADX WARNING: type inference failed for: r28v15 */
     /* JADX WARNING: type inference failed for: r28v16 */
     /* JADX WARNING: type inference failed for: r4v265 */
-    /* JADX WARNING: type inference failed for: r3v220 */
+    /* JADX WARNING: type inference failed for: r3v221 */
     /* JADX WARNING: Code restructure failed: missing block: B:133:0x0279, code lost:
         if (r15.sendingText == null) goto L_0x0174;
      */
@@ -4599,24 +4599,24 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (r4 == 0) goto L_0x135e
             int r4 = r4.size()
             if (r4 == r10) goto L_0x137a
-            r4 = 2131626848(0x7f0e0b60, float:1.8880944E38)
+            r4 = 2131626853(0x7f0e0b65, float:1.8880954E38)
             java.lang.String r5 = "SendContactToText"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             java.lang.String r5 = "selectAlertString"
             r0.putString(r5, r4)
-            r4 = 2131626826(0x7f0e0b4a, float:1.88809E38)
+            r4 = 2131626831(0x7f0e0b4f, float:1.888091E38)
             java.lang.String r5 = "SendContactToGroupText"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             java.lang.String r5 = "selectAlertStringGroup"
             r0.putString(r5, r4)
             goto L_0x137a
         L_0x135e:
-            r4 = 2131626848(0x7f0e0b60, float:1.8880944E38)
+            r4 = 2131626853(0x7f0e0b65, float:1.8880954E38)
             java.lang.String r5 = "SendMessagesToText"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             java.lang.String r5 = "selectAlertString"
             r0.putString(r5, r4)
-            r4 = 2131626847(0x7f0e0b5f, float:1.8880942E38)
+            r4 = 2131626852(0x7f0e0b64, float:1.8880952E38)
             java.lang.String r5 = "SendMessagesToGroupText"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             java.lang.String r5 = "selectAlertStringGroup"
@@ -4786,6 +4786,14 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r2.rightActionBarLayout
             r0.showLastFragment()
         L_0x14e5:
+            java.lang.String r0 = r45.getAction()
+            if (r0 == 0) goto L_0x14fa
+            java.lang.String r0 = r45.getAction()
+            java.lang.String r3 = "voip"
+            boolean r0 = r0.equals(r3)
+            if (r0 == 0) goto L_0x14fa
+            org.telegram.ui.VoIPFragment.show(r44)
+        L_0x14fa:
             r1.setAction(r4)
             return r13
         */
@@ -4874,7 +4882,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x005b:
             r4 = r15
             r15 = r13
-            r7 = 2131626121(0x7f0e0889, float:1.887947E38)
+            r7 = 2131626126(0x7f0e088e, float:1.887948E38)
             java.lang.String r8 = "OK"
             r10 = 0
             r11 = 1
@@ -4897,7 +4905,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r2 = "AppName"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            r1 = 2131626157(0x7f0e08ad, float:1.8879542E38)
+            r1 = 2131626162(0x7f0e08b2, float:1.8879552E38)
             java.lang.Object[] r2 = new java.lang.Object[r11]
             r2[r12] = r36
             java.lang.String r3 = "OtherLoginCode"
@@ -5315,12 +5323,12 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r4 = "cantSendToChannels"
             r3.putBoolean(r4, r7)
             r3.putInt(r9, r7)
-            r4 = 2131626832(0x7f0e0b50, float:1.8880911E38)
+            r4 = 2131626837(0x7f0e0b55, float:1.8880921E38)
             java.lang.String r9 = "SendGameToText"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r9, r4)
             java.lang.String r9 = "selectAlertString"
             r3.putString(r9, r4)
-            r4 = 2131626831(0x7f0e0b4f, float:1.888091E38)
+            r4 = 2131626836(0x7f0e0b54, float:1.888092E38)
             java.lang.String r9 = "SendGameToGroupText"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r9, r4)
             java.lang.String r9 = "selectAlertStringGroup"
@@ -5568,7 +5576,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             goto L_0x0292
         L_0x027d:
             java.lang.String r0 = "NoUsernameFound"
-            r2 = 2131625962(0x7f0e07ea, float:1.8879147E38)
+            r2 = 2131625967(0x7f0e07ef, float:1.8879157E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r2)     // Catch:{ Exception -> 0x028e }
             android.widget.Toast r0 = android.widget.Toast.makeText(r14, r0, r8)     // Catch:{ Exception -> 0x028e }
             r0.show()     // Catch:{ Exception -> 0x028e }
@@ -5787,18 +5795,18 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             java.lang.String r4 = "FLOOD_WAIT"
             boolean r0 = r0.startsWith(r4)
             if (r0 == 0) goto L_0x00eb
-            r0 = 2131625362(0x7f0e0592, float:1.887793E38)
+            r0 = 2131625367(0x7f0e0597, float:1.887794E38)
             java.lang.String r4 = "FloodWait"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r0)
             r3.setMessage(r0)
             goto L_0x00f7
         L_0x00eb:
-            r0 = 2131625611(0x7f0e068b, float:1.8878435E38)
+            r0 = 2131625616(0x7f0e0690, float:1.8878445E38)
             java.lang.String r4 = "JoinToGroupErrorNotExist"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r0)
             r3.setMessage(r0)
         L_0x00f7:
-            r0 = 2131626121(0x7f0e0889, float:1.887947E38)
+            r0 = 2131626126(0x7f0e088e, float:1.887948E38)
             java.lang.String r4 = "OK"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r4, r0)
             r3.setPositiveButton(r0, r1)
@@ -6174,7 +6182,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x0049:
             java.lang.StringBuilder r9 = new java.lang.StringBuilder
             r9.<init>()
-            r10 = 2131625148(0x7f0e04bc, float:1.8877496E38)
+            r10 = 2131625153(0x7f0e04c1, float:1.8877506E38)
             java.lang.String r11 = "ErrorOccurred"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r9.append(r10)
@@ -6300,11 +6308,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r5 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r5)
         L_0x008e:
-            r5 = 2131627118(0x7f0e0c6e, float:1.8881491E38)
+            r5 = 2131627123(0x7f0e0CLASSNAME, float:1.8881502E38)
             java.lang.String r6 = "Theme"
             if (r0 != r1) goto L_0x00aa
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            r6 = 2131627138(0x7f0e0CLASSNAME, float:1.8881532E38)
+            r6 = 2131627143(0x7f0e0CLASSNAME, float:1.8881542E38)
             java.lang.String r7 = "ThemeNotSupported"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             org.telegram.ui.ActionBar.AlertDialog$Builder r5 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r4, r5, r6)
@@ -6312,7 +6320,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             goto L_0x00be
         L_0x00aa:
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r6, r5)
-            r6 = 2131627137(0x7f0e0CLASSNAME, float:1.888153E38)
+            r6 = 2131627142(0x7f0e0CLASSNAME, float:1.888154E38)
             java.lang.String r7 = "ThemeNotFound"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             org.telegram.ui.ActionBar.AlertDialog$Builder r5 = org.telegram.ui.Components.AlertsCreator.createSimpleAlert(r4, r5, r6)
@@ -7062,6 +7070,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
                 arrayList3.get(arrayList3.size() - 1).onRequestPermissionsResultFragment(i, strArr, iArr);
             }
         }
+        VoIPFragment.onRequestPermissionsResult(i, strArr, iArr);
     }
 
     private void showPermissionErrorAlert(String str) {
@@ -7106,6 +7115,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         ConnectionsManager.getInstance(this.currentAccount).setAppPaused(true, false);
         if (PhotoViewer.hasInstance() && PhotoViewer.getInstance().isVisible()) {
             PhotoViewer.getInstance().onPause();
+        }
+        if (VoIPFragment.getInstance() != null) {
+            VoIPFragment.getInstance().onPause();
         }
     }
 
@@ -7218,6 +7230,9 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             showUpdateActivity(UserConfig.selectedAccount, UserConfig.getInstance(0).pendingAppUpdate, true);
         }
         checkAppUpdate(false);
+        if (VoIPFragment.getInstance() != null) {
+            VoIPFragment.getInstance().onResume();
+        }
     }
 
     static /* synthetic */ void lambda$onResume$48() {
@@ -7312,13 +7327,13 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             goto L_0x0582
         L_0x0054:
             int r0 = org.telegram.messenger.NotificationCenter.needShowAlert
-            r2 = 2131624540(0x7f0e025c, float:1.8876263E38)
+            r2 = 2131624545(0x7f0e0261, float:1.8876273E38)
             java.lang.String r3 = "Cancel"
             r4 = 2131624238(0x7f0e012e, float:1.887565E38)
             java.lang.String r5 = "AppName"
             r6 = 3
             r7 = 2
-            r8 = 2131626121(0x7f0e0889, float:1.887947E38)
+            r8 = 2131626126(0x7f0e088e, float:1.887948E38)
             java.lang.String r9 = "OK"
             r10 = 0
             r11 = 1
@@ -7347,7 +7362,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (r1 == r7) goto L_0x00b2
             int r1 = r13.intValue()
             if (r1 == r6) goto L_0x00b2
-            r1 = 2131625855(0x7f0e077f, float:1.887893E38)
+            r1 = 2131625860(0x7f0e0784, float:1.887894E38)
             java.lang.String r4 = "MoreInfo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             org.telegram.ui.-$$Lambda$LaunchActivity$NSo2b96RBrvjx_PKPJS1uHaK_D0 r4 = new org.telegram.ui.-$$Lambda$LaunchActivity$NSo2b96RBrvjx_PKPJS1uHaK_D0
@@ -7357,7 +7372,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             int r14 = r13.intValue()
             r1 = 5
             if (r14 != r1) goto L_0x00ce
-            r13 = 2131625967(0x7f0e07ef, float:1.8879157E38)
+            r13 = 2131625972(0x7f0e07f4, float:1.8879167E38)
             java.lang.String r14 = "NobodyLikesSpam3"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r0.setMessage(r13)
@@ -7367,7 +7382,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00ce:
             int r14 = r13.intValue()
             if (r14 != 0) goto L_0x00e9
-            r13 = 2131625965(0x7f0e07ed, float:1.8879153E38)
+            r13 = 2131625970(0x7f0e07f2, float:1.8879163E38)
             java.lang.String r14 = "NobodyLikesSpam1"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r0.setMessage(r13)
@@ -7377,7 +7392,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x00e9:
             int r14 = r13.intValue()
             if (r14 != r11) goto L_0x0103
-            r13 = 2131625966(0x7f0e07ee, float:1.8879155E38)
+            r13 = 2131625971(0x7f0e07f3, float:1.8879165E38)
             java.lang.String r14 = "NobodyLikesSpam2"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r0.setMessage(r13)
@@ -7397,7 +7412,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             if (r13 == 0) goto L_0x0135
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setPositiveButton(r13, r10)
-            r13 = 2131625706(0x7f0e06ea, float:1.8878628E38)
+            r13 = 2131625711(0x7f0e06ef, float:1.8878638E38)
             java.lang.String r14 = "LogOut"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             org.telegram.ui.-$$Lambda$LaunchActivity$DcnfwOlEX5NnGZyS78k4skpxFsw r14 = new org.telegram.ui.-$$Lambda$LaunchActivity$DcnfwOlEX5NnGZyS78k4skpxFsw
@@ -7411,11 +7426,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
         L_0x013d:
             int r13 = r13.intValue()
             if (r13 != r6) goto L_0x0169
-            r13 = 2131626590(0x7f0e0a5e, float:1.888042E38)
+            r13 = 2131626595(0x7f0e0a63, float:1.888043E38)
             java.lang.String r14 = "Proxy"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r0.setTitle(r13)
-            r13 = 2131627280(0x7f0e0d10, float:1.888182E38)
+            r13 = 2131627285(0x7f0e0d15, float:1.888183E38)
             java.lang.String r14 = "UseProxyTelegramError"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r0.setMessage(r13)
@@ -7447,13 +7462,13 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r15.setTitle(r0)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r9, r8)
             r15.setPositiveButton(r0, r10)
-            r0 = 2131626921(0x7f0e0ba9, float:1.8881092E38)
+            r0 = 2131626926(0x7f0e0bae, float:1.8881102E38)
             java.lang.String r1 = "ShareYouLocationUnableManually"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.ui.-$$Lambda$LaunchActivity$PqmnoyNYeFO8TLBwKtWNb2TYkoo r1 = new org.telegram.ui.-$$Lambda$LaunchActivity$PqmnoyNYeFO8TLBwKtWNb2TYkoo
             r1.<init>(r13, r14)
             r15.setNegativeButton(r0, r1)
-            r13 = 2131626920(0x7f0e0ba8, float:1.888109E38)
+            r13 = 2131626925(0x7f0e0bad, float:1.88811E38)
             java.lang.String r14 = "ShareYouLocationUnable"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r15.setMessage(r13)
@@ -7590,11 +7605,11 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.BaseFragment r4 = (org.telegram.ui.ActionBar.BaseFragment) r4
             org.telegram.ui.ActionBar.AlertDialog$Builder r5 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             r5.<init>((android.content.Context) r12)
-            r6 = 2131627248(0x7f0e0cf0, float:1.8881755E38)
+            r6 = 2131627253(0x7f0e0cf5, float:1.8881765E38)
             java.lang.String r7 = "UpdateContactsTitle"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r5.setTitle(r6)
-            r6 = 2131627247(0x7f0e0cef, float:1.8881753E38)
+            r6 = 2131627252(0x7f0e0cf4, float:1.8881763E38)
             java.lang.String r7 = "UpdateContactsMessage"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r5.setMessage(r6)
@@ -8106,7 +8121,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.ActionBar.AlertDialog$Builder r7 = new org.telegram.ui.ActionBar.AlertDialog$Builder     // Catch:{ Exception -> 0x0115 }
             r7.<init>((android.content.Context) r1)     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r8 = r1.systemLocaleStrings     // Catch:{ Exception -> 0x0115 }
-            r9 = 2131624778(0x7f0e034a, float:1.8876745E38)
+            r9 = 2131624783(0x7f0e034f, float:1.8876755E38)
             java.lang.String r8 = r1.getStringForLanguageAlert(r8, r2, r9)     // Catch:{ Exception -> 0x0115 }
             r7.setTitle(r8)     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r8 = r1.englishLocaleStrings     // Catch:{ Exception -> 0x0115 }
@@ -8121,7 +8136,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.messenger.LocaleController$LocaleInfo[] r11 = new org.telegram.messenger.LocaleController.LocaleInfo[r8]     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r12 = r1.systemLocaleStrings     // Catch:{ Exception -> 0x0115 }
             java.lang.String r13 = "English"
-            r14 = 2131625136(0x7f0e04b0, float:1.8877471E38)
+            r14 = 2131625141(0x7f0e04b5, float:1.8877482E38)
             java.lang.String r12 = r1.getStringForLanguageAlert(r12, r13, r14)     // Catch:{ Exception -> 0x0115 }
             if (r5 == 0) goto L_0x0056
             r13 = r4
@@ -8192,7 +8207,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             org.telegram.ui.Cells.LanguageCell r3 = new org.telegram.ui.Cells.LanguageCell     // Catch:{ Exception -> 0x0115 }
             r3.<init>(r1, r6)     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r4 = r1.systemLocaleStrings     // Catch:{ Exception -> 0x0115 }
-            r5 = 2131624779(0x7f0e034b, float:1.8876747E38)
+            r5 = 2131624784(0x7f0e0350, float:1.8876757E38)
             java.lang.String r4 = r1.getStringForLanguageAlert(r4, r0, r5)     // Catch:{ Exception -> 0x0115 }
             java.util.HashMap<java.lang.String, java.lang.String> r6 = r1.englishLocaleStrings     // Catch:{ Exception -> 0x0115 }
             java.lang.String r0 = r1.getStringForLanguageAlert(r6, r0, r5)     // Catch:{ Exception -> 0x0115 }
@@ -8205,7 +8220,7 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
             r2.addView(r3, r0)     // Catch:{ Exception -> 0x0115 }
             r7.setView(r2)     // Catch:{ Exception -> 0x0115 }
             java.lang.String r0 = "OK"
-            r2 = 2131626121(0x7f0e0889, float:1.887947E38)
+            r2 = 2131626126(0x7f0e088e, float:1.887948E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r2)     // Catch:{ Exception -> 0x0115 }
             org.telegram.ui.-$$Lambda$LaunchActivity$9Ej_ZHZEFtsi6RMBIKBFESTAxoI r2 = new org.telegram.ui.-$$Lambda$LaunchActivity$9Ej_ZHZEFtsi6RMBIKBFESTAxoI     // Catch:{ Exception -> 0x0115 }
             r2.<init>(r10)     // Catch:{ Exception -> 0x0115 }

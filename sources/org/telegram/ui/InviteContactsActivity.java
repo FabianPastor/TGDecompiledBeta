@@ -1071,7 +1071,7 @@ public class InviteContactsActivity extends BaseFragment implements Notification
                           (r2v0 'this' org.telegram.ui.InviteContactsActivity$InviteAdapter$1 A[THIS])
                           (r3v0 'str' java.lang.String)
                          call: org.telegram.ui.-$$Lambda$InviteContactsActivity$InviteAdapter$1$Acay2VbdoDOg6RSwRkjeUNE5RJs.<init>(org.telegram.ui.InviteContactsActivity$InviteAdapter$1, java.lang.String):void type: CONSTRUCTOR)
-                         org.telegram.messenger.DispatchQueue.postRunnable(java.lang.Runnable):void type: VIRTUAL in method: org.telegram.ui.InviteContactsActivity.InviteAdapter.1.lambda$run$1$InviteContactsActivity$InviteAdapter$1(java.lang.String):void, dex: classes.dex
+                         org.telegram.messenger.DispatchQueue.postRunnable(java.lang.Runnable):boolean type: VIRTUAL in method: org.telegram.ui.InviteContactsActivity.InviteAdapter.1.lambda$run$1$InviteContactsActivity$InviteAdapter$1(java.lang.String):void, dex: classes.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                         	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)

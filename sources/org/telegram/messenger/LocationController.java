@@ -663,7 +663,7 @@ public class LocationController extends BaseController implements NotificationCe
         sharingLocationInfo.mid = i;
         sharingLocationInfo.period = i2;
         sharingLocationInfo.account = this.currentAccount;
-        sharingLocationInfo.messageObject = new MessageObject(this.currentAccount, tLRPC$Message, false);
+        sharingLocationInfo.messageObject = new MessageObject(this.currentAccount, tLRPC$Message, false, false);
         sharingLocationInfo.stopTime = getConnectionsManager().getCurrentTime() + i2;
         SharingLocationInfo sharingLocationInfo2 = this.sharingLocationsMap.get(j);
         this.sharingLocationsMap.put(j, sharingLocationInfo);
@@ -731,7 +731,7 @@ public class LocationController extends BaseController implements NotificationCe
                 sharingLocationInfo.account = this.currentAccount;
                 NativeByteBuffer byteBufferValue = queryFinalized.byteBufferValue(4);
                 if (byteBufferValue != null) {
-                    MessageObject messageObject = new MessageObject(this.currentAccount, TLRPC$Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), false);
+                    MessageObject messageObject = new MessageObject(this.currentAccount, TLRPC$Message.TLdeserialize(byteBufferValue, byteBufferValue.readInt32(false), false), false, false);
                     sharingLocationInfo.messageObject = messageObject;
                     MessagesStorage.addUsersAndChatsFromMessage(messageObject.messageOwner, arrayList4, arrayList5);
                     byteBufferValue.reuse();

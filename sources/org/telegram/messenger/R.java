@@ -219,6 +219,18 @@ public final class R {
         public static final int call_notification_bg = NUM;
         public static final int call_notification_line = NUM;
         public static final int call_notification_line_rtl = NUM;
+        public static final int calls_accept_video = NUM;
+        public static final int calls_accept_voice = NUM;
+        public static final int calls_back = NUM;
+        public static final int calls_bottomshadow = NUM;
+        public static final int calls_decline = NUM;
+        public static final int calls_flip = NUM;
+        public static final int calls_mute = NUM;
+        public static final int calls_mute_mini = NUM;
+        public static final int calls_speaker = NUM;
+        public static final int calls_topshadow = NUM;
+        public static final int calls_unmute = NUM;
+        public static final int calls_video = NUM;
         public static final int camera_btn = NUM;
         public static final int camera_revert1 = NUM;
         public static final int camera_revert2 = NUM;
@@ -656,6 +668,7 @@ public final class R {
         public static final int msg_unvote = NUM;
         public static final int msg_usersearch = NUM;
         public static final int msg_video = NUM;
+        public static final int msg_videocall = NUM;
         public static final int msg_views = NUM;
         public static final int msg_warning = NUM;
         public static final int music_empty = NUM;
@@ -731,6 +744,8 @@ public final class R {
         public static final int phototime = NUM;
         public static final int photoview_placeholder = NUM;
         public static final int pin = NUM;
+        public static final int pip_close = NUM;
+        public static final int pip_enlarge = NUM;
         public static final int place_x = NUM;
         public static final int places_btn = NUM;
         public static final int play_big = NUM;
@@ -773,6 +788,7 @@ public final class R {
         public static final int profile_newmsg = NUM;
         public static final int profile_phone = NUM;
         public static final int profile_photos = NUM;
+        public static final int profile_video = NUM;
         public static final int profile_voice = NUM;
         public static final int proxy_check = NUM;
         public static final int proxy_off = NUM;
@@ -1874,6 +1890,11 @@ public final class R {
         public static final int CallMessageOutgoing = NUM;
         public static final int CallMessageOutgoingMissed = NUM;
         public static final int CallMessageReportProblem = NUM;
+        public static final int CallMessageVideoIncoming = NUM;
+        public static final int CallMessageVideoIncomingDeclined = NUM;
+        public static final int CallMessageVideoIncomingMissed = NUM;
+        public static final int CallMessageVideoOutgoing = NUM;
+        public static final int CallMessageVideoOutgoingMissed = NUM;
         public static final int CallMessageWithDuration = NUM;
         public static final int CallNotAvailable = NUM;
         public static final int CallReportHint = NUM;
@@ -4702,6 +4723,8 @@ public final class R {
         public static final int Vibrate = NUM;
         public static final int VibrationDefault = NUM;
         public static final int VibrationDisabled = NUM;
+        public static final int VideoCall = NUM;
+        public static final int VideoCallViaTelegram = NUM;
         public static final int VideoCaption = NUM;
         public static final int VideoDoesNotSupportStreaming = NUM;
         public static final int VideoMessagesAutodownload = NUM;
@@ -4754,7 +4777,10 @@ public final class R {
         public static final int VoipHangingUp = NUM;
         public static final int VoipInCallBranding = NUM;
         public static final int VoipInCallBrandingWithName = NUM;
+        public static final int VoipInVideoCallBranding = NUM;
+        public static final int VoipInVideoCallBrandingWithName = NUM;
         public static final int VoipIncoming = NUM;
+        public static final int VoipNeedMicCameraPermission = NUM;
         public static final int VoipNeedMicPermission = NUM;
         public static final int VoipNotificationSettings = NUM;
         public static final int VoipOffline = NUM;

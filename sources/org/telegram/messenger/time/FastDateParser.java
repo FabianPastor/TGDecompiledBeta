@@ -1,5 +1,7 @@
 package org.telegram.messenger.time;
 
+import j$.util.DesugarTimeZone;
+import j$.util.concurrent.ConcurrentHashMap;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -15,7 +17,6 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TimeZone;
 import java.util.TreeMap;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -592,7 +593,7 @@ public class FastDateParser implements DateParser, Serializable {
             super();
             for (String[] strArr : DateFormatSymbols.getInstance(locale).getZoneStrings()) {
                 if (!strArr[0].startsWith("GMT")) {
-                    TimeZone timeZone = TimeZone.getTimeZone(strArr[0]);
+                    TimeZone timeZone = DesugarTimeZone.getTimeZone(strArr[0]);
                     if (!this.tzNames.containsKey(strArr[1])) {
                         this.tzNames.put(strArr[1], timeZone);
                     }
@@ -628,9 +629,9 @@ public class FastDateParser implements DateParser, Serializable {
         public void setCalendar(FastDateParser fastDateParser, Calendar calendar, String str) {
             TimeZone timeZone;
             if (str.charAt(0) == '+' || str.charAt(0) == '-') {
-                timeZone = TimeZone.getTimeZone("GMT" + str);
+                timeZone = DesugarTimeZone.getTimeZone("GMT" + str);
             } else if (str.startsWith("GMT")) {
-                timeZone = TimeZone.getTimeZone(str);
+                timeZone = DesugarTimeZone.getTimeZone(str);
             } else {
                 timeZone = (TimeZone) this.tzNames.get(str);
                 if (timeZone == null) {

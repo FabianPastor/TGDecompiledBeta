@@ -302,13 +302,9 @@ public class Emoji {
 
         public void draw(Canvas canvas) {
             Rect rect2;
-            Bitmap[][] access$300 = Emoji.emojiBmp;
-            DrawableInfo drawableInfo = this.info;
-            byte b = drawableInfo.page;
-            Bitmap[] bitmapArr = access$300[b];
-            short s = drawableInfo.page2;
-            if (bitmapArr[s] == null) {
-                Emoji.loadEmoji(b, s);
+            if (!isLoaded()) {
+                DrawableInfo drawableInfo = this.info;
+                Emoji.loadEmoji(drawableInfo.page, drawableInfo.page2);
                 canvas.drawRect(getBounds(), Emoji.placeholderPaint);
                 return;
             }
@@ -317,9 +313,22 @@ public class Emoji {
             } else {
                 rect2 = getBounds();
             }
-            Bitmap[][] access$3002 = Emoji.emojiBmp;
+            Bitmap[][] access$500 = Emoji.emojiBmp;
             DrawableInfo drawableInfo2 = this.info;
-            canvas.drawBitmap(access$3002[drawableInfo2.page][drawableInfo2.page2], (Rect) null, rect2, paint);
+            canvas.drawBitmap(access$500[drawableInfo2.page][drawableInfo2.page2], (Rect) null, rect2, paint);
+        }
+
+        public boolean isLoaded() {
+            Bitmap[][] access$500 = Emoji.emojiBmp;
+            DrawableInfo drawableInfo = this.info;
+            return access$500[drawableInfo.page][drawableInfo.page2] != null;
+        }
+
+        public void preload() {
+            if (!isLoaded()) {
+                DrawableInfo drawableInfo = this.info;
+                Emoji.loadEmoji(drawableInfo.page, drawableInfo.page2);
+            }
         }
     }
 

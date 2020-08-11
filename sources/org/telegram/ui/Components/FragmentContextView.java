@@ -48,7 +48,6 @@ import org.telegram.ui.Components.SharingLocationsAlert;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.LocationActivity;
-import org.telegram.ui.VoIPActivity;
 
 public class FragmentContextView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
     private FragmentContextView additionalContextView;
@@ -277,9 +276,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 this.fragment.presentFragment(new ChatActivity(bundle), this.fragment instanceof ChatActivity);
             }
         } else if (i == 1) {
-            Intent intent = new Intent(getContext(), VoIPActivity.class);
-            intent.addFlags(NUM);
-            getContext().startActivity(intent);
+            getContext().startActivity(new Intent(getContext(), LaunchActivity.class).setAction("voip"));
         } else if (i == 2) {
             int i4 = UserConfig.selectedAccount;
             BaseFragment baseFragment2 = this.fragment;

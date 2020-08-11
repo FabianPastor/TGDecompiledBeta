@@ -238,6 +238,18 @@
     <public type="drawable" name="call_notification_bg" id="NUM" />
     <public type="drawable" name="call_notification_line" id="NUM" />
     <public type="drawable" name="call_notification_line_rtl" id="NUM" />
+    <public type="drawable" name="calls_accept_video" id="NUM" />
+    <public type="drawable" name="calls_accept_voice" id="NUM" />
+    <public type="drawable" name="calls_back" id="NUM" />
+    <public type="drawable" name="calls_bottomshadow" id="NUM" />
+    <public type="drawable" name="calls_decline" id="NUM" />
+    <public type="drawable" name="calls_flip" id="NUM" />
+    <public type="drawable" name="calls_mute" id="NUM" />
+    <public type="drawable" name="calls_mute_mini" id="NUM" />
+    <public type="drawable" name="calls_speaker" id="NUM" />
+    <public type="drawable" name="calls_topshadow" id="NUM" />
+    <public type="drawable" name="calls_unmute" id="NUM" />
+    <public type="drawable" name="calls_video" id="NUM" />
     <public type="drawable" name="camera_btn" id="NUM" />
     <public type="drawable" name="camera_revert1" id="NUM" />
     <public type="drawable" name="camera_revert2" id="NUM" />
@@ -675,6 +687,7 @@
     <public type="drawable" name="msg_unvote" id="NUM" />
     <public type="drawable" name="msg_usersearch" id="NUM" />
     <public type="drawable" name="msg_video" id="NUM" />
+    <public type="drawable" name="msg_videocall" id="NUM" />
     <public type="drawable" name="msg_views" id="NUM" />
     <public type="drawable" name="msg_warning" id="NUM" />
     <public type="drawable" name="music_empty" id="NUM" />
@@ -750,6 +763,8 @@
     <public type="drawable" name="phototime" id="NUM" />
     <public type="drawable" name="photoview_placeholder" id="NUM" />
     <public type="drawable" name="pin" id="NUM" />
+    <public type="drawable" name="pip_close" id="NUM" />
+    <public type="drawable" name="pip_enlarge" id="NUM" />
     <public type="drawable" name="place_x" id="NUM" />
     <public type="drawable" name="places_btn" id="NUM" />
     <public type="drawable" name="play_big" id="NUM" />
@@ -792,6 +807,7 @@
     <public type="drawable" name="profile_newmsg" id="NUM" />
     <public type="drawable" name="profile_phone" id="NUM" />
     <public type="drawable" name="profile_photos" id="NUM" />
+    <public type="drawable" name="profile_video" id="NUM" />
     <public type="drawable" name="profile_voice" id="NUM" />
     <public type="drawable" name="proxy_check" id="NUM" />
     <public type="drawable" name="proxy_off" id="NUM" />
@@ -1735,6 +1751,11 @@
     <public type="string" name="CallMessageOutgoing" id="NUM" />
     <public type="string" name="CallMessageOutgoingMissed" id="NUM" />
     <public type="string" name="CallMessageReportProblem" id="NUM" />
+    <public type="string" name="CallMessageVideoIncoming" id="NUM" />
+    <public type="string" name="CallMessageVideoIncomingDeclined" id="NUM" />
+    <public type="string" name="CallMessageVideoIncomingMissed" id="NUM" />
+    <public type="string" name="CallMessageVideoOutgoing" id="NUM" />
+    <public type="string" name="CallMessageVideoOutgoingMissed" id="NUM" />
     <public type="string" name="CallMessageWithDuration" id="NUM" />
     <public type="string" name="CallNotAvailable" id="NUM" />
     <public type="string" name="CallReportHint" id="NUM" />
@@ -4563,6 +4584,8 @@
     <public type="string" name="Vibrate" id="NUM" />
     <public type="string" name="VibrationDefault" id="NUM" />
     <public type="string" name="VibrationDisabled" id="NUM" />
+    <public type="string" name="VideoCall" id="NUM" />
+    <public type="string" name="VideoCallViaTelegram" id="NUM" />
     <public type="string" name="VideoCaption" id="NUM" />
     <public type="string" name="VideoDoesNotSupportStreaming" id="NUM" />
     <public type="string" name="VideoMessagesAutodownload" id="NUM" />
@@ -4615,7 +4638,10 @@
     <public type="string" name="VoipHangingUp" id="NUM" />
     <public type="string" name="VoipInCallBranding" id="NUM" />
     <public type="string" name="VoipInCallBrandingWithName" id="NUM" />
+    <public type="string" name="VoipInVideoCallBranding" id="NUM" />
+    <public type="string" name="VoipInVideoCallBrandingWithName" id="NUM" />
     <public type="string" name="VoipIncoming" id="NUM" />
+    <public type="string" name="VoipNeedMicCameraPermission" id="NUM" />
     <public type="string" name="VoipNeedMicPermission" id="NUM" />
     <public type="string" name="VoipNotificationSettings" id="NUM" />
     <public type="string" name="VoipOffline" id="NUM" />

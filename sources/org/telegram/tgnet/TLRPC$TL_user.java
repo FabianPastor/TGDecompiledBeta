@@ -20,6 +20,7 @@ public class TLRPC$TL_user extends TLRPC$User {
         this.bot_inline_geo = (this.flags & 2097152) != 0;
         this.support = (this.flags & 8388608) != 0;
         this.scam = (this.flags & 16777216) != 0;
+        int i2 = this.flags & 33554432;
         this.id = abstractSerializedData.readInt32(z);
         if ((this.flags & 1) != 0) {
             this.access_hash = abstractSerializedData.readInt64(z);

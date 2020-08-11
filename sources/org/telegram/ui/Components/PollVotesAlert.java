@@ -31,6 +31,11 @@ import android.widget.TextView;
 import androidx.annotation.Keep;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import j$.util.Comparator;
+import j$.util.function.Function;
+import j$.util.function.ToDoubleFunction;
+import j$.util.function.ToIntFunction;
+import j$.util.function.ToLongFunction;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -625,7 +630,35 @@ public class PollVotesAlert extends BottomSheet {
             i3 = 1;
         }
         updateButtons();
-        Collections.sort(this.voters, new Comparator<VotesList>() {
+        Collections.sort(this.voters, new Object() {
+            public /* synthetic */ Comparator<T> reversed() {
+                return Comparator.CC.$default$reversed(this);
+            }
+
+            public /* synthetic */ <U extends Comparable<? super U>> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function) {
+                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (Function) function);
+            }
+
+            public /* synthetic */ <U> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function, java.util.Comparator<? super U> comparator) {
+                return Comparator.CC.$default$thenComparing(this, function, comparator);
+            }
+
+            public /* synthetic */ java.util.Comparator<T> thenComparing(java.util.Comparator<? super T> comparator) {
+                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (java.util.Comparator) comparator);
+            }
+
+            public /* synthetic */ java.util.Comparator<T> thenComparingDouble(ToDoubleFunction<? super T> toDoubleFunction) {
+                return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
+            }
+
+            public /* synthetic */ java.util.Comparator<T> thenComparingInt(ToIntFunction<? super T> toIntFunction) {
+                return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
+            }
+
+            public /* synthetic */ java.util.Comparator<T> thenComparingLong(ToLongFunction<? super T> toLongFunction) {
+                return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
+            }
+
             private int getIndex(VotesList votesList) {
                 int size = PollVotesAlert.this.poll.answers.size();
                 for (int i = 0; i < size; i++) {

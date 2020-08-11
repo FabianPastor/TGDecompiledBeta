@@ -434,7 +434,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 tLRPC$TL_message.media = new TLRPC$TL_messageMediaEmpty();
                 tLRPC$TL_message.action = new TLRPC$TL_messageActionEmpty();
                 tLRPC$TL_message.dialog_id = 0;
-                messageObject = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message, false);
+                messageObject = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message, false, false);
                 messageObject.messageOwner.attachPath = new File(FileLoader.getDirectory(4), SharedConfig.getLastLocalId() + "_avatar.mp4").getAbsolutePath();
                 messageObject.videoEditedInfo = sendingMediaInfo.videoEditedInfo;
                 bitmap = ImageLoader.loadBitmap(sendingMediaInfo.thumbPath, (Uri) null, 800.0f, 800.0f, true);
@@ -633,7 +633,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                     tLRPC$TL_message.media = new TLRPC$TL_messageMediaEmpty();
                     tLRPC$TL_message.action = new TLRPC$TL_messageActionEmpty();
                     tLRPC$TL_message.dialog_id = 0;
-                    MessageObject messageObject2 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message, false);
+                    MessageObject messageObject2 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message, false, false);
                     messageObject2.messageOwner.attachPath = new File(FileLoader.getDirectory(4), SharedConfig.getLastLocalId() + "_avatar.mp4").getAbsolutePath();
                     messageObject2.videoEditedInfo = photoEntry.editedInfo;
                     bitmap = ImageLoader.loadBitmap(photoEntry.thumbPath, (Uri) null, 800.0f, 800.0f, true);

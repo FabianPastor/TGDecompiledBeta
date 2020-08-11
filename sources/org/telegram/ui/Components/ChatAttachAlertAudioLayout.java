@@ -590,12 +590,12 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
             org.telegram.tgnet.TLRPC$TL_peerUser r15 = new org.telegram.tgnet.TLRPC$TL_peerUser     // Catch:{ all -> 0x0162 }
             r15.<init>()     // Catch:{ all -> 0x0162 }
             r5.to_id = r15     // Catch:{ all -> 0x0162 }
-            org.telegram.ui.Components.ChatAttachAlert r9 = r1.parentAlert     // Catch:{ all -> 0x0162 }
-            int r9 = r9.currentAccount     // Catch:{ all -> 0x0162 }
-            org.telegram.messenger.UserConfig r9 = org.telegram.messenger.UserConfig.getInstance(r9)     // Catch:{ all -> 0x0162 }
-            int r9 = r9.getClientUserId()     // Catch:{ all -> 0x0162 }
-            r5.from_id = r9     // Catch:{ all -> 0x0162 }
-            r15.user_id = r9     // Catch:{ all -> 0x0162 }
+            org.telegram.ui.Components.ChatAttachAlert r10 = r1.parentAlert     // Catch:{ all -> 0x0162 }
+            int r10 = r10.currentAccount     // Catch:{ all -> 0x0162 }
+            org.telegram.messenger.UserConfig r10 = org.telegram.messenger.UserConfig.getInstance(r10)     // Catch:{ all -> 0x0162 }
+            int r10 = r10.getClientUserId()     // Catch:{ all -> 0x0162 }
+            r5.from_id = r10     // Catch:{ all -> 0x0162 }
+            r15.user_id = r10     // Catch:{ all -> 0x0162 }
             long r16 = java.lang.System.currentTimeMillis()     // Catch:{ all -> 0x0162 }
             long r6 = r16 / r6
             int r7 = (int) r6     // Catch:{ all -> 0x0162 }
@@ -681,11 +681,11 @@ public class ChatAttachAlertAudioLayout extends ChatAttachAlert.AttachAlertLayou
             org.telegram.messenger.MessageObject r4 = new org.telegram.messenger.MessageObject     // Catch:{ all -> 0x0162 }
             org.telegram.ui.Components.ChatAttachAlert r6 = r1.parentAlert     // Catch:{ all -> 0x0162 }
             int r6 = r6.currentAccount     // Catch:{ all -> 0x0162 }
-            r4.<init>(r6, r5, r8)     // Catch:{ all -> 0x0162 }
+            r4.<init>(r6, r5, r8, r9)     // Catch:{ all -> 0x0162 }
             r3.messageObject = r4     // Catch:{ all -> 0x0162 }
             r14.add(r3)     // Catch:{ all -> 0x0162 }
             int r0 = r0 + -1
-            r9 = 1
+            r10 = 2
             r12 = 4
             r13 = 5
             goto L_0x003c

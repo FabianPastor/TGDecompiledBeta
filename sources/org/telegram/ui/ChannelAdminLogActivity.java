@@ -1778,7 +1778,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r2.putExtra(r5, r0)
         L_0x01fb:
             android.app.Activity r0 = r10.getParentActivity()
-            r3 = 2131626908(0x7f0e0b9c, float:1.8881065E38)
+            r3 = 2131626913(0x7f0e0ba1, float:1.8881076E38)
             java.lang.String r4 = "ShareFile"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             android.content.Intent r2 = android.content.Intent.createChooser(r2, r3)
@@ -1814,7 +1814,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             java.lang.String r1 = r1.toLowerCase()
             java.lang.String r2 = "attheme"
             boolean r1 = r1.endsWith(r2)
-            r2 = 2131626121(0x7f0e0889, float:1.887947E38)
+            r2 = 2131626126(0x7f0e088e, float:1.887948E38)
             java.lang.String r3 = "OK"
             r4 = 2131624238(0x7f0e012e, float:1.887565E38)
             java.lang.String r5 = "AppName"
@@ -1864,7 +1864,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131625557(0x7f0e0655, float:1.8878325E38)
+            r1 = 2131625562(0x7f0e065a, float:1.8878335E38)
             java.lang.String r4 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -1893,7 +1893,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.setTitle(r1)
-            r1 = 2131625556(0x7f0e0654, float:1.8878323E38)
+            r1 = 2131625561(0x7f0e0659, float:1.8878333E38)
             java.lang.String r4 = "IncorrectLocalization"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setMessage(r1)
@@ -2757,7 +2757,7 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                         org.telegram.ui.ChannelAdminLogActivity$ChatActivityAdapter r5 = org.telegram.ui.ChannelAdminLogActivity.ChatActivityAdapter.this
                                         org.telegram.ui.ChannelAdminLogActivity r5 = org.telegram.ui.ChannelAdminLogActivity.this
                                         android.app.Activity r5 = r5.getParentActivity()
-                                        r6 = 2131627115(0x7f0e0c6b, float:1.8881485E38)
+                                        r6 = 2131627120(0x7f0e0CLASSNAME, float:1.8881495E38)
                                         java.lang.String r7 = "TextCopied"
                                         java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
                                         android.widget.Toast r5 = android.widget.Toast.makeText(r5, r6, r1)
@@ -2822,11 +2822,11 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                                         r5.setTitle(r0)
                                         r6 = 2
                                         java.lang.CharSequence[] r6 = new java.lang.CharSequence[r6]
-                                        r7 = 2131626135(0x7f0e0897, float:1.8879498E38)
+                                        r7 = 2131626140(0x7f0e089c, float:1.8879508E38)
                                         java.lang.String r2 = "Open"
                                         java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r2, r7)
                                         r6[r1] = r7
-                                        r7 = 2131624864(0x7f0e03a0, float:1.887692E38)
+                                        r7 = 2131624869(0x7f0e03a5, float:1.887693E38)
                                         java.lang.String r1 = "Copy"
                                         java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r1, r7)
                                         r6[r3] = r7
@@ -3533,10 +3533,12 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                     arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgInMenuDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inMenu"));
                     arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgInMenuSelectedDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inMenuSelected"));
                     arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgMediaMenuDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_mediaMenu"));
-                    arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgOutInstantDrawable, Theme.chat_msgOutCallDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outInstant"));
-                    arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgOutCallSelectedDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outInstantSelected"));
-                    arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgInInstantDrawable, Theme.chat_msgInCallDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inInstant"));
-                    arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgInCallSelectedDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inInstantSelected"));
+                    arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgOutInstantDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outInstant"));
+                    arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgInInstantDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inInstant"));
+                    arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, Theme.chat_msgOutCallDrawable, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outInstant"));
+                    arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, Theme.chat_msgOutCallSelectedDrawable, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outInstantSelected"));
+                    arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, Theme.chat_msgInCallDrawable, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inInstant"));
+                    arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, Theme.chat_msgInCallSelectedDrawable, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inInstantSelected"));
                     arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgCallUpGreenDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_outUpCall"));
                     arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgCallDownRedDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inUpCall"));
                     arrayList.add(new ThemeDescription(this.chatListView, 0, new Class[]{ChatMessageCell.class}, (Paint) null, new Drawable[]{Theme.chat_msgCallDownGreenDrawable}, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_inDownCall"));

@@ -8,6 +8,7 @@ public class TLRPC$TL_phoneCall extends TLRPC$PhoneCall {
         this.flags = readInt32;
         int i = 0;
         this.p2p_allowed = (readInt32 & 32) != 0;
+        this.video = (this.flags & 64) != 0;
         this.id = abstractSerializedData.readInt64(z);
         this.access_hash = abstractSerializedData.readInt64(z);
         this.date = abstractSerializedData.readInt32(z);
@@ -20,7 +21,7 @@ public class TLRPC$TL_phoneCall extends TLRPC$PhoneCall {
         if (readInt322 == NUM) {
             int readInt323 = abstractSerializedData.readInt32(z);
             while (i < readInt323) {
-                TLRPC$TL_phoneConnection TLdeserialize = TLRPC$TL_phoneConnection.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+                TLRPC$PhoneConnection TLdeserialize = TLRPC$PhoneConnection.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
                 if (TLdeserialize != null) {
                     this.connections.add(TLdeserialize);
                     i++;
@@ -38,7 +39,9 @@ public class TLRPC$TL_phoneCall extends TLRPC$PhoneCall {
         abstractSerializedData.writeInt32(constructor);
         int i = this.p2p_allowed ? this.flags | 32 : this.flags & -33;
         this.flags = i;
-        abstractSerializedData.writeInt32(i);
+        int i2 = this.video ? i | 64 : i & -65;
+        this.flags = i2;
+        abstractSerializedData.writeInt32(i2);
         abstractSerializedData.writeInt64(this.id);
         abstractSerializedData.writeInt64(this.access_hash);
         abstractSerializedData.writeInt32(this.date);
@@ -50,8 +53,8 @@ public class TLRPC$TL_phoneCall extends TLRPC$PhoneCall {
         abstractSerializedData.writeInt32(NUM);
         int size = this.connections.size();
         abstractSerializedData.writeInt32(size);
-        for (int i2 = 0; i2 < size; i2++) {
-            this.connections.get(i2).serializeToStream(abstractSerializedData);
+        for (int i3 = 0; i3 < size; i3++) {
+            this.connections.get(i3).serializeToStream(abstractSerializedData);
         }
         abstractSerializedData.writeInt32(this.start_date);
     }

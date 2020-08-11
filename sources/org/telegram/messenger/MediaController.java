@@ -1731,7 +1731,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
                 this.currentPlaylistNum += arrayList4.size();
             }
         } else if (i == NotificationCenter.mediaDidLoad) {
-            if (objArr[3].intValue() == this.playlistClassGuid) {
+            if (objArr[3].intValue() == this.playlistClassGuid && this.playingMessageObject != null) {
                 long longValue3 = objArr[0].longValue();
                 objArr[4].intValue();
                 ArrayList arrayList5 = objArr[2];
@@ -4199,7 +4199,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
             r3 = 2
             r2.<init>(r10, r3)     // Catch:{ Exception -> 0x005e }
             java.lang.String r10 = "Loading"
-            r1 = 2131625686(0x7f0e06d6, float:1.8878587E38)
+            r1 = 2131625691(0x7f0e06db, float:1.8878597E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r1)     // Catch:{ Exception -> 0x005b }
             r2.setMessage(r10)     // Catch:{ Exception -> 0x005b }
             r2.setCanceledOnTouchOutside(r0)     // Catch:{ Exception -> 0x005b }
@@ -5879,8 +5879,6 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
         }
         if (i11 == 0) {
             i11 = 25;
-        } else if (i11 > 59) {
-            i11 = 59;
         }
         if (i8 == 90 || i8 == 270) {
             i5 = i;

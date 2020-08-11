@@ -35,6 +35,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
+import j$.util.Comparator;
+import j$.util.function.Function;
+import j$.util.function.ToDoubleFunction;
+import j$.util.function.ToIntFunction;
+import j$.util.function.ToLongFunction;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -750,20 +755,23 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             }
 
             public /* synthetic */ void lambda$shutterLongPressed$1$ChatAttachAlertPhotoLayout$8(String str, long j) {
-                if (this.outputFile != null && ChatAttachAlertPhotoLayout.this.parentAlert.baseFragment != null) {
-                    boolean unused = ChatAttachAlertPhotoLayout.mediaFromExternalCamera = false;
-                    MediaController.PhotoEntry photoEntry = new MediaController.PhotoEntry(0, ChatAttachAlertPhotoLayout.access$3110(), 0, this.outputFile.getAbsolutePath(), 0, true, 0, 0, 0);
-                    photoEntry.duration = (int) j;
-                    photoEntry.thumbPath = str;
+                if (this.outputFile != null) {
                     ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout = ChatAttachAlertPhotoLayout.this;
-                    if (chatAttachAlertPhotoLayout.parentAlert.avatarPicker != 0 && chatAttachAlertPhotoLayout.cameraView.isFrontface()) {
-                        MediaController.CropState cropState = new MediaController.CropState();
-                        photoEntry.cropState = cropState;
-                        cropState.mirrored = true;
-                        cropState.freeform = false;
-                        cropState.lockedAspectRatio = 1.0f;
+                    if (chatAttachAlertPhotoLayout.parentAlert.baseFragment != null && chatAttachAlertPhotoLayout.cameraView != null) {
+                        boolean unused = ChatAttachAlertPhotoLayout.mediaFromExternalCamera = false;
+                        MediaController.PhotoEntry photoEntry = new MediaController.PhotoEntry(0, ChatAttachAlertPhotoLayout.access$3110(), 0, this.outputFile.getAbsolutePath(), 0, true, 0, 0, 0);
+                        photoEntry.duration = (int) j;
+                        photoEntry.thumbPath = str;
+                        ChatAttachAlertPhotoLayout chatAttachAlertPhotoLayout2 = ChatAttachAlertPhotoLayout.this;
+                        if (chatAttachAlertPhotoLayout2.parentAlert.avatarPicker != 0 && chatAttachAlertPhotoLayout2.cameraView.isFrontface()) {
+                            MediaController.CropState cropState = new MediaController.CropState();
+                            photoEntry.cropState = cropState;
+                            cropState.mirrored = true;
+                            cropState.freeform = false;
+                            cropState.lockedAspectRatio = 1.0f;
+                        }
+                        ChatAttachAlertPhotoLayout.this.openPhotoViewer(photoEntry, false, false);
                     }
-                    ChatAttachAlertPhotoLayout.this.openPhotoViewer(photoEntry, false, false);
                 }
             }
 
@@ -1145,6 +1153,34 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
 
                 public final int compare(Object obj, Object obj2) {
                     return ChatAttachAlertPhotoLayout.lambda$updateAlbumsDropDown$8(this.f$0, (MediaController.AlbumEntry) obj, (MediaController.AlbumEntry) obj2);
+                }
+
+                public /* synthetic */ Comparator<T> reversed() {
+                    return Comparator.CC.$default$reversed(this);
+                }
+
+                public /* synthetic */ <U extends Comparable<? super U>> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function) {
+                    return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (Function) function);
+                }
+
+                public /* synthetic */ <U> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function, java.util.Comparator<? super U> comparator) {
+                    return Comparator.CC.$default$thenComparing(this, function, comparator);
+                }
+
+                public /* synthetic */ java.util.Comparator<T> thenComparing(java.util.Comparator<? super T> comparator) {
+                    return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (java.util.Comparator) comparator);
+                }
+
+                public /* synthetic */ java.util.Comparator<T> thenComparingDouble(ToDoubleFunction<? super T> toDoubleFunction) {
+                    return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
+                }
+
+                public /* synthetic */ java.util.Comparator<T> thenComparingInt(ToIntFunction<? super T> toIntFunction) {
+                    return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
+                }
+
+                public /* synthetic */ java.util.Comparator<T> thenComparingLong(ToLongFunction<? super T> toLongFunction) {
+                    return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
                 }
             });
         } else {
@@ -1618,7 +1654,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             if (r6 == r2) goto L_0x003b
             goto L_0x0073
         L_0x003b:
-            r6 = 2131165380(0x7var_c4, float:1.7944975E38)
+            r6 = 2131165392(0x7var_d0, float:1.7945E38)
             r5.setImageResource(r6)
             r6 = 2131623955(0x7f0e0013, float:1.8875076E38)
             java.lang.String r0 = "AccDescrCameraFlashAuto"
@@ -1626,7 +1662,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r5.setContentDescription(r6)
             goto L_0x0073
         L_0x004e:
-            r6 = 2131165382(0x7var_c6, float:1.794498E38)
+            r6 = 2131165394(0x7var_d2, float:1.7945004E38)
             r5.setImageResource(r6)
             r6 = 2131623957(0x7f0e0015, float:1.887508E38)
             java.lang.String r0 = "AccDescrCameraFlashOn"
@@ -1634,7 +1670,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r5.setContentDescription(r6)
             goto L_0x0073
         L_0x0061:
-            r6 = 2131165381(0x7var_c5, float:1.7944978E38)
+            r6 = 2131165393(0x7var_d1, float:1.7945002E38)
             r5.setImageResource(r6)
             r6 = 2131623956(0x7f0e0014, float:1.8875078E38)
             java.lang.String r0 = "AccDescrCameraFlashOff"

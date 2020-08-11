@@ -3,7 +3,6 @@ package org.telegram.ui.Cells;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -70,17 +69,12 @@ public class StatisticPostInfoCell extends FrameLayout {
         linearLayout3.setOrientation(0);
         linearLayout3.addView(this.date, LayoutHelper.createLinear(0, -2, 1.0f, 0, 0, 0, 8, 0));
         linearLayout3.addView(this.shares, LayoutHelper.createLinear(-2, -2));
-        linearLayout.addView(linearLayout3, LayoutHelper.createFrame(-1, -2.0f, 8388659, 0.0f, 2.0f, 0.0f, 0.0f));
+        linearLayout.addView(linearLayout3, LayoutHelper.createFrame(-1, -2.0f, 8388659, 0.0f, 2.0f, 0.0f, 8.0f));
         addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f, 0, 72.0f, 0.0f, 12.0f, 0.0f));
         this.message.setTextColor(Theme.getColor("dialogTextBlack"));
         this.views.setTextColor(Theme.getColor("dialogTextBlack"));
         this.date.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
         this.shares.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
-    }
-
-    /* access modifiers changed from: protected */
-    public void onMeasure(int i, int i2) {
-        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(56.0f), NUM));
     }
 
     public void setData(StatisticActivity.RecentPostInfo recentPostInfo) {

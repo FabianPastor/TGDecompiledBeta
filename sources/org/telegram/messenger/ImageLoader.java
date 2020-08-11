@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.SparseArray;
+import j$.util.concurrent.ConcurrentHashMap;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -24,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Locale;
-import java.util.concurrent.ConcurrentHashMap;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.ImageLoader;
 import org.telegram.tgnet.TLObject;
@@ -76,7 +76,7 @@ public class ImageLoader {
     private int currentHttpFileLoadTasksCount;
     private int currentHttpTasksCount;
     /* access modifiers changed from: private */
-    public ConcurrentHashMap<String, long[]> fileProgresses = new ConcurrentHashMap<>();
+    public ConcurrentHashMap<String, long[]> fileProgresses = new ConcurrentHashMap();
     /* access modifiers changed from: private */
     public HashMap<String, Integer> forceLoadingImages = new HashMap<>();
     private LinkedList<HttpFileTask> httpFileLoadTasks;
@@ -853,7 +853,7 @@ public class ImageLoader {
                 if (r3 != r4) goto L_0x0057
             L_0x002f:
                 org.telegram.messenger.ImageLoader r3 = org.telegram.messenger.ImageLoader.this     // Catch:{ all -> 0x00a6 }
-                java.util.concurrent.ConcurrentHashMap r3 = r3.testWebFile     // Catch:{ all -> 0x00a6 }
+                j$.util.concurrent.ConcurrentHashMap r3 = r3.testWebFile     // Catch:{ all -> 0x00a6 }
                 java.lang.Object r3 = r3.get(r11)     // Catch:{ all -> 0x00a6 }
                 org.telegram.messenger.WebFile r3 = (org.telegram.messenger.WebFile) r3     // Catch:{ all -> 0x00a6 }
                 if (r3 == 0) goto L_0x0057
@@ -3415,7 +3415,7 @@ public class ImageLoader {
     public ImageLoader() {
         this.currentHttpTasksCount = 0;
         this.currentArtworkTasksCount = 0;
-        this.testWebFile = new ConcurrentHashMap<>();
+        this.testWebFile = new ConcurrentHashMap();
         this.httpFileLoadTasks = new LinkedList<>();
         this.httpFileLoadTasksByKeys = new HashMap<>();
         this.retryHttpsTasks = new HashMap<>();
@@ -3925,7 +3925,7 @@ public class ImageLoader {
 
     public Float getFileProgress(String str) {
         long[] jArr;
-        if (str == null || (jArr = this.fileProgresses.get(str)) == null) {
+        if (str == null || (jArr = (long[]) this.fileProgresses.get(str)) == null) {
             return null;
         }
         if (jArr[1] == 0) {
@@ -3938,7 +3938,7 @@ public class ImageLoader {
         if (str == null) {
             return null;
         }
-        return this.fileProgresses.get(str);
+        return (long[]) this.fileProgresses.get(str);
     }
 
     public String getReplacedKey(String str) {

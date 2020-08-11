@@ -710,7 +710,7 @@ public class DownloadController extends BaseController implements NotificationCe
             int r6 = r5.user_id
             if (r6 == 0) goto L_0x0063
             org.telegram.messenger.ContactsController r6 = r9.getContactsController()
-            java.util.concurrent.ConcurrentHashMap<java.lang.Integer, org.telegram.tgnet.TLRPC$TL_contact> r6 = r6.contactsDict
+            j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, org.telegram.tgnet.TLRPC$TL_contact> r6 = r6.contactsDict
             int r5 = r5.user_id
             java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
             boolean r5 = r6.containsKey(r5)
@@ -724,7 +724,7 @@ public class DownloadController extends BaseController implements NotificationCe
             int r5 = r10.from_id
             if (r5 == 0) goto L_0x007e
             org.telegram.messenger.ContactsController r5 = r9.getContactsController()
-            java.util.concurrent.ConcurrentHashMap<java.lang.Integer, org.telegram.tgnet.TLRPC$TL_contact> r5 = r5.contactsDict
+            j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, org.telegram.tgnet.TLRPC$TL_contact> r5 = r5.contactsDict
             int r6 = r10.from_id
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             boolean r5 = r5.containsKey(r6)
@@ -739,7 +739,7 @@ public class DownloadController extends BaseController implements NotificationCe
             int r5 = r10.from_id
             if (r5 == 0) goto L_0x007e
             org.telegram.messenger.ContactsController r5 = r9.getContactsController()
-            java.util.concurrent.ConcurrentHashMap<java.lang.Integer, org.telegram.tgnet.TLRPC$TL_contact> r5 = r5.contactsDict
+            j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, org.telegram.tgnet.TLRPC$TL_contact> r5 = r5.contactsDict
             int r6 = r10.from_id
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             boolean r5 = r5.containsKey(r6)

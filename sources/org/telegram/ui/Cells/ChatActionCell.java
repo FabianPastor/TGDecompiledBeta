@@ -253,7 +253,14 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
+        this.imageReceiver.onDetachedFromWindow();
         this.wasLayout = false;
+    }
+
+    /* access modifiers changed from: protected */
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        this.imageReceiver.onAttachedToWindow();
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:44:0x0092  */

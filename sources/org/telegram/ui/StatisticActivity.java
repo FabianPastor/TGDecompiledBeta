@@ -614,7 +614,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             this.topMembersVisible.get(i - i3).onLongClick(this.chat, this, this.progressDialog);
             return true;
         }
-        this.topMembersVisible.get(i - i2).onLongClick(this.chat, this, this.progressDialog);
+        this.topAdmins.get(i - i2).onLongClick(this.chat, this, this.progressDialog);
         return true;
     }
 
@@ -1679,60 +1679,62 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         }
 
         private void zoomOut(boolean z) {
-            this.chartHeaderView.zoomOut(this.chartView, z);
-            this.chartView.legendSignatureView.chevron.setAlpha(1.0f);
-            this.zoomedChartView.setHeader((ChartHeaderView) null);
-            long selectedDate = this.chartView.getSelectedDate();
-            this.data.activeZoom = 0;
-            this.chartView.setVisibility(0);
-            this.zoomedChartView.clearSelection();
-            this.zoomedChartView.setHeader((ChartHeaderView) null);
-            this.chartView.setHeader(this.chartHeaderView);
-            if (!z) {
-                this.zoomedChartView.setVisibility(4);
-                BaseChartView baseChartView = this.chartView;
-                baseChartView.enabled = true;
-                this.zoomedChartView.enabled = false;
-                baseChartView.invalidate();
-                ((Activity) getContext()).getWindow().clearFlags(16);
-                Iterator<CheckBoxHolder> it = this.checkBoxes.iterator();
-                while (it.hasNext()) {
-                    CheckBoxHolder next = it.next();
-                    next.checkBox.setAlpha(1.0f);
-                    next.checkBox.enabled = true;
-                }
-                return;
-            }
-            ValueAnimator createTransitionAnimator = createTransitionAnimator(selectedDate, false);
-            createTransitionAnimator.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    ChartCell.this.zoomedChartView.setVisibility(4);
-                    ChartCell chartCell = ChartCell.this;
-                    BaseChartView baseChartView = chartCell.chartView;
-                    baseChartView.transitionMode = 0;
-                    BaseChartView baseChartView2 = chartCell.zoomedChartView;
-                    baseChartView2.transitionMode = 0;
+            if (this.data.chartData.x != null) {
+                this.chartHeaderView.zoomOut(this.chartView, z);
+                this.chartView.legendSignatureView.chevron.setAlpha(1.0f);
+                this.zoomedChartView.setHeader((ChartHeaderView) null);
+                long selectedDate = this.chartView.getSelectedDate();
+                this.data.activeZoom = 0;
+                this.chartView.setVisibility(0);
+                this.zoomedChartView.clearSelection();
+                this.zoomedChartView.setHeader((ChartHeaderView) null);
+                this.chartView.setHeader(this.chartHeaderView);
+                if (!z) {
+                    this.zoomedChartView.setVisibility(4);
+                    BaseChartView baseChartView = this.chartView;
                     baseChartView.enabled = true;
-                    baseChartView2.enabled = false;
-                    if (!(baseChartView instanceof StackLinearChartView)) {
-                        baseChartView.legendShowing = true;
-                        baseChartView.moveLegend();
-                        ChartCell.this.chartView.animateLegend(true);
-                        ChartCell.this.chartView.invalidate();
-                    } else {
-                        baseChartView.legendShowing = false;
-                        baseChartView.clearSelection();
+                    this.zoomedChartView.enabled = false;
+                    baseChartView.invalidate();
+                    ((Activity) getContext()).getWindow().clearFlags(16);
+                    Iterator<CheckBoxHolder> it = this.checkBoxes.iterator();
+                    while (it.hasNext()) {
+                        CheckBoxHolder next = it.next();
+                        next.checkBox.setAlpha(1.0f);
+                        next.checkBox.enabled = true;
                     }
-                    ((Activity) ChartCell.this.getContext()).getWindow().clearFlags(16);
+                    return;
                 }
-            });
-            Iterator<CheckBoxHolder> it2 = this.checkBoxes.iterator();
-            while (it2.hasNext()) {
-                CheckBoxHolder next2 = it2.next();
-                next2.checkBox.animate().alpha(1.0f).start();
-                next2.checkBox.enabled = true;
+                ValueAnimator createTransitionAnimator = createTransitionAnimator(selectedDate, false);
+                createTransitionAnimator.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animator) {
+                        ChartCell.this.zoomedChartView.setVisibility(4);
+                        ChartCell chartCell = ChartCell.this;
+                        BaseChartView baseChartView = chartCell.chartView;
+                        baseChartView.transitionMode = 0;
+                        BaseChartView baseChartView2 = chartCell.zoomedChartView;
+                        baseChartView2.transitionMode = 0;
+                        baseChartView.enabled = true;
+                        baseChartView2.enabled = false;
+                        if (!(baseChartView instanceof StackLinearChartView)) {
+                            baseChartView.legendShowing = true;
+                            baseChartView.moveLegend();
+                            ChartCell.this.chartView.animateLegend(true);
+                            ChartCell.this.chartView.invalidate();
+                        } else {
+                            baseChartView.legendShowing = false;
+                            baseChartView.clearSelection();
+                        }
+                        ((Activity) ChartCell.this.getContext()).getWindow().clearFlags(16);
+                    }
+                });
+                Iterator<CheckBoxHolder> it2 = this.checkBoxes.iterator();
+                while (it2.hasNext()) {
+                    CheckBoxHolder next2 = it2.next();
+                    next2.checkBox.animate().alpha(1.0f).start();
+                    next2.checkBox.enabled = true;
+                }
+                createTransitionAnimator.start();
             }
-            createTransitionAnimator.start();
         }
 
         private ValueAnimator createTransitionAnimator(long j, boolean z) {
@@ -2349,7 +2351,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         if (tLObject instanceof TLRPC$messages_Messages) {
             ArrayList<TLRPC$Message> arrayList2 = ((TLRPC$messages_Messages) tLObject).messages;
             for (int i = 0; i < arrayList2.size(); i++) {
-                arrayList.add(new MessageObject(this.currentAccount, arrayList2.get(i), false));
+                arrayList.add(new MessageObject(this.currentAccount, arrayList2.get(i), false, true));
             }
             getMessagesStorage().putMessages(arrayList2, false, true, true, 0, false);
         }
@@ -3346,21 +3348,21 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r11 = r6
                 r12 = r11
             L_0x0066:
-                r9 = 2131627002(0x7f0e0bfa, float:1.8881256E38)
+                r9 = 2131627007(0x7f0e0bff, float:1.8881266E38)
                 java.lang.String r10 = "StatisticOpenProfile"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
-                r9 = 2131165627(0x7var_bb, float:1.7945476E38)
+                r9 = 2131165639(0x7var_c7, float:1.79455E38)
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r5.add(r9)
                 r9 = 2
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r2.add(r9)
-                r9 = 2131627004(0x7f0e0bfc, float:1.888126E38)
+                r9 = 2131627009(0x7f0e0CLASSNAME, float:1.888127E38)
                 java.lang.String r10 = "StatisticSearchUserHistory"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
-                r9 = 2131165596(0x7var_c, float:1.7945414E38)
+                r9 = 2131165608(0x7var_a8, float:1.7945438E38)
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r5.add(r9)
                 r9 = 1
@@ -3454,11 +3456,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r9 = 0
             L_0x0166:
                 if (r9 == 0) goto L_0x016e
-                r0 = 2131626878(0x7f0e0b7e, float:1.8881005E38)
+                r0 = 2131626883(0x7f0e0b83, float:1.8881015E38)
                 java.lang.String r6 = "SetAsAdmin"
                 goto L_0x0173
             L_0x016e:
-                r0 = 2131625074(0x7f0e0472, float:1.8877346E38)
+                r0 = 2131625079(0x7f0e0477, float:1.8877356E38)
                 java.lang.String r6 = "EditAdminRights"
             L_0x0173:
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)

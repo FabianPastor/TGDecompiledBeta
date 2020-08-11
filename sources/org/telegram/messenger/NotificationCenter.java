@@ -163,6 +163,7 @@ public class NotificationCenter {
     public static final int updateMessageMedia;
     public static final int userInfoDidLoad;
     public static final int videoLoadingStateChanged;
+    public static final int voipServiceCreated;
     public static final int walletPendingTransactionsChanged;
     public static final int walletSyncProgressChanged;
     public static final int wallpapersDidLoad;
@@ -663,8 +664,11 @@ public class NotificationCenter {
         int i158 = i157 + 1;
         totalEvents = i158;
         messagePlayingSpeedChanged = i157;
-        totalEvents = i158 + 1;
+        int i159 = i158 + 1;
+        totalEvents = i159;
         screenStateChanged = i158;
+        totalEvents = i159 + 1;
+        voipServiceCreated = i159;
     }
 
     private static class DelayedPost {

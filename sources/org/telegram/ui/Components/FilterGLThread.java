@@ -396,13 +396,13 @@ public class FilterGLThread extends DispatchQueue {
     }
 
     public Bitmap getTexture() {
-        if (!this.initied) {
+        if (!this.initied || !isAlive()) {
             return null;
         }
         CountDownLatch countDownLatch = new CountDownLatch(1);
         Bitmap[] bitmapArr = new Bitmap[1];
         try {
-            postRunnable(new Runnable(bitmapArr, countDownLatch) {
+            if (postRunnable(new Runnable(bitmapArr, countDownLatch) {
                 public final /* synthetic */ Bitmap[] f$1;
                 public final /* synthetic */ CountDownLatch f$2;
 
@@ -414,8 +414,9 @@ public class FilterGLThread extends DispatchQueue {
                 public final void run() {
                     FilterGLThread.this.lambda$getTexture$4$FilterGLThread(this.f$1, this.f$2);
                 }
-            });
-            countDownLatch.await();
+            })) {
+                countDownLatch.await();
+            }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }

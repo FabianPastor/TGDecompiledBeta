@@ -1,24 +1,7 @@
 package org.telegram.tgnet;
 
-public class TLRPC$TL_phoneConnection extends TLObject {
+public class TLRPC$TL_phoneConnection extends TLRPC$PhoneConnection {
     public static int constructor = -NUM;
-    public long id;
-    public String ip;
-    public String ipv6;
-    public byte[] peer_tag;
-    public int port;
-
-    public static TLRPC$TL_phoneConnection TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        if (constructor == i) {
-            TLRPC$TL_phoneConnection tLRPC$TL_phoneConnection = new TLRPC$TL_phoneConnection();
-            tLRPC$TL_phoneConnection.readParams(abstractSerializedData, z);
-            return tLRPC$TL_phoneConnection;
-        } else if (!z) {
-            return null;
-        } else {
-            throw new RuntimeException(String.format("can't parse magic %x in TL_phoneConnection", new Object[]{Integer.valueOf(i)}));
-        }
-    }
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         this.id = abstractSerializedData.readInt64(z);

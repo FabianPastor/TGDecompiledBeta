@@ -59,7 +59,7 @@ public class ShareActivity extends Activity {
             return;
         }
         String string2 = sharedPreferences.getString(queryParameter + "_link", (String) null);
-        MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, TLdeserialize, false);
+        MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, TLdeserialize, false, true);
         messageObject.messageOwner.with_my_score = true;
         try {
             ShareAlert createShareAlert = ShareAlert.createShareAlert(this, messageObject, (String) null, false, string2, false);

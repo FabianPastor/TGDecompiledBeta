@@ -220,7 +220,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r4.<init>(r2)
                 android.widget.ImageView$ScaleType r7 = android.widget.ImageView.ScaleType.CENTER
                 r4.setScaleType(r7)
-                r7 = 2131165901(0x7var_cd, float:1.7946032E38)
+                r7 = 2131165917(0x7var_dd, float:1.7946065E38)
                 r4.setImageResource(r7)
                 android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
                 android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.MULTIPLY
@@ -296,7 +296,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2.setImeOptions(r4)
                 if (r3 != 0) goto L_0x014c
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131626787(0x7f0e0b23, float:1.888082E38)
+                r3 = 2131626792(0x7f0e0b28, float:1.888083E38)
                 java.lang.String r4 = "SearchStickersHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -304,7 +304,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             L_0x014c:
                 if (r3 != r6) goto L_0x015d
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131626772(0x7f0e0b14, float:1.888079E38)
+                r3 = 2131626777(0x7f0e0b19, float:1.88808E38)
                 java.lang.String r4 = "SearchEmojiHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -313,7 +313,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2 = 2
                 if (r3 != r2) goto L_0x016e
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131626778(0x7f0e0b1a, float:1.8880802E38)
+                r3 = 2131626783(0x7f0e0b1f, float:1.8880812E38)
                 java.lang.String r4 = "SearchGifsTitle"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)

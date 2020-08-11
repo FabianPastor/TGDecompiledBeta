@@ -83,7 +83,7 @@ public class ThemePreviewMessagesCell extends LinearLayout {
         TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
         tLRPC$TL_message.to_id = tLRPC$TL_peerUser;
         tLRPC$TL_peerUser.user_id = 0;
-        MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message, true);
+        MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message, true, false);
         TLRPC$TL_message tLRPC$TL_message2 = new TLRPC$TL_message();
         if (i == 0) {
             tLRPC$TL_message2.message = LocaleController.getString("FontSizePreviewLine2", NUM);
@@ -113,7 +113,7 @@ public class ThemePreviewMessagesCell extends LinearLayout {
         TLRPC$TL_peerUser tLRPC$TL_peerUser2 = new TLRPC$TL_peerUser();
         tLRPC$TL_message2.to_id = tLRPC$TL_peerUser2;
         tLRPC$TL_peerUser2.user_id = 0;
-        MessageObject messageObject2 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message2, true);
+        MessageObject messageObject2 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message2, true, false);
         messageObject2.resetLayout();
         messageObject2.eventId = 1;
         TLRPC$TL_message tLRPC$TL_message3 = new TLRPC$TL_message();
@@ -133,7 +133,7 @@ public class ThemePreviewMessagesCell extends LinearLayout {
         TLRPC$TL_peerUser tLRPC$TL_peerUser3 = new TLRPC$TL_peerUser();
         tLRPC$TL_message3.to_id = tLRPC$TL_peerUser3;
         tLRPC$TL_peerUser3.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
-        MessageObject messageObject3 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message3, true);
+        MessageObject messageObject3 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message3, true, false);
         if (i == 0) {
             messageObject3.customReplyName = LocaleController.getString("FontSizePreviewName", NUM);
         } else {
@@ -329,25 +329,19 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         float f = 2.0f / AndroidUtilities.density;
                         canvas.scale(f, f);
                         drawable.setBounds(0, 0, (int) Math.ceil((double) (((float) getMeasuredWidth()) / f)), (int) Math.ceil((double) (((float) getMeasuredHeight()) / f)));
-                        drawable.draw(canvas);
-                        canvas.restore();
                     } else {
                         int measuredHeight = getMeasuredHeight();
-                        float measuredWidth = ((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth());
-                        float intrinsicHeight = ((float) measuredHeight) / ((float) drawable.getIntrinsicHeight());
-                        if (measuredWidth < intrinsicHeight) {
-                            measuredWidth = intrinsicHeight;
-                        }
-                        int ceil = (int) Math.ceil((double) (((float) drawable.getIntrinsicWidth()) * measuredWidth));
-                        int ceil2 = (int) Math.ceil((double) (((float) drawable.getIntrinsicHeight()) * measuredWidth));
-                        int measuredWidth2 = (getMeasuredWidth() - ceil) / 2;
+                        float max = Math.max(((float) getMeasuredWidth()) / ((float) drawable.getIntrinsicWidth()), ((float) measuredHeight) / ((float) drawable.getIntrinsicHeight()));
+                        int ceil = (int) Math.ceil((double) (((float) drawable.getIntrinsicWidth()) * max));
+                        int ceil2 = (int) Math.ceil((double) (((float) drawable.getIntrinsicHeight()) * max));
+                        int measuredWidth = (getMeasuredWidth() - ceil) / 2;
                         int i2 = (measuredHeight - ceil2) / 2;
                         canvas.save();
                         canvas.clipRect(0, 0, ceil, getMeasuredHeight());
-                        drawable.setBounds(measuredWidth2, i2, ceil + measuredWidth2, ceil2 + i2);
-                        drawable.draw(canvas);
-                        canvas.restore();
+                        drawable.setBounds(measuredWidth, i2, ceil + measuredWidth, ceil2 + i2);
                     }
+                    drawable.draw(canvas);
+                    canvas.restore();
                 }
                 if (i == 0 && this.oldBackgroundDrawable != null && themeAnimationValue >= 1.0f) {
                     BackgroundGradientDrawable.Disposable disposable2 = this.oldBackgroundGradientDisposable;

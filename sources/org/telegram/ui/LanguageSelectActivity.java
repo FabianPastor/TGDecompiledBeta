@@ -11,6 +11,11 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import j$.util.Comparator;
+import j$.util.function.Function;
+import j$.util.function.ToDoubleFunction;
+import j$.util.function.ToIntFunction;
+import j$.util.function.ToLongFunction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -216,6 +221,34 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             public final int compare(Object obj, Object obj2) {
                 return LanguageSelectActivity.lambda$fillLanguages$3(LocaleController.LocaleInfo.this, (LocaleController.LocaleInfo) obj, (LocaleController.LocaleInfo) obj2);
             }
+
+            public /* synthetic */ Comparator<T> reversed() {
+                return Comparator.CC.$default$reversed(this);
+            }
+
+            public /* synthetic */ <U extends Comparable<? super U>> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function) {
+                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (Function) function);
+            }
+
+            public /* synthetic */ <U> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function, java.util.Comparator<? super U> comparator) {
+                return Comparator.CC.$default$thenComparing(this, function, comparator);
+            }
+
+            public /* synthetic */ java.util.Comparator<T> thenComparing(java.util.Comparator<? super T> comparator) {
+                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (java.util.Comparator) comparator);
+            }
+
+            public /* synthetic */ java.util.Comparator<T> thenComparingDouble(ToDoubleFunction<? super T> toDoubleFunction) {
+                return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
+            }
+
+            public /* synthetic */ java.util.Comparator<T> thenComparingInt(ToIntFunction<? super T> toIntFunction) {
+                return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
+            }
+
+            public /* synthetic */ java.util.Comparator<T> thenComparingLong(ToLongFunction<? super T> toLongFunction) {
+                return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
+            }
         };
         this.sortedLanguages = new ArrayList<>();
         this.unofficialLanguages = new ArrayList<>(LocaleController.getInstance().unofficialLanguages);
@@ -419,13 +452,13 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 int r0 = r0.size()
                 if (r8 != r0) goto L_0x0037
                 android.content.Context r8 = r6.mContext
-                r0 = 2131165412(0x7var_e4, float:1.794504E38)
+                r0 = 2131165424(0x7var_f0, float:1.7945065E38)
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r0, (java.lang.String) r1)
                 r7.setBackgroundDrawable(r8)
                 goto L_0x0108
             L_0x0037:
                 android.content.Context r8 = r6.mContext
-                r0 = 2131165413(0x7var_e5, float:1.7945042E38)
+                r0 = 2131165425(0x7var_f1, float:1.7945067E38)
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r0, (java.lang.String) r1)
                 r7.setBackgroundDrawable(r8)
                 goto L_0x0108
@@ -498,7 +531,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.lang.Object[] r3 = new java.lang.Object[r3]
                 java.lang.String r4 = r0.name
                 r3[r2] = r4
-                r4 = 2131625625(0x7f0e0699, float:1.8878463E38)
+                r4 = 2131625630(0x7f0e069e, float:1.8878473E38)
                 java.lang.String r5 = "LanguageCustom"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
                 r3[r1] = r4

@@ -56,17 +56,19 @@ import org.telegram.ui.Components.BetterRatingView;
 import org.telegram.ui.Components.EditTextBoldCursor;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.LaunchActivity;
-import org.telegram.ui.VoIPActivity;
 
 public class VoIPHelper {
     public static long lastCallTime;
 
-    public static void startCall(TLRPC$User tLRPC$User, Activity activity, TLRPC$UserFull tLRPC$UserFull) {
-        int i;
+    static /* synthetic */ void lambda$showRateAlert$7(DialogInterface dialogInterface, int i) {
+    }
+
+    public static void startCall(TLRPC$User tLRPC$User, boolean z, boolean z2, Activity activity, TLRPC$UserFull tLRPC$UserFull) {
         String str;
-        int i2;
+        int i;
         String str2;
-        boolean z = true;
+        int i2;
+        boolean z3 = true;
         if (tLRPC$UserFull != null && tLRPC$UserFull.phone_calls_private) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity);
             builder.setTitle(LocaleController.getString("VoipFailed", NUM));
@@ -75,10 +77,10 @@ public class VoIPHelper {
             builder.show();
         } else if (ConnectionsManager.getInstance(UserConfig.selectedAccount).getConnectionState() != 3) {
             if (Settings.System.getInt(activity.getContentResolver(), "airplane_mode_on", 0) == 0) {
-                z = false;
+                z3 = false;
             }
             AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) activity);
-            if (z) {
+            if (z3) {
                 i = NUM;
                 str = "VoipOfflineAirplaneTitle";
             } else {
@@ -86,7 +88,7 @@ public class VoIPHelper {
                 str = "VoipOfflineTitle";
             }
             builder2.setTitle(LocaleController.getString(str, i));
-            if (z) {
+            if (z3) {
                 i2 = NUM;
                 str2 = "VoipOfflineAirplane";
             } else {
@@ -95,7 +97,7 @@ public class VoIPHelper {
             }
             builder2.setMessage(LocaleController.getString(str2, i2));
             builder2.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
-            if (z) {
+            if (z3) {
                 Intent intent = new Intent("android.settings.AIRPLANE_MODE_SETTINGS");
                 if (intent.resolveActivity(activity.getPackageManager()) != null) {
                     builder2.setNeutralButton(LocaleController.getString("VoipOfflineOpenSettings", NUM), new DialogInterface.OnClickListener(activity, intent) {
@@ -114,14 +116,25 @@ public class VoIPHelper {
                 }
             }
             builder2.show();
-        } else if (Build.VERSION.SDK_INT < 23 || activity.checkSelfPermission("android.permission.RECORD_AUDIO") == 0) {
-            initiateCall(tLRPC$User, activity);
+        } else if (Build.VERSION.SDK_INT >= 23) {
+            ArrayList arrayList = new ArrayList();
+            if (activity.checkSelfPermission("android.permission.RECORD_AUDIO") != 0) {
+                arrayList.add("android.permission.RECORD_AUDIO");
+            }
+            if (z && activity.checkSelfPermission("android.permission.CAMERA") != 0) {
+                arrayList.add("android.permission.CAMERA");
+            }
+            if (arrayList.isEmpty()) {
+                initiateCall(tLRPC$User, z, z2, activity);
+            } else {
+                activity.requestPermissions((String[]) arrayList.toArray(new String[0]), z ? 102 : 101);
+            }
         } else {
-            activity.requestPermissions(new String[]{"android.permission.RECORD_AUDIO"}, 101);
+            initiateCall(tLRPC$User, z, z2, activity);
         }
     }
 
-    private static void initiateCall(TLRPC$User tLRPC$User, Activity activity) {
+    private static void initiateCall(TLRPC$User tLRPC$User, boolean z, boolean z2, Activity activity) {
         if (activity != null && tLRPC$User != null) {
             if (VoIPService.getSharedInstance() != null) {
                 TLRPC$User user = VoIPService.getSharedInstance().getUser();
@@ -129,54 +142,64 @@ public class VoIPHelper {
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity);
                     builder.setTitle(LocaleController.getString("VoipOngoingAlertTitle", NUM));
                     builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipOngoingAlert", NUM, ContactsController.formatName(user.first_name, user.last_name), ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name))));
-                    builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(activity) {
-                        public final /* synthetic */ Activity f$1;
+                    builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(z, z2, activity) {
+                        public final /* synthetic */ boolean f$1;
+                        public final /* synthetic */ boolean f$2;
+                        public final /* synthetic */ Activity f$3;
 
                         {
                             this.f$1 = r2;
+                            this.f$2 = r3;
+                            this.f$3 = r4;
                         }
 
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            VoIPHelper.lambda$initiateCall$2(TLRPC$User.this, this.f$1, dialogInterface, i);
+                            VoIPHelper.lambda$initiateCall$2(TLRPC$User.this, this.f$1, this.f$2, this.f$3, dialogInterface, i);
                         }
                     });
                     builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
                     builder.show();
                     return;
                 }
-                activity.startActivity(new Intent(activity, VoIPActivity.class).addFlags(NUM));
+                activity.startActivity(new Intent(activity, LaunchActivity.class).setAction("voip"));
             } else if (VoIPService.callIShouldHavePutIntoIntent == null) {
-                doInitiateCall(tLRPC$User, activity);
+                doInitiateCall(tLRPC$User, z, z2, activity);
             }
         }
     }
 
-    static /* synthetic */ void lambda$initiateCall$2(TLRPC$User tLRPC$User, Activity activity, DialogInterface dialogInterface, int i) {
+    static /* synthetic */ void lambda$initiateCall$2(TLRPC$User tLRPC$User, boolean z, boolean z2, Activity activity, DialogInterface dialogInterface, int i) {
         if (VoIPService.getSharedInstance() != null) {
-            VoIPService.getSharedInstance().hangUp(new Runnable(activity) {
-                public final /* synthetic */ Activity f$1;
+            VoIPService.getSharedInstance().hangUp(new Runnable(z, z2, activity) {
+                public final /* synthetic */ boolean f$1;
+                public final /* synthetic */ boolean f$2;
+                public final /* synthetic */ Activity f$3;
 
                 {
                     this.f$1 = r2;
+                    this.f$2 = r3;
+                    this.f$3 = r4;
                 }
 
                 public final void run() {
-                    VoIPHelper.doInitiateCall(TLRPC$User.this, this.f$1);
+                    VoIPHelper.doInitiateCall(TLRPC$User.this, this.f$1, this.f$2, this.f$3);
                 }
             });
         } else {
-            doInitiateCall(tLRPC$User, activity);
+            doInitiateCall(tLRPC$User, z, z2, activity);
         }
     }
 
     /* access modifiers changed from: private */
-    public static void doInitiateCall(TLRPC$User tLRPC$User, Activity activity) {
+    public static void doInitiateCall(TLRPC$User tLRPC$User, boolean z, boolean z2, Activity activity) {
         if (activity != null && tLRPC$User != null && System.currentTimeMillis() - lastCallTime >= 2000) {
             lastCallTime = System.currentTimeMillis();
             Intent intent = new Intent(activity, VoIPService.class);
             intent.putExtra("user_id", tLRPC$User.id);
             intent.putExtra("is_outgoing", true);
             intent.putExtra("start_incall_activity", true);
+            intent.putExtra("video_call", z);
+            intent.putExtra("can_video_call", z2);
             intent.putExtra("account", UserConfig.selectedAccount);
             try {
                 activity.startService(intent);
@@ -187,11 +210,20 @@ public class VoIPHelper {
     }
 
     @TargetApi(23)
-    public static void permissionDenied(Activity activity, Runnable runnable) {
-        if (!activity.shouldShowRequestPermissionRationale("android.permission.RECORD_AUDIO")) {
+    public static void permissionDenied(Activity activity, Runnable runnable, int i) {
+        int i2;
+        String str;
+        if (!activity.shouldShowRequestPermissionRationale("android.permission.RECORD_AUDIO") || (i == 102 && !activity.shouldShowRequestPermissionRationale("android.permission.CAMERA"))) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity);
             builder.setTitle(LocaleController.getString("AppName", NUM));
-            builder.setMessage(LocaleController.getString("VoipNeedMicPermission", NUM));
+            if (i == 102) {
+                i2 = NUM;
+                str = "VoipNeedMicCameraPermission";
+            } else {
+                i2 = NUM;
+                str = "VoipNeedMicPermission";
+            }
+            builder.setMessage(LocaleController.getString(str, i2));
             builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
             builder.setNegativeButton(LocaleController.getString("Settings", NUM), new DialogInterface.OnClickListener(activity) {
                 public final /* synthetic */ Activity f$0;
@@ -274,15 +306,15 @@ public class VoIPHelper {
 
     public static void showRateAlert(Context context, Runnable runnable, long j, long j2, int i, boolean z) {
         String str;
-        final Context context2 = context;
-        final File logFile = getLogFile(j);
+        Context context2 = context;
+        File logFile = getLogFile(j);
         int i2 = 1;
-        final int[] iArr = {0};
+        int[] iArr = {0};
         LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(1);
         int dp = AndroidUtilities.dp(16.0f);
         linearLayout.setPadding(dp, dp, dp, 0);
-        final TextView textView = new TextView(context2);
+        TextView textView = new TextView(context2);
         textView.setTextSize(2, 16.0f);
         textView.setTextColor(Theme.getColor("dialogTextBlack"));
         textView.setGravity(17);
@@ -292,12 +324,7 @@ public class VoIPHelper {
         linearLayout.addView(betterRatingView, LayoutHelper.createLinear(-2, -2, 1, 0, 16, 0, 0));
         LinearLayout linearLayout2 = new LinearLayout(context2);
         linearLayout2.setOrientation(1);
-        AnonymousClass1 r8 = new View.OnClickListener() {
-            public void onClick(View view) {
-                CheckBoxCell checkBoxCell = (CheckBoxCell) view;
-                checkBoxCell.setChecked(!checkBoxCell.isChecked(), true);
-            }
-        };
+        $$Lambda$VoIPHelper$10Yk49IUw0yaozGWCHYyd6pcXQY r8 = $$Lambda$VoIPHelper$10Yk49IUw0yaozGWCHYyd6pcXQY.INSTANCE;
         String[] strArr = {"echo", "noise", "interruptions", "distorted_speech", "silent_local", "silent_remote", "dropped"};
         int i3 = 0;
         for (int i4 = 7; i3 < i4; i4 = 7) {
@@ -349,13 +376,19 @@ public class VoIPHelper {
         editTextBoldCursor.setTextSize(18.0f);
         editTextBoldCursor.setVisibility(8);
         linearLayout.addView(editTextBoldCursor, LayoutHelper.createLinear(-1, -2, 8.0f, 8.0f, 8.0f, 0.0f));
-        final boolean[] zArr = {true};
-        final CheckBoxCell checkBoxCell2 = new CheckBoxCell(context2, 1);
-        AnonymousClass2 r9 = new View.OnClickListener() {
-            public void onClick(View view) {
-                boolean[] zArr = zArr;
-                zArr[0] = !zArr[0];
-                checkBoxCell2.setChecked(zArr[0], true);
+        boolean[] zArr = {true};
+        CheckBoxCell checkBoxCell2 = new CheckBoxCell(context2, 1);
+        $$Lambda$VoIPHelper$WeS4JAHIYvpwHaoSI5GKwAdQgyk r9 = new View.OnClickListener(zArr, checkBoxCell2) {
+            public final /* synthetic */ boolean[] f$0;
+            public final /* synthetic */ CheckBoxCell f$1;
+
+            {
+                this.f$0 = r1;
+                this.f$1 = r2;
+            }
+
+            public final void onClick(View view) {
+                VoIPHelper.lambda$showRateAlert$6(this.f$0, this.f$1, view);
             }
         };
         checkBoxCell2.setText(LocaleController.getString("CallReportIncludeLogs", NUM), (String) null, true, false);
@@ -377,122 +410,213 @@ public class VoIPHelper {
         AlertDialog.Builder builder = new AlertDialog.Builder(context2);
         builder.setTitle(LocaleController.getString("CallMessageReportProblem", NUM));
         builder.setView(linearLayout);
-        builder.setPositiveButton(LocaleController.getString("Send", NUM), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
-        });
+        builder.setPositiveButton(LocaleController.getString("Send", NUM), $$Lambda$VoIPHelper$5KyiUPu3LKl7VZZf6GWjFHGX4g.INSTANCE);
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-        final Runnable runnable2 = runnable;
-        builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            public void onDismiss(DialogInterface dialogInterface) {
-                Runnable runnable = runnable2;
-                if (runnable != null) {
-                    runnable.run();
-                }
+        builder.setOnDismissListener(new DialogInterface.OnDismissListener(runnable) {
+            public final /* synthetic */ Runnable f$0;
+
+            {
+                this.f$0 = r1;
+            }
+
+            public final void onDismiss(DialogInterface dialogInterface) {
+                VoIPHelper.lambda$showRateAlert$8(this.f$0, dialogInterface);
             }
         });
-        final AlertDialog create = builder.create();
+        AlertDialog create = builder.create();
         if (BuildVars.DEBUG_VERSION && logFile.exists()) {
-            create.setNeutralButton("Send log", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent = new Intent(context2, LaunchActivity.class);
-                    intent.setAction("android.intent.action.SEND");
-                    intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(logFile));
-                    context2.startActivity(intent);
+            create.setNeutralButton("Send log", new DialogInterface.OnClickListener(context2, logFile) {
+                public final /* synthetic */ Context f$0;
+                public final /* synthetic */ File f$1;
+
+                {
+                    this.f$0 = r1;
+                    this.f$1 = r2;
+                }
+
+                public final void onClick(DialogInterface dialogInterface, int i) {
+                    VoIPHelper.lambda$showRateAlert$9(this.f$0, this.f$1, dialogInterface, i);
                 }
             });
         }
         create.show();
         create.getWindow().setSoftInputMode(3);
-        final View button = create.getButton(-1);
-        final View view = button;
+        View button = create.getButton(-1);
         button.setEnabled(false);
-        betterRatingView.setOnRatingChangeListener(new BetterRatingView.OnRatingChangeListener() {
-            public void onRatingChanged(int i) {
-                int i2;
-                String str;
-                button.setEnabled(i > 0);
-                TextView textView = (TextView) button;
-                if (i < 4) {
-                    i2 = NUM;
-                    str = "Next";
-                } else {
-                    i2 = NUM;
-                    str = "Send";
-                }
-                textView.setText(LocaleController.getString(str, i2).toUpperCase());
+        betterRatingView.setOnRatingChangeListener(new BetterRatingView.OnRatingChangeListener(button) {
+            public final /* synthetic */ View f$0;
+
+            {
+                this.f$0 = r1;
+            }
+
+            public final void onRatingChanged(int i) {
+                VoIPHelper.lambda$showRateAlert$10(this.f$0, i);
             }
         });
-        final BetterRatingView betterRatingView2 = betterRatingView;
-        final LinearLayout linearLayout3 = linearLayout2;
-        final EditTextBoldCursor editTextBoldCursor2 = editTextBoldCursor;
-        final boolean[] zArr2 = zArr;
-        final long j3 = j2;
-        AnonymousClass7 r27 = r0;
-        final long j4 = j;
-        final TextView textView3 = textView2;
-        final boolean z2 = z;
-        final CheckBoxCell checkBoxCell3 = checkBoxCell2;
-        final int i5 = i;
-        final Context context3 = context;
-        AnonymousClass7 r0 = new View.OnClickListener() {
-            public void onClick(View view) {
-                if (betterRatingView2.getRating() < 4) {
-                    int[] iArr = iArr;
-                    if (iArr[0] != 1) {
-                        iArr[0] = 1;
-                        betterRatingView2.setVisibility(8);
-                        textView.setVisibility(8);
-                        create.setTitle(LocaleController.getString("CallReportHint", NUM));
-                        editTextBoldCursor2.setVisibility(0);
-                        if (logFile.exists()) {
-                            checkBoxCell3.setVisibility(0);
-                            textView3.setVisibility(0);
-                        }
-                        linearLayout3.setVisibility(0);
-                        ((TextView) view).setText(LocaleController.getString("Send", NUM).toUpperCase());
-                        return;
-                    }
-                }
-                final int i = UserConfig.selectedAccount;
-                final TLRPC$TL_phone_setCallRating tLRPC$TL_phone_setCallRating = new TLRPC$TL_phone_setCallRating();
-                tLRPC$TL_phone_setCallRating.rating = betterRatingView2.getRating();
-                final ArrayList arrayList = new ArrayList();
-                for (int i2 = 0; i2 < linearLayout3.getChildCount(); i2++) {
-                    CheckBoxCell checkBoxCell = (CheckBoxCell) linearLayout3.getChildAt(i2);
-                    if (checkBoxCell.isChecked()) {
-                        arrayList.add("#" + checkBoxCell.getTag());
-                    }
-                }
-                if (tLRPC$TL_phone_setCallRating.rating < 5) {
-                    tLRPC$TL_phone_setCallRating.comment = editTextBoldCursor2.getText().toString();
-                } else {
-                    tLRPC$TL_phone_setCallRating.comment = "";
-                }
-                if (!arrayList.isEmpty() && !zArr2[0]) {
-                    tLRPC$TL_phone_setCallRating.comment += " " + TextUtils.join(" ", arrayList);
-                }
-                TLRPC$TL_inputPhoneCall tLRPC$TL_inputPhoneCall = new TLRPC$TL_inputPhoneCall();
-                tLRPC$TL_phone_setCallRating.peer = tLRPC$TL_inputPhoneCall;
-                tLRPC$TL_inputPhoneCall.access_hash = j3;
-                tLRPC$TL_inputPhoneCall.id = j4;
-                tLRPC$TL_phone_setCallRating.user_initiative = z2;
-                ConnectionsManager.getInstance(i5).sendRequest(tLRPC$TL_phone_setCallRating, new RequestDelegate() {
-                    public void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        if (tLObject instanceof TLRPC$TL_updates) {
-                            MessagesController.getInstance(i).processUpdates((TLRPC$TL_updates) tLObject, false);
-                        }
-                        AnonymousClass7 r14 = AnonymousClass7.this;
-                        if (zArr2[0] && logFile.exists() && tLRPC$TL_phone_setCallRating.rating < 4) {
-                            SendMessagesHelper.prepareSendingDocument(AccountInstance.getInstance(UserConfig.selectedAccount), logFile.getAbsolutePath(), logFile.getAbsolutePath(), (Uri) null, TextUtils.join(" ", arrayList), "text/plain", 4244000, (MessageObject) null, (InputContentInfoCompat) null, (MessageObject) null, true, 0);
-                            Toast.makeText(context3, LocaleController.getString("CallReportSent", NUM), 1).show();
-                        }
-                    }
-                });
-                create.dismiss();
+        $$Lambda$VoIPHelper$450nV7LHHckm9amteAkst6k1_4 r27 = r0;
+        CheckBoxCell checkBoxCell3 = checkBoxCell2;
+        $$Lambda$VoIPHelper$450nV7LHHckm9amteAkst6k1_4 r0 = new View.OnClickListener(betterRatingView, iArr, linearLayout2, editTextBoldCursor, zArr, j2, j, z, i, logFile, context, create, textView, checkBoxCell3, textView2, button) {
+            public final /* synthetic */ BetterRatingView f$0;
+            public final /* synthetic */ int[] f$1;
+            public final /* synthetic */ Context f$10;
+            public final /* synthetic */ AlertDialog f$11;
+            public final /* synthetic */ TextView f$12;
+            public final /* synthetic */ CheckBoxCell f$13;
+            public final /* synthetic */ TextView f$14;
+            public final /* synthetic */ View f$15;
+            public final /* synthetic */ LinearLayout f$2;
+            public final /* synthetic */ EditTextBoldCursor f$3;
+            public final /* synthetic */ boolean[] f$4;
+            public final /* synthetic */ long f$5;
+            public final /* synthetic */ long f$6;
+            public final /* synthetic */ boolean f$7;
+            public final /* synthetic */ int f$8;
+            public final /* synthetic */ File f$9;
+
+            {
+                this.f$0 = r4;
+                this.f$1 = r5;
+                this.f$2 = r6;
+                this.f$3 = r7;
+                this.f$4 = r8;
+                this.f$5 = r9;
+                this.f$6 = r11;
+                this.f$7 = r13;
+                this.f$8 = r14;
+                this.f$9 = r15;
+                this.f$10 = r16;
+                this.f$11 = r17;
+                this.f$12 = r18;
+                this.f$13 = r19;
+                this.f$14 = r20;
+                this.f$15 = r21;
+            }
+
+            public final void onClick(View view) {
+                View view2 = view;
+                BetterRatingView betterRatingView = this.f$0;
+                BetterRatingView betterRatingView2 = betterRatingView;
+                VoIPHelper.lambda$showRateAlert$12(betterRatingView2, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12, this.f$13, this.f$14, this.f$15, view2);
             }
         };
         button.setOnClickListener(r27);
+    }
+
+    static /* synthetic */ void lambda$showRateAlert$5(View view) {
+        CheckBoxCell checkBoxCell = (CheckBoxCell) view;
+        checkBoxCell.setChecked(!checkBoxCell.isChecked(), true);
+    }
+
+    static /* synthetic */ void lambda$showRateAlert$6(boolean[] zArr, CheckBoxCell checkBoxCell, View view) {
+        zArr[0] = !zArr[0];
+        checkBoxCell.setChecked(zArr[0], true);
+    }
+
+    static /* synthetic */ void lambda$showRateAlert$8(Runnable runnable, DialogInterface dialogInterface) {
+        if (runnable != null) {
+            runnable.run();
+        }
+    }
+
+    static /* synthetic */ void lambda$showRateAlert$9(Context context, File file, DialogInterface dialogInterface, int i) {
+        Intent intent = new Intent(context, LaunchActivity.class);
+        intent.setAction("android.intent.action.SEND");
+        intent.putExtra("android.intent.extra.STREAM", Uri.fromFile(file));
+        context.startActivity(intent);
+    }
+
+    static /* synthetic */ void lambda$showRateAlert$10(View view, int i) {
+        int i2;
+        String str;
+        view.setEnabled(i > 0);
+        TextView textView = (TextView) view;
+        if (i < 4) {
+            i2 = NUM;
+            str = "Next";
+        } else {
+            i2 = NUM;
+            str = "Send";
+        }
+        textView.setText(LocaleController.getString(str, i2).toUpperCase());
+    }
+
+    static /* synthetic */ void lambda$showRateAlert$12(BetterRatingView betterRatingView, int[] iArr, LinearLayout linearLayout, EditTextBoldCursor editTextBoldCursor, boolean[] zArr, long j, long j2, boolean z, int i, File file, Context context, AlertDialog alertDialog, TextView textView, CheckBoxCell checkBoxCell, TextView textView2, View view, View view2) {
+        LinearLayout linearLayout2 = linearLayout;
+        if (betterRatingView.getRating() >= 4 || iArr[0] == 1) {
+            BetterRatingView betterRatingView2 = betterRatingView;
+            EditTextBoldCursor editTextBoldCursor2 = editTextBoldCursor;
+            AlertDialog alertDialog2 = alertDialog;
+            int i2 = UserConfig.selectedAccount;
+            TLRPC$TL_phone_setCallRating tLRPC$TL_phone_setCallRating = new TLRPC$TL_phone_setCallRating();
+            tLRPC$TL_phone_setCallRating.rating = betterRatingView.getRating();
+            ArrayList arrayList = new ArrayList();
+            for (int i3 = 0; i3 < linearLayout.getChildCount(); i3++) {
+                CheckBoxCell checkBoxCell2 = (CheckBoxCell) linearLayout.getChildAt(i3);
+                if (checkBoxCell2.isChecked()) {
+                    arrayList.add("#" + checkBoxCell2.getTag());
+                }
+            }
+            if (tLRPC$TL_phone_setCallRating.rating < 5) {
+                tLRPC$TL_phone_setCallRating.comment = editTextBoldCursor.getText().toString();
+            } else {
+                tLRPC$TL_phone_setCallRating.comment = "";
+            }
+            if (!arrayList.isEmpty() && !zArr[0]) {
+                tLRPC$TL_phone_setCallRating.comment += " " + TextUtils.join(" ", arrayList);
+            }
+            TLRPC$TL_inputPhoneCall tLRPC$TL_inputPhoneCall = new TLRPC$TL_inputPhoneCall();
+            tLRPC$TL_phone_setCallRating.peer = tLRPC$TL_inputPhoneCall;
+            tLRPC$TL_inputPhoneCall.access_hash = j;
+            tLRPC$TL_inputPhoneCall.id = j2;
+            tLRPC$TL_phone_setCallRating.user_initiative = z;
+            ConnectionsManager.getInstance(i).sendRequest(tLRPC$TL_phone_setCallRating, new RequestDelegate(i2, zArr, file, tLRPC$TL_phone_setCallRating, arrayList, context) {
+                public final /* synthetic */ int f$0;
+                public final /* synthetic */ boolean[] f$1;
+                public final /* synthetic */ File f$2;
+                public final /* synthetic */ TLRPC$TL_phone_setCallRating f$3;
+                public final /* synthetic */ ArrayList f$4;
+                public final /* synthetic */ Context f$5;
+
+                {
+                    this.f$0 = r1;
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                    this.f$3 = r4;
+                    this.f$4 = r5;
+                    this.f$5 = r6;
+                }
+
+                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                    VoIPHelper.lambda$null$11(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, tLObject, tLRPC$TL_error);
+                }
+            });
+            alertDialog.dismiss();
+            return;
+        }
+        iArr[0] = 1;
+        BetterRatingView betterRatingView3 = betterRatingView;
+        betterRatingView.setVisibility(8);
+        textView.setVisibility(8);
+        alertDialog.setTitle(LocaleController.getString("CallReportHint", NUM));
+        editTextBoldCursor.setVisibility(0);
+        if (file.exists()) {
+            checkBoxCell.setVisibility(0);
+            textView2.setVisibility(0);
+        }
+        linearLayout.setVisibility(0);
+        ((TextView) view).setText(LocaleController.getString("Send", NUM).toUpperCase());
+    }
+
+    static /* synthetic */ void lambda$null$11(int i, boolean[] zArr, File file, TLRPC$TL_phone_setCallRating tLRPC$TL_phone_setCallRating, ArrayList arrayList, Context context, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        TLObject tLObject2 = tLObject;
+        if (tLObject2 instanceof TLRPC$TL_updates) {
+            MessagesController.getInstance(i).processUpdates((TLRPC$TL_updates) tLObject2, false);
+        }
+        if (zArr[0] && file.exists() && tLRPC$TL_phone_setCallRating.rating < 4) {
+            SendMessagesHelper.prepareSendingDocument(AccountInstance.getInstance(UserConfig.selectedAccount), file.getAbsolutePath(), file.getAbsolutePath(), (Uri) null, TextUtils.join(" ", arrayList), "text/plain", 4244000, (MessageObject) null, (InputContentInfoCompat) null, (MessageObject) null, true, 0);
+            Toast.makeText(context, LocaleController.getString("CallReportSent", NUM), 1).show();
+        }
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:2:0x0004, code lost:
@@ -548,7 +672,7 @@ public class VoIPHelper {
     }
 
     public static void showCallDebugSettings(Context context) {
-        final SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
+        SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
         LinearLayout linearLayout = new LinearLayout(context);
         linearLayout.setOrientation(1);
         TextView textView = new TextView(context);
@@ -556,42 +680,54 @@ public class VoIPHelper {
         textView.setText("Please only change these settings if you know exactly what they do.");
         textView.setTextColor(Theme.getColor("dialogTextBlack"));
         linearLayout.addView(textView, LayoutHelper.createLinear(-1, -2, 16.0f, 8.0f, 16.0f, 8.0f));
-        final TextCheckCell textCheckCell = new TextCheckCell(context);
+        TextCheckCell textCheckCell = new TextCheckCell(context);
         textCheckCell.setTextAndCheck("Force TCP", globalMainSettings.getBoolean("dbg_force_tcp_in_calls", false), false);
-        textCheckCell.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                boolean z = globalMainSettings.getBoolean("dbg_force_tcp_in_calls", false);
-                SharedPreferences.Editor edit = globalMainSettings.edit();
-                edit.putBoolean("dbg_force_tcp_in_calls", !z);
-                edit.commit();
-                textCheckCell.setChecked(!z);
+        textCheckCell.setOnClickListener(new View.OnClickListener(globalMainSettings, textCheckCell) {
+            public final /* synthetic */ SharedPreferences f$0;
+            public final /* synthetic */ TextCheckCell f$1;
+
+            {
+                this.f$0 = r1;
+                this.f$1 = r2;
+            }
+
+            public final void onClick(View view) {
+                VoIPHelper.lambda$showCallDebugSettings$13(this.f$0, this.f$1, view);
             }
         });
         linearLayout.addView(textCheckCell);
         if (BuildVars.DEBUG_VERSION && BuildVars.LOGS_ENABLED) {
-            final TextCheckCell textCheckCell2 = new TextCheckCell(context);
+            TextCheckCell textCheckCell2 = new TextCheckCell(context);
             textCheckCell2.setTextAndCheck("Dump detailed stats", globalMainSettings.getBoolean("dbg_dump_call_stats", false), false);
-            textCheckCell2.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    boolean z = globalMainSettings.getBoolean("dbg_dump_call_stats", false);
-                    SharedPreferences.Editor edit = globalMainSettings.edit();
-                    edit.putBoolean("dbg_dump_call_stats", !z);
-                    edit.commit();
-                    textCheckCell2.setChecked(!z);
+            textCheckCell2.setOnClickListener(new View.OnClickListener(globalMainSettings, textCheckCell2) {
+                public final /* synthetic */ SharedPreferences f$0;
+                public final /* synthetic */ TextCheckCell f$1;
+
+                {
+                    this.f$0 = r1;
+                    this.f$1 = r2;
+                }
+
+                public final void onClick(View view) {
+                    VoIPHelper.lambda$showCallDebugSettings$14(this.f$0, this.f$1, view);
                 }
             });
             linearLayout.addView(textCheckCell2);
         }
         if (Build.VERSION.SDK_INT >= 26) {
-            final TextCheckCell textCheckCell3 = new TextCheckCell(context);
+            TextCheckCell textCheckCell3 = new TextCheckCell(context);
             textCheckCell3.setTextAndCheck("Enable ConnectionService", globalMainSettings.getBoolean("dbg_force_connection_service", false), false);
-            textCheckCell3.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    boolean z = globalMainSettings.getBoolean("dbg_force_connection_service", false);
-                    SharedPreferences.Editor edit = globalMainSettings.edit();
-                    edit.putBoolean("dbg_force_connection_service", !z);
-                    edit.commit();
-                    textCheckCell3.setChecked(!z);
+            textCheckCell3.setOnClickListener(new View.OnClickListener(globalMainSettings, textCheckCell3) {
+                public final /* synthetic */ SharedPreferences f$0;
+                public final /* synthetic */ TextCheckCell f$1;
+
+                {
+                    this.f$0 = r1;
+                    this.f$1 = r2;
+                }
+
+                public final void onClick(View view) {
+                    VoIPHelper.lambda$showCallDebugSettings$15(this.f$0, this.f$1, view);
                 }
             });
             linearLayout.addView(textCheckCell3);
@@ -600,6 +736,30 @@ public class VoIPHelper {
         builder.setTitle(LocaleController.getString("DebugMenuCallSettings", NUM));
         builder.setView(linearLayout);
         builder.show();
+    }
+
+    static /* synthetic */ void lambda$showCallDebugSettings$13(SharedPreferences sharedPreferences, TextCheckCell textCheckCell, View view) {
+        boolean z = sharedPreferences.getBoolean("dbg_force_tcp_in_calls", false);
+        SharedPreferences.Editor edit = sharedPreferences.edit();
+        edit.putBoolean("dbg_force_tcp_in_calls", !z);
+        edit.commit();
+        textCheckCell.setChecked(!z);
+    }
+
+    static /* synthetic */ void lambda$showCallDebugSettings$14(SharedPreferences sharedPreferences, TextCheckCell textCheckCell, View view) {
+        boolean z = sharedPreferences.getBoolean("dbg_dump_call_stats", false);
+        SharedPreferences.Editor edit = sharedPreferences.edit();
+        edit.putBoolean("dbg_dump_call_stats", !z);
+        edit.commit();
+        textCheckCell.setChecked(!z);
+    }
+
+    static /* synthetic */ void lambda$showCallDebugSettings$15(SharedPreferences sharedPreferences, TextCheckCell textCheckCell, View view) {
+        boolean z = sharedPreferences.getBoolean("dbg_force_connection_service", false);
+        SharedPreferences.Editor edit = sharedPreferences.edit();
+        edit.putBoolean("dbg_force_connection_service", !z);
+        edit.commit();
+        textCheckCell.setChecked(!z);
     }
 
     public static int getDataSavingDefault() {

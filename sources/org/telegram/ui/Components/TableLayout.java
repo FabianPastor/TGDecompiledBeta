@@ -8,9 +8,20 @@ import android.graphics.RectF;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.RecentlyNonNull;
+import androidx.annotation.RecentlyNullable;
+import j$.lang.Iterable;
+import j$.util.Collection;
+import j$.util.List;
+import j$.util.Spliterator;
+import j$.util.function.Consumer;
+import j$.util.function.Predicate;
+import j$.util.function.UnaryOperator;
+import j$.util.stream.Stream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
@@ -1797,9 +1808,40 @@ public class TableLayout extends View {
         }
     }
 
-    static final class Assoc<K, V> extends ArrayList<Pair<K, V>> {
+    static final class Assoc<K, V> extends ArrayList<Pair<K, V>> implements j$.util.List, Collection {
         private final Class<K> keyType;
         private final Class<V> valueType;
+
+        public /* synthetic */ void forEach(@RecentlyNonNull Consumer<? super T> consumer) {
+            Iterable.CC.$default$forEach(this, consumer);
+        }
+
+        @RecentlyNonNull
+        public /* synthetic */ Stream<E> parallelStream() {
+            return Collection.CC.$default$parallelStream(this);
+        }
+
+        public /* synthetic */ boolean removeIf(@RecentlyNonNull Predicate<? super E> predicate) {
+            return Collection.CC.$default$removeIf(this, predicate);
+        }
+
+        public /* synthetic */ void replaceAll(@RecentlyNonNull UnaryOperator<E> unaryOperator) {
+            List.CC.$default$replaceAll(this, unaryOperator);
+        }
+
+        public /* synthetic */ void sort(@RecentlyNullable Comparator<? super E> comparator) {
+            List.CC.$default$sort(this, comparator);
+        }
+
+        @RecentlyNonNull
+        public /* synthetic */ Spliterator<E> spliterator() {
+            return List.CC.$default$spliterator(this);
+        }
+
+        @RecentlyNonNull
+        public /* synthetic */ Stream<E> stream() {
+            return Collection.CC.$default$stream(this);
+        }
 
         private Assoc(Class<K> cls, Class<V> cls2) {
             this.keyType = cls;

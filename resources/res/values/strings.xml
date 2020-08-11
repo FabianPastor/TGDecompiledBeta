@@ -591,6 +591,11 @@
     <string name="CallMessageOutgoing">Outgoing Call</string>
     <string name="CallMessageOutgoingMissed">Cancelled Call</string>
     <string name="CallMessageReportProblem">Rate Call</string>
+    <string name="CallMessageVideoIncoming">Incoming Video Call</string>
+    <string name="CallMessageVideoIncomingDeclined">Declined Video Call</string>
+    <string name="CallMessageVideoIncomingMissed">Missed Video Call</string>
+    <string name="CallMessageVideoOutgoing">Outgoing Video Call</string>
+    <string name="CallMessageVideoOutgoingMissed">Cancelled Video Call</string>
     <string name="CallMessageWithDuration">%1$s (%2$s)</string>
     <string name="CallNotAvailable">Sorry, **%1$s** doesn\'t accept calls.</string>
     <string name="CallReportHint">What went wrong?</string>
@@ -3419,6 +3424,8 @@
     <string name="Vibrate">Vibrate</string>
     <string name="VibrationDefault">Default</string>
     <string name="VibrationDisabled">Disabled</string>
+    <string name="VideoCall">Video Call</string>
+    <string name="VideoCallViaTelegram">Telegram Video Call</string>
     <string name="VideoCaption">Video Caption</string>
     <string name="VideoDoesNotSupportStreaming">This video is not optimized for streaming. You may need to download it in full to play it.</string>
     <string name="VideoMessagesAutodownload">Video messages</string>
@@ -3471,7 +3478,10 @@
     <string name="VoipHangingUp">Hanging up</string>
     <string name="VoipInCallBranding">Telegram Call</string>
     <string name="VoipInCallBrandingWithName">Telegram Call to %s</string>
+    <string name="VoipInVideoCallBranding">Telegram Video Call</string>
+    <string name="VoipInVideoCallBrandingWithName">Telegram Video Call to %s</string>
     <string name="VoipIncoming">Incoming call</string>
+    <string name="VoipNeedMicCameraPermission">Telegram needs access to your microphone and camera so that you can make video calls.</string>
     <string name="VoipNeedMicPermission">Telegram needs access to your microphone so that you can make calls.</string>
     <string name="VoipNotificationSettings">Voice calls</string>
     <string name="VoipOffline">You\'re currently offline. Please connect to the Internet in order to make calls.</string>

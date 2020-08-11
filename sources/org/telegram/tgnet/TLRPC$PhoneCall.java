@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public abstract class TLRPC$PhoneCall extends TLObject {
     public long access_hash;
     public int admin_id;
-    public ArrayList<TLRPC$TL_phoneConnection> connections = new ArrayList<>();
+    public ArrayList<TLRPC$PhoneConnection> connections = new ArrayList<>();
     public int date;
     public int duration;
     public int flags;

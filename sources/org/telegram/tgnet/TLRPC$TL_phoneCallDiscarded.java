@@ -9,7 +9,7 @@ public class TLRPC$TL_phoneCallDiscarded extends TLRPC$PhoneCall {
         boolean z2 = false;
         this.need_rating = (readInt32 & 4) != 0;
         this.need_debug = (this.flags & 8) != 0;
-        if ((this.flags & 32) != 0) {
+        if ((this.flags & 64) != 0) {
             z2 = true;
         }
         this.video = z2;
@@ -28,7 +28,7 @@ public class TLRPC$TL_phoneCallDiscarded extends TLRPC$PhoneCall {
         this.flags = i;
         int i2 = this.need_debug ? i | 8 : i & -9;
         this.flags = i2;
-        int i3 = this.video ? i2 | 32 : i2 & -33;
+        int i3 = this.video ? i2 | 64 : i2 & -65;
         this.flags = i3;
         abstractSerializedData.writeInt32(i3);
         abstractSerializedData.writeInt64(this.id);

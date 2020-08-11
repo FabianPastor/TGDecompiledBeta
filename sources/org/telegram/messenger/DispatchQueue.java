@@ -59,22 +59,21 @@ public class DispatchQueue extends Thread {
         }
     }
 
-    public void postRunnable(Runnable runnable) {
-        postRunnable(runnable, 0);
+    public boolean postRunnable(Runnable runnable) {
         this.lastTaskTime = SystemClock.elapsedRealtime();
+        return postRunnable(runnable, 0);
     }
 
-    public void postRunnable(Runnable runnable, long j) {
+    public boolean postRunnable(Runnable runnable, long j) {
         try {
             this.syncLatch.await();
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
         if (j <= 0) {
-            this.handler.post(runnable);
-        } else {
-            this.handler.postDelayed(runnable, j);
+            return this.handler.post(runnable);
         }
+        return this.handler.postDelayed(runnable, j);
     }
 
     public void cleanupQueue() {

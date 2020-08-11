@@ -470,7 +470,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                               (r5v0 'this' org.telegram.ui.IntroActivity$EGLThread$1 A[THIS])
                              call: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$t5CDZ7wR8GgPufsAxg7RJ2ghGUs.<init>(org.telegram.ui.IntroActivity$EGLThread$1):void type: CONSTRUCTOR)
                               (16 long)
-                             org.telegram.messenger.DispatchQueue.postRunnable(java.lang.Runnable, long):void type: VIRTUAL in method: org.telegram.ui.IntroActivity.EGLThread.1.run():void, dex: classes.dex
+                             org.telegram.messenger.DispatchQueue.postRunnable(java.lang.Runnable, long):boolean type: VIRTUAL in method: org.telegram.ui.IntroActivity.EGLThread.1.run():void, dex: classes.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                             	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)

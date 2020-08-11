@@ -72,10 +72,13 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
     /* access modifiers changed from: private */
     public View.OnClickListener callBtnClickListener = new View.OnClickListener() {
         public void onClick(View view) {
+            CallLogRow callLogRow = (CallLogRow) view.getTag();
+            TLRPC$UserFull userFull = CallLogActivity.this.getMessagesController().getUserFull(callLogRow.user.id);
             CallLogActivity callLogActivity = CallLogActivity.this;
-            TLRPC$User tLRPC$User = ((CallLogRow) view.getTag()).user;
+            TLRPC$User tLRPC$User = callLogRow.user;
             TLRPC$User unused = callLogActivity.lastCallUser = tLRPC$User;
-            VoIPHelper.startCall(tLRPC$User, CallLogActivity.this.getParentActivity(), (TLRPC$UserFull) null);
+            boolean z = callLogRow.video;
+            VoIPHelper.startCall(tLRPC$User, z, z || (userFull != null && userFull.video_calls_available), CallLogActivity.this.getParentActivity(), (TLRPC$UserFull) null);
         }
     };
     /* access modifiers changed from: private */
@@ -162,6 +165,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                     arrayList2.add(messageObject.messageOwner);
                     callLogRow2.user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i3));
                     callLogRow2.type = i4;
+                    callLogRow2.video = messageObject.isVideoCall();
                     this.calls.add(0, callLogRow2);
                     this.listViewAdapter.notifyItemInserted(0);
                 }
@@ -185,8 +189,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             addView(this.profileSearchCell, LayoutHelper.createFrame(-1, -1.0f));
             ImageView imageView2 = new ImageView(context);
             this.imageView = imageView2;
-            imageView2.setImageResource(NUM);
-            this.imageView.setAlpha(214);
+            imageView2.setAlpha(214);
             this.imageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addButton"), PorterDuff.Mode.MULTIPLY));
             this.imageView.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("listSelectorSDK21"), 1));
             this.imageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -489,7 +492,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
     }
 
     public /* synthetic */ void lambda$null$3$CallLogActivity(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity) {
-        VoIPHelper.startCall(tLRPC$User, getParentActivity(), (TLRPC$UserFull) null);
+        TLRPC$UserFull userFull = getMessagesController().getUserFull(tLRPC$User.id);
+        VoIPHelper.startCall(tLRPC$User, false, userFull != null && userFull.video_calls_available, getParentActivity(), (TLRPC$UserFull) null);
     }
 
     /* access modifiers changed from: private */
@@ -582,6 +586,8 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                         callLogRow.calls = new ArrayList();
                         callLogRow.user = (TLRPC$User) sparseArray.get(i4);
                         callLogRow.type = i3;
+                        TLRPC$MessageAction tLRPC$MessageAction2 = tLRPC$Message.action;
+                        callLogRow.video = tLRPC$MessageAction2 != null && tLRPC$MessageAction2.video;
                     }
                     callLogRow.calls.add(tLRPC$Message);
                 }
@@ -642,13 +648,32 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
     }
 
     public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
-        if (i != 101) {
-            return;
-        }
-        if (iArr.length <= 0 || iArr[0] != 0) {
-            VoIPHelper.permissionDenied(getParentActivity(), (Runnable) null);
-        } else {
-            VoIPHelper.startCall(this.lastCallUser, getParentActivity(), (TLRPC$UserFull) null);
+        boolean z;
+        if (i == 101 || i == 102) {
+            boolean z2 = false;
+            int i2 = 0;
+            while (true) {
+                if (i2 >= iArr.length) {
+                    z = true;
+                    break;
+                } else if (iArr[i2] != 0) {
+                    z = false;
+                    break;
+                } else {
+                    i2++;
+                }
+            }
+            if (iArr.length <= 0 || !z) {
+                VoIPHelper.permissionDenied(getParentActivity(), (Runnable) null, i);
+                return;
+            }
+            TLRPC$UserFull userFull = getMessagesController().getUserFull(this.lastCallUser.id);
+            TLRPC$User tLRPC$User = this.lastCallUser;
+            boolean z3 = i == 102;
+            if (i == 102 || (userFull != null && userFull.video_calls_available)) {
+                z2 = true;
+            }
+            VoIPHelper.startCall(tLRPC$User, z3, z2, getParentActivity(), (TLRPC$UserFull) null);
         }
     }
 
@@ -687,9 +712,11 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
             SpannableString spannableString;
             if (viewHolder.getItemViewType() == 0) {
-                ViewItem viewItem = (ViewItem) viewHolder.itemView.getTag();
-                ProfileSearchCell profileSearchCell = viewItem.cell;
+                CustomCell customCell = (CustomCell) viewHolder.itemView;
+                ViewItem viewItem = (ViewItem) customCell.getTag();
                 CallLogRow callLogRow = (CallLogRow) CallLogActivity.this.calls.get(i);
+                customCell.imageView.setImageResource(callLogRow.video ? NUM : NUM);
+                ProfileSearchCell profileSearchCell = viewItem.cell;
                 boolean z = false;
                 TLRPC$Message tLRPC$Message = callLogRow.calls.get(0);
                 String str = LocaleController.isRTL ? "‫" : "";
@@ -738,6 +765,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         public List<TLRPC$Message> calls;
         public int type;
         public TLRPC$User user;
+        public boolean video;
 
         private CallLogRow() {
         }

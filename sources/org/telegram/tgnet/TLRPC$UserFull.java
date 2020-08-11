@@ -17,6 +17,7 @@ public abstract class TLRPC$UserFull extends TLObject {
     public TLRPC$Photo profile_photo;
     public TLRPC$TL_peerSettings settings;
     public TLRPC$User user;
+    public boolean video_calls_available;
 
     public static TLRPC$UserFull TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$TL_userFull tLRPC$TL_userFull;

@@ -179,7 +179,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                                 arrayList4 = new ArrayList();
                                 this.musicQueues.put(intValue, arrayList4);
                             }
-                            MessageObject messageObject = new MessageObject(this.currentAccount, TLdeserialize, false);
+                            MessageObject messageObject = new MessageObject(this.currentAccount, TLdeserialize, false, true);
                             arrayList3.add(0, messageObject);
                             MediaDescription.Builder builder = new MediaDescription.Builder();
                             MediaDescription.Builder mediaId = builder.setMediaId(intValue + "_" + arrayList3.size());

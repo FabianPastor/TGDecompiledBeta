@@ -708,7 +708,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r0.<init>(r6)
             r1.setOnClickListener(r0)
             android.app.Activity r0 = r29.getParentActivity()
-            r1 = 2131165412(0x7var_e4, float:1.794504E38)
+            r1 = 2131165424(0x7var_f0, float:1.7945065E38)
             java.lang.String r3 = "windowBackgroundGrayShadow"
             android.graphics.drawable.Drawable r0 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r0, (int) r1, (java.lang.String) r3)
             org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable
@@ -842,7 +842,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             java.lang.String r5 = "fonts/rmedium.ttf"
             android.graphics.Typeface r7 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
             r1.setTypeface(r7)
-            r7 = 2131624540(0x7f0e025c, float:1.8876263E38)
+            r7 = 2131624545(0x7f0e0261, float:1.8876273E38)
             java.lang.String r10 = "Cancel"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r10, r7)
             java.lang.String r7 = r7.toUpperCase()
@@ -871,7 +871,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
             r14.setGravity(r4)
             android.graphics.Typeface r1 = org.telegram.messenger.AndroidUtilities.getTypeface(r5)
             r14.setTypeface(r1)
-            r1 = 2131626748(0x7f0e0afc, float:1.888074E38)
+            r1 = 2131626753(0x7f0e0b01, float:1.8880751E38)
             java.lang.String r2 = "Save"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -1194,7 +1194,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 org.telegram.ui.Cells.TextInfoPrivacyCell r1 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r1
                 org.telegram.ui.DataAutoDownloadActivity r3 = org.telegram.ui.DataAutoDownloadActivity.this
                 int r3 = r3.typeSectionRow
-                r7 = 2131165412(0x7var_e4, float:1.794504E38)
+                r7 = 2131165424(0x7var_f0, float:1.7945065E38)
                 java.lang.String r9 = "windowBackgroundGrayShadow"
                 if (r2 != r3) goto L_0x004a
                 r2 = 2131624367(0x7f0e01af, float:1.8875912E38)
@@ -1216,7 +1216,7 @@ public class DataAutoDownloadActivity extends BaseFragment {
                 r3 = -1
                 if (r2 != r3) goto L_0x00aa
                 android.content.Context r2 = r0.mContext
-                r3 = 2131165413(0x7var_e5, float:1.7945042E38)
+                r3 = 2131165425(0x7var_f1, float:1.7945067E38)
                 android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r2, (int) r3, (java.lang.String) r9)
                 r1.setBackgroundDrawable(r2)
                 org.telegram.ui.DataAutoDownloadActivity r2 = org.telegram.ui.DataAutoDownloadActivity.this

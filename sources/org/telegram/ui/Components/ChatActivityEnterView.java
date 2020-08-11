@@ -7391,10 +7391,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 if (r3 == 0) goto L_0x0066
                 boolean r4 = r13.silent
                 if (r4 == 0) goto L_0x005f
-                r4 = 2131165507(0x7var_, float:1.7945233E38)
+                r4 = 2131165519(0x7var_f, float:1.7945257E38)
                 goto L_0x0062
             L_0x005f:
-                r4 = 2131165508(0x7var_, float:1.7945235E38)
+                r4 = 2131165520(0x7var_, float:1.794526E38)
             L_0x0062:
                 r3.setImageResource(r4)
                 goto L_0x0067
@@ -7665,7 +7665,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 r1 = 1
                 if (r0 != r1) goto L_0x0048
                 android.widget.ImageView r0 = r4.botButton
-                r1 = 2131165504(0x7var_, float:1.7945227E38)
+                r1 = 2131165516(0x7var_c, float:1.7945251E38)
                 r0.setImageResource(r1)
                 android.widget.ImageView r0 = r4.botButton
                 r1 = 2131624044(0x7f0e006c, float:1.8875257E38)
@@ -7675,7 +7675,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 goto L_0x0075
             L_0x0048:
                 android.widget.ImageView r0 = r4.botButton
-                r1 = 2131165497(0x7var_, float:1.7945213E38)
+                r1 = 2131165509(0x7var_, float:1.7945237E38)
                 r0.setImageResource(r1)
                 android.widget.ImageView r0 = r4.botButton
                 r1 = 2131623954(0x7f0e0012, float:1.8875074E38)
@@ -7685,7 +7685,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 goto L_0x0075
             L_0x005f:
                 android.widget.ImageView r0 = r4.botButton
-                r1 = 2131165496(0x7var_, float:1.794521E38)
+                r1 = 2131165508(0x7var_, float:1.7945235E38)
                 r0.setImageResource(r1)
                 android.widget.ImageView r0 = r4.botButton
                 r1 = 2131623953(0x7f0e0011, float:1.8875072E38)
@@ -8702,28 +8702,28 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 if (r11 != 0) goto L_0x0095
                 android.widget.ImageView[] r5 = r10.emojiButton
                 r5 = r5[r12]
-                r7 = 2131165504(0x7var_, float:1.7945227E38)
+                r7 = 2131165516(0x7var_c, float:1.7945251E38)
                 r5.setImageResource(r7)
                 goto L_0x00bb
             L_0x0095:
                 if (r11 != r2) goto L_0x00a2
                 android.widget.ImageView[] r5 = r10.emojiButton
                 r5 = r5[r12]
-                r7 = 2131165511(0x7var_, float:1.7945241E38)
+                r7 = 2131165523(0x7var_, float:1.7945266E38)
                 r5.setImageResource(r7)
                 goto L_0x00bb
             L_0x00a2:
                 if (r11 != r4) goto L_0x00af
                 android.widget.ImageView[] r5 = r10.emojiButton
                 r5 = r5[r12]
-                r7 = 2131165512(0x7var_, float:1.7945243E38)
+                r7 = 2131165524(0x7var_, float:1.7945268E38)
                 r5.setImageResource(r7)
                 goto L_0x00bb
             L_0x00af:
                 if (r11 != r0) goto L_0x00bb
                 android.widget.ImageView[] r5 = r10.emojiButton
                 r5 = r5[r12]
-                r7 = 2131165503(0x7var_f, float:1.7945225E38)
+                r7 = 2131165515(0x7var_b, float:1.794525E38)
                 r5.setImageResource(r7)
             L_0x00bb:
                 android.widget.ImageView[] r5 = r10.emojiButton
@@ -9107,7 +9107,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                 tLRPC$TL_messageMediaDocument.flags |= 3;
                                 tLRPC$TL_messageMediaDocument.document = this.audioToSend;
                                 tLRPC$TL_message.flags |= 768;
-                                this.audioToSendMessageObject = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message, false);
+                                this.audioToSendMessageObject = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message, false, true);
                                 this.recordedAudioPanel.setAlpha(1.0f);
                                 this.recordedAudioPanel.setVisibility(0);
                                 this.recordDeleteImageView.setVisibility(0);

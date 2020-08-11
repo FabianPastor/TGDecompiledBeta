@@ -15,6 +15,12 @@ import android.util.LongSparseArray;
 import android.util.SparseArray;
 import android.widget.Toast;
 import androidx.core.content.pm.ShortcutManagerCompat;
+import j$.util.Comparator;
+import j$.util.concurrent.ConcurrentHashMap;
+import j$.util.function.Function;
+import j$.util.function.ToDoubleFunction;
+import j$.util.function.ToIntFunction;
+import j$.util.function.ToLongFunction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,7 +29,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.SQLite.SQLiteDatabase;
@@ -215,7 +220,7 @@ public class MediaDataController extends BaseController {
     private SparseArray<MessageObject>[] searchResultMessagesMap = {new SparseArray<>(), new SparseArray<>()};
     private ArrayList<TLRPC$TL_messages_stickerSet>[] stickerSets = {new ArrayList<>(), new ArrayList<>(), new ArrayList<>(0), new ArrayList<>(), new ArrayList<>()};
     private LongSparseArray<TLRPC$TL_messages_stickerSet> stickerSetsById = new LongSparseArray<>();
-    private ConcurrentHashMap<String, TLRPC$TL_messages_stickerSet> stickerSetsByName = new ConcurrentHashMap<>(100, 1.0f, 1);
+    private ConcurrentHashMap<String, TLRPC$TL_messages_stickerSet> stickerSetsByName = new ConcurrentHashMap(100, 1.0f, 1);
     private LongSparseArray<String> stickersByEmoji = new LongSparseArray<>();
     private LongSparseArray<TLRPC$Document>[] stickersByIds = {new LongSparseArray<>(), new LongSparseArray<>(), new LongSparseArray<>(), new LongSparseArray<>(), new LongSparseArray<>()};
     private boolean[] stickersLoaded = new boolean[5];
@@ -707,7 +712,7 @@ public class MediaDataController extends BaseController {
             r11.putDiceStickersToCache(r1, r12, r3)
         L_0x002a:
             if (r0 != 0) goto L_0x0038
-            java.util.concurrent.ConcurrentHashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_messages_stickerSet> r0 = r11.stickerSetsByName
+            j$.util.concurrent.ConcurrentHashMap<java.lang.String, org.telegram.tgnet.TLRPC$TL_messages_stickerSet> r0 = r11.stickerSetsByName
             org.telegram.tgnet.TLRPC$StickerSet r1 = r12.set
             java.lang.String r1 = r1.short_name
             java.lang.Object r0 = r0.get(r1)
@@ -823,7 +828,7 @@ public class MediaDataController extends BaseController {
     }
 
     public TLRPC$TL_messages_stickerSet getStickerSetByName(String str) {
-        return this.stickerSetsByName.get(str);
+        return (TLRPC$TL_messages_stickerSet) this.stickerSetsByName.get(str);
     }
 
     public TLRPC$TL_messages_stickerSet getDiceStickerSetByEmoji(String str) {
@@ -1413,6 +1418,34 @@ public class MediaDataController extends BaseController {
             public final int compare(Object obj, Object obj2) {
                 return MediaDataController.lambda$reorderStickers$20(this.f$0, (TLRPC$TL_messages_stickerSet) obj, (TLRPC$TL_messages_stickerSet) obj2);
             }
+
+            public /* synthetic */ Comparator<T> reversed() {
+                return Comparator.CC.$default$reversed(this);
+            }
+
+            public /* synthetic */ <U extends Comparable<? super U>> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function) {
+                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (Function) function);
+            }
+
+            public /* synthetic */ <U> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function, java.util.Comparator<? super U> comparator) {
+                return Comparator.CC.$default$thenComparing(this, function, comparator);
+            }
+
+            public /* synthetic */ java.util.Comparator<T> thenComparing(java.util.Comparator<? super T> comparator) {
+                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (java.util.Comparator) comparator);
+            }
+
+            public /* synthetic */ java.util.Comparator<T> thenComparingDouble(ToDoubleFunction<? super T> toDoubleFunction) {
+                return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
+            }
+
+            public /* synthetic */ java.util.Comparator<T> thenComparingInt(ToIntFunction<? super T> toIntFunction) {
+                return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
+            }
+
+            public /* synthetic */ java.util.Comparator<T> thenComparingLong(ToLongFunction<? super T> toLongFunction) {
+                return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
+            }
         });
         this.loadHash[i] = calcStickersHash(this.stickerSets[i]);
         getNotificationCenter().postNotificationName(NotificationCenter.stickersDidLoad, Integer.valueOf(i));
@@ -1915,7 +1948,7 @@ public class MediaDataController extends BaseController {
             TLRPC$Document document = MessageObject.getDocument(tLRPC$Message);
             String stickerSetName = MessageObject.getStickerSetName(document);
             if (!TextUtils.isEmpty(stickerSetName)) {
-                TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = this.stickerSetsByName.get(stickerSetName);
+                TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = (TLRPC$TL_messages_stickerSet) this.stickerSetsByName.get(stickerSetName);
                 if (tLRPC$TL_messages_stickerSet != null) {
                     int size = tLRPC$TL_messages_stickerSet.documents.size();
                     for (int i = 0; i < size; i++) {
@@ -3850,7 +3883,7 @@ public class MediaDataController extends BaseController {
                 int i4 = 0;
                 boolean z2 = false;
                 while (i4 < min) {
-                    MessageObject messageObject = new MessageObject(this.currentAccount, tLRPC$messages_Messages.messages.get(i4), false);
+                    MessageObject messageObject = new MessageObject(this.currentAccount, tLRPC$messages_Messages.messages.get(i4), false, false);
                     this.searchResultMessages.add(messageObject);
                     this.searchResultMessagesMap[j == j2 ? (char) 0 : 1].put(messageObject.getId(), messageObject);
                     i4++;
@@ -4518,7 +4551,7 @@ public class MediaDataController extends BaseController {
         }
         ArrayList arrayList = new ArrayList();
         for (int i5 = 0; i5 < tLRPC$messages_Messages2.messages.size(); i5++) {
-            arrayList.add(new MessageObject(this.currentAccount, tLRPC$messages_Messages2.messages.get(i5), (SparseArray<TLRPC$User>) sparseArray, true));
+            arrayList.add(new MessageObject(this.currentAccount, tLRPC$messages_Messages2.messages.get(i5), (SparseArray<TLRPC$User>) sparseArray, true, true));
         }
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$messages_Messages, i, j, arrayList, i2, i3, z) {
             public final /* synthetic */ TLRPC$messages_Messages f$1;
@@ -5310,7 +5343,7 @@ public class MediaDataController extends BaseController {
                         TLdeserialize.id = sQLiteCursor.intValue(1);
                         TLdeserialize.dialog_id = j4;
                         try {
-                            arrayList3.add(0, new MessageObject(this.currentAccount, TLdeserialize, false));
+                            arrayList3.add(0, new MessageObject(this.currentAccount, TLdeserialize, false, true));
                         } catch (Exception e2) {
                             e = e2;
                             FileLog.e((Throwable) e);
@@ -5499,13 +5532,13 @@ public class MediaDataController extends BaseController {
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02f1 }
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02f1 }
             r9.<init>((android.content.Context) r10, (java.lang.String) r8)     // Catch:{ all -> 0x02f1 }
-            r10 = 2131625885(0x7f0e079d, float:1.887899E38)
+            r10 = 2131625890(0x7f0e07a2, float:1.8879E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02f1 }
             r9.setShortLabel(r11)     // Catch:{ all -> 0x02f1 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02f1 }
             r9.setLongLabel(r0)     // Catch:{ all -> 0x02f1 }
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02f1 }
-            r10 = 2131165890(0x7var_c2, float:1.794601E38)
+            r10 = 2131165906(0x7var_d2, float:1.7946042E38)
             androidx.core.graphics.drawable.IconCompat r0 = androidx.core.graphics.drawable.IconCompat.createWithResource(r0, r10)     // Catch:{ all -> 0x02f1 }
             r9.setIcon(r0)     // Catch:{ all -> 0x02f1 }
             r9.setIntent(r2)     // Catch:{ all -> 0x02f1 }
@@ -5737,7 +5770,7 @@ public class MediaDataController extends BaseController {
             goto L_0x02cf
         L_0x02c3:
             android.content.Context r6 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02f1 }
-            r8 = 2131165891(0x7var_c3, float:1.7946012E38)
+            r8 = 2131165907(0x7var_d3, float:1.7946044E38)
             androidx.core.graphics.drawable.IconCompat r6 = androidx.core.graphics.drawable.IconCompat.createWithResource(r6, r8)     // Catch:{ all -> 0x02f1 }
             r1.setIcon(r6)     // Catch:{ all -> 0x02f1 }
         L_0x02cf:
@@ -6341,7 +6374,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x0231 }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131626757(0x7f0e0b05, float:1.888076E38)
+            r9 = 2131626762(0x7f0e0b0a, float:1.888077E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0231 }
             r9 = r4
             r10 = 1
@@ -7062,7 +7095,7 @@ public class MediaDataController extends BaseController {
             sparseArray2.put(tLRPC$Chat.id, tLRPC$Chat);
         }
         if (z2) {
-            return new MessageObject(this.currentAccount, tLRPC$Message, (SparseArray<TLRPC$User>) sparseArray, (SparseArray<TLRPC$Chat>) sparseArray2, false);
+            return new MessageObject(this.currentAccount, tLRPC$Message, (SparseArray<TLRPC$User>) sparseArray, (SparseArray<TLRPC$Chat>) sparseArray2, false, false);
         }
         AndroidUtilities.runOnUIThread(new Runnable(arrayList, z, arrayList2, tLRPC$Message, sparseArray, sparseArray2) {
             public final /* synthetic */ ArrayList f$1;
@@ -7091,7 +7124,7 @@ public class MediaDataController extends BaseController {
     public /* synthetic */ void lambda$broadcastPinnedMessage$109$MediaDataController(ArrayList arrayList, boolean z, ArrayList arrayList2, TLRPC$Message tLRPC$Message, SparseArray sparseArray, SparseArray sparseArray2) {
         getMessagesController().putUsers(arrayList, z);
         getMessagesController().putChats(arrayList2, z);
-        getNotificationCenter().postNotificationName(NotificationCenter.pinnedMessageDidLoad, new MessageObject(this.currentAccount, tLRPC$Message, (SparseArray<TLRPC$User>) sparseArray, (SparseArray<TLRPC$Chat>) sparseArray2, false));
+        getNotificationCenter().postNotificationName(NotificationCenter.pinnedMessageDidLoad, new MessageObject(this.currentAccount, tLRPC$Message, (SparseArray<TLRPC$User>) sparseArray, (SparseArray<TLRPC$Chat>) sparseArray2, false, false));
     }
 
     private static void removeEmptyMessages(ArrayList<TLRPC$Message> arrayList) {
@@ -7227,7 +7260,7 @@ public class MediaDataController extends BaseController {
                     ArrayList arrayList2 = (ArrayList) longSparseArray.get(longValue);
                     longSparseArray.remove(longValue);
                     if (arrayList2 != null) {
-                        MessageObject messageObject = new MessageObject(this.currentAccount, TLdeserialize, false);
+                        MessageObject messageObject = new MessageObject(this.currentAccount, TLdeserialize, false, false);
                         for (int i = 0; i < arrayList2.size(); i++) {
                             MessageObject messageObject2 = (MessageObject) arrayList2.get(i);
                             messageObject2.replyMessageObject = messageObject;
@@ -7440,25 +7473,28 @@ public class MediaDataController extends BaseController {
     private void broadcastReplyMessages(ArrayList<TLRPC$Message> arrayList, SparseArray<ArrayList<MessageObject>> sparseArray, ArrayList<TLRPC$User> arrayList2, ArrayList<TLRPC$Chat> arrayList3, long j, boolean z) {
         SparseArray sparseArray2 = new SparseArray();
         for (int i = 0; i < arrayList2.size(); i++) {
-            ArrayList<TLRPC$User> arrayList4 = arrayList2;
             TLRPC$User tLRPC$User = arrayList2.get(i);
             sparseArray2.put(tLRPC$User.id, tLRPC$User);
         }
-        ArrayList<TLRPC$User> arrayList5 = arrayList2;
+        ArrayList<TLRPC$User> arrayList4 = arrayList2;
         SparseArray sparseArray3 = new SparseArray();
         for (int i2 = 0; i2 < arrayList3.size(); i2++) {
             TLRPC$Chat tLRPC$Chat = arrayList3.get(i2);
             sparseArray3.put(tLRPC$Chat.id, tLRPC$Chat);
         }
-        AndroidUtilities.runOnUIThread(new Runnable(arrayList2, z, arrayList3, arrayList, sparseArray, sparseArray2, sparseArray3, j) {
+        ArrayList<TLRPC$Chat> arrayList5 = arrayList3;
+        ArrayList arrayList6 = new ArrayList();
+        int size = arrayList.size();
+        for (int i3 = 0; i3 < size; i3++) {
+            arrayList6.add(new MessageObject(this.currentAccount, arrayList.get(i3), (SparseArray<TLRPC$User>) sparseArray2, (SparseArray<TLRPC$Chat>) sparseArray3, false, false));
+        }
+        AndroidUtilities.runOnUIThread(new Runnable(arrayList2, z, arrayList3, arrayList6, sparseArray, j) {
             public final /* synthetic */ ArrayList f$1;
             public final /* synthetic */ boolean f$2;
             public final /* synthetic */ ArrayList f$3;
             public final /* synthetic */ ArrayList f$4;
             public final /* synthetic */ SparseArray f$5;
-            public final /* synthetic */ SparseArray f$6;
-            public final /* synthetic */ SparseArray f$7;
-            public final /* synthetic */ long f$8;
+            public final /* synthetic */ long f$6;
 
             {
                 this.f$1 = r2;
@@ -7467,29 +7503,25 @@ public class MediaDataController extends BaseController {
                 this.f$4 = r5;
                 this.f$5 = r6;
                 this.f$6 = r7;
-                this.f$7 = r8;
-                this.f$8 = r9;
             }
 
             public final void run() {
-                MediaDataController.this.lambda$broadcastReplyMessages$116$MediaDataController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8);
+                MediaDataController.this.lambda$broadcastReplyMessages$116$MediaDataController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6);
             }
         });
     }
 
-    public /* synthetic */ void lambda$broadcastReplyMessages$116$MediaDataController(ArrayList arrayList, boolean z, ArrayList arrayList2, ArrayList arrayList3, SparseArray sparseArray, SparseArray sparseArray2, SparseArray sparseArray3, long j) {
-        boolean z2 = z;
-        ArrayList arrayList4 = arrayList;
-        getMessagesController().putUsers(arrayList, z2);
-        getMessagesController().putChats(arrayList2, z2);
-        boolean z3 = false;
-        for (int i = 0; i < arrayList3.size(); i++) {
-            TLRPC$Message tLRPC$Message = (TLRPC$Message) arrayList3.get(i);
-            ArrayList arrayList5 = (ArrayList) sparseArray.get(tLRPC$Message.id);
-            if (arrayList5 != null) {
-                MessageObject messageObject = new MessageObject(this.currentAccount, tLRPC$Message, (SparseArray<TLRPC$User>) sparseArray2, (SparseArray<TLRPC$Chat>) sparseArray3, false);
-                for (int i2 = 0; i2 < arrayList5.size(); i2++) {
-                    MessageObject messageObject2 = (MessageObject) arrayList5.get(i2);
+    public /* synthetic */ void lambda$broadcastReplyMessages$116$MediaDataController(ArrayList arrayList, boolean z, ArrayList arrayList2, ArrayList arrayList3, SparseArray sparseArray, long j) {
+        getMessagesController().putUsers(arrayList, z);
+        getMessagesController().putChats(arrayList2, z);
+        int size = arrayList3.size();
+        boolean z2 = false;
+        for (int i = 0; i < size; i++) {
+            MessageObject messageObject = (MessageObject) arrayList3.get(i);
+            ArrayList arrayList4 = (ArrayList) sparseArray.get(messageObject.getId());
+            if (arrayList4 != null) {
+                for (int i2 = 0; i2 < arrayList4.size(); i2++) {
+                    MessageObject messageObject2 = (MessageObject) arrayList4.get(i2);
                     messageObject2.replyMessageObject = messageObject;
                     TLRPC$MessageAction tLRPC$MessageAction = messageObject2.messageOwner.action;
                     if (tLRPC$MessageAction instanceof TLRPC$TL_messageActionPinMessage) {
@@ -7503,10 +7535,10 @@ public class MediaDataController extends BaseController {
                         messageObject2.replyMessageObject.messageOwner.flags |= Integer.MIN_VALUE;
                     }
                 }
-                z3 = true;
+                z2 = true;
             }
         }
-        if (z3) {
+        if (z2) {
             getNotificationCenter().postNotificationName(NotificationCenter.replyMessagesDidLoad, Long.valueOf(j));
         }
     }

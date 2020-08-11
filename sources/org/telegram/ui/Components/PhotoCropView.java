@@ -375,17 +375,11 @@ public class PhotoCropView extends FrameLayout {
     /* access modifiers changed from: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
         super.onLayout(z, i, i2, i3, i4);
-        CropView cropView2 = this.cropView;
-        if (cropView2 != null) {
-            cropView2.updateLayout();
-        }
+        this.cropView.updateLayout();
     }
 
     public void invalidate() {
         super.invalidate();
-        CropView cropView2 = this.cropView;
-        if (cropView2 != null) {
-            cropView2.invalidate();
-        }
+        this.cropView.invalidate();
     }
 }

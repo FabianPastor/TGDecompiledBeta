@@ -6,6 +6,11 @@ import android.os.SystemClock;
 import android.view.View;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
+import j$.util.Comparator;
+import j$.util.function.Function;
+import j$.util.function.ToDoubleFunction;
+import j$.util.function.ToIntFunction;
+import j$.util.function.ToLongFunction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -196,6 +201,34 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                     public final int compare(Object obj, Object obj2) {
                         return DialogsAdapter.lambda$sortOnlineContacts$0(MessagesController.this, this.f$1, (TLRPC$TL_contact) obj, (TLRPC$TL_contact) obj2);
                     }
+
+                    public /* synthetic */ Comparator<T> reversed() {
+                        return Comparator.CC.$default$reversed(this);
+                    }
+
+                    public /* synthetic */ <U extends Comparable<? super U>> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function) {
+                        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (Function) function);
+                    }
+
+                    public /* synthetic */ <U> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function, java.util.Comparator<? super U> comparator) {
+                        return Comparator.CC.$default$thenComparing(this, function, comparator);
+                    }
+
+                    public /* synthetic */ java.util.Comparator<T> thenComparing(java.util.Comparator<? super T> comparator) {
+                        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (java.util.Comparator) comparator);
+                    }
+
+                    public /* synthetic */ java.util.Comparator<T> thenComparingDouble(ToDoubleFunction<? super T> toDoubleFunction) {
+                        return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
+                    }
+
+                    public /* synthetic */ java.util.Comparator<T> thenComparingInt(ToIntFunction<? super T> toIntFunction) {
+                        return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
+                    }
+
+                    public /* synthetic */ java.util.Comparator<T> thenComparingLong(ToLongFunction<? super T> toLongFunction) {
+                        return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
+                    }
                 });
                 if (z) {
                     notifyDataSetChanged();
@@ -353,7 +386,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         /*
             r12 = this;
             java.lang.String r13 = "windowBackgroundGrayShadow"
-            r0 = 2131165412(0x7var_e4, float:1.794504E38)
+            r0 = 2131165424(0x7var_f0, float:1.7945065E38)
             java.lang.String r1 = "windowBackgroundGray"
             r2 = 5
             r3 = -1
@@ -405,7 +438,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Cells.HeaderCell r13 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r0 = r12.mContext
             r13.<init>(r0)
-            r0 = 2131627477(0x7f0e0dd5, float:1.888222E38)
+            r0 = 2131627487(0x7f0e0ddf, float:1.888224E38)
             java.lang.String r1 = "YourContacts"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r13.setText(r0)
@@ -448,7 +481,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Cells.HeaderCell r13 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r0 = r12.mContext
             r13.<init>(r0)
-            r0 = 2131626637(0x7f0e0a8d, float:1.8880516E38)
+            r0 = 2131626642(0x7f0e0a92, float:1.8880526E38)
             java.lang.String r1 = "RecentlyViewed"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r13.setText(r0)
@@ -463,7 +496,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             java.lang.String r1 = "windowBackgroundWhiteBlueHeader"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r0.setTextColor(r1)
-            r1 = 2131626638(0x7f0e0a8e, float:1.8880518E38)
+            r1 = 2131626643(0x7f0e0a93, float:1.8880528E38)
             java.lang.String r4 = "RecentlyViewedHide"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setText(r1)

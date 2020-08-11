@@ -7665,10 +7665,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
 
         /* access modifiers changed from: private */
-        /* JADX WARNING: Removed duplicated region for block: B:143:0x04d9  */
-        /* JADX WARNING: Removed duplicated region for block: B:144:0x0503  */
-        /* JADX WARNING: Removed duplicated region for block: B:151:0x0526  */
-        /* JADX WARNING: Removed duplicated region for block: B:176:0x059c A[SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:143:0x04da  */
+        /* JADX WARNING: Removed duplicated region for block: B:144:0x0504  */
+        /* JADX WARNING: Removed duplicated region for block: B:151:0x0527  */
+        /* JADX WARNING: Removed duplicated region for block: B:176:0x059d A[SYNTHETIC] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void addBlock(org.telegram.ui.ArticleViewer.WebpageAdapter r25, org.telegram.tgnet.TLRPC$PageBlock r26, int r27, int r28, int r29) {
             /*
@@ -7765,7 +7765,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r2.flags = r3
                 org.telegram.messenger.MessageObject r3 = new org.telegram.messenger.MessageObject
                 int r4 = org.telegram.messenger.UserConfig.selectedAccount
-                r3.<init>(r4, r2, r11)
+                r3.<init>(r4, r2, r11, r12)
                 java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r7.audioMessages
                 r2.add(r3)
                 java.util.HashMap<org.telegram.tgnet.TLRPC$TL_pageBlockAudio, org.telegram.messenger.MessageObject> r2 = r7.audioBlocks
@@ -7775,7 +7775,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 boolean r3 = android.text.TextUtils.isEmpty(r2)
                 if (r3 == 0) goto L_0x00e1
                 boolean r3 = android.text.TextUtils.isEmpty(r0)
-                if (r3 != 0) goto L_0x05a4
+                if (r3 != 0) goto L_0x05a5
             L_0x00e1:
                 boolean r3 = android.text.TextUtils.isEmpty(r2)
                 if (r3 != 0) goto L_0x00ff
@@ -7788,15 +7788,15 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 java.lang.String r0 = "%s - %s"
                 java.lang.String r0 = java.lang.String.format(r0, r3)
                 r7.addTextBlock(r0, r1)
-                goto L_0x05a4
+                goto L_0x05a5
             L_0x00ff:
                 boolean r3 = android.text.TextUtils.isEmpty(r2)
                 if (r3 != 0) goto L_0x010a
                 r7.addTextBlock(r2, r1)
-                goto L_0x05a4
+                goto L_0x05a5
             L_0x010a:
                 r7.addTextBlock(r0, r1)
-                goto L_0x05a4
+                goto L_0x05a5
             L_0x010f:
                 boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageBlockEmbedPost
                 r13 = 0
@@ -7805,7 +7805,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.tgnet.TLRPC$TL_pageBlockEmbedPost r2 = (org.telegram.tgnet.TLRPC$TL_pageBlockEmbedPost) r2
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r3 = r2.blocks
                 boolean r3 = r3.isEmpty()
-                if (r3 != 0) goto L_0x05a4
+                if (r3 != 0) goto L_0x05a5
                 r3 = -1
                 r1.level = r3
             L_0x0122:
@@ -7854,7 +7854,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.tgnet.TLRPC$RichText r0 = r0.credit
                 java.lang.CharSequence r0 = org.telegram.ui.ArticleViewer.getPlainText(r0)
                 boolean r0 = android.text.TextUtils.isEmpty(r0)
-                if (r0 != 0) goto L_0x05a4
+                if (r0 != 0) goto L_0x05a5
             L_0x0187:
                 org.telegram.ui.ArticleViewer$TL_pageBlockEmbedPostCaption r0 = new org.telegram.ui.ArticleViewer$TL_pageBlockEmbedPostCaption
                 r0.<init>()
@@ -7863,7 +7863,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r0.caption = r1
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r1 = r7.blocks
                 r1.add(r0)
-                goto L_0x05a4
+                goto L_0x05a5
             L_0x019a:
                 boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageBlockRelatedArticles
                 if (r3 == 0) goto L_0x01de
@@ -7888,13 +7888,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int r11 = r11 + 1
                 goto L_0x01b8
             L_0x01cd:
-                if (r29 != 0) goto L_0x05a4
+                if (r29 != 0) goto L_0x05a5
                 org.telegram.ui.ArticleViewer$TL_pageBlockRelatedArticlesShadow r0 = new org.telegram.ui.ArticleViewer$TL_pageBlockRelatedArticlesShadow
                 r0.<init>()
                 org.telegram.tgnet.TLRPC$TL_pageBlockRelatedArticles unused = r0.parent = r1
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r1 = r7.blocks
                 r1.add(r0)
-                goto L_0x05a4
+                goto L_0x05a5
             L_0x01de:
                 boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageBlockDetails
                 if (r3 == 0) goto L_0x0216
@@ -7903,7 +7903,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r1 = r10.blocks
                 int r14 = r1.size()
             L_0x01eb:
-                if (r11 >= r14) goto L_0x05a4
+                if (r11 >= r14) goto L_0x05a5
                 org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild r1 = new org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild
                 r1.<init>()
                 org.telegram.tgnet.TLRPC$PageBlock unused = r1.parent = r8
@@ -7925,7 +7925,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 java.lang.String r14 = " "
                 java.lang.String r15 = ".%d"
                 java.lang.String r6 = "%d."
-                if (r2 == 0) goto L_0x038a
+                if (r2 == 0) goto L_0x038b
                 r5 = r1
                 org.telegram.tgnet.TLRPC$TL_pageBlockList r5 = (org.telegram.tgnet.TLRPC$TL_pageBlockList) r5
                 org.telegram.ui.ArticleViewer$TL_pageBlockListParent r4 = new org.telegram.ui.ArticleViewer$TL_pageBlockListParent
@@ -7937,7 +7937,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int r3 = r1.size()
                 r2 = 0
             L_0x0235:
-                if (r2 >= r3) goto L_0x05a4
+                if (r2 >= r3) goto L_0x05a5
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageListItem> r1 = r5.items
                 java.lang.Object r1 = r1.get(r2)
                 org.telegram.tgnet.TLRPC$PageListItem r1 = (org.telegram.tgnet.TLRPC$PageListItem) r1
@@ -7958,7 +7958,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r13[r16] = r17
                 java.lang.String r13 = java.lang.String.format(r15, r13)
                 java.lang.String unused = r11.num = r13
-                goto L_0x0283
+                goto L_0x0284
             L_0x0269:
                 r12 = 1
                 r16 = 0
@@ -7968,44 +7968,44 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r13[r16] = r12
                 java.lang.String r12 = java.lang.String.format(r6, r13)
                 java.lang.String unused = r11.num = r12
-                goto L_0x0283
+                goto L_0x0284
             L_0x027e:
                 java.lang.String r12 = "•"
                 java.lang.String unused = r11.num = r12
-            L_0x0283:
+            L_0x0284:
                 java.util.ArrayList r12 = r4.items
                 r12.add(r11)
                 boolean r12 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageListItemText
-                if (r12 == 0) goto L_0x0297
+                if (r12 == 0) goto L_0x0298
                 r12 = r1
                 org.telegram.tgnet.TLRPC$TL_pageListItemText r12 = (org.telegram.tgnet.TLRPC$TL_pageListItemText) r12
                 org.telegram.tgnet.TLRPC$RichText r12 = r12.text
                 org.telegram.tgnet.TLRPC$RichText unused = r11.textItem = r12
-                goto L_0x02c1
-            L_0x0297:
+                goto L_0x02c2
+            L_0x0298:
                 boolean r12 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageListItemBlocks
-                if (r12 == 0) goto L_0x02c1
+                if (r12 == 0) goto L_0x02c2
                 r12 = r1
                 org.telegram.tgnet.TLRPC$TL_pageListItemBlocks r12 = (org.telegram.tgnet.TLRPC$TL_pageListItemBlocks) r12
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r13 = r12.blocks
                 boolean r13 = r13.isEmpty()
-                if (r13 != 0) goto L_0x02b3
+                if (r13 != 0) goto L_0x02b4
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r12 = r12.blocks
                 r13 = 0
                 java.lang.Object r12 = r12.get(r13)
                 org.telegram.tgnet.TLRPC$PageBlock r12 = (org.telegram.tgnet.TLRPC$PageBlock) r12
                 org.telegram.tgnet.TLRPC$PageBlock unused = r11.blockItem = r12
-                goto L_0x02c1
-            L_0x02b3:
+                goto L_0x02c2
+            L_0x02b4:
                 org.telegram.tgnet.TLRPC$TL_pageListItemText r1 = new org.telegram.tgnet.TLRPC$TL_pageListItemText
                 r1.<init>()
                 org.telegram.tgnet.TLRPC$TL_textPlain r12 = new org.telegram.tgnet.TLRPC$TL_textPlain
                 r12.<init>()
                 r12.text = r14
                 r1.text = r12
-            L_0x02c1:
+            L_0x02c2:
                 r12 = r1
-                if (r10 == 0) goto L_0x02ef
+                if (r10 == 0) goto L_0x02f0
                 r1 = r8
                 org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild r1 = (org.telegram.ui.ArticleViewer.TL_pageBlockDetailsChild) r1
                 org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild r13 = new org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild
@@ -8027,36 +8027,36 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r0 = r6
                 r6 = r29
                 r1.addBlock(r2, r3, r4, r5, r6)
-                goto L_0x030f
-            L_0x02ef:
+                goto L_0x0310
+            L_0x02f0:
                 r19 = r2
                 r20 = r3
                 r13 = r4
                 r21 = r5
                 r0 = r6
-                if (r19 != 0) goto L_0x0301
+                if (r19 != 0) goto L_0x0302
                 org.telegram.ui.ArticleViewer r1 = org.telegram.ui.ArticleViewer.this
                 org.telegram.tgnet.TLRPC$PageBlock r1 = r1.fixListBlock(r8, r11)
                 r3 = r1
-                goto L_0x0302
-            L_0x0301:
-                r3 = r11
+                goto L_0x0303
             L_0x0302:
+                r3 = r11
+            L_0x0303:
                 int r5 = r9 + 1
                 r1 = r24
                 r2 = r25
                 r4 = r27
                 r6 = r29
                 r1.addBlock(r2, r3, r4, r5, r6)
-            L_0x030f:
+            L_0x0310:
                 boolean r1 = r12 instanceof org.telegram.tgnet.TLRPC$TL_pageListItemBlocks
-                if (r1 == 0) goto L_0x037b
+                if (r1 == 0) goto L_0x037c
                 org.telegram.tgnet.TLRPC$TL_pageListItemBlocks r12 = (org.telegram.tgnet.TLRPC$TL_pageListItemBlocks) r12
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r1 = r12.blocks
                 int r11 = r1.size()
                 r6 = 1
-            L_0x031c:
-                if (r6 >= r11) goto L_0x037b
+            L_0x031d:
+                if (r6 >= r11) goto L_0x037c
                 org.telegram.ui.ArticleViewer$TL_pageBlockListItem r5 = new org.telegram.ui.ArticleViewer$TL_pageBlockListItem
                 org.telegram.ui.ArticleViewer r1 = org.telegram.ui.ArticleViewer.this
                 r2 = 0
@@ -8066,7 +8066,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.tgnet.TLRPC$PageBlock r1 = (org.telegram.tgnet.TLRPC$PageBlock) r1
                 org.telegram.tgnet.TLRPC$PageBlock unused = r5.blockItem = r1
                 org.telegram.ui.ArticleViewer.TL_pageBlockListParent unused = r5.parent = r13
-                if (r10 == 0) goto L_0x035c
+                if (r10 == 0) goto L_0x035d
                 r1 = r8
                 org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild r1 = (org.telegram.ui.ArticleViewer.TL_pageBlockDetailsChild) r1
                 org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild r3 = new org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild
@@ -8083,8 +8083,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r22 = r6
                 r6 = r29
                 r1.addBlock(r2, r3, r4, r5, r6)
-                goto L_0x036f
-            L_0x035c:
+                goto L_0x0370
+            L_0x035d:
                 r23 = r5
                 r22 = r6
                 int r5 = r9 + 1
@@ -8094,13 +8094,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r4 = r27
                 r6 = r29
                 r1.addBlock(r2, r3, r4, r5, r6)
-            L_0x036f:
+            L_0x0370:
                 java.util.ArrayList r1 = r13.items
                 r2 = r23
                 r1.add(r2)
                 int r6 = r22 + 1
-                goto L_0x031c
-            L_0x037b:
+                goto L_0x031d
+            L_0x037c:
                 int r2 = r19 + 1
                 r6 = r0
                 r4 = r13
@@ -8111,10 +8111,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r13 = 0
                 r0 = r25
                 goto L_0x0235
-            L_0x038a:
+            L_0x038b:
                 r0 = r6
                 boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageBlockOrderedList
-                if (r2 == 0) goto L_0x05a4
+                if (r2 == 0) goto L_0x05a5
                 r11 = r1
                 org.telegram.tgnet.TLRPC$TL_pageBlockOrderedList r11 = (org.telegram.tgnet.TLRPC$TL_pageBlockOrderedList) r11
                 org.telegram.ui.ArticleViewer$TL_pageBlockOrderedListParent r12 = new org.telegram.ui.ArticleViewer$TL_pageBlockOrderedListParent
@@ -8126,8 +8126,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageListOrderedItem> r1 = r11.items
                 int r13 = r1.size()
                 r6 = 0
-            L_0x03a7:
-                if (r6 >= r13) goto L_0x05a4
+            L_0x03a8:
+                if (r6 >= r13) goto L_0x05a5
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageListOrderedItem> r1 = r11.items
                 java.lang.Object r1 = r1.get(r6)
                 org.telegram.tgnet.TLRPC$PageListOrderedItem r1 = (org.telegram.tgnet.TLRPC$PageListOrderedItem) r1
@@ -8141,16 +8141,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r3.add(r2)
                 boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageListOrderedItemText
                 java.lang.String r4 = "."
-                if (r3 == 0) goto L_0x043c
+                if (r3 == 0) goto L_0x043d
                 r3 = r1
                 org.telegram.tgnet.TLRPC$TL_pageListOrderedItemText r3 = (org.telegram.tgnet.TLRPC$TL_pageListOrderedItemText) r3
                 org.telegram.tgnet.TLRPC$RichText r5 = r3.text
                 org.telegram.tgnet.TLRPC$RichText unused = r2.textItem = r5
                 java.lang.String r5 = r3.num
                 boolean r5 = android.text.TextUtils.isEmpty(r5)
-                if (r5 == 0) goto L_0x040c
+                if (r5 == 0) goto L_0x040d
                 boolean r3 = r7.isRtl
-                if (r3 == 0) goto L_0x03f6
+                if (r3 == 0) goto L_0x03f7
                 r3 = 1
                 java.lang.Object[] r4 = new java.lang.Object[r3]
                 int r5 = r6 + 1
@@ -8159,8 +8159,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r4[r16] = r5
                 java.lang.String r4 = java.lang.String.format(r15, r4)
                 java.lang.String unused = r2.num = r4
-                goto L_0x04d1
-            L_0x03f6:
+                goto L_0x04d2
+            L_0x03f7:
                 r3 = 1
                 r16 = 0
                 java.lang.Object[] r4 = new java.lang.Object[r3]
@@ -8169,10 +8169,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r4[r16] = r3
                 java.lang.String r3 = java.lang.String.format(r0, r4)
                 java.lang.String unused = r2.num = r3
-                goto L_0x04d1
-            L_0x040c:
+                goto L_0x04d2
+            L_0x040d:
                 boolean r5 = r7.isRtl
-                if (r5 == 0) goto L_0x0426
+                if (r5 == 0) goto L_0x0427
                 java.lang.StringBuilder r5 = new java.lang.StringBuilder
                 r5.<init>()
                 r5.append(r4)
@@ -8180,8 +8180,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r5.append(r3)
                 java.lang.String r3 = r5.toString()
                 java.lang.String unused = r2.num = r3
-                goto L_0x04d1
-            L_0x0426:
+                goto L_0x04d2
+            L_0x0427:
                 java.lang.StringBuilder r5 = new java.lang.StringBuilder
                 r5.<init>()
                 java.lang.String r3 = r3.num
@@ -8189,15 +8189,15 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r5.append(r4)
                 java.lang.String r3 = r5.toString()
                 java.lang.String unused = r2.num = r3
-                goto L_0x04d1
-            L_0x043c:
+                goto L_0x04d2
+            L_0x043d:
                 boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageListOrderedItemBlocks
-                if (r3 == 0) goto L_0x04d1
+                if (r3 == 0) goto L_0x04d2
                 r3 = r1
                 org.telegram.tgnet.TLRPC$TL_pageListOrderedItemBlocks r3 = (org.telegram.tgnet.TLRPC$TL_pageListOrderedItemBlocks) r3
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r5 = r3.blocks
                 boolean r5 = r5.isEmpty()
-                if (r5 != 0) goto L_0x045c
+                if (r5 != 0) goto L_0x045d
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r5 = r3.blocks
                 r19 = r1
                 r1 = 0
@@ -8205,20 +8205,20 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.tgnet.TLRPC$PageBlock r5 = (org.telegram.tgnet.TLRPC$PageBlock) r5
                 org.telegram.tgnet.TLRPC$PageBlock unused = r2.blockItem = r5
                 r1 = r19
-                goto L_0x046a
-            L_0x045c:
+                goto L_0x046b
+            L_0x045d:
                 org.telegram.tgnet.TLRPC$TL_pageListOrderedItemText r1 = new org.telegram.tgnet.TLRPC$TL_pageListOrderedItemText
                 r1.<init>()
                 org.telegram.tgnet.TLRPC$TL_textPlain r5 = new org.telegram.tgnet.TLRPC$TL_textPlain
                 r5.<init>()
                 r5.text = r14
                 r1.text = r5
-            L_0x046a:
+            L_0x046b:
                 java.lang.String r5 = r3.num
                 boolean r5 = android.text.TextUtils.isEmpty(r5)
-                if (r5 == 0) goto L_0x04a0
+                if (r5 == 0) goto L_0x04a1
                 boolean r3 = r7.isRtl
-                if (r3 == 0) goto L_0x048b
+                if (r3 == 0) goto L_0x048c
                 r5 = 1
                 java.lang.Object[] r3 = new java.lang.Object[r5]
                 int r4 = r6 + 1
@@ -8227,8 +8227,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r3[r16] = r4
                 java.lang.String r3 = java.lang.String.format(r15, r3)
                 java.lang.String unused = r2.num = r3
-                goto L_0x04cf
-            L_0x048b:
+                goto L_0x04d0
+            L_0x048c:
                 r5 = 1
                 r16 = 0
                 java.lang.Object[] r3 = new java.lang.Object[r5]
@@ -8237,11 +8237,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r3[r16] = r4
                 java.lang.String r3 = java.lang.String.format(r0, r3)
                 java.lang.String unused = r2.num = r3
-                goto L_0x04cf
-            L_0x04a0:
+                goto L_0x04d0
+            L_0x04a1:
                 r16 = 0
                 boolean r5 = r7.isRtl
-                if (r5 == 0) goto L_0x04bb
+                if (r5 == 0) goto L_0x04bc
                 java.lang.StringBuilder r5 = new java.lang.StringBuilder
                 r5.<init>()
                 r5.append(r4)
@@ -8249,8 +8249,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r5.append(r3)
                 java.lang.String r3 = r5.toString()
                 java.lang.String unused = r2.num = r3
-                goto L_0x04cf
-            L_0x04bb:
+                goto L_0x04d0
+            L_0x04bc:
                 java.lang.StringBuilder r5 = new java.lang.StringBuilder
                 r5.<init>()
                 java.lang.String r3 = r3.num
@@ -8258,15 +8258,15 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r5.append(r4)
                 java.lang.String r3 = r5.toString()
                 java.lang.String unused = r2.num = r3
-            L_0x04cf:
+            L_0x04d0:
                 r5 = r1
-                goto L_0x04d7
-            L_0x04d1:
+                goto L_0x04d8
+            L_0x04d2:
                 r19 = r1
                 r16 = 0
                 r5 = r19
-            L_0x04d7:
-                if (r10 == 0) goto L_0x0503
+            L_0x04d8:
+                if (r10 == 0) goto L_0x0504
                 r1 = r8
                 org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild r1 = (org.telegram.ui.ArticleViewer.TL_pageBlockDetailsChild) r1
                 org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild r3 = new org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild
@@ -8286,35 +8286,35 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r19 = r6
                 r6 = r29
                 r1.addBlock(r2, r3, r4, r5, r6)
-                goto L_0x0522
-            L_0x0503:
+                goto L_0x0523
+            L_0x0504:
                 r20 = r0
                 r0 = r5
                 r19 = r6
                 r17 = 1
-                if (r19 != 0) goto L_0x0514
+                if (r19 != 0) goto L_0x0515
                 org.telegram.ui.ArticleViewer r1 = org.telegram.ui.ArticleViewer.this
                 org.telegram.tgnet.TLRPC$PageBlock r1 = r1.fixListBlock(r8, r2)
                 r3 = r1
-                goto L_0x0515
-            L_0x0514:
-                r3 = r2
+                goto L_0x0516
             L_0x0515:
+                r3 = r2
+            L_0x0516:
                 int r5 = r9 + 1
                 r1 = r24
                 r2 = r25
                 r4 = r27
                 r6 = r29
                 r1.addBlock(r2, r3, r4, r5, r6)
-            L_0x0522:
+            L_0x0523:
                 boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_pageListOrderedItemBlocks
-                if (r1 == 0) goto L_0x059c
+                if (r1 == 0) goto L_0x059d
                 org.telegram.tgnet.TLRPC$TL_pageListOrderedItemBlocks r0 = (org.telegram.tgnet.TLRPC$TL_pageListOrderedItemBlocks) r0
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r1 = r0.blocks
                 int r6 = r1.size()
                 r5 = 1
-            L_0x052f:
-                if (r5 >= r6) goto L_0x059c
+            L_0x0530:
+                if (r5 >= r6) goto L_0x059d
                 org.telegram.ui.ArticleViewer$TL_pageBlockOrderedListItem r4 = new org.telegram.ui.ArticleViewer$TL_pageBlockOrderedListItem
                 org.telegram.ui.ArticleViewer r1 = org.telegram.ui.ArticleViewer.this
                 r3 = 0
@@ -8324,7 +8324,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.tgnet.TLRPC$PageBlock r1 = (org.telegram.tgnet.TLRPC$PageBlock) r1
                 org.telegram.tgnet.TLRPC$PageBlock unused = r4.blockItem = r1
                 org.telegram.ui.ArticleViewer.TL_pageBlockOrderedListParent unused = r4.parent = r12
-                if (r10 == 0) goto L_0x0577
+                if (r10 == 0) goto L_0x0578
                 r1 = r8
                 org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild r1 = (org.telegram.ui.ArticleViewer.TL_pageBlockDetailsChild) r1
                 org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild r2 = new org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild
@@ -8345,8 +8345,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r18 = r6
                 r6 = r29
                 r1.addBlock(r2, r3, r4, r5, r6)
-                goto L_0x058e
-            L_0x0577:
+                goto L_0x058f
+            L_0x0578:
                 r22 = r3
                 r21 = r4
                 r23 = r5
@@ -8357,29 +8357,29 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r3 = r21
                 r4 = r27
                 r6 = r29
-                r1.addBlock(r2, r3, r4, r5, r6)     // Catch:{ all -> 0x05a5 }
-            L_0x058e:
+                r1.addBlock(r2, r3, r4, r5, r6)     // Catch:{ all -> 0x05a6 }
+            L_0x058f:
                 java.util.ArrayList r1 = r12.items
                 r2 = r21
                 r1.add(r2)
                 int r5 = r23 + 1
                 r6 = r18
-                goto L_0x052f
-            L_0x059c:
+                goto L_0x0530
+            L_0x059d:
                 r22 = 0
                 int r6 = r19 + 1
                 r0 = r20
-                goto L_0x03a7
-            L_0x05a4:
-                return
+                goto L_0x03a8
             L_0x05a5:
+                return
+            L_0x05a6:
                 r0 = move-exception
                 r1 = r0
-                goto L_0x05a9
-            L_0x05a8:
-                throw r1
+                goto L_0x05aa
             L_0x05a9:
-                goto L_0x05a8
+                throw r1
+            L_0x05aa:
+                goto L_0x05a9
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.WebpageAdapter.addBlock(org.telegram.ui.ArticleViewer$WebpageAdapter, org.telegram.tgnet.TLRPC$PageBlock, int, int, int):void");
         }
@@ -16942,7 +16942,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         L_0x0053:
             android.app.Activity r0 = r5.parentActivity     // Catch:{ Exception -> 0x009c }
             java.lang.String r2 = "ShareFile"
-            r3 = 2131626908(0x7f0e0b9c, float:1.8881065E38)
+            r3 = 2131626913(0x7f0e0ba1, float:1.8881076E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ Exception -> 0x009c }
             android.content.Intent r1 = android.content.Intent.createChooser(r1, r2)     // Catch:{ Exception -> 0x009c }
             r2 = 500(0x1f4, float:7.0E-43)
@@ -16957,12 +16957,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x009c }
             r0.setTitle(r1)     // Catch:{ Exception -> 0x009c }
             java.lang.String r1 = "OK"
-            r2 = 2131626121(0x7f0e0889, float:1.887947E38)
+            r2 = 2131626126(0x7f0e088e, float:1.887948E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x009c }
             r2 = 0
             r0.setPositiveButton(r1, r2)     // Catch:{ Exception -> 0x009c }
             java.lang.String r1 = "PleaseDownload"
-            r2 = 2131626511(0x7f0e0a0f, float:1.888026E38)
+            r2 = 2131626516(0x7f0e0a14, float:1.888027E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x009c }
             r0.setMessage(r1)     // Catch:{ Exception -> 0x009c }
             org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()     // Catch:{ Exception -> 0x009c }
@@ -17490,7 +17490,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             goto L_0x0132
         L_0x010d:
             org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
-            r1 = 2131626123(0x7f0e088b, float:1.8879473E38)
+            r1 = 2131626128(0x7f0e0890, float:1.8879483E38)
             java.lang.Object[] r2 = new java.lang.Object[r11]
             int r3 = r7.currentIndex
             int r3 = r3 + r10

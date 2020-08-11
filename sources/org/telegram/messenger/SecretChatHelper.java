@@ -13,7 +13,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
-import java.util.concurrent.ConcurrentHashMap;
 import org.telegram.SQLite.SQLiteCursor;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.support.SparseLongArray;
@@ -71,7 +70,6 @@ import org.telegram.tgnet.TLRPC$TL_messages_requestEncryption;
 import org.telegram.tgnet.TLRPC$TL_messages_sendEncryptedMultiMedia;
 import org.telegram.tgnet.TLRPC$TL_peerUser;
 import org.telegram.tgnet.TLRPC$TL_photoSizeEmpty;
-import org.telegram.tgnet.TLRPC$TL_updateEncryption;
 import org.telegram.tgnet.TLRPC$Update;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$messages_DhConfig;
@@ -234,77 +232,114 @@ public class SecretChatHelper extends BaseController {
         }
     }
 
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r9v8, resolved type: java.lang.Object} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v8, resolved type: org.telegram.tgnet.TLRPC$User} */
     /* access modifiers changed from: protected */
-    public void processUpdateEncryption(TLRPC$TL_updateEncryption tLRPC$TL_updateEncryption, ConcurrentHashMap<Integer, TLRPC$User> concurrentHashMap) {
-        byte[] bArr;
-        TLRPC$EncryptedChat tLRPC$EncryptedChat = tLRPC$TL_updateEncryption.chat;
-        long j = ((long) tLRPC$EncryptedChat.id) << 32;
-        TLRPC$EncryptedChat encryptedChatDB = getMessagesController().getEncryptedChatDB(tLRPC$EncryptedChat.id, false);
-        if ((tLRPC$EncryptedChat instanceof TLRPC$TL_encryptedChatRequested) && encryptedChatDB == null) {
-            int i = tLRPC$EncryptedChat.participant_id;
-            if (i == getUserConfig().getClientUserId()) {
-                i = tLRPC$EncryptedChat.admin_id;
-            }
-            TLRPC$User user = getMessagesController().getUser(Integer.valueOf(i));
-            if (user == null) {
-                user = concurrentHashMap.get(Integer.valueOf(i));
-            }
-            tLRPC$EncryptedChat.user_id = i;
-            TLRPC$TL_dialog tLRPC$TL_dialog = new TLRPC$TL_dialog();
-            tLRPC$TL_dialog.id = j;
-            tLRPC$TL_dialog.folder_id = tLRPC$EncryptedChat.folder_id;
-            tLRPC$TL_dialog.unread_count = 0;
-            tLRPC$TL_dialog.top_message = 0;
-            tLRPC$TL_dialog.last_message_date = tLRPC$TL_updateEncryption.date;
-            getMessagesController().putEncryptedChat(tLRPC$EncryptedChat, false);
-            AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_dialog, j) {
-                public final /* synthetic */ TLRPC$Dialog f$1;
-                public final /* synthetic */ long f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    SecretChatHelper.this.lambda$processUpdateEncryption$1$SecretChatHelper(this.f$1, this.f$2);
-                }
-            });
-            getMessagesStorage().putEncryptedChat(tLRPC$EncryptedChat, user, tLRPC$TL_dialog);
-            acceptSecretChat(tLRPC$EncryptedChat);
-        } else if (!(tLRPC$EncryptedChat instanceof TLRPC$TL_encryptedChat)) {
-            if (encryptedChatDB != null) {
-                tLRPC$EncryptedChat.user_id = encryptedChatDB.user_id;
-                tLRPC$EncryptedChat.auth_key = encryptedChatDB.auth_key;
-                tLRPC$EncryptedChat.key_create_date = encryptedChatDB.key_create_date;
-                tLRPC$EncryptedChat.key_use_count_in = encryptedChatDB.key_use_count_in;
-                tLRPC$EncryptedChat.key_use_count_out = encryptedChatDB.key_use_count_out;
-                tLRPC$EncryptedChat.ttl = encryptedChatDB.ttl;
-                tLRPC$EncryptedChat.seq_in = encryptedChatDB.seq_in;
-                tLRPC$EncryptedChat.seq_out = encryptedChatDB.seq_out;
-                tLRPC$EncryptedChat.admin_id = encryptedChatDB.admin_id;
-                tLRPC$EncryptedChat.mtproto_seq = encryptedChatDB.mtproto_seq;
-            }
-            AndroidUtilities.runOnUIThread(new Runnable(encryptedChatDB, tLRPC$EncryptedChat) {
-                public final /* synthetic */ TLRPC$EncryptedChat f$1;
-                public final /* synthetic */ TLRPC$EncryptedChat f$2;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                }
-
-                public final void run() {
-                    SecretChatHelper.this.lambda$processUpdateEncryption$2$SecretChatHelper(this.f$1, this.f$2);
-                }
-            });
-        } else if ((encryptedChatDB instanceof TLRPC$TL_encryptedChatWaiting) && ((bArr = encryptedChatDB.auth_key) == null || bArr.length == 1)) {
-            tLRPC$EncryptedChat.a_or_b = encryptedChatDB.a_or_b;
-            tLRPC$EncryptedChat.user_id = encryptedChatDB.user_id;
-            processAcceptedSecretChat(tLRPC$EncryptedChat);
-        } else if (encryptedChatDB == null && this.startingSecretChat) {
-            this.delayedEncryptedChatUpdates.add(tLRPC$TL_updateEncryption);
-        }
+    /* JADX WARNING: Multi-variable type inference failed */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void processUpdateEncryption(org.telegram.tgnet.TLRPC$TL_updateEncryption r8, j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, org.telegram.tgnet.TLRPC$User> r9) {
+        /*
+            r7 = this;
+            org.telegram.tgnet.TLRPC$EncryptedChat r0 = r8.chat
+            int r1 = r0.id
+            long r1 = (long) r1
+            r3 = 32
+            long r1 = r1 << r3
+            org.telegram.messenger.MessagesController r3 = r7.getMessagesController()
+            int r4 = r0.id
+            r5 = 0
+            org.telegram.tgnet.TLRPC$EncryptedChat r3 = r3.getEncryptedChatDB(r4, r5)
+            boolean r4 = r0 instanceof org.telegram.tgnet.TLRPC$TL_encryptedChatRequested
+            if (r4 == 0) goto L_0x006f
+            if (r3 != 0) goto L_0x006f
+            int r3 = r0.participant_id
+            org.telegram.messenger.UserConfig r4 = r7.getUserConfig()
+            int r4 = r4.getClientUserId()
+            if (r3 != r4) goto L_0x0027
+            int r3 = r0.admin_id
+        L_0x0027:
+            org.telegram.messenger.MessagesController r4 = r7.getMessagesController()
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r3)
+            org.telegram.tgnet.TLRPC$User r4 = r4.getUser(r6)
+            if (r4 != 0) goto L_0x0040
+            java.lang.Integer r4 = java.lang.Integer.valueOf(r3)
+            java.lang.Object r9 = r9.get(r4)
+            r4 = r9
+            org.telegram.tgnet.TLRPC$User r4 = (org.telegram.tgnet.TLRPC$User) r4
+        L_0x0040:
+            r0.user_id = r3
+            org.telegram.tgnet.TLRPC$TL_dialog r9 = new org.telegram.tgnet.TLRPC$TL_dialog
+            r9.<init>()
+            r9.id = r1
+            int r3 = r0.folder_id
+            r9.folder_id = r3
+            r9.unread_count = r5
+            r9.top_message = r5
+            int r8 = r8.date
+            r9.last_message_date = r8
+            org.telegram.messenger.MessagesController r8 = r7.getMessagesController()
+            r8.putEncryptedChat(r0, r5)
+            org.telegram.messenger.-$$Lambda$SecretChatHelper$eDp1ow-71SJ45XI53001XP-mRTQ r8 = new org.telegram.messenger.-$$Lambda$SecretChatHelper$eDp1ow-71SJ45XI53001XP-mRTQ
+            r8.<init>(r9, r1)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r8)
+            org.telegram.messenger.MessagesStorage r8 = r7.getMessagesStorage()
+            r8.putEncryptedChat(r0, r4, r9)
+            r7.acceptSecretChat(r0)
+            goto L_0x00c9
+        L_0x006f:
+            boolean r9 = r0 instanceof org.telegram.tgnet.TLRPC$TL_encryptedChat
+            if (r9 == 0) goto L_0x0097
+            boolean r9 = r3 instanceof org.telegram.tgnet.TLRPC$TL_encryptedChatWaiting
+            if (r9 == 0) goto L_0x008b
+            byte[] r9 = r3.auth_key
+            if (r9 == 0) goto L_0x007f
+            int r9 = r9.length
+            r1 = 1
+            if (r9 != r1) goto L_0x008b
+        L_0x007f:
+            byte[] r8 = r3.a_or_b
+            r0.a_or_b = r8
+            int r8 = r3.user_id
+            r0.user_id = r8
+            r7.processAcceptedSecretChat(r0)
+            goto L_0x00c9
+        L_0x008b:
+            if (r3 != 0) goto L_0x00c9
+            boolean r9 = r7.startingSecretChat
+            if (r9 == 0) goto L_0x00c9
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$Update> r9 = r7.delayedEncryptedChatUpdates
+            r9.add(r8)
+            goto L_0x00c9
+        L_0x0097:
+            if (r3 == 0) goto L_0x00c1
+            int r8 = r3.user_id
+            r0.user_id = r8
+            byte[] r8 = r3.auth_key
+            r0.auth_key = r8
+            int r8 = r3.key_create_date
+            r0.key_create_date = r8
+            short r8 = r3.key_use_count_in
+            r0.key_use_count_in = r8
+            short r8 = r3.key_use_count_out
+            r0.key_use_count_out = r8
+            int r8 = r3.ttl
+            r0.ttl = r8
+            int r8 = r3.seq_in
+            r0.seq_in = r8
+            int r8 = r3.seq_out
+            r0.seq_out = r8
+            int r8 = r3.admin_id
+            r0.admin_id = r8
+            int r8 = r3.mtproto_seq
+            r0.mtproto_seq = r8
+        L_0x00c1:
+            org.telegram.messenger.-$$Lambda$SecretChatHelper$G9V6FvkI-PnA0UumuoB_kxH2lOM r8 = new org.telegram.messenger.-$$Lambda$SecretChatHelper$G9V6FvkI-PnA0UumuoB_kxH2lOM
+            r8.<init>(r3, r0)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r8)
+        L_0x00c9:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.SecretChatHelper.processUpdateEncryption(org.telegram.tgnet.TLRPC$TL_updateEncryption, j$.util.concurrent.ConcurrentHashMap):void");
     }
 
     public /* synthetic */ void lambda$processUpdateEncryption$1$SecretChatHelper(TLRPC$Dialog tLRPC$Dialog, long j) {
@@ -502,7 +537,7 @@ public class SecretChatHelper extends BaseController {
                 tLRPC$TL_decryptedMessageService.action = tLRPC$TL_decryptedMessageActionSetMessageTTL;
                 tLRPC$TL_decryptedMessageActionSetMessageTTL.ttl_seconds = tLRPC$EncryptedChat.ttl;
                 tLRPC$Message = createServiceSecretMessage(tLRPC$EncryptedChat, tLRPC$TL_decryptedMessageActionSetMessageTTL);
-                MessageObject messageObject = new MessageObject(this.currentAccount, tLRPC$Message, false);
+                MessageObject messageObject = new MessageObject(this.currentAccount, tLRPC$Message, false, false);
                 messageObject.messageOwner.send_state = 1;
                 messageObject.wasJustSent = true;
                 ArrayList arrayList = new ArrayList();
@@ -526,7 +561,7 @@ public class SecretChatHelper extends BaseController {
                 tLRPC$TL_decryptedMessageService.action = tLRPC$TL_decryptedMessageActionScreenshotMessages;
                 tLRPC$TL_decryptedMessageActionScreenshotMessages.random_ids = arrayList;
                 tLRPC$Message = createServiceSecretMessage(tLRPC$EncryptedChat, tLRPC$TL_decryptedMessageActionScreenshotMessages);
-                MessageObject messageObject = new MessageObject(this.currentAccount, tLRPC$Message, false);
+                MessageObject messageObject = new MessageObject(this.currentAccount, tLRPC$Message, false, false);
                 messageObject.messageOwner.send_state = 1;
                 messageObject.wasJustSent = true;
                 ArrayList arrayList2 = new ArrayList();
@@ -2555,7 +2590,7 @@ public class SecretChatHelper extends BaseController {
 
     public /* synthetic */ void lambda$null$13$SecretChatHelper(ArrayList arrayList) {
         for (int i = 0; i < arrayList.size(); i++) {
-            MessageObject messageObject = new MessageObject(this.currentAccount, (TLRPC$Message) arrayList.get(i), false);
+            MessageObject messageObject = new MessageObject(this.currentAccount, (TLRPC$Message) arrayList.get(i), false, true);
             messageObject.resendAsIs = true;
             getSendMessagesHelper().retrySendMessage(messageObject, true);
         }

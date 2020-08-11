@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.Locale;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
-import org.telegram.tgnet.TLRPC$TL_phoneConnection;
 import org.telegram.ui.Components.voip.VoIPHelper;
 
 public class VoIPController {
@@ -38,7 +37,6 @@ public class VoIPController {
     public static final int NET_TYPE_OTHER_MOBILE = 11;
     public static final int NET_TYPE_UNKNOWN = 0;
     public static final int NET_TYPE_WIFI = 6;
-    public static final int PEER_CAP_GROUP_CALLS = 1;
     public static final int STATE_ESTABLISHED = 3;
     public static final int STATE_FAILED = 4;
     public static final int STATE_RECONNECTING = 5;
@@ -46,16 +44,10 @@ public class VoIPController {
     public static final int STATE_WAIT_INIT_ACK = 2;
     protected long callStartTime;
     protected ConnectionStateListener listener;
-    protected long nativeInst;
+    protected long nativeInst = nativeInit(new File(ApplicationLoader.applicationContext.getFilesDir(), "voip_persistent_state.json").getAbsolutePath());
 
     public interface ConnectionStateListener {
-        void onCallUpgradeRequestReceived();
-
         void onConnectionStateChanged(int i);
-
-        void onGroupCallKeyReceived(byte[] bArr);
-
-        void onGroupCallKeySent();
 
         void onSignalBarCountChanged(int i);
     }
@@ -88,8 +80,6 @@ public class VoIPController {
 
     private native void nativeRequestCallUpgrade(long j);
 
-    private native void nativeSendGroupCallKey(long j, byte[] bArr);
-
     private native void nativeSetAudioOutputGainControlEnabled(long j, boolean z);
 
     private native void nativeSetConfig(long j, double d, double d2, int i, boolean z, boolean z2, boolean z3, String str, String str2, boolean z4);
@@ -106,18 +96,7 @@ public class VoIPController {
 
     private native void nativeSetProxy(long j, String str, int i, String str2, String str3);
 
-    private native void nativeSetRemoteEndpoints(long j, TLRPC$TL_phoneConnection[] tLRPC$TL_phoneConnectionArr, boolean z, boolean z2, int i);
-
-    public static native void nativeSetVideoRenderer(long j, long j2);
-
-    public static native void nativeSetVideoSource(long j, long j2);
-
     private native void nativeStart(long j);
-
-    public VoIPController() {
-        this.nativeInst = 0;
-        this.nativeInst = nativeInit(new File(ApplicationLoader.applicationContext.getFilesDir(), "voip_persistent_state.json").getAbsolutePath());
-    }
 
     public void start() {
         ensureNativeInstance();
@@ -127,29 +106,6 @@ public class VoIPController {
     public void connect() {
         ensureNativeInstance();
         nativeConnect(this.nativeInst);
-    }
-
-    public void setRemoteEndpoints(TLRPC$TL_phoneConnection[] tLRPC$TL_phoneConnectionArr, boolean z, boolean z2, int i) {
-        if (tLRPC$TL_phoneConnectionArr.length != 0) {
-            int i2 = 0;
-            while (i2 < tLRPC$TL_phoneConnectionArr.length) {
-                TLRPC$TL_phoneConnection tLRPC$TL_phoneConnection = tLRPC$TL_phoneConnectionArr[i2];
-                String str = tLRPC$TL_phoneConnection.ip;
-                if (str == null || str.length() == 0) {
-                    throw new IllegalArgumentException("endpoint " + tLRPC$TL_phoneConnection + " has empty/null ipv4");
-                }
-                byte[] bArr = tLRPC$TL_phoneConnection.peer_tag;
-                if (bArr == null || bArr.length == 16) {
-                    i2++;
-                } else {
-                    throw new IllegalArgumentException("endpoint " + tLRPC$TL_phoneConnection + " has peer_tag of wrong length");
-                }
-            }
-            ensureNativeInstance();
-            nativeSetRemoteEndpoints(this.nativeInst, tLRPC$TL_phoneConnectionArr, z, z2, i);
-            return;
-        }
-        throw new IllegalArgumentException("endpoints size is 0");
     }
 
     public void setEncryptionKey(byte[] bArr, boolean z) {
@@ -201,27 +157,6 @@ public class VoIPController {
         ConnectionStateListener connectionStateListener = this.listener;
         if (connectionStateListener != null) {
             connectionStateListener.onSignalBarCountChanged(i);
-        }
-    }
-
-    private void groupCallKeyReceived(byte[] bArr) {
-        ConnectionStateListener connectionStateListener = this.listener;
-        if (connectionStateListener != null) {
-            connectionStateListener.onGroupCallKeyReceived(bArr);
-        }
-    }
-
-    private void groupCallKeySent() {
-        ConnectionStateListener connectionStateListener = this.listener;
-        if (connectionStateListener != null) {
-            connectionStateListener.onGroupCallKeySent();
-        }
-    }
-
-    private void callUpgradeRequestReceived() {
-        ConnectionStateListener connectionStateListener = this.listener;
-        if (connectionStateListener != null) {
-            connectionStateListener.onCallUpgradeRequestReceived();
         }
     }
 
@@ -370,9 +305,7 @@ public class VoIPController {
     private String getLogFilePath(long j) {
         File logsDir = VoIPHelper.getLogsDir();
         if (!BuildVars.DEBUG_VERSION) {
-            File[] listFiles = logsDir.listFiles();
-            ArrayList arrayList = new ArrayList();
-            arrayList.addAll(Arrays.asList(listFiles));
+            ArrayList arrayList = new ArrayList(Arrays.asList(logsDir.listFiles()));
             while (arrayList.size() > 20) {
                 File file = (File) arrayList.get(0);
                 Iterator it = arrayList.iterator();
@@ -411,17 +344,6 @@ public class VoIPController {
     public int getPeerCapabilities() {
         ensureNativeInstance();
         return nativeGetPeerCapabilities(this.nativeInst);
-    }
-
-    public void sendGroupCallKey(byte[] bArr) {
-        if (bArr == null) {
-            throw new NullPointerException("key can not be null");
-        } else if (bArr.length == 256) {
-            ensureNativeInstance();
-            nativeSendGroupCallKey(this.nativeInst, bArr);
-        } else {
-            throw new IllegalArgumentException("key must be 256 bytes long, got " + bArr.length);
-        }
     }
 
     public void requestCallUpgrade() {

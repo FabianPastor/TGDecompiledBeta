@@ -11,10 +11,11 @@ public class TLRPC$TL_userFull extends TLRPC$UserFull {
         this.phone_calls_available = (this.flags & 16) != 0;
         this.phone_calls_private = (this.flags & 32) != 0;
         this.can_pin_message = (this.flags & 128) != 0;
-        if ((this.flags & 4096) == 0) {
+        this.has_scheduled = (this.flags & 4096) != 0;
+        if ((this.flags & 8192) == 0) {
             z2 = false;
         }
-        this.has_scheduled = z2;
+        this.video_calls_available = z2;
         this.user = TLRPC$User.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         if ((this.flags & 2) != 0) {
             this.about = abstractSerializedData.readString(z);

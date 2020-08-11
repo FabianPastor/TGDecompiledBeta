@@ -350,14 +350,14 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r3 = r3.createMenu()
             r4 = 0
-            r5 = 2131165442(0x7var_, float:1.7945101E38)
+            r5 = 2131165454(0x7var_e, float:1.7945126E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r3.addItem((int) r4, (int) r5)
             r3.setIsSearchField(r2)
             org.telegram.ui.ThemePreviewActivity$1 r5 = new org.telegram.ui.ThemePreviewActivity$1
             r5.<init>(r0)
             r3.setActionBarMenuItemSearchListener(r5)
             java.lang.String r5 = "Search"
-            r6 = 2131626769(0x7f0e0b11, float:1.8880784E38)
+            r6 = 2131626774(0x7f0e0b16, float:1.8880794E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)
             r3.setSearchFieldHint(r5)
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
@@ -368,7 +368,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r3.setAddToContainer(r4)
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
             java.lang.String r5 = "ThemePreview"
-            r6 = 2131627139(0x7f0e0CLASSNAME, float:1.8881534E38)
+            r6 = 2131627144(0x7f0e0CLASSNAME, float:1.8881544E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)
             r3.setTitle(r5)
             org.telegram.ui.ThemePreviewActivity$2 r3 = new org.telegram.ui.ThemePreviewActivity$2
@@ -437,7 +437,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r14 = 21
             if (r13 >= r14) goto L_0x010c
             android.content.res.Resources r13 = r34.getResources()
-            r15 = 2131165387(0x7var_cb, float:1.794499E38)
+            r15 = 2131165399(0x7var_d7, float:1.7945014E38)
             android.graphics.drawable.Drawable r13 = r13.getDrawable(r15)
             android.graphics.drawable.Drawable r13 = r13.mutate()
             android.graphics.PorterDuffColorFilter r15 = new android.graphics.PorterDuffColorFilter
@@ -462,7 +462,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r10.<init>(r11, r13)
             r8.setColorFilter(r10)
             android.widget.ImageView r8 = r0.floatingButton
-            r10 = 2131165386(0x7var_ca, float:1.7944988E38)
+            r10 = 2131165398(0x7var_d6, float:1.7945012E38)
             r8.setImageResource(r10)
             int r8 = android.os.Build.VERSION.SDK_INT
             r10 = 1082130432(0x40800000, float:4.0)
@@ -645,7 +645,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ActionBar.ActionBar r6 = r0.actionBar2
             org.telegram.ui.ActionBar.ActionBarMenu r6 = r6.createMenu()
             r8 = 5
-            r12 = 2131165488(0x7var_, float:1.7945195E38)
+            r12 = 2131165500(0x7var_c, float:1.7945219E38)
             r6.addItem((int) r8, (int) r12)
             goto L_0x0405
         L_0x02a4:
@@ -653,7 +653,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ActionBar.ActionBar r8 = r0.actionBar2
             org.telegram.ui.ActionBar.ActionBarMenu r8 = r8.createMenu()
             r15 = 4
-            r14 = 2131626748(0x7f0e0afc, float:1.888074E38)
+            r14 = 2131626753(0x7f0e0b01, float:1.8880751E38)
             java.lang.String r13 = "Save"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r13, r14)
             java.lang.String r13 = r13.toUpperCase()
@@ -664,17 +664,17 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r0.dropDownContainer = r13
             r13.setSubMenuOpenSide(r2)
             org.telegram.ui.ActionBar.ActionBarMenuItem r8 = r0.dropDownContainer
-            r13 = 2131624814(0x7f0e036e, float:1.8876818E38)
+            r13 = 2131624819(0x7f0e0373, float:1.8876828E38)
             java.lang.String r14 = "ColorPickerMainColor"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r8.addSubItem(r2, r13)
             org.telegram.ui.ActionBar.ActionBarMenuItem r8 = r0.dropDownContainer
-            r13 = 2131624813(0x7f0e036d, float:1.8876816E38)
+            r13 = 2131624818(0x7f0e0372, float:1.8876826E38)
             java.lang.String r14 = "ColorPickerBackground"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r8.addSubItem(r9, r13)
             org.telegram.ui.ActionBar.ActionBarMenuItem r8 = r0.dropDownContainer
-            r13 = 2131624815(0x7f0e036f, float:1.887682E38)
+            r13 = 2131624820(0x7f0e0374, float:1.887683E38)
             java.lang.String r14 = "ColorPickerMyMessages"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r8.addSubItem(r12, r13)
@@ -725,12 +725,12 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             android.graphics.Typeface r12 = org.telegram.messenger.AndroidUtilities.getTypeface(r11)
             r8.setTypeface(r12)
             android.widget.TextView r8 = r0.dropDown
-            r12 = 2131624814(0x7f0e036e, float:1.8876818E38)
+            r12 = 2131624819(0x7f0e0373, float:1.8876828E38)
             java.lang.String r13 = "ColorPickerMainColor"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             r8.setText(r12)
             android.content.res.Resources r8 = r34.getResources()
-            r12 = 2131165450(0x7var_a, float:1.7945117E38)
+            r12 = 2131165462(0x7var_, float:1.7945142E38)
             android.graphics.drawable.Drawable r8 = r8.getDrawable(r12)
             android.graphics.drawable.Drawable r8 = r8.mutate()
             android.graphics.PorterDuffColorFilter r12 = new android.graphics.PorterDuffColorFilter
@@ -934,7 +934,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             int r8 = org.telegram.ui.ActionBar.Theme.getColor(r10)
             r6.setTextColor(r8)
             android.widget.TextView r6 = r0.bottomOverlayChatText
-            r8 = 2131626880(0x7f0e0b80, float:1.8881009E38)
+            r8 = 2131626885(0x7f0e0b85, float:1.8881019E38)
             java.lang.String r12 = "SetBackground"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r12, r8)
             r6.setText(r8)
@@ -947,7 +947,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             android.graphics.Rect r6 = new android.graphics.Rect
             r6.<init>()
             android.content.res.Resources r8 = r34.getResources()
-            r12 = 2131165889(0x7var_c1, float:1.7946008E38)
+            r12 = 2131165905(0x7var_d1, float:1.794604E38)
             android.graphics.drawable.Drawable r8 = r8.getDrawable(r12)
             android.graphics.drawable.Drawable r8 = r8.mutate()
             r0.sheetDrawable = r8
@@ -1278,7 +1278,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             r8.setTextColor(r9)
             android.widget.TextView[] r8 = r0.patternsCancelButton
             r8 = r8[r3]
-            r9 = 2131624540(0x7f0e025c, float:1.8876263E38)
+            r9 = 2131624545(0x7f0e0261, float:1.8876273E38)
             java.lang.String r10 = "Cancel"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             java.lang.String r9 = r9.toUpperCase()
@@ -1652,7 +1652,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r3.setPadding(r7, r4, r8, r4)
             android.widget.TextView r3 = r0.cancelButton
-            r7 = 2131624540(0x7f0e025c, float:1.8876263E38)
+            r7 = 2131624545(0x7f0e0261, float:1.8876273E38)
             java.lang.String r8 = "Cancel"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             java.lang.String r7 = r7.toUpperCase()
@@ -2597,21 +2597,21 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r1 = r7.getParentActivity()
             r0.<init>((android.content.Context) r1)
-            r1 = 2131626750(0x7f0e0afe, float:1.8880745E38)
+            r1 = 2131626755(0x7f0e0b03, float:1.8880755E38)
             java.lang.String r2 = "SaveChangesAlertTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
-            r1 = 2131626749(0x7f0e0afd, float:1.8880743E38)
+            r1 = 2131626754(0x7f0e0b02, float:1.8880753E38)
             java.lang.String r2 = "SaveChangesAlertText"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setMessage(r1)
-            r1 = 2131626748(0x7f0e0afc, float:1.888074E38)
+            r1 = 2131626753(0x7f0e0b01, float:1.8880751E38)
             java.lang.String r2 = "Save"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.-$$Lambda$ThemePreviewActivity$VhuCSQ0ekK36xL0S9AHA-K57wyo r2 = new org.telegram.ui.-$$Lambda$ThemePreviewActivity$VhuCSQ0ekK36xL0S9AHA-K57wyo
             r2.<init>()
             r0.setPositiveButton(r1, r2)
-            r1 = 2131626245(0x7f0e0905, float:1.887972E38)
+            r1 = 2131626250(0x7f0e090a, float:1.887973E38)
             java.lang.String r2 = "PassportDiscard"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.-$$Lambda$ThemePreviewActivity$6MCYHNXt8AHlTpbo4JBN0Y_054c r2 = new org.telegram.ui.-$$Lambda$ThemePreviewActivity$6MCYHNXt8AHlTpbo4JBN0Y_054c
@@ -3968,7 +3968,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
                 tLRPC$TL_message.to_id = tLRPC$TL_peerUser;
                 tLRPC$TL_peerUser.user_id = 0;
-                MessageObject messageObject = new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message, true);
+                MessageObject messageObject = new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message, true, false);
                 messageObject.eventId = 1;
                 messageObject.resetLayout();
                 this.messages.add(messageObject);
@@ -3988,7 +3988,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 TLRPC$TL_peerUser tLRPC$TL_peerUser2 = new TLRPC$TL_peerUser();
                 tLRPC$TL_message2.to_id = tLRPC$TL_peerUser2;
                 tLRPC$TL_peerUser2.user_id = UserConfig.getInstance(themePreviewActivity.currentAccount).getClientUserId();
-                MessageObject messageObject2 = new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message2, true);
+                MessageObject messageObject2 = new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message2, true, false);
                 messageObject2.eventId = 1;
                 messageObject2.resetLayout();
                 this.messages.add(messageObject2);
@@ -4017,7 +4017,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 TLRPC$TL_peerUser tLRPC$TL_peerUser3 = new TLRPC$TL_peerUser();
                 tLRPC$TL_message3.to_id = tLRPC$TL_peerUser3;
                 tLRPC$TL_peerUser3.user_id = 0;
-                MessageObject messageObject3 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message3, true);
+                MessageObject messageObject3 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message3, true, false);
                 TLRPC$TL_message tLRPC$TL_message4 = new TLRPC$TL_message();
                 String string = LocaleController.getString("NewThemePreviewLine3", NUM);
                 StringBuilder sb = new StringBuilder(string);
@@ -4043,7 +4043,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 TLRPC$TL_peerUser tLRPC$TL_peerUser4 = new TLRPC$TL_peerUser();
                 tLRPC$TL_message4.to_id = tLRPC$TL_peerUser4;
                 tLRPC$TL_peerUser4.user_id = 0;
-                MessageObject messageObject4 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message4, true);
+                MessageObject messageObject4 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message4, true, false);
                 messageObject4.resetLayout();
                 messageObject4.eventId = 1;
                 this.messages.add(messageObject4);
@@ -4060,7 +4060,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 TLRPC$TL_peerUser tLRPC$TL_peerUser5 = new TLRPC$TL_peerUser();
                 tLRPC$TL_message5.to_id = tLRPC$TL_peerUser5;
                 tLRPC$TL_peerUser5.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
-                MessageObject messageObject5 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message5, true);
+                MessageObject messageObject5 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message5, true, false);
                 messageObject5.customReplyName = LocaleController.getString("NewThemePreviewName", NUM);
                 messageObject5.eventId = 1;
                 messageObject5.resetLayout();
@@ -4091,7 +4091,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                 TLRPC$TL_peerUser tLRPC$TL_peerUser6 = new TLRPC$TL_peerUser();
                 tLRPC$TL_message6.to_id = tLRPC$TL_peerUser6;
                 tLRPC$TL_peerUser6.user_id = 0;
-                MessageObject messageObject6 = new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message6, true);
+                MessageObject messageObject6 = new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message6, true, false);
                 messageObject6.audioProgressSec = 1;
                 messageObject6.audioProgress = 0.3f;
                 messageObject6.useCustomPhoto = true;
@@ -4122,7 +4122,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     tLRPC$TL_message7.to_id = tLRPC$TL_peerChat;
                     tLRPC$TL_peerChat.chat_id = 1;
                     tLRPC$TL_message7.from_id = tLRPC$TL_user2.id;
-                    this.messages.add(new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message7, true));
+                    this.messages.add(new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message7, true, false));
                     TLRPC$TL_message tLRPC$TL_message8 = new TLRPC$TL_message();
                     tLRPC$TL_message8.message = "No.\nAnd every unnecessary ping of the dev delays the release for 10 days.\nEvery request for ETA delays the release for 2 weeks.";
                     tLRPC$TL_message8.date = i3;
@@ -4135,7 +4135,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     tLRPC$TL_message8.to_id = tLRPC$TL_peerChat2;
                     tLRPC$TL_peerChat2.chat_id = 1;
                     tLRPC$TL_message8.from_id = tLRPC$TL_user2.id;
-                    this.messages.add(new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message8, true));
+                    this.messages.add(new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message8, true, false));
                     TLRPC$TL_message tLRPC$TL_message9 = new TLRPC$TL_message();
                     tLRPC$TL_message9.message = "Is source code for Android coming anytime soon?";
                     tLRPC$TL_message9.date = currentTimeMillis + 600;
@@ -4148,7 +4148,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     tLRPC$TL_message9.to_id = tLRPC$TL_peerChat3;
                     tLRPC$TL_peerChat3.chat_id = 1;
                     tLRPC$TL_message9.from_id = tLRPC$TL_user.id;
-                    this.messages.add(new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message9, true));
+                    this.messages.add(new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message9, true, false));
                 } else {
                     TLRPC$TL_message tLRPC$TL_message10 = new TLRPC$TL_message();
                     tLRPC$TL_message10.message = LocaleController.getString("ThemePreviewLine1", NUM);
@@ -4163,7 +4163,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     TLRPC$TL_peerUser tLRPC$TL_peerUser7 = new TLRPC$TL_peerUser();
                     tLRPC$TL_message10.to_id = tLRPC$TL_peerUser7;
                     tLRPC$TL_peerUser7.user_id = 0;
-                    MessageObject messageObject7 = new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message10, true);
+                    MessageObject messageObject7 = new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message10, true, false);
                     TLRPC$TL_message tLRPC$TL_message11 = new TLRPC$TL_message();
                     tLRPC$TL_message11.message = LocaleController.getString("ThemePreviewLine2", NUM);
                     tLRPC$TL_message11.date = currentTimeMillis + 960;
@@ -4176,7 +4176,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     TLRPC$TL_peerUser tLRPC$TL_peerUser8 = new TLRPC$TL_peerUser();
                     tLRPC$TL_message11.to_id = tLRPC$TL_peerUser8;
                     tLRPC$TL_peerUser8.user_id = 0;
-                    this.messages.add(new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message11, true));
+                    this.messages.add(new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message11, true, false));
                     TLRPC$TL_message tLRPC$TL_message12 = new TLRPC$TL_message();
                     tLRPC$TL_message12.date = currentTimeMillis + 130;
                     tLRPC$TL_message12.dialog_id = 1;
@@ -4199,7 +4199,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     TLRPC$TL_peerUser tLRPC$TL_peerUser9 = new TLRPC$TL_peerUser();
                     tLRPC$TL_message12.to_id = tLRPC$TL_peerUser9;
                     tLRPC$TL_peerUser9.user_id = UserConfig.getInstance(themePreviewActivity.currentAccount).getClientUserId();
-                    this.messages.add(new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message12, true));
+                    this.messages.add(new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message12, true, false));
                     TLRPC$TL_message tLRPC$TL_message13 = new TLRPC$TL_message();
                     tLRPC$TL_message13.message = LocaleController.getString("ThemePreviewLine3", NUM);
                     tLRPC$TL_message13.date = i4;
@@ -4213,7 +4213,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     TLRPC$TL_peerUser tLRPC$TL_peerUser10 = new TLRPC$TL_peerUser();
                     tLRPC$TL_message13.to_id = tLRPC$TL_peerUser10;
                     tLRPC$TL_peerUser10.user_id = UserConfig.getInstance(themePreviewActivity.currentAccount).getClientUserId();
-                    MessageObject messageObject8 = new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message13, true);
+                    MessageObject messageObject8 = new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message13, true, false);
                     messageObject8.customReplyName = LocaleController.getString("ThemePreviewLine3Reply", NUM);
                     messageObject8.replyMessageObject = messageObject7;
                     this.messages.add(messageObject8);
@@ -4240,7 +4240,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     TLRPC$TL_peerUser tLRPC$TL_peerUser11 = new TLRPC$TL_peerUser();
                     tLRPC$TL_message14.to_id = tLRPC$TL_peerUser11;
                     tLRPC$TL_peerUser11.user_id = 0;
-                    MessageObject messageObject9 = new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message14, true);
+                    MessageObject messageObject9 = new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message14, true, false);
                     messageObject9.audioProgressSec = 1;
                     messageObject9.audioProgress = 0.3f;
                     messageObject9.useCustomPhoto = true;
@@ -4274,7 +4274,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
                     TLRPC$TL_peerUser tLRPC$TL_peerUser12 = new TLRPC$TL_peerUser();
                     tLRPC$TL_message15.to_id = tLRPC$TL_peerUser12;
                     tLRPC$TL_peerUser12.user_id = UserConfig.getInstance(themePreviewActivity.currentAccount).getClientUserId();
-                    MessageObject messageObject10 = new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message15, true);
+                    MessageObject messageObject10 = new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message15, true, false);
                     messageObject10.useCustomPhoto = true;
                     this.messages.add(messageObject10);
                 }
@@ -4283,7 +4283,7 @@ public class ThemePreviewActivity extends BaseFragment implements DownloadContro
             tLRPC$TL_message16.message = LocaleController.formatDateChat((long) currentTimeMillis);
             tLRPC$TL_message16.id = 0;
             tLRPC$TL_message16.date = currentTimeMillis;
-            MessageObject messageObject11 = new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message16, false);
+            MessageObject messageObject11 = new MessageObject(themePreviewActivity.currentAccount, tLRPC$TL_message16, false, false);
             messageObject11.type = 10;
             messageObject11.contentType = 1;
             messageObject11.isDateObject = true;

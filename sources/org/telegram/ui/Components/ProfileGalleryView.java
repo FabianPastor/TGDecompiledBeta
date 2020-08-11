@@ -35,7 +35,8 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
     /* access modifiers changed from: private */
     public final Callback callback;
     private TLRPC$ChatFull chatInfo;
-    private int currentAccount = UserConfig.selectedAccount;
+    /* access modifiers changed from: private */
+    public int currentAccount = UserConfig.selectedAccount;
     private final long dialogId;
     private final PointF downPoint = new PointF();
     /* access modifiers changed from: private */
@@ -115,6 +116,10 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                                 if (!allowStartAnimation) {
                                     imageReceiver.setAllowStartAnimation(true);
                                     imageReceiver.startAnimation();
+                                }
+                                ImageLocation imageLocation2 = (ImageLocation) ProfileGalleryView.this.videoLocations.get(realPosition2);
+                                if (imageLocation2 != null) {
+                                    FileLoader.getInstance(ProfileGalleryView.this.currentAccount).setForceStreamLoadingFile(imageLocation2.location, "mp4");
                                 }
                             } else if (allowStartAnimation) {
                                 AnimatedFileDrawable animation = imageReceiver.getAnimation();
@@ -1266,14 +1271,14 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                 }
 
                 public void destroyItem(ViewGroup viewGroup, int i, Object obj) {
-                    BackupImageView access$400 = ((Item) obj).imageView;
-                    if (access$400.getImageReceiver().hasStaticThumb()) {
-                        Drawable drawable = access$400.getImageReceiver().getDrawable();
+                    BackupImageView access$500 = ((Item) obj).imageView;
+                    if (access$500.getImageReceiver().hasStaticThumb()) {
+                        Drawable drawable = access$500.getImageReceiver().getDrawable();
                         if (drawable instanceof AnimatedFileDrawable) {
-                            ((AnimatedFileDrawable) drawable).removeSecondParentView(access$400);
+                            ((AnimatedFileDrawable) drawable).removeSecondParentView(access$500);
                         }
                     }
-                    viewGroup.removeView(access$400);
+                    viewGroup.removeView(access$500);
                 }
 
                 public CharSequence getPageTitle(int i) {

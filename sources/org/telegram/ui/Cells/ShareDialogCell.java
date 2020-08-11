@@ -154,7 +154,7 @@ public class ShareDialogCell extends FrameLayout {
         L_0x003f:
             int r8 = r6.currentAccount
             org.telegram.messenger.MessagesController r8 = org.telegram.messenger.MessagesController.getInstance(r8)
-            java.util.concurrent.ConcurrentHashMap<java.lang.Integer, java.lang.Integer> r8 = r8.onlinePrivacy
+            j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, java.lang.Integer> r8 = r8.onlinePrivacy
             org.telegram.tgnet.TLRPC$User r10 = r6.user
             int r10 = r10.id
             java.lang.Integer r10 = java.lang.Integer.valueOf(r10)

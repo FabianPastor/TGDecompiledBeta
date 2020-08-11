@@ -352,11 +352,11 @@ public class VideoTimelinePlayView extends View {
         if (this.mediaMetadataRetriever != null) {
             if (i == 0) {
                 this.frameHeight = AndroidUtilities.dp(40.0f);
-                this.framesToLoad = (getMeasuredWidth() - AndroidUtilities.dp(16.0f)) / this.frameHeight;
+                this.framesToLoad = Math.max(1, (getMeasuredWidth() - AndroidUtilities.dp(16.0f)) / this.frameHeight);
                 this.frameWidth = (int) Math.ceil((double) (((float) (getMeasuredWidth() - AndroidUtilities.dp(16.0f))) / ((float) this.framesToLoad)));
                 this.frameTimeOffset = this.videoLength / ((long) this.framesToLoad);
             }
-            AnonymousClass1 r0 = new AsyncTask<Integer, Integer, Bitmap>() {
+            AnonymousClass1 r1 = new AsyncTask<Integer, Integer, Bitmap>() {
                 private int frameNum = 0;
 
                 /* access modifiers changed from: protected */
@@ -407,8 +407,8 @@ public class VideoTimelinePlayView extends View {
                     }
                 }
             };
-            this.currentTask = r0;
-            r0.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Integer[]{Integer.valueOf(i), null, null});
+            this.currentTask = r1;
+            r1.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Integer[]{Integer.valueOf(i), null, null});
         }
     }
 

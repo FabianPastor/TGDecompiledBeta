@@ -17,6 +17,12 @@ import android.os.Handler;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.SparseArray;
+import j$.util.Comparator;
+import j$.util.concurrent.ConcurrentHashMap;
+import j$.util.function.Function;
+import j$.util.function.ToDoubleFunction;
+import j$.util.function.ToIntFunction;
+import j$.util.function.ToLongFunction;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,7 +30,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -89,7 +94,7 @@ public class ContactsController extends BaseController {
     public HashMap<String, Contact> contactsBookSPhones = new HashMap<>();
     public HashMap<String, TLRPC$TL_contact> contactsByPhone = new HashMap<>();
     public HashMap<String, TLRPC$TL_contact> contactsByShortPhone = new HashMap<>();
-    public ConcurrentHashMap<Integer, TLRPC$TL_contact> contactsDict = new ConcurrentHashMap<>(20, 1.0f, 2);
+    public ConcurrentHashMap<Integer, TLRPC$TL_contact> contactsDict = new ConcurrentHashMap(20, 1.0f, 2);
     public boolean contactsLoaded;
     private boolean contactsSyncInProgress;
     private ArrayList<Integer> delayedContactsUpdate = new ArrayList<>();
@@ -611,7 +616,7 @@ public class ContactsController extends BaseController {
             r0.clear()
             java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_contact> r0 = r12.contacts
             r0.clear()
-            java.util.concurrent.ConcurrentHashMap<java.lang.Integer, org.telegram.tgnet.TLRPC$TL_contact> r0 = r12.contactsDict
+            j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, org.telegram.tgnet.TLRPC$TL_contact> r0 = r12.contactsDict
             r0.clear()
             java.util.HashMap<java.lang.String, java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_contact>> r0 = r12.usersSectionsDict
             r0.clear()
@@ -953,7 +958,7 @@ public class ContactsController extends BaseController {
             r1 = 0
             java.lang.Integer r2 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x01eb }
             r0.add(r2)     // Catch:{ all -> 0x01eb }
-            r0 = 2131626472(0x7f0e09e8, float:1.8880181E38)
+            r0 = 2131626477(0x7f0e09ed, float:1.8880191E38)
             java.lang.String r1 = "PhoneMobile"
             if (r14 != 0) goto L_0x0182
             r2 = 3
@@ -972,7 +977,7 @@ public class ContactsController extends BaseController {
             if (r14 != r2) goto L_0x0194
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneHome"
-            r3 = 2131626470(0x7f0e09e6, float:1.8880177E38)
+            r3 = 2131626475(0x7f0e09eb, float:1.8880187E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
             goto L_0x01d4
@@ -988,7 +993,7 @@ public class ContactsController extends BaseController {
             if (r14 != r0) goto L_0x01b3
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneWork"
-            r3 = 2131626480(0x7f0e09f0, float:1.8880197E38)
+            r3 = 2131626485(0x7f0e09f5, float:1.8880208E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
             goto L_0x01d4
@@ -997,14 +1002,14 @@ public class ContactsController extends BaseController {
             if (r14 != r0) goto L_0x01c6
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneMain"
-            r3 = 2131626471(0x7f0e09e7, float:1.888018E38)
+            r3 = 2131626476(0x7f0e09ec, float:1.888019E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
             goto L_0x01d4
         L_0x01c6:
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneOther"
-            r3 = 2131626479(0x7f0e09ef, float:1.8880195E38)
+            r3 = 2131626484(0x7f0e09f4, float:1.8880205E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
         L_0x01d4:
@@ -2574,6 +2579,34 @@ public class ContactsController extends BaseController {
             public final int compare(Object obj, Object obj2) {
                 return UserObject.getFirstName((TLRPC$User) this.f$0.get(((TLRPC$TL_contact) obj).user_id)).compareTo(UserObject.getFirstName((TLRPC$User) this.f$0.get(((TLRPC$TL_contact) obj2).user_id)));
             }
+
+            public /* synthetic */ Comparator<T> reversed() {
+                return Comparator.CC.$default$reversed(this);
+            }
+
+            public /* synthetic */ <U extends Comparable<? super U>> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function) {
+                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (Function) function);
+            }
+
+            public /* synthetic */ <U> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function, java.util.Comparator<? super U> comparator) {
+                return Comparator.CC.$default$thenComparing(this, function, comparator);
+            }
+
+            public /* synthetic */ java.util.Comparator<T> thenComparing(java.util.Comparator<? super T> comparator) {
+                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (java.util.Comparator) comparator);
+            }
+
+            public /* synthetic */ java.util.Comparator<T> thenComparingDouble(ToDoubleFunction<? super T> toDoubleFunction) {
+                return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
+            }
+
+            public /* synthetic */ java.util.Comparator<T> thenComparingInt(ToIntFunction<? super T> toIntFunction) {
+                return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
+            }
+
+            public /* synthetic */ java.util.Comparator<T> thenComparingLong(ToLongFunction<? super T> toLongFunction) {
+                return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
+            }
         });
         ConcurrentHashMap concurrentHashMap = new ConcurrentHashMap(20, 1.0f, 2);
         HashMap hashMap3 = new HashMap();
@@ -2935,9 +2968,37 @@ public class ContactsController extends BaseController {
     private void buildContactsSectionsArrays(boolean z) {
         String str;
         if (z) {
-            Collections.sort(this.contacts, new Comparator() {
+            Collections.sort(this.contacts, new java.util.Comparator() {
                 public final int compare(Object obj, Object obj2) {
                     return ContactsController.this.lambda$buildContactsSectionsArrays$41$ContactsController((TLRPC$TL_contact) obj, (TLRPC$TL_contact) obj2);
+                }
+
+                public /* synthetic */ java.util.Comparator<T> reversed() {
+                    return Comparator.CC.$default$reversed(this);
+                }
+
+                public /* synthetic */ <U extends Comparable<? super U>> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function) {
+                    return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (Function) function);
+                }
+
+                public /* synthetic */ <U> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function, java.util.Comparator<? super U> comparator) {
+                    return Comparator.CC.$default$thenComparing(this, function, comparator);
+                }
+
+                public /* synthetic */ java.util.Comparator<T> thenComparing(java.util.Comparator<? super T> comparator) {
+                    return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (java.util.Comparator) comparator);
+                }
+
+                public /* synthetic */ java.util.Comparator<T> thenComparingDouble(ToDoubleFunction<? super T> toDoubleFunction) {
+                    return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
+                }
+
+                public /* synthetic */ java.util.Comparator<T> thenComparingInt(ToIntFunction<? super T> toIntFunction) {
+                    return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
+                }
+
+                public /* synthetic */ java.util.Comparator<T> thenComparingLong(ToLongFunction<? super T> toLongFunction) {
+                    return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
                 }
             });
         }
@@ -3180,7 +3241,7 @@ public class ContactsController extends BaseController {
             }
             TLRPC$TL_contact tLRPC$TL_contact2 = arrayList2.get(i2);
             if (concurrentHashMap != null) {
-                tLRPC$User = concurrentHashMap.get(Integer.valueOf(tLRPC$TL_contact2.user_id));
+                tLRPC$User = (TLRPC$User) concurrentHashMap.get(Integer.valueOf(tLRPC$TL_contact2.user_id));
             }
             if (tLRPC$User == null) {
                 tLRPC$User = getMessagesController().getUser(Integer.valueOf(tLRPC$TL_contact2.user_id));
@@ -3214,7 +3275,7 @@ public class ContactsController extends BaseController {
                     ContactsController.this.lambda$applyContactsUpdates$44$ContactsController(this.f$1);
                 }
             });
-            TLRPC$User tLRPC$User2 = concurrentHashMap != null ? concurrentHashMap.get(num2) : null;
+            TLRPC$User tLRPC$User2 = concurrentHashMap != null ? (TLRPC$User) concurrentHashMap.get(num2) : null;
             if (tLRPC$User2 == null) {
                 tLRPC$User2 = getMessagesController().getUser(num2);
             } else {
@@ -3277,7 +3338,7 @@ public class ContactsController extends BaseController {
         }
         for (int i2 = 0; i2 < arrayList2.size(); i2++) {
             Integer num = (Integer) arrayList2.get(i2);
-            TLRPC$TL_contact tLRPC$TL_contact2 = this.contactsDict.get(num);
+            TLRPC$TL_contact tLRPC$TL_contact2 = (TLRPC$TL_contact) this.contactsDict.get(num);
             if (tLRPC$TL_contact2 != null) {
                 this.contacts.remove(tLRPC$TL_contact2);
                 this.contactsDict.remove(num);
@@ -3604,7 +3665,7 @@ public class ContactsController extends BaseController {
         boolean z = false;
         while (it.hasNext()) {
             TLRPC$User tLRPC$User = (TLRPC$User) it.next();
-            TLRPC$TL_contact tLRPC$TL_contact = this.contactsDict.get(Integer.valueOf(tLRPC$User.id));
+            TLRPC$TL_contact tLRPC$TL_contact = (TLRPC$TL_contact) this.contactsDict.get(Integer.valueOf(tLRPC$User.id));
             if (tLRPC$TL_contact != null) {
                 this.contacts.remove(tLRPC$TL_contact);
                 this.contactsDict.remove(Integer.valueOf(tLRPC$User.id));

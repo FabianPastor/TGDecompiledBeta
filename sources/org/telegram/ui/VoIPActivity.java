@@ -67,7 +67,8 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.voip.EncryptionKeyEmojifier;
-import org.telegram.messenger.voip.TgVoip;
+import org.telegram.messenger.voip.Instance;
+import org.telegram.messenger.voip.VideoCameraCapturer;
 import org.telegram.messenger.voip.VoIPBaseService;
 import org.telegram.messenger.voip.VoIPService;
 import org.telegram.tgnet.TLRPC$MessageEntity;
@@ -92,6 +93,11 @@ import org.telegram.ui.Components.voip.DarkTheme;
 import org.telegram.ui.Components.voip.FabBackgroundDrawable;
 import org.telegram.ui.Components.voip.VoIPHelper;
 import org.telegram.ui.VoIPActivity;
+import org.webrtc.EglBase;
+import org.webrtc.GlRectDrawer;
+import org.webrtc.RendererCommon;
+import org.webrtc.TextureViewRenderer;
+import org.webrtc.VideoSink;
 
 public class VoIPActivity extends Activity implements VoIPBaseService.StateListener, NotificationCenter.NotificationCenterDelegate {
     /* access modifiers changed from: private */
@@ -155,11 +161,13 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
     public boolean isIncomingWaiting;
     private ImageView[] keyEmojiViews = new ImageView[4];
     private String lastStateText;
+    private TextureViewRenderer localRenderer;
     private CheckableImageView micToggle;
     /* access modifiers changed from: private */
     public TextView nameText;
     /* access modifiers changed from: private */
     public BackupImageView photoView;
+    private TextureViewRenderer remoteRenderer;
     /* access modifiers changed from: private */
     public AnimatorSet retryAnim;
     /* access modifiers changed from: private */
@@ -183,6 +191,15 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
     public Runnable tooltipHider;
     /* access modifiers changed from: private */
     public TLRPC$User user;
+
+    public void onCameraSwitch(boolean z) {
+    }
+
+    public void onMediaStateUpdated(int i, int i2) {
+    }
+
+    public void onVideoAvailableChange(boolean z) {
+    }
 
     /* access modifiers changed from: protected */
     public void onCreate(Bundle bundle) {
@@ -512,6 +529,18 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
         imageView2.setScaleType(ImageView.ScaleType.CENTER_CROP);
         this.blurOverlayView2.setAlpha(0.0f);
         r7.addView(this.blurOverlayView2);
+        TextureViewRenderer textureViewRenderer = new TextureViewRenderer(this);
+        this.remoteRenderer = textureViewRenderer;
+        textureViewRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FILL);
+        this.remoteRenderer.setEnableHardwareScaler(true);
+        this.remoteRenderer.setFpsReduction(30.0f);
+        r7.addView(this.remoteRenderer, LayoutHelper.createFrame(-1, -1, 51));
+        TextureViewRenderer textureViewRenderer2 = new TextureViewRenderer(this);
+        this.localRenderer = textureViewRenderer2;
+        textureViewRenderer2.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT);
+        this.localRenderer.setEnableHardwareScaler(true);
+        this.localRenderer.setFpsReduction(60.0f);
+        r7.addView(this.localRenderer, LayoutHelper.createFrame(-2, 144.0f, 85, 14.0f, 14.0f, 14.0f, 14.0f));
         TextView textView = new TextView(this);
         textView.setTextColor(-NUM);
         textView.setText(LocaleController.getString("VoipInCallBranding", NUM));
@@ -768,7 +797,60 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
         });
         r7.setClipChildren(false);
         this.content = r7;
+        ImageView imageView8 = new ImageView(this);
+        imageView8.setImageResource(NUM);
+        r7.addView(imageView8, LayoutHelper.createFrame(50, 50, 17));
+        imageView8.setOnClickListener(new View.OnClickListener() {
+            public final void onClick(View view) {
+                VoIPActivity.this.lambda$createContentView$3$VoIPActivity(view);
+            }
+        });
+        ImageView imageView9 = new ImageView(this);
+        imageView9.setImageResource(NUM);
+        r7.addView(imageView9, LayoutHelper.createFrame(50, 50.0f, 17, 100.0f, 0.0f, 0.0f, 0.0f));
+        imageView9.setOnClickListener($$Lambda$VoIPActivity$OIcj5BKdqzQQjQMqayy_thnzloE.INSTANCE);
+        VoIPService sharedInstance = VoIPService.getSharedInstance();
+        if (sharedInstance != null) {
+            sharedInstance.setSinks(this.localRenderer, this.remoteRenderer);
+        }
         return r7;
+    }
+
+    public /* synthetic */ void lambda$createContentView$3$VoIPActivity(View view) {
+        VoIPService sharedInstance = VoIPService.getSharedInstance();
+        if (sharedInstance != null) {
+            sharedInstance.requestVideoCall();
+            sharedInstance.setSinks(this.localRenderer, this.remoteRenderer);
+        }
+    }
+
+    static /* synthetic */ void lambda$createContentView$4(View view) {
+        VoIPService sharedInstance = VoIPService.getSharedInstance();
+        if (sharedInstance != null) {
+            sharedInstance.switchCamera();
+        }
+    }
+
+    /* access modifiers changed from: protected */
+    public void onStart() {
+        super.onStart();
+        VideoCameraCapturer.getInstance();
+        if (VideoCameraCapturer.eglBase == null) {
+            VideoCameraCapturer.eglBase = EglBase.CC.create((EglBase.Context) null, EglBase.CONFIG_PLAIN);
+        }
+        this.localRenderer.init(VideoCameraCapturer.eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
+        this.remoteRenderer.init(VideoCameraCapturer.eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null, EglBase.CONFIG_PLAIN, new GlRectDrawer());
+    }
+
+    /* access modifiers changed from: protected */
+    public void onStop() {
+        super.onStop();
+        VoIPService sharedInstance = VoIPService.getSharedInstance();
+        if (sharedInstance != null) {
+            sharedInstance.setSinks((VideoSink) null, (VideoSink) null);
+        }
+        this.localRenderer.release();
+        this.remoteRenderer.release();
     }
 
     @SuppressLint({"ObjectAnimatorBinding"})
@@ -833,7 +915,7 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
                 public void run() {
                     VoIPActivity.this.finish();
                 }
-            });
+            }, i);
         } else {
             this.acceptSwipe.reset();
         }
@@ -941,7 +1023,7 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
 
     /* access modifiers changed from: private */
     public String getDebugTitle() {
-        String version = TgVoip.getVersion();
+        String version = Instance.getVersion();
         if (version == null) {
             return "libtgvoip";
         }
@@ -1630,12 +1712,12 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
             }
 
             public final void run() {
-                VoIPActivity.this.lambda$sendTextMessage$3$VoIPActivity(this.f$1);
+                VoIPActivity.this.lambda$sendTextMessage$5$VoIPActivity(this.f$1);
             }
         });
     }
 
-    public /* synthetic */ void lambda$sendTextMessage$3$VoIPActivity(String str) {
+    public /* synthetic */ void lambda$sendTextMessage$5$VoIPActivity(String str) {
         SendMessagesHelper.getInstance(this.currentAccount).sendMessage(str, (long) this.user.id, (MessageObject) null, (TLRPC$WebPage) null, false, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
     }
 
@@ -1652,11 +1734,11 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
             getWindow().setNavigationBarColor(-13948117);
             bottomSheet.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 public final void onDismiss(DialogInterface dialogInterface) {
-                    VoIPActivity.this.lambda$showMessagesSheet$4$VoIPActivity(dialogInterface);
+                    VoIPActivity.this.lambda$showMessagesSheet$6$VoIPActivity(dialogInterface);
                 }
             });
         }
-        $$Lambda$VoIPActivity$vv9zFeTuMzmokkSgVZMX6jmBDQ r8 = new View.OnClickListener(bottomSheet) {
+        $$Lambda$VoIPActivity$bfllivoCLASSNAMEATN9M_aPx6spWks r8 = new View.OnClickListener(bottomSheet) {
             public final /* synthetic */ BottomSheet f$1;
 
             {
@@ -1664,7 +1746,7 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
             }
 
             public final void onClick(View view) {
-                VoIPActivity.this.lambda$showMessagesSheet$6$VoIPActivity(this.f$1, view);
+                VoIPActivity.this.lambda$showMessagesSheet$8$VoIPActivity(this.f$1, view);
             }
         };
         for (int i = 0; i < 4; i++) {
@@ -1716,7 +1798,7 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
             }
 
             public final void onClick(View view) {
-                VoIPActivity.this.lambda$showMessagesSheet$7$VoIPActivity(this.f$1, this.f$2, view);
+                VoIPActivity.this.lambda$showMessagesSheet$9$VoIPActivity(this.f$1, this.f$2, view);
             }
         });
         imageView.setVisibility(4);
@@ -1736,7 +1818,7 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
             }
 
             public final void onClick(View view) {
-                VoIPActivity.this.lambda$showMessagesSheet$8$VoIPActivity(this.f$1, this.f$2, this.f$3, view);
+                VoIPActivity.this.lambda$showMessagesSheet$10$VoIPActivity(this.f$1, this.f$2, this.f$3, view);
             }
         });
         editTextBoldCursor.addTextChangedListener(new TextWatcher(this) {
@@ -1786,7 +1868,7 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
             }
 
             public final void onClick(View view) {
-                VoIPActivity.this.lambda$showMessagesSheet$9$VoIPActivity(this.f$1, this.f$2, this.f$3, view);
+                VoIPActivity.this.lambda$showMessagesSheet$11$VoIPActivity(this.f$1, this.f$2, this.f$3, view);
             }
         });
         linearLayout.addView(frameLayout);
@@ -1795,11 +1877,11 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
         bottomSheet.show();
     }
 
-    public /* synthetic */ void lambda$showMessagesSheet$4$VoIPActivity(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$showMessagesSheet$6$VoIPActivity(DialogInterface dialogInterface) {
         getWindow().setNavigationBarColor(0);
     }
 
-    public /* synthetic */ void lambda$showMessagesSheet$6$VoIPActivity(BottomSheet bottomSheet, View view) {
+    public /* synthetic */ void lambda$showMessagesSheet$8$VoIPActivity(BottomSheet bottomSheet, View view) {
         bottomSheet.dismiss();
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().declineIncomingCall(4, new Runnable(view) {
@@ -1810,17 +1892,17 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
                 }
 
                 public final void run() {
-                    VoIPActivity.this.lambda$null$5$VoIPActivity(this.f$1);
+                    VoIPActivity.this.lambda$null$7$VoIPActivity(this.f$1);
                 }
             });
         }
     }
 
-    public /* synthetic */ void lambda$null$5$VoIPActivity(View view) {
+    public /* synthetic */ void lambda$null$7$VoIPActivity(View view) {
         sendTextMessage((String) view.getTag());
     }
 
-    public /* synthetic */ void lambda$showMessagesSheet$7$VoIPActivity(final EditTextBoldCursor editTextBoldCursor, BottomSheet bottomSheet, View view) {
+    public /* synthetic */ void lambda$showMessagesSheet$9$VoIPActivity(final EditTextBoldCursor editTextBoldCursor, BottomSheet bottomSheet, View view) {
         if (editTextBoldCursor.length() != 0) {
             bottomSheet.dismiss();
             if (VoIPService.getSharedInstance() != null) {
@@ -1833,14 +1915,14 @@ public class VoIPActivity extends Activity implements VoIPBaseService.StateListe
         }
     }
 
-    public /* synthetic */ void lambda$showMessagesSheet$8$VoIPActivity(FrameLayout frameLayout, BottomSheet.BottomSheetCell bottomSheetCell, EditTextBoldCursor editTextBoldCursor, View view) {
+    public /* synthetic */ void lambda$showMessagesSheet$10$VoIPActivity(FrameLayout frameLayout, BottomSheet.BottomSheetCell bottomSheetCell, EditTextBoldCursor editTextBoldCursor, View view) {
         frameLayout.setVisibility(8);
         bottomSheetCell.setVisibility(0);
         editTextBoldCursor.setText("");
         ((InputMethodManager) getSystemService("input_method")).hideSoftInputFromWindow(editTextBoldCursor.getWindowToken(), 0);
     }
 
-    public /* synthetic */ void lambda$showMessagesSheet$9$VoIPActivity(FrameLayout frameLayout, BottomSheet.BottomSheetCell bottomSheetCell, EditTextBoldCursor editTextBoldCursor, View view) {
+    public /* synthetic */ void lambda$showMessagesSheet$11$VoIPActivity(FrameLayout frameLayout, BottomSheet.BottomSheetCell bottomSheetCell, EditTextBoldCursor editTextBoldCursor, View view) {
         frameLayout.setVisibility(0);
         bottomSheetCell.setVisibility(4);
         editTextBoldCursor.requestFocus();

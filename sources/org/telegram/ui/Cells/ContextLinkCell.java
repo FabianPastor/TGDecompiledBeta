@@ -1086,7 +1086,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
                 sb2.append(ImageLoader.getHttpUrlExtension(str7, str3));
                 tLRPC$TL_message.attachPath = new File(directory, sb2.toString()).getAbsolutePath();
             }
-            this.currentMessageObject = new MessageObject(this.currentAccount, tLRPC$TL_message, false);
+            this.currentMessageObject = new MessageObject(this.currentAccount, tLRPC$TL_message, false, true);
         }
     }
 
