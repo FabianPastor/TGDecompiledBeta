@@ -39,6 +39,7 @@ public class DrawerLayoutContainer extends FrameLayout {
     private ViewGroup drawerLayout;
     private boolean drawerOpened;
     private float drawerPosition;
+    private boolean firstLayout = true;
     private boolean hasCutout;
     private boolean inLayout;
     private Object lastInsets;
@@ -81,16 +82,17 @@ public class DrawerLayoutContainer extends FrameLayout {
             drawerLayoutContainer.requestLayout();
         }
         int systemWindowInsetTop = windowInsets.getSystemWindowInsetTop();
-        if ((systemWindowInsetTop != 0 || AndroidUtilities.isInMultiwindow) && AndroidUtilities.statusBarHeight != systemWindowInsetTop) {
+        if ((systemWindowInsetTop != 0 || AndroidUtilities.isInMultiwindow || this.firstLayout) && AndroidUtilities.statusBarHeight != systemWindowInsetTop) {
             AndroidUtilities.statusBarHeight = systemWindowInsetTop;
         }
+        boolean z = false;
+        this.firstLayout = false;
         this.lastInsets = windowInsets;
-        boolean z = true;
         drawerLayoutContainer.setWillNotDraw(windowInsets.getSystemWindowInsetTop() <= 0 && getBackground() == null);
         if (Build.VERSION.SDK_INT >= 28) {
             DisplayCutout displayCutout = windowInsets.getDisplayCutout();
-            if (displayCutout == null || displayCutout.getBoundingRects().size() == 0) {
-                z = false;
+            if (!(displayCutout == null || displayCutout.getBoundingRects().size() == 0)) {
+                z = true;
             }
             this.hasCutout = z;
         }

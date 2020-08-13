@@ -28,6 +28,7 @@ public class EglRenderer implements VideoSink {
     public EglBase eglBase;
     private final EglSurfaceCreation eglSurfaceCreationRunnable;
     private volatile ErrorCallback errorCallback;
+    private boolean firstFrameRendered;
     private final Object fpsReductionLock;
     private final VideoFrameDrawer frameDrawer;
     private final ArrayList<FrameListenerAndParams> frameListeners;
@@ -61,6 +62,10 @@ public class EglRenderer implements VideoSink {
 
     public interface FrameListener {
         void onFrame(Bitmap bitmap);
+    }
+
+    /* access modifiers changed from: protected */
+    public void onFirstFrameRendered() {
     }
 
     private static class FrameListenerAndParams {
@@ -156,6 +161,7 @@ public class EglRenderer implements VideoSink {
                 logD("Initializing EglRenderer");
                 this.drawer = glDrawer;
                 this.usePresentationTimeStamp = z;
+                this.firstFrameRendered = false;
                 HandlerThread handlerThread = new HandlerThread(this.name + "EglRenderer");
                 handlerThread.start();
                 HandlerWithExceptionCallback handlerWithExceptionCallback = new HandlerWithExceptionCallback(handlerThread.getLooper(), new Runnable() {
@@ -646,7 +652,7 @@ public class EglRenderer implements VideoSink {
 
     /* access modifiers changed from: private */
     /* JADX WARNING: Code restructure failed: missing block: B:10:0x0011, code lost:
-        if (r0 == null) goto L_0x0137;
+        if (r0 == null) goto L_0x0140;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:12:0x0017, code lost:
         if (r0.hasSurface() != false) goto L_0x001b;
@@ -746,7 +752,7 @@ public class EglRenderer implements VideoSink {
         r14.drawMatrix.preTranslate(-0.5f, -0.5f);
      */
     /* JADX WARNING: Code restructure failed: missing block: B:47:0x00af, code lost:
-        if (r11 == false) goto L_0x0106;
+        if (r11 == false) goto L_0x010f;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:49:?, code lost:
         android.opengl.GLES20.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -763,62 +769,69 @@ public class EglRenderer implements VideoSink {
     /* JADX WARNING: Code restructure failed: missing block: B:52:0x00e3, code lost:
         r14.eglBase.swapBuffers();
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:53:0x00e8, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:54:0x00ea, code lost:
+        if (r14.firstFrameRendered != false) goto L_0x00f1;
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:55:0x00ec, code lost:
+        r14.firstFrameRendered = true;
+        onFirstFrameRendered();
+     */
+    /* JADX WARNING: Code restructure failed: missing block: B:56:0x00f1, code lost:
         r4 = java.lang.System.nanoTime();
         r0 = r14.statisticsLock;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:54:0x00ee, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:57:0x00f7, code lost:
         monitor-enter(r0);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:56:?, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:59:?, code lost:
         r14.framesRendered++;
         r14.renderTimeNs += r4 - r12;
         r14.renderSwapBufferTimeNs += r4 - r2;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:57:0x0101, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:60:0x010a, code lost:
         monitor-exit(r0);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:63:0x0106, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:66:0x010f, code lost:
         notifyCallbacks(r1, r11);
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:64:0x0109, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:67:0x0112, code lost:
         r1.release();
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:65:0x010d, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:68:0x0116, code lost:
         r0 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:66:0x010f, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:69:0x0118, code lost:
         r0 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:69:?, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:72:?, code lost:
         logE("Error while drawing frame", r0);
         r0 = r14.errorCallback;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:70:0x0117, code lost:
-        if (r0 != null) goto L_0x0119;
+    /* JADX WARNING: Code restructure failed: missing block: B:73:0x0120, code lost:
+        if (r0 != null) goto L_0x0122;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:71:0x0119, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:74:0x0122, code lost:
         r0.onGlOutOfMemory();
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:72:0x011c, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:75:0x0125, code lost:
         r14.drawer.release();
         r14.frameDrawer.release();
         r14.bitmapTextureFramebuffer.release();
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:73:0x012c, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:76:0x0135, code lost:
         return;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:74:0x012d, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:77:0x0136, code lost:
         r1.release();
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:75:0x0130, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:78:0x0139, code lost:
         throw r0;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:84:0x0137, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:87:0x0140, code lost:
         logD("Dropping frame - No surface");
         r1.release();
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:85:0x013f, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:88:0x0148, code lost:
         return;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:9:0x000f, code lost:
@@ -830,24 +843,24 @@ public class EglRenderer implements VideoSink {
             r14 = this;
             java.lang.Object r0 = r14.frameLock
             monitor-enter(r0)
-            org.webrtc.VideoFrame r1 = r14.pendingFrame     // Catch:{ all -> 0x0140 }
+            org.webrtc.VideoFrame r1 = r14.pendingFrame     // Catch:{ all -> 0x0149 }
             if (r1 != 0) goto L_0x0009
-            monitor-exit(r0)     // Catch:{ all -> 0x0140 }
+            monitor-exit(r0)     // Catch:{ all -> 0x0149 }
             return
         L_0x0009:
-            org.webrtc.VideoFrame r1 = r14.pendingFrame     // Catch:{ all -> 0x0140 }
+            org.webrtc.VideoFrame r1 = r14.pendingFrame     // Catch:{ all -> 0x0149 }
             r2 = 0
-            r14.pendingFrame = r2     // Catch:{ all -> 0x0140 }
-            monitor-exit(r0)     // Catch:{ all -> 0x0140 }
+            r14.pendingFrame = r2     // Catch:{ all -> 0x0149 }
+            monitor-exit(r0)     // Catch:{ all -> 0x0149 }
             org.webrtc.EglBase r0 = r14.eglBase
-            if (r0 == 0) goto L_0x0137
+            if (r0 == 0) goto L_0x0140
             boolean r0 = r0.hasSurface()
             if (r0 != 0) goto L_0x001b
-            goto L_0x0137
+            goto L_0x0140
         L_0x001b:
             java.lang.Object r0 = r14.fpsReductionLock
             monitor-enter(r0)
-            long r2 = r14.minRenderPeriodNs     // Catch:{ all -> 0x0134 }
+            long r2 = r14.minRenderPeriodNs     // Catch:{ all -> 0x013d }
             r4 = 9223372036854775807(0x7fffffffffffffff, double:NaN)
             r6 = 0
             r10 = 1
@@ -857,7 +870,7 @@ public class EglRenderer implements VideoSink {
             r11 = 0
             goto L_0x0055
         L_0x002d:
-            long r2 = r14.minRenderPeriodNs     // Catch:{ all -> 0x0134 }
+            long r2 = r14.minRenderPeriodNs     // Catch:{ all -> 0x013d }
             r4 = 0
             int r7 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
             if (r7 > 0) goto L_0x0037
@@ -865,23 +878,23 @@ public class EglRenderer implements VideoSink {
             r11 = 1
             goto L_0x0055
         L_0x0037:
-            long r2 = java.lang.System.nanoTime()     // Catch:{ all -> 0x0134 }
-            long r4 = r14.nextFrameTimeNs     // Catch:{ all -> 0x0134 }
+            long r2 = java.lang.System.nanoTime()     // Catch:{ all -> 0x013d }
+            long r4 = r14.nextFrameTimeNs     // Catch:{ all -> 0x013d }
             int r7 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
             if (r7 >= 0) goto L_0x0047
             java.lang.String r2 = "Skipping frame rendering - fps reduction is active."
-            r14.logD(r2)     // Catch:{ all -> 0x0134 }
+            r14.logD(r2)     // Catch:{ all -> 0x013d }
             goto L_0x002b
         L_0x0047:
-            long r4 = r14.nextFrameTimeNs     // Catch:{ all -> 0x0134 }
-            long r6 = r14.minRenderPeriodNs     // Catch:{ all -> 0x0134 }
+            long r4 = r14.nextFrameTimeNs     // Catch:{ all -> 0x013d }
+            long r6 = r14.minRenderPeriodNs     // Catch:{ all -> 0x013d }
             long r4 = r4 + r6
-            r14.nextFrameTimeNs = r4     // Catch:{ all -> 0x0134 }
-            long r2 = java.lang.Math.max(r4, r2)     // Catch:{ all -> 0x0134 }
-            r14.nextFrameTimeNs = r2     // Catch:{ all -> 0x0134 }
+            r14.nextFrameTimeNs = r4     // Catch:{ all -> 0x013d }
+            long r2 = java.lang.Math.max(r4, r2)     // Catch:{ all -> 0x013d }
+            r14.nextFrameTimeNs = r2     // Catch:{ all -> 0x013d }
             goto L_0x0035
         L_0x0055:
-            monitor-exit(r0)     // Catch:{ all -> 0x0134 }
+            monitor-exit(r0)     // Catch:{ all -> 0x013d }
             long r12 = java.lang.System.nanoTime()
             int r0 = r1.getRotatedWidth()
             float r0 = (float) r0
@@ -890,16 +903,16 @@ public class EglRenderer implements VideoSink {
             float r0 = r0 / r2
             java.lang.Object r2 = r14.layoutLock
             monitor-enter(r2)
-            float r3 = r14.layoutAspectRatio     // Catch:{ all -> 0x0131 }
+            float r3 = r14.layoutAspectRatio     // Catch:{ all -> 0x013a }
             r4 = 0
             int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
             if (r3 == 0) goto L_0x0072
-            float r3 = r14.layoutAspectRatio     // Catch:{ all -> 0x0131 }
+            float r3 = r14.layoutAspectRatio     // Catch:{ all -> 0x013a }
             goto L_0x0073
         L_0x0072:
             r3 = r0
         L_0x0073:
-            monitor-exit(r2)     // Catch:{ all -> 0x0131 }
+            monitor-exit(r2)     // Catch:{ all -> 0x013a }
             r2 = 1065353216(0x3var_, float:1.0)
             int r5 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
             if (r5 <= 0) goto L_0x007e
@@ -934,101 +947,106 @@ public class EglRenderer implements VideoSink {
             android.graphics.Matrix r0 = r14.drawMatrix
             r2 = -1090519040(0xffffffffbvar_, float:-0.5)
             r0.preTranslate(r2, r2)
-            if (r11 == 0) goto L_0x0106
-            android.opengl.GLES20.glClearColor(r4, r4, r4, r4)     // Catch:{ GlOutOfMemoryException -> 0x010f }
+            if (r11 == 0) goto L_0x010f
+            android.opengl.GLES20.glClearColor(r4, r4, r4, r4)     // Catch:{ GlOutOfMemoryException -> 0x0118 }
             r0 = 16384(0x4000, float:2.2959E-41)
-            android.opengl.GLES20.glClear(r0)     // Catch:{ GlOutOfMemoryException -> 0x010f }
-            org.webrtc.VideoFrameDrawer r2 = r14.frameDrawer     // Catch:{ GlOutOfMemoryException -> 0x010f }
-            org.webrtc.RendererCommon$GlDrawer r4 = r14.drawer     // Catch:{ GlOutOfMemoryException -> 0x010f }
-            android.graphics.Matrix r5 = r14.drawMatrix     // Catch:{ GlOutOfMemoryException -> 0x010f }
+            android.opengl.GLES20.glClear(r0)     // Catch:{ GlOutOfMemoryException -> 0x0118 }
+            org.webrtc.VideoFrameDrawer r2 = r14.frameDrawer     // Catch:{ GlOutOfMemoryException -> 0x0118 }
+            org.webrtc.RendererCommon$GlDrawer r4 = r14.drawer     // Catch:{ GlOutOfMemoryException -> 0x0118 }
+            android.graphics.Matrix r5 = r14.drawMatrix     // Catch:{ GlOutOfMemoryException -> 0x0118 }
             r6 = 0
             r7 = 0
-            org.webrtc.EglBase r0 = r14.eglBase     // Catch:{ GlOutOfMemoryException -> 0x010f }
-            int r8 = r0.surfaceWidth()     // Catch:{ GlOutOfMemoryException -> 0x010f }
-            org.webrtc.EglBase r0 = r14.eglBase     // Catch:{ GlOutOfMemoryException -> 0x010f }
-            int r9 = r0.surfaceHeight()     // Catch:{ GlOutOfMemoryException -> 0x010f }
+            org.webrtc.EglBase r0 = r14.eglBase     // Catch:{ GlOutOfMemoryException -> 0x0118 }
+            int r8 = r0.surfaceWidth()     // Catch:{ GlOutOfMemoryException -> 0x0118 }
+            org.webrtc.EglBase r0 = r14.eglBase     // Catch:{ GlOutOfMemoryException -> 0x0118 }
+            int r9 = r0.surfaceHeight()     // Catch:{ GlOutOfMemoryException -> 0x0118 }
             r3 = r1
-            r2.drawFrame(r3, r4, r5, r6, r7, r8, r9)     // Catch:{ GlOutOfMemoryException -> 0x010f }
-            long r2 = java.lang.System.nanoTime()     // Catch:{ GlOutOfMemoryException -> 0x010f }
-            boolean r0 = r14.usePresentationTimeStamp     // Catch:{ GlOutOfMemoryException -> 0x010f }
+            r2.drawFrame(r3, r4, r5, r6, r7, r8, r9)     // Catch:{ GlOutOfMemoryException -> 0x0118 }
+            long r2 = java.lang.System.nanoTime()     // Catch:{ GlOutOfMemoryException -> 0x0118 }
+            boolean r0 = r14.usePresentationTimeStamp     // Catch:{ GlOutOfMemoryException -> 0x0118 }
             if (r0 == 0) goto L_0x00e3
-            org.webrtc.EglBase r0 = r14.eglBase     // Catch:{ GlOutOfMemoryException -> 0x010f }
-            long r4 = r1.getTimestampNs()     // Catch:{ GlOutOfMemoryException -> 0x010f }
-            r0.swapBuffers(r4)     // Catch:{ GlOutOfMemoryException -> 0x010f }
+            org.webrtc.EglBase r0 = r14.eglBase     // Catch:{ GlOutOfMemoryException -> 0x0118 }
+            long r4 = r1.getTimestampNs()     // Catch:{ GlOutOfMemoryException -> 0x0118 }
+            r0.swapBuffers(r4)     // Catch:{ GlOutOfMemoryException -> 0x0118 }
             goto L_0x00e8
         L_0x00e3:
-            org.webrtc.EglBase r0 = r14.eglBase     // Catch:{ GlOutOfMemoryException -> 0x010f }
-            r0.swapBuffers()     // Catch:{ GlOutOfMemoryException -> 0x010f }
+            org.webrtc.EglBase r0 = r14.eglBase     // Catch:{ GlOutOfMemoryException -> 0x0118 }
+            r0.swapBuffers()     // Catch:{ GlOutOfMemoryException -> 0x0118 }
         L_0x00e8:
-            long r4 = java.lang.System.nanoTime()     // Catch:{ GlOutOfMemoryException -> 0x010f }
-            java.lang.Object r0 = r14.statisticsLock     // Catch:{ GlOutOfMemoryException -> 0x010f }
-            monitor-enter(r0)     // Catch:{ GlOutOfMemoryException -> 0x010f }
-            int r6 = r14.framesRendered     // Catch:{ all -> 0x0103 }
+            boolean r0 = r14.firstFrameRendered     // Catch:{ GlOutOfMemoryException -> 0x0118 }
+            if (r0 != 0) goto L_0x00f1
+            r14.firstFrameRendered = r10     // Catch:{ GlOutOfMemoryException -> 0x0118 }
+            r14.onFirstFrameRendered()     // Catch:{ GlOutOfMemoryException -> 0x0118 }
+        L_0x00f1:
+            long r4 = java.lang.System.nanoTime()     // Catch:{ GlOutOfMemoryException -> 0x0118 }
+            java.lang.Object r0 = r14.statisticsLock     // Catch:{ GlOutOfMemoryException -> 0x0118 }
+            monitor-enter(r0)     // Catch:{ GlOutOfMemoryException -> 0x0118 }
+            int r6 = r14.framesRendered     // Catch:{ all -> 0x010c }
             int r6 = r6 + r10
-            r14.framesRendered = r6     // Catch:{ all -> 0x0103 }
-            long r6 = r14.renderTimeNs     // Catch:{ all -> 0x0103 }
+            r14.framesRendered = r6     // Catch:{ all -> 0x010c }
+            long r6 = r14.renderTimeNs     // Catch:{ all -> 0x010c }
             long r8 = r4 - r12
             long r6 = r6 + r8
-            r14.renderTimeNs = r6     // Catch:{ all -> 0x0103 }
-            long r6 = r14.renderSwapBufferTimeNs     // Catch:{ all -> 0x0103 }
+            r14.renderTimeNs = r6     // Catch:{ all -> 0x010c }
+            long r6 = r14.renderSwapBufferTimeNs     // Catch:{ all -> 0x010c }
             long r4 = r4 - r2
             long r6 = r6 + r4
-            r14.renderSwapBufferTimeNs = r6     // Catch:{ all -> 0x0103 }
-            monitor-exit(r0)     // Catch:{ all -> 0x0103 }
-            goto L_0x0106
-        L_0x0103:
+            r14.renderSwapBufferTimeNs = r6     // Catch:{ all -> 0x010c }
+            monitor-exit(r0)     // Catch:{ all -> 0x010c }
+            goto L_0x010f
+        L_0x010c:
             r2 = move-exception
-            monitor-exit(r0)     // Catch:{ all -> 0x0103 }
-            throw r2     // Catch:{ GlOutOfMemoryException -> 0x010f }
-        L_0x0106:
-            r14.notifyCallbacks(r1, r11)     // Catch:{ GlOutOfMemoryException -> 0x010f }
-        L_0x0109:
-            r1.release()
-            goto L_0x012c
-        L_0x010d:
-            r0 = move-exception
-            goto L_0x012d
+            monitor-exit(r0)     // Catch:{ all -> 0x010c }
+            throw r2     // Catch:{ GlOutOfMemoryException -> 0x0118 }
         L_0x010f:
+            r14.notifyCallbacks(r1, r11)     // Catch:{ GlOutOfMemoryException -> 0x0118 }
+        L_0x0112:
+            r1.release()
+            goto L_0x0135
+        L_0x0116:
+            r0 = move-exception
+            goto L_0x0136
+        L_0x0118:
             r0 = move-exception
             java.lang.String r2 = "Error while drawing frame"
-            r14.logE(r2, r0)     // Catch:{ all -> 0x010d }
-            org.webrtc.EglRenderer$ErrorCallback r0 = r14.errorCallback     // Catch:{ all -> 0x010d }
-            if (r0 == 0) goto L_0x011c
-            r0.onGlOutOfMemory()     // Catch:{ all -> 0x010d }
-        L_0x011c:
-            org.webrtc.RendererCommon$GlDrawer r0 = r14.drawer     // Catch:{ all -> 0x010d }
-            r0.release()     // Catch:{ all -> 0x010d }
-            org.webrtc.VideoFrameDrawer r0 = r14.frameDrawer     // Catch:{ all -> 0x010d }
-            r0.release()     // Catch:{ all -> 0x010d }
-            org.webrtc.GlTextureFrameBuffer r0 = r14.bitmapTextureFramebuffer     // Catch:{ all -> 0x010d }
-            r0.release()     // Catch:{ all -> 0x010d }
-            goto L_0x0109
-        L_0x012c:
+            r14.logE(r2, r0)     // Catch:{ all -> 0x0116 }
+            org.webrtc.EglRenderer$ErrorCallback r0 = r14.errorCallback     // Catch:{ all -> 0x0116 }
+            if (r0 == 0) goto L_0x0125
+            r0.onGlOutOfMemory()     // Catch:{ all -> 0x0116 }
+        L_0x0125:
+            org.webrtc.RendererCommon$GlDrawer r0 = r14.drawer     // Catch:{ all -> 0x0116 }
+            r0.release()     // Catch:{ all -> 0x0116 }
+            org.webrtc.VideoFrameDrawer r0 = r14.frameDrawer     // Catch:{ all -> 0x0116 }
+            r0.release()     // Catch:{ all -> 0x0116 }
+            org.webrtc.GlTextureFrameBuffer r0 = r14.bitmapTextureFramebuffer     // Catch:{ all -> 0x0116 }
+            r0.release()     // Catch:{ all -> 0x0116 }
+            goto L_0x0112
+        L_0x0135:
             return
-        L_0x012d:
+        L_0x0136:
             r1.release()
             throw r0
-        L_0x0131:
+        L_0x013a:
             r0 = move-exception
-            monitor-exit(r2)     // Catch:{ all -> 0x0131 }
+            monitor-exit(r2)     // Catch:{ all -> 0x013a }
             throw r0
-        L_0x0134:
+        L_0x013d:
             r1 = move-exception
-            monitor-exit(r0)     // Catch:{ all -> 0x0134 }
+            monitor-exit(r0)     // Catch:{ all -> 0x013d }
             throw r1
-        L_0x0137:
+        L_0x0140:
             java.lang.String r0 = "Dropping frame - No surface"
             r14.logD(r0)
             r1.release()
             return
-        L_0x0140:
+        L_0x0149:
             r1 = move-exception
-            monitor-exit(r0)     // Catch:{ all -> 0x0140 }
-            goto L_0x0144
-        L_0x0143:
+            monitor-exit(r0)     // Catch:{ all -> 0x0149 }
+            goto L_0x014d
+        L_0x014c:
             throw r1
-        L_0x0144:
-            goto L_0x0143
+        L_0x014d:
+            goto L_0x014c
         */
         throw new UnsupportedOperationException("Method not decompiled: org.webrtc.EglRenderer.renderFrameOnRenderThread():void");
     }

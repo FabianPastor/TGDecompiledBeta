@@ -3,6 +3,7 @@ package org.telegram.messenger.voip;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
@@ -18,13 +19,13 @@ public final class VoIPPendingCall {
     private final NotificationCenter.NotificationCenterDelegate observer = new NotificationCenter.NotificationCenterDelegate() {
         public void didReceivedNotification(int i, int i2, Object... objArr) {
             if (i == NotificationCenter.didUpdateConnectionState) {
-                boolean unused = VoIPPendingCall.this.onConnectionStateUpdated(i2);
+                boolean unused = VoIPPendingCall.this.onConnectionStateUpdated(i2, false);
             }
         }
     };
     private final Runnable releaseRunnable = new Runnable() {
         public final void run() {
-            VoIPPendingCall.this.release();
+            VoIPPendingCall.this.lambda$new$0$VoIPPendingCall();
         }
     };
     private boolean released;
@@ -32,14 +33,18 @@ public final class VoIPPendingCall {
     private final boolean video;
 
     public static VoIPPendingCall startOrSchedule(Activity activity2, int i, boolean z) {
-        return new VoIPPendingCall(activity2, i, z, 2000);
+        return new VoIPPendingCall(activity2, i, z, 1000);
+    }
+
+    public /* synthetic */ void lambda$new$0$VoIPPendingCall() {
+        onConnectionStateUpdated(UserConfig.selectedAccount, true);
     }
 
     private VoIPPendingCall(Activity activity2, int i, boolean z, long j) {
         this.activity = activity2;
         this.userId = i;
         this.video = z;
-        if (!onConnectionStateUpdated(UserConfig.selectedAccount)) {
+        if (!onConnectionStateUpdated(UserConfig.selectedAccount, false)) {
             NotificationCenter instance = NotificationCenter.getInstance(UserConfig.selectedAccount);
             this.notificationCenter = instance;
             instance.addObserver(this.observer, NotificationCenter.didUpdateConnectionState);
@@ -50,23 +55,33 @@ public final class VoIPPendingCall {
     }
 
     /* access modifiers changed from: private */
-    public boolean onConnectionStateUpdated(int i) {
-        boolean z = false;
-        if (this.released || ConnectionsManager.getInstance(i).getConnectionState() != 3) {
+    public boolean onConnectionStateUpdated(int i, boolean z) {
+        boolean z2 = false;
+        if (this.released || (!z && !isConnected(i) && !isAirplaneMode())) {
             return false;
         }
         MessagesController instance = MessagesController.getInstance(i);
         TLRPC$User user = instance.getUser(Integer.valueOf(this.userId));
         if (user != null) {
             TLRPC$UserFull userFull = instance.getUserFull(user.id);
-            boolean z2 = this.video;
+            boolean z3 = this.video;
             if (userFull != null && userFull.video_calls_available) {
-                z = true;
+                z2 = true;
             }
-            VoIPHelper.startCall(user, z2, z, this.activity, userFull);
+            VoIPHelper.startCall(user, z3, z2, this.activity, userFull);
+        } else if (isAirplaneMode()) {
+            VoIPHelper.startCall((TLRPC$User) null, this.video, false, this.activity, (TLRPC$UserFull) null);
         }
         release();
         return true;
+    }
+
+    private boolean isConnected(int i) {
+        return ConnectionsManager.getInstance(i).getConnectionState() == 3;
+    }
+
+    private boolean isAirplaneMode() {
+        return Settings.System.getInt(this.activity.getContentResolver(), "airplane_mode_on", 0) != 0;
     }
 
     public void release() {

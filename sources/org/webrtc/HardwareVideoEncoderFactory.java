@@ -3,15 +3,74 @@ package org.webrtc;
 import android.media.MediaCodecInfo;
 import android.media.MediaCodecList;
 import android.os.Build;
+import androidx.annotation.RecentlyNonNull;
+import j$.lang.Iterable;
+import j$.util.Collection;
+import j$.util.Set;
+import j$.util.Spliterator;
+import j$.util.function.Consumer;
+import j$.util.function.Predicate;
+import j$.util.stream.Stream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.webrtc.EglBase;
 import org.webrtc.EglBase14;
 import org.webrtc.VideoEncoderFactory;
 
 public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
     private static final List<String> H264_HW_EXCEPTION_MODELS = Arrays.asList(new String[]{"SAMSUNG-SGH-I337", "Nexus 7", "Nexus 4"});
+    private static Set<String> HW_EXCEPTION_MODELS = new HashSet<String>() {
+        public /* synthetic */ void forEach(@RecentlyNonNull Consumer<? super T> consumer) {
+            Iterable.CC.$default$forEach(this, consumer);
+        }
+
+        @RecentlyNonNull
+        public /* synthetic */ Stream<E> parallelStream() {
+            return Collection.CC.$default$parallelStream(this);
+        }
+
+        public /* synthetic */ boolean removeIf(@RecentlyNonNull Predicate<? super E> predicate) {
+            return Collection.CC.$default$removeIf(this, predicate);
+        }
+
+        @RecentlyNonNull
+        public /* synthetic */ Spliterator<E> spliterator() {
+            return Set.CC.$default$spliterator(this);
+        }
+
+        @RecentlyNonNull
+        public /* synthetic */ Stream<E> stream() {
+            return Collection.CC.$default$stream(this);
+        }
+
+        {
+            add("SM-A310F");
+            add("SM-A310F/DS");
+            add("SM-A310Y");
+            add("SM-A310M");
+            add("SM-G920F");
+            add("SM-G920FD");
+            add("SM-G920FQ");
+            add("SM-G920I");
+            add("SM-G920A");
+            add("SM-G920T");
+            add("SM-G930F");
+            add("SM-G930FD");
+            add("SM-G930W8");
+            add("SM-G930S");
+            add("SM-G930K");
+            add("SM-G930L");
+            add("SM-G935F");
+            add("SM-G935FD");
+            add("SM-G935W8");
+            add("SM-G935S");
+            add("SM-G935K");
+            add("SM-G935L");
+        }
+    };
     private static final int QCOM_VP8_KEY_FRAME_INTERVAL_ANDROID_L_MS = 15000;
     private static final int QCOM_VP8_KEY_FRAME_INTERVAL_ANDROID_M_MS = 20000;
     private static final int QCOM_VP8_KEY_FRAME_INTERVAL_ANDROID_N_MS = 15000;
@@ -159,8 +218,28 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
         return false;
     }
 
-    /* renamed from: org.webrtc.HardwareVideoEncoderFactory$1  reason: invalid class name */
-    static /* synthetic */ class AnonymousClass1 {
+    private boolean isHardwareSupportedInCurrentSdk(MediaCodecInfo mediaCodecInfo, VideoCodecMimeType videoCodecMimeType) {
+        if (HW_EXCEPTION_MODELS.contains(Build.MODEL)) {
+            return false;
+        }
+        int i = AnonymousClass2.$SwitchMap$org$webrtc$VideoCodecMimeType[videoCodecMimeType.ordinal()];
+        if (i == 1) {
+            return isHardwareSupportedInCurrentSdkVp8(mediaCodecInfo);
+        }
+        if (i == 2) {
+            return isHardwareSupportedInCurrentSdkVp9(mediaCodecInfo);
+        }
+        if (i == 3) {
+            return isHardwareSupportedInCurrentSdkH264(mediaCodecInfo);
+        }
+        if (i != 4) {
+            return false;
+        }
+        return isHardwareSupportedInCurrentSdkH265(mediaCodecInfo);
+    }
+
+    /* renamed from: org.webrtc.HardwareVideoEncoderFactory$2  reason: invalid class name */
+    static /* synthetic */ class AnonymousClass2 {
         static final /* synthetic */ int[] $SwitchMap$org$webrtc$VideoCodecMimeType;
 
         /* JADX WARNING: Can't wrap try/catch for region: R(8:0|1|2|3|4|5|6|(3:7|8|10)) */
@@ -199,25 +278,8 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
             L_0x0033:
                 return
             */
-            throw new UnsupportedOperationException("Method not decompiled: org.webrtc.HardwareVideoEncoderFactory.AnonymousClass1.<clinit>():void");
+            throw new UnsupportedOperationException("Method not decompiled: org.webrtc.HardwareVideoEncoderFactory.AnonymousClass2.<clinit>():void");
         }
-    }
-
-    private boolean isHardwareSupportedInCurrentSdk(MediaCodecInfo mediaCodecInfo, VideoCodecMimeType videoCodecMimeType) {
-        int i = AnonymousClass1.$SwitchMap$org$webrtc$VideoCodecMimeType[videoCodecMimeType.ordinal()];
-        if (i == 1) {
-            return isHardwareSupportedInCurrentSdkVp8(mediaCodecInfo);
-        }
-        if (i == 2) {
-            return isHardwareSupportedInCurrentSdkVp9(mediaCodecInfo);
-        }
-        if (i == 3) {
-            return isHardwareSupportedInCurrentSdkH264(mediaCodecInfo);
-        }
-        if (i != 4) {
-            return false;
-        }
-        return isHardwareSupportedInCurrentSdkH265(mediaCodecInfo);
     }
 
     private boolean isHardwareSupportedInCurrentSdkVp8(MediaCodecInfo mediaCodecInfo) {
@@ -243,7 +305,7 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
 
     private boolean isHardwareSupportedInCurrentSdkH265(MediaCodecInfo mediaCodecInfo) {
         String name = mediaCodecInfo.getName();
-        return (name.startsWith("OMX.qcom.") && Build.VERSION.SDK_INT >= 19) || (name.startsWith("OMX.Exynos.") && Build.VERSION.SDK_INT >= 21) || (name.startsWith("OMX.hisi.") && Build.VERSION.SDK_INT >= 19);
+        return (name.startsWith("OMX.qcom.") && Build.VERSION.SDK_INT >= 19) || (name.startsWith("OMX.Exynos.") && Build.VERSION.SDK_INT >= 21);
     }
 
     private boolean isMediaCodecAllowed(MediaCodecInfo mediaCodecInfo) {
@@ -255,7 +317,7 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
     }
 
     private int getKeyFrameIntervalSec(VideoCodecMimeType videoCodecMimeType) {
-        int i = AnonymousClass1.$SwitchMap$org$webrtc$VideoCodecMimeType[videoCodecMimeType.ordinal()];
+        int i = AnonymousClass2.$SwitchMap$org$webrtc$VideoCodecMimeType[videoCodecMimeType.ordinal()];
         if (i == 1 || i == 2) {
             return 100;
         }

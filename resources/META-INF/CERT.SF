@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: 1.0 (Android)
-SHA1-Digest-Manifest: U2rApPRdk1GL+DKV/xzFJVI+xxk=
+SHA1-Digest-Manifest: hiKVJ4n6zJJ7iej2/RK7Mx34i60=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: coNgiw91ZV2lRNpgqYelE72PYyo=
+SHA1-Digest: xrzLqzs6bp3a8jihvQRrAW6sxpY=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9511,13 +9511,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: cvkJugJ0vDVPjhi3ak9BiV93chs=
+SHA1-Digest: ZyoDEnUwjzGIBvMwUy51iSDdNJ4=
 
 Name: classes2.dex
-SHA1-Digest: /otfFd8vxUcg93uxSLgHaGmL4dY=
+SHA1-Digest: we4ZailMi+W5IIxt5eDdOZx3WOY=
 
 Name: classes3.dex
-SHA1-Digest: dva3XvaeEn3kVLA0qapXkFwCEpo=
+SHA1-Digest: B9Oen9XN/5wQGpWtDEMs7Er1yHI=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -9592,16 +9592,16 @@ Name: isoparser-default.properties
 SHA1-Digest: ix2/FbuQDYdbrL/0Ibd5Tj5OTV0=
 
 Name: lib/arm64-v8a/libtmessages.31.so
-SHA1-Digest: /VaA4J5FO3e83Qbkva5KQZ7Yh/I=
+SHA1-Digest: Ereepy4sgJPMRueXHKoEyEUOURg=
 
 Name: lib/armeabi-v7a/libtmessages.31.so
-SHA1-Digest: ET3x/myvTfnKeEq4GmA/jVvRL3g=
+SHA1-Digest: sLIRZwNhasahMeafVUv91bc1Ju4=
 
 Name: lib/x86/libtmessages.31.so
-SHA1-Digest: lPPQAt0oh+Hcqi/RjoxUGAn+fo8=
+SHA1-Digest: e2giXRSSeencc6uOePrrzh8E98s=
 
 Name: lib/x86_64/libtmessages.31.so
-SHA1-Digest: Xhsc9wB8RbsuZC8wFEQR5e3gOBA=
+SHA1-Digest: HaTFwEWGm72NSw980sm+VPJybvs=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: 4xRXfC5wD7cP7zkWXYe1OQH2mf8=
@@ -9942,8 +9942,8 @@ SHA1-Digest: NF/EYTb2NkmIBMcrRC1Q6mRvg38=
 Name: res/drawable-hdpi-v4/calls_headphones.png
 SHA1-Digest: GmuTxZc9k6+zGOnAYkvEW1Xk0n8=
 
-Name: res/drawable-hdpi-v4/calls_headset.png
-SHA1-Digest: y4x4ycL5K+6aXzIyikRrHNCGnyA=
+Name: res/drawable-hdpi-v4/calls_menu_bluetooth.png
+SHA1-Digest: zyKqTSDiMmNzmJAbHcfvXTmxFkI=
 
 Name: res/drawable-hdpi-v4/calls_menu_headset.png
 SHA1-Digest: vpfrBDtQi5cf2cyDVXBUmZ/9bOM=
@@ -12124,8 +12124,8 @@ SHA1-Digest: GNQk/FdwYBrJiddQXq3r5t0r9Bc=
 Name: res/drawable-mdpi-v4/calls_headphones.png
 SHA1-Digest: /JcA+V8uPRsRA49jgdZJpwtmJGY=
 
-Name: res/drawable-mdpi-v4/calls_headset.png
-SHA1-Digest: ZCbTQxED/ftU0vsKgixiPVGz714=
+Name: res/drawable-mdpi-v4/calls_menu_bluetooth.png
+SHA1-Digest: kBei3nPMmo7qiYU3hjkAb9n0ljE=
 
 Name: res/drawable-mdpi-v4/calls_menu_headset.png
 SHA1-Digest: LE5RbiKoyTWMciLszIwFF5vgwh8=
@@ -14351,8 +14351,8 @@ SHA1-Digest: TV9mTeBxMXXHcuFYQKkcmkJJQms=
 Name: res/drawable-xhdpi-v4/calls_headphones.png
 SHA1-Digest: J+vNSi1vn6iI9dDle1JgsyvdV5A=
 
-Name: res/drawable-xhdpi-v4/calls_headset.png
-SHA1-Digest: MMrbY44QiJJDpl0GJUys0sXPoYM=
+Name: res/drawable-xhdpi-v4/calls_menu_bluetooth.png
+SHA1-Digest: Xw3rfDnPfprS0KBayXzAP+Bnf2w=
 
 Name: res/drawable-xhdpi-v4/calls_menu_headset.png
 SHA1-Digest: P+ibOfxvM2X06IlJlwUsu3LJock=
@@ -16536,8 +16536,8 @@ SHA1-Digest: KDJ9XdJ09dJpdYiBOTzRjgEzsCU=
 Name: res/drawable-xxhdpi-v4/calls_headphones.png
 SHA1-Digest: aWRYU2SfWck4snqyhsF+HLqvsRM=
 
-Name: res/drawable-xxhdpi-v4/calls_headset.png
-SHA1-Digest: xeahKmE0LXwhTDK+xZZp5ehQe8k=
+Name: res/drawable-xxhdpi-v4/calls_menu_bluetooth.png
+SHA1-Digest: gmFsGJwJeMhZ85neWoTcIc1fw/Y=
 
 Name: res/drawable-xxhdpi-v4/calls_menu_headset.png
 SHA1-Digest: fSBekmtIoqufwZO+dDBfz8jumeM=
@@ -19145,10 +19145,10 @@ Name: res/raw/wallet_science.tgs
 SHA1-Digest: xcYXycYjGRsZcet5rKoz4b8trBo=
 
 Name: res/xml/auth.xml
-SHA1-Digest: e8n6hjomNV2XXQdLq4hlpXV4+HY=
+SHA1-Digest: hyIrILDYEFmkT+xh58berA6WGAs=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: UsbKxUxWm5O763wWXhGMNu0lX8c=
+SHA1-Digest: zw4xqsBNsDPKOsPhsNr1PEAFcvI=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: 9Hh95nQe6vvvIyVqqpGpBH5VMqA=
@@ -19166,7 +19166,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: EKVtPd4WhuqlEv3MAob50GzhkNc=
+SHA1-Digest: 3Ed32g7MxGo4dPBULxgncKzyRSU=
 
 Name: transport-api.properties
 SHA1-Digest: KlRwAVirU5yXrBUVC3JeyHIPlcs=

@@ -228,7 +228,7 @@ public final class R {
         public static final int calls_decline = NUM;
         public static final int calls_flip = NUM;
         public static final int calls_headphones = NUM;
-        public static final int calls_headset = NUM;
+        public static final int calls_menu_bluetooth = NUM;
         public static final int calls_menu_headset = NUM;
         public static final int calls_menu_phone = NUM;
         public static final int calls_menu_speaker = NUM;
@@ -1432,6 +1432,12 @@ public final class R {
         public static final int AccDescrVideoMessage = NUM;
         public static final int AccDescrVideoQuality = NUM;
         public static final int AccDescrVoiceMessage = NUM;
+        public static final int AccDescrVoipCamOff = NUM;
+        public static final int AccDescrVoipCamOn = NUM;
+        public static final int AccDescrVoipCamSwitchedToBack = NUM;
+        public static final int AccDescrVoipCamSwitchedToFront = NUM;
+        public static final int AccDescrVoipMicOff = NUM;
+        public static final int AccDescrVoipMicOn = NUM;
         public static final int AccReleaseForArchive = NUM;
         public static final int AccSwipeForArchive = NUM;
         public static final int Accept = NUM;

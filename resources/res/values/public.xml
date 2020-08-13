@@ -247,7 +247,7 @@
     <public type="drawable" name="calls_decline" id="NUM" />
     <public type="drawable" name="calls_flip" id="NUM" />
     <public type="drawable" name="calls_headphones" id="NUM" />
-    <public type="drawable" name="calls_headset" id="NUM" />
+    <public type="drawable" name="calls_menu_bluetooth" id="NUM" />
     <public type="drawable" name="calls_menu_headset" id="NUM" />
     <public type="drawable" name="calls_menu_phone" id="NUM" />
     <public type="drawable" name="calls_menu_speaker" id="NUM" />
@@ -1293,6 +1293,12 @@
     <public type="string" name="AccDescrVideoMessage" id="NUM" />
     <public type="string" name="AccDescrVideoQuality" id="NUM" />
     <public type="string" name="AccDescrVoiceMessage" id="NUM" />
+    <public type="string" name="AccDescrVoipCamOff" id="NUM" />
+    <public type="string" name="AccDescrVoipCamOn" id="NUM" />
+    <public type="string" name="AccDescrVoipCamSwitchedToBack" id="NUM" />
+    <public type="string" name="AccDescrVoipCamSwitchedToFront" id="NUM" />
+    <public type="string" name="AccDescrVoipMicOff" id="NUM" />
+    <public type="string" name="AccDescrVoipMicOn" id="NUM" />
     <public type="string" name="AccReleaseForArchive" id="NUM" />
     <public type="string" name="AccSwipeForArchive" id="NUM" />
     <public type="string" name="Accept" id="NUM" />

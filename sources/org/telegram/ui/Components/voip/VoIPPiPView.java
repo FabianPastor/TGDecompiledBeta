@@ -22,14 +22,15 @@ import android.os.Build;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewOutlineProvider;
+import android.view.ViewPropertyAnimator;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
-import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.FileLog;
+import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.voip.VideoCameraCapturer;
 import org.telegram.messenger.voip.VoIPBaseService;
 import org.telegram.messenger.voip.VoIPService;
@@ -41,27 +42,33 @@ import org.telegram.ui.VoIPFragment;
 import org.webrtc.RendererCommon;
 
 public class VoIPPiPView implements VoIPBaseService.StateListener {
-    private static VoIPPiPView instance;
-    int animationIndex = -1;
+    public static int bottomInset = 0;
+    /* access modifiers changed from: private */
+    public static VoIPPiPView expandedInstance = null;
+    /* access modifiers changed from: private */
+    public static VoIPPiPView instance = null;
+    public static boolean switchingToPip = false;
+    public static int topInset;
     ValueAnimator animatorToCameraMini;
     ValueAnimator.AnimatorUpdateListener animatorToCameraMiniUpdater = new ValueAnimator.AnimatorUpdateListener() {
         public final void onAnimationUpdate(ValueAnimator valueAnimator) {
             VoIPPiPView.this.lambda$new$0$VoIPPiPView(valueAnimator);
         }
     };
-    public int bottomInset;
     boolean callingUserIsVideo;
-    /* access modifiers changed from: private */
-    public VoIPTextureView callingUserTextureView;
+    public final VoIPTextureView callingUserTextureView;
     ImageView closeIcon;
-    Runnable collapseRunnable = new Runnable() {
+    Runnable collapseRunnable = new Runnable(this) {
         public void run() {
-            VoIPPiPView.this.floatingView.expand(false);
+            if (VoIPPiPView.instance != null) {
+                VoIPPiPView.instance.floatingView.expand(false);
+            }
         }
     };
-    /* access modifiers changed from: private */
-    public VoIPTextureView currentUserTextureView;
+    boolean currentUserIsVideo;
+    public final VoIPTextureView currentUserTextureView;
     ImageView enlargeIcon;
+    ValueAnimator expandAnimator;
     public boolean expanded;
     /* access modifiers changed from: private */
     public boolean expandedAnimationInProgress;
@@ -75,8 +82,6 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
     long startTime;
     float startX;
     float startY;
-    public boolean switchingToPip;
-    public int topInset;
     View topShadow;
     /* access modifiers changed from: private */
     public ValueAnimator.AnimatorUpdateListener updateXlistener = new ValueAnimator.AnimatorUpdateListener() {
@@ -85,9 +90,9 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
             VoIPPiPView voIPPiPView = VoIPPiPView.this;
             voIPPiPView.windowLayoutParams.x = (int) floatValue;
             if (voIPPiPView.windowView.getParent() != null) {
-                WindowManager access$100 = VoIPPiPView.this.windowManager;
+                WindowManager access$200 = VoIPPiPView.this.windowManager;
                 VoIPPiPView voIPPiPView2 = VoIPPiPView.this;
-                access$100.updateViewLayout(voIPPiPView2.windowView, voIPPiPView2.windowLayoutParams);
+                access$200.updateViewLayout(voIPPiPView2.windowView, voIPPiPView2.windowLayoutParams);
             }
         }
     };
@@ -98,9 +103,9 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
             VoIPPiPView voIPPiPView = VoIPPiPView.this;
             voIPPiPView.windowLayoutParams.y = (int) floatValue;
             if (voIPPiPView.windowView.getParent() != null) {
-                WindowManager access$100 = VoIPPiPView.this.windowManager;
+                WindowManager access$200 = VoIPPiPView.this.windowManager;
                 VoIPPiPView voIPPiPView2 = VoIPPiPView.this;
-                access$100.updateViewLayout(voIPPiPView2.windowView, voIPPiPView2.windowLayoutParams);
+                access$200.updateViewLayout(voIPPiPView2.windowView, voIPPiPView2.windowLayoutParams);
             }
         }
     };
@@ -127,36 +132,15 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
 
     public static void show(Activity activity, int i, int i2, int i3) {
         if (instance == null) {
-            WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
-            float f = (float) i2;
-            float f2 = f * 0.4f;
-            float f3 = (float) i;
-            float f4 = 0.4f * f3;
-            layoutParams.height = (int) ((f * 0.25f) + ((float) ((((int) ((f2 * 1.05f) - f2)) / 2) * 2)));
-            layoutParams.width = (int) ((f3 * 0.25f) + ((float) ((((int) ((1.05f * f4) - f4)) / 2) * 2)));
-            layoutParams.gravity = 51;
-            layoutParams.format = -3;
-            if (Build.VERSION.SDK_INT >= 26) {
-                layoutParams.type = 2038;
-            } else {
-                layoutParams.type = 2003;
-            }
-            instance = new VoIPPiPView(activity, i, i2);
-            try {
-                layoutParams.getClass().getField("privateFlags").set(layoutParams, Integer.valueOf(((Integer) layoutParams.getClass().getField("privateFlags").get(layoutParams)).intValue() | 64));
-            } catch (Exception unused) {
-            }
-            layoutParams.flags = 16777992;
-            if (Build.VERSION.SDK_INT >= 21) {
-                layoutParams.flags = 16777992 | Integer.MIN_VALUE;
-            }
+            WindowManager.LayoutParams createWindowLayoutParams = createWindowLayoutParams(activity, i, i2, 0.25f);
+            instance = new VoIPPiPView(activity, i, i2, false);
             WindowManager windowManager2 = (WindowManager) activity.getSystemService("window");
             VoIPPiPView voIPPiPView = instance;
             voIPPiPView.windowManager = windowManager2;
-            voIPPiPView.windowLayoutParams = layoutParams;
+            voIPPiPView.windowLayoutParams = createWindowLayoutParams;
             SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("voippipconfig", 0);
             instance.setRelativePosition(sharedPreferences.getFloat("relativeX", 1.0f), sharedPreferences.getFloat("relativeY", 0.0f));
-            windowManager2.addView(instance.windowView, layoutParams);
+            windowManager2.addView(instance.windowView, createWindowLayoutParams);
             instance.currentUserTextureView.renderer.init(VideoCameraCapturer.eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
             instance.callingUserTextureView.renderer.init(VideoCameraCapturer.eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
             if (i3 == 0) {
@@ -178,6 +162,56 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
                 }
             }
         }
+    }
+
+    /* access modifiers changed from: private */
+    public static WindowManager.LayoutParams createWindowLayoutParams(Context context, int i, int i2, float f) {
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        float f2 = (float) i2;
+        float f3 = f2 * 0.4f;
+        float f4 = (float) i;
+        float f5 = 0.4f * f4;
+        layoutParams.height = (int) ((f2 * f) + ((float) ((((int) ((f3 * 1.05f) - f3)) / 2) * 2)));
+        layoutParams.width = (int) ((f4 * f) + ((float) ((((int) ((1.05f * f5) - f5)) / 2) * 2)));
+        layoutParams.gravity = 51;
+        layoutParams.format = -3;
+        if (!AndroidUtilities.checkInlinePermissions(context)) {
+            layoutParams.type = 99;
+        } else if (Build.VERSION.SDK_INT >= 26) {
+            layoutParams.type = 2038;
+        } else {
+            layoutParams.type = 2003;
+        }
+        if (Build.VERSION.SDK_INT >= 21) {
+            layoutParams.flags |= Integer.MIN_VALUE;
+        }
+        layoutParams.flags = 16777992;
+        return layoutParams;
+    }
+
+    public static void prepareForTransition() {
+        if (expandedInstance != null) {
+            instance.expandAnimator.cancel();
+        }
+    }
+
+    public static void finish() {
+        if (!switchingToPip) {
+            VoIPPiPView voIPPiPView = expandedInstance;
+            if (voIPPiPView != null) {
+                voIPPiPView.finishInternal();
+            }
+            VoIPPiPView voIPPiPView2 = instance;
+            if (voIPPiPView2 != null) {
+                voIPPiPView2.finishInternal();
+            }
+            expandedInstance = null;
+            instance = null;
+        }
+    }
+
+    public static boolean isExpanding() {
+        return instance.expanded;
     }
 
     private void setRelativePosition(float f, float f2) {
@@ -205,10 +239,14 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
     }
 
     public static VoIPPiPView getInstance() {
+        VoIPPiPView voIPPiPView = expandedInstance;
+        if (voIPPiPView != null) {
+            return voIPPiPView;
+        }
         return instance;
     }
 
-    public VoIPPiPView(Context context, int i, int i2) {
+    public VoIPPiPView(Context context, int i, int i2, boolean z) {
         this.parentWidth = i;
         this.parentHeight = i2;
         float f = ((float) i2) * 0.4f;
@@ -231,35 +269,36 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
         this.windowView.addView(this.floatingView);
         this.windowView.setClipChildren(false);
         this.windowView.setClipToPadding(false);
-        View view = new View(context);
-        this.topShadow = view;
-        view.setBackground(new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{ColorUtils.setAlphaComponent(-16777216, 76), 0}));
-        this.floatingView.addView(this.topShadow, -1, AndroidUtilities.dp(60.0f));
-        ImageView imageView = new ImageView(context);
-        this.closeIcon = imageView;
-        imageView.setImageResource(NUM);
-        this.closeIcon.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
-        this.floatingView.addView(this.closeIcon, LayoutHelper.createFrame(40, 40.0f, 53, 4.0f, 4.0f, 4.0f, 0.0f));
-        ImageView imageView2 = new ImageView(context);
-        this.enlargeIcon = imageView2;
-        imageView2.setImageResource(NUM);
-        this.enlargeIcon.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
-        this.floatingView.addView(this.enlargeIcon, LayoutHelper.createFrame(40, 40.0f, 51, 4.0f, 4.0f, 4.0f, 0.0f));
-        this.closeIcon.setOnClickListener($$Lambda$VoIPPiPView$0Qsk63ZuxTpx_890HxG4bMQ6To.INSTANCE);
-        this.enlargeIcon.setOnClickListener(new View.OnClickListener(context) {
-            public final /* synthetic */ Context f$0;
+        if (z) {
+            View view = new View(context);
+            this.topShadow = view;
+            view.setBackground(new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{ColorUtils.setAlphaComponent(-16777216, 76), 0}));
+            this.floatingView.addView(this.topShadow, -1, AndroidUtilities.dp(60.0f));
+            ImageView imageView = new ImageView(context);
+            this.closeIcon = imageView;
+            imageView.setImageResource(NUM);
+            this.closeIcon.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
+            this.closeIcon.setContentDescription(LocaleController.getString("Close", NUM));
+            this.floatingView.addView(this.closeIcon, LayoutHelper.createFrame(40, 40.0f, 53, 4.0f, 4.0f, 4.0f, 0.0f));
+            ImageView imageView2 = new ImageView(context);
+            this.enlargeIcon = imageView2;
+            imageView2.setImageResource(NUM);
+            this.enlargeIcon.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
+            this.enlargeIcon.setContentDescription(LocaleController.getString("Open", NUM));
+            this.floatingView.addView(this.enlargeIcon, LayoutHelper.createFrame(40, 40.0f, 51, 4.0f, 4.0f, 4.0f, 0.0f));
+            this.closeIcon.setOnClickListener($$Lambda$VoIPPiPView$0Qsk63ZuxTpx_890HxG4bMQ6To.INSTANCE);
+            this.enlargeIcon.setOnClickListener(new View.OnClickListener(context) {
+                public final /* synthetic */ Context f$0;
 
-            {
-                this.f$0 = r1;
-            }
+                {
+                    this.f$0 = r1;
+                }
 
-            public final void onClick(View view) {
-                VoIPPiPView.lambda$new$2(this.f$0, view);
-            }
-        });
-        this.closeIcon.setVisibility(8);
-        this.enlargeIcon.setVisibility(8);
-        this.topShadow.setVisibility(8);
+                public final void onClick(View view) {
+                    VoIPPiPView.lambda$new$2(this.f$0, view);
+                }
+            });
+        }
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance != null) {
             sharedInstance.registerStateListener(this);
@@ -285,30 +324,30 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
         }
     }
 
-    public void finish() {
-        if (!this.switchingToPip) {
-            this.currentUserTextureView.renderer.release();
-            this.callingUserTextureView.renderer.release();
-            VoIPService sharedInstance = VoIPService.getSharedInstance();
-            if (sharedInstance != null) {
-                sharedInstance.unregisterStateListener(this);
-            }
-            this.floatingView.getRelativePosition(this.point);
-            float min = Math.min(1.0f, Math.max(0.0f, this.point[0]));
-            ApplicationLoader.applicationContext.getSharedPreferences("voippipconfig", 0).edit().putFloat("relativeX", min).putFloat("relativeY", Math.min(1.0f, Math.max(0.0f, this.point[1]))).apply();
-            this.windowView.setVisibility(8);
-            this.windowManager.removeView(this.windowView);
-            instance = null;
+    private void finishInternal() {
+        this.currentUserTextureView.renderer.release();
+        this.callingUserTextureView.renderer.release();
+        VoIPService sharedInstance = VoIPService.getSharedInstance();
+        if (sharedInstance != null) {
+            sharedInstance.unregisterStateListener(this);
         }
+        this.floatingView.getRelativePosition(this.point);
+        float min = Math.min(1.0f, Math.max(0.0f, this.point[0]));
+        ApplicationLoader.applicationContext.getSharedPreferences("voippipconfig", 0).edit().putFloat("relativeX", min).putFloat("relativeY", Math.min(1.0f, Math.max(0.0f, this.point[1]))).apply();
+        this.windowView.setVisibility(8);
+        if (this.windowView.getParent() != null) {
+            try {
+                this.windowManager.removeView(this.windowView);
+            } catch (Throwable th) {
+                FileLog.e(th);
+            }
+        }
+        instance = null;
     }
 
     public void onStateChanged(int i) {
         if (i == 11 || i == 17) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    VoIPPiPView.this.finish();
-                }
-            }, 200);
+            AndroidUtilities.runOnUIThread($$Lambda$VoIPPiPView$kbk5r2X6lrKAHtUD_RxqQueS1k0.INSTANCE, 200);
         }
         updateViewState();
     }
@@ -321,13 +360,25 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
         updateViewState();
     }
 
+    public void onScreenOnChange(boolean z) {
+        VoIPService sharedInstance = VoIPService.getSharedInstance();
+        if (sharedInstance != null) {
+            if (!z && this.currentUserIsVideo) {
+                sharedInstance.setVideoState(1);
+            }
+            if (z && sharedInstance.getVideoState() == 1) {
+                sharedInstance.setVideoState(2);
+            }
+        }
+    }
+
     private void updateViewState() {
         boolean z = this.floatingView.getMeasuredWidth() != 0;
         boolean z2 = this.callingUserIsVideo;
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance != null) {
             this.callingUserIsVideo = sharedInstance.getCurrentVideoState() == 2;
-            int videoState = sharedInstance.getVideoState();
+            this.currentUserIsVideo = sharedInstance.getVideoState() == 2 || sharedInstance.getVideoState() == 1;
             this.currentUserTextureView.renderer.setMirror(sharedInstance.isFrontFaceCamera());
         }
         float f = 1.0f;
@@ -358,6 +409,22 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
     public void onTransitionEnd() {
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().swapSinks();
+        }
+    }
+
+    public void onPause() {
+        if (this.windowLayoutParams.type == 99) {
+            VoIPService sharedInstance = VoIPService.getSharedInstance();
+            if (this.currentUserIsVideo) {
+                sharedInstance.setVideoState(1);
+            }
+        }
+    }
+
+    public void onResume() {
+        VoIPService sharedInstance = VoIPService.getSharedInstance();
+        if (sharedInstance != null && sharedInstance.getVideoState() == 1) {
+            sharedInstance.setVideoState(2);
         }
     }
 
@@ -409,18 +476,22 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
 
         /* access modifiers changed from: protected */
         public void dispatchDraw(Canvas canvas) {
-            VoIPPiPView.this.currentUserTextureView.setPivotX((float) VoIPPiPView.this.callingUserTextureView.getMeasuredWidth());
-            VoIPPiPView.this.currentUserTextureView.setPivotY((float) VoIPPiPView.this.callingUserTextureView.getMeasuredHeight());
+            VoIPPiPView voIPPiPView = VoIPPiPView.this;
+            voIPPiPView.currentUserTextureView.setPivotX((float) voIPPiPView.callingUserTextureView.getMeasuredWidth());
+            VoIPPiPView voIPPiPView2 = VoIPPiPView.this;
+            voIPPiPView2.currentUserTextureView.setPivotY((float) voIPPiPView2.callingUserTextureView.getMeasuredHeight());
             VoIPPiPView.this.currentUserTextureView.setTranslationX(((float) (-AndroidUtilities.dp(4.0f))) * (1.0f / getScaleX()) * VoIPPiPView.this.progressToCameraMini);
             VoIPPiPView.this.currentUserTextureView.setTranslationY(((float) (-AndroidUtilities.dp(4.0f))) * (1.0f / getScaleY()) * VoIPPiPView.this.progressToCameraMini);
             VoIPPiPView.this.currentUserTextureView.setRoundCorners(((float) AndroidUtilities.dp(8.0f)) * (1.0f / getScaleY()) * VoIPPiPView.this.progressToCameraMini);
-            VoIPPiPView.this.currentUserTextureView.setScaleX(((1.0f - VoIPPiPView.this.progressToCameraMini) * 0.6f) + 0.4f);
-            VoIPPiPView.this.currentUserTextureView.setScaleY(((1.0f - VoIPPiPView.this.progressToCameraMini) * 0.6f) + 0.4f);
+            VoIPPiPView voIPPiPView3 = VoIPPiPView.this;
+            voIPPiPView3.currentUserTextureView.setScaleX(((1.0f - voIPPiPView3.progressToCameraMini) * 0.6f) + 0.4f);
+            VoIPPiPView voIPPiPView4 = VoIPPiPView.this;
+            voIPPiPView4.currentUserTextureView.setScaleY(((1.0f - voIPPiPView4.progressToCameraMini) * 0.6f) + 0.4f);
             super.dispatchDraw(canvas);
         }
 
         /* JADX WARNING: Code restructure failed: missing block: B:10:0x002f, code lost:
-            if (r4 != 3) goto L_0x0214;
+            if (r4 != 3) goto L_0x0226;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public boolean onTouchEvent(android.view.MotionEvent r15) {
@@ -429,12 +500,12 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
                 org.telegram.ui.Components.voip.VoIPPiPView r0 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 boolean r0 = r0.expandedAnimationInProgress
                 r1 = 0
-                if (r0 != 0) goto L_0x0215
+                if (r0 != 0) goto L_0x0227
+                boolean r0 = org.telegram.ui.Components.voip.VoIPPiPView.switchingToPip
+                if (r0 == 0) goto L_0x000f
+                goto L_0x0227
+            L_0x000f:
                 org.telegram.ui.Components.voip.VoIPPiPView r0 = org.telegram.ui.Components.voip.VoIPPiPView.this
-                boolean r2 = r0.switchingToPip
-                if (r2 == 0) goto L_0x0011
-                goto L_0x0215
-            L_0x0011:
                 java.lang.Runnable r0 = r0.collapseRunnable
                 org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r0)
                 float r0 = r15.getRawX()
@@ -442,13 +513,13 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
                 android.view.ViewParent r3 = r14.getParent()
                 int r4 = r15.getAction()
                 r5 = 1
-                if (r4 == 0) goto L_0x01ff
+                if (r4 == 0) goto L_0x0211
                 r6 = 2
                 if (r4 == r5) goto L_0x0091
                 if (r4 == r6) goto L_0x0033
                 r0 = 3
                 if (r4 == r0) goto L_0x0091
-                goto L_0x0214
+                goto L_0x0226
             L_0x0033:
                 org.telegram.ui.Components.voip.VoIPPiPView r15 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 float r1 = r15.startX
@@ -477,7 +548,7 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
             L_0x005e:
                 org.telegram.ui.Components.voip.VoIPPiPView r15 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 boolean r3 = r15.moving
-                if (r3 == 0) goto L_0x0214
+                if (r3 == 0) goto L_0x0226
                 android.view.WindowManager$LayoutParams r3 = r15.windowLayoutParams
                 int r6 = r3.x
                 float r6 = (float) r6
@@ -493,14 +564,14 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
                 r15.startY = r2
                 android.widget.FrameLayout r15 = r15.windowView
                 android.view.ViewParent r15 = r15.getParent()
-                if (r15 == 0) goto L_0x0214
+                if (r15 == 0) goto L_0x0226
                 org.telegram.ui.Components.voip.VoIPPiPView r15 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 android.view.WindowManager r15 = r15.windowManager
                 org.telegram.ui.Components.voip.VoIPPiPView r0 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 android.widget.FrameLayout r1 = r0.windowView
                 android.view.WindowManager$LayoutParams r0 = r0.windowLayoutParams
                 r15.updateViewLayout(r1, r0)
-                goto L_0x0214
+                goto L_0x0226
             L_0x0091:
                 org.telegram.ui.Components.voip.VoIPPiPView r0 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 android.animation.AnimatorSet r0 = r0.moveToBoundsAnimator
@@ -509,44 +580,47 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
             L_0x009a:
                 int r15 = r15.getAction()
                 r7 = 150(0x96, double:7.4E-322)
-                if (r15 != r5) goto L_0x00c0
+                if (r15 != r5) goto L_0x00ca
                 org.telegram.ui.Components.voip.VoIPPiPView r15 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 boolean r15 = r15.moving
-                if (r15 != 0) goto L_0x00c0
+                if (r15 != 0) goto L_0x00ca
                 long r9 = java.lang.System.currentTimeMillis()
                 org.telegram.ui.Components.voip.VoIPPiPView r15 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 long r11 = r15.startTime
                 long r9 = r9 - r11
-                int r0 = (r9 > r7 ? 1 : (r9 == r7 ? 0 : -1))
-                if (r0 >= 0) goto L_0x00c0
-                boolean r15 = r15.expanded
-                r15 = r15 ^ r5
-                r14.expand(r15)
+                int r15 = (r9 > r7 ? 1 : (r9 == r7 ? 0 : -1))
+                if (r15 >= 0) goto L_0x00ca
+                org.telegram.ui.Components.voip.VoIPPiPView r15 = org.telegram.ui.Components.voip.VoIPPiPView.instance
+                org.telegram.ui.Components.voip.VoIPPiPView$FloatingView r15 = r15.floatingView
+                org.telegram.ui.Components.voip.VoIPPiPView r0 = org.telegram.ui.Components.voip.VoIPPiPView.instance
+                boolean r0 = r0.expanded
+                r0 = r0 ^ r5
+                r15.expand(r0)
                 org.telegram.ui.Components.voip.VoIPPiPView r15 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 r15.moving = r1
                 return r1
-            L_0x00c0:
-                if (r3 == 0) goto L_0x01ef
+            L_0x00ca:
+                if (r3 == 0) goto L_0x01fb
                 r3.requestDisallowInterceptTouchEvent(r1)
                 android.graphics.Point r15 = org.telegram.messenger.AndroidUtilities.displaySize
                 int r0 = r15.x
                 int r15 = r15.y
-                org.telegram.ui.Components.voip.VoIPPiPView r2 = org.telegram.ui.Components.voip.VoIPPiPView.this
-                int r3 = r2.topInset
-                int r15 = r15 + r3
-                float r3 = r14.topPadding
-                float r4 = r14.bottomPadding
-                android.view.WindowManager$LayoutParams r9 = r2.windowLayoutParams
+                int r2 = org.telegram.ui.Components.voip.VoIPPiPView.topInset
+                int r15 = r15 + r2
+                float r2 = r14.topPadding
+                float r3 = r14.bottomPadding
+                org.telegram.ui.Components.voip.VoIPPiPView r4 = org.telegram.ui.Components.voip.VoIPPiPView.this
+                android.view.WindowManager$LayoutParams r9 = r4.windowLayoutParams
                 int r9 = r9.x
-                org.telegram.ui.Components.voip.VoIPPiPView$FloatingView r2 = r2.floatingView
-                int r2 = r2.getLeft()
-                int r9 = r9 + r2
-                float r2 = (float) r9
+                org.telegram.ui.Components.voip.VoIPPiPView$FloatingView r4 = r4.floatingView
+                int r4 = r4.getLeft()
+                int r9 = r9 + r4
+                float r4 = (float) r9
                 org.telegram.ui.Components.voip.VoIPPiPView r9 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 org.telegram.ui.Components.voip.VoIPPiPView$FloatingView r9 = r9.floatingView
                 int r9 = r9.getMeasuredWidth()
                 float r9 = (float) r9
-                float r9 = r9 + r2
+                float r9 = r9 + r4
                 org.telegram.ui.Components.voip.VoIPPiPView r10 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 android.view.WindowManager$LayoutParams r11 = r10.windowLayoutParams
                 int r11 = r11.y
@@ -556,7 +630,7 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
                 float r10 = (float) r11
                 org.telegram.ui.Components.voip.VoIPPiPView r11 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 org.telegram.ui.Components.voip.VoIPPiPView$FloatingView r11 = r11.floatingView
-                int r11 = r11.getBottom()
+                int r11 = r11.getMeasuredHeight()
                 float r11 = (float) r11
                 float r11 = r11 + r10
                 org.telegram.ui.Components.voip.VoIPPiPView r12 = org.telegram.ui.Components.voip.VoIPPiPView.this
@@ -564,71 +638,71 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
                 r13.<init>()
                 r12.moveToBoundsAnimator = r13
                 float r12 = r14.leftPadding
-                int r2 = (r2 > r12 ? 1 : (r2 == r12 ? 0 : -1))
-                if (r2 >= 0) goto L_0x013f
+                int r4 = (r4 > r12 ? 1 : (r4 == r12 ? 0 : -1))
+                if (r4 >= 0) goto L_0x0149
                 float[] r0 = new float[r6]
-                org.telegram.ui.Components.voip.VoIPPiPView r2 = org.telegram.ui.Components.voip.VoIPPiPView.this
-                android.view.WindowManager$LayoutParams r9 = r2.windowLayoutParams
+                org.telegram.ui.Components.voip.VoIPPiPView r4 = org.telegram.ui.Components.voip.VoIPPiPView.this
+                android.view.WindowManager$LayoutParams r9 = r4.windowLayoutParams
                 int r9 = r9.x
                 float r9 = (float) r9
                 r0[r1] = r9
-                org.telegram.ui.Components.voip.VoIPPiPView$FloatingView r2 = r2.floatingView
-                int r2 = r2.getLeft()
-                float r2 = (float) r2
-                float r12 = r12 - r2
+                org.telegram.ui.Components.voip.VoIPPiPView$FloatingView r4 = r4.floatingView
+                int r4 = r4.getLeft()
+                float r4 = (float) r4
+                float r12 = r12 - r4
                 r0[r5] = r12
                 android.animation.ValueAnimator r0 = android.animation.ValueAnimator.ofFloat(r0)
-                org.telegram.ui.Components.voip.VoIPPiPView r2 = org.telegram.ui.Components.voip.VoIPPiPView.this
-                android.animation.ValueAnimator$AnimatorUpdateListener r2 = r2.updateXlistener
-                r0.addUpdateListener(r2)
-                org.telegram.ui.Components.voip.VoIPPiPView r2 = org.telegram.ui.Components.voip.VoIPPiPView.this
-                android.animation.AnimatorSet r2 = r2.moveToBoundsAnimator
+                org.telegram.ui.Components.voip.VoIPPiPView r4 = org.telegram.ui.Components.voip.VoIPPiPView.this
+                android.animation.ValueAnimator$AnimatorUpdateListener r4 = r4.updateXlistener
+                r0.addUpdateListener(r4)
+                org.telegram.ui.Components.voip.VoIPPiPView r4 = org.telegram.ui.Components.voip.VoIPPiPView.this
+                android.animation.AnimatorSet r4 = r4.moveToBoundsAnimator
                 android.animation.Animator[] r9 = new android.animation.Animator[r5]
                 r9[r1] = r0
-                r2.playTogether(r9)
-                goto L_0x0177
-            L_0x013f:
-                float r2 = (float) r0
+                r4.playTogether(r9)
+                goto L_0x0181
+            L_0x0149:
+                float r4 = (float) r0
                 float r12 = r14.rightPadding
-                float r2 = r2 - r12
-                int r2 = (r9 > r2 ? 1 : (r9 == r2 ? 0 : -1))
-                if (r2 <= 0) goto L_0x0177
-                float[] r2 = new float[r6]
+                float r4 = r4 - r12
+                int r4 = (r9 > r4 ? 1 : (r9 == r4 ? 0 : -1))
+                if (r4 <= 0) goto L_0x0181
+                float[] r4 = new float[r6]
                 org.telegram.ui.Components.voip.VoIPPiPView r9 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 android.view.WindowManager$LayoutParams r12 = r9.windowLayoutParams
                 int r12 = r12.x
                 float r12 = (float) r12
-                r2[r1] = r12
+                r4[r1] = r12
                 org.telegram.ui.Components.voip.VoIPPiPView$FloatingView r9 = r9.floatingView
                 int r9 = r9.getRight()
                 int r0 = r0 - r9
                 float r0 = (float) r0
                 float r9 = r14.rightPadding
                 float r0 = r0 - r9
-                r2[r5] = r0
-                android.animation.ValueAnimator r0 = android.animation.ValueAnimator.ofFloat(r2)
-                org.telegram.ui.Components.voip.VoIPPiPView r2 = org.telegram.ui.Components.voip.VoIPPiPView.this
-                android.animation.ValueAnimator$AnimatorUpdateListener r2 = r2.updateXlistener
-                r0.addUpdateListener(r2)
-                org.telegram.ui.Components.voip.VoIPPiPView r2 = org.telegram.ui.Components.voip.VoIPPiPView.this
-                android.animation.AnimatorSet r2 = r2.moveToBoundsAnimator
+                r4[r5] = r0
+                android.animation.ValueAnimator r0 = android.animation.ValueAnimator.ofFloat(r4)
+                org.telegram.ui.Components.voip.VoIPPiPView r4 = org.telegram.ui.Components.voip.VoIPPiPView.this
+                android.animation.ValueAnimator$AnimatorUpdateListener r4 = r4.updateXlistener
+                r0.addUpdateListener(r4)
+                org.telegram.ui.Components.voip.VoIPPiPView r4 = org.telegram.ui.Components.voip.VoIPPiPView.this
+                android.animation.AnimatorSet r4 = r4.moveToBoundsAnimator
                 android.animation.Animator[] r9 = new android.animation.Animator[r5]
                 r9[r1] = r0
-                r2.playTogether(r9)
-            L_0x0177:
-                int r0 = (r10 > r3 ? 1 : (r10 == r3 ? 0 : -1))
-                if (r0 >= 0) goto L_0x01a9
+                r4.playTogether(r9)
+            L_0x0181:
+                int r0 = (r10 > r2 ? 1 : (r10 == r2 ? 0 : -1))
+                if (r0 >= 0) goto L_0x01b3
                 float[] r15 = new float[r6]
                 org.telegram.ui.Components.voip.VoIPPiPView r0 = org.telegram.ui.Components.voip.VoIPPiPView.this
-                android.view.WindowManager$LayoutParams r2 = r0.windowLayoutParams
-                int r2 = r2.y
-                float r2 = (float) r2
-                r15[r1] = r2
+                android.view.WindowManager$LayoutParams r3 = r0.windowLayoutParams
+                int r3 = r3.y
+                float r3 = (float) r3
+                r15[r1] = r3
                 org.telegram.ui.Components.voip.VoIPPiPView$FloatingView r0 = r0.floatingView
                 int r0 = r0.getTop()
                 float r0 = (float) r0
-                float r3 = r3 - r0
-                r15[r5] = r3
+                float r2 = r2 - r0
+                r15[r5] = r2
                 android.animation.ValueAnimator r15 = android.animation.ValueAnimator.ofFloat(r15)
                 org.telegram.ui.Components.voip.VoIPPiPView r0 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 android.animation.ValueAnimator$AnimatorUpdateListener r0 = r0.updateYlistener
@@ -638,22 +712,23 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
                 android.animation.Animator[] r2 = new android.animation.Animator[r5]
                 r2[r1] = r15
                 r0.playTogether(r2)
-                goto L_0x01db
-            L_0x01a9:
+                goto L_0x01e7
+            L_0x01b3:
                 float r0 = (float) r15
-                float r0 = r0 - r4
+                float r0 = r0 - r3
                 int r0 = (r11 > r0 ? 1 : (r11 == r0 ? 0 : -1))
-                if (r0 <= 0) goto L_0x01db
+                if (r0 <= 0) goto L_0x01e7
                 float[] r0 = new float[r6]
                 org.telegram.ui.Components.voip.VoIPPiPView r2 = org.telegram.ui.Components.voip.VoIPPiPView.this
-                android.view.WindowManager$LayoutParams r2 = r2.windowLayoutParams
-                int r2 = r2.y
-                float r2 = (float) r2
-                r0[r1] = r2
-                int r2 = r14.getMeasuredHeight()
+                android.view.WindowManager$LayoutParams r4 = r2.windowLayoutParams
+                int r4 = r4.y
+                float r4 = (float) r4
+                r0[r1] = r4
+                org.telegram.ui.Components.voip.VoIPPiPView$FloatingView r2 = r2.floatingView
+                int r2 = r2.getMeasuredHeight()
                 int r15 = r15 - r2
                 float r15 = (float) r15
-                float r15 = r15 - r4
+                float r15 = r15 - r3
                 r0[r5] = r15
                 android.animation.ValueAnimator r15 = android.animation.ValueAnimator.ofFloat(r0)
                 org.telegram.ui.Components.voip.VoIPPiPView r0 = org.telegram.ui.Components.voip.VoIPPiPView.this
@@ -664,7 +739,7 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
                 android.animation.Animator[] r2 = new android.animation.Animator[r5]
                 r2[r1] = r15
                 r0.playTogether(r2)
-            L_0x01db:
+            L_0x01e7:
                 org.telegram.ui.Components.voip.VoIPPiPView r15 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 android.animation.AnimatorSet r15 = r15.moveToBoundsAnimator
                 android.animation.AnimatorSet r15 = r15.setDuration(r7)
@@ -673,16 +748,18 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
                 org.telegram.ui.Components.voip.VoIPPiPView r15 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 android.animation.AnimatorSet r15 = r15.moveToBoundsAnimator
                 r15.start()
-            L_0x01ef:
+            L_0x01fb:
                 org.telegram.ui.Components.voip.VoIPPiPView r15 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 r15.moving = r1
-                boolean r0 = r15.expanded
-                if (r0 == 0) goto L_0x0214
+                org.telegram.ui.Components.voip.VoIPPiPView r15 = org.telegram.ui.Components.voip.VoIPPiPView.instance
+                boolean r15 = r15.expanded
+                if (r15 == 0) goto L_0x0226
+                org.telegram.ui.Components.voip.VoIPPiPView r15 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 java.lang.Runnable r15 = r15.collapseRunnable
                 r0 = 3000(0xbb8, double:1.482E-320)
                 org.telegram.messenger.AndroidUtilities.runOnUIThread(r15, r0)
-                goto L_0x0214
-            L_0x01ff:
+                goto L_0x0226
+            L_0x0211:
                 org.telegram.ui.Components.voip.VoIPPiPView r15 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 r15.startX = r0
                 r15.startY = r2
@@ -690,204 +767,14 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
                 r15.startTime = r0
                 org.telegram.ui.Components.voip.VoIPPiPView r15 = org.telegram.ui.Components.voip.VoIPPiPView.this
                 android.animation.AnimatorSet r15 = r15.moveToBoundsAnimator
-                if (r15 == 0) goto L_0x0214
+                if (r15 == 0) goto L_0x0226
                 r15.cancel()
-            L_0x0214:
+            L_0x0226:
                 return r5
-            L_0x0215:
+            L_0x0227:
                 return r1
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.onTouchEvent(android.view.MotionEvent):boolean");
-        }
-
-        /* access modifiers changed from: private */
-        public void expand(boolean z) {
-            boolean z2 = z;
-            AndroidUtilities.cancelRunOnUIThread(VoIPPiPView.this.collapseRunnable);
-            if (!VoIPPiPView.this.expandedAnimationInProgress) {
-                getRelativePosition(VoIPPiPView.this.point);
-                float[] fArr = VoIPPiPView.this.point;
-                float f = fArr[0];
-                float f2 = fArr[1];
-                animate().cancel();
-                VoIPPiPView voIPPiPView = VoIPPiPView.this;
-                int i = voIPPiPView.parentWidth;
-                int i2 = voIPPiPView.xOffset;
-                final float f3 = (((float) i) * 0.25f) + ((float) (i2 * 2));
-                int i3 = voIPPiPView.parentHeight;
-                int i4 = voIPPiPView.yOffset;
-                final float f4 = (((float) i3) * 0.25f) + ((float) (i4 * 2));
-                float f5 = (((float) i) * 0.4f) + ((float) (i2 * 2));
-                float f6 = (((float) i3) * 0.4f) + ((float) (i4 * 2));
-                float scaleX = 0.625f * voIPPiPView.floatingView.getScaleX();
-                VoIPPiPView.this.floatingView.setPivotX(0.0f);
-                VoIPPiPView.this.floatingView.setPivotY(0.0f);
-                if (z2) {
-                    VoIPPiPView voIPPiPView2 = VoIPPiPView.this;
-                    WindowManager.LayoutParams layoutParams = voIPPiPView2.windowLayoutParams;
-                    layoutParams.width = (int) f5;
-                    layoutParams.height = (int) f6;
-                    boolean unused = voIPPiPView2.expandedAnimationInProgress = true;
-                    if (VoIPPiPView.this.windowView.getParent() != null) {
-                        WindowManager access$100 = VoIPPiPView.this.windowManager;
-                        VoIPPiPView voIPPiPView3 = VoIPPiPView.this;
-                        access$100.updateViewLayout(voIPPiPView3.windowView, voIPPiPView3.windowLayoutParams);
-                    }
-                    VoIPPiPView.this.floatingView.invalidate();
-                    VoIPPiPView.this.floatingView.setScaleX(scaleX);
-                    VoIPPiPView.this.floatingView.setScaleY(scaleX);
-                    VoIPPiPView.this.floatingView.animate().translationX(0.0f).translationY(0.0f);
-                    VoIPPiPView voIPPiPView4 = VoIPPiPView.this;
-                    WindowManager.LayoutParams layoutParams2 = voIPPiPView4.windowLayoutParams;
-                    int i5 = layoutParams2.x;
-                    int i6 = layoutParams2.y;
-                    int i7 = (int) (((float) i6) - ((f6 - f4) * f2));
-                    voIPPiPView4.closeIcon.setVisibility(0);
-                    VoIPPiPView.this.enlargeIcon.setVisibility(0);
-                    VoIPPiPView.this.topShadow.setVisibility(0);
-                    VoIPPiPView.this.enlargeIcon.setAlpha(0.0f);
-                    VoIPPiPView.this.closeIcon.setAlpha(0.0f);
-                    VoIPPiPView.this.topShadow.setAlpha(0.0f);
-                    VoIPPiPView.this.closeIcon.animate().alpha(1.0f).setDuration(200).start();
-                    VoIPPiPView.this.enlargeIcon.animate().alpha(1.0f).setDuration(200).start();
-                    VoIPPiPView.this.topShadow.animate().alpha(1.0f).setDuration(200).start();
-                    ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(scaleX, 1.0f, i5, (int) (((float) i5) - ((f5 - f3) * f)), i6, i7) {
-                        public final /* synthetic */ float f$1;
-                        public final /* synthetic */ float f$2;
-                        public final /* synthetic */ int f$3;
-                        public final /* synthetic */ int f$4;
-                        public final /* synthetic */ int f$5;
-                        public final /* synthetic */ int f$6;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                            this.f$4 = r5;
-                            this.f$5 = r6;
-                            this.f$6 = r7;
-                        }
-
-                        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            VoIPPiPView.FloatingView.this.lambda$expand$0$VoIPPiPView$FloatingView(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, valueAnimator);
-                        }
-                    });
-                    VoIPPiPView.this.animationIndex = NotificationCenter.getInstance(UserConfig.selectedAccount).setAnimationInProgress(VoIPPiPView.this.animationIndex, (int[]) null);
-                    ofFloat.addListener(new AnimatorListenerAdapter() {
-                        public void onAnimationEnd(Animator animator) {
-                            VoIPPiPView.this.floatingView.setScaleX(1.0f);
-                            VoIPPiPView.this.floatingView.setScaleY(1.0f);
-                            if (VoIPPiPView.this.windowView.getParent() != null) {
-                                WindowManager access$100 = VoIPPiPView.this.windowManager;
-                                VoIPPiPView voIPPiPView = VoIPPiPView.this;
-                                access$100.updateViewLayout(voIPPiPView.windowView, voIPPiPView.windowLayoutParams);
-                            }
-                            VoIPPiPView.this.closeIcon.setAlpha(1.0f);
-                            VoIPPiPView.this.enlargeIcon.setAlpha(1.0f);
-                            VoIPPiPView.this.topShadow.setAlpha(1.0f);
-                            VoIPPiPView.this.closeIcon.setVisibility(0);
-                            VoIPPiPView.this.enlargeIcon.setVisibility(0);
-                            VoIPPiPView.this.topShadow.setVisibility(0);
-                            AndroidUtilities.runOnUIThread(VoIPPiPView.this.collapseRunnable, 3000);
-                            NotificationCenter.getInstance(UserConfig.selectedAccount).onAnimationFinish(VoIPPiPView.this.animationIndex);
-                            boolean unused = VoIPPiPView.this.expandedAnimationInProgress = false;
-                        }
-                    });
-                    ofFloat.setDuration(300).setInterpolator(CubicBezierInterpolator.DEFAULT);
-                    ofFloat.start();
-                } else {
-                    VoIPPiPView.this.floatingView.setScaleX(1.0f);
-                    VoIPPiPView.this.floatingView.setScaleY(1.0f);
-                    boolean unused2 = VoIPPiPView.this.expandedAnimationInProgress = true;
-                    VoIPPiPView.this.closeIcon.animate().alpha(0.0f).setDuration(200).start();
-                    VoIPPiPView.this.enlargeIcon.animate().alpha(0.0f).setDuration(200).start();
-                    VoIPPiPView.this.topShadow.animate().alpha(0.0f).setDuration(200).start();
-                    WindowManager.LayoutParams layoutParams3 = VoIPPiPView.this.windowLayoutParams;
-                    int i8 = layoutParams3.x;
-                    int i9 = layoutParams3.y;
-                    ValueAnimator ofFloat2 = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                    ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(1.0f, scaleX, i8, (int) (((float) i8) + ((f5 - f3) * f)), i9, (int) (((float) i9) + ((f6 - f4) * f2))) {
-                        public final /* synthetic */ float f$1;
-                        public final /* synthetic */ float f$2;
-                        public final /* synthetic */ int f$3;
-                        public final /* synthetic */ int f$4;
-                        public final /* synthetic */ int f$5;
-                        public final /* synthetic */ int f$6;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                            this.f$3 = r4;
-                            this.f$4 = r5;
-                            this.f$5 = r6;
-                            this.f$6 = r7;
-                        }
-
-                        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            VoIPPiPView.FloatingView.this.lambda$expand$1$VoIPPiPView$FloatingView(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, valueAnimator);
-                        }
-                    });
-                    VoIPPiPView.this.animationIndex = NotificationCenter.getInstance(UserConfig.selectedAccount).setAnimationInProgress(VoIPPiPView.this.animationIndex, (int[]) null);
-                    ofFloat2.addListener(new AnimatorListenerAdapter() {
-                        public void onAnimationEnd(Animator animator) {
-                            NotificationCenter.getInstance(UserConfig.selectedAccount).onAnimationFinish(VoIPPiPView.this.animationIndex);
-                            VoIPPiPView voIPPiPView = VoIPPiPView.this;
-                            WindowManager.LayoutParams layoutParams = voIPPiPView.windowLayoutParams;
-                            layoutParams.width = (int) f3;
-                            layoutParams.height = (int) f4;
-                            if (voIPPiPView.windowView.getParent() != null) {
-                                WindowManager access$100 = VoIPPiPView.this.windowManager;
-                                VoIPPiPView voIPPiPView2 = VoIPPiPView.this;
-                                access$100.updateViewLayout(voIPPiPView2.windowView, voIPPiPView2.windowLayoutParams);
-                            }
-                            VoIPPiPView.this.floatingView.setScaleX(1.0f);
-                            VoIPPiPView.this.floatingView.setScaleY(1.0f);
-                            boolean unused = VoIPPiPView.this.expandedAnimationInProgress = false;
-                            VoIPPiPView.this.closeIcon.setVisibility(8);
-                            VoIPPiPView.this.enlargeIcon.setVisibility(8);
-                            VoIPPiPView.this.topShadow.setVisibility(8);
-                        }
-                    });
-                    ofFloat2.setDuration(300).setInterpolator(CubicBezierInterpolator.DEFAULT);
-                    ofFloat2.start();
-                }
-                VoIPPiPView.this.expanded = z2;
-            }
-        }
-
-        public /* synthetic */ void lambda$expand$0$VoIPPiPView$FloatingView(float f, float f2, int i, int i2, int i3, int i4, ValueAnimator valueAnimator) {
-            float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
-            float f3 = 1.0f - floatValue;
-            float f4 = (f * f3) + (f2 * floatValue);
-            VoIPPiPView.this.floatingView.setScaleX(f4);
-            VoIPPiPView.this.floatingView.setScaleY(f4);
-            VoIPPiPView voIPPiPView = VoIPPiPView.this;
-            WindowManager.LayoutParams layoutParams = voIPPiPView.windowLayoutParams;
-            layoutParams.x = (int) ((((float) i) * f3) + (((float) i2) * floatValue));
-            layoutParams.y = (int) ((((float) i3) * f3) + (((float) i4) * floatValue));
-            if (voIPPiPView.windowView.getParent() != null) {
-                WindowManager access$100 = VoIPPiPView.this.windowManager;
-                VoIPPiPView voIPPiPView2 = VoIPPiPView.this;
-                access$100.updateViewLayout(voIPPiPView2.windowView, voIPPiPView2.windowLayoutParams);
-            }
-        }
-
-        public /* synthetic */ void lambda$expand$1$VoIPPiPView$FloatingView(float f, float f2, int i, int i2, int i3, int i4, ValueAnimator valueAnimator) {
-            float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
-            float f3 = 1.0f - floatValue;
-            float f4 = (f * f3) + (f2 * floatValue);
-            VoIPPiPView.this.floatingView.setScaleX(f4);
-            VoIPPiPView.this.floatingView.setScaleY(f4);
-            VoIPPiPView voIPPiPView = VoIPPiPView.this;
-            WindowManager.LayoutParams layoutParams = voIPPiPView.windowLayoutParams;
-            layoutParams.x = (int) ((((float) i) * f3) + (((float) i2) * floatValue));
-            layoutParams.y = (int) ((((float) i3) * f3) + (((float) i4) * floatValue));
-            if (voIPPiPView.windowView.getParent() != null) {
-                WindowManager access$100 = VoIPPiPView.this.windowManager;
-                VoIPPiPView voIPPiPView2 = VoIPPiPView.this;
-                access$100.updateViewLayout(voIPPiPView2.windowView, voIPPiPView2.windowLayoutParams);
-            }
         }
 
         /* access modifiers changed from: private */
@@ -901,6 +788,363 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
             float top = (float) (voIPPiPView2.windowLayoutParams.y + voIPPiPView2.floatingView.getTop());
             float f2 = this.topPadding;
             fArr[1] = (top - f2) / (((((float) point.y) - f2) - this.bottomPadding) - ((float) VoIPPiPView.this.floatingView.getMeasuredHeight()));
+            fArr[0] = Math.min(1.0f, Math.max(0.0f, fArr[0]));
+            fArr[1] = Math.min(1.0f, Math.max(0.0f, fArr[1]));
+        }
+
+        /* access modifiers changed from: private */
+        public void expand(final boolean z) {
+            AndroidUtilities.cancelRunOnUIThread(VoIPPiPView.this.collapseRunnable);
+            if (VoIPPiPView.instance != null && !VoIPPiPView.this.expandedAnimationInProgress && VoIPPiPView.instance.expanded != z) {
+                VoIPPiPView.instance.expanded = z;
+                VoIPPiPView voIPPiPView = VoIPPiPView.this;
+                int i = voIPPiPView.parentWidth;
+                int i2 = voIPPiPView.xOffset;
+                float f = (((float) i) * 0.25f) + ((float) (i2 * 2));
+                int i3 = voIPPiPView.parentHeight;
+                int i4 = voIPPiPView.yOffset;
+                float f2 = (((float) i3) * 0.25f) + ((float) (i4 * 2));
+                float f3 = (((float) i) * 0.4f) + ((float) (i2 * 2));
+                float f4 = (((float) i3) * 0.4f) + ((float) (i4 * 2));
+                boolean unused = voIPPiPView.expandedAnimationInProgress = true;
+                if (z) {
+                    Context context = VoIPPiPView.instance.windowView.getContext();
+                    VoIPPiPView voIPPiPView2 = VoIPPiPView.this;
+                    WindowManager.LayoutParams access$700 = VoIPPiPView.createWindowLayoutParams(context, voIPPiPView2.parentWidth, voIPPiPView2.parentHeight, 0.4f);
+                    Context context2 = getContext();
+                    VoIPPiPView voIPPiPView3 = VoIPPiPView.this;
+                    VoIPPiPView voIPPiPView4 = new VoIPPiPView(context2, voIPPiPView3.parentWidth, voIPPiPView3.parentHeight, true);
+                    getRelativePosition(VoIPPiPView.this.point);
+                    VoIPPiPView voIPPiPView5 = VoIPPiPView.this;
+                    float[] fArr = voIPPiPView5.point;
+                    float f5 = fArr[0];
+                    float f6 = fArr[1];
+                    WindowManager.LayoutParams layoutParams = voIPPiPView5.windowLayoutParams;
+                    access$700.x = (int) (((float) layoutParams.x) - ((f3 - f) * f5));
+                    access$700.y = (int) (((float) layoutParams.y) - ((f4 - f2) * f6));
+                    voIPPiPView5.windowManager.addView(voIPPiPView4.windowView, access$700);
+                    voIPPiPView4.windowView.setAlpha(1.0f);
+                    voIPPiPView4.windowLayoutParams = access$700;
+                    WindowManager unused2 = voIPPiPView4.windowManager = VoIPPiPView.this.windowManager;
+                    VoIPPiPView unused3 = VoIPPiPView.expandedInstance = voIPPiPView4;
+                    swapRender(VoIPPiPView.instance, VoIPPiPView.expandedInstance);
+                    float scaleX = VoIPPiPView.this.floatingView.getScaleX() * 0.625f;
+                    voIPPiPView4.floatingView.setPivotX(f5 * ((float) VoIPPiPView.this.parentWidth) * 0.4f);
+                    voIPPiPView4.floatingView.setPivotY(f6 * ((float) VoIPPiPView.this.parentHeight) * 0.4f);
+                    voIPPiPView4.floatingView.setScaleX(scaleX);
+                    voIPPiPView4.floatingView.setScaleY(scaleX);
+                    VoIPPiPView.expandedInstance.topShadow.setAlpha(0.0f);
+                    VoIPPiPView.expandedInstance.closeIcon.setAlpha(0.0f);
+                    VoIPPiPView.expandedInstance.enlargeIcon.setAlpha(0.0f);
+                    AndroidUtilities.runOnUIThread(new Runnable(scaleX, voIPPiPView4) {
+                        public final /* synthetic */ float f$1;
+                        public final /* synthetic */ VoIPPiPView f$2;
+
+                        {
+                            this.f$1 = r2;
+                            this.f$2 = r3;
+                        }
+
+                        public final void run() {
+                            VoIPPiPView.FloatingView.this.lambda$expand$1$VoIPPiPView$FloatingView(this.f$1, this.f$2);
+                        }
+                    }, 64);
+                } else if (VoIPPiPView.expandedInstance != null) {
+                    VoIPPiPView.expandedInstance.floatingView.getRelativePosition(VoIPPiPView.this.point);
+                    float[] fArr2 = VoIPPiPView.this.point;
+                    float f7 = fArr2[0];
+                    float f8 = fArr2[1];
+                    VoIPPiPView.instance.windowLayoutParams.x = (int) (((float) VoIPPiPView.expandedInstance.windowLayoutParams.x) + ((f3 - f) * f7));
+                    VoIPPiPView.instance.windowLayoutParams.y = (int) (((float) VoIPPiPView.expandedInstance.windowLayoutParams.y) + ((f4 - f2) * f8));
+                    VoIPPiPView.expandedInstance.floatingView.setPivotX(f7 * ((float) VoIPPiPView.this.parentWidth) * 0.4f);
+                    VoIPPiPView.expandedInstance.floatingView.setPivotY(f8 * ((float) VoIPPiPView.this.parentHeight) * 0.4f);
+                    showUi(false);
+                    ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(VoIPPiPView.this.floatingView.getScaleX() * 0.625f) {
+                        public final /* synthetic */ float f$0;
+
+                        {
+                            this.f$0 = r1;
+                        }
+
+                        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            VoIPPiPView.FloatingView.lambda$expand$2(this.f$0, valueAnimator);
+                        }
+                    });
+                    ofFloat.setDuration(300).setInterpolator(CubicBezierInterpolator.DEFAULT);
+                    ofFloat.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            if (VoIPPiPView.expandedInstance != null) {
+                                FloatingView.this.swapRender(VoIPPiPView.expandedInstance, VoIPPiPView.instance);
+                                VoIPPiPView.instance.windowView.setAlpha(1.0f);
+                                VoIPPiPView.this.windowManager.addView(VoIPPiPView.instance.windowView, VoIPPiPView.instance.windowLayoutParams);
+                                AndroidUtilities.runOnUIThread(
+                                /*  JADX ERROR: Method code generation error
+                                    jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x003f: INVOKE  
+                                      (wrap: org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$AVdgH092L8APYH6xi6BVRTxL6Ts : 0x003a: CONSTRUCTOR  (r0v4 org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$AVdgH092L8APYH6xi6BVRTxL6Ts) = 
+                                      (r3v0 'this' org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3 A[THIS])
+                                      (wrap: boolean : 0x0036: IGET  (r4v8 boolean) = 
+                                      (r3v0 'this' org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3 A[THIS])
+                                     org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.3.val$expanded boolean)
+                                     call: org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$AVdgH092L8APYH6xi6BVRTxL6Ts.<init>(org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3, boolean):void type: CONSTRUCTOR)
+                                      (64 long)
+                                     org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable, long):void type: STATIC in method: org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.3.onAnimationEnd(android.animation.Animator):void, dex: classes3.dex
+                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                                    	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                    	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                    	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                    	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                                    	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                                    	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                                    	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                    	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                    	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
+                                    	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
+                                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                                    	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                                    	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                                    	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                                    	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                                    	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                    	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                    	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                                    	at jadx.core.codegen.RegionGen.connectElseIf(RegionGen.java:175)
+                                    	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:152)
+                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                    	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                                    	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                                    	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                                    	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                                    	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                                    	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                                    	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                                    	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                    	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                    	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
+                                    	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
+                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                                    	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                    	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                                    	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                                    	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                                    	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                                    	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                                    	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                                    	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                                    	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                                    	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                                    	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                                    	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                                    	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
+                                    	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
+                                    	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
+                                    	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
+                                    	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+                                    	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
+                                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x003a: CONSTRUCTOR  (r0v4 org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$AVdgH092L8APYH6xi6BVRTxL6Ts) = 
+                                      (r3v0 'this' org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3 A[THIS])
+                                      (wrap: boolean : 0x0036: IGET  (r4v8 boolean) = 
+                                      (r3v0 'this' org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3 A[THIS])
+                                     org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.3.val$expanded boolean)
+                                     call: org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$AVdgH092L8APYH6xi6BVRTxL6Ts.<init>(org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3, boolean):void type: CONSTRUCTOR in method: org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.3.onAnimationEnd(android.animation.Animator):void, dex: classes3.dex
+                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                                    	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                                    	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                                    	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                                    	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                                    	... 95 more
+                                    Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$AVdgH092L8APYH6xi6BVRTxL6Ts, state: NOT_LOADED
+                                    	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
+                                    	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
+                                    	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                                    	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                                    	... 101 more
+                                    */
+                                /*
+                                    this = this;
+                                    org.telegram.ui.Components.voip.VoIPPiPView r4 = org.telegram.ui.Components.voip.VoIPPiPView.expandedInstance
+                                    if (r4 != 0) goto L_0x0007
+                                    return
+                                L_0x0007:
+                                    org.telegram.ui.Components.voip.VoIPPiPView$FloatingView r4 = org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.this
+                                    org.telegram.ui.Components.voip.VoIPPiPView r0 = org.telegram.ui.Components.voip.VoIPPiPView.expandedInstance
+                                    org.telegram.ui.Components.voip.VoIPPiPView r1 = org.telegram.ui.Components.voip.VoIPPiPView.instance
+                                    r4.swapRender(r0, r1)
+                                    org.telegram.ui.Components.voip.VoIPPiPView r4 = org.telegram.ui.Components.voip.VoIPPiPView.instance
+                                    android.widget.FrameLayout r4 = r4.windowView
+                                    r0 = 1065353216(0x3var_, float:1.0)
+                                    r4.setAlpha(r0)
+                                    org.telegram.ui.Components.voip.VoIPPiPView$FloatingView r4 = org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.this
+                                    org.telegram.ui.Components.voip.VoIPPiPView r4 = org.telegram.ui.Components.voip.VoIPPiPView.this
+                                    android.view.WindowManager r4 = r4.windowManager
+                                    org.telegram.ui.Components.voip.VoIPPiPView r0 = org.telegram.ui.Components.voip.VoIPPiPView.instance
+                                    android.widget.FrameLayout r0 = r0.windowView
+                                    org.telegram.ui.Components.voip.VoIPPiPView r1 = org.telegram.ui.Components.voip.VoIPPiPView.instance
+                                    android.view.WindowManager$LayoutParams r1 = r1.windowLayoutParams
+                                    r4.addView(r0, r1)
+                                    boolean r4 = r13
+                                    org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$AVdgH092L8APYH6xi6BVRTxL6Ts r0 = new org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$AVdgH092L8APYH6xi6BVRTxL6Ts
+                                    r0.<init>(r3, r4)
+                                    r1 = 64
+                                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1)
+                                    return
+                                */
+                                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.AnonymousClass3.onAnimationEnd(android.animation.Animator):void");
+                            }
+
+                            public /* synthetic */ void lambda$onAnimationEnd$0$VoIPPiPView$FloatingView$3(boolean z) {
+                                if (VoIPPiPView.instance != null && VoIPPiPView.expandedInstance != null) {
+                                    VoIPPiPView.expandedInstance.windowView.setAlpha(0.0f);
+                                    try {
+                                        VoIPPiPView.this.windowManager.removeView(VoIPPiPView.expandedInstance.windowView);
+                                    } catch (Throwable th) {
+                                        FileLog.e(th);
+                                    }
+                                    VoIPPiPView unused = VoIPPiPView.expandedInstance = null;
+                                    boolean unused2 = VoIPPiPView.this.expandedAnimationInProgress = false;
+                                    if (z) {
+                                        AndroidUtilities.runOnUIThread(VoIPPiPView.this.collapseRunnable, 3000);
+                                    }
+                                }
+                            }
+                        });
+                        ofFloat.start();
+                        VoIPPiPView.this.expandAnimator = ofFloat;
+                    }
+                }
+            }
+
+            public /* synthetic */ void lambda$expand$1$VoIPPiPView$FloatingView(float f, VoIPPiPView voIPPiPView) {
+                if (VoIPPiPView.expandedInstance != null) {
+                    VoIPPiPView.this.windowView.setAlpha(0.0f);
+                    try {
+                        VoIPPiPView.this.windowManager.removeView(VoIPPiPView.this.windowView);
+                    } catch (Throwable th) {
+                        FileLog.e(th);
+                    }
+                    animate().cancel();
+                    showUi(true);
+                    ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(f, 1.0f, voIPPiPView) {
+                        public final /* synthetic */ float f$0;
+                        public final /* synthetic */ float f$1;
+                        public final /* synthetic */ VoIPPiPView f$2;
+
+                        {
+                            this.f$0 = r1;
+                            this.f$1 = r2;
+                            this.f$2 = r3;
+                        }
+
+                        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            VoIPPiPView.FloatingView.lambda$null$0(this.f$0, this.f$1, this.f$2, valueAnimator);
+                        }
+                    });
+                    ofFloat.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            super.onAnimationEnd(animator);
+                            boolean unused = VoIPPiPView.this.expandedAnimationInProgress = false;
+                        }
+                    });
+                    ofFloat.setDuration(300).setInterpolator(CubicBezierInterpolator.DEFAULT);
+                    ofFloat.start();
+                    VoIPPiPView.this.expandAnimator = ofFloat;
+                }
+            }
+
+            static /* synthetic */ void lambda$null$0(float f, float f2, VoIPPiPView voIPPiPView, ValueAnimator valueAnimator) {
+                float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+                float f3 = (f * (1.0f - floatValue)) + (f2 * floatValue);
+                voIPPiPView.floatingView.setScaleX(f3);
+                voIPPiPView.floatingView.setScaleY(f3);
+                voIPPiPView.floatingView.invalidate();
+            }
+
+            static /* synthetic */ void lambda$expand$2(float f, ValueAnimator valueAnimator) {
+                float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+                float f2 = (1.0f - floatValue) + (f * floatValue);
+                if (VoIPPiPView.expandedInstance != null) {
+                    VoIPPiPView.expandedInstance.floatingView.setScaleX(f2);
+                    VoIPPiPView.expandedInstance.floatingView.setScaleY(f2);
+                    VoIPPiPView.expandedInstance.floatingView.invalidate();
+                }
+            }
+
+            private void showUi(boolean z) {
+                if (VoIPPiPView.expandedInstance != null) {
+                    float f = 0.0f;
+                    if (z) {
+                        VoIPPiPView.expandedInstance.topShadow.setAlpha(0.0f);
+                        VoIPPiPView.expandedInstance.closeIcon.setAlpha(0.0f);
+                        VoIPPiPView.expandedInstance.enlargeIcon.setAlpha(0.0f);
+                    }
+                    VoIPPiPView.expandedInstance.topShadow.animate().alpha(z ? 1.0f : 0.0f).setDuration(300).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
+                    VoIPPiPView.expandedInstance.closeIcon.animate().alpha(z ? 1.0f : 0.0f).setDuration(300).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
+                    ViewPropertyAnimator animate = VoIPPiPView.expandedInstance.enlargeIcon.animate();
+                    if (z) {
+                        f = 1.0f;
+                    }
+                    animate.alpha(f).setDuration(300).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
+                }
+            }
+
+            /* access modifiers changed from: private */
+            public void swapRender(VoIPPiPView voIPPiPView, VoIPPiPView voIPPiPView2) {
+                voIPPiPView2.currentUserTextureView.setStub(voIPPiPView.currentUserTextureView);
+                voIPPiPView2.callingUserTextureView.setStub(voIPPiPView.callingUserTextureView);
+                voIPPiPView.currentUserTextureView.renderer.release();
+                voIPPiPView.callingUserTextureView.renderer.release();
+                voIPPiPView2.currentUserTextureView.renderer.init(VideoCameraCapturer.eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
+                voIPPiPView2.callingUserTextureView.renderer.init(VideoCameraCapturer.eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
+                if (VoIPService.getSharedInstance() != null) {
+                    VoIPService.getSharedInstance().setSinks(voIPPiPView2.currentUserTextureView.renderer, voIPPiPView2.callingUserTextureView.renderer);
+                }
+            }
         }
     }
-}

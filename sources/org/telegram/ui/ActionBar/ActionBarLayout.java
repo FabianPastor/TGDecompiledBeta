@@ -420,6 +420,16 @@ public class ActionBarLayout extends FrameLayout {
                 animatorSet.cancel();
                 this.currentAnimation = null;
             }
+            Runnable runnable = this.animationRunnable;
+            if (runnable != null) {
+                AndroidUtilities.cancelRunOnUIThread(runnable);
+                this.animationRunnable = null;
+            }
+            Runnable runnable2 = this.waitingForKeyboardCloseRunnable;
+            if (runnable2 != null) {
+                AndroidUtilities.cancelRunOnUIThread(runnable2);
+                this.waitingForKeyboardCloseRunnable = null;
+            }
             if (this.onCloseAnimationEndRunnable != null) {
                 onCloseAnimationEnd();
             } else if (this.onOpenAnimationEndRunnable != null) {

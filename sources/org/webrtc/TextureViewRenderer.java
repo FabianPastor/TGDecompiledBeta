@@ -7,9 +7,11 @@ import android.graphics.SurfaceTexture;
 import android.os.Looper;
 import android.view.TextureView;
 import java.util.concurrent.CountDownLatch;
+import org.telegram.messenger.AndroidUtilities;
 import org.webrtc.EglBase;
 import org.webrtc.EglRenderer;
 import org.webrtc.RendererCommon;
+import org.webrtc.TextureViewRenderer;
 
 public class TextureViewRenderer extends TextureView implements TextureView.SurfaceTextureListener, VideoSink, RendererCommon.RendererEvents {
     private static final String TAG = "TextureViewRenderer";
@@ -22,10 +24,6 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
     private int surfaceHeight;
     private int surfaceWidth;
     private final RendererCommon.VideoLayoutMeasure videoLayoutMeasure = new RendererCommon.VideoLayoutMeasure();
-
-    public void setFirstFrameRendered() {
-        boolean unused = this.eglRenderer.isFirstFrameRendered = true;
-    }
 
     public static class TextureEglRenderer extends EglRenderer implements TextureView.SurfaceTextureListener {
         private static final String TAG = "TextureEglRenderer";
@@ -116,7 +114,7 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
             return true;
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:23:0x009e, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:18:0x0089, code lost:
             return;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -125,72 +123,61 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
                 r5 = this;
                 java.lang.Object r0 = r5.layoutLock
                 monitor-enter(r0)
-                boolean r1 = r5.isRenderingPaused     // Catch:{ all -> 0x009f }
+                boolean r1 = r5.isRenderingPaused     // Catch:{ all -> 0x008a }
                 if (r1 == 0) goto L_0x0009
-                monitor-exit(r0)     // Catch:{ all -> 0x009f }
+                monitor-exit(r0)     // Catch:{ all -> 0x008a }
                 return
             L_0x0009:
-                boolean r1 = r5.isFirstFrameRendered     // Catch:{ all -> 0x009f }
-                if (r1 != 0) goto L_0x001e
-                r1 = 1
-                r5.isFirstFrameRendered = r1     // Catch:{ all -> 0x009f }
-                java.lang.String r1 = "Reporting first rendered frame."
-                r5.logD(r1)     // Catch:{ all -> 0x009f }
-                org.webrtc.RendererCommon$RendererEvents r1 = r5.rendererEvents     // Catch:{ all -> 0x009f }
-                if (r1 == 0) goto L_0x001e
-                org.webrtc.RendererCommon$RendererEvents r1 = r5.rendererEvents     // Catch:{ all -> 0x009f }
-                r1.onFirstFrameRendered()     // Catch:{ all -> 0x009f }
-            L_0x001e:
-                int r1 = r5.rotatedFrameWidth     // Catch:{ all -> 0x009f }
-                int r2 = r6.getRotatedWidth()     // Catch:{ all -> 0x009f }
-                if (r1 != r2) goto L_0x0036
-                int r1 = r5.rotatedFrameHeight     // Catch:{ all -> 0x009f }
-                int r2 = r6.getRotatedHeight()     // Catch:{ all -> 0x009f }
-                if (r1 != r2) goto L_0x0036
-                int r1 = r5.frameRotation     // Catch:{ all -> 0x009f }
-                int r2 = r6.getRotation()     // Catch:{ all -> 0x009f }
-                if (r1 == r2) goto L_0x009d
-            L_0x0036:
-                java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ all -> 0x009f }
-                r1.<init>()     // Catch:{ all -> 0x009f }
+                int r1 = r5.rotatedFrameWidth     // Catch:{ all -> 0x008a }
+                int r2 = r6.getRotatedWidth()     // Catch:{ all -> 0x008a }
+                if (r1 != r2) goto L_0x0021
+                int r1 = r5.rotatedFrameHeight     // Catch:{ all -> 0x008a }
+                int r2 = r6.getRotatedHeight()     // Catch:{ all -> 0x008a }
+                if (r1 != r2) goto L_0x0021
+                int r1 = r5.frameRotation     // Catch:{ all -> 0x008a }
+                int r2 = r6.getRotation()     // Catch:{ all -> 0x008a }
+                if (r1 == r2) goto L_0x0088
+            L_0x0021:
+                java.lang.StringBuilder r1 = new java.lang.StringBuilder     // Catch:{ all -> 0x008a }
+                r1.<init>()     // Catch:{ all -> 0x008a }
                 java.lang.String r2 = "Reporting frame resolution changed to "
-                r1.append(r2)     // Catch:{ all -> 0x009f }
-                org.webrtc.VideoFrame$Buffer r2 = r6.getBuffer()     // Catch:{ all -> 0x009f }
-                int r2 = r2.getWidth()     // Catch:{ all -> 0x009f }
-                r1.append(r2)     // Catch:{ all -> 0x009f }
+                r1.append(r2)     // Catch:{ all -> 0x008a }
+                org.webrtc.VideoFrame$Buffer r2 = r6.getBuffer()     // Catch:{ all -> 0x008a }
+                int r2 = r2.getWidth()     // Catch:{ all -> 0x008a }
+                r1.append(r2)     // Catch:{ all -> 0x008a }
                 java.lang.String r2 = "x"
-                r1.append(r2)     // Catch:{ all -> 0x009f }
-                org.webrtc.VideoFrame$Buffer r2 = r6.getBuffer()     // Catch:{ all -> 0x009f }
-                int r2 = r2.getHeight()     // Catch:{ all -> 0x009f }
-                r1.append(r2)     // Catch:{ all -> 0x009f }
+                r1.append(r2)     // Catch:{ all -> 0x008a }
+                org.webrtc.VideoFrame$Buffer r2 = r6.getBuffer()     // Catch:{ all -> 0x008a }
+                int r2 = r2.getHeight()     // Catch:{ all -> 0x008a }
+                r1.append(r2)     // Catch:{ all -> 0x008a }
                 java.lang.String r2 = " with rotation "
-                r1.append(r2)     // Catch:{ all -> 0x009f }
-                int r2 = r6.getRotation()     // Catch:{ all -> 0x009f }
-                r1.append(r2)     // Catch:{ all -> 0x009f }
-                java.lang.String r1 = r1.toString()     // Catch:{ all -> 0x009f }
-                r5.logD(r1)     // Catch:{ all -> 0x009f }
-                org.webrtc.RendererCommon$RendererEvents r1 = r5.rendererEvents     // Catch:{ all -> 0x009f }
-                if (r1 == 0) goto L_0x008b
-                org.webrtc.RendererCommon$RendererEvents r1 = r5.rendererEvents     // Catch:{ all -> 0x009f }
-                org.webrtc.VideoFrame$Buffer r2 = r6.getBuffer()     // Catch:{ all -> 0x009f }
-                int r2 = r2.getWidth()     // Catch:{ all -> 0x009f }
-                org.webrtc.VideoFrame$Buffer r3 = r6.getBuffer()     // Catch:{ all -> 0x009f }
-                int r3 = r3.getHeight()     // Catch:{ all -> 0x009f }
-                int r4 = r6.getRotation()     // Catch:{ all -> 0x009f }
-                r1.onFrameResolutionChanged(r2, r3, r4)     // Catch:{ all -> 0x009f }
-            L_0x008b:
-                int r1 = r6.getRotatedWidth()     // Catch:{ all -> 0x009f }
-                r5.rotatedFrameWidth = r1     // Catch:{ all -> 0x009f }
-                int r1 = r6.getRotatedHeight()     // Catch:{ all -> 0x009f }
-                r5.rotatedFrameHeight = r1     // Catch:{ all -> 0x009f }
-                int r6 = r6.getRotation()     // Catch:{ all -> 0x009f }
-                r5.frameRotation = r6     // Catch:{ all -> 0x009f }
-            L_0x009d:
-                monitor-exit(r0)     // Catch:{ all -> 0x009f }
+                r1.append(r2)     // Catch:{ all -> 0x008a }
+                int r2 = r6.getRotation()     // Catch:{ all -> 0x008a }
+                r1.append(r2)     // Catch:{ all -> 0x008a }
+                java.lang.String r1 = r1.toString()     // Catch:{ all -> 0x008a }
+                r5.logD(r1)     // Catch:{ all -> 0x008a }
+                org.webrtc.RendererCommon$RendererEvents r1 = r5.rendererEvents     // Catch:{ all -> 0x008a }
+                if (r1 == 0) goto L_0x0076
+                org.webrtc.RendererCommon$RendererEvents r1 = r5.rendererEvents     // Catch:{ all -> 0x008a }
+                org.webrtc.VideoFrame$Buffer r2 = r6.getBuffer()     // Catch:{ all -> 0x008a }
+                int r2 = r2.getWidth()     // Catch:{ all -> 0x008a }
+                org.webrtc.VideoFrame$Buffer r3 = r6.getBuffer()     // Catch:{ all -> 0x008a }
+                int r3 = r3.getHeight()     // Catch:{ all -> 0x008a }
+                int r4 = r6.getRotation()     // Catch:{ all -> 0x008a }
+                r1.onFrameResolutionChanged(r2, r3, r4)     // Catch:{ all -> 0x008a }
+            L_0x0076:
+                int r1 = r6.getRotatedWidth()     // Catch:{ all -> 0x008a }
+                r5.rotatedFrameWidth = r1     // Catch:{ all -> 0x008a }
+                int r1 = r6.getRotatedHeight()     // Catch:{ all -> 0x008a }
+                r5.rotatedFrameHeight = r1     // Catch:{ all -> 0x008a }
+                int r6 = r6.getRotation()     // Catch:{ all -> 0x008a }
+                r5.frameRotation = r6     // Catch:{ all -> 0x008a }
+            L_0x0088:
+                monitor-exit(r0)     // Catch:{ all -> 0x008a }
                 return
-            L_0x009f:
+            L_0x008a:
                 r6 = move-exception
-                monitor-exit(r0)     // Catch:{ all -> 0x009f }
+                monitor-exit(r0)     // Catch:{ all -> 0x008a }
                 throw r6
             */
             throw new UnsupportedOperationException("Method not decompiled: org.webrtc.TextureViewRenderer.TextureEglRenderer.updateFrameDimensionsAndReportEvents(org.webrtc.VideoFrame):void");
@@ -198,6 +185,20 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
 
         private void logD(String str) {
             Logging.d("TextureEglRenderer", this.name + ": " + str);
+        }
+
+        /* access modifiers changed from: protected */
+        public void onFirstFrameRendered() {
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public final void run() {
+                    TextureViewRenderer.TextureEglRenderer.this.lambda$onFirstFrameRendered$0$TextureViewRenderer$TextureEglRenderer();
+                }
+            });
+        }
+
+        public /* synthetic */ void lambda$onFirstFrameRendered$0$TextureViewRenderer$TextureEglRenderer() {
+            this.isFirstFrameRendered = true;
+            this.rendererEvents.onFirstFrameRendered();
         }
     }
 

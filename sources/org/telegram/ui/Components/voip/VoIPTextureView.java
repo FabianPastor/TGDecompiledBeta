@@ -37,9 +37,14 @@ public class VoIPTextureView extends FrameLayout {
         this.xRefPaint = new Paint(1);
         this.stubVisibleProgress = 1.0f;
         this.imageView = new ImageView(context);
-        TextureViewRenderer textureViewRenderer = new TextureViewRenderer(context);
-        this.renderer = textureViewRenderer;
-        textureViewRenderer.setEnableHardwareScaler(true);
+        AnonymousClass1 r0 = new TextureViewRenderer(context) {
+            public void onFirstFrameRendered() {
+                super.onFirstFrameRendered();
+                VoIPTextureView.this.invalidate();
+            }
+        };
+        this.renderer = r0;
+        r0.setEnableHardwareScaler(true);
         addView(this.renderer);
         addView(this.imageView);
         if (Build.VERSION.SDK_INT >= 21) {
@@ -112,5 +117,17 @@ public class VoIPTextureView extends FrameLayout {
             } catch (Throwable unused) {
             }
         }
+    }
+
+    public void setStub(VoIPTextureView voIPTextureView) {
+        Bitmap bitmap = voIPTextureView.renderer.getBitmap();
+        if (bitmap == null || bitmap.getPixel(0, 0) == 0) {
+            this.imageView.setImageDrawable(voIPTextureView.imageView.getDrawable());
+        } else {
+            this.imageView.setImageBitmap(bitmap);
+        }
+        this.stubVisibleProgress = 1.0f;
+        this.imageView.setVisibility(0);
+        this.imageView.setAlpha(1.0f);
     }
 }

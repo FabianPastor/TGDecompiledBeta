@@ -3,7 +3,7 @@ Built-By: Generated-by-ADT
 Created-By: Android Gradle 4.0.1
 
 Name: AndroidManifest.xml
-SHA1-Digest: 9qbQVnEOaQ2P3N0N2CbGOz9tWrA=
+SHA1-Digest: D6uov11s22aco83qtVDFZysGGSU=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: OGGiGAP82euSpAMCew2iu3rdTeE=
@@ -9510,13 +9510,13 @@ Name: builddef.lst
 SHA1-Digest: 2OFxLdkhRBE8GU89a6MioeZUiU4=
 
 Name: classes.dex
-SHA1-Digest: eNxTLYOMPVE2T3iXO6sK7fCRF78=
+SHA1-Digest: Uor5StzD9W/gsfyCgbq/6B5qswE=
 
 Name: classes2.dex
-SHA1-Digest: r4L2Iglraena5RfLlqsMpGzTtag=
+SHA1-Digest: 9B8vZAa7/iCJkIEstXKndPVS+Kc=
 
 Name: classes3.dex
-SHA1-Digest: OMHeA6FjLCmTPaa9iloYbX5PV1M=
+SHA1-Digest: SyphnMh16UyDT+e5ZyRcgG83ZTw=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: 3OspJ3jk+6chzCfOCJPZHwrwxpA=
@@ -9591,16 +9591,16 @@ Name: isoparser-default.properties
 SHA1-Digest: 6/KBb+rGX/5O2/xNP3HN6XIg3lI=
 
 Name: lib/arm64-v8a/libtmessages.31.so
-SHA1-Digest: YaUOWQuNXt3rUgHI2J/fFqXa5yY=
+SHA1-Digest: hrA4q4LLr6CCqIcU/ejTKm7UkYE=
 
 Name: lib/armeabi-v7a/libtmessages.31.so
-SHA1-Digest: YC2iy7BuZEwTD3w5EMEDe6qaV+Y=
+SHA1-Digest: bA3Oj+0YUiCl5mRoS0eNWnZNh3A=
 
 Name: lib/x86/libtmessages.31.so
-SHA1-Digest: FxefIS1yGql6Y72hqTNiujEb5MM=
+SHA1-Digest: Ki0P/AhAUBM+dQgdIdNs5Pizw3Q=
 
 Name: lib/x86_64/libtmessages.31.so
-SHA1-Digest: FGh/ysuDrtdGzTPazMuKU8/jgek=
+SHA1-Digest: XqvAo0692aqVtdOUscoKzoEig/8=
 
 Name: play-services-auth-api-phone.properties
 SHA1-Digest: /3UPL+65RV1bQ1opEtJnBMah8ZI=
@@ -9941,7 +9941,7 @@ SHA1-Digest: G+6f/IW37ut8uY2IQprLrO2/ukE=
 Name: res/drawable-hdpi-v4/calls_headphones.png
 SHA1-Digest: kR69CyfR3tCat3eyoQE+o3Rr6S8=
 
-Name: res/drawable-hdpi-v4/calls_headset.png
+Name: res/drawable-hdpi-v4/calls_menu_bluetooth.png
 SHA1-Digest: aMKQAL50LzzRGdWiYZ05HZD3N38=
 
 Name: res/drawable-hdpi-v4/calls_menu_headset.png
@@ -12123,7 +12123,7 @@ SHA1-Digest: wCHioJR2bbmV7XcxP8Ez4k/JVeo=
 Name: res/drawable-mdpi-v4/calls_headphones.png
 SHA1-Digest: /kLcNOxsBDAHp15WNyYrI2ED2kY=
 
-Name: res/drawable-mdpi-v4/calls_headset.png
+Name: res/drawable-mdpi-v4/calls_menu_bluetooth.png
 SHA1-Digest: nPy6XWQQyD2rfD2gNBITVmftyMw=
 
 Name: res/drawable-mdpi-v4/calls_menu_headset.png
@@ -14350,7 +14350,7 @@ SHA1-Digest: QEk9ELJnppSbFycfouerYUjpeic=
 Name: res/drawable-xhdpi-v4/calls_headphones.png
 SHA1-Digest: od5gjDyCwfdoyZuMr8Zd1D1E/RI=
 
-Name: res/drawable-xhdpi-v4/calls_headset.png
+Name: res/drawable-xhdpi-v4/calls_menu_bluetooth.png
 SHA1-Digest: OxfjfWHnQr4Ipqfns9lxsTF/2Rk=
 
 Name: res/drawable-xhdpi-v4/calls_menu_headset.png
@@ -16535,7 +16535,7 @@ SHA1-Digest: CofSmrIX65BdU7bFHsaIAYupiaE=
 Name: res/drawable-xxhdpi-v4/calls_headphones.png
 SHA1-Digest: WrfKrMwisW+ySYTYgL/+ll/OrKI=
 
-Name: res/drawable-xxhdpi-v4/calls_headset.png
+Name: res/drawable-xxhdpi-v4/calls_menu_bluetooth.png
 SHA1-Digest: pq+Pkh9lwDZrwMLO1NmLLM7oZNM=
 
 Name: res/drawable-xxhdpi-v4/calls_menu_headset.png
@@ -19144,10 +19144,10 @@ Name: res/raw/wallet_science.tgs
 SHA1-Digest: 7hpfUbUIaGItHgHPayfu77P2q3g=
 
 Name: res/xml/auth.xml
-SHA1-Digest: EzGX5Bgot9B5Al+NrzwKlx+b4TU=
+SHA1-Digest: kiqzb+mwVsyW7QuYNoxKQuUFJfk=
 
 Name: res/xml/auth_menu.xml
-SHA1-Digest: ydaCe866I1rnsCTUFyn9W3dbQss=
+SHA1-Digest: nGKdAWnX9SMgr0mwFP+csiJ35hc=
 
 Name: res/xml/automotive_app_desc.xml
 SHA1-Digest: vNxeRePtnY64Hxd7k8wXLkWhqV0=
@@ -19165,7 +19165,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: +MNf64vCtPnRiuZgbqYoIaqfJC4=
 
 Name: resources.arsc
-SHA1-Digest: NJCe5BWXFiIYFuLYqvs/sB0gFRI=
+SHA1-Digest: S8prY+iQ9jnN1MvitVh5DkIhwVk=
 
 Name: transport-api.properties
 SHA1-Digest: 1ihjJr5LtYfq/sGtDlVEQK4Ajxg=

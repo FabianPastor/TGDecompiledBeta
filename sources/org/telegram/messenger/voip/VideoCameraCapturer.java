@@ -1,6 +1,7 @@
 package org.telegram.messenger.voip;
 
 import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import org.telegram.messenger.AndroidUtilities;
@@ -39,11 +40,13 @@ public class VideoCameraCapturer {
     }
 
     public VideoCameraCapturer() {
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                VideoCameraCapturer.this.lambda$new$0$VideoCameraCapturer();
-            }
-        });
+        if (Build.VERSION.SDK_INT >= 18) {
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public final void run() {
+                    VideoCameraCapturer.this.lambda$new$0$VideoCameraCapturer();
+                }
+            });
+        }
     }
 
     public /* synthetic */ void lambda$new$0$VideoCameraCapturer() {
@@ -58,59 +61,63 @@ public class VideoCameraCapturer {
     }
 
     private void init(long j, boolean z) {
-        AndroidUtilities.runOnUIThread(new Runnable(j, z) {
-            public final /* synthetic */ long f$1;
-            public final /* synthetic */ boolean f$2;
-
-            {
-                this.f$1 = r2;
-                this.f$2 = r4;
-            }
-
-            public final void run() {
-                VideoCameraCapturer.this.lambda$init$3$VideoCameraCapturer(this.f$1, this.f$2);
-            }
-        });
-    }
-
-    public /* synthetic */ void lambda$init$3$VideoCameraCapturer(long j, boolean z) {
-        this.nativePtr = j;
-        CameraEnumerator camera2Enumerator = Camera2Enumerator.isSupported(ApplicationLoader.applicationContext) ? new Camera2Enumerator(ApplicationLoader.applicationContext) : new Camera1Enumerator();
-        String[] deviceNames = camera2Enumerator.getDeviceNames();
-        int i = 0;
-        while (true) {
-            if (i >= deviceNames.length) {
-                i = -1;
-                break;
-            } else if (camera2Enumerator.isFrontFacing(deviceNames[i]) == z) {
-                break;
-            } else {
-                i++;
-            }
-        }
-        if (i != -1) {
-            String str = deviceNames[i];
-            if (this.videoCapturer == null) {
-                this.videoCapturer = camera2Enumerator.createCapturer(str, (CameraVideoCapturer.CameraEventsHandler) null);
-                this.videoCapturerSurfaceTextureHelper = SurfaceTextureHelper.create("VideoCapturerThread", eglBase.getEglBaseContext());
-                this.handler.post(new Runnable() {
-                    public final void run() {
-                        VideoCameraCapturer.this.lambda$null$1$VideoCameraCapturer();
-                    }
-                });
-                return;
-            }
-            this.handler.post(new Runnable(str) {
-                public final /* synthetic */ String f$1;
+        if (Build.VERSION.SDK_INT >= 18) {
+            AndroidUtilities.runOnUIThread(new Runnable(j, z) {
+                public final /* synthetic */ long f$1;
+                public final /* synthetic */ boolean f$2;
 
                 {
                     this.f$1 = r2;
+                    this.f$2 = r4;
                 }
 
                 public final void run() {
-                    VideoCameraCapturer.this.lambda$null$2$VideoCameraCapturer(this.f$1);
+                    VideoCameraCapturer.this.lambda$init$3$VideoCameraCapturer(this.f$1, this.f$2);
                 }
             });
+        }
+    }
+
+    public /* synthetic */ void lambda$init$3$VideoCameraCapturer(long j, boolean z) {
+        if (eglBase != null) {
+            this.nativePtr = j;
+            CameraEnumerator camera2Enumerator = Camera2Enumerator.isSupported(ApplicationLoader.applicationContext) ? new Camera2Enumerator(ApplicationLoader.applicationContext) : new Camera1Enumerator();
+            String[] deviceNames = camera2Enumerator.getDeviceNames();
+            int i = 0;
+            while (true) {
+                if (i >= deviceNames.length) {
+                    i = -1;
+                    break;
+                } else if (camera2Enumerator.isFrontFacing(deviceNames[i]) == z) {
+                    break;
+                } else {
+                    i++;
+                }
+            }
+            if (i != -1) {
+                String str = deviceNames[i];
+                if (this.videoCapturer == null) {
+                    this.videoCapturer = camera2Enumerator.createCapturer(str, (CameraVideoCapturer.CameraEventsHandler) null);
+                    this.videoCapturerSurfaceTextureHelper = SurfaceTextureHelper.create("VideoCapturerThread", eglBase.getEglBaseContext());
+                    this.handler.post(new Runnable() {
+                        public final void run() {
+                            VideoCameraCapturer.this.lambda$null$1$VideoCameraCapturer();
+                        }
+                    });
+                    return;
+                }
+                this.handler.post(new Runnable(str) {
+                    public final /* synthetic */ String f$1;
+
+                    {
+                        this.f$1 = r2;
+                    }
+
+                    public final void run() {
+                        VideoCameraCapturer.this.lambda$null$2$VideoCameraCapturer(this.f$1);
+                    }
+                });
+            }
         }
     }
 
@@ -148,19 +155,21 @@ public class VideoCameraCapturer {
     }
 
     private void onStateChanged(long j, int i) {
-        AndroidUtilities.runOnUIThread(new Runnable(j, i) {
-            public final /* synthetic */ long f$1;
-            public final /* synthetic */ int f$2;
+        if (Build.VERSION.SDK_INT >= 18) {
+            AndroidUtilities.runOnUIThread(new Runnable(j, i) {
+                public final /* synthetic */ long f$1;
+                public final /* synthetic */ int f$2;
 
-            {
-                this.f$1 = r2;
-                this.f$2 = r4;
-            }
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r4;
+                }
 
-            public final void run() {
-                VideoCameraCapturer.this.lambda$onStateChanged$5$VideoCameraCapturer(this.f$1, this.f$2);
-            }
-        });
+                public final void run() {
+                    VideoCameraCapturer.this.lambda$onStateChanged$5$VideoCameraCapturer(this.f$1, this.f$2);
+                }
+            });
+        }
     }
 
     public /* synthetic */ void lambda$onStateChanged$5$VideoCameraCapturer(long j, int i) {
@@ -195,11 +204,13 @@ public class VideoCameraCapturer {
     }
 
     private void onDestroy() {
-        AndroidUtilities.runOnUIThread(new Runnable() {
-            public final void run() {
-                VideoCameraCapturer.this.lambda$onDestroy$7$VideoCameraCapturer();
-            }
-        });
+        if (Build.VERSION.SDK_INT >= 18) {
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public final void run() {
+                    VideoCameraCapturer.this.lambda$onDestroy$7$VideoCameraCapturer();
+                }
+            });
+        }
     }
 
     public /* synthetic */ void lambda$onDestroy$7$VideoCameraCapturer() {

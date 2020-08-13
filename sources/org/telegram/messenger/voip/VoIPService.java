@@ -186,6 +186,7 @@ public class VoIPService extends VoIPBaseService {
             if (this.videoCall) {
                 this.videoCapturer = NativeInstance.createVideoCapturer(this.localSink);
                 this.videoState = 2;
+                setAudioOutput(0);
             }
             if (this.user == null) {
                 if (BuildVars.LOGS_ENABLED) {
@@ -230,6 +231,9 @@ public class VoIPService extends VoIPBaseService {
                 } else {
                     this.videoCapturer = NativeInstance.createVideoCapturer(this.localSink);
                     this.videoState = 2;
+                }
+                if (this.videoCall) {
+                    setAudioOutput(0);
                 }
                 callIShouldHavePutIntoIntent = null;
                 if (VoIPBaseService.USE_CONNECTION_SERVICE) {
@@ -797,6 +801,7 @@ public class VoIPService extends VoIPBaseService {
         } else {
             this.videoState = i;
             nativeInstance.setVideoState(i);
+            checkIsNear();
         }
     }
 

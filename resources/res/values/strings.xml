@@ -122,6 +122,12 @@
     <string name="AccDescrVideoMessage">Record video message</string>
     <string name="AccDescrVideoQuality">Video quality</string>
     <string name="AccDescrVoiceMessage">Record voice message</string>
+    <string name="AccDescrVoipCamOff">Camera is off</string>
+    <string name="AccDescrVoipCamOn">Camera is on</string>
+    <string name="AccDescrVoipCamSwitchedToBack">Switched to back camera</string>
+    <string name="AccDescrVoipCamSwitchedToFront">Switched to front camera</string>
+    <string name="AccDescrVoipMicOff">Microphone is off</string>
+    <string name="AccDescrVoipMicOn">Microphone is on</string>
     <string name="AccReleaseForArchive">Release for archive</string>
     <string name="AccSwipeForArchive">Swipe down for archive</string>
     <string name="Accept">Accept</string>

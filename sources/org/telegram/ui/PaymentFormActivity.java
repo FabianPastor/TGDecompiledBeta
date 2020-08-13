@@ -492,7 +492,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r8 = 1
             if (r0 != 0) goto L_0x001e
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626440(0x7f0e09c8, float:1.8880116E38)
+            r9 = 2131626446(0x7f0e09ce, float:1.8880128E38)
             java.lang.String r10 = "PaymentShippingInfo"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r9)
@@ -500,7 +500,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x001e:
             if (r0 != r8) goto L_0x0030
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626441(0x7f0e09c9, float:1.8880118E38)
+            r9 = 2131626447(0x7f0e09cf, float:1.888013E38)
             java.lang.String r10 = "PaymentShippingMethod"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r9)
@@ -508,7 +508,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x0030:
             if (r0 != r7) goto L_0x0042
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626400(0x7f0e09a0, float:1.8880035E38)
+            r9 = 2131626406(0x7f0e09a6, float:1.8880047E38)
             java.lang.String r10 = "PaymentCardInfo"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r9)
@@ -516,7 +516,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x0042:
             if (r0 != r6) goto L_0x0054
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626400(0x7f0e09a0, float:1.8880035E38)
+            r9 = 2131626406(0x7f0e09a6, float:1.8880047E38)
             java.lang.String r10 = "PaymentCardInfo"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r9)
@@ -532,7 +532,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r9.<init>()
             java.lang.String r10 = "Test "
             r9.append(r10)
-            r10 = 2131626407(0x7f0e09a7, float:1.888005E38)
+            r10 = 2131626413(0x7f0e09ad, float:1.8880061E38)
             java.lang.String r11 = "PaymentCheckout"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r9.append(r10)
@@ -541,7 +541,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             goto L_0x00d6
         L_0x007e:
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626407(0x7f0e09a7, float:1.888005E38)
+            r9 = 2131626413(0x7f0e09ad, float:1.8880061E38)
             java.lang.String r10 = "PaymentCheckout"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r9)
@@ -557,7 +557,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r9.<init>()
             java.lang.String r10 = "Test "
             r9.append(r10)
-            r10 = 2131626433(0x7f0e09c1, float:1.8880102E38)
+            r10 = 2131626439(0x7f0e09c7, float:1.8880114E38)
             java.lang.String r11 = "PaymentReceipt"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r9.append(r10)
@@ -566,7 +566,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             goto L_0x00d6
         L_0x00b7:
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626433(0x7f0e09c1, float:1.8880102E38)
+            r9 = 2131626439(0x7f0e09c7, float:1.8880114E38)
             java.lang.String r10 = "PaymentReceipt"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r9)
@@ -574,7 +574,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x00c6:
             if (r0 != r3) goto L_0x00d6
             org.telegram.ui.ActionBar.ActionBar r0 = r1.actionBar
-            r9 = 2131626422(0x7f0e09b6, float:1.888008E38)
+            r9 = 2131626428(0x7f0e09bc, float:1.8880092E38)
             java.lang.String r10 = "PaymentPassword"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r9)
@@ -744,7 +744,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.setBackgroundColor(r14)
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             r3 = r3[r12]
-            r14 = 2131626434(0x7f0e09c2, float:1.8880104E38)
+            r14 = 2131626440(0x7f0e09c8, float:1.8880116E38)
             java.lang.String r15 = "PaymentShippingAddress"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             r3.setText(r14)
@@ -780,7 +780,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.setBackgroundColor(r7)
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             r3 = r3[r8]
-            r7 = 2131626444(0x7f0e09cc, float:1.8880124E38)
+            r7 = 2131626450(0x7f0e09d2, float:1.8880137E38)
             java.lang.String r14 = "PaymentShippingReceiver"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r14, r7)
             r3.setText(r7)
@@ -966,7 +966,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x03e7:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r13 = 2131626439(0x7f0e09c7, float:1.8880114E38)
+            r13 = 2131626445(0x7f0e09cd, float:1.8880126E38)
             java.lang.String r14 = "PaymentShippingEmailPlaceholder"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r7.setHint(r13)
@@ -982,7 +982,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x040a:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r13 = 2131626442(0x7f0e09ca, float:1.888012E38)
+            r13 = 2131626448(0x7f0e09d0, float:1.8880132E38)
             java.lang.String r14 = "PaymentShippingName"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r7.setHint(r13)
@@ -998,7 +998,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x042d:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r13 = 2131626448(0x7f0e09d0, float:1.8880132E38)
+            r13 = 2131626454(0x7f0e09d6, float:1.8880145E38)
             java.lang.String r14 = "PaymentShippingZipPlaceholder"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r7.setHint(r13)
@@ -1015,7 +1015,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x0452:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r13 = 2131626438(0x7f0e09c6, float:1.8880112E38)
+            r13 = 2131626444(0x7f0e09cc, float:1.8880124E38)
             java.lang.String r14 = "PaymentShippingCountry"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r7.setHint(r13)
@@ -1044,7 +1044,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x048b:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r13 = 2131626447(0x7f0e09cf, float:1.888013E38)
+            r13 = 2131626453(0x7f0e09d5, float:1.8880143E38)
             java.lang.String r14 = "PaymentShippingStatePlaceholder"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r7.setHint(r13)
@@ -1061,7 +1061,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x04af:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r13 = 2131626437(0x7f0e09c5, float:1.888011E38)
+            r13 = 2131626443(0x7f0e09cb, float:1.8880122E38)
             java.lang.String r14 = "PaymentShippingCityPlaceholder"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r7.setHint(r13)
@@ -1078,7 +1078,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x04d3:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r13 = 2131626436(0x7f0e09c4, float:1.8880108E38)
+            r13 = 2131626442(0x7f0e09ca, float:1.888012E38)
             java.lang.String r14 = "PaymentShippingAddress2Placeholder"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r7.setHint(r13)
@@ -1095,7 +1095,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x04f7:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r13 = 2131626435(0x7f0e09c3, float:1.8880106E38)
+            r13 = 2131626441(0x7f0e09c9, float:1.8880118E38)
             java.lang.String r14 = "PaymentShippingAddress1Placeholder"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             r7.setHint(r13)
@@ -1298,7 +1298,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             if (r7 == 0) goto L_0x06b6
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r7 = r1.bottomCell
             r7 = r7[r8]
-            r11 = 2131626430(0x7f0e09be, float:1.8880096E38)
+            r11 = 2131626436(0x7f0e09c4, float:1.8880108E38)
             java.lang.Object[] r13 = new java.lang.Object[r8]
             r13[r12] = r3
             java.lang.String r3 = "PaymentPhoneEmailToProvider"
@@ -1312,7 +1312,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             if (r7 == 0) goto L_0x06d3
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r7 = r1.bottomCell
             r7 = r7[r8]
-            r11 = 2131626418(0x7f0e09b2, float:1.8880072E38)
+            r11 = 2131626424(0x7f0e09b8, float:1.8880084E38)
             java.lang.Object[] r13 = new java.lang.Object[r8]
             r13[r12] = r3
             java.lang.String r3 = "PaymentEmailToProvider"
@@ -1322,7 +1322,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x06d3:
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r7 = r1.bottomCell
             r7 = r7[r8]
-            r11 = 2131626431(0x7f0e09bf, float:1.8880098E38)
+            r11 = 2131626437(0x7f0e09c5, float:1.888011E38)
             java.lang.Object[] r13 = new java.lang.Object[r8]
             r13[r12] = r3
             java.lang.String r3 = "PaymentPhoneToProvider"
@@ -1335,7 +1335,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r8)
             r3.setBackgroundDrawable(r7)
             org.telegram.ui.Cells.TextCheckCell r3 = r1.checkCell1
-            r7 = 2131626445(0x7f0e09cd, float:1.8880126E38)
+            r7 = 2131626451(0x7f0e09d3, float:1.8880139E38)
             java.lang.String r11 = "PaymentShippingSave"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r11, r7)
             boolean r11 = r1.saveShippingInfo
@@ -1361,7 +1361,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.setBackgroundDrawable(r11)
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
             r3 = r3[r12]
-            r7 = 2131626446(0x7f0e09ce, float:1.8880128E38)
+            r7 = 2131626452(0x7f0e09d4, float:1.888014E38)
             java.lang.String r11 = "PaymentShippingSaveInfo"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r11, r7)
             r3.setText(r7)
@@ -1734,7 +1734,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             android.graphics.drawable.Drawable r3 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r8)
             r0.setBackgroundDrawable(r3)
             org.telegram.ui.Cells.TextCheckCell r0 = r1.checkCell1
-            r3 = 2131626403(0x7f0e09a3, float:1.8880041E38)
+            r3 = 2131626409(0x7f0e09a9, float:1.8880053E38)
             java.lang.String r4 = "PaymentCardSavePaymentInformation"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             boolean r4 = r1.saveCardInfo
@@ -1827,7 +1827,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.setBackgroundColor(r4)
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             r3 = r3[r12]
-            r4 = 2131626406(0x7f0e09a6, float:1.8880047E38)
+            r4 = 2131626412(0x7f0e09ac, float:1.888006E38)
             java.lang.String r7 = "PaymentCardTitle"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r7, r4)
             r3.setText(r4)
@@ -1852,7 +1852,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.setBackgroundColor(r4)
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             r3 = r3[r8]
-            r4 = 2131626397(0x7f0e099d, float:1.888003E38)
+            r4 = 2131626403(0x7f0e09a3, float:1.8880041E38)
             java.lang.String r7 = "PaymentBillingAddress"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r7, r4)
             r3.setText(r4)
@@ -2001,7 +2001,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x0c3d:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r9 = 2131626448(0x7f0e09d0, float:1.8880132E38)
+            r9 = 2131626454(0x7f0e09d6, float:1.8880145E38)
             java.lang.String r11 = "PaymentShippingZipPlaceholder"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r7.setHint(r9)
@@ -2009,7 +2009,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x0c4e:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r9 = 2131626438(0x7f0e09c6, float:1.8880112E38)
+            r9 = 2131626444(0x7f0e09cc, float:1.8880124E38)
             java.lang.String r11 = "PaymentShippingCountry"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r7.setHint(r9)
@@ -2017,7 +2017,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x0c5f:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r9 = 2131626398(0x7f0e099e, float:1.8880031E38)
+            r9 = 2131626404(0x7f0e09a4, float:1.8880043E38)
             java.lang.String r11 = "PaymentCardCvv"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r7.setHint(r9)
@@ -2025,7 +2025,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x0CLASSNAME:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r9 = 2131626401(0x7f0e09a1, float:1.8880037E38)
+            r9 = 2131626407(0x7f0e09a7, float:1.888005E38)
             java.lang.String r11 = "PaymentCardName"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r7.setHint(r9)
@@ -2033,7 +2033,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x0CLASSNAME:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r9 = 2131626399(0x7f0e099f, float:1.8880033E38)
+            r9 = 2131626405(0x7f0e09a5, float:1.8880045E38)
             java.lang.String r11 = "PaymentCardExpireDate"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r7.setHint(r9)
@@ -2041,7 +2041,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x0CLASSNAME:
             org.telegram.ui.Components.EditTextBoldCursor[] r7 = r1.inputFields
             r7 = r7[r0]
-            r9 = 2131626402(0x7f0e09a2, float:1.888004E38)
+            r9 = 2131626408(0x7f0e09a8, float:1.8880051E38)
             java.lang.String r11 = "PaymentCardNumber"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r7.setHint(r9)
@@ -2126,7 +2126,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r8)
             r7.setBackgroundDrawable(r9)
             org.telegram.ui.Cells.TextCheckCell r7 = r1.checkCell1
-            r9 = 2131626403(0x7f0e09a3, float:1.8880041E38)
+            r9 = 2131626409(0x7f0e09a9, float:1.8880053E38)
             java.lang.String r11 = "PaymentCardSavePaymentInformation"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             boolean r11 = r1.saveCardInfo
@@ -2347,7 +2347,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.setBackgroundColor(r4)
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             r3 = r3[r12]
-            r4 = 2131626406(0x7f0e09a6, float:1.8880047E38)
+            r4 = 2131626412(0x7f0e09ac, float:1.888006E38)
             java.lang.String r7 = "PaymentCardTitle"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r7, r4)
             r3.setText(r4)
@@ -2477,7 +2477,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x100e:
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
-            r9 = 2131625719(0x7f0e06f7, float:1.8878654E38)
+            r9 = 2131625725(0x7f0e06fd, float:1.8878666E38)
             java.lang.String r11 = "LoginPassword"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r11, r9)
             r4.setHint(r9)
@@ -2531,7 +2531,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3[r12] = r4
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
             r3 = r3[r12]
-            r4 = 2131626415(0x7f0e09af, float:1.8880066E38)
+            r4 = 2131626421(0x7f0e09b5, float:1.8880078E38)
             java.lang.Object[] r9 = new java.lang.Object[r8]
             org.telegram.tgnet.TLRPC$TL_payments_paymentForm r11 = r1.paymentForm
             org.telegram.tgnet.TLRPC$TL_paymentSavedCredentialsCard r11 = r11.saved_credentials
@@ -2562,7 +2562,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.setBackgroundDrawable(r4)
             org.telegram.ui.Cells.TextSettingsCell[] r3 = r1.settingsCell
             r3 = r3[r12]
-            r4 = 2131626416(0x7f0e09b0, float:1.8880068E38)
+            r4 = 2131626422(0x7f0e09b6, float:1.888008E38)
             java.lang.String r9 = "PaymentConfirmationNewCard"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r9, r4)
             r3.setText(r4, r12)
@@ -2610,7 +2610,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.Cells.EditTextSettingsCell r0 = new org.telegram.ui.Cells.EditTextSettingsCell
             r0.<init>(r2)
             r1.codeFieldCell = r0
-            r3 = 2131626386(0x7f0e0992, float:1.8880007E38)
+            r3 = 2131626392(0x7f0e0998, float:1.8880019E38)
             java.lang.String r4 = "PasswordCode"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             java.lang.String r4 = ""
@@ -2669,7 +2669,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r0.setTextColor(r3)
             org.telegram.ui.Cells.TextSettingsCell[] r0 = r1.settingsCell
             r0 = r0[r8]
-            r3 = 2131626702(0x7f0e0ace, float:1.8880648E38)
+            r3 = 2131626708(0x7f0e0ad4, float:1.888066E38)
             java.lang.String r4 = "ResendCode"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.setText(r3, r8)
@@ -2736,7 +2736,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.setBackgroundColor(r4)
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             r3 = r3[r12]
-            r4 = 2131626429(0x7f0e09bd, float:1.8880094E38)
+            r4 = 2131626435(0x7f0e09c3, float:1.8880106E38)
             java.lang.String r7 = "PaymentPasswordTitle"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r7, r4)
             r3.setText(r4)
@@ -2761,7 +2761,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3.setBackgroundColor(r4)
             org.telegram.ui.Cells.HeaderCell[] r3 = r1.headerCell
             r3 = r3[r8]
-            r4 = 2131626425(0x7f0e09b9, float:1.8880086E38)
+            r4 = 2131626431(0x7f0e09bf, float:1.8880098E38)
             java.lang.String r7 = "PaymentPasswordEmailTitle"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r7, r4)
             r3.setText(r4)
@@ -2871,7 +2871,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x1387:
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
-            r14 = 2131626423(0x7f0e09b7, float:1.8880082E38)
+            r14 = 2131626429(0x7f0e09bd, float:1.8880094E38)
             java.lang.String r15 = "PaymentPasswordEmail"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             r4.setHint(r14)
@@ -2879,7 +2879,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x1398:
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
-            r14 = 2131626428(0x7f0e09bc, float:1.8880092E38)
+            r14 = 2131626434(0x7f0e09c2, float:1.8880104E38)
             java.lang.String r15 = "PaymentPasswordReEnter"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             r4.setHint(r14)
@@ -2887,7 +2887,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
         L_0x13a9:
             org.telegram.ui.Components.EditTextBoldCursor[] r4 = r1.inputFields
             r4 = r4[r0]
-            r14 = 2131626426(0x7f0e09ba, float:1.8880088E38)
+            r14 = 2131626432(0x7f0e09c0, float:1.88801E38)
             java.lang.String r15 = "PaymentPasswordEnter"
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r15, r14)
             r4.setHint(r14)
@@ -2933,7 +2933,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3[r12] = r4
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
             r3 = r3[r12]
-            r4 = 2131626427(0x7f0e09bb, float:1.888009E38)
+            r4 = 2131626433(0x7f0e09c1, float:1.8880102E38)
             java.lang.String r14 = "PaymentPasswordInfo"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r14, r4)
             r3.setText(r4)
@@ -2959,7 +2959,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r3[r8] = r4
             org.telegram.ui.Cells.TextInfoPrivacyCell[] r3 = r1.bottomCell
             r3 = r3[r8]
-            r4 = 2131626424(0x7f0e09b8, float:1.8880084E38)
+            r4 = 2131626430(0x7f0e09be, float:1.8880096E38)
             java.lang.String r7 = "PaymentPasswordEmailInfo"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r7, r4)
             r3.setText(r4)
@@ -3052,7 +3052,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r0.<init>(r2)
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r22)
             r0.setBackgroundColor(r4)
-            r4 = 2131626454(0x7f0e09d6, float:1.8880145E38)
+            r4 = 2131626460(0x7f0e09dc, float:1.8880157E38)
             java.lang.String r5 = "PaymentTransactionTotal"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r5 = 1
@@ -3082,7 +3082,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.ui.Cells.TextDetailSettingsCell[] r0 = r1.detailSettingsCell
             r0 = r0[r12]
             java.lang.String r4 = r1.cardName
-            r7 = 2131626409(0x7f0e09a9, float:1.8880053E38)
+            r7 = 2131626415(0x7f0e09af, float:1.8880066E38)
             java.lang.String r8 = "PaymentCheckoutMethod"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r0.setTextAndValue(r4, r7, r5)
@@ -3134,7 +3134,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             java.lang.String r4 = r5.first_name
             java.lang.String r5 = r5.last_name
             java.lang.String r4 = org.telegram.messenger.ContactsController.formatName(r4, r5)
-            r5 = 2131626413(0x7f0e09ad, float:1.8880061E38)
+            r5 = 2131626419(0x7f0e09b3, float:1.8880074E38)
             java.lang.String r8 = "PaymentCheckoutProvider"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r8, r5)
             r0.setTextAndValue(r4, r5, r7)
@@ -3182,7 +3182,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r5.setBackgroundColor(r7)
             org.telegram.ui.Cells.TextDetailSettingsCell[] r5 = r1.detailSettingsCell
             r5 = r5[r8]
-            r7 = 2131626434(0x7f0e09c2, float:1.8880104E38)
+            r7 = 2131626440(0x7f0e09c8, float:1.8880116E38)
             java.lang.String r9 = "PaymentShippingAddress"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r9, r7)
             r9 = 1
@@ -3209,7 +3209,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo r5 = r1.validateRequest
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r5 = r5.info
             java.lang.String r5 = r5.name
-            r7 = 2131626410(0x7f0e09aa, float:1.8880055E38)
+            r7 = 2131626416(0x7f0e09b0, float:1.8880068E38)
             java.lang.String r8 = "PaymentCheckoutName"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r8 = 1
@@ -3239,7 +3239,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r6 = r6.info
             java.lang.String r6 = r6.phone
             java.lang.String r5 = r5.format(r6)
-            r6 = 2131626412(0x7f0e09ac, float:1.888006E38)
+            r6 = 2131626418(0x7f0e09b2, float:1.8880072E38)
             java.lang.String r7 = "PaymentCheckoutPhoneNumber"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r7 = 1
@@ -3268,7 +3268,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             org.telegram.tgnet.TLRPC$TL_payments_validateRequestedInfo r5 = r1.validateRequest
             org.telegram.tgnet.TLRPC$TL_paymentRequestedInfo r5 = r5.info
             java.lang.String r5 = r5.email
-            r7 = 2131626408(0x7f0e09a8, float:1.8880051E38)
+            r7 = 2131626414(0x7f0e09ae, float:1.8880064E38)
             java.lang.String r8 = "PaymentCheckoutEmail"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r8 = 1
@@ -3293,7 +3293,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r0 = r0[r6]
             org.telegram.tgnet.TLRPC$TL_shippingOption r5 = r1.shippingOption
             java.lang.String r5 = r5.title
-            r7 = 2131626414(0x7f0e09ae, float:1.8880064E38)
+            r7 = 2131626420(0x7f0e09b4, float:1.8880076E38)
             java.lang.String r8 = "PaymentCheckoutShippingMethod"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r0.setTextAndValue(r5, r7, r12)
@@ -3329,7 +3329,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             r0.setTextColor(r4)
             android.widget.TextView r0 = r1.payTextView
-            r4 = 2131626411(0x7f0e09ab, float:1.8880057E38)
+            r4 = 2131626417(0x7f0e09b1, float:1.888007E38)
             r5 = 1
             java.lang.Object[] r7 = new java.lang.Object[r5]
             r7[r12] = r3

@@ -11,6 +11,8 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.Drawable;
+import android.view.accessibility.AccessibilityNodeInfo;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import androidx.core.content.ContextCompat;
@@ -24,6 +26,8 @@ public class VoIPToggleButton extends FrameLayout {
     public int animationDelay;
     int backgroundColor;
     private Paint bitmapPaint = new Paint(1);
+    private boolean checkable;
+    private boolean checked;
     Paint circlePaint = new Paint(1);
     private float crossOffset;
     private Paint crossPaint = new Paint(1);
@@ -53,6 +57,7 @@ public class VoIPToggleButton extends FrameLayout {
             textView2.setGravity(1);
             textView2.setTextSize(11.0f);
             textView2.setTextColor(-1);
+            textView2.setImportantForAccessibility(2);
             addView(textView2, LayoutHelper.createFrame(-1, -2.0f, 0, 0.0f, 58.0f, 0.0f, 0.0f));
             this.textView[i] = textView2;
         }
@@ -588,6 +593,24 @@ public class VoIPToggleButton extends FrameLayout {
         Drawable drawable = this.rippleDrawable;
         if (drawable != null) {
             drawable.jumpToCurrentState();
+        }
+    }
+
+    public void setCheckable(boolean z) {
+        this.checkable = z;
+    }
+
+    public void setChecked(boolean z) {
+        this.checked = z;
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
+        super.onInitializeAccessibilityNodeInfo(accessibilityNodeInfo);
+        accessibilityNodeInfo.setText(this.currentText);
+        accessibilityNodeInfo.setClassName(Button.class.getName());
+        if (this.checkable) {
+            accessibilityNodeInfo.setCheckable(true);
+            accessibilityNodeInfo.setChecked(this.checked);
         }
     }
 }
