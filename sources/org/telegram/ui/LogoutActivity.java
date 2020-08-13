@@ -153,7 +153,7 @@ public class LogoutActivity extends BaseFragment {
         } else if (i == this.supportRow) {
             showDialog(AlertsCreator.createSupportAlert(this));
         } else if (i == this.logoutRow && getParentActivity() != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
             getUserConfig();
             builder.setMessage(LocaleController.getString("AreYouSureLogout", NUM));
             builder.setTitle(LocaleController.getString("LogOut", NUM));
@@ -260,7 +260,7 @@ public class LogoutActivity extends BaseFragment {
                 android.content.Context r4 = r2.mContext
                 r3.<init>(r4)
                 android.content.Context r4 = r2.mContext
-                r0 = 2131165424(0x7var_f0, float:1.7945065E38)
+                r0 = 2131165435(0x7var_fb, float:1.7945087E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r4, (int) r0, (java.lang.String) r1)
                 r3.setBackgroundDrawable(r4)

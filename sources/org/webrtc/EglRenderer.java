@@ -298,7 +298,9 @@ public class EglRenderer implements VideoSink {
     }
 
     public /* synthetic */ void lambda$release$1$EglRenderer(CountDownLatch countDownLatch) {
-        GLES20.glUseProgram(0);
+        synchronized (EglBase.lock) {
+            GLES20.glUseProgram(0);
+        }
         RendererCommon.GlDrawer glDrawer = this.drawer;
         if (glDrawer != null) {
             glDrawer.release();

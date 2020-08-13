@@ -336,7 +336,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 presentFragment(new PasscodeActivity(1));
             } else if (i == this.autoLockRow) {
                 if (getParentActivity() != null) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                     builder.setTitle(LocaleController.getString("AutoLock", NUM));
                     NumberPicker numberPicker = new NumberPicker(getParentActivity());
                     numberPicker.setMinValue(0);

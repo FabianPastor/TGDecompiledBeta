@@ -277,7 +277,7 @@ public class RenderView extends TextureView {
                               (wrap: org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$HlBJ_nBTz_zjBI9w92KsEr6_ZgU : 0x0071: CONSTRUCTOR  (r0v27 org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$HlBJ_nBTz_zjBI9w92KsEr6_ZgU) = 
                               (r4v0 'this' org.telegram.ui.Components.Paint.RenderView$CanvasInternal$1 A[THIS])
                              call: org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$HlBJ_nBTz_zjBI9w92KsEr6_ZgU.<init>(org.telegram.ui.Components.Paint.RenderView$CanvasInternal$1):void type: CONSTRUCTOR)
-                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Components.Paint.RenderView.CanvasInternal.1.run():void, dex: classes2.dex
+                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Components.Paint.RenderView.CanvasInternal.1.run():void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                             	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -350,7 +350,7 @@ public class RenderView extends TextureView {
                             	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
                             Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0071: CONSTRUCTOR  (r0v27 org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$HlBJ_nBTz_zjBI9w92KsEr6_ZgU) = 
                               (r4v0 'this' org.telegram.ui.Components.Paint.RenderView$CanvasInternal$1 A[THIS])
-                             call: org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$HlBJ_nBTz_zjBI9w92KsEr6_ZgU.<init>(org.telegram.ui.Components.Paint.RenderView$CanvasInternal$1):void type: CONSTRUCTOR in method: org.telegram.ui.Components.Paint.RenderView.CanvasInternal.1.run():void, dex: classes2.dex
+                             call: org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$HlBJ_nBTz_zjBI9w92KsEr6_ZgU.<init>(org.telegram.ui.Components.Paint.RenderView$CanvasInternal$1):void type: CONSTRUCTOR in method: org.telegram.ui.Components.Paint.RenderView.CanvasInternal.1.run():void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)

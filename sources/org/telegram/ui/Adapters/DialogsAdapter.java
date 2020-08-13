@@ -386,7 +386,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         /*
             r12 = this;
             java.lang.String r13 = "windowBackgroundGrayShadow"
-            r0 = 2131165424(0x7var_f0, float:1.7945065E38)
+            r0 = 2131165435(0x7var_fb, float:1.7945087E38)
             java.lang.String r1 = "windowBackgroundGray"
             r2 = 5
             r3 = -1
@@ -438,7 +438,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Cells.HeaderCell r13 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r0 = r12.mContext
             r13.<init>(r0)
-            r0 = 2131627487(0x7f0e0ddf, float:1.888224E38)
+            r0 = 2131627501(0x7f0e0ded, float:1.8882268E38)
             java.lang.String r1 = "YourContacts"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r13.setText(r0)
@@ -481,7 +481,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Cells.HeaderCell r13 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r0 = r12.mContext
             r13.<init>(r0)
-            r0 = 2131626642(0x7f0e0a92, float:1.8880526E38)
+            r0 = 2131626645(0x7f0e0a95, float:1.8880532E38)
             java.lang.String r1 = "RecentlyViewed"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r13.setText(r0)
@@ -496,7 +496,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             java.lang.String r1 = "windowBackgroundWhiteBlueHeader"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r0.setTextColor(r1)
-            r1 = 2131626643(0x7f0e0a93, float:1.8880528E38)
+            r1 = 2131626646(0x7f0e0a96, float:1.8880534E38)
             java.lang.String r4 = "RecentlyViewedHide"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setText(r1)

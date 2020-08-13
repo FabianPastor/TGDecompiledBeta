@@ -58,6 +58,7 @@ class WebRtcAudioRecord {
     public volatile boolean microphoneMute;
     /* access modifiers changed from: private */
     public long nativeAudioRecord;
+    private AudioDeviceInfo preferredDevice;
     private final JavaAudioDeviceModule.AudioRecordStateCallback stateCallback;
 
     private static String audioStateToString(int i) {
@@ -224,6 +225,9 @@ class WebRtcAudioRecord {
         try {
             if (Build.VERSION.SDK_INT >= 23) {
                 this.audioRecord = createAudioRecordOnMOrHigher(this.audioSource, i, channelCountToConfiguration, this.audioFormat, max);
+                if (this.preferredDevice != null) {
+                    setPreferredDevice(this.preferredDevice);
+                }
             } else {
                 this.audioRecord = createAudioRecordOnLowerThanM(this.audioSource, i, channelCountToConfiguration, this.audioFormat, max);
             }
@@ -245,6 +249,20 @@ class WebRtcAudioRecord {
             reportWebRtcAudioRecordInitError(e.getMessage());
             releaseAudioResources();
             return -1;
+        }
+    }
+
+    /* access modifiers changed from: package-private */
+    @TargetApi(23)
+    public void setPreferredDevice(AudioDeviceInfo audioDeviceInfo) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("setPreferredDevice ");
+        sb.append(audioDeviceInfo != null ? Integer.valueOf(audioDeviceInfo.getId()) : null);
+        Logging.d("WebRtcAudioRecordExternal", sb.toString());
+        this.preferredDevice = audioDeviceInfo;
+        AudioRecord audioRecord2 = this.audioRecord;
+        if (audioRecord2 != null && !audioRecord2.setPreferredDevice(audioDeviceInfo)) {
+            Logging.e("WebRtcAudioRecordExternal", "setPreferredDevice failed");
         }
     }
 

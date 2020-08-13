@@ -24,6 +24,7 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
     private final RendererCommon.VideoLayoutMeasure videoLayoutMeasure = new RendererCommon.VideoLayoutMeasure();
 
     public void setFirstFrameRendered() {
+        boolean unused = this.eglRenderer.isFirstFrameRendered = true;
     }
 
     public static class TextureEglRenderer extends EglRenderer implements TextureView.SurfaceTextureListener {

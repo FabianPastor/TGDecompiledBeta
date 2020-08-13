@@ -593,7 +593,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r0.addView(r4, r8)
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
-                r14 = 2131165809(0x7var_, float:1.7945846E38)
+                r14 = 2131165820(0x7var_c, float:1.7945868E38)
                 r8.setImageResource(r14)
                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
                 if (r14 == 0) goto L_0x010f
@@ -661,7 +661,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.ImageView r14 = new android.widget.ImageView
                 r14.<init>(r2)
                 r0.blackImageView = r14
-                r11 = 2131165938(0x7var_f2, float:1.7946107E38)
+                r11 = 2131165949(0x7var_fd, float:1.794613E38)
                 r14.setImageResource(r11)
                 android.widget.ImageView r11 = r0.blackImageView
                 android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
@@ -682,7 +682,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131165936(0x7var_f0, float:1.7946103E38)
+                r10 = 2131165947(0x7var_fb, float:1.7946125E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -694,7 +694,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131626870(0x7f0e0b76, float:1.8880988E38)
+                r8 = 2131626873(0x7f0e0b79, float:1.8880994E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -703,7 +703,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131165937(0x7var_f1, float:1.7946105E38)
+                r10 = 2131165948(0x7var_fc, float:1.7946128E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -722,7 +722,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131626874(0x7f0e0b7a, float:1.8880997E38)
+                r8 = 2131626877(0x7f0e0b7d, float:1.8881003E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
@@ -840,14 +840,14 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 int r1 = r0.currentType
                 if (r1 != r3) goto L_0x030b
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625017(0x7f0e0439, float:1.887723E38)
+                r2 = 2131625020(0x7f0e043c, float:1.8877236E38)
                 java.lang.String r3 = "DidNotGetTheCodeSms"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
                 goto L_0x0319
             L_0x030b:
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625016(0x7f0e0438, float:1.8877228E38)
+                r2 = 2131625019(0x7f0e043b, float:1.8877234E38)
                 java.lang.String r3 = "DidNotGetTheCode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
@@ -1734,7 +1734,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         if (r2 != r6) goto L_0x00a2
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131626992(0x7f0e0bf0, float:1.8881236E38)
+                                        r3 = 2131626995(0x7f0e0bf3, float:1.8881242E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -1842,7 +1842,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                     L_0x0164:
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131626866(0x7f0e0b72, float:1.888098E38)
+                                        r1 = 2131626869(0x7f0e0b75, float:1.8880986E38)
                                         java.lang.String r2 = "SendingSms"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)

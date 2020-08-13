@@ -460,7 +460,11 @@ public class PeerConnection {
         CELLULAR(4),
         VPN(8),
         LOOPBACK(16),
-        ADAPTER_TYPE_ANY(32);
+        ADAPTER_TYPE_ANY(32),
+        CELLULAR_2G(64),
+        CELLULAR_3G(128),
+        CELLULAR_4G(256),
+        CELLULAR_5G(512);
         
         private static final Map<Integer, AdapterType> BY_BITMASK = null;
         public final Integer bitMask;
@@ -526,8 +530,6 @@ public class PeerConnection {
         public TurnCustomizer turnCustomizer;
         public String turnLoggingId;
         public PortPrunePolicy turnPortPrunePolicy;
-        public boolean useMediaTransport;
-        public boolean useMediaTransportForDataChannels;
 
         public RTCConfiguration(List<IceServer> list) {
             this.iceServers = list;
@@ -561,8 +563,6 @@ public class PeerConnection {
             this.networkPreference = AdapterType.UNKNOWN;
             this.sdpSemantics = SdpSemantics.PLAN_B;
             this.activeResetSrtpParams = false;
-            this.useMediaTransport = false;
-            this.useMediaTransportForDataChannels = false;
             this.cryptoOptions = null;
             this.turnLoggingId = null;
             this.allowCodecSwitching = null;
@@ -800,18 +800,6 @@ public class PeerConnection {
         @CalledByNative("RTCConfiguration")
         public Boolean getAllowCodecSwitching() {
             return this.allowCodecSwitching;
-        }
-
-        /* access modifiers changed from: package-private */
-        @CalledByNative("RTCConfiguration")
-        public boolean getUseMediaTransport() {
-            return this.useMediaTransport;
-        }
-
-        /* access modifiers changed from: package-private */
-        @CalledByNative("RTCConfiguration")
-        public boolean getUseMediaTransportForDataChannels() {
-            return this.useMediaTransportForDataChannels;
         }
 
         /* access modifiers changed from: package-private */

@@ -25,7 +25,9 @@ public class RtpTransceiver {
 
     private static native void nativeSetDirection(long j, RtpTransceiverDirection rtpTransceiverDirection);
 
-    private static native void nativeStop(long j);
+    private static native void nativeStopInternal(long j);
+
+    private static native void nativeStopStandard(long j);
 
     private static native boolean nativeStopped(long j);
 
@@ -147,7 +149,17 @@ public class RtpTransceiver {
 
     public void stop() {
         checkRtpTransceiverExists();
-        nativeStop(this.nativeRtpTransceiver);
+        nativeStopInternal(this.nativeRtpTransceiver);
+    }
+
+    public void stopInternal() {
+        checkRtpTransceiverExists();
+        nativeStopInternal(this.nativeRtpTransceiver);
+    }
+
+    public void stopStandard() {
+        checkRtpTransceiverExists();
+        nativeStopStandard(this.nativeRtpTransceiver);
     }
 
     @CalledByNative

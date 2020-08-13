@@ -326,7 +326,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
                     presentFragment(groupCreateFinalActivity);
                 } else if (!this.chats.isEmpty()) {
                     TLRPC$Chat tLRPC$Chat2 = this.chats.get(0);
-                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                     if (this.isChannel) {
                         str2 = LocaleController.getString("DiscussionUnlinkGroup", NUM);
                         str = LocaleController.formatString("DiscussionUnlinkChannelAlert", NUM, tLRPC$Chat2.title);
@@ -445,7 +445,7 @@ public class ChatLinkActivity extends BaseFragment implements NotificationCenter
         TLRPC$ChatFull chatFull = getMessagesController().getChatFull(tLRPC$Chat2.id);
         int i = 3;
         if (chatFull != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
             TextView textView = new TextView(getParentActivity());
             textView.setTextColor(Theme.getColor("dialogTextBlack"));
             textView.setTextSize(1, 16.0f);

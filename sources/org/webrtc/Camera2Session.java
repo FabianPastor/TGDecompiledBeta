@@ -254,8 +254,8 @@ class Camera2Session implements CameraSession {
             this.isCameraFrontFacing = ((Integer) this.cameraCharacteristics.get(CameraCharacteristics.LENS_FACING)).intValue() == 0;
             findCaptureFormat();
             openCamera();
-        } catch (CameraAccessException e) {
-            reportError("getCameraCharacteristics(): " + e.getMessage());
+        } catch (Throwable th) {
+            reportError("getCameraCharacteristics(): " + th.getMessage());
         }
     }
 

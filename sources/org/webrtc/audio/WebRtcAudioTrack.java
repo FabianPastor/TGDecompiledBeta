@@ -124,7 +124,7 @@ class WebRtcAudioTrack {
     }
 
     @CalledByNative
-    private boolean initPlayout(int i, int i2, double d) {
+    private int initPlayout(int i, int i2, double d) {
         this.threadChecker.checkIsOnValidThread();
         Logging.d("WebRtcAudioTrackExternal", "initPlayout(sampleRate=" + i + ", channels=" + i2 + ", bufferSizeFactor=" + d + ")");
         this.byteBuffer = ByteBuffer.allocateDirect(i2 * 2 * (i / 100));
@@ -141,10 +141,10 @@ class WebRtcAudioTrack {
         Logging.d("WebRtcAudioTrackExternal", "minBufferSizeInBytes: " + i3);
         if (i3 < this.byteBuffer.capacity()) {
             reportWebRtcAudioTrackInitError("AudioTrack.getMinBufferSize returns an invalid value.");
-            return false;
+            return -1;
         } else if (this.audioTrack != null) {
             reportWebRtcAudioTrackInitError("Conflict with existing AudioTrack.");
-            return false;
+            return -1;
         } else {
             try {
                 if (Build.VERSION.SDK_INT >= 21) {
@@ -156,15 +156,15 @@ class WebRtcAudioTrack {
                 if (audioTrack2 == null || audioTrack2.getState() != 1) {
                     reportWebRtcAudioTrackInitError("Initialization of audio track failed.");
                     releaseAudioResources();
-                    return false;
+                    return -1;
                 }
                 logMainParameters();
                 logMainParametersExtended();
-                return true;
+                return i3;
             } catch (IllegalArgumentException e) {
                 reportWebRtcAudioTrackInitError(e.getMessage());
                 releaseAudioResources();
-                return false;
+                return -1;
             }
         }
     }
@@ -294,6 +294,14 @@ class WebRtcAudioTrack {
         if (Build.VERSION.SDK_INT >= 23) {
             Logging.d("WebRtcAudioTrackExternal", "AudioTrack: buffer size in frames: " + this.audioTrack.getBufferSizeInFrames());
         }
+    }
+
+    @CalledByNative
+    private int getBufferSizeInFrames() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            return this.audioTrack.getBufferSizeInFrames();
+        }
+        return -1;
     }
 
     private void logBufferCapacityInFrames() {

@@ -560,7 +560,7 @@ public class PopupNotificationActivity extends Activity implements NotificationC
     public void onRequestPermissionsResult(int i, String[] strArr, int[] iArr) {
         super.onRequestPermissionsResult(i, strArr, iArr);
         if (i == 3 && iArr[0] != 0) {
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(LocaleController.getString("AppName", NUM));
             builder.setMessage(LocaleController.getString("PermissionNoAudio", NUM));
             builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {

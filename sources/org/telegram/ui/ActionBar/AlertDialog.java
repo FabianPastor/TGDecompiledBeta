@@ -1337,10 +1337,6 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     public static class Builder {
         private AlertDialog alertDialog;
 
-        protected Builder(AlertDialog alertDialog2) {
-            this.alertDialog = alertDialog2;
-        }
-
         public Builder(Context context) {
             this.alertDialog = new AlertDialog(context, 0);
         }

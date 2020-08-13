@@ -2150,7 +2150,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
                                   (wrap: org.telegram.ui.Components.-$$Lambda$WebPlayerView$2$1$XktWEKlh2pqd2EX-7__wMiImvaQ : 0x004f: CONSTRUCTOR  (r0v7 org.telegram.ui.Components.-$$Lambda$WebPlayerView$2$1$XktWEKlh2pqd2EX-7__wMiImvaQ) = 
                                   (r2v0 'this' org.telegram.ui.Components.WebPlayerView$2$1 A[THIS])
                                  call: org.telegram.ui.Components.-$$Lambda$WebPlayerView$2$1$XktWEKlh2pqd2EX-7__wMiImvaQ.<init>(org.telegram.ui.Components.WebPlayerView$2$1):void type: CONSTRUCTOR)
-                                 org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Components.WebPlayerView.2.1.onPreDraw():boolean, dex: classes2.dex
+                                 org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Components.WebPlayerView.2.1.onPreDraw():boolean, dex: classes3.dex
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                                 	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -2252,7 +2252,7 @@ public class WebPlayerView extends ViewGroup implements VideoPlayer.VideoPlayerD
                                 	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
                                 Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x004f: CONSTRUCTOR  (r0v7 org.telegram.ui.Components.-$$Lambda$WebPlayerView$2$1$XktWEKlh2pqd2EX-7__wMiImvaQ) = 
                                   (r2v0 'this' org.telegram.ui.Components.WebPlayerView$2$1 A[THIS])
-                                 call: org.telegram.ui.Components.-$$Lambda$WebPlayerView$2$1$XktWEKlh2pqd2EX-7__wMiImvaQ.<init>(org.telegram.ui.Components.WebPlayerView$2$1):void type: CONSTRUCTOR in method: org.telegram.ui.Components.WebPlayerView.2.1.onPreDraw():boolean, dex: classes2.dex
+                                 call: org.telegram.ui.Components.-$$Lambda$WebPlayerView$2$1$XktWEKlh2pqd2EX-7__wMiImvaQ.<init>(org.telegram.ui.Components.WebPlayerView$2$1):void type: CONSTRUCTOR in method: org.telegram.ui.Components.WebPlayerView.2.1.onPreDraw():boolean, dex: classes3.dex
                                 	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                 	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                 	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)

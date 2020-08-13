@@ -99,7 +99,7 @@ public class AcceptDeclineView extends View {
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:6:0x000f, code lost:
-        if (r0 != 3) goto L_0x0179;
+        if (r0 != 3) goto L_0x0183;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r12) {
@@ -108,26 +108,28 @@ public class AcceptDeclineView extends View {
             int r0 = r12.getAction()
             r1 = 0
             r2 = 1
-            if (r0 == 0) goto L_0x012a
+            if (r0 == 0) goto L_0x0134
             r3 = 2
             r4 = 0
-            if (r0 == r2) goto L_0x0093
+            if (r0 == r2) goto L_0x009d
             if (r0 == r3) goto L_0x0013
             r5 = 3
-            if (r0 == r5) goto L_0x0093
-            goto L_0x0179
+            if (r0 == r5) goto L_0x009d
+            goto L_0x0183
         L_0x0013:
             boolean r0 = r11.captured
-            if (r0 == 0) goto L_0x0179
+            if (r0 == 0) goto L_0x0183
             float r0 = r12.getX()
             float r3 = r11.startX
             float r0 = r0 - r3
             boolean r3 = r11.startDrag
-            if (r3 != 0) goto L_0x003f
+            if (r3 != 0) goto L_0x0049
             float r3 = java.lang.Math.abs(r0)
             float r5 = r11.touchSlop
             int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r3 <= 0) goto L_0x003f
+            if (r3 <= 0) goto L_0x0049
+            boolean r3 = r11.retryMod
+            if (r3 != 0) goto L_0x0044
             float r12 = r12.getX()
             r11.startX = r12
             r11.startDrag = r2
@@ -135,20 +137,24 @@ public class AcceptDeclineView extends View {
             android.view.ViewParent r12 = r11.getParent()
             r12.requestDisallowInterceptTouchEvent(r2)
             r0 = 0
-        L_0x003f:
+            goto L_0x0049
+        L_0x0044:
+            r11.setPressed(r1)
+            r11.captured = r1
+        L_0x0049:
             boolean r12 = r11.startDrag
-            if (r12 == 0) goto L_0x0092
+            if (r12 == 0) goto L_0x009c
             boolean r12 = r11.leftDrag
-            if (r12 == 0) goto L_0x006c
+            if (r12 == 0) goto L_0x0076
             r11.leftOffsetX = r0
             int r12 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r12 >= 0) goto L_0x0050
+            if (r12 >= 0) goto L_0x005a
             r11.leftOffsetX = r4
-            goto L_0x0092
-        L_0x0050:
+            goto L_0x009c
+        L_0x005a:
             float r12 = r11.maxOffset
             int r0 = (r0 > r12 ? 1 : (r0 == r12 ? 0 : -1))
-            if (r0 <= 0) goto L_0x0092
+            if (r0 <= 0) goto L_0x009c
             r11.leftOffsetX = r12
             long r3 = android.os.SystemClock.uptimeMillis()
             long r5 = android.os.SystemClock.uptimeMillis()
@@ -158,18 +164,18 @@ public class AcceptDeclineView extends View {
             r10 = 0
             android.view.MotionEvent r12 = android.view.MotionEvent.obtain(r3, r5, r7, r8, r9, r10)
             r11.dispatchTouchEvent(r12)
-            goto L_0x0092
-        L_0x006c:
+            goto L_0x009c
+        L_0x0076:
             r11.rigthOffsetX = r0
             int r12 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-            if (r12 <= 0) goto L_0x0075
+            if (r12 <= 0) goto L_0x007f
             r11.rigthOffsetX = r4
-            goto L_0x0092
-        L_0x0075:
+            goto L_0x009c
+        L_0x007f:
             float r12 = r11.maxOffset
             float r1 = -r12
             int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r0 >= 0) goto L_0x0092
+            if (r0 >= 0) goto L_0x009c
             float r12 = -r12
             r11.rigthOffsetX = r12
             long r3 = android.os.SystemClock.uptimeMillis()
@@ -180,17 +186,17 @@ public class AcceptDeclineView extends View {
             r10 = 0
             android.view.MotionEvent r12 = android.view.MotionEvent.obtain(r3, r5, r7, r8, r9, r10)
             r11.dispatchTouchEvent(r12)
-        L_0x0092:
+        L_0x009c:
             return r2
-        L_0x0093:
+        L_0x009d:
             float r12 = r12.getY()
             float r0 = r11.startY
             float r12 = r12 - r0
             boolean r0 = r11.captured
-            if (r0 == 0) goto L_0x011b
+            if (r0 == 0) goto L_0x0125
             boolean r0 = r11.leftDrag
             r5 = 1061997773(0x3f4ccccd, float:0.8)
-            if (r0 == 0) goto L_0x00e0
+            if (r0 == 0) goto L_0x00ea
             float[] r0 = new float[r3]
             float r3 = r11.leftOffsetX
             r0[r1] = r3
@@ -202,24 +208,24 @@ public class AcceptDeclineView extends View {
             r0.start()
             r11.leftAnimator = r0
             org.telegram.ui.Components.voip.AcceptDeclineView$Listener r0 = r11.listener
-            if (r0 == 0) goto L_0x011b
+            if (r0 == 0) goto L_0x0125
             boolean r0 = r11.startDrag
-            if (r0 != 0) goto L_0x00d0
+            if (r0 != 0) goto L_0x00da
             float r12 = java.lang.Math.abs(r12)
             float r0 = r11.touchSlop
             int r12 = (r12 > r0 ? 1 : (r12 == r0 ? 0 : -1))
-            if (r12 < 0) goto L_0x00da
-        L_0x00d0:
+            if (r12 < 0) goto L_0x00e4
+        L_0x00da:
             float r12 = r11.leftOffsetX
             float r0 = r11.maxOffset
             float r0 = r0 * r5
             int r12 = (r12 > r0 ? 1 : (r12 == r0 ? 0 : -1))
-            if (r12 <= 0) goto L_0x011b
-        L_0x00da:
+            if (r12 <= 0) goto L_0x0125
+        L_0x00e4:
             org.telegram.ui.Components.voip.AcceptDeclineView$Listener r12 = r11.listener
             r12.onDicline()
-            goto L_0x011b
-        L_0x00e0:
+            goto L_0x0125
+        L_0x00ea:
             float[] r0 = new float[r3]
             float r3 = r11.rigthOffsetX
             r0[r1] = r3
@@ -231,67 +237,67 @@ public class AcceptDeclineView extends View {
             r0.start()
             r11.rightAnimator = r0
             org.telegram.ui.Components.voip.AcceptDeclineView$Listener r0 = r11.listener
-            if (r0 == 0) goto L_0x011b
+            if (r0 == 0) goto L_0x0125
             boolean r0 = r11.startDrag
-            if (r0 != 0) goto L_0x010b
+            if (r0 != 0) goto L_0x0115
             float r12 = java.lang.Math.abs(r12)
             float r0 = r11.touchSlop
             int r12 = (r12 > r0 ? 1 : (r12 == r0 ? 0 : -1))
-            if (r12 < 0) goto L_0x0116
-        L_0x010b:
+            if (r12 < 0) goto L_0x0120
+        L_0x0115:
             float r12 = r11.rigthOffsetX
             float r12 = -r12
             float r0 = r11.maxOffset
             float r0 = r0 * r5
             int r12 = (r12 > r0 ? 1 : (r12 == r0 ? 0 : -1))
-            if (r12 <= 0) goto L_0x011b
-        L_0x0116:
+            if (r12 <= 0) goto L_0x0125
+        L_0x0120:
             org.telegram.ui.Components.voip.AcceptDeclineView$Listener r12 = r11.listener
             r12.onAccept()
-        L_0x011b:
+        L_0x0125:
             android.view.ViewParent r12 = r11.getParent()
             r12.requestDisallowInterceptTouchEvent(r1)
             r11.captured = r1
             r11.startDrag = r1
             r11.setPressed(r1)
-            goto L_0x0179
-        L_0x012a:
+            goto L_0x0183
+        L_0x0134:
             float r0 = r12.getX()
             r11.startX = r0
             float r0 = r12.getY()
             r11.startY = r0
             android.animation.Animator r0 = r11.leftAnimator
-            if (r0 != 0) goto L_0x0154
+            if (r0 != 0) goto L_0x015e
             android.graphics.Rect r0 = r11.declineRect
             float r3 = r12.getX()
             int r3 = (int) r3
             float r4 = r12.getY()
             int r4 = (int) r4
             boolean r0 = r0.contains(r3, r4)
-            if (r0 == 0) goto L_0x0154
+            if (r0 == 0) goto L_0x015e
             r11.captured = r2
             r11.leftDrag = r2
             r11.setPressed(r2)
             return r2
-        L_0x0154:
+        L_0x015e:
             android.animation.Animator r0 = r11.rightAnimator
-            if (r0 != 0) goto L_0x0179
+            if (r0 != 0) goto L_0x0183
             android.graphics.Rect r0 = r11.acceptRect
             float r3 = r12.getX()
             int r3 = (int) r3
             float r12 = r12.getY()
             int r12 = (int) r12
             boolean r12 = r0.contains(r3, r12)
-            if (r12 == 0) goto L_0x0179
+            if (r12 == 0) goto L_0x0183
             r11.captured = r2
             r11.leftDrag = r1
             r11.setPressed(r2)
             android.animation.Animator r12 = r11.rightAnimator
-            if (r12 == 0) goto L_0x0178
+            if (r12 == 0) goto L_0x0182
             r12.cancel()
-        L_0x0178:
+        L_0x0182:
             return r2
-        L_0x0179:
+        L_0x0183:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.AcceptDeclineView.onTouchEvent(android.view.MotionEvent):boolean");

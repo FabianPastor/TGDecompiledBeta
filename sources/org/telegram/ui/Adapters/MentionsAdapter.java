@@ -297,7 +297,7 @@ public class MentionsAdapter extends RecyclerListView.SelectionAdapter {
                     checkLocationPermissionsOrStart();
                 } else {
                     TLRPC$User tLRPC$User2 = this.foundContextBot;
-                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.parentFragment.getParentActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this.parentFragment.getParentActivity());
                     builder.setTitle(LocaleController.getString("ShareYouLocationTitle", NUM));
                     builder.setMessage(LocaleController.getString("ShareYouLocationInline", NUM));
                     boolean[] zArr = new boolean[1];

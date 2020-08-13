@@ -304,7 +304,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
                 }
             }, 10);
         } else if (getParentActivity() != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
             builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
             builder.setNegativeButton(LocaleController.getString("RestorePasswordResetAccount", NUM), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
@@ -372,7 +372,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
             twoStepVerificationSetupActivity2.setCurrentPasswordParams(this.currentPasswordHash, this.currentSecretId, this.currentSecret, true);
             presentFragment(twoStepVerificationSetupActivity2);
         } else if (i == this.turnPasswordOffRow) {
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
             String string = LocaleController.getString("TurnPasswordOffQuestion", NUM);
             if (this.currentPassword.has_secure_values) {
                 string = string + "\n\n" + LocaleController.getString("TurnPasswordOffPassport", NUM);
@@ -661,7 +661,7 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
 
     private void showAlertWithText(String str, String str2) {
         if (getParentActivity() != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
             builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
             builder.setTitle(str);
             builder.setMessage(str2);

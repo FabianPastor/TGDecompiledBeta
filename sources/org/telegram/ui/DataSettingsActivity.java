@@ -292,7 +292,7 @@ public class DataSettingsActivity extends BaseFragment {
             }
         } else if (i == this.resetDownloadRow) {
             if (getParentActivity() != null && view.isEnabled()) {
-                AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                 builder.setTitle(LocaleController.getString("ResetAutomaticMediaDownloadAlertTitle", NUM));
                 builder.setMessage(LocaleController.getString("ResetAutomaticMediaDownloadAlert", NUM));
                 builder.setPositiveButton(LocaleController.getString("Reset", NUM), new DialogInterface.OnClickListener() {
@@ -382,7 +382,7 @@ public class DataSettingsActivity extends BaseFragment {
                 ((TextCheckCell) view).setChecked(SharedConfig.autoplayVideo);
             }
         } else if (i == this.clearDraftsRow) {
-            AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
+            AlertDialog.Builder builder2 = new AlertDialog.Builder(getParentActivity());
             builder2.setTitle(LocaleController.getString("AreYouSureClearDraftsTitle", NUM));
             builder2.setMessage(LocaleController.getString("AreYouSureClearDrafts", NUM));
             builder2.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener() {

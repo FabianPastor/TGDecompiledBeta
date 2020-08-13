@@ -786,7 +786,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                     return;
                 } else {
                     if (this.chatType == 0 && this.selectedContacts.size() == MessagesController.getInstance(this.currentAccount).maxGroupCount) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                         builder.setTitle(LocaleController.getString("AppName", NUM));
                         builder.setMessage(LocaleController.getString("SoftUserLimitAlert", NUM));
                         builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
@@ -806,7 +806,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                                 }
                             } else if (this.channelId != 0) {
                                 TLRPC$Chat chat2 = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.channelId));
-                                AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
+                                AlertDialog.Builder builder2 = new AlertDialog.Builder(getParentActivity());
                                 if (ChatObject.canAddAdmins(chat2)) {
                                     builder2.setTitle(LocaleController.getString("AppName", NUM));
                                     builder2.setMessage(LocaleController.getString("AddBotAsAdmin", NUM));
@@ -1007,7 +1007,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         } else if (getParentActivity() == null) {
             return false;
         } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
             if (this.selectedContacts.size() == 1) {
                 builder.setTitle(LocaleController.getString("AddOneMemberAlertTitle", NUM));
             } else {

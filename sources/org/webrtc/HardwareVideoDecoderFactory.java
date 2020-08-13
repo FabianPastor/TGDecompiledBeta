@@ -1,14 +1,11 @@
 package org.webrtc;
 
 import android.media.MediaCodecInfo;
-import java.util.Arrays;
 import org.webrtc.EglBase;
 import org.webrtc.Predicate;
 
 public class HardwareVideoDecoderFactory extends MediaCodecVideoDecoderFactory {
     private static final Predicate<MediaCodecInfo> defaultAllowedPredicate = new Predicate<MediaCodecInfo>() {
-        private String[] prefixBlacklist;
-
         public /* synthetic */ Predicate<T> and(Predicate<? super T> predicate) {
             return Predicate.CC.$default$and(this, predicate);
         }
@@ -21,19 +18,8 @@ public class HardwareVideoDecoderFactory extends MediaCodecVideoDecoderFactory {
             return Predicate.CC.$default$or(this, predicate);
         }
 
-        {
-            String[] strArr = MediaCodecUtils.SOFTWARE_IMPLEMENTATION_PREFIXES;
-            this.prefixBlacklist = (String[]) Arrays.copyOf(strArr, strArr.length);
-        }
-
         public boolean test(MediaCodecInfo mediaCodecInfo) {
-            String name = mediaCodecInfo.getName();
-            for (String startsWith : this.prefixBlacklist) {
-                if (name.startsWith(startsWith)) {
-                    return false;
-                }
-            }
-            return true;
+            return MediaCodecUtils.isHardwareAccelerated(mediaCodecInfo);
         }
     };
 

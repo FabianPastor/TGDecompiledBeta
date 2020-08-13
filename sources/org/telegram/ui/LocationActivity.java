@@ -1684,7 +1684,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 if (getParentActivity().getPackageManager().hasSystemFeature("android.hardware.location.gps")) {
                     try {
                         if (!((LocationManager) ApplicationLoader.applicationContext.getSystemService("location")).isProviderEnabled("gps")) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                             builder.setTitle(LocaleController.getString("GpsDisabledAlertTitle", NUM));
                             builder.setMessage(LocaleController.getString("GpsDisabledAlertText", NUM));
                             builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", NUM), new DialogInterface.OnClickListener() {
@@ -1773,7 +1773,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     /* access modifiers changed from: private */
     public void showPermissionAlert(boolean z) {
         if (getParentActivity() != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
             builder.setTitle(LocaleController.getString("AppName", NUM));
             if (z) {
                 builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", NUM));

@@ -207,7 +207,20 @@ public class SurfaceTextureHelper {
         tryDeliverTextureFrame();
     }
 
-    public /* synthetic */ void lambda$setFrameRotation$3$SurfaceTextureHelper(int i) {
+    public void forceFrame() {
+        this.handler.post(new Runnable() {
+            public final void run() {
+                SurfaceTextureHelper.this.lambda$forceFrame$3$SurfaceTextureHelper();
+            }
+        });
+    }
+
+    public /* synthetic */ void lambda$forceFrame$3$SurfaceTextureHelper() {
+        this.hasPendingTexture = true;
+        tryDeliverTextureFrame();
+    }
+
+    public /* synthetic */ void lambda$setFrameRotation$4$SurfaceTextureHelper(int i) {
         this.frameRotation = i;
     }
 
@@ -220,7 +233,7 @@ public class SurfaceTextureHelper {
             }
 
             public final void run() {
-                SurfaceTextureHelper.this.lambda$setFrameRotation$3$SurfaceTextureHelper(this.f$1);
+                SurfaceTextureHelper.this.lambda$setFrameRotation$4$SurfaceTextureHelper(this.f$1);
             }
         });
     }
@@ -237,12 +250,12 @@ public class SurfaceTextureHelper {
     public void returnTextureFrame() {
         this.handler.post(new Runnable() {
             public final void run() {
-                SurfaceTextureHelper.this.lambda$returnTextureFrame$4$SurfaceTextureHelper();
+                SurfaceTextureHelper.this.lambda$returnTextureFrame$5$SurfaceTextureHelper();
             }
         });
     }
 
-    public /* synthetic */ void lambda$returnTextureFrame$4$SurfaceTextureHelper() {
+    public /* synthetic */ void lambda$returnTextureFrame$5$SurfaceTextureHelper() {
         this.isTextureInUse = false;
         if (this.isQuitting) {
             release();
@@ -259,12 +272,12 @@ public class SurfaceTextureHelper {
         Logging.d("SurfaceTextureHelper", "dispose()");
         ThreadUtils.invokeAtFrontUninterruptibly(this.handler, (Runnable) new Runnable() {
             public final void run() {
-                SurfaceTextureHelper.this.lambda$dispose$5$SurfaceTextureHelper();
+                SurfaceTextureHelper.this.lambda$dispose$6$SurfaceTextureHelper();
             }
         });
     }
 
-    public /* synthetic */ void lambda$dispose$5$SurfaceTextureHelper() {
+    public /* synthetic */ void lambda$dispose$6$SurfaceTextureHelper() {
         this.isQuitting = true;
         if (!this.isTextureInUse) {
             release();

@@ -109,24 +109,26 @@ public class WebRtcAudioTrack {
             WebRtcAudioTrack.assertTrue(WebRtcAudioTrack.this.audioTrack.getPlayState() == 3);
             int capacity = WebRtcAudioTrack.this.byteBuffer.capacity();
             while (this.keepAlive) {
-                WebRtcAudioTrack webRtcAudioTrack = WebRtcAudioTrack.this;
-                webRtcAudioTrack.nativeGetPlayoutData(capacity, webRtcAudioTrack.nativeAudioTrack);
-                WebRtcAudioTrack.assertTrue(capacity <= WebRtcAudioTrack.this.byteBuffer.remaining());
-                if (WebRtcAudioTrack.speakerMute) {
-                    WebRtcAudioTrack.this.byteBuffer.clear();
-                    WebRtcAudioTrack.this.byteBuffer.put(WebRtcAudioTrack.this.emptyBytes);
-                    WebRtcAudioTrack.this.byteBuffer.position(0);
-                }
-                int writeBytes = writeBytes(WebRtcAudioTrack.this.audioTrack, WebRtcAudioTrack.this.byteBuffer, capacity);
-                if (writeBytes != capacity) {
-                    Logging.e("WebRtcAudioTrack", "AudioTrack.write played invalid number of bytes: " + writeBytes);
-                    if (writeBytes < 0) {
-                        this.keepAlive = false;
-                        WebRtcAudioTrack webRtcAudioTrack2 = WebRtcAudioTrack.this;
-                        webRtcAudioTrack2.reportWebRtcAudioTrackError("AudioTrack.write failed: " + writeBytes);
+                try {
+                    WebRtcAudioTrack.this.nativeGetPlayoutData(capacity, WebRtcAudioTrack.this.nativeAudioTrack);
+                    WebRtcAudioTrack.assertTrue(capacity <= WebRtcAudioTrack.this.byteBuffer.remaining());
+                    if (WebRtcAudioTrack.speakerMute) {
+                        WebRtcAudioTrack.this.byteBuffer.clear();
+                        WebRtcAudioTrack.this.byteBuffer.put(WebRtcAudioTrack.this.emptyBytes);
+                        WebRtcAudioTrack.this.byteBuffer.position(0);
                     }
+                    int writeBytes = writeBytes(WebRtcAudioTrack.this.audioTrack, WebRtcAudioTrack.this.byteBuffer, capacity);
+                    if (writeBytes != capacity) {
+                        Logging.e("WebRtcAudioTrack", "AudioTrack.write played invalid number of bytes: " + writeBytes);
+                        if (writeBytes < 0) {
+                            this.keepAlive = false;
+                            WebRtcAudioTrack webRtcAudioTrack = WebRtcAudioTrack.this;
+                            webRtcAudioTrack.reportWebRtcAudioTrackError("AudioTrack.write failed: " + writeBytes);
+                        }
+                    }
+                    WebRtcAudioTrack.this.byteBuffer.rewind();
+                } catch (Throwable unused) {
                 }
-                WebRtcAudioTrack.this.byteBuffer.rewind();
             }
             if (WebRtcAudioTrack.this.audioTrack != null) {
                 Logging.d("WebRtcAudioTrack", "Calling AudioTrack.stop...");
@@ -160,7 +162,7 @@ public class WebRtcAudioTrack {
         this.nativeAudioTrack = j;
     }
 
-    private boolean initPlayout(int i, int i2, double d) {
+    private int initPlayout(int i, int i2, double d) {
         this.threadChecker.checkIsOnValidThread();
         Logging.d("WebRtcAudioTrack", "initPlayout(sampleRate=" + i + ", channels=" + i2 + ", bufferSizeFactor=" + d + ")");
         this.byteBuffer = ByteBuffer.allocateDirect(i2 * 2 * (i / 100));
@@ -177,10 +179,10 @@ public class WebRtcAudioTrack {
         Logging.d("WebRtcAudioTrack", "minBufferSizeInBytes: " + i3);
         if (i3 < this.byteBuffer.capacity()) {
             reportWebRtcAudioTrackInitError("AudioTrack.getMinBufferSize returns an invalid value.");
-            return false;
+            return -1;
         } else if (this.audioTrack != null) {
             reportWebRtcAudioTrackInitError("Conflict with existing AudioTrack.");
-            return false;
+            return -1;
         } else {
             try {
                 if (Build.VERSION.SDK_INT >= 21) {
@@ -192,15 +194,15 @@ public class WebRtcAudioTrack {
                 if (audioTrack2 == null || audioTrack2.getState() != 1) {
                     reportWebRtcAudioTrackInitError("Initialization of audio track failed.");
                     releaseAudioResources();
-                    return false;
+                    return -1;
                 }
                 logMainParameters();
                 logMainParametersExtended();
-                return true;
+                return i3;
             } catch (IllegalArgumentException e) {
                 reportWebRtcAudioTrackInitError(e.getMessage());
                 releaseAudioResources();
-                return false;
+                return -1;
             }
         }
     }
@@ -307,6 +309,13 @@ public class WebRtcAudioTrack {
         if (Build.VERSION.SDK_INT >= 23) {
             Logging.d("WebRtcAudioTrack", "AudioTrack: buffer size in frames: " + this.audioTrack.getBufferSizeInFrames());
         }
+    }
+
+    private int getBufferSizeInFrames() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            return this.audioTrack.getBufferSizeInFrames();
+        }
+        return -1;
     }
 
     private void logBufferCapacityInFrames() {

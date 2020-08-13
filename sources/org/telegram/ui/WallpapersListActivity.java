@@ -327,7 +327,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     WallpapersListActivity.this.finishFragment();
                 } else if (i == 4) {
                     if (WallpapersListActivity.this.getParentActivity() != null) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder((Context) WallpapersListActivity.this.getParentActivity());
+                        AlertDialog.Builder builder = new AlertDialog.Builder(WallpapersListActivity.this.getParentActivity());
                         builder.setTitle(LocaleController.formatPluralString("DeleteBackground", WallpapersListActivity.this.selectedWallPapers.size()));
                         builder.setMessage(LocaleController.formatString("DeleteChatBackgroundsAlert", NUM, new Object[0]));
                         builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener() {
@@ -656,7 +656,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 wallpapersListActivity.patterns = this.patterns;
                 presentFragment(wallpapersListActivity);
             } else if (i == this.resetRow) {
-                AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                 builder.setTitle(LocaleController.getString("ResetChatBackgroundsAlertTitle", NUM));
                 builder.setMessage(LocaleController.getString("ResetChatBackgroundsAlert", NUM));
                 builder.setPositiveButton(LocaleController.getString("Reset", NUM), new DialogInterface.OnClickListener() {
@@ -1038,7 +1038,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             if (r0 != 0) goto L_0x0033
             org.telegram.ui.WallpapersListActivity$FileWallpaper r0 = new org.telegram.ui.WallpapersListActivity$FileWallpaper
             r3 = 2131165274(0x7var_a, float:1.794476E38)
-            r4 = 2131165323(0x7var_b, float:1.794486E38)
+            r4 = 2131165330(0x7var_, float:1.7944874E38)
             r0.<init>((java.lang.String) r2, (int) r3, (int) r4)
             r15.catsWallpaper = r0
             goto L_0x0038

@@ -558,7 +558,7 @@ public class DataUsageActivity extends BaseFragment {
         if (getParentActivity() != null) {
             ListAdapter listAdapter = (ListAdapter) recyclerListView.getAdapter();
             if (i == listAdapter.resetRow) {
-                AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                 builder.setTitle(LocaleController.getString("ResetStatisticsAlertTitle", NUM));
                 builder.setMessage(LocaleController.getString("ResetStatisticsAlert", NUM));
                 builder.setPositiveButton(LocaleController.getString("Reset", NUM), new DialogInterface.OnClickListener(listAdapter) {

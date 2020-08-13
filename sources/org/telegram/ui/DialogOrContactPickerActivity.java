@@ -699,7 +699,7 @@ public class DialogOrContactPickerActivity extends BaseFragment {
 
     private void showBlockAlert(TLRPC$User tLRPC$User) {
         if (tLRPC$User != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
             builder.setTitle(LocaleController.getString("BlockUser", NUM));
             builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureBlockContact2", NUM, ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name))));
             builder.setPositiveButton(LocaleController.getString("BlockContact", NUM), new DialogInterface.OnClickListener(tLRPC$User) {

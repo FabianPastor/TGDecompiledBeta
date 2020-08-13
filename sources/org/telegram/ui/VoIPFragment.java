@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -12,7 +13,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
@@ -29,6 +29,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
@@ -62,11 +63,13 @@ import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackgroundGradientDrawable;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
+import org.telegram.ui.Components.HintView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.voip.AcceptDeclineView;
 import org.telegram.ui.Components.voip.VoIPButtonsLayout;
 import org.telegram.ui.Components.voip.VoIPFloatingLayout;
 import org.telegram.ui.Components.voip.VoIPHelper;
+import org.telegram.ui.Components.voip.VoIPNotificationsLayout;
 import org.telegram.ui.Components.voip.VoIPOverlayBackground;
 import org.telegram.ui.Components.voip.VoIPPiPView;
 import org.telegram.ui.Components.voip.VoIPStatusTextView;
@@ -90,7 +93,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
     VoIPToggleButton[] bottomButtons = new VoIPToggleButton[4];
     View bottomShadow;
     private VoIPButtonsLayout buttonsLayout;
-    TLRPC$User callingUser = VoIPService.getSharedInstance().getUser();
+    TLRPC$User callingUser;
     boolean callingUserIsVideo = false;
     /* access modifiers changed from: private */
     public VoIPFloatingLayout callingUserMiniFloatingLayout;
@@ -102,7 +105,6 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
     public BackupImageView callingUserPhotoViewMini;
     /* access modifiers changed from: private */
     public VoIPTextureView callingUserTextureView;
-    private TextView callingUserTitle;
     boolean cameraForceExpanded;
     private Animator cameraShowingAnimator;
     /* access modifiers changed from: private */
@@ -110,13 +112,11 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
     private boolean canSwitchToPip;
     /* access modifiers changed from: private */
     public int currentState;
-    TLRPC$User currentUser = MessagesController.getInstance(UserConfig.selectedAccount).getUser(Integer.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId()));
     /* access modifiers changed from: private */
     public VoIPFloatingLayout currentUserCameraFloatingLayout;
     boolean currentUserIsVideo = false;
-    private BackupImageView currentUserPhotoViewMini;
     /* access modifiers changed from: private */
-    public TextureViewRenderer currentUserTextureView;
+    public VoIPTextureView currentUserTextureView;
     Emoji.EmojiDrawable[] emojiDrawables = new Emoji.EmojiDrawable[4];
     /* access modifiers changed from: private */
     public boolean emojiExpanded;
@@ -133,17 +133,19 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             VoIPFragment.this.lambda$new$2$VoIPFragment();
         }
     };
+    boolean hideUiRunnableWaiting;
     /* access modifiers changed from: private */
     public boolean isFinished;
+    long lastContentTapTime;
     /* access modifiers changed from: private */
     public WindowInsets lastInsets;
-    long lastSwitchFloatingTime;
     ValueAnimator naviagtionBarAnimator;
     ValueAnimator.AnimatorUpdateListener navigationBarAnimationListener = new ValueAnimator.AnimatorUpdateListener() {
         public final void onAnimationUpdate(ValueAnimator valueAnimator) {
             VoIPFragment.this.lambda$new$1$VoIPFragment(valueAnimator);
         }
     };
+    VoIPNotificationsLayout notificationsLayout;
     /* access modifiers changed from: private */
     public VoIPOverlayBackground overlayBackground;
     Paint overlayBottomPaint = new Paint();
@@ -161,6 +163,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
     };
     /* access modifiers changed from: private */
     public boolean switchingToPip;
+    HintView tapToVideoTooltip;
     View topShadow;
     float touchSlop;
     float uiVisibilityAlpha = 1.0f;
@@ -169,9 +172,6 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
     public boolean uiVisible = true;
     /* access modifiers changed from: private */
     public VoIPWindowView windowView;
-
-    public void onVideoAvailableChange(boolean z) {
-    }
 
     public /* synthetic */ void lambda$new$0$VoIPFragment(ValueAnimator valueAnimator) {
         this.uiVisibilityAlpha = ((Float) valueAnimator.getAnimatedValue()).floatValue();
@@ -184,7 +184,13 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
     }
 
     public /* synthetic */ void lambda$new$2$VoIPFragment() {
-        showUi(false);
+        this.hideUiRunnableWaiting = false;
+        if (this.canHideUI && this.uiVisible) {
+            this.lastContentTapTime = System.currentTimeMillis();
+            showUi(false);
+            this.previousState = this.currentState;
+            updateViewState();
+        }
     }
 
     public static void show(Activity activity2) {
@@ -249,10 +255,12 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
     /* access modifiers changed from: private */
     public void onBackPressed() {
         if (!this.isFinished && !this.switchingToPip) {
-            if (this.callingUserIsVideo) {
-                boolean z = this.currentUserIsVideo;
-            }
-            if (this.emojiExpanded) {
+            if (this.callingUserIsVideo && this.currentUserIsVideo && this.cameraForceExpanded) {
+                this.cameraForceExpanded = false;
+                this.currentUserCameraFloatingLayout.setRelativePosition(this.callingUserMiniFloatingLayout);
+                this.previousState = this.currentState;
+                updateViewState();
+            } else if (this.emojiExpanded) {
                 expandEmoji(false);
             } else if (this.emojiRationalTextView.getVisibility() == 8) {
                 if (!this.canSwitchToPip) {
@@ -286,7 +294,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         VoIPFragment voIPFragment3 = instance;
         if (voIPFragment3 != null) {
             voIPFragment3.callingUserTextureView.renderer.release();
-            instance.currentUserTextureView.release();
+            instance.currentUserTextureView.renderer.release();
             instance.callingUserMiniTextureRenderer.release();
             instance.destroy();
         }
@@ -310,6 +318,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         ((FrameLayout.LayoutParams) this.currentUserCameraFloatingLayout.getLayoutParams()).bottomMargin = this.lastInsets.getSystemWindowInsetBottom();
         ((FrameLayout.LayoutParams) this.callingUserMiniFloatingLayout.getLayoutParams()).bottomMargin = this.lastInsets.getSystemWindowInsetBottom();
         ((FrameLayout.LayoutParams) this.callingUserTextureView.getLayoutParams()).bottomMargin = this.lastInsets.getSystemWindowInsetBottom();
+        ((FrameLayout.LayoutParams) this.notificationsLayout.getLayoutParams()).bottomMargin = this.lastInsets.getSystemWindowInsetBottom();
         ((FrameLayout.LayoutParams) this.bottomShadow.getLayoutParams()).bottomMargin = this.lastInsets.getSystemWindowInsetBottom();
         this.currentUserCameraFloatingLayout.setInsets(this.lastInsets);
         this.callingUserMiniFloatingLayout.setInsets(this.lastInsets);
@@ -317,6 +326,8 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
     }
 
     public VoIPFragment() {
+        MessagesController.getInstance(UserConfig.selectedAccount).getUser(Integer.valueOf(UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId()));
+        this.callingUser = VoIPService.getSharedInstance().getUser();
         VoIPService.getSharedInstance().registerStateListener(this);
         VoIPService.getSharedInstance().isOutgoing();
         this.previousState = -1;
@@ -374,6 +385,10 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         }
     }
 
+    public /* synthetic */ void lambda$onSignalBarsCountChanged$5$VoIPFragment(int i) {
+        this.statusTextView.setSignalBarCount(i);
+    }
+
     public void onSignalBarsCountChanged(int i) {
         AndroidUtilities.runOnUIThread(new Runnable(i) {
             public final /* synthetic */ int f$1;
@@ -388,10 +403,6 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         });
     }
 
-    public /* synthetic */ void lambda$onSignalBarsCountChanged$5$VoIPFragment(int i) {
-        this.statusTextView.setSignalBarCount(i);
-    }
-
     public void onAudioSettingsChanged() {
         updateButtons(true);
     }
@@ -402,6 +413,11 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
     }
 
     public void onCameraSwitch(boolean z) {
+        this.previousState = this.currentState;
+        updateViewState();
+    }
+
+    public void onVideoAvailableChange(boolean z) {
         this.previousState = this.currentState;
         updateViewState();
     }
@@ -428,6 +444,9 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             }
 
             public boolean onTouchEvent(MotionEvent motionEvent) {
+                if (!isEnabled()) {
+                    return false;
+                }
                 int action = motionEvent.getAction();
                 if (action == 0) {
                     this.pressedX = motionEvent.getX();
@@ -441,16 +460,19 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
                 } else if (this.check) {
                     float x = motionEvent.getX() - this.pressedX;
                     float y = motionEvent.getY() - this.pressedY;
+                    long currentTimeMillis = System.currentTimeMillis();
                     float f = (x * x) + (y * y);
-                    float f2 = VoIPFragment.this.touchSlop;
-                    if (f < f2 * f2 && System.currentTimeMillis() - this.pressedTime < 300) {
+                    VoIPFragment voIPFragment = VoIPFragment.this;
+                    float f2 = voIPFragment.touchSlop;
+                    if (f < f2 * f2 && currentTimeMillis - this.pressedTime < 300 && currentTimeMillis - voIPFragment.lastContentTapTime > 300) {
+                        voIPFragment.lastContentTapTime = System.currentTimeMillis();
                         if (VoIPFragment.this.emojiExpanded) {
                             VoIPFragment.this.expandEmoji(false);
                         } else if (VoIPFragment.this.canHideUI) {
-                            VoIPFragment voIPFragment = VoIPFragment.this;
-                            voIPFragment.showUi(!voIPFragment.uiVisible);
                             VoIPFragment voIPFragment2 = VoIPFragment.this;
-                            int unused = voIPFragment2.previousState = voIPFragment2.currentState;
+                            voIPFragment2.showUi(!voIPFragment2.uiVisible);
+                            VoIPFragment voIPFragment3 = VoIPFragment.this;
+                            int unused = voIPFragment3.previousState = voIPFragment3.currentState;
                             VoIPFragment.this.updateViewState();
                         }
                     }
@@ -471,11 +493,10 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
                 canvas.drawColor(this.blackoutColor);
             }
         };
-        VoIPTextureView voIPTextureView = new VoIPTextureView(context2);
+        VoIPTextureView voIPTextureView = new VoIPTextureView(context2, false);
         this.callingUserTextureView = voIPTextureView;
         voIPTextureView.renderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT);
         this.callingUserTextureView.renderer.setEnableHardwareScaler(true);
-        this.currentUserPhotoViewMini = new BackupImageView(context2);
         r2.addView(this.callingUserPhotoView);
         r2.addView(this.callingUserTextureView);
         BackgroundGradientDrawable backgroundGradientDrawable = new BackgroundGradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{-14994098, -14328963});
@@ -497,32 +518,17 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             }
         });
         this.callingUserPhotoView.setImage(ImageLocation.getForUser(this.callingUser, true), (String) null, (Drawable) backgroundGradientDrawable, (Object) this.callingUser);
-        this.currentUserPhotoViewMini.setImage(ImageLocation.getForUser(this.currentUser, true), (String) null, (Drawable) new ColorDrawable(-16777216), (Object) this.currentUser);
         VoIPFloatingLayout voIPFloatingLayout = new VoIPFloatingLayout(context2);
         this.currentUserCameraFloatingLayout = voIPFloatingLayout;
         voIPFloatingLayout.setRelativePosition(1.0f, 1.0f);
-        this.currentUserTextureView = new TextureViewRenderer(context2);
+        this.currentUserTextureView = new VoIPTextureView(context2, true);
         this.currentUserCameraFloatingLayout.setOnTapListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                VoIPFragment voIPFragment = VoIPFragment.this;
-                if (voIPFragment.currentUserIsVideo && voIPFragment.callingUserIsVideo) {
-                    long currentTimeMillis = System.currentTimeMillis();
-                    VoIPFragment voIPFragment2 = VoIPFragment.this;
-                    if (currentTimeMillis - voIPFragment2.lastSwitchFloatingTime > 500) {
-                        AndroidUtilities.cancelRunOnUIThread(voIPFragment2.hideUIRunnable);
-                        VoIPFragment.this.lastSwitchFloatingTime = System.currentTimeMillis();
-                        VoIPFragment.this.callingUserMiniFloatingLayout.setRelativePosition(VoIPFragment.this.currentUserCameraFloatingLayout);
-                        VoIPFragment voIPFragment3 = VoIPFragment.this;
-                        voIPFragment3.cameraForceExpanded = true;
-                        int unused = voIPFragment3.currentState = voIPFragment3.previousState;
-                        VoIPFragment.this.updateViewState();
-                    }
-                }
+            public final void onClick(View view) {
+                VoIPFragment.this.lambda$createView$7$VoIPFragment(view);
             }
         });
-        this.currentUserTextureView.setMirror(true);
+        this.currentUserTextureView.renderer.setMirror(true);
         this.currentUserCameraFloatingLayout.addView(this.currentUserTextureView);
-        this.currentUserCameraFloatingLayout.addView(this.currentUserPhotoViewMini);
         VoIPFloatingLayout voIPFloatingLayout2 = new VoIPFloatingLayout(context2);
         this.callingUserMiniFloatingLayout = voIPFloatingLayout2;
         voIPFloatingLayout2.alwaysFloating = true;
@@ -533,7 +539,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         this.callingUserMiniFloatingLayout.addView(this.callingUserMiniTextureRenderer);
         this.callingUserMiniFloatingLayout.setOnTapListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                VoIPFragment.this.lambda$createView$7$VoIPFragment(view);
+                VoIPFragment.this.lambda$createView$8$VoIPFragment(view);
             }
         });
         this.callingUserMiniFloatingLayout.setVisibility(8);
@@ -555,7 +561,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         this.emojiLayout.setClipToPadding(false);
         this.emojiLayout.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                VoIPFragment.this.lambda$createView$8$VoIPFragment(view);
+                VoIPFragment.this.lambda$createView$9$VoIPFragment(view);
             }
         });
         TextView textView = new TextView(context2);
@@ -581,15 +587,13 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         this.callingUserPhotoViewMini.setRoundRadius(AndroidUtilities.dp(135.0f) / 2);
         this.callingUserPhotoViewMini.setVisibility(8);
         TextView textView2 = new TextView(context2);
-        this.callingUserTitle = textView2;
         textView2.setTextSize(24.0f);
-        TextView textView3 = this.callingUserTitle;
         TLRPC$User tLRPC$User = this.callingUser;
-        textView3.setText(ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name));
-        this.callingUserTitle.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
-        this.callingUserTitle.setTextColor(-1);
-        this.callingUserTitle.setGravity(1);
-        this.statusLayout.addView(this.callingUserTitle, LayoutHelper.createLinear(-2, -2, 1, 0, 0, 0, 6));
+        textView2.setText(ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name));
+        textView2.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
+        textView2.setTextColor(-1);
+        textView2.setGravity(1);
+        this.statusLayout.addView(textView2, LayoutHelper.createLinear(-2, -2, 1, 0, 0, 0, 6));
         VoIPStatusTextView voIPStatusTextView = new VoIPStatusTextView(context2);
         this.statusTextView = voIPStatusTextView;
         this.statusLayout.addView(voIPStatusTextView, LayoutHelper.createLinear(-2, -2, 1, 0, 0, 0, 6));
@@ -651,20 +655,50 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         imageView2.setBackground(Theme.createSelectorDrawable(ColorUtils.setAlphaComponent(-1, 76)));
         this.speakerPhoneIcon.setPadding(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f));
         r2.addView(this.speakerPhoneIcon, LayoutHelper.createFrame(56, 56, 53));
+        this.speakerPhoneIcon.setOnClickListener(new View.OnClickListener() {
+            public final void onClick(View view) {
+                VoIPFragment.this.lambda$createView$10$VoIPFragment(view);
+            }
+        });
         this.backIcon.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                VoIPFragment.this.lambda$createView$9$VoIPFragment(view);
+                VoIPFragment.this.lambda$createView$11$VoIPFragment(view);
             }
         });
         if (this.windowView.isLockOnScreen()) {
             this.backIcon.setVisibility(8);
         }
+        VoIPNotificationsLayout voIPNotificationsLayout = new VoIPNotificationsLayout(context2);
+        this.notificationsLayout = voIPNotificationsLayout;
+        voIPNotificationsLayout.setGravity(80);
+        this.notificationsLayout.setOnViewsUpdated(new Runnable() {
+            public final void run() {
+                VoIPFragment.this.lambda$createView$12$VoIPFragment();
+            }
+        });
+        r2.addView(this.notificationsLayout, LayoutHelper.createFrame(-1, 200.0f, 80, 16.0f, 0.0f, 16.0f, 0.0f));
         updateViewState();
         if (VoIPService.getSharedInstance() != null) {
             if (VideoCameraCapturer.eglBase == null) {
                 VideoCameraCapturer.eglBase = EglBase.CC.create((EglBase.Context) null, EglBase.CONFIG_PLAIN);
             }
-            this.currentUserTextureView.init(VideoCameraCapturer.eglBase.getEglBaseContext(), new RendererCommon.RendererEvents() {
+            this.currentUserTextureView.renderer.init(VideoCameraCapturer.eglBase.getEglBaseContext(), new RendererCommon.RendererEvents() {
+                public void onFrameResolutionChanged(int i, int i2, int i3) {
+                }
+
+                public /* synthetic */ void lambda$onFirstFrameRendered$0$VoIPFragment$6() {
+                    VoIPFragment.this.updateViewState();
+                }
+
+                public void onFirstFrameRendered() {
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public final void run() {
+                            VoIPFragment.AnonymousClass6.this.lambda$onFirstFrameRendered$0$VoIPFragment$6();
+                        }
+                    });
+                }
+            });
+            this.callingUserTextureView.renderer.init(VideoCameraCapturer.eglBase.getEglBaseContext(), new RendererCommon.RendererEvents() {
                 public void onFrameResolutionChanged(int i, int i2, int i3) {
                 }
 
@@ -679,25 +713,15 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
                         }
                     });
                 }
-            });
-            this.callingUserTextureView.renderer.init(VideoCameraCapturer.eglBase.getEglBaseContext(), new RendererCommon.RendererEvents() {
-                public void onFrameResolutionChanged(int i, int i2, int i3) {
-                }
-
-                public /* synthetic */ void lambda$onFirstFrameRendered$0$VoIPFragment$8() {
-                    VoIPFragment.this.updateViewState();
-                }
-
-                public void onFirstFrameRendered() {
-                    AndroidUtilities.runOnUIThread(new Runnable() {
-                        public final void run() {
-                            VoIPFragment.AnonymousClass8.this.lambda$onFirstFrameRendered$0$VoIPFragment$8();
-                        }
-                    });
-                }
             }, EglBase.CONFIG_PLAIN, new GlRectDrawer());
             this.callingUserMiniTextureRenderer.init(VideoCameraCapturer.eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
         }
+        HintView hintView = new HintView(context2, 4);
+        this.tapToVideoTooltip = hintView;
+        hintView.setText(LocaleController.getString("TapToTurnCamera", NUM));
+        r2.addView(this.tapToVideoTooltip, LayoutHelper.createFrame(-2, -2.0f, 51, 19.0f, 0.0f, 19.0f, 8.0f));
+        this.tapToVideoTooltip.setBottomOffset(AndroidUtilities.dp(4.0f));
+        this.tapToVideoTooltip.setVisibility(8);
         return r2;
     }
 
@@ -709,9 +733,22 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
     }
 
     public /* synthetic */ void lambda$createView$7$VoIPFragment(View view) {
-        if (this.cameraForceExpanded && System.currentTimeMillis() - this.lastSwitchFloatingTime > 500) {
+        if (this.currentUserIsVideo && this.callingUserIsVideo && System.currentTimeMillis() - this.lastContentTapTime > 500) {
             AndroidUtilities.cancelRunOnUIThread(this.hideUIRunnable);
-            this.lastSwitchFloatingTime = System.currentTimeMillis();
+            this.hideUiRunnableWaiting = false;
+            this.lastContentTapTime = System.currentTimeMillis();
+            this.callingUserMiniFloatingLayout.setRelativePosition(this.currentUserCameraFloatingLayout);
+            this.cameraForceExpanded = true;
+            this.currentState = this.previousState;
+            updateViewState();
+        }
+    }
+
+    public /* synthetic */ void lambda$createView$8$VoIPFragment(View view) {
+        if (this.cameraForceExpanded && System.currentTimeMillis() - this.lastContentTapTime > 500) {
+            AndroidUtilities.cancelRunOnUIThread(this.hideUIRunnable);
+            this.hideUiRunnableWaiting = false;
+            this.lastContentTapTime = System.currentTimeMillis();
             this.currentUserCameraFloatingLayout.setRelativePosition(this.callingUserMiniFloatingLayout);
             this.cameraForceExpanded = false;
             this.currentState = this.previousState;
@@ -719,16 +756,30 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         }
     }
 
-    public /* synthetic */ void lambda$createView$8$VoIPFragment(View view) {
-        if (this.emojiLoaded) {
-            expandEmoji(!this.emojiExpanded);
+    public /* synthetic */ void lambda$createView$9$VoIPFragment(View view) {
+        if (System.currentTimeMillis() - this.lastContentTapTime >= 500) {
+            this.lastContentTapTime = System.currentTimeMillis();
+            if (this.emojiLoaded) {
+                expandEmoji(!this.emojiExpanded);
+            }
         }
     }
 
-    public /* synthetic */ void lambda$createView$9$VoIPFragment(View view) {
+    public /* synthetic */ void lambda$createView$10$VoIPFragment(View view) {
+        if (VoIPService.getSharedInstance() != null) {
+            VoIPService.getSharedInstance().toggleSpeakerphoneOrShowRouteSheet(this.activity);
+        }
+    }
+
+    public /* synthetic */ void lambda$createView$11$VoIPFragment(View view) {
         if (!this.windowView.isLockOnScreen()) {
             onBackPressed();
         }
+    }
+
+    public /* synthetic */ void lambda$createView$12$VoIPFragment() {
+        this.previousState = this.currentState;
+        updateViewState();
     }
 
     public void switchToPip() {
@@ -755,6 +806,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             this.bottomShadow.animate().alpha(0.0f).setDuration(350).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
             this.topShadow.animate().alpha(0.0f).setDuration(350).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
             this.callingUserMiniFloatingLayout.animate().alpha(0.0f).setDuration(350).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
+            this.notificationsLayout.animate().alpha(0.0f).setDuration(350).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
             VoIPPiPView.getInstance().switchingToPip = true;
             this.switchingToPip = true;
             Animator createPiPTransition = createPiPTransition(false);
@@ -764,17 +816,17 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
                     VoIPPiPView.getInstance().windowView.setAlpha(1.0f);
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public final void run() {
-                            VoIPFragment.AnonymousClass9.this.lambda$onAnimationEnd$0$VoIPFragment$9();
+                            VoIPFragment.AnonymousClass8.this.lambda$onAnimationEnd$0$VoIPFragment$8();
                         }
                     }, 200);
                 }
 
-                public /* synthetic */ void lambda$onAnimationEnd$0$VoIPFragment$9() {
+                public /* synthetic */ void lambda$onAnimationEnd$0$VoIPFragment$8() {
                     NotificationCenter.getInstance(UserConfig.selectedAccount).onAnimationFinish(VoIPFragment.this.animationIndex);
                     VoIPPiPView.getInstance().onTransitionEnd();
                     VoIPFragment.this.currentUserCameraFloatingLayout.setCornerRadius(-1.0f);
                     VoIPFragment.this.callingUserTextureView.renderer.release();
-                    VoIPFragment.this.currentUserTextureView.release();
+                    VoIPFragment.this.currentUserTextureView.renderer.release();
                     VoIPFragment.this.callingUserMiniTextureRenderer.release();
                     VoIPFragment.this.destroy();
                     VoIPFragment.this.windowView.finishImmediate();
@@ -801,12 +853,12 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         this.animationIndex = NotificationCenter.getInstance(UserConfig.selectedAccount).setAnimationInProgress(this.animationIndex, (int[]) null);
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
-                VoIPFragment.this.lambda$startTransitionFromPiP$11$VoIPFragment();
+                VoIPFragment.this.lambda$startTransitionFromPiP$14$VoIPFragment();
             }
         }, 64);
     }
 
-    public /* synthetic */ void lambda$startTransitionFromPiP$11$VoIPFragment() {
+    public /* synthetic */ void lambda$startTransitionFromPiP$14$VoIPFragment() {
         this.windowView.setAlpha(1.0f);
         Animator createPiPTransition = createPiPTransition(true);
         this.backIcon.setAlpha(0.0f);
@@ -816,6 +868,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         this.bottomShadow.setAlpha(0.0f);
         this.topShadow.setAlpha(0.0f);
         this.speakerPhoneIcon.setAlpha(0.0f);
+        this.notificationsLayout.setAlpha(0.0f);
         AndroidUtilities.runOnUIThread(new Runnable(createPiPTransition) {
             public final /* synthetic */ Animator f$1;
 
@@ -824,12 +877,12 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             }
 
             public final void run() {
-                VoIPFragment.this.lambda$null$10$VoIPFragment(this.f$1);
+                VoIPFragment.this.lambda$null$13$VoIPFragment(this.f$1);
             }
         }, 64);
     }
 
-    public /* synthetic */ void lambda$null$10$VoIPFragment(Animator animator) {
+    public /* synthetic */ void lambda$null$13$VoIPFragment(Animator animator) {
         VoIPPiPView.getInstance().switchingToPip = false;
         VoIPPiPView.getInstance().finish();
         this.speakerPhoneIcon.animate().setDuration(150).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
@@ -839,6 +892,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         this.buttonsLayout.animate().alpha(1.0f).setDuration(150).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
         this.bottomShadow.animate().alpha(1.0f).setDuration(350).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
         this.topShadow.animate().alpha(1.0f).setDuration(350).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
+        this.notificationsLayout.animate().alpha(1.0f).setDuration(350).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
         animator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 NotificationCenter.getInstance(UserConfig.selectedAccount).onAnimationFinish(VoIPFragment.this.animationIndex);
@@ -924,8 +978,8 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         }
         this.enterTransitionProgress = var_;
         updateSystemBarColors();
-        $$Lambda$VoIPFragment$vgP_hONW_XKtBFAOa2J6QNxRUsA r21 = r0;
-        $$Lambda$VoIPFragment$vgP_hONW_XKtBFAOa2J6QNxRUsA r0 = new ValueAnimator.AnimatorUpdateListener(this, z2, scaleX, f3, x, f2, y, f, dp, dp2, 1.0f, f9, 0.0f, measuredWidth, 0.0f, measuredHeight) {
+        $$Lambda$VoIPFragment$eiLc8Rrdnt3qjFkrjvfxSBnqk r21 = r0;
+        $$Lambda$VoIPFragment$eiLc8Rrdnt3qjFkrjvfxSBnqk r0 = new ValueAnimator.AnimatorUpdateListener(this, z2, scaleX, f3, x, f2, y, f, dp, dp2, 1.0f, f9, 0.0f, measuredWidth, 0.0f, measuredHeight) {
             public final /* synthetic */ VoIPFragment f$0;
             public final /* synthetic */ boolean f$1;
             public final /* synthetic */ float f$10;
@@ -966,7 +1020,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
                 ValueAnimator valueAnimator2 = valueAnimator;
                 VoIPFragment voIPFragment = this.f$0;
                 VoIPFragment voIPFragment2 = voIPFragment;
-                voIPFragment2.lambda$createPiPTransition$12$VoIPFragment(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12, this.f$13, this.f$14, this.f$15, valueAnimator2);
+                voIPFragment2.lambda$createPiPTransition$15$VoIPFragment(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12, this.f$13, this.f$14, this.f$15, valueAnimator2);
             }
         };
         ValueAnimator valueAnimator = ofFloat;
@@ -974,7 +1028,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         return valueAnimator;
     }
 
-    public /* synthetic */ void lambda$createPiPTransition$12$VoIPFragment(boolean z, float f, float f2, float f3, float f4, float f5, float f6, float f7, float f8, float f9, float var_, float var_, float var_, float var_, float var_, ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$createPiPTransition$15$VoIPFragment(boolean z, float f, float f2, float f3, float f4, float f5, float f6, float f7, float f8, float f9, float var_, float var_, float var_, float var_, float var_, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         float var_ = 1.0f - floatValue;
         this.enterTransitionProgress = var_;
@@ -991,8 +1045,8 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         this.callingUserTextureView.setScaleX(var_);
         this.callingUserTextureView.setScaleY(var_);
         float var_ = (var_ * var_) + (var_ * floatValue);
-        this.callingUserTextureView.setTranslationX(var_);
         float var_ = (var_ * var_) + (var_ * floatValue);
+        this.callingUserTextureView.setTranslationX(var_);
         this.callingUserTextureView.setTranslationY(var_);
         this.callingUserTextureView.setRoundCorners(((floatValue * ((float) AndroidUtilities.dp(4.0f))) * 1.0f) / var_);
         this.callingUserPhotoView.setScaleX(var_);
@@ -1041,31 +1095,35 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:100:0x024d A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:107:0x0297  */
-    /* JADX WARNING: Removed duplicated region for block: B:108:0x0299  */
-    /* JADX WARNING: Removed duplicated region for block: B:117:0x02c0  */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x02c2  */
-    /* JADX WARNING: Removed duplicated region for block: B:126:0x02d2  */
-    /* JADX WARNING: Removed duplicated region for block: B:128:0x02db  */
-    /* JADX WARNING: Removed duplicated region for block: B:133:0x0300  */
-    /* JADX WARNING: Removed duplicated region for block: B:139:0x0311  */
-    /* JADX WARNING: Removed duplicated region for block: B:141:0x0318  */
-    /* JADX WARNING: Removed duplicated region for block: B:144:0x0335  */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x0348  */
-    /* JADX WARNING: Removed duplicated region for block: B:150:0x034a  */
-    /* JADX WARNING: Removed duplicated region for block: B:162:0x0363  */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x012e  */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x017f  */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x01aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x01bb  */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x01dd  */
-    /* JADX WARNING: Removed duplicated region for block: B:96:0x01ef  */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x0228  */
+    /* JADX WARNING: Removed duplicated region for block: B:116:0x0235  */
+    /* JADX WARNING: Removed duplicated region for block: B:126:0x0282  */
+    /* JADX WARNING: Removed duplicated region for block: B:137:0x02aa  */
+    /* JADX WARNING: Removed duplicated region for block: B:139:0x02b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:142:0x02ce  */
+    /* JADX WARNING: Removed duplicated region for block: B:147:0x02e1  */
+    /* JADX WARNING: Removed duplicated region for block: B:148:0x02e3  */
+    /* JADX WARNING: Removed duplicated region for block: B:157:0x02f8  */
+    /* JADX WARNING: Removed duplicated region for block: B:158:0x02fa  */
+    /* JADX WARNING: Removed duplicated region for block: B:161:0x02ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:202:0x03e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:208:0x03f6  */
+    /* JADX WARNING: Removed duplicated region for block: B:213:0x0405  */
+    /* JADX WARNING: Removed duplicated region for block: B:217:0x0463 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:53:0x0135  */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x0186  */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x01b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x01c6  */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x01c8  */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x01d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x01d6  */
+    /* JADX WARNING: Removed duplicated region for block: B:94:0x01f9  */
+    /* JADX WARNING: Removed duplicated region for block: B:95:0x01fb  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void updateViewState() {
         /*
-            r16 = this;
-            r0 = r16
+            r17 = this;
+            r0 = r17
             boolean r1 = r0.isFinished
             if (r1 == 0) goto L_0x0007
             return
@@ -1086,474 +1144,622 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         L_0x0019:
             r1 = 0
         L_0x001a:
-            org.telegram.messenger.voip.VoIPService r2 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            r5 = 2
-            if (r2 == 0) goto L_0x0037
-            int r6 = r2.getCurrentVideoState()
-            if (r6 != r5) goto L_0x0029
-            r6 = 1
-            goto L_0x002a
-        L_0x0029:
-            r6 = 0
-        L_0x002a:
-            r0.callingUserIsVideo = r6
-            int r6 = r2.getVideoState()
-            if (r6 != r5) goto L_0x0034
-            r6 = 1
-            goto L_0x0035
-        L_0x0034:
-            r6 = 0
-        L_0x0035:
-            r0.currentUserIsVideo = r6
-        L_0x0037:
-            int r6 = r0.currentState
-            r7 = 5
-            r8 = 3
-            r9 = 0
-            if (r6 == r4) goto L_0x0113
-            if (r6 == r5) goto L_0x0113
-            if (r6 == r8) goto L_0x00f5
-            if (r6 == r7) goto L_0x00f5
-            switch(r6) {
-                case 11: goto L_0x00ea;
-                case 12: goto L_0x00db;
-                case 13: goto L_0x00cc;
-                case 14: goto L_0x00bd;
-                case 15: goto L_0x0075;
-                case 16: goto L_0x0065;
-                case 17: goto L_0x0049;
-                default: goto L_0x0047;
+            r2 = 1098907648(0x41800000, float:16.0)
+            org.telegram.messenger.AndroidUtilities.dp(r2)
+            org.telegram.messenger.voip.VoIPService r5 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            r6 = 2
+            if (r5 == 0) goto L_0x003c
+            int r7 = r5.getCurrentVideoState()
+            if (r7 != r6) goto L_0x002e
+            r7 = 1
+            goto L_0x002f
+        L_0x002e:
+            r7 = 0
+        L_0x002f:
+            r0.callingUserIsVideo = r7
+            int r7 = r5.getVideoState()
+            if (r7 != r6) goto L_0x0039
+            r7 = 1
+            goto L_0x003a
+        L_0x0039:
+            r7 = 0
+        L_0x003a:
+            r0.currentUserIsVideo = r7
+        L_0x003c:
+            if (r1 == 0) goto L_0x0048
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r7 = r0.currentUserCameraFloatingLayout
+            r7.saveRelatedPosition()
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r7 = r0.callingUserMiniFloatingLayout
+            r7.saveRelatedPosition()
+        L_0x0048:
+            int r7 = r0.currentState
+            r8 = 5
+            r9 = 3
+            r10 = 0
+            if (r7 == r4) goto L_0x011a
+            if (r7 == r6) goto L_0x011a
+            if (r7 == r9) goto L_0x010b
+            if (r7 == r8) goto L_0x010b
+            switch(r7) {
+                case 11: goto L_0x00fb;
+                case 12: goto L_0x00ec;
+                case 13: goto L_0x00dd;
+                case 14: goto L_0x00ce;
+                case 15: goto L_0x0086;
+                case 16: goto L_0x0076;
+                case 17: goto L_0x005a;
+                default: goto L_0x0058;
             }
-        L_0x0047:
-            goto L_0x0121
-        L_0x0049:
-            org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
-            r10 = 2131627402(0x7f0e0d8a, float:1.8882067E38)
-            java.lang.String r11 = "VoipBusy"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r6.setText(r10, r3, r1)
-            org.telegram.ui.Components.voip.AcceptDeclineView r6 = r0.acceptDeclineView
-            r6.setRetryMod(r4)
+        L_0x0058:
+            goto L_0x0128
+        L_0x005a:
+            org.telegram.ui.Components.voip.VoIPStatusTextView r7 = r0.statusTextView
+            r11 = 2131627406(0x7f0e0d8e, float:1.8882076E38)
+            java.lang.String r12 = "VoipBusy"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
+            r7.setText(r11, r3, r1)
+            org.telegram.ui.Components.voip.AcceptDeclineView r7 = r0.acceptDeclineView
+            r7.setRetryMod(r4)
             r0.currentUserIsVideo = r3
             r0.callingUserIsVideo = r3
-            r6 = 0
-            r10 = 0
-            r11 = 1
-            goto L_0x0124
-        L_0x0065:
-            org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
-            r10 = 2131627434(0x7f0e0daa, float:1.8882132E38)
-            java.lang.String r11 = "VoipRinging"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r6.setText(r10, r4, r1)
-            goto L_0x0121
-        L_0x0075:
-            r6 = 1103101952(0x41CLASSNAME, float:24.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            org.telegram.ui.Components.voip.AcceptDeclineView r10 = r0.acceptDeclineView
-            r10.setRetryMod(r3)
-            if (r2 == 0) goto L_0x00a6
-            org.telegram.tgnet.TLRPC$PhoneCall r10 = r2.call
-            boolean r10 = r10.video
-            if (r10 == 0) goto L_0x00a6
-            boolean r10 = r0.currentUserIsVideo
+            r7 = 0
+            r11 = 0
+            r12 = 1
+            goto L_0x012b
+        L_0x0076:
+            org.telegram.ui.Components.voip.VoIPStatusTextView r7 = r0.statusTextView
+            r11 = 2131627441(0x7f0e0db1, float:1.8882147E38)
+            java.lang.String r12 = "VoipRinging"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
+            r7.setText(r11, r4, r1)
+            goto L_0x0128
+        L_0x0086:
+            r7 = 1103101952(0x41CLASSNAME, float:24.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            org.telegram.ui.Components.voip.AcceptDeclineView r11 = r0.acceptDeclineView
+            r11.setRetryMod(r3)
+            if (r5 == 0) goto L_0x00b7
+            org.telegram.tgnet.TLRPC$PhoneCall r11 = r5.call
+            boolean r11 = r11.video
+            if (r11 == 0) goto L_0x00b7
+            boolean r11 = r0.currentUserIsVideo
+            org.telegram.ui.Components.voip.VoIPStatusTextView r12 = r0.statusTextView
+            r13 = 2131627419(0x7f0e0d9b, float:1.8882102E38)
+            java.lang.String r14 = "VoipInVideoCallBranding"
+            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
+            r12.setText(r13, r4, r1)
+            org.telegram.ui.Components.voip.AcceptDeclineView r12 = r0.acceptDeclineView
+            r13 = 1114636288(0x42700000, float:60.0)
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            int r13 = -r13
+            float r13 = (float) r13
+            r12.setTranslationY(r13)
+            goto L_0x00cb
+        L_0x00b7:
             org.telegram.ui.Components.voip.VoIPStatusTextView r11 = r0.statusTextView
-            r12 = 2131627414(0x7f0e0d96, float:1.8882092E38)
-            java.lang.String r13 = "VoipInVideoCallBranding"
+            r12 = 2131627417(0x7f0e0d99, float:1.8882098E38)
+            java.lang.String r13 = "VoipInCallBranding"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             r11.setText(r12, r4, r1)
             org.telegram.ui.Components.voip.AcceptDeclineView r11 = r0.acceptDeclineView
-            r12 = 1114636288(0x42700000, float:60.0)
-            int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            int r12 = -r12
-            float r12 = (float) r12
-            r11.setTranslationY(r12)
-            goto L_0x00ba
-        L_0x00a6:
-            org.telegram.ui.Components.voip.VoIPStatusTextView r10 = r0.statusTextView
-            r11 = 2131627412(0x7f0e0d94, float:1.8882088E38)
-            java.lang.String r12 = "VoipInCallBranding"
-            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
-            r10.setText(r11, r4, r1)
-            org.telegram.ui.Components.voip.AcceptDeclineView r10 = r0.acceptDeclineView
-            r10.setTranslationY(r9)
-            r10 = 0
-        L_0x00ba:
-            r11 = 1
+            r11.setTranslationY(r10)
+            r11 = 0
+        L_0x00cb:
             r12 = 1
-            goto L_0x0125
-        L_0x00bd:
-            org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
-            r10 = 2131627433(0x7f0e0da9, float:1.888213E38)
-            java.lang.String r11 = "VoipRequesting"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r6.setText(r10, r4, r1)
-            goto L_0x0121
-        L_0x00cc:
-            org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
-            r10 = 2131627438(0x7f0e0dae, float:1.888214E38)
-            java.lang.String r11 = "VoipWaiting"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r6.setText(r10, r4, r1)
-            goto L_0x0121
-        L_0x00db:
-            org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
-            r10 = 2131627408(0x7f0e0d90, float:1.888208E38)
-            java.lang.String r11 = "VoipExchangingKeys"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r6.setText(r10, r4, r1)
-            goto L_0x0121
-        L_0x00ea:
-            org.telegram.ui.-$$Lambda$VoIPFragment$LBGRYG0ig3piS3s3egRHoD2O3Ts r6 = new org.telegram.ui.-$$Lambda$VoIPFragment$LBGRYG0ig3piS3s3egRHoD2O3Ts
-            r6.<init>()
-            r10 = 200(0xc8, double:9.9E-322)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r6, r10)
-            goto L_0x0121
-        L_0x00f5:
-            int r6 = r0.previousState
-            if (r6 == r8) goto L_0x010d
-            if (r6 == r7) goto L_0x010d
-            r0.updateKeyView(r1)
-            boolean r6 = r0.callingUserIsVideo
-            if (r6 != 0) goto L_0x0106
-            boolean r6 = r0.currentUserIsVideo
-            if (r6 == 0) goto L_0x010d
-        L_0x0106:
-            java.lang.Runnable r6 = r0.hideUIRunnable
-            r10 = 5000(0x1388, double:2.4703E-320)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r6, r10)
-        L_0x010d:
-            r6 = 0
-            r10 = 0
-            r11 = 0
-            r12 = 0
             r13 = 1
-            goto L_0x0126
-        L_0x0113:
-            org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
-            r10 = 2131627404(0x7f0e0d8c, float:1.8882071E38)
-            java.lang.String r11 = "VoipConnecting"
-            java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
-            r6.setText(r10, r4, r1)
-        L_0x0121:
-            r6 = 0
-            r10 = 0
+            goto L_0x012c
+        L_0x00ce:
+            org.telegram.ui.Components.voip.VoIPStatusTextView r7 = r0.statusTextView
+            r11 = 2131627440(0x7f0e0db0, float:1.8882144E38)
+            java.lang.String r12 = "VoipRequesting"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
+            r7.setText(r11, r4, r1)
+            goto L_0x0128
+        L_0x00dd:
+            org.telegram.ui.Components.voip.VoIPStatusTextView r7 = r0.statusTextView
+            r11 = 2131627452(0x7f0e0dbc, float:1.8882169E38)
+            java.lang.String r12 = "VoipWaiting"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
+            r7.setText(r11, r4, r1)
+            goto L_0x0128
+        L_0x00ec:
+            org.telegram.ui.Components.voip.VoIPStatusTextView r7 = r0.statusTextView
+            r11 = 2131627412(0x7f0e0d94, float:1.8882088E38)
+            java.lang.String r12 = "VoipExchangingKeys"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
+            r7.setText(r11, r4, r1)
+            goto L_0x0128
+        L_0x00fb:
+            org.telegram.ui.Components.voip.VoIPTextureView r7 = r0.currentUserTextureView
+            r7.saveCameraLastBitmap()
+            org.telegram.ui.-$$Lambda$VoIPFragment$MvW0sQCy-TSLYUodkxbKK4c0B_w r7 = new org.telegram.ui.-$$Lambda$VoIPFragment$MvW0sQCy-TSLYUodkxbKK4c0B_w
+            r7.<init>()
+            r11 = 200(0xc8, double:9.9E-322)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r7, r11)
+            goto L_0x0128
+        L_0x010b:
+            int r7 = r0.previousState
+            if (r7 == r9) goto L_0x0114
+            if (r7 == r8) goto L_0x0114
+            r0.updateKeyView(r1)
+        L_0x0114:
+            r7 = 0
             r11 = 0
-        L_0x0124:
             r12 = 0
-        L_0x0125:
             r13 = 0
-        L_0x0126:
-            boolean r14 = r0.callingUserIsVideo
-            r7 = 250(0xfa, double:1.235E-321)
-            r15 = 1065353216(0x3var_, float:1.0)
-            if (r14 == 0) goto L_0x0176
-            org.telegram.ui.Components.BackupImageView r14 = r0.callingUserPhotoView
-            r14.setAlpha(r15)
-            if (r1 == 0) goto L_0x0147
-            org.telegram.ui.Components.voip.VoIPTextureView r14 = r0.callingUserTextureView
-            android.view.ViewPropertyAnimator r14 = r14.animate()
-            android.view.ViewPropertyAnimator r14 = r14.alpha(r15)
-            android.view.ViewPropertyAnimator r14 = r14.setDuration(r7)
-            r14.start()
-            goto L_0x0155
-        L_0x0147:
-            org.telegram.ui.Components.voip.VoIPTextureView r14 = r0.callingUserTextureView
-            android.view.ViewPropertyAnimator r14 = r14.animate()
-            r14.cancel()
-            org.telegram.ui.Components.voip.VoIPTextureView r14 = r0.callingUserTextureView
-            r14.setAlpha(r15)
-        L_0x0155:
-            org.telegram.ui.Components.BackupImageView r14 = r0.callingUserPhotoView
-            org.telegram.ui.Components.voip.VoIPTextureView r15 = r0.callingUserTextureView
-            org.webrtc.TextureViewRenderer r15 = r15.renderer
-            boolean r15 = r15.isFirstFrameRendered()
-            if (r15 == 0) goto L_0x0166
-            java.lang.Integer r15 = java.lang.Integer.valueOf(r4)
-            goto L_0x0167
-        L_0x0166:
-            r15 = 0
-        L_0x0167:
-            r14.setTag(r15)
-            org.telegram.ui.Components.voip.VoIPTextureView r14 = r0.callingUserTextureView
-            org.webrtc.TextureViewRenderer r14 = r14.renderer
-            boolean r14 = r14.isFirstFrameRendered()
-            if (r14 != 0) goto L_0x0176
-            r0.callingUserIsVideo = r3
-        L_0x0176:
-            boolean r14 = r0.currentUserIsVideo
-            if (r14 != 0) goto L_0x01aa
-            boolean r14 = r0.callingUserIsVideo
-            if (r14 == 0) goto L_0x017f
-            goto L_0x01aa
-        L_0x017f:
-            r0.fillNavigationBar(r3, r1)
-            org.telegram.ui.Components.BackupImageView r14 = r0.callingUserPhotoView
-            r14.setVisibility(r3)
-            if (r1 == 0) goto L_0x019b
-            org.telegram.ui.Components.voip.VoIPTextureView r14 = r0.callingUserTextureView
-            android.view.ViewPropertyAnimator r14 = r14.animate()
-            android.view.ViewPropertyAnimator r14 = r14.alpha(r9)
-            android.view.ViewPropertyAnimator r7 = r14.setDuration(r7)
-            r7.start()
-            goto L_0x01ad
-        L_0x019b:
-            org.telegram.ui.Components.voip.VoIPTextureView r7 = r0.callingUserTextureView
-            android.view.ViewPropertyAnimator r7 = r7.animate()
-            r7.cancel()
-            org.telegram.ui.Components.voip.VoIPTextureView r7 = r0.callingUserTextureView
-            r7.setAlpha(r9)
-            goto L_0x01ad
-        L_0x01aa:
-            r0.fillNavigationBar(r4, r1)
-        L_0x01ad:
-            boolean r7 = r0.currentUserIsVideo
-            if (r7 == 0) goto L_0x01b5
-            boolean r7 = r0.callingUserIsVideo
-            if (r7 != 0) goto L_0x01b7
-        L_0x01b5:
-            r0.cameraForceExpanded = r3
-        L_0x01b7:
-            boolean r7 = r0.currentUserIsVideo
-            if (r7 == 0) goto L_0x01dd
-            org.webrtc.TextureViewRenderer r7 = r0.currentUserTextureView
-            org.telegram.ui.Components.BackupImageView r8 = r0.currentUserPhotoViewMini
-            r0.checkFirstFrameRendered(r7, r8, r1)
-            org.telegram.ui.Components.voip.VoIPFloatingLayout r7 = r0.currentUserCameraFloatingLayout
-            r7.setVisibility(r3)
-            boolean r7 = r0.callingUserIsVideo
-            if (r7 == 0) goto L_0x01d4
-            boolean r7 = r0.cameraForceExpanded
-            if (r7 == 0) goto L_0x01d0
-            goto L_0x01d4
-        L_0x01d0:
-            r0.showFloatingLayout(r5, r1)
-            goto L_0x01e0
-        L_0x01d4:
-            r0.showFloatingLayout(r4, r1)
-            boolean r5 = r0.cameraForceExpanded
-            if (r5 == 0) goto L_0x01e0
-            r5 = 1
-            goto L_0x01e1
-        L_0x01dd:
-            r0.showFloatingLayout(r3, r1)
-        L_0x01e0:
-            r5 = 0
-        L_0x01e1:
-            r7 = 150(0x96, double:7.4E-322)
-            r14 = 1056964608(0x3var_, float:0.5)
-            if (r5 == 0) goto L_0x024d
-            org.telegram.ui.Components.voip.VoIPFloatingLayout r15 = r0.callingUserMiniFloatingLayout
-            java.lang.Object r15 = r15.getTag()
-            if (r15 != 0) goto L_0x024d
-            org.telegram.ui.Components.voip.VoIPFloatingLayout r15 = r0.callingUserMiniFloatingLayout
-            r15.setIsActive(r4)
-            org.telegram.ui.Components.voip.VoIPFloatingLayout r15 = r0.callingUserMiniFloatingLayout
-            int r15 = r15.getVisibility()
-            if (r15 == 0) goto L_0x0210
-            org.telegram.ui.Components.voip.VoIPFloatingLayout r15 = r0.callingUserMiniFloatingLayout
-            r15.setVisibility(r3)
-            org.telegram.ui.Components.voip.VoIPFloatingLayout r15 = r0.callingUserMiniFloatingLayout
-            r15.setAlpha(r9)
-            org.telegram.ui.Components.voip.VoIPFloatingLayout r15 = r0.callingUserMiniFloatingLayout
-            r15.setScaleX(r14)
-            org.telegram.ui.Components.voip.VoIPFloatingLayout r15 = r0.callingUserMiniFloatingLayout
-            r15.setScaleY(r14)
-        L_0x0210:
-            org.telegram.ui.Components.voip.VoIPFloatingLayout r14 = r0.callingUserMiniFloatingLayout
-            android.view.ViewPropertyAnimator r14 = r14.animate()
-            r15 = 0
-            android.view.ViewPropertyAnimator r14 = r14.setListener(r15)
-            r14.cancel()
-            org.telegram.ui.Components.voip.VoIPFloatingLayout r14 = r0.callingUserMiniFloatingLayout
-            android.view.ViewPropertyAnimator r14 = r14.animate()
-            r15 = 1065353216(0x3var_, float:1.0)
-            android.view.ViewPropertyAnimator r14 = r14.alpha(r15)
-            android.view.ViewPropertyAnimator r14 = r14.scaleX(r15)
-            android.view.ViewPropertyAnimator r14 = r14.scaleY(r15)
-            android.view.ViewPropertyAnimator r14 = r14.setDuration(r7)
-            org.telegram.ui.Components.CubicBezierInterpolator r15 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
-            android.view.ViewPropertyAnimator r14 = r14.setInterpolator(r15)
-            android.view.ViewPropertyAnimator r14 = r14.setStartDelay(r7)
-            r14.start()
-            org.telegram.ui.Components.voip.VoIPFloatingLayout r14 = r0.callingUserMiniFloatingLayout
-            java.lang.Integer r15 = java.lang.Integer.valueOf(r4)
-            r14.setTag(r15)
-            goto L_0x028b
-        L_0x024d:
-            if (r5 != 0) goto L_0x028b
-            org.telegram.ui.Components.voip.VoIPFloatingLayout r15 = r0.callingUserMiniFloatingLayout
-            java.lang.Object r15 = r15.getTag()
-            if (r15 == 0) goto L_0x028b
-            org.telegram.ui.Components.voip.VoIPFloatingLayout r15 = r0.callingUserMiniFloatingLayout
-            r15.setIsActive(r3)
-            org.telegram.ui.Components.voip.VoIPFloatingLayout r15 = r0.callingUserMiniFloatingLayout
-            android.view.ViewPropertyAnimator r15 = r15.animate()
-            android.view.ViewPropertyAnimator r15 = r15.alpha(r9)
-            android.view.ViewPropertyAnimator r15 = r15.scaleX(r14)
-            android.view.ViewPropertyAnimator r14 = r15.scaleY(r14)
-            org.telegram.ui.VoIPFragment$13 r15 = new org.telegram.ui.VoIPFragment$13
-            r15.<init>()
-            android.view.ViewPropertyAnimator r14 = r14.setListener(r15)
-            android.view.ViewPropertyAnimator r14 = r14.setDuration(r7)
-            org.telegram.ui.Components.CubicBezierInterpolator r15 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
-            android.view.ViewPropertyAnimator r14 = r14.setInterpolator(r15)
-            r14.start()
-            org.telegram.ui.Components.voip.VoIPFloatingLayout r14 = r0.callingUserMiniFloatingLayout
-            r15 = 0
-            r14.setTag(r15)
-            goto L_0x028c
-        L_0x028b:
-            r15 = 0
-        L_0x028c:
-            r0.showCallingUserAvatarMini(r10, r1)
-            org.telegram.ui.Components.BackupImageView r10 = r0.callingUserPhotoViewMini
-            java.lang.Object r10 = r10.getTag()
-            if (r10 != 0) goto L_0x0299
-            r10 = 0
-            goto L_0x02a6
-        L_0x0299:
-            r10 = 1124532224(0x43070000, float:135.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            r14 = 1094713344(0x41400000, float:12.0)
-            int r14 = org.telegram.messenger.AndroidUtilities.dp(r14)
-            int r10 = r10 + r14
-        L_0x02a6:
-            int r6 = r6 + r10
-            r0.showAcceptDeclineView(r11, r1)
-            org.telegram.ui.Components.voip.VoIPWindowView r10 = r0.windowView
-            r10.setLockOnScreen(r12)
-            int r10 = r0.currentState
-            r11 = 3
-            if (r10 == r11) goto L_0x02b7
-            r11 = 5
-            if (r10 != r11) goto L_0x02c0
-        L_0x02b7:
-            boolean r11 = r0.currentUserIsVideo
-            if (r11 != 0) goto L_0x02c2
-            boolean r11 = r0.callingUserIsVideo
-            if (r11 == 0) goto L_0x02c0
-            goto L_0x02c2
-        L_0x02c0:
+            r14 = 1
+            goto L_0x012d
+        L_0x011a:
+            org.telegram.ui.Components.voip.VoIPStatusTextView r7 = r0.statusTextView
+            r11 = 2131627408(0x7f0e0d90, float:1.888208E38)
+            java.lang.String r12 = "VoipConnecting"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r12, r11)
+            r7.setText(r11, r4, r1)
+        L_0x0128:
+            r7 = 0
             r11 = 0
-            goto L_0x02c3
-        L_0x02c2:
-            r11 = 1
-        L_0x02c3:
-            r0.canHideUI = r11
-            if (r11 != 0) goto L_0x02ce
-            boolean r11 = r0.uiVisible
-            if (r11 == 0) goto L_0x02ce
+            r12 = 0
+        L_0x012b:
+            r13 = 0
+        L_0x012c:
+            r14 = 0
+        L_0x012d:
+            boolean r15 = r0.callingUserIsVideo
+            r8 = 250(0xfa, double:1.235E-321)
+            r6 = 1065353216(0x3var_, float:1.0)
+            if (r15 == 0) goto L_0x017d
+            org.telegram.ui.Components.BackupImageView r15 = r0.callingUserPhotoView
+            r15.setAlpha(r6)
+            if (r1 == 0) goto L_0x014e
+            org.telegram.ui.Components.voip.VoIPTextureView r15 = r0.callingUserTextureView
+            android.view.ViewPropertyAnimator r15 = r15.animate()
+            android.view.ViewPropertyAnimator r15 = r15.alpha(r6)
+            android.view.ViewPropertyAnimator r15 = r15.setDuration(r8)
+            r15.start()
+            goto L_0x015c
+        L_0x014e:
+            org.telegram.ui.Components.voip.VoIPTextureView r15 = r0.callingUserTextureView
+            android.view.ViewPropertyAnimator r15 = r15.animate()
+            r15.cancel()
+            org.telegram.ui.Components.voip.VoIPTextureView r15 = r0.callingUserTextureView
+            r15.setAlpha(r6)
+        L_0x015c:
+            org.telegram.ui.Components.BackupImageView r15 = r0.callingUserPhotoView
+            org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.callingUserTextureView
+            org.webrtc.TextureViewRenderer r2 = r2.renderer
+            boolean r2 = r2.isFirstFrameRendered()
+            if (r2 == 0) goto L_0x016d
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r4)
+            goto L_0x016e
+        L_0x016d:
+            r2 = 0
+        L_0x016e:
+            r15.setTag(r2)
+            org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.callingUserTextureView
+            org.webrtc.TextureViewRenderer r2 = r2.renderer
+            boolean r2 = r2.isFirstFrameRendered()
+            if (r2 != 0) goto L_0x017d
+            r0.callingUserIsVideo = r3
+        L_0x017d:
+            boolean r2 = r0.currentUserIsVideo
+            if (r2 != 0) goto L_0x01b1
+            boolean r2 = r0.callingUserIsVideo
+            if (r2 == 0) goto L_0x0186
+            goto L_0x01b1
+        L_0x0186:
+            r0.fillNavigationBar(r3, r1)
+            org.telegram.ui.Components.BackupImageView r2 = r0.callingUserPhotoView
+            r2.setVisibility(r3)
+            if (r1 == 0) goto L_0x01a2
+            org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.callingUserTextureView
+            android.view.ViewPropertyAnimator r2 = r2.animate()
+            android.view.ViewPropertyAnimator r2 = r2.alpha(r10)
+            android.view.ViewPropertyAnimator r2 = r2.setDuration(r8)
+            r2.start()
+            goto L_0x01b4
+        L_0x01a2:
+            org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.callingUserTextureView
+            android.view.ViewPropertyAnimator r2 = r2.animate()
+            r2.cancel()
+            org.telegram.ui.Components.voip.VoIPTextureView r2 = r0.callingUserTextureView
+            r2.setAlpha(r10)
+            goto L_0x01b4
+        L_0x01b1:
+            r0.fillNavigationBar(r4, r1)
+        L_0x01b4:
+            boolean r2 = r0.currentUserIsVideo
+            if (r2 == 0) goto L_0x01bc
+            boolean r2 = r0.callingUserIsVideo
+            if (r2 != 0) goto L_0x01be
+        L_0x01bc:
+            r0.cameraForceExpanded = r3
+        L_0x01be:
+            boolean r2 = r0.currentUserIsVideo
+            if (r2 == 0) goto L_0x01c8
+            boolean r2 = r0.cameraForceExpanded
+            if (r2 == 0) goto L_0x01c8
+            r2 = 1
+            goto L_0x01c9
+        L_0x01c8:
+            r2 = 0
+        L_0x01c9:
+            r0.showCallingUserAvatarMini(r11, r1)
+            org.telegram.ui.Components.BackupImageView r8 = r0.callingUserPhotoViewMini
+            java.lang.Object r8 = r8.getTag()
+            if (r8 != 0) goto L_0x01d6
+            r8 = 0
+            goto L_0x01e3
+        L_0x01d6:
+            r8 = 1124532224(0x43070000, float:135.0)
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            r9 = 1094713344(0x41400000, float:12.0)
+            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+            int r8 = r8 + r9
+        L_0x01e3:
+            int r7 = r7 + r8
+            r0.showAcceptDeclineView(r12, r1)
+            org.telegram.ui.Components.voip.VoIPWindowView r8 = r0.windowView
+            r8.setLockOnScreen(r13)
+            int r8 = r0.currentState
+            r9 = 3
+            if (r8 != r9) goto L_0x01fb
+            boolean r8 = r0.currentUserIsVideo
+            if (r8 != 0) goto L_0x01f9
+            boolean r8 = r0.callingUserIsVideo
+            if (r8 == 0) goto L_0x01fb
+        L_0x01f9:
+            r8 = 1
+            goto L_0x01fc
+        L_0x01fb:
+            r8 = 0
+        L_0x01fc:
+            r0.canHideUI = r8
+            if (r8 != 0) goto L_0x0207
+            boolean r8 = r0.uiVisible
+            if (r8 != 0) goto L_0x0207
             r0.showUi(r4)
-        L_0x02ce:
-            boolean r11 = r0.uiVisible
-            if (r11 != 0) goto L_0x02d9
-            r11 = 1112014848(0x42480000, float:50.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            int r6 = r6 - r11
-        L_0x02d9:
-            if (r1 == 0) goto L_0x0300
-            if (r12 != 0) goto L_0x02f2
-            boolean r11 = r0.uiVisible
-            if (r11 != 0) goto L_0x02e2
-            goto L_0x02f2
-        L_0x02e2:
+        L_0x0207:
+            boolean r8 = r0.uiVisible
+            if (r8 == 0) goto L_0x0224
+            boolean r8 = r0.canHideUI
+            if (r8 == 0) goto L_0x0224
+            boolean r8 = r0.hideUiRunnableWaiting
+            if (r8 != 0) goto L_0x0224
+            if (r5 == 0) goto L_0x0224
+            boolean r8 = r5.isMicMute()
+            if (r8 != 0) goto L_0x0224
+            java.lang.Runnable r8 = r0.hideUIRunnable
+            r11 = 3000(0xbb8, double:1.482E-320)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r8, r11)
+            r0.hideUiRunnableWaiting = r4
+        L_0x0224:
+            boolean r8 = r0.uiVisible
+            if (r8 != 0) goto L_0x022f
+            r8 = 1112014848(0x42480000, float:50.0)
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            int r7 = r7 - r8
+        L_0x022f:
+            r8 = 1117782016(0x42a00000, float:80.0)
+            r11 = 150(0x96, double:7.4E-322)
+            if (r1 == 0) goto L_0x0282
+            if (r13 != 0) goto L_0x024a
+            boolean r9 = r0.uiVisible
+            if (r9 != 0) goto L_0x023c
+            goto L_0x024a
+        L_0x023c:
             android.widget.ImageView r9 = r0.backIcon
             android.view.ViewPropertyAnimator r9 = r9.animate()
-            r11 = 1065353216(0x3var_, float:1.0)
-            android.view.ViewPropertyAnimator r9 = r9.alpha(r11)
+            android.view.ViewPropertyAnimator r9 = r9.alpha(r6)
             r9.start()
-            goto L_0x030c
-        L_0x02f2:
-            android.widget.ImageView r11 = r0.backIcon
-            android.view.ViewPropertyAnimator r11 = r11.animate()
-            android.view.ViewPropertyAnimator r9 = r11.alpha(r9)
-            r9.start()
-            goto L_0x030c
-        L_0x0300:
-            r11 = 1065353216(0x3var_, float:1.0)
-            android.widget.ImageView r14 = r0.backIcon
-            if (r12 == 0) goto L_0x0307
-            goto L_0x0309
-        L_0x0307:
-            r9 = 1065353216(0x3var_, float:1.0)
-        L_0x0309:
-            r14.setAlpha(r9)
-        L_0x030c:
-            r0.updateButtons(r1)
-            if (r13 == 0) goto L_0x0316
-            org.telegram.ui.Components.voip.VoIPStatusTextView r9 = r0.statusTextView
-            r9.showTimer(r1)
-        L_0x0316:
-            if (r1 == 0) goto L_0x0335
-            int r9 = r0.statusLayoutAnimateToOffset
-            if (r6 == r9) goto L_0x033b
-            android.widget.LinearLayout r9 = r0.statusLayout
+            goto L_0x0257
+        L_0x024a:
+            android.widget.ImageView r9 = r0.backIcon
             android.view.ViewPropertyAnimator r9 = r9.animate()
-            float r11 = (float) r6
-            android.view.ViewPropertyAnimator r9 = r9.translationY(r11)
-            android.view.ViewPropertyAnimator r7 = r9.setDuration(r7)
-            org.telegram.ui.Components.CubicBezierInterpolator r8 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
-            android.view.ViewPropertyAnimator r7 = r7.setInterpolator(r8)
-            r7.start()
-            goto L_0x033b
-        L_0x0335:
-            android.widget.LinearLayout r7 = r0.statusLayout
-            float r8 = (float) r6
-            r7.setTranslationY(r8)
-        L_0x033b:
-            r0.statusLayoutAnimateToOffset = r6
-            org.telegram.ui.Components.voip.VoIPOverlayBackground r6 = r0.overlayBackground
+            android.view.ViewPropertyAnimator r9 = r9.alpha(r10)
+            r9.start()
+        L_0x0257:
+            org.telegram.ui.Components.voip.VoIPNotificationsLayout r9 = r0.notificationsLayout
+            android.view.ViewPropertyAnimator r9 = r9.animate()
+            r13 = 1098907648(0x41800000, float:16.0)
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            int r13 = -r13
+            boolean r15 = r0.uiVisible
+            if (r15 == 0) goto L_0x026d
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            goto L_0x026e
+        L_0x026d:
+            r8 = 0
+        L_0x026e:
+            int r13 = r13 - r8
+            float r8 = (float) r13
+            android.view.ViewPropertyAnimator r8 = r9.translationY(r8)
+            android.view.ViewPropertyAnimator r8 = r8.setDuration(r11)
+            org.telegram.ui.Components.CubicBezierInterpolator r9 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
+            android.view.ViewPropertyAnimator r8 = r8.setInterpolator(r9)
+            r8.start()
+            goto L_0x02a5
+        L_0x0282:
+            android.widget.ImageView r9 = r0.backIcon
+            if (r13 == 0) goto L_0x0288
+            r13 = 0
+            goto L_0x028a
+        L_0x0288:
+            r13 = 1065353216(0x3var_, float:1.0)
+        L_0x028a:
+            r9.setAlpha(r13)
+            org.telegram.ui.Components.voip.VoIPNotificationsLayout r9 = r0.notificationsLayout
+            r13 = 1098907648(0x41800000, float:16.0)
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r13)
+            int r13 = -r13
+            boolean r15 = r0.uiVisible
+            if (r15 == 0) goto L_0x029f
+            int r8 = org.telegram.messenger.AndroidUtilities.dp(r8)
+            goto L_0x02a0
+        L_0x029f:
+            r8 = 0
+        L_0x02a0:
+            int r13 = r13 - r8
+            float r8 = (float) r13
+            r9.setTranslationY(r8)
+        L_0x02a5:
+            r0.updateButtons(r1)
+            if (r14 == 0) goto L_0x02af
+            org.telegram.ui.Components.voip.VoIPStatusTextView r8 = r0.statusTextView
+            r8.showTimer(r1)
+        L_0x02af:
+            if (r1 == 0) goto L_0x02ce
+            int r8 = r0.statusLayoutAnimateToOffset
+            if (r7 == r8) goto L_0x02d4
+            android.widget.LinearLayout r8 = r0.statusLayout
+            android.view.ViewPropertyAnimator r8 = r8.animate()
+            float r9 = (float) r7
+            android.view.ViewPropertyAnimator r8 = r8.translationY(r9)
+            android.view.ViewPropertyAnimator r8 = r8.setDuration(r11)
+            org.telegram.ui.Components.CubicBezierInterpolator r9 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
+            android.view.ViewPropertyAnimator r8 = r8.setInterpolator(r9)
+            r8.start()
+            goto L_0x02d4
+        L_0x02ce:
+            android.widget.LinearLayout r8 = r0.statusLayout
+            float r9 = (float) r7
+            r8.setTranslationY(r9)
+        L_0x02d4:
+            r0.statusLayoutAnimateToOffset = r7
+            org.telegram.ui.Components.voip.VoIPOverlayBackground r7 = r0.overlayBackground
+            boolean r8 = r0.currentUserIsVideo
+            if (r8 != 0) goto L_0x02e3
+            boolean r8 = r0.callingUserIsVideo
+            if (r8 == 0) goto L_0x02e1
+            goto L_0x02e3
+        L_0x02e1:
+            r8 = 0
+            goto L_0x02e4
+        L_0x02e3:
+            r8 = 1
+        L_0x02e4:
+            r7.setShowBlackout(r8, r1)
+            int r7 = r0.currentState
+            r8 = 3
+            if (r7 == r8) goto L_0x02ef
+            r8 = 5
+            if (r7 != r8) goto L_0x02f8
+        L_0x02ef:
             boolean r7 = r0.currentUserIsVideo
-            if (r7 != 0) goto L_0x034a
+            if (r7 != 0) goto L_0x02fa
             boolean r7 = r0.callingUserIsVideo
-            if (r7 == 0) goto L_0x0348
-            goto L_0x034a
-        L_0x0348:
+            if (r7 == 0) goto L_0x02f8
+            goto L_0x02fa
+        L_0x02f8:
             r7 = 0
-            goto L_0x034b
-        L_0x034a:
+            goto L_0x02fb
+        L_0x02fa:
             r7 = 1
-        L_0x034b:
-            r6.setShowBlackout(r7, r1)
-            int r1 = r0.currentState
-            r6 = 3
-            if (r1 == r6) goto L_0x0356
-            r6 = 5
-            if (r1 != r6) goto L_0x035f
-        L_0x0356:
-            boolean r1 = r0.currentUserIsVideo
-            if (r1 != 0) goto L_0x035e
-            boolean r1 = r0.callingUserIsVideo
-            if (r1 == 0) goto L_0x035f
-        L_0x035e:
-            r3 = 1
-        L_0x035f:
-            r0.canSwitchToPip = r3
-            if (r2 == 0) goto L_0x037e
-            org.webrtc.TextureViewRenderer r1 = r0.currentUserTextureView
-            boolean r3 = r2.isFrontFaceCamera()
-            r1.setMirror(r3)
-            boolean r1 = r0.currentUserIsVideo
-            if (r1 == 0) goto L_0x0372
-            org.webrtc.TextureViewRenderer r15 = r0.currentUserTextureView
-        L_0x0372:
-            if (r5 == 0) goto L_0x0377
-            org.webrtc.TextureViewRenderer r1 = r0.callingUserMiniTextureRenderer
-            goto L_0x037b
-        L_0x0377:
-            org.telegram.ui.Components.voip.VoIPTextureView r1 = r0.callingUserTextureView
-            org.webrtc.TextureViewRenderer r1 = r1.renderer
-        L_0x037b:
-            r2.setSinks(r15, r1)
-        L_0x037e:
-            r16.updateSpeakerPhoneIcon()
+        L_0x02fb:
+            r0.canSwitchToPip = r7
+            if (r5 == 0) goto L_0x03c2
+            org.telegram.ui.Components.voip.VoIPTextureView r7 = r0.currentUserTextureView
+            org.webrtc.TextureViewRenderer r7 = r7.renderer
+            boolean r8 = r5.isFrontFaceCamera()
+            r7.setMirror(r8)
+            boolean r7 = r0.currentUserIsVideo
+            if (r7 == 0) goto L_0x0313
+            org.telegram.ui.Components.voip.VoIPTextureView r7 = r0.currentUserTextureView
+            org.webrtc.TextureViewRenderer r7 = r7.renderer
+            goto L_0x0314
+        L_0x0313:
+            r7 = 0
+        L_0x0314:
+            if (r2 == 0) goto L_0x0319
+            org.webrtc.TextureViewRenderer r8 = r0.callingUserMiniTextureRenderer
+            goto L_0x031d
+        L_0x0319:
+            org.telegram.ui.Components.voip.VoIPTextureView r8 = r0.callingUserTextureView
+            org.webrtc.TextureViewRenderer r8 = r8.renderer
+        L_0x031d:
+            r5.setSinks(r7, r8)
+            boolean r7 = r0.callingUserIsVideo
+            if (r7 == 0) goto L_0x033d
+            org.telegram.tgnet.TLRPC$PhoneCall r7 = r5.call
+            if (r7 == 0) goto L_0x033d
+            boolean r7 = r7.video
+            if (r7 != 0) goto L_0x033d
+            org.telegram.messenger.voip.VoIPBaseService$SharedUIParams r7 = r5.sharedUIParams
+            boolean r8 = r7.tapToVideoTooltipWasShowed
+            if (r8 != 0) goto L_0x033d
+            r7.tapToVideoTooltipWasShowed = r4
+            org.telegram.ui.Components.HintView r7 = r0.tapToVideoTooltip
+            org.telegram.ui.Components.voip.VoIPToggleButton[] r8 = r0.bottomButtons
+            r8 = r8[r4]
+            r7.showForView(r8, r4)
+        L_0x033d:
+            if (r1 == 0) goto L_0x0344
+            org.telegram.ui.Components.voip.VoIPNotificationsLayout r7 = r0.notificationsLayout
+            r7.beforeLayoutChanges()
+        L_0x0344:
+            boolean r7 = r0.currentUserIsVideo
+            java.lang.String r8 = "video"
+            java.lang.String r9 = "muted"
+            if (r7 != 0) goto L_0x0350
+            boolean r7 = r0.callingUserIsVideo
+            if (r7 == 0) goto L_0x03b1
+        L_0x0350:
+            int r7 = r0.currentState
+            r13 = 3
+            if (r7 == r13) goto L_0x0358
+            r13 = 5
+            if (r7 != r13) goto L_0x03b1
+        L_0x0358:
+            long r13 = r5.getCallDuration()
+            r15 = 500(0x1f4, double:2.47E-321)
+            int r7 = (r13 > r15 ? 1 : (r13 == r15 ? 0 : -1))
+            if (r7 <= 0) goto L_0x03b1
+            int r7 = r5.getCurrentAudioState()
+            if (r7 != 0) goto L_0x0384
+            org.telegram.ui.Components.voip.VoIPNotificationsLayout r7 = r0.notificationsLayout
+            r13 = 2131165321(0x7var_, float:1.7944856E38)
+            r14 = 2131627451(0x7f0e0dbb, float:1.8882167E38)
+            java.lang.Object[] r15 = new java.lang.Object[r4]
+            org.telegram.tgnet.TLRPC$User r11 = r0.callingUser
+            java.lang.String r11 = org.telegram.messenger.UserObject.getFirstName(r11)
+            r15[r3] = r11
+            java.lang.String r11 = "VoipUserMicrophoneIsOff"
+            java.lang.String r11 = org.telegram.messenger.LocaleController.formatString(r11, r14, r15)
+            r7.addNotification(r13, r11, r9, r1)
+            goto L_0x0389
+        L_0x0384:
+            org.telegram.ui.Components.voip.VoIPNotificationsLayout r7 = r0.notificationsLayout
+            r7.removeNotification(r9)
+        L_0x0389:
+            int r5 = r5.getCurrentVideoState()
+            if (r5 != 0) goto L_0x03ab
+            org.telegram.ui.Components.voip.VoIPNotificationsLayout r5 = r0.notificationsLayout
+            r7 = 2131165312(0x7var_, float:1.7944838E38)
+            r9 = 2131627450(0x7f0e0dba, float:1.8882165E38)
+            java.lang.Object[] r11 = new java.lang.Object[r4]
+            org.telegram.tgnet.TLRPC$User r12 = r0.callingUser
+            java.lang.String r12 = org.telegram.messenger.UserObject.getFirstName(r12)
+            r11[r3] = r12
+            java.lang.String r12 = "VoipUserCameraIsOff"
+            java.lang.String r9 = org.telegram.messenger.LocaleController.formatString(r12, r9, r11)
+            r5.addNotification(r7, r9, r8, r1)
+            goto L_0x03bb
+        L_0x03ab:
+            org.telegram.ui.Components.voip.VoIPNotificationsLayout r5 = r0.notificationsLayout
+            r5.removeNotification(r8)
+            goto L_0x03bb
+        L_0x03b1:
+            org.telegram.ui.Components.voip.VoIPNotificationsLayout r5 = r0.notificationsLayout
+            r5.removeNotification(r9)
+            org.telegram.ui.Components.voip.VoIPNotificationsLayout r5 = r0.notificationsLayout
+            r5.removeNotification(r8)
+        L_0x03bb:
+            if (r1 == 0) goto L_0x03c2
+            org.telegram.ui.Components.voip.VoIPNotificationsLayout r5 = r0.notificationsLayout
+            r5.animateLayoutChanges()
+        L_0x03c2:
+            org.telegram.ui.Components.voip.VoIPNotificationsLayout r5 = r0.notificationsLayout
+            int r5 = r5.getChildsHight()
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r7 = r0.callingUserMiniFloatingLayout
+            r7.setBottomOffset(r5, r1)
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r7 = r0.currentUserCameraFloatingLayout
+            r7.setBottomOffset(r5, r1)
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r5 = r0.currentUserCameraFloatingLayout
+            boolean r7 = r0.uiVisible
+            r5.setUiVisible(r7)
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r5 = r0.callingUserMiniFloatingLayout
+            boolean r7 = r0.uiVisible
+            r5.setUiVisible(r7)
+            boolean r5 = r0.currentUserIsVideo
+            if (r5 == 0) goto L_0x03f6
+            boolean r5 = r0.callingUserIsVideo
+            if (r5 == 0) goto L_0x03f2
+            boolean r5 = r0.cameraForceExpanded
+            if (r5 == 0) goto L_0x03ed
+            goto L_0x03f2
+        L_0x03ed:
+            r5 = 2
+            r0.showFloatingLayout(r5, r1)
+            goto L_0x03f9
+        L_0x03f2:
+            r0.showFloatingLayout(r4, r1)
+            goto L_0x03f9
+        L_0x03f6:
+            r0.showFloatingLayout(r3, r1)
+        L_0x03f9:
+            r1 = 1056964608(0x3var_, float:0.5)
+            if (r2 == 0) goto L_0x0463
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r5 = r0.callingUserMiniFloatingLayout
+            java.lang.Object r5 = r5.getTag()
+            if (r5 != 0) goto L_0x0463
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r2 = r0.callingUserMiniFloatingLayout
+            r2.setIsActive(r4)
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r2 = r0.callingUserMiniFloatingLayout
+            int r2 = r2.getVisibility()
+            if (r2 == 0) goto L_0x0426
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r2 = r0.callingUserMiniFloatingLayout
+            r2.setVisibility(r3)
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r2 = r0.callingUserMiniFloatingLayout
+            r2.setAlpha(r10)
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r2 = r0.callingUserMiniFloatingLayout
+            r2.setScaleX(r1)
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r2 = r0.callingUserMiniFloatingLayout
+            r2.setScaleY(r1)
+        L_0x0426:
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r1 = r0.callingUserMiniFloatingLayout
+            android.view.ViewPropertyAnimator r1 = r1.animate()
+            r2 = 0
+            android.view.ViewPropertyAnimator r1 = r1.setListener(r2)
+            r1.cancel()
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r1 = r0.callingUserMiniFloatingLayout
+            android.view.ViewPropertyAnimator r1 = r1.animate()
+            android.view.ViewPropertyAnimator r1 = r1.alpha(r6)
+            android.view.ViewPropertyAnimator r1 = r1.scaleX(r6)
+            android.view.ViewPropertyAnimator r1 = r1.scaleY(r6)
+            r2 = 150(0x96, double:7.4E-322)
+            android.view.ViewPropertyAnimator r1 = r1.setDuration(r2)
+            org.telegram.ui.Components.CubicBezierInterpolator r5 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
+            android.view.ViewPropertyAnimator r1 = r1.setInterpolator(r5)
+            android.view.ViewPropertyAnimator r1 = r1.setStartDelay(r2)
+            r1.start()
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r1 = r0.callingUserMiniFloatingLayout
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r4)
+            r1.setTag(r2)
+            goto L_0x04a2
+        L_0x0463:
+            if (r2 != 0) goto L_0x04a2
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r2 = r0.callingUserMiniFloatingLayout
+            java.lang.Object r2 = r2.getTag()
+            if (r2 == 0) goto L_0x04a2
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r2 = r0.callingUserMiniFloatingLayout
+            r2.setIsActive(r3)
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r2 = r0.callingUserMiniFloatingLayout
+            android.view.ViewPropertyAnimator r2 = r2.animate()
+            android.view.ViewPropertyAnimator r2 = r2.alpha(r10)
+            android.view.ViewPropertyAnimator r2 = r2.scaleX(r1)
+            android.view.ViewPropertyAnimator r1 = r2.scaleY(r1)
+            org.telegram.ui.VoIPFragment$12 r2 = new org.telegram.ui.VoIPFragment$12
+            r2.<init>()
+            android.view.ViewPropertyAnimator r1 = r1.setListener(r2)
+            r2 = 150(0x96, double:7.4E-322)
+            android.view.ViewPropertyAnimator r1 = r1.setDuration(r2)
+            org.telegram.ui.Components.CubicBezierInterpolator r2 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
+            android.view.ViewPropertyAnimator r1 = r1.setInterpolator(r2)
+            r1.start()
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r1 = r0.callingUserMiniFloatingLayout
+            r2 = 0
+            r1.setTag(r2)
+        L_0x04a2:
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r1 = r0.currentUserCameraFloatingLayout
+            r1.restoreRelativePosition()
+            org.telegram.ui.Components.voip.VoIPFloatingLayout r1 = r0.callingUserMiniFloatingLayout
+            r1.restoreRelativePosition()
+            r17.updateSpeakerPhoneIcon()
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.VoIPFragment.updateViewState():void");
     }
 
-    public /* synthetic */ void lambda$updateViewState$13$VoIPFragment() {
+    public /* synthetic */ void lambda$updateViewState$16$VoIPFragment() {
         this.windowView.finish();
     }
 
@@ -1595,36 +1801,13 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         this.fillNaviagtionBar = z;
     }
 
-    private void checkFirstFrameRendered(TextureViewRenderer textureViewRenderer, final BackupImageView backupImageView, boolean z) {
-        int i = null;
-        if (!textureViewRenderer.isFirstFrameRendered()) {
-            backupImageView.animate().setListener((Animator.AnimatorListener) null).cancel();
-            backupImageView.setAlpha(1.0f);
-            backupImageView.setVisibility(0);
-        } else if (!z || backupImageView.getTag() != null) {
-            backupImageView.animate().setListener((Animator.AnimatorListener) null).cancel();
-            backupImageView.setVisibility(8);
-        } else {
-            backupImageView.animate().alpha(0.0f).setListener(new AnimatorListenerAdapter(this) {
-                public void onAnimationEnd(Animator animator) {
-                    backupImageView.setAlpha(1.0f);
-                    backupImageView.setVisibility(8);
-                }
-            }).setDuration(150).start();
-        }
-        if (this.callingUserTextureView.renderer.isFirstFrameRendered()) {
-            i = 1;
-        }
-        backupImageView.setTag(i);
-    }
-
     /* access modifiers changed from: private */
     public void showUi(boolean z) {
         ValueAnimator valueAnimator = this.uiVisibilityAnimator;
         if (valueAnimator != null) {
             valueAnimator.cancel();
         }
-        AndroidUtilities.cancelRunOnUIThread(this.hideUIRunnable);
+        int i = 0;
         if (!z && this.uiVisible) {
             this.speakerPhoneIcon.animate().alpha(0.0f).translationY((float) (-AndroidUtilities.dp(50.0f))).setDuration(150).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
             this.backIcon.animate().alpha(0.0f).translationY((float) (-AndroidUtilities.dp(50.0f))).setDuration(150).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
@@ -1638,7 +1821,10 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             ofFloat.addUpdateListener(this.statusbarAnimatorListener);
             this.uiVisibilityAnimator.setDuration(150).setInterpolator(CubicBezierInterpolator.DEFAULT);
             this.uiVisibilityAnimator.start();
+            AndroidUtilities.cancelRunOnUIThread(this.hideUIRunnable);
+            this.hideUiRunnableWaiting = false;
         } else if (z && !this.uiVisible) {
+            this.tapToVideoTooltip.hide();
             this.speakerPhoneIcon.animate().alpha(1.0f).translationY(0.0f).setDuration(150).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
             this.backIcon.animate().alpha(1.0f).translationY(0.0f).setDuration(150).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
             this.emojiLayout.animate().alpha(1.0f).translationY(0.0f).setDuration(150).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
@@ -1653,9 +1839,13 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             this.uiVisibilityAnimator.start();
         }
         this.uiVisible = z;
-        this.currentUserCameraFloatingLayout.setUiVisible(z);
-        this.callingUserMiniFloatingLayout.setUiVisible(this.uiVisible);
         this.windowView.requestFullscreen(!z);
+        ViewPropertyAnimator animate = this.notificationsLayout.animate();
+        int i2 = -AndroidUtilities.dp(16.0f);
+        if (this.uiVisible) {
+            i = AndroidUtilities.dp(80.0f);
+        }
+        animate.translationY((float) (i2 - i)).setDuration(150).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
     }
 
     private void showFloatingLayout(int i, boolean z) {
@@ -1715,17 +1905,28 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
                 animator3.removeAllListeners();
                 this.cameraShowingAnimator.cancel();
             }
+            AnimatorSet animatorSet2 = new AnimatorSet();
             VoIPFloatingLayout voIPFloatingLayout6 = this.currentUserCameraFloatingLayout;
-            ObjectAnimator ofFloat = ObjectAnimator.ofFloat(voIPFloatingLayout6, View.ALPHA, new float[]{voIPFloatingLayout6.getAlpha(), 0.0f});
-            this.cameraShowingAnimator = ofFloat;
-            ofFloat.addListener(new AnimatorListenerAdapter() {
+            animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(voIPFloatingLayout6, View.ALPHA, new float[]{voIPFloatingLayout6.getAlpha(), 0.0f})});
+            if (this.currentUserCameraFloatingLayout.getTag() != null && ((Integer) this.currentUserCameraFloatingLayout.getTag()).intValue() == 2) {
+                VoIPFloatingLayout voIPFloatingLayout7 = this.currentUserCameraFloatingLayout;
+                Property property3 = View.SCALE_X;
+                float[] fArr3 = {voIPFloatingLayout7.getScaleX(), 0.7f};
+                VoIPFloatingLayout voIPFloatingLayout8 = this.currentUserCameraFloatingLayout;
+                animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(voIPFloatingLayout7, property3, fArr3), ObjectAnimator.ofFloat(voIPFloatingLayout8, View.SCALE_Y, new float[]{voIPFloatingLayout8.getScaleX(), 0.7f})});
+            }
+            this.cameraShowingAnimator = animatorSet2;
+            animatorSet2.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     VoIPFragment.this.currentUserCameraFloatingLayout.setTranslationX(0.0f);
                     VoIPFragment.this.currentUserCameraFloatingLayout.setTranslationY(0.0f);
+                    VoIPFragment.this.currentUserCameraFloatingLayout.setScaleY(1.0f);
+                    VoIPFragment.this.currentUserCameraFloatingLayout.setScaleX(1.0f);
                     VoIPFragment.this.currentUserCameraFloatingLayout.setVisibility(8);
                 }
             });
-            this.cameraShowingAnimator.setDuration(150).setInterpolator(new LinearInterpolator());
+            this.cameraShowingAnimator.setDuration(250).setInterpolator(CubicBezierInterpolator.DEFAULT);
+            this.cameraShowingAnimator.setStartDelay(50);
             this.cameraShowingAnimator.start();
         }
         this.currentUserCameraFloatingLayout.setTag(Integer.valueOf(i));
@@ -1773,7 +1974,8 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
                 byteArrayOutputStream.write(sharedInstance.getEncryptionKey());
                 byteArrayOutputStream.write(sharedInstance.getGA());
                 tLRPC$TL_encryptedChat.auth_key = byteArrayOutputStream.toByteArray();
-            } catch (Exception unused) {
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
             }
             byte[] bArr = tLRPC$TL_encryptedChat.auth_key;
             String[] emojifyForCall = EncryptionKeyEmojifier.emojifyForCall(Utilities.computeSHA256(bArr, 0, bArr.length));
@@ -1841,6 +2043,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
                 }).alpha(0.0f);
             }
         }
+        this.acceptDeclineView.setEnabled(z);
         AcceptDeclineView acceptDeclineView3 = this.acceptDeclineView;
         if (z) {
             i2 = 1;
@@ -1877,31 +2080,34 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
                     this.bottomButtons[0].setVisibility(8);
                     this.bottomButtons[1].setVisibility(8);
                     this.bottomButtons[2].setVisibility(8);
-                    this.bottomButtons[3].setVisibility(8);
                 } else {
                     if (this.currentUserIsVideo) {
                         setFrontalCameraAction(this.bottomButtons[0], sharedInstance, z);
-                        this.speakerPhoneIcon.animate().alpha(1.0f).start();
+                        if (this.uiVisible) {
+                            this.speakerPhoneIcon.animate().alpha(1.0f).start();
+                        }
                     } else {
                         setSpeakerPhoneAction(this.bottomButtons[0], sharedInstance, z);
                         this.speakerPhoneIcon.animate().alpha(0.0f).start();
                     }
                     setVideoAction(this.bottomButtons[1], sharedInstance, z);
                     setMicrohoneAction(this.bottomButtons[2], sharedInstance, z);
-                    this.bottomButtons[3].setVisibility(8);
                 }
+                this.bottomButtons[3].setVisibility(8);
             } else if (instance != null) {
                 if (this.currentUserIsVideo) {
                     setFrontalCameraAction(this.bottomButtons[0], sharedInstance, z);
-                    this.speakerPhoneIcon.animate().alpha(1.0f).start();
+                    if (this.uiVisible) {
+                        this.speakerPhoneIcon.animate().alpha(1.0f).start();
+                    }
                 } else {
                     setSpeakerPhoneAction(this.bottomButtons[0], sharedInstance, z);
                     this.speakerPhoneIcon.animate().alpha(0.0f).start();
                 }
                 setVideoAction(this.bottomButtons[1], sharedInstance, z);
                 setMicrohoneAction(this.bottomButtons[2], sharedInstance, z);
-                this.bottomButtons[3].setData(NUM, -1, -1041108, "End Call", false, z);
-                this.bottomButtons[3].setOnClickListener($$Lambda$VoIPFragment$VneVWv7pmZyfcT8HINutHcYSxc.INSTANCE);
+                this.bottomButtons[3].setData(NUM, -1, -1041108, LocaleController.getString("VoipEndCall", NUM), false, z);
+                this.bottomButtons[3].setOnClickListener($$Lambda$VoIPFragment$2Mj4qPmFKJAGv2cAUi0sJ2kqQK4.INSTANCE);
             } else {
                 return;
             }
@@ -1912,10 +2118,11 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
                     i2 += 16;
                 }
             }
+            updateSpeakerPhoneIcon();
         }
     }
 
-    static /* synthetic */ void lambda$updateButtons$14(View view) {
+    static /* synthetic */ void lambda$updateButtons$17(View view) {
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().hangUp();
         }
@@ -1923,19 +2130,19 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
 
     private void setMicrohoneAction(VoIPToggleButton voIPToggleButton, VoIPService voIPService, boolean z) {
         if (voIPService.isMicMute()) {
-            voIPToggleButton.setData(NUM, -16777216, -1, "Unmute", true, z);
+            voIPToggleButton.setData(NUM, -16777216, -1, LocaleController.getString("VoipUnmute", NUM), true, z);
         } else {
-            voIPToggleButton.setData(NUM, -1, ColorUtils.setAlphaComponent(-1, 30), "Mute", false, z);
+            voIPToggleButton.setData(NUM, -1, ColorUtils.setAlphaComponent(-1, 30), LocaleController.getString("VoipMute", NUM), false, z);
         }
         this.currentUserCameraFloatingLayout.setMuted(voIPService.isMicMute(), z);
         voIPToggleButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                VoIPFragment.this.lambda$setMicrohoneAction$15$VoIPFragment(view);
+                VoIPFragment.this.lambda$setMicrohoneAction$18$VoIPFragment(view);
             }
         });
     }
 
-    public /* synthetic */ void lambda$setMicrohoneAction$15$VoIPFragment(View view) {
+    public /* synthetic */ void lambda$setMicrohoneAction$18$VoIPFragment(View view) {
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().setMicMute(!VoIPService.getSharedInstance().isMicMute());
             updateButtons(true);
@@ -1943,46 +2150,91 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
     }
 
     private void setVideoAction(VoIPToggleButton voIPToggleButton, VoIPService voIPService, boolean z) {
-        if (this.currentUserIsVideo) {
-            voIPToggleButton.setData(NUM, -1, ColorUtils.setAlphaComponent(-1, 30), "Video", false, z);
-        } else {
-            voIPToggleButton.setData(NUM, -16777216, -1, "Video", true, z);
-        }
-        voIPToggleButton.setCrossOffset(-AndroidUtilities.dpf2(3.5f));
-        voIPToggleButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                VoIPFragment.this.lambda$setVideoAction$16$VoIPFragment(view);
+        if ((this.currentUserIsVideo || this.callingUserIsVideo) ? true : voIPService.isVideoAvailable()) {
+            if (this.currentUserIsVideo) {
+                voIPToggleButton.setData(NUM, -1, ColorUtils.setAlphaComponent(-1, 30), LocaleController.getString("VoipStopVideo", NUM), false, z);
+            } else {
+                voIPToggleButton.setData(NUM, -16777216, -1, LocaleController.getString("VoipStartVideo", NUM), true, z);
             }
-        });
+            voIPToggleButton.setCrossOffset(-AndroidUtilities.dpf2(3.5f));
+            voIPToggleButton.setOnClickListener(new View.OnClickListener(voIPService) {
+                public final /* synthetic */ VoIPService f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void onClick(View view) {
+                    VoIPFragment.this.lambda$setVideoAction$20$VoIPFragment(this.f$1, view);
+                }
+            });
+            voIPToggleButton.setEnabled(true);
+            return;
+        }
+        voIPToggleButton.setData(NUM, ColorUtils.setAlphaComponent(-1, 127), ColorUtils.setAlphaComponent(-1, 30), "Video", false, z);
+        voIPToggleButton.setOnClickListener((View.OnClickListener) null);
+        voIPToggleButton.setEnabled(false);
     }
 
-    public /* synthetic */ void lambda$setVideoAction$16$VoIPFragment(View view) {
+    public /* synthetic */ void lambda$setVideoAction$20$VoIPFragment(VoIPService voIPService, View view) {
         if (Build.VERSION.SDK_INT < 23 || this.activity.checkSelfPermission("android.permission.CAMERA") == 0) {
-            toggleCameraInput();
+            TLRPC$PhoneCall tLRPC$PhoneCall = voIPService.call;
+            if (tLRPC$PhoneCall == null || tLRPC$PhoneCall.video || this.callingUserIsVideo || voIPService.sharedUIParams.cameraAlertWasShowed) {
+                toggleCameraInput();
+                return;
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(this.activity);
+            builder.setMessage(LocaleController.getString("VoipSwitchToVideoCall", NUM));
+            builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(voIPService) {
+                public final /* synthetic */ VoIPService f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void onClick(DialogInterface dialogInterface, int i) {
+                    VoIPFragment.this.lambda$null$19$VoIPFragment(this.f$1, dialogInterface, i);
+                }
+            });
+            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+            builder.create().show();
             return;
         }
         this.activity.requestPermissions(new String[]{"android.permission.CAMERA"}, 102);
     }
 
+    public /* synthetic */ void lambda$null$19$VoIPFragment(VoIPService voIPService, DialogInterface dialogInterface, int i) {
+        voIPService.sharedUIParams.cameraAlertWasShowed = true;
+        toggleCameraInput();
+    }
+
     private void updateSpeakerPhoneIcon() {
-        this.speakerPhoneIcon.setImageResource(NUM);
+        VoIPService sharedInstance = VoIPService.getSharedInstance();
+        if (sharedInstance != null) {
+            if (!sharedInstance.isSpeakerphoneOn()) {
+                this.speakerPhoneIcon.setImageResource(NUM);
+            } else if (sharedInstance.isBluetoothOn()) {
+                this.speakerPhoneIcon.setImageResource(NUM);
+            } else {
+                this.speakerPhoneIcon.setImageResource(NUM);
+            }
+        }
     }
 
     private void setSpeakerPhoneAction(VoIPToggleButton voIPToggleButton, VoIPService voIPService, boolean z) {
         if (voIPService.isSpeakerphoneOn()) {
-            voIPToggleButton.setData(NUM, -16777216, -1, "Speaker", false, z);
+            voIPToggleButton.setData(voIPService.isBluetoothOn() ? NUM : NUM, -16777216, -1, LocaleController.getString("VoipSpeaker", NUM), false, z);
         } else {
-            voIPToggleButton.setData(NUM, -1, ColorUtils.setAlphaComponent(-1, 30), "Speaker", false, z);
+            voIPToggleButton.setData(NUM, -1, ColorUtils.setAlphaComponent(-1, 30), LocaleController.getString("VoipSpeaker", NUM), false, z);
         }
-        VoIPToggleButton voIPToggleButton2 = voIPToggleButton;
         voIPToggleButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                VoIPFragment.this.lambda$setSpeakerPhoneAction$17$VoIPFragment(view);
+                VoIPFragment.this.lambda$setSpeakerPhoneAction$21$VoIPFragment(view);
             }
         });
     }
 
-    public /* synthetic */ void lambda$setSpeakerPhoneAction$17$VoIPFragment(View view) {
+    public /* synthetic */ void lambda$setSpeakerPhoneAction$21$VoIPFragment(View view) {
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().toggleSpeakerphoneOrShowRouteSheet(this.activity);
         }
@@ -1990,15 +2242,14 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
 
     private void setFrontalCameraAction(VoIPToggleButton voIPToggleButton, VoIPService voIPService, boolean z) {
         if (!voIPService.isFrontFaceCamera()) {
-            voIPToggleButton.setData(NUM, -16777216, -1, "Flip", false, z);
+            voIPToggleButton.setData(NUM, -16777216, -1, LocaleController.getString("VoipFlip", NUM), false, z);
         } else {
-            voIPToggleButton.setData(NUM, -1, ColorUtils.setAlphaComponent(-1, 30), "Flip", false, z);
+            voIPToggleButton.setData(NUM, -1, ColorUtils.setAlphaComponent(-1, 30), LocaleController.getString("VoipFlip", NUM), false, z);
         }
-        VoIPToggleButton voIPToggleButton2 = voIPToggleButton;
-        voIPToggleButton.setOnClickListener($$Lambda$VoIPFragment$_vCTfUTDARh0dZASvergkEekY.INSTANCE);
+        voIPToggleButton.setOnClickListener($$Lambda$VoIPFragment$x_1RZL381ODjIVlMTP1JKnckpsc.INSTANCE);
     }
 
-    static /* synthetic */ void lambda$setFrontalCameraAction$18(View view) {
+    static /* synthetic */ void lambda$setFrontalCameraAction$22(View view) {
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().switchCamera();
         }
@@ -2015,6 +2266,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
                 sharedInstance.requestVideoCall();
                 sharedInstance.setVideoState(2);
             } else {
+                this.currentUserTextureView.saveCameraLastBitmap();
                 sharedInstance.setVideoState(0);
             }
             this.previousState = this.currentState;
@@ -2041,7 +2293,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
                 VoIPService.getSharedInstance().declineIncomingCall();
                 VoIPHelper.permissionDenied(this.activity, new Runnable() {
                     public final void run() {
-                        VoIPFragment.this.lambda$onRequestPermissionsResultInternal$19$VoIPFragment();
+                        VoIPFragment.this.lambda$onRequestPermissionsResultInternal$23$VoIPFragment();
                     }
                 }, i);
                 return;
@@ -2057,7 +2309,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         }
     }
 
-    public /* synthetic */ void lambda$onRequestPermissionsResultInternal$19$VoIPFragment() {
+    public /* synthetic */ void lambda$onRequestPermissionsResultInternal$23$VoIPFragment() {
         this.windowView.finish();
     }
 
@@ -2101,19 +2353,20 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         return Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(this.activity);
     }
 
+    @SuppressLint({"InlinedApi"})
     private void requestInlinePermissions() {
-        AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.activity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.activity);
         builder.setTitle(LocaleController.getString("AppName", NUM));
         builder.setMessage(LocaleController.getString("PermissionDrawAboveOtherApps", NUM));
         builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {
             public final void onClick(DialogInterface dialogInterface, int i) {
-                VoIPFragment.this.lambda$requestInlinePermissions$20$VoIPFragment(dialogInterface, i);
+                VoIPFragment.this.lambda$requestInlinePermissions$24$VoIPFragment(dialogInterface, i);
             }
         });
         builder.show();
     }
 
-    public /* synthetic */ void lambda$requestInlinePermissions$20$VoIPFragment(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$requestInlinePermissions$24$VoIPFragment(DialogInterface dialogInterface, int i) {
         Activity activity2 = this.activity;
         if (activity2 != null) {
             try {

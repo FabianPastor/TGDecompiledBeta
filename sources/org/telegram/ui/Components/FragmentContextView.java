@@ -196,7 +196,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
 
     public /* synthetic */ void lambda$new$3$FragmentContextView(View view) {
         if (this.currentStyle == 2) {
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.fragment.getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(this.fragment.getParentActivity());
             builder.setTitle(LocaleController.getString("StopLiveLocationAlertToTitle", NUM));
             BaseFragment baseFragment = this.fragment;
             if (baseFragment instanceof DialogsActivity) {

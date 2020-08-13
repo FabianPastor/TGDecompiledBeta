@@ -780,7 +780,9 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             if (createScaledBitmap != null) {
                 Utilities.blurBitmap(createScaledBitmap, 7, 1, createScaledBitmap.getWidth(), this.lastBitmap.getHeight(), this.lastBitmap.getRowBytes());
                 try {
-                    this.lastBitmap.compress(Bitmap.CompressFormat.JPEG, 87, new FileOutputStream(new File(ApplicationLoader.getFilesDirFixed(), "icthumb.jpg")));
+                    FileOutputStream fileOutputStream = new FileOutputStream(new File(ApplicationLoader.getFilesDirFixed(), "icthumb.jpg"));
+                    this.lastBitmap.compress(Bitmap.CompressFormat.JPEG, 87, fileOutputStream);
+                    fileOutputStream.close();
                 } catch (Throwable unused) {
                 }
             }
@@ -2535,7 +2537,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                           (wrap: int : 0x0010: INVOKE  (r1v1 int) = (56.0f float) org.telegram.messenger.AndroidUtilities.dp(float):int type: STATIC)
                          android.view.TextureView.getBitmap(int, int):android.graphics.Bitmap type: VIRTUAL)
                          call: org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$xGQJp5d6DO4uze38119mIkTi7zA.<init>(org.telegram.ui.Components.InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask, android.graphics.Bitmap):void type: CONSTRUCTOR)
-                         org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Components.InstantCameraView.VideoRecorder.GenerateKeyframeThumbTask.run():void, dex: classes2.dex
+                         org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Components.InstantCameraView.VideoRecorder.GenerateKeyframeThumbTask.run():void, dex: classes3.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                         	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -2610,7 +2612,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                           (wrap: int : 0x000c: INVOKE  (r2v0 int) = (56.0f float) org.telegram.messenger.AndroidUtilities.dp(float):int type: STATIC)
                           (wrap: int : 0x0010: INVOKE  (r1v1 int) = (56.0f float) org.telegram.messenger.AndroidUtilities.dp(float):int type: STATIC)
                          android.view.TextureView.getBitmap(int, int):android.graphics.Bitmap type: VIRTUAL)
-                         call: org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$xGQJp5d6DO4uze38119mIkTi7zA.<init>(org.telegram.ui.Components.InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask, android.graphics.Bitmap):void type: CONSTRUCTOR in method: org.telegram.ui.Components.InstantCameraView.VideoRecorder.GenerateKeyframeThumbTask.run():void, dex: classes2.dex
+                         call: org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$xGQJp5d6DO4uze38119mIkTi7zA.<init>(org.telegram.ui.Components.InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask, android.graphics.Bitmap):void type: CONSTRUCTOR in method: org.telegram.ui.Components.InstantCameraView.VideoRecorder.GenerateKeyframeThumbTask.run():void, dex: classes3.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                         	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)

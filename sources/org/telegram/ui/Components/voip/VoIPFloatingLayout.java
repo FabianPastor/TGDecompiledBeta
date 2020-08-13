@@ -30,6 +30,7 @@ import org.telegram.ui.Components.CubicBezierInterpolator;
 public class VoIPFloatingLayout extends FrameLayout {
     private boolean active = true;
     public boolean alwaysFloating;
+    public int bottomOffset;
     float bottomPadding;
     /* access modifiers changed from: private */
     public boolean floatingMode;
@@ -62,6 +63,8 @@ public class VoIPFloatingLayout extends FrameLayout {
     public float relativePositionToSetX = -1.0f;
     float relativePositionToSetY = -1.0f;
     float rightPadding;
+    public float savedRelativePositionX;
+    public float savedRelativePositionY;
     private boolean setedFloatingMode;
     float starX;
     float starY;
@@ -76,6 +79,8 @@ public class VoIPFloatingLayout extends FrameLayout {
     float topPadding;
     float touchSlop;
     private boolean uiVisible;
+    public float updatePositionFromX;
+    public float updatePositionFromY;
     final Paint xRefPaint = new Paint(1);
 
     public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
@@ -148,7 +153,7 @@ public class VoIPFloatingLayout extends FrameLayout {
         if (this.uiVisible) {
             f = 100.0f;
         }
-        this.bottomPadding = (float) AndroidUtilities.dp(f);
+        this.bottomPadding = (float) (AndroidUtilities.dp(f) + this.bottomOffset);
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:13:0x0026, code lost:
@@ -382,6 +387,16 @@ public class VoIPFloatingLayout extends FrameLayout {
     /* access modifiers changed from: protected */
     public void dispatchDraw(Canvas canvas) {
         boolean z;
+        if (this.updatePositionFromX >= 0.0f) {
+            animate().setListener((Animator.AnimatorListener) null).cancel();
+            setTranslationX(this.updatePositionFromX);
+            setTranslationY(this.updatePositionFromY);
+            setScaleX(1.0f);
+            setScaleY(1.0f);
+            setAlpha(1.0f);
+            this.updatePositionFromX = -1.0f;
+            this.updatePositionFromY = -1.0f;
+        }
         if (this.relativePositionToSetX >= 0.0f && this.floatingMode && getMeasuredWidth() > 0) {
             setRelativePositionInternal(this.relativePositionToSetX, this.relativePositionToSetY, getMeasuredWidth(), getMeasuredHeight(), false);
             this.relativePositionToSetX = -1.0f;
@@ -429,82 +444,20 @@ public class VoIPFloatingLayout extends FrameLayout {
         setRelativePositionInternal(f, f2, getMeasuredWidth(), getMeasuredHeight(), true);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:6:0x0012, code lost:
-        r11 = r10.lastInsets;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setUiVisible(boolean r11) {
-        /*
-            r10 = this;
-            android.view.ViewParent r0 = r10.getParent()
-            if (r0 != 0) goto L_0x0009
-            r10.uiVisible = r11
-            return
-        L_0x0009:
-            r10.uiVisible = r11
-            int r11 = android.os.Build.VERSION.SDK_INT
-            r1 = 0
-            r2 = 20
-            if (r11 < r2) goto L_0x0020
-            android.view.WindowInsets r11 = r10.lastInsets
-            if (r11 != 0) goto L_0x0017
-            goto L_0x0020
-        L_0x0017:
-            int r11 = r11.getSystemWindowInsetTop()
-            float r11 = (float) r11
-            float r3 = r10.topPadding
-            float r11 = r11 + r3
-            goto L_0x0021
-        L_0x0020:
-            r11 = 0
-        L_0x0021:
-            int r3 = android.os.Build.VERSION.SDK_INT
-            if (r3 < r2) goto L_0x0032
-            android.view.WindowInsets r2 = r10.lastInsets
-            if (r2 != 0) goto L_0x002a
-            goto L_0x0032
-        L_0x002a:
-            int r1 = r2.getSystemWindowInsetBottom()
-            float r1 = (float) r1
-            float r2 = r10.bottomPadding
-            float r1 = r1 + r2
-        L_0x0032:
-            float r2 = r10.getTranslationX()
-            float r3 = r10.leftPadding
-            float r2 = r2 - r3
-            android.view.View r0 = (android.view.View) r0
-            int r3 = r0.getMeasuredWidth()
-            float r3 = (float) r3
-            float r4 = r10.leftPadding
-            float r3 = r3 - r4
-            float r4 = r10.rightPadding
-            float r3 = r3 - r4
-            int r4 = r10.getMeasuredWidth()
-            float r4 = (float) r4
-            float r3 = r3 - r4
-            float r5 = r2 / r3
-            float r2 = r10.getTranslationY()
-            float r2 = r2 - r11
-            int r0 = r0.getMeasuredHeight()
-            float r0 = (float) r0
-            float r0 = r0 - r1
-            float r0 = r0 - r11
-            int r11 = r10.getMeasuredHeight()
-            float r11 = (float) r11
-            float r0 = r0 - r11
-            float r6 = r2 / r0
-            r10.updatePadding()
-            int r11 = r10.getMeasuredWidth()
-            if (r11 <= 0) goto L_0x0078
-            int r7 = r10.getMeasuredWidth()
-            int r8 = r10.getMeasuredHeight()
-            r9 = 1
-            r4 = r10
-            r4.setRelativePositionInternal(r5, r6, r7, r8, r9)
-        L_0x0078:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.VoIPFloatingLayout.setUiVisible(boolean):void");
+    public void setUiVisible(boolean z) {
+        if (getParent() == null) {
+            this.uiVisible = z;
+        } else {
+            this.uiVisible = z;
+        }
+    }
+
+    public void setBottomOffset(int i, boolean z) {
+        if (getParent() == null || !z) {
+            this.bottomOffset = i;
+        } else {
+            this.bottomOffset = i;
+        }
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:10:0x001b, code lost:
@@ -635,14 +588,15 @@ public class VoIPFloatingLayout extends FrameLayout {
         } else if (z && !this.floatingMode) {
             this.floatingMode = true;
             this.setedFloatingMode = z;
+            updatePadding();
             float f2 = this.relativePositionToSetX;
             if (f2 >= 0.0f) {
                 setRelativePositionInternal(f2, this.relativePositionToSetY, (int) (((float) getMeasuredWidth()) * 0.23f), (int) (((float) getMeasuredHeight()) * 0.23f), false);
             }
             this.floatingMode = false;
             this.switchingToFloatingMode = true;
-            float translationX = getTranslationX();
-            float translationY = getTranslationY();
+            final float translationX = getTranslationX();
+            final float translationY = getTranslationY();
             setTranslationX(0.0f);
             setTranslationY(0.0f);
             invalidate();
@@ -660,7 +614,10 @@ public class VoIPFloatingLayout extends FrameLayout {
                 public void onAnimationEnd(Animator animator) {
                     boolean unused = VoIPFloatingLayout.this.switchingToFloatingMode = false;
                     boolean unused2 = VoIPFloatingLayout.this.floatingMode = true;
-                    VoIPFloatingLayout.this.requestLayout();
+                    VoIPFloatingLayout voIPFloatingLayout = VoIPFloatingLayout.this;
+                    voIPFloatingLayout.updatePositionFromX = translationX;
+                    voIPFloatingLayout.updatePositionFromY = translationY;
+                    voIPFloatingLayout.requestLayout();
                 }
             }).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
         } else if (z || !this.floatingMode) {
@@ -675,6 +632,7 @@ public class VoIPFloatingLayout extends FrameLayout {
             this.setedFloatingMode = z;
             final float translationX2 = getTranslationX();
             final float translationY2 = getTranslationY();
+            updatePadding();
             this.floatingMode = false;
             this.switchingToFloatingMode = true;
             requestLayout();
@@ -835,5 +793,107 @@ public class VoIPFloatingLayout extends FrameLayout {
 
     public void setIsActive(boolean z) {
         this.active = z;
+    }
+
+    /* JADX WARNING: Code restructure failed: missing block: B:9:0x001a, code lost:
+        r2 = r7.lastInsets;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void saveRelatedPosition() {
+        /*
+            r7 = this;
+            int r0 = r7.getMeasuredWidth()
+            if (r0 <= 0) goto L_0x0089
+            float r0 = r7.relativePositionToSetX
+            r1 = 0
+            int r0 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
+            if (r0 >= 0) goto L_0x0089
+            android.view.ViewParent r0 = r7.getParent()
+            if (r0 != 0) goto L_0x0014
+            return
+        L_0x0014:
+            int r2 = android.os.Build.VERSION.SDK_INT
+            r3 = 20
+            if (r2 < r3) goto L_0x0028
+            android.view.WindowInsets r2 = r7.lastInsets
+            if (r2 != 0) goto L_0x001f
+            goto L_0x0028
+        L_0x001f:
+            int r2 = r2.getSystemWindowInsetTop()
+            float r2 = (float) r2
+            float r4 = r7.topPadding
+            float r2 = r2 + r4
+            goto L_0x0029
+        L_0x0028:
+            r2 = 0
+        L_0x0029:
+            int r4 = android.os.Build.VERSION.SDK_INT
+            if (r4 < r3) goto L_0x003b
+            android.view.WindowInsets r3 = r7.lastInsets
+            if (r3 != 0) goto L_0x0032
+            goto L_0x003b
+        L_0x0032:
+            int r3 = r3.getSystemWindowInsetBottom()
+            float r3 = (float) r3
+            float r4 = r7.bottomPadding
+            float r3 = r3 + r4
+            goto L_0x003c
+        L_0x003b:
+            r3 = 0
+        L_0x003c:
+            float r4 = r7.getTranslationX()
+            float r5 = r7.leftPadding
+            float r4 = r4 - r5
+            android.view.View r0 = (android.view.View) r0
+            int r5 = r0.getMeasuredWidth()
+            float r5 = (float) r5
+            float r6 = r7.leftPadding
+            float r5 = r5 - r6
+            float r6 = r7.rightPadding
+            float r5 = r5 - r6
+            int r6 = r7.getMeasuredWidth()
+            float r6 = (float) r6
+            float r5 = r5 - r6
+            float r4 = r4 / r5
+            r7.savedRelativePositionX = r4
+            float r4 = r7.getTranslationY()
+            float r4 = r4 - r2
+            int r0 = r0.getMeasuredHeight()
+            float r0 = (float) r0
+            float r0 = r0 - r3
+            float r0 = r0 - r2
+            int r2 = r7.getMeasuredHeight()
+            float r2 = (float) r2
+            float r0 = r0 - r2
+            float r4 = r4 / r0
+            r7.savedRelativePositionY = r4
+            float r0 = r7.savedRelativePositionX
+            r2 = 1065353216(0x3var_, float:1.0)
+            float r0 = java.lang.Math.min(r2, r0)
+            float r0 = java.lang.Math.max(r1, r0)
+            r7.savedRelativePositionX = r0
+            float r0 = r7.savedRelativePositionY
+            float r0 = java.lang.Math.min(r2, r0)
+            float r0 = java.lang.Math.max(r1, r0)
+            r7.savedRelativePositionY = r0
+            goto L_0x008f
+        L_0x0089:
+            r0 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r7.savedRelativePositionX = r0
+            r7.savedRelativePositionY = r0
+        L_0x008f:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.VoIPFloatingLayout.saveRelatedPosition():void");
+    }
+
+    public void restoreRelativePosition() {
+        updatePadding();
+        float f = this.savedRelativePositionX;
+        if (f >= 0.0f && !this.switchingToFloatingMode) {
+            setRelativePositionInternal(f, this.savedRelativePositionY, getMeasuredWidth(), getMeasuredHeight(), true);
+            this.savedRelativePositionX = -1.0f;
+            this.savedRelativePositionY = -1.0f;
+        }
     }
 }

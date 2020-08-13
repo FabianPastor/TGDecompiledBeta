@@ -574,7 +574,7 @@ public class AndroidUtilities {
             if (baseFragment.getParentActivity() == null) {
                 return false;
             }
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) baseFragment.getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(baseFragment.getParentActivity());
             builder.setMessage(LocaleController.getString("InstallGoogleMaps", NUM));
             builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
@@ -2918,7 +2918,7 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0159
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0159
-            r7 = 2131626126(0x7f0e088e, float:1.887948E38)
+            r7 = 2131626129(0x7f0e0891, float:1.8879485E38)
             java.lang.String r8 = "OK"
             r9 = 2131624238(0x7f0e012e, float:1.887565E38)
             java.lang.String r10 = "AppName"
@@ -2938,10 +2938,10 @@ public class AndroidUtilities {
             goto L_0x0159
         L_0x007e:
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder
-            r0.<init>((android.content.Context) r1)
+            r0.<init>(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131625562(0x7f0e065a, float:1.8878335E38)
+            r1 = 2131625565(0x7f0e065d, float:1.8878342E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3020,12 +3020,12 @@ public class AndroidUtilities {
             return
         L_0x0121:
             org.telegram.ui.ActionBar.AlertDialog$Builder r3 = new org.telegram.ui.ActionBar.AlertDialog$Builder
-            r3.<init>((android.content.Context) r1)
+            r3.<init>(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131625934(0x7f0e07ce, float:1.887909E38)
+            r1 = 2131625937(0x7f0e07d1, float:1.8879096E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3123,7 +3123,7 @@ public class AndroidUtilities {
             boolean r8 = r8.canRequestPackageInstalls()
             if (r8 != 0) goto L_0x00ca
             org.telegram.ui.ActionBar.AlertDialog$Builder r8 = new org.telegram.ui.ActionBar.AlertDialog$Builder
-            r8.<init>((android.content.Context) r9)
+            r8.<init>(r9)
             r0 = 2131624238(0x7f0e012e, float:1.887565E38)
             java.lang.String r1 = "AppName"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
@@ -3132,7 +3132,7 @@ public class AndroidUtilities {
             java.lang.String r1 = "ApkRestricted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setMessage(r0)
-            r0 = 2131626469(0x7f0e09e5, float:1.8880175E38)
+            r0 = 2131626472(0x7f0e09e8, float:1.8880181E38)
             java.lang.String r1 = "PermissionOpenSettings"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw

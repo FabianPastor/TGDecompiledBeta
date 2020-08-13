@@ -3348,21 +3348,21 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r11 = r6
                 r12 = r11
             L_0x0066:
-                r9 = 2131627007(0x7f0e0bff, float:1.8881266E38)
+                r9 = 2131627010(0x7f0e0CLASSNAME, float:1.8881272E38)
                 java.lang.String r10 = "StatisticOpenProfile"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
-                r9 = 2131165639(0x7var_c7, float:1.79455E38)
+                r9 = 2131165650(0x7var_d2, float:1.7945523E38)
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r5.add(r9)
                 r9 = 2
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r2.add(r9)
-                r9 = 2131627009(0x7f0e0CLASSNAME, float:1.888127E38)
+                r9 = 2131627012(0x7f0e0CLASSNAME, float:1.8881276E38)
                 java.lang.String r10 = "StatisticSearchUserHistory"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
-                r9 = 2131165608(0x7var_a8, float:1.7945438E38)
+                r9 = 2131165619(0x7var_b3, float:1.794546E38)
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r5.add(r9)
                 r9 = 1
@@ -3456,11 +3456,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r9 = 0
             L_0x0166:
                 if (r9 == 0) goto L_0x016e
-                r0 = 2131626883(0x7f0e0b83, float:1.8881015E38)
+                r0 = 2131626886(0x7f0e0b86, float:1.888102E38)
                 java.lang.String r6 = "SetAsAdmin"
                 goto L_0x0173
             L_0x016e:
-                r0 = 2131625079(0x7f0e0477, float:1.8877356E38)
+                r0 = 2131625082(0x7f0e047a, float:1.8877362E38)
                 java.lang.String r6 = "EditAdminRights"
             L_0x0173:
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)
@@ -3481,7 +3481,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             L_0x0193:
                 org.telegram.ui.ActionBar.AlertDialog$Builder r10 = new org.telegram.ui.ActionBar.AlertDialog$Builder
                 android.app.Activity r0 = r18.getParentActivity()
-                r10.<init>((android.content.Context) r0)
+                r10.<init>(r0)
                 int r0 = r2.size()
                 java.lang.CharSequence[] r0 = new java.lang.CharSequence[r0]
                 java.lang.Object[] r0 = r1.toArray(r0)

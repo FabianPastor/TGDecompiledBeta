@@ -221,8 +221,8 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
         int i4 = this.yOffset;
         frameLayout.setPadding(i3, i4, i3, i4);
         this.floatingView = new FloatingView(context);
-        this.callingUserTextureView = new VoIPTextureView(context);
-        VoIPTextureView voIPTextureView = new VoIPTextureView(context);
+        this.callingUserTextureView = new VoIPTextureView(context, false);
+        VoIPTextureView voIPTextureView = new VoIPTextureView(context, false);
         this.currentUserTextureView = voIPTextureView;
         voIPTextureView.renderer.setMirror(true);
         this.floatingView.addView(this.callingUserTextureView);

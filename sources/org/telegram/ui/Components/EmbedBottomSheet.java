@@ -514,7 +514,7 @@ public class EmbedBottomSheet extends BottomSheet {
             android.widget.ImageView$ScaleType r8 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r8)
             android.widget.ImageView r2 = r0.pipButton
-            r8 = 2131165997(0x7var_d, float:1.7946227E38)
+            r8 = 2131166008(0x7var_, float:1.794625E38)
             r2.setImageResource(r8)
             android.widget.ImageView r2 = r0.pipButton
             r8 = 2131624005(0x7f0e0045, float:1.8875177E38)
@@ -557,9 +557,9 @@ public class EmbedBottomSheet extends BottomSheet {
             r8.<init>(r1)
             android.widget.ImageView$ScaleType r10 = android.widget.ImageView.ScaleType.CENTER
             r8.setScaleType(r10)
-            r10 = 2131165989(0x7var_, float:1.794621E38)
+            r10 = 2131166000(0x7var_, float:1.7946233E38)
             r8.setImageResource(r10)
-            r10 = 2131624871(0x7f0e03a7, float:1.8876934E38)
+            r10 = 2131624874(0x7f0e03aa, float:1.887694E38)
             java.lang.String r13 = "CopyLink"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r13, r10)
             r8.setContentDescription(r10)
@@ -601,7 +601,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r7.setPadding(r8, r5, r10, r5)
             android.widget.TextView r7 = r0.copyTextButton
-            r8 = 2131624869(0x7f0e03a5, float:1.887693E38)
+            r8 = 2131624872(0x7f0e03a8, float:1.8876936E38)
             java.lang.String r10 = "Copy"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
             java.lang.String r8 = r8.toUpperCase()
@@ -633,7 +633,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r6)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r2.setPadding(r1, r5, r6, r5)
-            r1 = 2131626145(0x7f0e08a1, float:1.8879518E38)
+            r1 = 2131626148(0x7f0e08a4, float:1.8879524E38)
             java.lang.String r6 = "OpenInBrowser"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -784,7 +784,7 @@ public class EmbedBottomSheet extends BottomSheet {
         if (Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(activity)) {
             return true;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.parentActivity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.parentActivity);
         builder.setTitle(LocaleController.getString("AppName", NUM));
         builder.setMessage(LocaleController.getString("PermissionDrawAboveOtherApps", NUM));
         builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {

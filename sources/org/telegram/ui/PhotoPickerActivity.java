@@ -1317,7 +1317,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             this.searchItem.getSearchField().setSelection(str.length());
             processSearch(this.searchItem.getSearchField());
         } else if (i == this.recentSearches.size() + 1) {
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
             builder.setTitle(LocaleController.getString("ClearSearchAlertTitle", NUM));
             builder.setMessage(LocaleController.getString("ClearSearchAlert", NUM));
             builder.setPositiveButton(LocaleController.getString("ClearButton", NUM).toUpperCase(), new DialogInterface.OnClickListener() {

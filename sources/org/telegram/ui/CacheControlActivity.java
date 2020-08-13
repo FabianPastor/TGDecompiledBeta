@@ -655,7 +655,7 @@ public class CacheControlActivity extends BaseFragment {
     }
 
     private void clearDatabase() {
-        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
         builder.setTitle(LocaleController.getString("LocalDatabaseClearTextTitle", NUM));
         builder.setMessage(LocaleController.getString("LocalDatabaseClearText", NUM));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);

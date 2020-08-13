@@ -1,5 +1,6 @@
 package org.webrtc;
 
+import android.annotation.TargetApi;
 import android.media.MediaCodecInfo;
 import android.os.Build;
 import java.util.HashMap;
@@ -17,7 +18,7 @@ class MediaCodecUtils {
     static final String INTEL_PREFIX = "OMX.Intel.";
     static final String NVIDIA_PREFIX = "OMX.Nvidia.";
     static final String QCOM_PREFIX = "OMX.qcom.";
-    static final String[] SOFTWARE_IMPLEMENTATION_PREFIXES = {"OMX.google.", "OMX.SEC."};
+    static final String[] SOFTWARE_IMPLEMENTATION_PREFIXES = {"OMX.google.", "OMX.SEC.", "c2.android"};
     private static final String TAG = "MediaCodecUtils";
     static final int[] TEXTURE_COLOR_FORMATS = getTextureColorFormats();
 
@@ -101,6 +102,36 @@ class MediaCodecUtils {
             return H264Utils.getDefaultH264Params(z);
         }
         throw new IllegalArgumentException("Unsupported codec: " + videoCodecMimeType);
+    }
+
+    static boolean isHardwareAccelerated(MediaCodecInfo mediaCodecInfo) {
+        if (Build.VERSION.SDK_INT >= 29) {
+            return isHardwareAcceleratedQOrHigher(mediaCodecInfo);
+        }
+        return !isSoftwareOnly(mediaCodecInfo);
+    }
+
+    @TargetApi(29)
+    private static boolean isHardwareAcceleratedQOrHigher(MediaCodecInfo mediaCodecInfo) {
+        return mediaCodecInfo.isHardwareAccelerated();
+    }
+
+    static boolean isSoftwareOnly(MediaCodecInfo mediaCodecInfo) {
+        if (Build.VERSION.SDK_INT >= 29) {
+            return isSoftwareOnlyQOrHigher(mediaCodecInfo);
+        }
+        String name = mediaCodecInfo.getName();
+        for (String startsWith : SOFTWARE_IMPLEMENTATION_PREFIXES) {
+            if (name.startsWith(startsWith)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @TargetApi(29)
+    private static boolean isSoftwareOnlyQOrHigher(MediaCodecInfo mediaCodecInfo) {
+        return mediaCodecInfo.isSoftwareOnly();
     }
 
     private MediaCodecUtils() {

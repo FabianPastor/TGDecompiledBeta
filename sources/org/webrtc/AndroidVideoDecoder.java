@@ -136,12 +136,12 @@ class AndroidVideoDecoder implements VideoDecoder, VideoSink {
                 createOutputThread.start();
                 Logging.d("AndroidVideoDecoder", "initDecodeInternal done");
                 return VideoCodecStatus.OK;
-            } catch (IllegalStateException e) {
+            } catch (IllegalArgumentException | IllegalStateException e) {
                 Logging.e("AndroidVideoDecoder", "initDecode failed", e);
                 release();
                 return VideoCodecStatus.FALLBACK_SOFTWARE;
             }
-        } catch (IOException | IllegalArgumentException unused) {
+        } catch (IOException | IllegalArgumentException | IllegalStateException unused) {
             Logging.e("AndroidVideoDecoder", "Cannot create media decoder " + this.codecName);
             return VideoCodecStatus.FALLBACK_SOFTWARE;
         }

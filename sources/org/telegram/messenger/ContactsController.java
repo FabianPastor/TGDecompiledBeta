@@ -958,7 +958,7 @@ public class ContactsController extends BaseController {
             r1 = 0
             java.lang.Integer r2 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x01eb }
             r0.add(r2)     // Catch:{ all -> 0x01eb }
-            r0 = 2131626477(0x7f0e09ed, float:1.8880191E38)
+            r0 = 2131626480(0x7f0e09f0, float:1.8880197E38)
             java.lang.String r1 = "PhoneMobile"
             if (r14 != 0) goto L_0x0182
             r2 = 3
@@ -977,7 +977,7 @@ public class ContactsController extends BaseController {
             if (r14 != r2) goto L_0x0194
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneHome"
-            r3 = 2131626475(0x7f0e09eb, float:1.8880187E38)
+            r3 = 2131626478(0x7f0e09ee, float:1.8880193E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
             goto L_0x01d4
@@ -993,7 +993,7 @@ public class ContactsController extends BaseController {
             if (r14 != r0) goto L_0x01b3
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneWork"
-            r3 = 2131626485(0x7f0e09f5, float:1.8880208E38)
+            r3 = 2131626488(0x7f0e09f8, float:1.8880214E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
             goto L_0x01d4
@@ -1002,14 +1002,14 @@ public class ContactsController extends BaseController {
             if (r14 != r0) goto L_0x01c6
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneMain"
-            r3 = 2131626476(0x7f0e09ec, float:1.888019E38)
+            r3 = 2131626479(0x7f0e09ef, float:1.8880195E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
             goto L_0x01d4
         L_0x01c6:
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneOther"
-            r3 = 2131626484(0x7f0e09f4, float:1.8880205E38)
+            r3 = 2131626487(0x7f0e09f7, float:1.8880212E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
         L_0x01d4:
@@ -3092,106 +3092,117 @@ public class ContactsController extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:34:0x009d  */
-    /* JADX WARNING: Removed duplicated region for block: B:42:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:38:0x00b8  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:? A[RETURN, SYNTHETIC] */
     /* renamed from: performWriteContactsToPhoneBookInternal */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void lambda$performWriteContactsToPhoneBook$43$ContactsController(java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_contact> r11) {
+    public void lambda$performWriteContactsToPhoneBook$43$ContactsController(java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_contact> r13) {
         /*
-            r10 = this;
-            r0 = 0
-            boolean r1 = r10.hasContactsPermission()     // Catch:{ Exception -> 0x0091 }
-            if (r1 != 0) goto L_0x0008
-            return
-        L_0x0008:
-            android.net.Uri r1 = android.provider.ContactsContract.RawContacts.CONTENT_URI     // Catch:{ Exception -> 0x0091 }
-            android.net.Uri$Builder r1 = r1.buildUpon()     // Catch:{ Exception -> 0x0091 }
-            java.lang.String r2 = "account_name"
-            android.accounts.Account r3 = r10.systemAccount     // Catch:{ Exception -> 0x0091 }
-            java.lang.String r3 = r3.name     // Catch:{ Exception -> 0x0091 }
-            android.net.Uri$Builder r1 = r1.appendQueryParameter(r2, r3)     // Catch:{ Exception -> 0x0091 }
-            java.lang.String r2 = "account_type"
-            android.accounts.Account r3 = r10.systemAccount     // Catch:{ Exception -> 0x0091 }
-            java.lang.String r3 = r3.type     // Catch:{ Exception -> 0x0091 }
-            android.net.Uri$Builder r1 = r1.appendQueryParameter(r2, r3)     // Catch:{ Exception -> 0x0091 }
-            android.net.Uri r3 = r1.build()     // Catch:{ Exception -> 0x0091 }
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0091 }
-            android.content.ContentResolver r2 = r1.getContentResolver()     // Catch:{ Exception -> 0x0091 }
-            r1 = 2
-            java.lang.String[] r4 = new java.lang.String[r1]     // Catch:{ Exception -> 0x0091 }
-            java.lang.String r1 = "_id"
-            r8 = 0
-            r4[r8] = r1     // Catch:{ Exception -> 0x0091 }
-            java.lang.String r1 = "sync2"
-            r9 = 1
-            r4[r9] = r1     // Catch:{ Exception -> 0x0091 }
-            r5 = 0
-            r6 = 0
-            r7 = 0
-            android.database.Cursor r1 = r2.query(r3, r4, r5, r6, r7)     // Catch:{ Exception -> 0x0091 }
-            org.telegram.messenger.support.SparseLongArray r2 = new org.telegram.messenger.support.SparseLongArray     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
-            r2.<init>()     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
-            if (r1 == 0) goto L_0x0085
-        L_0x0047:
-            boolean r3 = r1.moveToNext()     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
-            if (r3 == 0) goto L_0x0059
-            int r3 = r1.getInt(r9)     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
-            long r4 = r1.getLong(r8)     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
-            r2.put(r3, r4)     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
-            goto L_0x0047
-        L_0x0059:
-            r1.close()     // Catch:{ Exception -> 0x008c, all -> 0x0089 }
+            r12 = this;
+            java.lang.String r0 = "contacts_updated_v7"
             r1 = 0
-        L_0x005d:
-            int r3 = r11.size()     // Catch:{ Exception -> 0x0091 }
-            if (r1 >= r3) goto L_0x0086
-            java.lang.Object r3 = r11.get(r1)     // Catch:{ Exception -> 0x0091 }
-            org.telegram.tgnet.TLRPC$TL_contact r3 = (org.telegram.tgnet.TLRPC$TL_contact) r3     // Catch:{ Exception -> 0x0091 }
-            int r4 = r3.user_id     // Catch:{ Exception -> 0x0091 }
-            int r4 = r2.indexOfKey(r4)     // Catch:{ Exception -> 0x0091 }
-            if (r4 >= 0) goto L_0x0082
-            org.telegram.messenger.MessagesController r4 = r10.getMessagesController()     // Catch:{ Exception -> 0x0091 }
-            int r3 = r3.user_id     // Catch:{ Exception -> 0x0091 }
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r3)     // Catch:{ Exception -> 0x0091 }
-            org.telegram.tgnet.TLRPC$User r3 = r4.getUser(r3)     // Catch:{ Exception -> 0x0091 }
-            r10.addContactToPhoneBook(r3, r8)     // Catch:{ Exception -> 0x0091 }
-        L_0x0082:
-            int r1 = r1 + 1
-            goto L_0x005d
-        L_0x0085:
-            r0 = r1
-        L_0x0086:
-            if (r0 == 0) goto L_0x009a
-            goto L_0x0097
-        L_0x0089:
-            r11 = move-exception
-            r0 = r1
-            goto L_0x009b
-        L_0x008c:
-            r11 = move-exception
-            r0 = r1
-            goto L_0x0092
-        L_0x008f:
-            r11 = move-exception
-            goto L_0x009b
-        L_0x0091:
-            r11 = move-exception
-        L_0x0092:
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r11)     // Catch:{ all -> 0x008f }
-            if (r0 == 0) goto L_0x009a
-        L_0x0097:
-            r0.close()
-        L_0x009a:
+            boolean r2 = r12.hasContactsPermission()     // Catch:{ Exception -> 0x00ac }
+            if (r2 != 0) goto L_0x000a
             return
-        L_0x009b:
+        L_0x000a:
+            int r2 = r12.currentAccount     // Catch:{ Exception -> 0x00ac }
+            android.content.SharedPreferences r2 = org.telegram.messenger.MessagesController.getMainSettings(r2)     // Catch:{ Exception -> 0x00ac }
+            r3 = 0
+            boolean r4 = r2.getBoolean(r0, r3)     // Catch:{ Exception -> 0x00ac }
+            r5 = 1
+            r4 = r4 ^ r5
+            if (r4 == 0) goto L_0x0024
+            android.content.SharedPreferences$Editor r2 = r2.edit()     // Catch:{ Exception -> 0x00ac }
+            android.content.SharedPreferences$Editor r0 = r2.putBoolean(r0, r5)     // Catch:{ Exception -> 0x00ac }
+            r0.commit()     // Catch:{ Exception -> 0x00ac }
+        L_0x0024:
+            android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x00ac }
+            android.content.ContentResolver r6 = r0.getContentResolver()     // Catch:{ Exception -> 0x00ac }
+            android.net.Uri r0 = android.provider.ContactsContract.RawContacts.CONTENT_URI     // Catch:{ Exception -> 0x00ac }
+            android.net.Uri$Builder r0 = r0.buildUpon()     // Catch:{ Exception -> 0x00ac }
+            java.lang.String r2 = "account_name"
+            android.accounts.Account r7 = r12.systemAccount     // Catch:{ Exception -> 0x00ac }
+            java.lang.String r7 = r7.name     // Catch:{ Exception -> 0x00ac }
+            android.net.Uri$Builder r0 = r0.appendQueryParameter(r2, r7)     // Catch:{ Exception -> 0x00ac }
+            java.lang.String r2 = "account_type"
+            android.accounts.Account r7 = r12.systemAccount     // Catch:{ Exception -> 0x00ac }
+            java.lang.String r7 = r7.type     // Catch:{ Exception -> 0x00ac }
+            android.net.Uri$Builder r0 = r0.appendQueryParameter(r2, r7)     // Catch:{ Exception -> 0x00ac }
+            android.net.Uri r7 = r0.build()     // Catch:{ Exception -> 0x00ac }
+            r0 = 2
+            java.lang.String[] r8 = new java.lang.String[r0]     // Catch:{ Exception -> 0x00ac }
+            java.lang.String r0 = "_id"
+            r8[r3] = r0     // Catch:{ Exception -> 0x00ac }
+            java.lang.String r0 = "sync2"
+            r8[r5] = r0     // Catch:{ Exception -> 0x00ac }
+            r9 = 0
+            r10 = 0
+            r11 = 0
+            android.database.Cursor r0 = r6.query(r7, r8, r9, r10, r11)     // Catch:{ Exception -> 0x00ac }
+            org.telegram.messenger.support.SparseLongArray r2 = new org.telegram.messenger.support.SparseLongArray     // Catch:{ Exception -> 0x00a7, all -> 0x00a4 }
+            r2.<init>()     // Catch:{ Exception -> 0x00a7, all -> 0x00a4 }
             if (r0 == 0) goto L_0x00a0
-            r0.close()
+        L_0x0061:
+            boolean r6 = r0.moveToNext()     // Catch:{ Exception -> 0x00a7, all -> 0x00a4 }
+            if (r6 == 0) goto L_0x0073
+            int r6 = r0.getInt(r5)     // Catch:{ Exception -> 0x00a7, all -> 0x00a4 }
+            long r7 = r0.getLong(r3)     // Catch:{ Exception -> 0x00a7, all -> 0x00a4 }
+            r2.put(r6, r7)     // Catch:{ Exception -> 0x00a7, all -> 0x00a4 }
+            goto L_0x0061
+        L_0x0073:
+            r0.close()     // Catch:{ Exception -> 0x00a7, all -> 0x00a4 }
+        L_0x0076:
+            int r0 = r13.size()     // Catch:{ Exception -> 0x00ac }
+            if (r3 >= r0) goto L_0x00a1
+            java.lang.Object r0 = r13.get(r3)     // Catch:{ Exception -> 0x00ac }
+            org.telegram.tgnet.TLRPC$TL_contact r0 = (org.telegram.tgnet.TLRPC$TL_contact) r0     // Catch:{ Exception -> 0x00ac }
+            if (r4 != 0) goto L_0x008c
+            int r5 = r0.user_id     // Catch:{ Exception -> 0x00ac }
+            int r5 = r2.indexOfKey(r5)     // Catch:{ Exception -> 0x00ac }
+            if (r5 >= 0) goto L_0x009d
+        L_0x008c:
+            org.telegram.messenger.MessagesController r5 = r12.getMessagesController()     // Catch:{ Exception -> 0x00ac }
+            int r0 = r0.user_id     // Catch:{ Exception -> 0x00ac }
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r0)     // Catch:{ Exception -> 0x00ac }
+            org.telegram.tgnet.TLRPC$User r0 = r5.getUser(r0)     // Catch:{ Exception -> 0x00ac }
+            r12.addContactToPhoneBook(r0, r4)     // Catch:{ Exception -> 0x00ac }
+        L_0x009d:
+            int r3 = r3 + 1
+            goto L_0x0076
         L_0x00a0:
-            goto L_0x00a2
+            r1 = r0
         L_0x00a1:
-            throw r11
-        L_0x00a2:
-            goto L_0x00a1
+            if (r1 == 0) goto L_0x00b5
+            goto L_0x00b2
+        L_0x00a4:
+            r13 = move-exception
+            r1 = r0
+            goto L_0x00b6
+        L_0x00a7:
+            r13 = move-exception
+            r1 = r0
+            goto L_0x00ad
+        L_0x00aa:
+            r13 = move-exception
+            goto L_0x00b6
+        L_0x00ac:
+            r13 = move-exception
+        L_0x00ad:
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)     // Catch:{ all -> 0x00aa }
+            if (r1 == 0) goto L_0x00b5
+        L_0x00b2:
+            r1.close()
+        L_0x00b5:
+            return
+        L_0x00b6:
+            if (r1 == 0) goto L_0x00bb
+            r1.close()
+        L_0x00bb:
+            goto L_0x00bd
+        L_0x00bc:
+            throw r13
+        L_0x00bd:
+            goto L_0x00bc
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ContactsController.lambda$performWriteContactsToPhoneBook$43$ContactsController(java.util.ArrayList):void");
     }
@@ -3421,19 +3432,35 @@ public class ContactsController extends BaseController {
         newInsert2.withValue("data2", tLRPC$User.first_name);
         newInsert2.withValue("data3", tLRPC$User.last_name);
         arrayList.add(newInsert2.build());
-        ContentProviderOperation.Builder newInsert3 = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI);
-        newInsert3.withValueBackReference("raw_contact_id", 0);
-        newInsert3.withValue("mimetype", "vnd.android.cursor.item/vnd.org.telegram.messenger.android.profile");
-        newInsert3.withValue("data1", Integer.valueOf(tLRPC$User.id));
-        newInsert3.withValue("data2", "Telegram Profile");
         if (TextUtils.isEmpty(tLRPC$User.phone)) {
             str = formatName(tLRPC$User.first_name, tLRPC$User.last_name);
         } else {
             str = "+" + tLRPC$User.phone;
         }
-        newInsert3.withValue("data3", str);
+        ContentProviderOperation.Builder newInsert3 = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI);
+        newInsert3.withValueBackReference("raw_contact_id", 0);
+        newInsert3.withValue("mimetype", "vnd.android.cursor.item/vnd.org.telegram.messenger.android.profile");
+        newInsert3.withValue("data1", Integer.valueOf(tLRPC$User.id));
+        newInsert3.withValue("data2", "Telegram Profile");
+        newInsert3.withValue("data3", LocaleController.formatString("ContactShortcutMessage", NUM, str));
         newInsert3.withValue("data4", Integer.valueOf(tLRPC$User.id));
         arrayList.add(newInsert3.build());
+        ContentProviderOperation.Builder newInsert4 = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI);
+        newInsert4.withValueBackReference("raw_contact_id", 0);
+        newInsert4.withValue("mimetype", "vnd.android.cursor.item/vnd.org.telegram.messenger.android.call");
+        newInsert4.withValue("data1", Integer.valueOf(tLRPC$User.id));
+        newInsert4.withValue("data2", "Telegram Voice Call");
+        newInsert4.withValue("data3", LocaleController.formatString("ContactShortcutVoiceCall", NUM, str));
+        newInsert4.withValue("data4", Integer.valueOf(tLRPC$User.id));
+        arrayList.add(newInsert4.build());
+        ContentProviderOperation.Builder newInsert5 = ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI);
+        newInsert5.withValueBackReference("raw_contact_id", 0);
+        newInsert5.withValue("mimetype", "vnd.android.cursor.item/vnd.org.telegram.messenger.android.call.video");
+        newInsert5.withValue("data1", Integer.valueOf(tLRPC$User.id));
+        newInsert5.withValue("data2", "Telegram Video Call");
+        newInsert5.withValue("data3", LocaleController.formatString("ContactShortcutVideoCall", NUM, str));
+        newInsert5.withValue("data4", Integer.valueOf(tLRPC$User.id));
+        arrayList.add(newInsert5.build());
         try {
             ContentProviderResult[] applyBatch = contentResolver.applyBatch("com.android.contacts", arrayList);
             if (!(applyBatch == null || applyBatch.length <= 0 || applyBatch[0].uri == null)) {

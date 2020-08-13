@@ -781,7 +781,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             r23 = this;
             r1 = r23
             java.lang.String r0 = "SavedMessages"
-            r2 = 2131626762(0x7f0e0b0a, float:1.888077E38)
+            r2 = 2131626765(0x7f0e0b0d, float:1.8880775E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r2)     // Catch:{ Exception -> 0x06a5 }
             java.lang.String r0 = r0.toLowerCase()     // Catch:{ Exception -> 0x06a5 }
             java.lang.String r2 = r24.trim()     // Catch:{ Exception -> 0x06a5 }
@@ -2117,7 +2117,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             r0.setText(r2)
             goto L_0x037a
         L_0x00db:
-            r2 = 2131626637(0x7f0e0a8d, float:1.8880516E38)
+            r2 = 2131626640(0x7f0e0a90, float:1.8880522E38)
             java.lang.String r3 = "Recent"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r8, r5)
@@ -2129,7 +2129,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             java.util.ArrayList<java.lang.String> r3 = r1.searchResultHashtags
             boolean r3 = r3.isEmpty()
             if (r3 != 0) goto L_0x0111
-            r2 = 2131625523(0x7f0e0633, float:1.8878256E38)
+            r2 = 2131625526(0x7f0e0636, float:1.8878262E38)
             java.lang.String r3 = "Hashtags"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r8, r5)
@@ -2167,7 +2167,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             int r2 = r2 - r4
             if (r2 < 0) goto L_0x0160
             if (r2 >= r8) goto L_0x0160
-            r2 = 2131626483(0x7f0e09f3, float:1.8880203E38)
+            r2 = 2131626486(0x7f0e09f6, float:1.888021E38)
             java.lang.String r3 = "PhoneNumberSearch"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -2176,13 +2176,13 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             int r2 = r2 - r8
             if (r2 < 0) goto L_0x0173
             if (r2 >= r6) goto L_0x0173
-            r2 = 2131625478(0x7f0e0606, float:1.8878165E38)
+            r2 = 2131625481(0x7f0e0609, float:1.8878171E38)
             java.lang.String r3 = "GlobalSearch"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
             goto L_0x037a
         L_0x0173:
-            r2 = 2131626789(0x7f0e0b25, float:1.8880824E38)
+            r2 = 2131626792(0x7f0e0b28, float:1.888083E38)
             java.lang.String r3 = "SearchMessages"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -2409,7 +2409,7 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             int r0 = r3.id
             int r2 = r1.selfUserId
             if (r0 != r2) goto L_0x0327
-            r0 = 2131626762(0x7f0e0b0a, float:1.888077E38)
+            r0 = 2131626765(0x7f0e0b0d, float:1.8880775E38)
             java.lang.String r2 = "SavedMessages"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             r5 = 0

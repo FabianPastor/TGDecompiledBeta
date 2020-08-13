@@ -838,7 +838,7 @@ public class ChatRightsEditActivity extends BaseFragment {
             if (getParentActivity() != null) {
                 if ("PASSWORD_HASH_INVALID".equals(tLRPC$TL_error2.text)) {
                     if (tLRPC$InputCheckPasswordSRP == null) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
                         if (this.isChannel) {
                             builder.setTitle(LocaleController.getString("EditAdminChannelTransfer", NUM));
                         } else {
@@ -857,7 +857,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                     if (twoStepVerificationActivity2 != null) {
                         twoStepVerificationActivity.needHideProgress();
                     }
-                    AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
+                    AlertDialog.Builder builder2 = new AlertDialog.Builder(getParentActivity());
                     builder2.setTitle(LocaleController.getString("EditAdminTransferAlertTitle", NUM));
                     LinearLayout linearLayout = new LinearLayout(getParentActivity());
                     linearLayout.setPadding(AndroidUtilities.dp(24.0f), AndroidUtilities.dp(2.0f), AndroidUtilities.dp(24.0f), 0);
@@ -1373,7 +1373,7 @@ public class ChatRightsEditActivity extends BaseFragment {
         if (!(!z)) {
             return true;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
         builder.setTitle(LocaleController.getString("UserRestrictionsApplyChanges", NUM));
         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("UserRestrictionsApplyChangesText", NUM, MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.chatId)).title)));
         builder.setPositiveButton(LocaleController.getString("ApplyTheme", NUM), new DialogInterface.OnClickListener() {
@@ -1557,7 +1557,7 @@ public class ChatRightsEditActivity extends BaseFragment {
                 android.content.Context r7 = r6.mContext
                 r8.<init>(r7)
                 android.content.Context r7 = r6.mContext
-                r0 = 2131165425(0x7var_f1, float:1.7945067E38)
+                r0 = 2131165436(0x7var_fc, float:1.794509E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r0, (java.lang.String) r1)
                 r8.setBackgroundDrawable(r7)

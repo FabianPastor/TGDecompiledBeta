@@ -37,15 +37,6 @@ public class IdenticonDrawable extends Drawable {
         invalidateSelf();
     }
 
-    public void setColors(int[] iArr) {
-        if (this.colors.length == 4) {
-            this.colors = iArr;
-            invalidateSelf();
-            return;
-        }
-        throw new IllegalArgumentException("colors must have length of 4");
-    }
-
     public void draw(Canvas canvas) {
         byte[] bArr = this.data;
         if (bArr != null) {

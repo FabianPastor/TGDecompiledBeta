@@ -2,6 +2,7 @@ package org.webrtc;
 
 import android.opengl.GLES20;
 import java.nio.FloatBuffer;
+import org.telegram.messenger.FileLog;
 
 public class GlShader {
     private static final String TAG = "GlShader";
@@ -87,13 +88,18 @@ public class GlShader {
     }
 
     public void useProgram() {
-        int i = this.program;
-        if (i != -1) {
-            GLES20.glUseProgram(i);
-            GlUtil.checkNoGLES2Error("glUseProgram");
-            return;
+        if (this.program != -1) {
+            synchronized (EglBase.lock) {
+                GLES20.glUseProgram(this.program);
+            }
+            try {
+                GlUtil.checkNoGLES2Error("glUseProgram");
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
+            }
+        } else {
+            throw new RuntimeException("The program has been released");
         }
-        throw new RuntimeException("The program has been released");
     }
 
     public void release() {

@@ -24792,7 +24792,7 @@ public class MessagesController extends BaseController implements NotificationCe
 
     private static void showCantOpenAlert(BaseFragment baseFragment, String str) {
         if (baseFragment != null && baseFragment.getParentActivity() != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder((Context) baseFragment.getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(baseFragment.getParentActivity());
             builder.setTitle(LocaleController.getString("AppName", NUM));
             builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
             builder.setMessage(str);

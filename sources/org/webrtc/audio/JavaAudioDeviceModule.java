@@ -1,6 +1,7 @@
 package org.webrtc.audio;
 
 import android.content.Context;
+import android.media.AudioDeviceInfo;
 import android.media.AudioManager;
 import org.webrtc.JniCommon;
 import org.webrtc.Logging;
@@ -278,5 +279,10 @@ public class JavaAudioDeviceModule implements AudioDeviceModule {
     public void setMicrophoneMute(boolean z) {
         Logging.d("JavaAudioDeviceModule", "setMicrophoneMute: " + z);
         this.audioInput.setMicrophoneMute(z);
+    }
+
+    public void setPreferredInputDevice(AudioDeviceInfo audioDeviceInfo) {
+        Logging.d("JavaAudioDeviceModule", "setPreferredInputDevice: " + audioDeviceInfo);
+        this.audioInput.setPreferredDevice(audioDeviceInfo);
     }
 }

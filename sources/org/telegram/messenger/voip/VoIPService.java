@@ -64,7 +64,6 @@ import org.telegram.tgnet.TLRPC$TL_phone_sendSignalingData;
 import org.telegram.tgnet.TLRPC$TL_updatePhoneCallSignalingData;
 import org.telegram.tgnet.TLRPC$TL_updates;
 import org.telegram.tgnet.TLRPC$User;
-import org.telegram.tgnet.TLRPC$UserProfilePhoto;
 import org.telegram.tgnet.TLRPC$messages_DhConfig;
 import org.telegram.ui.LaunchActivity;
 import org.telegram.ui.VoIPFeedbackActivity;
@@ -97,7 +96,6 @@ public class VoIPService extends VoIPBaseService {
     private ProxyVideoSink remoteSink;
     private boolean startedRinging = false;
     private TLRPC$User user;
-    private int videoState = 0;
 
     static /* synthetic */ void lambda$onSignalingData$22(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
     }
@@ -1727,9 +1725,7 @@ public class VoIPService extends VoIPBaseService {
     /* access modifiers changed from: protected */
     public void showNotification() {
         TLRPC$User tLRPC$User = this.user;
-        String formatName = ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name);
-        TLRPC$UserProfilePhoto tLRPC$UserProfilePhoto = this.user.photo;
-        showNotification(formatName, tLRPC$UserProfilePhoto != null ? tLRPC$UserProfilePhoto.photo_small : null);
+        showNotification(ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name), getRoundAvatarBitmap(this.user));
     }
 
     private void startConnectingSound() {

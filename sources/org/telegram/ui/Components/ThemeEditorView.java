@@ -198,7 +198,7 @@ public class ThemeEditorView {
                       (wrap: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchField$oyMCfmJu6kX9C4_2783iB9VXPBE : 0x00b5: CONSTRUCTOR  (r1v15 org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchField$oyMCfmJu6kX9C4_2783iB9VXPBE) = 
                       (r11v0 'this' org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchField A[THIS])
                      call: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchField$oyMCfmJu6kX9C4_2783iB9VXPBE.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchField):void type: CONSTRUCTOR)
-                     android.widget.ImageView.setOnClickListener(android.view.View$OnClickListener):void type: VIRTUAL in method: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchField.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert, android.content.Context):void, dex: classes2.dex
+                     android.widget.ImageView.setOnClickListener(android.view.View$OnClickListener):void type: VIRTUAL in method: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchField.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert, android.content.Context):void, dex: classes3.dex
                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                     	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -261,7 +261,7 @@ public class ThemeEditorView {
                     	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
                     Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x00b5: CONSTRUCTOR  (r1v15 org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchField$oyMCfmJu6kX9C4_2783iB9VXPBE) = 
                       (r11v0 'this' org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchField A[THIS])
-                     call: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchField$oyMCfmJu6kX9C4_2783iB9VXPBE.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchField):void type: CONSTRUCTOR in method: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchField.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert, android.content.Context):void, dex: classes2.dex
+                     call: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchField$oyMCfmJu6kX9C4_2783iB9VXPBE.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchField):void type: CONSTRUCTOR in method: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchField.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert, android.content.Context):void, dex: classes3.dex
                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                     	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                     	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -301,7 +301,7 @@ public class ThemeEditorView {
                     r0.<init>(r13)
                     android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
                     r0.setScaleType(r1)
-                    r1 = 2131165917(0x7var_dd, float:1.7946065E38)
+                    r1 = 2131165928(0x7var_e8, float:1.7946087E38)
                     r0.setImageResource(r1)
                     android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
                     android.graphics.PorterDuff$Mode r2 = android.graphics.PorterDuff.Mode.MULTIPLY
@@ -385,7 +385,7 @@ public class ThemeEditorView {
                     r13.setImeOptions(r0)
                     org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
                     java.lang.String r0 = "Search"
-                    r1 = 2131626774(0x7f0e0b16, float:1.8880794E38)
+                    r1 = 2131626777(0x7f0e0b19, float:1.88808E38)
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r1)
                     r13.setHint(r0)
                     org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
@@ -503,7 +503,7 @@ public class ThemeEditorView {
                     r7.<init>(r8)
                     r0.circlePaint = r7
                     android.content.res.Resources r7 = r19.getResources()
-                    r9 = 2131165552(0x7var_, float:1.7945324E38)
+                    r9 = 2131165563(0x7var_b, float:1.7945347E38)
                     android.graphics.drawable.Drawable r7 = r7.getDrawable(r9)
                     android.graphics.drawable.Drawable r7 = r7.mutate()
                     r0.circleDrawable = r7
@@ -1133,7 +1133,7 @@ public class ThemeEditorView {
                 android.animation.AnimatorSet[] r4 = new android.animation.AnimatorSet[r4]
                 r0.shadowAnimation = r4
                 android.content.res.Resources r4 = r18.getResources()
-                r5 = 2131165905(0x7var_d1, float:1.794604E38)
+                r5 = 2131165916(0x7var_dc, float:1.7946063E38)
                 android.graphics.drawable.Drawable r4 = r4.getDrawable(r5)
                 android.graphics.drawable.Drawable r4 = r4.mutate()
                 r0.shadowDrawable = r4
@@ -1215,7 +1215,7 @@ public class ThemeEditorView {
                 r1.showTextView()
                 org.telegram.ui.Components.EmptyTextProgressView r1 = r0.searchEmptyView
                 java.lang.String r4 = "NoResult"
-                r9 = 2131625953(0x7f0e07e1, float:1.8879129E38)
+                r9 = 2131625956(0x7f0e07e4, float:1.8879135E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
                 r1.setText(r4)
                 org.telegram.ui.Components.RecyclerListView r1 = r0.listView
@@ -1339,7 +1339,7 @@ public class ThemeEditorView {
                 int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r1.setPadding(r4, r5, r15, r5)
                 java.lang.String r4 = "SaveTheme"
-                r15 = 2131626756(0x7f0e0b04, float:1.8880757E38)
+                r15 = 2131626759(0x7f0e0b07, float:1.8880763E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r15)
                 java.lang.String r4 = r4.toUpperCase()
                 r1.setText(r4)
@@ -1407,7 +1407,7 @@ public class ThemeEditorView {
                 int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r4.setPadding(r8, r5, r15, r5)
                 java.lang.String r8 = "Default"
-                r15 = 2131624946(0x7f0e03f2, float:1.8877086E38)
+                r15 = 2131624949(0x7f0e03f5, float:1.8877092E38)
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r15)
                 java.lang.String r8 = r8.toUpperCase()
                 r4.setText(r8)
@@ -1430,7 +1430,7 @@ public class ThemeEditorView {
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r4.setPadding(r2, r5, r3, r5)
                 java.lang.String r2 = "Save"
-                r3 = 2131626753(0x7f0e0b01, float:1.8880751E38)
+                r3 = 2131626756(0x7f0e0b04, float:1.8880757E38)
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
                 java.lang.String r2 = r2.toUpperCase()
                 r4.setText(r2)
@@ -1791,7 +1791,7 @@ public class ThemeEditorView {
                       (r2v0 'arrayList' java.util.ArrayList<java.util.ArrayList<org.telegram.ui.ActionBar.ThemeDescription>>)
                       (r3v0 'arrayList2' java.util.ArrayList<java.lang.CharSequence>)
                      call: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$p-mG9tNYo33F1pFcBkO4OWkissQ.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter, int, java.util.ArrayList, java.util.ArrayList):void type: CONSTRUCTOR)
-                     org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchAdapter.updateSearchResults(java.util.ArrayList, java.util.ArrayList, int):void, dex: classes2.dex
+                     org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchAdapter.updateSearchResults(java.util.ArrayList, java.util.ArrayList, int):void, dex: classes3.dex
                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                     	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -1857,7 +1857,7 @@ public class ThemeEditorView {
                       (r4v0 'i' int)
                       (r2v0 'arrayList' java.util.ArrayList<java.util.ArrayList<org.telegram.ui.ActionBar.ThemeDescription>>)
                       (r3v0 'arrayList2' java.util.ArrayList<java.lang.CharSequence>)
-                     call: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$p-mG9tNYo33F1pFcBkO4OWkissQ.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter, int, java.util.ArrayList, java.util.ArrayList):void type: CONSTRUCTOR in method: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchAdapter.updateSearchResults(java.util.ArrayList, java.util.ArrayList, int):void, dex: classes2.dex
+                     call: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$p-mG9tNYo33F1pFcBkO4OWkissQ.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter, int, java.util.ArrayList, java.util.ArrayList):void type: CONSTRUCTOR in method: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchAdapter.updateSearchResults(java.util.ArrayList, java.util.ArrayList, int):void, dex: classes3.dex
                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                     	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                     	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -1937,7 +1937,7 @@ public class ThemeEditorView {
                           (r0v4 'i' int)
                          call: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$QO0-7n9Zk7XEogLqnxXJbl4gmjs.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter, java.lang.String, int):void type: CONSTRUCTOR)
                           (r3v0 'this' org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter A[THIS])
-                         org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchAdapter.searchRunnable java.lang.Runnable in method: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchAdapter.searchDialogs(java.lang.String):void, dex: classes2.dex
+                         org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchAdapter.searchRunnable java.lang.Runnable in method: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchAdapter.searchDialogs(java.lang.String):void, dex: classes3.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
                         	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
@@ -2013,7 +2013,7 @@ public class ThemeEditorView {
                           (r3v0 'this' org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter A[THIS])
                           (r4v0 'str' java.lang.String)
                           (r0v4 'i' int)
-                         call: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$QO0-7n9Zk7XEogLqnxXJbl4gmjs.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter, java.lang.String, int):void type: CONSTRUCTOR in method: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchAdapter.searchDialogs(java.lang.String):void, dex: classes2.dex
+                         call: org.telegram.ui.Components.-$$Lambda$ThemeEditorView$EditorAlert$SearchAdapter$QO0-7n9Zk7XEogLqnxXJbl4gmjs.<init>(org.telegram.ui.Components.ThemeEditorView$EditorAlert$SearchAdapter, java.lang.String, int):void type: CONSTRUCTOR in method: org.telegram.ui.Components.ThemeEditorView.EditorAlert.SearchAdapter.searchDialogs(java.lang.String):void, dex: classes3.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                         	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
