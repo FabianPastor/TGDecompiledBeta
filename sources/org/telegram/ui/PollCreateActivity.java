@@ -650,7 +650,7 @@ public class PollCreateActivity extends BaseFragment {
             }
         }
         if (!isEmpty) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setTitle(LocaleController.getString("CancelPollAlertTitle", NUM));
             builder.setMessage(LocaleController.getString("CancelPollAlertText", NUM));
             builder.setPositiveButton(LocaleController.getString("PassportDiscard", NUM), new DialogInterface.OnClickListener() {

@@ -573,7 +573,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                                     ProfileNotificationsActivity.AnonymousClass3.this.lambda$onItemClick$3$ProfileNotificationsActivity$3(view, i);
                                 }
                             });
-                            AlertDialog.Builder builder = new AlertDialog.Builder(ProfileNotificationsActivity.this.getParentActivity());
+                            AlertDialog.Builder builder = new AlertDialog.Builder((Context) ProfileNotificationsActivity.this.getParentActivity());
                             builder.setTitle(LocaleController.getString("SmartNotificationsAlert", NUM));
                             builder.setView(recyclerListView);
                             builder.setPositiveButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);

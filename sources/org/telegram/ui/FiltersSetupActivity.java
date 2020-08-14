@@ -563,7 +563,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
 
         public /* synthetic */ void lambda$onCreateViewHolder$5$FiltersSetupActivity$ListAdapter(View view) {
             MessagesController.DialogFilter currentFilter = ((FilterCell) view.getParent()).getCurrentFilter();
-            AlertDialog.Builder builder = new AlertDialog.Builder(FiltersSetupActivity.this.getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) FiltersSetupActivity.this.getParentActivity());
             TextPaint textPaint = new TextPaint(1);
             textPaint.setTextSize((float) AndroidUtilities.dp(20.0f));
             builder.setTitle(Emoji.replaceEmoji(currentFilter.name, textPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false));
@@ -587,7 +587,7 @@ public class FiltersSetupActivity extends BaseFragment implements NotificationCe
             if (i == 0) {
                 FiltersSetupActivity.this.presentFragment(new FilterCreateActivity(dialogFilter));
             } else if (i == 1) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(FiltersSetupActivity.this.getParentActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder((Context) FiltersSetupActivity.this.getParentActivity());
                 builder.setTitle(LocaleController.getString("FilterDelete", NUM));
                 builder.setMessage(LocaleController.getString("FilterDeleteAlert", NUM));
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);

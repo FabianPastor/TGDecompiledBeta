@@ -499,7 +499,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
     }
 
     public /* synthetic */ void lambda$createView$7$ChatEditTypeActivity(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setMessage(LocaleController.getString("RevokeAlert", NUM));
         builder.setTitle(LocaleController.getString("RevokeLink", NUM));
         builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new DialogInterface.OnClickListener() {
@@ -658,7 +658,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
 
     public /* synthetic */ void lambda$null$13$ChatEditTypeActivity(View view) {
         TLRPC$Chat currentChannel = ((AdminedChannelCell) view.getParent()).getCurrentChannel();
-        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("AppName", NUM));
         if (this.isChannel) {
             builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlertChannel", NUM, getMessagesController().linkPrefix + "/" + currentChannel.username, currentChannel.title)));
@@ -975,7 +975,7 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             }
             if (z) {
                 if (getParentActivity() != null) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                     builder.setMessage(LocaleController.getString("RevokeAlertNewLink", NUM));
                     builder.setTitle(LocaleController.getString("RevokeLink", NUM));
                     builder.setNegativeButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);

@@ -2,7 +2,9 @@ package org.webrtc;
 
 import android.graphics.Matrix;
 import android.os.Handler;
+import java.nio.ByteBuffer;
 import java.util.concurrent.Callable;
+import org.telegram.messenger.FileLog;
 import org.webrtc.TextureBufferImpl;
 import org.webrtc.VideoFrame;
 
@@ -105,11 +107,47 @@ public class TextureBufferImpl implements VideoFrame.TextureBuffer {
     }
 
     public VideoFrame.I420Buffer toI420() {
-        return (VideoFrame.I420Buffer) ThreadUtils.invokeAtFrontUninterruptibly(this.toI420Handler, new Callable() {
-            public final Object call() {
-                return TextureBufferImpl.this.lambda$toI420$1$TextureBufferImpl();
+        try {
+            return (VideoFrame.I420Buffer) ThreadUtils.invokeAtFrontUninterruptibly(this.toI420Handler, new Callable() {
+                public final Object call() {
+                    return TextureBufferImpl.this.lambda$toI420$1$TextureBufferImpl();
+                }
+            });
+        } catch (Throwable th) {
+            FileLog.e(th);
+            int width2 = getWidth();
+            int height2 = getHeight();
+            int i = ((width2 + 7) / 8) * 8;
+            int i2 = (height2 + 1) / 2;
+            ByteBuffer nativeAllocateByteBuffer = JniCommon.nativeAllocateByteBuffer((height2 + i2) * i);
+            while (nativeAllocateByteBuffer.hasRemaining()) {
+                nativeAllocateByteBuffer.put((byte) 0);
             }
-        });
+            int i3 = i / 4;
+            int i4 = (i * height2) + 0;
+            int i5 = i / 2;
+            int i6 = i4 + i5;
+            nativeAllocateByteBuffer.position(0);
+            nativeAllocateByteBuffer.limit(i4);
+            ByteBuffer slice = nativeAllocateByteBuffer.slice();
+            nativeAllocateByteBuffer.position(i4);
+            int i7 = ((i2 - 1) * i) + i5;
+            nativeAllocateByteBuffer.limit(i4 + i7);
+            ByteBuffer slice2 = nativeAllocateByteBuffer.slice();
+            nativeAllocateByteBuffer.position(i6);
+            nativeAllocateByteBuffer.limit(i6 + i7);
+            return JavaI420Buffer.wrap(width2, height2, slice, i, slice2, i, nativeAllocateByteBuffer.slice(), i, new Runnable(nativeAllocateByteBuffer) {
+                public final /* synthetic */ ByteBuffer f$0;
+
+                {
+                    this.f$0 = r1;
+                }
+
+                public final void run() {
+                    JniCommon.nativeFreeByteBuffer(this.f$0);
+                }
+            });
+        }
     }
 
     public /* synthetic */ VideoFrame.I420Buffer lambda$toI420$1$TextureBufferImpl() throws Exception {

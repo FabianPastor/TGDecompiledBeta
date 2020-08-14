@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
+import org.telegram.messenger.FileLog;
 import org.webrtc.EglBase;
 import org.webrtc.EncodedImage;
 import org.webrtc.ThreadUtils;
@@ -407,34 +408,39 @@ class AndroidVideoDecoder implements VideoDecoder, VideoSink {
         int i7 = i4;
         if (i5 % 2 == 0) {
             int i8 = (i6 + 1) / 2;
-            int i9 = i2 % 2;
-            int i10 = i9 == 0 ? (i7 + 1) / 2 : i7 / 2;
-            int i11 = i5 / 2;
+            int i9 = i2 % 2 == 0 ? (i7 + 1) / 2 : i7 / 2;
+            int i10 = i5 / 2;
+            int i11 = (i5 * i7) + 0;
             int i12 = (i5 * i2) + 0;
-            int i13 = i11 * i10;
-            int i14 = i12 + ((i11 * i2) / 2);
-            int i15 = i14 + i13;
+            int i13 = i10 * i9;
+            int i14 = i12 + i13;
+            int i15 = i12 + ((i10 * i2) / 2);
+            int i16 = i15 + i13;
             VideoFrame.I420Buffer allocateI420Buffer = allocateI420Buffer(i6, i7);
-            byteBuffer2.limit((i5 * i7) + 0);
-            byteBuffer2.position(0);
-            copyPlane(byteBuffer.slice(), i, allocateI420Buffer.getDataY(), allocateI420Buffer.getStrideY(), i3, i4);
-            byteBuffer2.limit(i12 + i13);
-            byteBuffer2.position(i12);
-            copyPlane(byteBuffer.slice(), i11, allocateI420Buffer.getDataU(), allocateI420Buffer.getStrideU(), i8, i10);
-            if (i9 == 1) {
-                byteBuffer2.position(i12 + ((i10 - 1) * i11));
-                ByteBuffer dataU = allocateI420Buffer.getDataU();
-                dataU.position(allocateI420Buffer.getStrideU() * i10);
-                dataU.put(byteBuffer2);
-            }
-            byteBuffer2.limit(i15);
-            byteBuffer2.position(i14);
-            copyPlane(byteBuffer.slice(), i11, allocateI420Buffer.getDataV(), allocateI420Buffer.getStrideV(), i8, i10);
-            if (i9 == 1) {
-                byteBuffer2.position(i14 + (i11 * (i10 - 1)));
-                ByteBuffer dataV = allocateI420Buffer.getDataV();
-                dataV.position(allocateI420Buffer.getStrideV() * i10);
-                dataV.put(byteBuffer2);
+            try {
+                byteBuffer2.limit(i11);
+                byteBuffer2.position(0);
+                copyPlane(byteBuffer.slice(), i, allocateI420Buffer.getDataY(), allocateI420Buffer.getStrideY(), i3, i4);
+                byteBuffer2.limit(i14);
+                byteBuffer2.position(i12);
+                copyPlane(byteBuffer.slice(), i10, allocateI420Buffer.getDataU(), allocateI420Buffer.getStrideU(), i8, i9);
+                if (i2 % 2 == 1) {
+                    byteBuffer2.position(i12 + ((i9 - 1) * i10));
+                    ByteBuffer dataU = allocateI420Buffer.getDataU();
+                    dataU.position(allocateI420Buffer.getStrideU() * i9);
+                    dataU.put(byteBuffer2);
+                }
+                byteBuffer2.limit(i16);
+                byteBuffer2.position(i15);
+                copyPlane(byteBuffer.slice(), i10, allocateI420Buffer.getDataV(), allocateI420Buffer.getStrideV(), i8, i9);
+                if (i2 % 2 == 1) {
+                    byteBuffer2.position(i15 + (i10 * (i9 - 1)));
+                    ByteBuffer dataV = allocateI420Buffer.getDataV();
+                    dataV.position(allocateI420Buffer.getStrideV() * i9);
+                    dataV.put(byteBuffer2);
+                }
+            } catch (Throwable th) {
+                FileLog.e(th);
             }
             return allocateI420Buffer;
         }

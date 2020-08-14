@@ -891,7 +891,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     ThemeActivity.this.finishFragment();
                 } else if (i == 1) {
                     if (ThemeActivity.this.getParentActivity() != null) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ThemeActivity.this.getParentActivity());
+                        AlertDialog.Builder builder = new AlertDialog.Builder((Context) ThemeActivity.this.getParentActivity());
                         builder.setTitle(LocaleController.getString("NewTheme", NUM));
                         builder.setMessage(LocaleController.getString("CreateNewThemeAlert", NUM));
                         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -915,7 +915,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     Theme.ThemeInfo currentTheme = Theme.getCurrentTheme();
                     ThemeActivity.this.presentFragment(new ThemePreviewActivity(currentTheme, false, 1, currentTheme.getAccent(false).id >= 100, ThemeActivity.this.currentType == 1));
                 } else if (i == 4 && ThemeActivity.this.getParentActivity() != null) {
-                    AlertDialog.Builder builder2 = new AlertDialog.Builder(ThemeActivity.this.getParentActivity());
+                    AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) ThemeActivity.this.getParentActivity());
                     builder2.setTitle(LocaleController.getString("ThemeResetToDefaultsTitle", NUM));
                     builder2.setMessage(LocaleController.getString("ThemeResetToDefaultsText", NUM));
                     builder2.setPositiveButton(LocaleController.getString("Reset", NUM), new DialogInterface.OnClickListener() {
@@ -1031,7 +1031,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             }
         } else if (i == this.distanceRow) {
             if (getParentActivity() != null) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                 builder.setTitle(LocaleController.getString("DistanceUnitsTitle", NUM));
                 builder.setItems(new CharSequence[]{LocaleController.getString("DistanceUnitsAutomatic", NUM), LocaleController.getString("DistanceUnitsKilometers", NUM), LocaleController.getString("DistanceUnitsMiles", NUM)}, new DialogInterface.OnClickListener() {
                     public final void onClick(DialogInterface dialogInterface, int i) {
@@ -1054,7 +1054,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         } else if (i != this.contactsReimportRow) {
             if (i == this.contactsSortRow) {
                 if (getParentActivity() != null) {
-                    AlertDialog.Builder builder2 = new AlertDialog.Builder(getParentActivity());
+                    AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
                     builder2.setTitle(LocaleController.getString("SortBy", NUM));
                     builder2.setItems(new CharSequence[]{LocaleController.getString("Default", NUM), LocaleController.getString("SortFirstName", NUM), LocaleController.getString("SortLastName", NUM)}, new DialogInterface.OnClickListener(i) {
                         public final /* synthetic */ int f$1;
@@ -1248,7 +1248,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 if (getParentActivity().getPackageManager().hasSystemFeature("android.hardware.location.gps")) {
                     try {
                         if (!((LocationManager) ApplicationLoader.applicationContext.getSystemService("location")).isProviderEnabled("gps")) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                             builder.setTitle(LocaleController.getString("GpsDisabledAlertTitle", NUM));
                             builder.setMessage(LocaleController.getString("GpsDisabledAlertText", NUM));
                             builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", NUM), new DialogInterface.OnClickListener() {
@@ -1642,7 +1642,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 return;
             }
             if ((themeInfo.info == null || themeInfo.themeLoaded) && ThemeActivity.this.currentType != 1) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ThemeActivity.this.getParentActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder((Context) ThemeActivity.this.getParentActivity());
                 String str2 = null;
                 boolean z = false;
                 if (themeInfo.pathToFile == null) {
@@ -1875,7 +1875,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             L_0x0164:
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x017a }
                 java.lang.String r10 = "ShareFile"
-                r0 = 2131626922(0x7f0e0baa, float:1.8881094E38)
+                r0 = 2131626925(0x7f0e0bad, float:1.88811E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r0)     // Catch:{ Exception -> 0x017a }
                 android.content.Intent r8 = android.content.Intent.createChooser(r8, r10)     // Catch:{ Exception -> 0x017a }
                 r10 = 500(0x1f4, float:7.0E-43)
@@ -1917,22 +1917,22 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 org.telegram.ui.ActionBar.AlertDialog$Builder r9 = new org.telegram.ui.ActionBar.AlertDialog$Builder
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 android.app.Activity r10 = r10.getParentActivity()
-                r9.<init>(r10)
-                r10 = 2131625005(0x7f0e042d, float:1.8877206E38)
+                r9.<init>((android.content.Context) r10)
+                r10 = 2131625007(0x7f0e042f, float:1.887721E38)
                 java.lang.String r0 = "DeleteThemeTitle"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setTitle(r10)
-                r10 = 2131625004(0x7f0e042c, float:1.8877204E38)
+                r10 = 2131625006(0x7f0e042e, float:1.8877208E38)
                 java.lang.String r0 = "DeleteThemeAlert"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setMessage(r10)
-                r10 = 2131624957(0x7f0e03fd, float:1.8877108E38)
+                r10 = 2131624959(0x7f0e03ff, float:1.8877112E38)
                 java.lang.String r0 = "Delete"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$HjGrFd2877SP2gFmUCLASSNAMEvuRyOmw r0 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$HjGrFd2877SP2gFmUCLASSNAMEvuRyOmw
                 r0.<init>(r8)
                 r9.setPositiveButton(r10, r0)
-                r8 = 2131624551(0x7f0e0267, float:1.8876285E38)
+                r8 = 2131624552(0x7f0e0268, float:1.8876287E38)
                 java.lang.String r10 = "Cancel"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r9.setNegativeButton(r8, r1)
@@ -2010,7 +2010,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             if (i >= 0 && i < themeAccentsListAdapter.themeAccents.size()) {
                 Theme.ThemeAccent themeAccent = (Theme.ThemeAccent) themeAccentsListAdapter.themeAccents.get(i);
                 if (themeAccent.id >= 100) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ThemeActivity.this.getParentActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) ThemeActivity.this.getParentActivity());
                     CharSequence[] charSequenceArr = new CharSequence[4];
                     charSequenceArr[0] = LocaleController.getString("OpenInEditor", NUM);
                     charSequenceArr[1] = LocaleController.getString("ShareTheme", NUM);
@@ -2059,7 +2059,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 } else if (i == 2) {
                     ThemeActivity.this.presentFragment(new ThemeSetUrlActivity(themeAccent.parentTheme, themeAccent, false));
                 } else if (i == 3 && ThemeActivity.this.getParentActivity() != null) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ThemeActivity.this.getParentActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) ThemeActivity.this.getParentActivity());
                     builder.setTitle(LocaleController.getString("DeleteThemeTitle", NUM));
                     builder.setMessage(LocaleController.getString("DeleteThemeAlert", NUM));
                     builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener(themeAccentsListAdapter, themeAccent) {

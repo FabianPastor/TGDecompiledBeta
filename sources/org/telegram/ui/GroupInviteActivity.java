@@ -158,7 +158,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
                     }
                 }
             } else if (i == this.revokeLinkRow) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                 builder.setMessage(LocaleController.getString("RevokeAlert", NUM));
                 builder.setTitle(LocaleController.getString("RevokeLink", NUM));
                 builder.setPositiveButton(LocaleController.getString("RevokeButton", NUM), new DialogInterface.OnClickListener() {
@@ -247,7 +247,7 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
             this.invite = (TLRPC$ExportedChatInvite) tLObject;
             if (z) {
                 if (getParentActivity() != null) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                     builder.setMessage(LocaleController.getString("RevokeAlertNewLink", NUM));
                     builder.setTitle(LocaleController.getString("RevokeLink", NUM));
                     builder.setNegativeButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);

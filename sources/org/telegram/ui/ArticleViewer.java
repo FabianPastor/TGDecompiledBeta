@@ -5399,7 +5399,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         ArticleViewer articleViewer = ArticleViewer.this;
                         File access$11300 = articleViewer.getMediaFile(articleViewer.photoAdapter, ArticleViewer.this.currentIndex);
                         if (access$11300 == null || !access$11300.exists()) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(ArticleViewer.this.parentActivity);
+                            AlertDialog.Builder builder = new AlertDialog.Builder((Context) ArticleViewer.this.parentActivity);
                             builder.setTitle(LocaleController.getString("AppName", NUM));
                             builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
                             builder.setMessage(LocaleController.getString("PleaseDownload", NUM));
@@ -16080,7 +16080,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 if (r4 == 0) goto L_0x0060
                 boolean r4 = android.text.TextUtils.isEmpty(r0)
                 if (r4 != 0) goto L_0x0060
-                r4 = 2131624328(0x7f0e0188, float:1.8875833E38)
+                r4 = 2131624329(0x7f0e0189, float:1.8875835E38)
                 r7 = 2
                 java.lang.Object[] r7 = new java.lang.Object[r7]
                 org.telegram.messenger.LocaleController r8 = org.telegram.messenger.LocaleController.getInstance()
@@ -16098,7 +16098,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             L_0x0060:
                 boolean r4 = android.text.TextUtils.isEmpty(r0)
                 if (r4 != 0) goto L_0x0074
-                r4 = 2131624327(0x7f0e0187, float:1.887583E38)
+                r4 = 2131624328(0x7f0e0188, float:1.8875833E38)
                 java.lang.Object[] r15 = new java.lang.Object[r15]
                 r15[r3] = r0
                 java.lang.String r5 = "ArticleByAuthor"
@@ -16939,7 +16939,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         L_0x0053:
             android.app.Activity r0 = r5.parentActivity     // Catch:{ Exception -> 0x009c }
             java.lang.String r2 = "ShareFile"
-            r3 = 2131626922(0x7f0e0baa, float:1.8881094E38)
+            r3 = 2131626925(0x7f0e0bad, float:1.88811E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ Exception -> 0x009c }
             android.content.Intent r1 = android.content.Intent.createChooser(r1, r2)     // Catch:{ Exception -> 0x009c }
             r2 = 500(0x1f4, float:7.0E-43)
@@ -16948,18 +16948,18 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         L_0x0068:
             org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder     // Catch:{ Exception -> 0x009c }
             android.app.Activity r1 = r5.parentActivity     // Catch:{ Exception -> 0x009c }
-            r0.<init>(r1)     // Catch:{ Exception -> 0x009c }
+            r0.<init>((android.content.Context) r1)     // Catch:{ Exception -> 0x009c }
             java.lang.String r1 = "AppName"
-            r2 = 2131624244(0x7f0e0134, float:1.8875662E38)
+            r2 = 2131624245(0x7f0e0135, float:1.8875664E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x009c }
             r0.setTitle(r1)     // Catch:{ Exception -> 0x009c }
             java.lang.String r1 = "OK"
-            r2 = 2131626135(0x7f0e0897, float:1.8879498E38)
+            r2 = 2131626137(0x7f0e0899, float:1.8879502E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x009c }
             r2 = 0
             r0.setPositiveButton(r1, r2)     // Catch:{ Exception -> 0x009c }
             java.lang.String r1 = "PleaseDownload"
-            r2 = 2131626525(0x7f0e0a1d, float:1.8880289E38)
+            r2 = 2131626527(0x7f0e0a1f, float:1.8880293E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x009c }
             r0.setMessage(r1)     // Catch:{ Exception -> 0x009c }
             org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()     // Catch:{ Exception -> 0x009c }
@@ -17460,7 +17460,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.menuItem
             r0.showSubItem(r14)
             org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
-            r1 = 2131624339(0x7f0e0193, float:1.8875855E38)
+            r1 = 2131624340(0x7f0e0194, float:1.8875857E38)
             java.lang.String r2 = "AttachGif"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -17473,21 +17473,21 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (r0 != r10) goto L_0x010d
             if (r16 == 0) goto L_0x00fe
             org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
-            r1 = 2131624356(0x7f0e01a4, float:1.887589E38)
+            r1 = 2131624357(0x7f0e01a5, float:1.8875891E38)
             java.lang.String r2 = "AttachVideo"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x0132
         L_0x00fe:
             org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
-            r1 = 2131624350(0x7f0e019e, float:1.8875877E38)
+            r1 = 2131624351(0x7f0e019f, float:1.887588E38)
             java.lang.String r2 = "AttachPhoto"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x0132
         L_0x010d:
             org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
-            r1 = 2131626137(0x7f0e0899, float:1.8879502E38)
+            r1 = 2131626139(0x7f0e089b, float:1.8879506E38)
             java.lang.Object[] r2 = new java.lang.Object[r11]
             int r3 = r7.currentIndex
             int r3 = r3 + r10

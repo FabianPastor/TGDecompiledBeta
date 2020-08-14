@@ -766,7 +766,7 @@ public class PhonebookShareAlert extends BottomSheet {
             int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             r3.setBackgroundColor(r6)
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
-            r6 = 2131165455(0x7var_f, float:1.7945128E38)
+            r6 = 2131165456(0x7var_, float:1.794513E38)
             r3.setBackButtonImage(r6)
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
             java.lang.String r6 = "dialogTextBlack"
@@ -785,9 +785,9 @@ public class PhonebookShareAlert extends BottomSheet {
             r6 = 0
             r3.setAlpha(r6)
             boolean r3 = r0.isImport
-            r7 = 2131624160(0x7f0e00e0, float:1.8875492E38)
+            r7 = 2131624161(0x7f0e00e1, float:1.8875494E38)
             java.lang.String r9 = "AddContactPhonebookTitle"
-            r10 = 2131626921(0x7f0e0ba9, float:1.8881092E38)
+            r10 = 2131626924(0x7f0e0bac, float:1.8881098E38)
             java.lang.String r11 = "ShareContactTitle"
             if (r3 == 0) goto L_0x022a
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
@@ -947,7 +947,7 @@ public class PhonebookShareAlert extends BottomSheet {
                     }
                     Browser.openUrl((Context) this.parentFragment.getParentActivity(), value);
                 } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this.parentFragment.getParentActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.parentFragment.getParentActivity());
                     builder.setItems(new CharSequence[]{LocaleController.getString("Copy", NUM)}, new DialogInterface.OnClickListener(vcardItem) {
                         public final /* synthetic */ AndroidUtilities.VcardItem f$1;
 

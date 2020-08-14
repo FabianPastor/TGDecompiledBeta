@@ -253,6 +253,7 @@
     <public type="drawable" name="calls_menu_speaker" id="NUM" />
     <public type="drawable" name="calls_mute" id="NUM" />
     <public type="drawable" name="calls_mute_mini" id="NUM" />
+    <public type="drawable" name="calls_pip_outershadow" id="NUM" />
     <public type="drawable" name="calls_speaker" id="NUM" />
     <public type="drawable" name="calls_topshadow" id="NUM" />
     <public type="drawable" name="calls_unmute" id="NUM" />
@@ -1302,6 +1303,7 @@
     <public type="string" name="AccReleaseForArchive" id="NUM" />
     <public type="string" name="AccSwipeForArchive" id="NUM" />
     <public type="string" name="Accept" id="NUM" />
+    <public type="string" name="AcceptCall" id="NUM" />
     <public type="string" name="AccessError" id="NUM" />
     <public type="string" name="Account" id="NUM" />
     <public type="string" name="AccountAlreadyLoggedIn" id="NUM" />
@@ -2189,6 +2191,7 @@
     <public type="string" name="DebugSendLogs" id="NUM" />
     <public type="string" name="December" id="NUM" />
     <public type="string" name="Decline" id="NUM" />
+    <public type="string" name="DeclineCall" id="NUM" />
     <public type="string" name="DeclineDeactivate" id="NUM" />
     <public type="string" name="Default" id="NUM" />
     <public type="string" name="DefaultRingtone" id="NUM" />
@@ -3986,6 +3989,7 @@
     <public type="string" name="Restrictions_two" id="NUM" />
     <public type="string" name="Restrictions_zero" id="NUM" />
     <public type="string" name="Retry" id="NUM" />
+    <public type="string" name="RetryCall" id="NUM" />
     <public type="string" name="ReturnToCall" id="NUM" />
     <public type="string" name="ReverseOrder" id="NUM" />
     <public type="string" name="RevokeAlert" id="NUM" />
@@ -4646,6 +4650,7 @@
     <public type="string" name="VoipAnsweringAsAccount" id="NUM" />
     <public type="string" name="VoipAudioRoutingBluetooth" id="NUM" />
     <public type="string" name="VoipAudioRoutingEarpiece" id="NUM" />
+    <public type="string" name="VoipAudioRoutingHeadset" id="NUM" />
     <public type="string" name="VoipAudioRoutingSpeaker" id="NUM" />
     <public type="string" name="VoipBusy" id="NUM" />
     <public type="string" name="VoipCallEnded" id="NUM" />
@@ -4688,11 +4693,13 @@
     <public type="string" name="VoipSpeaker" id="NUM" />
     <public type="string" name="VoipStartVideo" id="NUM" />
     <public type="string" name="VoipStopVideo" id="NUM" />
+    <public type="string" name="VoipSwitch" id="NUM" />
     <public type="string" name="VoipSwitchToVideoCall" id="NUM" />
     <public type="string" name="VoipUnmute" id="NUM" />
     <public type="string" name="VoipUseLessData" id="NUM" />
     <public type="string" name="VoipUserCameraIsOff" id="NUM" />
     <public type="string" name="VoipUserMicrophoneIsOff" id="NUM" />
+    <public type="string" name="VoipVideoUnavailable" id="NUM" />
     <public type="string" name="VoipWaiting" id="NUM" />
     <public type="string" name="Vote_few" id="NUM" />
     <public type="string" name="Vote_many" id="NUM" />

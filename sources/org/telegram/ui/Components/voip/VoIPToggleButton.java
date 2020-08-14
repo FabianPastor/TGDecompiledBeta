@@ -555,6 +555,7 @@ public class VoIPToggleButton extends FrameLayout {
                     VoIPToggleButton voIPToggleButton = VoIPToggleButton.this;
                     voIPToggleButton.backgroundColor = voIPToggleButton.animateToBackgroundColor;
                     voIPToggleButton.replaceProgress = 0.0f;
+                    voIPToggleButton.invalidate();
                 }
             });
             this.replaceAnimator.setDuration(150).start();

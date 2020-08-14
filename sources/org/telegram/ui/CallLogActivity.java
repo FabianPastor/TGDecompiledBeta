@@ -451,7 +451,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
         if (VoIPHelper.canRateCall((TLRPC$TL_messageActionPhoneCall) callLogRow.calls.get(0).action)) {
             arrayList.add(LocaleController.getString("CallMessageReportProblem", NUM));
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("Calls", NUM));
         builder.setItems((CharSequence[]) arrayList.toArray(new String[0]), new DialogInterface.OnClickListener(callLogRow) {
             public final /* synthetic */ CallLogActivity.CallLogRow f$1;
@@ -613,7 +613,7 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
 
     private void confirmAndDelete(CallLogRow callLogRow) {
         if (getParentActivity() != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setTitle(LocaleController.getString("AppName", NUM));
             builder.setMessage(LocaleController.getString("ConfirmDeleteCallLog", NUM));
             builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener(callLogRow) {

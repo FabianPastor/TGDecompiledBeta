@@ -21,7 +21,7 @@ import org.webrtc.EglBase14;
 import org.webrtc.VideoEncoderFactory;
 
 public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
-    private static final List<String> H264_HW_EXCEPTION_MODELS = Arrays.asList(new String[]{"SAMSUNG-SGH-I337", "Nexus 7", "Nexus 4"});
+    private static final List<String> H264_HW_EXCEPTION_MODELS = Arrays.asList(new String[]{"SAMSUNG-SGH-I337", "Nexus 7", "Nexus 4", "Pixel 3 XL", "Pixel 3"});
     private static Set<String> HW_EXCEPTION_MODELS = new HashSet<String>() {
         public /* synthetic */ void forEach(@RecentlyNonNull Consumer<? super T> consumer) {
             Iterable.CC.$default$forEach(this, consumer);
@@ -75,6 +75,7 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
     private static final int QCOM_VP8_KEY_FRAME_INTERVAL_ANDROID_M_MS = 20000;
     private static final int QCOM_VP8_KEY_FRAME_INTERVAL_ANDROID_N_MS = 15000;
     private static final String TAG = "HardwareVideoEncoderFactory";
+    private static final List<String> VP8_HW_EXCEPTION_MODELS = Arrays.asList(new String[]{"Pixel 3 XL", "Pixel 3"});
     private final Predicate<MediaCodecInfo> codecAllowedPredicate;
     private final boolean enableH264HighProfile;
     private final boolean enableIntelVp8Encoder;
@@ -283,8 +284,14 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
     }
 
     private boolean isHardwareSupportedInCurrentSdkVp8(MediaCodecInfo mediaCodecInfo) {
+        if (VP8_HW_EXCEPTION_MODELS.contains(Build.MODEL)) {
+            return false;
+        }
         String name = mediaCodecInfo.getName();
-        return (name.startsWith("OMX.qcom.") && Build.VERSION.SDK_INT >= 19) || (name.startsWith("OMX.hisi.") && Build.VERSION.SDK_INT >= 19) || ((name.startsWith("OMX.Exynos.") && Build.VERSION.SDK_INT >= 23) || (name.startsWith("OMX.Intel.") && Build.VERSION.SDK_INT >= 21 && this.enableIntelVp8Encoder));
+        if ((!name.startsWith("OMX.qcom.") || Build.VERSION.SDK_INT < 19) && ((!name.startsWith("OMX.hisi.") || Build.VERSION.SDK_INT < 19) && ((!name.startsWith("OMX.Exynos.") || Build.VERSION.SDK_INT < 23) && (!name.startsWith("OMX.Intel.") || Build.VERSION.SDK_INT < 21 || !this.enableIntelVp8Encoder)))) {
+            return false;
+        }
+        return true;
     }
 
     private boolean isHardwareSupportedInCurrentSdkVp9(MediaCodecInfo mediaCodecInfo) {

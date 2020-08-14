@@ -235,13 +235,13 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
                     TwoStepVerificationSetupActivity.this.finishFragment();
                 } else if (i == 2) {
                     ConnectionsManager.getInstance(TwoStepVerificationSetupActivity.this.currentAccount).sendRequest(new TLRPC$TL_account_resendPasswordEmail(), $$Lambda$TwoStepVerificationSetupActivity$1$FwW87nCaHoiueVTZ9QFlpVyqdmY.INSTANCE);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(TwoStepVerificationSetupActivity.this.getParentActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) TwoStepVerificationSetupActivity.this.getParentActivity());
                     builder.setMessage(LocaleController.getString("ResendCodeInfo", NUM));
                     builder.setTitle(LocaleController.getString("TwoStepVerificationTitle", NUM));
                     builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
                     TwoStepVerificationSetupActivity.this.showDialog(builder.create());
                 } else if (i == 1) {
-                    AlertDialog.Builder builder2 = new AlertDialog.Builder(TwoStepVerificationSetupActivity.this.getParentActivity());
+                    AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) TwoStepVerificationSetupActivity.this.getParentActivity());
                     if (TwoStepVerificationSetupActivity.this.currentPassword == null || !TwoStepVerificationSetupActivity.this.currentPassword.has_password) {
                         str = LocaleController.getString("CancelPasswordQuestion", NUM);
                     } else {
@@ -837,7 +837,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
     public /* synthetic */ void lambda$createView$2$TwoStepVerificationSetupActivity(View view) {
         int i = this.currentType;
         if (i == 3) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setMessage(LocaleController.getString("YourEmailSkipWarningText", NUM));
             builder.setTitle(LocaleController.getString("YourEmailSkipWarning", NUM));
             builder.setPositiveButton(LocaleController.getString("YourEmailSkip", NUM), new DialogInterface.OnClickListener() {
@@ -989,7 +989,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
     public /* synthetic */ void lambda$null$4$TwoStepVerificationSetupActivity(TLRPC$TL_error tLRPC$TL_error) {
         String str;
         if (tLRPC$TL_error == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
                     TwoStepVerificationSetupActivity.this.lambda$null$3$TwoStepVerificationSetupActivity(dialogInterface, i);
@@ -1046,7 +1046,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
         if (tLRPC$TL_error == null) {
             if (getParentActivity() != null) {
                 if (this.currentPassword.has_password) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                     builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener() {
                         public final void onClick(DialogInterface dialogInterface, int i) {
                             TwoStepVerificationSetupActivity.this.lambda$null$6$TwoStepVerificationSetupActivity(dialogInterface, i);
@@ -1435,7 +1435,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
 
     private void showAlertWithText(String str, String str2) {
         if (getParentActivity() != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
             builder.setTitle(str);
             builder.setMessage(str2);
@@ -1716,8 +1716,8 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             if (r1 == 0) goto L_0x00d3
             org.telegram.ui.ActionBar.AlertDialog$Builder r1 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r2 = r10.getParentActivity()
-            r1.<init>(r2)
-            r2 = 2131626135(0x7f0e0897, float:1.8879498E38)
+            r1.<init>((android.content.Context) r2)
+            r2 = 2131626137(0x7f0e0899, float:1.8879502E38)
             java.lang.String r4 = "OK"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
             org.telegram.ui.-$$Lambda$TwoStepVerificationSetupActivity$vexohBL5wOdBFSvWUIhFMmWKVwc r4 = new org.telegram.ui.-$$Lambda$TwoStepVerificationSetupActivity$vexohBL5wOdBFSvWUIhFMmWKVwc
@@ -1728,18 +1728,18 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             if (r2 == 0) goto L_0x00a9
             boolean r2 = r2.has_password
             if (r2 == 0) goto L_0x00a9
-            r2 = 2131627518(0x7f0e0dfe, float:1.8882303E38)
+            r2 = 2131627524(0x7f0e0e04, float:1.8882315E38)
             java.lang.String r3 = "YourEmailSuccessText"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setMessage(r2)
             goto L_0x00b5
         L_0x00a9:
-            r2 = 2131627522(0x7f0e0e02, float:1.888231E38)
+            r2 = 2131627528(0x7f0e0e08, float:1.8882323E38)
             java.lang.String r3 = "YourPasswordChangedSuccessText"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setMessage(r2)
         L_0x00b5:
-            r2 = 2131627523(0x7f0e0e03, float:1.8882313E38)
+            r2 = 2131627529(0x7f0e0e09, float:1.8882325E38)
             java.lang.String r3 = "YourPasswordSuccess"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setTitle(r2)
@@ -1823,11 +1823,11 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             java.lang.String r2 = r1.text
             java.lang.String r3 = "EMAIL_INVALID"
             boolean r2 = r3.equals(r2)
-            r3 = 2131624244(0x7f0e0134, float:1.8875662E38)
+            r3 = 2131624245(0x7f0e0135, float:1.8875664E38)
             java.lang.String r4 = "AppName"
             if (r2 == 0) goto L_0x017a
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r2 = 2131626394(0x7f0e099a, float:1.8880023E38)
+            r2 = 2131626396(0x7f0e099c, float:1.8880027E38)
             java.lang.String r3 = "PasswordEmailInvalid"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r10.showAlertWithText(r1, r2)
@@ -1851,7 +1851,7 @@ public class TwoStepVerificationSetupActivity extends BaseFragment {
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatPluralString(r2, r1)
         L_0x01a0:
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r3)
-            r3 = 2131625377(0x7f0e05a1, float:1.887796E38)
+            r3 = 2131625379(0x7f0e05a3, float:1.8877964E38)
             java.lang.Object[] r4 = new java.lang.Object[r6]
             r4[r7] = r1
             java.lang.String r1 = "FloodWaitTime"

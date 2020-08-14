@@ -1003,7 +1003,7 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
         float f;
         int i;
         float f2;
-        if (this.cropTransform != null) {
+        if (this.cropTransform != null && this.state != null) {
             this.areaView.getCropRect(this.cropRect);
             int ceil = (int) Math.ceil((double) scaleWidthToMaxSize(this.cropRect, this.sizeRect));
             float f3 = (float) ceil;

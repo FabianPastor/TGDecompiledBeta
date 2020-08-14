@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -200,7 +201,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r8.searching = r6
             r8.searchWas = r6
             org.telegram.ui.ActionBar.ActionBar r0 = r8.actionBar
-            r1 = 2131165455(0x7var_f, float:1.7945128E38)
+            r1 = 2131165456(0x7var_, float:1.794513E38)
             r0.setBackButtonImage(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r8.actionBar
             r5 = 1
@@ -210,7 +211,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r8.returnAsResult
             if (r0 == 0) goto L_0x002e
             org.telegram.ui.ActionBar.ActionBar r0 = r8.actionBar
-            r1 = 2131626831(0x7f0e0b4f, float:1.888091E38)
+            r1 = 2131626834(0x7f0e0b52, float:1.8880915E38)
             java.lang.String r2 = "SelectContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -219,21 +220,21 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             boolean r0 = r8.createSecretChat
             if (r0 == 0) goto L_0x0041
             org.telegram.ui.ActionBar.ActionBar r0 = r8.actionBar
-            r1 = 2131625912(0x7f0e07b8, float:1.8879045E38)
+            r1 = 2131625914(0x7f0e07ba, float:1.887905E38)
             java.lang.String r2 = "NewSecretChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x005e
         L_0x0041:
             org.telegram.ui.ActionBar.ActionBar r0 = r8.actionBar
-            r1 = 2131625903(0x7f0e07af, float:1.8879027E38)
+            r1 = 2131625905(0x7f0e07b1, float:1.8879031E38)
             java.lang.String r2 = "NewMessageTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
             goto L_0x005e
         L_0x0050:
             org.telegram.ui.ActionBar.ActionBar r0 = r8.actionBar
-            r1 = 2131624864(0x7f0e03a0, float:1.887692E38)
+            r1 = 2131624865(0x7f0e03a1, float:1.8876922E38)
             java.lang.String r2 = "Contacts"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setTitle(r1)
@@ -244,14 +245,14 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r0.setActionBarMenuOnItemClick(r1)
             org.telegram.ui.ActionBar.ActionBar r0 = r8.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
-            r1 = 2131165465(0x7var_, float:1.7945148E38)
+            r1 = 2131165466(0x7var_a, float:1.794515E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r0.addItem((int) r6, (int) r1)
             r1.setIsSearchField(r5)
             org.telegram.ui.ContactsActivity$2 r2 = new org.telegram.ui.ContactsActivity$2
             r2.<init>()
             r1.setActionBarMenuItemSearchListener(r2)
             java.lang.String r2 = "Search"
-            r3 = 2131626783(0x7f0e0b1f, float:1.8880812E38)
+            r3 = 2131626786(0x7f0e0b22, float:1.8880818E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r2, r3)
             r1.setSearchFieldHint(r4)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
@@ -262,10 +263,10 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             if (r1 != 0) goto L_0x00b8
             boolean r1 = r8.sortByName
             if (r1 == 0) goto L_0x00a3
-            r1 = 2131165376(0x7var_c0, float:1.7944967E38)
+            r1 = 2131165377(0x7var_c1, float:1.794497E38)
             goto L_0x00a6
         L_0x00a3:
-            r1 = 2131165375(0x7var_bf, float:1.7944965E38)
+            r1 = 2131165376(0x7var_c0, float:1.7944967E38)
         L_0x00a6:
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItem((int) r5, (int) r1)
             r8.sortItem = r0
@@ -372,7 +373,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r8.emptyView = r1
             r1.setShowAtCenter(r15)
             org.telegram.ui.Components.EmptyTextProgressView r1 = r8.emptyView
-            r2 = 2131625934(0x7f0e07ce, float:1.887909E38)
+            r2 = 2131625936(0x7f0e07d0, float:1.8879094E38)
             java.lang.String r3 = "NoContacts"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
@@ -486,7 +487,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             int r2 = android.os.Build.VERSION.SDK_INT
             if (r2 >= r5) goto L_0x0283
             android.content.res.Resources r2 = r25.getResources()
-            r6 = 2131165410(0x7var_e2, float:1.7945036E38)
+            r6 = 2131165411(0x7var_e3, float:1.7945038E38)
             android.graphics.drawable.Drawable r2 = r2.getDrawable(r6)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             android.graphics.PorterDuffColorFilter r6 = new android.graphics.PorterDuffColorFilter
@@ -514,7 +515,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             r1 = 2131165259(0x7var_b, float:1.794473E38)
             r0.setImageResource(r1)
             android.widget.FrameLayout r0 = r8.floatingButtonContainer
-            r1 = 2131624893(0x7f0e03bd, float:1.8876979E38)
+            r1 = 2131624894(0x7f0e03be, float:1.887698E38)
             java.lang.String r2 = "CreateNewContact"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setContentDescription(r1)
@@ -620,7 +621,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                         ContactsController.Contact contact = (ContactsController.Contact) item;
                         String str = !contact.phones.isEmpty() ? contact.phones.get(0) : null;
                         if (str != null && getParentActivity() != null) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                             builder.setMessage(LocaleController.getString("InviteUser", NUM));
                             builder.setTitle(LocaleController.getString("AppName", NUM));
                             builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(str) {
@@ -772,7 +773,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                     }
                 } else if (this.channelId != 0) {
                     TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(this.channelId));
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                     if (ChatObject.canAddAdmins(chat)) {
                         builder.setTitle(LocaleController.getString("AppName", NUM));
                         builder.setMessage(LocaleController.getString("AddBotAsAdmin", NUM));
@@ -798,7 +799,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                     return;
                 }
             }
-            AlertDialog.Builder builder2 = new AlertDialog.Builder(getParentActivity());
+            AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
             builder2.setTitle(LocaleController.getString("AppName", NUM));
             String formatStringSimple = LocaleController.formatStringSimple(this.selectAlertString, UserObject.getUserName(tLRPC$User));
             if (tLRPC$User.bot || !this.needForwardCount) {

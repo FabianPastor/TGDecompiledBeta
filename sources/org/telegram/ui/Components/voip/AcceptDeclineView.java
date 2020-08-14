@@ -9,6 +9,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Layout;
 import android.text.StaticLayout;
@@ -25,6 +26,7 @@ import android.widget.Button;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.LocaleController;
 import org.telegram.ui.ActionBar.Theme;
 
 public class AcceptDeclineView extends View {
@@ -87,10 +89,13 @@ public class AcceptDeclineView extends View {
         TextPaint textPaint = new TextPaint(1);
         textPaint.setTextSize((float) AndroidUtilities.dp(11.0f));
         textPaint.setColor(-1);
+        String string = LocaleController.getString("AcceptCall", NUM);
+        String string2 = LocaleController.getString("DeclineCall", NUM);
+        String string3 = LocaleController.getString("RetryCall", NUM);
         TextPaint textPaint2 = textPaint;
-        this.acceptLayout = new StaticLayout("Accept", textPaint2, (int) textPaint.measureText("Accept"), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-        this.declineLayout = new StaticLayout("Decline", textPaint2, (int) textPaint.measureText("Decline"), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-        this.retryLayout = new StaticLayout("Retry", textPaint2, (int) textPaint.measureText("Retry"), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        this.acceptLayout = new StaticLayout(string, textPaint2, (int) textPaint.measureText(string), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        this.declineLayout = new StaticLayout(string2, textPaint2, (int) textPaint.measureText(string2), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+        this.retryLayout = new StaticLayout(string3, textPaint2, (int) textPaint.measureText(string3), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         this.callDrawable = ContextCompat.getDrawable(context, NUM).mutate();
         Drawable mutate = ContextCompat.getDrawable(context, NUM).mutate();
         this.cancelDrawable = mutate;
@@ -544,10 +549,14 @@ public class AcceptDeclineView extends View {
             }
             AccessibilityNodeInfo obtain2 = AccessibilityNodeInfo.obtain(this.hostView, i);
             obtain2.setPackageName(this.hostView.getContext().getPackageName());
-            obtain2.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_CLICK);
+            if (Build.VERSION.SDK_INT >= 21) {
+                obtain2.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_CLICK);
+            }
             obtain2.setText(getVirtualViewText(i));
             obtain2.setClassName(Button.class.getName());
-            obtain2.setImportantForAccessibility(true);
+            if (Build.VERSION.SDK_INT >= 24) {
+                obtain2.setImportantForAccessibility(true);
+            }
             obtain2.setVisibleToUser(true);
             obtain2.setClickable(true);
             obtain2.setEnabled(true);

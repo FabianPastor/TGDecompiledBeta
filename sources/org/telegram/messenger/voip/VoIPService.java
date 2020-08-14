@@ -8,6 +8,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,7 +17,6 @@ import android.os.SystemClock;
 import android.telecom.TelecomManager;
 import android.view.KeyEvent;
 import android.widget.Toast;
-import androidx.core.app.NotificationManagerCompat;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -180,13 +180,21 @@ public class VoIPService extends VoIPBaseService {
             this.isOutgoing = intent.getBooleanExtra("is_outgoing", false);
             this.videoCall = intent.getBooleanExtra("video_call", false);
             this.isVideoAvailable = intent.getBooleanExtra("can_video_call", false);
+            this.notificationsDisabled = intent.getBooleanExtra("notifications_disabled", false);
             this.user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(intExtra2));
             this.localSink = new ProxyVideoSink();
             this.remoteSink = new ProxyVideoSink();
+            try {
+                this.isHeadsetPlugged = ((AudioManager) getSystemService("audio")).isWiredHeadsetOn();
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
+            }
             if (this.videoCall) {
                 this.videoCapturer = NativeInstance.createVideoCapturer(this.localSink);
                 this.videoState = 2;
-                setAudioOutput(0);
+                if (!this.isBtHeadsetConnected && !this.isHeadsetPlugged) {
+                    setAudioOutput(0);
+                }
             }
             if (this.user == null) {
                 if (BuildVars.LOGS_ENABLED) {
@@ -226,13 +234,16 @@ public class VoIPService extends VoIPBaseService {
                 this.call = tLRPC$PhoneCall;
                 boolean z = tLRPC$PhoneCall != null && tLRPC$PhoneCall.video;
                 this.videoCall = z;
-                if (!z || (Build.VERSION.SDK_INT >= 23 && checkSelfPermission("android.permission.CAMERA") != 0)) {
+                if (z) {
+                    this.isVideoAvailable = true;
+                }
+                if (!this.videoCall || (Build.VERSION.SDK_INT >= 23 && checkSelfPermission("android.permission.CAMERA") != 0)) {
                     this.videoState = 0;
                 } else {
                     this.videoCapturer = NativeInstance.createVideoCapturer(this.localSink);
                     this.videoState = 2;
                 }
-                if (this.videoCall) {
+                if (this.videoCall && !this.isBtHeadsetConnected && !this.isHeadsetPlugged) {
                     setAudioOutput(0);
                 }
                 callIShouldHavePutIntoIntent = null;
@@ -607,24 +618,23 @@ public class VoIPService extends VoIPBaseService {
                 FileLog.d("starting ringing for call " + this.call.id);
             }
             dispatchStateChanged(15);
-            if (Build.VERSION.SDK_INT >= 21) {
+            if (this.notificationsDisabled || Build.VERSION.SDK_INT < 21) {
+                startRingtoneAndVibration(this.user.id);
+                if (BuildVars.LOGS_ENABLED) {
+                    FileLog.d("Starting incall activity for incoming call");
+                }
+                try {
+                    PendingIntent.getActivity(this, 12345, new Intent(this, LaunchActivity.class).setAction("voip"), 0).send();
+                } catch (Exception e) {
+                    if (BuildVars.LOGS_ENABLED) {
+                        FileLog.e("Error starting incall activity", e);
+                    }
+                }
+            } else {
                 TLRPC$User tLRPC$User = this.user;
                 showIncomingNotification(ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name), (CharSequence) null, this.user, this.call.video, 0);
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d("Showing incoming call notification");
-                    return;
-                }
-                return;
-            }
-            startRingtoneAndVibration(this.user.id);
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.d("Starting incall activity for incoming call");
-            }
-            try {
-                PendingIntent.getActivity(this, 12345, new Intent(this, LaunchActivity.class).setAction("voip"), 0).send();
-            } catch (Exception e) {
-                if (BuildVars.LOGS_ENABLED) {
-                    FileLog.e("Error starting incall activity", e);
                 }
             }
         }
@@ -1368,16 +1378,15 @@ public class VoIPService extends VoIPBaseService {
      */
     /* JADX WARNING: Exception block dominator not found, dom blocks: [] */
     /* JADX WARNING: Missing exception handler attribute for start block: B:25:0x009f */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x0107 A[Catch:{ Exception -> 0x02aa }] */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x0115 A[Catch:{ Exception -> 0x02aa }] */
-    /* JADX WARNING: Removed duplicated region for block: B:64:0x012f A[Catch:{ Exception -> 0x02aa }] */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x016b A[Catch:{ Exception -> 0x02aa }] */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x0179 A[Catch:{ Exception -> 0x02aa }, LOOP:2: B:69:0x0177->B:70:0x0179, LOOP_END] */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x01c0 A[Catch:{ Exception -> 0x02aa }] */
-    /* JADX WARNING: Removed duplicated region for block: B:86:0x027c A[Catch:{ Exception -> 0x02aa }] */
-    /* JADX WARNING: Removed duplicated region for block: B:87:0x027e A[Catch:{ Exception -> 0x02aa }] */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x0283 A[Catch:{ Exception -> 0x02aa }, LOOP:3: B:90:0x0283->B:92:0x028b, LOOP_START, PHI: r3 
-      PHI: (r3v10 int) = (r3v9 int), (r3v11 int) binds: [B:89:0x0281, B:92:0x028b] A[DONT_GENERATE, DONT_INLINE]] */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x0107 A[Catch:{ Exception -> 0x02c5 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x0115 A[Catch:{ Exception -> 0x02c5 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x012f A[Catch:{ Exception -> 0x02c5 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x016b A[Catch:{ Exception -> 0x02c5 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x0179 A[Catch:{ Exception -> 0x02c5 }, LOOP:2: B:69:0x0177->B:70:0x0179, LOOP_END] */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x01c0 A[Catch:{ Exception -> 0x02c5 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x0231 A[Catch:{ Exception -> 0x02c5 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x0233 A[Catch:{ Exception -> 0x02c5 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:94:0x029e A[Catch:{ Exception -> 0x02c5 }] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void initiateActualEncryptedCall() {
         /*
@@ -1391,59 +1400,59 @@ public class VoIPService extends VoIPBaseService {
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r3)
             r1.timeoutRunnable = r4
         L_0x0010:
-            boolean r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x02aa }
+            boolean r3 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x02c5 }
             if (r3 == 0) goto L_0x002a
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x02aa }
-            r3.<init>()     // Catch:{ Exception -> 0x02aa }
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x02c5 }
+            r3.<init>()     // Catch:{ Exception -> 0x02c5 }
             java.lang.String r5 = "InitCall: keyID="
-            r3.append(r5)     // Catch:{ Exception -> 0x02aa }
-            long r5 = r1.keyFingerprint     // Catch:{ Exception -> 0x02aa }
-            r3.append(r5)     // Catch:{ Exception -> 0x02aa }
-            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x02aa }
-            org.telegram.messenger.FileLog.d(r3)     // Catch:{ Exception -> 0x02aa }
+            r3.append(r5)     // Catch:{ Exception -> 0x02c5 }
+            long r5 = r1.keyFingerprint     // Catch:{ Exception -> 0x02c5 }
+            r3.append(r5)     // Catch:{ Exception -> 0x02c5 }
+            java.lang.String r3 = r3.toString()     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.messenger.FileLog.d(r3)     // Catch:{ Exception -> 0x02c5 }
         L_0x002a:
-            int r3 = r1.currentAccount     // Catch:{ Exception -> 0x02aa }
-            android.content.SharedPreferences r3 = org.telegram.messenger.MessagesController.getNotificationsSettings(r3)     // Catch:{ Exception -> 0x02aa }
-            java.util.Set r5 = r3.getStringSet(r0, r4)     // Catch:{ Exception -> 0x02aa }
+            int r3 = r1.currentAccount     // Catch:{ Exception -> 0x02c5 }
+            android.content.SharedPreferences r3 = org.telegram.messenger.MessagesController.getNotificationsSettings(r3)     // Catch:{ Exception -> 0x02c5 }
+            java.util.Set r5 = r3.getStringSet(r0, r4)     // Catch:{ Exception -> 0x02c5 }
             if (r5 == 0) goto L_0x003c
-            java.util.HashSet r6 = new java.util.HashSet     // Catch:{ Exception -> 0x02aa }
-            r6.<init>(r5)     // Catch:{ Exception -> 0x02aa }
+            java.util.HashSet r6 = new java.util.HashSet     // Catch:{ Exception -> 0x02c5 }
+            r6.<init>(r5)     // Catch:{ Exception -> 0x02c5 }
             goto L_0x0041
         L_0x003c:
-            java.util.HashSet r6 = new java.util.HashSet     // Catch:{ Exception -> 0x02aa }
-            r6.<init>()     // Catch:{ Exception -> 0x02aa }
+            java.util.HashSet r6 = new java.util.HashSet     // Catch:{ Exception -> 0x02c5 }
+            r6.<init>()     // Catch:{ Exception -> 0x02c5 }
         L_0x0041:
-            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x02aa }
-            r5.<init>()     // Catch:{ Exception -> 0x02aa }
-            org.telegram.tgnet.TLRPC$PhoneCall r7 = r1.call     // Catch:{ Exception -> 0x02aa }
-            long r7 = r7.id     // Catch:{ Exception -> 0x02aa }
-            r5.append(r7)     // Catch:{ Exception -> 0x02aa }
-            r5.append(r2)     // Catch:{ Exception -> 0x02aa }
-            org.telegram.tgnet.TLRPC$PhoneCall r7 = r1.call     // Catch:{ Exception -> 0x02aa }
-            long r7 = r7.access_hash     // Catch:{ Exception -> 0x02aa }
-            r5.append(r7)     // Catch:{ Exception -> 0x02aa }
-            r5.append(r2)     // Catch:{ Exception -> 0x02aa }
-            long r7 = java.lang.System.currentTimeMillis()     // Catch:{ Exception -> 0x02aa }
-            r5.append(r7)     // Catch:{ Exception -> 0x02aa }
-            java.lang.String r5 = r5.toString()     // Catch:{ Exception -> 0x02aa }
-            r6.add(r5)     // Catch:{ Exception -> 0x02aa }
+            java.lang.StringBuilder r5 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x02c5 }
+            r5.<init>()     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.tgnet.TLRPC$PhoneCall r7 = r1.call     // Catch:{ Exception -> 0x02c5 }
+            long r7 = r7.id     // Catch:{ Exception -> 0x02c5 }
+            r5.append(r7)     // Catch:{ Exception -> 0x02c5 }
+            r5.append(r2)     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.tgnet.TLRPC$PhoneCall r7 = r1.call     // Catch:{ Exception -> 0x02c5 }
+            long r7 = r7.access_hash     // Catch:{ Exception -> 0x02c5 }
+            r5.append(r7)     // Catch:{ Exception -> 0x02c5 }
+            r5.append(r2)     // Catch:{ Exception -> 0x02c5 }
+            long r7 = java.lang.System.currentTimeMillis()     // Catch:{ Exception -> 0x02c5 }
+            r5.append(r7)     // Catch:{ Exception -> 0x02c5 }
+            java.lang.String r5 = r5.toString()     // Catch:{ Exception -> 0x02c5 }
+            r6.add(r5)     // Catch:{ Exception -> 0x02c5 }
         L_0x0068:
-            int r5 = r6.size()     // Catch:{ Exception -> 0x02aa }
+            int r5 = r6.size()     // Catch:{ Exception -> 0x02c5 }
             r7 = 20
             r8 = 2
             if (r5 <= r7) goto L_0x00a9
             r9 = 9223372036854775807(0x7fffffffffffffff, double:NaN)
-            java.util.Iterator r5 = r6.iterator()     // Catch:{ Exception -> 0x02aa }
+            java.util.Iterator r5 = r6.iterator()     // Catch:{ Exception -> 0x02c5 }
             r7 = r4
         L_0x007b:
-            boolean r11 = r5.hasNext()     // Catch:{ Exception -> 0x02aa }
+            boolean r11 = r5.hasNext()     // Catch:{ Exception -> 0x02c5 }
             if (r11 == 0) goto L_0x00a3
-            java.lang.Object r11 = r5.next()     // Catch:{ Exception -> 0x02aa }
-            java.lang.String r11 = (java.lang.String) r11     // Catch:{ Exception -> 0x02aa }
-            java.lang.String[] r12 = r11.split(r2)     // Catch:{ Exception -> 0x02aa }
-            int r13 = r12.length     // Catch:{ Exception -> 0x02aa }
+            java.lang.Object r11 = r5.next()     // Catch:{ Exception -> 0x02c5 }
+            java.lang.String r11 = (java.lang.String) r11     // Catch:{ Exception -> 0x02c5 }
+            java.lang.String[] r12 = r11.split(r2)     // Catch:{ Exception -> 0x02c5 }
+            int r13 = r12.length     // Catch:{ Exception -> 0x02c5 }
             if (r13 >= r8) goto L_0x0092
-            r5.remove()     // Catch:{ Exception -> 0x02aa }
+            r5.remove()     // Catch:{ Exception -> 0x02c5 }
             goto L_0x007b
         L_0x0092:
             r12 = r12[r8]     // Catch:{ Exception -> 0x009f }
@@ -1454,17 +1463,17 @@ public class VoIPService extends VoIPBaseService {
             r9 = r12
             goto L_0x007b
         L_0x009f:
-            r5.remove()     // Catch:{ Exception -> 0x02aa }
+            r5.remove()     // Catch:{ Exception -> 0x02c5 }
             goto L_0x007b
         L_0x00a3:
             if (r7 == 0) goto L_0x0068
-            r6.remove(r7)     // Catch:{ Exception -> 0x02aa }
+            r6.remove(r7)     // Catch:{ Exception -> 0x02c5 }
             goto L_0x0068
         L_0x00a9:
-            android.content.SharedPreferences$Editor r2 = r3.edit()     // Catch:{ Exception -> 0x02aa }
-            android.content.SharedPreferences$Editor r0 = r2.putStringSet(r0, r6)     // Catch:{ Exception -> 0x02aa }
-            r0.commit()     // Catch:{ Exception -> 0x02aa }
-            int r0 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x02aa }
+            android.content.SharedPreferences$Editor r2 = r3.edit()     // Catch:{ Exception -> 0x02c5 }
+            android.content.SharedPreferences$Editor r0 = r2.putStringSet(r0, r6)     // Catch:{ Exception -> 0x02c5 }
+            r0.commit()     // Catch:{ Exception -> 0x02c5 }
+            int r0 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x02c5 }
             r2 = 16
             r3 = 0
             if (r0 < r2) goto L_0x00c6
@@ -1480,25 +1489,25 @@ public class VoIPService extends VoIPBaseService {
         L_0x00c7:
             r2 = 0
         L_0x00c8:
-            android.content.SharedPreferences r5 = org.telegram.messenger.MessagesController.getGlobalMainSettings()     // Catch:{ Exception -> 0x02aa }
-            int r6 = r1.currentAccount     // Catch:{ Exception -> 0x02aa }
-            org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r6)     // Catch:{ Exception -> 0x02aa }
-            int r7 = r6.callConnectTimeout     // Catch:{ Exception -> 0x02aa }
+            android.content.SharedPreferences r5 = org.telegram.messenger.MessagesController.getGlobalMainSettings()     // Catch:{ Exception -> 0x02c5 }
+            int r6 = r1.currentAccount     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.messenger.MessagesController r6 = org.telegram.messenger.MessagesController.getInstance(r6)     // Catch:{ Exception -> 0x02c5 }
+            int r7 = r6.callConnectTimeout     // Catch:{ Exception -> 0x02c5 }
             double r9 = (double) r7
             r11 = 4652007308841189376(0x408fNUM, double:1000.0)
             java.lang.Double.isNaN(r9)
             double r14 = r9 / r11
-            int r6 = r6.callPacketTimeout     // Catch:{ Exception -> 0x02aa }
+            int r6 = r6.callPacketTimeout     // Catch:{ Exception -> 0x02c5 }
             double r6 = (double) r6
             java.lang.Double.isNaN(r6)
             double r16 = r6 / r11
             java.lang.String r6 = "VoipDataSaving"
-            int r7 = org.telegram.ui.Components.voip.VoIPHelper.getDataSavingDefault()     // Catch:{ Exception -> 0x02aa }
-            int r6 = r5.getInt(r6, r7)     // Catch:{ Exception -> 0x02aa }
-            int r18 = r1.convertDataSavingMode(r6)     // Catch:{ Exception -> 0x02aa }
-            org.telegram.messenger.voip.Instance$ServerConfig r6 = org.telegram.messenger.voip.Instance.getGlobalServerConfig()     // Catch:{ Exception -> 0x02aa }
+            int r7 = org.telegram.ui.Components.voip.VoIPHelper.getDataSavingDefault()     // Catch:{ Exception -> 0x02c5 }
+            int r6 = r5.getInt(r6, r7)     // Catch:{ Exception -> 0x02c5 }
+            int r18 = r1.convertDataSavingMode(r6)     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.messenger.voip.Instance$ServerConfig r6 = org.telegram.messenger.voip.Instance.getGlobalServerConfig()     // Catch:{ Exception -> 0x02c5 }
             if (r0 == 0) goto L_0x0103
-            boolean r0 = r6.useSystemAec     // Catch:{ Exception -> 0x02aa }
+            boolean r0 = r6.useSystemAec     // Catch:{ Exception -> 0x02c5 }
             if (r0 != 0) goto L_0x0100
             goto L_0x0103
         L_0x0100:
@@ -1508,7 +1517,7 @@ public class VoIPService extends VoIPBaseService {
             r20 = 1
         L_0x0105:
             if (r2 == 0) goto L_0x010f
-            boolean r0 = r6.useSystemNs     // Catch:{ Exception -> 0x02aa }
+            boolean r0 = r6.useSystemNs     // Catch:{ Exception -> 0x02c5 }
             if (r0 != 0) goto L_0x010c
             goto L_0x010f
         L_0x010c:
@@ -1517,71 +1526,71 @@ public class VoIPService extends VoIPBaseService {
         L_0x010f:
             r21 = 1
         L_0x0111:
-            boolean r0 = org.telegram.messenger.BuildVars.DEBUG_VERSION     // Catch:{ Exception -> 0x02aa }
+            boolean r0 = org.telegram.messenger.BuildVars.DEBUG_VERSION     // Catch:{ Exception -> 0x02c5 }
             if (r0 == 0) goto L_0x012f
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x02aa }
-            r0.<init>()     // Catch:{ Exception -> 0x02aa }
+            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x02c5 }
+            r0.<init>()     // Catch:{ Exception -> 0x02c5 }
             java.lang.String r2 = "voip"
-            r0.append(r2)     // Catch:{ Exception -> 0x02aa }
-            org.telegram.tgnet.TLRPC$PhoneCall r2 = r1.call     // Catch:{ Exception -> 0x02aa }
-            long r9 = r2.id     // Catch:{ Exception -> 0x02aa }
-            r0.append(r9)     // Catch:{ Exception -> 0x02aa }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x02aa }
-            java.lang.String r0 = org.telegram.ui.Components.voip.VoIPHelper.getLogFilePath((java.lang.String) r0)     // Catch:{ Exception -> 0x02aa }
+            r0.append(r2)     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.tgnet.TLRPC$PhoneCall r2 = r1.call     // Catch:{ Exception -> 0x02c5 }
+            long r9 = r2.id     // Catch:{ Exception -> 0x02c5 }
+            r0.append(r9)     // Catch:{ Exception -> 0x02c5 }
+            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x02c5 }
+            java.lang.String r0 = org.telegram.ui.Components.voip.VoIPHelper.getLogFilePath((java.lang.String) r0)     // Catch:{ Exception -> 0x02c5 }
             goto L_0x0137
         L_0x012f:
-            org.telegram.tgnet.TLRPC$PhoneCall r0 = r1.call     // Catch:{ Exception -> 0x02aa }
-            long r9 = r0.id     // Catch:{ Exception -> 0x02aa }
-            java.lang.String r0 = org.telegram.ui.Components.voip.VoIPHelper.getLogFilePath((long) r9)     // Catch:{ Exception -> 0x02aa }
+            org.telegram.tgnet.TLRPC$PhoneCall r0 = r1.call     // Catch:{ Exception -> 0x02c5 }
+            long r9 = r0.id     // Catch:{ Exception -> 0x02c5 }
+            java.lang.String r0 = org.telegram.ui.Components.voip.VoIPHelper.getLogFilePath((long) r9)     // Catch:{ Exception -> 0x02c5 }
         L_0x0137:
             r24 = r0
-            org.telegram.messenger.voip.Instance$Config r26 = new org.telegram.messenger.voip.Instance$Config     // Catch:{ Exception -> 0x02aa }
-            org.telegram.tgnet.TLRPC$PhoneCall r0 = r1.call     // Catch:{ Exception -> 0x02aa }
-            boolean r0 = r0.p2p_allowed     // Catch:{ Exception -> 0x02aa }
+            org.telegram.messenger.voip.Instance$Config r26 = new org.telegram.messenger.voip.Instance$Config     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.tgnet.TLRPC$PhoneCall r0 = r1.call     // Catch:{ Exception -> 0x02c5 }
+            boolean r0 = r0.p2p_allowed     // Catch:{ Exception -> 0x02c5 }
             r22 = 1
             r23 = 0
-            org.telegram.tgnet.TLRPC$PhoneCall r2 = r1.call     // Catch:{ Exception -> 0x02aa }
-            org.telegram.tgnet.TLRPC$PhoneCallProtocol r2 = r2.protocol     // Catch:{ Exception -> 0x02aa }
-            int r2 = r2.max_layer     // Catch:{ Exception -> 0x02aa }
+            org.telegram.tgnet.TLRPC$PhoneCall r2 = r1.call     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.tgnet.TLRPC$PhoneCallProtocol r2 = r2.protocol     // Catch:{ Exception -> 0x02c5 }
+            int r2 = r2.max_layer     // Catch:{ Exception -> 0x02c5 }
             r13 = r26
             r19 = r0
             r25 = r2
-            r13.<init>(r14, r16, r18, r19, r20, r21, r22, r23, r24, r25)     // Catch:{ Exception -> 0x02aa }
-            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x02aa }
-            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x02aa }
-            java.io.File r2 = r2.getFilesDir()     // Catch:{ Exception -> 0x02aa }
+            r13.<init>(r14, r16, r18, r19, r20, r21, r22, r23, r24, r25)     // Catch:{ Exception -> 0x02c5 }
+            java.io.File r0 = new java.io.File     // Catch:{ Exception -> 0x02c5 }
+            android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x02c5 }
+            java.io.File r2 = r2.getFilesDir()     // Catch:{ Exception -> 0x02c5 }
             java.lang.String r6 = "voip_persistent_state.json"
-            r0.<init>(r2, r6)     // Catch:{ Exception -> 0x02aa }
-            java.lang.String r27 = r0.getAbsolutePath()     // Catch:{ Exception -> 0x02aa }
+            r0.<init>(r2, r6)     // Catch:{ Exception -> 0x02c5 }
+            java.lang.String r27 = r0.getAbsolutePath()     // Catch:{ Exception -> 0x02c5 }
             java.lang.String r0 = "dbg_force_tcp_in_calls"
-            boolean r0 = r5.getBoolean(r0, r3)     // Catch:{ Exception -> 0x02aa }
+            boolean r0 = r5.getBoolean(r0, r3)     // Catch:{ Exception -> 0x02c5 }
             if (r0 == 0) goto L_0x016c
             r8 = 3
         L_0x016c:
-            org.telegram.tgnet.TLRPC$PhoneCall r2 = r1.call     // Catch:{ Exception -> 0x02aa }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhoneConnection> r2 = r2.connections     // Catch:{ Exception -> 0x02aa }
-            int r2 = r2.size()     // Catch:{ Exception -> 0x02aa }
-            org.telegram.messenger.voip.Instance$Endpoint[] r6 = new org.telegram.messenger.voip.Instance.Endpoint[r2]     // Catch:{ Exception -> 0x02aa }
+            org.telegram.tgnet.TLRPC$PhoneCall r2 = r1.call     // Catch:{ Exception -> 0x02c5 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhoneConnection> r2 = r2.connections     // Catch:{ Exception -> 0x02c5 }
+            int r2 = r2.size()     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.messenger.voip.Instance$Endpoint[] r6 = new org.telegram.messenger.voip.Instance.Endpoint[r2]     // Catch:{ Exception -> 0x02c5 }
             r15 = 0
         L_0x0177:
             if (r15 >= r2) goto L_0x01bc
-            org.telegram.tgnet.TLRPC$PhoneCall r9 = r1.call     // Catch:{ Exception -> 0x02aa }
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhoneConnection> r9 = r9.connections     // Catch:{ Exception -> 0x02aa }
-            java.lang.Object r9 = r9.get(r15)     // Catch:{ Exception -> 0x02aa }
-            org.telegram.tgnet.TLRPC$PhoneConnection r9 = (org.telegram.tgnet.TLRPC$PhoneConnection) r9     // Catch:{ Exception -> 0x02aa }
-            org.telegram.messenger.voip.Instance$Endpoint r22 = new org.telegram.messenger.voip.Instance$Endpoint     // Catch:{ Exception -> 0x02aa }
-            boolean r10 = r9 instanceof org.telegram.tgnet.TLRPC$TL_phoneConnectionWebrtc     // Catch:{ Exception -> 0x02aa }
-            long r11 = r9.id     // Catch:{ Exception -> 0x02aa }
-            java.lang.String r13 = r9.ip     // Catch:{ Exception -> 0x02aa }
-            java.lang.String r14 = r9.ipv6     // Catch:{ Exception -> 0x02aa }
-            int r7 = r9.port     // Catch:{ Exception -> 0x02aa }
-            byte[] r4 = r9.peer_tag     // Catch:{ Exception -> 0x02aa }
-            boolean r3 = r9.turn     // Catch:{ Exception -> 0x02aa }
+            org.telegram.tgnet.TLRPC$PhoneCall r9 = r1.call     // Catch:{ Exception -> 0x02c5 }
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhoneConnection> r9 = r9.connections     // Catch:{ Exception -> 0x02c5 }
+            java.lang.Object r9 = r9.get(r15)     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.tgnet.TLRPC$PhoneConnection r9 = (org.telegram.tgnet.TLRPC$PhoneConnection) r9     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.messenger.voip.Instance$Endpoint r22 = new org.telegram.messenger.voip.Instance$Endpoint     // Catch:{ Exception -> 0x02c5 }
+            boolean r10 = r9 instanceof org.telegram.tgnet.TLRPC$TL_phoneConnectionWebrtc     // Catch:{ Exception -> 0x02c5 }
+            long r11 = r9.id     // Catch:{ Exception -> 0x02c5 }
+            java.lang.String r13 = r9.ip     // Catch:{ Exception -> 0x02c5 }
+            java.lang.String r14 = r9.ipv6     // Catch:{ Exception -> 0x02c5 }
+            int r7 = r9.port     // Catch:{ Exception -> 0x02c5 }
+            byte[] r4 = r9.peer_tag     // Catch:{ Exception -> 0x02c5 }
+            boolean r3 = r9.turn     // Catch:{ Exception -> 0x02c5 }
             r25 = r2
-            boolean r2 = r9.stun     // Catch:{ Exception -> 0x02aa }
+            boolean r2 = r9.stun     // Catch:{ Exception -> 0x02c5 }
             r28 = r5
-            java.lang.String r5 = r9.username     // Catch:{ Exception -> 0x02aa }
-            java.lang.String r9 = r9.password     // Catch:{ Exception -> 0x02aa }
+            java.lang.String r5 = r9.username     // Catch:{ Exception -> 0x02c5 }
+            java.lang.String r9 = r9.password     // Catch:{ Exception -> 0x02c5 }
             r21 = r9
             r9 = r22
             r29 = r15
@@ -1591,8 +1600,8 @@ public class VoIPService extends VoIPBaseService {
             r18 = r3
             r19 = r2
             r20 = r5
-            r9.<init>(r10, r11, r13, r14, r15, r16, r17, r18, r19, r20, r21)     // Catch:{ Exception -> 0x02aa }
-            r6[r29] = r22     // Catch:{ Exception -> 0x02aa }
+            r9.<init>(r10, r11, r13, r14, r15, r16, r17, r18, r19, r20, r21)     // Catch:{ Exception -> 0x02c5 }
+            r6[r29] = r22     // Catch:{ Exception -> 0x02c5 }
             int r15 = r29 + 1
             r2 = r25
             r5 = r28
@@ -1602,122 +1611,136 @@ public class VoIPService extends VoIPBaseService {
         L_0x01bc:
             r28 = r5
             if (r0 == 0) goto L_0x01c8
-            org.telegram.messenger.voip.-$$Lambda$VoIPService$sVXcu5HN_7izaRlZx3dMmxuDEFM r0 = new org.telegram.messenger.voip.-$$Lambda$VoIPService$sVXcu5HN_7izaRlZx3dMmxuDEFM     // Catch:{ Exception -> 0x02aa }
-            r0.<init>()     // Catch:{ Exception -> 0x02aa }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x02aa }
+            org.telegram.messenger.voip.-$$Lambda$VoIPService$sVXcu5HN_7izaRlZx3dMmxuDEFM r0 = new org.telegram.messenger.voip.-$$Lambda$VoIPService$sVXcu5HN_7izaRlZx3dMmxuDEFM     // Catch:{ Exception -> 0x02c5 }
+            r0.<init>()     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x02c5 }
         L_0x01c8:
             java.lang.String r0 = "proxy_enabled"
             r2 = r28
             r3 = 0
-            boolean r0 = r2.getBoolean(r0, r3)     // Catch:{ Exception -> 0x02aa }
+            boolean r0 = r2.getBoolean(r0, r3)     // Catch:{ Exception -> 0x02c5 }
             if (r0 == 0) goto L_0x0210
             java.lang.String r0 = "proxy_enabled_calls"
-            boolean r0 = r2.getBoolean(r0, r3)     // Catch:{ Exception -> 0x02aa }
+            boolean r0 = r2.getBoolean(r0, r3)     // Catch:{ Exception -> 0x02c5 }
             if (r0 == 0) goto L_0x0210
             java.lang.String r0 = "proxy_ip"
             r3 = 0
-            java.lang.String r0 = r2.getString(r0, r3)     // Catch:{ Exception -> 0x02aa }
+            java.lang.String r0 = r2.getString(r0, r3)     // Catch:{ Exception -> 0x02c5 }
             java.lang.String r4 = "proxy_secret"
-            java.lang.String r4 = r2.getString(r4, r3)     // Catch:{ Exception -> 0x02aa }
-            boolean r3 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x02aa }
+            java.lang.String r4 = r2.getString(r4, r3)     // Catch:{ Exception -> 0x02c5 }
+            boolean r3 = android.text.TextUtils.isEmpty(r0)     // Catch:{ Exception -> 0x02c5 }
             if (r3 != 0) goto L_0x0210
-            boolean r3 = android.text.TextUtils.isEmpty(r4)     // Catch:{ Exception -> 0x02aa }
+            boolean r3 = android.text.TextUtils.isEmpty(r4)     // Catch:{ Exception -> 0x02c5 }
             if (r3 == 0) goto L_0x0210
-            org.telegram.messenger.voip.Instance$Proxy r3 = new org.telegram.messenger.voip.Instance$Proxy     // Catch:{ Exception -> 0x02aa }
+            org.telegram.messenger.voip.Instance$Proxy r3 = new org.telegram.messenger.voip.Instance$Proxy     // Catch:{ Exception -> 0x02c5 }
             java.lang.String r4 = "proxy_port"
             r5 = 0
-            int r4 = r2.getInt(r4, r5)     // Catch:{ Exception -> 0x02aa }
+            int r4 = r2.getInt(r4, r5)     // Catch:{ Exception -> 0x02c5 }
             java.lang.String r5 = "proxy_user"
             r7 = 0
-            java.lang.String r5 = r2.getString(r5, r7)     // Catch:{ Exception -> 0x02aa }
+            java.lang.String r5 = r2.getString(r5, r7)     // Catch:{ Exception -> 0x02c5 }
             java.lang.String r8 = "proxy_pass"
-            java.lang.String r2 = r2.getString(r8, r7)     // Catch:{ Exception -> 0x02aa }
-            r3.<init>(r0, r4, r5, r2)     // Catch:{ Exception -> 0x02aa }
+            java.lang.String r2 = r2.getString(r8, r7)     // Catch:{ Exception -> 0x02c5 }
+            r3.<init>(r0, r4, r5, r2)     // Catch:{ Exception -> 0x02c5 }
             r29 = r3
             goto L_0x0213
         L_0x0210:
             r7 = 0
             r29 = r7
         L_0x0213:
-            org.telegram.messenger.voip.Instance$EncryptionKey r0 = new org.telegram.messenger.voip.Instance$EncryptionKey     // Catch:{ Exception -> 0x02aa }
-            byte[] r2 = r1.authKey     // Catch:{ Exception -> 0x02aa }
-            boolean r3 = r1.isOutgoing     // Catch:{ Exception -> 0x02aa }
-            r0.<init>(r2, r3)     // Catch:{ Exception -> 0x02aa }
-            org.telegram.tgnet.TLRPC$PhoneCall r2 = r1.call     // Catch:{ Exception -> 0x02aa }
-            org.telegram.tgnet.TLRPC$PhoneCallProtocol r2 = r2.protocol     // Catch:{ Exception -> 0x02aa }
-            java.util.ArrayList<java.lang.String> r2 = r2.library_versions     // Catch:{ Exception -> 0x02aa }
+            org.telegram.messenger.voip.Instance$EncryptionKey r0 = new org.telegram.messenger.voip.Instance$EncryptionKey     // Catch:{ Exception -> 0x02c5 }
+            byte[] r2 = r1.authKey     // Catch:{ Exception -> 0x02c5 }
+            boolean r3 = r1.isOutgoing     // Catch:{ Exception -> 0x02c5 }
+            r0.<init>(r2, r3)     // Catch:{ Exception -> 0x02c5 }
+            java.lang.String r2 = "2.7.7"
+            org.telegram.tgnet.TLRPC$PhoneCall r3 = r1.call     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.tgnet.TLRPC$PhoneCallProtocol r3 = r3.protocol     // Catch:{ Exception -> 0x02c5 }
+            java.util.ArrayList<java.lang.String> r3 = r3.library_versions     // Catch:{ Exception -> 0x02c5 }
+            r4 = 0
+            java.lang.Object r3 = r3.get(r4)     // Catch:{ Exception -> 0x02c5 }
+            java.lang.String r3 = (java.lang.String) r3     // Catch:{ Exception -> 0x02c5 }
+            int r2 = r2.compareTo(r3)     // Catch:{ Exception -> 0x02c5 }
+            if (r2 > 0) goto L_0x0233
+            r7 = 1
+            goto L_0x0234
+        L_0x0233:
+            r7 = 0
+        L_0x0234:
+            long r2 = r1.videoCapturer     // Catch:{ Exception -> 0x02c5 }
+            r4 = 0
+            int r8 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
+            if (r8 == 0) goto L_0x0248
+            if (r7 != 0) goto L_0x0248
+            long r2 = r1.videoCapturer     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.messenger.voip.NativeInstance.destroyVideoCapturer(r2)     // Catch:{ Exception -> 0x02c5 }
+            r1.videoCapturer = r4     // Catch:{ Exception -> 0x02c5 }
+            r2 = 0
+            r1.videoState = r2     // Catch:{ Exception -> 0x02c5 }
+        L_0x0248:
+            org.telegram.tgnet.TLRPC$PhoneCall r2 = r1.call     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.tgnet.TLRPC$PhoneCallProtocol r2 = r2.protocol     // Catch:{ Exception -> 0x02c5 }
+            java.util.ArrayList<java.lang.String> r2 = r2.library_versions     // Catch:{ Exception -> 0x02c5 }
             r3 = 0
-            java.lang.Object r2 = r2.get(r3)     // Catch:{ Exception -> 0x02aa }
+            java.lang.Object r2 = r2.get(r3)     // Catch:{ Exception -> 0x02c5 }
             r25 = r2
-            java.lang.String r25 = (java.lang.String) r25     // Catch:{ Exception -> 0x02aa }
-            int r30 = r35.getNetworkType()     // Catch:{ Exception -> 0x02aa }
-            org.telegram.messenger.voip.VoIPService$ProxyVideoSink r2 = r1.remoteSink     // Catch:{ Exception -> 0x02aa }
-            long r3 = r1.videoCapturer     // Catch:{ Exception -> 0x02aa }
+            java.lang.String r25 = (java.lang.String) r25     // Catch:{ Exception -> 0x02c5 }
+            int r30 = r35.getNetworkType()     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.messenger.voip.VoIPService$ProxyVideoSink r2 = r1.remoteSink     // Catch:{ Exception -> 0x02c5 }
+            long r8 = r1.videoCapturer     // Catch:{ Exception -> 0x02c5 }
             r28 = r6
             r31 = r0
             r32 = r2
-            r33 = r3
-            org.telegram.messenger.voip.NativeInstance r0 = org.telegram.messenger.voip.Instance.makeInstance(r25, r26, r27, r28, r29, r30, r31, r32, r33)     // Catch:{ Exception -> 0x02aa }
-            r1.tgVoip = r0     // Catch:{ Exception -> 0x02aa }
-            org.telegram.messenger.voip.-$$Lambda$VYM9A__n3J9Cn9HYgpkPNOXrH-Q r2 = new org.telegram.messenger.voip.-$$Lambda$VYM9A__n3J9Cn9HYgpkPNOXrH-Q     // Catch:{ Exception -> 0x02aa }
-            r2.<init>()     // Catch:{ Exception -> 0x02aa }
-            r0.setOnStateUpdatedListener(r2)     // Catch:{ Exception -> 0x02aa }
-            org.telegram.messenger.voip.NativeInstance r0 = r1.tgVoip     // Catch:{ Exception -> 0x02aa }
-            org.telegram.messenger.voip.-$$Lambda$I790xfnJrjgXe4qL58YKIsOEJRg r2 = new org.telegram.messenger.voip.-$$Lambda$I790xfnJrjgXe4qL58YKIsOEJRg     // Catch:{ Exception -> 0x02aa }
-            r2.<init>()     // Catch:{ Exception -> 0x02aa }
-            r0.setOnSignalBarsUpdatedListener(r2)     // Catch:{ Exception -> 0x02aa }
-            org.telegram.messenger.voip.NativeInstance r0 = r1.tgVoip     // Catch:{ Exception -> 0x02aa }
-            org.telegram.messenger.voip.-$$Lambda$wt73IOwhdKwC4mWgAzzxt6-zz2U r2 = new org.telegram.messenger.voip.-$$Lambda$wt73IOwhdKwC4mWgAzzxt6-zz2U     // Catch:{ Exception -> 0x02aa }
-            r2.<init>()     // Catch:{ Exception -> 0x02aa }
-            r0.setOnSignalDataListener(r2)     // Catch:{ Exception -> 0x02aa }
-            org.telegram.messenger.voip.NativeInstance r0 = r1.tgVoip     // Catch:{ Exception -> 0x02aa }
-            org.telegram.messenger.voip.-$$Lambda$5iIUXC5lpoSVo4TbX-mmCX7uOGA r2 = new org.telegram.messenger.voip.-$$Lambda$5iIUXC5lpoSVo4TbX-mmCX7uOGA     // Catch:{ Exception -> 0x02aa }
-            r2.<init>()     // Catch:{ Exception -> 0x02aa }
-            r0.setOnRemoteMediaStateUpdatedListener(r2)     // Catch:{ Exception -> 0x02aa }
-            java.lang.String r0 = "2.7.7"
-            org.telegram.tgnet.TLRPC$PhoneCall r2 = r1.call     // Catch:{ Exception -> 0x02aa }
-            org.telegram.tgnet.TLRPC$PhoneCallProtocol r2 = r2.protocol     // Catch:{ Exception -> 0x02aa }
-            java.util.ArrayList<java.lang.String> r2 = r2.library_versions     // Catch:{ Exception -> 0x02aa }
-            r3 = 0
-            java.lang.Object r2 = r2.get(r3)     // Catch:{ Exception -> 0x02aa }
-            java.lang.String r2 = (java.lang.String) r2     // Catch:{ Exception -> 0x02aa }
-            int r0 = r0.compareTo(r2)     // Catch:{ Exception -> 0x02aa }
-            if (r0 > 0) goto L_0x027e
-            r7 = 1
-            goto L_0x027f
-        L_0x027e:
-            r7 = 0
-        L_0x027f:
-            boolean r0 = r1.isVideoAvailable     // Catch:{ Exception -> 0x02aa }
-            if (r7 == r0) goto L_0x029b
-        L_0x0283:
-            java.util.ArrayList<org.telegram.messenger.voip.VoIPBaseService$StateListener> r0 = r1.stateListeners     // Catch:{ Exception -> 0x02aa }
-            int r0 = r0.size()     // Catch:{ Exception -> 0x02aa }
-            if (r3 >= r0) goto L_0x029b
-            java.util.ArrayList<org.telegram.messenger.voip.VoIPBaseService$StateListener> r0 = r1.stateListeners     // Catch:{ Exception -> 0x02aa }
-            java.lang.Object r0 = r0.get(r3)     // Catch:{ Exception -> 0x02aa }
-            org.telegram.messenger.voip.VoIPBaseService$StateListener r0 = (org.telegram.messenger.voip.VoIPBaseService.StateListener) r0     // Catch:{ Exception -> 0x02aa }
-            boolean r2 = r1.isVideoAvailable     // Catch:{ Exception -> 0x02aa }
-            r0.onVideoAvailableChange(r2)     // Catch:{ Exception -> 0x02aa }
+            r33 = r8
+            org.telegram.messenger.voip.NativeInstance r0 = org.telegram.messenger.voip.Instance.makeInstance(r25, r26, r27, r28, r29, r30, r31, r32, r33)     // Catch:{ Exception -> 0x02c5 }
+            r1.tgVoip = r0     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.messenger.voip.-$$Lambda$VYM9A__n3J9Cn9HYgpkPNOXrH-Q r2 = new org.telegram.messenger.voip.-$$Lambda$VYM9A__n3J9Cn9HYgpkPNOXrH-Q     // Catch:{ Exception -> 0x02c5 }
+            r2.<init>()     // Catch:{ Exception -> 0x02c5 }
+            r0.setOnStateUpdatedListener(r2)     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.messenger.voip.NativeInstance r0 = r1.tgVoip     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.messenger.voip.-$$Lambda$I790xfnJrjgXe4qL58YKIsOEJRg r2 = new org.telegram.messenger.voip.-$$Lambda$I790xfnJrjgXe4qL58YKIsOEJRg     // Catch:{ Exception -> 0x02c5 }
+            r2.<init>()     // Catch:{ Exception -> 0x02c5 }
+            r0.setOnSignalBarsUpdatedListener(r2)     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.messenger.voip.NativeInstance r0 = r1.tgVoip     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.messenger.voip.-$$Lambda$wt73IOwhdKwC4mWgAzzxt6-zz2U r2 = new org.telegram.messenger.voip.-$$Lambda$wt73IOwhdKwC4mWgAzzxt6-zz2U     // Catch:{ Exception -> 0x02c5 }
+            r2.<init>()     // Catch:{ Exception -> 0x02c5 }
+            r0.setOnSignalDataListener(r2)     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.messenger.voip.NativeInstance r0 = r1.tgVoip     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.messenger.voip.-$$Lambda$5iIUXC5lpoSVo4TbX-mmCX7uOGA r2 = new org.telegram.messenger.voip.-$$Lambda$5iIUXC5lpoSVo4TbX-mmCX7uOGA     // Catch:{ Exception -> 0x02c5 }
+            r2.<init>()     // Catch:{ Exception -> 0x02c5 }
+            r0.setOnRemoteMediaStateUpdatedListener(r2)     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.messenger.voip.NativeInstance r0 = r1.tgVoip     // Catch:{ Exception -> 0x02c5 }
+            boolean r2 = r1.micMute     // Catch:{ Exception -> 0x02c5 }
+            r0.setMuteMicrophone(r2)     // Catch:{ Exception -> 0x02c5 }
+            boolean r0 = r1.isVideoAvailable     // Catch:{ Exception -> 0x02c5 }
+            if (r7 == r0) goto L_0x02b8
+            r1.isVideoAvailable = r7     // Catch:{ Exception -> 0x02c5 }
+        L_0x02a0:
+            java.util.ArrayList<org.telegram.messenger.voip.VoIPBaseService$StateListener> r0 = r1.stateListeners     // Catch:{ Exception -> 0x02c5 }
+            int r0 = r0.size()     // Catch:{ Exception -> 0x02c5 }
+            if (r3 >= r0) goto L_0x02b8
+            java.util.ArrayList<org.telegram.messenger.voip.VoIPBaseService$StateListener> r0 = r1.stateListeners     // Catch:{ Exception -> 0x02c5 }
+            java.lang.Object r0 = r0.get(r3)     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.messenger.voip.VoIPBaseService$StateListener r0 = (org.telegram.messenger.voip.VoIPBaseService.StateListener) r0     // Catch:{ Exception -> 0x02c5 }
+            boolean r2 = r1.isVideoAvailable     // Catch:{ Exception -> 0x02c5 }
+            r0.onVideoAvailableChange(r2)     // Catch:{ Exception -> 0x02c5 }
             int r3 = r3 + 1
-            goto L_0x0283
-        L_0x029b:
-            r2 = 0
-            r1.videoCapturer = r2     // Catch:{ Exception -> 0x02aa }
-            org.telegram.messenger.voip.VoIPService$2 r0 = new org.telegram.messenger.voip.VoIPService$2     // Catch:{ Exception -> 0x02aa }
-            r0.<init>()     // Catch:{ Exception -> 0x02aa }
+            goto L_0x02a0
+        L_0x02b8:
+            r1.videoCapturer = r4     // Catch:{ Exception -> 0x02c5 }
+            org.telegram.messenger.voip.VoIPService$2 r0 = new org.telegram.messenger.voip.VoIPService$2     // Catch:{ Exception -> 0x02c5 }
+            r0.<init>()     // Catch:{ Exception -> 0x02c5 }
             r2 = 5000(0x1388, double:2.4703E-320)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r2)     // Catch:{ Exception -> 0x02aa }
-            goto L_0x02b7
-        L_0x02aa:
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r2)     // Catch:{ Exception -> 0x02c5 }
+            goto L_0x02d2
+        L_0x02c5:
             r0 = move-exception
             boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r2 == 0) goto L_0x02b4
+            if (r2 == 0) goto L_0x02cf
             java.lang.String r2 = "error starting call"
             org.telegram.messenger.FileLog.e(r2, r0)
-        L_0x02b4:
+        L_0x02cf:
             r35.callFailed()
-        L_0x02b7:
+        L_0x02d2:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.voip.VoIPService.initiateActualEncryptedCall():void");
@@ -1818,40 +1841,6 @@ public class VoIPService extends VoIPBaseService {
         return this.isVideoAvailable;
     }
 
-    public void onUIForegroundStateChanged(boolean z) {
-        if (Build.VERSION.SDK_INT >= 21 || this.currentState != 15) {
-            return;
-        }
-        if (z) {
-            stopForeground(true);
-        } else if (((KeyguardManager) getSystemService("keyguard")).inKeyguardRestrictedInputMode()) {
-            AndroidUtilities.runOnUIThread(new Runnable() {
-                public final void run() {
-                    VoIPService.this.lambda$onUIForegroundStateChanged$24$VoIPService();
-                }
-            }, 500);
-        } else if (NotificationManagerCompat.from(this).areNotificationsEnabled()) {
-            TLRPC$User tLRPC$User = this.user;
-            showIncomingNotification(ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name), (CharSequence) null, this.user, this.call.video, 0);
-        } else {
-            declineIncomingCall(4, (Runnable) null);
-        }
-    }
-
-    public /* synthetic */ void lambda$onUIForegroundStateChanged$24$VoIPService() {
-        try {
-            PendingIntent.getActivity(this, 0, new Intent(this, LaunchActivity.class).setAction("voip"), 0).send();
-        } catch (PendingIntent.CanceledException e) {
-            if (BuildVars.LOGS_ENABLED) {
-                FileLog.e("error restarting activity", e);
-            }
-            declineIncomingCall(4, (Runnable) null);
-        }
-        if (Build.VERSION.SDK_INT >= 26) {
-            showNotification();
-        }
-    }
-
     /* access modifiers changed from: package-private */
     public void onMediaButtonEvent(KeyEvent keyEvent) {
         if ((keyEvent.getKeyCode() != 79 && keyEvent.getKeyCode() != 127 && keyEvent.getKeyCode() != 85) || keyEvent.getAction() != 1) {
@@ -1909,9 +1898,9 @@ public class VoIPService extends VoIPBaseService {
             this.systemCallConnection = callConnection;
             callConnection.setInitializing();
             if (this.isOutgoing) {
-                $$Lambda$VoIPService$VIel8pKEtyNe7nVC_u4A7NR3AE r0 = new Runnable() {
+                $$Lambda$VoIPService$AINxdSlDr9GfLD6rBQtApg5v_Yc r0 = new Runnable() {
                     public final void run() {
-                        VoIPService.this.lambda$getConnectionAndStartCall$25$VoIPService();
+                        VoIPService.this.lambda$getConnectionAndStartCall$24$VoIPService();
                     }
                 };
                 this.delayedStartOutgoingCall = r0;
@@ -1926,7 +1915,7 @@ public class VoIPService extends VoIPBaseService {
         return this.systemCallConnection;
     }
 
-    public /* synthetic */ void lambda$getConnectionAndStartCall$25$VoIPService() {
+    public /* synthetic */ void lambda$getConnectionAndStartCall$24$VoIPService() {
         this.delayedStartOutgoingCall = null;
         startOutgoingCall();
     }

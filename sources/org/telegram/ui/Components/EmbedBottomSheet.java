@@ -487,7 +487,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r6)
             int r8 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r13.setPadding(r3, r5, r8, r5)
-            r3 = 2131624815(0x7f0e036f, float:1.887682E38)
+            r3 = 2131624816(0x7f0e0370, float:1.8876822E38)
             java.lang.String r8 = "Close"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r8, r3)
             java.lang.String r3 = r3.toUpperCase()
@@ -514,7 +514,7 @@ public class EmbedBottomSheet extends BottomSheet {
             android.widget.ImageView$ScaleType r8 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r8)
             android.widget.ImageView r2 = r0.pipButton
-            r8 = 2131166008(0x7var_, float:1.794625E38)
+            r8 = 2131166009(0x7var_, float:1.7946251E38)
             r2.setImageResource(r8)
             android.widget.ImageView r2 = r0.pipButton
             r8 = 2131624005(0x7f0e0045, float:1.8875177E38)
@@ -557,9 +557,9 @@ public class EmbedBottomSheet extends BottomSheet {
             r8.<init>(r1)
             android.widget.ImageView$ScaleType r10 = android.widget.ImageView.ScaleType.CENTER
             r8.setScaleType(r10)
-            r10 = 2131166000(0x7var_, float:1.7946233E38)
+            r10 = 2131166001(0x7var_, float:1.7946235E38)
             r8.setImageResource(r10)
-            r10 = 2131624880(0x7f0e03b0, float:1.8876952E38)
+            r10 = 2131624881(0x7f0e03b1, float:1.8876954E38)
             java.lang.String r13 = "CopyLink"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r13, r10)
             r8.setContentDescription(r10)
@@ -601,7 +601,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r10 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r7.setPadding(r8, r5, r10, r5)
             android.widget.TextView r7 = r0.copyTextButton
-            r8 = 2131624878(0x7f0e03ae, float:1.8876948E38)
+            r8 = 2131624879(0x7f0e03af, float:1.887695E38)
             java.lang.String r10 = "Copy"
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
             java.lang.String r8 = r8.toUpperCase()
@@ -633,7 +633,7 @@ public class EmbedBottomSheet extends BottomSheet {
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r6)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r2.setPadding(r1, r5, r6, r5)
-            r1 = 2131626154(0x7f0e08aa, float:1.8879536E38)
+            r1 = 2131626156(0x7f0e08ac, float:1.887954E38)
             java.lang.String r6 = "OpenInBrowser"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r6, r1)
             java.lang.String r1 = r1.toUpperCase()
@@ -784,7 +784,7 @@ public class EmbedBottomSheet extends BottomSheet {
         if (Build.VERSION.SDK_INT < 23 || Settings.canDrawOverlays(activity)) {
             return true;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(this.parentActivity);
+        AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.parentActivity);
         builder.setTitle(LocaleController.getString("AppName", NUM));
         builder.setMessage(LocaleController.getString("PermissionDrawAboveOtherApps", NUM));
         builder.setPositiveButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {

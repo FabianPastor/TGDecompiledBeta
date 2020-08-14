@@ -282,7 +282,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                     if (getParentActivity() != null) {
                         int deleteAccountTTL = getContactsController().getDeleteAccountTTL();
                         int i4 = deleteAccountTTL <= 31 ? 0 : deleteAccountTTL <= 93 ? 1 : deleteAccountTTL <= 182 ? 2 : 3;
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                         builder.setTitle(LocaleController.getString("DeleteAccountTitle", NUM));
                         String[] strArr = {LocaleController.formatPluralString("Months", 1), LocaleController.formatPluralString("Months", 3), LocaleController.formatPluralString("Months", 6), LocaleController.formatPluralString("Years", 1)};
                         LinearLayout linearLayout = new LinearLayout(getParentActivity());
@@ -364,7 +364,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                     }
                 } else if (i2 == this.contactsDeleteRow) {
                     if (getParentActivity() != null) {
-                        AlertDialog.Builder builder2 = new AlertDialog.Builder(getParentActivity());
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
                         builder2.setTitle(LocaleController.getString("SyncContactsDeleteTitle", NUM));
                         builder2.setMessage(AndroidUtilities.replaceTags(LocaleController.getString("SyncContactsDeleteText", NUM)));
                         builder2.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -384,7 +384,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                     TextCheckCell textCheckCell2 = (TextCheckCell) view2;
                     boolean z2 = this.newSuggest;
                     if (z2) {
-                        AlertDialog.Builder builder3 = new AlertDialog.Builder(getParentActivity());
+                        AlertDialog.Builder builder3 = new AlertDialog.Builder((Context) getParentActivity());
                         builder3.setTitle(LocaleController.getString("SuggestContactsTitle", NUM));
                         builder3.setMessage(LocaleController.getString("SuggestContactsAlert", NUM));
                         builder3.setPositiveButton(LocaleController.getString("MuteDisable", NUM), new DialogInterface.OnClickListener(textCheckCell2) {
@@ -428,7 +428,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
                         }
                     }, false);
                 } else if (i2 == this.paymentsClearRow) {
-                    AlertDialog.Builder builder4 = new AlertDialog.Builder(getParentActivity());
+                    AlertDialog.Builder builder4 = new AlertDialog.Builder((Context) getParentActivity());
                     builder4.setTitle(LocaleController.getString("PrivacyPaymentsClearAlertTitle", NUM));
                     builder4.setMessage(LocaleController.getString("PrivacyPaymentsClearAlertText", NUM));
                     LinearLayout linearLayout2 = new LinearLayout(getParentActivity());
@@ -623,7 +623,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("PrivacyPaymentsClearAlertTitle", NUM));
         builder.setMessage(LocaleController.getString("PrivacyPaymentsClearAlert", NUM));
         builder.setPositiveButton(LocaleController.getString("ClearButton", NUM), new DialogInterface.OnClickListener() {

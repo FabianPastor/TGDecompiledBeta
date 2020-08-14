@@ -19,8 +19,8 @@ import org.webrtc.SurfaceTextureHelper;
 @TargetApi(18)
 public class VideoCameraCapturer {
     private static final int CAPTURE_FPS = 30;
-    private static final int CAPTURE_HEIGHT = 720;
-    private static final int CAPTURE_WIDTH = 1280;
+    private static final int CAPTURE_HEIGHT = (Build.VERSION.SDK_INT <= 19 ? 320 : 720);
+    private static final int CAPTURE_WIDTH = (Build.VERSION.SDK_INT <= 19 ? 480 : 1280);
     public static EglBase eglBase;
     private static VideoCameraCapturer instance;
     private Handler handler;
@@ -124,7 +124,7 @@ public class VideoCameraCapturer {
     public /* synthetic */ void lambda$null$1$VideoCameraCapturer() {
         this.nativeCapturerObserver = nativeGetJavaVideoCapturerObserver(this.nativePtr);
         this.videoCapturer.initialize(this.videoCapturerSurfaceTextureHelper, ApplicationLoader.applicationContext, this.nativeCapturerObserver);
-        this.videoCapturer.startCapture(1280, 720, 30);
+        this.videoCapturer.startCapture(CAPTURE_WIDTH, CAPTURE_HEIGHT, 30);
     }
 
     public /* synthetic */ void lambda$null$2$VideoCameraCapturer(String str) {
@@ -192,7 +192,7 @@ public class VideoCameraCapturer {
         CameraVideoCapturer cameraVideoCapturer = this.videoCapturer;
         if (cameraVideoCapturer != null) {
             if (i == 2) {
-                cameraVideoCapturer.startCapture(1280, 720, 30);
+                cameraVideoCapturer.startCapture(CAPTURE_WIDTH, CAPTURE_HEIGHT, 30);
                 return;
             }
             try {

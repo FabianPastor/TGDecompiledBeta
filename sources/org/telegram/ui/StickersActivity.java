@@ -296,7 +296,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                 presentFragment(new StickersActivity(1));
             } else if (i == this.suggestRow) {
                 if (getParentActivity() != null) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                     builder.setTitle(LocaleController.getString("SuggestStickers", NUM));
                     String[] strArr = {LocaleController.getString("SuggestStickersAll", NUM), LocaleController.getString("SuggestStickersInstalled", NUM), LocaleController.getString("SuggestStickersNone", NUM)};
                     LinearLayout linearLayout = new LinearLayout(getParentActivity());
@@ -613,7 +613,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                     return;
                 }
                 if (size2 != 1) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(StickersActivity.this.getParentActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) StickersActivity.this.getParentActivity());
                     if (i == 1) {
                         builder.setTitle(LocaleController.formatString("DeleteStickerSetsAlertTitle", NUM, LocaleController.formatPluralString("StickerSets", size2)));
                         builder.setMessage(LocaleController.formatString("DeleteStickersAlertMessage", NUM, Integer.valueOf(size2)));
@@ -818,7 +818,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             int[] iArr;
             int[] iArr2;
             TLRPC$TL_messages_stickerSet stickersSet = ((StickerSetCell) view.getParent()).getStickersSet();
-            AlertDialog.Builder builder = new AlertDialog.Builder(StickersActivity.this.getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) StickersActivity.this.getParentActivity());
             builder.setTitle(stickersSet.set.title);
             if (stickersSet.set.official) {
                 iArr2 = new int[]{0, 4};

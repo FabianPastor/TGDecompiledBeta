@@ -51,6 +51,10 @@ public class VoIPTextureView extends FrameLayout {
             setOutlineProvider(new ViewOutlineProvider() {
                 @TargetApi(21)
                 public void getOutline(View view, Outline outline) {
+                    if (VoIPTextureView.this.roundRadius < 1.0f) {
+                        outline.setRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+                        return;
+                    }
                     outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), VoIPTextureView.this.roundRadius);
                 }
             });

@@ -1477,7 +1477,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                 if (getParentActivity().getPackageManager().hasSystemFeature("android.hardware.location.gps")) {
                     try {
                         if (!((LocationManager) ApplicationLoader.applicationContext.getSystemService("location")).isProviderEnabled("gps")) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                             builder.setTitle(LocaleController.getString("GpsDisabledAlertTitle", NUM));
                             builder.setMessage(LocaleController.getString("GpsDisabledAlertText", NUM));
                             builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", NUM), new DialogInterface.OnClickListener() {
@@ -1574,7 +1574,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
 
     private void showPermissionAlert(boolean z) {
         if (getParentActivity() != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setTitle(LocaleController.getString("AppName", NUM));
             if (z) {
                 builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", NUM));

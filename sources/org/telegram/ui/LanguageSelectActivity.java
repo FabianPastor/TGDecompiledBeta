@@ -167,7 +167,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         if (getParentActivity() == null || this.parentLayout == null || !(view instanceof LanguageCell) || (currentLocale = ((LanguageCell) view).getCurrentLocale()) == null || currentLocale.pathToFile == null || (currentLocale.isRemote() && currentLocale.serverIndex != Integer.MAX_VALUE)) {
             return false;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("DeleteLocalizationTitle", NUM));
         builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("DeleteLocalizationText", NUM, currentLocale.name)));
         builder.setPositiveButton(LocaleController.getString("Delete", NUM), new DialogInterface.OnClickListener(currentLocale) {
@@ -452,13 +452,13 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 int r0 = r0.size()
                 if (r8 != r0) goto L_0x0037
                 android.content.Context r8 = r6.mContext
-                r0 = 2131165435(0x7var_fb, float:1.7945087E38)
+                r0 = 2131165436(0x7var_fc, float:1.794509E38)
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r0, (java.lang.String) r1)
                 r7.setBackgroundDrawable(r8)
                 goto L_0x0108
             L_0x0037:
                 android.content.Context r8 = r6.mContext
-                r0 = 2131165436(0x7var_fc, float:1.794509E38)
+                r0 = 2131165437(0x7var_fd, float:1.7945091E38)
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r0, (java.lang.String) r1)
                 r7.setBackgroundDrawable(r8)
                 goto L_0x0108
@@ -531,7 +531,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.lang.Object[] r3 = new java.lang.Object[r3]
                 java.lang.String r4 = r0.name
                 r3[r2] = r4
-                r4 = 2131625639(0x7f0e06a7, float:1.8878492E38)
+                r4 = 2131625641(0x7f0e06a9, float:1.8878496E38)
                 java.lang.String r5 = "LanguageCustom"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
                 r3[r1] = r4

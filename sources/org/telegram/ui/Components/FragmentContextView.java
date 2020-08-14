@@ -71,6 +71,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private ImageView playButton;
     private ImageView playbackSpeedButton;
     private View selector;
+    private boolean supportsCalls;
     private TextView titleTextView;
     private float topPadding;
     private boolean visible;
@@ -90,6 +91,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         View view2 = view;
         boolean z2 = z;
         this.currentStyle = -1;
+        this.supportsCalls = true;
         this.lastLocationSharingCount = -1;
         this.checkLocationRunnable = new Runnable() {
             public void run() {
@@ -196,7 +198,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
 
     public /* synthetic */ void lambda$new$3$FragmentContextView(View view) {
         if (this.currentStyle == 2) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this.fragment.getParentActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.fragment.getParentActivity());
             builder.setTitle(LocaleController.getString("StopLiveLocationAlertToTitle", NUM));
             BaseFragment baseFragment = this.fragment;
             if (baseFragment instanceof DialogsActivity) {
@@ -311,6 +313,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 }));
             }
         }
+    }
+
+    public void setSupportsCalls(boolean z) {
+        this.supportsCalls = z;
     }
 
     public void setDelegate(FragmentContextViewDelegate fragmentContextViewDelegate) {
@@ -742,7 +748,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         }
         if (playingMessageObject == null || playingMessageObject.getId() == 0 || playingMessageObject.isVideo()) {
             this.lastMessageObject = null;
-            if ((VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().getCallState() == 15) ? false : true) {
+            if ((!this.supportsCalls || VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().getCallState() == 15) ? false : true) {
                 checkCall(false);
             } else if (this.visible) {
                 this.visible = false;
@@ -879,7 +885,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         if (!z && fragmentView != null && (fragmentView.getParent() == null || ((View) fragmentView.getParent()).getVisibility() != 0)) {
             z = true;
         }
-        if ((VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().getCallState() == 15) ? false : true) {
+        if ((!this.supportsCalls || VoIPService.getSharedInstance() == null || VoIPService.getSharedInstance().getCallState() == 15) ? false : true) {
             updateStyle(1);
             if (z && this.topPadding == 0.0f) {
                 setTopPadding((float) AndroidUtilities.dp2(36.0f));

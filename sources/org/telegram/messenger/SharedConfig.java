@@ -31,7 +31,7 @@ public class SharedConfig {
     public static boolean autoplayVideo = true;
     public static int badPasscodeTries = 0;
     public static int bubbleRadius = 10;
-    public static boolean chatBubbles = false;
+    public static boolean chatBubbles = (Build.VERSION.SDK_INT >= 30);
     private static boolean configLoaded = false;
     public static ProxyInfo currentProxy = null;
     public static boolean customTabs = true;
@@ -212,7 +212,7 @@ public class SharedConfig {
                 SharedPreferences sharedPreferences2 = ApplicationLoader.applicationContext.getSharedPreferences("mainconfig", 0);
                 saveToGallery = sharedPreferences2.getBoolean("save_gallery", false);
                 autoplayGifs = sharedPreferences2.getBoolean("autoplay_gif", true);
-                chatBubbles = sharedPreferences2.getBoolean("chatBubbles", false);
+                chatBubbles = sharedPreferences2.getBoolean("chatBubbles", Build.VERSION.SDK_INT >= 30);
                 autoplayVideo = sharedPreferences2.getBoolean("autoplay_video", true);
                 mapPreviewType = sharedPreferences2.getInt("mapPreviewType", 2);
                 raiseToSpeak = sharedPreferences2.getBoolean("raise_to_speak", true);

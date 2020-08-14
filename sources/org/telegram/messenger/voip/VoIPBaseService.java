@@ -146,6 +146,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     protected boolean micMute;
     protected boolean needPlayEndSound;
     protected boolean needSwitchToBluetoothAfterScoActivates;
+    protected boolean notificationsDisabled;
     protected Notification ongoingCallNotification;
     protected boolean playingSound;
     protected Instance.TrafficStats prevTrafficStats;
@@ -411,22 +412,24 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 
     public void toggleSpeakerphoneOrShowRouteSheet(Activity activity) {
         CallConnection callConnection;
-        int i = 2;
+        String str;
+        int i;
+        int i2 = 2;
         if (!isBluetoothHeadsetConnected() || !hasEarpiece()) {
             if (USE_CONNECTION_SERVICE && (callConnection = this.systemCallConnection) != null && callConnection.getCallAudioState() != null) {
-                int i2 = 5;
+                int i3 = 5;
                 if (hasEarpiece()) {
                     CallConnection callConnection2 = this.systemCallConnection;
                     if (callConnection2.getCallAudioState().getRoute() != 8) {
-                        i2 = 8;
+                        i3 = 8;
                     }
-                    callConnection2.setAudioRoute(i2);
+                    callConnection2.setAudioRoute(i3);
                 } else {
                     CallConnection callConnection3 = this.systemCallConnection;
                     if (callConnection3.getCallAudioState().getRoute() == 2) {
-                        i = 5;
+                        i2 = 5;
                     }
-                    callConnection3.setAudioRoute(i);
+                    callConnection3.setAudioRoute(i2);
                 }
             } else if (!this.audioConfigured || USE_CONNECTION_SERVICE) {
                 this.speakerphoneStateToSet = !this.speakerphoneStateToSet;
@@ -449,13 +452,24 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         builder.setTitle(LocaleController.getString("VoipOutputDevices", NUM), true);
         CharSequence[] charSequenceArr = new CharSequence[3];
         charSequenceArr[0] = LocaleController.getString("VoipAudioRoutingSpeaker", NUM);
-        charSequenceArr[1] = LocaleController.getString("VoipAudioRoutingEarpiece", NUM);
-        String str = this.currentBluetoothDeviceName;
-        if (str == null) {
-            str = LocaleController.getString("VoipAudioRoutingBluetooth", NUM);
+        if (this.isHeadsetPlugged) {
+            i = NUM;
+            str = "VoipAudioRoutingHeadset";
+        } else {
+            i = NUM;
+            str = "VoipAudioRoutingEarpiece";
         }
-        charSequenceArr[2] = str;
-        builder.setItems(charSequenceArr, new int[]{NUM, NUM, NUM}, new DialogInterface.OnClickListener() {
+        charSequenceArr[1] = LocaleController.getString(str, i);
+        String str2 = this.currentBluetoothDeviceName;
+        if (str2 == null) {
+            str2 = LocaleController.getString("VoipAudioRoutingBluetooth", NUM);
+        }
+        charSequenceArr[2] = str2;
+        int[] iArr = new int[3];
+        iArr[0] = NUM;
+        iArr[1] = this.isHeadsetPlugged ? NUM : NUM;
+        iArr[2] = NUM;
+        builder.setItems(charSequenceArr, iArr, new DialogInterface.OnClickListener() {
             public final void onClick(DialogInterface dialogInterface, int i) {
                 VoIPBaseService.this.lambda$toggleSpeakerphoneOrShowRouteSheet$0$VoIPBaseService(dialogInterface, i);
             }
@@ -642,9 +656,6 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(this.currentAccount);
         AudioManager audioManager = (AudioManager) getSystemService("audio");
         if (audioManager.getRingerMode() != 0) {
-            if (!USE_CONNECTION_SERVICE) {
-                audioManager.requestAudioFocus(this, 2, 1);
-            }
             MediaPlayer mediaPlayer = new MediaPlayer();
             this.ringtonePlayer = mediaPlayer;
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -653,7 +664,14 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                 }
             });
             this.ringtonePlayer.setLooping(true);
-            this.ringtonePlayer.setAudioStreamType(2);
+            if (this.isHeadsetPlugged) {
+                this.ringtonePlayer.setAudioStreamType(0);
+            } else {
+                this.ringtonePlayer.setAudioStreamType(2);
+                if (!USE_CONNECTION_SERVICE) {
+                    audioManager.requestAudioFocus(this, 2, 1);
+                }
+            }
             try {
                 if (notificationsSettings.getBoolean("custom_" + i, false)) {
                     str = notificationsSettings.getString("ringtone_path_" + i, RingtoneManager.getDefaultUri(1).toString());
@@ -1216,9 +1234,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r4.setAction(r5)
             android.app.Notification$Builder r5 = new android.app.Notification$Builder
             r5.<init>(r1)
-            r6 = 2131627425(0x7f0e0da1, float:1.8882114E38)
+            r6 = 2131627429(0x7f0e0da5, float:1.8882122E38)
             java.lang.String r7 = "VoipInVideoCallBranding"
-            r8 = 2131627423(0x7f0e0d9f, float:1.888211E38)
+            r8 = 2131627427(0x7f0e0da3, float:1.8882118E38)
             java.lang.String r9 = "VoipInCallBranding"
             if (r21 == 0) goto L_0x002a
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r7, r6)
@@ -1228,7 +1246,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         L_0x002e:
             android.app.Notification$Builder r5 = r5.setContentTitle(r10)
             android.app.Notification$Builder r5 = r5.setContentText(r0)
-            r10 = 2131165783(0x7var_, float:1.7945793E38)
+            r10 = 2131165784(0x7var_, float:1.7945795E38)
             android.app.Notification$Builder r5 = r5.setSmallIcon(r10)
             android.app.Notification$Builder r5 = r5.setSubText(r2)
             r10 = 0
@@ -1309,7 +1327,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r13.append(r15)
             r13.append(r6)
             java.lang.String r13 = r13.toString()
-            r14 = 2131625569(0x7f0e0661, float:1.887835E38)
+            r14 = 2131625571(0x7f0e0663, float:1.8878354E38)
             r16 = r9
             java.lang.String r9 = "IncomingCalls"
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r14)
@@ -1358,7 +1376,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             java.lang.String r6 = "call_id"
             r2.putExtra(r6, r8)
             java.lang.String r8 = "VoipDeclineCall"
-            r9 = 2131627415(0x7f0e0d97, float:1.8882094E38)
+            r9 = 2131627419(0x7f0e0d9b, float:1.8882102E38)
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r8, r9)
             int r11 = android.os.Build.VERSION.SDK_INT
             r12 = 24
@@ -1378,7 +1396,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         L_0x019a:
             r11 = 268435456(0x10000000, float:2.5243549E-29)
             android.app.PendingIntent r2 = android.app.PendingIntent.getBroadcast(r1, r14, r2, r11)
-            r13 = 2131165476(0x7var_, float:1.794517E38)
+            r13 = 2131165477(0x7var_, float:1.7945172E38)
             r5.addAction(r13, r10, r2)
             android.content.Intent r10 = new android.content.Intent
             java.lang.Class<org.telegram.messenger.voip.VoIPActionsReceiver> r13 = org.telegram.messenger.voip.VoIPActionsReceiver.class
@@ -1394,7 +1412,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             long r13 = r17.getCallID()
             r10.putExtra(r6, r13)
             java.lang.String r6 = "VoipAnswerCall"
-            r13 = 2131627407(0x7f0e0d8f, float:1.8882078E38)
+            r13 = 2131627410(0x7f0e0d92, float:1.8882084E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r6, r13)
             int r15 = android.os.Build.VERSION.SDK_INT
             if (r15 < r12) goto L_0x01f0
@@ -1412,7 +1430,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             r9 = 0
         L_0x01f1:
             android.app.PendingIntent r10 = android.app.PendingIntent.getBroadcast(r1, r9, r10, r11)
-            r11 = 2131165475(0x7var_, float:1.7945168E38)
+            r11 = 2131165476(0x7var_, float:1.794517E38)
             r5.addAction(r11, r14, r10)
             r11 = 2
             r5.setPriority(r11)
@@ -1478,7 +1496,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
             if (r21 == 0) goto L_0x02a9
-            r7 = 2131627426(0x7f0e0da2, float:1.8882116E38)
+            r7 = 2131627430(0x7f0e0da6, float:1.8882124E38)
             java.lang.Object[] r11 = new java.lang.Object[r11]
             java.lang.String r14 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -1490,7 +1508,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             goto L_0x02bf
         L_0x02a9:
             r14 = 0
-            r7 = 2131627424(0x7f0e0da0, float:1.8882112E38)
+            r7 = 2131627428(0x7f0e0da4, float:1.888212E38)
             java.lang.Object[] r11 = new java.lang.Object[r11]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -1503,11 +1521,11 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             goto L_0x0309
         L_0x02c3:
             if (r21 == 0) goto L_0x02c9
-            r0 = 2131627425(0x7f0e0da1, float:1.8882114E38)
+            r0 = 2131627429(0x7f0e0da5, float:1.8882122E38)
             goto L_0x02ce
         L_0x02c9:
             r7 = r16
-            r0 = 2131627423(0x7f0e0d9f, float:1.888211E38)
+            r0 = 2131627427(0x7f0e0da3, float:1.8882118E38)
         L_0x02ce:
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r7, r0)
             r9.setTextViewText(r12, r0)
@@ -1519,7 +1537,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             int r0 = r1.currentAccount
             org.telegram.messenger.UserConfig r0 = org.telegram.messenger.UserConfig.getInstance(r0)
             org.telegram.tgnet.TLRPC$User r0 = r0.getCurrentUser()
-            r11 = 2131627408(0x7f0e0d90, float:1.888208E38)
+            r11 = 2131627411(0x7f0e0d93, float:1.8882086E38)
             java.lang.Object[] r7 = new java.lang.Object[r7]
             java.lang.String r15 = r0.first_name
             java.lang.String r0 = r0.last_name
@@ -1541,7 +1559,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r6, r13)
             r9.setTextViewText(r3, r6)
             r3 = 2131230780(0x7var_c, float:1.8077622E38)
-            r6 = 2131627415(0x7f0e0d97, float:1.8882094E38)
+            r6 = 2131627419(0x7f0e0d9b, float:1.8882102E38)
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r8, r6)
             r9.setTextViewText(r3, r6)
             r3 = 2131230826(0x7var_a, float:1.8077716E38)
@@ -1653,6 +1671,10 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
 
     public boolean isBluetoothOn() {
         return ((AudioManager) getSystemService("audio")).isBluetoothScoOn();
+    }
+
+    public boolean isHeadsetPlugged() {
+        return this.isHeadsetPlugged;
     }
 
     public void onMediaStateUpdated(int i, int i2) {

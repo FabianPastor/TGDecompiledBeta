@@ -70,7 +70,7 @@ public class VoIPHelper {
         int i2;
         boolean z3 = true;
         if (tLRPC$UserFull != null && tLRPC$UserFull.phone_calls_private) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity);
             builder.setTitle(LocaleController.getString("VoipFailed", NUM));
             builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("CallNotAvailable", NUM, ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name))));
             builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
@@ -79,7 +79,7 @@ public class VoIPHelper {
             if (Settings.System.getInt(activity.getContentResolver(), "airplane_mode_on", 0) == 0) {
                 z3 = false;
             }
-            AlertDialog.Builder builder2 = new AlertDialog.Builder(activity);
+            AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) activity);
             if (z3) {
                 i = NUM;
                 str = "VoipOfflineAirplaneTitle";
@@ -139,7 +139,7 @@ public class VoIPHelper {
             if (VoIPService.getSharedInstance() != null) {
                 TLRPC$User user = VoIPService.getSharedInstance().getUser();
                 if (user.id != tLRPC$User.id) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity);
                     builder.setTitle(LocaleController.getString("VoipOngoingAlertTitle", NUM));
                     builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipOngoingAlert", NUM, ContactsController.formatName(user.first_name, user.last_name), ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name))));
                     builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(z, z2, activity) {
@@ -218,7 +218,7 @@ public class VoIPHelper {
         int i2;
         String str;
         if (!activity.shouldShowRequestPermissionRationale("android.permission.RECORD_AUDIO") || (i == 102 && !activity.shouldShowRequestPermissionRationale("android.permission.CAMERA"))) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity);
             builder.setTitle(LocaleController.getString("AppName", NUM));
             if (i == 102) {
                 i2 = NUM;
@@ -428,7 +428,7 @@ public class VoIPHelper {
             }
         });
         AlertDialog create = builder.create();
-        if (BuildVars.DEBUG_VERSION && logFile.exists()) {
+        if (BuildVars.LOGS_ENABLED && logFile.exists()) {
             create.setNeutralButton("Send log", new DialogInterface.OnClickListener(context2, logFile) {
                 public final /* synthetic */ Context f$0;
                 public final /* synthetic */ File f$1;

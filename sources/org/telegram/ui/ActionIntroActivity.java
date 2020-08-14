@@ -597,7 +597,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                 getParentActivity().requestPermissions(new String[]{"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"}, 2);
             } else if (i != 2) {
                 if (i == 3) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                     builder.setTitle(LocaleController.getString("PhoneNumberChangeTitle", NUM));
                     builder.setMessage(LocaleController.getString("PhoneNumberAlert", NUM));
                     builder.setPositiveButton(LocaleController.getString("Change", NUM), new DialogInterface.OnClickListener() {
@@ -706,7 +706,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             if (i == 2) {
                 if (iArr != null && iArr.length != 0) {
                     if (iArr[0] != 0) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                         builder.setTitle(LocaleController.getString("AppName", NUM));
                         builder.setMessage(LocaleController.getString("PermissionNoLocationPosition", NUM));
                         builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {
@@ -723,7 +723,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
             } else if (i != 34) {
             } else {
                 if (iArr.length <= 0 || iArr[0] != 0) {
-                    AlertDialog.Builder builder2 = new AlertDialog.Builder(getParentActivity());
+                    AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) getParentActivity());
                     builder2.setTitle(LocaleController.getString("AppName", NUM));
                     builder2.setMessage(LocaleController.getString("QRCodePermissionNoCamera", NUM));
                     builder2.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {

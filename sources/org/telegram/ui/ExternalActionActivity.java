@@ -1,6 +1,7 @@
 package org.telegram.ui;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -263,7 +264,7 @@ public class ExternalActionActivity extends Activity implements ActionBarLayout.
                         if (AndroidUtilities.isTablet()) {
                             this.layersActionBarLayout.showLastFragment();
                         }
-                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder((Context) this);
                         builder.setTitle(LocaleController.getString("AppName", NUM));
                         builder.setMessage(LocaleController.getString("PleaseLoginPassport", NUM));
                         builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);

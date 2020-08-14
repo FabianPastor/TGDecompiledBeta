@@ -9,8 +9,6 @@ import android.graphics.Canvas;
 import android.graphics.Outline;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -28,7 +26,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 
 public class VoIPFloatingLayout extends FrameLayout {
-    private boolean active = true;
+    private boolean active;
     public boolean alwaysFloating;
     public int bottomOffset;
     float bottomPadding;
@@ -43,25 +41,17 @@ public class VoIPFloatingLayout extends FrameLayout {
     boolean moving;
     ValueAnimator mutedAnimator;
     Drawable mutedDrawable;
-    Paint mutedPaint = new Paint(1);
-    float mutedProgress = 0.0f;
-    private ValueAnimator.AnimatorUpdateListener mutedUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-            VoIPFloatingLayout.this.lambda$new$1$VoIPFloatingLayout(valueAnimator);
-        }
-    };
+    Paint mutedPaint;
+    float mutedProgress;
+    private ValueAnimator.AnimatorUpdateListener mutedUpdateListener;
     /* access modifiers changed from: private */
-    public float overrideCornerRadius = -1.0f;
+    public float overrideCornerRadius;
     final Path path = new Path();
     /* access modifiers changed from: private */
-    public ValueAnimator.AnimatorUpdateListener progressUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-            VoIPFloatingLayout.this.lambda$new$0$VoIPFloatingLayout(valueAnimator);
-        }
-    };
+    public ValueAnimator.AnimatorUpdateListener progressUpdateListener;
     final RectF rectF = new RectF();
-    public float relativePositionToSetX = -1.0f;
-    float relativePositionToSetY = -1.0f;
+    public float relativePositionToSetX;
+    float relativePositionToSetY;
     float rightPadding;
     public float savedRelativePositionX;
     public float savedRelativePositionY;
@@ -74,14 +64,14 @@ public class VoIPFloatingLayout extends FrameLayout {
     ValueAnimator switchToFloatingModeAnimator;
     /* access modifiers changed from: private */
     public boolean switchingToFloatingMode;
+    public boolean switchingToPip;
     View.OnClickListener tapListener;
-    float toFloatingModeProgress = 0.0f;
+    float toFloatingModeProgress;
     float topPadding;
     float touchSlop;
     private boolean uiVisible;
     public float updatePositionFromX;
     public float updatePositionFromY;
-    final Paint xRefPaint = new Paint(1);
 
     public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
         return true;
@@ -99,22 +89,43 @@ public class VoIPFloatingLayout extends FrameLayout {
 
     public VoIPFloatingLayout(Context context) {
         super(context);
+        new Paint(1);
+        this.mutedPaint = new Paint(1);
+        this.relativePositionToSetX = -1.0f;
+        this.relativePositionToSetY = -1.0f;
+        this.toFloatingModeProgress = 0.0f;
+        this.mutedProgress = 0.0f;
+        this.overrideCornerRadius = -1.0f;
+        this.active = true;
+        this.progressUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
+            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                VoIPFloatingLayout.this.lambda$new$0$VoIPFloatingLayout(valueAnimator);
+            }
+        };
+        this.mutedUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
+            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                VoIPFloatingLayout.this.lambda$new$1$VoIPFloatingLayout(valueAnimator);
+            }
+        };
         this.touchSlop = (float) ViewConfiguration.get(context).getScaledTouchSlop();
         if (Build.VERSION.SDK_INT >= 21) {
             setOutlineProvider(new ViewOutlineProvider() {
                 @TargetApi(21)
                 public void getOutline(View view, Outline outline) {
                     if (VoIPFloatingLayout.this.overrideCornerRadius >= 0.0f) {
-                        outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), VoIPFloatingLayout.this.overrideCornerRadius);
+                        if (VoIPFloatingLayout.this.overrideCornerRadius < 1.0f) {
+                            outline.setRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+                        } else {
+                            outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), VoIPFloatingLayout.this.overrideCornerRadius);
+                        }
+                    } else if (!VoIPFloatingLayout.this.floatingMode) {
+                        outline.setRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
                     } else {
                         outline.setRoundRect(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight(), VoIPFloatingLayout.this.floatingMode ? (float) AndroidUtilities.dp(4.0f) : 0.0f);
                     }
                 }
             });
             setClipToOutline(true);
-        } else {
-            this.xRefPaint.setColor(-16777216);
-            this.xRefPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         }
         this.mutedPaint.setColor(ColorUtils.setAlphaComponent(-16777216, 102));
         this.mutedDrawable = ContextCompat.getDrawable(context, NUM);
@@ -129,7 +140,7 @@ public class VoIPFloatingLayout extends FrameLayout {
             size = (int) (((float) size) * 0.23f);
             size2 = (int) (((float) size2) * 0.23f);
             this.measuredAsFloatingMode = true;
-        } else {
+        } else if (!this.switchingToPip) {
             setTranslationX(0.0f);
             setTranslationY(0.0f);
         }
@@ -156,229 +167,212 @@ public class VoIPFloatingLayout extends FrameLayout {
         this.bottomPadding = (float) (AndroidUtilities.dp(f) + this.bottomOffset);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:13:0x0026, code lost:
-        if (r1 != 3) goto L_0x01bf;
+    /* JADX WARNING: Code restructure failed: missing block: B:12:0x0025, code lost:
+        if (r1 != 3) goto L_0x01b3;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:39:0x00f1, code lost:
-        r3 = r10.lastInsets;
-     */
-    /* JADX WARNING: Removed duplicated region for block: B:24:0x0083  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean onTouchEvent(android.view.MotionEvent r11) {
+    public boolean onTouchEvent(android.view.MotionEvent r10) {
         /*
-            r10 = this;
-            android.view.ViewParent r0 = r10.getParent()
-            boolean r1 = r10.floatingMode
+            r9 = this;
+            android.view.ViewParent r0 = r9.getParent()
+            boolean r1 = r9.floatingMode
             r2 = 0
-            if (r1 == 0) goto L_0x01c0
-            boolean r1 = r10.switchingToFloatingMode
-            if (r1 != 0) goto L_0x01c0
-            boolean r1 = r10.active
+            if (r1 == 0) goto L_0x01b4
+            boolean r1 = r9.switchingToFloatingMode
+            if (r1 != 0) goto L_0x01b4
+            boolean r1 = r9.active
             if (r1 != 0) goto L_0x0013
-            goto L_0x01c0
+            goto L_0x01b4
         L_0x0013:
-            int r1 = r11.getAction()
+            int r1 = r10.getAction()
             r3 = 0
             r5 = 0
             r6 = 1065353216(0x3var_, float:1.0)
             r7 = 1
-            if (r1 == 0) goto L_0x0176
-            r8 = 0
-            if (r1 == r7) goto L_0x0091
-            r9 = 2
-            if (r1 == r9) goto L_0x002a
-            r11 = 3
-            if (r1 == r11) goto L_0x0091
-            goto L_0x01bf
-        L_0x002a:
-            float r1 = r11.getX()
-            float r2 = r10.getX()
+            if (r1 == 0) goto L_0x016a
+            if (r1 == r7) goto L_0x0090
+            r8 = 2
+            if (r1 == r8) goto L_0x0029
+            r10 = 3
+            if (r1 == r10) goto L_0x0090
+            goto L_0x01b3
+        L_0x0029:
+            float r1 = r10.getX()
+            float r2 = r9.getX()
             float r1 = r1 + r2
-            float r2 = r10.starX
+            float r2 = r9.starX
             float r1 = r1 - r2
-            float r2 = r11.getY()
-            float r3 = r10.getY()
+            float r2 = r10.getY()
+            float r3 = r9.getY()
             float r2 = r2 + r3
-            float r3 = r10.starY
+            float r3 = r9.starY
             float r2 = r2 - r3
-            boolean r3 = r10.moving
+            boolean r3 = r9.moving
+            r4 = 0
             if (r3 != 0) goto L_0x007e
             float r3 = r1 * r1
-            float r4 = r2 * r2
-            float r3 = r3 + r4
-            float r4 = r10.touchSlop
-            float r4 = r4 * r4
-            int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
+            float r5 = r2 * r2
+            float r3 = r3 + r5
+            float r5 = r9.touchSlop
+            float r5 = r5 * r5
+            int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
             if (r3 <= 0) goto L_0x007e
             if (r0 == 0) goto L_0x0058
             r0.requestDisallowInterceptTouchEvent(r7)
         L_0x0058:
-            r10.moving = r7
-            float r0 = r11.getX()
-            float r1 = r10.getX()
+            r9.moving = r7
+            float r0 = r10.getX()
+            float r1 = r9.getX()
             float r0 = r0 + r1
-            r10.starX = r0
-            float r11 = r11.getY()
-            float r0 = r10.getY()
-            float r11 = r11 + r0
-            r10.starY = r11
-            float r11 = r10.getTranslationX()
-            r10.startMovingFromX = r11
-            float r11 = r10.getTranslationY()
-            r10.startMovingFromY = r11
+            r9.starX = r0
+            float r10 = r10.getY()
+            float r0 = r9.getY()
+            float r10 = r10 + r0
+            r9.starY = r10
+            float r10 = r9.getTranslationX()
+            r9.startMovingFromX = r10
+            float r10 = r9.getTranslationY()
+            r9.startMovingFromY = r10
+            r1 = 0
             r2 = 0
-            goto L_0x007f
         L_0x007e:
-            r8 = r1
-        L_0x007f:
-            boolean r11 = r10.moving
-            if (r11 == 0) goto L_0x01bf
-            float r11 = r10.startMovingFromX
-            float r11 = r11 + r8
-            r10.setTranslationX(r11)
-            float r11 = r10.startMovingFromY
-            float r11 = r11 + r2
-            r10.setTranslationY(r11)
-            goto L_0x01bf
-        L_0x0091:
-            if (r0 == 0) goto L_0x0173
-            boolean r11 = r10.floatingMode
-            if (r11 == 0) goto L_0x0173
-            boolean r11 = r10.switchingToFloatingMode
-            if (r11 != 0) goto L_0x0173
+            boolean r10 = r9.moving
+            if (r10 == 0) goto L_0x01b3
+            float r10 = r9.startMovingFromX
+            float r10 = r10 + r1
+            r9.setTranslationX(r10)
+            float r10 = r9.startMovingFromY
+            float r10 = r10 + r2
+            r9.setTranslationY(r10)
+            goto L_0x01b3
+        L_0x0090:
+            if (r0 == 0) goto L_0x0167
+            boolean r10 = r9.floatingMode
+            if (r10 == 0) goto L_0x0167
+            boolean r10 = r9.switchingToFloatingMode
+            if (r10 != 0) goto L_0x0167
             r0.requestDisallowInterceptTouchEvent(r2)
-            android.view.ViewPropertyAnimator r11 = r10.animate()
-            android.view.ViewPropertyAnimator r11 = r11.setListener(r5)
-            r11.cancel()
-            android.view.ViewPropertyAnimator r11 = r10.animate()
-            android.view.ViewPropertyAnimator r11 = r11.scaleX(r6)
-            android.view.ViewPropertyAnimator r11 = r11.scaleY(r6)
-            android.view.ViewPropertyAnimator r11 = r11.alpha(r6)
-            android.view.ViewPropertyAnimator r11 = r11.setStartDelay(r3)
-            android.view.View$OnClickListener r0 = r10.tapListener
-            if (r0 == 0) goto L_0x00d7
-            boolean r0 = r10.moving
-            if (r0 != 0) goto L_0x00d7
+            android.view.ViewPropertyAnimator r10 = r9.animate()
+            android.view.ViewPropertyAnimator r10 = r10.setListener(r5)
+            r10.cancel()
+            android.view.ViewPropertyAnimator r10 = r9.animate()
+            android.view.ViewPropertyAnimator r10 = r10.scaleX(r6)
+            android.view.ViewPropertyAnimator r10 = r10.scaleY(r6)
+            android.view.ViewPropertyAnimator r10 = r10.alpha(r6)
+            android.view.ViewPropertyAnimator r10 = r10.setStartDelay(r3)
+            android.view.View$OnClickListener r0 = r9.tapListener
+            if (r0 == 0) goto L_0x00d6
+            boolean r0 = r9.moving
+            if (r0 != 0) goto L_0x00d6
             long r0 = java.lang.System.currentTimeMillis()
-            long r3 = r10.startTime
+            long r3 = r9.startTime
             long r0 = r0 - r3
             r3 = 200(0xc8, double:9.9E-322)
             int r5 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r5 >= 0) goto L_0x00d7
-            android.view.View$OnClickListener r0 = r10.tapListener
-            r0.onClick(r10)
-        L_0x00d7:
-            android.view.ViewParent r0 = r10.getParent()
+            if (r5 >= 0) goto L_0x00d6
+            android.view.View$OnClickListener r0 = r9.tapListener
+            r0.onClick(r9)
+        L_0x00d6:
+            android.view.ViewParent r0 = r9.getParent()
             android.view.View r0 = (android.view.View) r0
             int r0 = r0.getMeasuredWidth()
-            android.view.ViewParent r1 = r10.getParent()
+            android.view.ViewParent r1 = r9.getParent()
             android.view.View r1 = (android.view.View) r1
             int r1 = r1.getMeasuredHeight()
-            int r3 = android.os.Build.VERSION.SDK_INT
-            r4 = 20
-            if (r3 < r4) goto L_0x00ff
-            android.view.WindowInsets r3 = r10.lastInsets
-            if (r3 != 0) goto L_0x00f6
-            goto L_0x00ff
-        L_0x00f6:
-            int r3 = r3.getSystemWindowInsetTop()
-            float r3 = (float) r3
-            float r5 = r10.topPadding
-            float r3 = r3 + r5
-            goto L_0x0100
-        L_0x00ff:
-            r3 = 0
-        L_0x0100:
+            float r3 = r9.topPadding
+            float r4 = r9.bottomPadding
             int r5 = android.os.Build.VERSION.SDK_INT
-            if (r5 < r4) goto L_0x0112
-            android.view.WindowInsets r4 = r10.lastInsets
-            if (r4 != 0) goto L_0x0109
-            goto L_0x0112
-        L_0x0109:
-            int r4 = r4.getSystemWindowInsetBottom()
-            float r4 = (float) r4
-            float r5 = r10.bottomPadding
-            float r8 = r4 + r5
-        L_0x0112:
-            float r4 = r10.getX()
-            float r5 = r10.leftPadding
-            int r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
-            if (r4 >= 0) goto L_0x0120
-            r11.translationX(r5)
-            goto L_0x013e
-        L_0x0120:
-            float r4 = r10.getX()
-            int r5 = r10.getMeasuredWidth()
+            r6 = 20
+            if (r5 <= r6) goto L_0x0106
+            android.view.WindowInsets r5 = r9.lastInsets
+            if (r5 == 0) goto L_0x0106
+            int r5 = r5.getSystemWindowInsetTop()
+            float r5 = (float) r5
+            float r3 = r3 + r5
+            android.view.WindowInsets r5 = r9.lastInsets
+            int r5 = r5.getSystemWindowInsetBottom()
             float r5 = (float) r5
             float r4 = r4 + r5
-            float r5 = (float) r0
-            float r6 = r10.rightPadding
-            float r5 = r5 - r6
-            int r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
-            if (r4 <= 0) goto L_0x013e
-            int r4 = r10.getMeasuredWidth()
-            int r0 = r0 - r4
+        L_0x0106:
+            float r5 = r9.getX()
+            float r6 = r9.leftPadding
+            int r5 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
+            if (r5 >= 0) goto L_0x0114
+            r10.translationX(r6)
+            goto L_0x0132
+        L_0x0114:
+            float r5 = r9.getX()
+            int r6 = r9.getMeasuredWidth()
+            float r6 = (float) r6
+            float r5 = r5 + r6
+            float r6 = (float) r0
+            float r8 = r9.rightPadding
+            float r6 = r6 - r8
+            int r5 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
+            if (r5 <= 0) goto L_0x0132
+            int r5 = r9.getMeasuredWidth()
+            int r0 = r0 - r5
             float r0 = (float) r0
-            float r4 = r10.rightPadding
-            float r0 = r0 - r4
-            r11.translationX(r0)
-        L_0x013e:
-            float r0 = r10.getY()
+            float r5 = r9.rightPadding
+            float r0 = r0 - r5
+            r10.translationX(r0)
+        L_0x0132:
+            float r0 = r9.getY()
             int r0 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r0 >= 0) goto L_0x014a
-            r11.translationY(r3)
-            goto L_0x0164
-        L_0x014a:
-            float r0 = r10.getY()
-            int r3 = r10.getMeasuredHeight()
+            if (r0 >= 0) goto L_0x013e
+            r10.translationY(r3)
+            goto L_0x0158
+        L_0x013e:
+            float r0 = r9.getY()
+            int r3 = r9.getMeasuredHeight()
             float r3 = (float) r3
             float r0 = r0 + r3
             float r3 = (float) r1
-            float r3 = r3 - r8
+            float r3 = r3 - r4
             int r0 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r0 <= 0) goto L_0x0164
-            int r0 = r10.getMeasuredHeight()
+            if (r0 <= 0) goto L_0x0158
+            int r0 = r9.getMeasuredHeight()
             int r1 = r1 - r0
             float r0 = (float) r1
-            float r0 = r0 - r8
-            r11.translationY(r0)
-        L_0x0164:
+            float r0 = r0 - r4
+            r10.translationY(r0)
+        L_0x0158:
             r0 = 150(0x96, double:7.4E-322)
-            android.view.ViewPropertyAnimator r11 = r11.setDuration(r0)
+            android.view.ViewPropertyAnimator r10 = r10.setDuration(r0)
             org.telegram.ui.Components.CubicBezierInterpolator r0 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
-            android.view.ViewPropertyAnimator r11 = r11.setInterpolator(r0)
-            r11.start()
-        L_0x0173:
-            r10.moving = r2
-            goto L_0x01bf
-        L_0x0176:
-            boolean r0 = r10.floatingMode
-            if (r0 == 0) goto L_0x01bf
-            boolean r0 = r10.switchingToFloatingMode
-            if (r0 != 0) goto L_0x01bf
+            android.view.ViewPropertyAnimator r10 = r10.setInterpolator(r0)
+            r10.start()
+        L_0x0167:
+            r9.moving = r2
+            goto L_0x01b3
+        L_0x016a:
+            boolean r0 = r9.floatingMode
+            if (r0 == 0) goto L_0x01b3
+            boolean r0 = r9.switchingToFloatingMode
+            if (r0 != 0) goto L_0x01b3
             long r0 = java.lang.System.currentTimeMillis()
-            r10.startTime = r0
-            float r0 = r11.getX()
-            float r1 = r10.getX()
+            r9.startTime = r0
+            float r0 = r10.getX()
+            float r1 = r9.getX()
             float r0 = r0 + r1
-            r10.starX = r0
-            float r11 = r11.getY()
-            float r0 = r10.getY()
-            float r11 = r11 + r0
-            r10.starY = r11
-            android.view.ViewPropertyAnimator r11 = r10.animate()
-            android.view.ViewPropertyAnimator r11 = r11.setListener(r5)
-            r11.cancel()
-            android.view.ViewPropertyAnimator r11 = r10.animate()
+            r9.starX = r0
+            float r10 = r10.getY()
+            float r0 = r9.getY()
+            float r10 = r10 + r0
+            r9.starY = r10
+            android.view.ViewPropertyAnimator r10 = r9.animate()
+            android.view.ViewPropertyAnimator r10 = r10.setListener(r5)
+            r10.cancel()
+            android.view.ViewPropertyAnimator r10 = r9.animate()
             r0 = 1065772646(0x3var_, float:1.05)
-            android.view.ViewPropertyAnimator r11 = r11.scaleY(r0)
-            android.view.ViewPropertyAnimator r11 = r11.scaleX(r0)
-            android.view.ViewPropertyAnimator r11 = r11.alpha(r6)
-            android.view.ViewPropertyAnimator r11 = r11.setStartDelay(r3)
-            r11.start()
-        L_0x01bf:
+            android.view.ViewPropertyAnimator r10 = r10.scaleY(r0)
+            android.view.ViewPropertyAnimator r10 = r10.scaleX(r0)
+            android.view.ViewPropertyAnimator r10 = r10.alpha(r6)
+            android.view.ViewPropertyAnimator r10 = r10.setStartDelay(r3)
+            r10.start()
+        L_0x01b3:
             return r7
-        L_0x01c0:
+        L_0x01b4:
             return r2
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.VoIPFloatingLayout.onTouchEvent(android.view.MotionEvent):boolean");
@@ -402,15 +396,7 @@ public class VoIPFloatingLayout extends FrameLayout {
             this.relativePositionToSetX = -1.0f;
             this.relativePositionToSetY = -1.0f;
         }
-        if (Build.VERSION.SDK_INT >= 21 || !this.floatingMode) {
-            super.dispatchDraw(canvas);
-        } else {
-            try {
-                super.dispatchDraw(canvas);
-                canvas.drawPath(this.path, this.xRefPaint);
-            } catch (Exception unused) {
-            }
-        }
+        super.dispatchDraw(canvas);
         if (!this.switchingToFloatingMode && this.floatingMode != (z = this.setedFloatingMode)) {
             setFloatingMode(z, true);
         }

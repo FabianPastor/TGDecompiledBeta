@@ -370,7 +370,7 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         if (i < i2 || i >= this.proxyEndRow) {
             return false;
         }
-        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setMessage(LocaleController.getString("DeleteProxy", NUM));
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         builder.setTitle(LocaleController.getString("AppName", NUM));

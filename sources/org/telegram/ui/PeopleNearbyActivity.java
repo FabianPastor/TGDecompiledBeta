@@ -373,7 +373,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                         sendRequest(false, 2);
                         updateRows(true);
                     } else {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+                        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
                         builder.setTitle(LocaleController.getString("MakeMyselfVisibleTitle", NUM));
                         builder.setMessage(LocaleController.getString("MakeMyselfVisibleInfo", NUM));
                         builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(userConfig) {

@@ -3,7 +3,6 @@ package org.telegram.ui.Components.voip;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
-import android.app.KeyguardManager;
 import android.os.Build;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
@@ -19,7 +18,6 @@ public class VoIPWindowView extends FrameLayout {
     Activity activity;
     /* access modifiers changed from: private */
     public int animationIndex = -1;
-    boolean deviceIsLocked;
     boolean finished;
     protected boolean lockOnScreen;
     /* access modifiers changed from: private */
@@ -35,7 +33,6 @@ public class VoIPWindowView extends FrameLayout {
         this.activity = activity2;
         setSystemUiVisibility(1792);
         setFitsSystemWindows(true);
-        this.deviceIsLocked = ((KeyguardManager) activity2.getSystemService("keyguard")).inKeyguardRestrictedInputMode();
         this.orientationBefore = activity2.getRequestedOrientation();
         activity2.setRequestedOrientation(1);
         if (!z) {
@@ -57,54 +54,55 @@ public class VoIPWindowView extends FrameLayout {
     }
 
     public boolean onTouchEvent(MotionEvent motionEvent) {
-        if (!this.lockOnScreen && !this.deviceIsLocked) {
-            if (motionEvent.getAction() == 0) {
-                this.startX = motionEvent.getX();
-                this.startY = motionEvent.getY();
-                if (this.velocityTracker == null) {
-                    this.velocityTracker = VelocityTracker.obtain();
+        if (this.lockOnScreen) {
+            return false;
+        }
+        if (motionEvent.getAction() == 0) {
+            this.startX = motionEvent.getX();
+            this.startY = motionEvent.getY();
+            if (this.velocityTracker == null) {
+                this.velocityTracker = VelocityTracker.obtain();
+            }
+            this.velocityTracker.clear();
+        } else {
+            float f = 0.0f;
+            boolean z = true;
+            if (motionEvent.getAction() == 2) {
+                float x = motionEvent.getX() - this.startX;
+                float y = motionEvent.getY() - this.startY;
+                if (!this.startDragging && Math.abs(x) > AndroidUtilities.getPixelsInCM(0.4f, true) && Math.abs(x) / 3.0f > y) {
+                    this.startX = motionEvent.getX();
+                    this.startDragging = true;
+                    x = 0.0f;
                 }
-                this.velocityTracker.clear();
-            } else {
-                float f = 0.0f;
-                boolean z = true;
-                if (motionEvent.getAction() == 2) {
-                    float x = motionEvent.getX() - this.startX;
-                    float y = motionEvent.getY() - this.startY;
-                    if (!this.startDragging && Math.abs(x) > AndroidUtilities.getPixelsInCM(0.4f, true) && Math.abs(x) / 3.0f > y) {
-                        this.startX = motionEvent.getX();
-                        this.startDragging = true;
-                        x = 0.0f;
+                if (this.startDragging) {
+                    if (x >= 0.0f) {
+                        f = x;
                     }
-                    if (this.startDragging) {
-                        if (x >= 0.0f) {
-                            f = x;
-                        }
-                        if (this.velocityTracker == null) {
-                            this.velocityTracker = VelocityTracker.obtain();
-                        }
-                        this.velocityTracker.addMovement(motionEvent);
-                        setTranslationX(f);
-                    }
-                    return this.startDragging;
-                } else if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
-                    float translationX = getTranslationX();
                     if (this.velocityTracker == null) {
                         this.velocityTracker = VelocityTracker.obtain();
                     }
-                    this.velocityTracker.computeCurrentVelocity(1000);
-                    float xVelocity = this.velocityTracker.getXVelocity();
-                    float yVelocity = this.velocityTracker.getYVelocity();
-                    if (translationX >= ((float) getMeasuredWidth()) / 3.0f || (xVelocity >= 3500.0f && xVelocity >= yVelocity)) {
-                        z = false;
-                    }
-                    if (!z) {
-                        finish((long) Math.max((int) ((200.0f / ((float) getMeasuredWidth())) * (((float) getMeasuredWidth()) - getTranslationX())), 50));
-                    } else {
-                        animate().translationX(0.0f).start();
-                    }
-                    this.startDragging = false;
+                    this.velocityTracker.addMovement(motionEvent);
+                    setTranslationX(f);
                 }
+                return this.startDragging;
+            } else if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
+                float translationX = getTranslationX();
+                if (this.velocityTracker == null) {
+                    this.velocityTracker = VelocityTracker.obtain();
+                }
+                this.velocityTracker.computeCurrentVelocity(1000);
+                float xVelocity = this.velocityTracker.getXVelocity();
+                float yVelocity = this.velocityTracker.getYVelocity();
+                if (translationX >= ((float) getMeasuredWidth()) / 3.0f || (xVelocity >= 3500.0f && xVelocity >= yVelocity)) {
+                    z = false;
+                }
+                if (!z) {
+                    finish((long) Math.max((int) ((200.0f / ((float) getMeasuredWidth())) * (((float) getMeasuredWidth()) - getTranslationX())), 50));
+                } else {
+                    animate().translationX(0.0f).start();
+                }
+                this.startDragging = false;
             }
         }
         return false;
@@ -115,30 +113,37 @@ public class VoIPWindowView extends FrameLayout {
     }
 
     public void finish(long j) {
-        if (!this.finished && getParent() != null) {
+        if (!this.finished) {
             this.finished = true;
             VoIPFragment.clearInstance();
-            if (this.deviceIsLocked) {
-                ((WindowManager) this.activity.getSystemService("window")).removeView(this);
-                return;
-            }
-            this.animationIndex = NotificationCenter.getInstance(UserConfig.selectedAccount).setAnimationInProgress(this.animationIndex, (int[]) null);
-            animate().translationX((float) getMeasuredWidth()).setListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    NotificationCenter.getInstance(UserConfig.selectedAccount).onAnimationFinish(VoIPWindowView.this.animationIndex);
-                    if (VoIPWindowView.this.getParent() != null) {
-                        VoIPWindowView voIPWindowView = VoIPWindowView.this;
-                        voIPWindowView.activity.setRequestedOrientation(voIPWindowView.orientationBefore);
-                        VoIPWindowView.this.setVisibility(8);
-                        ((WindowManager) VoIPWindowView.this.activity.getSystemService("window")).removeView(VoIPWindowView.this);
-                    }
+            if (this.lockOnScreen) {
+                try {
+                    ((WindowManager) this.activity.getSystemService("window")).removeView(this);
+                } catch (Exception unused) {
                 }
-            }).setDuration(j).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
+            } else {
+                this.animationIndex = NotificationCenter.getInstance(UserConfig.selectedAccount).setAnimationInProgress(this.animationIndex, (int[]) null);
+                animate().translationX((float) getMeasuredWidth()).setListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animator) {
+                        NotificationCenter.getInstance(UserConfig.selectedAccount).onAnimationFinish(VoIPWindowView.this.animationIndex);
+                        if (VoIPWindowView.this.getParent() != null) {
+                            VoIPWindowView voIPWindowView = VoIPWindowView.this;
+                            voIPWindowView.activity.setRequestedOrientation(voIPWindowView.orientationBefore);
+                            WindowManager windowManager = (WindowManager) VoIPWindowView.this.activity.getSystemService("window");
+                            VoIPWindowView.this.setVisibility(8);
+                            try {
+                                windowManager.removeView(VoIPWindowView.this);
+                            } catch (Exception unused) {
+                            }
+                        }
+                    }
+                }).setDuration(j).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
+            }
         }
     }
 
     public void startEnterTransition() {
-        if (!this.deviceIsLocked) {
+        if (!this.lockOnScreen) {
             setTranslationX((float) getMeasuredWidth());
             animate().translationX(0.0f).setDuration(150).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
         }

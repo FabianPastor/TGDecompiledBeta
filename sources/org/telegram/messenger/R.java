@@ -234,6 +234,7 @@ public final class R {
         public static final int calls_menu_speaker = NUM;
         public static final int calls_mute = NUM;
         public static final int calls_mute_mini = NUM;
+        public static final int calls_pip_outershadow = NUM;
         public static final int calls_speaker = NUM;
         public static final int calls_topshadow = NUM;
         public static final int calls_unmute = NUM;
@@ -1441,6 +1442,7 @@ public final class R {
         public static final int AccReleaseForArchive = NUM;
         public static final int AccSwipeForArchive = NUM;
         public static final int Accept = NUM;
+        public static final int AcceptCall = NUM;
         public static final int AccessError = NUM;
         public static final int Account = NUM;
         public static final int AccountAlreadyLoggedIn = NUM;
@@ -2328,6 +2330,7 @@ public final class R {
         public static final int DebugSendLogs = NUM;
         public static final int December = NUM;
         public static final int Decline = NUM;
+        public static final int DeclineCall = NUM;
         public static final int DeclineDeactivate = NUM;
         public static final int Default = NUM;
         public static final int DefaultRingtone = NUM;
@@ -4125,6 +4128,7 @@ public final class R {
         public static final int Restrictions_two = NUM;
         public static final int Restrictions_zero = NUM;
         public static final int Retry = NUM;
+        public static final int RetryCall = NUM;
         public static final int ReturnToCall = NUM;
         public static final int ReverseOrder = NUM;
         public static final int RevokeAlert = NUM;
@@ -4785,6 +4789,7 @@ public final class R {
         public static final int VoipAnsweringAsAccount = NUM;
         public static final int VoipAudioRoutingBluetooth = NUM;
         public static final int VoipAudioRoutingEarpiece = NUM;
+        public static final int VoipAudioRoutingHeadset = NUM;
         public static final int VoipAudioRoutingSpeaker = NUM;
         public static final int VoipBusy = NUM;
         public static final int VoipCallEnded = NUM;
@@ -4827,11 +4832,13 @@ public final class R {
         public static final int VoipSpeaker = NUM;
         public static final int VoipStartVideo = NUM;
         public static final int VoipStopVideo = NUM;
+        public static final int VoipSwitch = NUM;
         public static final int VoipSwitchToVideoCall = NUM;
         public static final int VoipUnmute = NUM;
         public static final int VoipUseLessData = NUM;
         public static final int VoipUserCameraIsOff = NUM;
         public static final int VoipUserMicrophoneIsOff = NUM;
+        public static final int VoipVideoUnavailable = NUM;
         public static final int VoipWaiting = NUM;
         public static final int Vote_few = NUM;
         public static final int Vote_many = NUM;

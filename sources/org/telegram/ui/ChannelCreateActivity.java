@@ -330,7 +330,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                     } else if (ChannelCreateActivity.this.currentStep == 1) {
                         if (!ChannelCreateActivity.this.isPrivate) {
                             if (ChannelCreateActivity.this.descriptionTextView.length() == 0) {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(ChannelCreateActivity.this.getParentActivity());
+                                AlertDialog.Builder builder = new AlertDialog.Builder((Context) ChannelCreateActivity.this.getParentActivity());
                                 builder.setTitle(LocaleController.getString("ChannelPublicEmptyUsernameTitle", NUM));
                                 builder.setMessage(LocaleController.getString("ChannelPublicEmptyUsername", NUM));
                                 builder.setPositiveButton(LocaleController.getString("Close", NUM), (DialogInterface.OnClickListener) null);
@@ -1219,7 +1219,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
 
     public /* synthetic */ void lambda$null$15$ChannelCreateActivity(View view) {
         TLRPC$Chat currentChannel = ((AdminedChannelCell) view.getParent()).getCurrentChannel();
-        AlertDialog.Builder builder = new AlertDialog.Builder(getParentActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("AppName", NUM));
         if (currentChannel.megagroup) {
             builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("RevokeLinkAlert", NUM, MessagesController.getInstance(this.currentAccount).linkPrefix + "/" + currentChannel.username, currentChannel.title)));
