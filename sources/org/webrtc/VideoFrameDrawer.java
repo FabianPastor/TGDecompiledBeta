@@ -161,21 +161,21 @@ public class VideoFrameDrawer {
     }
 
     public void drawFrame(VideoFrame videoFrame, RendererCommon.GlDrawer glDrawer, Matrix matrix) {
-        drawFrame(videoFrame, glDrawer, matrix, 0, 0, videoFrame.getRotatedWidth(), videoFrame.getRotatedHeight());
+        drawFrame(videoFrame, glDrawer, matrix, 0, 0, videoFrame.getRotatedWidth(), videoFrame.getRotatedHeight(), false);
     }
 
-    public void drawFrame(VideoFrame videoFrame, RendererCommon.GlDrawer glDrawer, Matrix matrix, int i, int i2, int i3, int i4) {
+    public void drawFrame(VideoFrame videoFrame, RendererCommon.GlDrawer glDrawer, Matrix matrix, int i, int i2, int i3, int i4, boolean z) {
         VideoFrame videoFrame2 = videoFrame;
         Matrix matrix2 = matrix;
-        calculateTransformedRenderSize(videoFrame.getRotatedWidth(), videoFrame.getRotatedHeight(), matrix);
+        calculateTransformedRenderSize(z ? videoFrame.getRotatedHeight() : videoFrame.getRotatedWidth(), z ? videoFrame.getRotatedWidth() : videoFrame.getRotatedHeight(), matrix);
         if (this.renderWidth <= 0 || this.renderHeight <= 0) {
             Logging.w("VideoFrameDrawer", "Illegal frame size: " + this.renderWidth + "x" + this.renderHeight);
             return;
         }
-        boolean z = videoFrame.getBuffer() instanceof VideoFrame.TextureBuffer;
+        boolean z2 = videoFrame.getBuffer() instanceof VideoFrame.TextureBuffer;
         this.renderMatrix.reset();
         this.renderMatrix.preTranslate(0.5f, 0.5f);
-        if (!z) {
+        if (!z2) {
             this.renderMatrix.preScale(1.0f, -1.0f);
         }
         this.renderMatrix.preRotate((float) videoFrame.getRotation());
@@ -183,7 +183,7 @@ public class VideoFrameDrawer {
         if (matrix2 != null) {
             this.renderMatrix.preConcat(matrix);
         }
-        if (z) {
+        if (z2) {
             this.lastI420Frame = null;
             drawTexture(glDrawer, (VideoFrame.TextureBuffer) videoFrame.getBuffer(), this.renderMatrix, this.renderWidth, this.renderHeight, i, i2, i3, i4);
             return;

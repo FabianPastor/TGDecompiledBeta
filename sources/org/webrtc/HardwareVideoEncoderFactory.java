@@ -246,7 +246,7 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
 
     private static String getModel() {
         String str = Build.MODEL;
-        return str != null ? str.toLowerCase() : "nomodel";
+        return str != null ? str.toLowerCase().replace(" ", "") : "nomodel";
     }
 
     private boolean isHardwareSupportedInCurrentSdk(MediaCodecInfo mediaCodecInfo, VideoCodecMimeType videoCodecMimeType) {

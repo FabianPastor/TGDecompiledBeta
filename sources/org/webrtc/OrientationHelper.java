@@ -5,6 +5,7 @@ import org.telegram.messenger.ApplicationLoader;
 
 public class OrientationHelper {
     private static final int ORIENTATION_HYSTERESIS = 5;
+    public static volatile int cameraRotation;
     /* access modifiers changed from: private */
     public OrientationEventListener orientationEventListener = new OrientationEventListener(ApplicationLoader.applicationContext) {
         public void onOrientationChanged(int i) {

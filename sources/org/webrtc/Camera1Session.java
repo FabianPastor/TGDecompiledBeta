@@ -291,6 +291,7 @@ class Camera1Session implements CameraSession {
         if (this.info.facing == 1) {
             orientation = 360 - orientation;
         }
+        OrientationHelper.cameraRotation = orientation;
         return (this.info.orientation + orientation) % 360;
     }
 

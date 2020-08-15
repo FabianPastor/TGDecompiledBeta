@@ -56,7 +56,8 @@ public class BottomSheet extends Dialog {
     public boolean applyBottomPadding = true;
     /* access modifiers changed from: private */
     public boolean applyTopPadding = true;
-    protected ColorDrawable backDrawable = new ColorDrawable(-16777216);
+    /* access modifiers changed from: protected */
+    public ColorDrawable backDrawable = new ColorDrawable(-16777216);
     /* access modifiers changed from: protected */
     public int backgroundPaddingLeft;
     /* access modifiers changed from: protected */
@@ -69,7 +70,8 @@ public class BottomSheet extends Dialog {
     public int bottomInset;
     protected boolean calcMandatoryInsets;
     private boolean canDismissWithSwipe = true;
-    protected ContainerView container;
+    /* access modifiers changed from: protected */
+    public ContainerView container;
     /* access modifiers changed from: protected */
     public ViewGroup containerView;
     /* access modifiers changed from: protected */

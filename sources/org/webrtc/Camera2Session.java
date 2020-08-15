@@ -350,6 +350,7 @@ class Camera2Session implements CameraSession {
         if (this.isCameraFrontFacing) {
             orientation = 360 - orientation;
         }
+        OrientationHelper.cameraRotation = orientation;
         return (this.cameraOrientation + orientation) % 360;
     }
 

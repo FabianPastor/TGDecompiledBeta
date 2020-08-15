@@ -371,6 +371,9 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
         if (rendererEvents2 != null) {
             rendererEvents2.onFrameResolutionChanged(i, i2, i3);
         }
+        if (this.isCamera) {
+            this.eglRenderer.setRotation(-OrientationHelper.cameraRotation);
+        }
         int i4 = (i3 == 0 || i3 == 180) ? i : i2;
         if (i3 == 0 || i3 == 180) {
             i = i2;
