@@ -11,12 +11,20 @@ public class OrientationHelper {
         public void onOrientationChanged(int i) {
             if (OrientationHelper.this.orientationEventListener != null && i != -1) {
                 OrientationHelper orientationHelper = OrientationHelper.this;
-                int unused = orientationHelper.rotation = orientationHelper.roundOrientation(i, orientationHelper.rotation);
+                int access$200 = orientationHelper.roundOrientation(i, orientationHelper.rotation);
+                if (access$200 != OrientationHelper.this.rotation) {
+                    OrientationHelper orientationHelper2 = OrientationHelper.this;
+                    orientationHelper2.onOrientationUpdate(orientationHelper2.rotation = access$200);
+                }
             }
         }
     };
     /* access modifiers changed from: private */
     public int rotation;
+
+    /* access modifiers changed from: protected */
+    public void onOrientationUpdate(int i) {
+    }
 
     /* access modifiers changed from: private */
     public int roundOrientation(int i, int i2) {

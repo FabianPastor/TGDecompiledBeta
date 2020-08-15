@@ -745,10 +745,11 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         sharedInstance = null;
         AndroidUtilities.runOnUIThread($$Lambda$VoIPBaseService$P0JaABs0QNj6qdlGVIvCURoOJAE.INSTANCE);
         if (this.tgVoip != null) {
-            updateTrafficStats();
             StatsController.getInstance(this.currentAccount).incrementTotalCallsTime(getStatsNetworkType(), ((int) (getCallDuration() / 1000)) % 5);
             onTgVoipPreStop();
-            onTgVoipStop(this.tgVoip.stop());
+            Instance.FinalState stop = this.tgVoip.stop();
+            updateTrafficStats(stop.trafficStats);
+            onTgVoipStop(stop);
             this.prevTrafficStats = null;
             this.callStartTime = 0;
             this.tgVoip = null;
@@ -878,8 +879,10 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     }
 
     /* access modifiers changed from: protected */
-    public void updateTrafficStats() {
-        Instance.TrafficStats trafficStats = this.tgVoip.getTrafficStats();
+    public void updateTrafficStats(Instance.TrafficStats trafficStats) {
+        if (trafficStats == null) {
+            trafficStats = this.tgVoip.getTrafficStats();
+        }
         long j = trafficStats.bytesSentWifi;
         Instance.TrafficStats trafficStats2 = this.prevTrafficStats;
         long j2 = j - (trafficStats2 != null ? trafficStats2.bytesSentWifi : 0);

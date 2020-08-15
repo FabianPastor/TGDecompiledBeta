@@ -1,6 +1,7 @@
 package org.telegram.messenger.voip;
 
 import android.graphics.Point;
+import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
@@ -8,12 +9,14 @@ import org.telegram.messenger.voip.Instance;
 import org.webrtc.VideoSink;
 
 public class NativeInstance {
+    private Instance.FinalState finalState;
     private long nativePtr;
     private Instance.OnRemoteMediaStateUpdatedListener onRemoteMediaStateUpdatedListener;
     private Instance.OnSignalBarsUpdatedListener onSignalBarsUpdatedListener;
     private Instance.OnSignalingDataListener onSignalDataListener;
     private Instance.OnStateUpdatedListener onStateUpdatedListener;
     private String persistentStateFilePath;
+    private CountDownLatch stopBarrier;
 
     public static native long createVideoCapturer(VideoSink videoSink);
 
@@ -22,6 +25,8 @@ public class NativeInstance {
     private static native long makeNativeInstance(String str, NativeInstance nativeInstance, Instance.Config config, String str2, Instance.Endpoint[] endpointArr, Instance.Proxy proxy, int i, Instance.EncryptionKey encryptionKey, VideoSink videoSink, long j, float f);
 
     public static native void setVideoStateCapturer(long j, int i);
+
+    private native void stopNative();
 
     public static native void switchCameraCapturer(long j);
 
@@ -58,8 +63,6 @@ public class NativeInstance {
     public native void setVideoState(int i);
 
     public native void setupOutgoingVideo(VideoSink videoSink);
-
-    public native Instance.FinalState stop();
 
     public native void switchCamera();
 
@@ -124,5 +127,24 @@ public class NativeInstance {
         if (onRemoteMediaStateUpdatedListener2 != null) {
             onRemoteMediaStateUpdatedListener2.onMediaStateUpdated(i, i2);
         }
+    }
+
+    private void onStop(Instance.FinalState finalState2) {
+        this.finalState = finalState2;
+        CountDownLatch countDownLatch = this.stopBarrier;
+        if (countDownLatch != null) {
+            countDownLatch.countDown();
+        }
+    }
+
+    public Instance.FinalState stop() {
+        this.stopBarrier = new CountDownLatch(1);
+        stopNative();
+        try {
+            this.stopBarrier.await();
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
+        return this.finalState;
     }
 }

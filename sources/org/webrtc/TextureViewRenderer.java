@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.graphics.SurfaceTexture;
 import android.os.Looper;
 import android.view.TextureView;
+import android.view.View;
 import java.util.concurrent.CountDownLatch;
 import org.telegram.messenger.AndroidUtilities;
 import org.webrtc.EglBase;
@@ -18,6 +19,7 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
     private final TextureEglRenderer eglRenderer;
     private boolean enableFixedSize;
     private boolean isCamera;
+    private OrientationHelper orientationHelper;
     private RendererCommon.RendererEvents rendererEvents;
     private final String resourceName;
     private int rotatedFrameHeight;
@@ -225,6 +227,10 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
 
     public void release() {
         this.eglRenderer.release();
+        OrientationHelper orientationHelper2 = this.orientationHelper;
+        if (orientationHelper2 != null) {
+            orientationHelper2.stop();
+        }
     }
 
     public void addFrameListener(EglRenderer.FrameListener frameListener, float f, RendererCommon.GlDrawer glDrawer) {
@@ -241,12 +247,58 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
 
     public void setIsCamera(boolean z) {
         this.isCamera = z;
+        if (!z) {
+            AnonymousClass1 r1 = new OrientationHelper() {
+                /* access modifiers changed from: protected */
+                public void onOrientationUpdate(int i) {
+                    TextureViewRenderer.this.updateRotation();
+                }
+            };
+            this.orientationHelper = r1;
+            r1.start();
+        }
     }
 
     public void setEnableHardwareScaler(boolean z) {
         ThreadUtils.checkIsOnMainThread();
         this.enableFixedSize = z;
         updateSurfaceSize();
+    }
+
+    /* access modifiers changed from: private */
+    public void updateRotation() {
+        View view;
+        float f;
+        float f2;
+        float f3;
+        if (this.orientationHelper != null && this.rotatedFrameWidth != 0 && this.rotatedFrameHeight != 0 && (view = (View) getParent()) != null) {
+            int orientation = this.orientationHelper.getOrientation();
+            float measuredWidth = (float) getMeasuredWidth();
+            float measuredHeight = (float) getMeasuredHeight();
+            float measuredWidth2 = (float) view.getMeasuredWidth();
+            float measuredHeight2 = (float) view.getMeasuredHeight();
+            if (orientation == 90 || orientation == 270) {
+                f = measuredWidth;
+                f2 = measuredHeight;
+            } else {
+                f2 = measuredWidth;
+                f = measuredHeight;
+            }
+            if (f2 < f) {
+                f3 = Math.max(f2 / measuredWidth, f / measuredHeight);
+            } else {
+                f3 = Math.min(f2 / measuredWidth, f / measuredHeight);
+            }
+            float f4 = f2 * f3;
+            float f5 = f * f3;
+            if (Math.abs((f4 / f5) - (measuredWidth2 / measuredHeight2)) < 0.1f) {
+                f3 *= Math.max(measuredWidth2 / f4, measuredHeight2 / f5);
+            }
+            if (orientation == 270) {
+                orientation = -90;
+            }
+            animate().scaleX(f3).scaleY(f3).rotation((float) (-orientation)).setDuration(180).start();
+        }
     }
 
     public void setMirror(boolean z) {
@@ -286,6 +338,9 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
         ThreadUtils.checkIsOnMainThread();
         Point measure = this.videoLayoutMeasure.measure(this.isCamera, i, i2, this.rotatedFrameWidth, this.rotatedFrameHeight);
         setMeasuredDimension(measure.x, measure.y);
+        if (!this.isCamera) {
+            updateRotation();
+        }
         logD("onMeasure(). New size: " + measure.x + "x" + measure.y);
     }
 
@@ -309,7 +364,7 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
         if (((float) i) / ((float) i2) > width) {
             i = (int) (((float) i2) * width);
         } else {
-            i2 = (int) (((float) i) / width);
+            i2 = (int) (((float) i2) / width);
         }
         int min = Math.min(getWidth(), i);
         int min2 = Math.min(getHeight(), i2);
