@@ -55,6 +55,7 @@ class Camera2Session implements CameraSession {
     private final int height;
     /* access modifiers changed from: private */
     public boolean isCameraFrontFacing;
+    private OrientationHelper orientationHelper;
     /* access modifiers changed from: private */
     public SessionState state = SessionState.RUNNING;
     /* access modifiers changed from: private */
@@ -241,6 +242,7 @@ class Camera2Session implements CameraSession {
         this.width = i;
         this.height = i2;
         this.framerate = i3;
+        this.orientationHelper = new OrientationHelper();
         start();
     }
 
@@ -248,9 +250,9 @@ class Camera2Session implements CameraSession {
         checkIsOnCameraThread();
         Logging.d("Camera2Session", "start");
         try {
-            CameraCharacteristics cameraCharacteristics2 = this.cameraManager.getCameraCharacteristics(this.cameraId);
-            this.cameraCharacteristics = cameraCharacteristics2;
-            this.cameraOrientation = ((Integer) cameraCharacteristics2.get(CameraCharacteristics.SENSOR_ORIENTATION)).intValue();
+            this.cameraCharacteristics = this.cameraManager.getCameraCharacteristics(this.cameraId);
+            this.orientationHelper.start();
+            this.cameraOrientation = ((Integer) this.cameraCharacteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)).intValue();
             this.isCameraFrontFacing = ((Integer) this.cameraCharacteristics.get(CameraCharacteristics.LENS_FACING)).intValue() == 0;
             findCaptureFormat();
             openCamera();
@@ -321,6 +323,10 @@ class Camera2Session implements CameraSession {
             cameraDevice2.close();
             this.cameraDevice = null;
         }
+        OrientationHelper orientationHelper2 = this.orientationHelper;
+        if (orientationHelper2 != null) {
+            orientationHelper2.stop();
+        }
         Logging.d("Camera2Session", "Stop done");
     }
 
@@ -340,11 +346,11 @@ class Camera2Session implements CameraSession {
 
     /* access modifiers changed from: private */
     public int getFrameOrientation() {
-        int deviceOrientation = CameraSession.CC.getDeviceOrientation(this.applicationContext);
-        if (!this.isCameraFrontFacing) {
-            deviceOrientation = 360 - deviceOrientation;
+        int orientation = this.orientationHelper.getOrientation();
+        if (this.isCameraFrontFacing) {
+            orientation = 360 - orientation;
         }
-        return (this.cameraOrientation + deviceOrientation) % 360;
+        return (this.cameraOrientation + orientation) % 360;
     }
 
     /* access modifiers changed from: private */

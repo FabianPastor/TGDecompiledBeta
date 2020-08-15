@@ -20,9 +20,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Utilities;
+import org.telegram.ui.Components.LayoutHelper;
+import org.webrtc.RendererCommon;
 import org.webrtc.TextureViewRenderer;
 
 public class VoIPTextureView extends FrameLayout {
+    public View backgroundView;
     public Bitmap cameraLastBitmap;
     public final ImageView imageView;
     final Path path = new Path();
@@ -42,10 +45,25 @@ public class VoIPTextureView extends FrameLayout {
                 super.onFirstFrameRendered();
                 VoIPTextureView.this.invalidate();
             }
+
+            /* access modifiers changed from: protected */
+            public void onMeasure(int i, int i2) {
+                super.onMeasure(i, i2);
+            }
         };
         this.renderer = r0;
         r0.setEnableHardwareScaler(true);
-        addView(this.renderer);
+        this.renderer.setIsCamera(z);
+        if (!z) {
+            View view = new View(context);
+            this.backgroundView = view;
+            view.setBackgroundColor(-14999773);
+            addView(this.backgroundView, LayoutHelper.createFrame(-1, -1.0f));
+            this.renderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT);
+            addView(this.renderer, LayoutHelper.createFrame(-1, -2, 17));
+        } else {
+            addView(this.renderer);
+        }
         addView(this.imageView);
         if (Build.VERSION.SDK_INT >= 21) {
             setOutlineProvider(new ViewOutlineProvider() {

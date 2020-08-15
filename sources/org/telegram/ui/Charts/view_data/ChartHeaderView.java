@@ -135,6 +135,8 @@ public class ChartHeaderView extends FrameLayout {
         this.back.setAlpha(1.0f);
         this.back.setTranslationX(0.0f);
         this.back.setTranslationY(0.0f);
+        this.back.setScaleX(1.0f);
+        this.back.setScaleY(1.0f);
         this.title.setAlpha(0.0f);
     }
 

@@ -17,6 +17,7 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
     private static final String TAG = "TextureViewRenderer";
     private final TextureEglRenderer eglRenderer;
     private boolean enableFixedSize;
+    private boolean isCamera;
     private RendererCommon.RendererEvents rendererEvents;
     private final String resourceName;
     private int rotatedFrameHeight;
@@ -238,6 +239,10 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
         this.eglRenderer.removeFrameListener(frameListener);
     }
 
+    public void setIsCamera(boolean z) {
+        this.isCamera = z;
+    }
+
     public void setEnableHardwareScaler(boolean z) {
         ThreadUtils.checkIsOnMainThread();
         this.enableFixedSize = z;
@@ -279,7 +284,7 @@ public class TextureViewRenderer extends TextureView implements TextureView.Surf
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         ThreadUtils.checkIsOnMainThread();
-        Point measure = this.videoLayoutMeasure.measure(i, i2, this.rotatedFrameWidth, this.rotatedFrameHeight);
+        Point measure = this.videoLayoutMeasure.measure(this.isCamera, i, i2, this.rotatedFrameWidth, this.rotatedFrameHeight);
         setMeasuredDimension(measure.x, measure.y);
         logD("onMeasure(). New size: " + measure.x + "x" + measure.y);
     }

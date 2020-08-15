@@ -116,7 +116,7 @@ public class SurfaceViewRenderer extends SurfaceView implements SurfaceHolder.Ca
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         ThreadUtils.checkIsOnMainThread();
-        Point measure = this.videoLayoutMeasure.measure(i, i2, this.rotatedFrameWidth, this.rotatedFrameHeight);
+        Point measure = this.videoLayoutMeasure.measure(true, i, i2, this.rotatedFrameWidth, this.rotatedFrameHeight);
         setMeasuredDimension(measure.x, measure.y);
         logD("onMeasure(). New size: " + measure.x + "x" + measure.y);
     }

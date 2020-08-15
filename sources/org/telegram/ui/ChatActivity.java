@@ -9303,7 +9303,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 this.floatingDateViewOffset = 0.0f;
             }
             updateChatListViewTopPadding();
-            if (!this.firstLoading && !this.paused && !this.inPreviewMode && !this.inScheduleMode) {
+            if (!this.firstLoading && !this.paused && !this.inPreviewMode && !this.inScheduleMode && !getMessagesController().ignoreSetOnline) {
                 if (i10 != Integer.MIN_VALUE || i9 != Integer.MAX_VALUE) {
                     int i12 = 0;
                     int i13 = 0;

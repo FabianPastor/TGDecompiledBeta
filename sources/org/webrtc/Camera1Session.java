@@ -35,6 +35,7 @@ class Camera1Session implements CameraSession {
     /* access modifiers changed from: private */
     public boolean firstFrameReported;
     private final Camera.CameraInfo info;
+    private OrientationHelper orientationHelper;
     /* access modifiers changed from: private */
     public SessionState state;
     private final SurfaceTextureHelper surfaceTextureHelper;
@@ -132,6 +133,7 @@ class Camera1Session implements CameraSession {
         this.info = cameraInfo;
         this.captureFormat = captureFormat2;
         this.constructionTimeNs = j;
+        this.orientationHelper = new OrientationHelper();
         surfaceTextureHelper2.setTextureSize(captureFormat2.width, captureFormat2.height);
         startCapturing();
     }
@@ -172,6 +174,7 @@ class Camera1Session implements CameraSession {
         } else {
             listenForBytebufferFrames();
         }
+        this.orientationHelper.start();
         try {
             this.camera.startPreview();
         } catch (RuntimeException e) {
@@ -195,6 +198,10 @@ class Camera1Session implements CameraSession {
         this.camera.stopPreview();
         this.camera.release();
         this.events.onCameraClosed(this);
+        OrientationHelper orientationHelper2 = this.orientationHelper;
+        if (orientationHelper2 != null) {
+            orientationHelper2.stop();
+        }
         Logging.d("Camera1Session", "Stop done");
     }
 
@@ -280,11 +287,11 @@ class Camera1Session implements CameraSession {
 
     /* access modifiers changed from: private */
     public int getFrameOrientation() {
-        int deviceOrientation = CameraSession.CC.getDeviceOrientation(this.applicationContext);
-        if (this.info.facing == 0) {
-            deviceOrientation = 360 - deviceOrientation;
+        int orientation = this.orientationHelper.getOrientation();
+        if (this.info.facing == 1) {
+            orientation = 360 - orientation;
         }
-        return (this.info.orientation + deviceOrientation) % 360;
+        return (this.info.orientation + orientation) % 360;
     }
 
     /* access modifiers changed from: private */

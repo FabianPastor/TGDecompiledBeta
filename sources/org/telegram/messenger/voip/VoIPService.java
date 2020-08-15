@@ -653,6 +653,7 @@ public class VoIPService extends VoIPBaseService {
     }
 
     public void acceptIncomingCall() {
+        MessagesController.getInstance(this.currentAccount).ignoreSetOnline = false;
         stopRinging();
         showNotification();
         configureDeviceForCall();

@@ -1750,6 +1750,9 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             transitionParams.pickerEndOut = chartPickerDelegate.pickerEnd;
             transitionParams.pickerStartOut = chartPickerDelegate.pickerStart;
             int binarySearch = Arrays.binarySearch(this.data.chartData.x, j);
+            if (binarySearch < 0) {
+                binarySearch = this.data.chartData.x.length - 1;
+            }
             transitionParams.xPercentage = this.data.chartData.xPercentage[binarySearch];
             this.zoomedChartView.setVisibility(0);
             this.zoomedChartView.transitionParams = transitionParams;

@@ -183,7 +183,7 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
         if (Build.VERSION.SDK_INT >= 21) {
             layoutParams.flags |= Integer.MIN_VALUE;
         }
-        layoutParams.flags = 16777992;
+        layoutParams.flags = 16778120;
         return layoutParams;
     }
 

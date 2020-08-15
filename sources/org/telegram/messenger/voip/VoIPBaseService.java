@@ -54,6 +54,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLoader;
@@ -269,6 +270,12 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
     protected long videoCapturer;
     protected int videoState = 0;
     private boolean wasEstablished;
+
+    public static class SharedUIParams {
+        public boolean cameraAlertWasShowed;
+        public boolean tapToVideoTooltipWasShowed;
+        public boolean wasVideoCall;
+    }
 
     public interface StateListener {
         void onAudioSettingsChanged();
@@ -716,6 +723,9 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
         }
         stopForeground(true);
         stopRinging();
+        if (ApplicationLoader.mainInterfacePaused || !ApplicationLoader.isScreenOn) {
+            MessagesController.getInstance(this.currentAccount).ignoreSetOnline = false;
+        }
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.appDidLogout);
         SensorManager sensorManager = (SensorManager) getSystemService("sensor");
         if (sensorManager.getDefaultSensor(8) != null) {
@@ -1951,15 +1961,6 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
                 FileLog.d("onSlience");
             }
             VoIPBaseService.this.stopRinging();
-        }
-    }
-
-    public class SharedUIParams {
-        public boolean cameraAlertWasShowed;
-        public boolean tapToVideoTooltipWasShowed;
-        public boolean wasVideoCall;
-
-        public SharedUIParams() {
         }
     }
 }

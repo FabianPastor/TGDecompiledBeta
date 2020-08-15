@@ -55,6 +55,7 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.voip.EncryptionKeyEmojifier;
 import org.telegram.messenger.voip.VideoCameraCapturer;
@@ -572,7 +573,12 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         TextureViewRenderer textureViewRenderer = new TextureViewRenderer(context2);
         this.callingUserMiniTextureRenderer = textureViewRenderer;
         textureViewRenderer.setEnableHardwareScaler(true);
-        this.callingUserMiniFloatingLayout.addView(this.callingUserMiniTextureRenderer);
+        this.callingUserMiniTextureRenderer.setIsCamera(false);
+        this.callingUserMiniTextureRenderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT);
+        View view = new View(context2);
+        view.setBackgroundColor(-14999773);
+        this.callingUserMiniFloatingLayout.addView(view, LayoutHelper.createFrame(-1, -1.0f));
+        this.callingUserMiniFloatingLayout.addView(this.callingUserMiniTextureRenderer, LayoutHelper.createFrame(-1, -2, 17));
         this.callingUserMiniFloatingLayout.setOnTapListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 VoIPFragment.this.lambda$createView$8$VoIPFragment(view);
@@ -582,13 +588,13 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         r2.addView(this.currentUserCameraFloatingLayout, LayoutHelper.createFrame(-2, -2.0f));
         r2.addView(this.callingUserMiniFloatingLayout);
         r2.addView(this.overlayBackground);
-        View view = new View(context2);
-        this.bottomShadow = view;
-        view.setBackground(new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{0, ColorUtils.setAlphaComponent(-16777216, 127)}));
-        r2.addView(this.bottomShadow, LayoutHelper.createFrame(-1, 140, 80));
         View view2 = new View(context2);
-        this.topShadow = view2;
-        view2.setBackground(new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{ColorUtils.setAlphaComponent(-16777216, 102), 0}));
+        this.bottomShadow = view2;
+        view2.setBackground(new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{0, ColorUtils.setAlphaComponent(-16777216, 127)}));
+        r2.addView(this.bottomShadow, LayoutHelper.createFrame(-1, 140, 80));
+        View view3 = new View(context2);
+        this.topShadow = view3;
+        view3.setBackground(new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{ColorUtils.setAlphaComponent(-16777216, 102), 0}));
         r2.addView(this.topShadow, LayoutHelper.createFrame(-1, 140, 48));
         AnonymousClass5 r5 = new LinearLayout(context2) {
             public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo accessibilityNodeInfo) {
@@ -607,7 +613,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         });
         TextView textView = new TextView(context2);
         this.emojiRationalTextView = textView;
-        textView.setText(LocaleController.formatString("CallEmojiKeyTooltip", NUM, this.callingUser.first_name));
+        textView.setText(LocaleController.formatString("CallEmojiKeyTooltip", NUM, UserObject.getFirstName(this.callingUser)));
         this.emojiRationalTextView.setTextSize(16.0f);
         this.emojiRationalTextView.setTextColor(-1);
         this.emojiRationalTextView.setGravity(17);

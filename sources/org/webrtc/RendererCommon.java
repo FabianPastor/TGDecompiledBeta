@@ -2,7 +2,6 @@ package org.webrtc;
 
 import android.graphics.Point;
 import android.opengl.Matrix;
-import android.view.View;
 
 public class RendererCommon {
     private static float BALANCED_VISIBLE_FRACTION = 0.5625f;
@@ -47,27 +46,84 @@ public class RendererCommon {
             this.visibleFractionMismatchOrientation = f2;
         }
 
-        public Point measure(int i, int i2, int i3, int i4) {
-            int defaultSize = View.getDefaultSize(Integer.MAX_VALUE, i);
-            int defaultSize2 = View.getDefaultSize(Integer.MAX_VALUE, i2);
-            if (i3 == 0 || i4 == 0 || defaultSize == 0 || defaultSize2 == 0) {
-                return new Point(defaultSize, defaultSize2);
-            }
-            float f = ((float) i3) / ((float) i4);
-            float f2 = ((float) defaultSize) / ((float) defaultSize2);
-            boolean z = true;
-            boolean z2 = f > 1.0f;
-            if (f2 <= 1.0f) {
-                z = false;
-            }
-            Point displaySize = RendererCommon.getDisplaySize(z2 == z ? this.visibleFractionMatchOrientation : this.visibleFractionMismatchOrientation, f, defaultSize, defaultSize2);
-            if (View.MeasureSpec.getMode(i) == NUM) {
-                displaySize.x = defaultSize;
-            }
-            if (View.MeasureSpec.getMode(i2) == NUM) {
-                displaySize.y = defaultSize2;
-            }
-            return displaySize;
+        /* JADX WARNING: Code restructure failed: missing block: B:29:0x0056, code lost:
+            if (r8 == r2) goto L_0x0058;
+         */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public android.graphics.Point measure(boolean r8, int r9, int r10, int r11, int r12) {
+            /*
+                r7 = this;
+                r0 = 2147483647(0x7fffffff, float:NaN)
+                int r1 = android.view.View.getDefaultSize(r0, r9)
+                int r0 = android.view.View.getDefaultSize(r0, r10)
+                if (r11 == 0) goto L_0x005b
+                if (r12 == 0) goto L_0x005b
+                if (r1 == 0) goto L_0x005b
+                if (r0 != 0) goto L_0x0014
+                goto L_0x005b
+            L_0x0014:
+                float r11 = (float) r11
+                float r12 = (float) r12
+                float r11 = r11 / r12
+                float r12 = (float) r1
+                float r2 = (float) r0
+                float r12 = r12 / r2
+                r2 = 1
+                r3 = 0
+                r4 = 1065353216(0x3var_, float:1.0)
+                int r5 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
+                if (r5 <= 0) goto L_0x0024
+                r5 = 1
+                goto L_0x0025
+            L_0x0024:
+                r5 = 0
+            L_0x0025:
+                int r6 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1))
+                if (r6 <= 0) goto L_0x002b
+                r6 = 1
+                goto L_0x002c
+            L_0x002b:
+                r6 = 0
+            L_0x002c:
+                if (r5 != r6) goto L_0x0031
+                float r5 = r7.visibleFractionMatchOrientation
+                goto L_0x0033
+            L_0x0031:
+                float r5 = r7.visibleFractionMismatchOrientation
+            L_0x0033:
+                android.graphics.Point r5 = org.webrtc.RendererCommon.getDisplaySize((float) r5, (float) r11, (int) r1, (int) r0)
+                int r9 = android.view.View.MeasureSpec.getMode(r9)
+                r6 = 1073741824(0x40000000, float:2.0)
+                if (r9 != r6) goto L_0x0041
+                r5.x = r1
+            L_0x0041:
+                int r9 = android.view.View.MeasureSpec.getMode(r10)
+                if (r9 == r6) goto L_0x0058
+                if (r8 != 0) goto L_0x005a
+                int r8 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
+                if (r8 <= 0) goto L_0x004f
+                r8 = 1
+                goto L_0x0050
+            L_0x004f:
+                r8 = 0
+            L_0x0050:
+                int r9 = (r12 > r4 ? 1 : (r12 == r4 ? 0 : -1))
+                if (r9 <= 0) goto L_0x0055
+                goto L_0x0056
+            L_0x0055:
+                r2 = 0
+            L_0x0056:
+                if (r8 != r2) goto L_0x005a
+            L_0x0058:
+                r5.y = r0
+            L_0x005a:
+                return r5
+            L_0x005b:
+                android.graphics.Point r8 = new android.graphics.Point
+                r8.<init>(r1, r0)
+                return r8
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.webrtc.RendererCommon.VideoLayoutMeasure.measure(boolean, int, int, int, int):android.graphics.Point");
         }
     }
 
