@@ -1038,7 +1038,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             if (r0 != 0) goto L_0x0033
             org.telegram.ui.WallpapersListActivity$FileWallpaper r0 = new org.telegram.ui.WallpapersListActivity$FileWallpaper
             r3 = 2131165274(0x7var_a, float:1.794476E38)
-            r4 = 2131165331(0x7var_, float:1.7944876E38)
+            r4 = 2131165332(0x7var_, float:1.7944878E38)
             r0.<init>((java.lang.String) r2, (int) r3, (int) r4)
             r15.catsWallpaper = r0
             goto L_0x0038

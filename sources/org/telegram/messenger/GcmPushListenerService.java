@@ -4083,10 +4083,10 @@ public class GcmPushListenerService extends FirebaseMessagingService {
             goto L_0x1741
         L_0x09c1:
             java.lang.String r2 = "YouHaveNewMessage"
-            r3 = 2131627509(0x7f0e0df5, float:1.8882284E38)
+            r3 = 2131627514(0x7f0e0dfa, float:1.8882295E38)
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ all -> 0x044c }
             java.lang.String r3 = "SecretChatName"
-            r4 = 2131626820(0x7f0e0b44, float:1.8880887E38)
+            r4 = 2131626822(0x7f0e0b46, float:1.8880891E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ all -> 0x044c }
             r25 = r3
             r6 = r18

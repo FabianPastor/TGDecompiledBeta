@@ -28,6 +28,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.voip.VideoCameraCapturer;
 import org.telegram.messenger.voip.VoIPBaseService;
 import org.telegram.messenger.voip.VoIPService;
@@ -39,7 +40,7 @@ import org.telegram.ui.VoIPFragment;
 import org.webrtc.EglBase;
 import org.webrtc.RendererCommon;
 
-public class VoIPPiPView implements VoIPBaseService.StateListener {
+public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationCenter.NotificationCenterDelegate {
     public static int bottomInset = 0;
     /* access modifiers changed from: private */
     public static VoIPPiPView expandedInstance = null;
@@ -138,6 +139,7 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
             voIPPiPView.windowLayoutParams = createWindowLayoutParams;
             SharedPreferences sharedPreferences = ApplicationLoader.applicationContext.getSharedPreferences("voippipconfig", 0);
             instance.setRelativePosition(sharedPreferences.getFloat("relativeX", 1.0f), sharedPreferences.getFloat("relativeY", 0.0f));
+            NotificationCenter.getGlobalInstance().addObserver(instance, NotificationCenter.didEndCall);
             windowManager2.addView(instance.windowView, createWindowLayoutParams);
             instance.currentUserTextureView.renderer.init(VideoCameraCapturer.eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
             instance.callingUserTextureView.renderer.init(VideoCameraCapturer.eglBase.getEglBaseContext(), (RendererCommon.RendererEvents) null);
@@ -321,6 +323,8 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance != null) {
             sharedInstance.hangUp();
+        } else {
+            finish();
         }
     }
 
@@ -335,25 +339,26 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
         }
     }
 
-    private void finishInternal() {
+    /* access modifiers changed from: private */
+    public void finishInternal() {
         this.currentUserTextureView.renderer.release();
         this.callingUserTextureView.renderer.release();
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance != null) {
             sharedInstance.unregisterStateListener(this);
         }
-        this.floatingView.getRelativePosition(this.point);
-        float min = Math.min(1.0f, Math.max(0.0f, this.point[0]));
-        ApplicationLoader.applicationContext.getSharedPreferences("voippipconfig", 0).edit().putFloat("relativeX", min).putFloat("relativeY", Math.min(1.0f, Math.max(0.0f, this.point[1]))).apply();
         this.windowView.setVisibility(8);
         if (this.windowView.getParent() != null) {
+            this.floatingView.getRelativePosition(this.point);
+            float min = Math.min(1.0f, Math.max(0.0f, this.point[0]));
+            ApplicationLoader.applicationContext.getSharedPreferences("voippipconfig", 0).edit().putFloat("relativeX", min).putFloat("relativeY", Math.min(1.0f, Math.max(0.0f, this.point[1]))).apply();
             try {
                 this.windowManager.removeView(this.windowView);
             } catch (Throwable th) {
                 FileLog.e(th);
             }
         }
-        instance = null;
+        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.didEndCall);
     }
 
     public void onStateChanged(int i) {
@@ -442,6 +447,12 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance != null && sharedInstance.getVideoState() == 1) {
             sharedInstance.setVideoState(2);
+        }
+    }
+
+    public void didReceivedNotification(int i, int i2, Object... objArr) {
+        if (i == NotificationCenter.didEndCall) {
+            finish();
         }
     }
 
@@ -1044,13 +1055,8 @@ public class VoIPPiPView implements VoIPBaseService.StateListener {
                             public /* synthetic */ void lambda$onAnimationEnd$0$VoIPPiPView$FloatingView$3(boolean z) {
                                 if (VoIPPiPView.instance != null && VoIPPiPView.expandedInstance != null) {
                                     VoIPPiPView.expandedInstance.windowView.setAlpha(0.0f);
-                                    try {
-                                        VoIPPiPView.this.windowManager.removeView(VoIPPiPView.expandedInstance.windowView);
-                                    } catch (Throwable th) {
-                                        FileLog.e(th);
-                                    }
-                                    VoIPPiPView unused = VoIPPiPView.expandedInstance = null;
-                                    boolean unused2 = VoIPPiPView.this.expandedAnimationInProgress = false;
+                                    VoIPPiPView.expandedInstance.finishInternal();
+                                    boolean unused = VoIPPiPView.this.expandedAnimationInProgress = false;
                                     if (z) {
                                         AndroidUtilities.runOnUIThread(VoIPPiPView.this.collapseRunnable, 3000);
                                     }

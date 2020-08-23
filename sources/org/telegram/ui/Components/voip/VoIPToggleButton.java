@@ -495,18 +495,16 @@ public class VoIPToggleButton extends FrameLayout {
             if (valueAnimator != null) {
                 valueAnimator.cancel();
             }
-            float f = 0.0f;
             if (!z2) {
                 this.icon[0] = ContextCompat.getDrawable(getContext(), i).mutate();
                 this.icon[0].setColorFilter(new PorterDuffColorFilter(i2, PorterDuff.Mode.MULTIPLY));
                 this.crossPaint.setColor(i2);
                 this.backgroundColor = i3;
                 this.textView[0].setText(str);
-                if (this.drawCross) {
-                    f = 1.0f;
-                }
-                this.crossProgress = f;
+                this.crossProgress = this.drawCross ? 1.0f : 0.0f;
                 this.iconChangeColor = false;
+                this.replaceProgress = 0.0f;
+                invalidate();
                 return;
             }
             if (!this.iconChangeColor) {
@@ -559,6 +557,7 @@ public class VoIPToggleButton extends FrameLayout {
                 }
             });
             this.replaceAnimator.setDuration(150).start();
+            invalidate();
         }
     }
 

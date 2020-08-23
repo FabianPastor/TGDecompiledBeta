@@ -1,6 +1,7 @@
 package org.webrtc;
 
 import android.media.MediaCodecInfo;
+import org.telegram.messenger.voip.Instance;
 import org.webrtc.EglBase;
 import org.webrtc.Predicate;
 
@@ -19,7 +20,53 @@ public class HardwareVideoDecoderFactory extends MediaCodecVideoDecoderFactory {
         }
 
         public boolean test(MediaCodecInfo mediaCodecInfo) {
-            return MediaCodecUtils.isHardwareAccelerated(mediaCodecInfo);
+            String[] supportedTypes;
+            if (!MediaCodecUtils.isHardwareAccelerated(mediaCodecInfo) || (supportedTypes = mediaCodecInfo.getSupportedTypes()) == null || supportedTypes.length == 0) {
+                return false;
+            }
+            Instance.ServerConfig globalServerConfig = Instance.getGlobalServerConfig();
+            for (String str : supportedTypes) {
+                char c = 65535;
+                switch (str.hashCode()) {
+                    case -1662541442:
+                        if (str.equals("video/hevc")) {
+                            c = 3;
+                            break;
+                        }
+                        break;
+                    case 1331836730:
+                        if (str.equals("video/avc")) {
+                            c = 2;
+                            break;
+                        }
+                        break;
+                    case 1599127256:
+                        if (str.equals("video/x-vnd.on2.vp8")) {
+                            c = 0;
+                            break;
+                        }
+                        break;
+                    case 1599127257:
+                        if (str.equals("video/x-vnd.on2.vp9")) {
+                            c = 1;
+                            break;
+                        }
+                        break;
+                }
+                if (c == 0) {
+                    return globalServerConfig.enable_vp8_decoder;
+                }
+                if (c == 1) {
+                    return globalServerConfig.enable_vp9_decoder;
+                }
+                if (c == 2) {
+                    return globalServerConfig.enable_h264_decoder;
+                }
+                if (c == 3) {
+                    return globalServerConfig.enable_h265_decoder;
+                }
+            }
+            return true;
         }
     };
 

@@ -248,7 +248,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
             boolean r13 = r11.self
             r14 = 2
             if (r13 == 0) goto L_0x00c8
-            r13 = 2131626774(0x7f0e0b16, float:1.8880794E38)
+            r13 = 2131626776(0x7f0e0b18, float:1.8880798E38)
             java.lang.String r15 = "SavedMessages"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
             java.lang.String r13 = r13.toLowerCase()

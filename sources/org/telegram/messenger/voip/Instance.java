@@ -274,6 +274,14 @@ public final class Instance {
     }
 
     public static final class ServerConfig {
+        public final boolean enable_h264_decoder;
+        public final boolean enable_h264_encoder;
+        public final boolean enable_h265_decoder;
+        public final boolean enable_h265_encoder;
+        public final boolean enable_vp8_decoder;
+        public final boolean enable_vp8_encoder;
+        public final boolean enable_vp9_decoder;
+        public final boolean enable_vp9_encoder;
         public final double hangupUiTimeout;
         /* access modifiers changed from: private */
         public final JSONObject jsonObject;
@@ -285,6 +293,14 @@ public final class Instance {
             this.useSystemNs = jSONObject.optBoolean("use_system_ns", true);
             this.useSystemAec = jSONObject.optBoolean("use_system_aec", true);
             this.hangupUiTimeout = jSONObject.optDouble("hangup_ui_timeout", 5.0d);
+            this.enable_vp8_encoder = jSONObject.optBoolean("enable_vp8_encoder", true);
+            this.enable_vp8_decoder = jSONObject.optBoolean("enable_vp8_decoder", true);
+            this.enable_vp9_encoder = jSONObject.optBoolean("enable_vp9_encoder", true);
+            this.enable_vp9_decoder = jSONObject.optBoolean("enable_vp9_decoder", true);
+            this.enable_h265_encoder = jSONObject.optBoolean("enable_h265_encoder", true);
+            this.enable_h265_decoder = jSONObject.optBoolean("enable_h265_decoder", true);
+            this.enable_h264_encoder = jSONObject.optBoolean("enable_h264_encoder", true);
+            this.enable_h264_decoder = jSONObject.optBoolean("enable_h264_decoder", true);
         }
 
         public String getString(String str) {

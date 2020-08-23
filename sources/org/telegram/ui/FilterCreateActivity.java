@@ -1289,8 +1289,8 @@ public class FilterCreateActivity extends BaseFragment {
                 r3 = 1
                 if (r0 == r3) goto L_0x0149
                 r4 = 3
-                r5 = 2131165437(0x7var_fd, float:1.7945091E38)
-                r6 = 2131165436(0x7var_fc, float:1.794509E38)
+                r5 = 2131165438(0x7var_fe, float:1.7945093E38)
+                r6 = 2131165437(0x7var_fd, float:1.7945091E38)
                 java.lang.String r7 = "windowBackgroundGrayShadow"
                 if (r0 == r4) goto L_0x0127
                 r4 = 4

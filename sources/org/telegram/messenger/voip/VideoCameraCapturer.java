@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
+import com.google.android.datatransport.runtime.logging.Logging;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
@@ -41,6 +42,7 @@ public class VideoCameraCapturer {
 
     public VideoCameraCapturer() {
         if (Build.VERSION.SDK_INT >= 18) {
+            Logging.i("VideoCameraCapturer", "device model = " + Build.MANUFACTURER + Build.MODEL);
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public final void run() {
                     VideoCameraCapturer.this.lambda$new$0$VideoCameraCapturer();
@@ -250,5 +252,16 @@ public class VideoCameraCapturer {
             surfaceTextureHelper.dispose();
             this.videoCapturerSurfaceTextureHelper = null;
         }
+    }
+
+    private EglBase.Context getSharedEGLContext() {
+        if (eglBase == null) {
+            eglBase = EglBase.CC.create((EglBase.Context) null, EglBase.CONFIG_PLAIN);
+        }
+        EglBase eglBase2 = eglBase;
+        if (eglBase2 != null) {
+            return eglBase2.getEglBaseContext();
+        }
+        return null;
     }
 }

@@ -215,6 +215,7 @@ public final class R {
         public static final int broadcast_w = NUM;
         public static final int btnshadow = NUM;
         public static final int burn = NUM;
+        public static final int call_arrow_right = NUM;
         public static final int call_custom_notification_icon = NUM;
         public static final int call_notification_bg = NUM;
         public static final int call_notification_line = NUM;
@@ -4022,6 +4023,8 @@ public final class R {
         public static final int RateCallNoise = NUM;
         public static final int RateCallSilentLocal = NUM;
         public static final int RateCallSilentRemote = NUM;
+        public static final int RateCallVideoDistorted = NUM;
+        public static final int RateCallVideoPixelated = NUM;
         public static final int ReEnterYourPasscode = NUM;
         public static final int Recent = NUM;
         public static final int RecentFiles = NUM;
@@ -4822,9 +4825,12 @@ public final class R {
         public static final int VoipOutputDevices = NUM;
         public static final int VoipPeerIncompatible = NUM;
         public static final int VoipPeerOutdated = NUM;
+        public static final int VoipPeerVideoOutdated = NUM;
+        public static final int VoipPeerVideoOutdatedMakeVoice = NUM;
         public static final int VoipQuickReplies = NUM;
         public static final int VoipQuickRepliesExplain = NUM;
         public static final int VoipRateCallAlert = NUM;
+        public static final int VoipReconnecting = NUM;
         public static final int VoipRequesting = NUM;
         public static final int VoipRinging = NUM;
         public static final int VoipRingtoneInfo = NUM;

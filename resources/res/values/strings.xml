@@ -2711,6 +2711,8 @@
     <string name="RateCallNoise">I heard background noise</string>
     <string name="RateCallSilentLocal">I couldn\'t hear the other side</string>
     <string name="RateCallSilentRemote">The other side couldn\'t hear me</string>
+    <string name="RateCallVideoDistorted">Video was distorted</string>
+    <string name="RateCallVideoPixelated">Video was pixelated</string>
     <string name="ReEnterYourPasscode">Re-enter your new passcode</string>
     <string name="Recent">Recent</string>
     <string name="RecentFiles">Recent files</string>
@@ -3511,9 +3513,12 @@
     <string name="VoipOutputDevices">Output Devices</string>
     <string name="VoipPeerIncompatible">**%1$s**\'s app is using an incompatible protocol. They need to update their app before you can call them.</string>
     <string name="VoipPeerOutdated">**%1$s**\'s app does not support calls. They need to update their app before you can call them.</string>
+    <string name="VoipPeerVideoOutdated">Sorry, **%1$s** is using an old version of Telegram that doesn\'t support video calls.</string>
+    <string name="VoipPeerVideoOutdatedMakeVoice">Make a voice call</string>
     <string name="VoipQuickReplies">Respond with Text</string>
     <string name="VoipQuickRepliesExplain">These quick responses will be available when you respond to an incoming call with a Telegram message. Change them to say anything you like.</string>
     <string name="VoipRateCallAlert">Please rate the quality of your Telegram call</string>
+    <string name="VoipReconnecting">Reconnecting</string>
     <string name="VoipRequesting">Requesting</string>
     <string name="VoipRinging">Ringing</string>
     <string name="VoipRingtoneInfo">You can customize the ringtone used when this contact calls you on Telegram.</string>

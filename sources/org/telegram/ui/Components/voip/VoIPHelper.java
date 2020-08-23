@@ -115,7 +115,11 @@ public class VoIPHelper {
                     });
                 }
             }
-            builder2.show();
+            try {
+                builder2.show();
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
+            }
         } else if (Build.VERSION.SDK_INT >= 23) {
             ArrayList arrayList = new ArrayList();
             if (activity.checkSelfPermission("android.permission.RECORD_AUDIO") != 0) {
@@ -298,7 +302,7 @@ public class VoIPHelper {
                 if (str.equals(tLRPC$TL_messageActionPhoneCall.call_id + "")) {
                     try {
                         long parseLong = Long.parseLong(split2[1]);
-                        showRateAlert(context, (Runnable) null, tLRPC$TL_messageActionPhoneCall.call_id, parseLong, UserConfig.selectedAccount, true);
+                        showRateAlert(context, (Runnable) null, tLRPC$TL_messageActionPhoneCall.video, tLRPC$TL_messageActionPhoneCall.call_id, parseLong, UserConfig.selectedAccount, true);
                         return;
                     } catch (Exception unused) {
                         return;
@@ -308,7 +312,7 @@ public class VoIPHelper {
         }
     }
 
-    public static void showRateAlert(Context context, Runnable runnable, long j, long j2, int i, boolean z) {
+    public static void showRateAlert(Context context, Runnable runnable, boolean z, long j, long j2, int i, boolean z2) {
         String str;
         Context context2 = context;
         File logFile = getLogFile(j);
@@ -329,42 +333,59 @@ public class VoIPHelper {
         LinearLayout linearLayout2 = new LinearLayout(context2);
         linearLayout2.setOrientation(1);
         $$Lambda$VoIPHelper$10Yk49IUw0yaozGWCHYyd6pcXQY r8 = $$Lambda$VoIPHelper$10Yk49IUw0yaozGWCHYyd6pcXQY.INSTANCE;
-        String[] strArr = {"echo", "noise", "interruptions", "distorted_speech", "silent_local", "silent_remote", "dropped"};
+        String[] strArr = new String[9];
+        strArr[0] = z ? "distorted_video" : null;
+        strArr[1] = z ? "pixelated_video" : null;
+        strArr[2] = "echo";
+        strArr[3] = "noise";
+        strArr[4] = "interruptions";
+        strArr[5] = "distorted_speech";
+        strArr[6] = "silent_local";
+        strArr[7] = "silent_remote";
+        strArr[8] = "dropped";
         int i3 = 0;
-        for (int i4 = 7; i3 < i4; i4 = 7) {
-            CheckBoxCell checkBoxCell = new CheckBoxCell(context2, i2);
-            checkBoxCell.setClipToPadding(false);
-            checkBoxCell.setTag(strArr[i3]);
-            switch (i3) {
-                case 0:
-                    str = LocaleController.getString("RateCallEcho", NUM);
-                    break;
-                case 1:
-                    str = LocaleController.getString("RateCallNoise", NUM);
-                    break;
-                case 2:
-                    str = LocaleController.getString("RateCallInterruptions", NUM);
-                    break;
-                case 3:
-                    str = LocaleController.getString("RateCallDistorted", NUM);
-                    break;
-                case 4:
-                    str = LocaleController.getString("RateCallSilentLocal", NUM);
-                    break;
-                case 5:
-                    str = LocaleController.getString("RateCallSilentRemote", NUM);
-                    break;
-                case 6:
-                    str = LocaleController.getString("RateCallDropped", NUM);
-                    break;
-                default:
-                    str = null;
-                    break;
+        for (int i4 = 9; i3 < i4; i4 = 9) {
+            if (strArr[i3] != null) {
+                CheckBoxCell checkBoxCell = new CheckBoxCell(context2, i2);
+                checkBoxCell.setClipToPadding(false);
+                checkBoxCell.setTag(strArr[i3]);
+                switch (i3) {
+                    case 0:
+                        str = LocaleController.getString("RateCallVideoDistorted", NUM);
+                        break;
+                    case 1:
+                        str = LocaleController.getString("RateCallVideoPixelated", NUM);
+                        break;
+                    case 2:
+                        str = LocaleController.getString("RateCallEcho", NUM);
+                        break;
+                    case 3:
+                        str = LocaleController.getString("RateCallNoise", NUM);
+                        break;
+                    case 4:
+                        str = LocaleController.getString("RateCallInterruptions", NUM);
+                        break;
+                    case 5:
+                        str = LocaleController.getString("RateCallDistorted", NUM);
+                        break;
+                    case 6:
+                        str = LocaleController.getString("RateCallSilentLocal", NUM);
+                        break;
+                    case 7:
+                        str = LocaleController.getString("RateCallSilentRemote", NUM);
+                        break;
+                    case 8:
+                        str = LocaleController.getString("RateCallDropped", NUM);
+                        break;
+                    default:
+                        str = null;
+                        break;
+                }
+                checkBoxCell.setText(str, (String) null, false, false);
+                checkBoxCell.setOnClickListener(r8);
+                checkBoxCell.setTag(strArr[i3]);
+                linearLayout2.addView(checkBoxCell);
             }
-            checkBoxCell.setText(str, (String) null, false, false);
-            checkBoxCell.setOnClickListener(r8);
-            checkBoxCell.setTag(strArr[i3]);
-            linearLayout2.addView(checkBoxCell);
             i3++;
             i2 = 1;
         }
@@ -382,7 +403,7 @@ public class VoIPHelper {
         linearLayout.addView(editTextBoldCursor, LayoutHelper.createLinear(-1, -2, 8.0f, 8.0f, 8.0f, 0.0f));
         boolean[] zArr = {true};
         CheckBoxCell checkBoxCell2 = new CheckBoxCell(context2, 1);
-        $$Lambda$VoIPHelper$WeS4JAHIYvpwHaoSI5GKwAdQgyk r9 = new View.OnClickListener(zArr, checkBoxCell2) {
+        $$Lambda$VoIPHelper$WeS4JAHIYvpwHaoSI5GKwAdQgyk r4 = new View.OnClickListener(zArr, checkBoxCell2) {
             public final /* synthetic */ boolean[] f$0;
             public final /* synthetic */ CheckBoxCell f$1;
 
@@ -397,14 +418,14 @@ public class VoIPHelper {
         };
         checkBoxCell2.setText(LocaleController.getString("CallReportIncludeLogs", NUM), (String) null, true, false);
         checkBoxCell2.setClipToPadding(false);
-        checkBoxCell2.setOnClickListener(r9);
+        checkBoxCell2.setOnClickListener(r4);
         linearLayout.addView(checkBoxCell2, LayoutHelper.createLinear(-1, -2, -8.0f, 0.0f, -8.0f, 0.0f));
         TextView textView2 = new TextView(context2);
         textView2.setTextSize(2, 14.0f);
         textView2.setTextColor(Theme.getColor("dialogTextGray3"));
         textView2.setText(LocaleController.getString("CallReportLogsExplain", NUM));
         textView2.setPadding(AndroidUtilities.dp(8.0f), 0, AndroidUtilities.dp(8.0f), 0);
-        textView2.setOnClickListener(r9);
+        textView2.setOnClickListener(r4);
         linearLayout.addView(textView2);
         checkBoxCell2.setVisibility(8);
         textView2.setVisibility(8);
@@ -459,8 +480,7 @@ public class VoIPHelper {
             }
         });
         $$Lambda$VoIPHelper$450nV7LHHckm9amteAkst6k1_4 r27 = r0;
-        CheckBoxCell checkBoxCell3 = checkBoxCell2;
-        $$Lambda$VoIPHelper$450nV7LHHckm9amteAkst6k1_4 r0 = new View.OnClickListener(betterRatingView, iArr, linearLayout2, editTextBoldCursor, zArr, j2, j, z, i, logFile, context, create, textView, checkBoxCell3, textView2, button) {
+        $$Lambda$VoIPHelper$450nV7LHHckm9amteAkst6k1_4 r0 = new View.OnClickListener(betterRatingView, iArr, linearLayout2, editTextBoldCursor, zArr, j2, j, z2, i, logFile, context, create, textView, checkBoxCell2, textView2, button) {
             public final /* synthetic */ BetterRatingView f$0;
             public final /* synthetic */ int[] f$1;
             public final /* synthetic */ Context f$10;

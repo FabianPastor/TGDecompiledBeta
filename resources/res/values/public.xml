@@ -234,6 +234,7 @@
     <public type="drawable" name="broadcast_w" id="NUM" />
     <public type="drawable" name="btnshadow" id="NUM" />
     <public type="drawable" name="burn" id="NUM" />
+    <public type="drawable" name="call_arrow_right" id="NUM" />
     <public type="drawable" name="call_custom_notification_icon" id="NUM" />
     <public type="drawable" name="call_notification_bg" id="NUM" />
     <public type="drawable" name="call_notification_line" id="NUM" />
@@ -3883,6 +3884,8 @@
     <public type="string" name="RateCallNoise" id="NUM" />
     <public type="string" name="RateCallSilentLocal" id="NUM" />
     <public type="string" name="RateCallSilentRemote" id="NUM" />
+    <public type="string" name="RateCallVideoDistorted" id="NUM" />
+    <public type="string" name="RateCallVideoPixelated" id="NUM" />
     <public type="string" name="ReEnterYourPasscode" id="NUM" />
     <public type="string" name="Recent" id="NUM" />
     <public type="string" name="RecentFiles" id="NUM" />
@@ -4683,9 +4686,12 @@
     <public type="string" name="VoipOutputDevices" id="NUM" />
     <public type="string" name="VoipPeerIncompatible" id="NUM" />
     <public type="string" name="VoipPeerOutdated" id="NUM" />
+    <public type="string" name="VoipPeerVideoOutdated" id="NUM" />
+    <public type="string" name="VoipPeerVideoOutdatedMakeVoice" id="NUM" />
     <public type="string" name="VoipQuickReplies" id="NUM" />
     <public type="string" name="VoipQuickRepliesExplain" id="NUM" />
     <public type="string" name="VoipRateCallAlert" id="NUM" />
+    <public type="string" name="VoipReconnecting" id="NUM" />
     <public type="string" name="VoipRequesting" id="NUM" />
     <public type="string" name="VoipRinging" id="NUM" />
     <public type="string" name="VoipRingtoneInfo" id="NUM" />

@@ -85,7 +85,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r1 = r23
             r0 = r24
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
-            r3 = 2131165456(0x7var_, float:1.794513E38)
+            r3 = 2131165457(0x7var_, float:1.7945132E38)
             r2.setBackButtonImage(r3)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
             r3 = 1
@@ -109,7 +109,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.ui.ActionBar.ActionBarMenu r2 = r2.createMenu()
             r5 = 1113587712(0x42600000, float:56.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r6 = 2131165486(0x7var_e, float:1.794519E38)
+            r6 = 2131165487(0x7var_f, float:1.7945193E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r2.addItemWithWidth(r3, r6, r5)
             r1.editDoneItem = r2
             java.lang.String r5 = "Done"

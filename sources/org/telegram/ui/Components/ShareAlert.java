@@ -309,7 +309,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r6.<init>(r4)
             r0.textPaint = r6
             android.content.res.Resources r6 = r23.getResources()
-            r7 = 2131165917(0x7var_dd, float:1.7946065E38)
+            r7 = 2131165918(0x7var_de, float:1.7946067E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r7)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             r0.shadowDrawable = r6
@@ -600,7 +600,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r6 = 0
             r3.<init>(r1, r2, r6, r4)
             r0.commentTextView = r3
-            r2 = 2131626922(0x7f0e0baa, float:1.8881094E38)
+            r2 = 2131626924(0x7f0e0bac, float:1.8881098E38)
             java.lang.String r6 = "ShareComment"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             r3.setHint(r2)
@@ -662,7 +662,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             int r9 = android.os.Build.VERSION.SDK_INT
             if (r9 >= r14) goto L_0x03ba
             android.content.res.Resources r9 = r23.getResources()
-            r10 = 2131165412(0x7var_e4, float:1.794504E38)
+            r10 = 2131165413(0x7var_e5, float:1.7945042E38)
             android.graphics.drawable.Drawable r9 = r9.getDrawable(r10)
             android.graphics.drawable.Drawable r9 = r9.mutate()
             android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter

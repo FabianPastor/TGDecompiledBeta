@@ -967,6 +967,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             if (bitmapShader2 == null) {
                 Canvas canvas3 = canvas2;
                 int i11 = i6;
+                BitmapDrawable bitmapDrawable2 = bitmapDrawable;
                 if (this.isAspectFit) {
                     float max = Math.max(f5, f6);
                     canvas.save();
@@ -980,17 +981,17 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     float var_ = (float) i12;
                     rectF.set(((f8 - f9) / 2.0f) + f7, ((var_ - var_) / 2.0f) + var_, f7 + ((f8 + f9) / 2.0f), var_ + ((var_ + var_) / 2.0f));
                     RectF rectF2 = this.drawRegion;
-                    bitmapDrawable.setBounds((int) rectF2.left, (int) rectF2.top, (int) rectF2.right, (int) rectF2.bottom);
+                    bitmapDrawable2.setBounds((int) rectF2.left, (int) rectF2.top, (int) rectF2.right, (int) rectF2.bottom);
                     if (z2) {
                         RectF rectF3 = this.drawRegion;
-                        ((AnimatedFileDrawable) bitmapDrawable).setActualDrawRect(rectF3.left, rectF3.top, rectF3.width(), this.drawRegion.height());
+                        ((AnimatedFileDrawable) bitmapDrawable2).setActualDrawRect(rectF3.left, rectF3.top, rectF3.width(), this.drawRegion.height());
                     }
                     if (this.isVisible) {
                         try {
-                            bitmapDrawable.setAlpha(i11);
-                            bitmapDrawable.draw(canvas3);
+                            bitmapDrawable2.setAlpha(i11);
+                            bitmapDrawable2.draw(canvas3);
                         } catch (Exception e) {
-                            onBitmapException(bitmapDrawable);
+                            onBitmapException(bitmapDrawable2);
                             FileLog.e((Throwable) e);
                         }
                     }
@@ -1025,24 +1026,24 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                         rectF5.set(var_, var_ - ((var_ - var_) / 2.0f), var_ + var_, var_ + ((var_ + var_) / 2.0f));
                     }
                     if (z2) {
-                        ((AnimatedFileDrawable) bitmapDrawable).setActualDrawRect(this.imageX, this.imageY, this.imageW, this.imageH);
+                        ((AnimatedFileDrawable) bitmapDrawable2).setActualDrawRect(this.imageX, this.imageY, this.imageW, this.imageH);
                     }
                     if (i13 == 90 || i13 == 270) {
                         float width = this.drawRegion.width() / 2.0f;
                         float height = this.drawRegion.height() / 2.0f;
                         float centerX = this.drawRegion.centerX();
                         float centerY = this.drawRegion.centerY();
-                        bitmapDrawable.setBounds((int) (centerX - height), (int) (centerY - width), (int) (centerX + height), (int) (centerY + width));
+                        bitmapDrawable2.setBounds((int) (centerX - height), (int) (centerY - width), (int) (centerX + height), (int) (centerY + width));
                     } else {
                         RectF rectF6 = this.drawRegion;
-                        bitmapDrawable.setBounds((int) rectF6.left, (int) rectF6.top, (int) rectF6.right, (int) rectF6.bottom);
+                        bitmapDrawable2.setBounds((int) rectF6.left, (int) rectF6.top, (int) rectF6.right, (int) rectF6.bottom);
                     }
                     if (this.isVisible) {
                         try {
-                            bitmapDrawable.setAlpha(i11);
-                            bitmapDrawable.draw(canvas3);
+                            bitmapDrawable2.setAlpha(i11);
+                            bitmapDrawable2.draw(canvas3);
                         } catch (Exception e2) {
-                            onBitmapException(bitmapDrawable);
+                            onBitmapException(bitmapDrawable2);
                             FileLog.e((Throwable) e2);
                         }
                     }
@@ -1067,24 +1068,24 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                         rectF8.inset((float) (-i15), (float) (-i15));
                     }
                     if (z2) {
-                        ((AnimatedFileDrawable) bitmapDrawable).setActualDrawRect(this.imageX, this.imageY, this.imageW, this.imageH);
+                        ((AnimatedFileDrawable) bitmapDrawable2).setActualDrawRect(this.imageX, this.imageY, this.imageW, this.imageH);
                     }
                     if (i14 == 90 || i14 == 270) {
                         float width2 = this.drawRegion.width() / 2.0f;
                         float height2 = this.drawRegion.height() / 2.0f;
                         float centerX2 = this.drawRegion.centerX();
                         float centerY2 = this.drawRegion.centerY();
-                        bitmapDrawable.setBounds((int) (centerX2 - height2), (int) (centerY2 - width2), (int) (centerX2 + height2), (int) (centerY2 + width2));
+                        bitmapDrawable2.setBounds((int) (centerX2 - height2), (int) (centerY2 - width2), (int) (centerX2 + height2), (int) (centerY2 + width2));
                     } else {
                         RectF rectF9 = this.drawRegion;
-                        bitmapDrawable.setBounds((int) rectF9.left, (int) rectF9.top, (int) rectF9.right, (int) rectF9.bottom);
+                        bitmapDrawable2.setBounds((int) rectF9.left, (int) rectF9.top, (int) rectF9.right, (int) rectF9.bottom);
                     }
                     if (this.isVisible) {
                         try {
-                            bitmapDrawable.setAlpha(i11);
-                            bitmapDrawable.draw(canvas3);
+                            bitmapDrawable2.setAlpha(i11);
+                            bitmapDrawable2.draw(canvas3);
                         } catch (Exception e3) {
-                            onBitmapException(bitmapDrawable);
+                            onBitmapException(bitmapDrawable2);
                             FileLog.e((Throwable) e3);
                         }
                     }
@@ -1112,26 +1113,29 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     this.roundPaint.setAlpha(i6);
                     this.roundRect.set(this.drawRegion);
                     if (this.isRoundRect) {
-                        RectF rectvar_ = this.roundRect;
-                        int[] iArr = this.roundRadius;
-                        canvas2.drawRoundRect(rectvar_, (float) iArr[0], (float) iArr[0], this.roundPaint);
-                        return;
-                    }
-                    int i16 = 0;
-                    while (true) {
-                        int[] iArr2 = this.roundRadius;
-                        if (i16 < iArr2.length) {
-                            float[] fArr = radii;
-                            int i17 = i16 * 2;
-                            fArr[i17] = (float) iArr2[i16];
-                            fArr[i17 + 1] = (float) iArr2[i16];
-                            i16++;
-                        } else {
-                            this.roundPath.reset();
-                            this.roundPath.addRoundRect(this.roundRect, radii, Path.Direction.CW);
-                            this.roundPath.close();
-                            canvas2.drawPath(this.roundPath, this.roundPaint);
-                            return;
+                        try {
+                            canvas2.drawRoundRect(this.roundRect, (float) this.roundRadius[0], (float) this.roundRadius[0], this.roundPaint);
+                        } catch (Exception e4) {
+                            onBitmapException(bitmapDrawable);
+                            FileLog.e((Throwable) e4);
+                        }
+                    } else {
+                        int i16 = 0;
+                        while (true) {
+                            int[] iArr = this.roundRadius;
+                            if (i16 < iArr.length) {
+                                float[] fArr = radii;
+                                int i17 = i16 * 2;
+                                fArr[i17] = (float) iArr[i16];
+                                fArr[i17 + 1] = (float) iArr[i16];
+                                i16++;
+                            } else {
+                                this.roundPath.reset();
+                                this.roundPath.addRoundRect(this.roundRect, radii, Path.Direction.CW);
+                                this.roundPath.close();
+                                canvas2.drawPath(this.roundPath, this.roundPaint);
+                                return;
+                            }
                         }
                     }
                 }
@@ -1141,6 +1145,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 RectF rectvar_ = this.roundRect;
                 float var_ = this.imageX;
                 float var_ = this.sideClip;
+                BitmapDrawable bitmapDrawable3 = bitmapDrawable;
                 float var_ = this.imageY;
                 rectvar_.set(var_ + var_, var_ + var_, (var_ + this.imageW) - var_, (var_ + this.imageH) - var_);
                 this.shaderMatrix.reset();
@@ -1190,27 +1195,30 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                     bitmapShader2.setLocalMatrix(this.shaderMatrix);
                     this.roundPaint.setAlpha(i);
                     if (this.isRoundRect) {
-                        RectF rectvar_ = this.roundRect;
-                        int[] iArr3 = this.roundRadius;
-                        canvas.drawRoundRect(rectvar_, (float) iArr3[0], (float) iArr3[0], this.roundPaint);
-                        return;
-                    }
-                    Canvas canvas4 = canvas;
-                    int i18 = 0;
-                    while (true) {
-                        int[] iArr4 = this.roundRadius;
-                        if (i18 < iArr4.length) {
-                            float[] fArr2 = radii;
-                            int i19 = i18 * 2;
-                            fArr2[i19] = (float) iArr4[i18];
-                            fArr2[i19 + 1] = (float) iArr4[i18];
-                            i18++;
-                        } else {
-                            this.roundPath.reset();
-                            this.roundPath.addRoundRect(this.roundRect, radii, Path.Direction.CW);
-                            this.roundPath.close();
-                            canvas4.drawPath(this.roundPath, this.roundPaint);
-                            return;
+                        try {
+                            canvas.drawRoundRect(this.roundRect, (float) this.roundRadius[0], (float) this.roundRadius[0], this.roundPaint);
+                        } catch (Exception e5) {
+                            onBitmapException(bitmapDrawable3);
+                            FileLog.e((Throwable) e5);
+                        }
+                    } else {
+                        Canvas canvas4 = canvas;
+                        int i18 = 0;
+                        while (true) {
+                            int[] iArr2 = this.roundRadius;
+                            if (i18 < iArr2.length) {
+                                float[] fArr2 = radii;
+                                int i19 = i18 * 2;
+                                fArr2[i19] = (float) iArr2[i18];
+                                fArr2[i19 + 1] = (float) iArr2[i18];
+                                i18++;
+                            } else {
+                                this.roundPath.reset();
+                                this.roundPath.addRoundRect(this.roundRect, radii, Path.Direction.CW);
+                                this.roundPath.close();
+                                canvas4.drawPath(this.roundPath, this.roundPaint);
+                                return;
+                            }
                         }
                     }
                 }
@@ -1228,8 +1236,8 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 try {
                     drawable.setAlpha(i);
                     drawable2.draw(canvas5);
-                } catch (Exception e4) {
-                    FileLog.e((Throwable) e4);
+                } catch (Exception e6) {
+                    FileLog.e((Throwable) e6);
                 }
             }
         }

@@ -1654,7 +1654,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             if (r6 == r2) goto L_0x003b
             goto L_0x0073
         L_0x003b:
-            r6 = 2131165404(0x7var_dc, float:1.7945024E38)
+            r6 = 2131165405(0x7var_dd, float:1.7945026E38)
             r5.setImageResource(r6)
             r6 = 2131623955(0x7f0e0013, float:1.8875076E38)
             java.lang.String r0 = "AccDescrCameraFlashAuto"
@@ -1662,7 +1662,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r5.setContentDescription(r6)
             goto L_0x0073
         L_0x004e:
-            r6 = 2131165406(0x7var_de, float:1.7945028E38)
+            r6 = 2131165407(0x7var_df, float:1.794503E38)
             r5.setImageResource(r6)
             r6 = 2131623957(0x7f0e0015, float:1.887508E38)
             java.lang.String r0 = "AccDescrCameraFlashOn"
@@ -1670,7 +1670,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
             r5.setContentDescription(r6)
             goto L_0x0073
         L_0x0061:
-            r6 = 2131165405(0x7var_dd, float:1.7945026E38)
+            r6 = 2131165406(0x7var_de, float:1.7945028E38)
             r5.setImageResource(r6)
             r6 = 2131623956(0x7f0e0014, float:1.8875078E38)
             java.lang.String r0 = "AccDescrCameraFlashOff"
