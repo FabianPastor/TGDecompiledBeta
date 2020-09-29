@@ -2305,18 +2305,35 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
     }
 
     public void setTranslationY(float f) {
-        View view;
         super.setTranslationY(f);
+        updateBottomTabContainerPosition();
+    }
+
+    private void updateBottomTabContainerPosition() {
+        View view;
+        int i;
         if (this.bottomTabContainer.getTag() == null) {
             EmojiViewDelegate emojiViewDelegate = this.delegate;
             if ((emojiViewDelegate == null || !emojiViewDelegate.isSearchOpened()) && (view = (View) getParent()) != null) {
-                float y = (getY() + ((float) getMeasuredHeight())) - ((float) view.getHeight());
-                if (((float) this.bottomTabContainer.getTop()) - y < 0.0f) {
-                    y = (float) this.bottomTabContainer.getTop();
+                float y = getY() - ((float) view.getHeight());
+                if (getLayoutParams().height > 0) {
+                    i = getLayoutParams().height;
+                } else {
+                    i = getMeasuredHeight();
                 }
-                this.bottomTabContainer.setTranslationY(-y);
+                float f = y + ((float) i);
+                if (((float) this.bottomTabContainer.getTop()) - f < 0.0f) {
+                    f = (float) this.bottomTabContainer.getTop();
+                }
+                this.bottomTabContainer.setTranslationY(-f);
             }
         }
+    }
+
+    /* access modifiers changed from: protected */
+    public void dispatchDraw(Canvas canvas) {
+        updateBottomTabContainerPosition();
+        super.dispatchDraw(canvas);
     }
 
     /* access modifiers changed from: private */

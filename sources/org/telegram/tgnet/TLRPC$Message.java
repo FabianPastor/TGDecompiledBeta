@@ -22,6 +22,7 @@ public abstract class TLRPC$Message extends TLObject {
     public int fwd_msg_id;
     public long grouped_id;
     public int id;
+    public boolean isThreadMessage;
     public int layer;
     public boolean legacy;
     public int local_id;

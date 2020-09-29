@@ -11,6 +11,7 @@ import android.widget.TextView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.ImageLocation;
+import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationsController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$User;
@@ -92,9 +93,9 @@ public class DrawerUserCell extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
-        int totalUnreadCount;
-        if (UserConfig.getActivatedAccountsCount() > 1 && NotificationsController.getInstance(this.accountNumber).showBadgeNumber && (totalUnreadCount = NotificationsController.getInstance(this.accountNumber).getTotalUnreadCount()) > 0) {
-            String format = String.format("%d", new Object[]{Integer.valueOf(totalUnreadCount)});
+        int mainUnreadCount;
+        if (UserConfig.getActivatedAccountsCount() > 1 && NotificationsController.getInstance(this.accountNumber).showBadgeNumber && (mainUnreadCount = MessagesStorage.getInstance(this.accountNumber).getMainUnreadCount()) > 0) {
+            String format = String.format("%d", new Object[]{Integer.valueOf(mainUnreadCount)});
             int dp = AndroidUtilities.dp(12.5f);
             int ceil = (int) Math.ceil((double) Theme.dialogs_countTextPaint.measureText(format));
             int max = Math.max(AndroidUtilities.dp(10.0f), ceil);

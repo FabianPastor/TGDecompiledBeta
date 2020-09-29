@@ -8942,7 +8942,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 return;
             }
             int i26 = i19;
-            if (!z6 || !((i26 == 3 || i26 == 2) && i20 == 0)) {
+            if (!z6 || !((i26 == 3 || i26 == 2) && i7 == 0)) {
                 TLRPC$TL_messages_getHistory tLRPC$TL_messages_getHistory = new TLRPC$TL_messages_getHistory();
                 tLRPC$TL_messages_getHistory.peer = getInputPeer(i23);
                 if (i26 == 4) {
@@ -8960,7 +8960,6 @@ public class MessagesController extends BaseController implements NotificationCe
                 tLRPC$TL_messages_getHistory.limit = i14;
                 tLRPC$TL_messages_getHistory.offset_id = i15;
                 tLRPC$TL_messages_getHistory.offset_date = i16;
-                $$Lambda$MessagesController$UvKVc3kI4b5wILabPwnMmA0AlA r40 = r0;
                 TLRPC$TL_messages_getHistory tLRPC$TL_messages_getHistory2 = tLRPC$TL_messages_getHistory;
                 $$Lambda$MessagesController$UvKVc3kI4b5wILabPwnMmA0AlA r02 = new RequestDelegate(this, j, i, i2, i3, j2, i5, i10, i7, i11, i12, i6, z3, i8, i9, z5, i13, tLRPC$TL_messages_getHistory2) {
                     public final /* synthetic */ MessagesController f$0;
@@ -9009,7 +9008,7 @@ public class MessagesController extends BaseController implements NotificationCe
                         messagesController2.lambda$loadMessagesInternal$134$MessagesController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12, this.f$13, this.f$14, this.f$15, this.f$16, this.f$17, tLObject, tLRPC$TL_error);
                     }
                 };
-                getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getHistory2, r40), i5);
+                getConnectionsManager().bindRequestToGuid(getConnectionsManager().sendRequest(tLRPC$TL_messages_getHistory2, r02), i5);
                 return;
             }
             TLRPC$TL_messages_getPeerDialogs tLRPC$TL_messages_getPeerDialogs = r13;
@@ -9018,9 +9017,7 @@ public class MessagesController extends BaseController implements NotificationCe
             TLRPC$TL_inputDialogPeer tLRPC$TL_inputDialogPeer = new TLRPC$TL_inputDialogPeer();
             tLRPC$TL_inputDialogPeer.peer = inputPeer;
             tLRPC$TL_messages_getPeerDialogs2.peers.add(tLRPC$TL_inputDialogPeer);
-            $$Lambda$MessagesController$EUYi4UAEOp5Xr40Lj5q1a3cLyY r37 = r0;
-            ConnectionsManager connectionsManager2 = getConnectionsManager();
-            $$Lambda$MessagesController$EUYi4UAEOp5Xr40Lj5q1a3cLyY r03 = new RequestDelegate(this, j, j2, z, i, i2, i3, i4, i5, i6, z3, i8, i9, i10, i12, z5, tLRPC$TL_messages_getPeerDialogs) {
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_getPeerDialogs2, new RequestDelegate(this, j, j2, z, i, i2, i3, i4, i5, i6, z3, i8, i9, i10, i12, z5, tLRPC$TL_messages_getPeerDialogs) {
                 public final /* synthetic */ MessagesController f$0;
                 public final /* synthetic */ long f$1;
                 public final /* synthetic */ boolean f$10;
@@ -9064,8 +9061,7 @@ public class MessagesController extends BaseController implements NotificationCe
                     MessagesController messagesController2 = messagesController;
                     messagesController2.lambda$loadMessagesInternal$132$MessagesController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12, this.f$13, this.f$14, this.f$15, this.f$16, tLObject, tLRPC$TL_error);
                 }
-            };
-            connectionsManager2.sendRequest(tLRPC$TL_messages_getPeerDialogs2, r37);
+            });
         } else if (!z8) {
             TLRPC$TL_messages_getReplies tLRPC$TL_messages_getReplies = new TLRPC$TL_messages_getReplies();
             tLRPC$TL_messages_getReplies.peer = getInputPeer(i23);
@@ -9085,12 +9081,12 @@ public class MessagesController extends BaseController implements NotificationCe
             }
             tLRPC$TL_messages_getReplies.limit = i14;
             tLRPC$TL_messages_getReplies.offset_id = i15;
-            $$Lambda$MessagesController$a0L5ffaouaNFNaRcpO0MmV8sCI r32 = r0;
-            ConnectionsManager connectionsManager3 = getConnectionsManager();
+            $$Lambda$MessagesController$f9AT2PitnHGJAfe2UFWKumBpXI r32 = r0;
+            ConnectionsManager connectionsManager2 = getConnectionsManager();
             TLRPC$TL_messages_getReplies tLRPC$TL_messages_getReplies2 = tLRPC$TL_messages_getReplies;
-            $$Lambda$MessagesController$a0L5ffaouaNFNaRcpO0MmV8sCI r04 = new RequestDelegate(this, j, i, i2, i3, i10, i6, j2, i5, i7, i11, i12, z3, i8, i9, z5, i13, tLRPC$TL_messages_getReplies2) {
+            $$Lambda$MessagesController$f9AT2PitnHGJAfe2UFWKumBpXI r03 = new RequestDelegate(this, i, i2, i3, i10, i6, j, j2, i5, i7, i11, i12, z3, i8, i9, z5, i13, tLRPC$TL_messages_getReplies2) {
                 public final /* synthetic */ MessagesController f$0;
-                public final /* synthetic */ long f$1;
+                public final /* synthetic */ int f$1;
                 public final /* synthetic */ int f$10;
                 public final /* synthetic */ int f$11;
                 public final /* synthetic */ boolean f$12;
@@ -9103,7 +9099,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 public final /* synthetic */ int f$3;
                 public final /* synthetic */ int f$4;
                 public final /* synthetic */ int f$5;
-                public final /* synthetic */ int f$6;
+                public final /* synthetic */ long f$6;
                 public final /* synthetic */ long f$7;
                 public final /* synthetic */ int f$8;
                 public final /* synthetic */ int f$9;
@@ -9111,11 +9107,11 @@ public class MessagesController extends BaseController implements NotificationCe
                 {
                     this.f$0 = r4;
                     this.f$1 = r5;
-                    this.f$2 = r7;
-                    this.f$3 = r8;
-                    this.f$4 = r9;
-                    this.f$5 = r10;
-                    this.f$6 = r11;
+                    this.f$2 = r6;
+                    this.f$3 = r7;
+                    this.f$4 = r8;
+                    this.f$5 = r9;
+                    this.f$6 = r10;
                     this.f$7 = r12;
                     this.f$8 = r14;
                     this.f$9 = r15;
@@ -9135,18 +9131,17 @@ public class MessagesController extends BaseController implements NotificationCe
                     messagesController2.lambda$loadMessagesInternal$129$MessagesController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12, this.f$13, this.f$14, this.f$15, this.f$16, this.f$17, tLObject, tLRPC$TL_error);
                 }
             };
-            getConnectionsManager().bindRequestToGuid(connectionsManager3.sendRequest(tLRPC$TL_messages_getReplies2, r32), i5);
+            getConnectionsManager().bindRequestToGuid(connectionsManager2.sendRequest(tLRPC$TL_messages_getReplies2, r32), i5);
         }
     }
 
-    public /* synthetic */ void lambda$loadMessagesInternal$129$MessagesController(long j, int i, int i2, int i3, int i4, int i5, long j2, int i6, int i7, int i8, int i9, boolean z, int i10, int i11, boolean z2, int i12, TLRPC$TL_messages_getReplies tLRPC$TL_messages_getReplies, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$loadMessagesInternal$129$MessagesController(int i, int i2, int i3, int i4, int i5, long j, long j2, int i6, int i7, int i8, int i9, boolean z, int i10, int i11, boolean z2, int i12, TLRPC$TL_messages_getReplies tLRPC$TL_messages_getReplies, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         int i13;
         int i14;
         int i15 = i3;
         int i16 = i4;
         if (tLObject != null) {
             TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
-            removeDeletedMessagesFromArray(j, tLRPC$messages_Messages.messages);
             if (tLRPC$messages_Messages.messages.size() > i) {
                 tLRPC$messages_Messages.messages.remove(0);
             }

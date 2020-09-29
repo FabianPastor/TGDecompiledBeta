@@ -576,7 +576,7 @@
     <string name="BotOwnershipTransfer">Transfer Bot Ownership</string>
     <string name="BotOwnershipTransferAlertText">You can transfer bot only if you have:</string>
     <string name="BotOwnershipTransferChangeOwner">Change Owner</string>
-    <string name="BotOwnershipTransferReadyAlertText">This will transfer the **full owner** rights for bot to selected user.</string>
+    <string name="BotOwnershipTransferReadyAlertText">This will transfer the **full owner** rights for the bot to the selected user.</string>
     <string name="BotPermissionGameAlert">Allow %1$s to pass your Telegram name and id (not your phone number) to pages you open with this bot?</string>
     <string name="BotRestart">Restart bot</string>
     <string name="BotSettings">Settings</string>
@@ -1128,9 +1128,9 @@
     <string name="Disconnect">Disconnect</string>
     <string name="DiscussChannel">channel</string>
     <string name="Discussion">Discussion</string>
-    <string name="DiscussionChannelGroupSetHelp2">**%1$s** is selected as the group that will be used to host comments for your channel.</string>
+    <string name="DiscussionChannelGroupSetHelp2">**%1$s** is selected as the group that hosts comments for your channel.</string>
     <string name="DiscussionChannelHelp2">Everything you post in the channel will be forwarded to this group.</string>
-    <string name="DiscussionChannelHelp3">Select a group chat that will be used to host comments from your channel.</string>
+    <string name="DiscussionChannelHelp3">Select a group chat that will host comments from your channel.</string>
     <string name="DiscussionCreateGroup">Create a New Group</string>
     <string name="DiscussionGroupHelp">**%1$s** is linking the group as its discussion board.</string>
     <string name="DiscussionGroupHelp2">All new messages posted in this channel are forwarded to the group.</string>
@@ -2914,7 +2914,7 @@
     <string name="SearchEmptyViewFilteredSubtitleMedia">Media</string>
     <string name="SearchEmptyViewFilteredSubtitleMusic">Music</string>
     <string name="SearchEmptyViewFilteredSubtitleVoice">Voice</string>
-    <string name="SearchEmptyViewTitle">Nothing yet</string>
+    <string name="SearchEmptyViewTitle">No Results</string>
     <string name="SearchEmptyViewTitle2">No Results</string>
     <string name="SearchForPeople">Search for people...</string>
     <string name="SearchForPeopleAndGroups">Search for users and groups...</string>

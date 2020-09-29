@@ -242,13 +242,15 @@ public class AndroidUtilities {
             return charSequence;
         }
         float measureText = (primaryHorizontal - f) + (textPaint.measureText("...") * 2.0f);
+        float f2 = 0.1f * f;
+        float f3 = measureText + f2;
         if (charSequence.length() - i2 > 20) {
-            measureText += 0.2f * f;
+            f3 += f2;
         }
-        if (measureText <= 0.0f) {
+        if (f3 <= 0.0f) {
             return charSequence;
         }
-        int offsetForHorizontal = staticLayout.getOffsetForHorizontal(0, measureText);
+        int offsetForHorizontal = staticLayout.getOffsetForHorizontal(0, f3);
         if (offsetForHorizontal > charSequence.length() - 1) {
             offsetForHorizontal = charSequence.length() - 1;
         }
@@ -260,7 +262,7 @@ public class AndroidUtilities {
             i3++;
             offsetForHorizontal++;
             if (offsetForHorizontal > charSequence.length() - 1) {
-                offsetForHorizontal = staticLayout.getOffsetForHorizontal(0, measureText);
+                offsetForHorizontal = staticLayout.getOffsetForHorizontal(0, f3);
                 break;
             }
         }

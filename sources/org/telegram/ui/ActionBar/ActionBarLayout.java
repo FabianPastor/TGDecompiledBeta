@@ -448,7 +448,8 @@ public class ActionBarLayout extends FrameLayout {
     /* access modifiers changed from: protected */
     public boolean drawChild(Canvas canvas, View view, long j) {
         LayoutContainer layoutContainer;
-        if (this.drawerLayoutContainer.isDrawCurrentPreviewFragmentAbove()) {
+        DrawerLayoutContainer drawerLayoutContainer2 = this.drawerLayoutContainer;
+        if (drawerLayoutContainer2 != null && drawerLayoutContainer2.isDrawCurrentPreviewFragmentAbove() && (this.inPreviewMode || this.transitionAnimationPreviewMode || this.previewOpenAnimationInProgress)) {
             BaseFragment baseFragment = this.oldFragment;
             if (view == ((baseFragment == null || !baseFragment.inPreviewMode) ? this.containerView : this.containerViewBack)) {
                 this.drawerLayoutContainer.invalidate();
@@ -460,7 +461,7 @@ public class ActionBarLayout extends FrameLayout {
         int paddingLeft = getPaddingLeft();
         int paddingLeft2 = getPaddingLeft() + width;
         if (view == this.containerViewBack) {
-            paddingLeft2 = paddingRight;
+            paddingLeft2 = AndroidUtilities.dp(1.0f) + paddingRight;
         } else if (view == this.containerView) {
             paddingLeft = paddingRight;
         }
@@ -494,6 +495,9 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public float getCurrentPreviewFragmentAlpha() {
+        if (!this.inPreviewMode && !this.transitionAnimationPreviewMode && !this.previewOpenAnimationInProgress) {
+            return 0.0f;
+        }
         BaseFragment baseFragment = this.oldFragment;
         return ((baseFragment == null || !baseFragment.inPreviewMode) ? this.containerView : this.containerViewBack).getAlpha();
     }

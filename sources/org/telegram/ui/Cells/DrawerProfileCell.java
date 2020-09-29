@@ -315,7 +315,8 @@ public class DrawerProfileCell extends FrameLayout {
             this.shadowView.getDrawable().setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
         }
         int color = Theme.getColor("chats_menuName");
-        if (this.currentMoonColor == null || this.currentColor.intValue() != color) {
+        Integer num2 = this.currentMoonColor;
+        if (num2 == null || num2.intValue() != color) {
             this.currentMoonColor = Integer.valueOf(color);
             this.sunDrawable.beginApplyLayerColors();
             this.sunDrawable.setLayerColor("Sunny.**", this.currentMoonColor.intValue());

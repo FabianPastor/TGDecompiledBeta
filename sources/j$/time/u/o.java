@@ -45,13 +45,13 @@ final class o extends q {
         long j;
         Map map = fieldValues;
         I i = resolverStyle;
-        Long wbyLong = (Long) map.get(q.WEEK_BASED_YEAR);
+        Long wbyLong = (Long) map.get(q.d);
         Long dowLong = (Long) map.get(j.DAY_OF_WEEK);
         if (wbyLong == null || dowLong == null) {
             return null;
         }
-        int wby = q.WEEK_BASED_YEAR.p().a(wbyLong.longValue(), q.WEEK_BASED_YEAR);
-        long wowby = ((Long) map.get(q.WEEK_OF_WEEK_BASED_YEAR)).longValue();
+        int wby = q.d.p().a(wbyLong.longValue(), q.d);
+        long wowby = ((Long) map.get(q.c)).longValue();
         q.V(partialTemporal);
         LocalDate date2 = LocalDate.a0(wby, 1, 4);
         if (i == I.LENIENT) {
@@ -80,7 +80,7 @@ final class o extends q {
             date = date2.h0(wowby - 1).c(j.DAY_OF_WEEK, (long) dow2);
         }
         map.remove(this);
-        map.remove(q.WEEK_BASED_YEAR);
+        map.remove(q.d);
         map.remove(j.DAY_OF_WEEK);
         return date;
     }

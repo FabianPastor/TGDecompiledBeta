@@ -276,6 +276,9 @@ public class ProfileSearchCell extends BaseCell {
             this.lastUnreadCount = 0;
             this.countLayout = null;
         }
+        if (this.nameWidth < 0) {
+            this.nameWidth = 0;
+        }
         this.nameLayout = new StaticLayout(TextUtils.ellipsize(charSequence2, textPaint2, (float) (this.nameWidth - AndroidUtilities.dp(12.0f)), TextUtils.TruncateAt.END), textPaint2, this.nameWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         TextPaint textPaint3 = Theme.dialogs_offlinePaint;
         if (!LocaleController.isRTL) {

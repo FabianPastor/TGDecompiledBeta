@@ -25,7 +25,7 @@ final class p extends q {
 
     public u L(u temporal, long newValue) {
         if (K(temporal)) {
-            int newWby = p().a(newValue, q.WEEK_BASED_YEAR);
+            int newWby = p().a(newValue, q.d);
             LocalDate date = LocalDate.M(temporal);
             int dow = date.i(j.DAY_OF_WEEK);
             int week = q.W(date);

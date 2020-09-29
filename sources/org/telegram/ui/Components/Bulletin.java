@@ -9,6 +9,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.InsetDrawable;
+import android.os.Build;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,12 +133,12 @@ public final class Bulletin {
                         Delegate unused = Bulletin.this.currentDelegate = (Delegate) Bulletin.delegates.get(Bulletin.this.containerLayout);
                         Bulletin bulletin = Bulletin.this;
                         int unused2 = bulletin.currentBottomOffset = bulletin.currentDelegate != null ? Bulletin.this.currentDelegate.getBottomOffset() : 0;
-                        if (Bulletin.this.currentBottomOffset != 0) {
-                            Bulletin.this.parentLayout.setClipBounds(new Rect(i, i2 - Bulletin.this.currentBottomOffset, i3, i4 - Bulletin.this.currentBottomOffset));
-                        } else {
-                            Bulletin.this.parentLayout.setClipBounds((Rect) null);
-                        }
                         if (Bulletin.isTransitionsEnabled()) {
+                            if (Bulletin.this.currentBottomOffset != 0) {
+                                ViewCompat.setClipBounds(Bulletin.this.parentLayout, new Rect(i, i2 - Bulletin.this.currentBottomOffset, i3, i4 - Bulletin.this.currentBottomOffset));
+                            } else {
+                                ViewCompat.setClipBounds(Bulletin.this.parentLayout, (Rect) null);
+                            }
                             Bulletin.this.ensureLayoutTransitionCreated();
                             Layout.Transition access$900 = Bulletin.this.layoutTransition;
                             Layout access$000 = Bulletin.this.layout;
@@ -287,7 +288,7 @@ public final class Bulletin {
 
     /* access modifiers changed from: private */
     public static boolean isTransitionsEnabled() {
-        return MessagesController.getGlobalMainSettings().getBoolean("view_animations", true);
+        return MessagesController.getGlobalMainSettings().getBoolean("view_animations", true) && Build.VERSION.SDK_INT >= 18;
     }
 
     public static void addDelegate(BaseFragment baseFragment, Delegate delegate) {

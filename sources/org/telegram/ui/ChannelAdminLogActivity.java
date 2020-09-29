@@ -2506,6 +2506,10 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$setShouldNotRepeatSticker(this, messageObject);
                     }
 
+                    public /* synthetic */ boolean shouldDrawThreadProgress(ChatMessageCell chatMessageCell) {
+                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$shouldDrawThreadProgress(this, chatMessageCell);
+                    }
+
                     public /* synthetic */ boolean shouldRepeatSticker(MessageObject messageObject) {
                         return ChatMessageCell.ChatMessageCellDelegate.CC.$default$shouldRepeatSticker(this, messageObject);
                     }

@@ -175,6 +175,7 @@ public class DialogOrContactPickerActivity extends BaseFragment {
             }
         });
         this.searchItem = addItem;
+        addItem.setSearchFieldHint(LocaleController.getString("Search", NUM));
         ScrollSlidingTextTabStrip scrollSlidingTextTabStrip2 = new ScrollSlidingTextTabStrip(context);
         this.scrollSlidingTextTabStrip = scrollSlidingTextTabStrip2;
         scrollSlidingTextTabStrip2.setUseSameWidth(true);

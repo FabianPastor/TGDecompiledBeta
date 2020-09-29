@@ -40,7 +40,6 @@ import org.telegram.ui.Components.RadialProgress2;
 
 public class AvatarPreviewer {
     private static AvatarPreviewer INSTANCE;
-    private InfoLoadTask<?, ?> infoLoadTask;
     private Layout layout;
     private ViewGroup view;
     private boolean visible;
@@ -83,20 +82,6 @@ public class AvatarPreviewer {
             };
         }
         this.layout.setData(data);
-        if (data.infoLoadTask != null) {
-            this.infoLoadTask = data.infoLoadTask;
-            data.infoLoadTask.load(new Consumer(data) {
-                public final /* synthetic */ AvatarPreviewer.Data f$1;
-
-                {
-                    this.f$1 = r2;
-                }
-
-                public final void accept(Object obj) {
-                    AvatarPreviewer.this.lambda$show$0$AvatarPreviewer(this.f$1, obj);
-                }
-            });
-        }
         if (!this.visible) {
             if (this.layout.getParent() != null) {
                 this.windowManager.removeView(this.layout);
@@ -111,22 +96,9 @@ public class AvatarPreviewer {
         }
     }
 
-    public /* synthetic */ void lambda$show$0$AvatarPreviewer(Data data, Object obj) {
-        if (obj instanceof TLRPC$UserFull) {
-            this.layout.setData(Data.of((TLRPC$UserFull) obj, data.menuItems));
-        } else if (obj instanceof TLRPC$ChatFull) {
-            this.layout.setData(Data.of((TLRPC$Chat) data.infoLoadTask.argument, (TLRPC$ChatFull) obj, data.menuItems));
-        }
-    }
-
     public void close() {
         if (this.visible) {
             this.visible = false;
-            InfoLoadTask<?, ?> infoLoadTask2 = this.infoLoadTask;
-            if (infoLoadTask2 != null) {
-                infoLoadTask2.cancel();
-                this.infoLoadTask = null;
-            }
             if (this.layout.getParent() != null) {
                 this.windowManager.removeView(this.layout);
             }
@@ -339,8 +311,10 @@ public class AvatarPreviewer {
 
         /* access modifiers changed from: protected */
         public final void onResult(B b) {
-            cancel();
-            this.onResult.accept(b);
+            if (this.loading) {
+                cancel();
+                this.onResult.accept(b);
+            }
         }
     }
 
@@ -350,6 +324,7 @@ public class AvatarPreviewer {
         private final Callback callback;
         private float downY;
         private final ImageReceiver imageReceiver;
+        private InfoLoadTask<?, ?> infoLoadTask;
         private WindowInsets insets;
         private final Interpolator interpolator;
         private long lastUpdateTime;
@@ -361,6 +336,7 @@ public class AvatarPreviewer {
         private ValueAnimator progressShowAnimator;
         private final RadialProgress2 radialProgress;
         private final int radialProgressSize = AndroidUtilities.dp(64.0f);
+        private boolean recycled;
         /* access modifiers changed from: private */
         public boolean showProgress;
         private boolean showing;
@@ -813,9 +789,38 @@ public class AvatarPreviewer {
             this.menuItems = data.menuItems;
             this.showProgress = data.videoLocation != null;
             this.videoFileName = data.videoFileName;
+            recycleInfoLoadTask();
+            if (data.infoLoadTask != null) {
+                InfoLoadTask<?, ?> access$1100 = data.infoLoadTask;
+                this.infoLoadTask = access$1100;
+                access$1100.load(new Consumer(data) {
+                    public final /* synthetic */ AvatarPreviewer.Data f$1;
+
+                    {
+                        this.f$1 = r2;
+                    }
+
+                    public final void accept(Object obj) {
+                        AvatarPreviewer.Layout.this.lambda$setData$5$AvatarPreviewer$Layout(this.f$1, obj);
+                    }
+                });
+            } else {
+                Data data2 = data;
+            }
             this.imageReceiver.setCurrentAccount(UserConfig.selectedAccount);
             this.imageReceiver.setImage(data.videoLocation, data.videoFilter, data.imageLocation, data.imageFilter, data.thumbImageLocation, data.thumbImageFilter, (Drawable) null, 0, (String) null, data.parentObject, 1);
             setShowing(true);
+        }
+
+        public /* synthetic */ void lambda$setData$5$AvatarPreviewer$Layout(Data data, Object obj) {
+            if (this.recycled) {
+                return;
+            }
+            if (obj instanceof TLRPC$UserFull) {
+                setData(Data.of((TLRPC$UserFull) obj, data.menuItems));
+            } else if (obj instanceof TLRPC$ChatFull) {
+                setData(Data.of((TLRPC$Chat) data.infoLoadTask.argument, (TLRPC$ChatFull) obj, data.menuItems));
+            }
         }
 
         private void setShowing(boolean z) {
@@ -827,6 +832,7 @@ public class AvatarPreviewer {
         }
 
         public void recycle() {
+            this.recycled = true;
             ValueAnimator valueAnimator = this.moveAnimator;
             if (valueAnimator != null) {
                 valueAnimator.cancel();
@@ -834,6 +840,15 @@ public class AvatarPreviewer {
             BottomSheet bottomSheet = this.visibleSheet;
             if (bottomSheet != null) {
                 bottomSheet.cancel();
+            }
+            recycleInfoLoadTask();
+        }
+
+        private void recycleInfoLoadTask() {
+            InfoLoadTask<?, ?> infoLoadTask2 = this.infoLoadTask;
+            if (infoLoadTask2 != null) {
+                infoLoadTask2.cancel();
+                this.infoLoadTask = null;
             }
         }
     }

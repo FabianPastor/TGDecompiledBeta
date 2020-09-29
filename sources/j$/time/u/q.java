@@ -7,8 +7,7 @@ import j$.time.t.p;
 import j$.time.t.t;
 
 enum q implements B {
-    WEEK_OF_WEEK_BASED_YEAR,
-    WEEK_BASED_YEAR;
+    ;
     
     /* access modifiers changed from: private */
     public static final int[] e = null;

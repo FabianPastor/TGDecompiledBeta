@@ -320,6 +320,10 @@ public class PrivacyControlActivity extends BaseFragment implements Notification
                     ChatMessageCell.ChatMessageCellDelegate.CC.$default$setShouldNotRepeatSticker(this, messageObject);
                 }
 
+                public /* synthetic */ boolean shouldDrawThreadProgress(ChatMessageCell chatMessageCell) {
+                    return ChatMessageCell.ChatMessageCellDelegate.CC.$default$shouldDrawThreadProgress(this, chatMessageCell);
+                }
+
                 public /* synthetic */ boolean shouldRepeatSticker(MessageObject messageObject) {
                     return ChatMessageCell.ChatMessageCellDelegate.CC.$default$shouldRepeatSticker(this, messageObject);
                 }

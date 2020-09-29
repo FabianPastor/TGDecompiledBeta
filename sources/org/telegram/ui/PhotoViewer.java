@@ -2116,6 +2116,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
 
             /* access modifiers changed from: protected */
             public void onTransitionStart(boolean z) {
+                int i;
+                String str;
                 PhotoViewer.this.windowView.setClipChildren(false);
                 if (PhotoViewer.this.captionEditText.getTag() == null || !z) {
                     PhotoViewer.this.checkImageView.animate().alpha(1.0f).setDuration(220).start();
@@ -2127,9 +2129,14 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     return;
                 }
                 if (PhotoViewer.this.isCurrentVideo) {
-                    PhotoViewer.this.actionBar.setTitle(PhotoViewer.this.muteVideo ? LocaleController.getString("GifCaption", NUM) : LocaleController.getString("VideoCaption", NUM));
-                    PhotoViewer.this.actionBar.setTitle(PhotoViewer.this.muteVideo ? LocaleController.getString("GifCaption", NUM) : LocaleController.getString("VideoCaption", NUM));
-                    PhotoViewer.this.actionBar.setSubtitle((CharSequence) null);
+                    if (PhotoViewer.this.muteVideo) {
+                        i = NUM;
+                        str = "GifCaption";
+                    } else {
+                        i = NUM;
+                        str = "VideoCaption";
+                    }
+                    PhotoViewer.this.actionBar.setTitleAnimated(LocaleController.getString(str, i), true, 220);
                 } else {
                     PhotoViewer.this.actionBar.setTitleAnimated(LocaleController.getString("PhotoCaption", NUM), true, 220);
                 }
@@ -6123,12 +6130,20 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 }
 
                 public void onEmojiViewCloseStart() {
+                    String str;
+                    int i;
                     setOffset(PhotoViewer.this.captionEditText.getEmojiPadding());
                     if (PhotoViewer.this.captionEditText.getTag() != null) {
                         if (PhotoViewer.this.isCurrentVideo) {
-                            PhotoViewer.this.actionBar.setTitleAnimated(PhotoViewer.this.muteVideo ? LocaleController.getString("GifCaption", NUM) : LocaleController.getString("VideoCaption", NUM), true, 220);
-                            PhotoViewer.this.actionBar.setTitleAnimated(PhotoViewer.this.muteVideo ? LocaleController.getString("GifCaption", NUM) : LocaleController.getString("VideoCaption", NUM), true, 220);
-                            PhotoViewer.this.actionBar.setSubtitle((CharSequence) null);
+                            ActionBar access$5600 = PhotoViewer.this.actionBar;
+                            if (PhotoViewer.this.muteVideo) {
+                                i = NUM;
+                                str = "GifCaption";
+                            } else {
+                                i = NUM;
+                                str = "VideoCaption";
+                            }
+                            access$5600.setTitleAnimated(LocaleController.getString(str, i), true, 220);
                         } else {
                             PhotoViewer.this.actionBar.setTitleAnimated(LocaleController.getString("PhotoCaption", NUM), true, 220);
                         }
@@ -6140,11 +6155,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                     PhotoViewer.this.checkImageView.animate().alpha(1.0f).setDuration(220).start();
                     PhotoViewer.this.photosCounterView.animate().alpha(1.0f).setDuration(220).start();
                     if (PhotoViewer.this.lastTitle != null) {
-                        if (PhotoViewer.this.isCurrentVideo) {
-                            PhotoViewer.this.actionBar.setTitle(PhotoViewer.this.lastTitle);
-                        } else {
-                            PhotoViewer.this.actionBar.setTitleAnimated(PhotoViewer.this.lastTitle, false, 220);
-                        }
+                        PhotoViewer.this.actionBar.setTitleAnimated(PhotoViewer.this.lastTitle, false, 220);
                         String unused = PhotoViewer.this.lastTitle = null;
                     }
                 }
@@ -7980,7 +7991,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 }
                 this.captionEditText.setTag((Object) null);
                 if (this.isCurrentVideo) {
-                    this.actionBar.setTitle(this.lastTitle);
+                    this.actionBar.setTitleAnimated(this.lastTitle, false, 220);
                     this.actionBar.setSubtitle(this.muteVideo ? LocaleController.getString("SoundMuted", NUM) : this.currentSubtitle);
                 }
                 updateCaptionTextForCurrentPhoto(obj);

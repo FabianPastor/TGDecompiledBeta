@@ -1682,6 +1682,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                                 playlistGlobalSearchParams.endReached = FilteredSearchView.this.endReached;
                                 playlistGlobalSearchParams.nextSearchRate = FilteredSearchView.this.nextSearchRate;
                                 playlistGlobalSearchParams.totalCount = FilteredSearchView.this.totalCount;
+                                playlistGlobalSearchParams.folderId = FilteredSearchView.this.uiCallback.getFolderId();
                                 return MediaController.getInstance().setPlaylist(FilteredSearchView.this.messages, messageObject, 0, playlistGlobalSearchParams);
                             }
                         }

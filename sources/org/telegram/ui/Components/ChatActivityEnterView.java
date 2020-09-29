@@ -9771,69 +9771,71 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
 
         /* access modifiers changed from: private */
         public void checkStickresExpandHeight() {
-            Point point = AndroidUtilities.displaySize;
-            int i = point.x > point.y ? this.keyboardHeightLand : this.keyboardHeight;
-            int currentActionBarHeight = (((this.originalViewHeight - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) - ActionBar.getCurrentActionBarHeight()) - getHeight()) + Theme.chat_composeShadowDrawable.getIntrinsicHeight();
-            if (this.searchingType == 2) {
-                currentActionBarHeight = Math.min(currentActionBarHeight, AndroidUtilities.dp(120.0f) + i);
-            }
-            int i2 = this.emojiView.getLayoutParams().height;
-            if (i2 != currentActionBarHeight) {
-                Animator animator = this.stickersExpansionAnim;
-                if (animator != null) {
-                    animator.cancel();
-                    this.stickersExpansionAnim = null;
+            if (this.emojiView != null) {
+                Point point = AndroidUtilities.displaySize;
+                int i = point.x > point.y ? this.keyboardHeightLand : this.keyboardHeight;
+                int currentActionBarHeight = (((this.originalViewHeight - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)) - ActionBar.getCurrentActionBarHeight()) - getHeight()) + Theme.chat_composeShadowDrawable.getIntrinsicHeight();
+                if (this.searchingType == 2) {
+                    currentActionBarHeight = Math.min(currentActionBarHeight, AndroidUtilities.dp(120.0f) + i);
                 }
-                this.stickersExpandedHeight = currentActionBarHeight;
-                if (i2 > currentActionBarHeight) {
-                    AnimatorSet animatorSet = new AnimatorSet();
-                    animatorSet.playTogether(new Animator[]{ObjectAnimator.ofInt(this, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)}), ObjectAnimator.ofInt(this.emojiView, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)})});
-                    ((ObjectAnimator) animatorSet.getChildAnimations().get(0)).addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                int i2 = this.emojiView.getLayoutParams().height;
+                if (i2 != currentActionBarHeight) {
+                    Animator animator = this.stickersExpansionAnim;
+                    if (animator != null) {
+                        animator.cancel();
+                        this.stickersExpansionAnim = null;
+                    }
+                    this.stickersExpandedHeight = currentActionBarHeight;
+                    if (i2 > currentActionBarHeight) {
+                        AnimatorSet animatorSet = new AnimatorSet();
+                        animatorSet.playTogether(new Animator[]{ObjectAnimator.ofInt(this, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)}), ObjectAnimator.ofInt(this.emojiView, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)})});
+                        ((ObjectAnimator) animatorSet.getChildAnimations().get(0)).addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                ChatActivityEnterView.this.lambda$checkStickresExpandHeight$32$ChatActivityEnterView(valueAnimator);
+                            }
+                        });
+                        animatorSet.setDuration(300);
+                        animatorSet.setInterpolator(CubicBezierInterpolator.DEFAULT);
+                        animatorSet.addListener(new AnimatorListenerAdapter() {
+                            public void onAnimationEnd(Animator animator) {
+                                Animator unused = ChatActivityEnterView.this.stickersExpansionAnim = null;
+                                if (ChatActivityEnterView.this.emojiView != null) {
+                                    ChatActivityEnterView.this.emojiView.getLayoutParams().height = ChatActivityEnterView.this.stickersExpandedHeight;
+                                    ChatActivityEnterView.this.emojiView.setLayerType(0, (Paint) null);
+                                }
+                            }
+                        });
+                        this.stickersExpansionAnim = animatorSet;
+                        this.emojiView.setLayerType(2, (Paint) null);
+                        animatorSet.start();
+                        return;
+                    }
+                    this.emojiView.getLayoutParams().height = this.stickersExpandedHeight;
+                    this.sizeNotifierLayout.requestLayout();
+                    int selectionStart = this.messageEditText.getSelectionStart();
+                    int selectionEnd = this.messageEditText.getSelectionEnd();
+                    EditTextCaption editTextCaption = this.messageEditText;
+                    editTextCaption.setText(editTextCaption.getText());
+                    this.messageEditText.setSelection(selectionStart, selectionEnd);
+                    AnimatorSet animatorSet2 = new AnimatorSet();
+                    animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofInt(this, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)}), ObjectAnimator.ofInt(this.emojiView, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)})});
+                    ((ObjectAnimator) animatorSet2.getChildAnimations().get(0)).addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                         public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            ChatActivityEnterView.this.lambda$checkStickresExpandHeight$32$ChatActivityEnterView(valueAnimator);
+                            ChatActivityEnterView.this.lambda$checkStickresExpandHeight$33$ChatActivityEnterView(valueAnimator);
                         }
                     });
-                    animatorSet.setDuration(300);
-                    animatorSet.setInterpolator(CubicBezierInterpolator.DEFAULT);
-                    animatorSet.addListener(new AnimatorListenerAdapter() {
+                    animatorSet2.setDuration(300);
+                    animatorSet2.setInterpolator(CubicBezierInterpolator.DEFAULT);
+                    animatorSet2.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             Animator unused = ChatActivityEnterView.this.stickersExpansionAnim = null;
-                            if (ChatActivityEnterView.this.emojiView != null) {
-                                ChatActivityEnterView.this.emojiView.getLayoutParams().height = ChatActivityEnterView.this.stickersExpandedHeight;
-                                ChatActivityEnterView.this.emojiView.setLayerType(0, (Paint) null);
-                            }
+                            ChatActivityEnterView.this.emojiView.setLayerType(0, (Paint) null);
                         }
                     });
-                    this.stickersExpansionAnim = animatorSet;
+                    this.stickersExpansionAnim = animatorSet2;
                     this.emojiView.setLayerType(2, (Paint) null);
-                    animatorSet.start();
-                    return;
+                    animatorSet2.start();
                 }
-                this.emojiView.getLayoutParams().height = this.stickersExpandedHeight;
-                this.sizeNotifierLayout.requestLayout();
-                int selectionStart = this.messageEditText.getSelectionStart();
-                int selectionEnd = this.messageEditText.getSelectionEnd();
-                EditTextCaption editTextCaption = this.messageEditText;
-                editTextCaption.setText(editTextCaption.getText());
-                this.messageEditText.setSelection(selectionStart, selectionEnd);
-                AnimatorSet animatorSet2 = new AnimatorSet();
-                animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofInt(this, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)}), ObjectAnimator.ofInt(this.emojiView, this.roundedTranslationYProperty, new int[]{-(this.stickersExpandedHeight - i)})});
-                ((ObjectAnimator) animatorSet2.getChildAnimations().get(0)).addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        ChatActivityEnterView.this.lambda$checkStickresExpandHeight$33$ChatActivityEnterView(valueAnimator);
-                    }
-                });
-                animatorSet2.setDuration(300);
-                animatorSet2.setInterpolator(CubicBezierInterpolator.DEFAULT);
-                animatorSet2.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animator) {
-                        Animator unused = ChatActivityEnterView.this.stickersExpansionAnim = null;
-                        ChatActivityEnterView.this.emojiView.setLayerType(0, (Paint) null);
-                    }
-                });
-                this.stickersExpansionAnim = animatorSet2;
-                this.emojiView.setLayerType(2, (Paint) null);
-                animatorSet2.start();
             }
         }
 

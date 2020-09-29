@@ -234,6 +234,7 @@ public class SharedConfig {
                 useSystemEmoji = sharedPreferences2.getBoolean("useSystemEmoji", false);
                 streamMedia = sharedPreferences2.getBoolean("streamMedia", true);
                 saveStreamMedia = sharedPreferences2.getBoolean("saveStreamMedia", true);
+                smoothKeyboard = sharedPreferences2.getBoolean("smoothKeyboard2", true);
                 pauseMusicOnRecord = sharedPreferences2.getBoolean("pauseMusicOnRecord", true);
                 streamAllVideo = sharedPreferences2.getBoolean("streamAllVideo", BuildVars.DEBUG_VERSION);
                 streamMkv = sharedPreferences2.getBoolean("streamMkv", false);
@@ -668,7 +669,7 @@ public class SharedConfig {
     public static void toggleSmoothKeyboard() {
         smoothKeyboard = !smoothKeyboard;
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
-        edit.putBoolean("smoothKeyboard", smoothKeyboard);
+        edit.putBoolean("smoothKeyboard2", smoothKeyboard);
         edit.commit();
     }
 

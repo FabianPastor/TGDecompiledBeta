@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
-import com.google.android.datatransport.runtime.logging.Logging;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.FileLog;
@@ -15,6 +14,7 @@ import org.webrtc.CameraEnumerator;
 import org.webrtc.CameraVideoCapturer;
 import org.webrtc.CapturerObserver;
 import org.webrtc.EglBase;
+import org.webrtc.Logging;
 import org.webrtc.SurfaceTextureHelper;
 
 @TargetApi(18)
@@ -42,7 +42,8 @@ public class VideoCameraCapturer {
 
     public VideoCameraCapturer() {
         if (Build.VERSION.SDK_INT >= 18) {
-            Logging.i("VideoCameraCapturer", "device model = " + Build.MANUFACTURER + Build.MODEL);
+            Logging.enableLogToDebugOutput(Logging.Severity.LS_INFO);
+            Logging.d("VideoCameraCapturer", "device model = " + Build.MANUFACTURER + Build.MODEL);
             AndroidUtilities.runOnUIThread(new Runnable() {
                 public final void run() {
                     VideoCameraCapturer.this.lambda$new$0$VideoCameraCapturer();

@@ -8158,7 +8158,7 @@ public class MessageObject {
         if (i != 0) {
             return i;
         }
-        int dp = this.generatedWithMinSize - AndroidUtilities.dp((!needDrawAvatarInternal() || isOutOwner()) ? 80.0f : 132.0f);
+        int dp = this.generatedWithMinSize - AndroidUtilities.dp((!needDrawAvatarInternal() || isOutOwner() || this.messageOwner.isThreadMessage) ? 80.0f : 132.0f);
         if (needDrawShareButton() && !isOutOwner()) {
             dp -= AndroidUtilities.dp(10.0f);
         }
@@ -10475,33 +10475,15 @@ public class MessageObject {
         return tLRPC$TL_messageReplies != null && tLRPC$TL_messageReplies.replies > 0;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:2:0x0006, code lost:
-        r0 = r1.replyMessageObject;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean canViewThread() {
-        /*
-            r1 = this;
-            boolean r0 = r1.hasReplies()
-            if (r0 != 0) goto L_0x0019
-            org.telegram.messenger.MessageObject r0 = r1.replyMessageObject
-            if (r0 == 0) goto L_0x0010
-            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
-            org.telegram.tgnet.TLRPC$TL_messageReplies r0 = r0.replies
-            if (r0 != 0) goto L_0x0019
-        L_0x0010:
-            int r0 = r1.getReplyTopMsgId()
-            if (r0 == 0) goto L_0x0017
-            goto L_0x0019
-        L_0x0017:
-            r0 = 0
-            goto L_0x001a
-        L_0x0019:
-            r0 = 1
-        L_0x001a:
-            return r0
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.canViewThread():boolean");
+        MessageObject messageObject;
+        if (this.messageOwner.action != null) {
+            return false;
+        }
+        if (hasReplies() || (((messageObject = this.replyMessageObject) != null && messageObject.messageOwner.replies != null) || getReplyTopMsgId() != 0)) {
+            return true;
+        }
+        return false;
     }
 
     public boolean isComments() {
@@ -10831,6 +10813,11 @@ public class MessageObject {
         return tLRPC$TL_messageReplyHeader.reply_to_msg_id;
     }
 
+    public boolean isPrivateForward() {
+        TLRPC$MessageFwdHeader tLRPC$MessageFwdHeader = this.messageOwner.fwd_from;
+        return tLRPC$MessageFwdHeader != null && !TextUtils.isEmpty(tLRPC$MessageFwdHeader.from_name);
+    }
+
     public int getSenderId() {
         TLRPC$Peer tLRPC$Peer;
         TLRPC$MessageFwdHeader tLRPC$MessageFwdHeader = this.messageOwner.fwd_from;
@@ -11008,73 +10995,165 @@ public class MessageObject {
         }
     }
 
-    public void setQuery(String str) {
-        String documentFileName;
-        if (!TextUtils.isEmpty(str)) {
-            ArrayList<String> arrayList = new ArrayList<>();
-            String lowerCase = str.trim().toLowerCase();
-            String[] split = lowerCase.split("\\P{L}+");
-            ArrayList arrayList2 = new ArrayList();
-            if (!TextUtils.isEmpty(this.messageOwner.message)) {
-                String lowerCase2 = this.messageOwner.message.trim().toLowerCase();
-                if (lowerCase2.contains(lowerCase) && !arrayList.contains(lowerCase)) {
-                    arrayList.add(lowerCase);
-                }
-                arrayList2.addAll(Arrays.asList(lowerCase2.split("\\P{L}+")));
-            }
-            if (!(getDocument() == null || (documentFileName = FileLoader.getDocumentFileName(getDocument())) == null)) {
-                if (documentFileName.contains(lowerCase) && !arrayList.contains(lowerCase)) {
-                    arrayList.add(lowerCase);
-                }
-                arrayList2.addAll(Arrays.asList(documentFileName.toLowerCase().split("\\P{L}+")));
-            }
-            TLRPC$MessageMedia tLRPC$MessageMedia = this.messageOwner.media;
-            if (tLRPC$MessageMedia instanceof TLRPC$TL_messageMediaWebPage) {
-                TLRPC$WebPage tLRPC$WebPage = tLRPC$MessageMedia.webpage;
-                if (tLRPC$WebPage instanceof TLRPC$TL_webPage) {
-                    String str2 = tLRPC$WebPage.title;
-                    if (str2 == null) {
-                        str2 = tLRPC$WebPage.site_name;
-                    }
-                    if (str2 != null) {
-                        if (str2.contains(lowerCase) && !arrayList.contains(lowerCase)) {
-                            arrayList.add(lowerCase);
-                        }
-                        arrayList2.addAll(Arrays.asList(str2.toLowerCase().split("\\P{L}+")));
-                    }
-                }
-            }
-            String musicAuthor = getMusicAuthor();
-            if (musicAuthor != null) {
-                if (musicAuthor.contains(lowerCase) && !arrayList.contains(lowerCase)) {
-                    arrayList.add(lowerCase);
-                }
-                arrayList2.addAll(Arrays.asList(musicAuthor.toLowerCase().split("\\P{L}+")));
-            }
-            for (int i = 0; i < split.length; i++) {
-                String str3 = split[i];
-                int i2 = 0;
-                while (i2 < arrayList2.size()) {
-                    if (!arrayList.contains(arrayList2.get(i2))) {
-                        int max = Math.max(str3.length(), ((String) arrayList2.get(i2)).length());
-                        int min = Math.min(str3.length(), ((String) arrayList2.get(i2)).length());
-                        int i3 = 0;
-                        int i4 = 0;
-                        while (i3 < min && ((String) arrayList2.get(i2)).charAt(i3) == str3.charAt(i3)) {
-                            i4++;
-                            i3++;
-                        }
-                        if (((double) (((float) i4) / ((float) max))) >= 0.5d) {
-                            arrayList.add(arrayList2.get(i2));
-                        }
-                    }
-                    i2++;
-                }
-            }
-            if (!arrayList.isEmpty()) {
-                this.highlightedWords = arrayList;
-            }
-        }
+    /* JADX WARNING: Code restructure failed: missing block: B:53:0x00f6, code lost:
+        r6 = (java.lang.String) r3.get(r5);
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void setQuery(java.lang.String r14) {
+        /*
+            r13 = this;
+            boolean r0 = android.text.TextUtils.isEmpty(r14)
+            if (r0 == 0) goto L_0x0007
+            return
+        L_0x0007:
+            java.util.ArrayList r0 = new java.util.ArrayList
+            r0.<init>()
+            java.lang.String r14 = r14.trim()
+            java.lang.String r14 = r14.toLowerCase()
+            java.lang.String r1 = "\\P{L}+"
+            java.lang.String[] r2 = r14.split(r1)
+            java.util.ArrayList r3 = new java.util.ArrayList
+            r3.<init>()
+            org.telegram.tgnet.TLRPC$Message r4 = r13.messageOwner
+            java.lang.String r4 = r4.message
+            boolean r4 = android.text.TextUtils.isEmpty(r4)
+            if (r4 != 0) goto L_0x004f
+            org.telegram.tgnet.TLRPC$Message r4 = r13.messageOwner
+            java.lang.String r4 = r4.message
+            java.lang.String r4 = r4.trim()
+            java.lang.String r4 = r4.toLowerCase()
+            boolean r5 = r4.contains(r14)
+            if (r5 == 0) goto L_0x0044
+            boolean r5 = r0.contains(r14)
+            if (r5 != 0) goto L_0x0044
+            r0.add(r14)
+        L_0x0044:
+            java.lang.String[] r4 = r4.split(r1)
+            java.util.List r4 = java.util.Arrays.asList(r4)
+            r3.addAll(r4)
+        L_0x004f:
+            org.telegram.tgnet.TLRPC$Document r4 = r13.getDocument()
+            if (r4 == 0) goto L_0x007d
+            org.telegram.tgnet.TLRPC$Document r4 = r13.getDocument()
+            java.lang.String r4 = org.telegram.messenger.FileLoader.getDocumentFileName(r4)
+            if (r4 == 0) goto L_0x007d
+            java.lang.String r4 = r4.toLowerCase()
+            boolean r5 = r4.contains(r14)
+            if (r5 == 0) goto L_0x0072
+            boolean r5 = r0.contains(r14)
+            if (r5 != 0) goto L_0x0072
+            r0.add(r14)
+        L_0x0072:
+            java.lang.String[] r4 = r4.split(r1)
+            java.util.List r4 = java.util.Arrays.asList(r4)
+            r3.addAll(r4)
+        L_0x007d:
+            org.telegram.tgnet.TLRPC$Message r4 = r13.messageOwner
+            org.telegram.tgnet.TLRPC$MessageMedia r4 = r4.media
+            boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_messageMediaWebPage
+            if (r5 == 0) goto L_0x00b1
+            org.telegram.tgnet.TLRPC$WebPage r4 = r4.webpage
+            boolean r5 = r4 instanceof org.telegram.tgnet.TLRPC$TL_webPage
+            if (r5 == 0) goto L_0x00b1
+            java.lang.String r5 = r4.title
+            if (r5 != 0) goto L_0x0091
+            java.lang.String r5 = r4.site_name
+        L_0x0091:
+            if (r5 == 0) goto L_0x00b1
+            java.lang.String r4 = r5.toLowerCase()
+            boolean r5 = r4.contains(r14)
+            if (r5 == 0) goto L_0x00a6
+            boolean r5 = r0.contains(r14)
+            if (r5 != 0) goto L_0x00a6
+            r0.add(r14)
+        L_0x00a6:
+            java.lang.String[] r4 = r4.split(r1)
+            java.util.List r4 = java.util.Arrays.asList(r4)
+            r3.addAll(r4)
+        L_0x00b1:
+            java.lang.String r4 = r13.getMusicAuthor()
+            if (r4 == 0) goto L_0x00d5
+            java.lang.String r4 = r4.toLowerCase()
+            boolean r5 = r4.contains(r14)
+            if (r5 == 0) goto L_0x00ca
+            boolean r5 = r0.contains(r14)
+            if (r5 != 0) goto L_0x00ca
+            r0.add(r14)
+        L_0x00ca:
+            java.lang.String[] r14 = r4.split(r1)
+            java.util.List r14 = java.util.Arrays.asList(r14)
+            r3.addAll(r14)
+        L_0x00d5:
+            r14 = 0
+            r1 = 0
+        L_0x00d7:
+            int r4 = r2.length
+            if (r1 >= r4) goto L_0x014f
+            r4 = r2[r1]
+            int r5 = r4.length()
+            r6 = 2
+            if (r5 >= r6) goto L_0x00e4
+            goto L_0x014c
+        L_0x00e4:
+            r5 = 0
+        L_0x00e5:
+            int r6 = r3.size()
+            if (r5 >= r6) goto L_0x014c
+            java.lang.Object r6 = r3.get(r5)
+            boolean r6 = r0.contains(r6)
+            if (r6 == 0) goto L_0x00f6
+            goto L_0x0149
+        L_0x00f6:
+            java.lang.Object r6 = r3.get(r5)
+            java.lang.String r6 = (java.lang.String) r6
+            char r7 = r4.charAt(r14)
+            int r7 = r6.indexOf(r7)
+            if (r7 >= 0) goto L_0x0107
+            goto L_0x0149
+        L_0x0107:
+            if (r7 == 0) goto L_0x010d
+            java.lang.String r6 = r6.substring(r7)
+        L_0x010d:
+            int r7 = r4.length()
+            int r8 = r6.length()
+            int r7 = java.lang.Math.max(r7, r8)
+            int r8 = r4.length()
+            int r9 = r6.length()
+            int r8 = java.lang.Math.min(r8, r9)
+            r9 = 0
+            r10 = 0
+        L_0x0127:
+            if (r9 >= r8) goto L_0x0138
+            char r11 = r6.charAt(r9)
+            char r12 = r4.charAt(r9)
+            if (r11 != r12) goto L_0x0138
+            int r10 = r10 + 1
+            int r9 = r9 + 1
+            goto L_0x0127
+        L_0x0138:
+            float r6 = (float) r10
+            float r7 = (float) r7
+            float r6 = r6 / r7
+            double r6 = (double) r6
+            r8 = 4602678819172646912(0x3feNUM, double:0.5)
+            int r10 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
+            if (r10 < 0) goto L_0x0149
+            java.lang.Object r6 = r3.get(r5)
+            r0.add(r6)
+        L_0x0149:
+            int r5 = r5 + 1
+            goto L_0x00e5
+        L_0x014c:
+            int r1 = r1 + 1
+            goto L_0x00d7
+        L_0x014f:
+            boolean r14 = r0.isEmpty()
+            if (r14 != 0) goto L_0x0157
+            r13.highlightedWords = r0
+        L_0x0157:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.setQuery(java.lang.String):void");
     }
 
     public boolean hasHighlightedWords() {

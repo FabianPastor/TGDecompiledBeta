@@ -781,7 +781,7 @@ public class DrawerLayoutContainer extends FrameLayout {
     /* access modifiers changed from: protected */
     public boolean drawChild(Canvas canvas, View view, long j) {
         int i;
-        int x;
+        int ceil;
         Canvas canvas2 = canvas;
         View view2 = view;
         int i2 = 0;
@@ -801,26 +801,26 @@ public class DrawerLayoutContainer extends FrameLayout {
                 if (childAt.getVisibility() == 0 && childAt != this.drawerLayout) {
                     i3 = i4;
                 }
-                if (childAt != view2 && childAt.getVisibility() == 0 && childAt == this.drawerLayout && childAt.getHeight() >= height && (x = ((int) childAt.getX()) + childAt.getMeasuredWidth()) > i) {
-                    i = x;
+                if (childAt != view2 && childAt.getVisibility() == 0 && childAt == this.drawerLayout && childAt.getHeight() >= height && (ceil = ((int) Math.ceil((double) childAt.getX())) + childAt.getMeasuredWidth()) > i) {
+                    i = ceil;
                 }
             }
             if (i != 0) {
-                canvas.clipRect(i, 0, width, getHeight());
+                canvas2.clipRect(i - AndroidUtilities.dp(1.0f), 0, width, getHeight());
             }
             i2 = i3;
         } else {
             i = 0;
         }
         boolean drawChild = super.drawChild(canvas, view, j);
-        canvas.restoreToCount(save);
+        canvas2.restoreToCount(save);
         if (this.scrimOpacity <= 0.0f || !z) {
             if (this.shadowLeft != null) {
                 float max = Math.max(0.0f, Math.min(this.drawerPosition / ((float) AndroidUtilities.dp(20.0f)), 1.0f));
                 if (max != 0.0f) {
                     this.shadowLeft.setBounds((int) this.drawerPosition, view.getTop(), ((int) this.drawerPosition) + this.shadowLeft.getIntrinsicWidth(), view.getBottom());
                     this.shadowLeft.setAlpha((int) (max * 255.0f));
-                    this.shadowLeft.draw(canvas);
+                    this.shadowLeft.draw(canvas2);
                 }
             }
         } else if (indexOfChild(view2) == i2) {
