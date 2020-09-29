@@ -46,6 +46,7 @@ import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$FileLocation;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_webPageEmpty;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$WebPage;
 import org.telegram.tgnet.TLRPC$messages_Messages;
 import org.telegram.ui.ActionBar.BaseFragment;
@@ -899,10 +900,12 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
 
     public /* synthetic */ void lambda$null$2$FilteredSearchView(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z, String str, ArrayList arrayList, FiltersView.MediaFilterData mediaFilterData, int i2, long j, ArrayList arrayList2, ArrayList arrayList3) {
         String str2;
+        String str3 = str;
         FiltersView.MediaFilterData mediaFilterData2 = mediaFilterData;
         ArrayList arrayList4 = arrayList2;
         if (i == this.requestIndex) {
             this.isLoading = false;
+            boolean z2 = true;
             if (tLRPC$TL_error != null) {
                 this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle2", NUM));
                 this.emptyView.subtitle.setVisibility(0);
@@ -923,7 +926,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 this.sectionArrays.clear();
             }
             this.totalCount = tLRPC$messages_Messages.count;
-            this.currentDataQuery = str;
+            this.currentDataQuery = str3;
             int size = arrayList.size();
             for (int i3 = 0; i3 < size; i3++) {
                 MessageObject messageObject = (MessageObject) arrayList.get(i3);
@@ -949,7 +952,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 if (mediaFilterData2 == null) {
                     this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle2", NUM));
                     this.emptyView.subtitle.setVisibility(8);
-                } else if (TextUtils.isEmpty(this.currentDataQuery)) {
+                } else if (TextUtils.isEmpty(this.currentDataQuery) && i2 == 0 && j == 0) {
                     this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle", NUM));
                     if (i2 == 0 && j == 0) {
                         int i4 = mediaFilterData2.filterType;
@@ -965,7 +968,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                             str2 = LocaleController.getString("SearchEmptyViewFilteredSubtitleVoice", NUM);
                         }
                         this.emptyView.subtitle.setVisibility(0);
-                        this.emptyView.subtitle.setText(LocaleController.formatString("SearchEmptyViewFilteredSubtitle", NUM, str2));
+                        this.emptyView.subtitle.setText(str2);
                     } else {
                         this.emptyView.subtitle.setVisibility(8);
                     }
@@ -1005,11 +1008,28 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 if (arrayList4 != null) {
                     this.localTipChats.addAll(arrayList4);
                 }
+                if (str.length() >= 3 && (LocaleController.getString("SavedMessages", NUM).toLowerCase().startsWith(str3) || "saved messages".startsWith(str3))) {
+                    int i6 = 0;
+                    while (true) {
+                        if (i6 < this.localTipChats.size()) {
+                            if ((this.localTipChats.get(i6) instanceof TLRPC$User) && UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == ((TLRPC$User) this.localTipChats.get(i6)).id) {
+                                break;
+                            }
+                            i6++;
+                        } else {
+                            z2 = false;
+                            break;
+                        }
+                    }
+                    if (!z2) {
+                        this.localTipChats.add(0, UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser());
+                    }
+                }
                 this.localTipDates.clear();
                 this.localTipDates.addAll(arrayList3);
                 Delegate delegate2 = this.delegate;
                 if (delegate2 != null) {
-                    delegate2.updateFiltersView(TextUtils.isEmpty(this.currentDataQuery), arrayList4, this.localTipDates);
+                    delegate2.updateFiltersView(TextUtils.isEmpty(this.currentDataQuery), this.localTipChats, this.localTipDates);
                 }
             }
             if (this.loadingView.getVisibility() == 0 && this.recyclerListView.getChildCount() == 0) {
@@ -1437,12 +1457,12 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         r0 = 2
                         java.lang.CharSequence[] r0 = new java.lang.CharSequence[r0]
                         r1 = 0
-                        r2 = 2131626192(0x7f0e08d0, float:1.8879613E38)
+                        r2 = 2131626191(0x7f0e08cf, float:1.8879611E38)
                         java.lang.String r3 = "Open"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
                         r1 = 1
-                        r2 = 2131624898(0x7f0e03c2, float:1.8876989E38)
+                        r2 = 2131624899(0x7f0e03c3, float:1.887699E38)
                         java.lang.String r3 = "Copy"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
@@ -1868,7 +1888,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     org.telegram.ui.Cells.GraySectionCell r4 = new org.telegram.ui.Cells.GraySectionCell
                     android.content.Context r3 = r3.getContext()
                     r4.<init>(r3)
-                    r3 = 2131626865(0x7f0e0b71, float:1.8880978E38)
+                    r3 = 2131626863(0x7f0e0b6f, float:1.8880974E38)
                     java.lang.String r0 = "SearchMessages"
                     java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r0, r3)
                     r4.setText(r3)

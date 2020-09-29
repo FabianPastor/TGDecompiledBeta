@@ -2128,6 +2128,7 @@ public final class R {
         public static final int ChannelPermissions = NUM;
         public static final int ChannelPermissionsHeader = NUM;
         public static final int ChannelPhotoEditNotification = NUM;
+        public static final int ChannelPostDeleted = NUM;
         public static final int ChannelPrivate = NUM;
         public static final int ChannelPrivateInfo = NUM;
         public static final int ChannelPrivateLinkHelp = NUM;
@@ -4305,7 +4306,6 @@ public final class R {
         public static final int SearchBackgrounds = NUM;
         public static final int SearchByColor = NUM;
         public static final int SearchEmojiHint = NUM;
-        public static final int SearchEmptyViewFilteredSubtitle = NUM;
         public static final int SearchEmptyViewFilteredSubtitle2 = NUM;
         public static final int SearchEmptyViewFilteredSubtitleFiles = NUM;
         public static final int SearchEmptyViewFilteredSubtitleLinks = NUM;
@@ -4329,6 +4329,7 @@ public final class R {
         public static final int SearchMusic = NUM;
         public static final int SearchRecentFiles = NUM;
         public static final int SearchStickersHint = NUM;
+        public static final int SearchTipToday = NUM;
         public static final int SearchTrendingStickersHint = NUM;
         public static final int SecondsBold_few = NUM;
         public static final int SecondsBold_many = NUM;
@@ -5142,6 +5143,7 @@ public final class R {
         public static final int formatterStats12H = NUM;
         public static final int formatterStats24H = NUM;
         public static final int formatterWeek = NUM;
+        public static final int formatterWeekLong = NUM;
         public static final int formatterYear = NUM;
         public static final int formatterYearMax = NUM;
         public static final int gcm_defaultSenderId = NUM;

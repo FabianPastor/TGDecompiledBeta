@@ -6468,31 +6468,45 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             ImageView imageView;
             ImageView imageView2;
             ImageView imageView3;
+            LinearLayout linearLayout;
             ImageView imageView4;
+            ImageView imageView5;
+            ImageView imageView6;
+            LinearLayout linearLayout2;
             EditTextCaption editTextCaption = this.messageEditText;
             if (editTextCaption != null && this.editingMessageObject == null) {
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) editTextCaption.getLayoutParams();
                 int i2 = layoutParams.rightMargin;
                 if (i == 1) {
-                    ImageView imageView5 = this.botButton;
-                    if ((imageView5 == null || imageView5.getVisibility() != 0) && (((imageView3 = this.notifyButton) == null || imageView3.getVisibility() != 0) && ((imageView4 = this.scheduledButton) == null || imageView4.getTag() == null))) {
-                        layoutParams.rightMargin = AndroidUtilities.dp(50.0f);
+                    ImageView imageView7 = this.botButton;
+                    if (imageView7 == null || imageView7.getVisibility() != 0 || (imageView6 = this.scheduledButton) == null || imageView6.getVisibility() != 0 || (linearLayout2 = this.attachLayout) == null || linearLayout2.getVisibility() != 0) {
+                        ImageView imageView8 = this.botButton;
+                        if ((imageView8 == null || imageView8.getVisibility() != 0) && (((imageView4 = this.notifyButton) == null || imageView4.getVisibility() != 0) && ((imageView5 = this.scheduledButton) == null || imageView5.getTag() == null))) {
+                            layoutParams.rightMargin = AndroidUtilities.dp(50.0f);
+                        } else {
+                            layoutParams.rightMargin = AndroidUtilities.dp(98.0f);
+                        }
                     } else {
-                        layoutParams.rightMargin = AndroidUtilities.dp(98.0f);
+                        layoutParams.rightMargin = AndroidUtilities.dp(146.0f);
                     }
                 } else if (i != 2) {
-                    ImageView imageView6 = this.scheduledButton;
-                    if (imageView6 == null || imageView6.getTag() == null) {
+                    ImageView imageView9 = this.scheduledButton;
+                    if (imageView9 == null || imageView9.getTag() == null) {
                         layoutParams.rightMargin = AndroidUtilities.dp(2.0f);
                     } else {
                         layoutParams.rightMargin = AndroidUtilities.dp(50.0f);
                     }
                 } else if (i2 != AndroidUtilities.dp(2.0f)) {
-                    ImageView imageView7 = this.botButton;
-                    if ((imageView7 == null || imageView7.getVisibility() != 0) && (((imageView = this.notifyButton) == null || imageView.getVisibility() != 0) && ((imageView2 = this.scheduledButton) == null || imageView2.getTag() == null))) {
-                        layoutParams.rightMargin = AndroidUtilities.dp(50.0f);
+                    ImageView imageView10 = this.botButton;
+                    if (imageView10 == null || imageView10.getVisibility() != 0 || (imageView3 = this.scheduledButton) == null || imageView3.getVisibility() != 0 || (linearLayout = this.attachLayout) == null || linearLayout.getVisibility() != 0) {
+                        ImageView imageView11 = this.botButton;
+                        if ((imageView11 == null || imageView11.getVisibility() != 0) && (((imageView = this.notifyButton) == null || imageView.getVisibility() != 0) && ((imageView2 = this.scheduledButton) == null || imageView2.getTag() == null))) {
+                            layoutParams.rightMargin = AndroidUtilities.dp(50.0f);
+                        } else {
+                            layoutParams.rightMargin = AndroidUtilities.dp(98.0f);
+                        }
                     } else {
-                        layoutParams.rightMargin = AndroidUtilities.dp(98.0f);
+                        layoutParams.rightMargin = AndroidUtilities.dp(146.0f);
                     }
                 }
                 if (i2 != layoutParams.rightMargin) {

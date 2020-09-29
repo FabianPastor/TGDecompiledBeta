@@ -212,7 +212,10 @@ public class ActionBar extends FrameLayout {
     /* access modifiers changed from: protected */
     public boolean shouldClipChild(View view) {
         if (this.clipContent) {
-            return view == this.titleTextView[0] || view == this.subtitleTextView || view == this.menu || view == this.backButtonImageView;
+            SimpleTextView[] simpleTextViewArr = this.titleTextView;
+            if (view == simpleTextViewArr[0] || view == simpleTextViewArr[1] || view == this.subtitleTextView || view == this.menu || view == this.backButtonImageView) {
+                return true;
+            }
         }
         return false;
     }
@@ -1557,5 +1560,9 @@ public class ActionBar extends FrameLayout {
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         this.ellipsizeSpanAnimator.onDetachedFromWindow();
+    }
+
+    public ActionBarMenu getActionMode() {
+        return this.actionMode;
     }
 }

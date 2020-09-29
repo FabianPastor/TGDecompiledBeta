@@ -644,19 +644,22 @@ public class DrawerLayoutContainer extends FrameLayout {
         int childCount = viewGroup.getChildCount();
         for (int i = 0; i < childCount; i++) {
             View childAt = viewGroup.getChildAt(i);
-            childAt.getHitRect(this.rect);
-            if (this.rect.contains((int) f, (int) f2)) {
-                if (childAt.canScrollHorizontally(-1)) {
-                    return childAt;
-                }
-                if (childAt instanceof ViewGroup) {
-                    Rect rect2 = this.rect;
-                    View findScrollingChild = findScrollingChild((ViewGroup) childAt, f - ((float) rect2.left), f2 - ((float) rect2.top));
-                    if (findScrollingChild != null) {
-                        return findScrollingChild;
-                    }
-                } else {
+            if (childAt.getVisibility() == 0) {
+                childAt.getHitRect(this.rect);
+                if (!this.rect.contains((int) f, (int) f2)) {
                     continue;
+                } else if (childAt.canScrollHorizontally(-1)) {
+                    return childAt;
+                } else {
+                    if (childAt instanceof ViewGroup) {
+                        Rect rect2 = this.rect;
+                        View findScrollingChild = findScrollingChild((ViewGroup) childAt, f - ((float) rect2.left), f2 - ((float) rect2.top));
+                        if (findScrollingChild != null) {
+                            return findScrollingChild;
+                        }
+                    } else {
+                        continue;
+                    }
                 }
             }
         }

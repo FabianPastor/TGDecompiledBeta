@@ -37,6 +37,7 @@ import org.telegram.ui.Components.RLottieImageView;
 import org.telegram.ui.Components.SnowflakesEffect;
 
 public class DrawerProfileCell extends FrameLayout {
+    public static boolean switchingTheme;
     private boolean accountsShown;
     private ImageView arrowView;
     private BackupImageView avatarImageView;
@@ -53,7 +54,6 @@ public class DrawerProfileCell extends FrameLayout {
     private SnowflakesEffect snowflakesEffect;
     private Rect srcRect = new Rect();
     private RLottieDrawable sunDrawable;
-    private boolean switchingTheme;
 
     public DrawerProfileCell(Context context) {
         super(context);
@@ -129,17 +129,19 @@ public class DrawerProfileCell extends FrameLayout {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:12:0x003a, code lost:
-        if (r4.isDark() != false) goto L_0x0040;
+    /* JADX WARNING: Code restructure failed: missing block: B:12:0x003d, code lost:
+        if (r4.isDark() != false) goto L_0x0043;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$new$0$DrawerProfileCell(android.view.View r7) {
         /*
             r6 = this;
-            boolean r7 = r6.switchingTheme
+            boolean r7 = switchingTheme
             if (r7 == 0) goto L_0x0005
             return
         L_0x0005:
+            r7 = 1
+            switchingTheme = r7
             android.content.Context r7 = org.telegram.messenger.ApplicationLoader.applicationContext
             r0 = 0
             java.lang.String r1 = "themeconfig"
@@ -148,45 +150,45 @@ public class DrawerProfileCell extends FrameLayout {
             java.lang.String r2 = "lastDayTheme"
             java.lang.String r2 = r7.getString(r2, r1)
             org.telegram.ui.ActionBar.Theme$ThemeInfo r3 = org.telegram.ui.ActionBar.Theme.getTheme(r2)
-            if (r3 != 0) goto L_0x001d
+            if (r3 != 0) goto L_0x0020
             r2 = r1
-        L_0x001d:
+        L_0x0020:
             java.lang.String r3 = "Dark Blue"
             java.lang.String r4 = "lastDarkTheme"
             java.lang.String r7 = r7.getString(r4, r3)
             org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = org.telegram.ui.ActionBar.Theme.getTheme(r7)
-            if (r4 != 0) goto L_0x002c
+            if (r4 != 0) goto L_0x002f
             r7 = r3
-        L_0x002c:
+        L_0x002f:
             org.telegram.ui.ActionBar.Theme$ThemeInfo r4 = org.telegram.ui.ActionBar.Theme.getActiveTheme()
             boolean r5 = r2.equals(r7)
-            if (r5 == 0) goto L_0x003d
+            if (r5 == 0) goto L_0x0040
             boolean r5 = r4.isDark()
-            if (r5 == 0) goto L_0x003e
-            goto L_0x0040
-        L_0x003d:
+            if (r5 == 0) goto L_0x0041
+            goto L_0x0043
+        L_0x0040:
             r3 = r7
-        L_0x003e:
+        L_0x0041:
             r1 = r2
             r7 = r3
-        L_0x0040:
+        L_0x0043:
             java.lang.String r2 = r4.getKey()
             boolean r2 = r1.equals(r2)
-            if (r2 == 0) goto L_0x0056
+            if (r2 == 0) goto L_0x0059
             org.telegram.ui.ActionBar.Theme$ThemeInfo r7 = org.telegram.ui.ActionBar.Theme.getTheme(r7)
             org.telegram.ui.Components.RLottieDrawable r1 = r6.sunDrawable
             r3 = 36
             r1.setCustomEndFrame(r3)
-            goto L_0x005f
-        L_0x0056:
+            goto L_0x0062
+        L_0x0059:
             org.telegram.ui.ActionBar.Theme$ThemeInfo r7 = org.telegram.ui.ActionBar.Theme.getTheme(r1)
             org.telegram.ui.Components.RLottieDrawable r1 = r6.sunDrawable
             r1.setCustomEndFrame(r0)
-        L_0x005f:
+        L_0x0062:
             org.telegram.ui.Components.RLottieImageView r1 = r6.darkThemeView
             r1.playAnimation()
             int r1 = org.telegram.ui.ActionBar.Theme.selectedAutoNightType
-            if (r1 == 0) goto L_0x0084
+            if (r1 == 0) goto L_0x0087
             android.content.Context r1 = r6.getContext()
             r3 = 2131624422(0x7f0e01e6, float:1.8876023E38)
             java.lang.String r4 = "AutoNightModeOff"
@@ -196,9 +198,8 @@ public class DrawerProfileCell extends FrameLayout {
             org.telegram.ui.ActionBar.Theme.selectedAutoNightType = r0
             org.telegram.ui.ActionBar.Theme.saveAutoNightThemeConfig()
             org.telegram.ui.ActionBar.Theme.cancelAutoNightThemeCallbacks()
-        L_0x0084:
+        L_0x0087:
             r6.switchTheme(r7, r2)
-            r6.switchingTheme = r0
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.DrawerProfileCell.lambda$new$0$DrawerProfileCell(android.view.View):void");

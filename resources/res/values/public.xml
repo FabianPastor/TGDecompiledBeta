@@ -1989,6 +1989,7 @@
     <public type="string" name="ChannelPermissions" id="NUM" />
     <public type="string" name="ChannelPermissionsHeader" id="NUM" />
     <public type="string" name="ChannelPhotoEditNotification" id="NUM" />
+    <public type="string" name="ChannelPostDeleted" id="NUM" />
     <public type="string" name="ChannelPrivate" id="NUM" />
     <public type="string" name="ChannelPrivateInfo" id="NUM" />
     <public type="string" name="ChannelPrivateLinkHelp" id="NUM" />
@@ -4166,7 +4167,6 @@
     <public type="string" name="SearchBackgrounds" id="NUM" />
     <public type="string" name="SearchByColor" id="NUM" />
     <public type="string" name="SearchEmojiHint" id="NUM" />
-    <public type="string" name="SearchEmptyViewFilteredSubtitle" id="NUM" />
     <public type="string" name="SearchEmptyViewFilteredSubtitle2" id="NUM" />
     <public type="string" name="SearchEmptyViewFilteredSubtitleFiles" id="NUM" />
     <public type="string" name="SearchEmptyViewFilteredSubtitleLinks" id="NUM" />
@@ -4190,6 +4190,7 @@
     <public type="string" name="SearchMusic" id="NUM" />
     <public type="string" name="SearchRecentFiles" id="NUM" />
     <public type="string" name="SearchStickersHint" id="NUM" />
+    <public type="string" name="SearchTipToday" id="NUM" />
     <public type="string" name="SearchTrendingStickersHint" id="NUM" />
     <public type="string" name="SecondsBold_few" id="NUM" />
     <public type="string" name="SecondsBold_many" id="NUM" />
@@ -5003,6 +5004,7 @@
     <public type="string" name="formatterStats12H" id="NUM" />
     <public type="string" name="formatterStats24H" id="NUM" />
     <public type="string" name="formatterWeek" id="NUM" />
+    <public type="string" name="formatterWeekLong" id="NUM" />
     <public type="string" name="formatterYear" id="NUM" />
     <public type="string" name="formatterYearMax" id="NUM" />
     <public type="string" name="gcm_defaultSenderId" id="NUM" />

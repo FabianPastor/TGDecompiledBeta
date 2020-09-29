@@ -1589,6 +1589,14 @@ public class ActionBarMenuItem extends FrameLayout {
                 TLObject tLObject = mediaFilterData.chat;
                 if (tLObject instanceof TLRPC$User) {
                     TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
+                    if (UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == tLRPC$User.id) {
+                        CombinedDrawable createCircleDrawableWithIcon2 = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), NUM);
+                        createCircleDrawableWithIcon2.setIconSize(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f));
+                        Theme.setCombinedDrawableColor(createCircleDrawableWithIcon2, Theme.getColor("avatar_backgroundSaved"), false);
+                        Theme.setCombinedDrawableColor(createCircleDrawableWithIcon2, Theme.getColor("avatar_actionBarIconBlue"), true);
+                        this.avatarImageView.setImageDrawable(createCircleDrawableWithIcon2);
+                        return;
+                    }
                     this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(16.0f));
                     this.avatarImageView.getImageReceiver().setImage(ImageLocation.getForUser(tLRPC$User, false), "50_50", this.thumbDrawable, (String) null, tLRPC$User, 0);
                 } else if (tLObject instanceof TLRPC$Chat) {

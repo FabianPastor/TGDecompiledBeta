@@ -5599,7 +5599,7 @@ public class MediaDataController extends BaseController {
             androidx.core.content.pm.ShortcutInfoCompat$Builder r9 = new androidx.core.content.pm.ShortcutInfoCompat$Builder     // Catch:{ all -> 0x02f1 }
             android.content.Context r10 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02f1 }
             r9.<init>((android.content.Context) r10, (java.lang.String) r8)     // Catch:{ all -> 0x02f1 }
-            r10 = 2131625933(0x7f0e07cd, float:1.8879088E38)
+            r10 = 2131625932(0x7f0e07cc, float:1.8879086E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02f1 }
             r9.setShortLabel(r11)     // Catch:{ all -> 0x02f1 }
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02f1 }
@@ -6441,7 +6441,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x024c }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131626734(0x7f0e0aee, float:1.8880713E38)
+            r9 = 2131626733(0x7f0e0aed, float:1.888071E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x024c }
         L_0x0067:
             r9 = r4
@@ -6451,7 +6451,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x024c }
             if (r8 == 0) goto L_0x007a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131626828(0x7f0e0b4c, float:1.8880903E38)
+            r9 = 2131626827(0x7f0e0b4b, float:1.8880901E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x024c }
             goto L_0x0067
         L_0x007a:

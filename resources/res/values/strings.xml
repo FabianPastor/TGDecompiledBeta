@@ -730,6 +730,7 @@
     <string name="ChannelPermissions">Permissions</string>
     <string name="ChannelPermissionsHeader">What can members of this group do?</string>
     <string name="ChannelPhotoEditNotification">Channel %1$s updated its photo</string>
+    <string name="ChannelPostDeleted">Sorry, this post has been removed from the discussion group.</string>
     <string name="ChannelPrivate">Private Channel</string>
     <string name="ChannelPrivateInfo">Private channels can only be joined via an invite link.</string>
     <string name="ChannelPrivateLinkHelp">People can join your channel by following this link. You can revoke the link any time.</string>
@@ -2907,13 +2908,12 @@
     <string name="SearchBackgrounds">Search Backgrounds</string>
     <string name="SearchByColor">Search by color</string>
     <string name="SearchEmojiHint">Search emoji</string>
-    <string name="SearchEmptyViewFilteredSubtitle">%s from all your chats will be shown here.</string>
     <string name="SearchEmptyViewFilteredSubtitle2">Try a new search.</string>
-    <string name="SearchEmptyViewFilteredSubtitleFiles">Files</string>
-    <string name="SearchEmptyViewFilteredSubtitleLinks">Links</string>
-    <string name="SearchEmptyViewFilteredSubtitleMedia">Media</string>
-    <string name="SearchEmptyViewFilteredSubtitleMusic">Music</string>
-    <string name="SearchEmptyViewFilteredSubtitleVoice">Voice</string>
+    <string name="SearchEmptyViewFilteredSubtitleFiles">Files from all your chats will be shown here.</string>
+    <string name="SearchEmptyViewFilteredSubtitleLinks">Links from all your chats will be shown here.</string>
+    <string name="SearchEmptyViewFilteredSubtitleMedia">Media from all your chats will be shown here.</string>
+    <string name="SearchEmptyViewFilteredSubtitleMusic">Music from all your chats will be shown here.</string>
+    <string name="SearchEmptyViewFilteredSubtitleVoice">Voice from all your chats will be shown here.</string>
     <string name="SearchEmptyViewTitle">No Results</string>
     <string name="SearchEmptyViewTitle2">No Results</string>
     <string name="SearchForPeople">Search for people...</string>
@@ -2931,6 +2931,7 @@
     <string name="SearchMusic">Search music</string>
     <string name="SearchRecentFiles">Search Recent Files</string>
     <string name="SearchStickersHint">Search sticker sets</string>
+    <string name="SearchTipToday">Today</string>
     <string name="SearchTrendingStickersHint">Search trending stickers</string>
     <string name="SecondsBold_few">**%1$d** seconds</string>
     <string name="SecondsBold_many">**%1$d** seconds</string>
@@ -3744,6 +3745,7 @@
     <string name="formatterStats12H">MMM dd yyyy, h:mm a</string>
     <string name="formatterStats24H">MMM dd yyyy, HH:mm</string>
     <string name="formatterWeek">EEE</string>
+    <string name="formatterWeekLong">EEEE</string>
     <string name="formatterYear">dd.MM.yy</string>
     <string name="formatterYearMax">dd.MM.yyyy</string>
     <string name="gcm_defaultSenderId">760348033671</string>

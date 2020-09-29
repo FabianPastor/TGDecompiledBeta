@@ -229,7 +229,7 @@ public class AndroidUtilities {
         CharSequence charSequence2;
         StaticLayout staticLayout = new StaticLayout(charSequence, textPaint, Integer.MAX_VALUE, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         float f = (float) i;
-        if (staticLayout.getPrimaryHorizontal(charSequence.length()) < f) {
+        if (staticLayout.getPrimaryHorizontal(charSequence.length()) + textPaint.measureText("...") < f) {
             return charSequence;
         }
         int indexOf = charSequence.toString().toLowerCase().indexOf(str) + 1;
@@ -269,6 +269,9 @@ public class AndroidUtilities {
         if (i3 >= 10) {
             charSequence2 = charSequence.subSequence(staticLayout.getOffsetForHorizontal(0, staticLayout.getPrimaryHorizontal(indexOf) - (f * 0.3f)), charSequence.length());
         } else {
+            if (Character.isWhitespace(charSequence.charAt(offsetForHorizontal))) {
+                offsetForHorizontal--;
+            }
             charSequence2 = charSequence.subSequence(offsetForHorizontal, charSequence.length());
         }
         return SpannableStringBuilder.valueOf("...").append(charSequence2);
@@ -2988,7 +2991,7 @@ public class AndroidUtilities {
             if (r5 == 0) goto L_0x0159
             boolean r7 = r5.exists()
             if (r7 == 0) goto L_0x0159
-            r7 = 2131626178(0x7f0e08c2, float:1.8879585E38)
+            r7 = 2131626177(0x7f0e08c1, float:1.8879583E38)
             java.lang.String r8 = "OK"
             r9 = 2131624245(0x7f0e0135, float:1.8875664E38)
             java.lang.String r10 = "AppName"
@@ -3011,7 +3014,7 @@ public class AndroidUtilities {
             r0.<init>((android.content.Context) r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r10, r9)
             r0.setTitle(r1)
-            r1 = 2131625597(0x7f0e067d, float:1.8878406E38)
+            r1 = 2131625596(0x7f0e067c, float:1.8878404E38)
             java.lang.String r3 = "IncorrectTheme"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setMessage(r1)
@@ -3095,7 +3098,7 @@ public class AndroidUtilities {
             r3.setTitle(r1)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r3.setPositiveButton(r1, r6)
-            r1 = 2131625982(0x7f0e07fe, float:1.8879187E38)
+            r1 = 2131625981(0x7f0e07fd, float:1.8879185E38)
             r4 = 1
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r5 = 0
@@ -3202,7 +3205,7 @@ public class AndroidUtilities {
             java.lang.String r1 = "ApkRestricted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r8.setMessage(r0)
-            r0 = 2131626523(0x7f0e0a1b, float:1.8880285E38)
+            r0 = 2131626522(0x7f0e0a1a, float:1.8880283E38)
             java.lang.String r1 = "PermissionOpenSettings"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$q8abJMKKLZd0AQ4S8-Kcd0a7Aqw

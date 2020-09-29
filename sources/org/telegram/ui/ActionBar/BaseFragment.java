@@ -387,12 +387,15 @@ public class BaseFragment {
     }
 
     public FrameLayout getLayoutContainer() {
-        ViewParent parent;
         View view = this.fragmentView;
-        if (view == null || (parent = view.getParent()) == null || !(parent instanceof FrameLayout)) {
+        if (view == null) {
             return null;
         }
-        return (FrameLayout) parent;
+        ViewParent parent = view.getParent();
+        if (parent instanceof FrameLayout) {
+            return (FrameLayout) parent;
+        }
+        return null;
     }
 
     public boolean presentFragmentAsPreview(BaseFragment baseFragment) {

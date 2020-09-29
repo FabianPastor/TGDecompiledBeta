@@ -63,6 +63,7 @@ public class EditTextBoldCursor extends EditText {
     private float headerAnimationProgress;
     private int headerHintColor;
     private AnimatorSet headerTransformAnimation;
+    private CharSequence hint;
     private float hintAlpha = 1.0f;
     private int hintColor;
     private StaticLayout hintLayout;
@@ -406,6 +407,7 @@ public class EditTextBoldCursor extends EditText {
     public void onMeasure(int i, int i2) {
         super.onMeasure(i, i2);
         if (this.hintLayout != null) {
+            setHintText(this.hint);
             this.lineY = (((float) (getMeasuredHeight() - this.hintLayout.getHeight())) / 2.0f) + ((float) this.hintLayout.getHeight()) + ((float) AndroidUtilities.dp(6.0f));
         }
     }
@@ -413,6 +415,14 @@ public class EditTextBoldCursor extends EditText {
     public void setHintText(CharSequence charSequence) {
         if (charSequence == null) {
             charSequence = "";
+        }
+        this.hint = charSequence;
+        if (getMeasuredWidth() != 0) {
+            charSequence = TextUtils.ellipsize(charSequence, getPaint(), (float) getMeasuredWidth(), TextUtils.TruncateAt.END);
+            StaticLayout staticLayout = this.hintLayout;
+            if (staticLayout != null && TextUtils.equals(staticLayout.getText(), charSequence)) {
+                return;
+            }
         }
         this.hintLayout = new StaticLayout(charSequence, getPaint(), AndroidUtilities.dp(1000.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
     }
