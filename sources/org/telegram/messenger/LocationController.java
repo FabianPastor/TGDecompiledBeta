@@ -214,15 +214,13 @@ public class LocationController extends BaseController implements NotificationCe
                                 if (i4 >= arrayList2.size()) {
                                     z = false;
                                     break;
-                                }
-                                int i5 = ((TLRPC$Message) arrayList2.get(i4)).from_id;
-                                TLRPC$Message tLRPC$Message = messageObject.messageOwner;
-                                if (i5 == tLRPC$Message.from_id) {
-                                    arrayList2.set(i4, tLRPC$Message);
+                                } else if (MessageObject.getFromChatId((TLRPC$Message) arrayList2.get(i4)) == messageObject.getFromChatId()) {
+                                    arrayList2.set(i4, messageObject.messageOwner);
                                     z = true;
                                     break;
+                                } else {
+                                    i4++;
                                 }
-                                i4++;
                             }
                             if (!z) {
                                 arrayList2.add(messageObject.messageOwner);
@@ -240,8 +238,8 @@ public class LocationController extends BaseController implements NotificationCe
                 ArrayList arrayList4 = objArr[0];
                 int intValue = objArr[1].intValue();
                 ArrayList arrayList5 = null;
-                for (int i6 = 0; i6 < this.sharingLocationsUI.size(); i6++) {
-                    SharingLocationInfo sharingLocationInfo = this.sharingLocationsUI.get(i6);
+                for (int i5 = 0; i5 < this.sharingLocationsUI.size(); i5++) {
+                    SharingLocationInfo sharingLocationInfo = this.sharingLocationsUI.get(i5);
                     MessageObject messageObject2 = sharingLocationInfo.messageObject;
                     if (intValue == (messageObject2 != null ? messageObject2.getChannelId() : 0) && arrayList4.contains(Integer.valueOf(sharingLocationInfo.mid))) {
                         if (arrayList5 == null) {
@@ -251,8 +249,8 @@ public class LocationController extends BaseController implements NotificationCe
                     }
                 }
                 if (arrayList5 != null) {
-                    for (int i7 = 0; i7 < arrayList5.size(); i7++) {
-                        removeSharingLocation(((Long) arrayList5.get(i7)).longValue());
+                    for (int i6 = 0; i6 < arrayList5.size(); i6++) {
+                        removeSharingLocation(((Long) arrayList5.get(i6)).longValue());
                     }
                 }
             }
@@ -261,21 +259,21 @@ public class LocationController extends BaseController implements NotificationCe
             if (isSharingLocation(longValue2) && (arrayList = this.locationsCache.get(longValue2)) != null) {
                 ArrayList arrayList6 = objArr[1];
                 boolean z3 = false;
-                for (int i8 = 0; i8 < arrayList6.size(); i8++) {
-                    MessageObject messageObject3 = (MessageObject) arrayList6.get(i8);
-                    int i9 = 0;
+                for (int i7 = 0; i7 < arrayList6.size(); i7++) {
+                    MessageObject messageObject3 = (MessageObject) arrayList6.get(i7);
+                    int i8 = 0;
                     while (true) {
-                        if (i9 >= arrayList.size()) {
+                        if (i8 >= arrayList.size()) {
                             break;
-                        } else if (((TLRPC$Message) arrayList.get(i9)).from_id == messageObject3.messageOwner.from_id) {
+                        } else if (MessageObject.getFromChatId((TLRPC$Message) arrayList.get(i8)) == messageObject3.getFromChatId()) {
                             if (!messageObject3.isLiveLocation()) {
-                                arrayList.remove(i9);
+                                arrayList.remove(i8);
                             } else {
-                                arrayList.set(i9, messageObject3.messageOwner);
+                                arrayList.set(i8, messageObject3.messageOwner);
                             }
                             z3 = true;
                         } else {
-                            i9++;
+                            i8++;
                         }
                     }
                 }

@@ -78,7 +78,11 @@ public class ShareDialogCell extends FrameLayout {
             TLRPC$User user2 = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i));
             this.user = user2;
             this.avatarDrawable.setInfo(user2);
-            if (UserObject.isUserSelf(this.user)) {
+            if (UserObject.isReplyUser(this.user)) {
+                this.nameTextView.setText(LocaleController.getString("RepliesTitle", NUM));
+                this.avatarDrawable.setAvatarType(4);
+                this.imageView.setImage((ImageLocation) null, (String) null, (Drawable) this.avatarDrawable, (Object) this.user);
+            } else if (UserObject.isUserSelf(this.user)) {
                 this.nameTextView.setText(LocaleController.getString("SavedMessages", NUM));
                 this.avatarDrawable.setAvatarType(1);
                 this.imageView.setImage((ImageLocation) null, (String) null, (Drawable) this.avatarDrawable, (Object) this.user);
@@ -125,11 +129,11 @@ public class ShareDialogCell extends FrameLayout {
             r6 = this;
             boolean r9 = super.drawChild(r7, r8, r9)
             org.telegram.ui.Components.BackupImageView r10 = r6.imageView
-            if (r8 != r10) goto L_0x00ec
+            if (r8 != r10) goto L_0x00ed
             org.telegram.tgnet.TLRPC$User r8 = r6.user
-            if (r8 == 0) goto L_0x00ec
+            if (r8 == 0) goto L_0x00ed
             boolean r8 = org.telegram.messenger.MessagesController.isSupportUser(r8)
-            if (r8 != 0) goto L_0x00ec
+            if (r8 != 0) goto L_0x00ed
             long r0 = android.os.SystemClock.elapsedRealtime()
             long r2 = r6.lastUpdateTime
             long r2 = r0 - r2
@@ -170,7 +174,7 @@ public class ShareDialogCell extends FrameLayout {
             if (r8 != 0) goto L_0x0061
             float r0 = r6.onlineProgress
             int r0 = (r0 > r10 ? 1 : (r0 == r10 ? 0 : -1))
-            if (r0 == 0) goto L_0x00ec
+            if (r0 == 0) goto L_0x00ed
         L_0x0061:
             org.telegram.ui.Components.BackupImageView r0 = r6.imageView
             int r0 = r0.getBottom()
@@ -207,39 +211,39 @@ public class ShareDialogCell extends FrameLayout {
             android.graphics.Paint r5 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
             r7.drawCircle(r1, r0, r4, r5)
             r7 = 1125515264(0x43160000, float:150.0)
-            if (r8 == 0) goto L_0x00d3
+            if (r8 == 0) goto L_0x00d4
             float r8 = r6.onlineProgress
             r10 = 1065353216(0x3var_, float:1.0)
             int r0 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r0 >= 0) goto L_0x00ec
+            if (r0 >= 0) goto L_0x00ed
             float r0 = (float) r2
             float r0 = r0 / r7
             float r8 = r8 + r0
             r6.onlineProgress = r8
             int r7 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r7 <= 0) goto L_0x00ca
+            if (r7 <= 0) goto L_0x00cb
             r6.onlineProgress = r10
-        L_0x00ca:
+        L_0x00cb:
             org.telegram.ui.Components.BackupImageView r7 = r6.imageView
             r7.invalidate()
             r6.invalidate()
-            goto L_0x00ec
-        L_0x00d3:
+            goto L_0x00ed
+        L_0x00d4:
             float r8 = r6.onlineProgress
             int r0 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r0 <= 0) goto L_0x00ec
+            if (r0 <= 0) goto L_0x00ed
             float r0 = (float) r2
             float r0 = r0 / r7
             float r8 = r8 - r0
             r6.onlineProgress = r8
             int r7 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r7 >= 0) goto L_0x00e4
+            if (r7 >= 0) goto L_0x00e5
             r6.onlineProgress = r10
-        L_0x00e4:
+        L_0x00e5:
             org.telegram.ui.Components.BackupImageView r7 = r6.imageView
             r7.invalidate()
             r6.invalidate()
-        L_0x00ec:
+        L_0x00ed:
             return r9
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ShareDialogCell.drawChild(android.graphics.Canvas, android.view.View, long):boolean");

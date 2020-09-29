@@ -1,9 +1,12 @@
 package org.telegram.ui.Adapters;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import j$.util.Comparator;
 import j$.util.function.Function;
@@ -23,25 +26,36 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC$TL_contact;
 import org.telegram.tgnet.TLRPC$User;
+import org.telegram.ui.ActionBar.ActionBar;
+import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.DividerCell;
 import org.telegram.ui.Cells.GraySectionCell;
 import org.telegram.ui.Cells.LetterSectionCell;
+import org.telegram.ui.Cells.ShadowSectionCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.UserCell;
+import org.telegram.ui.Components.CombinedDrawable;
+import org.telegram.ui.Components.ContactsEmptyView;
+import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
     private SparseArray<?> checkedMap;
     private int currentAccount = UserConfig.selectedAccount;
     private boolean disableSections;
-    private boolean hasGps;
+    /* access modifiers changed from: private */
+    public boolean hasGps;
     private SparseArray<TLRPC$User> ignoreUsers;
-    private boolean isAdmin;
+    /* access modifiers changed from: private */
+    public boolean isAdmin;
     private boolean isChannel;
+    private boolean isEmpty;
     private Context mContext;
-    private boolean needPhonebook;
+    /* access modifiers changed from: private */
+    public boolean needPhonebook;
     private ArrayList<TLRPC$TL_contact> onlineContacts;
-    private int onlyUsers;
+    /* access modifiers changed from: private */
+    public int onlyUsers;
     private boolean scrolling;
     private int sortType;
 
@@ -260,7 +274,25 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
         HashMap<String, ArrayList<TLRPC$TL_contact>> hashMap = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).usersMutualSectionsDict : ContactsController.getInstance(this.currentAccount).usersSectionsDict;
         ArrayList<String> arrayList = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).sortedUsersMutualSectionsArray : ContactsController.getInstance(this.currentAccount).sortedUsersSectionsArray;
         if (this.onlyUsers == 0 || this.isAdmin) {
-            if (i != 0) {
+            if (i == 0) {
+                if (this.isAdmin) {
+                    if (i2 != 1) {
+                        return true;
+                    }
+                    return false;
+                } else if (this.needPhonebook) {
+                    if ((!this.hasGps || i2 == 2) && (this.hasGps || i2 == 1)) {
+                        return false;
+                    }
+                    return true;
+                } else if (i2 != 3) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else if (this.isEmpty) {
+                return false;
+            } else {
                 if (this.sortType != 2) {
                     int i3 = i - 1;
                     if (i3 >= arrayList.size() || i2 < hashMap.get(arrayList.get(i3)).size()) {
@@ -273,22 +305,8 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
                     return false;
                 }
                 return true;
-            } else if (this.isAdmin) {
-                if (i2 != 1) {
-                    return true;
-                }
-                return false;
-            } else if (this.needPhonebook) {
-                if ((!this.hasGps || i2 == 2) && (this.hasGps || i2 == 1)) {
-                    return false;
-                }
-                return true;
-            } else if (i2 != 3) {
-                return true;
-            } else {
-                return false;
             }
-        } else if (i2 < hashMap.get(arrayList.get(i)).size()) {
+        } else if (!this.isEmpty && i2 < hashMap.get(arrayList.get(i)).size()) {
             return true;
         } else {
             return false;
@@ -296,11 +314,17 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
     }
 
     public int getSectionCount() {
-        int i;
+        this.isEmpty = false;
+        int i = 1;
         if (this.sortType == 2) {
-            i = 1;
+            this.isEmpty = this.onlineContacts.isEmpty();
         } else {
-            i = (this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).sortedUsersMutualSectionsArray : ContactsController.getInstance(this.currentAccount).sortedUsersSectionsArray).size();
+            int size = (this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).sortedUsersMutualSectionsArray : ContactsController.getInstance(this.currentAccount).sortedUsersSectionsArray).size();
+            if (size == 0) {
+                this.isEmpty = true;
+            } else {
+                i = size;
+            }
         }
         if (this.onlyUsers == 0) {
             i++;
@@ -323,21 +347,29 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
                     return 3;
                 }
                 return 2;
-            } else if (this.sortType != 2) {
-                int i2 = i - 1;
-                if (i2 < arrayList.size()) {
-                    int size = hashMap.get(arrayList.get(i2)).size();
-                    return (i2 != arrayList.size() - 1 || this.needPhonebook) ? size + 1 : size;
+            } else if (this.isEmpty) {
+                return 1;
+            } else {
+                if (this.sortType != 2) {
+                    int i2 = i - 1;
+                    if (i2 < arrayList.size()) {
+                        int size = hashMap.get(arrayList.get(i2)).size();
+                        return (i2 != arrayList.size() - 1 || this.needPhonebook) ? size + 1 : size;
+                    }
+                } else if (i == 1) {
+                    if (this.onlineContacts.isEmpty()) {
+                        return 0;
+                    }
+                    return this.onlineContacts.size() + 1;
                 }
-            } else if (i == 1) {
-                if (this.onlineContacts.isEmpty()) {
-                    return 0;
-                }
-                return this.onlineContacts.size() + 1;
             }
-        } else if (i < arrayList.size()) {
-            int size2 = hashMap.get(arrayList.get(i)).size();
-            return (i != arrayList.size() - 1 || this.needPhonebook) ? size2 + 1 : size2;
+        } else if (this.isEmpty) {
+            return 1;
+        } else {
+            if (i < arrayList.size()) {
+                int size2 = hashMap.get(arrayList.get(i)).size();
+                return (i != arrayList.size() - 1 || this.needPhonebook) ? size2 + 1 : size2;
+            }
         }
         if (this.needPhonebook) {
             return ContactsController.getInstance(this.currentAccount).phoneBookContacts.size();
@@ -356,7 +388,7 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
             view = new LetterSectionCell(this.mContext);
         }
         LetterSectionCell letterSectionCell = (LetterSectionCell) view;
-        if (this.sortType == 2 || this.disableSections) {
+        if (this.sortType == 2 || this.disableSections || this.isEmpty) {
             letterSectionCell.setLetter("");
         } else if (this.onlyUsers == 0 || this.isAdmin) {
             if (i == 0) {
@@ -377,13 +409,15 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
         return view;
     }
 
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup viewGroup, int i) {
         View view;
         if (i == 0) {
             view = new UserCell(this.mContext, 58, 1, false);
         } else if (i == 1) {
             view = new TextCell(this.mContext);
-        } else if (i != 2) {
+        } else if (i == 2) {
+            view = new GraySectionCell(this.mContext);
+        } else if (i == 3) {
             view = new DividerCell(this.mContext);
             float f = 28.0f;
             int dp = AndroidUtilities.dp(LocaleController.isRTL ? 28.0f : 72.0f);
@@ -392,8 +426,39 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
                 f = 72.0f;
             }
             view.setPadding(dp, dp2, AndroidUtilities.dp(f), AndroidUtilities.dp(8.0f));
+        } else if (i != 4) {
+            view = new ShadowSectionCell(this.mContext);
+            CombinedDrawable combinedDrawable = new CombinedDrawable(new ColorDrawable(Theme.getColor("windowBackgroundGray")), Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
+            combinedDrawable.setFullsize(true);
+            view.setBackgroundDrawable(combinedDrawable);
         } else {
-            view = new GraySectionCell(this.mContext);
+            AnonymousClass1 r7 = new FrameLayout(this.mContext) {
+                /* access modifiers changed from: protected */
+                public void onMeasure(int i, int i2) {
+                    int size = View.MeasureSpec.getSize(i2);
+                    if (size == 0) {
+                        size = viewGroup.getMeasuredHeight();
+                    }
+                    int i3 = 0;
+                    if (size == 0) {
+                        size = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+                    }
+                    int dp = AndroidUtilities.dp(50.0f);
+                    int dp2 = ContactsAdapter.this.onlyUsers != 0 ? 0 : AndroidUtilities.dp(30.0f) + dp;
+                    if (ContactsAdapter.this.hasGps) {
+                        dp2 += dp;
+                    }
+                    if (!ContactsAdapter.this.isAdmin && !ContactsAdapter.this.needPhonebook) {
+                        dp2 += dp;
+                    }
+                    if (dp2 < size) {
+                        i3 = size - dp2;
+                    }
+                    super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(i3, NUM));
+                }
+            };
+            r7.addView(new ContactsEmptyView(this.mContext), LayoutHelper.createFrame(-2, -2, 17));
+            view = r7;
         }
         return new RecyclerListView.Holder(view);
     }
@@ -484,50 +549,61 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
                         return 2;
                     }
                 } else if (this.needPhonebook) {
-                    if ((!this.hasGps || i2 != 2) && (this.hasGps || i2 != 1)) {
-                        return 1;
+                    if ((this.hasGps && i2 == 2) || (!this.hasGps && i2 == 1)) {
+                        if (this.isEmpty) {
+                            return 5;
+                        }
+                        return 2;
+                    }
+                } else if (i2 == 3) {
+                    if (this.isEmpty) {
+                        return 5;
                     }
                     return 2;
-                } else if (i2 == 3) {
-                    return 2;
                 }
-            } else if (this.sortType != 2) {
-                int i3 = i - 1;
-                if (i3 < arrayList.size()) {
-                    if (i2 < hashMap.get(arrayList.get(i3)).size()) {
+            } else if (this.isEmpty) {
+                return 4;
+            } else {
+                if (this.sortType != 2) {
+                    int i3 = i - 1;
+                    if (i3 < arrayList.size()) {
+                        if (i2 < hashMap.get(arrayList.get(i3)).size()) {
+                            return 0;
+                        }
+                        return 3;
+                    }
+                } else if (i == 1) {
+                    if (i2 < this.onlineContacts.size()) {
                         return 0;
                     }
                     return 3;
                 }
-            } else if (i == 1) {
-                if (i2 < this.onlineContacts.size()) {
-                    return 0;
-                }
-                return 3;
             }
             return 1;
-        } else if (i2 < hashMap.get(arrayList.get(i)).size()) {
-            return 0;
+        } else if (this.isEmpty) {
+            return 4;
         } else {
+            if (i2 < hashMap.get(arrayList.get(i)).size()) {
+                return 0;
+            }
             return 3;
         }
     }
 
     public String getLetter(int i) {
-        if (this.sortType == 2) {
-            return null;
-        }
-        ArrayList<String> arrayList = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).sortedUsersMutualSectionsArray : ContactsController.getInstance(this.currentAccount).sortedUsersSectionsArray;
-        int sectionForPosition = getSectionForPosition(i);
-        if (sectionForPosition == -1) {
-            sectionForPosition = arrayList.size() - 1;
-        }
-        if (this.onlyUsers == 0 || this.isAdmin) {
-            if (sectionForPosition > 0 && sectionForPosition <= arrayList.size()) {
-                return arrayList.get(sectionForPosition - 1);
+        if (this.sortType != 2 && !this.isEmpty) {
+            ArrayList<String> arrayList = this.onlyUsers == 2 ? ContactsController.getInstance(this.currentAccount).sortedUsersMutualSectionsArray : ContactsController.getInstance(this.currentAccount).sortedUsersSectionsArray;
+            int sectionForPosition = getSectionForPosition(i);
+            if (sectionForPosition == -1) {
+                sectionForPosition = arrayList.size() - 1;
             }
-        } else if (sectionForPosition >= 0 && sectionForPosition < arrayList.size()) {
-            return arrayList.get(sectionForPosition);
+            if (this.onlyUsers == 0 || this.isAdmin) {
+                if (sectionForPosition > 0 && sectionForPosition <= arrayList.size()) {
+                    return arrayList.get(sectionForPosition - 1);
+                }
+            } else if (sectionForPosition >= 0 && sectionForPosition < arrayList.size()) {
+                return arrayList.get(sectionForPosition);
+            }
         }
         return null;
     }

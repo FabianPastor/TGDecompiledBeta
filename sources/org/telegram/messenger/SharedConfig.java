@@ -26,6 +26,7 @@ public class SharedConfig {
     public static boolean allowScreenCapture = false;
     public static boolean appLocked = false;
     public static boolean archiveHidden = false;
+    public static boolean assistantSupport = false;
     public static int autoLockIn = 3600;
     public static boolean autoplayGifs = true;
     public static boolean autoplayVideo = true;
@@ -82,7 +83,7 @@ public class SharedConfig {
     public static boolean searchMessagesAsListUsed = false;
     public static boolean showNotificationsForAllAccounts = true;
     public static boolean shuffleMusic = false;
-    public static boolean smoothKeyboard = false;
+    public static boolean smoothKeyboard = true;
     public static boolean sortContactsByName = false;
     public static boolean sortFilesByName = false;
     public static boolean stickersReorderingHintUsed = false;
@@ -224,6 +225,7 @@ public class SharedConfig {
                 inappCamera = sharedPreferences2.getBoolean("inappCamera", true);
                 hasCameraCache = sharedPreferences2.contains("cameraCache");
                 roundCamera16to9 = true;
+                assistantSupport = sharedPreferences2.getBoolean("assistantSupport", false);
                 repeatMode = sharedPreferences2.getInt("repeatMode", 0);
                 fontSize = sharedPreferences2.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
                 bubbleRadius = sharedPreferences2.getInt("bubbleRadius", 10);
@@ -232,7 +234,6 @@ public class SharedConfig {
                 useSystemEmoji = sharedPreferences2.getBoolean("useSystemEmoji", false);
                 streamMedia = sharedPreferences2.getBoolean("streamMedia", true);
                 saveStreamMedia = sharedPreferences2.getBoolean("saveStreamMedia", true);
-                smoothKeyboard = sharedPreferences2.getBoolean("smoothKeyboard", false);
                 pauseMusicOnRecord = sharedPreferences2.getBoolean("pauseMusicOnRecord", true);
                 streamAllVideo = sharedPreferences2.getBoolean("streamAllVideo", BuildVars.DEBUG_VERSION);
                 streamMkv = sharedPreferences2.getBoolean("streamMkv", false);
@@ -682,6 +683,13 @@ public class SharedConfig {
         inappCamera = !inappCamera;
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putBoolean("inappCamera", inappCamera);
+        edit.commit();
+    }
+
+    public static void toggleAssistantSupport() {
+        assistantSupport = !assistantSupport;
+        SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
+        edit.putBoolean("assistantSupport", assistantSupport);
         edit.commit();
     }
 

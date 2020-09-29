@@ -7,6 +7,7 @@ public abstract class TLRPC$ChatFull extends TLObject {
     public int admins_count;
     public int available_min_id;
     public int banned_count;
+    public boolean blocked;
     public ArrayList<TLRPC$BotInfo> bot_info = new ArrayList<>();
     public int call_msg_id;
     public boolean can_set_location;

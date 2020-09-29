@@ -646,7 +646,6 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         }
     }
 
-    /* access modifiers changed from: protected */
     public void needHideProgress() {
         AlertDialog alertDialog = this.progressDialog;
         if (alertDialog != null) {
@@ -818,7 +817,6 @@ public class TwoStepVerificationActivity extends BaseFragment implements Notific
         }
     }
 
-    /* access modifiers changed from: protected */
     public TLRPC$TL_inputCheckPasswordSRP getNewSrpPassword() {
         TLRPC$TL_account_password tLRPC$TL_account_password = this.currentPassword;
         TLRPC$PasswordKdfAlgo tLRPC$PasswordKdfAlgo = tLRPC$TL_account_password.current_algo;

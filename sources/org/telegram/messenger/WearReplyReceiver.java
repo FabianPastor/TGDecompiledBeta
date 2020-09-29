@@ -133,7 +133,7 @@ public class WearReplyReceiver extends BroadcastReceiver {
     }
 
     private void sendMessage(AccountInstance accountInstance, CharSequence charSequence, long j, int i) {
-        accountInstance.getSendMessagesHelper().sendMessage(charSequence.toString(), j, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
-        accountInstance.getMessagesController().markDialogAsRead(j, i, i, 0, false, 0, true, 0);
+        accountInstance.getSendMessagesHelper().sendMessage(charSequence.toString(), j, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
+        accountInstance.getMessagesController().markDialogAsRead(j, i, i, 0, false, 0, 0, true, 0);
     }
 }

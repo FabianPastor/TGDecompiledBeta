@@ -1,24 +1,46 @@
 package j$;
 
-import j$.util.function.CLASSNAMEo;
-import java.util.function.BinaryOperator;
+import j$.util.F;
+import java.util.PrimitiveIterator;
+import java.util.function.Consumer;
+import java.util.function.DoubleConsumer;
 
 /* renamed from: j$.q  reason: case insensitive filesystem */
-public final /* synthetic */ class CLASSNAMEq implements CLASSNAMEo {
-    final /* synthetic */ BinaryOperator a;
+public final /* synthetic */ class CLASSNAMEq implements PrimitiveIterator.OfDouble {
+    final /* synthetic */ F a;
 
-    private /* synthetic */ CLASSNAMEq(BinaryOperator binaryOperator) {
-        this.a = binaryOperator;
+    private /* synthetic */ CLASSNAMEq(F f) {
+        this.a = f;
     }
 
-    public static /* synthetic */ CLASSNAMEo b(BinaryOperator binaryOperator) {
-        if (binaryOperator == null) {
+    public static /* synthetic */ PrimitiveIterator.OfDouble a(F f) {
+        if (f == null) {
             return null;
         }
-        return new CLASSNAMEq(binaryOperator);
+        return new CLASSNAMEq(f);
     }
 
-    public /* synthetic */ Object a(Object obj, Object obj2) {
-        return this.a.apply(obj, obj2);
+    public /* synthetic */ void forEachRemaining(Object obj) {
+        this.a.forEachRemaining(obj);
+    }
+
+    public /* synthetic */ void forEachRemaining(Consumer consumer) {
+        this.a.forEachRemaining(C.a(consumer));
+    }
+
+    public /* synthetic */ void forEachRemaining(DoubleConsumer doubleConsumer) {
+        this.a.e(F.a(doubleConsumer));
+    }
+
+    public /* synthetic */ boolean hasNext() {
+        return this.a.hasNext();
+    }
+
+    public /* synthetic */ double nextDouble() {
+        return this.a.nextDouble();
+    }
+
+    public /* synthetic */ void remove() {
+        this.a.remove();
     }
 }

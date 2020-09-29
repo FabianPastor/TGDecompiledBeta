@@ -1,17 +1,17 @@
 package org.telegram.ui.Components;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.view.View;
+import android.widget.FrameLayout;
 import org.telegram.messenger.AndroidUtilities;
-import org.telegram.ui.ActionBar.AdjustPanFrameLayout;
 
-public class SizeNotifierFrameLayoutPhoto extends AdjustPanFrameLayout {
+public class SizeNotifierFrameLayoutPhoto extends FrameLayout {
     private SizeNotifierFrameLayoutPhotoDelegate delegate;
     private int keyboardHeight;
     private Rect rect = new Rect();
-    private boolean useSmoothKeyboard;
     private boolean withoutWindow;
 
     public interface SizeNotifierFrameLayoutPhotoDelegate {
@@ -20,7 +20,6 @@ public class SizeNotifierFrameLayoutPhoto extends AdjustPanFrameLayout {
 
     public SizeNotifierFrameLayoutPhoto(Context context, boolean z) {
         super(context);
-        this.useSmoothKeyboard = z;
     }
 
     public void setDelegate(SizeNotifierFrameLayoutPhotoDelegate sizeNotifierFrameLayoutPhotoDelegate) {
@@ -38,31 +37,23 @@ public class SizeNotifierFrameLayoutPhoto extends AdjustPanFrameLayout {
     }
 
     public int getKeyboardHeight() {
-        int i;
         View rootView = getRootView();
         getWindowVisibleDisplayFrame(this.rect);
-        int i2 = 0;
+        int i = 0;
         if (this.withoutWindow) {
             int height = rootView.getHeight();
             if (this.rect.top != 0) {
-                i2 = AndroidUtilities.statusBarHeight;
+                i = AndroidUtilities.statusBarHeight;
             }
-            int viewInset = (height - i2) - AndroidUtilities.getViewInset(rootView);
+            int viewInset = (height - i) - AndroidUtilities.getViewInset(rootView);
             Rect rect2 = this.rect;
             return viewInset - (rect2.bottom - rect2.top);
         }
-        int height2 = rootView.getHeight() - AndroidUtilities.getViewInset(rootView);
-        Rect rect3 = this.rect;
-        int i3 = rect3.top;
-        if (this.useSmoothKeyboard) {
-            i = Math.max(0, height2 - (rect3.bottom - i3));
-        } else {
-            i = (AndroidUtilities.displaySize.y - i3) - height2;
-        }
-        if (i <= Math.max(AndroidUtilities.dp(10.0f), AndroidUtilities.statusBarHeight)) {
+        int height2 = (((Activity) rootView.getContext()).getWindow().getDecorView().getHeight() - AndroidUtilities.getViewInset(rootView)) - rootView.getBottom();
+        if (height2 <= Math.max(AndroidUtilities.dp(10.0f), AndroidUtilities.statusBarHeight)) {
             return 0;
         }
-        return i;
+        return height2;
     }
 
     public void notifyHeightChanged() {

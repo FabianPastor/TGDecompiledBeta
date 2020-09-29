@@ -45,7 +45,6 @@ public class TrendingStickersAlert extends BottomSheet {
         this.alertContainerView = alertContainerView2;
         alertContainerView2.addView(trendingStickersLayout, LayoutHelper.createFrame(-1, -1.0f));
         this.containerView = this.alertContainerView;
-        this.useSmoothKeyboard = true;
         this.layout = trendingStickersLayout;
         trendingStickersLayout.setParentFragment(baseFragment);
         this.layout.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -58,9 +57,8 @@ public class TrendingStickersAlert extends BottomSheet {
             }
 
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
-                int i3 = this.scrolledY + i2;
-                this.scrolledY = i3;
-                if (Math.abs(i3) > AndroidUtilities.dp(96.0f)) {
+                this.scrolledY += i2;
+                if (recyclerView.getScrollState() == 1 && Math.abs(this.scrolledY) > AndroidUtilities.dp(96.0f)) {
                     View findFocus = TrendingStickersAlert.this.layout.findFocus();
                     if (findFocus == null) {
                         findFocus = TrendingStickersAlert.this.layout;
@@ -113,6 +111,10 @@ public class TrendingStickersAlert extends BottomSheet {
         return arrayList;
     }
 
+    public void setAllowNestedScroll(boolean z) {
+        this.allowNestedScroll = z;
+    }
+
     private class AlertContainerView extends SizeNotifierFrameLayout {
         /* access modifiers changed from: private */
         public boolean gluedToTop = false;
@@ -124,7 +126,7 @@ public class TrendingStickersAlert extends BottomSheet {
         private boolean statusBarVisible = false;
 
         public AlertContainerView(Context context) {
-            super(context, true);
+            super(context);
             setWillNotDraw(false);
             setPadding(TrendingStickersAlert.this.backgroundPaddingLeft, 0, TrendingStickersAlert.this.backgroundPaddingLeft, 0);
             setDelegate(new SizeNotifierFrameLayout.SizeNotifierFrameLayoutDelegate(TrendingStickersAlert.this) {
@@ -136,7 +138,6 @@ public class TrendingStickersAlert extends BottomSheet {
                         this.lastKeyboardHeight = i;
                         this.lastIsWidthGreater = z;
                         if (i > AndroidUtilities.dp(20.0f) && !AlertContainerView.this.gluedToTop) {
-                            TrendingStickersAlert.this.layout.setContentViewPaddingTop(0);
                             TrendingStickersAlert.this.setAllowNestedScroll(false);
                             boolean unused = AlertContainerView.this.gluedToTop = true;
                         }
@@ -171,14 +172,15 @@ public class TrendingStickersAlert extends BottomSheet {
         /* access modifiers changed from: protected */
         public void onMeasure(int i, int i2) {
             int i3 = Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
-            int size = (int) (((float) (View.MeasureSpec.getSize(i2) - i3)) * 0.2f);
             int measureKeyboardHeight = measureKeyboardHeight();
+            int size = (int) (((float) ((View.MeasureSpec.getSize(i2) - i3) + measureKeyboardHeight)) * 0.2f);
             this.ignoreLayout = true;
             if (measureKeyboardHeight > AndroidUtilities.dp(20.0f)) {
-                TrendingStickersAlert.this.layout.setContentViewPaddingTop(0);
+                TrendingStickersAlert.this.layout.glueToTop(true);
                 TrendingStickersAlert.this.setAllowNestedScroll(false);
                 this.gluedToTop = true;
             } else {
+                TrendingStickersAlert.this.layout.glueToTop(false);
                 TrendingStickersAlert.this.layout.setContentViewPaddingTop(size);
                 TrendingStickersAlert.this.setAllowNestedScroll(true);
                 this.gluedToTop = false;
@@ -247,7 +249,7 @@ public class TrendingStickersAlert extends BottomSheet {
             if (fraction == 0.0f && Build.VERSION.SDK_INT >= 21 && !TrendingStickersAlert.this.isDismissed()) {
                 z = true;
             }
-            setStatusBarVisible(z, !this.gluedToTop);
+            setStatusBarVisible(z, true);
             if (this.statusBarAlpha > 0.0f) {
                 int color2 = Theme.getColor("dialogBackground");
                 this.paint.setColor(Color.argb((int) (this.statusBarAlpha * 255.0f), (int) (((float) Color.red(color2)) * 0.8f), (int) (((float) Color.green(color2)) * 0.8f), (int) (((float) Color.blue(color2)) * 0.8f)));

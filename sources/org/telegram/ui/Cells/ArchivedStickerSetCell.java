@@ -27,6 +27,7 @@ import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$StickerSetCovered;
 import org.telegram.tgnet.TLRPC$TL_photoSize;
+import org.telegram.tgnet.TLRPC$TL_photoSizeProgressive;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -153,6 +154,7 @@ public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
     }
 
     public void setStickersSet(TLRPC$StickerSetCovered tLRPC$StickerSetCovered, boolean z) {
+        TLObject tLObject;
         ImageLocation imageLocation;
         this.needDivider = z;
         this.stickersSet = tLRPC$StickerSetCovered;
@@ -164,8 +166,10 @@ public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
             tLRPC$Document = !tLRPC$StickerSetCovered.covers.isEmpty() ? tLRPC$StickerSetCovered.covers.get(0) : null;
         }
         if (tLRPC$Document != null) {
-            TLObject tLObject = tLRPC$StickerSetCovered.set.thumb;
-            if (!(tLObject instanceof TLRPC$TL_photoSize)) {
+            TLRPC$PhotoSize tLRPC$PhotoSize = tLRPC$StickerSetCovered.set.thumb;
+            if ((tLRPC$PhotoSize instanceof TLRPC$TL_photoSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoSizeProgressive)) {
+                tLObject = tLRPC$StickerSetCovered.set.thumb;
+            } else {
                 tLObject = tLRPC$Document;
             }
             boolean z2 = tLObject instanceof TLRPC$Document;

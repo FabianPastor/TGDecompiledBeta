@@ -649,16 +649,16 @@ public class DownloadController extends BaseController implements NotificationCe
     /* JADX WARNING: Code restructure failed: missing block: B:31:0x005f, code lost:
         if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r5.user_id)) != false) goto L_0x0061;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:38:0x007b, code lost:
-        if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r10.from_id)) != false) goto L_0x0061;
+    /* JADX WARNING: Code restructure failed: missing block: B:38:0x007f, code lost:
+        if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r10.from_id.user_id)) != false) goto L_0x0061;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:45:0x009a, code lost:
-        if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r10.from_id)) != false) goto L_0x0061;
+    /* JADX WARNING: Code restructure failed: missing block: B:45:0x00a2, code lost:
+        if (getContactsController().contactsDict.containsKey(java.lang.Integer.valueOf(r10.from_id.user_id)) != false) goto L_0x0061;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:50:0x00a6  */
-    /* JADX WARNING: Removed duplicated region for block: B:54:0x00b2  */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00ef A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x00f9 A[ORIG_RETURN, RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x00ae  */
+    /* JADX WARNING: Removed duplicated region for block: B:54:0x00ba  */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x00f7 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:79:0x0101 A[ORIG_RETURN, RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:83:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public int canDownloadMedia(org.telegram.tgnet.TLRPC$Message r10) {
@@ -705,8 +705,8 @@ public class DownloadController extends BaseController implements NotificationCe
         L_0x0046:
             r4 = 4
         L_0x0047:
-            org.telegram.tgnet.TLRPC$Peer r5 = r10.to_id
-            if (r5 == 0) goto L_0x009f
+            org.telegram.tgnet.TLRPC$Peer r5 = r10.peer_id
+            if (r5 == 0) goto L_0x00a7
             int r6 = r5.user_id
             if (r6 == 0) goto L_0x0063
             org.telegram.messenger.ContactsController r6 = r9.getContactsController()
@@ -714,97 +714,101 @@ public class DownloadController extends BaseController implements NotificationCe
             int r5 = r5.user_id
             java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
             boolean r5 = r6.containsKey(r5)
-            if (r5 == 0) goto L_0x009f
+            if (r5 == 0) goto L_0x00a7
         L_0x0061:
             r5 = 0
-            goto L_0x00a0
+            goto L_0x00a8
         L_0x0063:
             int r5 = r5.chat_id
-            if (r5 == 0) goto L_0x0080
-            int r5 = r10.from_id
-            if (r5 == 0) goto L_0x007e
+            if (r5 == 0) goto L_0x0084
+            org.telegram.tgnet.TLRPC$Peer r5 = r10.from_id
+            boolean r5 = r5 instanceof org.telegram.tgnet.TLRPC$TL_peerUser
+            if (r5 == 0) goto L_0x0082
             org.telegram.messenger.ContactsController r5 = r9.getContactsController()
             j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, org.telegram.tgnet.TLRPC$TL_contact> r5 = r5.contactsDict
-            int r6 = r10.from_id
+            org.telegram.tgnet.TLRPC$Peer r6 = r10.from_id
+            int r6 = r6.user_id
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             boolean r5 = r5.containsKey(r6)
-            if (r5 == 0) goto L_0x007e
+            if (r5 == 0) goto L_0x0082
             goto L_0x0061
-        L_0x007e:
+        L_0x0082:
             r5 = 2
-            goto L_0x00a0
-        L_0x0080:
+            goto L_0x00a8
+        L_0x0084:
             boolean r5 = org.telegram.messenger.MessageObject.isMegagroup(r10)
-            if (r5 == 0) goto L_0x009d
-            int r5 = r10.from_id
-            if (r5 == 0) goto L_0x007e
+            if (r5 == 0) goto L_0x00a5
+            org.telegram.tgnet.TLRPC$Peer r5 = r10.from_id
+            boolean r5 = r5 instanceof org.telegram.tgnet.TLRPC$TL_peerUser
+            if (r5 == 0) goto L_0x0082
             org.telegram.messenger.ContactsController r5 = r9.getContactsController()
             j$.util.concurrent.ConcurrentHashMap<java.lang.Integer, org.telegram.tgnet.TLRPC$TL_contact> r5 = r5.contactsDict
-            int r6 = r10.from_id
+            org.telegram.tgnet.TLRPC$Peer r6 = r10.from_id
+            int r6 = r6.user_id
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             boolean r5 = r5.containsKey(r6)
-            if (r5 == 0) goto L_0x007e
+            if (r5 == 0) goto L_0x0082
             goto L_0x0061
-        L_0x009d:
+        L_0x00a5:
             r5 = 3
-            goto L_0x00a0
-        L_0x009f:
+            goto L_0x00a8
+        L_0x00a7:
             r5 = 1
-        L_0x00a0:
+        L_0x00a8:
             int r6 = org.telegram.messenger.ApplicationLoader.getAutodownloadNetworkType()
-            if (r6 != r3) goto L_0x00b2
+            if (r6 != r3) goto L_0x00ba
             org.telegram.messenger.DownloadController$Preset r6 = r9.wifiPreset
             boolean r6 = r6.enabled
-            if (r6 != 0) goto L_0x00ad
+            if (r6 != 0) goto L_0x00b5
             return r0
-        L_0x00ad:
+        L_0x00b5:
             org.telegram.messenger.DownloadController$Preset r6 = r9.getCurrentWiFiPreset()
-            goto L_0x00cb
-        L_0x00b2:
-            if (r6 != r2) goto L_0x00c0
+            goto L_0x00d3
+        L_0x00ba:
+            if (r6 != r2) goto L_0x00c8
             org.telegram.messenger.DownloadController$Preset r6 = r9.roamingPreset
             boolean r6 = r6.enabled
-            if (r6 != 0) goto L_0x00bb
+            if (r6 != 0) goto L_0x00c3
             return r0
-        L_0x00bb:
+        L_0x00c3:
             org.telegram.messenger.DownloadController$Preset r6 = r9.getCurrentRoamingPreset()
-            goto L_0x00cb
-        L_0x00c0:
+            goto L_0x00d3
+        L_0x00c8:
             org.telegram.messenger.DownloadController$Preset r6 = r9.mobilePreset
             boolean r6 = r6.enabled
-            if (r6 != 0) goto L_0x00c7
+            if (r6 != 0) goto L_0x00cf
             return r0
-        L_0x00c7:
+        L_0x00cf:
             org.telegram.messenger.DownloadController$Preset r6 = r9.getCurrentMobilePreset()
-        L_0x00cb:
+        L_0x00d3:
             int[] r7 = r6.mask
             r5 = r7[r5]
             int[] r7 = r6.sizes
             int r8 = typeToIndex(r4)
             r7 = r7[r8]
             int r10 = org.telegram.messenger.MessageObject.getMessageSize(r10)
-            if (r1 == 0) goto L_0x00ed
+            if (r1 == 0) goto L_0x00f5
             boolean r1 = r6.preloadVideo
-            if (r1 == 0) goto L_0x00ed
-            if (r10 <= r7) goto L_0x00ed
+            if (r1 == 0) goto L_0x00f5
+            if (r10 <= r7) goto L_0x00f5
             r1 = 2097152(0x200000, float:2.938736E-39)
-            if (r7 <= r1) goto L_0x00ed
+            if (r7 <= r1) goto L_0x00f5
             r10 = r5 & r4
-            if (r10 == 0) goto L_0x00ec
+            if (r10 == 0) goto L_0x00f4
             r0 = 2
-        L_0x00ec:
+        L_0x00f4:
             return r0
-        L_0x00ed:
-            if (r4 == r3) goto L_0x00f3
-            if (r10 == 0) goto L_0x00fa
-            if (r10 > r7) goto L_0x00fa
-        L_0x00f3:
-            if (r4 == r2) goto L_0x00f9
+        L_0x00f5:
+            if (r4 == r3) goto L_0x00fb
+            if (r10 == 0) goto L_0x0102
+            if (r10 > r7) goto L_0x0102
+        L_0x00fb:
+            if (r4 == r2) goto L_0x0101
             r10 = r5 & r4
-            if (r10 == 0) goto L_0x00fa
-        L_0x00f9:
+            if (r10 == 0) goto L_0x0102
+        L_0x0101:
             r0 = 1
-        L_0x00fa:
+        L_0x0102:
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.DownloadController.canDownloadMedia(org.telegram.tgnet.TLRPC$Message):int");
@@ -1197,17 +1201,15 @@ public class DownloadController extends BaseController implements NotificationCe
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
-        int i3;
-        int i4 = i;
-        if (i4 == NotificationCenter.fileDidFailToLoad || i4 == NotificationCenter.httpFileDidFailedLoad) {
+        if (i == NotificationCenter.fileDidFailToLoad || i == NotificationCenter.httpFileDidFailedLoad) {
             String str = objArr[0];
             Integer num = objArr[1];
             this.listenerInProgress = true;
             ArrayList arrayList = this.loadingFileObservers.get(str);
             if (arrayList != null) {
                 int size = arrayList.size();
-                for (int i5 = 0; i5 < size; i5++) {
-                    WeakReference weakReference = (WeakReference) arrayList.get(i5);
+                for (int i3 = 0; i3 < size; i3++) {
+                    WeakReference weakReference = (WeakReference) arrayList.get(i3);
                     if (weakReference.get() != null) {
                         ((FileDownloadProgressListener) weakReference.get()).onFailedDownload(str, num.intValue() == 1);
                         if (num.intValue() != 1) {
@@ -1222,22 +1224,22 @@ public class DownloadController extends BaseController implements NotificationCe
             this.listenerInProgress = false;
             processLaterArrays();
             checkDownloadFinished(str, num.intValue());
-        } else if (i4 == NotificationCenter.fileDidLoad || i4 == NotificationCenter.httpFileDidLoad) {
+        } else if (i == NotificationCenter.fileDidLoad || i == NotificationCenter.httpFileDidLoad) {
             this.listenerInProgress = true;
             String str2 = objArr[0];
             ArrayList arrayList2 = this.loadingFileMessagesObservers.get(str2);
             if (arrayList2 != null) {
                 int size2 = arrayList2.size();
-                for (int i6 = 0; i6 < size2; i6++) {
-                    ((MessageObject) arrayList2.get(i6)).mediaExists = true;
+                for (int i4 = 0; i4 < size2; i4++) {
+                    ((MessageObject) arrayList2.get(i4)).mediaExists = true;
                 }
                 this.loadingFileMessagesObservers.remove(str2);
             }
             ArrayList arrayList3 = this.loadingFileObservers.get(str2);
             if (arrayList3 != null) {
                 int size3 = arrayList3.size();
-                for (int i7 = 0; i7 < size3; i7++) {
-                    WeakReference weakReference2 = (WeakReference) arrayList3.get(i7);
+                for (int i5 = 0; i5 < size3; i5++) {
+                    WeakReference weakReference2 = (WeakReference) arrayList3.get(i5);
                     if (weakReference2.get() != null) {
                         ((FileDownloadProgressListener) weakReference2.get()).onSuccessDownload(str2);
                         this.observersByTag.remove(((FileDownloadProgressListener) weakReference2.get()).getObserverTag());
@@ -1248,7 +1250,7 @@ public class DownloadController extends BaseController implements NotificationCe
             this.listenerInProgress = false;
             processLaterArrays();
             checkDownloadFinished(str2, 0);
-        } else if (i4 == NotificationCenter.FileLoadProgressChanged) {
+        } else if (i == NotificationCenter.FileLoadProgressChanged) {
             this.listenerInProgress = true;
             String str3 = objArr[0];
             ArrayList arrayList4 = this.loadingFileObservers.get(str3);
@@ -1256,8 +1258,8 @@ public class DownloadController extends BaseController implements NotificationCe
                 Long l = objArr[1];
                 Long l2 = objArr[2];
                 int size4 = arrayList4.size();
-                for (int i8 = 0; i8 < size4; i8++) {
-                    WeakReference weakReference3 = (WeakReference) arrayList4.get(i8);
+                for (int i6 = 0; i6 < size4; i6++) {
+                    WeakReference weakReference3 = (WeakReference) arrayList4.get(i6);
                     if (weakReference3.get() != null) {
                         ((FileDownloadProgressListener) weakReference3.get()).onProgressDownload(str3, l.longValue(), l2.longValue());
                     }
@@ -1265,7 +1267,7 @@ public class DownloadController extends BaseController implements NotificationCe
             }
             this.listenerInProgress = false;
             processLaterArrays();
-        } else if (i4 == NotificationCenter.FileUploadProgressChanged) {
+        } else if (i == NotificationCenter.FileUploadProgressChanged) {
             this.listenerInProgress = true;
             String str4 = objArr[0];
             ArrayList arrayList5 = this.loadingFileObservers.get(str4);
@@ -1274,16 +1276,11 @@ public class DownloadController extends BaseController implements NotificationCe
                 Long l4 = objArr[2];
                 Boolean bool = objArr[3];
                 int size5 = arrayList5.size();
-                int i9 = 0;
-                while (i9 < size5) {
-                    WeakReference weakReference4 = (WeakReference) arrayList5.get(i9);
+                for (int i7 = 0; i7 < size5; i7++) {
+                    WeakReference weakReference4 = (WeakReference) arrayList5.get(i7);
                     if (weakReference4.get() != null) {
-                        i3 = i9;
                         ((FileDownloadProgressListener) weakReference4.get()).onProgressUpload(str4, l3.longValue(), l4.longValue(), bool.booleanValue());
-                    } else {
-                        i3 = i9;
                     }
-                    i9 = i3 + 1;
                 }
             }
             this.listenerInProgress = false;
@@ -1291,39 +1288,37 @@ public class DownloadController extends BaseController implements NotificationCe
             try {
                 ArrayList<SendMessagesHelper.DelayedMessage> delayedMessages = getSendMessagesHelper().getDelayedMessages(str4);
                 if (delayedMessages != null) {
-                    for (int i10 = 0; i10 < delayedMessages.size(); i10++) {
-                        SendMessagesHelper.DelayedMessage delayedMessage = delayedMessages.get(i10);
+                    for (int i8 = 0; i8 < delayedMessages.size(); i8++) {
+                        SendMessagesHelper.DelayedMessage delayedMessage = delayedMessages.get(i8);
                         if (delayedMessage.encryptedChat == null) {
                             long j = delayedMessage.peer;
-                            if (delayedMessage.type == 4) {
-                                Long l5 = this.typingTimes.get(j);
-                                if (l5 == null || l5.longValue() + 4000 < System.currentTimeMillis()) {
-                                    HashMap<Object, Object> hashMap = delayedMessage.extraHashMap;
-                                    MessageObject messageObject = (MessageObject) hashMap.get(str4 + "_i");
-                                    if (messageObject == null || !messageObject.isVideo()) {
-                                        getMessagesController().sendTyping(j, 4, 0);
-                                    } else {
-                                        getMessagesController().sendTyping(j, 5, 0);
-                                    }
-                                    this.typingTimes.put(j, Long.valueOf(System.currentTimeMillis()));
-                                }
-                            } else {
-                                Long l6 = this.typingTimes.get(j);
+                            int i9 = delayedMessage.topMessageId;
+                            Long l5 = this.typingTimes.get(j);
+                            if (delayedMessage.type != 4) {
                                 delayedMessage.obj.getDocument();
-                                if (l6 == null || l6.longValue() + 4000 < System.currentTimeMillis()) {
+                                if (l5 == null || l5.longValue() + 4000 < System.currentTimeMillis()) {
                                     if (delayedMessage.obj.isRoundVideo()) {
-                                        getMessagesController().sendTyping(j, 8, 0);
+                                        getMessagesController().sendTyping(j, i9, 8, 0);
                                     } else if (delayedMessage.obj.isVideo()) {
-                                        getMessagesController().sendTyping(j, 5, 0);
+                                        getMessagesController().sendTyping(j, i9, 5, 0);
                                     } else if (delayedMessage.obj.isVoice()) {
-                                        getMessagesController().sendTyping(j, 9, 0);
+                                        getMessagesController().sendTyping(j, i9, 9, 0);
                                     } else if (delayedMessage.obj.getDocument() != null) {
-                                        getMessagesController().sendTyping(j, 3, 0);
+                                        getMessagesController().sendTyping(j, i9, 3, 0);
                                     } else if (delayedMessage.photoSize != null) {
-                                        getMessagesController().sendTyping(j, 4, 0);
+                                        getMessagesController().sendTyping(j, i9, 4, 0);
                                     }
                                     this.typingTimes.put(j, Long.valueOf(System.currentTimeMillis()));
                                 }
+                            } else if (l5 == null || l5.longValue() + 4000 < System.currentTimeMillis()) {
+                                HashMap<Object, Object> hashMap = delayedMessage.extraHashMap;
+                                MessageObject messageObject = (MessageObject) hashMap.get(str4 + "_i");
+                                if (messageObject == null || !messageObject.isVideo()) {
+                                    getMessagesController().sendTyping(j, i9, 4, 0);
+                                } else {
+                                    getMessagesController().sendTyping(j, i9, 5, 0);
+                                }
+                                this.typingTimes.put(j, Long.valueOf(System.currentTimeMillis()));
                             }
                         }
                     }

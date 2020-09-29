@@ -58,6 +58,10 @@ public class Utilities {
 
     public static native String readlink(String str);
 
+    public static native String readlinkFd(int i);
+
+    public static native int saveProgressiveJpeg(Bitmap bitmap, int i, int i2, int i3, int i4, String str);
+
     public static native void stackBlurBitmap(Bitmap bitmap, int i);
 
     public static native void unpinBitmap(Bitmap bitmap);

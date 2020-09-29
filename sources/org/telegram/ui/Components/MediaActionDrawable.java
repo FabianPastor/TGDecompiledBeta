@@ -117,7 +117,7 @@ public class MediaActionDrawable extends Drawable {
                 return false;
             }
             if ((i3 == 0 && i == 1) || (this.currentIcon == 1 && i == 0)) {
-                this.transitionAnimationTime = 666.0f;
+                this.transitionAnimationTime = 300.0f;
             } else if (this.currentIcon == 2 && (i == 3 || i == 14)) {
                 this.transitionAnimationTime = 400.0f;
             } else if (this.currentIcon != 4 && i == 6) {
@@ -341,8 +341,8 @@ public class MediaActionDrawable extends Drawable {
             r1 = 1077936128(0x40400000, float:3.0)
             org.telegram.messenger.AndroidUtilities.dp(r1)
             int r1 = r0.currentIcon
-            r17 = 1120403456(0x42CLASSNAME, float:100.0)
-            r18 = 1094713344(0x41400000, float:12.0)
+            r17 = 1094713344(0x41400000, float:12.0)
+            r18 = 1120403456(0x42CLASSNAME, float:100.0)
             r19 = 1080033280(0x40600000, float:3.5)
             r20 = 1073741824(0x40000000, float:2.0)
             r21 = 1088421888(0x40e00000, float:7.0)
@@ -366,7 +366,7 @@ public class MediaActionDrawable extends Drawable {
             float r13 = r0.scale
             float r6 = r6 * r13
             float r6 = r6 + r1
-            int r13 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            int r13 = org.telegram.messenger.AndroidUtilities.dp(r17)
             float r13 = (float) r13
             float r10 = r0.scale
             float r13 = r13 * r10
@@ -385,7 +385,7 @@ public class MediaActionDrawable extends Drawable {
             int r2 = (int) r2
             r10.setAlpha(r2)
             float r2 = r0.transitionProgress
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            int r10 = org.telegram.messenger.AndroidUtilities.dp(r17)
             float r10 = (float) r10
             float r4 = r0.scale
             float r10 = r10 * r4
@@ -475,7 +475,7 @@ public class MediaActionDrawable extends Drawable {
             float r10 = r13 - r3
             float r3 = r3 + r13
             r2.set(r5, r10, r6, r3)
-            float r3 = r27 * r17
+            float r3 = r27 * r18
             android.graphics.RectF r2 = r0.rect
             r5 = 1120927744(0x42d00000, float:104.0)
             float r4 = r4 * r5
@@ -1306,10 +1306,10 @@ public class MediaActionDrawable extends Drawable {
             r5 = r9
             r31 = r25
             r1.drawLine(r2, r3, r4, r5, r6)
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)
             int r2 = r27 + r1
             float r4 = (float) r2
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)
             int r3 = r28 - r1
             float r5 = (float) r3
             android.graphics.Paint r6 = r0.paint
@@ -1432,7 +1432,7 @@ public class MediaActionDrawable extends Drawable {
             r7.scale(r4, r4, r3, r5)
         L_0x07cd:
             float r3 = r0.animatedDownloadProgress
-            float r3 = r3 * r17
+            float r3 = r3 * r18
             int r3 = (int) r3
             java.lang.String r4 = r0.percentString
             if (r4 == 0) goto L_0x07da
@@ -1475,7 +1475,7 @@ public class MediaActionDrawable extends Drawable {
             goto L_0x0820
         L_0x081c:
             r9 = 255(0xff, float:3.57E-43)
-            goto L_0x097e
+            goto L_0x0953
         L_0x0820:
             int r1 = r0.currentIcon
             if (r1 != 0) goto L_0x0828
@@ -1568,115 +1568,93 @@ public class MediaActionDrawable extends Drawable {
             int r2 = r8.centerY()
             float r2 = (float) r2
             r7.translate(r1, r2)
-            r1 = 1143373824(0x44268000, float:666.0)
+            r1 = 1140457472(0x43fa0000, float:500.0)
             float r4 = r4 * r1
             int r1 = r0.currentIcon
             r2 = 1
-            if (r1 != r2) goto L_0x08b7
+            if (r1 != r2) goto L_0x08b6
             r1 = 1119092736(0x42b40000, float:90.0)
-            goto L_0x08b8
-        L_0x08b7:
+            goto L_0x08b7
+        L_0x08b6:
             r1 = 0
-        L_0x08b8:
+        L_0x08b7:
             int r3 = r0.currentIcon
-            if (r3 != 0) goto L_0x08c0
+            if (r3 != 0) goto L_0x08f4
             int r3 = r0.nextIcon
-            if (r3 == r2) goto L_0x08c8
-        L_0x08c0:
-            int r3 = r0.currentIcon
-            if (r3 != r2) goto L_0x094f
-            int r2 = r0.nextIcon
-            if (r2 != 0) goto L_0x094f
-        L_0x08c8:
-            int r1 = (r4 > r17 ? 1 : (r4 == r17 ? 0 : -1))
-            if (r1 >= 0) goto L_0x08da
-            r1 = -1063256064(0xffffffffc0a00000, float:-5.0)
+            if (r3 != r2) goto L_0x08f4
+            r1 = 1136656384(0x43CLASSNAME, float:384.0)
+            int r1 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
+            if (r1 >= 0) goto L_0x08d5
+            r1 = 1119748096(0x42be0000, float:95.0)
             org.telegram.ui.Components.CubicBezierInterpolator r2 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_BOTH
-            float r3 = r4 / r17
+            r3 = 1136656384(0x43CLASSNAME, float:384.0)
+            float r3 = r4 / r3
             float r2 = r2.getInterpolation(r3)
             float r2 = r2 * r1
             r1 = r2
-            goto L_0x08f6
-        L_0x08da:
+            goto L_0x08f1
+        L_0x08d5:
             r1 = 1139933184(0x43var_, float:484.0)
             int r1 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r1 >= 0) goto L_0x08f4
+            if (r1 >= 0) goto L_0x08ef
+            r1 = 1119748096(0x42be0000, float:95.0)
+            r2 = 1084227584(0x40a00000, float:5.0)
+            org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_BOTH
+            r5 = 1136656384(0x43CLASSNAME, float:384.0)
+            float r5 = r4 - r5
+            float r5 = r5 / r18
+            float r3 = r3.getInterpolation(r5)
+            float r3 = r3 * r2
+            float r1 = r1 - r3
+            goto L_0x08f1
+        L_0x08ef:
+            r1 = 1119092736(0x42b40000, float:90.0)
+        L_0x08f1:
+            float r4 = r4 + r18
+            goto L_0x0929
+        L_0x08f4:
+            int r2 = r0.currentIcon
+            r3 = 1
+            if (r2 != r3) goto L_0x0929
+            int r2 = r0.nextIcon
+            if (r2 != 0) goto L_0x0929
+            int r1 = (r4 > r18 ? 1 : (r4 == r18 ? 0 : -1))
+            if (r1 >= 0) goto L_0x090e
+            r1 = -1063256064(0xffffffffc0a00000, float:-5.0)
+            org.telegram.ui.Components.CubicBezierInterpolator r2 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_BOTH
+            float r3 = r4 / r18
+            float r2 = r2.getInterpolation(r3)
+            float r1 = r1 * r2
+            goto L_0x0929
+        L_0x090e:
+            r1 = 1139933184(0x43var_, float:484.0)
+            int r1 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
+            if (r1 >= 0) goto L_0x0927
             r1 = -1063256064(0xffffffffc0a00000, float:-5.0)
             r2 = 1119748096(0x42be0000, float:95.0)
             org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_BOTH
-            float r5 = r4 - r17
+            float r5 = r4 - r18
             r6 = 1136656384(0x43CLASSNAME, float:384.0)
             float r5 = r5 / r6
             float r3 = r3.getInterpolation(r5)
             float r3 = r3 * r2
-            float r3 = r3 + r1
-            r1 = r3
-            goto L_0x08f6
-        L_0x08f4:
+            float r1 = r1 + r3
+            goto L_0x0929
+        L_0x0927:
             r1 = 1119092736(0x42b40000, float:90.0)
-        L_0x08f6:
-            r2 = 1128792064(0x43480000, float:200.0)
-            int r2 = (r4 > r2 ? 1 : (r4 == r2 ? 0 : -1))
-            if (r2 >= 0) goto L_0x08fd
-            goto L_0x094f
-        L_0x08fd:
-            r2 = 1137704960(0x43d00000, float:416.0)
-            int r2 = (r4 > r2 ? 1 : (r4 == r2 ? 0 : -1))
-            if (r2 >= 0) goto L_0x091a
-            r2 = 1036831949(0x3dcccccd, float:0.1)
-            org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_BOTH
-            r5 = 1128792064(0x43480000, float:200.0)
-            float r5 = r4 - r5
-            r6 = 1129840640(0x43580000, float:216.0)
-            float r5 = r5 / r6
-            float r3 = r3.getInterpolation(r5)
-            float r3 = r3 * r2
-            r2 = 1065353216(0x3var_, float:1.0)
-            float r3 = r3 + r2
-            r2 = r3
-            goto L_0x0951
-        L_0x091a:
-            r2 = 1141735424(0x440d8000, float:566.0)
-            int r2 = (r4 > r2 ? 1 : (r4 == r2 ? 0 : -1))
-            if (r2 >= 0) goto L_0x0938
-            r2 = 1066192077(0x3f8ccccd, float:1.1)
-            r3 = 1040522936(0x3e051eb8, float:0.13)
-            org.telegram.ui.Components.CubicBezierInterpolator r5 = org.telegram.ui.Components.CubicBezierInterpolator.EASE_BOTH
-            r6 = 1137704960(0x43d00000, float:416.0)
-            float r6 = r4 - r6
-            r8 = 1125515264(0x43160000, float:150.0)
-            float r6 = r6 / r8
-            float r5 = r5.getInterpolation(r6)
-            float r5 = r5 * r3
-            float r2 = r2 - r5
-            goto L_0x0951
-        L_0x0938:
-            r2 = 1064849900(0x3var_ec, float:0.97)
-            r3 = 1022739087(0x3cf5CLASSNAMEf, float:0.03)
-            android.view.animation.DecelerateInterpolator r5 = r0.interpolator
-            r6 = 1141735424(0x440d8000, float:566.0)
-            float r6 = r4 - r6
-            float r6 = r6 / r17
-            float r5 = r5.getInterpolation(r6)
-            float r5 = r5 * r3
-            float r2 = r2 + r5
-            goto L_0x0951
-        L_0x094f:
-            r2 = 1065353216(0x3var_, float:1.0)
-        L_0x0951:
+        L_0x0929:
             r7.rotate(r1)
-            r7.scale(r2, r2)
             int r1 = r0.currentIcon
-            if (r1 == 0) goto L_0x095e
+            if (r1 == 0) goto L_0x0933
             r2 = 1
-            if (r1 != r2) goto L_0x0963
-        L_0x095e:
+            if (r1 != r2) goto L_0x0938
+        L_0x0933:
             int r1 = r0.currentIcon
             r2 = 4
-            if (r1 != r2) goto L_0x0966
-        L_0x0963:
+            if (r1 != r2) goto L_0x093b
+        L_0x0938:
             r7.scale(r10, r10)
-        L_0x0966:
+        L_0x093b:
             org.telegram.ui.Components.PathAnimator r1 = org.telegram.ui.ActionBar.Theme.playPauseAnimator
             android.graphics.Paint r2 = r0.paint2
             r1.draw(r7, r2, r4)
@@ -1687,22 +1665,22 @@ public class MediaActionDrawable extends Drawable {
             android.graphics.Paint r2 = r0.paint2
             r1.draw(r7, r2, r4)
             r34.restore()
-        L_0x097e:
+        L_0x0953:
             int r1 = r0.currentIcon
             r2 = 6
-            if (r1 == r2) goto L_0x098c
+            if (r1 == r2) goto L_0x0961
             int r1 = r0.nextIcon
-            if (r1 != r2) goto L_0x0988
-            goto L_0x098c
-        L_0x0988:
-            r17 = r10
-            goto L_0x0a2a
-        L_0x098c:
+            if (r1 != r2) goto L_0x095d
+            goto L_0x0961
+        L_0x095d:
+            r18 = r10
+            goto L_0x09ff
+        L_0x0961:
             int r1 = r0.currentIcon
-            if (r1 == r2) goto L_0x09b4
+            if (r1 == r2) goto L_0x0989
             float r1 = r0.transitionProgress
             int r2 = (r1 > r23 ? 1 : (r1 == r23 ? 0 : -1))
-            if (r2 <= 0) goto L_0x09b0
+            if (r2 <= 0) goto L_0x0985
             float r1 = r1 - r23
             float r1 = r1 / r23
             float r2 = r1 / r23
@@ -1710,23 +1688,23 @@ public class MediaActionDrawable extends Drawable {
             float r2 = java.lang.Math.min(r3, r2)
             float r4 = r3 - r2
             int r2 = (r1 > r23 ? 1 : (r1 == r23 ? 0 : -1))
-            if (r2 <= 0) goto L_0x09ad
+            if (r2 <= 0) goto L_0x0982
             float r1 = r1 - r23
             float r1 = r1 / r23
-            goto L_0x09ae
-        L_0x09ad:
+            goto L_0x0983
+        L_0x0982:
             r1 = 0
-        L_0x09ae:
+        L_0x0983:
             r8 = r1
-            goto L_0x09b7
-        L_0x09b0:
+            goto L_0x098c
+        L_0x0985:
             r4 = 1065353216(0x3var_, float:1.0)
             r8 = 0
-            goto L_0x09b7
-        L_0x09b4:
+            goto L_0x098c
+        L_0x0989:
             r4 = 0
             r8 = 1065353216(0x3var_, float:1.0)
-        L_0x09b7:
+        L_0x098c:
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r21)
             int r6 = r12 + r1
             r1 = 1077936128(0x40400000, float:3.0)
@@ -1736,7 +1714,7 @@ public class MediaActionDrawable extends Drawable {
             r1.setAlpha(r9)
             r1 = 1065353216(0x3var_, float:1.0)
             int r2 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r2 >= 0) goto L_0x0a06
+            if (r2 >= 0) goto L_0x09db
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r16)
             int r1 = r5 - r1
             float r2 = (float) r1
@@ -1749,7 +1727,7 @@ public class MediaActionDrawable extends Drawable {
             float r9 = r9 * r4
             float r9 = r1 - r9
             float r1 = (float) r6
-            r17 = r5
+            r18 = r5
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r16)
             float r5 = (float) r5
             float r5 = r5 * r4
@@ -1758,36 +1736,36 @@ public class MediaActionDrawable extends Drawable {
             r1 = r34
             r16 = r4
             r4 = r9
-            r9 = r17
-            r17 = r10
+            r9 = r18
+            r18 = r10
             r10 = r6
             r6 = r16
             r1.drawLine(r2, r3, r4, r5, r6)
-            goto L_0x0a0a
-        L_0x0a06:
+            goto L_0x09df
+        L_0x09db:
             r9 = r5
-            r17 = r10
+            r18 = r10
             r10 = r6
-        L_0x0a0a:
+        L_0x09df:
             r1 = 0
             int r2 = (r8 > r1 ? 1 : (r8 == r1 ? 0 : -1))
-            if (r2 <= 0) goto L_0x0a2a
+            if (r2 <= 0) goto L_0x09ff
             float r2 = (float) r9
             float r3 = (float) r10
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)
             float r1 = (float) r1
             float r1 = r1 * r8
             float r4 = r2 + r1
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r18)
+            int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)
             float r1 = (float) r1
             float r1 = r1 * r8
             float r5 = r3 - r1
             android.graphics.Paint r6 = r0.paint
             r1 = r34
             r1.drawLine(r2, r3, r4, r5, r6)
-        L_0x0a2a:
-            if (r15 == 0) goto L_0x0a67
-            if (r15 == r14) goto L_0x0a67
+        L_0x09ff:
+            if (r15 == 0) goto L_0x0a3c
+            if (r15 == r14) goto L_0x0a3c
             int r1 = r15.getIntrinsicWidth()
             float r1 = (float) r1
             float r1 = r1 * r13
@@ -1800,16 +1778,16 @@ public class MediaActionDrawable extends Drawable {
             r15.setColorFilter(r3)
             int r3 = r0.currentIcon
             int r4 = r0.nextIcon
-            if (r3 != r4) goto L_0x0a4c
+            if (r3 != r4) goto L_0x0a21
             r3 = 255(0xff, float:3.57E-43)
-            goto L_0x0a55
-        L_0x0a4c:
+            goto L_0x0a2a
+        L_0x0a21:
             float r3 = r0.transitionProgress
             r4 = 1065353216(0x3var_, float:1.0)
             float r3 = r4 - r3
             float r3 = r3 * r22
             int r3 = (int) r3
-        L_0x0a55:
+        L_0x0a2a:
             r15.setAlpha(r3)
             r3 = 2
             int r1 = r1 / r3
@@ -1820,28 +1798,28 @@ public class MediaActionDrawable extends Drawable {
             int r2 = r2 + r12
             r15.setBounds(r4, r3, r1, r2)
             r15.draw(r7)
-        L_0x0a67:
-            if (r14 == 0) goto L_0x0a9e
+        L_0x0a3c:
+            if (r14 == 0) goto L_0x0a73
             int r1 = r14.getIntrinsicWidth()
             float r1 = (float) r1
-            float r1 = r1 * r17
+            float r1 = r1 * r18
             int r1 = (int) r1
             int r2 = r14.getIntrinsicHeight()
             float r2 = (float) r2
-            float r2 = r2 * r17
+            float r2 = r2 * r18
             int r2 = (int) r2
             android.graphics.ColorFilter r3 = r0.colorFilter
             r14.setColorFilter(r3)
             int r3 = r0.currentIcon
             int r4 = r0.nextIcon
-            if (r3 != r4) goto L_0x0a87
+            if (r3 != r4) goto L_0x0a5c
             r3 = 255(0xff, float:3.57E-43)
-            goto L_0x0a8c
-        L_0x0a87:
+            goto L_0x0a61
+        L_0x0a5c:
             float r3 = r0.transitionProgress
             float r3 = r3 * r22
             int r3 = (int) r3
-        L_0x0a8c:
+        L_0x0a61:
             r14.setAlpha(r3)
             r3 = 2
             int r1 = r1 / r3
@@ -1852,11 +1830,11 @@ public class MediaActionDrawable extends Drawable {
             int r2 = r2 + r12
             r14.setBounds(r4, r3, r1, r2)
             r14.draw(r7)
-        L_0x0a9e:
+        L_0x0a73:
             r1 = r31
             r2 = r19
-            if (r1 == 0) goto L_0x0afe
-            if (r1 == r2) goto L_0x0afe
+            if (r1 == 0) goto L_0x0ad3
+            if (r1 == r2) goto L_0x0ad3
             r3 = 1103101952(0x41CLASSNAME, float:24.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             float r3 = (float) r3
@@ -1873,16 +1851,16 @@ public class MediaActionDrawable extends Drawable {
             android.graphics.Paint r5 = r0.paint2
             int r6 = r0.currentIcon
             int r8 = r0.nextIcon
-            if (r6 != r8) goto L_0x0acc
+            if (r6 != r8) goto L_0x0aa1
             r6 = 255(0xff, float:3.57E-43)
-            goto L_0x0ad5
-        L_0x0acc:
+            goto L_0x0aaa
+        L_0x0aa1:
             float r6 = r0.transitionProgress
             r8 = 1065353216(0x3var_, float:1.0)
             float r6 = r8 - r6
             float r6 = r6 * r22
             int r6 = (int) r6
-        L_0x0ad5:
+        L_0x0aaa:
             r5.setAlpha(r6)
             r34.save()
             r5 = 2
@@ -1899,23 +1877,23 @@ public class MediaActionDrawable extends Drawable {
             r7.drawPath(r4, r3)
             r3 = 1
             r4 = r1[r3]
-            if (r4 == 0) goto L_0x0afb
+            if (r4 == 0) goto L_0x0ad0
             r1 = r1[r3]
             android.graphics.Paint r3 = r0.backPaint
             r7.drawPath(r1, r3)
-        L_0x0afb:
+        L_0x0ad0:
             r34.restore()
-        L_0x0afe:
-            if (r2 == 0) goto L_0x0b52
+        L_0x0ad3:
+            if (r2 == 0) goto L_0x0b27
             r1 = 1103101952(0x41CLASSNAME, float:24.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             float r1 = (float) r1
-            float r1 = r1 * r17
+            float r1 = r1 * r18
             int r1 = (int) r1
             r3 = 1103101952(0x41CLASSNAME, float:24.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             float r3 = (float) r3
-            float r3 = r3 * r17
+            float r3 = r3 * r18
             int r3 = (int) r3
             android.graphics.Paint r4 = r0.paint2
             android.graphics.Paint$Style r5 = android.graphics.Paint.Style.FILL_AND_STROKE
@@ -1923,14 +1901,14 @@ public class MediaActionDrawable extends Drawable {
             android.graphics.Paint r4 = r0.paint2
             int r5 = r0.currentIcon
             int r6 = r0.nextIcon
-            if (r5 != r6) goto L_0x0b26
+            if (r5 != r6) goto L_0x0afb
             r5 = 255(0xff, float:3.57E-43)
-            goto L_0x0b2b
-        L_0x0b26:
+            goto L_0x0b00
+        L_0x0afb:
             float r5 = r0.transitionProgress
             float r5 = r5 * r22
             int r5 = (int) r5
-        L_0x0b2b:
+        L_0x0b00:
             r4.setAlpha(r5)
             r34.save()
             r4 = 2
@@ -1947,38 +1925,38 @@ public class MediaActionDrawable extends Drawable {
             r7.drawPath(r3, r1)
             r1 = 1
             r3 = r2[r1]
-            if (r3 == 0) goto L_0x0b4f
+            if (r3 == 0) goto L_0x0b24
             r2 = r2[r1]
             android.graphics.Paint r1 = r0.backPaint
             r7.drawPath(r2, r1)
-        L_0x0b4f:
+        L_0x0b24:
             r34.restore()
-        L_0x0b52:
+        L_0x0b27:
             long r1 = java.lang.System.currentTimeMillis()
             long r3 = r0.lastAnimationTime
             long r3 = r1 - r3
             r5 = 17
             int r8 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r8 <= 0) goto L_0x0b62
+            if (r8 <= 0) goto L_0x0b37
             r3 = 17
-        L_0x0b62:
+        L_0x0b37:
             r0.lastAnimationTime = r1
             int r1 = r0.currentIcon
             r2 = 3
-            if (r1 == r2) goto L_0x0b7e
+            if (r1 == r2) goto L_0x0b53
             r2 = 14
-            if (r1 == r2) goto L_0x0b7e
+            if (r1 == r2) goto L_0x0b53
             r5 = 4
-            if (r1 != r5) goto L_0x0b74
+            if (r1 != r5) goto L_0x0b49
             int r1 = r0.nextIcon
-            if (r1 == r2) goto L_0x0b7e
-        L_0x0b74:
+            if (r1 == r2) goto L_0x0b53
+        L_0x0b49:
             int r1 = r0.currentIcon
             r2 = 10
-            if (r1 == r2) goto L_0x0b7e
+            if (r1 == r2) goto L_0x0b53
             r2 = 13
-            if (r1 != r2) goto L_0x0bc6
-        L_0x0b7e:
+            if (r1 != r2) goto L_0x0b9b
+        L_0x0b53:
             float r1 = r0.downloadRadOffset
             r5 = 360(0x168, double:1.78E-321)
             long r5 = r5 * r3
@@ -1991,25 +1969,25 @@ public class MediaActionDrawable extends Drawable {
             r0.downloadRadOffset = r1
             int r1 = r0.nextIcon
             r2 = 2
-            if (r1 == r2) goto L_0x0bc3
+            if (r1 == r2) goto L_0x0b98
             float r1 = r0.downloadProgress
             float r2 = r0.downloadProgressAnimationStart
             float r5 = r1 - r2
             r6 = 0
             int r8 = (r5 > r6 ? 1 : (r5 == r6 ? 0 : -1))
-            if (r8 <= 0) goto L_0x0bc3
+            if (r8 <= 0) goto L_0x0b98
             float r8 = r0.downloadProgressTime
             float r9 = (float) r3
             float r8 = r8 + r9
             r0.downloadProgressTime = r8
             r9 = 1128792064(0x43480000, float:200.0)
             int r9 = (r8 > r9 ? 1 : (r8 == r9 ? 0 : -1))
-            if (r9 < 0) goto L_0x0bb5
+            if (r9 < 0) goto L_0x0b8a
             r0.animatedDownloadProgress = r1
             r0.downloadProgressAnimationStart = r1
             r0.downloadProgressTime = r6
-            goto L_0x0bc3
-        L_0x0bb5:
+            goto L_0x0b98
+        L_0x0b8a:
             android.view.animation.DecelerateInterpolator r1 = r0.interpolator
             r6 = 1128792064(0x43480000, float:200.0)
             float r8 = r8 / r6
@@ -2017,35 +1995,35 @@ public class MediaActionDrawable extends Drawable {
             float r5 = r5 * r1
             float r2 = r2 + r5
             r0.animatedDownloadProgress = r2
-        L_0x0bc3:
+        L_0x0b98:
             r33.invalidateSelf()
-        L_0x0bc6:
+        L_0x0b9b:
             boolean r1 = r0.animatingTransition
-            if (r1 == 0) goto L_0x0be9
+            if (r1 == 0) goto L_0x0bbe
             float r1 = r0.transitionProgress
             r2 = 1065353216(0x3var_, float:1.0)
             int r5 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r5 >= 0) goto L_0x0be9
+            if (r5 >= 0) goto L_0x0bbe
             float r3 = (float) r3
             float r4 = r0.transitionAnimationTime
             float r3 = r3 / r4
             float r1 = r1 + r3
             r0.transitionProgress = r1
             int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r1 < 0) goto L_0x0be6
+            if (r1 < 0) goto L_0x0bbb
             int r1 = r0.nextIcon
             r0.currentIcon = r1
             r0.transitionProgress = r2
             r1 = 0
             r0.animatingTransition = r1
-        L_0x0be6:
+        L_0x0bbb:
             r33.invalidateSelf()
-        L_0x0be9:
+        L_0x0bbe:
             r1 = r20
             r2 = 1
-            if (r1 < r2) goto L_0x0bf1
+            if (r1 < r2) goto L_0x0bc6
             r7.restoreToCount(r1)
-        L_0x0bf1:
+        L_0x0bc6:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.MediaActionDrawable.draw(android.graphics.Canvas):void");

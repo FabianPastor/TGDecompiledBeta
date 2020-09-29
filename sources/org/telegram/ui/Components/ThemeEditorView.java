@@ -211,7 +211,7 @@ public class ThemeEditorView {
                     	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                     	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                     	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
                     	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                     	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                     	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -226,7 +226,7 @@ public class ThemeEditorView {
                     	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                     	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                     	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
                     	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                     	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                     	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -241,7 +241,7 @@ public class ThemeEditorView {
                     	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                     	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                     	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
                     	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                     	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                     	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -301,7 +301,7 @@ public class ThemeEditorView {
                     r0.<init>(r13)
                     android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
                     r0.setScaleType(r1)
-                    r1 = 2131165930(0x7var_ea, float:1.794609E38)
+                    r1 = 2131165957(0x7var_, float:1.7946146E38)
                     r0.setImageResource(r1)
                     android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
                     android.graphics.PorterDuff$Mode r2 = android.graphics.PorterDuff.Mode.MULTIPLY
@@ -385,7 +385,7 @@ public class ThemeEditorView {
                     r13.setImeOptions(r0)
                     org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
                     java.lang.String r0 = "Search"
-                    r1 = 2131626788(0x7f0e0b24, float:1.8880822E38)
+                    r1 = 2131626840(0x7f0e0b58, float:1.8880928E38)
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r1)
                     r13.setHint(r0)
                     org.telegram.ui.Components.EditTextBoldCursor r13 = r11.searchEditText
@@ -503,7 +503,7 @@ public class ThemeEditorView {
                     r7.<init>(r8)
                     r0.circlePaint = r7
                     android.content.res.Resources r7 = r19.getResources()
-                    r9 = 2131165565(0x7var_d, float:1.794535E38)
+                    r9 = 2131165566(0x7var_e, float:1.7945353E38)
                     android.graphics.drawable.Drawable r7 = r7.getDrawable(r9)
                     android.graphics.drawable.Drawable r7 = r7.mutate()
                     r0.circleDrawable = r7
@@ -1133,7 +1133,7 @@ public class ThemeEditorView {
                 android.animation.AnimatorSet[] r4 = new android.animation.AnimatorSet[r4]
                 r0.shadowAnimation = r4
                 android.content.res.Resources r4 = r18.getResources()
-                r5 = 2131165918(0x7var_de, float:1.7946067E38)
+                r5 = 2131165945(0x7var_f9, float:1.7946121E38)
                 android.graphics.drawable.Drawable r4 = r4.getDrawable(r5)
                 android.graphics.drawable.Drawable r4 = r4.mutate()
                 r0.shadowDrawable = r4
@@ -1215,7 +1215,7 @@ public class ThemeEditorView {
                 r1.showTextView()
                 org.telegram.ui.Components.EmptyTextProgressView r1 = r0.searchEmptyView
                 java.lang.String r4 = "NoResult"
-                r9 = 2131625964(0x7f0e07ec, float:1.887915E38)
+                r9 = 2131626002(0x7f0e0812, float:1.8879228E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
                 r1.setText(r4)
                 org.telegram.ui.Components.RecyclerListView r1 = r0.listView
@@ -1314,7 +1314,7 @@ public class ThemeEditorView {
                 int r9 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r1.setPadding(r15, r5, r9, r5)
                 java.lang.String r9 = "CloseEditor"
-                r15 = 2131624817(0x7f0e0371, float:1.8876824E38)
+                r15 = 2131624828(0x7f0e037c, float:1.8876847E38)
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r15)
                 java.lang.String r9 = r9.toUpperCase()
                 r1.setText(r9)
@@ -1339,7 +1339,7 @@ public class ThemeEditorView {
                 int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r1.setPadding(r4, r5, r15, r5)
                 java.lang.String r4 = "SaveTheme"
-                r15 = 2131626770(0x7f0e0b12, float:1.8880786E38)
+                r15 = 2131626822(0x7f0e0b46, float:1.8880891E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r15)
                 java.lang.String r4 = r4.toUpperCase()
                 r1.setText(r4)
@@ -1376,7 +1376,7 @@ public class ThemeEditorView {
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r1.setPadding(r4, r5, r8, r5)
                 java.lang.String r4 = "Cancel"
-                r8 = 2131624552(0x7f0e0268, float:1.8876287E38)
+                r8 = 2131624561(0x7f0e0271, float:1.8876305E38)
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r8)
                 java.lang.String r4 = r4.toUpperCase()
                 r1.setText(r4)
@@ -1407,7 +1407,7 @@ public class ThemeEditorView {
                 int r15 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r4.setPadding(r8, r5, r15, r5)
                 java.lang.String r8 = "Default"
-                r15 = 2131624957(0x7f0e03fd, float:1.8877108E38)
+                r15 = 2131624976(0x7f0e0410, float:1.8877147E38)
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r15)
                 java.lang.String r8 = r8.toUpperCase()
                 r4.setText(r8)
@@ -1430,7 +1430,7 @@ public class ThemeEditorView {
                 int r3 = org.telegram.messenger.AndroidUtilities.dp(r14)
                 r4.setPadding(r2, r5, r3, r5)
                 java.lang.String r2 = "Save"
-                r3 = 2131626767(0x7f0e0b0f, float:1.888078E38)
+                r3 = 2131626819(0x7f0e0b43, float:1.8880885E38)
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)
                 java.lang.String r2 = r2.toUpperCase()
                 r4.setText(r2)
@@ -1804,7 +1804,7 @@ public class ThemeEditorView {
                     	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                     	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                     	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
                     	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                     	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                     	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -1819,7 +1819,7 @@ public class ThemeEditorView {
                     	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                     	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                     	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
                     	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                     	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                     	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -1834,7 +1834,7 @@ public class ThemeEditorView {
                     	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                     	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                     	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
                     	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                     	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                     	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -1961,7 +1961,7 @@ public class ThemeEditorView {
                         	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                         	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                         	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
                         	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                         	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                         	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -1976,7 +1976,7 @@ public class ThemeEditorView {
                         	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                         	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                         	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
                         	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                         	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                         	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -1991,7 +1991,7 @@ public class ThemeEditorView {
                         	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                         	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                         	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
                         	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                         	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                         	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)

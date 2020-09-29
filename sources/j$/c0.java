@@ -1,23 +1,27 @@
 package j$;
 
-import j$.util.function.T;
-import java.util.function.ObjLongConsumer;
+import j$.util.function.J;
+import java.util.function.LongConsumer;
 
-public final /* synthetic */ class c0 implements T {
-    final /* synthetic */ ObjLongConsumer a;
+public final /* synthetic */ class c0 implements J {
+    final /* synthetic */ LongConsumer a;
 
-    private /* synthetic */ c0(ObjLongConsumer objLongConsumer) {
-        this.a = objLongConsumer;
+    private /* synthetic */ c0(LongConsumer longConsumer) {
+        this.a = longConsumer;
     }
 
-    public static /* synthetic */ T b(ObjLongConsumer objLongConsumer) {
-        if (objLongConsumer == null) {
+    public static /* synthetic */ J a(LongConsumer longConsumer) {
+        if (longConsumer == null) {
             return null;
         }
-        return new c0(objLongConsumer);
+        return longConsumer instanceof d0 ? ((d0) longConsumer).a : new c0(longConsumer);
     }
 
-    public /* synthetic */ void a(Object obj, long j) {
-        this.a.accept(obj, j);
+    public /* synthetic */ void accept(long j) {
+        this.a.accept(j);
+    }
+
+    public /* synthetic */ J h(J j) {
+        return a(this.a.andThen(d0.a(j)));
     }
 }

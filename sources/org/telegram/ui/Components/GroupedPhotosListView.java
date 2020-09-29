@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Scroller;
 import java.util.ArrayList;
+import java.util.List;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
@@ -18,18 +19,18 @@ import org.telegram.tgnet.TLRPC$PhotoSize;
 
 public class GroupedPhotosListView extends View implements GestureDetector.OnGestureListener {
     private boolean animateAllLine;
-    private boolean animateBackground;
+    private boolean animateBackground = true;
     private int animateToDX;
     private int animateToDXStart;
-    private int animateToItem;
+    private int animateToItem = -1;
     private boolean animateToItemFast;
-    private boolean animationsEnabled;
-    private Paint backgroundPaint;
+    private boolean animationsEnabled = true;
+    private Paint backgroundPaint = new Paint();
     private long currentGroupId;
     private int currentImage;
-    private float currentItemProgress;
-    private ArrayList<Object> currentObjects;
-    public ArrayList<ImageLocation> currentPhotos;
+    private float currentItemProgress = 1.0f;
+    private ArrayList<Object> currentObjects = new ArrayList<>();
+    public ArrayList<ImageLocation> currentPhotos = new ArrayList<>();
     /* access modifiers changed from: private */
     public GroupedPhotosListViewDelegate delegate;
     private float drawAlpha;
@@ -39,7 +40,7 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
     /* access modifiers changed from: private */
     public ValueAnimator hideAnimator;
     private boolean ignoreChanges;
-    private ArrayList<ImageReceiver> imagesToDraw;
+    private ArrayList<ImageReceiver> imagesToDraw = new ArrayList<>();
     private int itemHeight;
     private int itemSpacing;
     private int itemWidth;
@@ -48,14 +49,14 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
     private float moveLineProgress;
     private boolean moving;
     private int nextImage;
-    private float nextItemProgress;
-    private int nextPhotoScrolling;
+    private float nextItemProgress = 0.0f;
+    private int nextPhotoScrolling = -1;
     private Scroller scroll;
     private boolean scrolling;
     /* access modifiers changed from: private */
     public ValueAnimator showAnimator;
     private boolean stopedScrolling;
-    private ArrayList<ImageReceiver> unusedReceivers;
+    private ArrayList<ImageReceiver> unusedReceivers = new ArrayList<>();
 
     public interface GroupedPhotosListViewDelegate {
         int getAvatarsDialogId();
@@ -68,7 +69,7 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
 
         ArrayList<ImageLocation> getImagesArrLocations();
 
-        ArrayList<TLRPC$PageBlock> getPageBlockArr();
+        List<TLRPC$PageBlock> getPageBlockArr();
 
         Object getParentObject();
 
@@ -87,23 +88,8 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
     public void onShowPress(MotionEvent motionEvent) {
     }
 
-    public GroupedPhotosListView(Context context) {
-        this(context, AndroidUtilities.dp(3.0f));
-    }
-
     public GroupedPhotosListView(Context context, int i) {
         super(context);
-        this.backgroundPaint = new Paint();
-        this.unusedReceivers = new ArrayList<>();
-        this.imagesToDraw = new ArrayList<>();
-        this.currentPhotos = new ArrayList<>();
-        this.currentObjects = new ArrayList<>();
-        this.currentItemProgress = 1.0f;
-        this.nextItemProgress = 0.0f;
-        this.animateToItem = -1;
-        this.animationsEnabled = true;
-        this.nextPhotoScrolling = -1;
-        this.animateBackground = true;
         this.gestureDetector = new GestureDetector(context, this);
         this.scroll = new Scroller(context);
         this.itemWidth = AndroidUtilities.dp(42.0f);
@@ -161,7 +147,7 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
             org.telegram.ui.Components.GroupedPhotosListView$GroupedPhotosListViewDelegate r4 = r0.delegate
             java.util.ArrayList r4 = r4.getImagesArr()
             org.telegram.ui.Components.GroupedPhotosListView$GroupedPhotosListViewDelegate r5 = r0.delegate
-            java.util.ArrayList r5 = r5.getPageBlockArr()
+            java.util.List r5 = r5.getPageBlockArr()
             org.telegram.ui.Components.GroupedPhotosListView$GroupedPhotosListViewDelegate r6 = r0.delegate
             int r6 = r6.getSlideshowMessageId()
             org.telegram.ui.Components.GroupedPhotosListView$GroupedPhotosListViewDelegate r7 = r0.delegate
@@ -807,7 +793,7 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
         int currentIndex = this.delegate.getCurrentIndex();
         ArrayList<ImageLocation> imagesArrLocations = this.delegate.getImagesArrLocations();
         ArrayList<MessageObject> imagesArr = this.delegate.getImagesArr();
-        ArrayList<TLRPC$PageBlock> pageBlockArr = this.delegate.getPageBlockArr();
+        List<TLRPC$PageBlock> pageBlockArr = this.delegate.getPageBlockArr();
         stopScrolling();
         int size = this.imagesToDraw.size();
         int i = 0;
@@ -878,7 +864,7 @@ public class GroupedPhotosListView extends View implements GestureDetector.OnGes
         int currentIndex = this.delegate.getCurrentIndex();
         ArrayList<ImageLocation> imagesArrLocations = this.delegate.getImagesArrLocations();
         ArrayList<MessageObject> imagesArr = this.delegate.getImagesArr();
-        ArrayList<TLRPC$PageBlock> pageBlockArr = this.delegate.getPageBlockArr();
+        List<TLRPC$PageBlock> pageBlockArr = this.delegate.getPageBlockArr();
         int i8 = this.nextPhotoScrolling;
         if (currentIndex != i8 && i8 >= 0 && i8 < this.currentPhotos.size()) {
             Object obj = this.currentObjects.get(this.nextPhotoScrolling);

@@ -1,53 +1,31 @@
 package j$;
 
-import j$.util.stream.CLASSNAMEl1;
-import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.stream.BaseStream;
+import j$.util.function.P;
+import java.util.function.LongUnaryOperator;
 
-public final /* synthetic */ class j0 implements BaseStream {
-    final /* synthetic */ CLASSNAMEl1 a;
+public final /* synthetic */ class j0 implements P {
+    final /* synthetic */ LongUnaryOperator a;
 
-    private /* synthetic */ j0(CLASSNAMEl1 l1Var) {
-        this.a = l1Var;
+    private /* synthetic */ j0(LongUnaryOperator longUnaryOperator) {
+        this.a = longUnaryOperator;
     }
 
-    public static /* synthetic */ BaseStream c(CLASSNAMEl1 l1Var) {
-        if (l1Var == null) {
+    public static /* synthetic */ P c(LongUnaryOperator longUnaryOperator) {
+        if (longUnaryOperator == null) {
             return null;
         }
-        return new j0(l1Var);
+        return longUnaryOperator instanceof k0 ? ((k0) longUnaryOperator).a : new j0(longUnaryOperator);
     }
 
-    public /* synthetic */ void close() {
-        this.a.close();
+    public /* synthetic */ P a(P p) {
+        return c(this.a.andThen(k0.a(p)));
     }
 
-    public /* synthetic */ boolean isParallel() {
-        return this.a.isParallel();
+    public /* synthetic */ long applyAsLong(long j) {
+        return this.a.applyAsLong(j);
     }
 
-    public /* synthetic */ Iterator iterator() {
-        return this.a.iterator();
-    }
-
-    public /* synthetic */ BaseStream onClose(Runnable runnable) {
-        return c(this.a.onClose(runnable));
-    }
-
-    public /* synthetic */ BaseStream parallel() {
-        return c(this.a.parallel());
-    }
-
-    public /* synthetic */ BaseStream sequential() {
-        return c(this.a.sequential());
-    }
-
-    public /* synthetic */ Spliterator spliterator() {
-        return CLASSNAMEi.a(this.a.spliterator());
-    }
-
-    public /* synthetic */ BaseStream unordered() {
-        return c(this.a.unordered());
+    public /* synthetic */ P b(P p) {
+        return c(this.a.compose(k0.a(p)));
     }
 }

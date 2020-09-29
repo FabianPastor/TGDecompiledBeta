@@ -40,12 +40,14 @@ import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$InputStickerSet;
+import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$StickerSet;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_messages_getStickers;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.tgnet.TLRPC$TL_messages_stickers;
 import org.telegram.tgnet.TLRPC$TL_photoSize;
+import org.telegram.tgnet.TLRPC$TL_photoSizeProgressive;
 import org.telegram.ui.ActionBar.BottomSheet;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Cells.EmptyCell;
@@ -220,7 +222,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r4.<init>(r2)
                 android.widget.ImageView$ScaleType r7 = android.widget.ImageView.ScaleType.CENTER
                 r4.setScaleType(r7)
-                r7 = 2131165930(0x7var_ea, float:1.794609E38)
+                r7 = 2131165957(0x7var_, float:1.7946146E38)
                 r4.setImageResource(r7)
                 android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
                 android.graphics.PorterDuff$Mode r8 = android.graphics.PorterDuff.Mode.MULTIPLY
@@ -296,7 +298,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2.setImeOptions(r4)
                 if (r3 != 0) goto L_0x014c
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131626806(0x7f0e0b36, float:1.8880859E38)
+                r3 = 2131626868(0x7f0e0b74, float:1.8880984E38)
                 java.lang.String r4 = "SearchStickersHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -304,7 +306,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             L_0x014c:
                 if (r3 != r6) goto L_0x015d
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131626791(0x7f0e0b27, float:1.8880828E38)
+                r3 = 2131626844(0x7f0e0b5c, float:1.8880936E38)
                 java.lang.String r4 = "SearchEmojiHint"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -313,7 +315,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                 r2 = 2
                 if (r3 != r2) goto L_0x016e
                 org.telegram.ui.Components.EditTextBoldCursor r2 = r0.searchEditText
-                r3 = 2131626797(0x7f0e0b2d, float:1.888084E38)
+                r3 = 2131626859(0x7f0e0b6b, float:1.8880966E38)
                 java.lang.String r4 = "SearchGifsTitle"
                 java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                 r2.setHint(r3)
@@ -420,7 +422,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
         Drawable mutate = context.getResources().getDrawable(NUM).mutate();
         this.shadowDrawable = mutate;
         mutate.setColorFilter(new PorterDuffColorFilter(-14342875, PorterDuff.Mode.MULTIPLY));
-        AnonymousClass2 r5 = new SizeNotifierFrameLayout(context, false) {
+        AnonymousClass2 r5 = new SizeNotifierFrameLayout(context) {
             private boolean ignoreLayout = false;
             private long lastUpdateTime;
             private RectF rect = new RectF();
@@ -881,6 +883,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
     }
 
     private void updateStickerTabs() {
+        TLObject tLObject;
         ArrayList<TLRPC$Document> arrayList;
         if (this.stickersTab != null) {
             ImageView imageView = this.stickersButton;
@@ -921,8 +924,10 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
             for (int i4 = 0; i4 < this.stickerSets[this.currentType].size(); i4++) {
                 TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet2 = this.stickerSets[this.currentType].get(i4);
                 TLRPC$Document tLRPC$Document = tLRPC$TL_messages_stickerSet2.documents.get(0);
-                TLObject tLObject = tLRPC$TL_messages_stickerSet2.set.thumb;
-                if (!(tLObject instanceof TLRPC$TL_photoSize)) {
+                TLRPC$PhotoSize tLRPC$PhotoSize = tLRPC$TL_messages_stickerSet2.set.thumb;
+                if ((tLRPC$PhotoSize instanceof TLRPC$TL_photoSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoSizeProgressive)) {
+                    tLObject = tLRPC$TL_messages_stickerSet2.set.thumb;
+                } else {
                     tLObject = tLRPC$Document;
                 }
                 View addStickerTab = this.stickersTab.addStickerTab(tLObject, tLRPC$Document, tLRPC$TL_messages_stickerSet2);
@@ -1840,7 +1845,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                     	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                     	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                     	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
                     	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                     	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                     	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -1868,7 +1873,7 @@ public class StickerMasksAlert extends BottomSheet implements NotificationCenter
                     	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                     	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                     	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
                     	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                     	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                     	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)

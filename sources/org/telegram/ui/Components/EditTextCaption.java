@@ -13,6 +13,7 @@ import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.style.CharacterStyle;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -39,6 +40,10 @@ public class EditTextCaption extends EditTextBoldCursor {
     public boolean copyPasteShowed;
     private EditTextCaptionDelegate delegate;
     private int hintColor;
+    /* access modifiers changed from: private */
+    public boolean isInitLineCount;
+    /* access modifiers changed from: private */
+    public int lineCount;
     private float offsetY;
     private int selectionEnd = -1;
     private int selectionStart = -1;
@@ -50,8 +55,30 @@ public class EditTextCaption extends EditTextBoldCursor {
         void onSpansChanged();
     }
 
+    /* access modifiers changed from: protected */
+    public void onLineCountChanged(int i, int i2) {
+    }
+
     public EditTextCaption(Context context) {
         super(context);
+        addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            }
+
+            public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+            }
+
+            public void afterTextChanged(Editable editable) {
+                if (EditTextCaption.this.lineCount != EditTextCaption.this.getLineCount()) {
+                    if (!EditTextCaption.this.isInitLineCount && EditTextCaption.this.getMeasuredWidth() > 0) {
+                        EditTextCaption editTextCaption = EditTextCaption.this;
+                        editTextCaption.onLineCountChanged(editTextCaption.lineCount, EditTextCaption.this.getLineCount());
+                    }
+                    EditTextCaption editTextCaption2 = EditTextCaption.this;
+                    int unused = editTextCaption2.lineCount = editTextCaption2.getLineCount();
+                }
+            }
+        });
     }
 
     public void setCaption(String str) {
@@ -110,7 +137,7 @@ public class EditTextCaption extends EditTextBoldCursor {
         int i;
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle(LocaleController.getString("CreateLink", NUM));
-        AnonymousClass1 r1 = new EditTextBoldCursor(this, getContext()) {
+        AnonymousClass2 r1 = new EditTextBoldCursor(this, getContext()) {
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(64.0f), NUM));
@@ -237,7 +264,7 @@ public class EditTextCaption extends EditTextBoldCursor {
     }
 
     private ActionMode.Callback overrideCallback(final ActionMode.Callback callback) {
-        final AnonymousClass2 r0 = new ActionMode.Callback() {
+        final AnonymousClass3 r0 = new ActionMode.Callback() {
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
                 boolean unused = EditTextCaption.this.copyPasteShowed = true;
                 return callback.onCreateActionMode(actionMode, menu);
@@ -333,7 +360,12 @@ public class EditTextCaption extends EditTextBoldCursor {
     public void onMeasure(int i, int i2) {
         int indexOf;
         try {
+            this.isInitLineCount = getMeasuredWidth() == 0 && getMeasuredHeight() == 0;
             super.onMeasure(i, i2);
+            if (this.isInitLineCount) {
+                this.lineCount = getLineCount();
+            }
+            this.isInitLineCount = false;
         } catch (Exception e) {
             setMeasuredDimension(View.MeasureSpec.getSize(i), AndroidUtilities.dp(51.0f));
             FileLog.e((Throwable) e);

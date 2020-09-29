@@ -1,27 +1,23 @@
 package j$;
 
-import j$.util.function.J;
-import java.util.function.LongConsumer;
+import j$.util.function.z;
+import java.util.function.IntBinaryOperator;
 
-public final /* synthetic */ class Q implements J {
-    final /* synthetic */ LongConsumer a;
+public final /* synthetic */ class Q implements z {
+    final /* synthetic */ IntBinaryOperator a;
 
-    private /* synthetic */ Q(LongConsumer longConsumer) {
-        this.a = longConsumer;
+    private /* synthetic */ Q(IntBinaryOperator intBinaryOperator) {
+        this.a = intBinaryOperator;
     }
 
-    public static /* synthetic */ J a(LongConsumer longConsumer) {
-        if (longConsumer == null) {
+    public static /* synthetic */ z b(IntBinaryOperator intBinaryOperator) {
+        if (intBinaryOperator == null) {
             return null;
         }
-        return longConsumer instanceof S ? ((S) longConsumer).a : new Q(longConsumer);
+        return new Q(intBinaryOperator);
     }
 
-    public /* synthetic */ void accept(long j) {
-        this.a.accept(j);
-    }
-
-    public /* synthetic */ J h(J j) {
-        return a(this.a.andThen(S.a(j)));
+    public /* synthetic */ int a(int i, int i2) {
+        return this.a.applyAsInt(i, i2);
     }
 }

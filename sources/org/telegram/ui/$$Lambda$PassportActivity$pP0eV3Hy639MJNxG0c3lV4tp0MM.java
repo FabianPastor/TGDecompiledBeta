@@ -32,7 +32,7 @@ public final /* synthetic */ class $$Lambda$PassportActivity$pP0eV3Hy639MJNxG0c3
             	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
             	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
             	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+            	at java.util.ArrayList.forEach(ArrayList.java:1259)
             	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
             	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
             	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)

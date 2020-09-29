@@ -54,7 +54,7 @@ import org.telegram.ui.ActionBar.ThemeDescription;
 import org.telegram.ui.Cells.PhotoPickerAlbumsCell;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.CombinedDrawable;
-import org.telegram.ui.Components.EditTextBoldCursor;
+import org.telegram.ui.Components.EditTextCaption;
 import org.telegram.ui.Components.EditTextEmoji;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RadialProgressView;
@@ -189,7 +189,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         ActionBarMenuItem addItem = createMenu.addItem(0, NUM);
         addItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
         addItem.addSubItem(1, NUM, LocaleController.getString("OpenInExternalApp", NUM));
-        AnonymousClass2 r2 = new SizeNotifierFrameLayout(context2, SharedConfig.smoothKeyboard) {
+        AnonymousClass2 r2 = new SizeNotifierFrameLayout(context2) {
             private boolean ignoreLayout;
             private int lastNotifyWidth;
 
@@ -435,7 +435,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         this.commentTextView = new EditTextEmoji(context2, this.sizeNotifierFrameLayout, (BaseFragment) null, 1);
         this.commentTextView.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MessagesController.getInstance(UserConfig.selectedAccount).maxCaptionLength)});
         this.commentTextView.setHint(LocaleController.getString("AddCaption", NUM));
-        EditTextBoldCursor editText = this.commentTextView.getEditText();
+        EditTextCaption editText = this.commentTextView.getEditText();
         editText.setMaxLines(1);
         editText.setSingleLine(true);
         this.frameLayout2.addView(this.commentTextView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 84.0f, 0.0f));
@@ -564,9 +564,6 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         if (!(chatActivity2 == null || this.maxSelectedPhotos == 1)) {
             chatActivity2.getCurrentChat();
             TLRPC$User currentUser = this.chatActivity.getCurrentUser();
-            if (this.chatActivity.getCurrentEncryptedChat() != null) {
-                return false;
-            }
             if (this.sendPopupLayout == null) {
                 ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getParentActivity());
                 this.sendPopupLayout = actionBarPopupWindowLayout;
@@ -594,7 +591,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
                 this.sendPopupLayout.setShowedFromBotton(false);
                 this.itemCells = new ActionBarMenuSubItem[2];
                 for (int i = 0; i < 2; i++) {
-                    if (i != 1 || !UserObject.isUserSelf(currentUser)) {
+                    if ((i != 0 || this.chatActivity.canScheduleMessage()) && (i != 1 || !UserObject.isUserSelf(currentUser))) {
                         this.itemCells[i] = new ActionBarMenuSubItem(getParentActivity());
                         if (i == 0) {
                             if (UserObject.isUserSelf(currentUser)) {

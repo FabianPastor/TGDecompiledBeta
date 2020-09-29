@@ -37,7 +37,7 @@ class K5 extends CLASSNAMEx2 {
             long j = this.m;
             return new O6((S) helper.v0(spliterator), j, Q5.f(j, this.n));
         }
-        if (!CLASSNAMEu6.ORDERED.f(helper.r0())) {
+        if (!CLASSNAMEu6.ORDERED.K(helper.r0())) {
             return b1((S) helper.v0(spliterator), this.m, this.n, size);
         }
         return ((CLASSNAMEt3) new P5(this, helper, spliterator, CLASSNAMEr0.a, this.m, this.n).invoke()).spliterator();
@@ -58,7 +58,7 @@ class K5 extends CLASSNAMEx2 {
         } else {
             CLASSNAMEq4 q4Var2 = helper;
         }
-        if (!CLASSNAMEu6.ORDERED.f(helper.r0())) {
+        if (!CLASSNAMEu6.ORDERED.K(helper.r0())) {
             return CLASSNAMEp4.h(this, b1((S) helper.v0(spliterator), this.m, this.n, size), true);
         }
         return (CLASSNAMEt3) new P5(this, helper, spliterator, c, this.m, this.n).invoke();

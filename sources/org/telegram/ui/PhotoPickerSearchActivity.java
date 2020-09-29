@@ -193,7 +193,7 @@ public class PhotoPickerSearchActivity extends BaseFragment {
             }
         });
         this.maximumVelocity = ViewConfiguration.get(context).getScaledMaximumFlingVelocity();
-        AnonymousClass4 r0 = new SizeNotifierFrameLayout(context, SharedConfig.smoothKeyboard) {
+        AnonymousClass4 r0 = new SizeNotifierFrameLayout(context) {
             private boolean globalIgnoreLayout;
             /* access modifiers changed from: private */
             public boolean maybeStartTracking;

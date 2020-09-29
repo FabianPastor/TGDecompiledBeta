@@ -1,6 +1,6 @@
 package j$.util;
 
-import j$.r;
+import j$.C;
 import j$.util.Iterator;
 import j$.util.function.CLASSNAMEq;
 import j$.util.function.Consumer;
@@ -17,7 +17,7 @@ class W implements Iterator, Consumer, Iterator {
     }
 
     public /* synthetic */ void forEachRemaining(java.util.function.Consumer consumer) {
-        forEachRemaining(r.a(consumer));
+        forEachRemaining(C.a(consumer));
     }
 
     public /* synthetic */ Consumer g(Consumer consumer) {

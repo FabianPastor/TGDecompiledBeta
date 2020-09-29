@@ -1,12 +1,12 @@
 package j$.util.concurrent;
 
-import j$.l0;
-import j$.m0;
-import j$.n0;
 import j$.util.stream.A2;
 import j$.util.stream.M1;
 import j$.util.stream.W2;
 import j$.util.stream.b7;
+import j$.w0;
+import j$.x0;
+import j$.y0;
 import java.io.ObjectStreamField;
 import java.security.AccessController;
 import java.security.SecureRandom;
@@ -27,51 +27,51 @@ public class F extends Random {
     boolean c;
 
     public /* synthetic */ DoubleStream doubles() {
-        return l0.c(c());
+        return w0.c(c());
     }
 
     public /* synthetic */ DoubleStream doubles(double d2, double d3) {
-        return l0.c(d(d2, d3));
+        return w0.c(d(d2, d3));
     }
 
     public /* synthetic */ DoubleStream doubles(long j) {
-        return l0.c(e(j));
+        return w0.c(e(j));
     }
 
     public /* synthetic */ DoubleStream doubles(long j, double d2, double d3) {
-        return l0.c(f(j, d2, d3));
+        return w0.c(f(j, d2, d3));
     }
 
     public /* synthetic */ IntStream ints() {
-        return m0.c(l());
+        return x0.c(l());
     }
 
     public /* synthetic */ IntStream ints(int i, int i2) {
-        return m0.c(m(i, i2));
+        return x0.c(m(i, i2));
     }
 
     public /* synthetic */ IntStream ints(long j) {
-        return m0.c(n(j));
+        return x0.c(n(j));
     }
 
     public /* synthetic */ IntStream ints(long j, int i, int i2) {
-        return m0.c(o(j, i, i2));
+        return x0.c(o(j, i, i2));
     }
 
     public /* synthetic */ LongStream longs() {
-        return n0.c(q());
+        return y0.c(q());
     }
 
     public /* synthetic */ LongStream longs(long j) {
-        return n0.c(r(j));
+        return y0.c(r(j));
     }
 
     public /* synthetic */ LongStream longs(long j, long j2) {
-        return n0.c(s(j, j2));
+        return y0.c(s(j, j2));
     }
 
     public /* synthetic */ LongStream longs(long j, long j2, long j3) {
-        return n0.c(t(j, j2, j3));
+        return y0.c(t(j, j2, j3));
     }
 
     /* synthetic */ F(A x0) {

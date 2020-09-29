@@ -18,7 +18,7 @@ public abstract class TLRPC$Updates extends TLObject {
     public boolean out;
     public int pts;
     public int pts_count;
-    public int reply_to_msg_id;
+    public TLRPC$TL_messageReplyHeader reply_to;
     public int seq;
     public int seq_start;
     public boolean silent;
@@ -31,16 +31,16 @@ public abstract class TLRPC$Updates extends TLObject {
     public static TLRPC$Updates TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$Updates tLRPC$Updates;
         switch (i) {
-            case -1857044719:
-                tLRPC$Updates = new TLRPC$TL_updateShortMessage();
-                break;
             case -484987010:
                 tLRPC$Updates = new TLRPC$TL_updatesTooLong();
                 break;
             case 301019932:
                 tLRPC$Updates = new TLRPC$TL_updateShortSentMessage();
                 break;
-            case 377562760:
+            case 580309704:
+                tLRPC$Updates = new TLRPC$TL_updateShortMessage();
+                break;
+            case 1076714939:
                 tLRPC$Updates = new TLRPC$TL_updateShortChatMessage();
                 break;
             case 1918567619:

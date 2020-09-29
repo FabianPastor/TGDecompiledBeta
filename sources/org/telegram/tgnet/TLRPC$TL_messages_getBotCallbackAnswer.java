@@ -6,6 +6,7 @@ public class TLRPC$TL_messages_getBotCallbackAnswer extends TLObject {
     public int flags;
     public boolean game;
     public int msg_id;
+    public TLRPC$InputCheckPasswordSRP password;
     public TLRPC$InputPeer peer;
 
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
@@ -21,6 +22,9 @@ public class TLRPC$TL_messages_getBotCallbackAnswer extends TLObject {
         abstractSerializedData.writeInt32(this.msg_id);
         if ((this.flags & 1) != 0) {
             abstractSerializedData.writeByteArray(this.data);
+        }
+        if ((this.flags & 4) != 0) {
+            this.password.serializeToStream(abstractSerializedData);
         }
     }
 }

@@ -11,9 +11,10 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
         this.can_set_username = (this.flags & 64) != 0;
         this.can_set_stickers = (this.flags & 128) != 0;
         this.hidden_prehistory = (this.flags & 1024) != 0;
-        this.can_view_stats = (this.flags & 4096) != 0;
         this.can_set_location = (this.flags & 65536) != 0;
         this.has_scheduled = (this.flags & 524288) != 0;
+        this.can_view_stats = (this.flags & 1048576) != 0;
+        this.blocked = (this.flags & 4194304) != 0;
         this.id = abstractSerializedData.readInt32(z);
         this.about = abstractSerializedData.readString(z);
         if ((this.flags & 1) != 0) {
@@ -98,13 +99,15 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
         this.flags = i3;
         int i4 = this.hidden_prehistory ? i3 | 1024 : i3 & -1025;
         this.flags = i4;
-        int i5 = this.can_view_stats ? i4 | 4096 : i4 & -4097;
+        int i5 = this.can_set_location ? i4 | 65536 : i4 & -65537;
         this.flags = i5;
-        int i6 = this.can_set_location ? i5 | 65536 : i5 & -65537;
+        int i6 = this.has_scheduled ? i5 | 524288 : i5 & -524289;
         this.flags = i6;
-        int i7 = this.has_scheduled ? i6 | 524288 : i6 & -524289;
+        int i7 = this.can_view_stats ? i6 | 1048576 : i6 & -1048577;
         this.flags = i7;
-        abstractSerializedData.writeInt32(i7);
+        int i8 = this.blocked ? i7 | 4194304 : i7 & -4194305;
+        this.flags = i8;
+        abstractSerializedData.writeInt32(i8);
         abstractSerializedData.writeInt32(this.id);
         abstractSerializedData.writeString(this.about);
         if ((this.flags & 1) != 0) {
@@ -131,8 +134,8 @@ public class TLRPC$TL_channelFull extends TLRPC$ChatFull {
         abstractSerializedData.writeInt32(NUM);
         int size = this.bot_info.size();
         abstractSerializedData.writeInt32(size);
-        for (int i8 = 0; i8 < size; i8++) {
-            this.bot_info.get(i8).serializeToStream(abstractSerializedData);
+        for (int i9 = 0; i9 < size; i9++) {
+            this.bot_info.get(i9).serializeToStream(abstractSerializedData);
         }
         if ((this.flags & 16) != 0) {
             abstractSerializedData.writeInt32(this.migrated_from_chat_id);

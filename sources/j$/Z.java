@@ -1,31 +1,31 @@
 package j$;
 
-import j$.util.function.P;
-import java.util.function.LongUnaryOperator;
+import j$.util.function.G;
+import java.util.function.IntUnaryOperator;
 
-public final /* synthetic */ class Z implements LongUnaryOperator {
-    final /* synthetic */ P a;
+public final /* synthetic */ class Z implements G {
+    final /* synthetic */ IntUnaryOperator a;
 
-    private /* synthetic */ Z(P p) {
-        this.a = p;
+    private /* synthetic */ Z(IntUnaryOperator intUnaryOperator) {
+        this.a = intUnaryOperator;
     }
 
-    public static /* synthetic */ LongUnaryOperator a(P p) {
-        if (p == null) {
+    public static /* synthetic */ G d(IntUnaryOperator intUnaryOperator) {
+        if (intUnaryOperator == null) {
             return null;
         }
-        return p instanceof Y ? ((Y) p).a : new Z(p);
+        return intUnaryOperator instanceof a0 ? ((a0) intUnaryOperator).a : new Z(intUnaryOperator);
     }
 
-    public /* synthetic */ LongUnaryOperator andThen(LongUnaryOperator longUnaryOperator) {
-        return a(this.a.a(Y.c(longUnaryOperator)));
+    public /* synthetic */ G a(G g) {
+        return d(this.a.andThen(a0.a(g)));
     }
 
-    public /* synthetic */ long applyAsLong(long j) {
-        return this.a.applyAsLong(j);
+    public /* synthetic */ int b(int i) {
+        return this.a.applyAsInt(i);
     }
 
-    public /* synthetic */ LongUnaryOperator compose(LongUnaryOperator longUnaryOperator) {
-        return a(this.a.b(Y.c(longUnaryOperator)));
+    public /* synthetic */ G c(G g) {
+        return d(this.a.compose(a0.a(g)));
     }
 }

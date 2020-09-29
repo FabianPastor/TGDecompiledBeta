@@ -1109,8 +1109,6 @@
     <string name="Disconnect">Disconnetti</string>
     <string name="DiscussChannel">canale</string>
     <string name="Discussion">Discussione</string>
-    <string name="DiscussionChannelGroupSetHelp">A tutti gli iscritti viene mostrato un link a **%1$s** nel pannello inferiore.</string>
-    <string name="DiscussionChannelHelp">Seleziona una chat di gruppo per la discussione che sarà mostrata nel tuo canale.</string>
     <string name="DiscussionChannelHelp2">Tutto ciò che pubblichi nel canale verrà inoltrato in questo gruppo.</string>
     <string name="DiscussionCreateGroup">Crea un nuovo gruppo</string>
     <string name="DiscussionGroupHelp">Il gruppo è collegato come chat di discussione di **%1$s**.</string>

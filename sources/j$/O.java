@@ -1,31 +1,30 @@
 package j$;
 
-import j$.util.function.G;
-import java.util.function.IntUnaryOperator;
+import j$.util.function.Function;
 
-public final /* synthetic */ class O implements IntUnaryOperator {
-    final /* synthetic */ G a;
+public final /* synthetic */ class O implements Function {
+    final /* synthetic */ java.util.function.Function a;
 
-    private /* synthetic */ O(G g) {
-        this.a = g;
+    private /* synthetic */ O(java.util.function.Function function) {
+        this.a = function;
     }
 
-    public static /* synthetic */ IntUnaryOperator a(G g) {
-        if (g == null) {
+    public static /* synthetic */ Function c(java.util.function.Function function) {
+        if (function == null) {
             return null;
         }
-        return g instanceof N ? ((N) g).a : new O(g);
+        return function instanceof P ? ((P) function).a : new O(function);
     }
 
-    public /* synthetic */ IntUnaryOperator andThen(IntUnaryOperator intUnaryOperator) {
-        return a(((N) this.a).a(N.d(intUnaryOperator)));
+    public /* synthetic */ Function a(Function function) {
+        return c(this.a.andThen(P.a(function)));
     }
 
-    public /* synthetic */ int applyAsInt(int i) {
-        return ((N) this.a).b(i);
+    public /* synthetic */ Object apply(Object obj) {
+        return this.a.apply(obj);
     }
 
-    public /* synthetic */ IntUnaryOperator compose(IntUnaryOperator intUnaryOperator) {
-        return a(((N) this.a).c(N.d(intUnaryOperator)));
+    public /* synthetic */ Function b(Function function) {
+        return c(this.a.compose(P.a(function)));
     }
 }

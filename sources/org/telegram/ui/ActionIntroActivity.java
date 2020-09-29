@@ -167,14 +167,13 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                             ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
                         }
                     }
+                    ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM));
                     if (size > size2) {
-                        ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM));
                         int i8 = (int) (((float) size) * 0.6f);
                         ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(i8, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
                         ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec(i8, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
                         ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(i8, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
                     } else {
-                        ActionIntroActivity.this.imageView.measure(View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(100.0f), NUM));
                         ActionIntroActivity.this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
                         ActionIntroActivity.this.descriptionText.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, 0));
                         ActionIntroActivity.this.buttonTextView.measure(View.MeasureSpec.makeMeasureSpec(size, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(42.0f), NUM));
@@ -718,7 +717,11 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                         showDialog(builder.create());
                         return;
                     }
-                    presentFragment(new PeopleNearbyActivity(), true);
+                    AndroidUtilities.runOnUIThread(new Runnable() {
+                        public final void run() {
+                            ActionIntroActivity.this.lambda$onRequestPermissionsResultFragment$5$ActionIntroActivity();
+                        }
+                    });
                 }
             } else if (i != 34) {
             } else {
@@ -728,7 +731,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
                     builder2.setMessage(LocaleController.getString("QRCodePermissionNoCamera", NUM));
                     builder2.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {
                         public final void onClick(DialogInterface dialogInterface, int i) {
-                            ActionIntroActivity.this.lambda$onRequestPermissionsResultFragment$5$ActionIntroActivity(dialogInterface, i);
+                            ActionIntroActivity.this.lambda$onRequestPermissionsResultFragment$6$ActionIntroActivity(dialogInterface, i);
                         }
                     });
                     builder2.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
@@ -752,7 +755,11 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         }
     }
 
-    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$5$ActionIntroActivity(DialogInterface dialogInterface, int i) {
+    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$5$ActionIntroActivity() {
+        presentFragment(new PeopleNearbyActivity(), true);
+    }
+
+    public /* synthetic */ void lambda$onRequestPermissionsResultFragment$6$ActionIntroActivity(DialogInterface dialogInterface, int i) {
         try {
             Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
             intent.setData(Uri.parse("package:" + ApplicationLoader.applicationContext.getPackageName()));

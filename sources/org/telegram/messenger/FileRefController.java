@@ -160,7 +160,7 @@ public class FileRefController extends BaseController {
             return "message" + messageObject.getRealId() + "_" + channelId + "_" + messageObject.scheduled;
         } else if (obj instanceof TLRPC$Message) {
             TLRPC$Message tLRPC$Message = (TLRPC$Message) obj;
-            TLRPC$Peer tLRPC$Peer = tLRPC$Message.to_id;
+            TLRPC$Peer tLRPC$Peer = tLRPC$Message.peer_id;
             int i = tLRPC$Peer != null ? tLRPC$Peer.channel_id : 0;
             return "message" + tLRPC$Message.id + "_" + i + "_" + tLRPC$Message.from_scheduled;
         } else if (obj instanceof TLRPC$WebPage) {
@@ -1432,7 +1432,7 @@ public class FileRefController extends BaseController {
         L_0x0124:
             if (r13 == 0) goto L_0x016b
             if (r29 == 0) goto L_0x0169
-            org.telegram.tgnet.TLRPC$Peer r2 = r7.to_id
+            org.telegram.tgnet.TLRPC$Peer r2 = r7.peer_id
             if (r2 == 0) goto L_0x015c
             int r2 = r2.channel_id
             if (r2 == 0) goto L_0x015c
@@ -1446,7 +1446,7 @@ public class FileRefController extends BaseController {
             org.telegram.tgnet.TLRPC$Chat r6 = (org.telegram.tgnet.TLRPC$Chat) r6
             int r8 = r6.id
             r17 = r2
-            org.telegram.tgnet.TLRPC$Peer r2 = r7.to_id
+            org.telegram.tgnet.TLRPC$Peer r2 = r7.peer_id
             int r2 = r2.channel_id
             if (r8 != r2) goto L_0x0157
             boolean r2 = r6.megagroup

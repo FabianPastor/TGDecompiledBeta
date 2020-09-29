@@ -15,7 +15,9 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.accessibility.AccessibilityManager;
+import android.widget.FrameLayout;
 import java.util.ArrayList;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.ApplicationLoader;
@@ -53,7 +55,8 @@ public class BaseFragment {
     /* access modifiers changed from: protected */
     public boolean inPreviewMode;
     private boolean isFinished;
-    protected boolean isPaused;
+    /* access modifiers changed from: protected */
+    public boolean isPaused;
     /* access modifiers changed from: protected */
     public ActionBarLayout parentLayout;
     protected Dialog visibleDialog;
@@ -118,15 +121,7 @@ public class BaseFragment {
     }
 
     /* access modifiers changed from: protected */
-    public void onPanTransitionEnd() {
-    }
-
-    /* access modifiers changed from: protected */
-    public void onPanTransitionStart() {
-    }
-
-    /* access modifiers changed from: protected */
-    public void onPanTranslationUpdate(int i) {
+    public void onPreviewOpenAnimationEnd() {
     }
 
     /* access modifiers changed from: protected */
@@ -391,6 +386,15 @@ public class BaseFragment {
         return this.parentLayout;
     }
 
+    public FrameLayout getLayoutContainer() {
+        ViewParent parent;
+        View view = this.fragmentView;
+        if (view == null || (parent = view.getParent()) == null || !(parent instanceof FrameLayout)) {
+            return null;
+        }
+        return (FrameLayout) parent;
+    }
+
     public boolean presentFragmentAsPreview(BaseFragment baseFragment) {
         ActionBarLayout actionBarLayout = this.parentLayout;
         return actionBarLayout != null && actionBarLayout.presentFragmentAsPreview(baseFragment);
@@ -524,14 +528,6 @@ public class BaseFragment {
         }
     }
 
-    public int getCurrentPanTranslationY() {
-        ActionBarLayout actionBarLayout = this.parentLayout;
-        if (actionBarLayout != null) {
-            return actionBarLayout.getCurrentPanTranslationY();
-        }
-        return 0;
-    }
-
     public void setVisibleDialog(Dialog dialog) {
         this.visibleDialog = dialog;
     }
@@ -607,5 +603,12 @@ public class BaseFragment {
 
     public UserConfig getUserConfig() {
         return getAccountInstance().getUserConfig();
+    }
+
+    public void setFragmentPanTranslationOffset(int i) {
+        ActionBarLayout actionBarLayout = this.parentLayout;
+        if (actionBarLayout != null) {
+            actionBarLayout.setFragmentPanTranslationOffset(i);
+        }
     }
 }

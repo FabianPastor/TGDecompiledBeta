@@ -1,22 +1,23 @@
 package j$;
 
-import j$.util.function.ToIntFunction;
+import j$.util.function.M;
+import java.util.function.LongToDoubleFunction;
 
-public final /* synthetic */ class h0 implements ToIntFunction {
-    final /* synthetic */ java.util.function.ToIntFunction a;
+public final /* synthetic */ class h0 implements M {
+    final /* synthetic */ LongToDoubleFunction a;
 
-    private /* synthetic */ h0(java.util.function.ToIntFunction toIntFunction) {
-        this.a = toIntFunction;
+    private /* synthetic */ h0(LongToDoubleFunction longToDoubleFunction) {
+        this.a = longToDoubleFunction;
     }
 
-    public static /* synthetic */ ToIntFunction b(java.util.function.ToIntFunction toIntFunction) {
-        if (toIntFunction == null) {
+    public static /* synthetic */ M b(LongToDoubleFunction longToDoubleFunction) {
+        if (longToDoubleFunction == null) {
             return null;
         }
-        return new h0(toIntFunction);
+        return new h0(longToDoubleFunction);
     }
 
-    public /* synthetic */ int a(Object obj) {
-        return this.a.applyAsInt(obj);
+    public /* synthetic */ double a(long j) {
+        return this.a.applyAsDouble(j);
     }
 }

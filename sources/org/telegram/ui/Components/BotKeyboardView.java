@@ -130,6 +130,10 @@ public class BotKeyboardView extends LinearLayout {
     }
 
     public int getKeyboardHeight() {
-        return this.isFullSize ? this.panelHeight : (this.botButtons.rows.size() * AndroidUtilities.dp((float) this.buttonHeight)) + AndroidUtilities.dp(30.0f) + ((this.botButtons.rows.size() - 1) * AndroidUtilities.dp(10.0f));
+        TLRPC$TL_replyKeyboardMarkup tLRPC$TL_replyKeyboardMarkup = this.botButtons;
+        if (tLRPC$TL_replyKeyboardMarkup == null) {
+            return 0;
+        }
+        return this.isFullSize ? this.panelHeight : (tLRPC$TL_replyKeyboardMarkup.rows.size() * AndroidUtilities.dp((float) this.buttonHeight)) + AndroidUtilities.dp(30.0f) + ((this.botButtons.rows.size() - 1) * AndroidUtilities.dp(10.0f));
     }
 }

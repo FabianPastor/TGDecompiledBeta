@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.U;
+import j$.f0;
 import j$.util.function.I;
 import j$.util.function.J;
 import j$.util.function.L;
@@ -29,7 +29,7 @@ class Z2 extends CLASSNAMEb3 implements F5 {
     }
 
     public void accept(long t) {
-        if (!this.a && ((U) this.d).e(t) == this.c.a) {
+        if (!this.a && ((f0) this.d).e(t) == this.c.a) {
             this.a = true;
             this.b = this.c.b;
         }

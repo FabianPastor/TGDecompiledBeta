@@ -8,10 +8,11 @@ import org.telegram.tgnet.TLRPC$User;
 
 public class AutoMessageHeardReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
+        Intent intent2 = intent;
         ApplicationLoader.postInitApplication();
-        long longExtra = intent.getLongExtra("dialog_id", 0);
-        int intExtra = intent.getIntExtra("max_id", 0);
-        int intExtra2 = intent.getIntExtra("currentAccount", 0);
+        long longExtra = intent2.getLongExtra("dialog_id", 0);
+        int intExtra = intent2.getIntExtra("max_id", 0);
+        int intExtra2 = intent2.getIntExtra("currentAccount", 0);
         if (longExtra != 0 && intExtra != 0) {
             int i = (int) longExtra;
             AccountInstance instance = AccountInstance.getInstance(intExtra2);
@@ -88,19 +89,19 @@ public class AutoMessageHeardReceiver extends BroadcastReceiver {
                 });
                 return;
             }
-            MessagesController.getInstance(intExtra2).markDialogAsRead(longExtra, intExtra, intExtra, 0, false, 0, true, 0);
+            MessagesController.getInstance(intExtra2).markDialogAsRead(longExtra, intExtra, intExtra, 0, false, 0, 0, true, 0);
         }
     }
 
     static /* synthetic */ void lambda$null$0(AccountInstance accountInstance, TLRPC$User tLRPC$User, int i, long j, int i2) {
         TLRPC$User tLRPC$User2 = tLRPC$User;
         accountInstance.getMessagesController().putUser(tLRPC$User, true);
-        MessagesController.getInstance(i).markDialogAsRead(j, i2, i2, 0, false, 0, true, 0);
+        MessagesController.getInstance(i).markDialogAsRead(j, i2, i2, 0, false, 0, 0, true, 0);
     }
 
     static /* synthetic */ void lambda$null$2(AccountInstance accountInstance, TLRPC$Chat tLRPC$Chat, int i, long j, int i2) {
         TLRPC$Chat tLRPC$Chat2 = tLRPC$Chat;
         accountInstance.getMessagesController().putChat(tLRPC$Chat, true);
-        MessagesController.getInstance(i).markDialogAsRead(j, i2, i2, 0, false, 0, true, 0);
+        MessagesController.getInstance(i).markDialogAsRead(j, i2, i2, 0, false, 0, 0, true, 0);
     }
 }

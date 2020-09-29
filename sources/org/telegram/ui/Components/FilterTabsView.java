@@ -49,9 +49,6 @@ public class FilterTabsView extends FrameLayout {
         public void setValue(FilterTabsView filterTabsView, float f) {
             float unused = FilterTabsView.this.animationValue = f;
             FilterTabsView.this.selectorDrawable.setColor(ColorUtils.blendARGB(Theme.getColor(FilterTabsView.this.tabLineColorKey), Theme.getColor(FilterTabsView.this.aTabLineColorKey), f));
-            if (FilterTabsView.this.aBackgroundColorKey != null) {
-                filterTabsView.setBackgroundColor(ColorUtils.blendARGB(Theme.getColor(FilterTabsView.this.backgroundColorKey), Theme.getColor(FilterTabsView.this.aBackgroundColorKey), f));
-            }
             FilterTabsView.this.listView.invalidateViews();
             FilterTabsView.this.listView.invalidate();
             filterTabsView.invalidate();

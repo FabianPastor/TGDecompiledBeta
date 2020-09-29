@@ -15,6 +15,7 @@ import org.telegram.tgnet.TLRPC$StickerSet;
 import org.telegram.tgnet.TLRPC$StickerSetCovered;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.tgnet.TLRPC$TL_photoSize;
+import org.telegram.tgnet.TLRPC$TL_photoSizeProgressive;
 import org.telegram.ui.Components.Bulletin;
 
 @SuppressLint({"ViewConstructor"})
@@ -22,6 +23,7 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
     public StickerSetBulletinLayout(Context context, TLObject tLObject, int i) {
         super(context);
         TLRPC$StickerSet tLRPC$StickerSet;
+        TLObject tLObject2;
         ImageLocation imageLocation;
         TLRPC$Document tLRPC$Document = null;
         if (tLObject instanceof TLRPC$TL_messages_stickerSet) {
@@ -45,8 +47,12 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
         }
         TLRPC$StickerSet tLRPC$StickerSet2 = tLRPC$StickerSet;
         if (tLRPC$Document != null) {
-            TLObject tLObject2 = tLRPC$StickerSet2.thumb;
-            tLObject2 = !(tLObject2 instanceof TLRPC$TL_photoSize) ? tLRPC$Document : tLObject2;
+            TLRPC$PhotoSize tLRPC$PhotoSize = tLRPC$StickerSet2.thumb;
+            if ((tLRPC$PhotoSize instanceof TLRPC$TL_photoSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoSizeProgressive)) {
+                tLObject2 = tLRPC$StickerSet2.thumb;
+            } else {
+                tLObject2 = tLRPC$Document;
+            }
             boolean z = tLObject2 instanceof TLRPC$Document;
             if (z) {
                 imageLocation = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document);

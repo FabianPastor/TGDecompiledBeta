@@ -9,6 +9,7 @@ public abstract class TLRPC$KeyboardButton extends TLObject {
     public String query;
     public boolean quiz;
     public boolean request_write_access;
+    public boolean requires_password;
     public boolean same_peer;
     public String text;
     public String url;
@@ -43,11 +44,14 @@ public abstract class TLRPC$KeyboardButton extends TLObject {
             case 629866245:
                 tLRPC$KeyboardButton = new TLRPC$TL_keyboardButtonUrl();
                 break;
+            case 901503851:
+                tLRPC$KeyboardButton = new TLRPC$TL_keyboardButtonCallback();
+                break;
             case 1358175439:
                 tLRPC$KeyboardButton = new TLRPC$TL_keyboardButtonGame();
                 break;
             case 1748655686:
-                tLRPC$KeyboardButton = new TLRPC$TL_keyboardButtonCallback();
+                tLRPC$KeyboardButton = new TLRPC$TL_keyboardButtonCallback_layer117();
                 break;
             default:
                 tLRPC$KeyboardButton = null;

@@ -1,23 +1,30 @@
 package j$;
 
-import j$.util.function.H;
-import java.util.function.LongBinaryOperator;
+import java.util.function.Function;
 
-public final /* synthetic */ class P implements H {
-    final /* synthetic */ LongBinaryOperator a;
+public final /* synthetic */ class P implements Function {
+    final /* synthetic */ j$.util.function.Function a;
 
-    private /* synthetic */ P(LongBinaryOperator longBinaryOperator) {
-        this.a = longBinaryOperator;
+    private /* synthetic */ P(j$.util.function.Function function) {
+        this.a = function;
     }
 
-    public static /* synthetic */ H b(LongBinaryOperator longBinaryOperator) {
-        if (longBinaryOperator == null) {
+    public static /* synthetic */ Function a(j$.util.function.Function function) {
+        if (function == null) {
             return null;
         }
-        return new P(longBinaryOperator);
+        return function instanceof O ? ((O) function).a : new P(function);
     }
 
-    public /* synthetic */ long a(long j, long j2) {
-        return this.a.applyAsLong(j, j2);
+    public /* synthetic */ Function andThen(Function function) {
+        return a(this.a.a(O.c(function)));
+    }
+
+    public /* synthetic */ Object apply(Object obj) {
+        return this.a.apply(obj);
+    }
+
+    public /* synthetic */ Function compose(Function function) {
+        return a(this.a.b(O.c(function)));
     }
 }

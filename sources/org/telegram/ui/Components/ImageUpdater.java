@@ -326,7 +326,8 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 public void didSelectBot(TLRPC$User tLRPC$User) {
                 }
 
-                public void needEnterComment() {
+                public boolean needEnterComment() {
+                    return false;
                 }
 
                 public void didPressedButton(int i, boolean z, boolean z2, int i2) {
@@ -594,7 +595,7 @@ public class ImageUpdater implements NotificationCenter.NotificationCenterDelega
                 }
                 PhotoCropActivity photoCropActivity = new PhotoCropActivity(bundle);
                 photoCropActivity.setDelegate(this);
-                launchActivity.lambda$runLinkRequest$32$LaunchActivity(photoCropActivity);
+                launchActivity.lambda$runLinkRequest$41$LaunchActivity(photoCropActivity);
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);

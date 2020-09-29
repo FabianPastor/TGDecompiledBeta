@@ -25,6 +25,7 @@ import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.tgnet.TLRPC$TL_photoSize;
+import org.telegram.tgnet.TLRPC$TL_photoSizeProgressive;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox2;
@@ -153,6 +154,7 @@ public class StickerSetCell extends FrameLayout {
     }
 
     public void setStickersSet(TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet, boolean z) {
+        TLObject tLObject;
         ImageLocation imageLocation;
         this.needDivider = z;
         this.stickersSet = tLRPC$TL_messages_stickerSet;
@@ -180,8 +182,10 @@ public class StickerSetCell extends FrameLayout {
         }
         this.valueTextView.setText(LocaleController.formatPluralString("Stickers", arrayList.size()));
         TLRPC$Document tLRPC$Document = arrayList.get(0);
-        TLObject tLObject = tLRPC$TL_messages_stickerSet.set.thumb;
-        if (!(tLObject instanceof TLRPC$TL_photoSize)) {
+        TLRPC$PhotoSize tLRPC$PhotoSize = tLRPC$TL_messages_stickerSet.set.thumb;
+        if ((tLRPC$PhotoSize instanceof TLRPC$TL_photoSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoSizeProgressive)) {
+            tLObject = tLRPC$TL_messages_stickerSet.set.thumb;
+        } else {
             tLObject = tLRPC$Document;
         }
         boolean z2 = tLObject instanceof TLRPC$Document;

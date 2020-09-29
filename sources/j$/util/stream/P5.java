@@ -48,7 +48,7 @@ final class P5 extends CLASSNAMEi1 {
     public final CLASSNAMEt3 a() {
         long sizeIfKnown = -1;
         if (g()) {
-            if (CLASSNAMEu6.SIZED.g(this.j.c)) {
+            if (CLASSNAMEu6.SIZED.L(this.j.c)) {
                 sizeIfKnown = this.j.p0(this.b);
             }
             Node.Builder<P_OUT> nb = this.j.s0(sizeIfKnown, this.k);

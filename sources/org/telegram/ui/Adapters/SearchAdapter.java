@@ -16,11 +16,14 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
+import org.telegram.messenger.UserObject;
 import org.telegram.messenger.Utilities;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$EncryptedChat;
+import org.telegram.tgnet.TLRPC$TL_contact;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.SearchAdapterHelper;
@@ -150,196 +153,102 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         });
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:48:0x00f2, code lost:
-        r15 = 1;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$null$0$SearchAdapter(java.lang.String r18, java.util.ArrayList r19, int r20) {
-        /*
-            r17 = this;
-            r0 = r17
-            java.lang.String r1 = r18.trim()
-            java.lang.String r1 = r1.toLowerCase()
-            int r2 = r1.length()
-            if (r2 != 0) goto L_0x001e
-            java.util.ArrayList r1 = new java.util.ArrayList
-            r1.<init>()
-            java.util.ArrayList r2 = new java.util.ArrayList
-            r2.<init>()
-            r0.updateSearchResults(r1, r2)
-            return
-        L_0x001e:
-            org.telegram.messenger.LocaleController r2 = org.telegram.messenger.LocaleController.getInstance()
-            java.lang.String r2 = r2.getTranslitString(r1)
-            boolean r3 = r1.equals(r2)
-            r4 = 0
-            if (r3 != 0) goto L_0x0033
-            int r3 = r2.length()
-            if (r3 != 0) goto L_0x0034
-        L_0x0033:
-            r2 = r4
-        L_0x0034:
-            r3 = 0
-            r5 = 1
-            if (r2 == 0) goto L_0x003a
-            r6 = 1
-            goto L_0x003b
-        L_0x003a:
-            r6 = 0
-        L_0x003b:
-            int r6 = r6 + r5
-            java.lang.String[] r7 = new java.lang.String[r6]
-            r7[r3] = r1
-            if (r2 == 0) goto L_0x0044
-            r7[r5] = r2
-        L_0x0044:
-            java.util.ArrayList r1 = new java.util.ArrayList
-            r1.<init>()
-            java.util.ArrayList r2 = new java.util.ArrayList
-            r2.<init>()
-            r8 = 0
-        L_0x004f:
-            int r9 = r19.size()
-            if (r8 >= r9) goto L_0x0159
-            r9 = r19
-            java.lang.Object r10 = r9.get(r8)
-            org.telegram.tgnet.TLRPC$TL_contact r10 = (org.telegram.tgnet.TLRPC$TL_contact) r10
-            org.telegram.messenger.MessagesController r11 = org.telegram.messenger.MessagesController.getInstance(r20)
-            int r12 = r10.user_id
-            java.lang.Integer r12 = java.lang.Integer.valueOf(r12)
-            org.telegram.tgnet.TLRPC$User r11 = r11.getUser(r12)
-            boolean r12 = r0.allowSelf
-            if (r12 != 0) goto L_0x0073
-            boolean r12 = r11.self
-            if (r12 != 0) goto L_0x0087
-        L_0x0073:
-            boolean r12 = r0.onlyMutual
-            if (r12 == 0) goto L_0x007b
-            boolean r12 = r11.mutual_contact
-            if (r12 == 0) goto L_0x0087
-        L_0x007b:
-            android.util.SparseArray<org.telegram.tgnet.TLRPC$User> r12 = r0.ignoreUsers
-            if (r12 == 0) goto L_0x008b
-            int r10 = r10.user_id
-            int r10 = r12.indexOfKey(r10)
-            if (r10 < 0) goto L_0x008b
-        L_0x0087:
-            r10 = r4
-            r4 = 1
-            goto L_0x0152
-        L_0x008b:
-            r10 = 3
-            java.lang.String[] r12 = new java.lang.String[r10]
-            java.lang.String r13 = r11.first_name
-            java.lang.String r14 = r11.last_name
-            java.lang.String r13 = org.telegram.messenger.ContactsController.formatName(r13, r14)
-            java.lang.String r13 = r13.toLowerCase()
-            r12[r3] = r13
-            org.telegram.messenger.LocaleController r13 = org.telegram.messenger.LocaleController.getInstance()
-            r14 = r12[r3]
-            java.lang.String r13 = r13.getTranslitString(r14)
-            r12[r5] = r13
-            r13 = r12[r3]
-            r14 = r12[r5]
-            boolean r13 = r13.equals(r14)
-            if (r13 == 0) goto L_0x00b4
-            r12[r5] = r4
-        L_0x00b4:
-            boolean r13 = r11.self
-            r14 = 2
-            if (r13 == 0) goto L_0x00c8
-            r13 = 2131626776(0x7f0e0b18, float:1.8880798E38)
-            java.lang.String r15 = "SavedMessages"
-            java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r15, r13)
-            java.lang.String r13 = r13.toLowerCase()
-            r12[r14] = r13
-        L_0x00c8:
-            r13 = 0
-            r15 = 0
-        L_0x00ca:
-            if (r13 >= r6) goto L_0x0087
-            r3 = r7[r13]
-            r14 = 0
-        L_0x00cf:
-            if (r14 >= r10) goto L_0x00fa
-            r10 = r12[r14]
-            if (r10 == 0) goto L_0x00f4
-            boolean r16 = r10.startsWith(r3)
-            if (r16 != 0) goto L_0x00f2
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder
-            r4.<init>()
-            java.lang.String r5 = " "
-            r4.append(r5)
-            r4.append(r3)
-            java.lang.String r4 = r4.toString()
-            boolean r4 = r10.contains(r4)
-            if (r4 == 0) goto L_0x00f4
-        L_0x00f2:
-            r15 = 1
-            goto L_0x00fa
-        L_0x00f4:
-            int r14 = r14 + 1
-            r4 = 0
-            r5 = 1
-            r10 = 3
-            goto L_0x00cf
-        L_0x00fa:
-            if (r15 != 0) goto L_0x0107
-            java.lang.String r4 = r11.username
-            if (r4 == 0) goto L_0x0107
-            boolean r4 = r4.startsWith(r3)
-            if (r4 == 0) goto L_0x0107
-            r15 = 2
-        L_0x0107:
-            if (r15 == 0) goto L_0x0147
-            r4 = 1
-            if (r15 != r4) goto L_0x0119
-            java.lang.String r5 = r11.first_name
-            java.lang.String r10 = r11.last_name
-            java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r10, r3)
-            r2.add(r3)
-            r10 = 0
-            goto L_0x0143
-        L_0x0119:
-            java.lang.StringBuilder r5 = new java.lang.StringBuilder
-            r5.<init>()
-            java.lang.String r10 = "@"
-            r5.append(r10)
-            java.lang.String r12 = r11.username
-            r5.append(r12)
-            java.lang.String r5 = r5.toString()
-            java.lang.StringBuilder r12 = new java.lang.StringBuilder
-            r12.<init>()
-            r12.append(r10)
-            r12.append(r3)
-            java.lang.String r3 = r12.toString()
-            r10 = 0
-            java.lang.CharSequence r3 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r10, r3)
-            r2.add(r3)
-        L_0x0143:
-            r1.add(r11)
-            goto L_0x0152
-        L_0x0147:
-            r4 = 1
-            r10 = 0
-            int r13 = r13 + 1
-            r4 = r10
-            r3 = 0
-            r5 = 1
-            r10 = 3
-            r14 = 2
-            goto L_0x00ca
-        L_0x0152:
-            int r8 = r8 + 1
-            r4 = r10
-            r3 = 0
-            r5 = 1
-            goto L_0x004f
-        L_0x0159:
-            r0.updateSearchResults(r1, r2)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.SearchAdapter.lambda$null$0$SearchAdapter(java.lang.String, java.util.ArrayList, int):void");
+    public /* synthetic */ void lambda$null$0$SearchAdapter(String str, ArrayList arrayList, int i) {
+        String str2;
+        SparseArray<TLRPC$User> sparseArray;
+        String str3;
+        String lowerCase = str.trim().toLowerCase();
+        if (lowerCase.length() == 0) {
+            updateSearchResults(new ArrayList(), new ArrayList());
+            return;
+        }
+        String translitString = LocaleController.getInstance().getTranslitString(lowerCase);
+        String str4 = null;
+        if (lowerCase.equals(translitString) || translitString.length() == 0) {
+            translitString = null;
+        }
+        char c = 0;
+        char c2 = 1;
+        int i2 = (translitString != null ? 1 : 0) + 1;
+        String[] strArr = new String[i2];
+        strArr[0] = lowerCase;
+        if (translitString != null) {
+            strArr[1] = translitString;
+        }
+        ArrayList arrayList2 = new ArrayList();
+        ArrayList arrayList3 = new ArrayList();
+        int i3 = 0;
+        while (i3 < arrayList.size()) {
+            TLRPC$TL_contact tLRPC$TL_contact = (TLRPC$TL_contact) arrayList.get(i3);
+            TLRPC$User user = MessagesController.getInstance(i).getUser(Integer.valueOf(tLRPC$TL_contact.user_id));
+            if ((this.allowSelf || !user.self) && ((!this.onlyMutual || user.mutual_contact) && ((sparseArray = this.ignoreUsers) == null || sparseArray.indexOfKey(tLRPC$TL_contact.user_id) < 0))) {
+                int i4 = 3;
+                String[] strArr2 = new String[3];
+                strArr2[c] = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
+                strArr2[c2] = LocaleController.getInstance().getTranslitString(strArr2[c]);
+                if (strArr2[c].equals(strArr2[c2])) {
+                    strArr2[c2] = str4;
+                }
+                if (UserObject.isReplyUser(user)) {
+                    strArr2[2] = LocaleController.getString("RepliesTitle", NUM).toLowerCase();
+                } else if (user.self) {
+                    strArr2[2] = LocaleController.getString("SavedMessages", NUM).toLowerCase();
+                }
+                int i5 = 0;
+                char c3 = 0;
+                while (true) {
+                    if (i5 >= i2) {
+                        break;
+                    }
+                    String str5 = strArr[i5];
+                    int i6 = 0;
+                    while (true) {
+                        if (i6 >= i4) {
+                            break;
+                        }
+                        String str6 = strArr2[i6];
+                        if (str6 != null) {
+                            if (str6.startsWith(str5)) {
+                                break;
+                            }
+                            if (str6.contains(" " + str5)) {
+                                break;
+                            }
+                        }
+                        i6++;
+                        i4 = 3;
+                    }
+                    c3 = 1;
+                    if (c3 == 0 && (str3 = user.username) != null && str3.startsWith(str5)) {
+                        c3 = 2;
+                    }
+                    if (c3 != 0) {
+                        if (c3 == 1) {
+                            arrayList3.add(AndroidUtilities.generateSearchName(user.first_name, user.last_name, str5));
+                            str2 = null;
+                        } else {
+                            str2 = null;
+                            arrayList3.add(AndroidUtilities.generateSearchName("@" + user.username, (String) null, "@" + str5));
+                        }
+                        arrayList2.add(user);
+                    } else {
+                        i5++;
+                        str4 = null;
+                        i4 = 3;
+                    }
+                }
+                i3++;
+                str4 = str2;
+                c = 0;
+                c2 = 1;
+            }
+            str2 = str4;
+            i3++;
+            str4 = str2;
+            c = 0;
+            c2 = 1;
+        }
+        updateSearchResults(arrayList2, arrayList3);
     }
 
     private void updateSearchResults(ArrayList<TLObject> arrayList, ArrayList<CharSequence> arrayList2) {

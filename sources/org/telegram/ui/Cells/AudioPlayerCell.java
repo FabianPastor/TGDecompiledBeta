@@ -3,9 +3,12 @@ package org.telegram.ui.Cells;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.text.Layout;
+import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextUtils;
+import android.text.style.ReplacementSpan;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -23,8 +26,10 @@ import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_photoSize;
+import org.telegram.tgnet.TLRPC$TL_photoSizeProgressive;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.RadialProgress2;
+import org.telegram.ui.FilteredSearchView;
 
 public class AudioPlayerCell extends View implements DownloadController.FileDownloadProgressListener {
     private int TAG;
@@ -36,23 +41,46 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
     private MessageObject currentMessageObject;
     private StaticLayout descriptionLayout;
     private int descriptionY = AndroidUtilities.dp(29.0f);
+    private SpannableStringBuilder dotSpan;
     private int hasMiniProgress;
     private boolean miniButtonPressed;
     private int miniButtonState;
     private RadialProgress2 radialProgress;
     private StaticLayout titleLayout;
     private int titleY = AndroidUtilities.dp(9.0f);
+    private int viewType;
 
     public void onProgressUpload(String str, long j, long j2, boolean z) {
     }
 
-    public AudioPlayerCell(Context context) {
+    public AudioPlayerCell(Context context, int i) {
         super(context);
+        this.viewType = i;
         RadialProgress2 radialProgress2 = new RadialProgress2(this);
         this.radialProgress = radialProgress2;
         radialProgress2.setColors("chat_inLoader", "chat_inLoaderSelected", "chat_inMediaIcon", "chat_inMediaIconSelected");
         this.TAG = DownloadController.getInstance(this.currentAccount).generateObserverTag();
         setFocusable(true);
+        if (i == 1) {
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(".");
+            this.dotSpan = spannableStringBuilder;
+            spannableStringBuilder.setSpan(new ReplacementSpan(this) {
+                int color;
+                Paint p = new Paint(1);
+
+                public int getSize(Paint paint, CharSequence charSequence, int i, int i2, Paint.FontMetricsInt fontMetricsInt) {
+                    return AndroidUtilities.dp(3.0f);
+                }
+
+                public void draw(Canvas canvas, CharSequence charSequence, int i, int i2, float f, int i3, int i4, int i5, Paint paint) {
+                    if (this.color != paint.getColor()) {
+                        this.p.setColor(paint.getColor());
+                    }
+                    float dpf2 = AndroidUtilities.dpf2(3.0f) / 2.0f;
+                    canvas.drawCircle(f + dpf2, (float) ((i5 - i3) / 2), dpf2, this.p);
+                }
+            }, 0, 1, 0);
+        }
     }
 
     /* access modifiers changed from: protected */
@@ -68,8 +96,11 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
             FileLog.e((Throwable) e);
         }
         try {
-            String musicAuthor = this.currentMessageObject.getMusicAuthor();
-            this.descriptionLayout = new StaticLayout(TextUtils.ellipsize(musicAuthor.replace(10, ' '), Theme.chat_contextResult_descriptionTextPaint, (float) Math.min((int) Math.ceil((double) Theme.chat_contextResult_descriptionTextPaint.measureText(musicAuthor)), size), TextUtils.TruncateAt.END), Theme.chat_contextResult_descriptionTextPaint, size + AndroidUtilities.dp(4.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            CharSequence replace = this.currentMessageObject.getMusicAuthor().replace(10, ' ');
+            if (this.viewType == 1) {
+                replace = new SpannableStringBuilder(replace).append(' ').append(this.dotSpan).append(' ').append(FilteredSearchView.createFromInfoString(this.currentMessageObject));
+            }
+            this.descriptionLayout = new StaticLayout(TextUtils.ellipsize(replace, Theme.chat_contextResult_descriptionTextPaint, (float) size, TextUtils.TruncateAt.END), Theme.chat_contextResult_descriptionTextPaint, size + AndroidUtilities.dp(4.0f), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
         } catch (Exception e2) {
             FileLog.e((Throwable) e2);
         }
@@ -87,7 +118,7 @@ public class AudioPlayerCell extends View implements DownloadController.FileDown
         this.currentMessageObject = messageObject;
         TLRPC$Document document = messageObject.getDocument();
         TLRPC$PhotoSize closestPhotoSizeWithSize = document != null ? FileLoader.getClosestPhotoSizeWithSize(document.thumbs, 90) : null;
-        if (closestPhotoSizeWithSize instanceof TLRPC$TL_photoSize) {
+        if ((closestPhotoSizeWithSize instanceof TLRPC$TL_photoSize) || (closestPhotoSizeWithSize instanceof TLRPC$TL_photoSizeProgressive)) {
             this.radialProgress.setImageOverlay(closestPhotoSizeWithSize, document, messageObject);
         } else {
             String artworkUrl = messageObject.getArtworkUrl(true);

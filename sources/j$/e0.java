@@ -1,34 +1,23 @@
 package j$;
 
-import java.util.function.Predicate;
+import j$.util.function.K;
+import java.util.function.LongFunction;
 
-public final /* synthetic */ class e0 implements Predicate {
-    final /* synthetic */ j$.util.function.Predicate a;
+public final /* synthetic */ class e0 implements K {
+    final /* synthetic */ LongFunction a;
 
-    private /* synthetic */ e0(j$.util.function.Predicate predicate) {
-        this.a = predicate;
+    private /* synthetic */ e0(LongFunction longFunction) {
+        this.a = longFunction;
     }
 
-    public static /* synthetic */ Predicate a(j$.util.function.Predicate predicate) {
-        if (predicate == null) {
+    public static /* synthetic */ K b(LongFunction longFunction) {
+        if (longFunction == null) {
             return null;
         }
-        return predicate instanceof d0 ? ((d0) predicate).a : new e0(predicate);
+        return new e0(longFunction);
     }
 
-    public /* synthetic */ Predicate and(Predicate predicate) {
-        return a(this.a.b(d0.c(predicate)));
-    }
-
-    public /* synthetic */ Predicate negate() {
-        return a(this.a.negate());
-    }
-
-    public /* synthetic */ Predicate or(Predicate predicate) {
-        return a(this.a.a(d0.c(predicate)));
-    }
-
-    public /* synthetic */ boolean test(Object obj) {
-        return this.a.test(obj);
+    public /* synthetic */ Object a(long j) {
+        return this.a.apply(j);
     }
 }

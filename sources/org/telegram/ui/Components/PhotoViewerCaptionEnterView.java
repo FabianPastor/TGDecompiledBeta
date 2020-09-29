@@ -1,14 +1,21 @@
 package org.telegram.ui.Components;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.style.ImageSpan;
 import android.view.ActionMode;
@@ -25,12 +32,14 @@ import org.telegram.messenger.FileLog;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$ChatFull;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$InputStickerSet;
 import org.telegram.tgnet.TLRPC$StickerSet;
 import org.telegram.tgnet.TLRPC$StickerSetCovered;
+import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Components.EmojiView;
 import org.telegram.ui.Components.SizeNotifierFrameLayoutPhoto;
@@ -39,16 +48,22 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     float animationProgress = 0.0f;
     /* access modifiers changed from: private */
     public int captionMaxLength = 1024;
+    private float chatActivityEnterViewAnimateFromTop;
     private Drawable checkDrawable;
     /* access modifiers changed from: private */
     public PhotoViewerCaptionEnterViewDelegate delegate;
     private Drawable drawable;
     private ImageView emojiButton;
-    private int emojiPadding;
-    private EmojiView emojiView;
+    private ReplaceableIconDrawable emojiIconDrawable;
+    /* access modifiers changed from: private */
+    public int emojiPadding;
+    /* access modifiers changed from: private */
+    public EmojiView emojiView;
     private boolean forceFloatingEmoji;
     /* access modifiers changed from: private */
     public boolean innerTextChange;
+    /* access modifiers changed from: private */
+    public boolean isInitLineCount;
     private int keyboardHeight;
     private int keyboardHeightLand;
     private boolean keyboardVisible;
@@ -58,12 +73,27 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     public String lengthText;
     private TextPaint lengthTextPaint;
     /* access modifiers changed from: private */
+    public int lineCount;
+    /* access modifiers changed from: private */
     public EditTextCaption messageEditText;
+    ValueAnimator messageEditTextAnimator;
+    private int messageEditTextPredrawHeigth;
+    private int messageEditTextPredrawScrollY;
+    float offset;
+    Paint paint;
+    /* access modifiers changed from: private */
+    public boolean popupAnimating;
+    private boolean shouldAnimateEditTextWithBounds;
     private SizeNotifierFrameLayoutPhoto sizeNotifierLayout;
+    ValueAnimator topBackgroundAnimator;
     private View windowView;
 
     public interface PhotoViewerCaptionEnterViewDelegate {
         void onCaptionEnter();
+
+        void onEmojiViewCloseEnd();
+
+        void onEmojiViewCloseStart();
 
         void onTextChanged(CharSequence charSequence);
 
@@ -82,21 +112,26 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     public PhotoViewerCaptionEnterView(Context context, SizeNotifierFrameLayoutPhoto sizeNotifierFrameLayoutPhoto, View view) {
         super(context);
         Context context2 = context;
+        Paint paint2 = new Paint();
+        this.paint = paint2;
+        this.offset = 0.0f;
+        paint2.setColor(NUM);
         setWillNotDraw(false);
-        setBackgroundColor(NUM);
         setFocusable(true);
         setFocusableInTouchMode(true);
+        setClipChildren(false);
         this.windowView = view;
         this.sizeNotifierLayout = sizeNotifierFrameLayoutPhoto;
         LinearLayout linearLayout = new LinearLayout(context2);
+        linearLayout.setClipChildren(false);
         linearLayout.setOrientation(0);
         addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f, 51, 2.0f, 0.0f, 0.0f, 0.0f));
         FrameLayout frameLayout = new FrameLayout(context2);
+        frameLayout.setClipChildren(false);
         linearLayout.addView(frameLayout, LayoutHelper.createLinear(0, -2, 1.0f));
         ImageView imageView = new ImageView(context2);
         this.emojiButton = imageView;
-        imageView.setImageResource(NUM);
-        this.emojiButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         this.emojiButton.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(1.0f), 0, 0);
         this.emojiButton.setAlpha(0.58f);
         frameLayout.addView(this.emojiButton, LayoutHelper.createFrame(48, 48, 83));
@@ -106,6 +141,12 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             }
         });
         this.emojiButton.setContentDescription(LocaleController.getString("Emoji", NUM));
+        ImageView imageView2 = this.emojiButton;
+        ReplaceableIconDrawable replaceableIconDrawable = new ReplaceableIconDrawable(context2);
+        this.emojiIconDrawable = replaceableIconDrawable;
+        imageView2.setImageDrawable(replaceableIconDrawable);
+        this.emojiIconDrawable.setColorFilter(new PorterDuffColorFilter(-1, PorterDuff.Mode.MULTIPLY));
+        this.emojiIconDrawable.setIcon(NUM, false);
         TextPaint textPaint = new TextPaint(1);
         this.lengthTextPaint = textPaint;
         textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
@@ -120,7 +161,12 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             /* access modifiers changed from: protected */
             public void onMeasure(int i, int i2) {
                 try {
+                    boolean unused = PhotoViewerCaptionEnterView.this.isInitLineCount = getMeasuredWidth() == 0 && getMeasuredHeight() == 0;
                     super.onMeasure(i, i2);
+                    if (PhotoViewerCaptionEnterView.this.isInitLineCount) {
+                        int unused2 = PhotoViewerCaptionEnterView.this.lineCount = getLineCount();
+                    }
+                    boolean unused3 = PhotoViewerCaptionEnterView.this.isInitLineCount = false;
                 } catch (Exception e) {
                     setMeasuredDimension(View.MeasureSpec.getSize(i), AndroidUtilities.dp(51.0f));
                     FileLog.e((Throwable) e);
@@ -183,6 +229,14 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             }
 
             public void onTextChanged(CharSequence charSequence, int i, int i2, int i3) {
+                if (PhotoViewerCaptionEnterView.this.lineCount != PhotoViewerCaptionEnterView.this.messageEditText.getLineCount()) {
+                    if (!PhotoViewerCaptionEnterView.this.isInitLineCount && PhotoViewerCaptionEnterView.this.messageEditText.getMeasuredWidth() > 0) {
+                        PhotoViewerCaptionEnterView photoViewerCaptionEnterView = PhotoViewerCaptionEnterView.this;
+                        photoViewerCaptionEnterView.onLineCountChanged(photoViewerCaptionEnterView.lineCount, PhotoViewerCaptionEnterView.this.messageEditText.getLineCount());
+                    }
+                    PhotoViewerCaptionEnterView photoViewerCaptionEnterView2 = PhotoViewerCaptionEnterView.this;
+                    int unused = photoViewerCaptionEnterView2.lineCount = photoViewerCaptionEnterView2.messageEditText.getLineCount();
+                }
                 if (!PhotoViewerCaptionEnterView.this.innerTextChange) {
                     if (PhotoViewerCaptionEnterView.this.delegate != null) {
                         PhotoViewerCaptionEnterView.this.delegate.onTextChanged(charSequence);
@@ -194,9 +248,9 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             }
 
             public void afterTextChanged(Editable editable) {
-                int access$200 = PhotoViewerCaptionEnterView.this.captionMaxLength - PhotoViewerCaptionEnterView.this.messageEditText.length();
-                if (access$200 <= 128) {
-                    String unused = PhotoViewerCaptionEnterView.this.lengthText = String.format("%d", new Object[]{Integer.valueOf(access$200)});
+                int access$600 = PhotoViewerCaptionEnterView.this.captionMaxLength - PhotoViewerCaptionEnterView.this.messageEditText.length();
+                if (access$600 <= 128) {
+                    String unused = PhotoViewerCaptionEnterView.this.lengthText = String.format("%d", new Object[]{Integer.valueOf(access$600)});
                 } else {
                     String unused2 = PhotoViewerCaptionEnterView.this.lengthText = null;
                 }
@@ -215,21 +269,21 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.checkDrawable = context.getResources().getDrawable(NUM).mutate();
         CombinedDrawable combinedDrawable = new CombinedDrawable(this.drawable, this.checkDrawable, 0, AndroidUtilities.dp(1.0f));
         combinedDrawable.setCustomSize(AndroidUtilities.dp(32.0f), AndroidUtilities.dp(32.0f));
-        ImageView imageView2 = new ImageView(context2);
-        imageView2.setScaleType(ImageView.ScaleType.CENTER);
-        imageView2.setImageDrawable(combinedDrawable);
-        linearLayout.addView(imageView2, LayoutHelper.createLinear(48, 48, 80));
-        imageView2.setOnClickListener(new View.OnClickListener() {
+        ImageView imageView3 = new ImageView(context2);
+        imageView3.setScaleType(ImageView.ScaleType.CENTER);
+        imageView3.setImageDrawable(combinedDrawable);
+        linearLayout.addView(imageView3, LayoutHelper.createLinear(48, 48, 80));
+        imageView3.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 PhotoViewerCaptionEnterView.this.lambda$new$3$PhotoViewerCaptionEnterView(view);
             }
         });
-        imageView2.setContentDescription(LocaleController.getString("Done", NUM));
+        imageView3.setContentDescription(LocaleController.getString("Done", NUM));
     }
 
     public /* synthetic */ void lambda$new$0$PhotoViewerCaptionEnterView(View view) {
-        if (!isPopupShowing()) {
-            showPopup(1);
+        if (this.keyboardVisible) {
+            showPopup(1, false);
         } else {
             openKeyboardInternal();
         }
@@ -242,7 +296,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             }
             if (!this.keyboardVisible && isPopupShowing()) {
                 if (keyEvent.getAction() == 1) {
-                    showPopup(0);
+                    showPopup(0, true);
                 }
                 return true;
             }
@@ -252,7 +306,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     public /* synthetic */ void lambda$new$2$PhotoViewerCaptionEnterView(View view) {
         if (isPopupShowing()) {
-            showPopup(AndroidUtilities.usingHardwareInput ? 0 : 2);
+            showPopup(AndroidUtilities.usingHardwareInput ? 0 : 2, false);
         }
     }
 
@@ -260,23 +314,95 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.delegate.onCaptionEnter();
     }
 
+    /* access modifiers changed from: private */
+    public void onLineCountChanged(int i, int i2) {
+        if (!TextUtils.isEmpty(this.messageEditText.getText())) {
+            this.shouldAnimateEditTextWithBounds = true;
+            this.messageEditTextPredrawHeigth = this.messageEditText.getMeasuredHeight();
+            this.messageEditTextPredrawScrollY = this.messageEditText.getScrollY();
+            invalidate();
+        } else {
+            this.messageEditText.animate().cancel();
+            this.messageEditText.setOffsetY(0.0f);
+            this.shouldAnimateEditTextWithBounds = false;
+        }
+        this.chatActivityEnterViewAnimateFromTop = ((float) getTop()) + this.offset;
+    }
+
+    /* access modifiers changed from: protected */
+    public void dispatchDraw(Canvas canvas) {
+        canvas.save();
+        canvas.drawRect(0.0f, this.offset, (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.paint);
+        canvas.clipRect(0.0f, this.offset, (float) getMeasuredWidth(), (float) getMeasuredHeight());
+        super.dispatchDraw(canvas);
+        canvas.restore();
+    }
+
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
+        if (this.shouldAnimateEditTextWithBounds) {
+            EditTextCaption editTextCaption = this.messageEditText;
+            editTextCaption.setOffsetY(editTextCaption.getOffsetY() - ((float) ((this.messageEditTextPredrawHeigth - this.messageEditText.getMeasuredHeight()) + (this.messageEditTextPredrawScrollY - this.messageEditText.getScrollY()))));
+            ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{this.messageEditText.getOffsetY(), 0.0f});
+            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    PhotoViewerCaptionEnterView.this.lambda$onDraw$4$PhotoViewerCaptionEnterView(valueAnimator);
+                }
+            });
+            ValueAnimator valueAnimator = this.messageEditTextAnimator;
+            if (valueAnimator != null) {
+                valueAnimator.cancel();
+            }
+            this.messageEditTextAnimator = ofFloat;
+            ofFloat.setDuration(200);
+            ofFloat.setInterpolator(CubicBezierInterpolator.DEFAULT);
+            ofFloat.start();
+            this.shouldAnimateEditTextWithBounds = false;
+        }
+        float f = this.chatActivityEnterViewAnimateFromTop;
+        if (!(f == 0.0f || f == ((float) getTop()) + this.offset)) {
+            ValueAnimator valueAnimator2 = this.topBackgroundAnimator;
+            if (valueAnimator2 != null) {
+                valueAnimator2.cancel();
+            }
+            float top = this.chatActivityEnterViewAnimateFromTop - (((float) getTop()) + this.offset);
+            this.offset = top;
+            ValueAnimator ofFloat2 = ValueAnimator.ofFloat(new float[]{top, 0.0f});
+            this.topBackgroundAnimator = ofFloat2;
+            ofFloat2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    PhotoViewerCaptionEnterView.this.lambda$onDraw$5$PhotoViewerCaptionEnterView(valueAnimator);
+                }
+            });
+            this.topBackgroundAnimator.setInterpolator(CubicBezierInterpolator.DEFAULT);
+            this.topBackgroundAnimator.setDuration(200);
+            this.topBackgroundAnimator.start();
+            this.chatActivityEnterViewAnimateFromTop = 0.0f;
+        }
         if (this.lengthText == null || getMeasuredHeight() <= AndroidUtilities.dp(48.0f)) {
             this.lengthTextPaint.setAlpha(0);
             this.animationProgress = 0.0f;
             return;
         }
         canvas.drawText(this.lengthText, (float) ((AndroidUtilities.dp(56.0f) - ((int) Math.ceil((double) this.lengthTextPaint.measureText(this.lengthText)))) / 2), (float) (getMeasuredHeight() - AndroidUtilities.dp(48.0f)), this.lengthTextPaint);
-        float f = this.animationProgress;
-        if (f < 1.0f) {
-            this.animationProgress = f + 0.14166667f;
+        float f2 = this.animationProgress;
+        if (f2 < 1.0f) {
+            this.animationProgress = f2 + 0.14166667f;
             invalidate();
             if (this.animationProgress >= 1.0f) {
                 this.animationProgress = 1.0f;
             }
             this.lengthTextPaint.setAlpha((int) (this.animationProgress * 255.0f));
         }
+    }
+
+    public /* synthetic */ void lambda$onDraw$4$PhotoViewerCaptionEnterView(ValueAnimator valueAnimator) {
+        this.messageEditText.setOffsetY(((Float) valueAnimator.getAnimatedValue()).floatValue());
+    }
+
+    public /* synthetic */ void lambda$onDraw$5$PhotoViewerCaptionEnterView(ValueAnimator valueAnimator) {
+        this.offset = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+        invalidate();
     }
 
     public void setForceFloatingEmoji(boolean z) {
@@ -494,7 +620,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 if (!editTextCaption.isFocused()) {
                     this.messageEditText.postDelayed(new Runnable() {
                         public final void run() {
-                            PhotoViewerCaptionEnterView.this.lambda$setFieldFocused$4$PhotoViewerCaptionEnterView();
+                            PhotoViewerCaptionEnterView.this.lambda$setFieldFocused$6$PhotoViewerCaptionEnterView();
                         }
                     }, 600);
                 }
@@ -504,7 +630,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         }
     }
 
-    public /* synthetic */ void lambda$setFieldFocused$4$PhotoViewerCaptionEnterView() {
+    public /* synthetic */ void lambda$setFieldFocused$6$PhotoViewerCaptionEnterView() {
         EditTextCaption editTextCaption = this.messageEditText;
         if (editTextCaption != null) {
             try {
@@ -527,7 +653,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         return view == this.emojiView;
     }
 
-    private void showPopup(int i) {
+    private void showPopup(int i, boolean z) {
+        EmojiView emojiView2;
         if (i == 1) {
             if (this.emojiView == null) {
                 createEmojiView();
@@ -552,37 +679,79 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             if (sizeNotifierFrameLayoutPhoto != null) {
                 this.emojiPadding = i2;
                 sizeNotifierFrameLayoutPhoto.requestLayout();
-                this.emojiButton.setImageResource(NUM);
+                this.emojiIconDrawable.setIcon(NUM, true);
                 onWindowSizeChanged();
                 return;
             }
             return;
         }
-        ImageView imageView = this.emojiButton;
-        if (imageView != null) {
-            imageView.setImageResource(NUM);
-        }
-        EmojiView emojiView2 = this.emojiView;
-        if (emojiView2 != null) {
-            emojiView2.setVisibility(8);
+        if (this.emojiButton != null) {
+            this.emojiIconDrawable.setIcon(NUM, true);
         }
         if (this.sizeNotifierLayout != null) {
-            if (i == 0) {
+            if (z && SharedConfig.smoothKeyboard && i == 0 && this.emojiView != null) {
+                ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{(float) this.emojiPadding, 0.0f});
+                this.popupAnimating = true;
+                this.delegate.onEmojiViewCloseStart();
+                ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener((float) this.emojiPadding) {
+                    public final /* synthetic */ float f$1;
+
+                    {
+                        this.f$1 = r2;
+                    }
+
+                    public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        PhotoViewerCaptionEnterView.this.lambda$showPopup$7$PhotoViewerCaptionEnterView(this.f$1, valueAnimator);
+                    }
+                });
+                ofFloat.addListener(new AnimatorListenerAdapter() {
+                    public void onAnimationEnd(Animator animator) {
+                        int unused = PhotoViewerCaptionEnterView.this.emojiPadding = 0;
+                        PhotoViewerCaptionEnterView.this.setTranslationY(0.0f);
+                        PhotoViewerCaptionEnterView.this.setAlpha(1.0f);
+                        PhotoViewerCaptionEnterView.this.emojiView.setTranslationY(0.0f);
+                        boolean unused2 = PhotoViewerCaptionEnterView.this.popupAnimating = false;
+                        PhotoViewerCaptionEnterView.this.delegate.onEmojiViewCloseEnd();
+                        PhotoViewerCaptionEnterView.this.emojiView.setVisibility(8);
+                        PhotoViewerCaptionEnterView.this.emojiView.setAlpha(1.0f);
+                    }
+                });
+                ofFloat.setDuration(210);
+                ofFloat.setInterpolator(AdjustPanLayoutHelper.keyboardInterpolator);
+                ofFloat.start();
+            } else if (i == 0) {
+                EmojiView emojiView3 = this.emojiView;
+                if (emojiView3 != null) {
+                    emojiView3.setVisibility(8);
+                }
                 this.emojiPadding = 0;
+            } else if (!SharedConfig.smoothKeyboard && (emojiView2 = this.emojiView) != null) {
+                emojiView2.setVisibility(8);
             }
             this.sizeNotifierLayout.requestLayout();
             onWindowSizeChanged();
         }
     }
 
+    public /* synthetic */ void lambda$showPopup$7$PhotoViewerCaptionEnterView(float f, ValueAnimator valueAnimator) {
+        float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+        this.emojiPadding = (int) floatValue;
+        float f2 = f - floatValue;
+        this.emojiView.setTranslationY(f2);
+        setTranslationY(f2);
+        float f3 = floatValue / f;
+        setAlpha(f3);
+        this.emojiView.setAlpha(f3);
+    }
+
     public void hidePopup() {
         if (isPopupShowing()) {
-            showPopup(0);
+            showPopup(0, true);
         }
     }
 
     private void openKeyboardInternal() {
-        showPopup(AndroidUtilities.usingHardwareInput ? 0 : 2);
+        showPopup(AndroidUtilities.usingHardwareInput ? 0 : 2, false);
         openKeyboard();
     }
 
@@ -612,6 +781,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     public boolean isPopupShowing() {
         EmojiView emojiView2 = this.emojiView;
         return emojiView2 != null && emojiView2.getVisibility() == 0;
+    }
+
+    public boolean isPopupAnimatig() {
+        return this.popupAnimating;
     }
 
     public void closeKeyboard() {
@@ -664,7 +837,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         boolean z4 = i > 0;
         this.keyboardVisible = z4;
         if (z4 && isPopupShowing()) {
-            showPopup(0);
+            showPopup(0, false);
         }
         if (this.emojiPadding != 0 && !(z2 = this.keyboardVisible) && z2 != z3 && !isPopupShowing()) {
             this.emojiPadding = 0;

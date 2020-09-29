@@ -25,7 +25,6 @@ import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
 import org.telegram.tgnet.TLRPC$Message;
 import org.telegram.tgnet.TLRPC$MessageMedia;
-import org.telegram.tgnet.TLRPC$Peer;
 import org.telegram.tgnet.TLRPC$Photo;
 import org.telegram.tgnet.TLRPC$PhotoSize;
 import org.telegram.tgnet.TLRPC$TL_documentEmpty;
@@ -167,42 +166,33 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
     }
 
     public void setMessageObject(MessageObject messageObject) {
-        int i;
         TLRPC$PhotoSize tLRPC$PhotoSize;
+        StaticLayout staticLayout;
         MessageObject messageObject2 = messageObject;
-        if (this.currentMessageObject != messageObject2 || (!this.hasReplyMessage && messageObject2.replyMessageObject != null)) {
+        if (this.currentMessageObject != messageObject2 || (((staticLayout = this.textLayout) != null && !TextUtils.equals(staticLayout.getText(), messageObject2.messageText)) || (!this.hasReplyMessage && messageObject2.replyMessageObject != null))) {
             this.currentMessageObject = messageObject2;
             this.hasReplyMessage = messageObject2.replyMessageObject != null;
             DownloadController.getInstance(this.currentAccount).removeLoadingFileObserver(this);
             this.previousWidth = 0;
             TLRPC$VideoSize tLRPC$VideoSize = null;
             if (this.currentMessageObject.type == 11) {
-                TLRPC$Peer tLRPC$Peer = messageObject2.messageOwner.to_id;
-                if (tLRPC$Peer != null) {
-                    i = tLRPC$Peer.chat_id;
-                    if (i == 0 && (i = tLRPC$Peer.channel_id) == 0 && (i = tLRPC$Peer.user_id) == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
-                        i = messageObject2.messageOwner.from_id;
-                    }
-                } else {
-                    i = 0;
-                }
-                this.avatarDrawable.setInfo(i, (String) null, (String) null);
+                this.avatarDrawable.setInfo((int) messageObject.getDialogId(), (String) null, (String) null);
                 MessageObject messageObject3 = this.currentMessageObject;
                 if (messageObject3.messageOwner.action instanceof TLRPC$TL_messageActionUserUpdatedPhoto) {
                     this.imageReceiver.setImage((ImageLocation) null, (String) null, this.avatarDrawable, (String) null, messageObject3, 0);
                 } else {
                     int size = messageObject3.photoThumbs.size();
-                    int i2 = 0;
+                    int i = 0;
                     while (true) {
-                        if (i2 >= size) {
+                        if (i >= size) {
                             tLRPC$PhotoSize = null;
                             break;
                         }
-                        tLRPC$PhotoSize = this.currentMessageObject.photoThumbs.get(i2);
+                        tLRPC$PhotoSize = this.currentMessageObject.photoThumbs.get(i);
                         if (tLRPC$PhotoSize instanceof TLRPC$TL_photoStrippedSize) {
                             break;
                         }
-                        i2++;
+                        i++;
                     }
                     TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(this.currentMessageObject.photoThumbs, 640);
                     if (closestPhotoSizeWithSize != null) {
@@ -407,8 +397,7 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             if (r1 == 0) goto L_0x0115
             org.telegram.ui.Cells.ChatActionCell$ChatActionCellDelegate r0 = r9.delegate
             org.telegram.messenger.MessageObject r1 = r9.currentMessageObject
-            org.telegram.tgnet.TLRPC$Message r1 = r1.messageOwner
-            int r1 = r1.reply_to_msg_id
+            int r1 = r1.getReplyMsgId()
             r0.didPressReplyMessage(r9, r1)
             goto L_0x0132
         L_0x0115:

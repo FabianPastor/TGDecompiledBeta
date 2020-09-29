@@ -1109,8 +1109,6 @@
     <string name="Disconnect">Trennen</string>
     <string name="DiscussChannel">Kanal</string>
     <string name="Discussion">Diskussion</string>
-    <string name="DiscussionChannelGroupSetHelp">Ein Link zu **%1$s** wird allen Abonnenten im unteren Bereich angezeigt.</string>
-    <string name="DiscussionChannelHelp">Wähle einen Gruppenchat für Diskussionen aus, der in deinem Kanal angezeigt wird.</string>
     <string name="DiscussionChannelHelp2">Alles, was du in diesem Kanal veröffentlichst, wird an die Gruppe weitergeleitet.</string>
     <string name="DiscussionCreateGroup">Neue Gruppe erstellen</string>
     <string name="DiscussionGroupHelp">**%1$s** verknüpft die Gruppe als Diskussionsgruppe.</string>

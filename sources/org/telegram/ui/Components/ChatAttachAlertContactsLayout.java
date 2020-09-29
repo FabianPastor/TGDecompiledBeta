@@ -284,7 +284,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 boolean r11 = android.text.TextUtils.isEmpty(r11)
                 if (r11 == 0) goto L_0x00ee
                 org.telegram.ui.ActionBar.SimpleTextView r11 = r10.statusTextView
-                r1 = 2131626136(0x7f0e0898, float:1.88795E38)
+                r1 = 2131626177(0x7f0e08c1, float:1.8879583E38)
                 java.lang.String r3 = "NumberUnknown"
                 java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
                 r11.setText(r1)
@@ -358,6 +358,11 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 }
             }
 
+            public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
+                ChatAttachAlertContactsLayout.this.parentAlert.makeFocusable(getSearchEditText(), true);
+                return super.onInterceptTouchEvent(motionEvent);
+            }
+
             public void processTouchEvent(MotionEvent motionEvent) {
                 MotionEvent obtain = MotionEvent.obtain(motionEvent);
                 obtain.setLocation(obtain.getRawX(), (obtain.getRawY() - ChatAttachAlertContactsLayout.this.parentAlert.getSheetContainer().getTranslationY()) - ((float) AndroidUtilities.dp(58.0f)));
@@ -367,7 +372,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
 
             /* access modifiers changed from: protected */
             public void onFieldTouchUp(EditTextBoldCursor editTextBoldCursor) {
-                ChatAttachAlertContactsLayout.this.parentAlert.makeFocusable(editTextBoldCursor);
+                ChatAttachAlertContactsLayout.this.parentAlert.makeFocusable(editTextBoldCursor, true);
             }
         };
         this.searchField = r12;
@@ -421,7 +426,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrolled(RecyclerView recyclerView, int i, int i2) {
                 ChatAttachAlertContactsLayout chatAttachAlertContactsLayout = ChatAttachAlertContactsLayout.this;
-                chatAttachAlertContactsLayout.parentAlert.updateLayout(chatAttachAlertContactsLayout, true);
+                chatAttachAlertContactsLayout.parentAlert.updateLayout(chatAttachAlertContactsLayout, true, i2);
                 ChatAttachAlertContactsLayout.this.updateEmptyViewPosition();
             }
         });

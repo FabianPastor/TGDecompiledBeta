@@ -1,27 +1,46 @@
 package j$;
 
+import j$.util.J;
+import java.util.PrimitiveIterator;
 import java.util.function.Consumer;
+import java.util.function.LongConsumer;
 
 /* renamed from: j$.s  reason: case insensitive filesystem */
-public final /* synthetic */ class CLASSNAMEs implements Consumer {
-    final /* synthetic */ j$.util.function.Consumer a;
+public final /* synthetic */ class CLASSNAMEs implements PrimitiveIterator.OfLong {
+    final /* synthetic */ J a;
 
-    private /* synthetic */ CLASSNAMEs(j$.util.function.Consumer consumer) {
-        this.a = consumer;
+    private /* synthetic */ CLASSNAMEs(J j) {
+        this.a = j;
     }
 
-    public static /* synthetic */ Consumer a(j$.util.function.Consumer consumer) {
-        if (consumer == null) {
+    public static /* synthetic */ PrimitiveIterator.OfLong a(J j) {
+        if (j == null) {
             return null;
         }
-        return consumer instanceof r ? ((r) consumer).a : new CLASSNAMEs(consumer);
+        return new CLASSNAMEs(j);
     }
 
-    public /* synthetic */ void accept(Object obj) {
-        this.a.accept(obj);
+    public /* synthetic */ void forEachRemaining(Object obj) {
+        this.a.forEachRemaining(obj);
     }
 
-    public /* synthetic */ Consumer andThen(Consumer consumer) {
-        return a(this.a.g(r.a(consumer)));
+    public /* synthetic */ void forEachRemaining(Consumer consumer) {
+        this.a.forEachRemaining(C.a(consumer));
+    }
+
+    public /* synthetic */ void forEachRemaining(LongConsumer longConsumer) {
+        this.a.d(c0.a(longConsumer));
+    }
+
+    public /* synthetic */ boolean hasNext() {
+        return this.a.hasNext();
+    }
+
+    public /* synthetic */ long nextLong() {
+        return this.a.nextLong();
+    }
+
+    public /* synthetic */ void remove() {
+        this.a.remove();
     }
 }

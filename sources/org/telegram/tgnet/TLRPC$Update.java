@@ -4,9 +4,6 @@ public abstract class TLRPC$Update extends TLObject {
     public static TLRPC$Update TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$Update tLRPC$Update;
         switch (i) {
-            case -2131957734:
-                tLRPC$Update = new TLRPC$TL_updateUserBlocked();
-                break;
             case -2112423005:
                 tLRPC$Update = new TLRPC$TL_updateTheme();
                 break;
@@ -112,6 +109,9 @@ public abstract class TLRPC$Update extends TLObject {
             case -99664734:
                 tLRPC$Update = new TLRPC$TL_updatePinnedDialogs();
                 break;
+            case -13975905:
+                tLRPC$Update = new TLRPC$TL_updateChannelUserTyping();
+                break;
             case 92188360:
                 tLRPC$Update = new TLRPC$TL_updateGroupCallParticipant();
                 break;
@@ -142,8 +142,14 @@ public abstract class TLRPC$Update extends TLObject {
             case 469489699:
                 tLRPC$Update = new TLRPC$TL_updateUserStatus();
                 break;
+            case 482860628:
+                tLRPC$Update = new TLRPC$TL_updateReadChannelDiscussionInbox();
+                break;
             case 522914557:
                 tLRPC$Update = new TLRPC$TL_updateNewMessage();
+                break;
+            case 610945826:
+                tLRPC$Update = new TLRPC$TL_updatePeerBlocked();
                 break;
             case 634833351:
                 tLRPC$Update = new TLRPC$TL_updateReadChannelOutbox();
@@ -174,6 +180,9 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case 1135492588:
                 tLRPC$Update = new TLRPC$TL_updateStickerSets();
+                break;
+            case 1178116716:
+                tLRPC$Update = new TLRPC$TL_updateReadChannelDiscussionOutbox();
                 break;
             case 1180041828:
                 tLRPC$Update = new TLRPC$TL_updateLangPackTooLong();
@@ -219,6 +228,9 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case 1852826908:
                 tLRPC$Update = new TLRPC$TL_updateDialogPinned();
+                break;
+            case 1854571743:
+                tLRPC$Update = new TLRPC$TL_updateChannelMessageForwards();
                 break;
             case 1887741886:
                 tLRPC$Update = new TLRPC$TL_updateContactsReset();

@@ -18,17 +18,14 @@ public class TLRPC$TL_messageService_layer48 extends TLRPC$TL_messageService {
         this.post = z2;
         this.id = abstractSerializedData.readInt32(z);
         if ((this.flags & 256) != 0) {
-            this.from_id = abstractSerializedData.readInt32(z);
+            TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
+            this.from_id = tLRPC$TL_peerUser;
+            tLRPC$TL_peerUser.user_id = abstractSerializedData.readInt32(z);
         }
         TLRPC$Peer TLdeserialize = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
-        this.to_id = TLdeserialize;
-        if (this.from_id == 0) {
-            int i = TLdeserialize.user_id;
-            if (i != 0) {
-                this.from_id = i;
-            } else {
-                this.from_id = -TLdeserialize.channel_id;
-            }
+        this.peer_id = TLdeserialize;
+        if (this.from_id == null) {
+            this.from_id = TLdeserialize;
         }
         this.date = abstractSerializedData.readInt32(z);
         this.action = TLRPC$MessageAction.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
@@ -51,9 +48,9 @@ public class TLRPC$TL_messageService_layer48 extends TLRPC$TL_messageService {
         abstractSerializedData.writeInt32(i6);
         abstractSerializedData.writeInt32(this.id);
         if ((this.flags & 256) != 0) {
-            abstractSerializedData.writeInt32(this.from_id);
+            abstractSerializedData.writeInt32(this.from_id.user_id);
         }
-        this.to_id.serializeToStream(abstractSerializedData);
+        this.peer_id.serializeToStream(abstractSerializedData);
         abstractSerializedData.writeInt32(this.date);
         this.action.serializeToStream(abstractSerializedData);
     }

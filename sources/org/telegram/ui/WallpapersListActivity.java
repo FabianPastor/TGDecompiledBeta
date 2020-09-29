@@ -436,9 +436,9 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     for (int i2 = 0; i2 < arrayList.size(); i2++) {
                         long longValue = ((Long) arrayList2.get(i2)).longValue();
                         if (charSequence != null) {
-                            SendMessagesHelper.getInstance(WallpapersListActivity.this.currentAccount).sendMessage(charSequence.toString(), longValue, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
+                            SendMessagesHelper.getInstance(WallpapersListActivity.this.currentAccount).sendMessage(charSequence.toString(), longValue, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
                         }
-                        SendMessagesHelper.getInstance(WallpapersListActivity.this.currentAccount).sendMessage(sb.toString(), longValue, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
+                        SendMessagesHelper.getInstance(WallpapersListActivity.this.currentAccount).sendMessage(sb.toString(), longValue, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
                     }
                     dialogsActivity.finishFragment();
                     return;
@@ -458,7 +458,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                 if (i3 == 0 || MessagesController.getInstance(WallpapersListActivity.this.currentAccount).checkCanOpenChat(bundle, dialogsActivity)) {
                     NotificationCenter.getInstance(WallpapersListActivity.this.currentAccount).postNotificationName(NotificationCenter.closeChats, new Object[0]);
                     WallpapersListActivity.this.presentFragment(new ChatActivity(bundle), true);
-                    SendMessagesHelper.getInstance(WallpapersListActivity.this.currentAccount).sendMessage(sb.toString(), longValue2, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
+                    SendMessagesHelper.getInstance(WallpapersListActivity.this.currentAccount).sendMessage(sb.toString(), longValue2, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
                 }
             }
         });
@@ -490,7 +490,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
             });
             this.searchItem = addItem;
             addItem.setSearchFieldHint(LocaleController.getString("SearchBackgrounds", NUM));
-            ActionBarMenu createActionMode = this.actionBar.createActionMode(false);
+            ActionBarMenu createActionMode = this.actionBar.createActionMode(false, (String) null);
             createActionMode.setBackgroundColor(Theme.getColor("actionBarDefault"));
             this.actionBar.setItemsColor(Theme.getColor("actionBarDefaultIcon"), true);
             this.actionBar.setItemsBackgroundColor(Theme.getColor("actionBarDefaultSelector"), true);
@@ -508,7 +508,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
         FrameLayout frameLayout = new FrameLayout(context);
         this.fragmentView = frameLayout;
         FrameLayout frameLayout2 = frameLayout;
-        AnonymousClass4 r3 = new RecyclerListView(context) {
+        AnonymousClass4 r4 = new RecyclerListView(context) {
             private Paint paint = new Paint();
 
             public boolean hasOverlappingRendering() {
@@ -560,7 +560,7 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     r4 = r15
                     r8 = r10
                     r4.drawRect(r5, r6, r7, r8, r9)
-                    if (r2 == r1) goto L_0x006a
+                    if (r2 == r1) goto L_0x006c
                     android.graphics.Paint r0 = r14.paint
                     java.lang.String r2 = "windowBackgroundGray"
                     int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
@@ -572,26 +572,26 @@ public class WallpapersListActivity extends BaseFragment implements Notification
                     android.graphics.Paint r13 = r14.paint
                     r8 = r15
                     r8.drawRect(r9, r10, r11, r12, r13)
-                L_0x006a:
+                L_0x006c:
                     return
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.WallpapersListActivity.AnonymousClass4.onDraw(android.graphics.Canvas):void");
             }
         };
-        this.listView = r3;
-        r3.setClipToPadding(false);
+        this.listView = r4;
+        r4.setClipToPadding(false);
         this.listView.setHorizontalScrollBarEnabled(false);
         this.listView.setVerticalScrollBarEnabled(false);
         this.listView.setItemAnimator((RecyclerView.ItemAnimator) null);
         this.listView.setLayoutAnimation((LayoutAnimationController) null);
         RecyclerListView recyclerListView = this.listView;
-        AnonymousClass5 r4 = new LinearLayoutManager(this, context, 1, false) {
+        AnonymousClass5 r42 = new LinearLayoutManager(this, context, 1, false) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
             }
         };
-        this.layoutManager = r4;
-        recyclerListView.setLayoutManager(r4);
+        this.layoutManager = r42;
+        recyclerListView.setLayoutManager(r42);
         frameLayout2.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         RecyclerListView recyclerListView2 = this.listView;
         ListAdapter listAdapter2 = new ListAdapter(context);

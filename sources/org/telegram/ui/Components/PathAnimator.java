@@ -8,6 +8,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 
 public class PathAnimator {
+    private float durationScale;
     private ArrayList<KeyFrame> keyFrames = new ArrayList<>();
     private Path path = new Path();
     private float scale;
@@ -51,17 +52,18 @@ public class PathAnimator {
         }
     }
 
-    public PathAnimator(float f, float f2, float f3) {
+    public PathAnimator(float f, float f2, float f3, float f4) {
         this.scale = f;
         this.tx = f2;
         this.ty = f3;
+        this.durationScale = f4;
     }
 
     public void addSvgKeyFrame(String str, float f) {
         if (str != null) {
             try {
                 KeyFrame keyFrame = new KeyFrame();
-                keyFrame.time = f;
+                keyFrame.time = f * this.durationScale;
                 String[] split = str.split(" ");
                 int i = 0;
                 while (i < split.length) {

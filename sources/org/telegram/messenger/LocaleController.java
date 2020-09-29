@@ -69,6 +69,7 @@ public class LocaleController {
     public FastDateFormat formatterBannedUntilThisYear;
     public FastDateFormat formatterDay;
     public FastDateFormat formatterDayMonth;
+    public FastDateFormat formatterMonthYear;
     public FastDateFormat formatterScheduleDay;
     public FastDateFormat[] formatterScheduleSend = new FastDateFormat[6];
     public FastDateFormat formatterScheduleYear;
@@ -664,19 +665,19 @@ public class LocaleController {
         return sb.toString();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00be A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00bf A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c0 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c1 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c2 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c3 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c4 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c5 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c6 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c7 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c8 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00c9 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00ca A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A[RETURN] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static java.lang.String getLocaleAlias(java.lang.String r16) {
         /*
@@ -699,133 +700,133 @@ public class LocaleController {
             java.lang.String r14 = "in"
             java.lang.String r15 = "id"
             java.lang.String r2 = "he"
-            if (r3 == r4) goto L_0x00b2
+            if (r3 == r4) goto L_0x00b3
             r4 = 3355(0xd1b, float:4.701E-42)
-            if (r3 == r4) goto L_0x00aa
+            if (r3 == r4) goto L_0x00ab
             r4 = 3365(0xd25, float:4.715E-42)
-            if (r3 == r4) goto L_0x00a2
+            if (r3 == r4) goto L_0x00a3
             r4 = 3374(0xd2e, float:4.728E-42)
-            if (r3 == r4) goto L_0x009a
+            if (r3 == r4) goto L_0x009b
             r4 = 3391(0xd3f, float:4.752E-42)
-            if (r3 == r4) goto L_0x0092
+            if (r3 == r4) goto L_0x0093
             r4 = 3508(0xdb4, float:4.916E-42)
-            if (r3 == r4) goto L_0x0089
+            if (r3 == r4) goto L_0x008a
             r4 = 3521(0xdc1, float:4.934E-42)
-            if (r3 == r4) goto L_0x0081
+            if (r3 == r4) goto L_0x0082
             r4 = 3704(0xe78, float:5.19E-42)
-            if (r3 == r4) goto L_0x0079
+            if (r3 == r4) goto L_0x007a
             r4 = 3856(0xvar_, float:5.403E-42)
-            if (r3 == r4) goto L_0x0070
+            if (r3 == r4) goto L_0x0071
             r4 = 101385(0x18CLASSNAME, float:1.4207E-40)
-            if (r3 == r4) goto L_0x0067
+            if (r3 == r4) goto L_0x0068
             r4 = 3404(0xd4c, float:4.77E-42)
-            if (r3 == r4) goto L_0x005e
+            if (r3 == r4) goto L_0x005f
             r4 = 3405(0xd4d, float:4.771E-42)
-            if (r3 == r4) goto L_0x0055
-            goto L_0x00ba
-        L_0x0055:
+            if (r3 == r4) goto L_0x0056
+            goto L_0x00bb
+        L_0x0056:
             boolean r0 = r0.equals(r10)
-            if (r0 == 0) goto L_0x00ba
+            if (r0 == 0) goto L_0x00bb
             r0 = 2
-            goto L_0x00bb
-        L_0x005e:
+            goto L_0x00bc
+        L_0x005f:
             boolean r0 = r0.equals(r11)
-            if (r0 == 0) goto L_0x00ba
+            if (r0 == 0) goto L_0x00bb
             r0 = 8
-            goto L_0x00bb
-        L_0x0067:
+            goto L_0x00bc
+        L_0x0068:
             boolean r0 = r0.equals(r5)
-            if (r0 == 0) goto L_0x00ba
+            if (r0 == 0) goto L_0x00bb
             r0 = 10
-            goto L_0x00bb
-        L_0x0070:
+            goto L_0x00bc
+        L_0x0071:
             boolean r0 = r0.equals(r6)
-            if (r0 == 0) goto L_0x00ba
+            if (r0 == 0) goto L_0x00bb
             r0 = 11
-            goto L_0x00bb
-        L_0x0079:
+            goto L_0x00bc
+        L_0x007a:
             boolean r0 = r0.equals(r7)
-            if (r0 == 0) goto L_0x00ba
+            if (r0 == 0) goto L_0x00bb
             r0 = 4
-            goto L_0x00bb
-        L_0x0081:
+            goto L_0x00bc
+        L_0x0082:
             boolean r0 = r0.equals(r8)
-            if (r0 == 0) goto L_0x00ba
+            if (r0 == 0) goto L_0x00bb
             r0 = 3
-            goto L_0x00bb
-        L_0x0089:
+            goto L_0x00bc
+        L_0x008a:
             boolean r0 = r0.equals(r9)
-            if (r0 == 0) goto L_0x00ba
+            if (r0 == 0) goto L_0x00bb
             r0 = 9
-            goto L_0x00bb
-        L_0x0092:
+            goto L_0x00bc
+        L_0x0093:
             boolean r0 = r0.equals(r12)
-            if (r0 == 0) goto L_0x00ba
+            if (r0 == 0) goto L_0x00bb
             r0 = 5
-            goto L_0x00bb
-        L_0x009a:
+            goto L_0x00bc
+        L_0x009b:
             boolean r0 = r0.equals(r13)
-            if (r0 == 0) goto L_0x00ba
+            if (r0 == 0) goto L_0x00bb
             r0 = 1
-            goto L_0x00bb
-        L_0x00a2:
+            goto L_0x00bc
+        L_0x00a3:
             boolean r0 = r0.equals(r14)
-            if (r0 == 0) goto L_0x00ba
+            if (r0 == 0) goto L_0x00bb
             r0 = 0
-            goto L_0x00bb
-        L_0x00aa:
+            goto L_0x00bc
+        L_0x00ab:
             boolean r0 = r0.equals(r15)
-            if (r0 == 0) goto L_0x00ba
+            if (r0 == 0) goto L_0x00bb
             r0 = 6
-            goto L_0x00bb
-        L_0x00b2:
+            goto L_0x00bc
+        L_0x00b3:
             boolean r0 = r0.equals(r2)
-            if (r0 == 0) goto L_0x00ba
+            if (r0 == 0) goto L_0x00bb
             r0 = 7
-            goto L_0x00bb
-        L_0x00ba:
-            r0 = -1
+            goto L_0x00bc
         L_0x00bb:
+            r0 = -1
+        L_0x00bc:
             switch(r0) {
-                case 0: goto L_0x00ca;
-                case 1: goto L_0x00c9;
-                case 2: goto L_0x00c8;
-                case 3: goto L_0x00c7;
-                case 4: goto L_0x00c6;
-                case 5: goto L_0x00c5;
-                case 6: goto L_0x00c4;
-                case 7: goto L_0x00c3;
-                case 8: goto L_0x00c2;
-                case 9: goto L_0x00c1;
-                case 10: goto L_0x00c0;
-                case 11: goto L_0x00bf;
-                default: goto L_0x00be;
+                case 0: goto L_0x00cb;
+                case 1: goto L_0x00ca;
+                case 2: goto L_0x00c9;
+                case 3: goto L_0x00c8;
+                case 4: goto L_0x00c7;
+                case 5: goto L_0x00c6;
+                case 6: goto L_0x00c5;
+                case 7: goto L_0x00c4;
+                case 8: goto L_0x00c3;
+                case 9: goto L_0x00c2;
+                case 10: goto L_0x00c1;
+                case 11: goto L_0x00c0;
+                default: goto L_0x00bf;
             }
-        L_0x00be:
-            return r1
         L_0x00bf:
-            return r12
+            return r1
         L_0x00c0:
-            return r7
+            return r12
         L_0x00c1:
-            return r8
+            return r7
         L_0x00c2:
-            return r10
+            return r8
         L_0x00c3:
-            return r13
+            return r10
         L_0x00c4:
-            return r14
+            return r13
         L_0x00c5:
-            return r6
+            return r14
         L_0x00c6:
-            return r5
+            return r6
         L_0x00c7:
-            return r9
+            return r5
         L_0x00c8:
-            return r11
+            return r9
         L_0x00c9:
-            return r2
+            return r11
         L_0x00ca:
+            return r2
+        L_0x00cb:
             return r15
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.LocaleController.getLocaleAlias(java.lang.String):java.lang.String");
@@ -1266,6 +1267,10 @@ public class LocaleController {
 
     public LocaleInfo getCurrentLocaleInfo() {
         return this.currentLocaleInfo;
+    }
+
+    public Locale getCurrentLocale() {
+        return this.currentLocale;
     }
 
     public static String getCurrentLanguageName() {
@@ -2365,49 +2370,55 @@ public class LocaleController {
             r7 = 1
         L_0x0076:
             nameDisplayOrder = r7
-            r7 = 2131627591(0x7f0e0e47, float:1.888245E38)
+            r7 = 2131627677(0x7f0e0e9d, float:1.8882625E38)
+            java.lang.String r8 = "formatterMonthYear"
+            java.lang.String r7 = r9.getStringInternal(r8, r7)
+            java.lang.String r8 = "MMM yyyy"
+            org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
+            r9.formatterMonthYear = r7
+            r7 = 2131627675(0x7f0e0e9b, float:1.8882621E38)
             java.lang.String r8 = "formatterMonth"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd MMM"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterDayMonth = r7
-            r7 = 2131627597(0x7f0e0e4d, float:1.8882463E38)
+            r7 = 2131627682(0x7f0e0ea2, float:1.8882635E38)
             java.lang.String r8 = "formatterYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd.MM.yy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterYear = r7
-            r7 = 2131627598(0x7f0e0e4e, float:1.8882465E38)
+            r7 = 2131627683(0x7f0e0ea3, float:1.8882637E38)
             java.lang.String r8 = "formatterYearMax"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd.MM.yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterYearMax = r7
-            r7 = 2131627559(0x7f0e0e27, float:1.8882386E38)
+            r7 = 2131627643(0x7f0e0e7b, float:1.8882556E38)
             java.lang.String r8 = "chatDate"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "d MMMM"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.chatDate = r7
-            r7 = 2131627560(0x7f0e0e28, float:1.8882388E38)
+            r7 = 2131627644(0x7f0e0e7c, float:1.8882558E38)
             java.lang.String r8 = "chatFullDate"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "d MMMM yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.chatFullDate = r7
-            r7 = 2131627596(0x7f0e0e4c, float:1.888246E38)
+            r7 = 2131627681(0x7f0e0ea1, float:1.8882633E38)
             java.lang.String r8 = "formatterWeek"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "EEE"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterWeek = r7
-            r7 = 2131627583(0x7f0e0e3f, float:1.8882435E38)
+            r7 = 2131627667(0x7f0e0e93, float:1.8882605E38)
             java.lang.String r8 = "formatDateSchedule"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM d"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterScheduleDay = r7
-            r7 = 2131627584(0x7f0e0e40, float:1.8882437E38)
+            r7 = 2131627668(0x7f0e0e94, float:1.8882607E38)
             java.lang.String r8 = "formatDateScheduleYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM d yyyy"
@@ -2415,110 +2426,110 @@ public class LocaleController {
             r9.formatterScheduleYear = r7
             java.lang.String r7 = r1.toLowerCase()
             boolean r4 = r7.equals(r4)
-            if (r4 != 0) goto L_0x0118
+            if (r4 != 0) goto L_0x0129
             java.lang.String r1 = r1.toLowerCase()
             boolean r1 = r1.equals(r2)
-            if (r1 == 0) goto L_0x0115
-            goto L_0x0118
-        L_0x0115:
+            if (r1 == 0) goto L_0x0126
+            goto L_0x0129
+        L_0x0126:
             java.util.Locale r1 = java.util.Locale.US
-            goto L_0x0119
-        L_0x0118:
+            goto L_0x012a
+        L_0x0129:
             r1 = r0
-        L_0x0119:
+        L_0x012a:
             boolean r2 = is24HourFormat
-            if (r2 == 0) goto L_0x0123
-            r2 = 2131627590(0x7f0e0e46, float:1.8882449E38)
+            if (r2 == 0) goto L_0x0134
+            r2 = 2131627674(0x7f0e0e9a, float:1.888262E38)
             java.lang.String r4 = "formatterDay24H"
-            goto L_0x0128
-        L_0x0123:
-            r2 = 2131627589(0x7f0e0e45, float:1.8882447E38)
+            goto L_0x0139
+        L_0x0134:
+            r2 = 2131627673(0x7f0e0e99, float:1.8882617E38)
             java.lang.String r4 = "formatterDay12H"
-        L_0x0128:
+        L_0x0139:
             java.lang.String r2 = r9.getStringInternal(r4, r2)
             boolean r4 = is24HourFormat
-            if (r4 == 0) goto L_0x0133
+            if (r4 == 0) goto L_0x0144
             java.lang.String r4 = "HH:mm"
-            goto L_0x0135
-        L_0x0133:
+            goto L_0x0146
+        L_0x0144:
             java.lang.String r4 = "h:mm a"
-        L_0x0135:
+        L_0x0146:
             org.telegram.messenger.time.FastDateFormat r1 = r9.createFormatter(r1, r2, r4)
             r9.formatterDay = r1
             boolean r1 = is24HourFormat
-            if (r1 == 0) goto L_0x0145
-            r1 = 2131627595(0x7f0e0e4b, float:1.8882459E38)
+            if (r1 == 0) goto L_0x0156
+            r1 = 2131627680(0x7f0e0ea0, float:1.8882631E38)
             java.lang.String r2 = "formatterStats24H"
-            goto L_0x014a
-        L_0x0145:
-            r1 = 2131627594(0x7f0e0e4a, float:1.8882457E38)
+            goto L_0x015b
+        L_0x0156:
+            r1 = 2131627679(0x7f0e0e9f, float:1.888263E38)
             java.lang.String r2 = "formatterStats12H"
-        L_0x014a:
+        L_0x015b:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
             boolean r2 = is24HourFormat
             java.lang.String r4 = "MMM dd yyyy, HH:mm"
             java.lang.String r7 = "MMM dd yyyy, h:mm a"
-            if (r2 == 0) goto L_0x0158
+            if (r2 == 0) goto L_0x0169
             r2 = r4
-            goto L_0x0159
-        L_0x0158:
+            goto L_0x016a
+        L_0x0169:
             r2 = r7
-        L_0x0159:
+        L_0x016a:
             org.telegram.messenger.time.FastDateFormat r1 = r9.createFormatter(r0, r1, r2)
             r9.formatterStats = r1
             boolean r1 = is24HourFormat
-            if (r1 == 0) goto L_0x0169
-            r1 = 2131627586(0x7f0e0e42, float:1.888244E38)
+            if (r1 == 0) goto L_0x017a
+            r1 = 2131627670(0x7f0e0e96, float:1.888261E38)
             java.lang.String r2 = "formatterBannedUntil24H"
-            goto L_0x016e
-        L_0x0169:
-            r1 = 2131627585(0x7f0e0e41, float:1.8882439E38)
+            goto L_0x017f
+        L_0x017a:
+            r1 = 2131627669(0x7f0e0e95, float:1.8882609E38)
             java.lang.String r2 = "formatterBannedUntil12H"
-        L_0x016e:
+        L_0x017f:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
             boolean r2 = is24HourFormat
-            if (r2 == 0) goto L_0x0177
-            goto L_0x0178
-        L_0x0177:
+            if (r2 == 0) goto L_0x0188
+            goto L_0x0189
+        L_0x0188:
             r4 = r7
-        L_0x0178:
+        L_0x0189:
             org.telegram.messenger.time.FastDateFormat r1 = r9.createFormatter(r0, r1, r4)
             r9.formatterBannedUntil = r1
             boolean r1 = is24HourFormat
-            if (r1 == 0) goto L_0x0188
-            r1 = 2131627588(0x7f0e0e44, float:1.8882445E38)
+            if (r1 == 0) goto L_0x0199
+            r1 = 2131627672(0x7f0e0e98, float:1.8882615E38)
             java.lang.String r2 = "formatterBannedUntilThisYear24H"
-            goto L_0x018d
-        L_0x0188:
-            r1 = 2131627587(0x7f0e0e43, float:1.8882443E38)
+            goto L_0x019e
+        L_0x0199:
+            r1 = 2131627671(0x7f0e0e97, float:1.8882613E38)
             java.lang.String r2 = "formatterBannedUntilThisYear12H"
-        L_0x018d:
+        L_0x019e:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
             boolean r2 = is24HourFormat
-            if (r2 == 0) goto L_0x0198
+            if (r2 == 0) goto L_0x01a9
             java.lang.String r2 = "MMM dd, HH:mm"
-            goto L_0x019a
-        L_0x0198:
+            goto L_0x01ab
+        L_0x01a9:
             java.lang.String r2 = "MMM dd, h:mm a"
-        L_0x019a:
+        L_0x01ab:
             org.telegram.messenger.time.FastDateFormat r1 = r9.createFormatter(r0, r1, r2)
             r9.formatterBannedUntilThisYear = r1
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131626871(0x7f0e0b77, float:1.888099E38)
+            r2 = 2131626935(0x7f0e0bb7, float:1.888112E38)
             java.lang.String r4 = "SendTodayAt"
             java.lang.String r2 = r9.getStringInternal(r4, r2)
             java.lang.String r4 = "'Send today at' HH:mm"
             org.telegram.messenger.time.FastDateFormat r2 = r9.createFormatter(r0, r2, r4)
             r1[r3] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131626847(0x7f0e0b5f, float:1.8880942E38)
+            r2 = 2131626910(0x7f0e0b9e, float:1.888107E38)
             java.lang.String r3 = "SendDayAt"
             java.lang.String r2 = r9.getStringInternal(r3, r2)
             java.lang.String r3 = "'Send on' MMM d 'at' HH:mm"
             org.telegram.messenger.time.FastDateFormat r2 = r9.createFormatter(r0, r2, r3)
             r1[r5] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131626848(0x7f0e0b60, float:1.8880944E38)
+            r2 = 2131626911(0x7f0e0b9f, float:1.8881072E38)
             java.lang.String r3 = "SendDayYearAt"
             java.lang.String r2 = r9.getStringInternal(r3, r2)
             java.lang.String r3 = "'Send on' MMM d yyyy 'at' HH:mm"
@@ -2526,7 +2537,7 @@ public class LocaleController {
             r1[r6] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 3
-            r3 = 2131626672(0x7f0e0ab0, float:1.8880587E38)
+            r3 = 2131626716(0x7f0e0adc, float:1.8880676E38)
             java.lang.String r4 = "RemindTodayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind today at' HH:mm"
@@ -2534,7 +2545,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 4
-            r3 = 2131626670(0x7f0e0aae, float:1.8880583E38)
+            r3 = 2131626714(0x7f0e0ada, float:1.8880672E38)
             java.lang.String r4 = "RemindDayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind on' MMM d 'at' HH:mm"
@@ -2542,7 +2553,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 5
-            r3 = 2131626671(0x7f0e0aaf, float:1.8880585E38)
+            r3 = 2131626715(0x7f0e0adb, float:1.8880674E38)
             java.lang.String r4 = "RemindDayYearAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind on' MMM d yyyy 'at' HH:mm"

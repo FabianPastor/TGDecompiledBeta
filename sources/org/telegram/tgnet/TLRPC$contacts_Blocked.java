@@ -3,7 +3,8 @@ package org.telegram.tgnet;
 import java.util.ArrayList;
 
 public abstract class TLRPC$contacts_Blocked extends TLObject {
-    public ArrayList<TLRPC$TL_contactBlocked> blocked = new ArrayList<>();
+    public ArrayList<TLRPC$TL_peerBlocked> blocked = new ArrayList<>();
+    public ArrayList<TLRPC$Chat> chats = new ArrayList<>();
     public int count;
     public ArrayList<TLRPC$User> users = new ArrayList<>();
 

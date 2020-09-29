@@ -759,7 +759,7 @@ public class SecretMediaViewer implements NotificationCenter.NotificationCenterD
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagesDeleted);
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.updateMessageMedia);
             NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.didCreatedNewDeleteTask);
-            TLRPC$Peer tLRPC$Peer = messageObject2.messageOwner.to_id;
+            TLRPC$Peer tLRPC$Peer = messageObject2.messageOwner.peer_id;
             this.currentChannelId = tLRPC$Peer != null ? tLRPC$Peer.channel_id : 0;
             toggleActionBar(true, false);
             this.currentMessageObject = messageObject2;

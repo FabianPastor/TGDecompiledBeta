@@ -8,6 +8,7 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.telegram.messenger.FileLog;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -54,9 +55,25 @@ public class SvgHelper {
         L_0x0031:
             r3 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)
-            throw r0
+            return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SvgHelper.getBitmap(java.io.File, int, int, boolean):android.graphics.Bitmap");
+    }
+
+    public static Bitmap getBitmapByPathOnly(String str, int i, int i2, int i3, int i4) {
+        try {
+            Path doPath = doPath(str);
+            Bitmap createBitmap = Bitmap.createBitmap(i3, i4, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(createBitmap);
+            canvas.scale(((float) i3) / ((float) i), ((float) i4) / ((float) i2));
+            Paint paint = new Paint();
+            paint.setColor(-1);
+            canvas.drawPath(doPath, paint);
+            return createBitmap;
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+            return null;
+        }
     }
 
     private static NumberParse parseNumbers(String str) {

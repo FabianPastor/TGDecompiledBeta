@@ -7,10 +7,14 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.view.DisplayCutout;
 import android.view.MotionEvent;
@@ -25,10 +29,9 @@ import androidx.annotation.Keep;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
-import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.Utilities;
 
 public class DrawerLayoutContainer extends FrameLayout {
-    private AdjustPanLayoutHelper adjustPanLayoutHelper = new AdjustPanLayoutHelper(this);
     private boolean allowDrawContent = true;
     private boolean allowOpenDrawer;
     private boolean allowOpenDrawerBySwipe = true;
@@ -36,6 +39,7 @@ public class DrawerLayoutContainer extends FrameLayout {
     private boolean beginTrackingSent;
     private int behindKeyboardColor;
     private AnimatorSet currentAnimation;
+    private boolean drawCurrentPreviewFragmentAbove;
     private ViewGroup drawerLayout;
     private boolean drawerOpened;
     private float drawerPosition;
@@ -46,10 +50,13 @@ public class DrawerLayoutContainer extends FrameLayout {
     private boolean maybeStartTracking;
     private int minDrawerMargin = ((int) ((AndroidUtilities.density * 64.0f) + 0.5f));
     private ActionBarLayout parentActionBarLayout;
+    private BitmapDrawable previewBlurDrawable;
+    private PreviewForegroundDrawable previewForegroundDrawable;
     private Rect rect = new Rect();
     private float scrimOpacity;
     private Paint scrimPaint = new Paint();
     private Drawable shadowLeft;
+    private float startY;
     private boolean startedTracking;
     private int startedTrackingPointerId;
     private int startedTrackingX;
@@ -289,20 +296,75 @@ public class DrawerLayoutContainer extends FrameLayout {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:93:0x0190, code lost:
-        if (r9 != ((float) r8.drawerLayout.getMeasuredWidth())) goto L_0x0192;
+    public boolean isDrawCurrentPreviewFragmentAbove() {
+        return this.drawCurrentPreviewFragmentAbove;
+    }
+
+    public void setDrawCurrentPreviewFragmentAbove(boolean z) {
+        if (this.drawCurrentPreviewFragmentAbove != z) {
+            this.drawCurrentPreviewFragmentAbove = z;
+            if (z) {
+                createBlurDrawable();
+                this.previewForegroundDrawable = new PreviewForegroundDrawable();
+            } else {
+                this.startY = 0.0f;
+                this.previewBlurDrawable = null;
+                this.previewForegroundDrawable = null;
+            }
+            invalidate();
+        }
+    }
+
+    private void createBlurDrawable() {
+        int measuredWidth = getMeasuredWidth();
+        int measuredHeight = getMeasuredHeight();
+        int i = (int) (((float) measuredWidth) / 6.0f);
+        int i2 = (int) (((float) measuredHeight) / 6.0f);
+        Bitmap createBitmap = Bitmap.createBitmap(i, i2, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(createBitmap);
+        canvas.scale(0.16666667f, 0.16666667f);
+        draw(canvas);
+        Utilities.stackBlurBitmap(createBitmap, Math.max(7, Math.max(i, i2) / 180));
+        BitmapDrawable bitmapDrawable = new BitmapDrawable(createBitmap);
+        this.previewBlurDrawable = bitmapDrawable;
+        bitmapDrawable.setBounds(0, 0, measuredWidth, measuredHeight);
+    }
+
+    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+        if (!this.drawCurrentPreviewFragmentAbove || this.parentActionBarLayout == null) {
+            return super.dispatchTouchEvent(motionEvent);
+        }
+        int actionMasked = motionEvent.getActionMasked();
+        if (actionMasked == 2) {
+            float f = this.startY;
+            if (f == 0.0f) {
+                this.startY = motionEvent.getY();
+                MotionEvent obtain = MotionEvent.obtain(0, 0, 3, 0.0f, 0.0f, 0);
+                super.dispatchTouchEvent(obtain);
+                obtain.recycle();
+            } else {
+                this.parentActionBarLayout.movePreviewFragment(f - motionEvent.getY());
+            }
+        } else if (actionMasked == 1 || actionMasked == 6 || actionMasked == 3) {
+            this.parentActionBarLayout.finishPreviewFragment();
+        }
+        return true;
+    }
+
+    /* JADX WARNING: Code restructure failed: missing block: B:96:0x019f, code lost:
+        if (r9 != ((float) r8.drawerLayout.getMeasuredWidth())) goto L_0x01a1;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:121:0x01fd  */
+    /* JADX WARNING: Removed duplicated region for block: B:124:0x020c  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r9) {
         /*
             r8 = this;
             android.view.ViewGroup r0 = r8.drawerLayout
             r1 = 0
-            if (r0 == 0) goto L_0x0231
+            if (r0 == 0) goto L_0x0240
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.parentActionBarLayout
             boolean r0 = r0.checkTransitionAnimation()
-            if (r0 != 0) goto L_0x0231
+            if (r0 != 0) goto L_0x0240
             boolean r0 = r8.drawerOpened
             r2 = 1
             if (r0 == 0) goto L_0x002c
@@ -325,25 +387,31 @@ public class DrawerLayoutContainer extends FrameLayout {
             r5 = 0
             if (r0 != 0) goto L_0x0037
             boolean r0 = r8.drawerOpened
-            if (r0 == 0) goto L_0x0203
+            if (r0 == 0) goto L_0x0212
         L_0x0037:
             boolean r0 = r8.allowOpenDrawer
-            if (r0 == 0) goto L_0x0203
+            if (r0 == 0) goto L_0x0212
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.parentActionBarLayout
             java.util.ArrayList<org.telegram.ui.ActionBar.BaseFragment> r0 = r0.fragmentsStack
             int r0 = r0.size()
-            if (r0 != r2) goto L_0x0203
+            if (r0 != r2) goto L_0x0212
             r0 = 2
-            if (r9 == 0) goto L_0x008f
+            if (r9 == 0) goto L_0x009e
             int r6 = r9.getAction()
             if (r6 == 0) goto L_0x0054
             int r6 = r9.getAction()
-            if (r6 != r0) goto L_0x008f
+            if (r6 != r0) goto L_0x009e
         L_0x0054:
             boolean r6 = r8.startedTracking
-            if (r6 != 0) goto L_0x008f
+            if (r6 != 0) goto L_0x009e
             boolean r6 = r8.maybeStartTracking
-            if (r6 != 0) goto L_0x008f
+            if (r6 != 0) goto L_0x009e
+            float r0 = r9.getX()
+            float r3 = r9.getY()
+            android.view.View r0 = r8.findScrollingChild(r8, r0, r3)
+            if (r0 == 0) goto L_0x006b
+            return r1
+        L_0x006b:
             org.telegram.ui.ActionBar.ActionBarLayout r0 = r8.parentActionBarLayout
             android.graphics.Rect r3 = r8.rect
             r0.getHitRect(r3)
@@ -356,28 +424,28 @@ public class DrawerLayoutContainer extends FrameLayout {
             android.graphics.Rect r3 = r8.rect
             int r4 = r8.startedTrackingX
             boolean r0 = r3.contains(r4, r0)
-            if (r0 == 0) goto L_0x022e
+            if (r0 == 0) goto L_0x023d
             int r9 = r9.getPointerId(r1)
             r8.startedTrackingPointerId = r9
             r8.maybeStartTracking = r2
             r8.cancelCurrentAnimation()
             android.view.VelocityTracker r9 = r8.velocityTracker
-            if (r9 == 0) goto L_0x022e
+            if (r9 == 0) goto L_0x023d
             r9.clear()
-            goto L_0x022e
-        L_0x008f:
+            goto L_0x023d
+        L_0x009e:
             r6 = 0
-            if (r9 == 0) goto L_0x014e
+            if (r9 == 0) goto L_0x015d
             int r7 = r9.getAction()
-            if (r7 != r0) goto L_0x014e
+            if (r7 != r0) goto L_0x015d
             int r0 = r9.getPointerId(r1)
             int r7 = r8.startedTrackingPointerId
-            if (r0 != r7) goto L_0x014e
+            if (r0 != r7) goto L_0x015d
             android.view.VelocityTracker r0 = r8.velocityTracker
-            if (r0 != 0) goto L_0x00aa
+            if (r0 != 0) goto L_0x00b9
             android.view.VelocityTracker r0 = android.view.VelocityTracker.obtain()
             r8.velocityTracker = r0
-        L_0x00aa:
+        L_0x00b9:
             float r0 = r9.getX()
             int r1 = r8.startedTrackingX
             float r1 = (float) r1
@@ -393,95 +461,95 @@ public class DrawerLayoutContainer extends FrameLayout {
             android.view.VelocityTracker r3 = r8.velocityTracker
             r3.addMovement(r9)
             boolean r3 = r8.maybeStartTracking
-            if (r3 == 0) goto L_0x011f
+            if (r3 == 0) goto L_0x012e
             boolean r3 = r8.startedTracking
-            if (r3 != 0) goto L_0x011f
+            if (r3 != 0) goto L_0x012e
             int r3 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1))
-            if (r3 <= 0) goto L_0x00ed
+            if (r3 <= 0) goto L_0x00fc
             r3 = 1077936128(0x40400000, float:3.0)
             float r3 = r0 / r3
             float r4 = java.lang.Math.abs(r1)
             int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-            if (r3 <= 0) goto L_0x00ed
+            if (r3 <= 0) goto L_0x00fc
             float r3 = java.lang.Math.abs(r0)
             r4 = 1045220557(0x3e4ccccd, float:0.2)
             float r4 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r4, r2)
             int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-            if (r3 >= 0) goto L_0x0110
-        L_0x00ed:
-            boolean r3 = r8.drawerOpened
-            if (r3 == 0) goto L_0x011f
-            int r3 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1))
             if (r3 >= 0) goto L_0x011f
+        L_0x00fc:
+            boolean r3 = r8.drawerOpened
+            if (r3 == 0) goto L_0x012e
+            int r3 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1))
+            if (r3 >= 0) goto L_0x012e
             float r3 = java.lang.Math.abs(r0)
             float r1 = java.lang.Math.abs(r1)
             int r1 = (r3 > r1 ? 1 : (r3 == r1 ? 0 : -1))
-            if (r1 < 0) goto L_0x011f
+            if (r1 < 0) goto L_0x012e
             float r1 = java.lang.Math.abs(r0)
             r3 = 1053609165(0x3ecccccd, float:0.4)
             float r3 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r3, r2)
             int r1 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r1 < 0) goto L_0x011f
-        L_0x0110:
+            if (r1 < 0) goto L_0x012e
+        L_0x011f:
             r8.prepareForDrawerOpen(r9)
             float r9 = r9.getX()
             int r9 = (int) r9
             r8.startedTrackingX = r9
             r8.requestDisallowInterceptTouchEvent(r2)
-            goto L_0x022e
-        L_0x011f:
+            goto L_0x023d
+        L_0x012e:
             boolean r1 = r8.startedTracking
-            if (r1 == 0) goto L_0x022e
+            if (r1 == 0) goto L_0x023d
             boolean r1 = r8.beginTrackingSent
-            if (r1 != 0) goto L_0x0142
+            if (r1 != 0) goto L_0x0151
             android.content.Context r1 = r8.getContext()
             android.app.Activity r1 = (android.app.Activity) r1
             android.view.View r1 = r1.getCurrentFocus()
-            if (r1 == 0) goto L_0x0140
+            if (r1 == 0) goto L_0x014f
             android.content.Context r1 = r8.getContext()
             android.app.Activity r1 = (android.app.Activity) r1
             android.view.View r1 = r1.getCurrentFocus()
             org.telegram.messenger.AndroidUtilities.hideKeyboard(r1)
-        L_0x0140:
+        L_0x014f:
             r8.beginTrackingSent = r2
-        L_0x0142:
+        L_0x0151:
             r8.moveDrawerByX(r0)
             float r9 = r9.getX()
             int r9 = (int) r9
             r8.startedTrackingX = r9
-            goto L_0x022e
-        L_0x014e:
-            if (r9 == 0) goto L_0x016c
-            if (r9 == 0) goto L_0x022e
+            goto L_0x023d
+        L_0x015d:
+            if (r9 == 0) goto L_0x017b
+            if (r9 == 0) goto L_0x023d
             int r0 = r9.getPointerId(r1)
             int r7 = r8.startedTrackingPointerId
-            if (r0 != r7) goto L_0x022e
+            if (r0 != r7) goto L_0x023d
             int r0 = r9.getAction()
-            if (r0 == r4) goto L_0x016c
+            if (r0 == r4) goto L_0x017b
             int r0 = r9.getAction()
-            if (r0 == r2) goto L_0x016c
+            if (r0 == r2) goto L_0x017b
             int r9 = r9.getAction()
-            if (r9 != r3) goto L_0x022e
-        L_0x016c:
+            if (r9 != r3) goto L_0x023d
+        L_0x017b:
             android.view.VelocityTracker r9 = r8.velocityTracker
-            if (r9 != 0) goto L_0x0176
+            if (r9 != 0) goto L_0x0185
             android.view.VelocityTracker r9 = android.view.VelocityTracker.obtain()
             r8.velocityTracker = r9
-        L_0x0176:
+        L_0x0185:
             android.view.VelocityTracker r9 = r8.velocityTracker
             r0 = 1000(0x3e8, float:1.401E-42)
             r9.computeCurrentVelocity(r0)
             boolean r9 = r8.startedTracking
-            if (r9 != 0) goto L_0x0192
+            if (r9 != 0) goto L_0x01a1
             float r9 = r8.drawerPosition
             int r0 = (r9 > r6 ? 1 : (r9 == r6 ? 0 : -1))
-            if (r0 == 0) goto L_0x01f5
+            if (r0 == 0) goto L_0x0204
             android.view.ViewGroup r0 = r8.drawerLayout
             int r0 = r0.getMeasuredWidth()
             float r0 = (float) r0
             int r9 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1))
-            if (r9 == 0) goto L_0x01f5
-        L_0x0192:
+            if (r9 == 0) goto L_0x0204
+        L_0x01a1:
             android.view.VelocityTracker r9 = r8.velocityTracker
             float r9 = r9.getXVelocity()
             android.view.VelocityTracker r0 = r8.velocityTracker
@@ -494,82 +562,105 @@ public class DrawerLayoutContainer extends FrameLayout {
             float r4 = r4 / r7
             r7 = 1163575296(0x455aCLASSNAME, float:3500.0)
             int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-            if (r3 >= 0) goto L_0x01c1
+            if (r3 >= 0) goto L_0x01d0
             int r3 = (r9 > r7 ? 1 : (r9 == r7 ? 0 : -1))
-            if (r3 < 0) goto L_0x01cd
+            if (r3 < 0) goto L_0x01dc
             float r3 = java.lang.Math.abs(r9)
             float r0 = java.lang.Math.abs(r0)
             int r0 = (r3 > r0 ? 1 : (r3 == r0 ? 0 : -1))
-            if (r0 < 0) goto L_0x01cd
-        L_0x01c1:
+            if (r0 < 0) goto L_0x01dc
+        L_0x01d0:
             int r0 = (r9 > r6 ? 1 : (r9 == r6 ? 0 : -1))
-            if (r0 >= 0) goto L_0x01cf
+            if (r0 >= 0) goto L_0x01de
             float r0 = java.lang.Math.abs(r9)
             int r0 = (r0 > r7 ? 1 : (r0 == r7 ? 0 : -1))
-            if (r0 < 0) goto L_0x01cf
-        L_0x01cd:
+            if (r0 < 0) goto L_0x01de
+        L_0x01dc:
             r0 = 1
-            goto L_0x01d0
-        L_0x01cf:
+            goto L_0x01df
+        L_0x01de:
             r0 = 0
-        L_0x01d0:
-            if (r0 != 0) goto L_0x01e4
-            boolean r0 = r8.drawerOpened
-            if (r0 != 0) goto L_0x01df
-            float r9 = java.lang.Math.abs(r9)
-            int r9 = (r9 > r7 ? 1 : (r9 == r7 ? 0 : -1))
-            if (r9 < 0) goto L_0x01df
-            goto L_0x01e0
         L_0x01df:
-            r2 = 0
-        L_0x01e0:
-            r8.openDrawer(r2)
-            goto L_0x01f5
-        L_0x01e4:
+            if (r0 != 0) goto L_0x01f3
             boolean r0 = r8.drawerOpened
-            if (r0 == 0) goto L_0x01f1
+            if (r0 != 0) goto L_0x01ee
             float r9 = java.lang.Math.abs(r9)
             int r9 = (r9 > r7 ? 1 : (r9 == r7 ? 0 : -1))
-            if (r9 < 0) goto L_0x01f1
-            goto L_0x01f2
-        L_0x01f1:
+            if (r9 < 0) goto L_0x01ee
+            goto L_0x01ef
+        L_0x01ee:
             r2 = 0
-        L_0x01f2:
+        L_0x01ef:
+            r8.openDrawer(r2)
+            goto L_0x0204
+        L_0x01f3:
+            boolean r0 = r8.drawerOpened
+            if (r0 == 0) goto L_0x0200
+            float r9 = java.lang.Math.abs(r9)
+            int r9 = (r9 > r7 ? 1 : (r9 == r7 ? 0 : -1))
+            if (r9 < 0) goto L_0x0200
+            goto L_0x0201
+        L_0x0200:
+            r2 = 0
+        L_0x0201:
             r8.closeDrawer(r2)
-        L_0x01f5:
+        L_0x0204:
             r8.startedTracking = r1
             r8.maybeStartTracking = r1
             android.view.VelocityTracker r9 = r8.velocityTracker
-            if (r9 == 0) goto L_0x022e
+            if (r9 == 0) goto L_0x023d
             r9.recycle()
             r8.velocityTracker = r5
-            goto L_0x022e
-        L_0x0203:
-            if (r9 == 0) goto L_0x0221
-            if (r9 == 0) goto L_0x022e
+            goto L_0x023d
+        L_0x0212:
+            if (r9 == 0) goto L_0x0230
+            if (r9 == 0) goto L_0x023d
             int r0 = r9.getPointerId(r1)
             int r6 = r8.startedTrackingPointerId
-            if (r0 != r6) goto L_0x022e
+            if (r0 != r6) goto L_0x023d
             int r0 = r9.getAction()
-            if (r0 == r4) goto L_0x0221
+            if (r0 == r4) goto L_0x0230
             int r0 = r9.getAction()
-            if (r0 == r2) goto L_0x0221
+            if (r0 == r2) goto L_0x0230
             int r9 = r9.getAction()
-            if (r9 != r3) goto L_0x022e
-        L_0x0221:
+            if (r9 != r3) goto L_0x023d
+        L_0x0230:
             r8.startedTracking = r1
             r8.maybeStartTracking = r1
             android.view.VelocityTracker r9 = r8.velocityTracker
-            if (r9 == 0) goto L_0x022e
+            if (r9 == 0) goto L_0x023d
             r9.recycle()
             r8.velocityTracker = r5
-        L_0x022e:
+        L_0x023d:
             boolean r9 = r8.startedTracking
             return r9
-        L_0x0231:
+        L_0x0240:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.DrawerLayoutContainer.onTouchEvent(android.view.MotionEvent):boolean");
+    }
+
+    private View findScrollingChild(ViewGroup viewGroup, float f, float f2) {
+        int childCount = viewGroup.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View childAt = viewGroup.getChildAt(i);
+            childAt.getHitRect(this.rect);
+            if (this.rect.contains((int) f, (int) f2)) {
+                if (childAt.canScrollHorizontally(-1)) {
+                    return childAt;
+                }
+                if (childAt instanceof ViewGroup) {
+                    Rect rect2 = this.rect;
+                    View findScrollingChild = findScrollingChild((ViewGroup) childAt, f - ((float) rect2.left), f2 - ((float) rect2.top));
+                    if (findScrollingChild != null) {
+                        return findScrollingChild;
+                    }
+                } else {
+                    continue;
+                }
+            }
+        }
+        return null;
     }
 
     public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
@@ -654,7 +745,12 @@ public class DrawerLayoutContainer extends FrameLayout {
                     }
                 }
                 if (this.drawerLayout != childAt) {
-                    childAt.measure(View.MeasureSpec.makeMeasureSpec((size - layoutParams.leftMargin) - layoutParams.rightMargin, NUM), View.MeasureSpec.makeMeasureSpec((size2 - layoutParams.topMargin) - layoutParams.bottomMargin, NUM));
+                    int makeMeasureSpec = View.MeasureSpec.makeMeasureSpec((size - layoutParams.leftMargin) - layoutParams.rightMargin, NUM);
+                    int i5 = layoutParams.height;
+                    if (i5 <= 0) {
+                        i5 = View.MeasureSpec.makeMeasureSpec((size2 - layoutParams.topMargin) - layoutParams.bottomMargin, NUM);
+                    }
+                    childAt.measure(makeMeasureSpec, i5);
                 } else {
                     childAt.setPadding(0, 0, 0, 0);
                     childAt.measure(FrameLayout.getChildMeasureSpec(i, this.minDrawerMargin + layoutParams.leftMargin + layoutParams.rightMargin, layoutParams.width), FrameLayout.getChildMeasureSpec(i2, layoutParams.topMargin + layoutParams.bottomMargin, layoutParams.height));
@@ -670,8 +766,16 @@ public class DrawerLayoutContainer extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public void dispatchDraw(Canvas canvas) {
-        this.adjustPanLayoutHelper.update();
+        ActionBarLayout actionBarLayout;
         super.dispatchDraw(canvas);
+        if (this.drawCurrentPreviewFragmentAbove && (actionBarLayout = this.parentActionBarLayout) != null) {
+            BitmapDrawable bitmapDrawable = this.previewBlurDrawable;
+            if (bitmapDrawable != null) {
+                bitmapDrawable.setAlpha((int) (actionBarLayout.getCurrentPreviewFragmentAlpha() * 255.0f));
+                this.previewBlurDrawable.draw(canvas);
+            }
+            this.parentActionBarLayout.drawCurrentPreviewFragment(canvas, Build.VERSION.SDK_INT >= 21 ? this.previewForegroundDrawable : null);
+        }
     }
 
     /* access modifiers changed from: protected */
@@ -729,10 +833,10 @@ public class DrawerLayoutContainer extends FrameLayout {
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         Object obj;
-        int systemWindowInsetBottom;
         if (Build.VERSION.SDK_INT >= 21 && (obj = this.lastInsets) != null) {
             WindowInsets windowInsets = (WindowInsets) obj;
-            if (!SharedConfig.smoothKeyboard && (systemWindowInsetBottom = windowInsets.getSystemWindowInsetBottom()) > 0) {
+            int systemWindowInsetBottom = windowInsets.getSystemWindowInsetBottom();
+            if (systemWindowInsetBottom > 0) {
                 this.backgroundPaint.setColor(this.behindKeyboardColor);
                 canvas.drawRect(0.0f, (float) (getMeasuredHeight() - systemWindowInsetBottom), (float) getMeasuredWidth(), (float) getMeasuredHeight(), this.backgroundPaint);
             }
@@ -755,5 +859,54 @@ public class DrawerLayoutContainer extends FrameLayout {
             return super.onRequestSendAccessibilityEvent(view, accessibilityEvent);
         }
         return false;
+    }
+
+    private static class PreviewForegroundDrawable extends Drawable {
+        private final GradientDrawable bottomDrawable;
+        private final GradientDrawable topDrawable;
+
+        public int getOpacity() {
+            return -3;
+        }
+
+        public void setColorFilter(ColorFilter colorFilter) {
+        }
+
+        public PreviewForegroundDrawable() {
+            GradientDrawable gradientDrawable = new GradientDrawable();
+            this.topDrawable = gradientDrawable;
+            gradientDrawable.setStroke(AndroidUtilities.dp(1.0f), Theme.getColor("actionBarDefault"));
+            this.topDrawable.setCornerRadius((float) AndroidUtilities.dp(6.0f));
+            GradientDrawable gradientDrawable2 = new GradientDrawable();
+            this.bottomDrawable = gradientDrawable2;
+            gradientDrawable2.setStroke(1, Theme.getColor("divider"));
+            this.bottomDrawable.setCornerRadius((float) AndroidUtilities.dp(6.0f));
+        }
+
+        public void draw(Canvas canvas) {
+            Rect bounds = getBounds();
+            canvas.save();
+            int i = bounds.left;
+            int i2 = bounds.top;
+            canvas.clipRect(i, i2, bounds.right, ActionBar.getCurrentActionBarHeight() + i2);
+            this.topDrawable.draw(canvas);
+            canvas.restore();
+            canvas.save();
+            canvas.clipRect(bounds.left, bounds.top + ActionBar.getCurrentActionBarHeight(), bounds.right, bounds.bottom);
+            this.bottomDrawable.draw(canvas);
+            canvas.restore();
+        }
+
+        /* access modifiers changed from: protected */
+        public void onBoundsChange(Rect rect) {
+            super.onBoundsChange(rect);
+            this.topDrawable.setBounds(rect);
+            this.bottomDrawable.setBounds(rect);
+        }
+
+        public void setAlpha(int i) {
+            this.topDrawable.setAlpha(i);
+            this.bottomDrawable.setAlpha(i);
+        }
     }
 }

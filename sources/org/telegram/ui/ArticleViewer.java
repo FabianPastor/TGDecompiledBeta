@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -23,9 +22,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.SurfaceTexture;
 import android.graphics.Typeface;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -33,21 +30,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.Layout;
-import android.text.Selection;
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.method.LinkMovementMethod;
-import android.text.style.URLSpan;
 import android.util.LongSparseArray;
 import android.util.Property;
 import android.util.SparseArray;
 import android.view.ActionMode;
 import android.view.DisplayCutout;
-import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -82,12 +74,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
-import com.google.android.exoplayer2.analytics.AnalyticsListener;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import java.io.File;
-import java.lang.reflect.Array;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,7 +86,6 @@ import org.json.JSONObject;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.DownloadController;
-import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLoader;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
@@ -103,7 +93,6 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MediaController;
-import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
@@ -118,6 +107,7 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$DocumentAttribute;
+import org.telegram.tgnet.TLRPC$FileLocation;
 import org.telegram.tgnet.TLRPC$Page;
 import org.telegram.tgnet.TLRPC$PageBlock;
 import org.telegram.tgnet.TLRPC$Photo;
@@ -128,7 +118,6 @@ import org.telegram.tgnet.TLRPC$TL_contacts_resolveUsername;
 import org.telegram.tgnet.TLRPC$TL_contacts_resolvedPeer;
 import org.telegram.tgnet.TLRPC$TL_documentAttributeAudio;
 import org.telegram.tgnet.TLRPC$TL_error;
-import org.telegram.tgnet.TLRPC$TL_fileLocationUnavailable;
 import org.telegram.tgnet.TLRPC$TL_messageActionChatAddUser;
 import org.telegram.tgnet.TLRPC$TL_messages_getWebPage;
 import org.telegram.tgnet.TLRPC$TL_messages_messages;
@@ -190,11 +179,9 @@ import org.telegram.tgnet.TLRPC$Updates;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$WebPage;
 import org.telegram.tgnet.TLRPC$messages_Messages;
-import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.ActionBarPopupWindow;
-import org.telegram.ui.ActionBar.AlertDialog;
 import org.telegram.ui.ActionBar.BackDrawable;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.BottomSheet;
@@ -205,23 +192,19 @@ import org.telegram.ui.Cells.HeaderCell;
 import org.telegram.ui.Cells.TextSelectionHelper;
 import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.AnimatedArrowDrawable;
-import org.telegram.ui.Components.AnimatedFileDrawable;
 import org.telegram.ui.Components.AnimationProperties;
 import org.telegram.ui.Components.AvatarDrawable;
-import org.telegram.ui.Components.ClippingImageView;
 import org.telegram.ui.Components.CloseProgressDrawable2;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.ContextProgressView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EditTextBoldCursor;
-import org.telegram.ui.Components.GroupedPhotosListView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.LineProgressView;
 import org.telegram.ui.Components.LinkPath;
 import org.telegram.ui.Components.RadialProgress2;
 import org.telegram.ui.Components.RadioButton;
 import org.telegram.ui.Components.RecyclerListView;
-import org.telegram.ui.Components.Scroller;
 import org.telegram.ui.Components.SeekBar;
 import org.telegram.ui.Components.SeekBarView;
 import org.telegram.ui.Components.ShareAlert;
@@ -229,10 +212,10 @@ import org.telegram.ui.Components.StaticLayoutEx;
 import org.telegram.ui.Components.TableLayout;
 import org.telegram.ui.Components.TextPaintUrlSpan;
 import org.telegram.ui.Components.TypefaceSpan;
-import org.telegram.ui.Components.VideoPlayer;
 import org.telegram.ui.Components.WebPlayerView;
+import org.telegram.ui.PhotoViewer;
 
-public class ArticleViewer implements NotificationCenter.NotificationCenterDelegate, GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
+public class ArticleViewer implements NotificationCenter.NotificationCenterDelegate {
     public static final Property<WindowView, Float> ARTICLE_VIEWER_INNER_TRANSLATION_X = new AnimationProperties.FloatProperty<WindowView>("innerTranslationX") {
         public void setValue(WindowView windowView, float f) {
             windowView.setInnerTranslationX(f);
@@ -249,8 +232,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     private static SparseArray<TextPaint> authorTextPaints = new SparseArray<>();
     private static TextPaint channelNamePaint;
     private static TextPaint channelNamePhotoPaint;
-    /* access modifiers changed from: private */
-    public static DecelerateInterpolator decelerateInterpolator;
     private static SparseArray<TextPaint> detailsTextPaints = new SparseArray<>();
     /* access modifiers changed from: private */
     public static Paint dividerPaint;
@@ -279,10 +260,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     public static Paint preformattedBackgroundPaint;
     private static SparseArray<TextPaint> preformattedTextPaints = new SparseArray<>();
     /* access modifiers changed from: private */
-    public static Drawable[] progressDrawables;
-    /* access modifiers changed from: private */
-    public static Paint progressPaint;
-    /* access modifiers changed from: private */
     public static Paint quoteLinePaint;
     private static SparseArray<TextPaint> quoteTextPaints = new SparseArray<>();
     private static TextPaint relatedArticleHeaderPaint;
@@ -308,27 +285,15 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     /* access modifiers changed from: private */
     public static Paint webpageUrlPaint;
     /* access modifiers changed from: private */
-    public ActionBar actionBar;
-    /* access modifiers changed from: private */
     public WebpageAdapter[] adapter;
     int allowAnimationIndex = -1;
     /* access modifiers changed from: private */
     public int anchorsOffsetMeasuredWidth;
     /* access modifiers changed from: private */
     public boolean animateClear = true;
-    private float animateToScale;
-    private float animateToX;
-    private float animateToY;
-    /* access modifiers changed from: private */
-    public ClippingImageView animatingImageView;
     /* access modifiers changed from: private */
     public Runnable animationEndRunnable;
     private int animationInProgress;
-    private long animationStartTime;
-    private float animationValue;
-    private float[][] animationValues = ((float[][]) Array.newInstance(float.class, new int[]{2, 13}));
-    /* access modifiers changed from: private */
-    public AspectRatioFrameLayout aspectRatioFrameLayout;
     /* access modifiers changed from: private */
     public boolean attachedToWindow;
     private ImageView backButton;
@@ -337,18 +302,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     /* access modifiers changed from: private */
     public Paint backgroundPaint;
     /* access modifiers changed from: private */
-    public Paint blackPaint = new Paint();
-    /* access modifiers changed from: private */
-    public FrameLayout bottomLayout;
-    private boolean canDragDown = true;
-    private boolean canZoom = true;
-    /* access modifiers changed from: private */
-    public TextView captionTextView;
-    /* access modifiers changed from: private */
-    public TextView captionTextViewNext;
-    private ImageReceiver centerImage = new ImageReceiver();
-    private boolean changingPage;
-    /* access modifiers changed from: private */
     public boolean checkingForLongPress = false;
     /* access modifiers changed from: private */
     public ImageView clearButton;
@@ -356,36 +309,21 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     public boolean collapsed;
     /* access modifiers changed from: private */
     public FrameLayout containerView;
-    private int[] coords = new int[2];
     /* access modifiers changed from: private */
     public ArrayList<BlockEmbedCell> createdWebViews = new ArrayList<>();
     /* access modifiers changed from: private */
     public int currentAccount;
     /* access modifiers changed from: private */
-    public AnimatorSet currentActionBarAnimation;
-    private AnimatedFileDrawable currentAnimation;
-    private String[] currentFileNames = new String[3];
-    /* access modifiers changed from: private */
     public int currentHeaderHeight;
-    /* access modifiers changed from: private */
-    public int currentIndex;
-    private TLRPC$PageBlock currentMedia;
-    private PlaceProviderObject currentPlaceObject;
     /* access modifiers changed from: private */
     public WebPlayerView currentPlayingVideo;
     /* access modifiers changed from: private */
     public int currentSearchIndex;
     /* access modifiers changed from: private */
-    public ImageReceiver.BitmapHolder currentThumb;
-    /* access modifiers changed from: private */
     public View customView;
     /* access modifiers changed from: private */
     public WebChromeClient.CustomViewCallback customViewCallback;
     private TextView deleteView;
-    private boolean discardTap;
-    private boolean doubleTap;
-    private float dragY;
-    private boolean draggingDown;
     /* access modifiers changed from: private */
     public boolean drawBlockSelection;
     private FontCell[] fontCells = new FontCell[2];
@@ -397,9 +335,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     public FrameLayout fullscreenVideoContainer;
     /* access modifiers changed from: private */
     public WebPlayerView fullscreenedVideo;
-    private GestureDetector gestureDetector;
-    /* access modifiers changed from: private */
-    public GroupedPhotosListView groupedPhotosListView;
     /* access modifiers changed from: private */
     public boolean hasCutout;
     /* access modifiers changed from: private */
@@ -408,20 +343,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     public Paint headerProgressPaint = new Paint();
     /* access modifiers changed from: private */
     public FrameLayout headerView;
-    private PlaceProviderObject hideAfterAnimation;
     /* access modifiers changed from: private */
     public boolean ignoreOnTextChange;
-    /* access modifiers changed from: private */
-    public AnimatorSet imageMoveAnimation;
-    /* access modifiers changed from: private */
-    public ArrayList<TLRPC$PageBlock> imagesArr = new ArrayList<>();
     private DecelerateInterpolator interpolator = new DecelerateInterpolator(1.5f);
-    private boolean invalidCoords;
-    private boolean isActionBarVisible = true;
-    /* access modifiers changed from: private */
-    public boolean isPhotoVisible;
-    /* access modifiers changed from: private */
-    public boolean isPlaying;
     /* access modifiers changed from: private */
     public boolean isVisible;
     /* access modifiers changed from: private */
@@ -436,7 +360,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     public Drawable layerShadowDrawable;
     /* access modifiers changed from: private */
     public LinearLayoutManager[] layoutManager;
-    private ImageReceiver leftImage = new ImageReceiver();
     private Runnable lineProgressTickRunnable;
     private LineProgressView lineProgressView;
     /* access modifiers changed from: private */
@@ -446,17 +369,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     /* access modifiers changed from: private */
     public TLRPC$Chat loadedChannel;
     private boolean loadingChannel;
-    private float maxX;
-    private float maxY;
     /* access modifiers changed from: private */
     public ActionBarMenuItem menuButton;
     private FrameLayout menuContainer;
-    private ActionBarMenuItem menuItem;
-    private float minX;
-    private float minY;
-    private float moveStartX;
-    private float moveStartY;
-    private boolean moving;
     private int openUrlReqId;
     /* access modifiers changed from: private */
     public AnimatorSet pageSwitchAnimation;
@@ -469,23 +384,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     /* access modifiers changed from: private */
     public CheckForLongPress pendingCheckForLongPress = null;
     private CheckForTap pendingCheckForTap = null;
-    /* access modifiers changed from: private */
-    public WebpageAdapter photoAdapter;
-    /* access modifiers changed from: private */
-    public Runnable photoAnimationEndRunnable;
-    private int photoAnimationInProgress;
-    private PhotoBackgroundDrawable photoBackgroundDrawable = new PhotoBackgroundDrawable(-16777216);
-    /* access modifiers changed from: private */
-    public View photoContainerBackground;
-    /* access modifiers changed from: private */
-    public FrameLayoutDrawer photoContainerView;
-    private long photoTransitionAnimationStartTime;
-    private float pinchCenterX;
-    private float pinchCenterY;
-    private float pinchStartDistance;
-    private float pinchStartScale = 1.0f;
-    private float pinchStartX;
-    private float pinchStartY;
     private ActionBarPopupWindow.ActionBarPopupWindowLayout popupLayout;
     private Rect popupRect;
     /* access modifiers changed from: private */
@@ -504,14 +402,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     public ContextProgressView progressView;
     /* access modifiers changed from: private */
     public AnimatorSet progressViewAnimation;
-    private RadialProgressView[] radialProgressViews = new RadialProgressView[3];
-    private ImageReceiver rightImage = new ImageReceiver();
     /* access modifiers changed from: private */
     public AnimatorSet runAfterKeyboardClose;
-    private float scale = 1.0f;
     /* access modifiers changed from: private */
     public Paint scrimPaint;
-    private Scroller scroller;
     /* access modifiers changed from: private */
     public FrameLayout searchContainer;
     private SimpleTextView searchCountText;
@@ -528,70 +422,22 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     public String searchText;
     private ImageView searchUpButton;
     private int selectedFont = 0;
-    private PlaceProviderObject showAfterAnimation;
     /* access modifiers changed from: private */
     public Drawable slideDotBigDrawable;
     /* access modifiers changed from: private */
     public Drawable slideDotDrawable;
     /* access modifiers changed from: private */
     public Paint statusBarPaint = new Paint();
-    private int switchImageAfterAnimation;
     TextSelectionHelper.ArticleTextSelectionHelper textSelectionHelper;
     TextSelectionHelper.ArticleTextSelectionHelper textSelectionHelperBottomSheet;
     /* access modifiers changed from: private */
-    public boolean textureUploaded;
-    /* access modifiers changed from: private */
     public SimpleTextView titleTextView;
     private long transitionAnimationStartTime;
-    private float translationX;
-    private float translationY;
-    /* access modifiers changed from: private */
-    public Runnable updateProgressRunnable = new Runnable() {
-        public void run() {
-            if (!(ArticleViewer.this.videoPlayer == null || ArticleViewer.this.videoPlayerSeekbar == null || ArticleViewer.this.videoPlayerSeekbar.isDragging())) {
-                ArticleViewer.this.videoPlayerSeekbar.setProgress(((float) ArticleViewer.this.videoPlayer.getCurrentPosition()) / ((float) ArticleViewer.this.videoPlayer.getDuration()));
-                ArticleViewer.this.videoPlayerControlFrameLayout.invalidate();
-                ArticleViewer.this.updateVideoPlayerTime();
-            }
-            if (ArticleViewer.this.isPlaying) {
-                AndroidUtilities.runOnUIThread(ArticleViewer.this.updateProgressRunnable, 100);
-            }
-        }
-    };
     private LinkPath urlPath = new LinkPath();
-    private VelocityTracker velocityTracker;
-    private float videoCrossfadeAlpha;
-    private long videoCrossfadeAlphaLastTime;
-    private boolean videoCrossfadeStarted;
-    /* access modifiers changed from: private */
-    public ImageView videoPlayButton;
-    /* access modifiers changed from: private */
-    public VideoPlayer videoPlayer;
-    /* access modifiers changed from: private */
-    public FrameLayout videoPlayerControlFrameLayout;
-    /* access modifiers changed from: private */
-    public SeekBar videoPlayerSeekbar;
-    /* access modifiers changed from: private */
-    public TextView videoPlayerTime;
-    private TextureView videoTextureView;
     private Dialog visibleDialog;
     private WindowManager.LayoutParams windowLayoutParams;
     /* access modifiers changed from: private */
     public WindowView windowView;
-    private boolean zoomAnimation;
-    private boolean zooming;
-
-    public static class PlaceProviderObject {
-        public int clipBottomAddition;
-        public int clipTopAddition;
-        public ImageReceiver imageReceiver;
-        public View parentView;
-        public int[] radius;
-        public float scale = 1.0f;
-        public ImageReceiver.BitmapHolder thumb;
-        public int viewX;
-        public int viewY;
-    }
 
     static /* synthetic */ boolean lambda$setParentActivity$20(View view, MotionEvent motionEvent) {
         return true;
@@ -601,35 +447,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     public void updateWindowLayoutParamsForSearch() {
     }
 
-    public boolean onDoubleTapEvent(MotionEvent motionEvent) {
-        return false;
-    }
-
-    public boolean onDown(MotionEvent motionEvent) {
-        return false;
-    }
-
-    public void onLongPress(MotionEvent motionEvent) {
-    }
-
-    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
-        return false;
-    }
-
-    public void onShowPress(MotionEvent motionEvent) {
-    }
-
-    public boolean onSingleTapUp(MotionEvent motionEvent) {
-        return false;
-    }
-
-    static /* synthetic */ int access$15608(ArticleViewer articleViewer) {
+    static /* synthetic */ int access$12908(ArticleViewer articleViewer) {
         int i = articleViewer.lastBlockNum;
         articleViewer.lastBlockNum = i + 1;
         return i;
     }
 
-    static /* synthetic */ int access$2004(ArticleViewer articleViewer) {
+    static /* synthetic */ int access$1704(ArticleViewer articleViewer) {
         int i = articleViewer.pressCount + 1;
         articleViewer.pressCount = i;
         return i;
@@ -985,27 +809,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
-    private class FrameLayoutDrawer extends FrameLayout {
-        public FrameLayoutDrawer(Context context) {
-            super(context);
-        }
-
-        public boolean onTouchEvent(MotionEvent motionEvent) {
-            boolean unused = ArticleViewer.this.processTouchEvent(motionEvent);
-            return true;
-        }
-
-        /* access modifiers changed from: protected */
-        public void onDraw(Canvas canvas) {
-            ArticleViewer.this.drawContent(canvas);
-        }
-
-        /* access modifiers changed from: protected */
-        public boolean drawChild(Canvas canvas, View view, long j) {
-            return view != ArticleViewer.this.aspectRatioFrameLayout && super.drawChild(canvas, view, j);
-        }
-    }
-
     private final class CheckForTap implements Runnable {
         private CheckForTap() {
         }
@@ -1015,7 +818,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 ArticleViewer articleViewer = ArticleViewer.this;
                 CheckForLongPress unused = articleViewer.pendingCheckForLongPress = new CheckForLongPress();
             }
-            ArticleViewer.this.pendingCheckForLongPress.currentPressCount = ArticleViewer.access$2004(ArticleViewer.this);
+            ArticleViewer.this.pendingCheckForLongPress.currentPressCount = ArticleViewer.access$1704(ArticleViewer.this);
             if (ArticleViewer.this.windowView != null) {
                 ArticleViewer.this.windowView.postDelayed(ArticleViewer.this.pendingCheckForLongPress, (long) (ViewConfiguration.getLongPressTimeout() - ViewConfiguration.getTapTimeout()));
             }
@@ -1028,6 +831,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         private int bWidth;
         private int bX;
         private int bY;
+        private final Paint blackPaint = new Paint();
         /* access modifiers changed from: private */
         public boolean closeAnimationInProgress;
         private float innerTranslationX;
@@ -1106,11 +910,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
             boolean unused = articleViewer.keyboardVisible = z;
             ArticleViewer.this.containerView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, NUM));
-            ArticleViewer.this.photoContainerView.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, NUM));
-            ArticleViewer.this.photoContainerBackground.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, NUM));
             ArticleViewer.this.fullscreenVideoContainer.measure(View.MeasureSpec.makeMeasureSpec(size, NUM), View.MeasureSpec.makeMeasureSpec(size2, NUM));
-            ViewGroup.LayoutParams layoutParams = ArticleViewer.this.animatingImageView.getLayoutParams();
-            ArticleViewer.this.animatingImageView.measure(View.MeasureSpec.makeMeasureSpec(layoutParams.width, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(layoutParams.height, Integer.MIN_VALUE));
         }
 
         public boolean dispatchTouchEvent(MotionEvent motionEvent) {
@@ -1135,25 +935,24 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         /* access modifiers changed from: protected */
         public void onLayout(boolean z, int i, int i2, int i3, int i4) {
             int i5;
-            int i6;
             if (!this.selfLayout) {
-                int i7 = i3 - i;
-                if (ArticleViewer.this.anchorsOffsetMeasuredWidth != i7) {
+                int i6 = i3 - i;
+                int i7 = 0;
+                if (ArticleViewer.this.anchorsOffsetMeasuredWidth != i6) {
                     for (int i8 = 0; i8 < ArticleViewer.this.listView.length; i8++) {
                         for (Map.Entry value : ArticleViewer.this.adapter[i8].anchorsOffset.entrySet()) {
                             value.setValue(-1);
                         }
                     }
-                    int unused = ArticleViewer.this.anchorsOffsetMeasuredWidth = i7;
+                    int unused = ArticleViewer.this.anchorsOffsetMeasuredWidth = i6;
                 }
                 if (Build.VERSION.SDK_INT < 21 || ArticleViewer.this.lastInsets == null) {
                     i5 = 0;
-                    i6 = 0;
                 } else {
                     WindowInsets windowInsets = (WindowInsets) ArticleViewer.this.lastInsets;
-                    i6 = windowInsets.getSystemWindowInsetLeft();
+                    int systemWindowInsetLeft = windowInsets.getSystemWindowInsetLeft();
                     if (windowInsets.getSystemWindowInsetRight() != 0) {
-                        this.bX = i7 - this.bWidth;
+                        this.bX = i6 - this.bWidth;
                         this.bY = 0;
                     } else if (windowInsets.getSystemWindowInsetLeft() != 0) {
                         this.bX = 0;
@@ -1162,13 +961,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         this.bX = 0;
                         this.bY = (i4 - i2) - this.bHeight;
                     }
-                    i5 = windowInsets.getSystemWindowInsetTop() + 0;
+                    i5 = 0 + windowInsets.getSystemWindowInsetTop();
+                    i7 = systemWindowInsetLeft;
                 }
-                ArticleViewer.this.containerView.layout(i6, i5, ArticleViewer.this.containerView.getMeasuredWidth() + i6, ArticleViewer.this.containerView.getMeasuredHeight() + i5);
-                ArticleViewer.this.photoContainerView.layout(i6, i5, ArticleViewer.this.photoContainerView.getMeasuredWidth() + i6, ArticleViewer.this.photoContainerView.getMeasuredHeight() + i5);
-                ArticleViewer.this.photoContainerBackground.layout(i6, i5, ArticleViewer.this.photoContainerBackground.getMeasuredWidth() + i6, ArticleViewer.this.photoContainerBackground.getMeasuredHeight() + i5);
-                ArticleViewer.this.fullscreenVideoContainer.layout(i6, i5, ArticleViewer.this.fullscreenVideoContainer.getMeasuredWidth() + i6, ArticleViewer.this.fullscreenVideoContainer.getMeasuredHeight() + i5);
-                ArticleViewer.this.animatingImageView.layout(0, 0, ArticleViewer.this.animatingImageView.getMeasuredWidth(), ArticleViewer.this.animatingImageView.getMeasuredHeight());
+                ArticleViewer.this.containerView.layout(i7, i5, ArticleViewer.this.containerView.getMeasuredWidth() + i7, ArticleViewer.this.containerView.getMeasuredHeight() + i5);
+                ArticleViewer.this.fullscreenVideoContainer.layout(i7, i5, ArticleViewer.this.fullscreenVideoContainer.getMeasuredWidth() + i7, ArticleViewer.this.fullscreenVideoContainer.getMeasuredHeight() + i5);
                 if (ArticleViewer.this.runAfterKeyboardClose != null) {
                     ArticleViewer.this.runAfterKeyboardClose.start();
                     AnimatorSet unused2 = ArticleViewer.this.runAfterKeyboardClose = null;
@@ -1259,7 +1056,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
 
         public boolean handleTouchEvent(MotionEvent motionEvent) {
-            if (ArticleViewer.this.isPhotoVisible || this.closeAnimationInProgress || ArticleViewer.this.fullscreenVideoContainer.getVisibility() == 0 || ArticleViewer.this.textSelectionHelper.isSelectionMode()) {
+            if (this.closeAnimationInProgress || ArticleViewer.this.fullscreenVideoContainer.getVisibility() == 0 || ArticleViewer.this.textSelectionHelper.isSelectionMode()) {
                 return false;
             }
             if (motionEvent != null && motionEvent.getAction() == 0 && !this.startedTracking && !this.maybeStartTracking) {
@@ -1302,23 +1099,23 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     prepareForMoving(motionEvent);
                 }
                 if (this.startedTracking) {
-                    View access$2800 = this.movingPage ? ArticleViewer.this.listView[0] : ArticleViewer.this.containerView;
-                    float x = access$2800.getX();
-                    final boolean z = x < ((float) access$2800.getMeasuredWidth()) / 3.0f && (xVelocity < 3500.0f || xVelocity < yVelocity);
+                    View access$2500 = this.movingPage ? ArticleViewer.this.listView[0] : ArticleViewer.this.containerView;
+                    float x = access$2500.getX();
+                    final boolean z = x < ((float) access$2500.getMeasuredWidth()) / 3.0f && (xVelocity < 3500.0f || xVelocity < yVelocity);
                     AnimatorSet animatorSet = new AnimatorSet();
                     if (!z) {
-                        x = ((float) access$2800.getMeasuredWidth()) - x;
+                        x = ((float) access$2500.getMeasuredWidth()) - x;
                         if (this.movingPage) {
-                            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ArticleViewer.this.listView[0], View.TRANSLATION_X, new float[]{(float) access$2800.getMeasuredWidth()})});
+                            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ArticleViewer.this.listView[0], View.TRANSLATION_X, new float[]{(float) access$2500.getMeasuredWidth()})});
                         } else {
-                            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ArticleViewer.this.containerView, View.TRANSLATION_X, new float[]{(float) access$2800.getMeasuredWidth()}), ObjectAnimator.ofFloat(this, ArticleViewer.ARTICLE_VIEWER_INNER_TRANSLATION_X, new float[]{(float) access$2800.getMeasuredWidth()})});
+                            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ArticleViewer.this.containerView, View.TRANSLATION_X, new float[]{(float) access$2500.getMeasuredWidth()}), ObjectAnimator.ofFloat(this, ArticleViewer.ARTICLE_VIEWER_INNER_TRANSLATION_X, new float[]{(float) access$2500.getMeasuredWidth()})});
                         }
                     } else if (this.movingPage) {
                         animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ArticleViewer.this.listView[0], View.TRANSLATION_X, new float[]{0.0f})});
                     } else {
                         animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(ArticleViewer.this.containerView, View.TRANSLATION_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this, ArticleViewer.ARTICLE_VIEWER_INNER_TRANSLATION_X, new float[]{0.0f})});
                     }
-                    animatorSet.setDuration((long) Math.max((int) ((200.0f / ((float) access$2800.getMeasuredWidth())) * x), 50));
+                    animatorSet.setDuration((long) Math.max((int) ((200.0f / ((float) access$2500.getMeasuredWidth())) * x), 50));
                     animatorSet.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             if (WindowView.this.movingPage) {
@@ -1387,13 +1184,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int i;
             super.dispatchDraw(canvas);
             if (this.bWidth != 0 && this.bHeight != 0) {
-                ArticleViewer.this.blackPaint.setAlpha((int) (ArticleViewer.this.windowView.getAlpha() * 255.0f));
+                this.blackPaint.setAlpha((int) (ArticleViewer.this.windowView.getAlpha() * 255.0f));
                 int i2 = this.bX;
                 if (i2 == 0 && (i = this.bY) == 0) {
-                    canvas.drawRect((float) i2, (float) i, (float) (i2 + this.bWidth), (float) (i + this.bHeight), ArticleViewer.this.blackPaint);
+                    canvas.drawRect((float) i2, (float) i, (float) (i2 + this.bWidth), (float) (i + this.bHeight), this.blackPaint);
                     return;
                 }
-                canvas.drawRect(((float) this.bX) - getTranslationX(), (float) this.bY, ((float) (this.bX + this.bWidth)) - getTranslationX(), (float) (this.bY + this.bHeight), ArticleViewer.this.blackPaint);
+                canvas.drawRect(((float) this.bX) - getTranslationX(), (float) this.bY, ((float) (this.bX + this.bWidth)) - getTranslationX(), (float) (this.bY + this.bHeight), this.blackPaint);
             }
         }
 
@@ -1796,7 +1593,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
-    private TLRPC$RichText getBlockCaption(TLRPC$PageBlock tLRPC$PageBlock, int i) {
+    /* access modifiers changed from: private */
+    public TLRPC$RichText getBlockCaption(TLRPC$PageBlock tLRPC$PageBlock, int i) {
         if (i == 2) {
             TLRPC$RichText blockCaption = getBlockCaption(tLRPC$PageBlock, 0);
             if (blockCaption instanceof TLRPC$TL_textEmpty) {
@@ -2348,9 +2146,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             if (tLRPC$TL_textAnchor != null) {
                 TLRPC$TL_pageBlockParagraph tLRPC$TL_pageBlockParagraph = new TLRPC$TL_pageBlockParagraph();
                 tLRPC$TL_pageBlockParagraph.text = tLRPC$TL_textAnchor.text;
-                int access$8300 = this.adapter[0].getTypeForBlock(tLRPC$TL_pageBlockParagraph);
-                RecyclerView.ViewHolder onCreateViewHolder = this.adapter[0].onCreateViewHolder((ViewGroup) null, access$8300);
-                this.adapter[0].bindBlockToHolder(access$8300, onCreateViewHolder, tLRPC$TL_pageBlockParagraph, 0, 0);
+                int access$7500 = this.adapter[0].getTypeForBlock(tLRPC$TL_pageBlockParagraph);
+                RecyclerView.ViewHolder onCreateViewHolder = this.adapter[0].onCreateViewHolder((ViewGroup) null, access$7500);
+                this.adapter[0].bindBlockToHolder(access$7500, onCreateViewHolder, tLRPC$TL_pageBlockParagraph, 0, 0);
                 BottomSheet.Builder builder = new BottomSheet.Builder(this.parentActivity);
                 builder.setApplyTopPadding(false);
                 builder.setApplyBottomPadding(false);
@@ -2442,9 +2240,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 Integer num3 = (Integer) this.adapter[0].anchorsOffset.get(lowerCase);
                 if (num3 != null) {
                     if (num3.intValue() == -1) {
-                        int access$83002 = this.adapter[0].getTypeForBlock(tLRPC$PageBlock);
-                        RecyclerView.ViewHolder onCreateViewHolder2 = this.adapter[0].onCreateViewHolder((ViewGroup) null, access$83002);
-                        this.adapter[0].bindBlockToHolder(access$83002, onCreateViewHolder2, tLRPC$PageBlock, 0, 0);
+                        int access$75002 = this.adapter[0].getTypeForBlock(tLRPC$PageBlock);
+                        RecyclerView.ViewHolder onCreateViewHolder2 = this.adapter[0].onCreateViewHolder((ViewGroup) null, access$75002);
+                        this.adapter[0].bindBlockToHolder(access$75002, onCreateViewHolder2, tLRPC$PageBlock, 0, 0);
                         onCreateViewHolder2.itemView.measure(View.MeasureSpec.makeMeasureSpec(this.listView[0].getMeasuredWidth(), NUM), View.MeasureSpec.makeMeasureSpec(0, 0));
                         Integer num4 = (Integer) this.adapter[0].anchorsOffset.get(lowerCase);
                         if (num4.intValue() != -1) {
@@ -2588,6 +2386,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
+    /* access modifiers changed from: private */
+    public CharSequence getText(WebpageAdapter webpageAdapter, View view, TLRPC$RichText tLRPC$RichText, TLRPC$RichText tLRPC$RichText2, TLRPC$PageBlock tLRPC$PageBlock, int i) {
+        return getText(webpageAdapter.currentPage, view, tLRPC$RichText, tLRPC$RichText2, tLRPC$PageBlock, i);
+    }
+
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v0, resolved type: java.lang.String} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v1, resolved type: android.text.SpannableStringBuilder} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r2v2, resolved type: android.text.SpannableStringBuilder} */
@@ -2596,7 +2399,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     /* JADX WARNING: Failed to insert additional move for type inference */
     /* JADX WARNING: Multi-variable type inference failed */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public java.lang.CharSequence getText(org.telegram.ui.ArticleViewer.WebpageAdapter r27, android.view.View r28, org.telegram.tgnet.TLRPC$RichText r29, org.telegram.tgnet.TLRPC$RichText r30, org.telegram.tgnet.TLRPC$PageBlock r31, int r32) {
+    public java.lang.CharSequence getText(org.telegram.tgnet.TLRPC$WebPage r27, android.view.View r28, org.telegram.tgnet.TLRPC$RichText r29, org.telegram.tgnet.TLRPC$RichText r30, org.telegram.tgnet.TLRPC$PageBlock r31, int r32) {
         /*
             r26 = this;
             r8 = r26
@@ -2618,7 +2421,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r4 = r29
             r6 = r31
             r7 = r32
-            java.lang.CharSequence r0 = r1.getText(r2, r3, r4, r5, r6, r7)
+            java.lang.CharSequence r0 = r1.getText((org.telegram.tgnet.TLRPC$WebPage) r2, (android.view.View) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$RichText) r5, (org.telegram.tgnet.TLRPC$PageBlock) r6, (int) r7)
             return r0
         L_0x0026:
             boolean r1 = r9 instanceof org.telegram.tgnet.TLRPC$TL_textItalic
@@ -2632,7 +2435,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r4 = r29
             r6 = r31
             r7 = r32
-            java.lang.CharSequence r0 = r1.getText(r2, r3, r4, r5, r6, r7)
+            java.lang.CharSequence r0 = r1.getText((org.telegram.tgnet.TLRPC$WebPage) r2, (android.view.View) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$RichText) r5, (org.telegram.tgnet.TLRPC$PageBlock) r6, (int) r7)
             return r0
         L_0x0040:
             boolean r1 = r9 instanceof org.telegram.tgnet.TLRPC$TL_textBold
@@ -2646,7 +2449,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r4 = r29
             r6 = r31
             r7 = r32
-            java.lang.CharSequence r0 = r1.getText(r2, r3, r4, r5, r6, r7)
+            java.lang.CharSequence r0 = r1.getText((org.telegram.tgnet.TLRPC$WebPage) r2, (android.view.View) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$RichText) r5, (org.telegram.tgnet.TLRPC$PageBlock) r6, (int) r7)
             return r0
         L_0x005a:
             boolean r1 = r9 instanceof org.telegram.tgnet.TLRPC$TL_textUnderline
@@ -2660,7 +2463,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r4 = r29
             r6 = r31
             r7 = r32
-            java.lang.CharSequence r0 = r1.getText(r2, r3, r4, r5, r6, r7)
+            java.lang.CharSequence r0 = r1.getText((org.telegram.tgnet.TLRPC$WebPage) r2, (android.view.View) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$RichText) r5, (org.telegram.tgnet.TLRPC$PageBlock) r6, (int) r7)
             return r0
         L_0x0074:
             boolean r1 = r9 instanceof org.telegram.tgnet.TLRPC$TL_textStrike
@@ -2674,7 +2477,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r4 = r29
             r6 = r31
             r7 = r32
-            java.lang.CharSequence r0 = r1.getText(r2, r3, r4, r5, r6, r7)
+            java.lang.CharSequence r0 = r1.getText((org.telegram.tgnet.TLRPC$WebPage) r2, (android.view.View) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$RichText) r5, (org.telegram.tgnet.TLRPC$PageBlock) r6, (int) r7)
             return r0
         L_0x008e:
             boolean r1 = r9 instanceof org.telegram.tgnet.TLRPC$TL_textEmail
@@ -2691,7 +2494,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r4 = r29
             r6 = r31
             r7 = r32
-            java.lang.CharSequence r1 = r1.getText(r2, r3, r4, r5, r6, r7)
+            java.lang.CharSequence r1 = r1.getText((org.telegram.tgnet.TLRPC$WebPage) r2, (android.view.View) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$RichText) r5, (org.telegram.tgnet.TLRPC$PageBlock) r6, (int) r7)
             r14.<init>(r1)
             int r1 = r14.length()
             java.lang.Class<android.text.style.MetricAffectingSpan> r2 = android.text.style.MetricAffectingSpan.class
@@ -2734,7 +2537,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r6 = r31
             r12 = r7
             r7 = r32
-            java.lang.CharSequence r1 = r1.getText(r2, r3, r4, r5, r6, r7)
+            java.lang.CharSequence r1 = r1.getText((org.telegram.tgnet.TLRPC$WebPage) r2, (android.view.View) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$RichText) r5, (org.telegram.tgnet.TLRPC$PageBlock) r6, (int) r7)
             r11.<init>(r1)
             int r1 = r11.length()
             java.lang.Class<android.text.style.MetricAffectingSpan> r2 = android.text.style.MetricAffectingSpan.class
@@ -2788,7 +2591,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r4 = r29
             r6 = r31
             r7 = r32
-            java.lang.CharSequence r0 = r1.getText(r2, r3, r4, r5, r6, r7)
+            java.lang.CharSequence r0 = r1.getText((org.telegram.tgnet.TLRPC$WebPage) r2, (android.view.View) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$RichText) r5, (org.telegram.tgnet.TLRPC$PageBlock) r6, (int) r7)
             r11.<init>(r0)
             org.telegram.ui.Components.AnchorSpan r0 = new org.telegram.ui.Components.AnchorSpan
             java.lang.String r1 = r9.name
@@ -2860,7 +2663,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r6 = r31
             r18 = r7
             r7 = r32
-            java.lang.CharSequence r1 = r1.getText(r2, r3, r4, r5, r6, r7)
+            java.lang.CharSequence r1 = r1.getText((org.telegram.tgnet.TLRPC$WebPage) r2, (android.view.View) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$RichText) r5, (org.telegram.tgnet.TLRPC$PageBlock) r6, (int) r7)
             int r2 = r8.getTextFlags(r15)
             int r3 = r12.length()
             r12.append(r1)
@@ -2935,7 +2738,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r4 = r29
             r6 = r31
             r7 = r32
-            java.lang.CharSequence r0 = r1.getText(r2, r3, r4, r5, r6, r7)
+            java.lang.CharSequence r0 = r1.getText((org.telegram.tgnet.TLRPC$WebPage) r2, (android.view.View) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$RichText) r5, (org.telegram.tgnet.TLRPC$PageBlock) r6, (int) r7)
             return r0
         L_0x02a9:
             boolean r1 = r9 instanceof org.telegram.tgnet.TLRPC$TL_textSuperscript
@@ -2949,7 +2752,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r4 = r29
             r6 = r31
             r7 = r32
-            java.lang.CharSequence r0 = r1.getText(r2, r3, r4, r5, r6, r7)
+            java.lang.CharSequence r0 = r1.getText((org.telegram.tgnet.TLRPC$WebPage) r2, (android.view.View) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$RichText) r5, (org.telegram.tgnet.TLRPC$PageBlock) r6, (int) r7)
             return r0
         L_0x02c3:
             boolean r1 = r9 instanceof org.telegram.tgnet.TLRPC$TL_textMarked
@@ -2964,7 +2767,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r4 = r29
             r6 = r31
             r7 = r32
-            java.lang.CharSequence r1 = r1.getText(r2, r3, r4, r5, r6, r7)
+            java.lang.CharSequence r1 = r1.getText((org.telegram.tgnet.TLRPC$WebPage) r2, (android.view.View) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$RichText) r5, (org.telegram.tgnet.TLRPC$PageBlock) r6, (int) r7)
             r11.<init>(r1)
             int r1 = r11.length()
             java.lang.Class<android.text.style.MetricAffectingSpan> r2 = android.text.style.MetricAffectingSpan.class
@@ -3004,7 +2807,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r4 = r29
             r6 = r31
             r7 = r32
-            java.lang.CharSequence r1 = r1.getText(r2, r3, r4, r5, r6, r7)     // Catch:{ all -> 0x0411 }
+            java.lang.CharSequence r1 = r1.getText((org.telegram.tgnet.TLRPC$WebPage) r2, (android.view.View) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$RichText) r5, (org.telegram.tgnet.TLRPC$PageBlock) r6, (int) r7)     // Catch:{ all -> 0x0410 }
             r11.<init>(r1)
             int r1 = r11.length()
             java.lang.Class<android.text.style.MetricAffectingSpan> r2 = android.text.style.MetricAffectingSpan.class
@@ -3040,13 +2843,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             return r11
         L_0x0372:
             boolean r0 = r9 instanceof org.telegram.tgnet.TLRPC$TL_textImage
-            if (r0 == 0) goto L_0x03ff
+            if (r0 == 0) goto L_0x03fe
             r0 = r9
             org.telegram.tgnet.TLRPC$TL_textImage r0 = (org.telegram.tgnet.TLRPC$TL_textImage) r0
             long r3 = r0.document_id
             r1 = r27
-            org.telegram.tgnet.TLRPC$Document r20 = r1.getDocumentWithId(r3)
-            if (r20 == 0) goto L_0x03fe
+            org.telegram.tgnet.TLRPC$Document r20 = org.telegram.ui.ArticleViewer.WebPageUtils.getDocumentWithId(r1, r3)
+            if (r20 == 0) goto L_0x03fd
             android.text.SpannableStringBuilder r2 = new android.text.SpannableStringBuilder
             java.lang.String r3 = "*"
             r2.<init>(r3)
@@ -3071,7 +2874,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r23 = r0
             r22 = r3
         L_0x03ae:
-            if (r28 == 0) goto L_0x03fe
+            if (r28 == 0) goto L_0x03fd
             java.lang.String r0 = "windowBackgroundWhite"
             int r0 = org.telegram.ui.ActionBar.Theme.getColor(r0)
             r3 = 1046066128(0x3e59b3d0, float:0.2126)
@@ -3091,26 +2894,26 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r0 = 1132396544(0x437var_, float:255.0)
             float r4 = r4 / r0
             org.telegram.ui.Components.TextPaintImageReceiverSpan r0 = new org.telegram.ui.Components.TextPaintImageReceiverSpan
-            org.telegram.tgnet.TLRPC$WebPage r21 = r27.currentPage
             r24 = 0
-            r1 = 1060403937(0x3var_ae1, float:0.705)
-            int r1 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
-            if (r1 > 0) goto L_0x03eb
+            r3 = 1060403937(0x3var_ae1, float:0.705)
+            int r3 = (r4 > r3 ? 1 : (r4 == r3 ? 0 : -1))
+            if (r3 > 0) goto L_0x03e8
             r25 = 1
-            goto L_0x03ed
-        L_0x03eb:
+            goto L_0x03ea
+        L_0x03e8:
             r25 = 0
-        L_0x03ed:
+        L_0x03ea:
             r18 = r0
             r19 = r28
+            r21 = r27
             r18.<init>(r19, r20, r21, r22, r23, r24, r25)
             int r1 = r2.length()
             r3 = 33
             r4 = 0
             r2.setSpan(r0, r4, r1, r3)
-        L_0x03fe:
+        L_0x03fd:
             return r2
-        L_0x03ff:
+        L_0x03fe:
             java.lang.StringBuilder r0 = new java.lang.StringBuilder
             r0.<init>()
             java.lang.String r1 = "not supported "
@@ -3118,16 +2921,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r0.append(r9)
             java.lang.String r0 = r0.toString()
             return r0
-        L_0x0411:
+        L_0x0410:
             r0 = move-exception
             r1 = r0
-            goto L_0x0415
-        L_0x0414:
-            throw r1
-        L_0x0415:
             goto L_0x0414
+        L_0x0413:
+            throw r1
+        L_0x0414:
+            goto L_0x0413
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.getText(org.telegram.ui.ArticleViewer$WebpageAdapter, android.view.View, org.telegram.tgnet.TLRPC$RichText, org.telegram.tgnet.TLRPC$RichText, org.telegram.tgnet.TLRPC$PageBlock, int):java.lang.CharSequence");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.getText(org.telegram.tgnet.TLRPC$WebPage, android.view.View, org.telegram.tgnet.TLRPC$RichText, org.telegram.tgnet.TLRPC$RichText, org.telegram.tgnet.TLRPC$PageBlock, int):java.lang.CharSequence");
     }
 
     public static CharSequence getPlainText(TLRPC$RichText tLRPC$RichText) {
@@ -3541,7 +3344,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r4 = r25
             r5 = r28
             r6 = r20
-            java.lang.CharSequence r0 = r0.getText(r1, r2, r3, r4, r5, r6)
+            java.lang.CharSequence r0 = r0.getText((org.telegram.ui.ArticleViewer.WebpageAdapter) r1, (android.view.View) r2, (org.telegram.tgnet.TLRPC$RichText) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$PageBlock) r5, (int) r6)
         L_0x0035:
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 == 0) goto L_0x003c
@@ -4304,7 +4107,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
         int i = this.lastReqId + 1;
         this.lastReqId = i;
-        closePhoto(false);
         showProgressView(true, true);
         TLRPC$TL_messages_getWebPage tLRPC$TL_messages_getWebPage = new TLRPC$TL_messages_getWebPage();
         tLRPC$TL_messages_getWebPage.url = str;
@@ -4363,212 +4165,124 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:68:0x010c, code lost:
-        r1 = (org.telegram.ui.ArticleViewer.BlockAudioCell) r1;
+    /* JADX WARNING: Code restructure failed: missing block: B:29:0x0064, code lost:
+        r2 = (org.telegram.ui.ArticleViewer.BlockAudioCell) r2;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void didReceivedNotification(int r8, int r9, java.lang.Object... r10) {
+    public void didReceivedNotification(int r7, int r8, java.lang.Object... r9) {
         /*
-            r7 = this;
-            int r9 = org.telegram.messenger.NotificationCenter.fileDidFailToLoad
-            r0 = 1065353216(0x3var_, float:1.0)
-            r1 = 3
-            r2 = 0
-            r3 = 1
-            if (r8 != r9) goto L_0x002c
-            r8 = r10[r2]
-            java.lang.String r8 = (java.lang.String) r8
-        L_0x000d:
-            if (r2 >= r1) goto L_0x016e
-            java.lang.String[] r9 = r7.currentFileNames
-            r10 = r9[r2]
-            if (r10 == 0) goto L_0x0029
-            r9 = r9[r2]
-            boolean r9 = r9.equals(r8)
-            if (r9 == 0) goto L_0x0029
-            org.telegram.ui.ArticleViewer$RadialProgressView[] r8 = r7.radialProgressViews
-            r8 = r8[r2]
-            r8.setProgress(r0, r3)
-            r7.checkProgress(r2, r3)
-            goto L_0x016e
-        L_0x0029:
-            int r2 = r2 + 1
-            goto L_0x000d
-        L_0x002c:
-            int r9 = org.telegram.messenger.NotificationCenter.fileDidLoad
-            if (r8 != r9) goto L_0x0063
-            r8 = r10[r2]
-            java.lang.String r8 = (java.lang.String) r8
+            r6 = this;
+            int r8 = org.telegram.messenger.NotificationCenter.messagePlayingDidStart
+            r0 = 1
+            r1 = 0
+            if (r7 != r8) goto L_0x0034
+            r7 = r9[r1]
+            org.telegram.messenger.MessageObject r7 = (org.telegram.messenger.MessageObject) r7
+            org.telegram.ui.Components.RecyclerListView[] r7 = r6.listView
+            if (r7 == 0) goto L_0x00c6
+            r7 = 0
+        L_0x000f:
+            org.telegram.ui.Components.RecyclerListView[] r8 = r6.listView
+            int r9 = r8.length
+            if (r7 >= r9) goto L_0x00c6
+            r8 = r8[r7]
+            int r8 = r8.getChildCount()
             r9 = 0
-        L_0x0035:
-            if (r9 >= r1) goto L_0x016e
-            java.lang.String[] r10 = r7.currentFileNames
-            r4 = r10[r9]
-            if (r4 == 0) goto L_0x0060
-            r10 = r10[r9]
-            boolean r10 = r10.equals(r8)
-            if (r10 == 0) goto L_0x0060
-            org.telegram.ui.ArticleViewer$RadialProgressView[] r8 = r7.radialProgressViews
-            r8 = r8[r9]
-            r8.setProgress(r0, r3)
-            r7.checkProgress(r9, r3)
-            if (r9 != 0) goto L_0x016e
-            org.telegram.ui.ArticleViewer$WebpageAdapter r8 = r7.photoAdapter
-            int r9 = r7.currentIndex
-            boolean r8 = r7.isMediaVideo(r8, r9)
-            if (r8 == 0) goto L_0x016e
-            r7.onActionClick(r2)
-            goto L_0x016e
-        L_0x0060:
+        L_0x001b:
+            if (r9 >= r8) goto L_0x0031
+            org.telegram.ui.Components.RecyclerListView[] r2 = r6.listView
+            r2 = r2[r7]
+            android.view.View r2 = r2.getChildAt(r9)
+            boolean r3 = r2 instanceof org.telegram.ui.ArticleViewer.BlockAudioCell
+            if (r3 == 0) goto L_0x002e
+            org.telegram.ui.ArticleViewer$BlockAudioCell r2 = (org.telegram.ui.ArticleViewer.BlockAudioCell) r2
+            r2.updateButtonState(r0)
+        L_0x002e:
             int r9 = r9 + 1
-            goto L_0x0035
-        L_0x0063:
-            int r9 = org.telegram.messenger.NotificationCenter.FileLoadProgressChanged
-            if (r8 != r9) goto L_0x009d
-            r8 = r10[r2]
-            java.lang.String r8 = (java.lang.String) r8
-        L_0x006b:
-            if (r2 >= r1) goto L_0x016e
-            java.lang.String[] r9 = r7.currentFileNames
-            r4 = r9[r2]
-            if (r4 == 0) goto L_0x009a
-            r9 = r9[r2]
-            boolean r9 = r9.equals(r8)
-            if (r9 == 0) goto L_0x009a
-            r9 = r10[r3]
-            java.lang.Long r9 = (java.lang.Long) r9
-            r4 = 2
-            r4 = r10[r4]
-            java.lang.Long r4 = (java.lang.Long) r4
-            long r5 = r9.longValue()
-            float r9 = (float) r5
-            long r4 = r4.longValue()
-            float r4 = (float) r4
-            float r9 = r9 / r4
-            float r9 = java.lang.Math.min(r0, r9)
-            org.telegram.ui.ArticleViewer$RadialProgressView[] r4 = r7.radialProgressViews
-            r4 = r4[r2]
-            r4.setProgress(r9, r3)
-        L_0x009a:
-            int r2 = r2 + 1
-            goto L_0x006b
-        L_0x009d:
-            int r9 = org.telegram.messenger.NotificationCenter.emojiDidLoad
-            if (r8 != r9) goto L_0x00aa
-            android.widget.TextView r8 = r7.captionTextView
-            if (r8 == 0) goto L_0x016e
-            r8.invalidate()
-            goto L_0x016e
-        L_0x00aa:
-            int r9 = org.telegram.messenger.NotificationCenter.messagePlayingDidStart
-            if (r8 != r9) goto L_0x00dc
-            r8 = r10[r2]
-            org.telegram.messenger.MessageObject r8 = (org.telegram.messenger.MessageObject) r8
-            org.telegram.ui.Components.RecyclerListView[] r8 = r7.listView
-            if (r8 == 0) goto L_0x016e
+            goto L_0x001b
+        L_0x0031:
+            int r7 = r7 + 1
+            goto L_0x000f
+        L_0x0034:
+            int r8 = org.telegram.messenger.NotificationCenter.messagePlayingDidReset
+            if (r7 == r8) goto L_0x0096
+            int r8 = org.telegram.messenger.NotificationCenter.messagePlayingPlayStateChanged
+            if (r7 != r8) goto L_0x003d
+            goto L_0x0096
+        L_0x003d:
+            int r8 = org.telegram.messenger.NotificationCenter.messagePlayingProgressDidChanged
+            if (r7 != r8) goto L_0x00c6
+            r7 = r9[r1]
+            java.lang.Integer r7 = (java.lang.Integer) r7
+            org.telegram.ui.Components.RecyclerListView[] r8 = r6.listView
+            if (r8 == 0) goto L_0x00c6
             r8 = 0
-        L_0x00b7:
-            org.telegram.ui.Components.RecyclerListView[] r9 = r7.listView
-            int r10 = r9.length
-            if (r8 >= r10) goto L_0x016e
+        L_0x004a:
+            org.telegram.ui.Components.RecyclerListView[] r9 = r6.listView
+            int r0 = r9.length
+            if (r8 >= r0) goto L_0x00c6
             r9 = r9[r8]
             int r9 = r9.getChildCount()
-            r10 = 0
-        L_0x00c3:
-            if (r10 >= r9) goto L_0x00d9
-            org.telegram.ui.Components.RecyclerListView[] r0 = r7.listView
-            r0 = r0[r8]
-            android.view.View r0 = r0.getChildAt(r10)
-            boolean r1 = r0 instanceof org.telegram.ui.ArticleViewer.BlockAudioCell
-            if (r1 == 0) goto L_0x00d6
-            org.telegram.ui.ArticleViewer$BlockAudioCell r0 = (org.telegram.ui.ArticleViewer.BlockAudioCell) r0
-            r0.updateButtonState(r3)
-        L_0x00d6:
-            int r10 = r10 + 1
-            goto L_0x00c3
-        L_0x00d9:
-            int r8 = r8 + 1
-            goto L_0x00b7
-        L_0x00dc:
-            int r9 = org.telegram.messenger.NotificationCenter.messagePlayingDidReset
-            if (r8 == r9) goto L_0x013e
-            int r9 = org.telegram.messenger.NotificationCenter.messagePlayingPlayStateChanged
-            if (r8 != r9) goto L_0x00e5
-            goto L_0x013e
-        L_0x00e5:
-            int r9 = org.telegram.messenger.NotificationCenter.messagePlayingProgressDidChanged
-            if (r8 != r9) goto L_0x016e
-            r8 = r10[r2]
-            java.lang.Integer r8 = (java.lang.Integer) r8
-            org.telegram.ui.Components.RecyclerListView[] r9 = r7.listView
-            if (r9 == 0) goto L_0x016e
-            r9 = 0
-        L_0x00f2:
-            org.telegram.ui.Components.RecyclerListView[] r10 = r7.listView
-            int r0 = r10.length
-            if (r9 >= r0) goto L_0x016e
-            r10 = r10[r9]
-            int r10 = r10.getChildCount()
             r0 = 0
-        L_0x00fe:
-            if (r0 >= r10) goto L_0x013b
-            org.telegram.ui.Components.RecyclerListView[] r1 = r7.listView
-            r1 = r1[r9]
-            android.view.View r1 = r1.getChildAt(r0)
-            boolean r3 = r1 instanceof org.telegram.ui.ArticleViewer.BlockAudioCell
-            if (r3 == 0) goto L_0x0138
-            org.telegram.ui.ArticleViewer$BlockAudioCell r1 = (org.telegram.ui.ArticleViewer.BlockAudioCell) r1
-            org.telegram.messenger.MessageObject r3 = r1.getMessageObject()
-            if (r3 == 0) goto L_0x0138
+        L_0x0056:
+            if (r0 >= r9) goto L_0x0093
+            org.telegram.ui.Components.RecyclerListView[] r2 = r6.listView
+            r2 = r2[r8]
+            android.view.View r2 = r2.getChildAt(r0)
+            boolean r3 = r2 instanceof org.telegram.ui.ArticleViewer.BlockAudioCell
+            if (r3 == 0) goto L_0x0090
+            org.telegram.ui.ArticleViewer$BlockAudioCell r2 = (org.telegram.ui.ArticleViewer.BlockAudioCell) r2
+            org.telegram.messenger.MessageObject r3 = r2.getMessageObject()
+            if (r3 == 0) goto L_0x0090
             int r4 = r3.getId()
-            int r5 = r8.intValue()
-            if (r4 != r5) goto L_0x0138
-            org.telegram.messenger.MediaController r10 = org.telegram.messenger.MediaController.getInstance()
-            org.telegram.messenger.MessageObject r10 = r10.getPlayingMessageObject()
-            if (r10 == 0) goto L_0x013b
-            float r0 = r10.audioProgress
+            int r5 = r7.intValue()
+            if (r4 != r5) goto L_0x0090
+            org.telegram.messenger.MediaController r9 = org.telegram.messenger.MediaController.getInstance()
+            org.telegram.messenger.MessageObject r9 = r9.getPlayingMessageObject()
+            if (r9 == 0) goto L_0x0093
+            float r0 = r9.audioProgress
             r3.audioProgress = r0
-            int r0 = r10.audioProgressSec
+            int r0 = r9.audioProgressSec
             r3.audioProgressSec = r0
-            int r10 = r10.audioPlayerDuration
-            r3.audioPlayerDuration = r10
-            r1.updatePlayingMessageProgress()
-            goto L_0x013b
-        L_0x0138:
+            int r9 = r9.audioPlayerDuration
+            r3.audioPlayerDuration = r9
+            r2.updatePlayingMessageProgress()
+            goto L_0x0093
+        L_0x0090:
             int r0 = r0 + 1
-            goto L_0x00fe
-        L_0x013b:
-            int r9 = r9 + 1
-            goto L_0x00f2
-        L_0x013e:
-            org.telegram.ui.Components.RecyclerListView[] r8 = r7.listView
-            if (r8 == 0) goto L_0x016e
-            r8 = 0
-        L_0x0143:
-            org.telegram.ui.Components.RecyclerListView[] r9 = r7.listView
-            int r10 = r9.length
-            if (r8 >= r10) goto L_0x016e
-            r9 = r9[r8]
-            int r9 = r9.getChildCount()
-            r10 = 0
-        L_0x014f:
-            if (r10 >= r9) goto L_0x016b
-            org.telegram.ui.Components.RecyclerListView[] r0 = r7.listView
-            r0 = r0[r8]
-            android.view.View r0 = r0.getChildAt(r10)
-            boolean r1 = r0 instanceof org.telegram.ui.ArticleViewer.BlockAudioCell
-            if (r1 == 0) goto L_0x0168
-            org.telegram.ui.ArticleViewer$BlockAudioCell r0 = (org.telegram.ui.ArticleViewer.BlockAudioCell) r0
-            org.telegram.messenger.MessageObject r1 = r0.getMessageObject()
-            if (r1 == 0) goto L_0x0168
-            r0.updateButtonState(r3)
-        L_0x0168:
-            int r10 = r10 + 1
-            goto L_0x014f
-        L_0x016b:
+            goto L_0x0056
+        L_0x0093:
             int r8 = r8 + 1
-            goto L_0x0143
-        L_0x016e:
+            goto L_0x004a
+        L_0x0096:
+            org.telegram.ui.Components.RecyclerListView[] r7 = r6.listView
+            if (r7 == 0) goto L_0x00c6
+            r7 = 0
+        L_0x009b:
+            org.telegram.ui.Components.RecyclerListView[] r8 = r6.listView
+            int r9 = r8.length
+            if (r7 >= r9) goto L_0x00c6
+            r8 = r8[r7]
+            int r8 = r8.getChildCount()
+            r9 = 0
+        L_0x00a7:
+            if (r9 >= r8) goto L_0x00c3
+            org.telegram.ui.Components.RecyclerListView[] r2 = r6.listView
+            r2 = r2[r7]
+            android.view.View r2 = r2.getChildAt(r9)
+            boolean r3 = r2 instanceof org.telegram.ui.ArticleViewer.BlockAudioCell
+            if (r3 == 0) goto L_0x00c0
+            org.telegram.ui.ArticleViewer$BlockAudioCell r2 = (org.telegram.ui.ArticleViewer.BlockAudioCell) r2
+            org.telegram.messenger.MessageObject r3 = r2.getMessageObject()
+            if (r3 == 0) goto L_0x00c0
+            r2.updateButtonState(r0)
+        L_0x00c0:
+            int r9 = r9 + 1
+            goto L_0x00a7
+        L_0x00c3:
+            int r7 = r7 + 1
+            goto L_0x009b
+        L_0x00c6:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.didReceivedNotification(int, int, java.lang.Object[]):void");
@@ -4745,10 +4459,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.parentFragment = baseFragment;
         int i = UserConfig.selectedAccount;
         this.currentAccount = i;
-        this.leftImage.setCurrentAccount(i);
-        this.rightImage.setCurrentAccount(this.currentAccount);
-        this.centerImage.setCurrentAccount(this.currentAccount);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+        NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidReset);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
         NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.messagePlayingDidStart);
@@ -4893,47 +4604,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             this.windowView.setFitsSystemWindows(true);
             this.containerView.setOnApplyWindowInsetsListener($$Lambda$ArticleViewer$FZdCJFRpcBR9RAnJZatdXmTQ2fs.INSTANCE);
         }
-        View view = new View(activity2);
-        this.photoContainerBackground = view;
-        view.setVisibility(4);
-        this.photoContainerBackground.setBackgroundDrawable(this.photoBackgroundDrawable);
-        this.windowView.addView(this.photoContainerBackground, LayoutHelper.createFrame(-1, -1, 51));
-        ClippingImageView clippingImageView = new ClippingImageView(activity2);
-        this.animatingImageView = clippingImageView;
-        clippingImageView.setAnimationValues(this.animationValues);
-        this.animatingImageView.setVisibility(8);
-        this.windowView.addView(this.animatingImageView, LayoutHelper.createFrame(40, 40.0f));
-        AnonymousClass8 r02 = new FrameLayoutDrawer(activity2) {
-            /* access modifiers changed from: protected */
-            public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-                super.onLayout(z, i, i2, i3, i4);
-                int i5 = i4 - i2;
-                int measuredHeight = i5 - ArticleViewer.this.captionTextView.getMeasuredHeight();
-                int measuredHeight2 = i5 - ArticleViewer.this.groupedPhotosListView.getMeasuredHeight();
-                if (ArticleViewer.this.bottomLayout.getVisibility() == 0) {
-                    measuredHeight -= ArticleViewer.this.bottomLayout.getMeasuredHeight();
-                    measuredHeight2 -= ArticleViewer.this.bottomLayout.getMeasuredHeight();
-                }
-                if (!ArticleViewer.this.groupedPhotosListView.currentPhotos.isEmpty()) {
-                    measuredHeight -= ArticleViewer.this.groupedPhotosListView.getMeasuredHeight();
-                }
-                ArticleViewer.this.captionTextView.layout(0, measuredHeight, ArticleViewer.this.captionTextView.getMeasuredWidth(), ArticleViewer.this.captionTextView.getMeasuredHeight() + measuredHeight);
-                ArticleViewer.this.captionTextViewNext.layout(0, measuredHeight, ArticleViewer.this.captionTextViewNext.getMeasuredWidth(), ArticleViewer.this.captionTextViewNext.getMeasuredHeight() + measuredHeight);
-                ArticleViewer.this.groupedPhotosListView.layout(0, measuredHeight2, ArticleViewer.this.groupedPhotosListView.getMeasuredWidth(), ArticleViewer.this.groupedPhotosListView.getMeasuredHeight() + measuredHeight2);
-            }
-        };
-        this.photoContainerView = r02;
-        r02.setVisibility(4);
-        this.photoContainerView.setWillNotDraw(false);
-        this.windowView.addView(this.photoContainerView, LayoutHelper.createFrame(-1, -1, 51));
         FrameLayout frameLayout = new FrameLayout(activity2);
         this.fullscreenVideoContainer = frameLayout;
         frameLayout.setBackgroundColor(-16777216);
         this.fullscreenVideoContainer.setVisibility(4);
         this.windowView.addView(this.fullscreenVideoContainer, LayoutHelper.createFrame(-1, -1.0f));
-        AspectRatioFrameLayout aspectRatioFrameLayout2 = new AspectRatioFrameLayout(activity2);
-        this.fullscreenAspectRatioView = aspectRatioFrameLayout2;
-        aspectRatioFrameLayout2.setVisibility(8);
+        AspectRatioFrameLayout aspectRatioFrameLayout = new AspectRatioFrameLayout(activity2);
+        this.fullscreenAspectRatioView = aspectRatioFrameLayout;
+        aspectRatioFrameLayout.setVisibility(8);
         this.fullscreenVideoContainer.addView(this.fullscreenAspectRatioView, LayoutHelper.createFrame(-1, -1, 17));
         this.fullscreenTextureView = new TextureView(activity2);
         this.listView = new RecyclerListView[2];
@@ -5041,7 +4719,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         this.headerPaint.setColor(-16777216);
         this.statusBarPaint.setColor(-16777216);
         this.headerProgressPaint.setColor(-14408666);
-        AnonymousClass11 r03 = new FrameLayout(activity2) {
+        AnonymousClass10 r02 = new FrameLayout(activity2) {
             /* access modifiers changed from: protected */
             public void onDraw(Canvas canvas) {
                 View view;
@@ -5073,8 +4751,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
             }
         };
-        this.headerView = r03;
-        r03.setWillNotDraw(false);
+        this.headerView = r02;
+        r02.setWillNotDraw(false);
         this.containerView.addView(this.headerView, LayoutHelper.createFrame(-1, 56.0f));
         this.headerView.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
@@ -5104,9 +4782,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         FrameLayout frameLayout2 = new FrameLayout(activity2);
         this.menuContainer = frameLayout2;
         this.headerView.addView(frameLayout2, LayoutHelper.createFrame(48, 56, 53));
-        View view2 = new View(activity2);
-        this.searchShadow = view2;
-        view2.setBackgroundResource(NUM);
+        View view = new View(activity2);
+        this.searchShadow = view;
+        view.setBackgroundResource(NUM);
         this.searchShadow.setAlpha(0.0f);
         this.containerView.addView(this.searchShadow, LayoutHelper.createFrame(-1, 3.0f, 51, 0.0f, 56.0f, 0.0f, 0.0f));
         FrameLayout frameLayout3 = new FrameLayout(this.parentActivity);
@@ -5117,7 +4795,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             this.searchContainer.setAlpha(0.0f);
         }
         this.headerView.addView(this.searchContainer, LayoutHelper.createFrame(-1, 56.0f));
-        AnonymousClass12 r04 = new EditTextBoldCursor(this, this.parentActivity) {
+        AnonymousClass11 r03 = new EditTextBoldCursor(this, this.parentActivity) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (motionEvent.getAction() == 0 && !AndroidUtilities.showKeyboard(this)) {
                     clearFocus();
@@ -5126,8 +4804,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 return super.onTouchEvent(motionEvent);
             }
         };
-        this.searchField = r04;
-        r04.setCursorWidth(1.5f);
+        this.searchField = r03;
+        r03.setCursorWidth(1.5f);
         this.searchField.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.searchField.setCursorColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.searchField.setTextSize(1, 18.0f);
@@ -5183,7 +4861,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         if (ArticleViewer.this.animateClear) {
                             ArticleViewer.this.clearButton.animate().setInterpolator(new DecelerateInterpolator()).alpha(0.0f).setDuration(180).scaleY(0.0f).scaleX(0.0f).rotation(45.0f).withEndAction(new Runnable() {
                                 public final void run() {
-                                    ArticleViewer.AnonymousClass14.this.lambda$onTextChanged$0$ArticleViewer$14();
+                                    ArticleViewer.AnonymousClass13.this.lambda$onTextChanged$0$ArticleViewer$13();
                                 }
                             }).start();
                             return;
@@ -5211,14 +4889,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
             }
 
-            public /* synthetic */ void lambda$onTextChanged$0$ArticleViewer$14() {
+            public /* synthetic */ void lambda$onTextChanged$0$ArticleViewer$13() {
                 ArticleViewer.this.clearButton.setVisibility(4);
             }
         });
         this.searchField.setImeOptions(33554435);
         this.searchField.setTextIsSelectable(false);
         this.searchContainer.addView(this.searchField, LayoutHelper.createFrame(-1, 36.0f, 16, 72.0f, 0.0f, 48.0f, 0.0f));
-        AnonymousClass15 r05 = new ImageView(this.parentActivity) {
+        AnonymousClass14 r04 = new ImageView(this.parentActivity) {
             /* access modifiers changed from: protected */
             public void onDetachedFromWindow() {
                 super.onDetachedFromWindow();
@@ -5237,8 +4915,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 ArticleViewer.this.clearButton.setScaleY(1.0f);
             }
         };
-        this.clearButton = r05;
-        r05.setImageDrawable(new CloseProgressDrawable2());
+        this.clearButton = r04;
+        r04.setImageDrawable(new CloseProgressDrawable2());
         this.clearButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteBlackText"), PorterDuff.Mode.MULTIPLY));
         this.clearButton.setScaleType(ImageView.ScaleType.CENTER);
         this.clearButton.setAlpha(0.0f);
@@ -5270,16 +4948,15 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
         });
         this.backButton.setContentDescription(LocaleController.getString("AccDescrGoBack", NUM));
-        AnonymousClass16 r11 = r0;
-        AnonymousClass16 r06 = new ActionBarMenuItem(this.parentActivity, (ActionBarMenu) null, NUM, -5000269) {
+        AnonymousClass15 r05 = new ActionBarMenuItem(this.parentActivity, (ActionBarMenu) null, NUM, -5000269) {
             public void toggleSubMenu() {
                 super.toggleSubMenu();
                 ArticleViewer.this.listView[0].stopScroll();
                 ArticleViewer.this.checkScrollAnimated();
             }
         };
-        this.menuButton = r11;
-        r11.setLayoutInScreen(true);
+        this.menuButton = r05;
+        r05.setLayoutInScreen(true);
         this.menuButton.setDuplicateParentStateEnabled(false);
         this.menuButton.setClickable(true);
         this.menuButton.setIcon(NUM);
@@ -5304,7 +4981,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 ArticleViewer.this.lambda$setParentActivity$19$ArticleViewer(i);
             }
         });
-        AnonymousClass17 r07 = new FrameLayout(this, this.parentActivity) {
+        AnonymousClass16 r06 = new FrameLayout(this, this.parentActivity) {
             public void onDraw(Canvas canvas) {
                 int intrinsicHeight = Theme.chat_composeShadowDrawable.getIntrinsicHeight();
                 Theme.chat_composeShadowDrawable.setBounds(0, 0, getMeasuredWidth(), intrinsicHeight);
@@ -5312,8 +4989,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 canvas.drawRect(0.0f, (float) intrinsicHeight, (float) getMeasuredWidth(), (float) getMeasuredHeight(), Theme.chat_composeBackgroundPaint);
             }
         };
-        this.searchPanel = r07;
-        r07.setOnTouchListener($$Lambda$ArticleViewer$pYBsZpasNy9DZfNJRhpj5gzpxQE.INSTANCE);
+        this.searchPanel = r06;
+        r06.setOnTouchListener($$Lambda$ArticleViewer$pYBsZpasNy9DZfNJRhpj5gzpxQE.INSTANCE);
         this.searchPanel.setWillNotDraw(false);
         this.searchPanel.setVisibility(4);
         this.searchPanel.setFocusable(true);
@@ -5360,7 +5037,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         layoutParams.format = -3;
         layoutParams.width = -1;
         layoutParams.gravity = 51;
-        layoutParams.type = 99;
+        layoutParams.type = 98;
         layoutParams.softInputMode = SharedConfig.smoothKeyboard ? 32 : 16;
         WindowManager.LayoutParams layoutParams2 = this.windowLayoutParams;
         layoutParams2.flags = 131072;
@@ -5371,253 +5048,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 layoutParams2.layoutInDisplayCutoutMode = 1;
             }
         }
-        if (progressDrawables == null) {
-            Drawable[] drawableArr = new Drawable[4];
-            progressDrawables = drawableArr;
-            drawableArr[0] = this.parentActivity.getResources().getDrawable(NUM);
-            progressDrawables[1] = this.parentActivity.getResources().getDrawable(NUM);
-            progressDrawables[2] = this.parentActivity.getResources().getDrawable(NUM);
-            progressDrawables[3] = this.parentActivity.getResources().getDrawable(NUM);
-        }
-        this.scroller = new Scroller(activity2);
-        this.blackPaint.setColor(-16777216);
-        ActionBar actionBar2 = new ActionBar(activity2);
-        this.actionBar = actionBar2;
-        actionBar2.setBackgroundColor(NUM);
-        this.actionBar.setOccupyStatusBar(false);
-        this.actionBar.setTitleColor(-1);
-        this.actionBar.setItemsBackgroundColor(NUM, false);
-        this.actionBar.setBackButtonImage(NUM);
-        this.actionBar.setTitle(LocaleController.formatString("Of", NUM, 1, 1));
-        this.photoContainerView.addView(this.actionBar, LayoutHelper.createFrame(-1, -2.0f));
-        this.actionBar.setActionBarMenuOnItemClick(new ActionBar.ActionBarMenuOnItemClick() {
-            public void onItemClick(int i) {
-                if (i == -1) {
-                    ArticleViewer.this.closePhoto(true);
-                } else if (i == 1) {
-                    if (Build.VERSION.SDK_INT < 23 || ArticleViewer.this.parentActivity.checkSelfPermission("android.permission.WRITE_EXTERNAL_STORAGE") == 0) {
-                        ArticleViewer articleViewer = ArticleViewer.this;
-                        File access$11300 = articleViewer.getMediaFile(articleViewer.photoAdapter, ArticleViewer.this.currentIndex);
-                        if (access$11300 == null || !access$11300.exists()) {
-                            AlertDialog.Builder builder = new AlertDialog.Builder((Context) ArticleViewer.this.parentActivity);
-                            builder.setTitle(LocaleController.getString("AppName", NUM));
-                            builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
-                            builder.setMessage(LocaleController.getString("PleaseDownload", NUM));
-                            ArticleViewer.this.showDialog(builder.create());
-                            return;
-                        }
-                        String file = access$11300.toString();
-                        Activity access$2300 = ArticleViewer.this.parentActivity;
-                        ArticleViewer articleViewer2 = ArticleViewer.this;
-                        MediaController.saveFile(file, access$2300, articleViewer2.isMediaVideo(articleViewer2.photoAdapter, ArticleViewer.this.currentIndex) ? 1 : 0, (String) null, (String) null);
-                        return;
-                    }
-                    ArticleViewer.this.parentActivity.requestPermissions(new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 4);
-                } else if (i == 2) {
-                    ArticleViewer.this.onSharePressed();
-                } else if (i == 3) {
-                    try {
-                        AndroidUtilities.openForView(ArticleViewer.this.getMedia(ArticleViewer.this.photoAdapter, ArticleViewer.this.currentIndex), ArticleViewer.this.parentActivity);
-                        ArticleViewer.this.closePhoto(false);
-                    } catch (Exception e) {
-                        FileLog.e((Throwable) e);
-                    }
-                } else if (i == 4) {
-                    ArticleViewer articleViewer3 = ArticleViewer.this;
-                    TLObject access$11600 = articleViewer3.getMedia(articleViewer3.photoAdapter, ArticleViewer.this.currentIndex);
-                    if (access$11600 instanceof TLRPC$Document) {
-                        TLRPC$Document tLRPC$Document = (TLRPC$Document) access$11600;
-                        MediaDataController.getInstance(ArticleViewer.this.currentAccount).addRecentGif(tLRPC$Document, (int) (System.currentTimeMillis() / 1000));
-                        MessagesController.getInstance(ArticleViewer.this.currentAccount).saveGif(ArticleViewer.this.adapter[0].currentPage, tLRPC$Document);
-                    }
-                }
-            }
-
-            public boolean canOpenMenu() {
-                ArticleViewer articleViewer = ArticleViewer.this;
-                File access$11300 = articleViewer.getMediaFile(articleViewer.photoAdapter, ArticleViewer.this.currentIndex);
-                return access$11300 != null && access$11300.exists();
-            }
-        });
-        ActionBarMenu createMenu = this.actionBar.createMenu();
-        createMenu.addItem(2, NUM);
-        ActionBarMenuItem addItem = createMenu.addItem(0, NUM);
-        this.menuItem = addItem;
-        addItem.setLayoutInScreen(true);
-        this.menuItem.addSubItem(3, NUM, LocaleController.getString("OpenInExternalApp", NUM)).setColors(-328966, -328966);
-        this.menuItem.addSubItem(1, NUM, LocaleController.getString("SaveToGallery", NUM)).setColors(-328966, -328966);
-        this.menuItem.addSubItem(4, NUM, LocaleController.getString("SaveToGIFs", NUM)).setColors(-328966, -328966);
-        this.menuItem.redrawPopup(-NUM);
-        FrameLayout frameLayout4 = new FrameLayout(this.parentActivity);
-        this.bottomLayout = frameLayout4;
-        frameLayout4.setBackgroundColor(NUM);
-        this.photoContainerView.addView(this.bottomLayout, LayoutHelper.createFrame(-1, 48, 83));
-        GroupedPhotosListView groupedPhotosListView2 = new GroupedPhotosListView(this.parentActivity);
-        this.groupedPhotosListView = groupedPhotosListView2;
-        groupedPhotosListView2.setAnimationsEnabled(false);
-        this.photoContainerView.addView(this.groupedPhotosListView, LayoutHelper.createFrame(-1, 62.0f, 83, 0.0f, 0.0f, 0.0f, 0.0f));
-        this.groupedPhotosListView.setDelegate(new GroupedPhotosListView.GroupedPhotosListViewDelegate() {
-            public int getAvatarsDialogId() {
-                return 0;
-            }
-
-            public ArrayList<MessageObject> getImagesArr() {
-                return null;
-            }
-
-            public ArrayList<ImageLocation> getImagesArrLocations() {
-                return null;
-            }
-
-            public int getSlideshowMessageId() {
-                return 0;
-            }
-
-            public void onShowAnimationStart() {
-            }
-
-            public void onStopScrolling() {
-            }
-
-            public int getCurrentIndex() {
-                return ArticleViewer.this.currentIndex;
-            }
-
-            public int getCurrentAccount() {
-                return ArticleViewer.this.currentAccount;
-            }
-
-            public ArrayList<TLRPC$PageBlock> getPageBlockArr() {
-                return ArticleViewer.this.imagesArr;
-            }
-
-            public Object getParentObject() {
-                return ArticleViewer.this.adapter[0].currentPage;
-            }
-
-            public void setCurrentIndex(int i) {
-                int unused = ArticleViewer.this.currentIndex = -1;
-                if (ArticleViewer.this.currentThumb != null) {
-                    ArticleViewer.this.currentThumb.release();
-                    ImageReceiver.BitmapHolder unused2 = ArticleViewer.this.currentThumb = null;
-                }
-                ArticleViewer.this.setImageIndex(i, true);
-            }
-        });
-        TextView textView = new TextView(activity2);
-        this.captionTextViewNext = textView;
-        textView.setMaxLines(10);
-        this.captionTextViewNext.setBackgroundColor(NUM);
-        this.captionTextViewNext.setMovementMethod(new LinkMovementMethodMy());
-        this.captionTextViewNext.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f));
-        this.captionTextViewNext.setLinkTextColor(-1);
-        this.captionTextViewNext.setTextColor(-1);
-        this.captionTextViewNext.setHighlightColor(NUM);
-        this.captionTextViewNext.setGravity(19);
-        this.captionTextViewNext.setTextSize(1, 16.0f);
-        this.captionTextViewNext.setVisibility(8);
-        this.photoContainerView.addView(this.captionTextViewNext, LayoutHelper.createFrame(-1, -2, 83));
-        TextView textView2 = new TextView(activity2);
-        this.captionTextView = textView2;
-        textView2.setMaxLines(10);
-        this.captionTextView.setBackgroundColor(NUM);
-        this.captionTextView.setMovementMethod(new LinkMovementMethodMy());
-        this.captionTextView.setPadding(AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(20.0f), AndroidUtilities.dp(8.0f));
-        this.captionTextView.setLinkTextColor(-1);
-        this.captionTextView.setTextColor(-1);
-        this.captionTextView.setHighlightColor(NUM);
-        this.captionTextView.setGravity(19);
-        this.captionTextView.setTextSize(1, 16.0f);
-        this.captionTextView.setVisibility(8);
-        this.photoContainerView.addView(this.captionTextView, LayoutHelper.createFrame(-1, -2, 83));
-        this.radialProgressViews[0] = new RadialProgressView(activity2, this.photoContainerView);
-        this.radialProgressViews[0].setBackgroundState(0, false);
-        this.radialProgressViews[1] = new RadialProgressView(activity2, this.photoContainerView);
-        this.radialProgressViews[1].setBackgroundState(0, false);
-        this.radialProgressViews[2] = new RadialProgressView(activity2, this.photoContainerView);
-        this.radialProgressViews[2].setBackgroundState(0, false);
-        AnonymousClass20 r08 = new FrameLayout(activity2) {
-            public boolean onTouchEvent(MotionEvent motionEvent) {
-                motionEvent.getX();
-                motionEvent.getY();
-                if (!ArticleViewer.this.videoPlayerSeekbar.onTouch(motionEvent.getAction(), motionEvent.getX() - ((float) AndroidUtilities.dp(48.0f)), motionEvent.getY())) {
-                    return super.onTouchEvent(motionEvent);
-                }
-                getParent().requestDisallowInterceptTouchEvent(true);
-                invalidate();
-                return true;
-            }
-
-            /* access modifiers changed from: protected */
-            public void onMeasure(int i, int i2) {
-                super.onMeasure(i, i2);
-                long j = 0;
-                if (ArticleViewer.this.videoPlayer != null) {
-                    long duration = ArticleViewer.this.videoPlayer.getDuration();
-                    if (duration != -9223372036854775807L) {
-                        j = duration;
-                    }
-                }
-                int i3 = (int) (j / 1000);
-                ArticleViewer.this.videoPlayerSeekbar.setSize((getMeasuredWidth() - AndroidUtilities.dp(64.0f)) - ((int) Math.ceil((double) ArticleViewer.this.videoPlayerTime.getPaint().measureText(AndroidUtilities.formatLongDuration(i3, i3)))), getMeasuredHeight());
-            }
-
-            /* access modifiers changed from: protected */
-            public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-                super.onLayout(z, i, i2, i3, i4);
-                ArticleViewer.this.videoPlayerSeekbar.setProgress(ArticleViewer.this.videoPlayer != null ? ((float) ArticleViewer.this.videoPlayer.getCurrentPosition()) / ((float) ArticleViewer.this.videoPlayer.getDuration()) : 0.0f);
-            }
-
-            /* access modifiers changed from: protected */
-            public void onDraw(Canvas canvas) {
-                canvas.save();
-                canvas.translate((float) AndroidUtilities.dp(48.0f), 0.0f);
-                ArticleViewer.this.videoPlayerSeekbar.draw(canvas);
-                canvas.restore();
-            }
-        };
-        this.videoPlayerControlFrameLayout = r08;
-        r08.setWillNotDraw(false);
-        this.bottomLayout.addView(this.videoPlayerControlFrameLayout, LayoutHelper.createFrame(-1, -1, 51));
-        SeekBar seekBar = new SeekBar(this.videoPlayerControlFrameLayout);
-        this.videoPlayerSeekbar = seekBar;
-        seekBar.setColors(NUM, NUM, -2764585, -1, -1);
-        this.videoPlayerSeekbar.setDelegate(new SeekBar.SeekBarDelegate() {
-            public /* synthetic */ void onSeekBarContinuousDrag(float f) {
-                SeekBar.SeekBarDelegate.CC.$default$onSeekBarContinuousDrag(this, f);
-            }
-
-            public final void onSeekBarDrag(float f) {
-                ArticleViewer.this.lambda$setParentActivity$23$ArticleViewer(f);
-            }
-        });
-        ImageView imageView4 = new ImageView(activity2);
-        this.videoPlayButton = imageView4;
-        imageView4.setScaleType(ImageView.ScaleType.CENTER);
-        this.videoPlayerControlFrameLayout.addView(this.videoPlayButton, LayoutHelper.createFrame(48, 48, 51));
-        this.videoPlayButton.setOnClickListener(new View.OnClickListener() {
-            public final void onClick(View view) {
-                ArticleViewer.this.lambda$setParentActivity$24$ArticleViewer(view);
-            }
-        });
-        TextView textView3 = new TextView(activity2);
-        this.videoPlayerTime = textView3;
-        textView3.setTextColor(-1);
-        this.videoPlayerTime.setGravity(16);
-        this.videoPlayerTime.setTextSize(1, 13.0f);
-        this.videoPlayerControlFrameLayout.addView(this.videoPlayerTime, LayoutHelper.createFrame(-2, -1.0f, 53, 0.0f, 0.0f, 8.0f, 0.0f));
-        GestureDetector gestureDetector2 = new GestureDetector(activity2, this);
-        this.gestureDetector = gestureDetector2;
-        gestureDetector2.setOnDoubleTapListener(this);
-        this.centerImage.setParentView(this.photoContainerView);
-        this.centerImage.setCrossfadeAlpha((byte) 2);
-        this.centerImage.setInvalidateAll(true);
-        this.leftImage.setParentView(this.photoContainerView);
-        this.leftImage.setCrossfadeAlpha((byte) 2);
-        this.leftImage.setInvalidateAll(true);
-        this.rightImage.setParentView(this.photoContainerView);
-        this.rightImage.setCrossfadeAlpha((byte) 2);
-        this.rightImage.setInvalidateAll(true);
         TextSelectionHelper.ArticleTextSelectionHelper articleTextSelectionHelper = new TextSelectionHelper.ArticleTextSelectionHelper();
         this.textSelectionHelper = articleTextSelectionHelper;
         articleTextSelectionHelper.setParentView(this.listView[0]);
@@ -5879,25 +5309,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         scrollToSearchIndex(this.currentSearchIndex + 1);
     }
 
-    public /* synthetic */ void lambda$setParentActivity$23$ArticleViewer(float f) {
-        VideoPlayer videoPlayer2 = this.videoPlayer;
-        if (videoPlayer2 != null) {
-            videoPlayer2.seekTo((long) ((int) (f * ((float) videoPlayer2.getDuration()))));
-        }
-    }
-
-    public /* synthetic */ void lambda$setParentActivity$24$ArticleViewer(View view) {
-        VideoPlayer videoPlayer2 = this.videoPlayer;
-        if (videoPlayer2 == null) {
-            return;
-        }
-        if (this.isPlaying) {
-            videoPlayer2.pause();
-        } else {
-            videoPlayer2.play();
-        }
-    }
-
     /* access modifiers changed from: private */
     public void showSearch(final boolean z) {
         FrameLayout frameLayout = this.searchContainer;
@@ -5990,7 +5401,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     this.runAfterKeyboardClose = animatorSet;
                     AndroidUtilities.runOnUIThread(new Runnable() {
                         public final void run() {
-                            ArticleViewer.this.lambda$showSearch$25$ArticleViewer();
+                            ArticleViewer.this.lambda$showSearch$23$ArticleViewer();
                         }
                     }, 300);
                     return;
@@ -6015,7 +5426,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
-    public /* synthetic */ void lambda$showSearch$25$ArticleViewer() {
+    public /* synthetic */ void lambda$showSearch$23$ArticleViewer() {
         AnimatorSet animatorSet = this.runAfterKeyboardClose;
         if (animatorSet != null) {
             animatorSet.start();
@@ -6080,7 +5491,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
         int i = this.lastSearchIndex + 1;
         this.lastSearchIndex = i;
-        $$Lambda$ArticleViewer$NoPJaI7ZMk1prJ9DIPJOEKD4Hbg r1 = new Runnable(str, i) {
+        $$Lambda$ArticleViewer$w_Gpe91vsARSfs27FuVCGfwMMRU r1 = new Runnable(str, i) {
             public final /* synthetic */ String f$1;
             public final /* synthetic */ int f$2;
 
@@ -6090,14 +5501,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
 
             public final void run() {
-                ArticleViewer.this.lambda$processSearch$28$ArticleViewer(this.f$1, this.f$2);
+                ArticleViewer.this.lambda$processSearch$26$ArticleViewer(this.f$1, this.f$2);
             }
         };
         this.searchRunnable = r1;
         AndroidUtilities.runOnUIThread(r1, 400);
     }
 
-    public /* synthetic */ void lambda$processSearch$28$ArticleViewer(String str, int i) {
+    public /* synthetic */ void lambda$processSearch$26$ArticleViewer(String str, int i) {
         HashMap hashMap = new HashMap(this.adapter[0].textToBlocks);
         ArrayList arrayList = new ArrayList(this.adapter[0].textBlocks);
         this.searchRunnable = null;
@@ -6115,7 +5526,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
 
             public final void run() {
-                ArticleViewer.this.lambda$null$27$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4);
+                ArticleViewer.this.lambda$null$25$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
@@ -6132,7 +5543,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     /* JADX WARNING: Removed duplicated region for block: B:12:0x005e  */
     /* JADX WARNING: Removed duplicated region for block: B:26:0x0093 A[SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$null$27$ArticleViewer(java.util.ArrayList r19, java.util.HashMap r20, java.lang.String r21, int r22) {
+    public /* synthetic */ void lambda$null$25$ArticleViewer(java.util.ArrayList r19, java.util.HashMap r20, java.lang.String r21, int r22) {
         /*
             r18 = this;
             r7 = r18
@@ -6165,7 +5576,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r5 = r6
             r17 = r6
             r6 = r16
-            java.lang.CharSequence r0 = r0.getText(r1, r2, r3, r4, r5, r6)
+            java.lang.CharSequence r0 = r0.getText((org.telegram.ui.ArticleViewer.WebpageAdapter) r1, (android.view.View) r2, (org.telegram.tgnet.TLRPC$RichText) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$PageBlock) r5, (int) r6)
             boolean r1 = android.text.TextUtils.isEmpty(r0)
             if (r1 != 0) goto L_0x005b
             java.lang.String r0 = r0.toString()
@@ -6217,16 +5628,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r11 = 0
             goto L_0x000f
         L_0x0098:
-            org.telegram.ui.-$$Lambda$ArticleViewer$29VEkNt3-PeiASIykjI4B7EHqkY r0 = new org.telegram.ui.-$$Lambda$ArticleViewer$29VEkNt3-PeiASIykjI4B7EHqkY
+            org.telegram.ui.-$$Lambda$ArticleViewer$A_kaPODXYSRhNIy5Ujc3Jhz_vIw r0 = new org.telegram.ui.-$$Lambda$ArticleViewer$A_kaPODXYSRhNIy5Ujc3Jhz_vIw
             r1 = r22
             r0.<init>(r1, r9, r8)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.lambda$null$27$ArticleViewer(java.util.ArrayList, java.util.HashMap, java.lang.String, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.lambda$null$25$ArticleViewer(java.util.ArrayList, java.util.HashMap, java.lang.String, int):void");
     }
 
-    public /* synthetic */ void lambda$null$26$ArticleViewer(int i, ArrayList arrayList, String str) {
+    public /* synthetic */ void lambda$null$24$ArticleViewer(int i, ArrayList arrayList, String str) {
         if (i == this.lastSearchIndex) {
             this.searchPanel.setAlpha(1.0f);
             this.searchPanel.setVisibility(0);
@@ -6244,7 +5655,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         if (openAllParentBlocks(r4) == false) goto L_0x006d;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:13:0x005b, code lost:
-        org.telegram.ui.ArticleViewer.WebpageAdapter.access$8800(r11.adapter[0]);
+        org.telegram.ui.ArticleViewer.WebpageAdapter.access$8000(r11.adapter[0]);
         r11.adapter[0].notifyDataSetChanged();
      */
     /* JADX WARNING: Multi-variable type inference failed */
@@ -6427,14 +5838,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             duration.setInterpolator(new DecelerateInterpolator());
             duration.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    ArticleViewer.this.lambda$checkScrollAnimated$29$ArticleViewer(valueAnimator);
+                    ArticleViewer.this.lambda$checkScrollAnimated$27$ArticleViewer(valueAnimator);
                 }
             });
             duration.start();
         }
     }
 
-    public /* synthetic */ void lambda$checkScrollAnimated$29$ArticleViewer(ValueAnimator valueAnimator) {
+    public /* synthetic */ void lambda$checkScrollAnimated$27$ArticleViewer(ValueAnimator valueAnimator) {
         setCurrentHeaderHeight(((Integer) valueAnimator.getAnimatedValue()).intValue());
     }
 
@@ -6501,40 +5912,30 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         return open((MessageObject) null, tLRPC$TL_webPage, str, true);
     }
 
-    /* JADX WARNING: Can't wrap try/catch for region: R(6:58|(2:60|61)|62|63|(2:65|(1:67))|68) */
-    /* JADX WARNING: Code restructure failed: missing block: B:69:0x017c, code lost:
-        r12 = move-exception;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:70:0x017d, code lost:
-        org.telegram.messenger.FileLog.e((java.lang.Throwable) r12);
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:71:0x0180, code lost:
-        return false;
-     */
     /* JADX WARNING: Failed to process nested try/catch */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:62:0x0153 */
-    /* JADX WARNING: Removed duplicated region for block: B:41:0x00f6  */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x00fe  */
-    /* JADX WARNING: Removed duplicated region for block: B:45:0x0107  */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x0142  */
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x0159 A[Catch:{ Exception -> 0x017c }] */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x0181  */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x0212  */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:62:0x013e */
+    /* JADX WARNING: Removed duplicated region for block: B:41:0x00e0  */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x00e8  */
+    /* JADX WARNING: Removed duplicated region for block: B:45:0x00f1  */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x012d  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x0144 A[Catch:{ Exception -> 0x0167 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:72:0x016c  */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x01fd  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private boolean open(org.telegram.messenger.MessageObject r12, org.telegram.tgnet.TLRPC$WebPage r13, java.lang.String r14, boolean r15) {
         /*
             r11 = this;
             android.app.Activity r0 = r11.parentActivity
             r1 = 0
-            if (r0 == 0) goto L_0x0218
+            if (r0 == 0) goto L_0x0203
             boolean r0 = r11.isVisible
             if (r0 == 0) goto L_0x000d
             boolean r0 = r11.collapsed
-            if (r0 == 0) goto L_0x0218
+            if (r0 == 0) goto L_0x0203
         L_0x000d:
             if (r12 != 0) goto L_0x0013
             if (r13 != 0) goto L_0x0013
-            goto L_0x0218
+            goto L_0x0203
         L_0x0013:
             if (r12 == 0) goto L_0x001b
             org.telegram.tgnet.TLRPC$Message r13 = r12.messageOwner
@@ -6636,98 +6037,89 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             r13.setAlpha(r2)
             org.telegram.ui.ArticleViewer$WindowView r13 = r11.windowView
             r13.setInnerTranslationX(r0)
-            org.telegram.ui.ActionBar.ActionBar r13 = r11.actionBar
-            r2 = 8
-            r13.setVisibility(r2)
-            android.widget.FrameLayout r13 = r11.bottomLayout
-            r13.setVisibility(r2)
-            android.widget.TextView r13 = r11.captionTextView
-            r13.setVisibility(r2)
-            android.widget.TextView r13 = r11.captionTextViewNext
-            r13.setVisibility(r2)
             androidx.recyclerview.widget.LinearLayoutManager[] r13 = r11.layoutManager
             r13 = r13[r1]
             r13.scrollToPositionWithOffset(r1, r1)
             r13 = 1113587712(0x42600000, float:56.0)
-            if (r15 == 0) goto L_0x00fe
+            if (r15 == 0) goto L_0x00e8
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r13)
             r11.setCurrentHeaderHeight(r2)
-            goto L_0x0101
-        L_0x00fe:
+            goto L_0x00eb
+        L_0x00e8:
             r11.checkScrollAnimated()
-        L_0x0101:
+        L_0x00eb:
             boolean r2 = r11.addPageToStack(r7, r14, r1)
-            if (r15 == 0) goto L_0x013a
-            if (r2 != 0) goto L_0x010d
-            if (r14 == 0) goto L_0x010d
+            if (r15 == 0) goto L_0x0124
+            if (r2 != 0) goto L_0x00f7
+            if (r14 == 0) goto L_0x00f7
             r10 = r14
-            goto L_0x010e
-        L_0x010d:
+            goto L_0x00f8
+        L_0x00f7:
             r10 = r3
-        L_0x010e:
+        L_0x00f8:
             org.telegram.tgnet.TLRPC$TL_messages_getWebPage r14 = new org.telegram.tgnet.TLRPC$TL_messages_getWebPage
             r14.<init>()
             java.lang.String r15 = r7.url
             r14.url = r15
             org.telegram.tgnet.TLRPC$Page r15 = r7.cached_page
             boolean r2 = r15 instanceof org.telegram.tgnet.TLRPC$TL_pagePart_layer82
-            if (r2 != 0) goto L_0x0127
+            if (r2 != 0) goto L_0x0111
             boolean r15 = r15.part
-            if (r15 == 0) goto L_0x0122
-            goto L_0x0127
-        L_0x0122:
+            if (r15 == 0) goto L_0x010c
+            goto L_0x0111
+        L_0x010c:
             int r15 = r7.hash
             r14.hash = r15
-            goto L_0x0129
-        L_0x0127:
+            goto L_0x0113
+        L_0x0111:
             r14.hash = r1
-        L_0x0129:
+        L_0x0113:
             int r9 = org.telegram.messenger.UserConfig.selectedAccount
             org.telegram.tgnet.ConnectionsManager r15 = org.telegram.tgnet.ConnectionsManager.getInstance(r9)
-            org.telegram.ui.-$$Lambda$ArticleViewer$XAch4dR1xb9NL7ljkjb8_bZpUA8 r2 = new org.telegram.ui.-$$Lambda$ArticleViewer$XAch4dR1xb9NL7ljkjb8_bZpUA8
+            org.telegram.ui.-$$Lambda$ArticleViewer$GsVzBhgOv4auRr168_ka_eQCLASSNAMEU r2 = new org.telegram.ui.-$$Lambda$ArticleViewer$GsVzBhgOv4auRr168_ka_eQCLASSNAMEU
             r5 = r2
             r6 = r11
             r8 = r12
             r5.<init>(r7, r8, r9, r10)
             r15.sendRequest(r14, r2)
-        L_0x013a:
+        L_0x0124:
             r11.lastInsets = r3
             boolean r12 = r11.isVisible
             java.lang.String r14 = "window"
-            if (r12 != 0) goto L_0x0181
+            if (r12 != 0) goto L_0x016c
             android.app.Activity r12 = r11.parentActivity
             java.lang.Object r12 = r12.getSystemService(r14)
             android.view.WindowManager r12 = (android.view.WindowManager) r12
             boolean r14 = r11.attachedToWindow
-            if (r14 == 0) goto L_0x0153
-            org.telegram.ui.ArticleViewer$WindowView r14 = r11.windowView     // Catch:{ Exception -> 0x0153 }
-            r12.removeView(r14)     // Catch:{ Exception -> 0x0153 }
-        L_0x0153:
-            int r14 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x017c }
+            if (r14 == 0) goto L_0x013e
+            org.telegram.ui.ArticleViewer$WindowView r14 = r11.windowView     // Catch:{ Exception -> 0x013e }
+            r12.removeView(r14)     // Catch:{ Exception -> 0x013e }
+        L_0x013e:
+            int r14 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0167 }
             r15 = 21
-            if (r14 < r15) goto L_0x016a
-            android.view.WindowManager$LayoutParams r14 = r11.windowLayoutParams     // Catch:{ Exception -> 0x017c }
+            if (r14 < r15) goto L_0x0155
+            android.view.WindowManager$LayoutParams r14 = r11.windowLayoutParams     // Catch:{ Exception -> 0x0167 }
             r15 = -2147417856(0xfffffffvar_, float:-9.2194E-41)
-            r14.flags = r15     // Catch:{ Exception -> 0x017c }
-            int r14 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x017c }
+            r14.flags = r15     // Catch:{ Exception -> 0x0167 }
+            int r14 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x0167 }
             r15 = 28
-            if (r14 < r15) goto L_0x016a
-            android.view.WindowManager$LayoutParams r14 = r11.windowLayoutParams     // Catch:{ Exception -> 0x017c }
-            r14.layoutInDisplayCutoutMode = r4     // Catch:{ Exception -> 0x017c }
-        L_0x016a:
-            org.telegram.ui.ArticleViewer$WindowView r14 = r11.windowView     // Catch:{ Exception -> 0x017c }
-            r14.setFocusable(r1)     // Catch:{ Exception -> 0x017c }
-            android.widget.FrameLayout r14 = r11.containerView     // Catch:{ Exception -> 0x017c }
-            r14.setFocusable(r1)     // Catch:{ Exception -> 0x017c }
-            org.telegram.ui.ArticleViewer$WindowView r14 = r11.windowView     // Catch:{ Exception -> 0x017c }
-            android.view.WindowManager$LayoutParams r15 = r11.windowLayoutParams     // Catch:{ Exception -> 0x017c }
-            r12.addView(r14, r15)     // Catch:{ Exception -> 0x017c }
-            goto L_0x0198
-        L_0x017c:
+            if (r14 < r15) goto L_0x0155
+            android.view.WindowManager$LayoutParams r14 = r11.windowLayoutParams     // Catch:{ Exception -> 0x0167 }
+            r14.layoutInDisplayCutoutMode = r4     // Catch:{ Exception -> 0x0167 }
+        L_0x0155:
+            org.telegram.ui.ArticleViewer$WindowView r14 = r11.windowView     // Catch:{ Exception -> 0x0167 }
+            r14.setFocusable(r1)     // Catch:{ Exception -> 0x0167 }
+            android.widget.FrameLayout r14 = r11.containerView     // Catch:{ Exception -> 0x0167 }
+            r14.setFocusable(r1)     // Catch:{ Exception -> 0x0167 }
+            org.telegram.ui.ArticleViewer$WindowView r14 = r11.windowView     // Catch:{ Exception -> 0x0167 }
+            android.view.WindowManager$LayoutParams r15 = r11.windowLayoutParams     // Catch:{ Exception -> 0x0167 }
+            r12.addView(r14, r15)     // Catch:{ Exception -> 0x0167 }
+            goto L_0x0183
+        L_0x0167:
             r12 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r12)
             return r1
-        L_0x0181:
+        L_0x016c:
             android.view.WindowManager$LayoutParams r12 = r11.windowLayoutParams
             int r15 = r12.flags
             r15 = r15 & -17
@@ -6738,7 +6130,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             org.telegram.ui.ArticleViewer$WindowView r14 = r11.windowView
             android.view.WindowManager$LayoutParams r15 = r11.windowLayoutParams
             r12.updateViewLayout(r14, r15)
-        L_0x0198:
+        L_0x0183:
             r11.isVisible = r4
             r11.animationInProgress = r4
             org.telegram.ui.ArticleViewer$WindowView r12 = r11.windowView
@@ -6772,35 +6164,35 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             android.animation.ObjectAnimator r13 = android.animation.ObjectAnimator.ofFloat(r15, r2, r6)
             r14[r5] = r13
             r12.playTogether(r14)
-            org.telegram.ui.-$$Lambda$ArticleViewer$ji3CnpfGVGWO7Uyya7rUR4E_E8g r13 = new org.telegram.ui.-$$Lambda$ArticleViewer$ji3CnpfGVGWO7Uyya7rUR4E_E8g
+            org.telegram.ui.-$$Lambda$ArticleViewer$JF9Oh1YT1MqD5LC4s1jJnDWHE6g r13 = new org.telegram.ui.-$$Lambda$ArticleViewer$JF9Oh1YT1MqD5LC4s1jJnDWHE6g
             r13.<init>()
             r11.animationEndRunnable = r13
             r13 = 150(0x96, double:7.4E-322)
             r12.setDuration(r13)
             android.view.animation.DecelerateInterpolator r13 = r11.interpolator
             r12.setInterpolator(r13)
-            org.telegram.ui.ArticleViewer$24 r13 = new org.telegram.ui.ArticleViewer$24
+            org.telegram.ui.ArticleViewer$20 r13 = new org.telegram.ui.ArticleViewer$20
             r13.<init>()
             r12.addListener(r13)
             long r13 = java.lang.System.currentTimeMillis()
             r11.transitionAnimationStartTime = r13
-            org.telegram.ui.-$$Lambda$ArticleViewer$JpKgdz7Dmo_FOkJ2jLmk8qWwSYY r13 = new org.telegram.ui.-$$Lambda$ArticleViewer$JpKgdz7Dmo_FOkJ2jLmk8qWwSYY
+            org.telegram.ui.-$$Lambda$ArticleViewer$II63GQGE20FcWvaQM_YtFtJsIHM r13 = new org.telegram.ui.-$$Lambda$ArticleViewer$II63GQGE20FcWvaQM_YtFtJsIHM
             r13.<init>(r12)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r13)
             int r12 = android.os.Build.VERSION.SDK_INT
             r13 = 18
-            if (r12 < r13) goto L_0x0217
+            if (r12 < r13) goto L_0x0202
             android.widget.FrameLayout r12 = r11.containerView
             r12.setLayerType(r5, r3)
-        L_0x0217:
+        L_0x0202:
             return r4
-        L_0x0218:
+        L_0x0203:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.open(org.telegram.messenger.MessageObject, org.telegram.tgnet.TLRPC$WebPage, java.lang.String, boolean):boolean");
     }
 
-    public /* synthetic */ void lambda$open$31$ArticleViewer(TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject, int i, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$open$29$ArticleViewer(TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject, int i, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject, tLRPC$WebPage, messageObject, i, str) {
             public final /* synthetic */ TLObject f$1;
             public final /* synthetic */ TLRPC$WebPage f$2;
@@ -6817,12 +6209,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
 
             public final void run() {
-                ArticleViewer.this.lambda$null$30$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                ArticleViewer.this.lambda$null$28$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
             }
         });
     }
 
-    public /* synthetic */ void lambda$null$30$ArticleViewer(TLObject tLObject, TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject, int i, String str) {
+    public /* synthetic */ void lambda$null$28$ArticleViewer(TLObject tLObject, TLRPC$WebPage tLRPC$WebPage, MessageObject messageObject, int i, String str) {
         TLRPC$Page tLRPC$Page;
         int i2;
         RecyclerView.ViewHolder findViewHolderForAdapterPosition;
@@ -6878,7 +6270,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
-    public /* synthetic */ void lambda$open$32$ArticleViewer() {
+    public /* synthetic */ void lambda$open$30$ArticleViewer() {
         FrameLayout frameLayout = this.containerView;
         if (frameLayout != null && this.windowView != null) {
             if (Build.VERSION.SDK_INT >= 18) {
@@ -6889,7 +6281,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
-    public /* synthetic */ void lambda$open$33$ArticleViewer(AnimatorSet animatorSet) {
+    public /* synthetic */ void lambda$open$31$ArticleViewer(AnimatorSet animatorSet) {
         this.allowAnimationIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.allowAnimationIndex, new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats});
         animatorSet.start();
     }
@@ -7029,71 +6421,63 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
             if (this.textSelectionHelper.isSelectionMode()) {
                 this.textSelectionHelper.clear();
-                return;
-            }
-            if (this.isPhotoVisible) {
-                closePhoto(!z2);
-                if (!z2) {
-                    return;
-                }
-            }
-            if (this.searchContainer.getTag() != null) {
+            } else if (this.searchContainer.getTag() != null) {
                 showSearch(false);
-                return;
-            }
-            if (this.openUrlReqId != 0) {
-                ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.openUrlReqId, true);
-                this.openUrlReqId = 0;
-                showProgressView(true, false);
-            }
-            if (this.previewsReqId != 0) {
-                ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.previewsReqId, true);
-                this.previewsReqId = 0;
-                showProgressView(true, false);
-            }
-            saveCurrentPagePosition();
-            if (!z || z2 || !removeLastPageFromStack()) {
-                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
-                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidReset);
-                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
-                NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidStart);
-                this.parentFragment = null;
-                try {
-                    if (this.visibleDialog != null) {
-                        this.visibleDialog.dismiss();
-                        this.visibleDialog = null;
-                    }
-                } catch (Exception e) {
-                    FileLog.e((Throwable) e);
+            } else {
+                if (this.openUrlReqId != 0) {
+                    ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.openUrlReqId, true);
+                    this.openUrlReqId = 0;
+                    showProgressView(true, false);
                 }
-                AnimatorSet animatorSet = new AnimatorSet();
-                animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.windowView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.containerView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.windowView, View.TRANSLATION_X, new float[]{0.0f, (float) AndroidUtilities.dp(56.0f)})});
-                this.animationInProgress = 2;
-                this.animationEndRunnable = new Runnable() {
-                    public final void run() {
-                        ArticleViewer.this.lambda$close$36$ArticleViewer();
-                    }
-                };
-                animatorSet.setDuration(150);
-                animatorSet.setInterpolator(this.interpolator);
-                animatorSet.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animator) {
-                        if (ArticleViewer.this.animationEndRunnable != null) {
-                            ArticleViewer.this.animationEndRunnable.run();
-                            Runnable unused = ArticleViewer.this.animationEndRunnable = null;
+                if (this.previewsReqId != 0) {
+                    ConnectionsManager.getInstance(this.currentAccount).cancelRequest(this.previewsReqId, true);
+                    this.previewsReqId = 0;
+                    showProgressView(true, false);
+                }
+                saveCurrentPagePosition();
+                if (!z || z2 || !removeLastPageFromStack()) {
+                    NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingProgressDidChanged);
+                    NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidReset);
+                    NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingPlayStateChanged);
+                    NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidStart);
+                    this.parentFragment = null;
+                    try {
+                        if (this.visibleDialog != null) {
+                            this.visibleDialog.dismiss();
+                            this.visibleDialog = null;
                         }
+                    } catch (Exception e) {
+                        FileLog.e((Throwable) e);
                     }
-                });
-                this.transitionAnimationStartTime = System.currentTimeMillis();
-                if (Build.VERSION.SDK_INT >= 18) {
-                    this.containerView.setLayerType(2, (Paint) null);
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.windowView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.containerView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.windowView, View.TRANSLATION_X, new float[]{0.0f, (float) AndroidUtilities.dp(56.0f)})});
+                    this.animationInProgress = 2;
+                    this.animationEndRunnable = new Runnable() {
+                        public final void run() {
+                            ArticleViewer.this.lambda$close$34$ArticleViewer();
+                        }
+                    };
+                    animatorSet.setDuration(150);
+                    animatorSet.setInterpolator(this.interpolator);
+                    animatorSet.addListener(new AnimatorListenerAdapter() {
+                        public void onAnimationEnd(Animator animator) {
+                            if (ArticleViewer.this.animationEndRunnable != null) {
+                                ArticleViewer.this.animationEndRunnable.run();
+                                Runnable unused = ArticleViewer.this.animationEndRunnable = null;
+                            }
+                        }
+                    });
+                    this.transitionAnimationStartTime = System.currentTimeMillis();
+                    if (Build.VERSION.SDK_INT >= 18) {
+                        this.containerView.setLayerType(2, (Paint) null);
+                    }
+                    animatorSet.start();
                 }
-                animatorSet.start();
             }
         }
     }
 
-    public /* synthetic */ void lambda$close$36$ArticleViewer() {
+    public /* synthetic */ void lambda$close$34$ArticleViewer() {
         FrameLayout frameLayout = this.containerView;
         if (frameLayout != null) {
             if (Build.VERSION.SDK_INT >= 18) {
@@ -7120,12 +6504,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
         this.containerView.post(new Runnable() {
             public final void run() {
-                ArticleViewer.this.lambda$onClosed$37$ArticleViewer();
+                ArticleViewer.this.lambda$onClosed$35$ArticleViewer();
             }
         });
     }
 
-    public /* synthetic */ void lambda$onClosed$37$ArticleViewer() {
+    public /* synthetic */ void lambda$onClosed$35$ArticleViewer() {
         try {
             if (this.windowView.getParent() != null) {
                 ((WindowManager) this.parentActivity.getSystemService("window")).removeView(this.windowView);
@@ -7154,13 +6538,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
 
                 public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    ArticleViewer.this.lambda$loadChannel$39$ArticleViewer(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
+                    ArticleViewer.this.lambda$loadChannel$37$ArticleViewer(this.f$1, this.f$2, this.f$3, tLObject, tLRPC$TL_error);
                 }
             });
         }
     }
 
-    public /* synthetic */ void lambda$loadChannel$39$ArticleViewer(WebpageAdapter webpageAdapter, int i, BlockChannelCell blockChannelCell, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$loadChannel$37$ArticleViewer(WebpageAdapter webpageAdapter, int i, BlockChannelCell blockChannelCell, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(webpageAdapter, tLRPC$TL_error, tLObject, i, blockChannelCell) {
             public final /* synthetic */ ArticleViewer.WebpageAdapter f$1;
             public final /* synthetic */ TLRPC$TL_error f$2;
@@ -7177,12 +6561,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
 
             public final void run() {
-                ArticleViewer.this.lambda$null$38$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                ArticleViewer.this.lambda$null$36$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
             }
         });
     }
 
-    public /* synthetic */ void lambda$null$38$ArticleViewer(WebpageAdapter webpageAdapter, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i, BlockChannelCell blockChannelCell) {
+    public /* synthetic */ void lambda$null$36$ArticleViewer(WebpageAdapter webpageAdapter, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i, BlockChannelCell blockChannelCell) {
         this.loadingChannel = false;
         if (this.parentFragment != null && !webpageAdapter.blocks.isEmpty()) {
             if (tLRPC$TL_error == null) {
@@ -7226,12 +6610,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                ArticleViewer.this.lambda$joinChannel$43$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
+                ArticleViewer.this.lambda$joinChannel$41$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4, tLObject, tLRPC$TL_error);
             }
         });
     }
 
-    public /* synthetic */ void lambda$joinChannel$43$ArticleViewer(BlockChannelCell blockChannelCell, int i, TLRPC$TL_channels_joinChannel tLRPC$TL_channels_joinChannel, TLRPC$Chat tLRPC$Chat, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$joinChannel$41$ArticleViewer(BlockChannelCell blockChannelCell, int i, TLRPC$TL_channels_joinChannel tLRPC$TL_channels_joinChannel, TLRPC$Chat tLRPC$Chat, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         boolean z;
         if (tLRPC$TL_error != null) {
             AndroidUtilities.runOnUIThread(new Runnable(blockChannelCell, i, tLRPC$TL_error, tLRPC$TL_channels_joinChannel) {
@@ -7248,7 +6632,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
 
                 public final void run() {
-                    ArticleViewer.this.lambda$null$40$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4);
+                    ArticleViewer.this.lambda$null$38$ArticleViewer(this.f$1, this.f$2, this.f$3, this.f$4);
                 }
             });
             return;
@@ -7292,7 +6676,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         MessagesStorage.getInstance(i).updateDialogsWithDeletedMessages(new ArrayList(), (ArrayList<Long>) null, true, tLRPC$Chat.id);
     }
 
-    public /* synthetic */ void lambda$null$40$ArticleViewer(BlockChannelCell blockChannelCell, int i, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_channels_joinChannel tLRPC$TL_channels_joinChannel) {
+    public /* synthetic */ void lambda$null$38$ArticleViewer(BlockChannelCell blockChannelCell, int i, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_channels_joinChannel tLRPC$TL_channels_joinChannel) {
         blockChannelCell.setState(0, false);
         AlertsCreator.processError(i, tLRPC$TL_error, this.parentFragment, tLRPC$TL_channels_joinChannel, Boolean.TRUE);
     }
@@ -7313,10 +6697,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
     }
 
     public void destroyArticleViewer() {
-        if (this.parentActivity != null && this.windowView != null) {
-            releasePlayer();
+        WindowView windowView2;
+        if (this.parentActivity != null && (windowView2 = this.windowView) != null) {
             try {
-                if (this.windowView.getParent() != null) {
+                if (windowView2.getParent() != null) {
                     ((WindowManager) this.parentActivity.getSystemService("window")).removeViewImmediate(this.windowView);
                 }
                 this.windowView = null;
@@ -7332,12 +6716,6 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             } catch (Exception e2) {
                 FileLog.e((Throwable) e2);
             }
-            ImageReceiver.BitmapHolder bitmapHolder = this.currentThumb;
-            if (bitmapHolder != null) {
-                bitmapHolder.release();
-                this.currentThumb = null;
-            }
-            this.animatingImageView.setImageBitmap((ImageReceiver.BitmapHolder) null);
             this.parentActivity = null;
             this.parentFragment = null;
             Instance = null;
@@ -7363,7 +6741,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 dialog.setCanceledOnTouchOutside(true);
                 this.visibleDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     public final void onDismiss(DialogInterface dialogInterface) {
-                        ArticleViewer.this.lambda$showDialog$44$ArticleViewer(dialogInterface);
+                        ArticleViewer.this.lambda$showDialog$42$ArticleViewer(dialogInterface);
                     }
                 });
                 dialog.show();
@@ -7373,8 +6751,76 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
-    public /* synthetic */ void lambda$showDialog$44$ArticleViewer(DialogInterface dialogInterface) {
+    public /* synthetic */ void lambda$showDialog$42$ArticleViewer(DialogInterface dialogInterface) {
         this.visibleDialog = null;
+    }
+
+    private static final class WebPageUtils {
+        public static TLRPC$Photo getPhotoWithId(TLRPC$WebPage tLRPC$WebPage, long j) {
+            if (!(tLRPC$WebPage == null || tLRPC$WebPage.cached_page == null)) {
+                TLRPC$Photo tLRPC$Photo = tLRPC$WebPage.photo;
+                if (tLRPC$Photo != null && tLRPC$Photo.id == j) {
+                    return tLRPC$Photo;
+                }
+                for (int i = 0; i < tLRPC$WebPage.cached_page.photos.size(); i++) {
+                    TLRPC$Photo tLRPC$Photo2 = tLRPC$WebPage.cached_page.photos.get(i);
+                    if (tLRPC$Photo2.id == j) {
+                        return tLRPC$Photo2;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static TLRPC$Document getDocumentWithId(TLRPC$WebPage tLRPC$WebPage, long j) {
+            if (!(tLRPC$WebPage == null || tLRPC$WebPage.cached_page == null)) {
+                TLRPC$Document tLRPC$Document = tLRPC$WebPage.document;
+                if (tLRPC$Document != null && tLRPC$Document.id == j) {
+                    return tLRPC$Document;
+                }
+                for (int i = 0; i < tLRPC$WebPage.cached_page.documents.size(); i++) {
+                    TLRPC$Document tLRPC$Document2 = tLRPC$WebPage.cached_page.documents.get(i);
+                    if (tLRPC$Document2.id == j) {
+                        return tLRPC$Document2;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static boolean isVideo(TLRPC$WebPage tLRPC$WebPage, TLRPC$PageBlock tLRPC$PageBlock) {
+            TLRPC$Document documentWithId;
+            if (!(tLRPC$PageBlock instanceof TLRPC$TL_pageBlockVideo) || (documentWithId = getDocumentWithId(tLRPC$WebPage, ((TLRPC$TL_pageBlockVideo) tLRPC$PageBlock).video_id)) == null) {
+                return false;
+            }
+            return MessageObject.isVideoDocument(documentWithId);
+        }
+
+        public static TLObject getMedia(TLRPC$WebPage tLRPC$WebPage, TLRPC$PageBlock tLRPC$PageBlock) {
+            if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockPhoto) {
+                return getPhotoWithId(tLRPC$WebPage, ((TLRPC$TL_pageBlockPhoto) tLRPC$PageBlock).photo_id);
+            }
+            if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockVideo) {
+                return getDocumentWithId(tLRPC$WebPage, ((TLRPC$TL_pageBlockVideo) tLRPC$PageBlock).video_id);
+            }
+            return null;
+        }
+
+        public static File getMediaFile(TLRPC$WebPage tLRPC$WebPage, TLRPC$PageBlock tLRPC$PageBlock) {
+            TLRPC$Document documentWithId;
+            TLRPC$PhotoSize closestPhotoSizeWithSize;
+            if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockPhoto) {
+                TLRPC$Photo photoWithId = getPhotoWithId(tLRPC$WebPage, ((TLRPC$TL_pageBlockPhoto) tLRPC$PageBlock).photo_id);
+                if (photoWithId == null || (closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(photoWithId.sizes, AndroidUtilities.getPhotoSize())) == null) {
+                    return null;
+                }
+                return FileLoader.getPathToAttach(closestPhotoSizeWithSize, true);
+            } else if (!(tLRPC$PageBlock instanceof TLRPC$TL_pageBlockVideo) || (documentWithId = getDocumentWithId(tLRPC$WebPage, ((TLRPC$TL_pageBlockVideo) tLRPC$PageBlock).video_id)) == null) {
+                return null;
+            } else {
+                return FileLoader.getPathToAttach(documentWithId, true);
+            }
+        }
     }
 
     private class WebpageAdapter extends RecyclerListView.SelectionAdapter {
@@ -7414,38 +6860,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
 
         /* access modifiers changed from: private */
         public TLRPC$Photo getPhotoWithId(long j) {
-            TLRPC$WebPage tLRPC$WebPage = this.currentPage;
-            if (!(tLRPC$WebPage == null || tLRPC$WebPage.cached_page == null)) {
-                TLRPC$Photo tLRPC$Photo = tLRPC$WebPage.photo;
-                if (tLRPC$Photo != null && tLRPC$Photo.id == j) {
-                    return tLRPC$Photo;
-                }
-                for (int i = 0; i < this.currentPage.cached_page.photos.size(); i++) {
-                    TLRPC$Photo tLRPC$Photo2 = this.currentPage.cached_page.photos.get(i);
-                    if (tLRPC$Photo2.id == j) {
-                        return tLRPC$Photo2;
-                    }
-                }
-            }
-            return null;
+            return WebPageUtils.getPhotoWithId(this.currentPage, j);
         }
 
         /* access modifiers changed from: private */
         public TLRPC$Document getDocumentWithId(long j) {
-            TLRPC$WebPage tLRPC$WebPage = this.currentPage;
-            if (!(tLRPC$WebPage == null || tLRPC$WebPage.cached_page == null)) {
-                TLRPC$Document tLRPC$Document = tLRPC$WebPage.document;
-                if (tLRPC$Document != null && tLRPC$Document.id == j) {
-                    return tLRPC$Document;
-                }
-                for (int i = 0; i < this.currentPage.cached_page.documents.size(); i++) {
-                    TLRPC$Document tLRPC$Document2 = this.currentPage.cached_page.documents.get(i);
-                    if (tLRPC$Document2.id == j) {
-                        return tLRPC$Document2;
-                    }
-                }
-            }
-            return null;
+            return WebPageUtils.getDocumentWithId(this.currentPage, j);
         }
 
         private void setRichTextParents(TLRPC$RichText tLRPC$RichText, TLRPC$RichText tLRPC$RichText2) {
@@ -7662,10 +7082,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
 
         /* access modifiers changed from: private */
-        /* JADX WARNING: Removed duplicated region for block: B:143:0x04da  */
-        /* JADX WARNING: Removed duplicated region for block: B:144:0x0504  */
-        /* JADX WARNING: Removed duplicated region for block: B:151:0x0527  */
-        /* JADX WARNING: Removed duplicated region for block: B:176:0x059d A[SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:143:0x04e3  */
+        /* JADX WARNING: Removed duplicated region for block: B:144:0x050d  */
+        /* JADX WARNING: Removed duplicated region for block: B:151:0x0530  */
+        /* JADX WARNING: Removed duplicated region for block: B:176:0x05a6 A[SYNTHETIC] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void addBlock(org.telegram.ui.ArticleViewer.WebpageAdapter r25, org.telegram.tgnet.TLRPC$PageBlock r26, int r27, int r28, int r29) {
             /*
@@ -7718,7 +7138,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageBlockAudio
                 r11 = 0
                 r12 = 1
-                if (r3 == 0) goto L_0x010f
+                if (r3 == 0) goto L_0x0118
                 r0 = r1
                 org.telegram.tgnet.TLRPC$TL_pageBlockAudio r0 = (org.telegram.tgnet.TLRPC$TL_pageBlockAudio) r0
                 org.telegram.tgnet.TLRPC$TL_message r2 = new org.telegram.tgnet.TLRPC$TL_message
@@ -7732,13 +7152,17 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r2.id = r3
                 org.telegram.tgnet.TLRPC$TL_peerUser r3 = new org.telegram.tgnet.TLRPC$TL_peerUser
                 r3.<init>()
-                r2.to_id = r3
-                org.telegram.ui.ArticleViewer r4 = org.telegram.ui.ArticleViewer.this
-                int r4 = r4.currentAccount
-                org.telegram.messenger.UserConfig r4 = org.telegram.messenger.UserConfig.getInstance(r4)
-                int r4 = r4.getClientUserId()
-                r2.from_id = r4
-                r3.user_id = r4
+                r2.peer_id = r3
+                org.telegram.tgnet.TLRPC$TL_peerUser r3 = new org.telegram.tgnet.TLRPC$TL_peerUser
+                r3.<init>()
+                r2.from_id = r3
+                org.telegram.tgnet.TLRPC$Peer r4 = r2.peer_id
+                org.telegram.ui.ArticleViewer r5 = org.telegram.ui.ArticleViewer.this
+                int r5 = r5.currentAccount
+                org.telegram.messenger.UserConfig r5 = org.telegram.messenger.UserConfig.getInstance(r5)
+                int r5 = r5.getClientUserId()
+                r4.user_id = r5
+                r3.user_id = r5
                 long r3 = java.lang.System.currentTimeMillis()
                 r5 = 1000(0x3e8, double:4.94E-321)
                 long r3 = r3 / r5
@@ -7770,14 +7194,14 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 java.lang.String r0 = r3.getMusicAuthor(r11)
                 java.lang.String r2 = r3.getMusicTitle(r11)
                 boolean r3 = android.text.TextUtils.isEmpty(r2)
-                if (r3 == 0) goto L_0x00e1
+                if (r3 == 0) goto L_0x00ea
                 boolean r3 = android.text.TextUtils.isEmpty(r0)
-                if (r3 != 0) goto L_0x05a5
-            L_0x00e1:
+                if (r3 != 0) goto L_0x05ae
+            L_0x00ea:
                 boolean r3 = android.text.TextUtils.isEmpty(r2)
-                if (r3 != 0) goto L_0x00ff
+                if (r3 != 0) goto L_0x0108
                 boolean r3 = android.text.TextUtils.isEmpty(r0)
-                if (r3 != 0) goto L_0x00ff
+                if (r3 != 0) goto L_0x0108
                 r3 = 2
                 java.lang.Object[] r3 = new java.lang.Object[r3]
                 r3[r11] = r0
@@ -7785,39 +7209,39 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 java.lang.String r0 = "%s - %s"
                 java.lang.String r0 = java.lang.String.format(r0, r3)
                 r7.addTextBlock(r0, r1)
-                goto L_0x05a5
-            L_0x00ff:
+                goto L_0x05ae
+            L_0x0108:
                 boolean r3 = android.text.TextUtils.isEmpty(r2)
-                if (r3 != 0) goto L_0x010a
+                if (r3 != 0) goto L_0x0113
                 r7.addTextBlock(r2, r1)
-                goto L_0x05a5
-            L_0x010a:
+                goto L_0x05ae
+            L_0x0113:
                 r7.addTextBlock(r0, r1)
-                goto L_0x05a5
-            L_0x010f:
+                goto L_0x05ae
+            L_0x0118:
                 boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageBlockEmbedPost
                 r13 = 0
-                if (r3 == 0) goto L_0x019a
+                if (r3 == 0) goto L_0x01a3
                 r2 = r1
                 org.telegram.tgnet.TLRPC$TL_pageBlockEmbedPost r2 = (org.telegram.tgnet.TLRPC$TL_pageBlockEmbedPost) r2
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r3 = r2.blocks
                 boolean r3 = r3.isEmpty()
-                if (r3 != 0) goto L_0x05a5
+                if (r3 != 0) goto L_0x05ae
                 r3 = -1
                 r1.level = r3
-            L_0x0122:
+            L_0x012b:
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r1 = r2.blocks
                 int r1 = r1.size()
-                if (r11 >= r1) goto L_0x016b
+                if (r11 >= r1) goto L_0x0174
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r1 = r2.blocks
                 java.lang.Object r1 = r1.get(r11)
                 org.telegram.tgnet.TLRPC$PageBlock r1 = (org.telegram.tgnet.TLRPC$PageBlock) r1
                 boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageBlockUnsupported
-                if (r3 == 0) goto L_0x0137
-                goto L_0x0168
-            L_0x0137:
+                if (r3 == 0) goto L_0x0140
+                goto L_0x0171
+            L_0x0140:
                 boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageBlockAnchor
-                if (r3 == 0) goto L_0x0153
+                if (r3 == 0) goto L_0x015c
                 org.telegram.tgnet.TLRPC$TL_pageBlockAnchor r1 = (org.telegram.tgnet.TLRPC$TL_pageBlockAnchor) r1
                 java.util.HashMap<java.lang.String, java.lang.Integer> r3 = r7.anchors
                 java.lang.String r1 = r1.name
@@ -7826,33 +7250,33 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int r4 = r4.size()
                 java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
                 r3.put(r1, r4)
-                goto L_0x0168
-            L_0x0153:
+                goto L_0x0171
+            L_0x015c:
                 r1.level = r12
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r3 = r2.blocks
                 int r3 = r3.size()
                 int r3 = r3 - r12
-                if (r11 != r3) goto L_0x0160
+                if (r11 != r3) goto L_0x0169
                 r1.bottom = r12
-            L_0x0160:
+            L_0x0169:
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r3 = r7.blocks
                 r3.add(r1)
                 r7.addAllMediaFromBlock(r0, r1)
-            L_0x0168:
+            L_0x0171:
                 int r11 = r11 + 1
-                goto L_0x0122
-            L_0x016b:
+                goto L_0x012b
+            L_0x0174:
                 org.telegram.tgnet.TLRPC$TL_pageCaption r0 = r2.caption
                 org.telegram.tgnet.TLRPC$RichText r0 = r0.text
                 java.lang.CharSequence r0 = org.telegram.ui.ArticleViewer.getPlainText(r0)
                 boolean r0 = android.text.TextUtils.isEmpty(r0)
-                if (r0 == 0) goto L_0x0187
+                if (r0 == 0) goto L_0x0190
                 org.telegram.tgnet.TLRPC$TL_pageCaption r0 = r2.caption
                 org.telegram.tgnet.TLRPC$RichText r0 = r0.credit
                 java.lang.CharSequence r0 = org.telegram.ui.ArticleViewer.getPlainText(r0)
                 boolean r0 = android.text.TextUtils.isEmpty(r0)
-                if (r0 != 0) goto L_0x05a5
-            L_0x0187:
+                if (r0 != 0) goto L_0x05ae
+            L_0x0190:
                 org.telegram.ui.ArticleViewer$TL_pageBlockEmbedPostCaption r0 = new org.telegram.ui.ArticleViewer$TL_pageBlockEmbedPostCaption
                 r0.<init>()
                 org.telegram.tgnet.TLRPC$TL_pageBlockEmbedPost unused = r0.parent = r2
@@ -7860,10 +7284,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r0.caption = r1
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r1 = r7.blocks
                 r1.add(r0)
-                goto L_0x05a5
-            L_0x019a:
+                goto L_0x05ae
+            L_0x01a3:
                 boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageBlockRelatedArticles
-                if (r3 == 0) goto L_0x01de
+                if (r3 == 0) goto L_0x01e7
                 org.telegram.tgnet.TLRPC$TL_pageBlockRelatedArticles r1 = (org.telegram.tgnet.TLRPC$TL_pageBlockRelatedArticles) r1
                 org.telegram.ui.ArticleViewer$TL_pageBlockRelatedArticlesShadow r0 = new org.telegram.ui.ArticleViewer$TL_pageBlockRelatedArticlesShadow
                 r0.<init>()
@@ -7874,8 +7298,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r2.add(r3, r0)
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_pageRelatedArticle> r0 = r1.articles
                 int r0 = r0.size()
-            L_0x01b8:
-                if (r11 >= r0) goto L_0x01cd
+            L_0x01c1:
+                if (r11 >= r0) goto L_0x01d6
                 org.telegram.ui.ArticleViewer$TL_pageBlockRelatedArticlesChild r2 = new org.telegram.ui.ArticleViewer$TL_pageBlockRelatedArticlesChild
                 r2.<init>()
                 org.telegram.tgnet.TLRPC$TL_pageBlockRelatedArticles unused = r2.parent = r1
@@ -7883,24 +7307,24 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r3 = r7.blocks
                 r3.add(r2)
                 int r11 = r11 + 1
-                goto L_0x01b8
-            L_0x01cd:
-                if (r29 != 0) goto L_0x05a5
+                goto L_0x01c1
+            L_0x01d6:
+                if (r29 != 0) goto L_0x05ae
                 org.telegram.ui.ArticleViewer$TL_pageBlockRelatedArticlesShadow r0 = new org.telegram.ui.ArticleViewer$TL_pageBlockRelatedArticlesShadow
                 r0.<init>()
                 org.telegram.tgnet.TLRPC$TL_pageBlockRelatedArticles unused = r0.parent = r1
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r1 = r7.blocks
                 r1.add(r0)
-                goto L_0x05a5
-            L_0x01de:
+                goto L_0x05ae
+            L_0x01e7:
                 boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageBlockDetails
-                if (r3 == 0) goto L_0x0216
+                if (r3 == 0) goto L_0x021f
                 r10 = r1
                 org.telegram.tgnet.TLRPC$TL_pageBlockDetails r10 = (org.telegram.tgnet.TLRPC$TL_pageBlockDetails) r10
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r1 = r10.blocks
                 int r14 = r1.size()
-            L_0x01eb:
-                if (r11 >= r14) goto L_0x05a5
+            L_0x01f4:
+                if (r11 >= r14) goto L_0x05ae
                 org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild r1 = new org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild
                 r1.<init>()
                 org.telegram.tgnet.TLRPC$PageBlock unused = r1.parent = r8
@@ -7917,12 +7341,12 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r6 = r29
                 r1.addBlock(r2, r3, r4, r5, r6)
                 int r11 = r11 + 1
-                goto L_0x01eb
-            L_0x0216:
+                goto L_0x01f4
+            L_0x021f:
                 java.lang.String r14 = " "
                 java.lang.String r15 = ".%d"
                 java.lang.String r6 = "%d."
-                if (r2 == 0) goto L_0x038b
+                if (r2 == 0) goto L_0x0394
                 r5 = r1
                 org.telegram.tgnet.TLRPC$TL_pageBlockList r5 = (org.telegram.tgnet.TLRPC$TL_pageBlockList) r5
                 org.telegram.ui.ArticleViewer$TL_pageBlockListParent r4 = new org.telegram.ui.ArticleViewer$TL_pageBlockListParent
@@ -7933,8 +7357,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageListItem> r1 = r5.items
                 int r3 = r1.size()
                 r2 = 0
-            L_0x0235:
-                if (r2 >= r3) goto L_0x05a5
+            L_0x023e:
+                if (r2 >= r3) goto L_0x05ae
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageListItem> r1 = r5.items
                 java.lang.Object r1 = r1.get(r2)
                 org.telegram.tgnet.TLRPC$PageListItem r1 = (org.telegram.tgnet.TLRPC$PageListItem) r1
@@ -7944,9 +7368,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int unused = r11.index = r2
                 org.telegram.ui.ArticleViewer.TL_pageBlockListParent unused = r11.parent = r4
                 boolean r12 = r5.ordered
-                if (r12 == 0) goto L_0x027e
+                if (r12 == 0) goto L_0x0287
                 boolean r12 = r7.isRtl
-                if (r12 == 0) goto L_0x0269
+                if (r12 == 0) goto L_0x0272
                 r12 = 1
                 java.lang.Object[] r13 = new java.lang.Object[r12]
                 int r17 = r2 + 1
@@ -7955,8 +7379,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r13[r16] = r17
                 java.lang.String r13 = java.lang.String.format(r15, r13)
                 java.lang.String unused = r11.num = r13
-                goto L_0x0284
-            L_0x0269:
+                goto L_0x028d
+            L_0x0272:
                 r12 = 1
                 r16 = 0
                 java.lang.Object[] r13 = new java.lang.Object[r12]
@@ -7965,44 +7389,44 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r13[r16] = r12
                 java.lang.String r12 = java.lang.String.format(r6, r13)
                 java.lang.String unused = r11.num = r12
-                goto L_0x0284
-            L_0x027e:
+                goto L_0x028d
+            L_0x0287:
                 java.lang.String r12 = "•"
                 java.lang.String unused = r11.num = r12
-            L_0x0284:
+            L_0x028d:
                 java.util.ArrayList r12 = r4.items
                 r12.add(r11)
                 boolean r12 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageListItemText
-                if (r12 == 0) goto L_0x0298
+                if (r12 == 0) goto L_0x02a1
                 r12 = r1
                 org.telegram.tgnet.TLRPC$TL_pageListItemText r12 = (org.telegram.tgnet.TLRPC$TL_pageListItemText) r12
                 org.telegram.tgnet.TLRPC$RichText r12 = r12.text
                 org.telegram.tgnet.TLRPC$RichText unused = r11.textItem = r12
-                goto L_0x02c2
-            L_0x0298:
+                goto L_0x02cb
+            L_0x02a1:
                 boolean r12 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageListItemBlocks
-                if (r12 == 0) goto L_0x02c2
+                if (r12 == 0) goto L_0x02cb
                 r12 = r1
                 org.telegram.tgnet.TLRPC$TL_pageListItemBlocks r12 = (org.telegram.tgnet.TLRPC$TL_pageListItemBlocks) r12
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r13 = r12.blocks
                 boolean r13 = r13.isEmpty()
-                if (r13 != 0) goto L_0x02b4
+                if (r13 != 0) goto L_0x02bd
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r12 = r12.blocks
                 r13 = 0
                 java.lang.Object r12 = r12.get(r13)
                 org.telegram.tgnet.TLRPC$PageBlock r12 = (org.telegram.tgnet.TLRPC$PageBlock) r12
                 org.telegram.tgnet.TLRPC$PageBlock unused = r11.blockItem = r12
-                goto L_0x02c2
-            L_0x02b4:
+                goto L_0x02cb
+            L_0x02bd:
                 org.telegram.tgnet.TLRPC$TL_pageListItemText r1 = new org.telegram.tgnet.TLRPC$TL_pageListItemText
                 r1.<init>()
                 org.telegram.tgnet.TLRPC$TL_textPlain r12 = new org.telegram.tgnet.TLRPC$TL_textPlain
                 r12.<init>()
                 r12.text = r14
                 r1.text = r12
-            L_0x02c2:
+            L_0x02cb:
                 r12 = r1
-                if (r10 == 0) goto L_0x02f0
+                if (r10 == 0) goto L_0x02f9
                 r1 = r8
                 org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild r1 = (org.telegram.ui.ArticleViewer.TL_pageBlockDetailsChild) r1
                 org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild r13 = new org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild
@@ -8024,36 +7448,36 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r0 = r6
                 r6 = r29
                 r1.addBlock(r2, r3, r4, r5, r6)
-                goto L_0x0310
-            L_0x02f0:
+                goto L_0x0319
+            L_0x02f9:
                 r19 = r2
                 r20 = r3
                 r13 = r4
                 r21 = r5
                 r0 = r6
-                if (r19 != 0) goto L_0x0302
+                if (r19 != 0) goto L_0x030b
                 org.telegram.ui.ArticleViewer r1 = org.telegram.ui.ArticleViewer.this
                 org.telegram.tgnet.TLRPC$PageBlock r1 = r1.fixListBlock(r8, r11)
                 r3 = r1
-                goto L_0x0303
-            L_0x0302:
+                goto L_0x030c
+            L_0x030b:
                 r3 = r11
-            L_0x0303:
+            L_0x030c:
                 int r5 = r9 + 1
                 r1 = r24
                 r2 = r25
                 r4 = r27
                 r6 = r29
                 r1.addBlock(r2, r3, r4, r5, r6)
-            L_0x0310:
+            L_0x0319:
                 boolean r1 = r12 instanceof org.telegram.tgnet.TLRPC$TL_pageListItemBlocks
-                if (r1 == 0) goto L_0x037c
+                if (r1 == 0) goto L_0x0385
                 org.telegram.tgnet.TLRPC$TL_pageListItemBlocks r12 = (org.telegram.tgnet.TLRPC$TL_pageListItemBlocks) r12
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r1 = r12.blocks
                 int r11 = r1.size()
                 r6 = 1
-            L_0x031d:
-                if (r6 >= r11) goto L_0x037c
+            L_0x0326:
+                if (r6 >= r11) goto L_0x0385
                 org.telegram.ui.ArticleViewer$TL_pageBlockListItem r5 = new org.telegram.ui.ArticleViewer$TL_pageBlockListItem
                 org.telegram.ui.ArticleViewer r1 = org.telegram.ui.ArticleViewer.this
                 r2 = 0
@@ -8063,7 +7487,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.tgnet.TLRPC$PageBlock r1 = (org.telegram.tgnet.TLRPC$PageBlock) r1
                 org.telegram.tgnet.TLRPC$PageBlock unused = r5.blockItem = r1
                 org.telegram.ui.ArticleViewer.TL_pageBlockListParent unused = r5.parent = r13
-                if (r10 == 0) goto L_0x035d
+                if (r10 == 0) goto L_0x0366
                 r1 = r8
                 org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild r1 = (org.telegram.ui.ArticleViewer.TL_pageBlockDetailsChild) r1
                 org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild r3 = new org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild
@@ -8080,8 +7504,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r22 = r6
                 r6 = r29
                 r1.addBlock(r2, r3, r4, r5, r6)
-                goto L_0x0370
-            L_0x035d:
+                goto L_0x0379
+            L_0x0366:
                 r23 = r5
                 r22 = r6
                 int r5 = r9 + 1
@@ -8091,13 +7515,13 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r4 = r27
                 r6 = r29
                 r1.addBlock(r2, r3, r4, r5, r6)
-            L_0x0370:
+            L_0x0379:
                 java.util.ArrayList r1 = r13.items
                 r2 = r23
                 r1.add(r2)
                 int r6 = r22 + 1
-                goto L_0x031d
-            L_0x037c:
+                goto L_0x0326
+            L_0x0385:
                 int r2 = r19 + 1
                 r6 = r0
                 r4 = r13
@@ -8107,11 +7531,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r12 = 1
                 r13 = 0
                 r0 = r25
-                goto L_0x0235
-            L_0x038b:
+                goto L_0x023e
+            L_0x0394:
                 r0 = r6
                 boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageBlockOrderedList
-                if (r2 == 0) goto L_0x05a5
+                if (r2 == 0) goto L_0x05ae
                 r11 = r1
                 org.telegram.tgnet.TLRPC$TL_pageBlockOrderedList r11 = (org.telegram.tgnet.TLRPC$TL_pageBlockOrderedList) r11
                 org.telegram.ui.ArticleViewer$TL_pageBlockOrderedListParent r12 = new org.telegram.ui.ArticleViewer$TL_pageBlockOrderedListParent
@@ -8123,8 +7547,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageListOrderedItem> r1 = r11.items
                 int r13 = r1.size()
                 r6 = 0
-            L_0x03a8:
-                if (r6 >= r13) goto L_0x05a5
+            L_0x03b1:
+                if (r6 >= r13) goto L_0x05ae
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageListOrderedItem> r1 = r11.items
                 java.lang.Object r1 = r1.get(r6)
                 org.telegram.tgnet.TLRPC$PageListOrderedItem r1 = (org.telegram.tgnet.TLRPC$PageListOrderedItem) r1
@@ -8138,16 +7562,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r3.add(r2)
                 boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageListOrderedItemText
                 java.lang.String r4 = "."
-                if (r3 == 0) goto L_0x043d
+                if (r3 == 0) goto L_0x0446
                 r3 = r1
                 org.telegram.tgnet.TLRPC$TL_pageListOrderedItemText r3 = (org.telegram.tgnet.TLRPC$TL_pageListOrderedItemText) r3
                 org.telegram.tgnet.TLRPC$RichText r5 = r3.text
                 org.telegram.tgnet.TLRPC$RichText unused = r2.textItem = r5
                 java.lang.String r5 = r3.num
                 boolean r5 = android.text.TextUtils.isEmpty(r5)
-                if (r5 == 0) goto L_0x040d
+                if (r5 == 0) goto L_0x0416
                 boolean r3 = r7.isRtl
-                if (r3 == 0) goto L_0x03f7
+                if (r3 == 0) goto L_0x0400
                 r3 = 1
                 java.lang.Object[] r4 = new java.lang.Object[r3]
                 int r5 = r6 + 1
@@ -8156,8 +7580,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r4[r16] = r5
                 java.lang.String r4 = java.lang.String.format(r15, r4)
                 java.lang.String unused = r2.num = r4
-                goto L_0x04d2
-            L_0x03f7:
+                goto L_0x04db
+            L_0x0400:
                 r3 = 1
                 r16 = 0
                 java.lang.Object[] r4 = new java.lang.Object[r3]
@@ -8166,10 +7590,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r4[r16] = r3
                 java.lang.String r3 = java.lang.String.format(r0, r4)
                 java.lang.String unused = r2.num = r3
-                goto L_0x04d2
-            L_0x040d:
+                goto L_0x04db
+            L_0x0416:
                 boolean r5 = r7.isRtl
-                if (r5 == 0) goto L_0x0427
+                if (r5 == 0) goto L_0x0430
                 java.lang.StringBuilder r5 = new java.lang.StringBuilder
                 r5.<init>()
                 r5.append(r4)
@@ -8177,8 +7601,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r5.append(r3)
                 java.lang.String r3 = r5.toString()
                 java.lang.String unused = r2.num = r3
-                goto L_0x04d2
-            L_0x0427:
+                goto L_0x04db
+            L_0x0430:
                 java.lang.StringBuilder r5 = new java.lang.StringBuilder
                 r5.<init>()
                 java.lang.String r3 = r3.num
@@ -8186,15 +7610,15 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r5.append(r4)
                 java.lang.String r3 = r5.toString()
                 java.lang.String unused = r2.num = r3
-                goto L_0x04d2
-            L_0x043d:
+                goto L_0x04db
+            L_0x0446:
                 boolean r3 = r1 instanceof org.telegram.tgnet.TLRPC$TL_pageListOrderedItemBlocks
-                if (r3 == 0) goto L_0x04d2
+                if (r3 == 0) goto L_0x04db
                 r3 = r1
                 org.telegram.tgnet.TLRPC$TL_pageListOrderedItemBlocks r3 = (org.telegram.tgnet.TLRPC$TL_pageListOrderedItemBlocks) r3
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r5 = r3.blocks
                 boolean r5 = r5.isEmpty()
-                if (r5 != 0) goto L_0x045d
+                if (r5 != 0) goto L_0x0466
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r5 = r3.blocks
                 r19 = r1
                 r1 = 0
@@ -8202,20 +7626,20 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.tgnet.TLRPC$PageBlock r5 = (org.telegram.tgnet.TLRPC$PageBlock) r5
                 org.telegram.tgnet.TLRPC$PageBlock unused = r2.blockItem = r5
                 r1 = r19
-                goto L_0x046b
-            L_0x045d:
+                goto L_0x0474
+            L_0x0466:
                 org.telegram.tgnet.TLRPC$TL_pageListOrderedItemText r1 = new org.telegram.tgnet.TLRPC$TL_pageListOrderedItemText
                 r1.<init>()
                 org.telegram.tgnet.TLRPC$TL_textPlain r5 = new org.telegram.tgnet.TLRPC$TL_textPlain
                 r5.<init>()
                 r5.text = r14
                 r1.text = r5
-            L_0x046b:
+            L_0x0474:
                 java.lang.String r5 = r3.num
                 boolean r5 = android.text.TextUtils.isEmpty(r5)
-                if (r5 == 0) goto L_0x04a1
+                if (r5 == 0) goto L_0x04aa
                 boolean r3 = r7.isRtl
-                if (r3 == 0) goto L_0x048c
+                if (r3 == 0) goto L_0x0495
                 r5 = 1
                 java.lang.Object[] r3 = new java.lang.Object[r5]
                 int r4 = r6 + 1
@@ -8224,8 +7648,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r3[r16] = r4
                 java.lang.String r3 = java.lang.String.format(r15, r3)
                 java.lang.String unused = r2.num = r3
-                goto L_0x04d0
-            L_0x048c:
+                goto L_0x04d9
+            L_0x0495:
                 r5 = 1
                 r16 = 0
                 java.lang.Object[] r3 = new java.lang.Object[r5]
@@ -8234,11 +7658,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r3[r16] = r4
                 java.lang.String r3 = java.lang.String.format(r0, r3)
                 java.lang.String unused = r2.num = r3
-                goto L_0x04d0
-            L_0x04a1:
+                goto L_0x04d9
+            L_0x04aa:
                 r16 = 0
                 boolean r5 = r7.isRtl
-                if (r5 == 0) goto L_0x04bc
+                if (r5 == 0) goto L_0x04c5
                 java.lang.StringBuilder r5 = new java.lang.StringBuilder
                 r5.<init>()
                 r5.append(r4)
@@ -8246,8 +7670,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r5.append(r3)
                 java.lang.String r3 = r5.toString()
                 java.lang.String unused = r2.num = r3
-                goto L_0x04d0
-            L_0x04bc:
+                goto L_0x04d9
+            L_0x04c5:
                 java.lang.StringBuilder r5 = new java.lang.StringBuilder
                 r5.<init>()
                 java.lang.String r3 = r3.num
@@ -8255,15 +7679,15 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r5.append(r4)
                 java.lang.String r3 = r5.toString()
                 java.lang.String unused = r2.num = r3
-            L_0x04d0:
+            L_0x04d9:
                 r5 = r1
-                goto L_0x04d8
-            L_0x04d2:
+                goto L_0x04e1
+            L_0x04db:
                 r19 = r1
                 r16 = 0
                 r5 = r19
-            L_0x04d8:
-                if (r10 == 0) goto L_0x0504
+            L_0x04e1:
+                if (r10 == 0) goto L_0x050d
                 r1 = r8
                 org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild r1 = (org.telegram.ui.ArticleViewer.TL_pageBlockDetailsChild) r1
                 org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild r3 = new org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild
@@ -8283,35 +7707,35 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r19 = r6
                 r6 = r29
                 r1.addBlock(r2, r3, r4, r5, r6)
-                goto L_0x0523
-            L_0x0504:
+                goto L_0x052c
+            L_0x050d:
                 r20 = r0
                 r0 = r5
                 r19 = r6
                 r17 = 1
-                if (r19 != 0) goto L_0x0515
+                if (r19 != 0) goto L_0x051e
                 org.telegram.ui.ArticleViewer r1 = org.telegram.ui.ArticleViewer.this
                 org.telegram.tgnet.TLRPC$PageBlock r1 = r1.fixListBlock(r8, r2)
                 r3 = r1
-                goto L_0x0516
-            L_0x0515:
+                goto L_0x051f
+            L_0x051e:
                 r3 = r2
-            L_0x0516:
+            L_0x051f:
                 int r5 = r9 + 1
                 r1 = r24
                 r2 = r25
                 r4 = r27
                 r6 = r29
                 r1.addBlock(r2, r3, r4, r5, r6)
-            L_0x0523:
+            L_0x052c:
                 boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_pageListOrderedItemBlocks
-                if (r1 == 0) goto L_0x059d
+                if (r1 == 0) goto L_0x05a6
                 org.telegram.tgnet.TLRPC$TL_pageListOrderedItemBlocks r0 = (org.telegram.tgnet.TLRPC$TL_pageListOrderedItemBlocks) r0
                 java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r1 = r0.blocks
                 int r6 = r1.size()
                 r5 = 1
-            L_0x0530:
-                if (r5 >= r6) goto L_0x059d
+            L_0x0539:
+                if (r5 >= r6) goto L_0x05a6
                 org.telegram.ui.ArticleViewer$TL_pageBlockOrderedListItem r4 = new org.telegram.ui.ArticleViewer$TL_pageBlockOrderedListItem
                 org.telegram.ui.ArticleViewer r1 = org.telegram.ui.ArticleViewer.this
                 r3 = 0
@@ -8321,7 +7745,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 org.telegram.tgnet.TLRPC$PageBlock r1 = (org.telegram.tgnet.TLRPC$PageBlock) r1
                 org.telegram.tgnet.TLRPC$PageBlock unused = r4.blockItem = r1
                 org.telegram.ui.ArticleViewer.TL_pageBlockOrderedListParent unused = r4.parent = r12
-                if (r10 == 0) goto L_0x0578
+                if (r10 == 0) goto L_0x0581
                 r1 = r8
                 org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild r1 = (org.telegram.ui.ArticleViewer.TL_pageBlockDetailsChild) r1
                 org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild r2 = new org.telegram.ui.ArticleViewer$TL_pageBlockDetailsChild
@@ -8342,8 +7766,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r18 = r6
                 r6 = r29
                 r1.addBlock(r2, r3, r4, r5, r6)
-                goto L_0x058f
-            L_0x0578:
+                goto L_0x0598
+            L_0x0581:
                 r22 = r3
                 r21 = r4
                 r23 = r5
@@ -8354,29 +7778,29 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r3 = r21
                 r4 = r27
                 r6 = r29
-                r1.addBlock(r2, r3, r4, r5, r6)     // Catch:{ all -> 0x05a6 }
-            L_0x058f:
+                r1.addBlock(r2, r3, r4, r5, r6)     // Catch:{ all -> 0x05af }
+            L_0x0598:
                 java.util.ArrayList r1 = r12.items
                 r2 = r21
                 r1.add(r2)
                 int r5 = r23 + 1
                 r6 = r18
-                goto L_0x0530
-            L_0x059d:
+                goto L_0x0539
+            L_0x05a6:
                 r22 = 0
                 int r6 = r19 + 1
                 r0 = r20
-                goto L_0x03a8
-            L_0x05a5:
+                goto L_0x03b1
+            L_0x05ae:
                 return
-            L_0x05a6:
+            L_0x05af:
                 r0 = move-exception
                 r1 = r0
-                goto L_0x05aa
-            L_0x05a9:
+                goto L_0x05b3
+            L_0x05b2:
                 throw r1
-            L_0x05aa:
-                goto L_0x05a9
+            L_0x05b3:
+                goto L_0x05b2
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.WebpageAdapter.addBlock(org.telegram.ui.ArticleViewer$WebpageAdapter, org.telegram.tgnet.TLRPC$PageBlock, int, int, int):void");
         }
@@ -8390,7 +7814,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     tLRPC$TL_pageBlockPhoto.thumbObject = photoWithId;
                     this.photoBlocks.add(tLRPC$PageBlock);
                 }
-            } else if (!(tLRPC$PageBlock instanceof TLRPC$TL_pageBlockVideo) || !ArticleViewer.this.isVideoBlock(webpageAdapter, tLRPC$PageBlock)) {
+            } else if (!(tLRPC$PageBlock instanceof TLRPC$TL_pageBlockVideo) || !WebPageUtils.isVideo(webpageAdapter.currentPage, tLRPC$PageBlock)) {
                 int i = 0;
                 if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockSlideshow) {
                     TLRPC$TL_pageBlockSlideshow tLRPC$TL_pageBlockSlideshow = (TLRPC$TL_pageBlockSlideshow) tLRPC$PageBlock;
@@ -8401,7 +7825,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         addAllMediaFromBlock(webpageAdapter, tLRPC$PageBlock2);
                         i++;
                     }
-                    ArticleViewer.access$15608(ArticleViewer.this);
+                    ArticleViewer.access$12908(ArticleViewer.this);
                 } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockCollage) {
                     TLRPC$TL_pageBlockCollage tLRPC$TL_pageBlockCollage = (TLRPC$TL_pageBlockCollage) tLRPC$PageBlock;
                     int size2 = tLRPC$TL_pageBlockCollage.items.size();
@@ -8411,7 +7835,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         addAllMediaFromBlock(webpageAdapter, tLRPC$PageBlock3);
                         i++;
                     }
-                    ArticleViewer.access$15608(ArticleViewer.this);
+                    ArticleViewer.access$12908(ArticleViewer.this);
                 } else if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockCover) {
                     addAllMediaFromBlock(webpageAdapter, ((TLRPC$TL_pageBlockCover) tLRPC$PageBlock).cover);
                 }
@@ -8796,16 +8220,16 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
 
         private boolean isBlockOpened(TL_pageBlockDetailsChild tL_pageBlockDetailsChild) {
-            TLRPC$PageBlock access$13500 = ArticleViewer.this.getLastNonListPageBlock(tL_pageBlockDetailsChild.parent);
-            if (access$13500 instanceof TLRPC$TL_pageBlockDetails) {
-                return ((TLRPC$TL_pageBlockDetails) access$13500).open;
+            TLRPC$PageBlock access$10900 = ArticleViewer.this.getLastNonListPageBlock(tL_pageBlockDetailsChild.parent);
+            if (access$10900 instanceof TLRPC$TL_pageBlockDetails) {
+                return ((TLRPC$TL_pageBlockDetails) access$10900).open;
             }
-            if (!(access$13500 instanceof TL_pageBlockDetailsChild)) {
+            if (!(access$10900 instanceof TL_pageBlockDetailsChild)) {
                 return false;
             }
-            TL_pageBlockDetailsChild tL_pageBlockDetailsChild2 = (TL_pageBlockDetailsChild) access$13500;
-            TLRPC$PageBlock access$135002 = ArticleViewer.this.getLastNonListPageBlock(tL_pageBlockDetailsChild2.block);
-            if (!(access$135002 instanceof TLRPC$TL_pageBlockDetails) || ((TLRPC$TL_pageBlockDetails) access$135002).open) {
+            TL_pageBlockDetailsChild tL_pageBlockDetailsChild2 = (TL_pageBlockDetailsChild) access$10900;
+            TLRPC$PageBlock access$109002 = ArticleViewer.this.getLastNonListPageBlock(tL_pageBlockDetailsChild2.block);
+            if (!(access$109002 instanceof TLRPC$TL_pageBlockDetails) || ((TLRPC$TL_pageBlockDetails) access$109002).open) {
                 return isBlockOpened(tL_pageBlockDetailsChild2);
             }
             return false;
@@ -8817,8 +8241,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int size = this.blocks.size();
             for (int i = 0; i < size; i++) {
                 TLRPC$PageBlock tLRPC$PageBlock = this.blocks.get(i);
-                TLRPC$PageBlock access$13500 = ArticleViewer.this.getLastNonListPageBlock(tLRPC$PageBlock);
-                if (!(access$13500 instanceof TL_pageBlockDetailsChild) || isBlockOpened((TL_pageBlockDetailsChild) access$13500)) {
+                TLRPC$PageBlock access$10900 = ArticleViewer.this.getLastNonListPageBlock(tLRPC$PageBlock);
+                if (!(access$10900 instanceof TL_pageBlockDetailsChild) || isBlockOpened((TL_pageBlockDetailsChild) access$10900)) {
                     this.localBlocks.add(tLRPC$PageBlock);
                 }
             }
@@ -8945,9 +8369,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         public void setBlock(TLRPC$TL_pageBlockVideo tLRPC$TL_pageBlockVideo, boolean z, boolean z2) {
             this.currentBlock = tLRPC$TL_pageBlockVideo;
             this.parentBlock = null;
-            TLRPC$Document access$9100 = this.parentAdapter.getDocumentWithId(tLRPC$TL_pageBlockVideo.video_id);
-            this.currentDocument = access$9100;
-            this.isGif = MessageObject.isGifDocument(access$9100);
+            TLRPC$Document access$13000 = this.parentAdapter.getDocumentWithId(tLRPC$TL_pageBlockVideo.video_id);
+            this.currentDocument = access$13000;
+            this.isGif = MessageObject.isGifDocument(access$13000);
             this.isFirst = z;
             this.channelCell.setVisibility(4);
             updateButtonState(false);
@@ -9968,9 +9392,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 radialProgress2.setProgressRect(i5, dp4, i5 + dp3, dp4 + dp3);
                 ArticleViewer articleViewer = ArticleViewer.this;
                 TLRPC$TL_pageBlockAudio tLRPC$TL_pageBlockAudio2 = this.currentBlock;
-                DrawingText access$15800 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockAudio2.caption.text, dp2, this.textY, tLRPC$TL_pageBlockAudio2, this.parentAdapter);
-                this.captionLayout = access$15800;
-                if (access$15800 != null) {
+                DrawingText access$13200 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockAudio2.caption.text, dp2, this.textY, tLRPC$TL_pageBlockAudio2, this.parentAdapter);
+                this.captionLayout = access$13200;
+                if (access$13200 != null) {
                     int dp5 = AndroidUtilities.dp(8.0f) + this.captionLayout.getHeight();
                     this.creditOffset = dp5;
                     dp += dp5 + AndroidUtilities.dp(8.0f);
@@ -9978,9 +9402,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int i6 = dp;
                 ArticleViewer articleViewer2 = ArticleViewer.this;
                 TLRPC$TL_pageBlockAudio tLRPC$TL_pageBlockAudio3 = this.currentBlock;
-                DrawingText access$15900 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockAudio3.caption.credit, dp2, this.textY + this.creditOffset, tLRPC$TL_pageBlockAudio3, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.creditLayout = access$15900;
-                if (access$15900 != null) {
+                DrawingText access$13300 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockAudio3.caption.credit, dp2, this.textY + this.creditOffset, tLRPC$TL_pageBlockAudio3, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.creditLayout = access$13300;
+                if (access$13300 != null) {
                     i6 += AndroidUtilities.dp(4.0f) + this.creditLayout.getHeight();
                 }
                 if (!this.isFirst && this.currentBlock.level <= 0) {
@@ -10172,7 +9596,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         private void didPressedButton(boolean z) {
             int i = this.buttonState;
             if (i == 0) {
-                if (MediaController.getInstance().setPlaylist(this.parentAdapter.audioMessages, this.currentMessageObject, 0, false)) {
+                if (MediaController.getInstance().setPlaylist(this.parentAdapter.audioMessages, this.currentMessageObject, 0, false, (MediaController.PlaylistGlobalSearchParams) null)) {
                     this.buttonState = 1;
                     this.radialProgress.setIcon(getIconForCurrentState(), false, z);
                     invalidate();
@@ -10294,18 +9718,18 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     int dp = size - AndroidUtilities.dp(50.0f);
                     ArticleViewer articleViewer = ArticleViewer.this;
                     TLRPC$TL_pageBlockEmbedPost tLRPC$TL_pageBlockEmbedPost2 = this.currentBlock;
-                    DrawingText access$15800 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockEmbedPost2.caption.text, dp, this.textY, tLRPC$TL_pageBlockEmbedPost2, this.parentAdapter);
-                    this.captionLayout = access$15800;
-                    if (access$15800 != null) {
+                    DrawingText access$13200 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockEmbedPost2.caption.text, dp, this.textY, tLRPC$TL_pageBlockEmbedPost2, this.parentAdapter);
+                    this.captionLayout = access$13200;
+                    if (access$13200 != null) {
                         int dp2 = AndroidUtilities.dp(4.0f) + this.captionLayout.getHeight();
                         this.creditOffset = dp2;
                         i4 = 0 + dp2 + AndroidUtilities.dp(4.0f);
                     }
                     ArticleViewer articleViewer2 = ArticleViewer.this;
                     TLRPC$TL_pageBlockEmbedPost tLRPC$TL_pageBlockEmbedPost3 = this.currentBlock;
-                    DrawingText access$15900 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockEmbedPost3.caption.credit, dp, this.textY + this.creditOffset, tLRPC$TL_pageBlockEmbedPost3, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                    this.creditLayout = access$15900;
-                    if (access$15900 != null) {
+                    DrawingText access$13300 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockEmbedPost3.caption.credit, dp, this.textY + this.creditOffset, tLRPC$TL_pageBlockEmbedPost3, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                    this.creditLayout = access$13300;
+                    if (access$13300 != null) {
                         i4 += AndroidUtilities.dp(4.0f) + this.creditLayout.getHeight();
                     }
                     i3 = i4;
@@ -10313,18 +9737,18 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     boolean z = tLRPC$TL_pageBlockEmbedPost.author_photo_id != 0;
                     this.avatarVisible = z;
                     if (z) {
-                        TLRPC$Photo access$16700 = this.parentAdapter.getPhotoWithId(this.currentBlock.author_photo_id);
-                        boolean z2 = access$16700 instanceof TLRPC$TL_photo;
+                        TLRPC$Photo access$14100 = this.parentAdapter.getPhotoWithId(this.currentBlock.author_photo_id);
+                        boolean z2 = access$14100 instanceof TLRPC$TL_photo;
                         this.avatarVisible = z2;
                         if (z2) {
                             this.avatarDrawable.setInfo(0, this.currentBlock.author, (String) null);
-                            this.avatarImageView.setImage(ImageLocation.getForPhoto(FileLoader.getClosestPhotoSizeWithSize(access$16700.sizes, AndroidUtilities.dp(40.0f), true), access$16700), "40_40", (Drawable) this.avatarDrawable, 0, (String) null, (Object) this.parentAdapter.currentPage, 1);
+                            this.avatarImageView.setImage(ImageLocation.getForPhoto(FileLoader.getClosestPhotoSizeWithSize(access$14100.sizes, AndroidUtilities.dp(40.0f), true), access$14100), "40_40", (Drawable) this.avatarDrawable, 0, (String) null, (Object) this.parentAdapter.currentPage, 1);
                         }
                     }
-                    DrawingText access$16800 = ArticleViewer.this.createLayoutForText(this, this.currentBlock.author, (TLRPC$RichText) null, size - AndroidUtilities.dp((float) ((this.avatarVisible ? 54 : 0) + 50)), 0, this.currentBlock, Layout.Alignment.ALIGN_NORMAL, 1, this.parentAdapter);
-                    this.nameLayout = access$16800;
-                    if (access$16800 != null) {
-                        access$16800.x = AndroidUtilities.dp((float) ((this.avatarVisible ? 54 : 0) + 32));
+                    DrawingText access$14200 = ArticleViewer.this.createLayoutForText(this, this.currentBlock.author, (TLRPC$RichText) null, size - AndroidUtilities.dp((float) ((this.avatarVisible ? 54 : 0) + 50)), 0, this.currentBlock, Layout.Alignment.ALIGN_NORMAL, 1, this.parentAdapter);
+                    this.nameLayout = access$14200;
+                    if (access$14200 != null) {
+                        access$14200.x = AndroidUtilities.dp((float) ((this.avatarVisible ? 54 : 0) + 32));
                         this.nameLayout.y = AndroidUtilities.dp(this.dateLayout != null ? 10.0f : 19.0f);
                     }
                     if (this.currentBlock.date != 0) {
@@ -10339,9 +9763,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         int dp4 = size - AndroidUtilities.dp(50.0f);
                         ArticleViewer articleViewer3 = ArticleViewer.this;
                         TLRPC$TL_pageBlockEmbedPost tLRPC$TL_pageBlockEmbedPost4 = this.currentBlock;
-                        DrawingText access$158002 = articleViewer3.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockEmbedPost4.caption.text, dp4, this.textY, tLRPC$TL_pageBlockEmbedPost4, this.parentAdapter);
-                        this.captionLayout = access$158002;
-                        if (access$158002 != null) {
+                        DrawingText access$132002 = articleViewer3.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockEmbedPost4.caption.text, dp4, this.textY, tLRPC$TL_pageBlockEmbedPost4, this.parentAdapter);
+                        this.captionLayout = access$132002;
+                        if (access$132002 != null) {
                             int dp5 = AndroidUtilities.dp(4.0f) + this.captionLayout.getHeight();
                             this.creditOffset = dp5;
                             dp3 += dp5 + AndroidUtilities.dp(4.0f);
@@ -10349,9 +9773,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         int i5 = dp3;
                         ArticleViewer articleViewer4 = ArticleViewer.this;
                         TLRPC$TL_pageBlockEmbedPost tLRPC$TL_pageBlockEmbedPost5 = this.currentBlock;
-                        DrawingText access$159002 = articleViewer4.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockEmbedPost5.caption.credit, dp4, this.textY + this.creditOffset, tLRPC$TL_pageBlockEmbedPost5, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                        this.creditLayout = access$159002;
-                        if (access$159002 != null) {
+                        DrawingText access$133002 = articleViewer4.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockEmbedPost5.caption.credit, dp4, this.textY + this.creditOffset, tLRPC$TL_pageBlockEmbedPost5, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                        this.creditLayout = access$133002;
+                        if (access$133002 != null) {
                             i5 += AndroidUtilities.dp(4.0f) + this.creditLayout.getHeight();
                         }
                         dp3 = i5;
@@ -10501,10 +9925,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     this.textY = 0;
                     this.textX = AndroidUtilities.dp((float) ((i5 * 14) + 18));
                 }
-                DrawingText access$16800 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.text, (size - AndroidUtilities.dp(18.0f)) - this.textX, this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, 0, this.parentAdapter);
-                this.textLayout = access$16800;
-                if (access$16800 != null) {
-                    int height = access$16800.getHeight();
+                DrawingText access$14200 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.text, (size - AndroidUtilities.dp(18.0f)) - this.textX, this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, 0, this.parentAdapter);
+                this.textLayout = access$14200;
+                if (access$14200 != null) {
+                    int height = access$14200.getHeight();
                     if (this.currentBlock.level > 0) {
                         i3 = AndroidUtilities.dp(8.0f);
                     } else {
@@ -10600,7 +10024,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                     	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                     	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
                     	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                     	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                     	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -10615,7 +10039,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                     	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                     	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
                     	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                     	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                     	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -10630,7 +10054,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                     	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                     	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                    	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                    	at java.util.ArrayList.forEach(ArrayList.java:1259)
                     	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                     	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                     	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -10844,7 +10268,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                         	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                         	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
                         	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                         	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                         	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -10876,7 +10300,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                         	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                         	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
                         	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                         	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                         	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -10891,7 +10315,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                         	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                         	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
                         	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                         	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                         	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -11535,11 +10959,11 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 ArticleViewer articleViewer = ArticleViewer.this;
                 TLRPC$TL_pageBlockTable tLRPC$TL_pageBlockTable2 = this.currentBlock;
-                DrawingText access$16800 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockTable2.title, size - i4, 0, tLRPC$TL_pageBlockTable2, Layout.Alignment.ALIGN_CENTER, 0, this.parentAdapter);
-                this.titleLayout = access$16800;
-                if (access$16800 != null) {
+                DrawingText access$14200 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockTable2.title, size - i4, 0, tLRPC$TL_pageBlockTable2, Layout.Alignment.ALIGN_CENTER, 0, this.parentAdapter);
+                this.titleLayout = access$14200;
+                if (access$14200 != null) {
                     this.textY = 0;
-                    i5 = access$16800.getHeight() + AndroidUtilities.dp(8.0f) + 0;
+                    i5 = access$14200.getHeight() + AndroidUtilities.dp(8.0f) + 0;
                     this.listY = i5;
                     DrawingText drawingText = this.titleLayout;
                     drawingText.x = this.textX;
@@ -11701,7 +11125,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 int i10;
                 TLRPC$PhotoSize tLRPC$PhotoSize;
                 float f2;
-                TLRPC$Document access$9100;
+                TLRPC$Document access$13000;
                 this.posArray.clear();
                 this.positions.clear();
                 int size = BlockCollageCell.this.currentBlock.items.size();
@@ -11713,15 +11137,15 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     while (i11 < size) {
                         TLObject tLObject = BlockCollageCell.this.currentBlock.items.get(i11);
                         if (tLObject instanceof TLRPC$TL_pageBlockPhoto) {
-                            TLRPC$Photo access$16700 = BlockCollageCell.this.parentAdapter.getPhotoWithId(((TLRPC$TL_pageBlockPhoto) tLObject).photo_id);
-                            if (access$16700 == null) {
+                            TLRPC$Photo access$14100 = BlockCollageCell.this.parentAdapter.getPhotoWithId(((TLRPC$TL_pageBlockPhoto) tLObject).photo_id);
+                            if (access$14100 == null) {
                                 i11++;
                             } else {
-                                tLRPC$PhotoSize = FileLoader.getClosestPhotoSizeWithSize(access$16700.sizes, AndroidUtilities.getPhotoSize());
+                                tLRPC$PhotoSize = FileLoader.getClosestPhotoSizeWithSize(access$14100.sizes, AndroidUtilities.getPhotoSize());
                             }
                         } else {
-                            if ((tLObject instanceof TLRPC$TL_pageBlockVideo) && (access$9100 = BlockCollageCell.this.parentAdapter.getDocumentWithId(((TLRPC$TL_pageBlockVideo) tLObject).video_id)) != null) {
-                                tLRPC$PhotoSize = FileLoader.getClosestPhotoSizeWithSize(access$9100.thumbs, 90);
+                            if ((tLObject instanceof TLRPC$TL_pageBlockVideo) && (access$13000 = BlockCollageCell.this.parentAdapter.getDocumentWithId(((TLRPC$TL_pageBlockVideo) tLObject).video_id)) != null) {
+                                tLRPC$PhotoSize = FileLoader.getClosestPhotoSizeWithSize(access$13000.thumbs, 90);
                             }
                             i11++;
                         }
@@ -12255,9 +11679,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 this.textY = dp2;
                 ArticleViewer articleViewer = ArticleViewer.this;
                 TLRPC$TL_pageBlockCollage tLRPC$TL_pageBlockCollage2 = this.currentBlock;
-                DrawingText access$15800 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockCollage2.caption.text, i4, dp2, tLRPC$TL_pageBlockCollage2, this.parentAdapter);
-                this.captionLayout = access$15800;
-                if (access$15800 != null) {
+                DrawingText access$13200 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockCollage2.caption.text, i4, dp2, tLRPC$TL_pageBlockCollage2, this.parentAdapter);
+                this.captionLayout = access$13200;
+                if (access$13200 != null) {
                     int dp3 = AndroidUtilities.dp(4.0f) + this.captionLayout.getHeight();
                     this.creditOffset = dp3;
                     measuredHeight += dp3 + AndroidUtilities.dp(4.0f);
@@ -12269,9 +11693,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 ArticleViewer articleViewer2 = ArticleViewer.this;
                 TLRPC$TL_pageBlockCollage tLRPC$TL_pageBlockCollage3 = this.currentBlock;
-                DrawingText access$15900 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockCollage3.caption.credit, i4, this.textY + this.creditOffset, tLRPC$TL_pageBlockCollage3, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.creditLayout = access$15900;
-                if (access$15900 != null) {
+                DrawingText access$13300 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockCollage3.caption.credit, i4, this.textY + this.creditOffset, tLRPC$TL_pageBlockCollage3, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.creditLayout = access$13300;
+                if (access$13300 != null) {
                     measuredHeight += AndroidUtilities.dp(4.0f) + this.creditLayout.getHeight();
                     DrawingText drawingText2 = this.creditLayout;
                     drawingText2.x = this.textX;
@@ -12487,7 +11911,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 /* access modifiers changed from: protected */
                 public void onDraw(Canvas canvas) {
                     int i;
-                    int access$20000;
+                    int access$17400;
                     if (BlockSlideshowCell.this.currentBlock != null) {
                         int count = BlockSlideshowCell.this.innerAdapter.getCount();
                         int dp = (AndroidUtilities.dp(7.0f) * count) + ((count - 1) * AndroidUtilities.dp(6.0f)) + AndroidUtilities.dp(4.0f);
@@ -12500,15 +11924,15 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                             int i2 = (count - measuredWidth) - 1;
                             if (BlockSlideshowCell.this.currentPage != i2 || BlockSlideshowCell.this.pageOffset >= 0.0f) {
                                 if (BlockSlideshowCell.this.currentPage >= i2) {
-                                    access$20000 = ((count - (measuredWidth * 2)) - 1) * dp3;
+                                    access$17400 = ((count - (measuredWidth * 2)) - 1) * dp3;
                                 } else if (BlockSlideshowCell.this.currentPage > measuredWidth) {
-                                    access$20000 = ((int) (BlockSlideshowCell.this.pageOffset * ((float) dp3))) + ((BlockSlideshowCell.this.currentPage - measuredWidth) * dp3);
+                                    access$17400 = ((int) (BlockSlideshowCell.this.pageOffset * ((float) dp3))) + ((BlockSlideshowCell.this.currentPage - measuredWidth) * dp3);
                                 } else if (BlockSlideshowCell.this.currentPage != measuredWidth || BlockSlideshowCell.this.pageOffset <= 0.0f) {
                                     i = dp2;
                                 } else {
-                                    access$20000 = (int) (BlockSlideshowCell.this.pageOffset * ((float) dp3));
+                                    access$17400 = (int) (BlockSlideshowCell.this.pageOffset * ((float) dp3));
                                 }
-                                i = dp2 - access$20000;
+                                i = dp2 - access$17400;
                             } else {
                                 i = dp2 - (((int) (BlockSlideshowCell.this.pageOffset * ((float) dp3))) + (((count - (measuredWidth * 2)) - 1) * dp3));
                             }
@@ -12516,9 +11940,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                         int i3 = 0;
                         while (i3 < BlockSlideshowCell.this.currentBlock.items.size()) {
                             int dp4 = AndroidUtilities.dp(4.0f) + i + (AndroidUtilities.dp(13.0f) * i3);
-                            Drawable access$20800 = BlockSlideshowCell.this.currentPage == i3 ? ArticleViewer.this.slideDotBigDrawable : ArticleViewer.this.slideDotDrawable;
-                            access$20800.setBounds(dp4 - AndroidUtilities.dp(5.0f), 0, dp4 + AndroidUtilities.dp(5.0f), AndroidUtilities.dp(10.0f));
-                            access$20800.draw(canvas);
+                            Drawable access$18200 = BlockSlideshowCell.this.currentPage == i3 ? ArticleViewer.this.slideDotBigDrawable : ArticleViewer.this.slideDotDrawable;
+                            access$18200.setBounds(dp4 - AndroidUtilities.dp(5.0f), 0, dp4 + AndroidUtilities.dp(5.0f), AndroidUtilities.dp(10.0f));
+                            access$18200.draw(canvas);
                             i3++;
                         }
                     }
@@ -12558,9 +11982,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 this.textY = dp3;
                 ArticleViewer articleViewer = ArticleViewer.this;
                 TLRPC$TL_pageBlockSlideshow tLRPC$TL_pageBlockSlideshow = this.currentBlock;
-                DrawingText access$15800 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockSlideshow.caption.text, dp2, dp3, tLRPC$TL_pageBlockSlideshow, this.parentAdapter);
-                this.captionLayout = access$15800;
-                if (access$15800 != null) {
+                DrawingText access$13200 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockSlideshow.caption.text, dp2, dp3, tLRPC$TL_pageBlockSlideshow, this.parentAdapter);
+                this.captionLayout = access$13200;
+                if (access$13200 != null) {
                     int dp4 = AndroidUtilities.dp(4.0f) + this.captionLayout.getHeight();
                     this.creditOffset = dp4;
                     dp += dp4 + AndroidUtilities.dp(4.0f);
@@ -12572,9 +11996,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 ArticleViewer articleViewer2 = ArticleViewer.this;
                 TLRPC$TL_pageBlockSlideshow tLRPC$TL_pageBlockSlideshow2 = this.currentBlock;
-                DrawingText access$15900 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockSlideshow2.caption.credit, dp2, this.textY + this.creditOffset, tLRPC$TL_pageBlockSlideshow2, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.creditLayout = access$15900;
-                if (access$15900 != null) {
+                DrawingText access$13300 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockSlideshow2.caption.credit, dp2, this.textY + this.creditOffset, tLRPC$TL_pageBlockSlideshow2, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.creditLayout = access$13300;
+                if (access$13300 != null) {
                     dp += AndroidUtilities.dp(4.0f) + this.creditLayout.getHeight();
                     DrawingText drawingText2 = this.creditLayout;
                     drawingText2.x = this.textX;
@@ -12660,9 +12084,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     this.blockLayout = null;
                 }
                 if (this.currentBlock.blockItem != null) {
-                    int access$8300 = this.parentAdapter.getTypeForBlock(this.currentBlock.blockItem);
-                    this.currentBlockType = access$8300;
-                    RecyclerView.ViewHolder onCreateViewHolder = this.parentAdapter.onCreateViewHolder(this, access$8300);
+                    int access$7500 = this.parentAdapter.getTypeForBlock(this.currentBlock.blockItem);
+                    this.currentBlockType = access$7500;
+                    RecyclerView.ViewHolder onCreateViewHolder = this.parentAdapter.onCreateViewHolder(this, access$7500);
                     this.blockLayout = onCreateViewHolder;
                     addView(onCreateViewHolder.itemView);
                 }
@@ -13262,9 +12686,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     this.blockLayout = null;
                 }
                 if (this.currentBlock.blockItem != null) {
-                    int access$8300 = this.parentAdapter.getTypeForBlock(this.currentBlock.blockItem);
-                    this.currentBlockType = access$8300;
-                    RecyclerView.ViewHolder onCreateViewHolder = this.parentAdapter.onCreateViewHolder(this, access$8300);
+                    int access$7500 = this.parentAdapter.getTypeForBlock(this.currentBlock.blockItem);
+                    this.currentBlockType = access$7500;
+                    RecyclerView.ViewHolder onCreateViewHolder = this.parentAdapter.onCreateViewHolder(this, access$7500);
                     this.blockLayout = onCreateViewHolder;
                     addView(onCreateViewHolder.itemView);
                 }
@@ -13838,9 +13262,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int dp = AndroidUtilities.dp(39.0f);
             TLRPC$TL_pageBlockDetails tLRPC$TL_pageBlockDetails = this.currentBlock;
             if (tLRPC$TL_pageBlockDetails != null) {
-                DrawingText access$15900 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockDetails.title, size - AndroidUtilities.dp(52.0f), 0, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.textLayout = access$15900;
-                if (access$15900 != null) {
+                DrawingText access$13300 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockDetails.title, size - AndroidUtilities.dp(52.0f), 0, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.textLayout = access$13300;
+                if (access$13300 != null) {
                     dp = Math.max(dp, AndroidUtilities.dp(21.0f) + this.textLayout.getHeight());
                     int height = ((this.textLayout.getHeight() + AndroidUtilities.dp(21.0f)) - this.textLayout.getHeight()) / 2;
                     this.textY = height;
@@ -13940,9 +13364,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int size = View.MeasureSpec.getSize(i);
             TLRPC$TL_pageBlockRelatedArticles tLRPC$TL_pageBlockRelatedArticles = this.currentBlock;
             if (tLRPC$TL_pageBlockRelatedArticles != null) {
-                DrawingText access$16800 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockRelatedArticles.title, size - AndroidUtilities.dp(52.0f), 0, this.currentBlock, Layout.Alignment.ALIGN_NORMAL, 1, this.parentAdapter);
-                this.textLayout = access$16800;
-                if (access$16800 != null) {
+                DrawingText access$14200 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockRelatedArticles.title, size - AndroidUtilities.dp(52.0f), 0, this.currentBlock, Layout.Alignment.ALIGN_NORMAL, 1, this.parentAdapter);
+                this.textLayout = access$14200;
+                if (access$14200 != null) {
                     this.textY = AndroidUtilities.dp(6.0f) + ((AndroidUtilities.dp(32.0f) - this.textLayout.getHeight()) / 2);
                 }
             }
@@ -14015,15 +13439,15 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int dp = AndroidUtilities.dp((float) (SharedConfig.ivFontSize - 16));
             long j = tLRPC$TL_pageRelatedArticle.photo_id;
             TLRPC$PhotoSize tLRPC$PhotoSize = null;
-            TLRPC$Photo access$16700 = j != 0 ? this.parentAdapter.getPhotoWithId(j) : null;
-            if (access$16700 != null) {
+            TLRPC$Photo access$14100 = j != 0 ? this.parentAdapter.getPhotoWithId(j) : null;
+            if (access$14100 != null) {
                 this.drawImage = true;
-                TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(access$16700.sizes, AndroidUtilities.getPhotoSize());
-                TLRPC$PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(access$16700.sizes, 80, true);
+                TLRPC$PhotoSize closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(access$14100.sizes, AndroidUtilities.getPhotoSize());
+                TLRPC$PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(access$14100.sizes, 80, true);
                 if (closestPhotoSizeWithSize != closestPhotoSizeWithSize2) {
                     tLRPC$PhotoSize = closestPhotoSizeWithSize2;
                 }
-                this.imageView.setImage(ImageLocation.getForPhoto(closestPhotoSizeWithSize, access$16700), "64_64", ImageLocation.getForPhoto(tLRPC$PhotoSize, access$16700), "64_64_b", closestPhotoSizeWithSize.size, (String) null, this.parentAdapter.currentPage, 1);
+                this.imageView.setImage(ImageLocation.getForPhoto(closestPhotoSizeWithSize, access$14100), "64_64", ImageLocation.getForPhoto(tLRPC$PhotoSize, access$14100), "64_64_b", closestPhotoSizeWithSize.size, (String) null, this.parentAdapter.currentPage, 1);
             } else {
                 this.drawImage = false;
             }
@@ -14082,10 +13506,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             } else {
                 str = tLRPC$TL_pageRelatedArticle.url;
             }
-            DrawingText access$16800 = ArticleViewer.this.createLayoutForText(this, str, (TLRPC$RichText) null, i6, this.textOffset + this.textY, this.currentBlock, (this.parentAdapter.isRtl || z) ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, i5, this.parentAdapter);
-            this.textLayout2 = access$16800;
-            if (access$16800 != null) {
-                i4 += access$16800.getHeight();
+            DrawingText access$14200 = ArticleViewer.this.createLayoutForText(this, str, (TLRPC$RichText) null, i6, this.textOffset + this.textY, this.currentBlock, (this.parentAdapter.isRtl || z) ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, i5, this.parentAdapter);
+            this.textLayout2 = access$14200;
+            if (access$14200 != null) {
+                i4 += access$14200.getHeight();
                 if (this.textLayout != null) {
                     i4 += AndroidUtilities.dp(6.0f) + dp;
                 }
@@ -14171,9 +13595,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             TLRPC$TL_pageBlockHeader tLRPC$TL_pageBlockHeader = this.currentBlock;
             int i3 = 0;
             if (tLRPC$TL_pageBlockHeader != null) {
-                DrawingText access$15900 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockHeader.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.textLayout = access$15900;
-                if (access$15900 != null) {
+                DrawingText access$13300 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockHeader.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.textLayout = access$13300;
+                if (access$13300 != null) {
                     i3 = 0 + AndroidUtilities.dp(16.0f) + this.textLayout.getHeight();
                     DrawingText drawingText = this.textLayout;
                     drawingText.x = this.textX;
@@ -14260,9 +13684,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             TLRPC$TL_pageBlockSubtitle tLRPC$TL_pageBlockSubtitle = this.currentBlock;
             int i3 = 0;
             if (tLRPC$TL_pageBlockSubtitle != null) {
-                DrawingText access$15900 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockSubtitle.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.textLayout = access$15900;
-                if (access$15900 != null) {
+                DrawingText access$13300 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockSubtitle.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.textLayout = access$13300;
+                if (access$13300 != null) {
                     i3 = 0 + AndroidUtilities.dp(16.0f) + this.textLayout.getHeight();
                     DrawingText drawingText = this.textLayout;
                     drawingText.x = this.textX;
@@ -14332,19 +13756,19 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             int size = View.MeasureSpec.getSize(i);
             TLRPC$TL_pageBlockPullquote tLRPC$TL_pageBlockPullquote = this.currentBlock;
             if (tLRPC$TL_pageBlockPullquote != null) {
-                DrawingText access$15800 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockPullquote.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter);
-                this.textLayout = access$15800;
+                DrawingText access$13200 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockPullquote.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter);
+                this.textLayout = access$13200;
                 i3 = 0;
-                if (access$15800 != null) {
+                if (access$13200 != null) {
                     i3 = 0 + AndroidUtilities.dp(8.0f) + this.textLayout.getHeight();
                     DrawingText drawingText = this.textLayout;
                     drawingText.x = this.textX;
                     drawingText.y = this.textY;
                 }
                 this.textY2 = AndroidUtilities.dp(2.0f) + i3;
-                DrawingText access$158002 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.caption, size - AndroidUtilities.dp(36.0f), this.textY2, this.currentBlock, this.parentAdapter);
-                this.textLayout2 = access$158002;
-                if (access$158002 != null) {
+                DrawingText access$132002 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.caption, size - AndroidUtilities.dp(36.0f), this.textY2, this.currentBlock, this.parentAdapter);
+                this.textLayout2 = access$132002;
+                if (access$132002 != null) {
                     i3 += AndroidUtilities.dp(8.0f) + this.textLayout2.getHeight();
                     DrawingText drawingText2 = this.textLayout2;
                     drawingText2.x = this.textX;
@@ -14430,9 +13854,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 }
                 ArticleViewer articleViewer = ArticleViewer.this;
                 TLRPC$TL_pageBlockBlockquote tLRPC$TL_pageBlockBlockquote = this.currentBlock;
-                DrawingText access$15800 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockBlockquote.text, dp, this.textY, tLRPC$TL_pageBlockBlockquote, this.parentAdapter);
-                this.textLayout = access$15800;
-                i3 = access$15800 != null ? 0 + AndroidUtilities.dp(8.0f) + this.textLayout.getHeight() : 0;
+                DrawingText access$13200 = articleViewer.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockBlockquote.text, dp, this.textY, tLRPC$TL_pageBlockBlockquote, this.parentAdapter);
+                this.textLayout = access$13200;
+                i3 = access$13200 != null ? 0 + AndroidUtilities.dp(8.0f) + this.textLayout.getHeight() : 0;
                 if (this.currentBlock.level > 0) {
                     if (this.parentAdapter.isRtl) {
                         this.textX = AndroidUtilities.dp((float) ((this.currentBlock.level * 14) + 14));
@@ -14448,9 +13872,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 this.textY2 = dp2;
                 ArticleViewer articleViewer2 = ArticleViewer.this;
                 TLRPC$TL_pageBlockBlockquote tLRPC$TL_pageBlockBlockquote2 = this.currentBlock;
-                DrawingText access$158002 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockBlockquote2.caption, dp, dp2, tLRPC$TL_pageBlockBlockquote2, this.parentAdapter);
-                this.textLayout2 = access$158002;
-                if (access$158002 != null) {
+                DrawingText access$132002 = articleViewer2.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockBlockquote2.caption, dp, dp2, tLRPC$TL_pageBlockBlockquote2, this.parentAdapter);
+                this.textLayout2 = access$132002;
+                if (access$132002 != null) {
                     i3 += AndroidUtilities.dp(8.0f) + this.textLayout2.getHeight();
                 }
                 if (i3 != 0) {
@@ -14583,9 +14007,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             }
             TLRPC$TL_pageBlockPhoto tLRPC$TL_pageBlockPhoto2 = this.currentBlock;
             if (tLRPC$TL_pageBlockPhoto2 != null) {
-                TLRPC$Photo access$16700 = this.parentAdapter.getPhotoWithId(tLRPC$TL_pageBlockPhoto2.photo_id);
-                if (access$16700 != null) {
-                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(access$16700.sizes, AndroidUtilities.getPhotoSize());
+                TLRPC$Photo access$14100 = this.parentAdapter.getPhotoWithId(tLRPC$TL_pageBlockPhoto2.photo_id);
+                if (access$14100 != null) {
+                    this.currentPhotoObject = FileLoader.getClosestPhotoSizeWithSize(access$14100.sizes, AndroidUtilities.getPhotoSize());
                 } else {
                     this.currentPhotoObject = null;
                 }
@@ -15404,8 +14828,8 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 try {
                     double d = this.currentBlock.geo.lat;
                     double d2 = this.currentBlock.geo._long;
-                    Activity access$2300 = ArticleViewer.this.parentActivity;
-                    access$2300.startActivity(new Intent("android.intent.action.VIEW", Uri.parse("geo:" + d + "," + d2 + "?q=" + d + "," + d2)));
+                    Activity access$2000 = ArticleViewer.this.parentActivity;
+                    access$2000.startActivity(new Intent("android.intent.action.VIEW", Uri.parse("geo:" + d + "," + d2 + "?q=" + d + "," + d2)));
                 } catch (Exception e) {
                     FileLog.e((Throwable) e);
                 }
@@ -16056,7 +15480,7 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 r2 = r13
                 r3 = r4
                 r6 = r14
-                java.lang.CharSequence r0 = r0.getText(r1, r2, r3, r4, r5, r6)
+                java.lang.CharSequence r0 = r0.getText((org.telegram.ui.ArticleViewer.WebpageAdapter) r1, (android.view.View) r2, (org.telegram.tgnet.TLRPC$RichText) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$PageBlock) r5, (int) r6)
                 boolean r1 = r0 instanceof android.text.Spannable
                 r2 = 0
                 r3 = 0
@@ -16258,9 +15682,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 } else {
                     this.textY = AndroidUtilities.dp(8.0f);
                 }
-                DrawingText access$15900 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.textLayout = access$15900;
-                if (access$15900 != null) {
+                DrawingText access$13300 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.textLayout = access$13300;
+                if (access$13300 != null) {
                     i3 += AndroidUtilities.dp(16.0f) + this.textLayout.getHeight();
                     DrawingText drawingText = this.textLayout;
                     drawingText.x = this.textX;
@@ -16334,9 +15758,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 } else {
                     this.textY = AndroidUtilities.dp(8.0f);
                 }
-                DrawingText access$15900 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.textLayout = access$15900;
-                if (access$15900 != null) {
+                DrawingText access$13300 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.textLayout = access$13300;
+                if (access$13300 != null) {
                     i3 += AndroidUtilities.dp(16.0f) + this.textLayout.getHeight();
                     DrawingText drawingText = this.textLayout;
                     drawingText.x = this.textX;
@@ -16404,10 +15828,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                     this.textY = 0;
                     this.textX = AndroidUtilities.dp((float) ((i5 * 14) + 18));
                 }
-                DrawingText access$15900 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.text, (size - AndroidUtilities.dp(18.0f)) - this.textX, this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.textLayout = access$15900;
-                if (access$15900 != null) {
-                    int height = access$15900.getHeight();
+                DrawingText access$13300 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, this.currentBlock.text, (size - AndroidUtilities.dp(18.0f)) - this.textX, this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.textLayout = access$13300;
+                if (access$13300 != null) {
+                    int height = access$13300.getHeight();
                     if (this.currentBlock.level > 0) {
                         i3 = AndroidUtilities.dp(8.0f);
                     } else {
@@ -16508,9 +15932,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
                 public boolean onTouchEvent(MotionEvent motionEvent) {
                     BlockPreformattedCell blockPreformattedCell = BlockPreformattedCell.this;
                     ArticleViewer articleViewer = ArticleViewer.this;
-                    WebpageAdapter access$23100 = blockPreformattedCell.parentAdapter;
+                    WebpageAdapter access$20500 = blockPreformattedCell.parentAdapter;
                     BlockPreformattedCell blockPreformattedCell2 = BlockPreformattedCell.this;
-                    return articleViewer.checkLayoutForLinks(access$23100, motionEvent, blockPreformattedCell2, blockPreformattedCell2.textLayout, 0, 0) || super.onTouchEvent(motionEvent);
+                    return articleViewer.checkLayoutForLinks(access$20500, motionEvent, blockPreformattedCell2, blockPreformattedCell2.textLayout, 0, 0) || super.onTouchEvent(motionEvent);
                 }
 
                 /* access modifiers changed from: protected */
@@ -16612,9 +16036,9 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             TLRPC$TL_pageBlockSubheader tLRPC$TL_pageBlockSubheader = this.currentBlock;
             int i3 = 0;
             if (tLRPC$TL_pageBlockSubheader != null) {
-                DrawingText access$15900 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockSubheader.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
-                this.textLayout = access$15900;
-                if (access$15900 != null) {
+                DrawingText access$13300 = ArticleViewer.this.createLayoutForText(this, (CharSequence) null, tLRPC$TL_pageBlockSubheader.text, size - AndroidUtilities.dp(36.0f), this.textY, this.currentBlock, this.parentAdapter.isRtl ? StaticLayoutEx.ALIGN_RIGHT() : Layout.Alignment.ALIGN_NORMAL, this.parentAdapter);
+                this.textLayout = access$13300;
+                if (access$13300 != null) {
                     i3 = 0 + AndroidUtilities.dp(16.0f) + this.textLayout.getHeight();
                     DrawingText drawingText = this.textLayout;
                     drawingText.x = this.textX;
@@ -16716,3388 +16140,268 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
         }
     }
 
-    private static class LinkMovementMethodMy extends LinkMovementMethod {
-        private LinkMovementMethodMy() {
-        }
-
-        public boolean onTouchEvent(TextView textView, Spannable spannable, MotionEvent motionEvent) {
-            try {
-                boolean onTouchEvent = super.onTouchEvent(textView, spannable, motionEvent);
-                if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
-                    Selection.removeSelection(spannable);
-                }
-                return onTouchEvent;
-            } catch (Exception e) {
-                FileLog.e((Throwable) e);
-                return false;
-            }
-        }
-    }
-
-    private class PhotoBackgroundDrawable extends ColorDrawable {
-        /* access modifiers changed from: private */
-        public Runnable drawRunnable;
-
-        public PhotoBackgroundDrawable(int i) {
-            super(i);
-        }
-
-        @Keep
-        public void setAlpha(int i) {
-            if (ArticleViewer.this.parentActivity instanceof LaunchActivity) {
-                ((LaunchActivity) ArticleViewer.this.parentActivity).drawerLayoutContainer.setAllowDrawContent(!ArticleViewer.this.isPhotoVisible || i != 255);
-            }
-            super.setAlpha(i);
-        }
-
-        public void draw(Canvas canvas) {
-            Runnable runnable;
-            super.draw(canvas);
-            if (getAlpha() != 0 && (runnable = this.drawRunnable) != null) {
-                runnable.run();
-                this.drawRunnable = null;
-            }
-        }
-    }
-
-    private class RadialProgressView {
-        private float alpha = 1.0f;
-        private float animatedAlphaValue = 1.0f;
-        private float animatedProgressValue = 0.0f;
-        private float animationProgressStart = 0.0f;
-        /* access modifiers changed from: private */
-        public int backgroundState = -1;
-        private float currentProgress = 0.0f;
-        private long currentProgressTime = 0;
-        private long lastUpdateTime = 0;
-        private View parent;
-        private int previousBackgroundState = -2;
-        private RectF progressRect = new RectF();
-        private float radOffset = 0.0f;
-        private float scale = 1.0f;
-        private int size = AndroidUtilities.dp(64.0f);
-
-        public RadialProgressView(Context context, View view) {
-            if (ArticleViewer.decelerateInterpolator == null) {
-                DecelerateInterpolator unused = ArticleViewer.decelerateInterpolator = new DecelerateInterpolator(1.5f);
-                Paint unused2 = ArticleViewer.progressPaint = new Paint(1);
-                ArticleViewer.progressPaint.setStyle(Paint.Style.STROKE);
-                ArticleViewer.progressPaint.setStrokeCap(Paint.Cap.ROUND);
-                ArticleViewer.progressPaint.setStrokeWidth((float) AndroidUtilities.dp(3.0f));
-                ArticleViewer.progressPaint.setColor(-1);
-            }
-            this.parent = view;
-        }
-
-        private void updateAnimation() {
-            long currentTimeMillis = System.currentTimeMillis();
-            long j = currentTimeMillis - this.lastUpdateTime;
-            this.lastUpdateTime = currentTimeMillis;
-            if (this.animatedProgressValue != 1.0f) {
-                this.radOffset += ((float) (360 * j)) / 3000.0f;
-                float f = this.currentProgress;
-                float f2 = this.animationProgressStart;
-                float f3 = f - f2;
-                if (f3 > 0.0f) {
-                    long j2 = this.currentProgressTime + j;
-                    this.currentProgressTime = j2;
-                    if (j2 >= 300) {
-                        this.animatedProgressValue = f;
-                        this.animationProgressStart = f;
-                        this.currentProgressTime = 0;
-                    } else {
-                        this.animatedProgressValue = f2 + (f3 * ArticleViewer.decelerateInterpolator.getInterpolation(((float) this.currentProgressTime) / 300.0f));
-                    }
-                }
-                this.parent.invalidate();
-            }
-            if (this.animatedProgressValue >= 1.0f && this.previousBackgroundState != -2) {
-                float f4 = this.animatedAlphaValue - (((float) j) / 200.0f);
-                this.animatedAlphaValue = f4;
-                if (f4 <= 0.0f) {
-                    this.animatedAlphaValue = 0.0f;
-                    this.previousBackgroundState = -2;
-                }
-                this.parent.invalidate();
-            }
-        }
-
-        public void setProgress(float f, boolean z) {
-            if (!z) {
-                this.animatedProgressValue = f;
-                this.animationProgressStart = f;
-            } else {
-                this.animationProgressStart = this.animatedProgressValue;
-            }
-            this.currentProgress = f;
-            this.currentProgressTime = 0;
-        }
-
-        public void setBackgroundState(int i, boolean z) {
-            int i2;
-            this.lastUpdateTime = System.currentTimeMillis();
-            if (!z || (i2 = this.backgroundState) == i) {
-                this.previousBackgroundState = -2;
-            } else {
-                this.previousBackgroundState = i2;
-                this.animatedAlphaValue = 1.0f;
-            }
-            this.backgroundState = i;
-            this.parent.invalidate();
-        }
-
-        public void setAlpha(float f) {
-            this.alpha = f;
-        }
-
-        public void setScale(float f) {
-            this.scale = f;
-        }
-
-        public void onDraw(Canvas canvas) {
-            int i;
-            Drawable drawable;
-            Drawable drawable2;
-            int i2 = (int) (((float) this.size) * this.scale);
-            int access$23900 = (ArticleViewer.this.getContainerViewWidth() - i2) / 2;
-            int access$24000 = (ArticleViewer.this.getContainerViewHeight() - i2) / 2;
-            int i3 = this.previousBackgroundState;
-            if (i3 >= 0 && i3 < 4 && (drawable2 = ArticleViewer.progressDrawables[this.previousBackgroundState]) != null) {
-                drawable2.setAlpha((int) (this.animatedAlphaValue * 255.0f * this.alpha));
-                drawable2.setBounds(access$23900, access$24000, access$23900 + i2, access$24000 + i2);
-                drawable2.draw(canvas);
-            }
-            int i4 = this.backgroundState;
-            if (i4 >= 0 && i4 < 4 && (drawable = ArticleViewer.progressDrawables[this.backgroundState]) != null) {
-                if (this.previousBackgroundState != -2) {
-                    drawable.setAlpha((int) ((1.0f - this.animatedAlphaValue) * 255.0f * this.alpha));
-                } else {
-                    drawable.setAlpha((int) (this.alpha * 255.0f));
-                }
-                drawable.setBounds(access$23900, access$24000, access$23900 + i2, access$24000 + i2);
-                drawable.draw(canvas);
-            }
-            int i5 = this.backgroundState;
-            if (i5 == 0 || i5 == 1 || (i = this.previousBackgroundState) == 0 || i == 1) {
-                int dp = AndroidUtilities.dp(4.0f);
-                if (this.previousBackgroundState != -2) {
-                    ArticleViewer.progressPaint.setAlpha((int) (this.animatedAlphaValue * 255.0f * this.alpha));
-                } else {
-                    ArticleViewer.progressPaint.setAlpha((int) (this.alpha * 255.0f));
-                }
-                this.progressRect.set((float) (access$23900 + dp), (float) (access$24000 + dp), (float) ((access$23900 + i2) - dp), (float) ((access$24000 + i2) - dp));
-                canvas.drawArc(this.progressRect, this.radOffset - 0.049804688f, Math.max(4.0f, this.animatedProgressValue * 360.0f), false, ArticleViewer.progressPaint);
-                updateAnimation();
-            }
-        }
-    }
-
-    /* access modifiers changed from: private */
-    /* JADX WARNING: Can't wrap try/catch for region: R(4:12|13|14|15) */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:14:0x0044 */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void onSharePressed() {
-        /*
-            r5 = this;
-            android.app.Activity r0 = r5.parentActivity
-            if (r0 == 0) goto L_0x00a0
-            org.telegram.tgnet.TLRPC$PageBlock r0 = r5.currentMedia
-            if (r0 != 0) goto L_0x000a
-            goto L_0x00a0
-        L_0x000a:
-            org.telegram.ui.ArticleViewer$WebpageAdapter r0 = r5.photoAdapter     // Catch:{ Exception -> 0x009c }
-            int r1 = r5.currentIndex     // Catch:{ Exception -> 0x009c }
-            java.io.File r0 = r5.getMediaFile(r0, r1)     // Catch:{ Exception -> 0x009c }
-            if (r0 == 0) goto L_0x0068
-            boolean r1 = r0.exists()     // Catch:{ Exception -> 0x009c }
-            if (r1 == 0) goto L_0x0068
-            android.content.Intent r1 = new android.content.Intent     // Catch:{ Exception -> 0x009c }
-            java.lang.String r2 = "android.intent.action.SEND"
-            r1.<init>(r2)     // Catch:{ Exception -> 0x009c }
-            org.telegram.ui.ArticleViewer$WebpageAdapter r2 = r5.photoAdapter     // Catch:{ Exception -> 0x009c }
-            int r3 = r5.currentIndex     // Catch:{ Exception -> 0x009c }
-            java.lang.String r2 = r5.getMediaMime(r2, r3)     // Catch:{ Exception -> 0x009c }
-            r1.setType(r2)     // Catch:{ Exception -> 0x009c }
-            int r2 = android.os.Build.VERSION.SDK_INT     // Catch:{ Exception -> 0x009c }
-            r3 = 24
-            java.lang.String r4 = "android.intent.extra.STREAM"
-            if (r2 < r3) goto L_0x004c
-            android.app.Activity r2 = r5.parentActivity     // Catch:{ Exception -> 0x0044 }
-            java.lang.String r3 = "org.telegram.messenger.beta.provider"
-            android.net.Uri r2 = androidx.core.content.FileProvider.getUriForFile(r2, r3, r0)     // Catch:{ Exception -> 0x0044 }
-            r1.putExtra(r4, r2)     // Catch:{ Exception -> 0x0044 }
-            r2 = 1
-            r1.setFlags(r2)     // Catch:{ Exception -> 0x0044 }
-            goto L_0x0053
-        L_0x0044:
-            android.net.Uri r0 = android.net.Uri.fromFile(r0)     // Catch:{ Exception -> 0x009c }
-            r1.putExtra(r4, r0)     // Catch:{ Exception -> 0x009c }
-            goto L_0x0053
-        L_0x004c:
-            android.net.Uri r0 = android.net.Uri.fromFile(r0)     // Catch:{ Exception -> 0x009c }
-            r1.putExtra(r4, r0)     // Catch:{ Exception -> 0x009c }
-        L_0x0053:
-            android.app.Activity r0 = r5.parentActivity     // Catch:{ Exception -> 0x009c }
-            java.lang.String r2 = "ShareFile"
-            r3 = 2131626927(0x7f0e0baf, float:1.8881104E38)
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r3)     // Catch:{ Exception -> 0x009c }
-            android.content.Intent r1 = android.content.Intent.createChooser(r1, r2)     // Catch:{ Exception -> 0x009c }
-            r2 = 500(0x1f4, float:7.0E-43)
-            r0.startActivityForResult(r1, r2)     // Catch:{ Exception -> 0x009c }
-            goto L_0x00a0
-        L_0x0068:
-            org.telegram.ui.ActionBar.AlertDialog$Builder r0 = new org.telegram.ui.ActionBar.AlertDialog$Builder     // Catch:{ Exception -> 0x009c }
-            android.app.Activity r1 = r5.parentActivity     // Catch:{ Exception -> 0x009c }
-            r0.<init>((android.content.Context) r1)     // Catch:{ Exception -> 0x009c }
-            java.lang.String r1 = "AppName"
-            r2 = 2131624245(0x7f0e0135, float:1.8875664E38)
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x009c }
-            r0.setTitle(r1)     // Catch:{ Exception -> 0x009c }
-            java.lang.String r1 = "OK"
-            r2 = 2131626137(0x7f0e0899, float:1.8879502E38)
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x009c }
-            r2 = 0
-            r0.setPositiveButton(r1, r2)     // Catch:{ Exception -> 0x009c }
-            java.lang.String r1 = "PleaseDownload"
-            r2 = 2131626527(0x7f0e0a1f, float:1.8880293E38)
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r2)     // Catch:{ Exception -> 0x009c }
-            r0.setMessage(r1)     // Catch:{ Exception -> 0x009c }
-            org.telegram.ui.ActionBar.AlertDialog r0 = r0.create()     // Catch:{ Exception -> 0x009c }
-            r5.showDialog(r0)     // Catch:{ Exception -> 0x009c }
-            goto L_0x00a0
-        L_0x009c:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x00a0:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.onSharePressed():void");
-    }
-
-    /* access modifiers changed from: private */
-    public void updateVideoPlayerTime() {
-        String str;
-        VideoPlayer videoPlayer2 = this.videoPlayer;
-        if (videoPlayer2 == null) {
-            str = AndroidUtilities.formatLongDuration(0, 0);
-        } else {
-            long currentPosition = videoPlayer2.getCurrentPosition() / 1000;
-            long duration = this.videoPlayer.getDuration() / 1000;
-            if (duration == -9223372036854775807L || currentPosition == -9223372036854775807L) {
-                str = AndroidUtilities.formatLongDuration(0, 0);
-            } else {
-                str = AndroidUtilities.formatLongDuration((int) currentPosition, (int) duration);
-            }
-        }
-        if (!TextUtils.equals(this.videoPlayerTime.getText(), str)) {
-            this.videoPlayerTime.setText(str);
-        }
-    }
-
-    @SuppressLint({"NewApi"})
-    private void preparePlayer(File file, boolean z) {
-        if (this.parentActivity != null) {
-            releasePlayer();
-            if (this.videoTextureView == null) {
-                AspectRatioFrameLayout aspectRatioFrameLayout2 = new AspectRatioFrameLayout(this.parentActivity);
-                this.aspectRatioFrameLayout = aspectRatioFrameLayout2;
-                aspectRatioFrameLayout2.setVisibility(4);
-                this.photoContainerView.addView(this.aspectRatioFrameLayout, 0, LayoutHelper.createFrame(-1, -1, 17));
-                TextureView textureView = new TextureView(this.parentActivity);
-                this.videoTextureView = textureView;
-                textureView.setOpaque(false);
-                this.aspectRatioFrameLayout.addView(this.videoTextureView, LayoutHelper.createFrame(-1, -1, 17));
-            }
-            this.textureUploaded = false;
-            this.videoCrossfadeStarted = false;
-            TextureView textureView2 = this.videoTextureView;
-            this.videoCrossfadeAlpha = 0.0f;
-            textureView2.setAlpha(0.0f);
-            this.videoPlayButton.setImageResource(NUM);
-            if (this.videoPlayer == null) {
-                VideoPlayer videoPlayer2 = new VideoPlayer();
-                this.videoPlayer = videoPlayer2;
-                videoPlayer2.setTextureView(this.videoTextureView);
-                this.videoPlayer.setDelegate(new VideoPlayer.VideoPlayerDelegate() {
-                    public /* synthetic */ void onRenderedFirstFrame(AnalyticsListener.EventTime eventTime) {
-                        VideoPlayer.VideoPlayerDelegate.CC.$default$onRenderedFirstFrame(this, eventTime);
-                    }
-
-                    public /* synthetic */ void onSeekFinished(AnalyticsListener.EventTime eventTime) {
-                        VideoPlayer.VideoPlayerDelegate.CC.$default$onSeekFinished(this, eventTime);
-                    }
-
-                    public /* synthetic */ void onSeekStarted(AnalyticsListener.EventTime eventTime) {
-                        VideoPlayer.VideoPlayerDelegate.CC.$default$onSeekStarted(this, eventTime);
-                    }
-
-                    public boolean onSurfaceDestroyed(SurfaceTexture surfaceTexture) {
-                        return false;
-                    }
-
-                    public void onSurfaceTextureUpdated(SurfaceTexture surfaceTexture) {
-                    }
-
-                    public void onStateChanged(boolean z, int i) {
-                        if (ArticleViewer.this.videoPlayer != null) {
-                            if (i == 4 || i == 1) {
-                                try {
-                                    ArticleViewer.this.parentActivity.getWindow().clearFlags(128);
-                                } catch (Exception e) {
-                                    FileLog.e((Throwable) e);
-                                }
-                            } else {
-                                try {
-                                    ArticleViewer.this.parentActivity.getWindow().addFlags(128);
-                                } catch (Exception e2) {
-                                    FileLog.e((Throwable) e2);
-                                }
-                            }
-                            if (i == 3 && ArticleViewer.this.aspectRatioFrameLayout.getVisibility() != 0) {
-                                ArticleViewer.this.aspectRatioFrameLayout.setVisibility(0);
-                            }
-                            if (!ArticleViewer.this.videoPlayer.isPlaying() || i == 4) {
-                                if (ArticleViewer.this.isPlaying) {
-                                    boolean unused = ArticleViewer.this.isPlaying = false;
-                                    ArticleViewer.this.videoPlayButton.setImageResource(NUM);
-                                    AndroidUtilities.cancelRunOnUIThread(ArticleViewer.this.updateProgressRunnable);
-                                    if (i == 4 && !ArticleViewer.this.videoPlayerSeekbar.isDragging()) {
-                                        ArticleViewer.this.videoPlayerSeekbar.setProgress(0.0f);
-                                        ArticleViewer.this.videoPlayerControlFrameLayout.invalidate();
-                                        ArticleViewer.this.videoPlayer.seekTo(0);
-                                        ArticleViewer.this.videoPlayer.pause();
-                                    }
-                                }
-                            } else if (!ArticleViewer.this.isPlaying) {
-                                boolean unused2 = ArticleViewer.this.isPlaying = true;
-                                ArticleViewer.this.videoPlayButton.setImageResource(NUM);
-                                AndroidUtilities.runOnUIThread(ArticleViewer.this.updateProgressRunnable);
-                            }
-                            ArticleViewer.this.updateVideoPlayerTime();
-                        }
-                    }
-
-                    public void onError(VideoPlayer videoPlayer, Exception exc) {
-                        FileLog.e((Throwable) exc);
-                    }
-
-                    public void onVideoSizeChanged(int i, int i2, int i3, float f) {
-                        if (ArticleViewer.this.aspectRatioFrameLayout != null) {
-                            if (!(i3 == 90 || i3 == 270)) {
-                                int i4 = i2;
-                                i2 = i;
-                                i = i4;
-                            }
-                            ArticleViewer.this.aspectRatioFrameLayout.setAspectRatio(i == 0 ? 1.0f : (((float) i2) * f) / ((float) i), i3);
-                        }
-                    }
-
-                    public void onRenderedFirstFrame() {
-                        if (!ArticleViewer.this.textureUploaded) {
-                            boolean unused = ArticleViewer.this.textureUploaded = true;
-                            ArticleViewer.this.containerView.invalidate();
-                        }
-                    }
-                });
-            }
-            this.videoPlayer.preparePlayer(Uri.fromFile(file), "other");
-            this.bottomLayout.setVisibility(0);
-            this.videoPlayer.setPlayWhenReady(z);
-        }
-    }
-
-    private void releasePlayer() {
-        VideoPlayer videoPlayer2 = this.videoPlayer;
-        if (videoPlayer2 != null) {
-            videoPlayer2.releasePlayer(true);
-            this.videoPlayer = null;
-        }
-        try {
-            this.parentActivity.getWindow().clearFlags(128);
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
-        }
-        AspectRatioFrameLayout aspectRatioFrameLayout2 = this.aspectRatioFrameLayout;
-        if (aspectRatioFrameLayout2 != null) {
-            this.photoContainerView.removeView(aspectRatioFrameLayout2);
-            this.aspectRatioFrameLayout = null;
-        }
-        if (this.videoTextureView != null) {
-            this.videoTextureView = null;
-        }
-        if (this.isPlaying) {
-            this.isPlaying = false;
-            this.videoPlayButton.setImageResource(NUM);
-            AndroidUtilities.cancelRunOnUIThread(this.updateProgressRunnable);
-        }
-        this.bottomLayout.setVisibility(8);
-    }
-
-    private void toggleActionBar(boolean z, boolean z2) {
-        if (z) {
-            this.actionBar.setVisibility(0);
-            if (this.videoPlayer != null) {
-                this.bottomLayout.setVisibility(0);
-            }
-            if (this.captionTextView.getTag() != null) {
-                this.captionTextView.setVisibility(0);
-            }
-        }
-        this.isActionBarVisible = z;
-        this.actionBar.setEnabled(z);
-        this.bottomLayout.setEnabled(z);
-        float f = 1.0f;
-        if (z2) {
-            ArrayList arrayList = new ArrayList();
-            ActionBar actionBar2 = this.actionBar;
-            Property property = View.ALPHA;
-            float[] fArr = new float[1];
-            fArr[0] = z ? 1.0f : 0.0f;
-            arrayList.add(ObjectAnimator.ofFloat(actionBar2, property, fArr));
-            GroupedPhotosListView groupedPhotosListView2 = this.groupedPhotosListView;
-            Property property2 = View.ALPHA;
-            float[] fArr2 = new float[1];
-            fArr2[0] = z ? 1.0f : 0.0f;
-            arrayList.add(ObjectAnimator.ofFloat(groupedPhotosListView2, property2, fArr2));
-            FrameLayout frameLayout = this.bottomLayout;
-            Property property3 = View.ALPHA;
-            float[] fArr3 = new float[1];
-            fArr3[0] = z ? 1.0f : 0.0f;
-            arrayList.add(ObjectAnimator.ofFloat(frameLayout, property3, fArr3));
-            if (this.captionTextView.getTag() != null) {
-                TextView textView = this.captionTextView;
-                Property property4 = View.ALPHA;
-                float[] fArr4 = new float[1];
-                if (!z) {
-                    f = 0.0f;
-                }
-                fArr4[0] = f;
-                arrayList.add(ObjectAnimator.ofFloat(textView, property4, fArr4));
-            }
-            AnimatorSet animatorSet = new AnimatorSet();
-            this.currentActionBarAnimation = animatorSet;
-            animatorSet.playTogether(arrayList);
-            if (!z) {
-                this.currentActionBarAnimation.addListener(new AnimatorListenerAdapter() {
-                    public void onAnimationEnd(Animator animator) {
-                        if (ArticleViewer.this.currentActionBarAnimation != null && ArticleViewer.this.currentActionBarAnimation.equals(animator)) {
-                            ArticleViewer.this.actionBar.setVisibility(8);
-                            if (ArticleViewer.this.videoPlayer != null) {
-                                ArticleViewer.this.bottomLayout.setVisibility(8);
-                            }
-                            if (ArticleViewer.this.captionTextView.getTag() != null) {
-                                ArticleViewer.this.captionTextView.setVisibility(8);
-                            }
-                            AnimatorSet unused = ArticleViewer.this.currentActionBarAnimation = null;
-                        }
-                    }
-                });
-            }
-            this.currentActionBarAnimation.setDuration(200);
-            this.currentActionBarAnimation.start();
-            return;
-        }
-        this.actionBar.setAlpha(z ? 1.0f : 0.0f);
-        this.bottomLayout.setAlpha(z ? 1.0f : 0.0f);
-        if (this.captionTextView.getTag() != null) {
-            TextView textView2 = this.captionTextView;
-            if (!z) {
-                f = 0.0f;
-            }
-            textView2.setAlpha(f);
-        }
-        if (!z) {
-            this.actionBar.setVisibility(8);
-            if (this.videoPlayer != null) {
-                this.bottomLayout.setVisibility(8);
-            }
-            if (this.captionTextView.getTag() != null) {
-                this.captionTextView.setVisibility(8);
-            }
-        }
-    }
-
-    private String getFileName(int i) {
-        TLObject media = getMedia(this.photoAdapter, i);
-        if (media instanceof TLRPC$Photo) {
-            media = FileLoader.getClosestPhotoSizeWithSize(((TLRPC$Photo) media).sizes, AndroidUtilities.getPhotoSize());
-        }
-        return FileLoader.getAttachFileName(media);
-    }
-
-    /* access modifiers changed from: private */
-    public TLObject getMedia(WebpageAdapter webpageAdapter, int i) {
-        if (!this.imagesArr.isEmpty() && i < this.imagesArr.size() && i >= 0) {
-            TLRPC$PageBlock tLRPC$PageBlock = this.imagesArr.get(i);
-            if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockPhoto) {
-                return webpageAdapter.getPhotoWithId(((TLRPC$TL_pageBlockPhoto) tLRPC$PageBlock).photo_id);
-            }
-            if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockVideo) {
-                return webpageAdapter.getDocumentWithId(((TLRPC$TL_pageBlockVideo) tLRPC$PageBlock).video_id);
-            }
-        }
-        return null;
-    }
-
-    /* access modifiers changed from: private */
-    public File getMediaFile(WebpageAdapter webpageAdapter, int i) {
-        TLRPC$Document access$9100;
-        TLRPC$PhotoSize closestPhotoSizeWithSize;
-        if (!this.imagesArr.isEmpty() && i < this.imagesArr.size() && i >= 0) {
-            TLRPC$PageBlock tLRPC$PageBlock = this.imagesArr.get(i);
-            if (tLRPC$PageBlock instanceof TLRPC$TL_pageBlockPhoto) {
-                TLRPC$Photo access$16700 = webpageAdapter.getPhotoWithId(((TLRPC$TL_pageBlockPhoto) tLRPC$PageBlock).photo_id);
-                if (!(access$16700 == null || (closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(access$16700.sizes, AndroidUtilities.getPhotoSize())) == null)) {
-                    return FileLoader.getPathToAttach(closestPhotoSizeWithSize, true);
-                }
-            } else if ((tLRPC$PageBlock instanceof TLRPC$TL_pageBlockVideo) && (access$9100 = webpageAdapter.getDocumentWithId(((TLRPC$TL_pageBlockVideo) tLRPC$PageBlock).video_id)) != null) {
-                return FileLoader.getPathToAttach(access$9100, true);
-            }
-        }
-        return null;
-    }
-
-    /* access modifiers changed from: private */
-    public boolean isVideoBlock(WebpageAdapter webpageAdapter, TLRPC$PageBlock tLRPC$PageBlock) {
-        TLRPC$Document access$9100;
-        if (!(tLRPC$PageBlock instanceof TLRPC$TL_pageBlockVideo) || (access$9100 = webpageAdapter.getDocumentWithId(((TLRPC$TL_pageBlockVideo) tLRPC$PageBlock).video_id)) == null) {
-            return false;
-        }
-        return MessageObject.isVideoDocument(access$9100);
-    }
-
-    /* access modifiers changed from: private */
-    public boolean isMediaVideo(WebpageAdapter webpageAdapter, int i) {
-        return !this.imagesArr.isEmpty() && i < this.imagesArr.size() && i >= 0 && isVideoBlock(webpageAdapter, this.imagesArr.get(i));
-    }
-
-    private String getMediaMime(WebpageAdapter webpageAdapter, int i) {
-        TLRPC$Document access$9100;
-        if (i < this.imagesArr.size() && i >= 0) {
-            TLRPC$PageBlock tLRPC$PageBlock = this.imagesArr.get(i);
-            if ((tLRPC$PageBlock instanceof TLRPC$TL_pageBlockVideo) && (access$9100 = webpageAdapter.getDocumentWithId(((TLRPC$TL_pageBlockVideo) tLRPC$PageBlock).video_id)) != null) {
-                return access$9100.mime_type;
-            }
-        }
-        return "image/jpeg";
-    }
-
-    private TLRPC$PhotoSize getFileLocation(TLObject tLObject, int[] iArr) {
-        TLRPC$PhotoSize closestPhotoSizeWithSize;
-        if (tLObject instanceof TLRPC$Photo) {
-            TLRPC$PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(((TLRPC$Photo) tLObject).sizes, AndroidUtilities.getPhotoSize());
-            if (closestPhotoSizeWithSize2 != null) {
-                iArr[0] = closestPhotoSizeWithSize2.size;
-                if (iArr[0] == 0) {
-                    iArr[0] = -1;
-                }
-                return closestPhotoSizeWithSize2;
-            }
-            iArr[0] = -1;
-            return null;
-        } else if (!(tLObject instanceof TLRPC$Document) || (closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(((TLRPC$Document) tLObject).thumbs, 90)) == null) {
-            return null;
-        } else {
-            iArr[0] = closestPhotoSizeWithSize.size;
-            if (iArr[0] == 0) {
-                iArr[0] = -1;
-            }
-            return closestPhotoSizeWithSize;
-        }
-    }
-
-    private void onPhotoShow(int i, PlaceProviderObject placeProviderObject) {
-        this.currentIndex = -1;
-        String[] strArr = this.currentFileNames;
-        strArr[0] = null;
-        strArr[1] = null;
-        strArr[2] = null;
-        ImageReceiver.BitmapHolder bitmapHolder = this.currentThumb;
-        if (bitmapHolder != null) {
-            bitmapHolder.release();
-        }
-        this.currentThumb = placeProviderObject != null ? placeProviderObject.thumb : null;
-        this.menuItem.setVisibility(0);
-        this.menuItem.hideSubItem(3);
-        this.actionBar.setTranslationY(0.0f);
-        this.captionTextView.setTag((Object) null);
-        this.captionTextView.setVisibility(8);
-        for (int i2 = 0; i2 < 3; i2++) {
-            RadialProgressView[] radialProgressViewArr = this.radialProgressViews;
-            if (radialProgressViewArr[i2] != null) {
-                radialProgressViewArr[i2].setBackgroundState(-1, false);
-            }
-        }
-        setImageIndex(i, true);
-        if (this.currentMedia != null && isMediaVideo(this.photoAdapter, this.currentIndex)) {
-            onActionClick(false);
-        }
-    }
-
-    private void setImages() {
-        if (this.photoAnimationInProgress == 0) {
-            setIndexToImage(this.centerImage, this.currentIndex);
-            setIndexToImage(this.rightImage, this.currentIndex + 1);
-            setIndexToImage(this.leftImage, this.currentIndex - 1);
-        }
-    }
-
-    /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:29:0x009b  */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x00ba  */
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x00c2  */
-    /* JADX WARNING: Removed duplicated region for block: B:34:0x00e0  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setImageIndex(int r19, boolean r20) {
-        /*
-            r18 = this;
-            r7 = r18
-            r0 = r19
-            int r1 = r7.currentIndex
-            if (r1 != r0) goto L_0x0009
-            return
-        L_0x0009:
-            r8 = 0
-            if (r20 != 0) goto L_0x0015
-            org.telegram.messenger.ImageReceiver$BitmapHolder r1 = r7.currentThumb
-            if (r1 == 0) goto L_0x0015
-            r1.release()
-            r7.currentThumb = r8
-        L_0x0015:
-            java.lang.String[] r1 = r7.currentFileNames
-            java.lang.String r2 = r18.getFileName(r19)
-            r9 = 0
-            r1[r9] = r2
-            java.lang.String[] r1 = r7.currentFileNames
-            int r2 = r0 + 1
-            java.lang.String r2 = r7.getFileName(r2)
-            r10 = 1
-            r1[r10] = r2
-            java.lang.String[] r1 = r7.currentFileNames
-            int r2 = r0 + -1
-            java.lang.String r2 = r7.getFileName(r2)
-            r11 = 2
-            r1[r11] = r2
-            int r12 = r7.currentIndex
-            r7.currentIndex = r0
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r0 = r7.imagesArr
-            boolean r0 = r0.isEmpty()
-            r13 = 3
-            r14 = 4
-            if (r0 != 0) goto L_0x0146
-            int r0 = r7.currentIndex
-            if (r0 < 0) goto L_0x0142
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r1 = r7.imagesArr
-            int r1 = r1.size()
-            if (r0 < r1) goto L_0x0050
-            goto L_0x0142
-        L_0x0050:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r0 = r7.imagesArr
-            int r1 = r7.currentIndex
-            java.lang.Object r0 = r0.get(r1)
-            org.telegram.tgnet.TLRPC$PageBlock r0 = (org.telegram.tgnet.TLRPC$PageBlock) r0
-            org.telegram.tgnet.TLRPC$PageBlock r1 = r7.currentMedia
-            if (r1 == 0) goto L_0x0062
-            if (r1 != r0) goto L_0x0062
-            r15 = 1
-            goto L_0x0063
-        L_0x0062:
-            r15 = 0
-        L_0x0063:
-            r7.currentMedia = r0
-            org.telegram.ui.ArticleViewer$WebpageAdapter r1 = r7.photoAdapter
-            int r2 = r7.currentIndex
-            boolean r16 = r7.isMediaVideo(r1, r2)
-            if (r16 == 0) goto L_0x0074
-            org.telegram.ui.ActionBar.ActionBarMenuItem r1 = r7.menuItem
-            r1.showSubItem(r13)
-        L_0x0074:
-            boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$TL_pageBlockPhoto
-            if (r1 == 0) goto L_0x0097
-            org.telegram.tgnet.TLRPC$TL_pageBlockPhoto r0 = (org.telegram.tgnet.TLRPC$TL_pageBlockPhoto) r0
-            java.lang.String r0 = r0.url
-            boolean r1 = android.text.TextUtils.isEmpty(r0)
-            if (r1 != 0) goto L_0x0097
-            android.text.SpannableStringBuilder r1 = new android.text.SpannableStringBuilder
-            r1.<init>(r0)
-            org.telegram.ui.ArticleViewer$32 r2 = new org.telegram.ui.ArticleViewer$32
-            r2.<init>(r0)
-            int r0 = r0.length()
-            r3 = 34
-            r1.setSpan(r2, r9, r0, r3)
-            r6 = 1
-            goto L_0x0099
-        L_0x0097:
-            r1 = r8
-            r6 = 0
-        L_0x0099:
-            if (r1 != 0) goto L_0x00ba
-            org.telegram.tgnet.TLRPC$PageBlock r0 = r7.currentMedia
-            org.telegram.tgnet.TLRPC$RichText r4 = r7.getBlockCaption(r0, r11)
-            org.telegram.ui.ArticleViewer$WebpageAdapter r1 = r7.photoAdapter
-            r2 = 0
-            org.telegram.tgnet.TLRPC$PageBlock r5 = r7.currentMedia
-            r0 = 1120403456(0x42CLASSNAME, float:100.0)
-            int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
-            int r3 = -r0
-            r0 = r18
-            r17 = r3
-            r3 = r4
-            r13 = r6
-            r6 = r17
-            java.lang.CharSequence r1 = r0.getText(r1, r2, r3, r4, r5, r6)
-            goto L_0x00bb
-        L_0x00ba:
-            r13 = r6
-        L_0x00bb:
-            r7.setCurrentCaption(r1, r13)
-            org.telegram.ui.Components.AnimatedFileDrawable r0 = r7.currentAnimation
-            if (r0 == 0) goto L_0x00e0
-            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.menuItem
-            r0.setVisibility(r9)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.menuItem
-            r0.hideSubItem(r10)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.menuItem
-            r0.showSubItem(r14)
-            org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
-            r1 = 2131624340(0x7f0e0194, float:1.8875857E38)
-            java.lang.String r2 = "AttachGif"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            r0.setTitle(r1)
-            goto L_0x013c
-        L_0x00e0:
-            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.menuItem
-            r0.setVisibility(r9)
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r0 = r7.imagesArr
-            int r0 = r0.size()
-            if (r0 != r10) goto L_0x010d
-            if (r16 == 0) goto L_0x00fe
-            org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
-            r1 = 2131624357(0x7f0e01a5, float:1.8875891E38)
-            java.lang.String r2 = "AttachVideo"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            r0.setTitle(r1)
-            goto L_0x0132
-        L_0x00fe:
-            org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
-            r1 = 2131624351(0x7f0e019f, float:1.887588E38)
-            java.lang.String r2 = "AttachPhoto"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
-            r0.setTitle(r1)
-            goto L_0x0132
-        L_0x010d:
-            org.telegram.ui.ActionBar.ActionBar r0 = r7.actionBar
-            r1 = 2131626139(0x7f0e089b, float:1.8879506E38)
-            java.lang.Object[] r2 = new java.lang.Object[r11]
-            int r3 = r7.currentIndex
-            int r3 = r3 + r10
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
-            r2[r9] = r3
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r3 = r7.imagesArr
-            int r3 = r3.size()
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r3)
-            r2[r10] = r3
-            java.lang.String r3 = "Of"
-            java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r3, r1, r2)
-            r0.setTitle(r1)
-        L_0x0132:
-            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.menuItem
-            r0.showSubItem(r10)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r7.menuItem
-            r0.hideSubItem(r14)
-        L_0x013c:
-            org.telegram.ui.Components.GroupedPhotosListView r0 = r7.groupedPhotosListView
-            r0.fillList()
-            goto L_0x0149
-        L_0x0142:
-            r7.closePhoto(r9)
-            return
-        L_0x0146:
-            r15 = 0
-            r16 = 0
-        L_0x0149:
-            org.telegram.ui.Components.RecyclerListView[] r0 = r7.listView
-            r0 = r0[r9]
-            int r0 = r0.getChildCount()
-            r1 = 0
-        L_0x0152:
-            r2 = -1
-            if (r1 >= r0) goto L_0x017c
-            org.telegram.ui.Components.RecyclerListView[] r3 = r7.listView
-            r3 = r3[r9]
-            android.view.View r3 = r3.getChildAt(r1)
-            boolean r4 = r3 instanceof org.telegram.ui.ArticleViewer.BlockSlideshowCell
-            if (r4 == 0) goto L_0x0179
-            org.telegram.ui.ArticleViewer$BlockSlideshowCell r3 = (org.telegram.ui.ArticleViewer.BlockSlideshowCell) r3
-            org.telegram.tgnet.TLRPC$TL_pageBlockSlideshow r4 = r3.currentBlock
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PageBlock> r4 = r4.items
-            org.telegram.tgnet.TLRPC$PageBlock r5 = r7.currentMedia
-            int r4 = r4.indexOf(r5)
-            if (r4 == r2) goto L_0x0179
-            androidx.viewpager.widget.ViewPager r0 = r3.innerListView
-            r0.setCurrentItem(r4, r9)
-            goto L_0x017c
-        L_0x0179:
-            int r1 = r1 + 1
-            goto L_0x0152
-        L_0x017c:
-            org.telegram.ui.ArticleViewer$PlaceProviderObject r0 = r7.currentPlaceObject
-            if (r0 == 0) goto L_0x018c
-            int r1 = r7.photoAnimationInProgress
-            if (r1 != 0) goto L_0x018a
-            org.telegram.messenger.ImageReceiver r0 = r0.imageReceiver
-            r0.setVisible(r10, r10)
-            goto L_0x018c
-        L_0x018a:
-            r7.showAfterAnimation = r0
-        L_0x018c:
-            org.telegram.tgnet.TLRPC$PageBlock r0 = r7.currentMedia
-            org.telegram.ui.ArticleViewer$PlaceProviderObject r0 = r7.getPlaceForPhoto(r0)
-            r7.currentPlaceObject = r0
-            if (r0 == 0) goto L_0x01a2
-            int r1 = r7.photoAnimationInProgress
-            if (r1 != 0) goto L_0x01a0
-            org.telegram.messenger.ImageReceiver r0 = r0.imageReceiver
-            r0.setVisible(r9, r10)
-            goto L_0x01a2
-        L_0x01a0:
-            r7.hideAfterAnimation = r0
-        L_0x01a2:
-            if (r15 != 0) goto L_0x01ff
-            r7.draggingDown = r9
-            r0 = 0
-            r7.translationX = r0
-            r7.translationY = r0
-            r1 = 1065353216(0x3var_, float:1.0)
-            r7.scale = r1
-            r7.animateToX = r0
-            r7.animateToY = r0
-            r7.animateToScale = r1
-            r3 = 0
-            r7.animationStartTime = r3
-            r7.imageMoveAnimation = r8
-            com.google.android.exoplayer2.ui.AspectRatioFrameLayout r3 = r7.aspectRatioFrameLayout
-            if (r3 == 0) goto L_0x01c2
-            r3.setVisibility(r14)
-        L_0x01c2:
-            r18.releasePlayer()
-            r7.pinchStartDistance = r0
-            r7.pinchStartScale = r1
-            r7.pinchCenterX = r0
-            r7.pinchCenterY = r0
-            r7.pinchStartX = r0
-            r7.pinchStartY = r0
-            r7.moveStartX = r0
-            r7.moveStartY = r0
-            r7.zooming = r9
-            r7.moving = r9
-            r7.doubleTap = r9
-            r7.invalidCoords = r9
-            r7.canDragDown = r10
-            r7.changingPage = r9
-            r7.switchImageAfterAnimation = r9
-            java.lang.String[] r0 = r7.currentFileNames
-            r0 = r0[r9]
-            if (r0 == 0) goto L_0x01f7
-            if (r16 != 0) goto L_0x01f7
-            org.telegram.ui.ArticleViewer$RadialProgressView[] r0 = r7.radialProgressViews
-            r0 = r0[r9]
-            int r0 = r0.backgroundState
-            if (r0 == 0) goto L_0x01f7
-            r0 = 1
-            goto L_0x01f8
-        L_0x01f7:
-            r0 = 0
-        L_0x01f8:
-            r7.canZoom = r0
-            float r0 = r7.scale
-            r7.updateMinMax(r0)
-        L_0x01ff:
-            if (r12 != r2) goto L_0x020e
-            r18.setImages()
-            r0 = 0
-            r1 = 3
-        L_0x0206:
-            if (r0 >= r1) goto L_0x0258
-            r7.checkProgress(r0, r9)
-            int r0 = r0 + 1
-            goto L_0x0206
-        L_0x020e:
-            r7.checkProgress(r9, r9)
-            int r0 = r7.currentIndex
-            if (r12 <= r0) goto L_0x0236
-            org.telegram.messenger.ImageReceiver r1 = r7.rightImage
-            org.telegram.messenger.ImageReceiver r2 = r7.centerImage
-            r7.rightImage = r2
-            org.telegram.messenger.ImageReceiver r2 = r7.leftImage
-            r7.centerImage = r2
-            r7.leftImage = r1
-            org.telegram.ui.ArticleViewer$RadialProgressView[] r2 = r7.radialProgressViews
-            r3 = r2[r9]
-            r4 = r2[r11]
-            r2[r9] = r4
-            r2[r11] = r3
-            int r0 = r0 - r10
-            r7.setIndexToImage(r1, r0)
-            r7.checkProgress(r10, r9)
-            r7.checkProgress(r11, r9)
-            goto L_0x0258
-        L_0x0236:
-            if (r12 >= r0) goto L_0x0258
-            org.telegram.messenger.ImageReceiver r1 = r7.leftImage
-            org.telegram.messenger.ImageReceiver r2 = r7.centerImage
-            r7.leftImage = r2
-            org.telegram.messenger.ImageReceiver r2 = r7.rightImage
-            r7.centerImage = r2
-            r7.rightImage = r1
-            org.telegram.ui.ArticleViewer$RadialProgressView[] r2 = r7.radialProgressViews
-            r3 = r2[r9]
-            r4 = r2[r10]
-            r2[r9] = r4
-            r2[r10] = r3
-            int r0 = r0 + r10
-            r7.setIndexToImage(r1, r0)
-            r7.checkProgress(r10, r9)
-            r7.checkProgress(r11, r9)
-        L_0x0258:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.setImageIndex(int, boolean):void");
-    }
-
-    private void setCurrentCaption(CharSequence charSequence, boolean z) {
-        if (!TextUtils.isEmpty(charSequence)) {
-            Theme.createChatResources((Context) null, true);
-            if (!z) {
-                if (charSequence instanceof Spannable) {
-                    Spannable spannable = (Spannable) charSequence;
-                    TextPaintUrlSpan[] textPaintUrlSpanArr = (TextPaintUrlSpan[]) spannable.getSpans(0, charSequence.length(), TextPaintUrlSpan.class);
-                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(charSequence.toString());
-                    if (textPaintUrlSpanArr != null && textPaintUrlSpanArr.length > 0) {
-                        for (int i = 0; i < textPaintUrlSpanArr.length; i++) {
-                            spannableStringBuilder.setSpan(new URLSpan(textPaintUrlSpanArr[i].getUrl()) {
-                                public void onClick(View view) {
-                                    ArticleViewer.this.openWebpageUrl(getURL(), (String) null);
-                                }
-                            }, spannable.getSpanStart(textPaintUrlSpanArr[i]), spannable.getSpanEnd(textPaintUrlSpanArr[i]), 33);
-                        }
-                    }
-                    charSequence = spannableStringBuilder;
-                } else {
-                    charSequence = new SpannableStringBuilder(charSequence.toString());
-                }
-            }
-            CharSequence replaceEmoji = Emoji.replaceEmoji(charSequence, this.captionTextView.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
-            this.captionTextView.setTag(replaceEmoji);
-            this.captionTextView.setText(replaceEmoji);
-            this.captionTextView.setVisibility(0);
-            return;
-        }
-        this.captionTextView.setTag((Object) null);
-        this.captionTextView.setVisibility(8);
-    }
-
-    private void checkProgress(int i, boolean z) {
-        if (this.currentFileNames[i] != null) {
-            int i2 = this.currentIndex;
-            boolean z2 = true;
-            if (i == 1) {
-                i2++;
-            } else if (i == 2) {
-                i2--;
-            }
-            File mediaFile = getMediaFile(this.photoAdapter, i2);
-            boolean isMediaVideo = isMediaVideo(this.photoAdapter, i2);
-            if (mediaFile == null || !mediaFile.exists()) {
-                if (!isMediaVideo) {
-                    this.radialProgressViews[i].setBackgroundState(0, z);
-                } else if (!FileLoader.getInstance(this.currentAccount).isLoadingFile(this.currentFileNames[i])) {
-                    this.radialProgressViews[i].setBackgroundState(2, false);
-                } else {
-                    this.radialProgressViews[i].setBackgroundState(1, false);
-                }
-                Float fileProgress = ImageLoader.getInstance().getFileProgress(this.currentFileNames[i]);
-                if (fileProgress == null) {
-                    fileProgress = Float.valueOf(0.0f);
-                }
-                this.radialProgressViews[i].setProgress(fileProgress.floatValue(), false);
-            } else if (isMediaVideo) {
-                this.radialProgressViews[i].setBackgroundState(3, z);
-            } else {
-                this.radialProgressViews[i].setBackgroundState(-1, z);
-            }
-            if (i == 0) {
-                if (this.currentFileNames[0] == null || isMediaVideo || this.radialProgressViews[0].backgroundState == 0) {
-                    z2 = false;
-                }
-                this.canZoom = z2;
-                return;
-            }
-            return;
-        }
-        this.radialProgressViews[i].setBackgroundState(-1, z);
-    }
-
-    private void setIndexToImage(ImageReceiver imageReceiver, int i) {
-        ImageReceiver imageReceiver2 = imageReceiver;
-        int i2 = i;
-        imageReceiver.setOrientation(0, false);
-        int[] iArr = new int[1];
-        TLObject media = getMedia(this.photoAdapter, i2);
-        TLRPC$PhotoSize fileLocation = getFileLocation(media, iArr);
-        if (fileLocation != null) {
-            if (media instanceof TLRPC$Photo) {
-                TLRPC$Photo tLRPC$Photo = (TLRPC$Photo) media;
-                ImageReceiver.BitmapHolder bitmapHolder = this.currentThumb;
-                if (bitmapHolder == null || imageReceiver2 != this.centerImage) {
-                    bitmapHolder = null;
-                }
-                if (iArr[0] == 0) {
-                    iArr[0] = -1;
-                }
-                imageReceiver.setImage(ImageLocation.getForPhoto(fileLocation, tLRPC$Photo), (String) null, ImageLocation.getForPhoto(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Photo.sizes, 80), tLRPC$Photo), "b", bitmapHolder != null ? new BitmapDrawable(bitmapHolder.bitmap) : null, iArr[0], (String) null, this.photoAdapter.currentPage, 1);
-            } else if (!isMediaVideo(this.photoAdapter, i2)) {
-                AnimatedFileDrawable animatedFileDrawable = this.currentAnimation;
-                if (animatedFileDrawable != null) {
-                    imageReceiver.setImageBitmap((Drawable) animatedFileDrawable);
-                    this.currentAnimation.addSecondParentView(this.photoContainerView);
-                }
-            } else if (!(fileLocation.location instanceof TLRPC$TL_fileLocationUnavailable)) {
-                ImageReceiver.BitmapHolder bitmapHolder2 = this.currentThumb;
-                if (bitmapHolder2 == null || imageReceiver2 != this.centerImage) {
-                    bitmapHolder2 = null;
-                }
-                imageReceiver.setImage((ImageLocation) null, (String) null, ImageLocation.getForDocument(fileLocation, (TLRPC$Document) media), "b", bitmapHolder2 != null ? new BitmapDrawable(bitmapHolder2.bitmap) : null, 0, (String) null, this.photoAdapter.currentPage, 1);
-            } else {
-                imageReceiver.setImageBitmap(this.parentActivity.getResources().getDrawable(NUM));
-            }
-        } else if (iArr[0] == 0) {
-            imageReceiver.setImageBitmap((Bitmap) null);
-        } else {
-            imageReceiver.setImageBitmap(this.parentActivity.getResources().getDrawable(NUM));
-        }
-    }
-
-    private boolean checkPhotoAnimation() {
-        if (this.photoAnimationInProgress != 0 && Math.abs(this.photoTransitionAnimationStartTime - System.currentTimeMillis()) >= 500) {
-            Runnable runnable = this.photoAnimationEndRunnable;
-            if (runnable != null) {
-                runnable.run();
-                this.photoAnimationEndRunnable = null;
-            }
-            this.photoAnimationInProgress = 0;
-        }
-        if (this.photoAnimationInProgress != 0) {
-            return true;
-        }
-        return false;
-    }
-
     public boolean openPhoto(TLRPC$PageBlock tLRPC$PageBlock, WebpageAdapter webpageAdapter) {
-        PlaceProviderObject placeForPhoto;
+        List list;
         int i;
-        Object obj;
-        TLRPC$PageBlock tLRPC$PageBlock2 = tLRPC$PageBlock;
-        if (this.pageSwitchAnimation != null || this.parentActivity == null || this.isPhotoVisible || checkPhotoAnimation() || tLRPC$PageBlock2 == null || (placeForPhoto = getPlaceForPhoto(tLRPC$PageBlock)) == null) {
-            return false;
-        }
-        AndroidUtilities.hideKeyboard(this.searchField);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidFailToLoad);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.fileDidLoad);
-        NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileLoadProgressChanged);
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
-        if (this.velocityTracker == null) {
-            this.velocityTracker = VelocityTracker.obtain();
-        }
-        this.photoAdapter = webpageAdapter;
-        this.isPhotoVisible = true;
-        toggleActionBar(true, false);
-        this.actionBar.setAlpha(0.0f);
-        this.bottomLayout.setAlpha(0.0f);
-        this.captionTextView.setAlpha(0.0f);
-        this.photoBackgroundDrawable.setAlpha(0);
-        this.groupedPhotosListView.setAlpha(0.0f);
-        this.photoContainerView.setAlpha(1.0f);
-        this.photoAnimationInProgress = 1;
-        if (tLRPC$PageBlock2 != null) {
-            this.currentAnimation = placeForPhoto.imageReceiver.getAnimation();
-        }
-        int indexOf = this.photoAdapter.photoBlocks.indexOf(tLRPC$PageBlock2);
-        this.imagesArr.clear();
-        if (!(tLRPC$PageBlock2 instanceof TLRPC$TL_pageBlockVideo) || isVideoBlock(this.photoAdapter, tLRPC$PageBlock2)) {
-            this.imagesArr.addAll(this.photoAdapter.photoBlocks);
+        if (!(tLRPC$PageBlock instanceof TLRPC$TL_pageBlockVideo) || WebPageUtils.isVideo(webpageAdapter.currentPage, tLRPC$PageBlock)) {
+            ArrayList arrayList = new ArrayList(webpageAdapter.photoBlocks);
+            i = webpageAdapter.photoBlocks.indexOf(tLRPC$PageBlock);
+            list = arrayList;
         } else {
-            this.imagesArr.add(tLRPC$PageBlock2);
-            indexOf = 0;
-        }
-        onPhotoShow(indexOf, placeForPhoto);
-        RectF drawRegion = placeForPhoto.imageReceiver.getDrawRegion();
-        int orientation = placeForPhoto.imageReceiver.getOrientation();
-        int animatedOrientation = placeForPhoto.imageReceiver.getAnimatedOrientation();
-        if (animatedOrientation != 0) {
-            orientation = animatedOrientation;
-        }
-        this.animatingImageView.setVisibility(0);
-        this.animatingImageView.setRadius(placeForPhoto.radius);
-        this.animatingImageView.setOrientation(orientation);
-        this.animatingImageView.setImageBitmap(placeForPhoto.thumb);
-        this.animatingImageView.setAlpha(1.0f);
-        this.animatingImageView.setPivotX(0.0f);
-        this.animatingImageView.setPivotY(0.0f);
-        this.animatingImageView.setScaleX(placeForPhoto.scale);
-        this.animatingImageView.setScaleY(placeForPhoto.scale);
-        this.animatingImageView.setTranslationX(((float) placeForPhoto.viewX) + (drawRegion.left * placeForPhoto.scale));
-        this.animatingImageView.setTranslationY(((float) placeForPhoto.viewY) + (drawRegion.top * placeForPhoto.scale));
-        ViewGroup.LayoutParams layoutParams = this.animatingImageView.getLayoutParams();
-        layoutParams.width = (int) drawRegion.width();
-        layoutParams.height = (int) drawRegion.height();
-        if (layoutParams.width == 0) {
-            layoutParams.width = 1;
-        }
-        if (layoutParams.height == 0) {
-            layoutParams.height = 1;
-        }
-        this.animatingImageView.setLayoutParams(layoutParams);
-        Point point = AndroidUtilities.displaySize;
-        float min = Math.min(((float) point.x) / ((float) layoutParams.width), ((float) point.y) / ((float) layoutParams.height));
-        float f = ((float) layoutParams.height) * min;
-        float f2 = (((float) AndroidUtilities.displaySize.x) - (((float) layoutParams.width) * min)) / 2.0f;
-        if (Build.VERSION.SDK_INT >= 21 && (obj = this.lastInsets) != null) {
-            f2 += (float) ((WindowInsets) obj).getSystemWindowInsetLeft();
-        }
-        float f3 = ((((float) AndroidUtilities.displaySize.y) - f) / 2.0f) + ((float) AndroidUtilities.statusBarHeight);
-        if (placeForPhoto.imageReceiver.isAspectFit()) {
+            list = Collections.singletonList(tLRPC$PageBlock);
             i = 0;
-        } else {
-            i = (int) Math.abs(drawRegion.left - placeForPhoto.imageReceiver.getImageX());
         }
-        int abs = (int) Math.abs(drawRegion.top - placeForPhoto.imageReceiver.getImageY());
-        int[] iArr = new int[2];
-        placeForPhoto.parentView.getLocationInWindow(iArr);
-        int i2 = (int) ((((float) iArr[1]) - (((float) placeForPhoto.viewY) + drawRegion.top)) + ((float) placeForPhoto.clipTopAddition));
-        if (i2 < 0) {
-            i2 = 0;
+        PhotoViewer instance = PhotoViewer.getInstance();
+        instance.setParentActivity(this.parentActivity);
+        return instance.openPhoto(i, (PhotoViewer.PageBlocksAdapter) new RealPageBlocksAdapter(webpageAdapter.currentPage, list), (PhotoViewer.PhotoViewerProvider) new PageBlocksPhotoViewerProvider(list));
+    }
+
+    private class RealPageBlocksAdapter implements PhotoViewer.PageBlocksAdapter {
+        private final TLRPC$WebPage page;
+        private final List<TLRPC$PageBlock> pageBlocks;
+
+        private RealPageBlocksAdapter(TLRPC$WebPage tLRPC$WebPage, List<TLRPC$PageBlock> list) {
+            this.page = tLRPC$WebPage;
+            this.pageBlocks = list;
         }
-        int height = (int) ((((((float) placeForPhoto.viewY) + drawRegion.top) + ((float) layoutParams.height)) - ((float) (iArr[1] + placeForPhoto.parentView.getHeight()))) + ((float) placeForPhoto.clipBottomAddition));
-        if (height < 0) {
-            height = 0;
+
+        public int getItemsCount() {
+            return this.pageBlocks.size();
         }
-        int max = Math.max(i2, abs);
-        int max2 = Math.max(height, abs);
-        this.animationValues[0][0] = this.animatingImageView.getScaleX();
-        this.animationValues[0][1] = this.animatingImageView.getScaleY();
-        this.animationValues[0][2] = this.animatingImageView.getTranslationX();
-        this.animationValues[0][3] = this.animatingImageView.getTranslationY();
-        float[][] fArr = this.animationValues;
-        float[] fArr2 = fArr[0];
-        float f4 = (float) i;
-        float f5 = placeForPhoto.scale;
-        fArr2[4] = f4 * f5;
-        fArr[0][5] = ((float) max) * f5;
-        fArr[0][6] = ((float) max2) * f5;
-        int[] radius = this.animatingImageView.getRadius();
-        for (int i3 = 0; i3 < 4; i3++) {
-            this.animationValues[0][i3 + 7] = radius != null ? (float) radius[i3] : 0.0f;
+
+        public TLRPC$PageBlock get(int i) {
+            return this.pageBlocks.get(i);
         }
-        float[][] fArr3 = this.animationValues;
-        float[] fArr4 = fArr3[0];
-        float f6 = (float) abs;
-        float f7 = placeForPhoto.scale;
-        fArr4[11] = f6 * f7;
-        fArr3[0][12] = f4 * f7;
-        fArr3[1][0] = min;
-        fArr3[1][1] = min;
-        fArr3[1][2] = f2;
-        fArr3[1][3] = f3;
-        fArr3[1][4] = 0.0f;
-        fArr3[1][5] = 0.0f;
-        fArr3[1][6] = 0.0f;
-        fArr3[1][7] = 0.0f;
-        fArr3[1][8] = 0.0f;
-        fArr3[1][9] = 0.0f;
-        fArr3[1][10] = 0.0f;
-        fArr3[1][11] = 0.0f;
-        fArr3[1][12] = 0.0f;
-        this.photoContainerView.setVisibility(0);
-        this.photoContainerBackground.setVisibility(0);
-        this.animatingImageView.setAnimationProgress(0.0f);
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.animatingImageView, "animationProgress", new float[]{0.0f, 1.0f}), ObjectAnimator.ofInt(this.photoBackgroundDrawable, AnimationProperties.COLOR_DRAWABLE_ALPHA, new int[]{0, 255}), ObjectAnimator.ofFloat(this.actionBar, View.ALPHA, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.bottomLayout, View.ALPHA, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.captionTextView, View.ALPHA, new float[]{0.0f, 1.0f}), ObjectAnimator.ofFloat(this.groupedPhotosListView, View.ALPHA, new float[]{0.0f, 1.0f})});
-        this.photoAnimationEndRunnable = new Runnable() {
-            public final void run() {
-                ArticleViewer.this.lambda$openPhoto$45$ArticleViewer();
+
+        public List<TLRPC$PageBlock> getAll() {
+            return this.pageBlocks;
+        }
+
+        public boolean isVideo(int i) {
+            return i < this.pageBlocks.size() && i >= 0 && WebPageUtils.isVideo(this.page, get(i));
+        }
+
+        public TLObject getMedia(int i) {
+            if (i >= this.pageBlocks.size() || i < 0) {
+                return null;
             }
-        };
-        animatorSet.setDuration(200);
-        animatorSet.addListener(new AnimatorListenerAdapter() {
-            public void onAnimationEnd(Animator animator) {
-                AndroidUtilities.runOnUIThread(new Runnable() {
-                    public final void run() {
-                        ArticleViewer.AnonymousClass34.this.lambda$onAnimationEnd$0$ArticleViewer$34();
+            return WebPageUtils.getMedia(this.page, get(i));
+        }
+
+        public File getFile(int i) {
+            if (i >= this.pageBlocks.size() || i < 0) {
+                return null;
+            }
+            return WebPageUtils.getMediaFile(this.page, get(i));
+        }
+
+        public String getFileName(int i) {
+            TLObject media = getMedia(i);
+            if (media instanceof TLRPC$Photo) {
+                media = FileLoader.getClosestPhotoSizeWithSize(((TLRPC$Photo) media).sizes, AndroidUtilities.getPhotoSize());
+            }
+            return FileLoader.getAttachFileName(media);
+        }
+
+        /* JADX WARNING: Removed duplicated region for block: B:19:? A[RETURN, SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:7:0x002b  */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public java.lang.CharSequence getCaption(int r9) {
+            /*
+                r8 = this;
+                org.telegram.tgnet.TLRPC$PageBlock r5 = r8.get(r9)
+                boolean r9 = r5 instanceof org.telegram.tgnet.TLRPC$TL_pageBlockPhoto
+                r7 = 0
+                if (r9 == 0) goto L_0x0028
+                r9 = r5
+                org.telegram.tgnet.TLRPC$TL_pageBlockPhoto r9 = (org.telegram.tgnet.TLRPC$TL_pageBlockPhoto) r9
+                java.lang.String r9 = r9.url
+                boolean r0 = android.text.TextUtils.isEmpty(r9)
+                if (r0 != 0) goto L_0x0028
+                android.text.SpannableStringBuilder r0 = new android.text.SpannableStringBuilder
+                r0.<init>(r9)
+                org.telegram.ui.ArticleViewer$RealPageBlocksAdapter$1 r1 = new org.telegram.ui.ArticleViewer$RealPageBlocksAdapter$1
+                r1.<init>(r9)
+                int r9 = r9.length()
+                r2 = 34
+                r0.setSpan(r1, r7, r9, r2)
+                goto L_0x0029
+            L_0x0028:
+                r0 = 0
+            L_0x0029:
+                if (r0 != 0) goto L_0x0087
+                org.telegram.ui.ArticleViewer r9 = org.telegram.ui.ArticleViewer.this
+                r0 = 2
+                org.telegram.tgnet.TLRPC$RichText r4 = r9.getBlockCaption(r5, r0)
+                org.telegram.ui.ArticleViewer r0 = org.telegram.ui.ArticleViewer.this
+                org.telegram.tgnet.TLRPC$WebPage r1 = r8.page
+                r2 = 0
+                r9 = 1120403456(0x42CLASSNAME, float:100.0)
+                int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
+                int r6 = -r9
+                r3 = r4
+                java.lang.CharSequence r0 = r0.getText((org.telegram.tgnet.TLRPC$WebPage) r1, (android.view.View) r2, (org.telegram.tgnet.TLRPC$RichText) r3, (org.telegram.tgnet.TLRPC$RichText) r4, (org.telegram.tgnet.TLRPC$PageBlock) r5, (int) r6)
+                boolean r9 = r0 instanceof android.text.Spannable
+                if (r9 == 0) goto L_0x0087
+                r9 = r0
+                android.text.Spannable r9 = (android.text.Spannable) r9
+                int r1 = r0.length()
+                java.lang.Class<org.telegram.ui.Components.TextPaintUrlSpan> r2 = org.telegram.ui.Components.TextPaintUrlSpan.class
+                java.lang.Object[] r1 = r9.getSpans(r7, r1, r2)
+                org.telegram.ui.Components.TextPaintUrlSpan[] r1 = (org.telegram.ui.Components.TextPaintUrlSpan[]) r1
+                android.text.SpannableStringBuilder r2 = new android.text.SpannableStringBuilder
+                java.lang.String r0 = r0.toString()
+                r2.<init>(r0)
+                if (r1 == 0) goto L_0x0086
+                int r0 = r1.length
+                if (r0 <= 0) goto L_0x0086
+            L_0x0064:
+                int r0 = r1.length
+                if (r7 >= r0) goto L_0x0086
+                org.telegram.ui.ArticleViewer$RealPageBlocksAdapter$2 r0 = new org.telegram.ui.ArticleViewer$RealPageBlocksAdapter$2
+                r3 = r1[r7]
+                java.lang.String r3 = r3.getUrl()
+                r0.<init>(r3)
+                r3 = r1[r7]
+                int r3 = r9.getSpanStart(r3)
+                r4 = r1[r7]
+                int r4 = r9.getSpanEnd(r4)
+                r5 = 33
+                r2.setSpan(r0, r3, r4, r5)
+                int r7 = r7 + 1
+                goto L_0x0064
+            L_0x0086:
+                r0 = r2
+            L_0x0087:
+                return r0
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.RealPageBlocksAdapter.getCaption(int):java.lang.CharSequence");
+        }
+
+        public TLRPC$PhotoSize getFileLocation(TLObject tLObject, int[] iArr) {
+            TLRPC$PhotoSize closestPhotoSizeWithSize;
+            if (tLObject instanceof TLRPC$Photo) {
+                TLRPC$PhotoSize closestPhotoSizeWithSize2 = FileLoader.getClosestPhotoSizeWithSize(((TLRPC$Photo) tLObject).sizes, AndroidUtilities.getPhotoSize());
+                if (closestPhotoSizeWithSize2 != null) {
+                    iArr[0] = closestPhotoSizeWithSize2.size;
+                    if (iArr[0] == 0) {
+                        iArr[0] = -1;
                     }
-                });
-            }
-
-            public /* synthetic */ void lambda$onAnimationEnd$0$ArticleViewer$34() {
-                NotificationCenter.getInstance(ArticleViewer.this.currentAccount).onAnimationFinish(ArticleViewer.this.allowAnimationIndex);
-                if (ArticleViewer.this.photoAnimationEndRunnable != null) {
-                    ArticleViewer.this.photoAnimationEndRunnable.run();
-                    Runnable unused = ArticleViewer.this.photoAnimationEndRunnable = null;
+                    return closestPhotoSizeWithSize2;
                 }
-            }
-        });
-        this.photoTransitionAnimationStartTime = System.currentTimeMillis();
-        AndroidUtilities.runOnUIThread(new Runnable(animatorSet) {
-            public final /* synthetic */ AnimatorSet f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                ArticleViewer.this.lambda$openPhoto$46$ArticleViewer(this.f$1);
-            }
-        });
-        if (Build.VERSION.SDK_INT >= 18) {
-            this.photoContainerView.setLayerType(2, (Paint) null);
-        }
-        Runnable unused = this.photoBackgroundDrawable.drawRunnable = new Runnable(placeForPhoto) {
-            public final /* synthetic */ ArticleViewer.PlaceProviderObject f$1;
-
-            {
-                this.f$1 = r2;
-            }
-
-            public final void run() {
-                ArticleViewer.this.lambda$openPhoto$47$ArticleViewer(this.f$1);
-            }
-        };
-        return true;
-    }
-
-    public /* synthetic */ void lambda$openPhoto$45$ArticleViewer() {
-        FrameLayoutDrawer frameLayoutDrawer = this.photoContainerView;
-        if (frameLayoutDrawer != null) {
-            if (Build.VERSION.SDK_INT >= 18) {
-                frameLayoutDrawer.setLayerType(0, (Paint) null);
-            }
-            this.photoAnimationInProgress = 0;
-            this.photoTransitionAnimationStartTime = 0;
-            setImages();
-            this.photoContainerView.invalidate();
-            this.animatingImageView.setVisibility(8);
-            PlaceProviderObject placeProviderObject = this.showAfterAnimation;
-            if (placeProviderObject != null) {
-                placeProviderObject.imageReceiver.setVisible(true, true);
-            }
-            PlaceProviderObject placeProviderObject2 = this.hideAfterAnimation;
-            if (placeProviderObject2 != null) {
-                placeProviderObject2.imageReceiver.setVisible(false, true);
-            }
-        }
-    }
-
-    public /* synthetic */ void lambda$openPhoto$46$ArticleViewer(AnimatorSet animatorSet) {
-        this.allowAnimationIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.allowAnimationIndex, new int[]{NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats});
-        animatorSet.start();
-    }
-
-    public /* synthetic */ void lambda$openPhoto$47$ArticleViewer(PlaceProviderObject placeProviderObject) {
-        placeProviderObject.imageReceiver.setVisible(false, true);
-    }
-
-    /* JADX WARNING: Code restructure failed: missing block: B:13:0x0074, code lost:
-        r9 = r2.imageReceiver;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void closePhoto(boolean r18) {
-        /*
-            r17 = this;
-            r0 = r17
-            android.app.Activity r1 = r0.parentActivity
-            if (r1 == 0) goto L_0x03bd
-            boolean r1 = r0.isPhotoVisible
-            if (r1 == 0) goto L_0x03bd
-            boolean r1 = r17.checkPhotoAnimation()
-            if (r1 == 0) goto L_0x0012
-            goto L_0x03bd
-        L_0x0012:
-            r17.releasePlayer()
-            int r1 = r0.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.fileDidFailToLoad
-            r1.removeObserver(r0, r2)
-            int r1 = r0.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.fileDidLoad
-            r1.removeObserver(r0, r2)
-            int r1 = r0.currentAccount
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getInstance(r1)
-            int r2 = org.telegram.messenger.NotificationCenter.FileLoadProgressChanged
-            r1.removeObserver(r0, r2)
-            org.telegram.messenger.NotificationCenter r1 = org.telegram.messenger.NotificationCenter.getGlobalInstance()
-            int r2 = org.telegram.messenger.NotificationCenter.emojiDidLoad
-            r1.removeObserver(r0, r2)
-            r1 = 0
-            r0.isActionBarVisible = r1
-            android.view.VelocityTracker r2 = r0.velocityTracker
-            r3 = 0
-            if (r2 == 0) goto L_0x004c
-            r2.recycle()
-            r0.velocityTracker = r3
-        L_0x004c:
-            org.telegram.tgnet.TLRPC$PageBlock r2 = r0.currentMedia
-            org.telegram.ui.ArticleViewer$PlaceProviderObject r2 = r0.getPlaceForPhoto(r2)
-            if (r18 == 0) goto L_0x038f
-            r5 = 1
-            r0.photoAnimationInProgress = r5
-            org.telegram.ui.Components.ClippingImageView r6 = r0.animatingImageView
-            r6.setVisibility(r1)
-            org.telegram.ui.ArticleViewer$FrameLayoutDrawer r6 = r0.photoContainerView
-            r6.invalidate()
-            android.animation.AnimatorSet r6 = new android.animation.AnimatorSet
-            r6.<init>()
-            org.telegram.ui.Components.ClippingImageView r7 = r0.animatingImageView
-            android.view.ViewGroup$LayoutParams r7 = r7.getLayoutParams()
-            org.telegram.messenger.ImageReceiver r8 = r0.centerImage
-            int r8 = r8.getOrientation()
-            if (r2 == 0) goto L_0x007d
-            org.telegram.messenger.ImageReceiver r9 = r2.imageReceiver
-            if (r9 == 0) goto L_0x007d
-            int r9 = r9.getAnimatedOrientation()
-            goto L_0x007e
-        L_0x007d:
-            r9 = 0
-        L_0x007e:
-            if (r9 == 0) goto L_0x0081
-            r8 = r9
-        L_0x0081:
-            org.telegram.ui.Components.ClippingImageView r9 = r0.animatingImageView
-            r9.setOrientation(r8)
-            if (r2 == 0) goto L_0x00a4
-            org.telegram.messenger.ImageReceiver r8 = r2.imageReceiver
-            android.graphics.RectF r8 = r8.getDrawRegion()
-            float r9 = r8.width()
-            int r9 = (int) r9
-            r7.width = r9
-            float r9 = r8.height()
-            int r9 = (int) r9
-            r7.height = r9
-            org.telegram.ui.Components.ClippingImageView r9 = r0.animatingImageView
-            org.telegram.messenger.ImageReceiver$BitmapHolder r10 = r2.thumb
-            r9.setImageBitmap(r10)
-            goto L_0x00c2
-        L_0x00a4:
-            org.telegram.messenger.ImageReceiver r8 = r0.centerImage
-            float r8 = r8.getImageWidth()
-            int r8 = (int) r8
-            r7.width = r8
-            org.telegram.messenger.ImageReceiver r8 = r0.centerImage
-            float r8 = r8.getImageHeight()
-            int r8 = (int) r8
-            r7.height = r8
-            org.telegram.ui.Components.ClippingImageView r8 = r0.animatingImageView
-            org.telegram.messenger.ImageReceiver r9 = r0.centerImage
-            org.telegram.messenger.ImageReceiver$BitmapHolder r9 = r9.getBitmapSafe()
-            r8.setImageBitmap(r9)
-            r8 = r3
-        L_0x00c2:
-            int r9 = r7.width
-            if (r9 != 0) goto L_0x00c8
-            r7.width = r5
-        L_0x00c8:
-            int r9 = r7.height
-            if (r9 != 0) goto L_0x00ce
-            r7.height = r5
-        L_0x00ce:
-            org.telegram.ui.Components.ClippingImageView r9 = r0.animatingImageView
-            r9.setLayoutParams(r7)
-            android.graphics.Point r9 = org.telegram.messenger.AndroidUtilities.displaySize
-            int r10 = r9.x
-            float r10 = (float) r10
-            int r11 = r7.width
-            float r11 = (float) r11
-            float r10 = r10 / r11
-            int r9 = r9.y
-            float r9 = (float) r9
-            int r11 = r7.height
-            float r11 = (float) r11
-            float r9 = r9 / r11
-            float r9 = java.lang.Math.min(r10, r9)
-            int r10 = r7.width
-            float r10 = (float) r10
-            float r11 = r0.scale
-            float r10 = r10 * r11
-            float r10 = r10 * r9
-            int r7 = r7.height
-            float r7 = (float) r7
-            float r7 = r7 * r11
-            float r7 = r7 * r9
-            android.graphics.Point r11 = org.telegram.messenger.AndroidUtilities.displaySize
-            int r11 = r11.x
-            float r11 = (float) r11
-            float r11 = r11 - r10
-            r10 = 1073741824(0x40000000, float:2.0)
-            float r11 = r11 / r10
-            int r12 = android.os.Build.VERSION.SDK_INT
-            r13 = 21
-            if (r12 < r13) goto L_0x0112
-            java.lang.Object r12 = r0.lastInsets
-            if (r12 == 0) goto L_0x0112
-            android.view.WindowInsets r12 = (android.view.WindowInsets) r12
-            int r12 = r12.getSystemWindowInsetLeft()
-            float r12 = (float) r12
-            float r11 = r11 + r12
-        L_0x0112:
-            boolean r12 = r0.hasCutout
-            if (r12 == 0) goto L_0x0122
-            android.graphics.Point r12 = org.telegram.messenger.AndroidUtilities.displaySize
-            int r12 = r12.y
-            float r12 = (float) r12
-            float r12 = r12 - r7
-            float r12 = r12 / r10
-            int r7 = org.telegram.messenger.AndroidUtilities.statusBarHeight
-            float r7 = (float) r7
-            float r12 = r12 + r7
-            goto L_0x012c
-        L_0x0122:
-            android.graphics.Point r12 = org.telegram.messenger.AndroidUtilities.displaySize
-            int r12 = r12.y
-            int r13 = org.telegram.messenger.AndroidUtilities.statusBarHeight
-            int r12 = r12 + r13
-            float r12 = (float) r12
-            float r12 = r12 - r7
-            float r12 = r12 / r10
-        L_0x012c:
-            org.telegram.ui.Components.ClippingImageView r7 = r0.animatingImageView
-            float r10 = r0.translationX
-            float r11 = r11 + r10
-            r7.setTranslationX(r11)
-            org.telegram.ui.Components.ClippingImageView r7 = r0.animatingImageView
-            float r10 = r0.translationY
-            float r12 = r12 + r10
-            r7.setTranslationY(r12)
-            org.telegram.ui.Components.ClippingImageView r7 = r0.animatingImageView
-            float r10 = r0.scale
-            float r10 = r10 * r9
-            r7.setScaleX(r10)
-            org.telegram.ui.Components.ClippingImageView r7 = r0.animatingImageView
-            float r10 = r0.scale
-            float r10 = r10 * r9
-            r7.setScaleY(r10)
-            r11 = 3
-            r12 = 2
-            r13 = 0
-            if (r2 == 0) goto L_0x02e6
-            org.telegram.messenger.ImageReceiver r14 = r2.imageReceiver
-            r14.setVisible(r1, r5)
-            org.telegram.messenger.ImageReceiver r14 = r2.imageReceiver
-            boolean r14 = r14.isAspectFit()
-            if (r14 == 0) goto L_0x0162
-            r14 = 0
-            goto L_0x0170
-        L_0x0162:
-            float r14 = r8.left
-            org.telegram.messenger.ImageReceiver r15 = r2.imageReceiver
-            float r15 = r15.getImageX()
-            float r14 = r14 - r15
-            float r14 = java.lang.Math.abs(r14)
-            int r14 = (int) r14
-        L_0x0170:
-            float r15 = r8.top
-            org.telegram.messenger.ImageReceiver r3 = r2.imageReceiver
-            float r3 = r3.getImageY()
-            float r15 = r15 - r3
-            float r3 = java.lang.Math.abs(r15)
-            int r3 = (int) r3
-            int[] r15 = new int[r12]
-            android.view.View r7 = r2.parentView
-            r7.getLocationInWindow(r15)
-            r7 = r15[r5]
-            float r7 = (float) r7
-            int r9 = r2.viewY
-            float r9 = (float) r9
-            float r10 = r8.top
-            float r9 = r9 + r10
-            float r7 = r7 - r9
-            int r9 = r2.clipTopAddition
-            float r9 = (float) r9
-            float r7 = r7 + r9
-            int r7 = (int) r7
-            if (r7 >= 0) goto L_0x0197
-            r7 = 0
-        L_0x0197:
-            int r9 = r2.viewY
-            float r9 = (float) r9
-            float r10 = r8.top
-            float r9 = r9 + r10
-            float r4 = r8.bottom
-            float r4 = r4 - r10
-            float r9 = r9 + r4
-            r4 = r15[r5]
-            android.view.View r10 = r2.parentView
-            int r10 = r10.getHeight()
-            int r4 = r4 + r10
-            float r4 = (float) r4
-            float r9 = r9 - r4
-            int r4 = r2.clipBottomAddition
-            float r4 = (float) r4
-            float r9 = r9 + r4
-            int r4 = (int) r9
-            if (r4 >= 0) goto L_0x01b4
-            r4 = 0
-        L_0x01b4:
-            int r7 = java.lang.Math.max(r7, r3)
-            int r4 = java.lang.Math.max(r4, r3)
-            float[][] r9 = r0.animationValues
-            r9 = r9[r1]
-            org.telegram.ui.Components.ClippingImageView r10 = r0.animatingImageView
-            float r10 = r10.getScaleX()
-            r9[r1] = r10
-            float[][] r9 = r0.animationValues
-            r9 = r9[r1]
-            org.telegram.ui.Components.ClippingImageView r10 = r0.animatingImageView
-            float r10 = r10.getScaleY()
-            r9[r5] = r10
-            float[][] r9 = r0.animationValues
-            r9 = r9[r1]
-            org.telegram.ui.Components.ClippingImageView r10 = r0.animatingImageView
-            float r10 = r10.getTranslationX()
-            r9[r12] = r10
-            float[][] r9 = r0.animationValues
-            r9 = r9[r1]
-            org.telegram.ui.Components.ClippingImageView r10 = r0.animatingImageView
-            float r10 = r10.getTranslationY()
-            r9[r11] = r10
-            float[][] r9 = r0.animationValues
-            r10 = r9[r1]
-            r15 = 4
-            r10[r15] = r13
-            r10 = r9[r1]
-            r15 = 5
-            r10[r15] = r13
-            r10 = r9[r1]
-            r15 = 6
-            r10[r15] = r13
-            r10 = r9[r1]
-            r15 = 7
-            r10[r15] = r13
-            r10 = r9[r1]
-            r15 = 8
-            r10[r15] = r13
-            r10 = r9[r1]
-            r15 = 9
-            r10[r15] = r13
-            r10 = r9[r1]
-            r15 = 10
-            r10[r15] = r13
-            r10 = r9[r1]
-            r15 = 11
-            r10[r15] = r13
-            r10 = r9[r1]
-            r16 = 12
-            r10[r16] = r13
-            r10 = r9[r5]
-            float r13 = r2.scale
-            r10[r1] = r13
-            r10 = r9[r5]
-            r10[r5] = r13
-            r10 = r9[r5]
-            int r1 = r2.viewX
-            float r1 = (float) r1
-            float r15 = r8.left
-            float r15 = r15 * r13
-            float r1 = r1 + r15
-            r10[r12] = r1
-            r1 = r9[r5]
-            int r10 = r2.viewY
-            float r10 = (float) r10
-            float r8 = r8.top
-            float r8 = r8 * r13
-            float r10 = r10 + r8
-            r1[r11] = r10
-            r1 = r9[r5]
-            float r8 = (float) r14
-            float r10 = r8 * r13
-            r14 = 4
-            r1[r14] = r10
-            r1 = r9[r5]
-            float r7 = (float) r7
-            float r7 = r7 * r13
-            r10 = 5
-            r1[r10] = r7
-            r1 = r9[r5]
-            float r4 = (float) r4
-            float r4 = r4 * r13
-            r7 = 6
-            r1[r7] = r4
-            r1 = 0
-        L_0x025b:
-            if (r1 >= r14) goto L_0x0272
-            float[][] r4 = r0.animationValues
-            r4 = r4[r5]
-            int r7 = r1 + 7
-            int[] r9 = r2.radius
-            if (r9 == 0) goto L_0x026b
-            r9 = r9[r1]
-            float r9 = (float) r9
-            goto L_0x026c
-        L_0x026b:
-            r9 = 0
-        L_0x026c:
-            r4[r7] = r9
-            int r1 = r1 + 1
-            r14 = 4
-            goto L_0x025b
-        L_0x0272:
-            float[][] r1 = r0.animationValues
-            r4 = r1[r5]
-            float r3 = (float) r3
-            float r7 = r2.scale
-            float r3 = r3 * r7
-            r9 = 11
-            r4[r9] = r3
-            r1 = r1[r5]
-            float r8 = r8 * r7
-            r1[r16] = r8
-            r1 = 6
-            android.animation.Animator[] r1 = new android.animation.Animator[r1]
-            org.telegram.ui.Components.ClippingImageView r3 = r0.animatingImageView
-            float[] r4 = new float[r12]
-            r4 = {0, NUM} // fill-array
-            java.lang.String r7 = "animationProgress"
-            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r4)
-            r4 = 0
-            r1[r4] = r3
-            org.telegram.ui.ArticleViewer$PhotoBackgroundDrawable r3 = r0.photoBackgroundDrawable
-            android.util.Property<android.graphics.drawable.ColorDrawable, java.lang.Integer> r7 = org.telegram.ui.Components.AnimationProperties.COLOR_DRAWABLE_ALPHA
-            int[] r8 = new int[r5]
-            r8[r4] = r4
-            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofInt(r3, r7, r8)
-            r1[r5] = r3
-            org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
-            android.util.Property r7 = android.view.View.ALPHA
-            float[] r8 = new float[r5]
-            r9 = 0
-            r8[r4] = r9
-            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r8)
-            r1[r12] = r3
-            android.widget.FrameLayout r3 = r0.bottomLayout
-            android.util.Property r7 = android.view.View.ALPHA
-            float[] r8 = new float[r5]
-            r8[r4] = r9
-            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r8)
-            r1[r11] = r3
-            android.widget.TextView r3 = r0.captionTextView
-            android.util.Property r7 = android.view.View.ALPHA
-            float[] r8 = new float[r5]
-            r8[r4] = r9
-            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r8)
-            r7 = 4
-            r1[r7] = r3
-            org.telegram.ui.Components.GroupedPhotosListView r3 = r0.groupedPhotosListView
-            android.util.Property r7 = android.view.View.ALPHA
-            float[] r5 = new float[r5]
-            r5[r4] = r9
-            android.animation.ObjectAnimator r3 = android.animation.ObjectAnimator.ofFloat(r3, r7, r5)
-            r4 = 5
-            r1[r4] = r3
-            r6.playTogether(r1)
-            goto L_0x0365
-        L_0x02e6:
-            android.graphics.Point r1 = org.telegram.messenger.AndroidUtilities.displaySize
-            int r1 = r1.y
-            int r3 = org.telegram.messenger.AndroidUtilities.statusBarHeight
-            int r1 = r1 + r3
-            r3 = 7
-            android.animation.Animator[] r3 = new android.animation.Animator[r3]
-            org.telegram.ui.ArticleViewer$PhotoBackgroundDrawable r4 = r0.photoBackgroundDrawable
-            android.util.Property<android.graphics.drawable.ColorDrawable, java.lang.Integer> r7 = org.telegram.ui.Components.AnimationProperties.COLOR_DRAWABLE_ALPHA
-            int[] r8 = new int[r5]
-            r9 = 0
-            r8[r9] = r9
-            android.animation.ObjectAnimator r4 = android.animation.ObjectAnimator.ofInt(r4, r7, r8)
-            r3[r9] = r4
-            org.telegram.ui.Components.ClippingImageView r4 = r0.animatingImageView
-            android.util.Property r7 = android.view.View.ALPHA
-            float[] r8 = new float[r5]
-            r10 = 0
-            r8[r9] = r10
-            android.animation.ObjectAnimator r4 = android.animation.ObjectAnimator.ofFloat(r4, r7, r8)
-            r3[r5] = r4
-            org.telegram.ui.Components.ClippingImageView r4 = r0.animatingImageView
-            android.util.Property r7 = android.view.View.TRANSLATION_Y
-            float[] r8 = new float[r5]
-            float r9 = r0.translationY
-            int r9 = (r9 > r10 ? 1 : (r9 == r10 ? 0 : -1))
-            if (r9 < 0) goto L_0x031b
-            goto L_0x031c
-        L_0x031b:
-            int r1 = -r1
-        L_0x031c:
-            float r1 = (float) r1
-            r9 = 0
-            r8[r9] = r1
-            android.animation.ObjectAnimator r1 = android.animation.ObjectAnimator.ofFloat(r4, r7, r8)
-            r3[r12] = r1
-            org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
-            android.util.Property r4 = android.view.View.ALPHA
-            float[] r7 = new float[r5]
-            r8 = 0
-            r7[r9] = r8
-            android.animation.ObjectAnimator r1 = android.animation.ObjectAnimator.ofFloat(r1, r4, r7)
-            r3[r11] = r1
-            android.widget.FrameLayout r1 = r0.bottomLayout
-            android.util.Property r4 = android.view.View.ALPHA
-            float[] r7 = new float[r5]
-            r7[r9] = r8
-            android.animation.ObjectAnimator r1 = android.animation.ObjectAnimator.ofFloat(r1, r4, r7)
-            r4 = 4
-            r3[r4] = r1
-            android.widget.TextView r1 = r0.captionTextView
-            android.util.Property r4 = android.view.View.ALPHA
-            float[] r7 = new float[r5]
-            r7[r9] = r8
-            android.animation.ObjectAnimator r1 = android.animation.ObjectAnimator.ofFloat(r1, r4, r7)
-            r4 = 5
-            r3[r4] = r1
-            org.telegram.ui.Components.GroupedPhotosListView r1 = r0.groupedPhotosListView
-            android.util.Property r4 = android.view.View.ALPHA
-            float[] r5 = new float[r5]
-            r5[r9] = r8
-            android.animation.ObjectAnimator r1 = android.animation.ObjectAnimator.ofFloat(r1, r4, r5)
-            r4 = 6
-            r3[r4] = r1
-            r6.playTogether(r3)
-        L_0x0365:
-            org.telegram.ui.-$$Lambda$ArticleViewer$azAZ6VV1GbRnbOP8gPhbv3WND_w r1 = new org.telegram.ui.-$$Lambda$ArticleViewer$azAZ6VV1GbRnbOP8gPhbv3WND_w
-            r1.<init>(r2)
-            r0.photoAnimationEndRunnable = r1
-            r1 = 200(0xc8, double:9.9E-322)
-            r6.setDuration(r1)
-            org.telegram.ui.ArticleViewer$35 r1 = new org.telegram.ui.ArticleViewer$35
-            r1.<init>()
-            r6.addListener(r1)
-            long r1 = java.lang.System.currentTimeMillis()
-            r0.photoTransitionAnimationStartTime = r1
-            int r1 = android.os.Build.VERSION.SDK_INT
-            r2 = 18
-            if (r1 < r2) goto L_0x038b
-            org.telegram.ui.ArticleViewer$FrameLayoutDrawer r1 = r0.photoContainerView
-            r2 = 0
-            r1.setLayerType(r12, r2)
-        L_0x038b:
-            r6.start()
-            goto L_0x03ac
-        L_0x038f:
-            org.telegram.ui.ArticleViewer$FrameLayoutDrawer r1 = r0.photoContainerView
-            r3 = 4
-            r1.setVisibility(r3)
-            android.view.View r1 = r0.photoContainerBackground
-            r1.setVisibility(r3)
-            r1 = 0
-            r0.photoAnimationInProgress = r1
-            r0.onPhotoClosed(r2)
-            org.telegram.ui.ArticleViewer$FrameLayoutDrawer r1 = r0.photoContainerView
-            r2 = 1065353216(0x3var_, float:1.0)
-            r1.setScaleX(r2)
-            org.telegram.ui.ArticleViewer$FrameLayoutDrawer r1 = r0.photoContainerView
-            r1.setScaleY(r2)
-        L_0x03ac:
-            org.telegram.ui.Components.AnimatedFileDrawable r1 = r0.currentAnimation
-            if (r1 == 0) goto L_0x03bd
-            org.telegram.ui.ArticleViewer$FrameLayoutDrawer r2 = r0.photoContainerView
-            r1.removeSecondParentView(r2)
-            r1 = 0
-            r0.currentAnimation = r1
-            org.telegram.messenger.ImageReceiver r2 = r0.centerImage
-            r2.setImageBitmap((android.graphics.drawable.Drawable) r1)
-        L_0x03bd:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.closePhoto(boolean):void");
-    }
-
-    public /* synthetic */ void lambda$closePhoto$48$ArticleViewer(PlaceProviderObject placeProviderObject) {
-        if (Build.VERSION.SDK_INT >= 18) {
-            this.photoContainerView.setLayerType(0, (Paint) null);
-        }
-        this.photoContainerView.setVisibility(4);
-        this.photoContainerBackground.setVisibility(4);
-        this.photoAnimationInProgress = 0;
-        onPhotoClosed(placeProviderObject);
-    }
-
-    private void onPhotoClosed(PlaceProviderObject placeProviderObject) {
-        this.isPhotoVisible = false;
-        this.currentMedia = null;
-        ImageReceiver.BitmapHolder bitmapHolder = this.currentThumb;
-        if (bitmapHolder != null) {
-            bitmapHolder.release();
-            this.currentThumb = null;
-        }
-        AnimatedFileDrawable animatedFileDrawable = this.currentAnimation;
-        if (animatedFileDrawable != null) {
-            animatedFileDrawable.removeSecondParentView(this.photoContainerView);
-            this.currentAnimation = null;
-        }
-        for (int i = 0; i < 3; i++) {
-            RadialProgressView[] radialProgressViewArr = this.radialProgressViews;
-            if (radialProgressViewArr[i] != null) {
-                radialProgressViewArr[i].setBackgroundState(-1, false);
-            }
-        }
-        this.centerImage.setImageBitmap((Bitmap) null);
-        this.leftImage.setImageBitmap((Bitmap) null);
-        this.rightImage.setImageBitmap((Bitmap) null);
-        this.photoContainerView.post(new Runnable() {
-            public final void run() {
-                ArticleViewer.this.lambda$onPhotoClosed$49$ArticleViewer();
-            }
-        });
-        if (placeProviderObject != null) {
-            placeProviderObject.imageReceiver.setVisible(true, true);
-        }
-        this.groupedPhotosListView.clear();
-    }
-
-    public /* synthetic */ void lambda$onPhotoClosed$49$ArticleViewer() {
-        this.animatingImageView.setImageBitmap((ImageReceiver.BitmapHolder) null);
-    }
-
-    private void updateMinMax(float f) {
-        int imageWidth = ((int) ((this.centerImage.getImageWidth() * f) - ((float) getContainerViewWidth()))) / 2;
-        int imageHeight = ((int) ((this.centerImage.getImageHeight() * f) - ((float) getContainerViewHeight()))) / 2;
-        if (imageWidth > 0) {
-            this.minX = (float) (-imageWidth);
-            this.maxX = (float) imageWidth;
-        } else {
-            this.maxX = 0.0f;
-            this.minX = 0.0f;
-        }
-        if (imageHeight > 0) {
-            this.minY = (float) (-imageHeight);
-            this.maxY = (float) imageHeight;
-            return;
-        }
-        this.maxY = 0.0f;
-        this.minY = 0.0f;
-    }
-
-    /* access modifiers changed from: private */
-    public int getContainerViewWidth() {
-        return this.photoContainerView.getWidth();
-    }
-
-    /* access modifiers changed from: private */
-    public int getContainerViewHeight() {
-        return this.photoContainerView.getHeight();
-    }
-
-    /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:118:0x028a, code lost:
-        if (r13 > r3) goto L_0x0284;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:123:0x0299, code lost:
-        if (r0 > r3) goto L_0x0293;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:161:0x034d, code lost:
-        if (r2 > r3) goto L_0x0347;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:166:0x035e, code lost:
-        if (r2 > r3) goto L_0x0358;
-     */
-    /* JADX WARNING: Removed duplicated region for block: B:98:0x01fc  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean processTouchEvent(android.view.MotionEvent r13) {
-        /*
-            r12 = this;
-            int r0 = r12.photoAnimationInProgress
-            r1 = 0
-            if (r0 != 0) goto L_0x03f3
-            long r2 = r12.animationStartTime
-            r4 = 0
-            int r0 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r0 == 0) goto L_0x000f
-            goto L_0x03f3
-        L_0x000f:
-            int r0 = r13.getPointerCount()
-            r2 = 1
-            if (r0 != r2) goto L_0x002c
-            android.view.GestureDetector r0 = r12.gestureDetector
-            boolean r0 = r0.onTouchEvent(r13)
-            if (r0 == 0) goto L_0x002c
-            boolean r0 = r12.doubleTap
-            if (r0 == 0) goto L_0x002c
-            r12.doubleTap = r1
-            r12.moving = r1
-            r12.zooming = r1
-            r12.checkMinMax(r1)
-            return r2
-        L_0x002c:
-            int r0 = r13.getActionMasked()
-            r3 = 1073741824(0x40000000, float:2.0)
-            r6 = 2
-            if (r0 == 0) goto L_0x0368
-            int r0 = r13.getActionMasked()
-            r7 = 5
-            if (r0 != r7) goto L_0x003e
-            goto L_0x0368
-        L_0x003e:
-            int r0 = r13.getActionMasked()
-            r7 = 1077936128(0x40400000, float:3.0)
-            r8 = 1065353216(0x3var_, float:1.0)
-            r9 = 0
-            if (r0 != r6) goto L_0x0218
-            boolean r0 = r12.canZoom
-            if (r0 == 0) goto L_0x00cc
-            int r0 = r13.getPointerCount()
-            if (r0 != r6) goto L_0x00cc
-            boolean r0 = r12.draggingDown
-            if (r0 != 0) goto L_0x00cc
-            boolean r0 = r12.zooming
-            if (r0 == 0) goto L_0x00cc
-            boolean r0 = r12.changingPage
-            if (r0 != 0) goto L_0x00cc
-            r12.discardTap = r2
-            float r0 = r13.getX(r2)
-            float r3 = r13.getX(r1)
-            float r0 = r0 - r3
-            double r3 = (double) r0
-            float r0 = r13.getY(r2)
-            float r13 = r13.getY(r1)
-            float r0 = r0 - r13
-            double r7 = (double) r0
-            double r2 = java.lang.Math.hypot(r3, r7)
-            float r13 = (float) r2
-            float r0 = r12.pinchStartDistance
-            float r13 = r13 / r0
-            float r0 = r12.pinchStartScale
-            float r13 = r13 * r0
-            r12.scale = r13
-            float r13 = r12.pinchCenterX
-            int r0 = r12.getContainerViewWidth()
-            int r0 = r0 / r6
-            float r0 = (float) r0
-            float r13 = r13 - r0
-            float r0 = r12.pinchCenterX
-            int r2 = r12.getContainerViewWidth()
-            int r2 = r2 / r6
-            float r2 = (float) r2
-            float r0 = r0 - r2
-            float r2 = r12.pinchStartX
-            float r0 = r0 - r2
-            float r2 = r12.scale
-            float r3 = r12.pinchStartScale
-            float r2 = r2 / r3
-            float r0 = r0 * r2
-            float r13 = r13 - r0
-            r12.translationX = r13
-            float r13 = r12.pinchCenterY
-            int r0 = r12.getContainerViewHeight()
-            int r0 = r0 / r6
-            float r0 = (float) r0
-            float r13 = r13 - r0
-            float r0 = r12.pinchCenterY
-            int r2 = r12.getContainerViewHeight()
-            int r2 = r2 / r6
-            float r2 = (float) r2
-            float r0 = r0 - r2
-            float r2 = r12.pinchStartY
-            float r0 = r0 - r2
-            float r2 = r12.scale
-            float r3 = r12.pinchStartScale
-            float r3 = r2 / r3
-            float r0 = r0 * r3
-            float r13 = r13 - r0
-            r12.translationY = r13
-            r12.updateMinMax(r2)
-            org.telegram.ui.ArticleViewer$FrameLayoutDrawer r13 = r12.photoContainerView
-            r13.invalidate()
-            goto L_0x03f3
-        L_0x00cc:
-            int r0 = r13.getPointerCount()
-            if (r0 != r2) goto L_0x03f3
-            android.view.VelocityTracker r0 = r12.velocityTracker
-            if (r0 == 0) goto L_0x00d9
-            r0.addMovement(r13)
-        L_0x00d9:
-            float r0 = r13.getX()
-            float r6 = r12.moveStartX
-            float r0 = r0 - r6
-            float r0 = java.lang.Math.abs(r0)
-            float r6 = r13.getY()
-            float r10 = r12.dragY
-            float r6 = r6 - r10
-            float r6 = java.lang.Math.abs(r6)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            float r10 = (float) r10
-            int r10 = (r0 > r10 ? 1 : (r0 == r10 ? 0 : -1))
-            if (r10 > 0) goto L_0x0101
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
-            float r10 = (float) r10
-            int r10 = (r6 > r10 ? 1 : (r6 == r10 ? 0 : -1))
-            if (r10 <= 0) goto L_0x0103
-        L_0x0101:
-            r12.discardTap = r2
-        L_0x0103:
-            boolean r10 = r12.canDragDown
-            if (r10 == 0) goto L_0x0133
-            boolean r10 = r12.draggingDown
-            if (r10 != 0) goto L_0x0133
-            float r10 = r12.scale
-            int r10 = (r10 > r8 ? 1 : (r10 == r8 ? 0 : -1))
-            if (r10 != 0) goto L_0x0133
-            r10 = 1106247680(0x41var_, float:30.0)
-            int r10 = org.telegram.messenger.AndroidUtilities.dp(r10)
-            float r10 = (float) r10
-            int r10 = (r6 > r10 ? 1 : (r6 == r10 ? 0 : -1))
-            if (r10 < 0) goto L_0x0133
-            float r6 = r6 / r3
-            int r0 = (r6 > r0 ? 1 : (r6 == r0 ? 0 : -1))
-            if (r0 <= 0) goto L_0x0133
-            r12.draggingDown = r2
-            r12.moving = r1
-            float r13 = r13.getY()
-            r12.dragY = r13
-            boolean r13 = r12.isActionBarVisible
-            if (r13 == 0) goto L_0x0132
-            r12.toggleActionBar(r1, r2)
-        L_0x0132:
-            return r2
-        L_0x0133:
-            boolean r0 = r12.draggingDown
-            if (r0 == 0) goto L_0x0147
-            float r13 = r13.getY()
-            float r0 = r12.dragY
-            float r13 = r13 - r0
-            r12.translationY = r13
-            org.telegram.ui.ArticleViewer$FrameLayoutDrawer r13 = r12.photoContainerView
-            r13.invalidate()
-            goto L_0x03f3
-        L_0x0147:
-            boolean r0 = r12.invalidCoords
-            if (r0 != 0) goto L_0x0208
-            long r10 = r12.animationStartTime
-            int r0 = (r10 > r4 ? 1 : (r10 == r4 ? 0 : -1))
-            if (r0 != 0) goto L_0x0208
-            float r0 = r12.moveStartX
-            float r3 = r13.getX()
-            float r0 = r0 - r3
-            float r3 = r12.moveStartY
-            float r4 = r13.getY()
-            float r3 = r3 - r4
-            boolean r4 = r12.moving
-            if (r4 != 0) goto L_0x0183
-            float r4 = r12.scale
-            int r4 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1))
-            if (r4 != 0) goto L_0x017d
-            float r4 = java.lang.Math.abs(r3)
-            r5 = 1094713344(0x41400000, float:12.0)
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            float r5 = (float) r5
-            float r4 = r4 + r5
-            float r5 = java.lang.Math.abs(r0)
-            int r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
-            if (r4 < 0) goto L_0x0183
-        L_0x017d:
-            float r4 = r12.scale
-            int r4 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1))
-            if (r4 == 0) goto L_0x03f3
-        L_0x0183:
-            boolean r4 = r12.moving
-            if (r4 != 0) goto L_0x018d
-            r12.moving = r2
-            r12.canDragDown = r1
-            r0 = 0
-            r3 = 0
-        L_0x018d:
-            float r2 = r13.getX()
-            r12.moveStartX = r2
-            float r13 = r13.getY()
-            r12.moveStartY = r13
-            float r13 = r12.scale
-            r12.updateMinMax(r13)
-            float r13 = r12.translationX
-            float r2 = r12.minX
-            int r13 = (r13 > r2 ? 1 : (r13 == r2 ? 0 : -1))
-            if (r13 >= 0) goto L_0x01ae
-            org.telegram.messenger.ImageReceiver r13 = r12.rightImage
-            boolean r13 = r13.hasImageSet()
-            if (r13 == 0) goto L_0x01be
-        L_0x01ae:
-            float r13 = r12.translationX
-            float r2 = r12.maxX
-            int r13 = (r13 > r2 ? 1 : (r13 == r2 ? 0 : -1))
-            if (r13 <= 0) goto L_0x01bf
-            org.telegram.messenger.ImageReceiver r13 = r12.leftImage
-            boolean r13 = r13.hasImageSet()
-            if (r13 != 0) goto L_0x01bf
-        L_0x01be:
-            float r0 = r0 / r7
-        L_0x01bf:
-            float r13 = r12.maxY
-            int r2 = (r13 > r9 ? 1 : (r13 == r9 ? 0 : -1))
-            if (r2 != 0) goto L_0x01de
-            float r2 = r12.minY
-            int r4 = (r2 > r9 ? 1 : (r2 == r9 ? 0 : -1))
-            if (r4 != 0) goto L_0x01de
-            float r4 = r12.translationY
-            float r5 = r4 - r3
-            int r5 = (r5 > r2 ? 1 : (r5 == r2 ? 0 : -1))
-            if (r5 >= 0) goto L_0x01d6
-            r12.translationY = r2
-            goto L_0x01f1
-        L_0x01d6:
-            float r4 = r4 - r3
-            int r2 = (r4 > r13 ? 1 : (r4 == r13 ? 0 : -1))
-            if (r2 <= 0) goto L_0x01ed
-            r12.translationY = r13
-            goto L_0x01f1
-        L_0x01de:
-            float r13 = r12.translationY
-            float r2 = r12.minY
-            int r2 = (r13 > r2 ? 1 : (r13 == r2 ? 0 : -1))
-            if (r2 < 0) goto L_0x01ef
-            float r2 = r12.maxY
-            int r13 = (r13 > r2 ? 1 : (r13 == r2 ? 0 : -1))
-            if (r13 <= 0) goto L_0x01ed
-            goto L_0x01ef
-        L_0x01ed:
-            r9 = r3
-            goto L_0x01f1
-        L_0x01ef:
-            float r9 = r3 / r7
-        L_0x01f1:
-            float r13 = r12.translationX
-            float r13 = r13 - r0
-            r12.translationX = r13
-            float r13 = r12.scale
-            int r13 = (r13 > r8 ? 1 : (r13 == r8 ? 0 : -1))
-            if (r13 == 0) goto L_0x0201
-            float r13 = r12.translationY
-            float r13 = r13 - r9
-            r12.translationY = r13
-        L_0x0201:
-            org.telegram.ui.ArticleViewer$FrameLayoutDrawer r13 = r12.photoContainerView
-            r13.invalidate()
-            goto L_0x03f3
-        L_0x0208:
-            r12.invalidCoords = r1
-            float r0 = r13.getX()
-            r12.moveStartX = r0
-            float r13 = r13.getY()
-            r12.moveStartY = r13
-            goto L_0x03f3
-        L_0x0218:
-            int r0 = r13.getActionMasked()
-            r3 = 3
-            if (r0 == r3) goto L_0x022c
-            int r0 = r13.getActionMasked()
-            if (r0 == r2) goto L_0x022c
-            int r0 = r13.getActionMasked()
-            r4 = 6
-            if (r0 != r4) goto L_0x03f3
-        L_0x022c:
-            boolean r0 = r12.zooming
-            if (r0 == 0) goto L_0x02a7
-            r12.invalidCoords = r2
-            float r13 = r12.scale
-            int r0 = (r13 > r8 ? 1 : (r13 == r8 ? 0 : -1))
-            if (r0 >= 0) goto L_0x023f
-            r12.updateMinMax(r8)
-            r12.animateTo(r8, r9, r9, r2)
-            goto L_0x02a3
-        L_0x023f:
-            int r13 = (r13 > r7 ? 1 : (r13 == r7 ? 0 : -1))
-            if (r13 <= 0) goto L_0x02a0
-            float r13 = r12.pinchCenterX
-            int r0 = r12.getContainerViewWidth()
-            int r0 = r0 / r6
-            float r0 = (float) r0
-            float r13 = r13 - r0
-            float r0 = r12.pinchCenterX
-            int r3 = r12.getContainerViewWidth()
-            int r3 = r3 / r6
-            float r3 = (float) r3
-            float r0 = r0 - r3
-            float r3 = r12.pinchStartX
-            float r0 = r0 - r3
-            float r3 = r12.pinchStartScale
-            float r3 = r7 / r3
-            float r0 = r0 * r3
-            float r13 = r13 - r0
-            float r0 = r12.pinchCenterY
-            int r3 = r12.getContainerViewHeight()
-            int r3 = r3 / r6
-            float r3 = (float) r3
-            float r0 = r0 - r3
-            float r3 = r12.pinchCenterY
-            int r4 = r12.getContainerViewHeight()
-            int r4 = r4 / r6
-            float r4 = (float) r4
-            float r3 = r3 - r4
-            float r4 = r12.pinchStartY
-            float r3 = r3 - r4
-            float r4 = r12.pinchStartScale
-            float r4 = r7 / r4
-            float r3 = r3 * r4
-            float r0 = r0 - r3
-            r12.updateMinMax(r7)
-            float r3 = r12.minX
-            int r4 = (r13 > r3 ? 1 : (r13 == r3 ? 0 : -1))
-            if (r4 >= 0) goto L_0x0286
-        L_0x0284:
-            r13 = r3
-            goto L_0x028d
-        L_0x0286:
-            float r3 = r12.maxX
-            int r4 = (r13 > r3 ? 1 : (r13 == r3 ? 0 : -1))
-            if (r4 <= 0) goto L_0x028d
-            goto L_0x0284
-        L_0x028d:
-            float r3 = r12.minY
-            int r4 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r4 >= 0) goto L_0x0295
-        L_0x0293:
-            r0 = r3
-            goto L_0x029c
-        L_0x0295:
-            float r3 = r12.maxY
-            int r4 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r4 <= 0) goto L_0x029c
-            goto L_0x0293
-        L_0x029c:
-            r12.animateTo(r7, r13, r0, r2)
-            goto L_0x02a3
-        L_0x02a0:
-            r12.checkMinMax(r2)
-        L_0x02a3:
-            r12.zooming = r1
-            goto L_0x03f3
-        L_0x02a7:
-            boolean r0 = r12.draggingDown
-            if (r0 == 0) goto L_0x02cd
-            float r0 = r12.dragY
-            float r13 = r13.getY()
-            float r0 = r0 - r13
-            float r13 = java.lang.Math.abs(r0)
-            int r0 = r12.getContainerViewHeight()
-            float r0 = (float) r0
-            r3 = 1086324736(0x40CLASSNAME, float:6.0)
-            float r0 = r0 / r3
-            int r13 = (r13 > r0 ? 1 : (r13 == r0 ? 0 : -1))
-            if (r13 <= 0) goto L_0x02c6
-            r12.closePhoto(r2)
-            goto L_0x02c9
-        L_0x02c6:
-            r12.animateTo(r8, r9, r9, r1)
-        L_0x02c9:
-            r12.draggingDown = r1
-            goto L_0x03f3
-        L_0x02cd:
-            boolean r13 = r12.moving
-            if (r13 == 0) goto L_0x03f3
-            float r13 = r12.translationX
-            float r0 = r12.translationY
-            float r4 = r12.scale
-            r12.updateMinMax(r4)
-            r12.moving = r1
-            r12.canDragDown = r2
-            android.view.VelocityTracker r4 = r12.velocityTracker
-            if (r4 == 0) goto L_0x02f3
-            float r5 = r12.scale
-            int r5 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1))
-            if (r5 != 0) goto L_0x02f3
-            r5 = 1000(0x3e8, float:1.401E-42)
-            r4.computeCurrentVelocity(r5)
-            android.view.VelocityTracker r4 = r12.velocityTracker
-            float r9 = r4.getXVelocity()
-        L_0x02f3:
-            float r4 = r12.translationX
-            float r5 = r12.minX
-            int r6 = r12.getContainerViewWidth()
-            int r6 = r6 / r3
-            float r6 = (float) r6
-            float r5 = r5 - r6
-            r6 = 1143111680(0x44228000, float:650.0)
-            int r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
-            if (r4 < 0) goto L_0x030f
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            int r4 = -r4
-            float r4 = (float) r4
-            int r4 = (r9 > r4 ? 1 : (r9 == r4 ? 0 : -1))
-            if (r4 >= 0) goto L_0x031b
-        L_0x030f:
-            org.telegram.messenger.ImageReceiver r4 = r12.rightImage
-            boolean r4 = r4.hasImageSet()
-            if (r4 == 0) goto L_0x031b
-            r12.goToNext()
-            return r2
-        L_0x031b:
-            float r4 = r12.translationX
-            float r5 = r12.maxX
-            int r7 = r12.getContainerViewWidth()
-            int r7 = r7 / r3
-            float r3 = (float) r7
-            float r5 = r5 + r3
-            int r3 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
-            if (r3 > 0) goto L_0x0333
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            float r3 = (float) r3
-            int r3 = (r9 > r3 ? 1 : (r9 == r3 ? 0 : -1))
-            if (r3 <= 0) goto L_0x033f
-        L_0x0333:
-            org.telegram.messenger.ImageReceiver r3 = r12.leftImage
-            boolean r3 = r3.hasImageSet()
-            if (r3 == 0) goto L_0x033f
-            r12.goToPrev()
-            return r2
-        L_0x033f:
-            float r2 = r12.translationX
-            float r3 = r12.minX
-            int r4 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-            if (r4 >= 0) goto L_0x0349
-        L_0x0347:
-            r13 = r3
-            goto L_0x0350
-        L_0x0349:
-            float r3 = r12.maxX
-            int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-            if (r2 <= 0) goto L_0x0350
-            goto L_0x0347
-        L_0x0350:
-            float r2 = r12.translationY
-            float r3 = r12.minY
-            int r4 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-            if (r4 >= 0) goto L_0x035a
-        L_0x0358:
-            r0 = r3
-            goto L_0x0361
-        L_0x035a:
-            float r3 = r12.maxY
-            int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-            if (r2 <= 0) goto L_0x0361
-            goto L_0x0358
-        L_0x0361:
-            float r2 = r12.scale
-            r12.animateTo(r2, r13, r0, r1)
-            goto L_0x03f3
-        L_0x0368:
-            r12.discardTap = r1
-            org.telegram.ui.Components.Scroller r0 = r12.scroller
-            boolean r0 = r0.isFinished()
-            if (r0 != 0) goto L_0x0377
-            org.telegram.ui.Components.Scroller r0 = r12.scroller
-            r0.abortAnimation()
-        L_0x0377:
-            boolean r0 = r12.draggingDown
-            if (r0 != 0) goto L_0x03f3
-            boolean r0 = r12.changingPage
-            if (r0 != 0) goto L_0x03f3
-            boolean r0 = r12.canZoom
-            if (r0 == 0) goto L_0x03d4
-            int r0 = r13.getPointerCount()
-            if (r0 != r6) goto L_0x03d4
-            float r0 = r13.getX(r2)
-            float r4 = r13.getX(r1)
-            float r0 = r0 - r4
-            double r4 = (double) r0
-            float r0 = r13.getY(r2)
-            float r6 = r13.getY(r1)
-            float r0 = r0 - r6
-            double r6 = (double) r0
-            double r4 = java.lang.Math.hypot(r4, r6)
-            float r0 = (float) r4
-            r12.pinchStartDistance = r0
-            float r0 = r12.scale
-            r12.pinchStartScale = r0
-            float r0 = r13.getX(r1)
-            float r4 = r13.getX(r2)
-            float r0 = r0 + r4
-            float r0 = r0 / r3
-            r12.pinchCenterX = r0
-            float r0 = r13.getY(r1)
-            float r13 = r13.getY(r2)
-            float r0 = r0 + r13
-            float r0 = r0 / r3
-            r12.pinchCenterY = r0
-            float r13 = r12.translationX
-            r12.pinchStartX = r13
-            float r13 = r12.translationY
-            r12.pinchStartY = r13
-            r12.zooming = r2
-            r12.moving = r1
-            android.view.VelocityTracker r13 = r12.velocityTracker
-            if (r13 == 0) goto L_0x03f3
-            r13.clear()
-            goto L_0x03f3
-        L_0x03d4:
-            int r0 = r13.getPointerCount()
-            if (r0 != r2) goto L_0x03f3
-            float r0 = r13.getX()
-            r12.moveStartX = r0
-            float r13 = r13.getY()
-            r12.moveStartY = r13
-            r12.dragY = r13
-            r12.draggingDown = r1
-            r12.canDragDown = r2
-            android.view.VelocityTracker r13 = r12.velocityTracker
-            if (r13 == 0) goto L_0x03f3
-            r13.clear()
-        L_0x03f3:
-            return r1
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.processTouchEvent(android.view.MotionEvent):boolean");
-    }
-
-    /* JADX WARNING: Code restructure failed: missing block: B:4:0x0017, code lost:
-        if (r2 > r3) goto L_0x0011;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:9:0x0028, code lost:
-        if (r2 > r3) goto L_0x0022;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    private void checkMinMax(boolean r6) {
-        /*
-            r5 = this;
-            float r0 = r5.translationX
-            float r1 = r5.translationY
-            float r2 = r5.scale
-            r5.updateMinMax(r2)
-            float r2 = r5.translationX
-            float r3 = r5.minX
-            int r4 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-            if (r4 >= 0) goto L_0x0013
-        L_0x0011:
-            r0 = r3
-            goto L_0x001a
-        L_0x0013:
-            float r3 = r5.maxX
-            int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-            if (r2 <= 0) goto L_0x001a
-            goto L_0x0011
-        L_0x001a:
-            float r2 = r5.translationY
-            float r3 = r5.minY
-            int r4 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-            if (r4 >= 0) goto L_0x0024
-        L_0x0022:
-            r1 = r3
-            goto L_0x002b
-        L_0x0024:
-            float r3 = r5.maxY
-            int r2 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-            if (r2 <= 0) goto L_0x002b
-            goto L_0x0022
-        L_0x002b:
-            float r2 = r5.scale
-            r5.animateTo(r2, r0, r1, r6)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.checkMinMax(boolean):void");
-    }
-
-    private void goToNext() {
-        float containerViewWidth = this.scale != 1.0f ? ((((float) getContainerViewWidth()) - this.centerImage.getImageWidth()) / 2.0f) * this.scale : 0.0f;
-        this.switchImageAfterAnimation = 1;
-        animateTo(this.scale, ((this.minX - ((float) getContainerViewWidth())) - containerViewWidth) - ((float) (AndroidUtilities.dp(30.0f) / 2)), this.translationY, false);
-    }
-
-    private void goToPrev() {
-        float containerViewWidth = this.scale != 1.0f ? ((((float) getContainerViewWidth()) - this.centerImage.getImageWidth()) / 2.0f) * this.scale : 0.0f;
-        this.switchImageAfterAnimation = 2;
-        animateTo(this.scale, this.maxX + ((float) getContainerViewWidth()) + containerViewWidth + ((float) (AndroidUtilities.dp(30.0f) / 2)), this.translationY, false);
-    }
-
-    private void animateTo(float f, float f2, float f3, boolean z) {
-        animateTo(f, f2, f3, z, 250);
-    }
-
-    private void animateTo(float f, float f2, float f3, boolean z, int i) {
-        if (this.scale != f || this.translationX != f2 || this.translationY != f3) {
-            this.zoomAnimation = z;
-            this.animateToScale = f;
-            this.animateToX = f2;
-            this.animateToY = f3;
-            this.animationStartTime = System.currentTimeMillis();
-            AnimatorSet animatorSet = new AnimatorSet();
-            this.imageMoveAnimation = animatorSet;
-            animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(this, "animationValue", new float[]{0.0f, 1.0f})});
-            this.imageMoveAnimation.setInterpolator(this.interpolator);
-            this.imageMoveAnimation.setDuration((long) i);
-            this.imageMoveAnimation.addListener(new AnimatorListenerAdapter() {
-                public void onAnimationEnd(Animator animator) {
-                    AnimatorSet unused = ArticleViewer.this.imageMoveAnimation = null;
-                    ArticleViewer.this.photoContainerView.invalidate();
-                }
-            });
-            this.imageMoveAnimation.start();
-        }
-    }
-
-    @Keep
-    public void setAnimationValue(float f) {
-        this.animationValue = f;
-        this.photoContainerView.invalidate();
-    }
-
-    @Keep
-    public float getAnimationValue() {
-        return this.animationValue;
-    }
-
-    /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:100:0x0283  */
-    /* JADX WARNING: Removed duplicated region for block: B:131:0x037f  */
-    /* JADX WARNING: Removed duplicated region for block: B:138:0x03b4  */
-    /* JADX WARNING: Removed duplicated region for block: B:144:? A[RETURN, SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:84:0x01ad  */
-    /* JADX WARNING: Removed duplicated region for block: B:96:0x0278  */
-    /* JADX WARNING: Removed duplicated region for block: B:97:0x027a  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void drawContent(android.graphics.Canvas r19) {
-        /*
-            r18 = this;
-            r0 = r18
-            r1 = r19
-            int r2 = r0.photoAnimationInProgress
-            r3 = 1
-            if (r2 == r3) goto L_0x046b
-            boolean r4 = r0.isPhotoVisible
-            r5 = 2
-            if (r4 != 0) goto L_0x0012
-            if (r2 == r5) goto L_0x0012
-            goto L_0x046b
-        L_0x0012:
-            android.animation.AnimatorSet r2 = r0.imageMoveAnimation
-            r4 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r6 = 0
-            r7 = 0
-            r8 = 1065353216(0x3var_, float:1.0)
-            if (r2 == 0) goto L_0x005b
-            org.telegram.ui.Components.Scroller r2 = r0.scroller
-            boolean r2 = r2.isFinished()
-            if (r2 != 0) goto L_0x0029
-            org.telegram.ui.Components.Scroller r2 = r0.scroller
-            r2.abortAnimation()
-        L_0x0029:
-            float r2 = r0.scale
-            float r9 = r0.animateToScale
-            float r10 = r9 - r2
-            float r11 = r0.animationValue
-            float r10 = r10 * r11
-            float r10 = r10 + r2
-            float r12 = r0.translationX
-            float r13 = r0.animateToX
-            float r13 = r13 - r12
-            float r13 = r13 * r11
-            float r13 = r13 + r12
-            float r14 = r0.translationY
-            float r15 = r0.animateToY
-            float r15 = r15 - r14
-            float r15 = r15 * r11
-            float r14 = r14 + r15
-            int r9 = (r9 > r8 ? 1 : (r9 == r8 ? 0 : -1))
-            if (r9 != 0) goto L_0x0052
-            int r2 = (r2 > r8 ? 1 : (r2 == r8 ? 0 : -1))
-            if (r2 != 0) goto L_0x0052
-            int r2 = (r12 > r6 ? 1 : (r12 == r6 ? 0 : -1))
-            if (r2 != 0) goto L_0x0052
-            r2 = r14
-            goto L_0x0054
-        L_0x0052:
-            r2 = -1082130432(0xffffffffbvar_, float:-1.0)
-        L_0x0054:
-            org.telegram.ui.ArticleViewer$FrameLayoutDrawer r9 = r0.photoContainerView
-            r9.invalidate()
-            goto L_0x00fa
-        L_0x005b:
-            long r9 = r0.animationStartTime
-            r11 = 0
-            int r2 = (r9 > r11 ? 1 : (r9 == r11 ? 0 : -1))
-            if (r2 == 0) goto L_0x0076
-            float r2 = r0.animateToX
-            r0.translationX = r2
-            float r2 = r0.animateToY
-            r0.translationY = r2
-            float r2 = r0.animateToScale
-            r0.scale = r2
-            r0.animationStartTime = r11
-            r0.updateMinMax(r2)
-            r0.zoomAnimation = r7
-        L_0x0076:
-            org.telegram.ui.Components.Scroller r2 = r0.scroller
-            boolean r2 = r2.isFinished()
-            if (r2 != 0) goto L_0x00d1
-            org.telegram.ui.Components.Scroller r2 = r0.scroller
-            boolean r2 = r2.computeScrollOffset()
-            if (r2 == 0) goto L_0x00d1
-            org.telegram.ui.Components.Scroller r2 = r0.scroller
-            int r2 = r2.getStartX()
-            float r2 = (float) r2
-            float r9 = r0.maxX
-            int r2 = (r2 > r9 ? 1 : (r2 == r9 ? 0 : -1))
-            if (r2 >= 0) goto L_0x00a9
-            org.telegram.ui.Components.Scroller r2 = r0.scroller
-            int r2 = r2.getStartX()
-            float r2 = (float) r2
-            float r9 = r0.minX
-            int r2 = (r2 > r9 ? 1 : (r2 == r9 ? 0 : -1))
-            if (r2 <= 0) goto L_0x00a9
-            org.telegram.ui.Components.Scroller r2 = r0.scroller
-            int r2 = r2.getCurrX()
-            float r2 = (float) r2
-            r0.translationX = r2
-        L_0x00a9:
-            org.telegram.ui.Components.Scroller r2 = r0.scroller
-            int r2 = r2.getStartY()
-            float r2 = (float) r2
-            float r9 = r0.maxY
-            int r2 = (r2 > r9 ? 1 : (r2 == r9 ? 0 : -1))
-            if (r2 >= 0) goto L_0x00cc
-            org.telegram.ui.Components.Scroller r2 = r0.scroller
-            int r2 = r2.getStartY()
-            float r2 = (float) r2
-            float r9 = r0.minY
-            int r2 = (r2 > r9 ? 1 : (r2 == r9 ? 0 : -1))
-            if (r2 <= 0) goto L_0x00cc
-            org.telegram.ui.Components.Scroller r2 = r0.scroller
-            int r2 = r2.getCurrY()
-            float r2 = (float) r2
-            r0.translationY = r2
-        L_0x00cc:
-            org.telegram.ui.ArticleViewer$FrameLayoutDrawer r2 = r0.photoContainerView
-            r2.invalidate()
-        L_0x00d1:
-            int r2 = r0.switchImageAfterAnimation
-            if (r2 == 0) goto L_0x00ec
-            if (r2 != r3) goto L_0x00e0
-            org.telegram.ui.-$$Lambda$ArticleViewer$XHT4lMELACLASSNAMETU_NKXLDnneb7DY r2 = new org.telegram.ui.-$$Lambda$ArticleViewer$XHT4lMELACLASSNAMETU_NKXLDnneb7DY
-            r2.<init>()
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)
-            goto L_0x00ea
-        L_0x00e0:
-            if (r2 != r5) goto L_0x00ea
-            org.telegram.ui.-$$Lambda$ArticleViewer$yNePelONui_k3MQsoztkDOfWeqQ r2 = new org.telegram.ui.-$$Lambda$ArticleViewer$yNePelONui_k3MQsoztkDOfWeqQ
-            r2.<init>()
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)
-        L_0x00ea:
-            r0.switchImageAfterAnimation = r7
-        L_0x00ec:
-            float r10 = r0.scale
-            float r14 = r0.translationY
-            float r13 = r0.translationX
-            boolean r2 = r0.moving
-            if (r2 != 0) goto L_0x00f8
-            r2 = r14
-            goto L_0x00fa
-        L_0x00f8:
-            r2 = -1082130432(0xffffffffbvar_, float:-1.0)
-        L_0x00fa:
-            int r9 = r0.photoAnimationInProgress
-            if (r9 == r5) goto L_0x0137
-            float r9 = r0.scale
-            int r9 = (r9 > r8 ? 1 : (r9 == r8 ? 0 : -1))
-            if (r9 != 0) goto L_0x0130
-            int r4 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r4 == 0) goto L_0x0130
-            boolean r4 = r0.zoomAnimation
-            if (r4 != 0) goto L_0x0130
-            int r4 = r18.getContainerViewHeight()
-            float r4 = (float) r4
-            r9 = 1082130432(0x40800000, float:4.0)
-            float r4 = r4 / r9
-            org.telegram.ui.ArticleViewer$PhotoBackgroundDrawable r9 = r0.photoBackgroundDrawable
-            r11 = 1123942400(0x42fe0000, float:127.0)
-            r12 = 1132396544(0x437var_, float:255.0)
-            float r2 = java.lang.Math.abs(r2)
-            float r2 = java.lang.Math.min(r2, r4)
-            float r2 = r2 / r4
-            float r2 = r8 - r2
-            float r2 = r2 * r12
-            float r2 = java.lang.Math.max(r11, r2)
-            int r2 = (int) r2
-            r9.setAlpha(r2)
-            goto L_0x0137
-        L_0x0130:
-            org.telegram.ui.ArticleViewer$PhotoBackgroundDrawable r2 = r0.photoBackgroundDrawable
-            r4 = 255(0xff, float:3.57E-43)
-            r2.setAlpha(r4)
-        L_0x0137:
-            r2 = 0
-            float r4 = r0.scale
-            int r4 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1))
-            if (r4 < 0) goto L_0x016b
-            boolean r4 = r0.zoomAnimation
-            if (r4 != 0) goto L_0x016b
-            boolean r4 = r0.zooming
-            if (r4 != 0) goto L_0x016b
-            float r4 = r0.maxX
-            r9 = 1084227584(0x40a00000, float:5.0)
-            int r11 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            float r11 = (float) r11
-            float r4 = r4 + r11
-            int r4 = (r13 > r4 ? 1 : (r13 == r4 ? 0 : -1))
-            if (r4 <= 0) goto L_0x0157
-            org.telegram.messenger.ImageReceiver r2 = r0.leftImage
-            goto L_0x016b
-        L_0x0157:
-            float r4 = r0.minX
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
-            float r9 = (float) r9
-            float r4 = r4 - r9
-            int r4 = (r13 > r4 ? 1 : (r13 == r4 ? 0 : -1))
-            if (r4 >= 0) goto L_0x0166
-            org.telegram.messenger.ImageReceiver r2 = r0.rightImage
-            goto L_0x016b
-        L_0x0166:
-            org.telegram.ui.Components.GroupedPhotosListView r4 = r0.groupedPhotosListView
-            r4.setMoveProgress(r6)
-        L_0x016b:
-            if (r2 == 0) goto L_0x016f
-            r4 = 1
-            goto L_0x0170
-        L_0x016f:
-            r4 = 0
-        L_0x0170:
-            r0.changingPage = r4
-            org.telegram.messenger.ImageReceiver r4 = r0.rightImage
-            r9 = 1050253722(0x3e99999a, float:0.3)
-            r12 = 1106247680(0x41var_, float:30.0)
-            if (r2 != r4) goto L_0x024a
-            boolean r4 = r0.zoomAnimation
-            if (r4 != 0) goto L_0x01a3
-            float r4 = r0.minX
-            int r15 = (r13 > r4 ? 1 : (r13 == r4 ? 0 : -1))
-            if (r15 >= 0) goto L_0x01a3
-            float r4 = r4 - r13
-            int r15 = r19.getWidth()
-            float r15 = (float) r15
-            float r4 = r4 / r15
-            float r4 = java.lang.Math.min(r8, r4)
-            float r15 = r8 - r4
-            float r15 = r15 * r9
-            int r7 = r19.getWidth()
-            int r7 = -r7
-            int r16 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            int r16 = r16 / 2
-            int r7 = r7 - r16
-            float r7 = (float) r7
-            goto L_0x01a7
-        L_0x01a3:
-            r7 = r13
-            r4 = 1065353216(0x3var_, float:1.0)
-            r15 = 0
-        L_0x01a7:
-            boolean r16 = r2.hasBitmapImage()
-            if (r16 == 0) goto L_0x0209
-            r19.save()
-            int r16 = r18.getContainerViewWidth()
-            int r9 = r16 / 2
-            float r9 = (float) r9
-            int r16 = r18.getContainerViewHeight()
-            int r3 = r16 / 2
-            float r3 = (float) r3
-            r1.translate(r9, r3)
-            int r3 = r19.getWidth()
-            int r9 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            int r9 = r9 / r5
-            int r3 = r3 + r9
-            float r3 = (float) r3
-            float r3 = r3 + r7
-            r1.translate(r3, r6)
-            float r3 = r8 - r15
-            r1.scale(r3, r3)
-            int r3 = r2.getBitmapWidth()
-            int r9 = r2.getBitmapHeight()
-            int r6 = r18.getContainerViewWidth()
-            float r6 = (float) r6
-            float r3 = (float) r3
-            float r6 = r6 / r3
-            int r11 = r18.getContainerViewHeight()
-            float r11 = (float) r11
-            float r9 = (float) r9
-            float r11 = r11 / r9
-            float r6 = java.lang.Math.min(r6, r11)
-            float r3 = r3 * r6
-            int r3 = (int) r3
-            float r9 = r9 * r6
-            int r6 = (int) r9
-            r2.setAlpha(r4)
-            int r9 = -r3
-            int r9 = r9 / r5
-            float r9 = (float) r9
-            int r11 = -r6
-            int r11 = r11 / r5
-            float r11 = (float) r11
-            float r3 = (float) r3
-            float r6 = (float) r6
-            r2.setImageCoords(r9, r11, r3, r6)
-            r2.draw(r1)
-            r19.restore()
-        L_0x0209:
-            org.telegram.ui.Components.GroupedPhotosListView r3 = r0.groupedPhotosListView
-            float r6 = -r4
-            r3.setMoveProgress(r6)
-            r19.save()
-            float r3 = r14 / r10
-            r1.translate(r7, r3)
-            int r3 = r19.getWidth()
-            float r3 = (float) r3
-            float r6 = r0.scale
-            float r6 = r6 + r8
-            float r3 = r3 * r6
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            float r6 = (float) r6
-            float r3 = r3 + r6
-            r6 = 1073741824(0x40000000, float:2.0)
-            float r3 = r3 / r6
-            float r6 = -r14
-            float r6 = r6 / r10
-            r1.translate(r3, r6)
-            org.telegram.ui.ArticleViewer$RadialProgressView[] r3 = r0.radialProgressViews
-            r6 = 1
-            r3 = r3[r6]
-            float r7 = r8 - r15
-            r3.setScale(r7)
-            org.telegram.ui.ArticleViewer$RadialProgressView[] r3 = r0.radialProgressViews
-            r3 = r3[r6]
-            r3.setAlpha(r4)
-            org.telegram.ui.ArticleViewer$RadialProgressView[] r3 = r0.radialProgressViews
-            r3 = r3[r6]
-            r3.onDraw(r1)
-            r19.restore()
-        L_0x024a:
-            boolean r3 = r0.zoomAnimation
-            if (r3 != 0) goto L_0x026a
-            float r3 = r0.maxX
-            int r4 = (r13 > r3 ? 1 : (r13 == r3 ? 0 : -1))
-            if (r4 <= 0) goto L_0x026a
-            float r3 = r13 - r3
-            int r4 = r19.getWidth()
-            float r4 = (float) r4
-            float r3 = r3 / r4
-            float r3 = java.lang.Math.min(r8, r3)
-            r4 = 1050253722(0x3e99999a, float:0.3)
-            float r4 = r4 * r3
-            float r3 = r8 - r3
-            float r6 = r0.maxX
-            goto L_0x026e
-        L_0x026a:
-            r6 = r13
-            r3 = 1065353216(0x3var_, float:1.0)
-            r4 = 0
-        L_0x026e:
-            com.google.android.exoplayer2.ui.AspectRatioFrameLayout r7 = r0.aspectRatioFrameLayout
-            if (r7 == 0) goto L_0x027a
-            int r7 = r7.getVisibility()
-            if (r7 != 0) goto L_0x027a
-            r7 = 1
-            goto L_0x027b
-        L_0x027a:
-            r7 = 0
-        L_0x027b:
-            org.telegram.messenger.ImageReceiver r9 = r0.centerImage
-            boolean r9 = r9.hasBitmapImage()
-            if (r9 == 0) goto L_0x037f
-            r19.save()
-            int r9 = r18.getContainerViewWidth()
-            int r9 = r9 / r5
-            float r9 = (float) r9
-            int r11 = r18.getContainerViewHeight()
-            int r11 = r11 / r5
-            float r11 = (float) r11
-            r1.translate(r9, r11)
-            r1.translate(r6, r14)
-            float r9 = r10 - r4
-            r1.scale(r9, r9)
-            org.telegram.messenger.ImageReceiver r9 = r0.centerImage
-            int r9 = r9.getBitmapWidth()
-            org.telegram.messenger.ImageReceiver r11 = r0.centerImage
-            int r11 = r11.getBitmapHeight()
-            if (r7 == 0) goto L_0x02d9
-            boolean r15 = r0.textureUploaded
-            if (r15 == 0) goto L_0x02d9
-            float r15 = (float) r9
-            float r12 = (float) r11
-            float r15 = r15 / r12
-            android.view.TextureView r12 = r0.videoTextureView
-            int r12 = r12.getMeasuredWidth()
-            float r12 = (float) r12
-            android.view.TextureView r5 = r0.videoTextureView
-            int r5 = r5.getMeasuredHeight()
-            float r5 = (float) r5
-            float r12 = r12 / r5
-            float r15 = r15 - r12
-            float r5 = java.lang.Math.abs(r15)
-            r12 = 1008981770(0x3CLASSNAMEd70a, float:0.01)
-            int r5 = (r5 > r12 ? 1 : (r5 == r12 ? 0 : -1))
-            if (r5 <= 0) goto L_0x02d9
-            android.view.TextureView r5 = r0.videoTextureView
-            int r9 = r5.getMeasuredWidth()
-            android.view.TextureView r5 = r0.videoTextureView
-            int r11 = r5.getMeasuredHeight()
-        L_0x02d9:
-            int r5 = r18.getContainerViewWidth()
-            float r5 = (float) r5
-            float r9 = (float) r9
-            float r5 = r5 / r9
-            int r12 = r18.getContainerViewHeight()
-            float r12 = (float) r12
-            float r11 = (float) r11
-            float r12 = r12 / r11
-            float r5 = java.lang.Math.min(r5, r12)
-            float r9 = r9 * r5
-            int r9 = (int) r9
-            float r11 = r11 * r5
-            int r5 = (int) r11
-            if (r7 == 0) goto L_0x0305
-            boolean r11 = r0.textureUploaded
-            if (r11 == 0) goto L_0x0305
-            boolean r11 = r0.videoCrossfadeStarted
-            if (r11 == 0) goto L_0x0305
-            float r11 = r0.videoCrossfadeAlpha
-            int r11 = (r11 > r8 ? 1 : (r11 == r8 ? 0 : -1))
-            if (r11 == 0) goto L_0x0302
-            goto L_0x0305
-        L_0x0302:
-            r17 = r13
-            goto L_0x031f
-        L_0x0305:
-            org.telegram.messenger.ImageReceiver r11 = r0.centerImage
-            r11.setAlpha(r3)
-            org.telegram.messenger.ImageReceiver r11 = r0.centerImage
-            int r12 = -r9
-            r15 = 2
-            int r12 = r12 / r15
-            float r12 = (float) r12
-            int r8 = -r5
-            int r8 = r8 / r15
-            float r8 = (float) r8
-            float r15 = (float) r9
-            r17 = r13
-            float r13 = (float) r5
-            r11.setImageCoords(r12, r8, r15, r13)
-            org.telegram.messenger.ImageReceiver r8 = r0.centerImage
-            r8.draw(r1)
-        L_0x031f:
-            if (r7 == 0) goto L_0x037b
-            boolean r8 = r0.videoCrossfadeStarted
-            if (r8 != 0) goto L_0x0335
-            boolean r8 = r0.textureUploaded
-            if (r8 == 0) goto L_0x0335
-            r8 = 1
-            r0.videoCrossfadeStarted = r8
-            r8 = 0
-            r0.videoCrossfadeAlpha = r8
-            long r11 = java.lang.System.currentTimeMillis()
-            r0.videoCrossfadeAlphaLastTime = r11
-        L_0x0335:
-            int r8 = -r9
-            r9 = 2
-            int r8 = r8 / r9
-            float r8 = (float) r8
-            int r5 = -r5
-            int r5 = r5 / r9
-            float r5 = (float) r5
-            r1.translate(r8, r5)
-            android.view.TextureView r5 = r0.videoTextureView
-            float r8 = r0.videoCrossfadeAlpha
-            float r8 = r8 * r3
-            r5.setAlpha(r8)
-            com.google.android.exoplayer2.ui.AspectRatioFrameLayout r5 = r0.aspectRatioFrameLayout
-            r5.draw(r1)
-            boolean r5 = r0.videoCrossfadeStarted
-            if (r5 == 0) goto L_0x037b
-            float r5 = r0.videoCrossfadeAlpha
-            r8 = 1065353216(0x3var_, float:1.0)
-            int r5 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1))
-            if (r5 >= 0) goto L_0x037b
-            long r8 = java.lang.System.currentTimeMillis()
-            long r11 = r0.videoCrossfadeAlphaLastTime
-            long r11 = r8 - r11
-            r0.videoCrossfadeAlphaLastTime = r8
-            float r5 = r0.videoCrossfadeAlpha
-            float r8 = (float) r11
-            r9 = 1133903872(0x43960000, float:300.0)
-            float r8 = r8 / r9
-            float r5 = r5 + r8
-            r0.videoCrossfadeAlpha = r5
-            org.telegram.ui.ArticleViewer$FrameLayoutDrawer r5 = r0.photoContainerView
-            r5.invalidate()
-            float r5 = r0.videoCrossfadeAlpha
-            r8 = 1065353216(0x3var_, float:1.0)
-            int r5 = (r5 > r8 ? 1 : (r5 == r8 ? 0 : -1))
-            if (r5 <= 0) goto L_0x037b
-            r0.videoCrossfadeAlpha = r8
-        L_0x037b:
-            r19.restore()
-            goto L_0x0381
-        L_0x037f:
-            r17 = r13
-        L_0x0381:
-            if (r7 != 0) goto L_0x03b0
-            android.widget.FrameLayout r5 = r0.bottomLayout
-            int r5 = r5.getVisibility()
-            if (r5 == 0) goto L_0x03b0
-            r19.save()
-            float r5 = r14 / r10
-            r1.translate(r6, r5)
-            org.telegram.ui.ArticleViewer$RadialProgressView[] r5 = r0.radialProgressViews
-            r6 = 0
-            r5 = r5[r6]
-            r7 = 1065353216(0x3var_, float:1.0)
-            float r8 = r7 - r4
-            r5.setScale(r8)
-            org.telegram.ui.ArticleViewer$RadialProgressView[] r4 = r0.radialProgressViews
-            r4 = r4[r6]
-            r4.setAlpha(r3)
-            org.telegram.ui.ArticleViewer$RadialProgressView[] r4 = r0.radialProgressViews
-            r4 = r4[r6]
-            r4.onDraw(r1)
-            r19.restore()
-        L_0x03b0:
-            org.telegram.messenger.ImageReceiver r4 = r0.leftImage
-            if (r2 != r4) goto L_0x046b
-            boolean r4 = r2.hasBitmapImage()
-            if (r4 == 0) goto L_0x0422
-            r19.save()
-            int r4 = r18.getContainerViewWidth()
-            r5 = 2
-            int r4 = r4 / r5
-            float r4 = (float) r4
-            int r6 = r18.getContainerViewHeight()
-            int r6 = r6 / r5
-            float r5 = (float) r6
-            r1.translate(r4, r5)
-            int r4 = r19.getWidth()
-            float r4 = (float) r4
-            float r5 = r0.scale
-            r6 = 1065353216(0x3var_, float:1.0)
-            float r5 = r5 + r6
-            float r4 = r4 * r5
-            r5 = 1106247680(0x41var_, float:30.0)
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            float r5 = (float) r6
-            float r4 = r4 + r5
-            float r4 = -r4
-            r5 = 1073741824(0x40000000, float:2.0)
-            float r4 = r4 / r5
-            float r4 = r4 + r17
-            r5 = 0
-            r1.translate(r4, r5)
-            int r4 = r2.getBitmapWidth()
-            int r5 = r2.getBitmapHeight()
-            int r6 = r18.getContainerViewWidth()
-            float r6 = (float) r6
-            float r4 = (float) r4
-            float r6 = r6 / r4
-            int r7 = r18.getContainerViewHeight()
-            float r7 = (float) r7
-            float r5 = (float) r5
-            float r7 = r7 / r5
-            float r6 = java.lang.Math.min(r6, r7)
-            float r4 = r4 * r6
-            int r4 = (int) r4
-            float r5 = r5 * r6
-            int r5 = (int) r5
-            r6 = 1065353216(0x3var_, float:1.0)
-            r2.setAlpha(r6)
-            int r6 = -r4
-            r7 = 2
-            int r6 = r6 / r7
-            float r6 = (float) r6
-            int r8 = -r5
-            int r8 = r8 / r7
-            float r7 = (float) r8
-            float r4 = (float) r4
-            float r5 = (float) r5
-            r2.setImageCoords(r6, r7, r4, r5)
-            r2.draw(r1)
-            r19.restore()
-        L_0x0422:
-            org.telegram.ui.Components.GroupedPhotosListView r2 = r0.groupedPhotosListView
-            r4 = 1065353216(0x3var_, float:1.0)
-            float r8 = r4 - r3
-            r2.setMoveProgress(r8)
-            r19.save()
-            float r2 = r14 / r10
-            r13 = r17
-            r1.translate(r13, r2)
-            int r2 = r19.getWidth()
-            float r2 = (float) r2
-            float r3 = r0.scale
-            float r3 = r3 + r4
-            float r2 = r2 * r3
-            r3 = 1106247680(0x41var_, float:30.0)
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            float r3 = (float) r3
-            float r2 = r2 + r3
-            float r2 = -r2
-            r3 = 1073741824(0x40000000, float:2.0)
-            float r2 = r2 / r3
-            float r3 = -r14
-            float r3 = r3 / r10
-            r1.translate(r2, r3)
-            org.telegram.ui.ArticleViewer$RadialProgressView[] r2 = r0.radialProgressViews
-            r3 = 2
-            r2 = r2[r3]
-            r4 = 1065353216(0x3var_, float:1.0)
-            r2.setScale(r4)
-            org.telegram.ui.ArticleViewer$RadialProgressView[] r2 = r0.radialProgressViews
-            r2 = r2[r3]
-            r2.setAlpha(r4)
-            org.telegram.ui.ArticleViewer$RadialProgressView[] r2 = r0.radialProgressViews
-            r2 = r2[r3]
-            r2.onDraw(r1)
-            r19.restore()
-        L_0x046b:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.drawContent(android.graphics.Canvas):void");
-    }
-
-    public /* synthetic */ void lambda$drawContent$50$ArticleViewer() {
-        setImageIndex(this.currentIndex + 1, false);
-    }
-
-    public /* synthetic */ void lambda$drawContent$51$ArticleViewer() {
-        setImageIndex(this.currentIndex - 1, false);
-    }
-
-    private void onActionClick(boolean z) {
-        File mediaFile;
-        TLObject media = getMedia(this.photoAdapter, this.currentIndex);
-        if ((media instanceof TLRPC$Document) && this.currentFileNames[0] != null) {
-            TLRPC$Document tLRPC$Document = (TLRPC$Document) media;
-            File file = null;
-            if (this.currentMedia != null && ((mediaFile = getMediaFile(this.photoAdapter, this.currentIndex)) == null || mediaFile.exists())) {
-                file = mediaFile;
-            }
-            if (file != null) {
-                preparePlayer(file, true);
-            } else if (!z) {
+                iArr[0] = -1;
+                return null;
+            } else if (!(tLObject instanceof TLRPC$Document) || (closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(((TLRPC$Document) tLObject).thumbs, 90)) == null) {
+                return null;
             } else {
-                if (!FileLoader.getInstance(this.currentAccount).isLoadingFile(this.currentFileNames[0])) {
-                    FileLoader.getInstance(this.currentAccount).loadFile(tLRPC$Document, this.photoAdapter.currentPage, 1, 1);
-                } else {
-                    FileLoader.getInstance(this.currentAccount).cancelLoadFile(tLRPC$Document);
+                iArr[0] = closestPhotoSizeWithSize.size;
+                if (iArr[0] == 0) {
+                    iArr[0] = -1;
+                }
+                return closestPhotoSizeWithSize;
+            }
+        }
+
+        public void updateSlideshowCell(TLRPC$PageBlock tLRPC$PageBlock) {
+            int childCount = ArticleViewer.this.listView[0].getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View childAt = ArticleViewer.this.listView[0].getChildAt(i);
+                if (childAt instanceof BlockSlideshowCell) {
+                    BlockSlideshowCell blockSlideshowCell = (BlockSlideshowCell) childAt;
+                    int indexOf = blockSlideshowCell.currentBlock.items.indexOf(tLRPC$PageBlock);
+                    if (indexOf != -1) {
+                        blockSlideshowCell.innerListView.setCurrentItem(indexOf, false);
+                        return;
+                    }
                 }
             }
         }
-    }
 
-    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent2, float f, float f2) {
-        if (this.scale == 1.0f) {
-            return false;
+        public Object getParentObject() {
+            return this.page;
         }
-        this.scroller.abortAnimation();
-        this.scroller.fling(Math.round(this.translationX), Math.round(this.translationY), Math.round(f), Math.round(f2), (int) this.minX, (int) this.maxX, (int) this.minY, (int) this.maxY);
-        this.photoContainerView.postInvalidate();
-        return false;
     }
 
-    public boolean onSingleTapConfirmed(MotionEvent motionEvent) {
-        int access$24700;
-        if (this.discardTap) {
-            return false;
+    private class PageBlocksPhotoViewerProvider extends PhotoViewer.EmptyPhotoViewerProvider {
+        private final List<TLRPC$PageBlock> pageBlocks;
+        private final int[] tempArr = new int[2];
+
+        public PageBlocksPhotoViewerProvider(List<TLRPC$PageBlock> list) {
+            this.pageBlocks = list;
         }
-        AspectRatioFrameLayout aspectRatioFrameLayout2 = this.aspectRatioFrameLayout;
-        boolean z = aspectRatioFrameLayout2 != null && aspectRatioFrameLayout2.getVisibility() == 0;
-        RadialProgressView[] radialProgressViewArr = this.radialProgressViews;
-        if (radialProgressViewArr[0] != null && this.photoContainerView != null && !z && (access$24700 = radialProgressViewArr[0].backgroundState) > 0 && access$24700 <= 3) {
-            float x = motionEvent.getX();
-            float y = motionEvent.getY();
-            if (x >= ((float) (getContainerViewWidth() - AndroidUtilities.dp(100.0f))) / 2.0f && x <= ((float) (getContainerViewWidth() + AndroidUtilities.dp(100.0f))) / 2.0f && y >= ((float) (getContainerViewHeight() - AndroidUtilities.dp(100.0f))) / 2.0f && y <= ((float) (getContainerViewHeight() + AndroidUtilities.dp(100.0f))) / 2.0f) {
-                onActionClick(true);
-                checkProgress(0, true);
-                return true;
-            }
-        }
-        toggleActionBar(!this.isActionBarVisible, true);
-        return true;
-    }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:18:0x0086, code lost:
-        if (r0 > r9) goto L_0x0080;
-     */
-    /* JADX WARNING: Code restructure failed: missing block: B:23:0x0095, code lost:
-        if (r2 > r9) goto L_0x008f;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public boolean onDoubleTap(android.view.MotionEvent r9) {
-        /*
-            r8 = this;
-            boolean r0 = r8.canZoom
-            r1 = 0
-            if (r0 == 0) goto L_0x00a1
-            float r0 = r8.scale
-            r2 = 1065353216(0x3var_, float:1.0)
-            r3 = 0
-            int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r0 != 0) goto L_0x001c
-            float r0 = r8.translationY
-            int r0 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r0 != 0) goto L_0x00a1
-            float r0 = r8.translationX
-            int r0 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r0 == 0) goto L_0x001c
-            goto L_0x00a1
-        L_0x001c:
-            long r4 = r8.animationStartTime
-            r6 = 0
-            int r0 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r0 != 0) goto L_0x00a1
-            int r0 = r8.photoAnimationInProgress
-            if (r0 == 0) goto L_0x002a
-            goto L_0x00a1
-        L_0x002a:
-            float r0 = r8.scale
-            r1 = 1
-            int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r0 != 0) goto L_0x009c
-            float r0 = r9.getX()
-            int r2 = r8.getContainerViewWidth()
-            int r2 = r2 / 2
-            float r2 = (float) r2
-            float r0 = r0 - r2
-            float r2 = r9.getX()
-            int r3 = r8.getContainerViewWidth()
-            int r3 = r3 / 2
-            float r3 = (float) r3
-            float r2 = r2 - r3
-            float r3 = r8.translationX
-            float r2 = r2 - r3
-            float r3 = r8.scale
-            r4 = 1077936128(0x40400000, float:3.0)
-            float r3 = r4 / r3
-            float r2 = r2 * r3
-            float r0 = r0 - r2
-            float r2 = r9.getY()
-            int r3 = r8.getContainerViewHeight()
-            int r3 = r3 / 2
-            float r3 = (float) r3
-            float r2 = r2 - r3
-            float r9 = r9.getY()
-            int r3 = r8.getContainerViewHeight()
-            int r3 = r3 / 2
-            float r3 = (float) r3
-            float r9 = r9 - r3
-            float r3 = r8.translationY
-            float r9 = r9 - r3
-            float r3 = r8.scale
-            float r3 = r4 / r3
-            float r9 = r9 * r3
-            float r2 = r2 - r9
-            r8.updateMinMax(r4)
-            float r9 = r8.minX
-            int r3 = (r0 > r9 ? 1 : (r0 == r9 ? 0 : -1))
-            if (r3 >= 0) goto L_0x0082
-        L_0x0080:
-            r0 = r9
-            goto L_0x0089
-        L_0x0082:
-            float r9 = r8.maxX
-            int r3 = (r0 > r9 ? 1 : (r0 == r9 ? 0 : -1))
-            if (r3 <= 0) goto L_0x0089
-            goto L_0x0080
-        L_0x0089:
-            float r9 = r8.minY
-            int r3 = (r2 > r9 ? 1 : (r2 == r9 ? 0 : -1))
-            if (r3 >= 0) goto L_0x0091
-        L_0x008f:
-            r2 = r9
-            goto L_0x0098
-        L_0x0091:
-            float r9 = r8.maxY
-            int r3 = (r2 > r9 ? 1 : (r2 == r9 ? 0 : -1))
-            if (r3 <= 0) goto L_0x0098
-            goto L_0x008f
-        L_0x0098:
-            r8.animateTo(r4, r0, r2, r1)
-            goto L_0x009f
-        L_0x009c:
-            r8.animateTo(r2, r3, r3, r1)
-        L_0x009f:
-            r8.doubleTap = r1
-        L_0x00a1:
-            return r1
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ArticleViewer.onDoubleTap(android.view.MotionEvent):boolean");
-    }
-
-    private ImageReceiver getImageReceiverView(View view, TLRPC$PageBlock tLRPC$PageBlock, int[] iArr) {
-        ImageReceiver imageReceiverView;
-        ImageReceiver imageReceiverView2;
-        if (view instanceof BlockPhotoCell) {
-            BlockPhotoCell blockPhotoCell = (BlockPhotoCell) view;
-            if (blockPhotoCell.currentBlock != tLRPC$PageBlock) {
+        public PhotoViewer.PlaceProviderObject getPlaceForPhoto(MessageObject messageObject, TLRPC$FileLocation tLRPC$FileLocation, int i, boolean z) {
+            ImageReceiver imageReceiverFromListView;
+            if (i < 0 || i >= this.pageBlocks.size() || (imageReceiverFromListView = getImageReceiverFromListView(ArticleViewer.this.listView[0], this.pageBlocks.get(i), this.tempArr)) == null) {
                 return null;
             }
-            view.getLocationInWindow(iArr);
-            return blockPhotoCell.imageView;
-        } else if (view instanceof BlockVideoCell) {
-            BlockVideoCell blockVideoCell = (BlockVideoCell) view;
-            if (blockVideoCell.currentBlock != tLRPC$PageBlock) {
-                return null;
-            }
-            view.getLocationInWindow(iArr);
-            return blockVideoCell.imageView;
-        } else if (view instanceof BlockCollageCell) {
-            ImageReceiver imageReceiverFromListView = getImageReceiverFromListView(((BlockCollageCell) view).innerListView, tLRPC$PageBlock, iArr);
-            if (imageReceiverFromListView != null) {
-                return imageReceiverFromListView;
+            PhotoViewer.PlaceProviderObject placeProviderObject = new PhotoViewer.PlaceProviderObject();
+            int[] iArr = this.tempArr;
+            placeProviderObject.viewX = iArr[0];
+            placeProviderObject.viewY = iArr[1];
+            placeProviderObject.parentView = ArticleViewer.this.listView[0];
+            placeProviderObject.imageReceiver = imageReceiverFromListView;
+            placeProviderObject.thumb = imageReceiverFromListView.getBitmapSafe();
+            placeProviderObject.radius = imageReceiverFromListView.getRoundRadius();
+            placeProviderObject.clipTopAddition = ArticleViewer.this.currentHeaderHeight;
+            return placeProviderObject;
+        }
+
+        private ImageReceiver getImageReceiverFromListView(ViewGroup viewGroup, TLRPC$PageBlock tLRPC$PageBlock, int[] iArr) {
+            int childCount = viewGroup.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                ImageReceiver imageReceiverView = getImageReceiverView(viewGroup.getChildAt(i), tLRPC$PageBlock, iArr);
+                if (imageReceiverView != null) {
+                    return imageReceiverView;
+                }
             }
             return null;
-        } else if (view instanceof BlockSlideshowCell) {
-            ImageReceiver imageReceiverFromListView2 = getImageReceiverFromListView(((BlockSlideshowCell) view).innerListView, tLRPC$PageBlock, iArr);
-            if (imageReceiverFromListView2 != null) {
-                return imageReceiverFromListView2;
-            }
-            return null;
-        } else if (view instanceof BlockListItemCell) {
-            BlockListItemCell blockListItemCell = (BlockListItemCell) view;
-            if (blockListItemCell.blockLayout == null || (imageReceiverView2 = getImageReceiverView(blockListItemCell.blockLayout.itemView, tLRPC$PageBlock, iArr)) == null) {
-                return null;
-            }
-            return imageReceiverView2;
-        } else if (!(view instanceof BlockOrderedListItemCell)) {
-            return null;
-        } else {
-            BlockOrderedListItemCell blockOrderedListItemCell = (BlockOrderedListItemCell) view;
-            if (blockOrderedListItemCell.blockLayout == null || (imageReceiverView = getImageReceiverView(blockOrderedListItemCell.blockLayout.itemView, tLRPC$PageBlock, iArr)) == null) {
-                return null;
-            }
-            return imageReceiverView;
         }
-    }
 
-    private ImageReceiver getImageReceiverFromListView(ViewGroup viewGroup, TLRPC$PageBlock tLRPC$PageBlock, int[] iArr) {
-        int childCount = viewGroup.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            ImageReceiver imageReceiverView = getImageReceiverView(viewGroup.getChildAt(i), tLRPC$PageBlock, iArr);
-            if (imageReceiverView != null) {
+        private ImageReceiver getImageReceiverView(View view, TLRPC$PageBlock tLRPC$PageBlock, int[] iArr) {
+            ImageReceiver imageReceiverView;
+            ImageReceiver imageReceiverView2;
+            if (view instanceof BlockPhotoCell) {
+                BlockPhotoCell blockPhotoCell = (BlockPhotoCell) view;
+                if (blockPhotoCell.currentBlock != tLRPC$PageBlock) {
+                    return null;
+                }
+                view.getLocationInWindow(iArr);
+                return blockPhotoCell.imageView;
+            } else if (view instanceof BlockVideoCell) {
+                BlockVideoCell blockVideoCell = (BlockVideoCell) view;
+                if (blockVideoCell.currentBlock != tLRPC$PageBlock) {
+                    return null;
+                }
+                view.getLocationInWindow(iArr);
+                return blockVideoCell.imageView;
+            } else if (view instanceof BlockCollageCell) {
+                ImageReceiver imageReceiverFromListView = getImageReceiverFromListView(((BlockCollageCell) view).innerListView, tLRPC$PageBlock, iArr);
+                if (imageReceiverFromListView != null) {
+                    return imageReceiverFromListView;
+                }
+                return null;
+            } else if (view instanceof BlockSlideshowCell) {
+                ImageReceiver imageReceiverFromListView2 = getImageReceiverFromListView(((BlockSlideshowCell) view).innerListView, tLRPC$PageBlock, iArr);
+                if (imageReceiverFromListView2 != null) {
+                    return imageReceiverFromListView2;
+                }
+                return null;
+            } else if (view instanceof BlockListItemCell) {
+                BlockListItemCell blockListItemCell = (BlockListItemCell) view;
+                if (blockListItemCell.blockLayout == null || (imageReceiverView2 = getImageReceiverView(blockListItemCell.blockLayout.itemView, tLRPC$PageBlock, iArr)) == null) {
+                    return null;
+                }
+                return imageReceiverView2;
+            } else if (!(view instanceof BlockOrderedListItemCell)) {
+                return null;
+            } else {
+                BlockOrderedListItemCell blockOrderedListItemCell = (BlockOrderedListItemCell) view;
+                if (blockOrderedListItemCell.blockLayout == null || (imageReceiverView = getImageReceiverView(blockOrderedListItemCell.blockLayout.itemView, tLRPC$PageBlock, iArr)) == null) {
+                    return null;
+                }
                 return imageReceiverView;
             }
         }
-        return null;
-    }
-
-    private PlaceProviderObject getPlaceForPhoto(TLRPC$PageBlock tLRPC$PageBlock) {
-        ImageReceiver imageReceiverFromListView = getImageReceiverFromListView(this.listView[0], tLRPC$PageBlock, this.coords);
-        if (imageReceiverFromListView == null) {
-            return null;
-        }
-        PlaceProviderObject placeProviderObject = new PlaceProviderObject();
-        int[] iArr = this.coords;
-        placeProviderObject.viewX = iArr[0];
-        placeProviderObject.viewY = iArr[1];
-        placeProviderObject.parentView = this.listView[0];
-        placeProviderObject.imageReceiver = imageReceiverFromListView;
-        placeProviderObject.thumb = imageReceiverFromListView.getBitmapSafe();
-        placeProviderObject.radius = imageReceiverFromListView.getRoundRadius();
-        placeProviderObject.clipTopAddition = this.currentHeaderHeight;
-        return placeProviderObject;
     }
 }

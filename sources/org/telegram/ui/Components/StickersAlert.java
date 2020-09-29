@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -17,6 +18,9 @@ import android.text.Selection;
 import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
+import android.transition.Transition;
+import android.transition.TransitionManager;
+import android.transition.TransitionValues;
 import android.util.Property;
 import android.util.SparseArray;
 import android.view.MotionEvent;
@@ -76,6 +80,7 @@ import org.telegram.ui.Cells.StickerEmojiCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.Bulletin;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.StickersAlert;
 import org.telegram.ui.ContentPreviewViewer;
 
 public class StickersAlert extends BottomSheet implements NotificationCenter.NotificationCenterDelegate {
@@ -175,7 +180,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     /* access modifiers changed from: private */
     public ArrayList<TLRPC$StickerSetCovered> stickerSetCovereds;
     private RecyclerListView.OnItemClickListener stickersOnItemClickListener;
-    private TextView titleTextView;
+    /* access modifiers changed from: private */
+    public TextView titleTextView;
     private Pattern urlPattern;
 
     public interface StickersAlertDelegate {
@@ -407,6 +413,51 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     public /* synthetic */ void lambda$null$3$StickersAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, MediaDataController mediaDataController) {
         this.reqId = 0;
         if (tLRPC$TL_error == null) {
+            AnonymousClass2 r3 = new Transition() {
+                public void captureStartValues(TransitionValues transitionValues) {
+                    transitionValues.values.put("start", Boolean.TRUE);
+                    transitionValues.values.put("offset", Integer.valueOf(StickersAlert.this.containerView.getTop() + StickersAlert.this.scrollOffsetY));
+                }
+
+                public void captureEndValues(TransitionValues transitionValues) {
+                    transitionValues.values.put("start", Boolean.FALSE);
+                    transitionValues.values.put("offset", Integer.valueOf(StickersAlert.this.containerView.getTop() + StickersAlert.this.scrollOffsetY));
+                }
+
+                public Animator createAnimator(ViewGroup viewGroup, TransitionValues transitionValues, TransitionValues transitionValues2) {
+                    int access$400 = StickersAlert.this.scrollOffsetY;
+                    int intValue = ((Integer) transitionValues.values.get("offset")).intValue() - ((Integer) transitionValues2.values.get("offset")).intValue();
+                    ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+                    ofFloat.setDuration(250);
+                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(intValue, access$400) {
+                        public final /* synthetic */ int f$1;
+                        public final /* synthetic */ int f$2;
+
+                        {
+                            this.f$1 = r2;
+                            this.f$2 = r3;
+                        }
+
+                        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            StickersAlert.AnonymousClass2.this.lambda$createAnimator$0$StickersAlert$2(this.f$1, this.f$2, valueAnimator);
+                        }
+                    });
+                    return ofFloat;
+                }
+
+                public /* synthetic */ void lambda$createAnimator$0$StickersAlert$2(int i, int i2, ValueAnimator valueAnimator) {
+                    float animatedFraction = valueAnimator.getAnimatedFraction();
+                    StickersAlert.this.gridView.setAlpha(animatedFraction);
+                    StickersAlert.this.titleTextView.setAlpha(animatedFraction);
+                    if (i != 0) {
+                        int i3 = (int) (((float) i) * (1.0f - animatedFraction));
+                        StickersAlert.this.setScrollOffsetY(i2 + i3);
+                        StickersAlert.this.gridView.setTranslationY((float) i3);
+                    }
+                }
+            };
+            r3.addTarget(this.containerView);
+            TransitionManager.beginDelayedTransition(this.container, r3);
             this.optionsButton.setVisibility(0);
             TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = (TLRPC$TL_messages_stickerSet) tLObject;
             this.stickerSet = tLRPC$TL_messages_stickerSet;
@@ -423,7 +474,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
 
     private void init(Context context) {
         Context context2 = context;
-        AnonymousClass2 r2 = new FrameLayout(context2) {
+        AnonymousClass3 r2 = new FrameLayout(context2) {
             private boolean fullHeight;
             private int lastNotifyWidth;
             private RectF rect = new RectF();
@@ -700,7 +751,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
                 L_0x018e:
                     return
                 */
-                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickersAlert.AnonymousClass2.onDraw(android.graphics.Canvas):void");
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickersAlert.AnonymousClass3.onDraw(android.graphics.Canvas):void");
             }
         };
         this.containerView = r2;
@@ -716,7 +767,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         this.shadow[0].setVisibility(4);
         this.shadow[0].setTag(1);
         this.containerView.addView(this.shadow[0], layoutParams);
-        AnonymousClass3 r22 = new RecyclerListView(context2) {
+        AnonymousClass4 r22 = new RecyclerListView(context2) {
             public boolean onInterceptTouchEvent(MotionEvent motionEvent) {
                 boolean onInterceptTouchEvent = ContentPreviewViewer.getInstance().onInterceptTouchEvent(motionEvent, StickersAlert.this.gridView, 0, StickersAlert.this.previewDelegate);
                 if (super.onInterceptTouchEvent(motionEvent) || onInterceptTouchEvent) {
@@ -734,7 +785,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         this.gridView = r22;
         r22.setTag(14);
         RecyclerListView recyclerListView = this.gridView;
-        AnonymousClass4 r6 = new GridLayoutManager(getContext(), 5) {
+        AnonymousClass5 r6 = new GridLayoutManager(getContext(), 5) {
             /* access modifiers changed from: protected */
             public boolean isLayoutRTL() {
                 return StickersAlert.this.stickerSetCovereds != null && LocaleController.isRTL;
@@ -785,7 +836,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         this.stickersOnItemClickListener = r23;
         this.gridView.setOnItemClickListener((RecyclerListView.OnItemClickListener) r23);
         this.containerView.addView(this.gridView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 48.0f, 0.0f, 48.0f));
-        AnonymousClass8 r24 = new FrameLayout(context2) {
+        AnonymousClass9 r24 = new FrameLayout(context2) {
             public void requestLayout() {
                 if (!StickersAlert.this.ignoreLayout) {
                     super.requestLayout();
@@ -1069,7 +1120,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             if (r7 == r8) goto L_0x0060
             int r5 = r5 + 1
         L_0x0060:
-            org.telegram.ui.Components.StickersAlert$9 r7 = new org.telegram.ui.Components.StickersAlert$9     // Catch:{ Exception -> 0x0079 }
+            org.telegram.ui.Components.StickersAlert$10 r7 = new org.telegram.ui.Components.StickersAlert$10     // Catch:{ Exception -> 0x0079 }
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r8 = r10.stickerSet     // Catch:{ Exception -> 0x0079 }
             org.telegram.tgnet.TLRPC$StickerSet r8 = r8.set     // Catch:{ Exception -> 0x0079 }
             java.lang.String r8 = r8.title     // Catch:{ Exception -> 0x0079 }
@@ -1116,7 +1167,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r10.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r1 = r0.set
             boolean r1 = r1.masks
-            r6 = 2131626675(0x7f0e0ab3, float:1.8880593E38)
+            r6 = 2131626719(0x7f0e0adf, float:1.8880682E38)
             java.lang.String r7 = "RemoveStickersCount"
             if (r1 == 0) goto L_0x00d1
             java.lang.Object[] r1 = new java.lang.Object[r5]
@@ -1182,7 +1233,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             r0.notifyDataSetChanged()
             goto L_0x0160
         L_0x014b:
-            r0 = 2131624816(0x7f0e0370, float:1.8876822E38)
+            r0 = 2131624827(0x7f0e037b, float:1.8876845E38)
             java.lang.String r2 = "Close"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             java.lang.String r0 = r0.toUpperCase()
@@ -1273,38 +1324,35 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     @SuppressLint({"NewApi"})
     public void updateLayout() {
         if (this.gridView.getChildCount() <= 0) {
-            RecyclerListView recyclerListView = this.gridView;
-            int paddingTop = recyclerListView.getPaddingTop();
-            this.scrollOffsetY = paddingTop;
-            recyclerListView.setTopGlowOffset(paddingTop);
-            if (this.stickerSetCovereds == null) {
-                this.titleTextView.setTranslationY((float) this.scrollOffsetY);
-                this.optionsButton.setTranslationY((float) this.scrollOffsetY);
-                this.shadow[0].setTranslationY((float) this.scrollOffsetY);
-            }
-            this.containerView.invalidate();
+            setScrollOffsetY(this.gridView.getPaddingTop());
             return;
         }
+        int i = 0;
         View childAt = this.gridView.getChildAt(0);
         RecyclerListView.Holder holder = (RecyclerListView.Holder) this.gridView.findContainingViewHolder(childAt);
         int top = childAt.getTop();
         if (top < 0 || holder == null || holder.getAdapterPosition() != 0) {
             runShadowAnimation(0, true);
-            top = 0;
         } else {
             runShadowAnimation(0, false);
+            i = top;
         }
-        if (this.scrollOffsetY != top) {
-            RecyclerListView recyclerListView2 = this.gridView;
-            this.scrollOffsetY = top;
-            recyclerListView2.setTopGlowOffset(top);
-            if (this.stickerSetCovereds == null) {
-                this.titleTextView.setTranslationY((float) this.scrollOffsetY);
-                this.optionsButton.setTranslationY((float) this.scrollOffsetY);
-                this.shadow[0].setTranslationY((float) this.scrollOffsetY);
-            }
-            this.containerView.invalidate();
+        if (this.scrollOffsetY != i) {
+            setScrollOffsetY(i);
         }
+    }
+
+    /* access modifiers changed from: private */
+    public void setScrollOffsetY(int i) {
+        this.scrollOffsetY = i;
+        this.gridView.setTopGlowOffset(i);
+        if (this.stickerSetCovereds == null) {
+            float f = (float) i;
+            this.titleTextView.setTranslationY(f);
+            this.optionsButton.setTranslationY(f);
+            this.shadow[0].setTranslationY(f);
+        }
+        this.containerView.invalidate();
     }
 
     private void hidePreview() {

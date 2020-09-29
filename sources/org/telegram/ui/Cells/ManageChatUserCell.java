@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.UserConfig;
-import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$FileLocation;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.SimpleTextView;
@@ -25,7 +24,7 @@ public class ManageChatUserCell extends FrameLayout {
     private BackupImageView avatarImageView;
     private int currentAccount = UserConfig.selectedAccount;
     private CharSequence currentName;
-    private TLObject currentObject;
+    private Object currentObject;
     private CharSequence currrntStatus;
     private ManageChatUserCellDelegate delegate;
     private boolean isAdmin;
@@ -91,12 +90,12 @@ public class ManageChatUserCell extends FrameLayout {
         this.delegate.onOptionsButtonCheck(this, true);
     }
 
-    public void setData(TLObject tLObject, CharSequence charSequence, CharSequence charSequence2, boolean z) {
+    public void setData(Object obj, CharSequence charSequence, CharSequence charSequence2, boolean z) {
         float f;
-        TLObject tLObject2 = tLObject;
+        Object obj2 = obj;
         CharSequence charSequence3 = charSequence2;
         boolean z2 = z;
-        if (tLObject2 == null) {
+        if (obj2 == null) {
             this.currrntStatus = null;
             this.currentName = null;
             this.currentObject = null;
@@ -107,7 +106,7 @@ public class ManageChatUserCell extends FrameLayout {
         }
         this.currrntStatus = charSequence3;
         this.currentName = charSequence;
-        this.currentObject = tLObject2;
+        this.currentObject = obj2;
         if (this.optionsButton != null) {
             boolean onOptionsButtonCheck = this.delegate.onOptionsButtonCheck(this, false);
             this.optionsButton.setVisibility(onOptionsButtonCheck ? 0 : 4);
@@ -141,9 +140,9 @@ public class ManageChatUserCell extends FrameLayout {
     }
 
     public int getUserId() {
-        TLObject tLObject = this.currentObject;
-        if (tLObject instanceof TLRPC$User) {
-            return ((TLRPC$User) tLObject).id;
+        Object obj = this.currentObject;
+        if (obj instanceof TLRPC$User) {
+            return ((TLRPC$User) obj).id;
         }
         return 0;
     }
@@ -166,15 +165,15 @@ public class ManageChatUserCell extends FrameLayout {
     public void update(int r13) {
         /*
             r12 = this;
-            org.telegram.tgnet.TLObject r0 = r12.currentObject
+            java.lang.Object r0 = r12.currentObject
             if (r0 != 0) goto L_0x0005
             return
         L_0x0005:
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$User
             java.lang.String r2 = "50_50"
             r3 = 0
-            r4 = 0
-            r5 = 1
+            r4 = 1
+            r5 = 0
             if (r1 == 0) goto L_0x0151
             org.telegram.tgnet.TLRPC$User r0 = (org.telegram.tgnet.TLRPC$User) r0
             org.telegram.tgnet.TLRPC$UserProfilePhoto r1 = r0.photo
@@ -182,7 +181,7 @@ public class ManageChatUserCell extends FrameLayout {
             org.telegram.tgnet.TLRPC$FileLocation r1 = r1.photo_small
             goto L_0x0018
         L_0x0017:
-            r1 = r4
+            r1 = r5
         L_0x0018:
             if (r13 == 0) goto L_0x0075
             r6 = r13 & 2
@@ -231,7 +230,7 @@ public class ManageChatUserCell extends FrameLayout {
             if (r7 != 0) goto L_0x0070
             java.lang.String r7 = r12.lastName
             if (r7 == 0) goto L_0x0070
-            r13 = r13 & r5
+            r13 = r13 & r4
             if (r13 == 0) goto L_0x0070
             java.lang.String r13 = org.telegram.messenger.UserObject.getUserName(r0)
             java.lang.String r7 = r12.lastName
@@ -239,30 +238,30 @@ public class ManageChatUserCell extends FrameLayout {
             if (r7 != 0) goto L_0x0071
             goto L_0x0072
         L_0x0070:
-            r13 = r4
+            r13 = r5
         L_0x0071:
-            r5 = r6
+            r4 = r6
         L_0x0072:
-            if (r5 != 0) goto L_0x0076
+            if (r4 != 0) goto L_0x0076
             return
         L_0x0075:
-            r13 = r4
+            r13 = r5
         L_0x0076:
-            org.telegram.ui.Components.AvatarDrawable r5 = r12.avatarDrawable
-            r5.setInfo((org.telegram.tgnet.TLRPC$User) r0)
-            org.telegram.tgnet.TLRPC$UserStatus r5 = r0.status
-            if (r5 == 0) goto L_0x0084
-            int r5 = r5.expires
-            r12.lastStatus = r5
+            org.telegram.ui.Components.AvatarDrawable r4 = r12.avatarDrawable
+            r4.setInfo((org.telegram.tgnet.TLRPC$User) r0)
+            org.telegram.tgnet.TLRPC$UserStatus r4 = r0.status
+            if (r4 == 0) goto L_0x0084
+            int r4 = r4.expires
+            r12.lastStatus = r4
             goto L_0x0086
         L_0x0084:
             r12.lastStatus = r3
         L_0x0086:
-            java.lang.CharSequence r5 = r12.currentName
-            if (r5 == 0) goto L_0x0092
-            r12.lastName = r4
+            java.lang.CharSequence r4 = r12.currentName
+            if (r4 == 0) goto L_0x0092
+            r12.lastName = r5
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.nameTextView
-            r13.setText(r5)
+            r13.setText(r4)
             goto L_0x009f
         L_0x0092:
             if (r13 != 0) goto L_0x0098
@@ -294,14 +293,14 @@ public class ManageChatUserCell extends FrameLayout {
             goto L_0x00d6
         L_0x00c7:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131624511(0x7f0e023f, float:1.8876204E38)
+            r4 = 2131624518(0x7f0e0246, float:1.8876218E38)
             java.lang.String r5 = "BotStatusCantRead"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
             goto L_0x0142
         L_0x00d6:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131624512(0x7f0e0240, float:1.8876206E38)
+            r4 = 2131624519(0x7f0e0247, float:1.887622E38)
             java.lang.String r5 = "BotStatusRead"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
@@ -342,7 +341,7 @@ public class ManageChatUserCell extends FrameLayout {
             int r4 = r12.statusOnlineColor
             r13.setTextColor(r4)
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131626141(0x7f0e089d, float:1.887951E38)
+            r4 = 2131626182(0x7f0e08c6, float:1.8879593E38)
             java.lang.String r5 = "Online"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
@@ -352,17 +351,17 @@ public class ManageChatUserCell extends FrameLayout {
             org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForUser(r0, r3)
             org.telegram.ui.Components.AvatarDrawable r3 = r12.avatarDrawable
             r13.setImage((org.telegram.messenger.ImageLocation) r1, (java.lang.String) r2, (android.graphics.drawable.Drawable) r3, (java.lang.Object) r0)
-            goto L_0x022f
+            goto L_0x0270
         L_0x0151:
             boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$Chat
-            if (r1 == 0) goto L_0x022f
+            if (r1 == 0) goto L_0x024a
             org.telegram.tgnet.TLRPC$Chat r0 = (org.telegram.tgnet.TLRPC$Chat) r0
             org.telegram.tgnet.TLRPC$ChatPhoto r1 = r0.photo
             if (r1 == 0) goto L_0x015e
             org.telegram.tgnet.TLRPC$FileLocation r1 = r1.photo_small
             goto L_0x015f
         L_0x015e:
-            r1 = r4
+            r1 = r5
         L_0x015f:
             if (r13 == 0) goto L_0x01a3
             r6 = r13 & 2
@@ -396,29 +395,29 @@ public class ManageChatUserCell extends FrameLayout {
             if (r7 != 0) goto L_0x019e
             java.lang.String r7 = r12.lastName
             if (r7 == 0) goto L_0x019e
-            r13 = r13 & r5
+            r13 = r13 & r4
             if (r13 == 0) goto L_0x019e
             java.lang.String r13 = r0.title
             boolean r7 = r13.equals(r7)
             if (r7 != 0) goto L_0x019f
             goto L_0x01a0
         L_0x019e:
-            r13 = r4
+            r13 = r5
         L_0x019f:
-            r5 = r6
+            r4 = r6
         L_0x01a0:
-            if (r5 != 0) goto L_0x01a4
+            if (r4 != 0) goto L_0x01a4
             return
         L_0x01a3:
-            r13 = r4
+            r13 = r5
         L_0x01a4:
-            org.telegram.ui.Components.AvatarDrawable r5 = r12.avatarDrawable
-            r5.setInfo((org.telegram.tgnet.TLRPC$Chat) r0)
-            java.lang.CharSequence r5 = r12.currentName
-            if (r5 == 0) goto L_0x01b5
-            r12.lastName = r4
+            org.telegram.ui.Components.AvatarDrawable r4 = r12.avatarDrawable
+            r4.setInfo((org.telegram.tgnet.TLRPC$Chat) r0)
+            java.lang.CharSequence r4 = r12.currentName
+            if (r4 == 0) goto L_0x01b5
+            r12.lastName = r5
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.nameTextView
-            r13.setText(r5)
+            r13.setText(r4)
             goto L_0x01c0
         L_0x01b5:
             if (r13 != 0) goto L_0x01b9
@@ -436,50 +435,81 @@ public class ManageChatUserCell extends FrameLayout {
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
             java.lang.CharSequence r4 = r12.currrntStatus
             r13.setText(r4)
-            goto L_0x0222
+            goto L_0x023c
         L_0x01d3:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
             int r4 = r12.statusColor
             r13.setTextColor(r4)
             int r13 = r0.participants_count
-            if (r13 == 0) goto L_0x01ea
-            org.telegram.ui.ActionBar.SimpleTextView r4 = r12.statusTextView
-            java.lang.String r5 = "Members"
-            java.lang.String r13 = org.telegram.messenger.LocaleController.formatPluralString(r5, r13)
-            r4.setText(r13)
-            goto L_0x0222
-        L_0x01ea:
-            boolean r13 = r0.has_geo
-            if (r13 == 0) goto L_0x01fd
+            if (r13 == 0) goto L_0x0204
+            boolean r13 = org.telegram.messenger.ChatObject.isChannel(r0)
+            if (r13 == 0) goto L_0x01f6
+            boolean r13 = r0.megagroup
+            if (r13 != 0) goto L_0x01f6
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131625792(0x7f0e0740, float:1.8878802E38)
+            int r4 = r0.participants_count
+            java.lang.String r5 = "Subscribers"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.formatPluralString(r5, r4)
+            r13.setText(r4)
+            goto L_0x023c
+        L_0x01f6:
+            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
+            int r4 = r0.participants_count
+            java.lang.String r5 = "Members"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.formatPluralString(r5, r4)
+            r13.setText(r4)
+            goto L_0x023c
+        L_0x0204:
+            boolean r13 = r0.has_geo
+            if (r13 == 0) goto L_0x0217
+            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
+            r4 = 2131625817(0x7f0e0759, float:1.8878853E38)
             java.lang.String r5 = "MegaLocation"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
-            goto L_0x0222
-        L_0x01fd:
+            goto L_0x023c
+        L_0x0217:
             java.lang.String r13 = r0.username
             boolean r13 = android.text.TextUtils.isEmpty(r13)
-            if (r13 == 0) goto L_0x0214
+            if (r13 == 0) goto L_0x022e
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131625793(0x7f0e0741, float:1.8878804E38)
+            r4 = 2131625818(0x7f0e075a, float:1.8878855E38)
             java.lang.String r5 = "MegaPrivate"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
-            goto L_0x0222
-        L_0x0214:
+            goto L_0x023c
+        L_0x022e:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131625796(0x7f0e0744, float:1.887881E38)
+            r4 = 2131625821(0x7f0e075d, float:1.887886E38)
             java.lang.String r5 = "MegaPublic"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
-        L_0x0222:
+        L_0x023c:
             r12.lastAvatar = r1
             org.telegram.ui.Components.BackupImageView r13 = r12.avatarImageView
             org.telegram.messenger.ImageLocation r1 = org.telegram.messenger.ImageLocation.getForChat(r0, r3)
             org.telegram.ui.Components.AvatarDrawable r3 = r12.avatarDrawable
             r13.setImage((org.telegram.messenger.ImageLocation) r1, (java.lang.String) r2, (android.graphics.drawable.Drawable) r3, (java.lang.Object) r0)
-        L_0x022f:
+            goto L_0x0270
+        L_0x024a:
+            boolean r13 = r0 instanceof java.lang.Integer
+            if (r13 == 0) goto L_0x0270
+            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.nameTextView
+            java.lang.CharSequence r0 = r12.currentName
+            r13.setText(r0)
+            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
+            int r0 = r12.statusColor
+            r13.setTextColor(r0)
+            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
+            java.lang.CharSequence r0 = r12.currrntStatus
+            r13.setText(r0)
+            org.telegram.ui.Components.AvatarDrawable r13 = r12.avatarDrawable
+            r0 = 3
+            r13.setAvatarType(r0)
+            org.telegram.ui.Components.BackupImageView r13 = r12.avatarImageView
+            org.telegram.ui.Components.AvatarDrawable r0 = r12.avatarDrawable
+            r13.setImage(r5, r2, r0)
+        L_0x0270:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ManageChatUserCell.update(int):void");
@@ -493,7 +523,7 @@ public class ManageChatUserCell extends FrameLayout {
         this.delegate = manageChatUserCellDelegate;
     }
 
-    public TLObject getCurrentObject() {
+    public Object getCurrentObject() {
         return this.currentObject;
     }
 

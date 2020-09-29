@@ -12,6 +12,7 @@ public abstract class TLRPC$DecryptedMessage extends TLObject {
     public byte[] random_bytes;
     public long random_id;
     public long reply_to_random_id;
+    public boolean silent;
     public int ttl;
     public String via_bot_name;
 

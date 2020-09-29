@@ -23,8 +23,10 @@ import org.telegram.messenger.UserObject;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$Message;
-import org.telegram.tgnet.TLRPC$MessageFwdHeader;
+import org.telegram.tgnet.TLRPC$Peer;
 import org.telegram.tgnet.TLRPC$TL_channelLocation;
+import org.telegram.tgnet.TLRPC$TL_peerChannel;
+import org.telegram.tgnet.TLRPC$TL_peerChat;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
@@ -131,15 +133,18 @@ public class SharingLiveLocationCell extends FrameLayout {
 
     public void setDialog(MessageObject messageObject, Location location2) {
         String str;
-        int i = messageObject.messageOwner.from_id;
+        int i;
+        int fromChatId = messageObject.getFromChatId();
         if (messageObject.isForwarded()) {
-            TLRPC$MessageFwdHeader tLRPC$MessageFwdHeader = messageObject.messageOwner.fwd_from;
-            int i2 = tLRPC$MessageFwdHeader.channel_id;
-            if (i2 != 0) {
-                i = -i2;
+            TLRPC$Peer tLRPC$Peer = messageObject.messageOwner.fwd_from.from_id;
+            if (tLRPC$Peer instanceof TLRPC$TL_peerChannel) {
+                i = tLRPC$Peer.channel_id;
+            } else if (tLRPC$Peer instanceof TLRPC$TL_peerChat) {
+                i = tLRPC$Peer.chat_id;
             } else {
-                i = tLRPC$MessageFwdHeader.from_id;
+                fromChatId = tLRPC$Peer.user_id;
             }
+            fromChatId = -i;
         }
         this.currentAccount = messageObject.currentAccount;
         String str2 = !TextUtils.isEmpty(messageObject.messageOwner.media.address) ? messageObject.messageOwner.media.address : null;
@@ -155,15 +160,15 @@ public class SharingLiveLocationCell extends FrameLayout {
         } else {
             String str3 = "";
             this.avatarDrawable = null;
-            if (i > 0) {
-                TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(i));
+            if (fromChatId > 0) {
+                TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(fromChatId));
                 if (user != null) {
                     this.avatarDrawable = new AvatarDrawable(user);
                     str3 = UserObject.getUserName(user);
                     this.avatarImageView.setImage(ImageLocation.getForUser(user, false), "50_50", (Drawable) this.avatarDrawable, (Object) user);
                 }
             } else {
-                TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-i));
+                TLRPC$Chat chat = MessagesController.getInstance(this.currentAccount).getChat(Integer.valueOf(-fromChatId));
                 if (chat != null) {
                     this.avatarDrawable = new AvatarDrawable(chat);
                     str3 = chat.title;

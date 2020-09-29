@@ -1,31 +1,26 @@
 package j$;
 
-import j$.util.function.y;
-import java.util.function.DoubleUnaryOperator;
+import j$.util.function.Consumer;
 
-public final /* synthetic */ class C implements DoubleUnaryOperator {
-    final /* synthetic */ y a;
+public final /* synthetic */ class C implements Consumer {
+    final /* synthetic */ java.util.function.Consumer a;
 
-    private /* synthetic */ C(y yVar) {
-        this.a = yVar;
+    private /* synthetic */ C(java.util.function.Consumer consumer) {
+        this.a = consumer;
     }
 
-    public static /* synthetic */ DoubleUnaryOperator a(y yVar) {
-        if (yVar == null) {
+    public static /* synthetic */ Consumer a(java.util.function.Consumer consumer) {
+        if (consumer == null) {
             return null;
         }
-        return yVar instanceof B ? ((B) yVar).a : new C(yVar);
+        return consumer instanceof D ? ((D) consumer).a : new C(consumer);
     }
 
-    public /* synthetic */ DoubleUnaryOperator andThen(DoubleUnaryOperator doubleUnaryOperator) {
-        return a(((B) this.a).a(B.d(doubleUnaryOperator)));
+    public /* synthetic */ void accept(Object obj) {
+        this.a.accept(obj);
     }
 
-    public /* synthetic */ double applyAsDouble(double d) {
-        return ((B) this.a).b(d);
-    }
-
-    public /* synthetic */ DoubleUnaryOperator compose(DoubleUnaryOperator doubleUnaryOperator) {
-        return a(((B) this.a).c(B.d(doubleUnaryOperator)));
+    public /* synthetic */ Consumer g(Consumer consumer) {
+        return a(this.a.andThen(D.a(consumer)));
     }
 }

@@ -77,13 +77,13 @@ public class AcceptDeclineView extends View {
     public AcceptDeclineView(Context context) {
         super(context);
         this.touchSlop = (float) ViewConfiguration.get(context).getScaledTouchSlop();
-        this.buttonWidth = AndroidUtilities.dp(70.0f);
+        this.buttonWidth = AndroidUtilities.dp(60.0f);
         FabBackgroundDrawable fabBackgroundDrawable = new FabBackgroundDrawable();
         this.acceptDrawable = fabBackgroundDrawable;
-        fabBackgroundDrawable.setColor(-12207027);
+        fabBackgroundDrawable.setColor(-12531895);
         FabBackgroundDrawable fabBackgroundDrawable2 = new FabBackgroundDrawable();
         this.declineDrawable = fabBackgroundDrawable2;
-        fabBackgroundDrawable2.setColor(-1696188);
+        fabBackgroundDrawable2.setColor(-1041108);
         FabBackgroundDrawable fabBackgroundDrawable3 = this.declineDrawable;
         int i = this.buttonWidth;
         fabBackgroundDrawable3.setBounds(0, 0, i, i);
@@ -123,7 +123,7 @@ public class AcceptDeclineView extends View {
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:9:0x0016, code lost:
-        if (r0 != 3) goto L_0x0192;
+        if (r0 != 3) goto L_0x01ae;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r12) {
@@ -143,10 +143,10 @@ public class AcceptDeclineView extends View {
             if (r0 == r3) goto L_0x001a
             r5 = 3
             if (r0 == r5) goto L_0x00a4
-            goto L_0x0192
+            goto L_0x01ae
         L_0x001a:
             boolean r0 = r11.captured
-            if (r0 == 0) goto L_0x0192
+            if (r0 == 0) goto L_0x01ae
             float r0 = r12.getX()
             float r3 = r11.startX
             float r0 = r0 - r3
@@ -292,44 +292,53 @@ public class AcceptDeclineView extends View {
             r11.captured = r1
             r11.startDrag = r1
             r11.setPressed(r1)
-            goto L_0x0192
+            goto L_0x01ae
         L_0x0143:
             float r0 = r12.getX()
             r11.startX = r0
             float r0 = r12.getY()
             r11.startY = r0
             android.animation.Animator r0 = r11.leftAnimator
-            if (r0 != 0) goto L_0x016d
+            r3 = 1112539136(0x42500000, float:52.0)
+            if (r0 != 0) goto L_0x017c
             android.graphics.Rect r0 = r11.declineRect
-            float r3 = r12.getX()
-            int r3 = (int) r3
-            float r4 = r12.getY()
+            float r4 = r12.getX()
             int r4 = (int) r4
-            boolean r0 = r0.contains(r3, r4)
-            if (r0 == 0) goto L_0x016d
+            float r5 = r12.getY()
+            int r5 = (int) r5
+            boolean r0 = r0.contains(r4, r5)
+            if (r0 == 0) goto L_0x017c
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r0 = -51130(0xfffffffffffvar_, float:NaN)
+            android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r12, r1, r0)
+            r11.rippleDrawable = r12
             r11.captured = r2
             r11.leftDrag = r2
             r11.setPressed(r2)
             return r2
-        L_0x016d:
+        L_0x017c:
             android.animation.Animator r0 = r11.rightAnimator
-            if (r0 != 0) goto L_0x0192
+            if (r0 != 0) goto L_0x01ae
             android.graphics.Rect r0 = r11.acceptRect
-            float r3 = r12.getX()
-            int r3 = (int) r3
+            float r4 = r12.getX()
+            int r4 = (int) r4
             float r12 = r12.getY()
             int r12 = (int) r12
-            boolean r12 = r0.contains(r3, r12)
-            if (r12 == 0) goto L_0x0192
+            boolean r12 = r0.contains(r4, r12)
+            if (r12 == 0) goto L_0x01ae
+            int r12 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            r0 = -11677354(0xffffffffff4dd156, float:-2.7357867E38)
+            android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r12, r1, r0)
+            r11.rippleDrawable = r12
             r11.captured = r2
             r11.leftDrag = r1
             r11.setPressed(r2)
             android.animation.Animator r12 = r11.rightAnimator
-            if (r12 == 0) goto L_0x0191
+            if (r12 == 0) goto L_0x01ad
             r12.cancel()
-        L_0x0191:
+        L_0x01ad:
             return r2
-        L_0x0192:
+        L_0x01ae:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.AcceptDeclineView.onTouchEvent(android.view.MotionEvent):boolean");
@@ -467,10 +476,6 @@ public class AcceptDeclineView extends View {
         }
         this.acceptDrawable.draw(canvas2);
         this.acceptRect.set((getMeasuredWidth() - AndroidUtilities.dp(46.0f)) - this.buttonWidth, AndroidUtilities.dp(40.0f), getMeasuredWidth() - AndroidUtilities.dp(46.0f), AndroidUtilities.dp(40.0f) + this.buttonWidth);
-        if (!this.leftDrag) {
-            this.rippleDrawable.setBounds(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), this.buttonWidth - AndroidUtilities.dp(4.0f), this.buttonWidth - AndroidUtilities.dp(4.0f));
-            this.rippleDrawable.draw(canvas2);
-        }
         if (this.retryMod) {
             canvas.save();
             canvas2.translate((((float) this.buttonWidth) / 2.0f) - (((float) this.retryLayout.getWidth()) / 2.0f), (float) (this.buttonWidth + AndroidUtilities.dp(8.0f)));
@@ -483,10 +488,14 @@ public class AcceptDeclineView extends View {
             canvas.restore();
         }
         canvas.save();
-        int i5 = this.buttonWidth;
-        canvas2.rotate(-135.0f, ((float) i5) / 2.0f, ((float) i5) / 2.0f);
+        canvas2.translate((float) (-AndroidUtilities.dp(1.0f)), (float) AndroidUtilities.dp(1.0f));
+        canvas2.rotate(-135.0f, (float) this.callDrawable.getBounds().centerX(), (float) this.callDrawable.getBounds().centerY());
         this.callDrawable.draw(canvas2);
         canvas.restore();
+        if (!this.leftDrag) {
+            this.rippleDrawable.setBounds(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(4.0f), this.buttonWidth - AndroidUtilities.dp(4.0f), this.buttonWidth - AndroidUtilities.dp(4.0f));
+            this.rippleDrawable.draw(canvas2);
+        }
         canvas.restore();
         canvas.restore();
     }

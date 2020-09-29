@@ -19,6 +19,7 @@ import androidx.annotation.Keep;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.ui.Components.AnimatedFileDrawable;
+import org.telegram.ui.Components.LoadingStickerDrawable;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RecyclableDrawable;
 
@@ -854,10 +855,12 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         if (setBackupImage()) {
             return true;
         }
-        if (!this.allowStartLottieAnimation || this.currentOpenedLayerFlags != 0 || (lottieAnimation = getLottieAnimation()) == null) {
-            return false;
+        if (this.allowStartLottieAnimation && this.currentOpenedLayerFlags == 0 && (lottieAnimation = getLottieAnimation()) != null) {
+            lottieAnimation.start();
         }
-        lottieAnimation.start();
+        if (NotificationCenter.getGlobalInstance().isAnimationInProgress()) {
+            didReceivedNotification(NotificationCenter.stopAllHeavyOperations, this.currentAccount, 512);
+        }
         return false;
     }
 
@@ -1869,8 +1872,8 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         this.imageX = (float) i;
     }
 
-    public void setImageY(int i) {
-        this.imageY = (float) i;
+    public void setImageY(float f) {
+        this.imageY = f;
     }
 
     public void setImageWidth(int i) {
@@ -2146,6 +2149,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         if (animation != null) {
             animation.setUseSharedQueue(this.useSharedAnimationQueue);
             animation.start();
+            return;
+        }
+        RLottieDrawable lottieAnimation = getLottieAnimation();
+        if (lottieAnimation != null && !lottieAnimation.isRunning()) {
+            lottieAnimation.restart();
         }
     }
 
@@ -2153,6 +2161,11 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
         AnimatedFileDrawable animation = getAnimation();
         if (animation != null) {
             animation.stop();
+            return;
+        }
+        RLottieDrawable lottieAnimation = getLottieAnimation();
+        if (lottieAnimation != null && !lottieAnimation.isRunning()) {
+            lottieAnimation.stop();
         }
     }
 
@@ -2234,6 +2247,7 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     /* access modifiers changed from: protected */
     public boolean setImageBitmapByKey(Drawable drawable, String str, int i, boolean z, int i2) {
         Drawable drawable2;
+        boolean z2;
         if (drawable == null || str == null || this.currentGuid != i2) {
             return false;
         }
@@ -2255,7 +2269,12 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 this.currentAlpha = 1.0f;
             } else {
                 Drawable drawable3 = this.currentMediaDrawable;
-                if (((!(drawable3 instanceof AnimatedFileDrawable) || !((AnimatedFileDrawable) drawable3).hasBitmap()) && !(this.currentImageDrawable instanceof RLottieDrawable)) && ((this.currentThumbDrawable == null && this.staticThumbDrawable == null) || this.currentAlpha == 1.0f || this.forceCrossfade)) {
+                if (!(drawable3 instanceof AnimatedFileDrawable) || !((AnimatedFileDrawable) drawable3).hasBitmap()) {
+                    z2 = this.currentImageDrawable instanceof RLottieDrawable ? this.staticThumbDrawable instanceof LoadingStickerDrawable : true;
+                } else {
+                    z2 = false;
+                }
+                if (z2 && ((this.currentThumbDrawable == null && this.staticThumbDrawable == null) || this.currentAlpha == 1.0f || this.forceCrossfade)) {
                     this.currentAlpha = 0.0f;
                     this.lastUpdateAlphaTime = System.currentTimeMillis();
                     this.crossfadeWithThumb = (this.crossfadeImage == null && this.currentThumbDrawable == null && this.staticThumbDrawable == null) ? false : true;

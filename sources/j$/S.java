@@ -1,27 +1,27 @@
 package j$;
 
-import j$.util.function.J;
-import java.util.function.LongConsumer;
+import j$.util.function.B;
+import java.util.function.IntConsumer;
 
-public final /* synthetic */ class S implements LongConsumer {
-    final /* synthetic */ J a;
+public final /* synthetic */ class S implements B {
+    final /* synthetic */ IntConsumer a;
 
-    private /* synthetic */ S(J j) {
-        this.a = j;
+    private /* synthetic */ S(IntConsumer intConsumer) {
+        this.a = intConsumer;
     }
 
-    public static /* synthetic */ LongConsumer a(J j) {
-        if (j == null) {
+    public static /* synthetic */ B a(IntConsumer intConsumer) {
+        if (intConsumer == null) {
             return null;
         }
-        return j instanceof Q ? ((Q) j).a : new S(j);
+        return intConsumer instanceof T ? ((T) intConsumer).a : new S(intConsumer);
     }
 
-    public /* synthetic */ void accept(long j) {
-        this.a.accept(j);
+    public /* synthetic */ void accept(int i) {
+        this.a.accept(i);
     }
 
-    public /* synthetic */ LongConsumer andThen(LongConsumer longConsumer) {
-        return a(this.a.h(Q.a(longConsumer)));
+    public /* synthetic */ B q(B b) {
+        return a(this.a.andThen(T.a(b)));
     }
 }

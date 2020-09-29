@@ -1,27 +1,23 @@
 package j$;
 
-import j$.util.function.B;
-import java.util.function.IntConsumer;
+import j$.util.function.CLASSNAMEu;
+import java.util.function.DoubleFunction;
 
-public final /* synthetic */ class H implements IntConsumer {
-    final /* synthetic */ B a;
+public final /* synthetic */ class H implements CLASSNAMEu {
+    final /* synthetic */ DoubleFunction a;
 
-    private /* synthetic */ H(B b) {
-        this.a = b;
+    private /* synthetic */ H(DoubleFunction doubleFunction) {
+        this.a = doubleFunction;
     }
 
-    public static /* synthetic */ IntConsumer a(B b) {
-        if (b == null) {
+    public static /* synthetic */ CLASSNAMEu b(DoubleFunction doubleFunction) {
+        if (doubleFunction == null) {
             return null;
         }
-        return b instanceof G ? ((G) b).a : new H(b);
+        return new H(doubleFunction);
     }
 
-    public /* synthetic */ void accept(int i) {
-        this.a.accept(i);
-    }
-
-    public /* synthetic */ IntConsumer andThen(IntConsumer intConsumer) {
-        return a(this.a.q(G.a(intConsumer)));
+    public /* synthetic */ Object a(double d) {
+        return this.a.apply(d);
     }
 }

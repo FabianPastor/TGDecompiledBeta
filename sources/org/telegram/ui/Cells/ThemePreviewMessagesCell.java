@@ -20,6 +20,7 @@ import org.telegram.tgnet.TLRPC$KeyboardButton;
 import org.telegram.tgnet.TLRPC$TL_message;
 import org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl;
 import org.telegram.tgnet.TLRPC$TL_messageMediaEmpty;
+import org.telegram.tgnet.TLRPC$TL_messageReplyHeader;
 import org.telegram.tgnet.TLRPC$TL_peerUser;
 import org.telegram.tgnet.TLRPC$TL_pollAnswer;
 import org.telegram.tgnet.TLRPC$TL_reactionCount;
@@ -76,13 +77,15 @@ public class ThemePreviewMessagesCell extends LinearLayout {
         tLRPC$TL_message.date = i2;
         tLRPC$TL_message.dialog_id = 1;
         tLRPC$TL_message.flags = 259;
-        tLRPC$TL_message.from_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+        TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
+        tLRPC$TL_message.from_id = tLRPC$TL_peerUser;
+        tLRPC$TL_peerUser.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
         tLRPC$TL_message.id = 1;
         tLRPC$TL_message.media = new TLRPC$TL_messageMediaEmpty();
         tLRPC$TL_message.out = true;
-        TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
-        tLRPC$TL_message.to_id = tLRPC$TL_peerUser;
-        tLRPC$TL_peerUser.user_id = 0;
+        TLRPC$TL_peerUser tLRPC$TL_peerUser2 = new TLRPC$TL_peerUser();
+        tLRPC$TL_message.peer_id = tLRPC$TL_peerUser2;
+        tLRPC$TL_peerUser2.user_id = 0;
         MessageObject messageObject = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message, true, false);
         TLRPC$TL_message tLRPC$TL_message2 = new TLRPC$TL_message();
         if (i == 0) {
@@ -106,13 +109,15 @@ public class ThemePreviewMessagesCell extends LinearLayout {
         tLRPC$TL_message2.date = currentTimeMillis + 960;
         tLRPC$TL_message2.dialog_id = 1;
         tLRPC$TL_message2.flags = 259;
-        tLRPC$TL_message2.from_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+        TLRPC$TL_peerUser tLRPC$TL_peerUser3 = new TLRPC$TL_peerUser();
+        tLRPC$TL_message2.from_id = tLRPC$TL_peerUser3;
+        tLRPC$TL_peerUser3.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
         tLRPC$TL_message2.id = 1;
         tLRPC$TL_message2.media = new TLRPC$TL_messageMediaEmpty();
         tLRPC$TL_message2.out = true;
-        TLRPC$TL_peerUser tLRPC$TL_peerUser2 = new TLRPC$TL_peerUser();
-        tLRPC$TL_message2.to_id = tLRPC$TL_peerUser2;
-        tLRPC$TL_peerUser2.user_id = 0;
+        TLRPC$TL_peerUser tLRPC$TL_peerUser4 = new TLRPC$TL_peerUser();
+        tLRPC$TL_message2.peer_id = tLRPC$TL_peerUser4;
+        tLRPC$TL_peerUser4.user_id = 0;
         MessageObject messageObject2 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message2, true, false);
         messageObject2.resetLayout();
         messageObject2.eventId = 1;
@@ -125,14 +130,16 @@ public class ThemePreviewMessagesCell extends LinearLayout {
         tLRPC$TL_message3.date = i2;
         tLRPC$TL_message3.dialog_id = 1;
         tLRPC$TL_message3.flags = 265;
-        tLRPC$TL_message3.from_id = 0;
+        tLRPC$TL_message3.from_id = new TLRPC$TL_peerUser();
         tLRPC$TL_message3.id = 1;
-        tLRPC$TL_message3.reply_to_msg_id = 5;
+        TLRPC$TL_messageReplyHeader tLRPC$TL_messageReplyHeader = new TLRPC$TL_messageReplyHeader();
+        tLRPC$TL_message3.reply_to = tLRPC$TL_messageReplyHeader;
+        tLRPC$TL_messageReplyHeader.reply_to_msg_id = 5;
         tLRPC$TL_message3.media = new TLRPC$TL_messageMediaEmpty();
         tLRPC$TL_message3.out = false;
-        TLRPC$TL_peerUser tLRPC$TL_peerUser3 = new TLRPC$TL_peerUser();
-        tLRPC$TL_message3.to_id = tLRPC$TL_peerUser3;
-        tLRPC$TL_peerUser3.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
+        TLRPC$TL_peerUser tLRPC$TL_peerUser5 = new TLRPC$TL_peerUser();
+        tLRPC$TL_message3.peer_id = tLRPC$TL_peerUser5;
+        tLRPC$TL_peerUser5.user_id = UserConfig.getInstance(UserConfig.selectedAccount).getClientUserId();
         MessageObject messageObject3 = new MessageObject(UserConfig.selectedAccount, tLRPC$TL_message3, true, false);
         if (i == 0) {
             messageObject3.customReplyName = LocaleController.getString("FontSizePreviewName", NUM);
@@ -156,6 +163,14 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didLongPress(this, chatMessageCell, f, f2);
                     }
 
+                    public /* synthetic */ boolean didLongPressChannelAvatar(ChatMessageCell chatMessageCell, TLRPC$Chat tLRPC$Chat, int i, float f, float f2) {
+                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$didLongPressChannelAvatar(this, chatMessageCell, tLRPC$Chat, i, f, f2);
+                    }
+
+                    public /* synthetic */ boolean didLongPressUserAvatar(ChatMessageCell chatMessageCell, TLRPC$User tLRPC$User, float f, float f2) {
+                        return ChatMessageCell.ChatMessageCellDelegate.CC.$default$didLongPressUserAvatar(this, chatMessageCell, tLRPC$User, f, f2);
+                    }
+
                     public /* synthetic */ void didPressBotButton(ChatMessageCell chatMessageCell, TLRPC$KeyboardButton tLRPC$KeyboardButton) {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressBotButton(this, chatMessageCell, tLRPC$KeyboardButton);
                     }
@@ -166,6 +181,10 @@ public class ThemePreviewMessagesCell extends LinearLayout {
 
                     public /* synthetic */ void didPressChannelAvatar(ChatMessageCell chatMessageCell, TLRPC$Chat tLRPC$Chat, int i, float f, float f2) {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressChannelAvatar(this, chatMessageCell, tLRPC$Chat, i, f, f2);
+                    }
+
+                    public /* synthetic */ void didPressCommentButton(ChatMessageCell chatMessageCell) {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressCommentButton(this, chatMessageCell);
                     }
 
                     public /* synthetic */ void didPressHiddenForward(ChatMessageCell chatMessageCell) {
@@ -196,8 +215,8 @@ public class ThemePreviewMessagesCell extends LinearLayout {
                         ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressReplyMessage(this, chatMessageCell, i);
                     }
 
-                    public /* synthetic */ void didPressShare(ChatMessageCell chatMessageCell) {
-                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressShare(this, chatMessageCell);
+                    public /* synthetic */ void didPressSideButton(ChatMessageCell chatMessageCell) {
+                        ChatMessageCell.ChatMessageCellDelegate.CC.$default$didPressSideButton(this, chatMessageCell);
                     }
 
                     public /* synthetic */ void didPressUrl(ChatMessageCell chatMessageCell, CharacterStyle characterStyle, boolean z) {

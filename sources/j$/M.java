@@ -1,23 +1,31 @@
 package j$;
 
-import j$.util.function.F;
-import java.util.function.IntToLongFunction;
+import j$.util.function.y;
+import java.util.function.DoubleUnaryOperator;
 
-public final /* synthetic */ class M implements F {
-    final /* synthetic */ IntToLongFunction a;
+public final /* synthetic */ class M implements y {
+    final /* synthetic */ DoubleUnaryOperator a;
 
-    private /* synthetic */ M(IntToLongFunction intToLongFunction) {
-        this.a = intToLongFunction;
+    private /* synthetic */ M(DoubleUnaryOperator doubleUnaryOperator) {
+        this.a = doubleUnaryOperator;
     }
 
-    public static /* synthetic */ F b(IntToLongFunction intToLongFunction) {
-        if (intToLongFunction == null) {
+    public static /* synthetic */ y d(DoubleUnaryOperator doubleUnaryOperator) {
+        if (doubleUnaryOperator == null) {
             return null;
         }
-        return new M(intToLongFunction);
+        return doubleUnaryOperator instanceof N ? ((N) doubleUnaryOperator).a : new M(doubleUnaryOperator);
     }
 
-    public /* synthetic */ long a(int i) {
-        return this.a.applyAsLong(i);
+    public /* synthetic */ y a(y yVar) {
+        return d(this.a.andThen(N.a(yVar)));
+    }
+
+    public /* synthetic */ double b(double d) {
+        return this.a.applyAsDouble(d);
+    }
+
+    public /* synthetic */ y c(y yVar) {
+        return d(this.a.compose(N.a(yVar)));
     }
 }

@@ -958,7 +958,7 @@ public class ContactsController extends BaseController {
             r1 = 0
             java.lang.Integer r2 = java.lang.Integer.valueOf(r1)     // Catch:{ all -> 0x01eb }
             r0.add(r2)     // Catch:{ all -> 0x01eb }
-            r0 = 2131626488(0x7f0e09f8, float:1.8880214E38)
+            r0 = 2131626531(0x7f0e0a23, float:1.88803E38)
             java.lang.String r1 = "PhoneMobile"
             if (r14 != 0) goto L_0x0182
             r2 = 3
@@ -977,7 +977,7 @@ public class ContactsController extends BaseController {
             if (r14 != r2) goto L_0x0194
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneHome"
-            r3 = 2131626486(0x7f0e09f6, float:1.888021E38)
+            r3 = 2131626529(0x7f0e0a21, float:1.8880297E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
             goto L_0x01d4
@@ -993,7 +993,7 @@ public class ContactsController extends BaseController {
             if (r14 != r0) goto L_0x01b3
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneWork"
-            r3 = 2131626496(0x7f0e0a00, float:1.888023E38)
+            r3 = 2131626539(0x7f0e0a2b, float:1.8880317E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
             goto L_0x01d4
@@ -1002,14 +1002,14 @@ public class ContactsController extends BaseController {
             if (r14 != r0) goto L_0x01c6
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneMain"
-            r3 = 2131626487(0x7f0e09f7, float:1.8880212E38)
+            r3 = 2131626530(0x7f0e0a22, float:1.8880299E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
             goto L_0x01d4
         L_0x01c6:
             java.util.ArrayList<java.lang.String> r0 = r13.phoneTypes     // Catch:{ all -> 0x01eb }
             java.lang.String r1 = "PhoneOther"
-            r3 = 2131626495(0x7f0e09ff, float:1.8880228E38)
+            r3 = 2131626538(0x7f0e0a2a, float:1.8880315E38)
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r3)     // Catch:{ all -> 0x01eb }
             r0.add(r1)     // Catch:{ all -> 0x01eb }
         L_0x01d4:
@@ -4327,36 +4327,57 @@ public class ContactsController extends BaseController {
     }
 
     public static String formatName(String str, String str2) {
+        return formatName(str, str2, 0);
+    }
+
+    public static String formatName(String str, String str2, int i) {
         if (str != null) {
             str = str.trim();
         }
         if (str2 != null) {
             str2 = str2.trim();
         }
-        int i = 0;
-        int length = str != null ? str.length() : 0;
-        if (str2 != null) {
-            i = str2.length();
-        }
-        StringBuilder sb = new StringBuilder(length + i + 1);
+        StringBuilder sb = new StringBuilder((str != null ? str.length() : 0) + (str2 != null ? str2.length() : 0) + 1);
         if (LocaleController.nameDisplayOrder == 1) {
-            if (str != null && str.length() > 0) {
+            if (str == null || str.length() <= 0) {
+                if (str2 != null && str2.length() > 0) {
+                    if (i > 0 && str2.length() > i + 2) {
+                        return str2.substring(0, i);
+                    }
+                    sb.append(str2);
+                }
+            } else if (i > 0 && str.length() > i + 2) {
+                return str.substring(0, i);
+            } else {
                 sb.append(str);
                 if (str2 != null && str2.length() > 0) {
                     sb.append(" ");
-                    sb.append(str2);
+                    if (i <= 0 || sb.length() + str2.length() <= i) {
+                        sb.append(str2);
+                    } else {
+                        sb.append(str2.charAt(0));
+                    }
                 }
-            } else if (str2 != null && str2.length() > 0) {
-                sb.append(str2);
             }
-        } else if (str2 != null && str2.length() > 0) {
+        } else if (str2 == null || str2.length() <= 0) {
+            if (str != null && str.length() > 0) {
+                if (i > 0 && str.length() > i + 2) {
+                    return str.substring(0, i);
+                }
+                sb.append(str);
+            }
+        } else if (i > 0 && str2.length() > i + 2) {
+            return str2.substring(0, i);
+        } else {
             sb.append(str2);
             if (str != null && str.length() > 0) {
                 sb.append(" ");
-                sb.append(str);
+                if (i <= 0 || sb.length() + str.length() <= i) {
+                    sb.append(str);
+                } else {
+                    sb.append(str.charAt(0));
+                }
             }
-        } else if (str != null && str.length() > 0) {
-            sb.append(str);
         }
         return sb.toString();
     }

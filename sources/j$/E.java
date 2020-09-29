@@ -1,30 +1,23 @@
 package j$;
 
-import java.util.function.Function;
+import j$.util.function.r;
+import java.util.function.DoubleBinaryOperator;
 
-public final /* synthetic */ class E implements Function {
-    final /* synthetic */ j$.util.function.Function a;
+public final /* synthetic */ class E implements r {
+    final /* synthetic */ DoubleBinaryOperator a;
 
-    private /* synthetic */ E(j$.util.function.Function function) {
-        this.a = function;
+    private /* synthetic */ E(DoubleBinaryOperator doubleBinaryOperator) {
+        this.a = doubleBinaryOperator;
     }
 
-    public static /* synthetic */ Function a(j$.util.function.Function function) {
-        if (function == null) {
+    public static /* synthetic */ r b(DoubleBinaryOperator doubleBinaryOperator) {
+        if (doubleBinaryOperator == null) {
             return null;
         }
-        return function instanceof D ? ((D) function).a : new E(function);
+        return new E(doubleBinaryOperator);
     }
 
-    public /* synthetic */ Function andThen(Function function) {
-        return a(this.a.a(D.c(function)));
-    }
-
-    public /* synthetic */ Object apply(Object obj) {
-        return this.a.apply(obj);
-    }
-
-    public /* synthetic */ Function compose(Function function) {
-        return a(this.a.b(D.c(function)));
+    public /* synthetic */ double a(double d, double d2) {
+        return this.a.applyAsDouble(d, d2);
     }
 }

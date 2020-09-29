@@ -92,6 +92,7 @@ import org.telegram.tgnet.TLRPC$TL_messageMediaGeo;
 import org.telegram.tgnet.TLRPC$TL_messageMediaGeoLive;
 import org.telegram.tgnet.TLRPC$TL_messageMediaVenue;
 import org.telegram.tgnet.TLRPC$TL_messages_getRecentLocations;
+import org.telegram.tgnet.TLRPC$TL_peerUser;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$messages_Messages;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -571,7 +572,6 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                                         z = true;
                                     }
                                     boolean unused2 = locationActivity.searchInProgress = z;
-                                    LocationActivity.this.updateEmptyView();
                                 } else {
                                     if (LocationActivity.this.otherItem != null) {
                                         LocationActivity.this.otherItem.setVisibility(0);
@@ -580,8 +580,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                                     LocationActivity.this.mapViewClip.setVisibility(0);
                                     LocationActivity.this.searchListView.setAdapter((RecyclerView.Adapter) null);
                                     LocationActivity.this.searchListView.setVisibility(8);
-                                    LocationActivity.this.updateEmptyView();
                                 }
+                                LocationActivity.this.updateEmptyView();
                                 LocationActivity.this.searchAdapter.searchDelayed(obj, LocationActivity.this.userLocation);
                             }
                         }
@@ -1443,9 +1443,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     private int getMessageId(TLRPC$Message tLRPC$Message) {
-        int i = tLRPC$Message.from_id;
-        if (i != 0) {
-            return i;
+        if (tLRPC$Message.from_id != null) {
+            return MessageObject.getFromChatId(tLRPC$Message);
         }
         return (int) MessageObject.getDialogId(tLRPC$Message);
     }
@@ -1534,22 +1533,21 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     private LiveLocation addUserMarker(TLRPC$Message tLRPC$Message) {
         TLRPC$GeoPoint tLRPC$GeoPoint = tLRPC$Message.media.geo;
         LatLng latLng = new LatLng(tLRPC$GeoPoint.lat, tLRPC$GeoPoint._long);
-        LiveLocation liveLocation = this.markersMap.get(tLRPC$Message.from_id);
+        LiveLocation liveLocation = this.markersMap.get(MessageObject.getFromChatId(tLRPC$Message));
         if (liveLocation == null) {
             liveLocation = new LiveLocation();
             liveLocation.object = tLRPC$Message;
-            if (tLRPC$Message.from_id != 0) {
-                liveLocation.user = getMessagesController().getUser(Integer.valueOf(liveLocation.object.from_id));
-                liveLocation.id = liveLocation.object.from_id;
+            if (tLRPC$Message.from_id instanceof TLRPC$TL_peerUser) {
+                liveLocation.user = getMessagesController().getUser(Integer.valueOf(liveLocation.object.from_id.user_id));
+                liveLocation.id = liveLocation.object.from_id.user_id;
             } else {
                 int dialogId2 = (int) MessageObject.getDialogId(tLRPC$Message);
                 if (dialogId2 > 0) {
                     liveLocation.user = getMessagesController().getUser(Integer.valueOf(dialogId2));
-                    liveLocation.id = dialogId2;
                 } else {
                     liveLocation.chat = getMessagesController().getChat(Integer.valueOf(-dialogId2));
-                    liveLocation.id = dialogId2;
                 }
+                liveLocation.id = dialogId2;
             }
             try {
                 MarkerOptions markerOptions = new MarkerOptions();
@@ -1583,11 +1581,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         int i = (int) this.dialogId;
         if (i > 0) {
             liveLocation.user = getMessagesController().getUser(Integer.valueOf(i));
-            liveLocation.id = i;
         } else {
             liveLocation.chat = getMessagesController().getChat(Integer.valueOf(-i));
-            liveLocation.id = i;
         }
+        liveLocation.id = i;
         try {
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(latLng);

@@ -9,6 +9,10 @@ import org.telegram.tgnet.TLRPC$TL_userSelf_old3;
 import org.telegram.tgnet.TLRPC$User;
 
 public class UserObject {
+    public static boolean isReplyUser(long j) {
+        return j == 708513 || j == NUM;
+    }
+
     public static boolean isDeleted(TLRPC$User tLRPC$User) {
         return tLRPC$User == null || (tLRPC$User instanceof TLRPC$TL_userDeleted_old2) || (tLRPC$User instanceof TLRPC$TL_userEmpty) || tLRPC$User.deleted;
     }
@@ -19,6 +23,29 @@ public class UserObject {
 
     public static boolean isUserSelf(TLRPC$User tLRPC$User) {
         return tLRPC$User != null && ((tLRPC$User instanceof TLRPC$TL_userSelf_old3) || tLRPC$User.self);
+    }
+
+    /* JADX WARNING: Code restructure failed: missing block: B:1:0x0002, code lost:
+        r1 = r1.id;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static boolean isReplyUser(org.telegram.tgnet.TLRPC$User r1) {
+        /*
+            if (r1 == 0) goto L_0x0010
+            int r1 = r1.id
+            r0 = 708513(0xacfa1, float:9.92838E-40)
+            if (r1 == r0) goto L_0x000e
+            r0 = 1271266957(0x4bc5fe8d, float:2.5951514E7)
+            if (r1 != r0) goto L_0x0010
+        L_0x000e:
+            r1 = 1
+            goto L_0x0011
+        L_0x0010:
+            r1 = 0
+        L_0x0011:
+            return r1
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.UserObject.isReplyUser(org.telegram.tgnet.TLRPC$User):boolean");
     }
 
     public static String getUserName(TLRPC$User tLRPC$User) {

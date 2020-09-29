@@ -80,7 +80,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.ProfileActivity;
 
 public class PollVotesAlert extends BottomSheet {
-    public static final Property<UserCell, Float> USER_CELL_PROPERTY = new AnimationProperties.FloatProperty<UserCell>("placeholderAlpha(") {
+    public static final Property<UserCell, Float> USER_CELL_PROPERTY = new AnimationProperties.FloatProperty<UserCell>("placeholderAlpha") {
         public void setValue(UserCell userCell, float f) {
             userCell.setPlaceholderAlpha(f);
         }

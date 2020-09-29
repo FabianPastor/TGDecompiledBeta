@@ -1109,8 +1109,6 @@
     <string name="Disconnect">Verbreken</string>
     <string name="DiscussChannel">kanaal</string>
     <string name="Discussion">Discussie</string>
-    <string name="DiscussionChannelGroupSetHelp">Een link naar **%1$s** zal worden weergegeven aan alle abonnees in het onderpaneel.</string>
-    <string name="DiscussionChannelHelp">Kies een groepschat voor discussie die zal worden weergegeven in je kanaal.</string>
     <string name="DiscussionChannelHelp2">Alles wat je plaatst in het kanaal zal worden doorgestuurd naar deze groep.</string>
     <string name="DiscussionCreateGroup">Maak een nieuwe groep</string>
     <string name="DiscussionGroupHelp">**%1$s** koppelt de groep als discussiegroep</string>

@@ -1,10 +1,13 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_messages_searchGlobal extends TLObject {
-    public static int constructor = -NUM;
+    public static int constructor = NUM;
+    public TLRPC$MessagesFilter filter;
     public int flags;
     public int folder_id;
     public int limit;
+    public int max_date;
+    public int min_date;
     public int offset_id;
     public TLRPC$InputPeer offset_peer;
     public int offset_rate;
@@ -21,6 +24,12 @@ public class TLRPC$TL_messages_searchGlobal extends TLObject {
             abstractSerializedData.writeInt32(this.folder_id);
         }
         abstractSerializedData.writeString(this.q);
+        TLRPC$MessagesFilter tLRPC$MessagesFilter = this.filter;
+        if (tLRPC$MessagesFilter != null) {
+            tLRPC$MessagesFilter.serializeToStream(abstractSerializedData);
+        }
+        abstractSerializedData.writeInt32(this.min_date);
+        abstractSerializedData.writeInt32(this.max_date);
         abstractSerializedData.writeInt32(this.offset_rate);
         this.offset_peer.serializeToStream(abstractSerializedData);
         abstractSerializedData.writeInt32(this.offset_id);

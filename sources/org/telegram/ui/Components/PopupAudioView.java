@@ -109,7 +109,7 @@ public class PopupAudioView extends BaseCell implements SeekBar.SeekBarDelegate,
                 i = ((View) getParent()).getMeasuredHeight();
             }
             Theme.chat_msgInMediaDrawable.setTop((int) getY(), i, false, false);
-            BaseCell.setDrawableBounds(Theme.chat_msgInMediaDrawable, 0, 0, getMeasuredWidth(), getMeasuredHeight());
+            BaseCell.setDrawableBounds((Drawable) Theme.chat_msgInMediaDrawable, 0, 0, getMeasuredWidth(), getMeasuredHeight());
             Theme.chat_msgInMediaDrawable.draw(canvas);
             if (this.currentMessageObject != null) {
                 canvas.save();
@@ -249,7 +249,7 @@ public class PopupAudioView extends BaseCell implements SeekBar.SeekBarDelegate,
         int i = this.buttonState;
         if (i == 0) {
             boolean playMessage = MediaController.getInstance().playMessage(this.currentMessageObject);
-            if (!this.currentMessageObject.isOut() && this.currentMessageObject.isContentUnread() && this.currentMessageObject.messageOwner.to_id.channel_id == 0) {
+            if (!this.currentMessageObject.isOut() && this.currentMessageObject.isContentUnread() && this.currentMessageObject.messageOwner.peer_id.channel_id == 0) {
                 MessagesController.getInstance(this.currentAccount).markMessageContentAsRead(this.currentMessageObject);
                 this.currentMessageObject.setContentIsRead();
             }

@@ -174,7 +174,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                         int abs = Math.abs(PrivacyUsersActivity.this.layoutManager.findLastVisibleItemPosition() - PrivacyUsersActivity.this.layoutManager.findFirstVisibleItemPosition()) + 1;
                         int itemCount = recyclerView.getAdapter().getItemCount();
                         if (abs > 0 && PrivacyUsersActivity.this.layoutManager.findLastVisibleItemPosition() >= itemCount - 10) {
-                            PrivacyUsersActivity.this.getMessagesController().getBlockedUsers(false);
+                            PrivacyUsersActivity.this.getMessagesController().getBlockedPeers(false);
                         }
                     }
                 }
@@ -212,7 +212,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
         } else if (i >= this.usersStartRow && i < this.usersEndRow) {
             if (this.currentType == 1) {
                 Bundle bundle2 = new Bundle();
-                bundle2.putInt("user_id", getMessagesController().blockedUsers.keyAt(i - this.usersStartRow));
+                bundle2.putInt("user_id", getMessagesController().blockePeers.keyAt(i - this.usersStartRow));
                 presentFragment(new ProfileActivity(bundle2));
                 return;
             }
@@ -248,7 +248,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             return false;
         }
         if (this.currentType == 1) {
-            showUnblockAlert(Integer.valueOf(getMessagesController().blockedUsers.keyAt(i - this.usersStartRow)));
+            showUnblockAlert(Integer.valueOf(getMessagesController().blockePeers.keyAt(i - this.usersStartRow)));
         } else {
             showUnblockAlert(this.uidArray.get(i - i2));
         }
@@ -283,7 +283,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             return;
         }
         if (this.currentType == 1) {
-            getMessagesController().unblockUser(num.intValue());
+            getMessagesController().unblockPeer(num.intValue());
             return;
         }
         this.uidArray.remove(num);
@@ -308,7 +308,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             this.rowCount = i3 + 1;
             this.blockUserDetailRow = i3;
             if (this.currentType == 1) {
-                i = getMessagesController().blockedUsers.size();
+                i = getMessagesController().blockePeers.size();
             } else {
                 i = this.uidArray.size();
             }
@@ -371,7 +371,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
 
     public void didSelectContact(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity) {
         if (tLRPC$User != null) {
-            getMessagesController().blockUser(tLRPC$User.id);
+            getMessagesController().blockPeer(tLRPC$User.id);
         }
     }
 
@@ -414,10 +414,10 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                 r7 = this;
                 r8 = 1
                 java.lang.String r0 = "windowBackgroundWhite"
-                if (r9 == 0) goto L_0x003d
-                if (r9 == r8) goto L_0x0035
+                if (r9 == 0) goto L_0x003f
+                if (r9 == r8) goto L_0x0037
                 r8 = 2
-                if (r9 == r8) goto L_0x0026
+                if (r9 == r8) goto L_0x0028
                 org.telegram.ui.Cells.HeaderCell r8 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r2 = r7.mContext
                 r4 = 21
@@ -430,20 +430,20 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                 r8.setBackgroundColor(r9)
                 r9 = 43
                 r8.setHeight(r9)
-                goto L_0x0056
-            L_0x0026:
+                goto L_0x0058
+            L_0x0028:
                 org.telegram.ui.Cells.ManageChatTextCell r8 = new org.telegram.ui.Cells.ManageChatTextCell
                 android.content.Context r9 = r7.mContext
                 r8.<init>(r9)
                 int r9 = org.telegram.ui.ActionBar.Theme.getColor(r0)
                 r8.setBackgroundColor(r9)
-                goto L_0x0056
-            L_0x0035:
+                goto L_0x0058
+            L_0x0037:
                 org.telegram.ui.Cells.TextInfoPrivacyCell r8 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r9 = r7.mContext
                 r8.<init>(r9)
-                goto L_0x0056
-            L_0x003d:
+                goto L_0x0058
+            L_0x003f:
                 org.telegram.ui.Cells.ManageChatUserCell r9 = new org.telegram.ui.Cells.ManageChatUserCell
                 android.content.Context r1 = r7.mContext
                 r2 = 7
@@ -455,7 +455,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
                 r8.<init>()
                 r9.setDelegate(r8)
                 r8 = r9
-            L_0x0056:
+            L_0x0058:
                 org.telegram.ui.Components.RecyclerListView$Holder r9 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r9.<init>(r8)
                 return r9
@@ -472,7 +472,7 @@ public class PrivacyUsersActivity extends BaseFragment implements NotificationCe
             if (itemViewType == 0) {
                 ManageChatUserCell manageChatUserCell = (ManageChatUserCell) viewHolder.itemView;
                 if (PrivacyUsersActivity.this.currentType == 1) {
-                    i2 = PrivacyUsersActivity.this.getMessagesController().blockedUsers.keyAt(i - PrivacyUsersActivity.this.usersStartRow);
+                    i2 = PrivacyUsersActivity.this.getMessagesController().blockePeers.keyAt(i - PrivacyUsersActivity.this.usersStartRow);
                 } else {
                     i2 = ((Integer) PrivacyUsersActivity.this.uidArray.get(i - PrivacyUsersActivity.this.usersStartRow)).intValue();
                 }

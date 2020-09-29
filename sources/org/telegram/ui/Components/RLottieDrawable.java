@@ -328,8 +328,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                                     boolean unused11 = RLottieDrawable.this.nextFrameIsLast = true;
                                     RLottieDrawable.access$3308(RLottieDrawable.this);
                                 }
-                            } else if (RLottieDrawable.this.customEndFrame <= 0 || !RLottieDrawable.this.playInDirectionOfCustomEndFrame) {
-                                if (RLottieDrawable.this.currentFrame + i < (RLottieDrawable.this.customEndFrame > 0 ? RLottieDrawable.this.customEndFrame : RLottieDrawable.this.metaData[0])) {
+                            } else if (RLottieDrawable.this.customEndFrame < 0 || !RLottieDrawable.this.playInDirectionOfCustomEndFrame) {
+                                if (RLottieDrawable.this.currentFrame + i < (RLottieDrawable.this.customEndFrame >= 0 ? RLottieDrawable.this.customEndFrame : RLottieDrawable.this.metaData[0])) {
                                     if (RLottieDrawable.this.autoRepeat == 3) {
                                         boolean unused12 = RLottieDrawable.this.nextFrameIsLast = true;
                                         RLottieDrawable.access$3308(RLottieDrawable.this);
@@ -520,8 +520,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                                     boolean unused11 = RLottieDrawable.this.nextFrameIsLast = true;
                                     RLottieDrawable.access$3308(RLottieDrawable.this);
                                 }
-                            } else if (RLottieDrawable.this.customEndFrame <= 0 || !RLottieDrawable.this.playInDirectionOfCustomEndFrame) {
-                                if (RLottieDrawable.this.currentFrame + i < (RLottieDrawable.this.customEndFrame > 0 ? RLottieDrawable.this.customEndFrame : RLottieDrawable.this.metaData[0])) {
+                            } else if (RLottieDrawable.this.customEndFrame < 0 || !RLottieDrawable.this.playInDirectionOfCustomEndFrame) {
+                                if (RLottieDrawable.this.currentFrame + i < (RLottieDrawable.this.customEndFrame >= 0 ? RLottieDrawable.this.customEndFrame : RLottieDrawable.this.metaData[0])) {
                                     if (RLottieDrawable.this.autoRepeat == 3) {
                                         boolean unused12 = RLottieDrawable.this.nextFrameIsLast = true;
                                         RLottieDrawable.access$3308(RLottieDrawable.this);
@@ -828,8 +828,8 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                                     boolean unused11 = RLottieDrawable.this.nextFrameIsLast = true;
                                     RLottieDrawable.access$3308(RLottieDrawable.this);
                                 }
-                            } else if (RLottieDrawable.this.customEndFrame <= 0 || !RLottieDrawable.this.playInDirectionOfCustomEndFrame) {
-                                if (RLottieDrawable.this.currentFrame + i < (RLottieDrawable.this.customEndFrame > 0 ? RLottieDrawable.this.customEndFrame : RLottieDrawable.this.metaData[0])) {
+                            } else if (RLottieDrawable.this.customEndFrame < 0 || !RLottieDrawable.this.playInDirectionOfCustomEndFrame) {
+                                if (RLottieDrawable.this.currentFrame + i < (RLottieDrawable.this.customEndFrame >= 0 ? RLottieDrawable.this.customEndFrame : RLottieDrawable.this.metaData[0])) {
                                     if (RLottieDrawable.this.autoRepeat == 3) {
                                         boolean unused12 = RLottieDrawable.this.nextFrameIsLast = true;
                                         RLottieDrawable.access$3308(RLottieDrawable.this);
@@ -1195,6 +1195,10 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
 
     public void stop() {
         this.isRunning = false;
+    }
+
+    public void setCurrentFrame(int i) {
+        setCurrentFrame(i, true);
     }
 
     public void setCurrentFrame(int i, boolean z) {

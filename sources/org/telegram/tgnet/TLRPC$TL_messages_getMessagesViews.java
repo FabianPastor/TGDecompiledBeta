@@ -3,18 +3,13 @@ package org.telegram.tgnet;
 import java.util.ArrayList;
 
 public class TLRPC$TL_messages_getMessagesViews extends TLObject {
-    public static int constructor = -NUM;
+    public static int constructor = NUM;
     public ArrayList<Integer> id = new ArrayList<>();
     public boolean increment;
     public TLRPC$InputPeer peer;
 
     public TLObject deserializeResponse(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$Vector tLRPC$Vector = new TLRPC$Vector();
-        int readInt32 = abstractSerializedData.readInt32(z);
-        for (int i2 = 0; i2 < readInt32; i2++) {
-            tLRPC$Vector.objects.add(Integer.valueOf(abstractSerializedData.readInt32(z)));
-        }
-        return tLRPC$Vector;
+        return TLRPC$TL_messages_messageViews.TLdeserialize(abstractSerializedData, i, z);
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {

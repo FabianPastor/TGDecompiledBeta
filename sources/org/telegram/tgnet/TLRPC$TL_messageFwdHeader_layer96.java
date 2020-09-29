@@ -7,11 +7,15 @@ public class TLRPC$TL_messageFwdHeader_layer96 extends TLRPC$TL_messageFwdHeader
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
         if ((readInt32 & 1) != 0) {
-            this.from_id = abstractSerializedData.readInt32(z);
+            TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
+            this.from_id = tLRPC$TL_peerUser;
+            tLRPC$TL_peerUser.user_id = abstractSerializedData.readInt32(z);
         }
         this.date = abstractSerializedData.readInt32(z);
         if ((this.flags & 2) != 0) {
-            this.channel_id = abstractSerializedData.readInt32(z);
+            TLRPC$TL_peerChannel tLRPC$TL_peerChannel = new TLRPC$TL_peerChannel();
+            this.from_id = tLRPC$TL_peerChannel;
+            tLRPC$TL_peerChannel.channel_id = abstractSerializedData.readInt32(z);
         }
         if ((this.flags & 4) != 0) {
             this.channel_post = abstractSerializedData.readInt32(z);
@@ -31,11 +35,11 @@ public class TLRPC$TL_messageFwdHeader_layer96 extends TLRPC$TL_messageFwdHeader
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.flags);
         if ((this.flags & 1) != 0) {
-            abstractSerializedData.writeInt32(this.from_id);
+            abstractSerializedData.writeInt32(this.from_id.user_id);
         }
         abstractSerializedData.writeInt32(this.date);
         if ((this.flags & 2) != 0) {
-            abstractSerializedData.writeInt32(this.channel_id);
+            abstractSerializedData.writeInt32(this.from_id.channel_id);
         }
         if ((this.flags & 4) != 0) {
             abstractSerializedData.writeInt32(this.channel_post);

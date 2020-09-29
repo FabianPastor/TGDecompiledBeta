@@ -1,8 +1,8 @@
 package j$.util.concurrent;
 
-import j$.CLASSNAMEn;
-import j$.CLASSNAMEp;
-import j$.D;
+import j$.A;
+import j$.CLASSNAMEy;
+import j$.O;
 import java.io.ObjectStreamField;
 import java.io.Serializable;
 import java.util.AbstractMap;
@@ -41,27 +41,27 @@ public class ConcurrentHashMap extends AbstractMap implements ConcurrentMap, Ser
     private volatile transient int transferIndex;
 
     public /* synthetic */ Object compute(Object obj, BiFunction biFunction) {
-        return compute(obj, CLASSNAMEp.b(biFunction));
+        return compute(obj, A.b(biFunction));
     }
 
     public /* synthetic */ Object computeIfAbsent(Object obj, Function function) {
-        return computeIfAbsent(obj, D.c(function));
+        return computeIfAbsent(obj, O.c(function));
     }
 
     public /* synthetic */ Object computeIfPresent(Object obj, BiFunction biFunction) {
-        return computeIfPresent(obj, CLASSNAMEp.b(biFunction));
+        return computeIfPresent(obj, A.b(biFunction));
     }
 
     public /* synthetic */ void forEach(BiConsumer biConsumer) {
-        forEach(CLASSNAMEn.b(biConsumer));
+        forEach(CLASSNAMEy.b(biConsumer));
     }
 
     public /* synthetic */ Object merge(Object obj, Object obj2, BiFunction biFunction) {
-        return merge(obj, obj2, CLASSNAMEp.b(biFunction));
+        return merge(obj, obj2, A.b(biFunction));
     }
 
     public /* synthetic */ void replaceAll(BiFunction biFunction) {
-        replaceAll(CLASSNAMEp.b(biFunction));
+        replaceAll(A.b(biFunction));
     }
 
     static {

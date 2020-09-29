@@ -20,6 +20,9 @@ public abstract class TLRPC$PhotoSize extends TLObject {
             case 236446268:
                 tLRPC$PhotoSize = new TLRPC$TL_photoSizeEmpty();
                 break;
+            case 1520986705:
+                tLRPC$PhotoSize = new TLRPC$TL_photoSizeProgressive();
+                break;
             case 2009052699:
                 tLRPC$PhotoSize = new TLRPC$TL_photoSize();
                 break;

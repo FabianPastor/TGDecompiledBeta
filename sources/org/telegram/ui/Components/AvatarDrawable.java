@@ -8,6 +8,7 @@ import android.os.Build;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.UserObject;
@@ -16,6 +17,7 @@ import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.Theme;
 
 public class AvatarDrawable extends Drawable {
+    private int alpha;
     private float archivedAvatarProgress;
     private int avatarType;
     private int color;
@@ -42,14 +44,12 @@ public class AvatarDrawable extends Drawable {
         return -2;
     }
 
-    public void setAlpha(int i) {
-    }
-
     public void setColorFilter(ColorFilter colorFilter) {
     }
 
     public AvatarDrawable() {
         this.stringBuilder = new StringBuilder(5);
+        this.alpha = 255;
         TextPaint textPaint = new TextPaint(1);
         this.namePaint = textPaint;
         textPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -133,8 +133,12 @@ public class AvatarDrawable extends Drawable {
         boolean z = false;
         if (i == 2) {
             this.color = Theme.getColor("avatar_backgroundArchivedHidden");
+        } else if (i == 4) {
+            this.color = Theme.getColor("avatar_backgroundSaved");
         } else if (i == 1) {
             this.color = Theme.getColor("avatar_backgroundSaved");
+        } else if (i == 3) {
+            this.color = getColorForId(5);
         } else if (i == 4) {
             this.color = getColorForId(5);
         } else if (i == 5) {
@@ -153,7 +157,7 @@ public class AvatarDrawable extends Drawable {
             this.color = getColorForId(4);
         }
         int i2 = this.avatarType;
-        if (!(i2 == 2 || i2 == 1)) {
+        if (!(i2 == 2 || i2 == 1 || i2 == 4)) {
             z = true;
         }
         this.needApplyColorAccent = z;
@@ -262,8 +266,8 @@ public class AvatarDrawable extends Drawable {
         Rect bounds = getBounds();
         if (bounds != null) {
             int width = bounds.width();
-            this.namePaint.setColor(Theme.getColor("avatar_text"));
-            Theme.avatar_backgroundPaint.setColor(getColor());
+            this.namePaint.setColor(ColorUtils.setAlphaComponent(Theme.getColor("avatar_text"), this.alpha));
+            Theme.avatar_backgroundPaint.setColor(ColorUtils.setAlphaComponent(getColor(), this.alpha));
             canvas.save();
             canvas.translate((float) bounds.left, (float) bounds.top);
             float f = (float) width;
@@ -272,7 +276,7 @@ public class AvatarDrawable extends Drawable {
             int i = this.avatarType;
             if (i == 2) {
                 if (this.archivedAvatarProgress != 0.0f) {
-                    Theme.avatar_backgroundPaint.setColor(Theme.getColor("avatar_backgroundArchived"));
+                    Theme.avatar_backgroundPaint.setColor(ColorUtils.setAlphaComponent(Theme.getColor("avatar_backgroundArchived"), this.alpha));
                     canvas.drawCircle(f2, f2, this.archivedAvatarProgress * f2, Theme.avatar_backgroundPaint);
                     if (Theme.dialogs_archiveAvatarDrawableRecolored) {
                         Theme.dialogs_archiveAvatarDrawable.beginApplyLayerColors();
@@ -297,8 +301,12 @@ public class AvatarDrawable extends Drawable {
                 Theme.dialogs_archiveAvatarDrawable.draw(canvas);
                 canvas.restore();
             } else if (i != 0) {
-                if (i == 1) {
+                if (i == 4) {
+                    drawable = Theme.avatarDrawables[11];
+                } else if (i == 1) {
                     drawable = Theme.avatarDrawables[0];
+                } else if (i == 3) {
+                    drawable = Theme.avatarDrawables[10];
                 } else if (i == 4) {
                     drawable = Theme.avatarDrawables[2];
                 } else if (i == 5) {
@@ -326,7 +334,14 @@ public class AvatarDrawable extends Drawable {
                     int i4 = (width - intrinsicWidth2) / 2;
                     int i5 = (width - intrinsicHeight2) / 2;
                     drawable.setBounds(i4, i5, intrinsicWidth2 + i4, intrinsicHeight2 + i5);
-                    drawable.draw(canvas);
+                    int i6 = this.alpha;
+                    if (i6 != 255) {
+                        drawable.setAlpha(i6);
+                        drawable.draw(canvas);
+                        drawable.setAlpha(255);
+                    } else {
+                        drawable.draw(canvas);
+                    }
                 }
             } else {
                 if (this.drawDeleted) {
@@ -346,5 +361,9 @@ public class AvatarDrawable extends Drawable {
             }
             canvas.restore();
         }
+    }
+
+    public void setAlpha(int i) {
+        this.alpha = i;
     }
 }

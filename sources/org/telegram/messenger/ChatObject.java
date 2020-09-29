@@ -267,6 +267,27 @@ public class ChatObject {
         return canUserDoAction(tLRPC$Chat, 3);
     }
 
+    /* JADX WARNING: Code restructure failed: missing block: B:1:0x0002, code lost:
+        r0 = r0.admin_rights;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public static boolean shouldSendAnonymously(org.telegram.tgnet.TLRPC$Chat r0) {
+        /*
+            if (r0 == 0) goto L_0x000c
+            org.telegram.tgnet.TLRPC$TL_chatAdminRights r0 = r0.admin_rights
+            if (r0 == 0) goto L_0x000c
+            boolean r0 = r0.anonymous
+            if (r0 == 0) goto L_0x000c
+            r0 = 1
+            goto L_0x000d
+        L_0x000c:
+            r0 = 0
+        L_0x000d:
+            return r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ChatObject.shouldSendAnonymously(org.telegram.tgnet.TLRPC$Chat):boolean");
+    }
+
     public static boolean canAddBotsToChat(TLRPC$Chat tLRPC$Chat) {
         if (isChannel(tLRPC$Chat)) {
             if (tLRPC$Chat == null || !tLRPC$Chat.megagroup) {

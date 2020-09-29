@@ -1,5 +1,8 @@
 package org.telegram.ui.Components;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Paint;
@@ -31,6 +34,7 @@ import org.telegram.tgnet.TLRPC$TL_inputStickerSetID;
 import org.telegram.tgnet.TLRPC$TL_messages_featuredStickers;
 import org.telegram.tgnet.TLRPC$TL_messages_getOldFeaturedStickers;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
+import org.telegram.ui.ActionBar.AdjustPanLayoutHelper;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.ActionBar.ThemeDescription;
@@ -51,6 +55,7 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
     public final int currentAccount;
     /* access modifiers changed from: private */
     public final Delegate delegate;
+    ValueAnimator glueToTopAnimator;
     /* access modifiers changed from: private */
     public int hash;
     /* access modifiers changed from: private */
@@ -72,6 +77,8 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
     public final TLRPC$StickerSetCovered[] primaryInstallingStickerSets;
     /* access modifiers changed from: private */
     public final LongSparseArray<TLRPC$StickerSetCovered> removingStickerSets;
+    /* access modifiers changed from: private */
+    public boolean scrollFromAnimator;
     /* access modifiers changed from: private */
     public final StickersSearchAdapter searchAdapter;
     private final FrameLayout searchLayout;
@@ -198,6 +205,13 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
                 return super.dispatchTouchEvent(motionEvent);
             }
 
+            public boolean onTouchEvent(MotionEvent motionEvent) {
+                if (TrendingStickersLayout.this.glueToTopAnimator != null) {
+                    return false;
+                }
+                return super.onTouchEvent(motionEvent);
+            }
+
             public void requestLayout() {
                 if (!TrendingStickersLayout.this.ignoreLayout) {
                     super.requestLayout();
@@ -245,6 +259,16 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
             /* access modifiers changed from: protected */
             public boolean shouldCalcLastItemHeight() {
                 return TrendingStickersLayout.this.listView.getAdapter() == TrendingStickersLayout.this.searchAdapter;
+            }
+
+            public int scrollVerticallyBy(int i, RecyclerView.Recycler recycler, RecyclerView.State state) {
+                if (TrendingStickersLayout.this.scrollFromAnimator) {
+                    return super.scrollVerticallyBy(i, recycler, state);
+                }
+                if (TrendingStickersLayout.this.glueToTopAnimator != null) {
+                    return 0;
+                }
+                return super.scrollVerticallyBy(i, recycler, state);
             }
         };
         this.layoutManager = r02;
@@ -515,6 +539,41 @@ public class TrendingStickersLayout extends FrameLayout implements NotificationC
         this.searchAdapter.getThemeDescriptions(list2, this.listView, themeDescriptionDelegate2);
         list2.add(new ThemeDescription(this.shadowView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogShadowLine"));
         list2.add(new ThemeDescription(this.searchLayout, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackground"));
+    }
+
+    public void glueToTop(boolean z) {
+        if (!z) {
+            ValueAnimator valueAnimator = this.glueToTopAnimator;
+            if (valueAnimator != null) {
+                valueAnimator.removeAllListeners();
+                this.glueToTopAnimator.cancel();
+                this.glueToTopAnimator = null;
+            }
+        } else if (getContentTopOffset() > 0 && this.glueToTopAnimator == null) {
+            final int contentTopOffset = getContentTopOffset();
+            ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+            this.glueToTopAnimator = ofFloat;
+            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                int dy = 0;
+
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    int floatValue = (int) (((float) contentTopOffset) * ((Float) valueAnimator.getAnimatedValue()).floatValue());
+                    boolean unused = TrendingStickersLayout.this.scrollFromAnimator = true;
+                    TrendingStickersLayout.this.listView.scrollBy(0, floatValue - this.dy);
+                    boolean unused2 = TrendingStickersLayout.this.scrollFromAnimator = false;
+                    this.dy = floatValue;
+                }
+            });
+            this.glueToTopAnimator.addListener(new AnimatorListenerAdapter() {
+                public void onAnimationEnd(Animator animator) {
+                    TrendingStickersLayout.this.setContentViewPaddingTop(0);
+                    TrendingStickersLayout.this.glueToTopAnimator = null;
+                }
+            });
+            this.glueToTopAnimator.setDuration(250);
+            this.glueToTopAnimator.setInterpolator(AdjustPanLayoutHelper.keyboardInterpolator);
+            this.glueToTopAnimator.start();
+        }
     }
 
     private class TrendingStickersAdapter extends RecyclerListView.SelectionAdapter {

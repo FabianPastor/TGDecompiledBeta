@@ -37,7 +37,7 @@ class I5 extends CLASSNAMEs5 {
             long j = this.m;
             return new R6(v0, j, Q5.f(j, this.n));
         }
-        if (!CLASSNAMEu6.ORDERED.f(helper.r0())) {
+        if (!CLASSNAMEu6.ORDERED.K(helper.r0())) {
             return R0(helper.v0(spliterator), this.m, this.n, size);
         }
         return ((CLASSNAMEt3) new P5(this, helper, spliterator, Q5.g(), this.m, this.n).invoke()).spliterator();
@@ -55,7 +55,7 @@ class I5 extends CLASSNAMEs5 {
         } else {
             CLASSNAMEq4 q4Var2 = helper;
         }
-        if (!CLASSNAMEu6.ORDERED.f(helper.r0())) {
+        if (!CLASSNAMEu6.ORDERED.K(helper.r0())) {
             return CLASSNAMEp4.f(this, R0(helper.v0(spliterator), this.m, this.n, size), true, c2);
         }
         return (CLASSNAMEt3) new P5(this, helper, spliterator, c, this.m, this.n).invoke();

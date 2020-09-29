@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import org.telegram.SQLite.SQLiteCursor;
+import org.telegram.messenger.MediaController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.audioinfo.AudioInfo;
 import org.telegram.tgnet.NativeByteBuffer;
@@ -480,7 +481,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
                         if (parseInt2 < arrayList.size()) {
                             int unused = MusicBrowserService.this.lastSelectedDialog = parseInt;
                             MessagesController.getNotificationsSettings(MusicBrowserService.this.currentAccount).edit().putInt("auto_lastSelectedDialog", parseInt).commit();
-                            MediaController.getInstance().setPlaylist(arrayList, (MessageObject) arrayList.get(parseInt2), 0, false);
+                            MediaController.getInstance().setPlaylist(arrayList, (MessageObject) arrayList.get(parseInt2), 0, false, (MediaController.PlaylistGlobalSearchParams) null);
                             MusicBrowserService.this.mediaSession.setQueue(arrayList2);
                             if (parseInt > 0) {
                                 TLRPC$User tLRPC$User = (TLRPC$User) MusicBrowserService.this.users.get(parseInt);

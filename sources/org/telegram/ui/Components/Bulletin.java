@@ -1,14 +1,12 @@
 package org.telegram.ui.Components;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.InsetDrawable;
 import android.view.MotionEvent;
@@ -18,7 +16,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.core.util.Consumer;
+import androidx.core.util.Preconditions;
 import androidx.core.view.ViewCompat;
+import androidx.dynamicanimation.animation.DynamicAnimation;
+import androidx.dynamicanimation.animation.SpringAnimation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,11 +32,15 @@ import org.telegram.ui.Components.Bulletin;
 
 public final class Bulletin {
     /* access modifiers changed from: private */
-    public static final HashMap<FrameLayout, OffsetProvider> offsetProviders = new HashMap<>();
+    public static final HashMap<FrameLayout, Delegate> delegates = new HashMap<>();
     @SuppressLint({"StaticFieldLeak"})
     private static Bulletin visibleBulletin;
     /* access modifiers changed from: private */
     public final FrameLayout containerLayout;
+    /* access modifiers changed from: private */
+    public int currentBottomOffset;
+    /* access modifiers changed from: private */
+    public Delegate currentDelegate;
     /* access modifiers changed from: private */
     public final int duration;
     /* access modifiers changed from: private */
@@ -42,12 +48,27 @@ public final class Bulletin {
     /* access modifiers changed from: private */
     public final Layout layout;
     /* access modifiers changed from: private */
-    public final Layout.Transition layoutTransition;
+    public Layout.Transition layoutTransition;
+    /* access modifiers changed from: private */
+    public final FrameLayout parentLayout;
     /* access modifiers changed from: private */
     public boolean showing;
 
-    public interface OffsetProvider {
+    public interface Delegate {
+
+        /* renamed from: org.telegram.ui.Components.Bulletin$Delegate$-CC  reason: invalid class name */
+        public final /* synthetic */ class CC {
+            public static int $default$getBottomOffset(Delegate delegate) {
+                return 0;
+            }
+
+            public static void $default$onOffsetChange(Delegate delegate, float f) {
+            }
+        }
+
         int getBottomOffset();
+
+        void onOffsetChange(float f);
     }
 
     public static Bulletin make(FrameLayout frameLayout, Layout layout2, int i) {
@@ -55,7 +76,7 @@ public final class Bulletin {
     }
 
     public static Bulletin make(BaseFragment baseFragment, Layout layout2, int i) {
-        return new Bulletin(baseFragment.getParentLayout(), layout2, i);
+        return new Bulletin(baseFragment.getLayoutContainer(), layout2, i);
     }
 
     public static Bulletin find(FrameLayout frameLayout) {
@@ -69,85 +90,128 @@ public final class Bulletin {
         return null;
     }
 
+    public static void hide(FrameLayout frameLayout) {
+        hide(frameLayout, true);
+    }
+
+    public static void hide(FrameLayout frameLayout, boolean z) {
+        Bulletin find = find(frameLayout);
+        if (find != null) {
+            find.hide(z && isTransitionsEnabled());
+        }
+    }
+
     private Bulletin(FrameLayout frameLayout, Layout layout2, int i) {
         this.layout = layout2;
-        this.layoutTransition = layout2.createTransition();
+        FrameLayout frameLayout2 = new FrameLayout(layout2.getContext());
+        this.parentLayout = frameLayout2;
+        frameLayout2.addView(layout2, LayoutHelper.createFrame(-1, -2, 80));
         this.containerLayout = frameLayout;
         this.duration = i;
     }
 
     public void show() {
         if (!this.showing) {
+            boolean z = true;
             this.showing = true;
-            if (this.layout.getParent() == null) {
-                Bulletin bulletin = visibleBulletin;
-                if (bulletin != null) {
-                    bulletin.hide();
-                }
-                visibleBulletin = this;
-                this.layout.onAttach(this);
-                this.layout.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-                    public void onLayoutChange(View view, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
-                        Bulletin.this.layout.removeOnLayoutChangeListener(this);
-                        if (Bulletin.this.showing) {
-                            Bulletin.this.layout.onShow();
-                            if (Bulletin.isTransitionsEnabled()) {
-                                OffsetProvider offsetProvider = (OffsetProvider) Bulletin.offsetProviders.get(Bulletin.this.containerLayout);
-                                Layout.Transition access$500 = Bulletin.this.layoutTransition;
-                                Layout access$000 = Bulletin.this.layout;
-                                Layout access$0002 = Bulletin.this.layout;
-                                access$0002.getClass();
-                                access$500.animateEnter(access$000, new Runnable() {
-                                    public final void run() {
-                                        Bulletin.Layout.this.onEnterTransitionStart();
-                                    }
-                                }, new Runnable() {
-                                    public final void run() {
-                                        Bulletin.AnonymousClass1.this.lambda$onLayoutChange$0$Bulletin$1();
-                                    }
-                                }, offsetProvider != null ? offsetProvider.getBottomOffset() : 0);
-                                return;
-                            }
-                            Bulletin.this.layout.onEnterTransitionStart();
-                            Bulletin.this.layout.onEnterTransitionEnd();
-                            Layout access$0003 = Bulletin.this.layout;
-                            Bulletin bulletin = Bulletin.this;
-                            $$Lambda$wTVigIqq1dtB15QAWctG67JZ4x8 r3 = new Runnable() {
-                                public final void run() {
-                                    Bulletin.this.hide();
-                                }
-                            };
-                            Runnable unused = bulletin.exitRunnable = r3;
-                            access$0003.postDelayed(r3, (long) Bulletin.this.duration);
-                        }
-                    }
-
-                    public /* synthetic */ void lambda$onLayoutChange$0$Bulletin$1() {
-                        Bulletin.this.layout.onEnterTransitionEnd();
-                        Layout access$000 = Bulletin.this.layout;
+            if (this.layout.getParent() != this.parentLayout) {
+                z = false;
+            }
+            Preconditions.checkState(z, "Layout has incorrect parent");
+            Bulletin bulletin = visibleBulletin;
+            if (bulletin != null) {
+                bulletin.hide();
+            }
+            visibleBulletin = this;
+            this.layout.onAttach(this);
+            this.layout.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                public void onLayoutChange(View view, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
+                    Bulletin.this.layout.removeOnLayoutChangeListener(this);
+                    if (Bulletin.this.showing) {
+                        Bulletin.this.layout.onShow();
+                        Delegate unused = Bulletin.this.currentDelegate = (Delegate) Bulletin.delegates.get(Bulletin.this.containerLayout);
                         Bulletin bulletin = Bulletin.this;
-                        $$Lambda$wTVigIqq1dtB15QAWctG67JZ4x8 r2 = new Runnable() {
+                        int unused2 = bulletin.currentBottomOffset = bulletin.currentDelegate != null ? Bulletin.this.currentDelegate.getBottomOffset() : 0;
+                        if (Bulletin.this.currentBottomOffset != 0) {
+                            Bulletin.this.parentLayout.setClipBounds(new Rect(i, i2 - Bulletin.this.currentBottomOffset, i3, i4 - Bulletin.this.currentBottomOffset));
+                        } else {
+                            Bulletin.this.parentLayout.setClipBounds((Rect) null);
+                        }
+                        if (Bulletin.isTransitionsEnabled()) {
+                            Bulletin.this.ensureLayoutTransitionCreated();
+                            Layout.Transition access$900 = Bulletin.this.layoutTransition;
+                            Layout access$000 = Bulletin.this.layout;
+                            Layout access$0002 = Bulletin.this.layout;
+                            access$0002.getClass();
+                            access$900.animateEnter(access$000, new Runnable() {
+                                public final void run() {
+                                    Bulletin.Layout.this.onEnterTransitionStart();
+                                }
+                            }, new Runnable() {
+                                public final void run() {
+                                    Bulletin.AnonymousClass1.this.lambda$onLayoutChange$0$Bulletin$1();
+                                }
+                            }, new Consumer() {
+                                public final void accept(Object obj) {
+                                    Bulletin.AnonymousClass1.this.lambda$onLayoutChange$1$Bulletin$1((Float) obj);
+                                }
+                            }, Bulletin.this.currentBottomOffset);
+                            return;
+                        }
+                        if (Bulletin.this.currentDelegate != null) {
+                            Bulletin.this.currentDelegate.onOffsetChange((float) (Bulletin.this.layout.getHeight() - Bulletin.this.currentBottomOffset));
+                        }
+                        Bulletin.this.layout.setTranslationY((float) (-Bulletin.this.currentBottomOffset));
+                        Bulletin.this.layout.onEnterTransitionStart();
+                        Bulletin.this.layout.onEnterTransitionEnd();
+                        Layout access$0003 = Bulletin.this.layout;
+                        Bulletin bulletin2 = Bulletin.this;
+                        $$Lambda$wTVigIqq1dtB15QAWctG67JZ4x8 r3 = new Runnable() {
                             public final void run() {
                                 Bulletin.this.hide();
                             }
                         };
-                        Runnable unused = bulletin.exitRunnable = r2;
-                        access$000.postDelayed(r2, (long) Bulletin.this.duration);
+                        Runnable unused3 = bulletin2.exitRunnable = r3;
+                        access$0003.postDelayed(r3, (long) Bulletin.this.duration);
                     }
-                });
-                this.layout.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
-                    public void onViewAttachedToWindow(View view) {
-                    }
+                }
 
-                    public void onViewDetachedFromWindow(View view) {
-                        Bulletin.this.layout.removeOnAttachStateChangeListener(this);
-                        Bulletin.this.hide(false);
+                public /* synthetic */ void lambda$onLayoutChange$0$Bulletin$1() {
+                    Bulletin.this.layout.onEnterTransitionEnd();
+                    Layout access$000 = Bulletin.this.layout;
+                    Bulletin bulletin = Bulletin.this;
+                    $$Lambda$wTVigIqq1dtB15QAWctG67JZ4x8 r2 = new Runnable() {
+                        public final void run() {
+                            Bulletin.this.hide();
+                        }
+                    };
+                    Runnable unused = bulletin.exitRunnable = r2;
+                    access$000.postDelayed(r2, (long) Bulletin.this.duration);
+                }
+
+                public /* synthetic */ void lambda$onLayoutChange$1$Bulletin$1(Float f) {
+                    if (Bulletin.this.currentDelegate != null) {
+                        Bulletin.this.currentDelegate.onOffsetChange(((float) Bulletin.this.layout.getHeight()) - f.floatValue());
                     }
-                });
-                this.containerLayout.addView(this.layout);
-                return;
-            }
-            throw new IllegalStateException("Layout already has a parent");
+                }
+            });
+            this.layout.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+                public void onViewAttachedToWindow(View view) {
+                }
+
+                public void onViewDetachedFromWindow(View view) {
+                    Bulletin.this.layout.removeOnAttachStateChangeListener(this);
+                    Bulletin.this.hide(false);
+                }
+            });
+            this.containerLayout.addView(this.parentLayout);
+        }
+    }
+
+    /* access modifiers changed from: private */
+    public void ensureLayoutTransitionCreated() {
+        if (this.layoutTransition == null) {
+            this.layoutTransition = this.layout.createTransition();
         }
     }
 
@@ -158,11 +222,12 @@ public final class Bulletin {
     /* access modifiers changed from: private */
     public void hide(boolean z) {
         if (this.showing) {
-            int i = 0;
             this.showing = false;
             if (visibleBulletin == this) {
                 visibleBulletin = null;
             }
+            int i = this.currentBottomOffset;
+            this.currentBottomOffset = 0;
             if (ViewCompat.isLaidOut(this.layout)) {
                 Runnable runnable = this.exitRunnable;
                 if (runnable != null) {
@@ -170,50 +235,54 @@ public final class Bulletin {
                     this.exitRunnable = null;
                 }
                 if (z) {
-                    OffsetProvider offsetProvider = offsetProviders.get(this.containerLayout);
+                    ensureLayoutTransitionCreated();
                     Layout.Transition transition = this.layoutTransition;
                     Layout layout2 = this.layout;
                     layout2.getClass();
-                    $$Lambda$Ig6osR7PXW8VgfIN_nLQPCt6qA r3 = new Runnable() {
+                    transition.animateExit(layout2, new Runnable() {
                         public final void run() {
                             Bulletin.Layout.this.onExitTransitionStart();
                         }
-                    };
-                    $$Lambda$Bulletin$6NXrlSAHhDw4D1a2UGnfEdQd7k0 r4 = new Runnable() {
+                    }, new Runnable() {
                         public final void run() {
                             Bulletin.this.lambda$hide$0$Bulletin();
                         }
-                    };
-                    if (offsetProvider != null) {
-                        i = offsetProvider.getBottomOffset();
-                    }
-                    transition.animateExit(layout2, r3, r4, i);
+                    }, new Consumer() {
+                        public final void accept(Object obj) {
+                            Bulletin.this.lambda$hide$1$Bulletin((Float) obj);
+                        }
+                    }, i);
                     return;
                 }
+            }
+            Delegate delegate = this.currentDelegate;
+            if (delegate != null) {
+                delegate.onOffsetChange(0.0f);
             }
             this.layout.onExitTransitionStart();
             this.layout.onExitTransitionEnd();
             this.layout.onHide();
-            FrameLayout frameLayout = this.containerLayout;
-            if (frameLayout != null) {
-                frameLayout.removeView(this.layout);
-            }
+            this.containerLayout.removeView(this.parentLayout);
             this.layout.onDetach();
         }
     }
 
     public /* synthetic */ void lambda$hide$0$Bulletin() {
+        Delegate delegate = this.currentDelegate;
+        if (delegate != null) {
+            delegate.onOffsetChange(0.0f);
+        }
         this.layout.onExitTransitionEnd();
         this.layout.onHide();
-        FrameLayout frameLayout = this.containerLayout;
-        if (frameLayout != null) {
-            frameLayout.removeView(this.layout);
-        }
+        this.containerLayout.removeView(this.parentLayout);
         this.layout.onDetach();
     }
 
-    public Layout getLayout() {
-        return this.layout;
+    public /* synthetic */ void lambda$hide$1$Bulletin(Float f) {
+        Delegate delegate = this.currentDelegate;
+        if (delegate != null) {
+            delegate.onOffsetChange(((float) this.layout.getHeight()) - f.floatValue());
+        }
     }
 
     /* access modifiers changed from: private */
@@ -221,17 +290,31 @@ public final class Bulletin {
         return MessagesController.getGlobalMainSettings().getBoolean("view_animations", true);
     }
 
-    public static void addOffsetProvider(FrameLayout frameLayout, OffsetProvider offsetProvider) {
-        offsetProviders.put(frameLayout, offsetProvider);
+    public static void addDelegate(BaseFragment baseFragment, Delegate delegate) {
+        FrameLayout layoutContainer = baseFragment.getLayoutContainer();
+        if (layoutContainer != null) {
+            addDelegate(layoutContainer, delegate);
+        }
     }
 
-    public static void removeOffsetProvider(FrameLayout frameLayout) {
-        offsetProviders.remove(frameLayout);
+    public static void addDelegate(FrameLayout frameLayout, Delegate delegate) {
+        delegates.put(frameLayout, delegate);
+    }
+
+    public static void removeDelegate(BaseFragment baseFragment) {
+        FrameLayout layoutContainer = baseFragment.getLayoutContainer();
+        if (layoutContainer != null) {
+            removeDelegate(layoutContainer);
+        }
+    }
+
+    public static void removeDelegate(FrameLayout frameLayout) {
+        delegates.remove(frameLayout);
     }
 
     public static abstract class Layout extends FrameLayout {
         protected Bulletin bulletin;
-        private final List<Callback> callbacks = new ArrayList();
+        private final List<Callback> callbacks;
 
         public interface Callback {
             void onAttach(Layout layout, Bulletin bulletin);
@@ -252,15 +335,20 @@ public final class Bulletin {
         }
 
         public interface Transition {
-            void animateEnter(Layout layout, Runnable runnable, Runnable runnable2, int i);
+            void animateEnter(Layout layout, Runnable runnable, Runnable runnable2, Consumer<Float> consumer, int i);
 
-            void animateExit(Layout layout, Runnable runnable, Runnable runnable2, int i);
+            void animateExit(Layout layout, Runnable runnable, Runnable runnable2, Consumer<Float> consumer, int i);
         }
 
         public Layout(Context context) {
+            this(context, Theme.getColor("undo_background"));
+        }
+
+        public Layout(Context context, int i) {
             super(context);
+            this.callbacks = new ArrayList();
             setMinimumHeight(AndroidUtilities.dp(48.0f));
-            setBackground(new InsetDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(6.0f), Theme.getColor("undo_background")), AndroidUtilities.dp(8.0f)));
+            setBackground(new InsetDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(6.0f), i), AndroidUtilities.dp(8.0f)));
             updateSize();
         }
 
@@ -369,52 +457,63 @@ public final class Bulletin {
         }
 
         public Transition createTransition() {
-            return new DefaultTransition();
+            return new SpringTransition();
         }
 
-        public static class DefaultTransition implements Transition {
-            public void animateEnter(Layout layout, final Runnable runnable, final Runnable runnable2, int i) {
-                ObjectAnimator ofFloat = ObjectAnimator.ofFloat(layout, View.TRANSLATION_Y, new float[]{(float) layout.getHeight(), (float) (-i)});
-                ofFloat.setDuration(225);
-                ofFloat.setInterpolator(Easings.easeOutQuad);
-                ofFloat.addListener(new AnimatorListenerAdapter(this) {
-                    public void onAnimationStart(Animator animator) {
-                        Runnable runnable = runnable;
-                        if (runnable != null) {
-                            runnable.run();
+        public static class SpringTransition implements Transition {
+            public void animateEnter(Layout layout, Runnable runnable, final Runnable runnable2, final Consumer<Float> consumer, int i) {
+                float height = (float) (layout.getHeight() - i);
+                layout.setTranslationY(height);
+                consumer.accept(Float.valueOf(height));
+                SpringAnimation springAnimation = new SpringAnimation(layout, DynamicAnimation.TRANSLATION_Y, (float) (-i));
+                springAnimation.getSpring().setDampingRatio(0.8f);
+                springAnimation.getSpring().setStiffness(400.0f);
+                if (runnable2 != null) {
+                    springAnimation.addEndListener(new DynamicAnimation.OnAnimationEndListener(this) {
+                        public void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+                            if (!z) {
+                                runnable2.run();
+                            }
                         }
-                    }
-
-                    public void onAnimationEnd(Animator animator) {
-                        Runnable runnable = runnable2;
-                        if (runnable != null) {
-                            runnable.run();
+                    });
+                }
+                if (consumer != null) {
+                    springAnimation.addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener(this) {
+                        public void onAnimationUpdate(DynamicAnimation dynamicAnimation, float f, float f2) {
+                            consumer.accept(Float.valueOf(f));
                         }
-                    }
-                });
-                ofFloat.start();
+                    });
+                }
+                springAnimation.start();
+                if (runnable != null) {
+                    runnable.run();
+                }
             }
 
-            public void animateExit(Layout layout, final Runnable runnable, final Runnable runnable2, int i) {
-                ObjectAnimator ofFloat = ObjectAnimator.ofFloat(layout, View.TRANSLATION_Y, new float[]{layout.getTranslationY(), (float) layout.getHeight()});
-                ofFloat.setDuration(175);
-                ofFloat.setInterpolator(Easings.easeInQuad);
-                ofFloat.addListener(new AnimatorListenerAdapter(this) {
-                    public void onAnimationStart(Animator animator) {
-                        Runnable runnable = runnable;
-                        if (runnable != null) {
-                            runnable.run();
+            public void animateExit(Layout layout, Runnable runnable, final Runnable runnable2, final Consumer<Float> consumer, int i) {
+                SpringAnimation springAnimation = new SpringAnimation(layout, DynamicAnimation.TRANSLATION_Y, (float) (layout.getHeight() - i));
+                springAnimation.getSpring().setDampingRatio(0.8f);
+                springAnimation.getSpring().setStiffness(400.0f);
+                if (runnable2 != null) {
+                    springAnimation.addEndListener(new DynamicAnimation.OnAnimationEndListener(this) {
+                        public void onAnimationEnd(DynamicAnimation dynamicAnimation, boolean z, float f, float f2) {
+                            if (!z) {
+                                runnable2.run();
+                            }
                         }
-                    }
-
-                    public void onAnimationEnd(Animator animator) {
-                        Runnable runnable = runnable2;
-                        if (runnable != null) {
-                            runnable.run();
+                    });
+                }
+                if (consumer != null) {
+                    springAnimation.addUpdateListener(new DynamicAnimation.OnAnimationUpdateListener(this) {
+                        public void onAnimationUpdate(DynamicAnimation dynamicAnimation, float f, float f2) {
+                            consumer.accept(Float.valueOf(f));
                         }
-                    }
-                });
-                ofFloat.start();
+                    });
+                }
+                springAnimation.start();
+                if (runnable != null) {
+                    runnable.run();
+                }
             }
         }
     }
@@ -426,6 +525,10 @@ public final class Bulletin {
 
         public ButtonLayout(Context context) {
             super(context);
+        }
+
+        public ButtonLayout(Context context, int i) {
+            super(context, i);
         }
 
         /* access modifiers changed from: protected */
@@ -518,6 +621,45 @@ public final class Bulletin {
             this.subtitleTextView.setTypeface(Typeface.SANS_SERIF);
             this.subtitleTextView.setTextSize(1, 13.0f);
             linearLayout.addView(this.subtitleTextView);
+        }
+    }
+
+    public static class LottieLayout extends ButtonLayout {
+        public final RLottieImageView imageView;
+        private final int textColor;
+        public final TextView textView;
+
+        public LottieLayout(Context context) {
+            this(context, Theme.getColor("undo_background"), Theme.getColor("undo_infoColor"));
+        }
+
+        public LottieLayout(Context context, int i, int i2) {
+            super(context, i);
+            this.textColor = i2;
+            RLottieImageView rLottieImageView = new RLottieImageView(context);
+            this.imageView = rLottieImageView;
+            addView(rLottieImageView, LayoutHelper.createFrameRelatively(28.0f, 28.0f, 8388627, 14.0f, 10.0f, 14.0f, 10.0f));
+            TextView textView2 = new TextView(context);
+            this.textView = textView2;
+            textView2.setSingleLine();
+            this.textView.setTextColor(i2);
+            this.textView.setTypeface(Typeface.SANS_SERIF);
+            this.textView.setTextSize(1, 15.0f);
+            addView(this.textView, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388627, 56.0f, 0.0f, 16.0f, 0.0f));
+        }
+
+        /* access modifiers changed from: protected */
+        public void onShow() {
+            super.onShow();
+            this.imageView.playAnimation();
+        }
+
+        public void setAnimation(int i, String... strArr) {
+            this.imageView.setAnimation(i, 28, 28);
+            for (int i2 = 0; i2 < strArr.length; i2++) {
+                RLottieImageView rLottieImageView = this.imageView;
+                rLottieImageView.setLayerColor(strArr[i2] + ".**", this.textColor);
+            }
         }
     }
 

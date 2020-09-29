@@ -1,22 +1,23 @@
 package j$;
 
-import j$.util.function.ToLongFunction;
+import j$.util.function.N;
+import java.util.function.LongToIntFunction;
 
-public final /* synthetic */ class i0 implements ToLongFunction {
-    final /* synthetic */ java.util.function.ToLongFunction a;
+public final /* synthetic */ class i0 implements N {
+    final /* synthetic */ LongToIntFunction a;
 
-    private /* synthetic */ i0(java.util.function.ToLongFunction toLongFunction) {
-        this.a = toLongFunction;
+    private /* synthetic */ i0(LongToIntFunction longToIntFunction) {
+        this.a = longToIntFunction;
     }
 
-    public static /* synthetic */ ToLongFunction b(java.util.function.ToLongFunction toLongFunction) {
-        if (toLongFunction == null) {
+    public static /* synthetic */ N b(LongToIntFunction longToIntFunction) {
+        if (longToIntFunction == null) {
             return null;
         }
-        return new i0(toLongFunction);
+        return new i0(longToIntFunction);
     }
 
-    public /* synthetic */ long a(Object obj) {
-        return this.a.applyAsLong(obj);
+    public /* synthetic */ int a(long j) {
+        return this.a.applyAsInt(j);
     }
 }

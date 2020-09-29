@@ -15,8 +15,10 @@ public class TLRPC$TL_message_secret_layer72 extends TLRPC$TL_message {
         this.media_unread = (this.flags & 32) != 0;
         this.id = abstractSerializedData.readInt32(z);
         this.ttl = abstractSerializedData.readInt32(z);
-        this.from_id = abstractSerializedData.readInt32(z);
-        this.to_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
+        this.from_id = tLRPC$TL_peerUser;
+        tLRPC$TL_peerUser.user_id = abstractSerializedData.readInt32(z);
+        this.peer_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.date = abstractSerializedData.readInt32(z);
         this.message = abstractSerializedData.readString(z);
         TLRPC$MessageMedia TLdeserialize = TLRPC$MessageMedia.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
@@ -40,7 +42,9 @@ public class TLRPC$TL_message_secret_layer72 extends TLRPC$TL_message {
                 this.via_bot_name = abstractSerializedData.readString(z);
             }
             if ((this.flags & 8) != 0) {
-                this.reply_to_random_id = abstractSerializedData.readInt64(z);
+                TLRPC$TL_messageReplyHeader tLRPC$TL_messageReplyHeader = new TLRPC$TL_messageReplyHeader();
+                this.reply_to = tLRPC$TL_messageReplyHeader;
+                tLRPC$TL_messageReplyHeader.reply_to_random_id = abstractSerializedData.readInt64(z);
             }
         } else if (z) {
             throw new RuntimeException(String.format("wrong Vector magic, got %x", new Object[]{Integer.valueOf(readInt322)}));
@@ -60,8 +64,8 @@ public class TLRPC$TL_message_secret_layer72 extends TLRPC$TL_message {
         abstractSerializedData.writeInt32(i4);
         abstractSerializedData.writeInt32(this.id);
         abstractSerializedData.writeInt32(this.ttl);
-        abstractSerializedData.writeInt32(this.from_id);
-        this.to_id.serializeToStream(abstractSerializedData);
+        abstractSerializedData.writeInt32(this.from_id.user_id);
+        this.peer_id.serializeToStream(abstractSerializedData);
         abstractSerializedData.writeInt32(this.date);
         abstractSerializedData.writeString(this.message);
         this.media.serializeToStream(abstractSerializedData);
@@ -75,7 +79,7 @@ public class TLRPC$TL_message_secret_layer72 extends TLRPC$TL_message {
             abstractSerializedData.writeString(this.via_bot_name);
         }
         if ((this.flags & 8) != 0) {
-            abstractSerializedData.writeInt64(this.reply_to_random_id);
+            abstractSerializedData.writeInt64(this.reply_to.reply_to_random_id);
         }
         writeAttachPath(abstractSerializedData);
     }

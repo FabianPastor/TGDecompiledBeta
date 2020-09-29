@@ -20,7 +20,7 @@ public abstract class TLRPC$ChannelParticipant extends TLObject {
         TLRPC$ChannelParticipant tLRPC$ChannelParticipant;
         switch (i) {
             case -2138237532:
-                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantCreator();
+                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantCreator_layer118();
                 break;
             case -1933187430:
                 tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantKicked_layer67();
@@ -51,6 +51,9 @@ public abstract class TLRPC$ChannelParticipant extends TLObject {
                 break;
             case 573315206:
                 tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantBanned_layer92();
+                break;
+            case 1149094475:
+                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantCreator();
                 break;
             case 1571450403:
                 tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantAdmin_layer103();

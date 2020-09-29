@@ -3,6 +3,7 @@ package org.telegram.tgnet;
 public class TLRPC$TL_chatAdminRights extends TLObject {
     public static int constructor = NUM;
     public boolean add_admins;
+    public boolean anonymous;
     public boolean ban_users;
     public boolean change_info;
     public boolean delete_messages;
@@ -35,10 +36,11 @@ public class TLRPC$TL_chatAdminRights extends TLObject {
         this.ban_users = (this.flags & 16) != 0;
         this.invite_users = (this.flags & 32) != 0;
         this.pin_messages = (this.flags & 128) != 0;
-        if ((this.flags & 512) == 0) {
+        this.add_admins = (this.flags & 512) != 0;
+        if ((this.flags & 1024) == 0) {
             z2 = false;
         }
-        this.add_admins = z2;
+        this.anonymous = z2;
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -59,6 +61,8 @@ public class TLRPC$TL_chatAdminRights extends TLObject {
         this.flags = i7;
         int i8 = this.add_admins ? i7 | 512 : i7 & -513;
         this.flags = i8;
-        abstractSerializedData.writeInt32(i8);
+        int i9 = this.anonymous ? i8 | 1024 : i8 & -1025;
+        this.flags = i9;
+        abstractSerializedData.writeInt32(i9);
     }
 }

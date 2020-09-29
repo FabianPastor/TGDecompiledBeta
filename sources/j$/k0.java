@@ -1,44 +1,31 @@
 package j$;
 
-import j$.util.function.BiConsumer;
-import j$.util.function.CLASSNAMEo;
-import j$.util.function.Function;
-import j$.util.function.V;
-import j$.util.stream.CLASSNAMEn1;
-import java.util.Set;
-import java.util.stream.Collector;
+import j$.util.function.P;
+import java.util.function.LongUnaryOperator;
 
-public final /* synthetic */ class k0 implements CLASSNAMEn1 {
-    final /* synthetic */ Collector a;
+public final /* synthetic */ class k0 implements LongUnaryOperator {
+    final /* synthetic */ P a;
 
-    private /* synthetic */ k0(Collector collector) {
-        this.a = collector;
+    private /* synthetic */ k0(P p) {
+        this.a = p;
     }
 
-    public static /* synthetic */ CLASSNAMEn1 e(Collector collector) {
-        if (collector == null) {
+    public static /* synthetic */ LongUnaryOperator a(P p) {
+        if (p == null) {
             return null;
         }
-        return new k0(collector);
+        return p instanceof j0 ? ((j0) p).a : new k0(p);
     }
 
-    public /* synthetic */ BiConsumer a() {
-        return CLASSNAMEn.b(this.a.accumulator());
+    public /* synthetic */ LongUnaryOperator andThen(LongUnaryOperator longUnaryOperator) {
+        return a(this.a.a(j0.c(longUnaryOperator)));
     }
 
-    public /* synthetic */ CLASSNAMEo b() {
-        return CLASSNAMEq.b(this.a.combiner());
+    public /* synthetic */ long applyAsLong(long j) {
+        return this.a.applyAsLong(j);
     }
 
-    public /* synthetic */ V c() {
-        return f0.a(this.a.supplier());
-    }
-
-    public /* synthetic */ Set characteristics() {
-        return this.a.characteristics();
-    }
-
-    public /* synthetic */ Function d() {
-        return D.c(this.a.finisher());
+    public /* synthetic */ LongUnaryOperator compose(LongUnaryOperator longUnaryOperator) {
+        return a(this.a.b(j0.c(longUnaryOperator)));
     }
 }

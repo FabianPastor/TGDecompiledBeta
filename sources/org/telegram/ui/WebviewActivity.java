@@ -77,7 +77,7 @@ public class WebviewActivity extends BaseFragment {
             if (WebviewActivity.this.currentMessageObject != null && WebviewActivity.this.getParentActivity() != null) {
                 WebviewActivity webviewActivity = WebviewActivity.this;
                 if (webviewActivity.typingRunnable != null) {
-                    MessagesController.getInstance(webviewActivity.currentAccount).sendTyping(WebviewActivity.this.currentMessageObject.getDialogId(), 6, 0);
+                    MessagesController.getInstance(webviewActivity.currentAccount).sendTyping(WebviewActivity.this.currentMessageObject.getDialogId(), 0, 6, 0);
                     AndroidUtilities.runOnUIThread(WebviewActivity.this.typingRunnable, 25000);
                 }
             }

@@ -144,10 +144,10 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
             Iterator it3 = objArr[1].iterator();
             while (it3.hasNext()) {
                 MessageObject messageObject = (MessageObject) it3.next();
-                TLRPC$Message tLRPC$Message = messageObject.messageOwner;
-                if (tLRPC$Message.action instanceof TLRPC$TL_messageActionPhoneCall) {
-                    int i3 = tLRPC$Message.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? messageObject.messageOwner.to_id.user_id : messageObject.messageOwner.from_id;
-                    int i4 = messageObject.messageOwner.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? 0 : 1;
+                if (messageObject.messageOwner.action instanceof TLRPC$TL_messageActionPhoneCall) {
+                    int fromChatId = messageObject.getFromChatId();
+                    int i3 = fromChatId == UserConfig.getInstance(this.currentAccount).getClientUserId() ? messageObject.messageOwner.peer_id.user_id : fromChatId;
+                    int i4 = fromChatId == UserConfig.getInstance(this.currentAccount).getClientUserId() ? 0 : 1;
                     TLRPC$PhoneCallDiscardReason tLRPC$PhoneCallDiscardReason = messageObject.messageOwner.action.reason;
                     if (i4 == 1 && ((tLRPC$PhoneCallDiscardReason instanceof TLRPC$TL_phoneCallDiscardReasonMissed) || (tLRPC$PhoneCallDiscardReason instanceof TLRPC$TL_phoneCallDiscardReasonBusy))) {
                         i4 = 2;
@@ -573,19 +573,22 @@ public class CallLogActivity extends BaseFragment implements NotificationCenter.
                 TLRPC$Message tLRPC$Message = tLRPC$messages_Messages.messages.get(i2);
                 TLRPC$MessageAction tLRPC$MessageAction = tLRPC$Message.action;
                 if (tLRPC$MessageAction != null && !(tLRPC$MessageAction instanceof TLRPC$TL_messageActionHistoryClear)) {
-                    int i3 = tLRPC$Message.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? 0 : 1;
+                    int i3 = MessageObject.getFromChatId(tLRPC$Message) == UserConfig.getInstance(this.currentAccount).getClientUserId() ? 0 : 1;
                     TLRPC$PhoneCallDiscardReason tLRPC$PhoneCallDiscardReason = tLRPC$Message.action.reason;
                     if (i3 == 1 && ((tLRPC$PhoneCallDiscardReason instanceof TLRPC$TL_phoneCallDiscardReasonMissed) || (tLRPC$PhoneCallDiscardReason instanceof TLRPC$TL_phoneCallDiscardReasonBusy))) {
                         i3 = 2;
                     }
-                    int i4 = tLRPC$Message.from_id == UserConfig.getInstance(this.currentAccount).getClientUserId() ? tLRPC$Message.to_id.user_id : tLRPC$Message.from_id;
-                    if (!(callLogRow != null && callLogRow.user.id == i4 && callLogRow.type == i3)) {
+                    int fromChatId = MessageObject.getFromChatId(tLRPC$Message);
+                    if (fromChatId == UserConfig.getInstance(this.currentAccount).getClientUserId()) {
+                        fromChatId = tLRPC$Message.peer_id.user_id;
+                    }
+                    if (!(callLogRow != null && callLogRow.user.id == fromChatId && callLogRow.type == i3)) {
                         if (callLogRow != null && !this.calls.contains(callLogRow)) {
                             this.calls.add(callLogRow);
                         }
                         callLogRow = new CallLogRow();
                         callLogRow.calls = new ArrayList();
-                        callLogRow.user = (TLRPC$User) sparseArray.get(i4);
+                        callLogRow.user = (TLRPC$User) sparseArray.get(fromChatId);
                         callLogRow.type = i3;
                         TLRPC$MessageAction tLRPC$MessageAction2 = tLRPC$Message.action;
                         callLogRow.video = tLRPC$MessageAction2 != null && tLRPC$MessageAction2.video;

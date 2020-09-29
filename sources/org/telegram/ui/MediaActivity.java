@@ -395,10 +395,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.messagePlayingDidStart);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x03d7  */
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x03dd  */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x0579  */
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x0580 A[SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:62:0x03d8  */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x03de  */
+    /* JADX WARNING: Removed duplicated region for block: B:66:0x057b  */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x0582 A[SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public android.view.View createView(android.content.Context r28) {
         /*
@@ -457,7 +457,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r1 = r0.self
             if (r1 == 0) goto L_0x0081
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131626776(0x7f0e0b18, float:1.8880798E38)
+            r1 = 2131626828(0x7f0e0b4c, float:1.8880903E38)
             java.lang.String r3 = "SavedMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setTitle(r1)
@@ -507,7 +507,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = android.text.TextUtils.isEmpty(r0)
             if (r0 == 0) goto L_0x00f7
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            r1 = 2131626944(0x7f0e0bc0, float:1.8881138E38)
+            r1 = 2131627008(0x7f0e0CLASSNAME, float:1.8881268E38)
             java.lang.String r3 = "SharedContentTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
             r0.setTitle(r1)
@@ -523,7 +523,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r1.<init>()
             r0.setActionBarMenuOnItemClick(r1)
             android.content.res.Resources r0 = r28.getResources()
-            r1 = 2131165840(0x7var_, float:1.7945908E38)
+            r1 = 2131165851(0x7var_b, float:1.794593E38)
             android.graphics.drawable.Drawable r0 = r0.getDrawable(r1)
             r6.pinnedHeaderShadowDrawable = r0
             android.graphics.PorterDuffColorFilter r1 = new android.graphics.PorterDuffColorFilter
@@ -533,19 +533,19 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r1.<init>(r3, r4)
             r0.setColorFilter(r1)
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r6.scrollSlidingTextTabStrip
-            if (r0 == 0) goto L_0x0138
+            if (r0 == 0) goto L_0x0139
             int r0 = r0.getCurrentTabId()
             r6.initialTab = r0
-        L_0x0138:
+        L_0x0139:
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = new org.telegram.ui.Components.ScrollSlidingTextTabStrip
             r0.<init>(r7)
             r6.scrollSlidingTextTabStrip = r0
             int r1 = r6.initialTab
             r10 = -1
-            if (r1 == r10) goto L_0x0149
+            if (r1 == r10) goto L_0x014a
             r0.setInitialTabId(r1)
             r6.initialTab = r10
-        L_0x0149:
+        L_0x014a:
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r1 = r6.scrollSlidingTextTabStrip
             r3 = 44
@@ -557,20 +557,20 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r1.<init>()
             r0.setDelegate(r1)
             r0 = 1
-        L_0x0163:
-            if (r0 < 0) goto L_0x016f
+        L_0x0164:
+            if (r0 < 0) goto L_0x0170
             android.util.SparseArray<org.telegram.messenger.MessageObject>[] r1 = r6.selectedFiles
             r1 = r1[r0]
             r1.clear()
             int r0 = r0 + -1
-            goto L_0x0163
-        L_0x016f:
+            goto L_0x0164
+        L_0x0170:
             r6.cantDeleteMessagesCount = r8
             java.util.ArrayList<android.view.View> r0 = r6.actionModeViews
             r0.clear()
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createMenu()
-            r1 = 2131165467(0x7var_b, float:1.7945152E38)
+            r1 = 2131165468(0x7var_c, float:1.7945154E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItem((int) r8, (int) r1)
             r0.setIsSearchField(r9)
             org.telegram.ui.MediaActivity$6 r1 = new org.telegram.ui.MediaActivity$6
@@ -578,7 +578,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r0.setActionBarMenuItemSearchListener(r1)
             r6.searchItem = r0
             java.lang.String r1 = "Search"
-            r3 = 2131626788(0x7f0e0b24, float:1.8880822E38)
+            r3 = 2131626840(0x7f0e0b58, float:1.8880928E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r1, r3)
             r0.setSearchFieldHint(r4)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r6.searchItem
@@ -589,8 +589,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r6.searchItemState = r8
             r6.hasOwnBackground = r9
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
-            org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createActionMode(r8)
             r11 = 0
+            org.telegram.ui.ActionBar.ActionBarMenu r0 = r0.createActionMode(r8, r11)
             r0.setBackgroundDrawable(r11)
             org.telegram.ui.ActionBar.ActionBar r1 = r6.actionBar
             java.lang.String r3 = "actionBarDefaultIcon"
@@ -643,10 +643,10 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             int r1 = (int) r3
             r3 = 3
             r4 = 1113063424(0x42580000, float:54.0)
-            if (r1 == 0) goto L_0x026c
+            if (r1 == 0) goto L_0x026d
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
             r5 = 7
-            r12 = 2131165725(0x7var_d, float:1.7945675E38)
+            r12 = 2131165731(0x7var_, float:1.7945687E38)
             int r13 = org.telegram.messenger.AndroidUtilities.dp(r4)
             r14 = 2131623975(0x7f0e0027, float:1.8875117E38)
             java.lang.String r15 = "AccDescrGoToMessage"
@@ -655,18 +655,18 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r6.gotoItem = r5
             r1.add(r5)
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
-            r5 = 2131165705(0x7var_, float:1.7945635E38)
+            r5 = 2131165710(0x7var_e, float:1.7945645E38)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r13 = 2131625391(0x7f0e05af, float:1.8877989E38)
+            r13 = 2131625415(0x7f0e05c7, float:1.8878037E38)
             java.lang.String r14 = "Forward"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r14, r13)
             org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r0.addItemWithWidth(r3, r5, r12, r13)
             r1.add(r5)
-        L_0x026c:
+        L_0x026d:
             java.util.ArrayList<android.view.View> r1 = r6.actionModeViews
-            r5 = 2131165697(0x7var_, float:1.7945618E38)
+            r5 = 2131165701(0x7var_, float:1.7945627E38)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r12 = 2131624959(0x7f0e03ff, float:1.8877112E38)
+            r12 = 2131624978(0x7f0e0412, float:1.887715E38)
             java.lang.String r13 = "Delete"
             java.lang.String r12 = org.telegram.messenger.LocaleController.getString(r13, r12)
             org.telegram.ui.ActionBar.ActionBarMenuItem r0 = r0.addItemWithWidth(r2, r5, r4, r12)
@@ -703,16 +703,16 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r0 = -1
             r1 = 0
             r14 = 0
-        L_0x02cb:
+        L_0x02cc:
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r6.mediaPages
             int r3 = r2.length
-            if (r14 >= r3) goto L_0x0589
-            if (r14 != 0) goto L_0x0315
+            if (r14 >= r3) goto L_0x058b
+            if (r14 != 0) goto L_0x0316
             r3 = r2[r14]
-            if (r3 == 0) goto L_0x0315
+            if (r3 == 0) goto L_0x0316
             r2 = r2[r14]
             androidx.recyclerview.widget.LinearLayoutManager r2 = r2.layoutManager
-            if (r2 == 0) goto L_0x0315
+            if (r2 == 0) goto L_0x0316
             org.telegram.ui.MediaActivity$MediaPage[] r0 = r6.mediaPages
             r0 = r0[r14]
             androidx.recyclerview.widget.LinearLayoutManager r0 = r0.layoutManager
@@ -722,27 +722,27 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             androidx.recyclerview.widget.LinearLayoutManager r2 = r2.layoutManager
             int r2 = r2.getItemCount()
             int r2 = r2 - r9
-            if (r0 == r2) goto L_0x0312
+            if (r0 == r2) goto L_0x0313
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r6.mediaPages
             r2 = r2[r14]
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
             androidx.recyclerview.widget.RecyclerView$ViewHolder r2 = r2.findViewHolderForAdapterPosition(r0)
             org.telegram.ui.Components.RecyclerListView$Holder r2 = (org.telegram.ui.Components.RecyclerListView.Holder) r2
-            if (r2 == 0) goto L_0x0310
+            if (r2 == 0) goto L_0x0311
             android.view.View r1 = r2.itemView
             int r1 = r1.getTop()
-            goto L_0x0315
-        L_0x0310:
+            goto L_0x0316
+        L_0x0311:
             r0 = -1
-            goto L_0x0315
-        L_0x0312:
+            goto L_0x0316
+        L_0x0313:
             r5 = r1
             r15 = -1
-            goto L_0x0317
-        L_0x0315:
+            goto L_0x0318
+        L_0x0316:
             r15 = r0
             r5 = r1
-        L_0x0317:
+        L_0x0318:
             org.telegram.ui.MediaActivity$8 r4 = new org.telegram.ui.MediaActivity$8
             r4.<init>(r7)
             r3 = -1082130432(0xffffffffbvar_, float:-1.0)
@@ -819,15 +819,15 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.-$$Lambda$MediaActivity$RwU3_9vRjx_ylKGSBWguLaWu-aA r2 = new org.telegram.ui.-$$Lambda$MediaActivity$RwU3_9vRjx_ylKGSBWguLaWu-aA
             r2.<init>(r4)
             r0.setOnItemLongClickListener((org.telegram.ui.Components.RecyclerListView.OnItemLongClickListener) r2)
-            if (r14 != 0) goto L_0x03dd
+            if (r14 != 0) goto L_0x03de
             r0 = -1
-            if (r15 == r0) goto L_0x03dd
+            if (r15 == r0) goto L_0x03de
             r0 = r21
             r10.scrollToPositionWithOffset(r15, r0)
-            goto L_0x03df
-        L_0x03dd:
+            goto L_0x03e0
+        L_0x03de:
             r0 = r21
-        L_0x03df:
+        L_0x03e0:
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r6.mediaPages
             r2 = r2[r14]
             org.telegram.ui.Components.RecyclerListView r2 = r2.listView
@@ -983,21 +983,21 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.Components.RadialProgressView r2 = r2.progressBar
             android.widget.LinearLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createLinear(r10, r10)
             r1.addView(r2, r3)
-            if (r14 == 0) goto L_0x0580
+            if (r14 == 0) goto L_0x0582
             org.telegram.ui.MediaActivity$MediaPage[] r1 = r6.mediaPages
             r1 = r1[r14]
             r1.setVisibility(r4)
-        L_0x0580:
+        L_0x0582:
             int r14 = r14 + 1
             r1 = r0
             r0 = r15
             r10 = -1
             r11 = 0
             r12 = 2
-            goto L_0x02cb
-        L_0x0589:
+            goto L_0x02cc
+        L_0x058b:
             boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r0 != 0) goto L_0x05ab
+            if (r0 != 0) goto L_0x05ad
             org.telegram.ui.Components.FragmentContextView r0 = new org.telegram.ui.Components.FragmentContextView
             r0.<init>(r7, r6, r8)
             r6.fragmentContextView = r0
@@ -1010,7 +1010,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r25 = 0
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25)
             r13.addView(r0, r1)
-        L_0x05ab:
+        L_0x05ad:
             org.telegram.ui.ActionBar.ActionBar r0 = r6.actionBar
             r1 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
             r2 = -1
@@ -1022,9 +1022,9 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             int r0 = r0.getCurrentTabId()
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r1 = r6.scrollSlidingTextTabStrip
             int r1 = r1.getFirstTabId()
-            if (r0 != r1) goto L_0x05cc
+            if (r0 != r1) goto L_0x05ce
             r8 = 1
-        L_0x05cc:
+        L_0x05ce:
             r6.swipeBackEnabled = r8
             android.view.View r0 = r6.fragmentView
             return r0
@@ -1107,7 +1107,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
     /* JADX WARNING: Removed duplicated region for block: B:101:0x01fd  */
     /* JADX WARNING: Removed duplicated region for block: B:110:0x021e  */
     /* JADX WARNING: Removed duplicated region for block: B:176:0x02ff  */
-    /* JADX WARNING: Removed duplicated region for block: B:267:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:218:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void didReceivedNotification(int r22, int r23, java.lang.Object... r24) {
         /*
@@ -1128,7 +1128,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             java.lang.Integer r12 = (java.lang.Integer) r12
             int r12 = r12.intValue()
             int r13 = r0.classGuid
-            if (r12 != r13) goto L_0x0401
+            if (r12 != r13) goto L_0x0372
             r12 = r24[r7]
             java.lang.Integer r12 = (java.lang.Integer) r12
             int r12 = r12.intValue()
@@ -1271,7 +1271,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
         L_0x0113:
             org.telegram.ui.MediaActivity$MediaPage[] r3 = r0.mediaPages
             int r4 = r3.length
-            if (r1 >= r4) goto L_0x0401
+            if (r1 >= r4) goto L_0x0372
             r3 = r3[r1]
             int r3 = r3.selectedType
             if (r3 != r12) goto L_0x0174
@@ -1404,7 +1404,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             int r4 = r4 + 1
             goto L_0x01fb
         L_0x021c:
-            if (r5 == 0) goto L_0x0401
+            if (r5 == 0) goto L_0x0372
             r0.scrolling = r11
             org.telegram.ui.MediaActivity$SharedPhotoVideoAdapter r1 = r0.photoVideoAdapter
             if (r1 == 0) goto L_0x0227
@@ -1423,12 +1423,12 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r1.notifyDataSetChanged()
         L_0x023c:
             org.telegram.ui.MediaActivity$SharedDocumentsAdapter r1 = r0.audioAdapter
-            if (r1 == 0) goto L_0x0401
+            if (r1 == 0) goto L_0x0372
             r1.notifyDataSetChanged()
-            goto L_0x0401
+            goto L_0x0372
         L_0x0245:
             int r2 = org.telegram.messenger.NotificationCenter.didReceiveNewMessages
-            if (r1 != r2) goto L_0x0346
+            if (r1 != r2) goto L_0x0345
             r1 = r24[r9]
             java.lang.Boolean r1 = (java.lang.Boolean) r1
             boolean r1 = r1.booleanValue()
@@ -1440,7 +1440,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             long r1 = r1.longValue()
             long r3 = r0.dialog_id
             int r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r5 != 0) goto L_0x0401
+            if (r5 != 0) goto L_0x0372
             r1 = r24[r11]
             java.util.ArrayList r1 = (java.util.ArrayList) r1
             int r2 = (int) r3
@@ -1474,8 +1474,8 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r13 = r13[r12]
             long r14 = r5.getDialogId()
             long r6 = r0.dialog_id
-            int r16 = (r14 > r6 ? 1 : (r14 == r6 ? 0 : -1))
-            if (r16 != 0) goto L_0x02a1
+            int r18 = (r14 > r6 ? 1 : (r14 == r6 ? 0 : -1))
+            if (r18 != 0) goto L_0x02a1
             r6 = 0
             goto L_0x02a2
         L_0x02a1:
@@ -1491,7 +1491,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             r7 = 4
             goto L_0x026e
         L_0x02b1:
-            if (r4 == 0) goto L_0x0401
+            if (r4 == 0) goto L_0x0372
             r0.scrolling = r11
             r1 = 0
         L_0x02b6:
@@ -1570,111 +1570,32 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             goto L_0x02b6
         L_0x0341:
             r21.updateTabs()
-            goto L_0x0401
-        L_0x0346:
+            goto L_0x0372
+        L_0x0345:
             int r2 = org.telegram.messenger.NotificationCenter.messageReceivedByServer
-            if (r1 != r2) goto L_0x0373
+            if (r1 != r2) goto L_0x0372
             r1 = 6
             r1 = r24[r1]
             java.lang.Boolean r1 = (java.lang.Boolean) r1
             boolean r1 = r1.booleanValue()
-            if (r1 == 0) goto L_0x0356
+            if (r1 == 0) goto L_0x0355
             return
-        L_0x0356:
+        L_0x0355:
             r1 = r24[r10]
             java.lang.Integer r1 = (java.lang.Integer) r1
             r2 = r24[r11]
             java.lang.Integer r2 = (java.lang.Integer) r2
-        L_0x035e:
+        L_0x035d:
             org.telegram.ui.Components.SharedMediaLayout$SharedMediaData[] r3 = r0.sharedMediaData
             int r4 = r3.length
-            if (r10 >= r4) goto L_0x0401
+            if (r10 >= r4) goto L_0x0372
             r3 = r3[r10]
             int r4 = r1.intValue()
             int r5 = r2.intValue()
             r3.replaceMid(r4, r5)
             int r10 = r10 + 1
-            goto L_0x035e
-        L_0x0373:
-            int r2 = org.telegram.messenger.NotificationCenter.messagePlayingDidStart
-            if (r1 == r2) goto L_0x037f
-            int r2 = org.telegram.messenger.NotificationCenter.messagePlayingPlayStateChanged
-            if (r1 == r2) goto L_0x037f
-            int r2 = org.telegram.messenger.NotificationCenter.messagePlayingDidReset
-            if (r1 != r2) goto L_0x0401
-        L_0x037f:
-            int r2 = org.telegram.messenger.NotificationCenter.messagePlayingDidReset
-            if (r1 == r2) goto L_0x03cd
-            int r2 = org.telegram.messenger.NotificationCenter.messagePlayingPlayStateChanged
-            if (r1 != r2) goto L_0x0388
-            goto L_0x03cd
-        L_0x0388:
-            int r2 = org.telegram.messenger.NotificationCenter.messagePlayingDidStart
-            if (r1 != r2) goto L_0x0401
-            r1 = r24[r10]
-            org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
-            long r1 = r1.eventId
-            r3 = 0
-            int r5 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r5 == 0) goto L_0x0399
-            return
-        L_0x0399:
-            r1 = 0
-        L_0x039a:
-            org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            int r3 = r2.length
-            if (r1 >= r3) goto L_0x0401
-            r2 = r2[r1]
-            org.telegram.ui.Components.RecyclerListView r2 = r2.listView
-            int r2 = r2.getChildCount()
-            r3 = 0
-        L_0x03aa:
-            if (r3 >= r2) goto L_0x03ca
-            org.telegram.ui.MediaActivity$MediaPage[] r4 = r0.mediaPages
-            r4 = r4[r1]
-            org.telegram.ui.Components.RecyclerListView r4 = r4.listView
-            android.view.View r4 = r4.getChildAt(r3)
-            boolean r5 = r4 instanceof org.telegram.ui.Cells.SharedAudioCell
-            if (r5 == 0) goto L_0x03c7
-            org.telegram.ui.Cells.SharedAudioCell r4 = (org.telegram.ui.Cells.SharedAudioCell) r4
-            org.telegram.messenger.MessageObject r5 = r4.getMessage()
-            if (r5 == 0) goto L_0x03c7
-            r4.updateButtonState(r10, r11)
-        L_0x03c7:
-            int r3 = r3 + 1
-            goto L_0x03aa
-        L_0x03ca:
-            int r1 = r1 + 1
-            goto L_0x039a
-        L_0x03cd:
-            r1 = 0
-        L_0x03ce:
-            org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
-            int r3 = r2.length
-            if (r1 >= r3) goto L_0x0401
-            r2 = r2[r1]
-            org.telegram.ui.Components.RecyclerListView r2 = r2.listView
-            int r2 = r2.getChildCount()
-            r3 = 0
-        L_0x03de:
-            if (r3 >= r2) goto L_0x03fe
-            org.telegram.ui.MediaActivity$MediaPage[] r4 = r0.mediaPages
-            r4 = r4[r1]
-            org.telegram.ui.Components.RecyclerListView r4 = r4.listView
-            android.view.View r4 = r4.getChildAt(r3)
-            boolean r5 = r4 instanceof org.telegram.ui.Cells.SharedAudioCell
-            if (r5 == 0) goto L_0x03fb
-            org.telegram.ui.Cells.SharedAudioCell r4 = (org.telegram.ui.Cells.SharedAudioCell) r4
-            org.telegram.messenger.MessageObject r5 = r4.getMessage()
-            if (r5 == 0) goto L_0x03fb
-            r4.updateButtonState(r10, r11)
-        L_0x03fb:
-            int r3 = r3 + 1
-            goto L_0x03de
-        L_0x03fe:
-            int r1 = r1 + 1
-            goto L_0x03ce
-        L_0x0401:
+            goto L_0x035d
+        L_0x0372:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.MediaActivity.didReceivedNotification(int, int, java.lang.Object[]):void");
@@ -1943,7 +1864,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r1)
             if (r0 != 0) goto L_0x00cf
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r2 = 2131626951(0x7f0e0bc7, float:1.8881153E38)
+            r2 = 2131627015(0x7f0e0CLASSNAME, float:1.8881282E38)
             java.lang.String r9 = "SharedMediaTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r9, r2)
             r0.addTextTab(r1, r2)
@@ -1955,14 +1876,14 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r6)
             if (r0 != 0) goto L_0x00eb
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r2 = 2131626945(0x7f0e0bc1, float:1.888114E38)
+            r2 = 2131627009(0x7f0e0CLASSNAME, float:1.888127E38)
             java.lang.String r9 = "SharedFilesTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r9, r2)
             r0.addTextTab(r6, r2)
         L_0x00eb:
             long r9 = r12.dialog_id
             int r0 = (int) r9
-            r2 = 2131626953(0x7f0e0bc9, float:1.8881157E38)
+            r2 = 2131627017(0x7f0e0CLASSNAME, float:1.8881287E38)
             java.lang.String r9 = "SharedMusicTab2"
             if (r0 == 0) goto L_0x0129
             int[] r0 = r12.hasMedia
@@ -1972,7 +1893,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r3)
             if (r0 != 0) goto L_0x0111
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r7 = 2131626949(0x7f0e0bc5, float:1.8881149E38)
+            r7 = 2131627013(0x7f0e0CLASSNAME, float:1.8881278E38)
             java.lang.String r8 = "SharedLinksTab2"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r0.addTextTab(r3, r7)
@@ -2016,7 +1937,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             boolean r0 = r0.hasTab(r4)
             if (r0 != 0) goto L_0x0178
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r12.scrollSlidingTextTabStrip
-            r2 = 2131626956(0x7f0e0bcc, float:1.8881163E38)
+            r2 = 2131627021(0x7f0e0c0d, float:1.8881295E38)
             java.lang.String r3 = "SharedVoiceTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r4, r2)
@@ -2088,7 +2009,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             if (r3 == 0) goto L_0x01e5
             r3 = 1101004800(0x41a00000, float:20.0)
             r11 = 1106247680(0x41var_, float:30.0)
-            r12 = 2131625964(0x7f0e07ec, float:1.887915E38)
+            r12 = 2131626002(0x7f0e0812, float:1.8879228E38)
             java.lang.String r13 = "NoResult"
             if (r21 == 0) goto L_0x0124
             org.telegram.ui.MediaActivity$MediaPage[] r14 = r0.mediaPages
@@ -2305,7 +2226,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.ImageView r2 = r2.emptyImageView
-            r3 = 2131165978(0x7var_a, float:1.7946188E38)
+            r3 = 2131166005(0x7var_, float:1.7946243E38)
             r2.setImageResource(r3)
             long r2 = r0.dialog_id
             int r3 = (int) r2
@@ -2313,7 +2234,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625950(0x7f0e07de, float:1.8879122E38)
+            r3 = 2131625987(0x7f0e0803, float:1.8879197E38)
             java.lang.String r5 = "NoMediaSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -2322,7 +2243,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625948(0x7f0e07dc, float:1.8879118E38)
+            r3 = 2131625985(0x7f0e0801, float:1.8879193E38)
             java.lang.String r5 = "NoMedia"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -2344,7 +2265,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.ImageView r2 = r2.emptyImageView
-            r3 = 2131165979(0x7var_b, float:1.794619E38)
+            r3 = 2131166006(0x7var_, float:1.7946245E38)
             r2.setImageResource(r3)
             long r2 = r0.dialog_id
             int r3 = (int) r2
@@ -2352,7 +2273,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625969(0x7f0e07f1, float:1.887916E38)
+            r3 = 2131626007(0x7f0e0817, float:1.8879238E38)
             java.lang.String r5 = "NoSharedFilesSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -2361,7 +2282,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625968(0x7f0e07f0, float:1.8879159E38)
+            r3 = 2131626006(0x7f0e0816, float:1.8879236E38)
             java.lang.String r5 = "NoSharedFiles"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -2383,7 +2304,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.ImageView r2 = r2.emptyImageView
-            r3 = 2131165982(0x7var_e, float:1.7946196E38)
+            r3 = 2131166009(0x7var_, float:1.7946251E38)
             r2.setImageResource(r3)
             long r2 = r0.dialog_id
             int r3 = (int) r2
@@ -2391,7 +2312,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625974(0x7f0e07f6, float:1.8879171E38)
+            r3 = 2131626012(0x7f0e081c, float:1.8879248E38)
             java.lang.String r5 = "NoSharedVoiceSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -2400,7 +2321,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625973(0x7f0e07f5, float:1.887917E38)
+            r3 = 2131626011(0x7f0e081b, float:1.8879246E38)
             java.lang.String r5 = "NoSharedVoice"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -2422,7 +2343,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.ImageView r2 = r2.emptyImageView
-            r3 = 2131165980(0x7var_c, float:1.7946192E38)
+            r3 = 2131166007(0x7var_, float:1.7946247E38)
             r2.setImageResource(r3)
             long r2 = r0.dialog_id
             int r3 = (int) r2
@@ -2430,7 +2351,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625972(0x7f0e07f4, float:1.8879167E38)
+            r3 = 2131626010(0x7f0e081a, float:1.8879244E38)
             java.lang.String r5 = "NoSharedLinksSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -2439,7 +2360,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625971(0x7f0e07f3, float:1.8879165E38)
+            r3 = 2131626009(0x7f0e0819, float:1.8879242E38)
             java.lang.String r5 = "NoSharedLinks"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -2461,7 +2382,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.ImageView r2 = r2.emptyImageView
-            r3 = 2131165981(0x7var_d, float:1.7946194E38)
+            r3 = 2131166008(0x7var_, float:1.794625E38)
             r2.setImageResource(r3)
             long r2 = r0.dialog_id
             int r3 = (int) r2
@@ -2469,7 +2390,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625967(0x7f0e07ef, float:1.8879157E38)
+            r3 = 2131626005(0x7f0e0815, float:1.8879234E38)
             java.lang.String r5 = "NoSharedAudioSecret"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)
@@ -2478,7 +2399,7 @@ public class MediaActivity extends BaseFragment implements NotificationCenter.No
             org.telegram.ui.MediaActivity$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r21]
             android.widget.TextView r2 = r2.emptyTextView
-            r3 = 2131625966(0x7f0e07ee, float:1.8879155E38)
+            r3 = 2131626004(0x7f0e0814, float:1.8879232E38)
             java.lang.String r5 = "NoSharedAudio"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r5, r3)
             r2.setText(r3)

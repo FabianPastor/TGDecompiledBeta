@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.ActionBar;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
+import org.telegram.ui.Adapters.FiltersView;
 
 public class ActionBarMenu extends LinearLayout {
     protected boolean isActionMode;
@@ -259,6 +260,20 @@ public class ActionBarMenu extends LinearLayout {
                     }
                     actionBarMenuItem.setSearchFieldText(str, z2);
                     actionBarMenuItem.getSearchField().setSelection(str.length());
+                    return;
+                }
+            }
+        }
+    }
+
+    public void setFilter(FiltersView.MediaFilterData mediaFilterData) {
+        int childCount = getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View childAt = getChildAt(i);
+            if (childAt instanceof ActionBarMenuItem) {
+                ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) childAt;
+                if (actionBarMenuItem.isSearchField()) {
+                    actionBarMenuItem.addSearchFilter(mediaFilterData);
                     return;
                 }
             }

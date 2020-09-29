@@ -1109,8 +1109,6 @@
     <string name="Disconnect">연결 끊기</string>
     <string name="DiscussChannel">채널</string>
     <string name="Discussion">토론</string>
-    <string name="DiscussionChannelGroupSetHelp">**%1$s** 링크가 모든 구독자에게 바닥 패널에서 보입니다.</string>
-    <string name="DiscussionChannelHelp">채널 안에 표시될 토론 전용 그룹 대화방을 선택하세요.</string>
     <string name="DiscussionChannelHelp2">채널에 게시하시는 모든 것이 이 그룹으로 전달됩니다.</string>
     <string name="DiscussionCreateGroup">새로운 그룹 만들기</string>
     <string name="DiscussionGroupHelp">**%1$s** 채널이 그룹을 토론 게시판으로 삼아 잇고 있습니다.</string>

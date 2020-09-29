@@ -29,6 +29,7 @@ import com.google.android.exoplayer2.audio.TeeAudioProcessor;
 import com.google.android.exoplayer2.decoder.DecoderCounters;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
+import com.google.android.exoplayer2.mediacodec.MediaCodecRenderer;
 import com.google.android.exoplayer2.mediacodec.MediaCodecSelector;
 import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.source.MediaSourceEventListener;
@@ -82,6 +83,7 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
     private Surface surface;
     private TextureView textureView;
     private MappingTrackSelector trackSelector;
+    private boolean triedReinit;
     private boolean videoPlayerReady;
     private String videoType;
     private Uri videoUri;
@@ -942,11 +944,13 @@ public class VideoPlayer implements Player.EventListener, SimpleExoPlayer.VideoL
 
     public void onPlayerError(ExoPlaybackException exoPlaybackException) {
         Throwable cause = exoPlaybackException.getCause();
-        TextureView textureView2 = this.textureView;
-        if (textureView2 == null || !(cause instanceof SurfaceNotValidException)) {
+        if (this.textureView == null || ((this.triedReinit || !(cause instanceof MediaCodecRenderer.DecoderInitializationException)) && !(cause instanceof SurfaceNotValidException))) {
             this.delegate.onError(this, exoPlaybackException);
-        } else if (this.player != null) {
-            ViewGroup viewGroup = (ViewGroup) textureView2.getParent();
+            return;
+        }
+        this.triedReinit = true;
+        if (this.player != null) {
+            ViewGroup viewGroup = (ViewGroup) this.textureView.getParent();
             if (viewGroup != null) {
                 int indexOfChild = viewGroup.indexOfChild(this.textureView);
                 viewGroup.removeView(this.textureView);

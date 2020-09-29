@@ -801,21 +801,21 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             goto L_0x0429
         L_0x0078:
             int r13 = r10.resetNotificationsRow
-            r3 = 2131624552(0x7f0e0268, float:1.8876287E38)
+            r3 = 2131624561(0x7f0e0271, float:1.8876305E38)
             java.lang.String r4 = "Cancel"
             if (r12 != r13) goto L_0x00d5
             org.telegram.ui.ActionBar.AlertDialog$Builder r12 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r13 = r10.getParentActivity()
             r12.<init>((android.content.Context) r13)
-            r13 = 2131626734(0x7f0e0aee, float:1.8880713E38)
+            r13 = 2131626786(0x7f0e0b22, float:1.8880818E38)
             java.lang.String r0 = "ResetNotificationsAlertTitle"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
             r12.setTitle(r13)
-            r13 = 2131626733(0x7f0e0aed, float:1.888071E38)
+            r13 = 2131626785(0x7f0e0b21, float:1.8880816E38)
             java.lang.String r0 = "ResetNotificationsAlert"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
             r12.setMessage(r13)
-            r13 = 2131626714(0x7f0e0ada, float:1.8880672E38)
+            r13 = 2131626766(0x7f0e0b0e, float:1.8880777E38)
             java.lang.String r0 = "Reset"
             java.lang.String r13 = org.telegram.messenger.LocaleController.getString(r0, r13)
             org.telegram.ui.-$$Lambda$NotificationsSettingsActivity$yCH91Gy9ARU8yn1KTl14GsaHDf4 r0 = new org.telegram.ui.-$$Lambda$NotificationsSettingsActivity$yCH91Gy9ARU8yn1KTl14GsaHDf4
@@ -1101,13 +1101,13 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             org.telegram.ui.ActionBar.AlertDialog$Builder r13 = new org.telegram.ui.ActionBar.AlertDialog$Builder
             android.app.Activity r6 = r10.getParentActivity()
             r13.<init>((android.content.Context) r6)
-            r6 = 2131626686(0x7f0e0abe, float:1.8880615E38)
+            r6 = 2131626730(0x7f0e0aea, float:1.8880704E38)
             java.lang.String r7 = "RepeatNotifications"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r7, r6)
             r13.setTitle(r6)
             r6 = 7
             java.lang.CharSequence[] r6 = new java.lang.CharSequence[r6]
-            r7 = 2131626684(0x7f0e0abc, float:1.8880611E38)
+            r7 = 2131626728(0x7f0e0ae8, float:1.88807E38)
             java.lang.String r8 = "RepeatDisabled"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r6[r1] = r7
@@ -1340,7 +1340,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             r4 = 0
             r5 = 1
             if (r3 != r5) goto L_0x0072
-            r3 = 2131626105(0x7f0e0879, float:1.8879437E38)
+            r3 = 2131626143(0x7f0e089f, float:1.8879514E38)
             java.lang.Object[] r5 = new java.lang.Object[r5]
             r5[r4] = r0
             java.lang.String r0 = "NotificationsExceptionsSingleAlert"
@@ -1349,7 +1349,7 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             r2.setMessage(r0)
             goto L_0x0086
         L_0x0072:
-            r3 = 2131626104(0x7f0e0878, float:1.8879435E38)
+            r3 = 2131626142(0x7f0e089e, float:1.8879512E38)
             java.lang.Object[] r5 = new java.lang.Object[r5]
             r5[r4] = r0
             java.lang.String r0 = "NotificationsExceptionsAlert"
@@ -1357,17 +1357,17 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             android.text.SpannableStringBuilder r0 = org.telegram.messenger.AndroidUtilities.replaceTags(r0)
             r2.setMessage(r0)
         L_0x0086:
-            r0 = 2131626103(0x7f0e0877, float:1.8879433E38)
+            r0 = 2131626141(0x7f0e089d, float:1.887951E38)
             java.lang.String r3 = "NotificationsExceptions"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             r2.setTitle(r0)
-            r0 = 2131627394(0x7f0e0d82, float:1.8882051E38)
+            r0 = 2131627470(0x7f0e0dce, float:1.8882205E38)
             java.lang.String r3 = "ViewExceptions"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r3, r0)
             org.telegram.ui.-$$Lambda$NotificationsSettingsActivity$9FhV71oy8_vyXyR3LWFGjX-RReE r3 = new org.telegram.ui.-$$Lambda$NotificationsSettingsActivity$9FhV71oy8_vyXyR3LWFGjX-RReE
             r3.<init>(r7)
             r2.setNeutralButton(r0, r3)
-            r7 = 2131626137(0x7f0e0899, float:1.8879502E38)
+            r7 = 2131626178(0x7f0e08c2, float:1.8879585E38)
             java.lang.String r0 = "OK"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
             r2.setNegativeButton(r7, r1)
@@ -1424,68 +1424,68 @@ public class NotificationsSettingsActivity extends BaseFragment implements Notif
             /*
                 r2 = this;
                 java.lang.String r3 = "windowBackgroundWhite"
-                if (r4 == 0) goto L_0x006d
+                if (r4 == 0) goto L_0x006f
                 r0 = 1
-                if (r4 == r0) goto L_0x005e
+                if (r4 == r0) goto L_0x0060
                 r0 = 2
-                if (r4 == r0) goto L_0x004f
+                if (r4 == r0) goto L_0x0051
                 r0 = 3
-                if (r4 == r0) goto L_0x0040
+                if (r4 == r0) goto L_0x0042
                 r0 = 4
-                if (r4 == r0) goto L_0x0038
+                if (r4 == r0) goto L_0x003a
                 r0 = 5
-                if (r4 == r0) goto L_0x0029
+                if (r4 == r0) goto L_0x002b
                 org.telegram.ui.Cells.TextInfoPrivacyCell r3 = new org.telegram.ui.Cells.TextInfoPrivacyCell
                 android.content.Context r4 = r2.mContext
                 r3.<init>(r4)
                 android.content.Context r4 = r2.mContext
-                r0 = 2131165438(0x7var_fe, float:1.7945093E38)
+                r0 = 2131165439(0x7var_ff, float:1.7945095E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r4, (int) r0, (java.lang.String) r1)
                 r3.setBackgroundDrawable(r4)
-                goto L_0x007c
-            L_0x0029:
+                goto L_0x007e
+            L_0x002b:
                 org.telegram.ui.Cells.TextSettingsCell r4 = new org.telegram.ui.Cells.TextSettingsCell
                 android.content.Context r0 = r2.mContext
                 r4.<init>(r0)
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r4.setBackgroundColor(r3)
-                goto L_0x007b
-            L_0x0038:
+                goto L_0x007d
+            L_0x003a:
                 org.telegram.ui.Cells.ShadowSectionCell r3 = new org.telegram.ui.Cells.ShadowSectionCell
                 android.content.Context r4 = r2.mContext
                 r3.<init>(r4)
-                goto L_0x007c
-            L_0x0040:
+                goto L_0x007e
+            L_0x0042:
                 org.telegram.ui.Cells.NotificationsCheckCell r4 = new org.telegram.ui.Cells.NotificationsCheckCell
                 android.content.Context r0 = r2.mContext
                 r4.<init>(r0)
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r4.setBackgroundColor(r3)
-                goto L_0x007b
-            L_0x004f:
+                goto L_0x007d
+            L_0x0051:
                 org.telegram.ui.Cells.TextDetailSettingsCell r4 = new org.telegram.ui.Cells.TextDetailSettingsCell
                 android.content.Context r0 = r2.mContext
                 r4.<init>(r0)
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r4.setBackgroundColor(r3)
-                goto L_0x007b
-            L_0x005e:
+                goto L_0x007d
+            L_0x0060:
                 org.telegram.ui.Cells.TextCheckCell r4 = new org.telegram.ui.Cells.TextCheckCell
                 android.content.Context r0 = r2.mContext
                 r4.<init>(r0)
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r4.setBackgroundColor(r3)
-                goto L_0x007b
-            L_0x006d:
+                goto L_0x007d
+            L_0x006f:
                 org.telegram.ui.Cells.HeaderCell r4 = new org.telegram.ui.Cells.HeaderCell
                 android.content.Context r0 = r2.mContext
                 r4.<init>(r0)
                 int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
                 r4.setBackgroundColor(r3)
-            L_0x007b:
+            L_0x007d:
                 r3 = r4
-            L_0x007c:
+            L_0x007e:
                 org.telegram.ui.Components.RecyclerListView$Holder r4 = new org.telegram.ui.Components.RecyclerListView$Holder
                 r4.<init>(r3)
                 return r4

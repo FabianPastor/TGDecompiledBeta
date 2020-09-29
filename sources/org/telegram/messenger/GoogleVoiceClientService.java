@@ -46,7 +46,7 @@ public class GoogleVoiceClientService extends SearchActionVerificationClientServ
                     }
                     if (user != null) {
                         ContactsController.getInstance(i).markAsContacted(stringExtra2);
-                        SendMessagesHelper.getInstance(i).sendMessage(stringExtra, (long) user.id, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
+                        SendMessagesHelper.getInstance(i).sendMessage(stringExtra, (long) user.id, (MessageObject) null, (MessageObject) null, (TLRPC$WebPage) null, true, (ArrayList<TLRPC$MessageEntity>) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, true, 0);
                     }
                 }
             }

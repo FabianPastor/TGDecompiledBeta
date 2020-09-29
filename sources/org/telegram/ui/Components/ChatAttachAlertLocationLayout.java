@@ -417,7 +417,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
             public void onSearchExpand() {
                 boolean unused = ChatAttachAlertLocationLayout.this.searching = true;
                 ChatAttachAlertLocationLayout chatAttachAlertLocationLayout = ChatAttachAlertLocationLayout.this;
-                chatAttachAlertLocationLayout.parentAlert.makeFocusable(chatAttachAlertLocationLayout.searchItem.getSearchField());
+                chatAttachAlertLocationLayout.parentAlert.makeFocusable(chatAttachAlertLocationLayout.searchItem.getSearchField(), true);
             }
 
             public void onSearchCollapse() {
@@ -714,7 +714,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                     float unused = chatAttachAlertLocationLayout.yOffset = chatAttachAlertLocationLayout.yOffset + ((float) i2);
                 }
                 ChatAttachAlertLocationLayout chatAttachAlertLocationLayout2 = ChatAttachAlertLocationLayout.this;
-                chatAttachAlertLocationLayout2.parentAlert.updateLayout(chatAttachAlertLocationLayout2, true);
+                chatAttachAlertLocationLayout2.parentAlert.updateLayout(chatAttachAlertLocationLayout2, true, i2);
             }
         });
         ((DefaultItemAnimator) this.listView.getItemAnimator()).setDelayAnimations(false);

@@ -382,7 +382,6 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.contactsDidLoad);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.updateInterfaces);
         NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.chatDidCreated);
-        AndroidUtilities.removeAdjustResize(getParentActivity(), this.classGuid, true);
     }
 
     public void onClick(View view) {
@@ -868,7 +867,7 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
         if (editTextBoldCursor != null) {
             editTextBoldCursor.requestFocus();
         }
-        AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid, true);
+        AndroidUtilities.requestAdjustResize(getParentActivity(), this.classGuid);
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {

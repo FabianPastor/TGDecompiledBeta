@@ -146,6 +146,22 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
         return this.items.get(i2) == null ? 2 : 3;
     }
 
+    public void swapElements(int i, int i2) {
+        int i3 = i - 2;
+        int i4 = i2 - 2;
+        if (i3 >= 0 && i4 >= 0 && i3 < this.accountNumbers.size() && i4 < this.accountNumbers.size()) {
+            UserConfig instance = UserConfig.getInstance(this.accountNumbers.get(i3).intValue());
+            UserConfig instance2 = UserConfig.getInstance(this.accountNumbers.get(i4).intValue());
+            int i5 = instance.loginTime;
+            instance.loginTime = instance2.loginTime;
+            instance2.loginTime = i5;
+            instance.saveConfig(false);
+            instance2.saveConfig(false);
+            Collections.swap(this.accountNumbers, i3, i4);
+            notifyItemMoved(i, i2);
+        }
+    }
+
     private void resetItems() {
         int i;
         int i2;
@@ -229,6 +245,17 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
             return -1;
         }
         return item.id;
+    }
+
+    public int getFirstAccountPosition() {
+        return !this.accountsShown ? -1 : 2;
+    }
+
+    public int getLastAccountPosition() {
+        if (!this.accountsShown) {
+            return -1;
+        }
+        return this.accountNumbers.size() + 1;
     }
 
     private static class Item {

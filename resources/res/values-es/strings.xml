@@ -1109,8 +1109,6 @@
     <string name="Disconnect">Desconectar</string>
     <string name="DiscussChannel">canal</string>
     <string name="Discussion">Conversación</string>
-    <string name="DiscussionChannelGroupSetHelp">Un enlace a **%1$s** se muestra a todos los suscriptores en el panel inferior.</string>
-    <string name="DiscussionChannelHelp">Elige un grupo de conversación que se mostrará en tu canal.</string>
     <string name="DiscussionChannelHelp2">Todo lo que publiques en el canal será reenviado a este grupo.</string>
     <string name="DiscussionCreateGroup">Crear un nuevo grupo</string>
     <string name="DiscussionGroupHelp">Este grupo está vinculado como grupo de conversación de **%1$s**.</string>

@@ -157,7 +157,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
     public boolean onFragmentCreate() {
         super.onFragmentCreate();
         getContactsController().loadPrivacySettings();
-        getMessagesController().getBlockedUsers(true);
+        getMessagesController().getBlockedPeers(true);
         boolean z = getUserConfig().syncContacts;
         this.newSync = z;
         this.currentSync = z;

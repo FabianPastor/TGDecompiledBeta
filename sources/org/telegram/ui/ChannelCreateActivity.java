@@ -36,7 +36,6 @@ import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
-import org.telegram.messenger.SharedConfig;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.RequestDelegate;
 import org.telegram.tgnet.TLObject;
@@ -371,7 +370,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
         int i = this.currentStep;
         if (i == 0) {
             this.actionBar.setTitle(LocaleController.getString("NewChannel", NUM));
-            AnonymousClass2 r2 = new SizeNotifierFrameLayout(context2, SharedConfig.smoothKeyboard) {
+            AnonymousClass2 r2 = new SizeNotifierFrameLayout(context2) {
                 private boolean ignoreLayout;
 
                 /* access modifiers changed from: protected */
@@ -381,7 +380,7 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                     setMeasuredDimension(size, size2);
                     int paddingTop = size2 - getPaddingTop();
                     measureChildWithMargins(ChannelCreateActivity.this.actionBar, i, 0, i2, 0);
-                    if ((SharedConfig.smoothKeyboard ? 0 : measureKeyboardHeight()) > AndroidUtilities.dp(20.0f)) {
+                    if (measureKeyboardHeight() > AndroidUtilities.dp(20.0f)) {
                         this.ignoreLayout = true;
                         ChannelCreateActivity.this.nameTextView.hideEmojiView();
                         this.ignoreLayout = false;
@@ -404,134 +403,128 @@ public class ChannelCreateActivity extends BaseFragment implements NotificationC
                 }
 
                 /* access modifiers changed from: protected */
-                /* JADX WARNING: Removed duplicated region for block: B:29:0x0078  */
-                /* JADX WARNING: Removed duplicated region for block: B:36:0x0092  */
-                /* JADX WARNING: Removed duplicated region for block: B:44:0x00b9  */
-                /* JADX WARNING: Removed duplicated region for block: B:45:0x00c2  */
+                /* JADX WARNING: Removed duplicated region for block: B:25:0x0072  */
+                /* JADX WARNING: Removed duplicated region for block: B:32:0x008c  */
+                /* JADX WARNING: Removed duplicated region for block: B:40:0x00b3  */
+                /* JADX WARNING: Removed duplicated region for block: B:41:0x00bc  */
                 /* Code decompiled incorrectly, please refer to instructions dump. */
                 public void onLayout(boolean r11, int r12, int r13, int r14, int r15) {
                     /*
                         r10 = this;
                         int r11 = r10.getChildCount()
-                        boolean r0 = org.telegram.messenger.SharedConfig.smoothKeyboard
-                        r1 = 0
-                        if (r0 == 0) goto L_0x000b
-                        r0 = 0
-                        goto L_0x000f
-                    L_0x000b:
                         int r0 = r10.measureKeyboardHeight()
-                    L_0x000f:
-                        r2 = 1101004800(0x41a00000, float:20.0)
-                        int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-                        if (r0 > r2) goto L_0x002c
-                        boolean r2 = org.telegram.messenger.AndroidUtilities.isInMultiwindow
-                        if (r2 != 0) goto L_0x002c
-                        boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
-                        if (r2 != 0) goto L_0x002c
-                        org.telegram.ui.ChannelCreateActivity r2 = org.telegram.ui.ChannelCreateActivity.this
-                        org.telegram.ui.Components.EditTextEmoji r2 = r2.nameTextView
-                        int r2 = r2.getEmojiPadding()
-                        goto L_0x002d
-                    L_0x002c:
+                        r1 = 1101004800(0x41a00000, float:20.0)
+                        int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
                         r2 = 0
-                    L_0x002d:
-                        r10.setBottomClip(r2)
-                    L_0x0030:
-                        if (r1 >= r11) goto L_0x00d5
-                        android.view.View r3 = r10.getChildAt(r1)
+                        if (r0 > r1) goto L_0x0026
+                        boolean r1 = org.telegram.messenger.AndroidUtilities.isInMultiwindow
+                        if (r1 != 0) goto L_0x0026
+                        boolean r1 = org.telegram.messenger.AndroidUtilities.isTablet()
+                        if (r1 != 0) goto L_0x0026
+                        org.telegram.ui.ChannelCreateActivity r1 = org.telegram.ui.ChannelCreateActivity.this
+                        org.telegram.ui.Components.EditTextEmoji r1 = r1.nameTextView
+                        int r1 = r1.getEmojiPadding()
+                        goto L_0x0027
+                    L_0x0026:
+                        r1 = 0
+                    L_0x0027:
+                        r10.setBottomClip(r1)
+                    L_0x002a:
+                        if (r2 >= r11) goto L_0x00cf
+                        android.view.View r3 = r10.getChildAt(r2)
                         int r4 = r3.getVisibility()
                         r5 = 8
-                        if (r4 != r5) goto L_0x0040
-                        goto L_0x00d1
-                    L_0x0040:
+                        if (r4 != r5) goto L_0x003a
+                        goto L_0x00cb
+                    L_0x003a:
                         android.view.ViewGroup$LayoutParams r4 = r3.getLayoutParams()
                         android.widget.FrameLayout$LayoutParams r4 = (android.widget.FrameLayout.LayoutParams) r4
                         int r5 = r3.getMeasuredWidth()
                         int r6 = r3.getMeasuredHeight()
                         int r7 = r4.gravity
                         r8 = -1
-                        if (r7 != r8) goto L_0x0055
+                        if (r7 != r8) goto L_0x004f
                         r7 = 51
-                    L_0x0055:
+                    L_0x004f:
                         r8 = r7 & 7
                         r7 = r7 & 112(0x70, float:1.57E-43)
                         r8 = r8 & 7
                         r9 = 1
-                        if (r8 == r9) goto L_0x0069
+                        if (r8 == r9) goto L_0x0063
                         r9 = 5
-                        if (r8 == r9) goto L_0x0064
+                        if (r8 == r9) goto L_0x005e
                         int r8 = r4.leftMargin
-                        goto L_0x0074
-                    L_0x0064:
+                        goto L_0x006e
+                    L_0x005e:
                         int r8 = r14 - r5
                         int r9 = r4.rightMargin
-                        goto L_0x0073
-                    L_0x0069:
+                        goto L_0x006d
+                    L_0x0063:
                         int r8 = r14 - r12
                         int r8 = r8 - r5
                         int r8 = r8 / 2
                         int r9 = r4.leftMargin
                         int r8 = r8 + r9
                         int r9 = r4.rightMargin
-                    L_0x0073:
+                    L_0x006d:
                         int r8 = r8 - r9
-                    L_0x0074:
+                    L_0x006e:
                         r9 = 16
-                        if (r7 == r9) goto L_0x0092
+                        if (r7 == r9) goto L_0x008c
                         r9 = 48
-                        if (r7 == r9) goto L_0x008a
+                        if (r7 == r9) goto L_0x0084
                         r9 = 80
-                        if (r7 == r9) goto L_0x0083
+                        if (r7 == r9) goto L_0x007d
                         int r4 = r4.topMargin
-                        goto L_0x009f
-                    L_0x0083:
-                        int r7 = r15 - r2
+                        goto L_0x0099
+                    L_0x007d:
+                        int r7 = r15 - r1
                         int r7 = r7 - r13
                         int r7 = r7 - r6
                         int r4 = r4.bottomMargin
-                        goto L_0x009d
-                    L_0x008a:
+                        goto L_0x0097
+                    L_0x0084:
                         int r4 = r4.topMargin
                         int r7 = r10.getPaddingTop()
                         int r4 = r4 + r7
-                        goto L_0x009f
-                    L_0x0092:
-                        int r7 = r15 - r2
+                        goto L_0x0099
+                    L_0x008c:
+                        int r7 = r15 - r1
                         int r7 = r7 - r13
                         int r7 = r7 - r6
                         int r7 = r7 / 2
                         int r9 = r4.topMargin
                         int r7 = r7 + r9
                         int r4 = r4.bottomMargin
-                    L_0x009d:
+                    L_0x0097:
                         int r4 = r7 - r4
-                    L_0x009f:
+                    L_0x0099:
                         org.telegram.ui.ChannelCreateActivity r7 = org.telegram.ui.ChannelCreateActivity.this
                         org.telegram.ui.Components.EditTextEmoji r7 = r7.nameTextView
-                        if (r7 == 0) goto L_0x00cc
+                        if (r7 == 0) goto L_0x00c6
                         org.telegram.ui.ChannelCreateActivity r7 = org.telegram.ui.ChannelCreateActivity.this
                         org.telegram.ui.Components.EditTextEmoji r7 = r7.nameTextView
                         boolean r7 = r7.isPopupView(r3)
-                        if (r7 == 0) goto L_0x00cc
+                        if (r7 == 0) goto L_0x00c6
                         boolean r4 = org.telegram.messenger.AndroidUtilities.isTablet()
-                        if (r4 == 0) goto L_0x00c2
+                        if (r4 == 0) goto L_0x00bc
                         int r4 = r10.getMeasuredHeight()
                         int r7 = r3.getMeasuredHeight()
-                        goto L_0x00cb
-                    L_0x00c2:
+                        goto L_0x00c5
+                    L_0x00bc:
                         int r4 = r10.getMeasuredHeight()
                         int r4 = r4 + r0
                         int r7 = r3.getMeasuredHeight()
-                    L_0x00cb:
+                    L_0x00c5:
                         int r4 = r4 - r7
-                    L_0x00cc:
+                    L_0x00c6:
                         int r5 = r5 + r8
                         int r6 = r6 + r4
                         r3.layout(r8, r4, r5, r6)
-                    L_0x00d1:
-                        int r1 = r1 + 1
-                        goto L_0x0030
-                    L_0x00d5:
+                    L_0x00cb:
+                        int r2 = r2 + 1
+                        goto L_0x002a
+                    L_0x00cf:
                         r10.notifyHeightChanged()
                         return
                     */

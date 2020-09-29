@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_updateShortMessage extends TLRPC$Updates {
-    public static int constructor = -NUM;
+    public static int constructor = NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -24,7 +24,7 @@ public class TLRPC$TL_updateShortMessage extends TLRPC$Updates {
             this.via_bot_id = abstractSerializedData.readInt32(z);
         }
         if ((this.flags & 8) != 0) {
-            this.reply_to_msg_id = abstractSerializedData.readInt32(z);
+            this.reply_to = TLRPC$TL_messageReplyHeader.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         if ((this.flags & 128) != 0) {
             int readInt322 = abstractSerializedData.readInt32(z);

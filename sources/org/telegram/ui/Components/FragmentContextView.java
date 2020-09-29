@@ -52,6 +52,8 @@ import org.telegram.ui.LocationActivity;
 public class FragmentContextView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
     private FragmentContextView additionalContextView;
     /* access modifiers changed from: private */
+    public int animationIndex;
+    /* access modifiers changed from: private */
     public AnimatorSet animatorSet;
     private View applyingView;
     /* access modifiers changed from: private */
@@ -99,6 +101,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 AndroidUtilities.runOnUIThread(FragmentContextView.this.checkLocationRunnable, 1000);
             }
         };
+        this.animationIndex = -1;
         this.fragment = baseFragment;
         this.applyingView = view2;
         this.visible = true;
@@ -352,10 +355,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 }
 
                 public final void didSelectLocation(TLRPC$MessageMedia tLRPC$MessageMedia, int i, boolean z, int i2) {
-                    SendMessagesHelper.getInstance(LocationController.SharingLocationInfo.this.messageObject.currentAccount).sendMessage(tLRPC$MessageMedia, this.f$1, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i2);
+                    SendMessagesHelper.getInstance(LocationController.SharingLocationInfo.this.messageObject.currentAccount).sendMessage(tLRPC$MessageMedia, this.f$1, (MessageObject) null, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i2);
                 }
             });
-            launchActivity.lambda$runLinkRequest$32$LaunchActivity(locationActivity);
+            launchActivity.lambda$runLinkRequest$41$LaunchActivity(locationActivity);
         }
     }
 
@@ -695,8 +698,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     TLRPC$Message tLRPC$Message = (TLRPC$Message) arrayList.get(i2);
                     TLRPC$MessageMedia tLRPC$MessageMedia = tLRPC$Message.media;
                     if (tLRPC$MessageMedia != null && tLRPC$Message.date + tLRPC$MessageMedia.period > currentTime) {
-                        if (tLRPC$User == null && tLRPC$Message.from_id != clientUserId) {
-                            tLRPC$User = MessagesController.getInstance(currentAccount).getUser(Integer.valueOf(tLRPC$Message.from_id));
+                        int fromChatId = MessageObject.getFromChatId(tLRPC$Message);
+                        if (tLRPC$User == null && fromChatId != clientUserId) {
+                            tLRPC$User = MessagesController.getInstance(currentAccount).getUser(Integer.valueOf(fromChatId));
                         }
                         i++;
                     }
@@ -774,6 +778,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 }
                 this.animatorSet.addListener(new AnimatorListenerAdapter() {
                     public void onAnimationEnd(Animator animator) {
+                        NotificationCenter.getInstance(UserConfig.selectedAccount).onAnimationFinish(FragmentContextView.this.animationIndex);
                         if (FragmentContextView.this.animatorSet != null && FragmentContextView.this.animatorSet.equals(animator)) {
                             FragmentContextView.this.setVisibility(8);
                             if (FragmentContextView.this.delegate != null) {
@@ -784,6 +789,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     }
                 });
                 this.animatorSet.start();
+                this.animationIndex = NotificationCenter.getInstance(UserConfig.selectedAccount).setAnimationInProgress(this.animationIndex, (int[]) null);
             }
         } else {
             int i = this.currentStyle;
@@ -824,6 +830,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     this.animatorSet.setDuration(200);
                     this.animatorSet.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
+                            NotificationCenter.getInstance(UserConfig.selectedAccount).onAnimationFinish(FragmentContextView.this.animationIndex);
                             if (FragmentContextView.this.animatorSet != null && FragmentContextView.this.animatorSet.equals(animator)) {
                                 if (FragmentContextView.this.delegate != null) {
                                     FragmentContextView.this.delegate.onAnimation(false, true);
@@ -833,6 +840,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                         }
                     });
                     this.animatorSet.start();
+                    this.animationIndex = NotificationCenter.getInstance(UserConfig.selectedAccount).setAnimationInProgress(this.animationIndex, (int[]) null);
                 }
                 this.visible = true;
                 setVisibility(0);

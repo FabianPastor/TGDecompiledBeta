@@ -1,23 +1,31 @@
 package j$;
 
-import j$.util.function.Q;
-import java.util.function.ObjDoubleConsumer;
+import j$.util.function.G;
+import java.util.function.IntUnaryOperator;
 
-public final /* synthetic */ class a0 implements Q {
-    final /* synthetic */ ObjDoubleConsumer a;
+public final /* synthetic */ class a0 implements IntUnaryOperator {
+    final /* synthetic */ G a;
 
-    private /* synthetic */ a0(ObjDoubleConsumer objDoubleConsumer) {
-        this.a = objDoubleConsumer;
+    private /* synthetic */ a0(G g) {
+        this.a = g;
     }
 
-    public static /* synthetic */ Q b(ObjDoubleConsumer objDoubleConsumer) {
-        if (objDoubleConsumer == null) {
+    public static /* synthetic */ IntUnaryOperator a(G g) {
+        if (g == null) {
             return null;
         }
-        return new a0(objDoubleConsumer);
+        return g instanceof Z ? ((Z) g).a : new a0(g);
     }
 
-    public /* synthetic */ void a(Object obj, double d) {
-        this.a.accept(obj, d);
+    public /* synthetic */ IntUnaryOperator andThen(IntUnaryOperator intUnaryOperator) {
+        return a(((Z) this.a).a(Z.d(intUnaryOperator)));
+    }
+
+    public /* synthetic */ int applyAsInt(int i) {
+        return ((Z) this.a).b(i);
+    }
+
+    public /* synthetic */ IntUnaryOperator compose(IntUnaryOperator intUnaryOperator) {
+        return a(((Z) this.a).c(Z.d(intUnaryOperator)));
     }
 }

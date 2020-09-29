@@ -559,7 +559,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 }
             });
             if (zArr[0]) {
-                MessagesController.getInstance(this.currentAccount).blockUser(tLRPC$TL_webAuthorization.bot_id);
+                MessagesController.getInstance(this.currentAccount).blockPeer(tLRPC$TL_webAuthorization.bot_id);
             }
         }
     }
@@ -896,7 +896,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 int r0 = r6.getItemViewType()
                 r1 = 0
                 r2 = 1
-                if (r0 == 0) goto L_0x020a
+                if (r0 == 0) goto L_0x020b
                 r3 = -1
                 if (r0 == r2) goto L_0x0154
                 r4 = 2
@@ -925,7 +925,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 r1 = 1
             L_0x0044:
                 r6.setSession(r7, r1)
-                goto L_0x026f
+                goto L_0x0272
             L_0x0049:
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.otherSessionsStartRow
@@ -947,14 +947,14 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 r1 = 1
             L_0x0077:
                 r6.setSession(r0, r1)
-                goto L_0x026f
+                goto L_0x0272
             L_0x007c:
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.passwordSessionsStartRow
-                if (r7 < r0) goto L_0x026f
+                if (r7 < r0) goto L_0x0272
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.passwordSessionsEndRow
-                if (r7 >= r0) goto L_0x026f
+                if (r7 >= r0) goto L_0x0272
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 java.util.ArrayList r0 = r0.passwordSessions
                 org.telegram.ui.SessionsActivity r3 = org.telegram.ui.SessionsActivity.this
@@ -969,12 +969,12 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 r1 = 1
             L_0x00aa:
                 r6.setSession(r0, r1)
-                goto L_0x026f
+                goto L_0x0272
             L_0x00af:
                 org.telegram.ui.SessionsActivity r6 = org.telegram.ui.SessionsActivity.this
                 android.widget.LinearLayout r6 = r6.emptyLayout
                 android.view.ViewGroup$LayoutParams r6 = r6.getLayoutParams()
-                if (r6 == 0) goto L_0x026f
+                if (r6 == 0) goto L_0x0272
                 r7 = 1130102784(0x435CLASSNAME, float:220.0)
                 int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
                 android.graphics.Point r0 = org.telegram.messenger.AndroidUtilities.displaySize
@@ -1004,18 +1004,18 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r7 = org.telegram.ui.SessionsActivity.this
                 android.widget.LinearLayout r7 = r7.emptyLayout
                 r7.setLayoutParams(r6)
-                goto L_0x026f
+                goto L_0x0272
             L_0x00f8:
                 android.view.View r6 = r6.itemView
                 org.telegram.ui.Cells.HeaderCell r6 = (org.telegram.ui.Cells.HeaderCell) r6
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.currentSessionSectionRow
                 if (r7 != r0) goto L_0x0112
-                r7 = 2131624907(0x7f0e03cb, float:1.8877007E38)
+                r7 = 2131624926(0x7f0e03de, float:1.8877045E38)
                 java.lang.String r0 = "CurrentSession"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
-                goto L_0x026f
+                goto L_0x0272
             L_0x0112:
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.otherSessionsSectionRow
@@ -1023,131 +1023,131 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r7 = org.telegram.ui.SessionsActivity.this
                 int r7 = r7.currentType
                 if (r7 != 0) goto L_0x0130
-                r7 = 2131626174(0x7f0e08be, float:1.8879577E38)
+                r7 = 2131626217(0x7f0e08e9, float:1.8879664E38)
                 java.lang.String r0 = "OtherSessions"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
-                goto L_0x026f
+                goto L_0x0272
             L_0x0130:
-                r7 = 2131626176(0x7f0e08c0, float:1.887958E38)
+                r7 = 2131626219(0x7f0e08eb, float:1.8879668E38)
                 java.lang.String r0 = "OtherWebSessions"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
-                goto L_0x026f
+                goto L_0x0272
             L_0x013e:
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.passwordSessionsSectionRow
-                if (r7 != r0) goto L_0x026f
-                r7 = 2131625725(0x7f0e06fd, float:1.8878666E38)
+                if (r7 != r0) goto L_0x0272
+                r7 = 2131625750(0x7f0e0716, float:1.8878717E38)
                 java.lang.String r0 = "LoginAttempts"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
-                goto L_0x026f
+                goto L_0x0272
             L_0x0154:
                 android.view.View r6 = r6.itemView
                 org.telegram.ui.Cells.TextInfoPrivacyCell r6 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r6
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.terminateAllSessionsDetailRow
-                r1 = 2131165437(0x7var_fd, float:1.7945091E38)
+                r1 = 2131165438(0x7var_fe, float:1.7945093E38)
                 java.lang.String r2 = "windowBackgroundGrayShadow"
-                if (r7 != r0) goto L_0x0191
+                if (r7 != r0) goto L_0x0192
                 org.telegram.ui.SessionsActivity r7 = org.telegram.ui.SessionsActivity.this
                 int r7 = r7.currentType
-                if (r7 != 0) goto L_0x017a
-                r7 = 2131624804(0x7f0e0364, float:1.8876798E38)
+                if (r7 != 0) goto L_0x017b
+                r7 = 2131624815(0x7f0e036f, float:1.887682E38)
                 java.lang.String r0 = "ClearOtherSessionsHelp"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
-                goto L_0x0186
-            L_0x017a:
-                r7 = 2131624805(0x7f0e0365, float:1.88768E38)
+                goto L_0x0187
+            L_0x017b:
+                r7 = 2131624816(0x7f0e0370, float:1.8876822E38)
                 java.lang.String r0 = "ClearOtherWebSessionsHelp"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
-            L_0x0186:
+            L_0x0187:
                 android.content.Context r7 = r5.mContext
                 android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r1, (java.lang.String) r2)
                 r6.setBackgroundDrawable(r7)
-                goto L_0x026f
-            L_0x0191:
+                goto L_0x0272
+            L_0x0192:
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.otherSessionsTerminateDetail
-                r4 = 2131165438(0x7var_fe, float:1.7945093E38)
-                if (r7 != r0) goto L_0x01da
+                r4 = 2131165439(0x7var_ff, float:1.7945095E38)
+                if (r7 != r0) goto L_0x01db
                 org.telegram.ui.SessionsActivity r7 = org.telegram.ui.SessionsActivity.this
                 int r7 = r7.currentType
-                if (r7 != 0) goto L_0x01c3
+                if (r7 != 0) goto L_0x01c4
                 org.telegram.ui.SessionsActivity r7 = org.telegram.ui.SessionsActivity.this
                 java.util.ArrayList r7 = r7.sessions
                 boolean r7 = r7.isEmpty()
-                if (r7 == 0) goto L_0x01b6
+                if (r7 == 0) goto L_0x01b7
                 java.lang.String r7 = ""
                 r6.setText(r7)
-                goto L_0x01cf
-            L_0x01b6:
-                r7 = 2131627125(0x7f0e0CLASSNAME, float:1.8881506E38)
+                goto L_0x01d0
+            L_0x01b7:
+                r7 = 2131627197(0x7f0e0cbd, float:1.8881652E38)
                 java.lang.String r0 = "TerminateSessionInfo"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
-                goto L_0x01cf
-            L_0x01c3:
-                r7 = 2131627128(0x7f0e0CLASSNAME, float:1.8881512E38)
+                goto L_0x01d0
+            L_0x01c4:
+                r7 = 2131627200(0x7f0e0cc0, float:1.8881658E38)
                 java.lang.String r0 = "TerminateWebSessionInfo"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
-            L_0x01cf:
+            L_0x01d0:
                 android.content.Context r7 = r5.mContext
                 android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r4, (java.lang.String) r2)
                 r6.setBackgroundDrawable(r7)
-                goto L_0x026f
-            L_0x01da:
+                goto L_0x0272
+            L_0x01db:
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.passwordSessionsDetailRow
-                if (r7 != r0) goto L_0x026f
-                r7 = 2131625726(0x7f0e06fe, float:1.8878668E38)
+                if (r7 != r0) goto L_0x0272
+                r7 = 2131625751(0x7f0e0717, float:1.8878719E38)
                 java.lang.String r0 = "LoginAttemptsInfo"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
                 org.telegram.ui.SessionsActivity r7 = org.telegram.ui.SessionsActivity.this
                 int r7 = r7.otherSessionsTerminateDetail
-                if (r7 != r3) goto L_0x0200
+                if (r7 != r3) goto L_0x0201
                 android.content.Context r7 = r5.mContext
                 android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r4, (java.lang.String) r2)
                 r6.setBackgroundDrawable(r7)
-                goto L_0x026f
-            L_0x0200:
+                goto L_0x0272
+            L_0x0201:
                 android.content.Context r7 = r5.mContext
                 android.graphics.drawable.Drawable r7 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r7, (int) r1, (java.lang.String) r2)
                 r6.setBackgroundDrawable(r7)
-                goto L_0x026f
-            L_0x020a:
+                goto L_0x0272
+            L_0x020b:
                 android.view.View r6 = r6.itemView
                 org.telegram.ui.Cells.TextSettingsCell r6 = (org.telegram.ui.Cells.TextSettingsCell) r6
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.terminateAllSessionsRow
-                if (r7 != r0) goto L_0x0244
+                if (r7 != r0) goto L_0x0246
                 java.lang.String r7 = "windowBackgroundWhiteRedText2"
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r6.setTextColor(r0)
                 r6.setTag(r7)
                 org.telegram.ui.SessionsActivity r7 = org.telegram.ui.SessionsActivity.this
                 int r7 = r7.currentType
-                if (r7 != 0) goto L_0x0237
-                r7 = 2131627123(0x7f0e0CLASSNAME, float:1.8881502E38)
+                if (r7 != 0) goto L_0x0239
+                r7 = 2131627195(0x7f0e0cbb, float:1.8881648E38)
                 java.lang.String r0 = "TerminateAllSessions"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7, r1)
-                goto L_0x026f
-            L_0x0237:
-                r7 = 2131627124(0x7f0e0CLASSNAME, float:1.8881504E38)
+                goto L_0x0272
+            L_0x0239:
+                r7 = 2131627196(0x7f0e0cbc, float:1.888165E38)
                 java.lang.String r0 = "TerminateAllWebSessions"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7, r1)
-                goto L_0x026f
-            L_0x0244:
+                goto L_0x0272
+            L_0x0246:
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.qrCodeRow
-                if (r7 != r0) goto L_0x026f
+                if (r7 != r0) goto L_0x0272
                 java.lang.String r7 = "windowBackgroundWhiteBlueText4"
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r6.setTextColor(r0)
@@ -1160,7 +1160,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 boolean r0 = r0.isEmpty()
                 r0 = r0 ^ r2
                 r6.setText(r7, r0)
-            L_0x026f:
+            L_0x0272:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.SessionsActivity.ListAdapter.onBindViewHolder(androidx.recyclerview.widget.RecyclerView$ViewHolder, int):void");

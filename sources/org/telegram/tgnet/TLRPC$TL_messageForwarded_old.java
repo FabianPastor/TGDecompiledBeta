@@ -9,12 +9,15 @@ public class TLRPC$TL_messageForwarded_old extends TLRPC$TL_messageForwarded_old
         this.id = abstractSerializedData.readInt32(z);
         TLRPC$TL_messageFwdHeader tLRPC$TL_messageFwdHeader = new TLRPC$TL_messageFwdHeader();
         this.fwd_from = tLRPC$TL_messageFwdHeader;
-        tLRPC$TL_messageFwdHeader.from_id = abstractSerializedData.readInt32(z);
+        tLRPC$TL_messageFwdHeader.from_id = new TLRPC$TL_peerUser();
+        this.fwd_from.from_id.user_id = abstractSerializedData.readInt32(z);
         TLRPC$MessageFwdHeader tLRPC$MessageFwdHeader = this.fwd_from;
         tLRPC$MessageFwdHeader.flags |= 1;
         tLRPC$MessageFwdHeader.date = abstractSerializedData.readInt32(z);
-        this.from_id = abstractSerializedData.readInt32(z);
-        this.to_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
+        this.from_id = tLRPC$TL_peerUser;
+        tLRPC$TL_peerUser.user_id = abstractSerializedData.readInt32(z);
+        this.peer_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.out = abstractSerializedData.readBool(z);
         this.unread = abstractSerializedData.readBool(z);
         this.flags |= 772;
@@ -30,10 +33,10 @@ public class TLRPC$TL_messageForwarded_old extends TLRPC$TL_messageForwarded_old
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
         abstractSerializedData.writeInt32(constructor);
         abstractSerializedData.writeInt32(this.id);
-        abstractSerializedData.writeInt32(this.fwd_from.from_id);
+        abstractSerializedData.writeInt32(this.fwd_from.from_id.user_id);
         abstractSerializedData.writeInt32(this.fwd_from.date);
-        abstractSerializedData.writeInt32(this.from_id);
-        this.to_id.serializeToStream(abstractSerializedData);
+        abstractSerializedData.writeInt32(this.from_id.user_id);
+        this.peer_id.serializeToStream(abstractSerializedData);
         abstractSerializedData.writeBool(this.out);
         abstractSerializedData.writeBool(this.unread);
         abstractSerializedData.writeInt32(this.date);

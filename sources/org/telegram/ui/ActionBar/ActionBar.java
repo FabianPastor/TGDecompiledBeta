@@ -17,11 +17,14 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import java.util.ArrayList;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
+import org.telegram.ui.Adapters.FiltersView;
+import org.telegram.ui.Components.EllipsizeSpanAnimator;
 import org.telegram.ui.Components.FireworksEffect;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.SnowflakesEffect;
@@ -37,6 +40,7 @@ public class ActionBar extends FrameLayout {
     /* access modifiers changed from: private */
     public View[] actionModeHidingViews;
     private View actionModeShowingView;
+    private String actionModeTag;
     /* access modifiers changed from: private */
     public View actionModeTop;
     private View actionModeTranslationView;
@@ -46,6 +50,7 @@ public class ActionBar extends FrameLayout {
     private ImageView backButtonImageView;
     private boolean castShadows;
     private boolean clipContent;
+    EllipsizeSpanAnimator ellipsizeSpanAnimator;
     private int extraHeight;
     private FireworksEffect fireworksEffect;
     private Paint.FontMetricsInt fontMetricsInt;
@@ -56,6 +61,7 @@ public class ActionBar extends FrameLayout {
     protected int itemsActionModeColor;
     protected int itemsBackgroundColor;
     protected int itemsColor;
+    private CharSequence lastOverlayTitle;
     private Runnable lastRunnable;
     private CharSequence lastTitle;
     private boolean manualStart;
@@ -63,6 +69,9 @@ public class ActionBar extends FrameLayout {
     public ActionBarMenu menu;
     /* access modifiers changed from: private */
     public boolean occupyStatusBar;
+    boolean overlayTitleAnimationInProgress;
+    /* access modifiers changed from: private */
+    public Object[] overlayTitleToSet;
     protected BaseFragment parentFragment;
     private Rect rect;
     private SnowflakesEffect snowflakesEffect;
@@ -70,10 +79,11 @@ public class ActionBar extends FrameLayout {
     public SimpleTextView subtitleTextView;
     private boolean supportsHolidayImage;
     private Runnable titleActionRunnable;
+    private int titleColorToSet;
     private boolean titleOverlayShown;
     private int titleRightMargin;
     /* access modifiers changed from: private */
-    public SimpleTextView titleTextView;
+    public SimpleTextView[] titleTextView = new SimpleTextView[2];
 
     public static class ActionBarMenuOnItemClick {
         public boolean canOpenMenu() {
@@ -94,7 +104,10 @@ public class ActionBar extends FrameLayout {
         this.occupyStatusBar = Build.VERSION.SDK_INT >= 21;
         this.addToContainer = true;
         this.interceptTouches = true;
+        this.overlayTitleToSet = new Object[3];
         this.castShadows = true;
+        this.titleColorToSet = 0;
+        this.ellipsizeSpanAnimator = new EllipsizeSpanAnimator(this);
         setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 ActionBar.this.lambda$new$0$ActionBar(view);
@@ -178,12 +191,12 @@ public class ActionBar extends FrameLayout {
             if (this.snowflakesEffect == null) {
                 this.fireworksEffect = null;
                 this.snowflakesEffect = new SnowflakesEffect();
-                this.titleTextView.invalidate();
+                this.titleTextView[0].invalidate();
                 invalidate();
             } else {
                 this.snowflakesEffect = null;
                 this.fireworksEffect = new FireworksEffect();
-                this.titleTextView.invalidate();
+                this.titleTextView[0].invalidate();
                 invalidate();
             }
         }
@@ -192,7 +205,10 @@ public class ActionBar extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public boolean shouldClipChild(View view) {
-        return this.clipContent && (view == this.titleTextView || view == this.subtitleTextView || view == this.menu || view == this.backButtonImageView);
+        if (this.clipContent) {
+            return view == this.titleTextView[0] || view == this.subtitleTextView || view == this.menu || view == this.backButtonImageView;
+        }
+        return false;
     }
 
     /* access modifiers changed from: protected */
@@ -204,12 +220,12 @@ public class ActionBar extends FrameLayout {
             canvas.clipRect(0.0f, (-getTranslationY()) + ((float) (this.occupyStatusBar ? AndroidUtilities.statusBarHeight : 0)), (float) getMeasuredWidth(), (float) getMeasuredHeight());
         }
         boolean drawChild = super.drawChild(canvas, view, j);
-        if (this.supportsHolidayImage && !this.titleOverlayShown && !LocaleController.isRTL && view == this.titleTextView && (currentHolidayDrawable = Theme.getCurrentHolidayDrawable()) != null) {
-            TextPaint textPaint = this.titleTextView.getTextPaint();
+        if (this.supportsHolidayImage && !this.titleOverlayShown && !LocaleController.isRTL && view == this.titleTextView[0] && (currentHolidayDrawable = Theme.getCurrentHolidayDrawable()) != null) {
+            TextPaint textPaint = this.titleTextView[0].getTextPaint();
             textPaint.getFontMetricsInt(this.fontMetricsInt);
-            textPaint.getTextBounds((String) this.titleTextView.getText(), 0, 1, this.rect);
-            int textStartX = this.titleTextView.getTextStartX() + Theme.getCurrentHolidayDrawableXOffset() + ((this.rect.width() - (currentHolidayDrawable.getIntrinsicWidth() + Theme.getCurrentHolidayDrawableXOffset())) / 2);
-            int textStartY = this.titleTextView.getTextStartY() + Theme.getCurrentHolidayDrawableYOffset() + ((int) Math.ceil((double) (((float) (this.titleTextView.getTextHeight() - this.rect.height())) / 2.0f)));
+            textPaint.getTextBounds((String) this.titleTextView[0].getText(), 0, 1, this.rect);
+            int textStartX = this.titleTextView[0].getTextStartX() + Theme.getCurrentHolidayDrawableXOffset() + ((this.rect.width() - (currentHolidayDrawable.getIntrinsicWidth() + Theme.getCurrentHolidayDrawableXOffset())) / 2);
+            int textStartY = this.titleTextView[0].getTextStartY() + Theme.getCurrentHolidayDrawableYOffset() + ((int) Math.ceil((double) (((float) (this.titleTextView[0].getTextHeight() - this.rect.height())) / 2.0f)));
             currentHolidayDrawable.setBounds(textStartX, textStartY - currentHolidayDrawable.getIntrinsicHeight(), currentHolidayDrawable.getIntrinsicWidth() + textStartX, textStartY);
             currentHolidayDrawable.draw(canvas);
             if (Theme.canStartHolidayAnimation()) {
@@ -284,14 +300,19 @@ public class ActionBar extends FrameLayout {
         }
     }
 
-    private void createTitleTextView() {
-        if (this.titleTextView == null) {
-            SimpleTextView simpleTextView = new SimpleTextView(getContext());
-            this.titleTextView = simpleTextView;
-            simpleTextView.setGravity(3);
-            this.titleTextView.setTextColor(Theme.getColor("actionBarDefaultTitle"));
-            this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            addView(this.titleTextView, 0, LayoutHelper.createFrame(-2, -2, 51));
+    private void createTitleTextView(int i) {
+        SimpleTextView[] simpleTextViewArr = this.titleTextView;
+        if (simpleTextViewArr[i] == null) {
+            simpleTextViewArr[i] = new SimpleTextView(getContext());
+            this.titleTextView[i].setGravity(3);
+            int i2 = this.titleColorToSet;
+            if (i2 != 0) {
+                this.titleTextView[i].setTextColor(i2);
+            } else {
+                this.titleTextView[i].setTextColor(Theme.getColor("actionBarDefaultTitle"));
+            }
+            this.titleTextView[i].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            addView(this.titleTextView[i], 0, LayoutHelper.createFrame(-2, -2, 51));
         }
     }
 
@@ -300,22 +321,27 @@ public class ActionBar extends FrameLayout {
     }
 
     public void setTitle(CharSequence charSequence) {
-        if (charSequence != null && this.titleTextView == null) {
-            createTitleTextView();
+        if (charSequence != null && this.titleTextView[0] == null) {
+            createTitleTextView(0);
         }
-        SimpleTextView simpleTextView = this.titleTextView;
-        if (simpleTextView != null) {
+        SimpleTextView[] simpleTextViewArr = this.titleTextView;
+        if (simpleTextViewArr[0] != null) {
             this.lastTitle = charSequence;
-            simpleTextView.setVisibility((charSequence == null || this.isSearchFieldVisible) ? 4 : 0);
-            this.titleTextView.setText(charSequence);
+            simpleTextViewArr[0].setVisibility((charSequence == null || this.isSearchFieldVisible) ? 4 : 0);
+            this.titleTextView[0].setText(charSequence);
         }
     }
 
     public void setTitleColor(int i) {
-        if (this.titleTextView == null) {
-            createTitleTextView();
+        if (this.titleTextView[0] == null) {
+            createTitleTextView(0);
         }
-        this.titleTextView.setTextColor(i);
+        this.titleColorToSet = i;
+        this.titleTextView[0].setTextColor(i);
+        SimpleTextView[] simpleTextViewArr = this.titleTextView;
+        if (simpleTextViewArr[1] != null) {
+            simpleTextViewArr[1].setTextColor(i);
+        }
     }
 
     public void setSubtitleColor(int i) {
@@ -323,6 +349,10 @@ public class ActionBar extends FrameLayout {
             createSubtitleTextView();
         }
         this.subtitleTextView.setTextColor(i);
+    }
+
+    public void setTitleScrollNonFitText(boolean z) {
+        this.titleTextView[0].setScrollNonFitText(z);
     }
 
     public void setPopupItemsColor(int i, boolean z, boolean z2) {
@@ -360,15 +390,15 @@ public class ActionBar extends FrameLayout {
     }
 
     public SimpleTextView getTitleTextView() {
-        return this.titleTextView;
+        return this.titleTextView[0];
     }
 
     public String getTitle() {
-        SimpleTextView simpleTextView = this.titleTextView;
-        if (simpleTextView == null) {
+        SimpleTextView[] simpleTextViewArr = this.titleTextView;
+        if (simpleTextViewArr[0] == null) {
             return null;
         }
-        return simpleTextView.getText().toString();
+        return simpleTextViewArr[0].getText().toString();
     }
 
     public String getSubtitle() {
@@ -398,19 +428,35 @@ public class ActionBar extends FrameLayout {
         return this.actionBarMenuOnItemClick;
     }
 
-    public View getBackButton() {
+    public ImageView getBackButton() {
         return this.backButtonImageView;
     }
 
     public ActionBarMenu createActionMode() {
-        return createActionMode(true);
+        return createActionMode(true, (String) null);
     }
 
-    public ActionBarMenu createActionMode(boolean z) {
+    public boolean actionModeIsExist(String str) {
+        if (this.actionMode == null) {
+            return false;
+        }
+        if (this.actionModeTag == null && str == null) {
+            return true;
+        }
+        String str2 = this.actionModeTag;
+        return str2 != null && str2.equals(str);
+    }
+
+    public ActionBarMenu createActionMode(boolean z, String str) {
+        if (actionModeIsExist(str)) {
+            return this.actionMode;
+        }
         ActionBarMenu actionBarMenu = this.actionMode;
         if (actionBarMenu != null) {
-            return actionBarMenu;
+            removeView(actionBarMenu);
+            this.actionMode = null;
         }
+        this.actionModeTag = str;
         ActionBarMenu actionBarMenu2 = new ActionBarMenu(getContext(), this);
         this.actionMode = actionBarMenu2;
         actionBarMenu2.isActionMode = true;
@@ -490,8 +536,8 @@ public class ActionBar extends FrameLayout {
                     boolean[] zArr;
                     if (ActionBar.this.actionModeAnimation != null && ActionBar.this.actionModeAnimation.equals(animator)) {
                         AnimatorSet unused = ActionBar.this.actionModeAnimation = null;
-                        if (ActionBar.this.titleTextView != null) {
-                            ActionBar.this.titleTextView.setVisibility(4);
+                        if (ActionBar.this.titleTextView[0] != null) {
+                            ActionBar.this.titleTextView[0].setVisibility(4);
                         }
                         if (ActionBar.this.subtitleTextView != null && !TextUtils.isEmpty(ActionBar.this.subtitleTextView.getText())) {
                             ActionBar.this.subtitleTextView.setVisibility(4);
@@ -591,12 +637,12 @@ public class ActionBar extends FrameLayout {
             });
             this.actionModeAnimation.start();
             if (!this.isSearchFieldVisible) {
-                SimpleTextView simpleTextView = this.titleTextView;
-                if (simpleTextView != null) {
-                    simpleTextView.setVisibility(0);
+                SimpleTextView[] simpleTextViewArr = this.titleTextView;
+                if (simpleTextViewArr[0] != null) {
+                    simpleTextViewArr[0].setVisibility(0);
                 }
-                SimpleTextView simpleTextView2 = this.subtitleTextView;
-                if (simpleTextView2 != null && !TextUtils.isEmpty(simpleTextView2.getText())) {
+                SimpleTextView simpleTextView = this.subtitleTextView;
+                if (simpleTextView != null && !TextUtils.isEmpty(simpleTextView.getText())) {
                     this.subtitleTextView.setVisibility(0);
                 }
             }
@@ -656,18 +702,18 @@ public class ActionBar extends FrameLayout {
 
     public void onSearchFieldVisibilityChanged(boolean z) {
         this.isSearchFieldVisible = z;
-        SimpleTextView simpleTextView = this.titleTextView;
-        int i = 4;
-        if (simpleTextView != null) {
-            simpleTextView.setVisibility(z ? 4 : 0);
+        SimpleTextView[] simpleTextViewArr = this.titleTextView;
+        int i = 0;
+        if (simpleTextViewArr[0] != null) {
+            simpleTextViewArr[0].setVisibility(z ? 4 : 0);
         }
-        SimpleTextView simpleTextView2 = this.subtitleTextView;
-        if (simpleTextView2 != null && !TextUtils.isEmpty(simpleTextView2.getText())) {
-            SimpleTextView simpleTextView3 = this.subtitleTextView;
-            if (!z) {
-                i = 0;
+        SimpleTextView simpleTextView = this.subtitleTextView;
+        if (simpleTextView != null && !TextUtils.isEmpty(simpleTextView.getText())) {
+            SimpleTextView simpleTextView2 = this.subtitleTextView;
+            if (z) {
+                i = 4;
             }
-            simpleTextView3.setVisibility(i);
+            simpleTextView2.setVisibility(i);
         }
         Drawable drawable = this.backButtonImageView.getDrawable();
         if (drawable instanceof MenuDrawable) {
@@ -706,6 +752,13 @@ public class ActionBar extends FrameLayout {
         ActionBarMenu actionBarMenu = this.menu;
         if (actionBarMenu != null && str != null) {
             actionBarMenu.openSearchField(!this.isSearchFieldVisible, str, z);
+        }
+    }
+
+    public void setSearchFilter(FiltersView.MediaFilterData mediaFilterData) {
+        ActionBarMenu actionBarMenu = this.menu;
+        if (actionBarMenu != null) {
+            actionBarMenu.setFilter(mediaFilterData);
         }
     }
 
@@ -776,286 +829,316 @@ public class ActionBar extends FrameLayout {
             }
             this.menu.measure(i4, makeMeasureSpec);
         }
-        SimpleTextView simpleTextView3 = this.titleTextView;
-        if (!((simpleTextView3 == null || simpleTextView3.getVisibility() == 8) && ((simpleTextView2 = this.subtitleTextView) == null || simpleTextView2.getVisibility() == 8))) {
-            ActionBarMenu actionBarMenu3 = this.menu;
-            int measuredWidth = (((size - (actionBarMenu3 != null ? actionBarMenu3.getMeasuredWidth() : 0)) - AndroidUtilities.dp(16.0f)) - i3) - this.titleRightMargin;
-            SimpleTextView simpleTextView4 = this.titleTextView;
-            int i5 = 14;
-            int i6 = 18;
-            if (simpleTextView4 == null || simpleTextView4.getVisibility() == 8 || (simpleTextView = this.subtitleTextView) == null || simpleTextView.getVisibility() == 8) {
-                SimpleTextView simpleTextView5 = this.titleTextView;
-                if (!(simpleTextView5 == null || simpleTextView5.getVisibility() == 8)) {
-                    SimpleTextView simpleTextView6 = this.titleTextView;
-                    if (AndroidUtilities.isTablet() || getResources().getConfiguration().orientation != 2) {
-                        i6 = 20;
+        for (int i5 = 0; i5 < 2; i5++) {
+            SimpleTextView[] simpleTextViewArr = this.titleTextView;
+            if (!((simpleTextViewArr[0] == null || simpleTextViewArr[0].getVisibility() == 8) && ((simpleTextView2 = this.subtitleTextView) == null || simpleTextView2.getVisibility() == 8))) {
+                ActionBarMenu actionBarMenu3 = this.menu;
+                int measuredWidth = (((size - (actionBarMenu3 != null ? actionBarMenu3.getMeasuredWidth() : 0)) - AndroidUtilities.dp(16.0f)) - i3) - this.titleRightMargin;
+                SimpleTextView[] simpleTextViewArr2 = this.titleTextView;
+                int i6 = 14;
+                int i7 = 18;
+                if (simpleTextViewArr2[0] == null || simpleTextViewArr2[0].getVisibility() == 8 || (simpleTextView = this.subtitleTextView) == null || simpleTextView.getVisibility() == 8) {
+                    SimpleTextView[] simpleTextViewArr3 = this.titleTextView;
+                    if (!(simpleTextViewArr3[i5] == null || simpleTextViewArr3[i5].getVisibility() == 8)) {
+                        SimpleTextView simpleTextView3 = this.titleTextView[i5];
+                        if (AndroidUtilities.isTablet() || getResources().getConfiguration().orientation != 2) {
+                            i7 = 20;
+                        }
+                        simpleTextView3.setTextSize(i7);
                     }
-                    simpleTextView6.setTextSize(i6);
-                }
-                SimpleTextView simpleTextView7 = this.subtitleTextView;
-                if (!(simpleTextView7 == null || simpleTextView7.getVisibility() == 8)) {
-                    SimpleTextView simpleTextView8 = this.subtitleTextView;
-                    if (AndroidUtilities.isTablet() || getResources().getConfiguration().orientation != 2) {
-                        i5 = 16;
+                    SimpleTextView simpleTextView4 = this.subtitleTextView;
+                    if (!(simpleTextView4 == null || simpleTextView4.getVisibility() == 8)) {
+                        SimpleTextView simpleTextView5 = this.subtitleTextView;
+                        if (AndroidUtilities.isTablet() || getResources().getConfiguration().orientation != 2) {
+                            i6 = 16;
+                        }
+                        simpleTextView5.setTextSize(i6);
                     }
-                    simpleTextView8.setTextSize(i5);
+                } else {
+                    SimpleTextView[] simpleTextViewArr4 = this.titleTextView;
+                    if (simpleTextViewArr4[i5] != null) {
+                        SimpleTextView simpleTextView6 = simpleTextViewArr4[i5];
+                        if (AndroidUtilities.isTablet()) {
+                            i7 = 20;
+                        }
+                        simpleTextView6.setTextSize(i7);
+                    }
+                    SimpleTextView simpleTextView7 = this.subtitleTextView;
+                    if (AndroidUtilities.isTablet()) {
+                        i6 = 16;
+                    }
+                    simpleTextView7.setTextSize(i6);
                 }
-            } else {
-                SimpleTextView simpleTextView9 = this.titleTextView;
-                if (AndroidUtilities.isTablet()) {
-                    i6 = 20;
+                SimpleTextView[] simpleTextViewArr5 = this.titleTextView;
+                if (!(simpleTextViewArr5[i5] == null || simpleTextViewArr5[i5].getVisibility() == 8)) {
+                    CharSequence text = this.titleTextView[i5].getText();
+                    SimpleTextView[] simpleTextViewArr6 = this.titleTextView;
+                    simpleTextViewArr6[i5].setPivotX(simpleTextViewArr6[i5].getTextPaint().measureText(text, 0, text.length()) / 2.0f);
+                    this.titleTextView[i5].setPivotY((float) (AndroidUtilities.dp(24.0f) >> 1));
+                    this.titleTextView[i5].measure(View.MeasureSpec.makeMeasureSpec(measuredWidth, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), Integer.MIN_VALUE));
                 }
-                simpleTextView9.setTextSize(i6);
-                SimpleTextView simpleTextView10 = this.subtitleTextView;
-                if (AndroidUtilities.isTablet()) {
-                    i5 = 16;
+                SimpleTextView simpleTextView8 = this.subtitleTextView;
+                if (!(simpleTextView8 == null || simpleTextView8.getVisibility() == 8)) {
+                    this.subtitleTextView.measure(View.MeasureSpec.makeMeasureSpec(measuredWidth, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), Integer.MIN_VALUE));
                 }
-                simpleTextView10.setTextSize(i5);
-            }
-            SimpleTextView simpleTextView11 = this.titleTextView;
-            if (!(simpleTextView11 == null || simpleTextView11.getVisibility() == 8)) {
-                this.titleTextView.measure(View.MeasureSpec.makeMeasureSpec(measuredWidth, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(24.0f), Integer.MIN_VALUE));
-            }
-            SimpleTextView simpleTextView12 = this.subtitleTextView;
-            if (!(simpleTextView12 == null || simpleTextView12.getVisibility() == 8)) {
-                this.subtitleTextView.measure(View.MeasureSpec.makeMeasureSpec(measuredWidth, Integer.MIN_VALUE), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(20.0f), Integer.MIN_VALUE));
             }
         }
         int childCount = getChildCount();
-        for (int i7 = 0; i7 < childCount; i7++) {
-            View childAt = getChildAt(i7);
-            if (!(childAt.getVisibility() == 8 || childAt == this.titleTextView || childAt == this.subtitleTextView || childAt == this.menu || childAt == this.backButtonImageView)) {
-                measureChildWithMargins(childAt, i, 0, View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM), 0);
+        for (int i8 = 0; i8 < childCount; i8++) {
+            View childAt = getChildAt(i8);
+            if (childAt.getVisibility() != 8) {
+                SimpleTextView[] simpleTextViewArr7 = this.titleTextView;
+                if (!(childAt == simpleTextViewArr7[0] || childAt == simpleTextViewArr7[1] || childAt == this.subtitleTextView || childAt == this.menu || childAt == this.backButtonImageView)) {
+                    measureChildWithMargins(childAt, i, 0, View.MeasureSpec.makeMeasureSpec(getMeasuredHeight(), NUM), 0);
+                }
             }
         }
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:81:0x0177  */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x0184  */
+    /* JADX WARNING: Removed duplicated region for block: B:87:0x0193  */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x01a0  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void onLayout(boolean r11, int r12, int r13, int r14, int r15) {
+    public void onLayout(boolean r14, int r15, int r16, int r17, int r18) {
         /*
-            r10 = this;
-            boolean r11 = r10.occupyStatusBar
-            r0 = 0
-            if (r11 == 0) goto L_0x0008
-            int r11 = org.telegram.messenger.AndroidUtilities.statusBarHeight
-            goto L_0x0009
-        L_0x0008:
-            r11 = 0
+            r13 = this;
+            r0 = r13
+            boolean r1 = r0.occupyStatusBar
+            r2 = 0
+            if (r1 == 0) goto L_0x0009
+            int r1 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+            goto L_0x000a
         L_0x0009:
-            android.widget.ImageView r1 = r10.backButtonImageView
-            r2 = 8
-            if (r1 == 0) goto L_0x0035
-            int r1 = r1.getVisibility()
-            if (r1 == r2) goto L_0x0035
-            android.widget.ImageView r1 = r10.backButtonImageView
-            int r3 = r1.getMeasuredWidth()
-            android.widget.ImageView r4 = r10.backButtonImageView
-            int r4 = r4.getMeasuredHeight()
-            int r4 = r4 + r11
-            r1.layout(r0, r11, r3, r4)
-            boolean r1 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r1 == 0) goto L_0x002e
-            r1 = 1117782016(0x42a00000, float:80.0)
-            goto L_0x0030
-        L_0x002e:
-            r1 = 1116733440(0x42900000, float:72.0)
-        L_0x0030:
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            goto L_0x0044
-        L_0x0035:
-            boolean r1 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r1 == 0) goto L_0x003e
-            r1 = 1104150528(0x41d00000, float:26.0)
-            goto L_0x0040
-        L_0x003e:
-            r1 = 1099956224(0x41900000, float:18.0)
-        L_0x0040:
-            int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-        L_0x0044:
-            org.telegram.ui.ActionBar.ActionBarMenu r3 = r10.menu
-            if (r3 == 0) goto L_0x007c
+            r1 = 0
+        L_0x000a:
+            android.widget.ImageView r3 = r0.backButtonImageView
+            r4 = 8
+            if (r3 == 0) goto L_0x0036
             int r3 = r3.getVisibility()
-            if (r3 == r2) goto L_0x007c
-            boolean r3 = r10.isSearchFieldVisible
-            if (r3 == 0) goto L_0x0062
-            boolean r3 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r3 == 0) goto L_0x005b
-            r3 = 1116995584(0x42940000, float:74.0)
-            goto L_0x005d
-        L_0x005b:
-            r3 = 1115947008(0x42840000, float:66.0)
-        L_0x005d:
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
-            goto L_0x006b
-        L_0x0062:
-            int r3 = r14 - r12
-            org.telegram.ui.ActionBar.ActionBarMenu r4 = r10.menu
-            int r4 = r4.getMeasuredWidth()
-            int r3 = r3 - r4
-        L_0x006b:
-            org.telegram.ui.ActionBar.ActionBarMenu r4 = r10.menu
-            int r5 = r4.getMeasuredWidth()
-            int r5 = r5 + r3
-            org.telegram.ui.ActionBar.ActionBarMenu r6 = r10.menu
+            if (r3 == r4) goto L_0x0036
+            android.widget.ImageView r3 = r0.backButtonImageView
+            int r5 = r3.getMeasuredWidth()
+            android.widget.ImageView r6 = r0.backButtonImageView
             int r6 = r6.getMeasuredHeight()
-            int r6 = r6 + r11
-            r4.layout(r3, r11, r5, r6)
-        L_0x007c:
-            org.telegram.ui.ActionBar.SimpleTextView r3 = r10.titleTextView
-            r4 = 2
-            if (r3 == 0) goto L_0x00d9
-            int r3 = r3.getVisibility()
-            if (r3 == r2) goto L_0x00d9
-            org.telegram.ui.ActionBar.SimpleTextView r3 = r10.subtitleTextView
-            if (r3 == 0) goto L_0x00bb
-            int r3 = r3.getVisibility()
-            if (r3 == r2) goto L_0x00bb
-            int r3 = getCurrentActionBarHeight()
-            int r3 = r3 / r4
-            org.telegram.ui.ActionBar.SimpleTextView r5 = r10.titleTextView
-            int r5 = r5.getTextHeight()
-            int r3 = r3 - r5
-            int r3 = r3 / r4
-            boolean r5 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r5 != 0) goto L_0x00b3
-            android.content.res.Resources r5 = r10.getResources()
-            android.content.res.Configuration r5 = r5.getConfiguration()
-            int r5 = r5.orientation
-            if (r5 != r4) goto L_0x00b3
-            r5 = 1073741824(0x40000000, float:2.0)
-            goto L_0x00b5
-        L_0x00b3:
-            r5 = 1077936128(0x40400000, float:3.0)
-        L_0x00b5:
-            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            int r3 = r3 + r5
-            goto L_0x00c7
-        L_0x00bb:
-            int r3 = getCurrentActionBarHeight()
-            org.telegram.ui.ActionBar.SimpleTextView r5 = r10.titleTextView
-            int r5 = r5.getTextHeight()
-            int r3 = r3 - r5
-            int r3 = r3 / r4
-        L_0x00c7:
-            org.telegram.ui.ActionBar.SimpleTextView r5 = r10.titleTextView
-            int r3 = r3 + r11
-            int r6 = r5.getMeasuredWidth()
             int r6 = r6 + r1
-            org.telegram.ui.ActionBar.SimpleTextView r7 = r10.titleTextView
-            int r7 = r7.getTextHeight()
-            int r7 = r7 + r3
-            r5.layout(r1, r3, r6, r7)
-        L_0x00d9:
-            org.telegram.ui.ActionBar.SimpleTextView r3 = r10.subtitleTextView
-            if (r3 == 0) goto L_0x011f
-            int r3 = r3.getVisibility()
-            if (r3 == r2) goto L_0x011f
-            int r3 = getCurrentActionBarHeight()
-            int r3 = r3 / r4
-            int r5 = getCurrentActionBarHeight()
-            int r5 = r5 / r4
-            org.telegram.ui.ActionBar.SimpleTextView r6 = r10.subtitleTextView
-            int r6 = r6.getTextHeight()
-            int r5 = r5 - r6
-            int r5 = r5 / r4
-            int r3 = r3 + r5
+            r3.layout(r2, r1, r5, r6)
+            boolean r3 = org.telegram.messenger.AndroidUtilities.isTablet()
+            if (r3 == 0) goto L_0x002f
+            r3 = 1117782016(0x42a00000, float:80.0)
+            goto L_0x0031
+        L_0x002f:
+            r3 = 1116733440(0x42900000, float:72.0)
+        L_0x0031:
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+            goto L_0x0045
+        L_0x0036:
+            boolean r3 = org.telegram.messenger.AndroidUtilities.isTablet()
+            if (r3 == 0) goto L_0x003f
+            r3 = 1104150528(0x41d00000, float:26.0)
+            goto L_0x0041
+        L_0x003f:
+            r3 = 1099956224(0x41900000, float:18.0)
+        L_0x0041:
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
+        L_0x0045:
+            org.telegram.ui.ActionBar.ActionBarMenu r5 = r0.menu
+            if (r5 == 0) goto L_0x007d
+            int r5 = r5.getVisibility()
+            if (r5 == r4) goto L_0x007d
+            boolean r5 = r0.isSearchFieldVisible
+            if (r5 == 0) goto L_0x0063
             boolean r5 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r5 != 0) goto L_0x0106
-            android.content.res.Resources r5 = r10.getResources()
-            android.content.res.Configuration r5 = r5.getConfiguration()
-            int r5 = r5.orientation
-        L_0x0106:
-            r5 = 1065353216(0x3var_, float:1.0)
+            if (r5 == 0) goto L_0x005c
+            r5 = 1116995584(0x42940000, float:74.0)
+            goto L_0x005e
+        L_0x005c:
+            r5 = 1115947008(0x42840000, float:66.0)
+        L_0x005e:
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            int r3 = r3 - r5
-            org.telegram.ui.ActionBar.SimpleTextView r5 = r10.subtitleTextView
-            int r11 = r11 + r3
-            int r3 = r5.getMeasuredWidth()
-            int r3 = r3 + r1
-            org.telegram.ui.ActionBar.SimpleTextView r6 = r10.subtitleTextView
-            int r6 = r6.getTextHeight()
-            int r6 = r6 + r11
-            r5.layout(r1, r11, r3, r6)
-        L_0x011f:
-            int r11 = r10.getChildCount()
-        L_0x0123:
-            if (r0 >= r11) goto L_0x0197
-            android.view.View r1 = r10.getChildAt(r0)
-            int r3 = r1.getVisibility()
-            if (r3 == r2) goto L_0x0194
-            org.telegram.ui.ActionBar.SimpleTextView r3 = r10.titleTextView
-            if (r1 == r3) goto L_0x0194
-            org.telegram.ui.ActionBar.SimpleTextView r3 = r10.subtitleTextView
-            if (r1 == r3) goto L_0x0194
-            org.telegram.ui.ActionBar.ActionBarMenu r3 = r10.menu
-            if (r1 == r3) goto L_0x0194
-            android.widget.ImageView r3 = r10.backButtonImageView
-            if (r1 != r3) goto L_0x0140
-            goto L_0x0194
-        L_0x0140:
-            android.view.ViewGroup$LayoutParams r3 = r1.getLayoutParams()
-            android.widget.FrameLayout$LayoutParams r3 = (android.widget.FrameLayout.LayoutParams) r3
-            int r5 = r1.getMeasuredWidth()
-            int r6 = r1.getMeasuredHeight()
-            int r7 = r3.gravity
-            r8 = -1
-            if (r7 != r8) goto L_0x0155
-            r7 = 51
-        L_0x0155:
-            r8 = r7 & 7
-            r7 = r7 & 112(0x70, float:1.57E-43)
-            r8 = r8 & 7
-            r9 = 1
-            if (r8 == r9) goto L_0x0169
-            r9 = 5
-            if (r8 == r9) goto L_0x0164
-            int r8 = r3.leftMargin
-            goto L_0x0173
-        L_0x0164:
-            int r8 = r14 - r5
-            int r9 = r3.rightMargin
-            goto L_0x0172
-        L_0x0169:
-            int r8 = r14 - r12
-            int r8 = r8 - r5
-            int r8 = r8 / r4
-            int r9 = r3.leftMargin
-            int r8 = r8 + r9
-            int r9 = r3.rightMargin
-        L_0x0172:
-            int r8 = r8 - r9
-        L_0x0173:
-            r9 = 16
-            if (r7 == r9) goto L_0x0184
-            r9 = 80
-            if (r7 == r9) goto L_0x017e
-            int r3 = r3.topMargin
-            goto L_0x018f
-        L_0x017e:
-            int r7 = r15 - r13
-            int r7 = r7 - r6
-            int r3 = r3.bottomMargin
-            goto L_0x018d
-        L_0x0184:
-            int r7 = r15 - r13
-            int r7 = r7 - r6
-            int r7 = r7 / r4
-            int r9 = r3.topMargin
-            int r7 = r7 + r9
-            int r3 = r3.bottomMargin
-        L_0x018d:
-            int r3 = r7 - r3
-        L_0x018f:
-            int r5 = r5 + r8
+            goto L_0x006c
+        L_0x0063:
+            int r5 = r17 - r15
+            org.telegram.ui.ActionBar.ActionBarMenu r6 = r0.menu
+            int r6 = r6.getMeasuredWidth()
+            int r5 = r5 - r6
+        L_0x006c:
+            org.telegram.ui.ActionBar.ActionBarMenu r6 = r0.menu
+            int r7 = r6.getMeasuredWidth()
+            int r7 = r7 + r5
+            org.telegram.ui.ActionBar.ActionBarMenu r8 = r0.menu
+            int r8 = r8.getMeasuredHeight()
+            int r8 = r8 + r1
+            r6.layout(r5, r1, r7, r8)
+        L_0x007d:
+            r5 = 0
+        L_0x007e:
+            r6 = 2
+            if (r5 >= r6) goto L_0x00ee
+            org.telegram.ui.ActionBar.SimpleTextView[] r7 = r0.titleTextView
+            r8 = r7[r5]
+            if (r8 == 0) goto L_0x00eb
+            r7 = r7[r5]
+            int r7 = r7.getVisibility()
+            if (r7 == r4) goto L_0x00eb
+            org.telegram.ui.ActionBar.SimpleTextView r7 = r0.subtitleTextView
+            if (r7 == 0) goto L_0x00c5
+            int r7 = r7.getVisibility()
+            if (r7 == r4) goto L_0x00c5
+            int r7 = getCurrentActionBarHeight()
+            int r7 = r7 / r6
+            org.telegram.ui.ActionBar.SimpleTextView[] r8 = r0.titleTextView
+            r8 = r8[r5]
+            int r8 = r8.getTextHeight()
+            int r7 = r7 - r8
+            int r7 = r7 / r6
+            boolean r8 = org.telegram.messenger.AndroidUtilities.isTablet()
+            if (r8 != 0) goto L_0x00bd
+            android.content.res.Resources r8 = r13.getResources()
+            android.content.res.Configuration r8 = r8.getConfiguration()
+            int r8 = r8.orientation
+            if (r8 != r6) goto L_0x00bd
+            r6 = 1073741824(0x40000000, float:2.0)
+            goto L_0x00bf
+        L_0x00bd:
+            r6 = 1077936128(0x40400000, float:3.0)
+        L_0x00bf:
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
+            int r7 = r7 + r6
+            goto L_0x00d3
+        L_0x00c5:
+            int r7 = getCurrentActionBarHeight()
+            org.telegram.ui.ActionBar.SimpleTextView[] r8 = r0.titleTextView
+            r8 = r8[r5]
+            int r8 = r8.getTextHeight()
+            int r7 = r7 - r8
+            int r7 = r7 / r6
+        L_0x00d3:
+            org.telegram.ui.ActionBar.SimpleTextView[] r6 = r0.titleTextView
+            r8 = r6[r5]
+            int r7 = r7 + r1
+            r6 = r6[r5]
+            int r6 = r6.getMeasuredWidth()
             int r6 = r6 + r3
-            r1.layout(r8, r3, r5, r6)
-        L_0x0194:
-            int r0 = r0 + 1
-            goto L_0x0123
-        L_0x0197:
+            org.telegram.ui.ActionBar.SimpleTextView[] r9 = r0.titleTextView
+            r9 = r9[r5]
+            int r9 = r9.getTextHeight()
+            int r9 = r9 + r7
+            r8.layout(r3, r7, r6, r9)
+        L_0x00eb:
+            int r5 = r5 + 1
+            goto L_0x007e
+        L_0x00ee:
+            org.telegram.ui.ActionBar.SimpleTextView r5 = r0.subtitleTextView
+            if (r5 == 0) goto L_0x0134
+            int r5 = r5.getVisibility()
+            if (r5 == r4) goto L_0x0134
+            int r5 = getCurrentActionBarHeight()
+            int r5 = r5 / r6
+            int r7 = getCurrentActionBarHeight()
+            int r7 = r7 / r6
+            org.telegram.ui.ActionBar.SimpleTextView r8 = r0.subtitleTextView
+            int r8 = r8.getTextHeight()
+            int r7 = r7 - r8
+            int r7 = r7 / r6
+            int r5 = r5 + r7
+            boolean r7 = org.telegram.messenger.AndroidUtilities.isTablet()
+            if (r7 != 0) goto L_0x011b
+            android.content.res.Resources r7 = r13.getResources()
+            android.content.res.Configuration r7 = r7.getConfiguration()
+            int r7 = r7.orientation
+        L_0x011b:
+            r7 = 1065353216(0x3var_, float:1.0)
+            int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
+            int r5 = r5 - r7
+            org.telegram.ui.ActionBar.SimpleTextView r7 = r0.subtitleTextView
+            int r1 = r1 + r5
+            int r5 = r7.getMeasuredWidth()
+            int r5 = r5 + r3
+            org.telegram.ui.ActionBar.SimpleTextView r8 = r0.subtitleTextView
+            int r8 = r8.getTextHeight()
+            int r8 = r8 + r1
+            r7.layout(r3, r1, r5, r8)
+        L_0x0134:
+            int r1 = r13.getChildCount()
+            r3 = 0
+        L_0x0139:
+            if (r3 >= r1) goto L_0x01b3
+            android.view.View r5 = r13.getChildAt(r3)
+            int r7 = r5.getVisibility()
+            if (r7 == r4) goto L_0x01b0
+            org.telegram.ui.ActionBar.SimpleTextView[] r7 = r0.titleTextView
+            r8 = r7[r2]
+            if (r5 == r8) goto L_0x01b0
+            r8 = 1
+            r7 = r7[r8]
+            if (r5 == r7) goto L_0x01b0
+            org.telegram.ui.ActionBar.SimpleTextView r7 = r0.subtitleTextView
+            if (r5 == r7) goto L_0x01b0
+            org.telegram.ui.ActionBar.ActionBarMenu r7 = r0.menu
+            if (r5 == r7) goto L_0x01b0
+            android.widget.ImageView r7 = r0.backButtonImageView
+            if (r5 != r7) goto L_0x015d
+            goto L_0x01b0
+        L_0x015d:
+            android.view.ViewGroup$LayoutParams r7 = r5.getLayoutParams()
+            android.widget.FrameLayout$LayoutParams r7 = (android.widget.FrameLayout.LayoutParams) r7
+            int r9 = r5.getMeasuredWidth()
+            int r10 = r5.getMeasuredHeight()
+            int r11 = r7.gravity
+            r12 = -1
+            if (r11 != r12) goto L_0x0172
+            r11 = 51
+        L_0x0172:
+            r12 = r11 & 7
+            r11 = r11 & 112(0x70, float:1.57E-43)
+            r12 = r12 & 7
+            if (r12 == r8) goto L_0x0185
+            r8 = 5
+            if (r12 == r8) goto L_0x0180
+            int r8 = r7.leftMargin
+            goto L_0x018f
+        L_0x0180:
+            int r8 = r17 - r9
+            int r12 = r7.rightMargin
+            goto L_0x018e
+        L_0x0185:
+            int r8 = r17 - r15
+            int r8 = r8 - r9
+            int r8 = r8 / r6
+            int r12 = r7.leftMargin
+            int r8 = r8 + r12
+            int r12 = r7.rightMargin
+        L_0x018e:
+            int r8 = r8 - r12
+        L_0x018f:
+            r12 = 16
+            if (r11 == r12) goto L_0x01a0
+            r12 = 80
+            if (r11 == r12) goto L_0x019a
+            int r7 = r7.topMargin
+            goto L_0x01ab
+        L_0x019a:
+            int r11 = r18 - r16
+            int r11 = r11 - r10
+            int r7 = r7.bottomMargin
+            goto L_0x01a9
+        L_0x01a0:
+            int r11 = r18 - r16
+            int r11 = r11 - r10
+            int r11 = r11 / r6
+            int r12 = r7.topMargin
+            int r11 = r11 + r12
+            int r7 = r7.bottomMargin
+        L_0x01a9:
+            int r7 = r11 - r7
+        L_0x01ab:
+            int r9 = r9 + r8
+            int r10 = r10 + r7
+            r5.layout(r8, r7, r9, r10)
+        L_0x01b0:
+            int r3 = r3 + 1
+            goto L_0x0139
+        L_0x01b3:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.ActionBar.onLayout(boolean, int, int, int, int):void");
@@ -1085,31 +1168,190 @@ public class ActionBar extends FrameLayout {
         this.lastRunnable = runnable;
     }
 
-    public void setTitleOverlayText(String str, int i, Runnable runnable) {
-        if (this.allowOverlayTitle && this.parentFragment.parentLayout != null) {
-            CharSequence string = str != null ? LocaleController.getString(str, i) : this.lastTitle;
-            if (string != null && this.titleTextView == null) {
-                createTitleTextView();
-            }
-            if (this.titleTextView != null) {
-                int i2 = 0;
-                this.titleOverlayShown = str != null;
-                if (this.supportsHolidayImage) {
-                    this.titleTextView.invalidate();
-                    invalidate();
-                }
-                SimpleTextView simpleTextView = this.titleTextView;
-                if (string == null || this.isSearchFieldVisible) {
-                    i2 = 4;
-                }
-                simpleTextView.setVisibility(i2);
-                this.titleTextView.setText(string);
-            }
-            if (runnable == null) {
-                runnable = this.lastRunnable;
-            }
-            this.titleActionRunnable = runnable;
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x0152  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public void setTitleOverlayText(java.lang.String r5, int r6, java.lang.Runnable r7) {
+        /*
+            r4 = this;
+            boolean r0 = r4.allowOverlayTitle
+            if (r0 == 0) goto L_0x0156
+            org.telegram.ui.ActionBar.BaseFragment r0 = r4.parentFragment
+            org.telegram.ui.ActionBar.ActionBarLayout r0 = r0.parentLayout
+            if (r0 != 0) goto L_0x000c
+            goto L_0x0156
+        L_0x000c:
+            java.lang.Object[] r0 = r4.overlayTitleToSet
+            r1 = 0
+            r0[r1] = r5
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r6)
+            r3 = 1
+            r0[r3] = r2
+            java.lang.Object[] r0 = r4.overlayTitleToSet
+            r2 = 2
+            r0[r2] = r7
+            boolean r0 = r4.overlayTitleAnimationInProgress
+            if (r0 == 0) goto L_0x0022
+            return
+        L_0x0022:
+            java.lang.CharSequence r0 = r4.lastOverlayTitle
+            if (r0 != 0) goto L_0x0028
+            if (r5 == 0) goto L_0x0032
+        L_0x0028:
+            java.lang.CharSequence r0 = r4.lastOverlayTitle
+            if (r0 == 0) goto L_0x0033
+            boolean r0 = r0.equals(r5)
+            if (r0 == 0) goto L_0x0033
+        L_0x0032:
+            return
+        L_0x0033:
+            r4.lastOverlayTitle = r5
+            if (r5 == 0) goto L_0x003c
+            java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r5, r6)
+            goto L_0x003e
+        L_0x003c:
+            java.lang.CharSequence r6 = r4.lastTitle
+        L_0x003e:
+            if (r5 == 0) goto L_0x0053
+            java.lang.String r0 = "..."
+            int r0 = android.text.TextUtils.indexOf(r6, r0)
+            if (r0 < 0) goto L_0x0053
+            android.text.SpannableString r6 = android.text.SpannableString.valueOf(r6)
+            org.telegram.ui.Components.EllipsizeSpanAnimator r2 = r4.ellipsizeSpanAnimator
+            r2.wrap(r6, r0)
+            r0 = 1
+            goto L_0x0054
+        L_0x0053:
+            r0 = 0
+        L_0x0054:
+            if (r5 == 0) goto L_0x0058
+            r5 = 1
+            goto L_0x0059
+        L_0x0058:
+            r5 = 0
+        L_0x0059:
+            r4.titleOverlayShown = r5
+            if (r6 == 0) goto L_0x0063
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
+            r5 = r5[r1]
+            if (r5 == 0) goto L_0x0122
+        L_0x0063:
+            int r5 = r4.getMeasuredWidth()
+            if (r5 == 0) goto L_0x0122
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
+            r2 = r5[r1]
+            if (r2 == 0) goto L_0x0079
+            r5 = r5[r1]
+            int r5 = r5.getVisibility()
+            if (r5 == 0) goto L_0x0079
+            goto L_0x0122
+        L_0x0079:
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
+            r2 = r5[r1]
+            if (r2 == 0) goto L_0x014f
+            r5 = r5[r1]
+            android.view.ViewPropertyAnimator r5 = r5.animate()
+            r5.cancel()
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
+            r2 = r5[r3]
+            if (r2 == 0) goto L_0x0097
+            r5 = r5[r3]
+            android.view.ViewPropertyAnimator r5 = r5.animate()
+            r5.cancel()
+        L_0x0097:
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
+            r5 = r5[r3]
+            if (r5 != 0) goto L_0x00a0
+            r4.createTitleTextView(r3)
+        L_0x00a0:
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
+            r5 = r5[r3]
+            r5.setText(r6)
+            if (r0 == 0) goto L_0x00b2
+            org.telegram.ui.Components.EllipsizeSpanAnimator r5 = r4.ellipsizeSpanAnimator
+            org.telegram.ui.ActionBar.SimpleTextView[] r6 = r4.titleTextView
+            r6 = r6[r3]
+            r5.addView(r6)
+        L_0x00b2:
+            r4.overlayTitleAnimationInProgress = r3
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
+            r6 = r5[r3]
+            r0 = r5[r1]
+            r5[r3] = r0
+            r5[r1] = r6
+            r5 = r5[r1]
+            r6 = 0
+            r5.setAlpha(r6)
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
+            r5 = r5[r1]
+            r0 = 1101004800(0x41a00000, float:20.0)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            int r2 = -r2
+            float r2 = (float) r2
+            r5.setTranslationY(r2)
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
+            r5 = r5[r1]
+            android.view.ViewPropertyAnimator r5 = r5.animate()
+            r1 = 1065353216(0x3var_, float:1.0)
+            android.view.ViewPropertyAnimator r5 = r5.alpha(r1)
+            android.view.ViewPropertyAnimator r5 = r5.translationY(r6)
+            r1 = 220(0xdc, double:1.087E-321)
+            android.view.ViewPropertyAnimator r5 = r5.setDuration(r1)
+            r5.start()
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
+            r5 = r5[r3]
+            android.view.ViewPropertyAnimator r5 = r5.animate()
+            android.view.ViewPropertyAnimator r5 = r5.alpha(r6)
+            org.telegram.ui.ActionBar.SimpleTextView r6 = r4.subtitleTextView
+            if (r6 != 0) goto L_0x0107
+            int r6 = org.telegram.messenger.AndroidUtilities.dp(r0)
+            float r6 = (float) r6
+            r5.translationY(r6)
+            goto L_0x0111
+        L_0x0107:
+            r6 = 1060320051(0x3var_, float:0.7)
+            android.view.ViewPropertyAnimator r0 = r5.scaleY(r6)
+            r0.scaleX(r6)
+        L_0x0111:
+            android.view.ViewPropertyAnimator r5 = r5.setDuration(r1)
+            org.telegram.ui.ActionBar.ActionBar$3 r6 = new org.telegram.ui.ActionBar.ActionBar$3
+            r6.<init>()
+            android.view.ViewPropertyAnimator r5 = r5.setListener(r6)
+            r5.start()
+            goto L_0x014f
+        L_0x0122:
+            r4.createTitleTextView(r1)
+            boolean r5 = r4.supportsHolidayImage
+            if (r5 == 0) goto L_0x0133
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
+            r5 = r5[r1]
+            r5.invalidate()
+            r4.invalidate()
+        L_0x0133:
+            org.telegram.ui.ActionBar.SimpleTextView[] r5 = r4.titleTextView
+            r5 = r5[r1]
+            r5.setText(r6)
+            if (r0 == 0) goto L_0x0146
+            org.telegram.ui.Components.EllipsizeSpanAnimator r5 = r4.ellipsizeSpanAnimator
+            org.telegram.ui.ActionBar.SimpleTextView[] r6 = r4.titleTextView
+            r6 = r6[r1]
+            r5.addView(r6)
+            goto L_0x014f
+        L_0x0146:
+            org.telegram.ui.Components.EllipsizeSpanAnimator r5 = r4.ellipsizeSpanAnimator
+            org.telegram.ui.ActionBar.SimpleTextView[] r6 = r4.titleTextView
+            r6 = r6[r1]
+            r5.removeView(r6)
+        L_0x014f:
+            if (r7 == 0) goto L_0x0152
+            goto L_0x0154
+        L_0x0152:
+            java.lang.Runnable r7 = r4.lastRunnable
+        L_0x0154:
+            r4.titleActionRunnable = r7
+        L_0x0156:
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.ActionBar.setTitleOverlayText(java.lang.String, int, java.lang.Runnable):void");
     }
 
     public boolean isSearchFieldVisible() {
@@ -1178,6 +1420,8 @@ public class ActionBar extends FrameLayout {
             Drawable drawable2 = this.backButtonImageView.getDrawable();
             if (drawable2 instanceof BackDrawable) {
                 ((BackDrawable) drawable2).setColor(i);
+            } else if (drawable2 instanceof MenuDrawable) {
+                ((MenuDrawable) drawable2).setIconColor(i);
             }
         }
         ActionBarMenu actionBarMenu2 = this.menu;
@@ -1207,5 +1451,51 @@ public class ActionBar extends FrameLayout {
             return AndroidUtilities.dp(48.0f);
         }
         return AndroidUtilities.dp(56.0f);
+    }
+
+    public void setTitleAnimated(CharSequence charSequence, boolean z, long j) {
+        SimpleTextView[] simpleTextViewArr = this.titleTextView;
+        if (simpleTextViewArr[0] == null) {
+            setTitle(charSequence);
+            return;
+        }
+        if (simpleTextViewArr[1] != null) {
+            if (simpleTextViewArr[1].getParent() != null) {
+                ((ViewGroup) this.titleTextView[1].getParent()).removeView(this.titleTextView[1]);
+            }
+            this.titleTextView[1] = null;
+        }
+        SimpleTextView[] simpleTextViewArr2 = this.titleTextView;
+        simpleTextViewArr2[1] = simpleTextViewArr2[0];
+        simpleTextViewArr2[0] = null;
+        setTitle(charSequence);
+        this.titleTextView[0].setAlpha(0.0f);
+        SimpleTextView simpleTextView = this.titleTextView[0];
+        int dp = AndroidUtilities.dp(20.0f);
+        if (!z) {
+            dp = -dp;
+        }
+        simpleTextView.setTranslationY((float) dp);
+        this.titleTextView[0].animate().alpha(1.0f).translationY(0.0f).setDuration(j).start();
+        this.titleTextView[1].animate().alpha(0.0f).translationY((float) (z ? -AndroidUtilities.dp(20.0f) : AndroidUtilities.dp(20.0f))).setDuration(j).setListener(new AnimatorListenerAdapter() {
+            public void onAnimationEnd(Animator animator) {
+                if (!(ActionBar.this.titleTextView[1] == null || ActionBar.this.titleTextView[1].getParent() == null)) {
+                    ((ViewGroup) ActionBar.this.titleTextView[1].getParent()).removeView(ActionBar.this.titleTextView[1]);
+                }
+                ActionBar.this.titleTextView[1] = null;
+            }
+        }).start();
+    }
+
+    /* access modifiers changed from: protected */
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        this.ellipsizeSpanAnimator.onAttachedToWindow();
+    }
+
+    /* access modifiers changed from: protected */
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        this.ellipsizeSpanAnimator.onDetachedFromWindow();
     }
 }

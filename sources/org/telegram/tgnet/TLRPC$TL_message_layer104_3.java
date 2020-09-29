@@ -19,9 +19,11 @@ public class TLRPC$TL_message_layer104_3 extends TLRPC$TL_message {
         this.edit_hide = (this.flags & 2097152) != 0;
         this.id = abstractSerializedData.readInt32(z);
         if ((this.flags & 256) != 0) {
-            this.from_id = abstractSerializedData.readInt32(z);
+            TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
+            this.from_id = tLRPC$TL_peerUser;
+            tLRPC$TL_peerUser.user_id = abstractSerializedData.readInt32(z);
         }
-        this.to_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        this.peer_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         if ((this.flags & 4) != 0) {
             this.fwd_from = TLRPC$MessageFwdHeader.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
@@ -29,7 +31,9 @@ public class TLRPC$TL_message_layer104_3 extends TLRPC$TL_message {
             this.via_bot_id = abstractSerializedData.readInt32(z);
         }
         if ((this.flags & 8) != 0) {
-            this.reply_to_msg_id = abstractSerializedData.readInt32(z);
+            TLRPC$TL_messageReplyHeader tLRPC$TL_messageReplyHeader = new TLRPC$TL_messageReplyHeader();
+            this.reply_to = tLRPC$TL_messageReplyHeader;
+            tLRPC$TL_messageReplyHeader.reply_to_msg_id = abstractSerializedData.readInt32(z);
         }
         this.date = abstractSerializedData.readInt32(z);
         this.message = abstractSerializedData.readString(z);
@@ -122,9 +126,9 @@ public class TLRPC$TL_message_layer104_3 extends TLRPC$TL_message {
         abstractSerializedData.writeInt32(i8);
         abstractSerializedData.writeInt32(this.id);
         if ((this.flags & 256) != 0) {
-            abstractSerializedData.writeInt32(this.from_id);
+            abstractSerializedData.writeInt32(this.from_id.user_id);
         }
-        this.to_id.serializeToStream(abstractSerializedData);
+        this.peer_id.serializeToStream(abstractSerializedData);
         if ((this.flags & 4) != 0) {
             this.fwd_from.serializeToStream(abstractSerializedData);
         }
@@ -132,7 +136,7 @@ public class TLRPC$TL_message_layer104_3 extends TLRPC$TL_message {
             abstractSerializedData.writeInt32(this.via_bot_id);
         }
         if ((this.flags & 8) != 0) {
-            abstractSerializedData.writeInt32(this.reply_to_msg_id);
+            abstractSerializedData.writeInt32(this.reply_to.reply_to_msg_id);
         }
         abstractSerializedData.writeInt32(this.date);
         abstractSerializedData.writeString(this.message);

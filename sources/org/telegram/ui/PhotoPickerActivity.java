@@ -91,6 +91,7 @@ import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CheckBox2;
 import org.telegram.ui.Components.CombinedDrawable;
 import org.telegram.ui.Components.EditTextBoldCursor;
+import org.telegram.ui.Components.EditTextCaption;
 import org.telegram.ui.Components.EditTextEmoji;
 import org.telegram.ui.Components.EmptyTextProgressView;
 import org.telegram.ui.Components.LayoutHelper;
@@ -654,7 +655,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 this.searchItem.setSearchFieldHint(LocaleController.getString("SearchGifsTitle", NUM));
             }
         }
-        AnonymousClass5 r3 = new SizeNotifierFrameLayout(context2, SharedConfig.smoothKeyboard) {
+        AnonymousClass5 r3 = new SizeNotifierFrameLayout(context2) {
             private boolean ignoreLayout;
             private int lastItemSize;
             private int lastNotifyWidth;
@@ -696,7 +697,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 PhotoPickerActivity.this.listAdapter.notifyDataSetChanged();
             }
 
-            /* JADX WARNING: Removed duplicated region for block: B:28:0x0093  */
+            /* JADX WARNING: Removed duplicated region for block: B:28:0x008c  */
             /* Code decompiled incorrectly, please refer to instructions dump. */
             private void onMeasureInternal(int r13, int r14) {
                 /*
@@ -748,65 +749,62 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     r12.ignoreLayout = r3
                 L_0x0059:
                     boolean r0 = org.telegram.messenger.SharedConfig.smoothKeyboard
-                    if (r0 == 0) goto L_0x008c
+                    if (r0 == 0) goto L_0x0085
                     org.telegram.ui.PhotoPickerActivity r0 = org.telegram.ui.PhotoPickerActivity.this
                     org.telegram.ui.Components.EditTextEmoji r0 = r0.commentTextView
-                    if (r0 == 0) goto L_0x008c
+                    if (r0 == 0) goto L_0x0085
                     boolean r0 = r0.isPopupShowing()
-                    if (r0 == 0) goto L_0x008c
+                    if (r0 == 0) goto L_0x0085
                     org.telegram.ui.PhotoPickerActivity r0 = org.telegram.ui.PhotoPickerActivity.this
                     android.view.View r0 = r0.fragmentView
-                    org.telegram.ui.PhotoPickerActivity r1 = org.telegram.ui.PhotoPickerActivity.this
-                    int r1 = r1.getCurrentPanTranslationY()
-                    float r1 = (float) r1
+                    r1 = 0
                     r0.setTranslationY(r1)
                     org.telegram.ui.PhotoPickerActivity r0 = org.telegram.ui.PhotoPickerActivity.this
                     org.telegram.ui.Components.RecyclerListView r0 = r0.listView
-                    r1 = 0
                     r0.setTranslationY(r1)
                     org.telegram.ui.PhotoPickerActivity r0 = org.telegram.ui.PhotoPickerActivity.this
                     org.telegram.ui.Components.EmptyTextProgressView r0 = r0.emptyView
                     r0.setTranslationY(r1)
-                L_0x008c:
+                L_0x0085:
                     int r10 = r12.getChildCount()
                     r11 = 0
-                L_0x0091:
-                    if (r11 >= r10) goto L_0x011b
+                L_0x008a:
+                    if (r11 >= r10) goto L_0x0114
                     android.view.View r1 = r12.getChildAt(r11)
-                    if (r1 == 0) goto L_0x0117
+                    if (r1 == 0) goto L_0x0110
                     int r0 = r1.getVisibility()
                     r2 = 8
-                    if (r0 != r2) goto L_0x00a3
-                    goto L_0x0117
-                L_0x00a3:
+                    if (r0 != r2) goto L_0x009c
+                    goto L_0x0110
+                L_0x009c:
                     org.telegram.ui.PhotoPickerActivity r0 = org.telegram.ui.PhotoPickerActivity.this
                     org.telegram.ui.Components.EditTextEmoji r0 = r0.commentTextView
-                    if (r0 == 0) goto L_0x010f
+                    if (r0 == 0) goto L_0x0108
                     boolean r0 = r0.isPopupView(r1)
-                    if (r0 == 0) goto L_0x010f
+                    if (r0 == 0) goto L_0x0108
                     boolean r0 = org.telegram.messenger.AndroidUtilities.isInMultiwindow
-                    if (r0 != 0) goto L_0x00cc
+                    if (r0 != 0) goto L_0x00c5
                     boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-                    if (r0 == 0) goto L_0x00ba
-                    goto L_0x00cc
-                L_0x00ba:
+                    if (r0 == 0) goto L_0x00b3
+                    goto L_0x00c5
+                L_0x00b3:
                     int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r6, r7)
                     android.view.ViewGroup$LayoutParams r2 = r1.getLayoutParams()
                     int r2 = r2.height
                     int r2 = android.view.View.MeasureSpec.makeMeasureSpec(r2, r7)
                     r1.measure(r0, r2)
-                    goto L_0x0117
-                L_0x00cc:
+                    goto L_0x0110
+                L_0x00c5:
                     boolean r0 = org.telegram.messenger.AndroidUtilities.isTablet()
-                    if (r0 == 0) goto L_0x00fa
+                    if (r0 == 0) goto L_0x00f3
                     int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r6, r7)
                     boolean r2 = org.telegram.messenger.AndroidUtilities.isTablet()
-                    if (r2 == 0) goto L_0x00df
+                    if (r2 == 0) goto L_0x00d8
                     r2 = 1128792064(0x43480000, float:200.0)
-                    goto L_0x00e1
-                L_0x00df:
+                    goto L_0x00da
+                L_0x00d8:
                     r2 = 1134559232(0x43a00000, float:320.0)
-                L_0x00e1:
+                L_0x00da:
                     int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
                     int r3 = org.telegram.messenger.AndroidUtilities.statusBarHeight
                     int r3 = r9 - r3
@@ -815,8 +813,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     int r2 = java.lang.Math.min(r2, r3)
                     int r2 = android.view.View.MeasureSpec.makeMeasureSpec(r2, r7)
                     r1.measure(r0, r2)
-                    goto L_0x0117
-                L_0x00fa:
+                    goto L_0x0110
+                L_0x00f3:
                     int r0 = android.view.View.MeasureSpec.makeMeasureSpec(r6, r7)
                     int r2 = org.telegram.messenger.AndroidUtilities.statusBarHeight
                     int r2 = r9 - r2
@@ -824,18 +822,18 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     int r2 = r2 + r3
                     int r2 = android.view.View.MeasureSpec.makeMeasureSpec(r2, r7)
                     r1.measure(r0, r2)
-                    goto L_0x0117
-                L_0x010f:
+                    goto L_0x0110
+                L_0x0108:
                     r3 = 0
                     r5 = 0
                     r0 = r12
                     r2 = r13
                     r4 = r8
                     r0.measureChildWithMargins(r1, r2, r3, r4, r5)
-                L_0x0117:
+                L_0x0110:
                     int r11 = r11 + 1
-                    goto L_0x0091
-                L_0x011b:
+                    goto L_0x008a
+                L_0x0114:
                     return
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoPickerActivity.AnonymousClass5.onMeasureInternal(int, int):void");
@@ -1156,7 +1154,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             this.commentTextView.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MessagesController.getInstance(UserConfig.selectedAccount).maxCaptionLength)});
             this.commentTextView.setHint(LocaleController.getString("AddCaption", NUM));
             this.commentTextView.onResume();
-            EditTextBoldCursor editText = this.commentTextView.getEditText();
+            EditTextCaption editText = this.commentTextView.getEditText();
             editText.setMaxLines(1);
             editText.setSingleLine(true);
             this.frameLayout2.addView(this.commentTextView, LayoutHelper.createFrame(-1, -1.0f, 51, 0.0f, 0.0f, 84.0f, 0.0f));
@@ -1377,9 +1375,6 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         if (!(chatActivity2 == null || this.maxSelectedPhotos == 1)) {
             chatActivity2.getCurrentChat();
             TLRPC$User currentUser = this.chatActivity.getCurrentUser();
-            if (this.chatActivity.getCurrentEncryptedChat() != null) {
-                return false;
-            }
             if (this.sendPopupLayout == null) {
                 ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = new ActionBarPopupWindow.ActionBarPopupWindowLayout(getParentActivity());
                 this.sendPopupLayout = actionBarPopupWindowLayout;
@@ -1407,7 +1402,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 this.sendPopupLayout.setShowedFromBotton(false);
                 this.itemCells = new ActionBarMenuSubItem[2];
                 for (int i = 0; i < 2; i++) {
-                    if (i != 1 || !UserObject.isUserSelf(currentUser)) {
+                    if ((i != 0 || this.chatActivity.canScheduleMessage()) && (i != 1 || !UserObject.isUserSelf(currentUser))) {
                         this.itemCells[i] = new ActionBarMenuSubItem(getParentActivity());
                         if (i == 0) {
                             if (UserObject.isUserSelf(currentUser)) {
@@ -1475,21 +1470,6 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             });
         } else if (i == 1) {
             sendSelectedPhotos(true, 0);
-        }
-    }
-
-    /* access modifiers changed from: protected */
-    public void onPanTranslationUpdate(int i) {
-        if (this.listView != null) {
-            if (this.commentTextView.isPopupShowing()) {
-                this.fragmentView.setTranslationY((float) i);
-                this.listView.setTranslationY(0.0f);
-                this.emptyView.setTranslationY(0.0f);
-                return;
-            }
-            float f = (float) i;
-            this.listView.setTranslationY(f);
-            this.emptyView.setTranslationY(f);
         }
     }
 

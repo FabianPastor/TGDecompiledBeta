@@ -1,30 +1,26 @@
 package j$;
 
-import j$.util.function.Function;
+import java.util.function.Consumer;
 
-public final /* synthetic */ class D implements Function {
-    final /* synthetic */ java.util.function.Function a;
+public final /* synthetic */ class D implements Consumer {
+    final /* synthetic */ j$.util.function.Consumer a;
 
-    private /* synthetic */ D(java.util.function.Function function) {
-        this.a = function;
+    private /* synthetic */ D(j$.util.function.Consumer consumer) {
+        this.a = consumer;
     }
 
-    public static /* synthetic */ Function c(java.util.function.Function function) {
-        if (function == null) {
+    public static /* synthetic */ Consumer a(j$.util.function.Consumer consumer) {
+        if (consumer == null) {
             return null;
         }
-        return function instanceof E ? ((E) function).a : new D(function);
+        return consumer instanceof C ? ((C) consumer).a : new D(consumer);
     }
 
-    public /* synthetic */ Function a(Function function) {
-        return c(this.a.andThen(E.a(function)));
+    public /* synthetic */ void accept(Object obj) {
+        this.a.accept(obj);
     }
 
-    public /* synthetic */ Object apply(Object obj) {
-        return this.a.apply(obj);
-    }
-
-    public /* synthetic */ Function b(Function function) {
-        return c(this.a.compose(E.a(function)));
+    public /* synthetic */ Consumer andThen(Consumer consumer) {
+        return a(this.a.g(C.a(consumer)));
     }
 }

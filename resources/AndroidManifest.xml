@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="20659" android:versionName="7.0.1" android:installLocation="auto" android:compileSdkVersion="30" android:compileSdkVersionCodename="11" package="org.telegram.messenger.beta" platformBuildVersionCode="30" platformBuildVersionName="11">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="20879" android:versionName="7.1.0" android:installLocation="auto" android:compileSdkVersion="30" android:compileSdkVersionCodename="11" package="org.telegram.messenger.beta" platformBuildVersionCode="30" platformBuildVersionName="11">
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="28"/>
     <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
     <uses-feature android:name="android.hardware.location.network" android:required="false"/>
@@ -65,6 +65,7 @@
     <uses-permission android:name="me.everything.badger.permission.BADGE_COUNT_READ"/>
     <uses-permission android:name="me.everything.badger.permission.BADGE_COUNT_WRITE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION"/>
     <application android:theme="@style/Theme.TMessages.Start" android:label="@string/AppNameBeta" android:icon="@mipmap/ic_launcher" android:name="org.telegram.messenger.ApplicationLoader" android:manageSpaceActivity="org.telegram.ui.ExternalActionActivity" android:allowBackup="false" android:hardwareAccelerated="@bool/useHardwareAcceleration" android:largeHeap="true" android:supportsRtl="false" android:roundIcon="@mipmap/ic_launcher_round" android:appComponentFactory="androidx.core.app.CoreComponentFactory">
@@ -83,7 +84,7 @@
             </intent-filter>
         </receiver>
         <service android:name="com.google.android.gms.measurement.AppMeasurementService" android:enabled="false" android:exported="false"/>
-        <activity android:name="org.telegram.ui.LaunchActivity" android:launchMode="singleTask" android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize" android:windowSoftInputMode="adjustPan" android:hardwareAccelerated="@bool/useHardwareAcceleration">
+        <activity android:name="org.telegram.ui.LaunchActivity" android:launchMode="singleTask" android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize" android:windowSoftInputMode="adjustResize" android:hardwareAccelerated="@bool/useHardwareAcceleration">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -123,8 +124,6 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="vnd.android.cursor.item/vnd.org.telegram.messenger.android.profile"/>
-                <data android:mimeType="vnd.android.cursor.item/vnd.org.telegram.messenger.android.call"/>
-                <data android:mimeType="vnd.android.cursor.item/vnd.org.telegram.messenger.android.call.video"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -152,6 +151,14 @@
             <meta-data android:name="android.service.chooser.chooser_target_service" android:value="androidx.sharetarget.ChooserTargetServiceCompat"/>
             <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts"/>
         </activity>
+        <activity-alias android:name="org.telegram.ui.CallsActivity" android:permission="android.permission.CALL_PHONE" android:targetActivity="org.telegram.ui.LaunchActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="vnd.android.cursor.item/vnd.org.telegram.messenger.android.call"/>
+                <data android:mimeType="vnd.android.cursor.item/vnd.org.telegram.messenger.android.call.video"/>
+            </intent-filter>
+        </activity-alias>
         <activity android:name="org.telegram.ui.BubbleActivity" android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize" android:windowSoftInputMode="adjustResize" android:hardwareAccelerated="@bool/useHardwareAcceleration" android:allowEmbedded="true" android:documentLaunchMode="always" android:resizeableActivity="true"/>
         <activity android:theme="@style/Theme.TMessages.Transparent" android:name="org.telegram.ui.ShareActivity" android:stateNotNeeded="true" android:excludeFromRecents="true" android:configChanges="keyboard|keyboardHidden|orientation|uiMode|screenSize" android:windowSoftInputMode="adjustPan" android:hardwareAccelerated="@bool/useHardwareAcceleration">
             <intent-filter android:icon="@mipmap/ic_launcher" android:priority="1" android:roundIcon="@mipmap/ic_launcher_round">
@@ -217,7 +224,7 @@
         <service android:name="org.telegram.messenger.NotificationsService" android:enabled="true"/>
         <service android:name="org.telegram.messenger.NotificationRepeat" android:exported="false"/>
         <service android:name="org.telegram.messenger.VideoEncodingService" android:enabled="true"/>
-        <service android:name="org.telegram.messenger.LocationSharingService" android:enabled="true"/>
+        <service android:name="org.telegram.messenger.LocationSharingService" android:enabled="true" android:foregroundServiceType="8"/>
         <service android:name="org.telegram.messenger.voip.VoIPService" android:enabled="true"/>
         <service android:name="org.telegram.messenger.GoogleVoiceClientService"/>
         <service android:name="org.telegram.messenger.MusicPlayerService" android:enabled="true" android:exported="true"/>
@@ -290,6 +297,7 @@
         <meta-data android:name="com.google.android.gms.car.application" android:resource="@xml/automotive_app_desc"/>
         <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES" android:value="face,barcode"/>
         <meta-data android:name="android.max_aspect" android:value="2.5"/>
+        <meta-data android:name="com.google.android.actions" android:resource="@xml/actions"/>
         <service android:name="androidx.sharetarget.ChooserTargetServiceCompat" android:permission="android.permission.BIND_CHOOSER_TARGET_SERVICE">
             <intent-filter>
                 <action android:name="android.service.chooser.ChooserTargetService"/>
@@ -304,9 +312,9 @@
             <meta-data android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar" android:value="com.google.firebase.components.ComponentRegistrar"/>
             <meta-data android:name="com.google.firebase.components:com.google.firebase.iid.Registrar" android:value="com.google.firebase.components.ComponentRegistrar"/>
             <meta-data android:name="com.google.firebase.components:com.google.firebase.remoteconfig.RemoteConfigRegistrar" android:value="com.google.firebase.components.ComponentRegistrar"/>
+            <meta-data android:name="com.google.firebase.components:com.google.firebase.abt.component.AbtRegistrar" android:value="com.google.firebase.components.ComponentRegistrar"/>
             <meta-data android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar" android:value="com.google.firebase.components.ComponentRegistrar"/>
             <meta-data android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar" android:value="com.google.firebase.components.ComponentRegistrar"/>
-            <meta-data android:name="com.google.firebase.components:com.google.firebase.abt.component.AbtRegistrar" android:value="com.google.firebase.components.ComponentRegistrar"/>
         </service>
         <receiver android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver" android:permission="com.google.android.c2dm.permission.SEND" android:exported="true">
             <intent-filter>
@@ -317,7 +325,7 @@
         <activity android:theme="@style/Theme.Translucent.NoTitleBar" android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity" android:exported="false" android:excludeFromRecents="true"/>
         <service android:name="com.google.android.gms.auth.api.signin.RevocationBoundService" android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION" android:exported="true" android:visibleToInstantApps="true"/>
         <activity android:theme="@style/Theme.Translucent.NoTitleBar" android:name="com.google.android.gms.common.api.GoogleApiActivity" android:exported="false"/>
-        <provider android:name="com.google.firebase.provider.FirebaseInitProvider" android:exported="false" android:authorities="org.telegram.messenger.beta.firebaseinitprovider" android:initOrder="100"/>
+        <provider android:name="com.google.firebase.provider.FirebaseInitProvider" android:exported="false" android:authorities="org.telegram.messenger.beta.firebaseinitprovider" android:initOrder="100" android:directBootAware="true"/>
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
         <activity android:theme="@style/Theme.NoDisplay" android:name="com.microsoft.appcenter.distribute.DeepLinkActivity">
             <intent-filter>

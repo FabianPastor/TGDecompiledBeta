@@ -93,6 +93,7 @@ import org.telegram.tgnet.TLRPC$TL_messages_searchStickerSets;
 import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.tgnet.TLRPC$TL_messages_stickers;
 import org.telegram.tgnet.TLRPC$TL_photoSize;
+import org.telegram.tgnet.TLRPC$TL_photoSizeProgressive;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$messages_BotResults;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -1128,18 +1129,18 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             java.lang.String r13 = "chat_emojiPanelIconSelected"
             int r14 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165947(0x7var_fb, float:1.7946125E38)
+            r15 = 2131165974(0x7var_, float:1.794618E38)
             android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r12, r14)
             r14 = 0
             r11[r14] = r12
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             int r15 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r5 = 2131165944(0x7var_f8, float:1.794612E38)
+            r5 = 2131165971(0x7var_, float:1.7946174E38)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r5, r12, r15)
             r11[r3] = r5
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165948(0x7var_fc, float:1.7946128E38)
+            r15 = 2131165975(0x7var_, float:1.7946182E38)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r5, r12)
             r11[r8] = r5
             r0.tabIcons = r11
@@ -1148,51 +1149,51 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             java.lang.String r11 = "chat_emojiPanelIcon"
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             int r15 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r4 = 2131165938(0x7var_f2, float:1.7946107E38)
+            r4 = 2131165965(0x7var_d, float:1.7946162E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r4, r12, r15)
             r5[r14] = r4
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165939(0x7var_f3, float:1.794611E38)
+            r15 = 2131165966(0x7var_e, float:1.7946164E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r4, r12)
             r5[r3] = r4
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165932(0x7var_ec, float:1.7946095E38)
+            r15 = 2131165959(0x7var_, float:1.794615E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r4, r12)
             r5[r8] = r4
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165934(0x7var_ee, float:1.79461E38)
+            r15 = 2131165961(0x7var_, float:1.7946154E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r4, r12)
             r5[r7] = r4
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165931(0x7var_eb, float:1.7946093E38)
+            r15 = 2131165958(0x7var_, float:1.7946148E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r4, r12)
             r12 = 4
             r5[r12] = r4
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             int r15 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r6 = 2131165940(0x7var_f4, float:1.7946111E38)
+            r6 = 2131165967(0x7var_f, float:1.7946166E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r6, r4, r15)
             r6 = 5
             r5[r6] = r4
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             int r15 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r6 = 2131165935(0x7var_ef, float:1.7946101E38)
+            r6 = 2131165962(0x7var_a, float:1.7946156E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r6, r4, r15)
             r6 = 6
             r5[r6] = r4
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             int r6 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165936(0x7var_f0, float:1.7946103E38)
+            r15 = 2131165963(0x7var_b, float:1.7946158E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r4, r6)
             r6 = 7
             r5[r6] = r4
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r11)
             int r6 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r11 = 2131165933(0x7var_ed, float:1.7946097E38)
+            r11 = 2131165960(0x7var_, float:1.7946152E38)
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r11, r4, r6)
             r6 = 8
             r5[r6] = r4
@@ -1200,30 +1201,30 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             android.graphics.drawable.Drawable[] r4 = new android.graphics.drawable.Drawable[r12]
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             int r11 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165963(0x7var_b, float:1.7946158E38)
+            r15 = 2131165990(0x7var_, float:1.7946213E38)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r5, r11)
             r4[r14] = r5
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             int r11 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165961(0x7var_, float:1.7946154E38)
+            r15 = 2131165988(0x7var_, float:1.7946209E38)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r5, r11)
             r4[r3] = r5
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             int r11 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r15 = 2131165966(0x7var_e, float:1.7946164E38)
+            r15 = 2131165993(0x7var_, float:1.7946219E38)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r15, r5, r11)
             r4[r8] = r5
             android.graphics.drawable.LayerDrawable r5 = new android.graphics.drawable.LayerDrawable
             android.graphics.drawable.Drawable[] r11 = new android.graphics.drawable.Drawable[r8]
             int r15 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r6 = 2131165964(0x7var_c, float:1.794616E38)
+            r6 = 2131165991(0x7var_, float:1.7946215E38)
             android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r6, r15, r12)
             r11[r14] = r6
             java.lang.String r6 = "chat_emojiPanelStickerPackSelectorLine"
             int r12 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             int r15 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            r14 = 2131165965(0x7var_d, float:1.7946162E38)
+            r14 = 2131165992(0x7var_, float:1.7946217E38)
             android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r14, r12, r15)
             r11[r3] = r12
             r5.<init>(r11)
@@ -1232,51 +1233,51 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             android.graphics.drawable.Drawable[] r4 = new android.graphics.drawable.Drawable[r8]
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             int r11 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r12 = 2131165963(0x7var_b, float:1.7946158E38)
+            r12 = 2131165990(0x7var_, float:1.7946213E38)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r12, r5, r11)
             r11 = 0
             r4[r11] = r5
             int r5 = org.telegram.ui.ActionBar.Theme.getColor(r9)
             int r9 = org.telegram.ui.ActionBar.Theme.getColor(r13)
-            r12 = 2131165962(0x7var_a, float:1.7946156E38)
+            r12 = 2131165989(0x7var_, float:1.794621E38)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createEmojiIconSelectorDrawable(r1, r12, r5, r9)
             r4[r3] = r5
             r0.gifIcons = r4
             r4 = 8
             java.lang.String[] r5 = new java.lang.String[r4]
             java.lang.String r4 = "Emoji1"
-            r9 = 2131625119(0x7f0e049f, float:1.8877437E38)
+            r9 = 2131625142(0x7f0e04b6, float:1.8877484E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
             r5[r11] = r4
             java.lang.String r4 = "Emoji2"
-            r9 = 2131625120(0x7f0e04a0, float:1.8877439E38)
+            r9 = 2131625143(0x7f0e04b7, float:1.8877486E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
             r5[r3] = r4
             java.lang.String r4 = "Emoji3"
-            r9 = 2131625121(0x7f0e04a1, float:1.887744E38)
+            r9 = 2131625144(0x7f0e04b8, float:1.8877488E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
             r5[r8] = r4
             java.lang.String r4 = "Emoji4"
-            r9 = 2131625122(0x7f0e04a2, float:1.8877443E38)
+            r9 = 2131625145(0x7f0e04b9, float:1.887749E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
             r5[r7] = r4
             java.lang.String r4 = "Emoji5"
-            r9 = 2131625123(0x7f0e04a3, float:1.8877445E38)
+            r9 = 2131625146(0x7f0e04ba, float:1.8877492E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
             r9 = 4
             r5[r9] = r4
             java.lang.String r4 = "Emoji6"
-            r9 = 2131625124(0x7f0e04a4, float:1.8877447E38)
+            r9 = 2131625147(0x7f0e04bb, float:1.8877494E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
             r9 = 5
             r5[r9] = r4
             java.lang.String r4 = "Emoji7"
-            r9 = 2131625125(0x7f0e04a5, float:1.887745E38)
+            r9 = 2131625148(0x7f0e04bc, float:1.8877496E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
             r9 = 6
             r5[r9] = r4
             java.lang.String r4 = "Emoji8"
-            r9 = 2131625126(0x7f0e04a6, float:1.8877451E38)
+            r9 = 2131625149(0x7f0e04bd, float:1.8877498E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r9)
             r9 = 7
             r5[r9] = r4
@@ -1640,7 +1641,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             android.view.View r4 = new android.view.View
             r4.<init>(r1)
             r0.topShadow = r4
-            r6 = 2131165438(0x7var_fe, float:1.7945093E38)
+            r6 = 2131165439(0x7var_ff, float:1.7945095E38)
             r8 = -1907225(0xffffffffffe2e5e7, float:NaN)
             android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r1, (int) r6, (int) r8)
             r4.setBackgroundDrawable(r6)
@@ -1652,7 +1653,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             org.telegram.ui.Components.EmojiView$17 r4 = new org.telegram.ui.Components.EmojiView$17
             r4.<init>(r1)
             r0.backspaceButton = r4
-            r6 = 2131165943(0x7var_f7, float:1.7946117E38)
+            r6 = 2131165970(0x7var_, float:1.7946172E38)
             r4.setImageResource(r6)
             android.widget.ImageView r4 = r0.backspaceButton
             android.graphics.PorterDuffColorFilter r6 = new android.graphics.PorterDuffColorFilter
@@ -1725,7 +1726,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             android.widget.ImageView r2 = new android.widget.ImageView
             r2.<init>(r1)
             r0.stickerSettingsButton = r2
-            r7 = 2131165946(0x7var_fa, float:1.7946123E38)
+            r7 = 2131165973(0x7var_, float:1.7946178E38)
             r2.setImageResource(r7)
             android.widget.ImageView r2 = r0.stickerSettingsButton
             android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
@@ -1746,7 +1747,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             r2.setBackground(r7)
         L_0x06ea:
             android.widget.ImageView r2 = r0.stickerSettingsButton
-            r7 = 2131626915(0x7f0e0ba3, float:1.888108E38)
+            r7 = 2131626979(0x7f0e0be3, float:1.888121E38)
             java.lang.String r8 = "Settings"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r2.setContentDescription(r7)
@@ -1789,7 +1790,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             android.widget.ImageView r2 = new android.widget.ImageView
             r2.<init>(r1)
             r0.searchButton = r2
-            r7 = 2131165945(0x7var_f9, float:1.7946121E38)
+            r7 = 2131165972(0x7var_, float:1.7946176E38)
             r2.setImageResource(r7)
             android.widget.ImageView r2 = r0.searchButton
             android.graphics.PorterDuffColorFilter r7 = new android.graphics.PorterDuffColorFilter
@@ -1802,7 +1803,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             android.widget.ImageView$ScaleType r7 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r7)
             android.widget.ImageView r2 = r0.searchButton
-            r7 = 2131626788(0x7f0e0b24, float:1.8880822E38)
+            r7 = 2131626840(0x7f0e0b58, float:1.8880928E38)
             java.lang.String r8 = "Search"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             r2.setContentDescription(r7)
@@ -1867,7 +1868,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
             int r7 = android.os.Build.VERSION.SDK_INT
             if (r7 >= r5) goto L_0x082e
             android.content.res.Resources r7 = r29.getResources()
-            r8 = 2131165412(0x7var_e4, float:1.794504E38)
+            r8 = 2131165413(0x7var_e5, float:1.7945042E38)
             android.graphics.drawable.Drawable r7 = r7.getDrawable(r8)
             android.graphics.drawable.Drawable r7 = r7.mutate()
             android.graphics.PorterDuffColorFilter r8 = new android.graphics.PorterDuffColorFilter
@@ -2309,7 +2310,11 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         if (this.bottomTabContainer.getTag() == null) {
             EmojiViewDelegate emojiViewDelegate = this.delegate;
             if ((emojiViewDelegate == null || !emojiViewDelegate.isSearchOpened()) && (view = (View) getParent()) != null) {
-                this.bottomTabContainer.setTranslationY(-((getY() + ((float) getMeasuredHeight())) - ((float) view.getHeight())));
+                float y = (getY() + ((float) getMeasuredHeight())) - ((float) view.getHeight());
+                if (((float) this.bottomTabContainer.getTop()) - y < 0.0f) {
+                    y = (float) this.bottomTabContainer.getTop();
+                }
+                this.bottomTabContainer.setTranslationY(-y);
             }
         }
     }
@@ -3282,6 +3287,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
 
     /* access modifiers changed from: private */
     public void updateStickerTabs() {
+        TLObject tLObject;
         ArrayList<TLRPC$Document> arrayList;
         ArrayList<TLRPC$Document> arrayList2;
         ScrollSlidingTabStrip scrollSlidingTabStrip = this.stickersTab;
@@ -3407,8 +3413,10 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 } else {
                     TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet6 = this.stickerSets.get(i7);
                     TLRPC$Document tLRPC$Document2 = tLRPC$TL_messages_stickerSet6.documents.get(0);
-                    TLObject tLObject = tLRPC$TL_messages_stickerSet6.set.thumb;
-                    if (!(tLObject instanceof TLRPC$TL_photoSize)) {
+                    TLRPC$PhotoSize tLRPC$PhotoSize = tLRPC$TL_messages_stickerSet6.set.thumb;
+                    if ((tLRPC$PhotoSize instanceof TLRPC$TL_photoSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoSizeProgressive)) {
+                        tLObject = tLRPC$TL_messages_stickerSet6.set.thumb;
+                    } else {
                         tLObject = tLRPC$Document2;
                     }
                     this.stickersTab.addStickerTab(tLObject, tLRPC$Document2, tLRPC$TL_messages_stickerSet6).setContentDescription(tLRPC$TL_messages_stickerSet6.set.title + ", " + LocaleController.getString("AccDescrStickerSet", NUM));
@@ -3683,6 +3691,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
         }
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i2), NUM));
         this.isLayout = false;
+        setTranslationY(getTranslationY());
     }
 
     /* access modifiers changed from: protected */
@@ -3701,10 +3710,14 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 if (emojiViewDelegate != null && emojiViewDelegate.isSearchOpened()) {
                     this.bottomTabContainer.setTranslationY((float) AndroidUtilities.dp(49.0f));
                 } else if (this.bottomTabContainer.getTag() == null) {
-                    if (i6 < this.lastNotifyHeight) {
+                    if (i6 <= this.lastNotifyHeight) {
                         this.bottomTabContainer.setTranslationY(0.0f);
                     } else {
-                        this.bottomTabContainer.setTranslationY(-((getY() + ((float) getMeasuredHeight())) - ((float) view.getHeight())));
+                        float y = (getY() + ((float) getMeasuredHeight())) - ((float) view.getHeight());
+                        if (((float) this.bottomTabContainer.getTop()) - y < 0.0f) {
+                            y = (float) this.bottomTabContainer.getTop();
+                        }
+                        this.bottomTabContainer.setTranslationY(-y);
                     }
                 }
                 this.lastNotifyHeight = i6;
@@ -4290,10 +4303,10 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 org.telegram.ui.Components.EmojiView r8 = org.telegram.ui.Components.EmojiView.this
                 org.telegram.tgnet.TLRPC$TL_messages_stickerSet r8 = r8.groupStickerSet
                 if (r8 == 0) goto L_0x004c
-                r8 = 2131165967(0x7var_f, float:1.7946166E38)
+                r8 = 2131165994(0x7var_a, float:1.794622E38)
                 goto L_0x004f
             L_0x004c:
-                r8 = 2131165968(0x7var_, float:1.7946168E38)
+                r8 = 2131165995(0x7var_b, float:1.7946223E38)
             L_0x004f:
                 org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
                 org.telegram.tgnet.TLRPC$ChatFull r0 = r0.info
@@ -4307,7 +4320,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
                 org.telegram.tgnet.TLRPC$Chat r2 = r0.getChat(r2)
             L_0x0071:
-                r0 = 2131624906(0x7f0e03ca, float:1.8877005E38)
+                r0 = 2131624925(0x7f0e03dd, float:1.8877043E38)
                 java.lang.Object[] r3 = new java.lang.Object[r3]
                 if (r2 == 0) goto L_0x007b
                 java.lang.String r2 = r2.title
@@ -4335,7 +4348,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
                 java.util.ArrayList r0 = r0.recentStickers
                 if (r8 != r0) goto L_0x00b7
-                r8 = 2131626654(0x7f0e0a9e, float:1.888055E38)
+                r8 = 2131626698(0x7f0e0aca, float:1.888064E38)
                 java.lang.String r0 = "RecentStickers"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 r7.setText(r8, r1)
@@ -4344,7 +4357,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                 org.telegram.ui.Components.EmojiView r0 = org.telegram.ui.Components.EmojiView.this
                 java.util.ArrayList r0 = r0.favouriteStickers
                 if (r8 != r0) goto L_0x0176
-                r8 = 2131625279(0x7f0e053f, float:1.8877761E38)
+                r8 = 2131625303(0x7f0e0557, float:1.887781E38)
                 java.lang.String r0 = "FavoriteStickers"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 r7.setText(r8, r1)
@@ -4839,7 +4852,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                         	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                                         	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                                         	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                         	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                         	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                         	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -4871,7 +4884,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                         	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                                         	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                                         	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                         	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                         	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                         	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -4910,7 +4923,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                         	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                                         	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                                         	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                         	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                         	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                         	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -4925,7 +4938,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                         	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                                         	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                                         	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                         	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                         	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                         	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -5061,7 +5074,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                         	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                                         	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                                         	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                         	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                         	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                         	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -5093,7 +5106,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                         	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                                         	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                                         	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                         	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                         	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                         	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -5132,7 +5145,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                         	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                                         	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                                         	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                         	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                         	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                         	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -5147,7 +5160,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                         	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                                         	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                                         	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                         	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                         	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                         	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -5241,7 +5254,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                             	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                                             	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                                             	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                             	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                             	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                             	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -5273,7 +5286,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                             	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                                             	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                                             	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                             	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                             	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                             	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -5312,7 +5325,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                             	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                                             	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                                             	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                             	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                             	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                             	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -5327,7 +5340,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                             	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                                             	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                                             	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                             	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                             	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                             	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -6734,7 +6747,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                 	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                                 	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                                 	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                 	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                 	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                 	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -6762,7 +6775,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                 	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                                 	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                                 	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                 	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                 	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                 	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -6850,7 +6863,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                 	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                                 	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                                 	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                 	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                 	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                 	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -6878,7 +6891,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                                 	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                                 	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                                 	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                 	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                 	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                 	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -7079,7 +7092,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             r0.<init>(r2)
                             android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
                             r0.setScaleType(r2)
-                            r2 = 2131165960(0x7var_, float:1.7946152E38)
+                            r2 = 2131165987(0x7var_, float:1.7946207E38)
                             r0.setImageResource(r2)
                             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
                             java.lang.String r3 = "chat_emojiPanelEmptyText"
@@ -7099,7 +7112,7 @@ public class EmojiView extends FrameLayout implements NotificationCenter.Notific
                             android.widget.TextView r0 = new android.widget.TextView
                             android.content.Context r2 = r13.context
                             r0.<init>(r2)
-                            r2 = 2131625977(0x7f0e07f9, float:1.8879177E38)
+                            r2 = 2131626015(0x7f0e081f, float:1.8879254E38)
                             java.lang.String r4 = "NoStickersFound"
                             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
                             r0.setText(r2)

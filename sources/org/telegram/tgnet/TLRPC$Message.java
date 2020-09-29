@@ -7,7 +7,7 @@ import java.util.Map;
 
 public abstract class TLRPC$Message extends TLObject {
     public TLRPC$MessageAction action;
-    public String attachPath = "";
+    public String attachPath;
     public int date;
     public int destroyTime;
     public long dialog_id;
@@ -15,44 +15,55 @@ public abstract class TLRPC$Message extends TLObject {
     public boolean edit_hide;
     public ArrayList<TLRPC$MessageEntity> entities = new ArrayList<>();
     public int flags;
-    public int from_id;
+    public int forwards;
+    public TLRPC$Peer from_id;
     public boolean from_scheduled;
     public TLRPC$MessageFwdHeader fwd_from;
-    public int fwd_msg_id = 0;
+    public int fwd_msg_id;
     public long grouped_id;
     public int id;
     public int layer;
     public boolean legacy;
-    public int local_id = 0;
+    public int local_id;
     public TLRPC$MessageMedia media;
     public boolean media_unread;
     public boolean mentioned;
     public String message;
     public boolean out;
     public HashMap<String, String> params;
+    public TLRPC$Peer peer_id;
     public boolean post;
     public String post_author;
     public long random_id;
     public TLRPC$TL_messageReactions reactions;
     public int realId;
+    public TLRPC$TL_messageReplies replies;
     public TLRPC$Message replyMessage;
     public TLRPC$ReplyMarkup reply_markup;
-    public int reply_to_msg_id;
-    public long reply_to_random_id;
+    public TLRPC$TL_messageReplyHeader reply_to;
     public int reqId;
-    public ArrayList<TLRPC$TL_restrictionReason> restriction_reason = new ArrayList<>();
-    public int send_state = 0;
+    public ArrayList<TLRPC$TL_restrictionReason> restriction_reason;
+    public int send_state;
     public int seq_in;
     public int seq_out;
     public boolean silent;
-    public int stickerVerified = 1;
-    public TLRPC$Peer to_id;
+    public int stickerVerified;
     public int ttl;
     public boolean unread;
     public int via_bot_id;
     public String via_bot_name;
     public int views;
     public boolean with_my_score;
+
+    public TLRPC$Message() {
+        new ArrayList();
+        this.restriction_reason = new ArrayList<>();
+        this.send_state = 0;
+        this.fwd_msg_id = 0;
+        this.attachPath = "";
+        this.local_id = 0;
+        this.stickerVerified = 1;
+    }
 
     public static TLRPC$Message TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$Message tLRPC$Message;
@@ -67,7 +78,7 @@ public abstract class TLRPC$Message extends TLObject {
                 tLRPC$Message = new TLRPC$TL_message_layer104_3();
                 break;
             case -1642487306:
-                tLRPC$Message = new TLRPC$TL_messageService();
+                tLRPC$Message = new TLRPC$TL_messageService_layer118();
                 break;
             case -1618124613:
                 tLRPC$Message = new TLRPC$TL_messageService_old();
@@ -93,6 +104,9 @@ public abstract class TLRPC$Message extends TLObject {
             case -260565816:
                 tLRPC$Message = new TLRPC$TL_message_old5();
                 break;
+            case -181507201:
+                tLRPC$Message = new TLRPC$TL_message_layer118();
+                break;
             case 99903492:
                 tLRPC$Message = new TLRPC$TL_messageForwarded_old();
                 break;
@@ -105,6 +119,9 @@ public abstract class TLRPC$Message extends TLObject {
             case 585853626:
                 tLRPC$Message = new TLRPC$TL_message_old();
                 break;
+            case 678405636:
+                tLRPC$Message = new TLRPC$TL_messageService();
+                break;
             case 736885382:
                 tLRPC$Message = new TLRPC$TL_message_old6();
                 break;
@@ -112,7 +129,7 @@ public abstract class TLRPC$Message extends TLObject {
                 tLRPC$Message = new TLRPC$TL_message_layer104();
                 break;
             case 1160515173:
-                tLRPC$Message = new TLRPC$TL_message();
+                tLRPC$Message = new TLRPC$TL_message_layer117();
                 break;
             case 1431655928:
                 tLRPC$Message = new TLRPC$TL_message_secret_old();
@@ -126,6 +143,9 @@ public abstract class TLRPC$Message extends TLObject {
             case 1450613171:
                 tLRPC$Message = new TLRPC$TL_message_old2();
                 break;
+            case 1487813065:
+                tLRPC$Message = new TLRPC$TL_message();
+                break;
             case 1537633299:
                 tLRPC$Message = new TLRPC$TL_message_old7();
                 break;
@@ -136,15 +156,18 @@ public abstract class TLRPC$Message extends TLObject {
         if (tLRPC$Message != null || !z) {
             if (tLRPC$Message != null) {
                 tLRPC$Message.readParams(abstractSerializedData, z);
+                if (tLRPC$Message.from_id == null) {
+                    tLRPC$Message.from_id = tLRPC$Message.peer_id;
+                }
             }
             return tLRPC$Message;
         }
         throw new RuntimeException(String.format("can't parse magic %x in Message", new Object[]{Integer.valueOf(i)}));
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:57:0x009d  */
-    /* JADX WARNING: Removed duplicated region for block: B:87:0x0122  */
-    /* JADX WARNING: Removed duplicated region for block: B:93:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x00a1  */
+    /* JADX WARNING: Removed duplicated region for block: B:89:0x0127  */
+    /* JADX WARNING: Removed duplicated region for block: B:95:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void readAttachPath(org.telegram.tgnet.AbstractSerializedData r8, int r9) {
         /*
@@ -190,103 +213,105 @@ public abstract class TLRPC$Message extends TLObject {
         L_0x0040:
             boolean r4 = r7.out
             r5 = 3
-            if (r4 != 0) goto L_0x0053
-            org.telegram.tgnet.TLRPC$Peer r4 = r7.to_id
-            if (r4 == 0) goto L_0x005d
+            if (r4 != 0) goto L_0x0057
+            org.telegram.tgnet.TLRPC$Peer r4 = r7.peer_id
+            if (r4 == 0) goto L_0x0061
+            org.telegram.tgnet.TLRPC$Peer r6 = r7.from_id
+            if (r6 == 0) goto L_0x0061
             int r4 = r4.user_id
-            if (r4 == 0) goto L_0x005d
-            int r6 = r7.from_id
-            if (r4 != r6) goto L_0x005d
-            if (r6 != r9) goto L_0x005d
-        L_0x0053:
+            if (r4 == 0) goto L_0x0061
+            int r6 = r6.user_id
+            if (r4 != r6) goto L_0x0061
+            if (r6 != r9) goto L_0x0061
+        L_0x0057:
             int r9 = r7.id
-            if (r9 < 0) goto L_0x0061
-            if (r0 != 0) goto L_0x0061
+            if (r9 < 0) goto L_0x0065
+            if (r0 != 0) goto L_0x0065
             int r9 = r7.send_state
-            if (r9 == r5) goto L_0x0061
-        L_0x005d:
-            boolean r9 = r7.legacy
-            if (r9 == 0) goto L_0x0118
+            if (r9 == r5) goto L_0x0065
         L_0x0061:
+            boolean r9 = r7.legacy
+            if (r9 == 0) goto L_0x011d
+        L_0x0065:
             r9 = 2
-            if (r0 == 0) goto L_0x0097
-            if (r3 == 0) goto L_0x0097
+            if (r0 == 0) goto L_0x009b
+            if (r3 == 0) goto L_0x009b
             java.lang.String r0 = r7.message
             int r0 = r0.length()
             r3 = 6
-            if (r0 <= r3) goto L_0x0087
+            if (r0 <= r3) goto L_0x008b
             java.lang.String r0 = r7.message
             char r0 = r0.charAt(r9)
             r3 = 95
-            if (r0 != r3) goto L_0x0087
+            if (r0 != r3) goto L_0x008b
             java.util.HashMap r0 = new java.util.HashMap
             r0.<init>()
             r7.params = r0
             java.lang.String r3 = r7.message
             java.lang.String r4 = "ve"
             r0.put(r4, r3)
-        L_0x0087:
+        L_0x008b:
             java.util.HashMap<java.lang.String, java.lang.String> r0 = r7.params
-            if (r0 != 0) goto L_0x0093
+            if (r0 != 0) goto L_0x0097
             java.lang.String r0 = r7.message
             int r0 = r0.length()
-            if (r0 != r9) goto L_0x0097
-        L_0x0093:
+            if (r0 != r9) goto L_0x009b
+        L_0x0097:
             java.lang.String r0 = ""
             r7.message = r0
-        L_0x0097:
+        L_0x009b:
             int r0 = r8.remaining()
-            if (r0 <= 0) goto L_0x0118
+            if (r0 <= 0) goto L_0x011d
             java.lang.String r0 = r8.readString(r1)
             r7.attachPath = r0
-            if (r0 == 0) goto L_0x0118
+            if (r0 == 0) goto L_0x011d
             int r0 = r7.id
-            if (r0 < 0) goto L_0x00b1
+            if (r0 < 0) goto L_0x00b5
             int r0 = r7.send_state
-            if (r0 == r5) goto L_0x00b1
+            if (r0 == r5) goto L_0x00b5
             boolean r0 = r7.legacy
-            if (r0 == 0) goto L_0x0110
-        L_0x00b1:
+            if (r0 == 0) goto L_0x0115
+        L_0x00b5:
             java.lang.String r0 = r7.attachPath
             java.lang.String r3 = "||"
             boolean r0 = r0.startsWith(r3)
-            if (r0 == 0) goto L_0x0110
+            if (r0 == 0) goto L_0x0115
             java.lang.String r0 = r7.attachPath
             java.lang.String r3 = "\\|\\|"
             java.lang.String[] r0 = r0.split(r3)
             int r3 = r0.length
-            if (r3 <= 0) goto L_0x0118
+            if (r3 <= 0) goto L_0x011d
             java.util.HashMap<java.lang.String, java.lang.String> r3 = r7.params
-            if (r3 != 0) goto L_0x00d1
+            if (r3 != 0) goto L_0x00d6
             java.util.HashMap r3 = new java.util.HashMap
             r3.<init>()
             r7.params = r3
-        L_0x00d1:
+        L_0x00d6:
             r3 = 1
-        L_0x00d2:
+        L_0x00d7:
             int r4 = r0.length
             int r4 = r4 - r2
-            if (r3 >= r4) goto L_0x00ed
+            if (r3 >= r4) goto L_0x00f2
             r4 = r0[r3]
             java.lang.String r5 = "\\|=\\|"
             java.lang.String[] r4 = r4.split(r5)
             int r5 = r4.length
-            if (r5 != r9) goto L_0x00ea
+            if (r5 != r9) goto L_0x00ef
             java.util.HashMap<java.lang.String, java.lang.String> r5 = r7.params
             r6 = r4[r1]
             r4 = r4[r2]
             r5.put(r6, r4)
-        L_0x00ea:
+        L_0x00ef:
             int r3 = r3 + 1
-            goto L_0x00d2
-        L_0x00ed:
+            goto L_0x00d7
+        L_0x00f2:
             int r9 = r0.length
             int r9 = r9 - r2
             r9 = r0[r9]
             java.lang.String r9 = r9.trim()
             r7.attachPath = r9
             boolean r9 = r7.legacy
-            if (r9 == 0) goto L_0x0118
+            if (r9 == 0) goto L_0x011d
             java.util.HashMap<java.lang.String, java.lang.String> r9 = r7.params
             java.lang.String r0 = "legacy_layer"
             java.lang.Object r9 = r9.get(r0)
@@ -294,20 +319,20 @@ public abstract class TLRPC$Message extends TLObject {
             java.lang.Integer r9 = org.telegram.messenger.Utilities.parseInt(r9)
             int r9 = r9.intValue()
             r7.layer = r9
-            goto L_0x0118
-        L_0x0110:
+            goto L_0x011d
+        L_0x0115:
             java.lang.String r9 = r7.attachPath
             java.lang.String r9 = r9.trim()
             r7.attachPath = r9
-        L_0x0118:
+        L_0x011d:
             int r9 = r7.flags
             r9 = r9 & 4
-            if (r9 == 0) goto L_0x0128
+            if (r9 == 0) goto L_0x012d
             int r9 = r7.id
-            if (r9 >= 0) goto L_0x0128
+            if (r9 >= 0) goto L_0x012d
             int r8 = r8.readInt32(r1)
             r7.fwd_msg_id = r8
-        L_0x0128:
+        L_0x012d:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.tgnet.TLRPC$Message.readAttachPath(org.telegram.tgnet.AbstractSerializedData, int):void");
@@ -336,8 +361,8 @@ public abstract class TLRPC$Message extends TLObject {
             if (this.params == null) {
                 this.params = new HashMap<>();
             }
-            this.layer = 117;
-            this.params.put("legacy_layer", "117");
+            this.layer = 119;
+            this.params.put("legacy_layer", "119");
         }
         if ((this.id < 0 || this.send_state == 3 || this.legacy) && (hashMap2 = this.params) != null && hashMap2.size() > 0) {
             for (Map.Entry next2 : this.params.entrySet()) {

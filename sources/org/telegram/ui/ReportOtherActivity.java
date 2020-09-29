@@ -75,7 +75,7 @@ public class ReportOtherActivity extends BaseFragment {
                     org.telegram.ui.ReportOtherActivity r0 = org.telegram.ui.ReportOtherActivity.this
                     long r0 = r0.dialog_id
                     int r1 = (int) r0
-                    org.telegram.tgnet.TLRPC$InputPeer r4 = r4.getInputPeer(r1)
+                    org.telegram.tgnet.TLRPC$InputPeer r4 = r4.getInputPeer((int) r1)
                     org.telegram.ui.ReportOtherActivity r0 = org.telegram.ui.ReportOtherActivity.this
                     int r0 = r0.message_id
                     if (r0 == 0) goto L_0x0064
@@ -105,7 +105,7 @@ public class ReportOtherActivity extends BaseFragment {
                     org.telegram.ui.ReportOtherActivity r1 = org.telegram.ui.ReportOtherActivity.this
                     long r1 = r1.dialog_id
                     int r2 = (int) r1
-                    org.telegram.tgnet.TLRPC$InputPeer r4 = r4.getInputPeer(r2)
+                    org.telegram.tgnet.TLRPC$InputPeer r4 = r4.getInputPeer((int) r2)
                     r0.peer = r4
                     org.telegram.tgnet.TLRPC$TL_inputReportReasonOther r4 = new org.telegram.tgnet.TLRPC$TL_inputReportReasonOther
                     r4.<init>()
@@ -126,7 +126,7 @@ public class ReportOtherActivity extends BaseFragment {
                     if (r4 == 0) goto L_0x00c5
                     org.telegram.ui.ReportOtherActivity r4 = org.telegram.ui.ReportOtherActivity.this
                     android.app.Activity r4 = r4.getParentActivity()
-                    r0 = 2131626697(0x7f0e0ac9, float:1.8880638E38)
+                    r0 = 2131626749(0x7f0e0afd, float:1.8880743E38)
                     java.lang.String r1 = "ReportChatSent"
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                     r1 = 0

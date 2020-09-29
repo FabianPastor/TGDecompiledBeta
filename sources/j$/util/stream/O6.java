@@ -42,8 +42,8 @@ final class O6 extends Q6 implements S {
 
     /*  JADX ERROR: IndexOutOfBoundsException in pass: MethodInlineVisitor
         java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
-        	at java.util.ArrayList.rangeCheck(ArrayList.java:657)
-        	at java.util.ArrayList.get(ArrayList.java:433)
+        	at java.util.ArrayList.rangeCheck(ArrayList.java:659)
+        	at java.util.ArrayList.get(ArrayList.java:435)
         	at jadx.core.dex.visitors.MethodInlineVisitor.inlineMth(MethodInlineVisitor.java:57)
         	at jadx.core.dex.visitors.MethodInlineVisitor.visit(MethodInlineVisitor.java:47)
         */

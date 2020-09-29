@@ -1109,8 +1109,6 @@
     <string name="Disconnect">فك الارتباط</string>
     <string name="DiscussChannel">قناة</string>
     <string name="Discussion">المناقشات</string>
-    <string name="DiscussionChannelGroupSetHelp">يظهر رابط **%1$s** لجميع المشتركين في الجزء السفلي من القناة.</string>
-    <string name="DiscussionChannelHelp">قم باختيار مجموعة نقاشات ليتم عرضها في قناتك.</string>
     <string name="DiscussionChannelHelp2">سيتم تحويل جميع منشورات القناة الجديدة إلى هذه المجموعة.</string>
     <string name="DiscussionCreateGroup">إنشاء مجموعة جديدة</string>
     <string name="DiscussionGroupHelp">تم ربط هذه المجموعة بـ **%1$s** على أنها منصة نقاشاتها.</string>

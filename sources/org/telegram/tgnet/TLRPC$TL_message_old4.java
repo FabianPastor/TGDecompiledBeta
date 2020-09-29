@@ -17,18 +17,23 @@ public class TLRPC$TL_message_old4 extends TLRPC$TL_message {
         }
         this.media_unread = z2;
         this.id = abstractSerializedData.readInt32(z);
-        this.from_id = abstractSerializedData.readInt32(z);
-        this.to_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
+        this.from_id = tLRPC$TL_peerUser;
+        tLRPC$TL_peerUser.user_id = abstractSerializedData.readInt32(z);
+        this.peer_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         if ((this.flags & 4) != 0) {
             TLRPC$TL_messageFwdHeader tLRPC$TL_messageFwdHeader = new TLRPC$TL_messageFwdHeader();
             this.fwd_from = tLRPC$TL_messageFwdHeader;
-            tLRPC$TL_messageFwdHeader.from_id = abstractSerializedData.readInt32(z);
+            tLRPC$TL_messageFwdHeader.from_id = new TLRPC$TL_peerUser();
+            this.fwd_from.from_id.user_id = abstractSerializedData.readInt32(z);
             TLRPC$MessageFwdHeader tLRPC$MessageFwdHeader = this.fwd_from;
             tLRPC$MessageFwdHeader.flags = 1 | tLRPC$MessageFwdHeader.flags;
             tLRPC$MessageFwdHeader.date = abstractSerializedData.readInt32(z);
         }
         if ((this.flags & 8) != 0) {
-            this.reply_to_msg_id = abstractSerializedData.readInt32(z);
+            TLRPC$TL_messageReplyHeader tLRPC$TL_messageReplyHeader = new TLRPC$TL_messageReplyHeader();
+            this.reply_to = tLRPC$TL_messageReplyHeader;
+            tLRPC$TL_messageReplyHeader.reply_to_msg_id = abstractSerializedData.readInt32(z);
         }
         this.date = abstractSerializedData.readInt32(z);
         this.message = abstractSerializedData.readString(z);
@@ -54,14 +59,14 @@ public class TLRPC$TL_message_old4 extends TLRPC$TL_message {
         this.flags = i4;
         abstractSerializedData.writeInt32(i4);
         abstractSerializedData.writeInt32(this.id);
-        abstractSerializedData.writeInt32(this.from_id);
-        this.to_id.serializeToStream(abstractSerializedData);
+        abstractSerializedData.writeInt32(this.from_id.user_id);
+        this.peer_id.serializeToStream(abstractSerializedData);
         if ((this.flags & 4) != 0) {
-            abstractSerializedData.writeInt32(this.fwd_from.from_id);
+            abstractSerializedData.writeInt32(this.fwd_from.from_id.user_id);
             abstractSerializedData.writeInt32(this.fwd_from.date);
         }
         if ((this.flags & 8) != 0) {
-            abstractSerializedData.writeInt32(this.reply_to_msg_id);
+            abstractSerializedData.writeInt32(this.reply_to.reply_to_msg_id);
         }
         abstractSerializedData.writeInt32(this.date);
         abstractSerializedData.writeString(this.message);

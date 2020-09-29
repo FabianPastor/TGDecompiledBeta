@@ -1,27 +1,27 @@
 package j$;
 
-import j$.util.function.B;
-import java.util.function.IntConsumer;
+import j$.util.function.CLASSNAMEt;
+import java.util.function.DoubleConsumer;
 
-public final /* synthetic */ class G implements B {
-    final /* synthetic */ IntConsumer a;
+public final /* synthetic */ class G implements DoubleConsumer {
+    final /* synthetic */ CLASSNAMEt a;
 
-    private /* synthetic */ G(IntConsumer intConsumer) {
-        this.a = intConsumer;
+    private /* synthetic */ G(CLASSNAMEt tVar) {
+        this.a = tVar;
     }
 
-    public static /* synthetic */ B a(IntConsumer intConsumer) {
-        if (intConsumer == null) {
+    public static /* synthetic */ DoubleConsumer a(CLASSNAMEt tVar) {
+        if (tVar == null) {
             return null;
         }
-        return intConsumer instanceof H ? ((H) intConsumer).a : new G(intConsumer);
+        return tVar instanceof F ? ((F) tVar).a : new G(tVar);
     }
 
-    public /* synthetic */ void accept(int i) {
-        this.a.accept(i);
+    public /* synthetic */ void accept(double d) {
+        this.a.accept(d);
     }
 
-    public /* synthetic */ B q(B b) {
-        return a(this.a.andThen(H.a(b)));
+    public /* synthetic */ DoubleConsumer andThen(DoubleConsumer doubleConsumer) {
+        return a(this.a.p(F.a(doubleConsumer)));
     }
 }

@@ -553,12 +553,12 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.TextView r4 = r0.titleTextView
                 boolean r10 = org.telegram.messenger.LocaleController.isRTL
                 r12 = 3
-                if (r10 == 0) goto L_0x0091
+                if (r10 == 0) goto L_0x0095
                 r10 = 5
-                goto L_0x0092
-            L_0x0091:
+                goto L_0x0096
+            L_0x0095:
                 r10 = 3
-            L_0x0092:
+            L_0x0096:
                 r4.setGravity(r10)
                 android.widget.TextView r4 = r0.titleTextView
                 int r10 = org.telegram.messenger.AndroidUtilities.dp(r7)
@@ -569,34 +569,34 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r4.setGravity(r10)
                 int r4 = r0.currentType
                 r13 = -2
-                if (r4 != r12) goto L_0x0140
+                if (r4 != r12) goto L_0x0144
                 android.widget.TextView r4 = r0.confirmTextView
                 boolean r8 = org.telegram.messenger.LocaleController.isRTL
-                if (r8 == 0) goto L_0x00b3
+                if (r8 == 0) goto L_0x00b7
                 r8 = 5
-                goto L_0x00b4
-            L_0x00b3:
+                goto L_0x00b8
+            L_0x00b7:
                 r8 = 3
-            L_0x00b4:
+            L_0x00b8:
                 r8 = r8 | 48
                 r4.setGravity(r8)
                 android.widget.FrameLayout r4 = new android.widget.FrameLayout
                 r4.<init>(r2)
                 boolean r8 = org.telegram.messenger.LocaleController.isRTL
-                if (r8 == 0) goto L_0x00c4
+                if (r8 == 0) goto L_0x00c8
                 r8 = 5
-                goto L_0x00c5
-            L_0x00c4:
+                goto L_0x00c9
+            L_0x00c8:
                 r8 = 3
-            L_0x00c5:
+            L_0x00c9:
                 android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r8)
                 r0.addView(r4, r8)
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
-                r14 = 2131165822(0x7var_e, float:1.7945872E38)
+                r14 = 2131165833(0x7var_, float:1.7945894E38)
                 r8.setImageResource(r14)
                 boolean r14 = org.telegram.messenger.LocaleController.isRTL
-                if (r14 == 0) goto L_0x010f
+                if (r14 == 0) goto L_0x0113
                 r15 = 64
                 r16 = 1117257728(0x42980000, float:76.0)
                 r17 = 19
@@ -610,29 +610,29 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r14 = -1
                 r15 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
                 boolean r16 = org.telegram.messenger.LocaleController.isRTL
-                if (r16 == 0) goto L_0x00fc
+                if (r16 == 0) goto L_0x0100
                 r16 = 5
-                goto L_0x00fe
-            L_0x00fc:
+                goto L_0x0102
+            L_0x0100:
                 r16 = 3
-            L_0x00fe:
+            L_0x0102:
                 r17 = 1118044160(0x42a40000, float:82.0)
                 r18 = 0
                 r19 = 0
                 r20 = 0
                 android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r14, r15, r16, r17, r18, r19, r20)
                 r4.addView(r8, r14)
-                goto L_0x0224
-            L_0x010f:
+                goto L_0x0228
+            L_0x0113:
                 android.widget.TextView r15 = r0.confirmTextView
                 r16 = -1
                 r17 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-                if (r14 == 0) goto L_0x011a
+                if (r14 == 0) goto L_0x011e
                 r18 = 5
-                goto L_0x011c
-            L_0x011a:
+                goto L_0x0120
+            L_0x011e:
                 r18 = 3
-            L_0x011c:
+            L_0x0120:
                 r19 = 0
                 r20 = 0
                 r21 = 1118044160(0x42a40000, float:82.0)
@@ -647,8 +647,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r22 = 1073741824(0x40000000, float:2.0)
                 android.widget.FrameLayout$LayoutParams r14 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
                 r4.addView(r8, r14)
-                goto L_0x0224
-            L_0x0140:
+                goto L_0x0228
+            L_0x0144:
                 android.widget.TextView r4 = r0.confirmTextView
                 r4.setGravity(r10)
                 android.widget.FrameLayout r4 = new android.widget.FrameLayout
@@ -657,11 +657,11 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r0.addView(r4, r14)
                 int r14 = r0.currentType
                 java.lang.String r15 = "chats_actionBackground"
-                if (r14 != r3) goto L_0x01c0
+                if (r14 != r3) goto L_0x01c4
                 android.widget.ImageView r14 = new android.widget.ImageView
                 r14.<init>(r2)
                 r0.blackImageView = r14
-                r11 = 2131165951(0x7var_ff, float:1.7946134E38)
+                r11 = 2131165978(0x7var_a, float:1.7946188E38)
                 r14.setImageResource(r11)
                 android.widget.ImageView r11 = r0.blackImageView
                 android.graphics.PorterDuffColorFilter r14 = new android.graphics.PorterDuffColorFilter
@@ -682,7 +682,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131165949(0x7var_fd, float:1.794613E38)
+                r10 = 2131165976(0x7var_, float:1.7946184E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -694,16 +694,16 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131626884(0x7f0e0b84, float:1.8881017E38)
+                r8 = 2131626948(0x7f0e0bc4, float:1.8881147E38)
                 java.lang.String r10 = "SentAppCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
-                goto L_0x0202
-            L_0x01c0:
+                goto L_0x0206
+            L_0x01c4:
                 android.widget.ImageView r8 = new android.widget.ImageView
                 r8.<init>(r2)
                 r0.blueImageView = r8
-                r10 = 2131165950(0x7var_fe, float:1.7946132E38)
+                r10 = 2131165977(0x7var_, float:1.7946186E38)
                 r8.setImageResource(r10)
                 android.widget.ImageView r8 = r0.blueImageView
                 android.graphics.PorterDuffColorFilter r10 = new android.graphics.PorterDuffColorFilter
@@ -722,11 +722,11 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r17, r18, r19, r20, r21, r22, r23)
                 r4.addView(r8, r10)
                 android.widget.TextView r4 = r0.titleTextView
-                r8 = 2131626888(0x7f0e0b88, float:1.8881025E38)
+                r8 = 2131626952(0x7f0e0bc8, float:1.8881155E38)
                 java.lang.String r10 = "SentSmsCodeTitle"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r4.setText(r8)
-            L_0x0202:
+            L_0x0206:
                 android.widget.TextView r4 = r0.titleTextView
                 r17 = -2
                 r18 = -2
@@ -741,7 +741,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r21 = 17
                 android.widget.LinearLayout$LayoutParams r8 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r17, (int) r18, (int) r19, (int) r20, (int) r21, (int) r22, (int) r23)
                 r0.addView(r4, r8)
-            L_0x0224:
+            L_0x0228:
                 android.widget.LinearLayout r4 = new android.widget.LinearLayout
                 r4.<init>(r2)
                 r0.codeFieldContainer = r4
@@ -752,11 +752,11 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.LinearLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r10, (int) r3)
                 r0.addView(r4, r10)
                 int r4 = r0.currentType
-                if (r4 != r12) goto L_0x0245
+                if (r4 != r12) goto L_0x0249
                 android.widget.LinearLayout r4 = r0.codeFieldContainer
                 r10 = 8
                 r4.setVisibility(r10)
-            L_0x0245:
+            L_0x0249:
                 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$1 r4 = new org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$1
                 r4.<init>(r0, r2, r1)
                 r0.timeText = r4
@@ -769,17 +769,17 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 int r4 = r0.currentType
                 r5 = 1097859072(0x41700000, float:15.0)
                 r10 = 1092616192(0x41200000, float:10.0)
-                if (r4 != r12) goto L_0x02a3
+                if (r4 != r12) goto L_0x02a7
                 android.widget.TextView r4 = r0.timeText
                 r4.setTextSize(r3, r6)
                 android.widget.TextView r4 = r0.timeText
                 boolean r6 = org.telegram.messenger.LocaleController.isRTL
-                if (r6 == 0) goto L_0x0272
+                if (r6 == 0) goto L_0x0276
                 r6 = 5
-                goto L_0x0273
-            L_0x0272:
+                goto L_0x0277
+            L_0x0276:
                 r6 = 3
-            L_0x0273:
+            L_0x0277:
                 android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r6)
                 r0.addView(r4, r6)
                 org.telegram.ui.CancelAccountDeletionActivity$ProgressView r4 = new org.telegram.ui.CancelAccountDeletionActivity$ProgressView
@@ -787,12 +787,12 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r0.progressView = r4
                 android.widget.TextView r4 = r0.timeText
                 boolean r6 = org.telegram.messenger.LocaleController.isRTL
-                if (r6 == 0) goto L_0x0289
+                if (r6 == 0) goto L_0x028d
                 r11 = 5
-                goto L_0x028a
-            L_0x0289:
+                goto L_0x028e
+            L_0x028d:
                 r11 = 3
-            L_0x028a:
+            L_0x028e:
                 r4.setGravity(r11)
                 org.telegram.ui.CancelAccountDeletionActivity$ProgressView r4 = r0.progressView
                 r17 = -1
@@ -803,8 +803,8 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r22 = 0
                 android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r17, r18, r19, r20, r21, r22)
                 r0.addView(r4, r6)
-                goto L_0x02c5
-            L_0x02a3:
+                goto L_0x02c9
+            L_0x02a7:
                 android.widget.TextView r4 = r0.timeText
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r7)
                 int r11 = org.telegram.messenger.AndroidUtilities.dp(r10)
@@ -817,7 +817,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 android.widget.TextView r4 = r0.timeText
                 android.widget.LinearLayout$LayoutParams r11 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r6)
                 r0.addView(r4, r11)
-            L_0x02c5:
+            L_0x02c9:
                 org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$2 r4 = new org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView$2
                 r4.<init>(r0, r2, r1)
                 r0.problemText = r4
@@ -838,20 +838,20 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                 r2 = 49
                 r1.setGravity(r2)
                 int r1 = r0.currentType
-                if (r1 != r3) goto L_0x030b
+                if (r1 != r3) goto L_0x0310
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625028(0x7f0e0444, float:1.8877252E38)
+                r2 = 2131625047(0x7f0e0457, float:1.887729E38)
                 java.lang.String r3 = "DidNotGetTheCodeSms"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-                goto L_0x0319
-            L_0x030b:
+                goto L_0x031e
+            L_0x0310:
                 android.widget.TextView r1 = r0.problemText
-                r2 = 2131625027(0x7f0e0443, float:1.887725E38)
+                r2 = 2131625046(0x7f0e0456, float:1.8877289E38)
                 java.lang.String r3 = "DidNotGetTheCode"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                 r1.setText(r2)
-            L_0x0319:
+            L_0x031e:
                 android.widget.TextView r1 = r0.problemText
                 r2 = 49
                 android.widget.LinearLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createLinear((int) r13, (int) r13, (int) r2)
@@ -1232,7 +1232,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                             	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                             	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                             	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
                             	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                             	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                             	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -1271,7 +1271,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                             	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                             	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                             	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
                             	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                             	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                             	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -1286,7 +1286,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                             	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                             	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                             	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
                             	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                             	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                             	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -1399,7 +1399,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                 	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                                 	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                                 	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                 	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                 	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                 	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -1438,7 +1438,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                 	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                                 	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                                 	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                 	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                 	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                 	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -1453,7 +1453,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                 	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                                 	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                                 	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                 	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                 	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                 	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -1595,7 +1595,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                                         	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                                         	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                         	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                         	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                         	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -1634,7 +1634,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                                         	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                                         	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                         	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                         	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                         	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -1649,7 +1649,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                                         	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                                         	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                        	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                        	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                         	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                         	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                         	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -1734,7 +1734,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         if (r2 != r6) goto L_0x00a2
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131627006(0x7f0e0bfe, float:1.8881264E38)
+                                        r3 = 2131627078(0x7f0e0CLASSNAME, float:1.888141E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -1747,7 +1747,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                     L_0x0082:
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r2 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         android.widget.TextView r2 = r2.timeText
-                                        r3 = 2131624545(0x7f0e0261, float:1.8876273E38)
+                                        r3 = 2131624554(0x7f0e026a, float:1.887629E38)
                                         java.lang.Object[] r4 = new java.lang.Object[r6]
                                         java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
                                         r4[r5] = r0
@@ -1834,7 +1834,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                         if (r0 != r4) goto L_0x0164
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131624547(0x7f0e0263, float:1.8876277E38)
+                                        r1 = 2131624556(0x7f0e026c, float:1.8876295E38)
                                         java.lang.String r2 = "Calling"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)
@@ -1842,7 +1842,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                     L_0x0164:
                                         org.telegram.ui.CancelAccountDeletionActivity$LoginActivitySmsView r0 = org.telegram.ui.CancelAccountDeletionActivity.LoginActivitySmsView.this
                                         android.widget.TextView r0 = r0.timeText
-                                        r1 = 2131626880(0x7f0e0b80, float:1.8881009E38)
+                                        r1 = 2131626944(0x7f0e0bc0, float:1.8881138E38)
                                         java.lang.String r2 = "SendingSms"
                                         java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
                                         r0.setText(r1)
@@ -1899,7 +1899,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                             	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                                             	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                                             	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                             	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                             	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                             	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -1938,7 +1938,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                             	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
                                             	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
                                             	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                             	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                             	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                             	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
@@ -1953,7 +1953,7 @@ public class CancelAccountDeletionActivity extends BaseFragment {
                                             	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
                                             	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
                                             	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
-                                            	at java.util.ArrayList.forEach(ArrayList.java:1257)
+                                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
                                             	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
                                             	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
                                             	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)

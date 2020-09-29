@@ -1,23 +1,27 @@
 package j$;
 
-import j$.util.function.z;
-import java.util.function.IntBinaryOperator;
+import j$.util.function.CLASSNAMEt;
+import java.util.function.DoubleConsumer;
 
-public final /* synthetic */ class F implements z {
-    final /* synthetic */ IntBinaryOperator a;
+public final /* synthetic */ class F implements CLASSNAMEt {
+    final /* synthetic */ DoubleConsumer a;
 
-    private /* synthetic */ F(IntBinaryOperator intBinaryOperator) {
-        this.a = intBinaryOperator;
+    private /* synthetic */ F(DoubleConsumer doubleConsumer) {
+        this.a = doubleConsumer;
     }
 
-    public static /* synthetic */ z b(IntBinaryOperator intBinaryOperator) {
-        if (intBinaryOperator == null) {
+    public static /* synthetic */ CLASSNAMEt a(DoubleConsumer doubleConsumer) {
+        if (doubleConsumer == null) {
             return null;
         }
-        return new F(intBinaryOperator);
+        return doubleConsumer instanceof G ? ((G) doubleConsumer).a : new F(doubleConsumer);
     }
 
-    public /* synthetic */ int a(int i, int i2) {
-        return this.a.applyAsInt(i, i2);
+    public /* synthetic */ void accept(double d) {
+        this.a.accept(d);
+    }
+
+    public /* synthetic */ CLASSNAMEt p(CLASSNAMEt tVar) {
+        return a(this.a.andThen(G.a(tVar)));
     }
 }
