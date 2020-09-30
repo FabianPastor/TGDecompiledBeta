@@ -4683,7 +4683,8 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 }
             };
             this.actionBar = r22;
-            r22.setTitleColor(-1);
+            r22.setOverlayTitleAnimation(true);
+            this.actionBar.setTitleColor(-1);
             this.actionBar.setSubtitleColor(-1);
             this.actionBar.setBackgroundColor(NUM);
             this.actionBar.setOccupyStatusBar(isStatusBarVisible());

@@ -1,9 +1,46 @@
 package j$;
 
+import j$.util.F;
+import java.util.PrimitiveIterator;
+import java.util.function.Consumer;
+import java.util.function.DoubleConsumer;
+
 /* renamed from: j$.f  reason: case insensitive filesystem */
-public /* synthetic */ class CLASSNAMEf {
-    public static /* synthetic */ long a(long j, long j2) {
-        long j3 = j / j2;
-        return (j - (j2 * j3) != 0 && (((j ^ j2) >> 63) | 1) < 0) ? j3 - 1 : j3;
+public final /* synthetic */ class CLASSNAMEf implements PrimitiveIterator.OfDouble {
+    final /* synthetic */ F a;
+
+    private /* synthetic */ CLASSNAMEf(F f) {
+        this.a = f;
+    }
+
+    public static /* synthetic */ PrimitiveIterator.OfDouble a(F f) {
+        if (f == null) {
+            return null;
+        }
+        return new CLASSNAMEf(f);
+    }
+
+    public /* synthetic */ void forEachRemaining(Object obj) {
+        this.a.forEachRemaining(obj);
+    }
+
+    public /* synthetic */ void forEachRemaining(Consumer consumer) {
+        this.a.forEachRemaining(r.a(consumer));
+    }
+
+    public /* synthetic */ void forEachRemaining(DoubleConsumer doubleConsumer) {
+        this.a.e(CLASSNAMEu.a(doubleConsumer));
+    }
+
+    public /* synthetic */ boolean hasNext() {
+        return this.a.hasNext();
+    }
+
+    public /* synthetic */ double nextDouble() {
+        return this.a.nextDouble();
+    }
+
+    public /* synthetic */ void remove() {
+        this.a.remove();
     }
 }

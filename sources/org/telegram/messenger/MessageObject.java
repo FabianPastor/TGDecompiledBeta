@@ -11111,19 +11111,19 @@ public class MessageObject {
             if (r7 >= 0) goto L_0x0107
             goto L_0x0149
         L_0x0107:
-            if (r7 == 0) goto L_0x010d
-            java.lang.String r6 = r6.substring(r7)
-        L_0x010d:
-            int r7 = r4.length()
-            int r8 = r6.length()
-            int r7 = java.lang.Math.max(r7, r8)
             int r8 = r4.length()
             int r9 = r6.length()
-            int r8 = java.lang.Math.min(r8, r9)
+            int r8 = java.lang.Math.max(r8, r9)
+            if (r7 == 0) goto L_0x0119
+            java.lang.String r6 = r6.substring(r7)
+        L_0x0119:
+            int r7 = r4.length()
+            int r9 = r6.length()
+            int r7 = java.lang.Math.min(r7, r9)
             r9 = 0
             r10 = 0
         L_0x0127:
-            if (r9 >= r8) goto L_0x0138
+            if (r9 >= r7) goto L_0x0138
             char r11 = r6.charAt(r9)
             char r12 = r4.charAt(r9)
             if (r11 != r12) goto L_0x0138
@@ -11132,7 +11132,7 @@ public class MessageObject {
             goto L_0x0127
         L_0x0138:
             float r6 = (float) r10
-            float r7 = (float) r7
+            float r7 = (float) r8
             float r6 = r6 / r7
             double r6 = (double) r6
             r8 = 4602678819172646912(0x3feNUM, double:0.5)

@@ -1,35 +1,22 @@
 package j$;
 
-import j$.util.function.L;
-import java.util.function.LongPredicate;
+import j$.util.function.ToDoubleFunction;
 
-public final /* synthetic */ class g0 implements LongPredicate {
-    final /* synthetic */ L a;
+public final /* synthetic */ class g0 implements ToDoubleFunction {
+    final /* synthetic */ java.util.function.ToDoubleFunction a;
 
-    private /* synthetic */ g0(L l) {
-        this.a = l;
+    private /* synthetic */ g0(java.util.function.ToDoubleFunction toDoubleFunction) {
+        this.a = toDoubleFunction;
     }
 
-    public static /* synthetic */ LongPredicate a(L l) {
-        if (l == null) {
+    public static /* synthetic */ ToDoubleFunction b(java.util.function.ToDoubleFunction toDoubleFunction) {
+        if (toDoubleFunction == null) {
             return null;
         }
-        return l instanceof f0 ? ((f0) l).a : new g0(l);
+        return new g0(toDoubleFunction);
     }
 
-    public /* synthetic */ LongPredicate and(LongPredicate longPredicate) {
-        return a(((f0) this.a).a(f0.b(longPredicate)));
-    }
-
-    public /* synthetic */ LongPredicate negate() {
-        return a(((f0) this.a).c());
-    }
-
-    public /* synthetic */ LongPredicate or(LongPredicate longPredicate) {
-        return a(((f0) this.a).d(f0.b(longPredicate)));
-    }
-
-    public /* synthetic */ boolean test(long j) {
-        return ((f0) this.a).e(j);
+    public /* synthetic */ double a(Object obj) {
+        return this.a.applyAsDouble(obj);
     }
 }

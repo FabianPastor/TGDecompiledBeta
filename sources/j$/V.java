@@ -1,35 +1,35 @@
 package j$;
 
-import j$.util.function.D;
-import java.util.function.IntPredicate;
+import j$.util.function.L;
+import java.util.function.LongPredicate;
 
-public final /* synthetic */ class V implements D {
-    final /* synthetic */ IntPredicate a;
+public final /* synthetic */ class V implements LongPredicate {
+    final /* synthetic */ L a;
 
-    private /* synthetic */ V(IntPredicate intPredicate) {
-        this.a = intPredicate;
+    private /* synthetic */ V(L l) {
+        this.a = l;
     }
 
-    public static /* synthetic */ D b(IntPredicate intPredicate) {
-        if (intPredicate == null) {
+    public static /* synthetic */ LongPredicate a(L l) {
+        if (l == null) {
             return null;
         }
-        return intPredicate instanceof W ? ((W) intPredicate).a : new V(intPredicate);
+        return l instanceof U ? ((U) l).a : new V(l);
     }
 
-    public /* synthetic */ D a(D d) {
-        return b(this.a.and(W.a(d)));
+    public /* synthetic */ LongPredicate and(LongPredicate longPredicate) {
+        return a(((U) this.a).a(U.b(longPredicate)));
     }
 
-    public /* synthetic */ D c() {
-        return b(this.a.negate());
+    public /* synthetic */ LongPredicate negate() {
+        return a(((U) this.a).c());
     }
 
-    public /* synthetic */ D d(D d) {
-        return b(this.a.or(W.a(d)));
+    public /* synthetic */ LongPredicate or(LongPredicate longPredicate) {
+        return a(((U) this.a).d(U.b(longPredicate)));
     }
 
-    public /* synthetic */ boolean e(int i) {
-        return this.a.test(i);
+    public /* synthetic */ boolean test(long j) {
+        return ((U) this.a).e(j);
     }
 }

@@ -1,35 +1,23 @@
 package j$;
 
-import j$.util.function.CLASSNAMEv;
-import java.util.function.DoublePredicate;
+import j$.util.function.C;
+import java.util.function.IntFunction;
 
-public final /* synthetic */ class I implements CLASSNAMEv {
-    final /* synthetic */ DoublePredicate a;
+public final /* synthetic */ class I implements C {
+    final /* synthetic */ IntFunction a;
 
-    private /* synthetic */ I(DoublePredicate doublePredicate) {
-        this.a = doublePredicate;
+    private /* synthetic */ I(IntFunction intFunction) {
+        this.a = intFunction;
     }
 
-    public static /* synthetic */ CLASSNAMEv b(DoublePredicate doublePredicate) {
-        if (doublePredicate == null) {
+    public static /* synthetic */ C b(IntFunction intFunction) {
+        if (intFunction == null) {
             return null;
         }
-        return doublePredicate instanceof J ? ((J) doublePredicate).a : new I(doublePredicate);
+        return new I(intFunction);
     }
 
-    public /* synthetic */ CLASSNAMEv a(CLASSNAMEv vVar) {
-        return b(this.a.and(J.a(vVar)));
-    }
-
-    public /* synthetic */ CLASSNAMEv c() {
-        return b(this.a.negate());
-    }
-
-    public /* synthetic */ CLASSNAMEv d(CLASSNAMEv vVar) {
-        return b(this.a.or(J.a(vVar)));
-    }
-
-    public /* synthetic */ boolean e(double d) {
-        return this.a.test(d);
+    public /* synthetic */ Object a(int i) {
+        return this.a.apply(i);
     }
 }

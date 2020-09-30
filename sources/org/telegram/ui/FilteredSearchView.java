@@ -1177,7 +1177,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             LoadingCell loadingCell;
             if (i == 0) {
-                SharedPhotoVideoCell sharedPhotoVideoCell = new SharedPhotoVideoCell(this.mContext);
+                SharedPhotoVideoCell sharedPhotoVideoCell = new SharedPhotoVideoCell(this.mContext, 1);
                 sharedPhotoVideoCell.setDelegate(new SharedPhotoVideoCell.SharedPhotoVideoCellDelegate() {
                     public void didClickItem(SharedPhotoVideoCell sharedPhotoVideoCell, int i, MessageObject messageObject, int i2) {
                         FilteredSearchView.this.onItemClick(i, sharedPhotoVideoCell, messageObject, i2);

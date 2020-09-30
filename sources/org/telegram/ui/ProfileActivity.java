@@ -294,8 +294,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     /* access modifiers changed from: private */
     public int filtersRow;
     /* access modifiers changed from: private */
-    public boolean firstLayout;
-    /* access modifiers changed from: private */
     public boolean fragmentOpened;
     /* access modifiers changed from: private */
     public AnimatorSet headerAnimatorSet;
@@ -503,9 +501,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
 
     public /* synthetic */ String getInitialSearchString() {
         return ImageUpdater.ImageUpdaterDelegate.CC.$default$getInitialSearchString(this);
-    }
-
-    public void mediaCountUpdated() {
     }
 
     public class AvatarImageView extends BackupImageView {
@@ -1629,7 +1624,6 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         super(bundle);
         this.nameTextView = new SimpleTextView[2];
         this.onlineTextView = new SimpleTextView[3];
-        this.firstLayout = true;
         this.isOnline = new boolean[1];
         this.headerShadowAlpha = 1.0f;
         this.participantsMap = new SparseArray<>();
@@ -4100,9 +4094,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 searchItem2.setVisibility(0);
                             }
                             AnimatorSet unused = ProfileActivity.this.headerShadowAnimatorSet = new AnimatorSet();
-                            AnimatorSet access$12100 = ProfileActivity.this.headerShadowAnimatorSet;
+                            AnimatorSet access$12000 = ProfileActivity.this.headerShadowAnimatorSet;
                             ProfileActivity profileActivity = ProfileActivity.this;
-                            access$12100.playTogether(new Animator[]{ObjectAnimator.ofFloat(profileActivity, profileActivity.HEADER_SHADOW, new float[]{1.0f})});
+                            access$12000.playTogether(new Animator[]{ObjectAnimator.ofFloat(profileActivity, profileActivity.HEADER_SHADOW, new float[]{1.0f})});
                             ProfileActivity.this.headerShadowAnimatorSet.setDuration(100);
                             ProfileActivity.this.headerShadowAnimatorSet.addListener(new AnimatorListenerAdapter() {
                                 public void onAnimationEnd(Animator animator) {
@@ -5474,6 +5468,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         presentFragment(new ChatActivity(bundle), true);
     }
 
+    public void mediaCountUpdated() {
+        SharedMediaLayout.SharedMediaPreloader sharedMediaPreloader2;
+        SharedMediaLayout sharedMediaLayout2 = this.sharedMediaLayout;
+        if (!(sharedMediaLayout2 == null || (sharedMediaPreloader2 = this.sharedMediaPreloader) == null)) {
+            sharedMediaLayout2.setNewMediaCounts(sharedMediaPreloader2.getLastMediaCount());
+        }
+        updateSharedMediaRows();
+        updateSelectedMediaTabText();
+    }
+
     public void onResume() {
         super.onResume();
         SharedMediaLayout sharedMediaLayout2 = this.sharedMediaLayout;
@@ -5574,6 +5578,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         }
     }
 
+    private void updateSharedMediaRows() {
+        if (this.listAdapter != null) {
+            int i = this.sharedMediaRow;
+            updateRowsIds();
+            if (i != this.sharedMediaRow) {
+                this.listAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
     /* access modifiers changed from: protected */
     public void onTransitionAnimationStart(boolean z, boolean z2) {
         if (((!z && z2) || (z && !z2)) && this.playProfileAnimation != 0 && this.allowProfileAnimation && !this.isPulledDown) {
@@ -5599,10 +5613,10 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         createActionBarMenu();
                     }
                 }
-                this.fragmentOpened = true;
-                this.firstLayout = false;
-                this.lastMeasuredContentHeight = -1;
-                this.fragmentView.requestLayout();
+                if (!this.fragmentOpened) {
+                    this.fragmentOpened = true;
+                    this.fragmentView.requestLayout();
+                }
             }
             getNotificationCenter().onAnimationFinish(this.transitionIndex);
         }
@@ -11729,12 +11743,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         Object obj = this.recentSearches.get(i);
                         if (obj instanceof SearchResult) {
                             SearchResult searchResult = (SearchResult) obj;
-                            String access$20000 = searchResult.searchTitle;
-                            String[] access$19900 = searchResult.path;
+                            String access$19900 = searchResult.searchTitle;
+                            String[] access$19800 = searchResult.path;
                             if (i >= this.recentSearches.size() - 1) {
                                 z = false;
                             }
-                            settingsSearchCell.setTextAndValue(access$20000, access$19900, false, z);
+                            settingsSearchCell.setTextAndValue(access$19900, access$19800, false, z);
                         } else if (obj instanceof MessagesController.FaqSearchResult) {
                             MessagesController.FaqSearchResult faqSearchResult = (MessagesController.FaqSearchResult) obj;
                             String str = faqSearchResult.title;
@@ -11763,11 +11777,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         i2 = 0;
                     }
                     CharSequence charSequence = this.resultNames.get(i);
-                    String[] access$199002 = searchResult2.path;
+                    String[] access$198002 = searchResult2.path;
                     if (i >= this.searchResults.size() - 1) {
                         z = false;
                     }
-                    settingsSearchCell.setTextAndValueAndIcon(charSequence, access$199002, i2, z);
+                    settingsSearchCell.setTextAndValueAndIcon(charSequence, access$198002, i2, z);
                 } else {
                     int size2 = i - (this.searchResults.size() + 1);
                     CharSequence charSequence2 = this.resultNames.get(this.searchResults.size() + size2);

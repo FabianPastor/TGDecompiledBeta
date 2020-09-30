@@ -1,23 +1,35 @@
 package j$;
 
-import j$.util.function.C;
-import java.util.function.IntFunction;
+import j$.util.function.L;
+import java.util.function.LongPredicate;
 
-public final /* synthetic */ class U implements C {
-    final /* synthetic */ IntFunction a;
+public final /* synthetic */ class U implements L {
+    final /* synthetic */ LongPredicate a;
 
-    private /* synthetic */ U(IntFunction intFunction) {
-        this.a = intFunction;
+    private /* synthetic */ U(LongPredicate longPredicate) {
+        this.a = longPredicate;
     }
 
-    public static /* synthetic */ C b(IntFunction intFunction) {
-        if (intFunction == null) {
+    public static /* synthetic */ L b(LongPredicate longPredicate) {
+        if (longPredicate == null) {
             return null;
         }
-        return new U(intFunction);
+        return longPredicate instanceof V ? ((V) longPredicate).a : new U(longPredicate);
     }
 
-    public /* synthetic */ Object a(int i) {
-        return this.a.apply(i);
+    public /* synthetic */ L a(L l) {
+        return b(this.a.and(V.a(l)));
+    }
+
+    public /* synthetic */ L c() {
+        return b(this.a.negate());
+    }
+
+    public /* synthetic */ L d(L l) {
+        return b(this.a.or(V.a(l)));
+    }
+
+    public /* synthetic */ boolean e(long j) {
+        return this.a.test(j);
     }
 }

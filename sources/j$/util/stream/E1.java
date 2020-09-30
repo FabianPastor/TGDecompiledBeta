@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.I;
+import j$.CLASSNAMEx;
 
 class E1 extends CLASSNAMEw5 {
     final /* synthetic */ F1 b;
@@ -16,7 +16,7 @@ class E1 extends CLASSNAMEw5 {
     }
 
     public void accept(double t) {
-        if (((I) this.b.m).e(t)) {
+        if (((CLASSNAMEx) this.b.m).e(t)) {
             this.a.accept(t);
         }
     }

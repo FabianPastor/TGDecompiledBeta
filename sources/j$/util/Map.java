@@ -1,6 +1,6 @@
 package j$.util;
 
-import j$.CLASSNAMEo;
+import j$.CLASSNAMEe;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
 import j$.util.function.Function;
@@ -120,7 +120,7 @@ public interface Map {
 
         public static boolean $default$remove(java.util.Map _this, Object key, Object value) {
             Object curValue = _this.get(key);
-            if (!CLASSNAMEo.a(curValue, value)) {
+            if (!CLASSNAMEe.a(curValue, value)) {
                 return false;
             }
             if (curValue == null && !_this.containsKey(key)) {
@@ -132,7 +132,7 @@ public interface Map {
 
         public static boolean $default$replace(java.util.Map _this, Object key, Object oldValue, Object newValue) {
             Object curValue = _this.get(key);
-            if (!CLASSNAMEo.a(curValue, oldValue)) {
+            if (!CLASSNAMEe.a(curValue, oldValue)) {
                 return false;
             }
             if (curValue == null && !_this.containsKey(key)) {

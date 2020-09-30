@@ -1,6 +1,6 @@
 package j$.util.concurrent;
 
-import j$.C;
+import j$.r;
 import j$.util.Spliterator;
 import java.io.Serializable;
 import java.util.Collection;
@@ -10,7 +10,7 @@ import java.util.function.Consumer;
 
 final class v extends CLASSNAMEc implements Collection, Serializable, j$.util.Collection {
     public /* synthetic */ void forEach(Consumer consumer) {
-        forEach(C.a(consumer));
+        forEach(r.a(consumer));
     }
 
     v(ConcurrentHashMap concurrentHashMap) {

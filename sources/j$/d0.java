@@ -1,27 +1,34 @@
 package j$;
 
-import j$.util.function.J;
-import java.util.function.LongConsumer;
+import j$.util.function.Predicate;
 
-public final /* synthetic */ class d0 implements LongConsumer {
-    final /* synthetic */ J a;
+public final /* synthetic */ class d0 implements Predicate {
+    final /* synthetic */ java.util.function.Predicate a;
 
-    private /* synthetic */ d0(J j) {
-        this.a = j;
+    private /* synthetic */ d0(java.util.function.Predicate predicate) {
+        this.a = predicate;
     }
 
-    public static /* synthetic */ LongConsumer a(J j) {
-        if (j == null) {
+    public static /* synthetic */ Predicate c(java.util.function.Predicate predicate) {
+        if (predicate == null) {
             return null;
         }
-        return j instanceof c0 ? ((c0) j).a : new d0(j);
+        return predicate instanceof e0 ? ((e0) predicate).a : new d0(predicate);
     }
 
-    public /* synthetic */ void accept(long j) {
-        this.a.accept(j);
+    public /* synthetic */ Predicate a(Predicate predicate) {
+        return c(this.a.or(e0.a(predicate)));
     }
 
-    public /* synthetic */ LongConsumer andThen(LongConsumer longConsumer) {
-        return a(this.a.h(c0.a(longConsumer)));
+    public /* synthetic */ Predicate b(Predicate predicate) {
+        return c(this.a.and(e0.a(predicate)));
+    }
+
+    public /* synthetic */ Predicate negate() {
+        return c(this.a.negate());
+    }
+
+    public /* synthetic */ boolean test(Object obj) {
+        return this.a.test(obj);
     }
 }

@@ -1,53 +1,24 @@
 package j$;
 
-import java.util.Comparator;
-import java.util.Spliterator;
-import java.util.function.Consumer;
+import j$.util.function.r;
+import java.util.function.DoubleBinaryOperator;
 
 /* renamed from: j$.t  reason: case insensitive filesystem */
-public final /* synthetic */ class CLASSNAMEt implements Spliterator {
-    final /* synthetic */ j$.util.Spliterator a;
+public final /* synthetic */ class CLASSNAMEt implements r {
+    final /* synthetic */ DoubleBinaryOperator a;
 
-    private /* synthetic */ CLASSNAMEt(j$.util.Spliterator spliterator) {
-        this.a = spliterator;
+    private /* synthetic */ CLASSNAMEt(DoubleBinaryOperator doubleBinaryOperator) {
+        this.a = doubleBinaryOperator;
     }
 
-    public static /* synthetic */ Spliterator a(j$.util.Spliterator spliterator) {
-        if (spliterator == null) {
+    public static /* synthetic */ r b(DoubleBinaryOperator doubleBinaryOperator) {
+        if (doubleBinaryOperator == null) {
             return null;
         }
-        return new CLASSNAMEt(spliterator);
+        return new CLASSNAMEt(doubleBinaryOperator);
     }
 
-    public /* synthetic */ int characteristics() {
-        return this.a.characteristics();
-    }
-
-    public /* synthetic */ long estimateSize() {
-        return this.a.estimateSize();
-    }
-
-    public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        this.a.forEachRemaining(C.a(consumer));
-    }
-
-    public /* synthetic */ Comparator getComparator() {
-        return this.a.getComparator();
-    }
-
-    public /* synthetic */ long getExactSizeIfKnown() {
-        return this.a.getExactSizeIfKnown();
-    }
-
-    public /* synthetic */ boolean hasCharacteristics(int i) {
-        return this.a.hasCharacteristics(i);
-    }
-
-    public /* synthetic */ boolean tryAdvance(Consumer consumer) {
-        return this.a.a(C.a(consumer));
-    }
-
-    public /* synthetic */ Spliterator trySplit() {
-        return a(this.a.trySplit());
+    public /* synthetic */ double a(double d, double d2) {
+        return this.a.applyAsDouble(d, d2);
     }
 }

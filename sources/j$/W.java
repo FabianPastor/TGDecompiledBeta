@@ -1,35 +1,23 @@
 package j$;
 
-import j$.util.function.D;
-import java.util.function.IntPredicate;
+import j$.util.function.M;
+import java.util.function.LongToDoubleFunction;
 
-public final /* synthetic */ class W implements IntPredicate {
-    final /* synthetic */ D a;
+public final /* synthetic */ class W implements M {
+    final /* synthetic */ LongToDoubleFunction a;
 
-    private /* synthetic */ W(D d) {
-        this.a = d;
+    private /* synthetic */ W(LongToDoubleFunction longToDoubleFunction) {
+        this.a = longToDoubleFunction;
     }
 
-    public static /* synthetic */ IntPredicate a(D d) {
-        if (d == null) {
+    public static /* synthetic */ M b(LongToDoubleFunction longToDoubleFunction) {
+        if (longToDoubleFunction == null) {
             return null;
         }
-        return d instanceof V ? ((V) d).a : new W(d);
+        return new W(longToDoubleFunction);
     }
 
-    public /* synthetic */ IntPredicate and(IntPredicate intPredicate) {
-        return a(((V) this.a).a(V.b(intPredicate)));
-    }
-
-    public /* synthetic */ IntPredicate negate() {
-        return a(((V) this.a).c());
-    }
-
-    public /* synthetic */ IntPredicate or(IntPredicate intPredicate) {
-        return a(((V) this.a).d(V.b(intPredicate)));
-    }
-
-    public /* synthetic */ boolean test(int i) {
-        return ((V) this.a).e(i);
+    public /* synthetic */ double a(long j) {
+        return this.a.applyAsDouble(j);
     }
 }

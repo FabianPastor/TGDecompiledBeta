@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.h0;
+import j$.W;
 
 class J2 extends CLASSNAMEy5 {
     final /* synthetic */ K2 b;
@@ -12,6 +12,6 @@ class J2 extends CLASSNAMEy5 {
     }
 
     public void accept(long t) {
-        this.a.accept(((h0) this.b.m).a(t));
+        this.a.accept(((W) this.b.m).a(t));
     }
 }

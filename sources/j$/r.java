@@ -1,45 +1,26 @@
 package j$;
 
-import j$.util.H;
-import java.util.PrimitiveIterator;
-import java.util.function.Consumer;
-import java.util.function.IntConsumer;
+import j$.util.function.Consumer;
 
-public final /* synthetic */ class r implements PrimitiveIterator.OfInt {
-    final /* synthetic */ H a;
+public final /* synthetic */ class r implements Consumer {
+    final /* synthetic */ java.util.function.Consumer a;
 
-    private /* synthetic */ r(H h) {
-        this.a = h;
+    private /* synthetic */ r(java.util.function.Consumer consumer) {
+        this.a = consumer;
     }
 
-    public static /* synthetic */ PrimitiveIterator.OfInt a(H h) {
-        if (h == null) {
+    public static /* synthetic */ Consumer a(java.util.function.Consumer consumer) {
+        if (consumer == null) {
             return null;
         }
-        return new r(h);
+        return consumer instanceof CLASSNAMEs ? ((CLASSNAMEs) consumer).a : new r(consumer);
     }
 
-    public /* synthetic */ void forEachRemaining(Object obj) {
-        this.a.forEachRemaining(obj);
+    public /* synthetic */ void accept(Object obj) {
+        this.a.accept(obj);
     }
 
-    public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        this.a.forEachRemaining(C.a(consumer));
-    }
-
-    public /* synthetic */ void forEachRemaining(IntConsumer intConsumer) {
-        this.a.c(S.a(intConsumer));
-    }
-
-    public /* synthetic */ boolean hasNext() {
-        return this.a.hasNext();
-    }
-
-    public /* synthetic */ int nextInt() {
-        return this.a.nextInt();
-    }
-
-    public /* synthetic */ void remove() {
-        this.a.remove();
+    public /* synthetic */ Consumer g(Consumer consumer) {
+        return a(this.a.andThen(CLASSNAMEs.a(consumer)));
     }
 }

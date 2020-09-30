@@ -1,23 +1,23 @@
 package j$;
 
-import j$.util.function.E;
-import java.util.function.IntToDoubleFunction;
+import j$.util.function.N;
+import java.util.function.LongToIntFunction;
 
-public final /* synthetic */ class X implements E {
-    final /* synthetic */ IntToDoubleFunction a;
+public final /* synthetic */ class X implements N {
+    final /* synthetic */ LongToIntFunction a;
 
-    private /* synthetic */ X(IntToDoubleFunction intToDoubleFunction) {
-        this.a = intToDoubleFunction;
+    private /* synthetic */ X(LongToIntFunction longToIntFunction) {
+        this.a = longToIntFunction;
     }
 
-    public static /* synthetic */ E b(IntToDoubleFunction intToDoubleFunction) {
-        if (intToDoubleFunction == null) {
+    public static /* synthetic */ N b(LongToIntFunction longToIntFunction) {
+        if (longToIntFunction == null) {
             return null;
         }
-        return new X(intToDoubleFunction);
+        return new X(longToIntFunction);
     }
 
-    public /* synthetic */ double a(int i) {
-        return this.a.applyAsDouble(i);
+    public /* synthetic */ int a(long j) {
+        return this.a.applyAsInt(j);
     }
 }

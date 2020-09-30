@@ -1,23 +1,31 @@
 package j$;
 
-import j$.util.function.CLASSNAMEo;
-import java.util.function.BinaryOperator;
+import j$.util.function.y;
+import java.util.function.DoubleUnaryOperator;
 
-public final /* synthetic */ class B implements CLASSNAMEo {
-    final /* synthetic */ BinaryOperator a;
+public final /* synthetic */ class B implements y {
+    final /* synthetic */ DoubleUnaryOperator a;
 
-    private /* synthetic */ B(BinaryOperator binaryOperator) {
-        this.a = binaryOperator;
+    private /* synthetic */ B(DoubleUnaryOperator doubleUnaryOperator) {
+        this.a = doubleUnaryOperator;
     }
 
-    public static /* synthetic */ CLASSNAMEo b(BinaryOperator binaryOperator) {
-        if (binaryOperator == null) {
+    public static /* synthetic */ y d(DoubleUnaryOperator doubleUnaryOperator) {
+        if (doubleUnaryOperator == null) {
             return null;
         }
-        return new B(binaryOperator);
+        return doubleUnaryOperator instanceof C ? ((C) doubleUnaryOperator).a : new B(doubleUnaryOperator);
     }
 
-    public /* synthetic */ Object a(Object obj, Object obj2) {
-        return this.a.apply(obj, obj2);
+    public /* synthetic */ y a(y yVar) {
+        return d(this.a.andThen(C.a(yVar)));
+    }
+
+    public /* synthetic */ double b(double d) {
+        return this.a.applyAsDouble(d);
+    }
+
+    public /* synthetic */ y c(y yVar) {
+        return d(this.a.compose(C.a(yVar)));
     }
 }

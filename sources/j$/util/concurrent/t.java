@@ -1,6 +1,6 @@
 package j$.util.concurrent;
 
-import j$.C;
+import j$.r;
 import j$.util.Iterator;
 import j$.util.function.Consumer;
 import java.util.Enumeration;
@@ -14,7 +14,7 @@ final class t extends CLASSNAMEb implements Iterator, Enumeration, j$.util.Itera
     }
 
     public /* synthetic */ void forEachRemaining(java.util.function.Consumer consumer) {
-        forEachRemaining(C.a(consumer));
+        forEachRemaining(r.a(consumer));
     }
 
     t(m[] tab, int index, int size, int limit, ConcurrentHashMap concurrentHashMap) {

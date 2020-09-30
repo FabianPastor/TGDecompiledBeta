@@ -71,7 +71,7 @@ public class ActionBar extends FrameLayout {
     public ActionBarMenu menu;
     /* access modifiers changed from: private */
     public boolean occupyStatusBar;
-    private boolean ovelayTitleAnimation;
+    private boolean overlayTitleAnimation;
     boolean overlayTitleAnimationInProgress;
     /* access modifiers changed from: private */
     public Object[] overlayTitleToSet;
@@ -112,7 +112,6 @@ public class ActionBar extends FrameLayout {
         this.overlayTitleToSet = new Object[3];
         this.castShadows = true;
         this.titleColorToSet = 0;
-        this.ovelayTitleAnimation = true;
         this.ellipsizeSpanAnimator = new EllipsizeSpanAnimator(this);
         setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
@@ -305,6 +304,7 @@ public class ActionBar extends FrameLayout {
         SimpleTextView simpleTextView = this.subtitleTextView;
         if (simpleTextView != null) {
             simpleTextView.setVisibility((TextUtils.isEmpty(charSequence) || this.isSearchFieldVisible) ? 8 : 0);
+            this.subtitleTextView.setAlpha(1.0f);
             this.subtitleTextView.setText(charSequence);
         }
     }
@@ -339,6 +339,7 @@ public class ActionBar extends FrameLayout {
             simpleTextViewArr[0].setVisibility((charSequence == null || this.isSearchFieldVisible) ? 4 : 0);
             this.titleTextView[0].setText(charSequence);
         }
+        this.fromBottom = false;
     }
 
     public void setTitleColor(int i) {
@@ -844,7 +845,7 @@ public class ActionBar extends FrameLayout {
                 ActionBarMenu actionBarMenu3 = this.menu;
                 int measuredWidth = (((size - (actionBarMenu3 != null ? actionBarMenu3.getMeasuredWidth() : 0)) - AndroidUtilities.dp(16.0f)) - i3) - this.titleRightMargin;
                 int i6 = 18;
-                if (((!this.fromBottom || i5 != 0) && (this.fromBottom || i5 != 1)) || !this.ovelayTitleAnimation || !this.titleAnimationRunning) {
+                if (((!this.fromBottom || i5 != 0) && (this.fromBottom || i5 != 1)) || !this.overlayTitleAnimation || !this.titleAnimationRunning) {
                     SimpleTextView[] simpleTextViewArr2 = this.titleTextView;
                     int i7 = 14;
                     if (simpleTextViewArr2[0] == null || simpleTextViewArr2[0].getVisibility() == 8 || (simpleTextView = this.subtitleTextView) == null || simpleTextView.getVisibility() == 8) {
@@ -1006,7 +1007,7 @@ public class ActionBar extends FrameLayout {
             if (r8 != 0) goto L_0x00b3
             if (r5 != r6) goto L_0x00b3
         L_0x009c:
-            boolean r6 = r0.ovelayTitleAnimation
+            boolean r6 = r0.overlayTitleAnimation
             if (r6 == 0) goto L_0x00b3
             boolean r6 = r0.titleAnimationRunning
             if (r6 == 0) goto L_0x00b3
@@ -1491,12 +1492,11 @@ public class ActionBar extends FrameLayout {
     }
 
     public void setTitleAnimated(CharSequence charSequence, final boolean z, long j) {
-        if (this.titleTextView[0] == null) {
+        if (this.titleTextView[0] == null || charSequence == null) {
             setTitle(charSequence);
             return;
         }
-        this.fromBottom = z;
-        final boolean z2 = this.ovelayTitleAnimation && !TextUtils.isEmpty(this.subtitleTextView.getText());
+        final boolean z2 = this.overlayTitleAnimation && !TextUtils.isEmpty(this.subtitleTextView.getText());
         if (z2) {
             if (this.subtitleTextView.getVisibility() != 0) {
                 this.subtitleTextView.setVisibility(0);
@@ -1515,6 +1515,7 @@ public class ActionBar extends FrameLayout {
         simpleTextViewArr2[1] = simpleTextViewArr2[0];
         simpleTextViewArr2[0] = null;
         setTitle(charSequence);
+        this.fromBottom = z;
         this.titleTextView[0].setAlpha(0.0f);
         if (!z2) {
             SimpleTextView simpleTextView = this.titleTextView[0];
@@ -1564,5 +1565,9 @@ public class ActionBar extends FrameLayout {
 
     public ActionBarMenu getActionMode() {
         return this.actionMode;
+    }
+
+    public void setOverlayTitleAnimation(boolean z) {
+        this.overlayTitleAnimation = z;
     }
 }

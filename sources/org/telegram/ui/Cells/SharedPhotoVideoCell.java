@@ -39,7 +39,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
     /* access modifiers changed from: private */
     public Paint backgroundPaint;
     /* access modifiers changed from: private */
-    public int currentAccount = UserConfig.selectedAccount;
+    public int currentAccount;
     private SharedPhotoVideoCellDelegate delegate;
     private boolean ignoreLayout;
     private int[] indeces;
@@ -47,6 +47,7 @@ public class SharedPhotoVideoCell extends FrameLayout {
     private int itemsCount;
     private MessageObject[] messageObjects;
     private PhotoVideoView[] photoVideoViews;
+    private int type;
 
     public interface SharedPhotoVideoCellDelegate {
         void didClickItem(SharedPhotoVideoCell sharedPhotoVideoCell, int i, MessageObject messageObject, int i2);
@@ -245,24 +246,30 @@ public class SharedPhotoVideoCell extends FrameLayout {
     }
 
     public SharedPhotoVideoCell(Context context) {
+        this(context, 0);
+    }
+
+    public SharedPhotoVideoCell(Context context, int i) {
         super(context);
         Paint paint = new Paint();
         this.backgroundPaint = paint;
+        this.currentAccount = UserConfig.selectedAccount;
+        this.type = i;
         paint.setColor(Theme.getColor("sharedMedia_photoPlaceholder"));
         this.messageObjects = new MessageObject[6];
         this.photoVideoViews = new PhotoVideoView[6];
         this.indeces = new int[6];
-        for (int i = 0; i < 6; i++) {
-            this.photoVideoViews[i] = new PhotoVideoView(context);
-            addView(this.photoVideoViews[i]);
-            this.photoVideoViews[i].setVisibility(4);
-            this.photoVideoViews[i].setTag(Integer.valueOf(i));
-            this.photoVideoViews[i].setOnClickListener(new View.OnClickListener() {
+        for (int i2 = 0; i2 < 6; i2++) {
+            this.photoVideoViews[i2] = new PhotoVideoView(context);
+            addView(this.photoVideoViews[i2]);
+            this.photoVideoViews[i2].setVisibility(4);
+            this.photoVideoViews[i2].setTag(Integer.valueOf(i2));
+            this.photoVideoViews[i2].setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
                     SharedPhotoVideoCell.this.lambda$new$0$SharedPhotoVideoCell(view);
                 }
             });
-            this.photoVideoViews[i].setOnLongClickListener(new View.OnLongClickListener() {
+            this.photoVideoViews[i2].setOnLongClickListener(new View.OnLongClickListener() {
                 public final boolean onLongClick(View view) {
                     return SharedPhotoVideoCell.this.lambda$new$1$SharedPhotoVideoCell(view);
                 }
@@ -370,29 +377,34 @@ public class SharedPhotoVideoCell extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        int itemSize = getItemSize(this.itemsCount);
+        int i3;
+        if (this.type == 1) {
+            i3 = (View.MeasureSpec.getSize(i) - ((this.itemsCount - 1) * AndroidUtilities.dp(2.0f))) / this.itemsCount;
+        } else {
+            i3 = getItemSize(this.itemsCount);
+        }
         this.ignoreLayout = true;
-        int i3 = 0;
-        for (int i4 = 0; i4 < this.itemsCount; i4++) {
-            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.photoVideoViews[i4].getLayoutParams();
+        int i4 = 0;
+        for (int i5 = 0; i5 < this.itemsCount; i5++) {
+            FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.photoVideoViews[i5].getLayoutParams();
             layoutParams.topMargin = this.isFirst ? 0 : AndroidUtilities.dp(2.0f);
-            layoutParams.leftMargin = (AndroidUtilities.dp(2.0f) + itemSize) * i4;
-            if (i4 != this.itemsCount - 1) {
-                layoutParams.width = itemSize;
+            layoutParams.leftMargin = (AndroidUtilities.dp(2.0f) + i3) * i5;
+            if (i5 != this.itemsCount - 1) {
+                layoutParams.width = i3;
             } else if (AndroidUtilities.isTablet()) {
-                layoutParams.width = AndroidUtilities.dp(490.0f) - ((this.itemsCount - 1) * (AndroidUtilities.dp(2.0f) + itemSize));
+                layoutParams.width = AndroidUtilities.dp(490.0f) - ((this.itemsCount - 1) * (AndroidUtilities.dp(2.0f) + i3));
             } else {
-                layoutParams.width = AndroidUtilities.displaySize.x - ((this.itemsCount - 1) * (AndroidUtilities.dp(2.0f) + itemSize));
+                layoutParams.width = AndroidUtilities.displaySize.x - ((this.itemsCount - 1) * (AndroidUtilities.dp(2.0f) + i3));
             }
-            layoutParams.height = itemSize;
+            layoutParams.height = i3;
             layoutParams.gravity = 51;
-            this.photoVideoViews[i4].setLayoutParams(layoutParams);
+            this.photoVideoViews[i5].setLayoutParams(layoutParams);
         }
         this.ignoreLayout = false;
         if (!this.isFirst) {
-            i3 = AndroidUtilities.dp(2.0f);
+            i4 = AndroidUtilities.dp(2.0f);
         }
-        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(i3 + itemSize, NUM));
+        super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(i4 + i3, NUM));
     }
 
     public static int getItemSize(int i) {

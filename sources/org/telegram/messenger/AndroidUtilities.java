@@ -227,54 +227,58 @@ public class AndroidUtilities {
 
     public static CharSequence ellipsizeCenterEnd(CharSequence charSequence, String str, int i, TextPaint textPaint) {
         CharSequence charSequence2;
-        StaticLayout staticLayout = new StaticLayout(charSequence, textPaint, Integer.MAX_VALUE, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
-        float f = (float) i;
-        if (staticLayout.getPrimaryHorizontal(charSequence.length()) + textPaint.measureText("...") < f) {
-            return charSequence;
-        }
-        int indexOf = charSequence.toString().toLowerCase().indexOf(str) + 1;
-        int i2 = indexOf;
-        while (i2 < charSequence.length() - 1 && !Character.isWhitespace(charSequence.charAt(i2))) {
-            i2++;
-        }
-        float primaryHorizontal = staticLayout.getPrimaryHorizontal(i2);
-        if (primaryHorizontal < f) {
-            return charSequence;
-        }
-        float measureText = (primaryHorizontal - f) + (textPaint.measureText("...") * 2.0f);
-        float f2 = 0.1f * f;
-        float f3 = measureText + f2;
-        if (charSequence.length() - i2 > 20) {
-            f3 += f2;
-        }
-        if (f3 <= 0.0f) {
-            return charSequence;
-        }
-        int offsetForHorizontal = staticLayout.getOffsetForHorizontal(0, f3);
-        if (offsetForHorizontal > charSequence.length() - 1) {
-            offsetForHorizontal = charSequence.length() - 1;
-        }
-        int i3 = 0;
-        while (true) {
-            if (Character.isWhitespace(charSequence.charAt(offsetForHorizontal)) || i3 >= 10) {
-                break;
+        try {
+            StaticLayout staticLayout = new StaticLayout(charSequence, textPaint, Integer.MAX_VALUE, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+            float f = (float) i;
+            if (staticLayout.getPrimaryHorizontal(charSequence.length()) + textPaint.measureText("...") < f) {
+                return charSequence;
             }
-            i3++;
-            offsetForHorizontal++;
-            if (offsetForHorizontal > charSequence.length() - 1) {
-                offsetForHorizontal = staticLayout.getOffsetForHorizontal(0, f3);
-                break;
+            int indexOf = charSequence.toString().toLowerCase().indexOf(str) + 1;
+            int i2 = indexOf;
+            while (i2 < charSequence.length() - 1 && !Character.isWhitespace(charSequence.charAt(i2))) {
+                i2++;
             }
-        }
-        if (i3 >= 10) {
-            charSequence2 = charSequence.subSequence(staticLayout.getOffsetForHorizontal(0, staticLayout.getPrimaryHorizontal(indexOf) - (f * 0.3f)), charSequence.length());
-        } else {
-            if (Character.isWhitespace(charSequence.charAt(offsetForHorizontal))) {
-                offsetForHorizontal--;
+            float primaryHorizontal = staticLayout.getPrimaryHorizontal(i2);
+            if (primaryHorizontal < f) {
+                return charSequence;
             }
-            charSequence2 = charSequence.subSequence(offsetForHorizontal, charSequence.length());
+            float measureText = (primaryHorizontal - f) + (textPaint.measureText("...") * 2.0f);
+            float f2 = 0.1f * f;
+            float f3 = measureText + f2;
+            if (charSequence.length() - i2 > 20) {
+                f3 += f2;
+            }
+            if (f3 > 0.0f) {
+                int offsetForHorizontal = staticLayout.getOffsetForHorizontal(0, f3);
+                if (offsetForHorizontal > charSequence.length() - 1) {
+                    offsetForHorizontal = charSequence.length() - 1;
+                }
+                int i3 = 0;
+                while (true) {
+                    if (Character.isWhitespace(charSequence.charAt(offsetForHorizontal)) || i3 >= 10) {
+                        break;
+                    }
+                    i3++;
+                    offsetForHorizontal++;
+                    if (offsetForHorizontal > charSequence.length() - 1) {
+                        offsetForHorizontal = staticLayout.getOffsetForHorizontal(0, f3);
+                        break;
+                    }
+                }
+                if (i3 >= 10) {
+                    charSequence2 = charSequence.subSequence(staticLayout.getOffsetForHorizontal(0, staticLayout.getPrimaryHorizontal(indexOf) - (f * 0.3f)), charSequence.length());
+                } else {
+                    if (offsetForHorizontal > 0 && offsetForHorizontal < charSequence.length() - 1 && Character.isWhitespace(charSequence.charAt(offsetForHorizontal))) {
+                        offsetForHorizontal--;
+                    }
+                    charSequence2 = charSequence.subSequence(offsetForHorizontal, charSequence.length());
+                }
+                return SpannableStringBuilder.valueOf("...").append(charSequence2);
+            }
+            return charSequence;
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
         }
-        return SpannableStringBuilder.valueOf("...").append(charSequence2);
     }
 
     public static CharSequence highlightText(CharSequence charSequence, ArrayList<String> arrayList) {

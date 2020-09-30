@@ -1,6 +1,6 @@
 package j$.util.concurrent;
 
-import j$.C;
+import j$.r;
 import j$.util.Spliterator;
 import java.io.Serializable;
 import java.util.Collection;
@@ -13,7 +13,7 @@ public class j extends CLASSNAMEc implements Set, Serializable, j$.util.Set {
     private final Object b;
 
     public /* synthetic */ void forEach(Consumer consumer) {
-        forEach(C.a(consumer));
+        forEach(r.a(consumer));
     }
 
     j(ConcurrentHashMap concurrentHashMap, Object value) {

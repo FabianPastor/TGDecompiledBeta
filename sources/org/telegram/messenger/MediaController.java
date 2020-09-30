@@ -2649,7 +2649,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public /* synthetic */ void lambda$null$10$MediaController(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i2) {
         PlaylistGlobalSearchParams playlistGlobalSearchParams2;
-        if (this.playlistClassGuid == i && (playlistGlobalSearchParams2 = this.playlistGlobalSearchParams) != null && tLRPC$TL_error == null) {
+        if (this.playlistClassGuid == i && (playlistGlobalSearchParams2 = this.playlistGlobalSearchParams) != null && this.playingMessageObject != null && tLRPC$TL_error == null) {
             this.loadingPlaylist = false;
             TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
             playlistGlobalSearchParams2.nextSearchRate = tLRPC$messages_Messages.next_rate;

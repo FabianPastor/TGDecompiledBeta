@@ -1,22 +1,23 @@
 package j$;
 
-import j$.util.function.BiFunction;
+import j$.util.function.x;
+import java.util.function.DoubleToLongFunction;
 
-public final /* synthetic */ class A implements BiFunction {
-    final /* synthetic */ java.util.function.BiFunction a;
+public final /* synthetic */ class A implements x {
+    final /* synthetic */ DoubleToLongFunction a;
 
-    private /* synthetic */ A(java.util.function.BiFunction biFunction) {
-        this.a = biFunction;
+    private /* synthetic */ A(DoubleToLongFunction doubleToLongFunction) {
+        this.a = doubleToLongFunction;
     }
 
-    public static /* synthetic */ BiFunction b(java.util.function.BiFunction biFunction) {
-        if (biFunction == null) {
+    public static /* synthetic */ x b(DoubleToLongFunction doubleToLongFunction) {
+        if (doubleToLongFunction == null) {
             return null;
         }
-        return new A(biFunction);
+        return new A(doubleToLongFunction);
     }
 
-    public /* synthetic */ Object a(Object obj, Object obj2) {
-        return this.a.apply(obj, obj2);
+    public /* synthetic */ long a(double d) {
+        return this.a.applyAsLong(d);
     }
 }

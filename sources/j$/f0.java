@@ -1,35 +1,23 @@
 package j$;
 
-import j$.util.function.L;
-import java.util.function.LongPredicate;
+import j$.util.function.V;
+import java.util.function.Supplier;
 
-public final /* synthetic */ class f0 implements L {
-    final /* synthetic */ LongPredicate a;
+public final /* synthetic */ class f0 implements V {
+    final /* synthetic */ Supplier a;
 
-    private /* synthetic */ f0(LongPredicate longPredicate) {
-        this.a = longPredicate;
+    private /* synthetic */ f0(Supplier supplier) {
+        this.a = supplier;
     }
 
-    public static /* synthetic */ L b(LongPredicate longPredicate) {
-        if (longPredicate == null) {
+    public static /* synthetic */ V a(Supplier supplier) {
+        if (supplier == null) {
             return null;
         }
-        return longPredicate instanceof g0 ? ((g0) longPredicate).a : new f0(longPredicate);
+        return new f0(supplier);
     }
 
-    public /* synthetic */ L a(L l) {
-        return b(this.a.and(g0.a(l)));
-    }
-
-    public /* synthetic */ L c() {
-        return b(this.a.negate());
-    }
-
-    public /* synthetic */ L d(L l) {
-        return b(this.a.or(g0.a(l)));
-    }
-
-    public /* synthetic */ boolean e(long j) {
-        return this.a.test(j);
+    public /* synthetic */ Object get() {
+        return this.a.get();
     }
 }

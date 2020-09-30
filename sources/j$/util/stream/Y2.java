@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.V;
+import j$.J;
 import j$.util.function.A;
 import j$.util.function.B;
 import j$.util.function.D;
@@ -29,7 +29,7 @@ class Y2 extends CLASSNAMEb3 implements D5 {
     }
 
     public void accept(int t) {
-        if (!this.a && ((V) this.d).e(t) == this.c.a) {
+        if (!this.a && ((J) this.d).e(t) == this.c.a) {
             this.a = true;
             this.b = this.c.b;
         }

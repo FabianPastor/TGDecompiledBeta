@@ -1,35 +1,35 @@
 package j$;
 
-import j$.util.function.CLASSNAMEv;
-import java.util.function.DoublePredicate;
+import j$.util.function.D;
+import java.util.function.IntPredicate;
 
-public final /* synthetic */ class J implements DoublePredicate {
-    final /* synthetic */ CLASSNAMEv a;
+public final /* synthetic */ class J implements D {
+    final /* synthetic */ IntPredicate a;
 
-    private /* synthetic */ J(CLASSNAMEv vVar) {
-        this.a = vVar;
+    private /* synthetic */ J(IntPredicate intPredicate) {
+        this.a = intPredicate;
     }
 
-    public static /* synthetic */ DoublePredicate a(CLASSNAMEv vVar) {
-        if (vVar == null) {
+    public static /* synthetic */ D b(IntPredicate intPredicate) {
+        if (intPredicate == null) {
             return null;
         }
-        return vVar instanceof I ? ((I) vVar).a : new J(vVar);
+        return intPredicate instanceof K ? ((K) intPredicate).a : new J(intPredicate);
     }
 
-    public /* synthetic */ DoublePredicate and(DoublePredicate doublePredicate) {
-        return a(((I) this.a).a(I.b(doublePredicate)));
+    public /* synthetic */ D a(D d) {
+        return b(this.a.and(K.a(d)));
     }
 
-    public /* synthetic */ DoublePredicate negate() {
-        return a(((I) this.a).c());
+    public /* synthetic */ D c() {
+        return b(this.a.negate());
     }
 
-    public /* synthetic */ DoublePredicate or(DoublePredicate doublePredicate) {
-        return a(((I) this.a).d(I.b(doublePredicate)));
+    public /* synthetic */ D d(D d) {
+        return b(this.a.or(K.a(d)));
     }
 
-    public /* synthetic */ boolean test(double d) {
-        return ((I) this.a).e(d);
+    public /* synthetic */ boolean e(int i) {
+        return this.a.test(i);
     }
 }

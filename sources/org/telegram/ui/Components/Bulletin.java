@@ -263,7 +263,10 @@ public final class Bulletin {
             this.layout.onExitTransitionStart();
             this.layout.onExitTransitionEnd();
             this.layout.onHide();
-            this.containerLayout.removeView(this.parentLayout);
+            FrameLayout frameLayout = this.containerLayout;
+            if (frameLayout != null) {
+                frameLayout.removeView(this.parentLayout);
+            }
             this.layout.onDetach();
         }
     }
