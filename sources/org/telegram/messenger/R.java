@@ -2315,6 +2315,12 @@ public final class R {
         public static final int ColorWhite = NUM;
         public static final int ColorYellow = NUM;
         public static final int Comment = NUM;
+        public static final int CommentsCount_few = NUM;
+        public static final int CommentsCount_many = NUM;
+        public static final int CommentsCount_one = NUM;
+        public static final int CommentsCount_other = NUM;
+        public static final int CommentsCount_two = NUM;
+        public static final int CommentsCount_zero = NUM;
         public static final int CommentsTitle = NUM;
         public static final int Comments_few = NUM;
         public static final int Comments_many = NUM;
@@ -3659,6 +3665,7 @@ public final class R {
         public static final int OpenChannel2 = NUM;
         public static final int OpenFile = NUM;
         public static final int OpenGroup = NUM;
+        public static final int OpenGroup2 = NUM;
         public static final int OpenInBrowser = NUM;
         public static final int OpenInEditor = NUM;
         public static final int OpenInExternalApp = NUM;
@@ -4330,6 +4337,7 @@ public final class R {
         public static final int SearchRecentFiles = NUM;
         public static final int SearchStickersHint = NUM;
         public static final int SearchTipToday = NUM;
+        public static final int SearchTipYesterday = NUM;
         public static final int SearchTrendingStickersHint = NUM;
         public static final int SecondsBold_few = NUM;
         public static final int SecondsBold_many = NUM;

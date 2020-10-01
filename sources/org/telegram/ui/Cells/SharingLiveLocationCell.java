@@ -27,6 +27,7 @@ import org.telegram.tgnet.TLRPC$Peer;
 import org.telegram.tgnet.TLRPC$TL_channelLocation;
 import org.telegram.tgnet.TLRPC$TL_peerChannel;
 import org.telegram.tgnet.TLRPC$TL_peerChat;
+import org.telegram.tgnet.TLRPC$TL_peerUser;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.SimpleTextView;
 import org.telegram.ui.ActionBar.Theme;
@@ -141,7 +142,7 @@ public class SharingLiveLocationCell extends FrameLayout {
                 i = tLRPC$Peer.channel_id;
             } else if (tLRPC$Peer instanceof TLRPC$TL_peerChat) {
                 i = tLRPC$Peer.chat_id;
-            } else {
+            } else if (tLRPC$Peer instanceof TLRPC$TL_peerUser) {
                 fromChatId = tLRPC$Peer.user_id;
             }
             fromChatId = -i;

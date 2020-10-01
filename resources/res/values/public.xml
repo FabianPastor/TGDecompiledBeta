@@ -2176,6 +2176,12 @@
     <public type="string" name="ColorWhite" id="NUM" />
     <public type="string" name="ColorYellow" id="NUM" />
     <public type="string" name="Comment" id="NUM" />
+    <public type="string" name="CommentsCount_few" id="NUM" />
+    <public type="string" name="CommentsCount_many" id="NUM" />
+    <public type="string" name="CommentsCount_one" id="NUM" />
+    <public type="string" name="CommentsCount_other" id="NUM" />
+    <public type="string" name="CommentsCount_two" id="NUM" />
+    <public type="string" name="CommentsCount_zero" id="NUM" />
     <public type="string" name="CommentsTitle" id="NUM" />
     <public type="string" name="Comments_few" id="NUM" />
     <public type="string" name="Comments_many" id="NUM" />
@@ -3520,6 +3526,7 @@
     <public type="string" name="OpenChannel2" id="NUM" />
     <public type="string" name="OpenFile" id="NUM" />
     <public type="string" name="OpenGroup" id="NUM" />
+    <public type="string" name="OpenGroup2" id="NUM" />
     <public type="string" name="OpenInBrowser" id="NUM" />
     <public type="string" name="OpenInEditor" id="NUM" />
     <public type="string" name="OpenInExternalApp" id="NUM" />
@@ -4191,6 +4198,7 @@
     <public type="string" name="SearchRecentFiles" id="NUM" />
     <public type="string" name="SearchStickersHint" id="NUM" />
     <public type="string" name="SearchTipToday" id="NUM" />
+    <public type="string" name="SearchTipYesterday" id="NUM" />
     <public type="string" name="SearchTrendingStickersHint" id="NUM" />
     <public type="string" name="SecondsBold_few" id="NUM" />
     <public type="string" name="SecondsBold_many" id="NUM" />

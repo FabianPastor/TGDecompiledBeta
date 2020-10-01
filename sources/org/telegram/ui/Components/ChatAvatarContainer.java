@@ -432,32 +432,28 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                     printingString = TextUtils.replace(printingString, new String[]{"..."}, new String[]{str2});
                 }
                 if (printingString != null && printingString.length() != 0 && (!ChatObject.isChannel(currentChat) || currentChat.megagroup)) {
-                    if (this.parentFragment.isThreadChat()) {
-                        if (this.titleTextView.getTag() != null) {
-                            this.titleTextView.setTag((Object) null);
-                            this.subtitleTextView.setVisibility(0);
-                            AnimatorSet animatorSet = this.titleAnimation;
-                            if (animatorSet != null) {
-                                animatorSet.cancel();
-                                this.titleAnimation = null;
-                            }
-                            if (z) {
-                                AnimatorSet animatorSet2 = new AnimatorSet();
-                                this.titleAnimation = animatorSet2;
-                                animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.titleTextView, View.TRANSLATION_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.subtitleTextView, View.ALPHA, new float[]{1.0f})});
-                                this.titleAnimation.addListener(new AnimatorListenerAdapter() {
-                                    public void onAnimationEnd(Animator animator) {
-                                        AnimatorSet unused = ChatAvatarContainer.this.titleAnimation = null;
-                                    }
-                                });
-                                this.titleAnimation.setDuration(180);
-                                this.titleAnimation.start();
-                            } else {
-                                this.titleTextView.setTranslationY(0.0f);
-                                this.subtitleTextView.setAlpha(1.0f);
-                            }
+                    if (this.parentFragment.isThreadChat() && this.titleTextView.getTag() != null) {
+                        this.titleTextView.setTag((Object) null);
+                        this.subtitleTextView.setVisibility(0);
+                        AnimatorSet animatorSet = this.titleAnimation;
+                        if (animatorSet != null) {
+                            animatorSet.cancel();
+                            this.titleAnimation = null;
+                        }
+                        if (z) {
+                            AnimatorSet animatorSet2 = new AnimatorSet();
+                            this.titleAnimation = animatorSet2;
+                            animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.titleTextView, View.TRANSLATION_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.subtitleTextView, View.ALPHA, new float[]{1.0f})});
+                            this.titleAnimation.addListener(new AnimatorListenerAdapter() {
+                                public void onAnimationEnd(Animator animator) {
+                                    AnimatorSet unused = ChatAvatarContainer.this.titleAnimation = null;
+                                }
+                            });
+                            this.titleAnimation.setDuration(180);
+                            this.titleAnimation.start();
                         } else {
-                            return;
+                            this.titleTextView.setTranslationY(0.0f);
+                            this.subtitleTextView.setAlpha(1.0f);
                         }
                     }
                     setTypingAnimation(true);
@@ -604,7 +600,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
     public void setUserAvatar(TLRPC$User tLRPC$User, boolean z) {
         this.avatarDrawable.setInfo(tLRPC$User);
         if (UserObject.isReplyUser(tLRPC$User)) {
-            this.avatarDrawable.setAvatarType(4);
+            this.avatarDrawable.setAvatarType(12);
             this.avatarDrawable.setSmallSize(true);
             BackupImageView backupImageView = this.avatarImageView;
             if (backupImageView != null) {
@@ -635,7 +631,7 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
                 this.avatarDrawable.setInfo(currentUser);
                 if (UserObject.isReplyUser(currentUser)) {
                     this.avatarDrawable.setSmallSize(true);
-                    this.avatarDrawable.setAvatarType(4);
+                    this.avatarDrawable.setAvatarType(12);
                     BackupImageView backupImageView = this.avatarImageView;
                     if (backupImageView != null) {
                         backupImageView.setImage((ImageLocation) null, (String) null, (Drawable) this.avatarDrawable, (Object) currentUser);

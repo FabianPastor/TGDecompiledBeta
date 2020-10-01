@@ -132,7 +132,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         frameLayout.addView(this.searchListView);
         this.searchContainer.addView(this.noMediaFiltersSearchView);
         FilteredSearchView.LoadingView loadingView = new FilteredSearchView.LoadingView(context);
-        AnonymousClass3 r11 = new StickerEmptyView(context, loadingView) {
+        AnonymousClass3 r12 = new StickerEmptyView(context, loadingView) {
             public void setVisibility(int i) {
                 if (SearchViewPager.this.noMediaFiltersSearchView.getTag() != null) {
                     super.setVisibility(8);
@@ -141,11 +141,12 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 }
             }
         };
-        this.emptyView = r11;
-        r11.title.setText(LocaleController.getString("NoResult", NUM));
+        this.emptyView = r12;
+        r12.title.setText(LocaleController.getString("NoResult", NUM));
         this.emptyView.subtitle.setVisibility(8);
         this.emptyView.setVisibility(8);
         this.emptyView.addView(loadingView, 0);
+        this.emptyView.showProgress(true, false);
         this.searchContainer.addView(this.emptyView);
         this.searchListView.setEmptyView(this.emptyView);
         setAdapter(new ViewPagerFixed.Adapter() {

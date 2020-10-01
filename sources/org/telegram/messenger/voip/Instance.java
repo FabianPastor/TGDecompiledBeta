@@ -150,12 +150,14 @@ public final class Instance {
         public final boolean enableCallUpgrade;
         public final boolean enableNs;
         public final boolean enableP2p;
+        public final boolean enableSm;
         public final double initializationTimeout;
         public final String logPath;
         public final int maxApiLayer;
         public final double receiveTimeout;
+        public final String statsLogPath;
 
-        public Config(double d, double d2, int i, boolean z, boolean z2, boolean z3, boolean z4, boolean z5, String str, int i2) {
+        public Config(double d, double d2, int i, boolean z, boolean z2, boolean z3, boolean z4, boolean z5, boolean z6, String str, String str2, int i2) {
             this.initializationTimeout = d;
             this.receiveTimeout = d2;
             this.dataSaving = i;
@@ -165,11 +167,13 @@ public final class Instance {
             this.enableAgc = z4;
             this.enableCallUpgrade = z5;
             this.logPath = str;
+            this.statsLogPath = str2;
             this.maxApiLayer = i2;
+            this.enableSm = z6;
         }
 
         public String toString() {
-            return "Config{initializationTimeout=" + this.initializationTimeout + ", receiveTimeout=" + this.receiveTimeout + ", dataSaving=" + this.dataSaving + ", enableP2p=" + this.enableP2p + ", enableAec=" + this.enableAec + ", enableNs=" + this.enableNs + ", enableAgc=" + this.enableAgc + ", enableCallUpgrade=" + this.enableCallUpgrade + ", logPath='" + this.logPath + '\'' + ", maxApiLayer=" + this.maxApiLayer + '}';
+            return "Config{initializationTimeout=" + this.initializationTimeout + ", receiveTimeout=" + this.receiveTimeout + ", dataSaving=" + this.dataSaving + ", enableP2p=" + this.enableP2p + ", enableAec=" + this.enableAec + ", enableNs=" + this.enableNs + ", enableAgc=" + this.enableAgc + ", enableCallUpgrade=" + this.enableCallUpgrade + ", logPath='" + this.logPath + '\'' + ", statsLogPath='" + this.statsLogPath + '\'' + ", maxApiLayer=" + this.maxApiLayer + ", enableSm=" + this.enableSm + '}';
         }
     }
 
@@ -274,6 +278,7 @@ public final class Instance {
     }
 
     public static final class ServerConfig {
+        public final boolean enableStunMarking;
         public final boolean enable_h264_decoder;
         public final boolean enable_h264_encoder;
         public final boolean enable_h265_decoder;
@@ -292,6 +297,7 @@ public final class Instance {
             this.jsonObject = jSONObject;
             this.useSystemNs = jSONObject.optBoolean("use_system_ns", true);
             this.useSystemAec = jSONObject.optBoolean("use_system_aec", true);
+            this.enableStunMarking = jSONObject.optBoolean("voip_enable_stun_marking", false);
             this.hangupUiTimeout = jSONObject.optDouble("hangup_ui_timeout", 5.0d);
             this.enable_vp8_encoder = jSONObject.optBoolean("enable_vp8_encoder", true);
             this.enable_vp8_decoder = jSONObject.optBoolean("enable_vp8_decoder", true);

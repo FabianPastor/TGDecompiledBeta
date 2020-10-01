@@ -133,7 +133,7 @@ public class AvatarDrawable extends Drawable {
         boolean z = false;
         if (i == 2) {
             this.color = Theme.getColor("avatar_backgroundArchivedHidden");
-        } else if (i == 4) {
+        } else if (i == 12) {
             this.color = Theme.getColor("avatar_backgroundSaved");
         } else if (i == 1) {
             this.color = Theme.getColor("avatar_backgroundSaved");
@@ -157,7 +157,7 @@ public class AvatarDrawable extends Drawable {
             this.color = getColorForId(4);
         }
         int i2 = this.avatarType;
-        if (!(i2 == 2 || i2 == 1 || i2 == 4)) {
+        if (!(i2 == 2 || i2 == 1 || i2 == 12)) {
             z = true;
         }
         this.needApplyColorAccent = z;
@@ -301,7 +301,7 @@ public class AvatarDrawable extends Drawable {
                 Theme.dialogs_archiveAvatarDrawable.draw(canvas);
                 canvas.restore();
             } else if (i != 0) {
-                if (i == 4) {
+                if (i == 12) {
                     drawable = Theme.avatarDrawables[11];
                 } else if (i == 1) {
                     drawable = Theme.avatarDrawables[0];

@@ -917,6 +917,12 @@
     <string name="ColorWhite">White</string>
     <string name="ColorYellow">Yellow</string>
     <string name="Comment">Comment</string>
+    <string name="CommentsCount_few">%1$d comments</string>
+    <string name="CommentsCount_many">%1$d comments</string>
+    <string name="CommentsCount_one">%1$d comment</string>
+    <string name="CommentsCount_other">%1$d comments</string>
+    <string name="CommentsCount_two">%1$d comments</string>
+    <string name="CommentsCount_zero">%1$d comments</string>
     <string name="CommentsTitle">Comments</string>
     <string name="Comments_few">%1$d Comments</string>
     <string name="Comments_many">%1$d Comments</string>
@@ -2261,6 +2267,7 @@
     <string name="OpenChannel2">Open Channel</string>
     <string name="OpenFile">OPEN FILE</string>
     <string name="OpenGroup">VIEW GROUP</string>
+    <string name="OpenGroup2">Open Group</string>
     <string name="OpenInBrowser">OPEN IN...</string>
     <string name="OpenInEditor">Open in editor</string>
     <string name="OpenInExternalApp">Open in...</string>
@@ -2932,6 +2939,7 @@
     <string name="SearchRecentFiles">Search Recent Files</string>
     <string name="SearchStickersHint">Search sticker sets</string>
     <string name="SearchTipToday">Today</string>
+    <string name="SearchTipYesterday">Yesterday</string>
     <string name="SearchTrendingStickersHint">Search trending stickers</string>
     <string name="SecondsBold_few">**%1$d** seconds</string>
     <string name="SecondsBold_many">**%1$d** seconds</string>

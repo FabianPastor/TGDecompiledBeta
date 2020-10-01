@@ -813,7 +813,7 @@ public class VoIPHelper {
         return new File(ApplicationLoader.applicationContext.getExternalFilesDir((String) null), String.format(Locale.US, "logs/%02d_%02d_%04d_%02d_%02d_%02d_%s.txt", new Object[]{Integer.valueOf(instance.get(5)), Integer.valueOf(instance.get(2) + 1), Integer.valueOf(instance.get(1)), Integer.valueOf(instance.get(11)), Integer.valueOf(instance.get(12)), Integer.valueOf(instance.get(13)), str})).getAbsolutePath();
     }
 
-    public static String getLogFilePath(long j) {
+    public static String getLogFilePath(long j, boolean z) {
         File[] listFiles;
         File logsDir = getLogsDir();
         if (!BuildVars.DEBUG_VERSION && (listFiles = logsDir.listFiles()) != null) {

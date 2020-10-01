@@ -407,7 +407,7 @@ public class ProfileSearchCell extends BaseCell {
         this.nameLockLeft += getPaddingLeft();
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:34:0x00ad, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:34:0x00ae, code lost:
         r0 = r12.lastAvatar;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -418,14 +418,14 @@ public class ProfileSearchCell extends BaseCell {
             r1 = 0
             r2 = 1
             r3 = 0
-            if (r0 == 0) goto L_0x0059
+            if (r0 == 0) goto L_0x005a
             org.telegram.ui.Components.AvatarDrawable r4 = r12.avatarDrawable
             r4.setInfo((org.telegram.tgnet.TLRPC$User) r0)
             org.telegram.tgnet.TLRPC$User r0 = r12.user
             boolean r0 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r0)
-            if (r0 == 0) goto L_0x0027
+            if (r0 == 0) goto L_0x0028
             org.telegram.ui.Components.AvatarDrawable r0 = r12.avatarDrawable
-            r4 = 4
+            r4 = 12
             r0.setAvatarType(r4)
             org.telegram.messenger.ImageReceiver r5 = r12.avatarImage
             r6 = 0
@@ -435,10 +435,10 @@ public class ProfileSearchCell extends BaseCell {
             r10 = 0
             r11 = 0
             r5.setImage(r6, r7, r8, r9, r10, r11)
-            goto L_0x008f
-        L_0x0027:
+            goto L_0x0090
+        L_0x0028:
             boolean r0 = r12.savedMessages
-            if (r0 == 0) goto L_0x003d
+            if (r0 == 0) goto L_0x003e
             org.telegram.ui.Components.AvatarDrawable r0 = r12.avatarDrawable
             r0.setAvatarType(r2)
             org.telegram.messenger.ImageReceiver r4 = r12.avatarImage
@@ -449,13 +449,13 @@ public class ProfileSearchCell extends BaseCell {
             r9 = 0
             r10 = 0
             r4.setImage(r5, r6, r7, r8, r9, r10)
-            goto L_0x008f
-        L_0x003d:
+            goto L_0x0090
+        L_0x003e:
             org.telegram.tgnet.TLRPC$User r0 = r12.user
             org.telegram.tgnet.TLRPC$UserProfilePhoto r0 = r0.photo
-            if (r0 == 0) goto L_0x0045
+            if (r0 == 0) goto L_0x0046
             org.telegram.tgnet.TLRPC$FileLocation r1 = r0.photo_small
-        L_0x0045:
+        L_0x0046:
             org.telegram.messenger.ImageReceiver r4 = r12.avatarImage
             org.telegram.tgnet.TLRPC$User r0 = r12.user
             org.telegram.messenger.ImageLocation r5 = org.telegram.messenger.ImageLocation.getForUser(r0, r3)
@@ -465,14 +465,14 @@ public class ProfileSearchCell extends BaseCell {
             r10 = 0
             java.lang.String r6 = "50_50"
             r4.setImage(r5, r6, r7, r8, r9, r10)
-            goto L_0x008f
-        L_0x0059:
+            goto L_0x0090
+        L_0x005a:
             org.telegram.tgnet.TLRPC$Chat r0 = r12.chat
-            if (r0 == 0) goto L_0x007e
+            if (r0 == 0) goto L_0x007f
             org.telegram.tgnet.TLRPC$ChatPhoto r0 = r0.photo
-            if (r0 == 0) goto L_0x0063
+            if (r0 == 0) goto L_0x0064
             org.telegram.tgnet.TLRPC$FileLocation r1 = r0.photo_small
-        L_0x0063:
+        L_0x0064:
             org.telegram.ui.Components.AvatarDrawable r0 = r12.avatarDrawable
             org.telegram.tgnet.TLRPC$Chat r4 = r12.chat
             r0.setInfo((org.telegram.tgnet.TLRPC$Chat) r4)
@@ -485,8 +485,8 @@ public class ProfileSearchCell extends BaseCell {
             r11 = 0
             java.lang.String r7 = "50_50"
             r5.setImage(r6, r7, r8, r9, r10, r11)
-            goto L_0x008f
-        L_0x007e:
+            goto L_0x0090
+        L_0x007f:
             org.telegram.ui.Components.AvatarDrawable r0 = r12.avatarDrawable
             r0.setInfo(r3, r1, r1)
             org.telegram.messenger.ImageReceiver r4 = r12.avatarImage
@@ -497,71 +497,71 @@ public class ProfileSearchCell extends BaseCell {
             r9 = 0
             r10 = 0
             r4.setImage(r5, r6, r7, r8, r9, r10)
-        L_0x008f:
-            if (r13 == 0) goto L_0x013d
+        L_0x0090:
+            if (r13 == 0) goto L_0x013e
             r0 = r13 & 2
-            if (r0 == 0) goto L_0x0099
+            if (r0 == 0) goto L_0x009a
             org.telegram.tgnet.TLRPC$User r0 = r12.user
-            if (r0 != 0) goto L_0x00a1
-        L_0x0099:
+            if (r0 != 0) goto L_0x00a2
+        L_0x009a:
             r0 = r13 & 8
-            if (r0 == 0) goto L_0x00c3
+            if (r0 == 0) goto L_0x00c4
             org.telegram.tgnet.TLRPC$Chat r0 = r12.chat
-            if (r0 == 0) goto L_0x00c3
-        L_0x00a1:
+            if (r0 == 0) goto L_0x00c4
+        L_0x00a2:
             org.telegram.tgnet.TLRPC$FileLocation r0 = r12.lastAvatar
-            if (r0 == 0) goto L_0x00a7
-            if (r1 == 0) goto L_0x00c1
-        L_0x00a7:
+            if (r0 == 0) goto L_0x00a8
+            if (r1 == 0) goto L_0x00c2
+        L_0x00a8:
             org.telegram.tgnet.TLRPC$FileLocation r0 = r12.lastAvatar
-            if (r0 != 0) goto L_0x00ad
-            if (r1 != 0) goto L_0x00c1
-        L_0x00ad:
+            if (r0 != 0) goto L_0x00ae
+            if (r1 != 0) goto L_0x00c2
+        L_0x00ae:
             org.telegram.tgnet.TLRPC$FileLocation r0 = r12.lastAvatar
-            if (r0 == 0) goto L_0x00c3
-            if (r1 == 0) goto L_0x00c3
+            if (r0 == 0) goto L_0x00c4
+            if (r1 == 0) goto L_0x00c4
             long r4 = r0.volume_id
             long r6 = r1.volume_id
             int r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r8 != 0) goto L_0x00c1
+            if (r8 != 0) goto L_0x00c2
             int r0 = r0.local_id
             int r4 = r1.local_id
-            if (r0 == r4) goto L_0x00c3
-        L_0x00c1:
+            if (r0 == r4) goto L_0x00c4
+        L_0x00c2:
             r0 = 1
-            goto L_0x00c4
-        L_0x00c3:
-            r0 = 0
+            goto L_0x00c5
         L_0x00c4:
-            if (r0 != 0) goto L_0x00db
+            r0 = 0
+        L_0x00c5:
+            if (r0 != 0) goto L_0x00dc
             r4 = r13 & 4
-            if (r4 == 0) goto L_0x00db
+            if (r4 == 0) goto L_0x00dc
             org.telegram.tgnet.TLRPC$User r4 = r12.user
-            if (r4 == 0) goto L_0x00db
+            if (r4 == 0) goto L_0x00dc
             org.telegram.tgnet.TLRPC$UserStatus r4 = r4.status
-            if (r4 == 0) goto L_0x00d5
+            if (r4 == 0) goto L_0x00d6
             int r4 = r4.expires
-            goto L_0x00d6
-        L_0x00d5:
-            r4 = 0
+            goto L_0x00d7
         L_0x00d6:
+            r4 = 0
+        L_0x00d7:
             int r5 = r12.lastStatus
-            if (r4 == r5) goto L_0x00db
+            if (r4 == r5) goto L_0x00dc
             r0 = 1
-        L_0x00db:
-            if (r0 != 0) goto L_0x00e5
+        L_0x00dc:
+            if (r0 != 0) goto L_0x00e6
             r4 = r13 & 1
-            if (r4 == 0) goto L_0x00e5
+            if (r4 == 0) goto L_0x00e6
             org.telegram.tgnet.TLRPC$User r4 = r12.user
-            if (r4 != 0) goto L_0x00ed
-        L_0x00e5:
+            if (r4 != 0) goto L_0x00ee
+        L_0x00e6:
             r4 = r13 & 16
-            if (r4 == 0) goto L_0x0116
+            if (r4 == 0) goto L_0x0117
             org.telegram.tgnet.TLRPC$Chat r4 = r12.chat
-            if (r4 == 0) goto L_0x0116
-        L_0x00ed:
+            if (r4 == 0) goto L_0x0117
+        L_0x00ee:
             org.telegram.tgnet.TLRPC$User r4 = r12.user
-            if (r4 == 0) goto L_0x0109
+            if (r4 == 0) goto L_0x010a
             java.lang.StringBuilder r4 = new java.lang.StringBuilder
             r4.<init>()
             org.telegram.tgnet.TLRPC$User r5 = r12.user
@@ -571,48 +571,48 @@ public class ProfileSearchCell extends BaseCell {
             java.lang.String r5 = r5.last_name
             r4.append(r5)
             java.lang.String r4 = r4.toString()
-            goto L_0x010d
-        L_0x0109:
+            goto L_0x010e
+        L_0x010a:
             org.telegram.tgnet.TLRPC$Chat r4 = r12.chat
             java.lang.String r4 = r4.title
-        L_0x010d:
+        L_0x010e:
             java.lang.String r5 = r12.lastName
             boolean r4 = r4.equals(r5)
-            if (r4 != 0) goto L_0x0116
+            if (r4 != 0) goto L_0x0117
             r0 = 1
-        L_0x0116:
-            if (r0 != 0) goto L_0x0139
+        L_0x0117:
+            if (r0 != 0) goto L_0x013a
             boolean r4 = r12.drawCount
-            if (r4 == 0) goto L_0x0139
+            if (r4 == 0) goto L_0x013a
             r13 = r13 & 256(0x100, float:3.59E-43)
-            if (r13 == 0) goto L_0x0139
+            if (r13 == 0) goto L_0x013a
             int r13 = r12.currentAccount
             org.telegram.messenger.MessagesController r13 = org.telegram.messenger.MessagesController.getInstance(r13)
             android.util.LongSparseArray<org.telegram.tgnet.TLRPC$Dialog> r13 = r13.dialogs_dict
             long r4 = r12.dialog_id
             java.lang.Object r13 = r13.get(r4)
             org.telegram.tgnet.TLRPC$Dialog r13 = (org.telegram.tgnet.TLRPC$Dialog) r13
-            if (r13 == 0) goto L_0x0139
+            if (r13 == 0) goto L_0x013a
             int r13 = r13.unread_count
             int r4 = r12.lastUnreadCount
-            if (r13 == r4) goto L_0x0139
-            goto L_0x013a
-        L_0x0139:
-            r2 = r0
+            if (r13 == r4) goto L_0x013a
+            goto L_0x013b
         L_0x013a:
-            if (r2 != 0) goto L_0x013d
+            r2 = r0
+        L_0x013b:
+            if (r2 != 0) goto L_0x013e
             return
-        L_0x013d:
+        L_0x013e:
             org.telegram.tgnet.TLRPC$User r13 = r12.user
-            if (r13 == 0) goto L_0x0166
+            if (r13 == 0) goto L_0x0167
             org.telegram.tgnet.TLRPC$UserStatus r13 = r13.status
-            if (r13 == 0) goto L_0x014a
+            if (r13 == 0) goto L_0x014b
             int r13 = r13.expires
             r12.lastStatus = r13
-            goto L_0x014c
-        L_0x014a:
+            goto L_0x014d
+        L_0x014b:
             r12.lastStatus = r3
-        L_0x014c:
+        L_0x014d:
             java.lang.StringBuilder r13 = new java.lang.StringBuilder
             r13.<init>()
             org.telegram.tgnet.TLRPC$User r0 = r12.user
@@ -623,25 +623,25 @@ public class ProfileSearchCell extends BaseCell {
             r13.append(r0)
             java.lang.String r13 = r13.toString()
             r12.lastName = r13
-            goto L_0x016e
-        L_0x0166:
+            goto L_0x016f
+        L_0x0167:
             org.telegram.tgnet.TLRPC$Chat r13 = r12.chat
-            if (r13 == 0) goto L_0x016e
+            if (r13 == 0) goto L_0x016f
             java.lang.String r13 = r13.title
             r12.lastName = r13
-        L_0x016e:
+        L_0x016f:
             r12.lastAvatar = r1
             int r13 = r12.getMeasuredWidth()
-            if (r13 != 0) goto L_0x0181
+            if (r13 != 0) goto L_0x0182
             int r13 = r12.getMeasuredHeight()
-            if (r13 == 0) goto L_0x017d
-            goto L_0x0181
-        L_0x017d:
+            if (r13 == 0) goto L_0x017e
+            goto L_0x0182
+        L_0x017e:
             r12.requestLayout()
-            goto L_0x0184
-        L_0x0181:
+            goto L_0x0185
+        L_0x0182:
             r12.buildLayout()
-        L_0x0184:
+        L_0x0185:
             r12.postInvalidate()
             return
         */

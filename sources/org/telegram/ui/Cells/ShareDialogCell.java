@@ -80,7 +80,7 @@ public class ShareDialogCell extends FrameLayout {
             this.avatarDrawable.setInfo(user2);
             if (UserObject.isReplyUser(this.user)) {
                 this.nameTextView.setText(LocaleController.getString("RepliesTitle", NUM));
-                this.avatarDrawable.setAvatarType(4);
+                this.avatarDrawable.setAvatarType(12);
                 this.imageView.setImage((ImageLocation) null, (String) null, (Drawable) this.avatarDrawable, (Object) this.user);
             } else if (UserObject.isUserSelf(this.user)) {
                 this.nameTextView.setText(LocaleController.getString("SavedMessages", NUM));

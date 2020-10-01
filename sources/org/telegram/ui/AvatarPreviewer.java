@@ -120,6 +120,7 @@ public class AvatarPreviewer {
     public enum MenuItem {
         OPEN_PROFILE("OpenProfile", NUM, NUM),
         OPEN_CHANNEL("OpenChannel2", NUM, NUM),
+        OPEN_GROUP("OpenGroup2", NUM, NUM),
         SEND_MESSAGE("SendMessage", NUM, NUM),
         MENTION("Mention", NUM, NUM);
         

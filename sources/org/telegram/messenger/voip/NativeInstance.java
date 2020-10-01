@@ -18,7 +18,7 @@ public class NativeInstance {
     private String persistentStateFilePath;
     private CountDownLatch stopBarrier;
 
-    public static native long createVideoCapturer(VideoSink videoSink);
+    public static native long createVideoCapturer(VideoSink videoSink, boolean z);
 
     public static native void destroyVideoCapturer(long j);
 
@@ -28,7 +28,7 @@ public class NativeInstance {
 
     private native void stopNative();
 
-    public static native void switchCameraCapturer(long j);
+    public static native void switchCameraCapturer(long j, boolean z);
 
     public native String getDebugInfo();
 
@@ -62,9 +62,9 @@ public class NativeInstance {
 
     public native void setVideoState(int i);
 
-    public native void setupOutgoingVideo(VideoSink videoSink);
+    public native void setupOutgoingVideo(VideoSink videoSink, boolean z);
 
-    public native void switchCamera();
+    public native void switchCamera(boolean z);
 
     public static NativeInstance make(String str, Instance.Config config, String str2, Instance.Endpoint[] endpointArr, Instance.Proxy proxy, int i, Instance.EncryptionKey encryptionKey, VideoSink videoSink, long j) {
         if (BuildVars.LOGS_ENABLED) {
