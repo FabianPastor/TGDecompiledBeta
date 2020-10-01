@@ -4479,7 +4479,7 @@ public class MessagesStorage extends BaseController {
                     int i11 = 0;
                     while (i11 < arrayList.size()) {
                         TLRPC$Chat tLRPC$Chat = (TLRPC$Chat) arrayList.get(i11);
-                        if (tLRPC$Chat == null || (!ChatObject.isNotInChat(tLRPC$Chat) && tLRPC$Chat.migrated_to == null)) {
+                        if (tLRPC$Chat == null || (!ChatObject.isNotInChat(tLRPC$Chat) && !tLRPC$Chat.min && tLRPC$Chat.migrated_to == null)) {
                             longSparseArray2 = longSparseArray4;
                             arrayList5 = arrayList23;
                         } else {
