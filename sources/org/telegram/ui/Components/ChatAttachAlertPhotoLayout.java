@@ -2989,12 +2989,14 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         if (frameLayout != null) {
             frameLayout.setVisibility(0);
         }
-        int childCount = this.gridView.getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View childAt = this.gridView.getChildAt(i);
-            if (childAt instanceof PhotoAttachCameraCell) {
-                childAt.setVisibility(4);
-                return;
+        if (this.cameraView != null) {
+            int childCount = this.gridView.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                View childAt = this.gridView.getChildAt(i);
+                if (childAt instanceof PhotoAttachCameraCell) {
+                    childAt.setVisibility(4);
+                    return;
+                }
             }
         }
     }

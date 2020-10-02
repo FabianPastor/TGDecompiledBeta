@@ -412,6 +412,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     public void updateColors() {
         Theme.setDrawableColor(this.drawable, Theme.getColor("dialogFloatingButton"));
         Theme.setDrawableColor(this.checkDrawable, Theme.getColor("dialogFloatingIcon"));
+        EmojiView emojiView2 = this.emojiView;
+        if (emojiView2 != null) {
+            emojiView2.updateColors();
+        }
     }
 
     private void onWindowSizeChanged() {
@@ -603,11 +607,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 Emoji.replaceEmoji(spannableStringBuilder, this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             }
             this.messageEditText.setText(spannableStringBuilder);
-            if (charSequence.length() + i <= this.messageEditText.length()) {
-                this.messageEditText.setSelection(i + charSequence.length());
-            } else {
-                this.messageEditText.setSelection(this.messageEditText.length());
-            }
+            this.messageEditText.setSelection(Math.min(i + charSequence.length(), this.messageEditText.length()));
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }

@@ -8873,68 +8873,61 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
 
         /* access modifiers changed from: private */
-        public void showPopup(int i, int i2) {
+        public void showPopup(final int i, int i2) {
             View view;
-            boolean z;
-            boolean z2;
             int i3;
             int i4;
-            boolean z3;
-            final int i5 = i;
-            int i6 = i2;
-            if (i5 != 2) {
-                if (i5 == 1) {
-                    if (i6 == 0 && this.emojiView == null) {
+            if (i != 2) {
+                if (i == 1) {
+                    if (i2 == 0 && this.emojiView == null) {
                         if (this.parentActivity != null) {
                             createEmojiView();
                         } else {
                             return;
                         }
                     }
-                    if (i6 == 0) {
+                    if (i2 == 0) {
                         if (this.emojiView.getParent() == null) {
                             SizeNotifierFrameLayout sizeNotifierFrameLayout = this.sizeNotifierLayout;
                             sizeNotifierFrameLayout.addView(this.emojiView, sizeNotifierFrameLayout.getChildCount() - 1);
                         }
-                        z2 = this.emojiViewVisible && this.emojiView.getVisibility() == 0;
+                        if (this.emojiViewVisible) {
+                            int visibility = this.emojiView.getVisibility();
+                        }
                         this.emojiView.setVisibility(0);
                         this.emojiViewVisible = true;
                         BotKeyboardView botKeyboardView2 = this.botKeyboardView;
                         if (botKeyboardView2 == null || botKeyboardView2.getVisibility() == 8) {
                             i3 = 0;
-                            z = false;
                         } else {
                             this.botKeyboardView.setVisibility(8);
                             this.botKeyboardViewVisible = false;
                             i3 = this.botKeyboardView.getMeasuredHeight();
-                            z = true;
                         }
                         view = this.emojiView;
                         this.animatingContentType = 0;
-                    } else if (i6 == 1) {
-                        z2 = this.botKeyboardViewVisible && this.botKeyboardView.getVisibility() == 0;
+                    } else if (i2 == 1) {
+                        if (this.botKeyboardViewVisible) {
+                            int visibility2 = this.botKeyboardView.getVisibility();
+                        }
                         this.botKeyboardViewVisible = true;
                         EmojiView emojiView2 = this.emojiView;
                         if (emojiView2 == null || emojiView2.getVisibility() == 8) {
                             i4 = 0;
-                            z3 = false;
                         } else {
                             this.sizeNotifierLayout.removeView(this.emojiView);
                             this.emojiView.setVisibility(8);
                             this.emojiViewVisible = false;
                             i4 = this.emojiView.getMeasuredHeight();
-                            z3 = true;
                         }
                         this.botKeyboardView.setVisibility(0);
                         view = this.botKeyboardView;
                         this.animatingContentType = 1;
                     } else {
-                        i3 = 0;
-                        z2 = false;
-                        z = false;
                         view = null;
+                        i3 = 0;
                     }
-                    this.currentPopupContentType = i6;
+                    this.currentPopupContentType = i2;
                     if (this.keyboardHeight <= 0) {
                         this.keyboardHeight = MessagesController.getGlobalEmojiSettings().getInt("kbd_height", AndroidUtilities.dp(200.0f));
                     }
@@ -8942,32 +8935,30 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         this.keyboardHeightLand = MessagesController.getGlobalEmojiSettings().getInt("kbd_height_land3", AndroidUtilities.dp(200.0f));
                     }
                     Point point = AndroidUtilities.displaySize;
-                    int i7 = point.x > point.y ? this.keyboardHeightLand : this.keyboardHeight;
-                    if (!z2 && !z) {
-                        i7 = 0;
-                    } else if (i6 == 1) {
-                        i7 = Math.min(this.botKeyboardView.getKeyboardHeight(), i7);
+                    int i5 = point.x > point.y ? this.keyboardHeightLand : this.keyboardHeight;
+                    if (i2 == 1) {
+                        i5 = Math.min(this.botKeyboardView.getKeyboardHeight(), i5);
                     }
                     BotKeyboardView botKeyboardView3 = this.botKeyboardView;
                     if (botKeyboardView3 != null) {
-                        botKeyboardView3.setPanelHeight(i7);
+                        botKeyboardView3.setPanelHeight(i5);
                     }
                     FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) view.getLayoutParams();
-                    layoutParams.height = i7;
+                    layoutParams.height = Math.max(AndroidUtilities.dp(20.0f), i5);
                     view.setLayoutParams(layoutParams);
                     if (!AndroidUtilities.isInMultiwindow) {
                         AndroidUtilities.hideKeyboard(this.messageEditText);
                     }
                     SizeNotifierFrameLayout sizeNotifierFrameLayout2 = this.sizeNotifierLayout;
                     if (sizeNotifierFrameLayout2 != null) {
-                        this.emojiPadding = i7;
+                        this.emojiPadding = i5;
                         sizeNotifierFrameLayout2.requestLayout();
                         setEmojiButtonImage(true, true);
                         updateBotButton();
                         onWindowSizeChanged();
-                        if (this.smoothKeyboard && !this.keyboardVisible && i7 != i3) {
+                        if (this.smoothKeyboard && !this.keyboardVisible && i5 != i3) {
                             this.panelAnimation = new AnimatorSet();
-                            float f = (float) (i7 - i3);
+                            float f = (float) (i5 - i3);
                             view.setTranslationY(f);
                             this.panelAnimation.playTogether(new Animator[]{ObjectAnimator.ofFloat(view, View.TRANSLATION_Y, new float[]{f, 0.0f})});
                             this.panelAnimation.setInterpolator(AdjustPanLayoutHelper.keyboardInterpolator);
@@ -8993,7 +8984,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     }
                     this.currentPopupContentType = -1;
                     if (this.emojiView != null) {
-                        if (i5 == 2 && !AndroidUtilities.usingHardwareInput && !AndroidUtilities.isInMultiwindow) {
+                        if (i == 2 && !AndroidUtilities.usingHardwareInput && !AndroidUtilities.isInMultiwindow) {
                             this.removeEmojiViewAfterAnimation = false;
                             ChatActivityEnterViewDelegate chatActivityEnterViewDelegate = this.delegate;
                             if (chatActivityEnterViewDelegate != null) {
@@ -9020,7 +9011,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             this.panelAnimation.setDuration(250);
                             this.panelAnimation.addListener(new AnimatorListenerAdapter() {
                                 public void onAnimationEnd(Animator animator) {
-                                    if (i5 == 0) {
+                                    if (i == 0) {
                                         int unused = ChatActivityEnterView.this.emojiPadding = 0;
                                     }
                                     AnimatorSet unused2 = ChatActivityEnterView.this.panelAnimation = null;
@@ -9047,7 +9038,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         this.emojiViewVisible = false;
                     }
                     if (this.botKeyboardView != null) {
-                        if (i5 != 2 || AndroidUtilities.usingHardwareInput || AndroidUtilities.isInMultiwindow) {
+                        if (i != 2 || AndroidUtilities.usingHardwareInput || AndroidUtilities.isInMultiwindow) {
                             if (this.smoothKeyboard && !this.keyboardVisible) {
                                 if (this.botKeyboardViewVisible) {
                                     this.animatingContentType = 1;
@@ -9060,7 +9051,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                 this.panelAnimation.setDuration(250);
                                 this.panelAnimation.addListener(new AnimatorListenerAdapter() {
                                     public void onAnimationEnd(Animator animator) {
-                                        if (i5 == 0) {
+                                        if (i == 0) {
                                             int unused = ChatActivityEnterView.this.emojiPadding = 0;
                                         }
                                         AnimatorSet unused2 = ChatActivityEnterView.this.panelAnimation = null;
@@ -9083,7 +9074,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         this.botKeyboardViewVisible = false;
                     }
                     SizeNotifierFrameLayout sizeNotifierFrameLayout3 = this.sizeNotifierLayout;
-                    if (sizeNotifierFrameLayout3 != null && !SharedConfig.smoothKeyboard && i5 == 0) {
+                    if (sizeNotifierFrameLayout3 != null && !SharedConfig.smoothKeyboard && i == 0) {
                         this.emojiPadding = 0;
                         sizeNotifierFrameLayout3.requestLayout();
                         onWindowSizeChanged();
@@ -9093,7 +9084,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 if (this.stickersTabOpen || this.emojiTabOpen) {
                     checkSendButton(true);
                 }
-                if (this.stickersExpanded && i5 != 1) {
+                if (this.stickersExpanded && i != 1) {
                     setStickersExpanded(false, false, false);
                 }
             }

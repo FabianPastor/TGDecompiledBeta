@@ -2,17 +2,21 @@ package org.telegram.ui.Components;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import org.telegram.messenger.AccountInstance;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.LocaleController;
@@ -40,12 +44,14 @@ import org.telegram.ui.Cells.SharedDocumentCell;
 import org.telegram.ui.Cells.SharedLinkCell;
 import org.telegram.ui.Cells.SharedPhotoVideoCell;
 import org.telegram.ui.ChatActivity;
+import org.telegram.ui.Components.SearchViewPager;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.FilteredSearchView;
 import org.telegram.ui.ViewPagerFixed;
 
 public class SearchViewPager extends ViewPagerFixed implements FilteredSearchView.UiCallback {
     int currentAccount = UserConfig.selectedAccount;
+    ArrayList<SearchResultsEnterAnimator> currentAnimators = new ArrayList<>();
     private ArrayList<FiltersView.MediaFilterData> currentSearchFilters = new ArrayList<>();
     public DialogsSearchAdapter dialogsSearchAdapter;
     public StickerEmptyView emptyView;
@@ -96,17 +102,39 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 }
             }
         };
-        RecyclerListView recyclerListView = new RecyclerListView(context);
-        this.searchListView = recyclerListView;
-        recyclerListView.setPivotY(0.0f);
+        AnonymousClass2 r10 = new RecyclerListView(context) {
+            /* access modifiers changed from: protected */
+            public void dispatchDraw(Canvas canvas) {
+                int childCount = getChildCount();
+                for (int i = 0; i < childCount; i++) {
+                    View childAt = getChildAt(i);
+                    int position = SearchViewPager.this.searchlayoutManager.getPosition(childAt);
+                    int i2 = 0;
+                    while (true) {
+                        if (i2 >= SearchViewPager.this.currentAnimators.size()) {
+                            childAt.setAlpha(1.0f);
+                            break;
+                        } else if (SearchViewPager.this.currentAnimators.get(i2).setup(childAt, position)) {
+                            break;
+                        } else {
+                            i2++;
+                        }
+                    }
+                }
+                super.dispatchDraw(canvas);
+            }
+        };
+        this.searchListView = r10;
+        r10.setPivotY(0.0f);
         this.searchListView.setAdapter(this.dialogsSearchAdapter);
         this.searchListView.setVerticalScrollBarEnabled(true);
         this.searchListView.setInstantClick(true);
         this.searchListView.setVerticalScrollbarPosition(LocaleController.isRTL ? 1 : 2);
-        RecyclerListView recyclerListView2 = this.searchListView;
+        RecyclerListView recyclerListView = this.searchListView;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, 1, false);
         this.searchlayoutManager = linearLayoutManager;
-        recyclerListView2.setLayoutManager(linearLayoutManager);
+        recyclerListView.setLayoutManager(linearLayoutManager);
+        this.searchListView.setAnimateEmptyView(true, 0);
         this.searchListView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                 if (i == 1) {
@@ -132,7 +160,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         frameLayout.addView(this.searchListView);
         this.searchContainer.addView(this.noMediaFiltersSearchView);
         FilteredSearchView.LoadingView loadingView = new FilteredSearchView.LoadingView(context);
-        AnonymousClass3 r12 = new StickerEmptyView(context, loadingView) {
+        AnonymousClass4 r12 = new StickerEmptyView(context, loadingView) {
             public void setVisibility(int i) {
                 if (SearchViewPager.this.noMediaFiltersSearchView.getTag() != null) {
                     super.setVisibility(8);
@@ -226,6 +254,8 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 this.dialogsSearchAdapter.setFiltersDelegate(this.filteredSearchViewDelegate, false);
                 this.noMediaFiltersSearchView.animate().setListener((Animator.AnimatorListener) null).cancel();
                 this.noMediaFiltersSearchView.setDelegate((FilteredSearchView.Delegate) null, false);
+                this.emptyView.showProgress(!this.dialogsSearchAdapter.isSearching(), false);
+                this.emptyView.showProgress(this.dialogsSearchAdapter.isSearching(), false);
                 if (z) {
                     this.noMediaFiltersSearchView.setVisibility(8);
                 } else if (this.noMediaFiltersSearchView.getVisibility() != 8) {
@@ -690,5 +720,76 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SearchViewPager.messagesDeleted(int, java.util.ArrayList):void");
+    }
+
+    public void runResultsEnterAnimation() {
+        final HashSet hashSet = new HashSet();
+        int childCount = this.searchListView.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            hashSet.add(Integer.valueOf(this.searchlayoutManager.getPosition(this.searchListView.getChildAt(i))));
+        }
+        this.searchListView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            public boolean onPreDraw() {
+                SearchViewPager.this.searchListView.getViewTreeObserver().removeOnPreDrawListener(this);
+                int childCount = SearchViewPager.this.searchListView.getChildCount();
+                for (int i = 0; i < childCount; i++) {
+                    View childAt = SearchViewPager.this.searchListView.getChildAt(i);
+                    int position = SearchViewPager.this.searchlayoutManager.getPosition(childAt);
+                    if (!hashSet.contains(Integer.valueOf(position))) {
+                        SearchResultsEnterAnimator searchResultsEnterAnimator = new SearchResultsEnterAnimator();
+                        childAt.setAlpha(0.0f);
+                        searchResultsEnterAnimator.position = position;
+                        searchResultsEnterAnimator.valueAnimator.setStartDelay((long) ((int) ((((float) Math.min(SearchViewPager.this.searchListView.getMeasuredHeight(), Math.max(0, childAt.getTop()))) / ((float) SearchViewPager.this.searchListView.getMeasuredHeight())) * 100.0f)));
+                        searchResultsEnterAnimator.valueAnimator.setDuration(200);
+                        searchResultsEnterAnimator.valueAnimator.start();
+                    }
+                }
+                return true;
+            }
+        });
+    }
+
+    public void cancelEnterAnimation() {
+        while (this.currentAnimators.size() > 0) {
+            SearchResultsEnterAnimator searchResultsEnterAnimator = this.currentAnimators.get(0);
+            searchResultsEnterAnimator.valueAnimator.cancel();
+            this.currentAnimators.remove(searchResultsEnterAnimator);
+        }
+    }
+
+    private class SearchResultsEnterAnimator {
+        int position;
+        float progress;
+        final ValueAnimator valueAnimator;
+
+        private SearchResultsEnterAnimator() {
+            ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+            this.valueAnimator = ofFloat;
+            ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    SearchViewPager.SearchResultsEnterAnimator.this.lambda$new$0$SearchViewPager$SearchResultsEnterAnimator(valueAnimator);
+                }
+            });
+            this.valueAnimator.addListener(new AnimatorListenerAdapter(SearchViewPager.this) {
+                public void onAnimationEnd(Animator animator) {
+                    SearchResultsEnterAnimator searchResultsEnterAnimator = SearchResultsEnterAnimator.this;
+                    SearchViewPager.this.currentAnimators.remove(searchResultsEnterAnimator);
+                }
+            });
+            SearchViewPager.this.currentAnimators.add(this);
+        }
+
+        public /* synthetic */ void lambda$new$0$SearchViewPager$SearchResultsEnterAnimator(ValueAnimator valueAnimator2) {
+            this.progress = ((Float) valueAnimator2.getAnimatedValue()).floatValue();
+            SearchViewPager.this.searchListView.invalidate();
+        }
+
+        public boolean setup(View view, int i) {
+            if (this.position != i) {
+                return false;
+            }
+            view.setAlpha(this.progress);
+            return true;
+        }
     }
 }

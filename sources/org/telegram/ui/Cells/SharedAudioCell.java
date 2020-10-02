@@ -647,9 +647,11 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
 
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
+        StaticLayout staticLayout;
         if (this.viewType == 1) {
             this.description2TextPaint.setColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
         }
+        int i = 0;
         float f = 8.0f;
         if (this.dateLayout != null) {
             canvas.save();
@@ -659,7 +661,11 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         }
         if (this.titleLayout != null) {
             canvas.save();
-            canvas.translate((float) AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline), (float) this.titleY);
+            int dp = AndroidUtilities.dp(LocaleController.isRTL ? 8.0f : (float) AndroidUtilities.leftBaseline);
+            if (LocaleController.isRTL && (staticLayout = this.dateLayout) != null) {
+                i = staticLayout.getWidth() + AndroidUtilities.dp(4.0f);
+            }
+            canvas.translate((float) (dp + i), (float) this.titleY);
             this.titleLayout.draw(canvas);
             canvas.restore();
         }

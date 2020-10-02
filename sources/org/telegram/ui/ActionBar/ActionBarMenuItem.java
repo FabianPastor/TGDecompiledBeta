@@ -1002,7 +1002,7 @@ public class ActionBarMenuItem extends FrameLayout {
                     this.ignoreRequestLayout = true;
                     measureChildWithMargins(ActionBarMenuItem.this.searchFilterLayout, i, 0, i2, 0);
                     int measuredWidth2 = ActionBarMenuItem.this.searchFilterLayout.getVisibility() == 0 ? ActionBarMenuItem.this.searchFilterLayout.getMeasuredWidth() : 0;
-                    measureChildWithMargins(ActionBarMenuItem.this.searchField, i, measuredWidth2 + 0, i2, 0);
+                    measureChildWithMargins(ActionBarMenuItem.this.searchField, View.MeasureSpec.makeMeasureSpec(size2 - AndroidUtilities.dp(6.0f), 0), measuredWidth2 + 0, i2, 0);
                     this.ignoreRequestLayout = false;
                     setMeasuredDimension(Math.max(measuredWidth2 + ActionBarMenuItem.this.searchField.getMeasuredWidth(), size2), View.MeasureSpec.getSize(i2));
                 }
@@ -1175,7 +1175,7 @@ public class ActionBarMenuItem extends FrameLayout {
                 this.searchContainer.addView(this.searchFilterLayout, LayoutHelper.createFrame(-2, 32.0f, 16, 0.0f, 0.0f, 48.0f, 0.0f));
             } else {
                 this.searchContainer.addView(this.searchFilterLayout, LayoutHelper.createFrame(-2, 32.0f, 16, 0.0f, 0.0f, 48.0f, 0.0f));
-                this.searchContainer.addView(this.searchField, LayoutHelper.createFrame(-2, 36.0f, 16, 0.0f, 0.0f, 0.0f, 0.0f));
+                this.searchContainer.addView(this.searchField, LayoutHelper.createFrame(-2, 36.0f, 16, 0.0f, 0.0f, z2 ? 0.0f : 48.0f, 0.0f));
                 this.searchContainer.addView(this.searchFieldCaption, LayoutHelper.createFrame(-2, 36.0f, 21, 0.0f, 5.5f, 48.0f, 0.0f));
             }
             this.searchFilterLayout.setClipChildren(false);

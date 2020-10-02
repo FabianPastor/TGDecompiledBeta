@@ -6347,7 +6347,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             int r4 = r3 + 1
             r9.rowCount = r4
             r9.versionRow = r3
-            goto L_0x04a1
+            goto L_0x04c1
         L_0x019b:
             org.telegram.tgnet.TLRPC$UserFull r6 = r9.userInfo
             if (r6 == 0) goto L_0x01a7
@@ -6472,9 +6472,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             goto L_0x0299
         L_0x027b:
             int r3 = r9.lastSectionRow
-            if (r3 != r2) goto L_0x04a1
+            if (r3 != r2) goto L_0x04c1
             boolean r3 = r9.needSendMessage
-            if (r3 == 0) goto L_0x04a1
+            if (r3 == 0) goto L_0x04c1
             int r3 = r9.rowCount
             int r4 = r3 + 1
             r9.rowCount = r4
@@ -6485,16 +6485,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             int r4 = r3 + 1
             r9.rowCount = r4
             r9.lastSectionRow = r3
-            goto L_0x04a1
+            goto L_0x04c1
         L_0x0299:
             int r3 = r9.rowCount
             int r4 = r3 + 1
             r9.rowCount = r4
             r9.sharedMediaRow = r3
-            goto L_0x04a1
+            goto L_0x04c1
         L_0x02a3:
             int r4 = r9.chat_id
-            if (r4 == 0) goto L_0x04a1
+            if (r4 == 0) goto L_0x04c1
             org.telegram.tgnet.TLRPC$ChatFull r4 = r9.chatInfo
             if (r4 == 0) goto L_0x02bb
             java.lang.String r4 = r4.about
@@ -6508,47 +6508,63 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             org.telegram.tgnet.TLRPC$Chat r4 = r9.currentChat
             java.lang.String r4 = r4.username
             boolean r4 = android.text.TextUtils.isEmpty(r4)
-            if (r4 != 0) goto L_0x0303
+            if (r4 != 0) goto L_0x0323
         L_0x02c5:
+            boolean r4 = org.telegram.messenger.LocaleController.isRTL
+            if (r4 == 0) goto L_0x02e5
+            org.telegram.tgnet.TLRPC$Chat r4 = r9.currentChat
+            boolean r4 = org.telegram.messenger.ChatObject.isChannel(r4)
+            if (r4 == 0) goto L_0x02e5
+            org.telegram.tgnet.TLRPC$Chat r4 = r9.currentChat
+            boolean r4 = r4.megagroup
+            if (r4 != 0) goto L_0x02e5
+            org.telegram.tgnet.TLRPC$ChatFull r4 = r9.chatInfo
+            int r4 = r4.linked_chat_id
+            if (r4 == 0) goto L_0x02e5
+            int r4 = r9.rowCount
+            int r5 = r4 + 1
+            r9.rowCount = r5
+            r9.emptyRow = r4
+        L_0x02e5:
             int r4 = r9.rowCount
             int r5 = r4 + 1
             r9.rowCount = r5
             r9.infoHeaderRow = r4
             org.telegram.tgnet.TLRPC$ChatFull r4 = r9.chatInfo
-            if (r4 == 0) goto L_0x02f1
+            if (r4 == 0) goto L_0x0311
             java.lang.String r4 = r4.about
             boolean r4 = android.text.TextUtils.isEmpty(r4)
-            if (r4 != 0) goto L_0x02e1
+            if (r4 != 0) goto L_0x0301
             int r4 = r9.rowCount
             int r5 = r4 + 1
             r9.rowCount = r5
             r9.channelInfoRow = r4
-        L_0x02e1:
+        L_0x0301:
             org.telegram.tgnet.TLRPC$ChatFull r4 = r9.chatInfo
             org.telegram.tgnet.TLRPC$ChannelLocation r4 = r4.location
             boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_channelLocation
-            if (r4 == 0) goto L_0x02f1
+            if (r4 == 0) goto L_0x0311
             int r4 = r9.rowCount
             int r5 = r4 + 1
             r9.rowCount = r5
             r9.locationRow = r4
-        L_0x02f1:
+        L_0x0311:
             org.telegram.tgnet.TLRPC$Chat r4 = r9.currentChat
             java.lang.String r4 = r4.username
             boolean r4 = android.text.TextUtils.isEmpty(r4)
-            if (r4 != 0) goto L_0x0303
+            if (r4 != 0) goto L_0x0323
             int r4 = r9.rowCount
             int r5 = r4 + 1
             r9.rowCount = r5
             r9.usernameRow = r4
-        L_0x0303:
+        L_0x0323:
             int r4 = r9.infoHeaderRow
-            if (r4 == r2) goto L_0x030f
+            if (r4 == r2) goto L_0x032f
             int r4 = r9.rowCount
             int r5 = r4 + 1
             r9.rowCount = r5
             r9.notificationsDividerRow = r4
-        L_0x030f:
+        L_0x032f:
             int r4 = r9.rowCount
             int r5 = r4 + 1
             r9.rowCount = r5
@@ -6558,17 +6574,17 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r9.infoSectionRow = r5
             org.telegram.tgnet.TLRPC$Chat r4 = r9.currentChat
             boolean r4 = org.telegram.messenger.ChatObject.isChannel(r4)
-            if (r4 == 0) goto L_0x0365
+            if (r4 == 0) goto L_0x0385
             org.telegram.tgnet.TLRPC$Chat r4 = r9.currentChat
             boolean r5 = r4.megagroup
-            if (r5 != 0) goto L_0x0365
+            if (r5 != 0) goto L_0x0385
             org.telegram.tgnet.TLRPC$ChatFull r5 = r9.chatInfo
-            if (r5 == 0) goto L_0x0365
+            if (r5 == 0) goto L_0x0385
             boolean r4 = r4.creator
-            if (r4 != 0) goto L_0x0337
+            if (r4 != 0) goto L_0x0357
             boolean r4 = r5.can_view_participants
-            if (r4 == 0) goto L_0x0365
-        L_0x0337:
+            if (r4 == 0) goto L_0x0385
+        L_0x0357:
             int r4 = r9.rowCount
             int r5 = r4 + 1
             r9.rowCount = r5
@@ -6581,84 +6597,84 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r9.administratorsRow = r4
             org.telegram.tgnet.TLRPC$ChatFull r4 = r9.chatInfo
             int r5 = r4.banned_count
-            if (r5 != 0) goto L_0x0355
+            if (r5 != 0) goto L_0x0375
             int r4 = r4.kicked_count
-            if (r4 == 0) goto L_0x035d
-        L_0x0355:
+            if (r4 == 0) goto L_0x037d
+        L_0x0375:
             int r4 = r9.rowCount
             int r5 = r4 + 1
             r9.rowCount = r5
             r9.blockedUsersRow = r4
-        L_0x035d:
+        L_0x037d:
             int r4 = r9.rowCount
             int r5 = r4 + 1
             r9.rowCount = r5
             r9.membersSectionRow = r4
-        L_0x0365:
+        L_0x0385:
             org.telegram.tgnet.TLRPC$Chat r4 = r9.currentChat
             boolean r4 = org.telegram.messenger.ChatObject.isChannel(r4)
             r5 = 5
             r6 = 0
-            if (r4 == 0) goto L_0x0420
+            if (r4 == 0) goto L_0x0440
             org.telegram.tgnet.TLRPC$ChatFull r4 = r9.chatInfo
-            if (r4 == 0) goto L_0x0402
+            if (r4 == 0) goto L_0x0422
             org.telegram.tgnet.TLRPC$Chat r7 = r9.currentChat
             boolean r7 = r7.megagroup
-            if (r7 == 0) goto L_0x0402
+            if (r7 == 0) goto L_0x0422
             org.telegram.tgnet.TLRPC$ChatParticipants r4 = r4.participants
-            if (r4 == 0) goto L_0x0402
+            if (r4 == 0) goto L_0x0422
             java.util.ArrayList<org.telegram.tgnet.TLRPC$ChatParticipant> r4 = r4.participants
             boolean r4 = r4.isEmpty()
-            if (r4 != 0) goto L_0x0402
+            if (r4 != 0) goto L_0x0422
             org.telegram.tgnet.TLRPC$Chat r4 = r9.currentChat
             boolean r4 = org.telegram.messenger.ChatObject.isNotInChat(r4)
-            if (r4 != 0) goto L_0x03af
+            if (r4 != 0) goto L_0x03cf
             org.telegram.tgnet.TLRPC$Chat r4 = r9.currentChat
             boolean r7 = r4.megagroup
-            if (r7 == 0) goto L_0x03af
+            if (r7 == 0) goto L_0x03cf
             boolean r4 = org.telegram.messenger.ChatObject.canAddUsers(r4)
-            if (r4 == 0) goto L_0x03af
+            if (r4 == 0) goto L_0x03cf
             org.telegram.tgnet.TLRPC$ChatFull r4 = r9.chatInfo
-            if (r4 == 0) goto L_0x03a7
+            if (r4 == 0) goto L_0x03c7
             int r4 = r4.participants_count
             org.telegram.messenger.MessagesController r7 = r9.getMessagesController()
             int r7 = r7.maxMegagroupCount
-            if (r4 >= r7) goto L_0x03af
-        L_0x03a7:
+            if (r4 >= r7) goto L_0x03cf
+        L_0x03c7:
             int r4 = r9.rowCount
             int r7 = r4 + 1
             r9.rowCount = r7
             r9.addMemberRow = r4
-        L_0x03af:
+        L_0x03cf:
             org.telegram.tgnet.TLRPC$ChatFull r4 = r9.chatInfo
             org.telegram.tgnet.TLRPC$ChatParticipants r4 = r4.participants
             java.util.ArrayList<org.telegram.tgnet.TLRPC$ChatParticipant> r4 = r4.participants
             int r4 = r4.size()
-            if (r4 <= r5) goto L_0x03d6
-            if (r3 != 0) goto L_0x03be
-            goto L_0x03d6
-        L_0x03be:
+            if (r4 <= r5) goto L_0x03f6
+            if (r3 != 0) goto L_0x03de
+            goto L_0x03f6
+        L_0x03de:
             int r4 = r9.addMemberRow
-            if (r4 == r2) goto L_0x03ca
+            if (r4 == r2) goto L_0x03ea
             int r4 = r9.rowCount
             int r5 = r4 + 1
             r9.rowCount = r5
             r9.membersSectionRow = r4
-        L_0x03ca:
+        L_0x03ea:
             org.telegram.ui.Components.SharedMediaLayout r4 = r9.sharedMediaLayout
-            if (r4 == 0) goto L_0x0402
+            if (r4 == 0) goto L_0x0422
             java.util.ArrayList<java.lang.Integer> r5 = r9.sortedUsers
             org.telegram.tgnet.TLRPC$ChatFull r6 = r9.chatInfo
             r4.setChatUsers(r5, r6)
-            goto L_0x0402
-        L_0x03d6:
+            goto L_0x0422
+        L_0x03f6:
             int r4 = r9.addMemberRow
-            if (r4 != r2) goto L_0x03e2
+            if (r4 != r2) goto L_0x0402
             int r4 = r9.rowCount
             int r5 = r4 + 1
             r9.rowCount = r5
             r9.membersHeaderRow = r4
-        L_0x03e2:
+        L_0x0402:
             int r4 = r9.rowCount
             r9.membersStartRow = r4
             org.telegram.tgnet.TLRPC$ChatFull r5 = r9.chatInfo
@@ -6672,16 +6688,16 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r9.rowCount = r5
             r9.membersSectionRow = r4
             org.telegram.ui.Components.SharedMediaLayout r4 = r9.sharedMediaLayout
-            if (r4 == 0) goto L_0x0402
+            if (r4 == 0) goto L_0x0422
             r4.setChatUsers(r6, r6)
-        L_0x0402:
+        L_0x0422:
             int r4 = r9.lastSectionRow
-            if (r4 != r2) goto L_0x0497
+            if (r4 != r2) goto L_0x04b7
             org.telegram.tgnet.TLRPC$Chat r4 = r9.currentChat
             boolean r5 = r4.left
-            if (r5 == 0) goto L_0x0497
+            if (r5 == 0) goto L_0x04b7
             boolean r4 = r4.kicked
-            if (r4 != 0) goto L_0x0497
+            if (r4 != 0) goto L_0x04b7
             int r4 = r9.rowCount
             int r5 = r4 + 1
             r9.rowCount = r5
@@ -6689,56 +6705,56 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             int r4 = r5 + 1
             r9.rowCount = r4
             r9.lastSectionRow = r5
-            goto L_0x0497
-        L_0x0420:
+            goto L_0x04b7
+        L_0x0440:
             org.telegram.tgnet.TLRPC$ChatFull r4 = r9.chatInfo
-            if (r4 == 0) goto L_0x0497
+            if (r4 == 0) goto L_0x04b7
             org.telegram.tgnet.TLRPC$ChatParticipants r4 = r4.participants
             boolean r4 = r4 instanceof org.telegram.tgnet.TLRPC$TL_chatParticipantsForbidden
-            if (r4 != 0) goto L_0x0497
+            if (r4 != 0) goto L_0x04b7
             org.telegram.tgnet.TLRPC$Chat r4 = r9.currentChat
             boolean r4 = org.telegram.messenger.ChatObject.canAddUsers(r4)
-            if (r4 != 0) goto L_0x043c
+            if (r4 != 0) goto L_0x045c
             org.telegram.tgnet.TLRPC$Chat r4 = r9.currentChat
             org.telegram.tgnet.TLRPC$TL_chatBannedRights r4 = r4.default_banned_rights
-            if (r4 == 0) goto L_0x043c
+            if (r4 == 0) goto L_0x045c
             boolean r4 = r4.invite_users
-            if (r4 != 0) goto L_0x0444
-        L_0x043c:
+            if (r4 != 0) goto L_0x0464
+        L_0x045c:
             int r4 = r9.rowCount
             int r7 = r4 + 1
             r9.rowCount = r7
             r9.addMemberRow = r4
-        L_0x0444:
+        L_0x0464:
             org.telegram.tgnet.TLRPC$ChatFull r4 = r9.chatInfo
             org.telegram.tgnet.TLRPC$ChatParticipants r4 = r4.participants
             java.util.ArrayList<org.telegram.tgnet.TLRPC$ChatParticipant> r4 = r4.participants
             int r4 = r4.size()
-            if (r4 <= r5) goto L_0x046b
-            if (r3 != 0) goto L_0x0453
-            goto L_0x046b
-        L_0x0453:
+            if (r4 <= r5) goto L_0x048b
+            if (r3 != 0) goto L_0x0473
+            goto L_0x048b
+        L_0x0473:
             int r4 = r9.addMemberRow
-            if (r4 == r2) goto L_0x045f
+            if (r4 == r2) goto L_0x047f
             int r4 = r9.rowCount
             int r5 = r4 + 1
             r9.rowCount = r5
             r9.membersSectionRow = r4
-        L_0x045f:
+        L_0x047f:
             org.telegram.ui.Components.SharedMediaLayout r4 = r9.sharedMediaLayout
-            if (r4 == 0) goto L_0x0497
+            if (r4 == 0) goto L_0x04b7
             java.util.ArrayList<java.lang.Integer> r5 = r9.sortedUsers
             org.telegram.tgnet.TLRPC$ChatFull r6 = r9.chatInfo
             r4.setChatUsers(r5, r6)
-            goto L_0x0497
-        L_0x046b:
+            goto L_0x04b7
+        L_0x048b:
             int r4 = r9.addMemberRow
-            if (r4 != r2) goto L_0x0477
+            if (r4 != r2) goto L_0x0497
             int r4 = r9.rowCount
             int r5 = r4 + 1
             r9.rowCount = r5
             r9.membersHeaderRow = r4
-        L_0x0477:
+        L_0x0497:
             int r4 = r9.rowCount
             r9.membersStartRow = r4
             org.telegram.tgnet.TLRPC$ChatFull r5 = r9.chatInfo
@@ -6752,54 +6768,54 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r9.rowCount = r5
             r9.membersSectionRow = r4
             org.telegram.ui.Components.SharedMediaLayout r4 = r9.sharedMediaLayout
-            if (r4 == 0) goto L_0x0497
+            if (r4 == 0) goto L_0x04b7
             r4.setChatUsers(r6, r6)
-        L_0x0497:
-            if (r3 == 0) goto L_0x04a1
+        L_0x04b7:
+            if (r3 == 0) goto L_0x04c1
             int r3 = r9.rowCount
             int r4 = r3 + 1
             r9.rowCount = r4
             r9.sharedMediaRow = r3
-        L_0x04a1:
+        L_0x04c1:
             int r3 = r9.sharedMediaRow
-            if (r3 != r2) goto L_0x04ad
+            if (r3 != r2) goto L_0x04cd
             int r2 = r9.rowCount
             int r3 = r2 + 1
             r9.rowCount = r3
             r9.bottomPaddingRow = r2
-        L_0x04ad:
+        L_0x04cd:
             org.telegram.ui.ActionBar.ActionBar r2 = r9.actionBar
-            if (r2 == 0) goto L_0x04c3
+            if (r2 == 0) goto L_0x04e3
             int r2 = org.telegram.ui.ActionBar.ActionBar.getCurrentActionBarHeight()
             org.telegram.ui.ActionBar.ActionBar r3 = r9.actionBar
             boolean r3 = r3.getOccupyStatusBar()
-            if (r3 == 0) goto L_0x04c0
-            int r3 = org.telegram.messenger.AndroidUtilities.statusBarHeight
-            goto L_0x04c1
-        L_0x04c0:
-            r3 = 0
-        L_0x04c1:
-            int r2 = r2 + r3
-            goto L_0x04c4
-        L_0x04c3:
-            r2 = 0
-        L_0x04c4:
-            org.telegram.ui.Components.RecyclerListView r3 = r9.listView
             if (r3 == 0) goto L_0x04e0
+            int r3 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+            goto L_0x04e1
+        L_0x04e0:
+            r3 = 0
+        L_0x04e1:
+            int r2 = r2 + r3
+            goto L_0x04e4
+        L_0x04e3:
+            r2 = 0
+        L_0x04e4:
+            org.telegram.ui.Components.RecyclerListView r3 = r9.listView
+            if (r3 == 0) goto L_0x0500
             int r3 = r9.rowCount
-            if (r0 > r3) goto L_0x04e0
+            if (r0 > r3) goto L_0x0500
             int r0 = r9.listContentHeight
-            if (r0 == 0) goto L_0x04e2
+            if (r0 == 0) goto L_0x0502
             int r0 = r0 + r2
             r2 = 1118830592(0x42b00000, float:88.0)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r0 = r0 + r2
             org.telegram.ui.Components.RecyclerListView r2 = r9.listView
             int r2 = r2.getMeasuredHeight()
-            if (r0 >= r2) goto L_0x04e2
-        L_0x04e0:
+            if (r0 >= r2) goto L_0x0502
+        L_0x0500:
             r9.lastMeasuredContentWidth = r1
-        L_0x04e2:
+        L_0x0502:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ProfileActivity.updateRowsIds():void");

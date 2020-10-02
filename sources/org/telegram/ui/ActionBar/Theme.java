@@ -13883,14 +13883,14 @@ public class Theme {
                 return getDefaultColor(str);
             }
         }
-        if ("windowBackgroundWhite".equals(str) || "windowBackgroundGray".equals(str)) {
+        if ("windowBackgroundWhite".equals(str) || "windowBackgroundGray".equals(str) || "actionBarDefault".equals(str) || "actionBarDefaultArchived".equals(str)) {
             num2 = Integer.valueOf(num2.intValue() | -16777216);
         }
         return num2.intValue();
     }
 
     public static void setColor(String str, int i, boolean z) {
-        if (str.equals("chat_wallpaper") || str.equals("chat_wallpaper_gradient_to") || str.equals("windowBackgroundWhite") || str.equals("windowBackgroundGray")) {
+        if (str.equals("chat_wallpaper") || str.equals("chat_wallpaper_gradient_to") || str.equals("windowBackgroundWhite") || str.equals("windowBackgroundGray") || str.equals("actionBarDefault") || str.equals("actionBarDefaultArchived")) {
             i |= -16777216;
         }
         if (z) {

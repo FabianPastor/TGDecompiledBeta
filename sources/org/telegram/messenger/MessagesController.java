@@ -7780,7 +7780,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 if ((tLRPC$TL_messageViews.flags & 2) != 0) {
                     if (sparseIntArray2 == null) {
                         sparseIntArray2 = new SparseIntArray();
-                        sparseArray.put(i, sparseIntArray2);
+                        sparseArray2.put(i, sparseIntArray2);
                     }
                     sparseIntArray2.put(tLRPC$TL_messages_getMessagesViews.id.get(i2).intValue(), tLRPC$TL_messageViews.forwards);
                 }
