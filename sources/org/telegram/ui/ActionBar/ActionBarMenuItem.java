@@ -699,7 +699,9 @@ public class ActionBarMenuItem extends FrameLayout {
             if (!this.currentSearchFilters.isEmpty()) {
                 if (this.listener != null) {
                     for (int i = 0; i < this.currentSearchFilters.size(); i++) {
-                        this.listener.onSearchFilterCleared(this.currentSearchFilters.get(i));
+                        if (this.currentSearchFilters.get(i).removable) {
+                            this.listener.onSearchFilterCleared(this.currentSearchFilters.get(i));
+                        }
                     }
                 }
                 clearSearchFilters();
@@ -733,13 +735,15 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public void removeSearchFilter(FiltersView.MediaFilterData mediaFilterData) {
-        this.currentSearchFilters.remove(mediaFilterData);
-        int i = this.selectedFilterIndex;
-        if (i < 0 || i > this.currentSearchFilters.size() - 1) {
-            this.selectedFilterIndex = this.currentSearchFilters.size() - 1;
+        if (mediaFilterData.removable) {
+            this.currentSearchFilters.remove(mediaFilterData);
+            int i = this.selectedFilterIndex;
+            if (i < 0 || i > this.currentSearchFilters.size() - 1) {
+                this.selectedFilterIndex = this.currentSearchFilters.size() - 1;
+            }
+            onFiltersChanged();
+            this.searchField.hideActionMode();
         }
-        onFiltersChanged();
-        this.searchField.hideActionMode();
     }
 
     public void addSearchFilter(FiltersView.MediaFilterData mediaFilterData) {
@@ -749,7 +753,14 @@ public class ActionBarMenuItem extends FrameLayout {
     }
 
     public void clearSearchFilters() {
-        this.currentSearchFilters.clear();
+        int i = 0;
+        while (i < this.currentSearchFilters.size()) {
+            if (this.currentSearchFilters.get(i).removable) {
+                this.currentSearchFilters.remove(i);
+                i--;
+            }
+            i++;
+        }
         onFiltersChanged();
     }
 
@@ -854,9 +865,12 @@ public class ActionBarMenuItem extends FrameLayout {
         if (this.selectedFilterIndex != indexOf) {
             this.selectedFilterIndex = indexOf;
             onFiltersChanged();
-        } else if (!searchFilterView.selectedForDelete) {
-            searchFilterView.setSelectedForDelete(true);
+        } else if (!searchFilterView.getFilter().removable) {
         } else {
+            if (!searchFilterView.selectedForDelete) {
+                searchFilterView.setSelectedForDelete(true);
+                return;
+            }
             FiltersView.MediaFilterData filter = searchFilterView.getFilter();
             removeSearchFilter(filter);
             ActionBarMenuItemSearchListener actionBarMenuItemSearchListener = this.listener;
@@ -1089,10 +1103,10 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
 
                 public boolean onKeyDown(int i, KeyEvent keyEvent) {
-                    if (i != 67 || ActionBarMenuItem.this.searchField.length() != 0 || ((ActionBarMenuItem.this.searchFieldCaption.getVisibility() != 0 || ActionBarMenuItem.this.searchFieldCaption.length() <= 0) && ActionBarMenuItem.this.currentSearchFilters.isEmpty())) {
+                    if (i != 67 || ActionBarMenuItem.this.searchField.length() != 0 || ((ActionBarMenuItem.this.searchFieldCaption.getVisibility() != 0 || ActionBarMenuItem.this.searchFieldCaption.length() <= 0) && !ActionBarMenuItem.this.hasRemovableFilters())) {
                         return super.onKeyDown(i, keyEvent);
                     }
-                    if (!ActionBarMenuItem.this.currentSearchFilters.isEmpty()) {
+                    if (ActionBarMenuItem.this.hasRemovableFilters()) {
                         FiltersView.MediaFilterData mediaFilterData = (FiltersView.MediaFilterData) ActionBarMenuItem.this.currentSearchFilters.get(ActionBarMenuItem.this.currentSearchFilters.size() - 1);
                         ActionBarMenuItemSearchListener actionBarMenuItemSearchListener = ActionBarMenuItem.this.listener;
                         if (actionBarMenuItemSearchListener != null) {
@@ -1243,12 +1257,11 @@ public class ActionBarMenuItem extends FrameLayout {
     public /* synthetic */ void lambda$setIsSearchField$10$ActionBarMenuItem(View view) {
         if (this.searchField.length() != 0) {
             this.searchField.setText("");
-        } else if (!this.currentSearchFilters.isEmpty()) {
+        } else if (hasRemovableFilters()) {
             this.searchField.hideActionMode();
             for (int i = 0; i < this.currentSearchFilters.size(); i++) {
-                ActionBarMenuItemSearchListener actionBarMenuItemSearchListener = this.listener;
-                if (actionBarMenuItemSearchListener != null) {
-                    actionBarMenuItemSearchListener.onSearchFilterCleared(this.currentSearchFilters.get(i));
+                if (this.listener != null && this.currentSearchFilters.get(i).removable) {
+                    this.listener.onSearchFilterCleared(this.currentSearchFilters.get(i));
                 }
             }
             clearSearchFilters();
@@ -1256,9 +1269,9 @@ public class ActionBarMenuItem extends FrameLayout {
             TextView textView2 = this.searchFieldCaption;
             if (textView2 != null && textView2.getVisibility() == 0) {
                 this.searchFieldCaption.setVisibility(8);
-                ActionBarMenuItemSearchListener actionBarMenuItemSearchListener2 = this.listener;
-                if (actionBarMenuItemSearchListener2 != null) {
-                    actionBarMenuItemSearchListener2.onCaptionCleared();
+                ActionBarMenuItemSearchListener actionBarMenuItemSearchListener = this.listener;
+                if (actionBarMenuItemSearchListener != null) {
+                    actionBarMenuItemSearchListener.onCaptionCleared();
                 }
             }
         }
@@ -1273,7 +1286,7 @@ public class ActionBarMenuItem extends FrameLayout {
         if (this.clearButton == null) {
             return;
         }
-        if (!this.currentSearchFilters.isEmpty() || !TextUtils.isEmpty(this.searchField.getText()) || (((actionBarMenuItemSearchListener = this.listener) != null && actionBarMenuItemSearchListener.forceShowClear()) || ((textView2 = this.searchFieldCaption) != null && textView2.getVisibility() == 0))) {
+        if (hasRemovableFilters() || !TextUtils.isEmpty(this.searchField.getText()) || (((actionBarMenuItemSearchListener = this.listener) != null && actionBarMenuItemSearchListener.forceShowClear()) || ((textView2 = this.searchFieldCaption) != null && textView2.getVisibility() == 0))) {
             if (this.clearButton.getTag() == null) {
                 this.clearButton.setTag(1);
                 this.clearButton.clearAnimation();
@@ -1310,6 +1323,19 @@ public class ActionBarMenuItem extends FrameLayout {
 
     public /* synthetic */ void lambda$checkClearButton$11$ActionBarMenuItem() {
         this.clearButton.setVisibility(4);
+    }
+
+    /* access modifiers changed from: private */
+    public boolean hasRemovableFilters() {
+        if (this.currentSearchFilters.isEmpty()) {
+            return false;
+        }
+        for (int i = 0; i < this.currentSearchFilters.size(); i++) {
+            if (this.currentSearchFilters.get(i).removable) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setShowSearchProgress(boolean z) {
@@ -1519,6 +1545,11 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
+    public void collapseSearchFilters() {
+        this.selectedFilterIndex = -1;
+        onFiltersChanged();
+    }
+
     private static class SearchFilterView extends FrameLayout {
         BackupImageView avatarImageView;
         ImageView closeIconView;
@@ -1576,6 +1607,10 @@ public class ActionBarMenuItem extends FrameLayout {
                 Theme.setCombinedDrawableColor(this.thumbDrawable, Theme.getColor("avatar_actionBarIconBlue"), true);
             }
             this.avatarImageView.setAlpha(1.0f - this.selectedProgress);
+            FiltersView.MediaFilterData mediaFilterData = this.data;
+            if (mediaFilterData != null && mediaFilterData.filterType == 7) {
+                setData(mediaFilterData);
+            }
             invalidate();
         }
 
@@ -1586,7 +1621,8 @@ public class ActionBarMenuItem extends FrameLayout {
             this.thumbDrawable = createCircleDrawableWithIcon;
             Theme.setCombinedDrawableColor(createCircleDrawableWithIcon, Theme.getColor("avatar_backgroundBlue"), false);
             Theme.setCombinedDrawableColor(this.thumbDrawable, Theme.getColor("avatar_actionBarIconBlue"), true);
-            if (mediaFilterData.filterType == 4) {
+            int i = mediaFilterData.filterType;
+            if (i == 4) {
                 TLObject tLObject = mediaFilterData.chat;
                 if (tLObject instanceof TLRPC$User) {
                     TLRPC$User tLRPC$User = (TLRPC$User) tLObject;
@@ -1605,6 +1641,12 @@ public class ActionBarMenuItem extends FrameLayout {
                     this.avatarImageView.getImageReceiver().setRoundRadius(AndroidUtilities.dp(16.0f));
                     this.avatarImageView.getImageReceiver().setImage(ImageLocation.getForChat(tLRPC$Chat, false), "50_50", this.thumbDrawable, (String) null, tLRPC$Chat, 0);
                 }
+            } else if (i == 7) {
+                CombinedDrawable createCircleDrawableWithIcon3 = Theme.createCircleDrawableWithIcon(AndroidUtilities.dp(32.0f), NUM);
+                createCircleDrawableWithIcon3.setIconSize(AndroidUtilities.dp(16.0f), AndroidUtilities.dp(16.0f));
+                Theme.setCombinedDrawableColor(createCircleDrawableWithIcon3, Theme.getColor("avatar_backgroundArchived"), false);
+                Theme.setCombinedDrawableColor(createCircleDrawableWithIcon3, Theme.getColor("avatar_actionBarIconBlue"), true);
+                this.avatarImageView.setImageDrawable(createCircleDrawableWithIcon3);
             } else {
                 this.avatarImageView.setImageDrawable(this.thumbDrawable);
             }

@@ -7,7 +7,7 @@ import java.util.Map;
 
 public abstract class TLRPC$Message extends TLObject {
     public TLRPC$MessageAction action;
-    public String attachPath;
+    public String attachPath = "";
     public int date;
     public int destroyTime;
     public long dialog_id;
@@ -19,13 +19,13 @@ public abstract class TLRPC$Message extends TLObject {
     public TLRPC$Peer from_id;
     public boolean from_scheduled;
     public TLRPC$MessageFwdHeader fwd_from;
-    public int fwd_msg_id;
+    public int fwd_msg_id = 0;
     public long grouped_id;
     public int id;
     public boolean isThreadMessage;
     public int layer;
     public boolean legacy;
-    public int local_id;
+    public int local_id = 0;
     public TLRPC$MessageMedia media;
     public boolean media_unread;
     public boolean mentioned;
@@ -43,28 +43,18 @@ public abstract class TLRPC$Message extends TLObject {
     public TLRPC$ReplyMarkup reply_markup;
     public TLRPC$TL_messageReplyHeader reply_to;
     public int reqId;
-    public ArrayList<TLRPC$TL_restrictionReason> restriction_reason;
-    public int send_state;
+    public ArrayList<TLRPC$TL_restrictionReason> restriction_reason = new ArrayList<>();
+    public int send_state = 0;
     public int seq_in;
     public int seq_out;
     public boolean silent;
-    public int stickerVerified;
+    public int stickerVerified = 1;
     public int ttl;
     public boolean unread;
     public int via_bot_id;
     public String via_bot_name;
     public int views;
     public boolean with_my_score;
-
-    public TLRPC$Message() {
-        new ArrayList();
-        this.restriction_reason = new ArrayList<>();
-        this.send_state = 0;
-        this.fwd_msg_id = 0;
-        this.attachPath = "";
-        this.local_id = 0;
-        this.stickerVerified = 1;
-    }
 
     public static TLRPC$Message TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$Message tLRPC$Message;

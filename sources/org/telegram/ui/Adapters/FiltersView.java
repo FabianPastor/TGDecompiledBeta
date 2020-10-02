@@ -49,10 +49,10 @@ import org.telegram.ui.Components.RecyclerListView;
 
 public class FiltersView extends RecyclerListView {
     public static final MediaFilterData[] filters = {new MediaFilterData(NUM, NUM, LocaleController.getString("SharedMediaTab2", NUM), new TLRPC$TL_inputMessagesFilterPhotoVideo(), 0), new MediaFilterData(NUM, NUM, LocaleController.getString("SharedLinksTab2", NUM), new TLRPC$TL_inputMessagesFilterUrl(), 2), new MediaFilterData(NUM, NUM, LocaleController.getString("SharedFilesTab2", NUM), new TLRPC$TL_inputMessagesFilterDocument(), 1), new MediaFilterData(NUM, NUM, LocaleController.getString("SharedMusicTab2", NUM), new TLRPC$TL_inputMessagesFilterMusic(), 3), new MediaFilterData(NUM, NUM, LocaleController.getString("SharedVoiceTab2", NUM), new TLRPC$TL_inputMessagesFilterRoundVoice(), 5)};
-    private static final Pattern longDate = Pattern.compile("^([0-9]{1,2})(\\.| |\\\\)([0-9]{1,2})(\\.| |\\\\)([0-9]{1,4})$");
+    private static final Pattern longDate = Pattern.compile("^([0-9]{1,2})(\\.| |/|\\-)([0-9]{1,2})(\\.| |/|\\-)([0-9]{1,4})$");
     private static final Pattern monthYearOrDayPatter = Pattern.compile("(\\w{3,}) ([0-9]{0,4})");
     private static final int[] numberOfDaysEachMonth = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    private static final Pattern shortDate = Pattern.compile("^([0-9]{1,4})(\\.| |\\\\)([0-9]{1,4})$");
+    private static final Pattern shortDate = Pattern.compile("^([0-9]{1,4})(\\.| |/|\\-)([0-9]{1,4})$");
     private static final Pattern yearOrDayAndMonthPatter = Pattern.compile("([0-9]{0,4}) (\\w{2,})");
     private static final Pattern yearPatter = Pattern.compile("20[0-9]{1,2}");
     DiffUtil.Callback diffUtilsCallback = new DiffUtil.Callback() {
@@ -344,6 +344,9 @@ public class FiltersView extends RecyclerListView {
                                 int parseInt3 = Integer.parseInt(group3);
                                 int parseInt4 = Integer.parseInt(group4) - 1;
                                 int parseInt5 = Integer.parseInt(group5);
+                                if (parseInt5 >= 10 && parseInt5 <= 99) {
+                                    parseInt5 += 2000;
+                                }
                                 int i16 = Calendar.getInstance().get(1);
                                 if (validDateForMont(parseInt3 - 1, parseInt4) && parseInt5 >= 2013 && parseInt5 <= i16) {
                                     Calendar instance4 = Calendar.getInstance();
@@ -650,6 +653,7 @@ public class FiltersView extends RecyclerListView {
         public final TLRPC$MessagesFilter filter;
         public final int filterType;
         public final int iconResFilled;
+        public boolean removable = true;
         public final String title;
 
         public MediaFilterData(int i, int i2, String str, TLRPC$MessagesFilter tLRPC$MessagesFilter, int i3) {

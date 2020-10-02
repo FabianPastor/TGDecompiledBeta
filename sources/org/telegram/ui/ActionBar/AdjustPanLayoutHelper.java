@@ -12,6 +12,7 @@ import android.view.ViewTreeObserver;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import java.util.ArrayList;
+import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -47,7 +48,7 @@ public class AdjustPanLayoutHelper {
                     adjustPanLayoutHelper3.previousStartOffset = adjustPanLayoutHelper3.startOffset();
                 }
                 return true;
-            } else if (!adjustPanLayoutHelper.heightAnimationEnabled()) {
+            } else if (!adjustPanLayoutHelper.heightAnimationEnabled() || Math.abs(AdjustPanLayoutHelper.this.previousHeight - height) < AndroidUtilities.dp(20.0f)) {
                 AdjustPanLayoutHelper adjustPanLayoutHelper4 = AdjustPanLayoutHelper.this;
                 adjustPanLayoutHelper4.previousHeight = height;
                 adjustPanLayoutHelper4.previousContentHeight = adjustPanLayoutHelper4.contentView.getHeight();

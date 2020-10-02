@@ -10,6 +10,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -61,6 +62,7 @@ public class ViewPagerFixed extends FrameLayout {
     /* access modifiers changed from: private */
     public boolean maybeStartTracking;
     int nextPosition;
+    private Rect rect = new Rect();
     /* access modifiers changed from: private */
     public boolean startedTracking;
     private int startedTrackingPointerId;
@@ -294,6 +296,10 @@ public class ViewPagerFixed extends FrameLayout {
             this.velocityTracker.addMovement(motionEvent);
         }
         if (motionEvent != null && motionEvent.getAction() == 0 && checkTabsAnimationInProgress()) {
+            View findScrollingChild = findScrollingChild(this, motionEvent.getX(), motionEvent.getY());
+            if (findScrollingChild != null && (findScrollingChild.canScrollHorizontally(1) || findScrollingChild.canScrollHorizontally(-1))) {
+                return false;
+            }
             this.startedTracking = true;
             this.startedTrackingPointerId = motionEvent.getPointerId(0);
             int x = (int) motionEvent.getX();
@@ -594,11 +600,10 @@ public class ViewPagerFixed extends FrameLayout {
         if (i == 0) {
             return false;
         }
-        if (this.tabsAnimationInProgress) {
-            return true;
+        if (!this.tabsAnimationInProgress && !this.startedTracking) {
+            boolean z = i > 0;
+            return (z || this.currentPosition != 0) && (!z || this.currentPosition != this.adapter.getItemCount() - 1);
         }
-        boolean z = i > 0;
-        return (z || this.currentPosition != 0) && (!z || this.currentPosition != this.adapter.getItemCount() - 1);
     }
 
     public View getCurrentView() {
@@ -1464,5 +1469,31 @@ public class ViewPagerFixed extends FrameLayout {
             }
             invalidate();
         }
+    }
+
+    private View findScrollingChild(ViewGroup viewGroup, float f, float f2) {
+        int childCount = viewGroup.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View childAt = viewGroup.getChildAt(i);
+            if (childAt.getVisibility() == 0) {
+                childAt.getHitRect(this.rect);
+                if (!this.rect.contains((int) f, (int) f2)) {
+                    continue;
+                } else if (childAt.canScrollHorizontally(-1)) {
+                    return childAt;
+                } else {
+                    if (childAt instanceof ViewGroup) {
+                        Rect rect2 = this.rect;
+                        View findScrollingChild = findScrollingChild((ViewGroup) childAt, f - ((float) rect2.left), f2 - ((float) rect2.top));
+                        if (findScrollingChild != null) {
+                            return findScrollingChild;
+                        }
+                    } else {
+                        continue;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

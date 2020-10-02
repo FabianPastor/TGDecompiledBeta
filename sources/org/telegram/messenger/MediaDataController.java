@@ -72,7 +72,6 @@ import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_inputDocument;
 import org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName;
 import org.telegram.tgnet.TLRPC$TL_inputMessagesFilterDocument;
-import org.telegram.tgnet.TLRPC$TL_inputMessagesFilterEmpty;
 import org.telegram.tgnet.TLRPC$TL_inputMessagesFilterGif;
 import org.telegram.tgnet.TLRPC$TL_inputMessagesFilterMusic;
 import org.telegram.tgnet.TLRPC$TL_inputMessagesFilterPhotoVideo;
@@ -3627,221 +3626,370 @@ public class MediaDataController extends BaseController {
         }
     }
 
-    private void searchMessagesInChat(String str, long j, long j2, int i, int i2, int i3, boolean z, TLRPC$User tLRPC$User, boolean z2) {
-        long j3;
-        int i4;
-        boolean z3;
-        String str2;
-        long j4;
-        int i5;
-        long j5;
-        int i6;
-        long j6 = j;
-        long j7 = j2;
-        int i7 = i2;
-        TLRPC$User tLRPC$User2 = tLRPC$User;
-        boolean z4 = !z;
-        if (this.reqId != 0) {
-            getConnectionsManager().cancelRequest(this.reqId, true);
-            this.reqId = 0;
-        }
-        if (this.mergeReqId != 0) {
-            getConnectionsManager().cancelRequest(this.mergeReqId, true);
-            this.mergeReqId = 0;
-        }
-        if (str != null) {
-            if (z4) {
-                boolean[] zArr = this.messagesSearchEndReached;
-                zArr[1] = false;
-                zArr[0] = false;
-                int[] iArr = this.messagesSearchCount;
-                iArr[1] = 0;
-                iArr[0] = 0;
-                this.searchResultMessages.clear();
-                this.searchResultMessagesMap[0].clear();
-                this.searchResultMessagesMap[1].clear();
-                getNotificationCenter().postNotificationName(NotificationCenter.chatSearchResultsLoading, Integer.valueOf(i));
-            }
-            z3 = z4;
-            j3 = j6;
-            i4 = 0;
-            str2 = str;
-        } else if (!this.searchResultMessages.isEmpty()) {
-            if (i7 == 1) {
-                int i8 = this.lastReturnedNum + 1;
-                this.lastReturnedNum = i8;
-                if (i8 < this.searchResultMessages.size()) {
-                    MessageObject messageObject = this.searchResultMessages.get(this.lastReturnedNum);
-                    NotificationCenter notificationCenter = getNotificationCenter();
-                    int i9 = NotificationCenter.chatSearchResultsAvailable;
-                    int[] iArr2 = this.messagesSearchCount;
-                    notificationCenter.postNotificationName(i9, Integer.valueOf(i), Integer.valueOf(messageObject.getId()), Integer.valueOf(getMask()), Long.valueOf(messageObject.getDialogId()), Integer.valueOf(this.lastReturnedNum), Integer.valueOf(iArr2[0] + iArr2[1]), Boolean.valueOf(z2));
-                    return;
-                }
-                boolean[] zArr2 = this.messagesSearchEndReached;
-                if (!zArr2[0] || j7 != 0 || !zArr2[1]) {
-                    str2 = this.lastSearchQuery;
-                    ArrayList<MessageObject> arrayList = this.searchResultMessages;
-                    MessageObject messageObject2 = arrayList.get(arrayList.size() - 1);
-                    if (messageObject2.getDialogId() != j6 || this.messagesSearchEndReached[0]) {
-                        i6 = messageObject2.getDialogId() == j7 ? messageObject2.getId() : 0;
-                        this.messagesSearchEndReached[1] = false;
-                        j5 = j7;
-                    } else {
-                        i6 = messageObject2.getId();
-                        j5 = j6;
-                    }
-                    j3 = j5;
-                    i4 = i6;
-                    z3 = false;
-                } else {
-                    this.lastReturnedNum--;
-                    return;
-                }
-            } else if (i7 == 2) {
-                int i10 = this.lastReturnedNum - 1;
-                this.lastReturnedNum = i10;
-                if (i10 < 0) {
-                    this.lastReturnedNum = 0;
-                    return;
-                }
-                if (i10 >= this.searchResultMessages.size()) {
-                    this.lastReturnedNum = this.searchResultMessages.size() - 1;
-                }
-                MessageObject messageObject3 = this.searchResultMessages.get(this.lastReturnedNum);
-                NotificationCenter notificationCenter2 = getNotificationCenter();
-                int i11 = NotificationCenter.chatSearchResultsAvailable;
-                int[] iArr3 = this.messagesSearchCount;
-                notificationCenter2.postNotificationName(i11, Integer.valueOf(i), Integer.valueOf(messageObject3.getId()), Integer.valueOf(getMask()), Long.valueOf(messageObject3.getDialogId()), Integer.valueOf(this.lastReturnedNum), Integer.valueOf(iArr3[0] + iArr3[1]), Boolean.valueOf(z2));
-                return;
-            } else {
-                return;
-            }
-        } else {
-            return;
-        }
-        boolean[] zArr3 = this.messagesSearchEndReached;
-        if (!zArr3[0] || zArr3[1]) {
-            j4 = 0;
-        } else {
-            j4 = 0;
-            if (j7 != 0) {
-                j3 = j7;
-            }
-        }
-        String str3 = "";
-        if (j3 != j6 || !z3) {
-            i5 = i4;
-        } else if (j7 != j4) {
-            TLRPC$InputPeer inputPeer = getMessagesController().getInputPeer((int) j7);
-            if (inputPeer != null) {
-                TLRPC$TL_messages_search tLRPC$TL_messages_search = new TLRPC$TL_messages_search();
-                tLRPC$TL_messages_search.peer = inputPeer;
-                this.lastMergeDialogId = j7;
-                tLRPC$TL_messages_search.limit = 1;
-                if (str2 == null) {
-                    str2 = str3;
-                }
-                tLRPC$TL_messages_search.q = str2;
-                if (tLRPC$User2 != null) {
-                    tLRPC$TL_messages_search.from_id = getMessagesController().getInputUser(tLRPC$User2);
-                    tLRPC$TL_messages_search.flags = 1 | tLRPC$TL_messages_search.flags;
-                }
-                tLRPC$TL_messages_search.filter = new TLRPC$TL_inputMessagesFilterEmpty();
-                $$Lambda$MediaDataController$Li6KAu_xzpkDJVx7SoVupKAYWs4 r15 = r0;
-                $$Lambda$MediaDataController$Li6KAu_xzpkDJVx7SoVupKAYWs4 r0 = new RequestDelegate(j2, tLRPC$TL_messages_search, j, i, i2, i3, tLRPC$User, z2) {
-                    public final /* synthetic */ long f$1;
-                    public final /* synthetic */ TLRPC$TL_messages_search f$2;
-                    public final /* synthetic */ long f$3;
-                    public final /* synthetic */ int f$4;
-                    public final /* synthetic */ int f$5;
-                    public final /* synthetic */ int f$6;
-                    public final /* synthetic */ TLRPC$User f$7;
-                    public final /* synthetic */ boolean f$8;
-
-                    {
-                        this.f$1 = r2;
-                        this.f$2 = r4;
-                        this.f$3 = r5;
-                        this.f$4 = r7;
-                        this.f$5 = r8;
-                        this.f$6 = r9;
-                        this.f$7 = r10;
-                        this.f$8 = r11;
-                    }
-
-                    public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        MediaDataController.this.lambda$searchMessagesInChat$68$MediaDataController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, tLObject, tLRPC$TL_error);
-                    }
-                };
-                this.mergeReqId = getConnectionsManager().sendRequest(tLRPC$TL_messages_search, r15, 2);
-                return;
-            }
-            return;
-        } else {
-            i5 = i4;
-            this.lastMergeDialogId = 0;
-            this.messagesSearchEndReached[1] = true;
-            this.messagesSearchCount[1] = 0;
-        }
-        TLRPC$TL_messages_search tLRPC$TL_messages_search2 = new TLRPC$TL_messages_search();
-        TLRPC$InputPeer inputPeer2 = getMessagesController().getInputPeer((int) j3);
-        tLRPC$TL_messages_search2.peer = inputPeer2;
-        if (inputPeer2 != null) {
-            this.lastGuid = i;
-            this.lastDialogId = j6;
-            this.lastSearchUser = tLRPC$User2;
-            this.lastReplyMessageId = i3;
-            tLRPC$TL_messages_search2.limit = 21;
-            if (str2 != null) {
-                str3 = str2;
-            }
-            tLRPC$TL_messages_search2.q = str3;
-            tLRPC$TL_messages_search2.offset_id = i5;
-            if (tLRPC$User2 != null) {
-                tLRPC$TL_messages_search2.from_id = getMessagesController().getInputUser(tLRPC$User2);
-                tLRPC$TL_messages_search2.flags |= 1;
-            }
-            int i12 = this.lastReplyMessageId;
-            if (i12 != 0) {
-                tLRPC$TL_messages_search2.top_msg_id = i12;
-                tLRPC$TL_messages_search2.flags |= 2;
-            }
-            tLRPC$TL_messages_search2.filter = new TLRPC$TL_inputMessagesFilterEmpty();
-            int i13 = this.lastReqId + 1;
-            this.lastReqId = i13;
-            this.lastSearchQuery = str2;
-            $$Lambda$MediaDataController$aJiWf9vmVAb9fcSBedV4iGEpYx8 r16 = r0;
-            ConnectionsManager connectionsManager = getConnectionsManager();
-            $$Lambda$MediaDataController$aJiWf9vmVAb9fcSBedV4iGEpYx8 r02 = new RequestDelegate(i13, z2, tLRPC$TL_messages_search2, j3, j, i, j2, i3, tLRPC$User) {
-                public final /* synthetic */ int f$1;
-                public final /* synthetic */ boolean f$2;
-                public final /* synthetic */ TLRPC$TL_messages_search f$3;
-                public final /* synthetic */ long f$4;
-                public final /* synthetic */ long f$5;
-                public final /* synthetic */ int f$6;
-                public final /* synthetic */ long f$7;
-                public final /* synthetic */ int f$8;
-                public final /* synthetic */ TLRPC$User f$9;
-
-                {
-                    this.f$1 = r2;
-                    this.f$2 = r3;
-                    this.f$3 = r4;
-                    this.f$4 = r5;
-                    this.f$5 = r7;
-                    this.f$6 = r9;
-                    this.f$7 = r10;
-                    this.f$8 = r12;
-                    this.f$9 = r13;
-                }
-
-                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                    MediaDataController.this.lambda$searchMessagesInChat$70$MediaDataController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, tLObject, tLRPC$TL_error);
-                }
-            };
-            this.reqId = connectionsManager.sendRequest(tLRPC$TL_messages_search2, r16, 2);
-        }
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x023d A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x023e  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    private void searchMessagesInChat(java.lang.String r20, long r21, long r23, int r25, int r26, int r27, boolean r28, org.telegram.tgnet.TLRPC$User r29, boolean r30) {
+        /*
+            r19 = this;
+            r15 = r19
+            r8 = r21
+            r11 = r23
+            r10 = r26
+            r14 = r29
+            r0 = 1
+            r1 = r28 ^ 1
+            int r2 = r15.reqId
+            r3 = 0
+            if (r2 == 0) goto L_0x001d
+            org.telegram.tgnet.ConnectionsManager r2 = r19.getConnectionsManager()
+            int r4 = r15.reqId
+            r2.cancelRequest(r4, r0)
+            r15.reqId = r3
+        L_0x001d:
+            int r2 = r15.mergeReqId
+            if (r2 == 0) goto L_0x002c
+            org.telegram.tgnet.ConnectionsManager r2 = r19.getConnectionsManager()
+            int r4 = r15.mergeReqId
+            r2.cancelRequest(r4, r0)
+            r15.mergeReqId = r3
+        L_0x002c:
+            r13 = 2
+            if (r20 != 0) goto L_0x0166
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r15.searchResultMessages
+            boolean r1 = r1.isEmpty()
+            if (r1 == 0) goto L_0x0038
+            return
+        L_0x0038:
+            r2 = 5
+            r6 = 4
+            r7 = 3
+            r4 = 7
+            if (r10 != r0) goto L_0x00f3
+            int r5 = r15.lastReturnedNum
+            int r5 = r5 + r0
+            r15.lastReturnedNum = r5
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r15.searchResultMessages
+            int r1 = r1.size()
+            if (r5 >= r1) goto L_0x00a1
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r15.searchResultMessages
+            int r5 = r15.lastReturnedNum
+            java.lang.Object r1 = r1.get(r5)
+            org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
+            org.telegram.messenger.NotificationCenter r5 = r19.getNotificationCenter()
+            int r8 = org.telegram.messenger.NotificationCenter.chatSearchResultsAvailable
+            java.lang.Object[] r4 = new java.lang.Object[r4]
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r25)
+            r4[r3] = r9
+            int r9 = r1.getId()
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r4[r0] = r9
+            int r9 = r19.getMask()
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r4[r13] = r9
+            long r9 = r1.getDialogId()
+            java.lang.Long r1 = java.lang.Long.valueOf(r9)
+            r4[r7] = r1
+            int r1 = r15.lastReturnedNum
+            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+            r4[r6] = r1
+            int[] r1 = r15.messagesSearchCount
+            r3 = r1[r3]
+            r0 = r1[r0]
+            int r3 = r3 + r0
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r3)
+            r4[r2] = r0
+            java.lang.Boolean r0 = java.lang.Boolean.valueOf(r30)
+            r1 = 6
+            r4[r1] = r0
+            r5.postNotificationName(r8, r4)
+            return
+        L_0x00a1:
+            boolean[] r1 = r15.messagesSearchEndReached
+            boolean r2 = r1[r3]
+            if (r2 == 0) goto L_0x00b7
+            r4 = 0
+            int r2 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
+            if (r2 != 0) goto L_0x00b7
+            boolean r1 = r1[r0]
+            if (r1 == 0) goto L_0x00b7
+            int r1 = r15.lastReturnedNum
+            int r1 = r1 - r0
+            r15.lastReturnedNum = r1
+            return
+        L_0x00b7:
+            java.lang.String r1 = r15.lastSearchQuery
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r15.searchResultMessages
+            int r4 = r2.size()
+            int r4 = r4 - r0
+            java.lang.Object r2 = r2.get(r4)
+            org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
+            long r4 = r2.getDialogId()
+            int r6 = (r4 > r8 ? 1 : (r4 == r8 ? 0 : -1))
+            if (r6 != 0) goto L_0x00da
+            boolean[] r4 = r15.messagesSearchEndReached
+            boolean r4 = r4[r3]
+            if (r4 != 0) goto L_0x00da
+            int r2 = r2.getId()
+            r4 = r8
+            goto L_0x00ed
+        L_0x00da:
+            long r4 = r2.getDialogId()
+            int r6 = (r4 > r11 ? 1 : (r4 == r11 ? 0 : -1))
+            if (r6 != 0) goto L_0x00e7
+            int r2 = r2.getId()
+            goto L_0x00e8
+        L_0x00e7:
+            r2 = 0
+        L_0x00e8:
+            boolean[] r4 = r15.messagesSearchEndReached
+            r4[r0] = r3
+            r4 = r11
+        L_0x00ed:
+            r5 = r4
+            r4 = r2
+            r2 = r1
+            r1 = 0
+            goto L_0x019c
+        L_0x00f3:
+            if (r10 != r13) goto L_0x0165
+            int r1 = r15.lastReturnedNum
+            int r1 = r1 - r0
+            r15.lastReturnedNum = r1
+            if (r1 >= 0) goto L_0x00ff
+            r15.lastReturnedNum = r3
+            return
+        L_0x00ff:
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r5 = r15.searchResultMessages
+            int r5 = r5.size()
+            if (r1 < r5) goto L_0x0110
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r15.searchResultMessages
+            int r1 = r1.size()
+            int r1 = r1 - r0
+            r15.lastReturnedNum = r1
+        L_0x0110:
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r15.searchResultMessages
+            int r5 = r15.lastReturnedNum
+            java.lang.Object r1 = r1.get(r5)
+            org.telegram.messenger.MessageObject r1 = (org.telegram.messenger.MessageObject) r1
+            org.telegram.messenger.NotificationCenter r5 = r19.getNotificationCenter()
+            int r8 = org.telegram.messenger.NotificationCenter.chatSearchResultsAvailable
+            java.lang.Object[] r4 = new java.lang.Object[r4]
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r25)
+            r4[r3] = r9
+            int r9 = r1.getId()
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r4[r0] = r9
+            int r9 = r19.getMask()
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
+            r4[r13] = r9
+            long r9 = r1.getDialogId()
+            java.lang.Long r1 = java.lang.Long.valueOf(r9)
+            r4[r7] = r1
+            int r1 = r15.lastReturnedNum
+            java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
+            r4[r6] = r1
+            int[] r1 = r15.messagesSearchCount
+            r3 = r1[r3]
+            r0 = r1[r0]
+            int r3 = r3 + r0
+            java.lang.Integer r0 = java.lang.Integer.valueOf(r3)
+            r4[r2] = r0
+            java.lang.Boolean r0 = java.lang.Boolean.valueOf(r30)
+            r1 = 6
+            r4[r1] = r0
+            r5.postNotificationName(r8, r4)
+        L_0x0165:
+            return
+        L_0x0166:
+            if (r1 == 0) goto L_0x0198
+            boolean[] r2 = r15.messagesSearchEndReached
+            r2[r0] = r3
+            r2[r3] = r3
+            int[] r2 = r15.messagesSearchCount
+            r2[r0] = r3
+            r2[r3] = r3
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r15.searchResultMessages
+            r2.clear()
+            android.util.SparseArray<org.telegram.messenger.MessageObject>[] r2 = r15.searchResultMessagesMap
+            r2 = r2[r3]
+            r2.clear()
+            android.util.SparseArray<org.telegram.messenger.MessageObject>[] r2 = r15.searchResultMessagesMap
+            r2 = r2[r0]
+            r2.clear()
+            org.telegram.messenger.NotificationCenter r2 = r19.getNotificationCenter()
+            int r4 = org.telegram.messenger.NotificationCenter.chatSearchResultsLoading
+            java.lang.Object[] r5 = new java.lang.Object[r0]
+            java.lang.Integer r6 = java.lang.Integer.valueOf(r25)
+            r5[r3] = r6
+            r2.postNotificationName(r4, r5)
+        L_0x0198:
+            r2 = r20
+            r5 = r8
+            r4 = 0
+        L_0x019c:
+            boolean[] r7 = r15.messagesSearchEndReached
+            boolean r18 = r7[r3]
+            if (r18 == 0) goto L_0x01ae
+            boolean r7 = r7[r0]
+            if (r7 != 0) goto L_0x01ae
+            r16 = 0
+            int r7 = (r11 > r16 ? 1 : (r11 == r16 ? 0 : -1))
+            if (r7 == 0) goto L_0x01b0
+            r6 = r11
+            goto L_0x01b1
+        L_0x01ae:
+            r16 = 0
+        L_0x01b0:
+            r6 = r5
+        L_0x01b1:
+            java.lang.String r5 = ""
+            int r18 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
+            if (r18 != 0) goto L_0x022a
+            if (r1 == 0) goto L_0x022a
+            int r1 = (r11 > r16 ? 1 : (r11 == r16 ? 0 : -1))
+            if (r1 == 0) goto L_0x021b
+            org.telegram.messenger.MessagesController r1 = r19.getMessagesController()
+            int r3 = (int) r11
+            org.telegram.tgnet.TLRPC$InputPeer r1 = r1.getInputPeer((int) r3)
+            if (r1 != 0) goto L_0x01c9
+            return
+        L_0x01c9:
+            org.telegram.tgnet.TLRPC$TL_messages_search r7 = new org.telegram.tgnet.TLRPC$TL_messages_search
+            r7.<init>()
+            r7.peer = r1
+            r15.lastMergeDialogId = r11
+            r7.limit = r0
+            if (r2 == 0) goto L_0x01d7
+            goto L_0x01d8
+        L_0x01d7:
+            r2 = r5
+        L_0x01d8:
+            r7.q = r2
+            if (r14 == 0) goto L_0x01eb
+            org.telegram.messenger.MessagesController r1 = r19.getMessagesController()
+            org.telegram.tgnet.TLRPC$InputUser r1 = r1.getInputUser((org.telegram.tgnet.TLRPC$User) r14)
+            r7.from_id = r1
+            int r1 = r7.flags
+            r0 = r0 | r1
+            r7.flags = r0
+        L_0x01eb:
+            org.telegram.tgnet.TLRPC$TL_inputMessagesFilterEmpty r0 = new org.telegram.tgnet.TLRPC$TL_inputMessagesFilterEmpty
+            r0.<init>()
+            r7.filter = r0
+            org.telegram.tgnet.ConnectionsManager r5 = r19.getConnectionsManager()
+            org.telegram.messenger.-$$Lambda$MediaDataController$Li6KAu_xzpkDJVx7SoVupKAYWs4 r6 = new org.telegram.messenger.-$$Lambda$MediaDataController$Li6KAu_xzpkDJVx7SoVupKAYWs4
+            r0 = r6
+            r1 = r19
+            r2 = r23
+            r4 = r7
+            r11 = r5
+            r12 = r6
+            r5 = r21
+            r9 = r7
+            r7 = r25
+            r8 = r26
+            r10 = r9
+            r9 = r27
+            r13 = r10
+            r10 = r29
+            r14 = r11
+            r11 = r30
+            r0.<init>(r2, r4, r5, r7, r8, r9, r10, r11)
+            r0 = 2
+            int r0 = r14.sendRequest(r13, r12, r0)
+            r15.mergeReqId = r0
+            return
+        L_0x021b:
+            r10 = r4
+            r3 = 0
+            r15.lastMergeDialogId = r3
+            boolean[] r3 = r15.messagesSearchEndReached
+            r3[r0] = r0
+            int[] r3 = r15.messagesSearchCount
+            r1 = 0
+            r3[r0] = r1
+            goto L_0x022b
+        L_0x022a:
+            r10 = r4
+        L_0x022b:
+            org.telegram.tgnet.TLRPC$TL_messages_search r13 = new org.telegram.tgnet.TLRPC$TL_messages_search
+            r13.<init>()
+            org.telegram.messenger.MessagesController r1 = r19.getMessagesController()
+            int r3 = (int) r6
+            org.telegram.tgnet.TLRPC$InputPeer r1 = r1.getInputPeer((int) r3)
+            r13.peer = r1
+            if (r1 != 0) goto L_0x023e
+            return
+        L_0x023e:
+            r4 = r25
+            r15.lastGuid = r4
+            r15.lastDialogId = r8
+            r15.lastSearchUser = r14
+            r3 = r27
+            r15.lastReplyMessageId = r3
+            r1 = 21
+            r13.limit = r1
+            if (r2 == 0) goto L_0x0251
+            r5 = r2
+        L_0x0251:
+            r13.q = r5
+            r1 = r10
+            r13.offset_id = r1
+            if (r14 == 0) goto L_0x0267
+            org.telegram.messenger.MessagesController r1 = r19.getMessagesController()
+            org.telegram.tgnet.TLRPC$InputUser r1 = r1.getInputUser((org.telegram.tgnet.TLRPC$User) r14)
+            r13.from_id = r1
+            int r1 = r13.flags
+            r1 = r1 | r0
+            r13.flags = r1
+        L_0x0267:
+            int r1 = r15.lastReplyMessageId
+            if (r1 == 0) goto L_0x0276
+            r13.top_msg_id = r1
+            int r1 = r13.flags
+            r16 = 2
+            r1 = r1 | 2
+            r13.flags = r1
+            goto L_0x0278
+        L_0x0276:
+            r16 = 2
+        L_0x0278:
+            org.telegram.tgnet.TLRPC$TL_inputMessagesFilterEmpty r1 = new org.telegram.tgnet.TLRPC$TL_inputMessagesFilterEmpty
+            r1.<init>()
+            r13.filter = r1
+            int r1 = r15.lastReqId
+            int r5 = r1 + 1
+            r15.lastReqId = r5
+            r15.lastSearchQuery = r2
+            org.telegram.tgnet.ConnectionsManager r10 = r19.getConnectionsManager()
+            org.telegram.messenger.-$$Lambda$MediaDataController$Noo5jaZCJk_jz9RevQs-TZ1N3-I r1 = new org.telegram.messenger.-$$Lambda$MediaDataController$Noo5jaZCJk_jz9RevQs-TZ1N3-I
+            r0 = r1
+            r15 = r1
+            r1 = r19
+            r3 = r5
+            r4 = r30
+            r5 = r13
+            r8 = r21
+            r17 = r15
+            r15 = r10
+            r10 = r25
+            r11 = r23
+            r16 = r13
+            r18 = r15
+            r15 = 2
+            r13 = r27
+            r14 = r29
+            r0.<init>(r2, r3, r4, r5, r6, r8, r10, r11, r13, r14)
+            r0 = r16
+            r1 = r17
+            r2 = r18
+            int r0 = r2.sendRequest(r0, r1, r15)
+            r1 = r19
+            r1.reqId = r0
+            return
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.searchMessagesInChat(java.lang.String, long, long, int, int, int, boolean, org.telegram.tgnet.TLRPC$User, boolean):void");
     }
 
     public /* synthetic */ void lambda$searchMessagesInChat$68$MediaDataController(long j, TLRPC$TL_messages_search tLRPC$TL_messages_search, long j2, int i, int i2, int i3, TLRPC$User tLRPC$User, boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
@@ -3886,18 +4034,29 @@ public class MediaDataController extends BaseController {
         }
     }
 
-    public /* synthetic */ void lambda$searchMessagesInChat$70$MediaDataController(int i, boolean z, TLRPC$TL_messages_search tLRPC$TL_messages_search, long j, long j2, int i2, long j3, int i3, TLRPC$User tLRPC$User, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-        AndroidUtilities.runOnUIThread(new Runnable(i, z, tLObject, tLRPC$TL_messages_search, j, j2, i2, j3, i3, tLRPC$User) {
+    public /* synthetic */ void lambda$searchMessagesInChat$70$MediaDataController(String str, int i, boolean z, TLRPC$TL_messages_search tLRPC$TL_messages_search, long j, long j2, int i2, long j3, int i3, TLRPC$User tLRPC$User, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        ArrayList arrayList = new ArrayList();
+        if (tLRPC$TL_error == null) {
+            TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
+            int min = Math.min(tLRPC$messages_Messages.messages.size(), 20);
+            for (int i4 = 0; i4 < min; i4++) {
+                MessageObject messageObject = new MessageObject(this.currentAccount, tLRPC$messages_Messages.messages.get(i4), false, false);
+                messageObject.setQuery(str);
+                arrayList.add(messageObject);
+            }
+        }
+        AndroidUtilities.runOnUIThread(new Runnable(i, z, tLObject, tLRPC$TL_messages_search, j, j2, i2, arrayList, j3, i3, tLRPC$User) {
             public final /* synthetic */ int f$1;
-            public final /* synthetic */ TLRPC$User f$10;
+            public final /* synthetic */ int f$10;
+            public final /* synthetic */ TLRPC$User f$11;
             public final /* synthetic */ boolean f$2;
             public final /* synthetic */ TLObject f$3;
             public final /* synthetic */ TLRPC$TL_messages_search f$4;
             public final /* synthetic */ long f$5;
             public final /* synthetic */ long f$6;
             public final /* synthetic */ int f$7;
-            public final /* synthetic */ long f$8;
-            public final /* synthetic */ int f$9;
+            public final /* synthetic */ ArrayList f$8;
+            public final /* synthetic */ long f$9;
 
             {
                 this.f$1 = r2;
@@ -3908,17 +4067,18 @@ public class MediaDataController extends BaseController {
                 this.f$6 = r8;
                 this.f$7 = r10;
                 this.f$8 = r11;
-                this.f$9 = r13;
+                this.f$9 = r12;
                 this.f$10 = r14;
+                this.f$11 = r15;
             }
 
             public final void run() {
-                MediaDataController.this.lambda$null$69$MediaDataController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10);
+                MediaDataController.this.lambda$null$69$MediaDataController(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11);
             }
         });
     }
 
-    public /* synthetic */ void lambda$null$69$MediaDataController(int i, boolean z, TLObject tLObject, TLRPC$TL_messages_search tLRPC$TL_messages_search, long j, long j2, int i2, long j3, int i3, TLRPC$User tLRPC$User) {
+    public /* synthetic */ void lambda$null$69$MediaDataController(int i, boolean z, TLObject tLObject, TLRPC$TL_messages_search tLRPC$TL_messages_search, long j, long j2, int i2, ArrayList arrayList, long j3, int i3, TLRPC$User tLRPC$User) {
         if (i == this.lastReqId) {
             this.reqId = 0;
             if (!z) {
@@ -3950,7 +4110,8 @@ public class MediaDataController extends BaseController {
                 int i5 = 0;
                 boolean z2 = false;
                 while (i5 < min) {
-                    MessageObject messageObject = new MessageObject(this.currentAccount, tLRPC$messages_Messages.messages.get(i5), false, false);
+                    TLRPC$Message tLRPC$Message2 = tLRPC$messages_Messages.messages.get(i5);
+                    MessageObject messageObject = (MessageObject) arrayList.get(i5);
                     this.searchResultMessages.add(messageObject);
                     this.searchResultMessagesMap[j == j2 ? (char) 0 : 1].put(messageObject.getId(), messageObject);
                     i5++;

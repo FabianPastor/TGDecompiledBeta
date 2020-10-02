@@ -15849,6 +15849,9 @@ public class MessagesStorage extends BaseController {
                                     }
                                     tLRPC$TL_messageReplies2 = tLRPC$TL_messageReplies;
                                 }
+                                if (tLRPC$TL_messageReplies != null && tLRPC$TL_messageReplies.read_max_id > tLRPC$TL_messageReplies2.read_max_id) {
+                                    tLRPC$TL_messageReplies2.read_max_id = tLRPC$TL_messageReplies.read_max_id;
+                                }
                                 executeFast3.requery();
                                 NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(tLRPC$TL_messageReplies2.getObjectSize());
                                 tLRPC$TL_messageReplies2.serializeToStream(nativeByteBuffer);

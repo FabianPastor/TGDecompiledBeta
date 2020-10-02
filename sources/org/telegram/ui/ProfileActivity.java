@@ -3200,62 +3200,64 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     public /* synthetic */ void lambda$createView$15$ProfileActivity(View view) {
-        if (this.user_id != 0) {
-            boolean z = true;
-            if (this.imageUpdater != null) {
-                TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
-                if (user == null) {
-                    user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
-                }
-                if (user != null) {
-                    ImageUpdater imageUpdater2 = this.imageUpdater;
-                    TLRPC$UserProfilePhoto tLRPC$UserProfilePhoto = user.photo;
-                    if (tLRPC$UserProfilePhoto == null || tLRPC$UserProfilePhoto.photo_big == null || (tLRPC$UserProfilePhoto instanceof TLRPC$TL_userProfilePhotoEmpty)) {
-                        z = false;
+        if (this.writeButton.getTag() == null) {
+            if (this.user_id != 0) {
+                boolean z = true;
+                if (this.imageUpdater != null) {
+                    TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(UserConfig.getInstance(this.currentAccount).getClientUserId()));
+                    if (user == null) {
+                        user = UserConfig.getInstance(this.currentAccount).getCurrentUser();
                     }
-                    imageUpdater2.openMenu(z, new Runnable() {
-                        public final void run() {
-                            ProfileActivity.this.lambda$null$14$ProfileActivity();
+                    if (user != null) {
+                        ImageUpdater imageUpdater2 = this.imageUpdater;
+                        TLRPC$UserProfilePhoto tLRPC$UserProfilePhoto = user.photo;
+                        if (tLRPC$UserProfilePhoto == null || tLRPC$UserProfilePhoto.photo_big == null || (tLRPC$UserProfilePhoto instanceof TLRPC$TL_userProfilePhotoEmpty)) {
+                            z = false;
                         }
-                    });
+                        imageUpdater2.openMenu(z, new Runnable() {
+                            public final void run() {
+                                ProfileActivity.this.lambda$null$14$ProfileActivity();
+                            }
+                        });
+                        return;
+                    }
                     return;
                 }
-                return;
-            }
-            if (this.playProfileAnimation != 0) {
-                ArrayList<BaseFragment> arrayList = this.parentLayout.fragmentsStack;
-                if (arrayList.get(arrayList.size() - 2) instanceof ChatActivity) {
-                    finishFragment();
-                    return;
-                }
-            }
-            TLRPC$User user2 = getMessagesController().getUser(Integer.valueOf(this.user_id));
-            if (user2 != null && !(user2 instanceof TLRPC$TL_userEmpty)) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("user_id", this.user_id);
-                if (getMessagesController().checkCanOpenChat(bundle, this)) {
-                    if (!AndroidUtilities.isTablet()) {
-                        getNotificationCenter().removeObserver(this, NotificationCenter.closeChats);
-                        getNotificationCenter().postNotificationName(NotificationCenter.closeChats, new Object[0]);
-                    }
-                    int i = getArguments().getInt("nearby_distance", -1);
-                    if (i >= 0) {
-                        bundle.putInt("nearby_distance", i);
-                    }
-                    ChatActivity chatActivity = new ChatActivity(bundle);
-                    chatActivity.setPreloadedSticker(this.preloadedSticker);
-                    presentFragment(chatActivity, true);
-                    if (AndroidUtilities.isTablet()) {
+                if (this.playProfileAnimation != 0) {
+                    ArrayList<BaseFragment> arrayList = this.parentLayout.fragmentsStack;
+                    if (arrayList.get(arrayList.size() - 2) instanceof ChatActivity) {
                         finishFragment();
+                        return;
+                    }
+                }
+                TLRPC$User user2 = getMessagesController().getUser(Integer.valueOf(this.user_id));
+                if (user2 != null && !(user2 instanceof TLRPC$TL_userEmpty)) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("user_id", this.user_id);
+                    if (getMessagesController().checkCanOpenChat(bundle, this)) {
+                        if (!AndroidUtilities.isTablet()) {
+                            getNotificationCenter().removeObserver(this, NotificationCenter.closeChats);
+                            getNotificationCenter().postNotificationName(NotificationCenter.closeChats, new Object[0]);
+                        }
+                        int i = getArguments().getInt("nearby_distance", -1);
+                        if (i >= 0) {
+                            bundle.putInt("nearby_distance", i);
+                        }
+                        ChatActivity chatActivity = new ChatActivity(bundle);
+                        chatActivity.setPreloadedSticker(this.preloadedSticker);
+                        presentFragment(chatActivity, true);
+                        if (AndroidUtilities.isTablet()) {
+                            finishFragment();
+                            return;
+                        }
                         return;
                     }
                     return;
                 }
                 return;
             }
-            return;
+            openDiscussion();
         }
-        openDiscussion();
     }
 
     public /* synthetic */ void lambda$null$14$ProfileActivity() {

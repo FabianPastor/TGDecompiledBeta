@@ -8944,7 +8944,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                         botKeyboardView3.setPanelHeight(i5);
                     }
                     FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) view.getLayoutParams();
-                    layoutParams.height = Math.max(AndroidUtilities.dp(20.0f), i5);
+                    layoutParams.height = i5;
                     view.setLayoutParams(layoutParams);
                     if (!AndroidUtilities.isInMultiwindow) {
                         AndroidUtilities.hideKeyboard(this.messageEditText);

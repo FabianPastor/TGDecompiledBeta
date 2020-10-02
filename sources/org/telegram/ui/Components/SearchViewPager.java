@@ -254,8 +254,10 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
                 this.dialogsSearchAdapter.setFiltersDelegate(this.filteredSearchViewDelegate, false);
                 this.noMediaFiltersSearchView.animate().setListener((Animator.AnimatorListener) null).cancel();
                 this.noMediaFiltersSearchView.setDelegate((FilteredSearchView.Delegate) null, false);
-                this.emptyView.showProgress(!this.dialogsSearchAdapter.isSearching(), false);
-                this.emptyView.showProgress(this.dialogsSearchAdapter.isSearching(), false);
+                if (z) {
+                    this.emptyView.showProgress(!this.dialogsSearchAdapter.isSearching(), false);
+                    this.emptyView.showProgress(this.dialogsSearchAdapter.isSearching(), false);
+                }
                 if (z) {
                     this.noMediaFiltersSearchView.setVisibility(8);
                 } else if (this.noMediaFiltersSearchView.getVisibility() != 8) {

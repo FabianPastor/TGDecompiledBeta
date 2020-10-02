@@ -97,6 +97,7 @@ public class ActionBarLayout extends FrameLayout {
     public boolean previewOpenAnimationInProgress;
     private boolean rebuildAfterAnimation;
     private boolean rebuildLastAfterAnimation;
+    private Rect rect = new Rect();
     private boolean removeActionBarExtraHeight;
     private boolean showLastAfterAnimation;
     protected boolean startedTracking;
@@ -519,16 +520,16 @@ public class ActionBarLayout extends FrameLayout {
                 View childAt = layoutContainer.getChildAt(0);
                 if (childAt != null) {
                     ViewGroup.MarginLayoutParams marginLayoutParams = (ViewGroup.MarginLayoutParams) childAt.getLayoutParams();
-                    Rect rect = new Rect();
-                    childAt.getLocalVisibleRect(rect);
-                    rect.offset(marginLayoutParams.leftMargin, marginLayoutParams.topMargin);
-                    int i2 = rect.top;
+                    Rect rect2 = new Rect();
+                    childAt.getLocalVisibleRect(rect2);
+                    rect2.offset(marginLayoutParams.leftMargin, marginLayoutParams.topMargin);
+                    int i2 = rect2.top;
                     if (Build.VERSION.SDK_INT >= 21) {
                         i = AndroidUtilities.statusBarHeight - 1;
                     }
-                    rect.top = i2 + i;
+                    rect2.top = i2 + i;
                     drawable.setAlpha((int) (layoutContainer.getAlpha() * 255.0f));
-                    drawable.setBounds(rect);
+                    drawable.setBounds(rect2);
                     drawable.draw(canvas);
                 }
             }
@@ -679,10 +680,10 @@ public class ActionBarLayout extends FrameLayout {
                 this.velocityTracker.addMovement(motionEvent);
                 if (!this.transitionAnimationInProgress && !this.inPreviewMode && this.maybeStartTracking && !this.startedTracking && ((float) max) >= AndroidUtilities.getPixelsInCM(0.4f, true) && Math.abs(max) / 3 > abs) {
                     ArrayList<BaseFragment> arrayList2 = this.fragmentsStack;
-                    if (arrayList2.get(arrayList2.size() - 1).canBeginSlide()) {
-                        prepareForMoving(motionEvent);
-                    } else {
+                    if (!arrayList2.get(arrayList2.size() - 1).canBeginSlide() || findScrollingChild(this, motionEvent.getX(), motionEvent.getY()) != null) {
                         this.maybeStartTracking = false;
+                    } else {
+                        prepareForMoving(motionEvent);
                     }
                 } else if (this.startedTracking) {
                     if (!this.beginTrackingSent) {
@@ -2010,5 +2011,31 @@ public class ActionBarLayout extends FrameLayout {
         if (layoutContainer != null) {
             layoutContainer.setFragmentPanTranslationOffset(i);
         }
+    }
+
+    private View findScrollingChild(ViewGroup viewGroup, float f, float f2) {
+        int childCount = viewGroup.getChildCount();
+        for (int i = 0; i < childCount; i++) {
+            View childAt = viewGroup.getChildAt(i);
+            if (childAt.getVisibility() == 0) {
+                childAt.getHitRect(this.rect);
+                if (!this.rect.contains((int) f, (int) f2)) {
+                    continue;
+                } else if (childAt.canScrollHorizontally(-1)) {
+                    return childAt;
+                } else {
+                    if (childAt instanceof ViewGroup) {
+                        Rect rect2 = this.rect;
+                        View findScrollingChild = findScrollingChild((ViewGroup) childAt, f - ((float) rect2.left), f2 - ((float) rect2.top));
+                        if (findScrollingChild != null) {
+                            return findScrollingChild;
+                        }
+                    } else {
+                        continue;
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

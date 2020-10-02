@@ -438,7 +438,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
                     textView3.setVisibility(8);
                 }
             } else {
-                CharSequence highlightText2 = AndroidUtilities.highlightText((CharSequence) this.message.messageOwner.message.replace("\n", " ").trim(), this.message.highlightedWords);
+                CharSequence highlightText2 = AndroidUtilities.highlightText((CharSequence) this.message.messageOwner.message.replace("\n", " ").replaceAll(" +", " ").trim(), this.message.highlightedWords);
                 this.caption = highlightText2;
                 TextView textView4 = this.captionTextView;
                 if (textView4 != null) {

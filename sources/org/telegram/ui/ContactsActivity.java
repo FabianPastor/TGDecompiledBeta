@@ -736,7 +736,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                 String str2 = (String) item2;
                 if (!str2.equals("section")) {
                     NewContactActivity newContactActivity = new NewContactActivity();
-                    newContactActivity.setInitialPhoneNumber(str2);
+                    newContactActivity.setInitialPhoneNumber(str2, true);
                     presentFragment(newContactActivity);
                 }
             }

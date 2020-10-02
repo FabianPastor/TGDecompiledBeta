@@ -323,7 +323,6 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         this.layoutManager = linearLayoutManager;
         this.recyclerListView.setLayoutManager(linearLayoutManager);
         AnonymousClass4 r0 = new LoadingView(parentActivity2) {
-            /* access modifiers changed from: package-private */
             public int getType() {
                 FilteredSearchView filteredSearchView = FilteredSearchView.this;
                 FiltersView.MediaFilterData mediaFilterData = filteredSearchView.currentSearchFilter;
@@ -349,7 +348,6 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 }
             }
 
-            /* access modifiers changed from: package-private */
             public int getColumnsCount() {
                 return FilteredSearchView.this.columnsCount;
             }
@@ -1997,12 +1995,10 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             RectF rectF = new RectF();
             private int totalTranslation;
 
-            /* access modifiers changed from: package-private */
             public int getColumnsCount() {
                 return 2;
             }
 
-            /* access modifiers changed from: package-private */
             public int getType() {
                 return 1;
             }
@@ -2030,12 +2026,15 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 if (getType() == 1) {
                     while (i < getMeasuredHeight()) {
                         int dp2 = AndroidUtilities.dp(25.0f);
-                        canvas2.drawCircle((float) (AndroidUtilities.dp(9.0f) + dp2), (float) (i + (AndroidUtilities.dp(78.0f) >> 1)), (float) dp2, this.paint);
+                        canvas2.drawCircle(checkRtl((float) (AndroidUtilities.dp(9.0f) + dp2)), (float) (i + (AndroidUtilities.dp(78.0f) >> 1)), (float) dp2, this.paint);
                         this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(20.0f) + i), (float) AndroidUtilities.dp(f), (float) (i + AndroidUtilities.dp(28.0f)));
+                        checkRtl(this.rectF);
                         canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
                         this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(42.0f) + i), (float) AndroidUtilities.dp(260.0f), (float) (AndroidUtilities.dp(50.0f) + i));
+                        checkRtl(this.rectF);
                         canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
                         this.rectF.set((float) (getMeasuredWidth() - AndroidUtilities.dp(50.0f)), (float) (AndroidUtilities.dp(20.0f) + i), (float) (getMeasuredWidth() - AndroidUtilities.dp(12.0f)), (float) (AndroidUtilities.dp(28.0f) + i));
+                        checkRtl(this.rectF);
                         canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
                         i += AndroidUtilities.dp(78.0f) + 1;
                         f = 140.0f;
@@ -2051,12 +2050,16 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 } else if (getType() == 3) {
                     while (i < getMeasuredHeight()) {
                         this.rectF.set((float) AndroidUtilities.dp(12.0f), (float) (AndroidUtilities.dp(8.0f) + i), (float) AndroidUtilities.dp(52.0f), (float) (i + AndroidUtilities.dp(48.0f)));
+                        checkRtl(this.rectF);
                         canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
                         this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(12.0f) + i), (float) AndroidUtilities.dp(140.0f), (float) (AndroidUtilities.dp(20.0f) + i));
+                        checkRtl(this.rectF);
                         canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
                         this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(34.0f) + i), (float) AndroidUtilities.dp(260.0f), (float) (AndroidUtilities.dp(42.0f) + i));
+                        checkRtl(this.rectF);
                         canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
                         this.rectF.set((float) (getMeasuredWidth() - AndroidUtilities.dp(50.0f)), (float) (AndroidUtilities.dp(12.0f) + i), (float) (getMeasuredWidth() - AndroidUtilities.dp(12.0f)), (float) (AndroidUtilities.dp(20.0f) + i));
+                        checkRtl(this.rectF);
                         canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
                         i += AndroidUtilities.dp(56.0f) + 1;
                     }
@@ -2065,12 +2068,15 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     if (getType() == 4) {
                         while (i < getMeasuredHeight()) {
                             int dp4 = AndroidUtilities.dp(44.0f) >> i4;
-                            canvas2.drawCircle((float) (AndroidUtilities.dp(12.0f) + dp4), (float) (AndroidUtilities.dp(6.0f) + i + dp4), (float) dp4, this.paint);
+                            canvas2.drawCircle(checkRtl((float) (AndroidUtilities.dp(12.0f) + dp4)), (float) (AndroidUtilities.dp(6.0f) + i + dp4), (float) dp4, this.paint);
                             this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(12.0f) + i), (float) AndroidUtilities.dp(140.0f), (float) (AndroidUtilities.dp(20.0f) + i));
+                            checkRtl(this.rectF);
                             canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
                             this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(34.0f) + i), (float) AndroidUtilities.dp(260.0f), (float) (AndroidUtilities.dp(42.0f) + i));
+                            checkRtl(this.rectF);
                             canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
                             this.rectF.set((float) (getMeasuredWidth() - AndroidUtilities.dp(50.0f)), (float) (AndroidUtilities.dp(12.0f) + i), (float) (getMeasuredWidth() - AndroidUtilities.dp(12.0f)), (float) (AndroidUtilities.dp(20.0f) + i));
+                            checkRtl(this.rectF);
                             canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
                             i += AndroidUtilities.dp(56.0f) + 1;
                             i4 = 1;
@@ -2078,14 +2084,19 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     } else if (getType() == 5) {
                         while (i < getMeasuredHeight()) {
                             this.rectF.set((float) AndroidUtilities.dp(10.0f), (float) (AndroidUtilities.dp(11.0f) + i), (float) AndroidUtilities.dp(62.0f), (float) (AndroidUtilities.dp(63.0f) + i));
+                            checkRtl(this.rectF);
                             canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
                             this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(12.0f) + i), (float) AndroidUtilities.dp(140.0f), (float) (i + AndroidUtilities.dp(20.0f)));
+                            checkRtl(this.rectF);
                             canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
                             this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(34.0f) + i), (float) AndroidUtilities.dp(268.0f), (float) (AndroidUtilities.dp(42.0f) + i));
+                            checkRtl(this.rectF);
                             canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
                             this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(54.0f) + i), (float) AndroidUtilities.dp(188.0f), (float) (AndroidUtilities.dp(62.0f) + i));
+                            checkRtl(this.rectF);
                             canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
                             this.rectF.set((float) (getMeasuredWidth() - AndroidUtilities.dp(50.0f)), (float) (AndroidUtilities.dp(12.0f) + i), (float) (getMeasuredWidth() - AndroidUtilities.dp(12.0f)), (float) (AndroidUtilities.dp(20.0f) + i));
+                            checkRtl(this.rectF);
                             canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
                             i += AndroidUtilities.dp(80.0f);
                         }
@@ -2105,6 +2116,17 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 this.matrix.setTranslate(0.0f, (float) this.totalTranslation);
                 this.gradient.setLocalMatrix(this.matrix);
                 invalidate();
+            }
+
+            private float checkRtl(float f) {
+                return LocaleController.isRTL ? ((float) getMeasuredWidth()) - f : f;
+            }
+
+            private void checkRtl(RectF rectF2) {
+                if (LocaleController.isRTL) {
+                    rectF2.left = ((float) getMeasuredWidth()) - rectF2.left;
+                    rectF2.right = ((float) getMeasuredWidth()) - rectF2.right;
+                }
             }
         }
 
