@@ -858,10 +858,10 @@ public class ArticleViewer implements NotificationCenter.NotificationCenterDeleg
             List<Rect> boundingRects;
             WindowInsets windowInsets2 = (WindowInsets) ArticleViewer.this.lastInsets;
             Object unused = ArticleViewer.this.lastInsets = windowInsets;
-            if (windowInsets2 == null || !windowInsets2.toString().equals(windowInsets.toString())) {
+            if ((windowInsets2 == null || !windowInsets2.toString().equals(windowInsets.toString())) && ArticleViewer.this.windowView != null) {
                 ArticleViewer.this.windowView.requestLayout();
             }
-            if (Build.VERSION.SDK_INT >= 28 && (displayCutout = ArticleViewer.this.parentActivity.getWindow().getDecorView().getRootWindowInsets().getDisplayCutout()) != null && (boundingRects = displayCutout.getBoundingRects()) != null && !boundingRects.isEmpty()) {
+            if (!(Build.VERSION.SDK_INT < 28 || ArticleViewer.this.parentActivity == null || (displayCutout = ArticleViewer.this.parentActivity.getWindow().getDecorView().getRootWindowInsets().getDisplayCutout()) == null || (boundingRects = displayCutout.getBoundingRects()) == null || boundingRects.isEmpty())) {
                 ArticleViewer articleViewer = ArticleViewer.this;
                 boolean z = false;
                 if (boundingRects.get(0).height() != 0) {

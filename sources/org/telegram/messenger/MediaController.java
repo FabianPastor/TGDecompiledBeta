@@ -4200,7 +4200,7 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
 
     public /* synthetic */ void lambda$null$21$MediaController(String str, byte[] bArr, MessageObject messageObject) {
         MessageObject remove = this.generatingWaveform.remove(str);
-        if (remove != null && bArr != null) {
+        if (remove != null && bArr != null && remove.getDocument() != null) {
             int i = 0;
             while (true) {
                 if (i >= remove.getDocument().attributes.size()) {

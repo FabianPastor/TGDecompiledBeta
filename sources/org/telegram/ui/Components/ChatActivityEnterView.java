@@ -4077,7 +4077,10 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                 }
                 if (this.searchingType != 0) {
                     this.searchingType = 0;
-                    this.emojiView.closeSearch(false);
+                    EmojiView emojiView3 = this.emojiView;
+                    if (emojiView3 != null) {
+                        emojiView3.closeSearch(false);
+                    }
                     this.messageEditText.requestFocus();
                 }
                 if (this.stickersExpanded) {
@@ -8327,14 +8330,17 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             if (this.replyingMessageObject != null) {
                 openKeyboardInternal();
                 setButtons(this.botMessageObject, false);
-            } else if (this.botButtonsMessageObject.messageOwner.reply_markup.single_use) {
-                if (didPressedBotButton) {
-                    openKeyboardInternal();
-                } else {
-                    showPopup(0, 0);
+            } else {
+                MessageObject messageObject3 = this.botButtonsMessageObject;
+                if (messageObject3 != null && messageObject3.messageOwner.reply_markup.single_use) {
+                    if (didPressedBotButton) {
+                        openKeyboardInternal();
+                    } else {
+                        showPopup(0, 0);
+                    }
+                    SharedPreferences.Editor edit = MessagesController.getMainSettings(this.currentAccount).edit();
+                    edit.putInt("answered_" + this.dialog_id, this.botButtonsMessageObject.getId()).commit();
                 }
-                SharedPreferences.Editor edit = MessagesController.getMainSettings(this.currentAccount).edit();
-                edit.putInt("answered_" + this.dialog_id, this.botButtonsMessageObject.getId()).commit();
             }
             ChatActivityEnterViewDelegate chatActivityEnterViewDelegate = this.delegate;
             if (chatActivityEnterViewDelegate != null) {

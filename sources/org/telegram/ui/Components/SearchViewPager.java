@@ -393,10 +393,8 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         DialogsActivity dialogsActivity2 = dialogsActivity;
         ArrayList arrayList2 = arrayList;
         ArrayList arrayList3 = new ArrayList();
-        ArrayList arrayList4 = new ArrayList();
-        for (FilteredSearchView.MessageHashId next : this.selectedFiles.keySet()) {
-            arrayList4.add(Integer.valueOf(next.messageId));
-            arrayList3.add(this.selectedFiles.get(next));
+        for (FilteredSearchView.MessageHashId messageHashId : this.selectedFiles.keySet()) {
+            arrayList3.add(this.selectedFiles.get(messageHashId));
         }
         this.selectedFiles.clear();
         showActionMode(false);
@@ -620,105 +618,120 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         this.showOnlyDialogsAdapter = z;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:21:0x0076, code lost:
-        if (org.telegram.messenger.ChatObject.isChannel(r5, r9.currentAccount) != false) goto L_0x007a;
+    /* JADX WARNING: Code restructure failed: missing block: B:21:0x0077, code lost:
+        if (org.telegram.messenger.ChatObject.isChannel(r6, r10.currentAccount) != false) goto L_0x007b;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void messagesDeleted(int r10, java.util.ArrayList<java.lang.Integer> r11) {
+    public void messagesDeleted(int r11, java.util.ArrayList<java.lang.Integer> r12) {
         /*
-            r9 = this;
-            android.util.SparseArray<android.view.View> r0 = r9.viewsByType
+            r10 = this;
+            android.util.SparseArray<android.view.View> r0 = r10.viewsByType
             int r0 = r0.size()
             r1 = 0
             r2 = 0
         L_0x0008:
             if (r2 >= r0) goto L_0x001e
-            android.util.SparseArray<android.view.View> r3 = r9.viewsByType
+            android.util.SparseArray<android.view.View> r3 = r10.viewsByType
             java.lang.Object r3 = r3.valueAt(r2)
             android.view.View r3 = (android.view.View) r3
             boolean r4 = r3 instanceof org.telegram.ui.FilteredSearchView
             if (r4 == 0) goto L_0x001b
             org.telegram.ui.FilteredSearchView r3 = (org.telegram.ui.FilteredSearchView) r3
-            r3.messagesDeleted(r10, r11)
+            r3.messagesDeleted(r11, r12)
         L_0x001b:
             int r2 = r2 + 1
             goto L_0x0008
         L_0x001e:
             r0 = 0
         L_0x001f:
-            int r2 = r9.getChildCount()
+            int r2 = r10.getChildCount()
             if (r0 >= r2) goto L_0x0039
-            android.view.View r2 = r9.getChildAt(r0)
+            android.view.View r2 = r10.getChildAt(r0)
             boolean r2 = r2 instanceof org.telegram.ui.FilteredSearchView
             if (r2 == 0) goto L_0x0036
-            android.view.View r2 = r9.getChildAt(r0)
+            android.view.View r2 = r10.getChildAt(r0)
             org.telegram.ui.FilteredSearchView r2 = (org.telegram.ui.FilteredSearchView) r2
-            r2.messagesDeleted(r10, r11)
+            r2.messagesDeleted(r11, r12)
         L_0x0036:
             int r0 = r0 + 1
             goto L_0x001f
         L_0x0039:
-            org.telegram.ui.FilteredSearchView r0 = r9.noMediaFiltersSearchView
-            r0.messagesDeleted(r10, r11)
-            java.util.HashMap<org.telegram.ui.FilteredSearchView$MessageHashId, org.telegram.messenger.MessageObject> r0 = r9.selectedFiles
+            org.telegram.ui.FilteredSearchView r0 = r10.noMediaFiltersSearchView
+            r0.messagesDeleted(r11, r12)
+            java.util.HashMap<org.telegram.ui.FilteredSearchView$MessageHashId, org.telegram.messenger.MessageObject> r0 = r10.selectedFiles
             boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x00ba
-            java.util.HashMap<org.telegram.ui.FilteredSearchView$MessageHashId, org.telegram.messenger.MessageObject> r0 = r9.selectedFiles
-            java.util.Set r0 = r0.keySet()
-            java.util.Iterator r0 = r0.iterator()
-        L_0x0050:
-            boolean r2 = r0.hasNext()
-            if (r2 == 0) goto L_0x00ba
-            java.lang.Object r2 = r0.next()
-            org.telegram.ui.FilteredSearchView$MessageHashId r2 = (org.telegram.ui.FilteredSearchView.MessageHashId) r2
-            java.util.HashMap<org.telegram.ui.FilteredSearchView$MessageHashId, org.telegram.messenger.MessageObject> r3 = r9.selectedFiles
-            java.lang.Object r3 = r3.get(r2)
-            org.telegram.messenger.MessageObject r3 = (org.telegram.messenger.MessageObject) r3
-            long r4 = r3.getDialogId()
-            r6 = 0
-            int r8 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r8 >= 0) goto L_0x0079
-            long r4 = -r4
-            int r5 = (int) r4
-            int r4 = r9.currentAccount
-            boolean r4 = org.telegram.messenger.ChatObject.isChannel(r5, r4)
-            if (r4 == 0) goto L_0x0079
-            goto L_0x007a
-        L_0x0079:
-            r5 = 0
+            if (r0 != 0) goto L_0x00d5
+            r0 = 0
+            java.util.HashMap<org.telegram.ui.FilteredSearchView$MessageHashId, org.telegram.messenger.MessageObject> r2 = r10.selectedFiles
+            java.util.Set r2 = r2.keySet()
+            java.util.Iterator r2 = r2.iterator()
+        L_0x0051:
+            boolean r3 = r2.hasNext()
+            if (r3 == 0) goto L_0x00d5
+            java.lang.Object r3 = r2.next()
+            org.telegram.ui.FilteredSearchView$MessageHashId r3 = (org.telegram.ui.FilteredSearchView.MessageHashId) r3
+            java.util.HashMap<org.telegram.ui.FilteredSearchView$MessageHashId, org.telegram.messenger.MessageObject> r4 = r10.selectedFiles
+            java.lang.Object r4 = r4.get(r3)
+            org.telegram.messenger.MessageObject r4 = (org.telegram.messenger.MessageObject) r4
+            long r5 = r4.getDialogId()
+            r7 = 0
+            int r9 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
+            if (r9 >= 0) goto L_0x007a
+            long r5 = -r5
+            int r6 = (int) r5
+            int r5 = r10.currentAccount
+            boolean r5 = org.telegram.messenger.ChatObject.isChannel(r6, r5)
+            if (r5 == 0) goto L_0x007a
+            goto L_0x007b
         L_0x007a:
-            if (r5 != r10) goto L_0x0050
-            r4 = 0
-        L_0x007d:
-            int r5 = r11.size()
-            if (r4 >= r5) goto L_0x0050
-            int r5 = r3.getId()
-            java.lang.Object r6 = r11.get(r4)
-            java.lang.Integer r6 = (java.lang.Integer) r6
-            int r6 = r6.intValue()
-            if (r5 != r6) goto L_0x00b7
-            java.util.HashMap<org.telegram.ui.FilteredSearchView$MessageHashId, org.telegram.messenger.MessageObject> r5 = r9.selectedFiles
-            r5.remove(r2)
-            org.telegram.ui.Components.NumberTextView r5 = r9.selectedMessagesCountTextView
-            java.util.HashMap<org.telegram.ui.FilteredSearchView$MessageHashId, org.telegram.messenger.MessageObject> r6 = r9.selectedFiles
-            int r6 = r6.size()
-            r7 = 1
-            r5.setNumber(r6, r7)
-            org.telegram.ui.ActionBar.ActionBarMenuItem r5 = r9.gotoItem
-            if (r5 == 0) goto L_0x00b7
-            java.util.HashMap<org.telegram.ui.FilteredSearchView$MessageHashId, org.telegram.messenger.MessageObject> r6 = r9.selectedFiles
-            int r6 = r6.size()
-            if (r6 != r7) goto L_0x00b2
             r6 = 0
-            goto L_0x00b4
-        L_0x00b2:
-            r6 = 8
-        L_0x00b4:
-            r5.setVisibility(r6)
-        L_0x00b7:
+        L_0x007b:
+            if (r6 != r11) goto L_0x009f
+            r5 = 0
+        L_0x007e:
+            int r6 = r12.size()
+            if (r5 >= r6) goto L_0x009f
+            int r6 = r4.getId()
+            java.lang.Object r7 = r12.get(r5)
+            java.lang.Integer r7 = (java.lang.Integer) r7
+            int r7 = r7.intValue()
+            if (r6 != r7) goto L_0x009c
+            java.util.ArrayList r0 = new java.util.ArrayList
+            r0.<init>()
+            r0.add(r3)
+        L_0x009c:
+            int r5 = r5 + 1
+            goto L_0x007e
+        L_0x009f:
+            if (r0 == 0) goto L_0x0051
+            int r3 = r0.size()
+            r4 = 0
+        L_0x00a6:
+            if (r4 >= r3) goto L_0x00b4
+            java.util.HashMap<org.telegram.ui.FilteredSearchView$MessageHashId, org.telegram.messenger.MessageObject> r5 = r10.selectedFiles
+            java.lang.Object r6 = r0.get(r4)
+            r5.remove(r6)
             int r4 = r4 + 1
-            goto L_0x007d
-        L_0x00ba:
+            goto L_0x00a6
+        L_0x00b4:
+            org.telegram.ui.Components.NumberTextView r3 = r10.selectedMessagesCountTextView
+            java.util.HashMap<org.telegram.ui.FilteredSearchView$MessageHashId, org.telegram.messenger.MessageObject> r4 = r10.selectedFiles
+            int r4 = r4.size()
+            r5 = 1
+            r3.setNumber(r4, r5)
+            org.telegram.ui.ActionBar.ActionBarMenuItem r3 = r10.gotoItem
+            if (r3 == 0) goto L_0x0051
+            java.util.HashMap<org.telegram.ui.FilteredSearchView$MessageHashId, org.telegram.messenger.MessageObject> r4 = r10.selectedFiles
+            int r4 = r4.size()
+            if (r4 != r5) goto L_0x00ce
+            r4 = 0
+            goto L_0x00d0
+        L_0x00ce:
+            r4 = 8
+        L_0x00d0:
+            r3.setVisibility(r4)
+            goto L_0x0051
+        L_0x00d5:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SearchViewPager.messagesDeleted(int, java.util.ArrayList):void");

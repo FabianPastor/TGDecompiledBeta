@@ -308,7 +308,11 @@ public class AndroidUtilities {
         SpannableStringBuilder valueOf = SpannableStringBuilder.valueOf(charSequence);
         int indexOf = lowerCase.indexOf(str);
         while (indexOf >= 0) {
-            valueOf.setSpan(new ForegroundColorSpanThemable("windowBackgroundWhiteBlueText4"), indexOf, str.length() + indexOf, 0);
+            try {
+                valueOf.setSpan(new ForegroundColorSpanThemable("windowBackgroundWhiteBlueText4"), indexOf, str.length() + indexOf, 0);
+            } catch (Exception e) {
+                FileLog.e((Throwable) e);
+            }
             indexOf = lowerCase.indexOf(str, indexOf + 1);
         }
         return valueOf;
