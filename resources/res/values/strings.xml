@@ -45,7 +45,7 @@
     <string name="AccDescrIVHeading">Heading</string>
     <string name="AccDescrIVTitle">Title</string>
     <string name="AccDescrInstantCamera">Instant camera</string>
-    <string name="AccDescrLocationNotify">Notify when in radius</string>
+    <string name="AccDescrLocationNotify">Notify when in range</string>
     <string name="AccDescrMentionDown">Go to next mention</string>
     <string name="AccDescrMirror">Mirror</string>
     <string name="AccDescrMoreOptions">More options</string>
@@ -200,7 +200,7 @@
     <string name="ActionUserScoredInGame">un1 scored %1$s in un2</string>
     <string name="ActionUserWithinOtherRadius">un1 is now within %1$s from un2</string>
     <string name="ActionUserWithinRadius">un1 is now within %1$s from you</string>
-    <string name="ActionUserWithinYouRadius">You is now within from %1$s</string>
+    <string name="ActionUserWithinYouRadius">You is now within %1$s from un1</string>
     <string name="ActionYouAddUser">You added un2</string>
     <string name="ActionYouChangedPhoto">You changed the group photo</string>
     <string name="ActionYouChangedTitle">You changed the group name to un2</string>
@@ -2658,7 +2658,7 @@
     <string name="PeopleNearbyGpsInfo">Quickly add people nearby who are also viewing this section and discover local group chats.\10\10Please turn on location services to enable this feature.</string>
     <string name="PeopleNearbyHeader">People nearby</string>
     <string name="PeopleNearbyInfo2">Exchange contact info with people nearby and find new friends.</string>
-    <string name="PermissionBackgroundLocation">To share your live location in this chat, Telegram needs access to your location all the time, including while the app is in the background.\10\10We will access your location only for the duration you choose, and you can stop sharing it any time. We won’t use your location for any purpose other than sharing in this chat.</string>
+    <string name="PermissionBackgroundLocation">To share your live location in this chat, Telegram needs access to your location all the time, including while the app is in the background.\10\10We will access your location only for the duration you choose, and you can stop sharing it any time. We won’t use your location for any purpose other than sharing it in this chat.</string>
     <string name="PermissionContacts">To let you connect with friends across all your devices, your contacts will be continuously synced with Telegram\'s heavily encrypted cloud servers.</string>
     <string name="PermissionDrawAboveOtherApps">Telegram needs access to draw above other apps to play videos in Picture-in-Picture mode.</string>
     <string name="PermissionNoAudio">Telegram needs access to your microphone so that you can send voice messages.</string>

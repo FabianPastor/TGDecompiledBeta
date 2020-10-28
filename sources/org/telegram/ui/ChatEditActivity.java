@@ -183,76 +183,80 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         this.chatId = bundle.getInt("chat_id", 0);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:7:0x0048, code lost:
-        if (r0 == null) goto L_0x004a;
+    /* JADX WARNING: Code restructure failed: missing block: B:7:0x0050, code lost:
+        if (r0 == null) goto L_0x0052;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onFragmentCreate() {
         /*
-            r6 = this;
-            int r0 = r6.currentAccount
+            r9 = this;
+            int r0 = r9.currentAccount
             org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
-            int r1 = r6.chatId
+            int r1 = r9.chatId
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             org.telegram.tgnet.TLRPC$Chat r0 = r0.getChat(r1)
-            r6.currentChat = r0
+            r9.currentChat = r0
             r1 = 1
             r2 = 0
-            if (r0 != 0) goto L_0x004b
-            int r0 = r6.currentAccount
+            if (r0 != 0) goto L_0x0053
+            int r0 = r9.currentAccount
             org.telegram.messenger.MessagesStorage r0 = org.telegram.messenger.MessagesStorage.getInstance(r0)
-            int r3 = r6.chatId
+            int r3 = r9.chatId
             org.telegram.tgnet.TLRPC$Chat r0 = r0.getChatSync(r3)
-            r6.currentChat = r0
-            if (r0 == 0) goto L_0x004a
-            int r0 = r6.currentAccount
+            r9.currentChat = r0
+            if (r0 == 0) goto L_0x0052
+            int r0 = r9.currentAccount
             org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
-            org.telegram.tgnet.TLRPC$Chat r3 = r6.currentChat
+            org.telegram.tgnet.TLRPC$Chat r3 = r9.currentChat
             r0.putChat(r3, r1)
-            org.telegram.tgnet.TLRPC$ChatFull r0 = r6.info
-            if (r0 != 0) goto L_0x004b
-            int r0 = r6.currentAccount
-            org.telegram.messenger.MessagesStorage r0 = org.telegram.messenger.MessagesStorage.getInstance(r0)
-            int r3 = r6.chatId
-            java.util.concurrent.CountDownLatch r4 = new java.util.concurrent.CountDownLatch
-            r4.<init>(r1)
-            org.telegram.tgnet.TLRPC$ChatFull r0 = r0.loadChatInfo(r3, r4, r2, r2)
-            r6.info = r0
-            if (r0 != 0) goto L_0x004b
-        L_0x004a:
+            org.telegram.tgnet.TLRPC$ChatFull r0 = r9.info
+            if (r0 != 0) goto L_0x0053
+            int r0 = r9.currentAccount
+            org.telegram.messenger.MessagesStorage r3 = org.telegram.messenger.MessagesStorage.getInstance(r0)
+            int r4 = r9.chatId
+            org.telegram.tgnet.TLRPC$Chat r0 = r9.currentChat
+            boolean r5 = org.telegram.messenger.ChatObject.isChannel(r0)
+            java.util.concurrent.CountDownLatch r6 = new java.util.concurrent.CountDownLatch
+            r6.<init>(r1)
+            r7 = 0
+            r8 = 0
+            org.telegram.tgnet.TLRPC$ChatFull r0 = r3.loadChatInfo(r4, r5, r6, r7, r8)
+            r9.info = r0
+            if (r0 != 0) goto L_0x0053
+        L_0x0052:
             return r2
-        L_0x004b:
-            org.telegram.ui.Components.AvatarDrawable r0 = r6.avatarDrawable
+        L_0x0053:
+            org.telegram.ui.Components.AvatarDrawable r0 = r9.avatarDrawable
             r3 = 5
-            org.telegram.tgnet.TLRPC$Chat r4 = r6.currentChat
+            org.telegram.tgnet.TLRPC$Chat r4 = r9.currentChat
             java.lang.String r4 = r4.title
             r5 = 0
             r0.setInfo(r3, r4, r5)
-            org.telegram.tgnet.TLRPC$Chat r0 = r6.currentChat
+            org.telegram.tgnet.TLRPC$Chat r0 = r9.currentChat
             boolean r0 = org.telegram.messenger.ChatObject.isChannel(r0)
-            if (r0 == 0) goto L_0x0065
-            org.telegram.tgnet.TLRPC$Chat r0 = r6.currentChat
+            if (r0 == 0) goto L_0x006d
+            org.telegram.tgnet.TLRPC$Chat r0 = r9.currentChat
             boolean r0 = r0.megagroup
-            if (r0 != 0) goto L_0x0065
-            goto L_0x0066
-        L_0x0065:
+            if (r0 != 0) goto L_0x006d
+            goto L_0x006e
+        L_0x006d:
             r1 = 0
-        L_0x0066:
-            r6.isChannel = r1
-            org.telegram.ui.Components.ImageUpdater r0 = r6.imageUpdater
-            r0.parentFragment = r6
-            r0.setDelegate(r6)
-            org.telegram.tgnet.TLRPC$Chat r0 = r6.currentChat
+        L_0x006e:
+            r9.isChannel = r1
+            org.telegram.ui.Components.ImageUpdater r0 = r9.imageUpdater
+            r0.parentFragment = r9
+            r0.setDelegate(r9)
+            org.telegram.tgnet.TLRPC$Chat r0 = r9.currentChat
             boolean r0 = r0.signatures
-            r6.signMessages = r0
-            int r0 = r6.currentAccount
+            r9.signMessages = r0
+            int r0 = r9.currentAccount
             org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getInstance(r0)
             int r1 = org.telegram.messenger.NotificationCenter.chatInfoDidLoad
-            r0.addObserver(r6, r1)
-            int r0 = r6.currentAccount
+            r0.addObserver(r9, r1)
+            int r0 = r9.currentAccount
             org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getInstance(r0)
             int r1 = org.telegram.messenger.NotificationCenter.updateInterfaces
-            r0.addObserver(r6, r1)
+            r0.addObserver(r9, r1)
             boolean r0 = super.onFragmentCreate()
             return r0
         */
@@ -1569,15 +1573,17 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
     }
 
     public void saveSelfArgs(Bundle bundle) {
-        String obj;
         String str;
         ImageUpdater imageUpdater2 = this.imageUpdater;
         if (!(imageUpdater2 == null || (str = imageUpdater2.currentPicturePath) == null)) {
             bundle.putString("path", str);
         }
         EditTextEmoji editTextEmoji = this.nameTextView;
-        if (editTextEmoji != null && (obj = editTextEmoji.getText().toString()) != null && obj.length() != 0) {
-            bundle.putString("nameTextView", obj);
+        if (editTextEmoji != null) {
+            String obj = editTextEmoji.getText().toString();
+            if (obj.length() != 0) {
+                bundle.putString("nameTextView", obj);
+            }
         }
     }
 
@@ -1734,10 +1740,11 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
         }
         TextSettingsCell textSettingsCell = this.stickersCell;
         if (textSettingsCell != null) {
-            if (this.info.stickerset != null) {
-                textSettingsCell.setTextAndValue(LocaleController.getString("GroupStickers", NUM), this.info.stickerset.title, false);
-            } else {
+            TLRPC$ChatFull tLRPC$ChatFull7 = this.info;
+            if (tLRPC$ChatFull7 == null || tLRPC$ChatFull7.stickerset == null) {
                 textSettingsCell.setText(LocaleController.getString("GroupStickers", NUM), false);
+            } else {
+                textSettingsCell.setTextAndValue(LocaleController.getString("GroupStickers", NUM), this.info.stickerset.title, false);
             }
         }
         TextCell textCell2 = this.membersCell;
@@ -1747,8 +1754,8 @@ public class ChatEditActivity extends BaseFragment implements ImageUpdater.Image
                     textCell2.setTextAndValueAndIcon(LocaleController.getString("ChannelSubscribers", NUM), String.format("%d", new Object[]{Integer.valueOf(this.info.participants_count)}), NUM, true);
                     TextCell textCell3 = this.blockCell;
                     String string6 = LocaleController.getString("ChannelBlacklist", NUM);
-                    TLRPC$ChatFull tLRPC$ChatFull7 = this.info;
-                    String format = String.format("%d", new Object[]{Integer.valueOf(Math.max(tLRPC$ChatFull7.banned_count, tLRPC$ChatFull7.kicked_count))});
+                    TLRPC$ChatFull tLRPC$ChatFull8 = this.info;
+                    String format = String.format("%d", new Object[]{Integer.valueOf(Math.max(tLRPC$ChatFull8.banned_count, tLRPC$ChatFull8.kicked_count))});
                     TextCell textCell4 = this.logCell;
                     textCell3.setTextAndValueAndIcon(string6, format, NUM, textCell4 != null && textCell4.getVisibility() == 0);
                 } else {

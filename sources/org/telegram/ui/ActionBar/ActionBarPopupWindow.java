@@ -40,9 +40,15 @@ public class ActionBarPopupWindow extends PopupWindow {
     private static Method layoutInScreenMethod;
     private static final Field superListenerField;
     private boolean animationEnabled = allowAnimation;
+    /* access modifiers changed from: private */
+    public int currentAccount = UserConfig.selectedAccount;
     private int dismissAnimationDuration = 150;
+    /* access modifiers changed from: private */
+    public boolean isClosingAnimated;
     private ViewTreeObserver.OnScrollChangedListener mSuperScrollListener;
     private ViewTreeObserver mViewTreeObserver;
+    /* access modifiers changed from: private */
+    public boolean pauseNotifications;
     /* access modifiers changed from: private */
     public int popupAnimationIndex = -1;
     /* access modifiers changed from: private */
@@ -401,13 +407,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             this.windowAnimatorSet = animatorSet;
             animatorSet.playTogether(new Animator[]{ObjectAnimator.ofFloat(actionBarPopupWindowLayout, "backScaleY", new float[]{0.0f, 1.0f}), ObjectAnimator.ofInt(actionBarPopupWindowLayout, "backAlpha", new int[]{0, 255})});
             this.windowAnimatorSet.setDuration((long) ((i * 16) + 150));
-            this.windowAnimatorSet.addListener(new Animator.AnimatorListener() {
-                public void onAnimationRepeat(Animator animator) {
-                }
-
-                public void onAnimationStart(Animator animator) {
-                }
-
+            this.windowAnimatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
                     AnimatorSet unused = ActionBarPopupWindow.this.windowAnimatorSet = null;
                     ActionBarPopupWindowLayout actionBarPopupWindowLayout = (ActionBarPopupWindowLayout) ActionBarPopupWindow.this.getContentView();
@@ -415,10 +415,6 @@ public class ActionBarPopupWindow extends PopupWindow {
                     for (int i = 0; i < itemsCount; i++) {
                         actionBarPopupWindowLayout.getItemAt(i).setAlpha(1.0f);
                     }
-                }
-
-                public void onAnimationCancel(Animator animator) {
-                    onAnimationEnd(animator);
                 }
             });
             this.windowAnimatorSet.start();
@@ -444,8 +440,22 @@ public class ActionBarPopupWindow extends PopupWindow {
         dismiss(true);
     }
 
+    public void setPauseNotifications(boolean z) {
+        this.pauseNotifications = z;
+    }
+
     public void dismiss(boolean z) {
         setFocusable(false);
+        AnimatorSet animatorSet = this.windowAnimatorSet;
+        if (animatorSet != null) {
+            if (!z || !this.isClosingAnimated) {
+                animatorSet.cancel();
+                this.windowAnimatorSet = null;
+            } else {
+                return;
+            }
+        }
+        this.isClosingAnimated = false;
         if (!this.animationEnabled || !z) {
             try {
                 super.dismiss();
@@ -454,10 +464,7 @@ public class ActionBarPopupWindow extends PopupWindow {
             unregisterListener();
             return;
         }
-        AnimatorSet animatorSet = this.windowAnimatorSet;
-        if (animatorSet != null) {
-            animatorSet.cancel();
-        }
+        this.isClosingAnimated = true;
         ActionBarPopupWindowLayout actionBarPopupWindowLayout = (ActionBarPopupWindowLayout) getContentView();
         if (actionBarPopupWindowLayout.itemAnimators != null && !actionBarPopupWindowLayout.itemAnimators.isEmpty()) {
             int size = actionBarPopupWindowLayout.itemAnimators.size();
@@ -478,29 +485,24 @@ public class ActionBarPopupWindow extends PopupWindow {
         animatorArr[1] = ObjectAnimator.ofFloat(actionBarPopupWindowLayout, View.ALPHA, new float[]{0.0f});
         animatorSet3.playTogether(animatorArr);
         this.windowAnimatorSet.setDuration((long) this.dismissAnimationDuration);
-        this.windowAnimatorSet.addListener(new Animator.AnimatorListener() {
-            public void onAnimationRepeat(Animator animator) {
-            }
-
-            public void onAnimationStart(Animator animator) {
-            }
-
+        this.windowAnimatorSet.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 AnimatorSet unused = ActionBarPopupWindow.this.windowAnimatorSet = null;
+                boolean unused2 = ActionBarPopupWindow.this.isClosingAnimated = false;
                 ActionBarPopupWindow.this.setFocusable(false);
                 try {
                     ActionBarPopupWindow.super.dismiss();
-                } catch (Exception unused2) {
+                } catch (Exception unused3) {
                 }
                 ActionBarPopupWindow.this.unregisterListener();
-                NotificationCenter.getInstance(UserConfig.selectedAccount).onAnimationFinish(ActionBarPopupWindow.this.popupAnimationIndex);
-            }
-
-            public void onAnimationCancel(Animator animator) {
-                onAnimationEnd(animator);
+                if (ActionBarPopupWindow.this.pauseNotifications) {
+                    NotificationCenter.getInstance(ActionBarPopupWindow.this.currentAccount).onAnimationFinish(ActionBarPopupWindow.this.popupAnimationIndex);
+                }
             }
         });
-        this.popupAnimationIndex = NotificationCenter.getInstance(UserConfig.selectedAccount).setAnimationInProgress(this.popupAnimationIndex, (int[]) null);
+        if (this.pauseNotifications) {
+            this.popupAnimationIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.popupAnimationIndex, (int[]) null);
+        }
         this.windowAnimatorSet.start();
     }
 }

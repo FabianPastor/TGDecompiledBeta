@@ -102,77 +102,81 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
         this.isForcePublic = z;
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:7:0x0040, code lost:
-        if (r0 == null) goto L_0x0042;
+    /* JADX WARNING: Code restructure failed: missing block: B:7:0x0048, code lost:
+        if (r0 == null) goto L_0x004a;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onFragmentCreate() {
         /*
-            r5 = this;
-            org.telegram.messenger.MessagesController r0 = r5.getMessagesController()
-            int r1 = r5.chatId
+            r9 = this;
+            org.telegram.messenger.MessagesController r0 = r9.getMessagesController()
+            int r1 = r9.chatId
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             org.telegram.tgnet.TLRPC$Chat r0 = r0.getChat(r1)
-            r5.currentChat = r0
+            r9.currentChat = r0
             r1 = 1
             r2 = 0
-            if (r0 != 0) goto L_0x0043
-            org.telegram.messenger.MessagesStorage r0 = r5.getMessagesStorage()
-            int r3 = r5.chatId
+            if (r0 != 0) goto L_0x004b
+            org.telegram.messenger.MessagesStorage r0 = r9.getMessagesStorage()
+            int r3 = r9.chatId
             org.telegram.tgnet.TLRPC$Chat r0 = r0.getChatSync(r3)
-            r5.currentChat = r0
-            if (r0 == 0) goto L_0x0042
-            org.telegram.messenger.MessagesController r0 = r5.getMessagesController()
-            org.telegram.tgnet.TLRPC$Chat r3 = r5.currentChat
+            r9.currentChat = r0
+            if (r0 == 0) goto L_0x004a
+            org.telegram.messenger.MessagesController r0 = r9.getMessagesController()
+            org.telegram.tgnet.TLRPC$Chat r3 = r9.currentChat
             r0.putChat(r3, r1)
-            org.telegram.tgnet.TLRPC$ChatFull r0 = r5.info
-            if (r0 != 0) goto L_0x0043
-            org.telegram.messenger.MessagesStorage r0 = r5.getMessagesStorage()
-            int r3 = r5.chatId
-            java.util.concurrent.CountDownLatch r4 = new java.util.concurrent.CountDownLatch
-            r4.<init>(r1)
-            org.telegram.tgnet.TLRPC$ChatFull r0 = r0.loadChatInfo(r3, r4, r2, r2)
-            r5.info = r0
-            if (r0 != 0) goto L_0x0043
-        L_0x0042:
+            org.telegram.tgnet.TLRPC$ChatFull r0 = r9.info
+            if (r0 != 0) goto L_0x004b
+            org.telegram.messenger.MessagesStorage r3 = r9.getMessagesStorage()
+            int r4 = r9.chatId
+            org.telegram.tgnet.TLRPC$Chat r0 = r9.currentChat
+            boolean r5 = org.telegram.messenger.ChatObject.isChannel(r0)
+            java.util.concurrent.CountDownLatch r6 = new java.util.concurrent.CountDownLatch
+            r6.<init>(r1)
+            r7 = 0
+            r8 = 0
+            org.telegram.tgnet.TLRPC$ChatFull r0 = r3.loadChatInfo(r4, r5, r6, r7, r8)
+            r9.info = r0
+            if (r0 != 0) goto L_0x004b
+        L_0x004a:
             return r2
-        L_0x0043:
-            boolean r0 = r5.isForcePublic
-            if (r0 != 0) goto L_0x0053
-            org.telegram.tgnet.TLRPC$Chat r0 = r5.currentChat
+        L_0x004b:
+            boolean r0 = r9.isForcePublic
+            if (r0 != 0) goto L_0x005b
+            org.telegram.tgnet.TLRPC$Chat r0 = r9.currentChat
             java.lang.String r0 = r0.username
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 == 0) goto L_0x0053
+            if (r0 == 0) goto L_0x005b
             r0 = 1
-            goto L_0x0054
-        L_0x0053:
+            goto L_0x005c
+        L_0x005b:
             r0 = 0
-        L_0x0054:
-            r5.isPrivate = r0
-            org.telegram.tgnet.TLRPC$Chat r0 = r5.currentChat
+        L_0x005c:
+            r9.isPrivate = r0
+            org.telegram.tgnet.TLRPC$Chat r0 = r9.currentChat
             boolean r0 = org.telegram.messenger.ChatObject.isChannel(r0)
-            if (r0 == 0) goto L_0x0065
-            org.telegram.tgnet.TLRPC$Chat r0 = r5.currentChat
+            if (r0 == 0) goto L_0x006d
+            org.telegram.tgnet.TLRPC$Chat r0 = r9.currentChat
             boolean r0 = r0.megagroup
-            if (r0 != 0) goto L_0x0065
-            goto L_0x0066
-        L_0x0065:
+            if (r0 != 0) goto L_0x006d
+            goto L_0x006e
+        L_0x006d:
             r1 = 0
-        L_0x0066:
-            r5.isChannel = r1
-            boolean r0 = r5.isForcePublic
-            if (r0 == 0) goto L_0x0076
-            org.telegram.tgnet.TLRPC$Chat r0 = r5.currentChat
+        L_0x006e:
+            r9.isChannel = r1
+            boolean r0 = r9.isForcePublic
+            if (r0 == 0) goto L_0x007e
+            org.telegram.tgnet.TLRPC$Chat r0 = r9.currentChat
             java.lang.String r0 = r0.username
             boolean r0 = android.text.TextUtils.isEmpty(r0)
-            if (r0 != 0) goto L_0x0080
-        L_0x0076:
-            boolean r0 = r5.isPrivate
-            if (r0 == 0) goto L_0x009c
-            org.telegram.tgnet.TLRPC$Chat r0 = r5.currentChat
+            if (r0 != 0) goto L_0x0088
+        L_0x007e:
+            boolean r0 = r9.isPrivate
+            if (r0 == 0) goto L_0x00a4
+            org.telegram.tgnet.TLRPC$Chat r0 = r9.currentChat
             boolean r0 = r0.creator
-            if (r0 == 0) goto L_0x009c
-        L_0x0080:
+            if (r0 == 0) goto L_0x00a4
+        L_0x0088:
             org.telegram.tgnet.TLRPC$TL_channels_checkUsername r0 = new org.telegram.tgnet.TLRPC$TL_channels_checkUsername
             r0.<init>()
             java.lang.String r1 = "1"
@@ -180,14 +184,14 @@ public class ChatEditTypeActivity extends BaseFragment implements NotificationCe
             org.telegram.tgnet.TLRPC$TL_inputChannelEmpty r1 = new org.telegram.tgnet.TLRPC$TL_inputChannelEmpty
             r1.<init>()
             r0.channel = r1
-            org.telegram.tgnet.ConnectionsManager r1 = r5.getConnectionsManager()
+            org.telegram.tgnet.ConnectionsManager r1 = r9.getConnectionsManager()
             org.telegram.ui.-$$Lambda$ChatEditTypeActivity$D-mmdVYSONU5EQU5x4KjgeB4t7k r2 = new org.telegram.ui.-$$Lambda$ChatEditTypeActivity$D-mmdVYSONU5EQU5x4KjgeB4t7k
             r2.<init>()
             r1.sendRequest(r0, r2)
-        L_0x009c:
-            org.telegram.messenger.NotificationCenter r0 = r5.getNotificationCenter()
+        L_0x00a4:
+            org.telegram.messenger.NotificationCenter r0 = r9.getNotificationCenter()
             int r1 = org.telegram.messenger.NotificationCenter.chatInfoDidLoad
-            r0.addObserver(r5, r1)
+            r0.addObserver(r9, r1)
             boolean r0 = super.onFragmentCreate()
             return r0
         */

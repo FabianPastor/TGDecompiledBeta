@@ -1,10 +1,10 @@
 Signature-Version: 1.0
 Created-By: Android Gradle 4.1.0
-SHA1-Digest-Manifest: sJqBxkpge5DYxitWnqCW3l2BbkU=
+SHA1-Digest-Manifest: 8OYyTrZos66Ubc4DiN+WafFxpoM=
 X-Android-APK-Signed: 2
 
 Name: AndroidManifest.xml
-SHA1-Digest: L/Q0jbZjHGtUNIO4QpKiTAtSzIc=
+SHA1-Digest: G5H9wwF1noREpjtZGbNy4pSXjYw=
 
 Name: META-INF/androidx.arch.core_core-runtime.version
 SHA1-Digest: e1tut2kK2rB7RpspgrtY2fhXIus=
@@ -9511,13 +9511,13 @@ Name: builddef.lst
 SHA1-Digest: b4iFOKGOQFQJO7IF+KXHSQsv2sI=
 
 Name: classes.dex
-SHA1-Digest: 2YEJmv8MEpVr5JyuDHFbVKrdHzw=
+SHA1-Digest: qyQbjgsfemjGGkJfRV9KobGx9HI=
 
 Name: classes2.dex
 SHA1-Digest: svsd1LE73ihkPqbBPJNmhaoLj8U=
 
 Name: classes3.dex
-SHA1-Digest: 1Ii6gjBXqVtpcyVwv7fMtsY0CUI=
+SHA1-Digest: SVg2ZhQAJbeHOpCMczx7WzE3iyw=
 
 Name: com/google/android/search/verification/client/R.java
 SHA1-Digest: CIvj9T4PvsdJr6yfeJo7sTlaGfQ=
@@ -19830,7 +19830,7 @@ Name: res/xml/sync_contacts.xml
 SHA1-Digest: eTsXoSZyDh88OuOS8VQI6OdVkfQ=
 
 Name: resources.arsc
-SHA1-Digest: Dm5sCuFxZRbceA17Yf1Jqpg8VE0=
+SHA1-Digest: gOUhhU2E1QJusmSem0aMsNsEjI0=
 
 Name: transport-api.properties
 SHA1-Digest: OrUd0dvMYm2tlcfDVrGNApZLT1M=

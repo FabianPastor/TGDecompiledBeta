@@ -677,6 +677,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 bundle.putInt("chat_id", -dialogId);
             }
             bundle.putInt("message_id", tLRPC$Message.id);
+            bundle.putBoolean("need_remove_previous_same_chat_activity", false);
             if (getMessagesController().checkCanOpenChat(bundle, this)) {
                 presentFragment(new ChatActivity(bundle));
             }
@@ -696,6 +697,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         Bundle bundle = new Bundle();
         bundle.putInt("chat_id", this.chatId);
         bundle.putInt("message_id", this.messageId);
+        bundle.putBoolean("need_remove_previous_same_chat_activity", false);
         presentFragment(new ChatActivity(bundle));
     }
 

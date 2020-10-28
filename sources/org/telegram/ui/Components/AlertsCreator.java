@@ -194,12 +194,8 @@ public class AlertsCreator {
                 if (baseFragment2 == null || !str.equals("CHANNELS_TOO_MUCH")) {
                     if (baseFragment2 != null) {
                         showAddUserAlert(tLRPC$TL_error2.text, baseFragment2, (objArr2 == null || objArr2.length <= 0) ? false : ((Boolean) objArr2[0]).booleanValue(), tLObject2);
-                        return null;
-                    } else if (!tLRPC$TL_error2.text.equals("PEER_FLOOD")) {
-                        return null;
-                    } else {
+                    } else if (tLRPC$TL_error2.text.equals("PEER_FLOOD")) {
                         NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.needShowAlert, 1);
-                        return null;
                     }
                 } else if (z || (tLObject2 instanceof TLRPC$TL_channels_inviteToChannel)) {
                     baseFragment2.presentFragment(new TooManyCommunitiesActivity(0));
@@ -214,10 +210,8 @@ public class AlertsCreator {
                     return null;
                 } else if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
                     showFloodWaitAlert(tLRPC$TL_error2.text, baseFragment2);
-                    return null;
                 } else {
                     showAddUserAlert(tLRPC$TL_error2.text, baseFragment2, false, tLObject2);
-                    return null;
                 }
             } else if (tLObject2 instanceof TLRPC$TL_channels_createChannel) {
                 if (str.equals("CHANNELS_TOO_MUCH")) {
@@ -225,21 +219,18 @@ public class AlertsCreator {
                     return null;
                 } else if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
                     showFloodWaitAlert(tLRPC$TL_error2.text, baseFragment2);
-                    return null;
                 } else {
                     showAddUserAlert(tLRPC$TL_error2.text, baseFragment2, false, tLObject2);
-                    return null;
                 }
             } else if (tLObject2 instanceof TLRPC$TL_messages_editMessage) {
-                if (str.equals("MESSAGE_NOT_MODIFIED")) {
-                    return null;
+                if (!str.equals("MESSAGE_NOT_MODIFIED")) {
+                    if (baseFragment2 != null) {
+                        showSimpleAlert(baseFragment2, LocaleController.getString("EditMessageError", NUM));
+                    } else {
+                        showSimpleToast((BaseFragment) null, LocaleController.getString("EditMessageError", NUM));
+                        return null;
+                    }
                 }
-                if (baseFragment2 != null) {
-                    showSimpleAlert(baseFragment2, LocaleController.getString("EditMessageError", NUM));
-                    return null;
-                }
-                showSimpleToast(baseFragment2, LocaleController.getString("EditMessageError", NUM));
-                return null;
             } else if ((tLObject2 instanceof TLRPC$TL_messages_sendMessage) || (tLObject2 instanceof TLRPC$TL_messages_sendMedia) || (tLObject2 instanceof TLRPC$TL_messages_sendInlineBotResult) || (tLObject2 instanceof TLRPC$TL_messages_forwardMessages) || (tLObject2 instanceof TLRPC$TL_messages_sendMultiMedia) || (tLObject2 instanceof TLRPC$TL_messages_sendScheduledMessages)) {
                 str.hashCode();
                 char c = 65535;
@@ -266,29 +257,23 @@ public class AlertsCreator {
                 switch (c) {
                     case 0:
                         NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.needShowAlert, 5);
-                        return null;
+                        break;
                     case 1:
                         NotificationCenter.getInstance(i).postNotificationName(NotificationCenter.needShowAlert, 0);
-                        return null;
+                        break;
                     case 2:
                         showSimpleToast(baseFragment2, LocaleController.getString("MessageScheduledLimitReached", NUM));
-                        return null;
-                    default:
-                        return null;
+                        break;
                 }
             } else if (tLObject2 instanceof TLRPC$TL_messages_importChatInvite) {
                 if (str.startsWith("FLOOD_WAIT")) {
                     showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
-                    return null;
                 } else if (tLRPC$TL_error2.text.equals("USERS_TOO_MUCH")) {
                     showSimpleAlert(baseFragment2, LocaleController.getString("JoinToGroupErrorFull", NUM));
-                    return null;
                 } else if (tLRPC$TL_error2.text.equals("CHANNELS_TOO_MUCH")) {
                     baseFragment2.presentFragment(new TooManyCommunitiesActivity(0));
-                    return null;
                 } else {
                     showSimpleAlert(baseFragment2, LocaleController.getString("JoinToGroupErrorNotExist", NUM));
-                    return null;
                 }
             } else if (!(tLObject2 instanceof TLRPC$TL_messages_getAttachedStickers)) {
                 int i3 = i2;
@@ -316,16 +301,12 @@ public class AlertsCreator {
                     if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
                         return showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
                     }
-                    if (tLRPC$TL_error2.code == -1000) {
-                        return null;
+                    if (tLRPC$TL_error2.code != -1000) {
+                        return showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error2.text);
                     }
-                    return showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error2.text);
                 } else if (tLObject2 instanceof TLRPC$TL_account_sendConfirmPhoneCode) {
                     if (i3 == 400) {
                         return showSimpleAlert(baseFragment2, LocaleController.getString("CancelLinkExpired", NUM));
-                    }
-                    if (str == null) {
-                        return null;
                     }
                     if (str.startsWith("FLOOD_WAIT")) {
                         return showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
@@ -334,109 +315,81 @@ public class AlertsCreator {
                 } else if (tLObject2 instanceof TLRPC$TL_account_changePhone) {
                     if (str.contains("PHONE_NUMBER_INVALID")) {
                         showSimpleAlert(baseFragment2, LocaleController.getString("InvalidPhoneNumber", NUM));
-                        return null;
                     } else if (tLRPC$TL_error2.text.contains("PHONE_CODE_EMPTY") || tLRPC$TL_error2.text.contains("PHONE_CODE_INVALID")) {
                         showSimpleAlert(baseFragment2, LocaleController.getString("InvalidCode", NUM));
-                        return null;
                     } else if (tLRPC$TL_error2.text.contains("PHONE_CODE_EXPIRED")) {
                         showSimpleAlert(baseFragment2, LocaleController.getString("CodeExpired", NUM));
-                        return null;
                     } else if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
                         showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
-                        return null;
                     } else {
                         showSimpleAlert(baseFragment2, tLRPC$TL_error2.text);
-                        return null;
                     }
                 } else if (tLObject2 instanceof TLRPC$TL_account_sendChangePhoneCode) {
                     if (str.contains("PHONE_NUMBER_INVALID")) {
                         showSimpleAlert(baseFragment2, LocaleController.getString("InvalidPhoneNumber", NUM));
-                        return null;
                     } else if (tLRPC$TL_error2.text.contains("PHONE_CODE_EMPTY") || tLRPC$TL_error2.text.contains("PHONE_CODE_INVALID")) {
                         showSimpleAlert(baseFragment2, LocaleController.getString("InvalidCode", NUM));
-                        return null;
                     } else if (tLRPC$TL_error2.text.contains("PHONE_CODE_EXPIRED")) {
                         showSimpleAlert(baseFragment2, LocaleController.getString("CodeExpired", NUM));
-                        return null;
                     } else if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
                         showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
-                        return null;
                     } else if (tLRPC$TL_error2.text.startsWith("PHONE_NUMBER_OCCUPIED")) {
                         showSimpleAlert(baseFragment2, LocaleController.formatString("ChangePhoneNumberOccupied", NUM, objArr[0]));
-                        return null;
                     } else {
                         showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM));
-                        return null;
                     }
                 } else if (tLObject2 instanceof TLRPC$TL_updateUserName) {
                     str.hashCode();
                     if (str.equals("USERNAME_INVALID")) {
                         showSimpleAlert(baseFragment2, LocaleController.getString("UsernameInvalid", NUM));
-                        return null;
                     } else if (!str.equals("USERNAME_OCCUPIED")) {
                         showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM));
-                        return null;
                     } else {
                         showSimpleAlert(baseFragment2, LocaleController.getString("UsernameInUse", NUM));
-                        return null;
                     }
                 } else if (tLObject2 instanceof TLRPC$TL_contacts_importContacts) {
-                    if (tLRPC$TL_error2 == null || str.startsWith("FLOOD_WAIT")) {
+                    if (str.startsWith("FLOOD_WAIT")) {
                         showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
-                        return null;
+                    } else {
+                        showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error2.text);
                     }
-                    showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error2.text);
-                    return null;
                 } else if ((tLObject2 instanceof TLRPC$TL_account_getPassword) || (tLObject2 instanceof TLRPC$TL_account_getTmpPassword)) {
                     if (str.startsWith("FLOOD_WAIT")) {
                         showSimpleToast(baseFragment2, getFloodWaitString(tLRPC$TL_error2.text));
-                        return null;
+                    } else {
+                        showSimpleToast(baseFragment2, tLRPC$TL_error2.text);
                     }
-                    showSimpleToast(baseFragment2, tLRPC$TL_error2.text);
-                    return null;
                 } else if (tLObject2 instanceof TLRPC$TL_payments_sendPaymentForm) {
                     str.hashCode();
                     if (str.equals("BOT_PRECHECKOUT_FAILED")) {
                         showSimpleToast(baseFragment2, LocaleController.getString("PaymentPrecheckoutFailed", NUM));
-                        return null;
                     } else if (!str.equals("PAYMENT_FAILED")) {
                         showSimpleToast(baseFragment2, tLRPC$TL_error2.text);
-                        return null;
                     } else {
                         showSimpleToast(baseFragment2, LocaleController.getString("PaymentFailed", NUM));
-                        return null;
                     }
-                } else if (!(tLObject2 instanceof TLRPC$TL_payments_validateRequestedInfo)) {
-                    return null;
-                } else {
+                } else if (tLObject2 instanceof TLRPC$TL_payments_validateRequestedInfo) {
                     str.hashCode();
                     if (!str.equals("SHIPPING_NOT_AVAILABLE")) {
                         showSimpleToast(baseFragment2, tLRPC$TL_error2.text);
-                        return null;
+                    } else {
+                        showSimpleToast(baseFragment2, LocaleController.getString("PaymentNoShippingMethod", NUM));
                     }
-                    showSimpleToast(baseFragment2, LocaleController.getString("PaymentNoShippingMethod", NUM));
-                    return null;
                 }
-            } else if (baseFragment2 == null || baseFragment.getParentActivity() == null) {
-                return null;
-            } else {
+            } else if (!(baseFragment2 == null || baseFragment.getParentActivity() == null)) {
                 Activity parentActivity = baseFragment.getParentActivity();
                 Toast.makeText(parentActivity, LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error2.text, 0).show();
-                return null;
             }
         } else if (str.contains("PHONE_NUMBER_INVALID")) {
             showSimpleAlert(baseFragment2, LocaleController.getString("InvalidPhoneNumber", NUM));
-            return null;
         } else if (tLRPC$TL_error2.text.startsWith("FLOOD_WAIT")) {
             showSimpleAlert(baseFragment2, LocaleController.getString("FloodWait", NUM));
-            return null;
         } else if ("APP_VERSION_OUTDATED".equals(tLRPC$TL_error2.text)) {
             showUpdateAppAlert(baseFragment.getParentActivity(), LocaleController.getString("UpdateAppAlert", NUM), true);
-            return null;
         } else {
             showSimpleAlert(baseFragment2, LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error2.text);
-            return null;
         }
+        return null;
     }
 
     public static Toast showSimpleToast(BaseFragment baseFragment, String str) {
@@ -529,7 +482,7 @@ public class AlertsCreator {
         if (indexOf != -1) {
             int i2 = indexOf + 1;
             i = TextUtils.indexOf(spannableStringBuilder, ']', i2);
-            if (!(indexOf == -1 || i == -1)) {
+            if (i != -1) {
                 spannableStringBuilder.delete(i, i + 1);
                 spannableStringBuilder.delete(indexOf, i2);
             }
@@ -585,22 +538,23 @@ public class AlertsCreator {
     public static boolean checkSlowMode(Context context, int i, long j, boolean z) {
         TLRPC$Chat chat;
         int i2 = (int) j;
-        if (i2 < 0 && (chat = MessagesController.getInstance(i).getChat(Integer.valueOf(-i2))) != null && chat.slowmode_enabled && !ChatObject.hasAdminRights(chat)) {
-            if (!z) {
-                TLRPC$ChatFull chatFull = MessagesController.getInstance(i).getChatFull(chat.id);
-                if (chatFull == null) {
-                    chatFull = MessagesStorage.getInstance(i).loadChatInfo(chat.id, new CountDownLatch(1), false, false);
-                }
-                if (chatFull != null && chatFull.slowmode_next_send_date >= ConnectionsManager.getInstance(i).getCurrentTime()) {
-                    z = true;
-                }
+        if (i2 >= 0 || (chat = MessagesController.getInstance(i).getChat(Integer.valueOf(-i2))) == null || !chat.slowmode_enabled || ChatObject.hasAdminRights(chat)) {
+            return false;
+        }
+        if (!z) {
+            TLRPC$ChatFull chatFull = MessagesController.getInstance(i).getChatFull(chat.id);
+            if (chatFull == null) {
+                chatFull = MessagesStorage.getInstance(i).loadChatInfo(chat.id, ChatObject.isChannel(chat), new CountDownLatch(1), false, false);
             }
-            if (z) {
-                createSimpleAlert(context, chat.title, LocaleController.getString("SlowmodeSendError", NUM)).show();
-                return true;
+            if (chatFull != null && chatFull.slowmode_next_send_date >= ConnectionsManager.getInstance(i).getCurrentTime()) {
+                z = true;
             }
         }
-        return false;
+        if (!z) {
+            return false;
+        }
+        createSimpleAlert(context, chat.title, LocaleController.getString("SlowmodeSendError", NUM)).show();
+        return true;
     }
 
     public static AlertDialog.Builder createSimpleAlert(Context context, String str) {
@@ -733,23 +687,19 @@ public class AlertsCreator {
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:12:0x004a  */
-    /* JADX WARNING: Removed duplicated region for block: B:26:0x00f0  */
-    /* JADX WARNING: Removed duplicated region for block: B:27:0x00f5  */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x00fd  */
-    /* JADX WARNING: Removed duplicated region for block: B:31:0x0102  */
-    /* JADX WARNING: Removed duplicated region for block: B:35:0x0136  */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x01e0  */
-    /* JADX WARNING: Removed duplicated region for block: B:58:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:32:0x0133  */
+    /* JADX WARNING: Removed duplicated region for block: B:49:0x01dd  */
+    /* JADX WARNING: Removed duplicated region for block: B:55:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static void showBlockReportSpamAlert(org.telegram.ui.ActionBar.BaseFragment r18, long r19, org.telegram.tgnet.TLRPC$User r21, org.telegram.tgnet.TLRPC$Chat r22, org.telegram.tgnet.TLRPC$EncryptedChat r23, boolean r24, org.telegram.tgnet.TLRPC$ChatFull r25, org.telegram.messenger.MessagesStorage.IntCallback r26) {
         /*
             r0 = r18
             r7 = r22
             r1 = r25
-            if (r0 == 0) goto L_0x01e9
+            if (r0 == 0) goto L_0x01e6
             android.app.Activity r2 = r18.getParentActivity()
             if (r2 != 0) goto L_0x0010
-            goto L_0x01e9
+            goto L_0x01e6
         L_0x0010:
             org.telegram.messenger.AccountInstance r3 = r18.getAccountInstance()
             org.telegram.ui.ActionBar.AlertDialog$Builder r11 = new org.telegram.ui.ActionBar.AlertDialog$Builder
@@ -778,7 +728,7 @@ public class AlertsCreator {
         L_0x0047:
             r2 = 1
         L_0x0048:
-            if (r21 == 0) goto L_0x0136
+            if (r21 == 0) goto L_0x0133
             r1 = 2131624499(0x7f0e0233, float:1.887618E38)
             java.lang.Object[] r6 = new java.lang.Object[r4]
             java.lang.String r10 = org.telegram.messenger.UserObject.getFirstName(r21)
@@ -805,12 +755,12 @@ public class AlertsCreator {
             r14.setOrientation(r4)
             r15 = 0
         L_0x008f:
-            if (r15 >= r6) goto L_0x0127
+            if (r15 >= r6) goto L_0x0124
             if (r15 != 0) goto L_0x009b
             if (r2 != 0) goto L_0x009b
             r16 = r1
             r17 = r2
-            goto L_0x011e
+            goto L_0x011b
         L_0x009b:
             org.telegram.ui.Cells.CheckBoxCell r6 = new org.telegram.ui.Cells.CheckBoxCell
             android.app.Activity r13 = r18.getParentActivity()
@@ -823,17 +773,17 @@ public class AlertsCreator {
             java.lang.Integer r13 = java.lang.Integer.valueOf(r15)
             r6.setTag(r13)
             java.lang.String r6 = ""
-            if (r15 != 0) goto L_0x00cd
+            if (r15 != 0) goto L_0x00cf
             r13 = r10[r15]
             r12 = 2131625045(0x7f0e0455, float:1.8877287E38)
             r16 = r1
             java.lang.String r1 = "DeleteReportSpam"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r1, r12)
             r13.setText(r1, r6, r4, r5)
-            goto L_0x00e4
-        L_0x00cd:
+            r17 = r2
+            goto L_0x00e3
+        L_0x00cf:
             r16 = r1
-            if (r15 != r4) goto L_0x00e4
             r1 = r10[r15]
             r12 = 2131625053(0x7f0e045d, float:1.8877303E38)
             java.lang.Object[] r13 = new java.lang.Object[r5]
@@ -841,27 +791,24 @@ public class AlertsCreator {
             java.lang.String r2 = "DeleteThisChat"
             java.lang.String r2 = org.telegram.messenger.LocaleController.formatString(r2, r12, r13)
             r1.setText(r2, r6, r4, r5)
-            goto L_0x00e6
-        L_0x00e4:
-            r17 = r2
-        L_0x00e6:
+        L_0x00e3:
             r1 = r10[r15]
             boolean r2 = org.telegram.messenger.LocaleController.isRTL
             r6 = 1098907648(0x41800000, float:16.0)
             r12 = 1090519040(0x41000000, float:8.0)
-            if (r2 == 0) goto L_0x00f5
+            if (r2 == 0) goto L_0x00f2
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r6)
-            goto L_0x00f9
-        L_0x00f5:
+            goto L_0x00f6
+        L_0x00f2:
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r12)
-        L_0x00f9:
+        L_0x00f6:
             boolean r13 = org.telegram.messenger.LocaleController.isRTL
-            if (r13 == 0) goto L_0x0102
+            if (r13 == 0) goto L_0x00ff
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r12)
-            goto L_0x0106
-        L_0x0102:
+            goto L_0x0103
+        L_0x00ff:
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
-        L_0x0106:
+        L_0x0103:
             r1.setPadding(r2, r5, r6, r5)
             r1 = r10[r15]
             r2 = -2
@@ -872,31 +819,31 @@ public class AlertsCreator {
             org.telegram.ui.Components.-$$Lambda$AlertsCreator$XOv0VE_gHd14UuU40YAvw9NlXKk r2 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$XOv0VE_gHd14UuU40YAvw9NlXKk
             r2.<init>(r10)
             r1.setOnClickListener(r2)
-        L_0x011e:
+        L_0x011b:
             int r15 = r15 + 1
             r1 = r16
             r2 = r17
             r6 = 2
             goto L_0x008f
-        L_0x0127:
+        L_0x0124:
             r16 = r1
             r1 = 12
             r11.setCustomViewOffset(r1)
             r11.setView(r14)
             r4 = r10
             r12 = r16
-            goto L_0x01ae
-        L_0x0136:
-            if (r7 == 0) goto L_0x0174
-            if (r24 == 0) goto L_0x0174
+            goto L_0x01ab
+        L_0x0133:
+            if (r7 == 0) goto L_0x0171
+            if (r24 == 0) goto L_0x0171
             r2 = 2131626873(0x7f0e0b79, float:1.8880994E38)
             java.lang.String r6 = "ReportUnrelatedGroup"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r6, r2)
             r11.setTitle(r2)
-            if (r1 == 0) goto L_0x0167
+            if (r1 == 0) goto L_0x0164
             org.telegram.tgnet.TLRPC$ChannelLocation r1 = r1.location
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_channelLocation
-            if (r2 == 0) goto L_0x0167
+            if (r2 == 0) goto L_0x0164
             org.telegram.tgnet.TLRPC$TL_channelLocation r1 = (org.telegram.tgnet.TLRPC$TL_channelLocation) r1
             r2 = 2131626874(0x7f0e0b7a, float:1.8880997E38)
             java.lang.Object[] r4 = new java.lang.Object[r4]
@@ -906,39 +853,39 @@ public class AlertsCreator {
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r1, r2, r4)
             android.text.SpannableStringBuilder r1 = org.telegram.messenger.AndroidUtilities.replaceTags(r1)
             r11.setMessage(r1)
-            goto L_0x01a3
-        L_0x0167:
+            goto L_0x01a0
+        L_0x0164:
             r1 = 2131626875(0x7f0e0b7b, float:1.8880999E38)
             java.lang.String r2 = "ReportUnrelatedGroupTextNoAddress"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
-            goto L_0x01a3
-        L_0x0174:
+            goto L_0x01a0
+        L_0x0171:
             r1 = 2131626871(0x7f0e0b77, float:1.888099E38)
             java.lang.String r2 = "ReportSpamTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setTitle(r1)
             boolean r1 = org.telegram.messenger.ChatObject.isChannel(r22)
-            if (r1 == 0) goto L_0x0197
+            if (r1 == 0) goto L_0x0194
             boolean r1 = r7.megagroup
-            if (r1 != 0) goto L_0x0197
+            if (r1 != 0) goto L_0x0194
             r1 = 2131626867(0x7f0e0b73, float:1.8880982E38)
             java.lang.String r2 = "ReportSpamAlertChannel"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
-            goto L_0x01a3
-        L_0x0197:
+            goto L_0x01a0
+        L_0x0194:
             r1 = 2131626868(0x7f0e0b74, float:1.8880984E38)
             java.lang.String r2 = "ReportSpamAlertGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r11.setMessage(r1)
-        L_0x01a3:
+        L_0x01a0:
             r1 = 2131626857(0x7f0e0b69, float:1.8880962E38)
             java.lang.String r2 = "ReportChat"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r12 = r1
             r4 = 0
-        L_0x01ae:
+        L_0x01ab:
             org.telegram.ui.Components.-$$Lambda$AlertsCreator$gPN4YJIWOAt6YFUFK2WPve21WNI r13 = new org.telegram.ui.Components.-$$Lambda$AlertsCreator$gPN4YJIWOAt6YFUFK2WPve21WNI
             r1 = r13
             r2 = r21
@@ -959,11 +906,11 @@ public class AlertsCreator {
             r0 = -1
             android.view.View r0 = r1.getButton(r0)
             android.widget.TextView r0 = (android.widget.TextView) r0
-            if (r0 == 0) goto L_0x01e9
+            if (r0 == 0) goto L_0x01e6
             java.lang.String r1 = "dialogTextRed2"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r0.setTextColor(r1)
-        L_0x01e9:
+        L_0x01e6:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.AlertsCreator.showBlockReportSpamAlert(org.telegram.ui.ActionBar.BaseFragment, long, org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$Chat, org.telegram.tgnet.TLRPC$EncryptedChat, boolean, org.telegram.tgnet.TLRPC$ChatFull, org.telegram.messenger.MessagesStorage$IntCallback):void");
@@ -1708,28 +1655,25 @@ public class AlertsCreator {
                     });
                 }
                 if (tLRPC$User2 == null) {
-                    BackupImageView backupImageView3 = backupImageView2;
                     AvatarDrawable avatarDrawable3 = avatarDrawable;
-                    if (tLRPC$Chat2 != null) {
-                        avatarDrawable3.setInfo(tLRPC$Chat2);
-                        backupImageView3.setImage(ImageLocation.getForChat(tLRPC$Chat2, false), "50_50", (Drawable) avatarDrawable3, (Object) tLRPC$Chat2);
-                    }
+                    avatarDrawable3.setInfo(tLRPC$Chat2);
+                    backupImageView2.setImage(ImageLocation.getForChat(tLRPC$Chat2, false), "50_50", (Drawable) avatarDrawable3, (Object) tLRPC$Chat2);
                 } else if (UserObject.isReplyUser(tLRPC$User)) {
                     AvatarDrawable avatarDrawable4 = avatarDrawable;
                     avatarDrawable4.setSmallSize(true);
                     avatarDrawable4.setAvatarType(12);
                     backupImageView2.setImage((ImageLocation) null, (String) null, (Drawable) avatarDrawable4, (Object) tLRPC$User2);
                 } else {
-                    BackupImageView backupImageView4 = backupImageView2;
+                    BackupImageView backupImageView3 = backupImageView2;
                     AvatarDrawable avatarDrawable5 = avatarDrawable;
                     if (tLRPC$User2.id == clientUserId) {
                         avatarDrawable5.setSmallSize(true);
                         avatarDrawable5.setAvatarType(1);
-                        backupImageView4.setImage((ImageLocation) null, (String) null, (Drawable) avatarDrawable5, (Object) tLRPC$User2);
+                        backupImageView3.setImage((ImageLocation) null, (String) null, (Drawable) avatarDrawable5, (Object) tLRPC$User2);
                     } else {
                         avatarDrawable5.setSmallSize(false);
                         avatarDrawable5.setInfo(tLRPC$User2);
-                        backupImageView4.setImage(ImageLocation.getForUser(tLRPC$User2, false), "50_50", (Drawable) avatarDrawable5, (Object) tLRPC$User2);
+                        backupImageView3.setImage(ImageLocation.getForUser(tLRPC$User2, false), "50_50", (Drawable) avatarDrawable5, (Object) tLRPC$User2);
                     }
                 }
                 if (z3) {
@@ -1747,14 +1691,12 @@ public class AlertsCreator {
                         } else {
                             textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithUser", NUM, UserObject.getUserName(tLRPC$User))));
                         }
-                    } else if (tLRPC$Chat2 != null) {
-                        if (!ChatObject.isChannel(tLRPC$Chat) || (tLRPC$Chat2.megagroup && TextUtils.isEmpty(tLRPC$Chat2.username))) {
-                            textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithChat", NUM, tLRPC$Chat2.title)));
-                        } else if (tLRPC$Chat2.megagroup) {
-                            textView.setText(LocaleController.getString("AreYouSureClearHistoryGroup", NUM));
-                        } else {
-                            textView.setText(LocaleController.getString("AreYouSureClearHistoryChannel", NUM));
-                        }
+                    } else if (!ChatObject.isChannel(tLRPC$Chat) || (tLRPC$Chat2.megagroup && TextUtils.isEmpty(tLRPC$Chat2.username))) {
+                        textView.setText(AndroidUtilities.replaceTags(LocaleController.formatString("AreYouSureClearHistoryWithChat", NUM, tLRPC$Chat2.title)));
+                    } else if (tLRPC$Chat2.megagroup) {
+                        textView.setText(LocaleController.getString("AreYouSureClearHistoryGroup", NUM));
+                    } else {
+                        textView.setText(LocaleController.getString("AreYouSureClearHistoryChannel", NUM));
                     }
                 } else if (z2) {
                     if (!ChatObject.isChannel(tLRPC$Chat)) {
@@ -4105,14 +4047,12 @@ public class AlertsCreator {
             strArr22[4] = LocaleController.getString("NotificationsPriorityUrgent", NUM);
             strArr = strArr22;
         } else {
-            if (j2 == 0) {
-                if (i3 == 1) {
-                    iArr[0] = notificationsSettings.getInt("priority_messages", 1);
-                } else if (i3 == 0) {
-                    iArr[0] = notificationsSettings.getInt("priority_group", 1);
-                } else if (i3 == 2) {
-                    iArr[0] = notificationsSettings.getInt("priority_channel", 1);
-                }
+            if (i3 == 1) {
+                iArr[0] = notificationsSettings.getInt("priority_messages", 1);
+            } else if (i3 == 0) {
+                iArr[0] = notificationsSettings.getInt("priority_group", 1);
+            } else if (i3 == 2) {
+                iArr[0] = notificationsSettings.getInt("priority_channel", 1);
             }
             if (iArr[0] == 4) {
                 iArr[0] = 0;
@@ -4152,9 +4092,9 @@ public class AlertsCreator {
             radioColorCell.setCheckColor(Theme.getColor("radioBackground"), Theme.getColor("dialogRadioBackgroundChecked"));
             radioColorCell.setTextAndValue(strArr[i5], iArr[i4] == i5);
             linearLayout.addView(radioColorCell);
-            $$Lambda$AlertsCreator$nGlBMKIwzbSKIY_SfztpnR9JZKA r13 = r1;
+            $$Lambda$AlertsCreator$nGlBMKIwzbSKIY_SfztpnR9JZKA r0 = r1;
             AlertDialog.Builder builder2 = builder;
-            $$Lambda$AlertsCreator$nGlBMKIwzbSKIY_SfztpnR9JZKA r1 = new View.OnClickListener(iArr, j, i, notificationsSettings, builder, runnable) {
+            $$Lambda$AlertsCreator$nGlBMKIwzbSKIY_SfztpnR9JZKA r1 = new View.OnClickListener(iArr, j, i, notificationsSettings, builder2, runnable) {
                 public final /* synthetic */ int[] f$0;
                 public final /* synthetic */ long f$1;
                 public final /* synthetic */ int f$2;
@@ -4175,10 +4115,11 @@ public class AlertsCreator {
                     AlertsCreator.lambda$createPrioritySelectDialog$61(this.f$0, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, view);
                 }
             };
-            radioColorCell.setOnClickListener(r13);
+            radioColorCell.setOnClickListener(r0);
             i5++;
             activity2 = activity;
             linearLayout = linearLayout;
+            builder = builder2;
             i4 = 0;
             long j3 = j;
         }

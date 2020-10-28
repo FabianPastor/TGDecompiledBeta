@@ -584,7 +584,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 tLRPC$ChatFull.flags &= -257;
             }
             MessagesStorage.getInstance(this.currentAccount).updateChatInfo(this.info, false);
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, this.info, 0, Boolean.TRUE, null, null, 0, Boolean.FALSE);
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, this.info, 0, Boolean.TRUE);
             finishFragment();
             return;
         }

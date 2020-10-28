@@ -1733,7 +1733,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     /* access modifiers changed from: private */
     /* renamed from: lambda$openProximityAlert$18 */
     public /* synthetic */ boolean lambda$openProximityAlert$18$LocationActivity(int i) {
-        this.proximityCircle.setRadius((double) i);
+        Circle circle = this.proximityCircle;
+        if (circle != null) {
+            circle.setRadius((double) i);
+        }
         int size = this.markers.size();
         for (int i2 = 0; i2 < size; i2++) {
             LiveLocation liveLocation = this.markers.get(i2);

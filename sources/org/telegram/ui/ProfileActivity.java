@@ -1832,7 +1832,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             if (ChatObject.isChannel(this.currentChat)) {
                 getMessagesController().loadFullChat(this.chat_id, this.classGuid, true);
             } else if (this.chatInfo == null) {
-                this.chatInfo = getMessagesStorage().loadChatInfo(this.chat_id, (CountDownLatch) null, false, false);
+                this.chatInfo = getMessagesStorage().loadChatInfo(this.chat_id, false, (CountDownLatch) null, false, false);
             }
         }
         if (this.sharedMediaPreloader == null) {

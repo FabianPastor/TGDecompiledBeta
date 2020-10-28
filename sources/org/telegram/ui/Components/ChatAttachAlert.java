@@ -2841,10 +2841,13 @@ public class ChatAttachAlert extends BottomSheet implements NotificationCenter.N
             MessageObject messageObject = this.editingMessageObject;
             if (messageObject == null || !messageObject.hasValidGroupId() || (!this.editingMessageObject.isMusic() && !this.editingMessageObject.isDocument())) {
                 attachAlertLayout = this.photoLayout;
-                this.typeButtonsAvailable = true;
+                boolean z = this.avatarPicker == 0;
+                this.typeButtonsAvailable = z;
                 this.selectedId = 1;
-                this.buttonsRecyclerView.setVisibility(0);
-                this.shadow.setVisibility(0);
+                if (z) {
+                    this.buttonsRecyclerView.setVisibility(0);
+                    this.shadow.setVisibility(0);
+                }
             } else {
                 if (this.editingMessageObject.isMusic()) {
                     openAudioLayout(false);

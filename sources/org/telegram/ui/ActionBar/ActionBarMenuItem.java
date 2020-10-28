@@ -811,6 +811,7 @@ public class ActionBarMenuItem extends FrameLayout {
             }.setDuration(150)).addTransition(changeBounds);
             transitionSet.setOrdering(0);
             transitionSet.setInterpolator(CubicBezierInterpolator.EASE_OUT);
+            final int i = UserConfig.selectedAccount;
             transitionSet.addListener(new Transition.TransitionListener() {
                 public void onTransitionPause(Transition transition) {
                 }
@@ -819,30 +820,30 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
 
                 public void onTransitionStart(Transition transition) {
-                    int unused = ActionBarMenuItem.this.notificationIndex = NotificationCenter.getInstance(UserConfig.selectedAccount).setAnimationInProgress(ActionBarMenuItem.this.notificationIndex, (int[]) null);
+                    int unused = ActionBarMenuItem.this.notificationIndex = NotificationCenter.getInstance(i).setAnimationInProgress(ActionBarMenuItem.this.notificationIndex, (int[]) null);
                 }
 
                 public void onTransitionEnd(Transition transition) {
-                    NotificationCenter.getInstance(UserConfig.selectedAccount).onAnimationFinish(ActionBarMenuItem.this.notificationIndex);
+                    NotificationCenter.getInstance(i).onAnimationFinish(ActionBarMenuItem.this.notificationIndex);
                 }
 
                 public void onTransitionCancel(Transition transition) {
-                    NotificationCenter.getInstance(UserConfig.selectedAccount).onAnimationFinish(ActionBarMenuItem.this.notificationIndex);
+                    NotificationCenter.getInstance(i).onAnimationFinish(ActionBarMenuItem.this.notificationIndex);
                 }
             });
             TransitionManager.beginDelayedTransition(this.searchFilterLayout, transitionSet);
         }
-        int i = 0;
-        while (i < this.searchFilterLayout.getChildCount()) {
-            if (!arrayList.remove(((SearchFilterView) this.searchFilterLayout.getChildAt(i)).getFilter())) {
-                this.searchFilterLayout.removeViewAt(i);
-                i--;
+        int i2 = 0;
+        while (i2 < this.searchFilterLayout.getChildCount()) {
+            if (!arrayList.remove(((SearchFilterView) this.searchFilterLayout.getChildAt(i2)).getFilter())) {
+                this.searchFilterLayout.removeViewAt(i2);
+                i2--;
             }
-            i++;
+            i2++;
         }
-        for (int i2 = 0; i2 < arrayList.size(); i2++) {
+        for (int i3 = 0; i3 < arrayList.size(); i3++) {
             SearchFilterView searchFilterView = new SearchFilterView(getContext());
-            searchFilterView.setData((FiltersView.MediaFilterData) arrayList.get(i2));
+            searchFilterView.setData((FiltersView.MediaFilterData) arrayList.get(i3));
             searchFilterView.setOnClickListener(new View.OnClickListener(searchFilterView) {
                 public final /* synthetic */ ActionBarMenuItem.SearchFilterView f$1;
 
@@ -856,10 +857,10 @@ public class ActionBarMenuItem extends FrameLayout {
             });
             this.searchFilterLayout.addView(searchFilterView, LayoutHelper.createLinear(-2, -1, 0, 0, 0, 6, 0));
         }
-        int i3 = 0;
-        while (i3 < this.searchFilterLayout.getChildCount()) {
-            ((SearchFilterView) this.searchFilterLayout.getChildAt(i3)).setExpanded(i3 == this.selectedFilterIndex);
-            i3++;
+        int i4 = 0;
+        while (i4 < this.searchFilterLayout.getChildCount()) {
+            ((SearchFilterView) this.searchFilterLayout.getChildAt(i4)).setExpanded(i4 == this.selectedFilterIndex);
+            i4++;
         }
         this.searchFilterLayout.setTag(z ? 1 : null);
         final float x = this.searchField.getX();

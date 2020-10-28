@@ -675,7 +675,7 @@ public class MessagesController extends BaseController implements NotificationCe
         public EmojiSound(long j, long j2, String str) {
             this.id = j;
             this.accessHash = j2;
-            this.fileReference = Base64.decode(str, 0);
+            this.fileReference = Base64.decode(str, 8);
         }
 
         public EmojiSound(long j, long j2, byte[] bArr) {
@@ -4766,10 +4766,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (tLRPC$TL_messages_chatFull.full_chat.stickerset != null) {
             getMediaDataController().getGroupStickerSetById(tLRPC$TL_messages_chatFull.full_chat.stickerset);
         }
-        NotificationCenter notificationCenter = getNotificationCenter();
-        int i6 = NotificationCenter.chatInfoDidLoad;
-        Boolean bool = Boolean.FALSE;
-        notificationCenter.postNotificationName(i6, tLRPC$TL_messages_chatFull.full_chat, Integer.valueOf(i2), bool, null, null, 0, bool);
+        getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, tLRPC$TL_messages_chatFull.full_chat, Integer.valueOf(i2), Boolean.FALSE);
         if ((tLRPC$TL_messages_chatFull.full_chat.flags & 2048) != 0 && (tLRPC$Dialog = this.dialogs_dict.get(j)) != null && tLRPC$Dialog.folder_id != (i3 = tLRPC$TL_messages_chatFull.full_chat.folder_id)) {
             tLRPC$Dialog.folder_id = i3;
             sortDialogs((SparseArray<TLRPC$Chat>) null);
@@ -4883,7 +4880,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (tLRPC$UserFull.bot_info instanceof TLRPC$TL_botInfo) {
             getNotificationCenter().postNotificationName(NotificationCenter.botInfoDidLoad, tLRPC$UserFull.bot_info, Integer.valueOf(i));
         }
-        getNotificationCenter().postNotificationName(NotificationCenter.userInfoDidLoad, Integer.valueOf(tLRPC$User.id), tLRPC$UserFull, null, null, 0, Boolean.FALSE);
+        getNotificationCenter().postNotificationName(NotificationCenter.userInfoDidLoad, Integer.valueOf(tLRPC$User.id), tLRPC$UserFull);
         if ((tLRPC$UserFull.flags & 2048) != 0 && (tLRPC$Dialog = this.dialogs_dict.get((long) tLRPC$User.id)) != null && tLRPC$Dialog.folder_id != (i2 = tLRPC$UserFull.folder_id)) {
             tLRPC$Dialog.folder_id = i2;
             sortDialogs((SparseArray<TLRPC$Chat>) null);
@@ -7747,7 +7744,10 @@ public class MessagesController extends BaseController implements NotificationCe
             if (tLRPC$ChatFull.stickerset != null) {
                 getMediaDataController().getGroupStickerSetById(tLRPC$ChatFull.stickerset);
             }
-            getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, tLRPC$ChatFull, 0, Boolean.valueOf(z2), arrayList2, hashMap, Integer.valueOf(i2), Boolean.valueOf(z4));
+            getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, tLRPC$ChatFull, 0, Boolean.valueOf(z2));
+        }
+        if (arrayList2 != null) {
+            getNotificationCenter().postNotificationName(NotificationCenter.pinnedInfoDidLoad, Long.valueOf((long) (-i)), arrayList2, hashMap, Integer.valueOf(i2), Boolean.valueOf(z4));
         }
     }
 
@@ -7804,7 +7804,10 @@ public class MessagesController extends BaseController implements NotificationCe
                     this.blockePeers.delete(tLRPC$User.id);
                 }
             }
-            getNotificationCenter().postNotificationName(NotificationCenter.userInfoDidLoad, Integer.valueOf(tLRPC$User.id), tLRPC$UserFull, arrayList, hashMap, Integer.valueOf(i2), Boolean.valueOf(z3));
+            getNotificationCenter().postNotificationName(NotificationCenter.userInfoDidLoad, Integer.valueOf(tLRPC$User.id), tLRPC$UserFull);
+        }
+        if (arrayList != null) {
+            getNotificationCenter().postNotificationName(NotificationCenter.pinnedInfoDidLoad, Long.valueOf((long) tLRPC$User.id), arrayList, hashMap, Integer.valueOf(i2), Boolean.valueOf(z3));
         }
     }
 
@@ -15777,10 +15780,7 @@ public class MessagesController extends BaseController implements NotificationCe
     public /* synthetic */ void lambda$null$205$MessagesController(TLRPC$ChatFull tLRPC$ChatFull, String str) {
         tLRPC$ChatFull.about = str;
         getMessagesStorage().updateChatInfo(tLRPC$ChatFull, false);
-        NotificationCenter notificationCenter = getNotificationCenter();
-        int i = NotificationCenter.chatInfoDidLoad;
-        Boolean bool = Boolean.FALSE;
-        notificationCenter.postNotificationName(i, tLRPC$ChatFull, 0, bool, null, null, 0, bool);
+        getNotificationCenter().postNotificationName(NotificationCenter.chatInfoDidLoad, tLRPC$ChatFull, 0, Boolean.FALSE);
     }
 
     public void updateChannelUserName(int i, String str) {
@@ -15972,10 +15972,10 @@ public class MessagesController extends BaseController implements NotificationCe
             r8 = r20
             r0.<init>(r2, r3, r4, r5, r6, r7, r8)
             r11.sendRequest(r10, r12)
-            goto L_0x015a
+            goto L_0x014a
         L_0x00b3:
             boolean r2 = r1 instanceof org.telegram.tgnet.TLRPC$TL_chatFull
-            if (r2 == 0) goto L_0x015a
+            if (r2 == 0) goto L_0x014a
             r2 = 0
         L_0x00b8:
             org.telegram.tgnet.TLRPC$ChatParticipants r6 = r1.participants
@@ -16022,23 +16022,14 @@ public class MessagesController extends BaseController implements NotificationCe
             r0.updateChatInfo(r1, r5)
             org.telegram.messenger.NotificationCenter r0 = r13.getNotificationCenter()
             int r2 = org.telegram.messenger.NotificationCenter.chatInfoDidLoad
-            r4 = 7
+            r4 = 3
             java.lang.Object[] r4 = new java.lang.Object[r4]
             r4[r3] = r1
             java.lang.Integer r1 = java.lang.Integer.valueOf(r3)
             r4[r5] = r1
             r1 = 2
-            java.lang.Boolean r7 = java.lang.Boolean.FALSE
-            r4[r1] = r7
-            r1 = 3
+            java.lang.Boolean r6 = java.lang.Boolean.FALSE
             r4[r1] = r6
-            r1 = 4
-            r4[r1] = r6
-            r1 = 5
-            java.lang.Integer r6 = java.lang.Integer.valueOf(r3)
-            r4[r1] = r6
-            r1 = 6
-            r4[r1] = r7
             r0.postNotificationName(r2, r4)
             org.telegram.messenger.NotificationCenter r0 = r13.getNotificationCenter()
             int r1 = org.telegram.messenger.NotificationCenter.updateInterfaces
@@ -16047,7 +16038,7 @@ public class MessagesController extends BaseController implements NotificationCe
             java.lang.Integer r4 = java.lang.Integer.valueOf(r4)
             r2[r3] = r4
             r0.postNotificationName(r1, r2)
-        L_0x015a:
+        L_0x014a:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.addUserToChat(int, org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$ChatFull, int, java.lang.String, org.telegram.ui.ActionBar.BaseFragment, java.lang.Runnable):void");
@@ -16245,10 +16236,10 @@ public class MessagesController extends BaseController implements NotificationCe
             r10.<init>(r3, r8, r6)
             r6 = 64
             r7.sendRequest(r9, r10, r6)
-            goto L_0x0124
+            goto L_0x0114
         L_0x0096:
             boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$TL_chatFull
-            if (r9 == 0) goto L_0x0124
+            if (r9 == 0) goto L_0x0114
             java.lang.Integer r6 = java.lang.Integer.valueOf(r6)
             org.telegram.tgnet.TLRPC$Chat r6 = r5.getChat(r6)
             int r9 = r6.participants_count
@@ -16271,8 +16262,8 @@ public class MessagesController extends BaseController implements NotificationCe
             java.lang.Object r9 = r9.get(r6)
             org.telegram.tgnet.TLRPC$ChatParticipant r9 = (org.telegram.tgnet.TLRPC$ChatParticipant) r9
             int r9 = r9.user_id
-            int r2 = r7.id
-            if (r9 != r2) goto L_0x00db
+            int r10 = r7.id
+            if (r9 != r10) goto L_0x00db
             org.telegram.tgnet.TLRPC$ChatParticipants r7 = r8.participants
             java.util.ArrayList<org.telegram.tgnet.TLRPC$ChatParticipant> r7 = r7.participants
             r7.remove(r6)
@@ -16284,30 +16275,21 @@ public class MessagesController extends BaseController implements NotificationCe
         L_0x00de:
             r6 = 0
         L_0x00df:
-            if (r6 == 0) goto L_0x0111
+            if (r6 == 0) goto L_0x0101
             org.telegram.messenger.MessagesStorage r6 = r5.getMessagesStorage()
             r6.updateChatInfo(r8, r1)
             org.telegram.messenger.NotificationCenter r6 = r5.getNotificationCenter()
             int r7 = org.telegram.messenger.NotificationCenter.chatInfoDidLoad
-            r9 = 7
+            r9 = 3
             java.lang.Object[] r9 = new java.lang.Object[r9]
             r9[r0] = r8
             java.lang.Integer r8 = java.lang.Integer.valueOf(r0)
             r9[r1] = r8
             r8 = 2
-            java.lang.Boolean r2 = java.lang.Boolean.FALSE
-            r9[r8] = r2
-            r8 = 3
+            java.lang.Boolean r10 = java.lang.Boolean.FALSE
             r9[r8] = r10
-            r8 = 4
-            r9[r8] = r10
-            r8 = 5
-            java.lang.Integer r10 = java.lang.Integer.valueOf(r0)
-            r9[r8] = r10
-            r8 = 6
-            r9[r8] = r2
             r6.postNotificationName(r7, r9)
-        L_0x0111:
+        L_0x0101:
             org.telegram.messenger.NotificationCenter r6 = r5.getNotificationCenter()
             int r7 = org.telegram.messenger.NotificationCenter.updateInterfaces
             java.lang.Object[] r8 = new java.lang.Object[r1]
@@ -16315,7 +16297,7 @@ public class MessagesController extends BaseController implements NotificationCe
             java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
             r8[r0] = r9
             r6.postNotificationName(r7, r8)
-        L_0x0124:
+        L_0x0114:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesController.deleteUserFromChat(int, org.telegram.tgnet.TLRPC$User, org.telegram.tgnet.TLRPC$ChatFull, boolean, boolean):void");

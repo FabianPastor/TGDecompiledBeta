@@ -154,10 +154,11 @@ public class AdjustPanLayoutHelper {
             }
         });
         this.animationInProgress = true;
+        final int i3 = UserConfig.selectedAccount;
         this.animator.addListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {
                 boolean unused = AdjustPanLayoutHelper.this.animationInProgress = false;
-                NotificationCenter.getInstance(UserConfig.selectedAccount).onAnimationFinish(AdjustPanLayoutHelper.this.notificationsIndex);
+                NotificationCenter.getInstance(i3).onAnimationFinish(AdjustPanLayoutHelper.this.notificationsIndex);
                 AdjustPanLayoutHelper adjustPanLayoutHelper = AdjustPanLayoutHelper.this;
                 adjustPanLayoutHelper.animator = null;
                 adjustPanLayoutHelper.setViewHeight(-1);
@@ -172,7 +173,7 @@ public class AdjustPanLayoutHelper {
         });
         this.animator.setDuration(220);
         this.animator.setInterpolator(CubicBezierInterpolator.DEFAULT);
-        this.notificationsIndex = NotificationCenter.getInstance(UserConfig.selectedAccount).setAnimationInProgress(this.notificationsIndex, (int[]) null);
+        this.notificationsIndex = NotificationCenter.getInstance(i3).setAnimationInProgress(this.notificationsIndex, (int[]) null);
         this.animator.start();
     }
 
