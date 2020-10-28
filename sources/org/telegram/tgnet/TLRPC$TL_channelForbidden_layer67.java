@@ -8,7 +8,7 @@ public class TLRPC$TL_channelForbidden_layer67 extends TLRPC$TL_channelForbidden
         this.flags = readInt32;
         boolean z2 = true;
         this.broadcast = (readInt32 & 32) != 0;
-        if ((this.flags & 256) == 0) {
+        if ((readInt32 & 256) == 0) {
             z2 = false;
         }
         this.megagroup = z2;

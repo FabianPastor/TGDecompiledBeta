@@ -277,6 +277,8 @@ public class SharedPhotoVideoCell extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$SharedPhotoVideoCell(View view) {
         if (this.delegate != null) {
             int intValue = ((Integer) view.getTag()).intValue();
@@ -284,6 +286,8 @@ public class SharedPhotoVideoCell extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ boolean lambda$new$1$SharedPhotoVideoCell(View view) {
         if (this.delegate == null) {
             return false;

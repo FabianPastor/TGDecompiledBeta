@@ -268,7 +268,9 @@ public class FeaturedStickerSetInfoCell extends FrameLayout {
         if (this.stickerSetNameSearchLength != 0) {
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(this.set.set.title);
             try {
-                spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4")), this.stickerSetNameSearchIndex, this.stickerSetNameSearchIndex + this.stickerSetNameSearchLength, 33);
+                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4"));
+                int i = this.stickerSetNameSearchIndex;
+                spannableStringBuilder.setSpan(foregroundColorSpan, i, this.stickerSetNameSearchLength + i, 33);
             } catch (Exception unused) {
             }
             this.nameTextView.setText(spannableStringBuilder);

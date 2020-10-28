@@ -1,20 +1,25 @@
 package j$.util.stream;
 
-import j$.util.function.A;
-import j$.util.function.B;
+import j$.util.function.BiConsumer;
+import j$.util.function.BiFunction;
+import j$.util.function.CLASSNAMEb;
+import j$.util.function.Function;
+import j$.util.function.n;
 
-public final /* synthetic */ class G implements B {
-    public final /* synthetic */ CLASSNAMEr2 a;
+public final /* synthetic */ class G implements n {
+    public final /* synthetic */ BiConsumer a;
 
-    public /* synthetic */ G(CLASSNAMEr2 r2Var) {
-        this.a = r2Var;
+    public /* synthetic */ G(BiConsumer biConsumer) {
+        this.a = biConsumer;
     }
 
-    public final void accept(int i) {
-        this.a.a(i);
+    public BiFunction a(Function function) {
+        function.getClass();
+        return new CLASSNAMEb(this, function);
     }
 
-    public /* synthetic */ B q(B b) {
-        return A.a(this, b);
+    public final Object apply(Object obj, Object obj2) {
+        this.a.accept(obj, obj2);
+        return obj;
     }
 }

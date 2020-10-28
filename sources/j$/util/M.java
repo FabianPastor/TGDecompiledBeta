@@ -1,19 +1,39 @@
 package j$.util;
 
-import java.util.Collection;
+import j$.util.function.Consumer;
+import j$.util.function.q;
 import java.util.Comparator;
-import java.util.SortedSet;
 
-class M extends i0 {
-    final /* synthetic */ SortedSet f;
+final class M extends Q implements C {
+    M() {
+    }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    M(SortedSet this$0, Collection collection, int characteristics) {
-        super(collection, characteristics);
-        this.f = this$0;
+    public /* synthetic */ boolean b(Consumer consumer) {
+        return CLASSNAMEw.d(this, consumer);
+    }
+
+    public void e(q qVar) {
+        qVar.getClass();
+    }
+
+    public /* synthetic */ void forEachRemaining(Consumer consumer) {
+        CLASSNAMEw.a(this, consumer);
     }
 
     public Comparator getComparator() {
-        return this.f.comparator();
+        throw new IllegalStateException();
+    }
+
+    public /* synthetic */ long getExactSizeIfKnown() {
+        return CLASSNAMEk.e(this);
+    }
+
+    public /* synthetic */ boolean hasCharacteristics(int i) {
+        return CLASSNAMEk.f(this, i);
+    }
+
+    public boolean o(q qVar) {
+        qVar.getClass();
+        return false;
     }
 }

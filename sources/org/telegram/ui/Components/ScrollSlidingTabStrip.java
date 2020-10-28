@@ -178,6 +178,8 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
                     return ofFloat;
                 }
 
+                /* access modifiers changed from: private */
+                /* renamed from: lambda$createAnimator$0 */
                 public /* synthetic */ void lambda$createAnimator$0$ScrollSlidingTabStrip$1(ValueAnimator valueAnimator) {
                     ScrollSlidingTabStrip.this.invalidate();
                 }
@@ -249,6 +251,8 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         return imageView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$addIconTab$1 */
     public /* synthetic */ void lambda$addIconTab$1$ScrollSlidingTabStrip(View view) {
         this.delegate.onPageSelected(((Integer) view.getTag(NUM)).intValue());
     }
@@ -288,6 +292,8 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         this.tabTypes.put(str, frameLayout);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$addStickerTab$2 */
     public /* synthetic */ void lambda$addStickerTab$2$ScrollSlidingTabStrip(View view) {
         this.delegate.onPageSelected(((Integer) view.getTag(NUM)).intValue());
     }
@@ -326,6 +332,8 @@ public class ScrollSlidingTabStrip extends HorizontalScrollView {
         return frameLayout;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$addStickerTab$3 */
     public /* synthetic */ void lambda$addStickerTab$3$ScrollSlidingTabStrip(View view) {
         this.delegate.onPageSelected(((Integer) view.getTag(NUM)).intValue());
     }

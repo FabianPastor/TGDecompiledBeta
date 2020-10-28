@@ -98,31 +98,31 @@ public class CameraEnumerationAndroid {
         /* access modifiers changed from: package-private */
         public abstract int diff(T t);
 
-        public /* synthetic */ Comparator<T> reversed() {
+        public /* synthetic */ Comparator reversed() {
             return Comparator.CC.$default$reversed(this);
         }
 
-        public /* synthetic */ <U extends Comparable<? super U>> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function) {
-            return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (Function) function);
+        public /* synthetic */ java.util.Comparator thenComparing(Function function) {
+            return Comparator.CC.$default$thenComparing((java.util.Comparator) this, function);
         }
 
-        public /* synthetic */ <U> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function, java.util.Comparator<? super U> comparator) {
+        public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
             return Comparator.CC.$default$thenComparing(this, function, comparator);
         }
 
-        public /* synthetic */ java.util.Comparator<T> thenComparing(java.util.Comparator<? super T> comparator) {
-            return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (java.util.Comparator) comparator);
+        public /* synthetic */ java.util.Comparator thenComparing(java.util.Comparator comparator) {
+            return Comparator.CC.$default$thenComparing((java.util.Comparator) this, comparator);
         }
 
-        public /* synthetic */ java.util.Comparator<T> thenComparingDouble(ToDoubleFunction<? super T> toDoubleFunction) {
+        public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
             return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
         }
 
-        public /* synthetic */ java.util.Comparator<T> thenComparingInt(ToIntFunction<? super T> toIntFunction) {
+        public /* synthetic */ java.util.Comparator thenComparingInt(ToIntFunction toIntFunction) {
             return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
         }
 
-        public /* synthetic */ java.util.Comparator<T> thenComparingLong(ToLongFunction<? super T> toLongFunction) {
+        public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
             return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
         }
 

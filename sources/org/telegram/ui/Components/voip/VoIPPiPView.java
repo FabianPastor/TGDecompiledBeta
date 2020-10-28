@@ -124,6 +124,8 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
     public void onVideoAvailableChange(boolean z) {
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$VoIPPiPView(ValueAnimator valueAnimator) {
         this.progressToCameraMini = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.floatingView.invalidate();
@@ -166,6 +168,7 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
 
     /* access modifiers changed from: private */
     public static WindowManager.LayoutParams createWindowLayoutParams(Context context, int i, int i2, float f) {
+        int i3 = Build.VERSION.SDK_INT;
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
         float f2 = (float) i2;
         float f3 = f2 * 0.4f;
@@ -177,12 +180,12 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
         layoutParams.format = -3;
         if (!AndroidUtilities.checkInlinePermissions(context)) {
             layoutParams.type = 99;
-        } else if (Build.VERSION.SDK_INT >= 26) {
+        } else if (i3 >= 26) {
             layoutParams.type = 2038;
         } else {
             layoutParams.type = 2003;
         }
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (i3 >= 21) {
             layoutParams.flags |= Integer.MIN_VALUE;
         }
         layoutParams.flags = 16778120;
@@ -272,12 +275,13 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
         int i4 = this.yOffset;
         frameLayout.setPadding(i3, i4, i3, i4);
         this.floatingView = new FloatingView(context);
-        this.callingUserTextureView = new VoIPTextureView(context, false);
         VoIPTextureView voIPTextureView = new VoIPTextureView(context, false);
-        this.currentUserTextureView = voIPTextureView;
-        voIPTextureView.renderer.setMirror(true);
-        this.floatingView.addView(this.callingUserTextureView);
-        this.floatingView.addView(this.currentUserTextureView);
+        this.callingUserTextureView = voIPTextureView;
+        VoIPTextureView voIPTextureView2 = new VoIPTextureView(context, false);
+        this.currentUserTextureView = voIPTextureView2;
+        voIPTextureView2.renderer.setMirror(true);
+        this.floatingView.addView(voIPTextureView);
+        this.floatingView.addView(voIPTextureView2);
         this.floatingView.setBackgroundColor(-7829368);
         this.windowView.addView(this.floatingView);
         this.windowView.setClipChildren(false);
@@ -299,7 +303,7 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
             this.enlargeIcon.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
             this.enlargeIcon.setContentDescription(LocaleController.getString("Open", NUM));
             this.floatingView.addView(this.enlargeIcon, LayoutHelper.createFrame(40, 40.0f, 51, 4.0f, 4.0f, 4.0f, 0.0f));
-            this.closeIcon.setOnClickListener($$Lambda$VoIPPiPView$0Qsk63ZuxTpx_890HxG4bMQ6To.INSTANCE);
+            this.closeIcon.setOnClickListener($$Lambda$VoIPPiPView$MEYxxqPwmNN1zowModgP4kq3s9A.INSTANCE);
             this.enlargeIcon.setOnClickListener(new View.OnClickListener(context) {
                 public final /* synthetic */ Context f$0;
 
@@ -363,7 +367,7 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
 
     public void onStateChanged(int i) {
         if (i == 11 || i == 17 || i == 4 || i == 10) {
-            AndroidUtilities.runOnUIThread($$Lambda$VoIPPiPView$kbk5r2X6lrKAHtUD_RxqQueS1k0.INSTANCE, 200);
+            AndroidUtilities.runOnUIThread($$Lambda$VoIPPiPView$tBA5mFde0ixGh2dJCrDlzjN1YM.INSTANCE, 200);
         }
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance == null) {
@@ -908,12 +912,12 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
                                 AndroidUtilities.runOnUIThread(
                                 /*  JADX ERROR: Method code generation error
                                     jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x003f: INVOKE  
-                                      (wrap: org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$AVdgH092L8APYH6xi6BVRTxL6Ts : 0x003a: CONSTRUCTOR  (r0v4 org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$AVdgH092L8APYH6xi6BVRTxL6Ts) = 
+                                      (wrap: org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$iG-hzrQPDlTOeOW_Jrz8inBcOeQ : 0x003a: CONSTRUCTOR  (r0v4 org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$iG-hzrQPDlTOeOW_Jrz8inBcOeQ) = 
                                       (r3v0 'this' org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3 A[THIS])
                                       (wrap: boolean : 0x0036: IGET  (r4v8 boolean) = 
                                       (r3v0 'this' org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3 A[THIS])
                                      org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.3.val$expanded boolean)
-                                     call: org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$AVdgH092L8APYH6xi6BVRTxL6Ts.<init>(org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3, boolean):void type: CONSTRUCTOR)
+                                     call: org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$iG-hzrQPDlTOeOW_Jrz8inBcOeQ.<init>(org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3, boolean):void type: CONSTRUCTOR)
                                       (64 long)
                                      org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable, long):void type: STATIC in method: org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.3.onAnimationEnd(android.animation.Animator):void, dex: classes3.dex
                                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
@@ -1012,12 +1016,12 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
                                     	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                     	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                     	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x003a: CONSTRUCTOR  (r0v4 org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$AVdgH092L8APYH6xi6BVRTxL6Ts) = 
+                                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x003a: CONSTRUCTOR  (r0v4 org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$iG-hzrQPDlTOeOW_Jrz8inBcOeQ) = 
                                       (r3v0 'this' org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3 A[THIS])
                                       (wrap: boolean : 0x0036: IGET  (r4v8 boolean) = 
                                       (r3v0 'this' org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3 A[THIS])
                                      org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.3.val$expanded boolean)
-                                     call: org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$AVdgH092L8APYH6xi6BVRTxL6Ts.<init>(org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3, boolean):void type: CONSTRUCTOR in method: org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.3.onAnimationEnd(android.animation.Animator):void, dex: classes3.dex
+                                     call: org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$iG-hzrQPDlTOeOW_Jrz8inBcOeQ.<init>(org.telegram.ui.Components.voip.VoIPPiPView$FloatingView$3, boolean):void type: CONSTRUCTOR in method: org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.3.onAnimationEnd(android.animation.Animator):void, dex: classes3.dex
                                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                     	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                     	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -1026,7 +1030,7 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
                                     	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                                     	... 95 more
-                                    Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$AVdgH092L8APYH6xi6BVRTxL6Ts, state: NOT_LOADED
+                                    Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$iG-hzrQPDlTOeOW_Jrz8inBcOeQ, state: NOT_LOADED
                                     	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                                     	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                                     	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -1056,7 +1060,7 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
                                     android.view.WindowManager$LayoutParams r1 = r1.windowLayoutParams
                                     r4.addView(r0, r1)
                                     boolean r4 = r13
-                                    org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$AVdgH092L8APYH6xi6BVRTxL6Ts r0 = new org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$AVdgH092L8APYH6xi6BVRTxL6Ts
+                                    org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$iG-hzrQPDlTOeOW_Jrz8inBcOeQ r0 = new org.telegram.ui.Components.voip.-$$Lambda$VoIPPiPView$FloatingView$3$iG-hzrQPDlTOeOW_Jrz8inBcOeQ
                                     r0.<init>(r3, r4)
                                     r1 = 64
                                     org.telegram.messenger.AndroidUtilities.runOnUIThread(r0, r1)
@@ -1065,6 +1069,8 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
                                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.VoIPPiPView.FloatingView.AnonymousClass3.onAnimationEnd(android.animation.Animator):void");
                             }
 
+                            /* access modifiers changed from: private */
+                            /* renamed from: lambda$onAnimationEnd$0 */
                             public /* synthetic */ void lambda$onAnimationEnd$0$VoIPPiPView$FloatingView$3(boolean z) {
                                 if (VoIPPiPView.instance != null && VoIPPiPView.expandedInstance != null) {
                                     VoIPPiPView.expandedInstance.windowView.setAlpha(0.0f);
@@ -1082,6 +1088,8 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
                 }
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$expand$1 */
             public /* synthetic */ void lambda$expand$1$VoIPPiPView$FloatingView(float f, VoIPPiPView voIPPiPView) {
                 if (VoIPPiPView.expandedInstance != null) {
                     VoIPPiPView.this.windowView.setAlpha(0.0f);
@@ -1154,13 +1162,15 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
                         VoIPPiPView.expandedInstance.closeIcon.setAlpha(0.0f);
                         VoIPPiPView.expandedInstance.enlargeIcon.setAlpha(0.0f);
                     }
-                    VoIPPiPView.expandedInstance.topShadow.animate().alpha(z ? 1.0f : 0.0f).setDuration(300).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
-                    VoIPPiPView.expandedInstance.closeIcon.animate().alpha(z ? 1.0f : 0.0f).setDuration(300).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
+                    ViewPropertyAnimator duration = VoIPPiPView.expandedInstance.topShadow.animate().alpha(z ? 1.0f : 0.0f).setDuration(300);
+                    CubicBezierInterpolator cubicBezierInterpolator = CubicBezierInterpolator.DEFAULT;
+                    duration.setInterpolator(cubicBezierInterpolator).start();
+                    VoIPPiPView.expandedInstance.closeIcon.animate().alpha(z ? 1.0f : 0.0f).setDuration(300).setInterpolator(cubicBezierInterpolator).start();
                     ViewPropertyAnimator animate = VoIPPiPView.expandedInstance.enlargeIcon.animate();
                     if (z) {
                         f = 1.0f;
                     }
-                    animate.alpha(f).setDuration(300).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
+                    animate.alpha(f).setDuration(300).setInterpolator(cubicBezierInterpolator).start();
                 }
             }
 

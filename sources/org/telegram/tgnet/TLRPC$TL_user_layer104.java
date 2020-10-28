@@ -8,18 +8,18 @@ public class TLRPC$TL_user_layer104 extends TLRPC$TL_user {
         this.flags = readInt32;
         boolean z2 = false;
         this.self = (readInt32 & 1024) != 0;
-        this.contact = (this.flags & 2048) != 0;
-        this.mutual_contact = (this.flags & 4096) != 0;
-        this.deleted = (this.flags & 8192) != 0;
-        this.bot = (this.flags & 16384) != 0;
-        this.bot_chat_history = (this.flags & 32768) != 0;
-        this.bot_nochats = (this.flags & 65536) != 0;
-        this.verified = (this.flags & 131072) != 0;
-        this.restricted = (this.flags & 262144) != 0;
-        this.min = (this.flags & 1048576) != 0;
-        this.bot_inline_geo = (this.flags & 2097152) != 0;
-        this.support = (this.flags & 8388608) != 0;
-        if ((this.flags & 16777216) != 0) {
+        this.contact = (readInt32 & 2048) != 0;
+        this.mutual_contact = (readInt32 & 4096) != 0;
+        this.deleted = (readInt32 & 8192) != 0;
+        this.bot = (readInt32 & 16384) != 0;
+        this.bot_chat_history = (32768 & readInt32) != 0;
+        this.bot_nochats = (65536 & readInt32) != 0;
+        this.verified = (131072 & readInt32) != 0;
+        this.restricted = (readInt32 & 262144) != 0;
+        this.min = (1048576 & readInt32) != 0;
+        this.bot_inline_geo = (2097152 & readInt32) != 0;
+        this.support = (8388608 & readInt32) != 0;
+        if ((readInt32 & 16777216) != 0) {
             z2 = true;
         }
         this.scam = z2;

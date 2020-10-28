@@ -41,25 +41,31 @@ public class PaymentInfoCell extends FrameLayout {
         this.nameTextView.setSingleLine(true);
         this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 10.0f : 123.0f, 9.0f, LocaleController.isRTL ? 123.0f : 10.0f, 0.0f));
-        TextView textView2 = new TextView(context2);
-        this.detailTextView = textView2;
-        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        TextView textView2 = this.nameTextView;
+        boolean z = LocaleController.isRTL;
+        addView(textView2, LayoutHelper.createFrame(-1, -2.0f, (z ? 5 : 3) | 48, z ? 10.0f : 123.0f, 9.0f, z ? 123.0f : 10.0f, 0.0f));
+        TextView textView3 = new TextView(context2);
+        this.detailTextView = textView3;
+        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.detailTextView.setTextSize(1, 14.0f);
         this.detailTextView.setMaxLines(3);
         this.detailTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.detailTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        addView(this.detailTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 10.0f : 123.0f, 33.0f, LocaleController.isRTL ? 123.0f : 10.0f, 0.0f));
-        TextView textView3 = new TextView(context2);
-        this.detailExTextView = textView3;
-        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+        TextView textView4 = this.detailTextView;
+        boolean z2 = LocaleController.isRTL;
+        addView(textView4, LayoutHelper.createFrame(-1, -2.0f, (z2 ? 5 : 3) | 48, z2 ? 10.0f : 123.0f, 33.0f, z2 ? 123.0f : 10.0f, 0.0f));
+        TextView textView5 = new TextView(context2);
+        this.detailExTextView = textView5;
+        textView5.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         this.detailExTextView.setTextSize(1, 13.0f);
         this.detailExTextView.setLines(1);
         this.detailExTextView.setMaxLines(1);
         this.detailExTextView.setSingleLine(true);
         this.detailExTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.detailExTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        addView(this.detailExTextView, LayoutHelper.createFrame(-1, -2.0f, (!LocaleController.isRTL ? 3 : i) | 48, LocaleController.isRTL ? 10.0f : 123.0f, 90.0f, LocaleController.isRTL ? 123.0f : 10.0f, 0.0f));
+        TextView textView6 = this.detailExTextView;
+        boolean z3 = LocaleController.isRTL;
+        addView(textView6, LayoutHelper.createFrame(-1, -2.0f, (!z3 ? 3 : i) | 48, z3 ? 10.0f : 123.0f, 90.0f, z3 ? 123.0f : 10.0f, 0.0f));
     }
 
     /* access modifiers changed from: protected */
@@ -77,8 +83,9 @@ public class PaymentInfoCell extends FrameLayout {
 
     public void setInvoice(TLRPC$TL_messageMediaInvoice tLRPC$TL_messageMediaInvoice, String str) {
         int i;
-        this.nameTextView.setText(tLRPC$TL_messageMediaInvoice.title);
-        this.detailTextView.setText(tLRPC$TL_messageMediaInvoice.description);
+        TLRPC$TL_messageMediaInvoice tLRPC$TL_messageMediaInvoice2 = tLRPC$TL_messageMediaInvoice;
+        this.nameTextView.setText(tLRPC$TL_messageMediaInvoice2.title);
+        this.detailTextView.setText(tLRPC$TL_messageMediaInvoice2.description);
         this.detailExTextView.setText(str);
         if (AndroidUtilities.isTablet()) {
             i = AndroidUtilities.getMinTabletSide();
@@ -90,7 +97,7 @@ public class PaymentInfoCell extends FrameLayout {
         float dp = f / ((float) (((int) (((float) i) * 0.7f)) - AndroidUtilities.dp(2.0f)));
         int i2 = (int) (f / dp);
         int i3 = (int) (((float) 360) / dp);
-        TLRPC$WebDocument tLRPC$WebDocument = tLRPC$TL_messageMediaInvoice.photo;
+        TLRPC$WebDocument tLRPC$WebDocument = tLRPC$TL_messageMediaInvoice2.photo;
         int i4 = 5;
         if (tLRPC$WebDocument == null || !tLRPC$WebDocument.mime_type.startsWith("image/")) {
             this.nameTextView.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, 17.0f, 9.0f, 17.0f, 0.0f));
@@ -103,14 +110,19 @@ public class PaymentInfoCell extends FrameLayout {
             this.imageView.setVisibility(8);
             return;
         }
-        this.nameTextView.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 10.0f : 123.0f, 9.0f, LocaleController.isRTL ? 123.0f : 10.0f, 0.0f));
-        this.detailTextView.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 10.0f : 123.0f, 33.0f, LocaleController.isRTL ? 123.0f : 10.0f, 0.0f));
-        TextView textView2 = this.detailExTextView;
-        if (!LocaleController.isRTL) {
+        TextView textView2 = this.nameTextView;
+        boolean z = LocaleController.isRTL;
+        textView2.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, (z ? 5 : 3) | 48, z ? 10.0f : 123.0f, 9.0f, z ? 123.0f : 10.0f, 0.0f));
+        TextView textView3 = this.detailTextView;
+        boolean z2 = LocaleController.isRTL;
+        textView3.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, (z2 ? 5 : 3) | 48, z2 ? 10.0f : 123.0f, 33.0f, z2 ? 123.0f : 10.0f, 0.0f));
+        TextView textView4 = this.detailExTextView;
+        boolean z3 = LocaleController.isRTL;
+        if (!z3) {
             i4 = 3;
         }
-        textView2.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, i4 | 48, LocaleController.isRTL ? 10.0f : 123.0f, 90.0f, LocaleController.isRTL ? 123.0f : 10.0f, 0.0f));
+        textView4.setLayoutParams(LayoutHelper.createFrame(-1, -2.0f, i4 | 48, z3 ? 10.0f : 123.0f, 90.0f, z3 ? 123.0f : 10.0f, 0.0f));
         this.imageView.setVisibility(0);
-        this.imageView.getImageReceiver().setImage(ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$TL_messageMediaInvoice.photo)), String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(i2), Integer.valueOf(i3)}), (ImageLocation) null, (String) null, -1, (String) null, tLRPC$TL_messageMediaInvoice, 1);
+        this.imageView.getImageReceiver().setImage(ImageLocation.getForWebFile(WebFile.createWithWebDocument(tLRPC$TL_messageMediaInvoice2.photo)), String.format(Locale.US, "%d_%d", new Object[]{Integer.valueOf(i2), Integer.valueOf(i3)}), (ImageLocation) null, (String) null, -1, (String) null, tLRPC$TL_messageMediaInvoice, 1);
     }
 }

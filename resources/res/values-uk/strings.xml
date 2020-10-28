@@ -22,4 +22,5 @@
     <string name="google_assistant_verification_channel_name">Інструмент перевірки Асистента</string>
     <string name="google_assistant_verification_notification_title">Google Асистент надсилає повідомлення</string>
     <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="wallet_buy_button_place_holder">Купити за допомогою Google</string>
 </resources>

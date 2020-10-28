@@ -57,7 +57,8 @@ public class BlurBehindDrawable {
     public void draw(Canvas canvas) {
         Bitmap[] bitmapArr = this.renderingBitmap;
         if (bitmapArr != null || this.error) {
-            if (this.show) {
+            boolean z = this.show;
+            if (z) {
                 float f = this.blurAlpha;
                 if (f != 1.0f) {
                     float f2 = f + 0.09f;
@@ -68,7 +69,7 @@ public class BlurBehindDrawable {
                     this.parentView.invalidate();
                 }
             }
-            if (!this.show) {
+            if (!z) {
                 float f3 = this.blurAlpha;
                 if (f3 != 0.0f) {
                     float f4 = f3 - 0.09f;
@@ -168,6 +169,8 @@ public class BlurBehindDrawable {
         canvas.drawPaint(this.errorBlackoutPaint);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$draw$0 */
     public /* synthetic */ void lambda$draw$0$BlurBehindDrawable() {
         this.error = true;
         this.parentView.invalidate();
@@ -196,6 +199,8 @@ public class BlurBehindDrawable {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$clear$2 */
     public /* synthetic */ void lambda$clear$2$BlurBehindDrawable() {
         Bitmap[] bitmapArr = this.renderingBitmap;
         if (bitmapArr != null) {
@@ -218,6 +223,8 @@ public class BlurBehindDrawable {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$1 */
     public /* synthetic */ void lambda$null$1$BlurBehindDrawable() {
         DispatchQueue dispatchQueue = this.queue;
         if (dispatchQueue != null) {
@@ -346,6 +353,8 @@ public class BlurBehindDrawable {
             });
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$run$0 */
         public /* synthetic */ void lambda$run$0$BlurBehindDrawable$BlurBackgroundTask() {
             if (!this.canceled) {
                 Bitmap[] access$500 = BlurBehindDrawable.this.renderingBitmap;

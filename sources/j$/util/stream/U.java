@@ -1,20 +1,14 @@
 package j$.util.stream;
 
-import j$.util.function.I;
-import j$.util.function.J;
+import j$.util.function.ToLongFunction;
 
-public final /* synthetic */ class U implements J {
-    public final /* synthetic */ L2 a;
+public final /* synthetic */ class U implements ToLongFunction {
+    public static final /* synthetic */ U a = new U();
 
-    public /* synthetic */ U(L2 l2) {
-        this.a = l2;
+    private /* synthetic */ U() {
     }
 
-    public final void accept(long j) {
-        this.a.a(j);
-    }
-
-    public /* synthetic */ J h(J j) {
-        return I.a(this, j);
+    public final long applyAsLong(Object obj) {
+        return ((Long) obj).longValue();
     }
 }

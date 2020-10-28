@@ -281,6 +281,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         imageView3.setContentDescription(LocaleController.getString("Done", NUM));
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$PhotoViewerCaptionEnterView(View view) {
         if (this.keyboardVisible) {
             showPopup(1, false);
@@ -289,6 +291,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ boolean lambda$new$1$PhotoViewerCaptionEnterView(View view, int i, KeyEvent keyEvent) {
         if (i == 4) {
             if (this.windowView != null && hideActionMode()) {
@@ -304,12 +308,16 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         return false;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$2 */
     public /* synthetic */ void lambda$new$2$PhotoViewerCaptionEnterView(View view) {
         if (isPopupShowing()) {
             showPopup(AndroidUtilities.usingHardwareInput ? 0 : 2, false);
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$3 */
     public /* synthetic */ void lambda$new$3$PhotoViewerCaptionEnterView(View view) {
         this.delegate.onCaptionEnter();
     }
@@ -396,10 +404,14 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onDraw$4 */
     public /* synthetic */ void lambda$onDraw$4$PhotoViewerCaptionEnterView(ValueAnimator valueAnimator) {
         this.messageEditText.setOffsetY(((Float) valueAnimator.getAnimatedValue()).floatValue());
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onDraw$5 */
     public /* synthetic */ void lambda$onDraw$5$PhotoViewerCaptionEnterView(ValueAnimator valueAnimator) {
         this.offset = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
@@ -630,6 +642,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setFieldFocused$6 */
     public /* synthetic */ void lambda$setFieldFocused$6$PhotoViewerCaptionEnterView() {
         EditTextCaption editTextCaption = this.messageEditText;
         if (editTextCaption != null) {
@@ -733,6 +747,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$showPopup$7 */
     public /* synthetic */ void lambda$showPopup$7$PhotoViewerCaptionEnterView(float f, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.emojiPadding = (int) floatValue;
@@ -815,8 +831,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 i2 = this.keyboardHeight;
             }
             FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) this.emojiView.getLayoutParams();
-            if (!(layoutParams.width == AndroidUtilities.displaySize.x && layoutParams.height == i2)) {
-                layoutParams.width = AndroidUtilities.displaySize.x;
+            int i3 = layoutParams.width;
+            int i4 = AndroidUtilities.displaySize.x;
+            if (!(i3 == i4 && layoutParams.height == i2)) {
+                layoutParams.width = i4;
                 layoutParams.height = i2;
                 this.emojiView.setLayoutParams(layoutParams);
                 SizeNotifierFrameLayoutPhoto sizeNotifierFrameLayoutPhoto = this.sizeNotifierLayout;

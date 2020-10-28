@@ -145,6 +145,8 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$0 */
     public /* synthetic */ void lambda$createView$0$ArchivedStickersActivity(final View view, int i) {
         TLRPC$InputStickerSet tLRPC$InputStickerSet;
         if (i >= this.stickersStartRow && i < this.stickersEndRow && getParentActivity() != null) {
@@ -243,6 +245,8 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$getStickers$2 */
     public /* synthetic */ void lambda$getStickers$2$ArchivedStickersActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
             public final /* synthetic */ TLRPC$TL_error f$1;
@@ -259,15 +263,17 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$1 */
     public /* synthetic */ void lambda$null$1$ArchivedStickersActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (tLRPC$TL_error == null) {
-            lambda$processResponse$3$ArchivedStickersActivity((TLRPC$TL_messages_archivedStickers) tLObject);
+            lambda$processResponse$3((TLRPC$TL_messages_archivedStickers) tLObject);
         }
     }
 
     /* access modifiers changed from: private */
     /* renamed from: processResponse */
-    public void lambda$processResponse$3$ArchivedStickersActivity(TLRPC$TL_messages_archivedStickers tLRPC$TL_messages_archivedStickers) {
+    public void lambda$processResponse$3(TLRPC$TL_messages_archivedStickers tLRPC$TL_messages_archivedStickers) {
         if (!this.isInTransition) {
             this.sets.addAll(tLRPC$TL_messages_archivedStickers.sets);
             this.endReached = tLRPC$TL_messages_archivedStickers.sets.size() != 15;
@@ -419,6 +425,8 @@ public class ArchivedStickersActivity extends BaseFragment implements Notificati
             }
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onBindViewHolder$0 */
         public /* synthetic */ void lambda$onBindViewHolder$0$ArchivedStickersActivity$ListAdapter(TLRPC$StickerSetCovered tLRPC$StickerSetCovered, ArchivedStickerSetCell archivedStickerSetCell, boolean z) {
             if (z) {
                 archivedStickerSetCell.setChecked(false, false, false);

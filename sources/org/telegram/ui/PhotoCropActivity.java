@@ -80,517 +80,460 @@ public class PhotoCropActivity extends BaseFragment {
             paint3.setColor(-NUM);
             setBackgroundColor(-13421773);
             setOnTouchListener(new View.OnTouchListener() {
-                /* JADX WARNING: Removed duplicated region for block: B:50:0x00d2  */
+                /* JADX WARNING: Removed duplicated region for block: B:50:0x00bd  */
                 /* Code decompiled incorrectly, please refer to instructions dump. */
-                public boolean onTouch(android.view.View r12, android.view.MotionEvent r13) {
+                public boolean onTouch(android.view.View r14, android.view.MotionEvent r15) {
                     /*
-                        r11 = this;
-                        float r12 = r13.getX()
-                        float r0 = r13.getY()
+                        r13 = this;
+                        float r14 = r15.getX()
+                        float r0 = r15.getY()
                         r1 = 1096810496(0x41600000, float:14.0)
                         int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                        int r2 = r13.getAction()
+                        int r2 = r15.getAction()
                         r3 = 4
                         r4 = 3
                         r5 = 5
                         r6 = 0
                         r7 = 2
                         r8 = 1
-                        if (r2 != 0) goto L_0x00dd
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r2 = r13.rectX
+                        if (r2 != 0) goto L_0x00c8
+                        org.telegram.ui.PhotoCropActivity$PhotoCropView r15 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
+                        float r2 = r15.rectX
                         float r1 = (float) r1
                         float r9 = r2 - r1
-                        int r9 = (r9 > r12 ? 1 : (r9 == r12 ? 0 : -1))
-                        if (r9 >= 0) goto L_0x003b
-                        float r2 = r2 + r1
-                        int r2 = (r2 > r12 ? 1 : (r2 == r12 ? 0 : -1))
-                        if (r2 <= 0) goto L_0x003b
-                        float r2 = r13.rectY
-                        float r9 = r2 - r1
+                        int r9 = (r9 > r14 ? 1 : (r9 == r14 ? 0 : -1))
+                        if (r9 >= 0) goto L_0x003c
+                        float r9 = r2 + r1
+                        int r9 = (r9 > r14 ? 1 : (r9 == r14 ? 0 : -1))
+                        if (r9 <= 0) goto L_0x003c
+                        float r9 = r15.rectY
+                        float r10 = r9 - r1
+                        int r10 = (r10 > r0 ? 1 : (r10 == r0 ? 0 : -1))
+                        if (r10 >= 0) goto L_0x003c
+                        float r9 = r9 + r1
                         int r9 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1))
-                        if (r9 >= 0) goto L_0x003b
-                        float r2 = r2 + r1
-                        int r2 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-                        if (r2 <= 0) goto L_0x003b
-                        r13.draggingState = r8
-                        goto L_0x00cc
-                    L_0x003b:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r2 = r13.rectX
+                        if (r9 <= 0) goto L_0x003c
+                        r15.draggingState = r8
+                        goto L_0x00b9
+                    L_0x003c:
                         float r9 = r2 - r1
-                        float r10 = r13.rectSizeX
+                        float r10 = r15.rectSizeX
                         float r9 = r9 + r10
-                        int r9 = (r9 > r12 ? 1 : (r9 == r12 ? 0 : -1))
-                        if (r9 >= 0) goto L_0x005f
-                        float r2 = r2 + r1
-                        float r2 = r2 + r10
-                        int r2 = (r2 > r12 ? 1 : (r2 == r12 ? 0 : -1))
-                        if (r2 <= 0) goto L_0x005f
-                        float r2 = r13.rectY
-                        float r9 = r2 - r1
+                        int r9 = (r9 > r14 ? 1 : (r9 == r14 ? 0 : -1))
+                        if (r9 >= 0) goto L_0x005c
+                        float r9 = r2 + r1
+                        float r9 = r9 + r10
+                        int r9 = (r9 > r14 ? 1 : (r9 == r14 ? 0 : -1))
+                        if (r9 <= 0) goto L_0x005c
+                        float r9 = r15.rectY
+                        float r11 = r9 - r1
+                        int r11 = (r11 > r0 ? 1 : (r11 == r0 ? 0 : -1))
+                        if (r11 >= 0) goto L_0x005c
+                        float r9 = r9 + r1
                         int r9 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1))
-                        if (r9 >= 0) goto L_0x005f
-                        float r2 = r2 + r1
-                        int r2 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-                        if (r2 <= 0) goto L_0x005f
-                        r13.draggingState = r7
-                        goto L_0x00cc
-                    L_0x005f:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r2 = r13.rectX
+                        if (r9 <= 0) goto L_0x005c
+                        r15.draggingState = r7
+                        goto L_0x00b9
+                    L_0x005c:
                         float r7 = r2 - r1
-                        int r7 = (r7 > r12 ? 1 : (r7 == r12 ? 0 : -1))
-                        if (r7 >= 0) goto L_0x0082
-                        float r2 = r2 + r1
-                        int r2 = (r2 > r12 ? 1 : (r2 == r12 ? 0 : -1))
-                        if (r2 <= 0) goto L_0x0082
-                        float r2 = r13.rectY
-                        float r7 = r2 - r1
-                        float r9 = r13.rectSizeY
+                        int r7 = (r7 > r14 ? 1 : (r7 == r14 ? 0 : -1))
+                        if (r7 >= 0) goto L_0x007c
+                        float r7 = r2 + r1
+                        int r7 = (r7 > r14 ? 1 : (r7 == r14 ? 0 : -1))
+                        if (r7 <= 0) goto L_0x007c
+                        float r7 = r15.rectY
+                        float r9 = r7 - r1
+                        float r11 = r15.rectSizeY
+                        float r9 = r9 + r11
+                        int r9 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1))
+                        if (r9 >= 0) goto L_0x007c
+                        float r7 = r7 + r1
+                        float r7 = r7 + r11
+                        int r7 = (r7 > r0 ? 1 : (r7 == r0 ? 0 : -1))
+                        if (r7 <= 0) goto L_0x007c
+                        r15.draggingState = r4
+                        goto L_0x00b9
+                    L_0x007c:
+                        float r4 = r2 - r1
+                        float r4 = r4 + r10
+                        int r4 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1))
+                        if (r4 >= 0) goto L_0x009e
+                        float r4 = r2 + r1
+                        float r4 = r4 + r10
+                        int r4 = (r4 > r14 ? 1 : (r4 == r14 ? 0 : -1))
+                        if (r4 <= 0) goto L_0x009e
+                        float r4 = r15.rectY
+                        float r7 = r4 - r1
+                        float r9 = r15.rectSizeY
                         float r7 = r7 + r9
                         int r7 = (r7 > r0 ? 1 : (r7 == r0 ? 0 : -1))
-                        if (r7 >= 0) goto L_0x0082
-                        float r2 = r2 + r1
-                        float r2 = r2 + r9
-                        int r2 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-                        if (r2 <= 0) goto L_0x0082
-                        r13.draggingState = r4
-                        goto L_0x00cc
-                    L_0x0082:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r2 = r13.rectX
-                        float r4 = r2 - r1
-                        float r7 = r13.rectSizeX
-                        float r4 = r4 + r7
-                        int r4 = (r4 > r12 ? 1 : (r4 == r12 ? 0 : -1))
-                        if (r4 >= 0) goto L_0x00a9
-                        float r2 = r2 + r1
-                        float r2 = r2 + r7
-                        int r2 = (r2 > r12 ? 1 : (r2 == r12 ? 0 : -1))
-                        if (r2 <= 0) goto L_0x00a9
-                        float r2 = r13.rectY
-                        float r4 = r2 - r1
-                        float r7 = r13.rectSizeY
-                        float r4 = r4 + r7
-                        int r4 = (r4 > r0 ? 1 : (r4 == r0 ? 0 : -1))
-                        if (r4 >= 0) goto L_0x00a9
-                        float r2 = r2 + r1
-                        float r2 = r2 + r7
-                        int r1 = (r2 > r0 ? 1 : (r2 == r0 ? 0 : -1))
-                        if (r1 <= 0) goto L_0x00a9
-                        r13.draggingState = r3
-                        goto L_0x00cc
-                    L_0x00a9:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r1 = r13.rectX
-                        int r2 = (r1 > r12 ? 1 : (r1 == r12 ? 0 : -1))
-                        if (r2 >= 0) goto L_0x00c8
-                        float r2 = r13.rectSizeX
-                        float r1 = r1 + r2
-                        int r1 = (r1 > r12 ? 1 : (r1 == r12 ? 0 : -1))
-                        if (r1 <= 0) goto L_0x00c8
-                        float r1 = r13.rectY
+                        if (r7 >= 0) goto L_0x009e
+                        float r4 = r4 + r1
+                        float r4 = r4 + r9
+                        int r1 = (r4 > r0 ? 1 : (r4 == r0 ? 0 : -1))
+                        if (r1 <= 0) goto L_0x009e
+                        r15.draggingState = r3
+                        goto L_0x00b9
+                    L_0x009e:
+                        int r1 = (r2 > r14 ? 1 : (r2 == r14 ? 0 : -1))
+                        if (r1 >= 0) goto L_0x00b7
+                        float r2 = r2 + r10
+                        int r1 = (r2 > r14 ? 1 : (r2 == r14 ? 0 : -1))
+                        if (r1 <= 0) goto L_0x00b7
+                        float r1 = r15.rectY
                         int r2 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1))
-                        if (r2 >= 0) goto L_0x00c8
-                        float r2 = r13.rectSizeY
+                        if (r2 >= 0) goto L_0x00b7
+                        float r2 = r15.rectSizeY
                         float r1 = r1 + r2
                         int r1 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1))
-                        if (r1 <= 0) goto L_0x00c8
-                        r13.draggingState = r5
-                        goto L_0x00cc
+                        if (r1 <= 0) goto L_0x00b7
+                        r15.draggingState = r5
+                        goto L_0x00b9
+                    L_0x00b7:
+                        r15.draggingState = r6
+                    L_0x00b9:
+                        int r1 = r15.draggingState
+                        if (r1 == 0) goto L_0x00c0
+                        r15.requestDisallowInterceptTouchEvent(r8)
+                    L_0x00c0:
+                        org.telegram.ui.PhotoCropActivity$PhotoCropView r15 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
+                        r15.oldX = r14
+                        r15.oldY = r0
+                        goto L_0x02c5
                     L_0x00c8:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        r13.draggingState = r6
-                    L_0x00cc:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        int r1 = r13.draggingState
-                        if (r1 == 0) goto L_0x00d5
-                        r13.requestDisallowInterceptTouchEvent(r8)
-                    L_0x00d5:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        r13.oldX = r12
-                        r13.oldY = r0
-                        goto L_0x033d
-                    L_0x00dd:
-                        int r1 = r13.getAction()
-                        if (r1 != r8) goto L_0x00e9
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r12 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        r12.draggingState = r6
-                        goto L_0x033d
-                    L_0x00e9:
-                        int r13 = r13.getAction()
-                        if (r13 != r7) goto L_0x033d
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        int r1 = r13.draggingState
-                        if (r1 == 0) goto L_0x033d
-                        float r2 = r13.oldX
-                        float r2 = r12 - r2
-                        float r6 = r13.oldY
+                        int r1 = r15.getAction()
+                        if (r1 != r8) goto L_0x00d4
+                        org.telegram.ui.PhotoCropActivity$PhotoCropView r14 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
+                        r14.draggingState = r6
+                        goto L_0x02c5
+                    L_0x00d4:
+                        int r15 = r15.getAction()
+                        if (r15 != r7) goto L_0x02c5
+                        org.telegram.ui.PhotoCropActivity$PhotoCropView r15 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
+                        int r1 = r15.draggingState
+                        if (r1 == 0) goto L_0x02c5
+                        float r2 = r15.oldX
+                        float r2 = r14 - r2
+                        float r6 = r15.oldY
                         float r6 = r0 - r6
-                        if (r1 != r5) goto L_0x0148
-                        float r1 = r13.rectX
+                        if (r1 != r5) goto L_0x012f
+                        float r1 = r15.rectX
                         float r1 = r1 + r2
-                        r13.rectX = r1
-                        float r2 = r13.rectY
+                        r15.rectX = r1
+                        float r2 = r15.rectY
                         float r2 = r2 + r6
-                        r13.rectY = r2
-                        int r2 = r13.bitmapX
-                        float r3 = (float) r2
-                        int r3 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-                        if (r3 >= 0) goto L_0x0114
-                        float r1 = (float) r2
-                        r13.rectX = r1
-                        goto L_0x0125
-                    L_0x0114:
-                        float r3 = r13.rectSizeX
-                        float r1 = r1 + r3
-                        int r4 = r13.bitmapWidth
-                        int r5 = r2 + r4
-                        float r5 = (float) r5
-                        int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-                        if (r1 <= 0) goto L_0x0125
-                        int r2 = r2 + r4
-                        float r1 = (float) r2
-                        float r1 = r1 - r3
-                        r13.rectX = r1
-                    L_0x0125:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r1 = r13.rectY
-                        int r2 = r13.bitmapY
-                        float r3 = (float) r2
-                        int r3 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-                        if (r3 >= 0) goto L_0x0135
-                        float r1 = (float) r2
-                        r13.rectY = r1
-                        goto L_0x0334
-                    L_0x0135:
-                        float r3 = r13.rectSizeY
-                        float r1 = r1 + r3
-                        int r4 = r13.bitmapHeight
-                        int r5 = r2 + r4
-                        float r5 = (float) r5
-                        int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-                        if (r1 <= 0) goto L_0x0334
-                        int r2 = r2 + r4
-                        float r1 = (float) r2
-                        float r1 = r1 - r3
-                        r13.rectY = r1
-                        goto L_0x0334
-                    L_0x0148:
-                        r5 = 1126170624(0x43200000, float:160.0)
-                        if (r1 != r8) goto L_0x01c4
-                        float r13 = r13.rectSizeX
-                        float r1 = r13 - r2
-                        int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-                        if (r1 >= 0) goto L_0x0156
-                        float r2 = r13 - r5
-                    L_0x0156:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r1 = r13.rectX
-                        float r3 = r1 + r2
-                        int r13 = r13.bitmapX
-                        float r4 = (float) r13
-                        int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-                        if (r3 >= 0) goto L_0x0166
-                        float r13 = (float) r13
-                        float r2 = r13 - r1
-                    L_0x0166:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        boolean r1 = r13.freeform
-                        if (r1 != 0) goto L_0x0192
-                        float r1 = r13.rectY
-                        float r3 = r1 + r2
-                        int r13 = r13.bitmapY
-                        float r4 = (float) r13
-                        int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-                        if (r3 >= 0) goto L_0x017a
-                        float r13 = (float) r13
-                        float r2 = r13 - r1
-                    L_0x017a:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r1 = r13.rectX
-                        float r1 = r1 + r2
-                        r13.rectX = r1
-                        float r1 = r13.rectY
-                        float r1 = r1 + r2
-                        r13.rectY = r1
-                        float r1 = r13.rectSizeX
-                        float r1 = r1 - r2
-                        r13.rectSizeX = r1
-                        float r1 = r13.rectSizeY
-                        float r1 = r1 - r2
-                        r13.rectSizeY = r1
-                        goto L_0x0334
-                    L_0x0192:
-                        float r13 = r13.rectSizeY
-                        float r1 = r13 - r6
-                        int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-                        if (r1 >= 0) goto L_0x019c
-                        float r6 = r13 - r5
-                    L_0x019c:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r1 = r13.rectY
-                        float r3 = r1 + r6
-                        int r13 = r13.bitmapY
-                        float r4 = (float) r13
-                        int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-                        if (r3 >= 0) goto L_0x01ac
-                        float r13 = (float) r13
-                        float r6 = r13 - r1
-                    L_0x01ac:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r1 = r13.rectX
-                        float r1 = r1 + r2
-                        r13.rectX = r1
-                        float r1 = r13.rectY
-                        float r1 = r1 + r6
-                        r13.rectY = r1
-                        float r1 = r13.rectSizeX
-                        float r1 = r1 - r2
-                        r13.rectSizeX = r1
-                        float r1 = r13.rectSizeY
-                        float r1 = r1 - r6
-                        r13.rectSizeY = r1
-                        goto L_0x0334
-                    L_0x01c4:
-                        if (r1 != r7) goto L_0x023d
-                        float r13 = r13.rectSizeX
-                        float r1 = r13 + r2
-                        int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-                        if (r1 >= 0) goto L_0x01d0
-                        float r13 = r13 - r5
-                        float r2 = -r13
-                    L_0x01d0:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r1 = r13.rectX
-                        float r3 = r13.rectSizeX
-                        float r4 = r1 + r3
-                        float r4 = r4 + r2
-                        int r7 = r13.bitmapX
-                        int r13 = r13.bitmapWidth
-                        int r9 = r7 + r13
-                        float r9 = (float) r9
-                        int r4 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1))
-                        if (r4 <= 0) goto L_0x01e9
-                        int r7 = r7 + r13
-                        float r13 = (float) r7
-                        float r13 = r13 - r1
-                        float r2 = r13 - r3
-                    L_0x01e9:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        boolean r1 = r13.freeform
-                        if (r1 != 0) goto L_0x0210
-                        float r1 = r13.rectY
-                        float r3 = r1 - r2
-                        int r13 = r13.bitmapY
-                        float r4 = (float) r13
-                        int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-                        if (r3 >= 0) goto L_0x01fd
-                        float r13 = (float) r13
-                        float r2 = r1 - r13
-                    L_0x01fd:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r1 = r13.rectY
-                        float r1 = r1 - r2
-                        r13.rectY = r1
-                        float r1 = r13.rectSizeX
-                        float r1 = r1 + r2
-                        r13.rectSizeX = r1
-                        float r1 = r13.rectSizeY
-                        float r1 = r1 + r2
-                        r13.rectSizeY = r1
-                        goto L_0x0334
-                    L_0x0210:
-                        float r13 = r13.rectSizeY
-                        float r1 = r13 - r6
-                        int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-                        if (r1 >= 0) goto L_0x021a
-                        float r6 = r13 - r5
-                    L_0x021a:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r1 = r13.rectY
-                        float r3 = r1 + r6
-                        int r13 = r13.bitmapY
-                        float r4 = (float) r13
-                        int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-                        if (r3 >= 0) goto L_0x022a
-                        float r13 = (float) r13
-                        float r6 = r13 - r1
-                    L_0x022a:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r1 = r13.rectY
-                        float r1 = r1 + r6
-                        r13.rectY = r1
-                        float r1 = r13.rectSizeX
-                        float r1 = r1 + r2
-                        r13.rectSizeX = r1
-                        float r1 = r13.rectSizeY
-                        float r1 = r1 - r6
-                        r13.rectSizeY = r1
-                        goto L_0x0334
-                    L_0x023d:
-                        if (r1 != r4) goto L_0x02ba
-                        float r13 = r13.rectSizeX
-                        float r1 = r13 - r2
-                        int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-                        if (r1 >= 0) goto L_0x0249
-                        float r2 = r13 - r5
-                    L_0x0249:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r1 = r13.rectX
-                        float r3 = r1 + r2
-                        int r13 = r13.bitmapX
-                        float r4 = (float) r13
-                        int r3 = (r3 > r4 ? 1 : (r3 == r4 ? 0 : -1))
-                        if (r3 >= 0) goto L_0x0259
-                        float r13 = (float) r13
-                        float r2 = r13 - r1
-                    L_0x0259:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        boolean r1 = r13.freeform
-                        if (r1 != 0) goto L_0x028a
-                        float r1 = r13.rectY
-                        float r3 = r13.rectSizeX
-                        float r4 = r1 + r3
-                        float r4 = r4 - r2
-                        int r5 = r13.bitmapY
-                        int r13 = r13.bitmapHeight
-                        int r6 = r5 + r13
+                        r15.rectY = r2
+                        int r3 = r15.bitmapX
+                        float r4 = (float) r3
+                        int r4 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
+                        if (r4 >= 0) goto L_0x00ff
+                        float r1 = (float) r3
+                        r15.rectX = r1
+                        goto L_0x0110
+                    L_0x00ff:
+                        float r4 = r15.rectSizeX
+                        float r1 = r1 + r4
+                        int r5 = r15.bitmapWidth
+                        int r6 = r3 + r5
                         float r6 = (float) r6
+                        int r1 = (r1 > r6 ? 1 : (r1 == r6 ? 0 : -1))
+                        if (r1 <= 0) goto L_0x0110
+                        int r3 = r3 + r5
+                        float r1 = (float) r3
+                        float r1 = r1 - r4
+                        r15.rectX = r1
+                    L_0x0110:
+                        int r1 = r15.bitmapY
+                        float r3 = (float) r1
+                        int r3 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
+                        if (r3 >= 0) goto L_0x011c
+                        float r1 = (float) r1
+                        r15.rectY = r1
+                        goto L_0x02be
+                    L_0x011c:
+                        float r3 = r15.rectSizeY
+                        float r2 = r2 + r3
+                        int r4 = r15.bitmapHeight
+                        int r5 = r1 + r4
+                        float r5 = (float) r5
+                        int r2 = (r2 > r5 ? 1 : (r2 == r5 ? 0 : -1))
+                        if (r2 <= 0) goto L_0x02be
+                        int r1 = r1 + r4
+                        float r1 = (float) r1
+                        float r1 = r1 - r3
+                        r15.rectY = r1
+                        goto L_0x02be
+                    L_0x012f:
+                        r5 = 1126170624(0x43200000, float:160.0)
+                        if (r1 != r8) goto L_0x0190
+                        float r1 = r15.rectSizeX
+                        float r3 = r1 - r2
+                        int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+                        if (r3 >= 0) goto L_0x013d
+                        float r2 = r1 - r5
+                    L_0x013d:
+                        float r3 = r15.rectX
+                        float r4 = r3 + r2
+                        int r7 = r15.bitmapX
+                        float r9 = (float) r7
+                        int r4 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1))
+                        if (r4 >= 0) goto L_0x014a
+                        float r2 = (float) r7
+                        float r2 = r2 - r3
+                    L_0x014a:
+                        boolean r4 = r15.freeform
+                        if (r4 != 0) goto L_0x016b
+                        float r4 = r15.rectY
+                        float r5 = r4 + r2
+                        int r6 = r15.bitmapY
+                        float r7 = (float) r6
+                        int r5 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
+                        if (r5 >= 0) goto L_0x015b
+                        float r2 = (float) r6
+                        float r2 = r2 - r4
+                    L_0x015b:
+                        float r3 = r3 + r2
+                        r15.rectX = r3
+                        float r4 = r4 + r2
+                        r15.rectY = r4
+                        float r1 = r1 - r2
+                        r15.rectSizeX = r1
+                        float r1 = r15.rectSizeY
+                        float r1 = r1 - r2
+                        r15.rectSizeY = r1
+                        goto L_0x02be
+                    L_0x016b:
+                        float r4 = r15.rectSizeY
+                        float r7 = r4 - r6
+                        int r7 = (r7 > r5 ? 1 : (r7 == r5 ? 0 : -1))
+                        if (r7 >= 0) goto L_0x0175
+                        float r6 = r4 - r5
+                    L_0x0175:
+                        float r5 = r15.rectY
+                        float r7 = r5 + r6
+                        int r9 = r15.bitmapY
+                        float r10 = (float) r9
+                        int r7 = (r7 > r10 ? 1 : (r7 == r10 ? 0 : -1))
+                        if (r7 >= 0) goto L_0x0182
+                        float r6 = (float) r9
+                        float r6 = r6 - r5
+                    L_0x0182:
+                        float r3 = r3 + r2
+                        r15.rectX = r3
+                        float r5 = r5 + r6
+                        r15.rectY = r5
+                        float r1 = r1 - r2
+                        r15.rectSizeX = r1
+                        float r4 = r4 - r6
+                        r15.rectSizeY = r4
+                        goto L_0x02be
+                    L_0x0190:
+                        if (r1 != r7) goto L_0x01f3
+                        float r1 = r15.rectSizeX
+                        float r3 = r1 + r2
+                        int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+                        if (r3 >= 0) goto L_0x019d
+                        float r2 = r1 - r5
+                        float r2 = -r2
+                    L_0x019d:
+                        float r3 = r15.rectX
+                        float r4 = r3 + r1
+                        float r4 = r4 + r2
+                        int r7 = r15.bitmapX
+                        int r9 = r15.bitmapWidth
+                        int r10 = r7 + r9
+                        float r10 = (float) r10
+                        int r4 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1))
+                        if (r4 <= 0) goto L_0x01b1
+                        int r7 = r7 + r9
+                        float r2 = (float) r7
+                        float r2 = r2 - r3
+                        float r2 = r2 - r1
+                    L_0x01b1:
+                        boolean r3 = r15.freeform
+                        if (r3 != 0) goto L_0x01d0
+                        float r3 = r15.rectY
+                        float r4 = r3 - r2
+                        int r5 = r15.bitmapY
+                        float r6 = (float) r5
                         int r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-                        if (r4 <= 0) goto L_0x0277
-                        float r1 = r1 + r3
+                        if (r4 >= 0) goto L_0x01c3
                         float r2 = (float) r5
-                        float r1 = r1 - r2
-                        float r13 = (float) r13
-                        float r2 = r1 - r13
-                    L_0x0277:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r1 = r13.rectX
+                        float r2 = r3 - r2
+                    L_0x01c3:
+                        float r3 = r3 - r2
+                        r15.rectY = r3
                         float r1 = r1 + r2
-                        r13.rectX = r1
-                        float r1 = r13.rectSizeX
-                        float r1 = r1 - r2
-                        r13.rectSizeX = r1
-                        float r1 = r13.rectSizeY
-                        float r1 = r1 - r2
-                        r13.rectSizeY = r1
-                        goto L_0x0334
-                    L_0x028a:
-                        float r1 = r13.rectY
-                        float r3 = r13.rectSizeY
-                        float r4 = r1 + r3
+                        r15.rectSizeX = r1
+                        float r1 = r15.rectSizeY
+                        float r1 = r1 + r2
+                        r15.rectSizeY = r1
+                        goto L_0x02be
+                    L_0x01d0:
+                        float r3 = r15.rectSizeY
+                        float r4 = r3 - r6
+                        int r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
+                        if (r4 >= 0) goto L_0x01da
+                        float r6 = r3 - r5
+                    L_0x01da:
+                        float r4 = r15.rectY
+                        float r5 = r4 + r6
+                        int r7 = r15.bitmapY
+                        float r9 = (float) r7
+                        int r5 = (r5 > r9 ? 1 : (r5 == r9 ? 0 : -1))
+                        if (r5 >= 0) goto L_0x01e8
+                        float r5 = (float) r7
+                        float r6 = r5 - r4
+                    L_0x01e8:
                         float r4 = r4 + r6
-                        int r7 = r13.bitmapY
-                        int r13 = r13.bitmapHeight
-                        int r9 = r7 + r13
-                        float r9 = (float) r9
-                        int r4 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1))
-                        if (r4 <= 0) goto L_0x02a1
-                        int r7 = r7 + r13
-                        float r13 = (float) r7
-                        float r13 = r13 - r1
-                        float r6 = r13 - r3
-                    L_0x02a1:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r1 = r13.rectX
+                        r15.rectY = r4
                         float r1 = r1 + r2
-                        r13.rectX = r1
-                        float r1 = r13.rectSizeX
+                        r15.rectSizeX = r1
+                        float r3 = r3 - r6
+                        r15.rectSizeY = r3
+                        goto L_0x02be
+                    L_0x01f3:
+                        if (r1 != r4) goto L_0x0259
+                        float r1 = r15.rectSizeX
+                        float r3 = r1 - r2
+                        int r3 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
+                        if (r3 >= 0) goto L_0x01ff
+                        float r2 = r1 - r5
+                    L_0x01ff:
+                        float r3 = r15.rectX
+                        float r4 = r3 + r2
+                        int r7 = r15.bitmapX
+                        float r9 = (float) r7
+                        int r4 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1))
+                        if (r4 >= 0) goto L_0x020c
+                        float r2 = (float) r7
+                        float r2 = r2 - r3
+                    L_0x020c:
+                        boolean r4 = r15.freeform
+                        if (r4 != 0) goto L_0x0233
+                        float r4 = r15.rectY
+                        float r5 = r4 + r1
+                        float r5 = r5 - r2
+                        int r6 = r15.bitmapY
+                        int r7 = r15.bitmapHeight
+                        int r9 = r6 + r7
+                        float r9 = (float) r9
+                        int r5 = (r5 > r9 ? 1 : (r5 == r9 ? 0 : -1))
+                        if (r5 <= 0) goto L_0x0226
+                        float r4 = r4 + r1
+                        float r2 = (float) r6
+                        float r4 = r4 - r2
+                        float r2 = (float) r7
+                        float r2 = r4 - r2
+                    L_0x0226:
+                        float r3 = r3 + r2
+                        r15.rectX = r3
                         float r1 = r1 - r2
-                        r13.rectSizeX = r1
-                        float r1 = r13.rectSizeY
-                        float r1 = r1 + r6
-                        r13.rectSizeY = r1
-                        int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-                        if (r1 >= 0) goto L_0x0334
-                        r13.rectSizeY = r5
-                        goto L_0x0334
-                    L_0x02ba:
-                        if (r1 != r3) goto L_0x0334
-                        float r1 = r13.rectX
-                        float r3 = r13.rectSizeX
+                        r15.rectSizeX = r1
+                        float r1 = r15.rectSizeY
+                        float r1 = r1 - r2
+                        r15.rectSizeY = r1
+                        goto L_0x02be
+                    L_0x0233:
+                        float r4 = r15.rectY
+                        float r7 = r15.rectSizeY
+                        float r9 = r4 + r7
+                        float r9 = r9 + r6
+                        int r10 = r15.bitmapY
+                        int r11 = r15.bitmapHeight
+                        int r12 = r10 + r11
+                        float r12 = (float) r12
+                        int r9 = (r9 > r12 ? 1 : (r9 == r12 ? 0 : -1))
+                        if (r9 <= 0) goto L_0x0249
+                        int r10 = r10 + r11
+                        float r6 = (float) r10
+                        float r6 = r6 - r4
+                        float r6 = r6 - r7
+                    L_0x0249:
+                        float r3 = r3 + r2
+                        r15.rectX = r3
+                        float r1 = r1 - r2
+                        r15.rectSizeX = r1
+                        float r7 = r7 + r6
+                        r15.rectSizeY = r7
+                        int r1 = (r7 > r5 ? 1 : (r7 == r5 ? 0 : -1))
+                        if (r1 >= 0) goto L_0x02be
+                        r15.rectSizeY = r5
+                        goto L_0x02be
+                    L_0x0259:
+                        if (r1 != r3) goto L_0x02be
+                        float r1 = r15.rectX
+                        float r3 = r15.rectSizeX
                         float r4 = r1 + r3
                         float r4 = r4 + r2
-                        int r7 = r13.bitmapX
-                        int r13 = r13.bitmapWidth
-                        int r9 = r7 + r13
-                        float r9 = (float) r9
-                        int r4 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1))
-                        if (r4 <= 0) goto L_0x02d3
-                        int r7 = r7 + r13
-                        float r13 = (float) r7
-                        float r13 = r13 - r1
-                        float r2 = r13 - r3
-                    L_0x02d3:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        boolean r1 = r13.freeform
-                        if (r1 != 0) goto L_0x02fd
-                        float r1 = r13.rectY
-                        float r3 = r13.rectSizeX
+                        int r7 = r15.bitmapX
+                        int r9 = r15.bitmapWidth
+                        int r10 = r7 + r9
+                        float r10 = (float) r10
+                        int r4 = (r4 > r10 ? 1 : (r4 == r10 ? 0 : -1))
+                        if (r4 <= 0) goto L_0x0271
+                        int r7 = r7 + r9
+                        float r2 = (float) r7
+                        float r2 = r2 - r1
+                        float r2 = r2 - r3
+                    L_0x0271:
+                        boolean r1 = r15.freeform
+                        if (r1 != 0) goto L_0x0292
+                        float r1 = r15.rectY
                         float r4 = r1 + r3
                         float r4 = r4 + r2
-                        int r6 = r13.bitmapY
-                        int r13 = r13.bitmapHeight
-                        int r7 = r6 + r13
-                        float r7 = (float) r7
-                        int r4 = (r4 > r7 ? 1 : (r4 == r7 ? 0 : -1))
-                        if (r4 <= 0) goto L_0x02f0
-                        int r6 = r6 + r13
-                        float r13 = (float) r6
-                        float r13 = r13 - r1
-                        float r2 = r13 - r3
-                    L_0x02f0:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r1 = r13.rectSizeX
-                        float r1 = r1 + r2
-                        r13.rectSizeX = r1
-                        float r1 = r13.rectSizeY
-                        float r1 = r1 + r2
-                        r13.rectSizeY = r1
-                        goto L_0x0320
-                    L_0x02fd:
-                        float r1 = r13.rectY
-                        float r3 = r13.rectSizeY
-                        float r4 = r1 + r3
-                        float r4 = r4 + r6
-                        int r7 = r13.bitmapY
-                        int r13 = r13.bitmapHeight
-                        int r9 = r7 + r13
+                        int r6 = r15.bitmapY
+                        int r7 = r15.bitmapHeight
+                        int r9 = r6 + r7
                         float r9 = (float) r9
                         int r4 = (r4 > r9 ? 1 : (r4 == r9 ? 0 : -1))
-                        if (r4 <= 0) goto L_0x0314
-                        int r7 = r7 + r13
-                        float r13 = (float) r7
-                        float r13 = r13 - r1
-                        float r6 = r13 - r3
-                    L_0x0314:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r1 = r13.rectSizeX
+                        if (r4 <= 0) goto L_0x0289
+                        int r6 = r6 + r7
+                        float r2 = (float) r6
+                        float r2 = r2 - r1
+                        float r2 = r2 - r3
+                    L_0x0289:
+                        float r3 = r3 + r2
+                        r15.rectSizeX = r3
+                        float r1 = r15.rectSizeY
                         float r1 = r1 + r2
-                        r13.rectSizeX = r1
-                        float r1 = r13.rectSizeY
-                        float r1 = r1 + r6
-                        r13.rectSizeY = r1
-                    L_0x0320:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r1 = r13.rectSizeX
+                        r15.rectSizeY = r1
+                        goto L_0x02ae
+                    L_0x0292:
+                        float r1 = r15.rectY
+                        float r4 = r15.rectSizeY
+                        float r7 = r1 + r4
+                        float r7 = r7 + r6
+                        int r9 = r15.bitmapY
+                        int r10 = r15.bitmapHeight
+                        int r11 = r9 + r10
+                        float r11 = (float) r11
+                        int r7 = (r7 > r11 ? 1 : (r7 == r11 ? 0 : -1))
+                        if (r7 <= 0) goto L_0x02a8
+                        int r9 = r9 + r10
+                        float r6 = (float) r9
+                        float r6 = r6 - r1
+                        float r6 = r6 - r4
+                    L_0x02a8:
+                        float r3 = r3 + r2
+                        r15.rectSizeX = r3
+                        float r4 = r4 + r6
+                        r15.rectSizeY = r4
+                    L_0x02ae:
+                        float r1 = r15.rectSizeX
                         int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-                        if (r1 >= 0) goto L_0x032a
-                        r13.rectSizeX = r5
-                    L_0x032a:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        float r1 = r13.rectSizeY
+                        if (r1 >= 0) goto L_0x02b6
+                        r15.rectSizeX = r5
+                    L_0x02b6:
+                        float r1 = r15.rectSizeY
                         int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-                        if (r1 >= 0) goto L_0x0334
-                        r13.rectSizeY = r5
-                    L_0x0334:
-                        org.telegram.ui.PhotoCropActivity$PhotoCropView r13 = org.telegram.ui.PhotoCropActivity.PhotoCropView.this
-                        r13.oldX = r12
-                        r13.oldY = r0
-                        r13.invalidate()
-                    L_0x033d:
+                        if (r1 >= 0) goto L_0x02be
+                        r15.rectSizeY = r5
+                    L_0x02be:
+                        r15.oldX = r14
+                        r15.oldY = r0
+                        r15.invalidate()
+                    L_0x02c5:
                         return r8
                     */
                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoCropActivity.PhotoCropView.AnonymousClass1.onTouch(android.view.View, android.view.MotionEvent):boolean");
@@ -628,7 +571,7 @@ public class PhotoCropActivity extends BaseFragment {
                     int i5 = this.bitmapWidth;
                     this.rectX = (f2 * ((float) i5)) + ((float) this.bitmapX);
                     int i6 = this.bitmapHeight;
-                    this.rectY = (f4 * ((float) i6)) + ((float) this.bitmapY);
+                    this.rectY = (f4 * ((float) i6)) + ((float) dp);
                     this.rectSizeX = f5 * ((float) i5);
                     this.rectSizeY = f6 * ((float) i6);
                 } else if (this.freeform) {
@@ -696,7 +639,7 @@ public class PhotoCropActivity extends BaseFragment {
         }
 
         /* access modifiers changed from: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:14:0x01b8 A[LOOP:0: B:13:0x01b6->B:14:0x01b8, LOOP_END] */
+        /* JADX WARNING: Removed duplicated region for block: B:14:0x01b4 A[LOOP:0: B:13:0x01b2->B:14:0x01b4, LOOP_END] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onDraw(android.graphics.Canvas r16) {
             /*
@@ -704,35 +647,33 @@ public class PhotoCropActivity extends BaseFragment {
                 r1 = r15
                 org.telegram.ui.PhotoCropActivity r0 = org.telegram.ui.PhotoCropActivity.this
                 android.graphics.drawable.BitmapDrawable r0 = r0.drawable
-                if (r0 == 0) goto L_0x0035
-                org.telegram.ui.PhotoCropActivity r0 = org.telegram.ui.PhotoCropActivity.this     // Catch:{ all -> 0x002e }
-                android.graphics.drawable.BitmapDrawable r0 = r0.drawable     // Catch:{ all -> 0x002e }
-                int r2 = r1.bitmapX     // Catch:{ all -> 0x002e }
-                int r3 = r1.bitmapY     // Catch:{ all -> 0x002e }
-                int r4 = r1.bitmapX     // Catch:{ all -> 0x002e }
-                int r5 = r1.bitmapWidth     // Catch:{ all -> 0x002e }
-                int r4 = r4 + r5
-                int r5 = r1.bitmapY     // Catch:{ all -> 0x002e }
-                int r6 = r1.bitmapHeight     // Catch:{ all -> 0x002e }
-                int r5 = r5 + r6
-                r0.setBounds(r2, r3, r4, r5)     // Catch:{ all -> 0x002e }
-                org.telegram.ui.PhotoCropActivity r0 = org.telegram.ui.PhotoCropActivity.this     // Catch:{ all -> 0x002e }
-                android.graphics.drawable.BitmapDrawable r0 = r0.drawable     // Catch:{ all -> 0x002e }
+                if (r0 == 0) goto L_0x0031
+                org.telegram.ui.PhotoCropActivity r0 = org.telegram.ui.PhotoCropActivity.this     // Catch:{ all -> 0x002a }
+                android.graphics.drawable.BitmapDrawable r0 = r0.drawable     // Catch:{ all -> 0x002a }
+                int r2 = r1.bitmapX     // Catch:{ all -> 0x002a }
+                int r3 = r1.bitmapY     // Catch:{ all -> 0x002a }
+                int r4 = r1.bitmapWidth     // Catch:{ all -> 0x002a }
+                int r4 = r4 + r2
+                int r5 = r1.bitmapHeight     // Catch:{ all -> 0x002a }
+                int r5 = r5 + r3
+                r0.setBounds(r2, r3, r4, r5)     // Catch:{ all -> 0x002a }
+                org.telegram.ui.PhotoCropActivity r0 = org.telegram.ui.PhotoCropActivity.this     // Catch:{ all -> 0x002a }
+                android.graphics.drawable.BitmapDrawable r0 = r0.drawable     // Catch:{ all -> 0x002a }
                 r8 = r16
-                r0.draw(r8)     // Catch:{ all -> 0x002c }
-                goto L_0x0037
-            L_0x002c:
+                r0.draw(r8)     // Catch:{ all -> 0x0028 }
+                goto L_0x0033
+            L_0x0028:
                 r0 = move-exception
-                goto L_0x0031
-            L_0x002e:
+                goto L_0x002d
+            L_0x002a:
                 r0 = move-exception
                 r8 = r16
-            L_0x0031:
+            L_0x002d:
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-                goto L_0x0037
-            L_0x0035:
+                goto L_0x0033
+            L_0x0031:
                 r8 = r16
-            L_0x0037:
+            L_0x0033:
                 int r0 = r1.bitmapX
                 float r3 = (float) r0
                 int r2 = r1.bitmapY
@@ -943,8 +884,8 @@ public class PhotoCropActivity extends BaseFragment {
                 r2 = r16
                 r2.drawRect(r3, r4, r5, r6, r7)
                 r0 = 1
-            L_0x01b6:
-                if (r0 >= r11) goto L_0x0204
+            L_0x01b2:
+                if (r0 >= r11) goto L_0x0200
                 float r2 = r1.rectX
                 float r3 = r1.rectSizeX
                 r10 = 1077936128(0x40400000, float:3.0)
@@ -991,8 +932,8 @@ public class PhotoCropActivity extends BaseFragment {
                 r7 = r12
                 r2.drawRect(r3, r4, r5, r6, r7)
                 int r0 = r0 + 1
-                goto L_0x01b6
-            L_0x0204:
+                goto L_0x01b2
+            L_0x0200:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PhotoCropActivity.PhotoCropView.onDraw(android.graphics.Canvas):void");

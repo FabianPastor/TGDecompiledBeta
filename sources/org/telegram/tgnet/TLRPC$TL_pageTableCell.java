@@ -27,16 +27,16 @@ public class TLRPC$TL_pageTableCell extends TLObject {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.header = (readInt32 & 1) != 0;
-        this.align_center = (this.flags & 8) != 0;
-        this.align_right = (this.flags & 16) != 0;
-        this.valign_middle = (this.flags & 32) != 0;
-        if ((this.flags & 64) == 0) {
-            z2 = false;
+        this.align_center = (readInt32 & 8) != 0;
+        this.align_right = (readInt32 & 16) != 0;
+        this.valign_middle = (readInt32 & 32) != 0;
+        if ((readInt32 & 64) != 0) {
+            z2 = true;
         }
         this.valign_bottom = z2;
-        if ((this.flags & 128) != 0) {
+        if ((readInt32 & 128) != 0) {
             this.text = TLRPC$RichText.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         if ((this.flags & 2) != 0) {

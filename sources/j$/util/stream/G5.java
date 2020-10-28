@@ -1,17 +1,14 @@
 package j$.util.stream;
 
-import j$.util.function.Consumer;
+abstract class G5 extends CLASSNAMEo5 {
+    protected boolean b;
 
-interface G5 extends Consumer {
-    void accept(double d);
+    G5(CLASSNAMEt5 t5Var) {
+        super(t5Var);
+    }
 
-    void accept(int i);
-
-    void accept(long j);
-
-    void r();
-
-    void s(long j);
-
-    boolean u();
+    public final boolean p() {
+        this.b = true;
+        return false;
+    }
 }

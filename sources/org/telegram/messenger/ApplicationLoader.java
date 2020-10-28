@@ -18,7 +18,6 @@ import android.os.PowerManager;
 import android.text.TextUtils;
 import androidx.multidex.MultiDex;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import java.io.File;
@@ -154,7 +153,7 @@ public class ApplicationLoader extends Application {
             }
         };
         applicationHandler = new Handler(applicationContext.getMainLooper());
-        AndroidUtilities.runOnUIThread($$Lambda$r7IJ1lCIETKiJtvvar_QqYn99iv8.INSTANCE);
+        AndroidUtilities.runOnUIThread($$Lambda$6var_mOFSl8nO3HAcLKG9VPMoeQg.INSTANCE);
     }
 
     public static void startPushService() {
@@ -194,6 +193,8 @@ public class ApplicationLoader extends Application {
         }, 1000);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$initPlayServices$3 */
     public /* synthetic */ void lambda$initPlayServices$3$ApplicationLoader() {
         boolean checkPlayServices = checkPlayServices();
         hasPlayServices = checkPlayServices;
@@ -206,7 +207,7 @@ public class ApplicationLoader extends Application {
             } else if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("GCM Registration not found.");
             }
-            Utilities.globalQueue.postRunnable($$Lambda$ApplicationLoader$Zs8m_Ncm6w1SBp2_GI8M9mBWWQ.INSTANCE);
+            Utilities.globalQueue.postRunnable($$Lambda$ApplicationLoader$DwvxY6zuKaa_RTCmuug62P5rQS8.INSTANCE);
             return;
         }
         if (BuildVars.LOGS_ENABLED) {
@@ -218,9 +219,7 @@ public class ApplicationLoader extends Application {
 
     static /* synthetic */ void lambda$null$2() {
         try {
-            Task<InstanceIdResult> instanceId = FirebaseInstanceId.getInstance().getInstanceId();
-            instanceId.addOnSuccessListener($$Lambda$ApplicationLoader$1gYYQTJQUwFTHbnWcMMeK6lerQs.INSTANCE);
-            instanceId.addOnFailureListener($$Lambda$ApplicationLoader$394ZCZWLmaJTWPaI7WQrKYXFS88.INSTANCE);
+            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener($$Lambda$ApplicationLoader$TGgQsUU5oTyRg2IG0AheDEoqUo.INSTANCE).addOnFailureListener($$Lambda$ApplicationLoader$LpCD4w9w61F3DUVxHcv7_NlH_oY.INSTANCE);
         } catch (Throwable th) {
             FileLog.e(th);
         }

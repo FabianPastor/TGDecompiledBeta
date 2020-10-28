@@ -1,80 +1,89 @@
 package j$.util.stream;
 
-import j$.util.function.CLASSNAMEq;
-import j$.util.function.CLASSNAMEs;
-import j$.util.function.CLASSNAMEt;
+import j$.util.F;
+import j$.util.Spliterator;
+import j$.util.V;
 import j$.util.function.Consumer;
+import j$.util.function.u;
+import j$.util.function.v;
 import java.util.Arrays;
 
-final class J3 extends I3 implements CLASSNAMEh3 {
-    public /* synthetic */ void accept(int i) {
-        CLASSNAMEv5.a(this);
-        throw null;
-    }
+class J3 implements CLASSNAMEi3 {
+    final int[] a;
+    int b;
 
-    public /* synthetic */ void accept(long j) {
-        CLASSNAMEv5.b(this);
-        throw null;
-    }
-
-    public /* bridge */ /* synthetic */ void accept(Object obj) {
-        v((Double) obj);
-    }
-
-    public /* synthetic */ Consumer g(Consumer consumer) {
-        return CLASSNAMEq.a(this, consumer);
-    }
-
-    public /* synthetic */ CLASSNAMEt p(CLASSNAMEt tVar) {
-        return CLASSNAMEs.a(this, tVar);
-    }
-
-    public /* synthetic */ boolean u() {
-        CLASSNAMEv5.e();
-        return false;
-    }
-
-    public /* synthetic */ void v(Double d) {
-        A5.a(this, d);
-    }
-
-    J3(long size) {
-        super(size);
-    }
-
-    public CLASSNAMEm3 b() {
-        if (this.b >= this.a.length) {
-            return this;
-        }
-        throw new IllegalStateException(String.format("Current size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.a.length)}));
-    }
-
-    public void s(long size) {
-        if (size == ((long) this.a.length)) {
+    J3(long j) {
+        if (j < NUM) {
+            this.a = new int[((int) j)];
             this.b = 0;
-        } else {
-            throw new IllegalStateException(String.format("Begin size %d is not equal to fixed size %d", new Object[]{Long.valueOf(size), Integer.valueOf(this.a.length)}));
-        }
-    }
-
-    public void accept(double i) {
-        int i2 = this.b;
-        double[] dArr = this.a;
-        if (i2 < dArr.length) {
-            this.b = i2 + 1;
-            dArr[i2] = i;
             return;
         }
-        throw new IllegalStateException(String.format("Accept exceeded fixed size of %d", new Object[]{Integer.valueOf(this.a.length)}));
+        throw new IllegalArgumentException("Stream size exceeds max array size");
     }
 
-    public void r() {
-        if (this.b < this.a.length) {
-            throw new IllegalStateException(String.format("End size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.a.length)}));
+    J3(int[] iArr) {
+        this.a = iArr;
+        this.b = iArr.length;
+    }
+
+    public CLASSNAMEk3 b(int i) {
+        throw new IndexOutOfBoundsException();
+    }
+
+    public long count() {
+        return (long) this.b;
+    }
+
+    public void d(Object obj, int i) {
+        System.arraycopy(this.a, 0, (int[]) obj, i, this.b);
+    }
+
+    public Object e() {
+        int[] iArr = this.a;
+        int length = iArr.length;
+        int i = this.b;
+        return length == i ? iArr : Arrays.copyOf(iArr, i);
+    }
+
+    public /* synthetic */ void forEach(Consumer consumer) {
+        CLASSNAMEc3.i(this, consumer);
+    }
+
+    /* renamed from: g */
+    public /* synthetic */ void j(Integer[] numArr, int i) {
+        CLASSNAMEc3.f(this, numArr, i);
+    }
+
+    public void h(Object obj) {
+        u uVar = (u) obj;
+        for (int i = 0; i < this.b; i++) {
+            uVar.accept(this.a[i]);
         }
+    }
+
+    /* renamed from: k */
+    public /* synthetic */ CLASSNAMEi3 r(long j, long j2, v vVar) {
+        return CLASSNAMEc3.l(this, j, j2, vVar);
+    }
+
+    public /* synthetic */ int o() {
+        return 0;
+    }
+
+    public /* synthetic */ Object[] q(v vVar) {
+        return CLASSNAMEc3.d(this, vVar);
+    }
+
+    public F spliterator() {
+        return V.k(this.a, 0, this.b, 1040);
     }
 
     public String toString() {
-        return String.format("DoubleFixedNodeBuilder[%d][%s]", new Object[]{Integer.valueOf(this.a.length - this.b), Arrays.toString(this.a)});
+        return String.format("IntArrayNode[%d][%s]", new Object[]{Integer.valueOf(this.a.length - this.b), Arrays.toString(this.a)});
+    }
+
+    /* renamed from: spliterator  reason: collision with other method in class */
+    public Spliterator m15spliterator() {
+        return V.k(this.a, 0, this.b, 1040);
     }
 }

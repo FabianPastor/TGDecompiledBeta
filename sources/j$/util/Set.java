@@ -4,6 +4,15 @@ import java.util.Collection;
 import java.util.Iterator;
 
 public interface Set extends Collection, Collection {
+
+    /* renamed from: j$.util.Set$-CC  reason: invalid class name */
+    public final /* synthetic */ class CC {
+        public static Spliterator $default$spliterator(java.util.Set set) {
+            set.getClass();
+            return new T((Collection) set, 1);
+        }
+    }
+
     boolean add(Object obj);
 
     boolean addAll(Collection collection);
@@ -35,11 +44,4 @@ public interface Set extends Collection, Collection {
     Object[] toArray();
 
     Object[] toArray(Object[] objArr);
-
-    /* renamed from: j$.util.Set$-CC  reason: invalid class name */
-    public final /* synthetic */ class CC {
-        public static Spliterator $default$spliterator(java.util.Set _this) {
-            return k0.m(_this, 1);
-        }
-    }
 }

@@ -1,16 +1,50 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEz;
+import j$.util.CLASSNAMEk;
+import j$.util.function.CLASSNAMEe;
+import j$.util.function.Consumer;
 
-final class R1 extends S1 {
+abstract class R1 implements K6 {
+    boolean a;
+    Object b;
+
     R1() {
     }
 
-    /* renamed from: a */
-    public CLASSNAMEz get() {
-        if (this.a) {
-            return CLASSNAMEz.d(this.b);
+    public /* synthetic */ void accept(double d) {
+        CLASSNAMEk.c(this);
+        throw null;
+    }
+
+    public /* synthetic */ void accept(int i) {
+        CLASSNAMEk.a(this);
+        throw null;
+    }
+
+    public /* synthetic */ void accept(long j) {
+        CLASSNAMEk.b(this);
+        throw null;
+    }
+
+    public void accept(Object obj) {
+        if (!this.a) {
+            this.a = true;
+            this.b = obj;
         }
-        return null;
+    }
+
+    public Consumer f(Consumer consumer) {
+        consumer.getClass();
+        return new CLASSNAMEe(this, consumer);
+    }
+
+    public void m() {
+    }
+
+    public void n(long j) {
+    }
+
+    public boolean p() {
+        return this.a;
     }
 }

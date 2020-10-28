@@ -44,12 +44,13 @@ public class VideoFileRenderer implements VideoSink {
         HandlerThread handlerThread = new HandlerThread("VideoFileRendererRenderThread");
         this.renderThread = handlerThread;
         handlerThread.start();
-        this.renderThreadHandler = new Handler(this.renderThread.getLooper());
+        Handler handler = new Handler(handlerThread.getLooper());
+        this.renderThreadHandler = handler;
         HandlerThread handlerThread2 = new HandlerThread("VideoFileRendererFileThread");
         this.fileThread = handlerThread2;
         handlerThread2.start();
-        this.fileThreadHandler = new Handler(this.fileThread.getLooper());
-        ThreadUtils.invokeAtFrontUninterruptibly(this.renderThreadHandler, (Runnable) new Runnable() {
+        this.fileThreadHandler = new Handler(handlerThread2.getLooper());
+        ThreadUtils.invokeAtFrontUninterruptibly(handler, (Runnable) new Runnable() {
             public void run() {
                 EglBase unused = VideoFileRenderer.this.eglBase = EglBase.CC.create(context, EglBase.CONFIG_PIXEL_BUFFER);
                 VideoFileRenderer.this.eglBase.createDummyPbufferSurface();
@@ -76,7 +77,7 @@ public class VideoFileRenderer implements VideoSink {
 
     /* access modifiers changed from: private */
     /* renamed from: renderFrameOnRenderThread */
-    public void lambda$onFrame$0$VideoFileRenderer(VideoFrame videoFrame) {
+    public void lambda$onFrame$0(VideoFrame videoFrame) {
         VideoFrame.Buffer buffer = videoFrame.getBuffer();
         int i = videoFrame.getRotation() % 180 == 0 ? this.outputFileWidth : this.outputFileHeight;
         int i2 = videoFrame.getRotation() % 180 == 0 ? this.outputFileHeight : this.outputFileWidth;
@@ -108,6 +109,8 @@ public class VideoFileRenderer implements VideoSink {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$renderFrameOnRenderThread$1 */
     public /* synthetic */ void lambda$renderFrameOnRenderThread$1$VideoFileRenderer(VideoFrame.I420Buffer i420Buffer, VideoFrame videoFrame) {
         YuvHelper.I420Rotate(i420Buffer.getDataY(), i420Buffer.getStrideY(), i420Buffer.getDataU(), i420Buffer.getStrideU(), i420Buffer.getDataV(), i420Buffer.getStrideV(), this.outputFrameBuffer, i420Buffer.getWidth(), i420Buffer.getHeight(), videoFrame.getRotation());
         i420Buffer.release();
@@ -147,6 +150,8 @@ public class VideoFileRenderer implements VideoSink {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$release$2 */
     public /* synthetic */ void lambda$release$2$VideoFileRenderer(CountDownLatch countDownLatch) {
         this.yuvConverter.release();
         this.eglBase.release();
@@ -154,6 +159,8 @@ public class VideoFileRenderer implements VideoSink {
         countDownLatch.countDown();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$release$3 */
     public /* synthetic */ void lambda$release$3$VideoFileRenderer() {
         try {
             this.videoOutFile.close();

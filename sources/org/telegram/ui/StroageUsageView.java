@@ -213,11 +213,15 @@ class StroageUsageView extends FrameLayout {
         requestLayout();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setStorageUsage$0 */
     public /* synthetic */ void lambda$setStorageUsage$0$StroageUsageView(ValueAnimator valueAnimator3) {
         this.progress = ((Float) valueAnimator3.getAnimatedValue()).floatValue();
         invalidate();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setStorageUsage$1 */
     public /* synthetic */ void lambda$setStorageUsage$1$StroageUsageView(ValueAnimator valueAnimator3) {
         this.progress2 = ((Float) valueAnimator3.getAnimatedValue()).floatValue();
         invalidate();

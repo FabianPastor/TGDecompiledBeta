@@ -149,7 +149,7 @@ public class PaintingOverlay extends FrameLayout {
                         imageReceiver.setAllowDecodeSingleFrame(true);
                         imageReceiver.setAllowStartLottieAnimation(false);
                         if (z2) {
-                            imageReceiver.setDelegate($$Lambda$PaintingOverlay$M1MbD6dSCe7rjuKTW4iqhjJx7E.INSTANCE);
+                            imageReceiver.setDelegate($$Lambda$PaintingOverlay$y_8jID_HHjHQkiS8U9VB2FHG3GM.INSTANCE);
                         }
                     }
                     imageReceiver.setImage(ImageLocation.getForDocument(mediaEntity.document), (String) null, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(mediaEntity.document.thumbs, 90), mediaEntity.document), (String) null, "webp", mediaEntity.parentObject, 1);

@@ -93,6 +93,8 @@ public class AudioTrackJNI {
         throw new IllegalStateException("thread already started");
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$startThread$0 */
     public /* synthetic */ void lambda$startThread$0$AudioTrackJNI() {
         try {
             this.audioTrack.play();

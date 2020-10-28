@@ -203,8 +203,9 @@ public class VoIPHelper {
             boolean z3 = true;
             intent.putExtra("is_outgoing", true);
             intent.putExtra("start_incall_activity", true);
-            intent.putExtra("video_call", Build.VERSION.SDK_INT >= 18 && z);
-            if (Build.VERSION.SDK_INT < 18 || !z2) {
+            int i = Build.VERSION.SDK_INT;
+            intent.putExtra("video_call", i >= 18 && z);
+            if (i < 18 || !z2) {
                 z3 = false;
             }
             intent.putExtra("can_video_call", z3);
@@ -332,7 +333,7 @@ public class VoIPHelper {
         linearLayout.addView(betterRatingView, LayoutHelper.createLinear(-2, -2, 1, 0, 16, 0, 0));
         LinearLayout linearLayout2 = new LinearLayout(context2);
         linearLayout2.setOrientation(1);
-        $$Lambda$VoIPHelper$10Yk49IUw0yaozGWCHYyd6pcXQY r8 = $$Lambda$VoIPHelper$10Yk49IUw0yaozGWCHYyd6pcXQY.INSTANCE;
+        $$Lambda$VoIPHelper$vinoduW087FbAwTcDhijfGd_w3g r8 = $$Lambda$VoIPHelper$vinoduW087FbAwTcDhijfGd_w3g.INSTANCE;
         String[] strArr = new String[9];
         strArr[0] = z ? "distorted_video" : null;
         strArr[1] = z ? "pixelated_video" : null;
@@ -403,7 +404,7 @@ public class VoIPHelper {
         linearLayout.addView(editTextBoldCursor, LayoutHelper.createLinear(-1, -2, 8.0f, 8.0f, 8.0f, 0.0f));
         boolean[] zArr = {true};
         CheckBoxCell checkBoxCell2 = new CheckBoxCell(context2, 1);
-        $$Lambda$VoIPHelper$WeS4JAHIYvpwHaoSI5GKwAdQgyk r4 = new View.OnClickListener(zArr, checkBoxCell2) {
+        $$Lambda$VoIPHelper$ZKBGGqE4QXobBVoGWVP6DkbyIZs r4 = new View.OnClickListener(zArr, checkBoxCell2) {
             public final /* synthetic */ boolean[] f$0;
             public final /* synthetic */ CheckBoxCell f$1;
 
@@ -435,7 +436,7 @@ public class VoIPHelper {
         AlertDialog.Builder builder = new AlertDialog.Builder(context2);
         builder.setTitle(LocaleController.getString("CallMessageReportProblem", NUM));
         builder.setView(linearLayout);
-        builder.setPositiveButton(LocaleController.getString("Send", NUM), $$Lambda$VoIPHelper$5KyiUPu3LKl7VZZf6GWjFHGX4g.INSTANCE);
+        builder.setPositiveButton(LocaleController.getString("Send", NUM), $$Lambda$VoIPHelper$Zq4i0tG7qahuRNJhgdIjDg_fjg.INSTANCE);
         builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
         builder.setOnDismissListener(new DialogInterface.OnDismissListener(runnable) {
             public final /* synthetic */ Runnable f$0;
@@ -479,8 +480,8 @@ public class VoIPHelper {
                 VoIPHelper.lambda$showRateAlert$10(this.f$0, i);
             }
         });
-        $$Lambda$VoIPHelper$450nV7LHHckm9amteAkst6k1_4 r27 = r0;
-        $$Lambda$VoIPHelper$450nV7LHHckm9amteAkst6k1_4 r0 = new View.OnClickListener(betterRatingView, iArr, linearLayout2, editTextBoldCursor, zArr, j2, j, z2, i, logFile, context, create, textView, checkBoxCell2, textView2, button) {
+        $$Lambda$VoIPHelper$3TZIABxwSGTJlqRCTzksvwQXtEU r27 = r0;
+        $$Lambda$VoIPHelper$3TZIABxwSGTJlqRCTzksvwQXtEU r0 = new View.OnClickListener(betterRatingView, iArr, linearLayout2, editTextBoldCursor, zArr, j2, j, z2, i, logFile, context, create, textView, checkBoxCell2, textView2, button) {
             public final /* synthetic */ BetterRatingView f$0;
             public final /* synthetic */ int[] f$1;
             public final /* synthetic */ Context f$10;

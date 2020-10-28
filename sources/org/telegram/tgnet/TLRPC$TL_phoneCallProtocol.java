@@ -7,7 +7,7 @@ public class TLRPC$TL_phoneCallProtocol extends TLRPC$PhoneCallProtocol {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
         this.udp_p2p = (readInt32 & 1) != 0;
-        this.udp_reflector = (this.flags & 2) != 0;
+        this.udp_reflector = (readInt32 & 2) != 0;
         this.min_layer = abstractSerializedData.readInt32(z);
         this.max_layer = abstractSerializedData.readInt32(z);
         int readInt322 = abstractSerializedData.readInt32(z);

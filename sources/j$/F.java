@@ -1,23 +1,23 @@
 package j$;
 
-import j$.util.function.z;
-import java.util.function.IntBinaryOperator;
+import j$.util.function.r;
+import java.util.function.DoubleFunction;
 
-public final /* synthetic */ class F implements z {
-    final /* synthetic */ IntBinaryOperator a;
+public final /* synthetic */ class F implements r {
+    final /* synthetic */ DoubleFunction a;
 
-    private /* synthetic */ F(IntBinaryOperator intBinaryOperator) {
-        this.a = intBinaryOperator;
+    private /* synthetic */ F(DoubleFunction doubleFunction) {
+        this.a = doubleFunction;
     }
 
-    public static /* synthetic */ z b(IntBinaryOperator intBinaryOperator) {
-        if (intBinaryOperator == null) {
+    public static /* synthetic */ r a(DoubleFunction doubleFunction) {
+        if (doubleFunction == null) {
             return null;
         }
-        return new F(intBinaryOperator);
+        return doubleFunction instanceof G ? ((G) doubleFunction).a : new F(doubleFunction);
     }
 
-    public /* synthetic */ int a(int i, int i2) {
-        return this.a.applyAsInt(i, i2);
+    public /* synthetic */ Object apply(double d) {
+        return this.a.apply(d);
     }
 }

@@ -34,7 +34,9 @@ public class TextCheckBoxCell extends FrameLayout {
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
-        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 66.0f : 21.0f, 0.0f, LocaleController.isRTL ? 21.0f : 66.0f, 0.0f));
+        TextView textView3 = this.textView;
+        boolean z2 = LocaleController.isRTL;
+        addView(textView3, LayoutHelper.createFrame(-1, -1.0f, (z2 ? 5 : 3) | 48, z2 ? 66.0f : 21.0f, 0.0f, z2 ? 21.0f : 66.0f, 0.0f));
         CheckBoxSquare checkBoxSquare = new CheckBoxSquare(context, z);
         this.checkBox = checkBoxSquare;
         checkBoxSquare.setDuplicateParentStateEnabled(false);

@@ -97,6 +97,8 @@ public class ActionBarMenu extends LinearLayout {
         return actionBarMenuItem;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$addItem$0 */
     public /* synthetic */ void lambda$addItem$0$ActionBarMenu(View view) {
         ActionBarMenuItem actionBarMenuItem = (ActionBarMenuItem) view;
         if (actionBarMenuItem.hasSubMenu()) {

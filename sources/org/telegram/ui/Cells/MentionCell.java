@@ -11,6 +11,8 @@ import org.telegram.messenger.Emoji;
 import org.telegram.messenger.ImageLocation;
 import org.telegram.messenger.MediaDataController;
 import org.telegram.messenger.UserObject;
+import org.telegram.tgnet.TLRPC$Chat;
+import org.telegram.tgnet.TLRPC$ChatPhoto;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserProfilePhoto;
 import org.telegram.ui.ActionBar.Theme;
@@ -75,6 +77,31 @@ public class MentionCell extends LinearLayout {
         if (tLRPC$User.username != null) {
             TextView textView = this.usernameTextView;
             textView.setText("@" + tLRPC$User.username);
+        } else {
+            this.usernameTextView.setText("");
+        }
+        this.imageView.setVisibility(0);
+        this.usernameTextView.setVisibility(0);
+    }
+
+    public void setChat(TLRPC$Chat tLRPC$Chat) {
+        if (tLRPC$Chat == null) {
+            this.nameTextView.setText("");
+            this.usernameTextView.setText("");
+            this.imageView.setImageDrawable((Drawable) null);
+            return;
+        }
+        this.avatarDrawable.setInfo(tLRPC$Chat);
+        TLRPC$ChatPhoto tLRPC$ChatPhoto = tLRPC$Chat.photo;
+        if (tLRPC$ChatPhoto == null || tLRPC$ChatPhoto.photo_small == null) {
+            this.imageView.setImageDrawable(this.avatarDrawable);
+        } else {
+            this.imageView.setImage(ImageLocation.getForChat(tLRPC$Chat, false), "50_50", (Drawable) this.avatarDrawable, (Object) tLRPC$Chat);
+        }
+        this.nameTextView.setText(tLRPC$Chat.title);
+        if (tLRPC$Chat.username != null) {
+            TextView textView = this.usernameTextView;
+            textView.setText("@" + tLRPC$Chat.username);
         } else {
             this.usernameTextView.setText("");
         }

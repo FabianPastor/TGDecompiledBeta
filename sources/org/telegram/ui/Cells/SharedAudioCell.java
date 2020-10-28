@@ -90,7 +90,9 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         this.checkBox.setDrawUnchecked(false);
         int i2 = 3;
         this.checkBox.setDrawBackgroundAsArc(3);
-        addView(this.checkBox, LayoutHelper.createFrame(24, 24.0f, (LocaleController.isRTL ? 5 : i2) | 48, LocaleController.isRTL ? 0.0f : 38.1f, 32.1f, LocaleController.isRTL ? 6.0f : 0.0f, 0.0f));
+        CheckBox2 checkBox22 = this.checkBox;
+        boolean z = LocaleController.isRTL;
+        addView(checkBox22, LayoutHelper.createFrame(24, 24.0f, (z ? 5 : i2) | 48, z ? 0.0f : 38.1f, 32.1f, z ? 6.0f : 0.0f, 0.0f));
         if (i == 1) {
             TextPaint textPaint = new TextPaint(1);
             this.description2TextPaint = textPaint;
@@ -120,11 +122,11 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x01e2  */
-    /* JADX WARNING: Removed duplicated region for block: B:55:0x01f7  */
-    /* JADX WARNING: Removed duplicated region for block: B:56:0x0202  */
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x023a  */
-    /* JADX WARNING: Removed duplicated region for block: B:60:0x024c  */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x01e4  */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x01f9  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x0204  */
+    /* JADX WARNING: Removed duplicated region for block: B:59:0x023c  */
+    /* JADX WARNING: Removed duplicated region for block: B:60:0x024e  */
     @android.annotation.SuppressLint({"DrawAllocation"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onMeasure(int r23, int r24) {
@@ -229,7 +231,7 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         L_0x00c0:
             org.telegram.messenger.MessageObject r0 = r7.currentMessageObject
             boolean r0 = r0.hasHighlightedWords()
-            if (r0 == 0) goto L_0x0129
+            if (r0 == 0) goto L_0x012b
             org.telegram.messenger.MessageObject r0 = r7.currentMessageObject
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             java.lang.String r0 = r0.message
@@ -246,13 +248,14 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
             org.telegram.messenger.MessageObject r2 = r7.currentMessageObject
             java.util.ArrayList<java.lang.String> r2 = r2.highlightedWords
             java.lang.CharSequence r0 = org.telegram.messenger.AndroidUtilities.highlightText((java.lang.CharSequence) r0, (java.util.ArrayList<java.lang.String>) r2)
-            if (r0 == 0) goto L_0x0129
+            if (r0 == 0) goto L_0x012b
             org.telegram.messenger.MessageObject r2 = r7.currentMessageObject
             java.util.ArrayList<java.lang.String> r2 = r2.highlightedWords
             java.lang.Object r2 = r2.get(r4)
             java.lang.String r2 = (java.lang.String) r2
             android.text.TextPaint r10 = r7.captionTextPaint
-            java.lang.CharSequence r0 = org.telegram.messenger.AndroidUtilities.ellipsizeCenterEnd(r0, r2, r1, r10)
+            r11 = 130(0x82, float:1.82E-43)
+            java.lang.CharSequence r0 = org.telegram.messenger.AndroidUtilities.ellipsizeCenterEnd(r0, r2, r1, r10, r11)
             android.text.TextPaint r2 = r7.captionTextPaint
             float r10 = (float) r1
             android.text.TextUtils$TruncateAt r11 = android.text.TextUtils.TruncateAt.END
@@ -268,99 +271,99 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
             r12 = r0
             r12.<init>(r13, r14, r15, r16, r17, r18, r19)
             r7.captionLayout = r0
-        L_0x0129:
-            int r0 = r7.viewType     // Catch:{ Exception -> 0x01cd }
-            if (r0 != r5) goto L_0x016f
-            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x01cd }
-            boolean r0 = r0.isVoice()     // Catch:{ Exception -> 0x01cd }
-            if (r0 != 0) goto L_0x013d
-            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x01cd }
-            boolean r0 = r0.isRoundVideo()     // Catch:{ Exception -> 0x01cd }
-            if (r0 == 0) goto L_0x016f
-        L_0x013d:
-            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x01cd }
-            int r0 = r0.getDuration()     // Catch:{ Exception -> 0x01cd }
-            java.lang.String r0 = org.telegram.messenger.AndroidUtilities.formatDuration(r0, r4)     // Catch:{ Exception -> 0x01cd }
-            int r2 = r7.viewType     // Catch:{ Exception -> 0x01cd }
-            if (r2 != r5) goto L_0x014e
-            android.text.TextPaint r2 = r7.description2TextPaint     // Catch:{ Exception -> 0x01cd }
-            goto L_0x0150
-        L_0x014e:
-            android.text.TextPaint r2 = org.telegram.ui.ActionBar.Theme.chat_contextResult_descriptionTextPaint     // Catch:{ Exception -> 0x01cd }
+        L_0x012b:
+            int r0 = r7.viewType     // Catch:{ Exception -> 0x01cf }
+            if (r0 != r5) goto L_0x0171
+            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x01cf }
+            boolean r0 = r0.isVoice()     // Catch:{ Exception -> 0x01cf }
+            if (r0 != 0) goto L_0x013f
+            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x01cf }
+            boolean r0 = r0.isRoundVideo()     // Catch:{ Exception -> 0x01cf }
+            if (r0 == 0) goto L_0x0171
+        L_0x013f:
+            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x01cf }
+            int r0 = r0.getDuration()     // Catch:{ Exception -> 0x01cf }
+            java.lang.String r0 = org.telegram.messenger.AndroidUtilities.formatDuration(r0, r4)     // Catch:{ Exception -> 0x01cf }
+            int r2 = r7.viewType     // Catch:{ Exception -> 0x01cf }
+            if (r2 != r5) goto L_0x0150
+            android.text.TextPaint r2 = r7.description2TextPaint     // Catch:{ Exception -> 0x01cf }
+            goto L_0x0152
         L_0x0150:
+            android.text.TextPaint r2 = org.telegram.ui.ActionBar.Theme.chat_contextResult_descriptionTextPaint     // Catch:{ Exception -> 0x01cf }
+        L_0x0152:
             r12 = r2
-            float r2 = (float) r1     // Catch:{ Exception -> 0x01cd }
-            android.text.TextUtils$TruncateAt r5 = android.text.TextUtils.TruncateAt.END     // Catch:{ Exception -> 0x01cd }
-            java.lang.CharSequence r11 = android.text.TextUtils.ellipsize(r0, r12, r2, r5)     // Catch:{ Exception -> 0x01cd }
-            android.text.StaticLayout r0 = new android.text.StaticLayout     // Catch:{ Exception -> 0x01cd }
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ Exception -> 0x01cd }
+            float r2 = (float) r1     // Catch:{ Exception -> 0x01cf }
+            android.text.TextUtils$TruncateAt r5 = android.text.TextUtils.TruncateAt.END     // Catch:{ Exception -> 0x01cf }
+            java.lang.CharSequence r11 = android.text.TextUtils.ellipsize(r0, r12, r2, r5)     // Catch:{ Exception -> 0x01cf }
+            android.text.StaticLayout r0 = new android.text.StaticLayout     // Catch:{ Exception -> 0x01cf }
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ Exception -> 0x01cf }
             int r13 = r1 + r2
-            android.text.Layout$Alignment r14 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x01cd }
+            android.text.Layout$Alignment r14 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x01cf }
             r15 = 1065353216(0x3var_, float:1.0)
             r16 = 0
             r17 = 0
             r10 = r0
-            r10.<init>(r11, r12, r13, r14, r15, r16, r17)     // Catch:{ Exception -> 0x01cd }
-            r7.descriptionLayout = r0     // Catch:{ Exception -> 0x01cd }
-            goto L_0x01d1
-        L_0x016f:
-            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x01cd }
-            java.lang.String r0 = r0.getMusicAuthor()     // Catch:{ Exception -> 0x01cd }
-            java.lang.String r0 = r0.replace(r6, r8)     // Catch:{ Exception -> 0x01cd }
-            org.telegram.messenger.MessageObject r2 = r7.currentMessageObject     // Catch:{ Exception -> 0x01cd }
-            java.util.ArrayList<java.lang.String> r2 = r2.highlightedWords     // Catch:{ Exception -> 0x01cd }
-            java.lang.CharSequence r2 = org.telegram.messenger.AndroidUtilities.highlightText((java.lang.CharSequence) r0, (java.util.ArrayList<java.lang.String>) r2)     // Catch:{ Exception -> 0x01cd }
-            if (r2 == 0) goto L_0x0184
+            r10.<init>(r11, r12, r13, r14, r15, r16, r17)     // Catch:{ Exception -> 0x01cf }
+            r7.descriptionLayout = r0     // Catch:{ Exception -> 0x01cf }
+            goto L_0x01d3
+        L_0x0171:
+            org.telegram.messenger.MessageObject r0 = r7.currentMessageObject     // Catch:{ Exception -> 0x01cf }
+            java.lang.String r0 = r0.getMusicAuthor()     // Catch:{ Exception -> 0x01cf }
+            java.lang.String r0 = r0.replace(r6, r8)     // Catch:{ Exception -> 0x01cf }
+            org.telegram.messenger.MessageObject r2 = r7.currentMessageObject     // Catch:{ Exception -> 0x01cf }
+            java.util.ArrayList<java.lang.String> r2 = r2.highlightedWords     // Catch:{ Exception -> 0x01cf }
+            java.lang.CharSequence r2 = org.telegram.messenger.AndroidUtilities.highlightText((java.lang.CharSequence) r0, (java.util.ArrayList<java.lang.String>) r2)     // Catch:{ Exception -> 0x01cf }
+            if (r2 == 0) goto L_0x0186
             r0 = r2
-        L_0x0184:
-            int r2 = r7.viewType     // Catch:{ Exception -> 0x01cd }
-            if (r2 != r5) goto L_0x01a5
-            android.text.SpannableStringBuilder r2 = new android.text.SpannableStringBuilder     // Catch:{ Exception -> 0x01cd }
-            r2.<init>(r0)     // Catch:{ Exception -> 0x01cd }
-            android.text.SpannableStringBuilder r0 = r2.append(r8)     // Catch:{ Exception -> 0x01cd }
-            android.text.SpannableStringBuilder r2 = r7.dotSpan     // Catch:{ Exception -> 0x01cd }
-            android.text.SpannableStringBuilder r0 = r0.append(r2)     // Catch:{ Exception -> 0x01cd }
-            android.text.SpannableStringBuilder r0 = r0.append(r8)     // Catch:{ Exception -> 0x01cd }
-            org.telegram.messenger.MessageObject r2 = r7.currentMessageObject     // Catch:{ Exception -> 0x01cd }
-            java.lang.CharSequence r2 = org.telegram.ui.FilteredSearchView.createFromInfoString(r2)     // Catch:{ Exception -> 0x01cd }
-            android.text.SpannableStringBuilder r0 = r0.append(r2)     // Catch:{ Exception -> 0x01cd }
-        L_0x01a5:
-            int r2 = r7.viewType     // Catch:{ Exception -> 0x01cd }
-            if (r2 != r5) goto L_0x01ac
-            android.text.TextPaint r2 = r7.description2TextPaint     // Catch:{ Exception -> 0x01cd }
-            goto L_0x01ae
-        L_0x01ac:
-            android.text.TextPaint r2 = org.telegram.ui.ActionBar.Theme.chat_contextResult_descriptionTextPaint     // Catch:{ Exception -> 0x01cd }
+        L_0x0186:
+            int r2 = r7.viewType     // Catch:{ Exception -> 0x01cf }
+            if (r2 != r5) goto L_0x01a7
+            android.text.SpannableStringBuilder r2 = new android.text.SpannableStringBuilder     // Catch:{ Exception -> 0x01cf }
+            r2.<init>(r0)     // Catch:{ Exception -> 0x01cf }
+            android.text.SpannableStringBuilder r0 = r2.append(r8)     // Catch:{ Exception -> 0x01cf }
+            android.text.SpannableStringBuilder r2 = r7.dotSpan     // Catch:{ Exception -> 0x01cf }
+            android.text.SpannableStringBuilder r0 = r0.append(r2)     // Catch:{ Exception -> 0x01cf }
+            android.text.SpannableStringBuilder r0 = r0.append(r8)     // Catch:{ Exception -> 0x01cf }
+            org.telegram.messenger.MessageObject r2 = r7.currentMessageObject     // Catch:{ Exception -> 0x01cf }
+            java.lang.CharSequence r2 = org.telegram.ui.FilteredSearchView.createFromInfoString(r2)     // Catch:{ Exception -> 0x01cf }
+            android.text.SpannableStringBuilder r0 = r0.append(r2)     // Catch:{ Exception -> 0x01cf }
+        L_0x01a7:
+            int r2 = r7.viewType     // Catch:{ Exception -> 0x01cf }
+            if (r2 != r5) goto L_0x01ae
+            android.text.TextPaint r2 = r7.description2TextPaint     // Catch:{ Exception -> 0x01cf }
+            goto L_0x01b0
         L_0x01ae:
+            android.text.TextPaint r2 = org.telegram.ui.ActionBar.Theme.chat_contextResult_descriptionTextPaint     // Catch:{ Exception -> 0x01cf }
+        L_0x01b0:
             r12 = r2
-            float r2 = (float) r1     // Catch:{ Exception -> 0x01cd }
-            android.text.TextUtils$TruncateAt r5 = android.text.TextUtils.TruncateAt.END     // Catch:{ Exception -> 0x01cd }
-            java.lang.CharSequence r11 = android.text.TextUtils.ellipsize(r0, r12, r2, r5)     // Catch:{ Exception -> 0x01cd }
-            android.text.StaticLayout r0 = new android.text.StaticLayout     // Catch:{ Exception -> 0x01cd }
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ Exception -> 0x01cd }
+            float r2 = (float) r1     // Catch:{ Exception -> 0x01cf }
+            android.text.TextUtils$TruncateAt r5 = android.text.TextUtils.TruncateAt.END     // Catch:{ Exception -> 0x01cf }
+            java.lang.CharSequence r11 = android.text.TextUtils.ellipsize(r0, r12, r2, r5)     // Catch:{ Exception -> 0x01cf }
+            android.text.StaticLayout r0 = new android.text.StaticLayout     // Catch:{ Exception -> 0x01cf }
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r9)     // Catch:{ Exception -> 0x01cf }
             int r13 = r1 + r2
-            android.text.Layout$Alignment r14 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x01cd }
+            android.text.Layout$Alignment r14 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x01cf }
             r15 = 1065353216(0x3var_, float:1.0)
             r16 = 0
             r17 = 0
             r10 = r0
-            r10.<init>(r11, r12, r13, r14, r15, r16, r17)     // Catch:{ Exception -> 0x01cd }
-            r7.descriptionLayout = r0     // Catch:{ Exception -> 0x01cd }
-            goto L_0x01d1
-        L_0x01cd:
+            r10.<init>(r11, r12, r13, r14, r15, r16, r17)     // Catch:{ Exception -> 0x01cf }
+            r7.descriptionLayout = r0     // Catch:{ Exception -> 0x01cf }
+            goto L_0x01d3
+        L_0x01cf:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x01d1:
+        L_0x01d3:
             int r0 = android.view.View.MeasureSpec.getSize(r23)
             r1 = 1113587712(0x42600000, float:56.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
             android.text.StaticLayout r2 = r7.captionLayout
             r8 = 1099956224(0x41900000, float:18.0)
-            if (r2 != 0) goto L_0x01e2
-            goto L_0x01e6
-        L_0x01e2:
+            if (r2 != 0) goto L_0x01e4
+            goto L_0x01e8
+        L_0x01e4:
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r8)
-        L_0x01e6:
+        L_0x01e8:
             int r1 = r1 + r4
             boolean r2 = r7.needDivider
             int r1 = r1 + r2
@@ -368,15 +371,15 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
             r0 = 1112539136(0x42500000, float:52.0)
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r0)
             boolean r1 = org.telegram.messenger.LocaleController.isRTL
-            if (r1 == 0) goto L_0x0202
+            if (r1 == 0) goto L_0x0204
             int r1 = android.view.View.MeasureSpec.getSize(r23)
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r3)
             int r1 = r1 - r2
             int r1 = r1 - r0
-            goto L_0x0206
-        L_0x0202:
+            goto L_0x0208
+        L_0x0204:
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r3)
-        L_0x0206:
+        L_0x0208:
             org.telegram.ui.Components.RadialProgress2 r0 = r7.radialProgress
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r9)
             int r2 = r2 + r1
@@ -399,18 +402,18 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
             r1.measureChildWithMargins(r2, r3, r4, r5, r6)
             android.text.StaticLayout r0 = r7.captionLayout
             r1 = 1105723392(0x41e80000, float:29.0)
-            if (r0 == 0) goto L_0x024c
+            if (r0 == 0) goto L_0x024e
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r1)
             r7.captionY = r0
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r1)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r8)
             int r0 = r0 + r1
             r7.descriptionY = r0
-            goto L_0x0252
-        L_0x024c:
+            goto L_0x0254
+        L_0x024e:
             int r0 = org.telegram.messenger.AndroidUtilities.dp(r1)
             r7.descriptionY = r0
-        L_0x0252:
+        L_0x0254:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.SharedAudioCell.onMeasure(int, int):void");
@@ -628,7 +631,7 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
                 invalidate();
             }
         } else if (i == 1) {
-            if (MediaController.getInstance().lambda$startAudioAgain$7$MediaController(this.currentMessageObject)) {
+            if (MediaController.getInstance().lambda$startAudioAgain$7(this.currentMessageObject)) {
                 this.buttonState = 0;
                 this.radialProgress.setIcon(getIconForCurrentState(), false, true);
                 invalidate();
@@ -719,7 +722,7 @@ public class SharedAudioCell extends FrameLayout implements DownloadController.F
         if (!TextUtils.isEmpty(fileName)) {
             MessageObject messageObject = this.currentMessageObject;
             boolean z3 = messageObject.attachPathExists || messageObject.mediaExists;
-            if (!SharedConfig.streamMedia || !this.currentMessageObject.isMusic() || ((int) this.currentMessageObject.getDialogId()) == 0) {
+            if (!SharedConfig.streamMedia || !messageObject.isMusic() || ((int) this.currentMessageObject.getDialogId()) == 0) {
                 this.hasMiniProgress = 0;
                 this.miniButtonState = -1;
             } else {

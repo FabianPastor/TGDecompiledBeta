@@ -40,7 +40,7 @@ import org.telegram.ui.LocationActivity;
 public class SharingLiveLocationCell extends FrameLayout {
     private AvatarDrawable avatarDrawable;
     private BackupImageView avatarImageView;
-    private int currentAccount;
+    private int currentAccount = UserConfig.selectedAccount;
     private LocationController.SharingLocationInfo currentInfo;
     private SimpleTextView distanceTextView;
     /* access modifiers changed from: private */
@@ -70,18 +70,29 @@ public class SharingLiveLocationCell extends FrameLayout {
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         int i2 = 5;
         this.nameTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        float f = 0.0f;
         if (z) {
-            addView(this.avatarImageView, LayoutHelper.createFrame(42, 42.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 15.0f, 12.0f, LocaleController.isRTL ? 15.0f : 0.0f, 0.0f));
-            addView(this.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? (float) i : 73.0f, 12.0f, LocaleController.isRTL ? 73.0f : (float) i, 0.0f));
-            SimpleTextView simpleTextView2 = new SimpleTextView(context);
-            this.distanceTextView = simpleTextView2;
-            simpleTextView2.setTextSize(14);
+            BackupImageView backupImageView2 = this.avatarImageView;
+            boolean z2 = LocaleController.isRTL;
+            addView(backupImageView2, LayoutHelper.createFrame(42, 42.0f, (z2 ? 5 : 3) | 48, z2 ? 0.0f : 15.0f, 12.0f, z2 ? 15.0f : f, 0.0f));
+            SimpleTextView simpleTextView2 = this.nameTextView;
+            boolean z3 = LocaleController.isRTL;
+            addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, (z3 ? 5 : 3) | 48, z3 ? (float) i : 73.0f, 12.0f, z3 ? 73.0f : (float) i, 0.0f));
+            SimpleTextView simpleTextView3 = new SimpleTextView(context);
+            this.distanceTextView = simpleTextView3;
+            simpleTextView3.setTextSize(14);
             this.distanceTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
             this.distanceTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-            addView(this.distanceTextView, LayoutHelper.createFrame(-1, 20.0f, (!LocaleController.isRTL ? 3 : i2) | 48, LocaleController.isRTL ? (float) i : 73.0f, 37.0f, LocaleController.isRTL ? 73.0f : (float) i, 0.0f));
+            SimpleTextView simpleTextView4 = this.distanceTextView;
+            boolean z4 = LocaleController.isRTL;
+            addView(simpleTextView4, LayoutHelper.createFrame(-1, 20.0f, (!z4 ? 3 : i2) | 48, z4 ? (float) i : 73.0f, 37.0f, z4 ? 73.0f : (float) i, 0.0f));
         } else {
-            addView(this.avatarImageView, LayoutHelper.createFrame(42, 42.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 15.0f, 6.0f, LocaleController.isRTL ? 15.0f : 0.0f, 0.0f));
-            addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, (!LocaleController.isRTL ? 3 : i2) | 48, LocaleController.isRTL ? (float) i : 74.0f, 17.0f, LocaleController.isRTL ? 74.0f : (float) i, 0.0f));
+            BackupImageView backupImageView3 = this.avatarImageView;
+            boolean z5 = LocaleController.isRTL;
+            addView(backupImageView3, LayoutHelper.createFrame(42, 42.0f, (z5 ? 5 : 3) | 48, z5 ? 0.0f : 15.0f, 6.0f, z5 ? 15.0f : 0.0f, 0.0f));
+            SimpleTextView simpleTextView5 = this.nameTextView;
+            boolean z6 = LocaleController.isRTL;
+            addView(simpleTextView5, LayoutHelper.createFrame(-2, -2.0f, (!z6 ? 3 : i2) | 48, z6 ? (float) i : 74.0f, 17.0f, z6 ? 74.0f : (float) i, 0.0f));
         }
         setWillNotDraw(false);
     }
@@ -254,8 +265,8 @@ public class SharingLiveLocationCell extends FrameLayout {
         int i;
         int i2;
         int i3;
-        if (this.currentInfo != null || this.liveLocation != null) {
-            LocationController.SharingLocationInfo sharingLocationInfo = this.currentInfo;
+        LocationController.SharingLocationInfo sharingLocationInfo = this.currentInfo;
+        if (sharingLocationInfo != null || this.liveLocation != null) {
             if (sharingLocationInfo != null) {
                 i = sharingLocationInfo.stopTime;
                 i2 = sharingLocationInfo.period;

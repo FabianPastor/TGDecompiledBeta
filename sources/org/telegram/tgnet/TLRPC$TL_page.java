@@ -8,8 +8,8 @@ public class TLRPC$TL_page extends TLRPC$Page {
         this.flags = readInt32;
         int i = 0;
         this.part = (readInt32 & 1) != 0;
-        this.rtl = (this.flags & 2) != 0;
-        this.v2 = (this.flags & 4) != 0;
+        this.rtl = (readInt32 & 2) != 0;
+        this.v2 = (readInt32 & 4) != 0;
         this.url = abstractSerializedData.readString(z);
         int readInt322 = abstractSerializedData.readInt32(z);
         if (readInt322 == NUM) {

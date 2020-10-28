@@ -20,19 +20,19 @@ public abstract class TLRPC$UserFull extends TLObject {
     public boolean video_calls_available;
 
     public static TLRPC$UserFull TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$TL_userFull tLRPC$TL_userFull;
+        TLRPC$UserFull tLRPC$UserFull;
         if (i == -NUM) {
-            tLRPC$TL_userFull = new TLRPC$TL_userFull_layer98();
+            tLRPC$UserFull = new TLRPC$TL_userFull_layer98();
         } else if (i != -NUM) {
-            tLRPC$TL_userFull = i != NUM ? null : new TLRPC$TL_userFull_layer101();
+            tLRPC$UserFull = i != NUM ? null : new TLRPC$TL_userFull_layer101();
         } else {
-            tLRPC$TL_userFull = new TLRPC$TL_userFull();
+            tLRPC$UserFull = new TLRPC$TL_userFull();
         }
-        if (tLRPC$TL_userFull != null || !z) {
-            if (tLRPC$TL_userFull != null) {
-                tLRPC$TL_userFull.readParams(abstractSerializedData, z);
+        if (tLRPC$UserFull != null || !z) {
+            if (tLRPC$UserFull != null) {
+                tLRPC$UserFull.readParams(abstractSerializedData, z);
             }
-            return tLRPC$TL_userFull;
+            return tLRPC$UserFull;
         }
         throw new RuntimeException(String.format("can't parse magic %x in UserFull", new Object[]{Integer.valueOf(i)}));
     }

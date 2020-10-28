@@ -32,7 +32,7 @@ class StringMaker {
         stringMaker2.includeThrows = false;
         stringMaker2.includeModifiers = false;
         stringMaker2.shortPrimaryTypeNames = false;
-        shortStringMaker.cacheOffset = 1;
+        stringMaker.cacheOffset = 1;
         StringMaker stringMaker3 = new StringMaker();
         longStringMaker = stringMaker3;
         stringMaker3.shortTypeNames = false;

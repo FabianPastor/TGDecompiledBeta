@@ -200,6 +200,8 @@ public class EditTextCaption extends EditTextBoldCursor {
         r1.setSelection(0, r1.getText().length());
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$makeSelectedUrl$0 */
     public /* synthetic */ void lambda$makeSelectedUrl$0$EditTextCaption(int i, int i2, EditTextBoldCursor editTextBoldCursor, DialogInterface dialogInterface, int i3) {
         Editable text = getText();
         CharacterStyle[] characterStyleArr = (CharacterStyle[]) text.getSpans(i, i2, CharacterStyle.class);

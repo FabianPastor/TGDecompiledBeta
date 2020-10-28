@@ -243,14 +243,17 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         this.tabsContainer.addView(textView, LayoutHelper.createLinear(0, -1));
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$addTextTab$0 */
     public /* synthetic */ void lambda$addTextTab$0$ScrollSlidingTextTabStrip(int i, View view) {
         ScrollSlidingTabStripDelegate scrollSlidingTabStripDelegate;
         int indexOfChild = this.tabsContainer.indexOfChild(view);
         if (indexOfChild >= 0) {
-            if (indexOfChild != this.currentPosition || (scrollSlidingTabStripDelegate = this.delegate) == null) {
-                boolean z = this.currentPosition < indexOfChild;
+            int i2 = this.currentPosition;
+            if (indexOfChild != i2 || (scrollSlidingTabStripDelegate = this.delegate) == null) {
+                boolean z = i2 < indexOfChild;
                 this.scrollingToChild = -1;
-                this.previousPosition = this.currentPosition;
+                this.previousPosition = i2;
                 this.currentPosition = indexOfChild;
                 this.selectedTabId = i;
                 if (this.animatingIndicator) {
@@ -340,7 +343,8 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
         int childCount = this.tabsContainer.getChildCount();
         for (int i3 = 0; i3 < childCount; i3++) {
             LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) this.tabsContainer.getChildAt(i3).getLayoutParams();
-            if (this.allTextWidth > size) {
+            int i4 = this.allTextWidth;
+            if (i4 > size) {
                 layoutParams.weight = 0.0f;
                 layoutParams.width = -2;
             } else if (this.useSameWidth) {
@@ -350,7 +354,7 @@ public class ScrollSlidingTextTabStrip extends HorizontalScrollView {
                 layoutParams.weight = 0.0f;
                 layoutParams.width = -2;
             } else {
-                layoutParams.weight = (1.0f / ((float) this.allTextWidth)) * ((float) this.positionToWidth.get(i3));
+                layoutParams.weight = (1.0f / ((float) i4)) * ((float) this.positionToWidth.get(i3));
                 layoutParams.width = 0;
             }
         }

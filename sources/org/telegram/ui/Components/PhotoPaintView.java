@@ -176,7 +176,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             org.telegram.ui.Components.Paint.UndoStore r5 = new org.telegram.ui.Components.Paint.UndoStore
             r5.<init>()
             r0.undoStore = r5
-            org.telegram.ui.Components.-$$Lambda$PhotoPaintView$R6Re0Kk5HfUX12qMoexuM_2zbtQ r6 = new org.telegram.ui.Components.-$$Lambda$PhotoPaintView$R6Re0Kk5HfUX12qMoexuM_2zbtQ
+            org.telegram.ui.Components.-$$Lambda$PhotoPaintView$0LnFPf-ovGUDhUVgbsaVcga9VLg r6 = new org.telegram.ui.Components.-$$Lambda$PhotoPaintView$0LnFPf-ovGUDhUVgbsaVcga9VLg
             r6.<init>()
             r5.setDelegate(r6)
             android.widget.FrameLayout r5 = new android.widget.FrameLayout
@@ -245,7 +245,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             android.widget.FrameLayout r2 = r0.textDimView
             r2.setVisibility(r12)
             android.widget.FrameLayout r2 = r0.textDimView
-            org.telegram.ui.Components.-$$Lambda$PhotoPaintView$ZykewOMvdivcJ4QbiFmia3gfIL0 r10 = new org.telegram.ui.Components.-$$Lambda$PhotoPaintView$ZykewOMvdivcJ4QbiFmia3gfIL0
+            org.telegram.ui.Components.-$$Lambda$PhotoPaintView$GoVEhuokfCzcCksLSYQxoUopk1s r10 = new org.telegram.ui.Components.-$$Lambda$PhotoPaintView$GoVEhuokfCzcCksLSYQxoUopk1s
             r10.<init>()
             r2.setOnClickListener(r10)
             org.telegram.ui.Components.PhotoPaintView$3 r2 = new org.telegram.ui.Components.PhotoPaintView$3
@@ -291,7 +291,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setPadding(r14, r7, r15, r7)
             android.widget.TextView r2 = r0.cancelTextView
             java.lang.String r14 = "Cancel"
-            r15 = 2131624561(0x7f0e0271, float:1.8876305E38)
+            r15 = 2131624573(0x7f0e027d, float:1.887633E38)
             java.lang.String r14 = org.telegram.messenger.LocaleController.getString(r14, r15)
             java.lang.String r14 = r14.toUpperCase()
             r2.setText(r14)
@@ -323,7 +323,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.setPadding(r5, r7, r10, r7)
             android.widget.TextView r2 = r0.doneTextView
             java.lang.String r5 = "Done"
-            r10 = 2131625095(0x7f0e0487, float:1.8877388E38)
+            r10 = 2131625113(0x7f0e0499, float:1.8877425E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r10)
             java.lang.String r5 = r5.toUpperCase()
             r2.setText(r5)
@@ -341,7 +341,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r4)
             android.widget.ImageView r2 = r0.paintButton
-            r4 = 2131165838(0x7var_e, float:1.7945904E38)
+            r4 = 2131165862(0x7var_a6, float:1.7945953E38)
             r2.setImageResource(r4)
             android.widget.ImageView r2 = r0.paintButton
             r4 = 1090519039(0x40ffffff, float:7.9999995)
@@ -359,14 +359,14 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
             r2.addView(r5, r10)
             android.widget.ImageView r2 = r0.paintButton
-            org.telegram.ui.Components.-$$Lambda$PhotoPaintView$rvar_UpLc_844_0-ExvqyyhAN3g r5 = new org.telegram.ui.Components.-$$Lambda$PhotoPaintView$rvar_UpLc_844_0-ExvqyyhAN3g
+            org.telegram.ui.Components.-$$Lambda$PhotoPaintView$JqWHWu-WpgEZ5XqwgsvaEtqJUEs r5 = new org.telegram.ui.Components.-$$Lambda$PhotoPaintView$JqWHWu-WpgEZ5XqwgsvaEtqJUEs
             r5.<init>()
             r2.setOnClickListener(r5)
             android.widget.ImageView r2 = new android.widget.ImageView
             r2.<init>(r1)
             android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r5)
-            r5 = 2131165842(0x7var_, float:1.7945913E38)
+            r5 = 2131165866(0x7var_aa, float:1.7945961E38)
             r2.setImageResource(r5)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
             r2.setBackgroundDrawable(r5)
@@ -374,14 +374,14 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r10 = 54
             android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r10, r6, r11)
             r5.addView(r2, r6)
-            org.telegram.ui.Components.-$$Lambda$PhotoPaintView$bh1PtB_nRqdfutcf4y5QOEZjU74 r5 = new org.telegram.ui.Components.-$$Lambda$PhotoPaintView$bh1PtB_nRqdfutcf4y5QOEZjU74
+            org.telegram.ui.Components.-$$Lambda$PhotoPaintView$C-nJt2j_ta2oaFENmr9kCLx27ZU r5 = new org.telegram.ui.Components.-$$Lambda$PhotoPaintView$C-nJt2j_ta2oaFENmr9kCLx27ZU
             r5.<init>()
             r2.setOnClickListener(r5)
             android.widget.ImageView r2 = new android.widget.ImageView
             r2.<init>(r1)
             android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r1)
-            r1 = 2131165840(0x7var_, float:1.7945908E38)
+            r1 = 2131165864(0x7var_a8, float:1.7945957E38)
             r2.setImageResource(r1)
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
             r2.setBackgroundDrawable(r1)
@@ -390,7 +390,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r21 = 0
             android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r16, r17, r18, r19, r20, r21, r22)
             r1.addView(r2, r4)
-            org.telegram.ui.Components.-$$Lambda$PhotoPaintView$SEafmfD5xvHbkIUST7pqiumb7sI r1 = new org.telegram.ui.Components.-$$Lambda$PhotoPaintView$SEafmfD5xvHbkIUST7pqiumb7sI
+            org.telegram.ui.Components.-$$Lambda$PhotoPaintView$rmObZ5b3Q-Qm_HkOssfpboikuPY r1 = new org.telegram.ui.Components.-$$Lambda$PhotoPaintView$rmObZ5b3Q-Qm_HkOssfpboikuPY
             r1.<init>()
             r2.setOnClickListener(r1)
             org.telegram.ui.Components.Paint.Views.ColorPicker r1 = r0.colorPicker
@@ -513,22 +513,32 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoPaintView.<init>(android.content.Context, android.graphics.Bitmap, android.graphics.Bitmap, int, java.util.ArrayList, org.telegram.messenger.MediaController$CropState, java.lang.Runnable):void");
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$PhotoPaintView() {
         this.colorPicker.setUndoEnabled(this.undoStore.canUndo());
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ void lambda$new$1$PhotoPaintView(View view) {
         closeTextEnter(true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$2 */
     public /* synthetic */ void lambda$new$2$PhotoPaintView(View view) {
         selectEntity((EntityView) null);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$3 */
     public /* synthetic */ void lambda$new$3$PhotoPaintView(View view) {
         openStickersView();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$4 */
     public /* synthetic */ void lambda$new$4$PhotoPaintView(View view) {
         createText(true);
     }
@@ -630,7 +640,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         this.renderView.shutdown();
         this.entitiesView.setVisibility(8);
         this.selectionContainerView.setVisibility(8);
-        this.queue.postRunnable($$Lambda$PhotoPaintView$BRjjxWV4_4jng8wjr2bRzoAFJ_A.INSTANCE);
+        this.queue.postRunnable($$Lambda$PhotoPaintView$7d2iAiYXW7qOFQXSbvFu6D4N6GY.INSTANCE);
     }
 
     static /* synthetic */ void lambda$shutdown$5() {
@@ -642,6 +652,10 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
 
     public FrameLayout getToolsView() {
         return this.toolsView;
+    }
+
+    public FrameLayout getCurtainView() {
+        return this.curtainView;
     }
 
     public TextView getDoneTextView() {
@@ -998,16 +1012,17 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             int currentActionBarHeight = ActionBar.getCurrentActionBarHeight() + i;
             int measuredWidth = view.getMeasuredWidth();
             int measuredHeight = view.getMeasuredHeight();
-            int i2 = this.currentCropState.transformRotation;
+            MediaController.CropState cropState = this.currentCropState;
+            int i2 = cropState.transformRotation;
             if (i2 == 90 || i2 == 270) {
                 int i3 = measuredHeight;
                 measuredHeight = measuredWidth;
                 measuredWidth = i3;
             }
-            float scaleX = ((float) measuredWidth) * this.currentCropState.cropPw * view.getScaleX();
-            MediaController.CropState cropState = this.currentCropState;
-            int i4 = (int) (scaleX / cropState.cropScale);
-            int scaleY = (int) (((((float) measuredHeight) * cropState.cropPh) * view.getScaleY()) / this.currentCropState.cropScale);
+            float scaleX = ((float) measuredWidth) * cropState.cropPw * view.getScaleX();
+            MediaController.CropState cropState2 = this.currentCropState;
+            int i4 = (int) (scaleX / cropState2.cropScale);
+            int scaleY = (int) (((((float) measuredHeight) * cropState2.cropPh) * view.getScaleY()) / this.currentCropState.cropScale);
             float ceil = ((float) Math.ceil((double) ((getMeasuredWidth() - i4) / 2))) + this.transformX;
             float measuredHeight2 = ((float) (((((getMeasuredHeight() - currentActionBarHeight) - AndroidUtilities.dp(48.0f)) - scaleY) / 2) + AndroidUtilities.dp(8.0f) + i)) + this.transformY;
             canvas.clipRect(Math.max(0.0f, ceil), Math.max(0.0f, measuredHeight2), Math.min(ceil + ((float) i4), (float) getMeasuredWidth()), Math.min((float) getMeasuredHeight(), measuredHeight2 + ((float) scaleY)));
@@ -1060,9 +1075,8 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             return new Point(position.x + f, position.y + f);
         }
         float f2 = 100.0f;
-        MediaController.CropState cropState2 = this.currentCropState;
-        if (cropState2 != null) {
-            f2 = 100.0f / cropState2.cropScale;
+        if (cropState != null) {
+            f2 = 100.0f / cropState.cropScale;
         }
         Point centerPositionForEntity = centerPositionForEntity();
         while (true) {
@@ -1131,14 +1145,14 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 float var_ = cropState.cropScale * 1.0f;
                 int measuredWidth = view.getMeasuredWidth();
                 int measuredHeight = view.getMeasuredHeight();
-                int i2 = this.currentCropState.transformRotation;
+                MediaController.CropState cropState2 = this.currentCropState;
+                int i2 = cropState2.transformRotation;
                 if (i2 == 90 || i2 == 270) {
                     int i3 = measuredHeight;
                     measuredHeight = measuredWidth;
                     measuredWidth = i3;
                 }
                 float var_ = (float) measuredWidth;
-                MediaController.CropState cropState2 = this.currentCropState;
                 float var_ = (float) measuredHeight;
                 float max = Math.max(f4 / ((float) ((int) (cropState2.cropPw * var_))), f5 / ((float) ((int) (cropState2.cropPh * var_))));
                 f8 = var_ * max;
@@ -1186,7 +1200,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         EntityView entityView3 = this.currentEntityView;
         this.currentEntityView = entityView;
         if ((entityView3 instanceof TextPaintView) && TextUtils.isEmpty(((TextPaintView) entityView3).getText())) {
-            lambda$registerRemovalUndo$9$PhotoPaintView(entityView3);
+            lambda$registerRemovalUndo$9(entityView3);
         }
         EntityView entityView4 = this.currentEntityView;
         if (entityView4 != null) {
@@ -1205,7 +1219,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
 
     /* access modifiers changed from: private */
     /* renamed from: removeEntity */
-    public void lambda$registerRemovalUndo$9$PhotoPaintView(EntityView entityView) {
+    public void lambda$registerRemovalUndo$9(EntityView entityView) {
         EntityView entityView2 = this.currentEntityView;
         if (entityView == entityView2) {
             entityView2.deselect();
@@ -1259,10 +1273,14 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         onOpenCloseStickersAlert(true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$openStickersView$7 */
     public /* synthetic */ void lambda$openStickersView$7$PhotoPaintView(Object obj, TLRPC$Document tLRPC$Document) {
         createSticker(obj, tLRPC$Document, true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$openStickersView$8 */
     public /* synthetic */ void lambda$openStickersView$8$PhotoPaintView(DialogInterface dialogInterface) {
         onOpenCloseStickersAlert(false);
     }
@@ -1468,6 +1486,8 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         }, this, 51, centerLocationInWindow[0], centerLocationInWindow[1] - AndroidUtilities.dp(32.0f));
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$showMenuForEntity$13 */
     public /* synthetic */ void lambda$showMenuForEntity$13$PhotoPaintView(EntityView entityView) {
         LinearLayout linearLayout = new LinearLayout(getContext());
         linearLayout.setOrientation(0);
@@ -1528,14 +1548,18 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         linearLayout.setLayoutParams(layoutParams);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$10 */
     public /* synthetic */ void lambda$null$10$PhotoPaintView(EntityView entityView, View view) {
-        lambda$registerRemovalUndo$9$PhotoPaintView(entityView);
+        lambda$registerRemovalUndo$9(entityView);
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
             this.popupWindow.dismiss(true);
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$11 */
     public /* synthetic */ void lambda$null$11$PhotoPaintView(View view) {
         editSelectedTextEntity();
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
@@ -1544,6 +1568,8 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$12 */
     public /* synthetic */ void lambda$null$12$PhotoPaintView(View view) {
         duplicateSelectedEntity();
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
@@ -1595,6 +1621,8 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         return r0;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$buttonForBrush$14 */
     public /* synthetic */ void lambda$buttonForBrush$14$PhotoPaintView(int i, View view) {
         setBrush(i);
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
@@ -1612,6 +1640,8 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         }, this, 85, 0, AndroidUtilities.dp(48.0f));
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$showBrushSettings$15 */
     public /* synthetic */ void lambda$showBrushSettings$15$PhotoPaintView() {
         boolean z = false;
         this.popupLayout.addView(buttonForBrush(0, NUM, LocaleController.getString("PaintPen", NUM), this.currentBrush == 0), LayoutHelper.createLinear(-1, 54));
@@ -1663,6 +1693,8 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         return r0;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$buttonForText$16 */
     public /* synthetic */ void lambda$buttonForText$16$PhotoPaintView(int i, View view) {
         setType(i);
         ActionBarPopupWindow actionBarPopupWindow = this.popupWindow;
@@ -1680,6 +1712,8 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         }, this, 85, 0, AndroidUtilities.dp(48.0f));
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$showTextSettings$17 */
     public /* synthetic */ void lambda$showTextSettings$17$PhotoPaintView() {
         int i;
         String str;
@@ -1754,6 +1788,8 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         this.popupWindow.dismiss();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$showPopup$18 */
     public /* synthetic */ boolean lambda$showPopup$18$PhotoPaintView(View view, MotionEvent motionEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (motionEvent.getActionMasked() != 0 || (actionBarPopupWindow = this.popupWindow) == null || !actionBarPopupWindow.isShowing()) {
@@ -1767,6 +1803,8 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         return false;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$showPopup$19 */
     public /* synthetic */ void lambda$showPopup$19$PhotoPaintView(KeyEvent keyEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && (actionBarPopupWindow = this.popupWindow) != null && actionBarPopupWindow.isShowing()) {
@@ -1774,6 +1812,8 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$showPopup$20 */
     public /* synthetic */ void lambda$showPopup$20$PhotoPaintView() {
         this.popupLayout.removeInnerViews();
     }
@@ -1802,10 +1842,16 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$detectFaces$21 */
     public /* synthetic */ void lambda$detectFaces$21$PhotoPaintView() {
         FaceDetector faceDetector = null;
         try {
-            faceDetector = new FaceDetector.Builder(getContext()).setMode(1).setLandmarkType(1).setTrackingEnabled(false).build();
+            FaceDetector.Builder builder = new FaceDetector.Builder(getContext());
+            builder.setMode(1);
+            builder.setLandmarkType(1);
+            builder.setTrackingEnabled(false);
+            faceDetector = builder.build();
             if (!faceDetector.isOperational()) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.e("face detection is not operational");
@@ -1816,8 +1862,11 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
                 }
                 return;
             }
+            Frame.Builder builder2 = new Frame.Builder();
+            builder2.setBitmap(this.facesBitmap);
+            builder2.setRotation(getFrameRotation());
             try {
-                SparseArray<Face> detect = faceDetector.detect(new Frame.Builder().setBitmap(this.facesBitmap).setRotation(getFrameRotation()).build());
+                SparseArray<Face> detect = faceDetector.detect(builder2.build());
                 ArrayList<PhotoFace> arrayList = new ArrayList<>();
                 Size paintingSize2 = getPaintingSize();
                 for (int i = 0; i < detect.size(); i++) {

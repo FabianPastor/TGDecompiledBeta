@@ -255,18 +255,20 @@ public class FilterShaders {
         sb.append("uniform sampler2D sourceImage;\n");
         sb.append("uniform highp float texelWidthOffset;\n");
         sb.append("uniform highp float texelHeightOffset;\n");
-        sb.append(String.format(Locale.US, "varying highp vec2 blurCoordinates[%d];\n", new Object[]{Integer.valueOf((min * 2) + 1)}));
+        Locale locale = Locale.US;
+        sb.append(String.format(locale, "varying highp vec2 blurCoordinates[%d];\n", new Object[]{Integer.valueOf((min * 2) + 1)}));
         sb.append("void main()\n");
         sb.append("{\n");
         sb.append("lowp vec4 sum = vec4(0.0);\n");
-        sb.append(String.format(Locale.US, "sum += texture2D(sourceImage, blurCoordinates[0]) * %f;\n", new Object[]{Float.valueOf(fArr[0])}));
+        sb.append(String.format(locale, "sum += texture2D(sourceImage, blurCoordinates[0]) * %f;\n", new Object[]{Float.valueOf(fArr[0])}));
         for (int i6 = 0; i6 < min; i6++) {
             int i7 = i6 * 2;
             int i8 = i7 + 1;
             int i9 = i7 + 2;
             float f3 = fArr[i8] + fArr[i9];
-            sb.append(String.format(Locale.US, "sum += texture2D(sourceImage, blurCoordinates[%d]) * %f;\n", new Object[]{Integer.valueOf(i8), Float.valueOf(f3)}));
-            sb.append(String.format(Locale.US, "sum += texture2D(sourceImage, blurCoordinates[%d]) * %f;\n", new Object[]{Integer.valueOf(i9), Float.valueOf(f3)}));
+            Locale locale2 = Locale.US;
+            sb.append(String.format(locale2, "sum += texture2D(sourceImage, blurCoordinates[%d]) * %f;\n", new Object[]{Integer.valueOf(i8), Float.valueOf(f3)}));
+            sb.append(String.format(locale2, "sum += texture2D(sourceImage, blurCoordinates[%d]) * %f;\n", new Object[]{Integer.valueOf(i9), Float.valueOf(f3)}));
         }
         if (i5 > min) {
             sb.append("highp vec2 singleStepOffset = vec2(texelWidthOffset, texelHeightOffset);\n");
@@ -278,8 +280,9 @@ public class FilterShaders {
                 float f5 = fArr[i12];
                 float f6 = f4 + f5;
                 float f7 = ((f4 * ((float) i11)) + (f5 * ((float) i12))) / f6;
-                sb.append(String.format(Locale.US, "sum += texture2D(sourceImage, blurCoordinates[0] + singleStepOffset * %f) * %f;\n", new Object[]{Float.valueOf(f7), Float.valueOf(f6)}));
-                sb.append(String.format(Locale.US, "sum += texture2D(sourceImage, blurCoordinates[0] - singleStepOffset * %f) * %f;\n", new Object[]{Float.valueOf(f7), Float.valueOf(f6)}));
+                Locale locale3 = Locale.US;
+                sb.append(String.format(locale3, "sum += texture2D(sourceImage, blurCoordinates[0] + singleStepOffset * %f) * %f;\n", new Object[]{Float.valueOf(f7), Float.valueOf(f6)}));
+                sb.append(String.format(locale3, "sum += texture2D(sourceImage, blurCoordinates[0] - singleStepOffset * %f) * %f;\n", new Object[]{Float.valueOf(f7), Float.valueOf(f6)}));
                 min++;
             }
         }
@@ -723,8 +726,9 @@ public class FilterShaders {
         if (!blurProgram2.create()) {
             return false;
         }
-        String str3 = this.isVideo ? "#extension GL_OES_EGL_image_external : require" : "";
-        String str4 = this.isVideo ? "samplerExternalOES" : "sampler2D";
+        boolean z = this.isVideo;
+        String str3 = z ? "#extension GL_OES_EGL_image_external : require" : "";
+        String str4 = z ? "samplerExternalOES" : "sampler2D";
         int loadShader5 = loadShader(35633, "attribute vec4 position;attribute vec2 inputTexCoord;varying vec2 texCoord;void main() {gl_Position = position;texCoord = inputTexCoord;}");
         int loadShader6 = loadShader(35632, "varying highp vec2 texCoord;uniform sampler2D sourceImage;uniform sampler2D inputImageTexture2;uniform lowp float excludeSize;uniform lowp vec2 excludePoint;uniform lowp float excludeBlurSize;uniform highp float angle;uniform highp float aspectRatio;void main() {lowp vec4 sharpImageColor = texture2D(sourceImage, texCoord);lowp vec4 blurredImageColor = texture2D(inputImageTexture2, texCoord);highp vec2 texCoordToUse = vec2(texCoord.x, (texCoord.y * aspectRatio + 0.5 - 0.5 * aspectRatio));highp float distanceFromCenter = abs((texCoordToUse.x - excludePoint.x) * aspectRatio * cos(angle) + (texCoordToUse.y - excludePoint.y) * sin(angle));gl_FragColor = mix(sharpImageColor, blurredImageColor, smoothstep(excludeSize - excludeBlurSize, excludeSize, distanceFromCenter));}");
         if (loadShader5 == 0 || loadShader6 == 0) {
@@ -781,8 +785,9 @@ public class FilterShaders {
         }
         int i5 = 0;
         while (true) {
-            if (i5 < (this.isVideo ? 2 : 1)) {
-                if (i5 != 1 || !this.isVideo) {
+            boolean z2 = this.isVideo;
+            if (i5 < (z2 ? 2 : 1)) {
+                if (i5 != 1 || !z2) {
                     str2 = str5;
                     int loadShader9 = loadShader(35633, "attribute vec4 position;attribute vec2 inputTexCoord;varying vec2 texCoord;void main() {gl_Position = position;texCoord = inputTexCoord;}");
                     i4 = loadShader(35632, String.format(Locale.US, "%1$s\nprecision highp float;varying vec2 texCoord;uniform %2$s sourceImage;vec3 rgb_to_hsv(vec3 c) {vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);vec4 p = c.g < c.b ? vec4(c.bg, K.wz) : vec4(c.gb, K.xy);vec4 q = c.r < p.x ? vec4(p.xyw, c.r) : vec4(c.r, p.yzx);float d = q.x - min(q.w, q.y);float e = 1.0e-10;return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);}void main() {vec4 texel = texture2D(sourceImage, texCoord);gl_FragColor = vec4(rgb_to_hsv(texel.rgb), texel.a);}", new Object[]{"", "sampler2D"}));
@@ -853,7 +858,8 @@ public class FilterShaders {
                 } else {
                     i = loadShader(35633, "attribute vec4 position;attribute vec2 inputTexCoord;varying vec2 texCoord;void main() {gl_Position = position;texCoord = inputTexCoord;}");
                 }
-                int loadShader13 = loadShader(35632, String.format(Locale.US, "%1$s\nprecision lowp float;varying highp vec2 texCoord;uniform %2$s sourceImage;void main() {vec4 inp = texture2D(sourceImage, texCoord);vec4 image = vec4(inp.rgb * pow(2.0, -1.0), inp.w);vec4 base = vec4(image.g, image.g, image.g, 1.0);vec4 overlay = vec4(image.b, image.b, image.b, 1.0);float ba = 2.0 * overlay.b * base.b + overlay.b * (1.0 - base.a) + base.b * (1.0 - overlay.a);gl_FragColor = vec4(ba,ba,ba,image.a);}", new Object[]{str3, str4}));
+                Locale locale2 = Locale.US;
+                int loadShader13 = loadShader(35632, String.format(locale2, "%1$s\nprecision lowp float;varying highp vec2 texCoord;uniform %2$s sourceImage;void main() {vec4 inp = texture2D(sourceImage, texCoord);vec4 image = vec4(inp.rgb * pow(2.0, -1.0), inp.w);vec4 base = vec4(image.g, image.g, image.g, 1.0);vec4 overlay = vec4(image.b, image.b, image.b, 1.0);float ba = 2.0 * overlay.b * base.b + overlay.b * (1.0 - base.a) + base.b * (1.0 - overlay.a);gl_FragColor = vec4(ba,ba,ba,image.a);}", new Object[]{str3, str4}));
                 if (i == 0 || loadShader13 == 0) {
                     return false;
                 }
@@ -924,7 +930,7 @@ public class FilterShaders {
                 } else {
                     i2 = loadShader(35633, "attribute vec4 position;attribute vec2 inputTexCoord;varying vec2 texCoord;varying vec2 texCoord2;void main() {gl_Position = position;texCoord = inputTexCoord;texCoord2 = inputTexCoord;}");
                 }
-                int loadShader18 = loadShader(35632, String.format(Locale.US, "%1$s\nprecision lowp float;varying highp vec2 texCoord;varying highp vec2 texCoord2;uniform %2$s sourceImage;uniform sampler2D toneCurveTexture;uniform sampler2D inputImageTexture3;uniform lowp float mixturePercent;void main() {vec4 image = texture2D(sourceImage, texCoord);vec4 mask = texture2D(inputImageTexture3, texCoord2);float redCurveValue = texture2D(toneCurveTexture, vec2(image.r, 0.0)).r;float greenCurveValue = texture2D(toneCurveTexture, vec2(image.g, 0.0)).g;float blueCurveValue = texture2D(toneCurveTexture, vec2(image.b, 0.0)).b;vec4 result = vec4(redCurveValue, greenCurveValue, blueCurveValue, image.a);vec4 tone = mix(image, result, mixturePercent);gl_FragColor = vec4(mix(image.rgb, tone.rgb, 1.0 - mask.b), 1.0);}", new Object[]{str3, str4}));
+                int loadShader18 = loadShader(35632, String.format(locale2, "%1$s\nprecision lowp float;varying highp vec2 texCoord;varying highp vec2 texCoord2;uniform %2$s sourceImage;uniform sampler2D toneCurveTexture;uniform sampler2D inputImageTexture3;uniform lowp float mixturePercent;void main() {vec4 image = texture2D(sourceImage, texCoord);vec4 mask = texture2D(inputImageTexture3, texCoord2);float redCurveValue = texture2D(toneCurveTexture, vec2(image.r, 0.0)).r;float greenCurveValue = texture2D(toneCurveTexture, vec2(image.g, 0.0)).g;float blueCurveValue = texture2D(toneCurveTexture, vec2(image.b, 0.0)).b;vec4 result = vec4(redCurveValue, greenCurveValue, blueCurveValue, image.a);vec4 tone = mix(image, result, mixturePercent);gl_FragColor = vec4(mix(image.rgb, tone.rgb, 1.0 - mask.b), 1.0);}", new Object[]{str3, str4}));
                 if (i2 == 0 || loadShader18 == 0) {
                     return false;
                 }
@@ -987,13 +993,14 @@ public class FilterShaders {
     public void drawEnhancePass() {
         boolean z;
         char c;
-        if (this.isVideo) {
+        boolean z2 = this.isVideo;
+        if (z2) {
             z = true;
         } else {
             z = !this.hsvGenerated;
         }
         if (z) {
-            if (!this.isVideo || this.skinPassDrawn) {
+            if (!z2 || this.skinPassDrawn) {
                 GLES20.glUseProgram(this.rgbToHsvShaderProgram[0]);
                 GLES20.glActiveTexture(33984);
                 GLES20.glBindTexture(3553, this.skinPassDrawn ? this.renderTexture[1] : this.bitmapTextre[0]);
@@ -1147,8 +1154,9 @@ public class FilterShaders {
     }
 
     public boolean drawSkinSmoothPass() {
+        int i;
         FilterShadersDelegate filterShadersDelegate = this.delegate;
-        if (filterShadersDelegate == null || filterShadersDelegate.shouldShowOriginal() || this.delegate.getSoftenSkinValue() <= 0.0f || this.renderBufferWidth <= 0 || this.renderBufferHeight <= 0) {
+        if (filterShadersDelegate == null || filterShadersDelegate.shouldShowOriginal() || this.delegate.getSoftenSkinValue() <= 0.0f || (i = this.renderBufferWidth) <= 0 || this.renderBufferHeight <= 0) {
             if (this.skinPassDrawn) {
                 this.hsvGenerated = false;
                 this.skinPassDrawn = false;
@@ -1156,7 +1164,7 @@ public class FilterShaders {
             return false;
         }
         if (this.needUpdateSkinTexture || this.isVideo) {
-            float f = ((float) this.renderBufferWidth) * 0.006f;
+            float f = ((float) i) * 0.006f;
             if (this.skinBlurProgram == null || ((double) Math.abs(this.lastRadius - f)) > 1.0E-4d) {
                 BlurProgram blurProgram2 = this.skinBlurProgram;
                 if (blurProgram2 != null) {
@@ -1374,9 +1382,10 @@ public class FilterShaders {
         if (bitmap2 != null && !bitmap.isRecycled()) {
             GLES20.glGenTextures(1, this.bitmapTextre, 0);
             float photoSize = (float) AndroidUtilities.getPhotoSize();
-            if (((float) this.renderBufferWidth) > photoSize || ((float) this.renderBufferHeight) > photoSize || i4 % 360 != 0) {
+            int i5 = this.renderBufferWidth;
+            if (((float) i5) > photoSize || ((float) this.renderBufferHeight) > photoSize || i4 % 360 != 0) {
                 float f = 1.0f;
-                if (((float) this.renderBufferWidth) > photoSize || ((float) this.renderBufferHeight) > photoSize) {
+                if (((float) i5) > photoSize || ((float) this.renderBufferHeight) > photoSize) {
                     f = photoSize / ((float) bitmap.getWidth());
                     float height = photoSize / ((float) bitmap.getHeight());
                     if (f < height) {
@@ -1388,11 +1397,11 @@ public class FilterShaders {
                         f = height;
                     }
                 }
-                int i5 = i4 % 360;
-                if (i5 == 90 || i5 == 270) {
-                    int i6 = this.renderBufferWidth;
+                int i6 = i4 % 360;
+                if (i6 == 90 || i6 == 270) {
+                    int i7 = this.renderBufferWidth;
                     this.renderBufferWidth = this.renderBufferHeight;
-                    this.renderBufferHeight = i6;
+                    this.renderBufferHeight = i7;
                 }
                 bitmap2 = createBitmap(bitmap2, i4, f);
             }
@@ -1403,8 +1412,8 @@ public class FilterShaders {
             GLES20.glTexParameteri(3553, 10243, 33071);
             GLUtils.texImage2D(3553, 0, bitmap2, 0);
         }
-        for (int i7 = 0; i7 < 2; i7++) {
-            GLES20.glBindTexture(3553, this.renderTexture[i7]);
+        for (int i8 = 0; i8 < 2; i8++) {
+            GLES20.glBindTexture(3553, this.renderTexture[i8]);
             GLES20.glTexParameteri(3553, 10241, 9729);
             GLES20.glTexParameteri(3553, 10240, 9729);
             GLES20.glTexParameteri(3553, 10242, 33071);

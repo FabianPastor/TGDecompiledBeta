@@ -106,6 +106,8 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$0 */
     public /* synthetic */ void lambda$createView$0$FeaturedStickersActivity(final View view, int i) {
         TLRPC$InputStickerSet tLRPC$InputStickerSet;
         if (i >= this.stickersStartRow && i < this.stickersEndRow && getParentActivity() != null) {
@@ -220,6 +222,8 @@ public class FeaturedStickersActivity extends BaseFragment implements Notificati
             return viewHolder.getItemViewType() == 0;
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onCreateViewHolder$0 */
         public /* synthetic */ void lambda$onCreateViewHolder$0$FeaturedStickersActivity$ListAdapter(View view) {
             FeaturedStickerSetCell featuredStickerSetCell = (FeaturedStickerSetCell) view.getParent();
             TLRPC$StickerSetCovered stickerSet = featuredStickerSetCell.getStickerSet();

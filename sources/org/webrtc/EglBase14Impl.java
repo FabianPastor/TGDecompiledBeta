@@ -27,14 +27,12 @@ class EglBase14Impl implements EglBase14 {
     public static boolean isEGL14Supported() {
         StringBuilder sb = new StringBuilder();
         sb.append("SDK version: ");
-        sb.append(CURRENT_SDK_VERSION);
+        int i = CURRENT_SDK_VERSION;
+        sb.append(i);
         sb.append(". isEGL14Supported: ");
-        sb.append(CURRENT_SDK_VERSION >= 18);
+        sb.append(i >= 18);
         Logging.d("EglBase14Impl", sb.toString());
-        if (CURRENT_SDK_VERSION >= 18) {
-            return true;
-        }
-        return false;
+        return i >= 18;
     }
 
     public static class Context implements EglBase14.Context {
@@ -159,7 +157,9 @@ class EglBase14Impl implements EglBase14 {
         checkIsNotReleased();
         if (this.eglSurface != EGL14.EGL_NO_SURFACE) {
             synchronized (EglBase.lock) {
-                if (!EGL14.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
+                EGLDisplay eGLDisplay = this.eglDisplay;
+                EGLSurface eGLSurface = this.eglSurface;
+                if (!EGL14.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, this.eglContext)) {
                     throw new RuntimeException("eglMakeCurrent failed: 0x" + Integer.toHexString(EGL14.eglGetError()));
                 }
             }
@@ -170,7 +170,9 @@ class EglBase14Impl implements EglBase14 {
 
     public void detachCurrent() {
         synchronized (EglBase.lock) {
-            if (!EGL14.eglMakeCurrent(this.eglDisplay, EGL14.EGL_NO_SURFACE, EGL14.EGL_NO_SURFACE, EGL14.EGL_NO_CONTEXT)) {
+            EGLDisplay eGLDisplay = this.eglDisplay;
+            EGLSurface eGLSurface = EGL14.EGL_NO_SURFACE;
+            if (!EGL14.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, EGL14.EGL_NO_CONTEXT)) {
                 throw new RuntimeException("eglDetachCurrent failed: 0x" + Integer.toHexString(EGL14.eglGetError()));
             }
         }

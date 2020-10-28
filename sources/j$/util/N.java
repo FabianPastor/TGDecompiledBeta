@@ -1,20 +1,39 @@
 package j$.util;
 
+import j$.util.function.Consumer;
+import j$.util.function.u;
 import java.util.Comparator;
 
-public final /* synthetic */ class N {
-    public static long b(Spliterator _this) {
-        if ((_this.characteristics() & 64) == 0) {
-            return -1;
-        }
-        return _this.estimateSize();
+final class N extends Q implements D {
+    N() {
     }
 
-    public static boolean c(Spliterator _this, int characteristics) {
-        return (_this.characteristics() & characteristics) == characteristics;
+    public /* synthetic */ boolean b(Consumer consumer) {
+        return CLASSNAMEw.e(this, consumer);
     }
 
-    public static Comparator a(Spliterator _this) {
+    public void c(u uVar) {
+        uVar.getClass();
+    }
+
+    public /* synthetic */ void forEachRemaining(Consumer consumer) {
+        CLASSNAMEw.b(this, consumer);
+    }
+
+    public Comparator getComparator() {
         throw new IllegalStateException();
+    }
+
+    public /* synthetic */ long getExactSizeIfKnown() {
+        return CLASSNAMEk.e(this);
+    }
+
+    public boolean h(u uVar) {
+        uVar.getClass();
+        return false;
+    }
+
+    public /* synthetic */ boolean hasCharacteristics(int i) {
+        return CLASSNAMEk.f(this, i);
     }
 }

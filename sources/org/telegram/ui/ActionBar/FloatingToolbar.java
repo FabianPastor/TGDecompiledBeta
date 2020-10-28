@@ -48,13 +48,13 @@ import org.telegram.ui.ActionBar.FloatingToolbar;
 
 @TargetApi(23)
 public final class FloatingToolbar {
-    private static final MenuItem.OnMenuItemClickListener NO_OP_MENUITEM_CLICK_LISTENER = $$Lambda$FloatingToolbar$uBffYWeN3XYcSKbFDG7nEMNVsU.INSTANCE;
+    private static final MenuItem.OnMenuItemClickListener NO_OP_MENUITEM_CLICK_LISTENER = $$Lambda$FloatingToolbar$UGQARNO28FBZ0TeffXeMTHJ8TdA.INSTANCE;
     /* access modifiers changed from: private */
     public int currentStyle;
     private final Rect mContentRect = new Rect();
     private Menu mMenu;
     private MenuItem.OnMenuItemClickListener mMenuItemClickListener = NO_OP_MENUITEM_CLICK_LISTENER;
-    private final Comparator<MenuItem> mMenuItemComparator = $$Lambda$FloatingToolbar$id3tSGGj4IAqzijkydDavDmoZuo.INSTANCE;
+    private final Comparator<MenuItem> mMenuItemComparator = $$Lambda$FloatingToolbar$NbZiCM1EM2S6HZEOEjuQwJRChQ.INSTANCE;
     private final View.OnLayoutChangeListener mOrientationChangeHandler = new View.OnLayoutChangeListener() {
         private final Rect mNewRect = new Rect();
         private final Rect mOldRect = new Rect();
@@ -274,28 +274,29 @@ public final class FloatingToolbar {
             this.mMarginHorizontal = AndroidUtilities.dp(16.0f);
             this.mMarginVertical = AndroidUtilities.dp(8.0f);
             this.mLineHeight = AndroidUtilities.dp(48.0f);
-            this.mIconTextSpacing = AndroidUtilities.dp(8.0f);
+            int dp = AndroidUtilities.dp(8.0f);
+            this.mIconTextSpacing = dp;
             this.mLogAccelerateInterpolator = new LogAccelerateInterpolator();
-            this.mFastOutSlowInInterpolator = AnimationUtils.loadInterpolator(this.mContext, 17563661);
-            this.mLinearOutSlowInInterpolator = AnimationUtils.loadInterpolator(this.mContext, 17563662);
-            this.mFastOutLinearInInterpolator = AnimationUtils.loadInterpolator(this.mContext, 17563663);
-            Drawable mutate = this.mContext.getDrawable(NUM).mutate();
+            this.mFastOutSlowInInterpolator = AnimationUtils.loadInterpolator(context, 17563661);
+            this.mLinearOutSlowInInterpolator = AnimationUtils.loadInterpolator(context, 17563662);
+            this.mFastOutLinearInInterpolator = AnimationUtils.loadInterpolator(context, 17563663);
+            Drawable mutate = context.getDrawable(NUM).mutate();
             this.mArrow = mutate;
             mutate.setAutoMirrored(true);
-            Drawable mutate2 = this.mContext.getDrawable(NUM).mutate();
+            Drawable mutate2 = context.getDrawable(NUM).mutate();
             this.mOverflow = mutate2;
             mutate2.setAutoMirrored(true);
-            AnimatedVectorDrawable animatedVectorDrawable = (AnimatedVectorDrawable) this.mContext.getDrawable(NUM).mutate();
+            AnimatedVectorDrawable animatedVectorDrawable = (AnimatedVectorDrawable) context.getDrawable(NUM).mutate();
             this.mToArrow = animatedVectorDrawable;
             animatedVectorDrawable.setAutoMirrored(true);
-            AnimatedVectorDrawable animatedVectorDrawable2 = (AnimatedVectorDrawable) this.mContext.getDrawable(NUM).mutate();
+            AnimatedVectorDrawable animatedVectorDrawable2 = (AnimatedVectorDrawable) context.getDrawable(NUM).mutate();
             this.mToOverflow = animatedVectorDrawable2;
             animatedVectorDrawable2.setAutoMirrored(true);
             ImageButton createOverflowButton = createOverflowButton();
             this.mOverflowButton = createOverflowButton;
             this.mOverflowButtonSize = measure(createOverflowButton);
             this.mMainPanel = createMainPanel();
-            this.mOverflowPanelViewHelper = new OverflowPanelViewHelper(this.mContext, this.mIconTextSpacing);
+            this.mOverflowPanelViewHelper = new OverflowPanelViewHelper(context, dp);
             this.mOverflowPanel = createOverflowPanel();
             Animation.AnimationListener createOverflowAnimationListener = createOverflowAnimationListener();
             AnimationSet animationSet = new AnimationSet(true);
@@ -304,14 +305,14 @@ public final class FloatingToolbar {
             AnimationSet animationSet2 = new AnimationSet(true);
             this.mCloseOverflowAnimation = animationSet2;
             animationSet2.setAnimationListener(createOverflowAnimationListener);
-            this.mShowAnimation = FloatingToolbar.createEnterAnimation(this.mContentContainer);
-            this.mDismissAnimation = FloatingToolbar.createExitAnimation(this.mContentContainer, 150, new AnimatorListenerAdapter(FloatingToolbar.this) {
+            this.mShowAnimation = FloatingToolbar.createEnterAnimation(access$600);
+            this.mDismissAnimation = FloatingToolbar.createExitAnimation(access$600, 150, new AnimatorListenerAdapter(FloatingToolbar.this) {
                 public void onAnimationEnd(Animator animator) {
                     FloatingToolbarPopup.this.mPopupWindow.dismiss();
                     FloatingToolbarPopup.this.mContentContainer.removeAllViews();
                 }
             });
-            this.mHideAnimation = FloatingToolbar.createExitAnimation(this.mContentContainer, 0, new AnimatorListenerAdapter(FloatingToolbar.this) {
+            this.mHideAnimation = FloatingToolbar.createExitAnimation(access$600, 0, new AnimatorListenerAdapter(FloatingToolbar.this) {
                 public void onAnimationEnd(Animator animator) {
                     FloatingToolbarPopup.this.mPopupWindow.dismiss();
                 }
@@ -406,7 +407,7 @@ public final class FloatingToolbar {
                     updateOverflowHeight(i4 - i5);
                     i = rect.bottom;
                     this.mOpenOverflowUpwards = false;
-                } else if (i4 < i6 || this.mViewPortOnScreen.height() < calculateOverflowHeight) {
+                } else if (i4 < i6 || rect3.height() < calculateOverflowHeight) {
                     updateOverflowHeight(this.mViewPortOnScreen.height() - i5);
                     i = this.mViewPortOnScreen.top;
                     this.mOpenOverflowUpwards = false;
@@ -931,6 +932,8 @@ public final class FloatingToolbar {
             return imageButton;
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$createOverflowButton$0 */
         public /* synthetic */ void lambda$createOverflowButton$0$FloatingToolbar$FloatingToolbarPopup(ImageButton imageButton, View view) {
             if (this.mIsOverflowOpen) {
                 imageButton.setImageDrawable(this.mToOverflow);
@@ -967,6 +970,8 @@ public final class FloatingToolbar {
             return overflowPanel;
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$createOverflowPanel$1 */
         public /* synthetic */ void lambda$createOverflowPanel$1$FloatingToolbar$FloatingToolbarPopup(OverflowPanel overflowPanel, AdapterView adapterView, View view, int i, long j) {
             MenuItem menuItem = (MenuItem) overflowPanel.getAdapter().getItem(i);
             MenuItem.OnMenuItemClickListener onMenuItemClickListener = this.mOnMenuItemClickListener;
@@ -1005,9 +1010,9 @@ public final class FloatingToolbar {
                           (r1v0 'this' org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$13 A[THIS])
                          org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.13.this$1 org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup)
                          org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.access$400(org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup):android.view.ViewGroup type: STATIC)
-                          (wrap: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$Zp9K0kX9lUDbB0TcGe7rcdA3FKM : 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$Zp9K0kX9lUDbB0TcGe7rcdA3FKM) = 
+                          (wrap: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA : 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA) = 
                           (r1v0 'this' org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$13 A[THIS])
-                         call: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$Zp9K0kX9lUDbB0TcGe7rcdA3FKM.<init>(org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$13):void type: CONSTRUCTOR)
+                         call: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA.<init>(org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$13):void type: CONSTRUCTOR)
                          android.view.ViewGroup.post(java.lang.Runnable):boolean type: VIRTUAL in method: org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.13.onAnimationEnd(android.view.animation.Animation):void, dex: classes.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
@@ -1084,9 +1089,9 @@ public final class FloatingToolbar {
                         	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                         	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                         	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$Zp9K0kX9lUDbB0TcGe7rcdA3FKM) = 
+                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0008: CONSTRUCTOR  (r0v0 org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA) = 
                           (r1v0 'this' org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$13 A[THIS])
-                         call: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$Zp9K0kX9lUDbB0TcGe7rcdA3FKM.<init>(org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$13):void type: CONSTRUCTOR in method: org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.13.onAnimationEnd(android.view.animation.Animation):void, dex: classes.dex
+                         call: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA.<init>(org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup$13):void type: CONSTRUCTOR in method: org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.13.onAnimationEnd(android.view.animation.Animation):void, dex: classes.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                         	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -1095,7 +1100,7 @@ public final class FloatingToolbar {
                         	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                         	... 74 more
-                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$Zp9K0kX9lUDbB0TcGe7rcdA3FKM, state: NOT_LOADED
+                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA, state: NOT_LOADED
                         	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                         	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                         	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -1106,7 +1111,7 @@ public final class FloatingToolbar {
                         this = this;
                         org.telegram.ui.ActionBar.FloatingToolbar$FloatingToolbarPopup r2 = org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.this
                         android.view.ViewGroup r2 = r2.mContentContainer
-                        org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$Zp9K0kX9lUDbB0TcGe7rcdA3FKM r0 = new org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$Zp9K0kX9lUDbB0TcGe7rcdA3FKM
+                        org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA r0 = new org.telegram.ui.ActionBar.-$$Lambda$FloatingToolbar$FloatingToolbarPopup$13$d2okwCLASSNAMEm_XJUsyF7JZ4eggIbaA
                         r0.<init>(r1)
                         r2.post(r0)
                         return
@@ -1114,6 +1119,8 @@ public final class FloatingToolbar {
                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.FloatingToolbar.FloatingToolbarPopup.AnonymousClass13.onAnimationEnd(android.view.animation.Animation):void");
                 }
 
+                /* access modifiers changed from: private */
+                /* renamed from: lambda$onAnimationEnd$0 */
                 public /* synthetic */ void lambda$onAnimationEnd$0$FloatingToolbar$FloatingToolbarPopup$13() {
                     FloatingToolbarPopup.this.setPanelsStatesAtRestingPosition();
                     FloatingToolbarPopup.this.setContentAreaAsTouchableSurface();

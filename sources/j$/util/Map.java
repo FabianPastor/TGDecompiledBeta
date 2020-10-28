@@ -1,6 +1,5 @@
 package j$.util;
 
-import j$.CLASSNAMEe;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
 import j$.util.function.Function;
@@ -10,6 +9,129 @@ import java.util.Map;
 import java.util.Set;
 
 public interface Map {
+
+    /* renamed from: j$.util.Map$-CC  reason: invalid class name */
+    public final /* synthetic */ class CC {
+        public static Object $default$compute(java.util.Map map, Object obj, BiFunction biFunction) {
+            biFunction.getClass();
+            Object obj2 = map.get(obj);
+            Object apply = biFunction.apply(obj, obj2);
+            if (apply != null) {
+                map.put(obj, apply);
+                return apply;
+            } else if (obj2 == null && !map.containsKey(obj)) {
+                return null;
+            } else {
+                map.remove(obj);
+                return null;
+            }
+        }
+
+        public static Object $default$computeIfAbsent(java.util.Map map, Object obj, Function function) {
+            Object apply;
+            function.getClass();
+            Object obj2 = map.get(obj);
+            if (obj2 != null || (apply = function.apply(obj)) == null) {
+                return obj2;
+            }
+            map.put(obj, apply);
+            return apply;
+        }
+
+        public static Object $default$computeIfPresent(java.util.Map map, Object obj, BiFunction biFunction) {
+            biFunction.getClass();
+            Object obj2 = map.get(obj);
+            if (obj2 != null) {
+                Object apply = biFunction.apply(obj, obj2);
+                if (apply != null) {
+                    map.put(obj, apply);
+                    return apply;
+                }
+                map.remove(obj);
+            }
+            return null;
+        }
+
+        public static void $default$forEach(java.util.Map map, BiConsumer biConsumer) {
+            biConsumer.getClass();
+            for (Map.Entry entry : map.entrySet()) {
+                try {
+                    biConsumer.accept(entry.getKey(), entry.getValue());
+                } catch (IllegalStateException e) {
+                    throw new ConcurrentModificationException(e);
+                }
+            }
+        }
+
+        public static Object $default$getOrDefault(java.util.Map map, Object obj, Object obj2) {
+            Object obj3 = map.get(obj);
+            return (obj3 != null || map.containsKey(obj)) ? obj3 : obj2;
+        }
+
+        public static Object $default$merge(java.util.Map map, Object obj, Object obj2, BiFunction biFunction) {
+            biFunction.getClass();
+            obj2.getClass();
+            Object obj3 = map.get(obj);
+            if (obj3 != null) {
+                obj2 = biFunction.apply(obj3, obj2);
+            }
+            if (obj2 == null) {
+                map.remove(obj);
+            } else {
+                map.put(obj, obj2);
+            }
+            return obj2;
+        }
+
+        public static Object $default$putIfAbsent(java.util.Map map, Object obj, Object obj2) {
+            Object obj3 = map.get(obj);
+            return obj3 == null ? map.put(obj, obj2) : obj3;
+        }
+
+        public static boolean $default$remove(java.util.Map map, Object obj, Object obj2) {
+            Object obj3 = map.get(obj);
+            if (!CLASSNAMEk.r(obj3, obj2)) {
+                return false;
+            }
+            if (obj3 == null && !map.containsKey(obj)) {
+                return false;
+            }
+            map.remove(obj);
+            return true;
+        }
+
+        public static Object $default$replace(java.util.Map map, Object obj, Object obj2) {
+            Object obj3 = map.get(obj);
+            return (obj3 != null || map.containsKey(obj)) ? map.put(obj, obj2) : obj3;
+        }
+
+        public static boolean $default$replace(java.util.Map map, Object obj, Object obj2, Object obj3) {
+            Object obj4 = map.get(obj);
+            if (!CLASSNAMEk.r(obj4, obj2)) {
+                return false;
+            }
+            if (obj4 == null && !map.containsKey(obj)) {
+                return false;
+            }
+            map.put(obj, obj3);
+            return true;
+        }
+
+        public static void $default$replaceAll(java.util.Map map, BiFunction biFunction) {
+            biFunction.getClass();
+            for (Map.Entry entry : map.entrySet()) {
+                try {
+                    try {
+                        entry.setValue(biFunction.apply(entry.getKey(), entry.getValue()));
+                    } catch (IllegalStateException e) {
+                        throw new ConcurrentModificationException(e);
+                    }
+                } catch (IllegalStateException e2) {
+                    throw new ConcurrentModificationException(e2);
+                }
+            }
+        }
+    }
 
     public interface Entry {
         boolean equals(Object obj);
@@ -72,147 +194,4 @@ public interface Map {
     int size();
 
     Collection values();
-
-    /* renamed from: j$.util.Map$-CC  reason: invalid class name */
-    public final /* synthetic */ class CC {
-        public static Object $default$getOrDefault(java.util.Map _this, Object key, Object defaultValue) {
-            V v = _this.get(key);
-            V v2 = v;
-            if (v != null || _this.containsKey(key)) {
-                return v2;
-            }
-            return defaultValue;
-        }
-
-        public static void $default$forEach(java.util.Map _this, BiConsumer biConsumer) {
-            biConsumer.getClass();
-            for (Map.Entry<K, V> entry : _this.entrySet()) {
-                try {
-                    biConsumer.accept(entry.getKey(), entry.getValue());
-                } catch (IllegalStateException ise) {
-                    throw new ConcurrentModificationException(ise);
-                }
-            }
-        }
-
-        public static void $default$replaceAll(java.util.Map _this, BiFunction biFunction) {
-            biFunction.getClass();
-            for (Map.Entry<K, V> entry : _this.entrySet()) {
-                try {
-                    try {
-                        entry.setValue(biFunction.a(entry.getKey(), entry.getValue()));
-                    } catch (IllegalStateException ise) {
-                        throw new ConcurrentModificationException(ise);
-                    }
-                } catch (IllegalStateException ise2) {
-                    throw new ConcurrentModificationException(ise2);
-                }
-            }
-        }
-
-        public static Object $default$putIfAbsent(java.util.Map _this, Object key, Object value) {
-            V v = _this.get(key);
-            if (v == null) {
-                return _this.put(key, value);
-            }
-            return v;
-        }
-
-        public static boolean $default$remove(java.util.Map _this, Object key, Object value) {
-            Object curValue = _this.get(key);
-            if (!CLASSNAMEe.a(curValue, value)) {
-                return false;
-            }
-            if (curValue == null && !_this.containsKey(key)) {
-                return false;
-            }
-            _this.remove(key);
-            return true;
-        }
-
-        public static boolean $default$replace(java.util.Map _this, Object key, Object oldValue, Object newValue) {
-            Object curValue = _this.get(key);
-            if (!CLASSNAMEe.a(curValue, oldValue)) {
-                return false;
-            }
-            if (curValue == null && !_this.containsKey(key)) {
-                return false;
-            }
-            _this.put(key, newValue);
-            return true;
-        }
-
-        public static Object $default$replace(java.util.Map _this, Object key, Object value) {
-            V v = _this.get(key);
-            V curValue = v;
-            if (v != null || _this.containsKey(key)) {
-                return _this.put(key, value);
-            }
-            return curValue;
-        }
-
-        public static Object $default$computeIfAbsent(java.util.Map _this, Object key, Function function) {
-            function.getClass();
-            V v = _this.get(key);
-            V v2 = v;
-            if (v == null) {
-                V apply = function.apply(key);
-                V newValue = apply;
-                if (apply != null) {
-                    _this.put(key, newValue);
-                    return newValue;
-                }
-            }
-            return v2;
-        }
-
-        public static Object $default$computeIfPresent(java.util.Map _this, Object key, BiFunction biFunction) {
-            biFunction.getClass();
-            V v = _this.get(key);
-            V oldValue = v;
-            if (v == null) {
-                return null;
-            }
-            V newValue = biFunction.a(key, oldValue);
-            if (newValue != null) {
-                _this.put(key, newValue);
-                return newValue;
-            }
-            _this.remove(key);
-            return null;
-        }
-
-        public static Object $default$compute(java.util.Map _this, Object key, BiFunction biFunction) {
-            biFunction.getClass();
-            V oldValue = _this.get(key);
-            V newValue = biFunction.a(key, oldValue);
-            if (newValue != null) {
-                _this.put(key, newValue);
-                return newValue;
-            } else if (oldValue == null && !_this.containsKey(key)) {
-                return null;
-            } else {
-                _this.remove(key);
-                return null;
-            }
-        }
-
-        public static Object $default$merge(java.util.Map _this, Object key, Object value, BiFunction biFunction) {
-            Object obj;
-            biFunction.getClass();
-            value.getClass();
-            V oldValue = _this.get(key);
-            if (oldValue == null) {
-                obj = value;
-            } else {
-                obj = biFunction.a(oldValue, value);
-            }
-            if (obj == null) {
-                _this.remove(key);
-            } else {
-                _this.put(key, obj);
-            }
-            return obj;
-        }
-    }
 }

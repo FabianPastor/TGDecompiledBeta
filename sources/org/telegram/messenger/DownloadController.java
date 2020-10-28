@@ -179,24 +179,19 @@ public class DownloadController extends BaseController implements NotificationCe
                 int[] iArr = this.mask;
                 if (i < iArr.length) {
                     if (tLRPC$TL_autoDownloadSettings.photo_size_max == 0 || tLRPC$TL_autoDownloadSettings.disabled) {
-                        int[] iArr2 = this.mask;
-                        iArr2[i] = iArr2[i] & -2;
+                        iArr[i] = iArr[i] & -2;
                     } else {
                         iArr[i] = iArr[i] | 1;
                     }
                     if (tLRPC$TL_autoDownloadSettings.video_size_max == 0 || tLRPC$TL_autoDownloadSettings.disabled) {
-                        int[] iArr3 = this.mask;
-                        iArr3[i] = iArr3[i] & -5;
+                        iArr[i] = iArr[i] & -5;
                     } else {
-                        int[] iArr4 = this.mask;
-                        iArr4[i] = iArr4[i] | 4;
+                        iArr[i] = iArr[i] | 4;
                     }
                     if (tLRPC$TL_autoDownloadSettings.file_size_max == 0 || tLRPC$TL_autoDownloadSettings.disabled) {
-                        int[] iArr5 = this.mask;
-                        iArr5[i] = iArr5[i] & -9;
+                        iArr[i] = iArr[i] & -9;
                     } else {
-                        int[] iArr6 = this.mask;
-                        iArr6[i] = iArr6[i] | 8;
+                        iArr[i] = iArr[i] | 8;
                     }
                     i++;
                 } else {
@@ -351,6 +346,8 @@ public class DownloadController extends BaseController implements NotificationCe
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$DownloadController() {
         getNotificationCenter().addObserver(this, NotificationCenter.fileDidFailToLoad);
         getNotificationCenter().addObserver(this, NotificationCenter.fileDidLoad);
@@ -375,6 +372,8 @@ public class DownloadController extends BaseController implements NotificationCe
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$loadAutoDownloadConfig$2 */
     public /* synthetic */ void lambda$loadAutoDownloadConfig$2$DownloadController(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
             public final /* synthetic */ TLObject f$1;
@@ -389,6 +388,8 @@ public class DownloadController extends BaseController implements NotificationCe
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$1 */
     public /* synthetic */ void lambda$null$1$DownloadController(TLObject tLObject) {
         Preset preset;
         this.loadingAutoDownloadConfig = false;
@@ -901,10 +902,10 @@ public class DownloadController extends BaseController implements NotificationCe
                 if ((iArr[i3] & 1) != 0) {
                     z2 = true;
                 }
-                if ((preset.mask[i3] & 4) != 0) {
+                if ((iArr[i3] & 4) != 0) {
                     z3 = true;
                 }
-                if ((preset.mask[i3] & 8) != 0) {
+                if ((iArr[i3] & 8) != 0) {
                     z4 = true;
                 }
                 if (z2 && z3 && z4) {
@@ -915,14 +916,14 @@ public class DownloadController extends BaseController implements NotificationCe
                 break;
             }
         }
-        tLRPC$TL_account_saveAutoDownloadSettings.settings.photo_size_max = z2 ? preset.sizes[0] : 0;
-        tLRPC$TL_account_saveAutoDownloadSettings.settings.video_size_max = z3 ? preset.sizes[1] : 0;
         TLRPC$TL_autoDownloadSettings tLRPC$TL_autoDownloadSettings2 = tLRPC$TL_account_saveAutoDownloadSettings.settings;
+        tLRPC$TL_autoDownloadSettings2.photo_size_max = z2 ? preset.sizes[0] : 0;
+        tLRPC$TL_autoDownloadSettings2.video_size_max = z3 ? preset.sizes[1] : 0;
         if (z4) {
             i2 = preset.sizes[2];
         }
         tLRPC$TL_autoDownloadSettings2.file_size_max = i2;
-        getConnectionsManager().sendRequest(tLRPC$TL_account_saveAutoDownloadSettings, $$Lambda$DownloadController$0LtKveHOl8NLZKxEDiX80oSJa0.INSTANCE);
+        getConnectionsManager().sendRequest(tLRPC$TL_account_saveAutoDownloadSettings, $$Lambda$DownloadController$X8Qr0DXt6tSy5F0hlLtJCLASSNAMEVYJ0.INSTANCE);
     }
 
     /* access modifiers changed from: protected */

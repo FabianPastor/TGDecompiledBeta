@@ -226,8 +226,9 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                     this.isDownReleased = true;
                     this.callback.onRelease();
                 }
-                if (!this.isSwipingViewPager || !this.isScrollingListView) {
-                    if (this.isSwipingViewPager && !canScrollHorizontally(-1) && x > ((float) this.touchSlop)) {
+                boolean z2 = this.isSwipingViewPager;
+                if (!z2 || !this.isScrollingListView) {
+                    if (z2 && !canScrollHorizontally(-1) && x > ((float) this.touchSlop)) {
                         return false;
                     }
                 } else if (z) {
@@ -282,11 +283,11 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
     }
 
     public boolean initIfEmpty(ImageLocation imageLocation, ImageLocation imageLocation2) {
-        ImageLocation imageLocation3;
         if (imageLocation == null || imageLocation2 == null || this.settingMainPhoto != 0) {
             return false;
         }
-        if ((this.prevImageLocation == null && imageLocation != null) || !((imageLocation3 = this.prevImageLocation) == null || imageLocation3.location.local_id == imageLocation.location.local_id)) {
+        ImageLocation imageLocation3 = this.prevImageLocation;
+        if ((imageLocation3 == null && imageLocation != null) || !(imageLocation3 == null || imageLocation3.location.local_id == imageLocation.location.local_id)) {
             this.imagesLocations.clear();
             MessagesController.getInstance(this.currentAccount).loadDialogPhotos((int) this.dialogId, 80, 0, true, this.parentClassGuid);
         }
@@ -372,18 +373,18 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             for (int i2 = 0; i2 < size; i2++) {
                 ImageLocation imageLocation3 = arrayList.get(i2);
                 if (!(imageLocation3 == null || (tLRPC$TL_fileLocationToBeDeprecated = imageLocation3.location) == null)) {
-                    if (imageLocation3.dc_id == imageLocation.dc_id) {
-                        int i3 = tLRPC$TL_fileLocationToBeDeprecated.local_id;
+                    int i3 = imageLocation3.dc_id;
+                    if (i3 == imageLocation.dc_id) {
+                        int i4 = tLRPC$TL_fileLocationToBeDeprecated.local_id;
                         TLRPC$TL_fileLocationToBeDeprecated tLRPC$TL_fileLocationToBeDeprecated2 = imageLocation.location;
-                        if (i3 == tLRPC$TL_fileLocationToBeDeprecated2.local_id && tLRPC$TL_fileLocationToBeDeprecated.volume_id == tLRPC$TL_fileLocationToBeDeprecated2.volume_id) {
+                        if (i4 == tLRPC$TL_fileLocationToBeDeprecated2.local_id && tLRPC$TL_fileLocationToBeDeprecated.volume_id == tLRPC$TL_fileLocationToBeDeprecated2.volume_id) {
                             return this.videoLocations.get(i2);
                         }
                     }
-                    if (imageLocation3.dc_id == imageLocation2.dc_id) {
-                        TLRPC$TL_fileLocationToBeDeprecated tLRPC$TL_fileLocationToBeDeprecated3 = imageLocation3.location;
-                        int i4 = tLRPC$TL_fileLocationToBeDeprecated3.local_id;
-                        TLRPC$TL_fileLocationToBeDeprecated tLRPC$TL_fileLocationToBeDeprecated4 = imageLocation2.location;
-                        if (i4 == tLRPC$TL_fileLocationToBeDeprecated4.local_id && tLRPC$TL_fileLocationToBeDeprecated3.volume_id == tLRPC$TL_fileLocationToBeDeprecated4.volume_id) {
+                    if (i3 == imageLocation2.dc_id) {
+                        int i5 = tLRPC$TL_fileLocationToBeDeprecated.local_id;
+                        TLRPC$TL_fileLocationToBeDeprecated tLRPC$TL_fileLocationToBeDeprecated3 = imageLocation2.location;
+                        if (i5 == tLRPC$TL_fileLocationToBeDeprecated3.local_id && tLRPC$TL_fileLocationToBeDeprecated.volume_id == tLRPC$TL_fileLocationToBeDeprecated3.volume_id) {
                             return this.videoLocations.get(i2);
                         }
                     } else {
@@ -912,10 +913,10 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             return indexOf;
         }
 
-        public Item instantiateItem(ViewGroup viewGroup, final int i) {
+        public Item instantiateItem(ViewGroup viewGroup, int i) {
             Item item = this.objects.get(i);
             if (item.imageView == null) {
-                BackupImageView unused = item.imageView = new BackupImageView(this, this.context) {
+                BackupImageView unused = item.imageView = new BackupImageView(this, this.context, i) {
                     private long firstDrawTime = -1;
                     private boolean isVideo;
                     /* access modifiers changed from: private */
@@ -924,21 +925,29 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                     private float radialProgressHideAnimatorStartValue;
                     private final int radialProgressSize = AndroidUtilities.dp(64.0f);
                     final /* synthetic */ ViewPagerAdapter this$1;
+                    final /* synthetic */ int val$position;
 
                     {
-                        this.this$1 = r17;
-                        boolean z = true;
+                        boolean z;
+                        boolean z2;
+                        ViewPagerAdapter viewPagerAdapter = r18;
+                        int i = r20;
+                        this.this$1 = viewPagerAdapter;
+                        this.val$position = i;
+                        boolean z3 = true;
                         getImageReceiver().setAllowDecodeSingleFrame(true);
-                        int realPosition = this.this$1.getRealPosition(i);
+                        int realPosition = viewPagerAdapter.getRealPosition(i);
                         String str = null;
                         if (realPosition == 0) {
-                            Drawable drawable = this.this$1.parentAvatarImageView.getImageReceiver().getDrawable();
+                            Drawable drawable = r18.parentAvatarImageView.getImageReceiver().getDrawable();
                             if (drawable instanceof AnimatedFileDrawable) {
                                 AnimatedFileDrawable animatedFileDrawable = (AnimatedFileDrawable) drawable;
                                 if (animatedFileDrawable.hasBitmap()) {
                                     setImageDrawable(drawable);
                                     animatedFileDrawable.addSecondParentView(this);
                                     animatedFileDrawable.setInvalidateParentViewWithSecond(true);
+                                    z3 = false;
+                                    z2 = z3;
                                     z = false;
                                 }
                             }
@@ -947,20 +956,24 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                             if (imageLocation != null && imageLocation.imageType == 2) {
                                 str = "g";
                             }
-                            setImageMedia((ImageLocation) ProfileGalleryView.this.videoLocations.get(realPosition), str, (ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, this.this$1.parentAvatarImageView.getImageReceiver().getBitmap(), ((Integer) ProfileGalleryView.this.imagesLocationsSizes.get(realPosition)).intValue(), 1, (Object) null);
+                            setImageMedia((ImageLocation) ProfileGalleryView.this.videoLocations.get(realPosition), str, (ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, r18.parentAvatarImageView.getImageReceiver().getBitmap(), ((Integer) ProfileGalleryView.this.imagesLocationsSizes.get(realPosition)).intValue(), 1, (Object) null);
+                            z2 = z3;
+                            z = false;
                         } else {
                             ImageLocation imageLocation2 = (ImageLocation) ProfileGalleryView.this.videoLocations.get(realPosition);
                             this.isVideo = imageLocation2 != null;
+                            z = false;
                             setImageMedia(imageLocation2, (String) null, (ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, (ImageLocation) ProfileGalleryView.this.thumbsLocations.get(realPosition), ((ImageLocation) ProfileGalleryView.this.thumbsLocations.get(realPosition)).photoSize instanceof TLRPC$TL_photoStrippedSize ? "b" : str, (String) null, 0, 1, ProfileGalleryView.this.imagesLocationsSizes.get(realPosition));
+                            z2 = true;
                         }
-                        if (z) {
+                        if (z2) {
                             RadialProgress2 radialProgress2 = (RadialProgress2) ProfileGalleryView.this.radialProgresses.get(realPosition);
                             this.radialProgress = radialProgress2;
                             if (radialProgress2 == null) {
                                 RadialProgress2 radialProgress22 = new RadialProgress2(this);
                                 this.radialProgress = radialProgress22;
                                 radialProgress22.setOverrideAlpha(0.0f);
-                                this.radialProgress.setIcon(10, false, false);
+                                this.radialProgress.setIcon(10, z, z);
                                 this.radialProgress.setColors(NUM, NUM, -1, -1);
                                 ProfileGalleryView.this.radialProgresses.append(realPosition, this.radialProgress);
                             }
@@ -1023,9 +1036,9 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                                       (wrap: android.animation.ValueAnimator : 0x0062: IGET  (r0v27 android.animation.ValueAnimator) = 
                                       (r8v0 'this' org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter$1 A[THIS])
                                      org.telegram.ui.Components.ProfileGalleryView.ViewPagerAdapter.1.radialProgressHideAnimator android.animation.ValueAnimator)
-                                      (wrap: org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$wvZBxr78pLdwArB7T9Z7FL-LYVM : 0x0066: CONSTRUCTOR  (r1v5 org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$wvZBxr78pLdwArB7T9Z7FL-LYVM) = 
+                                      (wrap: org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$AuUduz5kSDZmsNXWu9tg6jQwiqE : 0x0066: CONSTRUCTOR  (r1v5 org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$AuUduz5kSDZmsNXWu9tg6jQwiqE) = 
                                       (r8v0 'this' org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter$1 A[THIS])
-                                     call: org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$wvZBxr78pLdwArB7T9Z7FL-LYVM.<init>(org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter$1):void type: CONSTRUCTOR)
+                                     call: org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$AuUduz5kSDZmsNXWu9tg6jQwiqE.<init>(org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter$1):void type: CONSTRUCTOR)
                                      android.animation.ValueAnimator.addUpdateListener(android.animation.ValueAnimator$AnimatorUpdateListener):void type: VIRTUAL in method: org.telegram.ui.Components.ProfileGalleryView.ViewPagerAdapter.1.onDraw(android.graphics.Canvas):void, dex: classes3.dex
                                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
@@ -1123,9 +1136,9 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                                     	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                                     	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                                     	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0066: CONSTRUCTOR  (r1v5 org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$wvZBxr78pLdwArB7T9Z7FL-LYVM) = 
+                                    Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0066: CONSTRUCTOR  (r1v5 org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$AuUduz5kSDZmsNXWu9tg6jQwiqE) = 
                                       (r8v0 'this' org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter$1 A[THIS])
-                                     call: org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$wvZBxr78pLdwArB7T9Z7FL-LYVM.<init>(org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter$1):void type: CONSTRUCTOR in method: org.telegram.ui.Components.ProfileGalleryView.ViewPagerAdapter.1.onDraw(android.graphics.Canvas):void, dex: classes3.dex
+                                     call: org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$AuUduz5kSDZmsNXWu9tg6jQwiqE.<init>(org.telegram.ui.Components.ProfileGalleryView$ViewPagerAdapter$1):void type: CONSTRUCTOR in method: org.telegram.ui.Components.ProfileGalleryView.ViewPagerAdapter.1.onDraw(android.graphics.Canvas):void, dex: classes3.dex
                                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                                     	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                                     	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -1134,7 +1147,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                                     	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                                     	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                                     	... 95 more
-                                    Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$wvZBxr78pLdwArB7T9Z7FL-LYVM, state: NOT_LOADED
+                                    Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$AuUduz5kSDZmsNXWu9tg6jQwiqE, state: NOT_LOADED
                                     	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                                     	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                                     	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -1188,7 +1201,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                                     org.telegram.ui.Components.CubicBezierInterpolator r1 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
                                     r0.setInterpolator(r1)
                                     android.animation.ValueAnimator r0 = r8.radialProgressHideAnimator
-                                    org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$wvZBxr78pLdwArB7T9Z7FL-LYVM r1 = new org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$wvZBxr78pLdwArB7T9Z7FL-LYVM
+                                    org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$AuUduz5kSDZmsNXWu9tg6jQwiqE r1 = new org.telegram.ui.Components.-$$Lambda$ProfileGalleryView$ViewPagerAdapter$1$AuUduz5kSDZmsNXWu9tg6jQwiqE
                                     r1.<init>(r8)
                                     r0.addUpdateListener(r1)
                                     android.animation.ValueAnimator r0 = r8.radialProgressHideAnimator
@@ -1258,6 +1271,8 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ProfileGalleryView.ViewPagerAdapter.AnonymousClass1.onDraw(android.graphics.Canvas):void");
                             }
 
+                            /* access modifiers changed from: private */
+                            /* renamed from: lambda$onDraw$0 */
                             public /* synthetic */ void lambda$onDraw$0$ProfileGalleryView$ViewPagerAdapter$1(ValueAnimator valueAnimator) {
                                 this.radialProgress.setOverrideAlpha(AndroidUtilities.lerp(this.radialProgressHideAnimatorStartValue, 0.0f, valueAnimator.getAnimatedFraction()));
                             }

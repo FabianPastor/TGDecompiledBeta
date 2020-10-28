@@ -1,5 +1,5 @@
 package j$.util.function;
 
 public interface r {
-    double a(double d, double d2);
+    Object apply(double d);
 }

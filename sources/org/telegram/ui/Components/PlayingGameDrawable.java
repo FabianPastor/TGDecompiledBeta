@@ -12,6 +12,7 @@ import org.telegram.ui.ActionBar.Theme;
 public class PlayingGameDrawable extends StatusDrawable {
     private int currentAccount = UserConfig.selectedAccount;
     private boolean isChat = false;
+    private final boolean isDialogScreen;
     private long lastUpdateTime = 0;
     private Paint paint = new Paint(1);
     private float progress;
@@ -25,7 +26,14 @@ public class PlayingGameDrawable extends StatusDrawable {
     public void setAlpha(int i) {
     }
 
+    public void setColor(int i) {
+    }
+
     public void setColorFilter(ColorFilter colorFilter) {
+    }
+
+    public PlayingGameDrawable(boolean z) {
+        this.isDialogScreen = z;
     }
 
     public void setIsChat(boolean z) {
@@ -68,7 +76,7 @@ public class PlayingGameDrawable extends StatusDrawable {
             intrinsicHeight += AndroidUtilities.dp(1.0f);
         }
         int i = intrinsicHeight;
-        this.paint.setColor(Theme.getColor("chat_status"));
+        this.paint.setColor(Theme.getColor(this.isDialogScreen ? "chats_actionMessage" : "chat_status"));
         this.rect.set(0.0f, (float) i, (float) dp, (float) (i + dp));
         float f = this.progress;
         int i2 = (int) (f < 0.5f ? (1.0f - (f / 0.5f)) * 35.0f : ((f - 0.5f) * 35.0f) / 0.5f);
@@ -88,7 +96,7 @@ public class PlayingGameDrawable extends StatusDrawable {
         }
         this.paint.setAlpha(255);
         canvas.drawArc(this.rect, (float) i2, (float) (360 - (i2 * 2)), true, this.paint);
-        this.paint.setColor(Theme.getColor("actionBarDefault"));
+        this.paint.setColor(Theme.getColor(this.isDialogScreen ? "windowBackgroundWhite" : "actionBarDefault"));
         canvas.drawCircle((float) AndroidUtilities.dp(4.0f), (float) ((i + (dp / 2)) - AndroidUtilities.dp(2.0f)), (float) AndroidUtilities.dp(1.0f), this.paint);
         checkUpdate();
     }

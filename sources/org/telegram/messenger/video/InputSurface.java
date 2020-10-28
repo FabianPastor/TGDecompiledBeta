@@ -19,12 +19,9 @@ public class InputSurface {
     private Surface mSurface;
 
     public InputSurface(Surface surface) {
-        if (surface != null) {
-            this.mSurface = surface;
-            eglSetup();
-            return;
-        }
-        throw null;
+        surface.getClass();
+        this.mSurface = surface;
+        eglSetup();
     }
 
     private void eglSetup() {

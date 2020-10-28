@@ -1,32 +1,19 @@
 package j$.util.stream;
 
-import j$.util.U;
+import j$.util.CLASSNAMEw;
+import j$.util.D;
 import j$.util.function.Consumer;
-import j$.util.k0;
 
-final class N3 extends P3 implements CLASSNAMEq3 {
-    public /* synthetic */ void forEach(Consumer consumer) {
-        CLASSNAMEp3.c(this, consumer);
+final class N3 extends P3 implements D {
+    N3(CLASSNAMEi3 i3Var) {
+        super(i3Var);
     }
 
-    public /* bridge */ /* synthetic */ void m(Object[] objArr, int i) {
-        o((Long[]) objArr, i);
+    public /* synthetic */ boolean b(Consumer consumer) {
+        return CLASSNAMEw.e(this, consumer);
     }
 
-    public /* synthetic */ void o(Long[] lArr, int i) {
-        CLASSNAMEp3.a(this, lArr, i);
-    }
-
-    N3() {
-    }
-
-    /* renamed from: g */
-    public U spliterator() {
-        return k0.d();
-    }
-
-    /* renamed from: b */
-    public long[] i() {
-        return CLASSNAMEp4.f;
+    public /* synthetic */ void forEachRemaining(Consumer consumer) {
+        CLASSNAMEw.b(this, consumer);
     }
 }

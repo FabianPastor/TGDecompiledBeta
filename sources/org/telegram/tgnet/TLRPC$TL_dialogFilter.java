@@ -37,13 +37,13 @@ public class TLRPC$TL_dialogFilter extends TLObject {
         this.flags = readInt32;
         int i = 0;
         this.contacts = (readInt32 & 1) != 0;
-        this.non_contacts = (this.flags & 2) != 0;
-        this.groups = (this.flags & 4) != 0;
-        this.broadcasts = (this.flags & 8) != 0;
-        this.bots = (this.flags & 16) != 0;
-        this.exclude_muted = (this.flags & 2048) != 0;
-        this.exclude_read = (this.flags & 4096) != 0;
-        this.exclude_archived = (this.flags & 8192) != 0;
+        this.non_contacts = (readInt32 & 2) != 0;
+        this.groups = (readInt32 & 4) != 0;
+        this.broadcasts = (readInt32 & 8) != 0;
+        this.bots = (readInt32 & 16) != 0;
+        this.exclude_muted = (readInt32 & 2048) != 0;
+        this.exclude_read = (readInt32 & 4096) != 0;
+        this.exclude_archived = (readInt32 & 8192) != 0;
         this.id = abstractSerializedData.readInt32(z);
         this.title = abstractSerializedData.readString(z);
         if ((this.flags & 33554432) != 0) {

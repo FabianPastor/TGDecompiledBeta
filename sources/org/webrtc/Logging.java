@@ -169,15 +169,17 @@ public class Logging {
     }
 
     public static void e(String str, String str2, Throwable th) {
-        log(Severity.LS_ERROR, str, str2);
-        log(Severity.LS_ERROR, str, th.toString());
-        log(Severity.LS_ERROR, str, getStackTraceString(th));
+        Severity severity = Severity.LS_ERROR;
+        log(severity, str, str2);
+        log(severity, str, th.toString());
+        log(severity, str, getStackTraceString(th));
     }
 
     public static void w(String str, String str2, Throwable th) {
-        log(Severity.LS_WARNING, str, str2);
-        log(Severity.LS_WARNING, str, th.toString());
-        log(Severity.LS_WARNING, str, getStackTraceString(th));
+        Severity severity = Severity.LS_WARNING;
+        log(severity, str, str2);
+        log(severity, str, th.toString());
+        log(severity, str, getStackTraceString(th));
     }
 
     public static void v(String str, String str2) {

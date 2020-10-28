@@ -1,57 +1,32 @@
 package j$.util.stream;
 
-import j$.util.function.CLASSNAMEq;
-import j$.util.function.CLASSNAMEs;
-import j$.util.function.CLASSNAMEt;
-import j$.util.function.Consumer;
+import j$.util.CLASSNAMEt;
+import j$.util.function.Predicate;
+import j$.util.function.k;
+import j$.util.function.l;
+import j$.util.function.m;
 
-public final /* synthetic */ class S0 implements B5 {
-    public final /* synthetic */ CLASSNAMEt a;
+public final /* synthetic */ class S0 implements Predicate {
+    public static final /* synthetic */ S0 a = new S0();
 
-    public /* synthetic */ S0(CLASSNAMEt tVar) {
-        this.a = tVar;
+    private /* synthetic */ S0() {
     }
 
-    public final void accept(double d) {
-        this.a.accept(d);
+    public Predicate a(Predicate predicate) {
+        predicate.getClass();
+        return new k(this, predicate);
     }
 
-    public /* synthetic */ void accept(int i) {
-        CLASSNAMEv5.a(this);
-        throw null;
+    public Predicate b(Predicate predicate) {
+        predicate.getClass();
+        return new m(this, predicate);
     }
 
-    public /* synthetic */ void accept(long j) {
-        CLASSNAMEv5.b(this);
-        throw null;
+    public Predicate negate() {
+        return new l(this);
     }
 
-    public /* bridge */ /* synthetic */ void accept(Object obj) {
-        v((Double) obj);
-    }
-
-    public /* synthetic */ Consumer g(Consumer consumer) {
-        return CLASSNAMEq.a(this, consumer);
-    }
-
-    public /* synthetic */ CLASSNAMEt p(CLASSNAMEt tVar) {
-        return CLASSNAMEs.a(this, tVar);
-    }
-
-    public /* synthetic */ void r() {
-        CLASSNAMEv5.f();
-    }
-
-    public /* synthetic */ void s(long j) {
-        CLASSNAMEv5.d();
-    }
-
-    public /* synthetic */ boolean u() {
-        CLASSNAMEv5.e();
-        return false;
-    }
-
-    public /* synthetic */ void v(Double d) {
-        A5.a(this, d);
+    public final boolean test(Object obj) {
+        return ((CLASSNAMEt) obj).c();
     }
 }

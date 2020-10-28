@@ -12,35 +12,35 @@ public abstract class TLRPC$MessageFwdHeader extends TLObject {
     public TLRPC$Peer saved_from_peer;
 
     public static TLRPC$MessageFwdHeader TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$TL_messageFwdHeader tLRPC$TL_messageFwdHeader;
+        TLRPC$MessageFwdHeader tLRPC$MessageFwdHeader;
         switch (i) {
             case -947462709:
-                tLRPC$TL_messageFwdHeader = new TLRPC$TL_messageFwdHeader_layer68();
+                tLRPC$MessageFwdHeader = new TLRPC$TL_messageFwdHeader_layer68();
                 break;
             case -332168592:
-                tLRPC$TL_messageFwdHeader = new TLRPC$TL_messageFwdHeader_layer112();
+                tLRPC$MessageFwdHeader = new TLRPC$TL_messageFwdHeader_layer112();
                 break;
             case -85986132:
-                tLRPC$TL_messageFwdHeader = new TLRPC$TL_messageFwdHeader_layer72();
+                tLRPC$MessageFwdHeader = new TLRPC$TL_messageFwdHeader_layer72();
                 break;
             case 893020267:
-                tLRPC$TL_messageFwdHeader = new TLRPC$TL_messageFwdHeader_layer118();
+                tLRPC$MessageFwdHeader = new TLRPC$TL_messageFwdHeader_layer118();
                 break;
             case 1436466797:
-                tLRPC$TL_messageFwdHeader = new TLRPC$TL_messageFwdHeader_layer96();
+                tLRPC$MessageFwdHeader = new TLRPC$TL_messageFwdHeader_layer96();
                 break;
             case 1601666510:
-                tLRPC$TL_messageFwdHeader = new TLRPC$TL_messageFwdHeader();
+                tLRPC$MessageFwdHeader = new TLRPC$TL_messageFwdHeader();
                 break;
             default:
-                tLRPC$TL_messageFwdHeader = null;
+                tLRPC$MessageFwdHeader = null;
                 break;
         }
-        if (tLRPC$TL_messageFwdHeader != null || !z) {
-            if (tLRPC$TL_messageFwdHeader != null) {
-                tLRPC$TL_messageFwdHeader.readParams(abstractSerializedData, z);
+        if (tLRPC$MessageFwdHeader != null || !z) {
+            if (tLRPC$MessageFwdHeader != null) {
+                tLRPC$MessageFwdHeader.readParams(abstractSerializedData, z);
             }
-            return tLRPC$TL_messageFwdHeader;
+            return tLRPC$MessageFwdHeader;
         }
         throw new RuntimeException(String.format("can't parse magic %x in MessageFwdHeader", new Object[]{Integer.valueOf(i)}));
     }

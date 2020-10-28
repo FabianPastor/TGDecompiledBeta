@@ -1,31 +1,30 @@
 package j$;
 
-import j$.util.function.P;
-import java.util.function.LongUnaryOperator;
+import java.util.function.IntPredicate;
 
-public final /* synthetic */ class Z implements LongUnaryOperator {
-    final /* synthetic */ P a;
+public final /* synthetic */ class Z implements IntPredicate {
+    final /* synthetic */ Y a;
 
-    private /* synthetic */ Z(P p) {
-        this.a = p;
-    }
-
-    public static /* synthetic */ LongUnaryOperator a(P p) {
-        if (p == null) {
+    public static /* synthetic */ IntPredicate a(Y y) {
+        if (y == null) {
             return null;
         }
-        return p instanceof Y ? ((Y) p).a : new Z(p);
+        return y.a;
     }
 
-    public /* synthetic */ LongUnaryOperator andThen(LongUnaryOperator longUnaryOperator) {
-        return a(this.a.a(Y.c(longUnaryOperator)));
+    public IntPredicate and(IntPredicate intPredicate) {
+        return a(Y.a(this.a.a.and(a(Y.a(intPredicate)))));
     }
 
-    public /* synthetic */ long applyAsLong(long j) {
-        return this.a.applyAsLong(j);
+    public IntPredicate negate() {
+        return a(Y.a(this.a.a.negate()));
     }
 
-    public /* synthetic */ LongUnaryOperator compose(LongUnaryOperator longUnaryOperator) {
-        return a(this.a.b(Y.c(longUnaryOperator)));
+    public IntPredicate or(IntPredicate intPredicate) {
+        return a(Y.a(this.a.a.or(a(Y.a(intPredicate)))));
+    }
+
+    public boolean test(int i) {
+        return this.a.a.test(i);
     }
 }

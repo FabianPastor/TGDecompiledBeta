@@ -1,57 +1,34 @@
 package j$.util.stream;
 
-import j$.util.Spliterator;
-import j$.util.function.C;
-import j$.util.function.Consumer;
+import j$.util.function.v;
 
-final class H3 extends CLASSNAMEv3 implements CLASSNAMEt3 {
-    H3(CLASSNAMEt3 left, CLASSNAMEt3 right) {
-        super(left, right);
+abstract class H3 implements CLASSNAMEl3 {
+    H3() {
     }
 
-    public Spliterator spliterator() {
-        return new Y3(this);
+    public CLASSNAMEl3 b(int i) {
+        throw new IndexOutOfBoundsException();
     }
 
-    public void m(Object[] array, int offset) {
-        array.getClass();
-        this.a.m(array, offset);
-        this.b.m(array, ((int) this.a.count()) + offset);
+    public long count() {
+        return 0;
     }
 
-    public Object[] x(C c) {
-        long size = count();
-        if (size < NUM) {
-            T[] array = (Object[]) c.a((int) size);
-            m(array, 0);
-            return array;
-        }
-        throw new IllegalArgumentException("Stream size exceeds max array size");
+    public void d(Object obj, int i) {
     }
 
-    public void forEach(Consumer consumer) {
-        this.a.forEach(consumer);
-        this.b.forEach(consumer);
+    public void h(Object obj) {
     }
 
-    public CLASSNAMEt3 c(long from, long to, C c) {
-        if (from == 0 && to == count()) {
-            return this;
-        }
-        long leftCount = this.a.count();
-        if (from >= leftCount) {
-            return this.b.c(from - leftCount, to - leftCount, c);
-        }
-        if (to <= leftCount) {
-            return this.a.c(from, to, c);
-        }
-        return CLASSNAMEp4.j(b(), this.a.c(from, leftCount, c), this.b.c(0, to - leftCount, c));
+    public /* synthetic */ int o() {
+        return 0;
     }
 
-    public String toString() {
-        if (count() < 32) {
-            return String.format("ConcNode[%s.%s]", new Object[]{this.a, this.b});
-        }
-        return String.format("ConcNode[size=%d]", new Object[]{Long.valueOf(count())});
+    public Object[] q(v vVar) {
+        return (Object[]) vVar.apply(0);
+    }
+
+    public /* synthetic */ CLASSNAMEl3 r(long j, long j2, v vVar) {
+        return CLASSNAMEc3.n(this, j, j2, vVar);
     }
 }

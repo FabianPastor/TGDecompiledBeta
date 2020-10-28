@@ -8,7 +8,7 @@ public class TLRPC$TL_phoneCall extends TLRPC$PhoneCall {
         this.flags = readInt32;
         int i = 0;
         this.p2p_allowed = (readInt32 & 32) != 0;
-        this.video = (this.flags & 64) != 0;
+        this.video = (readInt32 & 64) != 0;
         this.id = abstractSerializedData.readInt64(z);
         this.access_hash = abstractSerializedData.readInt64(z);
         this.date = abstractSerializedData.readInt32(z);

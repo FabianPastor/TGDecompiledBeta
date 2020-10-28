@@ -6,10 +6,10 @@ public class TLRPC$TL_peerNotifySettings_layer77 extends TLRPC$TL_peerNotifySett
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.show_previews = (readInt32 & 1) != 0;
-        if ((this.flags & 2) == 0) {
-            z2 = false;
+        if ((readInt32 & 2) != 0) {
+            z2 = true;
         }
         this.silent = z2;
         this.mute_until = abstractSerializedData.readInt32(z);

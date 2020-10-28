@@ -523,7 +523,8 @@ public class NativeByteBuffer extends AbstractSerializedData {
             }
             NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(intFromByte);
             int limit = this.buffer.limit();
-            this.buffer.limit(this.buffer.position() + intFromByte);
+            ByteBuffer byteBuffer = this.buffer;
+            byteBuffer.limit(byteBuffer.position() + intFromByte);
             nativeByteBuffer.buffer.put(this.buffer);
             this.buffer.limit(limit);
             nativeByteBuffer.buffer.position(0);

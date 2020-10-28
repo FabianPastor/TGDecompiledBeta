@@ -22,4 +22,5 @@
     <string name="google_assistant_verification_channel_name">അസിസ്‌റ്റന്റ് വെരിഫയർ</string>
     <string name="google_assistant_verification_notification_title">Google അസിസ്‌റ്റന്റ് സന്ദേശം അയയ്ക്കുന്നു</string>
     <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="wallet_buy_button_place_holder">Google വഴി വാങ്ങുക</string>
 </resources>

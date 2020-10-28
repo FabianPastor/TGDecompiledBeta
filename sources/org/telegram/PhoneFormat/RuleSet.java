@@ -25,7 +25,8 @@ public class RuleSet {
                 PhoneRule next = it.next();
                 if (i2 >= next.minVal && i2 <= next.maxVal && str.length() <= next.maxLen) {
                     if (z) {
-                        if (((next.flag12 & 3) == 0 && str3 == null && str2 == null) || !((str3 == null || (next.flag12 & 1) == 0) && (str2 == null || (next.flag12 & 2) == 0))) {
+                        int i3 = next.flag12;
+                        if (((i3 & 3) == 0 && str3 == null && str2 == null) || !((str3 == null || (i3 & 1) == 0) && (str2 == null || (i3 & 2) == 0))) {
                             return next.format(str, str2, str3);
                         }
                     } else if ((str3 == null && str2 == null) || !((str3 == null || (next.flag12 & 1) == 0) && (str2 == null || (next.flag12 & 2) == 0))) {

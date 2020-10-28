@@ -228,6 +228,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     super.hide(z, i);
                 }
 
+                /* access modifiers changed from: private */
+                /* renamed from: lambda$hide$1 */
                 public /* synthetic */ void lambda$hide$1$SessionsActivity$2(TLRPC$TL_authorization tLRPC$TL_authorization, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                     AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLRPC$TL_authorization) {
                         public final /* synthetic */ TLRPC$TL_error f$1;
@@ -244,6 +246,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                     });
                 }
 
+                /* access modifiers changed from: private */
+                /* renamed from: lambda$null$0 */
                 public /* synthetic */ void lambda$null$0$SessionsActivity$2(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_authorization tLRPC$TL_authorization) {
                     if (tLRPC$TL_error == null) {
                         SessionsActivity.this.sessions.remove(tLRPC$TL_authorization);
@@ -262,6 +266,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$15 */
     public /* synthetic */ void lambda$createView$15$SessionsActivity(View view, int i) {
         String str;
         String str2;
@@ -362,6 +368,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$3 */
     public /* synthetic */ void lambda$null$3$SessionsActivity(String str) {
         AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
         alertDialog.setCanCacnel(false);
@@ -382,6 +390,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$SessionsActivity(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLObject, tLRPC$TL_error) {
             public final /* synthetic */ AlertDialog f$1;
@@ -400,6 +410,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$1 */
     public /* synthetic */ void lambda$null$1$SessionsActivity(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         try {
             alertDialog.dismiss();
@@ -425,11 +437,20 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$0 */
     public /* synthetic */ void lambda$null$0$SessionsActivity(TLRPC$TL_error tLRPC$TL_error) {
-        String string = LocaleController.getString("AuthAnotherClient", NUM);
-        AlertsCreator.showSimpleAlert(this, string, LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error.text);
+        String str;
+        if (tLRPC$TL_error.text.equals("AUTH_TOKEN_EXCEPTION")) {
+            str = LocaleController.getString("AccountAlreadyLoggedIn", NUM);
+        } else {
+            str = LocaleController.getString("ErrorOccurred", NUM) + "\n" + tLRPC$TL_error.text;
+        }
+        AlertsCreator.showSimpleAlert(this, LocaleController.getString("AuthAnotherClient", NUM), str);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$8 */
     public /* synthetic */ void lambda$null$8$SessionsActivity(DialogInterface dialogInterface, int i) {
         if (this.currentType == 0) {
             ConnectionsManager.getInstance(this.currentAccount).sendRequest(new TLRPC$TL_auth_resetAuthorizations(), new RequestDelegate() {
@@ -446,6 +467,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$5 */
     public /* synthetic */ void lambda$null$5$SessionsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
             public final /* synthetic */ TLRPC$TL_error f$1;
@@ -471,6 +494,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$4 */
     public /* synthetic */ void lambda$null$4$SessionsActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (getParentActivity() != null && tLRPC$TL_error == null && (tLObject instanceof TLRPC$TL_boolTrue)) {
             Toast.makeText(getParentActivity(), LocaleController.getString("TerminateAllSessions", NUM), 0).show();
@@ -478,6 +503,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$7 */
     public /* synthetic */ void lambda$null$7$SessionsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
             public final /* synthetic */ TLRPC$TL_error f$1;
@@ -494,6 +521,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$6 */
     public /* synthetic */ void lambda$null$6$SessionsActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         if (getParentActivity() != null) {
             if (tLRPC$TL_error != null || !(tLObject instanceof TLRPC$TL_boolTrue)) {
@@ -512,6 +541,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$14 */
     public /* synthetic */ void lambda$null$14$SessionsActivity(int i, boolean[] zArr, DialogInterface dialogInterface, int i2) {
         TLRPC$TL_authorization tLRPC$TL_authorization;
         if (getParentActivity() != null) {
@@ -564,6 +595,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$11 */
     public /* synthetic */ void lambda$null$11$SessionsActivity(AlertDialog alertDialog, TLRPC$TL_authorization tLRPC$TL_authorization, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLRPC$TL_error, tLRPC$TL_authorization) {
             public final /* synthetic */ AlertDialog f$1;
@@ -582,6 +615,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$10 */
     public /* synthetic */ void lambda$null$10$SessionsActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_authorization tLRPC$TL_authorization) {
         try {
             alertDialog.dismiss();
@@ -599,6 +634,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$13 */
     public /* synthetic */ void lambda$null$13$SessionsActivity(AlertDialog alertDialog, TLRPC$TL_webAuthorization tLRPC$TL_webAuthorization, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLRPC$TL_error, tLRPC$TL_webAuthorization) {
             public final /* synthetic */ AlertDialog f$1;
@@ -617,6 +654,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$12 */
     public /* synthetic */ void lambda$null$12$SessionsActivity(AlertDialog alertDialog, TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_webAuthorization tLRPC$TL_webAuthorization) {
         try {
             alertDialog.dismiss();
@@ -685,6 +724,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$loadSessions$17 */
     public /* synthetic */ void lambda$loadSessions$17$SessionsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
             public final /* synthetic */ TLRPC$TL_error f$1;
@@ -701,6 +742,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$16 */
     public /* synthetic */ void lambda$null$16$SessionsActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.loading = false;
         if (tLRPC$TL_error == null) {
@@ -726,6 +769,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$loadSessions$19 */
     public /* synthetic */ void lambda$loadSessions$19$SessionsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject) {
             public final /* synthetic */ TLRPC$TL_error f$1;
@@ -742,6 +787,8 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$18 */
     public /* synthetic */ void lambda$null$18$SessionsActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.loading = false;
         if (tLRPC$TL_error == null) {
@@ -1011,7 +1058,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.currentSessionSectionRow
                 if (r7 != r0) goto L_0x0112
-                r7 = 2131624933(0x7f0e03e5, float:1.887706E38)
+                r7 = 2131624951(0x7f0e03f7, float:1.8877096E38)
                 java.lang.String r0 = "CurrentSession"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1023,13 +1070,13 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r7 = org.telegram.ui.SessionsActivity.this
                 int r7 = r7.currentType
                 if (r7 != 0) goto L_0x0130
-                r7 = 2131626223(0x7f0e08ef, float:1.8879676E38)
+                r7 = 2131626295(0x7f0e0937, float:1.8879822E38)
                 java.lang.String r0 = "OtherSessions"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
                 goto L_0x0272
             L_0x0130:
-                r7 = 2131626225(0x7f0e08f1, float:1.887968E38)
+                r7 = 2131626297(0x7f0e0939, float:1.8879826E38)
                 java.lang.String r0 = "OtherWebSessions"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1038,7 +1085,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.passwordSessionsSectionRow
                 if (r7 != r0) goto L_0x0272
-                r7 = 2131625755(0x7f0e071b, float:1.8878727E38)
+                r7 = 2131625788(0x7f0e073c, float:1.8878794E38)
                 java.lang.String r0 = "LoginAttempts"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1048,19 +1095,19 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.Cells.TextInfoPrivacyCell r6 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r6
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.terminateAllSessionsDetailRow
-                r1 = 2131165438(0x7var_fe, float:1.7945093E38)
+                r1 = 2131165446(0x7var_, float:1.794511E38)
                 java.lang.String r2 = "windowBackgroundGrayShadow"
                 if (r7 != r0) goto L_0x0192
                 org.telegram.ui.SessionsActivity r7 = org.telegram.ui.SessionsActivity.this
                 int r7 = r7.currentType
                 if (r7 != 0) goto L_0x017b
-                r7 = 2131624816(0x7f0e0370, float:1.8876822E38)
+                r7 = 2131624828(0x7f0e037c, float:1.8876847E38)
                 java.lang.String r0 = "ClearOtherSessionsHelp"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
                 goto L_0x0187
             L_0x017b:
-                r7 = 2131624817(0x7f0e0371, float:1.8876824E38)
+                r7 = 2131624829(0x7f0e037d, float:1.8876849E38)
                 java.lang.String r0 = "ClearOtherWebSessionsHelp"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1072,7 +1119,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
             L_0x0192:
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.otherSessionsTerminateDetail
-                r4 = 2131165439(0x7var_ff, float:1.7945095E38)
+                r4 = 2131165447(0x7var_, float:1.7945111E38)
                 if (r7 != r0) goto L_0x01db
                 org.telegram.ui.SessionsActivity r7 = org.telegram.ui.SessionsActivity.this
                 int r7 = r7.currentType
@@ -1085,13 +1132,13 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 r6.setText(r7)
                 goto L_0x01d0
             L_0x01b7:
-                r7 = 2131627204(0x7f0e0cc4, float:1.8881666E38)
+                r7 = 2131627315(0x7f0e0d33, float:1.888189E38)
                 java.lang.String r0 = "TerminateSessionInfo"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
                 goto L_0x01d0
             L_0x01c4:
-                r7 = 2131627207(0x7f0e0cc7, float:1.8881672E38)
+                r7 = 2131627318(0x7f0e0d36, float:1.8881897E38)
                 java.lang.String r0 = "TerminateWebSessionInfo"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1104,7 +1151,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this
                 int r0 = r0.passwordSessionsDetailRow
                 if (r7 != r0) goto L_0x0272
-                r7 = 2131625756(0x7f0e071c, float:1.8878729E38)
+                r7 = 2131625789(0x7f0e073d, float:1.8878796E38)
                 java.lang.String r0 = "LoginAttemptsInfo"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7)
@@ -1133,13 +1180,13 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 org.telegram.ui.SessionsActivity r7 = org.telegram.ui.SessionsActivity.this
                 int r7 = r7.currentType
                 if (r7 != 0) goto L_0x0239
-                r7 = 2131627202(0x7f0e0cc2, float:1.8881662E38)
+                r7 = 2131627313(0x7f0e0d31, float:1.8881887E38)
                 java.lang.String r0 = "TerminateAllSessions"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7, r1)
                 goto L_0x0272
             L_0x0239:
-                r7 = 2131627203(0x7f0e0cc3, float:1.8881664E38)
+                r7 = 2131627314(0x7f0e0d32, float:1.8881889E38)
                 java.lang.String r0 = "TerminateAllWebSessions"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 r6.setText(r7, r1)
@@ -1152,7 +1199,7 @@ public class SessionsActivity extends BaseFragment implements NotificationCenter
                 int r0 = org.telegram.ui.ActionBar.Theme.getColor(r7)
                 r6.setTextColor(r0)
                 r6.setTag(r7)
-                r7 = 2131624364(0x7f0e01ac, float:1.8875906E38)
+                r7 = 2131624376(0x7f0e01b8, float:1.887593E38)
                 java.lang.String r0 = "AuthAnotherClient"
                 java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r0, r7)
                 org.telegram.ui.SessionsActivity r0 = org.telegram.ui.SessionsActivity.this

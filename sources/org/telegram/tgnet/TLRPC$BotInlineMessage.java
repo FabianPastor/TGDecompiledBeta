@@ -8,12 +8,14 @@ public abstract class TLRPC$BotInlineMessage extends TLObject {
     public String first_name;
     public int flags;
     public TLRPC$GeoPoint geo;
+    public int heading;
     public String last_name;
     public String message;
     public boolean no_webpage;
     public int period;
     public String phone_number;
     public String provider;
+    public int proximity_notification_radius;
     public TLRPC$ReplyMarkup reply_markup;
     public String title;
     public String vcard;
@@ -30,6 +32,9 @@ public abstract class TLRPC$BotInlineMessage extends TLObject {
                 tLRPC$BotInlineMessage = new TLRPC$TL_botInlineMessageText();
                 break;
             case -1222451611:
+                tLRPC$BotInlineMessage = new TLRPC$TL_botInlineMessageMediaGeo_layer119();
+                break;
+            case 85477117:
                 tLRPC$BotInlineMessage = new TLRPC$TL_botInlineMessageMediaGeo();
                 break;
             case 175419739:

@@ -89,7 +89,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:8:0x0018, code lost:
-        if (r2 != 6) goto L_0x016d;
+        if (r2 != 6) goto L_0x0168;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r18) {
@@ -110,17 +110,17 @@ public class PhotoFilterBlurControl extends FrameLayout {
             if (r2 == r7) goto L_0x0047
             r3 = 6
             if (r2 == r3) goto L_0x002e
-            goto L_0x016d
+            goto L_0x0168
         L_0x001c:
             boolean r2 = r0.isMoving
             if (r2 == 0) goto L_0x0025
             r0.handlePan(r3, r1)
-            goto L_0x016d
+            goto L_0x0168
         L_0x0025:
             boolean r2 = r0.isZooming
-            if (r2 == 0) goto L_0x016d
+            if (r2 == 0) goto L_0x0168
             r0.handlePinch(r3, r1)
-            goto L_0x016d
+            goto L_0x0168
         L_0x002e:
             boolean r2 = r0.isMoving
             if (r2 == 0) goto L_0x0038
@@ -135,14 +135,14 @@ public class PhotoFilterBlurControl extends FrameLayout {
         L_0x0041:
             r0.checkForMoving = r6
             r0.checkForZooming = r6
-            goto L_0x016d
+            goto L_0x0168
         L_0x0047:
             int r2 = r18.getPointerCount()
-            if (r2 != r6) goto L_0x0147
+            if (r2 != r6) goto L_0x0142
             boolean r2 = r0.checkForMoving
-            if (r2 == 0) goto L_0x016d
+            if (r2 == 0) goto L_0x0168
             boolean r2 = r0.isMoving
-            if (r2 != 0) goto L_0x016d
+            if (r2 != 0) goto L_0x0168
             float r2 = r18.getX()
             float r3 = r18.getY()
             org.telegram.ui.Components.Point r4 = r17.getActualCenterPoint()
@@ -185,7 +185,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
             float r9 = BlurViewRadiusInset
         L_0x009e:
             int r8 = r0.type
-            if (r8 != 0) goto L_0x0113
+            if (r8 != 0) goto L_0x0110
             float r8 = r7.x
             double r11 = (double) r8
             float r8 = r0.angle
@@ -214,91 +214,88 @@ public class PhotoFilterBlurControl extends FrameLayout {
             int r2 = (r2 > r8 ? 1 : (r2 == r8 ? 0 : -1))
             if (r2 >= 0) goto L_0x00e4
             r0.isMoving = r6
-            goto L_0x013d
+            goto L_0x0138
         L_0x00e4:
             float r2 = BlurViewRadiusInset
-            float r2 = r3 - r2
-            int r2 = (r7 > r2 ? 1 : (r7 == r2 ? 0 : -1))
-            if (r2 <= 0) goto L_0x00f4
+            float r8 = r3 - r2
+            int r8 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
+            if (r8 <= 0) goto L_0x00f4
             float r10 = r10 + r3
-            int r2 = (r7 > r10 ? 1 : (r7 == r10 ? 0 : -1))
-            if (r2 >= 0) goto L_0x00f4
+            int r8 = (r7 > r10 ? 1 : (r7 == r10 ? 0 : -1))
+            if (r8 >= 0) goto L_0x00f4
             r0.isMoving = r6
-            goto L_0x013d
+            goto L_0x0138
         L_0x00f4:
-            float r2 = r4 - r9
-            int r2 = (r7 > r2 ? 1 : (r7 == r2 ? 0 : -1))
-            if (r2 <= 0) goto L_0x0104
-            float r2 = BlurViewRadiusInset
-            float r2 = r2 + r4
-            int r2 = (r7 > r2 ? 1 : (r7 == r2 ? 0 : -1))
-            if (r2 >= 0) goto L_0x0104
+            float r8 = r4 - r9
+            int r8 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
+            if (r8 <= 0) goto L_0x0103
+            float r8 = r4 + r2
+            int r8 = (r7 > r8 ? 1 : (r7 == r8 ? 0 : -1))
+            if (r8 >= 0) goto L_0x0103
             r0.isMoving = r6
-            goto L_0x013d
-        L_0x0104:
-            float r2 = BlurViewRadiusInset
+            goto L_0x0138
+        L_0x0103:
             float r3 = r3 - r2
             int r3 = (r7 > r3 ? 1 : (r7 == r3 ? 0 : -1))
-            if (r3 <= 0) goto L_0x0110
+            if (r3 <= 0) goto L_0x010d
             float r4 = r4 + r2
             int r2 = (r7 > r4 ? 1 : (r7 == r4 ? 0 : -1))
-            if (r2 < 0) goto L_0x013d
-        L_0x0110:
+            if (r2 < 0) goto L_0x0138
+        L_0x010d:
             r0.isMoving = r6
-            goto L_0x013d
-        L_0x0113:
-            if (r8 != r6) goto L_0x013d
+            goto L_0x0138
+        L_0x0110:
+            if (r8 != r6) goto L_0x0138
             float r7 = BlurViewCenterInset
             int r7 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
-            if (r7 >= 0) goto L_0x011e
+            if (r7 >= 0) goto L_0x011b
             r0.isMoving = r6
-            goto L_0x013d
-        L_0x011e:
+            goto L_0x0138
+        L_0x011b:
             float r7 = BlurViewRadiusInset
-            float r7 = r3 - r7
-            int r7 = (r2 > r7 ? 1 : (r2 == r7 ? 0 : -1))
-            if (r7 <= 0) goto L_0x012e
+            float r8 = r3 - r7
+            int r8 = (r2 > r8 ? 1 : (r2 == r8 ? 0 : -1))
+            if (r8 <= 0) goto L_0x012b
             float r3 = r3 + r10
             int r3 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-            if (r3 >= 0) goto L_0x012e
+            if (r3 >= 0) goto L_0x012b
             r0.isMoving = r6
-            goto L_0x013d
-        L_0x012e:
+            goto L_0x0138
+        L_0x012b:
             float r3 = r4 - r9
             int r3 = (r2 > r3 ? 1 : (r2 == r3 ? 0 : -1))
-            if (r3 <= 0) goto L_0x013d
-            float r3 = BlurViewRadiusInset
-            float r4 = r4 + r3
+            if (r3 <= 0) goto L_0x0138
+            float r4 = r4 + r7
             int r2 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r2 >= 0) goto L_0x013d
+            if (r2 >= 0) goto L_0x0138
             r0.isMoving = r6
-        L_0x013d:
+        L_0x0138:
             r0.checkForMoving = r5
             boolean r2 = r0.isMoving
-            if (r2 == 0) goto L_0x016d
+            if (r2 == 0) goto L_0x0168
             r0.handlePan(r6, r1)
-            goto L_0x016d
-        L_0x0147:
+            goto L_0x0168
+        L_0x0142:
             boolean r2 = r0.isMoving
-            if (r2 == 0) goto L_0x0152
+            if (r2 == 0) goto L_0x014d
             r0.handlePan(r4, r1)
             r0.checkForMoving = r6
             r0.isMoving = r5
-        L_0x0152:
+        L_0x014d:
             int r2 = r18.getPointerCount()
-            if (r2 != r3) goto L_0x0166
+            if (r2 != r3) goto L_0x0161
             boolean r2 = r0.checkForZooming
-            if (r2 == 0) goto L_0x016d
+            if (r2 == 0) goto L_0x0168
             boolean r2 = r0.isZooming
-            if (r2 != 0) goto L_0x016d
+            if (r2 != 0) goto L_0x0168
             r0.handlePinch(r6, r1)
             r0.isZooming = r6
-            goto L_0x016d
-        L_0x0166:
+            goto L_0x0168
+        L_0x0161:
             r0.handlePinch(r4, r1)
             r0.checkForZooming = r6
             r0.isZooming = r5
-        L_0x016d:
+        L_0x0168:
             return r6
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoFilterBlurControl.onTouchEvent(android.view.MotionEvent):boolean");
@@ -307,6 +304,7 @@ public class PhotoFilterBlurControl extends FrameLayout {
     private void handlePan(int i, MotionEvent motionEvent) {
         float f;
         int i2 = i;
+        int i3 = Build.VERSION.SDK_INT;
         float x = motionEvent.getX();
         float y = motionEvent.getY();
         Point actualCenterPoint = getActualCenterPoint();
@@ -329,20 +327,17 @@ public class PhotoFilterBlurControl extends FrameLayout {
         double sin = Math.sin(degreesToRadians2 + 1.5707963267948966d);
         Double.isNaN(d3);
         float abs = (float) Math.abs(d2 + (d3 * sin));
-        int i3 = 0;
         float f6 = 0.0f;
         if (i2 == 1) {
             this.pointerStartX = motionEvent.getX();
             this.pointerStartY = motionEvent.getY();
-            if (Math.abs(f5 - f4) < BlurInsetProximity) {
-                i3 = 1;
-            }
-            if (i3 != 0) {
+            boolean z = Math.abs(f5 - f4) < BlurInsetProximity;
+            if (z) {
                 f = 0.0f;
             } else {
                 f = BlurViewRadiusInset;
             }
-            if (i3 == 0) {
+            if (!z) {
                 f6 = BlurViewRadiusInset;
             }
             int i4 = this.type;
@@ -350,32 +345,35 @@ public class PhotoFilterBlurControl extends FrameLayout {
                 if (sqrt < BlurViewCenterInset) {
                     this.activeControl = BlurViewActiveControl.BlurViewActiveControlCenter;
                     this.startCenterPoint = actualCenterPoint;
-                } else if (abs > f4 - BlurViewRadiusInset && abs < f + f4) {
-                    this.activeControl = BlurViewActiveControl.BlurViewActiveControlInnerRadius;
-                    this.startDistance = abs;
-                    this.startRadius = f4;
-                } else if (abs <= f5 - f6 || abs >= BlurViewRadiusInset + f5) {
+                } else {
                     float f7 = BlurViewRadiusInset;
-                    if (abs <= f4 - f7 || abs >= f5 + f7) {
+                    if (abs > f4 - f7 && abs < f + f4) {
+                        this.activeControl = BlurViewActiveControl.BlurViewActiveControlInnerRadius;
+                        this.startDistance = abs;
+                        this.startRadius = f4;
+                    } else if (abs > f5 - f6 && abs < f5 + f7) {
+                        this.activeControl = BlurViewActiveControl.BlurViewActiveControlOuterRadius;
+                        this.startDistance = abs;
+                        this.startRadius = f5;
+                    } else if (abs <= f4 - f7 || abs >= f5 + f7) {
                         this.activeControl = BlurViewActiveControl.BlurViewActiveControlRotation;
                     }
-                } else {
-                    this.activeControl = BlurViewActiveControl.BlurViewActiveControlOuterRadius;
-                    this.startDistance = abs;
-                    this.startRadius = f5;
                 }
             } else if (i4 == 1) {
                 if (sqrt < BlurViewCenterInset) {
                     this.activeControl = BlurViewActiveControl.BlurViewActiveControlCenter;
                     this.startCenterPoint = actualCenterPoint;
-                } else if (sqrt > f4 - BlurViewRadiusInset && sqrt < f + f4) {
-                    this.activeControl = BlurViewActiveControl.BlurViewActiveControlInnerRadius;
-                    this.startDistance = sqrt;
-                    this.startRadius = f4;
-                } else if (sqrt > f5 - f6 && sqrt < BlurViewRadiusInset + f5) {
-                    this.activeControl = BlurViewActiveControl.BlurViewActiveControlOuterRadius;
-                    this.startDistance = sqrt;
-                    this.startRadius = f5;
+                } else {
+                    float f8 = BlurViewRadiusInset;
+                    if (sqrt > f4 - f8 && sqrt < f + f4) {
+                        this.activeControl = BlurViewActiveControl.BlurViewActiveControlInnerRadius;
+                        this.startDistance = sqrt;
+                        this.startRadius = f4;
+                    } else if (sqrt > f5 - f6 && sqrt < f8 + f5) {
+                        this.activeControl = BlurViewActiveControl.BlurViewActiveControlOuterRadius;
+                        this.startDistance = sqrt;
+                        this.startRadius = f5;
+                    }
                 }
             }
             setSelected(true, true);
@@ -384,19 +382,17 @@ public class PhotoFilterBlurControl extends FrameLayout {
             if (i5 == 0) {
                 int i6 = AnonymousClass1.$SwitchMap$org$telegram$ui$Components$PhotoFilterBlurControl$BlurViewActiveControl[this.activeControl.ordinal()];
                 if (i6 == 1) {
-                    float f8 = x - this.pointerStartX;
-                    float f9 = y - this.pointerStartY;
+                    float f9 = x - this.pointerStartX;
+                    float var_ = y - this.pointerStartY;
                     float width = (((float) getWidth()) - this.actualAreaSize.width) / 2.0f;
-                    if (Build.VERSION.SDK_INT >= 21 && !this.inBubbleMode) {
-                        i3 = AndroidUtilities.statusBarHeight;
-                    }
+                    float var_ = (float) ((i3 < 21 || this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight);
                     Size size3 = this.actualAreaSize;
                     float var_ = size3.height;
-                    Rect rect = new Rect(width, ((float) i3) + ((((float) getHeight()) - var_) / 2.0f), size3.width, var_);
+                    Rect rect = new Rect(width, var_ + ((((float) getHeight()) - var_) / 2.0f), size3.width, var_);
                     float var_ = rect.x;
-                    float max = Math.max(var_, Math.min(rect.width + var_, this.startCenterPoint.x + f8));
+                    float max = Math.max(var_, Math.min(rect.width + var_, this.startCenterPoint.x + f9));
                     float var_ = rect.y;
-                    Point point = new Point(max, Math.max(var_, Math.min(rect.height + var_, this.startCenterPoint.y + f9)));
+                    Point point = new Point(max, Math.max(var_, Math.min(rect.height + var_, this.startCenterPoint.y + var_)));
                     float var_ = point.x - rect.x;
                     Size size4 = this.actualAreaSize;
                     float var_ = size4.width;
@@ -408,13 +404,10 @@ public class PhotoFilterBlurControl extends FrameLayout {
                 } else if (i6 == 4) {
                     float var_ = x - this.pointerStartX;
                     float var_ = y - this.pointerStartY;
-                    boolean z = x > actualCenterPoint.x;
-                    boolean z2 = y > actualCenterPoint.y;
-                    boolean z3 = Math.abs(var_) > Math.abs(var_);
-                    if (z || z2 ? !(!z || z2 ? !z || !z2 ? !z3 ? var_ >= 0.0f : var_ >= 0.0f : !z3 ? var_ >= 0.0f : var_ <= 0.0f : !z3 ? var_ <= 0.0f : var_ <= 0.0f) : !(!z3 ? var_ <= 0.0f : var_ >= 0.0f)) {
-                        i3 = 1;
-                    }
-                    this.angle += ((((float) Math.sqrt((double) ((var_ * var_) + (var_ * var_)))) * ((float) ((i3 * 2) - 1))) / 3.1415927f) / 1.15f;
+                    boolean z2 = x > actualCenterPoint.x;
+                    boolean z3 = y > actualCenterPoint.y;
+                    boolean z4 = Math.abs(var_) > Math.abs(var_);
+                    this.angle += ((((float) Math.sqrt((double) ((var_ * var_) + (var_ * var_)))) * ((float) ((((z2 || z3 ? !z2 || z3 ? !z2 || !z3 ? !z4 ? var_ >= 0.0f : var_ >= 0.0f : !z4 ? var_ >= 0.0f : var_ <= 0.0f : !z4 ? var_ <= 0.0f : var_ <= 0.0f : !z4 ? var_ <= 0.0f : var_ >= 0.0f) ? 0 : 1) * 2) - 1))) / 3.1415927f) / 1.15f;
                     this.pointerStartX = x;
                     this.pointerStartY = y;
                 }
@@ -424,12 +417,10 @@ public class PhotoFilterBlurControl extends FrameLayout {
                     float var_ = x - this.pointerStartX;
                     float var_ = y - this.pointerStartY;
                     float width2 = (((float) getWidth()) - this.actualAreaSize.width) / 2.0f;
-                    if (Build.VERSION.SDK_INT >= 21 && !this.inBubbleMode) {
-                        i3 = AndroidUtilities.statusBarHeight;
-                    }
+                    float var_ = (float) ((i3 < 21 || this.inBubbleMode) ? 0 : AndroidUtilities.statusBarHeight);
                     Size size5 = this.actualAreaSize;
                     float var_ = size5.height;
-                    Rect rect2 = new Rect(width2, ((float) i3) + ((((float) getHeight()) - var_) / 2.0f), size5.width, var_);
+                    Rect rect2 = new Rect(width2, var_ + ((((float) getHeight()) - var_) / 2.0f), size5.width, var_);
                     float var_ = rect2.x;
                     float max2 = Math.max(var_, Math.min(rect2.width + var_, this.startCenterPoint.x + var_));
                     float var_ = rect2.y;

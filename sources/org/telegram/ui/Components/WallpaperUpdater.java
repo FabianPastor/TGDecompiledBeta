@@ -72,6 +72,8 @@ public class WallpaperUpdater {
         builder.show();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$showAlert$0 */
     public /* synthetic */ void lambda$showAlert$0$WallpaperUpdater(boolean z, DialogInterface dialogInterface, int i) {
         if (i == 0) {
             try {

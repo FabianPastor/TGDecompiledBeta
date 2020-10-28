@@ -49,14 +49,14 @@ public class SegmentTree {
     }
 
     public int rMaxQ(int i, int i2) {
-        if (this.array.length >= 30) {
+        int[] iArr = this.array;
+        if (iArr.length >= 30) {
             return rMaxQ(1, i, i2);
         }
         int i3 = Integer.MIN_VALUE;
         if (i < 0) {
             i = 0;
         }
-        int[] iArr = this.array;
         if (i2 > iArr.length - 1) {
             i2 = iArr.length - 1;
         }
@@ -87,14 +87,14 @@ public class SegmentTree {
     }
 
     public int rMinQ(int i, int i2) {
-        if (this.array.length >= 30) {
+        int[] iArr = this.array;
+        if (iArr.length >= 30) {
             return rMinQ(1, i, i2);
         }
         int i3 = Integer.MAX_VALUE;
         if (i < 0) {
             i = 0;
         }
-        int[] iArr = this.array;
         if (i2 > iArr.length - 1) {
             i2 = iArr.length - 1;
         }

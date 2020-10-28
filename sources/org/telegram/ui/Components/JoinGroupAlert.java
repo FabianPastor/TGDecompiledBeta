@@ -203,13 +203,13 @@ public class JoinGroupAlert extends BottomSheet {
             int r7 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             r1.setTextColor(r7)
             android.widget.TextView r1 = r5.cancelButton
-            r7 = 2131624561(0x7f0e0271, float:1.8876305E38)
+            r7 = 2131624573(0x7f0e027d, float:1.887633E38)
             java.lang.String r8 = "Cancel"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r8, r7)
             java.lang.String r7 = r7.toUpperCase()
             r1.setText(r7)
             android.widget.TextView r1 = r5.cancelButton
-            org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$HWwkTLyyGhrlSGGzuTHLEOoFKaE r7 = new org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$HWwkTLyyGhrlSGGzuTHLEOoFKaE
+            org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$AseK4-oUXkiQDAchBqaTq60CJa0 r7 = new org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$AseK4-oUXkiQDAchBqaTq60CJa0
             r7.<init>()
             r1.setOnClickListener(r7)
             android.widget.LinearLayout r1 = r5.doneButton
@@ -237,7 +237,7 @@ public class JoinGroupAlert extends BottomSheet {
             if (r1 != 0) goto L_0x01fa
         L_0x01e7:
             android.widget.TextView r1 = r5.doneButtonTextView
-            r2 = 2131626652(0x7f0e0a9c, float:1.8880546E38)
+            r2 = 2131626750(0x7f0e0afe, float:1.8880745E38)
             java.lang.String r3 = "ProfileJoinChannel"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             java.lang.String r2 = r2.toUpperCase()
@@ -245,13 +245,13 @@ public class JoinGroupAlert extends BottomSheet {
             goto L_0x0208
         L_0x01fa:
             android.widget.TextView r1 = r5.doneButtonTextView
-            r2 = 2131625654(0x7f0e06b6, float:1.8878522E38)
+            r2 = 2131625682(0x7f0e06d2, float:1.8878579E38)
             java.lang.String r3 = "JoinGroup"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setText(r2)
         L_0x0208:
             android.widget.LinearLayout r1 = r5.doneButton
-            org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$MfRcTjxTXiGmJvnuSHx7GPUtAhw r2 = new org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$MfRcTjxTXiGmJvnuSHx7GPUtAhw
+            org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$lV5gzJCFdYlzirjF_v5fq8Kw-ug r2 = new org.telegram.ui.Components.-$$Lambda$JoinGroupAlert$lV5gzJCFdYlzirjF_v5fq8Kw-ug
             r2.<init>()
             r1.setOnClickListener(r2)
             return
@@ -259,10 +259,14 @@ public class JoinGroupAlert extends BottomSheet {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.JoinGroupAlert.<init>(android.content.Context, org.telegram.tgnet.TLRPC$ChatInvite, java.lang.String, org.telegram.ui.ActionBar.BaseFragment):void");
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$JoinGroupAlert(View view) {
         dismiss();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$3 */
     public /* synthetic */ void lambda$new$3$JoinGroupAlert(View view) {
         dismiss();
         TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite = new TLRPC$TL_messages_importChatInvite();
@@ -280,6 +284,8 @@ public class JoinGroupAlert extends BottomSheet {
         }, 2);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$JoinGroupAlert(TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             MessagesController.getInstance(this.currentAccount).processUpdates((TLRPC$Updates) tLObject, false);
@@ -301,6 +307,8 @@ public class JoinGroupAlert extends BottomSheet {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$1 */
     public /* synthetic */ void lambda$null$1$JoinGroupAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, TLRPC$TL_messages_importChatInvite tLRPC$TL_messages_importChatInvite) {
         BaseFragment baseFragment = this.fragment;
         if (baseFragment != null && baseFragment.getParentActivity() != null) {

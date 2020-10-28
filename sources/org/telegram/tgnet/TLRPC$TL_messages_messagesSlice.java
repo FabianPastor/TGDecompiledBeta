@@ -1,7 +1,7 @@
 package org.telegram.tgnet;
 
 public class TLRPC$TL_messages_messagesSlice extends TLRPC$messages_Messages {
-    public static int constructor = -NUM;
+    public static int constructor = NUM;
 
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
@@ -11,6 +11,9 @@ public class TLRPC$TL_messages_messagesSlice extends TLRPC$messages_Messages {
         this.count = abstractSerializedData.readInt32(z);
         if ((this.flags & 1) != 0) {
             this.next_rate = abstractSerializedData.readInt32(z);
+        }
+        if ((this.flags & 4) != 0) {
+            this.offset_id_offset = abstractSerializedData.readInt32(z);
         }
         int readInt322 = abstractSerializedData.readInt32(z);
         if (readInt322 == NUM) {
@@ -69,6 +72,9 @@ public class TLRPC$TL_messages_messagesSlice extends TLRPC$messages_Messages {
         abstractSerializedData.writeInt32(this.count);
         if ((this.flags & 1) != 0) {
             abstractSerializedData.writeInt32(this.next_rate);
+        }
+        if ((this.flags & 4) != 0) {
+            abstractSerializedData.writeInt32(this.offset_id_offset);
         }
         abstractSerializedData.writeInt32(NUM);
         int size = this.messages.size();

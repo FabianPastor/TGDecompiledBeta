@@ -26,7 +26,6 @@ public class SharedConfig {
     public static boolean allowScreenCapture = false;
     public static boolean appLocked = false;
     public static boolean archiveHidden = false;
-    public static boolean assistantSupport = false;
     public static int autoLockIn = 3600;
     public static boolean autoplayGifs = true;
     public static boolean autoplayVideo = true;
@@ -122,13 +121,13 @@ public class SharedConfig {
             if (str == null) {
                 this.address = "";
             }
-            if (this.password == null) {
+            if (str3 == null) {
                 this.password = "";
             }
-            if (this.username == null) {
+            if (str2 == null) {
                 this.username = "";
             }
-            if (this.secret == null) {
+            if (str4 == null) {
                 this.secret = "";
             }
         }
@@ -140,7 +139,8 @@ public class SharedConfig {
                 SharedPreferences.Editor edit = ApplicationLoader.applicationContext.getSharedPreferences("userconfing", 0).edit();
                 edit.putBoolean("saveIncomingPhotos", saveIncomingPhotos);
                 edit.putString("passcodeHash1", passcodeHash);
-                edit.putString("passcodeSalt", passcodeSalt.length > 0 ? Base64.encodeToString(passcodeSalt, 0) : "");
+                byte[] bArr = passcodeSalt;
+                edit.putString("passcodeSalt", bArr.length > 0 ? Base64.encodeToString(bArr, 0) : "");
                 edit.putBoolean("appLocked", appLocked);
                 edit.putInt("passcodeType", passcodeType);
                 edit.putLong("passcodeRetryInMs", passcodeRetryInMs);
@@ -152,7 +152,8 @@ public class SharedConfig {
                 edit.putBoolean("useFingerprint", useFingerprint);
                 edit.putBoolean("allowScreenCapture", allowScreenCapture);
                 edit.putString("pushString2", pushString);
-                edit.putString("pushAuthKey", pushAuthKey != null ? Base64.encodeToString(pushAuthKey, 0) : "");
+                byte[] bArr2 = pushAuthKey;
+                edit.putString("pushAuthKey", bArr2 != null ? Base64.encodeToString(bArr2, 0) : "");
                 edit.putInt("lastLocalId", lastLocalId);
                 edit.putString("passportConfigJson", passportConfigJson);
                 edit.putInt("passportConfigHash", passportConfigHash);
@@ -225,7 +226,6 @@ public class SharedConfig {
                 inappCamera = sharedPreferences2.getBoolean("inappCamera", true);
                 hasCameraCache = sharedPreferences2.contains("cameraCache");
                 roundCamera16to9 = true;
-                assistantSupport = sharedPreferences2.getBoolean("assistantSupport", false);
                 repeatMode = sharedPreferences2.getInt("repeatMode", 0);
                 fontSize = sharedPreferences2.getInt("fons_size", AndroidUtilities.isTablet() ? 18 : 16);
                 bubbleRadius = sharedPreferences2.getInt("bubbleRadius", 10);
@@ -684,13 +684,6 @@ public class SharedConfig {
         inappCamera = !inappCamera;
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putBoolean("inappCamera", inappCamera);
-        edit.commit();
-    }
-
-    public static void toggleAssistantSupport() {
-        assistantSupport = !assistantSupport;
-        SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
-        edit.putBoolean("assistantSupport", assistantSupport);
         edit.commit();
     }
 

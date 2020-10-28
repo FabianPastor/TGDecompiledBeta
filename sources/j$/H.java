@@ -1,27 +1,22 @@
 package j$;
 
-import j$.util.function.B;
-import java.util.function.IntConsumer;
+import java.util.function.DoublePredicate;
 
-public final /* synthetic */ class H implements IntConsumer {
-    final /* synthetic */ B a;
+public final /* synthetic */ class H {
+    final /* synthetic */ DoublePredicate a;
 
-    private /* synthetic */ H(B b) {
-        this.a = b;
+    private /* synthetic */ H(DoublePredicate doublePredicate) {
+        this.a = doublePredicate;
     }
 
-    public static /* synthetic */ IntConsumer a(B b) {
-        if (b == null) {
+    public static /* synthetic */ H a(DoublePredicate doublePredicate) {
+        if (doublePredicate == null) {
             return null;
         }
-        return b instanceof G ? ((G) b).a : new H(b);
+        return doublePredicate instanceof I ? ((I) doublePredicate).a : new H(doublePredicate);
     }
 
-    public /* synthetic */ void accept(int i) {
-        this.a.accept(i);
-    }
-
-    public /* synthetic */ IntConsumer andThen(IntConsumer intConsumer) {
-        return a(this.a.q(G.a(intConsumer)));
+    public boolean b(double d) {
+        return this.a.test(d);
     }
 }

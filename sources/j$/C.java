@@ -1,31 +1,23 @@
 package j$;
 
-import j$.util.function.y;
-import java.util.function.DoubleUnaryOperator;
+import j$.util.function.p;
+import java.util.function.DoubleBinaryOperator;
 
-public final /* synthetic */ class C implements DoubleUnaryOperator {
-    final /* synthetic */ y a;
+public final /* synthetic */ class C implements DoubleBinaryOperator {
+    final /* synthetic */ p a;
 
-    private /* synthetic */ C(y yVar) {
-        this.a = yVar;
+    private /* synthetic */ C(p pVar) {
+        this.a = pVar;
     }
 
-    public static /* synthetic */ DoubleUnaryOperator a(y yVar) {
-        if (yVar == null) {
+    public static /* synthetic */ DoubleBinaryOperator a(p pVar) {
+        if (pVar == null) {
             return null;
         }
-        return yVar instanceof B ? ((B) yVar).a : new C(yVar);
+        return pVar instanceof B ? ((B) pVar).a : new C(pVar);
     }
 
-    public /* synthetic */ DoubleUnaryOperator andThen(DoubleUnaryOperator doubleUnaryOperator) {
-        return a(((B) this.a).a(B.d(doubleUnaryOperator)));
-    }
-
-    public /* synthetic */ double applyAsDouble(double d) {
-        return ((B) this.a).b(d);
-    }
-
-    public /* synthetic */ DoubleUnaryOperator compose(DoubleUnaryOperator doubleUnaryOperator) {
-        return a(((B) this.a).c(B.d(doubleUnaryOperator)));
+    public /* synthetic */ double applyAsDouble(double d, double d2) {
+        return this.a.applyAsDouble(d, d2);
     }
 }

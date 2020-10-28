@@ -5,7 +5,7 @@ public class TLRPC$TL_messages_search extends TLObject {
     public int add_offset;
     public TLRPC$MessagesFilter filter;
     public int flags;
-    public TLRPC$InputUser from_id;
+    public TLRPC$InputPeer from_id;
     public int hash;
     public int limit;
     public int max_date;

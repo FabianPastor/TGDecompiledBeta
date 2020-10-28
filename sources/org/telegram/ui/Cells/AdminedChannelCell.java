@@ -42,28 +42,37 @@ public class AdminedChannelCell extends FrameLayout {
         BackupImageView backupImageView = new BackupImageView(context2);
         this.avatarImageView = backupImageView;
         backupImageView.setRoundRadius(AndroidUtilities.dp(24.0f));
+        BackupImageView backupImageView2 = this.avatarImageView;
+        boolean z = LocaleController.isRTL;
         int i = 5;
-        addView(this.avatarImageView, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 12.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+        addView(backupImageView2, LayoutHelper.createFrame(48, 48.0f, (z ? 5 : 3) | 48, z ? 0.0f : 12.0f, 12.0f, z ? 12.0f : 0.0f, 0.0f));
         SimpleTextView simpleTextView = new SimpleTextView(context2);
         this.nameTextView = simpleTextView;
         simpleTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTextSize(17);
         this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        addView(this.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 62.0f : 73.0f, 15.5f, LocaleController.isRTL ? 73.0f : 62.0f, 0.0f));
-        SimpleTextView simpleTextView2 = new SimpleTextView(context2);
-        this.statusTextView = simpleTextView2;
-        simpleTextView2.setTextSize(14);
+        SimpleTextView simpleTextView2 = this.nameTextView;
+        boolean z2 = LocaleController.isRTL;
+        float f = 62.0f;
+        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, (z2 ? 5 : 3) | 48, z2 ? 62.0f : 73.0f, 15.5f, z2 ? 73.0f : 62.0f, 0.0f));
+        SimpleTextView simpleTextView3 = new SimpleTextView(context2);
+        this.statusTextView = simpleTextView3;
+        simpleTextView3.setTextSize(14);
         this.statusTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
         this.statusTextView.setLinkTextColor(Theme.getColor("windowBackgroundWhiteLinkText"));
         this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        addView(this.statusTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 62.0f : 73.0f, 38.5f, LocaleController.isRTL ? 73.0f : 62.0f, 0.0f));
+        SimpleTextView simpleTextView4 = this.statusTextView;
+        boolean z3 = LocaleController.isRTL;
+        addView(simpleTextView4, LayoutHelper.createFrame(-1, 20.0f, (z3 ? 5 : 3) | 48, z3 ? 62.0f : 73.0f, 38.5f, z3 ? 73.0f : f, 0.0f));
         ImageView imageView = new ImageView(context2);
         this.deleteButton = imageView;
         imageView.setScaleType(ImageView.ScaleType.CENTER);
         this.deleteButton.setImageResource(NUM);
         this.deleteButton.setOnClickListener(onClickListener);
         this.deleteButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayText"), PorterDuff.Mode.MULTIPLY));
-        addView(this.deleteButton, LayoutHelper.createFrame(48, 48.0f, (LocaleController.isRTL ? 3 : i) | 48, LocaleController.isRTL ? 7.0f : 0.0f, 12.0f, LocaleController.isRTL ? 0.0f : 7.0f, 0.0f));
+        ImageView imageView2 = this.deleteButton;
+        boolean z4 = LocaleController.isRTL;
+        addView(imageView2, LayoutHelper.createFrame(48, 48.0f, (z4 ? 3 : i) | 48, z4 ? 7.0f : 0.0f, 12.0f, z4 ? 0.0f : 7.0f, 0.0f));
     }
 
     public void setChannel(TLRPC$Chat tLRPC$Chat, boolean z) {

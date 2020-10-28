@@ -85,6 +85,8 @@ public class EllipsizeSpanAnimator {
         return ofInt;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createEllipsizeAnimator$0 */
     public /* synthetic */ void lambda$createEllipsizeAnimator$0$EllipsizeSpanAnimator(TextAlphaSpan textAlphaSpan, ValueAnimator valueAnimator) {
         textAlphaSpan.setAlpha(((Integer) valueAnimator.getAnimatedValue()).intValue());
         for (int i = 0; i < this.ellipsizedViews.size(); i++) {

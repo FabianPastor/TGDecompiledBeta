@@ -119,8 +119,9 @@ public class VideoSource extends MediaSource {
 
     public void setVideoProcessor(VideoProcessor videoProcessor2) {
         synchronized (this.videoProcessorLock) {
-            if (this.videoProcessor != null) {
-                this.videoProcessor.setSink((VideoSink) null);
+            VideoProcessor videoProcessor3 = this.videoProcessor;
+            if (videoProcessor3 != null) {
+                videoProcessor3.setSink((VideoSink) null);
                 if (this.isCapturerRunning) {
                     this.videoProcessor.onCapturerStopped();
                 }
@@ -139,10 +140,14 @@ public class VideoSource extends MediaSource {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$0 */
     public /* synthetic */ void lambda$null$0$VideoSource(VideoFrame videoFrame) {
         this.nativeAndroidVideoTrackSource.onFrameCaptured(videoFrame);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setVideoProcessor$1 */
     public /* synthetic */ void lambda$setVideoProcessor$1$VideoSource(VideoFrame videoFrame) {
         runWithReference(new Runnable(videoFrame) {
             public final /* synthetic */ VideoFrame f$1;

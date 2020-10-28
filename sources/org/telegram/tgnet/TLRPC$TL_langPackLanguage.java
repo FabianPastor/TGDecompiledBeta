@@ -29,10 +29,10 @@ public class TLRPC$TL_langPackLanguage extends TLObject {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.official = (readInt32 & 1) != 0;
-        if ((this.flags & 4) == 0) {
-            z2 = false;
+        if ((readInt32 & 4) != 0) {
+            z2 = true;
         }
         this.rtl = z2;
         this.name = abstractSerializedData.readString(z);

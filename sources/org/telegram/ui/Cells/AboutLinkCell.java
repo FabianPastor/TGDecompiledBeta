@@ -271,8 +271,9 @@ public class AboutLinkCell extends FrameLayout {
             canvas.drawPath(this.urlPath, Theme.linkSelectionPaint);
         }
         try {
-            if (this.textLayout != null) {
-                this.textLayout.draw(canvas);
+            StaticLayout staticLayout = this.textLayout;
+            if (staticLayout != null) {
+                staticLayout.draw(canvas);
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);

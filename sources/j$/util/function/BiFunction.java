@@ -1,5 +1,7 @@
 package j$.util.function;
 
 public interface BiFunction {
-    Object a(Object obj, Object obj2);
+    BiFunction a(Function function);
+
+    Object apply(Object obj, Object obj2);
 }

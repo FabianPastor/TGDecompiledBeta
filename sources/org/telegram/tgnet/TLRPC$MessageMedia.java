@@ -12,11 +12,13 @@ public abstract class TLRPC$MessageMedia extends TLObject {
     public int flags;
     public TLRPC$TL_game game;
     public TLRPC$GeoPoint geo;
+    public int heading;
     public String last_name;
     public int period;
     public String phone_number;
     public TLRPC$Photo photo;
     public String provider;
+    public int proximity_notification_radius;
     public int receipt_msg_id;
     public boolean shipping_address_requested;
     public String start_param;
@@ -52,6 +54,9 @@ public abstract class TLRPC$MessageMedia extends TLObject {
                 break;
             case -1256047857:
                 tLRPC$MessageMedia = new TLRPC$TL_messageMediaPhoto_layer74();
+                break;
+            case -1186937242:
+                tLRPC$MessageMedia = new TLRPC$TL_messageMediaGeoLive();
                 break;
             case -961117440:
                 tLRPC$MessageMedia = new TLRPC$TL_messageMediaAudio_layer45();
@@ -108,7 +113,7 @@ public abstract class TLRPC$MessageMedia extends TLObject {
                 tLRPC$MessageMedia = new TLRPC$TL_messageMediaVenue_layer71();
                 break;
             case 2084316681:
-                tLRPC$MessageMedia = new TLRPC$TL_messageMediaGeoLive();
+                tLRPC$MessageMedia = new TLRPC$TL_messageMediaGeoLive_layer119();
                 break;
             case 2084836563:
                 tLRPC$MessageMedia = new TLRPC$TL_messageMediaDocument_layer74();
@@ -147,17 +152,15 @@ public abstract class TLRPC$MessageMedia extends TLObject {
                 } else {
                     tLRPC$Document.mime_type = "video/mp4";
                 }
-                TLRPC$Document tLRPC$Document2 = tLRPC$TL_messageMediaDocument.document;
-                TLRPC$Video tLRPC$Video3 = tLRPC$MessageMedia.video_unused;
-                tLRPC$Document2.size = tLRPC$Video3.size;
-                tLRPC$Document2.thumbs.add(tLRPC$Video3.thumb);
+                tLRPC$Document.size = tLRPC$Video2.size;
+                tLRPC$Document.thumbs.add(tLRPC$Video2.thumb);
                 tLRPC$TL_messageMediaDocument.document.dc_id = tLRPC$MessageMedia.video_unused.dc_id;
                 tLRPC$TL_messageMediaDocument.captionLegacy = tLRPC$MessageMedia.captionLegacy;
                 TLRPC$TL_documentAttributeVideo tLRPC$TL_documentAttributeVideo = new TLRPC$TL_documentAttributeVideo();
-                TLRPC$Video tLRPC$Video4 = tLRPC$MessageMedia.video_unused;
-                tLRPC$TL_documentAttributeVideo.w = tLRPC$Video4.w;
-                tLRPC$TL_documentAttributeVideo.h = tLRPC$Video4.h;
-                tLRPC$TL_documentAttributeVideo.duration = tLRPC$Video4.duration;
+                TLRPC$Video tLRPC$Video3 = tLRPC$MessageMedia.video_unused;
+                tLRPC$TL_documentAttributeVideo.w = tLRPC$Video3.w;
+                tLRPC$TL_documentAttributeVideo.h = tLRPC$Video3.h;
+                tLRPC$TL_documentAttributeVideo.duration = tLRPC$Video3.duration;
                 tLRPC$TL_messageMediaDocument.document.attributes.add(tLRPC$TL_documentAttributeVideo);
                 if (tLRPC$TL_messageMediaDocument.captionLegacy == null) {
                     tLRPC$TL_messageMediaDocument.captionLegacy = "";
@@ -176,19 +179,19 @@ public abstract class TLRPC$MessageMedia extends TLObject {
                     tLRPC$TL_messageMediaDocument.document = new TLRPC$TL_document();
                 }
                 tLRPC$TL_messageMediaDocument.flags = 3;
-                TLRPC$Document tLRPC$Document3 = tLRPC$TL_messageMediaDocument.document;
-                tLRPC$Document3.file_reference = new byte[0];
+                TLRPC$Document tLRPC$Document2 = tLRPC$TL_messageMediaDocument.document;
+                tLRPC$Document2.file_reference = new byte[0];
                 TLRPC$Audio tLRPC$Audio2 = tLRPC$MessageMedia.audio_unused;
-                tLRPC$Document3.id = tLRPC$Audio2.id;
-                tLRPC$Document3.access_hash = tLRPC$Audio2.access_hash;
-                tLRPC$Document3.date = tLRPC$Audio2.date;
+                tLRPC$Document2.id = tLRPC$Audio2.id;
+                tLRPC$Document2.access_hash = tLRPC$Audio2.access_hash;
+                tLRPC$Document2.date = tLRPC$Audio2.date;
                 String str2 = tLRPC$Audio2.mime_type;
                 if (str2 != null) {
-                    tLRPC$Document3.mime_type = str2;
+                    tLRPC$Document2.mime_type = str2;
                 } else {
-                    tLRPC$Document3.mime_type = "audio/ogg";
+                    tLRPC$Document2.mime_type = "audio/ogg";
                 }
-                tLRPC$TL_messageMediaDocument.document.size = tLRPC$MessageMedia.audio_unused.size;
+                tLRPC$Document2.size = tLRPC$Audio2.size;
                 TLRPC$TL_photoSizeEmpty tLRPC$TL_photoSizeEmpty = new TLRPC$TL_photoSizeEmpty();
                 tLRPC$TL_photoSizeEmpty.type = "s";
                 tLRPC$TL_messageMediaDocument.document.thumbs.add(tLRPC$TL_photoSizeEmpty);

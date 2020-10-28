@@ -73,8 +73,9 @@ public class PacmanAnimation {
     private void drawGhost(Canvas canvas, int i) {
         Canvas canvas2 = canvas;
         int i2 = i;
-        if (this.ghostPath == null || this.ghostWalk != this.currentGhostWalk) {
-            if (this.ghostPath == null) {
+        Path path = this.ghostPath;
+        if (path == null || this.ghostWalk != this.currentGhostWalk) {
+            if (path == null) {
                 this.ghostPath = new Path();
             }
             this.ghostPath.reset();

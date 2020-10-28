@@ -64,7 +64,7 @@ public class ChangeNameActivity extends BaseFragment {
         this.fragmentView = linearLayout;
         linearLayout.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
         ((LinearLayout) this.fragmentView).setOrientation(1);
-        this.fragmentView.setOnTouchListener($$Lambda$ChangeNameActivity$2QrIPiMPNtI7lMzO9NvXqRR4gnI.INSTANCE);
+        this.fragmentView.setOnTouchListener($$Lambda$ChangeNameActivity$_cGt02858ILwa9dL3dFtQR4QAbE.INSTANCE);
         EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
         this.firstNameField = editTextBoldCursor;
         editTextBoldCursor.setTextSize(1, 18.0f);
@@ -123,6 +123,8 @@ public class ChangeNameActivity extends BaseFragment {
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$1 */
     public /* synthetic */ boolean lambda$createView$1$ChangeNameActivity(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 5) {
             return false;
@@ -133,6 +135,8 @@ public class ChangeNameActivity extends BaseFragment {
         return true;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$2 */
     public /* synthetic */ boolean lambda$createView$2$ChangeNameActivity(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 6) {
             return false;
@@ -172,7 +176,7 @@ public class ChangeNameActivity extends BaseFragment {
                 UserConfig.getInstance(this.currentAccount).saveConfig(true);
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.mainUserInfoChanged, new Object[0]);
                 NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.updateInterfaces, 1);
-                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_updateProfile, $$Lambda$ChangeNameActivity$6bo7pFwsMx83tkMlu0ygZxpDMfM.INSTANCE);
+                ConnectionsManager.getInstance(this.currentAccount).sendRequest(tLRPC$TL_account_updateProfile, $$Lambda$ChangeNameActivity$vtAdKEThAI1k81afp0SrP9xGvq8.INSTANCE);
             }
         }
     }
@@ -187,6 +191,8 @@ public class ChangeNameActivity extends BaseFragment {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onTransitionAnimationEnd$4 */
     public /* synthetic */ void lambda$onTransitionAnimationEnd$4$ChangeNameActivity() {
         EditTextBoldCursor editTextBoldCursor = this.firstNameField;
         if (editTextBoldCursor != null) {

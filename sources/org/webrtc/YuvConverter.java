@@ -61,12 +61,14 @@ public class YuvConverter {
     }
 
     public YuvConverter(VideoFrameDrawer videoFrameDrawer2) {
-        this.threadChecker = new ThreadUtils.ThreadChecker();
+        ThreadUtils.ThreadChecker threadChecker2 = new ThreadUtils.ThreadChecker();
+        this.threadChecker = threadChecker2;
         this.i420TextureFrameBuffer = new GlTextureFrameBuffer(6408);
-        this.shaderCallbacks = new ShaderCallbacks();
-        this.drawer = new GlGenericDrawer("uniform vec2 xUnit;\nuniform vec4 coeffs;\n\nvoid main() {\n  gl_FragColor.r = coeffs.a + dot(coeffs.rgb,\n      sample(tc - 1.5 * xUnit).rgb);\n  gl_FragColor.g = coeffs.a + dot(coeffs.rgb,\n      sample(tc - 0.5 * xUnit).rgb);\n  gl_FragColor.b = coeffs.a + dot(coeffs.rgb,\n      sample(tc + 0.5 * xUnit).rgb);\n  gl_FragColor.a = coeffs.a + dot(coeffs.rgb,\n      sample(tc + 1.5 * xUnit).rgb);\n}\n", this.shaderCallbacks);
+        ShaderCallbacks shaderCallbacks2 = new ShaderCallbacks();
+        this.shaderCallbacks = shaderCallbacks2;
+        this.drawer = new GlGenericDrawer("uniform vec2 xUnit;\nuniform vec4 coeffs;\n\nvoid main() {\n  gl_FragColor.r = coeffs.a + dot(coeffs.rgb,\n      sample(tc - 1.5 * xUnit).rgb);\n  gl_FragColor.g = coeffs.a + dot(coeffs.rgb,\n      sample(tc - 0.5 * xUnit).rgb);\n  gl_FragColor.b = coeffs.a + dot(coeffs.rgb,\n      sample(tc + 0.5 * xUnit).rgb);\n  gl_FragColor.a = coeffs.a + dot(coeffs.rgb,\n      sample(tc + 1.5 * xUnit).rgb);\n}\n", shaderCallbacks2);
         this.videoFrameDrawer = videoFrameDrawer2;
-        this.threadChecker.detachThread();
+        threadChecker2.detachThread();
     }
 
     public VideoFrame.I420Buffer convert(VideoFrame.TextureBuffer textureBuffer) {

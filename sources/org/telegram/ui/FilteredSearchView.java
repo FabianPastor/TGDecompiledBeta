@@ -7,15 +7,9 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Canvas;
-import android.graphics.LinearGradient;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.RectF;
-import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.SystemClock;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -34,7 +28,6 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageReceiver;
 import org.telegram.messenger.LocaleController;
-import org.telegram.messenger.MediaController;
 import org.telegram.messenger.MessageObject;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
@@ -44,6 +37,7 @@ import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$FileLocation;
+import org.telegram.tgnet.TLRPC$MessageMedia;
 import org.telegram.tgnet.TLRPC$TL_error;
 import org.telegram.tgnet.TLRPC$TL_webPageEmpty;
 import org.telegram.tgnet.TLRPC$User;
@@ -69,6 +63,7 @@ import org.telegram.ui.Components.AlertsCreator;
 import org.telegram.ui.Components.BackupImageView;
 import org.telegram.ui.Components.CubicBezierInterpolator;
 import org.telegram.ui.Components.EmbedBottomSheet;
+import org.telegram.ui.Components.FlickerLoadingView;
 import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.Components.SearchViewPager;
@@ -124,7 +119,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
     String lastMessagesSearchString;
     String lastSearchFilterQueryString;
     public final LinearLayoutManager layoutManager;
-    private final LoadingView loadingView;
+    private final FlickerLoadingView loadingView;
     ArrayList<TLObject> localTipChats = new ArrayList<>();
     ArrayList<FiltersView.DateData> localTipDates = new ArrayList<>();
     /* access modifiers changed from: private */
@@ -270,6 +265,8 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         void toggleItemSelection(MessageObject messageObject, View view, int i);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$FilteredSearchView() {
         hideFloatingDateView(true);
     }
@@ -322,32 +319,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(parentActivity2);
         this.layoutManager = linearLayoutManager;
         this.recyclerListView.setLayoutManager(linearLayoutManager);
-        AnonymousClass4 r0 = new LoadingView(parentActivity2) {
-            public int getType() {
-                FilteredSearchView filteredSearchView = FilteredSearchView.this;
-                FiltersView.MediaFilterData mediaFilterData = filteredSearchView.currentSearchFilter;
-                if (mediaFilterData == null) {
-                    return 1;
-                }
-                int i = mediaFilterData.filterType;
-                if (i == 0) {
-                    if (!TextUtils.isEmpty(filteredSearchView.currentSearchString)) {
-                        return 1;
-                    }
-                    return 2;
-                } else if (i == 1) {
-                    return 3;
-                } else {
-                    if (i == 3 || i == 5) {
-                        return 4;
-                    }
-                    if (i == 2) {
-                        return 5;
-                    }
-                    return 1;
-                }
-            }
-
+        AnonymousClass4 r0 = new FlickerLoadingView(parentActivity2) {
             public int getColumnsCount() {
                 return FilteredSearchView.this.columnsCount;
             }
@@ -396,23 +368,25 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         ChatActionCell chatActionCell = new ChatActionCell(parentActivity2);
         this.floatingDateView = chatActionCell;
         chatActionCell.setCustomDate((int) (System.currentTimeMillis() / 1000), false, false);
-        this.floatingDateView.setAlpha(0.0f);
-        this.floatingDateView.setOverrideColor("chat_mediaTimeBackground", "chat_mediaTimeText");
-        this.floatingDateView.setTranslationY((float) (-AndroidUtilities.dp(48.0f)));
-        addView(this.floatingDateView, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 4.0f, 0.0f, 0.0f));
+        chatActionCell.setAlpha(0.0f);
+        chatActionCell.setOverrideColor("chat_mediaTimeBackground", "chat_mediaTimeText");
+        chatActionCell.setTranslationY((float) (-AndroidUtilities.dp(48.0f)));
+        addView(chatActionCell, LayoutHelper.createFrame(-2, -2.0f, 49, 0.0f, 4.0f, 0.0f, 0.0f));
         this.dialogsAdapter = new OnlyUserFiltersAdapter();
         this.sharedPhotoVideoAdapter = new SharedPhotoVideoAdapter(getContext());
         this.sharedDocumentsAdapter = new SharedDocumentsAdapter(getContext(), 1);
         this.sharedLinksAdapter = new SharedLinksAdapter(getContext());
         this.sharedAudioAdapter = new SharedDocumentsAdapter(getContext(), 4);
         this.sharedVoiceAdapter = new SharedDocumentsAdapter(getContext(), 2);
-        StickerEmptyView stickerEmptyView = new StickerEmptyView(parentActivity2, this.loadingView);
+        StickerEmptyView stickerEmptyView = new StickerEmptyView(parentActivity2, r0);
         this.emptyView = stickerEmptyView;
         addView(stickerEmptyView);
         this.recyclerListView.setEmptyView(this.emptyView);
         this.emptyView.setVisibility(8);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ void lambda$new$1$FilteredSearchView(View view, int i) {
         if (view instanceof SharedDocumentCell) {
             onItemClick(i, view, ((SharedDocumentCell) view).getMessage(), 0);
@@ -445,7 +419,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             arrowSpan = r0
             org.telegram.ui.Components.ColoredImageSpan r1 = new org.telegram.ui.Components.ColoredImageSpan
             android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r3 = 2131165918(0x7var_de, float:1.7946067E38)
+            r3 = 2131165942(0x7var_f6, float:1.7946115E38)
             android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             r1.<init>(r2)
@@ -597,6 +571,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         }
         AndroidUtilities.cancelRunOnUIThread(this.clearCurrentResultsRunnable);
         if (!z2 || !z) {
+            long j5 = 0;
             if (z3 || (mediaFilterData2 == null && i2 == 0 && j3 == 0 && j4 == 0)) {
                 this.messages.clear();
                 this.sections.clear();
@@ -638,8 +613,8 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             }
             int i4 = this.requestIndex + 1;
             this.requestIndex = i4;
-            $$Lambda$FilteredSearchView$Js7iNF4Odekk6pWlqmS4T1BrjMs r15 = r0;
-            $$Lambda$FilteredSearchView$Js7iNF4Odekk6pWlqmS4T1BrjMs r0 = new Runnable(i, str, mediaFilterData, j, j2, z2, this.uiCallback.getFolderId(), format, i4) {
+            $$Lambda$FilteredSearchView$MXJpJ2qjsisjtFYTJjRuA7szmKs r15 = r0;
+            $$Lambda$FilteredSearchView$MXJpJ2qjsisjtFYTJjRuA7szmKs r0 = new Runnable(i, str, mediaFilterData, j, j2, z2, this.uiCallback.getFolderId(), format, i4) {
                 public final /* synthetic */ int f$1;
                 public final /* synthetic */ String f$2;
                 public final /* synthetic */ FiltersView.MediaFilterData f$3;
@@ -667,7 +642,28 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 }
             };
             this.searchRunnable = r15;
-            AndroidUtilities.runOnUIThread(r15, (!z2 || this.messages.isEmpty()) ? 350 : 0);
+            if (!z2 || this.messages.isEmpty()) {
+                j5 = 350;
+            }
+            AndroidUtilities.runOnUIThread(r15, j5);
+            if (mediaFilterData2 == null) {
+                this.loadingView.setViewType(1);
+                return;
+            }
+            int i5 = mediaFilterData2.filterType;
+            if (i5 == 0) {
+                if (!TextUtils.isEmpty(this.currentSearchString)) {
+                    this.loadingView.setViewType(1);
+                } else {
+                    this.loadingView.setViewType(2);
+                }
+            } else if (i5 == 1) {
+                this.loadingView.setViewType(3);
+            } else if (i5 == 3 || i5 == 5) {
+                this.loadingView.setViewType(4);
+            } else if (i5 == 2) {
+                this.loadingView.setViewType(5);
+            }
         }
     }
 
@@ -676,7 +672,9 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v6, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v7, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
     /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v8, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
+    /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
+    /* renamed from: lambda$search$4 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$search$4$FilteredSearchView(int r20, java.lang.String r21, org.telegram.ui.Adapters.FiltersView.MediaFilterData r22, long r23, long r25, boolean r27, int r28, java.lang.String r29, int r30) {
         /*
@@ -800,14 +798,14 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
             org.telegram.tgnet.TLRPC$Peer r0 = r0.peer_id
             int r1 = r0.channel_id
-            if (r1 == 0) goto L_0x00f3
-            goto L_0x00f7
-        L_0x00f3:
-            int r1 = r0.chat_id
-            if (r1 == 0) goto L_0x00f9
-        L_0x00f7:
+            if (r1 == 0) goto L_0x00f4
+        L_0x00f2:
             int r0 = -r1
             goto L_0x00fb
+        L_0x00f4:
+            int r1 = r0.chat_id
+            if (r1 == 0) goto L_0x00f9
+            goto L_0x00f2
         L_0x00f9:
             int r0 = r0.user_id
         L_0x00fb:
@@ -840,7 +838,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             org.telegram.ui.Adapters.FiltersView.fillTipDates(r0, r10)
             int r0 = r11.currentAccount
             org.telegram.tgnet.ConnectionsManager r13 = org.telegram.tgnet.ConnectionsManager.getInstance(r0)
-            org.telegram.ui.-$$Lambda$FilteredSearchView$Q_X--aM4xzCmUoT8AKKAIPQKNPw r14 = new org.telegram.ui.-$$Lambda$FilteredSearchView$Q_X--aM4xzCmUoT8AKKAIPQKNPw
+            org.telegram.ui.-$$Lambda$FilteredSearchView$G8yEGxDIxxI5XC0hm8Aonot0Mwc r14 = new org.telegram.ui.-$$Lambda$FilteredSearchView$G8yEGxDIxxI5XC0hm8Aonot0Mwc
             r0 = r14
             r1 = r19
             r2 = r21
@@ -856,6 +854,8 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilteredSearchView.lambda$search$4$FilteredSearchView(int, java.lang.String, org.telegram.ui.Adapters.FiltersView$MediaFilterData, long, long, boolean, int, java.lang.String, int):void");
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$3 */
     public /* synthetic */ void lambda$null$3$FilteredSearchView(String str, int i, boolean z, FiltersView.MediaFilterData mediaFilterData, int i2, long j, ArrayList arrayList, ArrayList arrayList2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         ArrayList arrayList3 = new ArrayList();
         if (tLRPC$TL_error == null) {
@@ -901,6 +901,8 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$FilteredSearchView(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z, String str, ArrayList arrayList, FiltersView.MediaFilterData mediaFilterData, int i2, long j, ArrayList arrayList2, ArrayList arrayList3) {
         String str2;
         String str3 = str;
@@ -1035,7 +1037,19 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     delegate2.updateFiltersView(TextUtils.isEmpty(this.currentDataQuery), this.localTipChats, this.localTipDates);
                 }
             }
-            if (this.loadingView.getVisibility() == 0 && this.recyclerListView.getChildCount() == 0) {
+            final View view = null;
+            final int i7 = -1;
+            for (int i8 = 0; i8 < size; i8++) {
+                View childAt = this.recyclerListView.getChildAt(i8);
+                if (childAt instanceof FlickerLoadingView) {
+                    i7 = this.recyclerListView.getChildAdapterPosition(childAt);
+                    view = childAt;
+                }
+            }
+            if (view != null) {
+                this.recyclerListView.removeView(view);
+            }
+            if ((this.loadingView.getVisibility() == 0 && this.recyclerListView.getChildCount() == 0) || view != null) {
                 getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                     public boolean onPreDraw() {
                         FilteredSearchView.this.getViewTreeObserver().removeOnPreDrawListener(this);
@@ -1043,11 +1057,13 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         AnimatorSet animatorSet = new AnimatorSet();
                         for (int i = 0; i < childCount; i++) {
                             View childAt = FilteredSearchView.this.recyclerListView.getChildAt(i);
-                            childAt.setAlpha(0.0f);
-                            ObjectAnimator ofFloat = ObjectAnimator.ofFloat(childAt, View.ALPHA, new float[]{0.0f, 1.0f});
-                            ofFloat.setStartDelay((long) ((int) ((((float) Math.min(FilteredSearchView.this.recyclerListView.getMeasuredHeight(), Math.max(0, childAt.getTop()))) / ((float) FilteredSearchView.this.recyclerListView.getMeasuredHeight())) * 100.0f)));
-                            ofFloat.setDuration(200);
-                            animatorSet.playTogether(new Animator[]{ofFloat});
+                            if (view == null || FilteredSearchView.this.recyclerListView.getChildAdapterPosition(childAt) >= i7) {
+                                childAt.setAlpha(0.0f);
+                                ObjectAnimator ofFloat = ObjectAnimator.ofFloat(childAt, View.ALPHA, new float[]{0.0f, 1.0f});
+                                ofFloat.setStartDelay((long) ((int) ((((float) Math.min(FilteredSearchView.this.recyclerListView.getMeasuredHeight(), Math.max(0, childAt.getTop()))) / ((float) FilteredSearchView.this.recyclerListView.getMeasuredHeight())) * 100.0f)));
+                                ofFloat.setDuration(200);
+                                animatorSet.playTogether(new Animator[]{ofFloat});
+                            }
                         }
                         animatorSet.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
@@ -1058,6 +1074,25 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         FilteredSearchView filteredSearchView = FilteredSearchView.this;
                         filteredSearchView.animationIndex = NotificationCenter.getInstance(filteredSearchView.currentAccount).setAnimationInProgress(FilteredSearchView.this.animationIndex, (int[]) null);
                         animatorSet.start();
+                        View view = view;
+                        if (view != null && view.getParent() == null) {
+                            FilteredSearchView.this.recyclerListView.addView(view);
+                            final RecyclerView.LayoutManager layoutManager = FilteredSearchView.this.recyclerListView.getLayoutManager();
+                            if (layoutManager != null) {
+                                layoutManager.ignoreView(view);
+                                View view2 = view;
+                                ObjectAnimator ofFloat2 = ObjectAnimator.ofFloat(view2, View.ALPHA, new float[]{view2.getAlpha(), 0.0f});
+                                ofFloat2.addListener(new AnimatorListenerAdapter() {
+                                    public void onAnimationEnd(Animator animator) {
+                                        view.setAlpha(1.0f);
+                                        layoutManager.stopIgnoringView(view);
+                                        AnonymousClass6 r2 = AnonymousClass6.this;
+                                        FilteredSearchView.this.recyclerListView.removeView(view);
+                                    }
+                                });
+                                ofFloat2.start();
+                            }
+                        }
                         return true;
                     }
                 });
@@ -1309,14 +1344,17 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 }
             } else if (i3 == 2) {
                 try {
+                    TLRPC$MessageMedia tLRPC$MessageMedia = messageObject.messageOwner.media;
                     String str = null;
-                    TLRPC$WebPage tLRPC$WebPage = messageObject.messageOwner.media != null ? messageObject.messageOwner.media.webpage : null;
+                    TLRPC$WebPage tLRPC$WebPage = tLRPC$MessageMedia != null ? tLRPC$MessageMedia.webpage : null;
                     if (tLRPC$WebPage != null && !(tLRPC$WebPage instanceof TLRPC$TL_webPageEmpty)) {
                         if (tLRPC$WebPage.cached_page != null) {
                             ArticleViewer.getInstance().setParentActivity(this.parentActivity, this.parentFragment);
                             ArticleViewer.getInstance().open(messageObject);
                             return;
-                        } else if (tLRPC$WebPage.embed_url == null || tLRPC$WebPage.embed_url.length() == 0) {
+                        }
+                        String str2 = tLRPC$WebPage.embed_url;
+                        if (str2 == null || str2.length() == 0) {
                             str = tLRPC$WebPage.url;
                         } else {
                             openWebView(tLRPC$WebPage);
@@ -1359,10 +1397,10 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                           (wrap: java.lang.String : 0x0019: INVOKE  (r2v1 java.lang.String) = ("Open"), (NUM int) org.telegram.messenger.LocaleController.getString(java.lang.String, int):java.lang.String type: STATIC)
                           (wrap: java.lang.String : 0x0025: INVOKE  (r2v3 java.lang.String) = ("Copy"), (NUM int) org.telegram.messenger.LocaleController.getString(java.lang.String, int):java.lang.String type: STATIC)
                          elemType: java.lang.CharSequence)
-                          (wrap: org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$fYba3vX26NjHpKyaMIVDJLJHhuw : 0x002d: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$fYba3vX26NjHpKyaMIVDJLJHhuw) = 
+                          (wrap: org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk : 0x002d: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk) = 
                           (r4v0 'this' org.telegram.ui.FilteredSearchView$SharedLinksAdapter$1 A[THIS])
                           (r5v0 'str' java.lang.String)
-                         call: org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$fYba3vX26NjHpKyaMIVDJLJHhuw.<init>(org.telegram.ui.FilteredSearchView$SharedLinksAdapter$1, java.lang.String):void type: CONSTRUCTOR)
+                         call: org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk.<init>(org.telegram.ui.FilteredSearchView$SharedLinksAdapter$1, java.lang.String):void type: CONSTRUCTOR)
                          org.telegram.ui.ActionBar.BottomSheet.Builder.setItems(java.lang.CharSequence[], android.content.DialogInterface$OnClickListener):org.telegram.ui.ActionBar.BottomSheet$Builder type: VIRTUAL in method: org.telegram.ui.FilteredSearchView.SharedLinksAdapter.1.onLinkPress(java.lang.String, boolean):void, dex: classes.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
@@ -1429,10 +1467,10 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                         	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                         	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x002d: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$fYba3vX26NjHpKyaMIVDJLJHhuw) = 
+                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x002d: CONSTRUCTOR  (r1v2 org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk) = 
                           (r4v0 'this' org.telegram.ui.FilteredSearchView$SharedLinksAdapter$1 A[THIS])
                           (r5v0 'str' java.lang.String)
-                         call: org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$fYba3vX26NjHpKyaMIVDJLJHhuw.<init>(org.telegram.ui.FilteredSearchView$SharedLinksAdapter$1, java.lang.String):void type: CONSTRUCTOR in method: org.telegram.ui.FilteredSearchView.SharedLinksAdapter.1.onLinkPress(java.lang.String, boolean):void, dex: classes.dex
+                         call: org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk.<init>(org.telegram.ui.FilteredSearchView$SharedLinksAdapter$1, java.lang.String):void type: CONSTRUCTOR in method: org.telegram.ui.FilteredSearchView.SharedLinksAdapter.1.onLinkPress(java.lang.String, boolean):void, dex: classes.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                         	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -1441,7 +1479,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                         	... 64 more
-                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$fYba3vX26NjHpKyaMIVDJLJHhuw, state: NOT_LOADED
+                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk, state: NOT_LOADED
                         	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                         	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                         	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -1460,16 +1498,16 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         r0 = 2
                         java.lang.CharSequence[] r0 = new java.lang.CharSequence[r0]
                         r1 = 0
-                        r2 = 2131626197(0x7f0e08d5, float:1.8879623E38)
+                        r2 = 2131626269(0x7f0e091d, float:1.887977E38)
                         java.lang.String r3 = "Open"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
                         r1 = 1
-                        r2 = 2131624905(0x7f0e03c9, float:1.8877003E38)
+                        r2 = 2131624923(0x7f0e03db, float:1.887704E38)
                         java.lang.String r3 = "Copy"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
-                        org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$fYba3vX26NjHpKyaMIVDJLJHhuw r1 = new org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$fYba3vX26NjHpKyaMIVDJLJHhuw
+                        org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk r1 = new org.telegram.ui.-$$Lambda$FilteredSearchView$SharedLinksAdapter$1$G3IrzfZSqRDBKftthXdsXAeg2tk
                         r1.<init>(r4, r5)
                         r6.setItems(r0, r1)
                         org.telegram.ui.FilteredSearchView$SharedLinksAdapter r5 = org.telegram.ui.FilteredSearchView.SharedLinksAdapter.this
@@ -1488,6 +1526,8 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilteredSearchView.SharedLinksAdapter.AnonymousClass1.onLinkPress(java.lang.String, boolean):void");
                 }
 
+                /* access modifiers changed from: private */
+                /* renamed from: lambda$onLinkPress$0 */
                 public /* synthetic */ void lambda$onLinkPress$0$FilteredSearchView$SharedLinksAdapter$1(String str, DialogInterface dialogInterface, int i) {
                     if (i == 0) {
                         FilteredSearchView.this.openUrl(str);
@@ -1562,19 +1602,49 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 return view;
             }
 
-            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-                View view;
-                if (i == 0) {
-                    view = new GraySectionCell(this.mContext);
-                } else if (i != 1) {
-                    view = new LoadingCell(this.mContext, AndroidUtilities.dp(32.0f), AndroidUtilities.dp(54.0f));
-                } else {
-                    SharedLinkCell sharedLinkCell = new SharedLinkCell(this.mContext, 1);
-                    sharedLinkCell.setDelegate(this.sharedLinkCellDelegate);
-                    view = sharedLinkCell;
-                }
-                view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-                return new RecyclerListView.Holder(view);
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v1, resolved type: org.telegram.ui.Cells.GraySectionCell} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v3, resolved type: org.telegram.ui.Cells.SharedLinkCell} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v4, resolved type: org.telegram.ui.Components.FlickerLoadingView} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v5, resolved type: org.telegram.ui.Cells.GraySectionCell} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v6, resolved type: org.telegram.ui.Cells.GraySectionCell} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v7, resolved type: org.telegram.ui.Cells.GraySectionCell} */
+            /* JADX WARNING: Multi-variable type inference failed */
+            /* Code decompiled incorrectly, please refer to instructions dump. */
+            public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r3, int r4) {
+                /*
+                    r2 = this;
+                    if (r4 == 0) goto L_0x0021
+                    r3 = 1
+                    if (r4 == r3) goto L_0x0014
+                    org.telegram.ui.Components.FlickerLoadingView r4 = new org.telegram.ui.Components.FlickerLoadingView
+                    android.content.Context r0 = r2.mContext
+                    r4.<init>(r0)
+                    r0 = 5
+                    r4.setViewType(r0)
+                    r4.setIsSingleCell(r3)
+                    goto L_0x0028
+                L_0x0014:
+                    org.telegram.ui.Cells.SharedLinkCell r4 = new org.telegram.ui.Cells.SharedLinkCell
+                    android.content.Context r0 = r2.mContext
+                    r4.<init>(r0, r3)
+                    org.telegram.ui.Cells.SharedLinkCell$SharedLinkCellDelegate r3 = r2.sharedLinkCellDelegate
+                    r4.setDelegate(r3)
+                    goto L_0x0028
+                L_0x0021:
+                    org.telegram.ui.Cells.GraySectionCell r4 = new org.telegram.ui.Cells.GraySectionCell
+                    android.content.Context r3 = r2.mContext
+                    r4.<init>(r3)
+                L_0x0028:
+                    androidx.recyclerview.widget.RecyclerView$LayoutParams r3 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
+                    r0 = -1
+                    r1 = -2
+                    r3.<init>((int) r0, (int) r1)
+                    r4.setLayoutParams(r3)
+                    org.telegram.ui.Components.RecyclerListView$Holder r3 = new org.telegram.ui.Components.RecyclerListView$Holder
+                    r3.<init>(r4)
+                    return r3
+                */
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilteredSearchView.SharedLinksAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
             }
 
             public void onBindViewHolder(int i, int i2, RecyclerView.ViewHolder viewHolder) {
@@ -1681,40 +1751,63 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 return view;
             }
 
-            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-                View view;
-                if (i == 0) {
-                    view = new GraySectionCell(this.mContext);
-                } else if (i == 1) {
-                    view = new SharedDocumentCell(this.mContext, 2);
-                } else if (i != 2) {
-                    view = new SharedAudioCell(this.mContext, 1) {
-                        public boolean needPlayMessage(MessageObject messageObject) {
-                            if (messageObject.isVoice() || messageObject.isRoundVideo()) {
-                                boolean playMessage = MediaController.getInstance().playMessage(messageObject);
-                                MediaController.getInstance().setVoiceMessagesPlaylist(playMessage ? FilteredSearchView.this.messages : null, false);
-                                return playMessage;
-                            } else if (!messageObject.isMusic()) {
-                                return false;
-                            } else {
-                                String access$800 = FilteredSearchView.this.currentDataQuery;
-                                FilteredSearchView filteredSearchView = FilteredSearchView.this;
-                                int i = filteredSearchView.currentSearchDialogId;
-                                long j = filteredSearchView.currentSearchMinDate;
-                                MediaController.PlaylistGlobalSearchParams playlistGlobalSearchParams = new MediaController.PlaylistGlobalSearchParams(access$800, i, j, j, filteredSearchView.currentSearchFilter);
-                                playlistGlobalSearchParams.endReached = FilteredSearchView.this.endReached;
-                                playlistGlobalSearchParams.nextSearchRate = FilteredSearchView.this.nextSearchRate;
-                                playlistGlobalSearchParams.totalCount = FilteredSearchView.this.totalCount;
-                                playlistGlobalSearchParams.folderId = FilteredSearchView.this.uiCallback.getFolderId();
-                                return MediaController.getInstance().setPlaylist(FilteredSearchView.this.messages, messageObject, 0, playlistGlobalSearchParams);
-                            }
-                        }
-                    };
-                } else {
-                    view = new LoadingCell(this.mContext, AndroidUtilities.dp(32.0f), AndroidUtilities.dp(54.0f));
-                }
-                view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-                return new RecyclerListView.Holder(view);
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v4, resolved type: org.telegram.ui.Cells.SharedDocumentCell} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v8, resolved type: org.telegram.ui.Cells.SharedDocumentCell} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r5v9, resolved type: org.telegram.ui.Cells.SharedDocumentCell} */
+            /* JADX WARNING: Multi-variable type inference failed */
+            /* Code decompiled incorrectly, please refer to instructions dump. */
+            public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r4, int r5) {
+                /*
+                    r3 = this;
+                    if (r5 == 0) goto L_0x0034
+                    r4 = 2
+                    r0 = 1
+                    if (r5 == r0) goto L_0x002b
+                    if (r5 == r4) goto L_0x0010
+                    org.telegram.ui.FilteredSearchView$SharedDocumentsAdapter$1 r4 = new org.telegram.ui.FilteredSearchView$SharedDocumentsAdapter$1
+                    android.content.Context r5 = r3.mContext
+                    r4.<init>(r5, r0)
+                    goto L_0x003b
+                L_0x0010:
+                    org.telegram.ui.Components.FlickerLoadingView r5 = new org.telegram.ui.Components.FlickerLoadingView
+                    android.content.Context r1 = r3.mContext
+                    r5.<init>(r1)
+                    int r1 = r3.currentType
+                    r2 = 4
+                    if (r1 == r4) goto L_0x0024
+                    if (r1 != r2) goto L_0x001f
+                    goto L_0x0024
+                L_0x001f:
+                    r4 = 3
+                    r5.setViewType(r4)
+                    goto L_0x0027
+                L_0x0024:
+                    r5.setViewType(r2)
+                L_0x0027:
+                    r5.setIsSingleCell(r0)
+                    goto L_0x0032
+                L_0x002b:
+                    org.telegram.ui.Cells.SharedDocumentCell r5 = new org.telegram.ui.Cells.SharedDocumentCell
+                    android.content.Context r0 = r3.mContext
+                    r5.<init>(r0, r4)
+                L_0x0032:
+                    r4 = r5
+                    goto L_0x003b
+                L_0x0034:
+                    org.telegram.ui.Cells.GraySectionCell r4 = new org.telegram.ui.Cells.GraySectionCell
+                    android.content.Context r5 = r3.mContext
+                    r4.<init>(r5)
+                L_0x003b:
+                    androidx.recyclerview.widget.RecyclerView$LayoutParams r5 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
+                    r0 = -1
+                    r1 = -2
+                    r5.<init>((int) r0, (int) r1)
+                    r4.setLayoutParams(r5)
+                    org.telegram.ui.Components.RecyclerListView$Holder r5 = new org.telegram.ui.Components.RecyclerListView$Holder
+                    r5.<init>(r4)
+                    return r5
+                */
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilteredSearchView.SharedDocumentsAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
             }
 
             public void onBindViewHolder(int i, int i2, RecyclerView.ViewHolder viewHolder) {
@@ -1867,10 +1960,6 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         }
 
         class OnlyUserFiltersAdapter extends RecyclerListView.SelectionAdapter {
-            public int getItemViewType(int i) {
-                return 0;
-            }
-
             public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {
                 return true;
             }
@@ -1879,30 +1968,41 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             }
 
             /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v1, resolved type: org.telegram.ui.Cells.DialogCell} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v3, resolved type: org.telegram.ui.Cells.GraySectionCell} */
-            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v4, resolved type: org.telegram.ui.Cells.DialogCell} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v3, resolved type: org.telegram.ui.Components.FlickerLoadingView} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v4, resolved type: org.telegram.ui.Cells.GraySectionCell} */
             /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v5, resolved type: org.telegram.ui.Cells.DialogCell} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v6, resolved type: org.telegram.ui.Cells.DialogCell} */
+            /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r4v7, resolved type: org.telegram.ui.Cells.DialogCell} */
             /* JADX WARNING: Multi-variable type inference failed */
             /* Code decompiled incorrectly, please refer to instructions dump. */
             public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r3, int r4) {
                 /*
                     r2 = this;
-                    if (r4 == 0) goto L_0x0018
+                    r0 = 1
+                    if (r4 == 0) goto L_0x002c
+                    r1 = 3
+                    if (r4 == r1) goto L_0x001c
                     org.telegram.ui.Cells.GraySectionCell r4 = new org.telegram.ui.Cells.GraySectionCell
                     android.content.Context r3 = r3.getContext()
                     r4.<init>(r3)
-                    r3 = 2131626870(0x7f0e0b76, float:1.8880988E38)
+                    r3 = 2131626977(0x7f0e0be1, float:1.8881205E38)
                     java.lang.String r0 = "SearchMessages"
                     java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r0, r3)
                     r4.setText(r3)
-                    goto L_0x0023
-                L_0x0018:
+                    goto L_0x0036
+                L_0x001c:
+                    org.telegram.ui.Components.FlickerLoadingView r4 = new org.telegram.ui.Components.FlickerLoadingView
+                    android.content.Context r3 = r3.getContext()
+                    r4.<init>(r3)
+                    r4.setIsSingleCell(r0)
+                    r4.setViewType(r0)
+                    goto L_0x0036
+                L_0x002c:
                     org.telegram.ui.Cells.DialogCell r4 = new org.telegram.ui.Cells.DialogCell
                     android.content.Context r3 = r3.getContext()
-                    r0 = 1
                     r1 = 0
                     r4.<init>(r3, r0, r1)
-                L_0x0023:
+                L_0x0036:
                     androidx.recyclerview.widget.RecyclerView$LayoutParams r3 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
                     r0 = -1
                     r1 = -2
@@ -1940,11 +2040,15 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 }
             }
 
+            public int getItemViewType(int i) {
+                return i >= FilteredSearchView.this.messages.size() ? 3 : 0;
+            }
+
             public int getItemCount() {
                 if (FilteredSearchView.this.messages.isEmpty()) {
                     return 0;
                 }
-                return FilteredSearchView.this.messages.size();
+                return FilteredSearchView.this.messages.size() + (FilteredSearchView.this.endReached ^ true ? 1 : 0);
             }
         }
 
@@ -1982,152 +2086,6 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
 
         public void setUiCallback(UiCallback uiCallback2) {
             this.uiCallback = uiCallback2;
-        }
-
-        public static class LoadingView extends View {
-            int color0;
-            int color1;
-            LinearGradient gradient;
-            int gradientWidth;
-            private long lastUpdateTime;
-            private Matrix matrix = new Matrix();
-            Paint paint = new Paint();
-            RectF rectF = new RectF();
-            private int totalTranslation;
-
-            public int getColumnsCount() {
-                return 2;
-            }
-
-            public int getType() {
-                return 1;
-            }
-
-            public LoadingView(Context context) {
-                super(context);
-            }
-
-            /* access modifiers changed from: protected */
-            public void onDraw(Canvas canvas) {
-                Canvas canvas2 = canvas;
-                int color = Theme.getColor("dialogBackground");
-                int color2 = Theme.getColor("windowBackgroundGray");
-                int i = 0;
-                if (!(this.color1 == color2 && this.color0 == color)) {
-                    this.color0 = color;
-                    this.color1 = color2;
-                    int dp = AndroidUtilities.dp(600.0f);
-                    this.gradientWidth = dp;
-                    LinearGradient linearGradient = new LinearGradient(0.0f, 0.0f, 0.0f, (float) dp, new int[]{color2, color, color, color2}, new float[]{0.0f, 0.4f, 0.6f, 1.0f}, Shader.TileMode.CLAMP);
-                    this.gradient = linearGradient;
-                    this.paint.setShader(linearGradient);
-                }
-                float f = 140.0f;
-                if (getType() == 1) {
-                    while (i < getMeasuredHeight()) {
-                        int dp2 = AndroidUtilities.dp(25.0f);
-                        canvas2.drawCircle(checkRtl((float) (AndroidUtilities.dp(9.0f) + dp2)), (float) (i + (AndroidUtilities.dp(78.0f) >> 1)), (float) dp2, this.paint);
-                        this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(20.0f) + i), (float) AndroidUtilities.dp(f), (float) (i + AndroidUtilities.dp(28.0f)));
-                        checkRtl(this.rectF);
-                        canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
-                        this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(42.0f) + i), (float) AndroidUtilities.dp(260.0f), (float) (AndroidUtilities.dp(50.0f) + i));
-                        checkRtl(this.rectF);
-                        canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
-                        this.rectF.set((float) (getMeasuredWidth() - AndroidUtilities.dp(50.0f)), (float) (AndroidUtilities.dp(20.0f) + i), (float) (getMeasuredWidth() - AndroidUtilities.dp(12.0f)), (float) (AndroidUtilities.dp(28.0f) + i));
-                        checkRtl(this.rectF);
-                        canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
-                        i += AndroidUtilities.dp(78.0f) + 1;
-                        f = 140.0f;
-                    }
-                } else if (getType() == 2) {
-                    int measuredWidth = (getMeasuredWidth() - (AndroidUtilities.dp(2.0f) * (getColumnsCount() - 1))) / getColumnsCount();
-                    for (int i2 = 0; i2 < getMeasuredHeight(); i2 += AndroidUtilities.dp(2.0f) + measuredWidth) {
-                        for (int i3 = 0; i3 < getColumnsCount(); i3++) {
-                            int dp3 = (AndroidUtilities.dp(2.0f) + measuredWidth) * i3;
-                            canvas.drawRect((float) dp3, (float) i2, (float) (dp3 + measuredWidth), (float) (i2 + measuredWidth), this.paint);
-                        }
-                    }
-                } else if (getType() == 3) {
-                    while (i < getMeasuredHeight()) {
-                        this.rectF.set((float) AndroidUtilities.dp(12.0f), (float) (AndroidUtilities.dp(8.0f) + i), (float) AndroidUtilities.dp(52.0f), (float) (i + AndroidUtilities.dp(48.0f)));
-                        checkRtl(this.rectF);
-                        canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
-                        this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(12.0f) + i), (float) AndroidUtilities.dp(140.0f), (float) (AndroidUtilities.dp(20.0f) + i));
-                        checkRtl(this.rectF);
-                        canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
-                        this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(34.0f) + i), (float) AndroidUtilities.dp(260.0f), (float) (AndroidUtilities.dp(42.0f) + i));
-                        checkRtl(this.rectF);
-                        canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
-                        this.rectF.set((float) (getMeasuredWidth() - AndroidUtilities.dp(50.0f)), (float) (AndroidUtilities.dp(12.0f) + i), (float) (getMeasuredWidth() - AndroidUtilities.dp(12.0f)), (float) (AndroidUtilities.dp(20.0f) + i));
-                        checkRtl(this.rectF);
-                        canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
-                        i += AndroidUtilities.dp(56.0f) + 1;
-                    }
-                } else {
-                    int i4 = 1;
-                    if (getType() == 4) {
-                        while (i < getMeasuredHeight()) {
-                            int dp4 = AndroidUtilities.dp(44.0f) >> i4;
-                            canvas2.drawCircle(checkRtl((float) (AndroidUtilities.dp(12.0f) + dp4)), (float) (AndroidUtilities.dp(6.0f) + i + dp4), (float) dp4, this.paint);
-                            this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(12.0f) + i), (float) AndroidUtilities.dp(140.0f), (float) (AndroidUtilities.dp(20.0f) + i));
-                            checkRtl(this.rectF);
-                            canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
-                            this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(34.0f) + i), (float) AndroidUtilities.dp(260.0f), (float) (AndroidUtilities.dp(42.0f) + i));
-                            checkRtl(this.rectF);
-                            canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
-                            this.rectF.set((float) (getMeasuredWidth() - AndroidUtilities.dp(50.0f)), (float) (AndroidUtilities.dp(12.0f) + i), (float) (getMeasuredWidth() - AndroidUtilities.dp(12.0f)), (float) (AndroidUtilities.dp(20.0f) + i));
-                            checkRtl(this.rectF);
-                            canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
-                            i += AndroidUtilities.dp(56.0f) + 1;
-                            i4 = 1;
-                        }
-                    } else if (getType() == 5) {
-                        while (i < getMeasuredHeight()) {
-                            this.rectF.set((float) AndroidUtilities.dp(10.0f), (float) (AndroidUtilities.dp(11.0f) + i), (float) AndroidUtilities.dp(62.0f), (float) (AndroidUtilities.dp(63.0f) + i));
-                            checkRtl(this.rectF);
-                            canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
-                            this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(12.0f) + i), (float) AndroidUtilities.dp(140.0f), (float) (i + AndroidUtilities.dp(20.0f)));
-                            checkRtl(this.rectF);
-                            canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
-                            this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(34.0f) + i), (float) AndroidUtilities.dp(268.0f), (float) (AndroidUtilities.dp(42.0f) + i));
-                            checkRtl(this.rectF);
-                            canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
-                            this.rectF.set((float) AndroidUtilities.dp(68.0f), (float) (AndroidUtilities.dp(54.0f) + i), (float) AndroidUtilities.dp(188.0f), (float) (AndroidUtilities.dp(62.0f) + i));
-                            checkRtl(this.rectF);
-                            canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
-                            this.rectF.set((float) (getMeasuredWidth() - AndroidUtilities.dp(50.0f)), (float) (AndroidUtilities.dp(12.0f) + i), (float) (getMeasuredWidth() - AndroidUtilities.dp(12.0f)), (float) (AndroidUtilities.dp(20.0f) + i));
-                            checkRtl(this.rectF);
-                            canvas2.drawRoundRect(this.rectF, (float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(4.0f), this.paint);
-                            i += AndroidUtilities.dp(80.0f);
-                        }
-                    }
-                }
-                long elapsedRealtime = SystemClock.elapsedRealtime();
-                long abs = Math.abs(this.lastUpdateTime - elapsedRealtime);
-                if (abs > 17) {
-                    abs = 16;
-                }
-                this.lastUpdateTime = elapsedRealtime;
-                int measuredHeight = (int) (((float) this.totalTranslation) + (((float) (abs * ((long) getMeasuredHeight()))) / 400.0f));
-                this.totalTranslation = measuredHeight;
-                if (measuredHeight >= getMeasuredHeight() * 2) {
-                    this.totalTranslation = (-this.gradientWidth) * 2;
-                }
-                this.matrix.setTranslate(0.0f, (float) this.totalTranslation);
-                this.gradient.setLocalMatrix(this.matrix);
-                invalidate();
-            }
-
-            private float checkRtl(float f) {
-                return LocaleController.isRTL ? ((float) getMeasuredWidth()) - f : f;
-            }
-
-            private void checkRtl(RectF rectF2) {
-                if (LocaleController.isRTL) {
-                    rectF2.left = ((float) getMeasuredWidth()) - rectF2.left;
-                    rectF2.right = ((float) getMeasuredWidth()) - rectF2.right;
-                }
-            }
         }
 
         /* access modifiers changed from: private */

@@ -23,7 +23,6 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
     public StickerSetBulletinLayout(Context context, TLObject tLObject, int i) {
         super(context);
         TLRPC$StickerSet tLRPC$StickerSet;
-        TLObject tLObject2;
         ImageLocation imageLocation;
         TLRPC$Document tLRPC$Document = null;
         if (tLObject instanceof TLRPC$TL_messages_stickerSet) {
@@ -47,10 +46,8 @@ public class StickerSetBulletinLayout extends Bulletin.TwoLineLayout {
         }
         TLRPC$StickerSet tLRPC$StickerSet2 = tLRPC$StickerSet;
         if (tLRPC$Document != null) {
-            TLRPC$PhotoSize tLRPC$PhotoSize = tLRPC$StickerSet2.thumb;
-            if ((tLRPC$PhotoSize instanceof TLRPC$TL_photoSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoSizeProgressive)) {
-                tLObject2 = tLRPC$StickerSet2.thumb;
-            } else {
+            TLObject tLObject2 = tLRPC$StickerSet2.thumb;
+            if (!(tLObject2 instanceof TLRPC$TL_photoSize) && !(tLObject2 instanceof TLRPC$TL_photoSizeProgressive)) {
                 tLObject2 = tLRPC$Document;
             }
             boolean z = tLObject2 instanceof TLRPC$Document;

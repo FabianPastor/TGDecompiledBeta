@@ -1,31 +1,43 @@
 package j$.util.stream;
 
-import j$.util.S;
+import j$.util.F;
+import j$.util.Spliterator;
+import j$.util.V;
 import j$.util.function.Consumer;
+import j$.util.function.v;
 
-final class E3 extends G3 implements CLASSNAMEo3 {
-    public /* synthetic */ CLASSNAMEv6 b() {
-        return CLASSNAMEn3.d(this);
+final class E3 extends H3 implements CLASSNAMEi3 {
+    E3() {
+    }
+
+    /* renamed from: a */
+    public /* synthetic */ void j(Integer[] numArr, int i) {
+        CLASSNAMEc3.f(this, numArr, i);
+    }
+
+    public CLASSNAMEk3 b(int i) {
+        throw new IndexOutOfBoundsException();
+    }
+
+    public Object e() {
+        return CLASSNAMEh4.e;
+    }
+
+    /* renamed from: f */
+    public /* synthetic */ CLASSNAMEi3 r(long j, long j2, v vVar) {
+        return CLASSNAMEc3.l(this, j, j2, vVar);
     }
 
     public /* synthetic */ void forEach(Consumer consumer) {
-        CLASSNAMEn3.c(this, consumer);
+        CLASSNAMEc3.i(this, consumer);
     }
 
-    public /* synthetic */ void k(Integer[] numArr, int i) {
-        CLASSNAMEn3.a(this, numArr, i);
+    public F spliterator() {
+        return V.c();
     }
 
-    public /* bridge */ /* synthetic */ void m(Object[] objArr, int i) {
-        k((Integer[]) objArr, i);
-    }
-
-    E3(CLASSNAMEo3 left, CLASSNAMEo3 right) {
-        super(left, right);
-    }
-
-    /* renamed from: g */
-    public S spliterator() {
-        return new V3(this);
+    /* renamed from: spliterator  reason: collision with other method in class */
+    public Spliterator m13spliterator() {
+        return V.c();
     }
 }

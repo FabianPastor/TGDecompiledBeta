@@ -8,7 +8,7 @@ public final /* synthetic */ class J implements ToIntFunction {
     private /* synthetic */ J() {
     }
 
-    public final int a(Object obj) {
+    public final int applyAsInt(Object obj) {
         return ((Integer) obj).intValue();
     }
 }

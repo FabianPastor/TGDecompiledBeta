@@ -28,16 +28,16 @@ public class TLRPC$TL_channelBannedRights_layer92 extends TLObject {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.view_messages = (readInt32 & 1) != 0;
-        this.send_messages = (this.flags & 2) != 0;
-        this.send_media = (this.flags & 4) != 0;
-        this.send_stickers = (this.flags & 8) != 0;
-        this.send_gifs = (this.flags & 16) != 0;
-        this.send_games = (this.flags & 32) != 0;
-        this.send_inline = (this.flags & 64) != 0;
-        if ((this.flags & 128) == 0) {
-            z2 = false;
+        this.send_messages = (readInt32 & 2) != 0;
+        this.send_media = (readInt32 & 4) != 0;
+        this.send_stickers = (readInt32 & 8) != 0;
+        this.send_gifs = (readInt32 & 16) != 0;
+        this.send_games = (readInt32 & 32) != 0;
+        this.send_inline = (readInt32 & 64) != 0;
+        if ((readInt32 & 128) != 0) {
+            z2 = true;
         }
         this.embed_links = z2;
         this.until_date = abstractSerializedData.readInt32(z);

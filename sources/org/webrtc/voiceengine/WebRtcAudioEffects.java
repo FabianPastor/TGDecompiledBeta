@@ -4,6 +4,7 @@ import android.media.audiofx.AcousticEchoCanceler;
 import android.media.audiofx.AudioEffect;
 import android.media.audiofx.NoiseSuppressor;
 import android.os.Build;
+import java.util.List;
 import java.util.UUID;
 import org.webrtc.Logging;
 
@@ -27,17 +28,21 @@ public class WebRtcAudioEffects {
     }
 
     public static boolean isAcousticEchoCancelerBlacklisted() {
-        boolean contains = WebRtcAudioUtils.getBlackListedModelsForAecUsage().contains(Build.MODEL);
+        List<String> blackListedModelsForAecUsage = WebRtcAudioUtils.getBlackListedModelsForAecUsage();
+        String str = Build.MODEL;
+        boolean contains = blackListedModelsForAecUsage.contains(str);
         if (contains) {
-            Logging.w("WebRtcAudioEffects", Build.MODEL + " is blacklisted for HW AEC usage!");
+            Logging.w("WebRtcAudioEffects", str + " is blacklisted for HW AEC usage!");
         }
         return contains;
     }
 
     public static boolean isNoiseSuppressorBlacklisted() {
-        boolean contains = WebRtcAudioUtils.getBlackListedModelsForNsUsage().contains(Build.MODEL);
+        List<String> blackListedModelsForNsUsage = WebRtcAudioUtils.getBlackListedModelsForNsUsage();
+        String str = Build.MODEL;
+        boolean contains = blackListedModelsForNsUsage.contains(str);
         if (contains) {
-            Logging.w("WebRtcAudioEffects", Build.MODEL + " is blacklisted for HW NS usage!");
+            Logging.w("WebRtcAudioEffects", str + " is blacklisted for HW NS usage!");
         }
         return contains;
     }

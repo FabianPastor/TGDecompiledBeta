@@ -28,19 +28,22 @@ public class LocationSharingService extends Service implements NotificationCente
 
     public void onCreate() {
         super.onCreate();
-        this.handler = new Handler();
-        $$Lambda$LocationSharingService$nPgxbLYJUuL6mX_Yd5lVL7HSSeY r0 = new Runnable() {
+        Handler handler2 = new Handler();
+        this.handler = handler2;
+        $$Lambda$LocationSharingService$rEo5XTlGjnI11L_Xa3dc0W_3s0w r1 = new Runnable() {
             public final void run() {
                 LocationSharingService.this.lambda$onCreate$1$LocationSharingService();
             }
         };
-        this.runnable = r0;
-        this.handler.postDelayed(r0, 1000);
+        this.runnable = r1;
+        handler2.postDelayed(r1, 1000);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onCreate$1 */
     public /* synthetic */ void lambda$onCreate$1$LocationSharingService() {
         this.handler.postDelayed(this.runnable, 1000);
-        Utilities.stageQueue.postRunnable($$Lambda$LocationSharingService$9a42Vs_pZkbJD8v75PcBjP85zg.INSTANCE);
+        Utilities.stageQueue.postRunnable($$Lambda$LocationSharingService$1XLzPxBQ4xTL_XwIW8HEDwn_inU.INSTANCE);
     }
 
     static /* synthetic */ void lambda$null$0() {
@@ -71,6 +74,8 @@ public class LocationSharingService extends Service implements NotificationCente
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$didReceivedNotification$2 */
     public /* synthetic */ void lambda$didReceivedNotification$2$LocationSharingService() {
         if (getInfos().isEmpty()) {
             stopSelf();

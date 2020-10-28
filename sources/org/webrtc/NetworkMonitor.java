@@ -123,7 +123,8 @@ public class NetworkMonitor {
     private boolean networkBindingSupported() {
         boolean z;
         synchronized (this.networkChangeDetectorLock) {
-            z = this.networkChangeDetector != null && this.networkChangeDetector.supportNetworkCallback();
+            NetworkChangeDetector networkChangeDetector2 = this.networkChangeDetector;
+            z = networkChangeDetector2 != null && networkChangeDetector2.supportNetworkCallback();
         }
         return z;
     }
@@ -203,10 +204,11 @@ public class NetworkMonitor {
     private void updateObserverActiveNetworkList(long j) {
         List<NetworkChangeDetector.NetworkInformation> list;
         synchronized (this.networkChangeDetectorLock) {
-            if (this.networkChangeDetector == null) {
+            NetworkChangeDetector networkChangeDetector2 = this.networkChangeDetector;
+            if (networkChangeDetector2 == null) {
                 list = null;
             } else {
-                list = this.networkChangeDetector.getActiveNetworkList();
+                list = networkChangeDetector2.getActiveNetworkList();
             }
         }
         if (list != null && list.size() != 0) {

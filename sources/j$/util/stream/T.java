@@ -1,17 +1,25 @@
 package j$.util.stream;
 
 import j$.util.function.BiConsumer;
-import j$.util.function.CLASSNAMEo;
+import j$.util.function.BiFunction;
+import j$.util.function.CLASSNAMEb;
+import j$.util.function.Function;
+import j$.util.function.n;
 
-public final /* synthetic */ class T implements CLASSNAMEo {
+public final /* synthetic */ class T implements n {
     public final /* synthetic */ BiConsumer a;
 
     public /* synthetic */ T(BiConsumer biConsumer) {
         this.a = biConsumer;
     }
 
-    public final Object a(Object obj, Object obj2) {
-        Object unused = this.a.accept(obj, obj2);
+    public BiFunction a(Function function) {
+        function.getClass();
+        return new CLASSNAMEb(this, function);
+    }
+
+    public final Object apply(Object obj, Object obj2) {
+        this.a.accept(obj, obj2);
         return obj;
     }
 }

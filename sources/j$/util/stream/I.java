@@ -1,15 +1,14 @@
 package j$.util.stream;
 
-import j$.util.function.F;
+import j$.util.function.w;
 
-public final /* synthetic */ class I implements F {
+public final /* synthetic */ class I implements w {
     public static final /* synthetic */ I a = new I();
 
     private /* synthetic */ I() {
     }
 
-    public final long a(int i) {
-        CLASSNAMEz2.V0();
+    public final long applyAsLong(int i) {
         return 1;
     }
 }

@@ -275,6 +275,8 @@ public class RecyclerAnimationScrollHelper {
                 RecyclerAnimationScrollHelper.this.animator.start();
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onLayoutChange$0 */
             public /* synthetic */ void lambda$onLayoutChange$0$RecyclerAnimationScrollHelper$1(ArrayList arrayList, boolean z, int i, ArrayList arrayList2, ValueAnimator valueAnimator) {
                 float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
                 int size = arrayList.size();

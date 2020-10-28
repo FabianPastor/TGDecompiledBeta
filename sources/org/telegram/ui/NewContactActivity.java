@@ -4,17 +4,23 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.FileLog;
+import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.BaseFragment;
 import org.telegram.ui.ActionBar.Theme;
@@ -86,14 +92,14 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r1 = r25
             r0 = r26
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
-            r3 = 2131165458(0x7var_, float:1.7945134E38)
+            r3 = 2131165466(0x7var_a, float:1.794515E38)
             r2.setBackButtonImage(r3)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
             r3 = 1
             r2.setAllowOverlayTitle(r3)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
             java.lang.String r4 = "AddContactTitle"
-            r5 = 2131624162(0x7f0e00e2, float:1.8875496E38)
+            r5 = 2131624167(0x7f0e00e7, float:1.8875506E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)
             r2.setTitle(r4)
             org.telegram.ui.ActionBar.ActionBar r2 = r1.actionBar
@@ -110,11 +116,11 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.ui.ActionBar.ActionBarMenu r2 = r2.createMenu()
             r5 = 1113587712(0x42600000, float:56.0)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
-            r6 = 2131165488(0x7var_, float:1.7945195E38)
+            r6 = 2131165496(0x7var_, float:1.794521E38)
             org.telegram.ui.ActionBar.ActionBarMenuItem r2 = r2.addItemWithWidth(r3, r6, r5)
             r1.editDoneItem = r2
             java.lang.String r5 = "Done"
-            r6 = 2131625095(0x7f0e0487, float:1.8877388E38)
+            r6 = 2131625113(0x7f0e0499, float:1.8877425E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)
             r2.setContentDescription(r5)
             org.telegram.ui.Components.ContextProgressView r2 = new org.telegram.ui.Components.ContextProgressView
@@ -149,7 +155,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             android.widget.FrameLayout$LayoutParams r10 = org.telegram.ui.Components.LayoutHelper.createScroll(r6, r8, r10)
             r2.addView(r7, r10)
             android.widget.LinearLayout r2 = r1.contentLayout
-            org.telegram.ui.-$$Lambda$NewContactActivity$dyt1ArQHbLSL06GO-wtQQZkRhQE r7 = org.telegram.ui.$$Lambda$NewContactActivity$dyt1ArQHbLSL06GOwtQQZkRhQE.INSTANCE
+            org.telegram.ui.-$$Lambda$NewContactActivity$QNbR9ocFE9ctqj-SAknZmW7yKV0 r7 = org.telegram.ui.$$Lambda$NewContactActivity$QNbR9ocFE9ctqjSAknZmW7yKV0.INSTANCE
             r2.setOnTouchListener(r7)
             android.widget.FrameLayout r2 = new android.widget.FrameLayout
             r2.<init>(r0)
@@ -208,7 +214,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r7.setImeOptions(r4)
             org.telegram.ui.Components.EditTextBoldCursor r7 = r1.firstNameField
             java.lang.String r15 = "FirstName"
-            r5 = 2131625406(0x7f0e05be, float:1.887802E38)
+            r5 = 2131625431(0x7f0e05d7, float:1.887807E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r15, r5)
             r7.setHint(r5)
             org.telegram.ui.Components.EditTextBoldCursor r5 = r1.firstNameField
@@ -243,7 +249,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r18, r19, r20, r21, r22, r23, r24)
             r2.addView(r8, r6)
             org.telegram.ui.Components.EditTextBoldCursor r6 = r1.firstNameField
-            org.telegram.ui.-$$Lambda$NewContactActivity$OEffd5rsJU1asHgIO5gqt5wMyr4 r8 = new org.telegram.ui.-$$Lambda$NewContactActivity$OEffd5rsJU1asHgIO5gqt5wMyr4
+            org.telegram.ui.-$$Lambda$NewContactActivity$URd3RjMejs1HFnoFD_4mTeMvar_ r8 = new org.telegram.ui.-$$Lambda$NewContactActivity$URd3RjMejs1HFnoFD_4mTeMvar_
             r8.<init>()
             r6.setOnEditorActionListener(r8)
             org.telegram.ui.Components.EditTextBoldCursor r6 = r1.firstNameField
@@ -276,7 +282,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.ui.Components.EditTextBoldCursor r6 = r1.lastNameField
             r6.setImeOptions(r4)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.lastNameField
-            r6 = 2131625682(0x7f0e06d2, float:1.8878579E38)
+            r6 = 2131625712(0x7f0e06f0, float:1.887864E38)
             java.lang.String r8 = "LastName"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r8, r6)
             r4.setHint(r6)
@@ -307,7 +313,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             android.widget.FrameLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createFrame(r18, r19, r20, r21, r22, r23, r24)
             r2.addView(r4, r6)
             org.telegram.ui.Components.EditTextBoldCursor r2 = r1.lastNameField
-            org.telegram.ui.-$$Lambda$NewContactActivity$caCQM7G1cFeQM5WDamEHC5G1jDk r4 = new org.telegram.ui.-$$Lambda$NewContactActivity$caCQM7G1cFeQM5WDamEHC5G1jDk
+            org.telegram.ui.-$$Lambda$NewContactActivity$YwIRvv0rW8r0zYiNx6OkqZGPo68 r4 = new org.telegram.ui.-$$Lambda$NewContactActivity$YwIRvv0rW8r0zYiNx6OkqZGPo68
             r4.<init>()
             r2.setOnEditorActionListener(r4)
             org.telegram.ui.Components.EditTextBoldCursor r2 = r1.lastNameField
@@ -352,7 +358,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             android.widget.LinearLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createLinear(r18, r19, r20, r21, r22, r23)
             r2.addView(r4, r5)
             android.widget.TextView r2 = r1.countryButton
-            org.telegram.ui.-$$Lambda$NewContactActivity$1MsqwwjUsbFVncyFfb6LZrQJtdc r4 = new org.telegram.ui.-$$Lambda$NewContactActivity$1MsqwwjUsbFVncyFfb6LZrQJtdc
+            org.telegram.ui.-$$Lambda$NewContactActivity$1YQpXHyXIpfanLAX_-MJ74fBcUM r4 = new org.telegram.ui.-$$Lambda$NewContactActivity$1YQpXHyXIpfanLAX_-MJ74fBcUM
             r4.<init>()
             r2.setOnClickListener(r4)
             android.view.View r2 = new android.view.View
@@ -442,7 +448,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r14.<init>()
             r4.addTextChangedListener(r14)
             org.telegram.ui.Components.EditTextBoldCursor r4 = r1.codeField
-            org.telegram.ui.-$$Lambda$NewContactActivity$_4M8UwTcrAOqbcxRs_dWKUHAnJM r14 = new org.telegram.ui.-$$Lambda$NewContactActivity$_4M8UwTcrAOqbcxRs_dWKUHAnJM
+            org.telegram.ui.-$$Lambda$NewContactActivity$D7vIJDjwpuvv7NJpUWCVX_3WkvQ r14 = new org.telegram.ui.-$$Lambda$NewContactActivity$D7vIJDjwpuvv7NJpUWCVX_3WkvQ
             r14.<init>()
             r4.setOnEditorActionListener(r14)
             org.telegram.ui.Components.HintEditText r4 = new org.telegram.ui.Components.HintEditText
@@ -487,11 +493,11 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             r4.<init>()
             r2.addTextChangedListener(r4)
             org.telegram.ui.Components.HintEditText r2 = r1.phoneField
-            org.telegram.ui.-$$Lambda$NewContactActivity$sAQJMXy-aH9t_IBkPAm16jh4ito r4 = new org.telegram.ui.-$$Lambda$NewContactActivity$sAQJMXy-aH9t_IBkPAm16jh4ito
+            org.telegram.ui.-$$Lambda$NewContactActivity$SogCDN-BBoHiev6hUNdl22cHU3s r4 = new org.telegram.ui.-$$Lambda$NewContactActivity$SogCDN-BBoHiev6hUNdl22cHU3s
             r4.<init>()
             r2.setOnEditorActionListener(r4)
             org.telegram.ui.Components.HintEditText r2 = r1.phoneField
-            org.telegram.ui.-$$Lambda$NewContactActivity$285Xs2RNjYsiReFBHjMd6DM1AKI r4 = new org.telegram.ui.-$$Lambda$NewContactActivity$285Xs2RNjYsiReFBHjMd6DM1AKI
+            org.telegram.ui.-$$Lambda$NewContactActivity$npIpFHB2nx5FTp26n2hKT0DOaKk r4 = new org.telegram.ui.-$$Lambda$NewContactActivity$npIpFHB2nx5FTp26n2hKT0DOaKk
             r4.<init>()
             r2.setOnKeyListener(r4)
             java.util.HashMap r2 = new java.util.HashMap
@@ -539,7 +545,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
         L_0x0463:
             java.util.ArrayList<java.lang.String> r0 = r1.countriesArray
-            org.telegram.ui.-$$Lambda$TEfSBt3hRUlBSSARfPEHsJesTtE r4 = org.telegram.ui.$$Lambda$TEfSBt3hRUlBSSARfPEHsJesTtE.INSTANCE
+            org.telegram.ui.-$$Lambda$Ds7dtVnGrflEw4-LvNOxA0cDT4Y r4 = org.telegram.ui.$$Lambda$Ds7dtVnGrflEw4LvNOxA0cDT4Y.INSTANCE
             java.util.Collections.sort(r0, r4)
             java.lang.String r0 = r1.initialPhoneNumber
             boolean r0 = android.text.TextUtils.isEmpty(r0)
@@ -627,7 +633,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
             int r0 = r0.length()
             if (r0 != 0) goto L_0x0524
             android.widget.TextView r0 = r1.countryButton
-            r2 = 2131624786(0x7f0e0352, float:1.8876762E38)
+            r2 = 2131624798(0x7f0e035e, float:1.8876786E38)
             java.lang.String r3 = "ChooseCountry"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.setText(r2)
@@ -641,6 +647,8 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.NewContactActivity.createView(android.content.Context):android.view.View");
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$1 */
     public /* synthetic */ boolean lambda$createView$1$NewContactActivity(TextView textView2, int i, KeyEvent keyEvent) {
         if (i != 5) {
             return false;
@@ -651,6 +659,8 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
         return true;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$2 */
     public /* synthetic */ boolean lambda$createView$2$NewContactActivity(TextView textView2, int i, KeyEvent keyEvent) {
         if (i != 5) {
             return false;
@@ -661,6 +671,8 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
         return true;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$4 */
     public /* synthetic */ void lambda$createView$4$NewContactActivity(View view) {
         CountrySelectActivity countrySelectActivity = new CountrySelectActivity(true);
         countrySelectActivity.setCountrySelectActivityDelegate(new CountrySelectActivity.CountrySelectActivityDelegate() {
@@ -671,6 +683,8 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
         presentFragment(countrySelectActivity);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$3 */
     public /* synthetic */ void lambda$null$3$NewContactActivity(String str, String str2) {
         selectCountry(str);
         this.phoneField.requestFocus();
@@ -678,6 +692,8 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
         hintEditText.setSelection(hintEditText.length());
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$5 */
     public /* synthetic */ boolean lambda$createView$5$NewContactActivity(TextView textView2, int i, KeyEvent keyEvent) {
         if (i != 5) {
             return false;
@@ -688,6 +704,8 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
         return true;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$6 */
     public /* synthetic */ boolean lambda$createView$6$NewContactActivity(TextView textView2, int i, KeyEvent keyEvent) {
         if (i != 6) {
             return false;
@@ -696,6 +714,8 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
         return true;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$7 */
     public /* synthetic */ boolean lambda$createView$7$NewContactActivity(View view, int i, KeyEvent keyEvent) {
         if (i != 67 || this.phoneField.length() != 0) {
             return false;
@@ -705,6 +725,38 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
         editTextBoldCursor.setSelection(editTextBoldCursor.length());
         this.codeField.dispatchKeyEvent(keyEvent);
         return true;
+    }
+
+    public static String getPhoneNumber(Context context, TLRPC$User tLRPC$User, String str, boolean z) {
+        HashMap hashMap = new HashMap();
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.getResources().getAssets().open("countries.txt")));
+            while (true) {
+                String readLine = bufferedReader.readLine();
+                if (readLine == null) {
+                    break;
+                }
+                String[] split = readLine.split(";");
+                hashMap.put(split[0], split[2]);
+            }
+            bufferedReader.close();
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
+        if (str.startsWith("+")) {
+            return str;
+        }
+        if (z || tLRPC$User == null || TextUtils.isEmpty(tLRPC$User.phone)) {
+            return "+" + str;
+        }
+        String str2 = tLRPC$User.phone;
+        for (int i = 4; i >= 1; i--) {
+            String substring = str2.substring(0, i);
+            if (((String) hashMap.get(substring)) != null) {
+                return "+" + substring + str;
+            }
+        }
+        return str;
     }
 
     /* access modifiers changed from: private */
@@ -818,7 +870,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$NewContactActivity$w3KTwAlwLqpY0K9fVsMRxI5REAU r10 = new ThemeDescription.ThemeDescriptionDelegate() {
+        $$Lambda$NewContactActivity$XUWaCoq8YKvo1PPx4JztTiFZyJg r10 = new ThemeDescription.ThemeDescriptionDelegate() {
             public final void didSetColor() {
                 NewContactActivity.this.lambda$getThemeDescriptions$8$NewContactActivity();
             }
@@ -851,7 +903,7 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
         arrayList.add(new ThemeDescription(this.countryButton, ThemeDescription.FLAG_SELECTORWHITE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "listSelectorSDK21"));
         arrayList.add(new ThemeDescription(this.editDoneItemProgress, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contextProgressInner2"));
         arrayList.add(new ThemeDescription(this.editDoneItemProgress, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "contextProgressOuter2"));
-        $$Lambda$NewContactActivity$w3KTwAlwLqpY0K9fVsMRxI5REAU r8 = r10;
+        $$Lambda$NewContactActivity$XUWaCoq8YKvo1PPx4JztTiFZyJg r8 = r10;
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, Theme.avatarDrawables, r8, "avatar_text"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundRed"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundOrange"));
@@ -863,6 +915,8 @@ public class NewContactActivity extends BaseFragment implements AdapterView.OnIt
         return arrayList;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$getThemeDescriptions$8 */
     public /* synthetic */ void lambda$getThemeDescriptions$8$NewContactActivity() {
         if (this.avatarImage != null) {
             invalidateAvatar();

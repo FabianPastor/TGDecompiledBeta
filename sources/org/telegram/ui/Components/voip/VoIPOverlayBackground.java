@@ -52,6 +52,8 @@ public class VoIPOverlayBackground extends ImageView {
         }).start();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setBackground$1 */
     public /* synthetic */ void lambda$setBackground$1$VoIPOverlayBackground(ImageReceiver.BitmapHolder bitmapHolder) {
         try {
             Bitmap createBitmap = Bitmap.createBitmap(150, 150, Bitmap.Config.ARGB_8888);
@@ -80,6 +82,8 @@ public class VoIPOverlayBackground extends ImageView {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$0 */
     public /* synthetic */ void lambda$null$0$VoIPOverlayBackground(Bitmap bitmap, ImageReceiver.BitmapHolder bitmapHolder) {
         setImageBitmap(bitmap);
         bitmapHolder.release();
@@ -112,6 +116,8 @@ public class VoIPOverlayBackground extends ImageView {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setShowBlackout$2 */
     public /* synthetic */ void lambda$setShowBlackout$2$VoIPOverlayBackground(ValueAnimator valueAnimator) {
         this.blackoutProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();

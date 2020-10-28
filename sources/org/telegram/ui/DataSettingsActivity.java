@@ -231,6 +231,8 @@ public class DataSettingsActivity extends BaseFragment {
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$5 */
     public /* synthetic */ void lambda$createView$5$DataSettingsActivity(View view, int i, float f, float f2) {
         String str;
         String str2;
@@ -400,6 +402,8 @@ public class DataSettingsActivity extends BaseFragment {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$0 */
     public /* synthetic */ void lambda$null$0$DataSettingsActivity(DialogInterface dialogInterface, int i) {
         String str;
         DownloadController.Preset preset;
@@ -437,6 +441,8 @@ public class DataSettingsActivity extends BaseFragment {
         this.listAdapter.notifyItemRangeChanged(this.mobileRow, 4);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$1 */
     public /* synthetic */ void lambda$null$1$DataSettingsActivity(SharedPreferences sharedPreferences, int i, DialogInterface dialogInterface, int i2) {
         int i3 = 3;
         if (i2 == 0) {
@@ -453,6 +459,8 @@ public class DataSettingsActivity extends BaseFragment {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$4 */
     public /* synthetic */ void lambda$null$4$DataSettingsActivity(DialogInterface dialogInterface, int i) {
         getConnectionsManager().sendRequest(new TLRPC$TL_messages_clearAllDrafts(), new RequestDelegate() {
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
@@ -461,10 +469,14 @@ public class DataSettingsActivity extends BaseFragment {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$DataSettingsActivity() {
         getMediaDataController().clearAllDrafts(true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$3 */
     public /* synthetic */ void lambda$null$3$DataSettingsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
@@ -611,11 +623,11 @@ public class DataSettingsActivity extends BaseFragment {
                             i5++;
                             z4 = true;
                         }
-                        if (!z5 && (currentRoamingPreset.mask[i4] & 4) != 0) {
+                        if (!z5 && (iArr[i4] & 4) != 0) {
                             i5++;
                             z5 = true;
                         }
-                        if (!z6 && (currentRoamingPreset.mask[i4] & 8) != 0) {
+                        if (!z6 && (iArr[i4] & 8) != 0) {
                             i5++;
                             z6 = true;
                         }
@@ -697,34 +709,29 @@ public class DataSettingsActivity extends BaseFragment {
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            NotificationsCheckCell notificationsCheckCell;
+            View view;
             if (i == 0) {
-                notificationsCheckCell = new ShadowSectionCell(this.mContext);
+                view = new ShadowSectionCell(this.mContext);
             } else if (i == 1) {
-                TextSettingsCell textSettingsCell = new TextSettingsCell(this.mContext);
-                textSettingsCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                notificationsCheckCell = textSettingsCell;
+                view = new TextSettingsCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             } else if (i == 2) {
-                HeaderCell headerCell = new HeaderCell(this.mContext);
-                headerCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                notificationsCheckCell = headerCell;
+                view = new HeaderCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             } else if (i == 3) {
-                TextCheckCell textCheckCell = new TextCheckCell(this.mContext);
-                textCheckCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                notificationsCheckCell = textCheckCell;
+                view = new TextCheckCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             } else if (i == 4) {
-                TextInfoPrivacyCell textInfoPrivacyCell = new TextInfoPrivacyCell(this.mContext);
-                textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                notificationsCheckCell = textInfoPrivacyCell;
+                view = new TextInfoPrivacyCell(this.mContext);
+                view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
             } else if (i != 5) {
-                notificationsCheckCell = null;
+                view = null;
             } else {
-                NotificationsCheckCell notificationsCheckCell2 = new NotificationsCheckCell(this.mContext);
-                notificationsCheckCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                notificationsCheckCell = notificationsCheckCell2;
+                view = new NotificationsCheckCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             }
-            notificationsCheckCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-            return new RecyclerListView.Holder(notificationsCheckCell);
+            view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
+            return new RecyclerListView.Holder(view);
         }
 
         public int getItemViewType(int i) {

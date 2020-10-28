@@ -153,6 +153,8 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
         r0.setContentDescription(charSequence);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$addIconTab$0 */
     public /* synthetic */ void lambda$addIconTab$0$PagerSlidingTabStrip(int i, View view) {
         if (!(this.pager.getAdapter() instanceof IconTabProvider) || ((IconTabProvider) this.pager.getAdapter()).canScrollToTab(i)) {
             this.pager.setCurrentItem(i, false);

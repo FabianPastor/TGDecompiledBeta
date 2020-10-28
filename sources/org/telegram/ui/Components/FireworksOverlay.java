@@ -144,8 +144,8 @@ public class FireworksOverlay extends View {
                 }
             }
             float f8 = ((float) (-AndroidUtilities.dp(1.0f))) / 2.0f;
-            boolean z = this.moveY < f8;
             float f9 = this.moveY;
+            boolean z = f9 < f8;
             if (f9 > f8) {
                 this.moveY = f9 + ((((float) AndroidUtilities.dp(1.0f)) / 3.0f) * f * FireworksOverlay.this.speedCoef);
             } else {
@@ -312,6 +312,8 @@ public class FireworksOverlay extends View {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onDraw$0 */
     public /* synthetic */ void lambda$onDraw$0$FireworksOverlay() {
         if (!this.started) {
             setLayerType(0, (Paint) null);

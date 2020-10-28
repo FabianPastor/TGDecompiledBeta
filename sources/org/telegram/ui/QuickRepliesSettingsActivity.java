@@ -160,7 +160,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 int r0 = r0.reply1Row
                 r2 = 0
                 if (r9 != r0) goto L_0x0030
-                r0 = 2131626678(0x7f0e0ab6, float:1.8880599E38)
+                r0 = 2131626785(0x7f0e0b21, float:1.8880816E38)
                 java.lang.String r2 = "QuickReplyDefault1"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 java.lang.String r0 = "quick_reply_msg1"
@@ -173,7 +173,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
                 int r0 = r0.reply2Row
                 if (r9 != r0) goto L_0x0044
-                r0 = 2131626679(0x7f0e0ab7, float:1.88806E38)
+                r0 = 2131626786(0x7f0e0b22, float:1.8880818E38)
                 java.lang.String r2 = "QuickReplyDefault2"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 java.lang.String r0 = "quick_reply_msg2"
@@ -182,7 +182,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
                 int r0 = r0.reply3Row
                 if (r9 != r0) goto L_0x0058
-                r0 = 2131626680(0x7f0e0ab8, float:1.8880603E38)
+                r0 = 2131626787(0x7f0e0b23, float:1.888082E38)
                 java.lang.String r2 = "QuickReplyDefault3"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 java.lang.String r0 = "quick_reply_msg3"
@@ -191,7 +191,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
                 int r0 = r0.reply4Row
                 if (r9 != r0) goto L_0x006c
-                r0 = 2131626681(0x7f0e0ab9, float:1.8880605E38)
+                r0 = 2131626788(0x7f0e0b24, float:1.8880822E38)
                 java.lang.String r2 = "QuickReplyDefault4"
                 java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r2, r0)
                 java.lang.String r0 = "quick_reply_msg4"
@@ -216,7 +216,7 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
             L_0x008b:
                 android.view.View r8 = r8.itemView
                 org.telegram.ui.Cells.TextCheckCell r8 = (org.telegram.ui.Cells.TextCheckCell) r8
-                r9 = 2131624205(0x7f0e010d, float:1.8875583E38)
+                r9 = 2131624210(0x7f0e0112, float:1.8875593E38)
                 java.lang.String r0 = "AllowCustomQuickReply"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r0, r9)
                 org.telegram.ui.QuickRepliesSettingsActivity r0 = org.telegram.ui.QuickRepliesSettingsActivity.this
@@ -234,11 +234,11 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
                 android.view.View r8 = r8.itemView
                 org.telegram.ui.Cells.TextInfoPrivacyCell r8 = (org.telegram.ui.Cells.TextInfoPrivacyCell) r8
                 android.content.Context r9 = r7.mContext
-                r0 = 2131165439(0x7var_ff, float:1.7945095E38)
+                r0 = 2131165447(0x7var_, float:1.7945111E38)
                 java.lang.String r1 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r9, (int) r0, (java.lang.String) r1)
                 r8.setBackgroundDrawable(r9)
-                r9 = 2131627543(0x7f0e0e17, float:1.8882353E38)
+                r9 = 2131627667(0x7f0e0e93, float:1.8882605E38)
                 java.lang.String r0 = "VoipQuickRepliesExplain"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r0, r9)
                 r8.setText(r9)
@@ -254,35 +254,32 @@ public class QuickRepliesSettingsActivity extends BaseFragment {
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            EditTextSettingsCell editTextSettingsCell;
+            View view;
             if (i == 0) {
-                editTextSettingsCell = new TextInfoPrivacyCell(this.mContext);
+                view = new TextInfoPrivacyCell(this.mContext);
             } else if (i == 1) {
-                TextSettingsCell textSettingsCell = new TextSettingsCell(this.mContext);
-                textSettingsCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                editTextSettingsCell = textSettingsCell;
+                view = new TextSettingsCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             } else if (i != 4) {
                 switch (i) {
                     case 9:
                     case 10:
                     case 11:
                     case 12:
-                        EditTextSettingsCell editTextSettingsCell2 = new EditTextSettingsCell(this.mContext);
-                        editTextSettingsCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                        QuickRepliesSettingsActivity.this.textCells[i - 9] = editTextSettingsCell2;
-                        editTextSettingsCell = editTextSettingsCell2;
+                        view = new EditTextSettingsCell(this.mContext);
+                        view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
+                        QuickRepliesSettingsActivity.this.textCells[i - 9] = view;
                         break;
                     default:
-                        editTextSettingsCell = null;
+                        view = null;
                         break;
                 }
             } else {
-                TextCheckCell textCheckCell = new TextCheckCell(this.mContext);
-                textCheckCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                editTextSettingsCell = textCheckCell;
+                view = new TextCheckCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             }
-            editTextSettingsCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-            return new RecyclerListView.Holder(editTextSettingsCell);
+            view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
+            return new RecyclerListView.Holder(view);
         }
 
         public int getItemViewType(int i) {

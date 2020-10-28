@@ -8,6 +8,41 @@ import java.util.Iterator;
 import java.util.ListIterator;
 
 public interface List extends Collection, Collection {
+
+    /* renamed from: j$.util.List$-CC  reason: invalid class name */
+    public final /* synthetic */ class CC {
+        public static void $default$replaceAll(java.util.List list, UnaryOperator unaryOperator) {
+            if (DesugarCollections.b.isInstance(list)) {
+                DesugarCollections.e(list, unaryOperator);
+                return;
+            }
+            unaryOperator.getClass();
+            ListIterator listIterator = list.listIterator();
+            while (listIterator.hasNext()) {
+                listIterator.set(unaryOperator.apply(listIterator.next()));
+            }
+        }
+
+        public static void $default$sort(java.util.List list, Comparator comparator) {
+            if (DesugarCollections.b.isInstance(list)) {
+                DesugarCollections.f(list, comparator);
+                return;
+            }
+            Object[] array = list.toArray();
+            Arrays.sort(array, comparator);
+            ListIterator listIterator = list.listIterator();
+            for (Object obj : array) {
+                listIterator.next();
+                listIterator.set(obj);
+            }
+        }
+
+        public static Spliterator $default$spliterator(java.util.List list) {
+            list.getClass();
+            return new T((Collection) list, 16);
+        }
+    }
+
     void add(int i, Object obj);
 
     boolean add(Object obj);
@@ -63,37 +98,4 @@ public interface List extends Collection, Collection {
     Object[] toArray();
 
     Object[] toArray(Object[] objArr);
-
-    /* renamed from: j$.util.List$-CC  reason: invalid class name */
-    public final /* synthetic */ class CC {
-        public static void $default$replaceAll(java.util.List _this, UnaryOperator unaryOperator) {
-            if (DesugarCollections.b.isInstance(_this)) {
-                DesugarCollections.g(_this, unaryOperator);
-                return;
-            }
-            unaryOperator.getClass();
-            ListIterator<E> li = _this.listIterator();
-            while (li.hasNext()) {
-                li.set(unaryOperator.apply(li.next()));
-            }
-        }
-
-        public static void $default$sort(java.util.List _this, Comparator c) {
-            if (DesugarCollections.b.isInstance(_this)) {
-                DesugarCollections.h(_this, c);
-                return;
-            }
-            Object[] a = _this.toArray();
-            Arrays.sort(a, c);
-            ListIterator<E> i = _this.listIterator();
-            for (Object e : a) {
-                i.next();
-                i.set(e);
-            }
-        }
-
-        public static Spliterator $default$spliterator(java.util.List _this) {
-            return k0.m(_this, 16);
-        }
-    }
 }

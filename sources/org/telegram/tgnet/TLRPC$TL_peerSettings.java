@@ -27,18 +27,18 @@ public class TLRPC$TL_peerSettings extends TLObject {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.report_spam = (readInt32 & 1) != 0;
-        this.add_contact = (this.flags & 2) != 0;
-        this.block_contact = (this.flags & 4) != 0;
-        this.share_contact = (this.flags & 8) != 0;
-        this.need_contacts_exception = (this.flags & 16) != 0;
-        this.report_geo = (this.flags & 32) != 0;
-        if ((this.flags & 128) == 0) {
-            z2 = false;
+        this.add_contact = (readInt32 & 2) != 0;
+        this.block_contact = (readInt32 & 4) != 0;
+        this.share_contact = (readInt32 & 8) != 0;
+        this.need_contacts_exception = (readInt32 & 16) != 0;
+        this.report_geo = (readInt32 & 32) != 0;
+        if ((readInt32 & 128) != 0) {
+            z2 = true;
         }
         this.autoarchived = z2;
-        if ((this.flags & 64) != 0) {
+        if ((readInt32 & 64) != 0) {
             this.geo_distance = abstractSerializedData.readInt32(z);
         }
     }

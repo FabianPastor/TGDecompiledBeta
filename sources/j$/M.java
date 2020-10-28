@@ -1,23 +1,23 @@
 package j$;
 
-import j$.util.function.F;
-import java.util.function.IntToLongFunction;
+import j$.util.function.s;
+import java.util.function.DoubleToLongFunction;
 
-public final /* synthetic */ class M implements F {
-    final /* synthetic */ IntToLongFunction a;
+public final /* synthetic */ class M implements DoubleToLongFunction {
+    final /* synthetic */ s a;
 
-    private /* synthetic */ M(IntToLongFunction intToLongFunction) {
-        this.a = intToLongFunction;
+    private /* synthetic */ M(s sVar) {
+        this.a = sVar;
     }
 
-    public static /* synthetic */ F b(IntToLongFunction intToLongFunction) {
-        if (intToLongFunction == null) {
+    public static /* synthetic */ DoubleToLongFunction a(s sVar) {
+        if (sVar == null) {
             return null;
         }
-        return new M(intToLongFunction);
+        return sVar instanceof L ? ((L) sVar).a : new M(sVar);
     }
 
-    public /* synthetic */ long a(int i) {
-        return this.a.applyAsLong(i);
+    public /* synthetic */ long applyAsLong(double d) {
+        return this.a.applyAsLong(d);
     }
 }

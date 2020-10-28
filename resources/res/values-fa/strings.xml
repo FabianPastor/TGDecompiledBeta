@@ -22,4 +22,5 @@
     <string name="google_assistant_verification_channel_name">تأییدکننده دستیار</string>
     <string name="google_assistant_verification_notification_title">‏«دستیار Google» درحال ارسال پیام</string>
     <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="wallet_buy_button_place_holder">خرید با Google</string>
 </resources>

@@ -137,7 +137,9 @@ public class StickerSetNameCell extends FrameLayout {
         if (this.stickerSetName != null && this.stickerSetNameSearchLength != 0) {
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(this.stickerSetName);
             try {
-                spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor("chat_emojiPanelStickerSetNameHighlight")), this.stickerSetNameSearchIndex, this.stickerSetNameSearchIndex + this.stickerSetNameSearchLength, 33);
+                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Theme.getColor("chat_emojiPanelStickerSetNameHighlight"));
+                int i = this.stickerSetNameSearchIndex;
+                spannableStringBuilder.setSpan(foregroundColorSpan, i, this.stickerSetNameSearchLength + i, 33);
             } catch (Exception unused) {
             }
             TextView textView2 = this.textView;

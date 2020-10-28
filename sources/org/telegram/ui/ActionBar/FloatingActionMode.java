@@ -95,20 +95,29 @@ public final class FloatingActionMode extends ActionMode {
         this.mContentRect = new Rect();
         this.mContentRectOnScreen = new Rect();
         this.mPreviousContentRectOnScreen = new Rect();
-        this.mViewPositionOnScreen = new int[2];
+        int[] iArr = new int[2];
+        this.mViewPositionOnScreen = iArr;
         this.mPreviousViewPositionOnScreen = new int[2];
         this.mRootViewPositionOnScreen = new int[2];
         this.mViewRectOnScreen = new Rect();
         this.mPreviousViewRectOnScreen = new Rect();
         this.mScreenRect = new Rect();
         this.mOriginatingView = view;
-        view.getLocationOnScreen(this.mViewPositionOnScreen);
+        view.getLocationOnScreen(iArr);
         this.mBottomAllowance = AndroidUtilities.dp(20.0f);
         this.mDisplaySize = new Point();
         setFloatingToolbar(floatingToolbar);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ boolean lambda$new$0$FloatingActionMode(MenuItem menuItem) {
+        return this.mCallback.onActionItemClicked(this, menuItem);
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setFloatingToolbar$1 */
+    public /* synthetic */ boolean lambda$setFloatingToolbar$1$FloatingActionMode(MenuItem menuItem) {
         return this.mCallback.onActionItemClicked(this, menuItem);
     }
 
@@ -123,10 +132,6 @@ public final class FloatingActionMode extends ActionMode {
         FloatingToolbarVisibilityHelper floatingToolbarVisibilityHelper = new FloatingToolbarVisibilityHelper(floatingToolbar);
         this.mFloatingToolbarVisibilityHelper = floatingToolbarVisibilityHelper;
         floatingToolbarVisibilityHelper.activate();
-    }
-
-    public /* synthetic */ boolean lambda$setFloatingToolbar$1$FloatingActionMode(MenuItem menuItem) {
-        return this.mCallback.onActionItemClicked(this, menuItem);
     }
 
     public void invalidate() {

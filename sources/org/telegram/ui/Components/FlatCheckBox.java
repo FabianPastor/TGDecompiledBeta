@@ -100,6 +100,8 @@ public class FlatCheckBox extends View {
         this.checkAnimator.start();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setChecked$0 */
     public /* synthetic */ void lambda$setChecked$0$FlatCheckBox(ValueAnimator valueAnimator) {
         this.progress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();

@@ -32,20 +32,20 @@ public class TLRPC$TL_chatBannedRights extends TLObject {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.view_messages = (readInt32 & 1) != 0;
-        this.send_messages = (this.flags & 2) != 0;
-        this.send_media = (this.flags & 4) != 0;
-        this.send_stickers = (this.flags & 8) != 0;
-        this.send_gifs = (this.flags & 16) != 0;
-        this.send_games = (this.flags & 32) != 0;
-        this.send_inline = (this.flags & 64) != 0;
-        this.embed_links = (this.flags & 128) != 0;
-        this.send_polls = (this.flags & 256) != 0;
-        this.change_info = (this.flags & 1024) != 0;
-        this.invite_users = (this.flags & 32768) != 0;
-        if ((this.flags & 131072) == 0) {
-            z2 = false;
+        this.send_messages = (readInt32 & 2) != 0;
+        this.send_media = (readInt32 & 4) != 0;
+        this.send_stickers = (readInt32 & 8) != 0;
+        this.send_gifs = (readInt32 & 16) != 0;
+        this.send_games = (readInt32 & 32) != 0;
+        this.send_inline = (readInt32 & 64) != 0;
+        this.embed_links = (readInt32 & 128) != 0;
+        this.send_polls = (readInt32 & 256) != 0;
+        this.change_info = (readInt32 & 1024) != 0;
+        this.invite_users = (32768 & readInt32) != 0;
+        if ((readInt32 & 131072) != 0) {
+            z2 = true;
         }
         this.pin_messages = z2;
         this.until_date = abstractSerializedData.readInt32(z);

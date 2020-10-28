@@ -30,14 +30,14 @@ public class TLRPC$TL_account_password extends TLObject {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.has_recovery = (readInt32 & 1) != 0;
-        this.has_secure_values = (this.flags & 2) != 0;
-        if ((this.flags & 4) == 0) {
-            z2 = false;
+        this.has_secure_values = (readInt32 & 2) != 0;
+        if ((readInt32 & 4) != 0) {
+            z2 = true;
         }
         this.has_password = z2;
-        if ((this.flags & 4) != 0) {
+        if ((readInt32 & 4) != 0) {
             this.current_algo = TLRPC$PasswordKdfAlgo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         }
         if ((this.flags & 4) != 0) {

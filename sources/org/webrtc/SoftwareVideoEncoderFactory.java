@@ -5,12 +5,10 @@ import java.util.HashMap;
 import org.webrtc.VideoEncoderFactory;
 
 public class SoftwareVideoEncoderFactory implements VideoEncoderFactory {
-    @CalledByNative
     public /* synthetic */ VideoEncoderFactory.VideoEncoderSelector getEncoderSelector() {
         return VideoEncoderFactory.CC.$default$getEncoderSelector(this);
     }
 
-    @CalledByNative
     public /* synthetic */ VideoCodecInfo[] getImplementations() {
         return VideoEncoderFactory.CC.$default$getImplementations(this);
     }

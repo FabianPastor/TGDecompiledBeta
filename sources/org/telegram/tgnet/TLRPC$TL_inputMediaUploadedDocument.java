@@ -8,7 +8,7 @@ public class TLRPC$TL_inputMediaUploadedDocument extends TLRPC$InputMedia {
         this.flags = readInt32;
         int i = 0;
         this.nosound_video = (readInt32 & 8) != 0;
-        this.force_file = (this.flags & 16) != 0;
+        this.force_file = (readInt32 & 16) != 0;
         this.file = TLRPC$InputFile.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         if ((this.flags & 4) != 0) {
             this.thumb = TLRPC$InputFile.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);

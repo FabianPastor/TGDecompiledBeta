@@ -85,6 +85,8 @@ public class ColorPicker extends FrameLayout {
         setLocation(f);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$ColorPicker(View view) {
         ColorPickerDelegate colorPickerDelegate = this.delegate;
         if (colorPickerDelegate != null) {
@@ -92,6 +94,8 @@ public class ColorPicker extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ void lambda$new$1$ColorPicker(View view) {
         ColorPickerDelegate colorPickerDelegate = this.delegate;
         if (colorPickerDelegate != null) {
@@ -126,6 +130,7 @@ public class ColorPicker extends FrameLayout {
     }
 
     public int colorForLocation(float f) {
+        float[] fArr;
         int i;
         if (f <= 0.0f) {
             return COLORS[0];
@@ -136,7 +141,7 @@ public class ColorPicker extends FrameLayout {
             return iArr[iArr.length - 1];
         }
         while (true) {
-            float[] fArr = LOCATIONS;
+            fArr = LOCATIONS;
             i = -1;
             if (i2 >= fArr.length) {
                 i2 = -1;
@@ -148,10 +153,9 @@ public class ColorPicker extends FrameLayout {
                 i2++;
             }
         }
-        float[] fArr2 = LOCATIONS;
-        float f2 = fArr2[i];
+        float f2 = fArr[i];
         int[] iArr2 = COLORS;
-        return interpolateColors(iArr2[i], iArr2[i2], (f - f2) / (fArr2[i2] - f2));
+        return interpolateColors(iArr2[i], iArr2[i2], (f - f2) / (fArr[i2] - f2));
     }
 
     private int interpolateColors(int i, int i2, float f) {

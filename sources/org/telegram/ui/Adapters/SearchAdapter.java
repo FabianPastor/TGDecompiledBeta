@@ -2,7 +2,6 @@ package org.telegram.ui.Adapters;
 
 import android.content.Context;
 import android.text.SpannableStringBuilder;
-import android.text.style.ForegroundColorSpan;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +24,12 @@ import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$EncryptedChat;
 import org.telegram.tgnet.TLRPC$TL_contact;
 import org.telegram.tgnet.TLRPC$User;
-import org.telegram.ui.ActionBar.Theme;
 import org.telegram.ui.Adapters.SearchAdapterHelper;
 import org.telegram.ui.Cells.GraySectionCell;
 import org.telegram.ui.Cells.ProfileSearchCell;
 import org.telegram.ui.Cells.TextCell;
 import org.telegram.ui.Cells.UserCell;
+import org.telegram.ui.Components.ForegroundColorSpanThemable;
 import org.telegram.ui.Components.RecyclerListView;
 
 public class SearchAdapter extends RecyclerListView.SelectionAdapter {
@@ -69,7 +68,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                 return SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$canApplySearchResults(this, i);
             }
 
-            public /* synthetic */ void onSetHashtags(ArrayList<SearchAdapterHelper.HashtagObject> arrayList, HashMap<String, SearchAdapterHelper.HashtagObject> hashMap) {
+            public /* synthetic */ void onSetHashtags(ArrayList arrayList, HashMap hashMap) {
                 SearchAdapterHelper.SearchAdapterHelperDelegate.CC.$default$onSetHashtags(this, arrayList, hashMap);
             }
 
@@ -86,8 +85,9 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
     public void searchDialogs(String str) {
         final String str2 = str;
         try {
-            if (this.searchTimer != null) {
-                this.searchTimer.cancel();
+            Timer timer = this.searchTimer;
+            if (timer != null) {
+                timer.cancel();
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -101,9 +101,9 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
             notifyDataSetChanged();
             return;
         }
-        Timer timer = new Timer();
-        this.searchTimer = timer;
-        timer.schedule(new TimerTask() {
+        Timer timer2 = new Timer();
+        this.searchTimer = timer2;
+        timer2.schedule(new TimerTask() {
             public void run() {
                 try {
                     SearchAdapter.this.searchTimer.cancel();
@@ -131,6 +131,8 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$processSearch$1 */
     public /* synthetic */ void lambda$processSearch$1$SearchAdapter(String str) {
         if (this.allowUsernameSearch) {
             this.searchAdapterHelper.queryServerSearch(str, true, this.allowChats, this.allowBots, this.allowSelf, false, this.channelId, this.allowPhoneNumbers, -1, 0);
@@ -153,6 +155,8 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$0 */
     public /* synthetic */ void lambda$null$0$SearchAdapter(String str, ArrayList arrayList, int i) {
         String str2;
         SparseArray<TLRPC$User> sparseArray;
@@ -267,6 +271,8 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$updateSearchResults$2 */
     public /* synthetic */ void lambda$updateSearchResults$2$SearchAdapter(ArrayList arrayList, ArrayList arrayList2) {
         this.searchResult = arrayList;
         this.searchResultNames = arrayList2;
@@ -394,7 +400,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                             } else {
                                 indexOfIgnoreCase++;
                             }
-                            spannableStringBuilder.setSpan(new ForegroundColorSpan(Theme.getColor("windowBackgroundWhiteBlueText4")), indexOfIgnoreCase, length + indexOfIgnoreCase, 33);
+                            spannableStringBuilder.setSpan(new ForegroundColorSpanThemable("windowBackgroundWhiteBlueText4"), indexOfIgnoreCase, length + indexOfIgnoreCase, 33);
                             charSequence = spannableStringBuilder;
                         }
                     } catch (Exception e) {

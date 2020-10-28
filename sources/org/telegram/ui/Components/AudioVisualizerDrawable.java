@@ -104,7 +104,7 @@ public class AudioVisualizerDrawable {
                 f2 = 1.0f;
             }
             fArr3[7] = f2;
-            this.dt[7] = (this.animateTo[7] - this.current[7]) / 120.0f;
+            this.dt[7] = (fArr3[7] - this.current[7]) / 120.0f;
             return;
         }
         while (i < 8) {
@@ -131,8 +131,8 @@ public class AudioVisualizerDrawable {
                 float f4 = fArr2[i];
                 float[] fArr3 = this.dt;
                 fArr2[i] = f4 + (fArr3[i] * 16.0f);
-                if ((fArr3[i] > 0.0f && fArr2[i] > fArr[i]) || (this.dt[i] < 0.0f && this.current[i] < this.animateTo[i])) {
-                    this.current[i] = this.animateTo[i];
+                if ((fArr3[i] > 0.0f && fArr2[i] > fArr[i]) || (fArr3[i] < 0.0f && fArr2[i] < fArr[i])) {
+                    fArr2[i] = fArr[i];
                 }
                 this.parentView.invalidate();
             }

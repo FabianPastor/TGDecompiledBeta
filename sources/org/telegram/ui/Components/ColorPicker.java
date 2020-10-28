@@ -224,7 +224,7 @@ public class ColorPicker extends FrameLayout {
                         ColorPicker.this.lambda$new$0$ColorPicker(this.f$1, view, z);
                     }
                 });
-                this.colorEditText[i].setOnEditorActionListener($$Lambda$ColorPicker$dvQ2Se2AeZAVZzn8bejAn986bSg.INSTANCE);
+                this.colorEditText[i].setOnEditorActionListener($$Lambda$ColorPicker$Zc7eIW9hmbbuwjjRymCs8IqW4Q.INSTANCE);
             }
             this.colorEditText[i].setTextSize(1, 18.0f);
             this.colorEditText[i].setHintTextColor(Theme.getColor("windowBackgroundWhiteHintText"));
@@ -312,6 +312,8 @@ public class ColorPicker extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$ColorPicker(int i, View view, boolean z) {
         if (this.colorEditText[3] != null) {
             int i2 = 1;
@@ -331,6 +333,8 @@ public class ColorPicker extends FrameLayout {
         return true;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$2 */
     public /* synthetic */ void lambda$new$2$ColorPicker(View view) {
         if (this.exchangeButton.getAlpha() == 1.0f) {
             if (this.myMessagesColor) {
@@ -347,6 +351,8 @@ public class ColorPicker extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$3 */
     public /* synthetic */ void lambda$new$3$ColorPicker(View view) {
         int i = 0;
         boolean z = this.clearButton.getTag() != null;
@@ -382,6 +388,8 @@ public class ColorPicker extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$4 */
     public /* synthetic */ void lambda$new$4$ColorPicker(View view) {
         if (this.resetButton.getAlpha() == 1.0f) {
             this.delegate.setColor(0, -1, true);
@@ -390,6 +398,8 @@ public class ColorPicker extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$5 */
     public /* synthetic */ void lambda$new$5$ColorPicker(int i) {
         boolean z = true;
         if (i == 1 || i == 2) {
@@ -403,6 +413,8 @@ public class ColorPicker extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$6 */
     public /* synthetic */ void lambda$new$6$ColorPicker(View view) {
         this.menuItem.toggleSubMenu();
     }
@@ -1198,13 +1210,13 @@ public class ColorPicker extends FrameLayout {
     private void updateHsvMinMaxBrightness() {
         float f = this.clearButton.getTag() != null ? 0.0f : this.minBrightness;
         float f2 = this.clearButton.getTag() != null ? 1.0f : this.maxBrightness;
-        float f3 = this.colorHSV[2];
+        float[] fArr = this.colorHSV;
+        float f3 = fArr[2];
         if (f == 0.0f && f2 == 1.0f) {
             this.minHsvBrightness = 0.0f;
             this.maxHsvBrightness = 1.0f;
             return;
         }
-        float[] fArr = this.colorHSV;
         fArr[2] = 1.0f;
         int HSVToColor = Color.HSVToColor(fArr);
         this.colorHSV[2] = f3;
@@ -1239,7 +1251,7 @@ public class ColorPicker extends FrameLayout {
         list2.add(new ThemeDescription(this.exchangeButton, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         list2.add(new ThemeDescription(this.exchangeButton, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogButtonSelector"));
         if (this.menuItem != null) {
-            $$Lambda$ColorPicker$eK23zZ0tDQoHxAcV4d7wlQCco r9 = new ThemeDescription.ThemeDescriptionDelegate() {
+            $$Lambda$ColorPicker$ciTUnxeYnWMQ4SHmg9zobxHaYZI r9 = new ThemeDescription.ThemeDescriptionDelegate() {
                 public final void didSetColor() {
                     ColorPicker.this.lambda$provideThemeDescriptions$7$ColorPicker();
                 }
@@ -1252,6 +1264,8 @@ public class ColorPicker extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$provideThemeDescriptions$7 */
     public /* synthetic */ void lambda$provideThemeDescriptions$7$ColorPicker() {
         this.menuItem.setIconColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         Theme.setDrawableColor(this.menuItem.getBackground(), Theme.getColor("dialogButtonSelector"));

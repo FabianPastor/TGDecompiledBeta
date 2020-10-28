@@ -108,23 +108,17 @@ public class WebviewActivity extends BaseFragment {
             });
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$postEvent$0 */
         public /* synthetic */ void lambda$postEvent$0$WebviewActivity$TelegramWebviewProxy(String str) {
             if (WebviewActivity.this.getParentActivity() != null) {
                 if (BuildVars.LOGS_ENABLED) {
                     FileLog.d(str);
                 }
-                char c = 65535;
-                int hashCode = str.hashCode();
-                if (hashCode != -NUM) {
-                    if (hashCode == NUM && str.equals("share_score")) {
-                        c = 1;
-                    }
-                } else if (str.equals("share_game")) {
-                    c = 0;
-                }
-                if (c == 0) {
+                str.hashCode();
+                if (str.equals("share_game")) {
                     WebviewActivity.this.currentMessageObject.messageOwner.with_my_score = false;
-                } else if (c == 1) {
+                } else if (str.equals("share_score")) {
                     WebviewActivity.this.currentMessageObject.messageOwner.with_my_score = true;
                 }
                 WebviewActivity webviewActivity = WebviewActivity.this;
@@ -232,10 +226,11 @@ public class WebviewActivity extends BaseFragment {
         FrameLayout frameLayout = new FrameLayout(context);
         this.fragmentView = frameLayout;
         FrameLayout frameLayout2 = frameLayout;
-        if (Build.VERSION.SDK_INT >= 19) {
+        int i2 = Build.VERSION.SDK_INT;
+        if (i2 >= 19) {
             this.webView.setLayerType(2, (Paint) null);
         }
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (i2 >= 21) {
             this.webView.getSettings().setMixedContentMode(0);
             CookieManager.getInstance().setAcceptThirdPartyCookies(this.webView, true);
             if (this.type == 0) {
@@ -347,6 +342,8 @@ public class WebviewActivity extends BaseFragment {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$reloadStats$1 */
     public /* synthetic */ void lambda$reloadStats$1$WebviewActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
             public final /* synthetic */ TLObject f$1;
@@ -361,6 +358,8 @@ public class WebviewActivity extends BaseFragment {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$0 */
     public /* synthetic */ void lambda$null$0$WebviewActivity(TLObject tLObject) {
         this.loadStats = false;
         if (tLObject != null) {

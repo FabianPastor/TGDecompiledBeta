@@ -6,10 +6,10 @@ public class TLRPC$TL_phoneCallProtocol_layer110 extends TLRPC$TL_phoneCallProto
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.udp_p2p = (readInt32 & 1) != 0;
-        if ((this.flags & 2) == 0) {
-            z2 = false;
+        if ((readInt32 & 2) != 0) {
+            z2 = true;
         }
         this.udp_reflector = z2;
         this.min_layer = abstractSerializedData.readInt32(z);

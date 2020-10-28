@@ -123,8 +123,9 @@ public class AudioRecordJNI {
 
     public void stop() {
         try {
-            if (this.audioRecord != null) {
-                this.audioRecord.stop();
+            AudioRecord audioRecord2 = this.audioRecord;
+            if (audioRecord2 != null) {
+                audioRecord2.stop();
             }
         } catch (Exception unused) {
         }
@@ -167,13 +168,15 @@ public class AudioRecordJNI {
         AudioRecord audioRecord2 = this.audioRecord;
         if (audioRecord2 != null && audioRecord2.getState() == 1) {
             try {
-                if (this.thread != null) {
-                    this.audioRecord.startRecording();
-                } else if (this.audioRecord == null) {
-                    return false;
+                if (this.thread == null) {
+                    AudioRecord audioRecord3 = this.audioRecord;
+                    if (audioRecord3 == null) {
+                        return false;
+                    }
+                    audioRecord3.startRecording();
+                    startThread();
                 } else {
                     this.audioRecord.startRecording();
-                    startThread();
                 }
                 return true;
             } catch (Exception e) {
@@ -204,6 +207,8 @@ public class AudioRecordJNI {
         throw new IllegalStateException("thread already started");
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$startThread$0 */
     public /* synthetic */ void lambda$startThread$0$AudioRecordJNI(ByteBuffer byteBuffer) {
         while (true) {
             if (!this.running) {

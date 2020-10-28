@@ -1,31 +1,22 @@
 package j$;
 
-import j$.util.function.G;
-import java.util.function.IntUnaryOperator;
+import java.util.function.DoubleUnaryOperator;
 
-public final /* synthetic */ class N implements G {
-    final /* synthetic */ IntUnaryOperator a;
+public final /* synthetic */ class N {
+    final /* synthetic */ DoubleUnaryOperator a;
 
-    private /* synthetic */ N(IntUnaryOperator intUnaryOperator) {
-        this.a = intUnaryOperator;
+    private /* synthetic */ N(DoubleUnaryOperator doubleUnaryOperator) {
+        this.a = doubleUnaryOperator;
     }
 
-    public static /* synthetic */ G d(IntUnaryOperator intUnaryOperator) {
-        if (intUnaryOperator == null) {
+    public static /* synthetic */ N b(DoubleUnaryOperator doubleUnaryOperator) {
+        if (doubleUnaryOperator == null) {
             return null;
         }
-        return intUnaryOperator instanceof O ? ((O) intUnaryOperator).a : new N(intUnaryOperator);
+        return doubleUnaryOperator instanceof O ? ((O) doubleUnaryOperator).a : new N(doubleUnaryOperator);
     }
 
-    public /* synthetic */ G a(G g) {
-        return d(this.a.andThen(O.a(g)));
-    }
-
-    public /* synthetic */ int b(int i) {
-        return this.a.applyAsInt(i);
-    }
-
-    public /* synthetic */ G c(G g) {
-        return d(this.a.compose(O.a(g)));
+    public double a(double d) {
+        return this.a.applyAsDouble(d);
     }
 }

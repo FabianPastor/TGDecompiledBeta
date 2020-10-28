@@ -1,57 +1,47 @@
 package j$.util.stream;
 
-import j$.util.function.A;
-import j$.util.function.B;
-import j$.util.function.CLASSNAMEq;
+import j$.util.CLASSNAMEk;
+import j$.util.function.CLASSNAMEe;
 import j$.util.function.Consumer;
 
-public final /* synthetic */ class N0 implements D5 {
-    public final /* synthetic */ CLASSNAMEm6 a;
+public final /* synthetic */ class N0 implements CLASSNAMEt5 {
+    public final /* synthetic */ Consumer a;
 
-    public /* synthetic */ N0(CLASSNAMEm6 m6Var) {
-        this.a = m6Var;
+    public /* synthetic */ N0(Consumer consumer) {
+        this.a = consumer;
     }
 
     public /* synthetic */ void accept(double d) {
-        CLASSNAMEv5.c(this);
+        CLASSNAMEk.c(this);
         throw null;
     }
 
-    public final void accept(int i) {
-        this.a.accept(i);
+    public /* synthetic */ void accept(int i) {
+        CLASSNAMEk.a(this);
+        throw null;
     }
 
     public /* synthetic */ void accept(long j) {
-        CLASSNAMEv5.b(this);
+        CLASSNAMEk.b(this);
         throw null;
     }
 
-    public /* bridge */ /* synthetic */ void accept(Object obj) {
-        t((Integer) obj);
+    public final void accept(Object obj) {
+        this.a.accept(obj);
     }
 
-    public /* synthetic */ Consumer g(Consumer consumer) {
-        return CLASSNAMEq.a(this, consumer);
+    public Consumer f(Consumer consumer) {
+        consumer.getClass();
+        return new CLASSNAMEe(this, consumer);
     }
 
-    public /* synthetic */ B q(B b) {
-        return A.a(this, b);
+    public void m() {
     }
 
-    public /* synthetic */ void r() {
-        CLASSNAMEv5.f();
+    public void n(long j) {
     }
 
-    public /* synthetic */ void s(long j) {
-        CLASSNAMEv5.d();
-    }
-
-    public /* synthetic */ void t(Integer num) {
-        C5.a(this, num);
-    }
-
-    public /* synthetic */ boolean u() {
-        CLASSNAMEv5.e();
+    public /* synthetic */ boolean p() {
         return false;
     }
 }

@@ -55,6 +55,8 @@ public class UndoStore {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$notifyOfHistoryChanges$0 */
     public /* synthetic */ void lambda$notifyOfHistoryChanges$0$UndoStore() {
         UndoStoreDelegate undoStoreDelegate = this.delegate;
         if (undoStoreDelegate != null) {

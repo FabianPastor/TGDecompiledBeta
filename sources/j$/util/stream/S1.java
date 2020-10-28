@@ -1,50 +1,94 @@
 package j$.util.stream;
 
-import j$.util.function.CLASSNAMEq;
-import j$.util.function.Consumer;
+import j$.util.Spliterator;
+import java.util.concurrent.CountedCompleter;
 
-abstract class S1 implements g7 {
-    boolean a;
-    Object b;
+final class S1 extends CLASSNAMEi1 {
+    private final M1 j;
 
-    public /* synthetic */ void accept(double d) {
-        CLASSNAMEv5.c(this);
-        throw null;
+    S1(M1 m1, CLASSNAMEi4 i4Var, Spliterator spliterator) {
+        super(i4Var, spliterator);
+        this.j = m1;
     }
 
-    public /* synthetic */ void accept(int i) {
-        CLASSNAMEv5.a(this);
-        throw null;
+    S1(S1 s1, Spliterator spliterator) {
+        super((CLASSNAMEi1) s1, spliterator);
+        this.j = s1.j;
     }
 
-    public /* synthetic */ void accept(long j) {
-        CLASSNAMEv5.b(this);
-        throw null;
-    }
-
-    public /* synthetic */ Consumer g(Consumer consumer) {
-        return CLASSNAMEq.a(this, consumer);
-    }
-
-    public /* synthetic */ void r() {
-        CLASSNAMEv5.f();
-    }
-
-    public /* synthetic */ void s(long j) {
-        CLASSNAMEv5.d();
-    }
-
-    S1() {
-    }
-
-    public void accept(Object value) {
-        if (!this.a) {
-            this.a = true;
-            this.b = value;
+    private void m(Object obj) {
+        boolean z;
+        CLASSNAMEk1 k1Var = this;
+        while (true) {
+            if (k1Var != null) {
+                CLASSNAMEk1 c = k1Var.c();
+                if (c != null && c.d != k1Var) {
+                    z = false;
+                    break;
+                }
+                k1Var = c;
+            } else {
+                z = true;
+                break;
+            }
+        }
+        if (z) {
+            l(obj);
+        } else {
+            j();
         }
     }
 
-    public boolean u() {
-        return this.a;
+    /* access modifiers changed from: protected */
+    public Object a() {
+        CLASSNAMEi4 i4Var = this.a;
+        K6 k6 = (K6) this.j.e.get();
+        i4Var.t0(k6, this.b);
+        Object obj = k6.get();
+        if (!this.j.b) {
+            if (obj != null) {
+                l(obj);
+            }
+            return null;
+        } else if (obj == null) {
+            return null;
+        } else {
+            m(obj);
+            return obj;
+        }
+    }
+
+    /* access modifiers changed from: protected */
+    public CLASSNAMEk1 f(Spliterator spliterator) {
+        return new S1(this, spliterator);
+    }
+
+    /* access modifiers changed from: protected */
+    public Object k() {
+        return this.j.c;
+    }
+
+    public void onCompletion(CountedCompleter countedCompleter) {
+        if (this.j.b) {
+            S1 s1 = (S1) this.d;
+            S1 s12 = null;
+            while (true) {
+                if (s1 != s12) {
+                    Object b = s1.b();
+                    if (b != null && this.j.d.test(b)) {
+                        g(b);
+                        m(b);
+                        break;
+                    }
+                    s12 = s1;
+                    s1 = (S1) this.e;
+                } else {
+                    break;
+                }
+            }
+        }
+        this.b = null;
+        this.e = null;
+        this.d = null;
     }
 }

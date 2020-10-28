@@ -1,30 +1,39 @@
 package j$.util;
 
-import j$.util.function.CLASSNAMEt;
 import j$.util.function.Consumer;
+import j$.util.function.y;
+import java.util.Comparator;
 
-public final /* synthetic */ class O {
-    public static boolean b(P _this, Consumer consumer) {
-        if (consumer instanceof CLASSNAMEt) {
-            return _this.j((CLASSNAMEt) consumer);
-        }
-        if (!l0.a) {
-            consumer.getClass();
-            return _this.j(new CLASSNAMEa(consumer));
-        }
-        l0.b(_this.getClass(), "{0} calling Spliterator.OfDouble.tryAdvance((DoubleConsumer) action::accept)");
-        throw null;
+final class O extends Q implements E {
+    O() {
     }
 
-    public static void a(P _this, Consumer consumer) {
-        if (consumer instanceof CLASSNAMEt) {
-            _this.e((CLASSNAMEt) consumer);
-        } else if (!l0.a) {
-            consumer.getClass();
-            _this.e(new CLASSNAMEa(consumer));
-        } else {
-            l0.b(_this.getClass(), "{0} calling Spliterator.OfDouble.forEachRemaining((DoubleConsumer) action::accept)");
-            throw null;
-        }
+    public /* synthetic */ boolean b(Consumer consumer) {
+        return CLASSNAMEw.f(this, consumer);
+    }
+
+    public void d(y yVar) {
+        yVar.getClass();
+    }
+
+    public /* synthetic */ void forEachRemaining(Consumer consumer) {
+        CLASSNAMEw.c(this, consumer);
+    }
+
+    public Comparator getComparator() {
+        throw new IllegalStateException();
+    }
+
+    public /* synthetic */ long getExactSizeIfKnown() {
+        return CLASSNAMEk.e(this);
+    }
+
+    public /* synthetic */ boolean hasCharacteristics(int i) {
+        return CLASSNAMEk.f(this, i);
+    }
+
+    public boolean j(y yVar) {
+        yVar.getClass();
+        return false;
     }
 }

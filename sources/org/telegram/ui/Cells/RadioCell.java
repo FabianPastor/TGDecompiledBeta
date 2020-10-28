@@ -52,7 +52,9 @@ public class RadioCell extends FrameLayout {
         } else {
             this.radioButton.setColor(Theme.getColor("radioBackground"), Theme.getColor("radioBackgroundChecked"));
         }
-        addView(this.radioButton, LayoutHelper.createFrame(22, 22.0f, (LocaleController.isRTL ? 3 : i2) | 48, (float) (LocaleController.isRTL ? i + 1 : 0), 14.0f, (float) (!LocaleController.isRTL ? i + 1 : 0), 0.0f));
+        RadioButton radioButton3 = this.radioButton;
+        boolean z2 = LocaleController.isRTL;
+        addView(radioButton3, LayoutHelper.createFrame(22, 22.0f, (z2 ? 3 : i2) | 48, (float) (z2 ? i + 1 : 0), 14.0f, (float) (!z2 ? i + 1 : 0), 0.0f));
     }
 
     /* access modifiers changed from: protected */

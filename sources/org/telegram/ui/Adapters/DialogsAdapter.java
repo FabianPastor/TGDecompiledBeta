@@ -64,7 +64,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         this.hasHints = i2 == 0 && i == 0 && !z;
         this.selectedDialogs = arrayList;
         this.currentAccount = i3;
-        if (this.folderId == 1) {
+        if (i2 == 1) {
             SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
             this.showArchiveHint = globalMainSettings.getBoolean("archivehint", true);
             globalMainSettings.edit().putBoolean("archivehint", false).commit();
@@ -140,10 +140,11 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             if (!z && this.onlineContacts != null) {
                 this.onlineContacts = null;
             }
-            if (this.folderId == 1 && this.showArchiveHint) {
+            int i6 = this.folderId;
+            if (i6 == 1 && this.showArchiveHint) {
                 i3 += 2;
             }
-            if (this.folderId == 0 && size != 0) {
+            if (i6 == 0 && size != 0) {
                 i3++;
             }
             this.currentCount = i3;
@@ -192,7 +193,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             this.lastSortTime = SystemClock.elapsedRealtime();
             try {
                 int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-                Collections.sort(this.onlineContacts, new Comparator(currentTime) {
+                Collections.sort(this.onlineContacts, new Object(currentTime) {
                     public final /* synthetic */ int f$1;
 
                     {
@@ -203,31 +204,31 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
                         return DialogsAdapter.lambda$sortOnlineContacts$0(MessagesController.this, this.f$1, (TLRPC$TL_contact) obj, (TLRPC$TL_contact) obj2);
                     }
 
-                    public /* synthetic */ Comparator<T> reversed() {
+                    public /* synthetic */ Comparator reversed() {
                         return Comparator.CC.$default$reversed(this);
                     }
 
-                    public /* synthetic */ <U extends Comparable<? super U>> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function) {
-                        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (Function) function);
+                    public /* synthetic */ java.util.Comparator thenComparing(Function function) {
+                        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, function);
                     }
 
-                    public /* synthetic */ <U> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function, java.util.Comparator<? super U> comparator) {
+                    public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
                         return Comparator.CC.$default$thenComparing(this, function, comparator);
                     }
 
-                    public /* synthetic */ java.util.Comparator<T> thenComparing(java.util.Comparator<? super T> comparator) {
-                        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (java.util.Comparator) comparator);
+                    public /* synthetic */ java.util.Comparator thenComparing(java.util.Comparator comparator) {
+                        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, comparator);
                     }
 
-                    public /* synthetic */ java.util.Comparator<T> thenComparingDouble(ToDoubleFunction<? super T> toDoubleFunction) {
+                    public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
                         return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
                     }
 
-                    public /* synthetic */ java.util.Comparator<T> thenComparingInt(ToIntFunction<? super T> toIntFunction) {
+                    public /* synthetic */ java.util.Comparator thenComparingInt(ToIntFunction toIntFunction) {
                         return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
                     }
 
-                    public /* synthetic */ java.util.Comparator<T> thenComparingLong(ToLongFunction<? super T> toLongFunction) {
+                    public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
                         return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
                     }
                 });
@@ -358,6 +359,8 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         return (itemViewType == 1 || itemViewType == 5 || itemViewType == 3 || itemViewType == 8 || itemViewType == 7 || itemViewType == 9 || itemViewType == 10) ? false : true;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onCreateViewHolder$1 */
     public /* synthetic */ void lambda$onCreateViewHolder$1$DialogsAdapter(View view) {
         MessagesController.getInstance(this.currentAccount).hintDialogs.clear();
         MessagesController.getGlobalMainSettings().edit().remove("installReferer").commit();
@@ -387,7 +390,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
         /*
             r12 = this;
             java.lang.String r13 = "windowBackgroundGrayShadow"
-            r0 = 2131165438(0x7var_fe, float:1.7945093E38)
+            r0 = 2131165446(0x7var_, float:1.794511E38)
             java.lang.String r1 = "windowBackgroundGray"
             r2 = 5
             r3 = -1
@@ -439,7 +442,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Cells.HeaderCell r13 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r0 = r12.mContext
             r13.<init>(r0)
-            r0 = 2131627609(0x7f0e0e59, float:1.8882487E38)
+            r0 = 2131627733(0x7f0e0ed5, float:1.8882739E38)
             java.lang.String r1 = "YourContacts"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r13.setText(r0)
@@ -482,7 +485,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Cells.HeaderCell r13 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r0 = r12.mContext
             r13.<init>(r0)
-            r0 = 2131626705(0x7f0e0ad1, float:1.8880654E38)
+            r0 = 2131626812(0x7f0e0b3c, float:1.888087E38)
             java.lang.String r1 = "RecentlyViewed"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r13.setText(r0)
@@ -497,7 +500,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             java.lang.String r1 = "windowBackgroundWhiteBlueHeader"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r0.setTextColor(r1)
-            r1 = 2131626706(0x7f0e0ad2, float:1.8880656E38)
+            r1 = 2131626813(0x7f0e0b3d, float:1.8880873E38)
             java.lang.String r4 = "RecentlyViewedHide"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setText(r1)
@@ -526,7 +529,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r11 = 0
             android.widget.FrameLayout$LayoutParams r1 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r6, r7, r8, r9, r10, r11)
             r13.addView(r0, r1)
-            org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DWIibGxp-Clk-7MRxEqoD1mmox4 r1 = new org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DWIibGxp-Clk-7MRxEqoD1mmox4
+            org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$B0qIe6TxDardgaYX-7eWyt6VPHc r1 = new org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$B0qIe6TxDardgaYX-7eWyt6VPHc
             r1.<init>()
             r0.setOnClickListener(r1)
             goto L_0x0131

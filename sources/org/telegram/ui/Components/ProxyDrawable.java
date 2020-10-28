@@ -73,7 +73,8 @@ public class ProxyDrawable extends Drawable {
             this.fullDrawable.setBounds(getBounds());
             this.fullDrawable.draw(canvas);
         }
-        if (this.connected) {
+        boolean z = this.connected;
+        if (z) {
             float f = this.connectedAnimationProgress;
             if (f != 1.0f) {
                 float f2 = f + (((float) j) / 300.0f);
@@ -85,7 +86,7 @@ public class ProxyDrawable extends Drawable {
                 return;
             }
         }
-        if (!this.connected) {
+        if (!z) {
             float f3 = this.connectedAnimationProgress;
             if (f3 != 0.0f) {
                 float f4 = f3 - (((float) j) / 300.0f);

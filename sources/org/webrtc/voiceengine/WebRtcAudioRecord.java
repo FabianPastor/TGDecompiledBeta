@@ -207,7 +207,7 @@ public class WebRtcAudioRecord {
         try {
             AudioRecord audioRecord2 = new AudioRecord(audioSource, i, channelCountToConfiguration, 2, max);
             this.audioRecord = audioRecord2;
-            if (audioRecord2 == null || audioRecord2.getState() != 1) {
+            if (audioRecord2.getState() != 1) {
                 reportWebRtcAudioRecordInitError("Failed to create a new AudioRecord instance");
                 releaseAudioResources();
                 return -1;

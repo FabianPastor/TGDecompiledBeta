@@ -311,6 +311,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$0 */
     public /* synthetic */ void lambda$createView$0$GroupStickersActivity(View view) {
         this.searchWas = false;
         this.selectedStickerSet = null;
@@ -318,6 +320,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         updateRows();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$1 */
     public /* synthetic */ void lambda$createView$1$GroupStickersActivity(View view, int i) {
         if (getParentActivity() != null) {
             int i2 = this.selectedStickerRow;
@@ -416,7 +420,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 this.searching = false;
                 return;
             }
-            $$Lambda$GroupStickersActivity$4Rqel5HptCXt4RyUWgtwIaVXIfk r1 = new Runnable(obj) {
+            $$Lambda$GroupStickersActivity$LE0Hkmgdmlll6CmITp9ssUUozs r1 = new Runnable(obj) {
                 public final /* synthetic */ String f$1;
 
                 {
@@ -432,6 +436,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$resolveStickerSet$4 */
     public /* synthetic */ void lambda$resolveStickerSet$4$GroupStickersActivity(String str) {
         if (this.queryRunnable != null) {
             TLRPC$TL_messages_getStickerSet tLRPC$TL_messages_getStickerSet = new TLRPC$TL_messages_getStickerSet();
@@ -446,6 +452,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$3 */
     public /* synthetic */ void lambda$null$3$GroupStickersActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
             public final /* synthetic */ TLObject f$1;
@@ -460,6 +468,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$GroupStickersActivity(TLObject tLObject) {
         this.searching = false;
         if (tLObject instanceof TLRPC$TL_messages_stickerSet) {
@@ -500,6 +510,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onTransitionAnimationEnd$5 */
     public /* synthetic */ void lambda$onTransitionAnimationEnd$5$GroupStickersActivity() {
         EditTextBoldCursor editTextBoldCursor = this.usernameTextView;
         if (editTextBoldCursor != null) {
@@ -513,7 +525,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         TLRPC$StickerSet tLRPC$StickerSet;
         TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet;
         TLRPC$ChatFull tLRPC$ChatFull = this.info;
-        if (tLRPC$ChatFull == null || (!((tLRPC$StickerSet = tLRPC$ChatFull.stickerset) == null || (tLRPC$TL_messages_stickerSet = this.selectedStickerSet) == null || tLRPC$TL_messages_stickerSet.set.id != tLRPC$StickerSet.id) || (this.info.stickerset == null && this.selectedStickerSet == null))) {
+        if (tLRPC$ChatFull == null || (!((tLRPC$StickerSet = tLRPC$ChatFull.stickerset) == null || (tLRPC$TL_messages_stickerSet = this.selectedStickerSet) == null || tLRPC$TL_messages_stickerSet.set.id != tLRPC$StickerSet.id) || (tLRPC$StickerSet == null && this.selectedStickerSet == null))) {
             finishFragment();
             return;
         }
@@ -538,6 +550,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$saveStickerSet$7 */
     public /* synthetic */ void lambda$saveStickerSet$7$GroupStickersActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error) {
             public final /* synthetic */ TLRPC$TL_error f$1;
@@ -552,6 +566,8 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$6 */
     public /* synthetic */ void lambda$null$6$GroupStickersActivity(TLRPC$TL_error tLRPC$TL_error) {
         if (tLRPC$TL_error == null) {
             TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = this.selectedStickerSet;
@@ -568,7 +584,7 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
                 tLRPC$ChatFull.flags &= -257;
             }
             MessagesStorage.getInstance(this.currentAccount).updateChatInfo(this.info, false);
-            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, this.info, 0, Boolean.TRUE, null);
+            NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.chatInfoDidLoad, this.info, 0, Boolean.TRUE, null, null, 0, Boolean.FALSE);
             finishFragment();
             return;
         }
@@ -579,10 +595,10 @@ public class GroupStickersActivity extends BaseFragment implements NotificationC
 
     private void updateRows() {
         this.rowCount = 0;
-        this.rowCount = 0 + 1;
+        int i = 0 + 1;
+        this.rowCount = i;
         this.nameRow = 0;
         if (this.selectedStickerSet != null || this.searchWas) {
-            int i = this.rowCount;
             this.rowCount = i + 1;
             this.selectedStickerRow = i;
         } else {

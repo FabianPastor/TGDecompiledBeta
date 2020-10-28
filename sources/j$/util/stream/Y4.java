@@ -1,16 +1,15 @@
 package j$.util.stream;
 
-class Y4 extends CLASSNAMEz5 {
+class Y4 extends CLASSNAMEp5 {
     final /* synthetic */ Z4 b;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    Y4(Z4 this$1, G5 downstream) {
-        super(downstream);
-        this.b = this$1;
+    Y4(Z4 z4, CLASSNAMEt5 t5Var) {
+        super(t5Var);
+        this.b = z4;
     }
 
-    public void accept(Object u) {
-        this.b.m.accept(u);
-        this.a.accept(u);
+    public void accept(Object obj) {
+        this.a.accept(this.b.l.applyAsLong(obj));
     }
 }

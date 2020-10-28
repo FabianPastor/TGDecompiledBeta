@@ -142,10 +142,10 @@ public class ChatObject {
             if (tLRPC$Chat.admin_rights != null && !isAdminAction(i)) {
                 return true;
             }
-            if (tLRPC$Chat.default_banned_rights == null && ((tLRPC$Chat instanceof TLRPC$TL_chat_layer92) || (tLRPC$Chat instanceof TLRPC$TL_chat_old) || (tLRPC$Chat instanceof TLRPC$TL_chat_old2) || (tLRPC$Chat instanceof TLRPC$TL_channel_layer92) || (tLRPC$Chat instanceof TLRPC$TL_channel_layer77) || (tLRPC$Chat instanceof TLRPC$TL_channel_layer72) || (tLRPC$Chat instanceof TLRPC$TL_channel_layer67) || (tLRPC$Chat instanceof TLRPC$TL_channel_layer48) || (tLRPC$Chat instanceof TLRPC$TL_channel_old))) {
+            TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights = tLRPC$Chat.default_banned_rights;
+            if (tLRPC$TL_chatBannedRights == null && ((tLRPC$Chat instanceof TLRPC$TL_chat_layer92) || (tLRPC$Chat instanceof TLRPC$TL_chat_old) || (tLRPC$Chat instanceof TLRPC$TL_chat_old2) || (tLRPC$Chat instanceof TLRPC$TL_channel_layer92) || (tLRPC$Chat instanceof TLRPC$TL_channel_layer77) || (tLRPC$Chat instanceof TLRPC$TL_channel_layer72) || (tLRPC$Chat instanceof TLRPC$TL_channel_layer67) || (tLRPC$Chat instanceof TLRPC$TL_channel_layer48) || (tLRPC$Chat instanceof TLRPC$TL_channel_old))) {
                 return true;
             }
-            TLRPC$TL_chatBannedRights tLRPC$TL_chatBannedRights = tLRPC$Chat.default_banned_rights;
             if (tLRPC$TL_chatBannedRights == null || getBannedRight(tLRPC$TL_chatBannedRights, i)) {
                 return false;
             }
@@ -290,7 +290,7 @@ public class ChatObject {
 
     public static boolean canAddBotsToChat(TLRPC$Chat tLRPC$Chat) {
         if (isChannel(tLRPC$Chat)) {
-            if (tLRPC$Chat == null || !tLRPC$Chat.megagroup) {
+            if (!tLRPC$Chat.megagroup) {
                 return false;
             }
             TLRPC$TL_chatAdminRights tLRPC$TL_chatAdminRights = tLRPC$Chat.admin_rights;
@@ -337,7 +337,7 @@ public class ChatObject {
 
     public static boolean isCanWriteToChannel(int i, int i2) {
         TLRPC$Chat chat = MessagesController.getInstance(i2).getChat(Integer.valueOf(i));
-        return canSendMessages(chat) || (chat != null && chat.megagroup);
+        return canSendMessages(chat) || chat.megagroup;
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:4:0x000a, code lost:

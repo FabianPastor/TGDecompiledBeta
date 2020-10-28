@@ -1,71 +1,69 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEz;
+import j$.util.Optional;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
-import j$.util.function.C;
-import j$.util.function.CLASSNAMEo;
 import j$.util.function.Consumer;
+import j$.util.function.E;
 import j$.util.function.Function;
 import j$.util.function.Predicate;
 import j$.util.function.ToDoubleFunction;
 import j$.util.function.ToIntFunction;
 import j$.util.function.ToLongFunction;
-import j$.util.function.V;
+import j$.util.function.n;
+import j$.util.function.v;
 import java.util.Comparator;
 
 public interface Stream extends CLASSNAMEl1 {
-    Object A(Object obj, BiFunction biFunction, CLASSNAMEo oVar);
+    L1 B(Function function);
 
-    M1 C(Function function);
+    Stream P(Predicate predicate);
 
-    Stream R(Predicate predicate);
+    Stream R(Consumer consumer);
 
-    Stream U(Consumer consumer);
+    Object S(CLASSNAMEn1 n1Var);
 
-    Object W(CLASSNAMEn1 n1Var);
+    boolean T(Predicate predicate);
 
-    boolean X(Predicate predicate);
-
-    W2 Y(Function function);
+    T2 U(Function function);
 
     boolean a(Predicate predicate);
 
+    boolean b0(Predicate predicate);
+
     long count();
+
+    CLASSNAMEx2 d(Function function);
+
+    T2 d0(ToLongFunction toLongFunction);
 
     Stream distinct();
 
-    boolean f0(Predicate predicate);
+    void f(Consumer consumer);
 
-    CLASSNAMEz findAny();
+    L1 f0(ToDoubleFunction toDoubleFunction);
 
-    CLASSNAMEz findFirst();
+    Optional findAny();
+
+    Optional findFirst();
 
     void forEach(Consumer consumer);
 
-    A2 h(Function function);
+    Object j(E e, BiConsumer biConsumer, BiConsumer biConsumer2);
 
-    W2 h0(ToLongFunction toLongFunction);
-
-    void j(Consumer consumer);
-
-    M1 k0(ToDoubleFunction toDoubleFunction);
+    Object l0(Object obj, n nVar);
 
     Stream limit(long j);
 
-    Object m(V v, BiConsumer biConsumer, BiConsumer biConsumer2);
+    CLASSNAMEx2 m(ToIntFunction toIntFunction);
 
-    CLASSNAMEz max(Comparator comparator);
+    Optional max(Comparator comparator);
 
-    CLASSNAMEz min(Comparator comparator);
+    Optional min(Comparator comparator);
 
-    A2 o(ToIntFunction toIntFunction);
-
-    Object o0(Object obj, CLASSNAMEo oVar);
+    Stream n(Function function);
 
     Stream p(Function function);
-
-    Stream r(Function function);
 
     Stream skip(long j);
 
@@ -73,9 +71,11 @@ public interface Stream extends CLASSNAMEl1 {
 
     Stream sorted(Comparator comparator);
 
+    Optional t(n nVar);
+
     Object[] toArray();
 
-    Object[] toArray(C c);
+    Object[] toArray(v vVar);
 
-    CLASSNAMEz u(CLASSNAMEo oVar);
+    Object z(Object obj, BiFunction biFunction, n nVar);
 }

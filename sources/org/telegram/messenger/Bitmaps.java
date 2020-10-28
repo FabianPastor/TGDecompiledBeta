@@ -66,29 +66,30 @@ public class Bitmaps {
     public static Bitmap createBitmap(Bitmap bitmap, int i, int i2, int i3, int i4, Matrix matrix, boolean z) {
         Paint paint;
         Bitmap bitmap2;
-        if (Build.VERSION.SDK_INT >= 21) {
+        int i5 = Build.VERSION.SDK_INT;
+        if (i5 >= 21) {
             return Bitmap.createBitmap(bitmap, i, i2, i3, i4, matrix, z);
         }
         checkXYSign(i, i2);
         checkWidthHeight(i3, i4);
-        int i5 = i + i3;
-        if (i5 <= bitmap.getWidth()) {
-            int i6 = i2 + i4;
-            if (i6 > bitmap.getHeight()) {
+        int i6 = i + i3;
+        if (i6 <= bitmap.getWidth()) {
+            int i7 = i2 + i4;
+            if (i7 > bitmap.getHeight()) {
                 throw new IllegalArgumentException("y + height must be <= bitmap.height()");
             } else if (!bitmap.isMutable() && i == 0 && i2 == 0 && i3 == bitmap.getWidth() && i4 == bitmap.getHeight() && (matrix == null || matrix.isIdentity())) {
                 return bitmap;
             } else {
                 Canvas canvas = new Canvas();
-                Rect rect = new Rect(i, i2, i5, i6);
+                Rect rect = new Rect(i, i2, i6, i7);
                 RectF rectF = new RectF(0.0f, 0.0f, (float) i3, (float) i4);
                 Bitmap.Config config = Bitmap.Config.ARGB_8888;
                 Bitmap.Config config2 = bitmap.getConfig();
                 if (config2 != null) {
-                    int i7 = AnonymousClass2.$SwitchMap$android$graphics$Bitmap$Config[config2.ordinal()];
-                    if (i7 == 1) {
+                    int i8 = AnonymousClass2.$SwitchMap$android$graphics$Bitmap$Config[config2.ordinal()];
+                    if (i8 == 1) {
                         config = Bitmap.Config.ARGB_8888;
-                    } else if (i7 != 2) {
+                    } else if (i8 != 2) {
                         config = Bitmap.Config.ARGB_8888;
                     } else {
                         config = Bitmap.Config.ALPHA_8;
@@ -117,7 +118,7 @@ public class Bitmaps {
                 }
                 bitmap2.setDensity(bitmap.getDensity());
                 bitmap2.setHasAlpha(bitmap.hasAlpha());
-                if (Build.VERSION.SDK_INT >= 19) {
+                if (i5 >= 19) {
                     bitmap2.setPremultiplied(bitmap.isPremultiplied());
                 }
                 canvas.setBitmap(bitmap2);

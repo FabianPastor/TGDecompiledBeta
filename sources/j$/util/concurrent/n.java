@@ -6,7 +6,7 @@ final class n extends m {
     }
 
     /* access modifiers changed from: package-private */
-    public m a(int h, Object k) {
+    public m a(int i, Object obj) {
         return null;
     }
 }

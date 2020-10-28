@@ -34,7 +34,7 @@ public class TLRPC$TL_payments_paymentForm extends TLObject {
         this.flags = readInt32;
         int i = 0;
         this.can_save_credentials = (readInt32 & 4) != 0;
-        this.password_missing = (this.flags & 8) != 0;
+        this.password_missing = (readInt32 & 8) != 0;
         this.bot_id = abstractSerializedData.readInt32(z);
         this.invoice = TLRPC$TL_invoice.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.provider_id = abstractSerializedData.readInt32(z);

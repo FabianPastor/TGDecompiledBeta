@@ -21,22 +21,22 @@ public class TLRPC$TL_channelAdminLogEventsFilter extends TLObject {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.join = (readInt32 & 1) != 0;
-        this.leave = (this.flags & 2) != 0;
-        this.invite = (this.flags & 4) != 0;
-        this.ban = (this.flags & 8) != 0;
-        this.unban = (this.flags & 16) != 0;
-        this.kick = (this.flags & 32) != 0;
-        this.unkick = (this.flags & 64) != 0;
-        this.promote = (this.flags & 128) != 0;
-        this.demote = (this.flags & 256) != 0;
-        this.info = (this.flags & 512) != 0;
-        this.settings = (this.flags & 1024) != 0;
-        this.pinned = (this.flags & 2048) != 0;
-        this.edit = (this.flags & 4096) != 0;
-        if ((this.flags & 8192) == 0) {
-            z2 = false;
+        this.leave = (readInt32 & 2) != 0;
+        this.invite = (readInt32 & 4) != 0;
+        this.ban = (readInt32 & 8) != 0;
+        this.unban = (readInt32 & 16) != 0;
+        this.kick = (readInt32 & 32) != 0;
+        this.unkick = (readInt32 & 64) != 0;
+        this.promote = (readInt32 & 128) != 0;
+        this.demote = (readInt32 & 256) != 0;
+        this.info = (readInt32 & 512) != 0;
+        this.settings = (readInt32 & 1024) != 0;
+        this.pinned = (readInt32 & 2048) != 0;
+        this.edit = (readInt32 & 4096) != 0;
+        if ((readInt32 & 8192) != 0) {
+            z2 = true;
         }
         this.delete = z2;
     }

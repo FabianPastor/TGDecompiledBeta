@@ -74,12 +74,12 @@ public class TLRPC$TL_config extends TLObject {
         this.flags = readInt32;
         int i = 0;
         this.phonecalls_enabled = (readInt32 & 2) != 0;
-        this.default_p2p_contacts = (this.flags & 8) != 0;
-        this.preload_featured_stickers = (this.flags & 16) != 0;
-        this.ignore_phone_entities = (this.flags & 32) != 0;
-        this.revoke_pm_inbox = (this.flags & 64) != 0;
-        this.blocked_mode = (this.flags & 256) != 0;
-        this.pfs_enabled = (this.flags & 8192) != 0;
+        this.default_p2p_contacts = (readInt32 & 8) != 0;
+        this.preload_featured_stickers = (readInt32 & 16) != 0;
+        this.ignore_phone_entities = (readInt32 & 32) != 0;
+        this.revoke_pm_inbox = (readInt32 & 64) != 0;
+        this.blocked_mode = (readInt32 & 256) != 0;
+        this.pfs_enabled = (readInt32 & 8192) != 0;
         this.date = abstractSerializedData.readInt32(z);
         this.expires = abstractSerializedData.readInt32(z);
         this.test_mode = abstractSerializedData.readBool(z);

@@ -11,17 +11,17 @@ public abstract class TLRPC$PhoneCallProtocol extends TLObject {
     public boolean udp_reflector;
 
     public static TLRPC$PhoneCallProtocol TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$TL_phoneCallProtocol tLRPC$TL_phoneCallProtocol;
+        TLRPC$PhoneCallProtocol tLRPC$PhoneCallProtocol;
         if (i != -NUM) {
-            tLRPC$TL_phoneCallProtocol = i != -58224696 ? null : new TLRPC$TL_phoneCallProtocol();
+            tLRPC$PhoneCallProtocol = i != -58224696 ? null : new TLRPC$TL_phoneCallProtocol();
         } else {
-            tLRPC$TL_phoneCallProtocol = new TLRPC$TL_phoneCallProtocol_layer110();
+            tLRPC$PhoneCallProtocol = new TLRPC$TL_phoneCallProtocol_layer110();
         }
-        if (tLRPC$TL_phoneCallProtocol != null || !z) {
-            if (tLRPC$TL_phoneCallProtocol != null) {
-                tLRPC$TL_phoneCallProtocol.readParams(abstractSerializedData, z);
+        if (tLRPC$PhoneCallProtocol != null || !z) {
+            if (tLRPC$PhoneCallProtocol != null) {
+                tLRPC$PhoneCallProtocol.readParams(abstractSerializedData, z);
             }
-            return tLRPC$TL_phoneCallProtocol;
+            return tLRPC$PhoneCallProtocol;
         }
         throw new RuntimeException(String.format("can't parse magic %x in PhoneCallProtocol", new Object[]{Integer.valueOf(i)}));
     }

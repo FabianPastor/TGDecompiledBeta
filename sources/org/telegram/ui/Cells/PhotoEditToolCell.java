@@ -78,6 +78,8 @@ public class PhotoEditToolCell extends FrameLayout {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setSeekBarDelegate$0 */
     public /* synthetic */ void lambda$setSeekBarDelegate$0$PhotoEditToolCell(PhotoEditorSeekBar.PhotoEditorSeekBarDelegate photoEditorSeekBarDelegate, int i, int i2) {
         photoEditorSeekBarDelegate.onProgressChanged(i, i2);
         if (i2 > 0) {

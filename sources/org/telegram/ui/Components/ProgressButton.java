@@ -34,8 +34,8 @@ public class ProgressButton extends Button {
         Paint paint = new Paint(1);
         this.progressPaint = paint;
         paint.setStrokeCap(Paint.Cap.ROUND);
-        this.progressPaint.setStyle(Paint.Style.STROKE);
-        this.progressPaint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth((float) AndroidUtilities.dp(2.0f));
     }
 
     /* access modifiers changed from: protected */

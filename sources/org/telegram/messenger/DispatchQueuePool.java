@@ -91,6 +91,8 @@ public class DispatchQueuePool {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$execute$1 */
     public /* synthetic */ void lambda$execute$1$DispatchQueuePool(Runnable runnable, DispatchQueue dispatchQueue) {
         runnable.run();
         AndroidUtilities.runOnUIThread(new Runnable(dispatchQueue) {
@@ -106,6 +108,8 @@ public class DispatchQueuePool {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$0 */
     public /* synthetic */ void lambda$null$0$DispatchQueuePool(DispatchQueue dispatchQueue) {
         this.totalTasksCount--;
         int intValue = this.busyQueuesMap.get(dispatchQueue).intValue() - 1;

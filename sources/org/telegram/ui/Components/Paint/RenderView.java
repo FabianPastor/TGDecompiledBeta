@@ -96,6 +96,8 @@ public class RenderView extends TextureView {
                 }
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onSurfaceTextureSizeChanged$0 */
             public /* synthetic */ void lambda$onSurfaceTextureSizeChanged$0$RenderView$1() {
                 if (RenderView.this.internal != null) {
                     RenderView.this.internal.requestRender();
@@ -113,6 +115,8 @@ public class RenderView extends TextureView {
                 return true;
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onSurfaceTextureDestroyed$1 */
             public /* synthetic */ void lambda$onSurfaceTextureDestroyed$1$RenderView$1() {
                 RenderView.this.internal.shutdown();
                 CanvasInternal unused = RenderView.this.internal = null;
@@ -247,6 +251,8 @@ public class RenderView extends TextureView {
         setVisibility(8);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$shutdown$0 */
     public /* synthetic */ void lambda$shutdown$0$RenderView() {
         this.painting.cleanResources(this.transformedBitmap);
         this.internal.shutdown();
@@ -274,9 +280,9 @@ public class RenderView extends TextureView {
                         AndroidUtilities.runOnUIThread(
                         /*  JADX ERROR: Method code generation error
                             jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0074: INVOKE  
-                              (wrap: org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$HlBJ_nBTz_zjBI9w92KsEr6_ZgU : 0x0071: CONSTRUCTOR  (r0v27 org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$HlBJ_nBTz_zjBI9w92KsEr6_ZgU) = 
+                              (wrap: org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$ZQI3UPnjjdZLTD7cOEZydc7B9sw : 0x0071: CONSTRUCTOR  (r0v27 org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$ZQI3UPnjjdZLTD7cOEZydc7B9sw) = 
                               (r4v0 'this' org.telegram.ui.Components.Paint.RenderView$CanvasInternal$1 A[THIS])
-                             call: org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$HlBJ_nBTz_zjBI9w92KsEr6_ZgU.<init>(org.telegram.ui.Components.Paint.RenderView$CanvasInternal$1):void type: CONSTRUCTOR)
+                             call: org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$ZQI3UPnjjdZLTD7cOEZydc7B9sw.<init>(org.telegram.ui.Components.Paint.RenderView$CanvasInternal$1):void type: CONSTRUCTOR)
                              org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Components.Paint.RenderView.CanvasInternal.1.run():void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
@@ -348,9 +354,9 @@ public class RenderView extends TextureView {
                             	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                             	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                             	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0071: CONSTRUCTOR  (r0v27 org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$HlBJ_nBTz_zjBI9w92KsEr6_ZgU) = 
+                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0071: CONSTRUCTOR  (r0v27 org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$ZQI3UPnjjdZLTD7cOEZydc7B9sw) = 
                               (r4v0 'this' org.telegram.ui.Components.Paint.RenderView$CanvasInternal$1 A[THIS])
-                             call: org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$HlBJ_nBTz_zjBI9w92KsEr6_ZgU.<init>(org.telegram.ui.Components.Paint.RenderView$CanvasInternal$1):void type: CONSTRUCTOR in method: org.telegram.ui.Components.Paint.RenderView.CanvasInternal.1.run():void, dex: classes3.dex
+                             call: org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$ZQI3UPnjjdZLTD7cOEZydc7B9sw.<init>(org.telegram.ui.Components.Paint.RenderView$CanvasInternal$1):void type: CONSTRUCTOR in method: org.telegram.ui.Components.Paint.RenderView.CanvasInternal.1.run():void, dex: classes3.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -359,7 +365,7 @@ public class RenderView extends TextureView {
                             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                             	... 69 more
-                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$HlBJ_nBTz_zjBI9w92KsEr6_ZgU, state: NOT_LOADED
+                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$ZQI3UPnjjdZLTD7cOEZydc7B9sw, state: NOT_LOADED
                             	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                             	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -412,7 +418,7 @@ public class RenderView extends TextureView {
                             org.telegram.ui.Components.Paint.RenderView$CanvasInternal r0 = org.telegram.ui.Components.Paint.RenderView.CanvasInternal.this
                             org.telegram.ui.Components.Paint.RenderView r0 = org.telegram.ui.Components.Paint.RenderView.this
                             boolean unused = r0.firstDrawSent = r1
-                            org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$HlBJ_nBTz_zjBI9w92KsEr6_ZgU r0 = new org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$HlBJ_nBTz_zjBI9w92KsEr6_ZgU
+                            org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$ZQI3UPnjjdZLTD7cOEZydc7B9sw r0 = new org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$ZQI3UPnjjdZLTD7cOEZydc7B9sw
                             r0.<init>(r4)
                             org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
                         L_0x0077:
@@ -422,7 +428,7 @@ public class RenderView extends TextureView {
                             org.telegram.ui.Components.Paint.RenderView$CanvasInternal r0 = org.telegram.ui.Components.Paint.RenderView.CanvasInternal.this
                             org.telegram.ui.Components.Paint.RenderView r0 = org.telegram.ui.Components.Paint.RenderView.this
                             org.telegram.messenger.DispatchQueue r0 = r0.queue
-                            org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$wtijfNwpyJRsWOlK7BTMkRQsh4k r1 = new org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$wtijfNwpyJRsWOlK7BTMkRQsh4k
+                            org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$tzTihPyxH4iIYNKnXymiuu62v2Y r1 = new org.telegram.ui.Components.Paint.-$$Lambda$RenderView$CanvasInternal$1$tzTihPyxH4iIYNKnXymiuu62v2Y
                             r1.<init>(r4)
                             r2 = 200(0xc8, double:9.9E-322)
                             r0.postRunnable(r1, r2)
@@ -432,10 +438,14 @@ public class RenderView extends TextureView {
                         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Paint.RenderView.CanvasInternal.AnonymousClass1.run():void");
                     }
 
+                    /* access modifiers changed from: private */
+                    /* renamed from: lambda$run$0 */
                     public /* synthetic */ void lambda$run$0$RenderView$CanvasInternal$1() {
                         RenderView.this.delegate.onFirstDraw();
                     }
 
+                    /* access modifiers changed from: private */
+                    /* renamed from: lambda$run$1 */
                     public /* synthetic */ void lambda$run$1$RenderView$CanvasInternal$1() {
                         boolean unused = CanvasInternal.this.ready = true;
                     }
@@ -576,6 +586,8 @@ public class RenderView extends TextureView {
                     this.bufferHeight = i2;
                 }
 
+                /* access modifiers changed from: private */
+                /* renamed from: lambda$requestRender$0 */
                 public /* synthetic */ void lambda$requestRender$0$RenderView$CanvasInternal() {
                     this.drawRunnable.run();
                 }
@@ -594,7 +606,7 @@ public class RenderView extends TextureView {
                         cancelRunnable(runnable);
                         this.scheduledRunnable = null;
                     }
-                    $$Lambda$RenderView$CanvasInternal$1Nuq5ookmPMlVYC1BO7kPj00XHw r0 = new Runnable() {
+                    $$Lambda$RenderView$CanvasInternal$onipHif6tFO752p7UyrjZ2509zs r0 = new Runnable() {
                         public final void run() {
                             RenderView.CanvasInternal.this.lambda$scheduleRedraw$1$RenderView$CanvasInternal();
                         }
@@ -603,6 +615,8 @@ public class RenderView extends TextureView {
                     postRunnable(r0, 1);
                 }
 
+                /* access modifiers changed from: private */
+                /* renamed from: lambda$scheduleRedraw$1 */
                 public /* synthetic */ void lambda$scheduleRedraw$1$RenderView$CanvasInternal() {
                     this.scheduledRunnable = null;
                     this.drawRunnable.run();
@@ -637,6 +651,8 @@ public class RenderView extends TextureView {
                     });
                 }
 
+                /* access modifiers changed from: private */
+                /* renamed from: lambda$shutdown$2 */
                 public /* synthetic */ void lambda$shutdown$2$RenderView$CanvasInternal() {
                     finish();
                     Looper myLooper = Looper.myLooper();
@@ -672,6 +688,8 @@ public class RenderView extends TextureView {
                     return bitmapArr[0];
                 }
 
+                /* access modifiers changed from: private */
+                /* renamed from: lambda$getTexture$3 */
                 public /* synthetic */ void lambda$getTexture$3$RenderView$CanvasInternal(Bitmap[] bitmapArr, CountDownLatch countDownLatch) {
                     Painting.PaintingData paintingData = RenderView.this.painting.getPaintingData(new RectF(0.0f, 0.0f, RenderView.this.painting.getSize().width, RenderView.this.painting.getSize().height), false);
                     if (paintingData != null) {
@@ -706,6 +724,8 @@ public class RenderView extends TextureView {
                 }
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$performInContext$1 */
             public /* synthetic */ void lambda$performInContext$1$RenderView(Runnable runnable) {
                 CanvasInternal canvasInternal = this.internal;
                 if (canvasInternal != null && canvasInternal.initialized) {

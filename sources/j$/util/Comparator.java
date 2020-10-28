@@ -27,76 +27,47 @@ public interface Comparator {
 
     /* renamed from: j$.util.Comparator$-CC  reason: invalid class name */
     public final /* synthetic */ class CC {
-        public static java.util.Comparator $default$reversed(java.util.Comparator _this) {
-            return Collections.reverseOrder(_this);
+        public static java.util.Comparator $default$reversed(java.util.Comparator comparator) {
+            return Collections.reverseOrder(comparator);
         }
 
-        public static java.util.Comparator $default$thenComparing(java.util.Comparator _this, java.util.Comparator other) {
-            other.getClass();
-            return new CLASSNAMEd(_this, other);
+        public static java.util.Comparator $default$thenComparing(java.util.Comparator comparator, Function function) {
+            function.getClass();
+            return CLASSNAMEk.D(comparator, new CLASSNAMEa(function));
         }
 
-        public static /* synthetic */ int k(java.util.Comparator _this, java.util.Comparator other, Object c1, Object c2) {
-            int res = _this.compare(c1, c2);
-            return res != 0 ? res : other.compare(c1, c2);
+        public static java.util.Comparator $default$thenComparingDouble(java.util.Comparator comparator, ToDoubleFunction toDoubleFunction) {
+            toDoubleFunction.getClass();
+            return CLASSNAMEk.D(comparator, new CLASSNAMEc(toDoubleFunction));
         }
 
-        public static java.util.Comparator $default$thenComparing(java.util.Comparator _this, Function function, java.util.Comparator keyComparator) {
-            return CLASSNAMEl.a(_this, b(function, keyComparator));
+        public static java.util.Comparator $default$thenComparingInt(java.util.Comparator comparator, ToIntFunction toIntFunction) {
+            toIntFunction.getClass();
+            return CLASSNAMEk.D(comparator, new CLASSNAMEe(toIntFunction));
         }
 
-        public static java.util.Comparator $default$thenComparing(java.util.Comparator _this, Function function) {
-            return CLASSNAMEl.a(_this, a(function));
+        public static java.util.Comparator $default$thenComparingLong(java.util.Comparator comparator, ToLongFunction toLongFunction) {
+            toLongFunction.getClass();
+            return CLASSNAMEk.D(comparator, new CLASSNAMEf(toLongFunction));
         }
 
-        public static java.util.Comparator $default$thenComparingInt(java.util.Comparator _this, ToIntFunction toIntFunction) {
-            return CLASSNAMEl.a(_this, d(toIntFunction));
+        public static java.util.Comparator b() {
+            return CLASSNAMEl.INSTANCE;
         }
 
-        public static java.util.Comparator $default$thenComparingLong(java.util.Comparator _this, ToLongFunction toLongFunction) {
-            return CLASSNAMEl.a(_this, e(toLongFunction));
-        }
-
-        public static java.util.Comparator $default$thenComparingDouble(java.util.Comparator _this, ToDoubleFunction toDoubleFunction) {
-            return CLASSNAMEl.a(_this, c(toDoubleFunction));
-        }
-
-        public static java.util.Comparator m() {
+        public static java.util.Comparator reverseOrder() {
             return Collections.reverseOrder();
         }
 
-        public static java.util.Comparator l() {
-            return CLASSNAMEm.INSTANCE;
-        }
-
-        public static java.util.Comparator b(Function function, java.util.Comparator keyComparator) {
+        public static java.util.Comparator $default$thenComparing(java.util.Comparator comparator, Function function, java.util.Comparator comparator2) {
             function.getClass();
-            keyComparator.getClass();
-            return new CLASSNAMEf(keyComparator, function);
+            comparator2.getClass();
+            return CLASSNAMEk.D(comparator, new CLASSNAMEb(comparator2, function));
         }
 
-        public static java.util.Comparator a(Function function) {
-            function.getClass();
-            return new CLASSNAMEg(function);
-        }
-
-        public static java.util.Comparator d(ToIntFunction toIntFunction) {
-            toIntFunction.getClass();
-            return new CLASSNAMEe(toIntFunction);
-        }
-
-        public static java.util.Comparator e(ToLongFunction toLongFunction) {
-            toLongFunction.getClass();
-            return new CLASSNAMEc(toLongFunction);
-        }
-
-        public static /* synthetic */ int j(ToLongFunction keyExtractor, Object c1, Object c2) {
-            return (keyExtractor.a(c1) > keyExtractor.a(c2) ? 1 : (keyExtractor.a(c1) == keyExtractor.a(c2) ? 0 : -1));
-        }
-
-        public static java.util.Comparator c(ToDoubleFunction toDoubleFunction) {
-            toDoubleFunction.getClass();
-            return new CLASSNAMEh(toDoubleFunction);
+        public static java.util.Comparator $default$thenComparing(java.util.Comparator comparator, java.util.Comparator comparator2) {
+            comparator2.getClass();
+            return new CLASSNAMEd(comparator, comparator2);
         }
     }
 }

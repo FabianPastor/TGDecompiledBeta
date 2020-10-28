@@ -1,30 +1,26 @@
 package j$.util.stream;
 
-import j$.util.B;
-import j$.util.function.CLASSNAMEs;
-import j$.util.function.CLASSNAMEt;
+import j$.util.CLASSNAMEu;
+import j$.util.function.g;
+import j$.util.function.u;
 
-final class O1 extends S1 implements B5 {
-    public /* synthetic */ CLASSNAMEt p(CLASSNAMEt tVar) {
-        return CLASSNAMEs.a(this, tVar);
-    }
-
+final class O1 extends R1 implements CLASSNAMEr5 {
     O1() {
     }
 
-    public /* bridge */ /* synthetic */ void v(Double d) {
-        super.accept((Object) d);
+    public void accept(int i) {
+        accept((Object) Integer.valueOf(i));
     }
 
-    public void accept(double value) {
-        accept((Object) Double.valueOf(value));
-    }
-
-    /* renamed from: a */
-    public B get() {
+    public Object get() {
         if (this.a) {
-            return B.d(((Double) this.b).doubleValue());
+            return CLASSNAMEu.d(((Integer) this.b).intValue());
         }
         return null;
+    }
+
+    public u l(u uVar) {
+        uVar.getClass();
+        return new g(this, uVar);
     }
 }

@@ -34,11 +34,11 @@ public class TLRPC$TL_authorization extends TLObject {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.current = (readInt32 & 1) != 0;
-        this.official_app = (this.flags & 2) != 0;
-        if ((this.flags & 4) == 0) {
-            z2 = false;
+        this.official_app = (readInt32 & 2) != 0;
+        if ((readInt32 & 4) != 0) {
+            z2 = true;
         }
         this.password_pending = z2;
         this.hash = abstractSerializedData.readInt64(z);

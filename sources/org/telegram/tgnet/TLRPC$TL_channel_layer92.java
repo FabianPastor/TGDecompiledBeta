@@ -6,16 +6,16 @@ public class TLRPC$TL_channel_layer92 extends TLRPC$TL_channel {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.creator = (readInt32 & 1) != 0;
-        this.left = (this.flags & 4) != 0;
-        this.broadcast = (this.flags & 32) != 0;
-        this.verified = (this.flags & 128) != 0;
-        this.megagroup = (this.flags & 256) != 0;
-        this.restricted = (this.flags & 512) != 0;
-        this.signatures = (this.flags & 2048) != 0;
-        if ((this.flags & 4096) == 0) {
-            z2 = false;
+        this.left = (readInt32 & 4) != 0;
+        this.broadcast = (readInt32 & 32) != 0;
+        this.verified = (readInt32 & 128) != 0;
+        this.megagroup = (readInt32 & 256) != 0;
+        this.restricted = (readInt32 & 512) != 0;
+        this.signatures = (readInt32 & 2048) != 0;
+        if ((readInt32 & 4096) != 0) {
+            z2 = true;
         }
         this.min = z2;
         this.id = abstractSerializedData.readInt32(z);

@@ -147,6 +147,8 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$runPendingAnimations$0 */
     public /* synthetic */ void lambda$runPendingAnimations$0$DialogsItemAnimator(ArrayList arrayList) {
         Iterator it = arrayList.iterator();
         while (it.hasNext()) {
@@ -157,6 +159,8 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
         this.mMovesList.remove(arrayList);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$runPendingAnimations$1 */
     public /* synthetic */ void lambda$runPendingAnimations$1$DialogsItemAnimator(ArrayList arrayList) {
         Iterator it = arrayList.iterator();
         while (it.hasNext()) {
@@ -166,6 +170,8 @@ public class DialogsItemAnimator extends SimpleItemAnimator {
         this.mChangesList.remove(arrayList);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$runPendingAnimations$2 */
     public /* synthetic */ void lambda$runPendingAnimations$2$DialogsItemAnimator(ArrayList arrayList) {
         Iterator it = arrayList.iterator();
         while (it.hasNext()) {

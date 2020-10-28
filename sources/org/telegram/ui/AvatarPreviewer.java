@@ -352,20 +352,21 @@ public class AvatarPreviewer {
             new Rect();
             this.interpolator = new AccelerateDecelerateInterpolator();
             this.backgroundDrawable = new ColorDrawable(NUM);
-            this.imageReceiver = new ImageReceiver();
+            ImageReceiver imageReceiver2 = new ImageReceiver();
+            this.imageReceiver = imageReceiver2;
             this.downY = -1.0f;
             this.callback = callback2;
             setWillNotDraw(false);
             setFitsSystemWindows(true);
-            this.imageReceiver.setAspectFit(true);
-            this.imageReceiver.setInvalidateAll(true);
-            this.imageReceiver.setRoundRadius(AndroidUtilities.dp(6.0f));
-            this.imageReceiver.setParentView(this);
+            imageReceiver2.setAspectFit(true);
+            imageReceiver2.setInvalidateAll(true);
+            imageReceiver2.setRoundRadius(AndroidUtilities.dp(6.0f));
+            imageReceiver2.setParentView(this);
             RadialProgress2 radialProgress2 = new RadialProgress2(this);
             this.radialProgress = radialProgress2;
             radialProgress2.setOverrideAlpha(0.0f);
-            this.radialProgress.setIcon(10, false, false);
-            this.radialProgress.setColors(NUM, NUM, -1, -1);
+            radialProgress2.setIcon(10, false, false);
+            radialProgress2.setColors(NUM, NUM, -1, -1);
             this.arrowDrawable = ContextCompat.getDrawable(context, NUM);
         }
 
@@ -429,6 +430,8 @@ public class AvatarPreviewer {
             return true;
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onTouchEvent$0 */
         public /* synthetic */ void lambda$onTouchEvent$0$AvatarPreviewer$Layout(ValueAnimator valueAnimator) {
             this.moveProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
             invalidate();
@@ -465,11 +468,15 @@ public class AvatarPreviewer {
             }
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$showBottomSheet$1 */
         public /* synthetic */ void lambda$showBottomSheet$1$AvatarPreviewer$Layout(DialogInterface dialogInterface, int i) {
             this.callback.onMenuClick(this.menuItems[i]);
             setShowing(false);
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$showBottomSheet$2 */
         public /* synthetic */ void lambda$showBottomSheet$2$AvatarPreviewer$Layout(DialogInterface dialogInterface) {
             this.visibleSheet = null;
             setShowing(false);
@@ -536,16 +543,16 @@ public class AvatarPreviewer {
         }
 
         /* access modifiers changed from: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:18:0x0060  */
-        /* JADX WARNING: Removed duplicated region for block: B:21:0x0081  */
-        /* JADX WARNING: Removed duplicated region for block: B:22:0x0084  */
-        /* JADX WARNING: Removed duplicated region for block: B:25:0x0089  */
-        /* JADX WARNING: Removed duplicated region for block: B:26:0x0090  */
-        /* JADX WARNING: Removed duplicated region for block: B:29:0x00c6  */
-        /* JADX WARNING: Removed duplicated region for block: B:30:0x00d3  */
-        /* JADX WARNING: Removed duplicated region for block: B:33:0x00ee  */
-        /* JADX WARNING: Removed duplicated region for block: B:55:0x01af  */
-        /* JADX WARNING: Removed duplicated region for block: B:56:0x01bd  */
+        /* JADX WARNING: Removed duplicated region for block: B:17:0x005e  */
+        /* JADX WARNING: Removed duplicated region for block: B:20:0x007f  */
+        /* JADX WARNING: Removed duplicated region for block: B:21:0x0082  */
+        /* JADX WARNING: Removed duplicated region for block: B:23:0x0085  */
+        /* JADX WARNING: Removed duplicated region for block: B:24:0x008c  */
+        /* JADX WARNING: Removed duplicated region for block: B:27:0x00c2  */
+        /* JADX WARNING: Removed duplicated region for block: B:28:0x00cf  */
+        /* JADX WARNING: Removed duplicated region for block: B:31:0x00ea  */
+        /* JADX WARNING: Removed duplicated region for block: B:53:0x01ab  */
+        /* JADX WARNING: Removed duplicated region for block: B:54:0x01b9  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onDraw(android.graphics.Canvas r10) {
             /*
@@ -559,38 +566,37 @@ public class AvatarPreviewer {
                 r4 = 0
                 r5 = 1065353216(0x3var_, float:1.0)
                 if (r0 == 0) goto L_0x0029
-                float r0 = r9.progress
-                int r6 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
-                if (r6 >= 0) goto L_0x0029
-                float r2 = (float) r2
-                float r2 = r2 / r1
-                float r0 = r0 + r2
-                r9.progress = r0
-                int r0 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
+                float r6 = r9.progress
+                int r7 = (r6 > r5 ? 1 : (r6 == r5 ? 0 : -1))
+                if (r7 >= 0) goto L_0x0029
+                float r0 = (float) r2
+                float r0 = r0 / r1
+                float r6 = r6 + r0
+                r9.progress = r6
+                int r0 = (r6 > r5 ? 1 : (r6 == r5 ? 0 : -1))
                 if (r0 >= 0) goto L_0x0026
                 r9.postInvalidateOnAnimation()
-                goto L_0x0045
+                goto L_0x0043
             L_0x0026:
                 r9.progress = r5
-                goto L_0x0045
+                goto L_0x0043
             L_0x0029:
-                boolean r0 = r9.showing
-                if (r0 != 0) goto L_0x0045
+                if (r0 != 0) goto L_0x0043
                 float r0 = r9.progress
                 int r6 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-                if (r6 <= 0) goto L_0x0045
+                if (r6 <= 0) goto L_0x0043
                 float r2 = (float) r2
                 float r2 = r2 / r1
                 float r0 = r0 - r2
                 r9.progress = r0
                 int r0 = (r0 > r4 ? 1 : (r0 == r4 ? 0 : -1))
-                if (r0 <= 0) goto L_0x0040
+                if (r0 <= 0) goto L_0x003e
                 r9.postInvalidateOnAnimation()
-                goto L_0x0045
-            L_0x0040:
+                goto L_0x0043
+            L_0x003e:
                 r9.progress = r4
                 r9.onHide()
-            L_0x0045:
+            L_0x0043:
                 android.view.animation.Interpolator r0 = r9.interpolator
                 float r1 = r9.progress
                 float r0 = r0.getInterpolation(r1)
@@ -602,7 +608,7 @@ public class AvatarPreviewer {
                 android.graphics.drawable.ColorDrawable r1 = r9.backgroundDrawable
                 r1.draw(r10)
                 int r1 = (r0 > r5 ? 1 : (r0 == r5 ? 0 : -1))
-                if (r1 >= 0) goto L_0x007a
+                if (r1 >= 0) goto L_0x0078
                 r1 = 1064514355(0x3var_, float:0.95)
                 float r2 = org.telegram.messenger.AndroidUtilities.lerp(r1, r5, r0)
                 float r1 = org.telegram.messenger.AndroidUtilities.lerp(r1, r5, r0)
@@ -611,88 +617,87 @@ public class AvatarPreviewer {
                 org.telegram.messenger.ImageReceiver r6 = r9.imageReceiver
                 float r6 = r6.getCenterY()
                 r10.scale(r2, r1, r3, r6)
-            L_0x007a:
+            L_0x0078:
                 int r1 = android.os.Build.VERSION.SDK_INT
                 r2 = 21
                 r3 = 0
-                if (r1 < r2) goto L_0x0084
-                int r1 = org.telegram.messenger.AndroidUtilities.statusBarHeight
-                goto L_0x0085
-            L_0x0084:
+                if (r1 < r2) goto L_0x0082
+                int r6 = org.telegram.messenger.AndroidUtilities.statusBarHeight
+                goto L_0x0083
+            L_0x0082:
+                r6 = 0
+            L_0x0083:
+                if (r1 < r2) goto L_0x008c
+                android.view.WindowInsets r1 = r9.insets
+                int r1 = r1.getStableInsetBottom()
+                goto L_0x008d
+            L_0x008c:
                 r1 = 0
-            L_0x0085:
-                int r6 = android.os.Build.VERSION.SDK_INT
-                if (r6 < r2) goto L_0x0090
-                android.view.WindowInsets r2 = r9.insets
-                int r2 = r2.getStableInsetBottom()
-                goto L_0x0091
-            L_0x0090:
-                r2 = 0
-            L_0x0091:
-                org.telegram.ui.AvatarPreviewer$MenuItem[] r6 = r9.menuItems
-                int r6 = r6.length
+            L_0x008d:
+                org.telegram.ui.AvatarPreviewer$MenuItem[] r2 = r9.menuItems
+                int r2 = r2.length
                 r7 = 1111490560(0x42400000, float:48.0)
                 int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                int r6 = r6 * r7
+                int r2 = r2 * r7
                 r7 = 1098907648(0x41800000, float:16.0)
                 int r8 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                int r6 = r6 + r8
+                int r2 = r2 + r8
                 int r8 = r9.getHeight()
-                int r2 = r2 + r6
-                int r6 = org.telegram.messenger.AndroidUtilities.dp(r7)
-                int r2 = r2 + r6
-                int r8 = r8 - r2
-                float r2 = (float) r8
-                org.telegram.messenger.ImageReceiver r6 = r9.imageReceiver
-                float r6 = r6.getImageY2()
-                float r2 = r2 - r6
-                float r2 = java.lang.Math.min(r4, r2)
-                org.telegram.messenger.ImageReceiver r6 = r9.imageReceiver
-                float r6 = r6.getImageY()
-                float r6 = r6 + r2
-                float r1 = (float) r1
-                int r1 = (r6 > r1 ? 1 : (r6 == r1 ? 0 : -1))
-                if (r1 >= 0) goto L_0x00d3
+                int r1 = r1 + r2
+                int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
+                int r1 = r1 + r2
+                int r8 = r8 - r1
+                float r1 = (float) r8
+                org.telegram.messenger.ImageReceiver r2 = r9.imageReceiver
+                float r2 = r2.getImageY2()
+                float r1 = r1 - r2
+                float r1 = java.lang.Math.min(r4, r1)
+                org.telegram.messenger.ImageReceiver r2 = r9.imageReceiver
+                float r2 = r2.getImageY()
+                float r2 = r2 + r1
+                float r6 = (float) r6
+                int r2 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
+                if (r2 >= 0) goto L_0x00cf
                 float r1 = r9.moveProgress
                 int r2 = org.telegram.messenger.AndroidUtilities.dp(r7)
                 float r2 = (float) r2
                 float r1 = r1 * r2
                 r10.translate(r4, r1)
-                goto L_0x00e0
-            L_0x00d3:
-                float r1 = r9.moveProgress
+                goto L_0x00dc
+            L_0x00cf:
+                float r2 = r9.moveProgress
                 int r6 = org.telegram.messenger.AndroidUtilities.dp(r7)
                 float r6 = (float) r6
-                float r1 = r1 * r6
-                float r2 = r2 + r1
-                r10.translate(r4, r2)
-            L_0x00e0:
+                float r2 = r2 * r6
+                float r1 = r1 + r2
+                r10.translate(r4, r1)
+            L_0x00dc:
                 org.telegram.messenger.ImageReceiver r1 = r9.imageReceiver
                 r1.setAlpha(r0)
                 org.telegram.messenger.ImageReceiver r1 = r9.imageReceiver
                 r1.draw(r10)
                 boolean r1 = r9.showProgress
-                if (r1 == 0) goto L_0x01a9
+                if (r1 == 0) goto L_0x01a5
                 org.telegram.messenger.ImageReceiver r1 = r9.imageReceiver
                 android.graphics.drawable.Drawable r1 = r1.getDrawable()
                 boolean r2 = r1 instanceof org.telegram.ui.Components.AnimatedFileDrawable
                 r6 = 2
                 r7 = 250(0xfa, double:1.235E-321)
-                if (r2 == 0) goto L_0x0152
+                if (r2 == 0) goto L_0x014e
                 org.telegram.ui.Components.AnimatedFileDrawable r1 = (org.telegram.ui.Components.AnimatedFileDrawable) r1
                 int r1 = r1.getDurationMs()
-                if (r1 <= 0) goto L_0x0152
+                if (r1 <= 0) goto L_0x014e
                 android.animation.ValueAnimator r1 = r9.progressShowAnimator
-                if (r1 == 0) goto L_0x014f
+                if (r1 == 0) goto L_0x014b
                 r1.cancel()
                 org.telegram.ui.Components.RadialProgress2 r1 = r9.radialProgress
                 float r1 = r1.getProgress()
                 r2 = 1
                 int r1 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-                if (r1 >= 0) goto L_0x011a
+                if (r1 >= 0) goto L_0x0116
                 org.telegram.ui.Components.RadialProgress2 r1 = r9.radialProgress
                 r1.setProgress(r5, r2)
-            L_0x011a:
+            L_0x0116:
                 float[] r1 = new float[r6]
                 android.animation.ValueAnimator r6 = r9.progressShowAnimator
                 java.lang.Object r6 = r6.getAnimatedValue()
@@ -706,25 +711,25 @@ public class AvatarPreviewer {
                 r2.<init>()
                 r1.addListener(r2)
                 android.animation.ValueAnimator r1 = r9.progressHideAnimator
-                org.telegram.ui.-$$Lambda$AvatarPreviewer$Layout$Vh3PHQnEnnTrxyomcT0MNdke4bY r2 = new org.telegram.ui.-$$Lambda$AvatarPreviewer$Layout$Vh3PHQnEnnTrxyomcT0MNdke4bY
+                org.telegram.ui.-$$Lambda$AvatarPreviewer$Layout$j9KW4xPGuPhYhDk833i23cp7jBU r2 = new org.telegram.ui.-$$Lambda$AvatarPreviewer$Layout$j9KW4xPGuPhYhDk833i23cp7jBU
                 r2.<init>()
                 r1.addUpdateListener(r2)
                 android.animation.ValueAnimator r1 = r9.progressHideAnimator
                 r1.setDuration(r7)
                 android.animation.ValueAnimator r1 = r9.progressHideAnimator
                 r1.start()
-                goto L_0x0178
-            L_0x014f:
+                goto L_0x0174
+            L_0x014b:
                 r9.showProgress = r3
-                goto L_0x0178
-            L_0x0152:
+                goto L_0x0174
+            L_0x014e:
                 android.animation.ValueAnimator r1 = r9.progressShowAnimator
-                if (r1 != 0) goto L_0x0178
+                if (r1 != 0) goto L_0x0174
                 float[] r1 = new float[r6]
                 r1 = {0, NUM} // fill-array
                 android.animation.ValueAnimator r1 = android.animation.ValueAnimator.ofFloat(r1)
                 r9.progressShowAnimator = r1
-                org.telegram.ui.-$$Lambda$AvatarPreviewer$Layout$thqDrKb7HJ7ZqZxQif1qK5QFbTg r2 = new org.telegram.ui.-$$Lambda$AvatarPreviewer$Layout$thqDrKb7HJ7ZqZxQif1qK5QFbTg
+                org.telegram.ui.-$$Lambda$AvatarPreviewer$Layout$xkdpQNyrqjoJ20d9783m1FumdYM r2 = new org.telegram.ui.-$$Lambda$AvatarPreviewer$Layout$xkdpQNyrqjoJ20d9783m1FumdYM
                 r2.<init>()
                 r1.addUpdateListener(r2)
                 android.animation.ValueAnimator r1 = r9.progressShowAnimator
@@ -733,9 +738,9 @@ public class AvatarPreviewer {
                 r1.setDuration(r7)
                 android.animation.ValueAnimator r1 = r9.progressShowAnimator
                 r1.start()
-            L_0x0178:
+            L_0x0174:
                 android.animation.ValueAnimator r1 = r9.progressHideAnimator
-                if (r1 == 0) goto L_0x0191
+                if (r1 == 0) goto L_0x018d
                 org.telegram.ui.Components.RadialProgress2 r2 = r9.radialProgress
                 java.lang.Object r1 = r1.getAnimatedValue()
                 java.lang.Float r1 = (java.lang.Float) r1
@@ -743,10 +748,10 @@ public class AvatarPreviewer {
                 r2.setOverrideAlpha(r1)
                 org.telegram.ui.Components.RadialProgress2 r1 = r9.radialProgress
                 r1.draw(r10)
-                goto L_0x01a9
-            L_0x0191:
+                goto L_0x01a5
+            L_0x018d:
                 android.animation.ValueAnimator r1 = r9.progressShowAnimator
-                if (r1 == 0) goto L_0x01a9
+                if (r1 == 0) goto L_0x01a5
                 org.telegram.ui.Components.RadialProgress2 r2 = r9.radialProgress
                 java.lang.Object r1 = r1.getAnimatedValue()
                 java.lang.Float r1 = (java.lang.Float) r1
@@ -754,23 +759,23 @@ public class AvatarPreviewer {
                 r2.setOverrideAlpha(r1)
                 org.telegram.ui.Components.RadialProgress2 r1 = r9.radialProgress
                 r1.draw(r10)
-            L_0x01a9:
+            L_0x01a5:
                 android.animation.ValueAnimator r1 = r9.moveAnimator
                 r2 = 1132396544(0x437var_, float:255.0)
-                if (r1 == 0) goto L_0x01bd
+                if (r1 == 0) goto L_0x01b9
                 android.graphics.drawable.Drawable r0 = r9.arrowDrawable
                 float r1 = r1.getAnimatedFraction()
                 float r5 = r5 - r1
                 float r5 = r5 * r2
                 int r1 = (int) r5
                 r0.setAlpha(r1)
-                goto L_0x01c5
-            L_0x01bd:
+                goto L_0x01c1
+            L_0x01b9:
                 android.graphics.drawable.Drawable r1 = r9.arrowDrawable
                 float r0 = r0 * r2
                 int r0 = (int) r0
                 r1.setAlpha(r0)
-            L_0x01c5:
+            L_0x01c1:
                 android.graphics.drawable.Drawable r0 = r9.arrowDrawable
                 r0.draw(r10)
                 return
@@ -778,10 +783,14 @@ public class AvatarPreviewer {
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.AvatarPreviewer.Layout.onDraw(android.graphics.Canvas):void");
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onDraw$3 */
         public /* synthetic */ void lambda$onDraw$3$AvatarPreviewer$Layout(ValueAnimator valueAnimator) {
             invalidate();
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onDraw$4 */
         public /* synthetic */ void lambda$onDraw$4$AvatarPreviewer$Layout(ValueAnimator valueAnimator) {
             invalidate();
         }
@@ -813,6 +822,8 @@ public class AvatarPreviewer {
             setShowing(true);
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$setData$5 */
         public /* synthetic */ void lambda$setData$5$AvatarPreviewer$Layout(Data data, Object obj) {
             if (this.recycled) {
                 return;

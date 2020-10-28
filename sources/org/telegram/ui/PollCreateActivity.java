@@ -276,6 +276,8 @@ public class PollCreateActivity extends BaseFragment {
                 }
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onItemClick$0 */
             public /* synthetic */ void lambda$onItemClick$0$PollCreateActivity$1(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
                 PollCreateActivity.this.delegate.sendPoll(tLRPC$TL_messageMediaPoll, hashMap, z, i);
                 PollCreateActivity.this.finishFragment();
@@ -332,6 +334,8 @@ public class PollCreateActivity extends BaseFragment {
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$0 */
     public /* synthetic */ void lambda$createView$0$PollCreateActivity(View view, int i) {
         boolean z;
         if (i == this.addAnswerRow) {
@@ -580,7 +584,7 @@ public class PollCreateActivity extends BaseFragment {
         } else {
             this.answerStartRow = -1;
         }
-        if (this.answersCount != this.answers.length) {
+        if (i5 != this.answers.length) {
             int i6 = this.rowCount;
             this.rowCount = i6 + 1;
             this.addAnswerRow = i6;
@@ -601,30 +605,31 @@ public class PollCreateActivity extends BaseFragment {
         } else {
             this.anonymousRow = -1;
         }
-        if (this.quizOnly != 1) {
-            int i10 = this.rowCount;
-            this.rowCount = i10 + 1;
-            this.multipleRow = i10;
+        int i10 = this.quizOnly;
+        if (i10 != 1) {
+            int i11 = this.rowCount;
+            this.rowCount = i11 + 1;
+            this.multipleRow = i11;
         } else {
             this.multipleRow = -1;
         }
-        if (this.quizOnly == 0) {
-            int i11 = this.rowCount;
-            this.rowCount = i11 + 1;
-            this.quizRow = i11;
+        if (i10 == 0) {
+            int i12 = this.rowCount;
+            this.rowCount = i12 + 1;
+            this.quizRow = i12;
         } else {
             this.quizRow = -1;
         }
-        int i12 = this.rowCount;
-        int i13 = i12 + 1;
-        this.rowCount = i13;
-        this.settingsSectionRow = i12;
+        int i13 = this.rowCount;
+        int i14 = i13 + 1;
+        this.rowCount = i14;
+        this.settingsSectionRow = i13;
         if (this.quizPoll) {
-            int i14 = i13 + 1;
-            this.rowCount = i14;
-            this.solutionRow = i13;
-            this.rowCount = i14 + 1;
-            this.solutionInfoRow = i14;
+            int i15 = i14 + 1;
+            this.rowCount = i15;
+            this.solutionRow = i14;
+            this.rowCount = i15 + 1;
+            this.solutionInfoRow = i15;
             return;
         }
         this.solutionRow = -1;
@@ -659,6 +664,8 @@ public class PollCreateActivity extends BaseFragment {
         return isEmpty;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$checkDiscard$1 */
     public /* synthetic */ void lambda$checkDiscard$1$PollCreateActivity(DialogInterface dialogInterface, int i) {
         finishFragment();
     }
@@ -858,7 +865,6 @@ public class PollCreateActivity extends BaseFragment {
 
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v1, resolved type: org.telegram.ui.Cells.HeaderCell} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v6, resolved type: org.telegram.ui.Cells.PollEditTextCell} */
-        /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v7, resolved type: org.telegram.ui.Cells.TextCheckCell} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r0v10, resolved type: org.telegram.ui.Cells.HeaderCell} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v10, resolved type: org.telegram.ui.Cells.HeaderCell} */
         /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r8v11, resolved type: org.telegram.ui.Cells.HeaderCell} */
@@ -870,10 +876,11 @@ public class PollCreateActivity extends BaseFragment {
         /* JADX WARNING: type inference failed for: r8v3, types: [org.telegram.ui.Cells.ShadowSectionCell] */
         /* JADX WARNING: type inference failed for: r8v4, types: [org.telegram.ui.Cells.TextInfoPrivacyCell] */
         /* JADX WARNING: type inference failed for: r8v5, types: [org.telegram.ui.Cells.TextCell, android.view.View] */
+        /* JADX WARNING: type inference failed for: r8v7, types: [android.view.View, org.telegram.ui.Cells.TextCheckCell] */
         /* JADX WARNING: type inference failed for: r8v8, types: [org.telegram.ui.Cells.PollEditTextCell, org.telegram.ui.PollCreateActivity$ListAdapter$2, android.widget.FrameLayout] */
         /* JADX WARNING: type inference failed for: r8v9, types: [org.telegram.ui.Cells.PollEditTextCell, org.telegram.ui.PollCreateActivity$ListAdapter$4, android.widget.FrameLayout] */
         /* JADX WARNING: Multi-variable type inference failed */
-        /* JADX WARNING: Unknown variable types count: 3 */
+        /* JADX WARNING: Unknown variable types count: 4 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public androidx.recyclerview.widget.RecyclerView.ViewHolder onCreateViewHolder(android.view.ViewGroup r7, int r8) {
             /*
@@ -895,7 +902,7 @@ public class PollCreateActivity extends BaseFragment {
                 if (r8 == r1) goto L_0x0055
                 org.telegram.ui.PollCreateActivity$ListAdapter$4 r8 = new org.telegram.ui.PollCreateActivity$ListAdapter$4
                 android.content.Context r1 = r6.mContext
-                org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$xPCTWTnLONqvpxDTUQukvNxp8wU r2 = new org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$xPCTWTnLONqvpxDTUQukvNxp8wU
+                org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$CE4hMeBrii7X7YyEe3DPqpm1fIg r2 = new org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$CE4hMeBrii7X7YyEe3DPqpm1fIg
                 r2.<init>()
                 r8.<init>(r1, r2)
                 int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
@@ -908,10 +915,10 @@ public class PollCreateActivity extends BaseFragment {
                 int r0 = r7.getImeOptions()
                 r0 = r0 | 5
                 r7.setImeOptions(r0)
-                org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$fHXG5XRT2mioX4wywMDd12jepYQ r0 = new org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$fHXG5XRT2mioX4wywMDd12jepYQ
+                org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$PMJgIAzLXn-iB90X94nh2loy9eY r0 = new org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$PMJgIAzLXn-iB90X94nh2loy9eY
                 r0.<init>(r8)
                 r7.setOnEditorActionListener(r0)
-                org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$0Cdu-jo6aZB372n9nZKgtvUqB-g r0 = new org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$0Cdu-jo6aZB372n9nZKgtvUqB-g
+                org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$4GdhUAeBCk5Oj0yFpg4wB3oKdrM r0 = new org.telegram.ui.-$$Lambda$PollCreateActivity$ListAdapter$4GdhUAeBCk5Oj0yFpg4wB3oKdrM
                 r0.<init>()
                 r7.setOnKeyListener(r0)
                 goto L_0x00ce
@@ -985,6 +992,8 @@ public class PollCreateActivity extends BaseFragment {
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.PollCreateActivity.ListAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onCreateViewHolder$0 */
         public /* synthetic */ void lambda$onCreateViewHolder$0$PollCreateActivity$ListAdapter(View view) {
             int adapterPosition;
             if (view.getTag() == null) {
@@ -1026,6 +1035,8 @@ public class PollCreateActivity extends BaseFragment {
             }
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onCreateViewHolder$1 */
         public /* synthetic */ boolean lambda$onCreateViewHolder$1$PollCreateActivity$ListAdapter(PollEditTextCell pollEditTextCell, TextView textView, int i, KeyEvent keyEvent) {
             int adapterPosition;
             if (i != 5) {

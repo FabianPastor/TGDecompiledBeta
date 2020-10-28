@@ -110,7 +110,8 @@ public class WebRtcAudioTrack {
             int capacity = WebRtcAudioTrack.this.byteBuffer.capacity();
             while (this.keepAlive) {
                 try {
-                    WebRtcAudioTrack.this.nativeGetPlayoutData(capacity, WebRtcAudioTrack.this.nativeAudioTrack);
+                    WebRtcAudioTrack webRtcAudioTrack = WebRtcAudioTrack.this;
+                    webRtcAudioTrack.nativeGetPlayoutData(capacity, webRtcAudioTrack.nativeAudioTrack);
                     WebRtcAudioTrack.assertTrue(capacity <= WebRtcAudioTrack.this.byteBuffer.remaining());
                     if (WebRtcAudioTrack.speakerMute) {
                         WebRtcAudioTrack.this.byteBuffer.clear();
@@ -122,8 +123,8 @@ public class WebRtcAudioTrack {
                         Logging.e("WebRtcAudioTrack", "AudioTrack.write played invalid number of bytes: " + writeBytes);
                         if (writeBytes < 0) {
                             this.keepAlive = false;
-                            WebRtcAudioTrack webRtcAudioTrack = WebRtcAudioTrack.this;
-                            webRtcAudioTrack.reportWebRtcAudioTrackError("AudioTrack.write failed: " + writeBytes);
+                            WebRtcAudioTrack webRtcAudioTrack2 = WebRtcAudioTrack.this;
+                            webRtcAudioTrack2.reportWebRtcAudioTrackError("AudioTrack.write failed: " + writeBytes);
                         }
                     }
                     WebRtcAudioTrack.this.byteBuffer.rewind();

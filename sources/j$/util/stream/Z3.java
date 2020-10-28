@@ -1,134 +1,94 @@
 package j$.util.stream;
 
-import j$.util.N;
+import j$.util.CLASSNAMEk;
 import j$.util.Spliterator;
-import java.util.ArrayDeque;
-import java.util.Comparator;
-import java.util.Deque;
+import j$.util.function.CLASSNAMEe;
+import j$.util.function.Consumer;
+import java.util.concurrent.CountedCompleter;
 
-abstract class Z3 implements Spliterator {
-    CLASSNAMEt3 a;
-    int b;
-    Spliterator c;
-    Spliterator d;
-    Deque e;
+abstract class Z3 extends CountedCompleter implements CLASSNAMEt5 {
+    protected final Spliterator a;
+    protected final CLASSNAMEi4 b;
+    protected final long c;
+    protected long d;
+    protected long e;
+    protected int f;
+    protected int g;
 
-    public /* synthetic */ Comparator getComparator() {
-        N.a(this);
+    Z3(Spliterator spliterator, CLASSNAMEi4 i4Var, int i) {
+        this.a = spliterator;
+        this.b = i4Var;
+        this.c = CLASSNAMEk1.h(spliterator.estimateSize());
+        this.d = 0;
+        this.e = (long) i;
+    }
+
+    Z3(Z3 z3, Spliterator spliterator, long j, long j2, int i) {
+        super(z3);
+        this.a = spliterator;
+        this.b = z3.b;
+        this.c = z3.c;
+        this.d = j;
+        this.e = j2;
+        if (j < 0 || j2 < 0 || (j + j2) - 1 >= ((long) i)) {
+            throw new IllegalArgumentException(String.format("offset and length interval [%d, %d + %d) is not within array size interval [0, %d)", new Object[]{Long.valueOf(j), Long.valueOf(j), Long.valueOf(j2), Integer.valueOf(i)}));
+        }
+    }
+
+    public /* synthetic */ void accept(double d2) {
+        CLASSNAMEk.c(this);
         throw null;
     }
 
-    public /* synthetic */ long getExactSizeIfKnown() {
-        return N.b(this);
+    public /* synthetic */ void accept(int i) {
+        CLASSNAMEk.a(this);
+        throw null;
     }
 
-    public /* synthetic */ boolean hasCharacteristics(int i) {
-        return N.c(this, i);
+    public /* synthetic */ void accept(long j) {
+        CLASSNAMEk.b(this);
+        throw null;
     }
 
-    Z3(CLASSNAMEt3 curNode) {
-        this.a = curNode;
+    /* access modifiers changed from: package-private */
+    public abstract Z3 b(Spliterator spliterator, long j, long j2);
+
+    public void compute() {
+        Spliterator trySplit;
+        Spliterator spliterator = this.a;
+        Z3 z3 = this;
+        while (spliterator.estimateSize() > z3.c && (trySplit = spliterator.trySplit()) != null) {
+            z3.setPendingCount(1);
+            long estimateSize = trySplit.estimateSize();
+            z3.b(trySplit, z3.d, estimateSize).fork();
+            z3 = z3.b(spliterator, z3.d + estimateSize, z3.e - estimateSize);
+        }
+        CLASSNAMEh1 h1Var = (CLASSNAMEh1) z3.b;
+        h1Var.getClass();
+        h1Var.m0(h1Var.u0(z3), spliterator);
+        z3.propagateCompletion();
     }
 
-    /* access modifiers changed from: protected */
-    public final Deque g() {
-        Deque<N> stack = new ArrayDeque<>(8);
-        int i = this.a.w();
-        while (true) {
-            i--;
-            if (i < this.b) {
-                return stack;
-            }
-            stack.addFirst(this.a.d(i));
-        }
+    public Consumer f(Consumer consumer) {
+        consumer.getClass();
+        return new CLASSNAMEe(this, consumer);
     }
 
-    /* access modifiers changed from: protected */
-    public final CLASSNAMEt3 b(Deque stack) {
-        while (true) {
-            N n = (CLASSNAMEt3) stack.pollFirst();
-            N n2 = n;
-            if (n == null) {
-                return null;
-            }
-            if (n2.w() != 0) {
-                for (int i = n2.w() - 1; i >= 0; i--) {
-                    stack.addFirst(n2.d(i));
-                }
-            } else if (n2.count() > 0) {
-                return n2;
-            }
-        }
+    public void m() {
     }
 
-    /* access modifiers changed from: protected */
-    public final boolean h() {
-        if (this.a == null) {
-            return false;
+    public void n(long j) {
+        long j2 = this.e;
+        if (j <= j2) {
+            int i = (int) this.d;
+            this.f = i;
+            this.g = i + ((int) j2);
+            return;
         }
-        if (this.d != null) {
-            return true;
-        }
-        N leaf = this.c;
-        if (leaf == null) {
-            Deque g = g();
-            this.e = g;
-            N leaf2 = b(g);
-            if (leaf2 != null) {
-                this.d = leaf2.spliterator();
-                return true;
-            }
-            this.a = null;
-            return false;
-        }
-        this.d = leaf;
-        return true;
+        throw new IllegalStateException("size passed to Sink.begin exceeds array length");
     }
 
-    public final Spliterator trySplit() {
-        CLASSNAMEt3 t3Var = this.a;
-        if (t3Var == null || this.d != null) {
-            return null;
-        }
-        Spliterator spliterator = this.c;
-        if (spliterator != null) {
-            return spliterator.trySplit();
-        }
-        if (this.b < t3Var.w() - 1) {
-            CLASSNAMEt3 t3Var2 = this.a;
-            int i = this.b;
-            this.b = i + 1;
-            return t3Var2.d(i).spliterator();
-        }
-        CLASSNAMEt3 d2 = this.a.d(this.b);
-        this.a = d2;
-        if (d2.w() == 0) {
-            Spliterator spliterator2 = this.a.spliterator();
-            this.c = spliterator2;
-            return spliterator2.trySplit();
-        }
-        this.b = 0;
-        CLASSNAMEt3 t3Var3 = this.a;
-        this.b = 1;
-        return t3Var3.d(0).spliterator();
-    }
-
-    public final long estimateSize() {
-        if (this.a == null) {
-            return 0;
-        }
-        Spliterator spliterator = this.c;
-        if (spliterator != null) {
-            return spliterator.estimateSize();
-        }
-        long size = 0;
-        for (int i = this.b; i < this.a.w(); i++) {
-            size += this.a.d(i).count();
-        }
-        return size;
-    }
-
-    public final int characteristics() {
-        return 64;
+    public /* synthetic */ boolean p() {
+        return false;
     }
 }

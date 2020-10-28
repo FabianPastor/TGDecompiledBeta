@@ -10,12 +10,12 @@ public class TLRPC$TL_message_layer104 extends TLRPC$TL_message {
         this.flags = readInt32;
         int i = 0;
         this.out = (readInt32 & 2) != 0;
-        this.mentioned = (this.flags & 16) != 0;
-        this.media_unread = (this.flags & 32) != 0;
-        this.silent = (this.flags & 8192) != 0;
-        this.post = (this.flags & 16384) != 0;
-        this.from_scheduled = (this.flags & 262144) != 0;
-        this.legacy = (this.flags & 524288) != 0;
+        this.mentioned = (readInt32 & 16) != 0;
+        this.media_unread = (readInt32 & 32) != 0;
+        this.silent = (readInt32 & 8192) != 0;
+        this.post = (readInt32 & 16384) != 0;
+        this.from_scheduled = (262144 & readInt32) != 0;
+        this.legacy = (readInt32 & 524288) != 0;
         this.id = abstractSerializedData.readInt32(z);
         if ((this.flags & 256) != 0) {
             TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
@@ -42,8 +42,7 @@ public class TLRPC$TL_message_layer104 extends TLRPC$TL_message {
             if (TLdeserialize != null) {
                 this.ttl = TLdeserialize.ttl_seconds;
             }
-            TLRPC$MessageMedia tLRPC$MessageMedia = this.media;
-            if (tLRPC$MessageMedia != null && !TextUtils.isEmpty(tLRPC$MessageMedia.captionLegacy)) {
+            if (TLdeserialize != null && !TextUtils.isEmpty(TLdeserialize.captionLegacy)) {
                 this.message = this.media.captionLegacy;
             }
         }

@@ -1,15 +1,18 @@
 package j$.util.stream;
 
-class D2 extends CLASSNAMEy5 {
-    final /* synthetic */ E2 b;
+import j$.util.function.z;
+
+class D2 extends CLASSNAMEk5 {
+    final /* synthetic */ z l;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    D2(E2 this$1, G5 downstream) {
-        super(downstream);
-        this.b = this$1;
+    D2(S2 s2, CLASSNAMEh1 h1Var, CLASSNAMEh6 h6Var, int i, z zVar) {
+        super(h1Var, h6Var, i);
+        this.l = zVar;
     }
 
-    public void accept(long t) {
-        this.a.accept(this.b.m.applyAsLong(t));
+    /* access modifiers changed from: package-private */
+    public CLASSNAMEt5 G0(int i, CLASSNAMEt5 t5Var) {
+        return new C2(this, t5Var);
     }
 }

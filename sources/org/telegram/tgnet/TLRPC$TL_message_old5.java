@@ -10,9 +10,9 @@ public class TLRPC$TL_message_old5 extends TLRPC$TL_message {
         this.flags = readInt32;
         int i = 0;
         this.unread = (readInt32 & 1) != 0;
-        this.out = (this.flags & 2) != 0;
-        this.mentioned = (this.flags & 16) != 0;
-        this.media_unread = (this.flags & 32) != 0;
+        this.out = (readInt32 & 2) != 0;
+        this.mentioned = (readInt32 & 16) != 0;
+        this.media_unread = (readInt32 & 32) != 0;
         this.id = abstractSerializedData.readInt32(z);
         TLRPC$TL_peerUser tLRPC$TL_peerUser = new TLRPC$TL_peerUser();
         this.from_id = tLRPC$TL_peerUser;

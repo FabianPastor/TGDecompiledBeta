@@ -8,7 +8,7 @@ public class TLRPC$TL_replyKeyboardForceReply extends TLRPC$ReplyMarkup {
         this.flags = readInt32;
         boolean z2 = true;
         this.single_use = (readInt32 & 2) != 0;
-        if ((this.flags & 4) == 0) {
+        if ((readInt32 & 4) == 0) {
             z2 = false;
         }
         this.selective = z2;

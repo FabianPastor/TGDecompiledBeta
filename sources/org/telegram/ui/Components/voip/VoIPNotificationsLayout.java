@@ -96,6 +96,8 @@ public class VoIPNotificationsLayout extends LinearLayout {
         }, 700);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$lock$0 */
     public /* synthetic */ void lambda$lock$0$VoIPNotificationsLayout() {
         this.lockAnimation = false;
         runDelayed();
@@ -192,6 +194,8 @@ public class VoIPNotificationsLayout extends LinearLayout {
             }, 400);
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$startAnimation$0 */
         public /* synthetic */ void lambda$startAnimation$0$VoIPNotificationsLayout$NotificationView() {
             if (Build.VERSION.SDK_INT >= 19) {
                 TransitionSet transitionSet = new TransitionSet();

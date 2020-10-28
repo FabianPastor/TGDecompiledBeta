@@ -1,34 +1,26 @@
 package j$.util.stream;
 
-import j$.util.Spliterator;
-import j$.util.function.Predicate;
-import j$.util.function.V;
+import j$.util.CLASSNAMEt;
+import j$.util.function.f;
+import j$.util.function.q;
 
-final class N1 implements f7 {
-    private final CLASSNAMEv6 a;
-    final boolean b;
-    final Object c;
-    final Predicate d;
-    final V e;
-
-    N1(boolean mustFindFirst, CLASSNAMEv6 shape, Object emptyValue, Predicate predicate, V v) {
-        this.b = mustFindFirst;
-        this.a = shape;
-        this.c = emptyValue;
-        this.d = predicate;
-        this.e = v;
+final class N1 extends R1 implements CLASSNAMEq5 {
+    N1() {
     }
 
-    public int a() {
-        return CLASSNAMEu6.z | (this.b ? 0 : CLASSNAMEu6.w);
+    public void accept(double d) {
+        accept((Object) Double.valueOf(d));
     }
 
-    public Object d(CLASSNAMEq4 helper, Spliterator spliterator) {
-        O result = ((g7) helper.t0((g7) this.e.get(), spliterator)).get();
-        return result != null ? result : this.c;
+    public Object get() {
+        if (this.a) {
+            return CLASSNAMEt.d(((Double) this.b).doubleValue());
+        }
+        return null;
     }
 
-    public Object c(CLASSNAMEq4 helper, Spliterator spliterator) {
-        return new T1(this, helper, spliterator).invoke();
+    public q k(q qVar) {
+        qVar.getClass();
+        return new f(this, qVar);
     }
 }

@@ -1,16 +1,22 @@
 package j$.util.stream;
 
-class Q2 extends CLASSNAMEy5 {
-    final /* synthetic */ R2 b;
-
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    Q2(R2 this$1, G5 downstream) {
-        super(downstream);
-        this.b = this$1;
+abstract class Q2 extends S2 {
+    Q2(CLASSNAMEh1 h1Var, CLASSNAMEh6 h6Var, int i) {
+        super(h1Var, i);
     }
 
-    public void accept(long t) {
-        this.b.m.accept(t);
-        this.a.accept(t);
+    /* access modifiers changed from: package-private */
+    public final boolean F0() {
+        return true;
+    }
+
+    public /* bridge */ /* synthetic */ T2 parallel() {
+        parallel();
+        return this;
+    }
+
+    public /* bridge */ /* synthetic */ T2 sequential() {
+        sequential();
+        return this;
     }
 }

@@ -36,17 +36,18 @@ public class AudioRecoder {
         MediaCodec createDecoderByType = MediaCodec.createDecoderByType(mediaFormat.getString("mime"));
         this.decoder = createDecoderByType;
         createDecoderByType.configure(mediaFormat, (Surface) null, (MediaCrypto) null, 0);
-        this.decoder.start();
-        this.encoder = MediaCodec.createEncoderByType("audio/mp4a-latm");
+        createDecoderByType.start();
+        MediaCodec createEncoderByType = MediaCodec.createEncoderByType("audio/mp4a-latm");
+        this.encoder = createEncoderByType;
         MediaFormat createAudioFormat = MediaFormat.createAudioFormat("audio/mp4a-latm", mediaFormat.getInteger("sample-rate"), mediaFormat.getInteger("channel-count"));
         this.format = createAudioFormat;
         createAudioFormat.setInteger("bitrate", 65536);
-        this.encoder.configure(this.format, (Surface) null, (MediaCrypto) null, 1);
-        this.encoder.start();
-        this.decoderInputBuffers = this.decoder.getInputBuffers();
-        this.decoderOutputBuffers = this.decoder.getOutputBuffers();
-        this.encoderInputBuffers = this.encoder.getInputBuffers();
-        this.encoderOutputBuffers = this.encoder.getOutputBuffers();
+        createEncoderByType.configure(createAudioFormat, (Surface) null, (MediaCrypto) null, 1);
+        createEncoderByType.start();
+        this.decoderInputBuffers = createDecoderByType.getInputBuffers();
+        this.decoderOutputBuffers = createDecoderByType.getOutputBuffers();
+        this.encoderInputBuffers = createEncoderByType.getInputBuffers();
+        this.encoderOutputBuffers = createEncoderByType.getOutputBuffers();
     }
 
     public void release() {

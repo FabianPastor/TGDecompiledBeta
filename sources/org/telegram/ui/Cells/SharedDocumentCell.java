@@ -84,10 +84,13 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         this.TAG = DownloadController.getInstance(i3).generateObserverTag();
         ImageView imageView = new ImageView(context2);
         this.placeholderImageView = imageView;
+        float f = 12.0f;
         if (i2 == 1) {
-            addView(imageView, LayoutHelper.createFrame(42, 42.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 15.0f, 12.0f, LocaleController.isRTL ? 15.0f : 0.0f, 0.0f));
+            boolean z = LocaleController.isRTL;
+            addView(imageView, LayoutHelper.createFrame(42, 42.0f, (z ? 5 : 3) | 48, z ? 0.0f : 15.0f, 12.0f, z ? 15.0f : 0.0f, 0.0f));
         } else {
-            addView(imageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+            boolean z2 = LocaleController.isRTL;
+            addView(imageView, LayoutHelper.createFrame(40, 40.0f, (z2 ? 5 : 3) | 48, z2 ? 0.0f : 12.0f, 8.0f, z2 ? 12.0f : 0.0f, 0.0f));
         }
         TextView textView = new TextView(context2);
         this.extTextView = textView;
@@ -101,9 +104,13 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         this.extTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.extTextView.setImportantForAccessibility(2);
         if (i2 == 1) {
-            addView(this.extTextView, LayoutHelper.createFrame(32, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 20.0f, 28.0f, LocaleController.isRTL ? 20.0f : 0.0f, 0.0f));
+            TextView textView2 = this.extTextView;
+            boolean z3 = LocaleController.isRTL;
+            addView(textView2, LayoutHelper.createFrame(32, -2.0f, (z3 ? 5 : 3) | 48, z3 ? 0.0f : 20.0f, 28.0f, z3 ? 20.0f : 0.0f, 0.0f));
         } else {
-            addView(this.extTextView, LayoutHelper.createFrame(32, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 22.0f, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
+            TextView textView3 = this.extTextView;
+            boolean z4 = LocaleController.isRTL;
+            addView(textView3, LayoutHelper.createFrame(32, -2.0f, (z4 ? 5 : 3) | 48, z4 ? 0.0f : 16.0f, 22.0f, z4 ? 16.0f : 0.0f, 0.0f));
         }
         AnonymousClass1 r12 = new BackupImageView(context2) {
             /* access modifiers changed from: protected */
@@ -120,13 +127,17 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         this.thumbImageView = r12;
         r12.setRoundRadius(AndroidUtilities.dp(4.0f));
         if (i2 == 1) {
-            addView(this.thumbImageView, LayoutHelper.createFrame(42, 42.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 16.0f, 12.0f, LocaleController.isRTL ? 16.0f : 0.0f, 0.0f));
+            BackupImageView backupImageView = this.thumbImageView;
+            boolean z5 = LocaleController.isRTL;
+            addView(backupImageView, LayoutHelper.createFrame(42, 42.0f, (z5 ? 5 : 3) | 48, z5 ? 0.0f : 16.0f, 12.0f, z5 ? 16.0f : 0.0f, 0.0f));
         } else {
-            addView(this.thumbImageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+            BackupImageView backupImageView2 = this.thumbImageView;
+            boolean z6 = LocaleController.isRTL;
+            addView(backupImageView2, LayoutHelper.createFrame(40, 40.0f, (z6 ? 5 : 3) | 48, z6 ? 0.0f : 12.0f, 8.0f, !z6 ? 0.0f : f, 0.0f));
         }
-        TextView textView2 = new TextView(context2);
-        this.nameTextView = textView2;
-        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        TextView textView4 = new TextView(context2);
+        this.nameTextView = textView4;
+        textView4.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTextSize(1, 16.0f);
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
@@ -135,14 +146,17 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
             this.nameTextView.setLines(1);
             this.nameTextView.setMaxLines(1);
             this.nameTextView.setSingleLine(true);
-            addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 9.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+            TextView textView5 = this.nameTextView;
+            boolean z7 = LocaleController.isRTL;
+            addView(textView5, LayoutHelper.createFrame(-1, -2.0f, (z7 ? 5 : 3) | 48, z7 ? 8.0f : 72.0f, 9.0f, z7 ? 72.0f : 8.0f, 0.0f));
         } else if (i2 == 2) {
             LinearLayout linearLayout = new LinearLayout(context2);
             linearLayout.setOrientation(0);
-            addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 16.0f : 72.0f, 5.0f, LocaleController.isRTL ? 72.0f : 16.0f, 0.0f));
-            TextView textView3 = new TextView(context2);
-            this.rightDateTextView = textView3;
-            textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
+            boolean z8 = LocaleController.isRTL;
+            addView(linearLayout, LayoutHelper.createFrame(-1, -2.0f, (z8 ? 5 : 3) | 48, z8 ? 16.0f : 72.0f, 5.0f, z8 ? 72.0f : 16.0f, 0.0f));
+            TextView textView6 = new TextView(context2);
+            this.rightDateTextView = textView6;
+            textView6.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
             this.rightDateTextView.setTextSize(1, 14.0f);
             if (!LocaleController.isRTL) {
                 linearLayout.addView(this.nameTextView, LayoutHelper.createLinear(-2, -2, 1.0f));
@@ -152,33 +166,41 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
                 linearLayout.addView(this.nameTextView, LayoutHelper.createLinear(-2, -2, 1.0f, 0, 0, 4, 0));
             }
             this.nameTextView.setMaxLines(2);
-            TextView textView4 = new TextView(context2);
-            this.captionTextView = textView4;
-            textView4.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+            TextView textView7 = new TextView(context2);
+            this.captionTextView = textView7;
+            textView7.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
             this.captionTextView.setLines(1);
             this.captionTextView.setMaxLines(1);
             this.captionTextView.setSingleLine(true);
             this.captionTextView.setEllipsize(TextUtils.TruncateAt.END);
             this.captionTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
             this.captionTextView.setTextSize(1, 13.0f);
-            addView(this.captionTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 30.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+            TextView textView8 = this.captionTextView;
+            boolean z9 = LocaleController.isRTL;
+            addView(textView8, LayoutHelper.createFrame(-1, -2.0f, (z9 ? 5 : 3) | 48, z9 ? 8.0f : 72.0f, 30.0f, z9 ? 72.0f : 8.0f, 0.0f));
             this.captionTextView.setVisibility(8);
         } else {
             this.nameTextView.setMaxLines(2);
-            addView(this.nameTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 5.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+            TextView textView9 = this.nameTextView;
+            boolean z10 = LocaleController.isRTL;
+            addView(textView9, LayoutHelper.createFrame(-1, -2.0f, (z10 ? 5 : 3) | 48, z10 ? 8.0f : 72.0f, 5.0f, z10 ? 72.0f : 8.0f, 0.0f));
         }
         ImageView imageView2 = new ImageView(context2);
         this.statusImageView = imageView2;
         imageView2.setVisibility(4);
         this.statusImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("sharedMedia_startStopLoadIcon"), PorterDuff.Mode.MULTIPLY));
         if (i2 == 1) {
-            addView(this.statusImageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 39.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+            ImageView imageView3 = this.statusImageView;
+            boolean z11 = LocaleController.isRTL;
+            addView(imageView3, LayoutHelper.createFrame(-2, -2.0f, (z11 ? 5 : 3) | 48, z11 ? 8.0f : 72.0f, 39.0f, z11 ? 72.0f : 8.0f, 0.0f));
         } else {
-            addView(this.statusImageView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 35.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+            ImageView imageView4 = this.statusImageView;
+            boolean z12 = LocaleController.isRTL;
+            addView(imageView4, LayoutHelper.createFrame(-2, -2.0f, (z12 ? 5 : 3) | 48, z12 ? 8.0f : 72.0f, 35.0f, z12 ? 72.0f : 8.0f, 0.0f));
         }
-        TextView textView5 = new TextView(context2);
-        this.dateTextView = textView5;
-        textView5.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
+        TextView textView10 = new TextView(context2);
+        this.dateTextView = textView10;
+        textView10.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
         this.dateTextView.setLines(1);
         this.dateTextView.setMaxLines(1);
         this.dateTextView.setSingleLine(true);
@@ -186,15 +208,21 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         this.dateTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         if (i2 == 1) {
             this.dateTextView.setTextSize(1, 13.0f);
-            addView(this.dateTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 34.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+            TextView textView11 = this.dateTextView;
+            boolean z13 = LocaleController.isRTL;
+            addView(textView11, LayoutHelper.createFrame(-1, -2.0f, (z13 ? 5 : 3) | 48, z13 ? 8.0f : 72.0f, 34.0f, z13 ? 72.0f : 8.0f, 0.0f));
         } else {
             this.dateTextView.setTextSize(1, 13.0f);
-            addView(this.dateTextView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 8.0f : 72.0f, 30.0f, LocaleController.isRTL ? 72.0f : 8.0f, 0.0f));
+            TextView textView12 = this.dateTextView;
+            boolean z14 = LocaleController.isRTL;
+            addView(textView12, LayoutHelper.createFrame(-1, -2.0f, (z14 ? 5 : 3) | 48, z14 ? 8.0f : 72.0f, 30.0f, z14 ? 72.0f : 8.0f, 0.0f));
         }
         LineProgressView lineProgressView = new LineProgressView(context2);
         this.progressView = lineProgressView;
         lineProgressView.setProgressColor(Theme.getColor("sharedMedia_startStopLoadIcon"));
-        addView(this.progressView, LayoutHelper.createFrame(-1, 2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 72.0f, 54.0f, LocaleController.isRTL ? 72.0f : 0.0f, 0.0f));
+        LineProgressView lineProgressView2 = this.progressView;
+        boolean z15 = LocaleController.isRTL;
+        addView(lineProgressView2, LayoutHelper.createFrame(-1, 2.0f, (z15 ? 5 : 3) | 48, z15 ? 0.0f : 72.0f, 54.0f, z15 ? 72.0f : 0.0f, 0.0f));
         CheckBox2 checkBox2 = new CheckBox2(context2, 21);
         this.checkBox = checkBox2;
         checkBox2.setVisibility(4);
@@ -202,9 +230,13 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         this.checkBox.setDrawUnchecked(false);
         this.checkBox.setDrawBackgroundAsArc(2);
         if (i2 == 1) {
-            addView(this.checkBox, LayoutHelper.createFrame(24, 24.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 38.0f, 36.0f, LocaleController.isRTL ? 38.0f : 0.0f, 0.0f));
+            CheckBox2 checkBox22 = this.checkBox;
+            boolean z16 = LocaleController.isRTL;
+            addView(checkBox22, LayoutHelper.createFrame(24, 24.0f, (z16 ? 5 : 3) | 48, z16 ? 0.0f : 38.0f, 36.0f, z16 ? 38.0f : 0.0f, 0.0f));
         } else {
-            addView(this.checkBox, LayoutHelper.createFrame(24, 24.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 33.0f, 28.0f, LocaleController.isRTL ? 33.0f : 0.0f, 0.0f));
+            CheckBox2 checkBox23 = this.checkBox;
+            boolean z17 = LocaleController.isRTL;
+            addView(checkBox23, LayoutHelper.createFrame(24, 24.0f, (z17 ? 5 : 3) | 48, z17 ? 0.0f : 33.0f, 28.0f, z17 ? 33.0f : 0.0f, 0.0f));
         }
         if (i2 == 2) {
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(".");
@@ -520,7 +552,7 @@ public class SharedDocumentCell extends FrameLayout implements DownloadControlle
         int dp = AndroidUtilities.dp(34.0f) + this.nameTextView.getMeasuredHeight() + (this.needDivider ? 1 : 0);
         if (!(this.caption == null || this.captionTextView == null || !this.message.hasHighlightedWords())) {
             this.ignoreRequestLayout = true;
-            this.captionTextView.setText(AndroidUtilities.ellipsizeCenterEnd(this.caption, this.message.highlightedWords.get(0), this.captionTextView.getMeasuredWidth(), this.captionTextView.getPaint()));
+            this.captionTextView.setText(AndroidUtilities.ellipsizeCenterEnd(this.caption, this.message.highlightedWords.get(0), this.captionTextView.getMeasuredWidth(), this.captionTextView.getPaint(), 130));
             this.ignoreRequestLayout = false;
             dp += this.captionTextView.getMeasuredHeight() + AndroidUtilities.dp(3.0f);
         }

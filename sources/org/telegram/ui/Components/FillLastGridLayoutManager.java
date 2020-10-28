@@ -29,42 +29,39 @@ public class FillLastGridLayoutManager extends GridLayoutManager {
         RecyclerView.Adapter adapter;
         if (this.listHeight > 0 && shouldCalcLastItemHeight() && (adapter = this.listView.getAdapter()) != null) {
             int spanCount = getSpanCount();
-            int i = 1;
             int itemCount = adapter.getItemCount() - 1;
             GridLayoutManager.SpanSizeLookup spanSizeLookup = getSpanSizeLookup();
+            int i = 0;
+            boolean z = true;
             int i2 = 0;
-            int i3 = 0;
-            int i4 = 0;
-            while (i2 < itemCount) {
-                int spanSize = spanSizeLookup.getSpanSize(i2);
-                i3 += spanSize;
-                if (spanSize == spanCount || i3 > spanCount) {
-                    i3 = 0;
-                } else if (i3 != i) {
-                    continue;
-                    i2++;
-                    i = 1;
+            for (int i3 = 0; i3 < itemCount; i3++) {
+                int spanSize = spanSizeLookup.getSpanSize(i3);
+                i += spanSize;
+                if (spanSize == spanCount || i > spanCount) {
+                    i = spanSize;
+                    z = true;
                 }
-                int itemViewType = adapter.getItemViewType(i2);
-                RecyclerView.ViewHolder viewHolder = this.heights.get(itemViewType, (Object) null);
-                if (viewHolder == null) {
-                    viewHolder = adapter.createViewHolder(this.listView, itemViewType);
-                    this.heights.put(itemViewType, viewHolder);
-                    if (viewHolder.itemView.getLayoutParams() == null) {
-                        viewHolder.itemView.setLayoutParams(generateDefaultLayoutParams());
+                if (z) {
+                    int itemViewType = adapter.getItemViewType(i3);
+                    RecyclerView.ViewHolder viewHolder = this.heights.get(itemViewType, (Object) null);
+                    if (viewHolder == null) {
+                        viewHolder = adapter.createViewHolder(this.listView, itemViewType);
+                        this.heights.put(itemViewType, viewHolder);
+                        if (viewHolder.itemView.getLayoutParams() == null) {
+                            viewHolder.itemView.setLayoutParams(generateDefaultLayoutParams());
+                        }
                     }
+                    adapter.onBindViewHolder(viewHolder, i3);
+                    RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) viewHolder.itemView.getLayoutParams();
+                    viewHolder.itemView.measure(RecyclerView.LayoutManager.getChildMeasureSpec(this.listWidth, getWidthMode(), getPaddingLeft() + getPaddingRight() + layoutParams.leftMargin + layoutParams.rightMargin, layoutParams.width, canScrollHorizontally()), RecyclerView.LayoutManager.getChildMeasureSpec(this.listHeight, getHeightMode(), getPaddingTop() + getPaddingBottom() + layoutParams.topMargin + layoutParams.bottomMargin, layoutParams.height, canScrollVertically()));
+                    i2 += viewHolder.itemView.getMeasuredHeight();
+                    if (i2 >= (this.listHeight - this.additionalHeight) - this.listView.getPaddingBottom()) {
+                        break;
+                    }
+                    z = false;
                 }
-                adapter.onBindViewHolder(viewHolder, i2);
-                RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) viewHolder.itemView.getLayoutParams();
-                viewHolder.itemView.measure(RecyclerView.LayoutManager.getChildMeasureSpec(this.listWidth, getWidthMode(), getPaddingLeft() + getPaddingRight() + layoutParams.leftMargin + layoutParams.rightMargin, layoutParams.width, canScrollHorizontally()), RecyclerView.LayoutManager.getChildMeasureSpec(this.listHeight, getHeightMode(), getPaddingTop() + getPaddingBottom() + layoutParams.topMargin + layoutParams.bottomMargin, layoutParams.height, canScrollVertically()));
-                i4 += viewHolder.itemView.getMeasuredHeight();
-                if (i4 >= (this.listHeight - this.additionalHeight) - this.listView.getPaddingBottom()) {
-                    break;
-                }
-                i2++;
-                i = 1;
             }
-            this.lastItemHeight = Math.max(0, ((this.listHeight - i4) - this.additionalHeight) - this.listView.getPaddingBottom());
+            this.lastItemHeight = Math.max(0, ((this.listHeight - i2) - this.additionalHeight) - this.listView.getPaddingBottom());
         }
     }
 

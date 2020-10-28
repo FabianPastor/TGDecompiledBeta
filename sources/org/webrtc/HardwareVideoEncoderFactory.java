@@ -19,12 +19,10 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
     private final boolean enableIntelVp8Encoder;
     private final EglBase14.Context sharedContext;
 
-    @CalledByNative
     public /* synthetic */ VideoEncoderFactory.VideoEncoderSelector getEncoderSelector() {
         return VideoEncoderFactory.CC.$default$getEncoderSelector(this);
     }
 
-    @CalledByNative
     public /* synthetic */ VideoCodecInfo[] getImplementations() {
         return VideoEncoderFactory.CC.$default$getImplementations(this);
     }
@@ -223,11 +221,12 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
     }
 
     private boolean isHardwareSupportedInCurrentSdkVp8(MediaCodecInfo mediaCodecInfo) {
+        int i = Build.VERSION.SDK_INT;
         if (!Instance.getGlobalServerConfig().enable_vp8_encoder) {
             return false;
         }
         String name = mediaCodecInfo.getName();
-        if ((!name.startsWith("OMX.qcom.") || Build.VERSION.SDK_INT < 19) && ((!name.startsWith("OMX.hisi.") || Build.VERSION.SDK_INT < 19) && ((!name.startsWith("OMX.Exynos.") || Build.VERSION.SDK_INT < 23) && (!name.startsWith("OMX.Intel.") || Build.VERSION.SDK_INT < 21 || !this.enableIntelVp8Encoder)))) {
+        if ((!name.startsWith("OMX.qcom.") || i < 19) && ((!name.startsWith("OMX.hisi.") || i < 19) && ((!name.startsWith("OMX.Exynos.") || i < 23) && (!name.startsWith("OMX.Intel.") || i < 21 || !this.enableIntelVp8Encoder)))) {
             return false;
         }
         return true;
@@ -245,22 +244,24 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
     }
 
     private boolean isHardwareSupportedInCurrentSdkH264(MediaCodecInfo mediaCodecInfo) {
+        int i = Build.VERSION.SDK_INT;
         if (!Instance.getGlobalServerConfig().enable_h264_encoder) {
             return false;
         }
         String name = mediaCodecInfo.getName();
-        if ((!name.startsWith("OMX.qcom.") || Build.VERSION.SDK_INT < 19) && (!name.startsWith("OMX.Exynos.") || Build.VERSION.SDK_INT < 21)) {
+        if ((!name.startsWith("OMX.qcom.") || i < 19) && (!name.startsWith("OMX.Exynos.") || i < 21)) {
             return false;
         }
         return true;
     }
 
     private boolean isHardwareSupportedInCurrentSdkH265(MediaCodecInfo mediaCodecInfo) {
+        int i = Build.VERSION.SDK_INT;
         if (!Instance.getGlobalServerConfig().enable_h265_encoder) {
             return false;
         }
         String name = mediaCodecInfo.getName();
-        if ((!name.startsWith("OMX.qcom.") || Build.VERSION.SDK_INT < 19) && (!name.startsWith("OMX.Exynos.") || Build.VERSION.SDK_INT < 21)) {
+        if ((!name.startsWith("OMX.qcom.") || i < 19) && (!name.startsWith("OMX.Exynos.") || i < 21)) {
             return false;
         }
         return true;

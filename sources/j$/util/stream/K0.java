@@ -1,15 +1,21 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEw;
-import j$.util.function.T;
+import j$.util.function.h;
+import j$.util.function.y;
 
-public final /* synthetic */ class K0 implements T {
-    public static final /* synthetic */ K0 a = new K0();
+public final /* synthetic */ class K0 implements y {
+    public final /* synthetic */ CLASSNAMEt5 a;
 
-    private /* synthetic */ K0() {
+    public /* synthetic */ K0(CLASSNAMEt5 t5Var) {
+        this.a = t5Var;
     }
 
-    public final void a(Object obj, long j) {
-        ((CLASSNAMEw) obj).accept(j);
+    public final void accept(long j) {
+        this.a.accept(j);
+    }
+
+    public y g(y yVar) {
+        yVar.getClass();
+        return new h(this, yVar);
     }
 }

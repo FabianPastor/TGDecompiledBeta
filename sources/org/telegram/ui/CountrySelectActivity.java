@@ -153,6 +153,8 @@ public class CountrySelectActivity extends BaseFragment {
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$0 */
     public /* synthetic */ void lambda$createView$0$CountrySelectActivity(View view, int i) {
         Country country;
         CountrySelectActivityDelegate countrySelectActivityDelegate;
@@ -222,9 +224,9 @@ public class CountrySelectActivity extends BaseFragment {
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }
-            Collections.sort(this.sortedCountries, $$Lambda$TEfSBt3hRUlBSSARfPEHsJesTtE.INSTANCE);
+            Collections.sort(this.sortedCountries, $$Lambda$Ds7dtVnGrflEw4LvNOxA0cDT4Y.INSTANCE);
             for (ArrayList<Country> sort : this.countries.values()) {
-                Collections.sort(sort, $$Lambda$CountrySelectActivity$CountryAdapter$GbbT4_eUqPD5K07oYJV3z7sG8q4.INSTANCE);
+                Collections.sort(sort, $$Lambda$CountrySelectActivity$CountryAdapter$dKjgdmEaEdtVLx1pfz_Hpxo_gOU.INSTANCE);
             }
         }
 
@@ -361,15 +363,16 @@ public class CountrySelectActivity extends BaseFragment {
                 return;
             }
             try {
-                if (this.searchTimer != null) {
-                    this.searchTimer.cancel();
+                Timer timer = this.searchTimer;
+                if (timer != null) {
+                    timer.cancel();
                 }
             } catch (Exception e) {
                 FileLog.e((Throwable) e);
             }
-            Timer timer = new Timer();
-            this.searchTimer = timer;
-            timer.schedule(new TimerTask() {
+            Timer timer2 = new Timer();
+            this.searchTimer = timer2;
+            timer2.schedule(new TimerTask() {
                 public void run() {
                     try {
                         CountrySearchAdapter.this.searchTimer.cancel();
@@ -397,6 +400,8 @@ public class CountrySelectActivity extends BaseFragment {
             });
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$processSearch$0 */
         public /* synthetic */ void lambda$processSearch$0$CountrySelectActivity$CountrySearchAdapter(String str) {
             if (str.trim().toLowerCase().length() == 0) {
                 updateSearchResults(new ArrayList());
@@ -430,6 +435,8 @@ public class CountrySelectActivity extends BaseFragment {
             });
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$updateSearchResults$1 */
         public /* synthetic */ void lambda$updateSearchResults$1$CountrySelectActivity$CountrySearchAdapter(ArrayList arrayList) {
             if (CountrySelectActivity.this.searching) {
                 this.searchResult = arrayList;

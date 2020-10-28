@@ -670,12 +670,13 @@ public class FastDatePrinter implements DatePrinter, Serializable {
 
     static String getTimeZoneDisplay(TimeZone timeZone, boolean z, int i, Locale locale) {
         TimeZoneDisplayKey timeZoneDisplayKey = new TimeZoneDisplayKey(timeZone, z, i, locale);
-        String str = (String) cTimeZoneDisplayCache.get(timeZoneDisplayKey);
+        ConcurrentMap<TimeZoneDisplayKey, String> concurrentMap = cTimeZoneDisplayCache;
+        String str = (String) concurrentMap.get(timeZoneDisplayKey);
         if (str != null) {
             return str;
         }
         String displayName = timeZone.getDisplayName(z, i, locale);
-        String putIfAbsent = cTimeZoneDisplayCache.putIfAbsent(timeZoneDisplayKey, displayName);
+        String putIfAbsent = concurrentMap.putIfAbsent(timeZoneDisplayKey, displayName);
         return putIfAbsent != null ? putIfAbsent : displayName;
     }
 

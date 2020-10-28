@@ -44,10 +44,10 @@ public class TrendingStickersAlert extends BottomSheet {
         AlertContainerView alertContainerView2 = new AlertContainerView(context);
         this.alertContainerView = alertContainerView2;
         alertContainerView2.addView(trendingStickersLayout, LayoutHelper.createFrame(-1, -1.0f));
-        this.containerView = this.alertContainerView;
+        this.containerView = alertContainerView2;
         this.layout = trendingStickersLayout;
         trendingStickersLayout.setParentFragment(baseFragment);
-        this.layout.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        trendingStickersLayout.setOnScrollListener(new RecyclerView.OnScrollListener() {
             private int scrolledY;
 
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
@@ -65,7 +65,9 @@ public class TrendingStickersAlert extends BottomSheet {
                     }
                     AndroidUtilities.hideKeyboard(findFocus);
                 }
-                TrendingStickersAlert.this.updateLayout();
+                if (i2 != 0) {
+                    TrendingStickersAlert.this.updateLayout();
+                }
             }
         });
     }
@@ -141,7 +143,6 @@ public class TrendingStickersAlert extends BottomSheet {
                             TrendingStickersAlert.this.setAllowNestedScroll(false);
                             boolean unused = AlertContainerView.this.gluedToTop = true;
                         }
-                        TrendingStickersAlert.this.layout.setContentViewPaddingBottom(i);
                     }
                 }
             });
@@ -171,9 +172,14 @@ public class TrendingStickersAlert extends BottomSheet {
 
         /* access modifiers changed from: protected */
         public void onMeasure(int i, int i2) {
-            int i3 = Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
+            super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i2), NUM));
+        }
+
+        /* access modifiers changed from: protected */
+        public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+            int i5 = Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0;
             int measureKeyboardHeight = measureKeyboardHeight();
-            int size = (int) (((float) ((View.MeasureSpec.getSize(i2) - i3) + measureKeyboardHeight)) * 0.2f);
+            int size = (int) (((float) ((View.MeasureSpec.getSize(getMeasuredHeight()) - i5) + measureKeyboardHeight)) * 0.2f);
             this.ignoreLayout = true;
             if (measureKeyboardHeight > AndroidUtilities.dp(20.0f)) {
                 TrendingStickersAlert.this.layout.glueToTop(true);
@@ -181,22 +187,15 @@ public class TrendingStickersAlert extends BottomSheet {
                 this.gluedToTop = true;
             } else {
                 TrendingStickersAlert.this.layout.glueToTop(false);
-                TrendingStickersAlert.this.layout.setContentViewPaddingTop(size);
                 TrendingStickersAlert.this.setAllowNestedScroll(true);
                 this.gluedToTop = false;
             }
-            TrendingStickersAlert.this.layout.setContentViewPaddingBottom(measureKeyboardHeight);
-            if (getPaddingTop() != i3) {
-                setPadding(TrendingStickersAlert.this.backgroundPaddingLeft, i3, TrendingStickersAlert.this.backgroundPaddingLeft, 0);
+            TrendingStickersAlert.this.layout.setContentViewPaddingTop(size);
+            if (getPaddingTop() != i5) {
+                setPadding(TrendingStickersAlert.this.backgroundPaddingLeft, i5, TrendingStickersAlert.this.backgroundPaddingLeft, 0);
             }
             this.ignoreLayout = false;
-            super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i2), NUM));
-        }
-
-        /* access modifiers changed from: protected */
-        public void onLayout(boolean z, int i, int i2, int i3, int i4) {
             super.onLayout(z, i, i2, i3, i4);
-            TrendingStickersAlert.this.updateLayout();
         }
 
         public void requestLayout() {
@@ -207,6 +206,7 @@ public class TrendingStickersAlert extends BottomSheet {
 
         /* access modifiers changed from: protected */
         public void onDraw(Canvas canvas) {
+            TrendingStickersAlert.this.updateLayout();
             super.onDraw(canvas);
             float fraction = getFraction();
             int access$800 = (int) (((float) TrendingStickersAlert.this.topOffset) * (1.0f - fraction));
@@ -235,18 +235,20 @@ public class TrendingStickersAlert extends BottomSheet {
             super.dispatchDraw(canvas);
             float fraction = getFraction();
             canvas.save();
+            float translationY = TrendingStickersAlert.this.layout.getTranslationY();
+            int i = Build.VERSION.SDK_INT;
             boolean z = false;
-            canvas.translate(0.0f, (TrendingStickersAlert.this.layout.getTranslationY() + ((float) (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0))) - ((float) TrendingStickersAlert.this.topOffset));
+            canvas.translate(0.0f, (translationY + ((float) (i >= 21 ? AndroidUtilities.statusBarHeight : 0))) - ((float) TrendingStickersAlert.this.topOffset));
             int dp = AndroidUtilities.dp(36.0f);
             int dp2 = AndroidUtilities.dp(4.0f);
-            int i = (int) (((float) dp2) * 2.0f * (1.0f - fraction));
+            int i2 = (int) (((float) dp2) * 2.0f * (1.0f - fraction));
             TrendingStickersAlert.this.shapeDrawable.setCornerRadius((float) AndroidUtilities.dp(2.0f));
             int color = Theme.getColor("key_sheet_scrollUp");
             TrendingStickersAlert.this.shapeDrawable.setColor(ColorUtils.setAlphaComponent(color, (int) (((float) Color.alpha(color)) * fraction)));
-            TrendingStickersAlert.this.shapeDrawable.setBounds((getWidth() - dp) / 2, TrendingStickersAlert.this.scrollOffsetY + AndroidUtilities.dp(10.0f) + i, (getWidth() + dp) / 2, TrendingStickersAlert.this.scrollOffsetY + AndroidUtilities.dp(10.0f) + i + dp2);
+            TrendingStickersAlert.this.shapeDrawable.setBounds((getWidth() - dp) / 2, TrendingStickersAlert.this.scrollOffsetY + AndroidUtilities.dp(10.0f) + i2, (getWidth() + dp) / 2, TrendingStickersAlert.this.scrollOffsetY + AndroidUtilities.dp(10.0f) + i2 + dp2);
             TrendingStickersAlert.this.shapeDrawable.draw(canvas);
             canvas.restore();
-            if (fraction == 0.0f && Build.VERSION.SDK_INT >= 21 && !TrendingStickersAlert.this.isDismissed()) {
+            if (fraction == 0.0f && i >= 21 && !TrendingStickersAlert.this.isDismissed()) {
                 z = true;
             }
             setStatusBarVisible(z, true);
@@ -315,6 +317,8 @@ public class TrendingStickersAlert extends BottomSheet {
             }
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$setStatusBarVisible$0 */
         public /* synthetic */ void lambda$setStatusBarVisible$0$TrendingStickersAlert$AlertContainerView(ValueAnimator valueAnimator) {
             this.statusBarAlpha = ((Float) valueAnimator.getAnimatedValue()).floatValue();
             invalidate();

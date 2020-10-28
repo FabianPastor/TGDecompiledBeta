@@ -16,10 +16,10 @@ public class TLRPC$TL_theme extends TLRPC$Theme {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.creator = (readInt32 & 1) != 0;
-        if ((this.flags & 2) == 0) {
-            z2 = false;
+        if ((readInt32 & 2) != 0) {
+            z2 = true;
         }
         this.isDefault = z2;
         this.id = abstractSerializedData.readInt64(z);

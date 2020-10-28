@@ -68,7 +68,7 @@ public class ConnectionsManager extends BaseController {
     public static final int FileTypeVideo = 33554432;
     private static volatile ConnectionsManager[] Instance = new ConnectionsManager[3];
     private static final int KEEP_ALIVE_SECONDS = 30;
-    private static final int MAXIMUM_POOL_SIZE = ((CPU_COUNT * 2) + 1);
+    private static final int MAXIMUM_POOL_SIZE;
     public static final int RequestFlagCanCompress = 4;
     public static final int RequestFlagEnableUnauthorized = 1;
     public static final int RequestFlagFailOnServerErrors = 2;
@@ -85,14 +85,8 @@ public class ConnectionsManager extends BaseController {
     private static long lastDnsRequestTime;
     /* access modifiers changed from: private */
     public static HashMap<String, ResolveHostByNameTask> resolvingHostnameTasks = new HashMap<>();
-    private static final BlockingQueue<Runnable> sPoolWorkQueue = new LinkedBlockingQueue(128);
-    private static final ThreadFactory sThreadFactory = new ThreadFactory() {
-        private final AtomicInteger mCount = new AtomicInteger(1);
-
-        public Thread newThread(Runnable runnable) {
-            return new Thread(runnable, "DnsAsyncTask #" + this.mCount.getAndIncrement());
-        }
-    };
+    private static final BlockingQueue<Runnable> sPoolWorkQueue;
+    private static final ThreadFactory sThreadFactory;
     private boolean appPaused = true;
     private int appResumeCount;
     private int connectionState = native_getConnectionState(this.currentAccount);
@@ -115,6 +109,8 @@ public class ConnectionsManager extends BaseController {
     public static native void native_cleanUp(int i, boolean z);
 
     public static native int native_getConnectionState(int i);
+
+    public static native int native_getCurrentDatacenterId(int i);
 
     public static native int native_getCurrentTime(int i);
 
@@ -161,8 +157,21 @@ public class ConnectionsManager extends BaseController {
     static {
         int availableProcessors = Runtime.getRuntime().availableProcessors();
         CPU_COUNT = availableProcessors;
-        CORE_POOL_SIZE = Math.max(2, Math.min(availableProcessors - 1, 4));
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(CORE_POOL_SIZE, MAXIMUM_POOL_SIZE, 30, TimeUnit.SECONDS, sPoolWorkQueue, sThreadFactory);
+        int max = Math.max(2, Math.min(availableProcessors - 1, 4));
+        CORE_POOL_SIZE = max;
+        int i = (availableProcessors * 2) + 1;
+        MAXIMUM_POOL_SIZE = i;
+        LinkedBlockingQueue linkedBlockingQueue = new LinkedBlockingQueue(128);
+        sPoolWorkQueue = linkedBlockingQueue;
+        AnonymousClass1 r10 = new ThreadFactory() {
+            private final AtomicInteger mCount = new AtomicInteger(1);
+
+            public Thread newThread(Runnable runnable) {
+                return new Thread(runnable, "DnsAsyncTask #" + this.mCount.getAndIncrement());
+            }
+        };
+        sThreadFactory = r10;
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(max, i, 30, TimeUnit.SECONDS, linkedBlockingQueue, r10);
         threadPoolExecutor.allowCoreThreadTimeOut(true);
         DNS_THREAD_POOL_EXECUTOR = threadPoolExecutor;
     }
@@ -208,8 +217,9 @@ public class ConnectionsManager extends BaseController {
         String str5;
         String str6;
         String str7;
-        String str8;
         int i2 = i;
+        int i3 = Build.VERSION.SDK_INT;
+        String str8 = "Android unknown";
         File filesDirFixed = ApplicationLoader.getFilesDirFixed();
         if (i2 != 0) {
             File file = new File(filesDirFixed, "account" + i2);
@@ -221,21 +231,22 @@ public class ConnectionsManager extends BaseController {
         try {
             str5 = LocaleController.getSystemLocaleStringIso639().toLowerCase();
             String lowerCase = LocaleController.getLocaleStringIso639().toLowerCase();
-            str3 = Build.MANUFACTURER + Build.MODEL;
+            str2 = Build.MANUFACTURER + Build.MODEL;
             PackageInfo packageInfo = ApplicationLoader.applicationContext.getPackageManager().getPackageInfo(ApplicationLoader.applicationContext.getPackageName(), 0);
-            str2 = packageInfo.versionName + " (" + packageInfo.versionCode + ")";
+            String str9 = packageInfo.versionName + " (" + packageInfo.versionCode + ")";
             if (BuildVars.DEBUG_PRIVATE_VERSION) {
-                str2 = str2 + " pbeta";
+                str9 = str9 + " pbeta";
             } else if (BuildVars.DEBUG_VERSION) {
-                str2 = str2 + " beta";
+                str9 = str9 + " beta";
             }
-            str4 = "SDK " + Build.VERSION.SDK_INT;
+            str4 = "SDK " + i3;
+            str3 = str9;
             str = lowerCase;
         } catch (Exception unused) {
-            str4 = "SDK " + Build.VERSION.SDK_INT;
+            str4 = "SDK " + i3;
             str = "";
-            str2 = "App version unknown";
-            str3 = "Android unknown";
+            str3 = "App version unknown";
+            str2 = str8;
             str5 = "en";
         }
         if (str5.trim().length() == 0) {
@@ -243,23 +254,19 @@ public class ConnectionsManager extends BaseController {
         } else {
             str6 = str5;
         }
+        str8 = str2.trim().length() != 0 ? str2 : str8;
         if (str3.trim().length() == 0) {
-            str7 = "Android unknown";
+            str7 = "App version unknown";
         } else {
             str7 = str3;
         }
-        if (str2.trim().length() == 0) {
-            str8 = "App version unknown";
-        } else {
-            str8 = str2;
-        }
-        String str9 = str4.trim().length() == 0 ? "SDK Unknown" : str4;
+        String str10 = str4.trim().length() == 0 ? "SDK Unknown" : str4;
         getUserConfig().loadConfig();
-        String str10 = SharedConfig.pushString;
-        if (TextUtils.isEmpty(str10) && !TextUtils.isEmpty(SharedConfig.pushStringStatus)) {
-            str10 = SharedConfig.pushStringStatus;
+        String str11 = SharedConfig.pushString;
+        if (TextUtils.isEmpty(str11) && !TextUtils.isEmpty(SharedConfig.pushStringStatus)) {
+            str11 = SharedConfig.pushStringStatus;
         }
-        init(BuildVars.BUILD_VERSION, 119, BuildVars.APP_ID, str7, str9, str8, str, str6, file2, FileLog.getNetworkLogPath(), str10, AndroidUtilities.getCertificateSHA256Fingerprint(), (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000, getUserConfig().getClientUserId(), isPushConnectionEnabled);
+        init(BuildVars.BUILD_VERSION, 120, BuildVars.APP_ID, str8, str10, str7, str, str6, file2, FileLog.getNetworkLogPath(), str11, AndroidUtilities.getCertificateSHA256Fingerprint(), (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000, getUserConfig().getClientUserId(), isPushConnectionEnabled);
     }
 
     public boolean isPushConnectionEnabled() {
@@ -276,6 +283,10 @@ public class ConnectionsManager extends BaseController {
 
     public int getCurrentTime() {
         return native_getCurrentTime(this.currentAccount);
+    }
+
+    public int getCurrentDatacenterId() {
+        return native_getCurrentDatacenterId(this.currentAccount);
     }
 
     public int getTimeDifference() {
@@ -330,6 +341,8 @@ public class ConnectionsManager extends BaseController {
         return andIncrement;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$sendRequest$2 */
     public /* synthetic */ void lambda$sendRequest$2$ConnectionsManager(TLObject tLObject, int i, RequestDelegate requestDelegate, QuickAckDelegate quickAckDelegate, WriteToSocketDelegate writeToSocketDelegate, int i2, int i3, int i4, boolean z) {
         TLObject tLObject2 = tLObject;
         if (BuildVars.LOGS_ENABLED) {
@@ -435,8 +448,9 @@ public class ConnectionsManager extends BaseController {
     }
 
     public int getConnectionState() {
-        if (this.connectionState != 3 || !this.isUpdating) {
-            return this.connectionState;
+        int i = this.connectionState;
+        if (i != 3 || !this.isUpdating) {
+            return i;
         }
         return 5;
     }
@@ -666,7 +680,13 @@ public class ConnectionsManager extends BaseController {
     }
 
     public static int getInitFlags() {
-        return EmuDetector.with(ApplicationLoader.applicationContext).detect() ? 1024 : 0;
+        if (!EmuDetector.with(ApplicationLoader.applicationContext).detect()) {
+            return 0;
+        }
+        if (BuildVars.LOGS_ENABLED) {
+            FileLog.d("detected emu");
+        }
+        return 1024;
     }
 
     public static void onBytesSent(int i, int i2, int i3) {
@@ -745,7 +765,7 @@ public class ConnectionsManager extends BaseController {
     }
 
     public static void onProxyError() {
-        AndroidUtilities.runOnUIThread($$Lambda$ConnectionsManager$mCKnTBWbUnfNosYqFdRo4Jn0cQ.INSTANCE);
+        AndroidUtilities.runOnUIThread($$Lambda$ConnectionsManager$qN5_ykWab6zX6YejMuelnFGOx7Q.INSTANCE);
     }
 
     public static void getHostByName(String str, long j) {
@@ -868,6 +888,8 @@ public class ConnectionsManager extends BaseController {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setIsUpdating$13 */
     public /* synthetic */ void lambda$setIsUpdating$13$ConnectionsManager(boolean z) {
         if (this.isUpdating != z) {
             this.isUpdating = z;
@@ -1278,7 +1300,7 @@ public class ConnectionsManager extends BaseController {
                 int r7 = r7 + 1
                 goto L_0x00e2
             L_0x00ff:
-                org.telegram.tgnet.-$$Lambda$ConnectionsManager$DnsTxtLoadTask$BEcjqZFmP4raPbtfXzTVfRUBAsw r2 = org.telegram.tgnet.$$Lambda$ConnectionsManager$DnsTxtLoadTask$BEcjqZFmP4raPbtfXzTVfRUBAsw.INSTANCE     // Catch:{ all -> 0x0143 }
+                org.telegram.tgnet.-$$Lambda$ConnectionsManager$DnsTxtLoadTask$2hNl7dRjyYZlxsNpN985yIwkDJs r2 = org.telegram.tgnet.$$Lambda$ConnectionsManager$DnsTxtLoadTask$2hNl7dRjyYZlxsNpN985yIwkDJs.INSTANCE     // Catch:{ all -> 0x0143 }
                 java.util.Collections.sort(r6, r2)     // Catch:{ all -> 0x0143 }
                 java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ all -> 0x0143 }
                 r2.<init>()     // Catch:{ all -> 0x0143 }
@@ -1373,6 +1395,8 @@ public class ConnectionsManager extends BaseController {
             });
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onPostExecute$1 */
         public /* synthetic */ void lambda$onPostExecute$1$ConnectionsManager$DnsTxtLoadTask(NativeByteBuffer nativeByteBuffer) {
             AsyncTask unused = ConnectionsManager.currentTask = null;
             if (nativeByteBuffer != null) {
@@ -1504,7 +1528,7 @@ public class ConnectionsManager extends BaseController {
                 int r6 = r6 + 1
                 goto L_0x00bb
             L_0x00d8:
-                org.telegram.tgnet.-$$Lambda$ConnectionsManager$GoogleDnsLoadTask$7geEd5QmUa4Hgb9F_2w_Jc5Hu4M r2 = org.telegram.tgnet.$$Lambda$ConnectionsManager$GoogleDnsLoadTask$7geEd5QmUa4Hgb9F_2w_Jc5Hu4M.INSTANCE     // Catch:{ all -> 0x011c }
+                org.telegram.tgnet.-$$Lambda$ConnectionsManager$GoogleDnsLoadTask$5CfuSkds626j4zMK1LBk4I-jQL4 r2 = org.telegram.tgnet.$$Lambda$ConnectionsManager$GoogleDnsLoadTask$5CfuSkds626j4zMK1LBk4IjQL4.INSTANCE     // Catch:{ all -> 0x011c }
                 java.util.Collections.sort(r5, r2)     // Catch:{ all -> 0x011c }
                 java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ all -> 0x011c }
                 r2.<init>()     // Catch:{ all -> 0x011c }
@@ -1611,6 +1635,8 @@ public class ConnectionsManager extends BaseController {
             });
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onPostExecute$1 */
         public /* synthetic */ void lambda$onPostExecute$1$ConnectionsManager$GoogleDnsLoadTask(NativeByteBuffer nativeByteBuffer) {
             AsyncTask unused = ConnectionsManager.currentTask = null;
             if (nativeByteBuffer != null) {
@@ -1745,7 +1771,7 @@ public class ConnectionsManager extends BaseController {
                 int r6 = r6 + 1
                 goto L_0x00c2
             L_0x00df:
-                org.telegram.tgnet.-$$Lambda$ConnectionsManager$MozillaDnsLoadTask$ef_f-SQUiYt6RD6fDvDkND7eCLASSNAME r2 = org.telegram.tgnet.$$Lambda$ConnectionsManager$MozillaDnsLoadTask$ef_fSQUiYt6RD6fDvDkND7eCLASSNAME.INSTANCE     // Catch:{ all -> 0x0123 }
+                org.telegram.tgnet.-$$Lambda$ConnectionsManager$MozillaDnsLoadTask$M9GKBPygkSN0m7CWMStMbZNRkk0 r2 = org.telegram.tgnet.$$Lambda$ConnectionsManager$MozillaDnsLoadTask$M9GKBPygkSN0m7CWMStMbZNRkk0.INSTANCE     // Catch:{ all -> 0x0123 }
                 java.util.Collections.sort(r5, r2)     // Catch:{ all -> 0x0123 }
                 java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ all -> 0x0123 }
                 r2.<init>()     // Catch:{ all -> 0x0123 }
@@ -1852,6 +1878,8 @@ public class ConnectionsManager extends BaseController {
             });
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onPostExecute$1 */
         public /* synthetic */ void lambda$onPostExecute$1$ConnectionsManager$MozillaDnsLoadTask(NativeByteBuffer nativeByteBuffer) {
             AsyncTask unused = ConnectionsManager.currentTask = null;
             if (nativeByteBuffer != null) {
@@ -1906,6 +1934,8 @@ public class ConnectionsManager extends BaseController {
             }
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$doInBackground$1 */
         public /* synthetic */ void lambda$doInBackground$1$ConnectionsManager$FirebaseTask(Task task) {
             Utilities.stageQueue.postRunnable(new Runnable(task.isSuccessful()) {
                 public final /* synthetic */ boolean f$1;
@@ -1920,6 +1950,8 @@ public class ConnectionsManager extends BaseController {
             });
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$null$0 */
         public /* synthetic */ void lambda$null$0$ConnectionsManager$FirebaseTask(boolean z) {
             String str;
             AsyncTask unused = ConnectionsManager.currentTask = null;
@@ -1934,7 +1966,9 @@ public class ConnectionsManager extends BaseController {
                 try {
                     NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(decode.length);
                     nativeByteBuffer.writeBytes(decode);
-                    ConnectionsManager.native_applyDnsConfig(this.currentAccount, nativeByteBuffer.address, AccountInstance.getInstance(this.currentAccount).getUserConfig().getClientPhone(), (int) (this.firebaseRemoteConfig.getInfo().getFetchTimeMillis() / 1000));
+                    int fetchTimeMillis = (int) (this.firebaseRemoteConfig.getInfo().getFetchTimeMillis() / 1000);
+                    int i = this.currentAccount;
+                    ConnectionsManager.native_applyDnsConfig(i, nativeByteBuffer.address, AccountInstance.getInstance(i).getUserConfig().getClientPhone(), fetchTimeMillis);
                 } catch (Exception e) {
                     FileLog.e((Throwable) e);
                 }
@@ -1949,6 +1983,8 @@ public class ConnectionsManager extends BaseController {
             }
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$doInBackground$2 */
         public /* synthetic */ void lambda$doInBackground$2$ConnectionsManager$FirebaseTask() {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("failed to get firebase result");

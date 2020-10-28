@@ -116,13 +116,12 @@ public class SparseLongArray implements Cloneable {
     public void append(int i, long j) {
         int i2 = this.mSize;
         if (i2 == 0 || i > this.mKeys[i2 - 1]) {
-            int i3 = this.mSize;
-            if (i3 >= this.mKeys.length) {
-                growKeyAndValueArrays(i3 + 1);
+            if (i2 >= this.mKeys.length) {
+                growKeyAndValueArrays(i2 + 1);
             }
-            this.mKeys[i3] = i;
-            this.mValues[i3] = j;
-            this.mSize = i3 + 1;
+            this.mKeys[i2] = i;
+            this.mValues[i2] = j;
+            this.mSize = i2 + 1;
             return;
         }
         put(i, j);

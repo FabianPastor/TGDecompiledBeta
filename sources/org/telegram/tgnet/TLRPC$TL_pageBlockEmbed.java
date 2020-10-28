@@ -15,13 +15,13 @@ public class TLRPC$TL_pageBlockEmbed extends TLRPC$PageBlock {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.full_width = (readInt32 & 1) != 0;
-        if ((this.flags & 8) == 0) {
-            z2 = false;
+        if ((readInt32 & 8) != 0) {
+            z2 = true;
         }
         this.allow_scrolling = z2;
-        if ((this.flags & 2) != 0) {
+        if ((readInt32 & 2) != 0) {
             this.url = abstractSerializedData.readString(z);
         }
         if ((this.flags & 4) != 0) {

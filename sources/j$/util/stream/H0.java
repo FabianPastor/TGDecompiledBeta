@@ -1,15 +1,16 @@
 package j$.util.stream;
 
-import j$.util.function.V;
-import java.util.LinkedHashSet;
+import j$.util.function.o;
 
-public final /* synthetic */ class H0 implements V {
-    public static final /* synthetic */ H0 a = new H0();
+public final /* synthetic */ class H0 implements o {
+    public final /* synthetic */ H6 a;
 
-    private /* synthetic */ H0() {
+    public /* synthetic */ H0(H6 h6) {
+        this.a = h6;
     }
 
-    public final Object get() {
-        return new LinkedHashSet();
+    public final boolean a() {
+        H6 h6 = this.a;
+        return h6.d.b(h6.e);
     }
 }

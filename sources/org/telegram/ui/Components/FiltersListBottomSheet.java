@@ -344,6 +344,8 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
         NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.emojiDidLoad);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$FiltersListBottomSheet(View view, int i) {
         this.delegate.didSelectFilter(this.adapter.getItem(i));
         dismiss();
@@ -531,15 +533,14 @@ public class FiltersListBottomSheet extends BottomSheet implements NotificationC
                             i2 = NUM;
                         }
                     }
-                    int i5 = dialogFilter.flags;
-                    if ((MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS & i5) == MessagesController.DIALOG_FILTER_FLAG_CHANNELS) {
+                    if ((MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS & i3) == MessagesController.DIALOG_FILTER_FLAG_CHANNELS) {
                         i2 = NUM;
-                    } else if ((MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS & i5) == MessagesController.DIALOG_FILTER_FLAG_GROUPS) {
+                    } else if ((MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS & i3) == MessagesController.DIALOG_FILTER_FLAG_GROUPS) {
                         i2 = NUM;
-                    } else if ((MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS & i5) == MessagesController.DIALOG_FILTER_FLAG_CONTACTS) {
+                    } else if ((MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS & i3) == MessagesController.DIALOG_FILTER_FLAG_CONTACTS) {
                         i2 = NUM;
                     } else {
-                        i2 = (i5 & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == MessagesController.DIALOG_FILTER_FLAG_BOTS ? NUM : NUM;
+                        i2 = (i3 & MessagesController.DIALOG_FILTER_FLAG_ALL_CHATS) == MessagesController.DIALOG_FILTER_FLAG_BOTS ? NUM : NUM;
                     }
                 }
                 bottomSheetCell.setTextAndIcon((CharSequence) dialogFilter.name, i2);

@@ -22,4 +22,5 @@
     <string name="google_assistant_verification_channel_name">Assistant-vahvistaja</string>
     <string name="google_assistant_verification_notification_title">Google Assistant lähettää viestiä</string>
     <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="wallet_buy_button_place_holder">Maksa Googlen kautta</string>
 </resources>

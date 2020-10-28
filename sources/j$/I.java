@@ -1,23 +1,30 @@
 package j$;
 
-import j$.util.function.C;
-import java.util.function.IntFunction;
+import java.util.function.DoublePredicate;
 
-public final /* synthetic */ class I implements C {
-    final /* synthetic */ IntFunction a;
+public final /* synthetic */ class I implements DoublePredicate {
+    final /* synthetic */ H a;
 
-    private /* synthetic */ I(IntFunction intFunction) {
-        this.a = intFunction;
-    }
-
-    public static /* synthetic */ C b(IntFunction intFunction) {
-        if (intFunction == null) {
+    public static /* synthetic */ DoublePredicate a(H h) {
+        if (h == null) {
             return null;
         }
-        return new I(intFunction);
+        return h.a;
     }
 
-    public /* synthetic */ Object a(int i) {
-        return this.a.apply(i);
+    public DoublePredicate and(DoublePredicate doublePredicate) {
+        return a(H.a(this.a.a.and(a(H.a(doublePredicate)))));
+    }
+
+    public DoublePredicate negate() {
+        return a(H.a(this.a.a.negate()));
+    }
+
+    public DoublePredicate or(DoublePredicate doublePredicate) {
+        return a(H.a(this.a.a.or(a(H.a(doublePredicate)))));
+    }
+
+    public boolean test(double d) {
+        return this.a.a.test(d);
     }
 }

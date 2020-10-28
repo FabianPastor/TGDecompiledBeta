@@ -1,14 +1,14 @@
 package j$.util.stream;
 
-import j$.util.function.H;
+import j$.util.function.E;
 
-public final /* synthetic */ class Y implements H {
+public final /* synthetic */ class Y implements E {
     public static final /* synthetic */ Y a = new Y();
 
     private /* synthetic */ Y() {
     }
 
-    public final long a(long j, long j2) {
-        return V2.Q0(j, j2);
+    public final Object get() {
+        return new O1();
     }
 }

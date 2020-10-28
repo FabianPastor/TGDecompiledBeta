@@ -1,5 +1,6 @@
 package org.telegram.ui;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Paint;
@@ -206,7 +207,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
             getUserConfig().suggestContacts = this.newSuggest;
             TLRPC$TL_contacts_toggleTopPeers tLRPC$TL_contacts_toggleTopPeers = new TLRPC$TL_contacts_toggleTopPeers();
             tLRPC$TL_contacts_toggleTopPeers.enabled = this.newSuggest;
-            getConnectionsManager().sendRequest(tLRPC$TL_contacts_toggleTopPeers, $$Lambda$PrivacySettingsActivity$IBy4A3n5R5n7oI7wDCjl___b3rk.INSTANCE);
+            getConnectionsManager().sendRequest(tLRPC$TL_contacts_toggleTopPeers, $$Lambda$PrivacySettingsActivity$zN22sIywlN32WjYbAygRQjKeWOU.INSTANCE);
             z = true;
         }
         TLRPC$TL_globalPrivacySettings globalPrivacySettings = getContactsController().getGlobalPrivacySettings();
@@ -219,7 +220,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
             tLRPC$TL_account_setGlobalPrivacySettings.settings = tLRPC$TL_globalPrivacySettings;
             tLRPC$TL_globalPrivacySettings.flags |= 1;
             tLRPC$TL_globalPrivacySettings.archive_and_mute_new_noncontact_peers = this.archiveChats;
-            getConnectionsManager().sendRequest(tLRPC$TL_account_setGlobalPrivacySettings, $$Lambda$PrivacySettingsActivity$zr_Y2U6mQmb4Hau0eSURIuVuw.INSTANCE);
+            getConnectionsManager().sendRequest(tLRPC$TL_account_setGlobalPrivacySettings, $$Lambda$PrivacySettingsActivity$P4iel4im6NgAU3dhIROtIKer3qY.INSTANCE);
         }
         if (z3) {
             getUserConfig().saveConfig(false);
@@ -262,6 +263,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$15 */
     public /* synthetic */ void lambda$createView$15$PrivacySettingsActivity(View view, int i) {
         String str;
         View view2 = view;
@@ -476,6 +479,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$4 */
     public /* synthetic */ void lambda$null$4$PrivacySettingsActivity(AlertDialog.Builder builder, View view) {
         int i;
         builder.getDismissRunnable().run();
@@ -511,6 +516,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$3 */
     public /* synthetic */ void lambda$null$3$PrivacySettingsActivity(AlertDialog alertDialog, TLRPC$TL_account_setAccountTTL tLRPC$TL_account_setAccountTTL, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialog, tLObject, tLRPC$TL_account_setAccountTTL) {
             public final /* synthetic */ AlertDialog f$1;
@@ -529,6 +536,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$PrivacySettingsActivity(AlertDialog alertDialog, TLObject tLObject, TLRPC$TL_account_setAccountTTL tLRPC$TL_account_setAccountTTL) {
         try {
             alertDialog.dismiss();
@@ -541,6 +550,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$6 */
     public /* synthetic */ void lambda$null$6$PrivacySettingsActivity(DialogInterface dialogInterface, int i) {
         AlertDialog show = new AlertDialog.Builder(getParentActivity(), 3).show();
         this.progressDialog = show;
@@ -559,10 +570,14 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$5 */
     public /* synthetic */ void lambda$null$5$PrivacySettingsActivity() {
         this.progressDialog.dismiss();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$9 */
     public /* synthetic */ void lambda$null$9$PrivacySettingsActivity(TextCheckCell textCheckCell, DialogInterface dialogInterface, int i) {
         TLRPC$TL_payments_clearSavedInfo tLRPC$TL_payments_clearSavedInfo = new TLRPC$TL_payments_clearSavedInfo();
         boolean[] zArr = this.clear;
@@ -583,6 +598,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$8 */
     public /* synthetic */ void lambda$null$8$PrivacySettingsActivity(TextCheckCell textCheckCell, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(textCheckCell) {
             public final /* synthetic */ TextCheckCell f$1;
@@ -597,16 +614,22 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$7 */
     public /* synthetic */ void lambda$null$7$PrivacySettingsActivity(TextCheckCell textCheckCell) {
         boolean z = !this.newSuggest;
         this.newSuggest = z;
         textCheckCell.setChecked(z);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$10 */
     public /* synthetic */ void lambda$null$10$PrivacySettingsActivity() {
         this.listAdapter.notifyDataSetChanged();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$11 */
     public /* synthetic */ void lambda$null$11$PrivacySettingsActivity(View view) {
         CheckBoxCell checkBoxCell = (CheckBoxCell) view;
         int intValue = ((Integer) checkBoxCell.getTag()).intValue();
@@ -615,10 +638,13 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         checkBoxCell.setChecked(zArr[intValue], true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$14 */
     public /* synthetic */ void lambda$null$14$PrivacySettingsActivity(DialogInterface dialogInterface, int i) {
         try {
-            if (this.visibleDialog != null) {
-                this.visibleDialog.dismiss();
+            Dialog dialog = this.visibleDialog;
+            if (dialog != null) {
+                dialog.dismiss();
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
@@ -641,6 +667,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$13 */
     public /* synthetic */ void lambda$null$13$PrivacySettingsActivity(DialogInterface dialogInterface, int i) {
         TLRPC$TL_payments_clearSavedInfo tLRPC$TL_payments_clearSavedInfo = new TLRPC$TL_payments_clearSavedInfo();
         boolean[] zArr = this.clear;
@@ -648,7 +676,7 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         tLRPC$TL_payments_clearSavedInfo.info = zArr[0];
         getUserConfig().tmpPassword = null;
         getUserConfig().saveConfig(false);
-        getConnectionsManager().sendRequest(tLRPC$TL_payments_clearSavedInfo, $$Lambda$PrivacySettingsActivity$ada6XLEIfIZZkALEZ9ftRVXR7Sk.INSTANCE);
+        getConnectionsManager().sendRequest(tLRPC$TL_payments_clearSavedInfo, $$Lambda$PrivacySettingsActivity$gmaPPhB4Qzdj4V7Y5cSfwbF5SZI.INSTANCE);
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
@@ -805,6 +833,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         }, 10);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$loadPasswordSettings$17 */
     public /* synthetic */ void lambda$loadPasswordSettings$17$PrivacySettingsActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable((TLRPC$TL_account_password) tLObject) {
@@ -821,6 +851,8 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$16 */
     public /* synthetic */ void lambda$null$16$PrivacySettingsActivity(TLRPC$TL_account_password tLRPC$TL_account_password) {
         this.currentPassword = tLRPC$TL_account_password;
         TwoStepVerificationActivity.initPasswordNewAlgo(tLRPC$TL_account_password);
@@ -959,23 +991,20 @@ public class PrivacySettingsActivity extends BaseFragment implements Notificatio
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            TextCheckCell textCheckCell;
+            View view;
             if (i == 0) {
-                TextSettingsCell textSettingsCell = new TextSettingsCell(this.mContext);
-                textSettingsCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                textCheckCell = textSettingsCell;
+                view = new TextSettingsCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             } else if (i == 1) {
-                textCheckCell = new TextInfoPrivacyCell(this.mContext);
+                view = new TextInfoPrivacyCell(this.mContext);
             } else if (i != 2) {
-                TextCheckCell textCheckCell2 = new TextCheckCell(this.mContext);
-                textCheckCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                textCheckCell = textCheckCell2;
+                view = new TextCheckCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             } else {
-                HeaderCell headerCell = new HeaderCell(this.mContext);
-                headerCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                textCheckCell = headerCell;
+                view = new HeaderCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             }
-            return new RecyclerListView.Holder(textCheckCell);
+            return new RecyclerListView.Holder(view);
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {

@@ -272,9 +272,13 @@ public class PhoneFormat {
 
     public String valueString(int i) {
         int i2 = i;
-        while (i2 < this.data.length) {
+        while (true) {
             try {
-                if (this.data[i2] == 0) {
+                byte[] bArr = this.data;
+                if (i2 >= bArr.length) {
+                    return "";
+                }
+                if (bArr[i2] == 0) {
                     int i3 = i2 - i;
                     if (i == i3) {
                         return "";
@@ -287,7 +291,6 @@ public class PhoneFormat {
                 return "";
             }
         }
-        return "";
     }
 
     public CallingCodeInfo callingCodeInfo(String str) {

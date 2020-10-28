@@ -113,6 +113,8 @@ public class TextPaintView extends EntityView {
         }, 300);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$beginEditing$0 */
     public /* synthetic */ void lambda$beginEditing$0$TextPaintView() {
         AndroidUtilities.showKeyboard(this.editText);
     }

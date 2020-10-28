@@ -153,6 +153,8 @@ public class FilterGLThread extends DispatchQueue {
         start();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setFilterGLThreadDelegate$0 */
     public /* synthetic */ void lambda$setFilterGLThreadDelegate$0$FilterGLThread(FilterShaders.FilterShadersDelegate filterShadersDelegate) {
         this.filterShaders.setDelegate(filterShadersDelegate);
     }
@@ -306,10 +308,14 @@ public class FilterGLThread extends DispatchQueue {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$initGL$1 */
     public /* synthetic */ void lambda$initGL$1$FilterGLThread(SurfaceTexture surfaceTexture2) {
         requestRender(false, true, true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$initGL$2 */
     public /* synthetic */ void lambda$initGL$2$FilterGLThread() {
         this.videoDelegate.onVideoSurfaceCreated(this.videoSurfaceTexture);
     }
@@ -330,13 +336,15 @@ public class FilterGLThread extends DispatchQueue {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setVideoSize$3 */
     public /* synthetic */ void lambda$setVideoSize$3$FilterGLThread(int i, int i2) {
         if (this.videoWidth != i || this.videoHeight != i2) {
             this.videoWidth = i;
             this.videoHeight = i2;
             if (i > 1280 || i2 > 1280) {
-                this.videoWidth /= 2;
-                this.videoHeight /= 2;
+                this.videoWidth = i / 2;
+                this.videoHeight = i2 / 2;
             }
             this.renderDataSet = false;
             setRenderData();
@@ -423,6 +431,8 @@ public class FilterGLThread extends DispatchQueue {
         return bitmapArr[0];
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$getTexture$4 */
     public /* synthetic */ void lambda$getTexture$4$FilterGLThread(Bitmap[] bitmapArr, CountDownLatch countDownLatch) {
         GLES20.glBindFramebuffer(36160, this.filterShaders.getRenderFrameBuffer());
         GLES20.glFramebufferTexture2D(36160, 36064, 3553, this.filterShaders.getRenderTexture(this.blurred ^ true ? 1 : 0), 0);
@@ -441,6 +451,8 @@ public class FilterGLThread extends DispatchQueue {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$shutdown$5 */
     public /* synthetic */ void lambda$shutdown$5$FilterGLThread() {
         finish();
         Looper myLooper = Looper.myLooper();
@@ -465,6 +477,8 @@ public class FilterGLThread extends DispatchQueue {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setSurfaceTextureSize$6 */
     public /* synthetic */ void lambda$setSurfaceTextureSize$6$FilterGLThread(int i, int i2) {
         this.surfaceWidth = i;
         this.surfaceHeight = i2;
@@ -497,6 +511,8 @@ public class FilterGLThread extends DispatchQueue {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestRender$7 */
     public /* synthetic */ void lambda$requestRender$7$FilterGLThread(boolean z, boolean z2, boolean z3) {
         if (z) {
             this.filterShaders.requestUpdateBlurTexture();

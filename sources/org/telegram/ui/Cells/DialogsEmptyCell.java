@@ -33,7 +33,7 @@ public class DialogsEmptyCell extends LinearLayout {
         super(context);
         setGravity(17);
         setOrientation(1);
-        setOnTouchListener($$Lambda$DialogsEmptyCell$7lLGhZthID2bSlrXEXwZZGk1ZsM.INSTANCE);
+        setOnTouchListener($$Lambda$DialogsEmptyCell$EZBh9dIKAqFHQ518PFNPpE9QmAU.INSTANCE);
         RLottieImageView rLottieImageView = new RLottieImageView(context);
         this.imageView = rLottieImageView;
         rLottieImageView.setScaleType(ImageView.ScaleType.CENTER);
@@ -64,6 +64,8 @@ public class DialogsEmptyCell extends LinearLayout {
         addView(this.emptyTextView2, LayoutHelper.createFrame(-1, -2.0f, 51, 52.0f, 7.0f, 52.0f, 0.0f));
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ void lambda$new$1$DialogsEmptyCell(View view) {
         if (!this.imageView.isPlaying()) {
             this.imageView.setProgress(0.0f);
@@ -82,11 +84,11 @@ public class DialogsEmptyCell extends LinearLayout {
             return
         L_0x0005:
             r5.currentType = r6
-            r0 = 2131625970(0x7f0e07f2, float:1.8879163E38)
+            r0 = 2131626023(0x7f0e0827, float:1.887927E38)
             java.lang.String r1 = "NoChats"
             r2 = 0
             if (r6 != 0) goto L_0x0024
-            r6 = 2131625972(0x7f0e07f4, float:1.8879167E38)
+            r6 = 2131626025(0x7f0e0829, float:1.8879275E38)
             java.lang.String r3 = "NoChatsHelp"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r3, r6)
             android.widget.TextView r3 = r5.emptyTextView1
@@ -99,7 +101,7 @@ public class DialogsEmptyCell extends LinearLayout {
         L_0x0024:
             r3 = 1
             if (r6 != r3) goto L_0x003a
-            r6 = 2131625971(0x7f0e07f3, float:1.8879165E38)
+            r6 = 2131626024(0x7f0e0828, float:1.8879273E38)
             java.lang.String r3 = "NoChatsContactsHelp"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r3, r6)
             android.widget.TextView r3 = r5.emptyTextView1
@@ -112,11 +114,11 @@ public class DialogsEmptyCell extends LinearLayout {
             org.telegram.ui.Components.RLottieImageView r6 = r5.imageView
             r6.setAutoRepeat(r2)
             r6 = 2131558420(0x7f0d0014, float:1.8742155E38)
-            r0 = 2131625372(0x7f0e059c, float:1.887795E38)
+            r0 = 2131625397(0x7f0e05b5, float:1.8878E38)
             java.lang.String r1 = "FilterNoChatsToDisplayInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             android.widget.TextView r1 = r5.emptyTextView1
-            r3 = 2131625371(0x7f0e059b, float:1.8877948E38)
+            r3 = 2131625396(0x7f0e05b4, float:1.8877999E38)
             java.lang.String r4 = "FilterNoChatsToDisplay"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setText(r3)
@@ -125,11 +127,11 @@ public class DialogsEmptyCell extends LinearLayout {
             org.telegram.ui.Components.RLottieImageView r6 = r5.imageView
             r6.setAutoRepeat(r3)
             r6 = 2131558419(0x7f0d0013, float:1.8742153E38)
-            r0 = 2131625327(0x7f0e056f, float:1.8877859E38)
+            r0 = 2131625352(0x7f0e0588, float:1.887791E38)
             java.lang.String r1 = "FilterAddingChatsInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             android.widget.TextView r1 = r5.emptyTextView1
-            r3 = 2131625326(0x7f0e056e, float:1.8877857E38)
+            r3 = 2131625351(0x7f0e0587, float:1.8877908E38)
             java.lang.String r4 = "FilterAddingChats"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r1.setText(r3)
@@ -189,20 +191,21 @@ public class DialogsEmptyCell extends LinearLayout {
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         int i3;
+        int i4 = Build.VERSION.SDK_INT;
         if (getParent() instanceof View) {
             View view = (View) getParent();
             i3 = view.getMeasuredHeight();
-            if (view.getPaddingTop() != 0 && Build.VERSION.SDK_INT >= 21) {
+            if (view.getPaddingTop() != 0 && i4 >= 21) {
                 i3 -= AndroidUtilities.statusBarHeight;
             }
         } else {
             i3 = View.MeasureSpec.getSize(i2);
         }
         if (i3 == 0) {
-            i3 = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0);
+            i3 = (AndroidUtilities.displaySize.y - ActionBar.getCurrentActionBarHeight()) - (i4 >= 21 ? AndroidUtilities.statusBarHeight : 0);
         }
-        int i4 = this.currentType;
-        if (i4 == 0 || i4 == 2 || i4 == 3) {
+        int i5 = this.currentType;
+        if (i5 == 0 || i5 == 2 || i5 == 3) {
             ArrayList<TLRPC$RecentMeUrl> arrayList = MessagesController.getInstance(this.currentAccount).hintDialogs;
             if (!arrayList.isEmpty()) {
                 i3 -= (((AndroidUtilities.dp(72.0f) * arrayList.size()) + arrayList.size()) - 1) + AndroidUtilities.dp(50.0f);

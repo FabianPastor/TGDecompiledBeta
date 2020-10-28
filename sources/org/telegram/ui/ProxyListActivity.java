@@ -94,11 +94,13 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             this.textView.setEllipsize(TextUtils.TruncateAt.END);
             int i = 5;
             this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+            TextView textView3 = this.textView;
+            boolean z = LocaleController.isRTL;
             int i2 = 56;
-            addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 56 : 21), 10.0f, (float) (LocaleController.isRTL ? 21 : 56), 0.0f));
-            TextView textView3 = new TextView(context);
-            this.valueTextView = textView3;
-            textView3.setTextSize(1, 13.0f);
+            addView(textView3, LayoutHelper.createFrame(-2, -2.0f, (z ? 5 : 3) | 48, (float) (z ? 56 : 21), 10.0f, (float) (z ? 21 : 56), 0.0f));
+            TextView textView4 = new TextView(context);
+            this.valueTextView = textView4;
+            textView4.setTextSize(1, 13.0f);
             this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
             this.valueTextView.setLines(1);
             this.valueTextView.setMaxLines(1);
@@ -106,7 +108,9 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             this.valueTextView.setCompoundDrawablePadding(AndroidUtilities.dp(6.0f));
             this.valueTextView.setEllipsize(TextUtils.TruncateAt.END);
             this.valueTextView.setPadding(0, 0, 0, 0);
-            addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 56 : 21), 35.0f, (float) (LocaleController.isRTL ? 21 : i2), 0.0f));
+            TextView textView5 = this.valueTextView;
+            boolean z2 = LocaleController.isRTL;
+            addView(textView5, LayoutHelper.createFrame(-2, -2.0f, (z2 ? 5 : 3) | 48, (float) (z2 ? 56 : 21), 35.0f, (float) (z2 ? 21 : i2), 0.0f));
             ImageView imageView = new ImageView(context);
             this.checkImageView = imageView;
             imageView.setImageResource(NUM);
@@ -122,6 +126,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             setWillNotDraw(false);
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$new$0 */
         public /* synthetic */ void lambda$new$0$ProxyListActivity$TextDetailProxyCell(View view) {
             ProxyListActivity.this.presentFragment(new ProxySettingsActivity(this.currentInfo));
         }
@@ -273,6 +279,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$0 */
     public /* synthetic */ void lambda$createView$0$ProxyListActivity(View view, int i) {
         if (i == this.useProxyRow) {
             if (SharedConfig.currentProxy == null) {
@@ -309,11 +317,13 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             boolean z = this.useProxySettings;
             SharedConfig.ProxyInfo proxyInfo = SharedConfig.currentProxy;
             ConnectionsManager.setProxySettings(z, proxyInfo.address, proxyInfo.port, proxyInfo.username, proxyInfo.password, proxyInfo.secret);
-            NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.proxySettingsChanged);
-            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
-            NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.proxySettingsChanged);
-            for (int i2 = this.proxyStartRow; i2 < this.proxyEndRow; i2++) {
-                RecyclerListView.Holder holder2 = (RecyclerListView.Holder) this.listView.findViewHolderForAdapterPosition(i2);
+            NotificationCenter globalInstance = NotificationCenter.getGlobalInstance();
+            int i2 = NotificationCenter.proxySettingsChanged;
+            globalInstance.removeObserver(this, i2);
+            NotificationCenter.getGlobalInstance().postNotificationName(i2, new Object[0]);
+            NotificationCenter.getGlobalInstance().addObserver(this, i2);
+            for (int i3 = this.proxyStartRow; i3 < this.proxyEndRow; i3++) {
+                RecyclerListView.Holder holder2 = (RecyclerListView.Holder) this.listView.findViewHolderForAdapterPosition(i3);
                 if (holder2 != null) {
                     ((TextDetailProxyCell) holder2.itemView).updateStatus();
                 }
@@ -326,9 +336,9 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
             edit3.putBoolean("proxy_enabled_calls", this.useProxyForCalls);
             edit3.commit();
         } else {
-            int i3 = this.proxyStartRow;
-            if (i >= i3 && i < this.proxyEndRow) {
-                SharedConfig.ProxyInfo proxyInfo2 = SharedConfig.proxyList.get(i - i3);
+            int i4 = this.proxyStartRow;
+            if (i >= i4 && i < this.proxyEndRow) {
+                SharedConfig.ProxyInfo proxyInfo2 = SharedConfig.proxyList.get(i - i4);
                 this.useProxySettings = true;
                 SharedPreferences.Editor edit4 = MessagesController.getGlobalMainSettings().edit();
                 edit4.putString("proxy_ip", proxyInfo2.address);
@@ -343,8 +353,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
                 }
                 edit4.commit();
                 SharedConfig.currentProxy = proxyInfo2;
-                for (int i4 = this.proxyStartRow; i4 < this.proxyEndRow; i4++) {
-                    RecyclerListView.Holder holder3 = (RecyclerListView.Holder) this.listView.findViewHolderForAdapterPosition(i4);
+                for (int i5 = this.proxyStartRow; i5 < this.proxyEndRow; i5++) {
+                    RecyclerListView.Holder holder3 = (RecyclerListView.Holder) this.listView.findViewHolderForAdapterPosition(i5);
                     if (holder3 != null) {
                         TextDetailProxyCell textDetailProxyCell = (TextDetailProxyCell) holder3.itemView;
                         textDetailProxyCell.setChecked(textDetailProxyCell.currentInfo == proxyInfo2);
@@ -365,6 +375,8 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$2 */
     public /* synthetic */ boolean lambda$createView$2$ProxyListActivity(View view, int i) {
         int i2 = this.proxyStartRow;
         if (i < i2 || i >= this.proxyEndRow) {
@@ -391,15 +403,19 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         return true;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$1 */
     public /* synthetic */ void lambda$null$1$ProxyListActivity(SharedConfig.ProxyInfo proxyInfo, int i, DialogInterface dialogInterface, int i2) {
         SharedConfig.deleteProxy(proxyInfo);
         if (SharedConfig.currentProxy == null) {
             this.useProxyForCalls = false;
             this.useProxySettings = false;
         }
-        NotificationCenter.getGlobalInstance().removeObserver(this, NotificationCenter.proxySettingsChanged);
-        NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.proxySettingsChanged, new Object[0]);
-        NotificationCenter.getGlobalInstance().addObserver(this, NotificationCenter.proxySettingsChanged);
+        NotificationCenter globalInstance = NotificationCenter.getGlobalInstance();
+        int i3 = NotificationCenter.proxySettingsChanged;
+        globalInstance.removeObserver(this, i3);
+        NotificationCenter.getGlobalInstance().postNotificationName(i3, new Object[0]);
+        NotificationCenter.getGlobalInstance().addObserver(this, i3);
         updateRows(false);
         ListAdapter listAdapter2 = this.listAdapter;
         if (listAdapter2 != null) {
@@ -628,34 +644,29 @@ public class ProxyListActivity extends BaseFragment implements NotificationCente
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            TextDetailProxyCell textDetailProxyCell;
+            View view;
             if (i == 0) {
-                textDetailProxyCell = new ShadowSectionCell(this.mContext);
+                view = new ShadowSectionCell(this.mContext);
             } else if (i == 1) {
-                TextSettingsCell textSettingsCell = new TextSettingsCell(this.mContext);
-                textSettingsCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                textDetailProxyCell = textSettingsCell;
+                view = new TextSettingsCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             } else if (i == 2) {
-                HeaderCell headerCell = new HeaderCell(this.mContext);
-                headerCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                textDetailProxyCell = headerCell;
+                view = new HeaderCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             } else if (i == 3) {
-                TextCheckCell textCheckCell = new TextCheckCell(this.mContext);
-                textCheckCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                textDetailProxyCell = textCheckCell;
+                view = new TextCheckCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             } else if (i == 4) {
-                TextInfoPrivacyCell textInfoPrivacyCell = new TextInfoPrivacyCell(this.mContext);
-                textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                textDetailProxyCell = textInfoPrivacyCell;
+                view = new TextInfoPrivacyCell(this.mContext);
+                view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
             } else if (i != 5) {
-                textDetailProxyCell = null;
+                view = null;
             } else {
-                TextDetailProxyCell textDetailProxyCell2 = new TextDetailProxyCell(this.mContext);
-                textDetailProxyCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                textDetailProxyCell = textDetailProxyCell2;
+                view = new TextDetailProxyCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             }
-            textDetailProxyCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-            return new RecyclerListView.Holder(textDetailProxyCell);
+            view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
+            return new RecyclerListView.Holder(view);
         }
 
         public int getItemViewType(int i) {

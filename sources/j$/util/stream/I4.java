@@ -1,71 +1,76 @@
 package j$.util.stream;
 
-import j$.util.function.A;
-import j$.util.function.B;
-import j$.util.function.CLASSNAMEq;
+import j$.util.CLASSNAMEk;
+import j$.util.CLASSNAMEv;
+import j$.util.function.CLASSNAMEe;
 import j$.util.function.Consumer;
-import j$.util.function.z;
+import j$.util.function.h;
+import j$.util.function.x;
+import j$.util.function.y;
 
-class I4 implements R4, D5 {
-    private int a;
-    final /* synthetic */ int b;
-    final /* synthetic */ z c;
+class I4 implements J4, CLASSNAMEs5 {
+    private boolean a;
+    private long b;
+    final /* synthetic */ x c;
+
+    I4(x xVar) {
+        this.c = xVar;
+    }
 
     public /* synthetic */ void accept(double d) {
-        CLASSNAMEv5.c(this);
+        CLASSNAMEk.c(this);
         throw null;
     }
 
-    public /* synthetic */ void accept(long j) {
-        CLASSNAMEv5.b(this);
+    public /* synthetic */ void accept(int i) {
+        CLASSNAMEk.a(this);
         throw null;
     }
 
-    public /* bridge */ /* synthetic */ void accept(Object obj) {
-        t((Integer) obj);
+    public void accept(long j) {
+        if (this.a) {
+            this.a = false;
+        } else {
+            j = this.c.applyAsLong(this.b, j);
+        }
+        this.b = j;
     }
 
-    public /* synthetic */ Consumer g(Consumer consumer) {
-        return CLASSNAMEq.a(this, consumer);
+    /* renamed from: b */
+    public /* synthetic */ void accept(Long l) {
+        CLASSNAMEc3.c(this, l);
     }
 
-    public /* synthetic */ B q(B b2) {
-        return A.a(this, b2);
+    public Consumer f(Consumer consumer) {
+        consumer.getClass();
+        return new CLASSNAMEe(this, consumer);
     }
 
-    public /* synthetic */ void r() {
-        CLASSNAMEv5.f();
+    public y g(y yVar) {
+        yVar.getClass();
+        return new h(this, yVar);
     }
 
-    public /* synthetic */ void t(Integer num) {
-        C5.a(this, num);
+    public Object get() {
+        return this.a ? CLASSNAMEv.a() : CLASSNAMEv.d(this.b);
     }
 
-    public /* synthetic */ boolean u() {
-        CLASSNAMEv5.e();
+    public void i(J4 j4) {
+        I4 i4 = (I4) j4;
+        if (!i4.a) {
+            accept(i4.b);
+        }
+    }
+
+    public void m() {
+    }
+
+    public void n(long j) {
+        this.a = true;
+        this.b = 0;
+    }
+
+    public /* synthetic */ boolean p() {
         return false;
-    }
-
-    I4(int i, z zVar) {
-        this.b = i;
-        this.c = zVar;
-    }
-
-    public void s(long size) {
-        this.a = this.b;
-    }
-
-    public void accept(int t) {
-        this.a = this.c.a(this.a, t);
-    }
-
-    /* renamed from: c */
-    public Integer get() {
-        return Integer.valueOf(this.a);
-    }
-
-    /* renamed from: a */
-    public void l(I4 other) {
-        accept(other.a);
     }
 }

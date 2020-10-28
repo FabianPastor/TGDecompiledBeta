@@ -265,7 +265,7 @@ public class VideoTimelinePlayView extends View {
                 }
                 VideoTimelineViewDelegate videoTimelineViewDelegate10 = this.delegate;
                 if (videoTimelineViewDelegate10 != null) {
-                    videoTimelineViewDelegate10.onLeftProgressChanged(this.progressLeft);
+                    videoTimelineViewDelegate10.onLeftProgressChanged(f8);
                 }
                 invalidate();
                 return true;
@@ -415,8 +415,9 @@ public class VideoTimelinePlayView extends View {
     public void destroy() {
         synchronized (sync) {
             try {
-                if (this.mediaMetadataRetriever != null) {
-                    this.mediaMetadataRetriever.release();
+                MediaMetadataRetriever mediaMetadataRetriever2 = this.mediaMetadataRetriever;
+                if (mediaMetadataRetriever2 != null) {
+                    mediaMetadataRetriever2.release();
                     this.mediaMetadataRetriever = null;
                 }
             } catch (Exception e) {

@@ -26,7 +26,12 @@
     <public type="attr" name="allowShortcuts" id="NUM" />
     <public type="attr" name="alpha" id="NUM" />
     <public type="attr" name="ambientEnabled" id="NUM" />
+    <public type="attr" name="appTheme" id="NUM" />
     <public type="attr" name="buttonSize" id="NUM" />
+    <public type="attr" name="buyButtonAppearance" id="NUM" />
+    <public type="attr" name="buyButtonHeight" id="NUM" />
+    <public type="attr" name="buyButtonText" id="NUM" />
+    <public type="attr" name="buyButtonWidth" id="NUM" />
     <public type="attr" name="cameraBearing" id="NUM" />
     <public type="attr" name="cameraMaxZoomPreference" id="NUM" />
     <public type="attr" name="cameraMinZoomPreference" id="NUM" />
@@ -40,10 +45,12 @@
     <public type="attr" name="coordinatorLayoutStyle" id="NUM" />
     <public type="attr" name="corpusId" id="NUM" />
     <public type="attr" name="corpusVersion" id="NUM" />
+    <public type="attr" name="customThemeStyle" id="NUM" />
     <public type="attr" name="defaultIntentAction" id="NUM" />
     <public type="attr" name="defaultIntentActivity" id="NUM" />
     <public type="attr" name="defaultIntentData" id="NUM" />
     <public type="attr" name="documentMaxAgeSecs" id="NUM" />
+    <public type="attr" name="environment" id="NUM" />
     <public type="attr" name="featureType" id="NUM" />
     <public type="attr" name="font" id="NUM" />
     <public type="attr" name="fontProviderAuthority" id="NUM" />
@@ -55,6 +62,8 @@
     <public type="attr" name="fontStyle" id="NUM" />
     <public type="attr" name="fontVariationSettings" id="NUM" />
     <public type="attr" name="fontWeight" id="NUM" />
+    <public type="attr" name="fragmentMode" id="NUM" />
+    <public type="attr" name="fragmentStyle" id="NUM" />
     <public type="attr" name="imageAspectRatio" id="NUM" />
     <public type="attr" name="imageAspectRatioAdjust" id="NUM" />
     <public type="attr" name="indexPrefixes" id="NUM" />
@@ -72,6 +81,13 @@
     <public type="attr" name="layout_keyline" id="NUM" />
     <public type="attr" name="liteMode" id="NUM" />
     <public type="attr" name="mapType" id="NUM" />
+    <public type="attr" name="maskedWalletDetailsBackground" id="NUM" />
+    <public type="attr" name="maskedWalletDetailsButtonBackground" id="NUM" />
+    <public type="attr" name="maskedWalletDetailsButtonTextAppearance" id="NUM" />
+    <public type="attr" name="maskedWalletDetailsHeaderTextAppearance" id="NUM" />
+    <public type="attr" name="maskedWalletDetailsLogoImageType" id="NUM" />
+    <public type="attr" name="maskedWalletDetailsLogoTextColor" id="NUM" />
+    <public type="attr" name="maskedWalletDetailsTextAppearance" id="NUM" />
     <public type="attr" name="noIndex" id="NUM" />
     <public type="attr" name="paramName" id="NUM" />
     <public type="attr" name="paramValue" id="NUM" />
@@ -92,6 +108,7 @@
     <public type="attr" name="statusBarBackground" id="NUM" />
     <public type="attr" name="subsectionSeparator" id="NUM" />
     <public type="attr" name="toAddressesSection" id="NUM" />
+    <public type="attr" name="toolbarTextColorStyle" id="NUM" />
     <public type="attr" name="trimmable" id="NUM" />
     <public type="attr" name="ttcIndex" id="NUM" />
     <public type="attr" name="uiCompass" id="NUM" />
@@ -106,6 +123,7 @@
     <public type="attr" name="userInputSection" id="NUM" />
     <public type="attr" name="userInputTag" id="NUM" />
     <public type="attr" name="userInputValue" id="NUM" />
+    <public type="attr" name="windowTransitionStyle" id="NUM" />
     <public type="attr" name="zOrderOnTop" id="NUM" />
     <public type="bool" name="isTablet" id="NUM" />
     <public type="bool" name="useHardwareAcceleration" id="NUM" />
@@ -125,6 +143,19 @@
     <public type="color" name="divider" id="NUM" />
     <public type="color" name="notification_action_color_filter" id="NUM" />
     <public type="color" name="notification_icon_bg_color" id="NUM" />
+    <public type="color" name="wallet_bright_foreground_disabled_holo_light" id="NUM" />
+    <public type="color" name="wallet_bright_foreground_holo_dark" id="NUM" />
+    <public type="color" name="wallet_bright_foreground_holo_light" id="NUM" />
+    <public type="color" name="wallet_dim_foreground_disabled_holo_dark" id="NUM" />
+    <public type="color" name="wallet_dim_foreground_holo_dark" id="NUM" />
+    <public type="color" name="wallet_highlighted_text_holo_dark" id="NUM" />
+    <public type="color" name="wallet_highlighted_text_holo_light" id="NUM" />
+    <public type="color" name="wallet_hint_foreground_holo_dark" id="NUM" />
+    <public type="color" name="wallet_hint_foreground_holo_light" id="NUM" />
+    <public type="color" name="wallet_holo_blue_light" id="NUM" />
+    <public type="color" name="wallet_link_text_light" id="NUM" />
+    <public type="color" name="wallet_primary_text_holo_light" id="NUM" />
+    <public type="color" name="wallet_secondary_text_holo_dark" id="NUM" />
     <public type="dimen" name="compat_button_inset_horizontal_material" id="NUM" />
     <public type="dimen" name="compat_button_inset_vertical_material" id="NUM" />
     <public type="dimen" name="compat_button_padding_horizontal_material" id="NUM" />
@@ -245,6 +276,7 @@
     <public type="drawable" name="bar_selector_white" id="NUM" />
     <public type="drawable" name="bg_voip_icon_btn" id="NUM" />
     <public type="drawable" name="blockpanel" id="NUM" />
+    <public type="drawable" name="blockpanel_shadow" id="NUM" />
     <public type="drawable" name="bluecounter" id="NUM" />
     <public type="drawable" name="blur_linear" id="NUM" />
     <public type="drawable" name="blur_off" id="NUM" />
@@ -267,6 +299,7 @@
     <public type="drawable" name="broadcast_w" id="NUM" />
     <public type="drawable" name="btnshadow" id="NUM" />
     <public type="drawable" name="burn" id="NUM" />
+    <public type="drawable" name="buy_with_googlepay_button_content" id="NUM" />
     <public type="drawable" name="call_arrow_right" id="NUM" />
     <public type="drawable" name="call_custom_notification_icon" id="NUM" />
     <public type="drawable" name="call_notification_bg" id="NUM" />
@@ -400,6 +433,12 @@
     <public type="drawable" name="gif_empty" id="NUM" />
     <public type="drawable" name="googleg_disabled_color_18" id="NUM" />
     <public type="drawable" name="googleg_standard_color_18" id="NUM" />
+    <public type="drawable" name="googlepay_button_background" id="NUM" />
+    <public type="drawable" name="googlepay_button_background_image" id="NUM" />
+    <public type="drawable" name="googlepay_button_content" id="NUM" />
+    <public type="drawable" name="googlepay_button_no_shadow_background" id="NUM" />
+    <public type="drawable" name="googlepay_button_no_shadow_background_image" id="NUM" />
+    <public type="drawable" name="googlepay_button_overlay" id="NUM" />
     <public type="drawable" name="gradient_bottom" id="NUM" />
     <public type="drawable" name="gradient_top" id="NUM" />
     <public type="drawable" name="greydivider" id="NUM" />
@@ -561,6 +600,10 @@
     <public type="drawable" name="logo_middle" id="NUM" />
     <public type="drawable" name="map_pin" id="NUM" />
     <public type="drawable" name="map_pin2" id="NUM" />
+    <public type="drawable" name="map_pin_arrow" id="NUM" />
+    <public type="drawable" name="map_pin_circle" id="NUM" />
+    <public type="drawable" name="map_pin_cone2" id="NUM" />
+    <public type="drawable" name="map_pin_photo" id="NUM" />
     <public type="drawable" name="media_doc_blue" id="NUM" />
     <public type="drawable" name="media_doc_blue_b" id="NUM" />
     <public type="drawable" name="media_doc_green" id="NUM" />
@@ -575,12 +618,15 @@
     <public type="drawable" name="mentionchatslist" id="NUM" />
     <public type="drawable" name="menu_add" id="NUM" />
     <public type="drawable" name="menu_bookmarks_14" id="NUM" />
+    <public type="drawable" name="menu_bookmarks_hw" id="NUM" />
     <public type="drawable" name="menu_bookmarks_ny" id="NUM" />
     <public type="drawable" name="menu_bots" id="NUM" />
     <public type="drawable" name="menu_broadcast" id="NUM" />
     <public type="drawable" name="menu_broadcast_14" id="NUM" />
+    <public type="drawable" name="menu_broadcast_hw" id="NUM" />
     <public type="drawable" name="menu_calls" id="NUM" />
     <public type="drawable" name="menu_calls_14" id="NUM" />
+    <public type="drawable" name="menu_calls_hw" id="NUM" />
     <public type="drawable" name="menu_calls_ny" id="NUM" />
     <public type="drawable" name="menu_camera" id="NUM" />
     <public type="drawable" name="menu_camera2" id="NUM" />
@@ -591,6 +637,7 @@
     <public type="drawable" name="menu_clearcache" id="NUM" />
     <public type="drawable" name="menu_contacts" id="NUM" />
     <public type="drawable" name="menu_contacts_14" id="NUM" />
+    <public type="drawable" name="menu_contacts_hw" id="NUM" />
     <public type="drawable" name="menu_contacts_ny" id="NUM" />
     <public type="drawable" name="menu_copy" id="NUM" />
     <public type="drawable" name="menu_data" id="NUM" />
@@ -600,11 +647,14 @@
     <public type="drawable" name="menu_folders" id="NUM" />
     <public type="drawable" name="menu_groups" id="NUM" />
     <public type="drawable" name="menu_groups_14" id="NUM" />
+    <public type="drawable" name="menu_groups_hw" id="NUM" />
     <public type="drawable" name="menu_groups_ny" id="NUM" />
     <public type="drawable" name="menu_help" id="NUM" />
+    <public type="drawable" name="menu_help_hw" id="NUM" />
     <public type="drawable" name="menu_help_ny" id="NUM" />
     <public type="drawable" name="menu_info" id="NUM" />
     <public type="drawable" name="menu_invite" id="NUM" />
+    <public type="drawable" name="menu_invite_hw" id="NUM" />
     <public type="drawable" name="menu_invite_ny" id="NUM" />
     <public type="drawable" name="menu_jobtitle" id="NUM" />
     <public type="drawable" name="menu_language" id="NUM" />
@@ -616,6 +666,7 @@
     <public type="drawable" name="menu_notifications" id="NUM" />
     <public type="drawable" name="menu_palette" id="NUM" />
     <public type="drawable" name="menu_passcode" id="NUM" />
+    <public type="drawable" name="menu_pinnedlist" id="NUM" />
     <public type="drawable" name="menu_policy" id="NUM" />
     <public type="drawable" name="menu_private" id="NUM" />
     <public type="drawable" name="menu_read" id="NUM" />
@@ -624,11 +675,13 @@
     <public type="drawable" name="menu_search" id="NUM" />
     <public type="drawable" name="menu_secret" id="NUM" />
     <public type="drawable" name="menu_secret_14" id="NUM" />
+    <public type="drawable" name="menu_secret_hw" id="NUM" />
     <public type="drawable" name="menu_secret_ny" id="NUM" />
     <public type="drawable" name="menu_settings" id="NUM" />
     <public type="drawable" name="menu_settings_14" id="NUM" />
     <public type="drawable" name="menu_settings_4" id="NUM" />
     <public type="drawable" name="menu_settings_filled" id="NUM" />
+    <public type="drawable" name="menu_settings_hw" id="NUM" />
     <public type="drawable" name="menu_settings_ny" id="NUM" />
     <public type="drawable" name="menu_shadow" id="NUM" />
     <public type="drawable" name="menu_support" id="NUM" />
@@ -689,6 +742,7 @@
     <public type="drawable" name="msg_link" id="NUM" />
     <public type="drawable" name="msg_list" id="NUM" />
     <public type="drawable" name="msg_location" id="NUM" />
+    <public type="drawable" name="msg_location_alert" id="NUM" />
     <public type="drawable" name="msg_map" id="NUM" />
     <public type="drawable" name="msg_markread" id="NUM" />
     <public type="drawable" name="msg_markunread" id="NUM" />
@@ -707,6 +761,7 @@
     <public type="drawable" name="msg_photo" id="NUM" />
     <public type="drawable" name="msg_photo_shadow" id="NUM" />
     <public type="drawable" name="msg_pin" id="NUM" />
+    <public type="drawable" name="msg_pin_mini" id="NUM" />
     <public type="drawable" name="msg_pollstop" id="NUM" />
     <public type="drawable" name="msg_psa" id="NUM" />
     <public type="drawable" name="msg_removefolder" id="NUM" />
@@ -1067,17 +1122,27 @@
     <public type="id" name="adjust_height" id="NUM" />
     <public type="id" name="adjust_width" id="NUM" />
     <public type="id" name="all" id="NUM" />
+    <public type="id" name="android_pay" id="NUM" />
+    <public type="id" name="android_pay_dark" id="NUM" />
+    <public type="id" name="android_pay_light" id="NUM" />
+    <public type="id" name="android_pay_light_with_border" id="NUM" />
     <public type="id" name="answer_btn" id="NUM" />
     <public type="id" name="answer_text" id="NUM" />
     <public type="id" name="async" id="NUM" />
     <public type="id" name="auto" id="NUM" />
     <public type="id" name="blocking" id="NUM" />
+    <public type="id" name="book_now" id="NUM" />
     <public type="id" name="bottom" id="NUM" />
     <public type="id" name="buttons" id="NUM" />
+    <public type="id" name="buyButton" id="NUM" />
+    <public type="id" name="buy_now" id="NUM" />
+    <public type="id" name="buy_with" id="NUM" />
+    <public type="id" name="buy_with_google" id="NUM" />
     <public type="id" name="center" id="NUM" />
     <public type="id" name="center_horizontal" id="NUM" />
     <public type="id" name="center_vertical" id="NUM" />
     <public type="id" name="chronometer" id="NUM" />
+    <public type="id" name="classic" id="NUM" />
     <public type="id" name="clip_horizontal" id="NUM" />
     <public type="id" name="clip_vertical" id="NUM" />
     <public type="id" name="contact" id="NUM" />
@@ -1089,12 +1154,21 @@
     <public type="id" name="demote_common_words" id="NUM" />
     <public type="id" name="demote_rfCLASSNAME_hostnames" id="NUM" />
     <public type="id" name="dialog_button" id="NUM" />
+    <public type="id" name="donate_with" id="NUM" />
+    <public type="id" name="donate_with_google" id="NUM" />
     <public type="id" name="email" id="NUM" />
     <public type="id" name="end" id="NUM" />
     <public type="id" name="fill" id="NUM" />
     <public type="id" name="fill_horizontal" id="NUM" />
     <public type="id" name="fill_vertical" id="NUM" />
     <public type="id" name="forever" id="NUM" />
+    <public type="id" name="googleMaterial2" id="NUM" />
+    <public type="id" name="google_wallet_classic" id="NUM" />
+    <public type="id" name="google_wallet_grayscale" id="NUM" />
+    <public type="id" name="google_wallet_monochrome" id="NUM" />
+    <public type="id" name="grayscale" id="NUM" />
+    <public type="id" name="holo_dark" id="NUM" />
+    <public type="id" name="holo_light" id="NUM" />
     <public type="id" name="html" id="NUM" />
     <public type="id" name="hybrid" id="NUM" />
     <public type="id" name="icon" id="NUM" />
@@ -1116,7 +1190,10 @@
     <public type="id" name="light" id="NUM" />
     <public type="id" name="line1" id="NUM" />
     <public type="id" name="line3" id="NUM" />
+    <public type="id" name="logo_only" id="NUM" />
     <public type="id" name="match_global_nicknames" id="NUM" />
+    <public type="id" name="match_parent" id="NUM" />
+    <public type="id" name="material" id="NUM" />
     <public type="id" name="menu_bold" id="NUM" />
     <public type="id" name="menu_groupbolditalic" id="NUM" />
     <public type="id" name="menu_italic" id="NUM" />
@@ -1125,6 +1202,7 @@
     <public type="id" name="menu_regular" id="NUM" />
     <public type="id" name="menu_strike" id="NUM" />
     <public type="id" name="menu_underline" id="NUM" />
+    <public type="id" name="monochrome" id="NUM" />
     <public type="id" name="name" id="NUM" />
     <public type="id" name="none" id="NUM" />
     <public type="id" name="normal" id="NUM" />
@@ -1159,13 +1237,18 @@
     <public type="id" name="player_previous" id="NUM" />
     <public type="id" name="player_progress_bar" id="NUM" />
     <public type="id" name="player_song_name" id="NUM" />
+    <public type="id" name="production" id="NUM" />
     <public type="id" name="rfCLASSNAME" id="NUM" />
     <public type="id" name="right" id="NUM" />
     <public type="id" name="right_icon" id="NUM" />
     <public type="id" name="right_side" id="NUM" />
+    <public type="id" name="sandbox" id="NUM" />
     <public type="id" name="satellite" id="NUM" />
+    <public type="id" name="selectionDetails" id="NUM" />
+    <public type="id" name="slide" id="NUM" />
     <public type="id" name="standard" id="NUM" />
     <public type="id" name="start" id="NUM" />
+    <public type="id" name="strict_sandbox" id="NUM" />
     <public type="id" name="subtitle" id="NUM" />
     <public type="id" name="tag_accessibility_actions" id="NUM" />
     <public type="id" name="tag_accessibility_clickable_spans" id="NUM" />
@@ -1176,6 +1259,7 @@
     <public type="id" name="tag_unhandled_key_event_manager" id="NUM" />
     <public type="id" name="tag_unhandled_key_listeners" id="NUM" />
     <public type="id" name="terrain" id="NUM" />
+    <public type="id" name="test" id="NUM" />
     <public type="id" name="text" id="NUM" />
     <public type="id" name="text1" id="NUM" />
     <public type="id" name="text2" id="NUM" />
@@ -1186,6 +1270,7 @@
     <public type="id" name="top" id="NUM" />
     <public type="id" name="url" id="NUM" />
     <public type="id" name="wide" id="NUM" />
+    <public type="id" name="wrap_content" id="NUM" />
     <public type="integer" name="google_play_services_version" id="NUM" />
     <public type="integer" name="status_bar_notification_info_maxnum" id="NUM" />
     <public type="interpolator" name="ft_avd_toarrow_animation_interpolator_1" id="NUM" />
@@ -1202,6 +1287,7 @@
     <public type="layout" name="notification_template_part_time" id="NUM" />
     <public type="layout" name="player_big_notification" id="NUM" />
     <public type="layout" name="player_small_notification" id="NUM" />
+    <public type="layout" name="wallet_test_layout" id="NUM" />
     <public type="mipmap" name="ic_launcher" id="NUM" />
     <public type="mipmap" name="ic_launcher_round" id="NUM" />
     <public type="mipmap" name="icon_background" id="NUM" />
@@ -1230,11 +1316,19 @@
     <public type="raw" name="filter_new" id="NUM" />
     <public type="raw" name="filter_no_chats" id="NUM" />
     <public type="raw" name="filters" id="NUM" />
+    <public type="raw" name="ic_admin" id="NUM" />
     <public type="raw" name="ic_delete" id="NUM" />
     <public type="raw" name="ic_download" id="NUM" />
     <public type="raw" name="ic_mute" id="NUM" />
+    <public type="raw" name="ic_pin" id="NUM" />
     <public type="raw" name="ic_unmute" id="NUM" />
+    <public type="raw" name="ic_unpin" id="NUM" />
     <public type="raw" name="mapstyle_night" id="NUM" />
+    <public type="raw" name="permission_map" id="NUM" />
+    <public type="raw" name="permission_map_dark" id="NUM" />
+    <public type="raw" name="permission_pin" id="NUM" />
+    <public type="raw" name="permission_pin_dark" id="NUM" />
+    <public type="raw" name="player_prev" id="NUM" />
     <public type="raw" name="qr_login" id="NUM" />
     <public type="raw" name="sound_in" id="NUM" />
     <public type="raw" name="sound_out" id="NUM" />
@@ -1304,6 +1398,7 @@
     <public type="string" name="AccDescrIVHeading" id="NUM" />
     <public type="string" name="AccDescrIVTitle" id="NUM" />
     <public type="string" name="AccDescrInstantCamera" id="NUM" />
+    <public type="string" name="AccDescrLocationNotify" id="NUM" />
     <public type="string" name="AccDescrMentionDown" id="NUM" />
     <public type="string" name="AccDescrMirror" id="NUM" />
     <public type="string" name="AccDescrMoreOptions" id="NUM" />
@@ -1387,6 +1482,7 @@
     <public type="string" name="AccDescrVoipCamSwitchedToFront" id="NUM" />
     <public type="string" name="AccDescrVoipMicOff" id="NUM" />
     <public type="string" name="AccDescrVoipMicOn" id="NUM" />
+    <public type="string" name="AccPinnedMessagesList" id="NUM" />
     <public type="string" name="AccReleaseForArchive" id="NUM" />
     <public type="string" name="AccSwipeForArchive" id="NUM" />
     <public type="string" name="Accept" id="NUM" />
@@ -1455,6 +1551,9 @@
     <public type="string" name="ActionTakeScreenshootYou" id="NUM" />
     <public type="string" name="ActionUserScored" id="NUM" />
     <public type="string" name="ActionUserScoredInGame" id="NUM" />
+    <public type="string" name="ActionUserWithinOtherRadius" id="NUM" />
+    <public type="string" name="ActionUserWithinRadius" id="NUM" />
+    <public type="string" name="ActionUserWithinYouRadius" id="NUM" />
     <public type="string" name="ActionYouAddUser" id="NUM" />
     <public type="string" name="ActionYouChangedPhoto" id="NUM" />
     <public type="string" name="ActionYouChangedTitle" id="NUM" />
@@ -1683,9 +1782,16 @@
     <public type="string" name="AttachVideo" id="NUM" />
     <public type="string" name="AttachVideoExpired" id="NUM" />
     <public type="string" name="AudioAutodownload" id="NUM" />
+    <public type="string" name="AudioSavedHint" id="NUM" />
     <public type="string" name="AudioTitle" id="NUM" />
     <public type="string" name="AudioUnknownArtist" id="NUM" />
     <public type="string" name="AudioUnknownTitle" id="NUM" />
+    <public type="string" name="AudiosSavedHint_few" id="NUM" />
+    <public type="string" name="AudiosSavedHint_many" id="NUM" />
+    <public type="string" name="AudiosSavedHint_one" id="NUM" />
+    <public type="string" name="AudiosSavedHint_other" id="NUM" />
+    <public type="string" name="AudiosSavedHint_two" id="NUM" />
+    <public type="string" name="AudiosSavedHint_zero" id="NUM" />
     <public type="string" name="August" id="NUM" />
     <public type="string" name="AuthAnotherClient" id="NUM" />
     <public type="string" name="AuthAnotherClientDownloadClientUrl" id="NUM" />
@@ -2182,6 +2288,12 @@
     <public type="string" name="CommentsCount_other" id="NUM" />
     <public type="string" name="CommentsCount_two" id="NUM" />
     <public type="string" name="CommentsCount_zero" id="NUM" />
+    <public type="string" name="CommentsNoNumber_few" id="NUM" />
+    <public type="string" name="CommentsNoNumber_many" id="NUM" />
+    <public type="string" name="CommentsNoNumber_one" id="NUM" />
+    <public type="string" name="CommentsNoNumber_other" id="NUM" />
+    <public type="string" name="CommentsNoNumber_two" id="NUM" />
+    <public type="string" name="CommentsNoNumber_zero" id="NUM" />
     <public type="string" name="CommentsTitle" id="NUM" />
     <public type="string" name="Comments_few" id="NUM" />
     <public type="string" name="Comments_many" id="NUM" />
@@ -2636,8 +2748,15 @@
     <public type="string" name="FeaturedStickers" id="NUM" />
     <public type="string" name="FeaturedStickersInfo" id="NUM" />
     <public type="string" name="February" id="NUM" />
+    <public type="string" name="FileSavedHint" id="NUM" />
     <public type="string" name="FileUploadLimit" id="NUM" />
     <public type="string" name="FilesDataUsage" id="NUM" />
+    <public type="string" name="FilesSavedHint_few" id="NUM" />
+    <public type="string" name="FilesSavedHint_many" id="NUM" />
+    <public type="string" name="FilesSavedHint_one" id="NUM" />
+    <public type="string" name="FilesSavedHint_other" id="NUM" />
+    <public type="string" name="FilesSavedHint_two" id="NUM" />
+    <public type="string" name="FilesSavedHint_zero" id="NUM" />
     <public type="string" name="Files_few" id="NUM" />
     <public type="string" name="Files_many" id="NUM" />
     <public type="string" name="Files_one" id="NUM" />
@@ -2740,6 +2859,7 @@
     <public type="string" name="FontSizePreviewName" id="NUM" />
     <public type="string" name="FontSizePreviewReply" id="NUM" />
     <public type="string" name="FontType" id="NUM" />
+    <public type="string" name="Foots" id="NUM" />
     <public type="string" name="FootsAway" id="NUM" />
     <public type="string" name="FootsFromYou" id="NUM" />
     <public type="string" name="ForgotPassword" id="NUM" />
@@ -2836,6 +2956,7 @@
     <public type="string" name="General" id="NUM" />
     <public type="string" name="GettingLinkInfo" id="NUM" />
     <public type="string" name="GifCaption" id="NUM" />
+    <public type="string" name="GifSavedToDownloadsHint" id="NUM" />
     <public type="string" name="GifsTab2" id="NUM" />
     <public type="string" name="GlobalAttachGifRestricted" id="NUM" />
     <public type="string" name="GlobalAttachInlineRestricted" id="NUM" />
@@ -2893,6 +3014,7 @@
     <public type="string" name="HideNewChatsAlertText" id="NUM" />
     <public type="string" name="HideNewChatsAlertTitle" id="NUM" />
     <public type="string" name="HideOnTop" id="NUM" />
+    <public type="string" name="HidePinnedMessages" id="NUM" />
     <public type="string" name="Highlights" id="NUM" />
     <public type="string" name="HistoryCleared" id="NUM" />
     <public type="string" name="HistoryClearedUndo" id="NUM" />
@@ -2983,6 +3105,7 @@
     <public type="string" name="July" id="NUM" />
     <public type="string" name="JumpToDate" id="NUM" />
     <public type="string" name="June" id="NUM" />
+    <public type="string" name="KMeters" id="NUM" />
     <public type="string" name="KMetersAway2" id="NUM" />
     <public type="string" name="KMetersFromYou2" id="NUM" />
     <public type="string" name="KeepMedia" id="NUM" />
@@ -2990,6 +3113,7 @@
     <public type="string" name="KeepMediaInfo" id="NUM" />
     <public type="string" name="KickFromBroadcast" id="NUM" />
     <public type="string" name="KickFromGroup" id="NUM" />
+    <public type="string" name="Km" id="NUM" />
     <public type="string" name="Language" id="NUM" />
     <public type="string" name="LanguageAlert" id="NUM" />
     <public type="string" name="LanguageCode" id="NUM" />
@@ -3072,6 +3196,9 @@
     <public type="string" name="LocalPhotoCache" id="NUM" />
     <public type="string" name="LocalVideoCache" id="NUM" />
     <public type="string" name="LocatedChannelsTooMuch" id="NUM" />
+    <public type="string" name="LocationNotifiation" id="NUM" />
+    <public type="string" name="LocationNotifiationButton" id="NUM" />
+    <public type="string" name="LocationNotifiationCloser" id="NUM" />
     <public type="string" name="LocationUpdated" id="NUM" />
     <public type="string" name="LocationUpdatedFormatted" id="NUM" />
     <public type="string" name="LocationUpdatedJustNow" id="NUM" />
@@ -3127,6 +3254,12 @@
     <public type="string" name="MasksRemoved" id="NUM" />
     <public type="string" name="MasksRemovedInfo" id="NUM" />
     <public type="string" name="May" id="NUM" />
+    <public type="string" name="MediaSavedHint_few" id="NUM" />
+    <public type="string" name="MediaSavedHint_many" id="NUM" />
+    <public type="string" name="MediaSavedHint_one" id="NUM" />
+    <public type="string" name="MediaSavedHint_other" id="NUM" />
+    <public type="string" name="MediaSavedHint_two" id="NUM" />
+    <public type="string" name="MediaSavedHint_zero" id="NUM" />
     <public type="string" name="MediaSelected_few" id="NUM" />
     <public type="string" name="MediaSelected_many" id="NUM" />
     <public type="string" name="MediaSelected_one" id="NUM" />
@@ -3178,6 +3311,7 @@
     <public type="string" name="MessageLifetimeYouRemoved" id="NUM" />
     <public type="string" name="MessageNotFound" id="NUM" />
     <public type="string" name="MessageNotifications" id="NUM" />
+    <public type="string" name="MessagePinnedHint" id="NUM" />
     <public type="string" name="MessagePreview" id="NUM" />
     <public type="string" name="MessageScheduleEditTime" id="NUM" />
     <public type="string" name="MessageScheduleSend" id="NUM" />
@@ -3189,6 +3323,7 @@
     <public type="string" name="MessageScheduledUntilOnline" id="NUM" />
     <public type="string" name="MessageScheduledVote" id="NUM" />
     <public type="string" name="MessageScheduledVoteResults" id="NUM" />
+    <public type="string" name="MessageUnpinnedHint" id="NUM" />
     <public type="string" name="MessagesChartTitle" id="NUM" />
     <public type="string" name="MessagesDataUsage" id="NUM" />
     <public type="string" name="MessagesDeletedHint_few" id="NUM" />
@@ -3199,6 +3334,13 @@
     <public type="string" name="MessagesDeletedHint_zero" id="NUM" />
     <public type="string" name="MessagesOverview" id="NUM" />
     <public type="string" name="MessagesSettings" id="NUM" />
+    <public type="string" name="MessagesUnpinned_few" id="NUM" />
+    <public type="string" name="MessagesUnpinned_many" id="NUM" />
+    <public type="string" name="MessagesUnpinned_one" id="NUM" />
+    <public type="string" name="MessagesUnpinned_other" id="NUM" />
+    <public type="string" name="MessagesUnpinned_two" id="NUM" />
+    <public type="string" name="MessagesUnpinned_zero" id="NUM" />
+    <public type="string" name="Meters" id="NUM" />
     <public type="string" name="MetersAway2" id="NUM" />
     <public type="string" name="MetersFromYou2" id="NUM" />
     <public type="string" name="Meters_few" id="NUM" />
@@ -3207,6 +3349,8 @@
     <public type="string" name="Meters_other" id="NUM" />
     <public type="string" name="Meters_two" id="NUM" />
     <public type="string" name="Meters_zero" id="NUM" />
+    <public type="string" name="Mi" id="NUM" />
+    <public type="string" name="Miles" id="NUM" />
     <public type="string" name="MilesAway" id="NUM" />
     <public type="string" name="MilesFromYou" id="NUM" />
     <public type="string" name="MinutesBold_few" id="NUM" />
@@ -3261,6 +3405,9 @@
     <public type="string" name="NewChannel" id="NUM" />
     <public type="string" name="NewChatsFromNonContacts" id="NUM" />
     <public type="string" name="NewContact" id="NUM" />
+    <public type="string" name="NewContactAlertButton" id="NUM" />
+    <public type="string" name="NewContactAlertMessage" id="NUM" />
+    <public type="string" name="NewContactAlertTitle" id="NUM" />
     <public type="string" name="NewConversationShortcut" id="NUM" />
     <public type="string" name="NewFollowersBySourceChartTitle" id="NUM" />
     <public type="string" name="NewGroup" id="NUM" />
@@ -3353,42 +3500,61 @@
     <public type="string" name="NotMounted" id="NUM" />
     <public type="string" name="NotificationActionPinnedContact2" id="NUM" />
     <public type="string" name="NotificationActionPinnedContactChannel2" id="NUM" />
+    <public type="string" name="NotificationActionPinnedContactUser" id="NUM" />
     <public type="string" name="NotificationActionPinnedFile" id="NUM" />
     <public type="string" name="NotificationActionPinnedFileChannel" id="NUM" />
+    <public type="string" name="NotificationActionPinnedFileUser" id="NUM" />
     <public type="string" name="NotificationActionPinnedGame" id="NUM" />
     <public type="string" name="NotificationActionPinnedGameChannel" id="NUM" />
     <public type="string" name="NotificationActionPinnedGameScore" id="NUM" />
     <public type="string" name="NotificationActionPinnedGameScoreChannel" id="NUM" />
+    <public type="string" name="NotificationActionPinnedGameScoreUser" id="NUM" />
+    <public type="string" name="NotificationActionPinnedGameUser" id="NUM" />
     <public type="string" name="NotificationActionPinnedGeo" id="NUM" />
     <public type="string" name="NotificationActionPinnedGeoChannel" id="NUM" />
     <public type="string" name="NotificationActionPinnedGeoLive" id="NUM" />
     <public type="string" name="NotificationActionPinnedGeoLiveChannel" id="NUM" />
+    <public type="string" name="NotificationActionPinnedGeoLiveUser" id="NUM" />
+    <public type="string" name="NotificationActionPinnedGeoUser" id="NUM" />
     <public type="string" name="NotificationActionPinnedGif" id="NUM" />
     <public type="string" name="NotificationActionPinnedGifChannel" id="NUM" />
+    <public type="string" name="NotificationActionPinnedGifUser" id="NUM" />
     <public type="string" name="NotificationActionPinnedInvoice" id="NUM" />
     <public type="string" name="NotificationActionPinnedInvoiceChannel" id="NUM" />
+    <public type="string" name="NotificationActionPinnedInvoiceUser" id="NUM" />
     <public type="string" name="NotificationActionPinnedMusic" id="NUM" />
     <public type="string" name="NotificationActionPinnedMusicChannel" id="NUM" />
+    <public type="string" name="NotificationActionPinnedMusicUser" id="NUM" />
     <public type="string" name="NotificationActionPinnedNoText" id="NUM" />
     <public type="string" name="NotificationActionPinnedNoTextChannel" id="NUM" />
+    <public type="string" name="NotificationActionPinnedNoTextUser" id="NUM" />
     <public type="string" name="NotificationActionPinnedPhoto" id="NUM" />
     <public type="string" name="NotificationActionPinnedPhotoChannel" id="NUM" />
+    <public type="string" name="NotificationActionPinnedPhotoUser" id="NUM" />
     <public type="string" name="NotificationActionPinnedPoll2" id="NUM" />
     <public type="string" name="NotificationActionPinnedPollChannel2" id="NUM" />
+    <public type="string" name="NotificationActionPinnedPollUser" id="NUM" />
     <public type="string" name="NotificationActionPinnedQuiz2" id="NUM" />
     <public type="string" name="NotificationActionPinnedQuizChannel2" id="NUM" />
+    <public type="string" name="NotificationActionPinnedQuizUser" id="NUM" />
     <public type="string" name="NotificationActionPinnedRound" id="NUM" />
     <public type="string" name="NotificationActionPinnedRoundChannel" id="NUM" />
+    <public type="string" name="NotificationActionPinnedRoundUser" id="NUM" />
     <public type="string" name="NotificationActionPinnedSticker" id="NUM" />
     <public type="string" name="NotificationActionPinnedStickerChannel" id="NUM" />
     <public type="string" name="NotificationActionPinnedStickerEmoji" id="NUM" />
     <public type="string" name="NotificationActionPinnedStickerEmojiChannel" id="NUM" />
+    <public type="string" name="NotificationActionPinnedStickerEmojiUser" id="NUM" />
+    <public type="string" name="NotificationActionPinnedStickerUser" id="NUM" />
     <public type="string" name="NotificationActionPinnedText" id="NUM" />
     <public type="string" name="NotificationActionPinnedTextChannel" id="NUM" />
+    <public type="string" name="NotificationActionPinnedTextUser" id="NUM" />
     <public type="string" name="NotificationActionPinnedVideo" id="NUM" />
     <public type="string" name="NotificationActionPinnedVideoChannel" id="NUM" />
+    <public type="string" name="NotificationActionPinnedVideoUser" id="NUM" />
     <public type="string" name="NotificationActionPinnedVoice" id="NUM" />
     <public type="string" name="NotificationActionPinnedVoiceChannel" id="NUM" />
+    <public type="string" name="NotificationActionPinnedVoiceUser" id="NUM" />
     <public type="string" name="NotificationContactJoined" id="NUM" />
     <public type="string" name="NotificationContactNewPhoto" id="NUM" />
     <public type="string" name="NotificationEditedGroupName" id="NUM" />
@@ -3845,6 +4011,7 @@
     <public type="string" name="PeopleNearbyGpsInfo" id="NUM" />
     <public type="string" name="PeopleNearbyHeader" id="NUM" />
     <public type="string" name="PeopleNearbyInfo2" id="NUM" />
+    <public type="string" name="PermissionBackgroundLocation" id="NUM" />
     <public type="string" name="PermissionContacts" id="NUM" />
     <public type="string" name="PermissionDrawAboveOtherApps" id="NUM" />
     <public type="string" name="PermissionNoAudio" id="NUM" />
@@ -3872,6 +4039,13 @@
     <public type="string" name="PhotoCaption" id="NUM" />
     <public type="string" name="PhotoEditorDiscardAlert" id="NUM" />
     <public type="string" name="PhotoSavedHint" id="NUM" />
+    <public type="string" name="PhotoSavedToDownloadsHint" id="NUM" />
+    <public type="string" name="PhotosSavedHint_few" id="NUM" />
+    <public type="string" name="PhotosSavedHint_many" id="NUM" />
+    <public type="string" name="PhotosSavedHint_one" id="NUM" />
+    <public type="string" name="PhotosSavedHint_other" id="NUM" />
+    <public type="string" name="PhotosSavedHint_two" id="NUM" />
+    <public type="string" name="PhotosSavedHint_zero" id="NUM" />
     <public type="string" name="PhotosSelected_few" id="NUM" />
     <public type="string" name="PhotosSelected_many" id="NUM" />
     <public type="string" name="PhotosSelected_one" id="NUM" />
@@ -3884,6 +4058,7 @@
     <public type="string" name="Photos_other" id="NUM" />
     <public type="string" name="Photos_two" id="NUM" />
     <public type="string" name="Photos_zero" id="NUM" />
+    <public type="string" name="PinAlsoFor" id="NUM" />
     <public type="string" name="PinFolderLimitReached" id="NUM" />
     <public type="string" name="PinInTheList" id="NUM" />
     <public type="string" name="PinMessage" id="NUM" />
@@ -3892,12 +4067,21 @@
     <public type="string" name="PinMessageAlertChat" id="NUM" />
     <public type="string" name="PinMessageAlertTitle" id="NUM" />
     <public type="string" name="PinNotify" id="NUM" />
+    <public type="string" name="PinOldMessageAlert" id="NUM" />
     <public type="string" name="PinToTop" id="NUM" />
     <public type="string" name="PinToTopLimitReached2" id="NUM" />
     <public type="string" name="Ping" id="NUM" />
     <public type="string" name="Pink" id="NUM" />
     <public type="string" name="PinnedMessage" id="NUM" />
     <public type="string" name="PinnedMessages" id="NUM" />
+    <public type="string" name="PinnedMessagesCount_few" id="NUM" />
+    <public type="string" name="PinnedMessagesCount_many" id="NUM" />
+    <public type="string" name="PinnedMessagesCount_one" id="NUM" />
+    <public type="string" name="PinnedMessagesCount_other" id="NUM" />
+    <public type="string" name="PinnedMessagesCount_two" id="NUM" />
+    <public type="string" name="PinnedMessagesCount_zero" id="NUM" />
+    <public type="string" name="PinnedMessagesHidden" id="NUM" />
+    <public type="string" name="PinnedMessagesHiddenInfo" id="NUM" />
     <public type="string" name="PinnedPoll" id="NUM" />
     <public type="string" name="PlacesInThisArea" id="NUM" />
     <public type="string" name="PleaseDownload" id="NUM" />
@@ -3933,6 +4117,7 @@
     <public type="string" name="PopupNotification" id="NUM" />
     <public type="string" name="PostingMembers" id="NUM" />
     <public type="string" name="PreviewFeedback2" id="NUM" />
+    <public type="string" name="PreviousPinnedMessage" id="NUM" />
     <public type="string" name="PriorityInfo" id="NUM" />
     <public type="string" name="PrivacyAddAnException" id="NUM" />
     <public type="string" name="PrivacyBots" id="NUM" />
@@ -3975,10 +4160,19 @@
     <public type="string" name="PrivacySettings" id="NUM" />
     <public type="string" name="PrivacySettingsChangedAlert" id="NUM" />
     <public type="string" name="PrivacyTitle" id="NUM" />
+    <public type="string" name="PrivateShares" id="NUM" />
+    <public type="string" name="PrivateShares_few" id="NUM" />
+    <public type="string" name="PrivateShares_many" id="NUM" />
+    <public type="string" name="PrivateShares_one" id="NUM" />
+    <public type="string" name="PrivateShares_other" id="NUM" />
+    <public type="string" name="PrivateShares_two" id="NUM" />
+    <public type="string" name="PrivateShares_zero" id="NUM" />
     <public type="string" name="ProfileJoinChannel" id="NUM" />
     <public type="string" name="ProfileJoinGroup" id="NUM" />
     <public type="string" name="ProfilePopupNotification" id="NUM" />
     <public type="string" name="ProfilePopupNotificationInfo" id="NUM" />
+    <public type="string" name="ProximityTooltioGroup" id="NUM" />
+    <public type="string" name="ProximityTooltioUser" id="NUM" />
     <public type="string" name="Proxy" id="NUM" />
     <public type="string" name="ProxyConnections" id="NUM" />
     <public type="string" name="ProxyDetails" id="NUM" />
@@ -3997,6 +4191,13 @@
     <public type="string" name="PublicChannelsTooMuch" id="NUM" />
     <public type="string" name="PublicPoll" id="NUM" />
     <public type="string" name="PublicPollCantForward" id="NUM" />
+    <public type="string" name="PublicShares" id="NUM" />
+    <public type="string" name="PublicShares_few" id="NUM" />
+    <public type="string" name="PublicShares_many" id="NUM" />
+    <public type="string" name="PublicShares_one" id="NUM" />
+    <public type="string" name="PublicShares_other" id="NUM" />
+    <public type="string" name="PublicShares_two" id="NUM" />
+    <public type="string" name="PublicShares_zero" id="NUM" />
     <public type="string" name="Purple" id="NUM" />
     <public type="string" name="QRCodePermissionNoCamera" id="NUM" />
     <public type="string" name="QuestionHint" id="NUM" />
@@ -4324,6 +4525,9 @@
     <public type="string" name="ShareFile" id="NUM" />
     <public type="string" name="ShareLink" id="NUM" />
     <public type="string" name="ShareLocation" id="NUM" />
+    <public type="string" name="ShareLocationAlertButton" id="NUM" />
+    <public type="string" name="ShareLocationAlertText" id="NUM" />
+    <public type="string" name="ShareLocationAlertTitle" id="NUM" />
     <public type="string" name="ShareMyContactInfo" id="NUM" />
     <public type="string" name="ShareMyPhone" id="NUM" />
     <public type="string" name="SharePhoneNumberWith" id="NUM" />
@@ -4426,6 +4630,7 @@
     <public type="string" name="StatisticOpenProfile" id="NUM" />
     <public type="string" name="StatisticOverview" id="NUM" />
     <public type="string" name="StatisticSearchUserHistory" id="NUM" />
+    <public type="string" name="StatisticViews" id="NUM" />
     <public type="string" name="Statistics" id="NUM" />
     <public type="string" name="StickerSets_few" id="NUM" />
     <public type="string" name="StickerSets_many" id="NUM" />
@@ -4658,6 +4863,7 @@
     <public type="string" name="UnlockFingerprint" id="NUM" />
     <public type="string" name="UnmuteNotifications" id="NUM" />
     <public type="string" name="UnofficialApp" id="NUM" />
+    <public type="string" name="UnpinAllMessages" id="NUM" />
     <public type="string" name="UnpinFromTop" id="NUM" />
     <public type="string" name="UnpinMessage" id="NUM" />
     <public type="string" name="UnpinMessageAlert" id="NUM" />
@@ -4741,6 +4947,7 @@
     <public type="string" name="UserRestrictionsSendPolls" id="NUM" />
     <public type="string" name="UserRestrictionsSendStickers" id="NUM" />
     <public type="string" name="UserRestrictionsUntilForever" id="NUM" />
+    <public type="string" name="UserSetAsAdminHint" id="NUM" />
     <public type="string" name="UserUnblocked" id="NUM" />
     <public type="string" name="Username" id="NUM" />
     <public type="string" name="UsernameAvailable" id="NUM" />
@@ -4786,6 +4993,13 @@
     <public type="string" name="VideoMessagesAutodownload" id="NUM" />
     <public type="string" name="VideoQualityIsTooLow" id="NUM" />
     <public type="string" name="VideoSavedHint" id="NUM" />
+    <public type="string" name="VideoSavedToDownloadsHint" id="NUM" />
+    <public type="string" name="VideosSavedHint_few" id="NUM" />
+    <public type="string" name="VideosSavedHint_many" id="NUM" />
+    <public type="string" name="VideosSavedHint_one" id="NUM" />
+    <public type="string" name="VideosSavedHint_other" id="NUM" />
+    <public type="string" name="VideosSavedHint_two" id="NUM" />
+    <public type="string" name="VideosSavedHint_zero" id="NUM" />
     <public type="string" name="VideosSelected_few" id="NUM" />
     <public type="string" name="VideosSelected_many" id="NUM" />
     <public type="string" name="VideosSelected_one" id="NUM" />
@@ -4798,10 +5012,13 @@
     <public type="string" name="Videos_other" id="NUM" />
     <public type="string" name="Videos_two" id="NUM" />
     <public type="string" name="Videos_zero" id="NUM" />
+    <public type="string" name="ViewChannelStats" id="NUM" />
     <public type="string" name="ViewContact" id="NUM" />
     <public type="string" name="ViewDiscussion" id="NUM" />
     <public type="string" name="ViewExceptions" id="NUM" />
     <public type="string" name="ViewInChat" id="NUM" />
+    <public type="string" name="ViewMessage" id="NUM" />
+    <public type="string" name="ViewMessageStatistic" id="NUM" />
     <public type="string" name="ViewPackPreview" id="NUM" />
     <public type="string" name="ViewReplies_few" id="NUM" />
     <public type="string" name="ViewReplies_many" id="NUM" />
@@ -4809,6 +5026,7 @@
     <public type="string" name="ViewReplies_other" id="NUM" />
     <public type="string" name="ViewReplies_two" id="NUM" />
     <public type="string" name="ViewReplies_zero" id="NUM" />
+    <public type="string" name="ViewStats" id="NUM" />
     <public type="string" name="ViewThread" id="NUM" />
     <public type="string" name="ViewingMembers" id="NUM" />
     <public type="string" name="ViewsBySourceChartTitle" id="NUM" />
@@ -5036,6 +5254,7 @@
     <public type="string" name="messages_zero" id="NUM" />
     <public type="string" name="project_id" id="NUM" />
     <public type="string" name="status_bar_notification_info_overflow" id="NUM" />
+    <public type="string" name="wallet_buy_button_place_holder" id="NUM" />
     <public type="style" name="ActionBar.Transparent.TMessages.Item" id="NUM" />
     <public type="style" name="ActionBar.Transparent.TMessages.Start" id="NUM" />
     <public type="style" name="DialogNoAnimation" id="NUM" />
@@ -5061,6 +5280,10 @@
     <public type="style" name="Theme.TMessages.Transparent" id="NUM" />
     <public type="style" name="Theme.TMessages.TransparentWithAlerts" id="NUM" />
     <public type="style" name="TransparentDialog" id="NUM" />
+    <public type="style" name="WalletFragmentDefaultButtonTextAppearance" id="NUM" />
+    <public type="style" name="WalletFragmentDefaultDetailsHeaderTextAppearance" id="NUM" />
+    <public type="style" name="WalletFragmentDefaultDetailsTextAppearance" id="NUM" />
+    <public type="style" name="WalletFragmentDefaultStyle" id="NUM" />
     <public type="style" name="Widget.Compat.NotificationActionContainer" id="NUM" />
     <public type="style" name="Widget.Compat.NotificationActionText" id="NUM" />
     <public type="style" name="Widget.Support.CoordinatorLayout" id="NUM" />

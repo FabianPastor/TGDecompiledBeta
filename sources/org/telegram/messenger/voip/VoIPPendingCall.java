@@ -16,18 +16,8 @@ public final class VoIPPendingCall {
     private final Activity activity;
     private Handler handler;
     private NotificationCenter notificationCenter;
-    private final NotificationCenter.NotificationCenterDelegate observer = new NotificationCenter.NotificationCenterDelegate() {
-        public void didReceivedNotification(int i, int i2, Object... objArr) {
-            if (i == NotificationCenter.didUpdateConnectionState) {
-                boolean unused = VoIPPendingCall.this.onConnectionStateUpdated(i2, false);
-            }
-        }
-    };
-    private final Runnable releaseRunnable = new Runnable() {
-        public final void run() {
-            VoIPPendingCall.this.lambda$new$0$VoIPPendingCall();
-        }
-    };
+    private final NotificationCenter.NotificationCenterDelegate observer;
+    private final Runnable releaseRunnable;
     private boolean released;
     private final int userId;
     private final boolean video;
@@ -36,21 +26,37 @@ public final class VoIPPendingCall {
         return new VoIPPendingCall(activity2, i, z, 1000);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$VoIPPendingCall() {
         onConnectionStateUpdated(UserConfig.selectedAccount, true);
     }
 
     private VoIPPendingCall(Activity activity2, int i, boolean z, long j) {
+        AnonymousClass1 r0 = new NotificationCenter.NotificationCenterDelegate() {
+            public void didReceivedNotification(int i, int i2, Object... objArr) {
+                if (i == NotificationCenter.didUpdateConnectionState) {
+                    boolean unused = VoIPPendingCall.this.onConnectionStateUpdated(i2, false);
+                }
+            }
+        };
+        this.observer = r0;
+        $$Lambda$VoIPPendingCall$WGrwzfT7SboEwBkc2dAxW2VQeFE r1 = new Runnable() {
+            public final void run() {
+                VoIPPendingCall.this.lambda$new$0$VoIPPendingCall();
+            }
+        };
+        this.releaseRunnable = r1;
         this.activity = activity2;
         this.userId = i;
         this.video = z;
         if (!onConnectionStateUpdated(UserConfig.selectedAccount, false)) {
             NotificationCenter instance = NotificationCenter.getInstance(UserConfig.selectedAccount);
             this.notificationCenter = instance;
-            instance.addObserver(this.observer, NotificationCenter.didUpdateConnectionState);
+            instance.addObserver(r0, NotificationCenter.didUpdateConnectionState);
             Handler handler2 = new Handler(Looper.myLooper());
             this.handler = handler2;
-            handler2.postDelayed(this.releaseRunnable, j);
+            handler2.postDelayed(r1, j);
         }
     }
 

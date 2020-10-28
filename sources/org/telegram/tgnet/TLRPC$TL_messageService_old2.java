@@ -6,12 +6,12 @@ public class TLRPC$TL_messageService_old2 extends TLRPC$TL_messageService {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.unread = (readInt32 & 1) != 0;
-        this.out = (this.flags & 2) != 0;
-        this.mentioned = (this.flags & 16) != 0;
-        if ((this.flags & 32) == 0) {
-            z2 = false;
+        this.out = (readInt32 & 2) != 0;
+        this.mentioned = (readInt32 & 16) != 0;
+        if ((readInt32 & 32) != 0) {
+            z2 = true;
         }
         this.media_unread = z2;
         this.id = abstractSerializedData.readInt32(z);

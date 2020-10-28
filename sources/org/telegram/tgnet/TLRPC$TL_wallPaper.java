@@ -7,12 +7,12 @@ public class TLRPC$TL_wallPaper extends TLRPC$WallPaper {
         this.id = abstractSerializedData.readInt64(z);
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.creator = (readInt32 & 1) != 0;
-        this.isDefault = (this.flags & 2) != 0;
-        this.pattern = (this.flags & 8) != 0;
-        if ((this.flags & 16) == 0) {
-            z2 = false;
+        this.isDefault = (readInt32 & 2) != 0;
+        this.pattern = (readInt32 & 8) != 0;
+        if ((readInt32 & 16) != 0) {
+            z2 = true;
         }
         this.dark = z2;
         this.access_hash = abstractSerializedData.readInt64(z);

@@ -63,11 +63,10 @@ public class BackDrawable extends Drawable {
         }
         this.lastFrameTime = 0;
         if (z) {
-            float f3 = this.currentRotation;
-            if (f3 < f) {
-                this.currentAnimationTime = (int) (f3 * this.animationTime);
+            if (f2 < f) {
+                this.currentAnimationTime = (int) (f2 * this.animationTime);
             } else {
-                this.currentAnimationTime = (int) ((1.0f - f3) * this.animationTime);
+                this.currentAnimationTime = (int) ((1.0f - f2) * this.animationTime);
             }
             this.lastFrameTime = System.currentTimeMillis();
             this.finalRotation = f;

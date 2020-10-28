@@ -195,6 +195,10 @@ public class AvatarDrawable extends Drawable {
     }
 
     public void setInfo(int i, String str, String str2, String str3) {
+        String str4;
+        String str5;
+        String str6 = str3;
+        int i2 = Build.VERSION.SDK_INT;
         if (this.isProfile) {
             this.color = getProfileColorForId(i);
         } else {
@@ -204,40 +208,43 @@ public class AvatarDrawable extends Drawable {
         this.avatarType = 0;
         this.drawDeleted = false;
         if (str == null || str.length() == 0) {
-            str = str2;
-            str2 = null;
+            str5 = str2;
+            str4 = null;
+        } else {
+            str5 = str;
+            str4 = str2;
         }
         this.stringBuilder.setLength(0);
-        if (str3 != null) {
-            this.stringBuilder.append(str3);
+        if (str6 != null) {
+            this.stringBuilder.append(str6);
         } else {
-            if (str != null && str.length() > 0) {
-                this.stringBuilder.appendCodePoint(str.codePointAt(0));
+            if (str5 != null && str5.length() > 0) {
+                this.stringBuilder.appendCodePoint(str5.codePointAt(0));
             }
-            if (str2 != null && str2.length() > 0) {
-                int length = str2.length() - 1;
+            if (str4 != null && str4.length() > 0) {
+                int length = str4.length() - 1;
                 Integer num = null;
-                while (length >= 0 && (num == null || str2.charAt(length) != ' ')) {
-                    num = Integer.valueOf(str2.codePointAt(length));
+                while (length >= 0 && (num == null || str4.charAt(length) != ' ')) {
+                    num = Integer.valueOf(str4.codePointAt(length));
                     length--;
                 }
-                if (Build.VERSION.SDK_INT > 17) {
+                if (i2 > 17) {
                     this.stringBuilder.append("‌");
                 }
                 this.stringBuilder.appendCodePoint(num.intValue());
-            } else if (str != null && str.length() > 0) {
-                int length2 = str.length() - 1;
+            } else if (str5 != null && str5.length() > 0) {
+                int length2 = str5.length() - 1;
                 while (true) {
                     if (length2 < 0) {
                         break;
                     }
-                    if (str.charAt(length2) == ' ' && length2 != str.length() - 1) {
-                        int i2 = length2 + 1;
-                        if (str.charAt(i2) != ' ') {
-                            if (Build.VERSION.SDK_INT > 17) {
+                    if (str5.charAt(length2) == ' ' && length2 != str5.length() - 1) {
+                        int i3 = length2 + 1;
+                        if (str5.charAt(i3) != ' ') {
+                            if (i2 > 17) {
                                 this.stringBuilder.append("‌");
                             }
-                            this.stringBuilder.appendCodePoint(str.codePointAt(i2));
+                            this.stringBuilder.appendCodePoint(str5.codePointAt(i3));
                         }
                     }
                     length2--;

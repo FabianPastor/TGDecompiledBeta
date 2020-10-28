@@ -55,7 +55,6 @@ class AndroidVideoDecoder implements VideoDecoder, VideoSink {
     private SurfaceTextureHelper surfaceTextureHelper;
     private int width;
 
-    @CalledByNative
     public /* synthetic */ long createNativeVideoDecoder() {
         return VideoDecoder.CC.$default$createNativeVideoDecoder(this);
     }
@@ -182,7 +181,7 @@ class AndroidVideoDecoder implements VideoDecoder, VideoSink {
         }
         int i3 = encodedImage.encodedWidth;
         int i4 = encodedImage.encodedHeight;
-        if (i3 * i4 > 0 && ((i3 != i || i4 != i2) && (reinitDecode = reinitDecode(encodedImage.encodedWidth, encodedImage.encodedHeight)) != VideoCodecStatus.OK)) {
+        if (i3 * i4 > 0 && ((i3 != i || i4 != i2) && (reinitDecode = reinitDecode(i3, i4)) != VideoCodecStatus.OK)) {
             return reinitDecode;
         }
         if (this.keyFrameRequired) {
@@ -353,9 +352,10 @@ class AndroidVideoDecoder implements VideoDecoder, VideoSink {
         long j;
         Integer num;
         synchronized (this.renderedTextureMetadataLock) {
-            if (this.renderedTextureMetadata != null) {
-                j = this.renderedTextureMetadata.presentationTimestampUs * 1000;
-                num = this.renderedTextureMetadata.decodeTimeMs;
+            DecodedTextureMetadata decodedTextureMetadata = this.renderedTextureMetadata;
+            if (decodedTextureMetadata != null) {
+                j = decodedTextureMetadata.presentationTimestampUs * 1000;
+                num = decodedTextureMetadata.decodeTimeMs;
                 this.renderedTextureMetadata = null;
             } else {
                 throw new IllegalStateException("Rendered texture metadata was null in onTextureFrameAvailable.");

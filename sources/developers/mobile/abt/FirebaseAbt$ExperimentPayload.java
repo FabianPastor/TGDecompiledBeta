@@ -1,6 +1,7 @@
 package developers.mobile.abt;
 
 import com.google.protobuf.GeneratedMessageLite;
+import com.google.protobuf.Internal;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Parser;
 
@@ -10,13 +11,13 @@ public final class FirebaseAbt$ExperimentPayload extends GeneratedMessageLite<Fi
     private static volatile Parser<FirebaseAbt$ExperimentPayload> PARSER;
     private String experimentId_ = "";
     private long experimentStartTimeMillis_;
+    private Internal.ProtobufList<FirebaseAbt$ExperimentLite> ongoingExperiments_ = GeneratedMessageLite.emptyProtobufList();
     private long timeToLiveMillis_;
     private String triggerEvent_ = "";
     private long triggerTimeoutMillis_;
     private String variantId_ = "";
 
     private FirebaseAbt$ExperimentPayload() {
-        GeneratedMessageLite.emptyProtobufList();
     }
 
     public String getExperimentId() {

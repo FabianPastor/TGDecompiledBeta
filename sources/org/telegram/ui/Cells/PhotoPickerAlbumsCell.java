@@ -158,6 +158,8 @@ public class PhotoPickerAlbumsCell extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$PhotoPickerAlbumsCell(View view) {
         PhotoPickerAlbumsCellDelegate photoPickerAlbumsCellDelegate = this.delegate;
         if (photoPickerAlbumsCellDelegate != null) {

@@ -40,41 +40,40 @@ public class AdjustPanLayoutHelper {
             AdjustPanLayoutHelper adjustPanLayoutHelper = AdjustPanLayoutHelper.this;
             int i = adjustPanLayoutHelper.previousHeight;
             if (startOffset == i - adjustPanLayoutHelper.previousStartOffset || height == i || adjustPanLayoutHelper.animator != null) {
-                AdjustPanLayoutHelper adjustPanLayoutHelper2 = AdjustPanLayoutHelper.this;
-                if (adjustPanLayoutHelper2.animator == null) {
-                    adjustPanLayoutHelper2.previousHeight = height;
-                    adjustPanLayoutHelper2.previousContentHeight = adjustPanLayoutHelper2.contentView.getHeight();
-                    AdjustPanLayoutHelper adjustPanLayoutHelper3 = AdjustPanLayoutHelper.this;
-                    adjustPanLayoutHelper3.previousStartOffset = adjustPanLayoutHelper3.startOffset();
+                if (adjustPanLayoutHelper.animator == null) {
+                    adjustPanLayoutHelper.previousHeight = height;
+                    adjustPanLayoutHelper.previousContentHeight = adjustPanLayoutHelper.contentView.getHeight();
+                    AdjustPanLayoutHelper adjustPanLayoutHelper2 = AdjustPanLayoutHelper.this;
+                    adjustPanLayoutHelper2.previousStartOffset = adjustPanLayoutHelper2.startOffset();
                 }
                 return true;
             } else if (!adjustPanLayoutHelper.heightAnimationEnabled() || Math.abs(AdjustPanLayoutHelper.this.previousHeight - height) < AndroidUtilities.dp(20.0f)) {
+                AdjustPanLayoutHelper adjustPanLayoutHelper3 = AdjustPanLayoutHelper.this;
+                adjustPanLayoutHelper3.previousHeight = height;
+                adjustPanLayoutHelper3.previousContentHeight = adjustPanLayoutHelper3.contentView.getHeight();
                 AdjustPanLayoutHelper adjustPanLayoutHelper4 = AdjustPanLayoutHelper.this;
-                adjustPanLayoutHelper4.previousHeight = height;
-                adjustPanLayoutHelper4.previousContentHeight = adjustPanLayoutHelper4.contentView.getHeight();
-                AdjustPanLayoutHelper adjustPanLayoutHelper5 = AdjustPanLayoutHelper.this;
-                adjustPanLayoutHelper5.previousStartOffset = adjustPanLayoutHelper5.startOffset();
+                adjustPanLayoutHelper4.previousStartOffset = adjustPanLayoutHelper4.startOffset();
                 return true;
             } else {
-                AdjustPanLayoutHelper adjustPanLayoutHelper6 = AdjustPanLayoutHelper.this;
-                if (adjustPanLayoutHelper6.previousHeight == -1 || adjustPanLayoutHelper6.previousContentHeight != adjustPanLayoutHelper6.contentView.getHeight()) {
+                AdjustPanLayoutHelper adjustPanLayoutHelper5 = AdjustPanLayoutHelper.this;
+                if (adjustPanLayoutHelper5.previousHeight == -1 || adjustPanLayoutHelper5.previousContentHeight != adjustPanLayoutHelper5.contentView.getHeight()) {
+                    AdjustPanLayoutHelper adjustPanLayoutHelper6 = AdjustPanLayoutHelper.this;
+                    adjustPanLayoutHelper6.previousHeight = height;
+                    adjustPanLayoutHelper6.previousContentHeight = adjustPanLayoutHelper6.contentView.getHeight();
                     AdjustPanLayoutHelper adjustPanLayoutHelper7 = AdjustPanLayoutHelper.this;
-                    adjustPanLayoutHelper7.previousHeight = height;
-                    adjustPanLayoutHelper7.previousContentHeight = adjustPanLayoutHelper7.contentView.getHeight();
-                    AdjustPanLayoutHelper adjustPanLayoutHelper8 = AdjustPanLayoutHelper.this;
-                    adjustPanLayoutHelper8.previousStartOffset = adjustPanLayoutHelper8.startOffset();
+                    adjustPanLayoutHelper7.previousStartOffset = adjustPanLayoutHelper7.startOffset();
                     return false;
                 }
                 if (height >= AdjustPanLayoutHelper.this.contentView.getBottom()) {
                     z = false;
                 }
+                AdjustPanLayoutHelper adjustPanLayoutHelper8 = AdjustPanLayoutHelper.this;
+                adjustPanLayoutHelper8.animateHeight(adjustPanLayoutHelper8.previousHeight, height, z);
                 AdjustPanLayoutHelper adjustPanLayoutHelper9 = AdjustPanLayoutHelper.this;
-                adjustPanLayoutHelper9.animateHeight(adjustPanLayoutHelper9.previousHeight, height, z);
+                adjustPanLayoutHelper9.previousHeight = height;
+                adjustPanLayoutHelper9.previousContentHeight = adjustPanLayoutHelper9.contentView.getHeight();
                 AdjustPanLayoutHelper adjustPanLayoutHelper10 = AdjustPanLayoutHelper.this;
-                adjustPanLayoutHelper10.previousHeight = height;
-                adjustPanLayoutHelper10.previousContentHeight = adjustPanLayoutHelper10.contentView.getHeight();
-                AdjustPanLayoutHelper adjustPanLayoutHelper11 = AdjustPanLayoutHelper.this;
-                adjustPanLayoutHelper11.previousStartOffset = adjustPanLayoutHelper11.startOffset();
+                adjustPanLayoutHelper10.previousStartOffset = adjustPanLayoutHelper10.startOffset();
                 return false;
             }
         }
@@ -164,7 +163,9 @@ public class AdjustPanLayoutHelper {
                 adjustPanLayoutHelper.setViewHeight(-1);
                 AdjustPanLayoutHelper.this.viewsToHeightSet.clear();
                 AdjustPanLayoutHelper.this.resizableView.requestLayout();
-                AdjustPanLayoutHelper.this.onPanTranslationUpdate(0.0f, z ? 1.0f : 0.0f, z);
+                AdjustPanLayoutHelper adjustPanLayoutHelper2 = AdjustPanLayoutHelper.this;
+                boolean z = z;
+                adjustPanLayoutHelper2.onPanTranslationUpdate(0.0f, z ? 1.0f : 0.0f, z);
                 AdjustPanLayoutHelper.this.parent.setTranslationY(0.0f);
                 AdjustPanLayoutHelper.this.onTransitionEnd();
             }
@@ -175,6 +176,8 @@ public class AdjustPanLayoutHelper {
         this.animator.start();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$animateHeight$0 */
     public /* synthetic */ void lambda$animateHeight$0$AdjustPanLayoutHelper(float f, float f2, boolean z, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         float f3 = (f * floatValue) + (f2 * (1.0f - floatValue));

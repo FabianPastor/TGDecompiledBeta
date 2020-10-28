@@ -1,14 +1,47 @@
 package j$.util;
 
 import j$.lang.Iterable;
-import j$.util.function.C;
 import j$.util.function.Consumer;
 import j$.util.function.Predicate;
+import j$.util.function.v;
+import j$.util.stream.CLASSNAMEc3;
 import j$.util.stream.Stream;
-import j$.util.stream.b7;
 import java.util.Iterator;
 
 public interface Collection extends Iterable, Iterable {
+
+    /* renamed from: j$.util.Collection$-CC  reason: invalid class name */
+    public final /* synthetic */ class CC {
+        public static Stream $default$parallelStream(java.util.Collection collection) {
+            return CLASSNAMEc3.v(CLASSNAMEk.C(collection), true);
+        }
+
+        public static boolean $default$removeIf(java.util.Collection collection, Predicate predicate) {
+            if (DesugarCollections.a.isInstance(collection)) {
+                return DesugarCollections.d(collection, predicate);
+            }
+            predicate.getClass();
+            boolean z = false;
+            Iterator it = collection.iterator();
+            while (it.hasNext()) {
+                if (predicate.test(it.next())) {
+                    it.remove();
+                    z = true;
+                }
+            }
+            return z;
+        }
+
+        public static Spliterator $default$spliterator(java.util.Collection collection) {
+            collection.getClass();
+            return new T(collection, 0);
+        }
+
+        public static Stream $default$stream(java.util.Collection collection) {
+            return CLASSNAMEc3.v(CLASSNAMEk.C(collection), false);
+        }
+    }
+
     boolean add(Object obj);
 
     boolean addAll(java.util.Collection collection);
@@ -47,50 +80,7 @@ public interface Collection extends Iterable, Iterable {
 
     Object[] toArray();
 
-    Object[] toArray(C c);
+    Object[] toArray(v vVar);
 
     Object[] toArray(Object[] objArr);
-
-    /* renamed from: j$.util.Collection$-CC  reason: invalid class name */
-    public final /* synthetic */ class CC {
-        public static Object[] b(java.util.Collection _this, C c) {
-            return _this.toArray((Object[]) c.a(0));
-        }
-
-        public static boolean $default$removeIf(java.util.Collection _this, Predicate predicate) {
-            if (DesugarCollections.a.isInstance(_this)) {
-                return DesugarCollections.f(_this, predicate);
-            }
-            predicate.getClass();
-            boolean removed = false;
-            Iterator<E> each = _this.iterator();
-            while (each.hasNext()) {
-                if (predicate.test(each.next())) {
-                    each.remove();
-                    removed = true;
-                }
-            }
-            return removed;
-        }
-
-        public static void a(java.util.Collection _this, Consumer consumer) {
-            consumer.getClass();
-            Iterator it = _this.iterator();
-            while (it.hasNext()) {
-                consumer.accept(it.next());
-            }
-        }
-
-        public static Spliterator $default$spliterator(java.util.Collection _this) {
-            return k0.m(_this, 0);
-        }
-
-        public static Stream $default$stream(java.util.Collection _this) {
-            return b7.d(CLASSNAMEk.c(_this), false);
-        }
-
-        public static Stream $default$parallelStream(java.util.Collection _this) {
-            return b7.d(CLASSNAMEk.c(_this), true);
-        }
-    }
 }

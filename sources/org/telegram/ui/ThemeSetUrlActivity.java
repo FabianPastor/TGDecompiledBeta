@@ -178,7 +178,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         linearLayout.setBackgroundColor(Theme.getColor("windowBackgroundGray"));
         LinearLayout linearLayout2 = (LinearLayout) this.fragmentView;
         linearLayout2.setOrientation(1);
-        this.fragmentView.setOnTouchListener($$Lambda$ThemeSetUrlActivity$_8Xemr4PmFieDLseu_SVMqLlMLs.INSTANCE);
+        this.fragmentView.setOnTouchListener($$Lambda$ThemeSetUrlActivity$RvXqYzQn0WUW3l0us8dPOAbBFw.INSTANCE);
         LinearLayout linearLayout3 = new LinearLayout(context2);
         this.linearLayoutTypeContainer = linearLayout3;
         linearLayout3.setOrientation(1);
@@ -357,6 +357,8 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$1 */
     public /* synthetic */ boolean lambda$createView$1$ThemeSetUrlActivity(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 6) {
             return false;
@@ -365,6 +367,8 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         return true;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$2 */
     public /* synthetic */ boolean lambda$createView$2$ThemeSetUrlActivity(TextView textView, int i, KeyEvent keyEvent) {
         View view;
         if (i != 6 || (view = this.doneButton) == null) {
@@ -374,6 +378,8 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         return true;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$3 */
     public /* synthetic */ void lambda$createView$3$ThemeSetUrlActivity(View view, boolean z) {
         if (z) {
             this.helpInfoCell.setText(AndroidUtilities.replaceTags(LocaleController.getString("ThemeCreateHelp2", NUM)));
@@ -382,6 +388,8 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$5 */
     public /* synthetic */ void lambda$createView$5$ThemeSetUrlActivity(Context context, View view) {
         Context context2 = context;
         if (getParentActivity() != null) {
@@ -395,7 +403,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
             textView.setTextSize(1, 20.0f);
             textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             linearLayout.addView(textView, LayoutHelper.createLinear(-1, -2, 51, 22, 12, 22, 4));
-            textView.setOnTouchListener($$Lambda$ThemeSetUrlActivity$QxZyJwLHHcW9tcx8U4a2QYVzp0.INSTANCE);
+            textView.setOnTouchListener($$Lambda$ThemeSetUrlActivity$gu18Jyf4uIpH4FwCLASSNAMEPZ4YEyIc.INSTANCE);
             builder.setCustomView(linearLayout);
             ArrayList arrayList = new ArrayList();
             int size = Theme.themes.size();
@@ -524,7 +532,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
                 }
                 setCheckText(LocaleController.getString("SetUrlChecking", NUM), "windowBackgroundWhiteGrayText8");
                 this.lastCheckName = str;
-                $$Lambda$ThemeSetUrlActivity$BOI1OGZjC9ZyL0GYbdTT_fDxcTk r13 = new Runnable(str) {
+                $$Lambda$ThemeSetUrlActivity$aosgSqQBGQIzBlEvKMAepPjixLE r13 = new Runnable(str) {
                     public final /* synthetic */ String f$1;
 
                     {
@@ -542,6 +550,8 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$checkUrl$8 */
     public /* synthetic */ void lambda$checkUrl$8$ThemeSetUrlActivity(String str) {
         TLRPC$TL_account_createTheme tLRPC$TL_account_createTheme = new TLRPC$TL_account_createTheme();
         tLRPC$TL_account_createTheme.slug = str;
@@ -560,6 +570,8 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         }, 2);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$7 */
     public /* synthetic */ void lambda$null$7$ThemeSetUrlActivity(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(str, tLRPC$TL_error) {
             public final /* synthetic */ String f$1;
@@ -576,6 +588,8 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$6 */
     public /* synthetic */ void lambda$null$6$ThemeSetUrlActivity(String str, TLRPC$TL_error tLRPC$TL_error) {
         this.checkReqId = 0;
         String str2 = this.lastCheckName;
@@ -622,7 +636,7 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
             String str2 = tLRPC$TL_theme.slug;
             AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
             this.progressDialog = alertDialog;
-            alertDialog.setOnCancelListener($$Lambda$ThemeSetUrlActivity$DJii0csNwFlvBjyKJ7HA1_lGQY.INSTANCE);
+            alertDialog.setOnCancelListener($$Lambda$ThemeSetUrlActivity$eLAQ9nbhXO3uPmw0qx4bPvi3nU.INSTANCE);
             this.progressDialog.show();
             Theme.ThemeInfo themeInfo2 = this.themeInfo;
             TLRPC$TL_theme tLRPC$TL_theme2 = this.info;
@@ -632,12 +646,13 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
             this.themeInfo.info.slug = this.linkField.getText().toString();
             Theme.saveCurrentTheme(this.themeInfo, true, true, true);
         } else {
-            String str3 = this.info.slug;
+            TLRPC$TL_theme tLRPC$TL_theme3 = this.info;
+            String str3 = tLRPC$TL_theme3.slug;
             String str4 = "";
             if (str3 == null) {
                 str3 = str4;
             }
-            String str5 = this.info.title;
+            String str5 = tLRPC$TL_theme3.title;
             if (str5 != null) {
                 str4 = str5;
             }
@@ -647,13 +662,13 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
                 this.progressDialog = new AlertDialog(getParentActivity(), 3);
                 TLRPC$TL_account_updateTheme tLRPC$TL_account_updateTheme = new TLRPC$TL_account_updateTheme();
                 TLRPC$TL_inputTheme tLRPC$TL_inputTheme = new TLRPC$TL_inputTheme();
-                TLRPC$TL_theme tLRPC$TL_theme3 = this.info;
-                tLRPC$TL_inputTheme.id = tLRPC$TL_theme3.id;
-                tLRPC$TL_inputTheme.access_hash = tLRPC$TL_theme3.access_hash;
+                TLRPC$TL_theme tLRPC$TL_theme4 = this.info;
+                tLRPC$TL_inputTheme.id = tLRPC$TL_theme4.id;
+                tLRPC$TL_inputTheme.access_hash = tLRPC$TL_theme4.access_hash;
                 tLRPC$TL_account_updateTheme.theme = tLRPC$TL_inputTheme;
                 tLRPC$TL_account_updateTheme.format = "android";
                 tLRPC$TL_account_updateTheme.slug = obj2;
-                int i = 1 | tLRPC$TL_account_updateTheme.flags;
+                int i = tLRPC$TL_account_updateTheme.flags | 1;
                 tLRPC$TL_account_updateTheme.flags = i;
                 tLRPC$TL_account_updateTheme.title = obj3;
                 tLRPC$TL_account_updateTheme.flags = i | 2;
@@ -687,6 +702,8 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$saveTheme$12 */
     public /* synthetic */ void lambda$saveTheme$12$ThemeSetUrlActivity(TLRPC$TL_account_updateTheme tLRPC$TL_account_updateTheme, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject instanceof TLRPC$TL_theme) {
             AndroidUtilities.runOnUIThread(new Runnable((TLRPC$TL_theme) tLObject) {
@@ -717,6 +734,8 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$10 */
     public /* synthetic */ void lambda$null$10$ThemeSetUrlActivity(TLRPC$TL_theme tLRPC$TL_theme) {
         try {
             this.progressDialog.dismiss();
@@ -728,6 +747,8 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         finishFragment();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$11 */
     public /* synthetic */ void lambda$null$11$ThemeSetUrlActivity(TLRPC$TL_error tLRPC$TL_error, TLRPC$TL_account_updateTheme tLRPC$TL_account_updateTheme) {
         try {
             this.progressDialog.dismiss();
@@ -738,6 +759,8 @@ public class ThemeSetUrlActivity extends BaseFragment implements NotificationCen
         AlertsCreator.processError(this.currentAccount, tLRPC$TL_error, this, tLRPC$TL_account_updateTheme, new Object[0]);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$saveTheme$13 */
     public /* synthetic */ void lambda$saveTheme$13$ThemeSetUrlActivity(int i, DialogInterface dialogInterface) {
         ConnectionsManager.getInstance(this.currentAccount).cancelRequest(i, true);
     }

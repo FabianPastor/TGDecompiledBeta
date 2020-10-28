@@ -70,7 +70,7 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
         }
         this.searchInProgress = true;
         DispatchQueue dispatchQueue = Utilities.searchQueue;
-        $$Lambda$BaseLocationAdapter$T_85LSiVXaUUUWP3WNWn8qK1uUI r1 = new Runnable(str, location) {
+        $$Lambda$BaseLocationAdapter$M5pEnfvG1qE0SmAACEhWNyquPlU r1 = new Runnable(str, location) {
             public final /* synthetic */ String f$1;
             public final /* synthetic */ Location f$2;
 
@@ -87,6 +87,8 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
         dispatchQueue.postRunnable(r1, 400);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$searchDelayed$1 */
     public /* synthetic */ void lambda$searchDelayed$1$BaseLocationAdapter(String str, Location location) {
         AndroidUtilities.runOnUIThread(new Runnable(str, location) {
             public final /* synthetic */ String f$1;
@@ -103,6 +105,8 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$0 */
     public /* synthetic */ void lambda$null$0$BaseLocationAdapter(String str, Location location) {
         this.searchRunnable = null;
         this.lastSearchLocation = null;
@@ -122,6 +126,8 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$searchBotUser$3 */
     public /* synthetic */ void lambda$searchBotUser$3$BaseLocationAdapter(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
@@ -138,6 +144,8 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$BaseLocationAdapter(TLObject tLObject) {
         TLRPC$TL_contacts_resolvedPeer tLRPC$TL_contacts_resolvedPeer = (TLRPC$TL_contacts_resolvedPeer) tLObject;
         MessagesController.getInstance(this.currentAccount).putUsers(tLRPC$TL_contacts_resolvedPeer.users, false);
@@ -222,6 +230,8 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$searchPlacesWithQuery$5 */
     public /* synthetic */ void lambda$searchPlacesWithQuery$5$BaseLocationAdapter(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(str, tLRPC$TL_error, tLObject) {
             public final /* synthetic */ String f$1;
@@ -240,6 +250,8 @@ public abstract class BaseLocationAdapter extends RecyclerListView.SelectionAdap
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$4 */
     public /* synthetic */ void lambda$null$4$BaseLocationAdapter(String str, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject) {
         this.currentRequestNum = 0;
         this.searching = false;

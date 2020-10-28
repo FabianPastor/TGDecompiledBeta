@@ -45,16 +45,20 @@ public class SessionCell extends FrameLayout {
         int i3 = 15;
         int i4 = 5;
         if (i == 1) {
-            addView(linearLayout, LayoutHelper.createFrame(-1, 30.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 15 : 49), 11.0f, (float) (LocaleController.isRTL ? 49 : i3), 0.0f));
+            boolean z = LocaleController.isRTL;
+            addView(linearLayout, LayoutHelper.createFrame(-1, 30.0f, (z ? 5 : 3) | 48, (float) (z ? 15 : 49), 11.0f, (float) (z ? 49 : i3), 0.0f));
             AvatarDrawable avatarDrawable2 = new AvatarDrawable();
             this.avatarDrawable = avatarDrawable2;
             avatarDrawable2.setTextSize(AndroidUtilities.dp(10.0f));
             BackupImageView backupImageView = new BackupImageView(context2);
             this.imageView = backupImageView;
             backupImageView.setRoundRadius(AndroidUtilities.dp(10.0f));
-            addView(this.imageView, LayoutHelper.createFrame(20, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 0 : 21), 13.0f, (float) (LocaleController.isRTL ? 21 : i2), 0.0f));
+            BackupImageView backupImageView2 = this.imageView;
+            boolean z2 = LocaleController.isRTL;
+            addView(backupImageView2, LayoutHelper.createFrame(20, 20.0f, (z2 ? 5 : 3) | 48, (float) (z2 ? 0 : 21), 13.0f, (float) (z2 ? 21 : i2), 0.0f));
         } else {
-            addView(linearLayout, LayoutHelper.createFrame(-1, 30.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 15 : 21), 11.0f, (float) (LocaleController.isRTL ? 21 : i3), 0.0f));
+            boolean z3 = LocaleController.isRTL;
+            addView(linearLayout, LayoutHelper.createFrame(-1, 30.0f, (z3 ? 5 : 3) | 48, (float) (z3 ? 15 : 21), 11.0f, (float) (z3 ? 21 : i3), 0.0f));
         }
         TextView textView = new TextView(context2);
         this.nameTextView = textView;

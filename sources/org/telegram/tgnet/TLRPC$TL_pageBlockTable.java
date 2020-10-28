@@ -15,7 +15,7 @@ public class TLRPC$TL_pageBlockTable extends TLRPC$PageBlock {
         this.flags = readInt32;
         int i = 0;
         this.bordered = (readInt32 & 1) != 0;
-        this.striped = (this.flags & 2) != 0;
+        this.striped = (readInt32 & 2) != 0;
         this.title = TLRPC$RichText.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         int readInt322 = abstractSerializedData.readInt32(z);
         if (readInt322 == NUM) {

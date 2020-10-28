@@ -1,47 +1,111 @@
 package j$.util.stream;
 
+import j$.util.C;
+import j$.util.CLASSNAMEk;
+import j$.util.F;
 import j$.util.Spliterator;
-import j$.util.function.CLASSNAMEo;
-import j$.util.function.K;
-import java.util.concurrent.CountedCompleter;
+import j$.util.function.CLASSNAMEe;
+import j$.util.function.Consumer;
+import j$.util.function.q;
+import j$.util.function.v;
 
-class C3 extends CLASSNAMEk1 {
-    protected final CLASSNAMEq4 h;
-    protected final K i;
-    protected final CLASSNAMEo j;
+final class C3 extends W5 implements CLASSNAMEh3, CLASSNAMEd3 {
+    private boolean g = false;
 
-    C3(CLASSNAMEq4 helper, Spliterator spliterator, K k, CLASSNAMEo oVar) {
-        super(helper, spliterator);
-        this.h = helper;
-        this.i = k;
-        this.j = oVar;
+    C3() {
     }
 
-    C3(C3 parent, Spliterator spliterator) {
-        super((CLASSNAMEk1) parent, spliterator);
-        this.h = parent.h;
-        this.i = parent.i;
-        this.j = parent.j;
+    public C B() {
+        return super.spliterator();
     }
 
-    /* access modifiers changed from: protected */
-    /* renamed from: l */
-    public C3 h(Spliterator spliterator) {
-        return new C3(this, spliterator);
+    /* renamed from: C */
+    public /* synthetic */ void accept(Double d) {
+        CLASSNAMEc3.a(this, d);
     }
 
-    /* access modifiers changed from: protected */
-    /* renamed from: k */
-    public CLASSNAMEt3 a() {
-        T_BUILDER builder = (CLASSNAMEk3) this.i.a(this.h.p0(this.b));
-        this.h.t0(builder, this.b);
-        return ((CLASSNAMEk3) builder).b();
+    /* renamed from: D */
+    public /* synthetic */ void j(Double[] dArr, int i) {
+        CLASSNAMEc3.e(this, dArr, i);
     }
 
-    public void onCompletion(CountedCompleter caller) {
-        if (!e()) {
-            i((CLASSNAMEt3) this.j.a((CLASSNAMEt3) ((C3) this.d).b(), (CLASSNAMEt3) ((C3) this.e).b()));
-        }
-        super.onCompletion(caller);
+    /* renamed from: E */
+    public /* synthetic */ CLASSNAMEh3 r(long j, long j2, v vVar) {
+        return CLASSNAMEc3.k(this, j, j2, vVar);
+    }
+
+    public CLASSNAMEh3 a() {
+        return this;
+    }
+
+    /* renamed from: a  reason: collision with other method in class */
+    public CLASSNAMEl3 m10a() {
+        return this;
+    }
+
+    public void accept(double d) {
+        super.accept(d);
+    }
+
+    public /* synthetic */ void accept(int i) {
+        CLASSNAMEk.a(this);
+        throw null;
+    }
+
+    public /* synthetic */ void accept(long j) {
+        CLASSNAMEk.b(this);
+        throw null;
+    }
+
+    public CLASSNAMEk3 b(int i) {
+        throw new IndexOutOfBoundsException();
+    }
+
+    public void d(Object obj, int i) {
+        super.d((double[]) obj, i);
+    }
+
+    public Object e() {
+        return (double[]) super.e();
+    }
+
+    public Consumer f(Consumer consumer) {
+        consumer.getClass();
+        return new CLASSNAMEe(this, consumer);
+    }
+
+    public void h(Object obj) {
+        super.h((q) obj);
+    }
+
+    public void m() {
+        this.g = false;
+    }
+
+    public void n(long j) {
+        this.g = true;
+        clear();
+        x(j);
+    }
+
+    public /* synthetic */ int o() {
+        return 0;
+    }
+
+    public /* synthetic */ boolean p() {
+        return false;
+    }
+
+    public /* synthetic */ Object[] q(v vVar) {
+        return CLASSNAMEc3.d(this, vVar);
+    }
+
+    public F spliterator() {
+        return super.spliterator();
+    }
+
+    /* renamed from: spliterator  reason: collision with other method in class */
+    public Spliterator m11spliterator() {
+        return super.spliterator();
     }
 }

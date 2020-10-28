@@ -3,70 +3,60 @@ package j$.util.concurrent;
 final class h extends m {
     final m[] e;
 
-    h(m[] tab) {
+    h(m[] mVarArr) {
         super(-1, (Object) null, (Object) null, (m) null);
-        this.e = tab;
+        this.e = mVarArr;
     }
 
     /* access modifiers changed from: package-private */
-    /* JADX WARNING: Code restructure failed: missing block: B:18:0x002d, code lost:
-        if ((r4 instanceof j$.util.concurrent.h) == false) goto L_0x0035;
+    /* JADX WARNING: Code restructure failed: missing block: B:17:0x0027, code lost:
+        if ((r0 instanceof j$.util.concurrent.h) == false) goto L_0x002e;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:19:0x002f, code lost:
-        r0 = ((j$.util.concurrent.h) r4).e;
+    /* JADX WARNING: Code restructure failed: missing block: B:18:0x0029, code lost:
+        r0 = ((j$.util.concurrent.h) r0).e;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:21:0x0039, code lost:
-        return r4.a(r8, r9);
+    /* JADX WARNING: Code restructure failed: missing block: B:20:0x0032, code lost:
+        return r0.a(r5, r6);
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public j$.util.concurrent.m a(int r8, java.lang.Object r9) {
+    public j$.util.concurrent.m a(int r5, java.lang.Object r6) {
         /*
-            r7 = this;
-            j$.util.concurrent.m[] r0 = r7.e
+            r4 = this;
+            j$.util.concurrent.m[] r0 = r4.e
         L_0x0002:
             r1 = 0
-            if (r9 == 0) goto L_0x0041
-            if (r0 == 0) goto L_0x0041
+            if (r0 == 0) goto L_0x0037
             int r2 = r0.length
-            r3 = r2
-            if (r2 == 0) goto L_0x0041
-            int r2 = r3 + -1
-            r2 = r2 & r8
-            j$.util.concurrent.m r2 = j$.util.concurrent.ConcurrentHashMap.o(r0, r2)
-            r4 = r2
-            if (r2 != 0) goto L_0x0016
-            goto L_0x0041
-        L_0x0016:
-            int r2 = r4.a
-            r5 = r2
-            if (r2 != r8) goto L_0x0029
-            java.lang.Object r2 = r4.b
-            r6 = r2
-            if (r2 == r9) goto L_0x0028
-            if (r6 == 0) goto L_0x0029
-            boolean r2 = r9.equals(r6)
-            if (r2 == 0) goto L_0x0029
-        L_0x0028:
-            return r4
-        L_0x0029:
-            if (r5 >= 0) goto L_0x003a
-            boolean r1 = r4 instanceof j$.util.concurrent.h
-            if (r1 == 0) goto L_0x0035
-            r1 = r4
-            j$.util.concurrent.h r1 = (j$.util.concurrent.h) r1
-            j$.util.concurrent.m[] r0 = r1.e
+            if (r2 == 0) goto L_0x0037
+            int r2 = r2 + -1
+            r2 = r2 & r5
+            j$.util.concurrent.m r0 = j$.util.concurrent.ConcurrentHashMap.n(r0, r2)
+            if (r0 != 0) goto L_0x0012
+            goto L_0x0037
+        L_0x0012:
+            int r2 = r0.a
+            if (r2 != r5) goto L_0x0023
+            java.lang.Object r3 = r0.b
+            if (r3 == r6) goto L_0x0022
+            if (r3 == 0) goto L_0x0023
+            boolean r3 = r6.equals(r3)
+            if (r3 == 0) goto L_0x0023
+        L_0x0022:
+            return r0
+        L_0x0023:
+            if (r2 >= 0) goto L_0x0033
+            boolean r1 = r0 instanceof j$.util.concurrent.h
+            if (r1 == 0) goto L_0x002e
+            j$.util.concurrent.h r0 = (j$.util.concurrent.h) r0
+            j$.util.concurrent.m[] r0 = r0.e
             goto L_0x0002
-        L_0x0035:
-            j$.util.concurrent.m r1 = r4.a(r8, r9)
-            return r1
-        L_0x003a:
-            j$.util.concurrent.m r2 = r4.d
-            r4 = r2
-            if (r2 != 0) goto L_0x0040
-            return r1
-        L_0x0040:
-            goto L_0x0016
-        L_0x0041:
+        L_0x002e:
+            j$.util.concurrent.m r5 = r0.a(r5, r6)
+            return r5
+        L_0x0033:
+            j$.util.concurrent.m r0 = r0.d
+            if (r0 != 0) goto L_0x0012
+        L_0x0037:
             return r1
         */
         throw new UnsupportedOperationException("Method not decompiled: j$.util.concurrent.h.a(int, java.lang.Object):j$.util.concurrent.m");

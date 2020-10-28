@@ -37,6 +37,9 @@ public abstract class TLRPC$ChannelParticipant extends TLObject {
             case -1473271656:
                 tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantAdmin_layer92();
                 break;
+            case -1010402965:
+                tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantLeft();
+                break;
             case -859915345:
                 tLRPC$ChannelParticipant = new TLRPC$TL_channelParticipantAdmin();
                 break;

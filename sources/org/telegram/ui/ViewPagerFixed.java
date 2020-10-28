@@ -29,6 +29,7 @@ import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import androidx.core.graphics.ColorUtils;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
@@ -50,7 +51,7 @@ import org.telegram.ui.Components.RecyclerListView;
 import org.telegram.ui.ViewPagerFixed;
 
 public class ViewPagerFixed extends FrameLayout {
-    private static final Interpolator interpolator = $$Lambda$ViewPagerFixed$IOzGXkIGNvpiwlJazAeEYLBTBxQ.INSTANCE;
+    private static final Interpolator interpolator = $$Lambda$ViewPagerFixed$DSGc2v7KN921L_PaRThzepHa24.INSTANCE;
     private Adapter adapter;
     private float additionalOffset;
     /* access modifiers changed from: private */
@@ -285,6 +286,8 @@ public class ViewPagerFixed extends FrameLayout {
         float f2;
         float f3;
         int i;
+        boolean z;
+        View findScrollingChild;
         TabsView tabsView2 = this.tabsView;
         if (tabsView2 != null && tabsView2.animatingIndicator) {
             return false;
@@ -296,10 +299,6 @@ public class ViewPagerFixed extends FrameLayout {
             this.velocityTracker.addMovement(motionEvent);
         }
         if (motionEvent != null && motionEvent.getAction() == 0 && checkTabsAnimationInProgress()) {
-            View findScrollingChild = findScrollingChild(this, motionEvent.getX(), motionEvent.getY());
-            if (findScrollingChild != null && (findScrollingChild.canScrollHorizontally(1) || findScrollingChild.canScrollHorizontally(-1))) {
-                return false;
-            }
             this.startedTracking = true;
             this.startedTrackingPointerId = motionEvent.getPointerId(0);
             int x = (int) motionEvent.getX();
@@ -325,6 +324,9 @@ public class ViewPagerFixed extends FrameLayout {
         } else if (motionEvent != null && motionEvent.getAction() == 0) {
             this.additionalOffset = 0.0f;
         }
+        if (!this.startedTracking && motionEvent != null && (findScrollingChild = findScrollingChild(this, motionEvent.getX(), motionEvent.getY())) != null && (findScrollingChild.canScrollHorizontally(1) || findScrollingChild.canScrollHorizontally(-1))) {
+            return false;
+        }
         if (motionEvent != null && motionEvent.getAction() == 0 && !this.startedTracking && !this.maybeStartTracking) {
             this.startedTrackingPointerId = motionEvent.getPointerId(0);
             this.maybeStartTracking = true;
@@ -333,7 +335,7 @@ public class ViewPagerFixed extends FrameLayout {
         } else if (motionEvent != null && motionEvent.getAction() == 2 && motionEvent.getPointerId(0) == this.startedTrackingPointerId) {
             int x2 = (int) ((motionEvent.getX() - ((float) this.startedTrackingX)) + this.additionalOffset);
             int abs = Math.abs(((int) motionEvent.getY()) - this.startedTrackingY);
-            if (this.startedTracking && ((this.animatingForward && x2 > 0) || (!this.animatingForward && x2 < 0))) {
+            if (this.startedTracking && (((z = this.animatingForward) && x2 > 0) || (!z && x2 < 0))) {
                 if (!prepareForMoving(motionEvent, x2 < 0)) {
                     this.maybeStartTracking = true;
                     this.startedTracking = false;
@@ -762,6 +764,7 @@ public class ViewPagerFixed extends FrameLayout {
             public void setTab(Tab tab, int i) {
                 this.currentTab = tab;
                 this.currentPosition = i;
+                setContentDescription(tab.title);
                 requestLayout();
             }
 
@@ -972,6 +975,13 @@ public class ViewPagerFixed extends FrameLayout {
                 public int scrollHorizontallyBy(int i, RecyclerView.Recycler recycler, RecyclerView.State state) {
                     return super.scrollHorizontallyBy(i, recycler, state);
                 }
+
+                public void onInitializeAccessibilityNodeInfo(RecyclerView.Recycler recycler, RecyclerView.State state, AccessibilityNodeInfoCompat accessibilityNodeInfoCompat) {
+                    super.onInitializeAccessibilityNodeInfo(recycler, state, accessibilityNodeInfoCompat);
+                    if (TabsView.this.isInHiddenMode) {
+                        accessibilityNodeInfoCompat.setVisibleToUser(false);
+                    }
+                }
             };
             this.layoutManager = r32;
             recyclerListView.setLayoutManager(r32);
@@ -995,6 +1005,8 @@ public class ViewPagerFixed extends FrameLayout {
             addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$new$0 */
         public /* synthetic */ void lambda$new$0$ViewPagerFixed$TabsView(View view, int i, float f, float f2) {
             TabsViewDelegate tabsViewDelegate;
             if (this.delegate.canPerformActions()) {
@@ -1016,9 +1028,10 @@ public class ViewPagerFixed extends FrameLayout {
         }
 
         private void scrollToTab(int i, int i2) {
-            boolean z = this.currentPosition < i2;
+            int i3 = this.currentPosition;
+            boolean z = i3 < i2;
             this.scrollingToChild = -1;
-            this.previousPosition = this.currentPosition;
+            this.previousPosition = i3;
             this.previousId = this.selectedTabId;
             this.currentPosition = i2;
             this.selectedTabId = i;
@@ -1129,49 +1142,48 @@ public class ViewPagerFixed extends FrameLayout {
         }
 
         /* access modifiers changed from: protected */
-        /* JADX WARNING: Removed duplicated region for block: B:22:0x005d  */
-        /* JADX WARNING: Removed duplicated region for block: B:26:0x008b  */
-        /* JADX WARNING: Removed duplicated region for block: B:40:0x00fd  */
-        /* JADX WARNING: Removed duplicated region for block: B:43:0x012c  */
+        /* JADX WARNING: Removed duplicated region for block: B:21:0x005b  */
+        /* JADX WARNING: Removed duplicated region for block: B:25:0x0089  */
+        /* JADX WARNING: Removed duplicated region for block: B:39:0x00fb  */
+        /* JADX WARNING: Removed duplicated region for block: B:42:0x012a  */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public boolean drawChild(android.graphics.Canvas r10, android.view.View r11, long r12) {
             /*
                 r9 = this;
                 boolean r12 = super.drawChild(r10, r11, r12)
                 org.telegram.ui.Components.RecyclerListView r13 = r9.listView
-                if (r11 != r13) goto L_0x013d
+                if (r11 != r13) goto L_0x013b
                 int r11 = r9.getMeasuredHeight()
                 boolean r13 = r9.isInHiddenMode
                 r0 = 0
                 if (r13 == 0) goto L_0x0029
-                float r13 = r9.hideProgress
-                r1 = 1065353216(0x3var_, float:1.0)
-                int r2 = (r13 > r1 ? 1 : (r13 == r1 ? 0 : -1))
-                if (r2 == 0) goto L_0x0029
-                r2 = 1036831949(0x3dcccccd, float:0.1)
-                float r13 = r13 + r2
-                r9.hideProgress = r13
-                int r13 = (r13 > r1 ? 1 : (r13 == r1 ? 0 : -1))
-                if (r13 <= 0) goto L_0x0025
+                float r1 = r9.hideProgress
+                r2 = 1065353216(0x3var_, float:1.0)
+                int r3 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
+                if (r3 == 0) goto L_0x0029
+                r13 = 1036831949(0x3dcccccd, float:0.1)
+                float r1 = r1 + r13
                 r9.hideProgress = r1
+                int r13 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
+                if (r13 <= 0) goto L_0x0025
+                r9.hideProgress = r2
             L_0x0025:
                 r9.invalidate()
-                goto L_0x0042
+                goto L_0x0040
             L_0x0029:
-                boolean r13 = r9.isInHiddenMode
-                if (r13 != 0) goto L_0x0042
+                if (r13 != 0) goto L_0x0040
                 float r13 = r9.hideProgress
                 int r1 = (r13 > r0 ? 1 : (r13 == r0 ? 0 : -1))
-                if (r1 == 0) goto L_0x0042
+                if (r1 == 0) goto L_0x0040
                 r1 = 1039516303(0x3df5CLASSNAMEf, float:0.12)
                 float r13 = r13 - r1
                 r9.hideProgress = r13
                 int r13 = (r13 > r0 ? 1 : (r13 == r0 ? 0 : -1))
-                if (r13 >= 0) goto L_0x003f
+                if (r13 >= 0) goto L_0x003d
                 r9.hideProgress = r0
-            L_0x003f:
+            L_0x003d:
                 r9.invalidate()
-            L_0x0042:
+            L_0x0040:
                 android.graphics.drawable.GradientDrawable r13 = r9.selectorDrawable
                 org.telegram.ui.Components.RecyclerListView r1 = r9.listView
                 float r1 = r1.getAlpha()
@@ -1182,15 +1194,15 @@ public class ViewPagerFixed extends FrameLayout {
                 boolean r13 = r9.animatingIndicator
                 r1 = -1
                 r3 = 0
-                if (r13 != 0) goto L_0x008b
+                if (r13 != 0) goto L_0x0089
                 int r13 = r9.manualScrollingToPosition
-                if (r13 == r1) goto L_0x005d
-                goto L_0x008b
-            L_0x005d:
+                if (r13 == r1) goto L_0x005b
+                goto L_0x0089
+            L_0x005b:
                 org.telegram.ui.Components.RecyclerListView r13 = r9.listView
                 int r1 = r9.currentPosition
                 androidx.recyclerview.widget.RecyclerView$ViewHolder r13 = r13.findViewHolderForAdapterPosition(r1)
-                if (r13 == 0) goto L_0x0089
+                if (r13 == 0) goto L_0x0087
                 android.view.View r13 = r13.itemView
                 org.telegram.ui.ViewPagerFixed$TabsView$TabView r13 = (org.telegram.ui.ViewPagerFixed.TabsView.TabView) r13
                 r1 = 1109393408(0x42200000, float:40.0)
@@ -1204,26 +1216,26 @@ public class ViewPagerFixed extends FrameLayout {
                 float r13 = (float) r13
                 float r1 = r1 + r13
                 int r13 = (int) r1
-                goto L_0x00fb
-            L_0x0089:
+                goto L_0x00f9
+            L_0x0087:
                 r13 = 0
-                goto L_0x00fb
-            L_0x008b:
+                goto L_0x00f9
+            L_0x0089:
                 androidx.recyclerview.widget.LinearLayoutManager r13 = r9.layoutManager
                 int r13 = r13.findFirstVisibleItemPosition()
-                if (r13 == r1) goto L_0x0089
+                if (r13 == r1) goto L_0x0087
                 org.telegram.ui.Components.RecyclerListView r1 = r9.listView
                 androidx.recyclerview.widget.RecyclerView$ViewHolder r1 = r1.findViewHolderForAdapterPosition(r13)
-                if (r1 == 0) goto L_0x0089
+                if (r1 == 0) goto L_0x0087
                 boolean r3 = r9.animatingIndicator
-                if (r3 == 0) goto L_0x00a4
+                if (r3 == 0) goto L_0x00a2
                 int r3 = r9.previousPosition
                 int r4 = r9.currentPosition
-                goto L_0x00a8
-            L_0x00a4:
+                goto L_0x00a6
+            L_0x00a2:
                 int r3 = r9.currentPosition
                 int r4 = r9.manualScrollingToPosition
-            L_0x00a8:
+            L_0x00a6:
                 android.util.SparseIntArray r5 = r9.positionToX
                 int r5 = r5.get(r3)
                 android.util.SparseIntArray r6 = r9.positionToX
@@ -1234,7 +1246,7 @@ public class ViewPagerFixed extends FrameLayout {
                 int r4 = r7.get(r4)
                 int r7 = r9.additionalTabWidth
                 r8 = 1098907648(0x41800000, float:16.0)
-                if (r7 == 0) goto L_0x00d5
+                if (r7 == 0) goto L_0x00d3
                 float r13 = (float) r5
                 int r6 = r6 - r5
                 float r1 = (float) r6
@@ -1244,8 +1256,8 @@ public class ViewPagerFixed extends FrameLayout {
                 int r13 = (int) r13
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r8)
                 int r13 = r13 + r1
-                goto L_0x00f1
-            L_0x00d5:
+                goto L_0x00ef
+            L_0x00d3:
                 android.util.SparseIntArray r7 = r9.positionToX
                 int r13 = r7.get(r13)
                 float r7 = (float) r5
@@ -1261,7 +1273,7 @@ public class ViewPagerFixed extends FrameLayout {
                 int r5 = r5 - r13
                 int r13 = org.telegram.messenger.AndroidUtilities.dp(r8)
                 int r13 = r13 + r5
-            L_0x00f1:
+            L_0x00ef:
                 float r1 = (float) r3
                 int r4 = r4 - r3
                 float r3 = (float) r4
@@ -1270,8 +1282,8 @@ public class ViewPagerFixed extends FrameLayout {
                 float r1 = r1 + r3
                 int r1 = (int) r1
                 r3 = r1
-            L_0x00fb:
-                if (r3 == 0) goto L_0x0128
+            L_0x00f9:
+                if (r3 == 0) goto L_0x0126
                 android.graphics.drawable.GradientDrawable r1 = r9.selectorDrawable
                 r4 = 1082130432(0x40800000, float:4.0)
                 int r5 = org.telegram.messenger.AndroidUtilities.dpr(r4)
@@ -1294,9 +1306,9 @@ public class ViewPagerFixed extends FrameLayout {
                 r1.setBounds(r13, r5, r3, r11)
                 android.graphics.drawable.GradientDrawable r11 = r9.selectorDrawable
                 r11.draw(r10)
-            L_0x0128:
+            L_0x0126:
                 android.graphics.Bitmap r11 = r9.crossfadeBitmap
-                if (r11 == 0) goto L_0x013d
+                if (r11 == 0) goto L_0x013b
                 android.graphics.Paint r11 = r9.crossfadePaint
                 float r13 = r9.crossfadeAlpha
                 float r13 = r13 * r2
@@ -1305,7 +1317,7 @@ public class ViewPagerFixed extends FrameLayout {
                 android.graphics.Bitmap r11 = r9.crossfadeBitmap
                 android.graphics.Paint r13 = r9.crossfadePaint
                 r10.drawBitmap(r11, r0, r0, r13)
-            L_0x013d:
+            L_0x013b:
                 return r12
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ViewPagerFixed.TabsView.drawChild(android.graphics.Canvas, android.view.View, long):boolean");
@@ -1408,7 +1420,7 @@ public class ViewPagerFixed extends FrameLayout {
                     MessagesController.DialogFilter dialogFilter = arrayList.get(i);
                     tLRPC$TL_messages_updateDialogFiltersOrder.order.add(Integer.valueOf(arrayList.get(i).id));
                 }
-                ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_messages_updateDialogFiltersOrder, $$Lambda$ViewPagerFixed$TabsView$wzcDwqXucI2NJHMVlPrMBY6rqmw.INSTANCE);
+                ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_messages_updateDialogFiltersOrder, $$Lambda$ViewPagerFixed$TabsView$kEasDyzuu3wchfo8pVCslw6OutE.INSTANCE);
                 this.orderChanged = false;
             }
         }

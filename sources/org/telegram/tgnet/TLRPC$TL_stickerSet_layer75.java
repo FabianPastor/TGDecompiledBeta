@@ -6,12 +6,12 @@ public class TLRPC$TL_stickerSet_layer75 extends TLRPC$TL_stickerSet {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.installed = (readInt32 & 1) != 0;
-        this.archived = (this.flags & 2) != 0;
-        this.official = (this.flags & 4) != 0;
-        if ((this.flags & 8) == 0) {
-            z2 = false;
+        this.archived = (readInt32 & 2) != 0;
+        this.official = (readInt32 & 4) != 0;
+        if ((readInt32 & 8) != 0) {
+            z2 = true;
         }
         this.masks = z2;
         this.id = abstractSerializedData.readInt64(z);

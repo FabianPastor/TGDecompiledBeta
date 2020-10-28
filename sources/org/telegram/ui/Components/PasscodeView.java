@@ -673,6 +673,8 @@ public class PasscodeView extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ boolean lambda$new$0$PasscodeView(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 6) {
             return false;
@@ -681,16 +683,22 @@ public class PasscodeView extends FrameLayout {
         return true;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ void lambda$new$1$PasscodeView(View view) {
         processDone(false);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$2 */
     public /* synthetic */ boolean lambda$new$2$PasscodeView(View view) {
         this.passwordEditText.setText("");
         this.passwordEditText2.eraseAllCharacters(true);
         return true;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$3 */
     public /* synthetic */ void lambda$new$3$PasscodeView(View view) {
         switch (((Integer) view.getTag()).intValue()) {
             case 0:
@@ -803,7 +811,9 @@ public class PasscodeView extends FrameLayout {
             animatorSet.setDuration(50);
             animatorSet.addListener(new AnimatorListenerAdapter() {
                 public void onAnimationEnd(Animator animator) {
-                    PasscodeView.this.shakeTextView(i == 5 ? 0.0f : -f, i + 1);
+                    PasscodeView passcodeView = PasscodeView.this;
+                    int i = i;
+                    passcodeView.shakeTextView(i == 5 ? 0.0f : -f, i + 1);
                 }
             });
             animatorSet.start();
@@ -884,6 +894,8 @@ public class PasscodeView extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onResume$4 */
     public /* synthetic */ void lambda$onResume$4$PasscodeView() {
         EditTextBoldCursor editTextBoldCursor;
         if (this.retryTextView.getVisibility() != 0 && (editTextBoldCursor = this.passwordEditText) != null) {
@@ -893,6 +905,7 @@ public class PasscodeView extends FrameLayout {
     }
 
     public void onPause() {
+        CancellationSignal cancellationSignal2;
         AndroidUtilities.cancelRunOnUIThread(this.checkRunnable);
         AlertDialog alertDialog = this.fingerprintDialog;
         if (alertDialog != null) {
@@ -906,8 +919,8 @@ public class PasscodeView extends FrameLayout {
             }
         }
         try {
-            if (Build.VERSION.SDK_INT >= 23 && this.cancellationSignal != null) {
-                this.cancellationSignal.cancel();
+            if (Build.VERSION.SDK_INT >= 23 && (cancellationSignal2 = this.cancellationSignal) != null) {
+                cancellationSignal2.cancel();
                 this.cancellationSignal = null;
             }
         } catch (Exception e2) {
@@ -919,7 +932,8 @@ public class PasscodeView extends FrameLayout {
         Activity activity = (Activity) getContext();
         if (Build.VERSION.SDK_INT >= 23 && activity != null && SharedConfig.useFingerprint && !ApplicationLoader.mainInterfacePaused) {
             try {
-                if (this.fingerprintDialog != null && this.fingerprintDialog.isShowing()) {
+                AlertDialog alertDialog = this.fingerprintDialog;
+                if (alertDialog != null && alertDialog.isShowing()) {
                     return;
                 }
             } catch (Exception e) {
@@ -967,8 +981,9 @@ public class PasscodeView extends FrameLayout {
                             PasscodeView.this.lambda$checkFingerprint$5$PasscodeView(dialogInterface);
                         }
                     });
-                    if (this.fingerprintDialog != null) {
-                        if (this.fingerprintDialog.isShowing()) {
+                    AlertDialog alertDialog2 = this.fingerprintDialog;
+                    if (alertDialog2 != null) {
+                        if (alertDialog2.isShowing()) {
                             this.fingerprintDialog.dismiss();
                         }
                     }
@@ -1011,6 +1026,8 @@ public class PasscodeView extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$checkFingerprint$5 */
     public /* synthetic */ void lambda$checkFingerprint$5$PasscodeView(DialogInterface dialogInterface) {
         CancellationSignal cancellationSignal2 = this.cancellationSignal;
         if (cancellationSignal2 != null) {
@@ -1081,7 +1098,7 @@ public class PasscodeView extends FrameLayout {
             this.passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
             this.passwordEditText.setText("");
             this.passwordEditText2.eraseAllCharacters(false);
-            setOnTouchListener($$Lambda$PasscodeView$KE0jvuBZJ1oZX5aNavDxSwZtWh0.INSTANCE);
+            setOnTouchListener($$Lambda$PasscodeView$toX_NNPd08dZTbLjuc_vei8QYI.INSTANCE);
         }
     }
 
@@ -1353,7 +1370,7 @@ public class PasscodeView extends FrameLayout {
             if (drawable == null) {
                 super.onDraw(canvas);
             } else if ((drawable instanceof ColorDrawable) || (drawable instanceof GradientDrawable)) {
-                this.backgroundDrawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
+                drawable.setBounds(0, 0, getMeasuredWidth(), getMeasuredHeight());
                 this.backgroundDrawable.draw(canvas);
             } else {
                 float measuredWidth = ((float) getMeasuredWidth()) / ((float) this.backgroundDrawable.getIntrinsicWidth());

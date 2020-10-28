@@ -5,7 +5,6 @@ import org.webrtc.VideoEncoder;
 public abstract class WrappedNativeVideoEncoder implements VideoEncoder {
     public abstract long createNativeVideoEncoder();
 
-    @CalledByNative
     public /* synthetic */ VideoEncoder.ResolutionBitrateLimits[] getResolutionBitrateLimits() {
         return VideoEncoder.CC.$default$getResolutionBitrateLimits(this);
     }

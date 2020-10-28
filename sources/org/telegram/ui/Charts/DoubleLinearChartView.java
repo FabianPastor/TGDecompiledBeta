@@ -43,15 +43,13 @@ public class DoubleLinearChartView extends BaseChartView<DoubleLinearChartData, 
             float var_ = 0.0f;
             int i3 = 1;
             if (i == 2) {
-                float var_ = this.transitionParams.progress;
-                f = var_ > 0.5f ? 0.0f : 1.0f - (var_ * 2.0f);
                 TransitionParams transitionParams = this.transitionParams;
-                canvas2.scale((transitionParams.progress * 2.0f) + 1.0f, 1.0f, transitionParams.pX, transitionParams.pY);
+                float var_ = transitionParams.progress;
+                f = var_ > 0.5f ? 0.0f : 1.0f - (var_ * 2.0f);
+                canvas2.scale((var_ * 2.0f) + 1.0f, 1.0f, transitionParams.pX, transitionParams.pY);
             } else if (i == 1) {
                 float var_ = this.transitionParams.progress;
-                if (var_ < 0.3f) {
-                    var_ = 0.0f;
-                }
+                f = var_ < 0.3f ? 0.0f : var_;
                 canvas.save();
                 TransitionParams transitionParams2 = this.transitionParams;
                 float var_ = transitionParams2.progress;
@@ -130,20 +128,20 @@ public class DoubleLinearChartView extends BaseChartView<DoubleLinearChartData, 
                         canvas2.drawLines(lineViewData.linesPath, 0, i7, lineViewData.paint);
                         i5++;
                         f8 = f2;
+                        i4 = 0;
                         i2 = 2;
                         var_ = 0.0f;
                         i3 = 1;
-                        i4 = 0;
                     }
                 } else {
                     f2 = f8;
                 }
                 i5++;
                 f8 = f2;
+                i4 = 0;
                 i2 = 2;
                 var_ = 0.0f;
                 i3 = 1;
-                i4 = 0;
             }
             canvas.restore();
         }
@@ -152,49 +150,51 @@ public class DoubleLinearChartView extends BaseChartView<DoubleLinearChartData, 
     /* access modifiers changed from: protected */
     public void drawPickerChart(Canvas canvas) {
         Canvas canvas2 = canvas;
-        int measuredHeight = getMeasuredHeight() - BaseChartView.PICKER_PADDING;
-        int measuredHeight2 = (getMeasuredHeight() - this.pikerHeight) - BaseChartView.PICKER_PADDING;
+        int measuredHeight = getMeasuredHeight();
+        int i = BaseChartView.PICKER_PADDING;
+        int i2 = measuredHeight - i;
+        int measuredHeight2 = (getMeasuredHeight() - this.pikerHeight) - i;
         int size = this.lines.size();
         if (this.chartData != null) {
-            for (int i = 0; i < size; i++) {
-                LineViewData lineViewData = (LineViewData) this.lines.get(i);
+            for (int i3 = 0; i3 < size; i3++) {
+                LineViewData lineViewData = (LineViewData) this.lines.get(i3);
                 if (lineViewData.enabled || lineViewData.alpha != 0.0f) {
                     lineViewData.bottomLinePath.reset();
                     int length = ((DoubleLinearChartData) this.chartData).xPercentage.length;
                     int[] iArr = lineViewData.line.y;
                     lineViewData.chartPath.reset();
-                    int i2 = 0;
-                    for (int i3 = 0; i3 < length; i3++) {
-                        if (iArr[i3] >= 0) {
+                    int i4 = 0;
+                    for (int i5 = 0; i5 < length; i5++) {
+                        if (iArr[i5] >= 0) {
                             T t = this.chartData;
-                            float f = ((DoubleLinearChartData) t).xPercentage[i3] * this.pickerWidth;
-                            float f2 = (1.0f - ((((float) iArr[i3]) * ((DoubleLinearChartData) this.chartData).linesK[i]) / (BaseChartView.ANIMATE_PICKER_SIZES ? this.pickerMaxHeight : (float) ((DoubleLinearChartData) t).maxValue))) * ((float) (measuredHeight - measuredHeight2));
+                            float f = ((DoubleLinearChartData) t).xPercentage[i5] * this.pickerWidth;
+                            float f2 = (1.0f - ((((float) iArr[i5]) * ((DoubleLinearChartData) t).linesK[i3]) / (BaseChartView.ANIMATE_PICKER_SIZES ? this.pickerMaxHeight : (float) ((DoubleLinearChartData) t).maxValue))) * ((float) (i2 - measuredHeight2));
                             if (BaseChartView.USE_LINES) {
-                                if (i2 == 0) {
+                                if (i4 == 0) {
                                     float[] fArr = lineViewData.linesPathBottom;
-                                    int i4 = i2 + 1;
-                                    fArr[i2] = f;
-                                    i2 = i4 + 1;
-                                    fArr[i4] = f2;
+                                    int i6 = i4 + 1;
+                                    fArr[i4] = f;
+                                    i4 = i6 + 1;
+                                    fArr[i6] = f2;
                                 } else {
                                     float[] fArr2 = lineViewData.linesPathBottom;
-                                    int i5 = i2 + 1;
-                                    fArr2[i2] = f;
-                                    int i6 = i5 + 1;
-                                    fArr2[i5] = f2;
-                                    int i7 = i6 + 1;
-                                    fArr2[i6] = f;
-                                    i2 = i7 + 1;
+                                    int i7 = i4 + 1;
+                                    fArr2[i4] = f;
+                                    int i8 = i7 + 1;
                                     fArr2[i7] = f2;
+                                    int i9 = i8 + 1;
+                                    fArr2[i8] = f;
+                                    i4 = i9 + 1;
+                                    fArr2[i9] = f2;
                                 }
-                            } else if (i3 == 0) {
+                            } else if (i5 == 0) {
                                 lineViewData.bottomLinePath.moveTo(f, f2);
                             } else {
                                 lineViewData.bottomLinePath.lineTo(f, f2);
                             }
                         }
                     }
-                    lineViewData.linesPathBottomSize = i2;
+                    lineViewData.linesPathBottomSize = i4;
                     if (lineViewData.enabled || lineViewData.alpha != 0.0f) {
                         lineViewData.bottomLinePaint.setAlpha((int) (lineViewData.alpha * 255.0f));
                         if (BaseChartView.USE_LINES) {
@@ -245,9 +245,9 @@ public class DoubleLinearChartView extends BaseChartView<DoubleLinearChartData, 
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:12:0x0045  */
-    /* JADX WARNING: Removed duplicated region for block: B:13:0x004b  */
-    /* JADX WARNING: Removed duplicated region for block: B:20:0x007b  */
+    /* JADX WARNING: Removed duplicated region for block: B:12:0x0043  */
+    /* JADX WARNING: Removed duplicated region for block: B:13:0x0049  */
+    /* JADX WARNING: Removed duplicated region for block: B:20:0x0079  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void drawSignaturesToHorizontalLines(android.graphics.Canvas r18, org.telegram.ui.Charts.view_data.ChartHorizontalLinesData r19) {
         /*
@@ -256,196 +256,195 @@ public class DoubleLinearChartView extends BaseChartView<DoubleLinearChartData, 
             r1 = r18
             r2 = r19
             int[] r3 = r2.values
-            int r3 = r3.length
-            T r4 = r0.chartData
-            org.telegram.ui.Charts.data.DoubleLinearChartData r4 = (org.telegram.ui.Charts.data.DoubleLinearChartData) r4
-            float[] r4 = r4.linesK
-            r5 = 0
-            r4 = r4[r5]
-            r6 = 1065353216(0x3var_, float:1.0)
-            r7 = 1
-            int r4 = (r4 > r6 ? 1 : (r4 == r6 ? 0 : -1))
-            if (r4 != 0) goto L_0x001b
-            r4 = 1
+            int r4 = r3.length
+            T r5 = r0.chartData
+            org.telegram.ui.Charts.data.DoubleLinearChartData r5 = (org.telegram.ui.Charts.data.DoubleLinearChartData) r5
+            float[] r5 = r5.linesK
+            r6 = 0
+            r5 = r5[r6]
+            r7 = 1065353216(0x3var_, float:1.0)
+            r8 = 1
+            int r5 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
+            if (r5 != 0) goto L_0x001b
+            r5 = 1
             goto L_0x001c
         L_0x001b:
-            r4 = 0
+            r5 = 0
         L_0x001c:
-            int r8 = r4 + 1
-            r9 = 2
-            int r8 = r8 % r9
-            r10 = 1036831949(0x3dcccccd, float:0.1)
-            if (r3 <= r9) goto L_0x003f
-            int[] r11 = r2.values
-            r12 = r11[r7]
-            r11 = r11[r5]
-            int r12 = r12 - r11
-            float r11 = (float) r12
+            int r9 = r5 + 1
+            r10 = 2
+            int r9 = r9 % r10
+            r11 = 1036831949(0x3dcccccd, float:0.1)
+            if (r4 <= r10) goto L_0x003d
+            r12 = r3[r8]
+            r3 = r3[r6]
+            int r12 = r12 - r3
+            float r3 = (float) r12
             float r12 = r0.currentMaxHeight
             float r13 = r0.currentMinHeight
             float r12 = r12 - r13
-            float r11 = r11 / r12
-            double r12 = (double) r11
+            float r3 = r3 / r12
+            double r12 = (double) r3
             r14 = 4591870180066957722(0x3fb999999999999a, double:0.1)
             int r16 = (r12 > r14 ? 1 : (r12 == r14 ? 0 : -1))
-            if (r16 >= 0) goto L_0x003f
-            float r11 = r11 / r10
-            goto L_0x0041
+            if (r16 >= 0) goto L_0x003d
+            float r3 = r3 / r11
+            goto L_0x003f
+        L_0x003d:
+            r3 = 1065353216(0x3var_, float:1.0)
         L_0x003f:
-            r11 = 1065353216(0x3var_, float:1.0)
-        L_0x0041:
             int r12 = r0.transitionMode
-            if (r12 != r9) goto L_0x004b
+            if (r12 != r10) goto L_0x0049
             org.telegram.ui.Charts.view_data.TransitionParams r12 = r0.transitionParams
             float r12 = r12.progress
-            float r6 = r6 - r12
-            goto L_0x0059
-        L_0x004b:
-            if (r12 != r7) goto L_0x0052
-            org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
-            float r6 = r6.progress
-            goto L_0x0059
-        L_0x0052:
+            float r7 = r7 - r12
+            goto L_0x0057
+        L_0x0049:
+            if (r12 != r8) goto L_0x0050
+            org.telegram.ui.Charts.view_data.TransitionParams r7 = r0.transitionParams
+            float r7 = r7.progress
+            goto L_0x0057
+        L_0x0050:
             r13 = 3
-            if (r12 != r13) goto L_0x0059
-            org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
-            float r6 = r6.progress
-        L_0x0059:
+            if (r12 != r13) goto L_0x0057
+            org.telegram.ui.Charts.view_data.TransitionParams r7 = r0.transitionParams
+            float r7 = r7.progress
+        L_0x0057:
             android.graphics.Paint r12 = r0.linePaint
             int r13 = r2.alpha
             float r13 = (float) r13
-            float r13 = r13 * r10
-            float r13 = r13 * r6
-            int r10 = (int) r13
-            r12.setAlpha(r10)
-            int r10 = r17.getMeasuredHeight()
+            float r13 = r13 * r11
+            float r13 = r13 * r7
+            int r11 = (int) r13
+            r12.setAlpha(r11)
+            int r11 = r17.getMeasuredHeight()
             int r12 = r0.chartBottom
-            int r10 = r10 - r12
+            int r11 = r11 - r12
             int r12 = org.telegram.ui.Charts.BaseChartView.SIGNATURE_TEXT_HEIGHT
-            int r10 = r10 - r12
+            int r11 = r11 - r12
             float r12 = (float) r12
             android.graphics.Paint r13 = r0.signaturePaint
             float r13 = r13.getTextSize()
             float r12 = r12 - r13
             int r12 = (int) r12
-        L_0x0079:
-            if (r5 >= r3) goto L_0x0152
+        L_0x0077:
+            if (r6 >= r4) goto L_0x0150
             int r13 = r17.getMeasuredHeight()
             int r14 = r0.chartBottom
             int r13 = r13 - r14
             float r13 = (float) r13
-            float r14 = (float) r10
+            float r14 = (float) r11
             int[] r15 = r2.values
-            r15 = r15[r5]
+            r15 = r15[r6]
             float r15 = (float) r15
-            float r7 = r0.currentMinHeight
-            float r15 = r15 - r7
-            float r9 = r0.currentMaxHeight
-            float r9 = r9 - r7
-            float r15 = r15 / r9
+            float r8 = r0.currentMinHeight
+            float r15 = r15 - r8
+            float r10 = r0.currentMaxHeight
+            float r10 = r10 - r8
+            float r15 = r15 / r10
             float r14 = r14 * r15
             float r13 = r13 - r14
-            int r7 = (int) r13
-            java.lang.String[] r9 = r2.valuesStr
-            if (r9 == 0) goto L_0x0102
-            java.util.ArrayList<L> r9 = r0.lines
-            int r9 = r9.size()
-            if (r9 <= 0) goto L_0x0102
-            java.lang.String[] r9 = r2.valuesStr2
-            if (r9 == 0) goto L_0x00d7
-            java.util.ArrayList<L> r9 = r0.lines
-            int r9 = r9.size()
+            int r8 = (int) r13
+            java.lang.String[] r10 = r2.valuesStr
+            if (r10 == 0) goto L_0x0100
+            java.util.ArrayList<L> r10 = r0.lines
+            int r10 = r10.size()
+            if (r10 <= 0) goto L_0x0100
+            java.lang.String[] r10 = r2.valuesStr2
+            if (r10 == 0) goto L_0x00d5
+            java.util.ArrayList<L> r10 = r0.lines
+            int r10 = r10.size()
             r13 = 2
-            if (r9 >= r13) goto L_0x00ae
-            goto L_0x00d8
-        L_0x00ae:
-            android.graphics.Paint r9 = r0.signaturePaint
+            if (r10 >= r13) goto L_0x00ac
+            goto L_0x00d6
+        L_0x00ac:
+            android.graphics.Paint r10 = r0.signaturePaint
             java.util.ArrayList<L> r14 = r0.lines
-            java.lang.Object r14 = r14.get(r8)
+            java.lang.Object r14 = r14.get(r9)
             org.telegram.ui.Charts.view_data.LineViewData r14 = (org.telegram.ui.Charts.view_data.LineViewData) r14
             int r14 = r14.lineColor
-            r9.setColor(r14)
-            android.graphics.Paint r9 = r0.signaturePaint
+            r10.setColor(r14)
+            android.graphics.Paint r10 = r0.signaturePaint
             int r14 = r2.alpha
             float r14 = (float) r14
             java.util.ArrayList<L> r15 = r0.lines
-            java.lang.Object r15 = r15.get(r8)
+            java.lang.Object r15 = r15.get(r9)
             org.telegram.ui.Charts.view_data.LineViewData r15 = (org.telegram.ui.Charts.view_data.LineViewData) r15
             float r15 = r15.alpha
             float r14 = r14 * r15
-            float r14 = r14 * r6
-            float r14 = r14 * r11
+            float r14 = r14 * r7
+            float r14 = r14 * r3
             int r14 = (int) r14
-            r9.setAlpha(r14)
-            goto L_0x00f4
-        L_0x00d7:
+            r10.setAlpha(r14)
+            goto L_0x00f2
+        L_0x00d5:
             r13 = 2
-        L_0x00d8:
-            android.graphics.Paint r9 = r0.signaturePaint
+        L_0x00d6:
+            android.graphics.Paint r10 = r0.signaturePaint
             java.lang.String r14 = "statisticChartSignature"
             int r14 = org.telegram.ui.ActionBar.Theme.getColor(r14)
-            r9.setColor(r14)
-            android.graphics.Paint r9 = r0.signaturePaint
+            r10.setColor(r14)
+            android.graphics.Paint r10 = r0.signaturePaint
             int r14 = r2.alpha
             float r14 = (float) r14
             float r15 = r0.signaturePaintAlpha
             float r14 = r14 * r15
-            float r14 = r14 * r6
-            float r14 = r14 * r11
+            float r14 = r14 * r7
+            float r14 = r14 * r3
             int r14 = (int) r14
-            r9.setAlpha(r14)
-        L_0x00f4:
-            java.lang.String[] r9 = r2.valuesStr
-            r9 = r9[r5]
+            r10.setAlpha(r14)
+        L_0x00f2:
+            java.lang.String[] r10 = r2.valuesStr
+            r10 = r10[r6]
             float r14 = org.telegram.ui.Charts.BaseChartView.HORIZONTAL_PADDING
-            int r15 = r7 - r12
+            int r15 = r8 - r12
             float r15 = (float) r15
             android.graphics.Paint r13 = r0.signaturePaint
-            r1.drawText(r9, r14, r15, r13)
-        L_0x0102:
-            java.lang.String[] r9 = r2.valuesStr2
-            if (r9 == 0) goto L_0x014b
-            java.util.ArrayList<L> r9 = r0.lines
-            int r9 = r9.size()
+            r1.drawText(r10, r14, r15, r13)
+        L_0x0100:
+            java.lang.String[] r10 = r2.valuesStr2
+            if (r10 == 0) goto L_0x0149
+            java.util.ArrayList<L> r10 = r0.lines
+            int r10 = r10.size()
             r13 = 1
-            if (r9 <= r13) goto L_0x014c
-            android.graphics.Paint r9 = r0.signaturePaint2
+            if (r10 <= r13) goto L_0x014a
+            android.graphics.Paint r10 = r0.signaturePaint2
             java.util.ArrayList<L> r14 = r0.lines
-            java.lang.Object r14 = r14.get(r4)
+            java.lang.Object r14 = r14.get(r5)
             org.telegram.ui.Charts.view_data.LineViewData r14 = (org.telegram.ui.Charts.view_data.LineViewData) r14
             int r14 = r14.lineColor
-            r9.setColor(r14)
-            android.graphics.Paint r9 = r0.signaturePaint2
+            r10.setColor(r14)
+            android.graphics.Paint r10 = r0.signaturePaint2
             int r14 = r2.alpha
             float r14 = (float) r14
             java.util.ArrayList<L> r15 = r0.lines
-            java.lang.Object r15 = r15.get(r4)
+            java.lang.Object r15 = r15.get(r5)
             org.telegram.ui.Charts.view_data.LineViewData r15 = (org.telegram.ui.Charts.view_data.LineViewData) r15
             float r15 = r15.alpha
             float r14 = r14 * r15
-            float r14 = r14 * r6
-            float r14 = r14 * r11
+            float r14 = r14 * r7
+            float r14 = r14 * r3
             int r14 = (int) r14
-            r9.setAlpha(r14)
-            java.lang.String[] r9 = r2.valuesStr2
-            r9 = r9[r5]
+            r10.setAlpha(r14)
+            java.lang.String[] r10 = r2.valuesStr2
+            r10 = r10[r6]
             int r14 = r17.getMeasuredWidth()
             float r14 = (float) r14
             float r15 = org.telegram.ui.Charts.BaseChartView.HORIZONTAL_PADDING
             float r14 = r14 - r15
-            int r7 = r7 - r12
-            float r7 = (float) r7
+            int r8 = r8 - r12
+            float r8 = (float) r8
             android.graphics.Paint r15 = r0.signaturePaint2
-            r1.drawText(r9, r14, r7, r15)
-            goto L_0x014c
-        L_0x014b:
+            r1.drawText(r10, r14, r8, r15)
+            goto L_0x014a
+        L_0x0149:
             r13 = 1
-        L_0x014c:
-            int r5 = r5 + 1
-            r7 = 1
-            r9 = 2
-            goto L_0x0079
-        L_0x0152:
+        L_0x014a:
+            int r6 = r6 + 1
+            r8 = 1
+            r10 = 2
+            goto L_0x0077
+        L_0x0150:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Charts.DoubleLinearChartView.drawSignaturesToHorizontalLines(android.graphics.Canvas, org.telegram.ui.Charts.view_data.ChartHorizontalLinesData):void");
@@ -536,7 +535,7 @@ public class DoubleLinearChartView extends BaseChartView<DoubleLinearChartData, 
             if (((DoubleLinearChartData) t).linesK[0] == 1.0f) {
                 c = 1;
             }
-            f = ((DoubleLinearChartData) this.chartData).linesK[c];
+            f = ((DoubleLinearChartData) t).linesK[c];
         }
         return new ChartHorizontalLinesData(i, i2, this.useMinHeight, f);
     }

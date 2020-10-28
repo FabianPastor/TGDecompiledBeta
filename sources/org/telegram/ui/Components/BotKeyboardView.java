@@ -125,6 +125,8 @@ public class BotKeyboardView extends LinearLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setButtons$0 */
     public /* synthetic */ void lambda$setButtons$0$BotKeyboardView(View view) {
         this.delegate.didPressedButton((TLRPC$KeyboardButton) view.getTag());
     }

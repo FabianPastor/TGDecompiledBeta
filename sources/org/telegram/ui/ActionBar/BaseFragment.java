@@ -78,6 +78,11 @@ public class BaseFragment {
     }
 
     /* access modifiers changed from: protected */
+    public int getPreviewHeight() {
+        return -1;
+    }
+
+    /* access modifiers changed from: protected */
     public boolean hideKeyboardOnShow() {
         return true;
     }
@@ -364,7 +369,8 @@ public class BaseFragment {
         }
         this.isPaused = true;
         try {
-            if (this.visibleDialog != null && this.visibleDialog.isShowing() && dismissDialogOnPause(this.visibleDialog)) {
+            Dialog dialog = this.visibleDialog;
+            if (dialog != null && dialog.isShowing() && dismissDialogOnPause(this.visibleDialog)) {
                 this.visibleDialog.dismiss();
                 this.visibleDialog = null;
             }
@@ -455,7 +461,8 @@ public class BaseFragment {
 
     public void onBeginSlide() {
         try {
-            if (this.visibleDialog != null && this.visibleDialog.isShowing()) {
+            Dialog dialog = this.visibleDialog;
+            if (dialog != null && dialog.isShowing()) {
                 this.visibleDialog.dismiss();
                 this.visibleDialog = null;
             }
@@ -491,8 +498,9 @@ public class BaseFragment {
         ActionBarLayout actionBarLayout;
         if (dialog != null && (actionBarLayout = this.parentLayout) != null && !actionBarLayout.animationInProgress && !actionBarLayout.startedTracking && (z || !actionBarLayout.checkTransitionAnimation())) {
             try {
-                if (this.visibleDialog != null) {
-                    this.visibleDialog.dismiss();
+                Dialog dialog2 = this.visibleDialog;
+                if (dialog2 != null) {
+                    dialog2.dismiss();
                     this.visibleDialog = null;
                 }
             } catch (Exception e) {
@@ -521,6 +529,8 @@ public class BaseFragment {
         return null;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$showDialog$0 */
     public /* synthetic */ void lambda$showDialog$0$BaseFragment(DialogInterface.OnDismissListener onDismissListener, DialogInterface dialogInterface) {
         if (onDismissListener != null) {
             onDismissListener.onDismiss(dialogInterface);

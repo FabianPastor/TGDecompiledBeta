@@ -209,6 +209,8 @@ public class LocaleController {
             });
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onReceive$0 */
         public /* synthetic */ void lambda$onReceive$0$LocaleController$TimeZoneChangedReceiver() {
             if (!LocaleController.this.formatterDayMonth.getTimeZone().equals(TimeZone.getDefault())) {
                 LocaleController.getInstance().recreateFormatters();
@@ -527,10 +529,14 @@ public class LocaleController {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$LocaleController() {
         loadRemoteLanguages(UserConfig.selectedAccount);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ void lambda$new$1$LocaleController() {
         this.currentSystemLocale = getSystemLocaleStringIso639();
     }
@@ -666,171 +672,114 @@ public class LocaleController {
         return sb.toString();
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:65:0x00bf A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:66:0x00c0 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x00c1 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:68:0x00c2 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:69:0x00c3 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:70:0x00c4 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:71:0x00c5 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:72:0x00c6 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x00c7 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x00c8 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x00c9 A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:76:0x00ca A[RETURN] */
-    /* JADX WARNING: Removed duplicated region for block: B:77:0x00cb A[RETURN] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static java.lang.String getLocaleAlias(java.lang.String r16) {
-        /*
-            r0 = r16
-            r1 = 0
-            if (r0 != 0) goto L_0x0006
-            return r1
-        L_0x0006:
-            int r3 = r16.hashCode()
-            r4 = 3325(0xcfd, float:4.66E-42)
-            java.lang.String r5 = "fil"
-            java.lang.String r6 = "yi"
-            java.lang.String r7 = "tl"
-            java.lang.String r8 = "no"
-            java.lang.String r9 = "nb"
-            java.lang.String r10 = "jw"
-            java.lang.String r11 = "jv"
-            java.lang.String r12 = "ji"
-            java.lang.String r13 = "iw"
-            java.lang.String r14 = "in"
-            java.lang.String r15 = "id"
-            java.lang.String r2 = "he"
-            if (r3 == r4) goto L_0x00b3
-            r4 = 3355(0xd1b, float:4.701E-42)
-            if (r3 == r4) goto L_0x00ab
-            r4 = 3365(0xd25, float:4.715E-42)
-            if (r3 == r4) goto L_0x00a3
-            r4 = 3374(0xd2e, float:4.728E-42)
-            if (r3 == r4) goto L_0x009b
-            r4 = 3391(0xd3f, float:4.752E-42)
-            if (r3 == r4) goto L_0x0093
-            r4 = 3508(0xdb4, float:4.916E-42)
-            if (r3 == r4) goto L_0x008a
-            r4 = 3521(0xdc1, float:4.934E-42)
-            if (r3 == r4) goto L_0x0082
-            r4 = 3704(0xe78, float:5.19E-42)
-            if (r3 == r4) goto L_0x007a
-            r4 = 3856(0xvar_, float:5.403E-42)
-            if (r3 == r4) goto L_0x0071
-            r4 = 101385(0x18CLASSNAME, float:1.4207E-40)
-            if (r3 == r4) goto L_0x0068
-            r4 = 3404(0xd4c, float:4.77E-42)
-            if (r3 == r4) goto L_0x005f
-            r4 = 3405(0xd4d, float:4.771E-42)
-            if (r3 == r4) goto L_0x0056
-            goto L_0x00bb
-        L_0x0056:
-            boolean r0 = r0.equals(r10)
-            if (r0 == 0) goto L_0x00bb
-            r0 = 2
-            goto L_0x00bc
-        L_0x005f:
-            boolean r0 = r0.equals(r11)
-            if (r0 == 0) goto L_0x00bb
-            r0 = 8
-            goto L_0x00bc
-        L_0x0068:
-            boolean r0 = r0.equals(r5)
-            if (r0 == 0) goto L_0x00bb
-            r0 = 10
-            goto L_0x00bc
-        L_0x0071:
-            boolean r0 = r0.equals(r6)
-            if (r0 == 0) goto L_0x00bb
-            r0 = 11
-            goto L_0x00bc
-        L_0x007a:
-            boolean r0 = r0.equals(r7)
-            if (r0 == 0) goto L_0x00bb
-            r0 = 4
-            goto L_0x00bc
-        L_0x0082:
-            boolean r0 = r0.equals(r8)
-            if (r0 == 0) goto L_0x00bb
-            r0 = 3
-            goto L_0x00bc
-        L_0x008a:
-            boolean r0 = r0.equals(r9)
-            if (r0 == 0) goto L_0x00bb
-            r0 = 9
-            goto L_0x00bc
-        L_0x0093:
-            boolean r0 = r0.equals(r12)
-            if (r0 == 0) goto L_0x00bb
-            r0 = 5
-            goto L_0x00bc
-        L_0x009b:
-            boolean r0 = r0.equals(r13)
-            if (r0 == 0) goto L_0x00bb
-            r0 = 1
-            goto L_0x00bc
-        L_0x00a3:
-            boolean r0 = r0.equals(r14)
-            if (r0 == 0) goto L_0x00bb
-            r0 = 0
-            goto L_0x00bc
-        L_0x00ab:
-            boolean r0 = r0.equals(r15)
-            if (r0 == 0) goto L_0x00bb
-            r0 = 6
-            goto L_0x00bc
-        L_0x00b3:
-            boolean r0 = r0.equals(r2)
-            if (r0 == 0) goto L_0x00bb
-            r0 = 7
-            goto L_0x00bc
-        L_0x00bb:
-            r0 = -1
-        L_0x00bc:
-            switch(r0) {
-                case 0: goto L_0x00cb;
-                case 1: goto L_0x00ca;
-                case 2: goto L_0x00c9;
-                case 3: goto L_0x00c8;
-                case 4: goto L_0x00c7;
-                case 5: goto L_0x00c6;
-                case 6: goto L_0x00c5;
-                case 7: goto L_0x00c4;
-                case 8: goto L_0x00c3;
-                case 9: goto L_0x00c2;
-                case 10: goto L_0x00c1;
-                case 11: goto L_0x00c0;
-                default: goto L_0x00bf;
-            }
-        L_0x00bf:
-            return r1
-        L_0x00c0:
-            return r12
-        L_0x00c1:
-            return r7
-        L_0x00c2:
-            return r8
-        L_0x00c3:
-            return r10
-        L_0x00c4:
-            return r13
-        L_0x00c5:
-            return r14
-        L_0x00c6:
-            return r6
-        L_0x00c7:
-            return r5
-        L_0x00c8:
-            return r9
-        L_0x00c9:
-            return r11
-        L_0x00ca:
-            return r2
-        L_0x00cb:
-            return r15
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.LocaleController.getLocaleAlias(java.lang.String):java.lang.String");
+    public static String getLocaleAlias(String str) {
+        if (str == null) {
+            return null;
+        }
+        str.hashCode();
+        char c = 65535;
+        switch (str.hashCode()) {
+            case 3325:
+                if (str.equals("he")) {
+                    c = 0;
+                    break;
+                }
+                break;
+            case 3355:
+                if (str.equals("id")) {
+                    c = 1;
+                    break;
+                }
+                break;
+            case 3365:
+                if (str.equals("in")) {
+                    c = 2;
+                    break;
+                }
+                break;
+            case 3374:
+                if (str.equals("iw")) {
+                    c = 3;
+                    break;
+                }
+                break;
+            case 3391:
+                if (str.equals("ji")) {
+                    c = 4;
+                    break;
+                }
+                break;
+            case 3404:
+                if (str.equals("jv")) {
+                    c = 5;
+                    break;
+                }
+                break;
+            case 3405:
+                if (str.equals("jw")) {
+                    c = 6;
+                    break;
+                }
+                break;
+            case 3508:
+                if (str.equals("nb")) {
+                    c = 7;
+                    break;
+                }
+                break;
+            case 3521:
+                if (str.equals("no")) {
+                    c = 8;
+                    break;
+                }
+                break;
+            case 3704:
+                if (str.equals("tl")) {
+                    c = 9;
+                    break;
+                }
+                break;
+            case 3856:
+                if (str.equals("yi")) {
+                    c = 10;
+                    break;
+                }
+                break;
+            case 101385:
+                if (str.equals("fil")) {
+                    c = 11;
+                    break;
+                }
+                break;
+        }
+        switch (c) {
+            case 0:
+                return "iw";
+            case 1:
+                return "in";
+            case 2:
+                return "id";
+            case 3:
+                return "he";
+            case 4:
+                return "yi";
+            case 5:
+                return "jw";
+            case 6:
+                return "jv";
+            case 7:
+                return "no";
+            case 8:
+                return "nb";
+            case 9:
+                return "fil";
+            case 10:
+                return "ji";
+            case 11:
+                return "tl";
+            default:
+                return null;
+        }
     }
 
     public boolean applyLanguageFile(File file, int i) {
@@ -1258,10 +1207,14 @@ public class LocaleController {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$applyLanguage$2 */
     public /* synthetic */ void lambda$applyLanguage$2$LocaleController(LocaleInfo localeInfo, int i) {
         applyRemoteLanguage(localeInfo, (String) null, true, i);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$applyLanguage$3 */
     public /* synthetic */ void lambda$applyLanguage$3$LocaleController(int i, boolean z) {
         reloadCurrentRemoteLocale(i, (String) null, z);
     }
@@ -1422,125 +1375,126 @@ public class LocaleController {
         boolean z = j < 0;
         long abs = Math.abs(j);
         Currency instance = Currency.getInstance(upperCase);
+        upperCase.hashCode();
         char c = 65535;
         switch (upperCase.hashCode()) {
             case 65726:
                 if (upperCase.equals("BHD")) {
-                    c = 2;
+                    c = 0;
                     break;
                 }
                 break;
             case 65759:
                 if (upperCase.equals("BIF")) {
-                    c = 9;
+                    c = 1;
                     break;
                 }
                 break;
             case 66267:
                 if (upperCase.equals("BYR")) {
-                    c = 10;
+                    c = 2;
                     break;
                 }
                 break;
             case 66813:
                 if (upperCase.equals("CLF")) {
-                    c = 0;
+                    c = 3;
                     break;
                 }
                 break;
             case 66823:
                 if (upperCase.equals("CLP")) {
-                    c = 11;
+                    c = 4;
                     break;
                 }
                 break;
             case 67122:
                 if (upperCase.equals("CVE")) {
-                    c = 12;
+                    c = 5;
                     break;
                 }
                 break;
             case 67712:
                 if (upperCase.equals("DJF")) {
-                    c = 13;
+                    c = 6;
                     break;
                 }
                 break;
             case 70719:
                 if (upperCase.equals("GNF")) {
-                    c = 14;
+                    c = 7;
                     break;
                 }
                 break;
             case 72732:
                 if (upperCase.equals("IQD")) {
-                    c = 3;
+                    c = 8;
                     break;
                 }
                 break;
             case 72777:
                 if (upperCase.equals("IRR")) {
-                    c = 1;
+                    c = 9;
                     break;
                 }
                 break;
             case 72801:
                 if (upperCase.equals("ISK")) {
-                    c = 15;
+                    c = 10;
                     break;
                 }
                 break;
             case 73631:
                 if (upperCase.equals("JOD")) {
-                    c = 4;
+                    c = 11;
                     break;
                 }
                 break;
             case 73683:
                 if (upperCase.equals("JPY")) {
-                    c = 16;
+                    c = 12;
                     break;
                 }
                 break;
             case 74532:
                 if (upperCase.equals("KMF")) {
-                    c = 17;
+                    c = 13;
                     break;
                 }
                 break;
             case 74704:
                 if (upperCase.equals("KRW")) {
-                    c = 18;
+                    c = 14;
                     break;
                 }
                 break;
             case 74840:
                 if (upperCase.equals("KWD")) {
-                    c = 5;
+                    c = 15;
                     break;
                 }
                 break;
             case 75863:
                 if (upperCase.equals("LYD")) {
-                    c = 6;
+                    c = 16;
                     break;
                 }
                 break;
             case 76263:
                 if (upperCase.equals("MGA")) {
-                    c = 19;
+                    c = 17;
                     break;
                 }
                 break;
             case 76618:
                 if (upperCase.equals("MRO")) {
-                    c = 29;
+                    c = 18;
                     break;
                 }
                 break;
             case 78388:
                 if (upperCase.equals("OMR")) {
-                    c = 7;
+                    c = 19;
                     break;
                 }
                 break;
@@ -1558,49 +1512,49 @@ public class LocaleController {
                 break;
             case 83210:
                 if (upperCase.equals("TND")) {
-                    c = 8;
+                    c = 22;
                     break;
                 }
                 break;
             case 83974:
                 if (upperCase.equals("UGX")) {
-                    c = 22;
+                    c = 23;
                     break;
                 }
                 break;
             case 84517:
                 if (upperCase.equals("UYI")) {
-                    c = 23;
+                    c = 24;
                     break;
                 }
                 break;
             case 85132:
                 if (upperCase.equals("VND")) {
-                    c = 24;
+                    c = 25;
                     break;
                 }
                 break;
             case 85367:
                 if (upperCase.equals("VUV")) {
-                    c = 25;
+                    c = 26;
                     break;
                 }
                 break;
             case 86653:
                 if (upperCase.equals("XAF")) {
-                    c = 26;
+                    c = 27;
                     break;
                 }
                 break;
             case 87087:
                 if (upperCase.equals("XOF")) {
-                    c = 27;
+                    c = 28;
                     break;
                 }
                 break;
             case 87118:
                 if (upperCase.equals("XPF")) {
-                    c = 28;
+                    c = 29;
                     break;
                 }
                 break;
@@ -1608,54 +1562,54 @@ public class LocaleController {
         String str2 = " %.2f";
         switch (c) {
             case 0:
+            case 8:
+            case 11:
+            case 15:
+            case 16:
+            case 19:
+            case 22:
                 double d2 = (double) abs;
                 Double.isNaN(d2);
-                d = d2 / 10000.0d;
-                str2 = " %.4f";
+                d = d2 / 1000.0d;
+                str2 = " %.3f";
                 break;
             case 1:
-                double d3 = (double) (((float) abs) / 100.0f);
-                if (abs % 100 == 0) {
-                    str2 = " %.0f";
-                }
-                d = d3;
-                break;
             case 2:
-            case 3:
             case 4:
             case 5:
             case 6:
             case 7:
-            case 8:
-                double d4 = (double) abs;
-                Double.isNaN(d4);
-                d = d4 / 1000.0d;
-                str2 = " %.3f";
-                break;
-            case 9:
             case 10:
-            case 11:
             case 12:
             case 13:
             case 14:
-            case 15:
-            case 16:
             case 17:
-            case 18:
-            case 19:
             case 20:
             case 21:
-            case 22:
             case 23:
             case 24:
             case 25:
             case 26:
             case 27:
             case 28:
+            case 29:
                 d = (double) abs;
                 str2 = " %.0f";
                 break;
-            case 29:
+            case 3:
+                double d3 = (double) abs;
+                Double.isNaN(d3);
+                d = d3 / 10000.0d;
+                str2 = " %.4f";
+                break;
+            case 9:
+                double d4 = (double) (((float) abs) / 100.0f);
+                if (abs % 100 == 0) {
+                    str2 = " %.0f";
+                }
+                d = d4;
+                break;
+            case 18:
                 double d5 = (double) abs;
                 Double.isNaN(d5);
                 d = d5 / 10.0d;
@@ -1696,333 +1650,261 @@ public class LocaleController {
         return sb2.toString();
     }
 
-    /* JADX WARNING: Can't fix incorrect switch cases order */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public java.lang.String formatCurrencyDecimalString(long r10, java.lang.String r12, boolean r13) {
-        /*
-            r9 = this;
-            java.lang.String r12 = r12.toUpperCase()
-            long r10 = java.lang.Math.abs(r10)
-            int r0 = r12.hashCode()
-            r1 = 1
-            r2 = 0
-            switch(r0) {
-                case 65726: goto L_0x015f;
-                case 65759: goto L_0x0154;
-                case 66267: goto L_0x0149;
-                case 66813: goto L_0x013f;
-                case 66823: goto L_0x0134;
-                case 67122: goto L_0x0129;
-                case 67712: goto L_0x011e;
-                case 70719: goto L_0x0113;
-                case 72732: goto L_0x0109;
-                case 72777: goto L_0x00ff;
-                case 72801: goto L_0x00f3;
-                case 73631: goto L_0x00e8;
-                case 73683: goto L_0x00dc;
-                case 74532: goto L_0x00d0;
-                case 74704: goto L_0x00c4;
-                case 74840: goto L_0x00b9;
-                case 75863: goto L_0x00ae;
-                case 76263: goto L_0x00a2;
-                case 76618: goto L_0x0096;
-                case 78388: goto L_0x008b;
-                case 79710: goto L_0x007f;
-                case 81569: goto L_0x0073;
-                case 83210: goto L_0x0067;
-                case 83974: goto L_0x005b;
-                case 84517: goto L_0x004f;
-                case 85132: goto L_0x0043;
-                case 85367: goto L_0x0037;
-                case 86653: goto L_0x002b;
-                case 87087: goto L_0x001f;
-                case 87118: goto L_0x0013;
-                default: goto L_0x0011;
-            }
-        L_0x0011:
-            goto L_0x0169
-        L_0x0013:
-            java.lang.String r0 = "XPF"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 28
-            goto L_0x016a
-        L_0x001f:
-            java.lang.String r0 = "XOF"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 27
-            goto L_0x016a
-        L_0x002b:
-            java.lang.String r0 = "XAF"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 26
-            goto L_0x016a
-        L_0x0037:
-            java.lang.String r0 = "VUV"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 25
-            goto L_0x016a
-        L_0x0043:
-            java.lang.String r0 = "VND"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 24
-            goto L_0x016a
-        L_0x004f:
-            java.lang.String r0 = "UYI"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 23
-            goto L_0x016a
-        L_0x005b:
-            java.lang.String r0 = "UGX"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 22
-            goto L_0x016a
-        L_0x0067:
-            java.lang.String r0 = "TND"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 8
-            goto L_0x016a
-        L_0x0073:
-            java.lang.String r0 = "RWF"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 21
-            goto L_0x016a
-        L_0x007f:
-            java.lang.String r0 = "PYG"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 20
-            goto L_0x016a
-        L_0x008b:
-            java.lang.String r0 = "OMR"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 7
-            goto L_0x016a
-        L_0x0096:
-            java.lang.String r0 = "MRO"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 29
-            goto L_0x016a
-        L_0x00a2:
-            java.lang.String r0 = "MGA"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 19
-            goto L_0x016a
-        L_0x00ae:
-            java.lang.String r0 = "LYD"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 6
-            goto L_0x016a
-        L_0x00b9:
-            java.lang.String r0 = "KWD"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 5
-            goto L_0x016a
-        L_0x00c4:
-            java.lang.String r0 = "KRW"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 18
-            goto L_0x016a
-        L_0x00d0:
-            java.lang.String r0 = "KMF"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 17
-            goto L_0x016a
-        L_0x00dc:
-            java.lang.String r0 = "JPY"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 16
-            goto L_0x016a
-        L_0x00e8:
-            java.lang.String r0 = "JOD"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 4
-            goto L_0x016a
-        L_0x00f3:
-            java.lang.String r0 = "ISK"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 15
-            goto L_0x016a
-        L_0x00ff:
-            java.lang.String r0 = "IRR"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 1
-            goto L_0x016a
-        L_0x0109:
-            java.lang.String r0 = "IQD"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 3
-            goto L_0x016a
-        L_0x0113:
-            java.lang.String r0 = "GNF"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 14
-            goto L_0x016a
-        L_0x011e:
-            java.lang.String r0 = "DJF"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 13
-            goto L_0x016a
-        L_0x0129:
-            java.lang.String r0 = "CVE"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 12
-            goto L_0x016a
-        L_0x0134:
-            java.lang.String r0 = "CLP"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 11
-            goto L_0x016a
-        L_0x013f:
-            java.lang.String r0 = "CLF"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 0
-            goto L_0x016a
-        L_0x0149:
-            java.lang.String r0 = "BYR"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 10
-            goto L_0x016a
-        L_0x0154:
-            java.lang.String r0 = "BIF"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 9
-            goto L_0x016a
-        L_0x015f:
-            java.lang.String r0 = "BHD"
-            boolean r0 = r12.equals(r0)
-            if (r0 == 0) goto L_0x0169
-            r0 = 2
-            goto L_0x016a
-        L_0x0169:
-            r0 = -1
-        L_0x016a:
-            java.lang.String r3 = " %.2f"
-            java.lang.String r4 = " %.0f"
-            switch(r0) {
-                case 0: goto L_0x01a4;
-                case 1: goto L_0x0193;
-                case 2: goto L_0x0186;
-                case 3: goto L_0x0186;
-                case 4: goto L_0x0186;
-                case 5: goto L_0x0186;
-                case 6: goto L_0x0186;
-                case 7: goto L_0x0186;
-                case 8: goto L_0x0186;
-                case 9: goto L_0x0183;
-                case 10: goto L_0x0183;
-                case 11: goto L_0x0183;
-                case 12: goto L_0x0183;
-                case 13: goto L_0x0183;
-                case 14: goto L_0x0183;
-                case 15: goto L_0x0183;
-                case 16: goto L_0x0183;
-                case 17: goto L_0x0183;
-                case 18: goto L_0x0183;
-                case 19: goto L_0x0183;
-                case 20: goto L_0x0183;
-                case 21: goto L_0x0183;
-                case 22: goto L_0x0183;
-                case 23: goto L_0x0183;
-                case 24: goto L_0x0183;
-                case 25: goto L_0x0183;
-                case 26: goto L_0x0183;
-                case 27: goto L_0x0183;
-                case 28: goto L_0x0183;
-                case 29: goto L_0x0179;
-                default: goto L_0x0171;
-            }
-        L_0x0171:
-            double r10 = (double) r10
-            r4 = 4636737291354636288(0xNUM, double:100.0)
-            java.lang.Double.isNaN(r10)
-            double r10 = r10 / r4
-            goto L_0x01b0
-        L_0x0179:
-            double r10 = (double) r10
-            r3 = 4621819117588971520(0xNUM, double:10.0)
-            java.lang.Double.isNaN(r10)
-            double r10 = r10 / r3
-            java.lang.String r3 = " %.1f"
-            goto L_0x01b0
-        L_0x0183:
-            double r10 = (double) r10
-            r3 = r4
-            goto L_0x01b0
-        L_0x0186:
-            double r10 = (double) r10
-            r3 = 4652007308841189376(0x408fNUM, double:1000.0)
-            java.lang.Double.isNaN(r10)
-            double r10 = r10 / r3
-            java.lang.String r3 = " %.3f"
-            goto L_0x01b0
-        L_0x0193:
-            float r0 = (float) r10
-            r5 = 1120403456(0x42CLASSNAME, float:100.0)
-            float r0 = r0 / r5
-            double r5 = (double) r0
-            r7 = 100
-            long r10 = r10 % r7
-            r7 = 0
-            int r0 = (r10 > r7 ? 1 : (r10 == r7 ? 0 : -1))
-            if (r0 != 0) goto L_0x01a2
-            r3 = r4
-        L_0x01a2:
-            r10 = r5
-            goto L_0x01b0
-        L_0x01a4:
-            double r10 = (double) r10
-            r3 = 4666723172467343360(0x40cNUM, double:10000.0)
-            java.lang.Double.isNaN(r10)
-            double r10 = r10 / r3
-            java.lang.String r3 = " %.4f"
-        L_0x01b0:
-            java.util.Locale r0 = java.util.Locale.US
-            if (r13 == 0) goto L_0x01b5
-            goto L_0x01c6
-        L_0x01b5:
-            java.lang.StringBuilder r12 = new java.lang.StringBuilder
-            r12.<init>()
-            java.lang.String r13 = ""
-            r12.append(r13)
-            r12.append(r3)
-            java.lang.String r12 = r12.toString()
-        L_0x01c6:
-            java.lang.Object[] r13 = new java.lang.Object[r1]
-            java.lang.Double r10 = java.lang.Double.valueOf(r10)
-            r13[r2] = r10
-            java.lang.String r10 = java.lang.String.format(r0, r12, r13)
-            java.lang.String r10 = r10.trim()
-            return r10
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.LocaleController.formatCurrencyDecimalString(long, java.lang.String, boolean):java.lang.String");
+    public String formatCurrencyDecimalString(long j, String str, boolean z) {
+        double d;
+        String upperCase = str.toUpperCase();
+        long abs = Math.abs(j);
+        upperCase.hashCode();
+        char c = 65535;
+        switch (upperCase.hashCode()) {
+            case 65726:
+                if (upperCase.equals("BHD")) {
+                    c = 0;
+                    break;
+                }
+                break;
+            case 65759:
+                if (upperCase.equals("BIF")) {
+                    c = 1;
+                    break;
+                }
+                break;
+            case 66267:
+                if (upperCase.equals("BYR")) {
+                    c = 2;
+                    break;
+                }
+                break;
+            case 66813:
+                if (upperCase.equals("CLF")) {
+                    c = 3;
+                    break;
+                }
+                break;
+            case 66823:
+                if (upperCase.equals("CLP")) {
+                    c = 4;
+                    break;
+                }
+                break;
+            case 67122:
+                if (upperCase.equals("CVE")) {
+                    c = 5;
+                    break;
+                }
+                break;
+            case 67712:
+                if (upperCase.equals("DJF")) {
+                    c = 6;
+                    break;
+                }
+                break;
+            case 70719:
+                if (upperCase.equals("GNF")) {
+                    c = 7;
+                    break;
+                }
+                break;
+            case 72732:
+                if (upperCase.equals("IQD")) {
+                    c = 8;
+                    break;
+                }
+                break;
+            case 72777:
+                if (upperCase.equals("IRR")) {
+                    c = 9;
+                    break;
+                }
+                break;
+            case 72801:
+                if (upperCase.equals("ISK")) {
+                    c = 10;
+                    break;
+                }
+                break;
+            case 73631:
+                if (upperCase.equals("JOD")) {
+                    c = 11;
+                    break;
+                }
+                break;
+            case 73683:
+                if (upperCase.equals("JPY")) {
+                    c = 12;
+                    break;
+                }
+                break;
+            case 74532:
+                if (upperCase.equals("KMF")) {
+                    c = 13;
+                    break;
+                }
+                break;
+            case 74704:
+                if (upperCase.equals("KRW")) {
+                    c = 14;
+                    break;
+                }
+                break;
+            case 74840:
+                if (upperCase.equals("KWD")) {
+                    c = 15;
+                    break;
+                }
+                break;
+            case 75863:
+                if (upperCase.equals("LYD")) {
+                    c = 16;
+                    break;
+                }
+                break;
+            case 76263:
+                if (upperCase.equals("MGA")) {
+                    c = 17;
+                    break;
+                }
+                break;
+            case 76618:
+                if (upperCase.equals("MRO")) {
+                    c = 18;
+                    break;
+                }
+                break;
+            case 78388:
+                if (upperCase.equals("OMR")) {
+                    c = 19;
+                    break;
+                }
+                break;
+            case 79710:
+                if (upperCase.equals("PYG")) {
+                    c = 20;
+                    break;
+                }
+                break;
+            case 81569:
+                if (upperCase.equals("RWF")) {
+                    c = 21;
+                    break;
+                }
+                break;
+            case 83210:
+                if (upperCase.equals("TND")) {
+                    c = 22;
+                    break;
+                }
+                break;
+            case 83974:
+                if (upperCase.equals("UGX")) {
+                    c = 23;
+                    break;
+                }
+                break;
+            case 84517:
+                if (upperCase.equals("UYI")) {
+                    c = 24;
+                    break;
+                }
+                break;
+            case 85132:
+                if (upperCase.equals("VND")) {
+                    c = 25;
+                    break;
+                }
+                break;
+            case 85367:
+                if (upperCase.equals("VUV")) {
+                    c = 26;
+                    break;
+                }
+                break;
+            case 86653:
+                if (upperCase.equals("XAF")) {
+                    c = 27;
+                    break;
+                }
+                break;
+            case 87087:
+                if (upperCase.equals("XOF")) {
+                    c = 28;
+                    break;
+                }
+                break;
+            case 87118:
+                if (upperCase.equals("XPF")) {
+                    c = 29;
+                    break;
+                }
+                break;
+        }
+        String str2 = " %.2f";
+        switch (c) {
+            case 0:
+            case 8:
+            case 11:
+            case 15:
+            case 16:
+            case 19:
+            case 22:
+                double d2 = (double) abs;
+                Double.isNaN(d2);
+                d = d2 / 1000.0d;
+                str2 = " %.3f";
+                break;
+            case 1:
+            case 2:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 10:
+            case 12:
+            case 13:
+            case 14:
+            case 17:
+            case 20:
+            case 21:
+            case 23:
+            case 24:
+            case 25:
+            case 26:
+            case 27:
+            case 28:
+            case 29:
+                d = (double) abs;
+                str2 = " %.0f";
+                break;
+            case 3:
+                double d3 = (double) abs;
+                Double.isNaN(d3);
+                d = d3 / 10000.0d;
+                str2 = " %.4f";
+                break;
+            case 9:
+                double d4 = (double) (((float) abs) / 100.0f);
+                if (abs % 100 == 0) {
+                    str2 = " %.0f";
+                }
+                d = d4;
+                break;
+            case 18:
+                double d5 = (double) abs;
+                Double.isNaN(d5);
+                d = d5 / 10.0d;
+                str2 = " %.1f";
+                break;
+            default:
+                double d6 = (double) abs;
+                Double.isNaN(d6);
+                d = d6 / 100.0d;
+                break;
+        }
+        Locale locale = Locale.US;
+        if (!z) {
+            upperCase = "" + str2;
+        }
+        return String.format(locale, upperCase, new Object[]{Double.valueOf(d)}).trim();
     }
 
     public static String formatStringSimple(String str, Object... objArr) {
@@ -2371,61 +2253,61 @@ public class LocaleController {
             r7 = 1
         L_0x0076:
             nameDisplayOrder = r7
-            r7 = 2131627684(0x7f0e0ea4, float:1.888264E38)
+            r7 = 2131627808(0x7f0e0var_, float:1.888289E38)
             java.lang.String r8 = "formatterMonthYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterMonthYear = r7
-            r7 = 2131627682(0x7f0e0ea2, float:1.8882635E38)
+            r7 = 2131627806(0x7f0e0f1e, float:1.8882887E38)
             java.lang.String r8 = "formatterMonth"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd MMM"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterDayMonth = r7
-            r7 = 2131627690(0x7f0e0eaa, float:1.8882652E38)
+            r7 = 2131627814(0x7f0e0var_, float:1.8882903E38)
             java.lang.String r8 = "formatterYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd.MM.yy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterYear = r7
-            r7 = 2131627691(0x7f0e0eab, float:1.8882654E38)
+            r7 = 2131627815(0x7f0e0var_, float:1.8882905E38)
             java.lang.String r8 = "formatterYearMax"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd.MM.yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterYearMax = r7
-            r7 = 2131627650(0x7f0e0e82, float:1.888257E38)
+            r7 = 2131627774(0x7f0e0efe, float:1.8882822E38)
             java.lang.String r8 = "chatDate"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "d MMMM"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.chatDate = r7
-            r7 = 2131627651(0x7f0e0e83, float:1.8882572E38)
+            r7 = 2131627775(0x7f0e0eff, float:1.8882824E38)
             java.lang.String r8 = "chatFullDate"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "d MMMM yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.chatFullDate = r7
-            r7 = 2131627688(0x7f0e0ea8, float:1.8882648E38)
+            r7 = 2131627812(0x7f0e0var_, float:1.88829E38)
             java.lang.String r8 = "formatterWeek"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "EEE"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterWeek = r7
-            r7 = 2131627689(0x7f0e0ea9, float:1.888265E38)
+            r7 = 2131627813(0x7f0e0var_, float:1.8882901E38)
             java.lang.String r8 = "formatterWeekLong"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "EEEE"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterWeekLong = r7
-            r7 = 2131627674(0x7f0e0e9a, float:1.888262E38)
+            r7 = 2131627798(0x7f0e0var_, float:1.888287E38)
             java.lang.String r8 = "formatDateSchedule"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM d"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterScheduleDay = r7
-            r7 = 2131627675(0x7f0e0e9b, float:1.8882621E38)
+            r7 = 2131627799(0x7f0e0var_, float:1.8882873E38)
             java.lang.String r8 = "formatDateScheduleYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM d yyyy"
@@ -2446,11 +2328,11 @@ public class LocaleController {
         L_0x013b:
             boolean r2 = is24HourFormat
             if (r2 == 0) goto L_0x0145
-            r2 = 2131627681(0x7f0e0ea1, float:1.8882633E38)
+            r2 = 2131627805(0x7f0e0f1d, float:1.8882885E38)
             java.lang.String r4 = "formatterDay24H"
             goto L_0x014a
         L_0x0145:
-            r2 = 2131627680(0x7f0e0ea0, float:1.8882631E38)
+            r2 = 2131627804(0x7f0e0f1c, float:1.8882883E38)
             java.lang.String r4 = "formatterDay12H"
         L_0x014a:
             java.lang.String r2 = r9.getStringInternal(r4, r2)
@@ -2465,11 +2347,11 @@ public class LocaleController {
             r9.formatterDay = r1
             boolean r1 = is24HourFormat
             if (r1 == 0) goto L_0x0167
-            r1 = 2131627687(0x7f0e0ea7, float:1.8882645E38)
+            r1 = 2131627811(0x7f0e0var_, float:1.8882897E38)
             java.lang.String r2 = "formatterStats24H"
             goto L_0x016c
         L_0x0167:
-            r1 = 2131627686(0x7f0e0ea6, float:1.8882643E38)
+            r1 = 2131627810(0x7f0e0var_, float:1.8882895E38)
             java.lang.String r2 = "formatterStats12H"
         L_0x016c:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
@@ -2486,11 +2368,11 @@ public class LocaleController {
             r9.formatterStats = r1
             boolean r1 = is24HourFormat
             if (r1 == 0) goto L_0x018b
-            r1 = 2131627677(0x7f0e0e9d, float:1.8882625E38)
+            r1 = 2131627801(0x7f0e0var_, float:1.8882877E38)
             java.lang.String r2 = "formatterBannedUntil24H"
             goto L_0x0190
         L_0x018b:
-            r1 = 2131627676(0x7f0e0e9c, float:1.8882623E38)
+            r1 = 2131627800(0x7f0e0var_, float:1.8882875E38)
             java.lang.String r2 = "formatterBannedUntil12H"
         L_0x0190:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
@@ -2504,11 +2386,11 @@ public class LocaleController {
             r9.formatterBannedUntil = r1
             boolean r1 = is24HourFormat
             if (r1 == 0) goto L_0x01aa
-            r1 = 2131627679(0x7f0e0e9f, float:1.888263E38)
+            r1 = 2131627803(0x7f0e0f1b, float:1.888288E38)
             java.lang.String r2 = "formatterBannedUntilThisYear24H"
             goto L_0x01af
         L_0x01aa:
-            r1 = 2131627678(0x7f0e0e9e, float:1.8882627E38)
+            r1 = 2131627802(0x7f0e0f1a, float:1.8882879E38)
             java.lang.String r2 = "formatterBannedUntilThisYear12H"
         L_0x01af:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
@@ -2522,21 +2404,21 @@ public class LocaleController {
             org.telegram.messenger.time.FastDateFormat r1 = r9.createFormatter(r0, r1, r2)
             r9.formatterBannedUntilThisYear = r1
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131626942(0x7f0e0bbe, float:1.8881134E38)
+            r2 = 2131627049(0x7f0e0CLASSNAME, float:1.8881351E38)
             java.lang.String r4 = "SendTodayAt"
             java.lang.String r2 = r9.getStringInternal(r4, r2)
             java.lang.String r4 = "'Send today at' HH:mm"
             org.telegram.messenger.time.FastDateFormat r2 = r9.createFormatter(r0, r2, r4)
             r1[r3] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131626917(0x7f0e0ba5, float:1.8881084E38)
+            r2 = 2131627024(0x7f0e0CLASSNAME, float:1.88813E38)
             java.lang.String r3 = "SendDayAt"
             java.lang.String r2 = r9.getStringInternal(r3, r2)
             java.lang.String r3 = "'Send on' MMM d 'at' HH:mm"
             org.telegram.messenger.time.FastDateFormat r2 = r9.createFormatter(r0, r2, r3)
             r1[r5] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131626918(0x7f0e0ba6, float:1.8881086E38)
+            r2 = 2131627025(0x7f0e0CLASSNAME, float:1.8881303E38)
             java.lang.String r3 = "SendDayYearAt"
             java.lang.String r2 = r9.getStringInternal(r3, r2)
             java.lang.String r3 = "'Send on' MMM d yyyy 'at' HH:mm"
@@ -2544,7 +2426,7 @@ public class LocaleController {
             r1[r6] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 3
-            r3 = 2131626722(0x7f0e0ae2, float:1.8880688E38)
+            r3 = 2131626829(0x7f0e0b4d, float:1.8880905E38)
             java.lang.String r4 = "RemindTodayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind today at' HH:mm"
@@ -2552,7 +2434,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 4
-            r3 = 2131626720(0x7f0e0ae0, float:1.8880684E38)
+            r3 = 2131626827(0x7f0e0b4b, float:1.8880901E38)
             java.lang.String r4 = "RemindDayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind on' MMM d 'at' HH:mm"
@@ -2560,7 +2442,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 5
-            r3 = 2131626721(0x7f0e0ae1, float:1.8880686E38)
+            r3 = 2131626828(0x7f0e0b4c, float:1.8880903E38)
             java.lang.String r4 = "RemindDayYearAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind on' MMM d yyyy 'at' HH:mm"
@@ -2747,13 +2629,13 @@ public class LocaleController {
         if (this.currentLocaleInfo != null) {
             String lowerCase = tLRPC$TL_langPackDifference.lang_code.replace('-', '_').toLowerCase();
             if (lowerCase.equals(this.currentLocaleInfo.shortName) || lowerCase.equals(this.currentLocaleInfo.baseLangCode)) {
-                lambda$null$9$LocaleController(this.currentLocaleInfo, tLRPC$TL_langPackDifference, i);
+                lambda$null$9(this.currentLocaleInfo, tLRPC$TL_langPackDifference, i);
             }
         }
     }
 
     /* renamed from: saveRemoteLocaleStrings */
-    public void lambda$null$9$LocaleController(LocaleInfo localeInfo, TLRPC$TL_langPackDifference tLRPC$TL_langPackDifference, int i) {
+    public void lambda$null$9(LocaleInfo localeInfo, TLRPC$TL_langPackDifference tLRPC$TL_langPackDifference, int i) {
         int i2;
         File file;
         HashMap<String, String> hashMap;
@@ -2781,17 +2663,28 @@ public class LocaleController {
                         if (tLRPC$LangPackString instanceof TLRPC$TL_langPackString) {
                             hashMap.put(tLRPC$LangPackString.key, escapeString(tLRPC$LangPackString.value));
                         } else if (tLRPC$LangPackString instanceof TLRPC$TL_langPackStringPluralized) {
-                            String str = "";
-                            hashMap.put(tLRPC$LangPackString.key + "_zero", tLRPC$LangPackString.zero_value != null ? escapeString(tLRPC$LangPackString.zero_value) : str);
-                            hashMap.put(tLRPC$LangPackString.key + "_one", tLRPC$LangPackString.one_value != null ? escapeString(tLRPC$LangPackString.one_value) : str);
-                            hashMap.put(tLRPC$LangPackString.key + "_two", tLRPC$LangPackString.two_value != null ? escapeString(tLRPC$LangPackString.two_value) : str);
-                            hashMap.put(tLRPC$LangPackString.key + "_few", tLRPC$LangPackString.few_value != null ? escapeString(tLRPC$LangPackString.few_value) : str);
-                            hashMap.put(tLRPC$LangPackString.key + "_many", tLRPC$LangPackString.many_value != null ? escapeString(tLRPC$LangPackString.many_value) : str);
-                            String str2 = tLRPC$LangPackString.key + "_other";
-                            if (tLRPC$LangPackString.other_value != null) {
-                                str = escapeString(tLRPC$LangPackString.other_value);
+                            String str = tLRPC$LangPackString.key + "_zero";
+                            String str2 = tLRPC$LangPackString.zero_value;
+                            String str3 = "";
+                            hashMap.put(str, str2 != null ? escapeString(str2) : str3);
+                            String str4 = tLRPC$LangPackString.key + "_one";
+                            String str5 = tLRPC$LangPackString.one_value;
+                            hashMap.put(str4, str5 != null ? escapeString(str5) : str3);
+                            String str6 = tLRPC$LangPackString.key + "_two";
+                            String str7 = tLRPC$LangPackString.two_value;
+                            hashMap.put(str6, str7 != null ? escapeString(str7) : str3);
+                            String str8 = tLRPC$LangPackString.key + "_few";
+                            String str9 = tLRPC$LangPackString.few_value;
+                            hashMap.put(str8, str9 != null ? escapeString(str9) : str3);
+                            String str10 = tLRPC$LangPackString.key + "_many";
+                            String str11 = tLRPC$LangPackString.many_value;
+                            hashMap.put(str10, str11 != null ? escapeString(str11) : str3);
+                            String str12 = tLRPC$LangPackString.key + "_other";
+                            String str13 = tLRPC$LangPackString.other_value;
+                            if (str13 != null) {
+                                str3 = escapeString(str13);
                             }
-                            hashMap.put(str2, str);
+                            hashMap.put(str12, str3);
                         } else if (tLRPC$LangPackString instanceof TLRPC$TL_langPackStringDeleted) {
                             hashMap.remove(tLRPC$LangPackString.key);
                         }
@@ -2835,6 +2728,8 @@ public class LocaleController {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$saveRemoteLocaleStrings$4 */
     public /* synthetic */ void lambda$saveRemoteLocaleStrings$4$LocaleController(LocaleInfo localeInfo, int i, TLRPC$TL_langPackDifference tLRPC$TL_langPackDifference, HashMap hashMap) {
         String[] strArr;
         Locale locale;
@@ -2909,6 +2804,8 @@ public class LocaleController {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$loadRemoteLanguages$6 */
     public /* synthetic */ void lambda$loadRemoteLanguages$6$LocaleController(int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable(tLObject, i) {
@@ -2927,6 +2824,8 @@ public class LocaleController {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$5 */
     public /* synthetic */ void lambda$null$5$LocaleController(TLObject tLObject, int i) {
         this.loadingRemoteLanguages = false;
         TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;
@@ -3078,6 +2977,8 @@ public class LocaleController {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$applyRemoteLanguage$8 */
     public /* synthetic */ void lambda$applyRemoteLanguage$8$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable(localeInfo, tLObject, i) {
@@ -3098,6 +2999,8 @@ public class LocaleController {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$applyRemoteLanguage$10 */
     public /* synthetic */ void lambda$applyRemoteLanguage$10$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable(localeInfo, tLObject, i) {
@@ -3118,6 +3021,8 @@ public class LocaleController {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$applyRemoteLanguage$12 */
     public /* synthetic */ void lambda$applyRemoteLanguage$12$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable(localeInfo, tLObject, i) {
@@ -3138,6 +3043,8 @@ public class LocaleController {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$applyRemoteLanguage$14 */
     public /* synthetic */ void lambda$applyRemoteLanguage$14$LocaleController(LocaleInfo localeInfo, int i, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable(localeInfo, tLObject, i) {
@@ -4000,13 +3907,16 @@ public class LocaleController {
         useImperialSystemType = null;
     }
 
-    public static String formatDistance(float f, int i) {
-        String str;
-        String str2;
-        boolean z;
+    public static boolean getUseImperialSystemType() {
+        ensureImperialSystemInit();
+        return useImperialSystemType.booleanValue();
+    }
+
+    public static void ensureImperialSystemInit() {
         if (useImperialSystemType == null) {
-            int i2 = SharedConfig.distanceSystemType;
-            if (i2 == 0) {
+            int i = SharedConfig.distanceSystemType;
+            boolean z = true;
+            if (i == 0) {
                 try {
                     TelephonyManager telephonyManager = (TelephonyManager) ApplicationLoader.applicationContext.getSystemService("phone");
                     if (telephonyManager != null) {
@@ -4014,10 +3924,8 @@ public class LocaleController {
                         if (!"US".equals(upperCase) && !"GB".equals(upperCase) && !"MM".equals(upperCase)) {
                             if (!"LR".equals(upperCase)) {
                                 z = false;
-                                useImperialSystemType = Boolean.valueOf(z);
                             }
                         }
-                        z = true;
                         useImperialSystemType = Boolean.valueOf(z);
                     }
                 } catch (Exception e) {
@@ -4025,10 +3933,23 @@ public class LocaleController {
                     FileLog.e((Throwable) e);
                 }
             } else {
-                useImperialSystemType = Boolean.valueOf(i2 == 2);
+                if (i != 2) {
+                    z = false;
+                }
+                useImperialSystemType = Boolean.valueOf(z);
             }
         }
-        if (useImperialSystemType.booleanValue()) {
+    }
+
+    public static String formatDistance(float f, int i) {
+        return formatDistance(f, i, (Boolean) null);
+    }
+
+    public static String formatDistance(float f, int i, Boolean bool) {
+        String str;
+        String str2;
+        ensureImperialSystemInit();
+        if ((bool != null && bool.booleanValue()) || (bool == null && useImperialSystemType.booleanValue())) {
             float f2 = f * 3.28084f;
             if (f2 >= 1000.0f) {
                 if (f2 % 5280.0f == 0.0f) {
@@ -4036,14 +3957,19 @@ public class LocaleController {
                 } else {
                     str2 = String.format("%.2f", new Object[]{Float.valueOf(f2 / 5280.0f)});
                 }
-                if (i != 0) {
+                if (i == 0) {
+                    return formatString("MilesAway", NUM, str2);
+                } else if (i != 1) {
+                    return formatString("Miles", NUM, str2);
+                } else {
                     return formatString("MilesFromYou", NUM, str2);
                 }
-                return formatString("MilesAway", NUM, str2);
-            } else if (i != 0) {
-                return formatString("FootsFromYou", NUM, String.format("%d", new Object[]{Integer.valueOf((int) Math.max(1.0f, f2))}));
-            } else {
+            } else if (i == 0) {
                 return formatString("FootsAway", NUM, String.format("%d", new Object[]{Integer.valueOf((int) Math.max(1.0f, f2))}));
+            } else if (i != 1) {
+                return formatString("Foots", NUM, String.format("%d", new Object[]{Integer.valueOf((int) Math.max(1.0f, f2))}));
+            } else {
+                return formatString("FootsFromYou", NUM, String.format("%d", new Object[]{Integer.valueOf((int) Math.max(1.0f, f2))}));
             }
         } else if (f >= 1000.0f) {
             if (f % 1000.0f == 0.0f) {
@@ -4051,14 +3977,19 @@ public class LocaleController {
             } else {
                 str = String.format("%.2f", new Object[]{Float.valueOf(f / 1000.0f)});
             }
-            if (i != 0) {
+            if (i == 0) {
+                return formatString("KMetersAway2", NUM, str);
+            } else if (i != 1) {
+                return formatString("KMeters", NUM, str);
+            } else {
                 return formatString("KMetersFromYou2", NUM, str);
             }
-            return formatString("KMetersAway2", NUM, str);
-        } else if (i != 0) {
-            return formatString("MetersFromYou2", NUM, String.format("%d", new Object[]{Integer.valueOf((int) Math.max(1.0f, f))}));
-        } else {
+        } else if (i == 0) {
             return formatString("MetersAway2", NUM, String.format("%d", new Object[]{Integer.valueOf((int) Math.max(1.0f, f))}));
+        } else if (i != 1) {
+            return formatString("Meters", NUM, String.format("%d", new Object[]{Integer.valueOf((int) Math.max(1.0f, f))}));
+        } else {
+            return formatString("MetersFromYou2", NUM, String.format("%d", new Object[]{Integer.valueOf((int) Math.max(1.0f, f))}));
         }
     }
 }

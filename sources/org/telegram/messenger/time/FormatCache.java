@@ -69,7 +69,8 @@ abstract class FormatCache<F extends Format> {
     static String getPatternForStyle(Integer num, Integer num2, Locale locale) {
         DateFormat dateFormat;
         MultipartKey multipartKey = new MultipartKey(num, num2, locale);
-        String str = (String) cDateTimeInstanceCache.get(multipartKey);
+        ConcurrentMap<MultipartKey, String> concurrentMap = cDateTimeInstanceCache;
+        String str = (String) concurrentMap.get(multipartKey);
         if (str != null) {
             return str;
         }
@@ -85,7 +86,7 @@ abstract class FormatCache<F extends Format> {
             dateFormat = DateFormat.getDateTimeInstance(num.intValue(), num2.intValue(), locale);
         }
         String pattern = ((SimpleDateFormat) dateFormat).toPattern();
-        String putIfAbsent = cDateTimeInstanceCache.putIfAbsent(multipartKey, pattern);
+        String putIfAbsent = concurrentMap.putIfAbsent(multipartKey, pattern);
         return putIfAbsent != null ? putIfAbsent : pattern;
     }
 

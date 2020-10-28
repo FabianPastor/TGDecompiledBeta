@@ -1,40 +1,67 @@
 package j$.util.stream;
 
-import j$.util.Spliterator;
-import j$.util.function.C;
+import j$.util.CLASSNAMEk;
+import j$.util.function.B;
+import j$.util.function.CLASSNAMEe;
+import j$.util.function.Consumer;
+import j$.util.function.E;
+import j$.util.function.f;
+import j$.util.function.n;
+import j$.util.function.q;
 
 /* renamed from: j$.util.stream.q4  reason: case insensitive filesystem */
-abstract class CLASSNAMEq4 {
-    /* access modifiers changed from: package-private */
-    public abstract void c(G5 g5, Spliterator spliterator);
+class CLASSNAMEq4 extends K4 implements J4, CLASSNAMEq5 {
+    final /* synthetic */ E b;
+    final /* synthetic */ B c;
+    final /* synthetic */ n d;
 
-    /* access modifiers changed from: package-private */
-    public abstract void d(G5 g5, Spliterator spliterator);
+    CLASSNAMEq4(E e, B b2, n nVar) {
+        this.b = e;
+        this.c = b2;
+        this.d = nVar;
+    }
 
-    /* access modifiers changed from: package-private */
-    public abstract CLASSNAMEt3 e(Spliterator spliterator, boolean z, C c);
+    public void accept(double d2) {
+        this.c.accept(this.a, d2);
+    }
 
-    /* access modifiers changed from: package-private */
-    public abstract long p0(Spliterator spliterator);
+    public /* synthetic */ void accept(int i) {
+        CLASSNAMEk.a(this);
+        throw null;
+    }
 
-    /* access modifiers changed from: package-private */
-    public abstract CLASSNAMEv6 q0();
+    public /* synthetic */ void accept(long j) {
+        CLASSNAMEk.b(this);
+        throw null;
+    }
 
-    /* access modifiers changed from: package-private */
-    public abstract int r0();
+    /* renamed from: b */
+    public /* synthetic */ void accept(Double d2) {
+        CLASSNAMEc3.a(this, d2);
+    }
 
-    /* access modifiers changed from: package-private */
-    public abstract CLASSNAMEk3 s0(long j, C c);
+    public Consumer f(Consumer consumer) {
+        consumer.getClass();
+        return new CLASSNAMEe(this, consumer);
+    }
 
-    /* access modifiers changed from: package-private */
-    public abstract G5 t0(G5 g5, Spliterator spliterator);
+    public void i(J4 j4) {
+        this.a = this.d.apply(this.a, ((CLASSNAMEq4) j4).a);
+    }
 
-    /* access modifiers changed from: package-private */
-    public abstract G5 u0(G5 g5);
+    public q k(q qVar) {
+        qVar.getClass();
+        return new f(this, qVar);
+    }
 
-    /* access modifiers changed from: package-private */
-    public abstract Spliterator v0(Spliterator spliterator);
+    public void m() {
+    }
 
-    CLASSNAMEq4() {
+    public void n(long j) {
+        this.a = this.b.get();
+    }
+
+    public /* synthetic */ boolean p() {
+        return false;
     }
 }

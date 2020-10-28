@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -72,7 +73,8 @@ public class FiltersView extends RecyclerListView {
             MediaFilterData mediaFilterData = (MediaFilterData) FiltersView.this.oldItems.get(i);
             MediaFilterData mediaFilterData2 = (MediaFilterData) FiltersView.this.usersFilters.get(i2);
             if (mediaFilterData.isSameType(mediaFilterData2)) {
-                if (mediaFilterData.filterType == 4) {
+                int i3 = mediaFilterData.filterType;
+                if (i3 == 4) {
                     TLObject tLObject = mediaFilterData.chat;
                     if (tLObject instanceof TLRPC$User) {
                         TLObject tLObject2 = mediaFilterData2.chat;
@@ -83,18 +85,17 @@ public class FiltersView extends RecyclerListView {
                             return false;
                         }
                     }
-                    TLObject tLObject3 = mediaFilterData.chat;
-                    if (tLObject3 instanceof TLRPC$Chat) {
-                        TLObject tLObject4 = mediaFilterData2.chat;
-                        if (tLObject4 instanceof TLRPC$Chat) {
-                            if (((TLRPC$Chat) tLObject3).id == ((TLRPC$Chat) tLObject4).id) {
+                    if (tLObject instanceof TLRPC$Chat) {
+                        TLObject tLObject3 = mediaFilterData2.chat;
+                        if (tLObject3 instanceof TLRPC$Chat) {
+                            if (((TLRPC$Chat) tLObject).id == ((TLRPC$Chat) tLObject3).id) {
                                 return true;
                             }
                             return false;
                         }
                     }
                 }
-                if (mediaFilterData.filterType == 6) {
+                if (i3 == 6) {
                     return mediaFilterData.title.equals(mediaFilterData2.title);
                 }
             }
@@ -109,9 +110,16 @@ public class FiltersView extends RecyclerListView {
 
     public FiltersView(Context context) {
         super(context);
-        AnonymousClass1 r0 = new LinearLayoutManager(this, context) {
+        AnonymousClass1 r0 = new LinearLayoutManager(context) {
             public boolean supportsPredictiveItemAnimations() {
                 return false;
+            }
+
+            public void onInitializeAccessibilityNodeInfo(RecyclerView.Recycler recycler, RecyclerView.State state, AccessibilityNodeInfoCompat accessibilityNodeInfoCompat) {
+                super.onInitializeAccessibilityNodeInfo(recycler, state, accessibilityNodeInfoCompat);
+                if (!FiltersView.this.isEnabled()) {
+                    accessibilityNodeInfoCompat.setVisibleToUser(false);
+                }
             }
         };
         this.layoutManager = r0;

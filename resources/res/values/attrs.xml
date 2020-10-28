@@ -6,10 +6,42 @@
     </attr>
     <attr name="ambientEnabled" format="boolean">
     </attr>
+    <attr name="appTheme">
+        <enum name="holo_dark" value="0" />
+        <enum name="holo_light" value="1" />
+    </attr>
     <attr name="buttonSize" format="reference">
         <enum name="icon_only" value="2" />
         <enum name="standard" value="0" />
         <enum name="wide" value="1" />
+    </attr>
+    <attr name="buyButtonAppearance">
+        <enum name="android_pay_dark" value="4" />
+        <enum name="android_pay_light" value="5" />
+        <enum name="android_pay_light_with_border" value="6" />
+        <enum name="classic" value="1" />
+        <enum name="google_wallet_classic" value="1" />
+        <enum name="google_wallet_grayscale" value="2" />
+        <enum name="google_wallet_monochrome" value="3" />
+        <enum name="grayscale" value="2" />
+        <enum name="monochrome" value="3" />
+    </attr>
+    <attr name="buyButtonHeight" format="dimension">
+        <enum name="match_parent" value="-1" />
+        <enum name="wrap_content" value="-2" />
+    </attr>
+    <attr name="buyButtonText">
+        <enum name="book_now" value="3" />
+        <enum name="buy_now" value="2" />
+        <enum name="buy_with" value="5" />
+        <enum name="buy_with_google" value="1" />
+        <enum name="donate_with" value="7" />
+        <enum name="donate_with_google" value="4" />
+        <enum name="logo_only" value="6" />
+    </attr>
+    <attr name="buyButtonWidth" format="dimension">
+        <enum name="match_parent" value="-1" />
+        <enum name="wrap_content" value="-2" />
     </attr>
     <attr name="cameraBearing" format="float">
     </attr>
@@ -40,6 +72,10 @@
     </attr>
     <attr name="corpusVersion" format="string">
     </attr>
+    <attr name="customThemeStyle">
+        <enum name="googleMaterial2" value="2" />
+        <enum name="material" value="1" />
+    </attr>
     <attr name="defaultIntentAction" format="string">
     </attr>
     <attr name="defaultIntentActivity" format="string">
@@ -47,6 +83,12 @@
     <attr name="defaultIntentData" format="string">
     </attr>
     <attr name="documentMaxAgeSecs" format="integer">
+    </attr>
+    <attr name="environment">
+        <enum name="production" value="1" />
+        <enum name="sandbox" value="0" />
+        <enum name="strict_sandbox" value="2" />
+        <enum name="test" value="3" />
     </attr>
     <attr name="featureType">
         <enum name="demote_common_words" value="2" />
@@ -80,6 +122,12 @@
     <attr name="fontVariationSettings" format="string">
     </attr>
     <attr name="fontWeight" format="integer">
+    </attr>
+    <attr name="fragmentMode">
+        <enum name="buyButton" value="1" />
+        <enum name="selectionDetails" value="2" />
+    </attr>
+    <attr name="fragmentStyle" format="reference">
     </attr>
     <attr name="imageAspectRatio" format="float">
     </attr>
@@ -152,6 +200,25 @@
         <enum name="satellite" value="2" />
         <enum name="terrain" value="3" />
     </attr>
+    <attr name="maskedWalletDetailsBackground" format="reference|color">
+    </attr>
+    <attr name="maskedWalletDetailsButtonBackground" format="reference|color">
+    </attr>
+    <attr name="maskedWalletDetailsButtonTextAppearance" format="reference">
+    </attr>
+    <attr name="maskedWalletDetailsHeaderTextAppearance" format="reference">
+    </attr>
+    <attr name="maskedWalletDetailsLogoImageType">
+        <enum name="android_pay" value="3" />
+        <enum name="classic" value="1" />
+        <enum name="google_wallet_classic" value="1" />
+        <enum name="google_wallet_monochrome" value="2" />
+        <enum name="monochrome" value="2" />
+    </attr>
+    <attr name="maskedWalletDetailsLogoTextColor" format="color">
+    </attr>
+    <attr name="maskedWalletDetailsTextAppearance" format="reference">
+    </attr>
     <attr name="noIndex" format="boolean">
     </attr>
     <attr name="paramName" format="string">
@@ -210,6 +277,10 @@
     </attr>
     <attr name="toAddressesSection" format="string">
     </attr>
+    <attr name="toolbarTextColorStyle">
+        <enum name="dark" value="2" />
+        <enum name="light" value="1" />
+    </attr>
     <attr name="trimmable" format="boolean">
     </attr>
     <attr name="ttcIndex" format="integer">
@@ -237,6 +308,10 @@
     <attr name="userInputTag" format="string">
     </attr>
     <attr name="userInputValue" format="string">
+    </attr>
+    <attr name="windowTransitionStyle">
+        <enum name="none" value="2" />
+        <enum name="slide" value="1" />
     </attr>
     <attr name="zOrderOnTop" format="boolean">
     </attr>

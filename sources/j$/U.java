@@ -1,35 +1,27 @@
 package j$;
 
-import j$.util.function.L;
-import java.util.function.LongPredicate;
+import j$.util.function.u;
+import java.util.function.IntConsumer;
 
-public final /* synthetic */ class U implements L {
-    final /* synthetic */ LongPredicate a;
+public final /* synthetic */ class U implements u {
+    final /* synthetic */ IntConsumer a;
 
-    private /* synthetic */ U(LongPredicate longPredicate) {
-        this.a = longPredicate;
+    private /* synthetic */ U(IntConsumer intConsumer) {
+        this.a = intConsumer;
     }
 
-    public static /* synthetic */ L b(LongPredicate longPredicate) {
-        if (longPredicate == null) {
+    public static /* synthetic */ u b(IntConsumer intConsumer) {
+        if (intConsumer == null) {
             return null;
         }
-        return longPredicate instanceof V ? ((V) longPredicate).a : new U(longPredicate);
+        return intConsumer instanceof V ? ((V) intConsumer).a : new U(intConsumer);
     }
 
-    public /* synthetic */ L a(L l) {
-        return b(this.a.and(V.a(l)));
+    public /* synthetic */ void accept(int i) {
+        this.a.accept(i);
     }
 
-    public /* synthetic */ L c() {
-        return b(this.a.negate());
-    }
-
-    public /* synthetic */ L d(L l) {
-        return b(this.a.or(V.a(l)));
-    }
-
-    public /* synthetic */ boolean e(long j) {
-        return this.a.test(j);
+    public /* synthetic */ u l(u uVar) {
+        return b(this.a.andThen(V.a(uVar)));
     }
 }

@@ -1,54 +1,41 @@
 package j$.util.stream;
 
-import java.util.Arrays;
+import j$.util.C;
+import j$.util.CLASSNAMEw;
+import j$.util.F;
+import j$.util.V;
+import j$.util.function.Consumer;
+import j$.util.function.q;
 
-final class V5 extends R5 {
-    private CLASSNAMEk6 c;
+class V5 extends CLASSNAMEb6 implements C {
+    final /* synthetic */ W5 g;
 
-    V5(G5 sink) {
-        super(sink);
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    V5(W5 w5, int i, int i2, int i3, int i4) {
+        super(w5, i, i2, i3, i4);
+        this.g = w5;
     }
 
-    public void s(long size) {
-        CLASSNAMEk6 k6Var;
-        if (size < NUM) {
-            if (size > 0) {
-                int i = (int) size;
-            } else {
-                k6Var = new CLASSNAMEk6();
-            }
-            this.c = k6Var;
-            return;
-        }
-        throw new IllegalArgumentException("Stream size exceeds max array size");
+    /* access modifiers changed from: package-private */
+    public void a(Object obj, int i, Object obj2) {
+        ((q) obj2).accept(((double[]) obj)[i]);
     }
 
-    public void r() {
-        double[] doubles = (double[]) this.c.i();
-        Arrays.sort(doubles);
-        this.a.s((long) doubles.length);
-        int i = 0;
-        if (!this.b) {
-            int length = doubles.length;
-            while (i < length) {
-                this.a.accept(doubles[i]);
-                i++;
-            }
-        } else {
-            int length2 = doubles.length;
-            while (i < length2) {
-                double aDouble = doubles[i];
-                if (this.a.u()) {
-                    break;
-                }
-                this.a.accept(aDouble);
-                i++;
-            }
-        }
-        this.a.r();
+    public /* synthetic */ boolean b(Consumer consumer) {
+        return CLASSNAMEw.d(this, consumer);
     }
 
-    public void accept(double t) {
-        this.c.accept(t);
+    /* access modifiers changed from: package-private */
+    public F f(Object obj, int i, int i2) {
+        return V.j((double[]) obj, i, i2 + i, 1040);
+    }
+
+    public /* synthetic */ void forEachRemaining(Consumer consumer) {
+        CLASSNAMEw.a(this, consumer);
+    }
+
+    /* access modifiers changed from: package-private */
+    public F g(int i, int i2, int i3, int i4) {
+        return new V5(this.g, i, i2, i3, i4);
     }
 }

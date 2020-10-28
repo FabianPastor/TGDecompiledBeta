@@ -7,6 +7,9 @@ public abstract class TLRPC$Update extends TLObject {
             case -2112423005:
                 tLRPC$Update = new TLRPC$TL_updateTheme();
                 break;
+            case -2054649973:
+                tLRPC$Update = new TLRPC$TL_updatePinnedChannelMessages();
+                break;
             case -2046916883:
                 tLRPC$Update = new TLRPC$TL_updateGroupCall();
                 break;
@@ -27,9 +30,6 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case -1791935732:
                 tLRPC$Update = new TLRPC$TL_updateUserPhoto();
-                break;
-            case -1738988427:
-                tLRPC$Update = new TLRPC$TL_updateChannelPinnedMessage();
                 break;
             case -1734268085:
                 tLRPC$Update = new TLRPC$TL_updateChannelMessageViews();
@@ -79,9 +79,6 @@ public abstract class TLRPC$Update extends TLObject {
             case -1015733815:
                 tLRPC$Update = new TLRPC$TL_updateDeleteChannelMessages();
                 break;
-            case -519195831:
-                tLRPC$Update = new TLRPC$TL_updateChatPinnedMessage();
-                break;
             case -513517117:
                 tLRPC$Update = new TLRPC$TL_updateDialogUnreadMark();
                 break;
@@ -99,6 +96,9 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case -337352679:
                 tLRPC$Update = new TLRPC$TL_updateServiceNotification();
+                break;
+            case -309990731:
+                tLRPC$Update = new TLRPC$TL_updatePinnedMessages();
                 break;
             case -299124375:
                 tLRPC$Update = new TLRPC$TL_updateDraftMessage();
@@ -186,9 +186,6 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case 1180041828:
                 tLRPC$Update = new TLRPC$TL_updateLangPackTooLong();
-                break;
-            case 1279515160:
-                tLRPC$Update = new TLRPC$TL_updateUserPinnedMessage();
                 break;
             case 1318109142:
                 tLRPC$Update = new TLRPC$TL_updateMessageID();

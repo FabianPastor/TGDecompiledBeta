@@ -1,20 +1,17 @@
 package j$.util.stream;
 
-import j$.util.function.z;
+import j$.util.function.x;
 
-class H4 extends T4 {
-    final /* synthetic */ z b;
-    final /* synthetic */ int c;
+class H4 extends L4 {
+    final /* synthetic */ x b;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    H4(CLASSNAMEv6 shape, z zVar, int i) {
-        super(shape);
-        this.b = zVar;
-        this.c = i;
+    H4(CLASSNAMEh6 h6Var, x xVar) {
+        super(h6Var);
+        this.b = xVar;
     }
 
-    /* renamed from: e */
-    public I4 b() {
-        return new I4(this.c, this.b);
+    public J4 a() {
+        return new I4(this.b);
     }
 }

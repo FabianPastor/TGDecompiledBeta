@@ -2,6 +2,7 @@ package org.telegram.ui.Components;
 
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
+import android.graphics.Paint;
 import android.view.animation.DecelerateInterpolator;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.NotificationCenter;
@@ -10,6 +11,7 @@ import org.telegram.ui.ActionBar.Theme;
 
 public class TypingDotsDrawable extends StatusDrawable {
     private int currentAccount = UserConfig.selectedAccount;
+    private Paint currentPaint;
     private DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator();
     private float[] elapsedTimes = {0.0f, 0.0f, 0.0f};
     private boolean isChat = false;
@@ -26,6 +28,19 @@ public class TypingDotsDrawable extends StatusDrawable {
     }
 
     public void setColorFilter(ColorFilter colorFilter) {
+    }
+
+    public TypingDotsDrawable(boolean z) {
+        if (z) {
+            this.currentPaint = new Paint(1);
+        }
+    }
+
+    public void setColor(int i) {
+        Paint paint = this.currentPaint;
+        if (paint != null) {
+            paint.setColor(i);
+        }
     }
 
     public void setIsChat(boolean z) {
@@ -90,11 +105,16 @@ public class TypingDotsDrawable extends StatusDrawable {
             i2 = AndroidUtilities.dp(9.3f);
             i = getBounds().top;
         }
-        Theme.chat_statusPaint.setAlpha(255);
-        float f = (float) (i2 + i);
-        canvas.drawCircle((float) AndroidUtilities.dp(3.0f), f, this.scales[0] * AndroidUtilities.density, Theme.chat_statusPaint);
-        canvas.drawCircle((float) AndroidUtilities.dp(9.0f), f, this.scales[1] * AndroidUtilities.density, Theme.chat_statusPaint);
-        canvas.drawCircle((float) AndroidUtilities.dp(15.0f), f, this.scales[2] * AndroidUtilities.density, Theme.chat_statusPaint);
+        int i3 = i2 + i;
+        Paint paint = this.currentPaint;
+        if (paint == null) {
+            paint = Theme.chat_statusPaint;
+            paint.setAlpha(255);
+        }
+        float f = (float) i3;
+        canvas.drawCircle((float) AndroidUtilities.dp(3.0f), f, this.scales[0] * AndroidUtilities.density, paint);
+        canvas.drawCircle((float) AndroidUtilities.dp(9.0f), f, this.scales[1] * AndroidUtilities.density, paint);
+        canvas.drawCircle((float) AndroidUtilities.dp(15.0f), f, this.scales[2] * AndroidUtilities.density, paint);
         checkUpdate();
     }
 

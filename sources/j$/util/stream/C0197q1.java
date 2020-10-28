@@ -4,27 +4,27 @@ import java.util.HashSet;
 import java.util.Set;
 
 /* renamed from: j$.util.stream.q1  reason: case insensitive filesystem */
-class CLASSNAMEq1 extends CLASSNAMEz5 {
+class CLASSNAMEq1 extends CLASSNAMEp5 {
     Set b;
 
-    CLASSNAMEq1(CLASSNAMEr1 this$0, G5 downstream) {
-        super(downstream);
+    CLASSNAMEq1(CLASSNAMEr1 r1Var, CLASSNAMEt5 t5Var) {
+        super(t5Var);
     }
 
-    public void s(long size) {
-        this.b = new HashSet();
-        this.a.s(-1);
-    }
-
-    public void r() {
-        this.b = null;
-        this.a.r();
-    }
-
-    public void accept(Object t) {
-        if (!this.b.contains(t)) {
-            this.b.add(t);
-            this.a.accept(t);
+    public void accept(Object obj) {
+        if (!this.b.contains(obj)) {
+            this.b.add(obj);
+            this.a.accept(obj);
         }
+    }
+
+    public void m() {
+        this.b = null;
+        this.a.m();
+    }
+
+    public void n(long j) {
+        this.b = new HashSet();
+        this.a.n(-1);
     }
 }

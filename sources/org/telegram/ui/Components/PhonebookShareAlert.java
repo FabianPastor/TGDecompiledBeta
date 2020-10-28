@@ -275,46 +275,45 @@ public class PhonebookShareAlert extends BottomSheet {
                 r8 = -1082130432(0xffffffffbvar_, float:-1.0)
                 boolean r4 = org.telegram.messenger.LocaleController.isRTL
                 if (r4 == 0) goto L_0x0047
-                r4 = 5
+                r9 = 5
                 goto L_0x0048
             L_0x0047:
-                r4 = 3
+                r9 = 3
             L_0x0048:
-                r9 = r4 | 48
-                boolean r4 = org.telegram.messenger.LocaleController.isRTL
+                r9 = r9 | 48
                 r14 = 17
                 r15 = 64
                 r16 = 1116733440(0x42900000, float:72.0)
-                if (r4 == 0) goto L_0x0062
+                if (r4 == 0) goto L_0x0060
                 boolean r4 = r18.isImport
-                if (r4 == 0) goto L_0x005d
+                if (r4 == 0) goto L_0x005b
                 r4 = 17
-                goto L_0x005f
-            L_0x005d:
+                goto L_0x005d
+            L_0x005b:
                 r4 = 64
-            L_0x005f:
+            L_0x005d:
                 float r4 = (float) r4
                 r10 = r4
-                goto L_0x0064
-            L_0x0062:
+                goto L_0x0062
+            L_0x0060:
                 r10 = 1116733440(0x42900000, float:72.0)
-            L_0x0064:
+            L_0x0062:
                 r11 = 1092616192(0x41200000, float:10.0)
                 boolean r4 = org.telegram.messenger.LocaleController.isRTL
-                if (r4 == 0) goto L_0x006d
+                if (r4 == 0) goto L_0x006b
                 r12 = 1116733440(0x42900000, float:72.0)
-                goto L_0x007a
-            L_0x006d:
-                boolean r4 = r18.isImport
-                if (r4 == 0) goto L_0x0076
-                r4 = 17
                 goto L_0x0078
-            L_0x0076:
+            L_0x006b:
+                boolean r4 = r18.isImport
+                if (r4 == 0) goto L_0x0074
+                r4 = 17
+                goto L_0x0076
+            L_0x0074:
                 r4 = 64
-            L_0x0078:
+            L_0x0076:
                 float r4 = (float) r4
                 r12 = r4
-            L_0x007a:
+            L_0x0078:
                 r13 = 0
                 android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r8, r9, r10, r11, r12, r13)
                 r0.addView(r2, r4)
@@ -335,53 +334,52 @@ public class PhonebookShareAlert extends BottomSheet {
                 r2.setSingleLine(r3)
                 android.widget.TextView r2 = r0.valueTextView
                 boolean r3 = org.telegram.messenger.LocaleController.isRTL
-                if (r3 == 0) goto L_0x00b0
+                if (r3 == 0) goto L_0x00ae
                 r3 = 5
-                goto L_0x00b1
-            L_0x00b0:
+                goto L_0x00af
+            L_0x00ae:
                 r3 = 3
-            L_0x00b1:
+            L_0x00af:
                 r2.setGravity(r3)
                 android.widget.TextView r2 = r0.valueTextView
                 r7 = -2
                 r8 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
                 boolean r3 = org.telegram.messenger.LocaleController.isRTL
-                if (r3 == 0) goto L_0x00bf
+                if (r3 == 0) goto L_0x00bd
                 r9 = 5
-                goto L_0x00c0
-            L_0x00bf:
+                goto L_0x00be
+            L_0x00bd:
                 r9 = 3
-            L_0x00c0:
-                boolean r3 = org.telegram.messenger.LocaleController.isRTL
-                if (r3 == 0) goto L_0x00d2
+            L_0x00be:
+                if (r3 == 0) goto L_0x00ce
                 boolean r3 = r18.isImport
-                if (r3 == 0) goto L_0x00cd
+                if (r3 == 0) goto L_0x00c9
                 r3 = 17
-                goto L_0x00cf
-            L_0x00cd:
+                goto L_0x00cb
+            L_0x00c9:
                 r3 = 64
-            L_0x00cf:
+            L_0x00cb:
                 float r3 = (float) r3
                 r10 = r3
-                goto L_0x00d4
-            L_0x00d2:
+                goto L_0x00d0
+            L_0x00ce:
                 r10 = 1116733440(0x42900000, float:72.0)
-            L_0x00d4:
+            L_0x00d0:
                 r11 = 1108082688(0x420CLASSNAME, float:35.0)
                 boolean r3 = org.telegram.messenger.LocaleController.isRTL
-                if (r3 == 0) goto L_0x00dd
+                if (r3 == 0) goto L_0x00d9
                 r12 = 1116733440(0x42900000, float:72.0)
-                goto L_0x00e8
-            L_0x00dd:
+                goto L_0x00e4
+            L_0x00d9:
                 boolean r3 = r18.isImport
-                if (r3 == 0) goto L_0x00e4
-                goto L_0x00e6
-            L_0x00e4:
+                if (r3 == 0) goto L_0x00e0
+                goto L_0x00e2
+            L_0x00e0:
                 r14 = 64
-            L_0x00e6:
+            L_0x00e2:
                 float r3 = (float) r14
                 r12 = r3
-            L_0x00e8:
+            L_0x00e4:
                 r13 = 0
                 android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r8, r9, r10, r11, r12, r13)
                 r0.addView(r2, r3)
@@ -401,36 +399,33 @@ public class PhonebookShareAlert extends BottomSheet {
                 r7 = -2
                 r8 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
                 boolean r3 = org.telegram.messenger.LocaleController.isRTL
-                if (r3 == 0) goto L_0x0119
-                r3 = 5
-                goto L_0x011a
-            L_0x0119:
-                r3 = 3
-            L_0x011a:
-                r9 = r3 | 48
-                boolean r3 = org.telegram.messenger.LocaleController.isRTL
+                if (r3 == 0) goto L_0x0115
+                r4 = 5
+                goto L_0x0116
+            L_0x0115:
+                r4 = 3
+            L_0x0116:
+                r9 = r4 | 48
                 r4 = 0
                 r10 = 1101004800(0x41a00000, float:20.0)
-                if (r3 == 0) goto L_0x0125
-                r3 = 0
-                goto L_0x0127
-            L_0x0125:
-                r3 = 1101004800(0x41a00000, float:20.0)
-            L_0x0127:
+                if (r3 == 0) goto L_0x011f
+                r11 = 0
+                goto L_0x0121
+            L_0x011f:
                 r11 = 1101004800(0x41a00000, float:20.0)
-                boolean r12 = org.telegram.messenger.LocaleController.isRTL
-                if (r12 == 0) goto L_0x0130
+            L_0x0121:
                 r12 = 1101004800(0x41a00000, float:20.0)
-                goto L_0x0131
-            L_0x0130:
-                r12 = 0
-            L_0x0131:
+                if (r3 == 0) goto L_0x0127
+                r4 = 1101004800(0x41a00000, float:20.0)
+            L_0x0127:
                 r13 = 0
-                r10 = r3
+                r10 = r11
+                r11 = r12
+                r12 = r4
                 android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r8, r9, r10, r11, r12, r13)
                 r0.addView(r2, r3)
                 boolean r2 = r18.isImport
-                if (r2 != 0) goto L_0x016a
+                if (r2 != 0) goto L_0x0162
                 org.telegram.ui.Components.Switch r2 = new org.telegram.ui.Components.Switch
                 r2.<init>(r1)
                 r0.checkBox = r2
@@ -442,9 +437,9 @@ public class PhonebookShareAlert extends BottomSheet {
                 r7 = 37
                 r8 = 1109393408(0x42200000, float:40.0)
                 boolean r2 = org.telegram.messenger.LocaleController.isRTL
-                if (r2 == 0) goto L_0x015b
+                if (r2 == 0) goto L_0x0153
                 r5 = 3
-            L_0x015b:
+            L_0x0153:
                 r9 = r5 | 16
                 r10 = 1102053376(0x41b00000, float:22.0)
                 r11 = 0
@@ -452,7 +447,7 @@ public class PhonebookShareAlert extends BottomSheet {
                 r13 = 0
                 android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r7, r8, r9, r10, r11, r12, r13)
                 r0.addView(r1, r2)
-            L_0x016a:
+            L_0x0162:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhonebookShareAlert.TextCheckBoxCell.<init>(org.telegram.ui.Components.PhonebookShareAlert, android.content.Context):void");
@@ -723,7 +718,7 @@ public class PhonebookShareAlert extends BottomSheet {
             android.widget.FrameLayout$LayoutParams r7 = org.telegram.ui.Components.LayoutHelper.createScroll(r8, r8, r7)
             r3.addView((android.view.View) r6, (android.view.ViewGroup.LayoutParams) r7)
             androidx.core.widget.NestedScrollView r3 = r0.scrollView
-            org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$UnFjjPf4YUr9var_khYpf2fRUOgU r6 = new org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$UnFjjPf4YUr9var_khYpf2fRUOgU
+            org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$oOQ71v9aVIC_vtHhWE2xbFy9JvM r6 = new org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$oOQ71v9aVIC_vtHhWE2xbFy9JvM
             r6.<init>()
             r3.setOnScrollChangeListener(r6)
             org.telegram.ui.Components.PhonebookShareAlert$ListAdapter r3 = r0.listAdapter
@@ -749,10 +744,10 @@ public class PhonebookShareAlert extends BottomSheet {
         L_0x01b6:
             android.graphics.drawable.Drawable r9 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable(r4)
             r7.setBackgroundDrawable(r9)
-            org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$xYhjnG_zxNlx0UlxGUyPm9kg6jA r9 = new org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$xYhjnG_zxNlx0UlxGUyPm9kg6jA
+            org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$o6UUiUcuxgbZ9ViFHXa2xYmtVbI r9 = new org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$o6UUiUcuxgbZ9ViFHXa2xYmtVbI
             r9.<init>(r6, r7)
             r7.setOnClickListener(r9)
-            org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$xbmp1lL6aksgcnSgelcdZkldvDc r9 = new org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$xbmp1lL6aksgcnSgelcdZkldvDc
+            org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$cI7ExqCggnboUqU9yaEacWJbFIk r9 = new org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$cI7ExqCggnboUqU9yaEacWJbFIk
             r9.<init>(r6)
             r7.setOnLongClickListener(r9)
         L_0x01cd:
@@ -766,7 +761,7 @@ public class PhonebookShareAlert extends BottomSheet {
             int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             r3.setBackgroundColor(r6)
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
-            r6 = 2131165458(0x7var_, float:1.7945134E38)
+            r6 = 2131165466(0x7var_a, float:1.794515E38)
             r3.setBackButtonImage(r6)
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
             java.lang.String r6 = "dialogTextBlack"
@@ -785,9 +780,9 @@ public class PhonebookShareAlert extends BottomSheet {
             r6 = 0
             r3.setAlpha(r6)
             boolean r3 = r0.isImport
-            r7 = 2131624161(0x7f0e00e1, float:1.8875494E38)
+            r7 = 2131624166(0x7f0e00e6, float:1.8875504E38)
             java.lang.String r9 = "AddContactPhonebookTitle"
-            r10 = 2131626997(0x7f0e0bf5, float:1.8881246E38)
+            r10 = 2131627104(0x7f0e0CLASSNAME, float:1.8881463E38)
             java.lang.String r11 = "ShareContactTitle"
             if (r3 == 0) goto L_0x022a
             org.telegram.ui.ActionBar.ActionBar r3 = r0.actionBar
@@ -905,7 +900,7 @@ public class PhonebookShareAlert extends BottomSheet {
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r19, r20, r21, r22, r23, r24, r25)
             r2.addView(r1, r3)
             android.widget.TextView r1 = r0.buttonTextView
-            org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$qATn_q-GXrzbrKnXSToIzpql_Ds r2 = new org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$qATn_q-GXrzbrKnXSToIzpql_Ds
+            org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$7Qjf9Nj11gjKRkxpgMMh3cQEq1k r2 = new org.telegram.ui.Components.-$$Lambda$PhonebookShareAlert$7Qjf9Nj11gjKRkxpgMMh3cQEq1k
             r2.<init>()
             r1.setOnClickListener(r2)
             return
@@ -913,10 +908,14 @@ public class PhonebookShareAlert extends BottomSheet {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhonebookShareAlert.<init>(org.telegram.ui.ActionBar.BaseFragment, org.telegram.messenger.ContactsController$Contact, org.telegram.tgnet.TLRPC$User, android.net.Uri, java.io.File, java.lang.String, java.lang.String):void");
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$PhonebookShareAlert(NestedScrollView nestedScrollView, int i, int i2, int i3, int i4) {
         updateLayout(!this.inLayout);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$2 */
     public /* synthetic */ void lambda$new$2$PhonebookShareAlert(int i, View view, View view2) {
         AndroidUtilities.VcardItem vcardItem;
         int i2 = this.phoneStartRow;
@@ -988,6 +987,8 @@ public class PhonebookShareAlert extends BottomSheet {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$1 */
     public /* synthetic */ void lambda$null$1$PhonebookShareAlert(AndroidUtilities.VcardItem vcardItem, DialogInterface dialogInterface, int i) {
         if (i == 0) {
             try {
@@ -999,6 +1000,8 @@ public class PhonebookShareAlert extends BottomSheet {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$3 */
     public /* synthetic */ boolean lambda$new$3$PhonebookShareAlert(int i, View view) {
         AndroidUtilities.VcardItem vcardItem;
         int i2 = this.phoneStartRow;
@@ -1025,6 +1028,8 @@ public class PhonebookShareAlert extends BottomSheet {
         return true;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$5 */
     public /* synthetic */ void lambda$new$5$PhonebookShareAlert(View view) {
         StringBuilder sb;
         if (this.isImport) {
@@ -1341,6 +1346,8 @@ public class PhonebookShareAlert extends BottomSheet {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$4 */
     public /* synthetic */ void lambda$null$4$PhonebookShareAlert(boolean z, int i) {
         this.delegate.didSelectContact(this.currentUser, z, i);
         dismiss();

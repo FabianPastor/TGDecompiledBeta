@@ -86,7 +86,7 @@ public class VideoSeekPreviewImage extends View {
             animatedFileDrawable.resetStream(false);
         }
         DispatchQueue dispatchQueue = Utilities.globalQueue;
-        $$Lambda$VideoSeekPreviewImage$Os3KazHQPmAT5faayq_HBEMpGLU r2 = new Runnable(f, j) {
+        $$Lambda$VideoSeekPreviewImage$g60CkZT71ETxRPl_quZCURAVemY r2 = new Runnable(f, j) {
             public final /* synthetic */ float f$1;
             public final /* synthetic */ long f$2;
 
@@ -103,6 +103,8 @@ public class VideoSeekPreviewImage extends View {
         dispatchQueue.postRunnable(r2);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setProgress$1 */
     public /* synthetic */ void lambda$setProgress$1$VideoSeekPreviewImage(float f, long j) {
         int i;
         if (this.fileDrawable == null) {
@@ -145,6 +147,8 @@ public class VideoSeekPreviewImage extends View {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$0 */
     public /* synthetic */ void lambda$null$0$VideoSeekPreviewImage(Bitmap bitmap) {
         int i;
         if (bitmap != null) {
@@ -187,7 +191,7 @@ public class VideoSeekPreviewImage extends View {
         if (uri != null && !uri.equals(this.videoUri)) {
             this.videoUri = uri;
             DispatchQueue dispatchQueue = Utilities.globalQueue;
-            $$Lambda$VideoSeekPreviewImage$zy4HD28BPX6FxdovZogZ2Hvfeys r1 = new Runnable(uri) {
+            $$Lambda$VideoSeekPreviewImage$lj2W0fe9RVE4Ns7EIj50QSS1lo r1 = new Runnable(uri) {
                 public final /* synthetic */ Uri f$1;
 
                 {
@@ -203,6 +207,8 @@ public class VideoSeekPreviewImage extends View {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$open$3 */
     public /* synthetic */ void lambda$open$3$VideoSeekPreviewImage(Uri uri) {
         String str;
         if ("tg".equals(uri.getScheme())) {
@@ -242,6 +248,8 @@ public class VideoSeekPreviewImage extends View {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$VideoSeekPreviewImage() {
         this.loadRunnable = null;
         if (this.fileDrawable != null) {
@@ -300,6 +308,8 @@ public class VideoSeekPreviewImage extends View {
         this.ready = false;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$close$4 */
     public /* synthetic */ void lambda$close$4$VideoSeekPreviewImage() {
         this.pendingProgress = 0.0f;
         AnimatedFileDrawable animatedFileDrawable = this.fileDrawable;

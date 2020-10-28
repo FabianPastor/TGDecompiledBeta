@@ -67,9 +67,11 @@ public class ChatGreetingsView extends LinearLayout {
             });
             return;
         }
-        lambda$null$0$ChatGreetingsView(tLRPC$Document);
+        lambda$null$0(tLRPC$Document);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ void lambda$new$1$ChatGreetingsView(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject instanceof TLRPC$TL_messages_stickers) {
             ArrayList<TLRPC$Document> arrayList = ((TLRPC$TL_messages_stickers) tLObject).stickers;
@@ -91,7 +93,7 @@ public class ChatGreetingsView extends LinearLayout {
 
     /* access modifiers changed from: private */
     /* renamed from: setSticker */
-    public void lambda$null$0$ChatGreetingsView(TLRPC$Document tLRPC$Document) {
+    public void lambda$null$0(TLRPC$Document tLRPC$Document) {
         this.stickerToSendView.setImage(ImageLocation.getForDocument(tLRPC$Document), createFilter(tLRPC$Document), ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document), (String) null, 0, (Object) tLRPC$Document);
         this.stickerToSendView.setOnClickListener(new View.OnClickListener(tLRPC$Document) {
             public final /* synthetic */ TLRPC$Document f$1;
@@ -106,6 +108,8 @@ public class ChatGreetingsView extends LinearLayout {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setSticker$2 */
     public /* synthetic */ void lambda$setSticker$2$ChatGreetingsView(TLRPC$Document tLRPC$Document, View view) {
         Listener listener2 = this.listener;
         if (listener2 != null) {

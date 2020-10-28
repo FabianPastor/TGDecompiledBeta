@@ -18,32 +18,32 @@ public abstract class TLRPC$StickerSet extends TLObject {
     public String title;
 
     public static TLRPC$StickerSet TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$TL_stickerSet tLRPC$TL_stickerSet;
+        TLRPC$StickerSet tLRPC$StickerSet;
         switch (i) {
             case -1482409193:
-                tLRPC$TL_stickerSet = new TLRPC$TL_stickerSet_old();
+                tLRPC$StickerSet = new TLRPC$TL_stickerSet_old();
                 break;
             case -852477119:
-                tLRPC$TL_stickerSet = new TLRPC$TL_stickerSet_layer75();
+                tLRPC$StickerSet = new TLRPC$TL_stickerSet_layer75();
                 break;
             case -290164953:
-                tLRPC$TL_stickerSet = new TLRPC$TL_stickerSet();
+                tLRPC$StickerSet = new TLRPC$TL_stickerSet();
                 break;
             case 1434820921:
-                tLRPC$TL_stickerSet = new TLRPC$TL_stickerSet_layer96();
+                tLRPC$StickerSet = new TLRPC$TL_stickerSet_layer96();
                 break;
             case 1787870391:
-                tLRPC$TL_stickerSet = new TLRPC$TL_stickerSet_layer97();
+                tLRPC$StickerSet = new TLRPC$TL_stickerSet_layer97();
                 break;
             default:
-                tLRPC$TL_stickerSet = null;
+                tLRPC$StickerSet = null;
                 break;
         }
-        if (tLRPC$TL_stickerSet != null || !z) {
-            if (tLRPC$TL_stickerSet != null) {
-                tLRPC$TL_stickerSet.readParams(abstractSerializedData, z);
+        if (tLRPC$StickerSet != null || !z) {
+            if (tLRPC$StickerSet != null) {
+                tLRPC$StickerSet.readParams(abstractSerializedData, z);
             }
-            return tLRPC$TL_stickerSet;
+            return tLRPC$StickerSet;
         }
         throw new RuntimeException(String.format("can't parse magic %x in StickerSet", new Object[]{Integer.valueOf(i)}));
     }

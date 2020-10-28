@@ -27,7 +27,7 @@ public class TextPaintImageReceiverSpan extends ReplacementSpan {
         this.imageReceiver = imageReceiver2;
         imageReceiver2.setInvalidateAll(true);
         if (z2) {
-            this.imageReceiver.setDelegate($$Lambda$TextPaintImageReceiverSpan$x0NtYGCv_nR9J6999CLASSNAMEM45NipY.INSTANCE);
+            this.imageReceiver.setDelegate($$Lambda$TextPaintImageReceiverSpan$VOfUEMxfp5Biab0XljN117MV0.INSTANCE);
         }
         String str = format;
         this.imageReceiver.setImage(ImageLocation.getForDocument(tLRPC$Document), str, ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document2.thumbs, 90), tLRPC$Document2), format, -1, (String) null, obj, 1);

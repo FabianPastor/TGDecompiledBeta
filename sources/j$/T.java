@@ -1,23 +1,23 @@
 package j$;
 
-import j$.util.function.K;
-import java.util.function.LongFunction;
+import j$.util.function.t;
+import java.util.function.IntBinaryOperator;
 
-public final /* synthetic */ class T implements K {
-    final /* synthetic */ LongFunction a;
+public final /* synthetic */ class T implements IntBinaryOperator {
+    final /* synthetic */ t a;
 
-    private /* synthetic */ T(LongFunction longFunction) {
-        this.a = longFunction;
+    private /* synthetic */ T(t tVar) {
+        this.a = tVar;
     }
 
-    public static /* synthetic */ K b(LongFunction longFunction) {
-        if (longFunction == null) {
+    public static /* synthetic */ IntBinaryOperator a(t tVar) {
+        if (tVar == null) {
             return null;
         }
-        return new T(longFunction);
+        return tVar instanceof S ? ((S) tVar).a : new T(tVar);
     }
 
-    public /* synthetic */ Object a(long j) {
-        return this.a.apply(j);
+    public /* synthetic */ int applyAsInt(int i, int i2) {
+        return this.a.applyAsInt(i, i2);
     }
 }

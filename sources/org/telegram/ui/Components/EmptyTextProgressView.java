@@ -41,7 +41,7 @@ public class EmptyTextProgressView extends FrameLayout {
         addView(this.textView, LayoutHelper.createFrame(-2, -2.0f));
         this.progressBar.setAlpha(0.0f);
         this.textView.setAlpha(0.0f);
-        setOnTouchListener($$Lambda$EmptyTextProgressView$AeVTSCBshpCl6wf4siSABV33AKw.INSTANCE);
+        setOnTouchListener($$Lambda$EmptyTextProgressView$8nH8zAnzG_iOQz8u5LEx8EcAeaI.INSTANCE);
     }
 
     public void showProgress() {

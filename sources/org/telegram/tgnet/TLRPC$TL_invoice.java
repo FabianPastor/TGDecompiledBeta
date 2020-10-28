@@ -33,13 +33,13 @@ public class TLRPC$TL_invoice extends TLObject {
         this.flags = readInt32;
         int i = 0;
         this.test = (readInt32 & 1) != 0;
-        this.name_requested = (this.flags & 2) != 0;
-        this.phone_requested = (this.flags & 4) != 0;
-        this.email_requested = (this.flags & 8) != 0;
-        this.shipping_address_requested = (this.flags & 16) != 0;
-        this.flexible = (this.flags & 32) != 0;
-        this.phone_to_provider = (this.flags & 64) != 0;
-        this.email_to_provider = (this.flags & 128) != 0;
+        this.name_requested = (readInt32 & 2) != 0;
+        this.phone_requested = (readInt32 & 4) != 0;
+        this.email_requested = (readInt32 & 8) != 0;
+        this.shipping_address_requested = (readInt32 & 16) != 0;
+        this.flexible = (readInt32 & 32) != 0;
+        this.phone_to_provider = (readInt32 & 64) != 0;
+        this.email_to_provider = (readInt32 & 128) != 0;
         this.currency = abstractSerializedData.readString(z);
         int readInt322 = abstractSerializedData.readInt32(z);
         if (readInt322 == NUM) {

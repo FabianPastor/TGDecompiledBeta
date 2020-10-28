@@ -10,12 +10,14 @@ public abstract class TLRPC$InputMedia extends TLObject {
     public int flags;
     public boolean force_file;
     public TLRPC$InputGeoPoint geo_point;
+    public int heading;
     public String last_name;
     public String mime_type;
     public boolean nosound_video;
     public int period;
     public String phone_number;
     public String provider;
+    public int proximity_notification_radius;
     public ArrayList<TLRPC$InputDocument> stickers = new ArrayList<>();
     public boolean stopped;
     public TLRPC$InputFile thumb;
@@ -31,14 +33,14 @@ public abstract class TLRPC$InputMedia extends TLObject {
             case -1771768449:
                 tLRPC$InputMedia = new TLRPC$TL_inputMediaEmpty();
                 break;
+            case -1759532989:
+                tLRPC$InputMedia = new TLRPC$TL_inputMediaGeoLive();
+                break;
             case -1279654347:
                 tLRPC$InputMedia = new TLRPC$TL_inputMediaPhoto();
                 break;
             case -1052959727:
                 tLRPC$InputMedia = new TLRPC$TL_inputMediaVenue();
-                break;
-            case -833715459:
-                tLRPC$InputMedia = new TLRPC$TL_inputMediaGeoLive();
                 break;
             case -750828557:
                 tLRPC$InputMedia = new TLRPC$TL_inputMediaGame();

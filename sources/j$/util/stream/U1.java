@@ -1,24 +1,27 @@
 package j$.util.stream;
 
-import j$.util.B;
-import j$.util.C;
-import j$.util.CLASSNAMEz;
-import j$.util.D;
+import j$.util.function.g;
+import j$.util.function.u;
 
-final class U1 {
-    public static f7 d(boolean mustFindFirst) {
-        return new N1(mustFindFirst, CLASSNAMEv6.REFERENCE, CLASSNAMEz.a(), P0.a, W0.a);
+final class U1 extends X1 implements CLASSNAMEr5 {
+    final u b;
+
+    U1(u uVar, boolean z) {
+        super(z);
+        this.b = uVar;
     }
 
-    public static f7 b(boolean mustFindFirst) {
-        return new N1(mustFindFirst, CLASSNAMEv6.INT_VALUE, C.a(), Y0.a, V0.a);
+    public void accept(int i) {
+        this.b.accept(i);
     }
 
-    public static f7 c(boolean mustFindFirst) {
-        return new N1(mustFindFirst, CLASSNAMEv6.LONG_VALUE, D.a(), I0.a, M0.a);
+    /* renamed from: e */
+    public /* synthetic */ void accept(Integer num) {
+        CLASSNAMEc3.b(this, num);
     }
 
-    public static f7 a(boolean mustFindFirst) {
-        return new N1(mustFindFirst, CLASSNAMEv6.DOUBLE_VALUE, B.a(), CLASSNAMEe1.a, U0.a);
+    public u l(u uVar) {
+        uVar.getClass();
+        return new g(this, uVar);
     }
 }

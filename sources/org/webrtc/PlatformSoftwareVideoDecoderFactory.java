@@ -6,15 +6,15 @@ import org.webrtc.Predicate;
 
 public class PlatformSoftwareVideoDecoderFactory extends MediaCodecVideoDecoderFactory {
     private static final Predicate<MediaCodecInfo> defaultAllowedPredicate = new Predicate<MediaCodecInfo>() {
-        public /* synthetic */ Predicate<T> and(Predicate<? super T> predicate) {
+        public /* synthetic */ Predicate and(Predicate predicate) {
             return Predicate.CC.$default$and(this, predicate);
         }
 
-        public /* synthetic */ Predicate<T> negate() {
+        public /* synthetic */ Predicate negate() {
             return Predicate.CC.$default$negate(this);
         }
 
-        public /* synthetic */ Predicate<T> or(Predicate<? super T> predicate) {
+        public /* synthetic */ Predicate or(Predicate predicate) {
             return Predicate.CC.$default$or(this, predicate);
         }
 

@@ -62,6 +62,8 @@ public class ShareDialogCell extends FrameLayout {
         addView(this.checkBox, LayoutHelper.createFrame(24, 24.0f, 49, 19.0f, 42.0f, 0.0f, 0.0f));
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$ShareDialogCell(float f) {
         float progress = 1.0f - (this.checkBox.getProgress() * 0.143f);
         this.imageView.setScaleX(progress);
@@ -129,11 +131,11 @@ public class ShareDialogCell extends FrameLayout {
             r6 = this;
             boolean r9 = super.drawChild(r7, r8, r9)
             org.telegram.ui.Components.BackupImageView r10 = r6.imageView
-            if (r8 != r10) goto L_0x00ed
+            if (r8 != r10) goto L_0x00ec
             org.telegram.tgnet.TLRPC$User r8 = r6.user
-            if (r8 == 0) goto L_0x00ed
+            if (r8 == 0) goto L_0x00ec
             boolean r8 = org.telegram.messenger.MessagesController.isSupportUser(r8)
-            if (r8 != 0) goto L_0x00ed
+            if (r8 != 0) goto L_0x00ec
             long r0 = android.os.SystemClock.elapsedRealtime()
             long r2 = r6.lastUpdateTime
             long r2 = r0 - r2
@@ -174,7 +176,7 @@ public class ShareDialogCell extends FrameLayout {
             if (r8 != 0) goto L_0x0061
             float r0 = r6.onlineProgress
             int r0 = (r0 > r10 ? 1 : (r0 == r10 ? 0 : -1))
-            if (r0 == 0) goto L_0x00ed
+            if (r0 == 0) goto L_0x00ec
         L_0x0061:
             org.telegram.ui.Components.BackupImageView r0 = r6.imageView
             int r0 = r0.getBottom()
@@ -211,39 +213,39 @@ public class ShareDialogCell extends FrameLayout {
             android.graphics.Paint r5 = org.telegram.ui.ActionBar.Theme.dialogs_onlineCirclePaint
             r7.drawCircle(r1, r0, r4, r5)
             r7 = 1125515264(0x43160000, float:150.0)
-            if (r8 == 0) goto L_0x00d4
+            if (r8 == 0) goto L_0x00d3
             float r8 = r6.onlineProgress
             r10 = 1065353216(0x3var_, float:1.0)
             int r0 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r0 >= 0) goto L_0x00ed
+            if (r0 >= 0) goto L_0x00ec
             float r0 = (float) r2
             float r0 = r0 / r7
             float r8 = r8 + r0
             r6.onlineProgress = r8
             int r7 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r7 <= 0) goto L_0x00cb
+            if (r7 <= 0) goto L_0x00ca
             r6.onlineProgress = r10
-        L_0x00cb:
+        L_0x00ca:
             org.telegram.ui.Components.BackupImageView r7 = r6.imageView
             r7.invalidate()
             r6.invalidate()
-            goto L_0x00ed
-        L_0x00d4:
+            goto L_0x00ec
+        L_0x00d3:
             float r8 = r6.onlineProgress
             int r0 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r0 <= 0) goto L_0x00ed
+            if (r0 <= 0) goto L_0x00ec
             float r0 = (float) r2
             float r0 = r0 / r7
             float r8 = r8 - r0
             r6.onlineProgress = r8
             int r7 = (r8 > r10 ? 1 : (r8 == r10 ? 0 : -1))
-            if (r7 >= 0) goto L_0x00e5
+            if (r7 >= 0) goto L_0x00e4
             r6.onlineProgress = r10
-        L_0x00e5:
+        L_0x00e4:
             org.telegram.ui.Components.BackupImageView r7 = r6.imageView
             r7.invalidate()
             r6.invalidate()
-        L_0x00ed:
+        L_0x00ec:
             return r9
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.ShareDialogCell.drawChild(android.graphics.Canvas, android.view.View, long):boolean");

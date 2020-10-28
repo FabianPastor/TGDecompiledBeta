@@ -1,5 +1,6 @@
 package org.telegram.messenger.camera;
 
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -7,6 +8,8 @@ import android.graphics.SurfaceTexture;
 import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
 import android.media.MediaRecorder;
+import android.os.Build;
+import android.util.Base64;
 import j$.util.Comparator;
 import j$.util.function.Function;
 import j$.util.function.ToDoubleFunction;
@@ -24,13 +27,16 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import org.telegram.messenger.AndroidUtilities;
+import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.BuildVars;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.ImageLoader;
+import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.Utilities;
 import org.telegram.messenger.camera.CameraController;
+import org.telegram.tgnet.SerializedData;
 
 public class CameraController implements MediaRecorder.OnInfoListener {
     private static final int CORE_POOL_SIZE = 1;
@@ -98,309 +104,188 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:39:0x00da, code lost:
-        if (r15.height != 720) goto L_0x011a;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$initCamera$4$CameraController(boolean r20, java.lang.Runnable r21) {
-        /*
-            r19 = this;
-            r1 = r19
-            java.lang.String r0 = "cameraCache"
-            java.util.ArrayList<org.telegram.messenger.camera.CameraInfo> r2 = r1.cameraInfos     // Catch:{ Exception -> 0x0255 }
-            if (r2 != 0) goto L_0x024c
-            android.content.SharedPreferences r2 = org.telegram.messenger.MessagesController.getGlobalMainSettings()     // Catch:{ Exception -> 0x0255 }
-            r3 = 0
-            java.lang.String r3 = r2.getString(r0, r3)     // Catch:{ Exception -> 0x0255 }
-            org.telegram.messenger.camera.-$$Lambda$CameraController$dwxNXb3SuNA_od-SPUyypaONvgM r4 = org.telegram.messenger.camera.$$Lambda$CameraController$dwxNXb3SuNA_odSPUyypaONvgM.INSTANCE     // Catch:{ Exception -> 0x0255 }
-            java.util.ArrayList r5 = new java.util.ArrayList     // Catch:{ Exception -> 0x0255 }
-            r5.<init>()     // Catch:{ Exception -> 0x0255 }
-            r6 = 0
-            if (r3 == 0) goto L_0x0085
-            org.telegram.tgnet.SerializedData r0 = new org.telegram.tgnet.SerializedData     // Catch:{ Exception -> 0x0255 }
-            byte[] r2 = android.util.Base64.decode(r3, r6)     // Catch:{ Exception -> 0x0255 }
-            r0.<init>((byte[]) r2)     // Catch:{ Exception -> 0x0255 }
-            int r2 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0255 }
-            r3 = 0
-        L_0x0029:
-            if (r3 >= r2) goto L_0x0080
-            org.telegram.messenger.camera.CameraInfo r7 = new org.telegram.messenger.camera.CameraInfo     // Catch:{ Exception -> 0x0255 }
-            int r8 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0255 }
-            int r9 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0255 }
-            r7.<init>(r8, r9)     // Catch:{ Exception -> 0x0255 }
-            int r8 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0255 }
-            r9 = 0
-        L_0x003d:
-            if (r9 >= r8) goto L_0x0054
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r10 = r7.previewSizes     // Catch:{ Exception -> 0x0255 }
-            org.telegram.messenger.camera.Size r11 = new org.telegram.messenger.camera.Size     // Catch:{ Exception -> 0x0255 }
-            int r12 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0255 }
-            int r13 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0255 }
-            r11.<init>(r12, r13)     // Catch:{ Exception -> 0x0255 }
-            r10.add(r11)     // Catch:{ Exception -> 0x0255 }
-            int r9 = r9 + 1
-            goto L_0x003d
-        L_0x0054:
-            int r8 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0255 }
-            r9 = 0
-        L_0x0059:
-            if (r9 >= r8) goto L_0x0070
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r10 = r7.pictureSizes     // Catch:{ Exception -> 0x0255 }
-            org.telegram.messenger.camera.Size r11 = new org.telegram.messenger.camera.Size     // Catch:{ Exception -> 0x0255 }
-            int r12 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0255 }
-            int r13 = r0.readInt32(r6)     // Catch:{ Exception -> 0x0255 }
-            r11.<init>(r12, r13)     // Catch:{ Exception -> 0x0255 }
-            r10.add(r11)     // Catch:{ Exception -> 0x0255 }
-            int r9 = r9 + 1
-            goto L_0x0059
-        L_0x0070:
-            r5.add(r7)     // Catch:{ Exception -> 0x0255 }
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r8 = r7.previewSizes     // Catch:{ Exception -> 0x0255 }
-            java.util.Collections.sort(r8, r4)     // Catch:{ Exception -> 0x0255 }
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r7 = r7.pictureSizes     // Catch:{ Exception -> 0x0255 }
-            java.util.Collections.sort(r7, r4)     // Catch:{ Exception -> 0x0255 }
-            int r3 = r3 + 1
-            goto L_0x0029
-        L_0x0080:
-            r0.cleanup()     // Catch:{ Exception -> 0x0255 }
-            goto L_0x0245
-        L_0x0085:
-            int r3 = android.hardware.Camera.getNumberOfCameras()     // Catch:{ Exception -> 0x0255 }
-            android.hardware.Camera$CameraInfo r7 = new android.hardware.Camera$CameraInfo     // Catch:{ Exception -> 0x0255 }
-            r7.<init>()     // Catch:{ Exception -> 0x0255 }
-            r8 = 4
-            r9 = 0
-        L_0x0090:
-            if (r9 >= r3) goto L_0x01c4
-            android.hardware.Camera.getCameraInfo(r9, r7)     // Catch:{ Exception -> 0x0248 }
-            org.telegram.messenger.camera.CameraInfo r10 = new org.telegram.messenger.camera.CameraInfo     // Catch:{ Exception -> 0x0248 }
-            int r11 = r7.facing     // Catch:{ Exception -> 0x0248 }
-            r10.<init>(r9, r11)     // Catch:{ Exception -> 0x0248 }
-            boolean r11 = org.telegram.messenger.ApplicationLoader.mainInterfacePaused     // Catch:{ Exception -> 0x0248 }
-            if (r11 == 0) goto L_0x00ad
-            boolean r11 = org.telegram.messenger.ApplicationLoader.externalInterfacePaused     // Catch:{ Exception -> 0x0255 }
-            if (r11 != 0) goto L_0x00a5
-            goto L_0x00ad
-        L_0x00a5:
-            java.lang.RuntimeException r0 = new java.lang.RuntimeException     // Catch:{ Exception -> 0x0255 }
-            java.lang.String r2 = "APP_PAUSED"
-            r0.<init>(r2)     // Catch:{ Exception -> 0x0255 }
-            throw r0     // Catch:{ Exception -> 0x0255 }
-        L_0x00ad:
-            int r11 = r10.getCameraId()     // Catch:{ Exception -> 0x0248 }
-            android.hardware.Camera r11 = android.hardware.Camera.open(r11)     // Catch:{ Exception -> 0x0248 }
-            android.hardware.Camera$Parameters r12 = r11.getParameters()     // Catch:{ Exception -> 0x0248 }
-            java.util.List r13 = r12.getSupportedPreviewSizes()     // Catch:{ Exception -> 0x0248 }
-            r14 = 0
-        L_0x00be:
-            int r15 = r13.size()     // Catch:{ Exception -> 0x0248 }
-            java.lang.String r6 = " "
-            r16 = r7
-            r7 = 1280(0x500, float:1.794E-42)
-            if (r14 >= r15) goto L_0x0128
-            java.lang.Object r15 = r13.get(r14)     // Catch:{ Exception -> 0x0248 }
-            android.hardware.Camera$Size r15 = (android.hardware.Camera.Size) r15     // Catch:{ Exception -> 0x0248 }
-            r17 = r13
-            int r13 = r15.width     // Catch:{ Exception -> 0x0248 }
-            if (r13 != r7) goto L_0x00dd
-            int r7 = r15.height     // Catch:{ Exception -> 0x0255 }
-            r13 = 720(0x2d0, float:1.009E-42)
-            if (r7 == r13) goto L_0x00dd
-            goto L_0x011a
-        L_0x00dd:
-            int r7 = r15.height     // Catch:{ Exception -> 0x0248 }
-            r13 = 2160(0x870, float:3.027E-42)
-            if (r7 >= r13) goto L_0x011a
-            int r7 = r15.width     // Catch:{ Exception -> 0x0248 }
-            if (r7 >= r13) goto L_0x011a
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r7 = r10.previewSizes     // Catch:{ Exception -> 0x0248 }
-            org.telegram.messenger.camera.Size r13 = new org.telegram.messenger.camera.Size     // Catch:{ Exception -> 0x0248 }
-            int r1 = r15.width     // Catch:{ Exception -> 0x0248 }
-            r18 = r0
-            int r0 = r15.height     // Catch:{ Exception -> 0x0248 }
-            r13.<init>(r1, r0)     // Catch:{ Exception -> 0x0248 }
-            r7.add(r13)     // Catch:{ Exception -> 0x0248 }
-            boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0248 }
-            if (r0 == 0) goto L_0x011c
-            java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0248 }
-            r0.<init>()     // Catch:{ Exception -> 0x0248 }
-            java.lang.String r1 = "preview size = "
-            r0.append(r1)     // Catch:{ Exception -> 0x0248 }
-            int r1 = r15.width     // Catch:{ Exception -> 0x0248 }
-            r0.append(r1)     // Catch:{ Exception -> 0x0248 }
-            r0.append(r6)     // Catch:{ Exception -> 0x0248 }
-            int r1 = r15.height     // Catch:{ Exception -> 0x0248 }
-            r0.append(r1)     // Catch:{ Exception -> 0x0248 }
-            java.lang.String r0 = r0.toString()     // Catch:{ Exception -> 0x0248 }
-            org.telegram.messenger.FileLog.d(r0)     // Catch:{ Exception -> 0x0248 }
-            goto L_0x011c
-        L_0x011a:
-            r18 = r0
-        L_0x011c:
-            int r14 = r14 + 1
-            r6 = 0
-            r1 = r19
-            r7 = r16
-            r13 = r17
-            r0 = r18
-            goto L_0x00be
-        L_0x0128:
-            r18 = r0
-            java.util.List r0 = r12.getSupportedPictureSizes()     // Catch:{ Exception -> 0x0248 }
-            r1 = 0
-        L_0x012f:
-            int r12 = r0.size()     // Catch:{ Exception -> 0x0248 }
-            if (r1 >= r12) goto L_0x0197
-            java.lang.Object r12 = r0.get(r1)     // Catch:{ Exception -> 0x0248 }
-            android.hardware.Camera$Size r12 = (android.hardware.Camera.Size) r12     // Catch:{ Exception -> 0x0248 }
-            int r13 = r12.width     // Catch:{ Exception -> 0x0248 }
-            if (r13 != r7) goto L_0x0146
-            int r13 = r12.height     // Catch:{ Exception -> 0x0248 }
-            r14 = 720(0x2d0, float:1.009E-42)
-            if (r13 == r14) goto L_0x0148
-            goto L_0x0192
-        L_0x0146:
-            r14 = 720(0x2d0, float:1.009E-42)
-        L_0x0148:
-            java.lang.String r13 = "samsung"
-            java.lang.String r15 = android.os.Build.MANUFACTURER     // Catch:{ Exception -> 0x0248 }
-            boolean r13 = r13.equals(r15)     // Catch:{ Exception -> 0x0248 }
-            if (r13 == 0) goto L_0x0162
-            java.lang.String r13 = "jflteuc"
-            java.lang.String r15 = android.os.Build.PRODUCT     // Catch:{ Exception -> 0x0248 }
-            boolean r13 = r13.equals(r15)     // Catch:{ Exception -> 0x0248 }
-            if (r13 == 0) goto L_0x0162
-            int r13 = r12.width     // Catch:{ Exception -> 0x0248 }
-            r15 = 2048(0x800, float:2.87E-42)
-            if (r13 >= r15) goto L_0x0192
-        L_0x0162:
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r13 = r10.pictureSizes     // Catch:{ Exception -> 0x0248 }
-            org.telegram.messenger.camera.Size r15 = new org.telegram.messenger.camera.Size     // Catch:{ Exception -> 0x0248 }
-            int r7 = r12.width     // Catch:{ Exception -> 0x0248 }
-            int r14 = r12.height     // Catch:{ Exception -> 0x0248 }
-            r15.<init>(r7, r14)     // Catch:{ Exception -> 0x0248 }
-            r13.add(r15)     // Catch:{ Exception -> 0x0248 }
-            boolean r7 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ Exception -> 0x0248 }
-            if (r7 == 0) goto L_0x0192
-            java.lang.StringBuilder r7 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0248 }
-            r7.<init>()     // Catch:{ Exception -> 0x0248 }
-            java.lang.String r13 = "picture size = "
-            r7.append(r13)     // Catch:{ Exception -> 0x0248 }
-            int r13 = r12.width     // Catch:{ Exception -> 0x0248 }
-            r7.append(r13)     // Catch:{ Exception -> 0x0248 }
-            r7.append(r6)     // Catch:{ Exception -> 0x0248 }
-            int r12 = r12.height     // Catch:{ Exception -> 0x0248 }
-            r7.append(r12)     // Catch:{ Exception -> 0x0248 }
-            java.lang.String r7 = r7.toString()     // Catch:{ Exception -> 0x0248 }
-            org.telegram.messenger.FileLog.d(r7)     // Catch:{ Exception -> 0x0248 }
-        L_0x0192:
-            int r1 = r1 + 1
-            r7 = 1280(0x500, float:1.794E-42)
-            goto L_0x012f
-        L_0x0197:
-            r11.release()     // Catch:{ Exception -> 0x0248 }
-            r5.add(r10)     // Catch:{ Exception -> 0x0248 }
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r0 = r10.previewSizes     // Catch:{ Exception -> 0x0248 }
-            java.util.Collections.sort(r0, r4)     // Catch:{ Exception -> 0x0248 }
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r0 = r10.pictureSizes     // Catch:{ Exception -> 0x0248 }
-            java.util.Collections.sort(r0, r4)     // Catch:{ Exception -> 0x0248 }
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r0 = r10.previewSizes     // Catch:{ Exception -> 0x0248 }
-            int r0 = r0.size()     // Catch:{ Exception -> 0x0248 }
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r1 = r10.pictureSizes     // Catch:{ Exception -> 0x0248 }
-            int r1 = r1.size()     // Catch:{ Exception -> 0x0248 }
-            int r0 = r0 + r1
-            int r0 = r0 * 8
-            int r0 = r0 + 8
-            int r8 = r8 + r0
-            int r9 = r9 + 1
-            r6 = 0
-            r1 = r19
-            r7 = r16
-            r0 = r18
-            goto L_0x0090
-        L_0x01c4:
-            r18 = r0
-            org.telegram.tgnet.SerializedData r0 = new org.telegram.tgnet.SerializedData     // Catch:{ Exception -> 0x0248 }
-            r0.<init>((int) r8)     // Catch:{ Exception -> 0x0248 }
-            int r1 = r5.size()     // Catch:{ Exception -> 0x0248 }
-            r0.writeInt32(r1)     // Catch:{ Exception -> 0x0248 }
-            r1 = 0
-        L_0x01d3:
-            if (r1 >= r3) goto L_0x022a
-            java.lang.Object r4 = r5.get(r1)     // Catch:{ Exception -> 0x0248 }
-            org.telegram.messenger.camera.CameraInfo r4 = (org.telegram.messenger.camera.CameraInfo) r4     // Catch:{ Exception -> 0x0248 }
-            int r6 = r4.cameraId     // Catch:{ Exception -> 0x0248 }
-            r0.writeInt32(r6)     // Catch:{ Exception -> 0x0248 }
-            int r6 = r4.frontCamera     // Catch:{ Exception -> 0x0248 }
-            r0.writeInt32(r6)     // Catch:{ Exception -> 0x0248 }
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r6 = r4.previewSizes     // Catch:{ Exception -> 0x0248 }
-            int r6 = r6.size()     // Catch:{ Exception -> 0x0248 }
-            r0.writeInt32(r6)     // Catch:{ Exception -> 0x0248 }
-            r7 = 0
-        L_0x01ef:
-            if (r7 >= r6) goto L_0x0206
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r8 = r4.previewSizes     // Catch:{ Exception -> 0x0248 }
-            java.lang.Object r8 = r8.get(r7)     // Catch:{ Exception -> 0x0248 }
-            org.telegram.messenger.camera.Size r8 = (org.telegram.messenger.camera.Size) r8     // Catch:{ Exception -> 0x0248 }
-            int r9 = r8.mWidth     // Catch:{ Exception -> 0x0248 }
-            r0.writeInt32(r9)     // Catch:{ Exception -> 0x0248 }
-            int r8 = r8.mHeight     // Catch:{ Exception -> 0x0248 }
-            r0.writeInt32(r8)     // Catch:{ Exception -> 0x0248 }
-            int r7 = r7 + 1
-            goto L_0x01ef
-        L_0x0206:
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r6 = r4.pictureSizes     // Catch:{ Exception -> 0x0248 }
-            int r6 = r6.size()     // Catch:{ Exception -> 0x0248 }
-            r0.writeInt32(r6)     // Catch:{ Exception -> 0x0248 }
-            r7 = 0
-        L_0x0210:
-            if (r7 >= r6) goto L_0x0227
-            java.util.ArrayList<org.telegram.messenger.camera.Size> r8 = r4.pictureSizes     // Catch:{ Exception -> 0x0248 }
-            java.lang.Object r8 = r8.get(r7)     // Catch:{ Exception -> 0x0248 }
-            org.telegram.messenger.camera.Size r8 = (org.telegram.messenger.camera.Size) r8     // Catch:{ Exception -> 0x0248 }
-            int r9 = r8.mWidth     // Catch:{ Exception -> 0x0248 }
-            r0.writeInt32(r9)     // Catch:{ Exception -> 0x0248 }
-            int r8 = r8.mHeight     // Catch:{ Exception -> 0x0248 }
-            r0.writeInt32(r8)     // Catch:{ Exception -> 0x0248 }
-            int r7 = r7 + 1
-            goto L_0x0210
-        L_0x0227:
-            int r1 = r1 + 1
-            goto L_0x01d3
-        L_0x022a:
-            android.content.SharedPreferences$Editor r1 = r2.edit()     // Catch:{ Exception -> 0x0248 }
-            byte[] r2 = r0.toByteArray()     // Catch:{ Exception -> 0x0248 }
-            r3 = 0
-            java.lang.String r2 = android.util.Base64.encodeToString(r2, r3)     // Catch:{ Exception -> 0x0248 }
-            r3 = r18
-            android.content.SharedPreferences$Editor r1 = r1.putString(r3, r2)     // Catch:{ Exception -> 0x0248 }
-            r1.commit()     // Catch:{ Exception -> 0x0248 }
-            r0.cleanup()     // Catch:{ Exception -> 0x0248 }
-            r1 = r19
-        L_0x0245:
-            r1.cameraInfos = r5     // Catch:{ Exception -> 0x0255 }
-            goto L_0x024c
-        L_0x0248:
-            r0 = move-exception
-            r1 = r19
-            goto L_0x0256
-        L_0x024c:
-            org.telegram.messenger.camera.-$$Lambda$CameraController$llC2aHeeX-BAOaFu9N7370RXqsE r0 = new org.telegram.messenger.camera.-$$Lambda$CameraController$llC2aHeeX-BAOaFu9N7370RXqsE     // Catch:{ Exception -> 0x0255 }
-            r0.<init>()     // Catch:{ Exception -> 0x0255 }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)     // Catch:{ Exception -> 0x0255 }
-            goto L_0x0262
-        L_0x0255:
-            r0 = move-exception
-        L_0x0256:
-            org.telegram.messenger.camera.-$$Lambda$CameraController$88xHVzlx_IKS4IavCNfpJS9ZRAE r2 = new org.telegram.messenger.camera.-$$Lambda$CameraController$88xHVzlx_IKS4IavCNfpJS9ZRAE
-            r3 = r20
-            r4 = r21
-            r2.<init>(r3, r0, r4)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)
-        L_0x0262:
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraController.lambda$initCamera$4$CameraController(boolean, java.lang.Runnable):void");
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$initCamera$4 */
+    public /* synthetic */ void lambda$initCamera$4$CameraController(boolean z, Runnable runnable) {
+        Camera.CameraInfo cameraInfo;
+        int i;
+        String str;
+        CameraController cameraController = this;
+        String str2 = "cameraCache";
+        try {
+            if (cameraController.cameraInfos == null) {
+                SharedPreferences globalMainSettings = MessagesController.getGlobalMainSettings();
+                String string = globalMainSettings.getString(str2, (String) null);
+                $$Lambda$CameraController$E3tDUXRg82Vus5hSAMEPVmSGY_I r4 = $$Lambda$CameraController$E3tDUXRg82Vus5hSAMEPVmSGY_I.INSTANCE;
+                ArrayList<CameraInfo> arrayList = new ArrayList<>();
+                if (string != null) {
+                    SerializedData serializedData = new SerializedData(Base64.decode(string, 0));
+                    int readInt32 = serializedData.readInt32(false);
+                    for (int i2 = 0; i2 < readInt32; i2++) {
+                        CameraInfo cameraInfo2 = new CameraInfo(serializedData.readInt32(false), serializedData.readInt32(false));
+                        int readInt322 = serializedData.readInt32(false);
+                        for (int i3 = 0; i3 < readInt322; i3++) {
+                            cameraInfo2.previewSizes.add(new Size(serializedData.readInt32(false), serializedData.readInt32(false)));
+                        }
+                        int readInt323 = serializedData.readInt32(false);
+                        for (int i4 = 0; i4 < readInt323; i4++) {
+                            cameraInfo2.pictureSizes.add(new Size(serializedData.readInt32(false), serializedData.readInt32(false)));
+                        }
+                        arrayList.add(cameraInfo2);
+                        Collections.sort(cameraInfo2.previewSizes, r4);
+                        Collections.sort(cameraInfo2.pictureSizes, r4);
+                    }
+                    serializedData.cleanup();
+                } else {
+                    int numberOfCameras = Camera.getNumberOfCameras();
+                    Camera.CameraInfo cameraInfo3 = new Camera.CameraInfo();
+                    int i5 = 4;
+                    int i6 = 0;
+                    while (i6 < numberOfCameras) {
+                        try {
+                            Camera.getCameraInfo(i6, cameraInfo3);
+                            CameraInfo cameraInfo4 = new CameraInfo(i6, cameraInfo3.facing);
+                            if (ApplicationLoader.mainInterfacePaused) {
+                                if (ApplicationLoader.externalInterfacePaused) {
+                                    throw new RuntimeException("APP_PAUSED");
+                                }
+                            }
+                            Camera open = Camera.open(cameraInfo4.getCameraId());
+                            Camera.Parameters parameters = open.getParameters();
+                            List<Camera.Size> supportedPreviewSizes = parameters.getSupportedPreviewSizes();
+                            int i7 = 0;
+                            while (true) {
+                                cameraInfo = cameraInfo3;
+                                i = 1280;
+                                if (i7 >= supportedPreviewSizes.size()) {
+                                    break;
+                                }
+                                Camera.Size size = supportedPreviewSizes.get(i7);
+                                List<Camera.Size> list = supportedPreviewSizes;
+                                int i8 = size.width;
+                                if (i8 != 1280 || size.height == 720) {
+                                    int i9 = size.height;
+                                    if (i9 < 2160 && i8 < 2160) {
+                                        str = str2;
+                                        cameraInfo4.previewSizes.add(new Size(i8, i9));
+                                        if (BuildVars.LOGS_ENABLED) {
+                                            FileLog.d("preview size = " + size.width + " " + size.height);
+                                        }
+                                        i7++;
+                                        cameraInfo3 = cameraInfo;
+                                        supportedPreviewSizes = list;
+                                        str2 = str;
+                                    }
+                                }
+                                str = str2;
+                                i7++;
+                                cameraInfo3 = cameraInfo;
+                                supportedPreviewSizes = list;
+                                str2 = str;
+                            }
+                            String str3 = str2;
+                            List<Camera.Size> supportedPictureSizes = parameters.getSupportedPictureSizes();
+                            int i10 = 0;
+                            while (i10 < supportedPictureSizes.size()) {
+                                Camera.Size size2 = supportedPictureSizes.get(i10);
+                                if (size2.width == i) {
+                                    if (size2.height != 720) {
+                                        i10++;
+                                        i = 1280;
+                                    }
+                                }
+                                if (!"samsung".equals(Build.MANUFACTURER) || !"jflteuc".equals(Build.PRODUCT) || size2.width < 2048) {
+                                    cameraInfo4.pictureSizes.add(new Size(size2.width, size2.height));
+                                    if (BuildVars.LOGS_ENABLED) {
+                                        FileLog.d("picture size = " + size2.width + " " + size2.height);
+                                    }
+                                    i10++;
+                                    i = 1280;
+                                } else {
+                                    i10++;
+                                    i = 1280;
+                                }
+                            }
+                            open.release();
+                            arrayList.add(cameraInfo4);
+                            Collections.sort(cameraInfo4.previewSizes, r4);
+                            Collections.sort(cameraInfo4.pictureSizes, r4);
+                            i5 += ((cameraInfo4.previewSizes.size() + cameraInfo4.pictureSizes.size()) * 8) + 8;
+                            i6++;
+                            cameraController = this;
+                            cameraInfo3 = cameraInfo;
+                            str2 = str3;
+                        } catch (Exception e) {
+                            e = e;
+                            cameraController = this;
+                            AndroidUtilities.runOnUIThread(new Runnable(z, e, runnable) {
+                                public final /* synthetic */ boolean f$1;
+                                public final /* synthetic */ Exception f$2;
+                                public final /* synthetic */ Runnable f$3;
+
+                                {
+                                    this.f$1 = r2;
+                                    this.f$2 = r3;
+                                    this.f$3 = r4;
+                                }
+
+                                public final void run() {
+                                    CameraController.this.lambda$null$3$CameraController(this.f$1, this.f$2, this.f$3);
+                                }
+                            });
+                        }
+                    }
+                    String str4 = str2;
+                    SerializedData serializedData2 = new SerializedData(i5);
+                    serializedData2.writeInt32(arrayList.size());
+                    for (int i11 = 0; i11 < numberOfCameras; i11++) {
+                        CameraInfo cameraInfo5 = arrayList.get(i11);
+                        serializedData2.writeInt32(cameraInfo5.cameraId);
+                        serializedData2.writeInt32(cameraInfo5.frontCamera);
+                        int size3 = cameraInfo5.previewSizes.size();
+                        serializedData2.writeInt32(size3);
+                        for (int i12 = 0; i12 < size3; i12++) {
+                            Size size4 = cameraInfo5.previewSizes.get(i12);
+                            serializedData2.writeInt32(size4.mWidth);
+                            serializedData2.writeInt32(size4.mHeight);
+                        }
+                        int size5 = cameraInfo5.pictureSizes.size();
+                        serializedData2.writeInt32(size5);
+                        for (int i13 = 0; i13 < size5; i13++) {
+                            Size size6 = cameraInfo5.pictureSizes.get(i13);
+                            serializedData2.writeInt32(size6.mWidth);
+                            serializedData2.writeInt32(size6.mHeight);
+                        }
+                    }
+                    globalMainSettings.edit().putString(str4, Base64.encodeToString(serializedData2.toByteArray(), 0)).commit();
+                    serializedData2.cleanup();
+                    cameraController = this;
+                }
+                cameraController.cameraInfos = arrayList;
+            }
+            AndroidUtilities.runOnUIThread(new Runnable() {
+                public final void run() {
+                    CameraController.this.lambda$null$1$CameraController();
+                }
+            });
+        } catch (Exception e2) {
+            e = e2;
+            AndroidUtilities.runOnUIThread(new Runnable(z, e, runnable) {
+                public final /* synthetic */ boolean f$1;
+                public final /* synthetic */ Exception f$2;
+                public final /* synthetic */ Runnable f$3;
+
+                {
+                    this.f$1 = r2;
+                    this.f$2 = r3;
+                    this.f$3 = r4;
+                }
+
+                public final void run() {
+                    CameraController.this.lambda$null$3$CameraController(this.f$1, this.f$2, this.f$3);
+                }
+            });
+        }
     }
 
     static /* synthetic */ int lambda$null$0(Size size, Size size2) {
@@ -423,6 +308,8 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         return 0;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$1 */
     public /* synthetic */ void lambda$null$1$CameraController() {
         this.loadingCameras = false;
         this.cameraInitied = true;
@@ -435,6 +322,8 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.cameraInitied, new Object[0]);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$3 */
     public /* synthetic */ void lambda$null$3$CameraController(boolean z, Exception exc, Runnable runnable) {
         this.onFinishCameraInitRunnables.clear();
         this.loadingCameras = false;
@@ -454,6 +343,8 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$CameraController(Runnable runnable) {
         initCamera(runnable, true);
     }
@@ -941,7 +832,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             }
             if (camera == null) {
                 CameraInfo cameraInfo = cameraSession.cameraInfo;
-                Camera open = Camera.open(cameraSession.cameraInfo.cameraId);
+                Camera open = Camera.open(cameraInfo.cameraId);
                 cameraInfo.camera = open;
                 camera = open;
             }
@@ -989,6 +880,8 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$open$10 */
     public /* synthetic */ void lambda$open$10$CameraController(CameraSession cameraSession, Runnable runnable, SurfaceTexture surfaceTexture, Runnable runnable2) {
         CameraInfo cameraInfo = cameraSession.cameraInfo;
         Camera camera = cameraInfo.camera;
@@ -1058,6 +951,8 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$recordVideo$11 */
     public /* synthetic */ void lambda$recordVideo$11$CameraController(Camera camera, CameraSession cameraSession, boolean z, File file, CameraInfo cameraInfo, VideoTakeCallback videoTakeCallback, Runnable runnable) {
         if (camera != null) {
             try {
@@ -1209,7 +1104,7 @@ public class CameraController implements MediaRecorder.OnInfoListener {
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
         L_0x00b3:
             org.telegram.messenger.SharedConfig.saveConfig()
-            org.telegram.messenger.camera.-$$Lambda$CameraController$Z2e0QjeyPqVck_gD_FIZx1BqCLASSNAME r0 = new org.telegram.messenger.camera.-$$Lambda$CameraController$Z2e0QjeyPqVck_gD_FIZx1BqCLASSNAME
+            org.telegram.messenger.camera.-$$Lambda$CameraController$LrYHqQ4a4pf8dE5O6NcJJoN9Lrk r0 = new org.telegram.messenger.camera.-$$Lambda$CameraController$LrYHqQ4a4pf8dE5O6NcJJoN9Lrk
             r4 = r0
             r5 = r10
             r4.<init>(r6, r7, r8)
@@ -1230,6 +1125,8 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.camera.CameraController.finishRecordingVideo():void");
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$finishRecordingVideo$12 */
     public /* synthetic */ void lambda$finishRecordingVideo$12$CameraController(File file, Bitmap bitmap, long j) {
         if (this.onVideoTakeCallback != null) {
             String absolutePath = file.getAbsolutePath();
@@ -1271,11 +1168,13 @@ public class CameraController implements MediaRecorder.OnInfoListener {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$stopVideoRecording$14 */
     public /* synthetic */ void lambda$stopVideoRecording$14$CameraController(CameraSession cameraSession, boolean z) {
+        MediaRecorder mediaRecorder;
         try {
             Camera camera = cameraSession.cameraInfo.camera;
-            if (!(camera == null || this.recorder == null)) {
-                MediaRecorder mediaRecorder = this.recorder;
+            if (!(camera == null || (mediaRecorder = this.recorder) == null)) {
                 this.recorder = null;
                 try {
                     mediaRecorder.stop();
@@ -1355,31 +1254,31 @@ public class CameraController implements MediaRecorder.OnInfoListener {
     }
 
     static class CompareSizesByArea implements Comparator<Size>, j$.util.Comparator {
-        public /* synthetic */ Comparator<T> reversed() {
+        public /* synthetic */ Comparator reversed() {
             return Comparator.CC.$default$reversed(this);
         }
 
-        public /* synthetic */ <U extends Comparable<? super U>> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function) {
-            return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (Function) function);
+        public /* synthetic */ java.util.Comparator thenComparing(Function function) {
+            return Comparator.CC.$default$thenComparing((java.util.Comparator) this, function);
         }
 
-        public /* synthetic */ <U> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function, java.util.Comparator<? super U> comparator) {
+        public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
             return Comparator.CC.$default$thenComparing(this, function, comparator);
         }
 
-        public /* synthetic */ java.util.Comparator<T> thenComparing(java.util.Comparator<? super T> comparator) {
-            return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (java.util.Comparator) comparator);
+        public /* synthetic */ java.util.Comparator thenComparing(java.util.Comparator comparator) {
+            return Comparator.CC.$default$thenComparing((java.util.Comparator) this, comparator);
         }
 
-        public /* synthetic */ java.util.Comparator<T> thenComparingDouble(ToDoubleFunction<? super T> toDoubleFunction) {
+        public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
             return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
         }
 
-        public /* synthetic */ java.util.Comparator<T> thenComparingInt(ToIntFunction<? super T> toIntFunction) {
+        public /* synthetic */ java.util.Comparator thenComparingInt(ToIntFunction toIntFunction) {
             return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
         }
 
-        public /* synthetic */ java.util.Comparator<T> thenComparingLong(ToLongFunction<? super T> toLongFunction) {
+        public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
             return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
         }
 

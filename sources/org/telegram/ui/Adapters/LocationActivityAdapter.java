@@ -93,6 +93,13 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         }
     }
 
+    public void updateLiveLocationCell() {
+        int i = this.shareLiveLocationPotistion;
+        if (i > 0) {
+            notifyItemChanged(i);
+        }
+    }
+
     public void updateLiveLocations() {
         if (!this.currentLiveLocations.isEmpty()) {
             notifyItemRangeChanged(2, this.currentLiveLocations.size(), new Object());
@@ -140,9 +147,11 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         if (this.locationType == 4 || this.customLocation != null) {
             if (!TextUtils.isEmpty(this.addressName)) {
                 str = this.addressName;
-            } else if (!(this.customLocation == null && this.gpsLocation == null) && !this.fetchingLocation) {
+            } else {
                 Location location = this.customLocation;
-                if (location != null) {
+                if ((location == null && this.gpsLocation == null) || this.fetchingLocation) {
+                    str = LocaleController.getString("Loading", NUM);
+                } else if (location != null) {
                     str = String.format(Locale.US, "(%f,%f)", new Object[]{Double.valueOf(location.getLatitude()), Double.valueOf(this.customLocation.getLongitude())});
                 } else {
                     Location location2 = this.gpsLocation;
@@ -152,8 +161,6 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                         str = LocaleController.getString("Loading", NUM);
                     }
                 }
-            } else {
-                str = LocaleController.getString("Loading", NUM);
             }
             if (this.locationType == 4) {
                 this.sendLocationCell.setText(LocaleController.getString("ChatSetThisLocation", NUM), str);
@@ -203,8 +210,8 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
 
     public int getItemCount() {
         int i = this.locationType;
-        int i2 = 5;
-        if (i == 5 || i == 4) {
+        int i2 = 6;
+        if (i == 6 || i == 5 || i == 4) {
             return 2;
         }
         int i3 = 1;
@@ -216,20 +223,21 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         } else if (i == 2) {
             return this.currentLiveLocations.size() + 2;
         } else {
-            boolean z = this.searching;
-            if (z || (!z && this.places.isEmpty())) {
-                if (this.locationType != 0) {
-                    i2 = 6;
+            if (this.searching || this.places.isEmpty()) {
+                if (this.locationType == 0) {
+                    i2 = 5;
                 }
                 return i2 + (this.needEmptyView ? 1 : 0);
             } else if (this.locationType == 1) {
-                return this.places.size() + 5 + (this.places.isEmpty() ^ true ? 1 : 0) + (this.needEmptyView ? 1 : 0);
+                return this.places.size() + 6 + (this.needEmptyView ? 1 : 0);
             } else {
-                return this.places.size() + 4 + (this.places.isEmpty() ^ true ? 1 : 0) + (this.needEmptyView ? 1 : 0);
+                return this.places.size() + 5 + (this.needEmptyView ? 1 : 0);
             }
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onCreateViewHolder$0 */
     public /* synthetic */ void lambda$onCreateViewHolder$0$LocationActivityAdapter(View view) {
         onDirectionClick();
     }
@@ -252,6 +260,8 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                         return animate;
                     }
 
+                    /* access modifiers changed from: private */
+                    /* renamed from: lambda$animate$0 */
                     public /* synthetic */ void lambda$animate$0$LocationActivityAdapter$1(ValueAnimator valueAnimator) {
                         if (LocationActivityAdapter.this.updateRunnable != null) {
                             LocationActivityAdapter.this.updateRunnable.run();
@@ -335,6 +345,10 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                     sendLocationCell2.setHasLocation(z);
                 } else if (itemViewType == 7) {
                     SharingLiveLocationCell sharingLiveLocationCell = (SharingLiveLocationCell) viewHolder.itemView;
+                    if (this.locationType == 6) {
+                        sharingLiveLocationCell.setDialog(this.currentMessageObject, this.gpsLocation);
+                        return;
+                    }
                     TLRPC$TL_channelLocation tLRPC$TL_channelLocation = this.chatLocation;
                     if (tLRPC$TL_channelLocation != null) {
                         sharingLiveLocationCell.setDialog(this.dialogId, tLRPC$TL_channelLocation);
@@ -343,7 +357,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                     MessageObject messageObject = this.currentMessageObject;
                     if (messageObject == null || i != 1) {
                         ArrayList<LocationActivity.LiveLocation> arrayList = this.currentLiveLocations;
-                        if (this.currentMessageObject != null) {
+                        if (messageObject != null) {
                             i2 = 5;
                         }
                         sharingLiveLocationCell.setDialog(arrayList.get(i - i2), this.gpsLocation);
@@ -410,6 +424,9 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         if (i == 0) {
             return 0;
         }
+        if (this.locationType == 6) {
+            return 7;
+        }
         if (this.needEmptyView && i == getItemCount() - 1) {
             return 10;
         }
@@ -451,8 +468,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                     if (i == 4) {
                         return 2;
                     }
-                    boolean z = this.searching;
-                    if (z || (!z && this.places.isEmpty())) {
+                    if (this.searching || this.places.isEmpty()) {
                         return 4;
                     }
                     if (i == this.places.size() + 5) {
@@ -468,8 +484,7 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
                 if (i == 3) {
                     return 2;
                 }
-                boolean z2 = this.searching;
-                if (z2 || (!z2 && this.places.isEmpty())) {
+                if (this.searching || this.places.isEmpty()) {
                     return 4;
                 }
                 if (i == this.places.size() + 4) {

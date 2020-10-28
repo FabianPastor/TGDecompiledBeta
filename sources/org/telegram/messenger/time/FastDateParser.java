@@ -461,11 +461,12 @@ public class FastDateParser implements DateParser, Serializable {
 
     private static ConcurrentMap<Locale, Strategy> getCache(int i) {
         ConcurrentMap<Locale, Strategy> concurrentMap;
-        synchronized (caches) {
-            if (caches[i] == null) {
-                caches[i] = new ConcurrentHashMap(3);
+        ConcurrentMap<Locale, Strategy>[] concurrentMapArr = caches;
+        synchronized (concurrentMapArr) {
+            if (concurrentMapArr[i] == null) {
+                concurrentMapArr[i] = new ConcurrentHashMap(3);
             }
-            concurrentMap = caches[i];
+            concurrentMap = concurrentMapArr[i];
         }
         return concurrentMap;
     }

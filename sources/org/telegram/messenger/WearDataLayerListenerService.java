@@ -44,7 +44,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
     /* JADX WARNING: Can't wrap try/catch for region: R(5:93|94|95|96|97) */
     /* JADX WARNING: Can't wrap try/catch for region: R(6:18|19|20|21|22|23) */
     /* JADX WARNING: Can't wrap try/catch for region: R(8:35|36|37|38|39|40|(1:42)(1:43)|44) */
-    /* JADX WARNING: Code restructure failed: missing block: B:93:0x0245, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:93:0x023f, code lost:
         r3 = move-exception;
      */
     /* JADX WARNING: Code restructure failed: missing block: B:95:?, code lost:
@@ -53,15 +53,15 @@ public class WearDataLayerListenerService extends WearableListenerService {
     /* JADX WARNING: Code restructure failed: missing block: B:97:?, code lost:
         throw r3;
      */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:104:0x0250 */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:22:0x00b7 */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:39:0x0130 */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:96:0x0249 */
-    /* JADX WARNING: Removed duplicated region for block: B:113:0x026b  */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:104:0x024a */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:22:0x00b5 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:39:0x012e */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:96:0x0243 */
+    /* JADX WARNING: Removed duplicated region for block: B:113:0x0265  */
     /* JADX WARNING: Removed duplicated region for block: B:120:? A[RETURN, SYNTHETIC] */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x014f A[Catch:{ Exception -> 0x0253 }] */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x0155 A[Catch:{ Exception -> 0x0253 }] */
-    /* JADX WARNING: Unknown top exception splitter block from list: {B:39:0x0130=Splitter:B:39:0x0130, B:22:0x00b7=Splitter:B:22:0x00b7} */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x014d A[Catch:{ Exception -> 0x024d }] */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x0153 A[Catch:{ Exception -> 0x024d }] */
+    /* JADX WARNING: Unknown top exception splitter block from list: {B:22:0x00b5=Splitter:B:22:0x00b5, B:39:0x012e=Splitter:B:39:0x012e} */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onChannelOpened(com.google.android.gms.wearable.Channel r12) {
         /*
@@ -93,261 +93,258 @@ public class WearDataLayerListenerService extends WearableListenerService {
             org.telegram.messenger.FileLog.d(r2)
         L_0x003f:
             java.lang.String r2 = "/getCurrentUser"
-            boolean r2 = r2.equals(r1)     // Catch:{ Exception -> 0x0253 }
+            boolean r2 = r2.equals(r1)     // Catch:{ Exception -> 0x024d }
             r3 = 2
             r4 = 1
             r5 = 0
-            if (r2 == 0) goto L_0x0101
-            java.io.DataOutputStream r1 = new java.io.DataOutputStream     // Catch:{ Exception -> 0x0253 }
-            java.io.BufferedOutputStream r2 = new java.io.BufferedOutputStream     // Catch:{ Exception -> 0x0253 }
-            com.google.android.gms.common.api.PendingResult r6 = r12.getOutputStream(r0)     // Catch:{ Exception -> 0x0253 }
-            com.google.android.gms.common.api.Result r6 = r6.await()     // Catch:{ Exception -> 0x0253 }
-            com.google.android.gms.wearable.Channel$GetOutputStreamResult r6 = (com.google.android.gms.wearable.Channel.GetOutputStreamResult) r6     // Catch:{ Exception -> 0x0253 }
-            java.io.OutputStream r6 = r6.getOutputStream()     // Catch:{ Exception -> 0x0253 }
-            r2.<init>(r6)     // Catch:{ Exception -> 0x0253 }
-            r1.<init>(r2)     // Catch:{ Exception -> 0x0253 }
-            int r2 = r11.currentAccount     // Catch:{ Exception -> 0x0253 }
-            org.telegram.messenger.UserConfig r2 = org.telegram.messenger.UserConfig.getInstance(r2)     // Catch:{ Exception -> 0x0253 }
-            boolean r2 = r2.isClientActivated()     // Catch:{ Exception -> 0x0253 }
-            if (r2 == 0) goto L_0x00f6
-            int r2 = r11.currentAccount     // Catch:{ Exception -> 0x0253 }
-            org.telegram.messenger.UserConfig r2 = org.telegram.messenger.UserConfig.getInstance(r2)     // Catch:{ Exception -> 0x0253 }
-            org.telegram.tgnet.TLRPC$User r2 = r2.getCurrentUser()     // Catch:{ Exception -> 0x0253 }
-            int r6 = r2.id     // Catch:{ Exception -> 0x0253 }
-            r1.writeInt(r6)     // Catch:{ Exception -> 0x0253 }
-            java.lang.String r6 = r2.first_name     // Catch:{ Exception -> 0x0253 }
-            r1.writeUTF(r6)     // Catch:{ Exception -> 0x0253 }
-            java.lang.String r6 = r2.last_name     // Catch:{ Exception -> 0x0253 }
-            r1.writeUTF(r6)     // Catch:{ Exception -> 0x0253 }
-            java.lang.String r6 = r2.phone     // Catch:{ Exception -> 0x0253 }
-            r1.writeUTF(r6)     // Catch:{ Exception -> 0x0253 }
-            org.telegram.tgnet.TLRPC$UserProfilePhoto r6 = r2.photo     // Catch:{ Exception -> 0x0253 }
-            if (r6 == 0) goto L_0x00f2
-            org.telegram.tgnet.TLRPC$UserProfilePhoto r6 = r2.photo     // Catch:{ Exception -> 0x0253 }
-            org.telegram.tgnet.TLRPC$FileLocation r6 = r6.photo_small     // Catch:{ Exception -> 0x0253 }
-            java.io.File r4 = org.telegram.messenger.FileLoader.getPathToAttach(r6, r4)     // Catch:{ Exception -> 0x0253 }
-            java.util.concurrent.CyclicBarrier r6 = new java.util.concurrent.CyclicBarrier     // Catch:{ Exception -> 0x0253 }
-            r6.<init>(r3)     // Catch:{ Exception -> 0x0253 }
-            boolean r3 = r4.exists()     // Catch:{ Exception -> 0x0253 }
-            if (r3 != 0) goto L_0x00bf
-            org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$zwyD_S0-u0WbjrTZjewMNF-0WGA r3 = new org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$zwyD_S0-u0WbjrTZjewMNF-0WGA     // Catch:{ Exception -> 0x0253 }
-            r3.<init>(r4, r6)     // Catch:{ Exception -> 0x0253 }
-            org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$CP3JJJCVrqGAns9jccdML_vquXc r7 = new org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$CP3JJJCVrqGAns9jccdML_vquXc     // Catch:{ Exception -> 0x0253 }
-            r7.<init>(r3, r2)     // Catch:{ Exception -> 0x0253 }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r7)     // Catch:{ Exception -> 0x0253 }
+            if (r2 == 0) goto L_0x00ff
+            java.io.DataOutputStream r1 = new java.io.DataOutputStream     // Catch:{ Exception -> 0x024d }
+            java.io.BufferedOutputStream r2 = new java.io.BufferedOutputStream     // Catch:{ Exception -> 0x024d }
+            com.google.android.gms.common.api.PendingResult r6 = r12.getOutputStream(r0)     // Catch:{ Exception -> 0x024d }
+            com.google.android.gms.common.api.Result r6 = r6.await()     // Catch:{ Exception -> 0x024d }
+            com.google.android.gms.wearable.Channel$GetOutputStreamResult r6 = (com.google.android.gms.wearable.Channel.GetOutputStreamResult) r6     // Catch:{ Exception -> 0x024d }
+            java.io.OutputStream r6 = r6.getOutputStream()     // Catch:{ Exception -> 0x024d }
+            r2.<init>(r6)     // Catch:{ Exception -> 0x024d }
+            r1.<init>(r2)     // Catch:{ Exception -> 0x024d }
+            int r2 = r11.currentAccount     // Catch:{ Exception -> 0x024d }
+            org.telegram.messenger.UserConfig r2 = org.telegram.messenger.UserConfig.getInstance(r2)     // Catch:{ Exception -> 0x024d }
+            boolean r2 = r2.isClientActivated()     // Catch:{ Exception -> 0x024d }
+            if (r2 == 0) goto L_0x00f4
+            int r2 = r11.currentAccount     // Catch:{ Exception -> 0x024d }
+            org.telegram.messenger.UserConfig r2 = org.telegram.messenger.UserConfig.getInstance(r2)     // Catch:{ Exception -> 0x024d }
+            org.telegram.tgnet.TLRPC$User r2 = r2.getCurrentUser()     // Catch:{ Exception -> 0x024d }
+            int r6 = r2.id     // Catch:{ Exception -> 0x024d }
+            r1.writeInt(r6)     // Catch:{ Exception -> 0x024d }
+            java.lang.String r6 = r2.first_name     // Catch:{ Exception -> 0x024d }
+            r1.writeUTF(r6)     // Catch:{ Exception -> 0x024d }
+            java.lang.String r6 = r2.last_name     // Catch:{ Exception -> 0x024d }
+            r1.writeUTF(r6)     // Catch:{ Exception -> 0x024d }
+            java.lang.String r6 = r2.phone     // Catch:{ Exception -> 0x024d }
+            r1.writeUTF(r6)     // Catch:{ Exception -> 0x024d }
+            org.telegram.tgnet.TLRPC$UserProfilePhoto r6 = r2.photo     // Catch:{ Exception -> 0x024d }
+            if (r6 == 0) goto L_0x00f0
+            org.telegram.tgnet.TLRPC$FileLocation r6 = r6.photo_small     // Catch:{ Exception -> 0x024d }
+            java.io.File r4 = org.telegram.messenger.FileLoader.getPathToAttach(r6, r4)     // Catch:{ Exception -> 0x024d }
+            java.util.concurrent.CyclicBarrier r6 = new java.util.concurrent.CyclicBarrier     // Catch:{ Exception -> 0x024d }
+            r6.<init>(r3)     // Catch:{ Exception -> 0x024d }
+            boolean r3 = r4.exists()     // Catch:{ Exception -> 0x024d }
+            if (r3 != 0) goto L_0x00bd
+            org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$8U0-_yHRCazmJqUiYuBHLzQc1Zw r3 = new org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$8U0-_yHRCazmJqUiYuBHLzQc1Zw     // Catch:{ Exception -> 0x024d }
+            r3.<init>(r4, r6)     // Catch:{ Exception -> 0x024d }
+            org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$ydGZBP8a_DgE_oUlcF-P734PK4E r7 = new org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$ydGZBP8a_DgE_oUlcF-P734PK4E     // Catch:{ Exception -> 0x024d }
+            r7.<init>(r3, r2)     // Catch:{ Exception -> 0x024d }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r7)     // Catch:{ Exception -> 0x024d }
             r7 = 10
-            java.util.concurrent.TimeUnit r2 = java.util.concurrent.TimeUnit.SECONDS     // Catch:{ Exception -> 0x00b7 }
-            r6.await(r7, r2)     // Catch:{ Exception -> 0x00b7 }
-        L_0x00b7:
-            org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$I2aG1wmNzR_z_5pgp2oULLH-i7k r2 = new org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$I2aG1wmNzR_z_5pgp2oULLH-i7k     // Catch:{ Exception -> 0x0253 }
-            r2.<init>(r3)     // Catch:{ Exception -> 0x0253 }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)     // Catch:{ Exception -> 0x0253 }
-        L_0x00bf:
-            boolean r2 = r4.exists()     // Catch:{ Exception -> 0x0253 }
-            if (r2 == 0) goto L_0x00ee
-            long r2 = r4.length()     // Catch:{ Exception -> 0x0253 }
+            java.util.concurrent.TimeUnit r2 = java.util.concurrent.TimeUnit.SECONDS     // Catch:{ Exception -> 0x00b5 }
+            r6.await(r7, r2)     // Catch:{ Exception -> 0x00b5 }
+        L_0x00b5:
+            org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$-E3pdqIpzem9HMQdYOOW1Pr-JLY r2 = new org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$-E3pdqIpzem9HMQdYOOW1Pr-JLY     // Catch:{ Exception -> 0x024d }
+            r2.<init>(r3)     // Catch:{ Exception -> 0x024d }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)     // Catch:{ Exception -> 0x024d }
+        L_0x00bd:
+            boolean r2 = r4.exists()     // Catch:{ Exception -> 0x024d }
+            if (r2 == 0) goto L_0x00ec
+            long r2 = r4.length()     // Catch:{ Exception -> 0x024d }
             r6 = 52428800(0x3200000, double:2.5903269E-316)
             int r8 = (r2 > r6 ? 1 : (r2 == r6 ? 0 : -1))
-            if (r8 > 0) goto L_0x00ee
-            long r2 = r4.length()     // Catch:{ Exception -> 0x0253 }
-            int r3 = (int) r2     // Catch:{ Exception -> 0x0253 }
-            byte[] r2 = new byte[r3]     // Catch:{ Exception -> 0x0253 }
-            java.io.FileInputStream r5 = new java.io.FileInputStream     // Catch:{ Exception -> 0x0253 }
-            r5.<init>(r4)     // Catch:{ Exception -> 0x0253 }
-            java.io.DataInputStream r4 = new java.io.DataInputStream     // Catch:{ Exception -> 0x0253 }
-            r4.<init>(r5)     // Catch:{ Exception -> 0x0253 }
-            r4.readFully(r2)     // Catch:{ Exception -> 0x0253 }
-            r5.close()     // Catch:{ Exception -> 0x0253 }
-            r1.writeInt(r3)     // Catch:{ Exception -> 0x0253 }
-            r1.write(r2)     // Catch:{ Exception -> 0x0253 }
-            goto L_0x00f9
-        L_0x00ee:
-            r1.writeInt(r5)     // Catch:{ Exception -> 0x0253 }
-            goto L_0x00f9
-        L_0x00f2:
-            r1.writeInt(r5)     // Catch:{ Exception -> 0x0253 }
-            goto L_0x00f9
-        L_0x00f6:
-            r1.writeInt(r5)     // Catch:{ Exception -> 0x0253 }
-        L_0x00f9:
-            r1.flush()     // Catch:{ Exception -> 0x0253 }
-            r1.close()     // Catch:{ Exception -> 0x0253 }
-            goto L_0x025d
-        L_0x0101:
+            if (r8 > 0) goto L_0x00ec
+            long r2 = r4.length()     // Catch:{ Exception -> 0x024d }
+            int r3 = (int) r2     // Catch:{ Exception -> 0x024d }
+            byte[] r2 = new byte[r3]     // Catch:{ Exception -> 0x024d }
+            java.io.FileInputStream r5 = new java.io.FileInputStream     // Catch:{ Exception -> 0x024d }
+            r5.<init>(r4)     // Catch:{ Exception -> 0x024d }
+            java.io.DataInputStream r4 = new java.io.DataInputStream     // Catch:{ Exception -> 0x024d }
+            r4.<init>(r5)     // Catch:{ Exception -> 0x024d }
+            r4.readFully(r2)     // Catch:{ Exception -> 0x024d }
+            r5.close()     // Catch:{ Exception -> 0x024d }
+            r1.writeInt(r3)     // Catch:{ Exception -> 0x024d }
+            r1.write(r2)     // Catch:{ Exception -> 0x024d }
+            goto L_0x00f7
+        L_0x00ec:
+            r1.writeInt(r5)     // Catch:{ Exception -> 0x024d }
+            goto L_0x00f7
+        L_0x00f0:
+            r1.writeInt(r5)     // Catch:{ Exception -> 0x024d }
+            goto L_0x00f7
+        L_0x00f4:
+            r1.writeInt(r5)     // Catch:{ Exception -> 0x024d }
+        L_0x00f7:
+            r1.flush()     // Catch:{ Exception -> 0x024d }
+            r1.close()     // Catch:{ Exception -> 0x024d }
+            goto L_0x0257
+        L_0x00ff:
             java.lang.String r2 = "/waitForAuthCode"
-            boolean r2 = r2.equals(r1)     // Catch:{ Exception -> 0x0253 }
+            boolean r2 = r2.equals(r1)     // Catch:{ Exception -> 0x024d }
             r6 = 0
-            if (r2 == 0) goto L_0x016b
-            int r1 = r11.currentAccount     // Catch:{ Exception -> 0x0253 }
-            org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)     // Catch:{ Exception -> 0x0253 }
-            r1.setAppPaused(r5, r5)     // Catch:{ Exception -> 0x0253 }
-            java.lang.String[] r1 = new java.lang.String[r4]     // Catch:{ Exception -> 0x0253 }
-            r1[r5] = r6     // Catch:{ Exception -> 0x0253 }
-            java.util.concurrent.CyclicBarrier r2 = new java.util.concurrent.CyclicBarrier     // Catch:{ Exception -> 0x0253 }
-            r2.<init>(r3)     // Catch:{ Exception -> 0x0253 }
-            org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$6oPgRZPy8Zd89HYJVV7iQJ7-ETw r3 = new org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$6oPgRZPy8Zd89HYJVV7iQJ7-ETw     // Catch:{ Exception -> 0x0253 }
-            r3.<init>(r1, r2)     // Catch:{ Exception -> 0x0253 }
-            org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$66bw8jSTVlEhrlsDPfucvOtg7dU r6 = new org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$66bw8jSTVlEhrlsDPfucvOtg7dU     // Catch:{ Exception -> 0x0253 }
-            r6.<init>(r3)     // Catch:{ Exception -> 0x0253 }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r6)     // Catch:{ Exception -> 0x0253 }
+            if (r2 == 0) goto L_0x0169
+            int r1 = r11.currentAccount     // Catch:{ Exception -> 0x024d }
+            org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)     // Catch:{ Exception -> 0x024d }
+            r1.setAppPaused(r5, r5)     // Catch:{ Exception -> 0x024d }
+            java.lang.String[] r1 = new java.lang.String[r4]     // Catch:{ Exception -> 0x024d }
+            r1[r5] = r6     // Catch:{ Exception -> 0x024d }
+            java.util.concurrent.CyclicBarrier r2 = new java.util.concurrent.CyclicBarrier     // Catch:{ Exception -> 0x024d }
+            r2.<init>(r3)     // Catch:{ Exception -> 0x024d }
+            org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$TyUn_inIn_bL15Zp21g9ds7kIqo r3 = new org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$TyUn_inIn_bL15Zp21g9ds7kIqo     // Catch:{ Exception -> 0x024d }
+            r3.<init>(r1, r2)     // Catch:{ Exception -> 0x024d }
+            org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$1H-JF3ZpPL0EQHpem6g8cKThkx0 r6 = new org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$1H-JF3ZpPL0EQHpem6g8cKThkx0     // Catch:{ Exception -> 0x024d }
+            r6.<init>(r3)     // Catch:{ Exception -> 0x024d }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r6)     // Catch:{ Exception -> 0x024d }
             r6 = 30
-            java.util.concurrent.TimeUnit r8 = java.util.concurrent.TimeUnit.SECONDS     // Catch:{ Exception -> 0x0130 }
-            r2.await(r6, r8)     // Catch:{ Exception -> 0x0130 }
-        L_0x0130:
-            org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$tkmP0IqL8QLTNQYYgIYqoX-Q4VA r2 = new org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$tkmP0IqL8QLTNQYYgIYqoX-Q4VA     // Catch:{ Exception -> 0x0253 }
-            r2.<init>(r3)     // Catch:{ Exception -> 0x0253 }
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)     // Catch:{ Exception -> 0x0253 }
-            java.io.DataOutputStream r2 = new java.io.DataOutputStream     // Catch:{ Exception -> 0x0253 }
-            com.google.android.gms.common.api.PendingResult r3 = r12.getOutputStream(r0)     // Catch:{ Exception -> 0x0253 }
-            com.google.android.gms.common.api.Result r3 = r3.await()     // Catch:{ Exception -> 0x0253 }
-            com.google.android.gms.wearable.Channel$GetOutputStreamResult r3 = (com.google.android.gms.wearable.Channel.GetOutputStreamResult) r3     // Catch:{ Exception -> 0x0253 }
-            java.io.OutputStream r3 = r3.getOutputStream()     // Catch:{ Exception -> 0x0253 }
-            r2.<init>(r3)     // Catch:{ Exception -> 0x0253 }
-            r3 = r1[r5]     // Catch:{ Exception -> 0x0253 }
-            if (r3 == 0) goto L_0x0155
-            r1 = r1[r5]     // Catch:{ Exception -> 0x0253 }
-            r2.writeUTF(r1)     // Catch:{ Exception -> 0x0253 }
-            goto L_0x015a
-        L_0x0155:
+            java.util.concurrent.TimeUnit r8 = java.util.concurrent.TimeUnit.SECONDS     // Catch:{ Exception -> 0x012e }
+            r2.await(r6, r8)     // Catch:{ Exception -> 0x012e }
+        L_0x012e:
+            org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$--vZ1ZRAnaS9dH9su4DFTPSXoSU r2 = new org.telegram.messenger.-$$Lambda$WearDataLayerListenerService$--vZ1ZRAnaS9dH9su4DFTPSXoSU     // Catch:{ Exception -> 0x024d }
+            r2.<init>(r3)     // Catch:{ Exception -> 0x024d }
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)     // Catch:{ Exception -> 0x024d }
+            java.io.DataOutputStream r2 = new java.io.DataOutputStream     // Catch:{ Exception -> 0x024d }
+            com.google.android.gms.common.api.PendingResult r3 = r12.getOutputStream(r0)     // Catch:{ Exception -> 0x024d }
+            com.google.android.gms.common.api.Result r3 = r3.await()     // Catch:{ Exception -> 0x024d }
+            com.google.android.gms.wearable.Channel$GetOutputStreamResult r3 = (com.google.android.gms.wearable.Channel.GetOutputStreamResult) r3     // Catch:{ Exception -> 0x024d }
+            java.io.OutputStream r3 = r3.getOutputStream()     // Catch:{ Exception -> 0x024d }
+            r2.<init>(r3)     // Catch:{ Exception -> 0x024d }
+            r3 = r1[r5]     // Catch:{ Exception -> 0x024d }
+            if (r3 == 0) goto L_0x0153
+            r1 = r1[r5]     // Catch:{ Exception -> 0x024d }
+            r2.writeUTF(r1)     // Catch:{ Exception -> 0x024d }
+            goto L_0x0158
+        L_0x0153:
             java.lang.String r1 = ""
-            r2.writeUTF(r1)     // Catch:{ Exception -> 0x0253 }
-        L_0x015a:
-            r2.flush()     // Catch:{ Exception -> 0x0253 }
-            r2.close()     // Catch:{ Exception -> 0x0253 }
-            int r1 = r11.currentAccount     // Catch:{ Exception -> 0x0253 }
-            org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)     // Catch:{ Exception -> 0x0253 }
-            r1.setAppPaused(r4, r5)     // Catch:{ Exception -> 0x0253 }
-            goto L_0x025d
-        L_0x016b:
+            r2.writeUTF(r1)     // Catch:{ Exception -> 0x024d }
+        L_0x0158:
+            r2.flush()     // Catch:{ Exception -> 0x024d }
+            r2.close()     // Catch:{ Exception -> 0x024d }
+            int r1 = r11.currentAccount     // Catch:{ Exception -> 0x024d }
+            org.telegram.tgnet.ConnectionsManager r1 = org.telegram.tgnet.ConnectionsManager.getInstance(r1)     // Catch:{ Exception -> 0x024d }
+            r1.setAppPaused(r4, r5)     // Catch:{ Exception -> 0x024d }
+            goto L_0x0257
+        L_0x0169:
             java.lang.String r2 = "/getChatPhoto"
-            boolean r1 = r2.equals(r1)     // Catch:{ Exception -> 0x0253 }
-            if (r1 == 0) goto L_0x025d
-            java.io.DataInputStream r1 = new java.io.DataInputStream     // Catch:{ Exception -> 0x0251 }
-            com.google.android.gms.common.api.PendingResult r2 = r12.getInputStream(r0)     // Catch:{ Exception -> 0x0251 }
-            com.google.android.gms.common.api.Result r2 = r2.await()     // Catch:{ Exception -> 0x0251 }
-            com.google.android.gms.wearable.Channel$GetInputStreamResult r2 = (com.google.android.gms.wearable.Channel.GetInputStreamResult) r2     // Catch:{ Exception -> 0x0251 }
-            java.io.InputStream r2 = r2.getInputStream()     // Catch:{ Exception -> 0x0251 }
-            r1.<init>(r2)     // Catch:{ Exception -> 0x0251 }
-            java.io.DataOutputStream r2 = new java.io.DataOutputStream     // Catch:{ all -> 0x024a }
-            com.google.android.gms.common.api.PendingResult r3 = r12.getOutputStream(r0)     // Catch:{ all -> 0x024a }
-            com.google.android.gms.common.api.Result r3 = r3.await()     // Catch:{ all -> 0x024a }
-            com.google.android.gms.wearable.Channel$GetOutputStreamResult r3 = (com.google.android.gms.wearable.Channel.GetOutputStreamResult) r3     // Catch:{ all -> 0x024a }
-            java.io.OutputStream r3 = r3.getOutputStream()     // Catch:{ all -> 0x024a }
-            r2.<init>(r3)     // Catch:{ all -> 0x024a }
-            java.lang.String r3 = r1.readUTF()     // Catch:{ all -> 0x0243 }
-            org.json.JSONObject r7 = new org.json.JSONObject     // Catch:{ all -> 0x0243 }
-            r7.<init>(r3)     // Catch:{ all -> 0x0243 }
+            boolean r1 = r2.equals(r1)     // Catch:{ Exception -> 0x024d }
+            if (r1 == 0) goto L_0x0257
+            java.io.DataInputStream r1 = new java.io.DataInputStream     // Catch:{ Exception -> 0x024b }
+            com.google.android.gms.common.api.PendingResult r2 = r12.getInputStream(r0)     // Catch:{ Exception -> 0x024b }
+            com.google.android.gms.common.api.Result r2 = r2.await()     // Catch:{ Exception -> 0x024b }
+            com.google.android.gms.wearable.Channel$GetInputStreamResult r2 = (com.google.android.gms.wearable.Channel.GetInputStreamResult) r2     // Catch:{ Exception -> 0x024b }
+            java.io.InputStream r2 = r2.getInputStream()     // Catch:{ Exception -> 0x024b }
+            r1.<init>(r2)     // Catch:{ Exception -> 0x024b }
+            java.io.DataOutputStream r2 = new java.io.DataOutputStream     // Catch:{ all -> 0x0244 }
+            com.google.android.gms.common.api.PendingResult r3 = r12.getOutputStream(r0)     // Catch:{ all -> 0x0244 }
+            com.google.android.gms.common.api.Result r3 = r3.await()     // Catch:{ all -> 0x0244 }
+            com.google.android.gms.wearable.Channel$GetOutputStreamResult r3 = (com.google.android.gms.wearable.Channel.GetOutputStreamResult) r3     // Catch:{ all -> 0x0244 }
+            java.io.OutputStream r3 = r3.getOutputStream()     // Catch:{ all -> 0x0244 }
+            r2.<init>(r3)     // Catch:{ all -> 0x0244 }
+            java.lang.String r3 = r1.readUTF()     // Catch:{ all -> 0x023d }
+            org.json.JSONObject r7 = new org.json.JSONObject     // Catch:{ all -> 0x023d }
+            r7.<init>(r3)     // Catch:{ all -> 0x023d }
             java.lang.String r3 = "chat_id"
-            int r3 = r7.getInt(r3)     // Catch:{ all -> 0x0243 }
+            int r3 = r7.getInt(r3)     // Catch:{ all -> 0x023d }
             java.lang.String r8 = "account_id"
-            int r7 = r7.getInt(r8)     // Catch:{ all -> 0x0243 }
+            int r7 = r7.getInt(r8)     // Catch:{ all -> 0x023d }
             r8 = 0
-        L_0x01af:
-            int r9 = org.telegram.messenger.UserConfig.getActivatedAccountsCount()     // Catch:{ all -> 0x0243 }
+        L_0x01ad:
+            int r9 = org.telegram.messenger.UserConfig.getActivatedAccountsCount()     // Catch:{ all -> 0x023d }
             r10 = -1
-            if (r8 >= r9) goto L_0x01c4
-            org.telegram.messenger.UserConfig r9 = org.telegram.messenger.UserConfig.getInstance(r8)     // Catch:{ all -> 0x0243 }
-            int r9 = r9.getClientUserId()     // Catch:{ all -> 0x0243 }
-            if (r9 != r7) goto L_0x01c1
-            goto L_0x01c5
-        L_0x01c1:
+            if (r8 >= r9) goto L_0x01c2
+            org.telegram.messenger.UserConfig r9 = org.telegram.messenger.UserConfig.getInstance(r8)     // Catch:{ all -> 0x023d }
+            int r9 = r9.getClientUserId()     // Catch:{ all -> 0x023d }
+            if (r9 != r7) goto L_0x01bf
+            goto L_0x01c3
+        L_0x01bf:
             int r8 = r8 + 1
-            goto L_0x01af
-        L_0x01c4:
+            goto L_0x01ad
+        L_0x01c2:
             r8 = -1
-        L_0x01c5:
-            if (r8 == r10) goto L_0x0236
-            if (r3 <= 0) goto L_0x01e1
-            org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r8)     // Catch:{ all -> 0x0243 }
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r3)     // Catch:{ all -> 0x0243 }
-            org.telegram.tgnet.TLRPC$User r3 = r7.getUser(r3)     // Catch:{ all -> 0x0243 }
-            if (r3 == 0) goto L_0x01f8
-            org.telegram.tgnet.TLRPC$UserProfilePhoto r7 = r3.photo     // Catch:{ all -> 0x0243 }
-            if (r7 == 0) goto L_0x01f8
-            org.telegram.tgnet.TLRPC$UserProfilePhoto r3 = r3.photo     // Catch:{ all -> 0x0243 }
-            org.telegram.tgnet.TLRPC$FileLocation r3 = r3.photo_small     // Catch:{ all -> 0x0243 }
+        L_0x01c3:
+            if (r8 == r10) goto L_0x0230
+            if (r3 <= 0) goto L_0x01dd
+            org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r8)     // Catch:{ all -> 0x023d }
+            java.lang.Integer r3 = java.lang.Integer.valueOf(r3)     // Catch:{ all -> 0x023d }
+            org.telegram.tgnet.TLRPC$User r3 = r7.getUser(r3)     // Catch:{ all -> 0x023d }
+            if (r3 == 0) goto L_0x01f2
+            org.telegram.tgnet.TLRPC$UserProfilePhoto r3 = r3.photo     // Catch:{ all -> 0x023d }
+            if (r3 == 0) goto L_0x01f2
+            org.telegram.tgnet.TLRPC$FileLocation r3 = r3.photo_small     // Catch:{ all -> 0x023d }
             r6 = r3
-            goto L_0x01f8
-        L_0x01e1:
-            org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r8)     // Catch:{ all -> 0x0243 }
+            goto L_0x01f2
+        L_0x01dd:
+            org.telegram.messenger.MessagesController r7 = org.telegram.messenger.MessagesController.getInstance(r8)     // Catch:{ all -> 0x023d }
             int r3 = -r3
-            java.lang.Integer r3 = java.lang.Integer.valueOf(r3)     // Catch:{ all -> 0x0243 }
-            org.telegram.tgnet.TLRPC$Chat r3 = r7.getChat(r3)     // Catch:{ all -> 0x0243 }
-            if (r3 == 0) goto L_0x01f8
-            org.telegram.tgnet.TLRPC$ChatPhoto r7 = r3.photo     // Catch:{ all -> 0x0243 }
-            if (r7 == 0) goto L_0x01f8
-            org.telegram.tgnet.TLRPC$ChatPhoto r3 = r3.photo     // Catch:{ all -> 0x0243 }
-            org.telegram.tgnet.TLRPC$FileLocation r6 = r3.photo_small     // Catch:{ all -> 0x0243 }
-        L_0x01f8:
-            if (r6 == 0) goto L_0x0232
-            java.io.File r3 = org.telegram.messenger.FileLoader.getPathToAttach(r6, r4)     // Catch:{ all -> 0x0243 }
-            boolean r4 = r3.exists()     // Catch:{ all -> 0x0243 }
-            if (r4 == 0) goto L_0x022e
-            long r6 = r3.length()     // Catch:{ all -> 0x0243 }
+            java.lang.Integer r3 = java.lang.Integer.valueOf(r3)     // Catch:{ all -> 0x023d }
+            org.telegram.tgnet.TLRPC$Chat r3 = r7.getChat(r3)     // Catch:{ all -> 0x023d }
+            if (r3 == 0) goto L_0x01f2
+            org.telegram.tgnet.TLRPC$ChatPhoto r3 = r3.photo     // Catch:{ all -> 0x023d }
+            if (r3 == 0) goto L_0x01f2
+            org.telegram.tgnet.TLRPC$FileLocation r6 = r3.photo_small     // Catch:{ all -> 0x023d }
+        L_0x01f2:
+            if (r6 == 0) goto L_0x022c
+            java.io.File r3 = org.telegram.messenger.FileLoader.getPathToAttach(r6, r4)     // Catch:{ all -> 0x023d }
+            boolean r4 = r3.exists()     // Catch:{ all -> 0x023d }
+            if (r4 == 0) goto L_0x0228
+            long r6 = r3.length()     // Catch:{ all -> 0x023d }
             r8 = 102400(0x19000, double:5.05923E-319)
             int r4 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
-            if (r4 >= 0) goto L_0x022e
-            long r6 = r3.length()     // Catch:{ all -> 0x0243 }
-            int r4 = (int) r6     // Catch:{ all -> 0x0243 }
-            r2.writeInt(r4)     // Catch:{ all -> 0x0243 }
-            java.io.FileInputStream r4 = new java.io.FileInputStream     // Catch:{ all -> 0x0243 }
-            r4.<init>(r3)     // Catch:{ all -> 0x0243 }
+            if (r4 >= 0) goto L_0x0228
+            long r6 = r3.length()     // Catch:{ all -> 0x023d }
+            int r4 = (int) r6     // Catch:{ all -> 0x023d }
+            r2.writeInt(r4)     // Catch:{ all -> 0x023d }
+            java.io.FileInputStream r4 = new java.io.FileInputStream     // Catch:{ all -> 0x023d }
+            r4.<init>(r3)     // Catch:{ all -> 0x023d }
             r3 = 10240(0x2800, float:1.4349E-41)
-            byte[] r3 = new byte[r3]     // Catch:{ all -> 0x0243 }
-        L_0x0220:
-            int r6 = r4.read(r3)     // Catch:{ all -> 0x0243 }
-            if (r6 <= 0) goto L_0x022a
-            r2.write(r3, r5, r6)     // Catch:{ all -> 0x0243 }
-            goto L_0x0220
-        L_0x022a:
-            r4.close()     // Catch:{ all -> 0x0243 }
-            goto L_0x0239
-        L_0x022e:
-            r2.writeInt(r5)     // Catch:{ all -> 0x0243 }
-            goto L_0x0239
-        L_0x0232:
-            r2.writeInt(r5)     // Catch:{ all -> 0x0243 }
-            goto L_0x0239
-        L_0x0236:
-            r2.writeInt(r5)     // Catch:{ all -> 0x0243 }
-        L_0x0239:
-            r2.flush()     // Catch:{ all -> 0x0243 }
-            r2.close()     // Catch:{ all -> 0x024a }
-            r1.close()     // Catch:{ Exception -> 0x0251 }
-            goto L_0x025d
+            byte[] r3 = new byte[r3]     // Catch:{ all -> 0x023d }
+        L_0x021a:
+            int r6 = r4.read(r3)     // Catch:{ all -> 0x023d }
+            if (r6 <= 0) goto L_0x0224
+            r2.write(r3, r5, r6)     // Catch:{ all -> 0x023d }
+            goto L_0x021a
+        L_0x0224:
+            r4.close()     // Catch:{ all -> 0x023d }
+            goto L_0x0233
+        L_0x0228:
+            r2.writeInt(r5)     // Catch:{ all -> 0x023d }
+            goto L_0x0233
+        L_0x022c:
+            r2.writeInt(r5)     // Catch:{ all -> 0x023d }
+            goto L_0x0233
+        L_0x0230:
+            r2.writeInt(r5)     // Catch:{ all -> 0x023d }
+        L_0x0233:
+            r2.flush()     // Catch:{ all -> 0x023d }
+            r2.close()     // Catch:{ all -> 0x0244 }
+            r1.close()     // Catch:{ Exception -> 0x024b }
+            goto L_0x0257
+        L_0x023d:
+            r3 = move-exception
+            throw r3     // Catch:{ all -> 0x023f }
+        L_0x023f:
+            r3 = move-exception
+            r2.close()     // Catch:{ all -> 0x0243 }
         L_0x0243:
-            r3 = move-exception
-            throw r3     // Catch:{ all -> 0x0245 }
-        L_0x0245:
-            r3 = move-exception
-            r2.close()     // Catch:{ all -> 0x0249 }
-        L_0x0249:
-            throw r3     // Catch:{ all -> 0x024a }
+            throw r3     // Catch:{ all -> 0x0244 }
+        L_0x0244:
+            r2 = move-exception
+            throw r2     // Catch:{ all -> 0x0246 }
+        L_0x0246:
+            r2 = move-exception
+            r1.close()     // Catch:{ all -> 0x024a }
         L_0x024a:
-            r2 = move-exception
-            throw r2     // Catch:{ all -> 0x024c }
-        L_0x024c:
-            r2 = move-exception
-            r1.close()     // Catch:{ all -> 0x0250 }
-        L_0x0250:
-            throw r2     // Catch:{ Exception -> 0x0251 }
-        L_0x0251:
-            goto L_0x025d
-        L_0x0253:
+            throw r2     // Catch:{ Exception -> 0x024b }
+        L_0x024b:
+            goto L_0x0257
+        L_0x024d:
             r1 = move-exception
             boolean r2 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r2 == 0) goto L_0x025d
+            if (r2 == 0) goto L_0x0257
             java.lang.String r2 = "error processing wear request"
             org.telegram.messenger.FileLog.e(r2, r1)
-        L_0x025d:
+        L_0x0257:
             com.google.android.gms.common.api.PendingResult r12 = r12.close(r0)
             r12.await()
             r0.disconnect()
             boolean r12 = org.telegram.messenger.BuildVars.LOGS_ENABLED
-            if (r12 == 0) goto L_0x0270
+            if (r12 == 0) goto L_0x026a
             java.lang.String r12 = "WearableDataLayer channel thread exiting"
             org.telegram.messenger.FileLog.d(r12)
-        L_0x0270:
+        L_0x026a:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.WearDataLayerListenerService.onChannelOpened(com.google.android.gms.wearable.Channel):void");
@@ -370,11 +367,15 @@ public class WearDataLayerListenerService extends WearableListenerService {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onChannelOpened$1 */
     public /* synthetic */ void lambda$onChannelOpened$1$WearDataLayerListenerService(NotificationCenter.NotificationCenterDelegate notificationCenterDelegate, TLRPC$User tLRPC$User) {
         NotificationCenter.getInstance(this.currentAccount).addObserver(notificationCenterDelegate, NotificationCenter.fileDidLoad);
         FileLoader.getInstance(this.currentAccount).loadFile(ImageLocation.getForUser(tLRPC$User, false), tLRPC$User, (String) null, 1, 1);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onChannelOpened$2 */
     public /* synthetic */ void lambda$onChannelOpened$2$WearDataLayerListenerService(NotificationCenter.NotificationCenterDelegate notificationCenterDelegate) {
         NotificationCenter.getInstance(this.currentAccount).removeObserver(notificationCenterDelegate, NotificationCenter.fileDidLoad);
     }
@@ -398,10 +399,14 @@ public class WearDataLayerListenerService extends WearableListenerService {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onChannelOpened$4 */
     public /* synthetic */ void lambda$onChannelOpened$4$WearDataLayerListenerService(NotificationCenter.NotificationCenterDelegate notificationCenterDelegate) {
         NotificationCenter.getInstance(this.currentAccount).addObserver(notificationCenterDelegate, NotificationCenter.didReceiveNewMessages);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onChannelOpened$5 */
     public /* synthetic */ void lambda$onChannelOpened$5$WearDataLayerListenerService(NotificationCenter.NotificationCenterDelegate notificationCenterDelegate) {
         NotificationCenter.getInstance(this.currentAccount).removeObserver(notificationCenterDelegate, NotificationCenter.didReceiveNewMessages);
     }
@@ -494,7 +499,7 @@ public class WearDataLayerListenerService extends WearableListenerService {
 
     public static void updateWatchConnectionState() {
         try {
-            Wearable.getCapabilityClient(ApplicationLoader.applicationContext).getCapability("remote_notifications", 1).addOnCompleteListener($$Lambda$WearDataLayerListenerService$gOGDgE93vZnJRS0bNwigjGIcLFc.INSTANCE);
+            Wearable.getCapabilityClient(ApplicationLoader.applicationContext).getCapability("remote_notifications", 1).addOnCompleteListener($$Lambda$WearDataLayerListenerService$OxFnbwNlLoIOEBS2zP2MedWVWRM.INSTANCE);
         } catch (Throwable unused) {
         }
     }

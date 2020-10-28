@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -74,19 +75,19 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         TextView textView = new TextView(context);
         this.title = textView;
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        this.title.setTag("windowBackgroundWhiteBlackText");
-        this.title.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        this.title.setTextSize(20.0f);
-        this.title.setGravity(17);
+        textView.setTag("windowBackgroundWhiteBlackText");
+        textView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
+        textView.setTextSize(20.0f);
+        textView.setGravity(17);
         TextView textView2 = new TextView(context);
         this.subtitle = textView2;
         textView2.setTag("windowBackgroundWhiteGrayText");
-        this.subtitle.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
-        this.subtitle.setTextSize(14.0f);
-        this.subtitle.setGravity(17);
+        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText"));
+        textView2.setTextSize(14.0f);
+        textView2.setGravity(17);
         this.linearLayout.addView(this.stickerView, LayoutHelper.createLinear(130, 130, 1));
-        this.linearLayout.addView(this.title, LayoutHelper.createLinear(-2, -2, 1, 0, 12, 0, 0));
-        this.linearLayout.addView(this.subtitle, LayoutHelper.createLinear(-2, -2, 1, 0, 8, 0, 0));
+        this.linearLayout.addView(textView, LayoutHelper.createLinear(-2, -2, 1, 0, 12, 0, 0));
+        this.linearLayout.addView(textView2, LayoutHelper.createLinear(-2, -2, 1, 0, 8, 0, 0));
         addView(this.linearLayout, LayoutHelper.createFrame(-2, -2.0f, 17, 56.0f, 0.0f, 56.0f, 30.0f));
         if (view == null) {
             RadialProgressView radialProgressView = new RadialProgressView(context);
@@ -98,6 +99,8 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$StickerEmptyView(View view) {
         this.stickerView.getImageReceiver().startAnimation();
     }
@@ -203,10 +206,12 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
             }
             float f = (float) (i3 + i2);
             if (z) {
-                this.linearLayout.animate().translationY(f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(250);
+                ViewPropertyAnimator translationY = this.linearLayout.animate().translationY(f);
+                CubicBezierInterpolator cubicBezierInterpolator = CubicBezierInterpolator.DEFAULT;
+                translationY.setInterpolator(cubicBezierInterpolator).setDuration(250);
                 RadialProgressView radialProgressView = this.progressBar;
                 if (radialProgressView != null) {
-                    radialProgressView.animate().translationY(f).setInterpolator(CubicBezierInterpolator.DEFAULT).setDuration(250);
+                    radialProgressView.animate().translationY(f).setInterpolator(cubicBezierInterpolator).setDuration(250);
                     return;
                 }
                 return;

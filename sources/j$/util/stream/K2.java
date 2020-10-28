@@ -1,18 +1,12 @@
 package j$.util.stream;
 
-import j$.util.function.M;
-
-class K2 extends K1 {
-    final /* synthetic */ M m;
-
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    K2(V2 this$0, CLASSNAMEh1 upstream, CLASSNAMEv6 inputShape, int opFlags, M m2) {
-        super(upstream, inputShape, opFlags);
-        this.m = m2;
+class K2 extends R2 {
+    K2(S2 s2, CLASSNAMEh1 h1Var, CLASSNAMEh6 h6Var, int i) {
+        super(h1Var, h6Var, i);
     }
 
     /* access modifiers changed from: package-private */
-    public G5 J0(int flags, G5 sink) {
-        return new J2(this, sink);
+    public CLASSNAMEt5 G0(int i, CLASSNAMEt5 t5Var) {
+        return t5Var;
     }
 }

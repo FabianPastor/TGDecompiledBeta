@@ -1,18 +1,16 @@
 package j$.util.stream;
 
-import j$.util.function.CLASSNAMEv;
-
-class F1 extends K1 {
-    final /* synthetic */ CLASSNAMEv m;
+class F1 extends CLASSNAMEm5 {
+    final /* synthetic */ G1 b;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    F1(L1 this$0, CLASSNAMEh1 upstream, CLASSNAMEv6 inputShape, int opFlags, CLASSNAMEv vVar) {
-        super(upstream, inputShape, opFlags);
-        this.m = vVar;
+    F1(G1 g1, CLASSNAMEt5 t5Var) {
+        super(t5Var);
+        this.b = g1;
     }
 
-    /* access modifiers changed from: package-private */
-    public G5 J0(int flags, G5 sink) {
-        return new E1(this, sink);
+    public void accept(double d) {
+        this.b.l.accept(d);
+        this.a.accept(d);
     }
 }

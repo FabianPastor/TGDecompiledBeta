@@ -38,8 +38,9 @@ public abstract class FourierTransform {
 
     /* access modifiers changed from: protected */
     public void setComplex(float[] fArr, float[] fArr2) {
-        if (this.real.length == fArr.length || this.imag.length == fArr2.length) {
-            System.arraycopy(fArr, 0, this.real, 0, fArr.length);
+        float[] fArr3 = this.real;
+        if (fArr3.length == fArr.length || this.imag.length == fArr2.length) {
+            System.arraycopy(fArr, 0, fArr3, 0, fArr.length);
             System.arraycopy(fArr2, 0, this.imag, 0, fArr2.length);
         }
     }
@@ -151,7 +152,7 @@ public abstract class FourierTransform {
         if (i > fArr.length - 1) {
             i = fArr.length - 1;
         }
-        return this.spectrum[i];
+        return fArr[i];
     }
 
     public float getBandWidth() {
@@ -257,23 +258,21 @@ public abstract class FourierTransform {
                     fArr[i] = f;
                     this.spectrum[i] = f;
                 } else {
-                    float[] fArr2 = this.real;
-                    float f2 = fArr2[i];
-                    float[] fArr3 = this.spectrum;
-                    fArr2[i] = f2 / fArr3[i];
-                    float[] fArr4 = this.imag;
-                    fArr4[i] = fArr4[i] / fArr3[i];
-                    fArr3[i] = f;
-                    fArr2[i] = fArr2[i] * fArr3[i];
-                    fArr4[i] = fArr4[i] * fArr3[i];
+                    float f2 = fArr[i];
+                    float[] fArr2 = this.spectrum;
+                    fArr[i] = f2 / fArr2[i];
+                    float[] fArr3 = this.imag;
+                    fArr3[i] = fArr3[i] / fArr2[i];
+                    fArr2[i] = f;
+                    fArr[i] = fArr[i] * fArr2[i];
+                    fArr3[i] = fArr3[i] * fArr2[i];
                 }
                 if (i != 0) {
                     int i2 = this.timeSize;
                     if (i != i2 / 2) {
-                        float[] fArr5 = this.real;
-                        fArr5[i2 - i] = fArr5[i];
-                        float[] fArr6 = this.imag;
-                        fArr6[i2 - i] = -fArr6[i];
+                        fArr[i2 - i] = fArr[i];
+                        float[] fArr4 = this.imag;
+                        fArr4[i2 - i] = -fArr4[i];
                     }
                 }
             }

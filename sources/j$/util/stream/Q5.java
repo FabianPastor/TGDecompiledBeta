@@ -1,86 +1,46 @@
 package j$.util.stream;
 
-import j$.util.P;
-import j$.util.S;
-import j$.util.Spliterator;
-import j$.util.U;
-import j$.util.function.C;
+import java.util.Arrays;
 
-final class Q5 {
-    /* access modifiers changed from: private */
-    public static long e(long size, long skip, long limit) {
-        if (size >= 0) {
-            return Math.max(-1, Math.min(size - skip, limit));
-        }
-        return -1;
+final class Q5 extends E5 {
+    private double[] c;
+    private int d;
+
+    Q5(CLASSNAMEt5 t5Var) {
+        super(t5Var);
     }
 
-    /* access modifiers changed from: private */
-    public static long f(long skip, long limit) {
-        long sliceFence = limit >= 0 ? skip + limit : Long.MAX_VALUE;
-        if (sliceFence >= 0) {
-            return sliceFence;
-        }
-        return Long.MAX_VALUE;
+    public void accept(double d2) {
+        double[] dArr = this.c;
+        int i = this.d;
+        this.d = i + 1;
+        dArr[i] = d2;
     }
 
-    /* access modifiers changed from: private */
-    public static Spliterator n(CLASSNAMEv6 shape, Spliterator spliterator, long skip, long limit) {
-        long sliceFence = f(skip, limit);
-        int ordinal = shape.ordinal();
-        if (ordinal == 0) {
-            return new R6(spliterator, skip, sliceFence);
+    public void m() {
+        int i = 0;
+        Arrays.sort(this.c, 0, this.d);
+        this.a.n((long) this.d);
+        if (!this.b) {
+            while (i < this.d) {
+                this.a.accept(this.c[i]);
+                i++;
+            }
+        } else {
+            while (i < this.d && !this.a.p()) {
+                this.a.accept(this.c[i]);
+                i++;
+            }
         }
-        if (ordinal == 1) {
-            return new O6((S) spliterator, skip, sliceFence);
-        }
-        if (ordinal == 2) {
-            return new P6((U) spliterator, skip, sliceFence);
-        }
-        if (ordinal == 3) {
-            return new N6((P) spliterator, skip, sliceFence);
-        }
-        throw new IllegalStateException("Unknown shape " + shape);
+        this.a.m();
+        this.c = null;
     }
 
-    /* access modifiers changed from: private */
-    public static C g() {
-        return CLASSNAMEu0.a;
-    }
-
-    static /* synthetic */ Object[] i(int size) {
-        return new Object[size];
-    }
-
-    public static Stream m(CLASSNAMEh1 upstream, long skip, long limit) {
-        if (skip >= 0) {
-            return new I5(upstream, CLASSNAMEv6.REFERENCE, h(limit), skip, limit);
+    public void n(long j) {
+        if (j < NUM) {
+            this.c = new double[((int) j)];
+            return;
         }
-        throw new IllegalArgumentException("Skip must be non-negative: " + skip);
-    }
-
-    public static A2 k(CLASSNAMEh1 upstream, long skip, long limit) {
-        if (skip >= 0) {
-            return new K5(upstream, CLASSNAMEv6.INT_VALUE, h(limit), skip, limit);
-        }
-        throw new IllegalArgumentException("Skip must be non-negative: " + skip);
-    }
-
-    public static W2 l(CLASSNAMEh1 upstream, long skip, long limit) {
-        if (skip >= 0) {
-            return new M5(upstream, CLASSNAMEv6.LONG_VALUE, h(limit), skip, limit);
-        }
-        throw new IllegalArgumentException("Skip must be non-negative: " + skip);
-    }
-
-    public static M1 j(CLASSNAMEh1 upstream, long skip, long limit) {
-        if (skip >= 0) {
-            return new O5(upstream, CLASSNAMEv6.DOUBLE_VALUE, h(limit), skip, limit);
-        }
-        throw new IllegalArgumentException("Skip must be non-negative: " + skip);
-    }
-
-    private static int h(long limit) {
-        return CLASSNAMEu6.y | (limit != -1 ? CLASSNAMEu6.z : 0);
+        throw new IllegalArgumentException("Stream size exceeds max array size");
     }
 }

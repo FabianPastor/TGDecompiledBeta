@@ -74,10 +74,10 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
         this.disableSections = z;
     }
 
-    public void setSortType(int i) {
+    public void setSortType(int i, boolean z) {
         this.sortType = i;
         if (i == 2) {
-            if (this.onlineContacts == null) {
+            if (this.onlineContacts == null || z) {
                 this.onlineContacts = new ArrayList<>(ContactsController.getInstance(this.currentAccount).contacts);
                 int i2 = UserConfig.getInstance(this.currentAccount).clientUserId;
                 int i3 = 0;
@@ -103,7 +103,7 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
         if (this.onlineContacts != null) {
             try {
                 int currentTime = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
-                Collections.sort(this.onlineContacts, new Comparator(currentTime) {
+                Collections.sort(this.onlineContacts, new Object(currentTime) {
                     public final /* synthetic */ int f$1;
 
                     {
@@ -114,31 +114,31 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
                         return ContactsAdapter.lambda$sortOnlineContacts$0(MessagesController.this, this.f$1, (TLRPC$TL_contact) obj, (TLRPC$TL_contact) obj2);
                     }
 
-                    public /* synthetic */ Comparator<T> reversed() {
+                    public /* synthetic */ Comparator reversed() {
                         return Comparator.CC.$default$reversed(this);
                     }
 
-                    public /* synthetic */ <U extends Comparable<? super U>> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function) {
-                        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (Function) function);
+                    public /* synthetic */ java.util.Comparator thenComparing(Function function) {
+                        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, function);
                     }
 
-                    public /* synthetic */ <U> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function, java.util.Comparator<? super U> comparator) {
+                    public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
                         return Comparator.CC.$default$thenComparing(this, function, comparator);
                     }
 
-                    public /* synthetic */ java.util.Comparator<T> thenComparing(java.util.Comparator<? super T> comparator) {
-                        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (java.util.Comparator) comparator);
+                    public /* synthetic */ java.util.Comparator thenComparing(java.util.Comparator comparator) {
+                        return Comparator.CC.$default$thenComparing((java.util.Comparator) this, comparator);
                     }
 
-                    public /* synthetic */ java.util.Comparator<T> thenComparingDouble(ToDoubleFunction<? super T> toDoubleFunction) {
+                    public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
                         return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
                     }
 
-                    public /* synthetic */ java.util.Comparator<T> thenComparingInt(ToIntFunction<? super T> toIntFunction) {
+                    public /* synthetic */ java.util.Comparator thenComparingInt(ToIntFunction toIntFunction) {
                         return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
                     }
 
-                    public /* synthetic */ java.util.Comparator<T> thenComparingLong(ToLongFunction<? super T> toLongFunction) {
+                    public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
                         return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
                     }
                 });
@@ -263,10 +263,10 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
                 }
                 return null;
             }
-            if (this.needPhonebook) {
-                return ContactsController.getInstance(this.currentAccount).phoneBookContacts.get(i2);
+            if (!this.needPhonebook || i2 < 0 || i2 >= ContactsController.getInstance(this.currentAccount).phoneBookContacts.size()) {
+                return null;
             }
-            return null;
+            return ContactsController.getInstance(this.currentAccount).phoneBookContacts.get(i2);
         }
     }
 
@@ -281,7 +281,8 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
                     }
                     return false;
                 } else if (this.needPhonebook) {
-                    if ((!this.hasGps || i2 == 2) && (this.hasGps || i2 == 1)) {
+                    boolean z = this.hasGps;
+                    if ((!z || i2 == 2) && (z || i2 == 1)) {
                         return false;
                     }
                     return true;
@@ -497,15 +498,13 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
             TextCell textCell = (TextCell) viewHolder.itemView;
             if (i != 0) {
                 ContactsController.Contact contact = ContactsController.getInstance(this.currentAccount).phoneBookContacts.get(i2);
-                if (contact.first_name == null || contact.last_name == null) {
-                    String str = contact.first_name;
-                    if (str == null || contact.last_name != null) {
-                        textCell.setText(contact.last_name, false);
-                    } else {
-                        textCell.setText(str, false);
-                    }
-                } else {
+                String str = contact.first_name;
+                if (str != null && contact.last_name != null) {
                     textCell.setText(contact.first_name + " " + contact.last_name, false);
+                } else if (str == null || contact.last_name != null) {
+                    textCell.setText(contact.last_name, false);
+                } else {
+                    textCell.setText(str, false);
                 }
             } else if (this.needPhonebook) {
                 if (i2 == 0) {
@@ -549,7 +548,8 @@ public class ContactsAdapter extends RecyclerListView.SectionsAdapter {
                         return 2;
                     }
                 } else if (this.needPhonebook) {
-                    if ((this.hasGps && i2 == 2) || (!this.hasGps && i2 == 1)) {
+                    boolean z = this.hasGps;
+                    if ((z && i2 == 2) || (!z && i2 == 1)) {
                         if (this.isEmpty) {
                             return 5;
                         }

@@ -1,26 +1,18 @@
 package j$.util.stream;
 
-import j$.util.Spliterator;
+import j$.util.function.Predicate;
 
-abstract class T4 implements f7 {
-    private final CLASSNAMEv6 a;
+class T4 extends CLASSNAMEk5 {
+    final /* synthetic */ Predicate l;
 
-    public /* synthetic */ int a() {
-        e7.a();
-        return 0;
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    T4(CLASSNAMEl5 l5Var, CLASSNAMEh1 h1Var, CLASSNAMEh6 h6Var, int i, Predicate predicate) {
+        super(h1Var, h6Var, i);
+        this.l = predicate;
     }
 
-    public abstract R4 b();
-
-    T4(CLASSNAMEv6 shape) {
-        this.a = shape;
-    }
-
-    public Object d(CLASSNAMEq4 helper, Spliterator spliterator) {
-        return ((R4) helper.t0(b(), spliterator)).get();
-    }
-
-    public Object c(CLASSNAMEq4 helper, Spliterator spliterator) {
-        return ((R4) new U4(this, helper, spliterator).invoke()).get();
+    /* access modifiers changed from: package-private */
+    public CLASSNAMEt5 G0(int i, CLASSNAMEt5 t5Var) {
+        return new S4(this, t5Var);
     }
 }

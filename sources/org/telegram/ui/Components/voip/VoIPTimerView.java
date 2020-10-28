@@ -17,15 +17,13 @@ public class VoIPTimerView extends View {
     String currentTimeStr;
     Paint inactivePaint = new Paint(1);
     RectF rectF = new RectF();
-    private int signalBarCount = 4;
-    TextPaint textPaint = new TextPaint(1);
+    private int signalBarCount;
+    TextPaint textPaint;
     StaticLayout timerLayout;
-    Runnable updater = new Runnable() {
-        public final void run() {
-            VoIPTimerView.this.lambda$new$0$VoIPTimerView();
-        }
-    };
+    Runnable updater;
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$VoIPTimerView() {
         if (getVisibility() == 0) {
             updateTimer();
@@ -34,7 +32,15 @@ public class VoIPTimerView extends View {
 
     public VoIPTimerView(Context context) {
         super(context);
-        this.textPaint.setTextSize((float) AndroidUtilities.dp(15.0f));
+        TextPaint textPaint2 = new TextPaint(1);
+        this.textPaint = textPaint2;
+        this.signalBarCount = 4;
+        this.updater = new Runnable() {
+            public final void run() {
+                VoIPTimerView.this.lambda$new$0$VoIPTimerView();
+            }
+        };
+        textPaint2.setTextSize((float) AndroidUtilities.dp(15.0f));
         this.textPaint.setColor(-1);
         this.textPaint.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
         this.activePaint.setColor(ColorUtils.setAlphaComponent(-1, 229));

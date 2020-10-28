@@ -119,14 +119,14 @@ public class ReportOtherActivity extends BaseFragment {
                     org.telegram.ui.ReportOtherActivity r4 = org.telegram.ui.ReportOtherActivity.this
                     int r4 = r4.currentAccount
                     org.telegram.tgnet.ConnectionsManager r4 = org.telegram.tgnet.ConnectionsManager.getInstance(r4)
-                    org.telegram.ui.-$$Lambda$ReportOtherActivity$1$PbLFyQbNnsMkC-qS1TkzMcffkwA r1 = org.telegram.ui.$$Lambda$ReportOtherActivity$1$PbLFyQbNnsMkCqS1TkzMcffkwA.INSTANCE
+                    org.telegram.ui.-$$Lambda$ReportOtherActivity$1$I-t22tVWvdxH5B2HLv6rHCZEVLc r1 = org.telegram.ui.$$Lambda$ReportOtherActivity$1$It22tVWvdxH5B2HLv6rHCZEVLc.INSTANCE
                     r4.sendRequest(r0, r1)
                     org.telegram.ui.ReportOtherActivity r4 = org.telegram.ui.ReportOtherActivity.this
                     android.app.Activity r4 = r4.getParentActivity()
                     if (r4 == 0) goto L_0x00c5
                     org.telegram.ui.ReportOtherActivity r4 = org.telegram.ui.ReportOtherActivity.this
                     android.app.Activity r4 = r4.getParentActivity()
-                    r0 = 2131626755(0x7f0e0b03, float:1.8880755E38)
+                    r0 = 2131626862(0x7f0e0b6e, float:1.8880972E38)
                     java.lang.String r1 = "ReportChatSent"
                     java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                     r1 = 0
@@ -146,7 +146,7 @@ public class ReportOtherActivity extends BaseFragment {
         this.fragmentView = linearLayout;
         linearLayout.setLayoutParams(new ViewGroup.LayoutParams(-1, -1));
         ((LinearLayout) this.fragmentView).setOrientation(1);
-        this.fragmentView.setOnTouchListener($$Lambda$ReportOtherActivity$VcwTn4nik4XOSC4IbcsIN4IckE.INSTANCE);
+        this.fragmentView.setOnTouchListener($$Lambda$ReportOtherActivity$IG6aFfI3wDPRkuo7wAQYA6dy_0.INSTANCE);
         EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context);
         this.firstNameField = editTextBoldCursor;
         editTextBoldCursor.setTextSize(1, 18.0f);
@@ -179,6 +179,8 @@ public class ReportOtherActivity extends BaseFragment {
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$1 */
     public /* synthetic */ boolean lambda$createView$1$ReportOtherActivity(TextView textView, int i, KeyEvent keyEvent) {
         View view;
         if (i != 6 || (view = this.doneButton) == null) {
@@ -206,6 +208,8 @@ public class ReportOtherActivity extends BaseFragment {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onTransitionAnimationEnd$2 */
     public /* synthetic */ void lambda$onTransitionAnimationEnd$2$ReportOtherActivity() {
         EditTextBoldCursor editTextBoldCursor = this.firstNameField;
         if (editTextBoldCursor != null) {

@@ -139,7 +139,8 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                     break;
                 }
                 cameraInfo = cameras.get(i4);
-                if ((this.isFrontface && cameraInfo.frontCamera != 0) || (!this.isFrontface && cameraInfo.frontCamera == 0)) {
+                boolean z = this.isFrontface;
+                if ((z && cameraInfo.frontCamera != 0) || (!z && cameraInfo.frontCamera == 0)) {
                     break;
                 }
                 i4++;
@@ -190,9 +191,9 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
                     surfaceTexture.setDefaultBufferSize(size3.getWidth(), this.previewSize.getHeight());
                     CameraSession cameraSession2 = new CameraSession(cameraInfo, this.previewSize, chooseOptimalSize, 256);
                     this.cameraSession = cameraSession2;
-                    boolean z = this.optimizeForBarcode;
-                    if (z) {
-                        cameraSession2.setOptimizeForBarcode(z);
+                    boolean z2 = this.optimizeForBarcode;
+                    if (z2) {
+                        cameraSession2.setOptimizeForBarcode(z2);
                     }
                     CameraController.getInstance().open(this.cameraSession, surfaceTexture, new Runnable() {
                         public final void run() {
@@ -208,6 +209,8 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$initCamera$0 */
     public /* synthetic */ void lambda$initCamera$0$CameraView() {
         CameraSession cameraSession2 = this.cameraSession;
         if (cameraSession2 != null) {
@@ -216,6 +219,8 @@ public class CameraView extends FrameLayout implements TextureView.SurfaceTextur
         checkPreviewMatrix();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$initCamera$1 */
     public /* synthetic */ void lambda$initCamera$1$CameraView() {
         CameraViewDelegate cameraViewDelegate = this.delegate;
         if (cameraViewDelegate != null) {

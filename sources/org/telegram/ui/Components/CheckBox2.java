@@ -49,7 +49,7 @@ public class CheckBox2 extends View {
     }
 
     public void setDrawBackgroundAsArc(int i) {
-        this.checkBoxBase.setDrawBackgroundAsArc(i);
+        this.checkBoxBase.setBackgroundType(i);
     }
 
     public float getProgress() {

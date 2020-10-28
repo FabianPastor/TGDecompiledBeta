@@ -1,18 +1,15 @@
 package j$.util.stream;
 
-import j$.util.function.P;
-
-class E2 extends U2 {
-    final /* synthetic */ P m;
+class E2 extends CLASSNAMEo5 {
+    final /* synthetic */ F2 b;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    E2(V2 this$0, CLASSNAMEh1 upstream, CLASSNAMEv6 inputShape, int opFlags, P p) {
-        super(upstream, inputShape, opFlags);
-        this.m = p;
+    E2(F2 f2, CLASSNAMEt5 t5Var) {
+        super(t5Var);
+        this.b = f2;
     }
 
-    /* access modifiers changed from: package-private */
-    public G5 J0(int flags, G5 sink) {
-        return new D2(this, sink);
+    public void accept(long j) {
+        this.a.accept(this.b.l.a(j));
     }
 }

@@ -15,7 +15,7 @@ public class MusicPlayerReceiver extends BroadcastReceiver {
                     if (MediaController.getInstance().isMessagePaused()) {
                         MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
                     } else {
-                        MediaController.getInstance().lambda$startAudioAgain$7$MediaController(MediaController.getInstance().getPlayingMessageObject());
+                        MediaController.getInstance().lambda$startAudioAgain$7(MediaController.getInstance().getPlayingMessageObject());
                     }
                 } else if (keyCode == 87) {
                     MediaController.getInstance().playNextMessage();
@@ -24,13 +24,13 @@ public class MusicPlayerReceiver extends BroadcastReceiver {
                 } else if (keyCode == 126) {
                     MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
                 } else if (keyCode == 127) {
-                    MediaController.getInstance().lambda$startAudioAgain$7$MediaController(MediaController.getInstance().getPlayingMessageObject());
+                    MediaController.getInstance().lambda$startAudioAgain$7(MediaController.getInstance().getPlayingMessageObject());
                 }
             }
         } else if (intent.getAction().equals("org.telegram.android.musicplayer.play")) {
             MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
         } else if (intent.getAction().equals("org.telegram.android.musicplayer.pause") || intent.getAction().equals("android.media.AUDIO_BECOMING_NOISY")) {
-            MediaController.getInstance().lambda$startAudioAgain$7$MediaController(MediaController.getInstance().getPlayingMessageObject());
+            MediaController.getInstance().lambda$startAudioAgain$7(MediaController.getInstance().getPlayingMessageObject());
         } else if (intent.getAction().equals("org.telegram.android.musicplayer.next")) {
             MediaController.getInstance().playNextMessage();
         } else if (intent.getAction().equals("org.telegram.android.musicplayer.close")) {

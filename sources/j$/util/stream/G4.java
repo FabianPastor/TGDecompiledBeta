@@ -1,59 +1,67 @@
 package j$.util.stream;
 
-import j$.util.function.BiConsumer;
-import j$.util.function.CLASSNAMEq;
+import j$.util.CLASSNAMEk;
+import j$.util.function.CLASSNAMEe;
 import j$.util.function.Consumer;
-import j$.util.function.V;
+import j$.util.function.h;
+import j$.util.function.x;
+import j$.util.function.y;
 
-class G4 extends S4 implements R4 {
-    final /* synthetic */ V b;
-    final /* synthetic */ BiConsumer c;
-    final /* synthetic */ BiConsumer d;
+class G4 implements J4, CLASSNAMEs5 {
+    private long a;
+    final /* synthetic */ long b;
+    final /* synthetic */ x c;
 
-    public /* synthetic */ void accept(double d2) {
-        CLASSNAMEv5.c(this);
+    G4(long j, x xVar) {
+        this.b = j;
+        this.c = xVar;
+    }
+
+    public /* synthetic */ void accept(double d) {
+        CLASSNAMEk.c(this);
         throw null;
     }
 
     public /* synthetic */ void accept(int i) {
-        CLASSNAMEv5.a(this);
+        CLASSNAMEk.a(this);
         throw null;
     }
 
-    public /* synthetic */ void accept(long j) {
-        CLASSNAMEv5.b(this);
-        throw null;
+    public void accept(long j) {
+        this.a = this.c.applyAsLong(this.a, j);
     }
 
-    public /* synthetic */ Consumer g(Consumer consumer) {
-        return CLASSNAMEq.a(this, consumer);
+    /* renamed from: b */
+    public /* synthetic */ void accept(Long l) {
+        CLASSNAMEc3.c(this, l);
     }
 
-    public /* synthetic */ void r() {
-        CLASSNAMEv5.f();
+    public Consumer f(Consumer consumer) {
+        consumer.getClass();
+        return new CLASSNAMEe(this, consumer);
     }
 
-    public /* synthetic */ boolean u() {
-        CLASSNAMEv5.e();
+    public y g(y yVar) {
+        yVar.getClass();
+        return new h(this, yVar);
+    }
+
+    public Object get() {
+        return Long.valueOf(this.a);
+    }
+
+    public void i(J4 j4) {
+        accept(((G4) j4).a);
+    }
+
+    public void m() {
+    }
+
+    public void n(long j) {
+        this.a = this.b;
+    }
+
+    public /* synthetic */ boolean p() {
         return false;
-    }
-
-    G4(V v, BiConsumer biConsumer, BiConsumer biConsumer2) {
-        this.b = v;
-        this.c = biConsumer;
-        this.d = biConsumer2;
-    }
-
-    public void s(long size) {
-        this.a = this.b.get();
-    }
-
-    public void accept(Object t) {
-        this.c.accept(this.a, t);
-    }
-
-    /* renamed from: a */
-    public void l(G4 other) {
-        this.d.accept(this.a, other.a);
     }
 }

@@ -1,14 +1,9 @@
 package j$.util;
 
-import j$.util.function.CLASSNAMEt;
-import j$.util.function.Consumer;
+public interface F extends Spliterator {
+    void forEachRemaining(Object obj);
 
-public interface F extends K {
-    void e(CLASSNAMEt tVar);
+    boolean tryAdvance(Object obj);
 
-    void forEachRemaining(Consumer consumer);
-
-    Double next();
-
-    double nextDouble();
+    F trySplit();
 }

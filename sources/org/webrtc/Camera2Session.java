@@ -166,6 +166,8 @@ class Camera2Session implements CameraSession {
             }
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onConfigured$0 */
         public /* synthetic */ void lambda$onConfigured$0$Camera2Session$CaptureSessionCallback(VideoFrame videoFrame) {
             Camera2Session.this.checkIsOnCameraThread();
             if (Camera2Session.this.state != SessionState.RUNNING) {
@@ -295,9 +297,11 @@ class Camera2Session implements CameraSession {
     public void stop() {
         Logging.d("Camera2Session", "Stop camera2 session on camera " + this.cameraId);
         checkIsOnCameraThread();
-        if (this.state != SessionState.STOPPED) {
+        SessionState sessionState = this.state;
+        SessionState sessionState2 = SessionState.STOPPED;
+        if (sessionState != sessionState2) {
             long nanoTime = System.nanoTime();
-            this.state = SessionState.STOPPED;
+            this.state = sessionState2;
             stopInternal();
             camera2StopTimeMsHistogram.addSample((int) TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - nanoTime));
         }

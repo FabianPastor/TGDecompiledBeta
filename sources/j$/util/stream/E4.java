@@ -1,60 +1,66 @@
 package j$.util.stream;
 
-import j$.util.function.BiConsumer;
-import j$.util.function.CLASSNAMEo;
-import j$.util.function.CLASSNAMEq;
+import j$.util.CLASSNAMEk;
+import j$.util.function.C;
+import j$.util.function.CLASSNAMEe;
 import j$.util.function.Consumer;
-import j$.util.function.V;
+import j$.util.function.E;
+import j$.util.function.g;
+import j$.util.function.n;
+import j$.util.function.u;
 
-class E4 extends S4 implements R4 {
-    final /* synthetic */ V b;
-    final /* synthetic */ BiConsumer c;
-    final /* synthetic */ CLASSNAMEo d;
+class E4 extends K4 implements J4, CLASSNAMEr5 {
+    final /* synthetic */ E b;
+    final /* synthetic */ C c;
+    final /* synthetic */ n d;
+
+    E4(E e, C c2, n nVar) {
+        this.b = e;
+        this.c = c2;
+        this.d = nVar;
+    }
 
     public /* synthetic */ void accept(double d2) {
-        CLASSNAMEv5.c(this);
+        CLASSNAMEk.c(this);
         throw null;
     }
 
-    public /* synthetic */ void accept(int i) {
-        CLASSNAMEv5.a(this);
-        throw null;
+    public void accept(int i) {
+        this.c.accept(this.a, i);
     }
 
     public /* synthetic */ void accept(long j) {
-        CLASSNAMEv5.b(this);
+        CLASSNAMEk.b(this);
         throw null;
     }
 
-    public /* synthetic */ Consumer g(Consumer consumer) {
-        return CLASSNAMEq.a(this, consumer);
+    /* renamed from: b */
+    public /* synthetic */ void accept(Integer num) {
+        CLASSNAMEc3.b(this, num);
     }
 
-    public /* synthetic */ void r() {
-        CLASSNAMEv5.f();
+    public Consumer f(Consumer consumer) {
+        consumer.getClass();
+        return new CLASSNAMEe(this, consumer);
     }
 
-    public /* synthetic */ boolean u() {
-        CLASSNAMEv5.e();
-        return false;
+    public void i(J4 j4) {
+        this.a = this.d.apply(this.a, ((E4) j4).a);
     }
 
-    E4(V v, BiConsumer biConsumer, CLASSNAMEo oVar) {
-        this.b = v;
-        this.c = biConsumer;
-        this.d = oVar;
+    public u l(u uVar) {
+        uVar.getClass();
+        return new g(this, uVar);
     }
 
-    public void s(long size) {
+    public void m() {
+    }
+
+    public void n(long j) {
         this.a = this.b.get();
     }
 
-    public void accept(Object t) {
-        this.c.accept(this.a, t);
-    }
-
-    /* renamed from: a */
-    public void l(E4 other) {
-        this.a = this.d.a(this.a, other.a);
+    public /* synthetic */ boolean p() {
+        return false;
     }
 }

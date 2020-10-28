@@ -9,12 +9,10 @@ public class DefaultVideoEncoderFactory implements VideoEncoderFactory {
     private final VideoEncoderFactory hardwareVideoEncoderFactory;
     private final VideoEncoderFactory softwareVideoEncoderFactory = new SoftwareVideoEncoderFactory();
 
-    @CalledByNative
     public /* synthetic */ VideoEncoderFactory.VideoEncoderSelector getEncoderSelector() {
         return VideoEncoderFactory.CC.$default$getEncoderSelector(this);
     }
 
-    @CalledByNative
     public /* synthetic */ VideoCodecInfo[] getImplementations() {
         return VideoEncoderFactory.CC.$default$getImplementations(this);
     }

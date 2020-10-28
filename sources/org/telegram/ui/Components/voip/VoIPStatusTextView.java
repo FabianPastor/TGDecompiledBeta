@@ -152,7 +152,7 @@ public class VoIPStatusTextView extends FrameLayout {
             android.widget.TextView[] r4 = r3.textView
             r5 = r4[r1]
             r4 = r4[r0]
-            org.telegram.ui.Components.voip.-$$Lambda$VoIPStatusTextView$NnszBeG4p9PQxoQw7aG18fdhXFQ r6 = new org.telegram.ui.Components.voip.-$$Lambda$VoIPStatusTextView$NnszBeG4p9PQxoQw7aG18fdhXFQ
+            org.telegram.ui.Components.voip.-$$Lambda$VoIPStatusTextView$mtAEttNmC-ocRXhJkjo_R66BzxQ r6 = new org.telegram.ui.Components.voip.-$$Lambda$VoIPStatusTextView$mtAEttNmC-ocRXhJkjo_R66BzxQ
             r6.<init>()
             r3.replaceViews(r5, r4, r6)
         L_0x00ba:
@@ -161,6 +161,8 @@ public class VoIPStatusTextView extends FrameLayout {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.VoIPStatusTextView.setText(java.lang.String, boolean, boolean):void");
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setText$0 */
     public /* synthetic */ void lambda$setText$0$VoIPStatusTextView() {
         TextView[] textViewArr = this.textView;
         TextView textView2 = textViewArr[0];
@@ -255,6 +257,8 @@ public class VoIPStatusTextView extends FrameLayout {
                 }
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onAnimationEnd$0 */
             public /* synthetic */ void lambda$onAnimationEnd$0$VoIPStatusTextView$1() {
                 TextView[] textViewArr = VoIPStatusTextView.this.textView;
                 TextView textView = textViewArr[0];

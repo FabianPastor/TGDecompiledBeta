@@ -40,17 +40,17 @@ class HardwareVideoEncoder implements VideoEncoder {
     private final String codecName;
     private final VideoCodecMimeType codecType;
     private ByteBuffer configBuffer;
-    private final ThreadUtils.ThreadChecker encodeThreadChecker = new ThreadUtils.ThreadChecker();
+    private final ThreadUtils.ThreadChecker encodeThreadChecker;
     private final long forcedKeyFrameNs;
     private int height;
     private final int keyFrameIntervalSec;
     private long lastKeyFrameNs;
     private final MediaCodecWrapperFactory mediaCodecWrapperFactory;
     private ByteBuffer[] outputBuffers;
-    private final BusyCount outputBuffersBusyCount = new BusyCount();
+    private final BusyCount outputBuffersBusyCount;
     private final BlockingDeque<EncodedImage.Builder> outputBuilders = new LinkedBlockingDeque();
     private Thread outputThread;
-    private final ThreadUtils.ThreadChecker outputThreadChecker = new ThreadUtils.ThreadChecker();
+    private final ThreadUtils.ThreadChecker outputThreadChecker;
     private final Map<String, String> params;
     /* access modifiers changed from: private */
     public volatile boolean running;
@@ -66,7 +66,6 @@ class HardwareVideoEncoder implements VideoEncoder {
     private final Integer yuvColorFormat;
     private final YuvFormat yuvFormat;
 
-    @CalledByNative
     public /* synthetic */ long createNativeVideoEncoder() {
         return VideoEncoder.CC.$default$createNativeVideoEncoder(this);
     }
@@ -75,12 +74,10 @@ class HardwareVideoEncoder implements VideoEncoder {
         return "HWEncoder";
     }
 
-    @CalledByNative
     public /* synthetic */ VideoEncoder.ResolutionBitrateLimits[] getResolutionBitrateLimits() {
         return VideoEncoder.CC.$default$getResolutionBitrateLimits(this);
     }
 
-    @CalledByNative
     public /* synthetic */ boolean isHardwareEncoder() {
         return VideoEncoder.CC.$default$isHardwareEncoder(this);
     }
@@ -129,6 +126,10 @@ class HardwareVideoEncoder implements VideoEncoder {
     }
 
     public HardwareVideoEncoder(MediaCodecWrapperFactory mediaCodecWrapperFactory2, String str, VideoCodecMimeType videoCodecMimeType, Integer num, Integer num2, Map<String, String> map, int i, int i2, BitrateAdjuster bitrateAdjuster2, EglBase14.Context context) {
+        ThreadUtils.ThreadChecker threadChecker = new ThreadUtils.ThreadChecker();
+        this.encodeThreadChecker = threadChecker;
+        this.outputThreadChecker = new ThreadUtils.ThreadChecker();
+        this.outputBuffersBusyCount = new BusyCount();
         this.mediaCodecWrapperFactory = mediaCodecWrapperFactory2;
         this.codecName = str;
         this.codecType = videoCodecMimeType;
@@ -140,7 +141,7 @@ class HardwareVideoEncoder implements VideoEncoder {
         this.forcedKeyFrameNs = TimeUnit.MILLISECONDS.toNanos((long) i2);
         this.bitrateAdjuster = bitrateAdjuster2;
         this.sharedContext = context;
-        this.encodeThreadChecker.detachThread();
+        threadChecker.detachThread();
     }
 
     public VideoCodecStatus initEncode(VideoEncoder.Settings settings, VideoEncoder.Callback callback2) {
@@ -410,6 +411,7 @@ class HardwareVideoEncoder implements VideoEncoder {
     /* access modifiers changed from: protected */
     public void deliverEncodedImage() {
         ByteBuffer byteBuffer;
+        VideoCodecMimeType videoCodecMimeType;
         this.outputThreadChecker.checkIsOnValidThread();
         try {
             MediaCodec.BufferInfo bufferInfo = new MediaCodec.BufferInfo();
@@ -436,7 +438,7 @@ class HardwareVideoEncoder implements VideoEncoder {
                 if (z) {
                     Logging.d("HardwareVideoEncoder", "Sync frame generated");
                 }
-                if (!z || !(this.codecType == VideoCodecMimeType.H264 || this.codecType == VideoCodecMimeType.H265)) {
+                if (!z || !((videoCodecMimeType = this.codecType) == VideoCodecMimeType.H264 || videoCodecMimeType == VideoCodecMimeType.H265)) {
                     byteBuffer = byteBuffer2.slice();
                 } else {
                     Logging.d("HardwareVideoEncoder", "Prepending config frame of size " + this.configBuffer.capacity() + " to output buffer with offset " + bufferInfo.offset + ", size " + bufferInfo.size);
@@ -470,6 +472,8 @@ class HardwareVideoEncoder implements VideoEncoder {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$deliverEncodedImage$0 */
     public /* synthetic */ void lambda$deliverEncodedImage$0$HardwareVideoEncoder(int i) {
         try {
             this.codec.releaseOutputBuffer(i, false);

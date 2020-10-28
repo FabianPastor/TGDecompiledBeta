@@ -35,13 +35,14 @@ public class ID3v2TagHeader {
                 this.revision = iD3v2DataInput.readByte();
                 byte readByte2 = iD3v2DataInput.readByte();
                 this.totalTagSize = iD3v2DataInput.readSyncsafeInt() + 10;
-                if (this.version == 2) {
+                int i = this.version;
+                if (i == 2) {
                     this.unsynchronization = (readByte2 & 128) != 0;
                     this.compression = (readByte2 & 64) != 0 ? true : z;
                 } else {
                     this.unsynchronization = (readByte2 & 128) != 0 ? true : z;
                     if ((readByte2 & 64) != 0) {
-                        if (this.version == 3) {
+                        if (i == 3) {
                             int readInt = iD3v2DataInput.readInt();
                             iD3v2DataInput.readByte();
                             iD3v2DataInput.readByte();

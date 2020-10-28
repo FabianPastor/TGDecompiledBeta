@@ -213,6 +213,8 @@ class Camera1Session implements CameraSession {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$listenForTextureFrames$0 */
     public /* synthetic */ void lambda$listenForTextureFrames$0$Camera1Session(VideoFrame videoFrame) {
         checkIsOnCameraThread();
         if (this.state != SessionState.RUNNING) {
@@ -263,6 +265,8 @@ class Camera1Session implements CameraSession {
                 }
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onPreviewFrame$1 */
             public /* synthetic */ void lambda$onPreviewFrame$1$Camera1Session$2(byte[] bArr) {
                 Camera1Session.this.cameraThreadHandler.post(new Runnable(bArr) {
                     public final /* synthetic */ byte[] f$1;
@@ -277,6 +281,8 @@ class Camera1Session implements CameraSession {
                 });
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$null$0 */
             public /* synthetic */ void lambda$null$0$Camera1Session$2(byte[] bArr) {
                 if (Camera1Session.this.state == SessionState.RUNNING) {
                     Camera1Session.this.camera.addCallbackBuffer(bArr);

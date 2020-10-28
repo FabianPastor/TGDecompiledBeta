@@ -1,35 +1,27 @@
 package j$;
 
-import j$.util.function.L;
-import java.util.function.LongPredicate;
+import j$.util.function.u;
+import java.util.function.IntConsumer;
 
-public final /* synthetic */ class V implements LongPredicate {
-    final /* synthetic */ L a;
+public final /* synthetic */ class V implements IntConsumer {
+    final /* synthetic */ u a;
 
-    private /* synthetic */ V(L l) {
-        this.a = l;
+    private /* synthetic */ V(u uVar) {
+        this.a = uVar;
     }
 
-    public static /* synthetic */ LongPredicate a(L l) {
-        if (l == null) {
+    public static /* synthetic */ IntConsumer a(u uVar) {
+        if (uVar == null) {
             return null;
         }
-        return l instanceof U ? ((U) l).a : new V(l);
+        return uVar instanceof U ? ((U) uVar).a : new V(uVar);
     }
 
-    public /* synthetic */ LongPredicate and(LongPredicate longPredicate) {
-        return a(((U) this.a).a(U.b(longPredicate)));
+    public /* synthetic */ void accept(int i) {
+        this.a.accept(i);
     }
 
-    public /* synthetic */ LongPredicate negate() {
-        return a(((U) this.a).c());
-    }
-
-    public /* synthetic */ LongPredicate or(LongPredicate longPredicate) {
-        return a(((U) this.a).d(U.b(longPredicate)));
-    }
-
-    public /* synthetic */ boolean test(long j) {
-        return ((U) this.a).e(j);
+    public /* synthetic */ IntConsumer andThen(IntConsumer intConsumer) {
+        return a(this.a.l(U.b(intConsumer)));
     }
 }

@@ -8,12 +8,12 @@ public class TLRPC$TL_stickerSet_layer97 extends TLRPC$TL_stickerSet {
         this.flags = readInt32;
         boolean z2 = false;
         this.archived = (readInt32 & 2) != 0;
-        this.official = (this.flags & 4) != 0;
-        if ((this.flags & 8) != 0) {
+        this.official = (readInt32 & 4) != 0;
+        if ((readInt32 & 8) != 0) {
             z2 = true;
         }
         this.masks = z2;
-        if ((this.flags & 1) != 0) {
+        if ((readInt32 & 1) != 0) {
             this.installed_date = abstractSerializedData.readInt32(z);
         }
         this.id = abstractSerializedData.readInt64(z);

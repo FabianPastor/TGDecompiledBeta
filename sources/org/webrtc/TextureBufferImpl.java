@@ -82,6 +82,8 @@ public class TextureBufferImpl implements VideoFrame.TextureBuffer {
         this.refCountMonitor = refCountMonitor2;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$TextureBufferImpl(RefCountMonitor refCountMonitor2) {
         refCountMonitor2.onDestroy(this);
     }
@@ -150,6 +152,8 @@ public class TextureBufferImpl implements VideoFrame.TextureBuffer {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$toI420$1 */
     public /* synthetic */ VideoFrame.I420Buffer lambda$toI420$1$TextureBufferImpl() throws Exception {
         return this.yuvConverter.convert(this);
     }

@@ -95,6 +95,8 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         invalidate();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setBackgroundImage$0 */
     public /* synthetic */ void lambda$setBackgroundImage$0$SizeNotifierFrameLayout(int i, int i2) {
         this.translationX = (float) i;
         this.translationY = (float) i2;
@@ -175,6 +177,8 @@ public class SizeNotifierFrameLayout extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$notifyHeightChanged$1 */
     public /* synthetic */ void lambda$notifyHeightChanged$1$SizeNotifierFrameLayout(boolean z) {
         SizeNotifierFrameLayoutDelegate sizeNotifierFrameLayoutDelegate = this.delegate;
         if (sizeNotifierFrameLayoutDelegate != null) {

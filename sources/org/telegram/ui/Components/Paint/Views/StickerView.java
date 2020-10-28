@@ -91,6 +91,8 @@ public class StickerView extends EntityView {
         updatePosition();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$StickerView(ImageReceiver imageReceiver, boolean z, boolean z2, boolean z3) {
         RLottieDrawable lottieAnimation;
         if (z && !z2 && (lottieAnimation = imageReceiver.getLottieAnimation()) != null) {

@@ -8,11 +8,11 @@ public class TLRPC$TL_wallPaperSettings extends TLRPC$WallPaperSettings {
         this.flags = readInt32;
         boolean z2 = false;
         this.blur = (readInt32 & 2) != 0;
-        if ((this.flags & 4) != 0) {
+        if ((readInt32 & 4) != 0) {
             z2 = true;
         }
         this.motion = z2;
-        if ((this.flags & 1) != 0) {
+        if ((readInt32 & 1) != 0) {
             this.background_color = abstractSerializedData.readInt32(z);
         }
         if ((this.flags & 16) != 0) {

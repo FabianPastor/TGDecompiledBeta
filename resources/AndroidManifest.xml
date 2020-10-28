@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="20989" android:versionName="7.1.2" android:installLocation="auto" android:compileSdkVersion="30" android:compileSdkVersionCodename="11" package="org.telegram.messenger.beta" platformBuildVersionCode="30" platformBuildVersionName="11">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt" android:versionCode="21249" android:versionName="7.2.0" android:installLocation="auto" android:compileSdkVersion="30" android:compileSdkVersionCodename="11" package="org.telegram.messenger.beta" platformBuildVersionCode="30" platformBuildVersionName="11">
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="28"/>
     <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
     <uses-feature android:name="android.hardware.location.network" android:required="false"/>
@@ -293,6 +293,7 @@
         <meta-data android:name="com.sec.android.multiwindow.DEFAULT_SIZE_H" android:value="598dp"/>
         <meta-data android:name="com.sec.android.multiwindow.MINIMUM_SIZE_W" android:value="632dp"/>
         <meta-data android:name="com.sec.android.multiwindow.MINIMUM_SIZE_H" android:value="598dp"/>
+        <meta-data android:name="com.google.android.gms.wallet.api.enabled" android:value="true"/>
         <meta-data android:name="com.google.android.gms.car.notification.SmallIcon" android:resource="@drawable/ic_player"/>
         <meta-data android:name="com.google.android.gms.car.application" android:resource="@xml/automotive_app_desc"/>
         <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES" android:value="face,barcode"/>

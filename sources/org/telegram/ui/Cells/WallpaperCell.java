@@ -325,10 +325,14 @@ public class WallpaperCell extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$WallpaperCell(WallpaperView wallpaperView, int i, View view) {
         onWallpaperClick(wallpaperView.currentWallpaper, i);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ boolean lambda$new$1$WallpaperCell(WallpaperView wallpaperView, int i, View view) {
         return onWallpaperLongClick(wallpaperView.currentWallpaper, i);
     }

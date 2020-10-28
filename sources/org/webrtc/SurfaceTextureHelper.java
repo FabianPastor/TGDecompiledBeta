@@ -121,9 +121,10 @@ public class SurfaceTextureHelper {
             this.eglBase = create;
             try {
                 create.createDummyPbufferSurface();
-                this.eglBase.makeCurrent();
-                this.oesTextureId = GlUtil.generateTexture(36197);
-                SurfaceTexture surfaceTexture2 = new SurfaceTexture(this.oesTextureId);
+                create.makeCurrent();
+                int generateTexture = GlUtil.generateTexture(36197);
+                this.oesTextureId = generateTexture;
+                SurfaceTexture surfaceTexture2 = new SurfaceTexture(generateTexture);
                 this.surfaceTexture = surfaceTexture2;
                 setOnFrameAvailableListener(surfaceTexture2, new SurfaceTexture.OnFrameAvailableListener() {
                     public final void onFrameAvailable(SurfaceTexture surfaceTexture) {
@@ -140,6 +141,8 @@ public class SurfaceTextureHelper {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$SurfaceTextureHelper(SurfaceTexture surfaceTexture2) {
         this.hasPendingTexture = true;
         tryDeliverTextureFrame();
@@ -173,6 +176,8 @@ public class SurfaceTextureHelper {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$stopListening$1 */
     public /* synthetic */ void lambda$stopListening$1$SurfaceTextureHelper() {
         this.listener = null;
         this.pendingListener = null;
@@ -201,6 +206,8 @@ public class SurfaceTextureHelper {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setTextureSize$2 */
     public /* synthetic */ void lambda$setTextureSize$2$SurfaceTextureHelper(int i, int i2) {
         this.textureWidth = i;
         this.textureHeight = i2;
@@ -215,11 +222,15 @@ public class SurfaceTextureHelper {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$forceFrame$3 */
     public /* synthetic */ void lambda$forceFrame$3$SurfaceTextureHelper() {
         this.hasPendingTexture = true;
         tryDeliverTextureFrame();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setFrameRotation$4 */
     public /* synthetic */ void lambda$setFrameRotation$4$SurfaceTextureHelper(int i) {
         this.frameRotation = i;
     }
@@ -255,6 +266,8 @@ public class SurfaceTextureHelper {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$returnTextureFrame$5 */
     public /* synthetic */ void lambda$returnTextureFrame$5$SurfaceTextureHelper() {
         this.isTextureInUse = false;
         if (this.isQuitting) {
@@ -277,6 +290,8 @@ public class SurfaceTextureHelper {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$dispose$6 */
     public /* synthetic */ void lambda$dispose$6$SurfaceTextureHelper() {
         this.isQuitting = true;
         if (!this.isTextureInUse) {

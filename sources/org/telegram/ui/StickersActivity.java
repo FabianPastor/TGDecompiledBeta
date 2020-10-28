@@ -224,7 +224,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         this.selectedCountTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.selectedCountTextView.setTextColor(Theme.getColor("actionBarActionModeDefaultIcon"));
         createActionMode.addView(this.selectedCountTextView, LayoutHelper.createLinear(0, -1, 1.0f, 72, 0, 0, 0));
-        this.selectedCountTextView.setOnTouchListener($$Lambda$StickersActivity$HUiGgK08vUbN9lswklOPdO_GEU.INSTANCE);
+        this.selectedCountTextView.setOnTouchListener($$Lambda$StickersActivity$Xk67QgVSNe1W5ZwlRfSZIQcgygo.INSTANCE);
         createActionMode.addItemWithWidth(0, NUM, AndroidUtilities.dp(54.0f));
         this.deleteMenuItem = createActionMode.addItemWithWidth(1, NUM, AndroidUtilities.dp(54.0f));
         this.listAdapter = new ListAdapter(context, MediaDataController.getInstance(this.currentAccount).getStickerSets(this.currentType));
@@ -276,6 +276,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$2 */
     public /* synthetic */ void lambda$createView$2$StickersActivity(Context context, View view, int i) {
         if (i < this.stickersStartRow || i >= this.stickersEndRow || getParentActivity() == null) {
             if (i == this.featuredRow) {
@@ -340,12 +342,16 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$1 */
     public /* synthetic */ void lambda$null$1$StickersActivity(AlertDialog.Builder builder, View view) {
         SharedConfig.setSuggestStickers(((Integer) view.getTag()).intValue());
         this.listAdapter.notifyItemChanged(this.suggestRow);
         builder.getDismissRunnable().run();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$3 */
     public /* synthetic */ boolean lambda$createView$3$StickersActivity(View view, int i) {
         if (this.listAdapter.hasSelected() || i < this.stickersStartRow || i >= this.stickersEndRow) {
             return false;
@@ -401,10 +407,14 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$4 */
     public /* synthetic */ void lambda$null$4$StickersActivity() {
         this.activeReorderingRequests--;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$sendReorder$5 */
     public /* synthetic */ void lambda$sendReorder$5$StickersActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable() {
             public final void run() {
@@ -420,7 +430,11 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         if (this.listAdapter != null) {
             if (!this.isPaused) {
                 diffResult = DiffUtil.calculateDiff(new DiffUtil.Callback() {
-                    final List<TLRPC$TL_messages_stickerSet> oldList = StickersActivity.this.listAdapter.stickerSets;
+                    final List<TLRPC$TL_messages_stickerSet> oldList;
+
+                    {
+                        this.oldList = StickersActivity.this.listAdapter.stickerSets;
+                    }
 
                     public int getOldListSize() {
                         return this.oldList.size();
@@ -444,44 +458,45 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             this.listAdapter.setStickerSets(stickerSets);
         }
         this.rowCount = 0;
-        if (this.currentType == 0) {
-            int i = 0 + 1;
-            this.rowCount = i;
-            this.suggestRow = 0;
-            int i2 = i + 1;
+        int i = this.currentType;
+        if (i == 0) {
+            int i2 = 0 + 1;
             this.rowCount = i2;
-            this.loopRow = i;
+            this.suggestRow = 0;
             int i3 = i2 + 1;
             this.rowCount = i3;
-            this.loopInfoRow = i2;
-            this.rowCount = i3 + 1;
-            this.featuredRow = i3;
+            this.loopRow = i2;
+            int i4 = i3 + 1;
+            this.rowCount = i4;
+            this.loopInfoRow = i3;
+            this.rowCount = i4 + 1;
+            this.featuredRow = i4;
         } else {
             this.suggestRow = -1;
             this.loopRow = -1;
             this.loopInfoRow = -1;
             this.featuredRow = -1;
         }
-        int i4 = 2;
-        if (instance.getArchivedStickersCount(this.currentType) != 0) {
+        int archivedStickersCount = instance.getArchivedStickersCount(i);
+        int i5 = 2;
+        if (archivedStickersCount != 0) {
             boolean z = this.archivedRow == -1;
-            int i5 = this.rowCount;
-            int i6 = i5 + 1;
-            this.rowCount = i6;
-            this.archivedRow = i5;
+            int i6 = this.rowCount;
+            int i7 = i6 + 1;
+            this.rowCount = i7;
+            this.archivedRow = i6;
             if (this.currentType == 1) {
-                this.rowCount = i6 + 1;
+                this.rowCount = i7 + 1;
             } else {
-                i6 = -1;
+                i7 = -1;
             }
-            this.archivedInfoRow = i6;
+            this.archivedInfoRow = i7;
             ListAdapter listAdapter2 = this.listAdapter;
             if (listAdapter2 != null && z) {
-                int i7 = this.archivedRow;
-                if (i6 == -1) {
-                    i4 = 1;
+                if (i7 == -1) {
+                    i5 = 1;
                 }
-                listAdapter2.notifyItemRangeInserted(i7, i4);
+                listAdapter2.notifyItemRangeInserted(i6, i5);
             }
         } else {
             int i8 = this.archivedRow;
@@ -491,9 +506,9 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             ListAdapter listAdapter3 = this.listAdapter;
             if (!(listAdapter3 == null || i8 == -1)) {
                 if (i9 == -1) {
-                    i4 = 1;
+                    i5 = 1;
                 }
-                listAdapter3.notifyItemRangeRemoved(i8, i4);
+                listAdapter3.notifyItemRangeRemoved(i8, i5);
             }
         }
         if (this.currentType == 0) {
@@ -529,12 +544,13 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             this.stickersShadowRow = -1;
             this.masksInfoRow = -1;
         }
-        if (this.listAdapter != null && diffResult != null) {
+        ListAdapter listAdapter4 = this.listAdapter;
+        if (listAdapter4 != null && diffResult != null) {
             final int i14 = this.stickersStartRow;
             if (i14 < 0) {
                 i14 = this.rowCount;
             }
-            this.listAdapter.notifyItemRangeChanged(0, i14);
+            listAdapter4.notifyItemRangeChanged(0, i14);
             diffResult.dispatchUpdatesTo((ListUpdateCallback) new ListUpdateCallback() {
                 public void onMoved(int i, int i2) {
                 }
@@ -598,13 +614,14 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
         public void processSelectionMenu(int i) {
             String str;
             TextView textView;
+            Boolean bool = Boolean.FALSE;
             if (i == 0 || i == 1) {
                 ArrayList arrayList = new ArrayList(this.selectedItems.size());
                 int size = this.stickerSets.size();
                 int i2 = 0;
                 for (int i3 = 0; i3 < size; i3++) {
                     TLRPC$StickerSet tLRPC$StickerSet = this.stickerSets.get(i3).set;
-                    if (this.selectedItems.get(tLRPC$StickerSet.id, Boolean.FALSE).booleanValue()) {
+                    if (this.selectedItems.get(tLRPC$StickerSet.id, bool).booleanValue()) {
                         arrayList.add(tLRPC$StickerSet);
                     }
                 }
@@ -651,7 +668,7 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                         break;
                     }
                     TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = this.stickerSets.get(i2);
-                    if (this.selectedItems.get(tLRPC$TL_messages_stickerSet.set.id, Boolean.FALSE).booleanValue()) {
+                    if (this.selectedItems.get(tLRPC$TL_messages_stickerSet.set.id, bool).booleanValue()) {
                         processSelectionOption(i, tLRPC$TL_messages_stickerSet);
                         break;
                     }
@@ -661,6 +678,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             }
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$processSelectionMenu$0 */
         public /* synthetic */ void lambda$processSelectionMenu$0$StickersActivity$ListAdapter(ArrayList arrayList, int i, DialogInterface dialogInterface, int i2) {
             StickersActivity.this.listAdapter.clearSelected();
             MediaDataController.getInstance(StickersActivity.this.currentAccount).toggleStickerSets(arrayList, StickersActivity.this.currentType, i == 1 ? 0 : 1, StickersActivity.this, true);
@@ -805,6 +824,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             return itemViewType == 0 || itemViewType == 2 || itemViewType == 4;
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onCreateViewHolder$1 */
         public /* synthetic */ boolean lambda$onCreateViewHolder$1$StickersActivity$ListAdapter(StickerSetCell stickerSetCell, View view, MotionEvent motionEvent) {
             if (motionEvent.getAction() != 0) {
                 return false;
@@ -813,6 +834,8 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             return false;
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onCreateViewHolder$3 */
         public /* synthetic */ void lambda$onCreateViewHolder$3$StickersActivity$ListAdapter(View view) {
             CharSequence[] charSequenceArr;
             int[] iArr;
@@ -849,13 +872,15 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
             }
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$null$2 */
         public /* synthetic */ void lambda$null$2$StickersActivity$ListAdapter(int[] iArr, TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet, DialogInterface dialogInterface, int i) {
             processSelectionOption(iArr[i], tLRPC$TL_messages_stickerSet);
         }
 
         @SuppressLint({"ClickableViewAccessibility"})
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            TextCheckCell textCheckCell;
+            View view;
             if (i == 0) {
                 StickerSetCell stickerSetCell = new StickerSetCell(this.mContext, 1);
                 stickerSetCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
@@ -875,26 +900,23 @@ public class StickersActivity extends BaseFragment implements NotificationCenter
                         StickersActivity.ListAdapter.this.lambda$onCreateViewHolder$3$StickersActivity$ListAdapter(view);
                     }
                 });
-                textCheckCell = stickerSetCell;
+                view = stickerSetCell;
             } else if (i == 1) {
-                TextInfoPrivacyCell textInfoPrivacyCell = new TextInfoPrivacyCell(this.mContext);
-                textInfoPrivacyCell.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
-                textCheckCell = textInfoPrivacyCell;
+                view = new TextInfoPrivacyCell(this.mContext);
+                view.setBackgroundDrawable(Theme.getThemedDrawable(this.mContext, NUM, "windowBackgroundGrayShadow"));
             } else if (i == 2) {
-                TextSettingsCell textSettingsCell = new TextSettingsCell(this.mContext);
-                textSettingsCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                textCheckCell = textSettingsCell;
+                view = new TextSettingsCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             } else if (i == 3) {
-                textCheckCell = new ShadowSectionCell(this.mContext);
+                view = new ShadowSectionCell(this.mContext);
             } else if (i != 4) {
-                textCheckCell = null;
+                view = null;
             } else {
-                TextCheckCell textCheckCell2 = new TextCheckCell(this.mContext);
-                textCheckCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                textCheckCell = textCheckCell2;
+                view = new TextCheckCell(this.mContext);
+                view.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             }
-            textCheckCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-            return new RecyclerListView.Holder(textCheckCell);
+            view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
+            return new RecyclerListView.Holder(view);
         }
 
         public int getItemViewType(int i) {

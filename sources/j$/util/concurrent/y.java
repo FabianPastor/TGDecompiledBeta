@@ -1,8 +1,12 @@
 package j$.util.concurrent;
 
-import j$.util.function.BiConsumer;
-import java.util.Map;
+import java.security.PrivilegedAction;
 
-public interface y extends Map, j$.util.Map {
-    void forEach(BiConsumer biConsumer);
+class y implements PrivilegedAction {
+    y() {
+    }
+
+    public Object run() {
+        return Boolean.valueOf(Boolean.getBoolean("java.util.secureRandomSeed"));
+    }
 }

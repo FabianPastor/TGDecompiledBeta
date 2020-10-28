@@ -1,17 +1,14 @@
 package j$.util.stream;
 
-import j$.util.function.BiConsumer;
-import j$.util.function.CLASSNAMEo;
+import j$.util.function.t;
 
-public final /* synthetic */ class L implements CLASSNAMEo {
-    public final /* synthetic */ BiConsumer a;
+public final /* synthetic */ class L implements t {
+    public static final /* synthetic */ L a = new L();
 
-    public /* synthetic */ L(BiConsumer biConsumer) {
-        this.a = biConsumer;
+    private /* synthetic */ L() {
     }
 
-    public final Object a(Object obj, Object obj2) {
-        Object unused = this.a.accept(obj, obj2);
-        return obj;
+    public final int applyAsInt(int i, int i2) {
+        return i + i2;
     }
 }

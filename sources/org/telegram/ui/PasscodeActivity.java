@@ -284,6 +284,8 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$0 */
     public /* synthetic */ boolean lambda$createView$0$PasscodeActivity(TextView textView, int i, KeyEvent keyEvent) {
         int i2 = this.passcodeSetStep;
         if (i2 == 0) {
@@ -297,10 +299,14 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$1 */
     public /* synthetic */ void lambda$createView$1$PasscodeActivity(View view) {
         this.dropDownContainer.toggleSubMenu();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$4 */
     public /* synthetic */ void lambda$createView$4$PasscodeActivity(View view, int i) {
         if (view.isEnabled()) {
             boolean z = true;
@@ -353,7 +359,7 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                     } else if (i3 == 18000) {
                         numberPicker.setValue(4);
                     }
-                    numberPicker.setFormatter($$Lambda$PasscodeActivity$e1eIIUXJcHN6dWhbpJbTrxba_60.INSTANCE);
+                    numberPicker.setFormatter($$Lambda$PasscodeActivity$zImr4FCdZoN5QJd52go50sgn8Y.INSTANCE);
                     builder.setView(numberPicker);
                     builder.setNegativeButton(LocaleController.getString("Done", NUM), new DialogInterface.OnClickListener(numberPicker, i) {
                         public final /* synthetic */ NumberPicker f$1;
@@ -403,6 +409,8 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$3 */
     public /* synthetic */ void lambda$null$3$PasscodeActivity(NumberPicker numberPicker, int i, DialogInterface dialogInterface, int i2) {
         int value = numberPicker.getValue();
         if (value == 0) {
@@ -436,6 +444,8 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
         fixLayoutInternal();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onResume$5 */
     public /* synthetic */ void lambda$onResume$5$PasscodeActivity() {
         EditTextBoldCursor editTextBoldCursor = this.passwordEditText;
         if (editTextBoldCursor != null) {
@@ -526,11 +536,12 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 textView.setText(LocaleController.getString("PasscodePassword", NUM));
             }
         }
-        if ((this.type == 1 && this.currentPasswordType == 0) || (this.type == 2 && SharedConfig.passcodeType == 0)) {
+        int i2 = this.type;
+        if ((i2 == 1 && this.currentPasswordType == 0) || (i2 == 2 && SharedConfig.passcodeType == 0)) {
             this.passwordEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(4)});
             this.passwordEditText.setInputType(3);
             this.passwordEditText.setKeyListener(DigitsKeyListener.getInstance("NUM"));
-        } else if ((this.type == 1 && this.currentPasswordType == 1) || (this.type == 2 && SharedConfig.passcodeType == 1)) {
+        } else if ((i2 == 1 && this.currentPasswordType == 1) || (i2 == 2 && SharedConfig.passcodeType == 1)) {
             this.passwordEditText.setFilters(new InputFilter[0]);
             this.passwordEditText.setKeyListener((KeyListener) null);
             this.passwordEditText.setInputType(129);
@@ -662,20 +673,18 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View view;
-            TextSettingsCell textSettingsCell;
+            View view2;
             if (i == 0) {
-                TextCheckCell textCheckCell = new TextCheckCell(this.mContext);
-                textCheckCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                textSettingsCell = textCheckCell;
+                view2 = new TextCheckCell(this.mContext);
+                view2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             } else if (i != 1) {
                 view = new TextInfoPrivacyCell(this.mContext);
                 return new RecyclerListView.Holder(view);
             } else {
-                TextSettingsCell textSettingsCell2 = new TextSettingsCell(this.mContext);
-                textSettingsCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                textSettingsCell = textSettingsCell2;
+                view2 = new TextSettingsCell(this.mContext);
+                view2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
             }
-            view = textSettingsCell;
+            view = view2;
             return new RecyclerListView.Holder(view);
         }
 

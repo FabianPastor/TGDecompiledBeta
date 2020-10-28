@@ -498,7 +498,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 }
             }
         }
-        Collections.sort(this.defaultThemes, $$Lambda$ThemeActivity$cs0N3OVBAa2T6bewE_YVZMeTCA.INSTANCE);
+        Collections.sort(this.defaultThemes, $$Lambda$ThemeActivity$UM18aTc2VkvPUFpY4hL9yY8ZWDA.INSTANCE);
         int i8 = 2;
         if (this.currentType == 0) {
             int i9 = this.rowCount;
@@ -753,16 +753,16 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     }
                 }
             } else if (z || this.previousUpdatedType == -1) {
-                this.listAdapter.notifyDataSetChanged();
+                listAdapter2.notifyDataSetChanged();
             } else if (i6 == -1 && (i = this.themeAccentListRow) != -1) {
-                this.listAdapter.notifyItemInserted(i);
+                listAdapter2.notifyItemInserted(i);
             } else if (i6 == -1 || this.themeAccentListRow != -1) {
                 int i61 = this.themeAccentListRow;
                 if (i61 != -1) {
-                    this.listAdapter.notifyItemChanged(i61);
+                    listAdapter2.notifyItemChanged(i61);
                 }
             } else {
-                this.listAdapter.notifyItemRemoved(i6);
+                listAdapter2.notifyItemRemoved(i6);
             }
         }
         if (this.currentType == 1) {
@@ -861,6 +861,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$didReceivedNotification$1 */
     public /* synthetic */ void lambda$didReceivedNotification$1$ThemeActivity(DialogInterface dialogInterface) {
         this.sharingProgressDialog = null;
         this.sharingTheme = null;
@@ -913,7 +915,9 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     ThemeActivity.this.showDialog(new ShareAlert(ThemeActivity.this.getParentActivity(), (ArrayList<MessageObject>) null, str, false, str, false));
                 } else if (i == 3) {
                     Theme.ThemeInfo currentTheme = Theme.getCurrentTheme();
-                    ThemeActivity.this.presentFragment(new ThemePreviewActivity(currentTheme, false, 1, currentTheme.getAccent(false).id >= 100, ThemeActivity.this.currentType == 1));
+                    Theme.ThemeAccent accent2 = currentTheme.getAccent(false);
+                    ThemeActivity themeActivity = ThemeActivity.this;
+                    themeActivity.presentFragment(new ThemePreviewActivity(currentTheme, false, 1, accent2.id >= 100, themeActivity.currentType == 1));
                 } else if (i == 4 && ThemeActivity.this.getParentActivity() != null) {
                     AlertDialog.Builder builder2 = new AlertDialog.Builder((Context) ThemeActivity.this.getParentActivity());
                     builder2.setTitle(LocaleController.getString("ThemeResetToDefaultsTitle", NUM));
@@ -933,10 +937,14 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 }
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onItemClick$0 */
             public /* synthetic */ void lambda$onItemClick$0$ThemeActivity$1(DialogInterface dialogInterface, int i) {
                 AlertsCreator.createThemeCreateDialog(ThemeActivity.this, 0, (Theme.ThemeInfo) null, (Theme.ThemeAccent) null);
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onItemClick$1 */
             public /* synthetic */ void lambda$onItemClick$1$ThemeActivity$1(DialogInterface dialogInterface, int i) {
                 boolean access$500 = ThemeActivity.this.setFontSize(AndroidUtilities.isTablet() ? 18 : 16);
                 if (ThemeActivity.this.setBubbleRadius(10, true)) {
@@ -991,6 +999,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$5 */
     public /* synthetic */ void lambda$createView$5$ThemeActivity(View view, int i, float f, float f2) {
         int i2;
         int i3;
@@ -1173,6 +1183,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$ThemeActivity(DialogInterface dialogInterface, int i) {
         SharedConfig.setDistanceSystemType(i);
         RecyclerView.ViewHolder findViewHolderForAdapterPosition = this.listView.findViewHolderForAdapterPosition(this.distanceRow);
@@ -1181,6 +1193,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$3 */
     public /* synthetic */ void lambda$null$3$ThemeActivity(int i, DialogInterface dialogInterface, int i2) {
         SharedPreferences.Editor edit = MessagesController.getGlobalMainSettings().edit();
         edit.putInt("sortContactsBy", i2);
@@ -1191,6 +1205,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$4 */
     public /* synthetic */ void lambda$null$4$ThemeActivity(int i, TextSettingsCell textSettingsCell, TimePicker timePicker, int i2, int i3) {
         int i4 = (i2 * 60) + i3;
         if (i == this.scheduleFromRow) {
@@ -1314,6 +1330,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         parentActivity.requestPermissions(new String[]{"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"}, 2);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$updateSunTime$6 */
     public /* synthetic */ void lambda$updateSunTime$6$ThemeActivity(DialogInterface dialogInterface, int i) {
         if (getParentActivity() != null) {
             try {
@@ -1323,27 +1341,17 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$updateSunTime$8 */
     public /* synthetic */ void lambda$updateSunTime$8$ThemeActivity() {
-        String str;
+        String str = null;
         try {
             List<Address> fromLocation = new Geocoder(ApplicationLoader.applicationContext, Locale.getDefault()).getFromLocation(Theme.autoNightLocationLatitude, Theme.autoNightLocationLongitude, 1);
             if (fromLocation.size() > 0) {
                 str = fromLocation.get(0).getLocality();
-                AndroidUtilities.runOnUIThread(new Runnable(str) {
-                    public final /* synthetic */ String f$1;
-
-                    {
-                        this.f$1 = r2;
-                    }
-
-                    public final void run() {
-                        ThemeActivity.this.lambda$null$7$ThemeActivity(this.f$1);
-                    }
-                });
             }
         } catch (Exception unused) {
         }
-        str = null;
         AndroidUtilities.runOnUIThread(new Runnable(str) {
             public final /* synthetic */ String f$1;
 
@@ -1357,6 +1365,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$7 */
     public /* synthetic */ void lambda$null$7$ThemeActivity(String str) {
         RecyclerListView.Holder holder;
         Theme.autoNightCityName = str;
@@ -1690,6 +1700,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             }
         }
 
+        /* access modifiers changed from: private */
         /* JADX WARNING: Can't wrap try/catch for region: R(4:59|60|61|62) */
         /* JADX WARNING: Missing exception handler attribute for start block: B:61:0x0155 */
         /* JADX WARNING: Removed duplicated region for block: B:34:0x00dc A[SYNTHETIC, Splitter:B:34:0x00dc] */
@@ -1697,6 +1708,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
         /* JADX WARNING: Removed duplicated region for block: B:50:0x010a  */
         /* JADX WARNING: Removed duplicated region for block: B:55:0x012d A[Catch:{ Exception -> 0x017a }, RETURN] */
         /* JADX WARNING: Removed duplicated region for block: B:56:0x012e A[Catch:{ Exception -> 0x017a }] */
+        /* renamed from: lambda$showOptionsForTheme$1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public /* synthetic */ void lambda$showOptionsForTheme$1$ThemeActivity$ListAdapter(org.telegram.ui.ActionBar.Theme.ThemeInfo r8, android.content.DialogInterface r9, int r10) {
             /*
@@ -1875,7 +1887,7 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             L_0x0164:
                 org.telegram.ui.ThemeActivity r9 = org.telegram.ui.ThemeActivity.this     // Catch:{ Exception -> 0x017a }
                 java.lang.String r10 = "ShareFile"
-                r0 = 2131626998(0x7f0e0bf6, float:1.8881248E38)
+                r0 = 2131627105(0x7f0e0CLASSNAME, float:1.8881465E38)
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r10, r0)     // Catch:{ Exception -> 0x017a }
                 android.content.Intent r8 = android.content.Intent.createChooser(r8, r10)     // Catch:{ Exception -> 0x017a }
                 r10 = 500(0x1f4, float:7.0E-43)
@@ -1918,21 +1930,21 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                 org.telegram.ui.ThemeActivity r10 = org.telegram.ui.ThemeActivity.this
                 android.app.Activity r10 = r10.getParentActivity()
                 r9.<init>((android.content.Context) r10)
-                r10 = 2131625033(0x7f0e0449, float:1.8877263E38)
+                r10 = 2131625051(0x7f0e045b, float:1.88773E38)
                 java.lang.String r0 = "DeleteThemeTitle"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setTitle(r10)
-                r10 = 2131625032(0x7f0e0448, float:1.887726E38)
+                r10 = 2131625050(0x7f0e045a, float:1.8877297E38)
                 java.lang.String r0 = "DeleteThemeAlert"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
                 r9.setMessage(r10)
-                r10 = 2131624985(0x7f0e0419, float:1.8877165E38)
+                r10 = 2131625003(0x7f0e042b, float:1.8877202E38)
                 java.lang.String r0 = "Delete"
                 java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
-                org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$HjGrFd2877SP2gFmUCLASSNAMEvuRyOmw r0 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$HjGrFd2877SP2gFmUCLASSNAMEvuRyOmw
+                org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$gl_JCjakwPx0TsvL6FtpACBSXUc r0 = new org.telegram.ui.-$$Lambda$ThemeActivity$ListAdapter$gl_JCjakwPx0TsvL6FtpACBSXUc
                 r0.<init>(r8)
                 r9.setPositiveButton(r10, r0)
-                r8 = 2131624561(0x7f0e0271, float:1.8876305E38)
+                r8 = 2131624573(0x7f0e027d, float:1.887633E38)
                 java.lang.String r10 = "Cancel"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r10, r8)
                 r9.setNegativeButton(r8, r1)
@@ -1952,6 +1964,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ThemeActivity.ListAdapter.lambda$showOptionsForTheme$1$ThemeActivity$ListAdapter(org.telegram.ui.ActionBar.Theme$ThemeInfo, android.content.DialogInterface, int):void");
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$null$0 */
         public /* synthetic */ void lambda$null$0$ThemeActivity$ListAdapter(Theme.ThemeInfo themeInfo, DialogInterface dialogInterface, int i) {
             MessagesController.getInstance(themeInfo.account).saveTheme(themeInfo, (Theme.ThemeAccent) null, themeInfo == Theme.getCurrentNightTheme(), true);
             if (Theme.deleteTheme(themeInfo)) {
@@ -1960,6 +1974,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.themeListUpdated, new Object[0]);
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onCreateViewHolder$2 */
         public /* synthetic */ void lambda$onCreateViewHolder$2$ThemeActivity$ListAdapter(ThemeAccentsListAdapter themeAccentsListAdapter, RecyclerListView recyclerListView, View view, int i) {
             Theme.ThemeInfo currentNightTheme = ThemeActivity.this.currentType == 1 ? Theme.getCurrentNightTheme() : Theme.getCurrentTheme();
             if (i == themeAccentsListAdapter.getItemCount() - 1) {
@@ -1982,7 +1998,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
                     objArr[3] = Integer.valueOf(themeAccent.id);
                     globalInstance.postNotificationName(i4, objArr);
                 } else {
-                    ThemeActivity.this.presentFragment(new ThemePreviewActivity(currentNightTheme, false, 1, i3 >= 100, ThemeActivity.this.currentType == 1));
+                    ThemeActivity themeActivity2 = ThemeActivity.this;
+                    themeActivity2.presentFragment(new ThemePreviewActivity(currentNightTheme, false, 1, i3 >= 100, themeActivity2.currentType == 1));
                 }
             }
             int left = view.getLeft();
@@ -2006,6 +2023,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             }
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onCreateViewHolder$5 */
         public /* synthetic */ boolean lambda$onCreateViewHolder$5$ThemeActivity$ListAdapter(ThemeAccentsListAdapter themeAccentsListAdapter, View view, int i) {
             if (i >= 0 && i < themeAccentsListAdapter.themeAccents.size()) {
                 Theme.ThemeAccent themeAccent = (Theme.ThemeAccent) themeAccentsListAdapter.themeAccents.get(i);
@@ -2039,6 +2058,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             return false;
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$null$4 */
         public /* synthetic */ void lambda$null$4$ThemeActivity$ListAdapter(Theme.ThemeAccent themeAccent, ThemeAccentsListAdapter themeAccentsListAdapter, DialogInterface dialogInterface, int i) {
             if (ThemeActivity.this.getParentActivity() != null) {
                 int i2 = 2;
@@ -2086,6 +2107,8 @@ public class ThemeActivity extends BaseFragment implements NotificationCenter.No
             }
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$null$3 */
         public /* synthetic */ void lambda$null$3$ThemeActivity$ListAdapter(ThemeAccentsListAdapter themeAccentsListAdapter, Theme.ThemeAccent themeAccent, DialogInterface dialogInterface, int i) {
             if (Theme.deleteThemeAccent(themeAccentsListAdapter.currentTheme, themeAccent, true)) {
                 Theme.refreshThemeColors();

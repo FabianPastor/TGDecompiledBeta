@@ -17,7 +17,7 @@ public class TLRPC$TL_updateServiceNotification extends TLRPC$Update {
         this.flags = readInt32;
         int i = 0;
         this.popup = (readInt32 & 1) != 0;
-        if ((this.flags & 2) != 0) {
+        if ((readInt32 & 2) != 0) {
             this.inbox_date = abstractSerializedData.readInt32(z);
         }
         this.type = abstractSerializedData.readString(z);

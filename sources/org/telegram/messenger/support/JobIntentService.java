@@ -170,8 +170,9 @@ public abstract class JobIntentService extends Service {
 
             public void complete() {
                 synchronized (JobServiceEngineImpl.this.mLock) {
-                    if (JobServiceEngineImpl.this.mParams != null) {
-                        JobServiceEngineImpl.this.mParams.completeWork(this.mJobWork);
+                    JobParameters jobParameters = JobServiceEngineImpl.this.mParams;
+                    if (jobParameters != null) {
+                        jobParameters.completeWork(this.mJobWork);
                     }
                 }
             }
@@ -200,16 +201,16 @@ public abstract class JobIntentService extends Service {
             return doStopCurrentWork;
         }
 
-        /* JADX WARNING: Code restructure failed: missing block: B:13:0x0013, code lost:
-            if (r1 == null) goto L_0x0028;
+        /* JADX WARNING: Code restructure failed: missing block: B:13:0x0011, code lost:
+            if (r1 == null) goto L_0x0026;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:14:0x0015, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:14:0x0013, code lost:
             r1.getIntent().setExtrasClassLoader(r3.mService.getClassLoader());
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:15:0x0027, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:15:0x0025, code lost:
             return new org.telegram.messenger.support.JobIntentService.JobServiceEngineImpl.WrapperWorkItem(r3, r1);
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:16:0x0028, code lost:
+        /* JADX WARNING: Code restructure failed: missing block: B:16:0x0026, code lost:
             return null;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
@@ -218,20 +219,19 @@ public abstract class JobIntentService extends Service {
                 r3 = this;
                 java.lang.Object r0 = r3.mLock
                 monitor-enter(r0)
-                android.app.job.JobParameters r1 = r3.mParams     // Catch:{ all -> 0x0029 }
+                android.app.job.JobParameters r1 = r3.mParams     // Catch:{ all -> 0x0027 }
                 r2 = 0
                 if (r1 != 0) goto L_0x000a
-                monitor-exit(r0)     // Catch:{ all -> 0x0029 }
+                monitor-exit(r0)     // Catch:{ all -> 0x0027 }
                 return r2
             L_0x000a:
-                android.app.job.JobParameters r1 = r3.mParams     // Catch:{ all -> 0x0011 }
-                android.app.job.JobWorkItem r1 = r1.dequeueWork()     // Catch:{ all -> 0x0011 }
-                goto L_0x0012
-            L_0x0011:
+                android.app.job.JobWorkItem r1 = r1.dequeueWork()     // Catch:{ all -> 0x000f }
+                goto L_0x0010
+            L_0x000f:
                 r1 = r2
-            L_0x0012:
-                monitor-exit(r0)     // Catch:{ all -> 0x0029 }
-                if (r1 == 0) goto L_0x0028
+            L_0x0010:
+                monitor-exit(r0)     // Catch:{ all -> 0x0027 }
+                if (r1 == 0) goto L_0x0026
                 android.content.Intent r0 = r1.getIntent()
                 org.telegram.messenger.support.JobIntentService r2 = r3.mService
                 java.lang.ClassLoader r2 = r2.getClassLoader()
@@ -239,11 +239,11 @@ public abstract class JobIntentService extends Service {
                 org.telegram.messenger.support.JobIntentService$JobServiceEngineImpl$WrapperWorkItem r0 = new org.telegram.messenger.support.JobIntentService$JobServiceEngineImpl$WrapperWorkItem
                 r0.<init>(r1)
                 return r0
-            L_0x0028:
+            L_0x0026:
                 return r2
-            L_0x0029:
+            L_0x0027:
                 r1 = move-exception
-                monitor-exit(r0)     // Catch:{ all -> 0x0029 }
+                monitor-exit(r0)     // Catch:{ all -> 0x0027 }
                 throw r1
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.support.JobIntentService.JobServiceEngineImpl.dequeueWork():org.telegram.messenger.support.JobIntentService$GenericWorkItem");
@@ -387,7 +387,8 @@ public abstract class JobIntentService extends Service {
 
     static WorkEnqueuer getWorkEnqueuer(Context context, ComponentName componentName, boolean z, int i) {
         WorkEnqueuer workEnqueuer;
-        WorkEnqueuer workEnqueuer2 = sClassWorkEnqueuer.get(componentName);
+        HashMap<ComponentName, WorkEnqueuer> hashMap = sClassWorkEnqueuer;
+        WorkEnqueuer workEnqueuer2 = hashMap.get(componentName);
         if (workEnqueuer2 != null) {
             return workEnqueuer2;
         }
@@ -399,7 +400,7 @@ public abstract class JobIntentService extends Service {
             throw new IllegalArgumentException("Can't be here without a job id");
         }
         WorkEnqueuer workEnqueuer3 = workEnqueuer;
-        sClassWorkEnqueuer.put(componentName, workEnqueuer3);
+        hashMap.put(componentName, workEnqueuer3);
         return workEnqueuer3;
     }
 
@@ -439,7 +440,8 @@ public abstract class JobIntentService extends Service {
         if (arrayList != null) {
             synchronized (arrayList) {
                 this.mCurProcessor = null;
-                if (this.mCompatQueue != null && this.mCompatQueue.size() > 0) {
+                ArrayList<CompatWorkItem> arrayList2 = this.mCompatQueue;
+                if (arrayList2 != null && arrayList2.size() > 0) {
                     ensureProcessorRunningLocked(false);
                 } else if (!this.mDestroyed) {
                     this.mCompatWorkEnqueuer.serviceProcessingFinished();

@@ -1,20 +1,54 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEs;
-import j$.util.function.BiConsumer;
-import j$.util.function.CLASSNAMEm;
+import j$.util.CLASSNAMEk;
+import j$.util.function.CLASSNAMEe;
+import j$.util.function.Consumer;
+import j$.util.function.g;
+import j$.util.function.u;
 
-public final /* synthetic */ class L0 implements BiConsumer {
-    public static final /* synthetic */ L0 a = new L0();
+public final /* synthetic */ class L0 implements CLASSNAMEr5 {
+    public final /* synthetic */ Y5 a;
 
-    private /* synthetic */ L0() {
+    public /* synthetic */ L0(Y5 y5) {
+        this.a = y5;
     }
 
-    public /* synthetic */ BiConsumer a(BiConsumer biConsumer) {
-        return CLASSNAMEm.a(this, biConsumer);
+    public /* synthetic */ void accept(double d) {
+        CLASSNAMEk.c(this);
+        throw null;
     }
 
-    public final void accept(Object obj, Object obj2) {
-        ((CLASSNAMEs) obj).a((CLASSNAMEs) obj2);
+    public final void accept(int i) {
+        this.a.accept(i);
+    }
+
+    public /* synthetic */ void accept(long j) {
+        CLASSNAMEk.b(this);
+        throw null;
+    }
+
+    /* renamed from: b */
+    public /* synthetic */ void accept(Integer num) {
+        CLASSNAMEc3.b(this, num);
+    }
+
+    public Consumer f(Consumer consumer) {
+        consumer.getClass();
+        return new CLASSNAMEe(this, consumer);
+    }
+
+    public u l(u uVar) {
+        uVar.getClass();
+        return new g(this, uVar);
+    }
+
+    public void m() {
+    }
+
+    public void n(long j) {
+    }
+
+    public /* synthetic */ boolean p() {
+        return false;
     }
 }

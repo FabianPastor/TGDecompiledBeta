@@ -119,62 +119,58 @@ public class NumberPicker extends LinearLayout {
         this.mMaxHeight = applyDimension;
         int i = this.mMinHeight;
         if (i == -1 || applyDimension == -1 || i <= applyDimension) {
-            int applyDimension2 = (int) TypedValue.applyDimension(1, 64.0f, getResources().getDisplayMetrics());
-            this.mMinWidth = applyDimension2;
+            this.mMinWidth = (int) TypedValue.applyDimension(1, 64.0f, getResources().getDisplayMetrics());
             this.mMaxWidth = -1;
-            if (applyDimension2 == -1 || -1 == -1 || applyDimension2 <= -1) {
-                this.mComputeMaxWidth = this.mMaxWidth == -1;
-                this.mPressedStateHelper = new PressedStateHelper();
-                setWillNotDraw(false);
-                TextView textView = new TextView(getContext());
-                this.mInputText = textView;
-                textView.setGravity(17);
-                this.mInputText.setSingleLine(true);
-                this.mInputText.setTextColor(Theme.getColor("dialogTextBlack"));
-                this.mInputText.setBackgroundResource(0);
-                this.mInputText.setTextSize(1, 18.0f);
-                this.mInputText.setVisibility(4);
-                addView(this.mInputText, new LinearLayout.LayoutParams(-1, -2));
-                ViewConfiguration viewConfiguration = ViewConfiguration.get(getContext());
-                this.mTouchSlop = viewConfiguration.getScaledTouchSlop();
-                this.mMinimumFlingVelocity = viewConfiguration.getScaledMinimumFlingVelocity();
-                this.mMaximumFlingVelocity = viewConfiguration.getScaledMaximumFlingVelocity() / 8;
-                this.mTextSize = (int) this.mInputText.getTextSize();
-                Paint paint2 = new Paint();
-                paint2.setAntiAlias(true);
-                paint2.setTextAlign(Paint.Align.CENTER);
-                paint2.setTextSize((float) this.mTextSize);
-                paint2.setTypeface(this.mInputText.getTypeface());
-                paint2.setColor(this.mInputText.getTextColors().getColorForState(LinearLayout.ENABLED_STATE_SET, -1));
-                this.mSelectorWheelPaint = paint2;
-                this.mFlingScroller = new Scroller(getContext(), (Interpolator) null, true);
-                this.mAdjustScroller = new Scroller(getContext(), new DecelerateInterpolator(2.5f));
-                updateInputTextView();
-                setImportantForAccessibility(1);
-                setAccessibilityDelegate(new SeekBarAccessibilityDelegate() {
-                    /* access modifiers changed from: protected */
-                    public boolean canScrollBackward(View view) {
-                        return true;
-                    }
+            this.mComputeMaxWidth = true;
+            this.mPressedStateHelper = new PressedStateHelper();
+            setWillNotDraw(false);
+            TextView textView = new TextView(getContext());
+            this.mInputText = textView;
+            textView.setGravity(17);
+            this.mInputText.setSingleLine(true);
+            this.mInputText.setTextColor(Theme.getColor("dialogTextBlack"));
+            this.mInputText.setBackgroundResource(0);
+            this.mInputText.setTextSize(1, 18.0f);
+            this.mInputText.setVisibility(4);
+            addView(this.mInputText, new LinearLayout.LayoutParams(-1, -2));
+            ViewConfiguration viewConfiguration = ViewConfiguration.get(getContext());
+            this.mTouchSlop = viewConfiguration.getScaledTouchSlop();
+            this.mMinimumFlingVelocity = viewConfiguration.getScaledMinimumFlingVelocity();
+            this.mMaximumFlingVelocity = viewConfiguration.getScaledMaximumFlingVelocity() / 8;
+            this.mTextSize = (int) this.mInputText.getTextSize();
+            Paint paint2 = new Paint();
+            paint2.setAntiAlias(true);
+            paint2.setTextAlign(Paint.Align.CENTER);
+            paint2.setTextSize((float) this.mTextSize);
+            paint2.setTypeface(this.mInputText.getTypeface());
+            paint2.setColor(this.mInputText.getTextColors().getColorForState(LinearLayout.ENABLED_STATE_SET, -1));
+            this.mSelectorWheelPaint = paint2;
+            this.mFlingScroller = new Scroller(getContext(), (Interpolator) null, true);
+            this.mAdjustScroller = new Scroller(getContext(), new DecelerateInterpolator(2.5f));
+            updateInputTextView();
+            setImportantForAccessibility(1);
+            setAccessibilityDelegate(new SeekBarAccessibilityDelegate() {
+                /* access modifiers changed from: protected */
+                public boolean canScrollBackward(View view) {
+                    return true;
+                }
 
-                    /* access modifiers changed from: protected */
-                    public boolean canScrollForward(View view) {
-                        return true;
-                    }
+                /* access modifiers changed from: protected */
+                public boolean canScrollForward(View view) {
+                    return true;
+                }
 
-                    /* access modifiers changed from: protected */
-                    public void doScroll(View view, boolean z) {
-                        NumberPicker.this.changeValueByOne(!z);
-                    }
+                /* access modifiers changed from: protected */
+                public void doScroll(View view, boolean z) {
+                    NumberPicker.this.changeValueByOne(!z);
+                }
 
-                    public CharSequence getContentDescription(View view) {
-                        NumberPicker numberPicker = NumberPicker.this;
-                        return numberPicker.getContentDescription(numberPicker.mValue);
-                    }
-                });
-                return;
-            }
-            throw new IllegalArgumentException("minWidth > maxWidth");
+                public CharSequence getContentDescription(View view) {
+                    NumberPicker numberPicker = NumberPicker.this;
+                    return numberPicker.getContentDescription(numberPicker.mValue);
+                }
+            });
+            return;
         }
         throw new IllegalArgumentException("minHeight > maxHeight");
     }
@@ -469,9 +465,10 @@ public class NumberPicker extends LinearLayout {
         int i5;
         int i6;
         int[] iArr = this.mSelectorIndices;
-        if (!this.mWrapSelectorWheel && i2 > 0 && iArr[this.SELECTOR_MIDDLE_ITEM_INDEX] <= this.mMinValue && this.mCurrentScrollOffset + i2 > (i6 = this.mInitialScrollOffset)) {
+        boolean z = this.mWrapSelectorWheel;
+        if (!z && i2 > 0 && iArr[this.SELECTOR_MIDDLE_ITEM_INDEX] <= this.mMinValue && this.mCurrentScrollOffset + i2 > (i6 = this.mInitialScrollOffset)) {
             this.mCurrentScrollOffset = i6;
-        } else if (this.mWrapSelectorWheel || i2 >= 0 || iArr[this.SELECTOR_MIDDLE_ITEM_INDEX] < this.mMaxValue || this.mCurrentScrollOffset + i2 >= (i5 = this.mInitialScrollOffset)) {
+        } else if (z || i2 >= 0 || iArr[this.SELECTOR_MIDDLE_ITEM_INDEX] < this.mMaxValue || this.mCurrentScrollOffset + i2 >= (i5 = this.mInitialScrollOffset)) {
             this.mCurrentScrollOffset += i2;
             while (true) {
                 int i7 = this.mCurrentScrollOffset;
@@ -619,7 +616,7 @@ public class NumberPicker extends LinearLayout {
                 if (i > this.mValue) {
                     this.mValue = i;
                 }
-                setWrapSelectorWheel(this.mMaxValue - this.mMinValue > this.mSelectorIndices.length);
+                setWrapSelectorWheel(this.mMaxValue - i > this.mSelectorIndices.length);
                 initializeSelectorWheelIndices();
                 updateInputTextView();
                 tryComputeMaxWidth();
@@ -641,7 +638,7 @@ public class NumberPicker extends LinearLayout {
                 if (i < this.mValue) {
                     this.mValue = i;
                 }
-                setWrapSelectorWheel(this.mMaxValue - this.mMinValue > this.mSelectorIndices.length);
+                setWrapSelectorWheel(i - this.mMinValue > this.mSelectorIndices.length);
                 initializeSelectorWheelIndices();
                 updateInputTextView();
                 tryComputeMaxWidth();

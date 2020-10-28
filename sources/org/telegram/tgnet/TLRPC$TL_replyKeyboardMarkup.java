@@ -8,8 +8,8 @@ public class TLRPC$TL_replyKeyboardMarkup extends TLRPC$ReplyMarkup {
         this.flags = readInt32;
         int i = 0;
         this.resize = (readInt32 & 1) != 0;
-        this.single_use = (this.flags & 2) != 0;
-        this.selective = (this.flags & 4) != 0;
+        this.single_use = (readInt32 & 2) != 0;
+        this.selective = (readInt32 & 4) != 0;
         int readInt322 = abstractSerializedData.readInt32(z);
         if (readInt322 == NUM) {
             int readInt323 = abstractSerializedData.readInt32(z);

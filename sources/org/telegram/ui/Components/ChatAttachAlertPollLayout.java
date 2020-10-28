@@ -296,6 +296,8 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         checkDoneButton();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$ChatAttachAlertPollLayout(View view, int i) {
         boolean z;
         if (i == this.addAnswerRow) {
@@ -479,6 +481,8 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onMenuItemClick$1 */
     public /* synthetic */ void lambda$onMenuItemClick$1$ChatAttachAlertPollLayout(TLRPC$TL_messageMediaPoll tLRPC$TL_messageMediaPoll, HashMap hashMap, boolean z, int i) {
         this.delegate.sendPoll(tLRPC$TL_messageMediaPoll, hashMap, z, i);
         this.parentAlert.dismiss();
@@ -701,7 +705,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         } else {
             this.answerStartRow = -1;
         }
-        if (this.answersCount != this.answers.length) {
+        if (i6 != this.answers.length) {
             int i7 = this.rowCount;
             this.rowCount = i7 + 1;
             this.addAnswerRow = i7;
@@ -722,37 +726,38 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         } else {
             this.anonymousRow = -1;
         }
-        if (this.quizOnly != 1) {
-            int i11 = this.rowCount;
-            this.rowCount = i11 + 1;
-            this.multipleRow = i11;
+        int i11 = this.quizOnly;
+        if (i11 != 1) {
+            int i12 = this.rowCount;
+            this.rowCount = i12 + 1;
+            this.multipleRow = i12;
         } else {
             this.multipleRow = -1;
         }
-        if (this.quizOnly == 0) {
-            int i12 = this.rowCount;
-            this.rowCount = i12 + 1;
-            this.quizRow = i12;
+        if (i11 == 0) {
+            int i13 = this.rowCount;
+            this.rowCount = i13 + 1;
+            this.quizRow = i13;
         } else {
             this.quizRow = -1;
         }
-        int i13 = this.rowCount;
-        int i14 = i13 + 1;
-        this.rowCount = i14;
-        this.settingsSectionRow = i13;
+        int i14 = this.rowCount;
+        int i15 = i14 + 1;
+        this.rowCount = i15;
+        this.settingsSectionRow = i14;
         if (this.quizPoll) {
-            int i15 = i14 + 1;
-            this.rowCount = i15;
-            this.solutionRow = i14;
-            this.rowCount = i15 + 1;
-            this.solutionInfoRow = i15;
+            int i16 = i15 + 1;
+            this.rowCount = i16;
+            this.solutionRow = i15;
+            this.rowCount = i16 + 1;
+            this.solutionInfoRow = i16;
         } else {
             this.solutionRow = -1;
             this.solutionInfoRow = -1;
         }
-        int i16 = this.rowCount;
-        this.rowCount = i16 + 1;
-        this.emptyRow = i16;
+        int i17 = this.rowCount;
+        this.rowCount = i17 + 1;
+        this.emptyRow = i17;
     }
 
     /* access modifiers changed from: package-private */
@@ -802,6 +807,8 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
         return isEmpty;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$checkDiscard$2 */
     public /* synthetic */ void lambda$checkDiscard$2$ChatAttachAlertPollLayout(DialogInterface dialogInterface, int i) {
         this.parentAlert.dismiss();
     }
@@ -1045,7 +1052,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
             L_0x0007:
                 org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$6 r11 = new org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$6
                 android.content.Context r12 = r10.mContext
-                org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$NcV_cYPpwSIv8-hSwctruoRf-Dc r0 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$NcV_cYPpwSIv8-hSwctruoRf-Dc
+                org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$KNQ7gU60k6g7bRsfSuyq9P8e0LU r0 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$KNQ7gU60k6g7bRsfSuyq9P8e0LU
                 r0.<init>()
                 r11.<init>(r12, r0)
                 org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$7 r12 = new org.telegram.ui.Components.ChatAttachAlertPollLayout$ListAdapter$7
@@ -1056,10 +1063,10 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 int r0 = r12.getImeOptions()
                 r0 = r0 | 5
                 r12.setImeOptions(r0)
-                org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$cpyREapExKY0zyfeRPfQ7C1XY48 r0 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$cpyREapExKY0zyfeRPfQ7C1XY48
+                org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$HHvA2RH7fkzBL_OTnB56ALzJK20 r0 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$HHvA2RH7fkzBL_OTnB56ALzJK20
                 r0.<init>(r11)
                 r12.setOnEditorActionListener(r0)
-                org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$6YhgegU9uSwoTnlMuay57mZuGxU r0 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$6YhgegU9uSwoTnlMuay57mZuGxU
+                org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$3unNk7Tvar_PRVsnwtsEJUGMGsuk r0 = new org.telegram.ui.Components.-$$Lambda$ChatAttachAlertPollLayout$ListAdapter$3unNk7Tvar_PRVsnwtsEJUGMGsuk
                 r0.<init>()
                 r12.setOnKeyListener(r0)
                 goto L_0x00cb
@@ -1115,7 +1122,7 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
                 android.content.Context r12 = r10.mContext
                 r11.<init>(r12)
                 android.content.Context r12 = r10.mContext
-                r2 = 2131165438(0x7var_fe, float:1.7945093E38)
+                r2 = 2131165446(0x7var_, float:1.794511E38)
                 java.lang.String r3 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r12, (int) r2, (java.lang.String) r3)
                 org.telegram.ui.Components.CombinedDrawable r2 = new org.telegram.ui.Components.CombinedDrawable
@@ -1148,6 +1155,8 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertPollLayout.ListAdapter.onCreateViewHolder(android.view.ViewGroup, int):androidx.recyclerview.widget.RecyclerView$ViewHolder");
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onCreateViewHolder$0 */
         public /* synthetic */ void lambda$onCreateViewHolder$0$ChatAttachAlertPollLayout$ListAdapter(View view) {
             int adapterPosition;
             if (view.getTag() == null) {
@@ -1192,6 +1201,8 @@ public class ChatAttachAlertPollLayout extends ChatAttachAlert.AttachAlertLayout
             }
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onCreateViewHolder$1 */
         public /* synthetic */ boolean lambda$onCreateViewHolder$1$ChatAttachAlertPollLayout$ListAdapter(PollEditTextCell pollEditTextCell, TextView textView, int i, KeyEvent keyEvent) {
             int adapterPosition;
             if (i != 5) {

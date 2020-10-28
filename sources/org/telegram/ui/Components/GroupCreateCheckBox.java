@@ -144,35 +144,36 @@ public class GroupCreateCheckBox extends View {
             this.drawBitmap.eraseColor(0);
             float f2 = this.progress;
             float f3 = f2 >= 0.5f ? 1.0f : f2 / 0.5f;
-            float f4 = this.progress;
-            float f5 = f4 < 0.5f ? 0.0f : (f4 - 0.5f) / 0.5f;
-            float f6 = this.isCheckAnimation ? this.progress : 1.0f - this.progress;
-            if (f6 < 0.2f) {
-                f = (((float) AndroidUtilities.dp(2.0f)) * f6) / 0.2f;
+            float f4 = f2 < 0.5f ? 0.0f : (f2 - 0.5f) / 0.5f;
+            if (!this.isCheckAnimation) {
+                f2 = 1.0f - f2;
+            }
+            if (f2 < 0.2f) {
+                f = (((float) AndroidUtilities.dp(2.0f)) * f2) / 0.2f;
             } else {
-                f = f6 < 0.4f ? ((float) AndroidUtilities.dp(2.0f)) - ((((float) AndroidUtilities.dp(2.0f)) * (f6 - 0.2f)) / 0.2f) : 0.0f;
+                f = f2 < 0.4f ? ((float) AndroidUtilities.dp(2.0f)) - ((((float) AndroidUtilities.dp(2.0f)) * (f2 - 0.2f)) / 0.2f) : 0.0f;
             }
-            if (f5 != 0.0f) {
-                canvas.drawCircle((float) measuredWidth, (float) measuredHeight, (((float) (measuredWidth - AndroidUtilities.dp(2.0f))) + (((float) AndroidUtilities.dp(2.0f)) * f5)) - f, this.backgroundPaint);
+            if (f4 != 0.0f) {
+                canvas.drawCircle((float) measuredWidth, (float) measuredHeight, (((float) (measuredWidth - AndroidUtilities.dp(2.0f))) + (((float) AndroidUtilities.dp(2.0f)) * f4)) - f, this.backgroundPaint);
             }
-            float f7 = ((float) (measuredWidth - this.innerRadDiff)) - f;
-            float f8 = (float) measuredWidth;
-            float f9 = (float) measuredHeight;
-            this.bitmapCanvas.drawCircle(f8, f9, f7, this.backgroundInnerPaint);
-            this.bitmapCanvas.drawCircle(f8, f9, f7 * (1.0f - f3), eraser);
+            float f5 = ((float) (measuredWidth - this.innerRadDiff)) - f;
+            float f6 = (float) measuredWidth;
+            float f7 = (float) measuredHeight;
+            this.bitmapCanvas.drawCircle(f6, f7, f5, this.backgroundInnerPaint);
+            this.bitmapCanvas.drawCircle(f6, f7, f5 * (1.0f - f3), eraser);
             canvas.drawBitmap(this.drawBitmap, 0.0f, 0.0f, (Paint) null);
-            float dp = ((float) AndroidUtilities.dp(10.0f)) * f5 * this.checkScale;
-            float dp2 = ((float) AndroidUtilities.dp(5.0f)) * f5 * this.checkScale;
+            float dp = ((float) AndroidUtilities.dp(10.0f)) * f4 * this.checkScale;
+            float dp2 = ((float) AndroidUtilities.dp(5.0f)) * f4 * this.checkScale;
             int dp3 = measuredWidth - AndroidUtilities.dp(1.0f);
             int dp4 = measuredHeight + AndroidUtilities.dp(4.0f);
             float sqrt = (float) Math.sqrt((double) ((dp2 * dp2) / 2.0f));
-            float var_ = (float) dp3;
-            float var_ = (float) dp4;
-            float var_ = var_;
-            canvas.drawLine(var_, var_, var_ - sqrt, var_ - sqrt, this.checkPaint);
+            float f8 = (float) dp3;
+            float f9 = (float) dp4;
+            float var_ = f9;
+            canvas.drawLine(f8, var_, f8 - sqrt, f9 - sqrt, this.checkPaint);
             float sqrt2 = (float) Math.sqrt((double) ((dp * dp) / 2.0f));
             float dp5 = (float) (dp3 - AndroidUtilities.dp(1.2f));
-            canvas.drawLine(dp5, var_, dp5 + sqrt2, var_ - sqrt2, this.checkPaint);
+            canvas.drawLine(dp5, var_, dp5 + sqrt2, f9 - sqrt2, this.checkPaint);
         }
     }
 }

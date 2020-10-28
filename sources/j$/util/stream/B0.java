@@ -1,19 +1,16 @@
 package j$.util.stream;
 
-import j$.util.function.I;
-import j$.util.function.J;
+import j$.util.function.o;
 
-public final /* synthetic */ class B0 implements J {
-    public static final /* synthetic */ B0 a = new B0();
+public final /* synthetic */ class B0 implements o {
+    public final /* synthetic */ t6 a;
 
-    private /* synthetic */ B0() {
+    public /* synthetic */ B0(t6 t6Var) {
+        this.a = t6Var;
     }
 
-    public final void accept(long j) {
-        P6.k();
-    }
-
-    public /* synthetic */ J h(J j) {
-        return I.a(this, j);
+    public final boolean a() {
+        t6 t6Var = this.a;
+        return t6Var.d.b(t6Var.e);
     }
 }

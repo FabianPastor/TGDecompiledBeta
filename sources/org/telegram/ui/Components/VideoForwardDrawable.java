@@ -37,10 +37,10 @@ public class VideoForwardDrawable extends Drawable {
             if (i < iArr.length / 2) {
                 if (i == 0) {
                     int i2 = i * 2;
-                    this.path1.moveTo((float) AndroidUtilities.dp((float) iArr[i2]), (float) AndroidUtilities.dp((float) playPath[i2 + 1]));
+                    this.path1.moveTo((float) AndroidUtilities.dp((float) iArr[i2]), (float) AndroidUtilities.dp((float) iArr[i2 + 1]));
                 } else {
                     int i3 = i * 2;
-                    this.path1.lineTo((float) AndroidUtilities.dp((float) iArr[i3]), (float) AndroidUtilities.dp((float) playPath[i3 + 1]));
+                    this.path1.lineTo((float) AndroidUtilities.dp((float) iArr[i3]), (float) AndroidUtilities.dp((float) iArr[i3 + 1]));
                 }
                 i++;
             } else {

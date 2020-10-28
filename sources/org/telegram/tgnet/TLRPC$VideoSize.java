@@ -10,17 +10,17 @@ public abstract class TLRPC$VideoSize extends TLObject {
     public int w;
 
     public static TLRPC$VideoSize TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
-        TLRPC$TL_videoSize tLRPC$TL_videoSize;
+        TLRPC$VideoSize tLRPC$VideoSize;
         if (i != -NUM) {
-            tLRPC$TL_videoSize = i != NUM ? null : new TLRPC$TL_videoSize_layer115();
+            tLRPC$VideoSize = i != NUM ? null : new TLRPC$TL_videoSize_layer115();
         } else {
-            tLRPC$TL_videoSize = new TLRPC$TL_videoSize();
+            tLRPC$VideoSize = new TLRPC$TL_videoSize();
         }
-        if (tLRPC$TL_videoSize != null || !z) {
-            if (tLRPC$TL_videoSize != null) {
-                tLRPC$TL_videoSize.readParams(abstractSerializedData, z);
+        if (tLRPC$VideoSize != null || !z) {
+            if (tLRPC$VideoSize != null) {
+                tLRPC$VideoSize.readParams(abstractSerializedData, z);
             }
-            return tLRPC$TL_videoSize;
+            return tLRPC$VideoSize;
         }
         throw new RuntimeException(String.format("can't parse magic %x in VideoSize", new Object[]{Integer.valueOf(i)}));
     }

@@ -88,6 +88,8 @@ public class ReplaceableIconDrawable extends Drawable implements Animator.Animat
         this.animation.start();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setIcon$0 */
     public /* synthetic */ void lambda$setIcon$0$ReplaceableIconDrawable(ValueAnimator valueAnimator) {
         this.progress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidateSelf();

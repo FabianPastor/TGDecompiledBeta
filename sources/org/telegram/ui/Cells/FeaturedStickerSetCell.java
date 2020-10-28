@@ -62,22 +62,29 @@ public class FeaturedStickerSetCell extends FrameLayout {
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         int i = 5;
         this.textView.setGravity(LocaleController.isRTL ? 5 : 3);
-        addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 22.0f : 71.0f, 10.0f, LocaleController.isRTL ? 71.0f : 22.0f, 0.0f));
-        TextView textView3 = new TextView(context);
-        this.valueTextView = textView3;
-        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+        TextView textView3 = this.textView;
+        boolean z = LocaleController.isRTL;
+        float f = 71.0f;
+        addView(textView3, LayoutHelper.createFrame(-2, -2.0f, z ? 5 : 3, z ? 22.0f : 71.0f, 10.0f, z ? 71.0f : 22.0f, 0.0f));
+        TextView textView4 = new TextView(context);
+        this.valueTextView = textView4;
+        textView4.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setLines(1);
         this.valueTextView.setMaxLines(1);
         this.valueTextView.setSingleLine(true);
         this.valueTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, LocaleController.isRTL ? 5 : 3, LocaleController.isRTL ? 100.0f : 71.0f, 35.0f, LocaleController.isRTL ? 71.0f : 100.0f, 0.0f));
+        TextView textView5 = this.valueTextView;
+        boolean z2 = LocaleController.isRTL;
+        addView(textView5, LayoutHelper.createFrame(-2, -2.0f, z2 ? 5 : 3, z2 ? 100.0f : 71.0f, 35.0f, !z2 ? 100.0f : f, 0.0f));
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
         backupImageView.setAspectFit(true);
         this.imageView.setLayerNum(1);
-        addView(this.imageView, LayoutHelper.createFrame(48, 48.0f, (!LocaleController.isRTL ? 3 : i) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 8.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+        BackupImageView backupImageView2 = this.imageView;
+        boolean z3 = LocaleController.isRTL;
+        addView(backupImageView2, LayoutHelper.createFrame(48, 48.0f, (!z3 ? 3 : i) | 48, z3 ? 0.0f : 12.0f, 8.0f, z3 ? 12.0f : 0.0f, 0.0f));
         ProgressButton progressButton = new ProgressButton(context);
         this.addButton = progressButton;
         progressButton.setText(LocaleController.getString("Add", NUM));
@@ -115,7 +122,6 @@ public class FeaturedStickerSetCell extends FrameLayout {
     }
 
     public void setStickersSet(TLRPC$StickerSetCovered tLRPC$StickerSetCovered, boolean z, boolean z2) {
-        TLObject tLObject;
         ImageLocation imageLocation;
         TLRPC$StickerSetCovered tLRPC$StickerSetCovered2 = tLRPC$StickerSetCovered;
         boolean z3 = z;
@@ -153,11 +159,12 @@ public class FeaturedStickerSetCell extends FrameLayout {
                 }
             };
             TextView textView2 = this.textView;
-            AnonymousClass1 r4 = LocaleController.isRTL ? null : r2;
-            if (!LocaleController.isRTL) {
+            boolean z5 = LocaleController.isRTL;
+            AnonymousClass1 r5 = z5 ? null : r2;
+            if (!z5) {
                 r2 = null;
             }
-            textView2.setCompoundDrawablesWithIntrinsicBounds(r4, (Drawable) null, r2, (Drawable) null);
+            textView2.setCompoundDrawablesWithIntrinsicBounds(r5, (Drawable) null, r2, (Drawable) null);
         } else {
             this.textView.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
@@ -169,20 +176,18 @@ public class FeaturedStickerSetCell extends FrameLayout {
             tLRPC$Document = tLRPC$StickerSetCovered2.covers.get(0);
         }
         if (tLRPC$Document != null) {
-            TLRPC$PhotoSize tLRPC$PhotoSize = tLRPC$StickerSetCovered2.set.thumb;
-            if ((tLRPC$PhotoSize instanceof TLRPC$TL_photoSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoSizeProgressive)) {
-                tLObject = tLRPC$StickerSetCovered2.set.thumb;
-            } else {
+            TLObject tLObject = tLRPC$StickerSetCovered2.set.thumb;
+            if (!(tLObject instanceof TLRPC$TL_photoSize) && !(tLObject instanceof TLRPC$TL_photoSizeProgressive)) {
                 tLObject = tLRPC$Document;
             }
-            boolean z5 = tLObject instanceof TLRPC$Document;
-            if (z5) {
+            boolean z6 = tLObject instanceof TLRPC$Document;
+            if (z6) {
                 imageLocation = ImageLocation.getForDocument(FileLoader.getClosestPhotoSizeWithSize(tLRPC$Document.thumbs, 90), tLRPC$Document);
             } else {
                 imageLocation = ImageLocation.getForSticker((TLRPC$PhotoSize) tLObject, tLRPC$Document);
             }
             ImageLocation imageLocation2 = imageLocation;
-            if (z5 && MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
+            if (z6 && MessageObject.isAnimatedStickerDocument(tLRPC$Document, true)) {
                 this.imageView.setImage(ImageLocation.getForDocument(tLRPC$Document), "50_50", imageLocation2, (String) null, 0, (Object) tLRPC$StickerSetCovered);
             } else if (imageLocation2 == null || imageLocation2.imageType != 1) {
                 this.imageView.setImage(imageLocation2, "50_50", "webp", (Drawable) null, tLRPC$StickerSetCovered);
@@ -193,11 +198,11 @@ public class FeaturedStickerSetCell extends FrameLayout {
             this.imageView.setImage((ImageLocation) null, (String) null, "webp", (Drawable) null, tLRPC$StickerSetCovered);
         }
         if (z4) {
-            boolean z6 = this.isInstalled;
+            boolean z7 = this.isInstalled;
             boolean isStickerPackInstalled = MediaDataController.getInstance(this.currentAccount).isStickerPackInstalled(tLRPC$StickerSetCovered2.set.id);
             this.isInstalled = isStickerPackInstalled;
             if (isStickerPackInstalled) {
-                if (!z6) {
+                if (!z7) {
                     this.checkImage.setVisibility(0);
                     this.addButton.setClickable(false);
                     AnimatorSet animatorSet = this.currentAnimation;
@@ -223,7 +228,7 @@ public class FeaturedStickerSetCell extends FrameLayout {
                     });
                     this.currentAnimation.start();
                 }
-            } else if (z6) {
+            } else if (z7) {
                 this.addButton.setVisibility(0);
                 this.addButton.setClickable(true);
                 AnimatorSet animatorSet3 = this.currentAnimation;

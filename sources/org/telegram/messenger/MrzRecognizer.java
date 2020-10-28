@@ -4,6 +4,11 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.util.Base64;
+import android.util.SparseArray;
+import com.google.android.gms.vision.Frame;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -83,291 +88,98 @@ public class MrzRecognizer {
         return recognizeBarcode;
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:28:0x00b1  */
-    /* JADX WARNING: Removed duplicated region for block: B:30:0x00bb  */
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x00e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:49:0x011b  */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    private static org.telegram.messenger.MrzRecognizer.Result recognizeBarcode(android.graphics.Bitmap r11) {
-        /*
-            com.google.android.gms.vision.barcode.BarcodeDetector$Builder r0 = new com.google.android.gms.vision.barcode.BarcodeDetector$Builder
-            android.content.Context r1 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r0.<init>(r1)
-            com.google.android.gms.vision.barcode.BarcodeDetector r0 = r0.build()
-            int r1 = r11.getWidth()
-            r2 = 1500(0x5dc, float:2.102E-42)
-            r3 = 1
-            if (r1 > r2) goto L_0x001a
-            int r1 = r11.getHeight()
-            if (r1 <= r2) goto L_0x0045
-        L_0x001a:
-            r1 = 1153138688(0x44bb8000, float:1500.0)
-            int r2 = r11.getWidth()
-            int r4 = r11.getHeight()
-            int r2 = java.lang.Math.max(r2, r4)
-            float r2 = (float) r2
-            float r1 = r1 / r2
-            int r2 = r11.getWidth()
-            float r2 = (float) r2
-            float r2 = r2 * r1
-            int r2 = java.lang.Math.round(r2)
-            int r4 = r11.getHeight()
-            float r4 = (float) r4
-            float r4 = r4 * r1
-            int r1 = java.lang.Math.round(r4)
-            android.graphics.Bitmap r11 = android.graphics.Bitmap.createScaledBitmap(r11, r2, r1, r3)
-        L_0x0045:
-            com.google.android.gms.vision.Frame$Builder r1 = new com.google.android.gms.vision.Frame$Builder
-            r1.<init>()
-            r1.setBitmap(r11)
-            com.google.android.gms.vision.Frame r11 = r1.build()
-            android.util.SparseArray r11 = r0.detect(r11)
-            r0 = 0
-            r1 = 0
-        L_0x0057:
-            int r2 = r11.size()
-            if (r1 >= r2) goto L_0x0253
-            java.lang.Object r2 = r11.valueAt(r1)
-            com.google.android.gms.vision.barcode.Barcode r2 = (com.google.android.gms.vision.barcode.Barcode) r2
-            int r4 = r2.valueFormat
-            r5 = 12
-            r6 = 6
-            r7 = 2
-            r8 = 4
-            if (r4 != r5) goto L_0x01a1
-            com.google.android.gms.vision.barcode.Barcode$DriverLicense r4 = r2.driverLicense
-            if (r4 == 0) goto L_0x01a1
-            org.telegram.messenger.MrzRecognizer$Result r11 = new org.telegram.messenger.MrzRecognizer$Result
-            r11.<init>()
-            com.google.android.gms.vision.barcode.Barcode$DriverLicense r1 = r2.driverLicense
-            java.lang.String r1 = r1.documentType
-            java.lang.String r4 = "ID"
-            boolean r1 = r4.equals(r1)
-            if (r1 == 0) goto L_0x0083
-            r1 = 2
-            goto L_0x0084
-        L_0x0083:
-            r1 = 4
-        L_0x0084:
-            r11.type = r1
-            com.google.android.gms.vision.barcode.Barcode$DriverLicense r1 = r2.driverLicense
-            java.lang.String r1 = r1.issuingCountry
-            int r4 = r1.hashCode()
-            r5 = 66480(0x103b0, float:9.3158E-41)
-            java.lang.String r9 = "USA"
-            r10 = -1
-            if (r4 == r5) goto L_0x00a4
-            r5 = 84323(0x14963, float:1.18162E-40)
-            if (r4 == r5) goto L_0x009c
-            goto L_0x00ae
-        L_0x009c:
-            boolean r1 = r1.equals(r9)
-            if (r1 == 0) goto L_0x00ae
-            r1 = 0
-            goto L_0x00af
-        L_0x00a4:
-            java.lang.String r4 = "CAN"
-            boolean r1 = r1.equals(r4)
-            if (r1 == 0) goto L_0x00ae
-            r1 = 1
-            goto L_0x00af
-        L_0x00ae:
-            r1 = -1
-        L_0x00af:
-            if (r1 == 0) goto L_0x00bb
-            if (r1 == r3) goto L_0x00b4
-            goto L_0x00c1
-        L_0x00b4:
-            java.lang.String r1 = "CA"
-            r11.issuingCountry = r1
-            r11.nationality = r1
-            goto L_0x00c1
-        L_0x00bb:
-            java.lang.String r1 = "US"
-            r11.issuingCountry = r1
-            r11.nationality = r1
-        L_0x00c1:
-            com.google.android.gms.vision.barcode.Barcode$DriverLicense r1 = r2.driverLicense
-            java.lang.String r1 = r1.firstName
-            java.lang.String r1 = capitalize(r1)
-            r11.firstName = r1
-            com.google.android.gms.vision.barcode.Barcode$DriverLicense r1 = r2.driverLicense
-            java.lang.String r1 = r1.lastName
-            java.lang.String r1 = capitalize(r1)
-            r11.lastName = r1
-            com.google.android.gms.vision.barcode.Barcode$DriverLicense r1 = r2.driverLicense
-            java.lang.String r1 = r1.middleName
-            java.lang.String r1 = capitalize(r1)
-            r11.middleName = r1
-            com.google.android.gms.vision.barcode.Barcode$DriverLicense r1 = r2.driverLicense
-            java.lang.String r4 = r1.licenseNumber
-            r11.number = r4
-            java.lang.String r1 = r1.gender
-            if (r1 == 0) goto L_0x0113
-            int r4 = r1.hashCode()
-            r5 = 49
-            if (r4 == r5) goto L_0x0100
-            r5 = 50
-            if (r4 == r5) goto L_0x00f6
-            goto L_0x0109
-        L_0x00f6:
-            java.lang.String r4 = "2"
-            boolean r1 = r1.equals(r4)
-            if (r1 == 0) goto L_0x0109
-            r10 = 1
-            goto L_0x0109
-        L_0x0100:
-            java.lang.String r4 = "1"
-            boolean r1 = r1.equals(r4)
-            if (r1 == 0) goto L_0x0109
-            r10 = 0
-        L_0x0109:
-            if (r10 == 0) goto L_0x0111
-            if (r10 == r3) goto L_0x010e
-            goto L_0x0113
-        L_0x010e:
-            r11.gender = r7
-            goto L_0x0113
-        L_0x0111:
-            r11.gender = r3
-        L_0x0113:
-            java.lang.String r1 = r11.issuingCountry
-            boolean r1 = r9.equals(r1)
-            if (r1 == 0) goto L_0x011e
-            r0 = 4
-            r6 = 2
-            r8 = 0
-        L_0x011e:
-            com.google.android.gms.vision.barcode.Barcode$DriverLicense r1 = r2.driverLicense     // Catch:{ NumberFormatException -> 0x01a0 }
-            java.lang.String r1 = r1.birthDate     // Catch:{ NumberFormatException -> 0x01a0 }
-            r3 = 8
-            if (r1 == 0) goto L_0x0160
-            com.google.android.gms.vision.barcode.Barcode$DriverLicense r1 = r2.driverLicense     // Catch:{ NumberFormatException -> 0x01a0 }
-            java.lang.String r1 = r1.birthDate     // Catch:{ NumberFormatException -> 0x01a0 }
-            int r1 = r1.length()     // Catch:{ NumberFormatException -> 0x01a0 }
-            if (r1 != r3) goto L_0x0160
-            com.google.android.gms.vision.barcode.Barcode$DriverLicense r1 = r2.driverLicense     // Catch:{ NumberFormatException -> 0x01a0 }
-            java.lang.String r1 = r1.birthDate     // Catch:{ NumberFormatException -> 0x01a0 }
-            int r4 = r0 + 4
-            java.lang.String r1 = r1.substring(r0, r4)     // Catch:{ NumberFormatException -> 0x01a0 }
-            int r1 = java.lang.Integer.parseInt(r1)     // Catch:{ NumberFormatException -> 0x01a0 }
-            r11.birthYear = r1     // Catch:{ NumberFormatException -> 0x01a0 }
-            com.google.android.gms.vision.barcode.Barcode$DriverLicense r1 = r2.driverLicense     // Catch:{ NumberFormatException -> 0x01a0 }
-            java.lang.String r1 = r1.birthDate     // Catch:{ NumberFormatException -> 0x01a0 }
-            int r4 = r8 + 2
-            java.lang.String r1 = r1.substring(r8, r4)     // Catch:{ NumberFormatException -> 0x01a0 }
-            int r1 = java.lang.Integer.parseInt(r1)     // Catch:{ NumberFormatException -> 0x01a0 }
-            r11.birthMonth = r1     // Catch:{ NumberFormatException -> 0x01a0 }
-            com.google.android.gms.vision.barcode.Barcode$DriverLicense r1 = r2.driverLicense     // Catch:{ NumberFormatException -> 0x01a0 }
-            java.lang.String r1 = r1.birthDate     // Catch:{ NumberFormatException -> 0x01a0 }
-            int r4 = r6 + 2
-            java.lang.String r1 = r1.substring(r6, r4)     // Catch:{ NumberFormatException -> 0x01a0 }
-            int r1 = java.lang.Integer.parseInt(r1)     // Catch:{ NumberFormatException -> 0x01a0 }
-            r11.birthDay = r1     // Catch:{ NumberFormatException -> 0x01a0 }
-        L_0x0160:
-            com.google.android.gms.vision.barcode.Barcode$DriverLicense r1 = r2.driverLicense     // Catch:{ NumberFormatException -> 0x01a0 }
-            java.lang.String r1 = r1.expiryDate     // Catch:{ NumberFormatException -> 0x01a0 }
-            if (r1 == 0) goto L_0x01a0
-            com.google.android.gms.vision.barcode.Barcode$DriverLicense r1 = r2.driverLicense     // Catch:{ NumberFormatException -> 0x01a0 }
-            java.lang.String r1 = r1.expiryDate     // Catch:{ NumberFormatException -> 0x01a0 }
-            int r1 = r1.length()     // Catch:{ NumberFormatException -> 0x01a0 }
-            if (r1 != r3) goto L_0x01a0
-            com.google.android.gms.vision.barcode.Barcode$DriverLicense r1 = r2.driverLicense     // Catch:{ NumberFormatException -> 0x01a0 }
-            java.lang.String r1 = r1.expiryDate     // Catch:{ NumberFormatException -> 0x01a0 }
-            int r3 = r0 + 4
-            java.lang.String r0 = r1.substring(r0, r3)     // Catch:{ NumberFormatException -> 0x01a0 }
-            int r0 = java.lang.Integer.parseInt(r0)     // Catch:{ NumberFormatException -> 0x01a0 }
-            r11.expiryYear = r0     // Catch:{ NumberFormatException -> 0x01a0 }
-            com.google.android.gms.vision.barcode.Barcode$DriverLicense r0 = r2.driverLicense     // Catch:{ NumberFormatException -> 0x01a0 }
-            java.lang.String r0 = r0.expiryDate     // Catch:{ NumberFormatException -> 0x01a0 }
-            int r1 = r8 + 2
-            java.lang.String r0 = r0.substring(r8, r1)     // Catch:{ NumberFormatException -> 0x01a0 }
-            int r0 = java.lang.Integer.parseInt(r0)     // Catch:{ NumberFormatException -> 0x01a0 }
-            r11.expiryMonth = r0     // Catch:{ NumberFormatException -> 0x01a0 }
-            com.google.android.gms.vision.barcode.Barcode$DriverLicense r0 = r2.driverLicense     // Catch:{ NumberFormatException -> 0x01a0 }
-            java.lang.String r0 = r0.expiryDate     // Catch:{ NumberFormatException -> 0x01a0 }
-            int r1 = r6 + 2
-            java.lang.String r0 = r0.substring(r6, r1)     // Catch:{ NumberFormatException -> 0x01a0 }
-            int r0 = java.lang.Integer.parseInt(r0)     // Catch:{ NumberFormatException -> 0x01a0 }
-            r11.expiryDay = r0     // Catch:{ NumberFormatException -> 0x01a0 }
-        L_0x01a0:
-            return r11
-        L_0x01a1:
-            int r4 = r2.valueFormat
-            r5 = 7
-            if (r4 != r5) goto L_0x024f
-            int r4 = r2.format
-            r5 = 2048(0x800, float:2.87E-42)
-            if (r4 != r5) goto L_0x024f
-            java.lang.String r4 = r2.rawValue
-            java.lang.String r5 = "^[A-Za-z0-9=]+$"
-            boolean r4 = r4.matches(r5)
-            if (r4 == 0) goto L_0x024f
-            java.lang.String r2 = r2.rawValue     // Catch:{ Exception -> 0x024f }
-            byte[] r2 = android.util.Base64.decode(r2, r0)     // Catch:{ Exception -> 0x024f }
-            java.lang.String r4 = new java.lang.String     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = "windows-1251"
-            r4.<init>(r2, r5)     // Catch:{ Exception -> 0x024f }
-            java.lang.String r2 = "\\|"
-            java.lang.String[] r2 = r4.split(r2)     // Catch:{ Exception -> 0x024f }
-            int r4 = r2.length     // Catch:{ Exception -> 0x024f }
-            r5 = 10
-            if (r4 < r5) goto L_0x024f
-            org.telegram.messenger.MrzRecognizer$Result r4 = new org.telegram.messenger.MrzRecognizer$Result     // Catch:{ Exception -> 0x024f }
-            r4.<init>()     // Catch:{ Exception -> 0x024f }
-            r4.type = r8     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = "RU"
-            r4.issuingCountry = r5     // Catch:{ Exception -> 0x024f }
-            r4.nationality = r5     // Catch:{ Exception -> 0x024f }
-            r5 = r2[r0]     // Catch:{ Exception -> 0x024f }
-            r4.number = r5     // Catch:{ Exception -> 0x024f }
-            r5 = r2[r7]     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = r5.substring(r0, r8)     // Catch:{ Exception -> 0x024f }
-            int r5 = java.lang.Integer.parseInt(r5)     // Catch:{ Exception -> 0x024f }
-            r4.expiryYear = r5     // Catch:{ Exception -> 0x024f }
-            r5 = r2[r7]     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = r5.substring(r8, r6)     // Catch:{ Exception -> 0x024f }
-            int r5 = java.lang.Integer.parseInt(r5)     // Catch:{ Exception -> 0x024f }
-            r4.expiryMonth = r5     // Catch:{ Exception -> 0x024f }
-            r5 = r2[r7]     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = r5.substring(r6)     // Catch:{ Exception -> 0x024f }
-            int r5 = java.lang.Integer.parseInt(r5)     // Catch:{ Exception -> 0x024f }
-            r4.expiryDay = r5     // Catch:{ Exception -> 0x024f }
-            r5 = 3
-            r5 = r2[r5]     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = cyrillicToLatin(r5)     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = capitalize(r5)     // Catch:{ Exception -> 0x024f }
-            r4.lastName = r5     // Catch:{ Exception -> 0x024f }
-            r5 = r2[r8]     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = cyrillicToLatin(r5)     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = capitalize(r5)     // Catch:{ Exception -> 0x024f }
-            r4.firstName = r5     // Catch:{ Exception -> 0x024f }
-            r5 = 5
-            r5 = r2[r5]     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = cyrillicToLatin(r5)     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = capitalize(r5)     // Catch:{ Exception -> 0x024f }
-            r4.middleName = r5     // Catch:{ Exception -> 0x024f }
-            r5 = r2[r6]     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = r5.substring(r0, r8)     // Catch:{ Exception -> 0x024f }
-            int r5 = java.lang.Integer.parseInt(r5)     // Catch:{ Exception -> 0x024f }
-            r4.birthYear = r5     // Catch:{ Exception -> 0x024f }
-            r5 = r2[r6]     // Catch:{ Exception -> 0x024f }
-            java.lang.String r5 = r5.substring(r8, r6)     // Catch:{ Exception -> 0x024f }
-            int r5 = java.lang.Integer.parseInt(r5)     // Catch:{ Exception -> 0x024f }
-            r4.birthMonth = r5     // Catch:{ Exception -> 0x024f }
-            r2 = r2[r6]     // Catch:{ Exception -> 0x024f }
-            java.lang.String r2 = r2.substring(r6)     // Catch:{ Exception -> 0x024f }
-            int r2 = java.lang.Integer.parseInt(r2)     // Catch:{ Exception -> 0x024f }
-            r4.birthDay = r2     // Catch:{ Exception -> 0x024f }
-            return r4
-        L_0x024f:
-            int r1 = r1 + 1
-            goto L_0x0057
-        L_0x0253:
-            r11 = 0
-            return r11
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MrzRecognizer.recognizeBarcode(android.graphics.Bitmap):org.telegram.messenger.MrzRecognizer$Result");
+    private static Result recognizeBarcode(Bitmap bitmap) {
+        BarcodeDetector build = new BarcodeDetector.Builder(ApplicationLoader.applicationContext).build();
+        if (bitmap.getWidth() > 1500 || bitmap.getHeight() > 1500) {
+            float max = 1500.0f / ((float) Math.max(bitmap.getWidth(), bitmap.getHeight()));
+            bitmap = Bitmap.createScaledBitmap(bitmap, Math.round(((float) bitmap.getWidth()) * max), Math.round(((float) bitmap.getHeight()) * max), true);
+        }
+        Frame.Builder builder = new Frame.Builder();
+        builder.setBitmap(bitmap);
+        SparseArray<Barcode> detect = build.detect(builder.build());
+        int i = 0;
+        int i2 = 0;
+        while (i2 < detect.size()) {
+            Barcode valueAt = detect.valueAt(i2);
+            int i3 = valueAt.valueFormat;
+            int i4 = 6;
+            int i5 = 4;
+            if (i3 != 12 || valueAt.driverLicense == null) {
+                if (i3 == 7 && valueAt.format == 2048 && valueAt.rawValue.matches("^[A-Za-z0-9=]+$")) {
+                    try {
+                        String[] split = new String(Base64.decode(valueAt.rawValue, 0), "windows-1251").split("\\|");
+                        if (split.length >= 10) {
+                            Result result = new Result();
+                            result.type = 4;
+                            result.issuingCountry = "RU";
+                            result.nationality = "RU";
+                            result.number = split[0];
+                            result.expiryYear = Integer.parseInt(split[2].substring(0, 4));
+                            result.expiryMonth = Integer.parseInt(split[2].substring(4, 6));
+                            result.expiryDay = Integer.parseInt(split[2].substring(6));
+                            result.lastName = capitalize(cyrillicToLatin(split[3]));
+                            result.firstName = capitalize(cyrillicToLatin(split[4]));
+                            result.middleName = capitalize(cyrillicToLatin(split[5]));
+                            result.birthYear = Integer.parseInt(split[6].substring(0, 4));
+                            result.birthMonth = Integer.parseInt(split[6].substring(4, 6));
+                            result.birthDay = Integer.parseInt(split[6].substring(6));
+                            return result;
+                        }
+                    } catch (Exception unused) {
+                        continue;
+                    }
+                }
+                i2++;
+            } else {
+                Result result2 = new Result();
+                result2.type = "ID".equals(valueAt.driverLicense.documentType) ? 2 : 4;
+                String str = valueAt.driverLicense.issuingCountry;
+                str.hashCode();
+                if (str.equals("CAN")) {
+                    result2.issuingCountry = "CA";
+                    result2.nationality = "CA";
+                } else if (str.equals("USA")) {
+                    result2.issuingCountry = "US";
+                    result2.nationality = "US";
+                }
+                result2.firstName = capitalize(valueAt.driverLicense.firstName);
+                result2.lastName = capitalize(valueAt.driverLicense.lastName);
+                result2.middleName = capitalize(valueAt.driverLicense.middleName);
+                Barcode.DriverLicense driverLicense = valueAt.driverLicense;
+                result2.number = driverLicense.licenseNumber;
+                String str2 = driverLicense.gender;
+                if (str2 != null) {
+                    str2.hashCode();
+                    if (str2.equals("1")) {
+                        result2.gender = 1;
+                    } else if (str2.equals("2")) {
+                        result2.gender = 2;
+                    }
+                }
+                if ("USA".equals(result2.issuingCountry)) {
+                    i = 4;
+                    i4 = 2;
+                    i5 = 0;
+                }
+                try {
+                    String str3 = valueAt.driverLicense.birthDate;
+                    if (str3 != null && str3.length() == 8) {
+                        result2.birthYear = Integer.parseInt(valueAt.driverLicense.birthDate.substring(i, i + 4));
+                        result2.birthMonth = Integer.parseInt(valueAt.driverLicense.birthDate.substring(i5, i5 + 2));
+                        result2.birthDay = Integer.parseInt(valueAt.driverLicense.birthDate.substring(i4, i4 + 2));
+                    }
+                    String str4 = valueAt.driverLicense.expiryDate;
+                    if (str4 != null && str4.length() == 8) {
+                        result2.expiryYear = Integer.parseInt(valueAt.driverLicense.expiryDate.substring(i, i + 4));
+                        result2.expiryMonth = Integer.parseInt(valueAt.driverLicense.expiryDate.substring(i5, i5 + 2));
+                        result2.expiryDay = Integer.parseInt(valueAt.driverLicense.expiryDate.substring(i4, i4 + 2));
+                    }
+                } catch (NumberFormatException unused2) {
+                }
+                return result2;
+            }
+        }
+        return null;
     }
 
     /* JADX WARNING: Removed duplicated region for block: B:103:0x0446  */

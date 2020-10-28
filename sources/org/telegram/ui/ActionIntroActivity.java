@@ -381,7 +381,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         this.fragmentView = r2;
         r2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
         ViewGroup viewGroup = (ViewGroup) this.fragmentView;
-        viewGroup.setOnTouchListener($$Lambda$ActionIntroActivity$fQjBdUFaAXJ5YCul6b6pzBMDpBQ.INSTANCE);
+        viewGroup.setOnTouchListener($$Lambda$ActionIntroActivity$_rX8FzoEMbTJSa3AZ8TBqco66KY.INSTANCE);
         viewGroup.addView(this.actionBar);
         RLottieImageView rLottieImageView = new RLottieImageView(context2);
         this.imageView = rLottieImageView;
@@ -585,6 +585,8 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$2 */
     public /* synthetic */ void lambda$createView$2$ActionIntroActivity(View view) {
         if (getParentActivity() != null) {
             int i = this.currentType;
@@ -633,6 +635,8 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$1 */
     public /* synthetic */ void lambda$null$1$ActionIntroActivity(DialogInterface dialogInterface, int i) {
         presentFragment(new ChangePhoneActivity(), true);
     }
@@ -743,6 +747,8 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onRequestPermissionsResultFragment$4 */
     public /* synthetic */ void lambda$onRequestPermissionsResultFragment$4$ActionIntroActivity(DialogInterface dialogInterface, int i) {
         if (getParentActivity() != null) {
             try {
@@ -755,10 +761,14 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onRequestPermissionsResultFragment$5 */
     public /* synthetic */ void lambda$onRequestPermissionsResultFragment$5$ActionIntroActivity() {
         presentFragment(new PeopleNearbyActivity(), true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onRequestPermissionsResultFragment$6 */
     public /* synthetic */ void lambda$onRequestPermissionsResultFragment$6$ActionIntroActivity(DialogInterface dialogInterface, int i) {
         try {
             Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
@@ -788,7 +798,7 @@ public class ActionIntroActivity extends BaseFragment implements LocationControl
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$ActionIntroActivity$fpGyZfwg0FJCkfDsWOrkKaY77lo r8 = new ThemeDescription.ThemeDescriptionDelegate() {
+        $$Lambda$ActionIntroActivity$u19EzaLWc0I3yBG2T03118n2Lc8 r8 = new ThemeDescription.ThemeDescriptionDelegate() {
             public final void didSetColor() {
                 ActionIntroActivity.this.updateColors();
             }

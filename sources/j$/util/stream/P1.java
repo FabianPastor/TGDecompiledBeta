@@ -1,29 +1,25 @@
 package j$.util.stream;
 
-import j$.util.C;
-import j$.util.function.A;
-import j$.util.function.B;
+import j$.util.CLASSNAMEv;
+import j$.util.function.h;
+import j$.util.function.y;
 
-final class P1 extends S1 implements D5 {
-    public /* synthetic */ B q(B b) {
-        return A.a(this, b);
-    }
-
+final class P1 extends R1 implements CLASSNAMEs5 {
     P1() {
     }
 
-    public /* bridge */ /* synthetic */ void t(Integer num) {
-        super.accept((Object) num);
+    public void accept(long j) {
+        accept((Object) Long.valueOf(j));
     }
 
-    public void accept(int value) {
-        accept((Object) Integer.valueOf(value));
+    public y g(y yVar) {
+        yVar.getClass();
+        return new h(this, yVar);
     }
 
-    /* renamed from: a */
-    public C get() {
+    public Object get() {
         if (this.a) {
-            return C.d(((Integer) this.b).intValue());
+            return CLASSNAMEv.d(((Long) this.b).longValue());
         }
         return null;
     }

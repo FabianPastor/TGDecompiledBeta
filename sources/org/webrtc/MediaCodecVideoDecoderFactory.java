@@ -12,7 +12,6 @@ class MediaCodecVideoDecoderFactory implements VideoDecoderFactory {
     private final Predicate<MediaCodecInfo> codecAllowedPredicate;
     private final EglBase.Context sharedContext;
 
-    @Deprecated
     public /* synthetic */ VideoDecoder createDecoder(String str) {
         return VideoDecoderFactory.CC.$default$createDecoder((VideoDecoderFactory) this, str);
     }
@@ -85,10 +84,11 @@ class MediaCodecVideoDecoderFactory implements VideoDecoderFactory {
 
     private boolean isH264HighProfileSupported(MediaCodecInfo mediaCodecInfo) {
         String name = mediaCodecInfo.getName();
-        if (Build.VERSION.SDK_INT >= 21 && name.startsWith("OMX.qcom.")) {
+        int i = Build.VERSION.SDK_INT;
+        if (i >= 21 && name.startsWith("OMX.qcom.")) {
             return true;
         }
-        if (Build.VERSION.SDK_INT < 23 || !name.startsWith("OMX.Exynos.")) {
+        if (i < 23 || !name.startsWith("OMX.Exynos.")) {
             return false;
         }
         return true;

@@ -38,17 +38,17 @@ public class NotificationBadge {
         LinkedList linkedList = new LinkedList();
         BADGERS = linkedList;
         linkedList.add(AdwHomeBadger.class);
-        BADGERS.add(ApexHomeBadger.class);
-        BADGERS.add(NewHtcHomeBadger.class);
-        BADGERS.add(NovaHomeBadger.class);
-        BADGERS.add(SonyHomeBadger.class);
-        BADGERS.add(XiaomiHomeBadger.class);
-        BADGERS.add(AsusHomeBadger.class);
-        BADGERS.add(HuaweiHomeBadger.class);
-        BADGERS.add(OPPOHomeBader.class);
-        BADGERS.add(SamsungHomeBadger.class);
-        BADGERS.add(ZukHomeBadger.class);
-        BADGERS.add(VivoHomeBadger.class);
+        linkedList.add(ApexHomeBadger.class);
+        linkedList.add(NewHtcHomeBadger.class);
+        linkedList.add(NovaHomeBadger.class);
+        linkedList.add(SonyHomeBadger.class);
+        linkedList.add(XiaomiHomeBadger.class);
+        linkedList.add(AsusHomeBadger.class);
+        linkedList.add(HuaweiHomeBadger.class);
+        linkedList.add(OPPOHomeBader.class);
+        linkedList.add(SamsungHomeBadger.class);
+        linkedList.add(ZukHomeBadger.class);
+        linkedList.add(VivoHomeBadger.class);
     }
 
     public static class AdwHomeBadger implements Badger {
@@ -457,10 +457,11 @@ public class NotificationBadge {
                 initBadger();
                 initied = true;
             }
-            if (badger == null) {
+            Badger badger2 = badger;
+            if (badger2 == null) {
                 return false;
             }
-            badger.executeBadge(i);
+            badger2.executeBadge(i);
             return true;
         } catch (Throwable unused) {
             return false;
@@ -525,13 +526,14 @@ public class NotificationBadge {
             }
         }
         if (badger == null) {
-            if (Build.MANUFACTURER.equalsIgnoreCase("Xiaomi")) {
+            String str3 = Build.MANUFACTURER;
+            if (str3.equalsIgnoreCase("Xiaomi")) {
                 badger = new XiaomiHomeBadger();
-            } else if (Build.MANUFACTURER.equalsIgnoreCase("ZUK")) {
+            } else if (str3.equalsIgnoreCase("ZUK")) {
                 badger = new ZukHomeBadger();
-            } else if (Build.MANUFACTURER.equalsIgnoreCase("OPPO")) {
+            } else if (str3.equalsIgnoreCase("OPPO")) {
                 badger = new OPPOHomeBader();
-            } else if (Build.MANUFACTURER.equalsIgnoreCase("VIVO")) {
+            } else if (str3.equalsIgnoreCase("VIVO")) {
                 badger = new VivoHomeBadger();
             } else {
                 badger = new DefaultBadger();

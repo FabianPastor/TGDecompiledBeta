@@ -20,8 +20,9 @@ public class M4AInfo extends AudioInfo {
     public M4AInfo(InputStream inputStream, Level level) throws IOException {
         this.debugLevel = level;
         MP4Input mP4Input = new MP4Input(inputStream);
-        if (LOGGER.isLoggable(level)) {
-            LOGGER.log(level, mP4Input.toString());
+        Logger logger = LOGGER;
+        if (logger.isLoggable(level)) {
+            logger.log(level, mP4Input.toString());
         }
         ftyp(mP4Input.nextChild("ftyp"));
         moov(mP4Input.nextChildUpTo("moov"));
@@ -29,56 +30,70 @@ public class M4AInfo extends AudioInfo {
 
     /* access modifiers changed from: package-private */
     public void ftyp(MP4Atom mP4Atom) throws IOException {
-        if (LOGGER.isLoggable(this.debugLevel)) {
-            LOGGER.log(this.debugLevel, mP4Atom.toString());
+        Logger logger = LOGGER;
+        if (logger.isLoggable(this.debugLevel)) {
+            logger.log(this.debugLevel, mP4Atom.toString());
         }
         String trim = mP4Atom.readString(4, "ISO8859_1").trim();
         this.brand = trim;
         if (trim.matches("M4V|MP4|mp42|isom")) {
-            Logger logger = LOGGER;
             logger.warning(mP4Atom.getPath() + ": brand=" + this.brand + " (experimental)");
         } else if (!this.brand.matches("M4A|M4P")) {
-            Logger logger2 = LOGGER;
-            logger2.warning(mP4Atom.getPath() + ": brand=" + this.brand + " (expected M4A or M4P)");
+            logger.warning(mP4Atom.getPath() + ": brand=" + this.brand + " (expected M4A or M4P)");
         }
         String.valueOf(mP4Atom.readInt());
     }
 
     /* access modifiers changed from: package-private */
     public void moov(MP4Atom mP4Atom) throws IOException {
-        if (LOGGER.isLoggable(this.debugLevel)) {
-            LOGGER.log(this.debugLevel, mP4Atom.toString());
+        Logger logger = LOGGER;
+        if (logger.isLoggable(this.debugLevel)) {
+            logger.log(this.debugLevel, mP4Atom.toString());
         }
         while (mP4Atom.hasMoreChildren()) {
             MP4Atom nextChild = mP4Atom.nextChild();
             String type = nextChild.getType();
+            type.hashCode();
             char c = 65535;
-            int hashCode = type.hashCode();
-            if (hashCode != 3363941) {
-                if (hashCode != 3568424) {
-                    if (hashCode == 3585340 && type.equals("udta")) {
-                        c = 2;
+            switch (type.hashCode()) {
+                case 3363941:
+                    if (type.equals("mvhd")) {
+                        c = 0;
+                        break;
                     }
-                } else if (type.equals("trak")) {
-                    c = 1;
-                }
-            } else if (type.equals("mvhd")) {
-                c = 0;
+                    break;
+                case 3568424:
+                    if (type.equals("trak")) {
+                        c = 1;
+                        break;
+                    }
+                    break;
+                case 3585340:
+                    if (type.equals("udta")) {
+                        c = 2;
+                        break;
+                    }
+                    break;
             }
-            if (c == 0) {
-                mvhd(nextChild);
-            } else if (c == 1) {
-                trak(nextChild);
-            } else if (c == 2) {
-                udta(nextChild);
+            switch (c) {
+                case 0:
+                    mvhd(nextChild);
+                    break;
+                case 1:
+                    trak(nextChild);
+                    break;
+                case 2:
+                    udta(nextChild);
+                    break;
             }
         }
     }
 
     /* access modifiers changed from: package-private */
     public void mvhd(MP4Atom mP4Atom) throws IOException {
-        if (LOGGER.isLoggable(this.debugLevel)) {
-            LOGGER.log(this.debugLevel, mP4Atom.toString());
+        Logger logger = LOGGER;
+        if (logger.isLoggable(this.debugLevel)) {
+            logger.log(this.debugLevel, mP4Atom.toString());
         }
         byte readByte = mP4Atom.readByte();
         mP4Atom.skip(3);
@@ -87,10 +102,9 @@ public class M4AInfo extends AudioInfo {
         long readLong = readByte == 1 ? mP4Atom.readLong() : (long) mP4Atom.readInt();
         if (this.duration == 0) {
             this.duration = (readLong * 1000) / ((long) readInt);
-        } else if (LOGGER.isLoggable(this.debugLevel)) {
+        } else if (logger.isLoggable(this.debugLevel)) {
             long j = (readLong * 1000) / ((long) readInt);
             if (Math.abs(this.duration - j) > 2) {
-                Logger logger = LOGGER;
                 Level level = this.debugLevel;
                 logger.log(level, "mvhd: duration " + this.duration + " -> " + j);
             }
@@ -101,24 +115,27 @@ public class M4AInfo extends AudioInfo {
 
     /* access modifiers changed from: package-private */
     public void trak(MP4Atom mP4Atom) throws IOException {
-        if (LOGGER.isLoggable(this.debugLevel)) {
-            LOGGER.log(this.debugLevel, mP4Atom.toString());
+        Logger logger = LOGGER;
+        if (logger.isLoggable(this.debugLevel)) {
+            logger.log(this.debugLevel, mP4Atom.toString());
         }
         mdia(mP4Atom.nextChildUpTo("mdia"));
     }
 
     /* access modifiers changed from: package-private */
     public void mdia(MP4Atom mP4Atom) throws IOException {
-        if (LOGGER.isLoggable(this.debugLevel)) {
-            LOGGER.log(this.debugLevel, mP4Atom.toString());
+        Logger logger = LOGGER;
+        if (logger.isLoggable(this.debugLevel)) {
+            logger.log(this.debugLevel, mP4Atom.toString());
         }
         mdhd(mP4Atom.nextChild("mdhd"));
     }
 
     /* access modifiers changed from: package-private */
     public void mdhd(MP4Atom mP4Atom) throws IOException {
-        if (LOGGER.isLoggable(this.debugLevel)) {
-            LOGGER.log(this.debugLevel, mP4Atom.toString());
+        Logger logger = LOGGER;
+        if (logger.isLoggable(this.debugLevel)) {
+            logger.log(this.debugLevel, mP4Atom.toString());
         }
         byte readByte = mP4Atom.readByte();
         mP4Atom.skip(3);
@@ -127,10 +144,9 @@ public class M4AInfo extends AudioInfo {
         long readLong = readByte == 1 ? mP4Atom.readLong() : (long) mP4Atom.readInt();
         if (this.duration == 0) {
             this.duration = (readLong * 1000) / ((long) readInt);
-        } else if (LOGGER.isLoggable(this.debugLevel)) {
+        } else if (logger.isLoggable(this.debugLevel)) {
             long j = (readLong * 1000) / ((long) readInt);
             if (Math.abs(this.duration - j) > 2) {
-                Logger logger = LOGGER;
                 Level level = this.debugLevel;
                 logger.log(level, "mdhd: duration " + this.duration + " -> " + j);
             }
@@ -139,8 +155,9 @@ public class M4AInfo extends AudioInfo {
 
     /* access modifiers changed from: package-private */
     public void udta(MP4Atom mP4Atom) throws IOException {
-        if (LOGGER.isLoggable(this.debugLevel)) {
-            LOGGER.log(this.debugLevel, mP4Atom.toString());
+        Logger logger = LOGGER;
+        if (logger.isLoggable(this.debugLevel)) {
+            logger.log(this.debugLevel, mP4Atom.toString());
         }
         while (mP4Atom.hasMoreChildren()) {
             MP4Atom nextChild = mP4Atom.nextChild();
@@ -153,8 +170,9 @@ public class M4AInfo extends AudioInfo {
 
     /* access modifiers changed from: package-private */
     public void meta(MP4Atom mP4Atom) throws IOException {
-        if (LOGGER.isLoggable(this.debugLevel)) {
-            LOGGER.log(this.debugLevel, mP4Atom.toString());
+        Logger logger = LOGGER;
+        if (logger.isLoggable(this.debugLevel)) {
+            logger.log(this.debugLevel, mP4Atom.toString());
         }
         mP4Atom.skip(4);
         while (mP4Atom.hasMoreChildren()) {
@@ -168,185 +186,172 @@ public class M4AInfo extends AudioInfo {
 
     /* access modifiers changed from: package-private */
     public void ilst(MP4Atom mP4Atom) throws IOException {
-        if (LOGGER.isLoggable(this.debugLevel)) {
-            LOGGER.log(this.debugLevel, mP4Atom.toString());
+        Logger logger = LOGGER;
+        if (logger.isLoggable(this.debugLevel)) {
+            logger.log(this.debugLevel, mP4Atom.toString());
         }
         while (mP4Atom.hasMoreChildren()) {
             MP4Atom nextChild = mP4Atom.nextChild();
-            if (LOGGER.isLoggable(this.debugLevel)) {
-                LOGGER.log(this.debugLevel, nextChild.toString());
+            Logger logger2 = LOGGER;
+            if (logger2.isLoggable(this.debugLevel)) {
+                logger2.log(this.debugLevel, nextChild.toString());
             }
             if (nextChild.getRemaining() != 0) {
                 data(nextChild.nextChildUpTo("data"));
-            } else if (LOGGER.isLoggable(this.debugLevel)) {
-                Logger logger = LOGGER;
+            } else if (logger2.isLoggable(this.debugLevel)) {
                 Level level = this.debugLevel;
-                logger.log(level, nextChild.getPath() + ": contains no value");
+                logger2.log(level, nextChild.getPath() + ": contains no value");
             }
         }
     }
 
     /* access modifiers changed from: package-private */
     public void data(MP4Atom mP4Atom) throws IOException {
-        if (LOGGER.isLoggable(this.debugLevel)) {
-            LOGGER.log(this.debugLevel, mP4Atom.toString());
+        Logger logger = LOGGER;
+        if (logger.isLoggable(this.debugLevel)) {
+            logger.log(this.debugLevel, mP4Atom.toString());
         }
         mP4Atom.skip(4);
         mP4Atom.skip(4);
         String type = mP4Atom.getParent().getType();
+        type.hashCode();
         char c = 65535;
         switch (type.hashCode()) {
             case 2954818:
                 if (type.equals("aART")) {
-                    c = 1;
+                    c = 0;
                     break;
                 }
                 break;
             case 3059752:
                 if (type.equals("covr")) {
-                    c = 6;
+                    c = 1;
                     break;
                 }
                 break;
             case 3060304:
                 if (type.equals("cpil")) {
-                    c = 7;
+                    c = 2;
                     break;
                 }
                 break;
             case 3060591:
                 if (type.equals("cprt")) {
-                    c = 8;
+                    c = 3;
                     break;
                 }
                 break;
             case 3083677:
                 if (type.equals("disk")) {
-                    c = 11;
+                    c = 4;
                     break;
                 }
                 break;
             case 3177818:
                 if (type.equals("gnre")) {
-                    c = 12;
+                    c = 5;
                     break;
                 }
                 break;
             case 3511163:
                 if (type.equals("rtng")) {
-                    c = 17;
+                    c = 6;
                     break;
                 }
                 break;
             case 3564088:
                 if (type.equals("tmpo")) {
-                    c = 18;
+                    c = 7;
                     break;
                 }
                 break;
             case 3568737:
                 if (type.equals("trkn")) {
-                    c = 19;
+                    c = 8;
                     break;
                 }
                 break;
             case 5099770:
                 if (type.equals("©ART")) {
-                    c = 2;
+                    c = 9;
                     break;
                 }
                 break;
             case 5131342:
                 if (type.equals("©alb")) {
-                    c = 0;
+                    c = 10;
                     break;
                 }
                 break;
             case 5133313:
                 if (type.equals("©cmt")) {
-                    c = 3;
+                    c = 11;
                     break;
                 }
                 break;
             case 5133368:
                 if (type.equals("©com")) {
-                    c = 4;
+                    c = 12;
                     break;
                 }
                 break;
             case 5133411:
                 if (type.equals("©cpy")) {
-                    c = 9;
+                    c = 13;
                     break;
                 }
                 break;
             case 5133907:
                 if (type.equals("©day")) {
-                    c = 10;
+                    c = 14;
                     break;
                 }
                 break;
             case 5136903:
                 if (type.equals("©gen")) {
-                    c = 13;
+                    c = 15;
                     break;
                 }
                 break;
             case 5137308:
                 if (type.equals("©grp")) {
-                    c = 14;
+                    c = 16;
                     break;
                 }
                 break;
             case 5142332:
                 if (type.equals("©lyr")) {
-                    c = 15;
+                    c = 17;
                     break;
                 }
                 break;
             case 5143505:
                 if (type.equals("©nam")) {
-                    c = 16;
+                    c = 18;
                     break;
                 }
                 break;
             case 5152688:
                 if (type.equals("©wrt")) {
-                    c = 5;
+                    c = 19;
                     break;
                 }
                 break;
         }
         switch (c) {
             case 0:
-                this.album = mP4Atom.readString("UTF-8");
-                return;
-            case 1:
                 this.albumArtist = mP4Atom.readString("UTF-8");
                 return;
-            case 2:
-                this.artist = mP4Atom.readString("UTF-8");
-                return;
-            case 3:
-                this.comment = mP4Atom.readString("UTF-8");
-                return;
-            case 4:
-            case 5:
-                String str = this.composer;
-                if (str == null || str.trim().length() == 0) {
-                    this.composer = mP4Atom.readString("UTF-8");
-                    return;
-                }
-                return;
-            case 6:
+            case 1:
                 try {
                     byte[] readBytes = mP4Atom.readBytes();
                     BitmapFactory.Options options = new BitmapFactory.Options();
                     options.inJustDecodeBounds = true;
                     options.inSampleSize = 1;
                     BitmapFactory.decodeByteArray(readBytes, 0, readBytes.length, options);
-                    if (options.outWidth > 800 || options.outHeight > 800) {
-                        for (int max = Math.max(options.outWidth, options.outHeight); max > 800; max /= 2) {
+                    int i = options.outWidth;
+                    if (i > 800 || options.outHeight > 800) {
+                        for (int max = Math.max(i, options.outHeight); max > 800; max /= 2) {
                             options.inSampleSize *= 2;
                         }
                     }
@@ -356,7 +361,8 @@ public class M4AInfo extends AudioInfo {
                     if (decodeByteArray != null) {
                         float max2 = ((float) Math.max(decodeByteArray.getWidth(), this.cover.getHeight())) / 120.0f;
                         if (max2 > 0.0f) {
-                            this.smallCover = Bitmap.createScaledBitmap(this.cover, (int) (((float) this.cover.getWidth()) / max2), (int) (((float) this.cover.getHeight()) / max2), true);
+                            Bitmap bitmap = this.cover;
+                            this.smallCover = Bitmap.createScaledBitmap(bitmap, (int) (((float) bitmap.getWidth()) / max2), (int) (((float) this.cover.getHeight()) / max2), true);
                         } else {
                             this.smallCover = this.cover;
                         }
@@ -371,37 +377,25 @@ public class M4AInfo extends AudioInfo {
                     e.printStackTrace();
                     return;
                 }
-            case 7:
+            case 2:
                 this.compilation = mP4Atom.readBoolean();
                 return;
-            case 8:
-            case 9:
-                String str2 = this.copyright;
-                if (str2 == null || str2.trim().length() == 0) {
+            case 3:
+            case 13:
+                String str = this.copyright;
+                if (str == null || str.trim().length() == 0) {
                     this.copyright = mP4Atom.readString("UTF-8");
                     return;
                 }
                 return;
-            case 10:
-                String trim = mP4Atom.readString("UTF-8").trim();
-                if (trim.length() >= 4) {
-                    try {
-                        this.year = Short.valueOf(trim.substring(0, 4)).shortValue();
-                        return;
-                    } catch (NumberFormatException unused) {
-                        return;
-                    }
-                } else {
-                    return;
-                }
-            case 11:
+            case 4:
                 mP4Atom.skip(2);
                 this.disc = mP4Atom.readShort();
                 this.discs = mP4Atom.readShort();
                 return;
-            case 12:
-                String str3 = this.genre;
-                if (str3 != null && str3.trim().length() != 0) {
+            case 5:
+                String str2 = this.genre;
+                if (str2 != null && str2.trim().length() != 0) {
                     return;
                 }
                 if (mP4Atom.getRemaining() == 2) {
@@ -414,32 +408,61 @@ public class M4AInfo extends AudioInfo {
                 }
                 this.genre = mP4Atom.readString("UTF-8");
                 return;
-            case 13:
+            case 6:
+                mP4Atom.readByte();
+                return;
+            case 7:
+                mP4Atom.readShort();
+                return;
+            case 8:
+                mP4Atom.skip(2);
+                this.track = mP4Atom.readShort();
+                this.tracks = mP4Atom.readShort();
+                return;
+            case 9:
+                this.artist = mP4Atom.readString("UTF-8");
+                return;
+            case 10:
+                this.album = mP4Atom.readString("UTF-8");
+                return;
+            case 11:
+                this.comment = mP4Atom.readString("UTF-8");
+                return;
+            case 12:
+            case 19:
+                String str3 = this.composer;
+                if (str3 == null || str3.trim().length() == 0) {
+                    this.composer = mP4Atom.readString("UTF-8");
+                    return;
+                }
+                return;
+            case 14:
+                String trim = mP4Atom.readString("UTF-8").trim();
+                if (trim.length() >= 4) {
+                    try {
+                        this.year = Short.valueOf(trim.substring(0, 4)).shortValue();
+                        return;
+                    } catch (NumberFormatException unused) {
+                        return;
+                    }
+                } else {
+                    return;
+                }
+            case 15:
                 String str4 = this.genre;
                 if (str4 == null || str4.trim().length() == 0) {
                     this.genre = mP4Atom.readString("UTF-8");
                     return;
                 }
                 return;
-            case 14:
+            case 16:
                 this.grouping = mP4Atom.readString("UTF-8");
                 return;
-            case 15:
+            case 17:
                 this.lyrics = mP4Atom.readString("UTF-8");
                 return;
-            case 16:
-                this.title = mP4Atom.readString("UTF-8");
-                return;
-            case 17:
-                mP4Atom.readByte();
-                return;
             case 18:
-                mP4Atom.readShort();
-                return;
-            case 19:
-                mP4Atom.skip(2);
-                this.track = mP4Atom.readShort();
-                this.tracks = mP4Atom.readShort();
+                this.title = mP4Atom.readString("UTF-8");
                 return;
             default:
                 return;

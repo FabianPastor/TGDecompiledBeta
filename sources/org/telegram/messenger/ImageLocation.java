@@ -322,15 +322,13 @@ public class ImageLocation {
                     return Utilities.MD5(str);
                 }
                 return null;
-            } else if (z || !(tLRPC$Document instanceof DocumentObject.ThemeDocument)) {
-                TLRPC$Document tLRPC$Document2 = this.document;
-                if (tLRPC$Document2.id == 0 || tLRPC$Document2.dc_id == 0) {
-                    return null;
-                }
-                return this.document.dc_id + "_" + this.document.id;
-            } else {
+            } else if (!z && (tLRPC$Document instanceof DocumentObject.ThemeDocument)) {
                 DocumentObject.ThemeDocument themeDocument = (DocumentObject.ThemeDocument) tLRPC$Document;
                 return this.document.dc_id + "_" + this.document.id + "_" + Theme.getBaseThemeKey(themeDocument.themeSettings) + "_" + themeDocument.themeSettings.accent_color + "_" + themeDocument.themeSettings.message_top_color + "_" + themeDocument.themeSettings.message_bottom_color;
+            } else if (tLRPC$Document.id == 0 || tLRPC$Document.dc_id == 0) {
+                return null;
+            } else {
+                return this.document.dc_id + "_" + this.document.id;
             }
         }
     }

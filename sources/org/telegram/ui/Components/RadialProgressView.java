@@ -94,11 +94,12 @@ public class RadialProgressView extends View {
                 this.currentCircleLength = 4.0f - ((1.0f - this.decelerateInterpolator.getInterpolation(this.currentProgressTime / 500.0f)) * 270.0f);
             }
             if (this.currentProgressTime == 500.0f) {
-                if (this.risingCircleLength) {
+                boolean z = this.risingCircleLength;
+                if (z) {
                     this.radOffset += 270.0f;
                     this.currentCircleLength = -266.0f;
                 }
-                this.risingCircleLength = !this.risingCircleLength;
+                this.risingCircleLength = !z;
                 this.currentProgressTime = 0.0f;
             }
         } else {

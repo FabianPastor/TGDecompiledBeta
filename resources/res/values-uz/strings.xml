@@ -22,4 +22,5 @@
     <string name="google_assistant_verification_channel_name">Assistent yordamida tekshirish</string>
     <string name="google_assistant_verification_notification_title">Google Assistent xabar yubormoqda</string>
     <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="wallet_buy_button_place_holder">Google orqali sotib olish</string>
 </resources>

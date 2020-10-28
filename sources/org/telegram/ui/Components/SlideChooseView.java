@@ -102,14 +102,14 @@ public class SlideChooseView extends View {
             r3 = 0
             r4 = 1
             r5 = 2
-            if (r1 != 0) goto L_0x0054
+            if (r1 != 0) goto L_0x0052
             android.view.ViewParent r9 = r8.getParent()
             r9.requestDisallowInterceptTouchEvent(r4)
             r9 = 0
         L_0x0017:
             java.lang.String[] r1 = r8.optionsStr
             int r1 = r1.length
-            if (r9 >= r1) goto L_0x00ff
+            if (r9 >= r1) goto L_0x00fd
             int r1 = r8.sideSide
             int r6 = r8.lineSize
             int r7 = r8.gapSize
@@ -125,46 +125,45 @@ public class SlideChooseView extends View {
             int r6 = r1 - r6
             float r6 = (float) r6
             int r6 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1))
-            if (r6 <= 0) goto L_0x0051
+            if (r6 <= 0) goto L_0x004f
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r1 = r1 + r6
             float r1 = (float) r1
             int r1 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r1 >= 0) goto L_0x0051
+            if (r1 >= 0) goto L_0x004f
             int r1 = r8.selectedIndex
             if (r9 != r1) goto L_0x0047
             r3 = 1
         L_0x0047:
             r8.startMoving = r3
             r8.startX = r0
-            int r9 = r8.selectedIndex
-            r8.startMovingPreset = r9
-            goto L_0x00ff
-        L_0x0051:
+            r8.startMovingPreset = r1
+            goto L_0x00fd
+        L_0x004f:
             int r9 = r9 + 1
             goto L_0x0017
-        L_0x0054:
+        L_0x0052:
             int r1 = r9.getAction()
-            if (r1 != r5) goto L_0x00ac
+            if (r1 != r5) goto L_0x00aa
             boolean r9 = r8.startMoving
-            if (r9 == 0) goto L_0x0075
+            if (r9 == 0) goto L_0x0073
             float r9 = r8.startX
             float r9 = r9 - r0
             float r9 = java.lang.Math.abs(r9)
             r0 = 1056964608(0x3var_, float:0.5)
             float r0 = org.telegram.messenger.AndroidUtilities.getPixelsInCM(r0, r4)
             int r9 = (r9 > r0 ? 1 : (r9 == r0 ? 0 : -1))
-            if (r9 < 0) goto L_0x00ff
+            if (r9 < 0) goto L_0x00fd
             r8.moving = r4
             r8.startMoving = r3
-            goto L_0x00ff
-        L_0x0075:
+            goto L_0x00fd
+        L_0x0073:
             boolean r9 = r8.moving
-            if (r9 == 0) goto L_0x00ff
-        L_0x0079:
+            if (r9 == 0) goto L_0x00fd
+        L_0x0077:
             java.lang.String[] r9 = r8.optionsStr
             int r9 = r9.length
-            if (r3 >= r9) goto L_0x00ff
+            if (r3 >= r9) goto L_0x00fd
             int r9 = r8.sideSide
             int r1 = r8.lineSize
             int r2 = r8.gapSize
@@ -183,31 +182,31 @@ public class SlideChooseView extends View {
             int r2 = r9 - r1
             float r2 = (float) r2
             int r2 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
-            if (r2 <= 0) goto L_0x00a9
+            if (r2 <= 0) goto L_0x00a7
             int r9 = r9 + r1
             float r9 = (float) r9
             int r9 = (r0 > r9 ? 1 : (r0 == r9 ? 0 : -1))
-            if (r9 >= 0) goto L_0x00a9
+            if (r9 >= 0) goto L_0x00a7
             int r9 = r8.selectedIndex
-            if (r9 == r3) goto L_0x00ff
+            if (r9 == r3) goto L_0x00fd
             r8.setOption(r3)
-            goto L_0x00ff
-        L_0x00a9:
+            goto L_0x00fd
+        L_0x00a7:
             int r3 = r3 + 1
-            goto L_0x0079
-        L_0x00ac:
+            goto L_0x0077
+        L_0x00aa:
             int r1 = r9.getAction()
-            if (r1 == r4) goto L_0x00b9
+            if (r1 == r4) goto L_0x00b7
             int r9 = r9.getAction()
             r1 = 3
-            if (r9 != r1) goto L_0x00ff
-        L_0x00b9:
+            if (r9 != r1) goto L_0x00fd
+        L_0x00b7:
             boolean r9 = r8.moving
-            if (r9 != 0) goto L_0x00f2
+            if (r9 != 0) goto L_0x00f0
             r9 = 0
-        L_0x00be:
+        L_0x00bc:
             r1 = 5
-            if (r9 >= r1) goto L_0x00fb
+            if (r9 >= r1) goto L_0x00f9
             int r1 = r8.sideSide
             int r6 = r8.lineSize
             int r7 = r8.gapSize
@@ -223,28 +222,28 @@ public class SlideChooseView extends View {
             int r6 = r1 - r6
             float r6 = (float) r6
             int r6 = (r0 > r6 ? 1 : (r0 == r6 ? 0 : -1))
-            if (r6 <= 0) goto L_0x00ef
+            if (r6 <= 0) goto L_0x00ed
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r2)
             int r1 = r1 + r6
             float r1 = (float) r1
             int r1 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
-            if (r1 >= 0) goto L_0x00ef
+            if (r1 >= 0) goto L_0x00ed
             int r0 = r8.selectedIndex
-            if (r0 == r9) goto L_0x00fb
+            if (r0 == r9) goto L_0x00f9
             r8.setOption(r9)
-            goto L_0x00fb
-        L_0x00ef:
+            goto L_0x00f9
+        L_0x00ed:
             int r9 = r9 + 1
-            goto L_0x00be
-        L_0x00f2:
+            goto L_0x00bc
+        L_0x00f0:
             int r9 = r8.selectedIndex
             int r0 = r8.startMovingPreset
-            if (r9 == r0) goto L_0x00fb
+            if (r9 == r0) goto L_0x00f9
             r8.setOption(r9)
-        L_0x00fb:
+        L_0x00f9:
             r8.startMoving = r3
             r8.moving = r3
-        L_0x00ff:
+        L_0x00fd:
             return r4
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SlideChooseView.onTouchEvent(android.view.MotionEvent):boolean");

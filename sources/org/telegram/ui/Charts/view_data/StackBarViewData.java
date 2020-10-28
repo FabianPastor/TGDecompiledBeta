@@ -8,7 +8,7 @@ import org.telegram.ui.Charts.data.ChartData;
 
 public class StackBarViewData extends LineViewData {
     public int blendColor = 0;
-    public final Paint unselectedPaint = new Paint();
+    public final Paint unselectedPaint;
 
     public void updateColors() {
         super.updateColors();
@@ -17,9 +17,11 @@ public class StackBarViewData extends LineViewData {
 
     public StackBarViewData(ChartData.Line line) {
         super(line);
+        Paint paint = new Paint();
+        this.unselectedPaint = paint;
         this.paint.setStrokeWidth(AndroidUtilities.dpf2(1.0f));
         this.paint.setStyle(Paint.Style.STROKE);
-        this.unselectedPaint.setStyle(Paint.Style.STROKE);
+        paint.setStyle(Paint.Style.STROKE);
         this.paint.setAntiAlias(false);
     }
 }

@@ -114,18 +114,22 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             return null;
         }
         ActionBarLayout[] actionBarLayoutArr = {new ActionBarLayout(baseFragment.getParentActivity())};
-        final ActionBarLayout[] actionBarLayoutArr2 = actionBarLayoutArr;
-        final boolean z2 = z;
-        final CameraScanActivityDelegate cameraScanActivityDelegate2 = cameraScanActivityDelegate;
-        new BottomSheet(baseFragment.getParentActivity(), false) {
+        new BottomSheet(baseFragment.getParentActivity(), false, actionBarLayoutArr, z, cameraScanActivityDelegate) {
+            final /* synthetic */ ActionBarLayout[] val$actionBarLayout;
+            final /* synthetic */ CameraScanActivityDelegate val$delegate;
+            final /* synthetic */ boolean val$gallery;
+
             /* access modifiers changed from: protected */
             public boolean canDismissWithSwipe() {
                 return false;
             }
 
             {
-                actionBarLayoutArr2[0].init(new ArrayList());
-                AnonymousClass1 r1 = new CameraScanActivity(1) {
+                this.val$actionBarLayout = r4;
+                this.val$gallery = r5;
+                this.val$delegate = r6;
+                r4[0].init(new ArrayList());
+                AnonymousClass1 r3 = new CameraScanActivity(1) {
                     public void finishFragment() {
                         AnonymousClass1.this.dismiss();
                     }
@@ -134,14 +138,14 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                         AnonymousClass1.this.dismiss();
                     }
                 };
-                boolean unused = r1.needGalleryButton = z2;
-                actionBarLayoutArr2[0].addFragmentToStack(r1);
-                actionBarLayoutArr2[0].showLastFragment();
-                ActionBarLayout actionBarLayout = actionBarLayoutArr2[0];
+                boolean unused = r3.needGalleryButton = r5;
+                r4[0].addFragmentToStack(r3);
+                r4[0].showLastFragment();
+                ActionBarLayout actionBarLayout = r4[0];
                 int i = this.backgroundPaddingLeft;
                 actionBarLayout.setPadding(i, 0, i, 0);
-                r1.setDelegate(cameraScanActivityDelegate2);
-                this.containerView = actionBarLayoutArr2[0];
+                r3.setDelegate(r6);
+                this.containerView = r4[0];
                 setApplyBottomPadding(false);
                 setApplyBottomPadding(false);
                 setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -152,17 +156,17 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
             }
 
             public void onBackPressed() {
-                ActionBarLayout[] actionBarLayoutArr = actionBarLayoutArr2;
+                ActionBarLayout[] actionBarLayoutArr = this.val$actionBarLayout;
                 if (actionBarLayoutArr[0] == null || actionBarLayoutArr[0].fragmentsStack.size() <= 1) {
                     super.onBackPressed();
                 } else {
-                    actionBarLayoutArr2[0].onBackPressed();
+                    this.val$actionBarLayout[0].onBackPressed();
                 }
             }
 
             public void dismiss() {
                 super.dismiss();
-                actionBarLayoutArr2[0] = null;
+                this.val$actionBarLayout[0] = null;
             }
         }.show();
         return actionBarLayoutArr;
@@ -183,6 +187,8 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$CameraScanActivity() {
         CameraView cameraView2 = this.cameraView;
         if (cameraView2 != null) {
@@ -330,7 +336,7 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                 return z;
             }
         };
-        r0.setOnTouchListener($$Lambda$CameraScanActivity$coK9fFDxJKElfMa1PuRYWa0XVmg.INSTANCE);
+        r0.setOnTouchListener($$Lambda$CameraScanActivity$s2SMU_1hrvLmURqE7dRM15kjdps.INSTANCE);
         this.fragmentView = r0;
         CameraView cameraView2 = new CameraView(context, false);
         this.cameraView = cameraView2;
@@ -421,6 +427,8 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$2 */
     public /* synthetic */ void lambda$createView$2$CameraScanActivity(View view) {
         if (getParentActivity() != null) {
             if (Build.VERSION.SDK_INT < 23 || getParentActivity().checkSelfPermission("android.permission.READ_EXTERNAL_STORAGE") == 0) {
@@ -465,6 +473,8 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$4 */
     public /* synthetic */ void lambda$createView$4$CameraScanActivity(View view) {
         CameraSession cameraSession = this.cameraView.getCameraSession();
         if (cameraSession != null) {
@@ -503,6 +513,8 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$3 */
     public /* synthetic */ void lambda$null$3$CameraScanActivity(ValueAnimator valueAnimator) {
         this.flashButton.invalidate();
     }
@@ -513,8 +525,9 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
                 Point realScreenSize = AndroidUtilities.getRealScreenSize();
                 String tryReadQr = tryReadQr((byte[]) null, (Size) null, 0, 0, 0, ImageLoader.loadBitmap((String) null, intent.getData(), (float) realScreenSize.x, (float) realScreenSize.y, true));
                 if (tryReadQr != null) {
-                    if (this.delegate != null) {
-                        this.delegate.didFindQr(tryReadQr);
+                    CameraScanActivityDelegate cameraScanActivityDelegate = this.delegate;
+                    if (cameraScanActivityDelegate != null) {
+                        cameraScanActivityDelegate.didFindQr(tryReadQr);
                     }
                     finishFragment();
                 }
@@ -559,6 +572,8 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onNoQrFound$5 */
     public /* synthetic */ void lambda$onNoQrFound$5$CameraScanActivity() {
         if (this.recognizedMrzView.getTag() != null) {
             this.recognizedMrzView.setTag((Object) null);
@@ -582,6 +597,8 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onPreviewFrame$8 */
     public /* synthetic */ void lambda$onPreviewFrame$8$CameraScanActivity(byte[] bArr, Camera camera) {
         try {
             Size previewSize = this.cameraView.getPreviewSize();
@@ -631,6 +648,8 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$6 */
     public /* synthetic */ void lambda$null$6$CameraScanActivity(MrzRecognizer.Result result) {
         this.recognizedMrzView.setText(result.rawMRZ);
         this.recognizedMrzView.animate().setDuration(200).alpha(1.0f).setInterpolator(CubicBezierInterpolator.DEFAULT).start();
@@ -645,6 +664,8 @@ public class CameraScanActivity extends BaseFragment implements Camera.PreviewCa
         }, 1200);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$7 */
     public /* synthetic */ void lambda$null$7$CameraScanActivity(String str) {
         CameraScanActivityDelegate cameraScanActivityDelegate = this.delegate;
         if (cameraScanActivityDelegate != null) {

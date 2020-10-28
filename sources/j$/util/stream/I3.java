@@ -1,84 +1,73 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEn;
-import j$.util.P;
-import j$.util.function.C;
-import j$.util.function.CLASSNAMEt;
+import j$.util.CLASSNAMEk;
+import j$.util.function.CLASSNAMEe;
 import j$.util.function.Consumer;
+import j$.util.function.v;
 import java.util.Arrays;
 
-class I3 implements CLASSNAMEm3 {
-    final double[] a;
-    int b;
-
-    public /* synthetic */ void e(Double[] dArr, int i) {
-        CLASSNAMEl3.a(this, dArr, i);
+final class I3 extends CLASSNAMEo3 implements CLASSNAMEg3 {
+    I3(long j, v vVar) {
+        super(j, vVar);
     }
 
-    public /* synthetic */ void forEach(Consumer consumer) {
-        CLASSNAMEl3.c(this, consumer);
+    public CLASSNAMEl3 a() {
+        if (this.b >= this.a.length) {
+            return this;
+        }
+        throw new IllegalStateException(String.format("Current size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.a.length)}));
     }
 
-    public /* bridge */ /* synthetic */ void m(Object[] objArr, int i) {
-        e((Double[]) objArr, i);
+    public /* synthetic */ void accept(double d) {
+        CLASSNAMEk.c(this);
+        throw null;
     }
 
-    public /* synthetic */ int w() {
-        CLASSNAMEg3.b();
-        return 0;
+    public /* synthetic */ void accept(int i) {
+        CLASSNAMEk.a(this);
+        throw null;
     }
 
-    public /* synthetic */ Object[] x(C c) {
-        return CLASSNAMEr3.a(this, c);
+    public /* synthetic */ void accept(long j) {
+        CLASSNAMEk.b(this);
+        throw null;
     }
 
-    I3(long size) {
-        if (size < NUM) {
-            this.a = new double[((int) size)];
-            this.b = 0;
+    public void accept(Object obj) {
+        int i = this.b;
+        Object[] objArr = this.a;
+        if (i < objArr.length) {
+            this.b = i + 1;
+            objArr[i] = obj;
             return;
         }
-        throw new IllegalArgumentException("Stream size exceeds max array size");
+        throw new IllegalStateException(String.format("Accept exceeded fixed size of %d", new Object[]{Integer.valueOf(this.a.length)}));
     }
 
-    I3(double[] array) {
-        this.a = array;
-        this.b = array.length;
+    public Consumer f(Consumer consumer) {
+        consumer.getClass();
+        return new CLASSNAMEe(this, consumer);
     }
 
-    /* renamed from: z */
-    public P spliterator() {
-        return CLASSNAMEn.a(this.a, 0, this.b);
-    }
-
-    /* renamed from: h */
-    public double[] i() {
-        double[] dArr = this.a;
-        int length = dArr.length;
-        int i = this.b;
-        if (length == i) {
-            return dArr;
+    public void m() {
+        if (this.b < this.a.length) {
+            throw new IllegalStateException(String.format("End size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.a.length)}));
         }
-        return Arrays.copyOf(dArr, i);
     }
 
-    /* renamed from: q */
-    public void f(double[] dest, int destOffset) {
-        System.arraycopy(this.a, 0, dest, destOffset, this.b);
-    }
-
-    public long count() {
-        return (long) this.b;
-    }
-
-    /* renamed from: y */
-    public void j(CLASSNAMEt consumer) {
-        for (int i = 0; i < this.b; i++) {
-            consumer.accept(this.a[i]);
+    public void n(long j) {
+        if (j == ((long) this.a.length)) {
+            this.b = 0;
+        } else {
+            throw new IllegalStateException(String.format("Begin size %d is not equal to fixed size %d", new Object[]{Long.valueOf(j), Integer.valueOf(this.a.length)}));
         }
+    }
+
+    public /* synthetic */ boolean p() {
+        return false;
     }
 
     public String toString() {
-        return String.format("DoubleArrayNode[%d][%s]", new Object[]{Integer.valueOf(this.a.length - this.b), Arrays.toString(this.a)});
+        return String.format("FixedNodeBuilder[%d][%s]", new Object[]{Integer.valueOf(this.a.length - this.b), Arrays.toString(this.a)});
     }
 }

@@ -120,7 +120,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         LinearLayout linearLayout = new LinearLayout(context2);
         linearLayout.setOrientation(1);
         ((ScrollView) this.fragmentView).addView(linearLayout, LayoutHelper.createScroll(-1, -2, 51));
-        linearLayout.setOnTouchListener($$Lambda$ContactAddActivity$A7kSn3Cfcajr4rigI3HkJXjVCE.INSTANCE);
+        linearLayout.setOnTouchListener($$Lambda$ContactAddActivity$xZiAGMz9R4iZiUVWOVvgIBQ7msg.INSTANCE);
         FrameLayout frameLayout = new FrameLayout(context2);
         linearLayout.addView(frameLayout, LayoutHelper.createLinear(-1, -2, 24.0f, 24.0f, 24.0f, 0.0f));
         BackupImageView backupImageView = new BackupImageView(context2);
@@ -138,17 +138,21 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         this.nameTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.nameTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        frameLayout.addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 80.0f, 3.0f, LocaleController.isRTL ? 80.0f : 0.0f, 0.0f));
-        TextView textView2 = new TextView(context2);
-        this.onlineTextView = textView2;
-        textView2.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
+        TextView textView2 = this.nameTextView;
+        boolean z = LocaleController.isRTL;
+        frameLayout.addView(textView2, LayoutHelper.createFrame(-2, -2.0f, (z ? 5 : 3) | 48, z ? 0.0f : 80.0f, 3.0f, z ? 80.0f : 0.0f, 0.0f));
+        TextView textView3 = new TextView(context2);
+        this.onlineTextView = textView3;
+        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
         this.onlineTextView.setTextSize(1, 14.0f);
         this.onlineTextView.setLines(1);
         this.onlineTextView.setMaxLines(1);
         this.onlineTextView.setSingleLine(true);
         this.onlineTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.onlineTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        frameLayout.addView(this.onlineTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 80.0f, 32.0f, LocaleController.isRTL ? 80.0f : 0.0f, 0.0f));
+        TextView textView4 = this.onlineTextView;
+        boolean z2 = LocaleController.isRTL;
+        frameLayout.addView(textView4, LayoutHelper.createFrame(-2, -2.0f, (z2 ? 5 : 3) | 48, z2 ? 0.0f : 80.0f, 32.0f, z2 ? 80.0f : 0.0f, 0.0f));
         EditTextBoldCursor editTextBoldCursor = new EditTextBoldCursor(context2);
         this.firstNameField = editTextBoldCursor;
         editTextBoldCursor.setTextSize(1, 18.0f);
@@ -213,15 +217,15 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
             editTextBoldCursor3.setSelection(editTextBoldCursor3.length());
             this.lastNameField.setText(user.last_name);
         }
-        TextView textView3 = new TextView(context2);
-        this.infoTextView = textView3;
-        textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
+        TextView textView5 = new TextView(context2);
+        this.infoTextView = textView5;
+        textView5.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText4"));
         this.infoTextView.setTextSize(1, 14.0f);
-        TextView textView4 = this.infoTextView;
+        TextView textView6 = this.infoTextView;
         if (LocaleController.isRTL) {
             i = 5;
         }
-        textView4.setGravity(i);
+        textView6.setGravity(i);
         if (this.addContact) {
             if (!this.needAddException || TextUtils.isEmpty(user.phone)) {
                 linearLayout.addView(this.infoTextView, LayoutHelper.createLinear(-1, -2, 24.0f, 18.0f, 24.0f, 0.0f));
@@ -243,6 +247,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$1 */
     public /* synthetic */ boolean lambda$createView$1$ContactAddActivity(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 5) {
             return false;
@@ -253,6 +259,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         return true;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$2 */
     public /* synthetic */ boolean lambda$createView$2$ContactAddActivity(TextView textView, int i, KeyEvent keyEvent) {
         if (i != 6) {
             return false;
@@ -261,6 +269,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         return true;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$3 */
     public /* synthetic */ void lambda$createView$3$ContactAddActivity(View view) {
         CheckBoxCell checkBoxCell2 = this.checkBoxCell;
         checkBoxCell2.setChecked(!checkBoxCell2.isChecked(), true);
@@ -328,7 +338,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$ContactAddActivity$ZD04TKrAmYykSmykZFEW6KtUdbc r10 = new ThemeDescription.ThemeDescriptionDelegate() {
+        $$Lambda$ContactAddActivity$SOaKXzA4ZHGsNoWooM8mGyCeTs r10 = new ThemeDescription.ThemeDescriptionDelegate() {
             public final void didSetColor() {
                 ContactAddActivity.this.lambda$getThemeDescriptions$4$ContactAddActivity();
             }
@@ -349,7 +359,7 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         arrayList.add(new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputField"));
         arrayList.add(new ThemeDescription(this.lastNameField, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteInputFieldActivated"));
         arrayList.add(new ThemeDescription(this.infoTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText4"));
-        $$Lambda$ContactAddActivity$ZD04TKrAmYykSmykZFEW6KtUdbc r8 = r10;
+        $$Lambda$ContactAddActivity$SOaKXzA4ZHGsNoWooM8mGyCeTs r8 = r10;
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, Theme.avatarDrawables, r8, "avatar_text"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundRed"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundOrange"));
@@ -361,6 +371,8 @@ public class ContactAddActivity extends BaseFragment implements NotificationCent
         return arrayList;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$getThemeDescriptions$4 */
     public /* synthetic */ void lambda$getThemeDescriptions$4$ContactAddActivity() {
         TLRPC$User user;
         if (this.avatarImage != null && (user = getMessagesController().getUser(Integer.valueOf(this.user_id))) != null) {

@@ -32,7 +32,9 @@ public class TextColorThemeCell extends FrameLayout {
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setPadding(0, 0, 0, AndroidUtilities.dp(3.0f));
-        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (!LocaleController.isRTL ? 3 : i) | 48, (float) (LocaleController.isRTL ? 21 : 57), 0.0f, (float) (LocaleController.isRTL ? 57 : 21), 0.0f));
+        TextView textView3 = this.textView;
+        boolean z = LocaleController.isRTL;
+        addView(textView3, LayoutHelper.createFrame(-1, -1.0f, (!z ? 3 : i) | 48, (float) (z ? 21 : 57), 0.0f, (float) (z ? 57 : 21), 0.0f));
     }
 
     public void setAlpha(float f) {

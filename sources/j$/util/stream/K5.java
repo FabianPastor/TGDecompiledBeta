@@ -1,71 +1,54 @@
 package j$.util.stream;
 
-import j$.util.S;
-import j$.util.Spliterator;
-import j$.util.function.C;
+import java.util.Arrays;
 
-class K5 extends CLASSNAMEx2 {
-    final /* synthetic */ long m;
-    final /* synthetic */ long n;
+final class K5 extends G5 {
+    private CLASSNAMEa6 c;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    K5(CLASSNAMEh1 upstream, CLASSNAMEv6 inputShape, int opFlags, long j, long j2) {
-        super(upstream, inputShape, opFlags);
-        this.m = j;
-        this.n = j2;
+    K5(CLASSNAMEt5 t5Var) {
+        super(t5Var);
     }
 
-    /* access modifiers changed from: package-private */
-    public S b1(S s, long skip, long limit, long sizeIfKnown) {
-        if (skip <= sizeIfKnown) {
-            long j = sizeIfKnown - skip;
-            if (limit >= 0) {
-                j = Math.min(limit, j);
+    public void accept(long j) {
+        this.c.accept(j);
+    }
+
+    public void m() {
+        long[] jArr = (long[]) this.c.e();
+        Arrays.sort(jArr);
+        this.a.n((long) jArr.length);
+        int i = 0;
+        if (!this.b) {
+            int length = jArr.length;
+            while (i < length) {
+                this.a.accept(jArr[i]);
+                i++;
             }
-            limit = j;
-            skip = 0;
-        }
-        return new U6(s, skip, limit);
-    }
-
-    /* access modifiers changed from: package-private */
-    public Spliterator H0(CLASSNAMEq4 helper, Spliterator spliterator) {
-        long size = helper.p0(spliterator);
-        if (size <= 0) {
-            Spliterator spliterator2 = spliterator;
-        } else if (spliterator.hasCharacteristics(16384)) {
-            long j = this.m;
-            return new O6((S) helper.v0(spliterator), j, Q5.f(j, this.n));
-        }
-        if (!CLASSNAMEu6.ORDERED.f(helper.r0())) {
-            return b1((S) helper.v0(spliterator), this.m, this.n, size);
-        }
-        return ((CLASSNAMEt3) new P5(this, helper, spliterator, CLASSNAMEr0.a, this.m, this.n).invoke()).spliterator();
-    }
-
-    static /* synthetic */ Integer[] a1(int x$0) {
-        return new Integer[x$0];
-    }
-
-    /* access modifiers changed from: package-private */
-    public CLASSNAMEt3 G0(CLASSNAMEq4 helper, Spliterator spliterator, C c) {
-        long size = helper.p0(spliterator);
-        if (size <= 0) {
-            CLASSNAMEq4 q4Var = helper;
-            Spliterator spliterator2 = spliterator;
-        } else if (spliterator.hasCharacteristics(16384)) {
-            return CLASSNAMEp4.h(helper, Q5.n(helper.q0(), spliterator, this.m, this.n), true);
         } else {
-            CLASSNAMEq4 q4Var2 = helper;
+            int length2 = jArr.length;
+            while (i < length2) {
+                long j = jArr[i];
+                if (this.a.p()) {
+                    break;
+                }
+                this.a.accept(j);
+                i++;
+            }
         }
-        if (!CLASSNAMEu6.ORDERED.f(helper.r0())) {
-            return CLASSNAMEp4.h(this, b1((S) helper.v0(spliterator), this.m, this.n, size), true);
-        }
-        return (CLASSNAMEt3) new P5(this, helper, spliterator, c, this.m, this.n).invoke();
+        this.a.m();
     }
 
-    /* access modifiers changed from: package-private */
-    public G5 J0(int flags, G5 sink) {
-        return new J5(this, sink);
+    public void n(long j) {
+        CLASSNAMEa6 a6Var;
+        if (j < NUM) {
+            if (j > 0) {
+                int i = (int) j;
+            } else {
+                a6Var = new CLASSNAMEa6();
+            }
+            this.c = a6Var;
+            return;
+        }
+        throw new IllegalArgumentException("Stream size exceeds max array size");
     }
 }

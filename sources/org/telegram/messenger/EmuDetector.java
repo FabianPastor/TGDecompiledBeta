@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
+import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import androidx.core.content.ContextCompat;
@@ -16,12 +16,13 @@ import java.util.List;
 
 public class EmuDetector {
     private static final String[] ANDY_FILES = {"fstab.andy", "ueventd.andy.rc"};
+    private static final String[] BLUE_FILES = {"/Android/data/com.bluestacks.home", "/Android/data/com.bluestacks.settings"};
     private static final String[] DEVICE_IDS = {"NUM", "e21833235b6eevar_", "NUM"};
     private static final String[] GENY_FILES = {"/dev/socket/genyd", "/dev/socket/baseband_genyd"};
     private static final String[] IMSI_IDS = {"NUM"};
     private static final String IP = "10.0.2.15";
     private static final int MIN_PROPERTIES_THRESHOLD = 5;
-    private static final String[] NOX_FILES = {"fstab.nox", "init.nox.rc", "ueventd.nox.rc"};
+    private static final String[] NOX_FILES = {"fstab.nox", "init.nox.rc", "ueventd.nox.rc", "/BigNoxGameHD", "/YSLauncher"};
     private static final String[] PHONE_NUMBERS = {"NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM", "NUM"};
     private static final String[] PIPES = {"/dev/socket/qemud", "/dev/qemu_pipe"};
     private static final Property[] PROPERTIES = {new Property("init.svc.qemud", (String) null), new Property("init.svc.qemu-props", (String) null), new Property("qemu.hw.mainkeys", (String) null), new Property("qemu.sf.fake_camera", (String) null), new Property("qemu.sf.lcd_density", (String) null), new Property("ro.bootloader", "unknown"), new Property("ro.bootmode", "unknown"), new Property("ro.hardware", "goldfish"), new Property("ro.kernel.android.qemud", (String) null), new Property("ro.kernel.qemu.gles", (String) null), new Property("ro.kernel.qemu", "1"), new Property("ro.product.device", "generic"), new Property("ro.product.model", "sdk"), new Property("ro.product.name", "sdk"), new Property("ro.serialno", (String) null)};
@@ -35,6 +36,15 @@ public class EmuDetector {
     private boolean isTelephony = false;
     private final Context mContext;
     private List<String> mListPackageName;
+
+    private enum EmulatorTypes {
+        GENY,
+        ANDY,
+        NOX,
+        BLUE,
+        PIPES,
+        X86
+    }
 
     public interface OnEmulatorDetectorListener {
         void onResult(boolean z);
@@ -67,6 +77,7 @@ public class EmuDetector {
         arrayList.add("com.google.android.launcher.layouts.genymotion");
         this.mListPackageName.add("com.bluestacks");
         this.mListPackageName.add("com.bignox.app");
+        this.mListPackageName.add("com.vphone.launcher");
     }
 
     public boolean isCheckTelephony() {
@@ -118,24 +129,115 @@ public class EmuDetector {
         }
     }
 
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x00d0 A[RETURN] */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x00d1  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
     private boolean checkBasic() {
-        boolean z = false;
-        boolean z2 = Build.FINGERPRINT.startsWith("generic") || Build.MODEL.contains("google_sdk") || Build.MODEL.toLowerCase().contains("droid4x") || Build.MODEL.contains("Emulator") || Build.MODEL.contains("Android SDK built for x86") || Build.MANUFACTURER.contains("Genymotion") || Build.HARDWARE.equals("goldfish") || Build.HARDWARE.equals("vbox86") || Build.PRODUCT.equals("sdk") || Build.PRODUCT.equals("google_sdk") || Build.PRODUCT.equals("sdk_x86") || Build.PRODUCT.equals("vbox86p") || Build.BOARD.toLowerCase().contains("nox") || Build.BOOTLOADER.toLowerCase().contains("nox") || Build.HARDWARE.toLowerCase().contains("nox") || Build.PRODUCT.toLowerCase().contains("nox") || Build.SERIAL.toLowerCase().contains("nox");
-        if (z2) {
-            return true;
-        }
-        if (Build.BRAND.startsWith("generic") && Build.DEVICE.startsWith("generic")) {
-            z = true;
-        }
-        boolean z3 = z2 | z;
-        if (z3) {
-            return true;
-        }
-        return z3 | "google_sdk".equals(Build.PRODUCT);
+        /*
+            r8 = this;
+            java.lang.String r0 = android.os.Build.BOARD
+            java.lang.String r0 = r0.toLowerCase()
+            java.lang.String r1 = "nox"
+            boolean r0 = r0.contains(r1)
+            r2 = 0
+            java.lang.String r3 = "google_sdk"
+            java.lang.String r4 = "generic"
+            r5 = 1
+            if (r0 != 0) goto L_0x00cd
+            java.lang.String r0 = android.os.Build.BOOTLOADER
+            java.lang.String r0 = r0.toLowerCase()
+            boolean r0 = r0.contains(r1)
+            if (r0 != 0) goto L_0x00cd
+            java.lang.String r0 = android.os.Build.FINGERPRINT
+            boolean r0 = r0.startsWith(r4)
+            if (r0 != 0) goto L_0x00cd
+            java.lang.String r0 = android.os.Build.MODEL
+            java.lang.String r6 = r0.toLowerCase()
+            boolean r6 = r6.contains(r3)
+            if (r6 != 0) goto L_0x00cd
+            java.lang.String r6 = r0.toLowerCase()
+            java.lang.String r7 = "droid4x"
+            boolean r6 = r6.contains(r7)
+            if (r6 != 0) goto L_0x00cd
+            java.lang.String r6 = r0.toLowerCase()
+            java.lang.String r7 = "emulator"
+            boolean r6 = r6.contains(r7)
+            if (r6 != 0) goto L_0x00cd
+            java.lang.String r6 = "Android SDK built for x86"
+            boolean r0 = r0.contains(r6)
+            if (r0 != 0) goto L_0x00cd
+            java.lang.String r0 = android.os.Build.MANUFACTURER
+            java.lang.String r0 = r0.toLowerCase()
+            java.lang.String r6 = "genymotion"
+            boolean r0 = r0.contains(r6)
+            if (r0 != 0) goto L_0x00cd
+            java.lang.String r0 = android.os.Build.HARDWARE
+            java.lang.String r6 = r0.toLowerCase()
+            java.lang.String r7 = "goldfish"
+            boolean r6 = r6.contains(r7)
+            if (r6 != 0) goto L_0x00cd
+            java.lang.String r6 = r0.toLowerCase()
+            java.lang.String r7 = "vbox86"
+            boolean r6 = r6.contains(r7)
+            if (r6 != 0) goto L_0x00cd
+            java.lang.String r6 = r0.toLowerCase()
+            java.lang.String r7 = "android_x86"
+            boolean r6 = r6.contains(r7)
+            if (r6 != 0) goto L_0x00cd
+            java.lang.String r0 = r0.toLowerCase()
+            boolean r0 = r0.contains(r1)
+            if (r0 != 0) goto L_0x00cd
+            java.lang.String r0 = android.os.Build.PRODUCT
+            java.lang.String r6 = "sdk"
+            boolean r6 = r0.equals(r6)
+            if (r6 != 0) goto L_0x00cd
+            boolean r6 = r0.equals(r3)
+            if (r6 != 0) goto L_0x00cd
+            java.lang.String r6 = "sdk_x86"
+            boolean r6 = r0.equals(r6)
+            if (r6 != 0) goto L_0x00cd
+            java.lang.String r6 = "vbox86p"
+            boolean r6 = r0.equals(r6)
+            if (r6 != 0) goto L_0x00cd
+            java.lang.String r0 = r0.toLowerCase()
+            boolean r0 = r0.contains(r1)
+            if (r0 != 0) goto L_0x00cd
+            java.lang.String r0 = android.os.Build.SERIAL
+            java.lang.String r0 = r0.toLowerCase()
+            boolean r0 = r0.contains(r1)
+            if (r0 == 0) goto L_0x00cb
+            goto L_0x00cd
+        L_0x00cb:
+            r0 = 0
+            goto L_0x00ce
+        L_0x00cd:
+            r0 = 1
+        L_0x00ce:
+            if (r0 == 0) goto L_0x00d1
+            return r5
+        L_0x00d1:
+            java.lang.String r1 = android.os.Build.BRAND
+            boolean r1 = r1.startsWith(r4)
+            if (r1 == 0) goto L_0x00e2
+            java.lang.String r1 = android.os.Build.DEVICE
+            boolean r1 = r1.startsWith(r4)
+            if (r1 == 0) goto L_0x00e2
+            r2 = 1
+        L_0x00e2:
+            r0 = r0 | r2
+            if (r0 == 0) goto L_0x00e6
+            return r5
+        L_0x00e6:
+            java.lang.String r1 = android.os.Build.PRODUCT
+            boolean r1 = r3.equals(r1)
+            r0 = r0 | r1
+            return r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.EmuDetector.checkBasic():boolean");
     }
 
     private boolean checkAdvanced() {
-        return checkTelephony() || checkFiles(GENY_FILES, "Geny") || checkFiles(ANDY_FILES, "Andy") || checkFiles(NOX_FILES, "Nox") || checkQEmuDrivers() || checkFiles(PIPES, "Pipes") || checkIp() || (checkQEmuProps() && checkFiles(X86_FILES, "X86"));
+        return checkTelephony() || checkFiles(GENY_FILES, EmulatorTypes.GENY) || checkFiles(ANDY_FILES, EmulatorTypes.ANDY) || checkFiles(NOX_FILES, EmulatorTypes.NOX) || checkFiles(BLUE_FILES, EmulatorTypes.BLUE) || checkQEmuDrivers() || checkFiles(PIPES, EmulatorTypes.PIPES) || checkIp() || (checkQEmuProps() && checkFiles(X86_FILES, EmulatorTypes.X86));
     }
 
     private boolean checkPackageName() {
@@ -214,9 +316,17 @@ public class EmuDetector {
         return false;
     }
 
-    private boolean checkFiles(String[] strArr, String str) {
-        for (String file : strArr) {
-            if (new File(file).exists()) {
+    private boolean checkFiles(String[] strArr, EmulatorTypes emulatorTypes) {
+        File file;
+        for (String str : strArr) {
+            if (ContextCompat.checkSelfPermission(this.mContext, "android.permission.READ_EXTERNAL_STORAGE") != 0) {
+                file = new File(str);
+            } else if ((!str.contains("/") || emulatorTypes != EmulatorTypes.NOX) && emulatorTypes != EmulatorTypes.BLUE) {
+                file = new File(str);
+            } else {
+                file = new File(Environment.getExternalStorageDirectory() + str);
+            }
+            if (file.exists()) {
                 return true;
             }
         }
@@ -227,10 +337,10 @@ public class EmuDetector {
         int i = 0;
         for (Property property : PROPERTIES) {
             String prop = getProp(this.mContext, property.name);
-            if (property.seek_value == null && prop != null) {
+            String str = property.seek_value;
+            if (str == null && prop != null) {
                 i++;
             }
-            String str = property.seek_value;
             if (str != null && prop.contains(str)) {
                 i++;
             }

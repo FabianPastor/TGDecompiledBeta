@@ -28,13 +28,13 @@ public class TLRPC$TL_dcOption extends TLObject {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.ipv6 = (readInt32 & 1) != 0;
-        this.media_only = (this.flags & 2) != 0;
-        this.tcpo_only = (this.flags & 4) != 0;
-        this.cdn = (this.flags & 8) != 0;
-        if ((this.flags & 16) == 0) {
-            z2 = false;
+        this.media_only = (readInt32 & 2) != 0;
+        this.tcpo_only = (readInt32 & 4) != 0;
+        this.cdn = (readInt32 & 8) != 0;
+        if ((readInt32 & 16) != 0) {
+            z2 = true;
         }
         this.isStatic = z2;
         this.id = abstractSerializedData.readInt32(z);

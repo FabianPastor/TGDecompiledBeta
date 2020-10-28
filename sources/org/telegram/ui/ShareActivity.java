@@ -77,6 +77,8 @@ public class ShareActivity extends Activity {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onCreate$0 */
     public /* synthetic */ void lambda$onCreate$0$ShareActivity(DialogInterface dialogInterface) {
         if (!isFinishing()) {
             finish();
@@ -87,7 +89,8 @@ public class ShareActivity extends Activity {
     public void onPause() {
         super.onPause();
         try {
-            if (this.visibleDialog != null && this.visibleDialog.isShowing()) {
+            Dialog dialog = this.visibleDialog;
+            if (dialog != null && dialog.isShowing()) {
                 this.visibleDialog.dismiss();
                 this.visibleDialog = null;
             }

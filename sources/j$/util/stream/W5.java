@@ -1,54 +1,82 @@
 package j$.util.stream;
 
+import j$.util.C;
+import j$.util.V;
+import j$.util.function.Consumer;
+import j$.util.function.f;
+import j$.util.function.q;
 import java.util.Arrays;
+import java.util.Iterator;
 
-final class W5 extends S5 {
-    private CLASSNAMEm6 c;
-
-    W5(G5 sink) {
-        super(sink);
+class W5 extends CLASSNAMEc6 implements q {
+    W5() {
     }
 
-    public void s(long size) {
-        CLASSNAMEm6 m6Var;
-        if (size < NUM) {
-            if (size > 0) {
-                int i = (int) size;
-            } else {
-                m6Var = new CLASSNAMEm6();
-            }
-            this.c = m6Var;
-            return;
-        }
-        throw new IllegalArgumentException("Stream size exceeds max array size");
+    W5(int i) {
+        super(i);
     }
 
-    public void r() {
-        int[] ints = (int[]) this.c.i();
-        Arrays.sort(ints);
-        this.a.s((long) ints.length);
-        int i = 0;
-        if (!this.b) {
-            int length = ints.length;
-            while (i < length) {
-                this.a.accept(ints[i]);
-                i++;
-            }
+    /* renamed from: B */
+    public C spliterator() {
+        return new V5(this, 0, this.c, 0, this.b);
+    }
+
+    public void accept(double d) {
+        A();
+        int i = this.b;
+        this.b = i + 1;
+        ((double[]) this.e)[i] = d;
+    }
+
+    public Object c(int i) {
+        return new double[i];
+    }
+
+    public void forEach(Consumer consumer) {
+        if (consumer instanceof q) {
+            h((q) consumer);
+        } else if (!L6.a) {
+            spliterator().forEachRemaining(consumer);
         } else {
-            int length2 = ints.length;
-            while (i < length2) {
-                int anInt = ints[i];
-                if (this.a.u()) {
-                    break;
-                }
-                this.a.accept(anInt);
-                i++;
-            }
+            L6.a(getClass(), "{0} calling SpinedBuffer.OfDouble.forEach(Consumer)");
+            throw null;
         }
-        this.a.r();
     }
 
-    public void accept(int t) {
-        this.c.accept(t);
+    public Iterator iterator() {
+        return V.f(spliterator());
+    }
+
+    public q k(q qVar) {
+        qVar.getClass();
+        return new f(this, qVar);
+    }
+
+    /* access modifiers changed from: protected */
+    public void t(Object obj, int i, int i2, Object obj2) {
+        double[] dArr = (double[]) obj;
+        q qVar = (q) obj2;
+        while (i < i2) {
+            qVar.accept(dArr[i]);
+            i++;
+        }
+    }
+
+    public String toString() {
+        double[] dArr = (double[]) e();
+        if (dArr.length < 200) {
+            return String.format("%s[length=%d, chunks=%d]%s", new Object[]{getClass().getSimpleName(), Integer.valueOf(dArr.length), Integer.valueOf(this.c), Arrays.toString(dArr)});
+        }
+        return String.format("%s[length=%d, chunks=%d]%s...", new Object[]{getClass().getSimpleName(), Integer.valueOf(dArr.length), Integer.valueOf(this.c), Arrays.toString(Arrays.copyOf(dArr, 200))});
+    }
+
+    /* access modifiers changed from: protected */
+    public int u(Object obj) {
+        return ((double[]) obj).length;
+    }
+
+    /* access modifiers changed from: protected */
+    public Object[] z(int i) {
+        return new double[i][];
     }
 }

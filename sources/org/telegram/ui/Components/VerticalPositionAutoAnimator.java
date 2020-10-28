@@ -37,7 +37,7 @@ public final class VerticalPositionAutoAnimator {
             SpringAnimation springAnimation = new SpringAnimation(view, DynamicAnimation.TRANSLATION_Y, 0.0f);
             this.floatingButtonAnimator = springAnimation;
             springAnimation.getSpring().setDampingRatio(1.0f);
-            this.floatingButtonAnimator.getSpring().setStiffness(f);
+            springAnimation.getSpring().setStiffness(f);
         }
 
         public void onLayoutChange(View view, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {

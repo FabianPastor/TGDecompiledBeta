@@ -8,8 +8,8 @@ public class TLRPC$TL_phoneCallDiscarded extends TLRPC$PhoneCall {
         this.flags = readInt32;
         boolean z2 = false;
         this.need_rating = (readInt32 & 4) != 0;
-        this.need_debug = (this.flags & 8) != 0;
-        if ((this.flags & 64) != 0) {
+        this.need_debug = (readInt32 & 8) != 0;
+        if ((readInt32 & 64) != 0) {
             z2 = true;
         }
         this.video = z2;

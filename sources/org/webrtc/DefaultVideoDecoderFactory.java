@@ -10,7 +10,6 @@ public class DefaultVideoDecoderFactory implements VideoDecoderFactory {
     private final VideoDecoderFactory platformSoftwareVideoDecoderFactory;
     private final VideoDecoderFactory softwareVideoDecoderFactory = new SoftwareVideoDecoderFactory();
 
-    @Deprecated
     public /* synthetic */ VideoDecoder createDecoder(String str) {
         return VideoDecoderFactory.CC.$default$createDecoder((VideoDecoderFactory) this, str);
     }

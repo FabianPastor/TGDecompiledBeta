@@ -1,12 +1,21 @@
 package j$.util.stream;
 
-class D1 extends K1 {
-    D1(L1 this$0, CLASSNAMEh1 upstream, CLASSNAMEv6 inputShape, int opFlags) {
-        super(upstream, inputShape, opFlags);
+class D1 extends CLASSNAMEm5 {
+    final /* synthetic */ E1 b;
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    D1(E1 e1, CLASSNAMEt5 t5Var) {
+        super(t5Var);
+        this.b = e1;
     }
 
-    /* access modifiers changed from: package-private */
-    public G5 J0(int flags, G5 sink) {
-        return sink;
+    public void accept(double d) {
+        if (this.b.l.b(d)) {
+            this.a.accept(d);
+        }
+    }
+
+    public void n(long j) {
+        this.a.n(-1);
     }
 }

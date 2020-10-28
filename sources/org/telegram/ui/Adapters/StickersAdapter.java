@@ -245,6 +245,8 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$searchEmojiByKeyword$1 */
     public /* synthetic */ void lambda$searchEmojiByKeyword$1$StickersAdapter(String str) {
         MediaDataController.getInstance(this.currentAccount).getEmojiSuggestions(this.lastSearchKeyboardLanguage, str, true, new MediaDataController.KeywordResultCallback(str) {
             public final /* synthetic */ String f$1;
@@ -259,6 +261,8 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$0 */
     public /* synthetic */ void lambda$null$0$StickersAdapter(String str, ArrayList arrayList, String str2) {
         if (str.equals(this.lastSticker)) {
             if (!arrayList.isEmpty()) {
@@ -353,31 +357,31 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         ArrayList<StickerResult> arrayList3 = this.stickers;
         if (arrayList3 != null) {
             Collections.sort(arrayList3, new Object(this) {
-                public /* synthetic */ Comparator<T> reversed() {
+                public /* synthetic */ Comparator reversed() {
                     return Comparator.CC.$default$reversed(this);
                 }
 
-                public /* synthetic */ <U extends Comparable<? super U>> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function) {
-                    return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (Function) function);
+                public /* synthetic */ java.util.Comparator thenComparing(Function function) {
+                    return Comparator.CC.$default$thenComparing((java.util.Comparator) this, function);
                 }
 
-                public /* synthetic */ <U> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function, java.util.Comparator<? super U> comparator) {
+                public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
                     return Comparator.CC.$default$thenComparing(this, function, comparator);
                 }
 
-                public /* synthetic */ java.util.Comparator<T> thenComparing(java.util.Comparator<? super T> comparator) {
-                    return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (java.util.Comparator) comparator);
+                public /* synthetic */ java.util.Comparator thenComparing(java.util.Comparator comparator) {
+                    return Comparator.CC.$default$thenComparing((java.util.Comparator) this, comparator);
                 }
 
-                public /* synthetic */ java.util.Comparator<T> thenComparingDouble(ToDoubleFunction<? super T> toDoubleFunction) {
+                public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
                     return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
                 }
 
-                public /* synthetic */ java.util.Comparator<T> thenComparingInt(ToIntFunction<? super T> toIntFunction) {
+                public /* synthetic */ java.util.Comparator thenComparingInt(ToIntFunction toIntFunction) {
                     return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
                 }
 
-                public /* synthetic */ java.util.Comparator<T> thenComparingLong(ToLongFunction<? super T> toLongFunction) {
+                public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
                     return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
                 }
 
@@ -458,6 +462,8 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$searchServerStickers$3 */
     public /* synthetic */ void lambda$searchServerStickers$3$StickersAdapter(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(str, tLObject) {
             public final /* synthetic */ String f$1;
@@ -474,6 +480,8 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$StickersAdapter(String str, TLObject tLObject) {
         ArrayList<StickerResult> arrayList;
         int i = 0;

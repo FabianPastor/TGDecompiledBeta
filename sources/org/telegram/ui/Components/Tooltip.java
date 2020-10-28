@@ -20,6 +20,8 @@ public class Tooltip extends TextView {
     };
     private boolean showing;
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$Tooltip() {
         ViewPropertyAnimator duration = animate().alpha(0.0f).setListener(new AnimatorListenerAdapter() {
             public void onAnimationEnd(Animator animator) {

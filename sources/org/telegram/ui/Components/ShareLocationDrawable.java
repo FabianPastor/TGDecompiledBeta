@@ -58,10 +58,9 @@ public class ShareLocationDrawable extends Drawable {
             if (fArr[i] >= 1.0f) {
                 fArr[i] = 0.0f;
             }
-            float[] fArr2 = this.progress;
-            fArr2[i] = fArr2[i] + (((float) j) / 1300.0f);
-            if (fArr2[i] > 1.0f) {
-                fArr2[i] = 1.0f;
+            fArr[i] = fArr[i] + (((float) j) / 1300.0f);
+            if (fArr[i] > 1.0f) {
+                fArr[i] = 1.0f;
             }
         }
         invalidateSelf();

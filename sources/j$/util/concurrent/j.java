@@ -1,114 +1,105 @@
 package j$.util.concurrent;
 
-import j$.r;
+import j$.CLASSNAMEz;
 import j$.util.Spliterator;
+import j$.util.function.Consumer;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 
 public class j extends CLASSNAMEc implements Set, Serializable, j$.util.Set {
-    private final Object b;
-
-    public /* synthetic */ void forEach(Consumer consumer) {
-        forEach(r.a(consumer));
-    }
-
-    j(ConcurrentHashMap concurrentHashMap, Object value) {
+    j(ConcurrentHashMap concurrentHashMap, Object obj) {
         super(concurrentHashMap);
-        this.b = value;
     }
 
-    public boolean contains(Object o) {
-        return this.a.containsKey(o);
+    public boolean add(Object obj) {
+        throw new UnsupportedOperationException();
     }
 
-    public boolean remove(Object o) {
-        return this.a.remove(o) != null;
+    public boolean addAll(Collection collection) {
+        throw new UnsupportedOperationException();
+    }
+
+    public boolean contains(Object obj) {
+        return this.a.containsKey(obj);
+    }
+
+    /* JADX WARNING: Code restructure failed: missing block: B:2:0x0004, code lost:
+        r2 = (java.util.Set) r2;
+     */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public boolean equals(java.lang.Object r2) {
+        /*
+            r1 = this;
+            boolean r0 = r2 instanceof java.util.Set
+            if (r0 == 0) goto L_0x0016
+            java.util.Set r2 = (java.util.Set) r2
+            if (r2 == r1) goto L_0x0014
+            boolean r0 = r1.containsAll(r2)
+            if (r0 == 0) goto L_0x0016
+            boolean r2 = r2.containsAll(r1)
+            if (r2 == 0) goto L_0x0016
+        L_0x0014:
+            r2 = 1
+            goto L_0x0017
+        L_0x0016:
+            r2 = 0
+        L_0x0017:
+            return r2
+        */
+        throw new UnsupportedOperationException("Method not decompiled: j$.util.concurrent.j.equals(java.lang.Object):boolean");
+    }
+
+    public void forEach(Consumer consumer) {
+        consumer.getClass();
+        m[] mVarArr = this.a.a;
+        if (mVarArr != null) {
+            q qVar = new q(mVarArr, mVarArr.length, 0, mVarArr.length);
+            while (true) {
+                m a = qVar.a();
+                if (a != null) {
+                    consumer.accept(a.b);
+                } else {
+                    return;
+                }
+            }
+        }
+    }
+
+    public /* synthetic */ void forEach(java.util.function.Consumer consumer) {
+        forEach(CLASSNAMEz.b(consumer));
+    }
+
+    public int hashCode() {
+        Iterator it = iterator();
+        int i = 0;
+        while (((CLASSNAMEb) it).hasNext()) {
+            i += ((i) it).next().hashCode();
+        }
+        return i;
     }
 
     public Iterator iterator() {
         ConcurrentHashMap concurrentHashMap = this.a;
-        ConcurrentHashMap.Node<K, V>[] nodeArr = concurrentHashMap.a;
-        ConcurrentHashMap.Node<K, V>[] t = nodeArr;
-        int f = nodeArr == null ? 0 : t.length;
-        return new i(t, f, 0, f, concurrentHashMap);
+        m[] mVarArr = concurrentHashMap.a;
+        int length = mVarArr == null ? 0 : mVarArr.length;
+        return new i(mVarArr, length, 0, length, concurrentHashMap);
     }
 
-    public boolean add(Object e) {
-        V v = this.b;
-        V v2 = v;
-        if (v != null) {
-            return this.a.i(e, v2, true) == null;
-        }
-        throw new UnsupportedOperationException();
-    }
-
-    public boolean addAll(Collection c) {
-        boolean added = false;
-        V v = this.b;
-        V v2 = v;
-        if (v != null) {
-            Iterator it = c.iterator();
-            while (it.hasNext()) {
-                if (this.a.i(it.next(), v2, true) == null) {
-                    added = true;
-                }
-            }
-            return added;
-        }
-        throw new UnsupportedOperationException();
-    }
-
-    public int hashCode() {
-        int h = 0;
-        Iterator it = iterator();
-        while (((CLASSNAMEb) it).hasNext()) {
-            h += ((i) it).next().hashCode();
-        }
-        return h;
-    }
-
-    public boolean equals(Object o) {
-        if (o instanceof Set) {
-            Set set = (Set) o;
-            Set set2 = set;
-            if (set == this || (containsAll(set2) && set2.containsAll(this))) {
-                return true;
-            }
-        }
-        return false;
+    public boolean remove(Object obj) {
+        return this.a.remove(obj) != null;
     }
 
     public Spliterator spliterator() {
         ConcurrentHashMap concurrentHashMap = this.a;
-        long n = concurrentHashMap.n();
-        ConcurrentHashMap.Node<K, V>[] nodeArr = concurrentHashMap.a;
-        ConcurrentHashMap.Node<K, V>[] t = nodeArr;
-        int f = nodeArr == null ? 0 : t.length;
-        return new k(t, f, 0, f, n < 0 ? 0 : n);
-    }
-
-    public void forEach(j$.util.function.Consumer consumer) {
-        if (consumer != null) {
-            ConcurrentHashMap.Node<K, V>[] nodeArr = this.a.a;
-            ConcurrentHashMap.Node<K, V>[] t = nodeArr;
-            if (nodeArr != null) {
-                ConcurrentHashMap.Traverser<K, V> it = new q(t, t.length, 0, t.length);
-                while (true) {
-                    ConcurrentHashMap.Node<K, V> b2 = it.b();
-                    ConcurrentHashMap.Node<K, V> p = b2;
-                    if (b2 != null) {
-                        consumer.accept(p.b);
-                    } else {
-                        return;
-                    }
-                }
-            }
-        } else {
-            throw null;
+        long m = concurrentHashMap.m();
+        m[] mVarArr = concurrentHashMap.a;
+        int length = mVarArr == null ? 0 : mVarArr.length;
+        long j = 0;
+        if (m >= 0) {
+            j = m;
         }
+        return new k(mVarArr, length, 0, length, j);
     }
 }

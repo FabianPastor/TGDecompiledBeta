@@ -29,8 +29,14 @@ public class RendererCommon {
     }
 
     public static class VideoLayoutMeasure {
-        private float visibleFractionMatchOrientation = RendererCommon.convertScalingTypeToVisibleFraction(ScalingType.SCALE_ASPECT_BALANCED);
-        private float visibleFractionMismatchOrientation = RendererCommon.convertScalingTypeToVisibleFraction(ScalingType.SCALE_ASPECT_BALANCED);
+        private float visibleFractionMatchOrientation;
+        private float visibleFractionMismatchOrientation;
+
+        public VideoLayoutMeasure() {
+            ScalingType scalingType = ScalingType.SCALE_ASPECT_BALANCED;
+            this.visibleFractionMatchOrientation = RendererCommon.convertScalingTypeToVisibleFraction(scalingType);
+            this.visibleFractionMismatchOrientation = RendererCommon.convertScalingTypeToVisibleFraction(scalingType);
+        }
 
         public void setScalingType(ScalingType scalingType) {
             setScalingType(scalingType, scalingType);

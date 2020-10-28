@@ -1,26 +1,22 @@
 package j$.util.stream;
 
-abstract class U2 extends V2 {
-    static {
-        Class<V2> cls = V2.class;
+import j$.util.function.Predicate;
+
+class U2 extends Y2 {
+    final /* synthetic */ Z2 c;
+    final /* synthetic */ Predicate d;
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    U2(Z2 z2, Predicate predicate) {
+        super(z2);
+        this.c = z2;
+        this.d = predicate;
     }
 
-    public /* bridge */ /* synthetic */ W2 parallel() {
-        super.parallel();
-        return this;
-    }
-
-    public /* bridge */ /* synthetic */ W2 sequential() {
-        super.sequential();
-        return this;
-    }
-
-    U2(CLASSNAMEh1 upstream, CLASSNAMEv6 inputShape, int opFlags) {
-        super(upstream, opFlags);
-    }
-
-    /* access modifiers changed from: package-private */
-    public final boolean I0() {
-        return false;
+    public void accept(Object obj) {
+        if (!this.a && this.d.test(obj) == this.c.a) {
+            this.a = true;
+            this.b = this.c.b;
+        }
     }
 }

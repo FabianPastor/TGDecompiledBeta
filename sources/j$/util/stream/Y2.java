@@ -1,37 +1,44 @@
 package j$.util.stream;
 
-import j$.J;
-import j$.util.function.A;
-import j$.util.function.B;
-import j$.util.function.D;
+import j$.util.CLASSNAMEk;
+import j$.util.function.CLASSNAMEe;
+import j$.util.function.Consumer;
 
-class Y2 extends CLASSNAMEb3 implements D5 {
-    final /* synthetic */ CLASSNAMEc3 c;
-    final /* synthetic */ D d;
+abstract class Y2 implements CLASSNAMEt5 {
+    boolean a;
+    boolean b;
 
-    public /* bridge */ /* synthetic */ void accept(Object obj) {
-        t((Integer) obj);
+    Y2(Z2 z2) {
+        this.b = !z2.b;
     }
 
-    public /* synthetic */ B q(B b) {
-        return A.a(this, b);
+    public /* synthetic */ void accept(double d) {
+        CLASSNAMEk.c(this);
+        throw null;
     }
 
-    public /* synthetic */ void t(Integer num) {
-        C5.a(this, num);
+    public /* synthetic */ void accept(int i) {
+        CLASSNAMEk.a(this);
+        throw null;
     }
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    Y2(CLASSNAMEc3 c3Var, D d2) {
-        super(c3Var);
-        this.c = c3Var;
-        this.d = d2;
+    public /* synthetic */ void accept(long j) {
+        CLASSNAMEk.b(this);
+        throw null;
     }
 
-    public void accept(int t) {
-        if (!this.a && ((J) this.d).e(t) == this.c.a) {
-            this.a = true;
-            this.b = this.c.b;
-        }
+    public Consumer f(Consumer consumer) {
+        consumer.getClass();
+        return new CLASSNAMEe(this, consumer);
+    }
+
+    public void m() {
+    }
+
+    public void n(long j) {
+    }
+
+    public boolean p() {
+        return this.a;
     }
 }

@@ -34,7 +34,7 @@ public class MediaConstraints {
             if (this == obj) {
                 return true;
             }
-            if (obj == null || KeyValuePair.class != obj.getClass()) {
+            if (obj == null || getClass() != obj.getClass()) {
                 return false;
             }
             KeyValuePair keyValuePair = (KeyValuePair) obj;

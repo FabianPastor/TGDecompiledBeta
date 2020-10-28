@@ -33,18 +33,20 @@ public class SurfaceViewRenderer extends SurfaceView implements SurfaceHolder.Ca
         super(context);
         String resourceName2 = getResourceName();
         this.resourceName = resourceName2;
-        this.eglRenderer = new SurfaceEglRenderer(resourceName2);
+        SurfaceEglRenderer surfaceEglRenderer = new SurfaceEglRenderer(resourceName2);
+        this.eglRenderer = surfaceEglRenderer;
         getHolder().addCallback(this);
-        getHolder().addCallback(this.eglRenderer);
+        getHolder().addCallback(surfaceEglRenderer);
     }
 
     public SurfaceViewRenderer(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         String resourceName2 = getResourceName();
         this.resourceName = resourceName2;
-        this.eglRenderer = new SurfaceEglRenderer(resourceName2);
+        SurfaceEglRenderer surfaceEglRenderer = new SurfaceEglRenderer(resourceName2);
+        this.eglRenderer = surfaceEglRenderer;
         getHolder().addCallback(this);
-        getHolder().addCallback(this.eglRenderer);
+        getHolder().addCallback(surfaceEglRenderer);
     }
 
     public void init(EglBase.Context context, RendererCommon.RendererEvents rendererEvents2) {
@@ -204,6 +206,8 @@ public class SurfaceViewRenderer extends SurfaceView implements SurfaceHolder.Ca
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onFrameResolutionChanged$0 */
     public /* synthetic */ void lambda$onFrameResolutionChanged$0$SurfaceViewRenderer(int i, int i2) {
         this.rotatedFrameWidth = i;
         this.rotatedFrameHeight = i2;

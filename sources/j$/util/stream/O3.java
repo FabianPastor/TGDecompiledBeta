@@ -1,22 +1,19 @@
 package j$.util.stream;
 
-import j$.util.Spliterator;
+import j$.util.CLASSNAMEw;
+import j$.util.E;
 import j$.util.function.Consumer;
-import j$.util.k0;
 
-class O3 extends P3 {
-    public /* bridge */ /* synthetic */ void forEach(Consumer consumer) {
-        super.j(consumer);
+final class O3 extends P3 implements E {
+    O3(CLASSNAMEj3 j3Var) {
+        super(j3Var);
     }
 
-    public /* bridge */ /* synthetic */ void m(Object[] objArr, int i) {
-        super.f(objArr, i);
+    public /* synthetic */ boolean b(Consumer consumer) {
+        return CLASSNAMEw.f(this, consumer);
     }
 
-    private O3() {
-    }
-
-    public Spliterator spliterator() {
-        return k0.e();
+    public /* synthetic */ void forEachRemaining(Consumer consumer) {
+        CLASSNAMEw.c(this, consumer);
     }
 }

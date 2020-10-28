@@ -8,10 +8,10 @@ public class TLRPC$TL_channelFull_layer101 extends TLRPC$TL_channelFull {
         this.flags = readInt32;
         int i = 0;
         this.can_view_participants = (readInt32 & 8) != 0;
-        this.can_set_username = (this.flags & 64) != 0;
-        this.can_set_stickers = (this.flags & 128) != 0;
-        this.hidden_prehistory = (this.flags & 1024) != 0;
-        this.can_view_stats = (this.flags & 4096) != 0;
+        this.can_set_username = (readInt32 & 64) != 0;
+        this.can_set_stickers = (readInt32 & 128) != 0;
+        this.hidden_prehistory = (readInt32 & 1024) != 0;
+        this.can_view_stats = (readInt32 & 4096) != 0;
         this.id = abstractSerializedData.readInt32(z);
         this.about = abstractSerializedData.readString(z);
         if ((this.flags & 1) != 0) {

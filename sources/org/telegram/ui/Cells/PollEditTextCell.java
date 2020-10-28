@@ -154,7 +154,9 @@ public class PollEditTextCell extends FrameLayout {
         editTextBoldCursor2.setInputType(editTextBoldCursor2.getInputType() | 16384);
         this.textView.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(10.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(11.0f));
         if (onClickListener2 != null) {
-            addView(this.textView, LayoutHelper.createFrame(-1, -2.0f, (LocaleController.isRTL ? 5 : 3) | 16, LocaleController.isRTL ? 58.0f : 64.0f, 0.0f, !LocaleController.isRTL ? 58.0f : 64.0f, 0.0f));
+            EditTextBoldCursor editTextBoldCursor3 = this.textView;
+            boolean z2 = LocaleController.isRTL;
+            addView(editTextBoldCursor3, LayoutHelper.createFrame(-1, -2.0f, (z2 ? 5 : 3) | 16, z2 ? 58.0f : 64.0f, 0.0f, !z2 ? 58.0f : 64.0f, 0.0f));
             ImageView imageView = new ImageView(context2);
             this.moveImageView = imageView;
             imageView.setFocusable(false);
@@ -171,12 +173,16 @@ public class PollEditTextCell extends FrameLayout {
             this.deleteImageView.setOnClickListener(onClickListener2);
             this.deleteImageView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("windowBackgroundWhiteGrayIcon"), PorterDuff.Mode.MULTIPLY));
             this.deleteImageView.setContentDescription(LocaleController.getString("Delete", NUM));
-            addView(this.deleteImageView, LayoutHelper.createFrame(48, 50.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 3.0f : 0.0f, 0.0f, LocaleController.isRTL ? 0.0f : 3.0f, 0.0f));
+            ImageView imageView3 = this.deleteImageView;
+            boolean z3 = LocaleController.isRTL;
+            addView(imageView3, LayoutHelper.createFrame(48, 50.0f, (z3 ? 3 : 5) | 48, z3 ? 3.0f : 0.0f, 0.0f, z3 ? 0.0f : 3.0f, 0.0f));
             SimpleTextView simpleTextView = new SimpleTextView(context2);
             this.textView2 = simpleTextView;
             simpleTextView.setTextSize(13);
             this.textView2.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
-            addView(this.textView2, LayoutHelper.createFrame(48, 24.0f, (LocaleController.isRTL ? 3 : 5) | 48, LocaleController.isRTL ? 20.0f : 0.0f, 43.0f, LocaleController.isRTL ? 0.0f : 20.0f, 0.0f));
+            SimpleTextView simpleTextView2 = this.textView2;
+            boolean z4 = LocaleController.isRTL;
+            addView(simpleTextView2, LayoutHelper.createFrame(48, 24.0f, (z4 ? 3 : 5) | 48, z4 ? 20.0f : 0.0f, 43.0f, z4 ? 0.0f : 20.0f, 0.0f));
             CheckBox2 checkBox2 = new CheckBox2(context2, 21);
             this.checkBox = checkBox2;
             checkBox2.setColor((String) null, "windowBackgroundWhiteGrayIcon", "checkboxCheck");
@@ -196,6 +202,8 @@ public class PollEditTextCell extends FrameLayout {
         addView(this.textView, LayoutHelper.createFrame(-1, -2.0f, (!LocaleController.isRTL ? 3 : i) | 16, 19.0f, 0.0f, 19.0f, 0.0f));
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$PollEditTextCell(View view) {
         if (this.checkBox.getTag() != null) {
             onCheckBoxClick(this, !this.checkBox.isChecked());
@@ -210,10 +218,11 @@ public class PollEditTextCell extends FrameLayout {
         int i = 3;
         this.textView2.setGravity((LocaleController.isRTL ? 3 : 5) | 48);
         SimpleTextView simpleTextView2 = this.textView2;
-        if (!LocaleController.isRTL) {
+        boolean z = LocaleController.isRTL;
+        if (!z) {
             i = 5;
         }
-        addView(simpleTextView2, LayoutHelper.createFrame(48, 24.0f, i | 48, LocaleController.isRTL ? 20.0f : 0.0f, 17.0f, LocaleController.isRTL ? 0.0f : 20.0f, 0.0f));
+        addView(simpleTextView2, LayoutHelper.createFrame(48, 24.0f, i | 48, z ? 20.0f : 0.0f, 17.0f, z ? 0.0f : 20.0f, 0.0f));
     }
 
     /* access modifiers changed from: protected */

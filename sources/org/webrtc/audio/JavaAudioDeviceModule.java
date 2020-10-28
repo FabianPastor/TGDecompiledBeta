@@ -93,7 +93,7 @@ public class JavaAudioDeviceModule implements AudioDeviceModule {
             AudioManager audioManager2 = (AudioManager) context2.getSystemService("audio");
             this.audioManager = audioManager2;
             this.inputSampleRate = WebRtcAudioManager.getSampleRate(audioManager2);
-            this.outputSampleRate = WebRtcAudioManager.getSampleRate(this.audioManager);
+            this.outputSampleRate = WebRtcAudioManager.getSampleRate(audioManager2);
         }
 
         public Builder setSampleRate(int i) {
@@ -264,8 +264,9 @@ public class JavaAudioDeviceModule implements AudioDeviceModule {
 
     public void release() {
         synchronized (this.nativeLock) {
-            if (this.nativeAudioDeviceModule != 0) {
-                JniCommon.nativeReleaseRef(this.nativeAudioDeviceModule);
+            long j = this.nativeAudioDeviceModule;
+            if (j != 0) {
+                JniCommon.nativeReleaseRef(j);
                 this.nativeAudioDeviceModule = 0;
             }
         }

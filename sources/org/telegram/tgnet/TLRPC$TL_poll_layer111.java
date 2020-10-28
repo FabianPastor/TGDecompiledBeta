@@ -9,9 +9,9 @@ public class TLRPC$TL_poll_layer111 extends TLRPC$TL_poll {
         this.flags = readInt32;
         int i = 0;
         this.closed = (readInt32 & 1) != 0;
-        this.public_voters = (this.flags & 2) != 0;
-        this.multiple_choice = (this.flags & 4) != 0;
-        this.quiz = (this.flags & 8) != 0;
+        this.public_voters = (readInt32 & 2) != 0;
+        this.multiple_choice = (readInt32 & 4) != 0;
+        this.quiz = (readInt32 & 8) != 0;
         this.question = abstractSerializedData.readString(z);
         int readInt322 = abstractSerializedData.readInt32(z);
         if (readInt322 == NUM) {

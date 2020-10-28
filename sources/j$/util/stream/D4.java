@@ -1,33 +1,23 @@
 package j$.util.stream;
 
-import j$.util.function.BiConsumer;
-import j$.util.function.CLASSNAMEo;
-import j$.util.function.V;
+import j$.util.function.C;
+import j$.util.function.E;
+import j$.util.function.n;
 
-class D4 extends T4 {
-    final /* synthetic */ CLASSNAMEo b;
-    final /* synthetic */ BiConsumer c;
-    final /* synthetic */ V d;
-    final /* synthetic */ CLASSNAMEn1 e;
+class D4 extends L4 {
+    final /* synthetic */ n b;
+    final /* synthetic */ C c;
+    final /* synthetic */ E d;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    D4(CLASSNAMEv6 shape, CLASSNAMEo oVar, BiConsumer biConsumer, V v, CLASSNAMEn1 n1Var) {
-        super(shape);
-        this.b = oVar;
-        this.c = biConsumer;
-        this.d = v;
-        this.e = n1Var;
+    D4(CLASSNAMEh6 h6Var, n nVar, C c2, E e) {
+        super(h6Var);
+        this.b = nVar;
+        this.c = c2;
+        this.d = e;
     }
 
-    /* renamed from: e */
-    public E4 b() {
+    public J4 a() {
         return new E4(this.d, this.c, this.b);
-    }
-
-    public int a() {
-        if (this.e.characteristics().contains(CLASSNAMEm1.UNORDERED)) {
-            return CLASSNAMEu6.w;
-        }
-        return 0;
     }
 }

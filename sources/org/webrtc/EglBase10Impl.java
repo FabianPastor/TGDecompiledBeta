@@ -188,7 +188,10 @@ class EglBase10Impl implements EglBase10 {
         checkIsNotReleased();
         if (this.eglSurface != EGL10.EGL_NO_SURFACE) {
             synchronized (EglBase.lock) {
-                if (!this.egl.eglMakeCurrent(this.eglDisplay, this.eglSurface, this.eglSurface, this.eglContext)) {
+                EGL10 egl10 = this.egl;
+                EGLDisplay eGLDisplay = this.eglDisplay;
+                EGLSurface eGLSurface = this.eglSurface;
+                if (!egl10.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, this.eglContext)) {
                     throw new RuntimeException("eglMakeCurrent failed: 0x" + Integer.toHexString(this.egl.eglGetError()));
                 }
             }
@@ -199,7 +202,10 @@ class EglBase10Impl implements EglBase10 {
 
     public void detachCurrent() {
         synchronized (EglBase.lock) {
-            if (!this.egl.eglMakeCurrent(this.eglDisplay, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_SURFACE, EGL10.EGL_NO_CONTEXT)) {
+            EGL10 egl10 = this.egl;
+            EGLDisplay eGLDisplay = this.eglDisplay;
+            EGLSurface eGLSurface = EGL10.EGL_NO_SURFACE;
+            if (!egl10.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, EGL10.EGL_NO_CONTEXT)) {
                 throw new RuntimeException("eglDetachCurrent failed: 0x" + Integer.toHexString(this.egl.eglGetError()));
             }
         }

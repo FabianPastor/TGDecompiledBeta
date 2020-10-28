@@ -13,17 +13,18 @@ public class MP3Frame {
         public void update(int i, int i2) {
             int i3 = 1 << (i2 - 1);
             do {
+                short s = this.crc;
                 boolean z = false;
-                boolean z2 = (this.crc & 32768) == 0;
+                boolean z2 = (32768 & s) == 0;
                 if ((i & i3) == 0) {
                     z = true;
                 }
                 if (z2 ^ z) {
-                    short s = (short) (this.crc << 1);
-                    this.crc = s;
-                    this.crc = (short) (s ^ 32773);
+                    short s2 = (short) (s << 1);
+                    this.crc = s2;
+                    this.crc = (short) (s2 ^ 32773);
                 } else {
-                    this.crc = (short) (this.crc << 1);
+                    this.crc = (short) (s << 1);
                 }
                 i3 >>>= 1;
             } while (i3 != 0);
@@ -78,7 +79,7 @@ public class MP3Frame {
                             int i9 = i & 1;
                             this.protection = i9;
                             i8 = i9 != 0 ? 4 : i8;
-                            i8 = this.layer == 1 ? i8 + getSideInfoSize() : i8;
+                            i8 = i5 == 1 ? i8 + getSideInfoSize() : i8;
                             if (getFrameSize() < i8) {
                                 throw new MP3Exception("Frame size must be at least " + i8);
                             }
@@ -190,8 +191,7 @@ public class MP3Frame {
             if (bArr[xingOffset] == 88 && bArr[xingOffset + 1] == 105 && bArr[xingOffset + 2] == 110 && bArr[xingOffset + 3] == 103) {
                 return true;
             }
-            byte[] bArr2 = this.bytes;
-            if (bArr2[xingOffset] == 73 && bArr2[xingOffset + 1] == 110 && bArr2[xingOffset + 2] == 102 && bArr2[xingOffset + 3] == 111) {
+            if (bArr[xingOffset] == 73 && bArr[xingOffset + 1] == 110 && bArr[xingOffset + 2] == 102 && bArr[xingOffset + 3] == 111) {
                 return true;
             }
             return false;

@@ -61,9 +61,12 @@ public final class EncryptedFileDataSource extends BaseDataSource {
             this.file = randomAccessFile2;
             randomAccessFile2.seek(dataSpec.position);
             this.fileOffset = (int) dataSpec.position;
-            long length = dataSpec.length == -1 ? this.file.length() - dataSpec.position : dataSpec.length;
-            this.bytesRemaining = length;
-            if (length >= 0) {
+            long j = dataSpec.length;
+            if (j == -1) {
+                j = this.file.length() - dataSpec.position;
+            }
+            this.bytesRemaining = j;
+            if (j >= 0) {
                 this.opened = true;
                 transferStarted(dataSpec);
                 return this.bytesRemaining;
@@ -104,8 +107,9 @@ public final class EncryptedFileDataSource extends BaseDataSource {
         this.uri = null;
         this.fileOffset = 0;
         try {
-            if (this.file != null) {
-                this.file.close();
+            RandomAccessFile randomAccessFile = this.file;
+            if (randomAccessFile != null) {
+                randomAccessFile.close();
             }
             this.file = null;
             if (this.opened) {

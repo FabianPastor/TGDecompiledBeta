@@ -8,7 +8,7 @@ public class TLRPC$TL_dialog extends TLRPC$Dialog {
         this.flags = readInt32;
         boolean z2 = false;
         this.pinned = (readInt32 & 4) != 0;
-        if ((this.flags & 8) != 0) {
+        if ((readInt32 & 8) != 0) {
             z2 = true;
         }
         this.unread_mark = z2;

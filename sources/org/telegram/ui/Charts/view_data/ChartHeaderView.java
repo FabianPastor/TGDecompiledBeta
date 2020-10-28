@@ -74,6 +74,8 @@ public class ChartHeaderView extends FrameLayout {
         recolor();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$ChartHeaderView(View view, int i, int i2, int i3, int i4, int i5, int i6, int i7, int i8) {
         TextView textView = this.datesTmp;
         textView.setPivotX(((float) textView.getMeasuredWidth()) * 0.7f);

@@ -12,8 +12,14 @@ public class TLRPC$TL_inputMediaGeoLive extends TLRPC$InputMedia {
         }
         this.stopped = z2;
         this.geo_point = TLRPC$InputGeoPoint.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
+        if ((this.flags & 4) != 0) {
+            this.heading = abstractSerializedData.readInt32(z);
+        }
         if ((this.flags & 2) != 0) {
             this.period = abstractSerializedData.readInt32(z);
+        }
+        if ((this.flags & 8) != 0) {
+            this.proximity_notification_radius = abstractSerializedData.readInt32(z);
         }
     }
 
@@ -23,8 +29,14 @@ public class TLRPC$TL_inputMediaGeoLive extends TLRPC$InputMedia {
         this.flags = i;
         abstractSerializedData.writeInt32(i);
         this.geo_point.serializeToStream(abstractSerializedData);
+        if ((this.flags & 4) != 0) {
+            abstractSerializedData.writeInt32(this.heading);
+        }
         if ((this.flags & 2) != 0) {
             abstractSerializedData.writeInt32(this.period);
+        }
+        if ((this.flags & 8) != 0) {
+            abstractSerializedData.writeInt32(this.proximity_notification_radius);
         }
     }
 }

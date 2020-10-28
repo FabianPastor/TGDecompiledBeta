@@ -27,12 +27,12 @@ public class TLRPC$TL_messages_botCallbackAnswer extends TLObject {
         this.flags = readInt32;
         boolean z2 = false;
         this.alert = (readInt32 & 2) != 0;
-        this.has_url = (this.flags & 8) != 0;
-        if ((this.flags & 16) != 0) {
+        this.has_url = (readInt32 & 8) != 0;
+        if ((readInt32 & 16) != 0) {
             z2 = true;
         }
         this.native_ui = z2;
-        if ((this.flags & 1) != 0) {
+        if ((readInt32 & 1) != 0) {
             this.message = abstractSerializedData.readString(z);
         }
         if ((this.flags & 4) != 0) {

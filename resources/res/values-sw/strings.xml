@@ -22,4 +22,5 @@
     <string name="google_assistant_verification_channel_name">Kithibitishaji cha programu ya Mratibu</string>
     <string name="google_assistant_verification_notification_title">Programu ya Mratibu wa Google inatuma ujumbe</string>
     <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="wallet_buy_button_place_holder">Nunua ukitumia Google Wallet</string>
 </resources>

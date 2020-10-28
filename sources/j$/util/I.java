@@ -1,36 +1,77 @@
 package j$.util;
 
+import j$.util.Iterator;
 import j$.util.function.Consumer;
-import j$.util.function.J;
+import j$.util.function.h;
+import j$.util.function.y;
+import java.util.NoSuchElementException;
 
-public final /* synthetic */ class I {
-    public static void b(J _this, J action) {
-        action.getClass();
-        while (_this.hasNext()) {
-            action.accept(((Y) _this).nextLong());
+class I implements z, y {
+    boolean a = false;
+    long b;
+    final /* synthetic */ E c;
+
+    I(E e) {
+        this.c = e;
+    }
+
+    public void accept(long j) {
+        this.a = true;
+        this.b = j;
+    }
+
+    /* renamed from: d */
+    public void forEachRemaining(y yVar) {
+        yVar.getClass();
+        while (hasNext()) {
+            yVar.accept(nextLong());
         }
     }
 
-    public static Long d(J _this) {
-        if (!l0.a) {
-            return Long.valueOf(((Y) _this).nextLong());
-        }
-        l0.b(_this.getClass(), "{0} calling PrimitiveIterator.OfLong.nextLong()");
-        throw null;
-    }
-
-    public static void a(J _this, Consumer consumer) {
-        if (consumer instanceof J) {
-            ((Y) _this).d((J) consumer);
+    public void forEachRemaining(Consumer consumer) {
+        if (consumer instanceof y) {
+            forEachRemaining((y) consumer);
             return;
         }
         consumer.getClass();
-        if (!l0.a) {
-            consumer.getClass();
-            ((Y) _this).d(new CLASSNAMEb(consumer));
-            return;
+        if (!W.a) {
+            forEachRemaining(new CLASSNAMEg(consumer));
+        } else {
+            W.a(I.class, "{0} calling PrimitiveIterator.OfLong.forEachRemainingLong(action::accept)");
+            throw null;
         }
-        l0.b(_this.getClass(), "{0} calling PrimitiveIterator.OfLong.forEachRemainingLong(action::accept)");
+    }
+
+    public y g(y yVar) {
+        yVar.getClass();
+        return new h(this, yVar);
+    }
+
+    public boolean hasNext() {
+        if (!this.a) {
+            this.c.j(this);
+        }
+        return this.a;
+    }
+
+    public Long next() {
+        if (!W.a) {
+            return Long.valueOf(nextLong());
+        }
+        W.a(I.class, "{0} calling PrimitiveIterator.OfLong.nextLong()");
+        throw null;
+    }
+
+    public long nextLong() {
+        if (this.a || hasNext()) {
+            this.a = false;
+            return this.b;
+        }
+        throw new NoSuchElementException();
+    }
+
+    public /* synthetic */ void remove() {
+        Iterator.CC.a(this);
         throw null;
     }
 }

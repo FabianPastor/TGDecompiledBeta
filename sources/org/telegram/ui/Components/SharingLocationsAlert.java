@@ -179,6 +179,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         this.adapter.notifyDataSetChanged();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$SharingLocationsAlert(View view, int i) {
         int i2 = i - 1;
         if (i2 >= 0 && i2 < LocationController.getLocationsCount()) {
@@ -187,6 +189,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ void lambda$new$1$SharingLocationsAlert(View view) {
         for (int i = 0; i < 3; i++) {
             LocationController.getInstance(i).removeAllLocationSharings();
@@ -194,6 +198,8 @@ public class SharingLocationsAlert extends BottomSheet implements NotificationCe
         dismiss();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$2 */
     public /* synthetic */ void lambda$new$2$SharingLocationsAlert(View view) {
         dismiss();
     }

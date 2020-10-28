@@ -249,6 +249,8 @@ public class ContentPreviewViewer {
             }
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$run$1 */
         public /* synthetic */ void lambda$run$1$ContentPreviewViewer$1(ArrayList arrayList, boolean z, DialogInterface dialogInterface, int i) {
             if (ContentPreviewViewer.this.parentActivity != null) {
                 if (((Integer) arrayList.get(i)).intValue() == 0) {
@@ -284,11 +286,15 @@ public class ContentPreviewViewer {
             }
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$run$2 */
         public /* synthetic */ void lambda$run$2$ContentPreviewViewer$1(DialogInterface dialogInterface) {
             BottomSheet unused = ContentPreviewViewer.this.visibleDialog = null;
             ContentPreviewViewer.this.close();
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$run$4 */
         public /* synthetic */ void lambda$run$4$ContentPreviewViewer$1(ArrayList arrayList, DialogInterface dialogInterface, int i) {
             if (ContentPreviewViewer.this.parentActivity != null) {
                 if (((Integer) arrayList.get(i)).intValue() == 0) {
@@ -340,6 +346,8 @@ public class ContentPreviewViewer {
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.AnonymousClass1.lambda$null$3(org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate, org.telegram.tgnet.TLRPC$Document, org.telegram.tgnet.TLRPC$BotInlineResult, java.lang.Object, boolean, int):void");
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$run$5 */
         public /* synthetic */ void lambda$run$5$ContentPreviewViewer$1(DialogInterface dialogInterface) {
             BottomSheet unused = ContentPreviewViewer.this.visibleDialog = null;
             ContentPreviewViewer.this.close();
@@ -394,6 +402,11 @@ public class ContentPreviewViewer {
         void sendGif(Object obj, Object obj2, boolean z, int i);
 
         void sendSticker(TLRPC$Document tLRPC$Document, Object obj, boolean z, int i);
+    }
+
+    public /* synthetic */ WindowInsets lambda$setParentActivity$2$ContentPreviewViewer(View view, WindowInsets windowInsets) {
+        lambda$setParentActivity$2(view, windowInsets);
+        return windowInsets;
     }
 
     private class FrameLayoutDrawer extends FrameLayout {
@@ -719,7 +732,7 @@ public class ContentPreviewViewer {
             r6.openPreviewRunnable = r3
             goto L_0x023c
         L_0x01fa:
-            org.telegram.ui.-$$Lambda$ContentPreviewViewer$EMKDqwNyTHEkiYf1BXP5lN4E1U8 r1 = new org.telegram.ui.-$$Lambda$ContentPreviewViewer$EMKDqwNyTHEkiYf1BXP5lN4E1U8
+            org.telegram.ui.-$$Lambda$ContentPreviewViewer$fTVdUVOkyauWT6lnO5eDqKhjScQ r1 = new org.telegram.ui.-$$Lambda$ContentPreviewViewer$fTVdUVOkyauWT6lnO5eDqKhjScQ
             r4 = r18
             r1.<init>(r4)
             r4 = 150(0x96, double:7.4E-322)
@@ -854,7 +867,7 @@ public class ContentPreviewViewer {
             r8.startX = r12
             r8.startY = r9
             r8.currentPreviewCell = r3
-            org.telegram.ui.-$$Lambda$ContentPreviewViewer$wFY_75sBoPTmhZIpv5QBGVqAeaE r9 = new org.telegram.ui.-$$Lambda$ContentPreviewViewer$wFY_75sBoPTmhZIpv5QBGVqAeaE
+            org.telegram.ui.-$$Lambda$ContentPreviewViewer$q4aGtLHXd-C3gffx-LweW1TuH58 r9 = new org.telegram.ui.-$$Lambda$ContentPreviewViewer$q4aGtLHXd-C3gffx-LweW1TuH58
             r9.<init>(r10, r11, r1)
             r8.openPreviewRunnable = r9
             r10 = 200(0xc8, double:9.9E-322)
@@ -869,6 +882,8 @@ public class ContentPreviewViewer {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ContentPreviewViewer.onInterceptTouchEvent(android.view.MotionEvent, org.telegram.ui.Components.RecyclerListView, int, org.telegram.ui.ContentPreviewViewer$ContentPreviewViewerDelegate):boolean");
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onInterceptTouchEvent$1 */
     public /* synthetic */ void lambda$onInterceptTouchEvent$1$ContentPreviewViewer(RecyclerListView recyclerListView, int i, int i2) {
         if (this.openPreviewRunnable != null) {
             recyclerListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) null);
@@ -909,11 +924,13 @@ public class ContentPreviewViewer {
             this.windowView = frameLayout;
             frameLayout.setFocusable(true);
             this.windowView.setFocusableInTouchMode(true);
-            if (Build.VERSION.SDK_INT >= 21) {
+            int i2 = Build.VERSION.SDK_INT;
+            if (i2 >= 21) {
                 this.windowView.setFitsSystemWindows(true);
                 this.windowView.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
                     public final WindowInsets onApplyWindowInsets(View view, WindowInsets windowInsets) {
-                        return ContentPreviewViewer.this.lambda$setParentActivity$2$ContentPreviewViewer(view, windowInsets);
+                        ContentPreviewViewer.this.lambda$setParentActivity$2$ContentPreviewViewer(view, windowInsets);
+                        return windowInsets;
                     }
                 });
             }
@@ -933,7 +950,7 @@ public class ContentPreviewViewer {
             layoutParams.width = -1;
             layoutParams.gravity = 48;
             layoutParams.type = 99;
-            if (Build.VERSION.SDK_INT >= 21) {
+            if (i2 >= 21) {
                 layoutParams.flags = -NUM;
             } else {
                 layoutParams.flags = 8;
@@ -944,11 +961,13 @@ public class ContentPreviewViewer {
         }
     }
 
-    public /* synthetic */ WindowInsets lambda$setParentActivity$2$ContentPreviewViewer(View view, WindowInsets windowInsets) {
+    private /* synthetic */ WindowInsets lambda$setParentActivity$2(View view, WindowInsets windowInsets) {
         this.lastInsets = windowInsets;
         return windowInsets;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setParentActivity$3 */
     public /* synthetic */ boolean lambda$setParentActivity$3$ContentPreviewViewer(View view, MotionEvent motionEvent) {
         if (motionEvent.getAction() == 1 || motionEvent.getAction() == 6 || motionEvent.getAction() == 3) {
             close();
@@ -990,8 +1009,9 @@ public class ContentPreviewViewer {
                     }
                     if (tLRPC$InputStickerSet != null && ((contentPreviewViewerDelegate = this.delegate) == null || contentPreviewViewerDelegate.needMenu())) {
                         try {
-                            if (this.visibleDialog != null) {
-                                this.visibleDialog.setOnDismissListener((DialogInterface.OnDismissListener) null);
+                            BottomSheet bottomSheet = this.visibleDialog;
+                            if (bottomSheet != null) {
+                                bottomSheet.setOnDismissListener((DialogInterface.OnDismissListener) null);
                                 this.visibleDialog.dismiss();
                                 this.visibleDialog = null;
                             }
@@ -1081,8 +1101,9 @@ public class ContentPreviewViewer {
             this.lastUpdateTime = System.currentTimeMillis();
             this.containerView.invalidate();
             try {
-                if (this.visibleDialog != null) {
-                    this.visibleDialog.dismiss();
+                BottomSheet bottomSheet = this.visibleDialog;
+                if (bottomSheet != null) {
+                    bottomSheet.dismiss();
                     this.visibleDialog = null;
                 }
             } catch (Exception e) {
@@ -1103,8 +1124,9 @@ public class ContentPreviewViewer {
         this.currentDocument = null;
         this.currentStickerSet = null;
         try {
-            if (this.visibleDialog != null) {
-                this.visibleDialog.dismiss();
+            BottomSheet bottomSheet = this.visibleDialog;
+            if (bottomSheet != null) {
+                bottomSheet.dismiss();
                 this.visibleDialog = null;
             }
         } catch (Exception e) {
@@ -1225,6 +1247,8 @@ public class ContentPreviewViewer {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onDraw$4 */
     public /* synthetic */ void lambda$onDraw$4$ContentPreviewViewer() {
         this.centerImage.setImageBitmap((Bitmap) null);
     }

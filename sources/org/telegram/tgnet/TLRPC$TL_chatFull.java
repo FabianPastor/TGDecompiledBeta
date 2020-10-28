@@ -8,7 +8,7 @@ public class TLRPC$TL_chatFull extends TLRPC$ChatFull {
         this.flags = readInt32;
         int i = 0;
         this.can_set_username = (readInt32 & 128) != 0;
-        this.has_scheduled = (this.flags & 256) != 0;
+        this.has_scheduled = (readInt32 & 256) != 0;
         this.id = abstractSerializedData.readInt32(z);
         this.about = abstractSerializedData.readString(z);
         this.participants = TLRPC$ChatParticipants.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);

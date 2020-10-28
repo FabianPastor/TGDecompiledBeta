@@ -559,12 +559,13 @@ public class PieChartView extends StackLinearChartView<PieChartViewData> {
                 boolean z = true;
                 for (int i6 = 0; i6 < size; i6++) {
                     LineViewData lineViewData = (LineViewData) this.lines.get(i6);
-                    if (lineViewData.enabled || lineViewData.alpha != 0.0f) {
+                    boolean z2 = lineViewData.enabled;
+                    if (z2 || lineViewData.alpha != 0.0f) {
                         float f6 = ((float) lineViewData.line.y[i3]) * lineViewData.alpha;
                         f5 += f6;
                         if (f6 > 0.0f) {
                             i5++;
-                            if (lineViewData.enabled) {
+                            if (z2) {
                                 z = false;
                             }
                         }
@@ -859,10 +860,11 @@ public class PieChartView extends StackLinearChartView<PieChartViewData> {
             int i2 = -1;
             int i3 = -1;
             for (int i4 = 0; i4 < length; i4++) {
-                if (((StackLinearChartData) this.chartData).xPercentage[i4] >= f && i3 == -1) {
+                T t = this.chartData;
+                if (((StackLinearChartData) t).xPercentage[i4] >= f && i3 == -1) {
                     i3 = i4;
                 }
-                if (((StackLinearChartData) this.chartData).xPercentage[i4] <= f2) {
+                if (((StackLinearChartData) t).xPercentage[i4] <= f2) {
                     i2 = i4;
                 }
             }
@@ -930,6 +932,8 @@ public class PieChartView extends StackLinearChartView<PieChartViewData> {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$updateCharValues$0 */
     public /* synthetic */ void lambda$updateCharValues$0$PieChartView(PieChartViewData pieChartViewData, ValueAnimator valueAnimator) {
         pieChartViewData.drawingPart = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();

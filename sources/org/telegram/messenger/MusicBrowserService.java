@@ -141,6 +141,8 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         loadChildrenImpl(str, result);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onLoadChildren$1 */
     public /* synthetic */ void lambda$onLoadChildren$1$MusicBrowserService(MessagesStorage messagesStorage, String str, MediaBrowserService.Result result) {
         MessagesStorage messagesStorage2 = messagesStorage;
         try {
@@ -226,6 +228,8 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$0 */
     public /* synthetic */ void lambda$null$0$MusicBrowserService(String str, MediaBrowserService.Result result) {
         this.chatsLoaded = true;
         this.loadingChats = false;
@@ -429,7 +433,8 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
             Bitmap createBitmap = Bitmap.createBitmap(decodeFile.getWidth(), decodeFile.getHeight(), Bitmap.Config.ARGB_8888);
             createBitmap.eraseColor(0);
             Canvas canvas = new Canvas(createBitmap);
-            BitmapShader bitmapShader = new BitmapShader(decodeFile, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+            Shader.TileMode tileMode = Shader.TileMode.CLAMP;
+            BitmapShader bitmapShader = new BitmapShader(decodeFile, tileMode, tileMode);
             if (this.roundPaint == null) {
                 this.roundPaint = new Paint(1);
                 this.bitmapRect = new RectF();
@@ -631,7 +636,7 @@ public class MusicBrowserService extends MediaBrowserService implements Notifica
 
     /* access modifiers changed from: private */
     public void handlePauseRequest() {
-        MediaController.getInstance().lambda$startAudioAgain$7$MediaController(MediaController.getInstance().getPlayingMessageObject());
+        MediaController.getInstance().lambda$startAudioAgain$7(MediaController.getInstance().getPlayingMessageObject());
         this.delayedStopHandler.removeCallbacksAndMessages((Object) null);
         this.delayedStopHandler.sendEmptyMessageDelayed(0, 30000);
     }

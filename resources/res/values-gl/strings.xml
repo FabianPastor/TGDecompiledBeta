@@ -22,4 +22,5 @@
     <string name="google_assistant_verification_channel_name">Verificador do Asistente</string>
     <string name="google_assistant_verification_notification_title">O Asistente de Google está enviando unha mensaxe</string>
     <string name="status_bar_notification_info_overflow">&gt;999</string>
+    <string name="wallet_buy_button_place_holder">Comprar con Google</string>
 </resources>

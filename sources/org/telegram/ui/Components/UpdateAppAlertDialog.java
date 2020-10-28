@@ -90,6 +90,8 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
         this.radialProgress.setProgressColor(Theme.getColor("dialogButton"));
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$UpdateAppAlertDialog(DialogInterface dialogInterface, int i) {
         if (BlockingUpdateView.checkApkInstallPermissions(getContext())) {
             TLRPC$TL_help_appUpdate tLRPC$TL_help_appUpdate = this.appUpdate;
@@ -106,6 +108,8 @@ public class UpdateAppAlertDialog extends AlertDialog implements NotificationCen
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ void lambda$new$1$UpdateAppAlertDialog(DialogInterface dialogInterface, int i) {
         if (this.appUpdate.document instanceof TLRPC$TL_document) {
             FileLoader.getInstance(this.accountNum).cancelLoadFile(this.appUpdate.document);

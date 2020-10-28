@@ -20,8 +20,8 @@ import org.webrtc.SurfaceTextureHelper;
 @TargetApi(18)
 public class VideoCameraCapturer {
     private static final int CAPTURE_FPS = 30;
-    private static final int CAPTURE_HEIGHT = (Build.VERSION.SDK_INT <= 19 ? 320 : 720);
-    private static final int CAPTURE_WIDTH = (Build.VERSION.SDK_INT <= 19 ? 480 : 1280);
+    private static final int CAPTURE_HEIGHT;
+    private static final int CAPTURE_WIDTH;
     public static EglBase eglBase;
     private static VideoCameraCapturer instance;
     private Handler handler;
@@ -34,6 +34,12 @@ public class VideoCameraCapturer {
     private static native CapturerObserver nativeGetJavaVideoCapturerObserver(long j);
 
     private void onAspectRatioRequested(float f) {
+    }
+
+    static {
+        int i = Build.VERSION.SDK_INT;
+        CAPTURE_WIDTH = i <= 19 ? 480 : 1280;
+        CAPTURE_HEIGHT = i <= 19 ? 320 : 720;
     }
 
     public static VideoCameraCapturer getInstance() {
@@ -52,6 +58,8 @@ public class VideoCameraCapturer {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$VideoCameraCapturer() {
         instance = this;
         HandlerThread handlerThread = new HandlerThread("CallThread");
@@ -81,6 +89,8 @@ public class VideoCameraCapturer {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$init$3 */
     public /* synthetic */ void lambda$init$3$VideoCameraCapturer(long j, boolean z) {
         if (eglBase != null) {
             this.nativePtr = j;
@@ -124,12 +134,16 @@ public class VideoCameraCapturer {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$1 */
     public /* synthetic */ void lambda$null$1$VideoCameraCapturer() {
         this.nativeCapturerObserver = nativeGetJavaVideoCapturerObserver(this.nativePtr);
         this.videoCapturer.initialize(this.videoCapturerSurfaceTextureHelper, ApplicationLoader.applicationContext, this.nativeCapturerObserver);
         this.videoCapturer.startCapture(CAPTURE_WIDTH, CAPTURE_HEIGHT, 30);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$VideoCameraCapturer(String str) {
         this.videoCapturer.switchCamera(new CameraVideoCapturer.CameraSwitchHandler() {
             public void onCameraSwitchError(String str) {
@@ -175,6 +189,8 @@ public class VideoCameraCapturer {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onStateChanged$5 */
     public /* synthetic */ void lambda$onStateChanged$5$VideoCameraCapturer(long j, int i) {
         if (this.nativePtr == j) {
             this.handler.post(new Runnable(i) {
@@ -191,6 +207,8 @@ public class VideoCameraCapturer {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$4 */
     public /* synthetic */ void lambda$null$4$VideoCameraCapturer(int i) {
         CameraVideoCapturer cameraVideoCapturer = this.videoCapturer;
         if (cameraVideoCapturer != null) {
@@ -216,6 +234,8 @@ public class VideoCameraCapturer {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onDestroy$7 */
     public /* synthetic */ void lambda$onDestroy$7$VideoCameraCapturer() {
         EglBase eglBase2 = eglBase;
         if (eglBase2 != null) {
@@ -237,6 +257,8 @@ public class VideoCameraCapturer {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$6 */
     public /* synthetic */ void lambda$null$6$VideoCameraCapturer() {
         CameraVideoCapturer cameraVideoCapturer = this.videoCapturer;
         if (cameraVideoCapturer != null) {

@@ -122,18 +122,19 @@ public class Switch extends View {
     }
 
     public void setDrawRipple(boolean z) {
-        AnonymousClass1 r0;
-        if (Build.VERSION.SDK_INT >= 21 && z != this.drawRipple) {
+        AnonymousClass1 r6;
+        int i = Build.VERSION.SDK_INT;
+        if (i >= 21 && z != this.drawRipple) {
             this.drawRipple = z;
-            int i = 1;
+            int i2 = 1;
             if (this.rippleDrawable == null) {
                 Paint paint3 = new Paint(1);
                 this.ripplePaint = paint3;
                 paint3.setColor(-1);
-                if (Build.VERSION.SDK_INT >= 23) {
-                    r0 = null;
+                if (i >= 23) {
+                    r6 = null;
                 } else {
-                    r0 = new Drawable() {
+                    r6 = new Drawable() {
                         public int getOpacity() {
                             return 0;
                         }
@@ -150,21 +151,22 @@ public class Switch extends View {
                         }
                     };
                 }
-                RippleDrawable rippleDrawable2 = new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{0}), (Drawable) null, r0);
+                RippleDrawable rippleDrawable2 = new RippleDrawable(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{0}), (Drawable) null, r6);
                 this.rippleDrawable = rippleDrawable2;
-                if (Build.VERSION.SDK_INT >= 23) {
+                if (i >= 23) {
                     rippleDrawable2.setRadius(AndroidUtilities.dp(18.0f));
                 }
                 this.rippleDrawable.setCallback(this);
             }
-            if ((this.isChecked && this.colorSet != 2) || (!this.isChecked && this.colorSet != 1)) {
-                this.rippleDrawable.setColor(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{Theme.getColor(this.isChecked ? "switchTrackBlueSelectorChecked" : "switchTrackBlueSelector")}));
+            boolean z2 = this.isChecked;
+            if ((z2 && this.colorSet != 2) || (!z2 && this.colorSet != 1)) {
+                this.rippleDrawable.setColor(new ColorStateList(new int[][]{StateSet.WILD_CARD}, new int[]{Theme.getColor(z2 ? "switchTrackBlueSelectorChecked" : "switchTrackBlueSelector")}));
                 if (this.isChecked) {
-                    i = 2;
+                    i2 = 2;
                 }
-                this.colorSet = i;
+                this.colorSet = i2;
             }
-            if (Build.VERSION.SDK_INT >= 28 && z) {
+            if (i >= 28 && z) {
                 this.rippleDrawable.setHotspot(this.isChecked ? 0.0f : (float) AndroidUtilities.dp(100.0f), (float) AndroidUtilities.dp(18.0f));
             }
             this.rippleDrawable.setState(z ? this.pressedState : StateSet.NOTHING);
@@ -354,23 +356,23 @@ public class Switch extends View {
     /* JADX WARNING: Code restructure failed: missing block: B:21:0x00b2, code lost:
         if (r12 == 0) goto L_0x00ad;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:66:0x01ef, code lost:
-        if (r1 == 0) goto L_0x01f1;
+    /* JADX WARNING: Code restructure failed: missing block: B:66:0x01ed, code lost:
+        if (r1 == 0) goto L_0x01ef;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:68:0x01f3, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:68:0x01f1, code lost:
         r6 = 1.0f;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:71:0x01f9, code lost:
-        if (r1 == 0) goto L_0x01f3;
+    /* JADX WARNING: Code restructure failed: missing block: B:71:0x01f7, code lost:
+        if (r1 == 0) goto L_0x01f1;
      */
     /* JADX WARNING: Removed duplicated region for block: B:29:0x00d1  */
     /* JADX WARNING: Removed duplicated region for block: B:30:0x00d3  */
     /* JADX WARNING: Removed duplicated region for block: B:32:0x00d6  */
-    /* JADX WARNING: Removed duplicated region for block: B:41:0x0177  */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x0198  */
-    /* JADX WARNING: Removed duplicated region for block: B:75:0x026d  */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x03ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:91:0x03d7  */
+    /* JADX WARNING: Removed duplicated region for block: B:41:0x0175  */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x0196  */
+    /* JADX WARNING: Removed duplicated region for block: B:75:0x026b  */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x03cc  */
+    /* JADX WARNING: Removed duplicated region for block: B:91:0x03d5  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onDraw(android.graphics.Canvas r32) {
         /*
@@ -412,12 +414,12 @@ public class Switch extends View {
             r12 = 0
         L_0x0047:
             r15 = 1
-            if (r12 >= r4) goto L_0x01b1
+            if (r12 >= r4) goto L_0x01af
             if (r12 != r15) goto L_0x0054
             int r13 = r0.overrideColorProgress
             if (r13 != 0) goto L_0x0054
             r7 = 1096810496(0x41600000, float:14.0)
-            goto L_0x01a3
+            goto L_0x01a1
         L_0x0054:
             if (r12 != 0) goto L_0x0058
             r13 = r1
@@ -480,32 +482,31 @@ public class Switch extends View {
             int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
             java.lang.String r7 = r0.trackCheckedColorKey
             int r7 = org.telegram.ui.ActionBar.Theme.getColor(r7)
-            if (r12 != 0) goto L_0x00eb
+            if (r12 != 0) goto L_0x00e9
             android.graphics.drawable.Drawable r8 = r0.iconDrawable
-            if (r8 == 0) goto L_0x00eb
-            int r8 = r0.lastIconColor
-            boolean r11 = r0.isChecked
-            if (r11 == 0) goto L_0x00d3
-            r11 = r7
+            if (r8 == 0) goto L_0x00e9
+            int r11 = r0.lastIconColor
+            boolean r14 = r0.isChecked
+            if (r14 == 0) goto L_0x00d3
+            r14 = r7
             goto L_0x00d4
         L_0x00d3:
-            r11 = r6
+            r14 = r6
         L_0x00d4:
-            if (r8 == r11) goto L_0x00eb
-            android.graphics.drawable.Drawable r8 = r0.iconDrawable
+            if (r11 == r14) goto L_0x00e9
             android.graphics.PorterDuffColorFilter r11 = new android.graphics.PorterDuffColorFilter
             boolean r14 = r0.isChecked
-            if (r14 == 0) goto L_0x00e0
+            if (r14 == 0) goto L_0x00de
             r14 = r7
-            goto L_0x00e1
-        L_0x00e0:
+            goto L_0x00df
+        L_0x00de:
             r14 = r6
-        L_0x00e1:
+        L_0x00df:
             r0.lastIconColor = r14
             android.graphics.PorterDuff$Mode r4 = android.graphics.PorterDuff.Mode.MULTIPLY
             r11.<init>(r14, r4)
             r8.setColorFilter(r11)
-        L_0x00eb:
+        L_0x00e9:
             int r4 = android.graphics.Color.red(r6)
             int r8 = android.graphics.Color.red(r7)
             int r11 = android.graphics.Color.green(r6)
@@ -572,9 +573,9 @@ public class Switch extends View {
             float r6 = org.telegram.messenger.AndroidUtilities.dpf2(r6)
             android.graphics.Paint r8 = r0.paint
             r13.drawCircle(r1, r4, r6, r8)
-            if (r12 != 0) goto L_0x0198
+            if (r12 != 0) goto L_0x0196
             android.graphics.drawable.RippleDrawable r1 = r0.rippleDrawable
-            if (r1 == 0) goto L_0x0198
+            if (r1 == 0) goto L_0x0196
             r4 = 1099956224(0x41900000, float:18.0)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r4)
             int r6 = r9 - r6
@@ -587,15 +588,15 @@ public class Switch extends View {
             r1.setBounds(r6, r8, r11, r4)
             android.graphics.drawable.RippleDrawable r1 = r0.rippleDrawable
             r1.draw(r13)
-            goto L_0x01a3
-        L_0x0198:
+            goto L_0x01a1
+        L_0x0196:
             r1 = 1
-            if (r12 != r1) goto L_0x01a3
+            if (r12 != r1) goto L_0x01a1
             android.graphics.Bitmap r1 = r0.overlayMaskBitmap
             android.graphics.Paint r4 = r0.overlayMaskPaint
             r6 = 0
             r13.drawBitmap(r1, r6, r6, r4)
-        L_0x01a3:
+        L_0x01a1:
             int r12 = r12 + 1
             r1 = r32
             r4 = 2
@@ -604,67 +605,67 @@ public class Switch extends View {
             r8 = 1088421888(0x40e00000, float:7.0)
             r11 = 0
             goto L_0x0047
-        L_0x01b1:
+        L_0x01af:
             r6 = 0
             int r1 = r0.overrideColorProgress
             r2 = 0
-            if (r1 == 0) goto L_0x01c2
+            if (r1 == 0) goto L_0x01c0
             android.graphics.Bitmap[] r1 = r0.overlayBitmap
             r3 = 0
             r1 = r1[r3]
             r3 = r32
             r3.drawBitmap(r1, r6, r6, r2)
-            goto L_0x01c4
-        L_0x01c2:
+            goto L_0x01c2
+        L_0x01c0:
             r3 = r32
-        L_0x01c4:
+        L_0x01c2:
             r1 = 0
-        L_0x01c5:
+        L_0x01c3:
             r4 = 2
-            if (r1 >= r4) goto L_0x03dd
+            if (r1 >= r4) goto L_0x03db
             r4 = 1
-            if (r1 != r4) goto L_0x01d7
+            if (r1 != r4) goto L_0x01d5
             int r5 = r0.overrideColorProgress
-            if (r5 != 0) goto L_0x01d7
+            if (r5 != 0) goto L_0x01d5
             r2 = 2
             r7 = 0
             r8 = 1088421888(0x40e00000, float:7.0)
             r13 = 1065353216(0x3var_, float:1.0)
-            goto L_0x03d8
-        L_0x01d7:
-            if (r1 != 0) goto L_0x01db
+            goto L_0x03d6
+        L_0x01d5:
+            if (r1 != 0) goto L_0x01d9
             r5 = r3
-            goto L_0x01df
-        L_0x01db:
+            goto L_0x01dd
+        L_0x01d9:
             android.graphics.Canvas[] r5 = r0.overlayCanvas
             r5 = r5[r4]
-        L_0x01df:
-            if (r1 != r4) goto L_0x01ea
+        L_0x01dd:
+            if (r1 != r4) goto L_0x01e8
             android.graphics.Bitmap[] r6 = r0.overlayBitmap
             r6 = r6[r4]
             r7 = 0
             r6.eraseColor(r7)
-            goto L_0x01eb
-        L_0x01ea:
+            goto L_0x01e9
+        L_0x01e8:
             r7 = 0
-        L_0x01eb:
+        L_0x01e9:
             int r6 = r0.overrideColorProgress
-            if (r6 != r4) goto L_0x01f6
-            if (r1 != 0) goto L_0x01f3
-        L_0x01f1:
-            r6 = 0
-            goto L_0x01fe
-        L_0x01f3:
-            r6 = 1065353216(0x3var_, float:1.0)
-            goto L_0x01fe
-        L_0x01f6:
-            r4 = 2
-            if (r6 != r4) goto L_0x01fc
+            if (r6 != r4) goto L_0x01f4
             if (r1 != 0) goto L_0x01f1
-            goto L_0x01f3
-        L_0x01fc:
+        L_0x01ef:
+            r6 = 0
+            goto L_0x01fc
+        L_0x01f1:
+            r6 = 1065353216(0x3var_, float:1.0)
+            goto L_0x01fc
+        L_0x01f4:
+            r4 = 2
+            if (r6 != r4) goto L_0x01fa
+            if (r1 != 0) goto L_0x01ef
+            goto L_0x01f1
+        L_0x01fa:
             float r6 = r0.progress
-        L_0x01fe:
+        L_0x01fc:
             java.lang.String r4 = r0.thumbColorKey
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             java.lang.String r8 = r0.thumbCheckedColorKey
@@ -720,9 +721,9 @@ public class Switch extends View {
             float r7 = (float) r7
             android.graphics.Paint r8 = r0.paint
             r5.drawCircle(r4, r6, r7, r8)
-            if (r1 != 0) goto L_0x03c6
+            if (r1 != 0) goto L_0x03c4
             android.graphics.drawable.Drawable r7 = r0.iconDrawable
-            if (r7 == 0) goto L_0x029c
+            if (r7 == 0) goto L_0x029a
             int r4 = r7.getIntrinsicWidth()
             r6 = 2
             int r4 = r4 / r6
@@ -742,11 +743,11 @@ public class Switch extends View {
             r7.setBounds(r4, r8, r11, r12)
             android.graphics.drawable.Drawable r4 = r0.iconDrawable
             r4.draw(r5)
-            goto L_0x03c6
-        L_0x029c:
+            goto L_0x03c4
+        L_0x029a:
             int r7 = r0.drawIconType
             r8 = 1
-            if (r7 != r8) goto L_0x0370
+            if (r7 != r8) goto L_0x036e
             r7 = 1093455053(0x412ccccd, float:10.8)
             int r7 = org.telegram.messenger.AndroidUtilities.dp(r7)
             float r7 = (float) r7
@@ -859,14 +860,14 @@ public class Switch extends View {
             r2 = 2
             r4 = 1
             r13 = 1065353216(0x3var_, float:1.0)
-            goto L_0x03cc
-        L_0x0370:
+            goto L_0x03ca
+        L_0x036e:
             r2 = 2
             r8 = 1088421888(0x40e00000, float:7.0)
-            if (r7 == r2) goto L_0x0379
+            if (r7 == r2) goto L_0x0377
             android.animation.ObjectAnimator r7 = r0.iconAnimator
-            if (r7 == 0) goto L_0x03c9
-        L_0x0379:
+            if (r7 == 0) goto L_0x03c7
+        L_0x0377:
             android.graphics.Paint r7 = r0.paint2
             r11 = 1132396544(0x437var_, float:255.0)
             float r12 = r0.iconProgress
@@ -902,37 +903,37 @@ public class Switch extends View {
             r30 = r11
             r25.drawLine(r26, r27, r28, r29, r30)
             r5.restore()
-            goto L_0x03cb
-        L_0x03c6:
+            goto L_0x03c9
+        L_0x03c4:
             r2 = 2
             r8 = 1088421888(0x40e00000, float:7.0)
-        L_0x03c9:
+        L_0x03c7:
             r13 = 1065353216(0x3var_, float:1.0)
-        L_0x03cb:
+        L_0x03c9:
             r4 = 1
-        L_0x03cc:
-            if (r1 != r4) goto L_0x03d7
+        L_0x03ca:
+            if (r1 != r4) goto L_0x03d5
             android.graphics.Bitmap r4 = r0.overlayMaskBitmap
             android.graphics.Paint r6 = r0.overlayMaskPaint
             r7 = 0
             r5.drawBitmap(r4, r7, r7, r6)
-            goto L_0x03d8
-        L_0x03d7:
+            goto L_0x03d6
+        L_0x03d5:
             r7 = 0
-        L_0x03d8:
+        L_0x03d6:
             int r1 = r1 + 1
             r2 = 0
-            goto L_0x01c5
-        L_0x03dd:
+            goto L_0x01c3
+        L_0x03db:
             r7 = 0
             int r1 = r0.overrideColorProgress
-            if (r1 == 0) goto L_0x03eb
+            if (r1 == 0) goto L_0x03e9
             android.graphics.Bitmap[] r1 = r0.overlayBitmap
             r2 = 1
             r1 = r1[r2]
             r2 = 0
             r3.drawBitmap(r1, r7, r7, r2)
-        L_0x03eb:
+        L_0x03e9:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.Switch.onDraw(android.graphics.Canvas):void");

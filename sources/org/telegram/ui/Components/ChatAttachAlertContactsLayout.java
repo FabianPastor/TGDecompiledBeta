@@ -87,21 +87,27 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             BackupImageView backupImageView = new BackupImageView(context);
             this.avatarImageView = backupImageView;
             backupImageView.setRoundRadius(AndroidUtilities.dp(23.0f));
+            BackupImageView backupImageView2 = this.avatarImageView;
+            boolean z = LocaleController.isRTL;
             int i2 = 5;
-            addView(this.avatarImageView, LayoutHelper.createFrame(46, 46.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 14.0f, 9.0f, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f));
+            addView(backupImageView2, LayoutHelper.createFrame(46, 46.0f, (z ? 5 : 3) | 48, z ? 0.0f : 14.0f, 9.0f, z ? 14.0f : 0.0f, 0.0f));
             SimpleTextView simpleTextView = new SimpleTextView(context);
             this.nameTextView = simpleTextView;
             simpleTextView.setTextColor(Theme.getColor("dialogTextBlack"));
             this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.nameTextView.setTextSize(16);
             this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-            addView(this.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 28.0f : 72.0f, 12.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
-            SimpleTextView simpleTextView2 = new SimpleTextView(context);
-            this.statusTextView = simpleTextView2;
-            simpleTextView2.setTextSize(13);
+            SimpleTextView simpleTextView2 = this.nameTextView;
+            boolean z2 = LocaleController.isRTL;
+            addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, (z2 ? 5 : 3) | 48, z2 ? 28.0f : 72.0f, 12.0f, z2 ? 72.0f : 28.0f, 0.0f));
+            SimpleTextView simpleTextView3 = new SimpleTextView(context);
+            this.statusTextView = simpleTextView3;
+            simpleTextView3.setTextSize(13);
             this.statusTextView.setTextColor(Theme.getColor("dialogTextGray2"));
             this.statusTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-            addView(this.statusTextView, LayoutHelper.createFrame(-1, 20.0f, (!LocaleController.isRTL ? 3 : i2) | 48, LocaleController.isRTL ? 28.0f : 72.0f, 36.0f, LocaleController.isRTL ? 72.0f : 28.0f, 0.0f));
+            SimpleTextView simpleTextView4 = this.statusTextView;
+            boolean z3 = LocaleController.isRTL;
+            addView(simpleTextView4, LayoutHelper.createFrame(-1, 20.0f, (!z3 ? 3 : i2) | 48, z3 ? 28.0f : 72.0f, 36.0f, z3 ? 72.0f : 28.0f, 0.0f));
         }
 
         public void setCurrentId(int i) {
@@ -131,193 +137,189 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         }
 
         /* JADX WARNING: Code restructure failed: missing block: B:2:0x0005, code lost:
-            r0 = r0.photo;
+            r2 = r0.photo;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:49:0x006c, code lost:
-            if (r11.equals(r10.lastName) == false) goto L_0x0071;
+        /* JADX WARNING: Code restructure failed: missing block: B:45:0x0064, code lost:
+            if (r12.equals(r11.lastName) == false) goto L_0x0069;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void update(int r11) {
+        public void update(int r12) {
             /*
-                r10 = this;
-                org.telegram.tgnet.TLRPC$User r0 = r10.currentUser
+                r11 = this;
+                org.telegram.tgnet.TLRPC$User r0 = r11.currentUser
                 r1 = 0
                 if (r0 == 0) goto L_0x000c
-                org.telegram.tgnet.TLRPC$UserProfilePhoto r0 = r0.photo
-                if (r0 == 0) goto L_0x000c
-                org.telegram.tgnet.TLRPC$FileLocation r0 = r0.photo_small
+                org.telegram.tgnet.TLRPC$UserProfilePhoto r2 = r0.photo
+                if (r2 == 0) goto L_0x000c
+                org.telegram.tgnet.TLRPC$FileLocation r2 = r2.photo_small
                 goto L_0x000d
             L_0x000c:
-                r0 = r1
+                r2 = r1
             L_0x000d:
-                r2 = 0
-                if (r11 == 0) goto L_0x0074
-                r3 = r11 & 2
-                r4 = 1
-                if (r3 == 0) goto L_0x0037
-                org.telegram.tgnet.TLRPC$FileLocation r3 = r10.lastAvatar
-                if (r3 == 0) goto L_0x001b
-                if (r0 == 0) goto L_0x0035
-            L_0x001b:
-                org.telegram.tgnet.TLRPC$FileLocation r3 = r10.lastAvatar
-                if (r3 != 0) goto L_0x0021
-                if (r0 != 0) goto L_0x0035
-            L_0x0021:
-                org.telegram.tgnet.TLRPC$FileLocation r3 = r10.lastAvatar
-                if (r3 == 0) goto L_0x0037
-                if (r0 == 0) goto L_0x0037
-                long r5 = r3.volume_id
-                long r7 = r0.volume_id
-                int r9 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
-                if (r9 != 0) goto L_0x0035
-                int r3 = r3.local_id
-                int r5 = r0.local_id
-                if (r3 == r5) goto L_0x0037
-            L_0x0035:
-                r3 = 1
-                goto L_0x0038
-            L_0x0037:
                 r3 = 0
-            L_0x0038:
-                org.telegram.tgnet.TLRPC$User r5 = r10.currentUser
-                if (r5 == 0) goto L_0x004f
-                if (r3 != 0) goto L_0x004f
-                r6 = r11 & 4
-                if (r6 == 0) goto L_0x004f
-                org.telegram.tgnet.TLRPC$UserStatus r5 = r5.status
-                if (r5 == 0) goto L_0x0049
-                int r5 = r5.expires
-                goto L_0x004a
+                if (r12 == 0) goto L_0x006c
+                r4 = r12 & 2
+                r5 = 1
+                if (r4 == 0) goto L_0x0033
+                org.telegram.tgnet.TLRPC$FileLocation r4 = r11.lastAvatar
+                if (r4 == 0) goto L_0x001b
+                if (r2 == 0) goto L_0x0031
+            L_0x001b:
+                if (r4 != 0) goto L_0x001f
+                if (r2 != 0) goto L_0x0031
+            L_0x001f:
+                if (r4 == 0) goto L_0x0033
+                if (r2 == 0) goto L_0x0033
+                long r6 = r4.volume_id
+                long r8 = r2.volume_id
+                int r10 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
+                if (r10 != 0) goto L_0x0031
+                int r4 = r4.local_id
+                int r6 = r2.local_id
+                if (r4 == r6) goto L_0x0033
+            L_0x0031:
+                r4 = 1
+                goto L_0x0034
+            L_0x0033:
+                r4 = 0
+            L_0x0034:
+                if (r0 == 0) goto L_0x0049
+                if (r4 != 0) goto L_0x0049
+                r6 = r12 & 4
+                if (r6 == 0) goto L_0x0049
+                org.telegram.tgnet.TLRPC$UserStatus r6 = r0.status
+                if (r6 == 0) goto L_0x0043
+                int r6 = r6.expires
+                goto L_0x0044
+            L_0x0043:
+                r6 = 0
+            L_0x0044:
+                int r7 = r11.lastStatus
+                if (r6 == r7) goto L_0x0049
+                r4 = 1
             L_0x0049:
-                r5 = 0
-            L_0x004a:
-                int r6 = r10.lastStatus
-                if (r5 == r6) goto L_0x004f
-                r3 = 1
-            L_0x004f:
-                if (r3 != 0) goto L_0x006f
-                java.lang.CharSequence r5 = r10.currentName
-                if (r5 != 0) goto L_0x006f
-                java.lang.String r5 = r10.lastName
-                if (r5 == 0) goto L_0x006f
-                r11 = r11 & r4
-                if (r11 == 0) goto L_0x006f
-                org.telegram.tgnet.TLRPC$User r11 = r10.currentUser
-                if (r11 == 0) goto L_0x0065
-                java.lang.String r11 = org.telegram.messenger.UserObject.getUserName(r11)
-                goto L_0x0066
-            L_0x0065:
-                r11 = r1
-            L_0x0066:
-                java.lang.String r5 = r10.lastName
-                boolean r5 = r11.equals(r5)
-                if (r5 != 0) goto L_0x0070
-                goto L_0x0071
-            L_0x006f:
-                r11 = r1
-            L_0x0070:
-                r4 = r3
-            L_0x0071:
-                if (r4 != 0) goto L_0x0075
+                if (r4 != 0) goto L_0x0067
+                java.lang.CharSequence r6 = r11.currentName
+                if (r6 != 0) goto L_0x0067
+                java.lang.String r6 = r11.lastName
+                if (r6 == 0) goto L_0x0067
+                r12 = r12 & r5
+                if (r12 == 0) goto L_0x0067
+                if (r0 == 0) goto L_0x005d
+                java.lang.String r12 = org.telegram.messenger.UserObject.getUserName(r0)
+                goto L_0x005e
+            L_0x005d:
+                r12 = r1
+            L_0x005e:
+                java.lang.String r0 = r11.lastName
+                boolean r0 = r12.equals(r0)
+                if (r0 != 0) goto L_0x0068
+                goto L_0x0069
+            L_0x0067:
+                r12 = r1
+            L_0x0068:
+                r5 = r4
+            L_0x0069:
+                if (r5 != 0) goto L_0x006d
                 return
-            L_0x0074:
-                r11 = r1
-            L_0x0075:
-                org.telegram.tgnet.TLRPC$User r3 = r10.currentUser
-                if (r3 == 0) goto L_0x008c
-                org.telegram.ui.Components.AvatarDrawable r4 = r10.avatarDrawable
-                r4.setInfo((org.telegram.tgnet.TLRPC$User) r3)
-                org.telegram.tgnet.TLRPC$User r3 = r10.currentUser
-                org.telegram.tgnet.TLRPC$UserStatus r3 = r3.status
-                if (r3 == 0) goto L_0x0089
-                int r3 = r3.expires
-                r10.lastStatus = r3
-                goto L_0x00a5
-            L_0x0089:
-                r10.lastStatus = r2
-                goto L_0x00a5
-            L_0x008c:
-                java.lang.CharSequence r3 = r10.currentName
-                if (r3 == 0) goto L_0x009c
-                org.telegram.ui.Components.AvatarDrawable r4 = r10.avatarDrawable
-                int r5 = r10.currentId
-                java.lang.String r3 = r3.toString()
-                r4.setInfo(r5, r3, r1)
-                goto L_0x00a5
-            L_0x009c:
-                org.telegram.ui.Components.AvatarDrawable r3 = r10.avatarDrawable
-                int r4 = r10.currentId
+            L_0x006c:
+                r12 = r1
+            L_0x006d:
+                org.telegram.tgnet.TLRPC$User r0 = r11.currentUser
+                if (r0 == 0) goto L_0x0084
+                org.telegram.ui.Components.AvatarDrawable r4 = r11.avatarDrawable
+                r4.setInfo((org.telegram.tgnet.TLRPC$User) r0)
+                org.telegram.tgnet.TLRPC$User r0 = r11.currentUser
+                org.telegram.tgnet.TLRPC$UserStatus r0 = r0.status
+                if (r0 == 0) goto L_0x0081
+                int r0 = r0.expires
+                r11.lastStatus = r0
+                goto L_0x009d
+            L_0x0081:
+                r11.lastStatus = r3
+                goto L_0x009d
+            L_0x0084:
+                java.lang.CharSequence r0 = r11.currentName
+                if (r0 == 0) goto L_0x0094
+                org.telegram.ui.Components.AvatarDrawable r4 = r11.avatarDrawable
+                int r5 = r11.currentId
+                java.lang.String r0 = r0.toString()
+                r4.setInfo(r5, r0, r1)
+                goto L_0x009d
+            L_0x0094:
+                org.telegram.ui.Components.AvatarDrawable r0 = r11.avatarDrawable
+                int r4 = r11.currentId
                 java.lang.String r5 = "#"
-                r3.setInfo(r4, r5, r1)
-            L_0x00a5:
-                java.lang.CharSequence r3 = r10.currentName
-                if (r3 == 0) goto L_0x00b1
-                r10.lastName = r1
-                org.telegram.ui.ActionBar.SimpleTextView r11 = r10.nameTextView
-                r11.setText(r3)
-                goto L_0x00c9
-            L_0x00b1:
-                org.telegram.tgnet.TLRPC$User r1 = r10.currentUser
-                if (r1 == 0) goto L_0x00be
-                if (r11 != 0) goto L_0x00bb
-                java.lang.String r11 = org.telegram.messenger.UserObject.getUserName(r1)
-            L_0x00bb:
-                r10.lastName = r11
-                goto L_0x00c2
-            L_0x00be:
-                java.lang.String r11 = ""
-                r10.lastName = r11
-            L_0x00c2:
-                org.telegram.ui.ActionBar.SimpleTextView r11 = r10.nameTextView
-                java.lang.String r1 = r10.lastName
-                r11.setText(r1)
-            L_0x00c9:
-                java.lang.CharSequence r11 = r10.currentStatus
-                if (r11 == 0) goto L_0x00d3
-                org.telegram.ui.ActionBar.SimpleTextView r1 = r10.statusTextView
-                r1.setText(r11)
-                goto L_0x0110
-            L_0x00d3:
-                org.telegram.tgnet.TLRPC$User r11 = r10.currentUser
-                if (r11 == 0) goto L_0x0110
-                java.lang.String r11 = r11.phone
-                boolean r11 = android.text.TextUtils.isEmpty(r11)
-                if (r11 == 0) goto L_0x00ee
-                org.telegram.ui.ActionBar.SimpleTextView r11 = r10.statusTextView
-                r1 = 2131626182(0x7f0e08c6, float:1.8879593E38)
-                java.lang.String r3 = "NumberUnknown"
-                java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r3, r1)
-                r11.setText(r1)
-                goto L_0x0110
-            L_0x00ee:
-                org.telegram.ui.ActionBar.SimpleTextView r11 = r10.statusTextView
-                org.telegram.PhoneFormat.PhoneFormat r1 = org.telegram.PhoneFormat.PhoneFormat.getInstance()
-                java.lang.StringBuilder r3 = new java.lang.StringBuilder
-                r3.<init>()
+                r0.setInfo(r4, r5, r1)
+            L_0x009d:
+                java.lang.CharSequence r0 = r11.currentName
+                if (r0 == 0) goto L_0x00a9
+                r11.lastName = r1
+                org.telegram.ui.ActionBar.SimpleTextView r12 = r11.nameTextView
+                r12.setText(r0)
+                goto L_0x00c1
+            L_0x00a9:
+                org.telegram.tgnet.TLRPC$User r0 = r11.currentUser
+                if (r0 == 0) goto L_0x00b6
+                if (r12 != 0) goto L_0x00b3
+                java.lang.String r12 = org.telegram.messenger.UserObject.getUserName(r0)
+            L_0x00b3:
+                r11.lastName = r12
+                goto L_0x00ba
+            L_0x00b6:
+                java.lang.String r12 = ""
+                r11.lastName = r12
+            L_0x00ba:
+                org.telegram.ui.ActionBar.SimpleTextView r12 = r11.nameTextView
+                java.lang.String r0 = r11.lastName
+                r12.setText(r0)
+            L_0x00c1:
+                java.lang.CharSequence r12 = r11.currentStatus
+                if (r12 == 0) goto L_0x00cb
+                org.telegram.ui.ActionBar.SimpleTextView r0 = r11.statusTextView
+                r0.setText(r12)
+                goto L_0x0108
+            L_0x00cb:
+                org.telegram.tgnet.TLRPC$User r12 = r11.currentUser
+                if (r12 == 0) goto L_0x0108
+                java.lang.String r12 = r12.phone
+                boolean r12 = android.text.TextUtils.isEmpty(r12)
+                if (r12 == 0) goto L_0x00e6
+                org.telegram.ui.ActionBar.SimpleTextView r12 = r11.statusTextView
+                r0 = 2131626254(0x7f0e090e, float:1.887974E38)
+                java.lang.String r1 = "NumberUnknown"
+                java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
+                r12.setText(r0)
+                goto L_0x0108
+            L_0x00e6:
+                org.telegram.ui.ActionBar.SimpleTextView r12 = r11.statusTextView
+                org.telegram.PhoneFormat.PhoneFormat r0 = org.telegram.PhoneFormat.PhoneFormat.getInstance()
+                java.lang.StringBuilder r1 = new java.lang.StringBuilder
+                r1.<init>()
                 java.lang.String r4 = "+"
-                r3.append(r4)
-                org.telegram.tgnet.TLRPC$User r4 = r10.currentUser
+                r1.append(r4)
+                org.telegram.tgnet.TLRPC$User r4 = r11.currentUser
                 java.lang.String r4 = r4.phone
-                r3.append(r4)
-                java.lang.String r3 = r3.toString()
-                java.lang.String r1 = r1.format(r3)
-                r11.setText(r1)
-            L_0x0110:
-                r10.lastAvatar = r0
-                org.telegram.tgnet.TLRPC$User r11 = r10.currentUser
-                if (r11 == 0) goto L_0x0126
-                org.telegram.ui.Components.BackupImageView r0 = r10.avatarImageView
-                org.telegram.messenger.ImageLocation r11 = org.telegram.messenger.ImageLocation.getForUser(r11, r2)
-                org.telegram.ui.Components.AvatarDrawable r1 = r10.avatarDrawable
-                org.telegram.tgnet.TLRPC$User r2 = r10.currentUser
+                r1.append(r4)
+                java.lang.String r1 = r1.toString()
+                java.lang.String r0 = r0.format(r1)
+                r12.setText(r0)
+            L_0x0108:
+                r11.lastAvatar = r2
+                org.telegram.tgnet.TLRPC$User r12 = r11.currentUser
+                if (r12 == 0) goto L_0x011e
+                org.telegram.ui.Components.BackupImageView r0 = r11.avatarImageView
+                org.telegram.messenger.ImageLocation r12 = org.telegram.messenger.ImageLocation.getForUser(r12, r3)
+                org.telegram.ui.Components.AvatarDrawable r1 = r11.avatarDrawable
+                org.telegram.tgnet.TLRPC$User r2 = r11.currentUser
                 java.lang.String r3 = "50_50"
-                r0.setImage((org.telegram.messenger.ImageLocation) r11, (java.lang.String) r3, (android.graphics.drawable.Drawable) r1, (java.lang.Object) r2)
-                goto L_0x012d
-            L_0x0126:
-                org.telegram.ui.Components.BackupImageView r11 = r10.avatarImageView
-                org.telegram.ui.Components.AvatarDrawable r0 = r10.avatarDrawable
-                r11.setImageDrawable(r0)
-            L_0x012d:
+                r0.setImage((org.telegram.messenger.ImageLocation) r12, (java.lang.String) r3, (android.graphics.drawable.Drawable) r1, (java.lang.Object) r2)
+                goto L_0x0125
+            L_0x011e:
+                org.telegram.ui.Components.BackupImageView r12 = r11.avatarImageView
+                org.telegram.ui.Components.AvatarDrawable r0 = r11.avatarDrawable
+                r12.setImageDrawable(r0)
+            L_0x0125:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertContactsLayout.UserCell.update(int):void");
@@ -443,6 +445,8 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         updateEmptyView();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ void lambda$new$1$ChatAttachAlertContactsLayout(View view, int i) {
         Object obj;
         String str;
@@ -500,6 +504,8 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$0 */
     public /* synthetic */ void lambda$null$0$ChatAttachAlertContactsLayout(TLRPC$User tLRPC$User, boolean z, int i) {
         this.parentAlert.dismiss();
         this.delegate.didSelectContact(tLRPC$User, z, i);
@@ -820,7 +826,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             int i = this.lastSearchId + 1;
             this.lastSearchId = i;
             DispatchQueue dispatchQueue = Utilities.searchQueue;
-            $$Lambda$ChatAttachAlertContactsLayout$ShareSearchAdapter$Jkc3b5IDn73gkiH5og64P_JheOE r2 = new Runnable(str, i) {
+            $$Lambda$ChatAttachAlertContactsLayout$ShareSearchAdapter$Dmr8UAUAZo2vhJGsb4WjN1mn8B4 r2 = new Runnable(str, i) {
                 public final /* synthetic */ String f$1;
                 public final /* synthetic */ int f$2;
 
@@ -839,7 +845,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
 
         /* access modifiers changed from: private */
         /* renamed from: processSearch */
-        public void lambda$search$0$ChatAttachAlertContactsLayout$ShareSearchAdapter(String str, int i) {
+        public void lambda$search$0(String str, int i) {
             AndroidUtilities.runOnUIThread(new Runnable(str, i) {
                 public final /* synthetic */ String f$1;
                 public final /* synthetic */ int f$2;
@@ -855,6 +861,8 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             });
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$processSearch$2 */
         public /* synthetic */ void lambda$processSearch$2$ChatAttachAlertContactsLayout$ShareSearchAdapter(String str, int i) {
             int i2 = UserConfig.selectedAccount;
             Utilities.searchQueue.postRunnable(new Runnable(str, new ArrayList(ContactsController.getInstance(i2).contactsBook.values()), new ArrayList(ContactsController.getInstance(i2).contacts), i2, i) {
@@ -883,6 +891,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         /* JADX WARNING: type inference failed for: r1v15 */
         /* JADX WARNING: type inference failed for: r1v19 */
         /* JADX WARNING: type inference failed for: r1v26 */
+        /* access modifiers changed from: private */
         /* JADX WARNING: Code restructure failed: missing block: B:33:0x00c4, code lost:
             if (r5.contains(" " + r0) == false) goto L_0x00c6;
          */
@@ -890,10 +899,10 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             if (r6.contains(" " + r0) != false) goto L_0x00e3;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:55:0x012b, code lost:
-            if (r14.contains(" " + r0) != false) goto L_0x0131;
+            if (r12.contains(" " + r0) != false) goto L_0x0131;
          */
         /* JADX WARNING: Code restructure failed: missing block: B:91:0x0222, code lost:
-            if (r6.contains(" " + r14) != false) goto L_0x0231;
+            if (r6.contains(" " + r12) != false) goto L_0x0231;
          */
         /* JADX WARNING: Multi-variable type inference failed */
         /* JADX WARNING: Removed duplicated region for block: B:104:0x0270 A[LOOP:3: B:82:0x01e8->B:104:0x0270, LOOP_END] */
@@ -901,6 +910,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         /* JADX WARNING: Removed duplicated region for block: B:116:0x0234 A[SYNTHETIC] */
         /* JADX WARNING: Removed duplicated region for block: B:70:0x018c A[LOOP:1: B:27:0x00a5->B:70:0x018c, LOOP_END] */
         /* JADX WARNING: Unknown variable types count: 1 */
+        /* renamed from: lambda$null$1 */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public /* synthetic */ void lambda$null$1$ChatAttachAlertContactsLayout$ShareSearchAdapter(java.lang.String r19, java.util.ArrayList r20, java.util.ArrayList r21, int r22, int r23) {
             /*
@@ -953,18 +963,18 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 r10 = 0
             L_0x005a:
                 int r11 = r20.size()
-                java.lang.String r12 = "@"
-                java.lang.String r13 = " "
+                java.lang.String r13 = "@"
+                java.lang.String r14 = " "
                 if (r10 >= r11) goto L_0x01a2
                 r11 = r20
                 java.lang.Object r15 = r11.get(r10)
                 org.telegram.messenger.ContactsController$Contact r15 = (org.telegram.messenger.ContactsController.Contact) r15
                 java.lang.String r4 = r15.first_name
-                java.lang.String r14 = r15.last_name
-                java.lang.String r4 = org.telegram.messenger.ContactsController.formatName(r4, r14)
+                java.lang.String r12 = r15.last_name
+                java.lang.String r4 = org.telegram.messenger.ContactsController.formatName(r4, r12)
                 java.lang.String r4 = r4.toLowerCase()
-                org.telegram.messenger.LocaleController r14 = org.telegram.messenger.LocaleController.getInstance()
-                java.lang.String r14 = r14.getTranslitString(r4)
+                org.telegram.messenger.LocaleController r12 = org.telegram.messenger.LocaleController.getInstance()
+                java.lang.String r12 = r12.getTranslitString(r4)
                 org.telegram.tgnet.TLRPC$User r5 = r15.user
                 if (r5 == 0) goto L_0x0099
                 java.lang.String r6 = r5.first_name
@@ -978,9 +988,9 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 r5 = 0
                 r6 = 0
             L_0x009b:
-                boolean r16 = r4.equals(r14)
+                boolean r16 = r4.equals(r12)
                 if (r16 == 0) goto L_0x00a2
-                r14 = 0
+                r12 = 0
             L_0x00a2:
                 r11 = 0
                 r16 = 0
@@ -992,7 +1002,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 if (r17 != 0) goto L_0x00e3
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
                 r1.<init>()
-                r1.append(r13)
+                r1.append(r14)
                 r1.append(r0)
                 java.lang.String r1 = r1.toString()
                 boolean r1 = r5.contains(r1)
@@ -1003,7 +1013,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 if (r1 != 0) goto L_0x00e3
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
                 r1.<init>()
-                r1.append(r13)
+                r1.append(r14)
                 r1.append(r0)
                 java.lang.String r1 = r1.toString()
                 boolean r1 = r6.contains(r1)
@@ -1025,20 +1035,20 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 if (r1 != 0) goto L_0x0131
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
                 r1.<init>()
-                r1.append(r13)
+                r1.append(r14)
                 r1.append(r0)
                 java.lang.String r1 = r1.toString()
                 boolean r1 = r4.contains(r1)
                 if (r1 != 0) goto L_0x0131
-                if (r14 == 0) goto L_0x012e
-                boolean r1 = r14.startsWith(r0)
+                if (r12 == 0) goto L_0x012e
+                boolean r1 = r12.startsWith(r0)
                 if (r1 != 0) goto L_0x0131
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
                 r1.<init>()
-                r1.append(r13)
+                r1.append(r14)
                 r1.append(r0)
                 java.lang.String r1 = r1.toString()
-                boolean r1 = r14.contains(r1)
+                boolean r1 = r12.contains(r1)
                 if (r1 == 0) goto L_0x012e
                 goto L_0x0131
             L_0x012e:
@@ -1067,14 +1077,14 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             L_0x0154:
                 java.lang.StringBuilder r1 = new java.lang.StringBuilder
                 r1.<init>()
-                r1.append(r12)
+                r1.append(r13)
                 org.telegram.tgnet.TLRPC$User r4 = r15.user
                 java.lang.String r4 = r4.username
                 r1.append(r4)
                 java.lang.String r1 = r1.toString()
                 java.lang.StringBuilder r4 = new java.lang.StringBuilder
                 r4.<init>()
-                r4.append(r12)
+                r4.append(r13)
                 r4.append(r0)
                 java.lang.String r0 = r4.toString()
                 r4 = 0
@@ -1115,7 +1125,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 int r5 = r9.indexOfKey(r5)
                 if (r5 < 0) goto L_0x01bd
             L_0x01b9:
-                r14 = 0
+                r12 = 0
                 r15 = 1
                 goto L_0x0276
             L_0x01bd:
@@ -1137,23 +1147,23 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 r11 = 0
             L_0x01e8:
                 if (r11 >= r7) goto L_0x01b9
-                r14 = r8[r11]
-                boolean r15 = r5.startsWith(r14)
+                r12 = r8[r11]
+                boolean r15 = r5.startsWith(r12)
                 if (r15 != 0) goto L_0x0231
                 java.lang.StringBuilder r15 = new java.lang.StringBuilder
                 r15.<init>()
-                r15.append(r13)
                 r15.append(r14)
+                r15.append(r12)
                 java.lang.String r15 = r15.toString()
                 boolean r15 = r5.contains(r15)
                 if (r15 != 0) goto L_0x0231
                 if (r6 == 0) goto L_0x0225
-                boolean r15 = r6.startsWith(r14)
+                boolean r15 = r6.startsWith(r12)
                 if (r15 != 0) goto L_0x0231
                 java.lang.StringBuilder r15 = new java.lang.StringBuilder
                 r15.<init>()
-                r15.append(r13)
                 r15.append(r14)
+                r15.append(r12)
                 java.lang.String r15 = r15.toString()
                 boolean r15 = r6.contains(r15)
                 if (r15 == 0) goto L_0x0225
@@ -1161,7 +1171,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             L_0x0225:
                 java.lang.String r15 = r4.username
                 if (r15 == 0) goto L_0x0232
-                boolean r15 = r15.startsWith(r14)
+                boolean r15 = r15.startsWith(r12)
                 if (r15 == 0) goto L_0x0232
                 r10 = 2
                 goto L_0x0232
@@ -1173,30 +1183,30 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
                 if (r10 != r15) goto L_0x0244
                 java.lang.String r5 = r4.first_name
                 java.lang.String r6 = r4.last_name
-                java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r6, r14)
+                java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r6, r12)
                 r3.add(r5)
-                r14 = 0
+                r12 = 0
                 goto L_0x026c
             L_0x0244:
                 java.lang.StringBuilder r5 = new java.lang.StringBuilder
                 r5.<init>()
-                r5.append(r12)
+                r5.append(r13)
                 java.lang.String r6 = r4.username
                 r5.append(r6)
                 java.lang.String r5 = r5.toString()
                 java.lang.StringBuilder r6 = new java.lang.StringBuilder
                 r6.<init>()
+                r6.append(r13)
                 r6.append(r12)
-                r6.append(r14)
                 java.lang.String r6 = r6.toString()
-                r14 = 0
-                java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r14, r6)
+                r12 = 0
+                java.lang.CharSequence r5 = org.telegram.messenger.AndroidUtilities.generateSearchName(r5, r12, r6)
                 r3.add(r5)
             L_0x026c:
                 r2.add(r4)
                 goto L_0x0276
             L_0x0270:
-                r14 = 0
+                r12 = 0
                 r15 = 1
                 int r11 = r11 + 1
                 goto L_0x01e8
@@ -1231,6 +1241,8 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
             });
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$updateSearchResults$3 */
         public /* synthetic */ void lambda$updateSearchResults$3$ChatAttachAlertContactsLayout$ShareSearchAdapter(int i, ArrayList arrayList, ArrayList arrayList2) {
             if (i == this.lastSearchId) {
                 if (!(i == -1 || ChatAttachAlertContactsLayout.this.listView.getAdapter() == ChatAttachAlertContactsLayout.this.searchAdapter)) {
@@ -1308,7 +1320,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
-        $$Lambda$ChatAttachAlertContactsLayout$FBM7kWzS5VexFIzQGv0bMgiRn9I r10 = new ThemeDescription.ThemeDescriptionDelegate() {
+        $$Lambda$ChatAttachAlertContactsLayout$sH6JAkCaTUdJUCOTKbttLI9Ll8 r10 = new ThemeDescription.ThemeDescriptionDelegate() {
             public final void didSetColor() {
                 ChatAttachAlertContactsLayout.this.lambda$getThemeDescriptions$2$ChatAttachAlertContactsLayout();
             }
@@ -1330,7 +1342,7 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextGray2"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r10, "dialogTextGray2"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{UserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        $$Lambda$ChatAttachAlertContactsLayout$FBM7kWzS5VexFIzQGv0bMgiRn9I r7 = r10;
+        $$Lambda$ChatAttachAlertContactsLayout$sH6JAkCaTUdJUCOTKbttLI9Ll8 r7 = r10;
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundRed"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundOrange"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r7, "avatar_backgroundViolet"));
@@ -1341,6 +1353,8 @@ public class ChatAttachAlertContactsLayout extends ChatAttachAlert.AttachAlertLa
         return arrayList;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$getThemeDescriptions$2 */
     public /* synthetic */ void lambda$getThemeDescriptions$2$ChatAttachAlertContactsLayout() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {

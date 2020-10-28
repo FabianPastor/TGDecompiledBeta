@@ -8,7 +8,7 @@ public class TLRPC$TL_draftMessage extends TLRPC$DraftMessage {
         this.flags = readInt32;
         int i = 0;
         this.no_webpage = (readInt32 & 2) != 0;
-        if ((this.flags & 1) != 0) {
+        if ((readInt32 & 1) != 0) {
             this.reply_to_msg_id = abstractSerializedData.readInt32(z);
         }
         this.message = abstractSerializedData.readString(z);

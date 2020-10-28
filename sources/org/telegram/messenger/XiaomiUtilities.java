@@ -38,7 +38,8 @@ public class XiaomiUtilities {
     @TargetApi(19)
     public static boolean isCustomPermissionGranted(int i) {
         try {
-            if (((Integer) AppOpsManager.class.getMethod("checkOpNoThrow", new Class[]{Integer.TYPE, Integer.TYPE, String.class}).invoke((AppOpsManager) ApplicationLoader.applicationContext.getSystemService("appops"), new Object[]{Integer.valueOf(i), Integer.valueOf(Process.myUid()), ApplicationLoader.applicationContext.getPackageName()})).intValue() == 0) {
+            Class cls = Integer.TYPE;
+            if (((Integer) AppOpsManager.class.getMethod("checkOpNoThrow", new Class[]{cls, cls, String.class}).invoke((AppOpsManager) ApplicationLoader.applicationContext.getSystemService("appops"), new Object[]{Integer.valueOf(i), Integer.valueOf(Process.myUid()), ApplicationLoader.applicationContext.getPackageName()})).intValue() == 0) {
                 return true;
             }
             return false;

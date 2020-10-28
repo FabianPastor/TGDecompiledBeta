@@ -1,18 +1,18 @@
 package j$.util.stream;
 
-import j$.util.function.Function;
+import j$.util.function.ToIntFunction;
 
-class X4 extends U2 {
-    final /* synthetic */ Function m;
+class X4 extends CLASSNAMEv2 {
+    final /* synthetic */ ToIntFunction l;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    X4(CLASSNAMEu5 this$0, CLASSNAMEh1 upstream, CLASSNAMEv6 inputShape, int opFlags, Function function) {
-        super(upstream, inputShape, opFlags);
-        this.m = function;
+    X4(CLASSNAMEl5 l5Var, CLASSNAMEh1 h1Var, CLASSNAMEh6 h6Var, int i, ToIntFunction toIntFunction) {
+        super(h1Var, h6Var, i);
+        this.l = toIntFunction;
     }
 
     /* access modifiers changed from: package-private */
-    public G5 J0(int flags, G5 sink) {
-        return new W4(this, sink);
+    public CLASSNAMEt5 G0(int i, CLASSNAMEt5 t5Var) {
+        return new W4(this, t5Var);
     }
 }

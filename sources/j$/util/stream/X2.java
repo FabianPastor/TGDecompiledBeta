@@ -1,22 +1,34 @@
 package j$.util.stream;
 
-import j$.util.function.Predicate;
+import j$.H;
+import j$.util.function.f;
+import j$.util.function.q;
 
-class X2 extends CLASSNAMEb3 {
-    final /* synthetic */ CLASSNAMEc3 c;
-    final /* synthetic */ Predicate d;
+class X2 extends Y2 implements CLASSNAMEq5 {
+    final /* synthetic */ Z2 c;
+    final /* synthetic */ H d;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    X2(CLASSNAMEc3 c3Var, Predicate predicate) {
-        super(c3Var);
-        this.c = c3Var;
-        this.d = predicate;
+    X2(Z2 z2, H h) {
+        super(z2);
+        this.c = z2;
+        this.d = h;
     }
 
-    public void accept(Object t) {
-        if (!this.a && this.d.test(t) == this.c.a) {
+    public void accept(double d2) {
+        if (!this.a && this.d.b(d2) == this.c.a) {
             this.a = true;
             this.b = this.c.b;
         }
+    }
+
+    /* renamed from: b */
+    public /* synthetic */ void accept(Double d2) {
+        CLASSNAMEc3.a(this, d2);
+    }
+
+    public q k(q qVar) {
+        qVar.getClass();
+        return new f(this, qVar);
     }
 }

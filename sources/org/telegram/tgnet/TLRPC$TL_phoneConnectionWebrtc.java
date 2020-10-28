@@ -6,10 +6,10 @@ public class TLRPC$TL_phoneConnectionWebrtc extends TLRPC$PhoneConnection {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.turn = (readInt32 & 1) != 0;
-        if ((this.flags & 2) == 0) {
-            z2 = false;
+        if ((readInt32 & 2) != 0) {
+            z2 = true;
         }
         this.stun = z2;
         this.id = abstractSerializedData.readInt64(z);

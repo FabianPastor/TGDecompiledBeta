@@ -39,7 +39,7 @@ import org.telegram.ui.DataUsageActivity;
 
 public class DataUsageActivity extends BaseFragment {
     /* access modifiers changed from: private */
-    public static final Interpolator interpolator = $$Lambda$DataUsageActivity$wsORmtBp3T6D3i_RtGAVFVpGzs.INSTANCE;
+    public static final Interpolator interpolator = $$Lambda$DataUsageActivity$P_yBFhbppGMoCdEu34gwLaeJwR4.INSTANCE;
     /* access modifiers changed from: private */
     public boolean animatingForward;
     /* access modifiers changed from: private */
@@ -554,6 +554,8 @@ public class DataUsageActivity extends BaseFragment {
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$2 */
     public /* synthetic */ void lambda$createView$2$DataUsageActivity(RecyclerListView recyclerListView, View view, int i) {
         if (getParentActivity() != null) {
             ListAdapter listAdapter = (ListAdapter) recyclerListView.getAdapter();
@@ -583,6 +585,8 @@ public class DataUsageActivity extends BaseFragment {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$1 */
     public /* synthetic */ void lambda$null$1$DataUsageActivity(ListAdapter listAdapter, DialogInterface dialogInterface, int i) {
         StatsController.getInstance(this.currentAccount).resetStats(listAdapter.currentType);
         listAdapter.notifyDataSetChanged();
@@ -927,7 +931,8 @@ public class DataUsageActivity extends BaseFragment {
                     }
                     textSettingsCell.setTag("windowBackgroundWhiteBlackText");
                     textSettingsCell.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-                    if (i == this.callsSentRow || i == this.callsReceivedRow || i == this.callsBytesSentRow || i == this.callsBytesReceivedRow) {
+                    int i3 = this.callsSentRow;
+                    if (i == i3 || i == this.callsReceivedRow || i == this.callsBytesSentRow || i == this.callsBytesReceivedRow) {
                         i2 = 0;
                     } else if (i == this.messagesSentRow || i == this.messagesReceivedRow || i == this.messagesBytesSentRow || i == this.messagesBytesReceivedRow) {
                         i2 = 1;
@@ -936,7 +941,7 @@ public class DataUsageActivity extends BaseFragment {
                     } else if (!(i == this.audiosSentRow || i == this.audiosReceivedRow || i == this.audiosBytesSentRow || i == this.audiosBytesReceivedRow)) {
                         i2 = (i == this.videosSentRow || i == this.videosReceivedRow || i == this.videosBytesSentRow || i == this.videosBytesReceivedRow) ? 2 : (i == this.filesSentRow || i == this.filesReceivedRow || i == this.filesBytesSentRow || i == this.filesBytesReceivedRow) ? 5 : 6;
                     }
-                    if (i == this.callsSentRow) {
+                    if (i == i3) {
                         textSettingsCell.setTextAndValue(LocaleController.getString("OutgoingCalls", NUM), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getSentItemsCount(this.currentType, i2))}), true);
                     } else if (i == this.callsReceivedRow) {
                         textSettingsCell.setTextAndValue(LocaleController.getString("IncomingCalls", NUM), String.format("%d", new Object[]{Integer.valueOf(StatsController.getInstance(DataUsageActivity.this.currentAccount).getRecivedItemsCount(this.currentType, i2))}), true);

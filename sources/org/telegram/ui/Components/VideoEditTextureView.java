@@ -80,6 +80,8 @@ public class VideoEditTextureView extends TextureView implements TextureView.Sur
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onSurfaceTextureAvailable$0 */
     public /* synthetic */ void lambda$onSurfaceTextureAvailable$0$VideoEditTextureView(SurfaceTexture surfaceTexture) {
         if (this.currentVideoPlayer != null) {
             this.currentVideoPlayer.setSurface(new Surface(surfaceTexture));
@@ -99,6 +101,8 @@ public class VideoEditTextureView extends TextureView implements TextureView.Sur
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onSurfaceTextureSizeChanged$1 */
     public /* synthetic */ void lambda$onSurfaceTextureSizeChanged$1$VideoEditTextureView() {
         FilterGLThread filterGLThread = this.eglThread;
         if (filterGLThread != null) {

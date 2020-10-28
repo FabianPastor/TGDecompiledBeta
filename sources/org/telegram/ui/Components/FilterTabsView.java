@@ -510,6 +510,8 @@ public class FilterTabsView extends FrameLayout {
         addView(this.listView, LayoutHelper.createFrame(-1, -1.0f));
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$FilterTabsView(View view, int i, float f, float f2) {
         FilterTabsViewDelegate filterTabsViewDelegate;
         if (this.delegate.canPerformActions()) {
@@ -529,6 +531,8 @@ public class FilterTabsView extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ boolean lambda$new$1$FilterTabsView(View view, int i) {
         if (this.delegate.canPerformActions() && !this.isEditing) {
             if (this.delegate.didSelectTab((TabView) view, i == this.currentPosition)) {
@@ -548,9 +552,10 @@ public class FilterTabsView extends FrameLayout {
     }
 
     private void scrollToTab(int i, int i2) {
-        boolean z = this.currentPosition < i2;
+        int i3 = this.currentPosition;
+        boolean z = i3 < i2;
         this.scrollingToChild = -1;
-        this.previousPosition = this.currentPosition;
+        this.previousPosition = i3;
         this.previousId = this.selectedTabId;
         this.currentPosition = i2;
         this.selectedTabId = i;
@@ -710,9 +715,9 @@ public class FilterTabsView extends FrameLayout {
     /* access modifiers changed from: protected */
     /* JADX WARNING: Removed duplicated region for block: B:24:0x00c7  */
     /* JADX WARNING: Removed duplicated region for block: B:27:0x00de  */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x0196  */
-    /* JADX WARNING: Removed duplicated region for block: B:83:0x01ae  */
-    /* JADX WARNING: Removed duplicated region for block: B:85:0x01b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:78:0x018c  */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x01a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x01a7  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean drawChild(android.graphics.Canvas r11, android.view.View r12, long r13) {
         /*
@@ -852,127 +857,122 @@ public class FilterTabsView extends FrameLayout {
             r12 = 1065353216(0x3var_, float:1.0)
             r14 = 1
             if (r11 != 0) goto L_0x010f
-            float r11 = r10.editingAnimationProgress
-            int r11 = (r11 > r1 ? 1 : (r11 == r1 ? 0 : -1))
-            if (r11 == 0) goto L_0x010d
+            float r4 = r10.editingAnimationProgress
+            int r4 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
+            if (r4 == 0) goto L_0x010d
             goto L_0x010f
         L_0x010d:
-            r11 = 0
-            goto L_0x0165
+            r4 = 0
+            goto L_0x015d
         L_0x010f:
-            boolean r11 = r10.editingForwardAnimation
-            r4 = 1123024896(0x42var_, float:120.0)
-            if (r11 == 0) goto L_0x013c
-            float r11 = r10.editingAnimationProgress
-            int r11 = (r11 > r1 ? 1 : (r11 == r1 ? 0 : -1))
-            if (r11 > 0) goto L_0x011d
-            r11 = 1
+            boolean r4 = r10.editingForwardAnimation
+            r5 = 1123024896(0x42var_, float:120.0)
+            if (r4 == 0) goto L_0x0138
+            float r4 = r10.editingAnimationProgress
+            int r6 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
+            if (r6 > 0) goto L_0x011d
+            r6 = 1
             goto L_0x011e
         L_0x011d:
-            r11 = 0
+            r6 = 0
         L_0x011e:
-            float r5 = r10.editingAnimationProgress
-            float r6 = (float) r2
-            float r6 = r6 / r4
-            float r5 = r5 + r6
-            r10.editingAnimationProgress = r5
-            boolean r4 = r10.isEditing
-            if (r4 != 0) goto L_0x0131
-            if (r11 == 0) goto L_0x0131
-            int r11 = (r5 > r1 ? 1 : (r5 == r1 ? 0 : -1))
-            if (r11 < 0) goto L_0x0131
+            float r7 = (float) r2
+            float r7 = r7 / r5
+            float r4 = r4 + r7
+            r10.editingAnimationProgress = r4
+            if (r11 != 0) goto L_0x012d
+            if (r6 == 0) goto L_0x012d
+            int r4 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
+            if (r4 < 0) goto L_0x012d
             r10.editingAnimationProgress = r1
-        L_0x0131:
-            float r11 = r10.editingAnimationProgress
-            int r11 = (r11 > r12 ? 1 : (r11 == r12 ? 0 : -1))
-            if (r11 < 0) goto L_0x0164
+        L_0x012d:
+            float r4 = r10.editingAnimationProgress
+            int r4 = (r4 > r12 ? 1 : (r4 == r12 ? 0 : -1))
+            if (r4 < 0) goto L_0x015c
             r10.editingAnimationProgress = r12
             r10.editingForwardAnimation = r0
-            goto L_0x0164
-        L_0x013c:
-            float r11 = r10.editingAnimationProgress
-            int r11 = (r11 > r1 ? 1 : (r11 == r1 ? 0 : -1))
-            if (r11 < 0) goto L_0x0144
-            r11 = 1
-            goto L_0x0145
-        L_0x0144:
-            r11 = 0
-        L_0x0145:
-            float r5 = r10.editingAnimationProgress
-            float r6 = (float) r2
-            float r6 = r6 / r4
-            float r5 = r5 - r6
-            r10.editingAnimationProgress = r5
-            boolean r4 = r10.isEditing
-            if (r4 != 0) goto L_0x0158
-            if (r11 == 0) goto L_0x0158
-            int r11 = (r5 > r1 ? 1 : (r5 == r1 ? 0 : -1))
-            if (r11 > 0) goto L_0x0158
-            r10.editingAnimationProgress = r1
-        L_0x0158:
-            float r11 = r10.editingAnimationProgress
-            r4 = -1082130432(0xffffffffbvar_, float:-1.0)
-            int r11 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
-            if (r11 > 0) goto L_0x0164
+            goto L_0x015c
+        L_0x0138:
+            float r4 = r10.editingAnimationProgress
+            int r6 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
+            if (r6 < 0) goto L_0x0140
+            r6 = 1
+            goto L_0x0141
+        L_0x0140:
+            r6 = 0
+        L_0x0141:
+            float r7 = (float) r2
+            float r7 = r7 / r5
+            float r4 = r4 - r7
             r10.editingAnimationProgress = r4
+            if (r11 != 0) goto L_0x0150
+            if (r6 == 0) goto L_0x0150
+            int r4 = (r4 > r1 ? 1 : (r4 == r1 ? 0 : -1))
+            if (r4 > 0) goto L_0x0150
+            r10.editingAnimationProgress = r1
+        L_0x0150:
+            float r4 = r10.editingAnimationProgress
+            r5 = -1082130432(0xffffffffbvar_, float:-1.0)
+            int r4 = (r4 > r5 ? 1 : (r4 == r5 ? 0 : -1))
+            if (r4 > 0) goto L_0x015c
+            r10.editingAnimationProgress = r5
             r10.editingForwardAnimation = r14
-        L_0x0164:
-            r11 = 1
-        L_0x0165:
-            boolean r4 = r10.isEditing
+        L_0x015c:
+            r4 = 1
+        L_0x015d:
             r5 = 1127481344(0x43340000, float:180.0)
-            if (r4 == 0) goto L_0x017e
-            float r4 = r10.editingStartAnimationProgress
-            int r6 = (r4 > r12 ? 1 : (r4 == r12 ? 0 : -1))
-            if (r6 >= 0) goto L_0x0192
-            float r11 = (float) r2
-            float r11 = r11 / r5
-            float r4 = r4 + r11
-            r10.editingStartAnimationProgress = r4
-            int r11 = (r4 > r12 ? 1 : (r4 == r12 ? 0 : -1))
-            if (r11 <= 0) goto L_0x017c
+            if (r11 == 0) goto L_0x0174
+            float r11 = r10.editingStartAnimationProgress
+            int r6 = (r11 > r12 ? 1 : (r11 == r12 ? 0 : -1))
+            if (r6 >= 0) goto L_0x0188
+            float r4 = (float) r2
+            float r4 = r4 / r5
+            float r11 = r11 + r4
+            r10.editingStartAnimationProgress = r11
+            int r11 = (r11 > r12 ? 1 : (r11 == r12 ? 0 : -1))
+            if (r11 <= 0) goto L_0x0172
             r10.editingStartAnimationProgress = r12
-        L_0x017c:
-            r11 = 1
-            goto L_0x0192
-        L_0x017e:
-            if (r4 != 0) goto L_0x0192
-            float r12 = r10.editingStartAnimationProgress
-            int r4 = (r12 > r1 ? 1 : (r12 == r1 ? 0 : -1))
-            if (r4 <= 0) goto L_0x0192
-            float r11 = (float) r2
-            float r11 = r11 / r5
-            float r12 = r12 - r11
-            r10.editingStartAnimationProgress = r12
-            int r11 = (r12 > r1 ? 1 : (r12 == r1 ? 0 : -1))
-            if (r11 >= 0) goto L_0x017c
+        L_0x0172:
+            r4 = 1
+            goto L_0x0188
+        L_0x0174:
+            if (r11 != 0) goto L_0x0188
+            float r11 = r10.editingStartAnimationProgress
+            int r12 = (r11 > r1 ? 1 : (r11 == r1 ? 0 : -1))
+            if (r12 <= 0) goto L_0x0188
+            float r12 = (float) r2
+            float r12 = r12 / r5
+            float r11 = r11 - r12
+            r10.editingStartAnimationProgress = r11
+            int r11 = (r11 > r1 ? 1 : (r11 == r1 ? 0 : -1))
+            if (r11 >= 0) goto L_0x0172
             r10.editingStartAnimationProgress = r1
-            goto L_0x017c
-        L_0x0192:
-            boolean r12 = r10.commitCrossfade
-            if (r12 == 0) goto L_0x01ae
+            goto L_0x0172
+        L_0x0188:
+            boolean r11 = r10.commitCrossfade
+            if (r11 == 0) goto L_0x01a4
             float r11 = r10.crossfadeAlpha
             float r12 = (float) r2
             float r12 = r12 / r5
             float r11 = r11 - r12
             r10.crossfadeAlpha = r11
             int r11 = (r11 > r1 ? 1 : (r11 == r1 ? 0 : -1))
-            if (r11 >= 0) goto L_0x01af
+            if (r11 >= 0) goto L_0x01a5
             r10.commitCrossfade = r0
             android.graphics.Bitmap r11 = r10.crossfadeBitmap
-            if (r11 == 0) goto L_0x01af
+            if (r11 == 0) goto L_0x01a5
             r11.recycle()
             r11 = 0
             r10.crossfadeBitmap = r11
-            goto L_0x01af
-        L_0x01ae:
-            r14 = r11
-        L_0x01af:
-            if (r14 == 0) goto L_0x01b9
+            goto L_0x01a5
+        L_0x01a4:
+            r14 = r4
+        L_0x01a5:
+            if (r14 == 0) goto L_0x01af
             org.telegram.ui.Components.RecyclerListView r11 = r10.listView
             r11.invalidateViews()
             r10.invalidate()
-        L_0x01b9:
+        L_0x01af:
             return r13
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.FilterTabsView.drawChild(android.graphics.Canvas, android.view.View, long):boolean");
@@ -1079,7 +1079,7 @@ public class FilterTabsView extends FrameLayout {
                 MessagesController.DialogFilter dialogFilter = arrayList.get(i);
                 tLRPC$TL_messages_updateDialogFiltersOrder.order.add(Integer.valueOf(arrayList.get(i).id));
             }
-            ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_messages_updateDialogFiltersOrder, $$Lambda$FilterTabsView$oWsODGqFhLoSTELjrJH5FUevIoE.INSTANCE);
+            ConnectionsManager.getInstance(UserConfig.selectedAccount).sendRequest(tLRPC$TL_messages_updateDialogFiltersOrder, $$Lambda$FilterTabsView$0gw0M2Mpnl7SUImCutpjvb1JvBw.INSTANCE);
             this.orderChanged = false;
         }
     }

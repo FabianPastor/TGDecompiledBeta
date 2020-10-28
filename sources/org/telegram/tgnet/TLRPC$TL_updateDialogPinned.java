@@ -10,12 +10,8 @@ public class TLRPC$TL_updateDialogPinned extends TLRPC$Update {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
-        if ((readInt32 & 1) == 0) {
-            z2 = false;
-        }
-        this.pinned = z2;
-        if ((this.flags & 2) != 0) {
+        this.pinned = (readInt32 & 1) != 0;
+        if ((readInt32 & 2) != 0) {
             this.folder_id = abstractSerializedData.readInt32(z);
         }
         this.peer = TLRPC$DialogPeer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);

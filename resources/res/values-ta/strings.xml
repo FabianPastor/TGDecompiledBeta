@@ -22,4 +22,5 @@
     <string name="google_assistant_verification_channel_name">அசிஸ்டண்ட் உறுதிப்படுத்தி</string>
     <string name="google_assistant_verification_notification_title">Google அசிஸ்டண்ட் செய்தியை அனுப்புகிறது</string>
     <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="wallet_buy_button_place_holder">Google மூலம் வாங்கு</string>
 </resources>

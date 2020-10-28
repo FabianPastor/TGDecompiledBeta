@@ -78,6 +78,8 @@ public class WearReplyReceiver extends BroadcastReceiver {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onReceive$1 */
     public /* synthetic */ void lambda$onReceive$1$WearReplyReceiver(AccountInstance accountInstance, int i, CharSequence charSequence, long j, int i2) {
         AndroidUtilities.runOnUIThread(new Runnable(accountInstance, accountInstance.getMessagesStorage().getUserSync(i), charSequence, j, i2) {
             public final /* synthetic */ AccountInstance f$1;
@@ -100,11 +102,15 @@ public class WearReplyReceiver extends BroadcastReceiver {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$0 */
     public /* synthetic */ void lambda$null$0$WearReplyReceiver(AccountInstance accountInstance, TLRPC$User tLRPC$User, CharSequence charSequence, long j, int i) {
         accountInstance.getMessagesController().putUser(tLRPC$User, true);
         sendMessage(accountInstance, charSequence, j, i);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onReceive$3 */
     public /* synthetic */ void lambda$onReceive$3$WearReplyReceiver(AccountInstance accountInstance, int i, CharSequence charSequence, long j, int i2) {
         AndroidUtilities.runOnUIThread(new Runnable(accountInstance, accountInstance.getMessagesStorage().getChatSync(-i), charSequence, j, i2) {
             public final /* synthetic */ AccountInstance f$1;
@@ -127,6 +133,8 @@ public class WearReplyReceiver extends BroadcastReceiver {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$WearReplyReceiver(AccountInstance accountInstance, TLRPC$Chat tLRPC$Chat, CharSequence charSequence, long j, int i) {
         accountInstance.getMessagesController().putChat(tLRPC$Chat, true);
         sendMessage(accountInstance, charSequence, j, i);

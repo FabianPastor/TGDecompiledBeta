@@ -71,6 +71,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private MessageObject lastMessageObject;
     private String lastString;
     private ImageView playButton;
+    private PlayPauseDrawable playPauseDrawable;
     private ImageView playbackSpeedButton;
     private View selector;
     private boolean supportsCalls;
@@ -119,12 +120,17 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.frameLayout.addView(view3, LayoutHelper.createFrame(-1, -1.0f));
         View view4 = new View(context2);
         view4.setBackgroundResource(NUM);
-        addView(view4, LayoutHelper.createFrame(-1, 3.0f, 51, 0.0f, 36.0f, 0.0f, 0.0f));
+        addView(view4, LayoutHelper.createFrame(-1, 2.0f, 51, 0.0f, 36.0f, 0.0f, 0.0f));
         ImageView imageView = new ImageView(context2);
         this.playButton = imageView;
         imageView.setScaleType(ImageView.ScaleType.CENTER);
         this.playButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("inappPlayerPlayPause"), PorterDuff.Mode.MULTIPLY));
-        if (Build.VERSION.SDK_INT >= 21) {
+        ImageView imageView2 = this.playButton;
+        PlayPauseDrawable playPauseDrawable2 = new PlayPauseDrawable(14);
+        this.playPauseDrawable = playPauseDrawable2;
+        imageView2.setImageDrawable(playPauseDrawable2);
+        int i = Build.VERSION.SDK_INT;
+        if (i >= 21) {
             this.playButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("inappPlayerPlayPause") & NUM, 1, AndroidUtilities.dp(14.0f)));
         }
         addView(this.playButton, LayoutHelper.createFrame(36, 36, 51));
@@ -143,9 +149,9 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         this.titleTextView.setGravity(19);
         addView(this.titleTextView, LayoutHelper.createFrame(-1, 36.0f, 51, 35.0f, 0.0f, 36.0f, 0.0f));
         if (!z2) {
-            ImageView imageView2 = new ImageView(context2);
-            this.playbackSpeedButton = imageView2;
-            imageView2.setScaleType(ImageView.ScaleType.CENTER);
+            ImageView imageView3 = new ImageView(context2);
+            this.playbackSpeedButton = imageView3;
+            imageView3.setScaleType(ImageView.ScaleType.CENTER);
             this.playbackSpeedButton.setImageResource(NUM);
             this.playbackSpeedButton.setContentDescription(LocaleController.getString("AccDescrPlayerSpeed", NUM));
             if (AndroidUtilities.density >= 3.0f) {
@@ -159,15 +165,15 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
             });
             updatePlaybackButton();
         }
-        ImageView imageView3 = new ImageView(context2);
-        this.closeButton = imageView3;
-        imageView3.setImageResource(NUM);
+        ImageView imageView4 = new ImageView(context2);
+        this.closeButton = imageView4;
+        imageView4.setImageResource(NUM);
         this.closeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("inappPlayerClose"), PorterDuff.Mode.MULTIPLY));
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (i >= 21) {
             this.closeButton.setBackgroundDrawable(Theme.createSelectorDrawable(Theme.getColor("inappPlayerClose") & NUM, 1, AndroidUtilities.dp(14.0f)));
         }
         this.closeButton.setScaleType(ImageView.ScaleType.CENTER);
-        addView(this.closeButton, LayoutHelper.createFrame(36, 36, 53));
+        addView(this.closeButton, LayoutHelper.createFrame(36, 36.0f, 53, 0.0f, 0.0f, 2.0f, 0.0f));
         this.closeButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 FragmentContextView.this.lambda$new$3$FragmentContextView(view);
@@ -180,6 +186,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$FragmentContextView(View view) {
         if (this.currentStyle != 0) {
             return;
@@ -187,10 +195,12 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         if (MediaController.getInstance().isMessagePaused()) {
             MediaController.getInstance().playMessage(MediaController.getInstance().getPlayingMessageObject());
         } else {
-            MediaController.getInstance().lambda$startAudioAgain$7$MediaController(MediaController.getInstance().getPlayingMessageObject());
+            MediaController.getInstance().lambda$startAudioAgain$7(MediaController.getInstance().getPlayingMessageObject());
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ void lambda$new$1$FragmentContextView(View view) {
         if (MediaController.getInstance().getPlaybackSpeed(this.isMusic) > 1.0f) {
             MediaController.getInstance().setPlaybackSpeed(this.isMusic, 1.0f);
@@ -199,6 +209,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$3 */
     public /* synthetic */ void lambda$new$3$FragmentContextView(View view) {
         if (this.currentStyle == 2) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) this.fragment.getParentActivity());
@@ -236,6 +248,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         MediaController.getInstance().cleanupPlayer(true, true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$FragmentContextView(DialogInterface dialogInterface, int i) {
         BaseFragment baseFragment = this.fragment;
         if (baseFragment instanceof DialogsActivity) {
@@ -247,6 +261,8 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         LocationController.getInstance(baseFragment.getCurrentAccount()).removeSharingLocation(((ChatActivity) this.fragment).getDialogId());
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$4 */
     public /* synthetic */ void lambda$new$4$FragmentContextView(View view) {
         long j;
         int i = this.currentStyle;
@@ -274,7 +290,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     bundle.putInt("enc_id", i3);
                 } else if (i2 > 0) {
                     bundle.putInt("user_id", i2);
-                } else if (i2 < 0) {
+                } else {
                     bundle.putInt("chat_id", -i2);
                 }
                 bundle.putInt("message_id", playingMessageObject.getId());
@@ -358,7 +374,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                     SendMessagesHelper.getInstance(LocationController.SharingLocationInfo.this.messageObject.currentAccount).sendMessage(tLRPC$MessageMedia, this.f$1, (MessageObject) null, (MessageObject) null, (TLRPC$ReplyMarkup) null, (HashMap<String, String>) null, z, i2);
                 }
             });
-            launchActivity.lambda$runLinkRequest$41$LaunchActivity(locationActivity);
+            launchActivity.lambda$runLinkRequest$42(locationActivity);
         }
     }
 
@@ -469,11 +485,11 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                         imageView.setVisibility(0);
                     }
                     this.closeButton.setContentDescription(LocaleController.getString("AccDescrClosePlayer", NUM));
-                } else if (i == 2) {
-                    this.playButton.setLayoutParams(LayoutHelper.createFrame(36, 36.0f, 51, 8.0f, 0.0f, 0.0f, 0.0f));
-                    this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 36.0f, 51, 51.0f, 0.0f, 36.0f, 0.0f));
-                    this.closeButton.setContentDescription(LocaleController.getString("AccDescrStopLiveLocation", NUM));
+                    return;
                 }
+                this.playButton.setLayoutParams(LayoutHelper.createFrame(36, 36.0f, 51, 8.0f, 0.0f, 0.0f, 0.0f));
+                this.titleTextView.setLayoutParams(LayoutHelper.createFrame(-1, 36.0f, 51, 51.0f, 0.0f, 36.0f, 0.0f));
+                this.closeButton.setContentDescription(LocaleController.getString("AccDescrStopLiveLocation", NUM));
             } else if (i == 1) {
                 this.selector.setBackground((Drawable) null);
                 this.frameLayout.setBackgroundColor(Theme.getColor("returnToCallBackground"));
@@ -549,7 +565,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
 
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
-        super.onMeasure(i, AndroidUtilities.dp2(39.0f));
+        super.onMeasure(i, AndroidUtilities.dp2(38.0f));
     }
 
     public void didReceivedNotification(int i, int i2, Object... objArr) {
@@ -846,10 +862,10 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 setVisibility(0);
             }
             if (MediaController.getInstance().isMessagePaused()) {
-                this.playButton.setImageResource(NUM);
+                this.playPauseDrawable.setPause(false, !z);
                 this.playButton.setContentDescription(LocaleController.getString("AccActionPlay", NUM));
             } else {
-                this.playButton.setImageResource(NUM);
+                this.playPauseDrawable.setPause(true, !z);
                 this.playButton.setContentDescription(LocaleController.getString("AccActionPause", NUM));
             }
             if (this.lastMessageObject != playingMessageObject || i != 0) {

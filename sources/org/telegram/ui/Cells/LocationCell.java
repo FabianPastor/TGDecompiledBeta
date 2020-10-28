@@ -32,8 +32,10 @@ public class LocationCell extends FrameLayout {
         this.circleDrawable = createCircleDrawable;
         backupImageView.setBackground(createCircleDrawable);
         this.imageView.setSize(AndroidUtilities.dp(30.0f), AndroidUtilities.dp(30.0f));
+        BackupImageView backupImageView2 = this.imageView;
+        boolean z2 = LocaleController.isRTL;
         int i = 5;
-        addView(this.imageView, LayoutHelper.createFrame(42, 42.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 15.0f, 11.0f, LocaleController.isRTL ? 15.0f : 0.0f, 0.0f));
+        addView(backupImageView2, LayoutHelper.createFrame(42, 42.0f, (z2 ? 5 : 3) | 48, z2 ? 0.0f : 15.0f, 11.0f, z2 ? 15.0f : 0.0f, 0.0f));
         TextView textView = new TextView(context);
         this.nameTextView = textView;
         textView.setTextSize(1, 16.0f);
@@ -43,17 +45,21 @@ public class LocationCell extends FrameLayout {
         this.nameTextView.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
         this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.nameTextView.setGravity(LocaleController.isRTL ? 5 : 3);
+        TextView textView2 = this.nameTextView;
+        boolean z3 = LocaleController.isRTL;
         int i2 = 16;
-        addView(this.nameTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 16 : 73), 10.0f, (float) (LocaleController.isRTL ? 73 : 16), 0.0f));
-        TextView textView2 = new TextView(context);
-        this.addressTextView = textView2;
-        textView2.setTextSize(1, 14.0f);
+        addView(textView2, LayoutHelper.createFrame(-2, -2.0f, (z3 ? 5 : 3) | 48, (float) (z3 ? 16 : 73), 10.0f, (float) (z3 ? 73 : 16), 0.0f));
+        TextView textView3 = new TextView(context);
+        this.addressTextView = textView3;
+        textView3.setTextSize(1, 14.0f);
         this.addressTextView.setMaxLines(1);
         this.addressTextView.setEllipsize(TextUtils.TruncateAt.END);
         this.addressTextView.setSingleLine(true);
         this.addressTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
         this.addressTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        addView(this.addressTextView, LayoutHelper.createFrame(-2, -2.0f, (!LocaleController.isRTL ? 3 : i) | 48, (float) (LocaleController.isRTL ? 16 : 73), 35.0f, (float) (LocaleController.isRTL ? 73 : i2), 0.0f));
+        TextView textView4 = this.addressTextView;
+        boolean z4 = LocaleController.isRTL;
+        addView(textView4, LayoutHelper.createFrame(-2, -2.0f, (!z4 ? 3 : i) | 48, (float) (z4 ? 16 : 73), 35.0f, (float) (z4 ? 73 : i2), 0.0f));
     }
 
     /* access modifiers changed from: protected */

@@ -693,6 +693,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                 onMeasureInternal(i, View.MeasureSpec.makeMeasureSpec(size, NUM));
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onMeasure$0 */
             public /* synthetic */ void lambda$onMeasure$0$PhotoPickerActivity$5() {
                 PhotoPickerActivity.this.listAdapter.notifyDataSetChanged();
             }
@@ -1145,7 +1147,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             this.frameLayout2.setVisibility(4);
             this.frameLayout2.setTranslationY((float) AndroidUtilities.dp(48.0f));
             this.sizeNotifierFrameLayout.addView(this.frameLayout2, LayoutHelper.createFrame(-1, 48, 83));
-            this.frameLayout2.setOnTouchListener($$Lambda$PhotoPickerActivity$UEkfqvbu1_SVwnH7n9JhVVbNS4o.INSTANCE);
+            this.frameLayout2.setOnTouchListener($$Lambda$PhotoPickerActivity$nw5X2H11HedLqIATxQhfS3slVP4.INSTANCE);
             EditTextEmoji editTextEmoji = this.commentTextView;
             if (editTextEmoji != null) {
                 editTextEmoji.onDestroy();
@@ -1196,11 +1198,12 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             int dp = AndroidUtilities.dp(56.0f);
             String str = "dialogFloatingButton";
             int color = Theme.getColor(str);
-            if (Build.VERSION.SDK_INT >= 21) {
+            int i4 = Build.VERSION.SDK_INT;
+            if (i4 >= 21) {
                 str = "dialogFloatingButtonPressed";
             }
             this.writeButtonDrawable = Theme.createSimpleSelectorCircleDrawable(dp, color, Theme.getColor(str));
-            if (Build.VERSION.SDK_INT < 21) {
+            if (i4 < 21) {
                 Drawable mutate = context.getResources().getDrawable(NUM).mutate();
                 mutate.setColorFilter(new PorterDuffColorFilter(-16777216, PorterDuff.Mode.MULTIPLY));
                 CombinedDrawable combinedDrawable = new CombinedDrawable(mutate, this.writeButtonDrawable, 0, 0);
@@ -1212,7 +1215,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
             this.writeButton.setImportantForAccessibility(2);
             this.writeButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("dialogFloatingIcon"), PorterDuff.Mode.MULTIPLY));
             this.writeButton.setScaleType(ImageView.ScaleType.CENTER);
-            if (Build.VERSION.SDK_INT >= 21) {
+            if (i4 >= 21) {
                 this.writeButton.setOutlineProvider(new ViewOutlineProvider(this) {
                     @SuppressLint({"NewApi"})
                     public void getOutline(View view, Outline outline) {
@@ -1220,7 +1223,7 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
                     }
                 });
             }
-            this.writeButtonContainer.addView(this.writeButton, LayoutHelper.createFrame(Build.VERSION.SDK_INT >= 21 ? 56 : 60, Build.VERSION.SDK_INT >= 21 ? 56.0f : 60.0f, 51, Build.VERSION.SDK_INT >= 21 ? 2.0f : 0.0f, 0.0f, 0.0f, 0.0f));
+            this.writeButtonContainer.addView(this.writeButton, LayoutHelper.createFrame(i4 >= 21 ? 56 : 60, i4 >= 21 ? 56.0f : 60.0f, 51, i4 >= 21 ? 2.0f : 0.0f, 0.0f, 0.0f, 0.0f));
             this.writeButton.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
                     PhotoPickerActivity.this.lambda$createView$4$PhotoPickerActivity(view);
@@ -1272,6 +1275,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$1 */
     public /* synthetic */ void lambda$createView$1$PhotoPickerActivity(View view, int i) {
         ArrayList arrayList;
         int i2;
@@ -1333,6 +1338,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$0 */
     public /* synthetic */ void lambda$null$0$PhotoPickerActivity(DialogInterface dialogInterface, int i) {
         PhotoPickerActivitySearchDelegate photoPickerActivitySearchDelegate = this.searchDelegate;
         if (photoPickerActivitySearchDelegate != null) {
@@ -1342,6 +1349,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$2 */
     public /* synthetic */ boolean lambda$createView$2$PhotoPickerActivity(View view, int i) {
         if (this.listSort) {
             onListItemClick(view, this.selectedAlbum.photos.get(i));
@@ -1357,6 +1366,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$4 */
     public /* synthetic */ void lambda$createView$4$PhotoPickerActivity(View view) {
         ChatActivity chatActivity2 = this.chatActivity;
         if (chatActivity2 == null || !chatActivity2.isInScheduleMode()) {
@@ -1370,6 +1381,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$7 */
     public /* synthetic */ boolean lambda$createView$7$PhotoPickerActivity(View view) {
         ChatActivity chatActivity2 = this.chatActivity;
         if (!(chatActivity2 == null || this.maxSelectedPhotos == 1)) {
@@ -1450,6 +1463,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         return false;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$5 */
     public /* synthetic */ void lambda$null$5$PhotoPickerActivity(KeyEvent keyEvent) {
         ActionBarPopupWindow actionBarPopupWindow;
         if (keyEvent.getKeyCode() == 4 && keyEvent.getRepeatCount() == 0 && (actionBarPopupWindow = this.sendPopupWindow) != null && actionBarPopupWindow.isShowing()) {
@@ -1457,6 +1472,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$6 */
     public /* synthetic */ void lambda$null$6$PhotoPickerActivity(int i, View view) {
         ActionBarPopupWindow actionBarPopupWindow = this.sendPopupWindow;
         if (actionBarPopupWindow != null && actionBarPopupWindow.isShowing()) {
@@ -1947,6 +1964,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$searchBotUser$9 */
     public /* synthetic */ void lambda$searchBotUser$9$PhotoPickerActivity(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable(tLObject, z) {
@@ -1965,6 +1984,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$8 */
     public /* synthetic */ void lambda$null$8$PhotoPickerActivity(TLObject tLObject, boolean z) {
         TLRPC$TL_contacts_resolvedPeer tLRPC$TL_contacts_resolvedPeer = (TLRPC$TL_contacts_resolvedPeer) tLObject;
         MessagesController.getInstance(this.currentAccount).putUsers(tLRPC$TL_contacts_resolvedPeer.users, false);
@@ -2032,6 +2053,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$searchImages$11 */
     public /* synthetic */ void lambda$searchImages$11$PhotoPickerActivity(int i, boolean z, TLRPC$User tLRPC$User, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(i, tLObject, z, tLRPC$User) {
             public final /* synthetic */ int f$1;
@@ -2052,6 +2075,8 @@ public class PhotoPickerActivity extends BaseFragment implements NotificationCen
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$10 */
     public /* synthetic */ void lambda$null$10$PhotoPickerActivity(int i, TLObject tLObject, boolean z, TLRPC$User tLRPC$User) {
         int i2;
         int i3;

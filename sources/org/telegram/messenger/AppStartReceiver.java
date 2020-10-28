@@ -7,7 +7,7 @@ import android.content.Intent;
 public class AppStartReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (intent != null && "android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
-            AndroidUtilities.runOnUIThread($$Lambda$AppStartReceiver$7IXYkDgfegfmGY13J4IaTEQTfFw.INSTANCE);
+            AndroidUtilities.runOnUIThread($$Lambda$AppStartReceiver$3RTLFR4jSsD6NQ_SSfyeDDSMWuU.INSTANCE);
         }
     }
 

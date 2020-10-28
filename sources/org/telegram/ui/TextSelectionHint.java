@@ -303,7 +303,8 @@ class TextSelectionHint extends View {
                 TextSelectionHint.this.lambda$show$2$TextSelectionHint(valueAnimator);
             }
         });
-        ofFloat3.setInterpolator(CubicBezierInterpolator.EASE_OUT);
+        CubicBezierInterpolator cubicBezierInterpolator = CubicBezierInterpolator.EASE_OUT;
+        ofFloat3.setInterpolator(cubicBezierInterpolator);
         ofFloat3.setDuration(500);
         ValueAnimator ofFloat4 = ValueAnimator.ofFloat(new float[]{1.0f, 0.0f});
         ofFloat4.setStartDelay(400);
@@ -312,7 +313,7 @@ class TextSelectionHint extends View {
                 TextSelectionHint.this.lambda$show$3$TextSelectionHint(valueAnimator);
             }
         });
-        ofFloat4.setInterpolator(CubicBezierInterpolator.EASE_OUT);
+        ofFloat4.setInterpolator(cubicBezierInterpolator);
         ofFloat4.setDuration(900);
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playSequentially(new Animator[]{ofFloat, ofFloat2, ofFloat3, ofFloat4});
@@ -321,16 +322,22 @@ class TextSelectionHint extends View {
         AndroidUtilities.runOnUIThread(this.dismissTunnable, 5000);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$show$0 */
     public /* synthetic */ void lambda$show$0$TextSelectionHint(ValueAnimator valueAnimator) {
         this.prepareProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$show$1 */
     public /* synthetic */ void lambda$show$1$TextSelectionHint(ValueAnimator valueAnimator) {
         this.enterValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$show$2 */
     public /* synthetic */ void lambda$show$2$TextSelectionHint(ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.startOffsetValue = floatValue;
@@ -339,6 +346,8 @@ class TextSelectionHint extends View {
         invalidate();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$show$3 */
     public /* synthetic */ void lambda$show$3$TextSelectionHint(ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.endOffsetValue = floatValue;
@@ -375,6 +384,8 @@ class TextSelectionHint extends View {
         ofFloat.start();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$hideInternal$4 */
     public /* synthetic */ void lambda$hideInternal$4$TextSelectionHint(ValueAnimator valueAnimator) {
         this.prepareProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();

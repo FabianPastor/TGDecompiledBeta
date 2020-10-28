@@ -1,5 +1,5 @@
 package j$.util.function;
 
 public interface ToIntFunction {
-    int a(Object obj);
+    int applyAsInt(Object obj);
 }

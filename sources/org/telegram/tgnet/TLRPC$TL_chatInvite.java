@@ -8,9 +8,9 @@ public class TLRPC$TL_chatInvite extends TLRPC$ChatInvite {
         this.flags = readInt32;
         int i = 0;
         this.channel = (readInt32 & 1) != 0;
-        this.broadcast = (this.flags & 2) != 0;
-        this.isPublic = (this.flags & 4) != 0;
-        this.megagroup = (this.flags & 8) != 0;
+        this.broadcast = (readInt32 & 2) != 0;
+        this.isPublic = (readInt32 & 4) != 0;
+        this.megagroup = (readInt32 & 8) != 0;
         this.title = abstractSerializedData.readString(z);
         this.photo = TLRPC$Photo.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
         this.participants_count = abstractSerializedData.readInt32(z);

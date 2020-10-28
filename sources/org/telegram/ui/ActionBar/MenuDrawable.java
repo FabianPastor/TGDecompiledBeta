@@ -47,11 +47,10 @@ public class MenuDrawable extends Drawable {
         }
         this.lastFrameTime = 0;
         if (z) {
-            float f3 = this.currentRotation;
-            if (f3 < f) {
-                this.currentAnimationTime = (int) (f3 * 200.0f);
+            if (f2 < f) {
+                this.currentAnimationTime = (int) (f2 * 200.0f);
             } else {
-                this.currentAnimationTime = (int) ((1.0f - f3) * 200.0f);
+                this.currentAnimationTime = (int) ((1.0f - f2) * 200.0f);
             }
             this.lastFrameTime = SystemClock.elapsedRealtime();
             this.finalRotation = f;

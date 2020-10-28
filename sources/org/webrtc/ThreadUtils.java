@@ -118,7 +118,7 @@ public class ThreadUtils {
             }
         } else {
             final AnonymousClass1Result r0 = new Object() {
-                public V value;
+                public Object value;
             };
             final AnonymousClass1CaughtException r1 = new Object() {
                 Exception e;

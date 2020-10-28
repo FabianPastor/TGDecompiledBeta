@@ -177,7 +177,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
                 this.accountNumbers.add(Integer.valueOf(i9));
             }
         }
-        Collections.sort(this.accountNumbers, $$Lambda$DrawerLayoutAdapter$mi1sw6PViLc4Y6s0MqsHrAJKuc.INSTANCE);
+        Collections.sort(this.accountNumbers, $$Lambda$DrawerLayoutAdapter$pyljm01qtLl0BbFoRFh7svzDDE.INSTANCE);
         this.items.clear();
         if (UserConfig.getInstance(UserConfig.selectedAccount).isClientActivated()) {
             int eventType = Theme.getEventType();
@@ -201,6 +201,16 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter {
                     i4 = NUM;
                     i3 = NUM;
                     i2 = NUM;
+                } else if (eventType == 2) {
+                    i8 = NUM;
+                    i10 = NUM;
+                    i7 = NUM;
+                    i6 = NUM;
+                    i5 = NUM;
+                    i4 = NUM;
+                    i3 = NUM;
+                    i2 = NUM;
+                    i = NUM;
                 } else {
                     i8 = NUM;
                     i10 = NUM;

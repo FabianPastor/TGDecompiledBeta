@@ -22,4 +22,5 @@
     <string name="google_assistant_verification_channel_name">Verifikator Asistenta</string>
     <string name="google_assistant_verification_notification_title">Google asistent šalje poruku</string>
     <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="wallet_buy_button_place_holder">Kupi putem Googlea</string>
 </resources>

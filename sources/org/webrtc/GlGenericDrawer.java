@@ -34,7 +34,8 @@ class GlGenericDrawer implements RendererCommon.GlDrawer {
 
     static String createFragmentShaderString(String str, ShaderType shaderType) {
         StringBuilder sb = new StringBuilder();
-        if (shaderType == ShaderType.OES) {
+        ShaderType shaderType2 = ShaderType.OES;
+        if (shaderType == shaderType2) {
             sb.append("#extension GL_OES_EGL_image_external : require\n");
         }
         sb.append("precision mediump float;\n");
@@ -53,7 +54,7 @@ class GlGenericDrawer implements RendererCommon.GlDrawer {
             sb.append("}\n");
             sb.append(str);
         } else {
-            String str2 = shaderType == ShaderType.OES ? "samplerExternalOES" : "sampler2D";
+            String str2 = shaderType == shaderType2 ? "samplerExternalOES" : "sampler2D";
             sb.append("uniform ");
             sb.append(str2);
             sb.append(" tex;\n");

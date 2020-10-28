@@ -6,7 +6,7 @@ public class DesugarTimeZone {
     private DesugarTimeZone() {
     }
 
-    public static TimeZone getTimeZone(String ID) {
-        return TimeZone.getTimeZone(ID);
+    public static TimeZone getTimeZone(String str) {
+        return TimeZone.getTimeZone(str);
     }
 }

@@ -356,7 +356,7 @@ public class NetworkMonitorAutoDetect extends BroadcastReceiver implements Netwo
         @SuppressLint({"InlinedApi"})
         public void onReceive(Context context2, Intent intent) {
             if ("android.net.wifi.p2p.CONNECTION_STATE_CHANGE".equals(intent.getAction())) {
-                lambda$new$0$NetworkMonitorAutoDetect$WifiDirectManagerDelegate((WifiP2pGroup) intent.getParcelableExtra("p2pGroupInfo"));
+                lambda$new$0((WifiP2pGroup) intent.getParcelableExtra("p2pGroupInfo"));
             } else if ("android.net.wifi.p2p.STATE_CHANGED".equals(intent.getAction())) {
                 onWifiP2pStateChange(intent.getIntExtra("wifi_p2p_state", 0));
             }
@@ -376,7 +376,7 @@ public class NetworkMonitorAutoDetect extends BroadcastReceiver implements Netwo
 
         /* access modifiers changed from: private */
         /* renamed from: onWifiP2pGroupChange */
-        public void lambda$new$0$NetworkMonitorAutoDetect$WifiDirectManagerDelegate(WifiP2pGroup wifiP2pGroup) {
+        public void lambda$new$0(WifiP2pGroup wifiP2pGroup) {
             if (wifiP2pGroup != null && wifiP2pGroup.getInterface() != null) {
                 try {
                     ArrayList<T> list = Collections.list(NetworkInterface.getByName(wifiP2pGroup.getInterface()).getInetAddresses());

@@ -28,17 +28,17 @@ public class TLRPC$TL_channelAdminRights_layer92 extends TLObject {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.change_info = (readInt32 & 1) != 0;
-        this.post_messages = (this.flags & 2) != 0;
-        this.edit_messages = (this.flags & 4) != 0;
-        this.delete_messages = (this.flags & 8) != 0;
-        this.ban_users = (this.flags & 16) != 0;
-        this.invite_users = (this.flags & 32) != 0;
-        this.pin_messages = (this.flags & 128) != 0;
-        this.add_admins = (this.flags & 512) != 0;
-        if ((this.flags & 1024) == 0) {
-            z2 = false;
+        this.post_messages = (readInt32 & 2) != 0;
+        this.edit_messages = (readInt32 & 4) != 0;
+        this.delete_messages = (readInt32 & 8) != 0;
+        this.ban_users = (readInt32 & 16) != 0;
+        this.invite_users = (readInt32 & 32) != 0;
+        this.pin_messages = (readInt32 & 128) != 0;
+        this.add_admins = (readInt32 & 512) != 0;
+        if ((readInt32 & 1024) != 0) {
+            z2 = true;
         }
         this.manage_call = z2;
     }

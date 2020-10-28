@@ -37,16 +37,16 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:109:0x03aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:115:0x03f9  */
-    /* JADX WARNING: Removed duplicated region for block: B:118:0x0401  */
-    /* JADX WARNING: Removed duplicated region for block: B:119:0x0403  */
-    /* JADX WARNING: Removed duplicated region for block: B:122:0x040a A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:140:0x044a  */
-    /* JADX WARNING: Removed duplicated region for block: B:143:0x0460  */
-    /* JADX WARNING: Removed duplicated region for block: B:145:0x0464  */
-    /* JADX WARNING: Removed duplicated region for block: B:146:0x046e  */
-    /* JADX WARNING: Removed duplicated region for block: B:149:0x047a  */
+    /* JADX WARNING: Removed duplicated region for block: B:109:0x03a4  */
+    /* JADX WARNING: Removed duplicated region for block: B:115:0x03f3  */
+    /* JADX WARNING: Removed duplicated region for block: B:118:0x03fb  */
+    /* JADX WARNING: Removed duplicated region for block: B:119:0x03fd  */
+    /* JADX WARNING: Removed duplicated region for block: B:122:0x0404 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:140:0x0444  */
+    /* JADX WARNING: Removed duplicated region for block: B:143:0x045a  */
+    /* JADX WARNING: Removed duplicated region for block: B:145:0x045e  */
+    /* JADX WARNING: Removed duplicated region for block: B:146:0x0468  */
+    /* JADX WARNING: Removed duplicated region for block: B:149:0x0474  */
     /* JADX WARNING: Removed duplicated region for block: B:66:0x01fd  */
     /* JADX WARNING: Removed duplicated region for block: B:67:0x0203  */
     /* JADX WARNING: Removed duplicated region for block: B:70:0x0214  */
@@ -61,7 +61,7 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             r0 = r35
             r1 = r36
             T r2 = r0.chartData
-            if (r2 == 0) goto L_0x062b
+            if (r2 == 0) goto L_0x0625
             float r2 = r0.chartWidth
             org.telegram.ui.Charts.ChartPickerDelegate r3 = r0.pickerDelegate
             float r4 = r3.pickerEnd
@@ -237,7 +237,7 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             r15 = 0
             r18 = 0
         L_0x0150:
-            if (r14 > r11) goto L_0x05db
+            if (r14 > r11) goto L_0x05d5
             r10 = 0
             r20 = 0
             r21 = 0
@@ -280,7 +280,7 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
         L_0x0194:
             java.util.ArrayList<L> r13 = r0.lines
             int r13 = r13.size()
-            if (r7 >= r13) goto L_0x05c0
+            if (r7 >= r13) goto L_0x05ba
             java.util.ArrayList<L> r13 = r0.lines
             java.lang.Object r13 = r13.get(r7)
             org.telegram.ui.Charts.view_data.LineViewData r13 = (org.telegram.ui.Charts.view_data.LineViewData) r13
@@ -303,7 +303,7 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             r6 = 0
             r10 = 2
             r13 = 0
-            goto L_0x05ac
+            goto L_0x05a6
         L_0x01c7:
             org.telegram.ui.Charts.data.ChartData$Line r8 = r13.line
             int[] r8 = r8.y
@@ -399,8 +399,8 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             r30 = 1119092736(0x42b40000, float:90.0)
             r31 = r11
             r11 = 2
-            if (r6 != r11) goto L_0x03a2
-            if (r7 == r2) goto L_0x03a2
+            if (r6 != r11) goto L_0x039c
+            if (r7 == r2) goto L_0x039c
             int r6 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
             if (r6 >= 0) goto L_0x0272
             org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
@@ -449,7 +449,7 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             float r6 = (float) r11
             float r6 = r6 - r30
             int r11 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-            if (r11 < 0) goto L_0x0318
+            if (r11 < 0) goto L_0x0314
             float[] r10 = r0.mapPoints
             r11 = 0
             r10[r11] = r1
@@ -469,13 +469,11 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             r10 = 0
             r11 = r8[r10]
             r12 = 1
-            r8 = r8[r12]
+            r33 = r8[r12]
             int r19 = (r11 > r4 ? 1 : (r11 == r4 ? 0 : -1))
             if (r19 >= 0) goto L_0x02e9
             r11 = r4
         L_0x02e9:
-            r33 = r8
-            float[] r8 = r0.mapPoints
             r8[r10] = r1
             r8[r12] = r3
             android.graphics.Matrix r3 = r0.matrix
@@ -492,15 +490,15 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             r8 = 1
             r3 = r3[r8]
             int r8 = (r1 > r4 ? 1 : (r1 == r4 ? 0 : -1))
-            if (r8 >= 0) goto L_0x0312
+            if (r8 >= 0) goto L_0x030e
             r1 = r4
-        L_0x0312:
+        L_0x030e:
             r10 = r32
             r8 = r33
-            goto L_0x03a8
-        L_0x0318:
+            goto L_0x03a2
+        L_0x0314:
             int r11 = (r10 > r4 ? 1 : (r10 == r4 ? 0 : -1))
-            if (r11 < 0) goto L_0x032c
+            if (r11 < 0) goto L_0x0328
             float r1 = r1 * r34
             float r3 = r4 * r9
             float r1 = r1 + r3
@@ -510,8 +508,8 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             r11 = r1
             r3 = r8
             r10 = r32
-            goto L_0x03a8
-        L_0x032c:
+            goto L_0x03a2
+        L_0x0328:
             float[] r11 = r0.mapPoints
             r12 = 0
             r11[r12] = r1
@@ -537,7 +535,7 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             r19 = 1
             r33 = r8[r19]
             int r10 = (r10 > r4 ? 1 : (r10 == r4 ? 0 : -1))
-            if (r10 < 0) goto L_0x0370
+            if (r10 < 0) goto L_0x036c
             org.telegram.ui.Charts.view_data.TransitionParams r10 = r0.transitionParams
             float r10 = r10.progress
             r16 = 1065353216(0x3var_, float:1.0)
@@ -546,13 +544,12 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             float r10 = r10 * r4
             float r1 = r1 + r10
             r8[r11] = r1
-            goto L_0x0372
-        L_0x0370:
+            goto L_0x036e
+        L_0x036c:
             r8[r11] = r1
-        L_0x0372:
-            float[] r1 = r0.mapPoints
-            r8 = 1
-            r1[r8] = r3
+        L_0x036e:
+            r1 = 1
+            r8[r1] = r3
             android.graphics.Matrix r1 = r0.matrix
             r1.reset()
             android.graphics.Matrix r1 = r0.matrix
@@ -575,22 +572,22 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             r3 = r1
             r1 = r8
             r11 = r12
-            goto L_0x0312
-        L_0x03a2:
+            goto L_0x030e
+        L_0x039c:
             r32 = r12
             r11 = r1
             r10 = r32
             r6 = 0
-        L_0x03a8:
-            if (r14 != r10) goto L_0x03f9
+        L_0x03a2:
+            if (r14 != r10) goto L_0x03f3
             int r12 = r35.getMeasuredHeight()
             float r12 = (float) r12
             r32 = r9
             int r9 = r0.transitionMode
             r33 = r10
             r10 = 2
-            if (r9 != r10) goto L_0x03ed
-            if (r7 == r2) goto L_0x03ed
+            if (r9 != r10) goto L_0x03e7
+            if (r7 == r2) goto L_0x03e7
             float[] r9 = r0.mapPoints
             r10 = 0
             float r34 = r10 - r4
@@ -618,105 +615,105 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             r12 = 1
             r6 = r6[r12]
             r12 = r6
-            goto L_0x03ef
-        L_0x03ed:
+            goto L_0x03e9
+        L_0x03e7:
             r9 = 0
             r10 = 0
-        L_0x03ef:
+        L_0x03e9:
             android.graphics.Path r6 = r13.chartPath
             r6.moveTo(r10, r12)
             boolean[] r6 = r0.skipPoints
             r6[r7] = r9
-            goto L_0x03fd
-        L_0x03f9:
+            goto L_0x03f7
+        L_0x03f3:
             r32 = r9
             r33 = r10
-        L_0x03fd:
+        L_0x03f7:
             org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
-            if (r6 != 0) goto L_0x0403
+            if (r6 != 0) goto L_0x03fd
             r6 = 0
-            goto L_0x0405
-        L_0x0403:
+            goto L_0x03ff
+        L_0x03fd:
             float r6 = r6.progress
-        L_0x0405:
+        L_0x03ff:
             r9 = 0
             int r10 = (r15 > r9 ? 1 : (r15 == r9 ? 0 : -1))
-            if (r10 != 0) goto L_0x0442
-            if (r14 <= 0) goto L_0x0442
+            if (r10 != 0) goto L_0x043c
+            if (r14 <= 0) goto L_0x043c
             int r9 = r14 + -1
             r9 = r28[r9]
-            if (r9 != 0) goto L_0x0442
+            if (r9 != 0) goto L_0x043c
             r9 = r31
-            if (r14 >= r9) goto L_0x0444
+            if (r14 >= r9) goto L_0x043e
             int r10 = r14 + 1
             r10 = r28[r10]
-            if (r10 != 0) goto L_0x0444
+            if (r10 != 0) goto L_0x043e
             int r10 = r0.transitionMode
             r12 = 2
-            if (r10 == r12) goto L_0x0444
+            if (r10 == r12) goto L_0x043e
             boolean[] r10 = r0.skipPoints
             boolean r10 = r10[r7]
-            if (r10 != 0) goto L_0x043a
-            if (r7 != r2) goto L_0x0435
+            if (r10 != 0) goto L_0x0434
+            if (r7 != r2) goto L_0x042f
             android.graphics.Path r10 = r13.chartPath
             r12 = 1065353216(0x3var_, float:1.0)
             float r6 = r12 - r6
             float r3 = r3 * r6
             r10.lineTo(r1, r3)
-            goto L_0x043a
-        L_0x0435:
+            goto L_0x0434
+        L_0x042f:
             android.graphics.Path r6 = r13.chartPath
             r6.lineTo(r1, r3)
-        L_0x043a:
+        L_0x0434:
             boolean[] r1 = r0.skipPoints
             r3 = 1
             r1[r7] = r3
             r12 = 1065353216(0x3var_, float:1.0)
-            goto L_0x0478
-        L_0x0442:
+            goto L_0x0472
+        L_0x043c:
             r9 = r31
-        L_0x0444:
+        L_0x043e:
             boolean[] r10 = r0.skipPoints
             boolean r10 = r10[r7]
-            if (r10 == 0) goto L_0x0460
-            if (r7 != r2) goto L_0x0458
+            if (r10 == 0) goto L_0x045a
+            if (r7 != r2) goto L_0x0452
             android.graphics.Path r10 = r13.chartPath
             r12 = 1065353216(0x3var_, float:1.0)
             float r15 = r12 - r6
             float r3 = r3 * r15
             r10.lineTo(r1, r3)
-            goto L_0x0462
-        L_0x0458:
+            goto L_0x045c
+        L_0x0452:
             r12 = 1065353216(0x3var_, float:1.0)
             android.graphics.Path r10 = r13.chartPath
             r10.lineTo(r1, r3)
-            goto L_0x0462
-        L_0x0460:
+            goto L_0x045c
+        L_0x045a:
             r12 = 1065353216(0x3var_, float:1.0)
-        L_0x0462:
-            if (r7 != r2) goto L_0x046e
+        L_0x045c:
+            if (r7 != r2) goto L_0x0468
             android.graphics.Path r1 = r13.chartPath
             float r3 = r12 - r6
             float r3 = r3 * r8
             r1.lineTo(r11, r3)
-            goto L_0x0473
-        L_0x046e:
+            goto L_0x046d
+        L_0x0468:
             android.graphics.Path r1 = r13.chartPath
             r1.lineTo(r11, r8)
-        L_0x0473:
+        L_0x046d:
             boolean[] r1 = r0.skipPoints
             r3 = 0
             r1[r7] = r3
-        L_0x0478:
-            if (r14 != r9) goto L_0x05a3
+        L_0x0472:
+            if (r14 != r9) goto L_0x059d
             int r1 = r35.getMeasuredWidth()
             float r1 = (float) r1
             int r3 = r35.getMeasuredHeight()
             float r3 = (float) r3
             int r6 = r0.transitionMode
             r10 = 2
-            if (r6 != r10) goto L_0x04b8
-            if (r7 == r2) goto L_0x04b8
+            if (r6 != r10) goto L_0x04b2
+            if (r7 == r2) goto L_0x04b2
             float[] r6 = r0.mapPoints
             float r1 = r1 + r4
             r10 = 0
@@ -740,15 +737,15 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             r6 = r1[r3]
             r3 = 1
             r1 = r1[r3]
-            goto L_0x04bd
-        L_0x04b8:
+            goto L_0x04b7
+        L_0x04b2:
             android.graphics.Path r6 = r13.chartPath
             r6.lineTo(r1, r3)
-        L_0x04bd:
+        L_0x04b7:
             int r1 = r0.transitionMode
             r3 = 2
-            if (r1 != r3) goto L_0x05a3
-            if (r7 == r2) goto L_0x05a3
+            if (r1 != r3) goto L_0x059d
+            if (r7 == r2) goto L_0x059d
             org.telegram.ui.Charts.view_data.TransitionParams r1 = r0.transitionParams
             float[] r3 = r1.startX
             r3 = r3[r7]
@@ -759,20 +756,20 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             float r1 = r1 / r3
             r3 = 0
             int r6 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-            if (r6 <= 0) goto L_0x04e4
+            if (r6 <= 0) goto L_0x04de
             r3 = r13
             double r12 = (double) r1
             double r12 = java.lang.Math.atan(r12)
             double r12 = -r12
             double r12 = java.lang.Math.toDegrees(r12)
-            goto L_0x04f2
-        L_0x04e4:
+            goto L_0x04ec
+        L_0x04de:
             r3 = r13
             float r1 = java.lang.Math.abs(r1)
             double r12 = (double) r1
             double r12 = java.lang.Math.atan(r12)
             double r12 = java.lang.Math.toDegrees(r12)
-        L_0x04f2:
+        L_0x04ec:
             float r1 = (float) r12
             float r1 = r1 - r30
             org.telegram.ui.Charts.view_data.TransitionParams r6 = r0.transitionParams
@@ -809,80 +806,80 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             double r12 = (double) r12
             r30 = 4562254508917369340(0x3var_dd2f1a9fc, double:0.001)
             int r15 = (r12 > r30 ? 1 : (r12 == r30 ? 0 : -1))
-            if (r15 >= 0) goto L_0x055e
+            if (r15 >= 0) goto L_0x0558
             int r12 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-            if (r12 >= 0) goto L_0x0545
+            if (r12 >= 0) goto L_0x053f
             int r12 = (r8 > r5 ? 1 : (r8 == r5 ? 0 : -1))
-            if (r12 < 0) goto L_0x054d
-        L_0x0545:
+            if (r12 < 0) goto L_0x0547
+        L_0x053f:
             int r12 = (r1 > r5 ? 1 : (r1 == r5 ? 0 : -1))
-            if (r12 <= 0) goto L_0x055e
+            if (r12 <= 0) goto L_0x0558
             int r12 = (r8 > r5 ? 1 : (r8 == r5 ? 0 : -1))
-            if (r12 <= 0) goto L_0x055e
-        L_0x054d:
+            if (r12 <= 0) goto L_0x0558
+        L_0x0547:
             org.telegram.ui.Charts.view_data.TransitionParams r1 = r0.transitionParams
             float[] r1 = r1.angle
             r1 = r1[r7]
             r8 = -1020002304(0xffffffffCLASSNAME, float:-180.0)
             int r1 = (r1 > r8 ? 1 : (r1 == r8 ? 0 : -1))
-            if (r1 != 0) goto L_0x055b
+            if (r1 != 0) goto L_0x0555
             r1 = 0
-            goto L_0x055c
-        L_0x055b:
+            goto L_0x0556
+        L_0x0555:
             r1 = 3
-        L_0x055c:
+        L_0x0556:
             r11 = 0
-            goto L_0x0566
-        L_0x055e:
+            goto L_0x0560
+        L_0x0558:
             int r11 = r0.quarterForPoint(r11, r8)
             int r1 = r0.quarterForPoint(r10, r1)
-        L_0x0566:
-            if (r11 > r1) goto L_0x05a4
-            if (r11 != 0) goto L_0x0578
+        L_0x0560:
+            if (r11 > r1) goto L_0x059e
+            if (r11 != 0) goto L_0x0572
             android.graphics.Path r8 = r3.chartPath
             int r10 = r35.getMeasuredWidth()
             float r10 = (float) r10
             r12 = 0
             r8.lineTo(r10, r12)
-        L_0x0575:
+        L_0x056f:
             r10 = 2
             r13 = 0
-            goto L_0x05a0
-        L_0x0578:
+            goto L_0x059a
+        L_0x0572:
             r8 = 1
-            if (r11 != r8) goto L_0x058b
+            if (r11 != r8) goto L_0x0585
             android.graphics.Path r8 = r3.chartPath
             int r10 = r35.getMeasuredWidth()
             float r10 = (float) r10
             int r12 = r35.getMeasuredHeight()
             float r12 = (float) r12
             r8.lineTo(r10, r12)
-            goto L_0x0575
-        L_0x058b:
+            goto L_0x056f
+        L_0x0585:
             r10 = 2
-            if (r11 != r10) goto L_0x059a
+            if (r11 != r10) goto L_0x0594
             android.graphics.Path r8 = r3.chartPath
             int r12 = r35.getMeasuredHeight()
             float r12 = (float) r12
             r13 = 0
             r8.lineTo(r13, r12)
-            goto L_0x05a0
-        L_0x059a:
+            goto L_0x059a
+        L_0x0594:
             r13 = 0
             android.graphics.Path r8 = r3.chartPath
             r8.lineTo(r13, r13)
-        L_0x05a0:
+        L_0x059a:
             int r11 = r11 + 1
-            goto L_0x0566
-        L_0x05a3:
+            goto L_0x0560
+        L_0x059d:
             r6 = 0
-        L_0x05a4:
+        L_0x059e:
             r10 = 2
             r13 = 0
             float r1 = r29 + r21
             r8 = r23
             r15 = r24
-        L_0x05ac:
+        L_0x05a6:
             int r7 = r7 + 1
             r6 = r1
             r21 = r2
@@ -894,7 +891,7 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             r12 = r33
             r1 = r36
             goto L_0x0194
-        L_0x05c0:
+        L_0x05ba:
             r26 = r2
             r27 = r3
             r23 = r8
@@ -911,7 +908,7 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             r9 = r32
             r13 = 1
             goto L_0x0150
-        L_0x05db:
+        L_0x05d5:
             r22 = r7
             r36.save()
             int r1 = org.telegram.ui.Charts.BaseChartView.SIGNATURE_TEXT_HEIGHT
@@ -922,17 +919,17 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             float r2 = (float) r2
             r3 = r36
             r3.clipRect(r15, r1, r8, r2)
-            if (r18 == 0) goto L_0x05fb
+            if (r18 == 0) goto L_0x05f5
             java.lang.String r1 = "statisticChartLineEmpty"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r3.drawColor(r1)
-        L_0x05fb:
+        L_0x05f5:
             java.util.ArrayList<L> r1 = r0.lines
             int r1 = r1.size()
             r2 = 1
             int r1 = r1 - r2
-        L_0x0603:
-            if (r1 < 0) goto L_0x0625
+        L_0x05fd:
+            if (r1 < 0) goto L_0x061f
             java.util.ArrayList<L> r2 = r0.lines
             java.lang.Object r2 = r2.get(r1)
             org.telegram.ui.Charts.view_data.LineViewData r2 = (org.telegram.ui.Charts.view_data.LineViewData) r2
@@ -946,11 +943,11 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             r4 = 255(0xff, float:3.57E-43)
             r2.setAlpha(r4)
             int r1 = r1 + -1
-            goto L_0x0603
+            goto L_0x05fd
+        L_0x061f:
+            r36.restore()
+            r36.restore()
         L_0x0625:
-            r36.restore()
-            r36.restore()
-        L_0x062b:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Charts.StackLinearChartView.drawChart(android.graphics.Canvas):void");
@@ -1261,8 +1258,8 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:41:0x0137  */
-    /* JADX WARNING: Removed duplicated region for block: B:42:0x0142  */
+    /* JADX WARNING: Removed duplicated region for block: B:41:0x0135  */
+    /* JADX WARNING: Removed duplicated region for block: B:42:0x0140  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void fillTransitionParams(org.telegram.ui.Charts.view_data.TransitionParams r18) {
         /*
@@ -1281,38 +1278,37 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             float r3 = r3 * r2
             float r4 = org.telegram.ui.Charts.BaseChartView.HORIZONTAL_PADDING
             float r3 = r3 - r4
-            r4 = r1
-            org.telegram.ui.Charts.data.StackLinearChartData r4 = (org.telegram.ui.Charts.data.StackLinearChartData) r4
-            float[] r4 = r4.xPercentage
-            int r4 = r4.length
-            r5 = 2
-            r6 = 1
-            if (r4 >= r5) goto L_0x0023
+            r5 = r1
+            org.telegram.ui.Charts.data.StackLinearChartData r5 = (org.telegram.ui.Charts.data.StackLinearChartData) r5
+            float[] r5 = r5.xPercentage
+            int r5 = r5.length
+            r6 = 2
+            r7 = 1
+            if (r5 >= r6) goto L_0x0023
             r1 = 1065353216(0x3var_, float:1.0)
             goto L_0x002b
         L_0x0023:
             org.telegram.ui.Charts.data.StackLinearChartData r1 = (org.telegram.ui.Charts.data.StackLinearChartData) r1
             float[] r1 = r1.xPercentage
-            r1 = r1[r6]
+            r1 = r1[r7]
             float r1 = r1 * r2
         L_0x002b:
-            float r4 = org.telegram.ui.Charts.BaseChartView.HORIZONTAL_PADDING
             float r4 = r4 / r1
             int r1 = (int) r4
-            int r1 = r1 + r6
+            int r1 = r1 + r7
             int r4 = r0.startXIndex
             int r4 = r4 - r1
-            int r4 = r4 - r6
-            r7 = 0
-            int r4 = java.lang.Math.max(r7, r4)
+            int r4 = r4 - r7
+            r5 = 0
+            int r4 = java.lang.Math.max(r5, r4)
             T r8 = r0.chartData
             org.telegram.ui.Charts.data.StackLinearChartData r8 = (org.telegram.ui.Charts.data.StackLinearChartData) r8
             float[] r8 = r8.xPercentage
             int r8 = r8.length
-            int r8 = r8 - r6
+            int r8 = r8 - r7
             int r9 = r0.endXIndex
             int r9 = r9 + r1
-            int r9 = r9 + r6
+            int r9 = r9 + r7
             int r1 = java.lang.Math.min(r8, r9)
             org.telegram.ui.Charts.view_data.TransitionParams r8 = r0.transitionParams
             T r9 = r0.chartData
@@ -1350,84 +1346,84 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             float[] r9 = new float[r9]
             r8.angle = r9
             r8 = 0
-        L_0x009a:
-            if (r8 >= r5) goto L_0x0159
-            if (r8 != r6) goto L_0x00a0
+        L_0x0098:
+            if (r8 >= r6) goto L_0x0157
+            if (r8 != r7) goto L_0x009e
             r9 = r1
-            goto L_0x00a1
-        L_0x00a0:
+            goto L_0x009f
+        L_0x009e:
             r9 = r4
-        L_0x00a1:
+        L_0x009f:
             r10 = 0
             r11 = 0
             r12 = 0
             r13 = 0
-        L_0x00a5:
+        L_0x00a3:
             java.util.ArrayList<L> r14 = r0.lines
             int r14 = r14.size()
-            if (r11 >= r14) goto L_0x00d5
+            if (r11 >= r14) goto L_0x00d3
             java.util.ArrayList<L> r14 = r0.lines
             java.lang.Object r14 = r14.get(r11)
             org.telegram.ui.Charts.view_data.LineViewData r14 = (org.telegram.ui.Charts.view_data.LineViewData) r14
             boolean r15 = r14.enabled
-            if (r15 != 0) goto L_0x00c0
+            if (r15 != 0) goto L_0x00be
             float r15 = r14.alpha
             int r15 = (r15 > r10 ? 1 : (r15 == r10 ? 0 : -1))
-            if (r15 != 0) goto L_0x00c0
-            goto L_0x00d2
-        L_0x00c0:
+            if (r15 != 0) goto L_0x00be
+            goto L_0x00d0
+        L_0x00be:
             org.telegram.ui.Charts.data.ChartData$Line r15 = r14.line
             int[] r15 = r15.y
             r16 = r15[r9]
-            if (r16 <= 0) goto L_0x00d2
+            if (r16 <= 0) goto L_0x00d0
             r15 = r15[r9]
             float r15 = (float) r15
             float r14 = r14.alpha
             float r15 = r15 * r14
             float r12 = r12 + r15
             int r13 = r13 + 1
-        L_0x00d2:
+        L_0x00d0:
             int r11 = r11 + 1
-            goto L_0x00a5
-        L_0x00d5:
+            goto L_0x00a3
+        L_0x00d3:
             r11 = 0
             r14 = 0
-        L_0x00d7:
+        L_0x00d5:
             java.util.ArrayList<L> r15 = r0.lines
             int r15 = r15.size()
-            if (r11 >= r15) goto L_0x0152
+            if (r11 >= r15) goto L_0x0150
             java.util.ArrayList<L> r15 = r0.lines
             java.lang.Object r15 = r15.get(r11)
             org.telegram.ui.Charts.view_data.LineViewData r15 = (org.telegram.ui.Charts.view_data.LineViewData) r15
             boolean r5 = r15.enabled
-            if (r5 != 0) goto L_0x00f2
+            if (r5 != 0) goto L_0x00f0
             float r5 = r15.alpha
             int r5 = (r5 > r10 ? 1 : (r5 == r10 ? 0 : -1))
-            if (r5 != 0) goto L_0x00f2
-            goto L_0x014c
-        L_0x00f2:
+            if (r5 != 0) goto L_0x00f0
+            goto L_0x014a
+        L_0x00f0:
             org.telegram.ui.Charts.data.ChartData$Line r5 = r15.line
             int[] r5 = r5.y
-            if (r13 != r6) goto L_0x0100
+            if (r13 != r7) goto L_0x00fe
             r5 = r5[r9]
-            if (r5 != 0) goto L_0x00fd
-            goto L_0x0104
-        L_0x00fd:
+            if (r5 != 0) goto L_0x00fb
+            goto L_0x0102
+        L_0x00fb:
             float r5 = r15.alpha
-            goto L_0x010e
-        L_0x0100:
+            goto L_0x010c
+        L_0x00fe:
             int r16 = (r12 > r10 ? 1 : (r12 == r10 ? 0 : -1))
-            if (r16 != 0) goto L_0x0106
-        L_0x0104:
+            if (r16 != 0) goto L_0x0104
+        L_0x0102:
             r5 = 0
-            goto L_0x010e
-        L_0x0106:
+            goto L_0x010c
+        L_0x0104:
             r5 = r5[r9]
             float r5 = (float) r5
             float r15 = r15.alpha
             float r5 = r5 * r15
             float r5 = r5 / r12
-        L_0x010e:
+        L_0x010c:
             T r15 = r0.chartData
             org.telegram.ui.Charts.data.StackLinearChartData r15 = (org.telegram.ui.Charts.data.StackLinearChartData) r15
             float[] r15 = r15.xPercentage
@@ -1450,32 +1446,32 @@ public class StackLinearChartView<T extends StackLinearViewData> extends BaseCha
             float r6 = r6 - r7
             float r7 = r7 + r5
             int r14 = (int) r7
-            if (r8 != 0) goto L_0x0142
+            if (r8 != 0) goto L_0x0140
             org.telegram.ui.Charts.view_data.TransitionParams r5 = r0.transitionParams
             float[] r7 = r5.startX
             r7[r11] = r15
             float[] r5 = r5.startY
             r5[r11] = r6
-            goto L_0x014c
-        L_0x0142:
+            goto L_0x014a
+        L_0x0140:
             org.telegram.ui.Charts.view_data.TransitionParams r5 = r0.transitionParams
             float[] r7 = r5.endX
             r7[r11] = r15
             float[] r5 = r5.endY
             r5[r11] = r6
-        L_0x014c:
+        L_0x014a:
             int r11 = r11 + 1
-            r5 = 2
-            r6 = 1
-            r7 = 0
-            goto L_0x00d7
-        L_0x0152:
+            r5 = 0
+            r6 = 2
+            r7 = 1
+            goto L_0x00d5
+        L_0x0150:
             int r8 = r8 + 1
-            r5 = 2
-            r6 = 1
-            r7 = 0
-            goto L_0x009a
-        L_0x0159:
+            r5 = 0
+            r6 = 2
+            r7 = 1
+            goto L_0x0098
+        L_0x0157:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Charts.StackLinearChartView.fillTransitionParams(org.telegram.ui.Charts.view_data.TransitionParams):void");

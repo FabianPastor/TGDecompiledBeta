@@ -82,45 +82,15 @@ public class PatternCell extends BackupImageView implements DownloadController.F
         updateSelected(false);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:4:0x000f, code lost:
-        r1 = r7.currentPattern;
-     */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void updateSelected(boolean r8) {
-        /*
-            r7 = this;
-            org.telegram.ui.Cells.PatternCell$PatternCellDelegate r0 = r7.delegate
-            org.telegram.tgnet.TLRPC$TL_wallPaper r0 = r0.getSelectedPattern()
-            org.telegram.tgnet.TLRPC$TL_wallPaper r1 = r7.currentPattern
-            r2 = 0
-            if (r1 != 0) goto L_0x000d
-            if (r0 == 0) goto L_0x001b
-        L_0x000d:
-            if (r0 == 0) goto L_0x001d
-            org.telegram.tgnet.TLRPC$TL_wallPaper r1 = r7.currentPattern
-            if (r1 == 0) goto L_0x001d
-            long r3 = r1.id
-            long r5 = r0.id
-            int r1 = (r3 > r5 ? 1 : (r3 == r5 ? 0 : -1))
-            if (r1 != 0) goto L_0x001d
-        L_0x001b:
-            r1 = 1
-            goto L_0x001e
-        L_0x001d:
-            r1 = 0
-        L_0x001e:
-            if (r1 == 0) goto L_0x0024
-            r7.updateButtonState(r0, r2, r8)
-            goto L_0x002a
-        L_0x0024:
-            org.telegram.ui.Components.RadialProgress2 r0 = r7.radialProgress
-            r1 = 4
-            r0.setIcon(r1, r2, r8)
-        L_0x002a:
-            r7.invalidate()
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.PatternCell.updateSelected(boolean):void");
+    public void updateSelected(boolean z) {
+        TLRPC$TL_wallPaper selectedPattern = this.delegate.getSelectedPattern();
+        TLRPC$TL_wallPaper tLRPC$TL_wallPaper = this.currentPattern;
+        if ((tLRPC$TL_wallPaper == null && selectedPattern == null) || !(selectedPattern == null || tLRPC$TL_wallPaper == null || tLRPC$TL_wallPaper.id != selectedPattern.id)) {
+            updateButtonState(selectedPattern, false, z);
+        } else {
+            this.radialProgress.setIcon(4, false, z);
+        }
+        invalidate();
     }
 
     private void updateButtonState(Object obj, boolean z, boolean z2) {

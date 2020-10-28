@@ -42,41 +42,32 @@ public class TimerDrawable extends Drawable {
     public void setTime(int i) {
         String str;
         this.time = i;
-        if (i < 1 || i >= 60) {
-            int i2 = this.time;
-            if (i2 < 60 || i2 >= 3600) {
-                int i3 = this.time;
-                if (i3 < 3600 || i3 >= 86400) {
-                    int i4 = this.time;
-                    if (i4 < 86400 || i4 >= 604800) {
-                        str = "" + ((((i / 60) / 60) / 24) / 7);
-                        if (str.length() < 2) {
-                            str = str + LocaleController.getString("SecretChatTimerWeeks", NUM);
-                        } else if (str.length() > 2) {
-                            str = "c";
-                        }
-                    } else {
-                        str = "" + (((i / 60) / 60) / 24);
-                        if (str.length() < 2) {
-                            str = str + LocaleController.getString("SecretChatTimerDays", NUM);
-                        }
-                    }
-                } else {
-                    str = "" + ((i / 60) / 60);
-                    if (str.length() < 2) {
-                        str = str + LocaleController.getString("SecretChatTimerHours", NUM);
-                    }
-                }
-            } else {
-                str = "" + (i / 60);
-                if (str.length() < 2) {
-                    str = str + LocaleController.getString("SecretChatTimerMinutes", NUM);
-                }
-            }
-        } else {
+        if (i >= 1 && i < 60) {
             str = "" + i;
             if (str.length() < 2) {
                 str = str + LocaleController.getString("SecretChatTimerSeconds", NUM);
+            }
+        } else if (i >= 60 && i < 3600) {
+            str = "" + (i / 60);
+            if (str.length() < 2) {
+                str = str + LocaleController.getString("SecretChatTimerMinutes", NUM);
+            }
+        } else if (i >= 3600 && i < 86400) {
+            str = "" + ((i / 60) / 60);
+            if (str.length() < 2) {
+                str = str + LocaleController.getString("SecretChatTimerHours", NUM);
+            }
+        } else if (i < 86400 || i >= 604800) {
+            str = "" + ((((i / 60) / 60) / 24) / 7);
+            if (str.length() < 2) {
+                str = str + LocaleController.getString("SecretChatTimerWeeks", NUM);
+            } else if (str.length() > 2) {
+                str = "c";
+            }
+        } else {
+            str = "" + (((i / 60) / 60) / 24);
+            if (str.length() < 2) {
+                str = str + LocaleController.getString("SecretChatTimerDays", NUM);
             }
         }
         String str2 = str;

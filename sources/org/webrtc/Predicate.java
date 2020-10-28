@@ -15,15 +15,15 @@ public interface Predicate<T> {
             return new Predicate<T>(predicate) {
                 final /* synthetic */ Predicate val$other;
 
-                public /* synthetic */ Predicate<T> and(Predicate<? super T> predicate) {
+                public /* synthetic */ Predicate and(Predicate predicate) {
                     return CC.$default$and(this, predicate);
                 }
 
-                public /* synthetic */ Predicate<T> negate() {
+                public /* synthetic */ Predicate negate() {
                     return CC.$default$negate(this);
                 }
 
-                public /* synthetic */ Predicate<T> or(Predicate<? super T> predicate) {
+                public /* synthetic */ Predicate or(Predicate predicate) {
                     return CC.$default$or(this, predicate);
                 }
 
@@ -41,15 +41,15 @@ public interface Predicate<T> {
             return new Predicate<T>(predicate) {
                 final /* synthetic */ Predicate val$other;
 
-                public /* synthetic */ Predicate<T> and(Predicate<? super T> predicate) {
+                public /* synthetic */ Predicate and(Predicate predicate) {
                     return CC.$default$and(this, predicate);
                 }
 
-                public /* synthetic */ Predicate<T> negate() {
+                public /* synthetic */ Predicate negate() {
                     return CC.$default$negate(this);
                 }
 
-                public /* synthetic */ Predicate<T> or(Predicate<? super T> predicate) {
+                public /* synthetic */ Predicate or(Predicate predicate) {
                     return CC.$default$or(this, predicate);
                 }
 
@@ -65,15 +65,15 @@ public interface Predicate<T> {
 
         public static Predicate $default$negate(Predicate _this) {
             return new Predicate<T>() {
-                public /* synthetic */ Predicate<T> and(Predicate<? super T> predicate) {
+                public /* synthetic */ Predicate and(Predicate predicate) {
                     return CC.$default$and(this, predicate);
                 }
 
-                public /* synthetic */ Predicate<T> negate() {
+                public /* synthetic */ Predicate negate() {
                     return CC.$default$negate(this);
                 }
 
-                public /* synthetic */ Predicate<T> or(Predicate<? super T> predicate) {
+                public /* synthetic */ Predicate or(Predicate predicate) {
                     return CC.$default$or(this, predicate);
                 }
 

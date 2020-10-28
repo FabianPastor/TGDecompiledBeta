@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<vector xmlns:android="http://schemas.android.com/apk/res/android" android:name="ft_avd_toarrow" android:height="24dp" android:width="24dp" android:viewportWidth="24" android:viewportHeight="24">
+<vector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt" android:name="ft_avd_toarrow" android:height="24dp" android:width="24dp" android:viewportWidth="24" android:viewportHeight="24">
     <group android:name="carrot_3" android:translateX="12" android:translateY="12">
         <group android:name="rectangle_4" android:translateY="6">
             <group android:name="rectangle_3_pivot_0">

@@ -131,12 +131,12 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         this.addingException = bundle.getBoolean("exception", false);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:33:0x00ce  */
-    /* JADX WARNING: Removed duplicated region for block: B:34:0x00e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:39:0x0129  */
-    /* JADX WARNING: Removed duplicated region for block: B:40:0x012b  */
-    /* JADX WARNING: Removed duplicated region for block: B:43:0x015c  */
-    /* JADX WARNING: Removed duplicated region for block: B:46:0x0170  */
+    /* JADX WARNING: Removed duplicated region for block: B:33:0x00c8  */
+    /* JADX WARNING: Removed duplicated region for block: B:34:0x00e3  */
+    /* JADX WARNING: Removed duplicated region for block: B:39:0x0123  */
+    /* JADX WARNING: Removed duplicated region for block: B:40:0x0125  */
+    /* JADX WARNING: Removed duplicated region for block: B:43:0x0156  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x016a  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onFragmentCreate() {
         /*
@@ -147,102 +147,99 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             r2 = -1
             r3 = 1
             if (r1 == 0) goto L_0x001a
-            r1 = 0
-            int r1 = r1 + r3
-            r8.rowCount = r1
-            r8.avatarRow = r0
-            int r4 = r1 + 1
+            r4 = 0
+            int r4 = r4 + r3
             r8.rowCount = r4
-            r8.avatarSectionRow = r1
+            r8.avatarRow = r0
+            int r5 = r4 + 1
+            r8.rowCount = r5
+            r8.avatarSectionRow = r4
             r8.customRow = r2
             r8.customInfoRow = r2
             goto L_0x002a
         L_0x001a:
             r8.avatarRow = r2
             r8.avatarSectionRow = r2
-            r1 = 0
-            int r1 = r1 + r3
-            r8.rowCount = r1
+            r4 = 0
+            int r4 = r4 + r3
+            r8.rowCount = r4
             r8.customRow = r0
-            int r4 = r1 + 1
-            r8.rowCount = r4
-            r8.customInfoRow = r1
+            int r5 = r4 + 1
+            r8.rowCount = r5
+            r8.customInfoRow = r4
         L_0x002a:
-            int r1 = r8.rowCount
-            int r4 = r1 + 1
-            r8.rowCount = r4
-            r8.generalRow = r1
-            boolean r1 = r8.addingException
-            if (r1 == 0) goto L_0x003d
-            int r1 = r4 + 1
+            int r4 = r8.rowCount
+            int r5 = r4 + 1
+            r8.rowCount = r5
+            r8.generalRow = r4
+            if (r1 == 0) goto L_0x003b
+            int r1 = r5 + 1
             r8.rowCount = r1
-            r8.enableRow = r4
-            goto L_0x003f
-        L_0x003d:
+            r8.enableRow = r5
+            goto L_0x003d
+        L_0x003b:
             r8.enableRow = r2
-        L_0x003f:
+        L_0x003d:
             long r4 = r8.dialog_id
             int r1 = (int) r4
-            if (r1 == 0) goto L_0x004d
+            if (r1 == 0) goto L_0x004b
             int r1 = r8.rowCount
-            int r4 = r1 + 1
-            r8.rowCount = r4
+            int r6 = r1 + 1
+            r8.rowCount = r6
             r8.previewRow = r1
-            goto L_0x004f
-        L_0x004d:
+            goto L_0x004d
+        L_0x004b:
             r8.previewRow = r2
-        L_0x004f:
+        L_0x004d:
             int r1 = r8.rowCount
-            int r4 = r1 + 1
-            r8.rowCount = r4
+            int r6 = r1 + 1
+            r8.rowCount = r6
             r8.soundRow = r1
-            int r1 = r4 + 1
+            int r1 = r6 + 1
             r8.rowCount = r1
-            r8.vibrateRow = r4
-            long r4 = r8.dialog_id
-            int r5 = (int) r4
-            if (r5 >= 0) goto L_0x0069
-            int r4 = r1 + 1
-            r8.rowCount = r4
+            r8.vibrateRow = r6
+            int r6 = (int) r4
+            if (r6 >= 0) goto L_0x0065
+            int r6 = r1 + 1
+            r8.rowCount = r6
             r8.smartRow = r1
-            goto L_0x006b
-        L_0x0069:
+            goto L_0x0067
+        L_0x0065:
             r8.smartRow = r2
-        L_0x006b:
+        L_0x0067:
             int r1 = android.os.Build.VERSION.SDK_INT
-            r4 = 21
-            if (r1 < r4) goto L_0x007a
+            r6 = 21
+            if (r1 < r6) goto L_0x0076
             int r1 = r8.rowCount
-            int r4 = r1 + 1
-            r8.rowCount = r4
+            int r6 = r1 + 1
+            r8.rowCount = r6
             r8.priorityRow = r1
-            goto L_0x007c
-        L_0x007a:
+            goto L_0x0078
+        L_0x0076:
             r8.priorityRow = r2
-        L_0x007c:
+        L_0x0078:
             int r1 = r8.rowCount
-            int r4 = r1 + 1
-            r8.rowCount = r4
+            int r6 = r1 + 1
+            r8.rowCount = r6
             r8.priorityInfoRow = r1
-            long r4 = r8.dialog_id
             int r1 = (int) r4
-            if (r1 >= 0) goto L_0x00a4
+            if (r1 >= 0) goto L_0x009e
             int r4 = r8.currentAccount
             org.telegram.messenger.MessagesController r4 = org.telegram.messenger.MessagesController.getInstance(r4)
             int r5 = -r1
             java.lang.Integer r5 = java.lang.Integer.valueOf(r5)
             org.telegram.tgnet.TLRPC$Chat r4 = r4.getChat(r5)
             boolean r5 = org.telegram.messenger.ChatObject.isChannel(r4)
-            if (r5 == 0) goto L_0x00a4
+            if (r5 == 0) goto L_0x009e
             boolean r4 = r4.megagroup
-            if (r4 != 0) goto L_0x00a4
+            if (r4 != 0) goto L_0x009e
             r4 = 1
-            goto L_0x00a5
-        L_0x00a4:
+            goto L_0x009f
+        L_0x009e:
             r4 = 0
-        L_0x00a5:
-            if (r1 == 0) goto L_0x00c4
-            if (r4 != 0) goto L_0x00c4
+        L_0x009f:
+            if (r1 == 0) goto L_0x00be
+            if (r4 != 0) goto L_0x00be
             int r4 = r8.rowCount
             int r5 = r4 + 1
             r8.rowCount = r5
@@ -256,14 +253,14 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             int r4 = r5 + 1
             r8.rowCount = r4
             r8.popupInfoRow = r5
-            goto L_0x00cc
-        L_0x00c4:
+            goto L_0x00c6
+        L_0x00be:
             r8.popupRow = r2
             r8.popupEnabledRow = r2
             r8.popupDisabledRow = r2
             r8.popupInfoRow = r2
-        L_0x00cc:
-            if (r1 <= 0) goto L_0x00e9
+        L_0x00c6:
+            if (r1 <= 0) goto L_0x00e3
             int r1 = r8.rowCount
             int r2 = r1 + 1
             r8.rowCount = r2
@@ -277,13 +274,13 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             int r1 = r2 + 1
             r8.rowCount = r1
             r8.ringtoneInfoRow = r2
-            goto L_0x00f1
-        L_0x00e9:
+            goto L_0x00eb
+        L_0x00e3:
             r8.callsRow = r2
             r8.callsVibrateRow = r2
             r8.ringtoneRow = r2
             r8.ringtoneInfoRow = r2
-        L_0x00f1:
+        L_0x00eb:
             int r1 = r8.rowCount
             int r2 = r1 + 1
             r8.rowCount = r2
@@ -304,16 +301,16 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             r2.append(r4)
             java.lang.String r2 = r2.toString()
             boolean r2 = r1.getBoolean(r2, r0)
-            if (r2 != 0) goto L_0x012b
+            if (r2 != 0) goto L_0x0125
             boolean r2 = r8.addingException
-            if (r2 == 0) goto L_0x0129
-            goto L_0x012b
-        L_0x0129:
+            if (r2 == 0) goto L_0x0123
+            goto L_0x0125
+        L_0x0123:
             r2 = 0
-            goto L_0x012c
-        L_0x012b:
+            goto L_0x0126
+        L_0x0125:
             r2 = 1
-        L_0x012c:
+        L_0x0126:
             r8.customEnabled = r2
             java.lang.StringBuilder r2 = new java.lang.StringBuilder
             r2.<init>()
@@ -330,29 +327,29 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
             r5.append(r6)
             java.lang.String r4 = r5.toString()
             int r1 = r1.getInt(r4, r0)
-            if (r1 != 0) goto L_0x0170
-            if (r2 == 0) goto L_0x0161
+            if (r1 != 0) goto L_0x016a
+            if (r2 == 0) goto L_0x015b
             r8.notificationsEnabled = r3
-            goto L_0x017d
-        L_0x0161:
+            goto L_0x0177
+        L_0x015b:
             int r0 = r8.currentAccount
             org.telegram.messenger.NotificationsController r0 = org.telegram.messenger.NotificationsController.getInstance(r0)
             long r1 = r8.dialog_id
             boolean r0 = r0.isGlobalNotificationsEnabled((long) r1)
             r8.notificationsEnabled = r0
-            goto L_0x017d
-        L_0x0170:
-            if (r1 != r3) goto L_0x0175
+            goto L_0x0177
+        L_0x016a:
+            if (r1 != r3) goto L_0x016f
             r8.notificationsEnabled = r3
-            goto L_0x017d
-        L_0x0175:
+            goto L_0x0177
+        L_0x016f:
             r2 = 2
-            if (r1 != r2) goto L_0x017b
+            if (r1 != r2) goto L_0x0175
             r8.notificationsEnabled = r0
-            goto L_0x017d
-        L_0x017b:
+            goto L_0x0177
+        L_0x0175:
             r8.notificationsEnabled = r0
-        L_0x017d:
+        L_0x0177:
             int r0 = r8.currentAccount
             org.telegram.messenger.NotificationCenter r0 = org.telegram.messenger.NotificationCenter.getInstance(r0)
             int r1 = org.telegram.messenger.NotificationCenter.notificationsSettingsUpdated
@@ -613,24 +610,32 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 }
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onItemClick$0 */
             public /* synthetic */ void lambda$onItemClick$0$ProfileNotificationsActivity$3() {
                 if (ProfileNotificationsActivity.this.adapter != null) {
                     ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.vibrateRow);
                 }
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onItemClick$1 */
             public /* synthetic */ void lambda$onItemClick$1$ProfileNotificationsActivity$3() {
                 if (ProfileNotificationsActivity.this.adapter != null) {
                     ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.callsVibrateRow);
                 }
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onItemClick$2 */
             public /* synthetic */ void lambda$onItemClick$2$ProfileNotificationsActivity$3() {
                 if (ProfileNotificationsActivity.this.adapter != null) {
                     ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.priorityRow);
                 }
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onItemClick$3 */
             public /* synthetic */ void lambda$onItemClick$3$ProfileNotificationsActivity$3(View view, int i) {
                 if (i >= 0 && i < 100) {
                     SharedPreferences notificationsSettings = MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount);
@@ -645,6 +650,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 }
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onItemClick$4 */
             public /* synthetic */ void lambda$onItemClick$4$ProfileNotificationsActivity$3(DialogInterface dialogInterface, int i) {
                 SharedPreferences.Editor edit = MessagesController.getNotificationsSettings(ProfileNotificationsActivity.this.currentAccount).edit();
                 edit.putInt("smart_max_count_" + ProfileNotificationsActivity.this.dialog_id, 0).commit();
@@ -654,6 +661,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                 ProfileNotificationsActivity.this.dismissCurrentDialog();
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onItemClick$5 */
             public /* synthetic */ void lambda$onItemClick$5$ProfileNotificationsActivity$3() {
                 if (ProfileNotificationsActivity.this.adapter != null) {
                     ProfileNotificationsActivity.this.adapter.notifyItemChanged(ProfileNotificationsActivity.this.colorRow);
@@ -822,51 +831,44 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
             View view;
-            TextCheckCell textCheckCell;
+            View view2;
             switch (i) {
                 case 0:
-                    HeaderCell headerCell = new HeaderCell(this.context);
-                    headerCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    textCheckCell = headerCell;
+                    view2 = new HeaderCell(this.context);
+                    view2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 case 1:
-                    TextSettingsCell textSettingsCell = new TextSettingsCell(this.context);
-                    textSettingsCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    textCheckCell = textSettingsCell;
+                    view2 = new TextSettingsCell(this.context);
+                    view2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 case 2:
                     view = new TextInfoPrivacyCell(this.context);
                     break;
                 case 3:
-                    TextColorCell textColorCell = new TextColorCell(this.context);
-                    textColorCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    textCheckCell = textColorCell;
+                    view2 = new TextColorCell(this.context);
+                    view2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 case 4:
-                    RadioCell radioCell = new RadioCell(this.context);
-                    radioCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    textCheckCell = radioCell;
+                    view2 = new RadioCell(this.context);
+                    view2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 case 5:
-                    TextCheckBoxCell textCheckBoxCell = new TextCheckBoxCell(this.context);
-                    textCheckBoxCell.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    textCheckCell = textCheckBoxCell;
+                    view2 = new TextCheckBoxCell(this.context);
+                    view2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 case 6:
-                    UserCell2 userCell2 = new UserCell2(this.context, 4, 0);
-                    userCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    textCheckCell = userCell2;
+                    view2 = new UserCell2(this.context, 4, 0);
+                    view2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
                 case 7:
                     view = new ShadowSectionCell(this.context);
                     break;
                 default:
-                    TextCheckCell textCheckCell2 = new TextCheckCell(this.context);
-                    textCheckCell2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-                    textCheckCell = textCheckCell2;
+                    view2 = new TextCheckCell(this.context);
+                    view2.setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
                     break;
             }
-            view = textCheckCell;
+            view = view2;
             view.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
             return new RecyclerListView.Holder(view);
         }
@@ -1207,7 +1209,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$ProfileNotificationsActivity$7A70wCksskw_wSSS5mOEgsRl6M r11 = new ThemeDescription.ThemeDescriptionDelegate() {
+        $$Lambda$ProfileNotificationsActivity$wdkiUreQfi0m_HnbGYNjjCSZFo r11 = new ThemeDescription.ThemeDescriptionDelegate() {
             public final void didSetColor() {
                 ProfileNotificationsActivity.this.lambda$getThemeDescriptions$0$ProfileNotificationsActivity();
             }
@@ -1236,11 +1238,11 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrack"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{TextCheckCell.class}, new String[]{"checkBox"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "switchTrackChecked"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-        $$Lambda$ProfileNotificationsActivity$7A70wCksskw_wSSS5mOEgsRl6M r9 = r11;
+        $$Lambda$ProfileNotificationsActivity$wdkiUreQfi0m_HnbGYNjjCSZFo r9 = r11;
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"statusColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteGrayText"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{UserCell2.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "windowBackgroundWhiteBlueText"));
         arrayList.add(new ThemeDescription(this.listView, 0, new Class[]{UserCell2.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        $$Lambda$ProfileNotificationsActivity$7A70wCksskw_wSSS5mOEgsRl6M r8 = r11;
+        $$Lambda$ProfileNotificationsActivity$wdkiUreQfi0m_HnbGYNjjCSZFo r8 = r11;
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundRed"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundOrange"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundViolet"));
@@ -1256,6 +1258,8 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
         return arrayList;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$getThemeDescriptions$0 */
     public /* synthetic */ void lambda$getThemeDescriptions$0$ProfileNotificationsActivity() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {

@@ -79,7 +79,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     private int maxSelectedFiles = -1;
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
-            $$Lambda$ChatAttachAlertDocumentLayout$1$M9YBntylu8hJc0yBthipOhUemHY r3 = new Runnable() {
+            $$Lambda$ChatAttachAlertDocumentLayout$1$f3hr_nbX6ALeTmaPbT6gulIKuc r3 = new Runnable() {
                 public final void run() {
                     ChatAttachAlertDocumentLayout.AnonymousClass1.this.lambda$onReceive$0$ChatAttachAlertDocumentLayout$1();
                 }
@@ -91,12 +91,15 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             }
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onReceive$0 */
         public /* synthetic */ void lambda$onReceive$0$ChatAttachAlertDocumentLayout$1() {
             try {
                 if (ChatAttachAlertDocumentLayout.this.currentDir == null) {
                     ChatAttachAlertDocumentLayout.this.listRoots();
                 } else {
-                    boolean unused = ChatAttachAlertDocumentLayout.this.listFiles(ChatAttachAlertDocumentLayout.this.currentDir);
+                    ChatAttachAlertDocumentLayout chatAttachAlertDocumentLayout = ChatAttachAlertDocumentLayout.this;
+                    boolean unused = chatAttachAlertDocumentLayout.listFiles(chatAttachAlertDocumentLayout.currentDir);
                 }
                 ChatAttachAlertDocumentLayout.this.updateSearchButton();
             } catch (Exception e) {
@@ -117,6 +120,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     public boolean searching;
     /* access modifiers changed from: private */
     public HashMap<String, ListItem> selectedFiles = new HashMap<>();
+    private ArrayList<String> selectedFilesOrder = new ArrayList<>();
     private boolean sendPressed;
     /* access modifiers changed from: private */
     public boolean sortByName;
@@ -235,7 +239,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         this.emptyView.setGravity(17);
         this.emptyView.setVisibility(8);
         addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
-        this.emptyView.setOnTouchListener($$Lambda$ChatAttachAlertDocumentLayout$Ug5oXtQiaWeFKnOp5QiPp76GJGA.INSTANCE);
+        this.emptyView.setOnTouchListener($$Lambda$ChatAttachAlertDocumentLayout$UzXO3YpFzwU2u1b1zfUtDODa94.INSTANCE);
         ImageView imageView = new ImageView(context2);
         this.emptyImageView = imageView;
         imageView.setImageResource(NUM);
@@ -330,8 +334,10 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     /* JADX WARNING: type inference failed for: r3v2, types: [org.telegram.ui.ActionBar.BaseFragment] */
+    /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
     /* JADX WARNING: Unknown variable types count: 1 */
+    /* renamed from: lambda$new$1 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public /* synthetic */ void lambda$new$1$ChatAttachAlertDocumentLayout(android.view.View r12, int r13) {
         /*
@@ -354,7 +360,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             r2 = 0
             if (r0 != 0) goto L_0x00a7
             int r12 = r13.icon
-            r13 = 2131165399(0x7var_d7, float:1.7945014E38)
+            r13 = 2131165401(0x7var_d9, float:1.7945018E38)
             r0 = 1
             if (r12 != r13) goto L_0x006b
             java.util.HashMap r12 = new java.util.HashMap
@@ -396,7 +402,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             r12.dismiss()
             goto L_0x00f0
         L_0x006b:
-            r13 = 2131165401(0x7var_d9, float:1.7945018E38)
+            r13 = 2131165403(0x7var_db, float:1.7945022E38)
             if (r12 != r13) goto L_0x0079
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$DocumentSelectActivityDelegate r12 = r11.delegate
             if (r12 == 0) goto L_0x00f0
@@ -462,6 +468,8 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAttachAlertDocumentLayout.lambda$new$1$ChatAttachAlertDocumentLayout(android.view.View, int):void");
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$2 */
     public /* synthetic */ boolean lambda$new$2$ChatAttachAlertDocumentLayout(View view, int i) {
         ListItem listItem;
         RecyclerView.Adapter adapter = this.listView.getAdapter();
@@ -624,7 +632,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     public void sendSelectedItems(boolean z, int i) {
         if (this.selectedFiles.size() != 0 && this.delegate != null && !this.sendPressed) {
             this.sendPressed = true;
-            this.delegate.didSelectFiles(new ArrayList(this.selectedFiles.keySet()), this.parentAlert.commentTextView.getText().toString(), z, i);
+            this.delegate.didSelectFiles(new ArrayList(this.selectedFilesOrder), this.parentAlert.commentTextView.getText().toString(), z, i);
             this.parentAlert.dismiss();
         }
     }
@@ -639,6 +647,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         String absolutePath = listItem.file.getAbsolutePath();
         if (this.selectedFiles.containsKey(absolutePath)) {
             this.selectedFiles.remove(absolutePath);
+            this.selectedFilesOrder.remove(absolutePath);
             z = false;
         } else if (!listItem.file.canRead()) {
             showErrorBox(LocaleController.getString("AccessError", NUM));
@@ -656,6 +665,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             return false;
         } else {
             this.selectedFiles.put(absolutePath, listItem);
+            this.selectedFilesOrder.add(absolutePath);
             z = true;
         }
         this.scrolling = false;
@@ -731,41 +741,43 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     }
 
     private void sortRecentItems() {
-        Collections.sort(this.recentItems, new Comparator() {
+        Collections.sort(this.recentItems, new Object() {
             public final int compare(Object obj, Object obj2) {
                 return ChatAttachAlertDocumentLayout.this.lambda$sortRecentItems$3$ChatAttachAlertDocumentLayout((ChatAttachAlertDocumentLayout.ListItem) obj, (ChatAttachAlertDocumentLayout.ListItem) obj2);
             }
 
-            public /* synthetic */ Comparator<T> reversed() {
+            public /* synthetic */ Comparator reversed() {
                 return Comparator.CC.$default$reversed(this);
             }
 
-            public /* synthetic */ <U extends Comparable<? super U>> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function) {
-                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (Function) function);
+            public /* synthetic */ java.util.Comparator thenComparing(Function function) {
+                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, function);
             }
 
-            public /* synthetic */ <U> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function, java.util.Comparator<? super U> comparator) {
+            public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
                 return Comparator.CC.$default$thenComparing(this, function, comparator);
             }
 
-            public /* synthetic */ java.util.Comparator<T> thenComparing(java.util.Comparator<? super T> comparator) {
-                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (java.util.Comparator) comparator);
+            public /* synthetic */ java.util.Comparator thenComparing(java.util.Comparator comparator) {
+                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, comparator);
             }
 
-            public /* synthetic */ java.util.Comparator<T> thenComparingDouble(ToDoubleFunction<? super T> toDoubleFunction) {
+            public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
                 return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
             }
 
-            public /* synthetic */ java.util.Comparator<T> thenComparingInt(ToIntFunction<? super T> toIntFunction) {
+            public /* synthetic */ java.util.Comparator thenComparingInt(ToIntFunction toIntFunction) {
                 return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
             }
 
-            public /* synthetic */ java.util.Comparator<T> thenComparingLong(ToLongFunction<? super T> toLongFunction) {
+            public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
                 return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
             }
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$sortRecentItems$3 */
     public /* synthetic */ int lambda$sortRecentItems$3$ChatAttachAlertDocumentLayout(ListItem listItem, ListItem listItem2) {
         if (this.sortByName) {
             return listItem.file.getName().compareToIgnoreCase(listItem2.file.getName());
@@ -780,42 +792,44 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
 
     private void sortFileItems() {
         if (this.currentDir != null) {
-            Collections.sort(this.items, new java.util.Comparator() {
+            Collections.sort(this.items, new Object() {
                 public final int compare(Object obj, Object obj2) {
                     return ChatAttachAlertDocumentLayout.this.lambda$sortFileItems$4$ChatAttachAlertDocumentLayout((ChatAttachAlertDocumentLayout.ListItem) obj, (ChatAttachAlertDocumentLayout.ListItem) obj2);
                 }
 
-                public /* synthetic */ java.util.Comparator<T> reversed() {
+                public /* synthetic */ java.util.Comparator reversed() {
                     return Comparator.CC.$default$reversed(this);
                 }
 
-                public /* synthetic */ <U extends Comparable<? super U>> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function) {
-                    return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (Function) function);
+                public /* synthetic */ java.util.Comparator thenComparing(Function function) {
+                    return Comparator.CC.$default$thenComparing((java.util.Comparator) this, function);
                 }
 
-                public /* synthetic */ <U> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function, java.util.Comparator<? super U> comparator) {
+                public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
                     return Comparator.CC.$default$thenComparing(this, function, comparator);
                 }
 
-                public /* synthetic */ java.util.Comparator<T> thenComparing(java.util.Comparator<? super T> comparator) {
-                    return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (java.util.Comparator) comparator);
+                public /* synthetic */ java.util.Comparator thenComparing(java.util.Comparator comparator) {
+                    return Comparator.CC.$default$thenComparing((java.util.Comparator) this, comparator);
                 }
 
-                public /* synthetic */ java.util.Comparator<T> thenComparingDouble(ToDoubleFunction<? super T> toDoubleFunction) {
+                public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
                     return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
                 }
 
-                public /* synthetic */ java.util.Comparator<T> thenComparingInt(ToIntFunction<? super T> toIntFunction) {
+                public /* synthetic */ java.util.Comparator thenComparingInt(ToIntFunction toIntFunction) {
                     return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
                 }
 
-                public /* synthetic */ java.util.Comparator<T> thenComparingLong(ToLongFunction<? super T> toLongFunction) {
+                public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
                     return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
                 }
             });
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$sortFileItems$4 */
     public /* synthetic */ int lambda$sortFileItems$4$ChatAttachAlertDocumentLayout(ListItem listItem, ListItem listItem2) {
         File file = listItem.file;
         if (file == null) {
@@ -828,7 +842,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         if (file == null && file2 == null) {
             return 0;
         }
-        boolean isDirectory = listItem.file.isDirectory();
+        boolean isDirectory = file.isDirectory();
         boolean isDirectory2 = listItem2.file.isDirectory();
         if (isDirectory != isDirectory2) {
             if (isDirectory) {
@@ -865,6 +879,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
     /* access modifiers changed from: package-private */
     public void onShow() {
         this.selectedFiles.clear();
+        this.selectedFilesOrder.clear();
         this.history.clear();
         listRoots();
         updateSearchButton();
@@ -1081,10 +1096,10 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             java.lang.String r4 = android.os.Environment.getExternalStorageState()
             java.lang.String r5 = "mounted"
             boolean r5 = r4.equals(r5)
-            r6 = 2131625305(0x7f0e0559, float:1.8877814E38)
+            r6 = 2131625323(0x7f0e056b, float:1.887785E38)
             java.lang.String r7 = "ExternalFolderInfo"
-            r8 = 2131165400(0x7var_d8, float:1.7945016E38)
-            r9 = 2131626845(0x7f0e0b5d, float:1.8880938E38)
+            r8 = 2131165402(0x7var_da, float:1.794502E38)
+            r9 = 2131626952(0x7f0e0bc8, float:1.8881155E38)
             java.lang.String r10 = "SdCard"
             if (r5 != 0) goto L_0x003e
             java.lang.String r5 = "mounted_ro"
@@ -1102,13 +1117,13 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             r4.subtitle = r5
             goto L_0x0073
         L_0x0058:
-            r5 = 2131625610(0x7f0e068a, float:1.8878433E38)
+            r5 = 2131625638(0x7f0e06a6, float:1.887849E38)
             java.lang.String r11 = "InternalStorage"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r4.title = r5
-            r5 = 2131165402(0x7var_da, float:1.794502E38)
+            r5 = 2131165404(0x7var_dc, float:1.7945024E38)
             r4.icon = r5
-            r5 = 2131625609(0x7f0e0689, float:1.887843E38)
+            r5 = 2131625637(0x7f0e06a5, float:1.8878488E38)
             java.lang.String r11 = "InternalFolderInfo"
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r11, r5)
             r4.subtitle = r5
@@ -1199,7 +1214,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             goto L_0x014c
         L_0x0141:
             java.lang.String r11 = "ExternalStorage"
-            r12 = 2131625306(0x7f0e055a, float:1.8877816E38)
+            r12 = 2131625324(0x7f0e056c, float:1.8877853E38)
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r11, r12)     // Catch:{ Exception -> 0x0162 }
             r4.title = r11     // Catch:{ Exception -> 0x0162 }
         L_0x014c:
@@ -1246,10 +1261,10 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             r3.<init>()     // Catch:{ Exception -> 0x01ae }
             r3.title = r0     // Catch:{ Exception -> 0x01ae }
             java.lang.String r0 = "AppFolderInfo"
-            r4 = 2131624244(0x7f0e0134, float:1.8875662E38)
+            r4 = 2131624249(0x7f0e0139, float:1.8875672E38)
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r4)     // Catch:{ Exception -> 0x01ae }
             r3.subtitle = r0     // Catch:{ Exception -> 0x01ae }
-            r0 = 2131165398(0x7var_d6, float:1.7945012E38)
+            r0 = 2131165400(0x7var_d8, float:1.7945016E38)
             r3.icon = r0     // Catch:{ Exception -> 0x01ae }
             r3.file = r2     // Catch:{ Exception -> 0x01ae }
             java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r0 = r13.items     // Catch:{ Exception -> 0x01ae }
@@ -1261,15 +1276,15 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
         L_0x01b2:
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
             r0.<init>()
-            r2 = 2131625507(0x7f0e0623, float:1.8878224E38)
+            r2 = 2131625533(0x7f0e063d, float:1.8878277E38)
             java.lang.String r3 = "Gallery"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.title = r2
-            r2 = 2131625508(0x7f0e0624, float:1.8878226E38)
+            r2 = 2131625534(0x7f0e063e, float:1.8878279E38)
             java.lang.String r3 = "GalleryInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.subtitle = r2
-            r2 = 2131165399(0x7var_d7, float:1.7945014E38)
+            r2 = 2131165401(0x7var_d9, float:1.7945018E38)
             r0.icon = r2
             r0.file = r1
             java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r2 = r13.items
@@ -1278,15 +1293,15 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             if (r0 == 0) goto L_0x0204
             org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem r0 = new org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem
             r0.<init>()
-            r2 = 2131624350(0x7f0e019e, float:1.8875877E38)
+            r2 = 2131624355(0x7f0e01a3, float:1.8875887E38)
             java.lang.String r3 = "AttachMusic"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.title = r2
-            r2 = 2131625915(0x7f0e07bb, float:1.8879051E38)
+            r2 = 2131625965(0x7f0e07ed, float:1.8879153E38)
             java.lang.String r3 = "MusicInfo"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.subtitle = r2
-            r2 = 2131165401(0x7var_d9, float:1.7945018E38)
+            r2 = 2131165403(0x7var_db, float:1.7945022E38)
             r0.icon = r2
             r0.file = r1
             java.util.ArrayList<org.telegram.ui.Components.ChatAttachAlertDocumentLayout$ListItem> r1 = r13.items
@@ -1448,7 +1463,7 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
                 notifyDataSetChanged();
                 return;
             }
-            $$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$V18jzUwhKDwiIGs6sSOElwWpTiM r0 = new Runnable(str) {
+            $$Lambda$ChatAttachAlertDocumentLayout$SearchAdapter$SVXF_0LRGzSJ2PW8PyIx1rhcirA r0 = new Runnable(str) {
                 public final /* synthetic */ String f$1;
 
                 {
@@ -1463,6 +1478,8 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             AndroidUtilities.runOnUIThread(r0, 300);
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$search$1 */
         public /* synthetic */ void lambda$search$1$ChatAttachAlertDocumentLayout$SearchAdapter(String str) {
             ArrayList arrayList = new ArrayList(ChatAttachAlertDocumentLayout.this.items);
             if (ChatAttachAlertDocumentLayout.this.history.isEmpty()) {
@@ -1483,6 +1500,8 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             });
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$null$0 */
         public /* synthetic */ void lambda$null$0$ChatAttachAlertDocumentLayout$SearchAdapter(String str, ArrayList arrayList) {
             String lowerCase = str.trim().toLowerCase();
             if (lowerCase.length() == 0) {
@@ -1538,6 +1557,8 @@ public class ChatAttachAlertDocumentLayout extends ChatAttachAlert.AttachAlertLa
             });
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$updateSearchResults$2 */
         public /* synthetic */ void lambda$updateSearchResults$2$ChatAttachAlertDocumentLayout$SearchAdapter(String str, ArrayList arrayList) {
             if (ChatAttachAlertDocumentLayout.this.searching) {
                 if (ChatAttachAlertDocumentLayout.this.listView.getAdapter() != ChatAttachAlertDocumentLayout.this.searchAdapter) {

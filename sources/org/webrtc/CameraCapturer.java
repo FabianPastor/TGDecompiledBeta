@@ -99,7 +99,8 @@ abstract class CameraCapturer implements CameraVideoCapturer {
                 CameraCapturer.this.capturerObserver.onCapturerStarted(true);
                 boolean unused = CameraCapturer.this.sessionOpening = false;
                 CameraSession unused2 = CameraCapturer.this.currentSession = cameraSession;
-                CameraVideoCapturer.CameraStatistics unused3 = CameraCapturer.this.cameraStatistics = new CameraVideoCapturer.CameraStatistics(CameraCapturer.this.surfaceHelper, CameraCapturer.this.eventsHandler);
+                CameraCapturer cameraCapturer = CameraCapturer.this;
+                CameraVideoCapturer.CameraStatistics unused3 = cameraCapturer.cameraStatistics = new CameraVideoCapturer.CameraStatistics(cameraCapturer.surfaceHelper, CameraCapturer.this.eventsHandler);
                 boolean unused4 = CameraCapturer.this.firstFrameObserved = false;
                 CameraCapturer.this.stateLock.notifyAll();
                 if (CameraCapturer.this.switchState == SwitchState.IN_PROGRESS) {
@@ -112,7 +113,8 @@ abstract class CameraCapturer implements CameraVideoCapturer {
                     String access$1500 = CameraCapturer.this.pendingCameraName;
                     String unused7 = CameraCapturer.this.pendingCameraName = null;
                     SwitchState unused8 = CameraCapturer.this.switchState = SwitchState.IDLE;
-                    CameraCapturer.this.switchCameraInternal(CameraCapturer.this.switchEventsHandler, access$1500);
+                    CameraCapturer cameraCapturer2 = CameraCapturer.this;
+                    cameraCapturer2.switchCameraInternal(cameraCapturer2.switchEventsHandler, access$1500);
                 }
             }
         }
@@ -127,12 +129,14 @@ abstract class CameraCapturer implements CameraVideoCapturer {
                     Logging.w("CameraCapturer", "Opening camera failed, passing: " + str);
                     boolean unused = CameraCapturer.this.sessionOpening = false;
                     CameraCapturer.this.stateLock.notifyAll();
-                    if (CameraCapturer.this.switchState != SwitchState.IDLE) {
+                    SwitchState access$100 = CameraCapturer.this.switchState;
+                    SwitchState switchState = SwitchState.IDLE;
+                    if (access$100 != switchState) {
                         if (CameraCapturer.this.switchEventsHandler != null) {
                             CameraCapturer.this.switchEventsHandler.onCameraSwitchError(str);
                             CameraVideoCapturer.CameraSwitchHandler unused2 = CameraCapturer.this.switchEventsHandler = null;
                         }
-                        SwitchState unused3 = CameraCapturer.this.switchState = SwitchState.IDLE;
+                        SwitchState unused3 = CameraCapturer.this.switchState = switchState;
                     }
                     if (failureType == CameraSession.FailureType.DISCONNECTED) {
                         CameraCapturer.this.eventsHandler.onCameraDisconnected();
@@ -187,7 +191,6 @@ abstract class CameraCapturer implements CameraVideoCapturer {
         IN_PROGRESS
     }
 
-    @Deprecated
     public /* synthetic */ void addMediaRecorderToCamera(MediaRecorder mediaRecorder, CameraVideoCapturer.MediaRecorderHandler mediaRecorderHandler) {
         CameraVideoCapturer.CC.$default$addMediaRecorderToCamera(this, mediaRecorder, mediaRecorderHandler);
     }
@@ -199,7 +202,6 @@ abstract class CameraCapturer implements CameraVideoCapturer {
         return false;
     }
 
-    @Deprecated
     public /* synthetic */ void removeMediaRecorderFromCamera(CameraVideoCapturer.MediaRecorderHandler mediaRecorderHandler) {
         CameraVideoCapturer.CC.$default$removeMediaRecorderFromCamera(this, mediaRecorderHandler);
     }
@@ -381,9 +383,12 @@ abstract class CameraCapturer implements CameraVideoCapturer {
         synchronized (this.stateLock) {
             if (this.switchState != SwitchState.IDLE) {
                 reportCameraSwitchError("Camera switch already in progress.", cameraSwitchHandler);
-            } else if (this.sessionOpening || this.currentSession != null) {
+                return;
+            }
+            boolean z = this.sessionOpening;
+            if (z || this.currentSession != null) {
                 this.switchEventsHandler = cameraSwitchHandler;
-                if (this.sessionOpening) {
+                if (z) {
                     this.switchState = SwitchState.PENDING;
                     this.pendingCameraName = str;
                     return;
@@ -404,9 +409,9 @@ abstract class CameraCapturer implements CameraVideoCapturer {
                 this.openAttemptsRemaining = 1;
                 createSessionInternal(0);
                 Logging.d("CameraCapturer", "switchCamera done");
-            } else {
-                reportCameraSwitchError("switchCamera: camera is not running.", cameraSwitchHandler);
+                return;
             }
+            reportCameraSwitchError("switchCamera: camera is not running.", cameraSwitchHandler);
         }
     }
 

@@ -97,8 +97,9 @@ public final class Instance {
     public static void setGlobalServerConfig(String str) {
         try {
             globalServerConfig = new ServerConfig(new JSONObject(str));
-            if (instance != null) {
-                instance.setGlobalServerConfig(str);
+            NativeInstance nativeInstance = instance;
+            if (nativeInstance != null) {
+                nativeInstance.setGlobalServerConfig(str);
             }
         } catch (JSONException e) {
             if (BuildVars.LOGS_ENABLED) {

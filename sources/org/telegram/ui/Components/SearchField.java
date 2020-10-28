@@ -164,11 +164,15 @@ public class SearchField extends FrameLayout {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$SearchField(View view) {
         this.searchEditText.setText("");
         AndroidUtilities.showKeyboard(this.searchEditText);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ boolean lambda$new$1$SearchField(TextView textView, int i, KeyEvent keyEvent) {
         if (keyEvent == null) {
             return false;
@@ -176,6 +180,7 @@ public class SearchField extends FrameLayout {
         if ((keyEvent.getAction() != 1 || keyEvent.getKeyCode() != 84) && (keyEvent.getAction() != 0 || keyEvent.getKeyCode() != 66)) {
             return false;
         }
+        this.searchEditText.hideActionMode();
         AndroidUtilities.hideKeyboard(this.searchEditText);
         return false;
     }

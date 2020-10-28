@@ -161,10 +161,11 @@ public class VoIPWindowView extends FrameLayout {
         layoutParams.gravity = 51;
         layoutParams.type = 99;
         layoutParams.screenOrientation = 1;
-        if (Build.VERSION.SDK_INT >= 28) {
+        int i = Build.VERSION.SDK_INT;
+        if (i >= 28) {
             layoutParams.layoutInDisplayCutoutMode = 1;
         }
-        if (Build.VERSION.SDK_INT >= 21) {
+        if (i >= 21) {
             layoutParams.flags = -NUM;
         } else {
             layoutParams.flags = 131072;

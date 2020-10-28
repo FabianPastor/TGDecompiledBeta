@@ -1,46 +1,15 @@
 package j$.util.concurrent;
 
-import j$.r;
+import j$.CLASSNAMEz;
 import j$.util.Spliterator;
+import j$.util.function.Consumer;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 
 final class v extends CLASSNAMEc implements Collection, Serializable, j$.util.Collection {
-    public /* synthetic */ void forEach(Consumer consumer) {
-        forEach(r.a(consumer));
-    }
-
     v(ConcurrentHashMap concurrentHashMap) {
         super(concurrentHashMap);
-    }
-
-    public final boolean contains(Object o) {
-        return this.a.containsValue(o);
-    }
-
-    public final boolean remove(Object o) {
-        if (o == null) {
-            return false;
-        }
-        Iterator<V> it = iterator();
-        while (((CLASSNAMEb) it).hasNext()) {
-            if (o.equals(((t) it).next())) {
-                ((CLASSNAMEb) it).remove();
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public final Iterator iterator() {
-        ConcurrentHashMap concurrentHashMap = this.a;
-        ConcurrentHashMap.Node<K, V>[] nodeArr = concurrentHashMap.a;
-        ConcurrentHashMap.Node<K, V>[] t = nodeArr;
-        int f = nodeArr == null ? 0 : t.length;
-        return new t(t, f, 0, f, concurrentHashMap);
     }
 
     public final boolean add(Object obj) {
@@ -51,33 +20,62 @@ final class v extends CLASSNAMEc implements Collection, Serializable, j$.util.Co
         throw new UnsupportedOperationException();
     }
 
-    public Spliterator spliterator() {
-        ConcurrentHashMap concurrentHashMap = this.a;
-        long n = concurrentHashMap.n();
-        ConcurrentHashMap.Node<K, V>[] nodeArr = concurrentHashMap.a;
-        ConcurrentHashMap.Node<K, V>[] t = nodeArr;
-        int f = nodeArr == null ? 0 : t.length;
-        return new u(t, f, 0, f, n < 0 ? 0 : n);
+    public final boolean contains(Object obj) {
+        return this.a.containsValue(obj);
     }
 
-    public void forEach(j$.util.function.Consumer consumer) {
-        if (consumer != null) {
-            ConcurrentHashMap.Node<K, V>[] nodeArr = this.a.a;
-            ConcurrentHashMap.Node<K, V>[] t = nodeArr;
-            if (nodeArr != null) {
-                ConcurrentHashMap.Traverser<K, V> it = new q(t, t.length, 0, t.length);
-                while (true) {
-                    ConcurrentHashMap.Node<K, V> b = it.b();
-                    ConcurrentHashMap.Node<K, V> p = b;
-                    if (b != null) {
-                        consumer.accept(p.c);
-                    } else {
-                        return;
-                    }
+    public void forEach(Consumer consumer) {
+        consumer.getClass();
+        m[] mVarArr = this.a.a;
+        if (mVarArr != null) {
+            q qVar = new q(mVarArr, mVarArr.length, 0, mVarArr.length);
+            while (true) {
+                m a = qVar.a();
+                if (a != null) {
+                    consumer.accept(a.c);
+                } else {
+                    return;
                 }
             }
-        } else {
-            throw null;
         }
+    }
+
+    public /* synthetic */ void forEach(java.util.function.Consumer consumer) {
+        forEach(CLASSNAMEz.b(consumer));
+    }
+
+    public final Iterator iterator() {
+        ConcurrentHashMap concurrentHashMap = this.a;
+        m[] mVarArr = concurrentHashMap.a;
+        int length = mVarArr == null ? 0 : mVarArr.length;
+        return new t(mVarArr, length, 0, length, concurrentHashMap);
+    }
+
+    public final boolean remove(Object obj) {
+        CLASSNAMEb bVar;
+        if (obj == null) {
+            return false;
+        }
+        Iterator it = iterator();
+        do {
+            bVar = (CLASSNAMEb) it;
+            if (!bVar.hasNext()) {
+                return false;
+            }
+        } while (!obj.equals(((t) it).next()));
+        bVar.remove();
+        return true;
+    }
+
+    public Spliterator spliterator() {
+        ConcurrentHashMap concurrentHashMap = this.a;
+        long m = concurrentHashMap.m();
+        m[] mVarArr = concurrentHashMap.a;
+        int length = mVarArr == null ? 0 : mVarArr.length;
+        long j = 0;
+        if (m >= 0) {
+            j = m;
+        }
+        return new u(mVarArr, length, 0, length, j);
     }
 }

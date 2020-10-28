@@ -35,7 +35,6 @@ public class NotificationsCheckCell extends FrameLayout {
         float f;
         float f2;
         float f3;
-        float f4;
         Context context2 = context;
         this.drawLine = true;
         setWillNotDraw(false);
@@ -60,15 +59,17 @@ public class NotificationsCheckCell extends FrameLayout {
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         TextView textView3 = this.textView;
-        int i4 = (LocaleController.isRTL ? 5 : 3) | 48;
+        boolean z2 = LocaleController.isRTL;
+        int i4 = (z2 ? 5 : 3) | 48;
         int i5 = 64;
-        if (LocaleController.isRTL) {
+        float f4 = 80.0f;
+        if (z2) {
             f = 80.0f;
         } else {
             f = (float) (z ? 64 : 23);
         }
         float f5 = (float) (((this.currentHeight - 70) / 2) + 13);
-        if (LocaleController.isRTL) {
+        if (z2) {
             f2 = (float) (z ? 64 : 23);
         } else {
             f2 = 80.0f;
@@ -85,17 +86,16 @@ public class NotificationsCheckCell extends FrameLayout {
         this.valueTextView.setPadding(0, 0, 0, 0);
         this.valueTextView.setEllipsize(TextUtils.TruncateAt.END);
         TextView textView5 = this.valueTextView;
-        int i6 = (LocaleController.isRTL ? 5 : 3) | 48;
-        if (LocaleController.isRTL) {
+        boolean z3 = LocaleController.isRTL;
+        int i6 = (z3 ? 5 : 3) | 48;
+        if (z3) {
             f3 = 80.0f;
         } else {
             f3 = (float) (z ? 64 : 23);
         }
         float f6 = (float) (((this.currentHeight - 70) / 2) + 38);
-        if (LocaleController.isRTL) {
+        if (z3) {
             f4 = (float) (!z ? 23 : i5);
-        } else {
-            f4 = 80.0f;
         }
         addView(textView5, LayoutHelper.createFrame(-2, -2.0f, i6, f3, f6, f4, 0.0f));
         Switch switchR = new Switch(context2);

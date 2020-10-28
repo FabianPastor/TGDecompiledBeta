@@ -1,15 +1,19 @@
 package j$.util.stream;
 
-import j$.util.function.CLASSNAMEp;
+import j$.util.function.h;
+import j$.util.function.y;
 
-public final /* synthetic */ class E0 implements CLASSNAMEp {
-    public final /* synthetic */ a7 a;
+public final /* synthetic */ class E0 implements y {
+    public static final /* synthetic */ E0 a = new E0();
 
-    public /* synthetic */ E0(a7 a7Var) {
-        this.a = a7Var;
+    private /* synthetic */ E0() {
     }
 
-    public final boolean a() {
-        return this.a.m();
+    public final void accept(long j) {
+    }
+
+    public y g(y yVar) {
+        yVar.getClass();
+        return new h(this, yVar);
     }
 }

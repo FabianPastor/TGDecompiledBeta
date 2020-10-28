@@ -63,9 +63,8 @@ public class ChartData {
                     if (iArr[i4] > line.maxValue) {
                         line.maxValue = iArr[i4];
                     }
-                    int[] iArr2 = line.y;
-                    if (iArr2[i4] < line.minValue) {
-                        line.minValue = iArr2[i4];
+                    if (iArr[i4] < line.minValue) {
+                        line.minValue = iArr[i4];
                     }
                     i4 = i5;
                 }
@@ -170,16 +169,12 @@ public class ChartData {
         while (i <= i2) {
             int i3 = (i2 + i) >> 1;
             float[] fArr = this.xPercentage;
-            if (f < fArr[i3] && (i3 == 0 || f > fArr[i3 - 1])) {
+            if ((f < fArr[i3] && (i3 == 0 || f > fArr[i3 - 1])) || f == fArr[i3]) {
                 return i3;
             }
-            float[] fArr2 = this.xPercentage;
-            if (f == fArr2[i3]) {
-                return i3;
-            }
-            if (f < fArr2[i3]) {
+            if (f < fArr[i3]) {
                 i2 = i3 - 1;
-            } else if (f > fArr2[i3]) {
+            } else if (f > fArr[i3]) {
                 i = i3 + 1;
             }
         }
@@ -196,16 +191,12 @@ public class ChartData {
         while (i <= i3) {
             int i4 = (i3 + i) >> 1;
             float[] fArr = this.xPercentage;
-            if (f > fArr[i4] && (i4 == i2 || f < fArr[i4 + 1])) {
+            if ((f > fArr[i4] && (i4 == i2 || f < fArr[i4 + 1])) || f == fArr[i4]) {
                 return i4;
             }
-            float[] fArr2 = this.xPercentage;
-            if (f == fArr2[i4]) {
-                return i4;
-            }
-            if (f < fArr2[i4]) {
+            if (f < fArr[i4]) {
                 i3 = i4 - 1;
-            } else if (f > fArr2[i4]) {
+            } else if (f > fArr[i4]) {
                 i = i4 + 1;
             }
         }
@@ -224,16 +215,12 @@ public class ChartData {
         while (i <= i2) {
             int i3 = (i2 + i) >> 1;
             float[] fArr2 = this.xPercentage;
-            if (f > fArr2[i3] && (i3 == length - 1 || f < fArr2[i3 + 1])) {
+            if ((f > fArr2[i3] && (i3 == length - 1 || f < fArr2[i3 + 1])) || f == fArr2[i3]) {
                 return i3;
             }
-            float[] fArr3 = this.xPercentage;
-            if (f == fArr3[i3]) {
-                return i3;
-            }
-            if (f < fArr3[i3]) {
+            if (f < fArr2[i3]) {
                 i2 = i3 - 1;
-            } else if (f > fArr3[i3]) {
+            } else if (f > fArr2[i3]) {
                 i = i3 + 1;
             }
         }

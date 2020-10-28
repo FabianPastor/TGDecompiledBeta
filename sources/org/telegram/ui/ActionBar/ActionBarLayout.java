@@ -966,6 +966,7 @@ public class ActionBarLayout extends FrameLayout {
         boolean z5 = z;
         boolean z6 = z2;
         final boolean z7 = z4;
+        int i = Build.VERSION.SDK_INT;
         if (baseFragment3 == null || checkTransitionAnimation() || (((actionBarLayoutDelegate = this.delegate) != null && z3 && !actionBarLayoutDelegate.needPresentFragment(baseFragment3, z5, z6, this)) || !baseFragment.onFragmentCreate())) {
             return false;
         }
@@ -974,7 +975,6 @@ public class ActionBarLayout extends FrameLayout {
             AndroidUtilities.hideKeyboard(this.parentActivity.getCurrentFocus());
         }
         boolean z8 = z7 || (!z6 && MessagesController.getGlobalMainSettings().getBoolean("view_animations", true));
-        AnimatorSet animatorSet = null;
         if (!this.fragmentsStack.isEmpty()) {
             ArrayList<BaseFragment> arrayList = this.fragmentsStack;
             baseFragment2 = arrayList.get(arrayList.size() - 1);
@@ -997,13 +997,20 @@ public class ActionBarLayout extends FrameLayout {
         layoutParams.width = -1;
         layoutParams.height = -1;
         if (z7) {
-            int dp = AndroidUtilities.dp(8.0f);
-            layoutParams.leftMargin = dp;
-            layoutParams.rightMargin = dp;
-            int dp2 = AndroidUtilities.dp(46.0f);
-            layoutParams.bottomMargin = dp2;
-            layoutParams.topMargin = dp2;
-            layoutParams.topMargin = dp2 + AndroidUtilities.statusBarHeight;
+            int previewHeight = baseFragment.getPreviewHeight();
+            int i2 = i >= 21 ? AndroidUtilities.statusBarHeight : 0;
+            if (previewHeight <= 0 || previewHeight >= getMeasuredHeight() - i2) {
+                int dp = AndroidUtilities.dp(46.0f);
+                layoutParams.bottomMargin = dp;
+                layoutParams.topMargin = dp;
+                layoutParams.topMargin = dp + AndroidUtilities.statusBarHeight;
+            } else {
+                layoutParams.height = previewHeight;
+                layoutParams.topMargin = i2 + (((getMeasuredHeight() - i2) - previewHeight) / 2);
+            }
+            int dp2 = AndroidUtilities.dp(8.0f);
+            layoutParams.leftMargin = dp2;
+            layoutParams.rightMargin = dp2;
         } else {
             layoutParams.leftMargin = 0;
             layoutParams.rightMargin = 0;
@@ -1037,7 +1044,7 @@ public class ActionBarLayout extends FrameLayout {
         setInnerTranslationX(0.0f);
         this.containerView.setTranslationY(0.0f);
         if (z7) {
-            if (Build.VERSION.SDK_INT >= 21) {
+            if (i >= 21) {
                 view.setOutlineProvider(new ViewOutlineProvider(this) {
                     @TargetApi(21)
                     public void getOutline(View view, Outline outline) {
@@ -1106,14 +1113,12 @@ public class ActionBarLayout extends FrameLayout {
             }
             this.oldFragment = baseFragment2;
             this.newFragment = baseFragment3;
-            if (!z7) {
-                animatorSet = baseFragment3.onCustomTransitionAnimation(true, new Runnable() {
-                    public final void run() {
-                        ActionBarLayout.this.lambda$presentFragment$2$ActionBarLayout();
-                    }
-                });
-            }
-            if (animatorSet == null) {
+            AnimatorSet onCustomTransitionAnimation = !z7 ? baseFragment3.onCustomTransitionAnimation(true, new Runnable() {
+                public final void run() {
+                    ActionBarLayout.this.lambda$presentFragment$2$ActionBarLayout();
+                }
+            }) : null;
+            if (onCustomTransitionAnimation == null) {
                 this.containerView.setAlpha(0.0f);
                 if (z7) {
                     this.containerView.setTranslationX(0.0f);
@@ -1157,7 +1162,7 @@ public class ActionBarLayout extends FrameLayout {
             } else {
                 this.containerView.setAlpha(1.0f);
                 this.containerView.setTranslationX(0.0f);
-                this.currentAnimation = animatorSet;
+                this.currentAnimation = onCustomTransitionAnimation;
             }
         } else {
             presentFragmentInternalRemoveOld(z5, baseFragment2);
@@ -1185,9 +1190,9 @@ public class ActionBarLayout extends FrameLayout {
                 baseFragment2.onTransitionAnimationStart(false, false);
             }
             baseFragment3.onTransitionAnimationStart(true, false);
-            AnimatorSet animatorSet2 = new AnimatorSet();
-            this.currentAnimation = animatorSet2;
-            animatorSet2.playTogether(arrayList2);
+            AnimatorSet animatorSet = new AnimatorSet();
+            this.currentAnimation = animatorSet;
+            animatorSet.playTogether(arrayList2);
             this.currentAnimation.setInterpolator(this.accelerateDecelerateInterpolator);
             this.currentAnimation.setDuration(200);
             this.currentAnimation.addListener(new AnimatorListenerAdapter() {
@@ -1208,6 +1213,8 @@ public class ActionBarLayout extends FrameLayout {
         baseFragment2.onBecomeFullyVisible();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$presentFragment$1 */
     public /* synthetic */ void lambda$presentFragment$1$ActionBarLayout(boolean z, boolean z2, BaseFragment baseFragment, BaseFragment baseFragment2) {
         if (z) {
             this.inPreviewMode = true;
@@ -1225,6 +1232,8 @@ public class ActionBarLayout extends FrameLayout {
         baseFragment2.onBecomeFullyVisible();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$presentFragment$2 */
     public /* synthetic */ void lambda$presentFragment$2$ActionBarLayout() {
         onAnimationEndCheck(false);
     }
@@ -1272,7 +1281,7 @@ public class ActionBarLayout extends FrameLayout {
         bringChildToFront(this.containerView);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:15:0x00cf  */
+    /* JADX WARNING: Removed duplicated region for block: B:15:0x00d2  */
     /* JADX WARNING: Removed duplicated region for block: B:18:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void movePreviewFragment(float r21) {
@@ -1280,10 +1289,10 @@ public class ActionBarLayout extends FrameLayout {
             r20 = this;
             r0 = r20
             boolean r1 = r0.inPreviewMode
-            if (r1 == 0) goto L_0x00d7
+            if (r1 == 0) goto L_0x00da
             boolean r1 = r0.transitionAnimationPreviewMode
             if (r1 == 0) goto L_0x000c
-            goto L_0x00d7
+            goto L_0x00da
         L_0x000c:
             org.telegram.ui.ActionBar.ActionBarLayout$LayoutContainer r1 = r0.containerView
             float r1 = r1.getTranslationY()
@@ -1294,14 +1303,14 @@ public class ActionBarLayout extends FrameLayout {
             if (r4 <= 0) goto L_0x001d
         L_0x001a:
             r2 = 0
-            goto L_0x00cb
+            goto L_0x00ce
         L_0x001d:
             r4 = 1114636288(0x42700000, float:60.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             int r4 = -r4
             float r4 = (float) r4
             int r4 = (r2 > r4 ? 1 : (r2 == r4 ? 0 : -1))
-            if (r4 >= 0) goto L_0x00cb
+            if (r4 >= 0) goto L_0x00ce
             r2 = 1
             r0.previewOpenAnimationInProgress = r2
             r4 = 0
@@ -1333,6 +1342,8 @@ public class ActionBarLayout extends FrameLayout {
             r8.rightMargin = r4
             r8.bottomMargin = r4
             r8.topMargin = r4
+            r9 = -1
+            r8.height = r9
             android.view.View r9 = r6.fragmentView
             r9.setLayoutParams(r8)
             r0.presentFragmentInternalRemoveOld(r4, r5)
@@ -1370,13 +1381,13 @@ public class ActionBarLayout extends FrameLayout {
             r0.performHapticFeedback(r10)
             r6.setInPreviewMode(r4)
             goto L_0x001a
-        L_0x00cb:
+        L_0x00ce:
             int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-            if (r1 == 0) goto L_0x00d7
+            if (r1 == 0) goto L_0x00da
             org.telegram.ui.ActionBar.ActionBarLayout$LayoutContainer r1 = r0.containerView
             r1.setTranslationY(r2)
             r20.invalidate()
-        L_0x00d7:
+        L_0x00da:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.ActionBarLayout.movePreviewFragment(float):void");
@@ -1558,6 +1569,8 @@ public class ActionBarLayout extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$closeLastFragment$3 */
     public /* synthetic */ void lambda$closeLastFragment$3$ActionBarLayout(BaseFragment baseFragment, BaseFragment baseFragment2) {
         if (this.inPreviewMode || this.transitionAnimationPreviewMode) {
             this.containerViewBack.setScaleX(1.0f);
@@ -1573,10 +1586,14 @@ public class ActionBarLayout extends FrameLayout {
         baseFragment2.onBecomeFullyVisible();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$closeLastFragment$4 */
     public /* synthetic */ void lambda$closeLastFragment$4$ActionBarLayout() {
         onAnimationEndCheck(false);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$closeLastFragment$5 */
     public /* synthetic */ void lambda$closeLastFragment$5$ActionBarLayout(BaseFragment baseFragment) {
         removeFragmentFromStackInternal(baseFragment);
         setVisibility(8);

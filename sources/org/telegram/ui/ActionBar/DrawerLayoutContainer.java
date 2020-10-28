@@ -83,6 +83,8 @@ public class DrawerLayoutContainer extends FrameLayout {
         this.shadowLeft = getResources().getDrawable(NUM);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ WindowInsets lambda$new$0$DrawerLayoutContainer(View view, WindowInsets windowInsets) {
         DrawerLayoutContainer drawerLayoutContainer = (DrawerLayoutContainer) view;
         if (AndroidUtilities.statusBarHeight != windowInsets.getSystemWindowInsetTop()) {
@@ -714,10 +716,11 @@ public class DrawerLayoutContainer extends FrameLayout {
     /* access modifiers changed from: protected */
     @SuppressLint({"NewApi"})
     public void onMeasure(int i, int i2) {
+        int i3 = Build.VERSION.SDK_INT;
         int size = View.MeasureSpec.getSize(i);
         int size2 = View.MeasureSpec.getSize(i2);
         setMeasuredDimension(size, size2);
-        if (Build.VERSION.SDK_INT < 21) {
+        if (i3 < 21) {
             this.inLayout = true;
             if (size2 == AndroidUtilities.displaySize.y + AndroidUtilities.statusBarHeight) {
                 if (getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
@@ -729,36 +732,38 @@ public class DrawerLayoutContainer extends FrameLayout {
             }
             this.inLayout = false;
         } else {
-            int i3 = size2 - AndroidUtilities.statusBarHeight;
-            if (i3 > 0 && i3 < 4096) {
-                AndroidUtilities.displaySize.y = i3;
+            int i4 = size2 - AndroidUtilities.statusBarHeight;
+            if (i4 > 0 && i4 < 4096) {
+                AndroidUtilities.displaySize.y = i4;
             }
         }
-        boolean z = this.lastInsets != null && Build.VERSION.SDK_INT >= 21;
+        boolean z = this.lastInsets != null && i3 >= 21;
         int childCount = getChildCount();
-        for (int i4 = 0; i4 < childCount; i4++) {
-            View childAt = getChildAt(i4);
+        for (int i5 = 0; i5 < childCount; i5++) {
+            View childAt = getChildAt(i5);
             if (childAt.getVisibility() != 8) {
                 FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) childAt.getLayoutParams();
                 if (z) {
                     if (childAt.getFitsSystemWindows()) {
                         dispatchChildInsets(childAt, this.lastInsets, layoutParams.gravity);
                     } else if (childAt.getTag() == null) {
-                        applyMarginInsets(layoutParams, this.lastInsets, layoutParams.gravity, Build.VERSION.SDK_INT >= 21);
+                        applyMarginInsets(layoutParams, this.lastInsets, layoutParams.gravity, i3 >= 21);
                     }
                 }
                 if (this.drawerLayout != childAt) {
                     int makeMeasureSpec = View.MeasureSpec.makeMeasureSpec((size - layoutParams.leftMargin) - layoutParams.rightMargin, NUM);
-                    int i5 = layoutParams.height;
-                    if (i5 <= 0) {
-                        i5 = View.MeasureSpec.makeMeasureSpec((size2 - layoutParams.topMargin) - layoutParams.bottomMargin, NUM);
+                    int i6 = layoutParams.height;
+                    if (i6 <= 0) {
+                        i6 = View.MeasureSpec.makeMeasureSpec((size2 - layoutParams.topMargin) - layoutParams.bottomMargin, NUM);
                     }
-                    childAt.measure(makeMeasureSpec, i5);
+                    childAt.measure(makeMeasureSpec, i6);
                 } else {
                     childAt.setPadding(0, 0, 0, 0);
                     childAt.measure(FrameLayout.getChildMeasureSpec(i, this.minDrawerMargin + layoutParams.leftMargin + layoutParams.rightMargin, layoutParams.width), FrameLayout.getChildMeasureSpec(i2, layoutParams.topMargin + layoutParams.bottomMargin, layoutParams.height));
                 }
             }
+            int i7 = i;
+            int i8 = i2;
         }
     }
 
@@ -879,11 +884,11 @@ public class DrawerLayoutContainer extends FrameLayout {
             GradientDrawable gradientDrawable = new GradientDrawable();
             this.topDrawable = gradientDrawable;
             gradientDrawable.setStroke(AndroidUtilities.dp(1.0f), Theme.getColor("actionBarDefault"));
-            this.topDrawable.setCornerRadius((float) AndroidUtilities.dp(6.0f));
+            gradientDrawable.setCornerRadius((float) AndroidUtilities.dp(6.0f));
             GradientDrawable gradientDrawable2 = new GradientDrawable();
             this.bottomDrawable = gradientDrawable2;
             gradientDrawable2.setStroke(1, Theme.getColor("divider"));
-            this.bottomDrawable.setCornerRadius((float) AndroidUtilities.dp(6.0f));
+            gradientDrawable2.setCornerRadius((float) AndroidUtilities.dp(6.0f));
         }
 
         public void draw(Canvas canvas) {

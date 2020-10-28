@@ -1,14 +1,21 @@
 package j$.util.stream;
 
-import j$.util.function.CLASSNAMEo;
+import j$.util.function.h;
+import j$.util.function.y;
 
-public final /* synthetic */ class Q implements CLASSNAMEo {
-    public static final /* synthetic */ Q a = new Q();
+public final /* synthetic */ class Q implements y {
+    public final /* synthetic */ I2 a;
 
-    private /* synthetic */ Q() {
+    public /* synthetic */ Q(I2 i2) {
+        this.a = i2;
     }
 
-    public final Object a(Object obj, Object obj2) {
-        return new D3((CLASSNAMEm3) obj, (CLASSNAMEm3) obj2);
+    public final void accept(long j) {
+        this.a.a.accept(j);
+    }
+
+    public y g(y yVar) {
+        yVar.getClass();
+        return new h(this, yVar);
     }
 }

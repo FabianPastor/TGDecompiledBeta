@@ -10,13 +10,14 @@ public class TLRPC$TL_message extends TLRPC$Message {
         this.flags = readInt32;
         int i = 0;
         this.out = (readInt32 & 2) != 0;
-        this.mentioned = (this.flags & 16) != 0;
-        this.media_unread = (this.flags & 32) != 0;
-        this.silent = (this.flags & 8192) != 0;
-        this.post = (this.flags & 16384) != 0;
-        this.from_scheduled = (this.flags & 262144) != 0;
-        this.legacy = (this.flags & 524288) != 0;
-        this.edit_hide = (this.flags & 2097152) != 0;
+        this.mentioned = (readInt32 & 16) != 0;
+        this.media_unread = (readInt32 & 32) != 0;
+        this.silent = (readInt32 & 8192) != 0;
+        this.post = (readInt32 & 16384) != 0;
+        this.from_scheduled = (262144 & readInt32) != 0;
+        this.legacy = (524288 & readInt32) != 0;
+        this.edit_hide = (2097152 & readInt32) != 0;
+        this.pinned = (readInt32 & 16777216) != 0;
         this.id = abstractSerializedData.readInt32(z);
         if ((this.flags & 256) != 0) {
             this.from_id = TLRPC$Peer.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);
@@ -39,8 +40,7 @@ public class TLRPC$TL_message extends TLRPC$Message {
             if (TLdeserialize != null) {
                 this.ttl = TLdeserialize.ttl_seconds;
             }
-            TLRPC$MessageMedia tLRPC$MessageMedia = this.media;
-            if (tLRPC$MessageMedia != null && !TextUtils.isEmpty(tLRPC$MessageMedia.captionLegacy)) {
+            if (TLdeserialize != null && !TextUtils.isEmpty(TLdeserialize.captionLegacy)) {
                 this.message = this.media.captionLegacy;
             }
         }
@@ -122,7 +122,9 @@ public class TLRPC$TL_message extends TLRPC$Message {
         this.flags = i7;
         int i8 = this.edit_hide ? i7 | 2097152 : i7 & -2097153;
         this.flags = i8;
-        abstractSerializedData.writeInt32(i8);
+        int i9 = this.pinned ? i8 | 16777216 : i8 & -16777217;
+        this.flags = i9;
+        abstractSerializedData.writeInt32(i9);
         abstractSerializedData.writeInt32(this.id);
         if ((this.flags & 256) != 0) {
             this.from_id.serializeToStream(abstractSerializedData);
@@ -149,8 +151,8 @@ public class TLRPC$TL_message extends TLRPC$Message {
             abstractSerializedData.writeInt32(NUM);
             int size = this.entities.size();
             abstractSerializedData.writeInt32(size);
-            for (int i9 = 0; i9 < size; i9++) {
-                this.entities.get(i9).serializeToStream(abstractSerializedData);
+            for (int i10 = 0; i10 < size; i10++) {
+                this.entities.get(i10).serializeToStream(abstractSerializedData);
             }
         }
         if ((this.flags & 1024) != 0) {
@@ -175,8 +177,8 @@ public class TLRPC$TL_message extends TLRPC$Message {
             abstractSerializedData.writeInt32(NUM);
             int size2 = this.restriction_reason.size();
             abstractSerializedData.writeInt32(size2);
-            for (int i10 = 0; i10 < size2; i10++) {
-                this.restriction_reason.get(i10).serializeToStream(abstractSerializedData);
+            for (int i11 = 0; i11 < size2; i11++) {
+                this.restriction_reason.get(i11).serializeToStream(abstractSerializedData);
             }
         }
         writeAttachPath(abstractSerializedData);

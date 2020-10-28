@@ -59,32 +59,36 @@ public class SerializedData extends AbstractSerializedData {
 
     public void cleanup() {
         try {
-            if (this.inbuf != null) {
-                this.inbuf.close();
+            ByteArrayInputStream byteArrayInputStream = this.inbuf;
+            if (byteArrayInputStream != null) {
+                byteArrayInputStream.close();
                 this.inbuf = null;
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
         try {
-            if (this.in != null) {
-                this.in.close();
+            DataInputStream dataInputStream = this.in;
+            if (dataInputStream != null) {
+                dataInputStream.close();
                 this.in = null;
             }
         } catch (Exception e2) {
             FileLog.e((Throwable) e2);
         }
         try {
-            if (this.outbuf != null) {
-                this.outbuf.close();
+            ByteArrayOutputStream byteArrayOutputStream = this.outbuf;
+            if (byteArrayOutputStream != null) {
+                byteArrayOutputStream.close();
                 this.outbuf = null;
             }
         } catch (Exception e3) {
             FileLog.e((Throwable) e3);
         }
         try {
-            if (this.out != null) {
-                this.out.close();
+            DataOutputStream dataOutputStream = this.out;
+            if (dataOutputStream != null) {
+                dataOutputStream.close();
                 this.out = null;
             }
         } catch (Exception e4) {

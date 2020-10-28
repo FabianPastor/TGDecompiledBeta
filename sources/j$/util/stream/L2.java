@@ -1,35 +1,21 @@
 package j$.util.stream;
 
-class L2 extends CLASSNAMEy5 {
+class L2 extends CLASSNAMEo5 {
     final /* synthetic */ M2 b;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    L2(M2 this$1, G5 downstream) {
-        super(downstream);
-        this.b = this$1;
+    L2(M2 m2, CLASSNAMEt5 t5Var) {
+        super(t5Var);
+        this.b = m2;
     }
 
-    public void s(long size) {
-        this.a.s(-1);
-    }
-
-    public void accept(long t) {
-        W2 result = (W2) this.b.m.a(t);
-        if (result != null) {
-            try {
-                result.sequential().i(new U(this));
-            } catch (Throwable th) {
-            }
+    public void accept(long j) {
+        if (this.b.l.b(j)) {
+            this.a.accept(j);
         }
-        if (result != null) {
-            result.close();
-            return;
-        }
-        return;
-        throw th;
     }
 
-    public /* synthetic */ void a(long i) {
-        this.a.accept(i);
+    public void n(long j) {
+        this.a.n(-1);
     }
 }

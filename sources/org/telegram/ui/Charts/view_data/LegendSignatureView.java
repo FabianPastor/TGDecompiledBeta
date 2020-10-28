@@ -246,31 +246,28 @@ public class LegendSignatureView extends FrameLayout {
             this.root = linearLayout;
             linearLayout.setPadding(AndroidUtilities.dp(4.0f), AndroidUtilities.dp(2.0f), AndroidUtilities.dp(4.0f), AndroidUtilities.dp(2.0f));
             if (legendSignatureView.showPercentage) {
-                LinearLayout linearLayout2 = this.root;
                 TextView textView = new TextView(legendSignatureView.getContext());
                 this.percentage = textView;
-                linearLayout2.addView(textView);
+                linearLayout.addView(textView);
                 this.percentage.getLayoutParams().width = AndroidUtilities.dp(36.0f);
                 this.percentage.setVisibility(8);
                 this.percentage.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                 this.percentage.setTextSize(13.0f);
             }
-            LinearLayout linearLayout3 = this.root;
             TextView textView2 = new TextView(legendSignatureView.getContext());
             this.signature = textView2;
-            linearLayout3.addView(textView2);
-            this.signature.getLayoutParams().width = AndroidUtilities.dp(legendSignatureView.showPercentage ? 80.0f : 96.0f);
-            LinearLayout linearLayout4 = this.root;
+            linearLayout.addView(textView2);
+            textView2.getLayoutParams().width = AndroidUtilities.dp(legendSignatureView.showPercentage ? 80.0f : 96.0f);
             TextView textView3 = new TextView(legendSignatureView.getContext());
             this.value = textView3;
-            linearLayout4.addView(textView3, LayoutHelper.createLinear(-1, -2));
-            this.signature.setGravity(8388611);
-            this.value.setGravity(8388613);
-            this.value.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            this.value.setTextSize(13.0f);
-            this.value.setMinEms(4);
-            this.value.setMaxEms(4);
-            this.signature.setTextSize(13.0f);
+            linearLayout.addView(textView3, LayoutHelper.createLinear(-1, -2));
+            textView2.setGravity(8388611);
+            textView3.setGravity(8388613);
+            textView3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            textView3.setTextSize(13.0f);
+            textView3.setMinEms(4);
+            textView3.setMaxEms(4);
+            textView2.setTextSize(13.0f);
         }
     }
 }

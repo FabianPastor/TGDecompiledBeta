@@ -41,7 +41,7 @@ public final class CustomTabsIntent {
             }
             Bundle bundle = new Bundle();
             BundleCompat.putBinder(bundle, "android.support.customtabs.extra.SESSION", customTabsSession != null ? customTabsSession.getBinder() : iBinder);
-            this.mIntent.putExtras(bundle);
+            intent.putExtras(bundle);
         }
 
         public Builder setToolbarColor(int i) {

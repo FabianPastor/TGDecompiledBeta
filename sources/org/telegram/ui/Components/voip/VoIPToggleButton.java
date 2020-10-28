@@ -75,8 +75,8 @@ public class VoIPToggleButton extends FrameLayout {
     }
 
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:58:0x01c9  */
-    /* JADX WARNING: Removed duplicated region for block: B:59:0x0293  */
+    /* JADX WARNING: Removed duplicated region for block: B:57:0x01c5  */
+    /* JADX WARNING: Removed duplicated region for block: B:58:0x028d  */
     @android.annotation.SuppressLint({"DrawAllocation"})
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onDraw(android.graphics.Canvas r21) {
@@ -133,11 +133,11 @@ public class VoIPToggleButton extends FrameLayout {
             r9 = 1065353216(0x3var_, float:1.0)
             r10 = 2
             r11 = 0
-            if (r5 != 0) goto L_0x010d
+            if (r5 != 0) goto L_0x010b
             float r5 = r0.crossProgress
             int r5 = (r5 > r3 ? 1 : (r5 == r3 ? 0 : -1))
             if (r5 == 0) goto L_0x0069
-            goto L_0x010d
+            goto L_0x010b
         L_0x0069:
             float r5 = r0.replaceProgress
             int r5 = (r5 > r3 ? 1 : (r5 == r3 ? 0 : -1))
@@ -151,10 +151,10 @@ public class VoIPToggleButton extends FrameLayout {
         L_0x0076:
             r5 = 1
         L_0x0077:
-            if (r11 >= r5) goto L_0x02d4
+            if (r11 >= r5) goto L_0x02ce
             android.graphics.drawable.Drawable[] r5 = r0.icon
             r5 = r5[r11]
-            if (r5 == 0) goto L_0x0109
+            if (r5 == 0) goto L_0x0107
             r21.save()
             float r5 = r0.replaceProgress
             int r12 = (r5 > r3 ? 1 : (r5 == r3 ? 0 : -1))
@@ -171,14 +171,13 @@ public class VoIPToggleButton extends FrameLayout {
             float r5 = r5 * r13
             int r5 = (int) r5
             r12.setAlpha(r5)
-            goto L_0x00c8
+            goto L_0x00c6
         L_0x00a0:
-            boolean r5 = r0.iconChangeColor
-            if (r5 == 0) goto L_0x00c1
-            int r5 = r0.replaceColorFrom
-            int r12 = r0.currentIconColor
-            float r13 = r0.replaceProgress
-            int r5 = androidx.core.graphics.ColorUtils.blendARGB(r5, r12, r13)
+            boolean r12 = r0.iconChangeColor
+            if (r12 == 0) goto L_0x00bf
+            int r12 = r0.replaceColorFrom
+            int r13 = r0.currentIconColor
+            int r5 = androidx.core.graphics.ColorUtils.blendARGB(r12, r13, r5)
             android.graphics.drawable.Drawable[] r12 = r0.icon
             r12 = r12[r11]
             android.graphics.PorterDuffColorFilter r13 = new android.graphics.PorterDuffColorFilter
@@ -187,11 +186,11 @@ public class VoIPToggleButton extends FrameLayout {
             r12.setColorFilter(r13)
             android.graphics.Paint r12 = r0.crossPaint
             r12.setColor(r5)
-        L_0x00c1:
+        L_0x00bf:
             android.graphics.drawable.Drawable[] r5 = r0.icon
             r5 = r5[r11]
             r5.setAlpha(r7)
-        L_0x00c8:
+        L_0x00c6:
             android.graphics.drawable.Drawable[] r5 = r0.icon
             r12 = r5[r11]
             r5 = r5[r11]
@@ -226,12 +225,12 @@ public class VoIPToggleButton extends FrameLayout {
             r5 = r5[r11]
             r5.draw(r1)
             r21.restore()
-        L_0x0109:
+        L_0x0107:
             int r11 = r11 + 1
             goto L_0x0069
-        L_0x010d:
+        L_0x010b:
             boolean r5 = r0.iconChangeColor
-            if (r5 == 0) goto L_0x012e
+            if (r5 == 0) goto L_0x012c
             int r5 = r0.replaceColorFrom
             int r12 = r0.currentIconColor
             float r13 = r0.replaceProgress
@@ -244,12 +243,12 @@ public class VoIPToggleButton extends FrameLayout {
             r12.setColorFilter(r13)
             android.graphics.Paint r12 = r0.crossPaint
             r12.setColor(r5)
-        L_0x012e:
+        L_0x012c:
             android.graphics.drawable.Drawable[] r5 = r0.icon
             r5 = r5[r11]
             r5.setAlpha(r7)
             android.graphics.Bitmap r5 = r0.iconBitmap
-            if (r5 != 0) goto L_0x0155
+            if (r5 != 0) goto L_0x0153
             r5 = 1107296256(0x42000000, float:32.0)
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r5)
             int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
@@ -260,10 +259,10 @@ public class VoIPToggleButton extends FrameLayout {
             android.graphics.Bitmap r12 = r0.iconBitmap
             r5.<init>(r12)
             r0.iconCanvas = r5
-            goto L_0x0158
-        L_0x0155:
+            goto L_0x0156
+        L_0x0153:
             r5.eraseColor(r11)
-        L_0x0158:
+        L_0x0156:
             android.graphics.Bitmap r5 = r0.iconBitmap
             int r5 = r5.getWidth()
             int r5 = r5 >> r8
@@ -274,9 +273,9 @@ public class VoIPToggleButton extends FrameLayout {
             float r8 = (float) r8
             float r12 = r0.replaceProgress
             int r13 = (r12 > r3 ? 1 : (r12 == r3 ? 0 : -1))
-            if (r13 == 0) goto L_0x018e
+            if (r13 == 0) goto L_0x018c
             boolean r13 = r0.iconChangeColor
-            if (r13 == 0) goto L_0x018e
+            if (r13 == 0) goto L_0x018c
             int r13 = r0.replaceColorFrom
             int r14 = r0.currentIconColor
             int r12 = androidx.core.graphics.ColorUtils.blendARGB(r13, r14, r12)
@@ -288,41 +287,40 @@ public class VoIPToggleButton extends FrameLayout {
             r13.setColorFilter(r14)
             android.graphics.Paint r13 = r0.crossPaint
             r13.setColor(r12)
-        L_0x018e:
+        L_0x018c:
             android.graphics.drawable.Drawable[] r12 = r0.icon
             r12 = r12[r11]
             r12.setAlpha(r7)
             boolean r7 = r0.drawCross
             r12 = 1034147594(0x3da3d70a, float:0.08)
-            if (r7 == 0) goto L_0x01b0
-            float r7 = r0.crossProgress
-            int r13 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r13 >= 0) goto L_0x01b0
-            float r7 = r7 + r12
-            r0.crossProgress = r7
-            int r7 = (r7 > r9 ? 1 : (r7 == r9 ? 0 : -1))
-            if (r7 <= 0) goto L_0x01ac
+            if (r7 == 0) goto L_0x01ae
+            float r13 = r0.crossProgress
+            int r14 = (r13 > r9 ? 1 : (r13 == r9 ? 0 : -1))
+            if (r14 >= 0) goto L_0x01ae
+            float r13 = r13 + r12
+            r0.crossProgress = r13
+            int r7 = (r13 > r9 ? 1 : (r13 == r9 ? 0 : -1))
+            if (r7 <= 0) goto L_0x01aa
             r0.crossProgress = r9
-            goto L_0x01c3
-        L_0x01ac:
+            goto L_0x01bf
+        L_0x01aa:
             r20.invalidate()
-            goto L_0x01c3
-        L_0x01b0:
-            boolean r7 = r0.drawCross
-            if (r7 != 0) goto L_0x01c3
+            goto L_0x01bf
+        L_0x01ae:
+            if (r7 != 0) goto L_0x01bf
             float r7 = r0.crossProgress
             float r7 = r7 - r12
             r0.crossProgress = r7
             int r7 = (r7 > r3 ? 1 : (r7 == r3 ? 0 : -1))
-            if (r7 >= 0) goto L_0x01c0
+            if (r7 >= 0) goto L_0x01bc
             r0.crossProgress = r3
-            goto L_0x01c3
-        L_0x01c0:
+            goto L_0x01bf
+        L_0x01bc:
             r20.invalidate()
-        L_0x01c3:
+        L_0x01bf:
             float r7 = r0.crossProgress
             int r3 = (r7 > r3 ? 1 : (r7 == r3 ? 0 : -1))
-            if (r3 <= 0) goto L_0x0293
+            if (r3 <= 0) goto L_0x028d
             android.graphics.drawable.Drawable[] r3 = r0.icon
             r3 = r3[r11]
             int r3 = r3.getIntrinsicWidth()
@@ -354,14 +352,13 @@ public class VoIPToggleButton extends FrameLayout {
             float r13 = (float) r13
             org.telegram.ui.Components.CubicBezierInterpolator r14 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
             float r15 = r0.crossProgress
-            float r14 = r14.getInterpolation(r15)
-            float r13 = r13 * r14
+            float r15 = r14.getInterpolation(r15)
+            float r13 = r13 * r15
             float r9 = r9 + r13
             int r12 = org.telegram.messenger.AndroidUtilities.dp(r12)
             float r12 = (float) r12
-            org.telegram.ui.Components.CubicBezierInterpolator r13 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
-            float r14 = r0.crossProgress
-            float r13 = r13.getInterpolation(r14)
+            float r13 = r0.crossProgress
+            float r13 = r14.getInterpolation(r13)
             float r12 = r12 * r13
             float r12 = r12 + r7
             android.graphics.drawable.Drawable[] r13 = r0.icon
@@ -423,8 +420,8 @@ public class VoIPToggleButton extends FrameLayout {
             float r6 = r6 - r8
             android.graphics.Paint r4 = r0.bitmapPaint
             r1.drawBitmap(r3, r2, r6, r4)
-            goto L_0x02d4
-        L_0x0293:
+            goto L_0x02ce
+        L_0x028d:
             android.graphics.drawable.Drawable[] r3 = r0.icon
             r4 = r3[r11]
             r3 = r3[r11]
@@ -460,7 +457,7 @@ public class VoIPToggleButton extends FrameLayout {
             android.graphics.drawable.Drawable[] r2 = r0.icon
             r2 = r2[r11]
             r2.draw(r1)
-        L_0x02d4:
+        L_0x02ce:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.VoIPToggleButton.onDraw(android.graphics.Canvas):void");
@@ -547,8 +544,10 @@ public class VoIPToggleButton extends FrameLayout {
                     }
                     if (!VoIPToggleButton.this.iconChangeColor) {
                         Drawable[] drawableArr = VoIPToggleButton.this.icon;
-                        drawableArr[0] = drawableArr[1];
-                        drawableArr[1] = null;
+                        if (drawableArr[1] != null) {
+                            drawableArr[0] = drawableArr[1];
+                            drawableArr[1] = null;
+                        }
                     }
                     boolean unused = VoIPToggleButton.this.iconChangeColor = false;
                     VoIPToggleButton voIPToggleButton = VoIPToggleButton.this;
@@ -562,6 +561,8 @@ public class VoIPToggleButton extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setData$0 */
     public /* synthetic */ void lambda$setData$0$VoIPToggleButton(boolean z, ValueAnimator valueAnimator) {
         this.replaceProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();

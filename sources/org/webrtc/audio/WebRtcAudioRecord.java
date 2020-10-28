@@ -225,8 +225,9 @@ class WebRtcAudioRecord {
         try {
             if (Build.VERSION.SDK_INT >= 23) {
                 this.audioRecord = createAudioRecordOnMOrHigher(this.audioSource, i, channelCountToConfiguration, this.audioFormat, max);
-                if (this.preferredDevice != null) {
-                    setPreferredDevice(this.preferredDevice);
+                AudioDeviceInfo audioDeviceInfo = this.preferredDevice;
+                if (audioDeviceInfo != null) {
+                    setPreferredDevice(audioDeviceInfo);
                 }
             } else {
                 this.audioRecord = createAudioRecordOnLowerThanM(this.audioSource, i, channelCountToConfiguration, this.audioFormat, max);
@@ -452,7 +453,7 @@ class WebRtcAudioRecord {
                 scheduledExecutorService.shutdownNow();
             }
             this.executor = Executors.newSingleThreadScheduledExecutor();
-            $$Lambda$WebRtcAudioRecord$IuPtu1L1Bj9aB9i_QLIET03iW8Q r0 = new Callable() {
+            $$Lambda$WebRtcAudioRecord$NdrzDf8trBuj0MlSlKYLuun2Js r0 = new Callable() {
                 public final Object call() {
                     return WebRtcAudioRecord.this.lambda$scheduleLogRecordingConfigurationsTask$0$WebRtcAudioRecord();
                 }
@@ -465,6 +466,8 @@ class WebRtcAudioRecord {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$scheduleLogRecordingConfigurationsTask$0 */
     public /* synthetic */ String lambda$scheduleLogRecordingConfigurationsTask$0$WebRtcAudioRecord() throws Exception {
         logRecordingConfigurations(true);
         return "Scheduled task is done";

@@ -9,7 +9,7 @@ public class TLRPC$TL_messageMediaInvoice extends TLRPC$MessageMedia {
         this.flags = readInt32;
         boolean z2 = false;
         this.shipping_address_requested = (readInt32 & 2) != 0;
-        if ((this.flags & 8) != 0) {
+        if ((readInt32 & 8) != 0) {
             z2 = true;
         }
         this.test = z2;

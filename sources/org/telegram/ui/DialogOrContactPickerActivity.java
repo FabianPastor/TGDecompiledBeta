@@ -40,7 +40,7 @@ import org.telegram.ui.DialogsActivity;
 
 public class DialogOrContactPickerActivity extends BaseFragment {
     /* access modifiers changed from: private */
-    public static final Interpolator interpolator = $$Lambda$DialogOrContactPickerActivity$VAmOOWLwronwq33cK0iXRproy5M.INSTANCE;
+    public static final Interpolator interpolator = $$Lambda$DialogOrContactPickerActivity$BNBuvOxpf9s1z0J3_qv_mDYDOg.INSTANCE;
     /* access modifiers changed from: private */
     public boolean animatingForward;
     /* access modifiers changed from: private */
@@ -122,6 +122,8 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         this.contactsActivity.onFragmentCreate();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ void lambda$new$1$DialogOrContactPickerActivity(DialogsActivity dialogsActivity2, ArrayList arrayList, CharSequence charSequence, boolean z) {
         if (!arrayList.isEmpty()) {
             long longValue = ((Long) arrayList.get(0)).longValue();
@@ -132,6 +134,8 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$2 */
     public /* synthetic */ void lambda$new$2$DialogOrContactPickerActivity(TLRPC$User tLRPC$User, String str, ContactsActivity contactsActivity2) {
         showBlockAlert(tLRPC$User);
     }
@@ -718,6 +722,8 @@ public class DialogOrContactPickerActivity extends BaseFragment {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$showBlockAlert$3 */
     public /* synthetic */ void lambda$showBlockAlert$3$DialogOrContactPickerActivity(TLRPC$User tLRPC$User, DialogInterface dialogInterface, int i) {
         if (MessagesController.isSupportUser(tLRPC$User)) {
             AlertsCreator.showSimpleToast(this, LocaleController.getString("ErrorOccurred", NUM));

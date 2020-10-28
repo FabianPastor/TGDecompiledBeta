@@ -69,7 +69,7 @@ public abstract class SeekBarAccessibilityDelegate extends View.AccessibilityDel
             Runnable runnable = this.accessibilityEventRunnables.get(view);
             if (runnable == null) {
                 Map<View, Runnable> map = this.accessibilityEventRunnables;
-                $$Lambda$SeekBarAccessibilityDelegate$pcjtUN_m9R6D9QI42bCM5CcG1ZQ r1 = new Runnable(view) {
+                $$Lambda$SeekBarAccessibilityDelegate$8IJe1316cK3QFfOcwBG4IAMvar_ r1 = new Runnable(view) {
                     public final /* synthetic */ View f$1;
 
                     {
@@ -90,6 +90,8 @@ public abstract class SeekBarAccessibilityDelegate extends View.AccessibilityDel
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$postAccessibilityEventRunnable$0 */
     public /* synthetic */ void lambda$postAccessibilityEventRunnable$0$SeekBarAccessibilityDelegate(View view) {
         sendAccessibilityEvent(view, 4);
     }

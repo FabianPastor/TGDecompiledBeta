@@ -1,56 +1,81 @@
 package j$.util;
 
-import java.lang.reflect.Field;
-import java.util.DoubleSummaryStatistics;
+import j$.util.function.g;
+import j$.util.function.h;
+import j$.util.function.u;
+import j$.util.function.y;
 
-public class r {
-    private static final Field a;
-    private static final Field b;
-    private static final Field c;
-    private static final Field d;
+public class r implements y, u {
+    private long count;
+    private long max = Long.MIN_VALUE;
+    private long min = Long.MAX_VALUE;
+    private long sum;
 
-    static {
-        Class<CLASSNAMEq> cls = CLASSNAMEq.class;
-        b(cls, "count").setAccessible(true);
-        b(cls, "sum").setAccessible(true);
-        b(cls, "min").setAccessible(true);
-        b(cls, "max").setAccessible(true);
-        Class<DoubleSummaryStatistics> cls2 = DoubleSummaryStatistics.class;
-        Field b2 = b(cls2, "count");
-        a = b2;
-        b2.setAccessible(true);
-        Field b3 = b(cls2, "sum");
-        b = b3;
-        b3.setAccessible(true);
-        Field b4 = b(cls2, "min");
-        c = b4;
-        b4.setAccessible(true);
-        Field b5 = b(cls2, "max");
-        d = b5;
-        b5.setAccessible(true);
+    public void accept(int i) {
+        accept((long) i);
     }
 
-    private static Field b(Class clazz, String name) {
-        try {
-            return clazz.getDeclaredField(name);
-        } catch (NoSuchFieldException e) {
-            throw new Error("Failed summary statistics set-up.", e);
-        }
+    public void accept(long j) {
+        this.count++;
+        this.sum += j;
+        this.min = Math.min(this.min, j);
+        this.max = Math.max(this.max, j);
     }
 
-    public static DoubleSummaryStatistics a(CLASSNAMEq stats) {
-        if (stats == null) {
-            return null;
+    public void b(r rVar) {
+        this.count += rVar.count;
+        this.sum += rVar.sum;
+        this.min = Math.min(this.min, rVar.min);
+        this.max = Math.max(this.max, rVar.max);
+    }
+
+    public final long c() {
+        return this.count;
+    }
+
+    public final long d() {
+        return this.max;
+    }
+
+    public final long e() {
+        return this.min;
+    }
+
+    public final long f() {
+        return this.sum;
+    }
+
+    public y g(y yVar) {
+        yVar.getClass();
+        return new h(this, yVar);
+    }
+
+    public u l(u uVar) {
+        uVar.getClass();
+        return new g(this, uVar);
+    }
+
+    public String toString() {
+        double d;
+        Object[] objArr = new Object[6];
+        objArr[0] = getClass().getSimpleName();
+        objArr[1] = Long.valueOf(this.count);
+        objArr[2] = Long.valueOf(this.sum);
+        objArr[3] = Long.valueOf(this.min);
+        long j = this.count;
+        if (j > 0) {
+            double d2 = (double) this.sum;
+            double d3 = (double) j;
+            Double.isNaN(d2);
+            Double.isNaN(d3);
+            Double.isNaN(d2);
+            Double.isNaN(d3);
+            d = d2 / d3;
+        } else {
+            d = 0.0d;
         }
-        DoubleSummaryStatistics newInstance = new DoubleSummaryStatistics();
-        try {
-            a.set(newInstance, Long.valueOf(stats.d()));
-            b.set(newInstance, Double.valueOf(stats.g()));
-            c.set(newInstance, Double.valueOf(stats.f()));
-            d.set(newInstance, Double.valueOf(stats.e()));
-            return newInstance;
-        } catch (IllegalAccessException e) {
-            throw new Error("Failed summary statistics conversion.", e);
-        }
+        objArr[4] = Double.valueOf(d);
+        objArr[5] = Long.valueOf(this.max);
+        return String.format("%s{count=%d, sum=%d, min=%d, average=%f, max=%d}", objArr);
     }
 }

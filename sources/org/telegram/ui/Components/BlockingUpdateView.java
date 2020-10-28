@@ -62,15 +62,16 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         super(context);
         Context context2 = context;
         setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-        int i = Build.VERSION.SDK_INT >= 21 ? (int) (((float) AndroidUtilities.statusBarHeight) / AndroidUtilities.density) : 0;
+        int i = Build.VERSION.SDK_INT;
+        int i2 = i >= 21 ? (int) (((float) AndroidUtilities.statusBarHeight) / AndroidUtilities.density) : 0;
         FrameLayout frameLayout = new FrameLayout(context2);
         frameLayout.setBackgroundColor(-11556378);
-        addView(frameLayout, new FrameLayout.LayoutParams(-1, AndroidUtilities.dp(176.0f) + (Build.VERSION.SDK_INT >= 21 ? AndroidUtilities.statusBarHeight : 0)));
+        addView(frameLayout, new FrameLayout.LayoutParams(-1, AndroidUtilities.dp(176.0f) + (i >= 21 ? AndroidUtilities.statusBarHeight : 0)));
         ImageView imageView = new ImageView(context2);
         imageView.setImageResource(NUM);
         imageView.setScaleType(ImageView.ScaleType.CENTER);
         imageView.setPadding(0, 0, 0, AndroidUtilities.dp(14.0f));
-        frameLayout.addView(imageView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, (float) i, 0.0f, 0.0f));
+        frameLayout.addView(imageView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, (float) i2, 0.0f, 0.0f));
         imageView.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 BlockingUpdateView.this.lambda$new$0$BlockingUpdateView(view);
@@ -78,7 +79,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         });
         ScrollView scrollView = new ScrollView(context2);
         AndroidUtilities.setScrollViewEdgeEffectColor(scrollView, Theme.getColor("actionBarDefault"));
-        addView(scrollView, LayoutHelper.createFrame(-1, -1.0f, 51, 27.0f, (float) (i + 206), 27.0f, 130.0f));
+        addView(scrollView, LayoutHelper.createFrame(-1, -1.0f, 51, 27.0f, (float) (i2 + 206), 27.0f, 130.0f));
         FrameLayout frameLayout2 = new FrameLayout(context2);
         scrollView.addView(frameLayout2, LayoutHelper.createScroll(-1, -2, 17));
         TextView textView2 = new TextView(context2);
@@ -114,7 +115,7 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         this.acceptTextView.setTextColor(-1);
         this.acceptTextView.setTextSize(1, 14.0f);
         this.acceptButton.addView(this.acceptTextView, LayoutHelper.createFrame(-2, -2, 17));
-        AnonymousClass1 r2 = new FrameLayout(context2) {
+        AnonymousClass1 r3 = new FrameLayout(context2) {
             /* access modifiers changed from: protected */
             public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                 super.onLayout(z, i, i2, i3, i4);
@@ -129,8 +130,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
                 BlockingUpdateView.this.radialProgress.draw(canvas);
             }
         };
-        this.radialProgressView = r2;
-        r2.setWillNotDraw(false);
+        this.radialProgressView = r3;
+        r3.setWillNotDraw(false);
         this.radialProgressView.setAlpha(0.0f);
         this.radialProgressView.setScaleX(0.1f);
         this.radialProgressView.setScaleY(0.1f);
@@ -142,6 +143,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         this.acceptButton.addView(this.radialProgressView, LayoutHelper.createFrame(36, 36, 17));
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$BlockingUpdateView(View view) {
         int i = this.pressCount + 1;
         this.pressCount = i;
@@ -152,6 +155,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ void lambda$new$1$BlockingUpdateView(View view) {
         if (checkApkInstallPermissions(getContext())) {
             TLRPC$TL_help_appUpdate tLRPC$TL_help_appUpdate = this.appUpdate;
@@ -331,6 +336,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$show$4 */
     public /* synthetic */ void lambda$show$4$BlockingUpdateView(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLObject) {
             public final /* synthetic */ TLObject f$1;
@@ -345,6 +352,8 @@ public class BlockingUpdateView extends FrameLayout implements NotificationCente
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$3 */
     public /* synthetic */ void lambda$null$3$BlockingUpdateView(TLObject tLObject) {
         if ((tLObject instanceof TLRPC$TL_help_appUpdate) && !((TLRPC$TL_help_appUpdate) tLObject).can_not_skip) {
             setVisibility(8);

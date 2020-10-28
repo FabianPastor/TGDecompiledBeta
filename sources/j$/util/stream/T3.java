@@ -1,96 +1,79 @@
 package j$.util.stream;
 
-import j$.util.S;
-import j$.util.function.B;
-import j$.util.function.C;
-import j$.util.function.CLASSNAMEq;
+import j$.util.CLASSNAMEk;
+import j$.util.function.CLASSNAMEe;
 import j$.util.function.Consumer;
+import j$.util.function.h;
+import j$.util.function.y;
+import java.util.Arrays;
 
-final class T3 extends CLASSNAMEm6 implements CLASSNAMEo3, CLASSNAMEi3 {
-    private boolean g = false;
+final class T3 extends S3 implements CLASSNAMEf3 {
+    T3(long j) {
+        super(j);
+    }
+
+    public CLASSNAMEj3 a() {
+        if (this.b >= this.a.length) {
+            return this;
+        }
+        throw new IllegalStateException(String.format("Current size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.a.length)}));
+    }
 
     public /* synthetic */ void accept(double d) {
-        CLASSNAMEv5.c(this);
+        CLASSNAMEk.c(this);
         throw null;
     }
 
-    public /* synthetic */ void accept(long j) {
-        CLASSNAMEv5.b(this);
+    public /* synthetic */ void accept(int i) {
+        CLASSNAMEk.a(this);
         throw null;
     }
 
-    public /* bridge */ /* synthetic */ void accept(Object obj) {
-        t((Integer) obj);
+    public void accept(long j) {
+        int i = this.b;
+        long[] jArr = this.a;
+        if (i < jArr.length) {
+            this.b = i + 1;
+            jArr[i] = j;
+            return;
+        }
+        throw new IllegalStateException(String.format("Accept exceeded fixed size of %d", new Object[]{Integer.valueOf(this.a.length)}));
     }
 
-    public /* synthetic */ Consumer g(Consumer consumer) {
-        return CLASSNAMEq.a(this, consumer);
+    public Consumer f(Consumer consumer) {
+        consumer.getClass();
+        return new CLASSNAMEe(this, consumer);
     }
 
-    public /* synthetic */ void k(Integer[] numArr, int i) {
-        CLASSNAMEn3.a(this, numArr, i);
+    public y g(y yVar) {
+        yVar.getClass();
+        return new h(this, yVar);
     }
 
-    public /* bridge */ /* synthetic */ void m(Object[] objArr, int i) {
-        k((Integer[]) objArr, i);
+    public void m() {
+        if (this.b < this.a.length) {
+            throw new IllegalStateException(String.format("End size %d is less than fixed size %d", new Object[]{Integer.valueOf(this.b), Integer.valueOf(this.a.length)}));
+        }
     }
 
-    public /* synthetic */ void t(Integer num) {
-        C5.a(this, num);
+    public void n(long j) {
+        if (j == ((long) this.a.length)) {
+            this.b = 0;
+        } else {
+            throw new IllegalStateException(String.format("Begin size %d is not equal to fixed size %d", new Object[]{Long.valueOf(j), Integer.valueOf(this.a.length)}));
+        }
     }
 
-    public /* synthetic */ boolean u() {
-        CLASSNAMEv5.e();
+    public /* synthetic */ boolean p() {
         return false;
     }
 
-    public /* synthetic */ int w() {
-        CLASSNAMEg3.b();
-        return 0;
+    /* renamed from: s */
+    public /* synthetic */ void accept(Long l) {
+        CLASSNAMEc3.c(this, l);
     }
 
-    public /* synthetic */ Object[] x(C c) {
-        return CLASSNAMEr3.a(this, c);
-    }
-
-    T3() {
-    }
-
-    /* renamed from: N */
-    public S spliterator() {
-        return super.spliterator();
-    }
-
-    /* renamed from: Q */
-    public void j(B consumer) {
-        super.j(consumer);
-    }
-
-    public void s(long size) {
-        this.g = true;
-        clear();
-        D(size);
-    }
-
-    public void accept(int i) {
-        super.accept(i);
-    }
-
-    public void r() {
-        this.g = false;
-    }
-
-    /* renamed from: P */
-    public void f(int[] array, int offset) {
-        super.f(array, offset);
-    }
-
-    /* renamed from: O */
-    public int[] i() {
-        return (int[]) super.i();
-    }
-
-    public CLASSNAMEo3 b() {
-        return this;
+    public String toString() {
+        return String.format("LongFixedNodeBuilder[%d][%s]", new Object[]{Integer.valueOf(this.a.length - this.b), Arrays.toString(this.a)});
     }
 }

@@ -1,39 +1,54 @@
 package j$.util.stream;
 
-class J5 extends CLASSNAMEx5 {
-    long b;
-    long c;
-    final /* synthetic */ K5 d;
+import java.util.Arrays;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    J5(K5 this$0, G5 downstream) {
-        super(downstream);
-        this.d = this$0;
-        K5 k5 = this.d;
-        this.b = k5.m;
-        long j = k5.n;
-        this.c = j < 0 ? Long.MAX_VALUE : j;
+final class J5 extends F5 {
+    private Y5 c;
+
+    J5(CLASSNAMEt5 t5Var) {
+        super(t5Var);
     }
 
-    public void s(long size) {
-        this.a.s(Q5.e(size, this.d.m, this.c));
+    public void accept(int i) {
+        this.c.accept(i);
     }
 
-    public void accept(int t) {
-        long j = this.b;
-        if (j == 0) {
-            long j2 = this.c;
-            if (j2 > 0) {
-                this.c = j2 - 1;
-                this.a.accept(t);
-                return;
+    public void m() {
+        int[] iArr = (int[]) this.c.e();
+        Arrays.sort(iArr);
+        this.a.n((long) iArr.length);
+        int i = 0;
+        if (!this.b) {
+            int length = iArr.length;
+            while (i < length) {
+                this.a.accept(iArr[i]);
+                i++;
             }
+        } else {
+            int length2 = iArr.length;
+            while (i < length2) {
+                int i2 = iArr[i];
+                if (this.a.p()) {
+                    break;
+                }
+                this.a.accept(i2);
+                i++;
+            }
+        }
+        this.a.m();
+    }
+
+    public void n(long j) {
+        Y5 y5;
+        if (j < NUM) {
+            if (j > 0) {
+                int i = (int) j;
+            } else {
+                y5 = new Y5();
+            }
+            this.c = y5;
             return;
         }
-        this.b = j - 1;
-    }
-
-    public boolean u() {
-        return this.c == 0 || this.a.u();
+        throw new IllegalArgumentException("Stream size exceeds max array size");
     }
 }

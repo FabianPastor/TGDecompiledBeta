@@ -1,21 +1,16 @@
 package j$.util.stream;
 
-import j$.util.function.CLASSNAMEq;
-import j$.util.function.Consumer;
-import java.util.List;
+import j$.util.function.D;
 
-public final /* synthetic */ class P implements Consumer {
-    public final /* synthetic */ List a;
+public final /* synthetic */ class P implements D {
+    public static final /* synthetic */ P a = new P();
 
-    public /* synthetic */ P(List list) {
-        this.a = list;
+    private /* synthetic */ P() {
     }
 
-    public final void accept(Object obj) {
-        this.a.add(obj);
-    }
-
-    public /* synthetic */ Consumer g(Consumer consumer) {
-        return CLASSNAMEq.a(this, consumer);
+    public final void accept(Object obj, long j) {
+        long[] jArr = (long[]) obj;
+        jArr[0] = jArr[0] + 1;
+        jArr[1] = jArr[1] + j;
     }
 }

@@ -142,6 +142,8 @@ public class Painting {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$paintStroke$0 */
     public /* synthetic */ void lambda$paintStroke$0$Painting(Path path, boolean z, Runnable runnable) {
         RectF rectF;
         this.activePath = path;
@@ -207,6 +209,8 @@ public class Painting {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$commitStroke$1 */
     public /* synthetic */ void lambda$commitStroke$1$Painting(int i) {
         PaintingDelegate paintingDelegate;
         registerUndo(this.activeStrokeBounds);
@@ -252,6 +256,8 @@ public class Painting {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$clearStroke$2 */
     public /* synthetic */ void lambda$clearStroke$2$Painting() {
         GLES20.glBindFramebuffer(36160, getReusableFramebuffer());
         GLES20.glFramebufferTexture2D(36160, 36064, 3553, getPaintTexture(), 0);
@@ -290,7 +296,7 @@ public class Painting {
 
     /* access modifiers changed from: private */
     /* renamed from: restoreSlice */
-    public void lambda$registerUndo$3$Painting(Slice slice) {
+    public void lambda$registerUndo$3(Slice slice) {
         this.renderView.performInContext(new Runnable(slice) {
             public final /* synthetic */ Slice f$1;
 
@@ -304,6 +310,8 @@ public class Painting {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$restoreSlice$4 */
     public /* synthetic */ void lambda$restoreSlice$4$Painting(Slice slice) {
         PaintingDelegate paintingDelegate;
         ByteBuffer data = slice.getData();
@@ -460,6 +468,8 @@ public class Painting {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onPause$5 */
     public /* synthetic */ void lambda$onPause$5$Painting(Runnable runnable) {
         this.paused = true;
         this.backupSlice = new Slice(getPaintingData(getBounds(), true).data, getBounds(), this.delegate.requestDispatchQueue());
@@ -470,7 +480,7 @@ public class Painting {
     }
 
     public void onResume() {
-        lambda$registerUndo$3$Painting(this.backupSlice);
+        lambda$registerUndo$3(this.backupSlice);
         this.backupSlice = null;
         this.paused = false;
     }

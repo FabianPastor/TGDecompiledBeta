@@ -219,11 +219,15 @@ public class PollVotesAlert extends BottomSheet {
                     PollVotesAlert.SectionCell.this.lambda$new$0$PollVotesAlert$SectionCell(view);
                 }
             });
-            addView(this.textView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 0 : 16), 0.0f, (float) (!LocaleController.isRTL ? 0 : i2), 0.0f));
+            TextView textView4 = this.textView;
+            boolean z = LocaleController.isRTL;
+            addView(textView4, LayoutHelper.createFrame(-2, -1.0f, (z ? 5 : 3) | 48, (float) (z ? 0 : 16), 0.0f, (float) (!z ? 0 : i2), 0.0f));
             addView(this.middleTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, 0.0f, 0.0f, 0.0f, 0.0f));
             addView(this.righTextView, LayoutHelper.createFrame(-2, -1.0f, (LocaleController.isRTL ? 3 : i) | 48, 16.0f, 0.0f, 16.0f, 0.0f));
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$new$0 */
         public /* synthetic */ void lambda$new$0$PollVotesAlert$SectionCell(View view) {
             onCollapseClick();
         }
@@ -306,15 +310,19 @@ public class PollVotesAlert extends BottomSheet {
             BackupImageView backupImageView = new BackupImageView(context);
             this.avatarImageView = backupImageView;
             backupImageView.setRoundRadius(AndroidUtilities.dp(18.0f));
+            BackupImageView backupImageView2 = this.avatarImageView;
+            boolean z = LocaleController.isRTL;
             int i2 = 5;
-            addView(this.avatarImageView, LayoutHelper.createFrame(36, 36.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 14.0f, 6.0f, LocaleController.isRTL ? 14.0f : 0.0f, 0.0f));
+            addView(backupImageView2, LayoutHelper.createFrame(36, 36.0f, (z ? 5 : 3) | 48, z ? 0.0f : 14.0f, 6.0f, z ? 14.0f : 0.0f, 0.0f));
             SimpleTextView simpleTextView = new SimpleTextView(context);
             this.nameTextView = simpleTextView;
             simpleTextView.setTextColor(Theme.getColor("dialogTextBlack"));
             this.nameTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.nameTextView.setTextSize(16);
             this.nameTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-            addView(this.nameTextView, LayoutHelper.createFrame(-1, 20.0f, (!LocaleController.isRTL ? 3 : i2) | 48, LocaleController.isRTL ? 28.0f : 65.0f, 14.0f, LocaleController.isRTL ? 65.0f : 28.0f, 0.0f));
+            SimpleTextView simpleTextView2 = this.nameTextView;
+            boolean z2 = LocaleController.isRTL;
+            addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, (!z2 ? 3 : i2) | 48, z2 ? 28.0f : 65.0f, 14.0f, z2 ? 65.0f : 28.0f, 0.0f));
         }
 
         public void setData(TLRPC$User tLRPC$User, int i, boolean z) {
@@ -355,130 +363,125 @@ public class PollVotesAlert extends BottomSheet {
         }
 
         /* JADX WARNING: Code restructure failed: missing block: B:2:0x0005, code lost:
-            r0 = r0.photo;
+            r2 = r0.photo;
          */
-        /* JADX WARNING: Code restructure failed: missing block: B:46:0x0066, code lost:
-            if (r1.equals(r10.lastName) == false) goto L_0x006a;
+        /* JADX WARNING: Code restructure failed: missing block: B:42:0x005e, code lost:
+            if (r1.equals(r11.lastName) == false) goto L_0x0062;
          */
         /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void update(int r11) {
+        public void update(int r12) {
             /*
-                r10 = this;
-                org.telegram.tgnet.TLRPC$User r0 = r10.currentUser
+                r11 = this;
+                org.telegram.tgnet.TLRPC$User r0 = r11.currentUser
                 r1 = 0
                 if (r0 == 0) goto L_0x000c
-                org.telegram.tgnet.TLRPC$UserProfilePhoto r0 = r0.photo
-                if (r0 == 0) goto L_0x000c
-                org.telegram.tgnet.TLRPC$FileLocation r0 = r0.photo_small
+                org.telegram.tgnet.TLRPC$UserProfilePhoto r2 = r0.photo
+                if (r2 == 0) goto L_0x000c
+                org.telegram.tgnet.TLRPC$FileLocation r2 = r2.photo_small
                 goto L_0x000d
             L_0x000c:
-                r0 = r1
+                r2 = r1
             L_0x000d:
-                r2 = 0
-                if (r11 == 0) goto L_0x006d
-                r3 = r11 & 2
-                r4 = 1
-                if (r3 == 0) goto L_0x0037
-                org.telegram.tgnet.TLRPC$FileLocation r3 = r10.lastAvatar
-                if (r3 == 0) goto L_0x001b
-                if (r0 == 0) goto L_0x0035
-            L_0x001b:
-                org.telegram.tgnet.TLRPC$FileLocation r3 = r10.lastAvatar
-                if (r3 != 0) goto L_0x0021
-                if (r0 != 0) goto L_0x0035
-            L_0x0021:
-                org.telegram.tgnet.TLRPC$FileLocation r3 = r10.lastAvatar
-                if (r3 == 0) goto L_0x0037
-                if (r0 == 0) goto L_0x0037
-                long r5 = r3.volume_id
-                long r7 = r0.volume_id
-                int r9 = (r5 > r7 ? 1 : (r5 == r7 ? 0 : -1))
-                if (r9 != 0) goto L_0x0035
-                int r3 = r3.local_id
-                int r5 = r0.local_id
-                if (r3 == r5) goto L_0x0037
-            L_0x0035:
-                r3 = 1
-                goto L_0x0038
-            L_0x0037:
                 r3 = 0
-            L_0x0038:
-                org.telegram.tgnet.TLRPC$User r5 = r10.currentUser
-                if (r5 == 0) goto L_0x004f
-                if (r3 != 0) goto L_0x004f
-                r6 = r11 & 4
-                if (r6 == 0) goto L_0x004f
-                org.telegram.tgnet.TLRPC$UserStatus r5 = r5.status
-                if (r5 == 0) goto L_0x0049
-                int r5 = r5.expires
-                goto L_0x004a
+                if (r12 == 0) goto L_0x0065
+                r4 = r12 & 2
+                r5 = 1
+                if (r4 == 0) goto L_0x0033
+                org.telegram.tgnet.TLRPC$FileLocation r4 = r11.lastAvatar
+                if (r4 == 0) goto L_0x001b
+                if (r2 == 0) goto L_0x0031
+            L_0x001b:
+                if (r4 != 0) goto L_0x001f
+                if (r2 != 0) goto L_0x0031
+            L_0x001f:
+                if (r4 == 0) goto L_0x0033
+                if (r2 == 0) goto L_0x0033
+                long r6 = r4.volume_id
+                long r8 = r2.volume_id
+                int r10 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
+                if (r10 != 0) goto L_0x0031
+                int r4 = r4.local_id
+                int r6 = r2.local_id
+                if (r4 == r6) goto L_0x0033
+            L_0x0031:
+                r4 = 1
+                goto L_0x0034
+            L_0x0033:
+                r4 = 0
+            L_0x0034:
+                if (r0 == 0) goto L_0x0049
+                if (r4 != 0) goto L_0x0049
+                r6 = r12 & 4
+                if (r6 == 0) goto L_0x0049
+                org.telegram.tgnet.TLRPC$UserStatus r6 = r0.status
+                if (r6 == 0) goto L_0x0043
+                int r6 = r6.expires
+                goto L_0x0044
+            L_0x0043:
+                r6 = 0
+            L_0x0044:
+                int r7 = r11.lastStatus
+                if (r6 == r7) goto L_0x0049
+                r4 = 1
             L_0x0049:
-                r5 = 0
-            L_0x004a:
-                int r6 = r10.lastStatus
-                if (r5 == r6) goto L_0x004f
-                r3 = 1
-            L_0x004f:
-                if (r3 != 0) goto L_0x0069
-                java.lang.String r5 = r10.lastName
-                if (r5 == 0) goto L_0x0069
-                r11 = r11 & r4
-                if (r11 == 0) goto L_0x0069
-                org.telegram.tgnet.TLRPC$User r11 = r10.currentUser
-                if (r11 == 0) goto L_0x0060
-                java.lang.String r1 = org.telegram.messenger.UserObject.getUserName(r11)
-            L_0x0060:
-                java.lang.String r11 = r10.lastName
-                boolean r11 = r1.equals(r11)
-                if (r11 != 0) goto L_0x0069
-                goto L_0x006a
-            L_0x0069:
-                r4 = r3
-            L_0x006a:
-                if (r4 != 0) goto L_0x006d
+                if (r4 != 0) goto L_0x0061
+                java.lang.String r6 = r11.lastName
+                if (r6 == 0) goto L_0x0061
+                r12 = r12 & r5
+                if (r12 == 0) goto L_0x0061
+                if (r0 == 0) goto L_0x0058
+                java.lang.String r1 = org.telegram.messenger.UserObject.getUserName(r0)
+            L_0x0058:
+                java.lang.String r12 = r11.lastName
+                boolean r12 = r1.equals(r12)
+                if (r12 != 0) goto L_0x0061
+                goto L_0x0062
+            L_0x0061:
+                r5 = r4
+            L_0x0062:
+                if (r5 != 0) goto L_0x0065
                 return
-            L_0x006d:
-                org.telegram.ui.Components.AvatarDrawable r11 = r10.avatarDrawable
-                org.telegram.tgnet.TLRPC$User r3 = r10.currentUser
-                r11.setInfo((org.telegram.tgnet.TLRPC$User) r3)
-                org.telegram.tgnet.TLRPC$User r11 = r10.currentUser
-                org.telegram.tgnet.TLRPC$UserStatus r11 = r11.status
-                if (r11 == 0) goto L_0x007f
-                int r11 = r11.expires
-                r10.lastStatus = r11
-                goto L_0x0081
-            L_0x007f:
-                r10.lastStatus = r2
+            L_0x0065:
+                org.telegram.ui.Components.AvatarDrawable r12 = r11.avatarDrawable
+                org.telegram.tgnet.TLRPC$User r0 = r11.currentUser
+                r12.setInfo((org.telegram.tgnet.TLRPC$User) r0)
+                org.telegram.tgnet.TLRPC$User r12 = r11.currentUser
+                org.telegram.tgnet.TLRPC$UserStatus r0 = r12.status
+                if (r0 == 0) goto L_0x0077
+                int r0 = r0.expires
+                r11.lastStatus = r0
+                goto L_0x0079
+            L_0x0077:
+                r11.lastStatus = r3
+            L_0x0079:
+                if (r12 == 0) goto L_0x0084
+                if (r1 != 0) goto L_0x0081
+                java.lang.String r1 = org.telegram.messenger.UserObject.getUserName(r12)
             L_0x0081:
-                org.telegram.tgnet.TLRPC$User r11 = r10.currentUser
-                if (r11 == 0) goto L_0x008e
-                if (r1 != 0) goto L_0x008b
-                java.lang.String r1 = org.telegram.messenger.UserObject.getUserName(r11)
-            L_0x008b:
-                r10.lastName = r1
-                goto L_0x0092
-            L_0x008e:
-                java.lang.String r11 = ""
-                r10.lastName = r11
-            L_0x0092:
-                org.telegram.ui.ActionBar.SimpleTextView r11 = r10.nameTextView
-                java.lang.String r1 = r10.lastName
-                r11.setText(r1)
-                r10.lastAvatar = r0
-                org.telegram.tgnet.TLRPC$User r11 = r10.currentUser
-                if (r11 == 0) goto L_0x00af
-                org.telegram.ui.Components.BackupImageView r0 = r10.avatarImageView
-                org.telegram.messenger.ImageLocation r11 = org.telegram.messenger.ImageLocation.getForUser(r11, r2)
-                org.telegram.ui.Components.AvatarDrawable r1 = r10.avatarDrawable
-                org.telegram.tgnet.TLRPC$User r2 = r10.currentUser
+                r11.lastName = r1
+                goto L_0x0088
+            L_0x0084:
+                java.lang.String r12 = ""
+                r11.lastName = r12
+            L_0x0088:
+                org.telegram.ui.ActionBar.SimpleTextView r12 = r11.nameTextView
+                java.lang.String r0 = r11.lastName
+                r12.setText(r0)
+                r11.lastAvatar = r2
+                org.telegram.tgnet.TLRPC$User r12 = r11.currentUser
+                if (r12 == 0) goto L_0x00a5
+                org.telegram.ui.Components.BackupImageView r0 = r11.avatarImageView
+                org.telegram.messenger.ImageLocation r12 = org.telegram.messenger.ImageLocation.getForUser(r12, r3)
+                org.telegram.ui.Components.AvatarDrawable r1 = r11.avatarDrawable
+                org.telegram.tgnet.TLRPC$User r2 = r11.currentUser
                 java.lang.String r3 = "50_50"
-                r0.setImage((org.telegram.messenger.ImageLocation) r11, (java.lang.String) r3, (android.graphics.drawable.Drawable) r1, (java.lang.Object) r2)
-                goto L_0x00b6
-            L_0x00af:
-                org.telegram.ui.Components.BackupImageView r11 = r10.avatarImageView
-                org.telegram.ui.Components.AvatarDrawable r0 = r10.avatarDrawable
-                r11.setImageDrawable(r0)
-            L_0x00b6:
+                r0.setImage((org.telegram.messenger.ImageLocation) r12, (java.lang.String) r3, (android.graphics.drawable.Drawable) r1, (java.lang.Object) r2)
+                goto L_0x00ac
+            L_0x00a5:
+                org.telegram.ui.Components.BackupImageView r12 = r11.avatarImageView
+                org.telegram.ui.Components.AvatarDrawable r0 = r11.avatarDrawable
+                r12.setImageDrawable(r0)
+            L_0x00ac:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PollVotesAlert.UserCell.update(int):void");
@@ -590,8 +593,9 @@ public class PollVotesAlert extends BottomSheet {
                 for (int i6 = 0; i6 < i5; i6++) {
                     tLRPC$TL_messages_votesList.votes.add(new TLRPC$TL_messageUserVoteInputOption());
                 }
-                tLRPC$TL_messages_votesList.next_offset = i5 < tLRPC$TL_pollAnswerVoters.voters ? "empty" : null;
-                tLRPC$TL_messages_votesList.count = tLRPC$TL_pollAnswerVoters.voters;
+                int i7 = tLRPC$TL_pollAnswerVoters.voters;
+                tLRPC$TL_messages_votesList.next_offset = i5 < i7 ? "empty" : null;
+                tLRPC$TL_messages_votesList.count = i7;
                 this.voters.add(new VotesList(tLRPC$TL_messages_votesList, tLRPC$TL_pollAnswerVoters.option));
                 TLRPC$TL_messages_getPollVotes tLRPC$TL_messages_getPollVotes = new TLRPC$TL_messages_getPollVotes();
                 tLRPC$TL_messages_getPollVotes.peer = this.peer;
@@ -599,11 +603,11 @@ public class PollVotesAlert extends BottomSheet {
                 tLRPC$TL_messages_getPollVotes.limit = tLRPC$TL_pollAnswerVoters.voters <= 15 ? 15 : 10;
                 tLRPC$TL_messages_getPollVotes.flags |= i3;
                 tLRPC$TL_messages_getPollVotes.option = tLRPC$TL_pollAnswerVoters.option;
-                $$Lambda$PollVotesAlert$lpnnrQFn8IKhhS43T4ZDEfqstlU r9 = r0;
+                $$Lambda$PollVotesAlert$VhpuNEK7164zrXpkg4D7IceH4M r9 = r0;
                 i = size;
                 ConnectionsManager connectionsManager = chatActivity2.getConnectionsManager();
                 i2 = i4;
-                $$Lambda$PollVotesAlert$lpnnrQFn8IKhhS43T4ZDEfqstlU r0 = new RequestDelegate(numArr, i4, chatActivity2, arrayList, tLRPC$TL_pollAnswerVoters) {
+                $$Lambda$PollVotesAlert$VhpuNEK7164zrXpkg4D7IceH4M r0 = new RequestDelegate(numArr, i4, chatActivity2, arrayList, tLRPC$TL_pollAnswerVoters) {
                     public final /* synthetic */ Integer[] f$1;
                     public final /* synthetic */ int f$2;
                     public final /* synthetic */ ChatActivity f$3;
@@ -631,31 +635,31 @@ public class PollVotesAlert extends BottomSheet {
         }
         updateButtons();
         Collections.sort(this.voters, new Object() {
-            public /* synthetic */ Comparator<T> reversed() {
+            public /* synthetic */ Comparator reversed() {
                 return Comparator.CC.$default$reversed(this);
             }
 
-            public /* synthetic */ <U extends Comparable<? super U>> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function) {
-                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (Function) function);
+            public /* synthetic */ java.util.Comparator thenComparing(Function function) {
+                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, function);
             }
 
-            public /* synthetic */ <U> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function, java.util.Comparator<? super U> comparator) {
+            public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
                 return Comparator.CC.$default$thenComparing(this, function, comparator);
             }
 
-            public /* synthetic */ java.util.Comparator<T> thenComparing(java.util.Comparator<? super T> comparator) {
-                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (java.util.Comparator) comparator);
+            public /* synthetic */ java.util.Comparator thenComparing(java.util.Comparator comparator) {
+                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, comparator);
             }
 
-            public /* synthetic */ java.util.Comparator<T> thenComparingDouble(ToDoubleFunction<? super T> toDoubleFunction) {
+            public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
                 return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
             }
 
-            public /* synthetic */ java.util.Comparator<T> thenComparingInt(ToIntFunction<? super T> toIntFunction) {
+            public /* synthetic */ java.util.Comparator thenComparingInt(ToIntFunction toIntFunction) {
                 return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
             }
 
-            public /* synthetic */ java.util.Comparator<T> thenComparingLong(ToLongFunction<? super T> toLongFunction) {
+            public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
                 return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
             }
 
@@ -797,8 +801,8 @@ public class PollVotesAlert extends BottomSheet {
         this.containerView = r02;
         r02.setWillNotDraw(false);
         ViewGroup viewGroup = this.containerView;
-        int i7 = this.backgroundPaddingLeft;
-        viewGroup.setPadding(i7, 0, i7, 0);
+        int i8 = this.backgroundPaddingLeft;
+        viewGroup.setPadding(i8, 0, i8, 0);
         AnonymousClass4 r03 = new RecyclerListView(parentActivity) {
             long lastUpdateTime;
 
@@ -917,6 +921,8 @@ public class PollVotesAlert extends BottomSheet {
         this.containerView.addView(this.actionBarShadow, LayoutHelper.createFrame(-1, 1.0f));
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ void lambda$new$1$PollVotesAlert(Integer[] numArr, int i, ChatActivity chatActivity2, ArrayList arrayList, TLRPC$TL_pollAnswerVoters tLRPC$TL_pollAnswerVoters, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(numArr, i, tLObject, chatActivity2, arrayList, tLRPC$TL_pollAnswerVoters) {
             public final /* synthetic */ Integer[] f$1;
@@ -941,6 +947,8 @@ public class PollVotesAlert extends BottomSheet {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$0 */
     public /* synthetic */ void lambda$null$0$PollVotesAlert(Integer[] numArr, int i, TLObject tLObject, ChatActivity chatActivity2, ArrayList arrayList, TLRPC$TL_pollAnswerVoters tLRPC$TL_pollAnswerVoters) {
         RecyclerView.ViewHolder findContainingViewHolder;
         this.queries.remove(numArr[i]);
@@ -1013,6 +1021,8 @@ public class PollVotesAlert extends BottomSheet {
         dismiss();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$4 */
     public /* synthetic */ void lambda$new$4$PollVotesAlert(ChatActivity chatActivity2, View view, int i) {
         if (chatActivity2 != null && chatActivity2.getParentActivity() != null) {
             ArrayList<Integer> arrayList = this.queries;
@@ -1077,6 +1087,8 @@ public class PollVotesAlert extends BottomSheet {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$3 */
     public /* synthetic */ void lambda$null$3$PollVotesAlert(VotesList votesList, ChatActivity chatActivity2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(votesList, tLObject, chatActivity2) {
             public final /* synthetic */ PollVotesAlert.VotesList f$1;
@@ -1095,6 +1107,8 @@ public class PollVotesAlert extends BottomSheet {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$PollVotesAlert(VotesList votesList, TLObject tLObject, ChatActivity chatActivity2) {
         if (isShowing()) {
             this.loadingMore.remove(votesList);
@@ -1149,7 +1163,7 @@ public class PollVotesAlert extends BottomSheet {
             }
         }
         if (z && i != 0) {
-            Collections.sort(arrayList, $$Lambda$PollVotesAlert$fCGvRabJVpryl8mZxJiM3wcqaoY.INSTANCE);
+            Collections.sort(arrayList, $$Lambda$PollVotesAlert$JlbsBgirEz4oQSTYz_nZssUAgSk.INSTANCE);
             int min = Math.min(i, arrayList.size());
             for (int i6 = 0; i6 < min; i6++) {
                 Button button2 = (Button) arrayList.get(i6);
@@ -1416,7 +1430,7 @@ public class PollVotesAlert extends BottomSheet {
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$PollVotesAlert$duMvUriWRtWBbdEJKBEaIhPp5ng r11 = new ThemeDescription.ThemeDescriptionDelegate() {
+        $$Lambda$PollVotesAlert$RBHXP45nhug4340Ynex3aJH17ro r11 = new ThemeDescription.ThemeDescriptionDelegate() {
             public final void didSetColor() {
                 PollVotesAlert.this.updatePlaceholder();
             }
@@ -1431,7 +1445,7 @@ public class PollVotesAlert extends BottomSheet {
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SELECTORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack"));
         arrayList.add(new ThemeDescription(this.titleTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack"));
         arrayList.add(new ThemeDescription(this.actionBarShadow, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogShadowLine"));
-        $$Lambda$PollVotesAlert$duMvUriWRtWBbdEJKBEaIhPp5ng r9 = r11;
+        $$Lambda$PollVotesAlert$RBHXP45nhug4340Ynex3aJH17ro r9 = r11;
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{View.class}, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "dialogBackground"));
         arrayList.add(new ThemeDescription((View) this.listView, 0, new Class[]{View.class}, (String[]) null, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r9, "dialogBackgroundGray"));
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_SECTIONS, new Class[]{SectionCell.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "key_graySectionText"));

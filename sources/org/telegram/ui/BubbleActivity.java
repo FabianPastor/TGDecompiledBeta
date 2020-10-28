@@ -119,6 +119,8 @@ public class BubbleActivity extends Activity implements ActionBarLayout.ActionBa
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$showPasscodeActivity$0 */
     public /* synthetic */ void lambda$showPasscodeActivity$0$BubbleActivity() {
         SharedConfig.isWaitingForPasscodeEnter = false;
         Intent intent = this.passcodeSaveIntent;

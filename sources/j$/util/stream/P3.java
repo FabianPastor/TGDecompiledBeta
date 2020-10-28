@@ -1,36 +1,56 @@
 package j$.util.stream;
 
-import j$.util.function.C;
+import j$.util.F;
+import j$.util.Spliterator;
+import java.util.Deque;
 
-abstract class P3 implements CLASSNAMEt3 {
-    public /* synthetic */ CLASSNAMEt3 c(long j, long j2, C c) {
-        return CLASSNAMEg3.d(this, j, j2, c);
+abstract class P3 extends R3 implements F {
+    P3(CLASSNAMEk3 k3Var) {
+        super(k3Var);
     }
 
-    public /* synthetic */ CLASSNAMEt3 d(int i) {
-        CLASSNAMEg3.a(this);
-        throw null;
+    /* renamed from: forEachRemaining */
+    public void e(Object obj) {
+        if (this.a != null) {
+            if (this.d == null) {
+                Spliterator spliterator = this.c;
+                if (spliterator == null) {
+                    Deque f = f();
+                    while (true) {
+                        CLASSNAMEk3 k3Var = (CLASSNAMEk3) a(f);
+                        if (k3Var != null) {
+                            k3Var.h(obj);
+                        } else {
+                            this.a = null;
+                            return;
+                        }
+                    }
+                } else {
+                    ((F) spliterator).forEachRemaining(obj);
+                }
+            } else {
+                do {
+                } while (o(obj));
+            }
+        }
     }
 
-    public /* synthetic */ int w() {
-        CLASSNAMEg3.b();
-        return 0;
-    }
-
-    P3() {
-    }
-
-    public Object[] x(C c) {
-        return (Object[]) c.a(0);
-    }
-
-    public void f(Object obj, int offset) {
-    }
-
-    public long count() {
-        return 0;
-    }
-
-    public void j(Object obj) {
+    /* renamed from: tryAdvance */
+    public boolean o(Object obj) {
+        CLASSNAMEk3 k3Var;
+        if (!g()) {
+            return false;
+        }
+        boolean tryAdvance = ((F) this.d).tryAdvance(obj);
+        if (!tryAdvance) {
+            if (this.c != null || (k3Var = (CLASSNAMEk3) a(this.e)) == null) {
+                this.a = null;
+            } else {
+                F spliterator = k3Var.spliterator();
+                this.d = spliterator;
+                return spliterator.tryAdvance(obj);
+            }
+        }
+        return tryAdvance;
     }
 }

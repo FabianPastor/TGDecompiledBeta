@@ -8,7 +8,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.SQLite.SQLiteCursor;
-import org.telegram.SQLite.SQLiteDatabase;
 import org.telegram.SQLite.SQLitePreparedStatement;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ChatObject;
@@ -150,8 +149,8 @@ public class SearchAdapterHelper {
             int i7 = this.channelLastReqId + 1;
             this.channelLastReqId = i7;
             ConnectionsManager instance = ConnectionsManager.getInstance(this.currentAccount);
-            $$Lambda$SearchAdapterHelper$TvNOKs_82NxNKUbKEl6ilcDLjOM r15 = r0;
-            $$Lambda$SearchAdapterHelper$TvNOKs_82NxNKUbKEl6ilcDLjOM r0 = new RequestDelegate(i7, str, z4, i3) {
+            $$Lambda$SearchAdapterHelper$8RMFgd_MVod5GyKAdDzoUmKlig r15 = r0;
+            $$Lambda$SearchAdapterHelper$8RMFgd_MVod5GyKAdDzoUmKlig r0 = new RequestDelegate(i7, str, z4, i3) {
                 public final /* synthetic */ int f$1;
                 public final /* synthetic */ String f$2;
                 public final /* synthetic */ boolean f$3;
@@ -179,9 +178,9 @@ public class SearchAdapterHelper {
                 tLRPC$TL_contacts_search.limit = 50;
                 int i8 = this.lastReqId + 1;
                 this.lastReqId = i8;
-                $$Lambda$SearchAdapterHelper$Pz3Yk9hHMq0c2qA_8xmmwKDyhTA r12 = r0;
+                $$Lambda$SearchAdapterHelper$d_RT9an5_K2u2dcxdohpFvar_SWE r12 = r0;
                 ConnectionsManager instance2 = ConnectionsManager.getInstance(this.currentAccount);
-                $$Lambda$SearchAdapterHelper$Pz3Yk9hHMq0c2qA_8xmmwKDyhTA r02 = new RequestDelegate(i8, i3, z2, z5, z3, z4, str) {
+                $$Lambda$SearchAdapterHelper$d_RT9an5_K2u2dcxdohpFvar_SWE r02 = new RequestDelegate(i8, i3, z2, z5, z3, z4, str) {
                     public final /* synthetic */ int f$1;
                     public final /* synthetic */ int f$2;
                     public final /* synthetic */ boolean f$3;
@@ -242,6 +241,8 @@ public class SearchAdapterHelper {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$queryServerSearch$1 */
     public /* synthetic */ void lambda$queryServerSearch$1$SearchAdapterHelper(int i, String str, boolean z, int i2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(i, tLRPC$TL_error, tLObject, str, z, i2) {
             public final /* synthetic */ int f$1;
@@ -266,6 +267,8 @@ public class SearchAdapterHelper {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$0 */
     public /* synthetic */ void lambda$null$0$SearchAdapterHelper(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, String str, boolean z, int i2) {
         if (i == this.channelLastReqId && tLRPC$TL_error == null) {
             TLRPC$TL_channels_channelParticipants tLRPC$TL_channels_channelParticipants = (TLRPC$TL_channels_channelParticipants) tLObject;
@@ -293,6 +296,8 @@ public class SearchAdapterHelper {
         this.channelReqId = 0;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$queryServerSearch$3 */
     public /* synthetic */ void lambda$queryServerSearch$3$SearchAdapterHelper(int i, int i2, boolean z, boolean z2, boolean z3, boolean z4, String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(i, i2, tLRPC$TL_error, tLObject, z, z2, z3, z4, str) {
             public final /* synthetic */ int f$1;
@@ -323,6 +328,8 @@ public class SearchAdapterHelper {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$SearchAdapterHelper(int i, int i2, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z, boolean z2, boolean z3, boolean z4, String str) {
         TLRPC$User tLRPC$User;
         TLRPC$Chat tLRPC$Chat;
@@ -455,6 +462,8 @@ public class SearchAdapterHelper {
         return false;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$loadRecentHashtags$6 */
     public /* synthetic */ void lambda$loadRecentHashtags$6$SearchAdapterHelper() {
         try {
             SQLiteCursor queryFinalized = MessagesStorage.getInstance(this.currentAccount).getDatabase().queryFinalized("SELECT id, date FROM hashtag_recent_v2 WHERE 1", new Object[0]);
@@ -468,7 +477,7 @@ public class SearchAdapterHelper {
                 hashMap.put(hashtagObject.hashtag, hashtagObject);
             }
             queryFinalized.dispose();
-            Collections.sort(arrayList, $$Lambda$SearchAdapterHelper$lNnZPLbXEKTf0Mjca3cj25zrw.INSTANCE);
+            Collections.sort(arrayList, $$Lambda$SearchAdapterHelper$733hu53wtvf8mK0zV5cqPQBmD58.INSTANCE);
             AndroidUtilities.runOnUIThread(new Runnable(arrayList, hashMap) {
                 public final /* synthetic */ ArrayList f$1;
                 public final /* synthetic */ HashMap f$2;
@@ -597,6 +606,8 @@ public class SearchAdapterHelper {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$putRecentHashtags$7 */
     public /* synthetic */ void lambda$putRecentHashtags$7$SearchAdapterHelper(ArrayList arrayList) {
         int i;
         try {
@@ -618,15 +629,16 @@ public class SearchAdapterHelper {
                 }
             }
             executeFast.dispose();
-            MessagesStorage.getInstance(this.currentAccount).getDatabase().commitTransaction();
-            if (arrayList.size() >= 100) {
-                MessagesStorage.getInstance(this.currentAccount).getDatabase().beginTransaction();
+            if (arrayList.size() > 100) {
+                SQLitePreparedStatement executeFast2 = MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM hashtag_recent_v2 WHERE id = ?");
                 for (i = 100; i < arrayList.size(); i++) {
-                    SQLiteDatabase database = MessagesStorage.getInstance(this.currentAccount).getDatabase();
-                    database.executeFast("DELETE FROM hashtag_recent_v2 WHERE id = '" + ((HashtagObject) arrayList.get(i)).hashtag + "'").stepThis().dispose();
+                    executeFast2.requery();
+                    executeFast2.bindString(1, ((HashtagObject) arrayList.get(i)).hashtag);
+                    executeFast2.step();
                 }
-                MessagesStorage.getInstance(this.currentAccount).getDatabase().commitTransaction();
+                executeFast2.dispose();
             }
+            MessagesStorage.getInstance(this.currentAccount).getDatabase().commitTransaction();
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
@@ -681,6 +693,8 @@ public class SearchAdapterHelper {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$clearRecentHashtags$8 */
     public /* synthetic */ void lambda$clearRecentHashtags$8$SearchAdapterHelper() {
         try {
             MessagesStorage.getInstance(this.currentAccount).getDatabase().executeFast("DELETE FROM hashtag_recent_v2 WHERE 1").stepThis().dispose();
@@ -690,7 +704,7 @@ public class SearchAdapterHelper {
     }
 
     /* renamed from: setHashtags */
-    public void lambda$null$5$SearchAdapterHelper(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
+    public void lambda$null$5(ArrayList<HashtagObject> arrayList, HashMap<String, HashtagObject> hashMap) {
         this.hashtags = arrayList;
         this.hashtagsByText = hashMap;
         this.hashtagsLoadedFromDb = true;

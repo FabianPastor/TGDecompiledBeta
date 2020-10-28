@@ -22,4 +22,5 @@
     <string name="google_assistant_verification_channel_name">ასისტენტის დადასტურების ხელსაწყო</string>
     <string name="google_assistant_verification_notification_title">Google ასისტენტი აგზავნის შეტყობინებას</string>
     <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="wallet_buy_button_place_holder">Google-ით ყიდვა</string>
 </resources>

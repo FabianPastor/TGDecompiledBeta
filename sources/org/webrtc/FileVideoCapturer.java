@@ -97,10 +97,11 @@ public class FileVideoCapturer implements VideoCapturer {
             allocate.getStrideU();
             allocate.getStrideV();
             try {
-                ByteBuffer allocate2 = ByteBuffer.allocate(FRAME_DELIMETER_LENGTH);
-                if (this.mediaFileChannel.read(allocate2) < FRAME_DELIMETER_LENGTH) {
+                int i2 = FRAME_DELIMETER_LENGTH;
+                ByteBuffer allocate2 = ByteBuffer.allocate(i2);
+                if (this.mediaFileChannel.read(allocate2) < i2) {
                     this.mediaFileChannel.position(this.videoStart);
-                    if (this.mediaFileChannel.read(allocate2) < FRAME_DELIMETER_LENGTH) {
+                    if (this.mediaFileChannel.read(allocate2) < i2) {
                         throw new RuntimeException("Error looping video");
                     }
                 }

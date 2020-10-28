@@ -1,30 +1,27 @@
 package j$;
 
-import java.util.function.Function;
+import j$.util.function.q;
+import java.util.function.DoubleConsumer;
 
-public final /* synthetic */ class E implements Function {
-    final /* synthetic */ j$.util.function.Function a;
+public final /* synthetic */ class E implements DoubleConsumer {
+    final /* synthetic */ q a;
 
-    private /* synthetic */ E(j$.util.function.Function function) {
-        this.a = function;
+    private /* synthetic */ E(q qVar) {
+        this.a = qVar;
     }
 
-    public static /* synthetic */ Function a(j$.util.function.Function function) {
-        if (function == null) {
+    public static /* synthetic */ DoubleConsumer a(q qVar) {
+        if (qVar == null) {
             return null;
         }
-        return function instanceof D ? ((D) function).a : new E(function);
+        return qVar instanceof D ? ((D) qVar).a : new E(qVar);
     }
 
-    public /* synthetic */ Function andThen(Function function) {
-        return a(this.a.a(D.c(function)));
+    public /* synthetic */ void accept(double d) {
+        this.a.accept(d);
     }
 
-    public /* synthetic */ Object apply(Object obj) {
-        return this.a.apply(obj);
-    }
-
-    public /* synthetic */ Function compose(Function function) {
-        return a(this.a.b(D.c(function)));
+    public /* synthetic */ DoubleConsumer andThen(DoubleConsumer doubleConsumer) {
+        return a(this.a.k(D.b(doubleConsumer)));
     }
 }

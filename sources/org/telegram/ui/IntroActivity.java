@@ -136,6 +136,8 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                 }
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onSurfaceTextureAvailable$0 */
             public /* synthetic */ void lambda$onSurfaceTextureAvailable$0$IntroActivity$2() {
                 IntroActivity.this.eglThread.drawRunnable.run();
             }
@@ -252,6 +254,8 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         AndroidUtilities.startAppCenter(this);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onCreate$0 */
     public /* synthetic */ void lambda$onCreate$0$IntroActivity(View view) {
         if (!this.startPressed) {
             this.startPressed = true;
@@ -263,11 +267,15 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onCreate$1 */
     public /* synthetic */ boolean lambda$onCreate$1$IntroActivity(View view) {
         ConnectionsManager.getInstance(this.currentAccount).switchBackend();
         return true;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onCreate$2 */
     public /* synthetic */ void lambda$onCreate$2$IntroActivity(View view) {
         if (!this.startPressed && this.localeInfo != null) {
             LocaleController.getInstance().applyLanguage(this.localeInfo, true, false, this.currentAccount);
@@ -353,6 +361,8 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$checkContinueText$4 */
     public /* synthetic */ void lambda$checkContinueText$4$IntroActivity(String str, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             TLRPC$Vector tLRPC$Vector = (TLRPC$Vector) tLObject;
@@ -377,6 +387,8 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$3 */
     public /* synthetic */ void lambda$null$3$IntroActivity(TLRPC$LangPackString tLRPC$LangPackString, String str) {
         if (!this.destroyed) {
             this.textView.setText(tLRPC$LangPackString.value);
@@ -466,9 +478,9 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                               (wrap: org.telegram.ui.IntroActivity$EGLThread : 0x00b9: IGET  (r0v11 org.telegram.ui.IntroActivity$EGLThread) = 
                               (r5v0 'this' org.telegram.ui.IntroActivity$EGLThread$1 A[THIS])
                              org.telegram.ui.IntroActivity.EGLThread.1.this$1 org.telegram.ui.IntroActivity$EGLThread)
-                              (wrap: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$t5CDZ7wR8GgPufsAxg7RJ2ghGUs : 0x00bd: CONSTRUCTOR  (r1v9 org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$t5CDZ7wR8GgPufsAxg7RJ2ghGUs) = 
+                              (wrap: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY : 0x00bd: CONSTRUCTOR  (r1v9 org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY) = 
                               (r5v0 'this' org.telegram.ui.IntroActivity$EGLThread$1 A[THIS])
-                             call: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$t5CDZ7wR8GgPufsAxg7RJ2ghGUs.<init>(org.telegram.ui.IntroActivity$EGLThread$1):void type: CONSTRUCTOR)
+                             call: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY.<init>(org.telegram.ui.IntroActivity$EGLThread$1):void type: CONSTRUCTOR)
                               (16 long)
                              org.telegram.messenger.DispatchQueue.postRunnable(java.lang.Runnable, long):boolean type: VIRTUAL in method: org.telegram.ui.IntroActivity.EGLThread.1.run():void, dex: classes.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
@@ -539,9 +551,9 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                             	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                             	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                             	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x00bd: CONSTRUCTOR  (r1v9 org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$t5CDZ7wR8GgPufsAxg7RJ2ghGUs) = 
+                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x00bd: CONSTRUCTOR  (r1v9 org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY) = 
                               (r5v0 'this' org.telegram.ui.IntroActivity$EGLThread$1 A[THIS])
-                             call: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$t5CDZ7wR8GgPufsAxg7RJ2ghGUs.<init>(org.telegram.ui.IntroActivity$EGLThread$1):void type: CONSTRUCTOR in method: org.telegram.ui.IntroActivity.EGLThread.1.run():void, dex: classes.dex
+                             call: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY.<init>(org.telegram.ui.IntroActivity$EGLThread$1):void type: CONSTRUCTOR in method: org.telegram.ui.IntroActivity.EGLThread.1.run():void, dex: classes.dex
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                             	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                             	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -550,7 +562,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                             	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                             	... 67 more
-                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$t5CDZ7wR8GgPufsAxg7RJ2ghGUs, state: NOT_LOADED
+                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY, state: NOT_LOADED
                             	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                             	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                             	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -630,7 +642,7 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                             javax.microedition.khronos.egl.EGLSurface r2 = r2.eglSurface
                             r0.eglSwapBuffers(r1, r2)
                             org.telegram.ui.IntroActivity$EGLThread r0 = org.telegram.ui.IntroActivity.EGLThread.this
-                            org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$t5CDZ7wR8GgPufsAxg7RJ2ghGUs r1 = new org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$t5CDZ7wR8GgPufsAxg7RJ2ghGUs
+                            org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY r1 = new org.telegram.ui.-$$Lambda$IntroActivity$EGLThread$1$0T3kBZ_0y5zFGlNgTyrhHL7MhdY
                             r1.<init>(r5)
                             r2 = 16
                             r0.postRunnable(r1, r2)
@@ -639,6 +651,8 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.IntroActivity.EGLThread.AnonymousClass1.run():void");
                     }
 
+                    /* access modifiers changed from: private */
+                    /* renamed from: lambda$run$0 */
                     public /* synthetic */ void lambda$run$0$IntroActivity$EGLThread$1() {
                         EGLThread.this.drawRunnable.run();
                     }
@@ -814,6 +828,8 @@ public class IntroActivity extends Activity implements NotificationCenter.Notifi
                     });
                 }
 
+                /* access modifiers changed from: private */
+                /* renamed from: lambda$shutdown$0 */
                 public /* synthetic */ void lambda$shutdown$0$IntroActivity$EGLThread() {
                     finish();
                     Looper myLooper = Looper.myLooper();

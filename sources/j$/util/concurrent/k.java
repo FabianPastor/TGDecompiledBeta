@@ -1,84 +1,72 @@
 package j$.util.concurrent;
 
-import j$.util.N;
+import j$.util.CLASSNAMEk;
 import j$.util.Spliterator;
 import j$.util.function.Consumer;
 import java.util.Comparator;
-import java.util.concurrent.ConcurrentHashMap;
 
 final class k extends q implements Spliterator {
     long i;
 
-    public /* synthetic */ Comparator getComparator() {
-        N.a(this);
-        throw null;
-    }
-
-    public /* synthetic */ long getExactSizeIfKnown() {
-        return N.b(this);
-    }
-
-    public /* synthetic */ boolean hasCharacteristics(int i2) {
-        return N.c(this, i2);
-    }
-
-    k(m[] tab, int size, int index, int limit, long est) {
-        super(tab, size, index, limit);
-        this.i = est;
-    }
-
-    public Spliterator trySplit() {
-        int i2 = this.f;
-        int i3 = i2;
-        int i4 = this.g;
-        int f = i4;
-        int i5 = (i2 + i4) >>> 1;
-        int h = i5;
-        if (i5 <= i3) {
-            return null;
-        }
-        m[] mVarArr = this.a;
-        int i6 = this.h;
-        this.g = h;
-        long j = this.i >>> 1;
+    k(m[] mVarArr, int i2, int i3, int i4, long j) {
+        super(mVarArr, i2, i3, i4);
         this.i = j;
-        return new k(mVarArr, i6, h, f, j);
     }
 
-    public void forEachRemaining(Consumer consumer) {
-        if (consumer != null) {
-            while (true) {
-                ConcurrentHashMap.Node<K, V> b = b();
-                ConcurrentHashMap.Node<K, V> p = b;
-                if (b != null) {
-                    consumer.accept(p.b);
-                } else {
-                    return;
-                }
-            }
-        } else {
-            throw null;
+    public boolean b(Consumer consumer) {
+        consumer.getClass();
+        m a = a();
+        if (a == null) {
+            return false;
         }
+        consumer.accept(a.b);
+        return true;
     }
 
-    public boolean a(Consumer consumer) {
-        if (consumer != null) {
-            ConcurrentHashMap.Node<K, V> b = b();
-            ConcurrentHashMap.Node<K, V> p = b;
-            if (b == null) {
-                return false;
-            }
-            consumer.accept(p.b);
-            return true;
-        }
-        throw null;
+    public int characteristics() {
+        return 4353;
     }
 
     public long estimateSize() {
         return this.i;
     }
 
-    public int characteristics() {
-        return 4353;
+    public void forEachRemaining(Consumer consumer) {
+        consumer.getClass();
+        while (true) {
+            m a = a();
+            if (a != null) {
+                consumer.accept(a.b);
+            } else {
+                return;
+            }
+        }
+    }
+
+    public Comparator getComparator() {
+        throw new IllegalStateException();
+    }
+
+    public /* synthetic */ long getExactSizeIfKnown() {
+        return CLASSNAMEk.e(this);
+    }
+
+    public /* synthetic */ boolean hasCharacteristics(int i2) {
+        return CLASSNAMEk.f(this, i2);
+    }
+
+    public Spliterator trySplit() {
+        int i2 = this.f;
+        int i3 = this.g;
+        int i4 = (i2 + i3) >>> 1;
+        if (i4 <= i2) {
+            return null;
+        }
+        m[] mVarArr = this.a;
+        int i5 = this.h;
+        this.g = i4;
+        long j = this.i >>> 1;
+        this.i = j;
+        return new k(mVarArr, i5, i4, i3, j);
     }
 }

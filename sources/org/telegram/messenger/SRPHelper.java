@@ -60,20 +60,21 @@ public class SRPHelper {
             BigInteger bigInteger4 = new BigInteger(1, bArr5);
             byte[] bigIntegerBytes2 = getBigIntegerBytes(valueOf.modPow(bigInteger4, bigInteger));
             BigInteger bigInteger5 = new BigInteger(1, bArr4);
-            if (bigInteger5.compareTo(BigInteger.ZERO) > 0 && bigInteger5.compareTo(bigInteger) < 0) {
+            BigInteger bigInteger6 = BigInteger.ZERO;
+            if (bigInteger5.compareTo(bigInteger6) > 0 && bigInteger5.compareTo(bigInteger) < 0) {
                 byte[] bigIntegerBytes3 = getBigIntegerBytes(bigInteger5);
-                BigInteger bigInteger6 = new BigInteger(1, Utilities.computeSHA256(bigIntegerBytes2, bigIntegerBytes3));
-                if (bigInteger6.compareTo(BigInteger.ZERO) == 0) {
+                BigInteger bigInteger7 = new BigInteger(1, Utilities.computeSHA256(bigIntegerBytes2, bigIntegerBytes3));
+                if (bigInteger7.compareTo(bigInteger6) == 0) {
                     return null;
                 }
                 BigInteger subtract = bigInteger5.subtract(bigInteger2.multiply(valueOf.modPow(bigInteger3, bigInteger)).mod(bigInteger));
-                if (subtract.compareTo(BigInteger.ZERO) < 0) {
+                if (subtract.compareTo(bigInteger6) < 0) {
                     subtract = subtract.add(bigInteger);
                 }
                 if (!Utilities.isGoodGaAndGb(subtract, bigInteger)) {
                     return null;
                 }
-                byte[] computeSHA256 = Utilities.computeSHA256(getBigIntegerBytes(subtract.modPow(bigInteger4.add(bigInteger6.multiply(bigInteger3)), bigInteger)));
+                byte[] computeSHA256 = Utilities.computeSHA256(getBigIntegerBytes(subtract.modPow(bigInteger4.add(bigInteger7.multiply(bigInteger3)), bigInteger)));
                 byte[] computeSHA2562 = Utilities.computeSHA256(tLRPC$TL_passwordKdfAlgoSHA256SHA256PBKDF2HMACSHA512iter100000SHA256ModPow2.p);
                 byte[] computeSHA2563 = Utilities.computeSHA256(bigIntegerBytes);
                 for (int i = 0; i < computeSHA2562.length; i++) {

@@ -73,8 +73,10 @@ public class VideoEncodingService extends Service implements NotificationCenter.
         int intExtra = intent.getIntExtra("currentAccount", UserConfig.selectedAccount);
         this.currentAccount = intExtra;
         if (i3 != intExtra) {
-            NotificationCenter.getInstance(i3).removeObserver(this, NotificationCenter.FileUploadProgressChanged);
-            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.FileUploadProgressChanged);
+            NotificationCenter instance = NotificationCenter.getInstance(i3);
+            int i4 = NotificationCenter.FileUploadProgressChanged;
+            instance.removeObserver(this, i4);
+            NotificationCenter.getInstance(this.currentAccount).addObserver(this, i4);
         }
         boolean booleanExtra = intent.getBooleanExtra("gif", false);
         if (this.path == null) {
@@ -101,7 +103,7 @@ public class VideoEncodingService extends Service implements NotificationCenter.
             }
         }
         this.currentProgress = 0;
-        this.builder.setProgress(100, 0, 0 == 0);
+        this.builder.setProgress(100, 0, !false);
         startForeground(4, this.builder.build());
         NotificationManagerCompat.from(ApplicationLoader.applicationContext).notify(4, this.builder.build());
         return 2;

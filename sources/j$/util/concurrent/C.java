@@ -1,99 +1,90 @@
 package j$.util.concurrent;
 
-import j$.util.N;
-import j$.util.O;
-import j$.util.P;
-import j$.util.function.CLASSNAMEt;
+import j$.util.CLASSNAMEk;
+import j$.util.CLASSNAMEw;
+import j$.util.E;
 import j$.util.function.Consumer;
+import j$.util.function.y;
 import java.util.Comparator;
 
-final class C implements P {
+final class C implements E {
     long a;
     final long b;
-    final double c;
-    final double d;
+    final long c;
+    final long d;
 
-    public /* synthetic */ boolean a(Consumer consumer) {
-        return O.b(this, consumer);
+    C(long j, long j2, long j3, long j4) {
+        this.a = j;
+        this.b = j2;
+        this.c = j3;
+        this.d = j4;
     }
 
-    public /* synthetic */ void forEachRemaining(Consumer consumer) {
-        O.a(this, consumer);
-    }
-
-    public /* synthetic */ Comparator getComparator() {
-        N.a(this);
-        throw null;
-    }
-
-    public /* synthetic */ long getExactSizeIfKnown() {
-        return N.b(this);
-    }
-
-    public /* synthetic */ boolean hasCharacteristics(int i) {
-        return N.c(this, i);
-    }
-
-    C(long index, long fence, double origin, double bound) {
-        this.a = index;
-        this.b = fence;
-        this.c = origin;
-        this.d = bound;
-    }
-
-    /* renamed from: b */
+    /* renamed from: a */
     public C trySplit() {
-        long i = this.a;
-        long m = (this.b + i) >>> 1;
-        if (m <= i) {
+        long j = this.a;
+        long j2 = (this.b + j) >>> 1;
+        if (j2 <= j) {
             return null;
         }
-        this.a = m;
-        return new C(i, m, this.c, this.d);
+        this.a = j2;
+        return new C(j, j2, this.c, this.d);
     }
 
-    public long estimateSize() {
-        return this.b - this.a;
+    public /* synthetic */ boolean b(Consumer consumer) {
+        return CLASSNAMEw.f(this, consumer);
     }
 
     public int characteristics() {
         return 17728;
     }
 
-    /* renamed from: j */
-    public boolean tryAdvance(CLASSNAMEt consumer) {
-        if (consumer != null) {
-            long i = this.a;
-            if (i >= this.b) {
-                return false;
-            }
-            consumer.accept(F.b().i(this.c, this.d));
-            this.a = 1 + i;
-            return true;
+    /* renamed from: d */
+    public void forEachRemaining(y yVar) {
+        yVar.getClass();
+        long j = this.a;
+        long j2 = this.b;
+        if (j < j2) {
+            this.a = j2;
+            long j3 = this.c;
+            long j4 = this.d;
+            D b2 = D.b();
+            do {
+                yVar.accept(b2.f(j3, j4));
+                j++;
+            } while (j < j2);
         }
-        throw null;
     }
 
-    /* renamed from: e */
-    public void forEachRemaining(CLASSNAMEt consumer) {
-        long j;
-        if (consumer != null) {
-            long i = this.a;
-            long f = this.b;
-            if (i < f) {
-                this.a = f;
-                double o = this.c;
-                double b2 = this.d;
-                F rng = F.b();
-                do {
-                    consumer.accept(rng.i(o, b2));
-                    j = 1 + i;
-                    i = j;
-                } while (j < f);
-                return;
-            }
-            return;
+    public long estimateSize() {
+        return this.b - this.a;
+    }
+
+    public /* synthetic */ void forEachRemaining(Consumer consumer) {
+        CLASSNAMEw.c(this, consumer);
+    }
+
+    public Comparator getComparator() {
+        throw new IllegalStateException();
+    }
+
+    public /* synthetic */ long getExactSizeIfKnown() {
+        return CLASSNAMEk.e(this);
+    }
+
+    public /* synthetic */ boolean hasCharacteristics(int i) {
+        return CLASSNAMEk.f(this, i);
+    }
+
+    /* renamed from: j */
+    public boolean tryAdvance(y yVar) {
+        yVar.getClass();
+        long j = this.a;
+        if (j >= this.b) {
+            return false;
         }
-        throw null;
+        yVar.accept(D.b().f(this.c, this.d));
+        this.a = j + 1;
+        return true;
     }
 }

@@ -1,18 +1,16 @@
 package j$.util.stream;
 
-import j$.util.function.H;
-
-class P4 extends T4 {
-    final /* synthetic */ H b;
+class P4 extends CLASSNAMEp5 {
+    final /* synthetic */ Q4 b;
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    P4(CLASSNAMEv6 shape, H h) {
-        super(shape);
-        this.b = h;
+    P4(Q4 q4, CLASSNAMEt5 t5Var) {
+        super(t5Var);
+        this.b = q4;
     }
 
-    /* renamed from: e */
-    public Q4 b() {
-        return new Q4(this.b);
+    public void accept(Object obj) {
+        this.b.l.accept(obj);
+        this.a.accept(obj);
     }
 }

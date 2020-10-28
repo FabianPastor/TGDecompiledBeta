@@ -230,7 +230,7 @@ public class AcceptDeclineView extends View {
             r0[r1] = r3
             r0[r2] = r4
             android.animation.ValueAnimator r0 = android.animation.ValueAnimator.ofFloat(r0)
-            org.telegram.ui.Components.voip.-$$Lambda$AcceptDeclineView$z6Onz1j2xHKE1brlfczii8ntp14 r2 = new org.telegram.ui.Components.voip.-$$Lambda$AcceptDeclineView$z6Onz1j2xHKE1brlfczii8ntp14
+            org.telegram.ui.Components.voip.-$$Lambda$AcceptDeclineView$XEKpzvhtApUfBXFcAbsBBZXtimc r2 = new org.telegram.ui.Components.voip.-$$Lambda$AcceptDeclineView$XEKpzvhtApUfBXFcAbsBBZXtimc
             r2.<init>()
             r0.addUpdateListener(r2)
             r0.start()
@@ -261,7 +261,7 @@ public class AcceptDeclineView extends View {
             r0[r1] = r3
             r0[r2] = r4
             android.animation.ValueAnimator r0 = android.animation.ValueAnimator.ofFloat(r0)
-            org.telegram.ui.Components.voip.-$$Lambda$AcceptDeclineView$v1R-WPl_eAn67uRSKCTITsDpzwY r2 = new org.telegram.ui.Components.voip.-$$Lambda$AcceptDeclineView$v1R-WPl_eAn67uRSKCTITsDpzwY
+            org.telegram.ui.Components.voip.-$$Lambda$AcceptDeclineView$lk93wO5tJWrNgRQERin5X2GqM8o r2 = new org.telegram.ui.Components.voip.-$$Lambda$AcceptDeclineView$lk93wO5tJWrNgRQERin5X2GqM8o
             r2.<init>()
             r0.addUpdateListener(r2)
             r0.start()
@@ -344,12 +344,16 @@ public class AcceptDeclineView extends View {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.voip.AcceptDeclineView.onTouchEvent(android.view.MotionEvent):boolean");
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onTouchEvent$0 */
     public /* synthetic */ void lambda$onTouchEvent$0$AcceptDeclineView(ValueAnimator valueAnimator) {
         this.leftOffsetX = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
         this.leftAnimator = null;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onTouchEvent$1 */
     public /* synthetic */ void lambda$onTouchEvent$1$AcceptDeclineView(ValueAnimator valueAnimator) {
         this.rigthOffsetX = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
@@ -628,12 +632,13 @@ public class AcceptDeclineView extends View {
             }
             AccessibilityNodeInfo obtain2 = AccessibilityNodeInfo.obtain(this.hostView, i);
             obtain2.setPackageName(this.hostView.getContext().getPackageName());
-            if (Build.VERSION.SDK_INT >= 21) {
+            int i3 = Build.VERSION.SDK_INT;
+            if (i3 >= 21) {
                 obtain2.addAction(AccessibilityNodeInfo.AccessibilityAction.ACTION_CLICK);
             }
             obtain2.setText(getVirtualViewText(i));
             obtain2.setClassName(Button.class.getName());
-            if (Build.VERSION.SDK_INT >= 24) {
+            if (i3 >= 24) {
                 obtain2.setImportantForAccessibility(true);
             }
             obtain2.setVisibleToUser(true);

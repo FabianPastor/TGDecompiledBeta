@@ -8,9 +8,9 @@ public class TLRPC$TL_updateShortMessage extends TLRPC$Updates {
         this.flags = readInt32;
         int i = 0;
         this.out = (readInt32 & 2) != 0;
-        this.mentioned = (this.flags & 16) != 0;
-        this.media_unread = (this.flags & 32) != 0;
-        this.silent = (this.flags & 8192) != 0;
+        this.mentioned = (readInt32 & 16) != 0;
+        this.media_unread = (readInt32 & 32) != 0;
+        this.silent = (readInt32 & 8192) != 0;
         this.id = abstractSerializedData.readInt32(z);
         this.user_id = abstractSerializedData.readInt32(z);
         this.message = abstractSerializedData.readString(z);

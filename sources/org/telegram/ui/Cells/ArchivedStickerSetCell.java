@@ -64,33 +64,33 @@ public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
             this.addButton = progressButton;
             this.currentButton = progressButton;
             progressButton.setText(LocaleController.getString("Add", NUM));
-            this.addButton.setTextColor(Theme.getColor("featuredStickers_buttonText"));
-            this.addButton.setProgressColor(Theme.getColor("featuredStickers_buttonProgress"));
-            this.addButton.setBackgroundRoundRect(Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed"));
-            addView(this.addButton, LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 18.0f, 14.0f, 0.0f));
+            progressButton.setTextColor(Theme.getColor("featuredStickers_buttonText"));
+            progressButton.setProgressColor(Theme.getColor("featuredStickers_buttonProgress"));
+            progressButton.setBackgroundRoundRect(Theme.getColor("featuredStickers_addButton"), Theme.getColor("featuredStickers_addButtonPressed"));
+            addView(progressButton, LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 18.0f, 14.0f, 0.0f));
             int dp = AndroidUtilities.dp(60.0f);
             ProgressButton progressButton2 = new ProgressButton(context);
             this.deleteButton = progressButton2;
             progressButton2.setAllCaps(false);
-            this.deleteButton.setMinWidth(dp);
-            this.deleteButton.setMinimumWidth(dp);
-            this.deleteButton.setTextSize(1, 14.0f);
-            this.deleteButton.setTextColor(Theme.getColor("featuredStickers_removeButtonText"));
-            this.deleteButton.setText(LocaleController.getString("StickersRemove", NUM));
-            this.deleteButton.setBackground(Theme.getRoundRectSelectorDrawable(Theme.getColor("featuredStickers_removeButtonText")));
-            this.deleteButton.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            ViewHelper.setPadding(this.deleteButton, 8.0f, 0.0f, 8.0f, 0.0f);
+            progressButton2.setMinWidth(dp);
+            progressButton2.setMinimumWidth(dp);
+            progressButton2.setTextSize(1, 14.0f);
+            progressButton2.setTextColor(Theme.getColor("featuredStickers_removeButtonText"));
+            progressButton2.setText(LocaleController.getString("StickersRemove", NUM));
+            progressButton2.setBackground(Theme.getRoundRectSelectorDrawable(Theme.getColor("featuredStickers_removeButtonText")));
+            progressButton2.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            ViewHelper.setPadding(progressButton2, 8.0f, 0.0f, 8.0f, 0.0f);
             if (Build.VERSION.SDK_INT >= 21) {
-                this.deleteButton.setOutlineProvider((ViewOutlineProvider) null);
+                progressButton2.setOutlineProvider((ViewOutlineProvider) null);
             }
-            addView(this.deleteButton, LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 18.0f, 14.0f, 0.0f));
-            $$Lambda$ArchivedStickerSetCell$3Z2Nu1fZ98AbJFFFoZgJ6g2jG5I r13 = new View.OnClickListener() {
+            addView(progressButton2, LayoutHelper.createFrameRelatively(-2.0f, 28.0f, 8388661, 0.0f, 18.0f, 14.0f, 0.0f));
+            $$Lambda$ArchivedStickerSetCell$ljI0DywNcbiAZ0Wm4HX0phKY86M r0 = new View.OnClickListener() {
                 public final void onClick(View view) {
                     ArchivedStickerSetCell.this.lambda$new$0$ArchivedStickerSetCell(view);
                 }
             };
-            this.addButton.setOnClickListener(r13);
-            this.deleteButton.setOnClickListener(r13);
+            progressButton.setOnClickListener(r0);
+            progressButton2.setOnClickListener(r0);
             syncButtons(false);
         } else {
             this.addButton = null;
@@ -99,29 +99,31 @@ public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
         TextView textView2 = new TextView(context);
         this.textView = textView2;
         textView2.setTextColor(Theme.getColor("windowBackgroundWhiteBlackText"));
-        this.textView.setTextSize(1, 16.0f);
-        this.textView.setLines(1);
-        this.textView.setMaxLines(1);
-        this.textView.setSingleLine(true);
-        this.textView.setEllipsize(TextUtils.TruncateAt.END);
-        this.textView.setGravity(LayoutHelper.getAbsoluteGravityStart());
-        addView(this.textView, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388611, 71.0f, 10.0f, 21.0f, 0.0f));
+        textView2.setTextSize(1, 16.0f);
+        textView2.setLines(1);
+        textView2.setMaxLines(1);
+        textView2.setSingleLine(true);
+        textView2.setEllipsize(TextUtils.TruncateAt.END);
+        textView2.setGravity(LayoutHelper.getAbsoluteGravityStart());
+        addView(textView2, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388611, 71.0f, 10.0f, 21.0f, 0.0f));
         TextView textView3 = new TextView(context);
         this.valueTextView = textView3;
         textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
-        this.valueTextView.setTextSize(1, 13.0f);
-        this.valueTextView.setLines(1);
-        this.valueTextView.setMaxLines(1);
-        this.valueTextView.setSingleLine(true);
-        this.valueTextView.setGravity(LayoutHelper.getAbsoluteGravityStart());
-        addView(this.valueTextView, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388611, 71.0f, 35.0f, 21.0f, 0.0f));
+        textView3.setTextSize(1, 13.0f);
+        textView3.setLines(1);
+        textView3.setMaxLines(1);
+        textView3.setSingleLine(true);
+        textView3.setGravity(LayoutHelper.getAbsoluteGravityStart());
+        addView(textView3, LayoutHelper.createFrameRelatively(-2.0f, -2.0f, 8388611, 71.0f, 35.0f, 21.0f, 0.0f));
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
         backupImageView.setAspectFit(true);
-        this.imageView.setLayerNum(1);
-        addView(this.imageView, LayoutHelper.createFrameRelatively(48.0f, 48.0f, 8388659, 12.0f, 8.0f, 0.0f, 0.0f));
+        backupImageView.setLayerNum(1);
+        addView(backupImageView, LayoutHelper.createFrameRelatively(48.0f, 48.0f, 8388659, 12.0f, 8.0f, 0.0f, 0.0f));
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$ArchivedStickerSetCell(View view) {
         toggle();
     }
@@ -154,7 +156,6 @@ public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
     }
 
     public void setStickersSet(TLRPC$StickerSetCovered tLRPC$StickerSetCovered, boolean z) {
-        TLObject tLObject;
         ImageLocation imageLocation;
         this.needDivider = z;
         this.stickersSet = tLRPC$StickerSetCovered;
@@ -166,10 +167,8 @@ public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
             tLRPC$Document = !tLRPC$StickerSetCovered.covers.isEmpty() ? tLRPC$StickerSetCovered.covers.get(0) : null;
         }
         if (tLRPC$Document != null) {
-            TLRPC$PhotoSize tLRPC$PhotoSize = tLRPC$StickerSetCovered.set.thumb;
-            if ((tLRPC$PhotoSize instanceof TLRPC$TL_photoSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoSizeProgressive)) {
-                tLObject = tLRPC$StickerSetCovered.set.thumb;
-            } else {
+            TLObject tLObject = tLRPC$StickerSetCovered.set.thumb;
+            if (!(tLObject instanceof TLRPC$TL_photoSize) && !(tLObject instanceof TLRPC$TL_photoSizeProgressive)) {
                 tLObject = tLRPC$Document;
             }
             boolean z2 = tLObject instanceof TLRPC$Document;
@@ -201,14 +200,15 @@ public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
             if (animatorSet2 != null) {
                 animatorSet2.cancel();
             }
+            boolean z2 = this.checked;
             float f = 1.0f;
-            float f2 = this.checked ? 1.0f : 0.0f;
-            if (this.checked) {
+            float f2 = z2 ? 1.0f : 0.0f;
+            if (z2) {
                 f = 0.0f;
             }
             int i = 4;
             if (z) {
-                this.currentButton = this.checked ? this.deleteButton : this.addButton;
+                this.currentButton = z2 ? this.deleteButton : this.addButton;
                 this.addButton.setVisibility(0);
                 this.deleteButton.setVisibility(0);
                 AnimatorSet animatorSet3 = new AnimatorSet();
@@ -228,7 +228,7 @@ public class ArchivedStickerSetCell extends FrameLayout implements Checkable {
                 this.animatorSet.start();
                 return;
             }
-            this.deleteButton.setVisibility(this.checked ? 0 : 4);
+            this.deleteButton.setVisibility(z2 ? 0 : 4);
             this.deleteButton.setAlpha(f2);
             this.deleteButton.setScaleX(f2);
             this.deleteButton.setScaleY(f2);

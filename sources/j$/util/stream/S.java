@@ -1,14 +1,14 @@
 package j$.util.stream;
 
-import j$.util.function.K;
+import j$.util.function.v;
 
-public final /* synthetic */ class S implements K {
+public final /* synthetic */ class S implements v {
     public static final /* synthetic */ S a = new S();
 
     private /* synthetic */ S() {
     }
 
-    public final Object a(long j) {
-        return CLASSNAMEp4.l(j);
+    public final Object apply(int i) {
+        return new Long[i];
     }
 }

@@ -8,12 +8,12 @@ public class TLRPC$TL_channelFull_layer110 extends TLRPC$ChatFull {
         this.flags = readInt32;
         int i = 0;
         this.can_view_participants = (readInt32 & 8) != 0;
-        this.can_set_username = (this.flags & 64) != 0;
-        this.can_set_stickers = (this.flags & 128) != 0;
-        this.hidden_prehistory = (this.flags & 1024) != 0;
-        this.can_view_stats = (this.flags & 4096) != 0;
-        this.can_set_location = (this.flags & 65536) != 0;
-        this.has_scheduled = (this.flags & 524288) != 0;
+        this.can_set_username = (readInt32 & 64) != 0;
+        this.can_set_stickers = (readInt32 & 128) != 0;
+        this.hidden_prehistory = (readInt32 & 1024) != 0;
+        this.can_view_stats = (readInt32 & 4096) != 0;
+        this.can_set_location = (65536 & readInt32) != 0;
+        this.has_scheduled = (readInt32 & 524288) != 0;
         this.id = abstractSerializedData.readInt32(z);
         this.about = abstractSerializedData.readString(z);
         if ((this.flags & 1) != 0) {

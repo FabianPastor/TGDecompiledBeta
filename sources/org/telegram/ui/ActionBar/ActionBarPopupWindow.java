@@ -27,10 +27,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.FileLog;
+import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.UserConfig;
 import org.telegram.ui.Components.LayoutHelper;
 
 public class ActionBarPopupWindow extends PopupWindow {
-    private static final ViewTreeObserver.OnScrollChangedListener NOP = $$Lambda$ActionBarPopupWindow$u1KuFqdl4RQdFfyVDBUWk_fHAc.INSTANCE;
+    private static final ViewTreeObserver.OnScrollChangedListener NOP = $$Lambda$ActionBarPopupWindow$y7Ge_B8A6xMy5V21XZB4h9NMbPQ.INSTANCE;
     /* access modifiers changed from: private */
     public static final boolean allowAnimation = (Build.VERSION.SDK_INT >= 18);
     /* access modifiers changed from: private */
@@ -41,6 +43,8 @@ public class ActionBarPopupWindow extends PopupWindow {
     private int dismissAnimationDuration = 150;
     private ViewTreeObserver.OnScrollChangedListener mSuperScrollListener;
     private ViewTreeObserver mViewTreeObserver;
+    /* access modifiers changed from: private */
+    public int popupAnimationIndex = -1;
     /* access modifiers changed from: private */
     public AnimatorSet windowAnimatorSet;
 
@@ -315,7 +319,7 @@ public class ActionBarPopupWindow extends PopupWindow {
         if (field != null) {
             try {
                 this.mSuperScrollListener = (ViewTreeObserver.OnScrollChangedListener) field.get(this);
-                superListenerField.set(this, NOP);
+                field.set(this, NOP);
             } catch (Exception unused) {
                 this.mSuperScrollListener = null;
             }
@@ -489,12 +493,14 @@ public class ActionBarPopupWindow extends PopupWindow {
                 } catch (Exception unused2) {
                 }
                 ActionBarPopupWindow.this.unregisterListener();
+                NotificationCenter.getInstance(UserConfig.selectedAccount).onAnimationFinish(ActionBarPopupWindow.this.popupAnimationIndex);
             }
 
             public void onAnimationCancel(Animator animator) {
                 onAnimationEnd(animator);
             }
         });
+        this.popupAnimationIndex = NotificationCenter.getInstance(UserConfig.selectedAccount).setAnimationInProgress(this.popupAnimationIndex, (int[]) null);
         this.windowAnimatorSet.start();
     }
 }

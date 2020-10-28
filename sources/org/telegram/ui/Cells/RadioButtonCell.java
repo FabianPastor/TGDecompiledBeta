@@ -34,8 +34,10 @@ public class RadioButtonCell extends FrameLayout {
         } else {
             this.radioButton.setColor(Theme.getColor("radioBackground"), Theme.getColor("radioBackgroundChecked"));
         }
+        RadioButton radioButton3 = this.radioButton;
+        boolean z2 = LocaleController.isRTL;
         int i = 5;
-        addView(this.radioButton, LayoutHelper.createFrame(22, 22.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 0 : 20), 10.0f, (float) (!LocaleController.isRTL ? 0 : 20), 0.0f));
+        addView(radioButton3, LayoutHelper.createFrame(22, 22.0f, (z2 ? 5 : 3) | 48, (float) (z2 ? 0 : 20), 10.0f, (float) (!z2 ? 0 : 20), 0.0f));
         TextView textView2 = new TextView(context2);
         this.textView = textView2;
         if (z) {
@@ -48,14 +50,16 @@ public class RadioButtonCell extends FrameLayout {
         this.textView.setMaxLines(1);
         this.textView.setSingleLine(true);
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+        TextView textView3 = this.textView;
+        boolean z3 = LocaleController.isRTL;
         int i2 = 61;
-        addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 23 : 61), 10.0f, (float) (LocaleController.isRTL ? 61 : 23), 0.0f));
-        TextView textView3 = new TextView(context2);
-        this.valueTextView = textView3;
+        addView(textView3, LayoutHelper.createFrame(-2, -2.0f, (z3 ? 5 : 3) | 48, (float) (z3 ? 23 : 61), 10.0f, (float) (z3 ? 61 : 23), 0.0f));
+        TextView textView4 = new TextView(context2);
+        this.valueTextView = textView4;
         if (z) {
-            textView3.setTextColor(Theme.getColor("dialogTextGray2"));
+            textView4.setTextColor(Theme.getColor("dialogTextGray2"));
         } else {
-            textView3.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
+            textView4.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText2"));
         }
         this.valueTextView.setTextSize(1, 13.0f);
         this.valueTextView.setGravity(LocaleController.isRTL ? 5 : 3);
@@ -63,7 +67,9 @@ public class RadioButtonCell extends FrameLayout {
         this.valueTextView.setMaxLines(0);
         this.valueTextView.setSingleLine(false);
         this.valueTextView.setPadding(0, 0, 0, AndroidUtilities.dp(12.0f));
-        addView(this.valueTextView, LayoutHelper.createFrame(-2, -2.0f, (!LocaleController.isRTL ? 3 : i) | 48, (float) (LocaleController.isRTL ? 17 : 61), 35.0f, (float) (!LocaleController.isRTL ? 17 : i2), 0.0f));
+        TextView textView5 = this.valueTextView;
+        boolean z4 = LocaleController.isRTL;
+        addView(textView5, LayoutHelper.createFrame(-2, -2.0f, (!z4 ? 3 : i) | 48, (float) (z4 ? 17 : 61), 35.0f, (float) (!z4 ? 17 : i2), 0.0f));
     }
 
     /* access modifiers changed from: protected */

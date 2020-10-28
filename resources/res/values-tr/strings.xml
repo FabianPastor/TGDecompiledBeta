@@ -41,4 +41,5 @@
     <string name="google_assistant_verification_channel_name">Asistan doğrulayıcı</string>
     <string name="google_assistant_verification_notification_title">Google Assistant mesaj gönderiyor</string>
     <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="wallet_buy_button_place_holder">Google ile satın al</string>
 </resources>

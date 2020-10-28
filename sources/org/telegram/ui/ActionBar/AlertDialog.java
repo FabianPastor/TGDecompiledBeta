@@ -136,11 +136,15 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     public RLottieImageView topImageView;
     /* access modifiers changed from: private */
     public int topResId;
+    /* access modifiers changed from: private */
+    public View topView;
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         return null;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$AlertDialog() {
         if (!isShowing()) {
             try {
@@ -217,8 +221,9 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
     /* access modifiers changed from: protected */
     public void onCreate(Bundle bundle) {
         int i;
+        int i2 = Build.VERSION.SDK_INT;
         super.onCreate(bundle);
-        AnonymousClass1 r1 = new LinearLayout(getContext()) {
+        AnonymousClass1 r2 = new LinearLayout(getContext()) {
             private boolean inLayout;
 
             public boolean hasOverlappingRendering() {
@@ -242,11 +247,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             }
 
             /* access modifiers changed from: protected */
-            /* JADX WARNING: Removed duplicated region for block: B:76:0x02db  */
+            /* JADX WARNING: Removed duplicated region for block: B:79:0x031a  */
             /* Code decompiled incorrectly, please refer to instructions dump. */
-            public void onMeasure(int r12, int r13) {
+            public void onMeasure(int r13, int r14) {
                 /*
-                    r11 = this;
+                    r12 = this;
                     org.telegram.ui.ActionBar.AlertDialog r0 = org.telegram.ui.ActionBar.AlertDialog.this
                     int r0 = r0.progressViewStyle
                     r1 = 1073741824(0x40000000, float:2.0)
@@ -260,22 +265,22 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
                     int r1 = android.view.View.MeasureSpec.makeMeasureSpec(r2, r1)
                     r0.measure(r3, r1)
-                    int r12 = android.view.View.MeasureSpec.getSize(r12)
                     int r13 = android.view.View.MeasureSpec.getSize(r13)
-                    r11.setMeasuredDimension(r12, r13)
-                    goto L_0x0359
+                    int r14 = android.view.View.MeasureSpec.getSize(r14)
+                    r12.setMeasuredDimension(r13, r14)
+                    goto L_0x0398
                 L_0x0033:
                     r0 = 1
-                    r11.inLayout = r0
-                    int r12 = android.view.View.MeasureSpec.getSize(r12)
-                    int r0 = android.view.View.MeasureSpec.getSize(r13)
-                    int r2 = r11.getPaddingTop()
+                    r12.inLayout = r0
+                    int r13 = android.view.View.MeasureSpec.getSize(r13)
+                    int r0 = android.view.View.MeasureSpec.getSize(r14)
+                    int r2 = r12.getPaddingTop()
                     int r0 = r0 - r2
-                    int r2 = r11.getPaddingBottom()
+                    int r2 = r12.getPaddingBottom()
                     int r0 = r0 - r2
-                    int r2 = r11.getPaddingLeft()
-                    int r2 = r12 - r2
-                    int r3 = r11.getPaddingRight()
+                    int r2 = r12.getPaddingLeft()
+                    int r2 = r13 - r2
+                    int r3 = r12.getPaddingRight()
                     int r2 = r2 - r3
                     r3 = 1111490560(0x42400000, float:48.0)
                     int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
@@ -309,7 +314,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 L_0x0094:
                     org.telegram.ui.ActionBar.AlertDialog r2 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.FrameLayout r2 = r2.buttonsLayout
-                    r2.measure(r4, r13)
+                    r2.measure(r4, r14)
                     org.telegram.ui.ActionBar.AlertDialog r2 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.FrameLayout r2 = r2.buttonsLayout
                     android.view.ViewGroup$LayoutParams r2 = r2.getLayoutParams()
@@ -334,7 +339,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     android.widget.TextView r5 = r5.secondTitleTextView
                     int r8 = android.view.View.MeasureSpec.getSize(r3)
                     int r8 = android.view.View.MeasureSpec.makeMeasureSpec(r8, r7)
-                    r5.measure(r8, r13)
+                    r5.measure(r8, r14)
                 L_0x00d2:
                     org.telegram.ui.ActionBar.AlertDialog r5 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r5 = r5.titleTextView
@@ -353,19 +358,19 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     int r10 = org.telegram.messenger.AndroidUtilities.dp(r8)
                     int r9 = r9 - r10
                     int r9 = android.view.View.MeasureSpec.makeMeasureSpec(r9, r1)
-                    r5.measure(r9, r13)
+                    r5.measure(r9, r14)
                     goto L_0x010f
                 L_0x0106:
                     org.telegram.ui.ActionBar.AlertDialog r5 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r5 = r5.titleTextView
-                    r5.measure(r3, r13)
+                    r5.measure(r3, r14)
                 L_0x010f:
                     org.telegram.ui.ActionBar.AlertDialog r5 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.FrameLayout r5 = r5.titleContainer
                     if (r5 == 0) goto L_0x013d
                     org.telegram.ui.ActionBar.AlertDialog r5 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.FrameLayout r5 = r5.titleContainer
-                    r5.measure(r3, r13)
+                    r5.measure(r3, r14)
                     org.telegram.ui.ActionBar.AlertDialog r5 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.FrameLayout r5 = r5.titleContainer
                     android.view.ViewGroup$LayoutParams r5 = r5.getLayoutParams()
@@ -384,234 +389,261 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     if (r5 == 0) goto L_0x016b
                     org.telegram.ui.ActionBar.AlertDialog r5 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r5 = r5.subtitleTextView
-                    r5.measure(r3, r13)
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    android.widget.TextView r13 = r13.subtitleTextView
-                    android.view.ViewGroup$LayoutParams r13 = r13.getLayoutParams()
-                    android.widget.LinearLayout$LayoutParams r13 = (android.widget.LinearLayout.LayoutParams) r13
+                    r5.measure(r3, r14)
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    android.widget.TextView r14 = r14.subtitleTextView
+                    android.view.ViewGroup$LayoutParams r14 = r14.getLayoutParams()
+                    android.widget.LinearLayout$LayoutParams r14 = (android.widget.LinearLayout.LayoutParams) r14
                     org.telegram.ui.ActionBar.AlertDialog r5 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r5 = r5.subtitleTextView
                     int r5 = r5.getMeasuredHeight()
-                    int r9 = r13.bottomMargin
+                    int r9 = r14.bottomMargin
                     int r5 = r5 + r9
-                    int r13 = r13.topMargin
-                    int r5 = r5 + r13
+                    int r14 = r14.topMargin
+                    int r5 = r5 + r14
                     int r2 = r2 - r5
                 L_0x016b:
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    org.telegram.ui.Components.RLottieImageView r13 = r13.topImageView
-                    if (r13 == 0) goto L_0x019f
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    org.telegram.ui.Components.RLottieImageView r13 = r13.topImageView
-                    int r5 = android.view.View.MeasureSpec.makeMeasureSpec(r12, r1)
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    org.telegram.ui.Components.RLottieImageView r14 = r14.topImageView
+                    if (r14 == 0) goto L_0x019f
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    org.telegram.ui.Components.RLottieImageView r14 = r14.topImageView
+                    int r5 = android.view.View.MeasureSpec.makeMeasureSpec(r13, r1)
                     org.telegram.ui.ActionBar.AlertDialog r9 = org.telegram.ui.ActionBar.AlertDialog.this
                     int r9 = r9.topHeight
                     float r9 = (float) r9
                     int r9 = org.telegram.messenger.AndroidUtilities.dp(r9)
                     int r9 = android.view.View.MeasureSpec.makeMeasureSpec(r9, r1)
-                    r13.measure(r5, r9)
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    org.telegram.ui.Components.RLottieImageView r13 = r13.topImageView
-                    int r13 = r13.getMeasuredHeight()
+                    r14.measure(r5, r9)
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    org.telegram.ui.Components.RLottieImageView r14 = r14.topImageView
+                    int r14 = r14.getMeasuredHeight()
                     int r5 = org.telegram.messenger.AndroidUtilities.dp(r8)
-                    int r13 = r13 - r5
-                    int r2 = r2 - r13
+                    int r14 = r14 - r5
+                    int r2 = r2 - r14
                 L_0x019f:
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    int r13 = r13.progressViewStyle
-                    r5 = 8
-                    if (r13 != 0) goto L_0x0263
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    android.widget.ScrollView r13 = r13.contentScrollView
-                    android.view.ViewGroup$LayoutParams r13 = r13.getLayoutParams()
-                    android.widget.LinearLayout$LayoutParams r13 = (android.widget.LinearLayout.LayoutParams) r13
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    android.view.View r14 = r14.topView
+                    r5 = 1098907648(0x41800000, float:16.0)
+                    if (r14 == 0) goto L_0x01e0
+                    int r14 = org.telegram.messenger.AndroidUtilities.dp(r5)
+                    int r14 = r13 - r14
+                    float r9 = (float) r14
+                    r10 = 1147797504(0x446a0000, float:936.0)
+                    float r9 = r9 / r10
+                    r10 = 1135673344(0x43b10000, float:354.0)
+                    float r9 = r9 * r10
+                    int r9 = (int) r9
+                    org.telegram.ui.ActionBar.AlertDialog r10 = org.telegram.ui.ActionBar.AlertDialog.this
+                    android.view.View r10 = r10.topView
+                    int r14 = android.view.View.MeasureSpec.makeMeasureSpec(r14, r1)
+                    int r11 = android.view.View.MeasureSpec.makeMeasureSpec(r9, r1)
+                    r10.measure(r14, r11)
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    android.view.View r14 = r14.topView
+                    android.view.ViewGroup$LayoutParams r14 = r14.getLayoutParams()
+                    r14.height = r9
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    android.view.View r14 = r14.topView
+                    int r14 = r14.getMeasuredHeight()
+                    int r2 = r2 - r14
+                L_0x01e0:
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    int r14 = r14.progressViewStyle
+                    r9 = 8
+                    if (r14 != 0) goto L_0x02a2
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    android.widget.ScrollView r14 = r14.contentScrollView
+                    android.view.ViewGroup$LayoutParams r14 = r14.getLayoutParams()
+                    android.widget.LinearLayout$LayoutParams r14 = (android.widget.LinearLayout.LayoutParams) r14
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.view.View r1 = r1.customView
-                    if (r1 == 0) goto L_0x01f2
+                    if (r1 == 0) goto L_0x0231
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r1 = r1.titleTextView
-                    if (r1 != 0) goto L_0x01e0
+                    if (r1 != 0) goto L_0x021f
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r1 = r1.messageTextView
                     int r1 = r1.getVisibility()
-                    if (r1 != r5) goto L_0x01e0
+                    if (r1 != r9) goto L_0x021f
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     java.lang.CharSequence[] r1 = r1.items
-                    if (r1 != 0) goto L_0x01e0
-                    r1 = 1098907648(0x41800000, float:16.0)
-                    int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                    goto L_0x01e1
-                L_0x01e0:
+                    if (r1 != 0) goto L_0x021f
+                    int r1 = org.telegram.messenger.AndroidUtilities.dp(r5)
+                    goto L_0x0220
+                L_0x021f:
                     r1 = 0
-                L_0x01e1:
-                    r13.topMargin = r1
+                L_0x0220:
+                    r14.topMargin = r1
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.FrameLayout r1 = r1.buttonsLayout
-                    if (r1 != 0) goto L_0x01ee
+                    if (r1 != 0) goto L_0x022d
                     int r1 = org.telegram.messenger.AndroidUtilities.dp(r8)
-                    goto L_0x01ef
-                L_0x01ee:
+                    goto L_0x022e
+                L_0x022d:
                     r1 = 0
-                L_0x01ef:
-                    r13.bottomMargin = r1
-                    goto L_0x0243
-                L_0x01f2:
+                L_0x022e:
+                    r14.bottomMargin = r1
+                    goto L_0x0282
+                L_0x0231:
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     java.lang.CharSequence[] r1 = r1.items
-                    if (r1 == 0) goto L_0x021d
+                    if (r1 == 0) goto L_0x025c
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r1 = r1.titleTextView
-                    if (r1 != 0) goto L_0x0213
+                    if (r1 != 0) goto L_0x0252
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r1 = r1.messageTextView
                     int r1 = r1.getVisibility()
-                    if (r1 != r5) goto L_0x0213
+                    if (r1 != r9) goto L_0x0252
                     int r1 = org.telegram.messenger.AndroidUtilities.dp(r8)
-                    goto L_0x0214
-                L_0x0213:
+                    goto L_0x0253
+                L_0x0252:
                     r1 = 0
-                L_0x0214:
-                    r13.topMargin = r1
+                L_0x0253:
+                    r14.topMargin = r1
                     int r1 = org.telegram.messenger.AndroidUtilities.dp(r8)
-                    r13.bottomMargin = r1
-                    goto L_0x0243
-                L_0x021d:
+                    r14.bottomMargin = r1
+                    goto L_0x0282
+                L_0x025c:
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r1 = r1.messageTextView
                     int r1 = r1.getVisibility()
-                    if (r1 != 0) goto L_0x0243
+                    if (r1 != 0) goto L_0x0282
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r1 = r1.titleTextView
-                    if (r1 != 0) goto L_0x0238
+                    if (r1 != 0) goto L_0x0277
                     r1 = 1100480512(0x41980000, float:19.0)
                     int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                    goto L_0x0239
-                L_0x0238:
+                    goto L_0x0278
+                L_0x0277:
                     r1 = 0
-                L_0x0239:
-                    r13.topMargin = r1
+                L_0x0278:
+                    r14.topMargin = r1
                     r1 = 1101004800(0x41a00000, float:20.0)
                     int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-                    r13.bottomMargin = r1
-                L_0x0243:
-                    int r1 = r13.bottomMargin
-                    int r13 = r13.topMargin
-                    int r1 = r1 + r13
+                    r14.bottomMargin = r1
+                L_0x0282:
+                    int r1 = r14.bottomMargin
+                    int r14 = r14.topMargin
+                    int r1 = r1 + r14
                     int r2 = r2 - r1
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    android.widget.ScrollView r13 = r13.contentScrollView
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    android.widget.ScrollView r14 = r14.contentScrollView
                     int r1 = android.view.View.MeasureSpec.makeMeasureSpec(r2, r7)
-                    r13.measure(r4, r1)
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    android.widget.ScrollView r13 = r13.contentScrollView
-                    int r13 = r13.getMeasuredHeight()
-                    int r2 = r2 - r13
-                    goto L_0x0335
-                L_0x0263:
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    android.widget.FrameLayout r13 = r13.progressViewContainer
-                    if (r13 == 0) goto L_0x0296
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    android.widget.FrameLayout r13 = r13.progressViewContainer
+                    r14.measure(r4, r1)
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    android.widget.ScrollView r14 = r14.contentScrollView
+                    int r14 = r14.getMeasuredHeight()
+                    int r2 = r2 - r14
+                    goto L_0x0374
+                L_0x02a2:
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    android.widget.FrameLayout r14 = r14.progressViewContainer
+                    if (r14 == 0) goto L_0x02d5
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    android.widget.FrameLayout r14 = r14.progressViewContainer
                     int r4 = android.view.View.MeasureSpec.makeMeasureSpec(r2, r7)
-                    r13.measure(r3, r4)
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    android.widget.FrameLayout r13 = r13.progressViewContainer
-                    android.view.ViewGroup$LayoutParams r13 = r13.getLayoutParams()
-                    android.widget.LinearLayout$LayoutParams r13 = (android.widget.LinearLayout.LayoutParams) r13
+                    r14.measure(r3, r4)
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    android.widget.FrameLayout r14 = r14.progressViewContainer
+                    android.view.ViewGroup$LayoutParams r14 = r14.getLayoutParams()
+                    android.widget.LinearLayout$LayoutParams r14 = (android.widget.LinearLayout.LayoutParams) r14
                     org.telegram.ui.ActionBar.AlertDialog r4 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.FrameLayout r4 = r4.progressViewContainer
                     int r4 = r4.getMeasuredHeight()
-                    int r5 = r13.bottomMargin
+                    int r5 = r14.bottomMargin
                     int r4 = r4 + r5
-                    int r13 = r13.topMargin
-                L_0x0293:
-                    int r4 = r4 + r13
+                    int r14 = r14.topMargin
+                L_0x02d2:
+                    int r4 = r4 + r14
                     int r2 = r2 - r4
-                    goto L_0x02d3
-                L_0x0296:
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    android.widget.TextView r13 = r13.messageTextView
-                    if (r13 == 0) goto L_0x02d3
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    android.widget.TextView r13 = r13.messageTextView
+                    goto L_0x0312
+                L_0x02d5:
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    android.widget.TextView r14 = r14.messageTextView
+                    if (r14 == 0) goto L_0x0312
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    android.widget.TextView r14 = r14.messageTextView
                     int r4 = android.view.View.MeasureSpec.makeMeasureSpec(r2, r7)
-                    r13.measure(r3, r4)
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    android.widget.TextView r13 = r13.messageTextView
-                    int r13 = r13.getVisibility()
-                    if (r13 == r5) goto L_0x02d3
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    android.widget.TextView r13 = r13.messageTextView
-                    android.view.ViewGroup$LayoutParams r13 = r13.getLayoutParams()
-                    android.widget.LinearLayout$LayoutParams r13 = (android.widget.LinearLayout.LayoutParams) r13
+                    r14.measure(r3, r4)
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    android.widget.TextView r14 = r14.messageTextView
+                    int r14 = r14.getVisibility()
+                    if (r14 == r9) goto L_0x0312
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    android.widget.TextView r14 = r14.messageTextView
+                    android.view.ViewGroup$LayoutParams r14 = r14.getLayoutParams()
+                    android.widget.LinearLayout$LayoutParams r14 = (android.widget.LinearLayout.LayoutParams) r14
                     org.telegram.ui.ActionBar.AlertDialog r4 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r4 = r4.messageTextView
                     int r4 = r4.getMeasuredHeight()
-                    int r5 = r13.bottomMargin
+                    int r5 = r14.bottomMargin
                     int r4 = r4 + r5
-                    int r13 = r13.topMargin
-                    goto L_0x0293
-                L_0x02d3:
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    org.telegram.ui.Components.LineProgressView r13 = r13.lineProgressView
-                    if (r13 == 0) goto L_0x0335
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    org.telegram.ui.Components.LineProgressView r13 = r13.lineProgressView
+                    int r14 = r14.topMargin
+                    goto L_0x02d2
+                L_0x0312:
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    org.telegram.ui.Components.LineProgressView r14 = r14.lineProgressView
+                    if (r14 == 0) goto L_0x0374
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    org.telegram.ui.Components.LineProgressView r14 = r14.lineProgressView
                     r4 = 1082130432(0x40800000, float:4.0)
                     int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
                     int r1 = android.view.View.MeasureSpec.makeMeasureSpec(r4, r1)
-                    r13.measure(r3, r1)
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    org.telegram.ui.Components.LineProgressView r13 = r13.lineProgressView
-                    android.view.ViewGroup$LayoutParams r13 = r13.getLayoutParams()
-                    android.widget.LinearLayout$LayoutParams r13 = (android.widget.LinearLayout.LayoutParams) r13
+                    r14.measure(r3, r1)
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    org.telegram.ui.Components.LineProgressView r14 = r14.lineProgressView
+                    android.view.ViewGroup$LayoutParams r14 = r14.getLayoutParams()
+                    android.widget.LinearLayout$LayoutParams r14 = (android.widget.LinearLayout.LayoutParams) r14
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     org.telegram.ui.Components.LineProgressView r1 = r1.lineProgressView
                     int r1 = r1.getMeasuredHeight()
-                    int r4 = r13.bottomMargin
+                    int r4 = r14.bottomMargin
                     int r1 = r1 + r4
-                    int r13 = r13.topMargin
-                    int r1 = r1 + r13
+                    int r14 = r14.topMargin
+                    int r1 = r1 + r14
                     int r2 = r2 - r1
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    android.widget.TextView r13 = r13.lineProgressViewPercent
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    android.widget.TextView r14 = r14.lineProgressViewPercent
                     int r1 = android.view.View.MeasureSpec.makeMeasureSpec(r2, r7)
-                    r13.measure(r3, r1)
-                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
-                    android.widget.TextView r13 = r13.lineProgressViewPercent
-                    android.view.ViewGroup$LayoutParams r13 = r13.getLayoutParams()
-                    android.widget.LinearLayout$LayoutParams r13 = (android.widget.LinearLayout.LayoutParams) r13
+                    r14.measure(r3, r1)
+                    org.telegram.ui.ActionBar.AlertDialog r14 = org.telegram.ui.ActionBar.AlertDialog.this
+                    android.widget.TextView r14 = r14.lineProgressViewPercent
+                    android.view.ViewGroup$LayoutParams r14 = r14.getLayoutParams()
+                    android.widget.LinearLayout$LayoutParams r14 = (android.widget.LinearLayout.LayoutParams) r14
                     org.telegram.ui.ActionBar.AlertDialog r1 = org.telegram.ui.ActionBar.AlertDialog.this
                     android.widget.TextView r1 = r1.lineProgressViewPercent
                     int r1 = r1.getMeasuredHeight()
-                    int r3 = r13.bottomMargin
+                    int r3 = r14.bottomMargin
                     int r1 = r1 + r3
-                    int r13 = r13.topMargin
-                    int r1 = r1 + r13
+                    int r14 = r14.topMargin
+                    int r1 = r1 + r14
                     int r2 = r2 - r1
-                L_0x0335:
+                L_0x0374:
                     int r0 = r0 - r2
-                    int r13 = r11.getPaddingTop()
-                    int r0 = r0 + r13
-                    int r13 = r11.getPaddingBottom()
-                    int r0 = r0 + r13
-                    r11.setMeasuredDimension(r12, r0)
-                    r11.inLayout = r6
-                    org.telegram.ui.ActionBar.AlertDialog r12 = org.telegram.ui.ActionBar.AlertDialog.this
-                    int r12 = r12.lastScreenWidth
-                    android.graphics.Point r13 = org.telegram.messenger.AndroidUtilities.displaySize
-                    int r13 = r13.x
-                    if (r12 == r13) goto L_0x0359
-                    org.telegram.ui.ActionBar.-$$Lambda$AlertDialog$1$2il1lPevBw8X_3FhfSjXOpGmbaM r12 = new org.telegram.ui.ActionBar.-$$Lambda$AlertDialog$1$2il1lPevBw8X_3FhfSjXOpGmbaM
-                    r12.<init>()
-                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r12)
-                L_0x0359:
+                    int r14 = r12.getPaddingTop()
+                    int r0 = r0 + r14
+                    int r14 = r12.getPaddingBottom()
+                    int r0 = r0 + r14
+                    r12.setMeasuredDimension(r13, r0)
+                    r12.inLayout = r6
+                    org.telegram.ui.ActionBar.AlertDialog r13 = org.telegram.ui.ActionBar.AlertDialog.this
+                    int r13 = r13.lastScreenWidth
+                    android.graphics.Point r14 = org.telegram.messenger.AndroidUtilities.displaySize
+                    int r14 = r14.x
+                    if (r13 == r14) goto L_0x0398
+                    org.telegram.ui.ActionBar.-$$Lambda$AlertDialog$1$JIrJ56APQSM_xO6XCF5kj8j2lPQ r13 = new org.telegram.ui.ActionBar.-$$Lambda$AlertDialog$1$JIrJ56APQSM_xO6XCF5kj8j2lPQ
+                    r13.<init>()
+                    org.telegram.messenger.AndroidUtilities.runOnUIThread(r13)
+                L_0x0398:
                     return
                 */
                 throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.AlertDialog.AnonymousClass1.onMeasure(int, int):void");
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onMeasure$0 */
             public /* synthetic */ void lambda$onMeasure$0$AlertDialog$1() {
                 int i;
                 int unused = AlertDialog.this.lastScreenWidth = AndroidUtilities.displaySize.x;
@@ -650,6 +682,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 }
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onLayout$1 */
             public /* synthetic */ void lambda$onLayout$1$AlertDialog$1() {
                 AlertDialog alertDialog = AlertDialog.this;
                 boolean z = false;
@@ -668,25 +702,31 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                 }
             }
         };
-        r1.setOrientation(1);
+        r2.setOrientation(1);
         if (this.progressViewStyle == 3) {
-            r1.setBackgroundDrawable((Drawable) null);
+            r2.setBackgroundDrawable((Drawable) null);
         } else {
-            r1.setBackgroundDrawable(this.shadowDrawable);
+            r2.setBackgroundDrawable(this.shadowDrawable);
         }
-        r1.setFitsSystemWindows(Build.VERSION.SDK_INT >= 21);
-        setContentView(r1);
+        r2.setFitsSystemWindows(i2 >= 21);
+        setContentView(r2);
         boolean z = (this.positiveButtonText == null && this.negativeButtonText == null && this.neutralButtonText == null) ? false : true;
-        if (!(this.topResId == 0 && this.topAnimationId == 0 && this.topDrawable == null)) {
+        if (this.topResId == 0 && this.topAnimationId == 0 && this.topDrawable == null) {
+            View view = this.topView;
+            if (view != null) {
+                view.setPadding(0, 0, 0, 0);
+                r2.addView(this.topView, LayoutHelper.createLinear(-1, this.topHeight, 51, 0, 0, 0, 0));
+            }
+        } else {
             RLottieImageView rLottieImageView = new RLottieImageView(getContext());
             this.topImageView = rLottieImageView;
             Drawable drawable = this.topDrawable;
             if (drawable != null) {
                 rLottieImageView.setImageDrawable(drawable);
             } else {
-                int i2 = this.topResId;
-                if (i2 != 0) {
-                    rLottieImageView.setImageResource(i2);
+                int i3 = this.topResId;
+                if (i3 != 0) {
+                    rLottieImageView.setImageResource(i3);
                 } else {
                     rLottieImageView.setAutoRepeat(true);
                     this.topImageView.setAnimation(this.topAnimationId, 94, 94);
@@ -697,12 +737,12 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.topImageView.setBackgroundDrawable(getContext().getResources().getDrawable(NUM));
             this.topImageView.getBackground().setColorFilter(new PorterDuffColorFilter(this.topBackgroundColor, PorterDuff.Mode.MULTIPLY));
             this.topImageView.setPadding(0, 0, 0, 0);
-            r1.addView(this.topImageView, LayoutHelper.createLinear(-1, this.topHeight, 51, -8, -8, 0, 0));
+            r2.addView(this.topImageView, LayoutHelper.createLinear(-1, this.topHeight, 51, -8, -8, 0, 0));
         }
         if (this.title != null) {
             FrameLayout frameLayout = new FrameLayout(getContext());
             this.titleContainer = frameLayout;
-            r1.addView(frameLayout, LayoutHelper.createLinear(-2, -2, 24.0f, 0.0f, 24.0f, 0.0f));
+            r2.addView(frameLayout, LayoutHelper.createLinear(-2, -2, 24.0f, 0.0f, 24.0f, 0.0f));
             TextView textView = new TextView(getContext());
             this.titleTextView = textView;
             textView.setText(this.title);
@@ -728,7 +768,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.subtitleTextView.setTextColor(getThemeColor("dialogIcon"));
             this.subtitleTextView.setTextSize(1, 14.0f);
             this.subtitleTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-            r1.addView(this.subtitleTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 24, 0, 24, this.items != null ? 14 : 10));
+            r2.addView(this.subtitleTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 24, 0, 24, this.items != null ? 14 : 10));
         }
         if (this.progressViewStyle == 0) {
             this.shadow[0] = (BitmapDrawable) getContext().getResources().getDrawable(NUM).mutate();
@@ -737,7 +777,7 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.shadow[1].setAlpha(0);
             this.shadow[0].setCallback(this);
             this.shadow[1].setCallback(this);
-            AnonymousClass2 r5 = new ScrollView(getContext()) {
+            AnonymousClass2 r7 = new ScrollView(getContext()) {
                 /* access modifiers changed from: protected */
                 public boolean drawChild(Canvas canvas, View view, long j) {
                     boolean drawChild = super.drawChild(canvas, view, j);
@@ -752,10 +792,10 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     return drawChild;
                 }
             };
-            this.contentScrollView = r5;
-            r5.setVerticalScrollBarEnabled(false);
+            this.contentScrollView = r7;
+            r7.setVerticalScrollBarEnabled(false);
             AndroidUtilities.setScrollViewEdgeEffectColor(this.contentScrollView, getThemeColor("dialogScrollGlow"));
-            r1.addView(this.contentScrollView, LayoutHelper.createLinear(-1, -2, 0.0f, 0.0f, 0.0f, 0.0f));
+            r2.addView(this.contentScrollView, LayoutHelper.createLinear(-1, -2, 0.0f, 0.0f, 0.0f, 0.0f));
             LinearLayout linearLayout = new LinearLayout(getContext());
             this.scrollContainer = linearLayout;
             linearLayout.setOrientation(1);
@@ -772,40 +812,43 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.messageTextView.setEnabled(false);
         }
         this.messageTextView.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
-        int i3 = this.progressViewStyle;
-        if (i3 == 1) {
+        int i4 = this.progressViewStyle;
+        if (i4 == 1) {
             FrameLayout frameLayout2 = new FrameLayout(getContext());
             this.progressViewContainer = frameLayout2;
-            r1.addView(frameLayout2, LayoutHelper.createLinear(-1, 44, 51, 23, this.title == null ? 24 : 0, 23, 24));
+            r2.addView(frameLayout2, LayoutHelper.createLinear(-1, 44, 51, 23, this.title == null ? 24 : 0, 23, 24));
             RadialProgressView radialProgressView = new RadialProgressView(getContext());
             radialProgressView.setProgressColor(getThemeColor("dialogProgressCircle"));
             this.progressViewContainer.addView(radialProgressView, LayoutHelper.createFrame(44, 44, (LocaleController.isRTL ? 5 : 3) | 48));
             this.messageTextView.setLines(1);
             this.messageTextView.setEllipsize(TextUtils.TruncateAt.END);
-            this.progressViewContainer.addView(this.messageTextView, LayoutHelper.createFrame(-2, -2.0f, (LocaleController.isRTL ? 5 : 3) | 16, (float) (LocaleController.isRTL ? 0 : 62), 0.0f, (float) (LocaleController.isRTL ? 62 : 0), 0.0f));
-        } else if (i3 == 2) {
-            r1.addView(this.messageTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 24, this.title == null ? 19 : 0, 24, 20));
+            FrameLayout frameLayout3 = this.progressViewContainer;
+            TextView textView5 = this.messageTextView;
+            boolean z2 = LocaleController.isRTL;
+            frameLayout3.addView(textView5, LayoutHelper.createFrame(-2, -2.0f, (z2 ? 5 : 3) | 16, (float) (z2 ? 0 : 62), 0.0f, (float) (z2 ? 62 : 0), 0.0f));
+        } else if (i4 == 2) {
+            r2.addView(this.messageTextView, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 24, this.title == null ? 19 : 0, 24, 20));
             LineProgressView lineProgressView2 = new LineProgressView(getContext());
             this.lineProgressView = lineProgressView2;
             lineProgressView2.setProgress(((float) this.currentProgress) / 100.0f, false);
             this.lineProgressView.setProgressColor(getThemeColor("dialogLineProgress"));
             this.lineProgressView.setBackColor(getThemeColor("dialogLineProgressBackground"));
-            r1.addView(this.lineProgressView, LayoutHelper.createLinear(-1, 4, 19, 24, 0, 24, 0));
-            TextView textView5 = new TextView(getContext());
-            this.lineProgressViewPercent = textView5;
-            textView5.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+            r2.addView(this.lineProgressView, LayoutHelper.createLinear(-1, 4, 19, 24, 0, 24, 0));
+            TextView textView6 = new TextView(getContext());
+            this.lineProgressViewPercent = textView6;
+            textView6.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
             this.lineProgressViewPercent.setGravity((LocaleController.isRTL ? 5 : 3) | 48);
             this.lineProgressViewPercent.setTextColor(getThemeColor("dialogTextGray2"));
             this.lineProgressViewPercent.setTextSize(1, 14.0f);
-            r1.addView(this.lineProgressViewPercent, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 23, 4, 23, 24));
+            r2.addView(this.lineProgressViewPercent, LayoutHelper.createLinear(-2, -2, (LocaleController.isRTL ? 5 : 3) | 48, 23, 4, 23, 24));
             updateLineProgressTextView();
-        } else if (i3 == 3) {
+        } else if (i4 == 3) {
             setCanceledOnTouchOutside(false);
             setCancelable(false);
-            FrameLayout frameLayout3 = new FrameLayout(getContext());
-            this.progressViewContainer = frameLayout3;
-            frameLayout3.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), Theme.getColor("dialog_inlineProgressBackground")));
-            r1.addView(this.progressViewContainer, LayoutHelper.createLinear(86, 86, 17));
+            FrameLayout frameLayout4 = new FrameLayout(getContext());
+            this.progressViewContainer = frameLayout4;
+            frameLayout4.setBackgroundDrawable(Theme.createRoundRectDrawable(AndroidUtilities.dp(18.0f), Theme.getColor("dialog_inlineProgressBackground")));
+            r2.addView(this.progressViewContainer, LayoutHelper.createLinear(86, 86, 17));
             RadialProgressView radialProgressView2 = new RadialProgressView(getContext());
             radialProgressView2.setProgressColor(getThemeColor("dialog_inlineProgress"));
             this.progressViewContainer.addView(radialProgressView2, LayoutHelper.createLinear(86, 86));
@@ -819,18 +862,18 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             this.messageTextView.setVisibility(8);
         }
         if (this.items != null) {
-            int i4 = 0;
+            int i5 = 0;
             while (true) {
                 CharSequence[] charSequenceArr = this.items;
-                if (i4 >= charSequenceArr.length) {
+                if (i5 >= charSequenceArr.length) {
                     break;
                 }
-                if (charSequenceArr[i4] != null) {
+                if (charSequenceArr[i5] != null) {
                     AlertDialogCell alertDialogCell = new AlertDialogCell(getContext());
-                    CharSequence charSequence = this.items[i4];
+                    CharSequence charSequence = this.items[i5];
                     int[] iArr = this.itemIcons;
-                    alertDialogCell.setTextAndIcon(charSequence, iArr != null ? iArr[i4] : 0);
-                    alertDialogCell.setTag(Integer.valueOf(i4));
+                    alertDialogCell.setTextAndIcon(charSequence, iArr != null ? iArr[i5] : 0);
+                    alertDialogCell.setTag(Integer.valueOf(i5));
                     this.itemViews.add(alertDialogCell);
                     this.scrollContainer.addView(alertDialogCell, LayoutHelper.createLinear(-1, 50));
                     alertDialogCell.setOnClickListener(new View.OnClickListener() {
@@ -839,18 +882,18 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                         }
                     });
                 }
-                i4++;
+                i5++;
             }
         }
-        View view = this.customView;
-        if (view != null) {
-            if (view.getParent() != null) {
+        View view2 = this.customView;
+        if (view2 != null) {
+            if (view2.getParent() != null) {
                 ((ViewGroup) this.customView.getParent()).removeView(this.customView);
             }
             this.scrollContainer.addView(this.customView, LayoutHelper.createLinear(-1, this.customViewHeight));
         }
         if (z) {
-            AnonymousClass3 r3 = new FrameLayout(this, getContext()) {
+            AnonymousClass3 r4 = new FrameLayout(this, getContext()) {
                 /* access modifiers changed from: protected */
                 public void onLayout(boolean z, int i, int i2, int i3, int i4) {
                     int i5;
@@ -928,11 +971,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                     }
                 }
             };
-            this.buttonsLayout = r3;
-            r3.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
-            r1.addView(this.buttonsLayout, LayoutHelper.createLinear(-1, 52));
+            this.buttonsLayout = r4;
+            r4.setPadding(AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f), AndroidUtilities.dp(8.0f));
+            r2.addView(this.buttonsLayout, LayoutHelper.createLinear(-1, 52));
             if (this.positiveButtonText != null) {
-                AnonymousClass4 r12 = new TextView(this, getContext()) {
+                AnonymousClass4 r22 = new TextView(this, getContext()) {
                     public void setEnabled(boolean z) {
                         super.setEnabled(z);
                         setAlpha(z ? 1.0f : 0.5f);
@@ -943,24 +986,24 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                         setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(i));
                     }
                 };
-                r12.setMinWidth(AndroidUtilities.dp(64.0f));
-                r12.setTag(-1);
-                r12.setTextSize(1, 14.0f);
-                r12.setTextColor(getThemeColor("dialogButton"));
-                r12.setGravity(17);
-                r12.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                r12.setText(this.positiveButtonText.toString().toUpperCase());
-                r12.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemeColor("dialogButton")));
-                r12.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
-                this.buttonsLayout.addView(r12, LayoutHelper.createFrame(-2, 36, 53));
-                r12.setOnClickListener(new View.OnClickListener() {
+                r22.setMinWidth(AndroidUtilities.dp(64.0f));
+                r22.setTag(-1);
+                r22.setTextSize(1, 14.0f);
+                r22.setTextColor(getThemeColor("dialogButton"));
+                r22.setGravity(17);
+                r22.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                r22.setText(this.positiveButtonText.toString().toUpperCase());
+                r22.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemeColor("dialogButton")));
+                r22.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
+                this.buttonsLayout.addView(r22, LayoutHelper.createFrame(-2, 36, 53));
+                r22.setOnClickListener(new View.OnClickListener() {
                     public final void onClick(View view) {
                         AlertDialog.this.lambda$onCreate$2$AlertDialog(view);
                     }
                 });
             }
             if (this.negativeButtonText != null) {
-                AnonymousClass5 r13 = new TextView(this, getContext()) {
+                AnonymousClass5 r23 = new TextView(this, getContext()) {
                     public void setEnabled(boolean z) {
                         super.setEnabled(z);
                         setAlpha(z ? 1.0f : 0.5f);
@@ -971,26 +1014,26 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                         setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(i));
                     }
                 };
-                r13.setMinWidth(AndroidUtilities.dp(64.0f));
-                r13.setTag(-2);
-                r13.setTextSize(1, 14.0f);
-                r13.setTextColor(getThemeColor("dialogButton"));
-                r13.setGravity(17);
-                r13.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                r13.setEllipsize(TextUtils.TruncateAt.END);
-                r13.setSingleLine(true);
-                r13.setText(this.negativeButtonText.toString().toUpperCase());
-                r13.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemeColor("dialogButton")));
-                r13.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
-                this.buttonsLayout.addView(r13, LayoutHelper.createFrame(-2, 36, 53));
-                r13.setOnClickListener(new View.OnClickListener() {
+                r23.setMinWidth(AndroidUtilities.dp(64.0f));
+                r23.setTag(-2);
+                r23.setTextSize(1, 14.0f);
+                r23.setTextColor(getThemeColor("dialogButton"));
+                r23.setGravity(17);
+                r23.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                r23.setEllipsize(TextUtils.TruncateAt.END);
+                r23.setSingleLine(true);
+                r23.setText(this.negativeButtonText.toString().toUpperCase());
+                r23.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemeColor("dialogButton")));
+                r23.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
+                this.buttonsLayout.addView(r23, LayoutHelper.createFrame(-2, 36, 53));
+                r23.setOnClickListener(new View.OnClickListener() {
                     public final void onClick(View view) {
                         AlertDialog.this.lambda$onCreate$3$AlertDialog(view);
                     }
                 });
             }
             if (this.neutralButtonText != null) {
-                AnonymousClass6 r14 = new TextView(this, getContext()) {
+                AnonymousClass6 r24 = new TextView(this, getContext()) {
                     public void setEnabled(boolean z) {
                         super.setEnabled(z);
                         setAlpha(z ? 1.0f : 0.5f);
@@ -1001,19 +1044,19 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
                         setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(i));
                     }
                 };
-                r14.setMinWidth(AndroidUtilities.dp(64.0f));
-                r14.setTag(-3);
-                r14.setTextSize(1, 14.0f);
-                r14.setTextColor(getThemeColor("dialogButton"));
-                r14.setGravity(17);
-                r14.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                r14.setEllipsize(TextUtils.TruncateAt.END);
-                r14.setSingleLine(true);
-                r14.setText(this.neutralButtonText.toString().toUpperCase());
-                r14.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemeColor("dialogButton")));
-                r14.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
-                this.buttonsLayout.addView(r14, LayoutHelper.createFrame(-2, 36, 51));
-                r14.setOnClickListener(new View.OnClickListener() {
+                r24.setMinWidth(AndroidUtilities.dp(64.0f));
+                r24.setTag(-3);
+                r24.setTextSize(1, 14.0f);
+                r24.setTextColor(getThemeColor("dialogButton"));
+                r24.setGravity(17);
+                r24.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+                r24.setEllipsize(TextUtils.TruncateAt.END);
+                r24.setSingleLine(true);
+                r24.setText(this.neutralButtonText.toString().toUpperCase());
+                r24.setBackgroundDrawable(Theme.getRoundRectSelectorDrawable(getThemeColor("dialogButton")));
+                r24.setPadding(AndroidUtilities.dp(10.0f), 0, AndroidUtilities.dp(10.0f), 0);
+                this.buttonsLayout.addView(r24, LayoutHelper.createFrame(-2, 36, 51));
+                r24.setOnClickListener(new View.OnClickListener() {
                     public final void onClick(View view) {
                         AlertDialog.this.lambda$onCreate$4$AlertDialog(view);
                     }
@@ -1028,9 +1071,9 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         } else {
             layoutParams.dimAmount = 0.6f;
             layoutParams.flags |= 2;
-            int i5 = AndroidUtilities.displaySize.x;
-            this.lastScreenWidth = i5;
-            int dp = i5 - AndroidUtilities.dp(48.0f);
+            int i6 = AndroidUtilities.displaySize.x;
+            this.lastScreenWidth = i6;
+            int dp = i6 - AndroidUtilities.dp(48.0f);
             if (!AndroidUtilities.isTablet()) {
                 i = AndroidUtilities.dp(356.0f);
             } else if (AndroidUtilities.isSmallTablet()) {
@@ -1042,18 +1085,20 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
             Rect rect = this.backgroundPaddings;
             layoutParams.width = min + rect.left + rect.right;
         }
-        View view2 = this.customView;
-        if (view2 == null || !canTextInput(view2)) {
+        View view3 = this.customView;
+        if (view3 == null || !canTextInput(view3)) {
             layoutParams.flags |= 131072;
         } else {
             layoutParams.softInputMode = 4;
         }
-        if (Build.VERSION.SDK_INT >= 28) {
+        if (i2 >= 28) {
             layoutParams.layoutInDisplayCutoutMode = 0;
         }
         window.setAttributes(layoutParams);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onCreate$1 */
     public /* synthetic */ void lambda$onCreate$1$AlertDialog(View view) {
         DialogInterface.OnClickListener onClickListener2 = this.onClickListener;
         if (onClickListener2 != null) {
@@ -1062,6 +1107,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         dismiss();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onCreate$2 */
     public /* synthetic */ void lambda$onCreate$2$AlertDialog(View view) {
         DialogInterface.OnClickListener onClickListener2 = this.positiveButtonListener;
         if (onClickListener2 != null) {
@@ -1072,6 +1119,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onCreate$3 */
     public /* synthetic */ void lambda$onCreate$3$AlertDialog(View view) {
         DialogInterface.OnClickListener onClickListener2 = this.negativeButtonListener;
         if (onClickListener2 != null) {
@@ -1082,6 +1131,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onCreate$4 */
     public /* synthetic */ void lambda$onCreate$4$AlertDialog(View view) {
         DialogInterface.OnClickListener onClickListener2 = this.neutralButtonListener;
         if (onClickListener2 != null) {
@@ -1124,6 +1175,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$showCancelAlert$5 */
     public /* synthetic */ void lambda$showCancelAlert$5$AlertDialog(DialogInterface dialogInterface, int i) {
         DialogInterface.OnCancelListener onCancelListener2 = this.onCancelListener;
         if (onCancelListener2 != null) {
@@ -1132,6 +1185,8 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         dismiss();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$showCancelAlert$6 */
     public /* synthetic */ void lambda$showCancelAlert$6$AlertDialog(DialogInterface dialogInterface) {
         this.cancelDialog = null;
     }
@@ -1390,6 +1445,11 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         public Builder setTopImage(int i, int i2) {
             int unused = this.alertDialog.topResId = i;
             int unused2 = this.alertDialog.topBackgroundColor = i2;
+            return this;
+        }
+
+        public Builder setTopView(View view) {
+            View unused = this.alertDialog.topView = view;
             return this;
         }
 

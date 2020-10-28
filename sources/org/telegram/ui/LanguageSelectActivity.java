@@ -151,6 +151,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$0 */
     public /* synthetic */ void lambda$createView$0$LanguageSelectActivity(View view, int i) {
         if (getParentActivity() != null && this.parentLayout != null && (view instanceof LanguageCell)) {
             LocaleController.LocaleInfo currentLocale = ((LanguageCell) view).getCurrentLocale();
@@ -162,6 +164,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$2 */
     public /* synthetic */ boolean lambda$createView$2$LanguageSelectActivity(View view, int i) {
         LocaleController.LocaleInfo currentLocale;
         if (getParentActivity() == null || this.parentLayout == null || !(view instanceof LanguageCell) || (currentLocale = ((LanguageCell) view).getCurrentLocale()) == null || currentLocale.pathToFile == null || (currentLocale.isRemote() && currentLocale.serverIndex != Integer.MAX_VALUE)) {
@@ -191,6 +195,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         return true;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$1 */
     public /* synthetic */ void lambda$null$1$LanguageSelectActivity(LocaleController.LocaleInfo localeInfo, DialogInterface dialogInterface, int i) {
         if (LocaleController.getInstance().deleteLanguage(localeInfo, this.currentAccount)) {
             fillLanguages();
@@ -217,36 +223,36 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
     }
 
     private void fillLanguages() {
-        $$Lambda$LanguageSelectActivity$bKvkTCAKOIGl0v4A4OGKsEAtQUU r1 = new Comparator() {
+        $$Lambda$LanguageSelectActivity$dTXpukxSSqBqzlmU6LajY5KHaow r1 = new Object() {
             public final int compare(Object obj, Object obj2) {
                 return LanguageSelectActivity.lambda$fillLanguages$3(LocaleController.LocaleInfo.this, (LocaleController.LocaleInfo) obj, (LocaleController.LocaleInfo) obj2);
             }
 
-            public /* synthetic */ Comparator<T> reversed() {
+            public /* synthetic */ Comparator reversed() {
                 return Comparator.CC.$default$reversed(this);
             }
 
-            public /* synthetic */ <U extends Comparable<? super U>> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function) {
-                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (Function) function);
+            public /* synthetic */ java.util.Comparator thenComparing(Function function) {
+                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, function);
             }
 
-            public /* synthetic */ <U> java.util.Comparator<T> thenComparing(Function<? super T, ? extends U> function, java.util.Comparator<? super U> comparator) {
+            public /* synthetic */ java.util.Comparator thenComparing(Function function, java.util.Comparator comparator) {
                 return Comparator.CC.$default$thenComparing(this, function, comparator);
             }
 
-            public /* synthetic */ java.util.Comparator<T> thenComparing(java.util.Comparator<? super T> comparator) {
-                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, (java.util.Comparator) comparator);
+            public /* synthetic */ java.util.Comparator thenComparing(java.util.Comparator comparator) {
+                return Comparator.CC.$default$thenComparing((java.util.Comparator) this, comparator);
             }
 
-            public /* synthetic */ java.util.Comparator<T> thenComparingDouble(ToDoubleFunction<? super T> toDoubleFunction) {
+            public /* synthetic */ java.util.Comparator thenComparingDouble(ToDoubleFunction toDoubleFunction) {
                 return Comparator.CC.$default$thenComparingDouble(this, toDoubleFunction);
             }
 
-            public /* synthetic */ java.util.Comparator<T> thenComparingInt(ToIntFunction<? super T> toIntFunction) {
+            public /* synthetic */ java.util.Comparator thenComparingInt(ToIntFunction toIntFunction) {
                 return Comparator.CC.$default$thenComparingInt(this, toIntFunction);
             }
 
-            public /* synthetic */ java.util.Comparator<T> thenComparingLong(ToLongFunction<? super T> toLongFunction) {
+            public /* synthetic */ java.util.Comparator thenComparingLong(ToLongFunction toLongFunction) {
                 return Comparator.CC.$default$thenComparingLong(this, toLongFunction);
             }
         };
@@ -301,15 +307,16 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
             return;
         }
         try {
-            if (this.searchTimer != null) {
-                this.searchTimer.cancel();
+            Timer timer = this.searchTimer;
+            if (timer != null) {
+                timer.cancel();
             }
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
-        Timer timer = new Timer();
-        this.searchTimer = timer;
-        timer.schedule(new TimerTask() {
+        Timer timer2 = new Timer();
+        this.searchTimer = timer2;
+        timer2.schedule(new TimerTask() {
             public void run() {
                 try {
                     LanguageSelectActivity.this.searchTimer.cancel();
@@ -337,6 +344,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$processSearch$4 */
     public /* synthetic */ void lambda$processSearch$4$LanguageSelectActivity(String str) {
         if (str.trim().toLowerCase().length() == 0) {
             updateSearchResults(new ArrayList());
@@ -375,6 +384,8 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$updateSearchResults$5 */
     public /* synthetic */ void lambda$updateSearchResults$5$LanguageSelectActivity(ArrayList arrayList) {
         this.searchResult = arrayList;
         this.searchListViewAdapter.notifyDataSetChanged();
@@ -452,13 +463,13 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 int r0 = r0.size()
                 if (r8 != r0) goto L_0x0038
                 android.content.Context r8 = r6.mContext
-                r0 = 2131165438(0x7var_fe, float:1.7945093E38)
+                r0 = 2131165446(0x7var_, float:1.794511E38)
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r0, (java.lang.String) r1)
                 r7.setBackgroundDrawable(r8)
                 goto L_0x0109
             L_0x0038:
                 android.content.Context r8 = r6.mContext
-                r0 = 2131165439(0x7var_ff, float:1.7945095E38)
+                r0 = 2131165447(0x7var_, float:1.7945111E38)
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r0, (java.lang.String) r1)
                 r7.setBackgroundDrawable(r8)
                 goto L_0x0109
@@ -531,7 +542,7 @@ public class LanguageSelectActivity extends BaseFragment implements Notification
                 java.lang.Object[] r3 = new java.lang.Object[r3]
                 java.lang.String r4 = r0.name
                 r3[r2] = r4
-                r4 = 2131625670(0x7f0e06c6, float:1.8878555E38)
+                r4 = 2131625700(0x7f0e06e4, float:1.8878615E38)
                 java.lang.String r5 = "LanguageCustom"
                 java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
                 r3[r1] = r4

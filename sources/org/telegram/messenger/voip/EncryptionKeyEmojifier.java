@@ -16,7 +16,8 @@ public class EncryptionKeyEmojifier {
         if (bArr.length == 32) {
             String[] strArr = new String[5];
             for (int i = 0; i < 5; i++) {
-                strArr[i] = emojis[bytesToInt(bArr, offsets[i]) % emojis.length];
+                String[] strArr2 = emojis;
+                strArr[i] = strArr2[bytesToInt(bArr, offsets[i]) % strArr2.length];
             }
             return strArr;
         }
@@ -26,7 +27,8 @@ public class EncryptionKeyEmojifier {
     public static String[] emojifyForCall(byte[] bArr) {
         String[] strArr = new String[4];
         for (int i = 0; i < 4; i++) {
-            strArr[i] = emojis[(int) (bytesToLong(bArr, i * 8) % ((long) emojis.length))];
+            String[] strArr2 = emojis;
+            strArr[i] = strArr2[(int) (bytesToLong(bArr, i * 8) % ((long) strArr2.length))];
         }
         return strArr;
     }

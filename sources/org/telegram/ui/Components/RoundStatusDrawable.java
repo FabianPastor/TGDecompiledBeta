@@ -2,10 +2,12 @@ package org.telegram.ui.Components;
 
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
+import android.graphics.Paint;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
 
 public class RoundStatusDrawable extends StatusDrawable {
+    private Paint currentPaint;
     private boolean isChat = false;
     private long lastUpdateTime = 0;
     private float progress;
@@ -20,6 +22,19 @@ public class RoundStatusDrawable extends StatusDrawable {
     }
 
     public void setColorFilter(ColorFilter colorFilter) {
+    }
+
+    public RoundStatusDrawable(boolean z) {
+        if (z) {
+            this.currentPaint = new Paint(1);
+        }
+    }
+
+    public void setColor(int i) {
+        Paint paint = this.currentPaint;
+        if (paint != null) {
+            paint.setColor(i);
+        }
     }
 
     public void setIsChat(boolean z) {
@@ -40,7 +55,7 @@ public class RoundStatusDrawable extends StatusDrawable {
         if (i > 0 && f2 >= 1.0f) {
             this.progressDirection = -1;
             this.progress = 1.0f;
-        } else if (this.progressDirection < 0 && this.progress <= 0.0f) {
+        } else if (i < 0 && f2 <= 0.0f) {
             this.progressDirection = 1;
             this.progress = 0.0f;
         }
@@ -58,8 +73,12 @@ public class RoundStatusDrawable extends StatusDrawable {
     }
 
     public void draw(Canvas canvas) {
-        Theme.chat_statusPaint.setAlpha(((int) (this.progress * 200.0f)) + 55);
-        canvas.drawCircle((float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(this.isChat ? 8.0f : 9.0f), (float) AndroidUtilities.dp(4.0f), Theme.chat_statusPaint);
+        Paint paint = this.currentPaint;
+        if (paint == null) {
+            paint = Theme.chat_statusPaint;
+        }
+        paint.setAlpha(((int) (this.progress * 200.0f)) + 55);
+        canvas.drawCircle((float) AndroidUtilities.dp(6.0f), (float) AndroidUtilities.dp(this.isChat ? 8.0f : 9.0f), (float) AndroidUtilities.dp(4.0f), paint);
         if (this.started) {
             update();
         }

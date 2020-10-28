@@ -101,7 +101,7 @@ public class BotHelpCell extends View {
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:63:0x0109 A[ORIG_RETURN, RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:63:0x0105 A[ORIG_RETURN, RETURN, SYNTHETIC] */
     /* JADX WARNING: Removed duplicated region for block: B:64:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public boolean onTouchEvent(android.view.MotionEvent r8) {
@@ -112,7 +112,7 @@ public class BotHelpCell extends View {
             android.text.StaticLayout r2 = r7.textLayout
             r3 = 0
             r4 = 1
-            if (r2 == 0) goto L_0x0100
+            if (r2 == 0) goto L_0x00fc
             int r2 = r8.getAction()
             if (r2 == 0) goto L_0x002b
             android.text.style.ClickableSpan r2 = r7.pressedLink
@@ -123,9 +123,9 @@ public class BotHelpCell extends View {
         L_0x001f:
             int r0 = r8.getAction()
             r1 = 3
-            if (r0 != r1) goto L_0x0100
+            if (r0 != r1) goto L_0x00fc
             r7.resetPressedLink()
-            goto L_0x0100
+            goto L_0x00fc
         L_0x002b:
             int r2 = r8.getAction()
             if (r2 != 0) goto L_0x00af
@@ -173,21 +173,21 @@ public class BotHelpCell extends View {
             int r0 = r0.getSpanEnd(r5)     // Catch:{ Exception -> 0x0095 }
             org.telegram.ui.Components.LinkPath r5 = r7.urlPath     // Catch:{ Exception -> 0x0095 }
             r2.getSelectionPath(r1, r0, r5)     // Catch:{ Exception -> 0x0095 }
-            goto L_0x00fe
+            goto L_0x00fa
         L_0x0095:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)     // Catch:{ Exception -> 0x009a }
-            goto L_0x00fe
+            goto L_0x00fa
         L_0x009a:
             r0 = move-exception
             r1 = 1
             goto L_0x00a7
         L_0x009d:
             r7.resetPressedLink()     // Catch:{ Exception -> 0x00a5 }
-            goto L_0x0100
+            goto L_0x00fc
         L_0x00a1:
             r7.resetPressedLink()     // Catch:{ Exception -> 0x00a5 }
-            goto L_0x0100
+            goto L_0x00fc
         L_0x00a5:
             r0 = move-exception
             r1 = 0
@@ -195,59 +195,57 @@ public class BotHelpCell extends View {
             r7.resetPressedLink()
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
             r0 = r1
-            goto L_0x0101
+            goto L_0x00fd
         L_0x00af:
             android.text.style.ClickableSpan r0 = r7.pressedLink
-            if (r0 == 0) goto L_0x0100
-            boolean r1 = r0 instanceof org.telegram.ui.Components.URLSpanNoUnderline     // Catch:{ Exception -> 0x00f7 }
-            if (r1 == 0) goto L_0x00df
-            org.telegram.ui.Components.URLSpanNoUnderline r0 = (org.telegram.ui.Components.URLSpanNoUnderline) r0     // Catch:{ Exception -> 0x00f7 }
-            java.lang.String r0 = r0.getURL()     // Catch:{ Exception -> 0x00f7 }
+            if (r0 == 0) goto L_0x00fc
+            boolean r1 = r0 instanceof org.telegram.ui.Components.URLSpanNoUnderline     // Catch:{ Exception -> 0x00f3 }
+            if (r1 == 0) goto L_0x00dd
+            org.telegram.ui.Components.URLSpanNoUnderline r0 = (org.telegram.ui.Components.URLSpanNoUnderline) r0     // Catch:{ Exception -> 0x00f3 }
+            java.lang.String r0 = r0.getURL()     // Catch:{ Exception -> 0x00f3 }
             java.lang.String r1 = "@"
-            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x00f7 }
+            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x00f3 }
             if (r1 != 0) goto L_0x00d5
             java.lang.String r1 = "#"
-            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x00f7 }
+            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x00f3 }
             if (r1 != 0) goto L_0x00d5
             java.lang.String r1 = "/"
-            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x00f7 }
-            if (r1 == 0) goto L_0x00fb
+            boolean r1 = r0.startsWith(r1)     // Catch:{ Exception -> 0x00f3 }
+            if (r1 == 0) goto L_0x00f7
         L_0x00d5:
-            org.telegram.ui.Cells.BotHelpCell$BotHelpCellDelegate r1 = r7.delegate     // Catch:{ Exception -> 0x00f7 }
-            if (r1 == 0) goto L_0x00fb
-            org.telegram.ui.Cells.BotHelpCell$BotHelpCellDelegate r1 = r7.delegate     // Catch:{ Exception -> 0x00f7 }
-            r1.didPressUrl(r0)     // Catch:{ Exception -> 0x00f7 }
-            goto L_0x00fb
-        L_0x00df:
-            boolean r1 = r0 instanceof android.text.style.URLSpan     // Catch:{ Exception -> 0x00f7 }
-            if (r1 == 0) goto L_0x00f3
-            org.telegram.ui.Cells.BotHelpCell$BotHelpCellDelegate r1 = r7.delegate     // Catch:{ Exception -> 0x00f7 }
-            if (r1 == 0) goto L_0x00fb
-            org.telegram.ui.Cells.BotHelpCell$BotHelpCellDelegate r1 = r7.delegate     // Catch:{ Exception -> 0x00f7 }
-            android.text.style.URLSpan r0 = (android.text.style.URLSpan) r0     // Catch:{ Exception -> 0x00f7 }
-            java.lang.String r0 = r0.getURL()     // Catch:{ Exception -> 0x00f7 }
-            r1.didPressUrl(r0)     // Catch:{ Exception -> 0x00f7 }
-            goto L_0x00fb
+            org.telegram.ui.Cells.BotHelpCell$BotHelpCellDelegate r1 = r7.delegate     // Catch:{ Exception -> 0x00f3 }
+            if (r1 == 0) goto L_0x00f7
+            r1.didPressUrl(r0)     // Catch:{ Exception -> 0x00f3 }
+            goto L_0x00f7
+        L_0x00dd:
+            boolean r1 = r0 instanceof android.text.style.URLSpan     // Catch:{ Exception -> 0x00f3 }
+            if (r1 == 0) goto L_0x00ef
+            org.telegram.ui.Cells.BotHelpCell$BotHelpCellDelegate r1 = r7.delegate     // Catch:{ Exception -> 0x00f3 }
+            if (r1 == 0) goto L_0x00f7
+            android.text.style.URLSpan r0 = (android.text.style.URLSpan) r0     // Catch:{ Exception -> 0x00f3 }
+            java.lang.String r0 = r0.getURL()     // Catch:{ Exception -> 0x00f3 }
+            r1.didPressUrl(r0)     // Catch:{ Exception -> 0x00f3 }
+            goto L_0x00f7
+        L_0x00ef:
+            r0.onClick(r7)     // Catch:{ Exception -> 0x00f3 }
+            goto L_0x00f7
         L_0x00f3:
-            r0.onClick(r7)     // Catch:{ Exception -> 0x00f7 }
-            goto L_0x00fb
-        L_0x00f7:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x00fb:
+        L_0x00f7:
             r7.resetPressedLink()
-        L_0x00fe:
+        L_0x00fa:
             r0 = 1
-            goto L_0x0101
-        L_0x0100:
+            goto L_0x00fd
+        L_0x00fc:
             r0 = 0
-        L_0x0101:
-            if (r0 != 0) goto L_0x0109
+        L_0x00fd:
+            if (r0 != 0) goto L_0x0105
             boolean r8 = super.onTouchEvent(r8)
-            if (r8 == 0) goto L_0x010a
-        L_0x0109:
+            if (r8 == 0) goto L_0x0106
+        L_0x0105:
             r3 = 1
-        L_0x010a:
+        L_0x0106:
             return r3
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.BotHelpCell.onTouchEvent(android.view.MotionEvent):boolean");

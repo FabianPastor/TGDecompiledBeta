@@ -27,12 +27,12 @@ public class TLRPC$TL_autoDownloadSettings extends TLObject {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.disabled = (readInt32 & 1) != 0;
-        this.video_preload_large = (this.flags & 2) != 0;
-        this.audio_preload_next = (this.flags & 4) != 0;
-        if ((this.flags & 8) == 0) {
-            z2 = false;
+        this.video_preload_large = (readInt32 & 2) != 0;
+        this.audio_preload_next = (readInt32 & 4) != 0;
+        if ((readInt32 & 8) != 0) {
+            z2 = true;
         }
         this.phonecalls_less_data = z2;
         this.photo_size_max = abstractSerializedData.readInt32(z);

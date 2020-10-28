@@ -7,7 +7,7 @@ public class TLRPC$TL_pollResults_layer111 extends TLRPC$PollResults {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
         this.min = (readInt32 & 1) != 0;
-        if ((this.flags & 2) != 0) {
+        if ((readInt32 & 2) != 0) {
             int readInt322 = abstractSerializedData.readInt32(z);
             if (readInt322 == NUM) {
                 int readInt323 = abstractSerializedData.readInt32(z);

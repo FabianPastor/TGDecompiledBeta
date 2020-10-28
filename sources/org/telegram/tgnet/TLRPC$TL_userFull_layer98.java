@@ -6,12 +6,12 @@ public class TLRPC$TL_userFull_layer98 extends TLRPC$TL_userFull {
     public void readParams(AbstractSerializedData abstractSerializedData, boolean z) {
         int readInt32 = abstractSerializedData.readInt32(z);
         this.flags = readInt32;
-        boolean z2 = true;
+        boolean z2 = false;
         this.blocked = (readInt32 & 1) != 0;
-        this.phone_calls_available = (this.flags & 16) != 0;
-        this.phone_calls_private = (this.flags & 32) != 0;
-        if ((this.flags & 128) == 0) {
-            z2 = false;
+        this.phone_calls_available = (readInt32 & 16) != 0;
+        this.phone_calls_private = (readInt32 & 32) != 0;
+        if ((readInt32 & 128) != 0) {
+            z2 = true;
         }
         this.can_pin_message = z2;
         this.user = TLRPC$User.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);

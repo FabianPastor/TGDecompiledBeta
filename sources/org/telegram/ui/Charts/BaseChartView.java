@@ -52,7 +52,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     private static final float SELECTED_LINE_WIDTH = AndroidUtilities.dpf2(1.5f);
     public static final int SIGNATURE_TEXT_HEIGHT = AndroidUtilities.dp(18.0f);
     private static final float SIGNATURE_TEXT_SIZE = AndroidUtilities.dpf2(12.0f);
-    public static final boolean USE_LINES = (Build.VERSION.SDK_INT < 28);
+    public static final boolean USE_LINES;
     ValueAnimator alphaAnimator;
     ValueAnimator alphaBottomAnimator;
     public boolean animateLegentTo = false;
@@ -208,18 +208,24 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     }
 
     static {
+        int i = Build.VERSION.SDK_INT;
         boolean z = true;
-        if (Build.VERSION.SDK_INT <= 21) {
+        USE_LINES = i < 28;
+        if (i <= 21) {
             z = false;
         }
         ANIMATE_PICKER_SIZES = z;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$BaseChartView(ValueAnimator valueAnimator) {
         this.currentMaxHeight = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ void lambda$new$1$BaseChartView(ValueAnimator valueAnimator) {
         this.currentMinHeight = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         invalidate();
@@ -235,10 +241,12 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     public void init() {
         this.linePaint.setStrokeWidth(1.0f);
         this.selectedLinePaint.setStrokeWidth(SELECTED_LINE_WIDTH);
-        this.signaturePaint.setTextSize(SIGNATURE_TEXT_SIZE);
-        this.signaturePaint2.setTextSize(SIGNATURE_TEXT_SIZE);
+        Paint paint = this.signaturePaint;
+        float f = SIGNATURE_TEXT_SIZE;
+        paint.setTextSize(f);
+        this.signaturePaint2.setTextSize(f);
         this.signaturePaint2.setTextAlign(Paint.Align.RIGHT);
-        this.bottomSignaturePaint.setTextSize(SIGNATURE_TEXT_SIZE);
+        this.bottomSignaturePaint.setTextSize(f);
         this.bottomSignaturePaint.setTextAlign(Paint.Align.CENTER);
         this.selectionBackgroundPaint.setStrokeWidth(AndroidUtilities.dpf2(6.0f));
         this.selectionBackgroundPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -301,12 +309,13 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
         if (getMeasuredWidth() != this.lastW || getMeasuredHeight() != this.lastH) {
             this.lastW = getMeasuredWidth();
             this.lastH = getMeasuredHeight();
-            this.bottomChartBitmap = Bitmap.createBitmap((int) (((float) getMeasuredWidth()) - (HORIZONTAL_PADDING * 2.0f)), this.pikerHeight, Bitmap.Config.ARGB_4444);
+            float f = HORIZONTAL_PADDING;
+            this.bottomChartBitmap = Bitmap.createBitmap((int) (((float) getMeasuredWidth()) - (f * 2.0f)), this.pikerHeight, Bitmap.Config.ARGB_4444);
             this.bottomChartCanvas = new Canvas(this.bottomChartBitmap);
-            this.sharedUiComponents.getPickerMaskBitmap(this.pikerHeight, (int) (((float) getMeasuredWidth()) - (HORIZONTAL_PADDING * 2.0f)));
+            this.sharedUiComponents.getPickerMaskBitmap(this.pikerHeight, (int) (((float) getMeasuredWidth()) - (2.0f * f)));
             measureSizes();
             if (this.legendShowing) {
-                moveLegend((this.chartFullWidth * this.pickerDelegate.pickerStart) - HORIZONTAL_PADDING);
+                moveLegend((this.chartFullWidth * this.pickerDelegate.pickerStart) - f);
             }
             onPickerDataChanged(false, true, false);
         }
@@ -317,7 +326,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             float f = HORIZONTAL_PADDING;
             this.pickerWidth = ((float) getMeasuredWidth()) - (2.0f * f);
             this.chartStart = f;
-            float measuredWidth = ((float) getMeasuredWidth()) - (this.landscape ? (float) LANDSCAPE_END_PADDING : HORIZONTAL_PADDING);
+            float measuredWidth = ((float) getMeasuredWidth()) - (this.landscape ? (float) LANDSCAPE_END_PADDING : f);
             this.chartEnd = measuredWidth;
             float f2 = measuredWidth - this.chartStart;
             this.chartWidth = f2;
@@ -325,10 +334,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             this.chartFullWidth = f2 / (chartPickerDelegate.pickerEnd - chartPickerDelegate.pickerStart);
             updateLineSignature();
             this.chartBottom = AndroidUtilities.dp(100.0f);
-            RectF rectF = this.chartArea;
-            float f3 = this.chartStart;
-            float f4 = HORIZONTAL_PADDING;
-            rectF.set(f3 - f4, 0.0f, this.chartEnd + f4, (float) (getMeasuredHeight() - this.chartBottom));
+            this.chartArea.set(this.chartStart - f, 0.0f, this.chartEnd + f, (float) (getMeasuredHeight() - this.chartBottom));
             if (this.chartData != null) {
                 this.bottomSignatureOffset = (int) (((float) AndroidUtilities.dp(20.0f)) / (this.pickerWidth / ((float) this.chartData.x.length)));
             }
@@ -787,19 +793,19 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
     }
 
     /* access modifiers changed from: package-private */
-    /* JADX WARNING: Code restructure failed: missing block: B:25:0x009c, code lost:
-        r2 = true;
+    /* JADX WARNING: Code restructure failed: missing block: B:25:0x0098, code lost:
+        r3 = true;
      */
-    /* JADX WARNING: Removed duplicated region for block: B:12:0x0072  */
-    /* JADX WARNING: Removed duplicated region for block: B:48:0x01e9  */
-    /* JADX WARNING: Removed duplicated region for block: B:51:0x0226  */
+    /* JADX WARNING: Removed duplicated region for block: B:12:0x0070  */
+    /* JADX WARNING: Removed duplicated region for block: B:48:0x01d1  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x020a  */
     /* JADX WARNING: Removed duplicated region for block: B:65:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void drawPicker(android.graphics.Canvas r28) {
+    public void drawPicker(android.graphics.Canvas r29) {
         /*
-            r27 = this;
-            r0 = r27
-            r7 = r28
+            r28 = this;
+            r0 = r28
+            r7 = r29
             T r1 = r0.chartData
             if (r1 != 0) goto L_0x0009
             return
@@ -807,309 +813,294 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             org.telegram.ui.Charts.ChartPickerDelegate r1 = r0.pickerDelegate
             float r2 = r0.pickerWidth
             r1.pickerWidth = r2
-            int r1 = r27.getMeasuredHeight()
+            int r1 = r28.getMeasuredHeight()
             int r2 = PICKER_PADDING
             int r8 = r1 - r2
-            int r1 = r27.getMeasuredHeight()
-            int r2 = r0.pikerHeight
-            int r1 = r1 - r2
-            int r2 = PICKER_PADDING
+            int r1 = r28.getMeasuredHeight()
+            int r3 = r0.pikerHeight
+            int r1 = r1 - r3
             int r9 = r1 - r2
-            float r1 = HORIZONTAL_PADDING
-            float r2 = r0.pickerWidth
+            float r2 = HORIZONTAL_PADDING
+            float r1 = r0.pickerWidth
             org.telegram.ui.Charts.ChartPickerDelegate r3 = r0.pickerDelegate
             float r4 = r3.pickerStart
-            float r4 = r4 * r2
-            float r4 = r4 + r1
+            float r4 = r4 * r1
+            float r4 = r4 + r2
             int r4 = (int) r4
             float r3 = r3.pickerEnd
-            float r3 = r3 * r2
-            float r3 = r3 + r1
+            float r3 = r3 * r1
+            float r3 = r3 + r2
             int r3 = (int) r3
             int r5 = r0.transitionMode
             r6 = 1065353216(0x3var_, float:1.0)
             r10 = 1
-            if (r5 != r10) goto L_0x005e
-            org.telegram.ui.Charts.view_data.TransitionParams r5 = r0.transitionParams
-            float r11 = r5.pickerStartOut
-            float r11 = r11 * r2
-            float r11 = r11 + r1
-            int r11 = (int) r11
-            float r12 = r5.pickerEndOut
-            float r2 = r2 * r12
+            if (r5 != r10) goto L_0x005c
+            org.telegram.ui.Charts.view_data.TransitionParams r11 = r0.transitionParams
+            float r12 = r11.pickerStartOut
+            float r12 = r12 * r1
+            float r12 = r12 + r2
+            int r12 = (int) r12
+            float r13 = r11.pickerEndOut
+            float r1 = r1 * r13
             float r1 = r1 + r2
             int r1 = (int) r1
-            float r2 = (float) r4
-            int r11 = r11 - r4
-            float r4 = (float) r11
-            float r5 = r5.progress
-            float r11 = r6 - r5
-            float r4 = r4 * r11
-            float r2 = r2 + r4
-            int r4 = (int) r2
-            float r2 = (float) r3
+            float r13 = (float) r4
+            int r12 = r12 - r4
+            float r4 = (float) r12
+            float r11 = r11.progress
+            float r12 = r6 - r11
+            float r4 = r4 * r12
+            float r13 = r13 + r4
+            int r4 = (int) r13
+            float r12 = (float) r3
             int r1 = r1 - r3
             float r1 = (float) r1
-            float r3 = r6 - r5
+            float r3 = r6 - r11
             float r1 = r1 * r3
-            float r2 = r2 + r1
-            int r3 = (int) r2
-            goto L_0x0068
-        L_0x005e:
+            float r12 = r12 + r1
+            int r3 = (int) r12
+            goto L_0x0066
+        L_0x005c:
             r1 = 3
-            if (r5 != r1) goto L_0x0068
+            if (r5 != r1) goto L_0x0066
             org.telegram.ui.Charts.view_data.TransitionParams r1 = r0.transitionParams
             float r1 = r1.progress
             r11 = r3
             r12 = r4
-            goto L_0x006c
-        L_0x0068:
+            goto L_0x006a
+        L_0x0066:
             r11 = r3
             r12 = r4
             r1 = 1065353216(0x3var_, float:1.0)
-        L_0x006c:
-            T r2 = r0.chartData
+        L_0x006a:
+            T r3 = r0.chartData
             r13 = 1073741824(0x40000000, float:2.0)
-            if (r2 == 0) goto L_0x01e9
-            int r2 = r0.transitionMode
-            r3 = 0
-            if (r2 != 0) goto L_0x00a1
+            if (r3 == 0) goto L_0x01d1
             r2 = 0
-        L_0x0078:
+            if (r5 != 0) goto L_0x009d
+            r3 = 0
+        L_0x0074:
             java.util.ArrayList<L> r4 = r0.lines
             int r4 = r4.size()
-            if (r2 >= r4) goto L_0x00a1
+            if (r3 >= r4) goto L_0x009d
             java.util.ArrayList<L> r4 = r0.lines
-            java.lang.Object r4 = r4.get(r2)
+            java.lang.Object r4 = r4.get(r3)
             org.telegram.ui.Charts.view_data.LineViewData r4 = (org.telegram.ui.Charts.view_data.LineViewData) r4
             android.animation.ValueAnimator r5 = r4.animatorIn
-            if (r5 == 0) goto L_0x0092
+            if (r5 == 0) goto L_0x008e
             boolean r5 = r5.isRunning()
-            if (r5 != 0) goto L_0x009c
-        L_0x0092:
+            if (r5 != 0) goto L_0x0098
+        L_0x008e:
             android.animation.ValueAnimator r4 = r4.animatorOut
-            if (r4 == 0) goto L_0x009e
+            if (r4 == 0) goto L_0x009a
             boolean r4 = r4.isRunning()
-            if (r4 == 0) goto L_0x009e
-        L_0x009c:
-            r2 = 1
-            goto L_0x00a2
+            if (r4 == 0) goto L_0x009a
+        L_0x0098:
+            r3 = 1
+            goto L_0x009e
+        L_0x009a:
+            int r3 = r3 + 1
+            goto L_0x0074
+        L_0x009d:
+            r3 = 0
         L_0x009e:
-            int r2 = r2 + 1
-            goto L_0x0078
-        L_0x00a1:
-            r2 = 0
-        L_0x00a2:
-            if (r2 == 0) goto L_0x00de
-            r28.save()
-            float r3 = HORIZONTAL_PADDING
-            int r4 = r27.getMeasuredHeight()
+            if (r3 == 0) goto L_0x00d2
+            r29.save()
+            float r2 = HORIZONTAL_PADDING
+            int r4 = r28.getMeasuredHeight()
             int r5 = PICKER_PADDING
             int r4 = r4 - r5
-            int r5 = r0.pikerHeight
-            int r4 = r4 - r5
+            int r14 = r0.pikerHeight
+            int r4 = r4 - r14
             float r4 = (float) r4
-            int r5 = r27.getMeasuredWidth()
-            float r5 = (float) r5
-            float r14 = HORIZONTAL_PADDING
-            float r5 = r5 - r14
-            int r14 = r27.getMeasuredHeight()
-            int r15 = PICKER_PADDING
-            int r14 = r14 - r15
+            int r14 = r28.getMeasuredWidth()
             float r14 = (float) r14
-            r7.clipRect(r3, r4, r5, r14)
-            float r3 = HORIZONTAL_PADDING
-            int r4 = r27.getMeasuredHeight()
-            int r5 = PICKER_PADDING
+            float r14 = r14 - r2
+            int r15 = r28.getMeasuredHeight()
+            int r15 = r15 - r5
+            float r15 = (float) r15
+            r7.clipRect(r2, r4, r14, r15)
+            int r4 = r28.getMeasuredHeight()
             int r4 = r4 - r5
             int r5 = r0.pikerHeight
             int r4 = r4 - r5
             float r4 = (float) r4
-            r7.translate(r3, r4)
-            r27.drawPickerChart(r28)
-            r28.restore()
-            goto L_0x00ee
-        L_0x00de:
+            r7.translate(r2, r4)
+            r28.drawPickerChart(r29)
+            r29.restore()
+            goto L_0x00e2
+        L_0x00d2:
             boolean r4 = r0.invalidatePickerChart
-            if (r4 == 0) goto L_0x00ee
+            if (r4 == 0) goto L_0x00e2
             android.graphics.Bitmap r4 = r0.bottomChartBitmap
-            r4.eraseColor(r3)
+            r4.eraseColor(r2)
             android.graphics.Canvas r4 = r0.bottomChartCanvas
             r0.drawPickerChart(r4)
-            r0.invalidatePickerChart = r3
-        L_0x00ee:
-            r3 = 2
-            if (r2 != 0) goto L_0x01bc
-            int r2 = r0.transitionMode
+            r0.invalidatePickerChart = r2
+        L_0x00e2:
+            r2 = 2
+            if (r3 != 0) goto L_0x01a7
+            int r3 = r0.transitionMode
             r4 = 1132396544(0x437var_, float:255.0)
-            if (r2 != r3) goto L_0x0147
+            if (r3 != r2) goto L_0x0135
             int r1 = r8 - r9
             int r1 = r1 + r9
             int r1 = r1 >> r10
             float r1 = (float) r1
-            float r2 = HORIZONTAL_PADDING
+            float r3 = HORIZONTAL_PADDING
             float r5 = r0.pickerWidth
             org.telegram.ui.Charts.view_data.TransitionParams r14 = r0.transitionParams
             float r15 = r14.xPercentage
             float r5 = r5 * r15
-            float r2 = r2 + r5
-            android.graphics.Paint r5 = r0.emptyPaint
+            float r5 = r5 + r3
+            android.graphics.Paint r15 = r0.emptyPaint
             float r14 = r14.progress
             float r14 = r6 - r14
             float r14 = r14 * r4
             int r4 = (int) r14
-            r5.setAlpha(r4)
-            r28.save()
-            float r4 = HORIZONTAL_PADDING
-            float r5 = (float) r9
-            int r14 = r27.getMeasuredWidth()
+            r15.setAlpha(r4)
+            r29.save()
+            float r4 = (float) r9
+            int r14 = r28.getMeasuredWidth()
             float r14 = (float) r14
-            float r15 = HORIZONTAL_PADDING
-            float r14 = r14 - r15
+            float r14 = r14 - r3
             float r15 = (float) r8
-            r7.clipRect(r4, r5, r14, r15)
+            r7.clipRect(r3, r4, r14, r15)
             org.telegram.ui.Charts.view_data.TransitionParams r4 = r0.transitionParams
             float r4 = r4.progress
             float r4 = r4 * r13
             float r4 = r4 + r6
-            r7.scale(r4, r6, r2, r1)
+            r7.scale(r4, r6, r5, r1)
             android.graphics.Bitmap r1 = r0.bottomChartBitmap
-            float r2 = HORIZONTAL_PADDING
-            int r4 = r27.getMeasuredHeight()
+            int r4 = r28.getMeasuredHeight()
             int r5 = PICKER_PADDING
             int r4 = r4 - r5
             int r5 = r0.pikerHeight
             int r4 = r4 - r5
             float r4 = (float) r4
             android.graphics.Paint r5 = r0.emptyPaint
-            r7.drawBitmap(r1, r2, r4, r5)
-            r28.restore()
-            goto L_0x01bc
-        L_0x0147:
-            if (r2 != r10) goto L_0x01a0
+            r7.drawBitmap(r1, r3, r4, r5)
+            r29.restore()
+            goto L_0x01a7
+        L_0x0135:
+            if (r3 != r10) goto L_0x018b
             int r1 = r8 - r9
             int r1 = r1 + r9
             int r1 = r1 >> r10
             float r1 = (float) r1
-            float r2 = HORIZONTAL_PADDING
+            float r3 = HORIZONTAL_PADDING
             float r5 = r0.pickerWidth
             org.telegram.ui.Charts.view_data.TransitionParams r14 = r0.transitionParams
-            float r14 = r14.xPercentage
-            float r15 = r5 * r14
-            float r2 = r2 + r15
-            r15 = 1056964608(0x3var_, float:0.5)
-            int r15 = (r14 > r15 ? 1 : (r14 == r15 ? 0 : -1))
-            if (r15 <= 0) goto L_0x0160
-            goto L_0x0162
-        L_0x0160:
-            float r14 = r6 - r14
-        L_0x0162:
-            float r5 = r5 * r14
-            org.telegram.ui.Charts.view_data.TransitionParams r14 = r0.transitionParams
+            float r15 = r14.xPercentage
+            float r16 = r5 * r15
+            float r10 = r3 + r16
+            r16 = 1056964608(0x3var_, float:0.5)
+            int r16 = (r15 > r16 ? 1 : (r15 == r16 ? 0 : -1))
+            if (r16 <= 0) goto L_0x014f
+            goto L_0x0151
+        L_0x014f:
+            float r15 = r6 - r15
+        L_0x0151:
+            float r5 = r5 * r15
             float r14 = r14.progress
             float r5 = r5 * r14
-            r28.save()
-            float r14 = r2 - r5
+            r29.save()
+            float r14 = r10 - r5
             float r15 = (float) r9
-            float r5 = r5 + r2
-            float r10 = (float) r8
-            r7.clipRect(r14, r15, r5, r10)
+            float r5 = r5 + r10
+            float r13 = (float) r8
+            r7.clipRect(r14, r15, r5, r13)
             android.graphics.Paint r5 = r0.emptyPaint
-            org.telegram.ui.Charts.view_data.TransitionParams r10 = r0.transitionParams
-            float r10 = r10.progress
-            float r10 = r10 * r4
-            int r4 = (int) r10
+            org.telegram.ui.Charts.view_data.TransitionParams r13 = r0.transitionParams
+            float r13 = r13.progress
+            float r13 = r13 * r4
+            int r4 = (int) r13
             r5.setAlpha(r4)
             org.telegram.ui.Charts.view_data.TransitionParams r4 = r0.transitionParams
             float r4 = r4.progress
-            r7.scale(r4, r6, r2, r1)
+            r7.scale(r4, r6, r10, r1)
             android.graphics.Bitmap r1 = r0.bottomChartBitmap
-            float r2 = HORIZONTAL_PADDING
-            int r4 = r27.getMeasuredHeight()
+            int r4 = r28.getMeasuredHeight()
             int r5 = PICKER_PADDING
             int r4 = r4 - r5
             int r5 = r0.pikerHeight
             int r4 = r4 - r5
             float r4 = (float) r4
             android.graphics.Paint r5 = r0.emptyPaint
-            r7.drawBitmap(r1, r2, r4, r5)
-            r28.restore()
-            goto L_0x01bc
-        L_0x01a0:
-            android.graphics.Paint r2 = r0.emptyPaint
+            r7.drawBitmap(r1, r3, r4, r5)
+            r29.restore()
+            goto L_0x01a7
+        L_0x018b:
+            android.graphics.Paint r3 = r0.emptyPaint
             float r1 = r1 * r4
             int r1 = (int) r1
-            r2.setAlpha(r1)
+            r3.setAlpha(r1)
             android.graphics.Bitmap r1 = r0.bottomChartBitmap
-            float r2 = HORIZONTAL_PADDING
-            int r4 = r27.getMeasuredHeight()
+            float r3 = HORIZONTAL_PADDING
+            int r4 = r28.getMeasuredHeight()
             int r5 = PICKER_PADDING
             int r4 = r4 - r5
             int r5 = r0.pikerHeight
             int r4 = r4 - r5
             float r4 = (float) r4
             android.graphics.Paint r5 = r0.emptyPaint
-            r7.drawBitmap(r1, r2, r4, r5)
-        L_0x01bc:
+            r7.drawBitmap(r1, r3, r4, r5)
+        L_0x01a7:
             int r1 = r0.transitionMode
-            if (r1 != r3) goto L_0x01c1
+            if (r1 != r2) goto L_0x01ac
             return
-        L_0x01c1:
-            float r2 = HORIZONTAL_PADDING
-            float r10 = (float) r9
-            int r1 = DP_12
-            int r1 = r1 + r12
+        L_0x01ac:
+            float r10 = HORIZONTAL_PADDING
+            float r13 = (float) r9
+            int r14 = DP_12
+            int r1 = r12 + r14
             float r4 = (float) r1
-            float r14 = (float) r8
+            float r15 = (float) r8
             android.graphics.Paint r6 = r0.unactiveBottomChartPaint
-            r1 = r28
-            r3 = r10
-            r5 = r14
+            r1 = r29
+            r2 = r10
+            r3 = r13
+            r5 = r15
             r1.drawRect(r2, r3, r4, r5, r6)
-            int r1 = DP_12
-            int r1 = r11 - r1
+            int r1 = r11 - r14
             float r2 = (float) r1
-            int r1 = r27.getMeasuredWidth()
+            int r1 = r28.getMeasuredWidth()
             float r1 = (float) r1
-            float r3 = HORIZONTAL_PADDING
-            float r4 = r1 - r3
+            float r4 = r1 - r10
             android.graphics.Paint r6 = r0.unactiveBottomChartPaint
-            r1 = r28
-            r3 = r10
+            r1 = r29
             r1.drawRect(r2, r3, r4, r5, r6)
-            goto L_0x01fd
-        L_0x01e9:
-            float r2 = HORIZONTAL_PADDING
+            goto L_0x01e1
+        L_0x01d1:
             float r3 = (float) r9
-            int r1 = r27.getMeasuredWidth()
+            int r1 = r28.getMeasuredWidth()
             float r1 = (float) r1
-            float r4 = HORIZONTAL_PADDING
-            float r4 = r1 - r4
+            float r4 = r1 - r2
             float r5 = (float) r8
             android.graphics.Paint r6 = r0.unactiveBottomChartPaint
-            r1 = r28
+            r1 = r29
             r1.drawRect(r2, r3, r4, r5, r6)
-        L_0x01fd:
+        L_0x01e1:
             org.telegram.ui.Charts.BaseChartView$SharedUiComponents r1 = r0.sharedUiComponents
             int r2 = r0.pikerHeight
-            int r3 = r27.getMeasuredWidth()
+            int r3 = r28.getMeasuredWidth()
             float r3 = (float) r3
             float r4 = HORIZONTAL_PADDING
-            float r4 = r4 * r13
-            float r3 = r3 - r4
+            r5 = 1073741824(0x40000000, float:2.0)
+            float r13 = r4 * r5
+            float r3 = r3 - r13
             int r3 = (int) r3
             android.graphics.Bitmap r1 = r1.getPickerMaskBitmap(r2, r3)
-            float r2 = HORIZONTAL_PADDING
-            int r3 = r27.getMeasuredHeight()
-            int r4 = PICKER_PADDING
-            int r3 = r3 - r4
-            int r4 = r0.pikerHeight
-            int r3 = r3 - r4
-            float r3 = (float) r3
-            android.graphics.Paint r4 = r0.emptyPaint
-            r7.drawBitmap(r1, r2, r3, r4)
+            int r2 = r28.getMeasuredHeight()
+            int r3 = PICKER_PADDING
+            int r2 = r2 - r3
+            int r3 = r0.pikerHeight
+            int r2 = r2 - r3
+            float r2 = (float) r2
+            android.graphics.Paint r3 = r0.emptyPaint
+            r7.drawBitmap(r1, r4, r2, r3)
             T r1 = r0.chartData
-            if (r1 == 0) goto L_0x039f
+            if (r1 == 0) goto L_0x035f
             android.graphics.Rect r1 = r0.pickerRect
             r1.set(r12, r9, r11, r8)
             org.telegram.ui.Charts.ChartPickerDelegate r1 = r0.pickerDelegate
@@ -1121,150 +1112,129 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             int r3 = r2.left
             float r4 = (float) r3
             int r5 = r2.top
-            int r6 = DP_1
-            int r5 = r5 - r6
+            int r10 = DP_1
+            int r5 = r5 - r10
             float r5 = (float) r5
-            int r10 = DP_12
-            int r3 = r3 + r10
+            int r13 = DP_12
+            int r3 = r3 + r13
             float r3 = (float) r3
             int r2 = r2.bottom
-            int r2 = r2 + r6
+            int r2 = r2 + r10
             float r2 = (float) r2
-            int r6 = DP_6
-            float r10 = (float) r6
-            float r6 = (float) r6
-            r23 = 1
-            r24 = 0
+            int r14 = DP_6
+            float r6 = (float) r14
+            float r15 = (float) r14
+            r24 = 1
             r25 = 0
-            r26 = 1
-            r16 = r1
-            r17 = r4
-            r18 = r5
-            r19 = r3
-            r20 = r2
-            r21 = r10
+            r26 = 0
+            r27 = 1
+            r17 = r1
+            r18 = r4
+            r19 = r5
+            r20 = r3
+            r21 = r2
             r22 = r6
-            RoundedRect(r16, r17, r18, r19, r20, r21, r22, r23, r24, r25, r26)
+            r23 = r15
+            RoundedRect(r17, r18, r19, r20, r21, r22, r23, r24, r25, r26, r27)
             android.graphics.Paint r2 = r0.pickerSelectorPaint
             r7.drawPath(r1, r2)
             android.graphics.Path r1 = r0.pathTmp
             android.graphics.Rect r2 = r0.pickerRect
             int r3 = r2.right
-            int r4 = DP_12
-            int r4 = r3 - r4
+            int r4 = r3 - r13
             float r4 = (float) r4
             int r5 = r2.top
-            int r6 = DP_1
-            int r5 = r5 - r6
+            int r5 = r5 - r10
             float r5 = (float) r5
             float r3 = (float) r3
             int r2 = r2.bottom
-            int r2 = r2 + r6
+            int r2 = r2 + r10
             float r2 = (float) r2
-            int r6 = DP_6
-            float r10 = (float) r6
-            float r6 = (float) r6
-            r23 = 0
-            r24 = 1
+            float r6 = (float) r14
+            float r15 = (float) r14
+            r24 = 0
             r25 = 1
-            r26 = 0
-            r16 = r1
-            r17 = r4
-            r18 = r5
-            r19 = r3
-            r20 = r2
-            r21 = r10
+            r26 = 1
+            r27 = 0
+            r17 = r1
+            r18 = r4
+            r19 = r5
+            r20 = r3
+            r21 = r2
             r22 = r6
-            RoundedRect(r16, r17, r18, r19, r20, r21, r22, r23, r24, r25, r26)
+            r23 = r15
+            RoundedRect(r17, r18, r19, r20, r21, r22, r23, r24, r25, r26, r27)
             android.graphics.Paint r2 = r0.pickerSelectorPaint
             r7.drawPath(r1, r2)
             android.graphics.Rect r1 = r0.pickerRect
             int r2 = r1.left
-            int r3 = DP_12
-            int r2 = r2 + r3
+            int r2 = r2 + r13
             float r2 = (float) r2
-            int r4 = r1.bottom
-            float r5 = (float) r4
+            int r3 = r1.bottom
+            float r4 = (float) r3
             int r1 = r1.right
-            int r1 = r1 - r3
-            float r6 = (float) r1
-            int r1 = DP_1
-            int r4 = r4 + r1
-            float r10 = (float) r4
-            android.graphics.Paint r13 = r0.pickerSelectorPaint
-            r1 = r28
-            r3 = r5
-            r4 = r6
-            r5 = r10
-            r6 = r13
+            int r1 = r1 - r13
+            float r5 = (float) r1
+            int r3 = r3 + r10
+            float r6 = (float) r3
+            android.graphics.Paint r15 = r0.pickerSelectorPaint
+            r1 = r29
+            r3 = r4
+            r4 = r5
+            r5 = r6
+            r6 = r15
             r1.drawRect(r2, r3, r4, r5, r6)
             android.graphics.Rect r1 = r0.pickerRect
             int r2 = r1.left
-            int r3 = DP_12
-            int r2 = r2 + r3
+            int r2 = r2 + r13
             float r2 = (float) r2
-            int r4 = r1.top
-            int r5 = DP_1
-            int r5 = r4 - r5
-            float r5 = (float) r5
+            int r3 = r1.top
+            int r4 = r3 - r10
+            float r4 = (float) r4
             int r1 = r1.right
-            int r1 = r1 - r3
-            float r6 = (float) r1
-            float r10 = (float) r4
-            android.graphics.Paint r13 = r0.pickerSelectorPaint
-            r1 = r28
-            r3 = r5
-            r4 = r6
-            r5 = r10
-            r6 = r13
-            r1.drawRect(r2, r3, r4, r5, r6)
-            android.graphics.Rect r1 = r0.pickerRect
-            int r2 = r1.left
-            int r3 = DP_6
-            int r2 = r2 + r3
-            float r2 = (float) r2
-            int r1 = r1.centerY()
-            int r3 = DP_6
-            int r1 = r1 - r3
-            float r4 = (float) r1
-            android.graphics.Rect r1 = r0.pickerRect
-            int r5 = r1.left
-            int r5 = r5 + r3
-            float r5 = (float) r5
-            int r1 = r1.centerY()
-            int r3 = DP_6
-            int r1 = r1 + r3
-            float r6 = (float) r1
-            android.graphics.Paint r10 = r0.whiteLinePaint
-            r1 = r28
+            int r1 = r1 - r13
+            float r5 = (float) r1
+            float r6 = (float) r3
+            android.graphics.Paint r10 = r0.pickerSelectorPaint
+            r1 = r29
             r3 = r4
             r4 = r5
             r5 = r6
             r6 = r10
+            r1.drawRect(r2, r3, r4, r5, r6)
+            android.graphics.Rect r1 = r0.pickerRect
+            int r2 = r1.left
+            int r2 = r2 + r14
+            float r2 = (float) r2
+            int r1 = r1.centerY()
+            int r1 = r1 - r14
+            float r3 = (float) r1
+            android.graphics.Rect r1 = r0.pickerRect
+            int r4 = r1.left
+            int r4 = r4 + r14
+            float r4 = (float) r4
+            int r1 = r1.centerY()
+            int r1 = r1 + r14
+            float r5 = (float) r1
+            android.graphics.Paint r6 = r0.whiteLinePaint
+            r1 = r29
             r1.drawLine(r2, r3, r4, r5, r6)
             android.graphics.Rect r1 = r0.pickerRect
             int r2 = r1.right
-            int r3 = DP_6
-            int r2 = r2 - r3
+            int r2 = r2 - r14
             float r2 = (float) r2
             int r1 = r1.centerY()
-            int r3 = DP_6
-            int r1 = r1 - r3
-            float r4 = (float) r1
+            int r1 = r1 - r14
+            float r3 = (float) r1
             android.graphics.Rect r1 = r0.pickerRect
-            int r5 = r1.right
-            int r5 = r5 - r3
-            float r5 = (float) r5
+            int r4 = r1.right
+            int r4 = r4 - r14
+            float r4 = (float) r4
             int r1 = r1.centerY()
-            int r3 = DP_6
-            int r1 = r1 + r3
-            float r6 = (float) r1
-            android.graphics.Paint r10 = r0.whiteLinePaint
-            r1 = r28
-            r3 = r4
-            r4 = r5
-            r5 = r6
-            r6 = r10
+            int r1 = r1 + r14
+            float r5 = (float) r1
+            android.graphics.Paint r6 = r0.whiteLinePaint
+            r1 = r29
             r1.drawLine(r2, r3, r4, r5, r6)
             org.telegram.ui.Charts.ChartPickerDelegate r1 = r0.pickerDelegate
             org.telegram.ui.Charts.ChartPickerDelegate$CapturesData r1 = r1.getMiddleCaptured()
@@ -1275,14 +1245,14 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             r4 = 1
             int r3 = r3 >> r4
             int r2 = r2 + r3
-            if (r1 == 0) goto L_0x0345
-            goto L_0x0383
-        L_0x0345:
+            if (r1 == 0) goto L_0x0307
+            goto L_0x0345
+        L_0x0307:
             org.telegram.ui.Charts.ChartPickerDelegate r1 = r0.pickerDelegate
             org.telegram.ui.Charts.ChartPickerDelegate$CapturesData r1 = r1.getLeftCaptured()
             org.telegram.ui.Charts.ChartPickerDelegate r4 = r0.pickerDelegate
             org.telegram.ui.Charts.ChartPickerDelegate$CapturesData r4 = r4.getRightCaptured()
-            if (r1 == 0) goto L_0x036a
+            if (r1 == 0) goto L_0x032c
             android.graphics.Rect r5 = r0.pickerRect
             int r5 = r5.left
             int r6 = DP_5
@@ -1297,8 +1267,8 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             float r10 = r10 - r1
             android.graphics.Paint r1 = r0.ripplePaint
             r7.drawCircle(r5, r6, r10, r1)
-        L_0x036a:
-            if (r4 == 0) goto L_0x0383
+        L_0x032c:
+            if (r4 == 0) goto L_0x0345
             android.graphics.Rect r1 = r0.pickerRect
             int r1 = r1.right
             int r5 = DP_5
@@ -1313,23 +1283,21 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             float r3 = r3 - r4
             android.graphics.Paint r4 = r0.ripplePaint
             r7.drawCircle(r1, r2, r3, r4)
-        L_0x0383:
+        L_0x0345:
             org.telegram.ui.Charts.ChartPickerDelegate r1 = r0.pickerDelegate
             android.graphics.Rect r1 = r1.leftPickerArea
             int r2 = PICKER_CAPTURE_WIDTH
             int r3 = r12 - r2
-            r4 = 1
-            int r2 = r2 >> r4
-            int r12 = r12 + r2
+            int r4 = r2 >> 1
+            int r12 = r12 + r4
             r1.set(r3, r9, r12, r8)
             org.telegram.ui.Charts.ChartPickerDelegate r1 = r0.pickerDelegate
             android.graphics.Rect r1 = r1.rightPickerArea
-            int r2 = PICKER_CAPTURE_WIDTH
             int r3 = r2 >> 1
             int r3 = r11 - r3
             int r11 = r11 + r2
             r1.set(r3, r9, r11, r8)
-        L_0x039f:
+        L_0x035f:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Charts.BaseChartView.drawPicker(android.graphics.Canvas):void");
@@ -1446,6 +1414,8 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setMaxMinValue$2 */
     public /* synthetic */ void lambda$setMaxMinValue$2$BaseChartView(ChartHorizontalLinesData chartHorizontalLinesData, ValueAnimator valueAnimator) {
         chartHorizontalLinesData.alpha = (int) ((Float) valueAnimator.getAnimatedValue()).floatValue();
         Iterator<ChartHorizontalLinesData> it = this.horizontalLines.iterator();
@@ -1750,13 +1720,14 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
         Iterator<L> it = this.lines.iterator();
         while (it.hasNext()) {
             LineViewData lineViewData = (LineViewData) it.next();
-            if (lineViewData.enabled) {
+            boolean z = lineViewData.enabled;
+            if (z) {
                 int i = lineViewData.line.maxValue;
                 if (((float) i) > this.pickerMaxHeight) {
                     this.pickerMaxHeight = (float) i;
                 }
             }
-            if (lineViewData.enabled) {
+            if (z) {
                 int i2 = lineViewData.line.minValue;
                 if (((float) i2) < this.pickerMinHeight) {
                     this.pickerMinHeight = (float) i2;
@@ -1820,7 +1791,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             ChartHeaderView chartHeaderView2 = this.chartHeaderView;
             if (chartHeaderView2 != null) {
                 long[] jArr = this.chartData.x;
-                chartHeaderView2.setDates(jArr[this.startXIndex], jArr[this.endXIndex]);
+                chartHeaderView2.setDates(jArr[i], jArr[this.endXIndex]);
             }
             updateLineSignature();
         }
@@ -1894,6 +1865,8 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$updateDates$3 */
     public /* synthetic */ void lambda$updateDates$3$BaseChartView(ChartBottomSignatureData chartBottomSignatureData, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         Iterator<ChartBottomSignatureData> it = this.bottomSignatureDate.iterator();
@@ -1973,12 +1946,16 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onCheckChanged$4 */
     public /* synthetic */ void lambda$onCheckChanged$4$BaseChartView(LineViewData lineViewData, ValueAnimator valueAnimator) {
         lineViewData.alpha = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.invalidatePickerChart = true;
         invalidate();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onCheckChanged$5 */
     public /* synthetic */ void lambda$onCheckChanged$5$BaseChartView(LineViewData lineViewData, ValueAnimator valueAnimator) {
         lineViewData.alpha = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         this.invalidatePickerChart = true;
@@ -1995,10 +1972,11 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
             int i4 = 0;
             while (it.hasNext()) {
                 LineViewData lineViewData = (LineViewData) it.next();
-                if (lineViewData.enabled && (i2 = lineViewData.line.maxValue) > i4) {
+                boolean z = lineViewData.enabled;
+                if (z && (i2 = lineViewData.line.maxValue) > i4) {
                     i4 = i2;
                 }
-                if (lineViewData.enabled && (i = lineViewData.line.minValue) < i3) {
+                if (z && (i = lineViewData.line.minValue) < i3) {
                     i3 = i;
                 }
             }
@@ -2046,6 +2024,7 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
         this.legendSignatureView.setVisibility(0);
         this.selectionA = 1.0f;
         moveLegend((this.chartFullWidth * this.pickerDelegate.pickerStart) - HORIZONTAL_PADDING);
+        performHapticFeedback(3, 2);
     }
 
     public long getStartDate() {
@@ -2063,10 +2042,11 @@ public abstract class BaseChartView<T extends ChartData, L extends LineViewData>
         int i = 0;
         int i2 = 0;
         for (int i3 = 0; i3 < length; i3++) {
-            if (j2 > chartData2.x[i3]) {
+            long[] jArr = chartData2.x;
+            if (j2 > jArr[i3]) {
                 i = i3;
             }
-            if (j3 > chartData2.x[i3]) {
+            if (j3 > jArr[i3]) {
                 i2 = i3;
             }
         }

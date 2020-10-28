@@ -1,9 +1,14 @@
 package j$.util.stream;
 
-import j$.util.function.J;
+abstract class F5 extends CLASSNAMEn5 {
+    protected boolean b;
 
-public interface F5 extends G5, J {
-    void accept(long j);
+    F5(CLASSNAMEt5 t5Var) {
+        super(t5Var);
+    }
 
-    void n(Long l);
+    public final boolean p() {
+        this.b = true;
+        return false;
+    }
 }

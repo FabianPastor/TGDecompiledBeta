@@ -2,14 +2,21 @@ package org.telegram.ui.Components;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import javax.xml.parsers.SAXParserFactory;
 import org.telegram.messenger.FileLog;
 import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class SvgHelper {
@@ -19,45 +26,161 @@ public class SvgHelper {
     private static void drawArc(Path path, float f, float f2, float f3, float f4, float f5, float f6, float f7, int i, int i2) {
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:11:0x002c, code lost:
-        r3 = move-exception;
+    private static class Line {
+        float x1;
+        float x2;
+        float y1;
+        float y2;
+
+        public Line(float f, float f2, float f3, float f4) {
+            this.x1 = f;
+            this.y1 = f2;
+            this.x2 = f3;
+            this.y2 = f4;
+        }
+    }
+
+    private static class Circle {
+        float rad;
+        float x1;
+        float y1;
+
+        public Circle(float f, float f2, float f3) {
+            this.x1 = f;
+            this.y1 = f2;
+            this.rad = f3;
+        }
+    }
+
+    private static class Oval {
+        RectF rect;
+
+        public Oval(RectF rectF) {
+            this.rect = rectF;
+        }
+    }
+
+    public static class SvgDrawable extends Drawable {
+        private ArrayList<Object> commands = new ArrayList<>();
+        /* access modifiers changed from: private */
+        public int height;
+        private HashMap<Object, Paint> paints = new HashMap<>();
+        /* access modifiers changed from: private */
+        public int width;
+
+        public int getOpacity() {
+            return -2;
+        }
+
+        public void setAlpha(int i) {
+        }
+
+        public void setColorFilter(ColorFilter colorFilter) {
+        }
+
+        public void draw(Canvas canvas) {
+            Rect bounds = getBounds();
+            float max = Math.max(((float) bounds.width()) / ((float) this.width), ((float) bounds.height()) / ((float) this.height));
+            canvas.scale(max, max);
+            int size = this.commands.size();
+            for (int i = 0; i < size; i++) {
+                Object obj = this.commands.get(i);
+                if (obj instanceof Matrix) {
+                    canvas.save();
+                    canvas.concat((Matrix) obj);
+                } else if (obj == null) {
+                    canvas.restore();
+                } else {
+                    Paint paint = this.paints.get(obj);
+                    if (obj instanceof Path) {
+                        canvas.drawPath((Path) obj, paint);
+                    } else if (obj instanceof Rect) {
+                        canvas.drawRect((Rect) obj, paint);
+                    } else if (obj instanceof RectF) {
+                        canvas.drawRect((RectF) obj, paint);
+                    } else if (obj instanceof Line) {
+                        Line line = (Line) obj;
+                        canvas.drawLine(line.x1, line.y1, line.x2, line.y2, paint);
+                    } else if (obj instanceof Circle) {
+                        Circle circle = (Circle) obj;
+                        canvas.drawCircle(circle.x1, circle.y1, circle.rad, paint);
+                    } else if (obj instanceof Oval) {
+                        canvas.drawOval(((Oval) obj).rect, paint);
+                    }
+                }
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public void addCommand(Object obj, Paint paint) {
+            this.commands.add(obj);
+            this.paints.put(obj, new Paint(paint));
+        }
+
+        /* access modifiers changed from: private */
+        public void addCommand(Object obj) {
+            this.commands.add(obj);
+        }
+    }
+
+    /* JADX WARNING: Code restructure failed: missing block: B:10:0x0031, code lost:
+        r8 = move-exception;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:13:?, code lost:
-        r1.close();
+    /* JADX WARNING: Code restructure failed: missing block: B:12:?, code lost:
+        r0.close();
      */
-    /* JADX WARNING: Missing exception handler attribute for start block: B:14:0x0030 */
+    /* JADX WARNING: Missing exception handler attribute for start block: B:13:0x0035 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public static android.graphics.Bitmap getBitmap(java.io.File r3, int r4, int r5, boolean r6) {
+    public static android.graphics.Bitmap getBitmap(java.io.File r8, int r9, int r10, boolean r11) {
         /*
-            r0 = 0
-            java.io.FileInputStream r1 = new java.io.FileInputStream     // Catch:{ Exception -> 0x0031 }
-            r1.<init>(r3)     // Catch:{ Exception -> 0x0031 }
-            javax.xml.parsers.SAXParserFactory r3 = javax.xml.parsers.SAXParserFactory.newInstance()     // Catch:{ all -> 0x002a }
-            javax.xml.parsers.SAXParser r3 = r3.newSAXParser()     // Catch:{ all -> 0x002a }
-            org.xml.sax.XMLReader r3 = r3.getXMLReader()     // Catch:{ all -> 0x002a }
-            org.telegram.ui.Components.SvgHelper$SVGHandler r2 = new org.telegram.ui.Components.SvgHelper$SVGHandler     // Catch:{ all -> 0x002a }
-            r2.<init>(r4, r5, r6)     // Catch:{ all -> 0x002a }
-            r3.setContentHandler(r2)     // Catch:{ all -> 0x002a }
-            org.xml.sax.InputSource r4 = new org.xml.sax.InputSource     // Catch:{ all -> 0x002a }
-            r4.<init>(r1)     // Catch:{ all -> 0x002a }
-            r3.parse(r4)     // Catch:{ all -> 0x002a }
-            android.graphics.Bitmap r3 = r2.getBitmap()     // Catch:{ all -> 0x002a }
-            r1.close()     // Catch:{ Exception -> 0x0031 }
-            return r3
-        L_0x002a:
-            r3 = move-exception
-            throw r3     // Catch:{ all -> 0x002c }
-        L_0x002c:
-            r3 = move-exception
-            r1.close()     // Catch:{ all -> 0x0030 }
-        L_0x0030:
-            throw r3     // Catch:{ Exception -> 0x0031 }
+            java.io.FileInputStream r0 = new java.io.FileInputStream     // Catch:{ Exception -> 0x0036 }
+            r0.<init>(r8)     // Catch:{ Exception -> 0x0036 }
+            javax.xml.parsers.SAXParserFactory r8 = javax.xml.parsers.SAXParserFactory.newInstance()     // Catch:{ all -> 0x002f }
+            javax.xml.parsers.SAXParser r8 = r8.newSAXParser()     // Catch:{ all -> 0x002f }
+            org.xml.sax.XMLReader r8 = r8.getXMLReader()     // Catch:{ all -> 0x002f }
+            org.telegram.ui.Components.SvgHelper$SVGHandler r7 = new org.telegram.ui.Components.SvgHelper$SVGHandler     // Catch:{ all -> 0x002f }
+            r5 = 0
+            r6 = 0
+            r1 = r7
+            r2 = r9
+            r3 = r10
+            r4 = r11
+            r1.<init>(r2, r3, r4, r5)     // Catch:{ all -> 0x002f }
+            r8.setContentHandler(r7)     // Catch:{ all -> 0x002f }
+            org.xml.sax.InputSource r9 = new org.xml.sax.InputSource     // Catch:{ all -> 0x002f }
+            r9.<init>(r0)     // Catch:{ all -> 0x002f }
+            r8.parse(r9)     // Catch:{ all -> 0x002f }
+            android.graphics.Bitmap r8 = r7.getBitmap()     // Catch:{ all -> 0x002f }
+            r0.close()     // Catch:{ Exception -> 0x0036 }
+            return r8
+        L_0x002f:
+            r8 = move-exception
+            throw r8     // Catch:{ all -> 0x0031 }
         L_0x0031:
-            r3 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r3)
-            return r0
+            r8 = move-exception
+            r0.close()     // Catch:{ all -> 0x0035 }
+        L_0x0035:
+            throw r8     // Catch:{ Exception -> 0x0036 }
+        L_0x0036:
+            r8 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r8)
+            r8 = 0
+            return r8
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SvgHelper.getBitmap(java.io.File, int, int, boolean):android.graphics.Bitmap");
+    }
+
+    public static SvgDrawable getDrawable(String str) {
+        try {
+            XMLReader xMLReader = SAXParserFactory.newInstance().newSAXParser().getXMLReader();
+            SVGHandler sVGHandler = new SVGHandler(0, 0, false, true);
+            xMLReader.setContentHandler(sVGHandler);
+            xMLReader.parse(new InputSource(new StringReader(str)));
+            return sVGHandler.getDrawable();
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+            return null;
+        }
     }
 
     public static Bitmap getBitmapByPathOnly(String str, int i, int i2, int i3, int i4) {
@@ -555,127 +678,144 @@ public class SvgHelper {
     public static java.lang.Integer getColorByName(java.lang.String r2) {
         /*
             java.lang.String r2 = r2.toLowerCase()
+            r2.hashCode()
             int r0 = r2.hashCode()
             r1 = -1
             switch(r0) {
-                case -734239628: goto L_0x005e;
-                case 112785: goto L_0x0054;
-                case 3027034: goto L_0x004a;
-                case 3068707: goto L_0x0040;
-                case 3181155: goto L_0x0036;
-                case 93818879: goto L_0x002c;
-                case 98619139: goto L_0x0022;
-                case 113101865: goto L_0x0017;
-                case 828922025: goto L_0x000d;
-                default: goto L_0x000c;
+                case -734239628: goto L_0x006c;
+                case 112785: goto L_0x0061;
+                case 3027034: goto L_0x0056;
+                case 3068707: goto L_0x004b;
+                case 3181155: goto L_0x0040;
+                case 93818879: goto L_0x0035;
+                case 98619139: goto L_0x002a;
+                case 113101865: goto L_0x001f;
+                case 828922025: goto L_0x0012;
+                default: goto L_0x000f;
             }
-        L_0x000c:
-            goto L_0x0068
-        L_0x000d:
+        L_0x000f:
+            r2 = -1
+            goto L_0x0076
+        L_0x0012:
             java.lang.String r0 = "magenta"
             boolean r2 = r2.equals(r0)
-            if (r2 == 0) goto L_0x0068
-            r2 = 7
-            goto L_0x0069
-        L_0x0017:
+            if (r2 != 0) goto L_0x001b
+            goto L_0x000f
+        L_0x001b:
+            r2 = 8
+            goto L_0x0076
+        L_0x001f:
             java.lang.String r0 = "white"
             boolean r2 = r2.equals(r0)
-            if (r2 == 0) goto L_0x0068
-            r2 = 8
-            goto L_0x0069
-        L_0x0022:
+            if (r2 != 0) goto L_0x0028
+            goto L_0x000f
+        L_0x0028:
+            r2 = 7
+            goto L_0x0076
+        L_0x002a:
             java.lang.String r0 = "green"
             boolean r2 = r2.equals(r0)
-            if (r2 == 0) goto L_0x0068
-            r2 = 3
-            goto L_0x0069
-        L_0x002c:
+            if (r2 != 0) goto L_0x0033
+            goto L_0x000f
+        L_0x0033:
+            r2 = 6
+            goto L_0x0076
+        L_0x0035:
             java.lang.String r0 = "black"
             boolean r2 = r2.equals(r0)
-            if (r2 == 0) goto L_0x0068
-            r2 = 0
-            goto L_0x0069
-        L_0x0036:
+            if (r2 != 0) goto L_0x003e
+            goto L_0x000f
+        L_0x003e:
+            r2 = 5
+            goto L_0x0076
+        L_0x0040:
             java.lang.String r0 = "gray"
             boolean r2 = r2.equals(r0)
-            if (r2 == 0) goto L_0x0068
-            r2 = 1
-            goto L_0x0069
-        L_0x0040:
+            if (r2 != 0) goto L_0x0049
+            goto L_0x000f
+        L_0x0049:
+            r2 = 4
+            goto L_0x0076
+        L_0x004b:
             java.lang.String r0 = "cyan"
             boolean r2 = r2.equals(r0)
-            if (r2 == 0) goto L_0x0068
-            r2 = 6
-            goto L_0x0069
-        L_0x004a:
+            if (r2 != 0) goto L_0x0054
+            goto L_0x000f
+        L_0x0054:
+            r2 = 3
+            goto L_0x0076
+        L_0x0056:
             java.lang.String r0 = "blue"
             boolean r2 = r2.equals(r0)
-            if (r2 == 0) goto L_0x0068
-            r2 = 4
-            goto L_0x0069
-        L_0x0054:
+            if (r2 != 0) goto L_0x005f
+            goto L_0x000f
+        L_0x005f:
+            r2 = 2
+            goto L_0x0076
+        L_0x0061:
             java.lang.String r0 = "red"
             boolean r2 = r2.equals(r0)
-            if (r2 == 0) goto L_0x0068
-            r2 = 2
-            goto L_0x0069
-        L_0x005e:
+            if (r2 != 0) goto L_0x006a
+            goto L_0x000f
+        L_0x006a:
+            r2 = 1
+            goto L_0x0076
+        L_0x006c:
             java.lang.String r0 = "yellow"
             boolean r2 = r2.equals(r0)
-            if (r2 == 0) goto L_0x0068
-            r2 = 5
-            goto L_0x0069
-        L_0x0068:
-            r2 = -1
-        L_0x0069:
+            if (r2 != 0) goto L_0x0075
+            goto L_0x000f
+        L_0x0075:
+            r2 = 0
+        L_0x0076:
             switch(r2) {
-                case 0: goto L_0x00a9;
-                case 1: goto L_0x00a1;
-                case 2: goto L_0x009a;
-                case 3: goto L_0x0092;
-                case 4: goto L_0x008a;
-                case 5: goto L_0x0083;
-                case 6: goto L_0x007b;
-                case 7: goto L_0x0073;
-                case 8: goto L_0x006e;
-                default: goto L_0x006c;
+                case 0: goto L_0x00b6;
+                case 1: goto L_0x00af;
+                case 2: goto L_0x00a7;
+                case 3: goto L_0x009f;
+                case 4: goto L_0x0097;
+                case 5: goto L_0x0090;
+                case 6: goto L_0x0088;
+                case 7: goto L_0x0083;
+                case 8: goto L_0x007b;
+                default: goto L_0x0079;
             }
-        L_0x006c:
+        L_0x0079:
             r2 = 0
             return r2
-        L_0x006e:
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r1)
-            return r2
-        L_0x0073:
+        L_0x007b:
             r2 = -65281(0xfffffffffffvar_ff, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x007b:
-            r2 = -16711681(0xfffffffffvar_ffff, float:-1.714704E38)
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
-            return r2
         L_0x0083:
-            r2 = -256(0xfffffffffffffvar_, float:NaN)
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r1)
             return r2
-        L_0x008a:
-            r2 = -16776961(0xfffffffffvar_ff, float:-1.7014636E38)
-            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
-            return r2
-        L_0x0092:
+        L_0x0088:
             r2 = -16711936(0xfffffffffvar_fvar_, float:-1.7146522E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x009a:
-            r2 = -65536(0xfffffffffffvar_, float:NaN)
+        L_0x0090:
+            r2 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x00a1:
+        L_0x0097:
             r2 = -7829368(0xfffffffffvar_, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
-        L_0x00a9:
-            r2 = -16777216(0xfffffffffvar_, float:-1.7014118E38)
+        L_0x009f:
+            r2 = -16711681(0xfffffffffvar_ffff, float:-1.714704E38)
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
+            return r2
+        L_0x00a7:
+            r2 = -16776961(0xfffffffffvar_ff, float:-1.7014636E38)
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
+            return r2
+        L_0x00af:
+            r2 = -65536(0xfffffffffffvar_, float:NaN)
+            java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
+            return r2
+        L_0x00b6:
+            r2 = -256(0xfffffffffffffvar_, float:NaN)
             java.lang.Integer r2 = java.lang.Integer.valueOf(r2)
             return r2
         */
@@ -785,6 +925,7 @@ public class SvgHelper {
         private Canvas canvas;
         private int desiredHeight;
         private int desiredWidth;
+        private SvgDrawable drawable;
         private HashMap<String, StyleSet> globalStyles;
         private Paint paint;
         boolean pushed;
@@ -799,7 +940,7 @@ public class SvgHelper {
         public void startDocument() {
         }
 
-        private SVGHandler(int i, int i2, boolean z) {
+        private SVGHandler(int i, int i2, boolean z, boolean z2) {
             this.scale = 1.0f;
             this.paint = new Paint(1);
             this.rect = new RectF();
@@ -808,6 +949,9 @@ public class SvgHelper {
             this.desiredWidth = i;
             this.desiredHeight = i2;
             this.whiteOnly = z;
+            if (z2) {
+                this.drawable = new SvgDrawable();
+            }
         }
 
         private boolean doFill(Properties properties) {
@@ -891,6 +1035,11 @@ public class SvgHelper {
             this.pushed = z;
             if (z) {
                 Matrix access$500 = SvgHelper.parseTransform(access$200);
+                SvgDrawable svgDrawable = this.drawable;
+                if (svgDrawable != null) {
+                    svgDrawable.addCommand(access$500);
+                    return;
+                }
                 this.canvas.save();
                 this.canvas.concat(access$500);
             }
@@ -898,50 +1047,55 @@ public class SvgHelper {
 
         private void popTransform() {
             if (this.pushed) {
-                this.canvas.restore();
+                SvgDrawable svgDrawable = this.drawable;
+                if (svgDrawable != null) {
+                    svgDrawable.addCommand((Object) null);
+                } else {
+                    this.canvas.restore();
+                }
             }
         }
 
         public void startElement(String str, String str2, String str3, Attributes attributes) {
             int i;
-            int i2;
             String access$200;
             if (!this.boundsMode || str2.equals("style")) {
+                str2.hashCode();
                 char c = 65535;
                 switch (str2.hashCode()) {
                     case -1656480802:
                         if (str2.equals("ellipse")) {
-                            c = 8;
+                            c = 0;
                             break;
                         }
                         break;
                     case -1360216880:
                         if (str2.equals("circle")) {
-                            c = 7;
+                            c = 1;
                             break;
                         }
                         break;
                     case -397519558:
                         if (str2.equals("polygon")) {
-                            c = 9;
+                            c = 2;
                             break;
                         }
                         break;
                     case 103:
                         if (str2.equals("g")) {
-                            c = 4;
+                            c = 3;
                             break;
                         }
                         break;
                     case 114276:
                         if (str2.equals("svg")) {
-                            c = 0;
+                            c = 4;
                             break;
                         }
                         break;
                     case 3079438:
                         if (str2.equals("defs")) {
-                            c = 1;
+                            c = 5;
                             break;
                         }
                         break;
@@ -953,19 +1107,19 @@ public class SvgHelper {
                         break;
                     case 3433509:
                         if (str2.equals("path")) {
-                            c = 11;
+                            c = 7;
                             break;
                         }
                         break;
                     case 3496420:
                         if (str2.equals("rect")) {
-                            c = 5;
+                            c = 8;
                             break;
                         }
                         break;
                     case 109780401:
                         if (str2.equals("style")) {
-                            c = 3;
+                            c = 9;
                             break;
                         }
                         break;
@@ -977,152 +1131,99 @@ public class SvgHelper {
                         break;
                     case 917656469:
                         if (str2.equals("clipPath")) {
-                            c = 2;
+                            c = 11;
                             break;
                         }
                         break;
                 }
                 switch (c) {
                     case 0:
-                        Float access$600 = SvgHelper.getFloatAttr("width", attributes);
-                        Float access$6002 = SvgHelper.getFloatAttr("height", attributes);
-                        if ((access$600 == null || access$6002 == null) && (access$200 = SvgHelper.getStringAttr("viewBox", attributes)) != null) {
-                            String[] split = access$200.split(" ");
-                            Float valueOf = Float.valueOf(Float.parseFloat(split[2]));
-                            access$6002 = Float.valueOf(Float.parseFloat(split[3]));
-                            access$600 = valueOf;
-                        }
-                        if (access$600 == null || access$6002 == null) {
-                            access$600 = Float.valueOf((float) this.desiredWidth);
-                            access$6002 = Float.valueOf((float) this.desiredHeight);
-                        }
-                        int ceil = (int) Math.ceil((double) access$600.floatValue());
-                        int ceil2 = (int) Math.ceil((double) access$6002.floatValue());
-                        if (ceil == 0 || ceil2 == 0) {
-                            i2 = this.desiredWidth;
-                            i = this.desiredHeight;
-                        } else {
-                            float f = (float) ceil;
-                            float f2 = (float) ceil2;
-                            float min = Math.min(((float) this.desiredWidth) / f, ((float) this.desiredHeight) / f2);
-                            this.scale = min;
-                            i2 = (int) (f * min);
-                            i = (int) (f2 * min);
-                        }
-                        Bitmap createBitmap = Bitmap.createBitmap(i2, i, Bitmap.Config.ARGB_8888);
-                        this.bitmap = createBitmap;
-                        createBitmap.eraseColor(0);
-                        Canvas canvas2 = new Canvas(this.bitmap);
-                        this.canvas = canvas2;
-                        float f3 = this.scale;
-                        if (f3 != 0.0f) {
-                            canvas2.scale(f3, f3);
+                        Float access$700 = SvgHelper.getFloatAttr("cx", attributes);
+                        Float access$7002 = SvgHelper.getFloatAttr("cy", attributes);
+                        Float access$7003 = SvgHelper.getFloatAttr("rx", attributes);
+                        Float access$7004 = SvgHelper.getFloatAttr("ry", attributes);
+                        if (access$700 != null && access$7002 != null && access$7003 != null && access$7004 != null) {
+                            pushTransform(attributes);
+                            Properties properties = new Properties(attributes, this.globalStyles);
+                            this.rect.set(access$700.floatValue() - access$7003.floatValue(), access$7002.floatValue() - access$7004.floatValue(), access$700.floatValue() + access$7003.floatValue(), access$7002.floatValue() + access$7004.floatValue());
+                            if (doFill(properties)) {
+                                SvgDrawable svgDrawable = this.drawable;
+                                if (svgDrawable != null) {
+                                    svgDrawable.addCommand(new Oval(this.rect), this.paint);
+                                } else {
+                                    this.canvas.drawOval(this.rect, this.paint);
+                                }
+                            }
+                            if (doStroke(properties)) {
+                                SvgDrawable svgDrawable2 = this.drawable;
+                                if (svgDrawable2 != null) {
+                                    svgDrawable2.addCommand(new Oval(this.rect), this.paint);
+                                } else {
+                                    this.canvas.drawOval(this.rect, this.paint);
+                                }
+                            }
+                            popTransform();
                             return;
                         }
                         return;
                     case 1:
-                    case 2:
-                        this.boundsMode = true;
-                        return;
-                    case 3:
-                        this.styles = new StringBuilder();
-                        return;
-                    case 4:
-                        if ("bounds".equalsIgnoreCase(SvgHelper.getStringAttr("id", attributes))) {
-                            this.boundsMode = true;
-                            return;
-                        }
-                        return;
-                    case 5:
-                        Float access$6003 = SvgHelper.getFloatAttr("x", attributes);
-                        if (access$6003 == null) {
-                            access$6003 = Float.valueOf(0.0f);
-                        }
-                        Float access$6004 = SvgHelper.getFloatAttr("y", attributes);
-                        if (access$6004 == null) {
-                            access$6004 = Float.valueOf(0.0f);
-                        }
-                        Float access$6005 = SvgHelper.getFloatAttr("width", attributes);
-                        Float access$6006 = SvgHelper.getFloatAttr("height", attributes);
-                        pushTransform(attributes);
-                        Properties properties = new Properties(attributes, this.globalStyles);
-                        if (doFill(properties)) {
-                            this.canvas.drawRect(access$6003.floatValue(), access$6004.floatValue(), access$6005.floatValue() + access$6003.floatValue(), access$6006.floatValue() + access$6004.floatValue(), this.paint);
-                        }
-                        if (doStroke(properties)) {
-                            this.canvas.drawRect(access$6003.floatValue(), access$6004.floatValue(), access$6003.floatValue() + access$6005.floatValue(), access$6004.floatValue() + access$6006.floatValue(), this.paint);
-                        }
-                        popTransform();
-                        return;
-                    case 6:
-                        Float access$6007 = SvgHelper.getFloatAttr("x1", attributes);
-                        Float access$6008 = SvgHelper.getFloatAttr("x2", attributes);
-                        Float access$6009 = SvgHelper.getFloatAttr("y1", attributes);
-                        Float access$60010 = SvgHelper.getFloatAttr("y2", attributes);
-                        if (doStroke(new Properties(attributes, this.globalStyles))) {
-                            pushTransform(attributes);
-                            this.canvas.drawLine(access$6007.floatValue(), access$6009.floatValue(), access$6008.floatValue(), access$60010.floatValue(), this.paint);
-                            popTransform();
-                            return;
-                        }
-                        return;
-                    case 7:
-                        Float access$60011 = SvgHelper.getFloatAttr("cx", attributes);
-                        Float access$60012 = SvgHelper.getFloatAttr("cy", attributes);
-                        Float access$60013 = SvgHelper.getFloatAttr("r", attributes);
-                        if (access$60011 != null && access$60012 != null && access$60013 != null) {
+                        Float access$7005 = SvgHelper.getFloatAttr("cx", attributes);
+                        Float access$7006 = SvgHelper.getFloatAttr("cy", attributes);
+                        Float access$7007 = SvgHelper.getFloatAttr("r", attributes);
+                        if (access$7005 != null && access$7006 != null && access$7007 != null) {
                             pushTransform(attributes);
                             Properties properties2 = new Properties(attributes, this.globalStyles);
                             if (doFill(properties2)) {
-                                this.canvas.drawCircle(access$60011.floatValue(), access$60012.floatValue(), access$60013.floatValue(), this.paint);
+                                SvgDrawable svgDrawable3 = this.drawable;
+                                if (svgDrawable3 != null) {
+                                    svgDrawable3.addCommand(new Circle(access$7005.floatValue(), access$7006.floatValue(), access$7007.floatValue()), this.paint);
+                                } else {
+                                    this.canvas.drawCircle(access$7005.floatValue(), access$7006.floatValue(), access$7007.floatValue(), this.paint);
+                                }
                             }
                             if (doStroke(properties2)) {
-                                this.canvas.drawCircle(access$60011.floatValue(), access$60012.floatValue(), access$60013.floatValue(), this.paint);
+                                SvgDrawable svgDrawable4 = this.drawable;
+                                if (svgDrawable4 != null) {
+                                    svgDrawable4.addCommand(new Circle(access$7005.floatValue(), access$7006.floatValue(), access$7007.floatValue()), this.paint);
+                                } else {
+                                    this.canvas.drawCircle(access$7005.floatValue(), access$7006.floatValue(), access$7007.floatValue(), this.paint);
+                                }
                             }
                             popTransform();
                             return;
                         }
                         return;
-                    case 8:
-                        Float access$60014 = SvgHelper.getFloatAttr("cx", attributes);
-                        Float access$60015 = SvgHelper.getFloatAttr("cy", attributes);
-                        Float access$60016 = SvgHelper.getFloatAttr("rx", attributes);
-                        Float access$60017 = SvgHelper.getFloatAttr("ry", attributes);
-                        if (access$60014 != null && access$60015 != null && access$60016 != null && access$60017 != null) {
-                            pushTransform(attributes);
-                            Properties properties3 = new Properties(attributes, this.globalStyles);
-                            this.rect.set(access$60014.floatValue() - access$60016.floatValue(), access$60015.floatValue() - access$60017.floatValue(), access$60014.floatValue() + access$60016.floatValue(), access$60015.floatValue() + access$60017.floatValue());
-                            if (doFill(properties3)) {
-                                this.canvas.drawOval(this.rect, this.paint);
-                            }
-                            if (doStroke(properties3)) {
-                                this.canvas.drawOval(this.rect, this.paint);
-                            }
-                            popTransform();
-                            return;
-                        }
-                        return;
-                    case 9:
+                    case 2:
                     case 10:
-                        NumberParse access$800 = SvgHelper.getNumberParseAttr("points", attributes);
-                        if (access$800 != null) {
+                        NumberParse access$1200 = SvgHelper.getNumberParseAttr("points", attributes);
+                        if (access$1200 != null) {
                             Path path = new Path();
-                            ArrayList access$100 = access$800.numbers;
+                            ArrayList access$100 = access$1200.numbers;
                             if (access$100.size() > 1) {
                                 pushTransform(attributes);
-                                Properties properties4 = new Properties(attributes, this.globalStyles);
+                                Properties properties3 = new Properties(attributes, this.globalStyles);
                                 path.moveTo(((Float) access$100.get(0)).floatValue(), ((Float) access$100.get(1)).floatValue());
-                                for (int i3 = 2; i3 < access$100.size(); i3 += 2) {
-                                    path.lineTo(((Float) access$100.get(i3)).floatValue(), ((Float) access$100.get(i3 + 1)).floatValue());
+                                for (int i2 = 2; i2 < access$100.size(); i2 += 2) {
+                                    path.lineTo(((Float) access$100.get(i2)).floatValue(), ((Float) access$100.get(i2 + 1)).floatValue());
                                 }
                                 if (str2.equals("polygon")) {
                                     path.close();
                                 }
-                                if (doFill(properties4)) {
-                                    this.canvas.drawPath(path, this.paint);
+                                if (doFill(properties3)) {
+                                    SvgDrawable svgDrawable5 = this.drawable;
+                                    if (svgDrawable5 != null) {
+                                        svgDrawable5.addCommand(path, this.paint);
+                                    } else {
+                                        this.canvas.drawPath(path, this.paint);
+                                    }
                                 }
-                                if (doStroke(properties4)) {
-                                    this.canvas.drawPath(path, this.paint);
+                                if (doStroke(properties3)) {
+                                    SvgDrawable svgDrawable6 = this.drawable;
+                                    if (svgDrawable6 != null) {
+                                        svgDrawable6.addCommand(path, this.paint);
+                                    } else {
+                                        this.canvas.drawPath(path, this.paint);
+                                    }
                                 }
                                 popTransform();
                                 return;
@@ -1130,17 +1231,134 @@ public class SvgHelper {
                             return;
                         }
                         return;
+                    case 3:
+                        if ("bounds".equalsIgnoreCase(SvgHelper.getStringAttr("id", attributes))) {
+                            this.boundsMode = true;
+                            return;
+                        }
+                        return;
+                    case 4:
+                        Float access$7008 = SvgHelper.getFloatAttr("width", attributes);
+                        Float access$7009 = SvgHelper.getFloatAttr("height", attributes);
+                        if ((access$7008 == null || access$7009 == null) && (access$200 = SvgHelper.getStringAttr("viewBox", attributes)) != null) {
+                            String[] split = access$200.split(" ");
+                            Float valueOf = Float.valueOf(Float.parseFloat(split[2]));
+                            access$7009 = Float.valueOf(Float.parseFloat(split[3]));
+                            access$7008 = valueOf;
+                        }
+                        if (access$7008 == null || access$7009 == null) {
+                            access$7008 = Float.valueOf((float) this.desiredWidth);
+                            access$7009 = Float.valueOf((float) this.desiredHeight);
+                        }
+                        int ceil = (int) Math.ceil((double) access$7008.floatValue());
+                        int ceil2 = (int) Math.ceil((double) access$7009.floatValue());
+                        if (ceil == 0 || ceil2 == 0) {
+                            ceil = this.desiredWidth;
+                            ceil2 = this.desiredHeight;
+                        } else {
+                            int i3 = this.desiredWidth;
+                            if (!(i3 == 0 || (i = this.desiredHeight) == 0)) {
+                                float f = (float) ceil;
+                                float f2 = (float) ceil2;
+                                float min = Math.min(((float) i3) / f, ((float) i) / f2);
+                                this.scale = min;
+                                ceil = (int) (f * min);
+                                ceil2 = (int) (f2 * min);
+                            }
+                        }
+                        SvgDrawable svgDrawable7 = this.drawable;
+                        if (svgDrawable7 == null) {
+                            Bitmap createBitmap = Bitmap.createBitmap(ceil, ceil2, Bitmap.Config.ARGB_8888);
+                            this.bitmap = createBitmap;
+                            createBitmap.eraseColor(0);
+                            Canvas canvas2 = new Canvas(this.bitmap);
+                            this.canvas = canvas2;
+                            float f3 = this.scale;
+                            if (f3 != 0.0f) {
+                                canvas2.scale(f3, f3);
+                                return;
+                            }
+                            return;
+                        }
+                        int unused = svgDrawable7.width = ceil;
+                        int unused2 = this.drawable.height = ceil2;
+                        return;
+                    case 5:
                     case 11:
-                        Path access$900 = SvgHelper.doPath(SvgHelper.getStringAttr("d", attributes));
+                        this.boundsMode = true;
+                        return;
+                    case 6:
+                        Float access$70010 = SvgHelper.getFloatAttr("x1", attributes);
+                        Float access$70011 = SvgHelper.getFloatAttr("x2", attributes);
+                        Float access$70012 = SvgHelper.getFloatAttr("y1", attributes);
+                        Float access$70013 = SvgHelper.getFloatAttr("y2", attributes);
+                        if (doStroke(new Properties(attributes, this.globalStyles))) {
+                            pushTransform(attributes);
+                            SvgDrawable svgDrawable8 = this.drawable;
+                            if (svgDrawable8 != null) {
+                                svgDrawable8.addCommand(new Line(access$70010.floatValue(), access$70012.floatValue(), access$70011.floatValue(), access$70013.floatValue()), this.paint);
+                            } else {
+                                this.canvas.drawLine(access$70010.floatValue(), access$70012.floatValue(), access$70011.floatValue(), access$70013.floatValue(), this.paint);
+                            }
+                            popTransform();
+                            return;
+                        }
+                        return;
+                    case 7:
+                        Path access$1300 = SvgHelper.doPath(SvgHelper.getStringAttr("d", attributes));
+                        pushTransform(attributes);
+                        Properties properties4 = new Properties(attributes, this.globalStyles);
+                        if (doFill(properties4)) {
+                            SvgDrawable svgDrawable9 = this.drawable;
+                            if (svgDrawable9 != null) {
+                                svgDrawable9.addCommand(access$1300, this.paint);
+                            } else {
+                                this.canvas.drawPath(access$1300, this.paint);
+                            }
+                        }
+                        if (doStroke(properties4)) {
+                            SvgDrawable svgDrawable10 = this.drawable;
+                            if (svgDrawable10 != null) {
+                                svgDrawable10.addCommand(access$1300, this.paint);
+                            } else {
+                                this.canvas.drawPath(access$1300, this.paint);
+                            }
+                        }
+                        popTransform();
+                        return;
+                    case 8:
+                        Float access$70014 = SvgHelper.getFloatAttr("x", attributes);
+                        if (access$70014 == null) {
+                            access$70014 = Float.valueOf(0.0f);
+                        }
+                        Float access$70015 = SvgHelper.getFloatAttr("y", attributes);
+                        if (access$70015 == null) {
+                            access$70015 = Float.valueOf(0.0f);
+                        }
+                        Float access$70016 = SvgHelper.getFloatAttr("width", attributes);
+                        Float access$70017 = SvgHelper.getFloatAttr("height", attributes);
                         pushTransform(attributes);
                         Properties properties5 = new Properties(attributes, this.globalStyles);
                         if (doFill(properties5)) {
-                            this.canvas.drawPath(access$900, this.paint);
+                            SvgDrawable svgDrawable11 = this.drawable;
+                            if (svgDrawable11 != null) {
+                                svgDrawable11.addCommand(new RectF(access$70014.floatValue(), access$70015.floatValue(), access$70014.floatValue() + access$70016.floatValue(), access$70015.floatValue() + access$70017.floatValue()), this.paint);
+                            } else {
+                                this.canvas.drawRect(access$70014.floatValue(), access$70015.floatValue(), access$70014.floatValue() + access$70016.floatValue(), access$70015.floatValue() + access$70017.floatValue(), this.paint);
+                            }
                         }
                         if (doStroke(properties5)) {
-                            this.canvas.drawPath(access$900, this.paint);
+                            SvgDrawable svgDrawable12 = this.drawable;
+                            if (svgDrawable12 != null) {
+                                svgDrawable12.addCommand(new RectF(access$70014.floatValue(), access$70015.floatValue(), access$70014.floatValue() + access$70016.floatValue(), access$70015.floatValue() + access$70017.floatValue()), this.paint);
+                            } else {
+                                this.canvas.drawRect(access$70014.floatValue(), access$70015.floatValue(), access$70014.floatValue() + access$70016.floatValue(), access$70015.floatValue() + access$70017.floatValue(), this.paint);
+                            }
                         }
                         popTransform();
+                        return;
+                    case 9:
+                        this.styles = new StringBuilder();
                         return;
                     default:
                         return;
@@ -1155,125 +1373,67 @@ public class SvgHelper {
             }
         }
 
-        /* JADX WARNING: Can't fix incorrect switch cases order */
-        /* Code decompiled incorrectly, please refer to instructions dump. */
-        public void endElement(java.lang.String r7, java.lang.String r8, java.lang.String r9) {
-            /*
-                r6 = this;
-                int r7 = r8.hashCode()
-                r9 = 4
-                r0 = 3
-                r1 = 2
-                r2 = 1
-                r3 = 0
-                switch(r7) {
-                    case 103: goto L_0x0035;
-                    case 114276: goto L_0x002b;
-                    case 3079438: goto L_0x0021;
-                    case 109780401: goto L_0x0017;
-                    case 917656469: goto L_0x000d;
-                    default: goto L_0x000c;
-                }
-            L_0x000c:
-                goto L_0x003f
-            L_0x000d:
-                java.lang.String r7 = "clipPath"
-                boolean r7 = r8.equals(r7)
-                if (r7 == 0) goto L_0x003f
-                r7 = 4
-                goto L_0x0040
-            L_0x0017:
-                java.lang.String r7 = "style"
-                boolean r7 = r8.equals(r7)
-                if (r7 == 0) goto L_0x003f
-                r7 = 0
-                goto L_0x0040
-            L_0x0021:
-                java.lang.String r7 = "defs"
-                boolean r7 = r8.equals(r7)
-                if (r7 == 0) goto L_0x003f
-                r7 = 3
-                goto L_0x0040
-            L_0x002b:
-                java.lang.String r7 = "svg"
-                boolean r7 = r8.equals(r7)
-                if (r7 == 0) goto L_0x003f
-                r7 = 1
-                goto L_0x0040
-            L_0x0035:
-                java.lang.String r7 = "g"
-                boolean r7 = r8.equals(r7)
-                if (r7 == 0) goto L_0x003f
-                r7 = 2
-                goto L_0x0040
-            L_0x003f:
-                r7 = -1
-            L_0x0040:
-                if (r7 == 0) goto L_0x004c
-                if (r7 == r1) goto L_0x0049
-                if (r7 == r0) goto L_0x0049
-                if (r7 == r9) goto L_0x0049
-                goto L_0x00b4
-            L_0x0049:
-                r6.boundsMode = r3
-                goto L_0x00b4
-            L_0x004c:
-                java.lang.StringBuilder r7 = r6.styles
-                if (r7 == 0) goto L_0x00b4
-                java.lang.String r7 = r7.toString()
-                java.lang.String r8 = "\\}"
-                java.lang.String[] r7 = r7.split(r8)
-                r8 = 0
-            L_0x005b:
-                int r9 = r7.length
-                r0 = 0
-                if (r8 >= r9) goto L_0x00b2
-                r9 = r7[r8]
-                java.lang.String r9 = r9.trim()
-                java.lang.String r1 = "\t"
-                java.lang.String r4 = ""
-                java.lang.String r9 = r9.replace(r1, r4)
-                java.lang.String r1 = "\n"
-                java.lang.String r9 = r9.replace(r1, r4)
-                r7[r8] = r9
-                r9 = r7[r8]
-                int r9 = r9.length()
-                if (r9 == 0) goto L_0x00af
-                r9 = r7[r8]
-                char r9 = r9.charAt(r3)
-                r1 = 46
-                if (r9 == r1) goto L_0x0088
-                goto L_0x00af
-            L_0x0088:
-                r9 = r7[r8]
-                r1 = 123(0x7b, float:1.72E-43)
-                int r9 = r9.indexOf(r1)
-                if (r9 >= 0) goto L_0x0093
-                goto L_0x00af
-            L_0x0093:
-                r1 = r7[r8]
-                java.lang.String r1 = r1.substring(r2, r9)
-                java.lang.String r1 = r1.trim()
-                r4 = r7[r8]
-                int r9 = r9 + 1
-                java.lang.String r9 = r4.substring(r9)
-                java.util.HashMap<java.lang.String, org.telegram.ui.Components.SvgHelper$StyleSet> r4 = r6.globalStyles
-                org.telegram.ui.Components.SvgHelper$StyleSet r5 = new org.telegram.ui.Components.SvgHelper$StyleSet
-                r5.<init>(r9)
-                r4.put(r1, r5)
-            L_0x00af:
-                int r8 = r8 + 1
-                goto L_0x005b
-            L_0x00b2:
-                r6.styles = r0
-            L_0x00b4:
-                return
-            */
-            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.SvgHelper.SVGHandler.endElement(java.lang.String, java.lang.String, java.lang.String):void");
+        public void endElement(String str, String str2, String str3) {
+            int indexOf;
+            str2.hashCode();
+            char c = 65535;
+            switch (str2.hashCode()) {
+                case 103:
+                    if (str2.equals("g")) {
+                        c = 0;
+                        break;
+                    }
+                    break;
+                case 3079438:
+                    if (str2.equals("defs")) {
+                        c = 1;
+                        break;
+                    }
+                    break;
+                case 109780401:
+                    if (str2.equals("style")) {
+                        c = 2;
+                        break;
+                    }
+                    break;
+                case 917656469:
+                    if (str2.equals("clipPath")) {
+                        c = 3;
+                        break;
+                    }
+                    break;
+            }
+            switch (c) {
+                case 0:
+                case 1:
+                case 3:
+                    this.boundsMode = false;
+                    return;
+                case 2:
+                    StringBuilder sb = this.styles;
+                    if (sb != null) {
+                        String[] split = sb.toString().split("\\}");
+                        for (int i = 0; i < split.length; i++) {
+                            split[i] = split[i].trim().replace("\t", "").replace("\n", "");
+                            if (split[i].length() != 0 && split[i].charAt(0) == '.' && (indexOf = split[i].indexOf(123)) >= 0) {
+                                this.globalStyles.put(split[i].substring(1, indexOf).trim(), new StyleSet(split[i].substring(indexOf + 1)));
+                            }
+                        }
+                        this.styles = null;
+                        return;
+                    }
+                    return;
+                default:
+                    return;
+            }
         }
 
         public Bitmap getBitmap() {
             return this.bitmap;
+        }
+
+        public SvgDrawable getDrawable() {
+            return this.drawable;
         }
     }
 
@@ -1305,14 +1465,15 @@ public class SvgHelper {
 
         private char read() {
             int i = this.pos;
-            if (i < this.n) {
+            int i2 = this.n;
+            if (i < i2) {
                 this.pos = i + 1;
             }
-            int i2 = this.pos;
-            if (i2 == this.n) {
+            int i3 = this.pos;
+            if (i3 == i2) {
                 return 0;
             }
-            return this.s.charAt(i2);
+            return this.s.charAt(i3);
         }
 
         public void skipWhitespace() {
@@ -1813,13 +1974,13 @@ public class SvgHelper {
                 i++;
             }
             double d2 = (double) i;
-            double[] access$1000 = SvgHelper.pow10;
+            double[] access$1400 = SvgHelper.pow10;
             if (i2 > 0) {
-                double d3 = access$1000[i2];
+                double d3 = access$1400[i2];
                 Double.isNaN(d2);
                 d = d2 * d3;
             } else {
-                double d4 = access$1000[-i2];
+                double d4 = access$1400[-i2];
                 Double.isNaN(d2);
                 d = d2 / d4;
             }

@@ -9,6 +9,7 @@ public abstract class TLRPC$messages_Messages extends TLObject {
     public boolean inexact;
     public ArrayList<TLRPC$Message> messages = new ArrayList<>();
     public int next_rate;
+    public int offset_id_offset;
     public int pts;
     public ArrayList<TLRPC$User> users = new ArrayList<>();
 
@@ -18,11 +19,11 @@ public abstract class TLRPC$messages_Messages extends TLObject {
             case -1938715001:
                 tLRPC$messages_Messages = new TLRPC$TL_messages_messages();
                 break;
-            case -1725551049:
-                tLRPC$messages_Messages = new TLRPC$TL_messages_channelMessages();
-                break;
-            case -923939298:
+            case 978610270:
                 tLRPC$messages_Messages = new TLRPC$TL_messages_messagesSlice();
+                break;
+            case 1682413576:
+                tLRPC$messages_Messages = new TLRPC$TL_messages_channelMessages();
                 break;
             case 1951620897:
                 tLRPC$messages_Messages = new TLRPC$TL_messages_messagesNotModified();

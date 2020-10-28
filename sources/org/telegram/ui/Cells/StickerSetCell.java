@@ -11,6 +11,8 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewPropertyAnimator;
+import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -76,14 +78,18 @@ public class StickerSetCell extends FrameLayout {
         this.imageView = backupImageView;
         backupImageView.setAspectFit(true);
         this.imageView.setLayerNum(1);
+        BackupImageView backupImageView2 = this.imageView;
+        boolean z = LocaleController.isRTL;
         int i3 = 5;
-        addView(this.imageView, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 13.0f, 9.0f, LocaleController.isRTL ? 13.0f : 0.0f, 0.0f));
+        addView(backupImageView2, LayoutHelper.createFrame(40, 40.0f, (z ? 5 : 3) | 48, z ? 0.0f : 13.0f, 9.0f, z ? 13.0f : 0.0f, 0.0f));
         if (i2 == 2) {
             RadialProgressView radialProgressView = new RadialProgressView(getContext());
             this.progressView = radialProgressView;
             radialProgressView.setProgressColor(Theme.getColor("dialogProgressCircle"));
             this.progressView.setSize(AndroidUtilities.dp(30.0f));
-            addView(this.progressView, LayoutHelper.createFrame(48, 48.0f, (!LocaleController.isRTL ? 3 : i3) | 48, LocaleController.isRTL ? 0.0f : 12.0f, 5.0f, LocaleController.isRTL ? 12.0f : 0.0f, 0.0f));
+            RadialProgressView radialProgressView2 = this.progressView;
+            boolean z2 = LocaleController.isRTL;
+            addView(radialProgressView2, LayoutHelper.createFrame(48, 48.0f, (!z2 ? 3 : i3) | 48, z2 ? 0.0f : 12.0f, 5.0f, z2 ? 12.0f : 0.0f, 0.0f));
         } else if (i2 != 0) {
             ImageView imageView2 = new ImageView(context2);
             this.optionsButton = imageView2;
@@ -112,7 +118,9 @@ public class StickerSetCell extends FrameLayout {
             } else if (i2 == 3) {
                 this.optionsButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("featuredStickers_addedIcon"), PorterDuff.Mode.MULTIPLY));
                 this.optionsButton.setImageResource(NUM);
-                addView(this.optionsButton, LayoutHelper.createFrame(40, 40.0f, (LocaleController.isRTL ? 3 : i3) | 48, (float) (LocaleController.isRTL ? 10 : 0), 9.0f, (float) (!LocaleController.isRTL ? 10 : i4), 0.0f));
+                ImageView imageView4 = this.optionsButton;
+                boolean z3 = LocaleController.isRTL;
+                addView(imageView4, LayoutHelper.createFrame(40, 40.0f, (z3 ? 3 : i3) | 48, (float) (z3 ? 10 : 0), 9.0f, (float) (!z3 ? 10 : i4), 0.0f));
             }
         }
     }
@@ -154,7 +162,6 @@ public class StickerSetCell extends FrameLayout {
     }
 
     public void setStickersSet(TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet, boolean z) {
-        TLObject tLObject;
         ImageLocation imageLocation;
         this.needDivider = z;
         this.stickersSet = tLRPC$TL_messages_stickerSet;
@@ -182,10 +189,8 @@ public class StickerSetCell extends FrameLayout {
         }
         this.valueTextView.setText(LocaleController.formatPluralString("Stickers", arrayList.size()));
         TLRPC$Document tLRPC$Document = arrayList.get(0);
-        TLRPC$PhotoSize tLRPC$PhotoSize = tLRPC$TL_messages_stickerSet.set.thumb;
-        if ((tLRPC$PhotoSize instanceof TLRPC$TL_photoSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoSizeProgressive)) {
-            tLObject = tLRPC$TL_messages_stickerSet.set.thumb;
-        } else {
+        TLObject tLObject = tLRPC$TL_messages_stickerSet.set.thumb;
+        if (!(tLObject instanceof TLRPC$TL_photoSize) && !(tLObject instanceof TLRPC$TL_photoSizeProgressive)) {
             tLObject = tLRPC$Document;
         }
         boolean z2 = tLObject instanceof TLRPC$Document;
@@ -239,7 +244,9 @@ public class StickerSetCell extends FrameLayout {
             fArr2[1] = f2;
             if (z2) {
                 this.reorderButton.setVisibility(0);
-                this.reorderButton.animate().alpha(fArr[0]).scaleX(fArr2[0]).scaleY(fArr2[0]).setDuration(200).setInterpolator(Easings.easeOutSine).withEndAction(new Runnable(z) {
+                ViewPropertyAnimator duration = this.reorderButton.animate().alpha(fArr[0]).scaleX(fArr2[0]).scaleY(fArr2[0]).setDuration(200);
+                Interpolator interpolator = Easings.easeOutSine;
+                duration.setInterpolator(interpolator).withEndAction(new Runnable(z) {
                     public final /* synthetic */ boolean f$1;
 
                     {
@@ -251,7 +258,7 @@ public class StickerSetCell extends FrameLayout {
                     }
                 }).start();
                 this.optionsButton.setVisibility(0);
-                this.optionsButton.animate().alpha(fArr[1]).scaleX(fArr2[1]).scaleY(fArr2[1]).setDuration(200).setInterpolator(Easings.easeOutSine).withEndAction(new Runnable(z) {
+                this.optionsButton.animate().alpha(fArr[1]).scaleX(fArr2[1]).scaleY(fArr2[1]).setDuration(200).setInterpolator(interpolator).withEndAction(new Runnable(z) {
                     public final /* synthetic */ boolean f$1;
 
                     {
@@ -279,12 +286,16 @@ public class StickerSetCell extends FrameLayout {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setReorderable$0 */
     public /* synthetic */ void lambda$setReorderable$0$StickerSetCell(boolean z) {
         if (!z) {
             this.reorderButton.setVisibility(8);
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$setReorderable$1 */
     public /* synthetic */ void lambda$setReorderable$1$StickerSetCell(boolean z) {
         if (z) {
             this.optionsButton.setVisibility(8);

@@ -61,8 +61,10 @@ public class SendLocationCell extends FrameLayout {
             combinedDrawable2.setIconSize(AndroidUtilities.dp(24.0f), AndroidUtilities.dp(24.0f));
             this.imageView.setBackgroundDrawable(combinedDrawable2);
         }
+        ImageView imageView3 = this.imageView;
+        boolean z2 = LocaleController.isRTL;
         int i = 5;
-        addView(this.imageView, LayoutHelper.createFrame(42, 42.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 0.0f : 15.0f, 12.0f, !LocaleController.isRTL ? 0.0f : 15.0f, 0.0f));
+        addView(imageView3, LayoutHelper.createFrame(42, 42.0f, (z2 ? 5 : 3) | 48, z2 ? 0.0f : 15.0f, 12.0f, !z2 ? 0.0f : 15.0f, 0.0f));
         SimpleTextView simpleTextView = new SimpleTextView(context);
         this.titleTextView = simpleTextView;
         simpleTextView.setTextSize(16);
@@ -71,13 +73,17 @@ public class SendLocationCell extends FrameLayout {
         this.titleTextView.setTextColor(Theme.getColor(!z ? "location_sendLocationText" : str2));
         this.titleTextView.setGravity(LocaleController.isRTL ? 5 : 3);
         this.titleTextView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-        addView(this.titleTextView, LayoutHelper.createFrame(-1, 20.0f, (LocaleController.isRTL ? 5 : 3) | 48, LocaleController.isRTL ? 16.0f : 73.0f, 12.0f, LocaleController.isRTL ? 73.0f : 16.0f, 0.0f));
-        SimpleTextView simpleTextView2 = new SimpleTextView(context);
-        this.accurateTextView = simpleTextView2;
-        simpleTextView2.setTextSize(14);
+        SimpleTextView simpleTextView2 = this.titleTextView;
+        boolean z3 = LocaleController.isRTL;
+        addView(simpleTextView2, LayoutHelper.createFrame(-1, 20.0f, (z3 ? 5 : 3) | 48, z3 ? 16.0f : 73.0f, 12.0f, z3 ? 73.0f : 16.0f, 0.0f));
+        SimpleTextView simpleTextView3 = new SimpleTextView(context);
+        this.accurateTextView = simpleTextView3;
+        simpleTextView3.setTextSize(14);
         this.accurateTextView.setTextColor(Theme.getColor("windowBackgroundWhiteGrayText3"));
         this.accurateTextView.setGravity(LocaleController.isRTL ? 5 : 3);
-        addView(this.accurateTextView, LayoutHelper.createFrame(-1, 20.0f, (!LocaleController.isRTL ? 3 : i) | 48, LocaleController.isRTL ? 16.0f : 73.0f, 37.0f, LocaleController.isRTL ? 73.0f : 16.0f, 0.0f));
+        SimpleTextView simpleTextView4 = this.accurateTextView;
+        boolean z4 = LocaleController.isRTL;
+        addView(simpleTextView4, LayoutHelper.createFrame(-1, 20.0f, (!z4 ? 3 : i) | 48, z4 ? 16.0f : 73.0f, 37.0f, z4 ? 73.0f : 16.0f, 0.0f));
     }
 
     private ImageView getImageView() {
@@ -95,6 +101,7 @@ public class SendLocationCell extends FrameLayout {
             }
             imageView2.setAlpha(f);
         }
+        checkText();
     }
 
     /* access modifiers changed from: protected */

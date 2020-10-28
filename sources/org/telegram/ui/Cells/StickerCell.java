@@ -121,8 +121,9 @@ public class StickerCell extends FrameLayout {
 
     /* access modifiers changed from: protected */
     public boolean drawChild(Canvas canvas, View view, long j) {
+        boolean z;
         boolean drawChild = super.drawChild(canvas, view, j);
-        if (view == this.imageView && ((this.scaled && this.scale != 0.8f) || (!this.scaled && this.scale != 1.0f))) {
+        if (view == this.imageView && ((z && this.scale != 0.8f) || (!(z = this.scaled) && this.scale != 1.0f))) {
             long currentTimeMillis = System.currentTimeMillis();
             long j2 = currentTimeMillis - this.lastUpdateTime;
             this.lastUpdateTime = currentTimeMillis;

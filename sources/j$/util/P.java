@@ -1,16 +1,30 @@
 package j$.util;
 
-import j$.util.function.CLASSNAMEt;
 import j$.util.function.Consumer;
+import java.util.Comparator;
 
-public interface P extends V {
-    boolean a(Consumer consumer);
+final class P extends Q implements Spliterator {
+    P() {
+    }
 
-    void e(CLASSNAMEt tVar);
+    public boolean b(Consumer consumer) {
+        consumer.getClass();
+        return false;
+    }
 
-    void forEachRemaining(Consumer consumer);
+    public void forEachRemaining(Consumer consumer) {
+        consumer.getClass();
+    }
 
-    boolean j(CLASSNAMEt tVar);
+    public Comparator getComparator() {
+        throw new IllegalStateException();
+    }
 
-    P trySplit();
+    public /* synthetic */ long getExactSizeIfKnown() {
+        return CLASSNAMEk.e(this);
+    }
+
+    public /* synthetic */ boolean hasCharacteristics(int i) {
+        return CLASSNAMEk.f(this, i);
+    }
 }

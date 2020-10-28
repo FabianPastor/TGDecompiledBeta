@@ -259,7 +259,7 @@ public class Track {
     public void prepare() {
         int i;
         ArrayList arrayList = new ArrayList(this.samplePresentationTimes);
-        Collections.sort(this.samplePresentationTimes, $$Lambda$Track$WwpAJwhUb2DZllFb8kOYdyyS8pU.INSTANCE);
+        Collections.sort(this.samplePresentationTimes, $$Lambda$Track$8mSIxxOe3niqfdOUWm68l4l5AUI.INSTANCE);
         this.sampleDurations = new long[this.samplePresentationTimes.size()];
         long j = Long.MAX_VALUE;
         long j2 = 0;

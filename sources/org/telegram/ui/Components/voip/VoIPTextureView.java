@@ -37,10 +37,12 @@ public class VoIPTextureView extends FrameLayout {
     public VoIPTextureView(Context context, boolean z) {
         super(context);
         new RectF();
-        this.xRefPaint = new Paint(1);
+        Paint paint = new Paint(1);
+        this.xRefPaint = paint;
         this.stubVisibleProgress = 1.0f;
-        this.imageView = new ImageView(context);
-        AnonymousClass1 r0 = new TextureViewRenderer(context) {
+        ImageView imageView2 = new ImageView(context);
+        this.imageView = imageView2;
+        AnonymousClass1 r3 = new TextureViewRenderer(context) {
             public void onFirstFrameRendered() {
                 super.onFirstFrameRendered();
                 VoIPTextureView.this.invalidate();
@@ -51,20 +53,20 @@ public class VoIPTextureView extends FrameLayout {
                 super.onMeasure(i, i2);
             }
         };
-        this.renderer = r0;
-        r0.setEnableHardwareScaler(true);
-        this.renderer.setIsCamera(z);
+        this.renderer = r3;
+        r3.setEnableHardwareScaler(true);
+        r3.setIsCamera(z);
         if (!z) {
             View view = new View(context);
             this.backgroundView = view;
             view.setBackgroundColor(-14999773);
             addView(this.backgroundView, LayoutHelper.createFrame(-1, -1.0f));
-            this.renderer.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT);
-            addView(this.renderer, LayoutHelper.createFrame(-1, -2, 17));
+            r3.setScalingType(RendererCommon.ScalingType.SCALE_ASPECT_FIT);
+            addView(r3, LayoutHelper.createFrame(-1, -2, 17));
         } else {
-            addView(this.renderer);
+            addView(r3);
         }
-        addView(this.imageView);
+        addView(imageView2);
         if (Build.VERSION.SDK_INT >= 21) {
             setOutlineProvider(new ViewOutlineProvider() {
                 @TargetApi(21)
@@ -78,8 +80,8 @@ public class VoIPTextureView extends FrameLayout {
             });
             setClipToOutline(true);
         } else {
-            this.xRefPaint.setColor(-16777216);
-            this.xRefPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+            paint.setColor(-16777216);
+            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         }
         if (z && this.cameraLastBitmap == null) {
             try {
@@ -88,8 +90,8 @@ public class VoIPTextureView extends FrameLayout {
                 if (decodeFile == null) {
                     this.cameraLastBitmap = BitmapFactory.decodeFile(new File(ApplicationLoader.getFilesDirFixed(), "icthumb.jpg").getAbsolutePath());
                 }
-                this.imageView.setImageBitmap(this.cameraLastBitmap);
-                this.imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                imageView2.setImageBitmap(this.cameraLastBitmap);
+                imageView2.setScaleType(ImageView.ScaleType.FIT_XY);
             } catch (Throwable unused) {
             }
         }

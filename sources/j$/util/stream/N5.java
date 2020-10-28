@@ -1,39 +1,28 @@
 package j$.util.stream;
 
-class N5 extends CLASSNAMEw5 {
-    long b;
-    long c;
-    final /* synthetic */ O5 d;
+import j$.util.Spliterator;
+import j$.util.function.v;
+import java.util.Arrays;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    N5(O5 this$0, G5 downstream) {
-        super(downstream);
-        this.d = this$0;
-        O5 o5 = this.d;
-        this.b = o5.m;
-        long j = o5.n;
-        this.c = j < 0 ? Long.MAX_VALUE : j;
+final class N5 extends Q2 {
+    N5(CLASSNAMEh1 h1Var) {
+        super(h1Var, CLASSNAMEh6.LONG_VALUE, CLASSNAMEg6.v | CLASSNAMEg6.t);
     }
 
-    public void s(long size) {
-        this.a.s(Q5.e(size, this.d.m, this.c));
-    }
-
-    public void accept(double t) {
-        long j = this.b;
-        if (j == 0) {
-            long j2 = this.c;
-            if (j2 > 0) {
-                this.c = j2 - 1;
-                this.a.accept(t);
-                return;
-            }
-            return;
+    public CLASSNAMEl3 D0(CLASSNAMEi4 i4Var, Spliterator spliterator, v vVar) {
+        if (CLASSNAMEg6.SORTED.d(i4Var.r0())) {
+            return i4Var.o0(spliterator, false, vVar);
         }
-        this.b = j - 1;
+        long[] jArr = (long[]) ((CLASSNAMEj3) i4Var.o0(spliterator, true, vVar)).e();
+        Arrays.sort(jArr);
+        return new S3(jArr);
     }
 
-    public boolean u() {
-        return this.c == 0 || this.a.u();
+    public CLASSNAMEt5 G0(int i, CLASSNAMEt5 t5Var) {
+        t5Var.getClass();
+        if (CLASSNAMEg6.SORTED.d(i)) {
+            return t5Var;
+        }
+        return CLASSNAMEg6.SIZED.d(i) ? new S5(t5Var) : new K5(t5Var);
     }
 }

@@ -96,6 +96,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
     };
     int type;
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$TooManyCommunitiesActivity(View view, int i) {
         if (view instanceof GroupCreateUserCell) {
             GroupCreateUserCell groupCreateUserCell = (GroupCreateUserCell) view;
@@ -119,6 +121,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ boolean lambda$new$1$TooManyCommunitiesActivity(View view, int i) {
         this.onItemClickListener.onItemClick(view, i);
         return true;
@@ -264,6 +268,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$2 */
     public /* synthetic */ void lambda$createView$2$TooManyCommunitiesActivity(View view) {
         if (!this.selectedIds.isEmpty()) {
             TLRPC$User user = getMessagesController().getUser(Integer.valueOf(getUserConfig().getClientUserId()));
@@ -338,6 +344,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$loadInactiveChannels$5 */
     public /* synthetic */ void lambda$loadInactiveChannels$5$TooManyCommunitiesActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         String str;
         if (tLRPC$TL_error == null) {
@@ -377,6 +385,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$4 */
     public /* synthetic */ void lambda$null$4$TooManyCommunitiesActivity(ArrayList arrayList, TLRPC$TL_messages_inactiveChats tLRPC$TL_messages_inactiveChats) {
         this.inactiveChatsSignatures.clear();
         this.inactiveChats.clear();
@@ -406,6 +416,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$3 */
     public /* synthetic */ void lambda$null$3$TooManyCommunitiesActivity(ValueAnimator valueAnimator) {
         this.enterProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         int childCount = this.listView.getChildCount();
@@ -513,7 +525,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 r1.<init>(r2, r3, r4, r5, r6)
                 r8 = 54
                 r9.setHeight(r8)
-                r8 = 2131625599(0x7f0e067f, float:1.887841E38)
+                r8 = 2131625627(0x7f0e069b, float:1.8878467E38)
                 java.lang.String r0 = "InactiveChats"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 r9.setText(r8)
@@ -523,7 +535,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 android.content.Context r1 = r8.getContext()
                 r9.<init>(r1)
                 android.content.Context r8 = r8.getContext()
-                r1 = 2131165438(0x7var_fe, float:1.7945093E38)
+                r1 = 2131165446(0x7var_, float:1.794511E38)
                 java.lang.String r2 = "windowBackgroundGrayShadow"
                 android.graphics.drawable.Drawable r8 = org.telegram.ui.ActionBar.Theme.getThemedDrawable((android.content.Context) r8, (int) r1, (java.lang.String) r2)
                 org.telegram.ui.Components.CombinedDrawable r1 = new org.telegram.ui.Components.CombinedDrawable
@@ -546,18 +558,18 @@ public class TooManyCommunitiesActivity extends BaseFragment {
                 org.telegram.ui.TooManyCommunitiesActivity r8 = org.telegram.ui.TooManyCommunitiesActivity.this
                 int r8 = r8.type
                 if (r8 != 0) goto L_0x00a1
-                r8 = 2131627285(0x7f0e0d15, float:1.888183E38)
+                r8 = 2131627396(0x7f0e0d84, float:1.8882055E38)
                 java.lang.String r0 = "TooManyCommunitiesHintJoin"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b6
             L_0x00a1:
                 if (r8 != r0) goto L_0x00ad
-                r8 = 2131627284(0x7f0e0d14, float:1.8881828E38)
+                r8 = 2131627395(0x7f0e0d83, float:1.8882053E38)
                 java.lang.String r0 = "TooManyCommunitiesHintEdit"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
                 goto L_0x00b6
             L_0x00ad:
-                r8 = 2131627283(0x7f0e0d13, float:1.8881826E38)
+                r8 = 2131627394(0x7f0e0d82, float:1.8882051E38)
                 java.lang.String r0 = "TooManyCommunitiesHintCreate"
                 java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r0, r8)
             L_0x00b6:
@@ -677,7 +689,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
             int i = this.lastSearchId + 1;
             this.lastSearchId = i;
             DispatchQueue dispatchQueue = Utilities.searchQueue;
-            $$Lambda$TooManyCommunitiesActivity$SearchAdapter$eIpwWzy4U0BhWnY_eYQGtDTWMw r2 = new Runnable(str, i) {
+            $$Lambda$TooManyCommunitiesActivity$SearchAdapter$NALjgMe5j1stSE7XJm8IHpXBYRk r2 = new Runnable(str, i) {
                 public final /* synthetic */ String f$1;
                 public final /* synthetic */ int f$2;
 
@@ -695,7 +707,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         }
 
         /* renamed from: processSearch */
-        public void lambda$search$0$TooManyCommunitiesActivity$SearchAdapter(String str, int i) {
+        public void lambda$search$0(String str, int i) {
             Utilities.searchQueue.postRunnable(new Runnable(str, i) {
                 public final /* synthetic */ String f$1;
                 public final /* synthetic */ int f$2;
@@ -711,6 +723,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
             });
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$processSearch$1 */
         public /* synthetic */ void lambda$processSearch$1$TooManyCommunitiesActivity$SearchAdapter(String str, int i) {
             int i2 = i;
             String lowerCase = str.trim().toLowerCase();
@@ -787,6 +801,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
             });
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$updateSearchResults$2 */
         public /* synthetic */ void lambda$updateSearchResults$2$TooManyCommunitiesActivity$SearchAdapter(int i, ArrayList arrayList, ArrayList arrayList2) {
             if (i == this.lastSearchId) {
                 this.searchResults.clear();
@@ -807,7 +823,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$TooManyCommunitiesActivity$FGp8uylO0OvTiIgJwTyVSKzRdtQ r10 = new ThemeDescription.ThemeDescriptionDelegate() {
+        $$Lambda$TooManyCommunitiesActivity$Pl18edBo1WNKDP94DRDqgOgQpuk r10 = new ThemeDescription.ThemeDescriptionDelegate() {
             public final void didSetColor() {
                 TooManyCommunitiesActivity.this.lambda$getThemeDescriptions$6$TooManyCommunitiesActivity();
             }
@@ -841,7 +857,7 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         arrayList.add(new ThemeDescription((View) this.searchListView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{GroupCreateUserCell.class}, new String[]{"nameTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
         arrayList.add(new ThemeDescription((View) this.searchListView, ThemeDescription.FLAG_TEXTCOLOR | ThemeDescription.FLAG_CHECKTAG, new Class[]{GroupCreateUserCell.class}, new String[]{"statusTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteGrayText"));
         arrayList.add(new ThemeDescription(this.searchListView, 0, new Class[]{GroupCreateUserCell.class}, (Paint) null, Theme.avatarDrawables, (ThemeDescription.ThemeDescriptionDelegate) null, "avatar_text"));
-        $$Lambda$TooManyCommunitiesActivity$FGp8uylO0OvTiIgJwTyVSKzRdtQ r8 = r10;
+        $$Lambda$TooManyCommunitiesActivity$Pl18edBo1WNKDP94DRDqgOgQpuk r8 = r10;
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundRed"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundOrange"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "avatar_backgroundViolet"));
@@ -857,6 +873,8 @@ public class TooManyCommunitiesActivity extends BaseFragment {
         return arrayList;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$getThemeDescriptions$6 */
     public /* synthetic */ void lambda$getThemeDescriptions$6$TooManyCommunitiesActivity() {
         RecyclerListView recyclerListView = this.listView;
         if (recyclerListView != null) {

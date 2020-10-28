@@ -292,6 +292,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         this.blurBehindDrawable = new BlurBehindDrawable(this.parentView, this);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
     public /* synthetic */ boolean lambda$new$0$InstantCameraView(View view, MotionEvent motionEvent) {
         ChatActivity chatActivity;
         if (motionEvent.getAction() == 0 && (chatActivity = this.baseFragment) != null) {
@@ -343,6 +345,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         return true;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$1 */
     public /* synthetic */ void lambda$new$1$InstantCameraView(View view) {
         CameraSession cameraSession2;
         if (this.cameraReady && (cameraSession2 = this.cameraSession) != null && cameraSession2.isInitied() && this.cameraThread != null) {
@@ -503,7 +507,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             this.key = null;
             this.iv = null;
             if (initCamera()) {
-                MediaController.getInstance().lambda$startAudioAgain$7$MediaController(MediaController.getInstance().getPlayingMessageObject());
+                MediaController.getInstance().lambda$startAudioAgain$7(MediaController.getInstance().getPlayingMessageObject());
                 File directory = FileLoader.getDirectory(4);
                 this.cameraFile = new File(directory, SharedConfig.getLastLocalId() + ".mp4");
                 SharedConfig.saveConfig();
@@ -656,6 +660,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         this.animatorSet.start();
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$startAnimation$2 */
     public /* synthetic */ void lambda$startAnimation$2$InstantCameraView(ValueAnimator valueAnimator) {
         this.animationTranslationY = (((float) getMeasuredHeight()) / 2.0f) * ((Float) valueAnimator.getAnimatedValue()).floatValue();
         updateTranslationY();
@@ -705,46 +711,45 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     this.key = null;
                     this.iv = null;
                     VideoEditedInfo videoEditedInfo2 = this.videoEditedInfo;
-                    double d = (double) videoEditedInfo2.estimatedDuration;
-                    long j = videoEditedInfo2.startTime;
-                    if (j < 0) {
-                        j = 0;
-                    }
-                    VideoEditedInfo videoEditedInfo3 = this.videoEditedInfo;
-                    long j2 = videoEditedInfo3.endTime;
+                    long j = videoEditedInfo2.estimatedDuration;
+                    double d = (double) j;
+                    long j2 = videoEditedInfo2.startTime;
+                    long j3 = j;
                     if (j2 < 0) {
-                        j2 = videoEditedInfo3.estimatedDuration;
+                        j2 = 0;
                     }
-                    VideoEditedInfo videoEditedInfo4 = this.videoEditedInfo;
-                    long j3 = j2 - j;
-                    videoEditedInfo4.estimatedDuration = j3;
+                    long j4 = videoEditedInfo2.endTime;
+                    long j5 = (j4 >= 0 ? j4 : j3) - j2;
+                    videoEditedInfo2.estimatedDuration = j5;
                     double d2 = (double) this.size;
-                    double d3 = (double) j3;
+                    double d3 = (double) j5;
                     Double.isNaN(d3);
                     Double.isNaN(d);
                     Double.isNaN(d2);
-                    videoEditedInfo4.estimatedSize = Math.max(1, (long) (d2 * (d3 / d)));
-                    VideoEditedInfo videoEditedInfo5 = this.videoEditedInfo;
-                    videoEditedInfo5.bitrate = 400000;
-                    long j4 = videoEditedInfo5.startTime;
-                    if (j4 > 0) {
-                        videoEditedInfo5.startTime = j4 * 1000;
+                    videoEditedInfo2.estimatedSize = Math.max(1, (long) (d2 * (d3 / d)));
+                    VideoEditedInfo videoEditedInfo3 = this.videoEditedInfo;
+                    videoEditedInfo3.bitrate = 400000;
+                    long j6 = videoEditedInfo3.startTime;
+                    if (j6 > 0) {
+                        videoEditedInfo3.startTime = j6 * 1000;
                     }
-                    VideoEditedInfo videoEditedInfo6 = this.videoEditedInfo;
-                    long j5 = videoEditedInfo6.endTime;
-                    if (j5 > 0) {
-                        videoEditedInfo6.endTime = j5 * 1000;
+                    long j7 = videoEditedInfo3.endTime;
+                    if (j7 > 0) {
+                        videoEditedInfo3.endTime = j7 * 1000;
                     }
                     FileLoader.getInstance(this.currentAccount).cancelUploadFile(this.cameraFile.getAbsolutePath(), false);
                 } else {
                     this.videoEditedInfo.estimatedSize = Math.max(1, this.size);
                 }
-                VideoEditedInfo videoEditedInfo7 = this.videoEditedInfo;
-                videoEditedInfo7.file = this.file;
-                videoEditedInfo7.encryptedFile = this.encryptedFile;
-                videoEditedInfo7.key = this.key;
-                videoEditedInfo7.iv = this.iv;
-                this.baseFragment.sendMedia(new MediaController.PhotoEntry(0, 0, 0, this.cameraFile.getAbsolutePath(), 0, true, 0, 0, 0), this.videoEditedInfo, z, i4);
+                VideoEditedInfo videoEditedInfo4 = this.videoEditedInfo;
+                videoEditedInfo4.file = this.file;
+                videoEditedInfo4.encryptedFile = this.encryptedFile;
+                videoEditedInfo4.key = this.key;
+                videoEditedInfo4.iv = this.iv;
+                ChatActivity chatActivity = this.baseFragment;
+                MediaController.PhotoEntry photoEntry = r3;
+                MediaController.PhotoEntry photoEntry2 = new MediaController.PhotoEntry(0, 0, 0, this.cameraFile.getAbsolutePath(), 0, true, 0, 0, 0);
+                chatActivity.sendMedia(photoEntry, this.videoEditedInfo, z, i4);
                 if (i4 != 0) {
                     startAnimation(false);
                 }
@@ -974,6 +979,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createCamera$5 */
     public /* synthetic */ void lambda$createCamera$5$InstantCameraView(SurfaceTexture surfaceTexture) {
         if (this.cameraThread != null) {
             if (BuildVars.LOGS_ENABLED) {
@@ -995,6 +1002,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$3 */
     public /* synthetic */ void lambda$null$3$InstantCameraView() {
         if (this.cameraSession != null) {
             if (BuildVars.LOGS_ENABLED) {
@@ -1004,6 +1013,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$4 */
     public /* synthetic */ void lambda$null$4$InstantCameraView() {
         this.cameraThread.setCurrentSession(this.cameraSession);
     }
@@ -1047,6 +1058,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 });
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$run$0 */
             public /* synthetic */ void lambda$run$0$InstantCameraView$9() {
                 try {
                     if (InstantCameraView.this.videoPlayer != null && InstantCameraView.this.videoEditedInfo != null) {
@@ -1273,6 +1286,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$initGL$0 */
         public /* synthetic */ void lambda$initGL$0$InstantCameraView$CameraGLThread(SurfaceTexture surfaceTexture2) {
             requestRender();
         }
@@ -1428,6 +1443,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             }
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$handleMessage$1 */
         public /* synthetic */ void lambda$handleMessage$1$InstantCameraView$CameraGLThread(SurfaceTexture surfaceTexture2) {
             requestRender();
         }
@@ -1674,7 +1691,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         r2 = 4611686018427387904(0xNUM, double:2.0)
                         double r13 = r13 / r2
                         double r2 = java.lang.Math.sqrt(r13)
-                        org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$1$KPZE6szM9PcDS6RXSdiCNzgniow r13 = new org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$1$KPZE6szM9PcDS6RXSdiCNzgniow
+                        org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$1$0A-xB0_yK9NaSCmdGo6Fumsv9B4 r13 = new org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$1$0A-xB0_yK9NaSCmdGo6Fumsv9B4
                         r13.<init>(r1, r2)
                         org.telegram.messenger.AndroidUtilities.runOnUIThread(r13)
                         r11.position(r4)
@@ -1761,6 +1778,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InstantCameraView.VideoRecorder.AnonymousClass1.run():void");
                 }
 
+                /* access modifiers changed from: private */
+                /* renamed from: lambda$run$0 */
                 public /* synthetic */ void lambda$run$0$InstantCameraView$VideoRecorder$1(double d) {
                     NotificationCenter.getInstance(InstantCameraView.this.currentAccount).postNotificationName(NotificationCenter.recordProgressChanged, Integer.valueOf(InstantCameraView.this.recordingGuid), Double.valueOf(d));
                 }
@@ -1970,7 +1989,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
 
         /* access modifiers changed from: private */
         /* JADX WARNING: Removed duplicated region for block: B:31:0x00c8  */
-        /* JADX WARNING: Removed duplicated region for block: B:98:0x00fb A[EDGE_INSN: B:98:0x00fb->B:38:0x00fb ?: BREAK  , SYNTHETIC] */
+        /* JADX WARNING: Removed duplicated region for block: B:97:0x00fb A[EDGE_INSN: B:97:0x00fb->B:38:0x00fb ?: BREAK  , SYNTHETIC] */
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void handleAudioFrameAvailable(org.telegram.ui.Components.InstantCameraView.AudioBufferInfo r17) {
             /*
@@ -2126,150 +2145,148 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             L_0x0123:
                 r0 = 0
             L_0x0124:
-                if (r2 == 0) goto L_0x0210
-                android.media.MediaCodec r3 = r1.audioEncoder     // Catch:{ all -> 0x020c }
+                if (r2 == 0) goto L_0x020c
+                android.media.MediaCodec r3 = r1.audioEncoder     // Catch:{ all -> 0x0208 }
                 r4 = 0
-                int r10 = r3.dequeueInputBuffer(r4)     // Catch:{ all -> 0x020c }
-                if (r10 < 0) goto L_0x0206
-                int r3 = android.os.Build.VERSION.SDK_INT     // Catch:{ all -> 0x020c }
+                int r10 = r3.dequeueInputBuffer(r4)     // Catch:{ all -> 0x0208 }
+                if (r10 < 0) goto L_0x0202
+                int r3 = android.os.Build.VERSION.SDK_INT     // Catch:{ all -> 0x0208 }
                 r6 = 21
                 if (r3 < r6) goto L_0x013d
-                android.media.MediaCodec r3 = r1.audioEncoder     // Catch:{ all -> 0x020c }
-                java.nio.ByteBuffer r3 = r3.getInputBuffer(r10)     // Catch:{ all -> 0x020c }
+                android.media.MediaCodec r3 = r1.audioEncoder     // Catch:{ all -> 0x0208 }
+                java.nio.ByteBuffer r3 = r3.getInputBuffer(r10)     // Catch:{ all -> 0x0208 }
                 goto L_0x0148
             L_0x013d:
-                android.media.MediaCodec r3 = r1.audioEncoder     // Catch:{ all -> 0x020c }
-                java.nio.ByteBuffer[] r3 = r3.getInputBuffers()     // Catch:{ all -> 0x020c }
-                r3 = r3[r10]     // Catch:{ all -> 0x020c }
-                r3.clear()     // Catch:{ all -> 0x020c }
+                android.media.MediaCodec r3 = r1.audioEncoder     // Catch:{ all -> 0x0208 }
+                java.nio.ByteBuffer[] r3 = r3.getInputBuffers()     // Catch:{ all -> 0x0208 }
+                r3 = r3[r10]     // Catch:{ all -> 0x0208 }
+                r3.clear()     // Catch:{ all -> 0x0208 }
             L_0x0148:
-                long[] r6 = r2.offset     // Catch:{ all -> 0x020c }
-                int r9 = r2.lastWroteBuffer     // Catch:{ all -> 0x020c }
-                r11 = r6[r9]     // Catch:{ all -> 0x020c }
-                int r6 = r2.lastWroteBuffer     // Catch:{ all -> 0x020c }
-            L_0x0150:
-                int r9 = r2.results     // Catch:{ all -> 0x020c }
+                long[] r6 = r2.offset     // Catch:{ all -> 0x0208 }
+                int r9 = r2.lastWroteBuffer     // Catch:{ all -> 0x0208 }
+                r11 = r6[r9]     // Catch:{ all -> 0x0208 }
+            L_0x014e:
+                int r6 = r2.results     // Catch:{ all -> 0x0208 }
                 r13 = 0
-                if (r6 > r9) goto L_0x01e4
-                int r9 = r2.results     // Catch:{ all -> 0x020c }
-                if (r6 >= r9) goto L_0x01b0
-                boolean r9 = r1.running     // Catch:{ all -> 0x020c }
-                if (r9 != 0) goto L_0x019b
-                long[] r9 = r2.offset     // Catch:{ all -> 0x020c }
-                r14 = r9[r6]     // Catch:{ all -> 0x020c }
-                long r4 = r1.videoLast     // Catch:{ all -> 0x020c }
-                long r7 = r1.desyncTime     // Catch:{ all -> 0x020c }
+                if (r9 > r6) goto L_0x01e0
+                if (r9 >= r6) goto L_0x01ac
+                boolean r6 = r1.running     // Catch:{ all -> 0x0208 }
+                if (r6 != 0) goto L_0x0197
+                long[] r6 = r2.offset     // Catch:{ all -> 0x0208 }
+                r14 = r6[r9]     // Catch:{ all -> 0x0208 }
+                long r4 = r1.videoLast     // Catch:{ all -> 0x0208 }
+                long r7 = r1.desyncTime     // Catch:{ all -> 0x0208 }
                 long r4 = r4 - r7
                 int r7 = (r14 > r4 ? 1 : (r14 == r4 ? 0 : -1))
-                if (r7 < 0) goto L_0x019b
-                boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ all -> 0x020c }
-                if (r0 == 0) goto L_0x0190
-                java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ all -> 0x020c }
-                r0.<init>()     // Catch:{ all -> 0x020c }
+                if (r7 < 0) goto L_0x0197
+                boolean r0 = org.telegram.messenger.BuildVars.LOGS_ENABLED     // Catch:{ all -> 0x0208 }
+                if (r0 == 0) goto L_0x018c
+                java.lang.StringBuilder r0 = new java.lang.StringBuilder     // Catch:{ all -> 0x0208 }
+                r0.<init>()     // Catch:{ all -> 0x0208 }
                 java.lang.String r4 = "stop audio encoding because of stoped video recording at "
-                r0.append(r4)     // Catch:{ all -> 0x020c }
-                long[] r2 = r2.offset     // Catch:{ all -> 0x020c }
-                r4 = r2[r6]     // Catch:{ all -> 0x020c }
-                r0.append(r4)     // Catch:{ all -> 0x020c }
+                r0.append(r4)     // Catch:{ all -> 0x0208 }
+                long[] r2 = r2.offset     // Catch:{ all -> 0x0208 }
+                r4 = r2[r9]     // Catch:{ all -> 0x0208 }
+                r0.append(r4)     // Catch:{ all -> 0x0208 }
                 java.lang.String r2 = " last video "
-                r0.append(r2)     // Catch:{ all -> 0x020c }
-                long r4 = r1.videoLast     // Catch:{ all -> 0x020c }
-                r0.append(r4)     // Catch:{ all -> 0x020c }
-                java.lang.String r0 = r0.toString()     // Catch:{ all -> 0x020c }
-                org.telegram.messenger.FileLog.d(r0)     // Catch:{ all -> 0x020c }
-            L_0x0190:
+                r0.append(r2)     // Catch:{ all -> 0x0208 }
+                long r4 = r1.videoLast     // Catch:{ all -> 0x0208 }
+                r0.append(r4)     // Catch:{ all -> 0x0208 }
+                java.lang.String r0 = r0.toString()     // Catch:{ all -> 0x0208 }
+                org.telegram.messenger.FileLog.d(r0)     // Catch:{ all -> 0x0208 }
+            L_0x018c:
                 r2 = 1
-                r1.audioStopedByTime = r2     // Catch:{ all -> 0x020c }
-                java.util.ArrayList<org.telegram.ui.Components.InstantCameraView$AudioBufferInfo> r0 = r1.buffersToWrite     // Catch:{ all -> 0x020c }
-                r0.clear()     // Catch:{ all -> 0x020c }
+                r1.audioStopedByTime = r2     // Catch:{ all -> 0x0208 }
+                java.util.ArrayList<org.telegram.ui.Components.InstantCameraView$AudioBufferInfo> r0 = r1.buffersToWrite     // Catch:{ all -> 0x0208 }
+                r0.clear()     // Catch:{ all -> 0x0208 }
                 r2 = r13
                 r0 = 1
-                goto L_0x01e4
-            L_0x019b:
-                int r4 = r3.remaining()     // Catch:{ all -> 0x020c }
-                int[] r5 = r2.read     // Catch:{ all -> 0x020c }
-                r5 = r5[r6]     // Catch:{ all -> 0x020c }
-                if (r4 >= r5) goto L_0x01a9
-                r2.lastWroteBuffer = r6     // Catch:{ all -> 0x020c }
+                goto L_0x01e0
+            L_0x0197:
+                int r4 = r3.remaining()     // Catch:{ all -> 0x0208 }
+                int[] r5 = r2.read     // Catch:{ all -> 0x0208 }
+                r5 = r5[r9]     // Catch:{ all -> 0x0208 }
+                if (r4 >= r5) goto L_0x01a5
+                r2.lastWroteBuffer = r9     // Catch:{ all -> 0x0208 }
                 r2 = r13
-                goto L_0x01e4
-            L_0x01a9:
-                java.nio.ByteBuffer[] r4 = r2.buffer     // Catch:{ all -> 0x020c }
-                r4 = r4[r6]     // Catch:{ all -> 0x020c }
-                r3.put(r4)     // Catch:{ all -> 0x020c }
-            L_0x01b0:
-                int r4 = r2.results     // Catch:{ all -> 0x020c }
+                goto L_0x01e0
+            L_0x01a5:
+                java.nio.ByteBuffer[] r4 = r2.buffer     // Catch:{ all -> 0x0208 }
+                r4 = r4[r9]     // Catch:{ all -> 0x0208 }
+                r3.put(r4)     // Catch:{ all -> 0x0208 }
+            L_0x01ac:
+                int r4 = r2.results     // Catch:{ all -> 0x0208 }
                 r5 = 1
                 int r4 = r4 - r5
-                if (r6 < r4) goto L_0x01db
-                java.util.ArrayList<org.telegram.ui.Components.InstantCameraView$AudioBufferInfo> r4 = r1.buffersToWrite     // Catch:{ all -> 0x020c }
-                r4.remove(r2)     // Catch:{ all -> 0x020c }
-                boolean r4 = r1.running     // Catch:{ all -> 0x020c }
-                if (r4 == 0) goto L_0x01c4
-                java.util.concurrent.ArrayBlockingQueue<org.telegram.ui.Components.InstantCameraView$AudioBufferInfo> r4 = r1.buffers     // Catch:{ all -> 0x020c }
-                r4.put(r2)     // Catch:{ all -> 0x020c }
-            L_0x01c4:
-                java.util.ArrayList<org.telegram.ui.Components.InstantCameraView$AudioBufferInfo> r4 = r1.buffersToWrite     // Catch:{ all -> 0x020c }
-                boolean r4 = r4.isEmpty()     // Catch:{ all -> 0x020c }
-                if (r4 != 0) goto L_0x01d6
-                java.util.ArrayList<org.telegram.ui.Components.InstantCameraView$AudioBufferInfo> r2 = r1.buffersToWrite     // Catch:{ all -> 0x020c }
+                if (r9 < r4) goto L_0x01d7
+                java.util.ArrayList<org.telegram.ui.Components.InstantCameraView$AudioBufferInfo> r4 = r1.buffersToWrite     // Catch:{ all -> 0x0208 }
+                r4.remove(r2)     // Catch:{ all -> 0x0208 }
+                boolean r4 = r1.running     // Catch:{ all -> 0x0208 }
+                if (r4 == 0) goto L_0x01c0
+                java.util.concurrent.ArrayBlockingQueue<org.telegram.ui.Components.InstantCameraView$AudioBufferInfo> r4 = r1.buffers     // Catch:{ all -> 0x0208 }
+                r4.put(r2)     // Catch:{ all -> 0x0208 }
+            L_0x01c0:
+                java.util.ArrayList<org.telegram.ui.Components.InstantCameraView$AudioBufferInfo> r4 = r1.buffersToWrite     // Catch:{ all -> 0x0208 }
+                boolean r4 = r4.isEmpty()     // Catch:{ all -> 0x0208 }
+                if (r4 != 0) goto L_0x01d2
+                java.util.ArrayList<org.telegram.ui.Components.InstantCameraView$AudioBufferInfo> r2 = r1.buffersToWrite     // Catch:{ all -> 0x0208 }
                 r4 = 0
-                java.lang.Object r2 = r2.get(r4)     // Catch:{ all -> 0x020c }
-                org.telegram.ui.Components.InstantCameraView$AudioBufferInfo r2 = (org.telegram.ui.Components.InstantCameraView.AudioBufferInfo) r2     // Catch:{ all -> 0x020c }
-                goto L_0x01dc
-            L_0x01d6:
+                java.lang.Object r2 = r2.get(r4)     // Catch:{ all -> 0x0208 }
+                org.telegram.ui.Components.InstantCameraView$AudioBufferInfo r2 = (org.telegram.ui.Components.InstantCameraView.AudioBufferInfo) r2     // Catch:{ all -> 0x0208 }
+                goto L_0x01d8
+            L_0x01d2:
                 r4 = 0
-                boolean r0 = r2.last     // Catch:{ all -> 0x020c }
+                boolean r0 = r2.last     // Catch:{ all -> 0x0208 }
                 r2 = r13
-                goto L_0x01e6
-            L_0x01db:
+                goto L_0x01e2
+            L_0x01d7:
                 r4 = 0
-            L_0x01dc:
-                int r6 = r6 + 1
+            L_0x01d8:
+                int r9 = r9 + 1
                 r4 = 0
                 r7 = 0
                 r8 = 1
-                goto L_0x0150
-            L_0x01e4:
+                goto L_0x014e
+            L_0x01e0:
                 r4 = 0
                 r5 = 1
-            L_0x01e6:
-                android.media.MediaCodec r9 = r1.audioEncoder     // Catch:{ all -> 0x020c }
+            L_0x01e2:
+                android.media.MediaCodec r9 = r1.audioEncoder     // Catch:{ all -> 0x0208 }
                 r6 = 0
-                int r3 = r3.position()     // Catch:{ all -> 0x020c }
+                int r3 = r3.position()     // Catch:{ all -> 0x0208 }
                 r7 = 0
                 int r13 = (r11 > r7 ? 1 : (r11 == r7 ? 0 : -1))
-                if (r13 != 0) goto L_0x01f5
-            L_0x01f3:
+                if (r13 != 0) goto L_0x01f1
+            L_0x01ef:
                 r13 = r7
-                goto L_0x01fa
-            L_0x01f5:
-                long r7 = r1.audioStartTime     // Catch:{ all -> 0x020c }
+                goto L_0x01f6
+            L_0x01f1:
+                long r7 = r1.audioStartTime     // Catch:{ all -> 0x0208 }
                 long r7 = r11 - r7
-                goto L_0x01f3
-            L_0x01fa:
-                if (r0 == 0) goto L_0x01ff
+                goto L_0x01ef
+            L_0x01f6:
+                if (r0 == 0) goto L_0x01fb
                 r7 = 4
                 r15 = 4
-                goto L_0x0200
-            L_0x01ff:
+                goto L_0x01fc
+            L_0x01fb:
                 r15 = 0
-            L_0x0200:
+            L_0x01fc:
                 r11 = r6
                 r12 = r3
-                r9.queueInputBuffer(r10, r11, r12, r13, r15)     // Catch:{ all -> 0x020c }
-                goto L_0x0208
-            L_0x0206:
+                r9.queueInputBuffer(r10, r11, r12, r13, r15)     // Catch:{ all -> 0x0208 }
+                goto L_0x0204
+            L_0x0202:
                 r4 = 0
                 r5 = 1
-            L_0x0208:
+            L_0x0204:
                 r7 = 0
                 r8 = 1
                 goto L_0x0124
-            L_0x020c:
+            L_0x0208:
                 r0 = move-exception
                 org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-            L_0x0210:
+            L_0x020c:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InstantCameraView.VideoRecorder.handleAudioFrameAvailable(org.telegram.ui.Components.InstantCameraView$AudioBufferInfo):void");
@@ -2486,7 +2503,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 if (r0 != 0) goto L_0x01da
                 org.telegram.ui.Components.InstantCameraView r0 = org.telegram.ui.Components.InstantCameraView.this
                 boolean unused = r0.cameraReady = r4
-                org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$ONc2-IZzZjKNnbhigUCIh3I7vt4 r0 = new org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$ONc2-IZzZjKNnbhigUCIh3I7vt4
+                org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$zKSWXu_h6ZQT19I2mxyRHkkZQZU r0 = new org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$zKSWXu_h6ZQT19I2mxyRHkkZQZU
                 r0.<init>()
                 org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
                 goto L_0x01da
@@ -2496,7 +2513,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 if (r0 != 0) goto L_0x01da
                 org.telegram.ui.Components.InstantCameraView r0 = org.telegram.ui.Components.InstantCameraView.this
                 boolean unused = r0.cameraReady = r4
-                org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$cj_4IZt_HllVK7x5iDyMvDcfDnc r0 = new org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$cj_4IZt_HllVK7x5iDyMvDcfDnc
+                org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$YV04Svi203GpDpRcdqeqrWPVGzE r0 = new org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$YV04Svi203GpDpRcdqeqrWPVGzE
                 r0.<init>()
                 org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
             L_0x01da:
@@ -2505,10 +2522,14 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InstantCameraView.VideoRecorder.handleVideoFrameAvailable(long, java.lang.Integer):void");
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$handleVideoFrameAvailable$0 */
         public /* synthetic */ void lambda$handleVideoFrameAvailable$0$InstantCameraView$VideoRecorder() {
             InstantCameraView.this.textureOverlayView.animate().setDuration(120).alpha(0.0f).setInterpolator(new DecelerateInterpolator()).start();
         }
 
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$handleVideoFrameAvailable$1 */
         public /* synthetic */ void lambda$handleVideoFrameAvailable$1$InstantCameraView$VideoRecorder() {
             InstantCameraView.this.textureOverlayView.animate().setDuration(120).alpha(0.0f).setInterpolator(new DecelerateInterpolator()).start();
         }
@@ -2529,14 +2550,14 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     AndroidUtilities.runOnUIThread(
                     /*  JADX ERROR: Method code generation error
                         jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x001d: INVOKE  
-                          (wrap: org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$xGQJp5d6DO4uze38119mIkTi7zA : 0x001a: CONSTRUCTOR  (r1v2 org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$xGQJp5d6DO4uze38119mIkTi7zA) = 
+                          (wrap: org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$y72Hm_WB3v_x3Xx1YMUxqgrt9ZA : 0x001a: CONSTRUCTOR  (r1v2 org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$y72Hm_WB3v_x3Xx1YMUxqgrt9ZA) = 
                           (r3v0 'this' org.telegram.ui.Components.InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask A[THIS])
                           (wrap: android.graphics.Bitmap : 0x0014: INVOKE  (r0v3 android.graphics.Bitmap) = 
                           (r0v2 'access$3400' android.view.TextureView)
                           (wrap: int : 0x000c: INVOKE  (r2v0 int) = (56.0f float) org.telegram.messenger.AndroidUtilities.dp(float):int type: STATIC)
                           (wrap: int : 0x0010: INVOKE  (r1v1 int) = (56.0f float) org.telegram.messenger.AndroidUtilities.dp(float):int type: STATIC)
                          android.view.TextureView.getBitmap(int, int):android.graphics.Bitmap type: VIRTUAL)
-                         call: org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$xGQJp5d6DO4uze38119mIkTi7zA.<init>(org.telegram.ui.Components.InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask, android.graphics.Bitmap):void type: CONSTRUCTOR)
+                         call: org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$y72Hm_WB3v_x3Xx1YMUxqgrt9ZA.<init>(org.telegram.ui.Components.InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask, android.graphics.Bitmap):void type: CONSTRUCTOR)
                          org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Components.InstantCameraView.VideoRecorder.GenerateKeyframeThumbTask.run():void, dex: classes3.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
@@ -2605,14 +2626,14 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
                         	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
                         	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
-                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x001a: CONSTRUCTOR  (r1v2 org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$xGQJp5d6DO4uze38119mIkTi7zA) = 
+                        Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x001a: CONSTRUCTOR  (r1v2 org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$y72Hm_WB3v_x3Xx1YMUxqgrt9ZA) = 
                           (r3v0 'this' org.telegram.ui.Components.InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask A[THIS])
                           (wrap: android.graphics.Bitmap : 0x0014: INVOKE  (r0v3 android.graphics.Bitmap) = 
                           (r0v2 'access$3400' android.view.TextureView)
                           (wrap: int : 0x000c: INVOKE  (r2v0 int) = (56.0f float) org.telegram.messenger.AndroidUtilities.dp(float):int type: STATIC)
                           (wrap: int : 0x0010: INVOKE  (r1v1 int) = (56.0f float) org.telegram.messenger.AndroidUtilities.dp(float):int type: STATIC)
                          android.view.TextureView.getBitmap(int, int):android.graphics.Bitmap type: VIRTUAL)
-                         call: org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$xGQJp5d6DO4uze38119mIkTi7zA.<init>(org.telegram.ui.Components.InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask, android.graphics.Bitmap):void type: CONSTRUCTOR in method: org.telegram.ui.Components.InstantCameraView.VideoRecorder.GenerateKeyframeThumbTask.run():void, dex: classes3.dex
+                         call: org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$y72Hm_WB3v_x3Xx1YMUxqgrt9ZA.<init>(org.telegram.ui.Components.InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask, android.graphics.Bitmap):void type: CONSTRUCTOR in method: org.telegram.ui.Components.InstantCameraView.VideoRecorder.GenerateKeyframeThumbTask.run():void, dex: classes3.dex
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
                         	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
                         	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
@@ -2621,7 +2642,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
                         	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
                         	... 66 more
-                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$xGQJp5d6DO4uze38119mIkTi7zA, state: NOT_LOADED
+                        Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$y72Hm_WB3v_x3Xx1YMUxqgrt9ZA, state: NOT_LOADED
                         	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
                         	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
                         	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
@@ -2638,7 +2659,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                         int r2 = org.telegram.messenger.AndroidUtilities.dp(r1)
                         int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
                         android.graphics.Bitmap r0 = r0.getBitmap(r2, r1)
-                        org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$xGQJp5d6DO4uze38119mIkTi7zA r1 = new org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$xGQJp5d6DO4uze38119mIkTi7zA
+                        org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$y72Hm_WB3v_x3Xx1YMUxqgrt9ZA r1 = new org.telegram.ui.Components.-$$Lambda$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask$y72Hm_WB3v_x3Xx1YMUxqgrt9ZA
                         r1.<init>(r3, r0)
                         org.telegram.messenger.AndroidUtilities.runOnUIThread(r1)
                     L_0x0020:
@@ -2647,6 +2668,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.InstantCameraView.VideoRecorder.GenerateKeyframeThumbTask.run():void");
                 }
 
+                /* access modifiers changed from: private */
+                /* renamed from: lambda$run$0 */
                 public /* synthetic */ void lambda$run$0$InstantCameraView$VideoRecorder$GenerateKeyframeThumbTask(Bitmap bitmap) {
                     if ((bitmap == null || bitmap.getPixel(0, 0) == 0) && VideoRecorder.this.keyframeThumbs.size() > 1) {
                         VideoRecorder.this.keyframeThumbs.add(VideoRecorder.this.keyframeThumbs.get(VideoRecorder.this.keyframeThumbs.size() - 1));
@@ -2739,6 +2762,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 this.handler.exit();
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$handleStopRecording$4 */
             public /* synthetic */ void lambda$handleStopRecording$4$InstantCameraView$VideoRecorder(int i) {
                 VideoEditedInfo unused = InstantCameraView.this.videoEditedInfo = new VideoEditedInfo();
                 InstantCameraView.this.videoEditedInfo.roundVideo = true;
@@ -2832,11 +2857,15 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 MediaController.getInstance().requestAudioFocus(false);
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$null$2 */
             public /* synthetic */ void lambda$null$2$InstantCameraView$VideoRecorder(boolean z, int i) {
                 InstantCameraView.this.baseFragment.sendMedia(new MediaController.PhotoEntry(0, 0, 0, this.videoFile.getAbsolutePath(), 0, true, 0, 0, 0), InstantCameraView.this.videoEditedInfo, z, i);
                 InstantCameraView.this.startAnimation(false);
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$null$3 */
             public /* synthetic */ void lambda$null$3$InstantCameraView$VideoRecorder() {
                 InstantCameraView.this.startAnimation(false);
             }
@@ -2967,6 +2996,8 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 }
             }
 
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$prepareEncoder$5 */
             public /* synthetic */ void lambda$prepareEncoder$5$InstantCameraView$VideoRecorder() {
                 if (!InstantCameraView.this.cancelled) {
                     try {
@@ -3012,65 +3043,65 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                 ByteBuffer byteBuffer2;
                 ByteBuffer byteBuffer3;
                 ByteBuffer byteBuffer4;
+                int i = Build.VERSION.SDK_INT;
                 if (z) {
                     this.videoEncoder.signalEndOfInputStream();
                 }
-                int i = 21;
-                ByteBuffer[] outputBuffers = Build.VERSION.SDK_INT < 21 ? this.videoEncoder.getOutputBuffers() : null;
+                int i2 = 21;
+                ByteBuffer[] outputBuffers = i < 21 ? this.videoEncoder.getOutputBuffers() : null;
                 while (true) {
                     int dequeueOutputBuffer = this.videoEncoder.dequeueOutputBuffer(this.videoBufferInfo, 10000);
-                    byte b = 1;
                     if (dequeueOutputBuffer == -1) {
                         if (!z) {
                             break;
                         }
-                    } else if (dequeueOutputBuffer == -3) {
-                        if (Build.VERSION.SDK_INT < i) {
-                            outputBuffers = this.videoEncoder.getOutputBuffers();
-                        }
-                    } else if (dequeueOutputBuffer == -2) {
-                        MediaFormat outputFormat = this.videoEncoder.getOutputFormat();
-                        if (this.videoTrackIndex == -5) {
-                            this.videoTrackIndex = this.mediaMuxer.addTrack(outputFormat, false);
-                            if (outputFormat.containsKey("prepend-sps-pps-to-idr-frames") && outputFormat.getInteger("prepend-sps-pps-to-idr-frames") == 1) {
-                                this.prependHeaderSize = outputFormat.getByteBuffer("csd-0").limit() + outputFormat.getByteBuffer("csd-1").limit();
+                        i2 = 21;
+                    } else {
+                        if (dequeueOutputBuffer == -3) {
+                            if (i < i2) {
+                                outputBuffers = this.videoEncoder.getOutputBuffers();
                             }
-                        }
-                    } else if (dequeueOutputBuffer >= 0) {
-                        if (Build.VERSION.SDK_INT < i) {
-                            byteBuffer2 = outputBuffers[dequeueOutputBuffer];
-                        } else {
-                            byteBuffer2 = this.videoEncoder.getOutputBuffer(dequeueOutputBuffer);
-                        }
-                        if (byteBuffer2 != null) {
-                            MediaCodec.BufferInfo bufferInfo = this.videoBufferInfo;
-                            int i2 = bufferInfo.size;
-                            if (i2 > 1) {
-                                int i3 = bufferInfo.flags;
-                                if ((i3 & 2) == 0) {
-                                    int i4 = this.prependHeaderSize;
-                                    if (!(i4 == 0 || (i3 & 1) == 0)) {
-                                        bufferInfo.offset += i4;
-                                        bufferInfo.size = i2 - i4;
-                                    }
-                                    if (this.firstEncode) {
-                                        MediaCodec.BufferInfo bufferInfo2 = this.videoBufferInfo;
-                                        if ((bufferInfo2.flags & 1) != 0) {
-                                            if (bufferInfo2.size > 100) {
-                                                byteBuffer2.position(bufferInfo2.offset);
+                        } else if (dequeueOutputBuffer == -2) {
+                            MediaFormat outputFormat = this.videoEncoder.getOutputFormat();
+                            if (this.videoTrackIndex == -5) {
+                                this.videoTrackIndex = this.mediaMuxer.addTrack(outputFormat, false);
+                                if (outputFormat.containsKey("prepend-sps-pps-to-idr-frames") && outputFormat.getInteger("prepend-sps-pps-to-idr-frames") == 1) {
+                                    this.prependHeaderSize = outputFormat.getByteBuffer("csd-0").limit() + outputFormat.getByteBuffer("csd-1").limit();
+                                }
+                            }
+                        } else if (dequeueOutputBuffer >= 0) {
+                            if (i < i2) {
+                                byteBuffer = outputBuffers[dequeueOutputBuffer];
+                            } else {
+                                byteBuffer = this.videoEncoder.getOutputBuffer(dequeueOutputBuffer);
+                            }
+                            if (byteBuffer != null) {
+                                MediaCodec.BufferInfo bufferInfo = this.videoBufferInfo;
+                                int i3 = bufferInfo.size;
+                                if (i3 > 1) {
+                                    int i4 = bufferInfo.flags;
+                                    if ((i4 & 2) == 0) {
+                                        int i5 = this.prependHeaderSize;
+                                        if (!(i5 == 0 || (i4 & 1) == 0)) {
+                                            bufferInfo.offset += i5;
+                                            bufferInfo.size = i3 - i5;
+                                        }
+                                        if (this.firstEncode && (i4 & 1) != 0) {
+                                            if (bufferInfo.size > 100) {
+                                                byteBuffer.position(bufferInfo.offset);
                                                 byte[] bArr = new byte[100];
-                                                byteBuffer2.get(bArr);
-                                                int i5 = 0;
+                                                byteBuffer.get(bArr);
                                                 int i6 = 0;
+                                                int i7 = 0;
                                                 while (true) {
-                                                    if (i5 < 96) {
-                                                        if (bArr[i5] == 0 && bArr[i5 + 1] == 0 && bArr[i5 + 2] == 0 && bArr[i5 + 3] == 1 && (i6 = i6 + 1) > 1) {
-                                                            MediaCodec.BufferInfo bufferInfo3 = this.videoBufferInfo;
-                                                            bufferInfo3.offset += i5;
-                                                            bufferInfo3.size -= i5;
+                                                    if (i6 < 96) {
+                                                        if (bArr[i6] == 0 && bArr[i6 + 1] == 0 && bArr[i6 + 2] == 0 && bArr[i6 + 3] == 1 && (i7 = i7 + 1) > 1) {
+                                                            MediaCodec.BufferInfo bufferInfo2 = this.videoBufferInfo;
+                                                            bufferInfo2.offset += i6;
+                                                            bufferInfo2.size -= i6;
                                                             break;
                                                         }
-                                                        i5++;
+                                                        i6++;
                                                     } else {
                                                         break;
                                                     }
@@ -3078,57 +3109,54 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                                             }
                                             this.firstEncode = false;
                                         }
-                                    }
-                                    long writeSampleData = this.mediaMuxer.writeSampleData(this.videoTrackIndex, byteBuffer2, this.videoBufferInfo, true);
-                                    if (writeSampleData != 0) {
-                                        didWriteData(this.videoFile, writeSampleData, false);
-                                    }
-                                } else if (this.videoTrackIndex == -5) {
-                                    byte[] bArr2 = new byte[i2];
-                                    byteBuffer2.limit(bufferInfo.offset + i2);
-                                    byteBuffer2.position(this.videoBufferInfo.offset);
-                                    byteBuffer2.get(bArr2);
-                                    int i7 = this.videoBufferInfo.size - 1;
-                                    while (true) {
-                                        if (i7 < 0 || i7 <= 3) {
-                                            byteBuffer4 = null;
-                                            byteBuffer3 = null;
-                                        } else {
-                                            if (bArr2[i7] == b && bArr2[i7 - 1] == 0 && bArr2[i7 - 2] == 0) {
-                                                int i8 = i7 - 3;
-                                                if (bArr2[i8] == 0) {
-                                                    byteBuffer4 = ByteBuffer.allocate(i8);
-                                                    byteBuffer3 = ByteBuffer.allocate(this.videoBufferInfo.size - i8);
-                                                    byteBuffer4.put(bArr2, 0, i8).position(0);
-                                                    byteBuffer3.put(bArr2, i8, this.videoBufferInfo.size - i8).position(0);
-                                                    break;
-                                                }
-                                            }
-                                            i7--;
-                                            b = 1;
+                                        long writeSampleData = this.mediaMuxer.writeSampleData(this.videoTrackIndex, byteBuffer, this.videoBufferInfo, true);
+                                        if (writeSampleData != 0) {
+                                            didWriteData(this.videoFile, writeSampleData, false);
                                         }
+                                    } else if (this.videoTrackIndex == -5) {
+                                        byte[] bArr2 = new byte[i3];
+                                        byteBuffer.limit(bufferInfo.offset + i3);
+                                        byteBuffer.position(this.videoBufferInfo.offset);
+                                        byteBuffer.get(bArr2);
+                                        int i8 = this.videoBufferInfo.size - 1;
+                                        while (true) {
+                                            if (i8 < 0 || i8 <= 3) {
+                                                byteBuffer3 = null;
+                                                byteBuffer2 = null;
+                                            } else {
+                                                if (bArr2[i8] == 1 && bArr2[i8 - 1] == 0 && bArr2[i8 - 2] == 0) {
+                                                    int i9 = i8 - 3;
+                                                    if (bArr2[i9] == 0) {
+                                                        byteBuffer3 = ByteBuffer.allocate(i9);
+                                                        byteBuffer2 = ByteBuffer.allocate(this.videoBufferInfo.size - i9);
+                                                        byteBuffer3.put(bArr2, 0, i9).position(0);
+                                                        byteBuffer2.put(bArr2, i9, this.videoBufferInfo.size - i9).position(0);
+                                                        break;
+                                                    }
+                                                }
+                                                i8--;
+                                            }
+                                        }
+                                        MediaFormat createVideoFormat = MediaFormat.createVideoFormat("video/avc", this.videoWidth, this.videoHeight);
+                                        if (!(byteBuffer3 == null || byteBuffer2 == null)) {
+                                            createVideoFormat.setByteBuffer("csd-0", byteBuffer3);
+                                            createVideoFormat.setByteBuffer("csd-1", byteBuffer2);
+                                        }
+                                        this.videoTrackIndex = this.mediaMuxer.addTrack(createVideoFormat, false);
                                     }
-                                    byteBuffer4 = null;
-                                    byteBuffer3 = null;
-                                    MediaFormat createVideoFormat = MediaFormat.createVideoFormat("video/avc", this.videoWidth, this.videoHeight);
-                                    if (!(byteBuffer4 == null || byteBuffer3 == null)) {
-                                        createVideoFormat.setByteBuffer("csd-0", byteBuffer4);
-                                        createVideoFormat.setByteBuffer("csd-1", byteBuffer3);
-                                    }
-                                    this.videoTrackIndex = this.mediaMuxer.addTrack(createVideoFormat, false);
                                 }
+                                this.videoEncoder.releaseOutputBuffer(dequeueOutputBuffer, false);
+                                if ((this.videoBufferInfo.flags & 4) != 0) {
+                                    break;
+                                }
+                            } else {
+                                throw new RuntimeException("encoderOutputBuffer " + dequeueOutputBuffer + " was null");
                             }
-                            this.videoEncoder.releaseOutputBuffer(dequeueOutputBuffer, false);
-                            if ((this.videoBufferInfo.flags & 4) != 0) {
-                                break;
-                            }
-                        } else {
-                            throw new RuntimeException("encoderOutputBuffer " + dequeueOutputBuffer + " was null");
                         }
+                        i2 = 21;
                     }
-                    i = 21;
                 }
-                if (Build.VERSION.SDK_INT < 21) {
+                if (i < 21) {
                     outputBuffers = this.audioEncoder.getOutputBuffers();
                 }
                 while (true) {
@@ -3141,7 +3169,7 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             return;
                         }
                     } else if (dequeueOutputBuffer2 == -3) {
-                        if (Build.VERSION.SDK_INT < 21) {
+                        if (i < 21) {
                             outputBuffers = this.audioEncoder.getOutputBuffers();
                         }
                     } else if (dequeueOutputBuffer2 == -2) {
@@ -3150,19 +3178,18 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                             this.audioTrackIndex = this.mediaMuxer.addTrack(outputFormat2, true);
                         }
                     } else if (dequeueOutputBuffer2 >= 0) {
-                        if (Build.VERSION.SDK_INT < 21) {
-                            byteBuffer = outputBuffers[dequeueOutputBuffer2];
+                        if (i < 21) {
+                            byteBuffer4 = outputBuffers[dequeueOutputBuffer2];
                         } else {
-                            byteBuffer = this.audioEncoder.getOutputBuffer(dequeueOutputBuffer2);
+                            byteBuffer4 = this.audioEncoder.getOutputBuffer(dequeueOutputBuffer2);
                         }
-                        if (byteBuffer != null) {
-                            MediaCodec.BufferInfo bufferInfo4 = this.audioBufferInfo;
-                            if ((bufferInfo4.flags & 2) != 0) {
-                                bufferInfo4.size = 0;
+                        if (byteBuffer4 != null) {
+                            MediaCodec.BufferInfo bufferInfo3 = this.audioBufferInfo;
+                            if ((bufferInfo3.flags & 2) != 0) {
+                                bufferInfo3.size = 0;
                             }
-                            MediaCodec.BufferInfo bufferInfo5 = this.audioBufferInfo;
-                            if (bufferInfo5.size != 0) {
-                                long writeSampleData2 = this.mediaMuxer.writeSampleData(this.audioTrackIndex, byteBuffer, bufferInfo5, false);
+                            if (bufferInfo3.size != 0) {
+                                long writeSampleData2 = this.mediaMuxer.writeSampleData(this.audioTrackIndex, byteBuffer4, bufferInfo3, false);
                                 if (writeSampleData2 != 0) {
                                     didWriteData(this.videoFile, writeSampleData2, false);
                                 }
@@ -3181,8 +3208,10 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
             /* access modifiers changed from: protected */
             public void finalize() throws Throwable {
                 try {
-                    if (this.eglDisplay != EGL14.EGL_NO_DISPLAY) {
-                        EGL14.eglMakeCurrent(this.eglDisplay, EGL14.EGL_NO_SURFACE, EGL14.EGL_NO_SURFACE, EGL14.EGL_NO_CONTEXT);
+                    android.opengl.EGLDisplay eGLDisplay = this.eglDisplay;
+                    if (eGLDisplay != EGL14.EGL_NO_DISPLAY) {
+                        android.opengl.EGLSurface eGLSurface = EGL14.EGL_NO_SURFACE;
+                        EGL14.eglMakeCurrent(eGLDisplay, eGLSurface, eGLSurface, EGL14.EGL_NO_CONTEXT);
                         EGL14.eglDestroyContext(this.eglDisplay, this.eglContext);
                         EGL14.eglReleaseThread();
                         EGL14.eglTerminate(this.eglDisplay);

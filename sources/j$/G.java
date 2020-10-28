@@ -1,27 +1,23 @@
 package j$;
 
-import j$.util.function.B;
-import java.util.function.IntConsumer;
+import j$.util.function.r;
+import java.util.function.DoubleFunction;
 
-public final /* synthetic */ class G implements B {
-    final /* synthetic */ IntConsumer a;
+public final /* synthetic */ class G implements DoubleFunction {
+    final /* synthetic */ r a;
 
-    private /* synthetic */ G(IntConsumer intConsumer) {
-        this.a = intConsumer;
+    private /* synthetic */ G(r rVar) {
+        this.a = rVar;
     }
 
-    public static /* synthetic */ B a(IntConsumer intConsumer) {
-        if (intConsumer == null) {
+    public static /* synthetic */ DoubleFunction a(r rVar) {
+        if (rVar == null) {
             return null;
         }
-        return intConsumer instanceof H ? ((H) intConsumer).a : new G(intConsumer);
+        return rVar instanceof F ? ((F) rVar).a : new G(rVar);
     }
 
-    public /* synthetic */ void accept(int i) {
-        this.a.accept(i);
-    }
-
-    public /* synthetic */ B q(B b) {
-        return a(this.a.andThen(H.a(b)));
+    public /* synthetic */ Object apply(double d) {
+        return this.a.apply(d);
     }
 }

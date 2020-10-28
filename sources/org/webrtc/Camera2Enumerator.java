@@ -119,9 +119,10 @@ public class Camera2Enumerator implements CameraEnumerator {
     static List<CameraEnumerationAndroid.CaptureFormat> getSupportedFormats(CameraManager cameraManager2, String str) {
         long j;
         int i;
-        synchronized (cachedSupportedFormats) {
-            if (cachedSupportedFormats.containsKey(str)) {
-                List<CameraEnumerationAndroid.CaptureFormat> list = cachedSupportedFormats.get(str);
+        Map<String, List<CameraEnumerationAndroid.CaptureFormat>> map = cachedSupportedFormats;
+        synchronized (map) {
+            if (map.containsKey(str)) {
+                List<CameraEnumerationAndroid.CaptureFormat> list = map.get(str);
                 return list;
             }
             Logging.d("Camera2Enumerator", "Get supported formats for camera index " + str + ".");

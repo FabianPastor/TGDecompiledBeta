@@ -992,82 +992,122 @@ public class FileRefController extends BaseController {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$0 */
     public /* synthetic */ void lambda$requestReferenceFromServer$0$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         onRequestComplete(str, str2, tLObject, true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$1 */
     public /* synthetic */ void lambda$requestReferenceFromServer$1$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         onRequestComplete(str, str2, tLObject, true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$2 */
     public /* synthetic */ void lambda$requestReferenceFromServer$2$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         onRequestComplete(str, str2, tLObject, true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$3 */
     public /* synthetic */ void lambda$requestReferenceFromServer$3$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         onRequestComplete(str, str2, tLObject, true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$4 */
     public /* synthetic */ void lambda$requestReferenceFromServer$4$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         onRequestComplete(str, str2, tLObject, true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$5 */
     public /* synthetic */ void lambda$requestReferenceFromServer$5$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         onRequestComplete(str, str2, tLObject, true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$6 */
     public /* synthetic */ void lambda$requestReferenceFromServer$6$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         onRequestComplete(str, str2, tLObject, true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$7 */
     public /* synthetic */ void lambda$requestReferenceFromServer$7$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         onRequestComplete(str, str2, tLObject, true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$8 */
     public /* synthetic */ void lambda$requestReferenceFromServer$8$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         onRequestComplete(str, str2, tLObject, true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$9 */
     public /* synthetic */ void lambda$requestReferenceFromServer$9$FileRefController(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         broadcastWaitersData(this.wallpaperWaiters, tLObject);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$10 */
     public /* synthetic */ void lambda$requestReferenceFromServer$10$FileRefController(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         broadcastWaitersData(this.savedGifsWaiters, tLObject);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$11 */
     public /* synthetic */ void lambda$requestReferenceFromServer$11$FileRefController(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         broadcastWaitersData(this.recentStickersWaiter, tLObject);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$12 */
     public /* synthetic */ void lambda$requestReferenceFromServer$12$FileRefController(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         broadcastWaitersData(this.favStickersWaiter, tLObject);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$13 */
     public /* synthetic */ void lambda$requestReferenceFromServer$13$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         onRequestComplete(str, str2, tLObject, true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$14 */
     public /* synthetic */ void lambda$requestReferenceFromServer$14$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         onRequestComplete(str, str2, tLObject, true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$15 */
     public /* synthetic */ void lambda$requestReferenceFromServer$15$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         onRequestComplete(str, str2, tLObject, false);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$16 */
     public /* synthetic */ void lambda$requestReferenceFromServer$16$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         onRequestComplete(str, str2, tLObject, false);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$17 */
     public /* synthetic */ void lambda$requestReferenceFromServer$17$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         onRequestComplete(str, str2, tLObject, true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$18 */
     public /* synthetic */ void lambda$requestReferenceFromServer$18$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         onRequestComplete(str, str2, tLObject, true);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$requestReferenceFromServer$19 */
     public /* synthetic */ void lambda$requestReferenceFromServer$19$FileRefController(String str, String str2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         onRequestComplete(str, str2, tLObject, true);
     }
@@ -1154,15 +1194,15 @@ public class FileRefController extends BaseController {
         } else if (requester.args[0] instanceof TLRPC$TL_messages_saveGif) {
             TLRPC$TL_messages_saveGif tLRPC$TL_messages_saveGif = (TLRPC$TL_messages_saveGif) requester.args[0];
             tLRPC$TL_messages_saveGif.id.file_reference = bArr;
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_saveGif, $$Lambda$FileRefController$B8e86bveS3knOZa0Cg1HvRKtz44.INSTANCE);
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_saveGif, $$Lambda$FileRefController$IIATEyiNERfsUuenCJgGqhSIy2A.INSTANCE);
         } else if (requester.args[0] instanceof TLRPC$TL_messages_saveRecentSticker) {
             TLRPC$TL_messages_saveRecentSticker tLRPC$TL_messages_saveRecentSticker = (TLRPC$TL_messages_saveRecentSticker) requester.args[0];
             tLRPC$TL_messages_saveRecentSticker.id.file_reference = bArr;
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_saveRecentSticker, $$Lambda$FileRefController$9VZxhYR0Ao1KW4hoVDK7k1sUZVI.INSTANCE);
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_saveRecentSticker, $$Lambda$FileRefController$S7MQkD5GBwhMkbNhixo5wpny2dM.INSTANCE);
         } else if (requester.args[0] instanceof TLRPC$TL_messages_faveSticker) {
             TLRPC$TL_messages_faveSticker tLRPC$TL_messages_faveSticker = (TLRPC$TL_messages_faveSticker) requester.args[0];
             tLRPC$TL_messages_faveSticker.id.file_reference = bArr;
-            getConnectionsManager().sendRequest(tLRPC$TL_messages_faveSticker, $$Lambda$FileRefController$9vHgXK5LhN8UmJHe149yk5CGvC8.INSTANCE);
+            getConnectionsManager().sendRequest(tLRPC$TL_messages_faveSticker, $$Lambda$FileRefController$ib3JG8VIbrGs8bAd6CSODgSusho.INSTANCE);
         } else if (requester.args[0] instanceof TLRPC$TL_messages_getAttachedStickers) {
             TLRPC$TL_messages_getAttachedStickers tLRPC$TL_messages_getAttachedStickers = (TLRPC$TL_messages_getAttachedStickers) requester.args[0];
             TLRPC$InputStickeredMedia tLRPC$InputStickeredMedia = tLRPC$TL_messages_getAttachedStickers.media;
@@ -1184,16 +1224,22 @@ public class FileRefController extends BaseController {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onUpdateObjectReference$20 */
     public /* synthetic */ void lambda$onUpdateObjectReference$20$FileRefController(TLRPC$TL_messages_sendMultiMedia tLRPC$TL_messages_sendMultiMedia, Object[] objArr) {
         getSendMessagesHelper().performSendMessageRequestMulti(tLRPC$TL_messages_sendMultiMedia, objArr[1], objArr[2], (ArrayList<Object>) null, objArr[4], objArr[5].booleanValue());
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onUpdateObjectReference$21 */
     public /* synthetic */ void lambda$onUpdateObjectReference$21$FileRefController(Requester requester) {
-        getSendMessagesHelper().performSendMessageRequest((TLObject) requester.args[0], (MessageObject) requester.args[1], (String) requester.args[2], (SendMessagesHelper.DelayedMessage) requester.args[3], ((Boolean) requester.args[4]).booleanValue(), (SendMessagesHelper.DelayedMessage) requester.args[5], (Object) null, ((Boolean) requester.args[6]).booleanValue());
+        getSendMessagesHelper().performSendMessageRequest((TLObject) requester.args[0], (MessageObject) requester.args[1], (String) requester.args[2], (SendMessagesHelper.DelayedMessage) requester.args[3], ((Boolean) requester.args[4]).booleanValue(), (SendMessagesHelper.DelayedMessage) requester.args[5], (Object) null, (HashMap<String, String>) null, ((Boolean) requester.args[6]).booleanValue());
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onUpdateObjectReference$22 */
     public /* synthetic */ void lambda$onUpdateObjectReference$22$FileRefController(Requester requester) {
-        getSendMessagesHelper().performSendMessageRequest((TLObject) requester.args[0], (MessageObject) requester.args[1], (String) requester.args[2], (SendMessagesHelper.DelayedMessage) requester.args[3], ((Boolean) requester.args[4]).booleanValue(), (SendMessagesHelper.DelayedMessage) requester.args[5], (Object) null, ((Boolean) requester.args[6]).booleanValue());
+        getSendMessagesHelper().performSendMessageRequest((TLObject) requester.args[0], (MessageObject) requester.args[1], (String) requester.args[2], (SendMessagesHelper.DelayedMessage) requester.args[3], ((Boolean) requester.args[4]).booleanValue(), (SendMessagesHelper.DelayedMessage) requester.args[5], (Object) null, (HashMap<String, String>) null, ((Boolean) requester.args[6]).booleanValue());
     }
 
     private void sendErrorToObject(Object[] objArr, int i) {
@@ -1252,12 +1298,16 @@ public class FileRefController extends BaseController {
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$sendErrorToObject$26 */
     public /* synthetic */ void lambda$sendErrorToObject$26$FileRefController(TLRPC$TL_messages_sendMultiMedia tLRPC$TL_messages_sendMultiMedia, Object[] objArr) {
         getSendMessagesHelper().performSendMessageRequestMulti(tLRPC$TL_messages_sendMultiMedia, objArr[1], objArr[2], (ArrayList<Object>) null, objArr[4], objArr[5].booleanValue());
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$sendErrorToObject$27 */
     public /* synthetic */ void lambda$sendErrorToObject$27$FileRefController(Object[] objArr) {
-        getSendMessagesHelper().performSendMessageRequest(objArr[0], objArr[1], objArr[2], objArr[3], objArr[4].booleanValue(), objArr[5], (Object) null, objArr[6].booleanValue());
+        getSendMessagesHelper().performSendMessageRequest(objArr[0], objArr[1], objArr[2], objArr[3], objArr[4].booleanValue(), objArr[5], (Object) null, (HashMap<String, String>) null, objArr[6].booleanValue());
     }
 
     /* JADX WARNING: type inference failed for: r8v0 */
@@ -1572,7 +1622,7 @@ public class FileRefController extends BaseController {
             byte[] r5 = r0.getFileReference((org.telegram.tgnet.TLRPC$Document) r5, (org.telegram.tgnet.TLRPC$InputFileLocation) r6, (boolean[]) r10, (org.telegram.tgnet.TLRPC$InputFileLocation[]) r11)
             if (r5 == 0) goto L_0x0212
             if (r29 == 0) goto L_0x0212
-            org.telegram.messenger.-$$Lambda$FileRefController$SNJwoq0kr06ZjWyihuJvKSpuIz0 r6 = new org.telegram.messenger.-$$Lambda$FileRefController$SNJwoq0kr06ZjWyihuJvKSpuIz0
+            org.telegram.messenger.-$$Lambda$FileRefController$YoivrI2jLCLASSNAME-9Uc3u7XDwNRgmQ r6 = new org.telegram.messenger.-$$Lambda$FileRefController$YoivrI2jLCLASSNAME-9Uc3u7XDwNRgmQ
             r6.<init>()
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r6)
             goto L_0x0212
@@ -1607,7 +1657,7 @@ public class FileRefController extends BaseController {
             r2 = 0
             r4 = 1
             r15.putUsersAndChats(r13, r2, r4, r4)
-            org.telegram.messenger.-$$Lambda$FileRefController$_4y5prO3JWgmruc7MhfACo84xB8 r2 = new org.telegram.messenger.-$$Lambda$FileRefController$_4y5prO3JWgmruc7MhfACo84xB8
+            org.telegram.messenger.-$$Lambda$FileRefController$RDXaiJgBNoBRXHvdRyp25gAbrhI r2 = new org.telegram.messenger.-$$Lambda$FileRefController$RDXaiJgBNoBRXHvdRyp25gAbrhI
             r2.<init>(r6)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)
             goto L_0x0286
@@ -1634,7 +1684,7 @@ public class FileRefController extends BaseController {
             r13 = 0
             r15 = 1
             r7.putUsersAndChats(r13, r4, r15, r15)
-            org.telegram.messenger.-$$Lambda$FileRefController$e8OtXvlo5kjEKEtnDDj1BG232-0 r4 = new org.telegram.messenger.-$$Lambda$FileRefController$e8OtXvlo5kjEKEtnDDj1BG232-0
+            org.telegram.messenger.-$$Lambda$FileRefController$A-1O8Y7O6I_bfsQ6FpcKXatHfmg r4 = new org.telegram.messenger.-$$Lambda$FileRefController$A-1O8Y7O6I_bfsQ6FpcKXatHfmg
             r4.<init>(r6)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r4)
         L_0x02b7:
@@ -1675,7 +1725,7 @@ public class FileRefController extends BaseController {
             r6 = 0
             r7 = 1
             r4.putUsersAndChats(r6, r2, r7, r7)
-            org.telegram.messenger.-$$Lambda$FileRefController$tUyca42NNsTxyQpe3m9-DSncaao r2 = new org.telegram.messenger.-$$Lambda$FileRefController$tUyca42NNsTxyQpe3m9-DSncaao
+            org.telegram.messenger.-$$Lambda$FileRefController$u1mwiWyTs-DxgRFVI1cxA8UQzdY r2 = new org.telegram.messenger.-$$Lambda$FileRefController$u1mwiWyTs-DxgRFVI1cxA8UQzdY
             r2.<init>(r5)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)
             goto L_0x0420
@@ -1738,7 +1788,7 @@ public class FileRefController extends BaseController {
             goto L_0x035e
         L_0x0376:
             if (r29 == 0) goto L_0x0420
-            org.telegram.messenger.-$$Lambda$FileRefController$q_nWD12uKB_1zPGAdz0IXAdyGJg r4 = new org.telegram.messenger.-$$Lambda$FileRefController$q_nWD12uKB_1zPGAdz0IXAdyGJg
+            org.telegram.messenger.-$$Lambda$FileRefController$yZaY4zEXCY1VeTQK1827Wf1GbaU r4 = new org.telegram.messenger.-$$Lambda$FileRefController$yZaY4zEXCY1VeTQK1827Wf1GbaU
             r4.<init>(r2)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r4)
             goto L_0x0420
@@ -1860,18 +1910,26 @@ public class FileRefController extends BaseController {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileRefController.onRequestComplete(java.lang.String, java.lang.String, org.telegram.tgnet.TLObject, boolean):boolean");
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onRequestComplete$29 */
     public /* synthetic */ void lambda$onRequestComplete$29$FileRefController(TLRPC$User tLRPC$User) {
         getMessagesController().putUser(tLRPC$User, false);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onRequestComplete$30 */
     public /* synthetic */ void lambda$onRequestComplete$30$FileRefController(TLRPC$Chat tLRPC$Chat) {
         getMessagesController().putChat(tLRPC$Chat, false);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onRequestComplete$31 */
     public /* synthetic */ void lambda$onRequestComplete$31$FileRefController(TLRPC$Chat tLRPC$Chat) {
         getMessagesController().putChat(tLRPC$Chat, false);
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$onRequestComplete$32 */
     public /* synthetic */ void lambda$onRequestComplete$32$FileRefController(TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet) {
         getMediaDataController().replaceStickerSet(tLRPC$TL_messages_stickerSet);
     }
@@ -2065,10 +2123,11 @@ public class FileRefController extends BaseController {
         if (tLRPC$FileLocation == null || !(tLRPC$InputFileLocation instanceof TLRPC$TL_inputFileLocation) || tLRPC$FileLocation.local_id != tLRPC$InputFileLocation.local_id || tLRPC$FileLocation.volume_id != tLRPC$InputFileLocation.volume_id) {
             return null;
         }
-        if (tLRPC$FileLocation.file_reference == null && zArr != null) {
+        byte[] bArr = tLRPC$FileLocation.file_reference;
+        if (bArr == null && zArr != null) {
             zArr[0] = true;
         }
-        return tLRPC$FileLocation.file_reference;
+        return bArr;
     }
 
     private byte[] getFileReference(TLRPC$WebPage tLRPC$WebPage, TLRPC$InputFileLocation tLRPC$InputFileLocation, boolean[] zArr, TLRPC$InputFileLocation[] tLRPC$InputFileLocationArr) {

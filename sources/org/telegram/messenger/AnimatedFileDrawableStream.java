@@ -227,8 +227,9 @@ public class AnimatedFileDrawableStream implements FileLoadOperationStream {
 
     public void cancel(boolean z) {
         synchronized (this.sync) {
-            if (this.countDownLatch != null) {
-                this.countDownLatch.countDown();
+            CountDownLatch countDownLatch2 = this.countDownLatch;
+            if (countDownLatch2 != null) {
+                countDownLatch2.countDown();
                 if (z && !this.canceled && !this.preview) {
                     FileLoader.getInstance(this.currentAccount).removeLoadingVideo(this.document, false, true);
                 }

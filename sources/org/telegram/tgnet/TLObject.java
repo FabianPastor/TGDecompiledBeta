@@ -24,9 +24,10 @@ public class TLObject {
     }
 
     public int getObjectSize() {
-        NativeByteBuffer nativeByteBuffer = sizeCalculator.get();
+        ThreadLocal<NativeByteBuffer> threadLocal = sizeCalculator;
+        NativeByteBuffer nativeByteBuffer = threadLocal.get();
         nativeByteBuffer.rewind();
-        serializeToStream(sizeCalculator.get());
+        serializeToStream(threadLocal.get());
         return nativeByteBuffer.length();
     }
 }

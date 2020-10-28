@@ -8,7 +8,7 @@ public class TLRPC$TL_updates_channelDifferenceTooLong extends TLRPC$updates_Cha
         this.flags = readInt32;
         int i = 0;
         this.isFinal = (readInt32 & 1) != 0;
-        if ((this.flags & 2) != 0) {
+        if ((readInt32 & 2) != 0) {
             this.timeout = abstractSerializedData.readInt32(z);
         }
         this.dialog = TLRPC$Dialog.TLdeserialize(abstractSerializedData, abstractSerializedData.readInt32(z), z);

@@ -4,7 +4,7 @@ import j$.util.function.Consumer;
 import java.util.Comparator;
 
 public interface Spliterator {
-    boolean a(Consumer consumer);
+    boolean b(Consumer consumer);
 
     int characteristics();
 

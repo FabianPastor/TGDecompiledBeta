@@ -38,8 +38,10 @@ public class CheckBoxUserCell extends FrameLayout {
         this.textView.setEllipsize(TextUtils.TruncateAt.END);
         int i = 5;
         this.textView.setGravity((LocaleController.isRTL ? 5 : 3) | 16);
+        TextView textView3 = this.textView;
+        boolean z2 = LocaleController.isRTL;
         int i2 = 21;
-        addView(this.textView, LayoutHelper.createFrame(-1, -1.0f, (LocaleController.isRTL ? 5 : 3) | 48, (float) (LocaleController.isRTL ? 21 : 94), 0.0f, (float) (!LocaleController.isRTL ? 21 : 94), 0.0f));
+        addView(textView3, LayoutHelper.createFrame(-1, -1.0f, (z2 ? 5 : 3) | 48, (float) (z2 ? 21 : 94), 0.0f, (float) (!z2 ? 21 : 94), 0.0f));
         this.avatarDrawable = new AvatarDrawable();
         BackupImageView backupImageView = new BackupImageView(context);
         this.imageView = backupImageView;
@@ -47,7 +49,8 @@ public class CheckBoxUserCell extends FrameLayout {
         addView(this.imageView, LayoutHelper.createFrame(36, 36.0f, (LocaleController.isRTL ? 5 : 3) | 48, 48.0f, 7.0f, 48.0f, 0.0f));
         CheckBoxSquare checkBoxSquare = new CheckBoxSquare(context, z);
         this.checkBox = checkBoxSquare;
-        addView(checkBoxSquare, LayoutHelper.createFrame(18, 18.0f, (!LocaleController.isRTL ? 3 : i) | 48, (float) (LocaleController.isRTL ? 0 : 21), 16.0f, (float) (!LocaleController.isRTL ? 0 : i2), 0.0f));
+        boolean z3 = LocaleController.isRTL;
+        addView(checkBoxSquare, LayoutHelper.createFrame(18, 18.0f, (!z3 ? 3 : i) | 48, (float) (z3 ? 0 : 21), 16.0f, (float) (!z3 ? 0 : i2), 0.0f));
     }
 
     /* access modifiers changed from: protected */

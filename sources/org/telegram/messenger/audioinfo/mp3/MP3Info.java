@@ -19,7 +19,7 @@ public class MP3Info extends AudioInfo {
         this(inputStream, j, Level.FINEST);
     }
 
-    public MP3Info(InputStream inputStream, final long j, Level level) throws IOException, ID3v2Exception, MP3Exception {
+    public MP3Info(InputStream inputStream, long j, Level level) throws IOException, ID3v2Exception, MP3Exception {
         this.brand = "MP3";
         MP3Input mP3Input = new MP3Input(inputStream);
         if (ID3v2Info.isID3v2StartPosition(mP3Input)) {
@@ -47,16 +47,23 @@ public class MP3Info extends AudioInfo {
         long j2 = this.duration;
         if (j2 <= 0 || j2 >= 3600000) {
             try {
-                this.duration = calculateDuration(mP3Input, j, new StopReadCondition(this) {
-                    final long stopPosition = (j - 128);
+                this.duration = calculateDuration(mP3Input, j, new StopReadCondition(this, j) {
+                    final long stopPosition;
+                    final /* synthetic */ long val$fileLength;
+
+                    {
+                        this.val$fileLength = r4;
+                        this.stopPosition = r4 - 128;
+                    }
 
                     public boolean stopRead(MP3Input mP3Input) throws IOException {
                         return mP3Input.getPosition() == this.stopPosition && ID3v1Info.isID3v1StartPosition(mP3Input);
                     }
                 });
             } catch (MP3Exception e) {
-                if (LOGGER.isLoggable(level)) {
-                    LOGGER.log(level, "Could not determine MP3 duration", e);
+                Logger logger = LOGGER;
+                if (logger.isLoggable(level)) {
+                    logger.log(level, "Could not determine MP3 duration", e);
                 }
             }
         }

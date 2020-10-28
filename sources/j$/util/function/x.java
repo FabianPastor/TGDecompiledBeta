@@ -1,5 +1,5 @@
 package j$.util.function;
 
 public interface x {
-    long a(double d);
+    long applyAsLong(long j, long j2);
 }

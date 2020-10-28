@@ -374,8 +374,9 @@ public class VideoTimelineView extends View {
     public void destroy() {
         synchronized (sync) {
             try {
-                if (this.mediaMetadataRetriever != null) {
-                    this.mediaMetadataRetriever.release();
+                MediaMetadataRetriever mediaMetadataRetriever2 = this.mediaMetadataRetriever;
+                if (mediaMetadataRetriever2 != null) {
+                    mediaMetadataRetriever2.release();
                     this.mediaMetadataRetriever = null;
                 }
             } catch (Exception e) {
@@ -444,12 +445,17 @@ public class VideoTimelineView extends View {
             for (int i2 = 0; i2 < this.frames.size(); i2++) {
                 Bitmap bitmap = this.frames.get(i2);
                 if (bitmap != null) {
-                    int i3 = (this.isRoundFrames ? this.frameWidth / 2 : this.frameWidth) * i;
-                    if (this.isRoundFrames) {
-                        this.rect2.set(i3, measuredHeight, AndroidUtilities.dp(28.0f) + i3, AndroidUtilities.dp(32.0f) + measuredHeight);
+                    boolean z = this.isRoundFrames;
+                    int i3 = this.frameWidth;
+                    if (z) {
+                        i3 /= 2;
+                    }
+                    int i4 = i3 * i;
+                    if (z) {
+                        this.rect2.set(i4, measuredHeight, AndroidUtilities.dp(28.0f) + i4, AndroidUtilities.dp(32.0f) + measuredHeight);
                         canvas.drawBitmap(bitmap, this.rect1, this.rect2, (Paint) null);
                     } else {
-                        canvas.drawBitmap(bitmap, (float) i3, (float) measuredHeight, (Paint) null);
+                        canvas.drawBitmap(bitmap, (float) i4, (float) measuredHeight, (Paint) null);
                     }
                 }
                 i++;

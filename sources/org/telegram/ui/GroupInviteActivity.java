@@ -135,6 +135,8 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         return this.fragmentView;
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$1 */
     public /* synthetic */ void lambda$createView$1$GroupInviteActivity(View view, int i) {
         if (getParentActivity() != null) {
             if (i == this.copyLinkRow || i == this.linkRow) {
@@ -172,6 +174,8 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$0 */
     public /* synthetic */ void lambda$null$0$GroupInviteActivity(DialogInterface dialogInterface, int i) {
         generateLink(true);
     }
@@ -224,6 +228,8 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         }
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$generateLink$3 */
     public /* synthetic */ void lambda$generateLink$3$GroupInviteActivity(boolean z, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(tLRPC$TL_error, tLObject, z) {
             public final /* synthetic */ TLRPC$TL_error f$1;
@@ -242,6 +248,8 @@ public class GroupInviteActivity extends BaseFragment implements NotificationCen
         });
     }
 
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$2 */
     public /* synthetic */ void lambda$null$2$GroupInviteActivity(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z) {
         if (tLRPC$TL_error == null) {
             this.invite = (TLRPC$ExportedChatInvite) tLObject;
