@@ -6450,7 +6450,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 MessageObject messageObject2 = this.messagesDict[0].get(num.intValue());
                 if (messageObject == null) {
                     messageObject = messageObject2;
-                } else {
+                } else if (messageObject2 != null) {
                     messageObject.mediaExists = messageObject2.mediaExists;
                     messageObject.attachPathExists = messageObject2.attachPathExists;
                 }
