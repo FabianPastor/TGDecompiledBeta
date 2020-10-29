@@ -72,9 +72,7 @@ public class AboutLinkCell extends FrameLayout {
             this.oldText = str;
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(this.oldText);
             this.stringBuilder = spannableStringBuilder;
-            if (z) {
-                MessageObject.addLinks(false, spannableStringBuilder, false, false);
-            }
+            MessageObject.addLinks(false, spannableStringBuilder, false, false, !z);
             Emoji.replaceEmoji(this.stringBuilder, Theme.profile_aboutTextPaint.getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
             if (TextUtils.isEmpty(str2)) {
                 this.valueTextView.setVisibility(8);

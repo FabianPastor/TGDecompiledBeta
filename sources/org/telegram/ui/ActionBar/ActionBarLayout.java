@@ -1278,6 +1278,7 @@ public class ActionBarLayout extends FrameLayout {
         baseFragment.setParentLayout((ActionBarLayout) null);
         this.fragmentsStack.remove(baseFragment);
         this.containerViewBack.setVisibility(4);
+        this.containerViewBack.setTranslationY(0.0f);
         bringChildToFront(this.containerView);
     }
 

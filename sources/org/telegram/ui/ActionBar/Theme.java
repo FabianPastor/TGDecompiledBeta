@@ -1739,9 +1739,10 @@ public class Theme {
                 android.graphics.Path r2 = r0.path
                 r1.drawPath(r2, r9)
                 android.graphics.LinearGradient r2 = r0.gradientShader
-                if (r2 == 0) goto L_0x058c
+                if (r2 == 0) goto L_0x058e
                 boolean r2 = r0.isSelected
-                if (r2 == 0) goto L_0x058c
+                if (r2 == 0) goto L_0x058e
+                if (r21 != 0) goto L_0x058e
                 java.lang.String r2 = "chat_outBubbleGradientSelectedOverlay"
                 int r2 = r0.getColor(r2)
                 android.graphics.Paint r3 = r0.selectedPaint
@@ -1757,7 +1758,7 @@ public class Theme {
                 android.graphics.Path r2 = r0.path
                 android.graphics.Paint r3 = r0.selectedPaint
                 r1.drawPath(r2, r3)
-            L_0x058c:
+            L_0x058e:
                 return
             */
             throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.ActionBar.Theme.MessageDrawable.draw(android.graphics.Canvas, android.graphics.Paint):void");

@@ -146,7 +146,7 @@ public class ColorPicker extends FrameLayout {
             if (i2 >= fArr.length) {
                 i2 = -1;
                 break;
-            } else if (fArr[i2] > f) {
+            } else if (fArr[i2] >= f) {
                 i = i2 - 1;
                 break;
             } else {

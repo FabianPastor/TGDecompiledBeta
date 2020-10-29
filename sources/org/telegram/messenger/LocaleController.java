@@ -365,9 +365,9 @@ public class LocaleController {
         this.languagesDict = new HashMap<>();
         this.otherLanguages = new ArrayList<>();
         addRules(new String[]{"bem", "brx", "da", "de", "el", "en", "eo", "es", "et", "fi", "fo", "gl", "he", "iw", "it", "nb", "nl", "nn", "no", "sv", "af", "bg", "bn", "ca", "eu", "fur", "fy", "gu", "ha", "is", "ku", "lb", "ml", "mr", "nah", "ne", "om", "or", "pa", "pap", "ps", "so", "sq", "sw", "ta", "te", "tk", "ur", "zu", "mn", "gsw", "chr", "rm", "pt", "an", "ast"}, new PluralRules_One());
-        addRules(new String[]{"cs", "sk"}, new PluralRules_Czech());
+        addRules(new String[]{"cs", "sk", "sr", "hr", "bs"}, new PluralRules_Czech());
         addRules(new String[]{"ff", "fr", "kab"}, new PluralRules_French());
-        addRules(new String[]{"hr", "ru", "sr", "uk", "be", "bs", "sh"}, new PluralRules_Balkan());
+        addRules(new String[]{"ru", "uk", "be", "sh"}, new PluralRules_Balkan());
         addRules(new String[]{"lv"}, new PluralRules_Latvian());
         addRules(new String[]{"lt"}, new PluralRules_Lithuanian());
         addRules(new String[]{"pl"}, new PluralRules_Polish());
@@ -1159,7 +1159,7 @@ public class LocaleController {
                 }
                 this.currentLocale = locale;
                 this.currentLocaleInfo = localeInfo;
-                if (localeInfo != null && !TextUtils.isEmpty(localeInfo.pluralLangCode)) {
+                if (!TextUtils.isEmpty(localeInfo.pluralLangCode)) {
                     this.currentPluralRules = this.allRules.get(this.currentLocaleInfo.pluralLangCode);
                 }
                 if (this.currentPluralRules == null) {
@@ -1233,16 +1233,25 @@ public class LocaleController {
     }
 
     private String getStringInternal(String str, int i) {
-        String str2 = BuildVars.USE_CLOUD_STRINGS ? this.localeValues.get(str) : null;
-        if (str2 == null) {
-            try {
-                str2 = ApplicationLoader.applicationContext.getString(i);
-            } catch (Exception e) {
-                FileLog.e((Throwable) e);
+        return getStringInternal(str, (String) null, i);
+    }
+
+    private String getStringInternal(String str, String str2, int i) {
+        String str3 = BuildVars.USE_CLOUD_STRINGS ? this.localeValues.get(str) : null;
+        if (str3 == null) {
+            if (BuildVars.USE_CLOUD_STRINGS && str2 != null) {
+                str3 = this.localeValues.get(str2);
+            }
+            if (str3 == null) {
+                try {
+                    str3 = ApplicationLoader.applicationContext.getString(i);
+                } catch (Exception e) {
+                    FileLog.e((Throwable) e);
+                }
             }
         }
-        if (str2 != null) {
-            return str2;
+        if (str3 != null) {
+            return str3;
         }
         return "LOC_ERR:" + str;
     }
@@ -1277,6 +1286,10 @@ public class LocaleController {
         return getInstance().getStringInternal(str, i);
     }
 
+    public static String getString(String str, String str2, int i) {
+        return getInstance().getStringInternal(str, str2, i);
+    }
+
     public static String getString(String str) {
         if (TextUtils.isEmpty(str)) {
             return "LOC_ERR:" + str;
@@ -1293,7 +1306,7 @@ public class LocaleController {
             return "LOC_ERR:" + str;
         }
         String str2 = str + "_" + getInstance().stringForQuantity(getInstance().currentPluralRules.quantityForNumber(i));
-        return getString(str2, ApplicationLoader.applicationContext.getResources().getIdentifier(str2, "string", ApplicationLoader.applicationContext.getPackageName()));
+        return getString(str2, str + "_other", ApplicationLoader.applicationContext.getResources().getIdentifier(str2, "string", ApplicationLoader.applicationContext.getPackageName()));
     }
 
     public static String formatPluralString(String str, int i) {
@@ -1301,7 +1314,7 @@ public class LocaleController {
             return "LOC_ERR:" + str;
         }
         String str2 = str + "_" + getInstance().stringForQuantity(getInstance().currentPluralRules.quantityForNumber(i));
-        return formatString(str2, ApplicationLoader.applicationContext.getResources().getIdentifier(str2, "string", ApplicationLoader.applicationContext.getPackageName()), Integer.valueOf(i));
+        return formatString(str2, str + "_other", ApplicationLoader.applicationContext.getResources().getIdentifier(str2, "string", ApplicationLoader.applicationContext.getPackageName()), Integer.valueOf(i));
     }
 
     public static String formatPluralStringComma(String str, int i) {
@@ -1314,11 +1327,18 @@ public class LocaleController {
                         for (int length = sb.length() - 3; length > 0; length -= 3) {
                             sb.insert(length, ',');
                         }
-                        String str3 = BuildVars.USE_CLOUD_STRINGS ? getInstance().localeValues.get(str2) : null;
-                        if (str3 == null) {
-                            str3 = ApplicationLoader.applicationContext.getString(ApplicationLoader.applicationContext.getResources().getIdentifier(str2, "string", ApplicationLoader.applicationContext.getPackageName()));
+                        String str3 = null;
+                        String str4 = BuildVars.USE_CLOUD_STRINGS ? getInstance().localeValues.get(str2) : null;
+                        if (str4 == null) {
+                            if (BuildVars.USE_CLOUD_STRINGS) {
+                                str3 = getInstance().localeValues.get(str + "_other");
+                            }
+                            str4 = str3;
                         }
-                        String replace = str3.replace("%1$d", "%1$s");
+                        if (str4 == null) {
+                            str4 = ApplicationLoader.applicationContext.getString(ApplicationLoader.applicationContext.getResources().getIdentifier(str2, "string", ApplicationLoader.applicationContext.getPackageName()));
+                        }
+                        String replace = str4.replace("%1$d", "%1$s");
                         if (getInstance().currentLocale != null) {
                             return String.format(getInstance().currentLocale, replace, new Object[]{sb});
                         }
@@ -1334,15 +1354,24 @@ public class LocaleController {
     }
 
     public static String formatString(String str, int i, Object... objArr) {
+        return formatString(str, (String) null, i, objArr);
+    }
+
+    public static String formatString(String str, String str2, int i, Object... objArr) {
         try {
-            String str2 = BuildVars.USE_CLOUD_STRINGS ? getInstance().localeValues.get(str) : null;
-            if (str2 == null) {
-                str2 = ApplicationLoader.applicationContext.getString(i);
+            String str3 = BuildVars.USE_CLOUD_STRINGS ? getInstance().localeValues.get(str) : null;
+            if (str3 == null) {
+                if (BuildVars.USE_CLOUD_STRINGS && str2 != null) {
+                    str3 = getInstance().localeValues.get(str2);
+                }
+                if (str3 == null) {
+                    str3 = ApplicationLoader.applicationContext.getString(i);
+                }
             }
             if (getInstance().currentLocale != null) {
-                return String.format(getInstance().currentLocale, str2, objArr);
+                return String.format(getInstance().currentLocale, str3, objArr);
             }
-            return String.format(str2, objArr);
+            return String.format(str3, objArr);
         } catch (Exception e) {
             FileLog.e((Throwable) e);
             return "LOC_ERR: " + str;
@@ -2253,61 +2282,61 @@ public class LocaleController {
             r7 = 1
         L_0x0076:
             nameDisplayOrder = r7
-            r7 = 2131627808(0x7f0e0var_, float:1.888289E38)
+            r7 = 2131627804(0x7f0e0f1c, float:1.8882883E38)
             java.lang.String r8 = "formatterMonthYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterMonthYear = r7
-            r7 = 2131627806(0x7f0e0f1e, float:1.8882887E38)
+            r7 = 2131627802(0x7f0e0f1a, float:1.8882879E38)
             java.lang.String r8 = "formatterMonth"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd MMM"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterDayMonth = r7
-            r7 = 2131627814(0x7f0e0var_, float:1.8882903E38)
+            r7 = 2131627810(0x7f0e0var_, float:1.8882895E38)
             java.lang.String r8 = "formatterYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd.MM.yy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterYear = r7
-            r7 = 2131627815(0x7f0e0var_, float:1.8882905E38)
+            r7 = 2131627811(0x7f0e0var_, float:1.8882897E38)
             java.lang.String r8 = "formatterYearMax"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "dd.MM.yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterYearMax = r7
-            r7 = 2131627774(0x7f0e0efe, float:1.8882822E38)
+            r7 = 2131627770(0x7f0e0efa, float:1.8882814E38)
             java.lang.String r8 = "chatDate"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "d MMMM"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.chatDate = r7
-            r7 = 2131627775(0x7f0e0eff, float:1.8882824E38)
+            r7 = 2131627771(0x7f0e0efb, float:1.8882816E38)
             java.lang.String r8 = "chatFullDate"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "d MMMM yyyy"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.chatFullDate = r7
-            r7 = 2131627812(0x7f0e0var_, float:1.88829E38)
+            r7 = 2131627808(0x7f0e0var_, float:1.888289E38)
             java.lang.String r8 = "formatterWeek"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "EEE"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterWeek = r7
-            r7 = 2131627813(0x7f0e0var_, float:1.8882901E38)
+            r7 = 2131627809(0x7f0e0var_, float:1.8882893E38)
             java.lang.String r8 = "formatterWeekLong"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "EEEE"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterWeekLong = r7
-            r7 = 2131627798(0x7f0e0var_, float:1.888287E38)
+            r7 = 2131627794(0x7f0e0var_, float:1.8882862E38)
             java.lang.String r8 = "formatDateSchedule"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM d"
             org.telegram.messenger.time.FastDateFormat r7 = r9.createFormatter(r0, r7, r8)
             r9.formatterScheduleDay = r7
-            r7 = 2131627799(0x7f0e0var_, float:1.8882873E38)
+            r7 = 2131627795(0x7f0e0var_, float:1.8882865E38)
             java.lang.String r8 = "formatDateScheduleYear"
             java.lang.String r7 = r9.getStringInternal(r8, r7)
             java.lang.String r8 = "MMM d yyyy"
@@ -2328,11 +2357,11 @@ public class LocaleController {
         L_0x013b:
             boolean r2 = is24HourFormat
             if (r2 == 0) goto L_0x0145
-            r2 = 2131627805(0x7f0e0f1d, float:1.8882885E38)
+            r2 = 2131627801(0x7f0e0var_, float:1.8882877E38)
             java.lang.String r4 = "formatterDay24H"
             goto L_0x014a
         L_0x0145:
-            r2 = 2131627804(0x7f0e0f1c, float:1.8882883E38)
+            r2 = 2131627800(0x7f0e0var_, float:1.8882875E38)
             java.lang.String r4 = "formatterDay12H"
         L_0x014a:
             java.lang.String r2 = r9.getStringInternal(r4, r2)
@@ -2347,11 +2376,11 @@ public class LocaleController {
             r9.formatterDay = r1
             boolean r1 = is24HourFormat
             if (r1 == 0) goto L_0x0167
-            r1 = 2131627811(0x7f0e0var_, float:1.8882897E38)
+            r1 = 2131627807(0x7f0e0f1f, float:1.8882889E38)
             java.lang.String r2 = "formatterStats24H"
             goto L_0x016c
         L_0x0167:
-            r1 = 2131627810(0x7f0e0var_, float:1.8882895E38)
+            r1 = 2131627806(0x7f0e0f1e, float:1.8882887E38)
             java.lang.String r2 = "formatterStats12H"
         L_0x016c:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
@@ -2368,11 +2397,11 @@ public class LocaleController {
             r9.formatterStats = r1
             boolean r1 = is24HourFormat
             if (r1 == 0) goto L_0x018b
-            r1 = 2131627801(0x7f0e0var_, float:1.8882877E38)
+            r1 = 2131627797(0x7f0e0var_, float:1.8882869E38)
             java.lang.String r2 = "formatterBannedUntil24H"
             goto L_0x0190
         L_0x018b:
-            r1 = 2131627800(0x7f0e0var_, float:1.8882875E38)
+            r1 = 2131627796(0x7f0e0var_, float:1.8882867E38)
             java.lang.String r2 = "formatterBannedUntil12H"
         L_0x0190:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
@@ -2386,11 +2415,11 @@ public class LocaleController {
             r9.formatterBannedUntil = r1
             boolean r1 = is24HourFormat
             if (r1 == 0) goto L_0x01aa
-            r1 = 2131627803(0x7f0e0f1b, float:1.888288E38)
+            r1 = 2131627799(0x7f0e0var_, float:1.8882873E38)
             java.lang.String r2 = "formatterBannedUntilThisYear24H"
             goto L_0x01af
         L_0x01aa:
-            r1 = 2131627802(0x7f0e0f1a, float:1.8882879E38)
+            r1 = 2131627798(0x7f0e0var_, float:1.888287E38)
             java.lang.String r2 = "formatterBannedUntilThisYear12H"
         L_0x01af:
             java.lang.String r1 = r9.getStringInternal(r2, r1)
@@ -2404,21 +2433,21 @@ public class LocaleController {
             org.telegram.messenger.time.FastDateFormat r1 = r9.createFormatter(r0, r1, r2)
             r9.formatterBannedUntilThisYear = r1
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131627049(0x7f0e0CLASSNAME, float:1.8881351E38)
+            r2 = 2131627046(0x7f0e0CLASSNAME, float:1.8881345E38)
             java.lang.String r4 = "SendTodayAt"
             java.lang.String r2 = r9.getStringInternal(r4, r2)
             java.lang.String r4 = "'Send today at' HH:mm"
             org.telegram.messenger.time.FastDateFormat r2 = r9.createFormatter(r0, r2, r4)
             r1[r3] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131627024(0x7f0e0CLASSNAME, float:1.88813E38)
+            r2 = 2131627021(0x7f0e0c0d, float:1.8881295E38)
             java.lang.String r3 = "SendDayAt"
             java.lang.String r2 = r9.getStringInternal(r3, r2)
             java.lang.String r3 = "'Send on' MMM d 'at' HH:mm"
             org.telegram.messenger.time.FastDateFormat r2 = r9.createFormatter(r0, r2, r3)
             r1[r5] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
-            r2 = 2131627025(0x7f0e0CLASSNAME, float:1.8881303E38)
+            r2 = 2131627022(0x7f0e0c0e, float:1.8881297E38)
             java.lang.String r3 = "SendDayYearAt"
             java.lang.String r2 = r9.getStringInternal(r3, r2)
             java.lang.String r3 = "'Send on' MMM d yyyy 'at' HH:mm"
@@ -2426,7 +2455,7 @@ public class LocaleController {
             r1[r6] = r2
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 3
-            r3 = 2131626829(0x7f0e0b4d, float:1.8880905E38)
+            r3 = 2131626826(0x7f0e0b4a, float:1.88809E38)
             java.lang.String r4 = "RemindTodayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind today at' HH:mm"
@@ -2434,7 +2463,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 4
-            r3 = 2131626827(0x7f0e0b4b, float:1.8880901E38)
+            r3 = 2131626824(0x7f0e0b48, float:1.8880895E38)
             java.lang.String r4 = "RemindDayAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind on' MMM d 'at' HH:mm"
@@ -2442,7 +2471,7 @@ public class LocaleController {
             r1[r2] = r3
             org.telegram.messenger.time.FastDateFormat[] r1 = r9.formatterScheduleSend
             r2 = 5
-            r3 = 2131626828(0x7f0e0b4c, float:1.8880903E38)
+            r3 = 2131626825(0x7f0e0b49, float:1.8880897E38)
             java.lang.String r4 = "RemindDayYearAt"
             java.lang.String r3 = r9.getStringInternal(r4, r3)
             java.lang.String r4 = "'Remind on' MMM d yyyy 'at' HH:mm"
@@ -2705,9 +2734,9 @@ public class LocaleController {
                     if (hasBaseLang) {
                         localeFileStrings.putAll(getLocaleFileStrings(localeInfo.getPathToFile()));
                     }
-                    AndroidUtilities.runOnUIThread(new Runnable(localeInfo, i2, tLRPC$TL_langPackDifference, localeFileStrings) {
-                        public final /* synthetic */ LocaleController.LocaleInfo f$1;
-                        public final /* synthetic */ int f$2;
+                    AndroidUtilities.runOnUIThread(new Runnable(i2, localeInfo, tLRPC$TL_langPackDifference, localeFileStrings) {
+                        public final /* synthetic */ int f$1;
+                        public final /* synthetic */ LocaleController.LocaleInfo f$2;
                         public final /* synthetic */ TLRPC$TL_langPackDifference f$3;
                         public final /* synthetic */ HashMap f$4;
 
@@ -2730,15 +2759,13 @@ public class LocaleController {
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$saveRemoteLocaleStrings$4 */
-    public /* synthetic */ void lambda$saveRemoteLocaleStrings$4$LocaleController(LocaleInfo localeInfo, int i, TLRPC$TL_langPackDifference tLRPC$TL_langPackDifference, HashMap hashMap) {
+    public /* synthetic */ void lambda$saveRemoteLocaleStrings$4$LocaleController(int i, LocaleInfo localeInfo, TLRPC$TL_langPackDifference tLRPC$TL_langPackDifference, HashMap hashMap) {
         String[] strArr;
         Locale locale;
-        if (localeInfo != null) {
-            if (i == 0) {
-                localeInfo.version = tLRPC$TL_langPackDifference.version;
-            } else {
-                localeInfo.baseVersion = tLRPC$TL_langPackDifference.version;
-            }
+        if (i == 0) {
+            localeInfo.version = tLRPC$TL_langPackDifference.version;
+        } else {
+            localeInfo.baseVersion = tLRPC$TL_langPackDifference.version;
         }
         saveOtherLanguages();
         try {
@@ -2762,7 +2789,7 @@ public class LocaleController {
                 this.localeValues = hashMap;
                 this.currentLocale = locale;
                 this.currentLocaleInfo = localeInfo;
-                if (localeInfo != null && !TextUtils.isEmpty(localeInfo.pluralLangCode)) {
+                if (!TextUtils.isEmpty(localeInfo.pluralLangCode)) {
                     this.currentPluralRules = this.allRules.get(this.currentLocaleInfo.pluralLangCode);
                 }
                 if (this.currentPluralRules == null) {
@@ -2895,7 +2922,7 @@ public class LocaleController {
         if (localeInfo == null) {
             return;
         }
-        if (localeInfo == null || localeInfo.isRemote() || localeInfo.isUnofficial()) {
+        if (localeInfo.isRemote() || localeInfo.isUnofficial()) {
             if (localeInfo.hasBaseLang() && (str == null || str.equals(localeInfo.baseLangCode))) {
                 if (localeInfo.baseVersion == 0 || z) {
                     TLRPC$TL_langpack_getLangPack tLRPC$TL_langpack_getLangPack = new TLRPC$TL_langpack_getLangPack();
@@ -3960,14 +3987,14 @@ public class LocaleController {
                 if (i == 0) {
                     return formatString("MilesAway", NUM, str2);
                 } else if (i != 1) {
-                    return formatString("Miles", NUM, str2);
+                    return formatString("MilesShort", NUM, str2);
                 } else {
                     return formatString("MilesFromYou", NUM, str2);
                 }
             } else if (i == 0) {
                 return formatString("FootsAway", NUM, String.format("%d", new Object[]{Integer.valueOf((int) Math.max(1.0f, f2))}));
             } else if (i != 1) {
-                return formatString("Foots", NUM, String.format("%d", new Object[]{Integer.valueOf((int) Math.max(1.0f, f2))}));
+                return formatString("FootsShort", NUM, String.format("%d", new Object[]{Integer.valueOf((int) Math.max(1.0f, f2))}));
             } else {
                 return formatString("FootsFromYou", NUM, String.format("%d", new Object[]{Integer.valueOf((int) Math.max(1.0f, f2))}));
             }
@@ -3980,14 +4007,14 @@ public class LocaleController {
             if (i == 0) {
                 return formatString("KMetersAway2", NUM, str);
             } else if (i != 1) {
-                return formatString("KMeters", NUM, str);
+                return formatString("KMetersShort", NUM, str);
             } else {
                 return formatString("KMetersFromYou2", NUM, str);
             }
         } else if (i == 0) {
             return formatString("MetersAway2", NUM, String.format("%d", new Object[]{Integer.valueOf((int) Math.max(1.0f, f))}));
         } else if (i != 1) {
-            return formatString("Meters", NUM, String.format("%d", new Object[]{Integer.valueOf((int) Math.max(1.0f, f))}));
+            return formatString("MetersShort", NUM, String.format("%d", new Object[]{Integer.valueOf((int) Math.max(1.0f, f))}));
         } else {
             return formatString("MetersFromYou2", NUM, String.format("%d", new Object[]{Integer.valueOf((int) Math.max(1.0f, f))}));
         }

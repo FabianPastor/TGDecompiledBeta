@@ -272,7 +272,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r3.<init>(r1)
             r0.emptyView = r3
             java.lang.String r4 = "NoResult"
-            r5 = 2131626060(0x7f0e084c, float:1.8879346E38)
+            r5 = 2131626063(0x7f0e084f, float:1.8879352E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)
             r3.setText(r4)
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.emptyView
@@ -305,7 +305,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r3.setTextColor(r7)
             r3.setTag(r6)
             java.lang.String r7 = "LoadingStats"
-            r8 = 2131625764(0x7f0e0724, float:1.8878745E38)
+            r8 = 2131625766(0x7f0e0726, float:1.887875E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)
             r3.setText(r7)
             r3.setGravity(r5)
@@ -318,7 +318,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r7.setTextColor(r9)
             r7.setTag(r8)
             java.lang.String r9 = "LoadingStatsDescription"
-            r10 = 2131625765(0x7f0e0725, float:1.8878747E38)
+            r10 = 2131625767(0x7f0e0727, float:1.8878751E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r7.setText(r9)
             r7.setGravity(r5)
@@ -1087,7 +1087,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 if (i == MessageStatisticActivity.this.overviewHeaderRow) {
                     headerCell.setText(LocaleController.formatString("StatisticOverview", NUM, new Object[0]));
                 } else {
-                    headerCell.setText(LocaleController.formatPluralString("PublicShares", MessageStatisticActivity.this.publicChats));
+                    headerCell.setText(LocaleController.formatPluralString("PublicSharesCount", MessageStatisticActivity.this.publicChats));
                 }
             } else if (itemViewType == 4) {
                 StatisticActivity.BaseChartCell baseChartCell = (StatisticActivity.BaseChartCell) viewHolder.itemView;

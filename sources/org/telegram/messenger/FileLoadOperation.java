@@ -1912,7 +1912,7 @@ public class FileLoadOperation {
     /* access modifiers changed from: private */
     /* renamed from: lambda$cancel$7 */
     public /* synthetic */ void lambda$cancel$7$FileLoadOperation(boolean z) {
-        if (this.state != 3 && this.state != 2) {
+        if (!(this.state == 3 || this.state == 2)) {
             if (this.requestInfos != null) {
                 for (int i = 0; i < this.requestInfos.size(); i++) {
                     RequestInfo requestInfo = this.requestInfos.get(i);
@@ -1922,56 +1922,56 @@ public class FileLoadOperation {
                 }
             }
             onFail(false, 1);
-            if (z) {
-                File file = this.cacheFileFinal;
-                if (file != null) {
-                    try {
-                        if (!file.delete()) {
-                            this.cacheFileFinal.deleteOnExit();
-                        }
-                    } catch (Exception e) {
-                        FileLog.e((Throwable) e);
+        }
+        if (z) {
+            File file = this.cacheFileFinal;
+            if (file != null) {
+                try {
+                    if (!file.delete()) {
+                        this.cacheFileFinal.deleteOnExit();
                     }
+                } catch (Exception e) {
+                    FileLog.e((Throwable) e);
                 }
-                File file2 = this.cacheFileTemp;
-                if (file2 != null) {
-                    try {
-                        if (!file2.delete()) {
-                            this.cacheFileTemp.deleteOnExit();
-                        }
-                    } catch (Exception e2) {
-                        FileLog.e((Throwable) e2);
+            }
+            File file2 = this.cacheFileTemp;
+            if (file2 != null) {
+                try {
+                    if (!file2.delete()) {
+                        this.cacheFileTemp.deleteOnExit();
                     }
+                } catch (Exception e2) {
+                    FileLog.e((Throwable) e2);
                 }
-                File file3 = this.cacheFileParts;
-                if (file3 != null) {
-                    try {
-                        if (!file3.delete()) {
-                            this.cacheFileParts.deleteOnExit();
-                        }
-                    } catch (Exception e3) {
-                        FileLog.e((Throwable) e3);
+            }
+            File file3 = this.cacheFileParts;
+            if (file3 != null) {
+                try {
+                    if (!file3.delete()) {
+                        this.cacheFileParts.deleteOnExit();
                     }
+                } catch (Exception e3) {
+                    FileLog.e((Throwable) e3);
                 }
-                File file4 = this.cacheIvTemp;
-                if (file4 != null) {
-                    try {
-                        if (!file4.delete()) {
-                            this.cacheIvTemp.deleteOnExit();
-                        }
-                    } catch (Exception e4) {
-                        FileLog.e((Throwable) e4);
+            }
+            File file4 = this.cacheIvTemp;
+            if (file4 != null) {
+                try {
+                    if (!file4.delete()) {
+                        this.cacheIvTemp.deleteOnExit();
                     }
+                } catch (Exception e4) {
+                    FileLog.e((Throwable) e4);
                 }
-                File file5 = this.cacheFilePreload;
-                if (file5 != null) {
-                    try {
-                        if (!file5.delete()) {
-                            this.cacheFilePreload.deleteOnExit();
-                        }
-                    } catch (Exception e5) {
-                        FileLog.e((Throwable) e5);
+            }
+            File file5 = this.cacheFilePreload;
+            if (file5 != null) {
+                try {
+                    if (!file5.delete()) {
+                        this.cacheFilePreload.deleteOnExit();
                     }
+                } catch (Exception e5) {
+                    FileLog.e((Throwable) e5);
                 }
             }
         }

@@ -119,7 +119,7 @@ public final class BulletinFactory {
             android.app.Activity r1 = r10.getParentActivity()
             r0.<init>(r1)
             java.lang.String r1 = "Hours"
-            r2 = 2131626231(0x7f0e08f7, float:1.8879692E38)
+            r2 = 2131626234(0x7f0e08fa, float:1.8879698E38)
             java.lang.String r3 = "NotificationsMutedForHint"
             r4 = 4
             r5 = 3
@@ -131,7 +131,7 @@ public final class BulletinFactory {
             if (r11 == r6) goto L_0x0041
             if (r11 == r5) goto L_0x0037
             if (r11 != r4) goto L_0x0031
-            r11 = 2131626251(0x7f0e090b, float:1.8879733E38)
+            r11 = 2131626254(0x7f0e090e, float:1.887974E38)
             java.lang.String r1 = "NotificationsUnmutedHint"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r1, r11)
             r1 = 0
@@ -141,7 +141,7 @@ public final class BulletinFactory {
             r10.<init>()
             throw r10
         L_0x0037:
-            r11 = 2131626232(0x7f0e08f8, float:1.8879694E38)
+            r11 = 2131626235(0x7f0e08fb, float:1.88797E38)
             java.lang.String r1 = "NotificationsMutedHint"
             java.lang.String r11 = org.telegram.messenger.LocaleController.getString(r1, r11)
             goto L_0x006b
@@ -234,12 +234,12 @@ public final class BulletinFactory {
             r9[r5] = r0
             r8.setAnimation(r4, r9)
             android.widget.TextView r9 = r8.titleTextView
-            r0 = 2131626663(0x7f0e0aa7, float:1.8880569E38)
+            r0 = 2131626666(0x7f0e0aaa, float:1.8880575E38)
             java.lang.String r1 = "PinnedMessagesHidden"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r9.setText(r0)
             android.widget.TextView r9 = r8.subtitleTextView
-            r0 = 2131626664(0x7f0e0aa8, float:1.888057E38)
+            r0 = 2131626667(0x7f0e0aab, float:1.8880577E38)
             java.lang.String r1 = "PinnedMessagesHiddenInfo"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r9.setText(r0)

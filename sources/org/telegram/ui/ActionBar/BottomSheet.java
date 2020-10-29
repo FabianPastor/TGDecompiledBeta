@@ -1031,10 +1031,6 @@ public class BottomSheet extends Dialog {
         }
     }
 
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-    }
-
     public void setAllowNestedScroll(boolean z) {
         this.allowNestedScroll = z;
         if (!z) {
@@ -1576,10 +1572,6 @@ public class BottomSheet extends Dialog {
         public Builder setCustomView(View view) {
             View unused = this.bottomSheet.customView = view;
             return this;
-        }
-
-        public View getCustomView() {
-            return this.bottomSheet.customView;
         }
 
         public Builder setTitle(CharSequence charSequence) {

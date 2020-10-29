@@ -8,16 +8,16 @@ import j$.util.function.ToLongFunction;
 import java.util.Comparator;
 import org.telegram.tgnet.TLRPC$MessageEntity;
 
-/* renamed from: org.telegram.messenger.-$$Lambda$MediaDataController$jkXV7i9uspMiPbrgCVbOvKdpC-o  reason: invalid class name */
+/* renamed from: org.telegram.messenger.-$$Lambda$MediaDataController$-4vpB9CMzHCfOZjC8NZee57pcH0  reason: invalid class name */
 /* compiled from: lambda */
-public final /* synthetic */ class $$Lambda$MediaDataController$jkXV7i9uspMiPbrgCVbOvKdpCo implements Comparator, j$.util.Comparator {
-    public static final /* synthetic */ $$Lambda$MediaDataController$jkXV7i9uspMiPbrgCVbOvKdpCo INSTANCE = new $$Lambda$MediaDataController$jkXV7i9uspMiPbrgCVbOvKdpCo();
+public final /* synthetic */ class $$Lambda$MediaDataController$4vpB9CMzHCfOZjC8NZee57pcH0 implements Comparator, j$.util.Comparator {
+    public static final /* synthetic */ $$Lambda$MediaDataController$4vpB9CMzHCfOZjC8NZee57pcH0 INSTANCE = new $$Lambda$MediaDataController$4vpB9CMzHCfOZjC8NZee57pcH0();
 
-    private /* synthetic */ $$Lambda$MediaDataController$jkXV7i9uspMiPbrgCVbOvKdpCo() {
+    private /* synthetic */ $$Lambda$MediaDataController$4vpB9CMzHCfOZjC8NZee57pcH0() {
     }
 
     public final int compare(Object obj, Object obj2) {
-        return MediaDataController.lambda$getTextStyleRuns$120((TLRPC$MessageEntity) obj, (TLRPC$MessageEntity) obj2);
+        return MediaDataController.lambda$getTextStyleRuns$121((TLRPC$MessageEntity) obj, (TLRPC$MessageEntity) obj2);
     }
 
     public /* synthetic */ Comparator reversed() {

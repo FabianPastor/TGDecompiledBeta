@@ -935,146 +935,145 @@ public class DownloadController extends BaseController implements NotificationCe
             if (downloadObject != null) {
                 TLObject tLObject = downloadObject.object;
                 if (tLObject instanceof TLRPC$Document) {
-                    getFileLoader().cancelLoadFile((TLRPC$Document) tLObject);
+                    getFileLoader().cancelLoadFile((TLRPC$Document) tLObject, true);
                 } else if ((tLObject instanceof TLRPC$Photo) && (closestPhotoSizeWithSize = FileLoader.getClosestPhotoSizeWithSize(((TLRPC$Photo) tLObject).sizes, AndroidUtilities.getPhotoSize())) != null) {
-                    getFileLoader().cancelLoadFile(closestPhotoSizeWithSize);
+                    getFileLoader().cancelLoadFile(closestPhotoSizeWithSize, true);
                 }
             }
         }
     }
 
+    /* JADX WARNING: type inference failed for: r8v12, types: [java.lang.String] */
+    /* JADX WARNING: type inference failed for: r8v16, types: [java.lang.String] */
     /* access modifiers changed from: protected */
-    /* JADX WARNING: Removed duplicated region for block: B:47:0x00b0  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x00ce A[SYNTHETIC] */
+    /* JADX WARNING: Multi-variable type inference failed */
+    /* JADX WARNING: Removed duplicated region for block: B:27:0x0065  */
+    /* JADX WARNING: Removed duplicated region for block: B:35:0x008a  */
+    /* JADX WARNING: Removed duplicated region for block: B:45:0x00a7  */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x00c5 A[SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void processDownloadObjects(int r21, java.util.ArrayList<org.telegram.messenger.DownloadObject> r22) {
+    public void processDownloadObjects(int r20, java.util.ArrayList<org.telegram.messenger.DownloadObject> r21) {
         /*
-            r20 = this;
-            r0 = r20
-            r1 = r21
-            boolean r2 = r22.isEmpty()
+            r19 = this;
+            r0 = r19
+            r1 = r20
+            boolean r2 = r21.isEmpty()
             if (r2 == 0) goto L_0x000b
             return
         L_0x000b:
             r2 = 2
-            r3 = 0
-            r4 = 1
-            if (r1 != r4) goto L_0x0013
+            r3 = 1
+            if (r1 != r3) goto L_0x0012
             java.util.ArrayList<org.telegram.messenger.DownloadObject> r1 = r0.photoDownloadQueue
-            goto L_0x0026
-        L_0x0013:
-            if (r1 != r2) goto L_0x0018
+            goto L_0x001f
+        L_0x0012:
+            if (r1 != r2) goto L_0x0017
             java.util.ArrayList<org.telegram.messenger.DownloadObject> r1 = r0.audioDownloadQueue
-            goto L_0x0026
-        L_0x0018:
-            r5 = 4
-            if (r1 != r5) goto L_0x001e
+            goto L_0x001f
+        L_0x0017:
+            r4 = 4
+            if (r1 != r4) goto L_0x001d
             java.util.ArrayList<org.telegram.messenger.DownloadObject> r1 = r0.videoDownloadQueue
-            goto L_0x0026
-        L_0x001e:
-            r5 = 8
-            if (r1 != r5) goto L_0x0025
+            goto L_0x001f
+        L_0x001d:
             java.util.ArrayList<org.telegram.messenger.DownloadObject> r1 = r0.documentDownloadQueue
-            goto L_0x0026
-        L_0x0025:
-            r1 = r3
-        L_0x0026:
+        L_0x001f:
+            r4 = 0
             r5 = 0
-            r6 = 0
-        L_0x0028:
-            int r7 = r22.size()
-            if (r6 >= r7) goto L_0x00d2
-            r7 = r22
-            java.lang.Object r8 = r7.get(r6)
-            org.telegram.messenger.DownloadObject r8 = (org.telegram.messenger.DownloadObject) r8
-            org.telegram.tgnet.TLObject r9 = r8.object
-            boolean r10 = r9 instanceof org.telegram.tgnet.TLRPC$Document
-            if (r10 == 0) goto L_0x0044
-            org.telegram.tgnet.TLRPC$Document r9 = (org.telegram.tgnet.TLRPC$Document) r9
-            java.lang.String r9 = org.telegram.messenger.FileLoader.getAttachFileName(r9)
-            r10 = r3
-            goto L_0x0060
-        L_0x0044:
-            boolean r10 = r9 instanceof org.telegram.tgnet.TLRPC$Photo
-            if (r10 == 0) goto L_0x005e
-            org.telegram.tgnet.TLRPC$Photo r9 = (org.telegram.tgnet.TLRPC$Photo) r9
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r9 = r9.sizes
-            int r10 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
-            org.telegram.tgnet.TLRPC$PhotoSize r9 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r9, r10)
-            java.lang.String r10 = org.telegram.messenger.FileLoader.getAttachFileName(r9)
-            r19 = r10
-            r10 = r9
-            r9 = r19
-            goto L_0x0060
-        L_0x005e:
-            r9 = r3
-            r10 = r9
-        L_0x0060:
-            if (r9 == 0) goto L_0x00ce
-            java.util.HashMap<java.lang.String, org.telegram.messenger.DownloadObject> r11 = r0.downloadQueueKeys
-            boolean r11 = r11.containsKey(r9)
-            if (r11 == 0) goto L_0x006b
-            goto L_0x00ce
-        L_0x006b:
-            if (r10 == 0) goto L_0x0093
-            org.telegram.tgnet.TLObject r11 = r8.object
-            org.telegram.tgnet.TLRPC$Photo r11 = (org.telegram.tgnet.TLRPC$Photo) r11
-            boolean r12 = r8.secret
-            if (r12 == 0) goto L_0x0078
-            r18 = 2
-            goto L_0x0081
-        L_0x0078:
-            boolean r12 = r8.forceCache
-            if (r12 == 0) goto L_0x007f
-            r18 = 1
-            goto L_0x0081
-        L_0x007f:
-            r18 = 0
-        L_0x0081:
-            org.telegram.messenger.FileLoader r13 = r20.getFileLoader()
-            org.telegram.messenger.ImageLocation r14 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r10, (org.telegram.tgnet.TLRPC$Photo) r11)
-            java.lang.String r15 = r8.parent
-            r16 = 0
-            r17 = 0
-            r13.loadFile(r14, r15, r16, r17, r18)
-            goto L_0x00ab
-        L_0x0093:
-            org.telegram.tgnet.TLObject r10 = r8.object
-            boolean r11 = r10 instanceof org.telegram.tgnet.TLRPC$Document
-            if (r11 == 0) goto L_0x00ad
-            org.telegram.tgnet.TLRPC$Document r10 = (org.telegram.tgnet.TLRPC$Document) r10
-            org.telegram.messenger.FileLoader r11 = r20.getFileLoader()
-            java.lang.String r12 = r8.parent
-            boolean r13 = r8.secret
-            if (r13 == 0) goto L_0x00a7
-            r13 = 2
-            goto L_0x00a8
-        L_0x00a7:
-            r13 = 0
-        L_0x00a8:
-            r11.loadFile(r10, r12, r5, r13)
-        L_0x00ab:
-            r10 = 1
-            goto L_0x00ae
-        L_0x00ad:
+        L_0x0021:
+            int r6 = r21.size()
+            if (r5 >= r6) goto L_0x00c9
+            r6 = r21
+            java.lang.Object r7 = r6.get(r5)
+            org.telegram.messenger.DownloadObject r7 = (org.telegram.messenger.DownloadObject) r7
+            org.telegram.tgnet.TLObject r8 = r7.object
+            boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$Document
             r10 = 0
-        L_0x00ae:
-            if (r10 == 0) goto L_0x00ce
-            r1.add(r8)
-            java.util.HashMap<java.lang.String, org.telegram.messenger.DownloadObject> r10 = r0.downloadQueueKeys
-            r10.put(r9, r8)
-            java.util.HashMap<android.util.Pair<java.lang.Long, java.lang.Integer>, org.telegram.messenger.DownloadObject> r9 = r0.downloadQueuePairs
-            android.util.Pair r10 = new android.util.Pair
-            long r11 = r8.id
-            java.lang.Long r11 = java.lang.Long.valueOf(r11)
-            int r12 = r8.type
-            java.lang.Integer r12 = java.lang.Integer.valueOf(r12)
-            r10.<init>(r11, r12)
-            r9.put(r10, r8)
-        L_0x00ce:
-            int r6 = r6 + 1
-            goto L_0x0028
-        L_0x00d2:
+            if (r9 == 0) goto L_0x0042
+            org.telegram.tgnet.TLRPC$Document r8 = (org.telegram.tgnet.TLRPC$Document) r8
+            java.lang.String r8 = org.telegram.messenger.FileLoader.getAttachFileName(r8)
+        L_0x003c:
+            r18 = r10
+            r10 = r8
+            r8 = r18
+            goto L_0x0058
+        L_0x0042:
+            boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$Photo
+            if (r9 == 0) goto L_0x0057
+            org.telegram.tgnet.TLRPC$Photo r8 = (org.telegram.tgnet.TLRPC$Photo) r8
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r8 = r8.sizes
+            int r9 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
+            org.telegram.tgnet.TLRPC$PhotoSize r10 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r8, r9)
+            java.lang.String r8 = org.telegram.messenger.FileLoader.getAttachFileName(r10)
+            goto L_0x003c
+        L_0x0057:
+            r8 = r10
+        L_0x0058:
+            if (r10 == 0) goto L_0x00c5
+            java.util.HashMap<java.lang.String, org.telegram.messenger.DownloadObject> r9 = r0.downloadQueueKeys
+            boolean r9 = r9.containsKey(r10)
+            if (r9 == 0) goto L_0x0063
+            goto L_0x00c5
+        L_0x0063:
+            if (r8 == 0) goto L_0x008a
+            org.telegram.tgnet.TLObject r9 = r7.object
+            org.telegram.tgnet.TLRPC$Photo r9 = (org.telegram.tgnet.TLRPC$Photo) r9
+            boolean r11 = r7.secret
+            if (r11 == 0) goto L_0x0070
+            r17 = 2
+            goto L_0x0079
+        L_0x0070:
+            boolean r11 = r7.forceCache
+            if (r11 == 0) goto L_0x0077
+            r17 = 1
+            goto L_0x0079
+        L_0x0077:
+            r17 = 0
+        L_0x0079:
+            org.telegram.messenger.FileLoader r12 = r19.getFileLoader()
+            org.telegram.messenger.ImageLocation r13 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r8, (org.telegram.tgnet.TLRPC$Photo) r9)
+            java.lang.String r14 = r7.parent
+            r15 = 0
+            r16 = 0
+            r12.loadFile(r13, r14, r15, r16, r17)
+            goto L_0x00a2
+        L_0x008a:
+            org.telegram.tgnet.TLObject r8 = r7.object
+            boolean r9 = r8 instanceof org.telegram.tgnet.TLRPC$Document
+            if (r9 == 0) goto L_0x00a4
+            org.telegram.tgnet.TLRPC$Document r8 = (org.telegram.tgnet.TLRPC$Document) r8
+            org.telegram.messenger.FileLoader r9 = r19.getFileLoader()
+            java.lang.String r11 = r7.parent
+            boolean r12 = r7.secret
+            if (r12 == 0) goto L_0x009e
+            r12 = 2
+            goto L_0x009f
+        L_0x009e:
+            r12 = 0
+        L_0x009f:
+            r9.loadFile(r8, r11, r4, r12)
+        L_0x00a2:
+            r8 = 1
+            goto L_0x00a5
+        L_0x00a4:
+            r8 = 0
+        L_0x00a5:
+            if (r8 == 0) goto L_0x00c5
+            r1.add(r7)
+            java.util.HashMap<java.lang.String, org.telegram.messenger.DownloadObject> r8 = r0.downloadQueueKeys
+            r8.put(r10, r7)
+            java.util.HashMap<android.util.Pair<java.lang.Long, java.lang.Integer>, org.telegram.messenger.DownloadObject> r8 = r0.downloadQueuePairs
+            android.util.Pair r9 = new android.util.Pair
+            long r10 = r7.id
+            java.lang.Long r10 = java.lang.Long.valueOf(r10)
+            int r11 = r7.type
+            java.lang.Integer r11 = java.lang.Integer.valueOf(r11)
+            r9.<init>(r10, r11)
+            r8.put(r9, r7)
+        L_0x00c5:
+            int r5 = r5 + 1
+            goto L_0x0021
+        L_0x00c9:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.DownloadController.processDownloadObjects(int, java.util.ArrayList):void");

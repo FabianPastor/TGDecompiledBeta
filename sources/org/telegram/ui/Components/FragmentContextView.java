@@ -589,6 +589,7 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     private void checkLiveLocation(boolean z) {
         boolean z2;
         String str;
+        String str2;
         View fragmentView = this.fragment.getFragmentView();
         if (!z && fragmentView != null && (fragmentView.getParent() == null || ((View) fragmentView.getParent()).getVisibility() != 0)) {
             z = true;
@@ -671,15 +672,18 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
                 LocationController.SharingLocationInfo sharingLocationInfo = (LocationController.SharingLocationInfo) arrayList.get(0);
                 int dialogId = (int) sharingLocationInfo.messageObject.getDialogId();
                 if (dialogId > 0) {
-                    str = UserObject.getFirstName(MessagesController.getInstance(sharingLocationInfo.messageObject.currentAccount).getUser(Integer.valueOf(dialogId)));
+                    str2 = UserObject.getFirstName(MessagesController.getInstance(sharingLocationInfo.messageObject.currentAccount).getUser(Integer.valueOf(dialogId)));
+                    str = LocaleController.getString("AttachLiveLocationIsSharing", NUM);
                 } else {
                     TLRPC$Chat chat = MessagesController.getInstance(sharingLocationInfo.messageObject.currentAccount).getChat(Integer.valueOf(-dialogId));
-                    str = chat != null ? chat.title : "";
+                    str2 = chat != null ? chat.title : "";
+                    str = LocaleController.getString("AttachLiveLocationIsSharingChat", NUM);
                 }
             } else {
-                str = LocaleController.formatPluralString("Chats", arrayList.size());
+                str2 = LocaleController.formatPluralString("Chats", arrayList.size());
+                str = LocaleController.getString("AttachLiveLocationIsSharingChats", NUM);
             }
-            String format = String.format(LocaleController.getString("AttachLiveLocationIsSharing", NUM), new Object[]{string, str});
+            String format = String.format(str, new Object[]{string, str2});
             int indexOf = format.indexOf(string);
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(format);
             this.titleTextView.setEllipsize(TextUtils.TruncateAt.END);

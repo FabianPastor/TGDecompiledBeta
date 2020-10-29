@@ -1769,6 +1769,8 @@
     <public type="string" name="AttachInlineRestrictedForever" id="NUM" />
     <public type="string" name="AttachLiveLocation" id="NUM" />
     <public type="string" name="AttachLiveLocationIsSharing" id="NUM" />
+    <public type="string" name="AttachLiveLocationIsSharingChat" id="NUM" />
+    <public type="string" name="AttachLiveLocationIsSharingChats" id="NUM" />
     <public type="string" name="AttachLocation" id="NUM" />
     <public type="string" name="AttachMediaRestricted" id="NUM" />
     <public type="string" name="AttachMediaRestrictedForever" id="NUM" />
@@ -2859,9 +2861,9 @@
     <public type="string" name="FontSizePreviewName" id="NUM" />
     <public type="string" name="FontSizePreviewReply" id="NUM" />
     <public type="string" name="FontType" id="NUM" />
-    <public type="string" name="Foots" id="NUM" />
     <public type="string" name="FootsAway" id="NUM" />
     <public type="string" name="FootsFromYou" id="NUM" />
+    <public type="string" name="FootsShort" id="NUM" />
     <public type="string" name="ForgotPassword" id="NUM" />
     <public type="string" name="Forward" id="NUM" />
     <public type="string" name="ForwardTo" id="NUM" />
@@ -3105,9 +3107,9 @@
     <public type="string" name="July" id="NUM" />
     <public type="string" name="JumpToDate" id="NUM" />
     <public type="string" name="June" id="NUM" />
-    <public type="string" name="KMeters" id="NUM" />
     <public type="string" name="KMetersAway2" id="NUM" />
     <public type="string" name="KMetersFromYou2" id="NUM" />
+    <public type="string" name="KMetersShort" id="NUM" />
     <public type="string" name="KeepMedia" id="NUM" />
     <public type="string" name="KeepMediaForever" id="NUM" />
     <public type="string" name="KeepMediaInfo" id="NUM" />
@@ -3197,7 +3199,8 @@
     <public type="string" name="LocalVideoCache" id="NUM" />
     <public type="string" name="LocatedChannelsTooMuch" id="NUM" />
     <public type="string" name="LocationNotifiation" id="NUM" />
-    <public type="string" name="LocationNotifiationButton" id="NUM" />
+    <public type="string" name="LocationNotifiationButtonGroup" id="NUM" />
+    <public type="string" name="LocationNotifiationButtonUser" id="NUM" />
     <public type="string" name="LocationNotifiationCloser" id="NUM" />
     <public type="string" name="LocationUpdated" id="NUM" />
     <public type="string" name="LocationUpdatedFormatted" id="NUM" />
@@ -3340,9 +3343,9 @@
     <public type="string" name="MessagesUnpinned_other" id="NUM" />
     <public type="string" name="MessagesUnpinned_two" id="NUM" />
     <public type="string" name="MessagesUnpinned_zero" id="NUM" />
-    <public type="string" name="Meters" id="NUM" />
     <public type="string" name="MetersAway2" id="NUM" />
     <public type="string" name="MetersFromYou2" id="NUM" />
+    <public type="string" name="MetersShort" id="NUM" />
     <public type="string" name="Meters_few" id="NUM" />
     <public type="string" name="Meters_many" id="NUM" />
     <public type="string" name="Meters_one" id="NUM" />
@@ -3350,9 +3353,9 @@
     <public type="string" name="Meters_two" id="NUM" />
     <public type="string" name="Meters_zero" id="NUM" />
     <public type="string" name="Mi" id="NUM" />
-    <public type="string" name="Miles" id="NUM" />
     <public type="string" name="MilesAway" id="NUM" />
     <public type="string" name="MilesFromYou" id="NUM" />
+    <public type="string" name="MilesShort" id="NUM" />
     <public type="string" name="MinutesBold_few" id="NUM" />
     <public type="string" name="MinutesBold_many" id="NUM" />
     <public type="string" name="MinutesBold_one" id="NUM" />
@@ -4161,12 +4164,6 @@
     <public type="string" name="PrivacySettingsChangedAlert" id="NUM" />
     <public type="string" name="PrivacyTitle" id="NUM" />
     <public type="string" name="PrivateShares" id="NUM" />
-    <public type="string" name="PrivateShares_few" id="NUM" />
-    <public type="string" name="PrivateShares_many" id="NUM" />
-    <public type="string" name="PrivateShares_one" id="NUM" />
-    <public type="string" name="PrivateShares_other" id="NUM" />
-    <public type="string" name="PrivateShares_two" id="NUM" />
-    <public type="string" name="PrivateShares_zero" id="NUM" />
     <public type="string" name="ProfileJoinChannel" id="NUM" />
     <public type="string" name="ProfileJoinGroup" id="NUM" />
     <public type="string" name="ProfilePopupNotification" id="NUM" />
@@ -4192,12 +4189,12 @@
     <public type="string" name="PublicPoll" id="NUM" />
     <public type="string" name="PublicPollCantForward" id="NUM" />
     <public type="string" name="PublicShares" id="NUM" />
-    <public type="string" name="PublicShares_few" id="NUM" />
-    <public type="string" name="PublicShares_many" id="NUM" />
-    <public type="string" name="PublicShares_one" id="NUM" />
-    <public type="string" name="PublicShares_other" id="NUM" />
-    <public type="string" name="PublicShares_two" id="NUM" />
-    <public type="string" name="PublicShares_zero" id="NUM" />
+    <public type="string" name="PublicSharesCount_few" id="NUM" />
+    <public type="string" name="PublicSharesCount_many" id="NUM" />
+    <public type="string" name="PublicSharesCount_one" id="NUM" />
+    <public type="string" name="PublicSharesCount_other" id="NUM" />
+    <public type="string" name="PublicSharesCount_two" id="NUM" />
+    <public type="string" name="PublicSharesCount_zero" id="NUM" />
     <public type="string" name="Purple" id="NUM" />
     <public type="string" name="QRCodePermissionNoCamera" id="NUM" />
     <public type="string" name="QuestionHint" id="NUM" />
@@ -4562,7 +4559,6 @@
     <public type="string" name="Shared_other" id="NUM" />
     <public type="string" name="Shared_two" id="NUM" />
     <public type="string" name="Shared_zero" id="NUM" />
-    <public type="string" name="Shares" id="NUM" />
     <public type="string" name="SharesPerPost" id="NUM" />
     <public type="string" name="Shares_few" id="NUM" />
     <public type="string" name="Shares_many" id="NUM" />

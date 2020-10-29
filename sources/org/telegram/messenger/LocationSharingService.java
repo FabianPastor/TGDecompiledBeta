@@ -97,6 +97,7 @@ public class LocationSharingService extends Service implements NotificationCente
 
     private void updateNotification(boolean z) {
         String str;
+        String str2;
         if (this.builder != null) {
             ArrayList<LocationController.SharingLocationInfo> infos = getInfos();
             if (infos.size() == 1) {
@@ -104,15 +105,18 @@ public class LocationSharingService extends Service implements NotificationCente
                 int dialogId = (int) sharingLocationInfo.messageObject.getDialogId();
                 int i = sharingLocationInfo.messageObject.currentAccount;
                 if (dialogId > 0) {
-                    str = UserObject.getFirstName(MessagesController.getInstance(i).getUser(Integer.valueOf(dialogId)));
+                    str2 = UserObject.getFirstName(MessagesController.getInstance(i).getUser(Integer.valueOf(dialogId)));
+                    str = LocaleController.getString("AttachLiveLocationIsSharing", NUM);
                 } else {
                     TLRPC$Chat chat = MessagesController.getInstance(i).getChat(Integer.valueOf(-dialogId));
-                    str = chat != null ? chat.title : "";
+                    str2 = chat != null ? chat.title : "";
+                    str = LocaleController.getString("AttachLiveLocationIsSharingChat", NUM);
                 }
             } else {
-                str = LocaleController.formatPluralString("Chats", infos.size());
+                str2 = LocaleController.formatPluralString("Chats", infos.size());
+                str = LocaleController.getString("AttachLiveLocationIsSharingChats", NUM);
             }
-            String format = String.format(LocaleController.getString("AttachLiveLocationIsSharing", NUM), new Object[]{LocaleController.getString("AttachLiveLocation", NUM), str});
+            String format = String.format(str, new Object[]{LocaleController.getString("AttachLiveLocation", NUM), str2});
             this.builder.setTicker(format);
             this.builder.setContentText(format);
             if (z) {

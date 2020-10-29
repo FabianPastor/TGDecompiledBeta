@@ -102,6 +102,7 @@ import java.util.regex.Pattern;
 import org.telegram.PhoneFormat.PhoneFormat;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.SharedConfig;
+import org.telegram.messenger.browser.Browser;
 import org.telegram.tgnet.ConnectionsManager;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.tgnet.TLRPC$TL_chatBannedRights;
@@ -361,17 +362,20 @@ public class AndroidUtilities {
         return strArr[0] + str;
     }
 
-    private static void gatherLinks(ArrayList<LinkSpec> arrayList, Spannable spannable, Pattern pattern, String[] strArr, Linkify.MatchFilter matchFilter) {
+    private static void gatherLinks(ArrayList<LinkSpec> arrayList, Spannable spannable, Pattern pattern, String[] strArr, Linkify.MatchFilter matchFilter, boolean z) {
         Matcher matcher = pattern.matcher(spannable);
         while (matcher.find()) {
             int start = matcher.start();
             int end = matcher.end();
             if (matchFilter == null || matchFilter.acceptMatch(spannable, start, end)) {
                 LinkSpec linkSpec = new LinkSpec();
-                linkSpec.url = makeUrl(matcher.group(0), strArr, matcher);
-                linkSpec.start = start;
-                linkSpec.end = end;
-                arrayList.add(linkSpec);
+                String makeUrl = makeUrl(matcher.group(0), strArr, matcher);
+                if (!z || Browser.isInternalUrl(makeUrl, (boolean[]) null)) {
+                    linkSpec.url = makeUrl;
+                    linkSpec.start = start;
+                    linkSpec.end = end;
+                    arrayList.add(linkSpec);
+                }
             }
         }
     }
@@ -381,7 +385,11 @@ public class AndroidUtilities {
     }
 
     public static boolean addLinks(Spannable spannable, int i) {
-        if ((spannable != null && containsUnsupportedCharacters(spannable.toString())) || i == 0) {
+        return addLinks(spannable, i, false);
+    }
+
+    public static boolean addLinks(Spannable spannable, int i, boolean z) {
+        if (spannable == null || containsUnsupportedCharacters(spannable.toString()) || i == 0) {
             return false;
         }
         URLSpan[] uRLSpanArr = (URLSpan[]) spannable.getSpans(0, spannable.length(), URLSpan.class);
@@ -389,11 +397,11 @@ public class AndroidUtilities {
             spannable.removeSpan(uRLSpanArr[length]);
         }
         ArrayList arrayList = new ArrayList();
-        if ((i & 4) != 0) {
+        if (!z && (i & 4) != 0) {
             Linkify.addLinks(spannable, 4);
         }
         if ((i & 1) != 0) {
-            gatherLinks(arrayList, spannable, LinkifyPort.WEB_URL, new String[]{"http://", "https://", "ton://", "tg://"}, sUrlMatchFilter);
+            gatherLinks(arrayList, spannable, LinkifyPort.WEB_URL, new String[]{"http://", "https://", "ton://", "tg://"}, sUrlMatchFilter, z);
         }
         pruneOverlaps(arrayList);
         if (arrayList.size() == 0) {
@@ -995,7 +1003,7 @@ public class AndroidUtilities {
                 int r0 = r9.type
                 r1 = 5
                 if (r0 != r1) goto L_0x000f
-                r0 = 2131624897(0x7f0e03c1, float:1.8876987E38)
+                r0 = 2131624899(0x7f0e03c3, float:1.887699E38)
                 java.lang.String r1 = "ContactBirthday"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1007,12 +1015,12 @@ public class AndroidUtilities {
                 java.lang.String r1 = "ORG"
                 boolean r0 = r1.equalsIgnoreCase(r0)
                 if (r0 == 0) goto L_0x0029
-                r0 = 2131624898(0x7f0e03c2, float:1.8876989E38)
+                r0 = 2131624900(0x7f0e03c4, float:1.8876993E38)
                 java.lang.String r1 = "ContactJob"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
             L_0x0029:
-                r0 = 2131624899(0x7f0e03c3, float:1.887699E38)
+                r0 = 2131624901(0x7f0e03c5, float:1.8876995E38)
                 java.lang.String r1 = "ContactJobTitle"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 return r0
@@ -1130,27 +1138,27 @@ public class AndroidUtilities {
             L_0x00cf:
                 goto L_0x0101
             L_0x00d0:
-                r0 = 2131626617(0x7f0e0a79, float:1.8880475E38)
+                r0 = 2131626620(0x7f0e0a7c, float:1.8880481E38)
                 java.lang.String r1 = "PhoneOther"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00da:
-                r0 = 2131626618(0x7f0e0a7a, float:1.8880477E38)
+                r0 = 2131626621(0x7f0e0a7d, float:1.8880483E38)
                 java.lang.String r1 = "PhoneWork"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00e4:
-                r0 = 2131626609(0x7f0e0a71, float:1.888046E38)
+                r0 = 2131626612(0x7f0e0a74, float:1.8880465E38)
                 java.lang.String r1 = "PhoneMain"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00ee:
-                r0 = 2131626608(0x7f0e0a70, float:1.8880457E38)
+                r0 = 2131626611(0x7f0e0a73, float:1.8880463E38)
                 java.lang.String r1 = "PhoneHome"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
                 goto L_0x0101
             L_0x00f8:
-                r0 = 2131626610(0x7f0e0a72, float:1.8880461E38)
+                r0 = 2131626613(0x7f0e0a75, float:1.8880467E38)
                 java.lang.String r1 = "PhoneMobile"
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             L_0x0101:
@@ -3240,13 +3248,13 @@ public class AndroidUtilities {
             java.lang.String r1 = "ApkRestricted"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r9.setMessage(r0)
-            r0 = 2131626602(0x7f0e0a6a, float:1.8880445E38)
+            r0 = 2131626605(0x7f0e0a6d, float:1.888045E38)
             java.lang.String r1 = "PermissionOpenSettings"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY r1 = new org.telegram.messenger.-$$Lambda$AndroidUtilities$KZdcN0wubmcXmQEEq3FC_4krNDY
             r1.<init>(r10)
             r9.setPositiveButton(r0, r1)
-            r10 = 2131624573(0x7f0e027d, float:1.887633E38)
+            r10 = 2131624575(0x7f0e027f, float:1.8876334E38)
             java.lang.String r0 = "Cancel"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r0, r10)
             r9.setNegativeButton(r10, r3)

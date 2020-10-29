@@ -3272,7 +3272,7 @@ public class ImageLoader {
                 if (this.imageLocation != null && !ImageLoader.this.forceLoadingImages.containsKey(this.key)) {
                     ImageLocation imageLocation2 = this.imageLocation;
                     if (imageLocation2.location != null) {
-                        FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.imageLocation.location, this.ext);
+                        FileLoader.getInstance(this.currentAccount).cancelLoadFile((TLRPC$FileLocation) this.imageLocation.location, this.ext);
                     } else if (imageLocation2.document != null) {
                         FileLoader.getInstance(this.currentAccount).cancelLoadFile(this.imageLocation.document);
                     } else if (imageLocation2.secureDocument != null) {
