@@ -103,6 +103,7 @@ import org.telegram.tgnet.TLRPC$TL_messageEntityUrl;
 import org.telegram.tgnet.TLRPC$TL_messageMediaDocument;
 import org.telegram.tgnet.TLRPC$TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC$TL_messageReplyHeader;
+import org.telegram.tgnet.TLRPC$TL_messageService;
 import org.telegram.tgnet.TLRPC$TL_message_secret;
 import org.telegram.tgnet.TLRPC$TL_messages_allStickers;
 import org.telegram.tgnet.TLRPC$TL_messages_archivedStickers;
@@ -7029,104 +7030,70 @@ public class MediaDataController extends BaseController {
         }
     }
 
-    /* JADX WARNING: type inference failed for: r0v7, types: [int] */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Multi-variable type inference failed */
     /* renamed from: lambda$loadPinnedMessages$106 */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$loadPinnedMessages$106$MediaDataController(int r10, org.telegram.tgnet.TLRPC$TL_messages_search r11, long r12, int r14, org.telegram.tgnet.TLObject r15, org.telegram.tgnet.TLRPC$TL_error r16) {
-        /*
-            r9 = this;
-            r0 = r15
-            java.util.ArrayList r3 = new java.util.ArrayList
-            r3.<init>()
-            java.util.HashMap r8 = new java.util.HashMap
-            r8.<init>()
-            boolean r1 = r0 instanceof org.telegram.tgnet.TLRPC$messages_Messages
-            r2 = 1
-            r4 = 0
-            if (r1 == 0) goto L_0x008a
-            org.telegram.tgnet.TLRPC$messages_Messages r0 = (org.telegram.tgnet.TLRPC$messages_Messages) r0
-            org.telegram.messenger.MessagesStorage r1 = r9.getMessagesStorage()
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r5 = r0.users
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r6 = r0.chats
-            r1.putUsersAndChats(r5, r6, r2, r2)
-            org.telegram.messenger.MessagesController r1 = r9.getMessagesController()
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$User> r5 = r0.users
-            r1.putUsers(r5, r4)
-            org.telegram.messenger.MessagesController r1 = r9.getMessagesController()
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Chat> r5 = r0.chats
-            r1.putChats(r5, r4)
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r0.messages
-            int r1 = r1.size()
-            r5 = 0
-        L_0x0037:
-            if (r5 >= r1) goto L_0x005f
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r6 = r0.messages
-            java.lang.Object r6 = r6.get(r5)
-            org.telegram.tgnet.TLRPC$Message r6 = (org.telegram.tgnet.TLRPC$Message) r6
-            boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_messageService
-            if (r7 != 0) goto L_0x005c
-            boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_messageEmpty
-            if (r7 == 0) goto L_0x004a
-            goto L_0x005c
-        L_0x004a:
-            int r7 = r6.id
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
-            r3.add(r7)
-            int r7 = r6.id
-            java.lang.Integer r7 = java.lang.Integer.valueOf(r7)
-            r8.put(r7, r6)
-        L_0x005c:
-            int r5 = r5 + 1
-            goto L_0x0037
-        L_0x005f:
-            if (r10 == 0) goto L_0x006e
-            boolean r1 = r3.isEmpty()
-            if (r1 == 0) goto L_0x006e
-            java.lang.Integer r1 = java.lang.Integer.valueOf(r10)
-            r3.add(r1)
-        L_0x006e:
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r1 = r0.messages
-            int r1 = r1.size()
-            r5 = r11
-            int r5 = r5.limit
-            if (r1 >= r5) goto L_0x007a
-            goto L_0x007b
-        L_0x007a:
-            r2 = 0
-        L_0x007b:
-            int r1 = r0.count
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$Message> r0 = r0.messages
-            int r0 = r0.size()
-            int r0 = java.lang.Math.max(r1, r0)
-            r5 = r0
-            r7 = r2
-            goto L_0x0097
-        L_0x008a:
-            if (r10 == 0) goto L_0x0094
-            java.lang.Integer r0 = java.lang.Integer.valueOf(r10)
-            r3.add(r0)
-            goto L_0x0095
-        L_0x0094:
-            r2 = 0
-        L_0x0095:
-            r5 = r2
-            r7 = 0
-        L_0x0097:
-            org.telegram.messenger.MessagesStorage r0 = r9.getMessagesStorage()
-            r4 = 1
-            r1 = r12
-            r6 = r14
-            r0.updatePinnedMessages(r1, r3, r4, r5, r6, r7, r8)
-            org.telegram.messenger.-$$Lambda$MediaDataController$vVtsx7SShvoUWjf6jOdafr0rJE4 r0 = new org.telegram.messenger.-$$Lambda$MediaDataController$vVtsx7SShvoUWjf6jOdafr0rJE4
-            r1 = r9
-            r2 = r12
-            r0.<init>(r12)
-            org.telegram.messenger.AndroidUtilities.runOnUIThread(r0)
-            return
-        */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MediaDataController.lambda$loadPinnedMessages$106$MediaDataController(int, org.telegram.tgnet.TLRPC$TL_messages_search, long, int, org.telegram.tgnet.TLObject, org.telegram.tgnet.TLRPC$TL_error):void");
+    public /* synthetic */ void lambda$loadPinnedMessages$106$MediaDataController(int i, TLRPC$TL_messages_search tLRPC$TL_messages_search, long j, int i2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+        boolean z;
+        int i3;
+        int i4;
+        TLObject tLObject2 = tLObject;
+        ArrayList arrayList = new ArrayList();
+        HashMap hashMap = new HashMap();
+        if (tLObject2 instanceof TLRPC$messages_Messages) {
+            TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject2;
+            SparseArray sparseArray = new SparseArray();
+            for (int i5 = 0; i5 < tLRPC$messages_Messages.users.size(); i5++) {
+                TLRPC$User tLRPC$User = tLRPC$messages_Messages.users.get(i5);
+                sparseArray.put(tLRPC$User.id, tLRPC$User);
+            }
+            SparseArray sparseArray2 = new SparseArray();
+            for (int i6 = 0; i6 < tLRPC$messages_Messages.chats.size(); i6++) {
+                TLRPC$Chat tLRPC$Chat = tLRPC$messages_Messages.chats.get(i6);
+                sparseArray2.put(tLRPC$Chat.id, tLRPC$Chat);
+            }
+            getMessagesStorage().putUsersAndChats(tLRPC$messages_Messages.users, tLRPC$messages_Messages.chats, true, true);
+            getMessagesController().putUsers(tLRPC$messages_Messages.users, false);
+            getMessagesController().putChats(tLRPC$messages_Messages.chats, false);
+            int size = tLRPC$messages_Messages.messages.size();
+            for (int i7 = 0; i7 < size; i7++) {
+                TLRPC$Message tLRPC$Message = tLRPC$messages_Messages.messages.get(i7);
+                if (!(tLRPC$Message instanceof TLRPC$TL_messageService) && !(tLRPC$Message instanceof TLRPC$TL_messageEmpty)) {
+                    arrayList.add(Integer.valueOf(tLRPC$Message.id));
+                    Integer valueOf = Integer.valueOf(tLRPC$Message.id);
+                    MessageObject messageObject = r10;
+                    MessageObject messageObject2 = new MessageObject(this.currentAccount, tLRPC$Message, (SparseArray<TLRPC$User>) sparseArray, (SparseArray<TLRPC$Chat>) sparseArray2, false, false);
+                    hashMap.put(valueOf, messageObject);
+                }
+            }
+            if (i != 0 && arrayList.isEmpty()) {
+                arrayList.add(Integer.valueOf(i));
+            }
+            boolean z2 = tLRPC$messages_Messages.messages.size() < tLRPC$TL_messages_search.limit;
+            i3 = Math.max(tLRPC$messages_Messages.count, tLRPC$messages_Messages.messages.size());
+            z = z2;
+        } else {
+            if (i != 0) {
+                arrayList.add(Integer.valueOf(i));
+                i4 = 1;
+            } else {
+                i4 = 0;
+            }
+            i3 = i4;
+            z = false;
+        }
+        long j2 = j;
+        getMessagesStorage().updatePinnedMessages(j2, arrayList, true, i3, i2, z, hashMap);
+        AndroidUtilities.runOnUIThread(new Runnable(j2) {
+            public final /* synthetic */ long f$1;
+
+            {
+                this.f$1 = r2;
+            }
+
+            public final void run() {
+                MediaDataController.this.lambda$null$105$MediaDataController(this.f$1);
+            }
+        });
     }
 
     /* access modifiers changed from: private */

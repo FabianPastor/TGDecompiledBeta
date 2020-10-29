@@ -6803,7 +6803,7 @@ public class MessagesController extends BaseController implements NotificationCe
                 processNewDifferenceParams(-1, tLRPC$TL_messages_affectedHistory.pts, -1, tLRPC$TL_messages_affectedHistory.pts_count);
             }
             new ArrayList();
-            getMessagesStorage().updatePinnedMessages((long) (tLRPC$Chat != null ? -tLRPC$Chat.id : tLRPC$User.id), (ArrayList<Integer>) null, false, 0, 0, false, (HashMap<Integer, TLRPC$Message>) null);
+            getMessagesStorage().updatePinnedMessages((long) (tLRPC$Chat != null ? -tLRPC$Chat.id : tLRPC$User.id), (ArrayList<Integer>) null, false, 0, 0, false, (HashMap<Integer, MessageObject>) null);
         }
     }
 
@@ -6841,7 +6841,7 @@ public class MessagesController extends BaseController implements NotificationCe
         if (tLRPC$TL_error == null) {
             ArrayList arrayList = new ArrayList();
             arrayList.add(Integer.valueOf(i));
-            getMessagesStorage().updatePinnedMessages((long) (tLRPC$Chat != null ? -tLRPC$Chat.id : tLRPC$User.id), arrayList, !z, -1, 0, false, (HashMap<Integer, TLRPC$Message>) null);
+            getMessagesStorage().updatePinnedMessages((long) (tLRPC$Chat != null ? -tLRPC$Chat.id : tLRPC$User.id), arrayList, !z, -1, 0, false, (HashMap<Integer, MessageObject>) null);
             processUpdates((TLRPC$Updates) tLObject, false);
         }
     }
