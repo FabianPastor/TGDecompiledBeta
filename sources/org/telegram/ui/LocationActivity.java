@@ -1255,7 +1255,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     /* access modifiers changed from: private */
     /* renamed from: lambda$createView$6 */
     public /* synthetic */ void lambda$createView$6$LocationActivity(View view) {
-        if (getParentActivity() != null && this.myLocation != null && checkGpsEnabled()) {
+        if (getParentActivity() != null && this.myLocation != null && checkGpsEnabled() && this.googleMap != null) {
             HintView hintView2 = this.hintView;
             if (hintView2 != null) {
                 hintView2.hide();
@@ -2292,20 +2292,22 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     private void createCircle(int i) {
-        List asList = Arrays.asList(new PatternItem[]{new Gap(20.0f), new Dash(20.0f)});
-        CircleOptions circleOptions = new CircleOptions();
-        circleOptions.center(new LatLng(this.myLocation.getLatitude(), this.myLocation.getLongitude()));
-        circleOptions.radius((double) i);
-        if (isActiveThemeDark()) {
-            circleOptions.strokeColor(-1);
-            circleOptions.fillColor(NUM);
-        } else {
-            circleOptions.strokeColor(-16777216);
-            circleOptions.fillColor(NUM);
+        if (this.googleMap != null) {
+            List asList = Arrays.asList(new PatternItem[]{new Gap(20.0f), new Dash(20.0f)});
+            CircleOptions circleOptions = new CircleOptions();
+            circleOptions.center(new LatLng(this.myLocation.getLatitude(), this.myLocation.getLongitude()));
+            circleOptions.radius((double) i);
+            if (isActiveThemeDark()) {
+                circleOptions.strokeColor(-1);
+                circleOptions.fillColor(NUM);
+            } else {
+                circleOptions.strokeColor(-16777216);
+                circleOptions.fillColor(NUM);
+            }
+            circleOptions.strokePattern(asList);
+            circleOptions.strokeWidth(2.0f);
+            this.proximityCircle = this.googleMap.addCircle(circleOptions);
         }
-        circleOptions.strokePattern(asList);
-        circleOptions.strokeWidth(2.0f);
-        this.proximityCircle = this.googleMap.addCircle(circleOptions);
     }
 
     private void removeInfoView() {

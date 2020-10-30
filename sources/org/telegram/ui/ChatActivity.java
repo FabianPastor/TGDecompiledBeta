@@ -6364,6 +6364,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         String str;
         this.searchingUserMessages = tLRPC$User;
         this.searchingChatMessages = tLRPC$Chat;
+        if (this.searchItem == null) {
+            return;
+        }
         if (tLRPC$User != null || tLRPC$Chat != null) {
             if (tLRPC$User != null) {
                 str = tLRPC$User.first_name;
@@ -6724,7 +6727,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             if (!this.inPreviewMode && (chatActivityEnterView2 = this.chatActivityEnterView) != null) {
                 if (chatActivityEnterView2.getAnimatedTop() != 0) {
                     this.chatListViewPaddingTop += (this.chatActivityEnterView.getHeightWithTopView() - AndroidUtilities.dp(51.0f)) - this.chatActivityEnterView.getAnimatedTop();
-                } else {
+                } else if (!this.chatActivityEnterView.pannelAniamationInProgress()) {
                     this.chatListViewPaddingTop = (int) (((float) this.chatListViewPaddingTop) - this.chatListView.getTranslationY());
                 }
             }
@@ -27961,7 +27964,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     /* access modifiers changed from: private */
     /* renamed from: lambda$processSelectedOption$92 */
     public /* synthetic */ void lambda$processSelectedOption$92$ChatActivity(boolean z, int i) {
-        if (i > 0) {
+        if (getParentActivity() != null && i > 0) {
             BulletinFactory.of((BaseFragment) this).createDownloadBulletin(z ? BulletinFactory.FileType.AUDIOS : BulletinFactory.FileType.UNKNOWNS, i).show();
         }
     }
@@ -27970,16 +27973,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     /* renamed from: lambda$processSelectedOption$93 */
     public /* synthetic */ void lambda$processSelectedOption$93$ChatActivity(boolean z, boolean z2, boolean z3) {
         BulletinFactory.FileType fileType;
-        if (z) {
-            fileType = BulletinFactory.FileType.PHOTO_TO_DOWNLOADS;
-        } else if (z2) {
-            fileType = BulletinFactory.FileType.VIDEO_TO_DOWNLOADS;
-        } else if (z3) {
-            fileType = BulletinFactory.FileType.GIF;
-        } else {
-            fileType = BulletinFactory.FileType.UNKNOWN;
+        if (getParentActivity() != null) {
+            if (z) {
+                fileType = BulletinFactory.FileType.PHOTO_TO_DOWNLOADS;
+            } else if (z2) {
+                fileType = BulletinFactory.FileType.VIDEO_TO_DOWNLOADS;
+            } else if (z3) {
+                fileType = BulletinFactory.FileType.GIF;
+            } else {
+                fileType = BulletinFactory.FileType.UNKNOWN;
+            }
+            BulletinFactory.of((BaseFragment) this).createDownloadBulletin(fileType).show();
         }
-        BulletinFactory.of((BaseFragment) this).createDownloadBulletin(fileType).show();
     }
 
     static /* synthetic */ void lambda$processSelectedOption$94(boolean[] zArr, View view) {

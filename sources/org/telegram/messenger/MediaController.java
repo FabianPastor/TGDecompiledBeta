@@ -5141,7 +5141,9 @@ public class MediaController implements AudioManager.OnAudioFocusChangeListener,
     }
 
     public static void saveFilesFromMessages(Context context, AccountInstance accountInstance, ArrayList<MessageObject> arrayList, MessagesStorage.IntCallback intCallback) {
-        new MediaLoader(context, accountInstance, arrayList, intCallback).start();
+        if (arrayList != null && !arrayList.isEmpty()) {
+            new MediaLoader(context, accountInstance, arrayList, intCallback).start();
+        }
     }
 
     public static void saveFile(String str, Context context, int i, String str2, String str3) {

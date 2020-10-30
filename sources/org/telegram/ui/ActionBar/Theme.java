@@ -14088,7 +14088,9 @@ public class Theme {
 
     public static void setDrawableColor(Drawable drawable, int i) {
         if (drawable != null) {
-            if (drawable instanceof MsgClockDrawable) {
+            if (drawable instanceof StatusDrawable) {
+                ((StatusDrawable) drawable).setColor(i);
+            } else if (drawable instanceof MsgClockDrawable) {
                 ((MsgClockDrawable) drawable).setColor(i);
             } else if (drawable instanceof ShapeDrawable) {
                 ((ShapeDrawable) drawable).getPaint().setColor(i);

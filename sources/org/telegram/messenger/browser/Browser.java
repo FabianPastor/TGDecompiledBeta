@@ -567,7 +567,7 @@ public class Browser {
                     return false;
                 }
             } else if (!"telegram.me".equals(lowerCase) && !"t.me".equals(lowerCase)) {
-                return z && ("telegram.org".equals(lowerCase) || "telegra.ph".equals(lowerCase) || "telesco.pe".equals(lowerCase));
+                return z && (lowerCase.endsWith("telegram.org") || lowerCase.endsWith("telegra.ph") || lowerCase.endsWith("telesco.pe"));
             } else {
                 String path2 = uri.getPath();
                 if (path2 != null && path2.length() > 1) {

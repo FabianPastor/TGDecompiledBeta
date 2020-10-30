@@ -1295,7 +1295,7 @@ public class UndoView extends FrameLayout {
             float r1 = (float) r1
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatDistance(r1, r15)
             r4[r7] = r1
-            java.lang.String r1 = "ProximityAlertSetInfoGroup"
+            java.lang.String r1 = "ProximityAlertSetInfoGroup2"
             java.lang.String r1 = org.telegram.messenger.LocaleController.formatString(r1, r3, r4)
             r2.setText(r1)
         L_0x092b:

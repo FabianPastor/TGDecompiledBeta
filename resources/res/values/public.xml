@@ -4171,7 +4171,7 @@
     <public type="string" name="ProfilePopupNotificationInfo" id="NUM" />
     <public type="string" name="ProximityAlertCancelled" id="NUM" />
     <public type="string" name="ProximityAlertSet" id="NUM" />
-    <public type="string" name="ProximityAlertSetInfoGroup" id="NUM" />
+    <public type="string" name="ProximityAlertSetInfoGroup2" id="NUM" />
     <public type="string" name="ProximityAlertSetInfoUser" id="NUM" />
     <public type="string" name="ProximityTooltioGroup" id="NUM" />
     <public type="string" name="ProximityTooltioUser" id="NUM" />

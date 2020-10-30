@@ -4310,7 +4310,7 @@ public final class R {
         public static final int ProfilePopupNotificationInfo = NUM;
         public static final int ProximityAlertCancelled = NUM;
         public static final int ProximityAlertSet = NUM;
-        public static final int ProximityAlertSetInfoGroup = NUM;
+        public static final int ProximityAlertSetInfoGroup2 = NUM;
         public static final int ProximityAlertSetInfoUser = NUM;
         public static final int ProximityTooltioGroup = NUM;
         public static final int ProximityTooltioUser = NUM;

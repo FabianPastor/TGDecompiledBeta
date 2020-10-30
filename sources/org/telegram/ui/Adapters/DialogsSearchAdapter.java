@@ -918,6 +918,10 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                 this.searchWas = false;
                 this.lastSearchId = 0;
                 this.waitingResponseCount = 0;
+                DialogsSearchAdapterDelegate dialogsSearchAdapterDelegate2 = this.delegate;
+                if (dialogsSearchAdapterDelegate2 != null) {
+                    dialogsSearchAdapterDelegate2.searchStateChanged(false, true);
+                }
                 searchMessagesInternal((String) null, 0);
                 notifyDataSetChanged();
                 this.localTipDates.clear();
@@ -941,9 +945,9 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
                     }
                     this.waitingResponseCount = 0;
                     notifyDataSetChanged();
-                    DialogsSearchAdapterDelegate dialogsSearchAdapterDelegate2 = this.delegate;
-                    if (dialogsSearchAdapterDelegate2 != null) {
-                        dialogsSearchAdapterDelegate2.searchStateChanged(false, false);
+                    DialogsSearchAdapterDelegate dialogsSearchAdapterDelegate3 = this.delegate;
+                    if (dialogsSearchAdapterDelegate3 != null) {
+                        dialogsSearchAdapterDelegate3.searchStateChanged(false, false);
                     }
                 }
             }
@@ -951,7 +955,9 @@ public class DialogsSearchAdapter extends RecyclerListView.SelectionAdapter {
             this.lastSearchId = i3;
             this.waitingResponseCount = 3;
             notifyDataSetChanged();
-            if (!(this.needMessagesSearch == 2 || (dialogsSearchAdapterDelegate = this.delegate) == null)) {
+            if (this.needMessagesSearch == 2 || (dialogsSearchAdapterDelegate = this.delegate) == null) {
+                this.waitingResponseCount--;
+            } else {
                 dialogsSearchAdapterDelegate.searchStateChanged(true, false);
             }
             DispatchQueue dispatchQueue = Utilities.searchQueue;

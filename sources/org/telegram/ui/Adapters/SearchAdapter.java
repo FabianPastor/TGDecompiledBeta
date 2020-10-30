@@ -384,24 +384,27 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                     charSequence = null;
                 } else {
                     String lastFoundUsername = this.searchAdapterHelper.getLastFoundUsername();
-                    if (lastFoundUsername.startsWith("@")) {
+                    if (lastFoundUsername != null && lastFoundUsername.startsWith("@")) {
                         lastFoundUsername = lastFoundUsername.substring(1);
                     }
                     try {
                         SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
                         spannableStringBuilder.append("@");
                         spannableStringBuilder.append(str);
-                        int indexOfIgnoreCase = AndroidUtilities.indexOfIgnoreCase(str, lastFoundUsername);
                         charSequence = spannableStringBuilder;
-                        if (indexOfIgnoreCase != -1) {
-                            int length = lastFoundUsername.length();
-                            if (indexOfIgnoreCase == 0) {
-                                length++;
-                            } else {
-                                indexOfIgnoreCase++;
-                            }
-                            spannableStringBuilder.setSpan(new ForegroundColorSpanThemable("windowBackgroundWhiteBlueText4"), indexOfIgnoreCase, length + indexOfIgnoreCase, 33);
+                        if (lastFoundUsername != null) {
+                            int indexOfIgnoreCase = AndroidUtilities.indexOfIgnoreCase(str, lastFoundUsername);
                             charSequence = spannableStringBuilder;
+                            if (indexOfIgnoreCase != -1) {
+                                int length = lastFoundUsername.length();
+                                if (indexOfIgnoreCase == 0) {
+                                    length++;
+                                } else {
+                                    indexOfIgnoreCase++;
+                                }
+                                spannableStringBuilder.setSpan(new ForegroundColorSpanThemable("windowBackgroundWhiteBlueText4"), indexOfIgnoreCase, length + indexOfIgnoreCase, 33);
+                                charSequence = spannableStringBuilder;
+                            }
                         }
                     } catch (Exception e) {
                         FileLog.e((Throwable) e);

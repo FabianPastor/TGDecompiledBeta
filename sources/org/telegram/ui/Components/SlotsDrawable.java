@@ -19,6 +19,7 @@ public class SlotsDrawable extends RLottieDrawable {
     private int[] frameNums = new int[5];
     private ReelValue left;
     private long[] nativePtrs = new long[5];
+    private boolean playWinAnimation;
     private ReelValue right;
     private int[] secondFrameCounts = new int[3];
     private int[] secondFrameNums = new int[3];
@@ -99,7 +100,7 @@ public class SlotsDrawable extends RLottieDrawable {
                                 i3++;
                             }
                         }
-                        if (this.autoRepeatPlayCount == 1) {
+                        if (this.playWinAnimation) {
                             int[] iArr3 = this.frameNums;
                             if (iArr3[0] + 1 < this.frameCounts[0]) {
                                 iArr3[0] = iArr3[0] + 1;
@@ -117,11 +118,13 @@ public class SlotsDrawable extends RLottieDrawable {
                             long j = jArr2[i4];
                             int[] iArr4 = this.secondFrameNums;
                             RLottieDrawable.getFrame(j, iArr4[i4] >= 0 ? iArr4[i4] : this.secondFrameCounts[i4] - 1, this.backgroundBitmap, this.width, this.height, this.backgroundBitmap.getRowBytes(), false);
-                            int[] iArr5 = this.secondFrameNums;
-                            if (iArr5[i4] + 1 < this.secondFrameCounts[i4]) {
-                                iArr5[i4] = iArr5[i4] + 1;
-                            } else {
-                                iArr5[i4] = -1;
+                            if (!this.nextFrameIsLast) {
+                                int[] iArr5 = this.secondFrameNums;
+                                if (iArr5[i4] + 1 < this.secondFrameCounts[i4]) {
+                                    iArr5[i4] = iArr5[i4] + 1;
+                                } else {
+                                    iArr5[i4] = -1;
+                                }
                             }
                             i4++;
                         }
@@ -133,16 +136,14 @@ public class SlotsDrawable extends RLottieDrawable {
                         int[] iArr7 = this.secondFrameNums;
                         if (iArr7[0] == -1 && iArr7[1] == -1 && iArr7[2] == -1) {
                             this.nextFrameIsLast = true;
+                            this.autoRepeatPlayCount++;
                         }
                         ReelValue reelValue = this.left;
                         ReelValue reelValue2 = this.right;
                         if (reelValue != reelValue2 || reelValue2 != this.center) {
                             this.frameNums[0] = -1;
                         } else if (this.secondFrameNums[0] == this.secondFrameCounts[0] - 100) {
-                            int i5 = this.autoRepeatPlayCount;
-                            if (i5 == 0) {
-                                this.autoRepeatPlayCount = i5 + 1;
-                            }
+                            this.playWinAnimation = true;
                             if (reelValue == ReelValue.sevenWin && (runnable = (Runnable) this.onFinishCallback.get()) != null) {
                                 AndroidUtilities.runOnUIThread(runnable);
                             }
