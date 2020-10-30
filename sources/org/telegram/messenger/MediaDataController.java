@@ -5780,7 +5780,7 @@ public class MediaDataController extends BaseController {
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r0, r10)     // Catch:{ all -> 0x02e0 }
             r9.setLongLabel(r0)     // Catch:{ all -> 0x02e0 }
             android.content.Context r0 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
-            r10 = 2131165970(0x7var_, float:1.7946172E38)
+            r10 = 2131165971(0x7var_, float:1.7946174E38)
             androidx.core.graphics.drawable.IconCompat r0 = androidx.core.graphics.drawable.IconCompat.createWithResource(r0, r10)     // Catch:{ all -> 0x02e0 }
             r9.setIcon(r0)     // Catch:{ all -> 0x02e0 }
             r9.setIntent(r2)     // Catch:{ all -> 0x02e0 }
@@ -6007,7 +6007,7 @@ public class MediaDataController extends BaseController {
             goto L_0x02be
         L_0x02b2:
             android.content.Context r6 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ all -> 0x02e0 }
-            r8 = 2131165971(0x7var_, float:1.7946174E38)
+            r8 = 2131165972(0x7var_, float:1.7946176E38)
             androidx.core.graphics.drawable.IconCompat r6 = androidx.core.graphics.drawable.IconCompat.createWithResource(r6, r8)     // Catch:{ all -> 0x02e0 }
             r1.setIcon(r6)     // Catch:{ all -> 0x02e0 }
         L_0x02be:
@@ -6635,7 +6635,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r5)     // Catch:{ Exception -> 0x0247 }
             if (r8 == 0) goto L_0x006a
             java.lang.String r8 = "RepliesTitle"
-            r9 = 2131626844(0x7f0e0b5c, float:1.8880936E38)
+            r9 = 2131626848(0x7f0e0b60, float:1.8880944E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0247 }
         L_0x0067:
             r9 = r4
@@ -6645,7 +6645,7 @@ public class MediaDataController extends BaseController {
             boolean r8 = org.telegram.messenger.UserObject.isUserSelf(r5)     // Catch:{ Exception -> 0x0247 }
             if (r8 == 0) goto L_0x007a
             java.lang.String r8 = "SavedMessages"
-            r9 = 2131626938(0x7f0e0bba, float:1.8881126E38)
+            r9 = 2131626942(0x7f0e0bbe, float:1.8881134E38)
             java.lang.String r8 = org.telegram.messenger.LocaleController.getString(r8, r9)     // Catch:{ Exception -> 0x0247 }
             goto L_0x0067
         L_0x007a:

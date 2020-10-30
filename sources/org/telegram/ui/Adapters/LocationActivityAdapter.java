@@ -119,9 +119,8 @@ public class LocationActivityAdapter extends BaseLocationAdapter implements Loca
         while (true) {
             if (i >= this.currentLiveLocations.size()) {
                 break;
-            } else if (this.currentLiveLocations.get(i).id == clientUserId) {
+            } else if (this.currentLiveLocations.get(i).id == clientUserId || this.currentLiveLocations.get(i).object.out) {
                 this.currentLiveLocations.remove(i);
-                break;
             } else {
                 i++;
             }

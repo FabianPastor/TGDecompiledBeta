@@ -129,6 +129,7 @@ import org.telegram.ui.Components.LayoutHelper;
 import org.telegram.ui.Components.MapPlaceholderDrawable;
 import org.telegram.ui.Components.ProximitySheet;
 import org.telegram.ui.Components.RecyclerListView;
+import org.telegram.ui.Components.UndoView;
 import org.telegram.ui.LocationActivity;
 
 public class LocationActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
@@ -138,6 +139,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     public AnimatorSet animatorSet;
     private int askWithRadius;
     private Bitmap[] bitmapCache = new Bitmap[7];
+    private boolean canUndo;
     /* access modifiers changed from: private */
     public TLRPC$TL_channelLocation chatLocation;
     private boolean checkBackgroundPermission = true;
@@ -226,6 +228,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     private View shadow;
     /* access modifiers changed from: private */
     public Drawable shadowDrawable;
+    private UndoView[] undoView = new UndoView[2];
     private Runnable updateRunnable;
     /* access modifiers changed from: private */
     public Location userLocation;
@@ -254,7 +257,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         public TLRPC$TL_messageMediaVenue venue;
     }
 
-    static /* synthetic */ boolean lambda$createView$5(View view, MotionEvent motionEvent) {
+    static /* synthetic */ boolean lambda$createView$7(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -481,6 +484,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         } catch (Exception e2) {
             FileLog.e((Throwable) e2);
         }
+        UndoView[] undoViewArr = this.undoView;
+        if (undoViewArr[0] != null) {
+            undoViewArr[0].hide(true, 0);
+        }
         LocationActivityAdapter locationActivityAdapter = this.adapter;
         if (locationActivityAdapter != null) {
             locationActivityAdapter.destroy();
@@ -501,15 +508,26 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         }
     }
 
+    private UndoView getUndoView() {
+        if (this.undoView[0].getVisibility() == 0) {
+            UndoView[] undoViewArr = this.undoView;
+            UndoView undoView2 = undoViewArr[0];
+            undoViewArr[0] = undoViewArr[1];
+            undoViewArr[1] = undoView2;
+            undoView2.hide(true, 2);
+            this.mapViewClip.removeView(this.undoView[0]);
+            this.mapViewClip.addView(this.undoView[0]);
+        }
+        return this.undoView[0];
+    }
+
     public View createView(Context context) {
         FrameLayout.LayoutParams layoutParams;
-        int i;
-        CombinedDrawable combinedDrawable;
         String str;
-        CombinedDrawable combinedDrawable2;
         String str2;
-        int i2;
+        int i;
         Context context2 = context;
+        int i2 = Build.VERSION.SDK_INT;
         this.searchWas = false;
         this.searching = false;
         this.searchInProgress = false;
@@ -694,19 +712,18 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         };
         this.mapViewClip = r02;
         r02.setBackgroundDrawable(new MapPlaceholderDrawable());
-        FrameLayout.LayoutParams layoutParams3 = layoutParams2;
-        if (this.messageObject == null && ((i2 = this.locationType) == 0 || i2 == 1)) {
+        FrameLayout frameLayout2 = frameLayout;
+        if (this.messageObject == null && ((i = this.locationType) == 0 || i == 1)) {
             SearchButton searchButton = new SearchButton(context2);
             this.searchAreaButton = searchButton;
             searchButton.setTranslationX((float) (-AndroidUtilities.dp(80.0f)));
             Drawable createSimpleSelectorRoundRectDrawable = Theme.createSimpleSelectorRoundRectDrawable(AndroidUtilities.dp(40.0f), Theme.getColor("location_actionBackground"), Theme.getColor("location_actionPressedBackground"));
-            int i4 = Build.VERSION.SDK_INT;
-            if (i4 < 21) {
+            if (i2 < 21) {
                 Drawable mutate2 = context.getResources().getDrawable(NUM).mutate();
                 mutate2.setColorFilter(new PorterDuffColorFilter(-16777216, PorterDuff.Mode.MULTIPLY));
-                CombinedDrawable combinedDrawable3 = new CombinedDrawable(mutate2, createSimpleSelectorRoundRectDrawable, AndroidUtilities.dp(2.0f), AndroidUtilities.dp(2.0f));
-                combinedDrawable3.setFullsize(true);
-                createSimpleSelectorRoundRectDrawable = combinedDrawable3;
+                CombinedDrawable combinedDrawable = new CombinedDrawable(mutate2, createSimpleSelectorRoundRectDrawable, AndroidUtilities.dp(2.0f), AndroidUtilities.dp(2.0f));
+                combinedDrawable.setFullsize(true);
+                createSimpleSelectorRoundRectDrawable = combinedDrawable;
             } else {
                 StateListAnimator stateListAnimator = new StateListAnimator();
                 SearchButton searchButton2 = this.searchAreaButton;
@@ -728,7 +745,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             this.searchAreaButton.setText(LocaleController.getString("PlacesInThisArea", NUM));
             this.searchAreaButton.setGravity(17);
             this.searchAreaButton.setPadding(AndroidUtilities.dp(20.0f), 0, AndroidUtilities.dp(20.0f), 0);
-            this.mapViewClip.addView(this.searchAreaButton, LayoutHelper.createFrame(-2, i4 >= 21 ? 40.0f : 44.0f, 49, 80.0f, 12.0f, 80.0f, 0.0f));
+            this.mapViewClip.addView(this.searchAreaButton, LayoutHelper.createFrame(-2, i2 >= 21 ? 40.0f : 44.0f, 49, 80.0f, 12.0f, 80.0f, 0.0f));
             this.searchAreaButton.setOnClickListener(new View.OnClickListener() {
                 public final void onClick(View view) {
                     LocationActivity.this.lambda$createView$0$LocationActivity(view);
@@ -746,19 +763,18 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.mapTypeButton.addSubItem(4, NUM, LocaleController.getString("Hybrid", NUM));
         this.mapTypeButton.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
         Drawable createSimpleSelectorCircleDrawable = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40.0f), Theme.getColor("location_actionBackground"), Theme.getColor("location_actionPressedBackground"));
-        int i5 = Build.VERSION.SDK_INT;
-        if (i5 < 21) {
+        if (i2 < 21) {
             Drawable mutate3 = context.getResources().getDrawable(NUM).mutate();
             mutate3.setColorFilter(new PorterDuffColorFilter(-16777216, PorterDuff.Mode.MULTIPLY));
-            CombinedDrawable combinedDrawable4 = new CombinedDrawable(mutate3, createSimpleSelectorCircleDrawable, 0, 0);
-            combinedDrawable4.setIconSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
-            combinedDrawable = combinedDrawable4;
-            i = i5;
+            CombinedDrawable combinedDrawable2 = new CombinedDrawable(mutate3, createSimpleSelectorCircleDrawable, 0, 0);
+            combinedDrawable2.setIconSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
+            createSimpleSelectorCircleDrawable = combinedDrawable2;
+            str = "location_actionIcon";
         } else {
             StateListAnimator stateListAnimator2 = new StateListAnimator();
             ActionBarMenuItem actionBarMenuItem2 = this.mapTypeButton;
             Property property2 = View.TRANSLATION_Z;
-            i = i5;
+            str = "location_actionIcon";
             stateListAnimator2.addState(new int[]{16842919}, ObjectAnimator.ofFloat(actionBarMenuItem2, property2, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             stateListAnimator2.addState(new int[0], ObjectAnimator.ofFloat(this.mapTypeButton, property2, new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.mapTypeButton.setStateListAnimator(stateListAnimator2);
@@ -768,11 +784,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     outline.setOval(0, 0, AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
                 }
             });
-            combinedDrawable = createSimpleSelectorCircleDrawable;
         }
-        this.mapTypeButton.setBackgroundDrawable(combinedDrawable);
+        this.mapTypeButton.setBackgroundDrawable(createSimpleSelectorCircleDrawable);
         this.mapTypeButton.setIcon(NUM);
-        this.mapViewClip.addView(this.mapTypeButton, LayoutHelper.createFrame(i >= 21 ? 40 : 44, i >= 21 ? 40.0f : 44.0f, 53, 0.0f, 12.0f, 12.0f, 0.0f));
+        this.mapViewClip.addView(this.mapTypeButton, LayoutHelper.createFrame(i2 >= 21 ? 40 : 44, i2 >= 21 ? 40.0f : 44.0f, 53, 0.0f, 12.0f, 12.0f, 0.0f));
         this.mapTypeButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 LocationActivity.this.lambda$createView$1$LocationActivity(view);
@@ -785,19 +800,20 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         });
         this.locationButton = new ImageView(context2);
         Drawable createSimpleSelectorCircleDrawable2 = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40.0f), Theme.getColor("location_actionBackground"), Theme.getColor("location_actionPressedBackground"));
-        if (i < 21) {
+        if (i2 < 21) {
             Drawable mutate4 = context.getResources().getDrawable(NUM).mutate();
             mutate4.setColorFilter(new PorterDuffColorFilter(-16777216, PorterDuff.Mode.MULTIPLY));
-            CombinedDrawable combinedDrawable5 = new CombinedDrawable(mutate4, createSimpleSelectorCircleDrawable2, 0, 0);
-            combinedDrawable5.setIconSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
-            combinedDrawable2 = combinedDrawable5;
-            str = "location_actionIcon";
+            CombinedDrawable combinedDrawable3 = new CombinedDrawable(mutate4, createSimpleSelectorCircleDrawable2, 0, 0);
+            combinedDrawable3.setIconSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
+            createSimpleSelectorCircleDrawable2 = combinedDrawable3;
+            str2 = "location_actionPressedBackground";
         } else {
             StateListAnimator stateListAnimator3 = new StateListAnimator();
             ImageView imageView = this.locationButton;
             Property property3 = View.TRANSLATION_Z;
-            str = "location_actionIcon";
-            stateListAnimator3.addState(new int[]{16842919}, ObjectAnimator.ofFloat(imageView, property3, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
+            ObjectAnimator ofFloat = ObjectAnimator.ofFloat(imageView, property3, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)});
+            str2 = "location_actionPressedBackground";
+            stateListAnimator3.addState(new int[]{16842919}, ofFloat.setDuration(200));
             stateListAnimator3.addState(new int[0], ObjectAnimator.ofFloat(this.locationButton, property3, new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.locationButton.setStateListAnimator(stateListAnimator3);
             this.locationButton.setOutlineProvider(new ViewOutlineProvider(this) {
@@ -806,17 +822,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     outline.setOval(0, 0, AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
                 }
             });
-            combinedDrawable2 = createSimpleSelectorCircleDrawable2;
         }
-        this.locationButton.setBackgroundDrawable(combinedDrawable2);
+        this.locationButton.setBackgroundDrawable(createSimpleSelectorCircleDrawable2);
         this.locationButton.setImageResource(NUM);
         this.locationButton.setScaleType(ImageView.ScaleType.CENTER);
         this.locationButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("location_actionActiveIcon"), PorterDuff.Mode.MULTIPLY));
         this.locationButton.setTag("location_actionActiveIcon");
         this.locationButton.setContentDescription(LocaleController.getString("AccDescrMyLocation", NUM));
-        FrameLayout.LayoutParams createFrame = LayoutHelper.createFrame(i >= 21 ? 40 : 44, i >= 21 ? 40.0f : 44.0f, 85, 0.0f, 0.0f, 12.0f, 12.0f);
-        FrameLayout.LayoutParams layoutParams4 = layoutParams3;
-        createFrame.bottomMargin += layoutParams4.height - rect.top;
+        FrameLayout.LayoutParams createFrame = LayoutHelper.createFrame(i2 >= 21 ? 40 : 44, i2 >= 21 ? 40.0f : 44.0f, 85, 0.0f, 0.0f, 12.0f, 12.0f);
+        createFrame.bottomMargin += layoutParams2.height - rect.top;
         this.mapViewClip.addView(this.locationButton, createFrame);
         this.locationButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
@@ -824,21 +838,18 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
         });
         this.proximityButton = new ImageView(context2);
-        Drawable createSimpleSelectorCircleDrawable3 = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40.0f), Theme.getColor("location_actionBackground"), Theme.getColor("location_actionPressedBackground"));
-        if (i < 21) {
+        Drawable createSimpleSelectorCircleDrawable3 = Theme.createSimpleSelectorCircleDrawable(AndroidUtilities.dp(40.0f), Theme.getColor("location_actionBackground"), Theme.getColor(str2));
+        if (i2 < 21) {
             Drawable mutate5 = context.getResources().getDrawable(NUM).mutate();
             mutate5.setColorFilter(new PorterDuffColorFilter(-16777216, PorterDuff.Mode.MULTIPLY));
-            CombinedDrawable combinedDrawable6 = new CombinedDrawable(mutate5, createSimpleSelectorCircleDrawable3, 0, 0);
-            combinedDrawable6.setIconSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
-            createSimpleSelectorCircleDrawable3 = combinedDrawable6;
-            str2 = str;
+            CombinedDrawable combinedDrawable4 = new CombinedDrawable(mutate5, createSimpleSelectorCircleDrawable3, 0, 0);
+            combinedDrawable4.setIconSize(AndroidUtilities.dp(40.0f), AndroidUtilities.dp(40.0f));
+            createSimpleSelectorCircleDrawable3 = combinedDrawable4;
         } else {
             StateListAnimator stateListAnimator4 = new StateListAnimator();
             ImageView imageView2 = this.proximityButton;
             Property property4 = View.TRANSLATION_Z;
-            ObjectAnimator ofFloat = ObjectAnimator.ofFloat(imageView2, property4, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)});
-            str2 = str;
-            stateListAnimator4.addState(new int[]{16842919}, ofFloat.setDuration(200));
+            stateListAnimator4.addState(new int[]{16842919}, ObjectAnimator.ofFloat(imageView2, property4, new float[]{(float) AndroidUtilities.dp(2.0f), (float) AndroidUtilities.dp(4.0f)}).setDuration(200));
             stateListAnimator4.addState(new int[0], ObjectAnimator.ofFloat(this.proximityButton, property4, new float[]{(float) AndroidUtilities.dp(4.0f), (float) AndroidUtilities.dp(2.0f)}).setDuration(200));
             this.proximityButton.setStateListAnimator(stateListAnimator4);
             this.proximityButton.setOutlineProvider(new ViewOutlineProvider(this) {
@@ -848,16 +859,14 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 }
             });
         }
+        this.proximityButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), PorterDuff.Mode.MULTIPLY));
         this.proximityButton.setBackgroundDrawable(createSimpleSelectorCircleDrawable3);
-        this.proximityButton.setImageResource(NUM);
         this.proximityButton.setScaleType(ImageView.ScaleType.CENTER);
-        String str4 = str2;
-        this.proximityButton.setTag(str4);
         this.proximityButton.setContentDescription(LocaleController.getString("AccDescrLocationNotify", NUM));
-        this.mapViewClip.addView(this.proximityButton, LayoutHelper.createFrame(i >= 21 ? 40 : 44, i >= 21 ? 40.0f : 44.0f, 53, 0.0f, 62.0f, 12.0f, 0.0f));
+        this.mapViewClip.addView(this.proximityButton, LayoutHelper.createFrame(i2 >= 21 ? 40 : 44, i2 >= 21 ? 40.0f : 44.0f, 53, 0.0f, 62.0f, 12.0f, 0.0f));
         this.proximityButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                LocationActivity.this.lambda$createView$4$LocationActivity(view);
+                LocationActivity.this.lambda$createView$6$LocationActivity(view);
             }
         });
         TLRPC$Chat tLRPC$Chat = null;
@@ -868,6 +877,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         MessageObject messageObject3 = this.messageObject;
         if (messageObject3 == null || !messageObject3.isLiveLocation() || this.messageObject.isExpiredLiveLocation(getConnectionsManager().getCurrentTime()) || (ChatObject.isChannel(tLRPC$Chat2) && !tLRPC$Chat2.megagroup)) {
             this.proximityButton.setVisibility(8);
+            this.proximityButton.setImageResource(NUM);
         } else {
             LocationController.SharingLocationInfo sharingLocationInfo = getLocationController().getSharingLocationInfo(this.dialogId);
             if (sharingLocationInfo == null || sharingLocationInfo.proximityMeters <= 0) {
@@ -877,9 +887,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     this.proximityButton.setScaleX(0.4f);
                     this.proximityButton.setScaleY(0.4f);
                 }
-                this.proximityButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str4), PorterDuff.Mode.MULTIPLY));
+                this.proximityButton.setImageResource(NUM);
             } else {
-                this.proximityButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("location_actionActiveIcon"), PorterDuff.Mode.MULTIPLY));
+                this.proximityButton.setImageResource(NUM);
             }
         }
         HintView hintView2 = new HintView(context2, 6, true);
@@ -893,8 +903,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.emptyView.setGravity(1);
         this.emptyView.setPadding(0, AndroidUtilities.dp(160.0f), 0, 0);
         this.emptyView.setVisibility(8);
-        frameLayout.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
-        this.emptyView.setOnTouchListener($$Lambda$LocationActivity$yoje4WzWg0SNW2cK8RxGqkuPmCw.INSTANCE);
+        FrameLayout frameLayout3 = frameLayout2;
+        frameLayout3.addView(this.emptyView, LayoutHelper.createFrame(-1, -1.0f));
+        this.emptyView.setOnTouchListener($$Lambda$LocationActivity$u7MvSmMkgdFfduHBmEIeEkTxpcg.INSTANCE);
         ImageView imageView3 = new ImageView(context2);
         this.emptyImageView = imageView3;
         imageView3.setImageResource(NUM);
@@ -917,6 +928,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.emptyView.addView(this.emptySubtitleTextView, LayoutHelper.createLinear(-2, -2, 17, 0, 6, 0, 0));
         RecyclerListView recyclerListView = new RecyclerListView(context2);
         this.listView = recyclerListView;
+        FrameLayout.LayoutParams layoutParams3 = layoutParams2;
         AnonymousClass9 r03 = new LocationActivityAdapter(context, this.locationType, this.dialogId, false) {
             /* access modifiers changed from: protected */
             public void onDirectionClick() {
@@ -942,7 +954,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         recyclerListView.setAdapter(r03);
         this.adapter.setUpdateRunnable(new Runnable() {
             public final void run() {
-                LocationActivity.this.lambda$createView$6$LocationActivity();
+                LocationActivity.this.lambda$createView$8$LocationActivity();
             }
         });
         this.listView.setVerticalScrollBarEnabled(false);
@@ -950,7 +962,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context2, 1, false);
         this.layoutManager = linearLayoutManager;
         recyclerListView2.setLayoutManager(linearLayoutManager);
-        frameLayout.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
+        frameLayout3.addView(this.listView, LayoutHelper.createFrame(-1, -1, 51));
         this.listView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                 boolean unused = LocationActivity.this.scrolling = i != 0;
@@ -970,7 +982,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         ((DefaultItemAnimator) this.listView.getItemAnimator()).setDelayAnimations(false);
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
             public final void onItemClick(View view, int i) {
-                LocationActivity.this.lambda$createView$12$LocationActivity(view, i);
+                LocationActivity.this.lambda$createView$14$LocationActivity(view, i);
             }
         });
         this.adapter.setDelegate(this.dialogId, new BaseLocationAdapter.BaseLocationAdapterDelegate() {
@@ -979,7 +991,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
         });
         this.adapter.setOverScrollHeight(this.overScrollHeight);
-        frameLayout.addView(this.mapViewClip, LayoutHelper.createFrame(-1, -1, 51));
+        frameLayout3.addView(this.mapViewClip, LayoutHelper.createFrame(-1, -1, 51));
         AnonymousClass11 r04 = new MapView(context2) {
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 return super.onTouchEvent(motionEvent);
@@ -1066,21 +1078,21 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                LocationActivity.this.lambda$createView$15$LocationActivity(this.f$1);
+                LocationActivity.this.lambda$createView$17$LocationActivity(this.f$1);
             }
         }).start();
         MessageObject messageObject4 = this.messageObject;
         if (messageObject4 == null && this.chatLocation == null) {
             if (!(tLRPC$Chat2 == null || this.locationType != 4 || this.dialogId == 0)) {
-                FrameLayout frameLayout2 = new FrameLayout(context2);
-                frameLayout2.setBackgroundResource(NUM);
-                this.mapViewClip.addView(frameLayout2, LayoutHelper.createFrame(62, 76, 49));
+                FrameLayout frameLayout4 = new FrameLayout(context2);
+                frameLayout4.setBackgroundResource(NUM);
+                this.mapViewClip.addView(frameLayout4, LayoutHelper.createFrame(62, 76, 49));
                 BackupImageView backupImageView = new BackupImageView(context2);
                 backupImageView.setRoundRadius(AndroidUtilities.dp(26.0f));
                 backupImageView.setImage(ImageLocation.getForChat(tLRPC$Chat2, false), "50_50", (Drawable) new AvatarDrawable(tLRPC$Chat2), (Object) tLRPC$Chat2);
-                frameLayout2.addView(backupImageView, LayoutHelper.createFrame(52, 52.0f, 51, 5.0f, 5.0f, 0.0f, 0.0f));
-                this.markerImageView = frameLayout2;
-                frameLayout2.setTag(1);
+                frameLayout4.addView(backupImageView, LayoutHelper.createFrame(52, 52.0f, 51, 5.0f, 5.0f, 0.0f, 0.0f));
+                this.markerImageView = frameLayout4;
+                frameLayout4.setTag(1);
             }
             if (this.markerImageView == null) {
                 ImageView imageView4 = new ImageView(context2);
@@ -1106,10 +1118,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             this.searchAdapter = r05;
             r05.setDelegate(0, new BaseLocationAdapter.BaseLocationAdapterDelegate() {
                 public final void didLoadSearchResult(ArrayList arrayList) {
-                    LocationActivity.this.lambda$createView$16$LocationActivity(arrayList);
+                    LocationActivity.this.lambda$createView$18$LocationActivity(arrayList);
                 }
             });
-            frameLayout.addView(this.searchListView, LayoutHelper.createFrame(-1, -1, 51));
+            frameLayout3.addView(this.searchListView, LayoutHelper.createFrame(-1, -1, 51));
             this.searchListView.setOnScrollListener(new RecyclerView.OnScrollListener() {
                 public void onScrollStateChanged(RecyclerView recyclerView, int i) {
                     if (i == 1 && LocationActivity.this.searching && LocationActivity.this.searchWas) {
@@ -1119,7 +1131,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             });
             this.searchListView.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
                 public final void onItemClick(View view, int i) {
-                    LocationActivity.this.lambda$createView$18$LocationActivity(view, i);
+                    LocationActivity.this.lambda$createView$20$LocationActivity(view, i);
                 }
             });
         } else if ((messageObject4 != null && !messageObject4.isLiveLocation()) || this.chatLocation != null) {
@@ -1136,6 +1148,14 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         MessageObject messageObject6 = this.messageObject;
         if (messageObject6 != null && this.locationType == 6) {
             this.adapter.setMessageObject(messageObject6);
+        }
+        for (int i4 = 0; i4 < 2; i4++) {
+            this.undoView[i4] = new UndoView(context2);
+            this.undoView[i4].setAdditionalTranslationY((float) AndroidUtilities.dp(10.0f));
+            if (i2 >= 21) {
+                this.undoView[i4].setTranslationZ((float) AndroidUtilities.dp(5.0f));
+            }
+            this.mapViewClip.addView(this.undoView[i4], LayoutHelper.createFrame(-1, -2.0f, 83, 8.0f, 0.0f, 8.0f, 8.0f));
         }
         AnonymousClass14 r06 = new View(context2) {
             private RectF rect = new RectF();
@@ -1156,13 +1176,16 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
         };
         this.shadow = r06;
-        this.mapViewClip.addView(r06, layoutParams4);
+        if (i2 >= 21) {
+            r06.setTranslationZ((float) AndroidUtilities.dp(6.0f));
+        }
+        this.mapViewClip.addView(this.shadow, layoutParams3);
         if (this.messageObject == null && this.chatLocation == null && this.initialLocation != null) {
             this.userLocationMoved = true;
-            this.locationButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str4), PorterDuff.Mode.MULTIPLY));
-            this.locationButton.setTag(str4);
+            this.locationButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor(str), PorterDuff.Mode.MULTIPLY));
+            this.locationButton.setTag(str);
         }
-        frameLayout.addView(this.actionBar);
+        frameLayout3.addView(this.actionBar);
         updateEmptyView();
         return this.fragmentView;
     }
@@ -1230,8 +1253,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$4 */
-    public /* synthetic */ void lambda$createView$4$LocationActivity(View view) {
+    /* renamed from: lambda$createView$6 */
+    public /* synthetic */ void lambda$createView$6$LocationActivity(View view) {
         if (getParentActivity() != null && this.myLocation != null && checkGpsEnabled()) {
             HintView hintView2 = this.hintView;
             if (hintView2 != null) {
@@ -1239,29 +1262,62 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
             MessagesController.getGlobalMainSettings().edit().putInt("proximityhint", 3).commit();
             LocationController.SharingLocationInfo sharingLocationInfo = getLocationController().getSharingLocationInfo(this.dialogId);
+            if (this.canUndo) {
+                this.undoView[0].hide(true, 1);
+            }
             if (sharingLocationInfo == null || sharingLocationInfo.proximityMeters <= 0) {
                 openProximityAlert();
                 return;
             }
-            this.proximityButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("location_actionIcon"), PorterDuff.Mode.MULTIPLY));
-            getLocationController().setProximityLocation(this.dialogId, 0, true);
+            this.proximityButton.setImageResource(NUM);
             Circle circle = this.proximityCircle;
             if (circle != null) {
                 circle.remove();
                 this.proximityCircle = null;
             }
+            this.canUndo = true;
+            getUndoView().showWithAction(0, 25, 0, (Object) null, new Runnable() {
+                public final void run() {
+                    LocationActivity.this.lambda$null$4$LocationActivity();
+                }
+            }, new Runnable(sharingLocationInfo) {
+                public final /* synthetic */ LocationController.SharingLocationInfo f$1;
+
+                {
+                    this.f$1 = r2;
+                }
+
+                public final void run() {
+                    LocationActivity.this.lambda$null$5$LocationActivity(this.f$1);
+                }
+            });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$6 */
-    public /* synthetic */ void lambda$createView$6$LocationActivity() {
+    /* renamed from: lambda$null$4 */
+    public /* synthetic */ void lambda$null$4$LocationActivity() {
+        getLocationController().setProximityLocation(this.dialogId, 0, true);
+        this.canUndo = false;
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$null$5 */
+    public /* synthetic */ void lambda$null$5$LocationActivity(LocationController.SharingLocationInfo sharingLocationInfo) {
+        this.proximityButton.setImageResource(NUM);
+        createCircle(sharingLocationInfo.proximityMeters);
+        this.canUndo = false;
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$createView$8 */
+    public /* synthetic */ void lambda$createView$8$LocationActivity() {
         updateClipView(false);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$12 */
-    public /* synthetic */ void lambda$createView$12$LocationActivity(View view, int i) {
+    /* renamed from: lambda$createView$14 */
+    public /* synthetic */ void lambda$createView$14$LocationActivity(View view, int i) {
         MessageObject messageObject2;
         TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue;
         int i2 = this.locationType;
@@ -1291,7 +1347,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     }
 
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        LocationActivity.this.lambda$null$8$LocationActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
+                        LocationActivity.this.lambda$null$10$LocationActivity(this.f$1, this.f$2, tLObject, tLRPC$TL_error);
                     }
                 })) {
                     public final /* synthetic */ int f$1;
@@ -1301,7 +1357,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     }
 
                     public final void onCancel(DialogInterface dialogInterface) {
-                        LocationActivity.this.lambda$null$9$LocationActivity(this.f$1, dialogInterface);
+                        LocationActivity.this.lambda$null$11$LocationActivity(this.f$1, dialogInterface);
                     }
                 });
                 showDialog(alertDialogArr[0]);
@@ -1336,7 +1392,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         }
 
                         public final void didSelectDate(boolean z, int i) {
-                            LocationActivity.this.lambda$null$11$LocationActivity(this.f$1, z, i);
+                            LocationActivity.this.lambda$null$13$LocationActivity(this.f$1, z, i);
                         }
                     });
                 } else if (item instanceof LiveLocation) {
@@ -1373,15 +1429,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void didSelectDate(boolean z, int i) {
-                    LocationActivity.this.lambda$null$10$LocationActivity(this.f$1, z, i);
+                    LocationActivity.this.lambda$null$12$LocationActivity(this.f$1, z, i);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$8 */
-    public /* synthetic */ void lambda$null$8$LocationActivity(AlertDialog[] alertDialogArr, TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$null$10 */
+    public /* synthetic */ void lambda$null$10$LocationActivity(AlertDialog[] alertDialogArr, TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         AndroidUtilities.runOnUIThread(new Runnable(alertDialogArr, tLRPC$TL_messageMediaVenue) {
             public final /* synthetic */ AlertDialog[] f$1;
             public final /* synthetic */ TLRPC$TL_messageMediaVenue f$2;
@@ -1392,14 +1448,14 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                LocationActivity.this.lambda$null$7$LocationActivity(this.f$1, this.f$2);
+                LocationActivity.this.lambda$null$9$LocationActivity(this.f$1, this.f$2);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$7 */
-    public /* synthetic */ void lambda$null$7$LocationActivity(AlertDialog[] alertDialogArr, TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue) {
+    /* renamed from: lambda$null$9 */
+    public /* synthetic */ void lambda$null$9$LocationActivity(AlertDialog[] alertDialogArr, TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue) {
         try {
             alertDialogArr[0].dismiss();
         } catch (Throwable unused) {
@@ -1410,28 +1466,28 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$9 */
-    public /* synthetic */ void lambda$null$9$LocationActivity(int i, DialogInterface dialogInterface) {
+    /* renamed from: lambda$null$11 */
+    public /* synthetic */ void lambda$null$11$LocationActivity(int i, DialogInterface dialogInterface) {
         getConnectionsManager().cancelRequest(i, true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$10 */
-    public /* synthetic */ void lambda$null$10$LocationActivity(TLRPC$TL_messageMediaGeo tLRPC$TL_messageMediaGeo, boolean z, int i) {
+    /* renamed from: lambda$null$12 */
+    public /* synthetic */ void lambda$null$12$LocationActivity(TLRPC$TL_messageMediaGeo tLRPC$TL_messageMediaGeo, boolean z, int i) {
         this.delegate.didSelectLocation(tLRPC$TL_messageMediaGeo, this.locationType, z, i);
         finishFragment();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$11 */
-    public /* synthetic */ void lambda$null$11$LocationActivity(Object obj, boolean z, int i) {
+    /* renamed from: lambda$null$13 */
+    public /* synthetic */ void lambda$null$13$LocationActivity(Object obj, boolean z, int i) {
         this.delegate.didSelectLocation((TLRPC$TL_messageMediaVenue) obj, this.locationType, z, i);
         finishFragment();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$15 */
-    public /* synthetic */ void lambda$createView$15$LocationActivity(MapView mapView2) {
+    /* renamed from: lambda$createView$17 */
+    public /* synthetic */ void lambda$createView$17$LocationActivity(MapView mapView2) {
         try {
             mapView2.onCreate((Bundle) null);
         } catch (Exception unused) {
@@ -1444,21 +1500,21 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run() {
-                LocationActivity.this.lambda$null$14$LocationActivity(this.f$1);
+                LocationActivity.this.lambda$null$16$LocationActivity(this.f$1);
             }
         });
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$14 */
-    public /* synthetic */ void lambda$null$14$LocationActivity(MapView mapView2) {
+    /* renamed from: lambda$null$16 */
+    public /* synthetic */ void lambda$null$16$LocationActivity(MapView mapView2) {
         if (this.mapView != null && getParentActivity() != null) {
             try {
                 mapView2.onCreate((Bundle) null);
                 MapsInitializer.initialize(ApplicationLoader.applicationContext);
                 this.mapView.getMapAsync(new OnMapReadyCallback() {
                     public final void onMapReady(GoogleMap googleMap) {
-                        LocationActivity.this.lambda$null$13$LocationActivity(googleMap);
+                        LocationActivity.this.lambda$null$15$LocationActivity(googleMap);
                     }
                 });
                 this.mapsInitialized = true;
@@ -1472,8 +1528,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$13 */
-    public /* synthetic */ void lambda$null$13$LocationActivity(GoogleMap googleMap2) {
+    /* renamed from: lambda$null$15 */
+    public /* synthetic */ void lambda$null$15$LocationActivity(GoogleMap googleMap2) {
         this.googleMap = googleMap2;
         if (isActiveThemeDark()) {
             this.currentMapStyleDark = true;
@@ -1484,15 +1540,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$16 */
-    public /* synthetic */ void lambda$createView$16$LocationActivity(ArrayList arrayList) {
+    /* renamed from: lambda$createView$18 */
+    public /* synthetic */ void lambda$createView$18$LocationActivity(ArrayList arrayList) {
         this.searchInProgress = false;
         updateEmptyView();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$18 */
-    public /* synthetic */ void lambda$createView$18$LocationActivity(View view, int i) {
+    /* renamed from: lambda$createView$20 */
+    public /* synthetic */ void lambda$createView$20$LocationActivity(View view, int i) {
         TLRPC$TL_messageMediaVenue item = this.searchAdapter.getItem(i);
         if (item != null && this.delegate != null) {
             ChatActivity chatActivity = this.parentFragment;
@@ -1509,15 +1565,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void didSelectDate(boolean z, int i) {
-                    LocationActivity.this.lambda$null$17$LocationActivity(this.f$1, z, i);
+                    LocationActivity.this.lambda$null$19$LocationActivity(this.f$1, z, i);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$17 */
-    public /* synthetic */ void lambda$null$17$LocationActivity(TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue, boolean z, int i) {
+    /* renamed from: lambda$null$19 */
+    public /* synthetic */ void lambda$null$19$LocationActivity(TLRPC$TL_messageMediaVenue tLRPC$TL_messageMediaVenue, boolean z, int i) {
         this.delegate.didSelectLocation(tLRPC$TL_messageMediaVenue, this.locationType, z, i);
         finishFragment();
     }
@@ -1717,21 +1773,24 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         } else {
             this.previousRadius = circle.getRadius();
         }
-        TLRPC$User tLRPC$User = null;
-        if (((int) this.dialogId) > 0) {
-            tLRPC$User = getMessagesController().getUser(Integer.valueOf((int) this.dialogId));
-        }
-        ProximitySheet proximitySheet2 = new ProximitySheet(getParentActivity(), tLRPC$User, new ProximitySheet.onRadiusPickerChange() {
-            public final boolean run(boolean z, int i) {
-                return LocationActivity.this.lambda$openProximityAlert$19$LocationActivity(z, i);
-            }
-        }, new ProximitySheet.onRadiusPickerChange() {
+        TLRPC$User user = ((int) this.dialogId) > 0 ? getMessagesController().getUser(Integer.valueOf((int) this.dialogId)) : null;
+        ProximitySheet proximitySheet2 = new ProximitySheet(getParentActivity(), user, new ProximitySheet.onRadiusPickerChange() {
             public final boolean run(boolean z, int i) {
                 return LocationActivity.this.lambda$openProximityAlert$21$LocationActivity(z, i);
             }
+        }, new ProximitySheet.onRadiusPickerChange(user) {
+            public final /* synthetic */ TLRPC$User f$1;
+
+            {
+                this.f$1 = r2;
+            }
+
+            public final boolean run(boolean z, int i) {
+                return LocationActivity.this.lambda$openProximityAlert$23$LocationActivity(this.f$1, z, i);
+            }
         }, new Runnable() {
             public final void run() {
-                LocationActivity.this.lambda$openProximityAlert$22$LocationActivity();
+                LocationActivity.this.lambda$openProximityAlert$24$LocationActivity();
             }
         });
         this.proximitySheet = proximitySheet2;
@@ -1740,8 +1799,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$openProximityAlert$19 */
-    public /* synthetic */ boolean lambda$openProximityAlert$19$LocationActivity(boolean z, int i) {
+    /* renamed from: lambda$openProximityAlert$21 */
+    public /* synthetic */ boolean lambda$openProximityAlert$21$LocationActivity(boolean z, int i) {
         Circle circle = this.proximityCircle;
         if (circle != null) {
             circle.setRadius((double) i);
@@ -1769,21 +1828,23 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$openProximityAlert$21 */
-    public /* synthetic */ boolean lambda$openProximityAlert$21$LocationActivity(boolean z, int i) {
+    /* renamed from: lambda$openProximityAlert$23 */
+    public /* synthetic */ boolean lambda$openProximityAlert$23$LocationActivity(TLRPC$User tLRPC$User, boolean z, int i) {
         if (getLocationController().getSharingLocationInfo(this.dialogId) == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
             builder.setTitle(LocaleController.getString("ShareLocationAlertTitle", NUM));
             builder.setMessage(LocaleController.getString("ShareLocationAlertText", NUM));
-            builder.setPositiveButton(LocaleController.getString("ShareLocationAlertButton", NUM), new DialogInterface.OnClickListener(i) {
-                public final /* synthetic */ int f$1;
+            builder.setPositiveButton(LocaleController.getString("ShareLocationAlertButton", NUM), new DialogInterface.OnClickListener(tLRPC$User, i) {
+                public final /* synthetic */ TLRPC$User f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
+                    this.f$2 = r3;
                 }
 
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    LocationActivity.this.lambda$null$20$LocationActivity(this.f$1, dialogInterface, i);
+                    LocationActivity.this.lambda$null$22$LocationActivity(this.f$1, this.f$2, dialogInterface, i);
                 }
             });
             builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -1791,20 +1852,21 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             return false;
         }
         this.proximitySheet.setRadiusSet();
-        this.proximityButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("location_actionActiveIcon"), PorterDuff.Mode.MULTIPLY));
+        this.proximityButton.setImageResource(NUM);
+        getUndoView().showWithAction(0, 24, Integer.valueOf(i), tLRPC$User, (Runnable) null, (Runnable) null);
         getLocationController().setProximityLocation(this.dialogId, i, true);
         return true;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$20 */
-    public /* synthetic */ void lambda$null$20$LocationActivity(int i, DialogInterface dialogInterface, int i2) {
-        lambda$openShareLiveLocation$24(900, i);
+    /* renamed from: lambda$null$22 */
+    public /* synthetic */ void lambda$null$22$LocationActivity(TLRPC$User tLRPC$User, int i, DialogInterface dialogInterface, int i2) {
+        lambda$openShareLiveLocation$26(tLRPC$User, 900, i);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$openProximityAlert$22 */
-    public /* synthetic */ void lambda$openProximityAlert$22$LocationActivity() {
+    /* renamed from: lambda$openProximityAlert$24 */
+    public /* synthetic */ void lambda$openProximityAlert$24$LocationActivity() {
         GoogleMap googleMap2 = this.googleMap;
         if (googleMap2 != null) {
             googleMap2.setPadding(AndroidUtilities.dp(70.0f), 0, AndroidUtilities.dp(70.0f), AndroidUtilities.dp(10.0f));
@@ -1836,39 +1898,38 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     globalMainSettings.edit().putInt("backgroundloc", (int) (System.currentTimeMillis() / 1000)).commit();
                     AlertsCreator.createBackgroundLocationPermissionDialog(parentActivity, getMessagesController().getUser(Integer.valueOf(getUserConfig().getClientUserId())), new Runnable() {
                         public final void run() {
-                            LocationActivity.this.lambda$openShareLiveLocation$23$LocationActivity();
+                            LocationActivity.this.lambda$openShareLiveLocation$25$LocationActivity();
                         }
                     }).show();
                     return;
                 }
             }
-            TLRPC$User tLRPC$User = null;
-            if (((int) this.dialogId) > 0) {
-                tLRPC$User = getMessagesController().getUser(Integer.valueOf((int) this.dialogId));
-            }
-            showDialog(AlertsCreator.createLocationUpdateDialog(getParentActivity(), tLRPC$User, new MessagesStorage.IntCallback(i) {
-                public final /* synthetic */ int f$1;
+            TLRPC$User user = ((int) this.dialogId) > 0 ? getMessagesController().getUser(Integer.valueOf((int) this.dialogId)) : null;
+            showDialog(AlertsCreator.createLocationUpdateDialog(getParentActivity(), user, new MessagesStorage.IntCallback(user, i) {
+                public final /* synthetic */ TLRPC$User f$1;
+                public final /* synthetic */ int f$2;
 
                 {
                     this.f$1 = r2;
+                    this.f$2 = r3;
                 }
 
                 public final void run(int i) {
-                    LocationActivity.this.lambda$openShareLiveLocation$24$LocationActivity(this.f$1, i);
+                    LocationActivity.this.lambda$openShareLiveLocation$26$LocationActivity(this.f$1, this.f$2, i);
                 }
             }));
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$openShareLiveLocation$23 */
-    public /* synthetic */ void lambda$openShareLiveLocation$23$LocationActivity() {
+    /* renamed from: lambda$openShareLiveLocation$25 */
+    public /* synthetic */ void lambda$openShareLiveLocation$25$LocationActivity() {
         openShareLiveLocation(this.askWithRadius);
     }
 
     /* access modifiers changed from: private */
     /* renamed from: shareLiveLocation */
-    public void lambda$openShareLiveLocation$24(int i, int i2) {
+    public void lambda$openShareLiveLocation$26(TLRPC$User tLRPC$User, int i, int i2) {
         TLRPC$TL_messageMediaGeoLive tLRPC$TL_messageMediaGeoLive = new TLRPC$TL_messageMediaGeoLive();
         TLRPC$TL_geoPoint tLRPC$TL_geoPoint = new TLRPC$TL_geoPoint();
         tLRPC$TL_messageMediaGeoLive.geo = tLRPC$TL_geoPoint;
@@ -1883,12 +1944,12 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         this.delegate.didSelectLocation(tLRPC$TL_messageMediaGeoLive, this.locationType, true, 0);
         if (i2 > 0) {
             this.proximitySheet.setRadiusSet();
-            this.proximityButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("location_actionActiveIcon"), PorterDuff.Mode.MULTIPLY));
+            this.proximityButton.setImageResource(NUM);
             ProximitySheet proximitySheet2 = this.proximitySheet;
             if (proximitySheet2 != null) {
                 proximitySheet2.dismiss();
-                return;
             }
+            getUndoView().showWithAction(0, 24, Integer.valueOf(i2), tLRPC$User, (Runnable) null, (Runnable) null);
             return;
         }
         finishFragment();
@@ -2107,22 +2168,22 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             this.googleMap.getUiSettings().setCompassEnabled(false);
             this.googleMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
                 public final void onCameraMoveStarted(int i) {
-                    LocationActivity.this.lambda$onMapInit$25$LocationActivity(i);
+                    LocationActivity.this.lambda$onMapInit$27$LocationActivity(i);
                 }
             });
             this.googleMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
                 public final void onMyLocationChange(Location location) {
-                    LocationActivity.this.lambda$onMapInit$26$LocationActivity(location);
+                    LocationActivity.this.lambda$onMapInit$28$LocationActivity(location);
                 }
             });
             this.googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 public final boolean onMarkerClick(Marker marker) {
-                    return LocationActivity.this.lambda$onMapInit$27$LocationActivity(marker);
+                    return LocationActivity.this.lambda$onMapInit$29$LocationActivity(marker);
                 }
             });
             this.googleMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
                 public final void onCameraMove() {
-                    LocationActivity.this.lambda$onMapInit$28$LocationActivity();
+                    LocationActivity.this.lambda$onMapInit$30$LocationActivity();
                 }
             });
             Location lastLocation = getLastLocation();
@@ -2140,8 +2201,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onMapInit$25 */
-    public /* synthetic */ void lambda$onMapInit$25$LocationActivity(int i) {
+    /* renamed from: lambda$onMapInit$27 */
+    public /* synthetic */ void lambda$onMapInit$27$LocationActivity(int i) {
         View childAt;
         RecyclerView.ViewHolder findContainingViewHolder;
         if (i == 1) {
@@ -2163,16 +2224,16 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onMapInit$26 */
-    public /* synthetic */ void lambda$onMapInit$26$LocationActivity(Location location) {
+    /* renamed from: lambda$onMapInit$28 */
+    public /* synthetic */ void lambda$onMapInit$28$LocationActivity(Location location) {
         positionMarker(location);
         getLocationController().setGoogleMapLocation(location, this.isFirstLocation);
         this.isFirstLocation = false;
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onMapInit$27 */
-    public /* synthetic */ boolean lambda$onMapInit$27$LocationActivity(Marker marker) {
+    /* renamed from: lambda$onMapInit$29 */
+    public /* synthetic */ boolean lambda$onMapInit$29$LocationActivity(Marker marker) {
         if (!(marker.getTag() instanceof VenueLocation)) {
             return true;
         }
@@ -2187,8 +2248,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onMapInit$28 */
-    public /* synthetic */ void lambda$onMapInit$28$LocationActivity() {
+    /* renamed from: lambda$onMapInit$30 */
+    public /* synthetic */ void lambda$onMapInit$30$LocationActivity() {
         MapOverlayView mapOverlayView = this.overlayView;
         if (mapOverlayView != null) {
             mapOverlayView.updatePositions();
@@ -2206,7 +2267,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 builder.setMessage(LocaleController.getString("GpsDisabledAlertText", NUM));
                 builder.setPositiveButton(LocaleController.getString("ConnectingToProxyEnable", NUM), new DialogInterface.OnClickListener() {
                     public final void onClick(DialogInterface dialogInterface, int i) {
-                        LocationActivity.this.lambda$checkGpsEnabled$29$LocationActivity(dialogInterface, i);
+                        LocationActivity.this.lambda$checkGpsEnabled$31$LocationActivity(dialogInterface, i);
                     }
                 });
                 builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
@@ -2220,8 +2281,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$checkGpsEnabled$29 */
-    public /* synthetic */ void lambda$checkGpsEnabled$29$LocationActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$checkGpsEnabled$31 */
+    public /* synthetic */ void lambda$checkGpsEnabled$31$LocationActivity(DialogInterface dialogInterface, int i) {
         if (getParentActivity() != null) {
             try {
                 getParentActivity().startActivity(new Intent("android.settings.LOCATION_SOURCE_SETTINGS"));
@@ -2269,7 +2330,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
             builder.setNegativeButton(LocaleController.getString("PermissionOpenSettings", NUM), new DialogInterface.OnClickListener() {
                 public final void onClick(DialogInterface dialogInterface, int i) {
-                    LocationActivity.this.lambda$showPermissionAlert$30$LocationActivity(dialogInterface, i);
+                    LocationActivity.this.lambda$showPermissionAlert$32$LocationActivity(dialogInterface, i);
                 }
             });
             builder.setPositiveButton(LocaleController.getString("OK", NUM), (DialogInterface.OnClickListener) null);
@@ -2278,8 +2339,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$showPermissionAlert$30 */
-    public /* synthetic */ void lambda$showPermissionAlert$30$LocationActivity(DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$showPermissionAlert$32 */
+    public /* synthetic */ void lambda$showPermissionAlert$32$LocationActivity(DialogInterface dialogInterface, int i) {
         if (getParentActivity() != null) {
             try {
                 Intent intent = new Intent("android.settings.APPLICATION_DETAILS_SETTINGS");
@@ -2359,7 +2420,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             org.telegram.tgnet.TLRPC$User r0 = r0.getUser(r1)
             org.telegram.ui.Components.HintView r1 = r7.hintView
-            r3 = 2131626752(0x7f0e0b00, float:1.888075E38)
+            r3 = 2131626756(0x7f0e0b04, float:1.8880757E38)
             java.lang.Object[] r5 = new java.lang.Object[r4]
             java.lang.String r0 = org.telegram.messenger.UserObject.getFirstName(r0)
             r5[r2] = r0
@@ -2369,7 +2430,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             goto L_0x0063
         L_0x0055:
             org.telegram.ui.Components.HintView r0 = r7.hintView
-            r1 = 2131626751(0x7f0e0aff, float:1.8880747E38)
+            r1 = 2131626755(0x7f0e0b03, float:1.8880755E38)
             java.lang.String r2 = "ProximityTooltioGroup"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             r0.setOverrideText(r1)
@@ -2526,7 +2587,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                         }
 
                         public final void run() {
-                            LocationActivity.this.lambda$fixLayoutInternal$31$LocationActivity(this.f$1);
+                            LocationActivity.this.lambda$fixLayoutInternal$33$LocationActivity(this.f$1);
                         }
                     });
                     return;
@@ -2537,8 +2598,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$fixLayoutInternal$31 */
-    public /* synthetic */ void lambda$fixLayoutInternal$31$LocationActivity(int i) {
+    /* renamed from: lambda$fixLayoutInternal$33 */
+    public /* synthetic */ void lambda$fixLayoutInternal$33$LocationActivity(int i) {
         this.layoutManager.scrollToPositionWithOffset(0, -AndroidUtilities.dp((float) i));
         updateClipView(false);
     }
@@ -2670,7 +2731,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                     LatLngBounds build = builder.build();
                     if (arrayList.size() > 1) {
                         try {
-                            CameraUpdate newLatLngBounds = CameraUpdateFactory.newLatLngBounds(build, AndroidUtilities.dp(80.0f));
+                            CameraUpdate newLatLngBounds = CameraUpdateFactory.newLatLngBounds(build, AndroidUtilities.dp(113.0f));
                             this.moveToBounds = newLatLngBounds;
                             this.googleMap.moveCamera(newLatLngBounds);
                             this.moveToBounds = null;
@@ -2759,7 +2820,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             }
 
             public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                LocationActivity.this.lambda$getRecentLocations$34$LocationActivity(this.f$1, tLObject, tLRPC$TL_error);
+                LocationActivity.this.lambda$getRecentLocations$36$LocationActivity(this.f$1, tLObject, tLRPC$TL_error);
             }
         });
         if (arrayList != null) {
@@ -2769,8 +2830,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getRecentLocations$34 */
-    public /* synthetic */ void lambda$getRecentLocations$34$LocationActivity(long j, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    /* renamed from: lambda$getRecentLocations$36 */
+    public /* synthetic */ void lambda$getRecentLocations$36$LocationActivity(long j, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         if (tLObject != null) {
             AndroidUtilities.runOnUIThread(new Runnable(tLObject, j) {
                 public final /* synthetic */ TLObject f$1;
@@ -2782,15 +2843,15 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 }
 
                 public final void run() {
-                    LocationActivity.this.lambda$null$33$LocationActivity(this.f$1, this.f$2);
+                    LocationActivity.this.lambda$null$35$LocationActivity(this.f$1, this.f$2);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$33 */
-    public /* synthetic */ void lambda$null$33$LocationActivity(TLObject tLObject, long j) {
+    /* renamed from: lambda$null$35 */
+    public /* synthetic */ void lambda$null$35$LocationActivity(TLObject tLObject, long j) {
         if (this.googleMap != null) {
             TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
             int i = 0;
@@ -2809,9 +2870,9 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
             fetchRecentLocations(tLRPC$messages_Messages.messages);
             getLocationController().markLiveLoactionsAsRead(this.dialogId);
             if (this.markAsReadRunnable == null) {
-                $$Lambda$LocationActivity$kkiqzv8qaSXd2g9QjDjgjTnsDI r6 = new Runnable() {
+                $$Lambda$LocationActivity$2ep522D_VQBQC8cxCTWH11gpBuQ r6 = new Runnable() {
                     public final void run() {
-                        LocationActivity.this.lambda$null$32$LocationActivity();
+                        LocationActivity.this.lambda$null$34$LocationActivity();
                     }
                 };
                 this.markAsReadRunnable = r6;
@@ -2821,8 +2882,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$null$32 */
-    public /* synthetic */ void lambda$null$32$LocationActivity() {
+    /* renamed from: lambda$null$34 */
+    public /* synthetic */ void lambda$null$34$LocationActivity() {
         Runnable runnable;
         getLocationController().markLiveLoactionsAsRead(this.dialogId);
         if (!this.isPaused && (runnable = this.markAsReadRunnable) != null) {
@@ -2861,7 +2922,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                             addUserMarker(messageObject2.messageOwner);
                             z = true;
                         } else if ((messageObject2.messageOwner.action instanceof TLRPC$TL_messageActionGeoProximityReached) && ((int) messageObject2.getDialogId()) > 0) {
-                            this.proximityButton.setColorFilter(new PorterDuffColorFilter(Theme.getColor("location_actionIcon"), PorterDuff.Mode.MULTIPLY));
+                            this.proximityButton.setImageResource(NUM);
                             Circle circle = this.proximityCircle;
                             if (circle != null) {
                                 circle.remove();
@@ -2930,6 +2991,10 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
                 FileLog.e((Throwable) e);
             }
         }
+        UndoView[] undoViewArr = this.undoView;
+        if (undoViewArr[0] != null) {
+            undoViewArr[0].hide(true, 0);
+        }
         this.onResumeCalled = false;
     }
 
@@ -2940,6 +3005,14 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         }
         proximitySheet2.dismiss();
         return false;
+    }
+
+    /* access modifiers changed from: protected */
+    public void onBecomeFullyHidden() {
+        UndoView[] undoViewArr = this.undoView;
+        if (undoViewArr[0] != null) {
+            undoViewArr[0].hide(true, 0);
+        }
     }
 
     public void onResume() {
@@ -2998,11 +3071,29 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
 
     public ArrayList<ThemeDescription> getThemeDescriptions() {
         ArrayList<ThemeDescription> arrayList = new ArrayList<>();
-        $$Lambda$LocationActivity$riN4ttqBN0wqvq6K0orJL2SC6dg r10 = new ThemeDescription.ThemeDescriptionDelegate() {
+        $$Lambda$LocationActivity$os7Jo3S2bd5XMkv2FrSpJwQ17c r10 = new ThemeDescription.ThemeDescriptionDelegate() {
             public final void didSetColor() {
-                LocationActivity.this.lambda$getThemeDescriptions$35$LocationActivity();
+                LocationActivity.this.lambda$getThemeDescriptions$37$LocationActivity();
             }
         };
+        for (int i = 0; i < this.undoView.length; i++) {
+            arrayList.add(new ThemeDescription(this.undoView[i], ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "undo_background"));
+            arrayList.add(new ThemeDescription((View) this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"undoImageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "undo_cancelColor"));
+            arrayList.add(new ThemeDescription((View) this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"undoTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "undo_cancelColor"));
+            arrayList.add(new ThemeDescription((View) this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"infoTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "undo_infoColor"));
+            arrayList.add(new ThemeDescription((View) this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"subinfoTextView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "undo_infoColor"));
+            arrayList.add(new ThemeDescription((View) this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"textPaint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "undo_infoColor"));
+            arrayList.add(new ThemeDescription((View) this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"progressPaint"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "undo_infoColor"));
+            arrayList.add(new ThemeDescription((View) this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"leftImageView"}, "BODY", "undo_background"));
+            arrayList.add(new ThemeDescription((View) this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"leftImageView"}, "Wibe Big", "undo_background"));
+            arrayList.add(new ThemeDescription((View) this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"leftImageView"}, "Wibe Big 3", "undo_infoColor"));
+            arrayList.add(new ThemeDescription((View) this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"leftImageView"}, "Wibe Small", "undo_infoColor"));
+            arrayList.add(new ThemeDescription((View) this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"leftImageView"}, "Body Main.**", "undo_infoColor"));
+            arrayList.add(new ThemeDescription((View) this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"leftImageView"}, "Body Top.**", "undo_infoColor"));
+            arrayList.add(new ThemeDescription((View) this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"leftImageView"}, "Line.**", "undo_infoColor"));
+            arrayList.add(new ThemeDescription((View) this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"leftImageView"}, "Curve Big.**", "undo_infoColor"));
+            arrayList.add(new ThemeDescription((View) this.undoView[i], 0, new Class[]{UndoView.class}, new String[]{"leftImageView"}, "Curve Small.**", "undo_infoColor"));
+        }
         arrayList.add(new ThemeDescription(this.fragmentView, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, r10, "dialogBackground"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_BACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackground"));
         arrayList.add(new ThemeDescription(this.listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogBackground"));
@@ -3013,7 +3104,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SEARCHPLACEHOLDER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_messagePanelHint"));
         ActionBarMenuItem actionBarMenuItem = this.searchItem;
         arrayList.add(new ThemeDescription(actionBarMenuItem != null ? actionBarMenuItem.getSearchField() : null, ThemeDescription.FLAG_CURSORCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialogTextBlack"));
-        $$Lambda$LocationActivity$riN4ttqBN0wqvq6K0orJL2SC6dg r8 = r10;
+        $$Lambda$LocationActivity$os7Jo3S2bd5XMkv2FrSpJwQ17c r8 = r10;
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUBACKGROUND, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "actionBarDefaultSubmenuBackground"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_AB_SUBMENUITEM, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "actionBarDefaultSubmenuItem"));
         arrayList.add(new ThemeDescription(this.actionBar, ThemeDescription.FLAG_IMAGECOLOR | ThemeDescription.FLAG_AB_SUBMENUITEM, (Class[]) null, (Paint) null, (Drawable[]) null, r8, "actionBarDefaultSubmenuItemIcon"));
@@ -3047,7 +3138,7 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "location_liveLocationProgress"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "location_placeLocationBackground"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "dialog_liveLocationProgress"));
-        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_CHECKTAG | ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE, new Class[]{SendLocationCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "location_sendLocationIcon"));
+        arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_CHECKTAG, new Class[]{SendLocationCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "location_sendLocationIcon"));
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_CHECKTAG, new Class[]{SendLocationCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "location_sendLiveLocationIcon"));
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_CHECKTAG, new Class[]{SendLocationCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "location_sendLocationBackground"));
         arrayList.add(new ThemeDescription((View) this.listView, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_USEBACKGROUNDDRAWABLE | ThemeDescription.FLAG_CHECKTAG, new Class[]{SendLocationCell.class}, new String[]{"imageView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "location_sendLiveLocationBackground"));
@@ -3078,8 +3169,8 @@ public class LocationActivity extends BaseFragment implements NotificationCenter
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getThemeDescriptions$35 */
-    public /* synthetic */ void lambda$getThemeDescriptions$35$LocationActivity() {
+    /* renamed from: lambda$getThemeDescriptions$37 */
+    public /* synthetic */ void lambda$getThemeDescriptions$37$LocationActivity() {
         this.mapTypeButton.setIconColor(Theme.getColor("location_actionIcon"));
         this.mapTypeButton.redrawPopup(Theme.getColor("actionBarDefaultSubmenuBackground"));
         this.mapTypeButton.setPopupItemsColor(Theme.getColor("actionBarDefaultSubmenuItemIcon"), true);

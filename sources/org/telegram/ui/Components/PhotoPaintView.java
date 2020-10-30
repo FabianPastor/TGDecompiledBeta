@@ -341,7 +341,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r4)
             android.widget.ImageView r2 = r0.paintButton
-            r4 = 2131165862(0x7var_a6, float:1.7945953E38)
+            r4 = 2131165863(0x7var_a7, float:1.7945955E38)
             r2.setImageResource(r4)
             android.widget.ImageView r2 = r0.paintButton
             r4 = 1090519039(0x40ffffff, float:7.9999995)
@@ -366,7 +366,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.<init>(r1)
             android.widget.ImageView$ScaleType r5 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r5)
-            r5 = 2131165866(0x7var_aa, float:1.7945961E38)
+            r5 = 2131165867(0x7var_ab, float:1.7945963E38)
             r2.setImageResource(r5)
             android.graphics.drawable.Drawable r5 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
             r2.setBackgroundDrawable(r5)
@@ -381,7 +381,7 @@ public class PhotoPaintView extends FrameLayout implements EntityView.EntityView
             r2.<init>(r1)
             android.widget.ImageView$ScaleType r1 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r1)
-            r1 = 2131165864(0x7var_a8, float:1.7945957E38)
+            r1 = 2131165865(0x7var_a9, float:1.794596E38)
             r2.setImageResource(r1)
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4)
             r2.setBackgroundDrawable(r1)

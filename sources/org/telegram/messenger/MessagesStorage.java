@@ -943,13 +943,13 @@ public class MessagesStorage extends BaseController {
             i = 68;
         }
         if (i == 68) {
-            this.database.executeFast("ALTER TABLE messages ADD COLUMN forwards INTEGER default 0").stepThis().dispose();
+            executeNoException("ALTER TABLE messages ADD COLUMN forwards INTEGER default 0");
             this.database.executeFast("PRAGMA user_version = 69").stepThis().dispose();
             i = 69;
         }
         if (i == 69) {
-            this.database.executeFast("ALTER TABLE messages ADD COLUMN replies_data BLOB default NULL").stepThis().dispose();
-            this.database.executeFast("ALTER TABLE messages ADD COLUMN thread_reply_id INTEGER default 0").stepThis().dispose();
+            executeNoException("ALTER TABLE messages ADD COLUMN replies_data BLOB default NULL");
+            executeNoException("ALTER TABLE messages ADD COLUMN thread_reply_id INTEGER default 0");
             this.database.executeFast("CREATE INDEX IF NOT EXISTS uid_thread_reply_id_mid_idx_messages ON messages(uid, thread_reply_id, mid) WHERE thread_reply_id != 0;").stepThis().dispose();
             this.database.executeFast("PRAGMA user_version = 70").stepThis().dispose();
             i = 70;
@@ -960,13 +960,21 @@ public class MessagesStorage extends BaseController {
             i = 71;
         }
         if (i == 71) {
-            this.database.executeFast("ALTER TABLE sharing_locations ADD COLUMN proximity INTEGER default 0").stepThis().dispose();
+            executeNoException("ALTER TABLE sharing_locations ADD COLUMN proximity INTEGER default 0");
             this.database.executeFast("PRAGMA user_version = 72").stepThis().dispose();
             i = 72;
         }
         if (i == 72) {
             this.database.executeFast("CREATE TABLE IF NOT EXISTS chat_pinned_count(uid INTEGER PRIMARY KEY, count INTEGER, end INTEGER);").stepThis().dispose();
             this.database.executeFast("PRAGMA user_version = 73").stepThis().dispose();
+        }
+    }
+
+    private void executeNoException(String str) {
+        try {
+            this.database.executeFast(str).stepThis().dispose();
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
         }
     }
 
@@ -21224,7 +21232,7 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: type inference failed for: r7v4 */
     /* JADX WARNING: type inference failed for: r7v16 */
     /* access modifiers changed from: private */
-    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r7v1, types: [int, boolean] */
+    /* JADX WARNING: Incorrect type for immutable var: ssa=int, code=?, for r7v1, types: [boolean, int] */
     /* JADX WARNING: Removed duplicated region for block: B:46:0x012b A[Catch:{ Exception -> 0x028b }] */
     /* JADX WARNING: Removed duplicated region for block: B:53:0x01d6 A[Catch:{ Exception -> 0x028b }] */
     /* JADX WARNING: Removed duplicated region for block: B:54:0x01db A[Catch:{ Exception -> 0x028b }] */
@@ -25450,7 +25458,7 @@ public class MessagesStorage extends BaseController {
             org.telegram.messenger.UserConfig r4 = org.telegram.messenger.UserConfig.getInstance(r4)
             int r4 = r4.getClientUserId()
             java.lang.String r5 = "SavedMessages"
-            r6 = 2131626938(0x7f0e0bba, float:1.8881126E38)
+            r6 = 2131626942(0x7f0e0bbe, float:1.8881134E38)
             java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r5, r6)     // Catch:{ Exception -> 0x0651 }
             java.lang.String r5 = r5.toLowerCase()     // Catch:{ Exception -> 0x0651 }
             java.lang.String r6 = r25.trim()     // Catch:{ Exception -> 0x0651 }

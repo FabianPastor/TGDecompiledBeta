@@ -703,18 +703,20 @@ public class LocationController extends BaseController implements NotificationCe
     }
 
     /* access modifiers changed from: protected */
-    public void addSharingLocation(long j, int i, int i2, int i3, TLRPC$Message tLRPC$Message) {
+    public void addSharingLocation(TLRPC$Message tLRPC$Message) {
         SharingLocationInfo sharingLocationInfo = new SharingLocationInfo();
-        sharingLocationInfo.did = j;
-        sharingLocationInfo.mid = i;
-        sharingLocationInfo.period = i2;
-        sharingLocationInfo.proximityMeters = i3;
-        sharingLocationInfo.lastSentProximityMeters = i3;
+        sharingLocationInfo.did = tLRPC$Message.dialog_id;
+        sharingLocationInfo.mid = tLRPC$Message.id;
+        TLRPC$MessageMedia tLRPC$MessageMedia = tLRPC$Message.media;
+        sharingLocationInfo.period = tLRPC$MessageMedia.period;
+        int i = tLRPC$MessageMedia.proximity_notification_radius;
+        sharingLocationInfo.proximityMeters = i;
+        sharingLocationInfo.lastSentProximityMeters = i;
         sharingLocationInfo.account = this.currentAccount;
         sharingLocationInfo.messageObject = new MessageObject(this.currentAccount, tLRPC$Message, false, false);
-        sharingLocationInfo.stopTime = getConnectionsManager().getCurrentTime() + i2;
-        SharingLocationInfo sharingLocationInfo2 = this.sharingLocationsMap.get(j);
-        this.sharingLocationsMap.put(j, sharingLocationInfo);
+        sharingLocationInfo.stopTime = getConnectionsManager().getCurrentTime() + sharingLocationInfo.period;
+        SharingLocationInfo sharingLocationInfo2 = this.sharingLocationsMap.get(sharingLocationInfo.did);
+        this.sharingLocationsMap.put(sharingLocationInfo.did, sharingLocationInfo);
         if (sharingLocationInfo2 != null) {
             this.sharingLocations.remove(sharingLocationInfo2);
         }

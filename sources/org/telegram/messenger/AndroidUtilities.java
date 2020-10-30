@@ -370,7 +370,7 @@ public class AndroidUtilities {
             if (matchFilter == null || matchFilter.acceptMatch(spannable, start, end)) {
                 LinkSpec linkSpec = new LinkSpec();
                 String makeUrl = makeUrl(matcher.group(0), strArr, matcher);
-                if (!z || Browser.isInternalUrl(makeUrl, (boolean[]) null)) {
+                if (!z || Browser.isInternalUrl(makeUrl, true, (boolean[]) null)) {
                     linkSpec.url = makeUrl;
                     linkSpec.start = start;
                     linkSpec.end = end;

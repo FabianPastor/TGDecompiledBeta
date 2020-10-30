@@ -3651,14 +3651,14 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.tgnet.TLRPC$ChatFull r0 = r0.chatInfo
             if (r0 != 0) goto L_0x013c
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r3 = 2131627130(0x7f0e0c7a, float:1.8881516E38)
+            r3 = 2131627134(0x7f0e0c7e, float:1.8881524E38)
             java.lang.String r4 = "SharedMediaTabFull2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r1, r3)
             goto L_0x014a
         L_0x013c:
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r3 = 2131627129(0x7f0e0CLASSNAME, float:1.8881514E38)
+            r3 = 2131627133(0x7f0e0c7d, float:1.8881522E38)
             java.lang.String r4 = "SharedMediaTab2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r1, r3)
@@ -3670,14 +3670,14 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r2)
             if (r0 != 0) goto L_0x0166
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r3 = 2131627123(0x7f0e0CLASSNAME, float:1.8881502E38)
+            r3 = 2131627127(0x7f0e0CLASSNAME, float:1.888151E38)
             java.lang.String r4 = "SharedFilesTab2"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.addTextTab(r2, r3)
         L_0x0166:
             long r2 = r14.dialog_id
             int r0 = (int) r2
-            r2 = 2131627131(0x7f0e0c7b, float:1.8881518E38)
+            r2 = 2131627135(0x7f0e0c7f, float:1.8881526E38)
             java.lang.String r3 = "SharedMusicTab2"
             if (r0 == 0) goto L_0x01a4
             int[] r0 = r14.hasMedia
@@ -3687,7 +3687,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r7)
             if (r0 != 0) goto L_0x018c
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r4 = 2131627127(0x7f0e0CLASSNAME, float:1.888151E38)
+            r4 = 2131627131(0x7f0e0c7b, float:1.8881518E38)
             java.lang.String r5 = "SharedLinksTab2"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r0.addTextTab(r7, r4)
@@ -3731,7 +3731,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r9)
             if (r0 != 0) goto L_0x01f4
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r2 = 2131627135(0x7f0e0c7f, float:1.8881526E38)
+            r2 = 2131627139(0x7f0e0CLASSNAME, float:1.8881534E38)
             java.lang.String r3 = "SharedVoiceTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r9, r2)
@@ -3743,7 +3743,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r10)
             if (r0 != 0) goto L_0x0210
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r2 = 2131627124(0x7f0e0CLASSNAME, float:1.8881504E38)
+            r2 = 2131627128(0x7f0e0CLASSNAME, float:1.8881512E38)
             java.lang.String r3 = "SharedGIFsTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r10, r2)
@@ -3755,7 +3755,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             boolean r0 = r0.hasTab(r11)
             if (r0 != 0) goto L_0x022c
             org.telegram.ui.Components.ScrollSlidingTextTabStrip r0 = r14.scrollSlidingTextTabStrip
-            r2 = 2131627125(0x7f0e0CLASSNAME, float:1.8881506E38)
+            r2 = 2131627129(0x7f0e0CLASSNAME, float:1.8881514E38)
             java.lang.String r3 = "SharedGroupsTab2"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r0.addTextTab(r11, r2)
@@ -4088,7 +4088,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r3 = r0.mediaPages
             r3 = r3[r25]
             int r3 = r3.selectedType
-            r10 = 2131166029(0x7var_d, float:1.7946292E38)
+            r10 = 2131166030(0x7var_e, float:1.7946294E38)
             if (r3 != 0) goto L_0x02e8
             org.telegram.ui.Components.SharedMediaLayout$SharedPhotoVideoAdapter r3 = r0.photoVideoAdapter
             if (r2 == r3) goto L_0x029f
@@ -4145,7 +4145,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.ImageView r2 = r2.emptyImageView
-            r3 = 2131166030(0x7var_e, float:1.7946294E38)
+            r3 = 2131166031(0x7var_f, float:1.7946296E38)
             r2.setImageResource(r3)
             long r2 = r0.dialog_id
             int r3 = (int) r2
@@ -4184,7 +4184,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.ImageView r2 = r2.emptyImageView
-            r3 = 2131166033(0x7var_, float:1.79463E38)
+            r3 = 2131166034(0x7var_, float:1.7946302E38)
             r2.setImageResource(r3)
             long r2 = r0.dialog_id
             int r3 = (int) r2
@@ -4223,7 +4223,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.ImageView r2 = r2.emptyImageView
-            r3 = 2131166031(0x7var_f, float:1.7946296E38)
+            r3 = 2131166032(0x7var_, float:1.7946298E38)
             r2.setImageResource(r3)
             long r2 = r0.dialog_id
             int r3 = (int) r2
@@ -4262,7 +4262,7 @@ public class SharedMediaLayout extends FrameLayout implements NotificationCenter
             org.telegram.ui.Components.SharedMediaLayout$MediaPage[] r2 = r0.mediaPages
             r2 = r2[r25]
             android.widget.ImageView r2 = r2.emptyImageView
-            r3 = 2131166032(0x7var_, float:1.7946298E38)
+            r3 = 2131166033(0x7var_, float:1.79463E38)
             r2.setImageResource(r3)
             long r2 = r0.dialog_id
             int r3 = (int) r2

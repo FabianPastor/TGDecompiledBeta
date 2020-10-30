@@ -2648,7 +2648,7 @@ public class PaymentFormActivity extends BaseFragment implements NotificationCen
             r0.setTextColor(r3)
             org.telegram.ui.Cells.TextSettingsCell[] r0 = r1.settingsCell
             r0 = r0[r8]
-            r3 = 2131626874(0x7f0e0b7a, float:1.8880997E38)
+            r3 = 2131626878(0x7f0e0b7e, float:1.8881005E38)
             java.lang.String r4 = "ResendCode"
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
             r0.setText(r3, r8)

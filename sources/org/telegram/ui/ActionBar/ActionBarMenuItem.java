@@ -1009,33 +1009,37 @@ public class ActionBarMenuItem extends FrameLayout {
                 /* access modifiers changed from: protected */
                 public void onMeasure(int i, int i2) {
                     int i3;
+                    int i4;
                     if (!z2) {
                         measureChildWithMargins(ActionBarMenuItem.this.clearButton, i, 0, i2, 0);
                     }
                     if (!LocaleController.isRTL) {
                         if (ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0) {
                             measureChildWithMargins(ActionBarMenuItem.this.searchFieldCaption, i, View.MeasureSpec.getSize(i) / 2, i2, 0);
-                            i3 = ActionBarMenuItem.this.searchFieldCaption.getMeasuredWidth() + AndroidUtilities.dp(4.0f);
+                            i4 = ActionBarMenuItem.this.searchFieldCaption.getMeasuredWidth() + AndroidUtilities.dp(4.0f);
                         } else {
-                            i3 = 0;
+                            i4 = 0;
                         }
                         int size = View.MeasureSpec.getSize(i);
                         this.ignoreRequestLayout = true;
-                        measureChildWithMargins(ActionBarMenuItem.this.searchFilterLayout, i, i3, i2, 0);
+                        measureChildWithMargins(ActionBarMenuItem.this.searchFilterLayout, i, i4, i2, 0);
                         int measuredWidth = ActionBarMenuItem.this.searchFilterLayout.getVisibility() == 0 ? ActionBarMenuItem.this.searchFilterLayout.getMeasuredWidth() : 0;
-                        measureChildWithMargins(ActionBarMenuItem.this.searchField, i, i3 + measuredWidth, i2, 0);
+                        measureChildWithMargins(ActionBarMenuItem.this.searchField, i, i4 + measuredWidth, i2, 0);
                         this.ignoreRequestLayout = false;
                         setMeasuredDimension(Math.max(measuredWidth + ActionBarMenuItem.this.searchField.getMeasuredWidth(), size), View.MeasureSpec.getSize(i2));
                         return;
                     }
                     if (ActionBarMenuItem.this.searchFieldCaption.getVisibility() == 0) {
                         measureChildWithMargins(ActionBarMenuItem.this.searchFieldCaption, i, View.MeasureSpec.getSize(i) / 2, i2, 0);
+                        i3 = ActionBarMenuItem.this.searchFieldCaption.getMeasuredWidth() + AndroidUtilities.dp(4.0f);
+                    } else {
+                        i3 = 0;
                     }
                     int size2 = View.MeasureSpec.getSize(i);
                     this.ignoreRequestLayout = true;
-                    measureChildWithMargins(ActionBarMenuItem.this.searchFilterLayout, i, 0, i2, 0);
+                    measureChildWithMargins(ActionBarMenuItem.this.searchFilterLayout, i, i3, i2, 0);
                     int measuredWidth2 = ActionBarMenuItem.this.searchFilterLayout.getVisibility() == 0 ? ActionBarMenuItem.this.searchFilterLayout.getMeasuredWidth() : 0;
-                    measureChildWithMargins(ActionBarMenuItem.this.searchField, View.MeasureSpec.makeMeasureSpec(size2 - AndroidUtilities.dp(6.0f), 0), measuredWidth2 + 0, i2, 0);
+                    measureChildWithMargins(ActionBarMenuItem.this.searchField, View.MeasureSpec.makeMeasureSpec(size2 - AndroidUtilities.dp(6.0f), 0), i3 + measuredWidth2, i2, 0);
                     this.ignoreRequestLayout = false;
                     setMeasuredDimension(Math.max(measuredWidth2 + ActionBarMenuItem.this.searchField.getMeasuredWidth(), size2), View.MeasureSpec.getSize(i2));
                 }

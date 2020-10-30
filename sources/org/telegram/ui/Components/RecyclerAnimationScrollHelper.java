@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import org.telegram.messenger.BuildVars;
+import org.telegram.messenger.MessagesController;
 import org.telegram.ui.Cells.ChatMessageCell;
 import org.telegram.ui.Components.RecyclerAnimationScrollHelper;
 import org.telegram.ui.Components.RecyclerListView;
@@ -66,7 +67,7 @@ public class RecyclerAnimationScrollHelper {
             return;
         }
         int childCount = this.recyclerView.getChildCount();
-        if (childCount == 0) {
+        if (childCount == 0 || !MessagesController.getGlobalMainSettings().getBoolean("view_animations", true)) {
             this.layoutManager.scrollToPositionWithOffset(i, i2, z);
             return;
         }

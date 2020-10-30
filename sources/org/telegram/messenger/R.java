@@ -724,6 +724,7 @@ public final class R {
         public static final int msg_list = NUM;
         public static final int msg_location = NUM;
         public static final int msg_location_alert = NUM;
+        public static final int msg_location_alert2 = NUM;
         public static final int msg_map = NUM;
         public static final int msg_markread = NUM;
         public static final int msg_markunread = NUM;
@@ -4307,6 +4308,10 @@ public final class R {
         public static final int ProfileJoinGroup = NUM;
         public static final int ProfilePopupNotification = NUM;
         public static final int ProfilePopupNotificationInfo = NUM;
+        public static final int ProximityAlertCancelled = NUM;
+        public static final int ProximityAlertSet = NUM;
+        public static final int ProximityAlertSetInfoGroup = NUM;
+        public static final int ProximityAlertSetInfoUser = NUM;
         public static final int ProximityTooltioGroup = NUM;
         public static final int ProximityTooltioUser = NUM;
         public static final int Proxy = NUM;

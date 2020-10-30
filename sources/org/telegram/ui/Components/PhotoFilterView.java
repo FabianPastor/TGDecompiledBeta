@@ -531,7 +531,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.ImageView$ScaleType r9 = android.widget.ImageView.ScaleType.CENTER
             r4.setScaleType(r9)
             android.widget.ImageView r4 = r0.tuneItem
-            r9 = 2131165868(0x7var_ac, float:1.7945965E38)
+            r9 = 2131165869(0x7var_ad, float:1.7945967E38)
             r4.setImageResource(r9)
             android.widget.ImageView r4 = r0.tuneItem
             android.graphics.PorterDuffColorFilter r9 = new android.graphics.PorterDuffColorFilter
@@ -559,7 +559,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.ImageView$ScaleType r12 = android.widget.ImageView.ScaleType.CENTER
             r4.setScaleType(r12)
             android.widget.ImageView r4 = r0.blurItem
-            r12 = 2131166037(0x7var_, float:1.7946308E38)
+            r12 = 2131166038(0x7var_, float:1.794631E38)
             r4.setImageResource(r12)
             android.widget.ImageView r4 = r0.blurItem
             android.graphics.drawable.Drawable r12 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r9)
@@ -583,7 +583,7 @@ public class PhotoFilterView extends FrameLayout implements FilterShaders.Filter
             android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r4)
             android.widget.ImageView r2 = r0.curveItem
-            r4 = 2131166039(0x7var_, float:1.7946312E38)
+            r4 = 2131166040(0x7var_, float:1.7946314E38)
             r2.setImageResource(r4)
             android.widget.ImageView r2 = r0.curveItem
             android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r9)

@@ -263,7 +263,7 @@ public class GroupCreateSpan extends View {
             r0.uid = r2
             boolean r2 = org.telegram.messenger.UserObject.isReplyUser((org.telegram.tgnet.TLRPC$User) r1)
             if (r2 == 0) goto L_0x0181
-            r1 = 2131626844(0x7f0e0b5c, float:1.8880936E38)
+            r1 = 2131626848(0x7f0e0b60, float:1.8880944E38)
             java.lang.String r2 = "RepliesTitle"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.Components.AvatarDrawable r2 = r0.avatarDrawable
@@ -277,7 +277,7 @@ public class GroupCreateSpan extends View {
         L_0x0181:
             boolean r2 = org.telegram.messenger.UserObject.isUserSelf(r1)
             if (r2 == 0) goto L_0x019b
-            r1 = 2131626938(0x7f0e0bba, float:1.8881126E38)
+            r1 = 2131626942(0x7f0e0bbe, float:1.8881134E38)
             java.lang.String r2 = "SavedMessages"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r2, r1)
             org.telegram.ui.Components.AvatarDrawable r2 = r0.avatarDrawable

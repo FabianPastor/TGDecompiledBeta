@@ -743,6 +743,7 @@
     <public type="drawable" name="msg_list" id="NUM" />
     <public type="drawable" name="msg_location" id="NUM" />
     <public type="drawable" name="msg_location_alert" id="NUM" />
+    <public type="drawable" name="msg_location_alert2" id="NUM" />
     <public type="drawable" name="msg_map" id="NUM" />
     <public type="drawable" name="msg_markread" id="NUM" />
     <public type="drawable" name="msg_markunread" id="NUM" />
@@ -4168,6 +4169,10 @@
     <public type="string" name="ProfileJoinGroup" id="NUM" />
     <public type="string" name="ProfilePopupNotification" id="NUM" />
     <public type="string" name="ProfilePopupNotificationInfo" id="NUM" />
+    <public type="string" name="ProximityAlertCancelled" id="NUM" />
+    <public type="string" name="ProximityAlertSet" id="NUM" />
+    <public type="string" name="ProximityAlertSetInfoGroup" id="NUM" />
+    <public type="string" name="ProximityAlertSetInfoUser" id="NUM" />
     <public type="string" name="ProximityTooltioGroup" id="NUM" />
     <public type="string" name="ProximityTooltioUser" id="NUM" />
     <public type="string" name="Proxy" id="NUM" />

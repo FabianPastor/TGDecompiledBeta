@@ -340,7 +340,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r6 = r26
             r0.parentFragment = r6
             android.content.res.Resources r6 = r25.getResources()
-            r7 = 2131165969(0x7var_, float:1.794617E38)
+            r7 = 2131165970(0x7var_, float:1.7946172E38)
             android.graphics.drawable.Drawable r6 = r6.getDrawable(r7)
             android.graphics.drawable.Drawable r6 = r6.mutate()
             r0.shadowDrawable = r6
@@ -660,7 +660,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r5.setOnClickListener(r11)
             android.widget.ImageView r5 = new android.widget.ImageView
             r5.<init>(r1)
-            r11 = 2131165967(0x7var_f, float:1.7946166E38)
+            r11 = 2131165968(0x7var_, float:1.7946168E38)
             r5.setImageResource(r11)
             android.graphics.PorterDuffColorFilter r11 = new android.graphics.PorterDuffColorFilter
             int r14 = org.telegram.ui.ActionBar.Theme.getColor(r8)
@@ -727,7 +727,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
             r31 = r8
             r26.<init>(r28, r29, r30, r31)
             r0.commentTextView = r3
-            r2 = 2131627099(0x7f0e0c5b, float:1.8881453E38)
+            r2 = 2131627103(0x7f0e0c5f, float:1.888146E38)
             java.lang.String r5 = "ShareComment"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r5, r2)
             r3.setHint(r2)

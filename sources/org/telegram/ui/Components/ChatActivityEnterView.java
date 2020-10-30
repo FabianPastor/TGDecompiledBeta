@@ -313,6 +313,7 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
     private MessageObject pendingMessageObject;
     /* access modifiers changed from: private */
     public MediaActionDrawable playPauseDrawable;
+    public boolean preventInput;
     private CloseProgressDrawable2 progressDrawable;
     private Runnable recordAudioVideoRunnable;
     /* access modifiers changed from: private */
@@ -3377,6 +3378,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     ChatActivityEnterView.this.openKeyboardInternal();
                 }
 
+                public boolean dispatchKeyEvent(KeyEvent keyEvent) {
+                    if (ChatActivityEnterView.this.preventInput) {
+                        return false;
+                    }
+                    return super.dispatchKeyEvent(keyEvent);
+                }
+
                 /* access modifiers changed from: protected */
                 public void onSelectionChanged(int i, int i2) {
                     super.onSelectionChanged(i, i2);
@@ -5614,8 +5622,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         }
 
         private void hideRecordedAudioPanel(boolean z) {
-            AnimatorSet animatorSet = this.recordPannelAnimation;
-            if (animatorSet == null || !animatorSet.isRunning()) {
+            AnimatorSet animatorSet;
+            AnimatorSet animatorSet2 = this.recordPannelAnimation;
+            if (animatorSet2 == null || !animatorSet2.isRunning()) {
                 this.audioToSendPath = null;
                 this.audioToSend = null;
                 this.audioToSendMessageObject = null;
@@ -5639,9 +5648,9 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     this.attachButton.setScaleY(0.0f);
                     this.emojiButton[0].setScaleY(0.0f);
                     this.emojiButton[1].setScaleY(0.0f);
-                    AnimatorSet animatorSet2 = new AnimatorSet();
-                    this.recordPannelAnimation = animatorSet2;
-                    animatorSet2.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.emojiButton[0], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.SCALE_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordedAudioPanel, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.attachButton, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.attachButton, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.attachButton, View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.messageEditText, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.messageEditText, View.TRANSLATION_X, new float[]{0.0f})});
+                    AnimatorSet animatorSet3 = new AnimatorSet();
+                    this.recordPannelAnimation = animatorSet3;
+                    animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.emojiButton[0], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.SCALE_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordedAudioPanel, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.attachButton, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.attachButton, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.attachButton, View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.messageEditText, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.messageEditText, View.TRANSLATION_X, new float[]{0.0f})});
                     this.recordPannelAnimation.setDuration(150);
                     this.recordPannelAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
@@ -5651,34 +5660,44 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                     });
                 } else {
                     this.recordDeleteImageView.playAnimation();
-                    AnimatorSet animatorSet3 = new AnimatorSet();
+                    AnimatorSet animatorSet4 = new AnimatorSet();
                     if (isInVideoMode()) {
-                        animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.videoTimelineView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.videoTimelineView, View.TRANSLATION_X, new float[]{(float) (-AndroidUtilities.dp(20.0f))}), ObjectAnimator.ofFloat(this.messageEditText, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.messageEditText, View.TRANSLATION_X, new float[]{0.0f})});
+                        animatorSet4.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.videoTimelineView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.videoTimelineView, View.TRANSLATION_X, new float[]{(float) (-AndroidUtilities.dp(20.0f))}), ObjectAnimator.ofFloat(this.messageEditText, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.messageEditText, View.TRANSLATION_X, new float[]{0.0f})});
                     } else {
                         this.messageEditText.setAlpha(1.0f);
                         this.messageEditText.setTranslationX(0.0f);
-                        animatorSet3.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.recordedAudioSeekBar, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordedAudioPlayButton, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordedAudioBackground, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordedAudioTimeTextView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordedAudioSeekBar, View.TRANSLATION_X, new float[]{(float) (-AndroidUtilities.dp(20.0f))}), ObjectAnimator.ofFloat(this.recordedAudioPlayButton, View.TRANSLATION_X, new float[]{(float) (-AndroidUtilities.dp(20.0f))}), ObjectAnimator.ofFloat(this.recordedAudioBackground, View.TRANSLATION_X, new float[]{(float) (-AndroidUtilities.dp(20.0f))}), ObjectAnimator.ofFloat(this.recordedAudioTimeTextView, View.TRANSLATION_X, new float[]{(float) (-AndroidUtilities.dp(20.0f))})});
+                        animatorSet4.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.recordedAudioSeekBar, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordedAudioPlayButton, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordedAudioBackground, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordedAudioTimeTextView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordedAudioSeekBar, View.TRANSLATION_X, new float[]{(float) (-AndroidUtilities.dp(20.0f))}), ObjectAnimator.ofFloat(this.recordedAudioPlayButton, View.TRANSLATION_X, new float[]{(float) (-AndroidUtilities.dp(20.0f))}), ObjectAnimator.ofFloat(this.recordedAudioBackground, View.TRANSLATION_X, new float[]{(float) (-AndroidUtilities.dp(20.0f))}), ObjectAnimator.ofFloat(this.recordedAudioTimeTextView, View.TRANSLATION_X, new float[]{(float) (-AndroidUtilities.dp(20.0f))})});
                     }
-                    animatorSet3.setDuration(200);
-                    this.attachButton.setAlpha(0.0f);
+                    animatorSet4.setDuration(200);
+                    ImageView imageView2 = this.attachButton;
+                    if (imageView2 != null) {
+                        imageView2.setAlpha(0.0f);
+                        this.attachButton.setScaleX(0.0f);
+                        this.attachButton.setScaleY(0.0f);
+                        AnimatorSet animatorSet5 = new AnimatorSet();
+                        animatorSet5.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.attachButton, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.attachButton, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.attachButton, View.SCALE_Y, new float[]{1.0f})});
+                        animatorSet5.setDuration(150);
+                        animatorSet = animatorSet5;
+                    } else {
+                        animatorSet = null;
+                    }
                     this.emojiButton[0].setAlpha(0.0f);
                     this.emojiButton[1].setAlpha(0.0f);
-                    this.attachButton.setScaleX(0.0f);
                     this.emojiButton[0].setScaleX(0.0f);
                     this.emojiButton[1].setScaleX(0.0f);
-                    this.attachButton.setScaleY(0.0f);
                     this.emojiButton[0].setScaleY(0.0f);
                     this.emojiButton[1].setScaleY(0.0f);
-                    AnimatorSet animatorSet4 = new AnimatorSet();
-                    animatorSet4.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.attachButton, View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.attachButton, View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.attachButton, View.SCALE_Y, new float[]{1.0f})});
-                    animatorSet4.setDuration(150);
-                    AnimatorSet animatorSet5 = new AnimatorSet();
-                    animatorSet5.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.recordDeleteImageView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.SCALE_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_Y, new float[]{1.0f})});
-                    animatorSet5.setDuration(150);
-                    animatorSet5.setStartDelay(600);
                     AnimatorSet animatorSet6 = new AnimatorSet();
-                    this.recordPannelAnimation = animatorSet6;
-                    animatorSet6.playTogether(new Animator[]{animatorSet3, animatorSet4, animatorSet5});
+                    animatorSet6.playTogether(new Animator[]{ObjectAnimator.ofFloat(this.recordDeleteImageView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.SCALE_X, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.SCALE_Y, new float[]{0.0f}), ObjectAnimator.ofFloat(this.recordDeleteImageView, View.ALPHA, new float[]{0.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[0], View.SCALE_Y, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.ALPHA, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_X, new float[]{1.0f}), ObjectAnimator.ofFloat(this.emojiButton[1], View.SCALE_Y, new float[]{1.0f})});
+                    animatorSet6.setDuration(150);
+                    animatorSet6.setStartDelay(600);
+                    AnimatorSet animatorSet7 = new AnimatorSet();
+                    this.recordPannelAnimation = animatorSet7;
+                    if (animatorSet != null) {
+                        animatorSet7.playTogether(new Animator[]{animatorSet4, animatorSet, animatorSet6});
+                    } else {
+                        animatorSet7.playTogether(new Animator[]{animatorSet4, animatorSet6});
+                    }
                     this.recordPannelAnimation.addListener(new AnimatorListenerAdapter() {
                         public void onAnimationEnd(Animator animator) {
                             ChatActivityEnterView.this.recordedAudioPanel.setVisibility(8);

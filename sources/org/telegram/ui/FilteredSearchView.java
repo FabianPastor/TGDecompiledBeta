@@ -91,7 +91,6 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
     };
     /* access modifiers changed from: private */
     public int columnsCount = 3;
-    int currentAccount = UserConfig.selectedAccount;
     /* access modifiers changed from: private */
     public String currentDataQuery;
     int currentSearchDialogId;
@@ -116,6 +115,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
     boolean ignoreRequestLayout;
     /* access modifiers changed from: private */
     public boolean isLoading;
+    int lastAccount;
     String lastMessagesSearchString;
     String lastSearchFilterQueryString;
     public final LinearLayoutManager layoutManager;
@@ -419,7 +419,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             arrowSpan = r0
             org.telegram.ui.Components.ColoredImageSpan r1 = new org.telegram.ui.Components.ColoredImageSpan
             android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r3 = 2131165942(0x7var_f6, float:1.7946115E38)
+            r3 = 2131165943(0x7var_f7, float:1.7946117E38)
             android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             r1.<init>(r2)
@@ -613,32 +613,34 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             }
             int i4 = this.requestIndex + 1;
             this.requestIndex = i4;
-            $$Lambda$FilteredSearchView$MXJpJ2qjsisjtFYTJjRuA7szmKs r15 = r0;
-            $$Lambda$FilteredSearchView$MXJpJ2qjsisjtFYTJjRuA7szmKs r0 = new Runnable(i, str, mediaFilterData, j, j2, z2, this.uiCallback.getFolderId(), format, i4) {
+            $$Lambda$FilteredSearchView$zovqrbVqIgZNAl4sFfDpP8XURw r15 = r0;
+            $$Lambda$FilteredSearchView$zovqrbVqIgZNAl4sFfDpP8XURw r0 = new Runnable(i, str, mediaFilterData, UserConfig.selectedAccount, j, j2, z2, this.uiCallback.getFolderId(), format, i4) {
                 public final /* synthetic */ int f$1;
+                public final /* synthetic */ int f$10;
                 public final /* synthetic */ String f$2;
                 public final /* synthetic */ FiltersView.MediaFilterData f$3;
-                public final /* synthetic */ long f$4;
+                public final /* synthetic */ int f$4;
                 public final /* synthetic */ long f$5;
-                public final /* synthetic */ boolean f$6;
-                public final /* synthetic */ int f$7;
-                public final /* synthetic */ String f$8;
-                public final /* synthetic */ int f$9;
+                public final /* synthetic */ long f$6;
+                public final /* synthetic */ boolean f$7;
+                public final /* synthetic */ int f$8;
+                public final /* synthetic */ String f$9;
 
                 {
                     this.f$1 = r2;
                     this.f$2 = r3;
                     this.f$3 = r4;
                     this.f$4 = r5;
-                    this.f$5 = r7;
-                    this.f$6 = r9;
+                    this.f$5 = r6;
+                    this.f$6 = r8;
                     this.f$7 = r10;
                     this.f$8 = r11;
                     this.f$9 = r12;
+                    this.f$10 = r13;
                 }
 
                 public final void run() {
-                    FilteredSearchView.this.lambda$search$4$FilteredSearchView(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9);
+                    FilteredSearchView.this.lambda$search$4$FilteredSearchView(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10);
                 }
             };
             this.searchRunnable = r15;
@@ -646,11 +648,12 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 j5 = 350;
             }
             AndroidUtilities.runOnUIThread(r15, j5);
-            if (mediaFilterData2 == null) {
+            FiltersView.MediaFilterData mediaFilterData3 = mediaFilterData;
+            if (mediaFilterData3 == null) {
                 this.loadingView.setViewType(1);
                 return;
             }
-            int i5 = mediaFilterData2.filterType;
+            int i5 = mediaFilterData3.filterType;
             if (i5 == 0) {
                 if (!TextUtils.isEmpty(this.currentSearchString)) {
                     this.loadingView.setViewType(1);
@@ -667,219 +670,220 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         }
     }
 
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v3, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v5, resolved type: org.telegram.tgnet.TLRPC$TL_messages_search} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v6, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v7, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
-    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r10v8, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v3, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v5, resolved type: org.telegram.tgnet.TLRPC$TL_messages_search} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v6, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v7, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
+    /* JADX DEBUG: Multi-variable search result rejected for TypeSearchVarInfo{r1v8, resolved type: org.telegram.tgnet.TLRPC$TL_messages_searchGlobal} */
     /* access modifiers changed from: private */
     /* JADX WARNING: Multi-variable type inference failed */
     /* renamed from: lambda$search$4 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$search$4$FilteredSearchView(int r20, java.lang.String r21, org.telegram.ui.Adapters.FiltersView.MediaFilterData r22, long r23, long r25, boolean r27, int r28, java.lang.String r29, int r30) {
+    public /* synthetic */ void lambda$search$4$FilteredSearchView(int r19, java.lang.String r20, org.telegram.ui.Adapters.FiltersView.MediaFilterData r21, int r22, long r23, long r25, boolean r27, int r28, java.lang.String r29, int r30) {
         /*
-            r19 = this;
-            r11 = r19
-            r6 = r20
-            r2 = r21
-            r5 = r22
-            r0 = 20
-            r1 = 0
-            r3 = 1000(0x3e8, double:4.94E-321)
-            r7 = 0
-            r9 = 0
-            if (r6 == 0) goto L_0x0075
-            org.telegram.tgnet.TLRPC$TL_messages_search r10 = new org.telegram.tgnet.TLRPC$TL_messages_search
-            r10.<init>()
-            r10.q = r2
-            r10.limit = r0
-            if (r5 != 0) goto L_0x0023
-            org.telegram.tgnet.TLRPC$TL_inputMessagesFilterEmpty r0 = new org.telegram.tgnet.TLRPC$TL_inputMessagesFilterEmpty
-            r0.<init>()
+            r18 = this;
+            r12 = r18
+            r7 = r19
+            r8 = r20
+            r9 = r21
+            r10 = 20
+            r11 = 0
+            r13 = 1000(0x3e8, double:4.94E-321)
+            r15 = 0
+            r0 = 0
+            if (r7 == 0) goto L_0x0074
+            org.telegram.tgnet.TLRPC$TL_messages_search r1 = new org.telegram.tgnet.TLRPC$TL_messages_search
+            r1.<init>()
+            r1.q = r8
+            r1.limit = r10
+            if (r9 != 0) goto L_0x0023
+            org.telegram.tgnet.TLRPC$TL_inputMessagesFilterEmpty r2 = new org.telegram.tgnet.TLRPC$TL_inputMessagesFilterEmpty
+            r2.<init>()
             goto L_0x0025
         L_0x0023:
-            org.telegram.tgnet.TLRPC$MessagesFilter r0 = r5.filter
+            org.telegram.tgnet.TLRPC$MessagesFilter r2 = r9.filter
         L_0x0025:
-            r10.filter = r0
-            int r0 = r11.currentAccount
-            org.telegram.messenger.AccountInstance r0 = org.telegram.messenger.AccountInstance.getInstance(r0)
-            org.telegram.messenger.MessagesController r0 = r0.getMessagesController()
-            org.telegram.tgnet.TLRPC$InputPeer r0 = r0.getInputPeer((int) r6)
-            r10.peer = r0
-            int r0 = (r23 > r7 ? 1 : (r23 == r7 ? 0 : -1))
-            if (r0 <= 0) goto L_0x0040
-            long r12 = r23 / r3
-            int r0 = (int) r12
-            r10.min_date = r0
-        L_0x0040:
-            int r0 = (r25 > r7 ? 1 : (r25 == r7 ? 0 : -1))
-            if (r0 <= 0) goto L_0x0049
-            long r3 = r25 / r3
-            int r0 = (int) r3
-            r10.max_date = r0
-        L_0x0049:
-            if (r27 == 0) goto L_0x0070
-            java.lang.String r0 = r11.lastMessagesSearchString
-            boolean r0 = r2.equals(r0)
-            if (r0 == 0) goto L_0x0070
-            java.util.ArrayList<org.telegram.messenger.MessageObject> r0 = r11.messages
-            boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x0070
-            java.util.ArrayList<org.telegram.messenger.MessageObject> r0 = r11.messages
-            int r1 = r0.size()
-            int r1 = r1 + -1
-            java.lang.Object r0 = r0.get(r1)
-            org.telegram.messenger.MessageObject r0 = (org.telegram.messenger.MessageObject) r0
-            int r0 = r0.getId()
-            r10.offset_id = r0
-            goto L_0x0072
+            r1.filter = r2
+            org.telegram.messenger.AccountInstance r2 = org.telegram.messenger.AccountInstance.getInstance(r22)
+            org.telegram.messenger.MessagesController r2 = r2.getMessagesController()
+            org.telegram.tgnet.TLRPC$InputPeer r2 = r2.getInputPeer((int) r7)
+            r1.peer = r2
+            int r2 = (r23 > r15 ? 1 : (r23 == r15 ? 0 : -1))
+            if (r2 <= 0) goto L_0x003e
+            long r2 = r23 / r13
+            int r3 = (int) r2
+            r1.min_date = r3
+        L_0x003e:
+            int r2 = (r25 > r15 ? 1 : (r25 == r15 ? 0 : -1))
+            if (r2 <= 0) goto L_0x0047
+            long r2 = r25 / r13
+            int r3 = (int) r2
+            r1.max_date = r3
+        L_0x0047:
+            if (r27 == 0) goto L_0x006e
+            java.lang.String r2 = r12.lastMessagesSearchString
+            boolean r2 = r8.equals(r2)
+            if (r2 == 0) goto L_0x006e
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r12.messages
+            boolean r2 = r2.isEmpty()
+            if (r2 != 0) goto L_0x006e
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r12.messages
+            int r3 = r2.size()
+            int r3 = r3 + -1
+            java.lang.Object r2 = r2.get(r3)
+            org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
+            int r2 = r2.getId()
+            r1.offset_id = r2
+            goto L_0x0070
+        L_0x006e:
+            r1.offset_id = r11
         L_0x0070:
-            r10.offset_id = r1
-        L_0x0072:
-            r12 = r10
-            goto L_0x0123
-        L_0x0075:
-            boolean r10 = android.text.TextUtils.isEmpty(r21)
-            if (r10 != 0) goto L_0x0099
-            java.util.ArrayList r9 = new java.util.ArrayList
-            r9.<init>()
-            java.util.ArrayList r16 = new java.util.ArrayList
-            r16.<init>()
+            r10 = r0
+            r13 = r1
+            goto L_0x0121
+        L_0x0074:
+            boolean r1 = android.text.TextUtils.isEmpty(r20)
+            if (r1 != 0) goto L_0x0099
             java.util.ArrayList r17 = new java.util.ArrayList
             r17.<init>()
-            int r10 = r11.currentAccount
-            org.telegram.messenger.MessagesStorage r12 = org.telegram.messenger.MessagesStorage.getInstance(r10)
-            r13 = 0
-            r14 = r21
-            r15 = r9
-            r18 = r28
-            r12.localSearch(r13, r14, r15, r16, r17, r18)
+            java.util.ArrayList r4 = new java.util.ArrayList
+            r4.<init>()
+            java.util.ArrayList r5 = new java.util.ArrayList
+            r5.<init>()
+            org.telegram.messenger.MessagesStorage r0 = org.telegram.messenger.MessagesStorage.getInstance(r22)
+            r1 = 0
+            r2 = r20
+            r3 = r17
+            r6 = r28
+            r0.localSearch(r1, r2, r3, r4, r5, r6)
+            r0 = r17
         L_0x0099:
-            org.telegram.tgnet.TLRPC$TL_messages_searchGlobal r10 = new org.telegram.tgnet.TLRPC$TL_messages_searchGlobal
-            r10.<init>()
-            r10.limit = r0
-            r10.q = r2
-            if (r5 != 0) goto L_0x00aa
-            org.telegram.tgnet.TLRPC$TL_inputMessagesFilterEmpty r0 = new org.telegram.tgnet.TLRPC$TL_inputMessagesFilterEmpty
-            r0.<init>()
+            org.telegram.tgnet.TLRPC$TL_messages_searchGlobal r1 = new org.telegram.tgnet.TLRPC$TL_messages_searchGlobal
+            r1.<init>()
+            r1.limit = r10
+            r1.q = r8
+            if (r9 != 0) goto L_0x00aa
+            org.telegram.tgnet.TLRPC$TL_inputMessagesFilterEmpty r2 = new org.telegram.tgnet.TLRPC$TL_inputMessagesFilterEmpty
+            r2.<init>()
             goto L_0x00ac
         L_0x00aa:
-            org.telegram.tgnet.TLRPC$MessagesFilter r0 = r5.filter
+            org.telegram.tgnet.TLRPC$MessagesFilter r2 = r9.filter
         L_0x00ac:
-            r10.filter = r0
-            int r0 = (r23 > r7 ? 1 : (r23 == r7 ? 0 : -1))
-            if (r0 <= 0) goto L_0x00b7
-            long r12 = r23 / r3
-            int r0 = (int) r12
-            r10.min_date = r0
+            r1.filter = r2
+            int r2 = (r23 > r15 ? 1 : (r23 == r15 ? 0 : -1))
+            if (r2 <= 0) goto L_0x00b7
+            long r2 = r23 / r13
+            int r3 = (int) r2
+            r1.min_date = r3
         L_0x00b7:
-            int r0 = (r25 > r7 ? 1 : (r25 == r7 ? 0 : -1))
-            if (r0 <= 0) goto L_0x00c0
-            long r3 = r25 / r3
-            int r0 = (int) r3
-            r10.max_date = r0
+            int r2 = (r25 > r15 ? 1 : (r25 == r15 ? 0 : -1))
+            if (r2 <= 0) goto L_0x00c0
+            long r2 = r25 / r13
+            int r3 = (int) r2
+            r1.max_date = r3
         L_0x00c0:
-            if (r27 == 0) goto L_0x0108
-            java.lang.String r0 = r11.lastMessagesSearchString
-            boolean r0 = r2.equals(r0)
-            if (r0 == 0) goto L_0x0108
-            java.util.ArrayList<org.telegram.messenger.MessageObject> r0 = r11.messages
-            boolean r0 = r0.isEmpty()
-            if (r0 != 0) goto L_0x0108
-            java.util.ArrayList<org.telegram.messenger.MessageObject> r0 = r11.messages
-            int r1 = r0.size()
-            int r1 = r1 + -1
-            java.lang.Object r0 = r0.get(r1)
-            org.telegram.messenger.MessageObject r0 = (org.telegram.messenger.MessageObject) r0
-            int r1 = r0.getId()
-            r10.offset_id = r1
-            int r1 = r11.nextSearchRate
-            r10.offset_rate = r1
-            org.telegram.tgnet.TLRPC$Message r0 = r0.messageOwner
-            org.telegram.tgnet.TLRPC$Peer r0 = r0.peer_id
-            int r1 = r0.channel_id
-            if (r1 == 0) goto L_0x00f4
+            if (r27 == 0) goto L_0x0106
+            java.lang.String r2 = r12.lastMessagesSearchString
+            boolean r2 = r8.equals(r2)
+            if (r2 == 0) goto L_0x0106
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r12.messages
+            boolean r2 = r2.isEmpty()
+            if (r2 != 0) goto L_0x0106
+            java.util.ArrayList<org.telegram.messenger.MessageObject> r2 = r12.messages
+            int r3 = r2.size()
+            int r3 = r3 + -1
+            java.lang.Object r2 = r2.get(r3)
+            org.telegram.messenger.MessageObject r2 = (org.telegram.messenger.MessageObject) r2
+            int r3 = r2.getId()
+            r1.offset_id = r3
+            int r3 = r12.nextSearchRate
+            r1.offset_rate = r3
+            org.telegram.tgnet.TLRPC$Message r2 = r2.messageOwner
+            org.telegram.tgnet.TLRPC$Peer r2 = r2.peer_id
+            int r3 = r2.channel_id
+            if (r3 == 0) goto L_0x00f4
         L_0x00f2:
-            int r0 = -r1
+            int r2 = -r3
             goto L_0x00fb
         L_0x00f4:
-            int r1 = r0.chat_id
-            if (r1 == 0) goto L_0x00f9
+            int r3 = r2.chat_id
+            if (r3 == 0) goto L_0x00f9
             goto L_0x00f2
         L_0x00f9:
-            int r0 = r0.user_id
+            int r2 = r2.user_id
         L_0x00fb:
-            int r1 = r11.currentAccount
-            org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
-            org.telegram.tgnet.TLRPC$InputPeer r0 = r1.getInputPeer((int) r0)
-            r10.offset_peer = r0
-            goto L_0x0113
-        L_0x0108:
-            r10.offset_rate = r1
-            r10.offset_id = r1
-            org.telegram.tgnet.TLRPC$TL_inputPeerEmpty r0 = new org.telegram.tgnet.TLRPC$TL_inputPeerEmpty
-            r0.<init>()
-            r10.offset_peer = r0
-        L_0x0113:
-            int r0 = r10.flags
-            r0 = r0 | 1
-            r10.flags = r0
-            org.telegram.ui.FilteredSearchView$UiCallback r0 = r11.uiCallback
-            int r0 = r0.getFolderId()
-            r10.folder_id = r0
-            goto L_0x0072
-        L_0x0123:
-            r11.lastMessagesSearchString = r2
+            org.telegram.messenger.MessagesController r3 = org.telegram.messenger.MessagesController.getInstance(r22)
+            org.telegram.tgnet.TLRPC$InputPeer r2 = r3.getInputPeer((int) r2)
+            r1.offset_peer = r2
+            goto L_0x0111
+        L_0x0106:
+            r1.offset_rate = r11
+            r1.offset_id = r11
+            org.telegram.tgnet.TLRPC$TL_inputPeerEmpty r2 = new org.telegram.tgnet.TLRPC$TL_inputPeerEmpty
+            r2.<init>()
+            r1.offset_peer = r2
+        L_0x0111:
+            int r2 = r1.flags
+            r2 = r2 | 1
+            r1.flags = r2
+            org.telegram.ui.FilteredSearchView$UiCallback r2 = r12.uiCallback
+            int r2 = r2.getFolderId()
+            r1.folder_id = r2
+            goto L_0x0070
+        L_0x0121:
+            r12.lastMessagesSearchString = r8
             r0 = r29
-            r11.lastSearchFilterQueryString = r0
-            java.util.ArrayList r10 = new java.util.ArrayList
-            r10.<init>()
-            java.lang.String r0 = r11.lastMessagesSearchString
-            org.telegram.ui.Adapters.FiltersView.fillTipDates(r0, r10)
-            int r0 = r11.currentAccount
-            org.telegram.tgnet.ConnectionsManager r13 = org.telegram.tgnet.ConnectionsManager.getInstance(r0)
-            org.telegram.ui.-$$Lambda$FilteredSearchView$G8yEGxDIxxI5XC0hm8Aonot0Mwc r14 = new org.telegram.ui.-$$Lambda$FilteredSearchView$G8yEGxDIxxI5XC0hm8Aonot0Mwc
-            r0 = r14
-            r1 = r19
-            r2 = r21
-            r3 = r30
-            r4 = r27
-            r5 = r22
-            r6 = r20
-            r7 = r23
-            r0.<init>(r2, r3, r4, r5, r6, r7, r9, r10)
-            r13.sendRequest(r12, r14)
+            r12.lastSearchFilterQueryString = r0
+            java.util.ArrayList r11 = new java.util.ArrayList
+            r11.<init>()
+            java.lang.String r0 = r12.lastMessagesSearchString
+            org.telegram.ui.Adapters.FiltersView.fillTipDates(r0, r11)
+            org.telegram.tgnet.ConnectionsManager r14 = org.telegram.tgnet.ConnectionsManager.getInstance(r22)
+            org.telegram.ui.-$$Lambda$FilteredSearchView$Pvh05aBp-yWsFCpaPRh1Rb15fOg r15 = new org.telegram.ui.-$$Lambda$FilteredSearchView$Pvh05aBp-yWsFCpaPRh1Rb15fOg
+            r0 = r15
+            r1 = r18
+            r2 = r22
+            r3 = r20
+            r4 = r30
+            r5 = r27
+            r6 = r21
+            r7 = r19
+            r8 = r23
+            r0.<init>(r2, r3, r4, r5, r6, r7, r8, r10, r11)
+            r14.sendRequest(r13, r15)
             return
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilteredSearchView.lambda$search$4$FilteredSearchView(int, java.lang.String, org.telegram.ui.Adapters.FiltersView$MediaFilterData, long, long, boolean, int, java.lang.String, int):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.FilteredSearchView.lambda$search$4$FilteredSearchView(int, java.lang.String, org.telegram.ui.Adapters.FiltersView$MediaFilterData, int, long, long, boolean, int, java.lang.String, int):void");
     }
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$3 */
-    public /* synthetic */ void lambda$null$3$FilteredSearchView(String str, int i, boolean z, FiltersView.MediaFilterData mediaFilterData, int i2, long j, ArrayList arrayList, ArrayList arrayList2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+    public /* synthetic */ void lambda$null$3$FilteredSearchView(int i, String str, int i2, boolean z, FiltersView.MediaFilterData mediaFilterData, int i3, long j, ArrayList arrayList, ArrayList arrayList2, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
         ArrayList arrayList3 = new ArrayList();
         if (tLRPC$TL_error == null) {
             TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
             int size = tLRPC$messages_Messages.messages.size();
-            for (int i3 = 0; i3 < size; i3++) {
-                MessageObject messageObject = new MessageObject(this.currentAccount, tLRPC$messages_Messages.messages.get(i3), false, true);
+            for (int i4 = 0; i4 < size; i4++) {
+                MessageObject messageObject = new MessageObject(i, tLRPC$messages_Messages.messages.get(i4), false, true);
                 messageObject.setQuery(str);
                 arrayList3.add(messageObject);
             }
         }
+        int i5 = i;
         String str2 = str;
-        AndroidUtilities.runOnUIThread(new Runnable(i, tLRPC$TL_error, tLObject, z, str, arrayList3, mediaFilterData, i2, j, arrayList, arrayList2) {
+        AndroidUtilities.runOnUIThread(new Runnable(i2, tLRPC$TL_error, tLObject, i, z, str, arrayList3, mediaFilterData, i3, j, arrayList, arrayList2) {
             public final /* synthetic */ int f$1;
-            public final /* synthetic */ ArrayList f$10;
+            public final /* synthetic */ long f$10;
             public final /* synthetic */ ArrayList f$11;
+            public final /* synthetic */ ArrayList f$12;
             public final /* synthetic */ TLRPC$TL_error f$2;
             public final /* synthetic */ TLObject f$3;
-            public final /* synthetic */ boolean f$4;
-            public final /* synthetic */ String f$5;
-            public final /* synthetic */ ArrayList f$6;
-            public final /* synthetic */ FiltersView.MediaFilterData f$7;
-            public final /* synthetic */ int f$8;
-            public final /* synthetic */ long f$9;
+            public final /* synthetic */ int f$4;
+            public final /* synthetic */ boolean f$5;
+            public final /* synthetic */ String f$6;
+            public final /* synthetic */ ArrayList f$7;
+            public final /* synthetic */ FiltersView.MediaFilterData f$8;
+            public final /* synthetic */ int f$9;
 
             {
                 this.f$1 = r2;
@@ -891,19 +895,20 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 this.f$7 = r8;
                 this.f$8 = r9;
                 this.f$9 = r10;
-                this.f$10 = r12;
+                this.f$10 = r11;
                 this.f$11 = r13;
+                this.f$12 = r14;
             }
 
             public final void run() {
-                FilteredSearchView.this.lambda$null$2$FilteredSearchView(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11);
+                FilteredSearchView.this.lambda$null$2$FilteredSearchView(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, this.f$8, this.f$9, this.f$10, this.f$11, this.f$12);
             }
         });
     }
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$2 */
-    public /* synthetic */ void lambda$null$2$FilteredSearchView(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, boolean z, String str, ArrayList arrayList, FiltersView.MediaFilterData mediaFilterData, int i2, long j, ArrayList arrayList2, ArrayList arrayList3) {
+    public /* synthetic */ void lambda$null$2$FilteredSearchView(int i, TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, int i2, boolean z, String str, ArrayList arrayList, FiltersView.MediaFilterData mediaFilterData, int i3, long j, ArrayList arrayList2, ArrayList arrayList3) {
         String str2;
         String str3 = str;
         FiltersView.MediaFilterData mediaFilterData2 = mediaFilterData;
@@ -921,9 +926,9 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             this.emptyView.showProgress(false);
             TLRPC$messages_Messages tLRPC$messages_Messages = (TLRPC$messages_Messages) tLObject;
             this.nextSearchRate = tLRPC$messages_Messages.next_rate;
-            MessagesStorage.getInstance(this.currentAccount).putUsersAndChats(tLRPC$messages_Messages.users, tLRPC$messages_Messages.chats, true, true);
-            MessagesController.getInstance(this.currentAccount).putUsers(tLRPC$messages_Messages.users, false);
-            MessagesController.getInstance(this.currentAccount).putChats(tLRPC$messages_Messages.chats, false);
+            MessagesStorage.getInstance(i2).putUsersAndChats(tLRPC$messages_Messages.users, tLRPC$messages_Messages.chats, true, true);
+            MessagesController.getInstance(i2).putUsers(tLRPC$messages_Messages.users, false);
+            MessagesController.getInstance(i2).putChats(tLRPC$messages_Messages.chats, false);
             if (!z) {
                 this.messages.clear();
                 this.messagesById.clear();
@@ -933,8 +938,8 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             this.totalCount = tLRPC$messages_Messages.count;
             this.currentDataQuery = str3;
             int size = arrayList.size();
-            for (int i3 = 0; i3 < size; i3++) {
-                MessageObject messageObject = (MessageObject) arrayList.get(i3);
+            for (int i4 = 0; i4 < size; i4++) {
+                MessageObject messageObject = (MessageObject) arrayList.get(i4);
                 ArrayList arrayList5 = this.sectionArrays.get(messageObject.monthKey);
                 if (arrayList5 == null) {
                     arrayList5 = new ArrayList();
@@ -957,17 +962,17 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 if (mediaFilterData2 == null) {
                     this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle2", NUM));
                     this.emptyView.subtitle.setVisibility(8);
-                } else if (TextUtils.isEmpty(this.currentDataQuery) && i2 == 0 && j == 0) {
+                } else if (TextUtils.isEmpty(this.currentDataQuery) && i3 == 0 && j == 0) {
                     this.emptyView.title.setText(LocaleController.getString("SearchEmptyViewTitle", NUM));
-                    if (i2 == 0 && j == 0) {
-                        int i4 = mediaFilterData2.filterType;
-                        if (i4 == 1) {
+                    if (i3 == 0 && j == 0) {
+                        int i5 = mediaFilterData2.filterType;
+                        if (i5 == 1) {
                             str2 = LocaleController.getString("SearchEmptyViewFilteredSubtitleFiles", NUM);
-                        } else if (i4 == 0) {
+                        } else if (i5 == 0) {
                             str2 = LocaleController.getString("SearchEmptyViewFilteredSubtitleMedia", NUM);
-                        } else if (i4 == 2) {
+                        } else if (i5 == 2) {
                             str2 = LocaleController.getString("SearchEmptyViewFilteredSubtitleLinks", NUM);
-                        } else if (i4 == 3) {
+                        } else if (i5 == 3) {
                             str2 = LocaleController.getString("SearchEmptyViewFilteredSubtitleMusic", NUM);
                         } else {
                             str2 = LocaleController.getString("SearchEmptyViewFilteredSubtitleVoice", NUM);
@@ -984,15 +989,15 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 }
             }
             if (mediaFilterData2 != null) {
-                int i5 = mediaFilterData2.filterType;
-                if (i5 != 0) {
-                    if (i5 == 1) {
+                int i6 = mediaFilterData2.filterType;
+                if (i6 != 0) {
+                    if (i6 == 1) {
                         this.adapter = this.sharedDocumentsAdapter;
-                    } else if (i5 == 2) {
+                    } else if (i6 == 2) {
                         this.adapter = this.sharedLinksAdapter;
-                    } else if (i5 == 3) {
+                    } else if (i6 == 3) {
                         this.adapter = this.sharedAudioAdapter;
-                    } else if (i5 == 5) {
+                    } else if (i6 == 5) {
                         this.adapter = this.sharedVoiceAdapter;
                     }
                 } else if (TextUtils.isEmpty(this.currentDataQuery)) {
@@ -1014,13 +1019,13 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     this.localTipChats.addAll(arrayList4);
                 }
                 if (str.length() >= 3 && (LocaleController.getString("SavedMessages", NUM).toLowerCase().startsWith(str3) || "saved messages".startsWith(str3))) {
-                    int i6 = 0;
+                    int i7 = 0;
                     while (true) {
-                        if (i6 < this.localTipChats.size()) {
-                            if ((this.localTipChats.get(i6) instanceof TLRPC$User) && UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == ((TLRPC$User) this.localTipChats.get(i6)).id) {
+                        if (i7 < this.localTipChats.size()) {
+                            if ((this.localTipChats.get(i7) instanceof TLRPC$User) && UserConfig.getInstance(UserConfig.selectedAccount).getCurrentUser().id == ((TLRPC$User) this.localTipChats.get(i7)).id) {
                                 break;
                             }
-                            i6++;
+                            i7++;
                         } else {
                             z2 = false;
                             break;
@@ -1038,11 +1043,11 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 }
             }
             final View view = null;
-            final int i7 = -1;
-            for (int i8 = 0; i8 < size; i8++) {
-                View childAt = this.recyclerListView.getChildAt(i8);
+            final int i8 = -1;
+            for (int i9 = 0; i9 < size; i9++) {
+                View childAt = this.recyclerListView.getChildAt(i9);
                 if (childAt instanceof FlickerLoadingView) {
-                    i7 = this.recyclerListView.getChildAdapterPosition(childAt);
+                    i8 = this.recyclerListView.getChildAdapterPosition(childAt);
                     view = childAt;
                 }
             }
@@ -1050,6 +1055,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 this.recyclerListView.removeView(view);
             }
             if ((this.loadingView.getVisibility() == 0 && this.recyclerListView.getChildCount() == 0) || view != null) {
+                final int i10 = i2;
                 getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                     public boolean onPreDraw() {
                         FilteredSearchView.this.getViewTreeObserver().removeOnPreDrawListener(this);
@@ -1057,7 +1063,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         AnimatorSet animatorSet = new AnimatorSet();
                         for (int i = 0; i < childCount; i++) {
                             View childAt = FilteredSearchView.this.recyclerListView.getChildAt(i);
-                            if (view == null || FilteredSearchView.this.recyclerListView.getChildAdapterPosition(childAt) >= i7) {
+                            if (view == null || FilteredSearchView.this.recyclerListView.getChildAdapterPosition(childAt) >= i8) {
                                 childAt.setAlpha(0.0f);
                                 ObjectAnimator ofFloat = ObjectAnimator.ofFloat(childAt, View.ALPHA, new float[]{0.0f, 1.0f});
                                 ofFloat.setStartDelay((long) ((int) ((((float) Math.min(FilteredSearchView.this.recyclerListView.getMeasuredHeight(), Math.max(0, childAt.getTop()))) / ((float) FilteredSearchView.this.recyclerListView.getMeasuredHeight())) * 100.0f)));
@@ -1067,12 +1073,11 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         }
                         animatorSet.addListener(new AnimatorListenerAdapter() {
                             public void onAnimationEnd(Animator animator) {
-                                NotificationCenter.getInstance(FilteredSearchView.this.currentAccount).onAnimationFinish(FilteredSearchView.this.animationIndex);
+                                NotificationCenter.getInstance(i10).onAnimationFinish(FilteredSearchView.this.animationIndex);
                                 super.onAnimationEnd(animator);
                             }
                         });
-                        FilteredSearchView filteredSearchView = FilteredSearchView.this;
-                        filteredSearchView.animationIndex = NotificationCenter.getInstance(filteredSearchView.currentAccount).setAnimationInProgress(FilteredSearchView.this.animationIndex, (int[]) null);
+                        FilteredSearchView.this.animationIndex = NotificationCenter.getInstance(i10).setAnimationInProgress(FilteredSearchView.this.animationIndex, (int[]) null);
                         animatorSet.start();
                         View view = view;
                         if (view != null && view.getParent() == null) {
@@ -1113,7 +1118,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:6:0x0025, code lost:
-        if (org.telegram.messenger.ChatObject.isChannel(r5, r9.currentAccount) != false) goto L_0x0029;
+        if (org.telegram.messenger.ChatObject.isChannel(r5, org.telegram.messenger.UserConfig.selectedAccount) != false) goto L_0x0029;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void messagesDeleted(int r10, java.util.ArrayList<java.lang.Integer> r11) {
@@ -1135,7 +1140,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             if (r8 >= 0) goto L_0x0028
             long r4 = -r4
             int r5 = (int) r4
-            int r4 = r9.currentAccount
+            int r4 = org.telegram.messenger.UserConfig.selectedAccount
             boolean r4 = org.telegram.messenger.ChatObject.isChannel(r5, r4)
             if (r4 == 0) goto L_0x0028
             goto L_0x0029
@@ -1335,10 +1340,10 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         }
                         AndroidUtilities.openDocument(messageObject, this.parentActivity, this.parentFragment);
                     } else if (!sharedDocumentCell.isLoading()) {
-                        AccountInstance.getInstance(this.currentAccount).getFileLoader().loadFile(document, sharedDocumentCell.getMessage(), 0, 0);
+                        AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().loadFile(document, sharedDocumentCell.getMessage(), 0, 0);
                         sharedDocumentCell.updateFileExistIcon();
                     } else {
-                        AccountInstance.getInstance(this.currentAccount).getFileLoader().cancelLoadFile(document);
+                        AccountInstance.getInstance(UserConfig.selectedAccount).getFileLoader().cancelLoadFile(document);
                         sharedDocumentCell.updateFileExistIcon();
                     }
                 }
@@ -1896,13 +1901,15 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         /* access modifiers changed from: protected */
         public void onAttachedToWindow() {
             super.onAttachedToWindow();
-            NotificationCenter.getInstance(this.currentAccount).addObserver(this, NotificationCenter.emojiDidLoad);
+            int i = UserConfig.selectedAccount;
+            this.lastAccount = i;
+            NotificationCenter.getInstance(i).addObserver(this, NotificationCenter.emojiDidLoad);
         }
 
         /* access modifiers changed from: protected */
         public void onDetachedFromWindow() {
             super.onDetachedFromWindow();
-            NotificationCenter.getInstance(this.currentAccount).removeObserver(this, NotificationCenter.emojiDidLoad);
+            NotificationCenter.getInstance(this.lastAccount).removeObserver(this, NotificationCenter.emojiDidLoad);
         }
 
         public void didReceivedNotification(int i, int i2, Object... objArr) {
@@ -1985,7 +1992,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     org.telegram.ui.Cells.GraySectionCell r4 = new org.telegram.ui.Cells.GraySectionCell
                     android.content.Context r3 = r3.getContext()
                     r4.<init>(r3)
-                    r3 = 2131626974(0x7f0e0bde, float:1.88812E38)
+                    r3 = 2131626978(0x7f0e0be2, float:1.8881207E38)
                     java.lang.String r0 = "SearchMessages"
                     java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r0, r3)
                     r4.setText(r3)

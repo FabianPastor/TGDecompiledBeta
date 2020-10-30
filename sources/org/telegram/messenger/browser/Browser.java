@@ -406,7 +406,7 @@ public class Browser {
             r3 = 2131165243(0x7var_b, float:1.7944698E38)
             android.graphics.Bitmap r1 = android.graphics.BitmapFactory.decodeResource(r1, r3)     // Catch:{ Exception -> 0x0221 }
             java.lang.String r3 = "ShareFile"
-            r4 = 2131627102(0x7f0e0c5e, float:1.8881459E38)
+            r4 = 2131627106(0x7f0e0CLASSNAME, float:1.8881467E38)
             java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r3, r4)     // Catch:{ Exception -> 0x0221 }
             android.content.Context r4 = org.telegram.messenger.ApplicationLoader.applicationContext     // Catch:{ Exception -> 0x0221 }
             android.app.PendingIntent r0 = android.app.PendingIntent.getBroadcast(r4, r12, r0, r12)     // Catch:{ Exception -> 0x0221 }
@@ -511,7 +511,11 @@ public class Browser {
     }
 
     public static boolean isInternalUrl(String str, boolean[] zArr) {
-        return isInternalUri(Uri.parse(str), zArr);
+        return isInternalUri(Uri.parse(str), false, zArr);
+    }
+
+    public static boolean isInternalUrl(String str, boolean z, boolean[] zArr) {
+        return isInternalUri(Uri.parse(str), z, zArr);
     }
 
     public static boolean isPassportUrl(String str) {
@@ -532,7 +536,10 @@ public class Browser {
     }
 
     public static boolean isInternalUri(Uri uri, boolean[] zArr) {
-        String path;
+        return isInternalUri(uri, false, zArr);
+    }
+
+    public static boolean isInternalUri(Uri uri, boolean z, boolean[] zArr) {
         String host = uri.getHost();
         String lowerCase = host != null ? host.toLowerCase() : "";
         if ("ton".equals(uri.getScheme())) {
@@ -545,9 +552,12 @@ public class Browser {
             return true;
         } else {
             if ("telegram.dog".equals(lowerCase)) {
-                String path2 = uri.getPath();
-                if (path2 != null && path2.length() > 1) {
-                    String lowerCase2 = path2.substring(1).toLowerCase();
+                String path = uri.getPath();
+                if (path != null && path.length() > 1) {
+                    if (z) {
+                        return true;
+                    }
+                    String lowerCase2 = path.substring(1).toLowerCase();
                     if (!lowerCase2.startsWith("blog") && !lowerCase2.equals("iv") && !lowerCase2.startsWith("faq") && !lowerCase2.equals("apps") && !lowerCase2.startsWith("s/")) {
                         return true;
                     }
@@ -556,16 +566,23 @@ public class Browser {
                     }
                     return false;
                 }
-            } else if (("telegram.me".equals(lowerCase) || "t.me".equals(lowerCase)) && (path = uri.getPath()) != null && path.length() > 1) {
-                String lowerCase3 = path.substring(1).toLowerCase();
-                if (!lowerCase3.equals("iv") && !lowerCase3.startsWith("s/")) {
-                    return true;
-                }
-                if (zArr != null) {
-                    zArr[0] = true;
+            } else if (!"telegram.me".equals(lowerCase) && !"t.me".equals(lowerCase)) {
+                return z && ("telegram.org".equals(lowerCase) || "telegra.ph".equals(lowerCase) || "telesco.pe".equals(lowerCase));
+            } else {
+                String path2 = uri.getPath();
+                if (path2 != null && path2.length() > 1) {
+                    if (z) {
+                        return true;
+                    }
+                    String lowerCase3 = path2.substring(1).toLowerCase();
+                    if (!lowerCase3.equals("iv") && !lowerCase3.startsWith("s/")) {
+                        return true;
+                    }
+                    if (zArr != null) {
+                        zArr[0] = true;
+                    }
                 }
             }
-            return false;
         }
     }
 }

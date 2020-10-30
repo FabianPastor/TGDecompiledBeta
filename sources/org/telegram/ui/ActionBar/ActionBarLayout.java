@@ -1105,7 +1105,8 @@ public class ActionBarLayout extends FrameLayout {
                     ActionBarLayout.this.lambda$presentFragment$1$ActionBarLayout(this.f$1, this.f$2, this.f$3, this.f$4);
                 }
             };
-            if (!baseFragment.needDelayOpenAnimation()) {
+            final boolean z9 = !baseFragment.needDelayOpenAnimation();
+            if (z9) {
                 if (baseFragment2 != null) {
                     baseFragment2.onTransitionAnimationStart(false, false);
                 }
@@ -1130,11 +1131,21 @@ public class ActionBarLayout extends FrameLayout {
                     this.containerView.setScaleY(1.0f);
                 }
                 if (this.containerView.isKeyboardVisible || this.containerViewBack.isKeyboardVisible) {
+                    final BaseFragment baseFragment4 = baseFragment2;
+                    final BaseFragment baseFragment5 = baseFragment;
+                    final boolean z10 = z4;
                     AnonymousClass5 r0 = new Runnable() {
                         public void run() {
                             if (ActionBarLayout.this.waitingForKeyboardCloseRunnable == this) {
                                 Runnable unused = ActionBarLayout.this.waitingForKeyboardCloseRunnable = null;
-                                ActionBarLayout.this.startLayoutAnimation(true, true, z7);
+                                if (!z9) {
+                                    BaseFragment baseFragment = baseFragment4;
+                                    if (baseFragment != null) {
+                                        baseFragment.onTransitionAnimationStart(false, false);
+                                    }
+                                    baseFragment5.onTransitionAnimationStart(true, false);
+                                }
+                                ActionBarLayout.this.startLayoutAnimation(true, true, z10);
                             }
                         }
                     };
