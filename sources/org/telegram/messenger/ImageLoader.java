@@ -688,29 +688,45 @@ public class ImageLoader {
         /* access modifiers changed from: protected */
         public void onPostExecute(String str) {
             if (str != null) {
-                CacheImage cacheImage2 = this.cacheImage;
-                cacheImage2.httpTask = new HttpImageTask(cacheImage2, 0, str);
-                ImageLoader.this.httpTasks.add(this.cacheImage.httpTask);
-                ImageLoader.this.runHttpTasks(false);
+                ImageLoader.this.imageLoadQueue.postRunnable(new Runnable(str) {
+                    public final /* synthetic */ String f$1;
+
+                    {
+                        this.f$1 = r2;
+                    }
+
+                    public final void run() {
+                        ImageLoader.ArtworkLoadTask.this.lambda$onPostExecute$0$ImageLoader$ArtworkLoadTask(this.f$1);
+                    }
+                });
             } else if (this.canRetry) {
                 ImageLoader.this.artworkLoadError(this.cacheImage.url);
             }
             ImageLoader.this.imageLoadQueue.postRunnable(new Runnable() {
                 public final void run() {
-                    ImageLoader.ArtworkLoadTask.this.lambda$onPostExecute$0$ImageLoader$ArtworkLoadTask();
+                    ImageLoader.ArtworkLoadTask.this.lambda$onPostExecute$1$ImageLoader$ArtworkLoadTask();
                 }
             });
         }
 
         /* access modifiers changed from: private */
         /* renamed from: lambda$onPostExecute$0 */
-        public /* synthetic */ void lambda$onPostExecute$0$ImageLoader$ArtworkLoadTask() {
+        public /* synthetic */ void lambda$onPostExecute$0$ImageLoader$ArtworkLoadTask(String str) {
+            CacheImage cacheImage2 = this.cacheImage;
+            cacheImage2.httpTask = new HttpImageTask(cacheImage2, 0, str);
+            ImageLoader.this.httpTasks.add(this.cacheImage.httpTask);
+            ImageLoader.this.runHttpTasks(false);
+        }
+
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$onPostExecute$1 */
+        public /* synthetic */ void lambda$onPostExecute$1$ImageLoader$ArtworkLoadTask() {
             ImageLoader.this.runArtworkTasks(true);
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$onCancelled$1 */
-        public /* synthetic */ void lambda$onCancelled$1$ImageLoader$ArtworkLoadTask() {
+        /* renamed from: lambda$onCancelled$2 */
+        public /* synthetic */ void lambda$onCancelled$2$ImageLoader$ArtworkLoadTask() {
             ImageLoader.this.runArtworkTasks(true);
         }
 
@@ -718,7 +734,7 @@ public class ImageLoader {
         public void onCancelled() {
             ImageLoader.this.imageLoadQueue.postRunnable(new Runnable() {
                 public final void run() {
-                    ImageLoader.ArtworkLoadTask.this.lambda$onCancelled$1$ImageLoader$ArtworkLoadTask();
+                    ImageLoader.ArtworkLoadTask.this.lambda$onCancelled$2$ImageLoader$ArtworkLoadTask();
                 }
             });
         }

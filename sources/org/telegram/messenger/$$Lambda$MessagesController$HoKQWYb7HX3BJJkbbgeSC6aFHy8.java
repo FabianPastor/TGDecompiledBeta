@@ -8,12 +8,12 @@ import j$.util.function.ToLongFunction;
 import java.util.Comparator;
 import org.telegram.tgnet.TLRPC$Updates;
 
-/* renamed from: org.telegram.messenger.-$$Lambda$MessagesController$G0UQcfksVbTtC9xUdNPOQsDts78  reason: invalid class name */
+/* renamed from: org.telegram.messenger.-$$Lambda$MessagesController$HoKQWYb7HX3BJJkbbgeSC6aFHy8  reason: invalid class name */
 /* compiled from: lambda */
-public final /* synthetic */ class $$Lambda$MessagesController$G0UQcfksVbTtC9xUdNPOQsDts78 implements Comparator, j$.util.Comparator {
-    public static final /* synthetic */ $$Lambda$MessagesController$G0UQcfksVbTtC9xUdNPOQsDts78 INSTANCE = new $$Lambda$MessagesController$G0UQcfksVbTtC9xUdNPOQsDts78();
+public final /* synthetic */ class $$Lambda$MessagesController$HoKQWYb7HX3BJJkbbgeSC6aFHy8 implements Comparator, j$.util.Comparator {
+    public static final /* synthetic */ $$Lambda$MessagesController$HoKQWYb7HX3BJJkbbgeSC6aFHy8 INSTANCE = new $$Lambda$MessagesController$HoKQWYb7HX3BJJkbbgeSC6aFHy8();
 
-    private /* synthetic */ $$Lambda$MessagesController$G0UQcfksVbTtC9xUdNPOQsDts78() {
+    private /* synthetic */ $$Lambda$MessagesController$HoKQWYb7HX3BJJkbbgeSC6aFHy8() {
     }
 
     public final int compare(Object obj, Object obj2) {

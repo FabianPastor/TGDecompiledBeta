@@ -19116,7 +19116,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                                         if (r3 == 0) goto L_0x0035
                                         org.telegram.ui.PhotoViewer r0 = org.telegram.ui.PhotoViewer.this
                                         java.lang.Runnable r0 = r0.animationEndRunnable
-                                        r3.lambda$null$120(r0)
+                                        r3.lambda$null$121(r0)
                                         goto L_0x0044
                                     L_0x0035:
                                         org.telegram.ui.PhotoViewer r3 = org.telegram.ui.PhotoViewer.this

@@ -67,7 +67,6 @@ import org.telegram.tgnet.TLRPC$Updates;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.tgnet.TLRPC$UserStatus;
 import org.telegram.ui.ActionBar.ActionBar;
-import org.telegram.ui.ActionBar.ActionBarLayout;
 import org.telegram.ui.ActionBar.ActionBarMenu;
 import org.telegram.ui.ActionBar.ActionBarMenuItem;
 import org.telegram.ui.ActionBar.AlertDialog;
@@ -3225,10 +3224,7 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
         SparseArray<TLObject> sparseArray;
         TLRPC$Chat tLRPC$Chat;
         EmptyTextProgressView emptyTextProgressView;
-        ActionBarLayout actionBarLayout = this.parentLayout;
-        if (actionBarLayout != null) {
-            actionBarLayout.resumeDelayedFragmentAnimation();
-        }
+        resumeDelayedFragmentAnimation();
         if (tLRPC$TL_error == null) {
             TLRPC$TL_channels_channelParticipants tLRPC$TL_channels_channelParticipants = (TLRPC$TL_channels_channelParticipants) tLObject;
             if (this.type == 1) {

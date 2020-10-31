@@ -358,6 +358,14 @@ public class BaseFragment {
         }
     }
 
+    /* access modifiers changed from: protected */
+    public void resumeDelayedFragmentAnimation() {
+        ActionBarLayout actionBarLayout = this.parentLayout;
+        if (actionBarLayout != null) {
+            actionBarLayout.resumeDelayedFragmentAnimation();
+        }
+    }
+
     public void onResume() {
         this.isPaused = false;
     }

@@ -1646,7 +1646,7 @@ public class MessagesStorage extends BaseController {
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$17 */
     public /* synthetic */ void lambda$null$17$MessagesStorage(long j, boolean z, int i, int i2, boolean z2, TLRPC$InputPeer tLRPC$InputPeer, long j2) {
-        getMessagesController().deleteDialog(j, z, i, i2, z2, tLRPC$InputPeer, j2);
+        getMessagesController().deleteDialog(j, z ? 1 : 0, i, i2, z2, tLRPC$InputPeer, j2);
     }
 
     /* access modifiers changed from: private */
@@ -25107,91 +25107,84 @@ public class MessagesStorage extends BaseController {
         }
     }
 
-    public int getDialogMaxMessageId(long j) {
-        CountDownLatch countDownLatch = new CountDownLatch(1);
-        Integer[] numArr = {0};
-        this.storageQueue.postRunnable(new Runnable(j, numArr, countDownLatch) {
+    public void getDialogMaxMessageId(long j, IntCallback intCallback) {
+        this.storageQueue.postRunnable(new Runnable(j, intCallback) {
             public final /* synthetic */ long f$1;
-            public final /* synthetic */ Integer[] f$2;
-            public final /* synthetic */ CountDownLatch f$3;
+            public final /* synthetic */ MessagesStorage.IntCallback f$2;
 
             {
                 this.f$1 = r2;
                 this.f$2 = r4;
-                this.f$3 = r5;
             }
 
             public final void run() {
-                MessagesStorage.this.lambda$getDialogMaxMessageId$169$MessagesStorage(this.f$1, this.f$2, this.f$3);
+                MessagesStorage.this.lambda$getDialogMaxMessageId$170$MessagesStorage(this.f$1, this.f$2);
             }
         });
-        try {
-            countDownLatch.await();
-        } catch (Exception e) {
-            FileLog.e((Throwable) e);
-        }
-        return numArr[0].intValue();
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Code restructure failed: missing block: B:10:0x0034, code lost:
-        if (r0 == null) goto L_0x0039;
+    /* JADX WARNING: Code restructure failed: missing block: B:10:0x0033, code lost:
+        if (r1 == null) goto L_0x0038;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:11:0x0036, code lost:
-        r0.dispose();
+    /* JADX WARNING: Code restructure failed: missing block: B:11:0x0035, code lost:
+        r1.dispose();
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:12:0x0039, code lost:
-        r8.countDown();
+    /* JADX WARNING: Code restructure failed: missing block: B:12:0x0038, code lost:
+        org.telegram.messenger.AndroidUtilities.runOnUIThread(new org.telegram.messenger.$$Lambda$MessagesStorage$ucEmGY3vJugKQAeNPwI4OlDcDA(r8, r0));
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:13:0x003c, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:13:0x0040, code lost:
         return;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:5:0x002b, code lost:
-        if (r0 != null) goto L_0x0036;
+    /* JADX WARNING: Code restructure failed: missing block: B:5:0x002a, code lost:
+        if (r1 != null) goto L_0x0035;
      */
-    /* renamed from: lambda$getDialogMaxMessageId$169 */
+    /* renamed from: lambda$getDialogMaxMessageId$170 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$getDialogMaxMessageId$169$MessagesStorage(long r5, java.lang.Integer[] r7, java.util.concurrent.CountDownLatch r8) {
+    public /* synthetic */ void lambda$getDialogMaxMessageId$170$MessagesStorage(long r6, org.telegram.messenger.MessagesStorage.IntCallback r8) {
         /*
-            r4 = this;
-            r0 = 0
-            org.telegram.SQLite.SQLiteDatabase r1 = r4.database     // Catch:{ Exception -> 0x0030 }
-            java.lang.StringBuilder r2 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x0030 }
-            r2.<init>()     // Catch:{ Exception -> 0x0030 }
-            java.lang.String r3 = "SELECT MAX(mid) FROM messages WHERE uid = "
-            r2.append(r3)     // Catch:{ Exception -> 0x0030 }
-            r2.append(r5)     // Catch:{ Exception -> 0x0030 }
-            java.lang.String r5 = r2.toString()     // Catch:{ Exception -> 0x0030 }
-            r6 = 0
-            java.lang.Object[] r2 = new java.lang.Object[r6]     // Catch:{ Exception -> 0x0030 }
-            org.telegram.SQLite.SQLiteCursor r0 = r1.queryFinalized(r5, r2)     // Catch:{ Exception -> 0x0030 }
-            boolean r5 = r0.next()     // Catch:{ Exception -> 0x0030 }
-            if (r5 == 0) goto L_0x002b
-            int r5 = r0.intValue(r6)     // Catch:{ Exception -> 0x0030 }
-            java.lang.Integer r5 = java.lang.Integer.valueOf(r5)     // Catch:{ Exception -> 0x0030 }
-            r7[r6] = r5     // Catch:{ Exception -> 0x0030 }
-        L_0x002b:
-            if (r0 == 0) goto L_0x0039
-            goto L_0x0036
-        L_0x002e:
-            r5 = move-exception
-            goto L_0x003d
-        L_0x0030:
-            r5 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r5)     // Catch:{ all -> 0x002e }
-            if (r0 == 0) goto L_0x0039
-        L_0x0036:
-            r0.dispose()
-        L_0x0039:
-            r8.countDown()
+            r5 = this;
+            r0 = 1
+            int[] r0 = new int[r0]
+            r1 = 0
+            org.telegram.SQLite.SQLiteDatabase r2 = r5.database     // Catch:{ Exception -> 0x002f }
+            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x002f }
+            r3.<init>()     // Catch:{ Exception -> 0x002f }
+            java.lang.String r4 = "SELECT MAX(mid) FROM messages WHERE uid = "
+            r3.append(r4)     // Catch:{ Exception -> 0x002f }
+            r3.append(r6)     // Catch:{ Exception -> 0x002f }
+            java.lang.String r6 = r3.toString()     // Catch:{ Exception -> 0x002f }
+            r7 = 0
+            java.lang.Object[] r3 = new java.lang.Object[r7]     // Catch:{ Exception -> 0x002f }
+            org.telegram.SQLite.SQLiteCursor r1 = r2.queryFinalized(r6, r3)     // Catch:{ Exception -> 0x002f }
+            boolean r6 = r1.next()     // Catch:{ Exception -> 0x002f }
+            if (r6 == 0) goto L_0x002a
+            int r6 = r1.intValue(r7)     // Catch:{ Exception -> 0x002f }
+            r0[r7] = r6     // Catch:{ Exception -> 0x002f }
+        L_0x002a:
+            if (r1 == 0) goto L_0x0038
+            goto L_0x0035
+        L_0x002d:
+            r6 = move-exception
+            goto L_0x0041
+        L_0x002f:
+            r6 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r6)     // Catch:{ all -> 0x002d }
+            if (r1 == 0) goto L_0x0038
+        L_0x0035:
+            r1.dispose()
+        L_0x0038:
+            org.telegram.messenger.-$$Lambda$MessagesStorage$ucEmGY3vJugKQAeNP-wI4OlDcDA r6 = new org.telegram.messenger.-$$Lambda$MessagesStorage$ucEmGY3vJugKQAeNP-wI4OlDcDA
+            r6.<init>(r0)
+            org.telegram.messenger.AndroidUtilities.runOnUIThread(r6)
             return
-        L_0x003d:
-            if (r0 == 0) goto L_0x0042
-            r0.dispose()
-        L_0x0042:
-            throw r5
+        L_0x0041:
+            if (r1 == 0) goto L_0x0046
+            r1.dispose()
+        L_0x0046:
+            throw r6
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogMaxMessageId$169$MessagesStorage(long, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogMaxMessageId$170$MessagesStorage(long, org.telegram.messenger.MessagesStorage$IntCallback):void");
     }
 
     public int getDialogReadMax(boolean z, long j) {
@@ -25211,7 +25204,7 @@ public class MessagesStorage extends BaseController {
             }
 
             public final void run() {
-                MessagesStorage.this.lambda$getDialogReadMax$170$MessagesStorage(this.f$1, this.f$2, this.f$3, this.f$4);
+                MessagesStorage.this.lambda$getDialogReadMax$171$MessagesStorage(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
         try {
@@ -25238,9 +25231,9 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Code restructure failed: missing block: B:8:0x0048, code lost:
         if (r1 != null) goto L_0x0053;
      */
-    /* renamed from: lambda$getDialogReadMax$170 */
+    /* renamed from: lambda$getDialogReadMax$171 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$getDialogReadMax$170$MessagesStorage(boolean r5, long r6, java.lang.Integer[] r8, java.util.concurrent.CountDownLatch r9) {
+    public /* synthetic */ void lambda$getDialogReadMax$171$MessagesStorage(boolean r5, long r6, java.lang.Integer[] r8, java.util.concurrent.CountDownLatch r9) {
         /*
             r4 = this;
             r0 = 0
@@ -25294,7 +25287,7 @@ public class MessagesStorage extends BaseController {
         L_0x005f:
             throw r5
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogReadMax$170$MessagesStorage(boolean, long, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getDialogReadMax$171$MessagesStorage(boolean, long, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
     }
 
     public int getChannelPtsSync(int i) {
@@ -25312,7 +25305,7 @@ public class MessagesStorage extends BaseController {
             }
 
             public final void run() {
-                MessagesStorage.this.lambda$getChannelPtsSync$171$MessagesStorage(this.f$1, this.f$2, this.f$3);
+                MessagesStorage.this.lambda$getChannelPtsSync$172$MessagesStorage(this.f$1, this.f$2, this.f$3);
             }
         });
         try {
@@ -25354,9 +25347,9 @@ public class MessagesStorage extends BaseController {
     /* JADX WARNING: Code restructure failed: missing block: B:5:0x002c, code lost:
         if (r0 != null) goto L_0x0037;
      */
-    /* renamed from: lambda$getChannelPtsSync$171 */
+    /* renamed from: lambda$getChannelPtsSync$172 */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public /* synthetic */ void lambda$getChannelPtsSync$171$MessagesStorage(int r5, java.lang.Integer[] r6, java.util.concurrent.CountDownLatch r7) {
+    public /* synthetic */ void lambda$getChannelPtsSync$172$MessagesStorage(int r5, java.lang.Integer[] r6, java.util.concurrent.CountDownLatch r7) {
         /*
             r4 = this;
             r0 = 0
@@ -25403,7 +25396,7 @@ public class MessagesStorage extends BaseController {
         L_0x004a:
             throw r5
         */
-        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getChannelPtsSync$171$MessagesStorage(int, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.lambda$getChannelPtsSync$172$MessagesStorage(int, java.lang.Integer[], java.util.concurrent.CountDownLatch):void");
     }
 
     public TLRPC$User getUserSync(int i) {
@@ -25421,7 +25414,7 @@ public class MessagesStorage extends BaseController {
             }
 
             public final void run() {
-                MessagesStorage.this.lambda$getUserSync$172$MessagesStorage(this.f$1, this.f$2, this.f$3);
+                MessagesStorage.this.lambda$getUserSync$173$MessagesStorage(this.f$1, this.f$2, this.f$3);
             }
         });
         try {
@@ -25433,8 +25426,8 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getUserSync$172 */
-    public /* synthetic */ void lambda$getUserSync$172$MessagesStorage(TLRPC$User[] tLRPC$UserArr, int i, CountDownLatch countDownLatch) {
+    /* renamed from: lambda$getUserSync$173 */
+    public /* synthetic */ void lambda$getUserSync$173$MessagesStorage(TLRPC$User[] tLRPC$UserArr, int i, CountDownLatch countDownLatch) {
         tLRPC$UserArr[0] = getUser(i);
         countDownLatch.countDown();
     }
@@ -25454,7 +25447,7 @@ public class MessagesStorage extends BaseController {
             }
 
             public final void run() {
-                MessagesStorage.this.lambda$getChatSync$173$MessagesStorage(this.f$1, this.f$2, this.f$3);
+                MessagesStorage.this.lambda$getChatSync$174$MessagesStorage(this.f$1, this.f$2, this.f$3);
             }
         });
         try {
@@ -25466,8 +25459,8 @@ public class MessagesStorage extends BaseController {
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$getChatSync$173 */
-    public /* synthetic */ void lambda$getChatSync$173$MessagesStorage(TLRPC$Chat[] tLRPC$ChatArr, int i, CountDownLatch countDownLatch) {
+    /* renamed from: lambda$getChatSync$174 */
+    public /* synthetic */ void lambda$getChatSync$174$MessagesStorage(TLRPC$Chat[] tLRPC$ChatArr, int i, CountDownLatch countDownLatch) {
         tLRPC$ChatArr[0] = getChat(i);
         countDownLatch.countDown();
     }
@@ -26172,7 +26165,7 @@ public class MessagesStorage extends BaseController {
             goto L_0x0503
         L_0x051f:
             r3 = r13
-            org.telegram.messenger.-$$Lambda$MessagesStorage$fslJxtzlgvKYsPJTn9BR3cAgBdg r2 = org.telegram.messenger.$$Lambda$MessagesStorage$fslJxtzlgvKYsPJTn9BR3cAgBdg.INSTANCE     // Catch:{ Exception -> 0x0651 }
+            org.telegram.messenger.-$$Lambda$MessagesStorage$uknD0UMTs2vmN7MZlUo_ZxsE7c4 r2 = org.telegram.messenger.$$Lambda$MessagesStorage$uknD0UMTs2vmN7MZlUo_ZxsE7c4.INSTANCE     // Catch:{ Exception -> 0x0651 }
             java.util.Collections.sort(r0, r2)     // Catch:{ Exception -> 0x0651 }
             r2 = 0
         L_0x0526:
@@ -26333,7 +26326,7 @@ public class MessagesStorage extends BaseController {
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessagesStorage.localSearch(int, java.lang.String, java.util.ArrayList, java.util.ArrayList, java.util.ArrayList, int):void");
     }
 
-    static /* synthetic */ int lambda$localSearch$174(DialogsSearchAdapter.DialogSearchResult dialogSearchResult, DialogsSearchAdapter.DialogSearchResult dialogSearchResult2) {
+    static /* synthetic */ int lambda$localSearch$175(DialogsSearchAdapter.DialogSearchResult dialogSearchResult, DialogsSearchAdapter.DialogSearchResult dialogSearchResult2) {
         int i = dialogSearchResult.date;
         int i2 = dialogSearchResult2.date;
         if (i < i2) {
