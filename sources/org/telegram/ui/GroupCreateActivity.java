@@ -277,7 +277,6 @@ public class GroupCreateActivity extends BaseFragment implements NotificationCen
                         public void onAnimationEnd(Animator animator) {
                             NotificationCenter.getInstance(GroupCreateActivity.this.currentAccount).onAnimationFinish(SpansContainer.this.animationIndex);
                             SpansContainer.this.requestLayout();
-                            super.onAnimationEnd(animator);
                         }
                     });
                     this.animationIndex = NotificationCenter.getInstance(GroupCreateActivity.this.currentAccount).setAnimationInProgress(this.animationIndex, (int[]) null);

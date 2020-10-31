@@ -354,10 +354,16 @@ public class AvatarDrawable extends Drawable {
                 if (this.drawDeleted) {
                     Drawable[] drawableArr = Theme.avatarDrawables;
                     if (drawableArr[1] != null) {
-                        int intrinsicWidth3 = (width - drawableArr[1].getIntrinsicWidth()) / 2;
-                        int intrinsicHeight3 = (width - Theme.avatarDrawables[1].getIntrinsicHeight()) / 2;
-                        Drawable[] drawableArr2 = Theme.avatarDrawables;
-                        drawableArr2[1].setBounds(intrinsicWidth3, intrinsicHeight3, drawableArr2[1].getIntrinsicWidth() + intrinsicWidth3, Theme.avatarDrawables[1].getIntrinsicHeight() + intrinsicHeight3);
+                        int intrinsicWidth3 = drawableArr[1].getIntrinsicWidth();
+                        int intrinsicHeight3 = Theme.avatarDrawables[1].getIntrinsicHeight();
+                        if (intrinsicWidth3 > width || intrinsicHeight3 > width) {
+                            float dp = f / ((float) AndroidUtilities.dp(50.0f));
+                            intrinsicWidth3 = (int) (((float) intrinsicWidth3) * dp);
+                            intrinsicHeight3 = (int) (((float) intrinsicHeight3) * dp);
+                        }
+                        int i7 = (width - intrinsicWidth3) / 2;
+                        int i8 = (width - intrinsicHeight3) / 2;
+                        Theme.avatarDrawables[1].setBounds(i7, i8, intrinsicWidth3 + i7, intrinsicHeight3 + i8);
                         Theme.avatarDrawables[1].draw(canvas);
                     }
                 }

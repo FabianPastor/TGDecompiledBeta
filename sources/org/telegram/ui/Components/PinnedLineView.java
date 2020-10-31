@@ -234,9 +234,10 @@ public class PinnedLineView extends View {
             this.selectedPosition = i;
             this.totalCount = i2;
             invalidate();
-        } else if (this.totalCount != i2 || Math.abs(i3 - i) > 2) {
+        } else if (this.totalCount != i2 || (Math.abs(i3 - i) > 2 && !this.animationInProgress && !this.replaceInProgress)) {
             ValueAnimator valueAnimator2 = this.animator;
             if (valueAnimator2 != null) {
+                this.nextPosition = 0;
                 valueAnimator2.cancel();
             }
             int dp = AndroidUtilities.dp(8.0f);

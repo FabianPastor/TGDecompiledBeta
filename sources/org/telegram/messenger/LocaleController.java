@@ -365,9 +365,10 @@ public class LocaleController {
         this.languagesDict = new HashMap<>();
         this.otherLanguages = new ArrayList<>();
         addRules(new String[]{"bem", "brx", "da", "de", "el", "en", "eo", "es", "et", "fi", "fo", "gl", "he", "iw", "it", "nb", "nl", "nn", "no", "sv", "af", "bg", "bn", "ca", "eu", "fur", "fy", "gu", "ha", "is", "ku", "lb", "ml", "mr", "nah", "ne", "om", "or", "pa", "pap", "ps", "so", "sq", "sw", "ta", "te", "tk", "ur", "zu", "mn", "gsw", "chr", "rm", "pt", "an", "ast"}, new PluralRules_One());
-        addRules(new String[]{"cs", "sk", "sr", "hr", "bs"}, new PluralRules_Czech());
+        addRules(new String[]{"cs", "sk"}, new PluralRules_Czech());
         addRules(new String[]{"ff", "fr", "kab"}, new PluralRules_French());
         addRules(new String[]{"ru", "uk", "be", "sh"}, new PluralRules_Balkan());
+        addRules(new String[]{"sr", "hr", "bs"}, new PluralRules_Serbian());
         addRules(new String[]{"lv"}, new PluralRules_Latvian());
         addRules(new String[]{"lt"}, new PluralRules_Lithuanian());
         addRules(new String[]{"pl"}, new PluralRules_Polish());
@@ -3904,6 +3905,20 @@ public class LocaleController {
                 return (i2 < 11 || i2 > 14) ? 0 : 16;
             }
             return 16;
+        }
+    }
+
+    public static class PluralRules_Serbian extends PluralRules {
+        public int quantityForNumber(int i) {
+            int i2 = i % 100;
+            int i3 = i % 10;
+            if (i3 == 1 && i2 != 11) {
+                return 2;
+            }
+            if (i3 < 2 || i3 > 4) {
+                return 0;
+            }
+            return (i2 < 12 || i2 > 14) ? 8 : 0;
         }
     }
 

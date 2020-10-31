@@ -8293,8 +8293,8 @@ public class MessageObject {
      */
     /* JADX WARNING: Removed duplicated region for block: B:148:0x032d  */
     /* JADX WARNING: Removed duplicated region for block: B:151:0x0332  */
-    /* JADX WARNING: Removed duplicated region for block: B:154:0x033e  */
-    /* JADX WARNING: Removed duplicated region for block: B:192:0x03f8  */
+    /* JADX WARNING: Removed duplicated region for block: B:154:0x0343  */
+    /* JADX WARNING: Removed duplicated region for block: B:193:0x0404  */
     /* JADX WARNING: Removed duplicated region for block: B:40:0x0080  */
     /* JADX WARNING: Removed duplicated region for block: B:41:0x008a  */
     /* JADX WARNING: Removed duplicated region for block: B:55:0x00b6  */
@@ -8302,7 +8302,7 @@ public class MessageObject {
     /* JADX WARNING: Removed duplicated region for block: B:68:0x0118  */
     /* JADX WARNING: Removed duplicated region for block: B:69:0x011b  */
     /* JADX WARNING: Removed duplicated region for block: B:72:0x0122 A[SYNTHETIC, Splitter:B:72:0x0122] */
-    /* JADX WARNING: Removed duplicated region for block: B:74:0x0142 A[Catch:{ Exception -> 0x0473 }] */
+    /* JADX WARNING: Removed duplicated region for block: B:74:0x0142 A[Catch:{ Exception -> 0x047e }] */
     /* JADX WARNING: Removed duplicated region for block: B:78:0x0166  */
     /* JADX WARNING: Removed duplicated region for block: B:79:0x0168  */
     /* JADX WARNING: Removed duplicated region for block: B:82:0x017a  */
@@ -8313,14 +8313,14 @@ public class MessageObject {
             r1 = r33
             int r2 = android.os.Build.VERSION.SDK_INT
             int r0 = r1.type
-            if (r0 != 0) goto L_0x0477
+            if (r0 != 0) goto L_0x0482
             org.telegram.tgnet.TLRPC$Message r0 = r1.messageOwner
             org.telegram.tgnet.TLRPC$Peer r0 = r0.peer_id
-            if (r0 == 0) goto L_0x0477
+            if (r0 == 0) goto L_0x0482
             java.lang.CharSequence r0 = r1.messageText
             boolean r0 = android.text.TextUtils.isEmpty(r0)
             if (r0 == 0) goto L_0x0018
-            goto L_0x0477
+            goto L_0x0482
         L_0x0018:
             r33.generateLinkDescription()
             java.util.ArrayList r0 = new java.util.ArrayList
@@ -8463,21 +8463,21 @@ public class MessageObject {
             r14 = r0
             r13 = 24
             if (r2 < r13) goto L_0x0142
-            java.lang.CharSequence r0 = r1.messageText     // Catch:{ Exception -> 0x0473 }
-            int r6 = r0.length()     // Catch:{ Exception -> 0x0473 }
-            android.text.StaticLayout$Builder r0 = android.text.StaticLayout.Builder.obtain(r0, r3, r6, r14, r15)     // Catch:{ Exception -> 0x0473 }
-            android.text.StaticLayout$Builder r0 = r0.setBreakStrategy(r5)     // Catch:{ Exception -> 0x0473 }
-            android.text.StaticLayout$Builder r0 = r0.setHyphenationFrequency(r3)     // Catch:{ Exception -> 0x0473 }
-            android.text.Layout$Alignment r6 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x0473 }
-            android.text.StaticLayout$Builder r0 = r0.setAlignment(r6)     // Catch:{ Exception -> 0x0473 }
-            android.text.StaticLayout r0 = r0.build()     // Catch:{ Exception -> 0x0473 }
+            java.lang.CharSequence r0 = r1.messageText     // Catch:{ Exception -> 0x047e }
+            int r6 = r0.length()     // Catch:{ Exception -> 0x047e }
+            android.text.StaticLayout$Builder r0 = android.text.StaticLayout.Builder.obtain(r0, r3, r6, r14, r15)     // Catch:{ Exception -> 0x047e }
+            android.text.StaticLayout$Builder r0 = r0.setBreakStrategy(r5)     // Catch:{ Exception -> 0x047e }
+            android.text.StaticLayout$Builder r0 = r0.setHyphenationFrequency(r3)     // Catch:{ Exception -> 0x047e }
+            android.text.Layout$Alignment r6 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x047e }
+            android.text.StaticLayout$Builder r0 = r0.setAlignment(r6)     // Catch:{ Exception -> 0x047e }
+            android.text.StaticLayout r0 = r0.build()     // Catch:{ Exception -> 0x047e }
             r13 = r0
             r3 = 24
             goto L_0x0158
         L_0x0142:
-            android.text.StaticLayout r0 = new android.text.StaticLayout     // Catch:{ Exception -> 0x0473 }
-            java.lang.CharSequence r7 = r1.messageText     // Catch:{ Exception -> 0x0473 }
-            android.text.Layout$Alignment r10 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x0473 }
+            android.text.StaticLayout r0 = new android.text.StaticLayout     // Catch:{ Exception -> 0x047e }
+            java.lang.CharSequence r7 = r1.messageText     // Catch:{ Exception -> 0x047e }
+            android.text.Layout$Alignment r10 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x047e }
             r11 = 1065353216(0x3var_, float:1.0)
             r12 = 0
             r16 = 0
@@ -8486,7 +8486,7 @@ public class MessageObject {
             r9 = r15
             r3 = 24
             r13 = r16
-            r6.<init>(r7, r8, r9, r10, r11, r12, r13)     // Catch:{ Exception -> 0x0473 }
+            r6.<init>(r7, r8, r9, r10, r11, r12, r13)     // Catch:{ Exception -> 0x047e }
             r13 = r0
         L_0x0158:
             int r0 = r13.getHeight()
@@ -8510,7 +8510,7 @@ public class MessageObject {
             r10 = 0
             r16 = 0
         L_0x0178:
-            if (r10 >= r12) goto L_0x0472
+            if (r10 >= r12) goto L_0x047d
             if (r2 < r3) goto L_0x017f
             int r0 = r1.linesCount
             goto L_0x0188
@@ -8605,24 +8605,24 @@ public class MessageObject {
             r3 = 0
             r4 = 1
             r20 = 0
-            goto L_0x045e
+            goto L_0x0469
         L_0x0227:
             r8.charactersOffset = r7
             r8.charactersEnd = r6
             if (r4 == 0) goto L_0x0263
             if (r2 < r3) goto L_0x0263
-            java.lang.CharSequence r3 = r1.messageText     // Catch:{ Exception -> 0x044a }
+            java.lang.CharSequence r3 = r1.messageText     // Catch:{ Exception -> 0x0455 }
             r19 = 1073741824(0x40000000, float:2.0)
-            int r19 = org.telegram.messenger.AndroidUtilities.dp(r19)     // Catch:{ Exception -> 0x044a }
+            int r19 = org.telegram.messenger.AndroidUtilities.dp(r19)     // Catch:{ Exception -> 0x0455 }
             int r11 = r15 + r19
-            android.text.StaticLayout$Builder r3 = android.text.StaticLayout.Builder.obtain(r3, r7, r6, r14, r11)     // Catch:{ Exception -> 0x044a }
-            android.text.StaticLayout$Builder r3 = r3.setBreakStrategy(r5)     // Catch:{ Exception -> 0x044a }
+            android.text.StaticLayout$Builder r3 = android.text.StaticLayout.Builder.obtain(r3, r7, r6, r14, r11)     // Catch:{ Exception -> 0x0455 }
+            android.text.StaticLayout$Builder r3 = r3.setBreakStrategy(r5)     // Catch:{ Exception -> 0x0455 }
             r11 = 0
-            android.text.StaticLayout$Builder r3 = r3.setHyphenationFrequency(r11)     // Catch:{ Exception -> 0x044a }
-            android.text.Layout$Alignment r6 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x044a }
-            android.text.StaticLayout$Builder r3 = r3.setAlignment(r6)     // Catch:{ Exception -> 0x044a }
-            android.text.StaticLayout r3 = r3.build()     // Catch:{ Exception -> 0x044a }
-            r8.textLayout = r3     // Catch:{ Exception -> 0x044a }
+            android.text.StaticLayout$Builder r3 = r3.setHyphenationFrequency(r11)     // Catch:{ Exception -> 0x0455 }
+            android.text.Layout$Alignment r6 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x0455 }
+            android.text.StaticLayout$Builder r3 = r3.setAlignment(r6)     // Catch:{ Exception -> 0x0455 }
+            android.text.StaticLayout r3 = r3.build()     // Catch:{ Exception -> 0x0455 }
+            r8.textLayout = r3     // Catch:{ Exception -> 0x0455 }
             r34 = r2
             r6 = r8
             r5 = r9
@@ -8636,9 +8636,9 @@ public class MessageObject {
             goto L_0x02a0
         L_0x0263:
             r11 = 0
-            android.text.StaticLayout r3 = new android.text.StaticLayout     // Catch:{ Exception -> 0x044a }
-            java.lang.CharSequence r11 = r1.messageText     // Catch:{ Exception -> 0x044a }
-            android.text.Layout$Alignment r19 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x044a }
+            android.text.StaticLayout r3 = new android.text.StaticLayout     // Catch:{ Exception -> 0x0455 }
+            java.lang.CharSequence r11 = r1.messageText     // Catch:{ Exception -> 0x0455 }
+            android.text.Layout$Alignment r19 = android.text.Layout.Alignment.ALIGN_NORMAL     // Catch:{ Exception -> 0x0455 }
             r21 = 1065353216(0x3var_, float:1.0)
             r22 = 0
             r23 = 0
@@ -8665,29 +8665,29 @@ public class MessageObject {
             r34 = r2
             r2 = r15
             r15 = r23
-            r6.<init>(r7, r8, r9, r10, r11, r12, r13, r14, r15)     // Catch:{ Exception -> 0x0440 }
+            r6.<init>(r7, r8, r9, r10, r11, r12, r13, r14, r15)     // Catch:{ Exception -> 0x044b }
             r6 = r27
-            r6.textLayout = r3     // Catch:{ Exception -> 0x0440 }
+            r6.textLayout = r3     // Catch:{ Exception -> 0x044b }
             r3 = r29
         L_0x02a0:
-            int r7 = r3.getLineTop(r5)     // Catch:{ Exception -> 0x043c }
-            float r7 = (float) r7     // Catch:{ Exception -> 0x043c }
-            r6.textYOffset = r7     // Catch:{ Exception -> 0x043c }
+            int r7 = r3.getLineTop(r5)     // Catch:{ Exception -> 0x0447 }
+            float r7 = (float) r7     // Catch:{ Exception -> 0x0447 }
+            r6.textYOffset = r7     // Catch:{ Exception -> 0x0447 }
             r8 = r26
             if (r8 == 0) goto L_0x02b0
             float r7 = r7 - r16
             int r7 = (int) r7
-            r6.height = r7     // Catch:{ Exception -> 0x0436 }
+            r6.height = r7     // Catch:{ Exception -> 0x0441 }
         L_0x02b0:
-            int r7 = r6.height     // Catch:{ Exception -> 0x0436 }
-            android.text.StaticLayout r9 = r6.textLayout     // Catch:{ Exception -> 0x0436 }
-            int r10 = r9.getLineCount()     // Catch:{ Exception -> 0x0436 }
+            int r7 = r6.height     // Catch:{ Exception -> 0x0441 }
+            android.text.StaticLayout r9 = r6.textLayout     // Catch:{ Exception -> 0x0441 }
+            int r10 = r9.getLineCount()     // Catch:{ Exception -> 0x0441 }
             r11 = 1
             int r10 = r10 - r11
-            int r9 = r9.getLineBottom(r10)     // Catch:{ Exception -> 0x0436 }
-            int r7 = java.lang.Math.max(r7, r9)     // Catch:{ Exception -> 0x0436 }
-            r6.height = r7     // Catch:{ Exception -> 0x0436 }
-            float r7 = r6.textYOffset     // Catch:{ Exception -> 0x0436 }
+            int r9 = r9.getLineBottom(r10)     // Catch:{ Exception -> 0x0441 }
+            int r7 = java.lang.Math.max(r7, r9)     // Catch:{ Exception -> 0x0441 }
+            r6.height = r7     // Catch:{ Exception -> 0x0441 }
+            float r7 = r6.textYOffset     // Catch:{ Exception -> 0x0441 }
             r9 = r28
             int r12 = r9 + -1
             if (r8 != r12) goto L_0x02ef
@@ -8749,54 +8749,61 @@ public class MessageObject {
             double r12 = (double) r0
             double r12 = java.lang.Math.ceil(r12)
             int r15 = (int) r12
-            int r12 = r2 + 80
-            if (r15 <= r12) goto L_0x032e
+            int r0 = r2 + 80
+            if (r15 <= r0) goto L_0x032e
             r15 = r2
         L_0x032e:
             int r12 = r9 + -1
             if (r8 != r12) goto L_0x0334
             r1.lastLineWidth = r15
         L_0x0334:
-            float r0 = r0 + r11
-            double r13 = (double) r0
+            float r0 = (float) r15
+            float r13 = java.lang.Math.max(r7, r11)
+            float r13 = r13 + r0
+            double r13 = (double) r13
             double r13 = java.lang.Math.ceil(r13)
             int r13 = (int) r13
             r14 = 1
-            if (r10 <= r14) goto L_0x03f8
+            if (r10 <= r14) goto L_0x0404
             r32 = r13
             r31 = r15
             r11 = 0
             r14 = 0
             r15 = 0
             r30 = 0
-        L_0x0347:
-            if (r11 >= r10) goto L_0x03d3
-            android.text.StaticLayout r0 = r6.textLayout     // Catch:{ Exception -> 0x0350 }
-            float r0 = r0.getLineWidth(r11)     // Catch:{ Exception -> 0x0350 }
-            goto L_0x0355
-        L_0x0350:
+        L_0x034c:
+            if (r11 >= r10) goto L_0x03df
+            android.text.StaticLayout r0 = r6.textLayout     // Catch:{ Exception -> 0x0357 }
+            float r0 = r0.getLineWidth(r11)     // Catch:{ Exception -> 0x0357 }
+            r21 = r0
+            goto L_0x035d
+        L_0x0357:
+            r0 = move-exception
+            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
+            r21 = 0
+        L_0x035d:
+            android.text.StaticLayout r0 = r6.textLayout     // Catch:{ Exception -> 0x0364 }
+            float r0 = r0.getLineLeft(r11)     // Catch:{ Exception -> 0x0364 }
+            goto L_0x0369
+        L_0x0364:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
             r0 = 0
-        L_0x0355:
+        L_0x0369:
             int r7 = r2 + 20
             float r7 = (float) r7
-            int r7 = (r0 > r7 ? 1 : (r0 == r7 ? 0 : -1))
-            if (r7 <= 0) goto L_0x035d
+            int r7 = (r21 > r7 ? 1 : (r21 == r7 ? 0 : -1))
+            if (r7 <= 0) goto L_0x0374
             float r0 = (float) r2
-        L_0x035d:
             r7 = r0
-            android.text.StaticLayout r0 = r6.textLayout     // Catch:{ Exception -> 0x0365 }
-            float r0 = r0.getLineLeft(r11)     // Catch:{ Exception -> 0x0365 }
-            goto L_0x036a
-        L_0x0365:
-            r0 = move-exception
-            org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
             r0 = 0
-        L_0x036a:
+            goto L_0x0376
+        L_0x0374:
+            r7 = r21
+        L_0x0376:
             r21 = 0
             int r22 = (r0 > r21 ? 1 : (r0 == r21 ? 0 : -1))
-            if (r22 <= 0) goto L_0x0386
+            if (r22 <= 0) goto L_0x0392
             r29 = r3
             float r3 = r1.textXOffset
             float r3 = java.lang.Math.min(r3, r0)
@@ -8808,32 +8815,32 @@ public class MessageObject {
             byte r3 = (byte) r3
             r6.directionFlags = r3
             r1.hasRtl = r4
-            goto L_0x0391
-        L_0x0386:
+            goto L_0x039d
+        L_0x0392:
             r29 = r3
             r21 = r4
             byte r3 = r6.directionFlags
             r3 = r3 | 2
             byte r3 = (byte) r3
             r6.directionFlags = r3
-        L_0x0391:
-            if (r14 != 0) goto L_0x03a7
+        L_0x039d:
+            if (r14 != 0) goto L_0x03b3
             r3 = 0
             int r4 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r4 != 0) goto L_0x03a7
-            android.text.StaticLayout r3 = r6.textLayout     // Catch:{ Exception -> 0x03a3 }
-            int r3 = r3.getParagraphDirection(r11)     // Catch:{ Exception -> 0x03a3 }
+            if (r4 != 0) goto L_0x03b3
+            android.text.StaticLayout r3 = r6.textLayout     // Catch:{ Exception -> 0x03af }
+            int r3 = r3.getParagraphDirection(r11)     // Catch:{ Exception -> 0x03af }
             r4 = 1
-            if (r3 != r4) goto L_0x03a7
+            if (r3 != r4) goto L_0x03b3
             r14 = 1
-            goto L_0x03a7
-        L_0x03a3:
+            goto L_0x03b3
+        L_0x03af:
             r3 = r30
             r14 = 1
-            goto L_0x03a9
-        L_0x03a7:
+            goto L_0x03b5
+        L_0x03b3:
             r3 = r30
-        L_0x03a9:
+        L_0x03b5:
             float r30 = java.lang.Math.max(r3, r7)
             float r0 = r0 + r7
             float r15 = java.lang.Math.max(r15, r0)
@@ -8851,22 +8858,22 @@ public class MessageObject {
             r4 = r21
             r3 = r29
             r7 = 0
-            goto L_0x0347
-        L_0x03d3:
+            goto L_0x034c
+        L_0x03df:
             r29 = r3
             r21 = r4
             r3 = r30
             r4 = r31
-            if (r14 == 0) goto L_0x03e2
-            if (r8 != r12) goto L_0x03e7
+            if (r14 == 0) goto L_0x03ee
+            if (r8 != r12) goto L_0x03f3
             r1.lastLineWidth = r13
-            goto L_0x03e7
-        L_0x03e2:
-            if (r8 != r12) goto L_0x03e6
+            goto L_0x03f3
+        L_0x03ee:
+            if (r8 != r12) goto L_0x03f2
             r1.lastLineWidth = r4
-        L_0x03e6:
+        L_0x03f2:
             r15 = r3
-        L_0x03e7:
+        L_0x03f3:
             int r0 = r1.textWidth
             double r3 = (double) r15
             double r3 = java.lang.Math.ceil(r3)
@@ -8875,69 +8882,68 @@ public class MessageObject {
             r1.textWidth = r0
             r3 = 0
             r4 = 1
-            goto L_0x0433
-        L_0x03f8:
+            goto L_0x043e
+        L_0x0404:
             r29 = r3
             r21 = r4
             r3 = 0
-            int r0 = (r11 > r3 ? 1 : (r11 == r3 ? 0 : -1))
-            if (r0 <= 0) goto L_0x041f
-            float r0 = r1.textXOffset
-            float r0 = java.lang.Math.min(r0, r11)
-            r1.textXOffset = r0
-            int r0 = (r0 > r3 ? 1 : (r0 == r3 ? 0 : -1))
-            if (r0 != 0) goto L_0x0410
-            float r0 = (float) r15
+            int r4 = (r11 > r3 ? 1 : (r11 == r3 ? 0 : -1))
+            if (r4 <= 0) goto L_0x042a
+            float r4 = r1.textXOffset
+            float r4 = java.lang.Math.min(r4, r11)
+            r1.textXOffset = r4
+            int r4 = (r4 > r3 ? 1 : (r4 == r3 ? 0 : -1))
+            if (r4 != 0) goto L_0x041b
             float r0 = r0 + r11
             int r15 = (int) r0
-        L_0x0410:
+        L_0x041b:
             r4 = 1
-            if (r9 == r4) goto L_0x0415
+            if (r9 == r4) goto L_0x0420
             r0 = 1
-            goto L_0x0416
-        L_0x0415:
+            goto L_0x0421
+        L_0x0420:
             r0 = 0
-        L_0x0416:
+        L_0x0421:
             r1.hasRtl = r0
             byte r0 = r6.directionFlags
             r0 = r0 | r4
             byte r0 = (byte) r0
             r6.directionFlags = r0
-            goto L_0x0427
-        L_0x041f:
+            goto L_0x0432
+        L_0x042a:
             r4 = 1
             byte r0 = r6.directionFlags
             r0 = r0 | 2
             byte r0 = (byte) r0
             r6.directionFlags = r0
-        L_0x0427:
+        L_0x0432:
             int r0 = r1.textWidth
             int r6 = java.lang.Math.min(r2, r15)
             int r0 = java.lang.Math.max(r0, r6)
             r1.textWidth = r0
-        L_0x0433:
+        L_0x043e:
             int r0 = r5 + r10
-            goto L_0x045f
-        L_0x0436:
+            goto L_0x046a
+        L_0x0441:
             r0 = move-exception
             r29 = r3
             r21 = r4
-            goto L_0x0445
-        L_0x043c:
+            goto L_0x0450
+        L_0x0447:
             r0 = move-exception
             r29 = r3
-            goto L_0x0441
-        L_0x0440:
+            goto L_0x044c
+        L_0x044b:
             r0 = move-exception
-        L_0x0441:
+        L_0x044c:
             r21 = r4
             r8 = r26
-        L_0x0445:
+        L_0x0450:
             r9 = r28
             r3 = 0
             r4 = 1
-            goto L_0x045b
-        L_0x044a:
+            goto L_0x0466
+        L_0x0455:
             r0 = move-exception
             r34 = r2
             r21 = r4
@@ -8950,11 +8956,11 @@ public class MessageObject {
             r3 = 0
             r4 = 1
             r20 = 0
-        L_0x045b:
+        L_0x0466:
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x045e:
+        L_0x0469:
             r0 = r5
-        L_0x045f:
+        L_0x046a:
             int r10 = r8 + 1
             r15 = r2
             r12 = r9
@@ -8967,12 +8973,12 @@ public class MessageObject {
             r2 = r34
             r9 = r0
             goto L_0x0178
-        L_0x0472:
+        L_0x047d:
             return
-        L_0x0473:
+        L_0x047e:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x0477:
+        L_0x0482:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.MessageObject.generateLayout(org.telegram.tgnet.TLRPC$User):void");

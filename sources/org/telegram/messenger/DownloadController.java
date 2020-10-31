@@ -1313,10 +1313,12 @@ public class DownloadController extends BaseController implements NotificationCe
                             } else if (l5 == null || l5.longValue() + 4000 < System.currentTimeMillis()) {
                                 HashMap<Object, Object> hashMap = delayedMessage.extraHashMap;
                                 MessageObject messageObject = (MessageObject) hashMap.get(str4 + "_i");
-                                if (messageObject == null || !messageObject.isVideo()) {
+                                if (messageObject != null && messageObject.isVideo()) {
+                                    getMessagesController().sendTyping(j, i9, 5, 0);
+                                } else if (messageObject == null || messageObject.getDocument() == null) {
                                     getMessagesController().sendTyping(j, i9, 4, 0);
                                 } else {
-                                    getMessagesController().sendTyping(j, i9, 5, 0);
+                                    getMessagesController().sendTyping(j, i9, 3, 0);
                                 }
                                 this.typingTimes.put(j, Long.valueOf(System.currentTimeMillis()));
                             }

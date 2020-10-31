@@ -6728,7 +6728,9 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 if (chatActivityEnterView2.getAnimatedTop() != 0) {
                     this.chatListViewPaddingTop += (this.chatActivityEnterView.getHeightWithTopView() - AndroidUtilities.dp(51.0f)) - this.chatActivityEnterView.getAnimatedTop();
                 } else if (!this.chatActivityEnterView.pannelAniamationInProgress()) {
-                    this.chatListViewPaddingTop = (int) (((float) this.chatListViewPaddingTop) - this.chatListView.getTranslationY());
+                    int heightWithTopView = this.chatListViewPaddingTop + (this.chatActivityEnterView.getHeightWithTopView() - AndroidUtilities.dp(51.0f));
+                    this.chatListViewPaddingTop = heightWithTopView;
+                    this.chatListViewPaddingTop = (int) (((float) heightWithTopView) - this.chatListView.getTranslationY());
                 }
             }
             int measuredHeight2 = (this.chatListView.getMeasuredHeight() * 2) / 3;

@@ -5105,13 +5105,13 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                     if (ChatActivityEnterView.this.currentTopViewAnimation != null && ChatActivityEnterView.this.currentTopViewAnimation.equals(animator)) {
                                         ValueAnimator unused = ChatActivityEnterView.this.currentTopViewAnimation = null;
                                     }
-                                    NotificationCenter.getGlobalInstance().onAnimationFinish(ChatActivityEnterView.this.notificationsIndex);
+                                    NotificationCenter.getInstance(ChatActivityEnterView.this.currentAccount).onAnimationFinish(ChatActivityEnterView.this.notificationsIndex);
                                 }
                             });
                             this.currentTopViewAnimation.setDuration(250);
                             this.currentTopViewAnimation.setInterpolator(CubicBezierInterpolator.DEFAULT);
                             this.currentTopViewAnimation.start();
-                            this.notificationsIndex = NotificationCenter.getGlobalInstance().setAnimationInProgress(this.notificationsIndex, (int[]) null);
+                            this.notificationsIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.notificationsIndex, (int[]) null);
                         } else {
                             this.topViewEnterProgress = 1.0f;
                             this.topView.setTranslationY(0.0f);
@@ -5432,7 +5432,8 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             this.dialog_id = j;
             int i2 = this.currentAccount;
             if (i2 != i) {
-                NotificationCenter instance = NotificationCenter.getInstance(i2);
+                NotificationCenter.getInstance(i2).onAnimationFinish(this.notificationsIndex);
+                NotificationCenter instance = NotificationCenter.getInstance(this.currentAccount);
                 int i3 = NotificationCenter.recordStarted;
                 instance.removeObserver(this, i3);
                 NotificationCenter instance2 = NotificationCenter.getInstance(this.currentAccount);
@@ -9062,12 +9063,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                     if (ChatActivityEnterView.this.delegate != null) {
                                         ChatActivityEnterView.this.delegate.bottomPanelTranslationYChanged(0.0f);
                                     }
-                                    NotificationCenter.getGlobalInstance().onAnimationFinish(ChatActivityEnterView.this.notificationsIndex);
+                                    NotificationCenter.getInstance(ChatActivityEnterView.this.currentAccount).onAnimationFinish(ChatActivityEnterView.this.notificationsIndex);
                                     ChatActivityEnterView.this.requestLayout();
                                 }
                             });
                             this.panelAnimation.start();
-                            this.notificationsIndex = NotificationCenter.getGlobalInstance().setAnimationInProgress(this.notificationsIndex, (int[]) null);
+                            this.notificationsIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.notificationsIndex, (int[]) null);
                             requestLayout();
                         }
                     }
@@ -9120,11 +9121,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                     if (ChatActivityEnterView.this.delegate != null) {
                                         ChatActivityEnterView.this.delegate.bottomPanelTranslationYChanged(0.0f);
                                     }
-                                    NotificationCenter.getInstance(UserConfig.selectedAccount).onAnimationFinish(ChatActivityEnterView.this.notificationsIndex);
+                                    NotificationCenter.getInstance(ChatActivityEnterView.this.currentAccount).onAnimationFinish(ChatActivityEnterView.this.notificationsIndex);
                                     ChatActivityEnterView.this.requestLayout();
                                 }
                             });
-                            this.notificationsIndex = NotificationCenter.getInstance(UserConfig.selectedAccount).setAnimationInProgress(this.notificationsIndex, (int[]) null);
+                            this.notificationsIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.notificationsIndex, (int[]) null);
                             this.panelAnimation.start();
                             requestLayout();
                         }
@@ -9151,14 +9152,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                         AnimatorSet unused2 = ChatActivityEnterView.this.panelAnimation = null;
                                         ChatActivityEnterView.this.botKeyboardView.setTranslationY(0.0f);
                                         ChatActivityEnterView.this.botKeyboardView.setVisibility(8);
-                                        NotificationCenter.getInstance(UserConfig.selectedAccount).onAnimationFinish(ChatActivityEnterView.this.notificationsIndex);
+                                        NotificationCenter.getInstance(ChatActivityEnterView.this.currentAccount).onAnimationFinish(ChatActivityEnterView.this.notificationsIndex);
                                         if (ChatActivityEnterView.this.delegate != null) {
                                             ChatActivityEnterView.this.delegate.bottomPanelTranslationYChanged(0.0f);
                                         }
                                         ChatActivityEnterView.this.requestLayout();
                                     }
                                 });
-                                this.notificationsIndex = NotificationCenter.getInstance(UserConfig.selectedAccount).setAnimationInProgress(this.notificationsIndex, (int[]) null);
+                                this.notificationsIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.notificationsIndex, (int[]) null);
                                 this.panelAnimation.start();
                                 requestLayout();
                             } else if (!this.waitingForKeyboardOpen) {
@@ -9623,11 +9624,11 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                             ChatActivityEnterView.this.delegate.bottomPanelTranslationYChanged(0.0f);
                                         }
                                         ChatActivityEnterView.this.requestLayout();
-                                        NotificationCenter.getGlobalInstance().onAnimationFinish(ChatActivityEnterView.this.notificationsIndex);
+                                        NotificationCenter.getInstance(ChatActivityEnterView.this.currentAccount).onAnimationFinish(ChatActivityEnterView.this.notificationsIndex);
                                     }
                                 });
                                 this.panelAnimation.start();
-                                this.notificationsIndex = NotificationCenter.getGlobalInstance().setAnimationInProgress(this.notificationsIndex, (int[]) null);
+                                this.notificationsIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.notificationsIndex, (int[]) null);
                                 requestLayout();
                             }
                         }
@@ -10065,12 +10066,12 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                             public void onAnimationEnd(Animator animator) {
                                 Animator unused = ChatActivityEnterView.this.stickersExpansionAnim = null;
                                 ChatActivityEnterView.this.emojiView.setLayerType(0, (Paint) null);
-                                NotificationCenter.getGlobalInstance().onAnimationFinish(ChatActivityEnterView.this.notificationsIndex);
+                                NotificationCenter.getInstance(ChatActivityEnterView.this.currentAccount).onAnimationFinish(ChatActivityEnterView.this.notificationsIndex);
                             }
                         });
                         this.stickersExpansionAnim = animatorSet;
                         this.emojiView.setLayerType(2, (Paint) null);
-                        this.notificationsIndex = NotificationCenter.getGlobalInstance().setAnimationInProgress(this.notificationsIndex, (int[]) null);
+                        this.notificationsIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.notificationsIndex, (int[]) null);
                         this.stickersExpansionProgress = 0.0f;
                         this.sizeNotifierLayout.invalidate();
                         animatorSet.start();
@@ -10116,14 +10117,14 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
                                     ChatActivityEnterView chatActivityEnterView = ChatActivityEnterView.this;
                                     chatActivityEnterView.showPopup(0, chatActivityEnterView.currentPopupContentType);
                                 }
-                                NotificationCenter.getGlobalInstance().onAnimationFinish(ChatActivityEnterView.this.notificationsIndex);
+                                NotificationCenter.getInstance(ChatActivityEnterView.this.currentAccount).onAnimationFinish(ChatActivityEnterView.this.notificationsIndex);
                             }
                         });
                         this.stickersExpansionProgress = 1.0f;
                         this.sizeNotifierLayout.invalidate();
                         this.stickersExpansionAnim = animatorSet2;
                         this.emojiView.setLayerType(2, (Paint) null);
-                        this.notificationsIndex = NotificationCenter.getGlobalInstance().setAnimationInProgress(this.notificationsIndex, (int[]) null);
+                        this.notificationsIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.notificationsIndex, (int[]) null);
                         animatorSet2.start();
                     } else {
                         this.stickersExpansionProgress = 0.0f;

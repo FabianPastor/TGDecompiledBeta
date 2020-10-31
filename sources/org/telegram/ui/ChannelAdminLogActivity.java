@@ -2277,13 +2277,13 @@ public class ChannelAdminLogActivity extends BaseFragment implements Notificatio
 
     public void onTransitionAnimationStart(boolean z, boolean z2) {
         if (z) {
-            this.allowAnimationIndex = NotificationCenter.getInstance(this.currentAccount).setAnimationInProgress(this.allowAnimationIndex, new int[]{NotificationCenter.chatInfoDidLoad, NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats, NotificationCenter.messagesDidLoad, NotificationCenter.botKeyboardDidLoad});
+            this.allowAnimationIndex = getNotificationCenter().setAnimationInProgress(this.allowAnimationIndex, new int[]{NotificationCenter.chatInfoDidLoad, NotificationCenter.dialogsNeedReload, NotificationCenter.closeChats, NotificationCenter.messagesDidLoad, NotificationCenter.botKeyboardDidLoad});
         }
     }
 
     public void onTransitionAnimationEnd(boolean z, boolean z2) {
         if (z) {
-            NotificationCenter.getInstance(this.currentAccount).onAnimationFinish(this.allowAnimationIndex);
+            getNotificationCenter().onAnimationFinish(this.allowAnimationIndex);
         }
     }
 
