@@ -1367,11 +1367,13 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         } else if (i == NotificationCenter.groupCallTypingsUpdated) {
             if (this.visible && this.currentStyle == 4) {
                 ChatObject.Call groupCall = ((ChatActivity) this.fragment).getGroupCall();
-                int i3 = groupCall.speakingMembersCount;
-                if (i3 != 0) {
-                    this.subtitleTextView.setText(LocaleController.formatPluralString("MembersTalking", i3));
-                } else {
-                    this.subtitleTextView.setText(LocaleController.formatPluralString("Members", groupCall.call.participants_count));
+                if (groupCall != null) {
+                    int i3 = groupCall.speakingMembersCount;
+                    if (i3 != 0) {
+                        this.subtitleTextView.setText(LocaleController.formatPluralString("MembersTalking", i3));
+                    } else {
+                        this.subtitleTextView.setText(LocaleController.formatPluralString("Members", groupCall.call.participants_count));
+                    }
                 }
                 updateAvatars();
             }

@@ -669,9 +669,12 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
                     View childAt = getChildAt(i);
                     f = Math.max(f, childAt.getY() + ((float) childAt.getMeasuredHeight()));
                 }
-                this.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), f);
+                this.rect.set(0.0f, 0.0f, (float) getMeasuredWidth(), Math.min((float) getMeasuredHeight(), f));
                 canvas.drawRoundRect(this.rect, (float) AndroidUtilities.dp(13.0f), (float) AndroidUtilities.dp(13.0f), GroupCallActivity.this.listViewBackgroundPaint);
+                canvas.save();
+                canvas.clipRect(0, 0, getMeasuredWidth(), getMeasuredHeight());
                 super.dispatchDraw(canvas);
+                canvas.restore();
             }
         };
         this.listView = r4;
