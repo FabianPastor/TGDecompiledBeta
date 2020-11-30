@@ -1,5 +1,7 @@
 package j$.util.function;
 
 public interface w {
-    long applyAsLong(int i);
+    void accept(int i);
+
+    w l(w wVar);
 }

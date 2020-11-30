@@ -1,5 +1,5 @@
 package j$.util.function;
 
-public interface D {
-    void accept(Object obj, long j);
+public interface D<R> {
+    Object apply(long j);
 }

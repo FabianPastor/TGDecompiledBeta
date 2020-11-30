@@ -34,6 +34,7 @@ import org.telegram.tgnet.TLRPC$TL_messageMediaPhoto;
 import org.telegram.tgnet.TLRPC$TL_messageMediaWebPage;
 import org.telegram.tgnet.TLRPC$TL_messageService;
 import org.telegram.tgnet.TLRPC$TL_photo;
+import org.telegram.tgnet.TLRPC$TL_photoPathSize;
 import org.telegram.tgnet.TLRPC$TL_photoStrippedSize;
 import org.telegram.tgnet.TLRPC$TL_secureFile;
 import org.telegram.tgnet.TLRPC$TL_videoSize;
@@ -74,15 +75,15 @@ public class FileLoader extends BaseController {
     private SparseArray<LinkedList<FileLoadOperation>> imageLoadOperationQueues = new SparseArray<>();
     private SparseIntArray imageLoadOperationsCount = new SparseIntArray();
     private int lastReferenceId;
-    private ConcurrentHashMap<String, FileLoadOperation> loadOperationPaths = new ConcurrentHashMap();
+    private ConcurrentHashMap<String, FileLoadOperation> loadOperationPaths = new ConcurrentHashMap<>();
     /* access modifiers changed from: private */
-    public ConcurrentHashMap<String, Boolean> loadOperationPathsUI = new ConcurrentHashMap(10, 1.0f, 2);
+    public ConcurrentHashMap<String, Boolean> loadOperationPathsUI = new ConcurrentHashMap<>(10, 1.0f, 2);
     private HashMap<String, Boolean> loadingVideos = new HashMap<>();
-    private ConcurrentHashMap<Integer, Object> parentObjectReferences = new ConcurrentHashMap();
+    private ConcurrentHashMap<Integer, Object> parentObjectReferences = new ConcurrentHashMap<>();
     /* access modifiers changed from: private */
-    public ConcurrentHashMap<String, FileUploadOperation> uploadOperationPaths = new ConcurrentHashMap();
+    public ConcurrentHashMap<String, FileUploadOperation> uploadOperationPaths = new ConcurrentHashMap<>();
     /* access modifiers changed from: private */
-    public ConcurrentHashMap<String, FileUploadOperation> uploadOperationPathsEnc = new ConcurrentHashMap();
+    public ConcurrentHashMap<String, FileUploadOperation> uploadOperationPathsEnc = new ConcurrentHashMap<>();
     /* access modifiers changed from: private */
     public LinkedList<FileUploadOperation> uploadOperationQueue = new LinkedList<>();
     private HashMap<String, Long> uploadSizes = new HashMap<>();
@@ -1485,7 +1486,7 @@ public class FileLoader extends BaseController {
             } else {
                 if (tLObject instanceof TLRPC$PhotoSize) {
                     TLRPC$PhotoSize tLRPC$PhotoSize = (TLRPC$PhotoSize) tLObject;
-                    if (!(tLRPC$PhotoSize instanceof TLRPC$TL_photoStrippedSize)) {
+                    if (!(tLRPC$PhotoSize instanceof TLRPC$TL_photoStrippedSize) && !(tLRPC$PhotoSize instanceof TLRPC$TL_photoPathSize)) {
                         TLRPC$FileLocation tLRPC$FileLocation = tLRPC$PhotoSize.location;
                         if (tLRPC$FileLocation == null || tLRPC$FileLocation.key != null || ((tLRPC$FileLocation.volume_id == -2147483648L && tLRPC$FileLocation.local_id < 0) || tLRPC$PhotoSize.size < 0)) {
                             directory = getDirectory(4);
@@ -1535,73 +1536,75 @@ public class FileLoader extends BaseController {
         return getClosestPhotoSizeWithSize(arrayList, i, false);
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:19:0x0037, code lost:
-        if (r5.dc_id != Integer.MIN_VALUE) goto L_0x0039;
+    /* JADX WARNING: Code restructure failed: missing block: B:21:0x003b, code lost:
+        if (r5.dc_id != Integer.MIN_VALUE) goto L_0x003d;
      */
-    /* JADX WARNING: Code restructure failed: missing block: B:30:0x0054, code lost:
-        if (r5.dc_id != Integer.MIN_VALUE) goto L_0x0056;
+    /* JADX WARNING: Code restructure failed: missing block: B:32:0x0058, code lost:
+        if (r5.dc_id != Integer.MIN_VALUE) goto L_0x005a;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public static org.telegram.tgnet.TLRPC$PhotoSize getClosestPhotoSizeWithSize(java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r8, int r9, boolean r10) {
         /*
             r0 = 0
-            if (r8 == 0) goto L_0x0063
+            if (r8 == 0) goto L_0x0067
             boolean r1 = r8.isEmpty()
             if (r1 == 0) goto L_0x000a
-            goto L_0x0063
+            goto L_0x0067
         L_0x000a:
             r1 = 0
             r2 = 0
         L_0x000c:
             int r3 = r8.size()
-            if (r1 >= r3) goto L_0x0063
+            if (r1 >= r3) goto L_0x0067
             java.lang.Object r3 = r8.get(r1)
             org.telegram.tgnet.TLRPC$PhotoSize r3 = (org.telegram.tgnet.TLRPC$PhotoSize) r3
-            if (r3 == 0) goto L_0x0060
+            if (r3 == 0) goto L_0x0064
             boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_photoSizeEmpty
-            if (r4 == 0) goto L_0x001f
-            goto L_0x0060
-        L_0x001f:
+            if (r4 != 0) goto L_0x0064
+            boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_photoPathSize
+            if (r4 == 0) goto L_0x0023
+            goto L_0x0064
+        L_0x0023:
             r4 = -2147483648(0xfffffffvar_, float:-0.0)
             r5 = 100
-            if (r10 == 0) goto L_0x0042
+            if (r10 == 0) goto L_0x0046
             int r6 = r3.h
             int r7 = r3.w
             int r6 = java.lang.Math.min(r6, r7)
-            if (r0 == 0) goto L_0x005e
-            if (r9 <= r5) goto L_0x0039
+            if (r0 == 0) goto L_0x0062
+            if (r9 <= r5) goto L_0x003d
             org.telegram.tgnet.TLRPC$FileLocation r5 = r0.location
-            if (r5 == 0) goto L_0x0039
+            if (r5 == 0) goto L_0x003d
             int r5 = r5.dc_id
-            if (r5 == r4) goto L_0x005e
-        L_0x0039:
+            if (r5 == r4) goto L_0x0062
+        L_0x003d:
             boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_photoCachedSize
-            if (r4 != 0) goto L_0x005e
-            if (r9 <= r2) goto L_0x0060
-            if (r2 >= r6) goto L_0x0060
-            goto L_0x005e
-        L_0x0042:
+            if (r4 != 0) goto L_0x0062
+            if (r9 <= r2) goto L_0x0064
+            if (r2 >= r6) goto L_0x0064
+            goto L_0x0062
+        L_0x0046:
             int r6 = r3.w
             int r7 = r3.h
             int r6 = java.lang.Math.max(r6, r7)
-            if (r0 == 0) goto L_0x005e
-            if (r9 <= r5) goto L_0x0056
+            if (r0 == 0) goto L_0x0062
+            if (r9 <= r5) goto L_0x005a
             org.telegram.tgnet.TLRPC$FileLocation r5 = r0.location
-            if (r5 == 0) goto L_0x0056
+            if (r5 == 0) goto L_0x005a
             int r5 = r5.dc_id
-            if (r5 == r4) goto L_0x005e
-        L_0x0056:
+            if (r5 == r4) goto L_0x0062
+        L_0x005a:
             boolean r4 = r3 instanceof org.telegram.tgnet.TLRPC$TL_photoCachedSize
-            if (r4 != 0) goto L_0x005e
-            if (r6 > r9) goto L_0x0060
-            if (r2 >= r6) goto L_0x0060
-        L_0x005e:
+            if (r4 != 0) goto L_0x0062
+            if (r6 > r9) goto L_0x0064
+            if (r2 >= r6) goto L_0x0064
+        L_0x0062:
             r0 = r3
             r2 = r6
-        L_0x0060:
+        L_0x0064:
             int r1 = r1 + 1
             goto L_0x000c
-        L_0x0063:
+        L_0x0067:
             return r0
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(java.util.ArrayList, int, boolean):org.telegram.tgnet.TLRPC$PhotoSize");

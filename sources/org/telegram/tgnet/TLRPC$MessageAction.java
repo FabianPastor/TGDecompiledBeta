@@ -113,6 +113,9 @@ public abstract class TLRPC$MessageAction extends TLObject {
             case 1581055051:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionChatAddUser_old();
                 break;
+            case 1991897370:
+                tLRPC$MessageAction = new TLRPC$TL_messageActionInviteToGroupCall();
+                break;
             case 2047704898:
                 tLRPC$MessageAction = new TLRPC$TL_messageActionGroupCall();
                 break;

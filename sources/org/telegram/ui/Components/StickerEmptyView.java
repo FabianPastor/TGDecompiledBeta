@@ -17,8 +17,10 @@ import org.telegram.tgnet.TLRPC$TL_messages_stickerSet;
 import org.telegram.ui.ActionBar.Theme;
 
 public class StickerEmptyView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate {
+    private boolean animateLayoutChange;
     int currentAccount = UserConfig.selectedAccount;
     int keyboardSize;
+    int lastH;
     private LinearLayout linearLayout;
     /* access modifiers changed from: private */
     public RadialProgressView progressBar;
@@ -40,15 +42,16 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
             stickerEmptyView.progressBar.animate().alpha(1.0f).scaleY(1.0f).scaleX(1.0f).setDuration(150).start();
         }
     };
-    /* access modifiers changed from: private */
+    private int stickerType;
     public BackupImageView stickerView;
     private LoadingStickerDrawable stubDrawable;
     public final TextView subtitle;
     public final TextView title;
 
-    public StickerEmptyView(Context context, View view) {
+    public StickerEmptyView(Context context, View view, int i) {
         super(context);
         this.progressView = view;
+        this.stickerType = i;
         AnonymousClass2 r0 = new LinearLayout(context) {
             public void setVisibility(int i) {
                 if (getVisibility() == 8 && i == 0) {
@@ -69,7 +72,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
                 StickerEmptyView.this.lambda$new$0$StickerEmptyView(view);
             }
         });
-        LoadingStickerDrawable loadingStickerDrawable = new LoadingStickerDrawable(this.stickerView, "M503.1,302.3c-2-20-21.4-29.8-42.4-30.7CLASSNAME.8-56.8-8.2-121-52.8-164.1CLASSNAME.6,24,190,51.3,131.7,146.2\n\tc-21.2-30.5-65-34.3-91.1-7.6c-30,30.6-18.4,82.7,22.5,97.3c-4.7,2.4-6.4,7.6-5.7,12.4c-14.2,10.5-19,28.5-5.1,42.4\n\tc-5.4,15,13.2,28.8,26.9,18.8CLASSNAME.5,6.9,21,15,27.8,28.8c-17.1,55.3-8.5,79.4,8.5,98.7v0CLASSNAME.5,53.8,235.6,45.3,292.2,11.5\n\tCLASSNAME.6-13.5,39.5-34.6,30.4-96.8CLASSNAME.1,322.1,505.7,328.5,503.1,302.3z M107.4,234c0.1,2.8,0.2,5.8,0.4,8.8c-7-2.5-14-3.6-20.5-3.6\n\tCLASSNAME.4,238.6,101.2,236.9,107.4,234z", AndroidUtilities.dp(130.0f), AndroidUtilities.dp(130.0f));
+        LoadingStickerDrawable loadingStickerDrawable = new LoadingStickerDrawable(this.stickerView, i == 1 ? "M503.1,302.3c-2-20-21.4-29.8-42.4-30.7CLASSNAME.8-56.8-8.2-121-52.8-164.1CLASSNAME.6,24,190,51.3,131.7,146.2\n\tc-21.2-30.5-65-34.3-91.1-7.6c-30,30.6-18.4,82.7,22.5,97.3c-4.7,2.4-6.4,7.6-5.7,12.4c-14.2,10.5-19,28.5-5.1,42.4\n\tc-5.4,15,13.2,28.8,26.9,18.8CLASSNAME.5,6.9,21,15,27.8,28.8c-17.1,55.3-8.5,79.4,8.5,98.7v0CLASSNAME.5,53.8,235.6,45.3,292.2,11.5\n\tCLASSNAME.6-13.5,39.5-34.6,30.4-96.8CLASSNAME.1,322.1,505.7,328.5,503.1,302.3z M107.4,234c0.1,2.8,0.2,5.8,0.4,8.8c-7-2.5-14-3.6-20.5-3.6\n\tCLASSNAME.4,238.6,101.2,236.9,107.4,234z" : "m418 282.6CLASSNAME.4-21.1 20.2-44.9 20.2-70.8 0-88.3-79.8-175.3-178.9-175.3-100.1 0-178.9 88-178.9 175.3 0 46.6 16.9 73.1 29.1 86.1-19.3 23.4-30.9 52.3-34.6 86.1-2.5 22.7 3.2 41.4 17.4 57.3 14.3 16 51.7 35 148.1 35 41.2 0 119.9-5.3 156.7-18.3 49.5-17.4 59.2-41.1 59.2-76.2 0-41.5-12.9-74.8-38.3-99.2z", AndroidUtilities.dp(130.0f), AndroidUtilities.dp(130.0f));
         this.stubDrawable = loadingStickerDrawable;
         this.stickerView.setImageDrawable(loadingStickerDrawable);
         TextView textView = new TextView(context);
@@ -105,6 +108,26 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
         this.stickerView.getImageReceiver().startAnimation();
     }
 
+    /* access modifiers changed from: protected */
+    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        int i5;
+        super.onLayout(z, i, i2, i3, i4);
+        if (this.animateLayoutChange && (i5 = this.lastH) > 0 && i5 != getMeasuredHeight()) {
+            float measuredHeight = ((float) (this.lastH - getMeasuredHeight())) / 2.0f;
+            LinearLayout linearLayout2 = this.linearLayout;
+            linearLayout2.setTranslationY(linearLayout2.getTranslationY() + measuredHeight);
+            ViewPropertyAnimator translationY = this.linearLayout.animate().translationY(0.0f);
+            CubicBezierInterpolator cubicBezierInterpolator = CubicBezierInterpolator.DEFAULT;
+            translationY.setInterpolator(cubicBezierInterpolator).setDuration(250);
+            RadialProgressView radialProgressView = this.progressBar;
+            if (radialProgressView != null) {
+                radialProgressView.setTranslationY(radialProgressView.getTranslationY() + measuredHeight);
+                this.progressBar.animate().translationY(0.0f).setInterpolator(cubicBezierInterpolator).setDuration(250);
+            }
+        }
+        this.lastH = getMeasuredHeight();
+    }
+
     public void setVisibility(int i) {
         if (getVisibility() != i && i == 0) {
             if (this.progressShowing) {
@@ -131,6 +154,7 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
             setSticker();
             return;
         }
+        this.lastH = 0;
         this.linearLayout.setAlpha(0.0f);
         this.linearLayout.setScaleX(0.8f);
         this.linearLayout.setScaleY(0.8f);
@@ -173,17 +197,12 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
             stickerSetByName = MediaDataController.getInstance(this.currentAccount).getStickerSetByEmojiOrName("tg_placeholders");
         }
         TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = stickerSetByName;
-        boolean z = true;
         if (tLRPC$TL_messages_stickerSet == null || tLRPC$TL_messages_stickerSet.documents.size() < 2) {
-            MediaDataController instance = MediaDataController.getInstance(this.currentAccount);
-            if (tLRPC$TL_messages_stickerSet != null) {
-                z = false;
-            }
-            instance.loadStickersByEmojiOrName("tg_placeholders", false, z);
+            MediaDataController.getInstance(this.currentAccount).loadStickersByEmojiOrName("tg_placeholders", false, tLRPC$TL_messages_stickerSet == null);
             this.stickerView.setImageDrawable(this.stubDrawable);
             return;
         }
-        this.stickerView.setImage(ImageLocation.getForDocument(tLRPC$TL_messages_stickerSet.documents.get(1)), "130_130", "tgs", this.stubDrawable, tLRPC$TL_messages_stickerSet);
+        this.stickerView.setImage(ImageLocation.getForDocument(tLRPC$TL_messages_stickerSet.documents.get(this.stickerType)), "130_130", "tgs", this.stubDrawable, tLRPC$TL_messages_stickerSet);
         this.stickerView.getImageReceiver().setAutoRepeat(2);
     }
 
@@ -283,5 +302,9 @@ public class StickerEmptyView extends FrameLayout implements NotificationCenter.
                 }
             }
         }
+    }
+
+    public void setAnimateLayoutChange(boolean z) {
+        this.animateLayoutChange = z;
     }
 }

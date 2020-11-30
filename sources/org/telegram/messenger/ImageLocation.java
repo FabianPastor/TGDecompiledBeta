@@ -14,6 +14,7 @@ import org.telegram.tgnet.TLRPC$TL_fileLocationToBeDeprecated;
 import org.telegram.tgnet.TLRPC$TL_inputPeerChannel;
 import org.telegram.tgnet.TLRPC$TL_inputPeerChat;
 import org.telegram.tgnet.TLRPC$TL_inputPeerUser;
+import org.telegram.tgnet.TLRPC$TL_photoPathSize;
 import org.telegram.tgnet.TLRPC$TL_photoStrippedSize;
 import org.telegram.tgnet.TLRPC$TL_secureFile;
 import org.telegram.tgnet.TLRPC$User;
@@ -96,7 +97,7 @@ public class ImageLocation {
     }
 
     public static ImageLocation getForPhoto(TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$Photo tLRPC$Photo) {
-        if (tLRPC$PhotoSize instanceof TLRPC$TL_photoStrippedSize) {
+        if ((tLRPC$PhotoSize instanceof TLRPC$TL_photoStrippedSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoPathSize)) {
             ImageLocation imageLocation = new ImageLocation();
             imageLocation.photoSize = tLRPC$PhotoSize;
             return imageLocation;
@@ -160,7 +161,7 @@ public class ImageLocation {
 
     public static ImageLocation getForSticker(TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$Document tLRPC$Document) {
         TLRPC$InputStickerSet inputStickerSet;
-        if (tLRPC$PhotoSize instanceof TLRPC$TL_photoStrippedSize) {
+        if ((tLRPC$PhotoSize instanceof TLRPC$TL_photoStrippedSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoPathSize)) {
             ImageLocation imageLocation = new ImageLocation();
             imageLocation.photoSize = tLRPC$PhotoSize;
             return imageLocation;
@@ -197,7 +198,7 @@ public class ImageLocation {
     }
 
     public static ImageLocation getForDocument(TLRPC$PhotoSize tLRPC$PhotoSize, TLRPC$Document tLRPC$Document) {
-        if (tLRPC$PhotoSize instanceof TLRPC$TL_photoStrippedSize) {
+        if ((tLRPC$PhotoSize instanceof TLRPC$TL_photoStrippedSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoPathSize)) {
             ImageLocation imageLocation = new ImageLocation();
             imageLocation.photoSize = tLRPC$PhotoSize;
             return imageLocation;
@@ -303,7 +304,7 @@ public class ImageLocation {
             return this.secureDocument.secureFile.dc_id + "_" + this.secureDocument.secureFile.id;
         }
         TLRPC$PhotoSize tLRPC$PhotoSize = this.photoSize;
-        if (tLRPC$PhotoSize instanceof TLRPC$TL_photoStrippedSize) {
+        if ((tLRPC$PhotoSize instanceof TLRPC$TL_photoStrippedSize) || (tLRPC$PhotoSize instanceof TLRPC$TL_photoPathSize)) {
             if (tLRPC$PhotoSize.bytes.length > 0) {
                 return getStippedKey(obj, obj2, tLRPC$PhotoSize);
             }

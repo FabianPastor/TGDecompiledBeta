@@ -45,6 +45,10 @@ public class ScreenCapturerAndroid implements VideoCapturer, VideoSink {
         }
     }
 
+    public MediaProjection getMediaProjection() {
+        return this.mediaProjection;
+    }
+
     public synchronized void initialize(SurfaceTextureHelper surfaceTextureHelper2, Context context, CapturerObserver capturerObserver2) {
         checkNotDisposed();
         if (capturerObserver2 != null) {

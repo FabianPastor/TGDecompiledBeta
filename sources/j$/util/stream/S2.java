@@ -1,264 +1,890 @@
 package j$.util.stream;
 
-import j$.CLASSNAMEm0;
-import j$.CLASSNAMEo0;
-import j$.CLASSNAMEq0;
-import j$.util.CLASSNAMEt;
-import j$.util.CLASSNAMEv;
-import j$.util.E;
+import j$.CLASSNAMEz;
+import j$.lang.Iterable;
 import j$.util.Spliterator;
-import j$.util.V;
-import j$.util.function.A;
-import j$.util.function.BiConsumer;
-import j$.util.function.D;
-import j$.util.function.v;
-import j$.util.function.x;
-import j$.util.function.y;
-import j$.util.function.z;
-import j$.util.r;
+import j$.util.function.C;
+import j$.util.function.CLASSNAMEe;
+import j$.util.function.CLASSNAMEf;
+import j$.util.function.CLASSNAMEg;
+import j$.util.function.CLASSNAMEh;
+import j$.util.function.Consumer;
+import j$.util.function.q;
+import j$.util.function.w;
+import j$.util.k;
+import j$.util.s;
+import j$.util.v;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 
-abstract class S2 extends CLASSNAMEh1 implements T2 {
-    S2(Spliterator spliterator, int i, boolean z) {
-        super(spliterator, i, z);
-    }
+class S2<E> extends CLASSNAMEj1 implements Consumer<E>, Iterable<E>, Iterable {
+    protected Object[] e = new Object[16];
+    protected Object[][] f;
 
-    S2(CLASSNAMEh1 h1Var, int i) {
-        super(h1Var, i);
-    }
+    class a implements Spliterator<E> {
+        int a;
+        final int b;
+        int c;
+        final int d;
+        Object[] e;
 
-    /* access modifiers changed from: private */
-    public static E L0(Spliterator spliterator) {
-        if (spliterator instanceof E) {
-            return (E) spliterator;
+        a(int i, int i2, int i3, int i4) {
+            this.a = i;
+            this.b = i2;
+            this.c = i3;
+            this.d = i4;
+            Object[][] objArr = S2.this.f;
+            this.e = objArr == null ? S2.this.e : objArr[i];
         }
-        if (L6.a) {
-            L6.a(CLASSNAMEh1.class, "using LongStream.adapt(Spliterator<Long> s)");
-            throw null;
+
+        public boolean b(Consumer consumer) {
+            consumer.getClass();
+            int i = this.a;
+            int i2 = this.b;
+            if (i >= i2 && (i != i2 || this.c >= this.d)) {
+                return false;
+            }
+            Object[] objArr = this.e;
+            int i3 = this.c;
+            this.c = i3 + 1;
+            consumer.accept(objArr[i3]);
+            if (this.c == this.e.length) {
+                this.c = 0;
+                int i4 = this.a + 1;
+                this.a = i4;
+                Object[][] objArr2 = S2.this.f;
+                if (objArr2 != null && i4 <= this.b) {
+                    this.e = objArr2[i4];
+                }
+            }
+            return true;
         }
-        throw new UnsupportedOperationException("LongStream.adapt(Spliterator<Long> s)");
-    }
 
-    public final long A(long j, x xVar) {
-        xVar.getClass();
-        return ((Long) w0(new F4(CLASSNAMEh6.LONG_VALUE, xVar, j))).longValue();
-    }
-
-    /* access modifiers changed from: package-private */
-    public final CLASSNAMEh6 A0() {
-        return CLASSNAMEh6.LONG_VALUE;
-    }
-
-    public final T2 G(CLASSNAMEm0 m0Var) {
-        m0Var.getClass();
-        return new M2(this, this, CLASSNAMEh6.LONG_VALUE, CLASSNAMEg6.y, m0Var);
-    }
-
-    /* access modifiers changed from: package-private */
-    public final Spliterator J0(CLASSNAMEi4 i4Var, j$.util.function.E e, boolean z) {
-        return new t6(i4Var, e, z);
-    }
-
-    public final Stream N(z zVar) {
-        zVar.getClass();
-        return new D2(this, this, CLASSNAMEh6.LONG_VALUE, CLASSNAMEg6.u | CLASSNAMEg6.s, zVar);
-    }
-
-    public void X(y yVar) {
-        yVar.getClass();
-        w0(new V1(yVar, true));
-    }
-
-    public final L1 asDoubleStream() {
-        return new CLASSNAMEz2(this, this, CLASSNAMEh6.LONG_VALUE, CLASSNAMEg6.u | CLASSNAMEg6.s);
-    }
-
-    public final CLASSNAMEt average() {
-        long[] jArr = (long[]) c0(W.a, P.a, O.a);
-        if (jArr[0] <= 0) {
-            return CLASSNAMEt.a();
+        public int characteristics() {
+            return 16464;
         }
-        double d = (double) jArr[1];
-        double d2 = (double) jArr[0];
-        Double.isNaN(d);
-        Double.isNaN(d2);
-        return CLASSNAMEt.d(d / d2);
-    }
 
-    public final Stream boxed() {
-        return N(CLASSNAMEa.a);
-    }
-
-    public final Object c0(j$.util.function.E e, D d, BiConsumer biConsumer) {
-        T t = new T(biConsumer);
-        e.getClass();
-        d.getClass();
-        return w0(new CLASSNAMEj4(CLASSNAMEh6.LONG_VALUE, t, d, e));
-    }
-
-    public final long count() {
-        return ((S2) x(V.a)).sum();
-    }
-
-    public final T2 distinct() {
-        return ((CLASSNAMEl5) ((CLASSNAMEl5) N(CLASSNAMEa.a)).distinct()).d0(U.a);
-    }
-
-    public void e(y yVar) {
-        yVar.getClass();
-        w0(new V1(yVar, false));
-    }
-
-    public final CLASSNAMEv findAny() {
-        return (CLASSNAMEv) w0(new M1(false, CLASSNAMEh6.LONG_VALUE, CLASSNAMEv.a(), Z0.a, CLASSNAMEg0.a));
-    }
-
-    public final CLASSNAMEv findFirst() {
-        return (CLASSNAMEv) w0(new M1(true, CLASSNAMEh6.LONG_VALUE, CLASSNAMEv.a(), Z0.a, CLASSNAMEg0.a));
-    }
-
-    public final CLASSNAMEv h(x xVar) {
-        xVar.getClass();
-        return (CLASSNAMEv) w0(new H4(CLASSNAMEh6.LONG_VALUE, xVar));
-    }
-
-    public final L1 i(CLASSNAMEo0 o0Var) {
-        o0Var.getClass();
-        return new H2(this, this, CLASSNAMEh6.LONG_VALUE, CLASSNAMEg6.u | CLASSNAMEg6.s, o0Var);
-    }
-
-    public final j$.util.z iterator() {
-        return V.h(spliterator());
-    }
-
-    /* renamed from: iterator  reason: collision with other method in class */
-    public Iterator m19iterator() {
-        return V.h(spliterator());
-    }
-
-    public final boolean l(CLASSNAMEm0 m0Var) {
-        return ((Boolean) w0(CLASSNAMEc3.t(m0Var, Z2.ANY))).booleanValue();
-    }
-
-    public final T2 limit(long j) {
-        if (j >= 0) {
-            return D5.h(this, 0, j);
+        public long estimateSize() {
+            int i = this.a;
+            int i2 = this.b;
+            if (i == i2) {
+                return ((long) this.d) - ((long) this.c);
+            }
+            long[] jArr = S2.this.d;
+            return ((jArr[i2] + ((long) this.d)) - jArr[i]) - ((long) this.c);
         }
-        throw new IllegalArgumentException(Long.toString(j));
-    }
 
-    public final CLASSNAMEv max() {
-        return h(Y0.a);
-    }
-
-    public final CLASSNAMEv min() {
-        return h(CLASSNAMEa0.a);
-    }
-
-    public final T2 q(y yVar) {
-        yVar.getClass();
-        return new O2(this, this, CLASSNAMEh6.LONG_VALUE, 0, yVar);
-    }
-
-    public final boolean r(CLASSNAMEm0 m0Var) {
-        return ((Boolean) w0(CLASSNAMEc3.t(m0Var, Z2.NONE))).booleanValue();
-    }
-
-    public final T2 s(z zVar) {
-        return new J2(this, this, CLASSNAMEh6.LONG_VALUE, CLASSNAMEg6.u | CLASSNAMEg6.s | CLASSNAMEg6.y, zVar);
-    }
-
-    /* access modifiers changed from: package-private */
-    public final CLASSNAMEg3 s0(long j, v vVar) {
-        return CLASSNAMEh4.q(j);
-    }
-
-    public final T2 skip(long j) {
-        int i = (j > 0 ? 1 : (j == 0 ? 0 : -1));
-        if (i >= 0) {
-            return i == 0 ? this : D5.h(this, j, -1);
+        public void forEachRemaining(Consumer consumer) {
+            int i;
+            consumer.getClass();
+            int i2 = this.a;
+            int i3 = this.b;
+            if (i2 < i3 || (i2 == i3 && this.c < this.d)) {
+                int i4 = this.c;
+                while (true) {
+                    i = this.b;
+                    if (i2 >= i) {
+                        break;
+                    }
+                    Object[] objArr = S2.this.f[i2];
+                    while (i4 < objArr.length) {
+                        consumer.accept(objArr[i4]);
+                        i4++;
+                    }
+                    i4 = 0;
+                    i2++;
+                }
+                Object[] objArr2 = this.a == i ? this.e : S2.this.f[i];
+                int i5 = this.d;
+                while (i4 < i5) {
+                    consumer.accept(objArr2[i4]);
+                    i4++;
+                }
+                this.a = this.b;
+                this.c = this.d;
+            }
         }
-        throw new IllegalArgumentException(Long.toString(j));
+
+        public Comparator getComparator() {
+            throw new IllegalStateException();
+        }
+
+        public /* synthetic */ long getExactSizeIfKnown() {
+            return k.e(this);
+        }
+
+        public /* synthetic */ boolean hasCharacteristics(int i) {
+            return k.f(this, i);
+        }
+
+        public Spliterator trySplit() {
+            int i = this.a;
+            int i2 = this.b;
+            if (i < i2) {
+                S2 s2 = S2.this;
+                int i3 = i2 - 1;
+                a aVar = new a(i, i3, this.c, s2.f[i3].length);
+                int i4 = this.b;
+                this.a = i4;
+                this.c = 0;
+                this.e = S2.this.f[i4];
+                return aVar;
+            } else if (i != i2) {
+                return null;
+            } else {
+                int i5 = this.d;
+                int i6 = this.c;
+                int i7 = (i5 - i6) / 2;
+                if (i7 == 0) {
+                    return null;
+                }
+                Spliterator m = v.m(this.e, i6, i6 + i7, 1040);
+                this.c += i7;
+                return m;
+            }
+        }
     }
 
-    public final T2 sorted() {
-        return new N5(this);
+    static class b extends e<Double, double[], q> implements q {
+
+        class a extends e<Double, double[], q>.a<Spliterator.a> implements Spliterator.a {
+            a(int i, int i2, int i3, int i4) {
+                super(i, i2, i3, i4);
+            }
+
+            /* access modifiers changed from: package-private */
+            public void a(Object obj, int i, Object obj2) {
+                ((q) obj2).accept(((double[]) obj)[i]);
+            }
+
+            public /* synthetic */ boolean b(Consumer consumer) {
+                return s.d(this, consumer);
+            }
+
+            /* access modifiers changed from: package-private */
+            public Spliterator.d f(Object obj, int i, int i2) {
+                return v.j((double[]) obj, i, i2 + i, 1040);
+            }
+
+            public /* synthetic */ void forEachRemaining(Consumer consumer) {
+                s.a(this, consumer);
+            }
+
+            /* access modifiers changed from: package-private */
+            public Spliterator.d g(int i, int i2, int i3, int i4) {
+                return new a(i, i2, i3, i4);
+            }
+        }
+
+        b() {
+        }
+
+        b(int i) {
+            super(i);
+        }
+
+        /* renamed from: B */
+        public Spliterator.a spliterator() {
+            return new a(0, this.c, 0, this.b);
+        }
+
+        public void accept(double d) {
+            A();
+            int i = this.b;
+            this.b = i + 1;
+            ((double[]) this.e)[i] = d;
+        }
+
+        public Object c(int i) {
+            return new double[i];
+        }
+
+        public void forEach(Consumer consumer) {
+            if (consumer instanceof q) {
+                h((q) consumer);
+            } else if (!i3.a) {
+                spliterator().forEachRemaining(consumer);
+            } else {
+                i3.a(getClass(), "{0} calling SpinedBuffer.OfDouble.forEach(Consumer)");
+                throw null;
+            }
+        }
+
+        public Iterator iterator() {
+            return v.f(spliterator());
+        }
+
+        public q k(q qVar) {
+            qVar.getClass();
+            return new CLASSNAMEf(this, qVar);
+        }
+
+        /* access modifiers changed from: protected */
+        public void t(Object obj, int i, int i2, Object obj2) {
+            double[] dArr = (double[]) obj;
+            q qVar = (q) obj2;
+            while (i < i2) {
+                qVar.accept(dArr[i]);
+                i++;
+            }
+        }
+
+        public String toString() {
+            double[] dArr = (double[]) e();
+            if (dArr.length < 200) {
+                return String.format("%s[length=%d, chunks=%d]%s", new Object[]{getClass().getSimpleName(), Integer.valueOf(dArr.length), Integer.valueOf(this.c), Arrays.toString(dArr)});
+            }
+            return String.format("%s[length=%d, chunks=%d]%s...", new Object[]{getClass().getSimpleName(), Integer.valueOf(dArr.length), Integer.valueOf(this.c), Arrays.toString(Arrays.copyOf(dArr, 200))});
+        }
+
+        /* access modifiers changed from: protected */
+        public int u(Object obj) {
+            return ((double[]) obj).length;
+        }
+
+        /* access modifiers changed from: protected */
+        public Object[] z(int i) {
+            return new double[i][];
+        }
     }
 
-    public final E spliterator() {
-        return L0(super.spliterator());
+    static class c extends e<Integer, int[], w> implements w {
+
+        class a extends e<Integer, int[], w>.a<Spliterator.b> implements Spliterator.b {
+            a(int i, int i2, int i3, int i4) {
+                super(i, i2, i3, i4);
+            }
+
+            /* access modifiers changed from: package-private */
+            public void a(Object obj, int i, Object obj2) {
+                ((w) obj2).accept(((int[]) obj)[i]);
+            }
+
+            public /* synthetic */ boolean b(Consumer consumer) {
+                return s.e(this, consumer);
+            }
+
+            /* access modifiers changed from: package-private */
+            public Spliterator.d f(Object obj, int i, int i2) {
+                return v.k((int[]) obj, i, i2 + i, 1040);
+            }
+
+            public /* synthetic */ void forEachRemaining(Consumer consumer) {
+                s.b(this, consumer);
+            }
+
+            /* access modifiers changed from: package-private */
+            public Spliterator.d g(int i, int i2, int i3, int i4) {
+                return new a(i, i2, i3, i4);
+            }
+        }
+
+        c() {
+        }
+
+        c(int i) {
+            super(i);
+        }
+
+        /* renamed from: B */
+        public Spliterator.b spliterator() {
+            return new a(0, this.c, 0, this.b);
+        }
+
+        public void accept(int i) {
+            A();
+            int i2 = this.b;
+            this.b = i2 + 1;
+            ((int[]) this.e)[i2] = i;
+        }
+
+        public Object c(int i) {
+            return new int[i];
+        }
+
+        public void forEach(Consumer consumer) {
+            if (consumer instanceof w) {
+                h((w) consumer);
+            } else if (!i3.a) {
+                spliterator().forEachRemaining(consumer);
+            } else {
+                i3.a(getClass(), "{0} calling SpinedBuffer.OfInt.forEach(Consumer)");
+                throw null;
+            }
+        }
+
+        public Iterator iterator() {
+            return v.g(spliterator());
+        }
+
+        public w l(w wVar) {
+            wVar.getClass();
+            return new CLASSNAMEg(this, wVar);
+        }
+
+        /* access modifiers changed from: protected */
+        public void t(Object obj, int i, int i2, Object obj2) {
+            int[] iArr = (int[]) obj;
+            w wVar = (w) obj2;
+            while (i < i2) {
+                wVar.accept(iArr[i]);
+                i++;
+            }
+        }
+
+        public String toString() {
+            int[] iArr = (int[]) e();
+            if (iArr.length < 200) {
+                return String.format("%s[length=%d, chunks=%d]%s", new Object[]{getClass().getSimpleName(), Integer.valueOf(iArr.length), Integer.valueOf(this.c), Arrays.toString(iArr)});
+            }
+            return String.format("%s[length=%d, chunks=%d]%s...", new Object[]{getClass().getSimpleName(), Integer.valueOf(iArr.length), Integer.valueOf(this.c), Arrays.toString(Arrays.copyOf(iArr, 200))});
+        }
+
+        /* access modifiers changed from: protected */
+        public int u(Object obj) {
+            return ((int[]) obj).length;
+        }
+
+        /* access modifiers changed from: protected */
+        public Object[] z(int i) {
+            return new int[i][];
+        }
     }
 
-    public final long sum() {
-        return ((Long) w0(new F4(CLASSNAMEh6.LONG_VALUE, X.a, 0))).longValue();
+    static class d extends e<Long, long[], C> implements C {
+
+        class a extends e<Long, long[], C>.a<Spliterator.c> implements Spliterator.c {
+            a(int i, int i2, int i3, int i4) {
+                super(i, i2, i3, i4);
+            }
+
+            /* access modifiers changed from: package-private */
+            public void a(Object obj, int i, Object obj2) {
+                ((C) obj2).accept(((long[]) obj)[i]);
+            }
+
+            public /* synthetic */ boolean b(Consumer consumer) {
+                return s.f(this, consumer);
+            }
+
+            /* access modifiers changed from: package-private */
+            public Spliterator.d f(Object obj, int i, int i2) {
+                return v.l((long[]) obj, i, i2 + i, 1040);
+            }
+
+            public /* synthetic */ void forEachRemaining(Consumer consumer) {
+                s.c(this, consumer);
+            }
+
+            /* access modifiers changed from: package-private */
+            public Spliterator.d g(int i, int i2, int i3, int i4) {
+                return new a(i, i2, i3, i4);
+            }
+        }
+
+        d() {
+        }
+
+        d(int i) {
+            super(i);
+        }
+
+        /* renamed from: B */
+        public Spliterator.c spliterator() {
+            return new a(0, this.c, 0, this.b);
+        }
+
+        public void accept(long j) {
+            A();
+            int i = this.b;
+            this.b = i + 1;
+            ((long[]) this.e)[i] = j;
+        }
+
+        public Object c(int i) {
+            return new long[i];
+        }
+
+        public void forEach(Consumer consumer) {
+            if (consumer instanceof C) {
+                h((C) consumer);
+            } else if (!i3.a) {
+                spliterator().forEachRemaining(consumer);
+            } else {
+                i3.a(getClass(), "{0} calling SpinedBuffer.OfLong.forEach(Consumer)");
+                throw null;
+            }
+        }
+
+        public C g(C c) {
+            c.getClass();
+            return new CLASSNAMEh(this, c);
+        }
+
+        public Iterator iterator() {
+            return v.h(spliterator());
+        }
+
+        /* access modifiers changed from: protected */
+        public void t(Object obj, int i, int i2, Object obj2) {
+            long[] jArr = (long[]) obj;
+            C c = (C) obj2;
+            while (i < i2) {
+                c.accept(jArr[i]);
+                i++;
+            }
+        }
+
+        public String toString() {
+            long[] jArr = (long[]) e();
+            if (jArr.length < 200) {
+                return String.format("%s[length=%d, chunks=%d]%s", new Object[]{getClass().getSimpleName(), Integer.valueOf(jArr.length), Integer.valueOf(this.c), Arrays.toString(jArr)});
+            }
+            return String.format("%s[length=%d, chunks=%d]%s...", new Object[]{getClass().getSimpleName(), Integer.valueOf(jArr.length), Integer.valueOf(this.c), Arrays.toString(Arrays.copyOf(jArr, 200))});
+        }
+
+        /* access modifiers changed from: protected */
+        public int u(Object obj) {
+            return ((long[]) obj).length;
+        }
+
+        /* access modifiers changed from: protected */
+        public Object[] z(int i) {
+            return new long[i][];
+        }
     }
 
-    public final r summaryStatistics() {
-        return (r) c0(CLASSNAMEf1.a, CLASSNAMEo0.a, CLASSNAMEx0.a);
+    static abstract class e<E, T_ARR, T_CONS> extends CLASSNAMEj1 implements Iterable<E>, Iterable {
+        Object e = c(16);
+        Object[] f;
+
+        abstract class a<T_SPLITR extends Spliterator.d<E, T_CONS, T_SPLITR>> implements Spliterator.d<E, T_CONS, T_SPLITR> {
+            int a;
+            final int b;
+            int c;
+            final int d;
+            Object e;
+
+            a(int i, int i2, int i3, int i4) {
+                this.a = i;
+                this.b = i2;
+                this.c = i3;
+                this.d = i4;
+                Object[] objArr = e.this.f;
+                this.e = objArr == null ? e.this.e : objArr[i];
+            }
+
+            /* access modifiers changed from: package-private */
+            public abstract void a(Object obj, int i, Object obj2);
+
+            public int characteristics() {
+                return 16464;
+            }
+
+            public long estimateSize() {
+                int i = this.a;
+                int i2 = this.b;
+                if (i == i2) {
+                    return ((long) this.d) - ((long) this.c);
+                }
+                long[] jArr = e.this.d;
+                return ((jArr[i2] + ((long) this.d)) - jArr[i]) - ((long) this.c);
+            }
+
+            /* access modifiers changed from: package-private */
+            public abstract Spliterator.d f(Object obj, int i, int i2);
+
+            /* renamed from: forEachRemaining */
+            public void e(Object obj) {
+                int i;
+                obj.getClass();
+                int i2 = this.a;
+                int i3 = this.b;
+                if (i2 < i3 || (i2 == i3 && this.c < this.d)) {
+                    int i4 = this.c;
+                    while (true) {
+                        i = this.b;
+                        if (i2 >= i) {
+                            break;
+                        }
+                        e eVar = e.this;
+                        Object obj2 = eVar.f[i2];
+                        eVar.t(obj2, i4, eVar.u(obj2), obj);
+                        i4 = 0;
+                        i2++;
+                    }
+                    e.this.t(this.a == i ? this.e : e.this.f[i], i4, this.d, obj);
+                    this.a = this.b;
+                    this.c = this.d;
+                }
+            }
+
+            /* access modifiers changed from: package-private */
+            public abstract Spliterator.d g(int i, int i2, int i3, int i4);
+
+            public Comparator getComparator() {
+                throw new IllegalStateException();
+            }
+
+            public /* synthetic */ long getExactSizeIfKnown() {
+                return k.e(this);
+            }
+
+            public /* synthetic */ boolean hasCharacteristics(int i) {
+                return k.f(this, i);
+            }
+
+            /* renamed from: tryAdvance */
+            public boolean o(Object obj) {
+                obj.getClass();
+                int i = this.a;
+                int i2 = this.b;
+                if (i >= i2 && (i != i2 || this.c >= this.d)) {
+                    return false;
+                }
+                Object obj2 = this.e;
+                int i3 = this.c;
+                this.c = i3 + 1;
+                a(obj2, i3, obj);
+                if (this.c == e.this.u(this.e)) {
+                    this.c = 0;
+                    int i4 = this.a + 1;
+                    this.a = i4;
+                    Object[] objArr = e.this.f;
+                    if (objArr != null && i4 <= this.b) {
+                        this.e = objArr[i4];
+                    }
+                }
+                return true;
+            }
+
+            public Spliterator.d trySplit() {
+                int i = this.a;
+                int i2 = this.b;
+                if (i < i2) {
+                    int i3 = this.c;
+                    e eVar = e.this;
+                    Spliterator.d g = g(i, i2 - 1, i3, eVar.u(eVar.f[i2 - 1]));
+                    int i4 = this.b;
+                    this.a = i4;
+                    this.c = 0;
+                    this.e = e.this.f[i4];
+                    return g;
+                } else if (i != i2) {
+                    return null;
+                } else {
+                    int i5 = this.d;
+                    int i6 = this.c;
+                    int i7 = (i5 - i6) / 2;
+                    if (i7 == 0) {
+                        return null;
+                    }
+                    Spliterator.d f2 = f(this.e, i6, i7);
+                    this.c += i7;
+                    return f2;
+                }
+            }
+        }
+
+        e() {
+        }
+
+        e(int i) {
+            super(i);
+        }
+
+        private void y() {
+            if (this.f == null) {
+                Object[] z = z(8);
+                this.f = z;
+                this.d = new long[8];
+                z[0] = this.e;
+            }
+        }
+
+        /* access modifiers changed from: protected */
+        public void A() {
+            if (this.b == u(this.e)) {
+                y();
+                int i = this.c;
+                int i2 = i + 1;
+                Object[] objArr = this.f;
+                if (i2 >= objArr.length || objArr[i + 1] == null) {
+                    x(v() + 1);
+                }
+                this.b = 0;
+                int i3 = this.c + 1;
+                this.c = i3;
+                this.e = this.f[i3];
+            }
+        }
+
+        public abstract Object c(int i);
+
+        public void clear() {
+            Object[] objArr = this.f;
+            if (objArr != null) {
+                this.e = objArr[0];
+                this.f = null;
+                this.d = null;
+            }
+            this.b = 0;
+            this.c = 0;
+        }
+
+        public void d(Object obj, int i) {
+            long j = (long) i;
+            long count = count() + j;
+            if (count > ((long) u(obj)) || count < j) {
+                throw new IndexOutOfBoundsException("does not fit");
+            } else if (this.c == 0) {
+                System.arraycopy(this.e, 0, obj, i, this.b);
+            } else {
+                for (int i2 = 0; i2 < this.c; i2++) {
+                    Object[] objArr = this.f;
+                    System.arraycopy(objArr[i2], 0, obj, i, u(objArr[i2]));
+                    i += u(this.f[i2]);
+                }
+                int i3 = this.b;
+                if (i3 > 0) {
+                    System.arraycopy(this.e, 0, obj, i, i3);
+                }
+            }
+        }
+
+        public Object e() {
+            long count = count();
+            if (count < NUM) {
+                Object c = c((int) count);
+                d(c, 0);
+                return c;
+            }
+            throw new IllegalArgumentException("Stream size exceeds max array size");
+        }
+
+        public void h(Object obj) {
+            for (int i = 0; i < this.c; i++) {
+                Object[] objArr = this.f;
+                t(objArr[i], 0, u(objArr[i]), obj);
+            }
+            t(this.e, 0, this.b, obj);
+        }
+
+        public abstract Spliterator spliterator();
+
+        /* access modifiers changed from: protected */
+        public abstract void t(Object obj, int i, int i2, Object obj2);
+
+        /* access modifiers changed from: protected */
+        public abstract int u(Object obj);
+
+        /* access modifiers changed from: protected */
+        public long v() {
+            int i = this.c;
+            if (i == 0) {
+                return (long) u(this.e);
+            }
+            return ((long) u(this.f[i])) + this.d[i];
+        }
+
+        /* access modifiers changed from: protected */
+        public int w(long j) {
+            if (this.c == 0) {
+                if (j < ((long) this.b)) {
+                    return 0;
+                }
+                throw new IndexOutOfBoundsException(Long.toString(j));
+            } else if (j < count()) {
+                for (int i = 0; i <= this.c; i++) {
+                    if (j < this.d[i] + ((long) u(this.f[i]))) {
+                        return i;
+                    }
+                }
+                throw new IndexOutOfBoundsException(Long.toString(j));
+            } else {
+                throw new IndexOutOfBoundsException(Long.toString(j));
+            }
+        }
+
+        /* access modifiers changed from: protected */
+        public final void x(long j) {
+            long v = v();
+            if (j > v) {
+                y();
+                int i = this.c;
+                while (true) {
+                    i++;
+                    if (j > v) {
+                        Object[] objArr = this.f;
+                        if (i >= objArr.length) {
+                            int length = objArr.length * 2;
+                            this.f = Arrays.copyOf(objArr, length);
+                            this.d = Arrays.copyOf(this.d, length);
+                        }
+                        int s = s(i);
+                        this.f[i] = c(s);
+                        long[] jArr = this.d;
+                        int i2 = i - 1;
+                        jArr[i] = jArr[i2] + ((long) u(this.f[i2]));
+                        v += (long) s;
+                    } else {
+                        return;
+                    }
+                }
+            }
+        }
+
+        /* access modifiers changed from: protected */
+        public abstract Object[] z(int i);
     }
 
-    public final long[] toArray() {
-        return (long[]) CLASSNAMEh4.o((CLASSNAMEj3) x0(S.a)).e();
+    S2() {
     }
 
-    public CLASSNAMEl1 unordered() {
-        return !B0() ? this : new K2(this, this, CLASSNAMEh6.LONG_VALUE, CLASSNAMEg6.w);
+    private void v() {
+        if (this.f == null) {
+            Object[][] objArr = new Object[8][];
+            this.f = objArr;
+            this.d = new long[8];
+            objArr[0] = this.e;
+        }
     }
 
-    public final CLASSNAMEx2 w(CLASSNAMEq0 q0Var) {
-        q0Var.getClass();
-        return new F2(this, this, CLASSNAMEh6.LONG_VALUE, CLASSNAMEg6.u | CLASSNAMEg6.s, q0Var);
+    public void accept(Object obj) {
+        if (this.b == this.e.length) {
+            v();
+            int i = this.c;
+            int i2 = i + 1;
+            Object[][] objArr = this.f;
+            if (i2 >= objArr.length || objArr[i + 1] == null) {
+                u(t() + 1);
+            }
+            this.b = 0;
+            int i3 = this.c + 1;
+            this.c = i3;
+            this.e = this.f[i3];
+        }
+        Object[] objArr2 = this.e;
+        int i4 = this.b;
+        this.b = i4 + 1;
+        objArr2[i4] = obj;
     }
 
-    public final T2 x(A a) {
-        a.getClass();
-        return new B2(this, this, CLASSNAMEh6.LONG_VALUE, CLASSNAMEg6.u | CLASSNAMEg6.s, a);
+    public void clear() {
+        Object[][] objArr = this.f;
+        if (objArr != null) {
+            this.e = objArr[0];
+            int i = 0;
+            while (true) {
+                Object[] objArr2 = this.e;
+                if (i >= objArr2.length) {
+                    break;
+                }
+                objArr2[i] = null;
+                i++;
+            }
+            this.f = null;
+            this.d = null;
+        } else {
+            for (int i2 = 0; i2 < this.b; i2++) {
+                this.e[i2] = null;
+            }
+        }
+        this.b = 0;
+        this.c = 0;
     }
 
-    public final boolean y(CLASSNAMEm0 m0Var) {
-        return ((Boolean) w0(CLASSNAMEc3.t(m0Var, Z2.ALL))).booleanValue();
+    public Consumer f(Consumer consumer) {
+        consumer.getClass();
+        return new CLASSNAMEe(this, consumer);
     }
 
-    /* access modifiers changed from: package-private */
-    public final CLASSNAMEl3 y0(CLASSNAMEi4 i4Var, Spliterator spliterator, boolean z, v vVar) {
-        return CLASSNAMEh4.h(i4Var, spliterator, z);
+    public void forEach(Consumer consumer) {
+        for (int i = 0; i < this.c; i++) {
+            for (Object accept : this.f[i]) {
+                consumer.accept(accept);
+            }
+        }
+        for (int i2 = 0; i2 < this.b; i2++) {
+            consumer.accept(this.e[i2]);
+        }
     }
 
-    /* access modifiers changed from: package-private */
-    /* JADX WARNING: Removed duplicated region for block: B:6:0x0015 A[LOOP:0: B:6:0x0015->B:9:0x001f, LOOP_START] */
-    /* Code decompiled incorrectly, please refer to instructions dump. */
-    public final void z0(j$.util.Spliterator r3, j$.util.stream.CLASSNAMEt5 r4) {
-        /*
-            r2 = this;
-            j$.util.E r3 = L0(r3)
-            boolean r0 = r4 instanceof j$.util.function.y
-            if (r0 == 0) goto L_0x000c
-            r0 = r4
-            j$.util.function.y r0 = (j$.util.function.y) r0
-            goto L_0x0015
-        L_0x000c:
-            boolean r0 = j$.util.stream.L6.a
-            if (r0 != 0) goto L_0x0022
-            j$.util.stream.K0 r0 = new j$.util.stream.K0
-            r0.<init>(r4)
-        L_0x0015:
-            boolean r1 = r4.p()
-            if (r1 != 0) goto L_0x0021
-            boolean r1 = r3.j(r0)
-            if (r1 != 0) goto L_0x0015
-        L_0x0021:
-            return
-        L_0x0022:
-            java.lang.Class<j$.util.stream.h1> r3 = j$.util.stream.CLASSNAMEh1.class
-            java.lang.String r4 = "using LongStream.adapt(Sink<Long> s)"
-            j$.util.stream.L6.a(r3, r4)
-            r3 = 0
-            goto L_0x002c
-        L_0x002b:
-            throw r3
-        L_0x002c:
-            goto L_0x002b
-        */
-        throw new UnsupportedOperationException("Method not decompiled: j$.util.stream.S2.z0(j$.util.Spliterator, j$.util.stream.t5):void");
+    public /* synthetic */ void forEach(java.util.function.Consumer consumer) {
+        forEach(CLASSNAMEz.b(consumer));
+    }
+
+    public Iterator iterator() {
+        return v.i(spliterator());
+    }
+
+    public void j(Object[] objArr, int i) {
+        long j = (long) i;
+        long count = count() + j;
+        if (count > ((long) objArr.length) || count < j) {
+            throw new IndexOutOfBoundsException("does not fit");
+        } else if (this.c == 0) {
+            System.arraycopy(this.e, 0, objArr, i, this.b);
+        } else {
+            for (int i2 = 0; i2 < this.c; i2++) {
+                Object[][] objArr2 = this.f;
+                System.arraycopy(objArr2[i2], 0, objArr, i, objArr2[i2].length);
+                i += this.f[i2].length;
+            }
+            int i3 = this.b;
+            if (i3 > 0) {
+                System.arraycopy(this.e, 0, objArr, i, i3);
+            }
+        }
+    }
+
+    public Spliterator spliterator() {
+        return new a(0, this.c, 0, this.b);
+    }
+
+    /* access modifiers changed from: protected */
+    public long t() {
+        int i = this.c;
+        if (i == 0) {
+            return (long) this.e.length;
+        }
+        return ((long) this.f[i].length) + this.d[i];
+    }
+
+    public String toString() {
+        ArrayList arrayList = new ArrayList();
+        forEach((Consumer) new CLASSNAMEb1(arrayList));
+        return "SpinedBuffer:" + arrayList.toString();
+    }
+
+    /* access modifiers changed from: protected */
+    public final void u(long j) {
+        long t = t();
+        if (j > t) {
+            v();
+            int i = this.c;
+            while (true) {
+                i++;
+                if (j > t) {
+                    Object[][] objArr = this.f;
+                    if (i >= objArr.length) {
+                        int length = objArr.length * 2;
+                        this.f = (Object[][]) Arrays.copyOf(objArr, length);
+                        this.d = Arrays.copyOf(this.d, length);
+                    }
+                    int s = s(i);
+                    Object[][] objArr2 = this.f;
+                    objArr2[i] = new Object[s];
+                    long[] jArr = this.d;
+                    int i2 = i - 1;
+                    jArr[i] = jArr[i2] + ((long) objArr2[i2].length);
+                    t += (long) s;
+                } else {
+                    return;
+                }
+            }
+        }
     }
 }

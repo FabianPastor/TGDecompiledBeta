@@ -1,85 +1,167 @@
 package j$.util.stream;
 
-import j$.CLASSNAMEm0;
-import j$.CLASSNAMEo0;
-import j$.CLASSNAMEq0;
-import j$.util.CLASSNAMEt;
-import j$.util.CLASSNAMEv;
-import j$.util.function.A;
-import j$.util.function.BiConsumer;
-import j$.util.function.D;
-import j$.util.function.E;
-import j$.util.function.x;
-import j$.util.function.y;
-import j$.util.function.z;
-import j$.util.r;
+import j$.util.Map;
+import j$.util.Spliterator;
+import java.util.EnumMap;
+import java.util.Map;
 
-public interface T2 extends CLASSNAMEl1 {
-    long A(long j, x xVar);
+enum T2 {
+    DISTINCT(0, r2),
+    SORTED(1, r5),
+    ORDERED(2, r7),
+    SIZED(3, r11),
+    SHORT_CIRCUIT(12, r13);
+    
+    static final int f = 0;
+    static final int g = 0;
+    static final int h = 0;
+    private static final int i = 0;
+    private static final int j = 0;
+    private static final int k = 0;
+    static final int l = 0;
+    static final int m = 0;
+    static final int n = 0;
+    static final int o = 0;
+    static final int p = 0;
+    static final int q = 0;
+    static final int r = 0;
+    static final int s = 0;
+    static final int t = 0;
+    static final int u = 0;
+    private final Map a;
+    private final int b;
+    private final int c;
+    private final int d;
+    private final int e;
 
-    T2 G(CLASSNAMEm0 m0Var);
+    private static class a {
+        final Map a;
 
-    Stream N(z zVar);
+        a(Map map) {
+            this.a = map;
+        }
 
-    void X(y yVar);
+        /* access modifiers changed from: package-private */
+        public a a(b bVar) {
+            this.a.put(bVar, 2);
+            return this;
+        }
 
-    L1 asDoubleStream();
+        /* access modifiers changed from: package-private */
+        public a b(b bVar) {
+            this.a.put(bVar, 1);
+            return this;
+        }
 
-    CLASSNAMEt average();
+        /* access modifiers changed from: package-private */
+        public a c(b bVar) {
+            this.a.put(bVar, 3);
+            return this;
+        }
+    }
 
-    Stream boxed();
+    enum b {
+        SPLITERATOR,
+        STREAM,
+        OP,
+        TERMINAL_OP,
+        UPSTREAM_TERMINAL_OP
+    }
 
-    Object c0(E e, D d, BiConsumer biConsumer);
+    static {
+        T2 t2;
+        b bVar;
+        b bVar2;
+        b bVar3;
+        T2 t22;
+        T2 t23;
+        b bVar4;
+        b bVar5;
+        T2 t24;
+        T2 t25;
+        f = b(bVar);
+        int b2 = b(bVar2);
+        g = b2;
+        h = b(bVar3);
+        b(bVar4);
+        b(bVar5);
+        T2[] values = values();
+        int i2 = 0;
+        for (int i3 = 0; i3 < 5; i3++) {
+            i2 |= values[i3].e;
+        }
+        i = i2;
+        j = b2;
+        int i4 = b2 << 1;
+        k = i4;
+        l = b2 | i4;
+        m = t2.c;
+        n = t2.d;
+        o = t22.c;
+        p = t22.d;
+        q = t23.c;
+        r = t23.d;
+        s = t24.c;
+        t = t24.d;
+        u = t25.c;
+    }
 
-    long count();
+    private T2(int i2, a aVar) {
+        b[] values = b.values();
+        for (int i3 = 0; i3 < 5; i3++) {
+            b bVar = values[i3];
+            Map map = aVar.a;
+            if (map instanceof j$.util.Map) {
+                ((j$.util.Map) map).putIfAbsent(bVar, 0);
+            } else {
+                Map.CC.$default$putIfAbsent(map, bVar, 0);
+            }
+        }
+        this.a = aVar.a;
+        int i4 = i2 * 2;
+        this.b = i4;
+        this.c = 1 << i4;
+        this.d = 2 << i4;
+        this.e = 3 << i4;
+    }
 
-    T2 distinct();
+    static int a(int i2, int i3) {
+        return i2 | (i3 & (i2 == 0 ? i : ((((j & i2) << 1) | i2) | ((k & i2) >> 1)) ^ -1));
+    }
 
-    void e(y yVar);
+    private static int b(b bVar) {
+        T2[] values = values();
+        int i2 = 0;
+        for (int i3 = 0; i3 < 5; i3++) {
+            T2 t2 = values[i3];
+            i2 |= ((Integer) t2.a.get(bVar)).intValue() << t2.b;
+        }
+        return i2;
+    }
 
-    CLASSNAMEv findAny();
+    static int c(Spliterator spliterator) {
+        int characteristics = spliterator.characteristics();
+        return ((characteristics & 4) == 0 || spliterator.getComparator() == null) ? f & characteristics : f & characteristics & -5;
+    }
 
-    CLASSNAMEv findFirst();
+    private static a f(b bVar) {
+        a aVar = new a(new EnumMap(b.class));
+        aVar.a.put(bVar, 1);
+        return aVar;
+    }
 
-    CLASSNAMEv h(x xVar);
+    static int g(int i2) {
+        return i2 & ((i2 ^ -1) >> 1) & j;
+    }
 
-    L1 i(CLASSNAMEo0 o0Var);
+    /* access modifiers changed from: package-private */
+    public boolean d(int i2) {
+        return (i2 & this.e) == this.c;
+    }
 
-    j$.util.z iterator();
-
-    boolean l(CLASSNAMEm0 m0Var);
-
-    T2 limit(long j);
-
-    CLASSNAMEv max();
-
-    CLASSNAMEv min();
-
-    T2 parallel();
-
-    T2 q(y yVar);
-
-    boolean r(CLASSNAMEm0 m0Var);
-
-    T2 s(z zVar);
-
-    T2 sequential();
-
-    T2 skip(long j);
-
-    T2 sorted();
-
-    j$.util.E spliterator();
-
-    long sum();
-
-    r summaryStatistics();
-
-    long[] toArray();
-
-    CLASSNAMEx2 w(CLASSNAMEq0 q0Var);
-
-    T2 x(A a);
-
-    boolean y(CLASSNAMEm0 m0Var);
+    /* access modifiers changed from: package-private */
+    public boolean e(int i2) {
+        int i3 = this.e;
+        return (i2 & i3) == i3;
+    }
 }

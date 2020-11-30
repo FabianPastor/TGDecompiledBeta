@@ -291,8 +291,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             }
             if (this.recentPostsAll.size() > 0) {
                 int i2 = this.recentPostsAll.get(0).counters.msg_id;
-                int size = this.recentPostsAll.size();
-                getMessagesStorage().getMessages((long) (-this.chat.id), 0, false, size, i2, 0, 0, this.classGuid, 0, true, false, 0, 0);
+                getMessagesStorage().getMessages((long) (-this.chat.id), 0, false, this.recentPostsAll.size(), i2, 0, 0, this.classGuid, 0, true, false, 0, 0, true);
             }
             AndroidUtilities.runOnUIThread(new Runnable(chartViewDataArr) {
                 public final /* synthetic */ StatisticActivity.ChartViewData[] f$1;
@@ -3444,7 +3443,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r11 = r6
                 r12 = r11
             L_0x0064:
-                r9 = 2131627210(0x7f0e0cca, float:1.8881678E38)
+                r9 = 2131627249(0x7f0e0cf1, float:1.8881757E38)
                 java.lang.String r10 = "StatisticOpenProfile"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
@@ -3454,7 +3453,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r9 = 2
                 java.lang.Integer r9 = java.lang.Integer.valueOf(r9)
                 r2.add(r9)
-                r9 = 2131627212(0x7f0e0ccc, float:1.8881682E38)
+                r9 = 2131627251(0x7f0e0cf3, float:1.8881761E38)
                 java.lang.String r10 = "StatisticSearchUserHistory"
                 java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r10, r9)
                 r1.add(r9)
@@ -3571,11 +3570,11 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                 r9 = 0
             L_0x017e:
                 if (r9 == 0) goto L_0x0186
-                r0 = 2131627076(0x7f0e0CLASSNAME, float:1.8881406E38)
+                r0 = 2131627109(0x7f0e0CLASSNAME, float:1.8881473E38)
                 java.lang.String r6 = "SetAsAdmin"
                 goto L_0x018b
             L_0x0186:
-                r0 = 2131625137(0x7f0e04b1, float:1.8877473E38)
+                r0 = 2131625145(0x7f0e04b9, float:1.887749E38)
                 java.lang.String r6 = "EditAdminRights"
             L_0x018b:
                 java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r6, r0)

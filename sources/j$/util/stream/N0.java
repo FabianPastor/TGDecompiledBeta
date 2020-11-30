@@ -1,10 +1,10 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEk;
 import j$.util.function.CLASSNAMEe;
 import j$.util.function.Consumer;
+import j$.util.k;
 
-public final /* synthetic */ class N0 implements CLASSNAMEt5 {
+public final /* synthetic */ class N0 implements A2 {
     public final /* synthetic */ Consumer a;
 
     public /* synthetic */ N0(Consumer consumer) {
@@ -12,17 +12,17 @@ public final /* synthetic */ class N0 implements CLASSNAMEt5 {
     }
 
     public /* synthetic */ void accept(double d) {
-        CLASSNAMEk.c(this);
+        k.c(this);
         throw null;
     }
 
     public /* synthetic */ void accept(int i) {
-        CLASSNAMEk.a(this);
+        k.a(this);
         throw null;
     }
 
     public /* synthetic */ void accept(long j) {
-        CLASSNAMEk.b(this);
+        k.b(this);
         throw null;
     }
 

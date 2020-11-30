@@ -1,47 +1,46 @@
 package j$.util.stream;
 
-import j$.util.Spliterator;
-import j$.util.function.y;
+import java.util.Arrays;
 
-class P2 extends S2 {
-    P2(Spliterator spliterator, int i, boolean z) {
-        super(spliterator, i, z);
+final class P2 extends D2 {
+    private int[] c;
+    private int d;
+
+    P2(A2 a2) {
+        super(a2);
     }
 
-    /* access modifiers changed from: package-private */
-    public final boolean F0() {
-        throw new UnsupportedOperationException();
+    public void accept(int i) {
+        int[] iArr = this.c;
+        int i2 = this.d;
+        this.d = i2 + 1;
+        iArr[i2] = i;
     }
 
-    /* access modifiers changed from: package-private */
-    public final CLASSNAMEt5 G0(int i, CLASSNAMEt5 t5Var) {
-        throw new UnsupportedOperationException();
+    public void m() {
+        int i = 0;
+        Arrays.sort(this.c, 0, this.d);
+        this.a.n((long) this.d);
+        if (!this.b) {
+            while (i < this.d) {
+                this.a.accept(this.c[i]);
+                i++;
+            }
+        } else {
+            while (i < this.d && !this.a.p()) {
+                this.a.accept(this.c[i]);
+                i++;
+            }
+        }
+        this.a.m();
+        this.c = null;
     }
 
-    public void X(y yVar) {
-        if (!isParallel()) {
-            S2.L0(I0()).d(yVar);
+    public void n(long j) {
+        if (j < NUM) {
+            this.c = new int[((int) j)];
             return;
         }
-        yVar.getClass();
-        w0(new V1(yVar, true));
-    }
-
-    public void e(y yVar) {
-        if (!isParallel()) {
-            S2.L0(I0()).d(yVar);
-        } else {
-            super.e(yVar);
-        }
-    }
-
-    public /* bridge */ /* synthetic */ T2 parallel() {
-        parallel();
-        return this;
-    }
-
-    public /* bridge */ /* synthetic */ T2 sequential() {
-        sequential();
-        return this;
+        throw new IllegalArgumentException("Stream size exceeds max array size");
     }
 }

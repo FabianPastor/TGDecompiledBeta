@@ -5,19 +5,18 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.text.Editable;
-import android.text.InputFilter;
+import android.os.Vibrator;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.style.ImageSpan;
 import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -26,6 +25,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import androidx.core.graphics.ColorUtils;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.Emoji;
 import org.telegram.messenger.FileLog;
@@ -45,14 +45,20 @@ import org.telegram.ui.Components.EmojiView;
 import org.telegram.ui.Components.SizeNotifierFrameLayoutPhoto;
 
 public class PhotoViewerCaptionEnterView extends FrameLayout implements NotificationCenter.NotificationCenterDelegate, SizeNotifierFrameLayoutPhoto.SizeNotifierFrameLayoutPhotoDelegate {
-    float animationProgress = 0.0f;
+    /* access modifiers changed from: private */
+    public NumberTextView captionLimitView;
     /* access modifiers changed from: private */
     public int captionMaxLength = 1024;
     private float chatActivityEnterViewAnimateFromTop;
-    private Drawable checkDrawable;
+    /* access modifiers changed from: private */
+    public Drawable checkDrawable;
+    /* access modifiers changed from: private */
+    public int codePointCount;
     /* access modifiers changed from: private */
     public PhotoViewerCaptionEnterViewDelegate delegate;
-    private Drawable drawable;
+    /* access modifiers changed from: private */
+    public final ImageView doneButton;
+    private Drawable doneDrawable;
     private ImageView emojiButton;
     private ReplaceableIconDrawable emojiIconDrawable;
     /* access modifiers changed from: private */
@@ -83,6 +89,11 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     Paint paint;
     /* access modifiers changed from: private */
     public boolean popupAnimating;
+    /* access modifiers changed from: private */
+    public ValueAnimator sendButtonColorAnimator;
+    boolean sendButtonEnabled = true;
+    /* access modifiers changed from: private */
+    public float sendButtonEnabledProgress = 1.0f;
     private boolean shouldAnimateEditTextWithBounds;
     private SizeNotifierFrameLayoutPhoto sizeNotifierLayout;
     ValueAnimator topBackgroundAnimator;
@@ -106,6 +117,10 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     public boolean hideActionMode() {
         return false;
+    }
+
+    public int getCaptionLimitOffset() {
+        return this.captionMaxLength - this.codePointCount;
     }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
@@ -152,7 +167,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         textPaint.setTextSize((float) AndroidUtilities.dp(13.0f));
         this.lengthTextPaint.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.lengthTextPaint.setColor(-2500135);
-        AnonymousClass1 r6 = new EditTextCaption(context2) {
+        AnonymousClass1 r7 = new EditTextCaption(context2) {
             /* access modifiers changed from: protected */
             public int getActionModeStyle() {
                 return 2;
@@ -193,8 +208,8 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 return super.requestRectangleOnScreen(rect);
             }
         };
-        this.messageEditText = r6;
-        r6.setWindowView(this.windowView);
+        this.messageEditText = r7;
+        r7.setWindowView(this.windowView);
         this.messageEditText.setHint(LocaleController.getString("AddCaption", NUM));
         this.messageEditText.setImeOptions(NUM);
         EditTextCaption editTextCaption = this.messageEditText;
@@ -210,7 +225,6 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
         this.messageEditText.setTextColor(-1);
         this.messageEditText.setHighlightColor(NUM);
         this.messageEditText.setHintTextColor(-NUM);
-        this.messageEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(this.captionMaxLength)});
         frameLayout.addView(this.messageEditText, LayoutHelper.createFrame(-1, -2.0f, 83, 52.0f, 0.0f, 6.0f, 0.0f));
         this.messageEditText.setOnKeyListener(new View.OnKeyListener() {
             public final boolean onKey(View view, int i, KeyEvent keyEvent) {
@@ -247,29 +261,213 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 }
             }
 
-            public void afterTextChanged(Editable editable) {
-                int access$600 = PhotoViewerCaptionEnterView.this.captionMaxLength - PhotoViewerCaptionEnterView.this.messageEditText.length();
-                if (access$600 <= 128) {
-                    String unused = PhotoViewerCaptionEnterView.this.lengthText = String.format("%d", new Object[]{Integer.valueOf(access$600)});
-                } else {
-                    String unused2 = PhotoViewerCaptionEnterView.this.lengthText = null;
-                }
-                PhotoViewerCaptionEnterView.this.invalidate();
-                if (!PhotoViewerCaptionEnterView.this.innerTextChange && this.processChange) {
-                    ImageSpan[] imageSpanArr = (ImageSpan[]) editable.getSpans(0, editable.length(), ImageSpan.class);
-                    for (ImageSpan removeSpan : imageSpanArr) {
-                        editable.removeSpan(removeSpan);
-                    }
-                    Emoji.replaceEmoji(editable, PhotoViewerCaptionEnterView.this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
-                    this.processChange = false;
-                }
+            /* JADX WARNING: Removed duplicated region for block: B:35:0x0160  */
+            /* JADX WARNING: Removed duplicated region for block: B:48:? A[RETURN, SYNTHETIC] */
+            /* Code decompiled incorrectly, please refer to instructions dump. */
+            public void afterTextChanged(android.text.Editable r11) {
+                /*
+                    r10 = this;
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r0 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    int r0 = r0.captionMaxLength
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r1 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    org.telegram.ui.Components.EditTextCaption r1 = r1.messageEditText
+                    int r1 = r1.length()
+                    int r0 = r0 - r1
+                    r1 = 0
+                    r2 = 1
+                    r3 = 0
+                    r4 = 128(0x80, float:1.794E-43)
+                    if (r0 > r4) goto L_0x002c
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r4 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    java.lang.Object[] r5 = new java.lang.Object[r2]
+                    java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
+                    r5[r3] = r0
+                    java.lang.String r0 = "%d"
+                    java.lang.String r0 = java.lang.String.format(r0, r5)
+                    java.lang.String unused = r4.lengthText = r0
+                    goto L_0x0031
+                L_0x002c:
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r0 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    java.lang.String unused = r0.lengthText = r1
+                L_0x0031:
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r0 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    r0.invalidate()
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r0 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    boolean r0 = r0.innerTextChange
+                    if (r0 != 0) goto L_0x0073
+                    boolean r0 = r10.processChange
+                    if (r0 == 0) goto L_0x0073
+                    int r0 = r11.length()
+                    java.lang.Class<android.text.style.ImageSpan> r4 = android.text.style.ImageSpan.class
+                    java.lang.Object[] r0 = r11.getSpans(r3, r0, r4)
+                    android.text.style.ImageSpan[] r0 = (android.text.style.ImageSpan[]) r0
+                    r4 = 0
+                L_0x004f:
+                    int r5 = r0.length
+                    if (r4 >= r5) goto L_0x005a
+                    r5 = r0[r4]
+                    r11.removeSpan(r5)
+                    int r4 = r4 + 1
+                    goto L_0x004f
+                L_0x005a:
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r0 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    org.telegram.ui.Components.EditTextCaption r0 = r0.messageEditText
+                    android.text.TextPaint r0 = r0.getPaint()
+                    android.graphics.Paint$FontMetricsInt r0 = r0.getFontMetricsInt()
+                    r4 = 1101004800(0x41a00000, float:20.0)
+                    int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+                    org.telegram.messenger.Emoji.replaceEmoji(r11, r0, r4, r3)
+                    r10.processChange = r3
+                L_0x0073:
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r0 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    int r4 = r11.length()
+                    int r11 = java.lang.Character.codePointCount(r11, r3, r4)
+                    int unused = r0.codePointCount = r11
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r11 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    int r11 = r11.captionMaxLength
+                    r4 = 100
+                    r0 = 1056964608(0x3var_, float:0.5)
+                    r6 = 0
+                    r7 = 1065353216(0x3var_, float:1.0)
+                    if (r11 <= 0) goto L_0x0137
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r11 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    int r11 = r11.captionMaxLength
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r8 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    int r8 = r8.codePointCount
+                    int r11 = r11 - r8
+                    r8 = 100
+                    if (r11 > r8) goto L_0x0137
+                    r8 = -9999(0xffffffffffffd8f1, float:NaN)
+                    if (r11 >= r8) goto L_0x00a6
+                    r11 = -9999(0xffffffffffffd8f1, float:NaN)
+                L_0x00a6:
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r8 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    org.telegram.ui.Components.NumberTextView r8 = r8.captionLimitView
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r9 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    org.telegram.ui.Components.NumberTextView r9 = r9.captionLimitView
+                    int r9 = r9.getVisibility()
+                    if (r9 != 0) goto L_0x00ba
+                    r9 = 1
+                    goto L_0x00bb
+                L_0x00ba:
+                    r9 = 0
+                L_0x00bb:
+                    r8.setNumber(r11, r9)
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r8 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    org.telegram.ui.Components.NumberTextView r8 = r8.captionLimitView
+                    int r8 = r8.getVisibility()
+                    if (r8 == 0) goto L_0x00ee
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r8 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    org.telegram.ui.Components.NumberTextView r8 = r8.captionLimitView
+                    r8.setVisibility(r3)
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r8 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    org.telegram.ui.Components.NumberTextView r8 = r8.captionLimitView
+                    r8.setAlpha(r6)
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r8 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    org.telegram.ui.Components.NumberTextView r8 = r8.captionLimitView
+                    r8.setScaleX(r0)
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r8 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    org.telegram.ui.Components.NumberTextView r8 = r8.captionLimitView
+                    r8.setScaleY(r0)
+                L_0x00ee:
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r0 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    org.telegram.ui.Components.NumberTextView r0 = r0.captionLimitView
+                    android.view.ViewPropertyAnimator r0 = r0.animate()
+                    android.view.ViewPropertyAnimator r0 = r0.setListener(r1)
+                    r0.cancel()
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r0 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    org.telegram.ui.Components.NumberTextView r0 = r0.captionLimitView
+                    android.view.ViewPropertyAnimator r0 = r0.animate()
+                    android.view.ViewPropertyAnimator r0 = r0.alpha(r7)
+                    android.view.ViewPropertyAnimator r0 = r0.scaleX(r7)
+                    android.view.ViewPropertyAnimator r0 = r0.scaleY(r7)
+                    android.view.ViewPropertyAnimator r0 = r0.setDuration(r4)
+                    r0.start()
+                    if (r11 >= 0) goto L_0x012c
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r11 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    org.telegram.ui.Components.NumberTextView r11 = r11.captionLimitView
+                    r0 = -1280137(0xffffffffffeCLASSNAME, float:NaN)
+                    r11.setTextColor(r0)
+                    r11 = 0
+                    goto L_0x015a
+                L_0x012c:
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r11 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    org.telegram.ui.Components.NumberTextView r11 = r11.captionLimitView
+                    r0 = -1
+                    r11.setTextColor(r0)
+                    goto L_0x0159
+                L_0x0137:
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r11 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    org.telegram.ui.Components.NumberTextView r11 = r11.captionLimitView
+                    android.view.ViewPropertyAnimator r11 = r11.animate()
+                    android.view.ViewPropertyAnimator r11 = r11.alpha(r6)
+                    android.view.ViewPropertyAnimator r11 = r11.scaleX(r0)
+                    android.view.ViewPropertyAnimator r11 = r11.scaleY(r0)
+                    android.view.ViewPropertyAnimator r11 = r11.setDuration(r4)
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView$2$1 r0 = new org.telegram.ui.Components.PhotoViewerCaptionEnterView$2$1
+                    r0.<init>()
+                    r11.setListener(r0)
+                L_0x0159:
+                    r11 = 1
+                L_0x015a:
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r0 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    boolean r1 = r0.sendButtonEnabled
+                    if (r1 == r11) goto L_0x01aa
+                    r0.sendButtonEnabled = r11
+                    android.animation.ValueAnimator r11 = r0.sendButtonColorAnimator
+                    if (r11 == 0) goto L_0x0171
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r11 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    android.animation.ValueAnimator r11 = r11.sendButtonColorAnimator
+                    r11.cancel()
+                L_0x0171:
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r11 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    r0 = 2
+                    float[] r0 = new float[r0]
+                    boolean r1 = r11.sendButtonEnabled
+                    if (r1 == 0) goto L_0x017c
+                    r4 = 0
+                    goto L_0x017e
+                L_0x017c:
+                    r4 = 1065353216(0x3var_, float:1.0)
+                L_0x017e:
+                    r0[r3] = r4
+                    if (r1 == 0) goto L_0x0184
+                    r6 = 1065353216(0x3var_, float:1.0)
+                L_0x0184:
+                    r0[r2] = r6
+                    android.animation.ValueAnimator r0 = android.animation.ValueAnimator.ofFloat(r0)
+                    android.animation.ValueAnimator unused = r11.sendButtonColorAnimator = r0
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r11 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    android.animation.ValueAnimator r11 = r11.sendButtonColorAnimator
+                    org.telegram.ui.Components.-$$Lambda$PhotoViewerCaptionEnterView$2$Kpzvncy5_cmP5zKv9lNHlpeDwJY r0 = new org.telegram.ui.Components.-$$Lambda$PhotoViewerCaptionEnterView$2$Kpzvncy5_cmP5zKv9lNHlpeDwJY
+                    r0.<init>()
+                    r11.addUpdateListener(r0)
+                    org.telegram.ui.Components.PhotoViewerCaptionEnterView r11 = org.telegram.ui.Components.PhotoViewerCaptionEnterView.this
+                    android.animation.ValueAnimator r11 = r11.sendButtonColorAnimator
+                    r0 = 150(0x96, double:7.4E-322)
+                    android.animation.ValueAnimator r11 = r11.setDuration(r0)
+                    r11.start()
+                L_0x01aa:
+                    return
+                */
+                throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.PhotoViewerCaptionEnterView.AnonymousClass2.afterTextChanged(android.text.Editable):void");
+            }
+
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$afterTextChanged$0 */
+            public /* synthetic */ void lambda$afterTextChanged$0$PhotoViewerCaptionEnterView$2(ValueAnimator valueAnimator) {
+                float unused = PhotoViewerCaptionEnterView.this.sendButtonEnabledProgress = ((Float) valueAnimator.getAnimatedValue()).floatValue();
+                int color = Theme.getColor("dialogFloatingIcon");
+                Theme.setDrawableColor(PhotoViewerCaptionEnterView.this.checkDrawable, ColorUtils.setAlphaComponent(color, (int) (((float) Color.alpha(color)) * ((PhotoViewerCaptionEnterView.this.sendButtonEnabledProgress * 0.42f) + 0.58f))));
+                PhotoViewerCaptionEnterView.this.doneButton.invalidate();
             }
         });
-        this.drawable = Theme.createCircleDrawable(AndroidUtilities.dp(16.0f), -10043398);
+        this.doneDrawable = Theme.createCircleDrawable(AndroidUtilities.dp(16.0f), -10043398);
         this.checkDrawable = context.getResources().getDrawable(NUM).mutate();
-        CombinedDrawable combinedDrawable = new CombinedDrawable(this.drawable, this.checkDrawable, 0, AndroidUtilities.dp(1.0f));
+        CombinedDrawable combinedDrawable = new CombinedDrawable(this.doneDrawable, this.checkDrawable, 0, AndroidUtilities.dp(1.0f));
         combinedDrawable.setCustomSize(AndroidUtilities.dp(32.0f), AndroidUtilities.dp(32.0f));
         ImageView imageView3 = new ImageView(context2);
+        this.doneButton = imageView3;
         imageView3.setScaleType(ImageView.ScaleType.CENTER);
         imageView3.setImageDrawable(combinedDrawable);
         linearLayout.addView(imageView3, LayoutHelper.createLinear(48, 48, 80));
@@ -279,6 +477,14 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             }
         });
         imageView3.setContentDescription(LocaleController.getString("Done", NUM));
+        NumberTextView numberTextView = new NumberTextView(context2);
+        this.captionLimitView = numberTextView;
+        numberTextView.setVisibility(8);
+        this.captionLimitView.setTextSize(15);
+        this.captionLimitView.setTextColor(-1);
+        this.captionLimitView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
+        this.captionLimitView.setCenterAlign(true);
+        addView(this.captionLimitView, LayoutHelper.createFrame(48, 20.0f, 85, 3.0f, 0.0f, 3.0f, 48.0f));
     }
 
     /* access modifiers changed from: private */
@@ -319,6 +525,15 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$3 */
     public /* synthetic */ void lambda$new$3$PhotoViewerCaptionEnterView(View view) {
+        if (this.captionMaxLength - this.codePointCount < 0) {
+            AndroidUtilities.shakeView(this.captionLimitView, 2.0f, 0);
+            Vibrator vibrator = (Vibrator) this.captionLimitView.getContext().getSystemService("vibrator");
+            if (vibrator != null) {
+                vibrator.vibrate(200);
+                return;
+            }
+            return;
+        }
         this.delegate.onCaptionEnter();
     }
 
@@ -368,7 +583,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             this.shouldAnimateEditTextWithBounds = false;
         }
         float f = this.chatActivityEnterViewAnimateFromTop;
-        if (!(f == 0.0f || f == ((float) getTop()) + this.offset)) {
+        if (f != 0.0f && f != ((float) getTop()) + this.offset) {
             ValueAnimator valueAnimator2 = this.topBackgroundAnimator;
             if (valueAnimator2 != null) {
                 valueAnimator2.cancel();
@@ -386,21 +601,6 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             this.topBackgroundAnimator.setDuration(200);
             this.topBackgroundAnimator.start();
             this.chatActivityEnterViewAnimateFromTop = 0.0f;
-        }
-        if (this.lengthText == null || getMeasuredHeight() <= AndroidUtilities.dp(48.0f)) {
-            this.lengthTextPaint.setAlpha(0);
-            this.animationProgress = 0.0f;
-            return;
-        }
-        canvas.drawText(this.lengthText, (float) ((AndroidUtilities.dp(56.0f) - ((int) Math.ceil((double) this.lengthTextPaint.measureText(this.lengthText)))) / 2), (float) (getMeasuredHeight() - AndroidUtilities.dp(48.0f)), this.lengthTextPaint);
-        float f2 = this.animationProgress;
-        if (f2 < 1.0f) {
-            this.animationProgress = f2 + 0.14166667f;
-            invalidate();
-            if (this.animationProgress >= 1.0f) {
-                this.animationProgress = 1.0f;
-            }
-            this.lengthTextPaint.setAlpha((int) (this.animationProgress * 255.0f));
         }
     }
 
@@ -422,8 +622,9 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
     }
 
     public void updateColors() {
-        Theme.setDrawableColor(this.drawable, Theme.getColor("dialogFloatingButton"));
-        Theme.setDrawableColor(this.checkDrawable, Theme.getColor("dialogFloatingIcon"));
+        Theme.setDrawableColor(this.doneDrawable, Theme.getColor("dialogFloatingButton"));
+        int color = Theme.getColor("dialogFloatingIcon");
+        Theme.setDrawableColor(this.checkDrawable, ColorUtils.setAlphaComponent(color, (int) (((float) Color.alpha(color)) * ((this.sendButtonEnabledProgress * 0.42f) + 0.58f))));
         EmojiView emojiView2 = this.emojiView;
         if (emojiView2 != null) {
             emojiView2.updateColors();
@@ -473,12 +674,7 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
             if (photoViewerCaptionEnterViewDelegate != null) {
                 photoViewerCaptionEnterViewDelegate.onTextChanged(this.messageEditText.getText());
             }
-            int i = this.captionMaxLength;
-            int i2 = MessagesController.getInstance(UserConfig.selectedAccount).maxCaptionLength;
-            this.captionMaxLength = i2;
-            if (i != i2) {
-                this.messageEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(this.captionMaxLength)});
-            }
+            this.captionMaxLength = MessagesController.getInstance(UserConfig.selectedAccount).maxCaptionLength;
         }
     }
 
@@ -581,25 +777,23 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
                 }
 
                 public void onEmojiSelected(String str) {
-                    if (PhotoViewerCaptionEnterView.this.messageEditText.length() + str.length() <= PhotoViewerCaptionEnterView.this.captionMaxLength) {
-                        int selectionEnd = PhotoViewerCaptionEnterView.this.messageEditText.getSelectionEnd();
-                        if (selectionEnd < 0) {
-                            selectionEnd = 0;
-                        }
-                        try {
-                            boolean unused = PhotoViewerCaptionEnterView.this.innerTextChange = true;
-                            CharSequence replaceEmoji = Emoji.replaceEmoji(str, PhotoViewerCaptionEnterView.this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
-                            PhotoViewerCaptionEnterView.this.messageEditText.setText(PhotoViewerCaptionEnterView.this.messageEditText.getText().insert(selectionEnd, replaceEmoji));
-                            int length = selectionEnd + replaceEmoji.length();
-                            PhotoViewerCaptionEnterView.this.messageEditText.setSelection(length, length);
-                        } catch (Exception e) {
-                            FileLog.e((Throwable) e);
-                        } catch (Throwable th) {
-                            boolean unused2 = PhotoViewerCaptionEnterView.this.innerTextChange = false;
-                            throw th;
-                        }
-                        boolean unused3 = PhotoViewerCaptionEnterView.this.innerTextChange = false;
+                    int selectionEnd = PhotoViewerCaptionEnterView.this.messageEditText.getSelectionEnd();
+                    if (selectionEnd < 0) {
+                        selectionEnd = 0;
                     }
+                    try {
+                        boolean unused = PhotoViewerCaptionEnterView.this.innerTextChange = true;
+                        CharSequence replaceEmoji = Emoji.replaceEmoji(str, PhotoViewerCaptionEnterView.this.messageEditText.getPaint().getFontMetricsInt(), AndroidUtilities.dp(20.0f), false);
+                        PhotoViewerCaptionEnterView.this.messageEditText.setText(PhotoViewerCaptionEnterView.this.messageEditText.getText().insert(selectionEnd, replaceEmoji));
+                        int length = selectionEnd + replaceEmoji.length();
+                        PhotoViewerCaptionEnterView.this.messageEditText.setSelection(length, length);
+                    } catch (Exception e) {
+                        FileLog.e((Throwable) e);
+                    } catch (Throwable th) {
+                        boolean unused2 = PhotoViewerCaptionEnterView.this.innerTextChange = false;
+                        throw th;
+                    }
+                    boolean unused3 = PhotoViewerCaptionEnterView.this.innerTextChange = false;
                 }
             });
             this.sizeNotifierLayout.addView(this.emojiView);
@@ -873,5 +1067,9 @@ public class PhotoViewerCaptionEnterView extends FrameLayout implements Notifica
 
     public void setAllowTextEntitiesIntersection(boolean z) {
         this.messageEditText.setAllowTextEntitiesIntersection(z);
+    }
+
+    public EditTextCaption getMessageEditText() {
+        return this.messageEditText;
     }
 }

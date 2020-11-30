@@ -1,26 +1,17 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEt;
-import j$.util.function.f;
-import j$.util.function.q;
+enum N1 {
+    ANY(true, true),
+    ALL(false, false),
+    NONE(true, false);
+    
+    /* access modifiers changed from: private */
+    public final boolean a;
+    /* access modifiers changed from: private */
+    public final boolean b;
 
-final class N1 extends R1 implements CLASSNAMEq5 {
-    N1() {
-    }
-
-    public void accept(double d) {
-        accept((Object) Double.valueOf(d));
-    }
-
-    public Object get() {
-        if (this.a) {
-            return CLASSNAMEt.d(((Double) this.b).doubleValue());
-        }
-        return null;
-    }
-
-    public q k(q qVar) {
-        qVar.getClass();
-        return new f(this, qVar);
+    private N1(boolean z, boolean z2) {
+        this.a = z;
+        this.b = z2;
     }
 }

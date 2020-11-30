@@ -1,20 +1,20 @@
 package j$;
 
-import j$.util.function.v;
+import j$.util.function.x;
 import java.util.function.IntFunction;
 
 public final /* synthetic */ class X implements IntFunction {
-    final /* synthetic */ v a;
+    final /* synthetic */ x a;
 
-    private /* synthetic */ X(v vVar) {
-        this.a = vVar;
+    private /* synthetic */ X(x xVar) {
+        this.a = xVar;
     }
 
-    public static /* synthetic */ IntFunction a(v vVar) {
-        if (vVar == null) {
+    public static /* synthetic */ IntFunction a(x xVar) {
+        if (xVar == null) {
             return null;
         }
-        return vVar instanceof W ? ((W) vVar).a : new X(vVar);
+        return xVar instanceof W ? ((W) xVar).a : new X(xVar);
     }
 
     public /* synthetic */ Object apply(int i) {

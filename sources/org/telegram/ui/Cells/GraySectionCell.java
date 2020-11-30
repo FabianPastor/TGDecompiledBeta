@@ -49,6 +49,12 @@ public class GraySectionCell extends FrameLayout {
         super.onMeasure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(i), NUM), View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(32.0f), NUM));
     }
 
+    public void setTextColor(String str) {
+        int color = Theme.getColor(str);
+        this.textView.setTextColor(color);
+        this.rightTextView.setTextColor(color);
+    }
+
     public void setText(String str) {
         this.textView.setText(str);
         this.rightTextView.setVisibility(8);

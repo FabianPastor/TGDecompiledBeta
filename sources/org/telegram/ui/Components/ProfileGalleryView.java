@@ -2,6 +2,7 @@ package org.telegram.ui.Components;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PointF;
@@ -37,7 +38,8 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
     private TLRPC$ChatFull chatInfo;
     /* access modifiers changed from: private */
     public int currentAccount = UserConfig.selectedAccount;
-    private final long dialogId;
+    /* access modifiers changed from: private */
+    public final long dialogId;
     private final PointF downPoint = new PointF();
     /* access modifiers changed from: private */
     public ArrayList<ImageLocation> imagesLocations = new ArrayList<>();
@@ -247,7 +249,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                     }
                 }
             }
-            boolean onTouchEvent = this.isScrollingListView ? this.parentListView.onTouchEvent(motionEvent) | false : false;
+            boolean onTouchEvent = this.isScrollingListView ? this.parentListView.onTouchEvent(motionEvent) : false;
             if (this.isSwipingViewPager) {
                 onTouchEvent |= super.onTouchEvent(motionEvent);
             }
@@ -287,7 +289,7 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
             return false;
         }
         ImageLocation imageLocation3 = this.prevImageLocation;
-        if ((imageLocation3 == null && imageLocation != null) || !(imageLocation3 == null || imageLocation3.location.local_id == imageLocation.location.local_id)) {
+        if (imageLocation3 == null || imageLocation3.location.local_id != imageLocation.location.local_id) {
             this.imagesLocations.clear();
             MessagesController.getInstance(this.currentAccount).loadDialogPhotos((int) this.dialogId, 80, 0, true, this.parentClassGuid);
         }
@@ -928,26 +930,28 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                     final /* synthetic */ int val$position;
 
                     {
+                        int i;
                         boolean z;
-                        boolean z2;
-                        ViewPagerAdapter viewPagerAdapter = r18;
-                        int i = r20;
+                        AnonymousClass1 r11;
+                        ViewPagerAdapter viewPagerAdapter = r17;
+                        int i2 = r19;
                         this.this$1 = viewPagerAdapter;
-                        this.val$position = i;
-                        boolean z3 = true;
+                        this.val$position = i2;
+                        boolean z2 = true;
                         getImageReceiver().setAllowDecodeSingleFrame(true);
-                        int realPosition = viewPagerAdapter.getRealPosition(i);
+                        int realPosition = viewPagerAdapter.getRealPosition(i2);
                         String str = null;
                         if (realPosition == 0) {
-                            Drawable drawable = r18.parentAvatarImageView.getImageReceiver().getDrawable();
+                            Drawable drawable = r17.parentAvatarImageView.getImageReceiver().getDrawable();
                             if (drawable instanceof AnimatedFileDrawable) {
                                 AnimatedFileDrawable animatedFileDrawable = (AnimatedFileDrawable) drawable;
                                 if (animatedFileDrawable.hasBitmap()) {
                                     setImageDrawable(drawable);
                                     animatedFileDrawable.addSecondParentView(this);
                                     animatedFileDrawable.setInvalidateParentViewWithSecond(true);
-                                    z3 = false;
-                                    z2 = z3;
+                                    z2 = false;
+                                    r11 = this;
+                                    i = realPosition;
                                     z = false;
                                 }
                             }
@@ -956,26 +960,37 @@ public class ProfileGalleryView extends CircularViewPager implements Notificatio
                             if (imageLocation != null && imageLocation.imageType == 2) {
                                 str = "g";
                             }
-                            setImageMedia((ImageLocation) ProfileGalleryView.this.videoLocations.get(realPosition), str, (ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, r18.parentAvatarImageView.getImageReceiver().getBitmap(), ((Integer) ProfileGalleryView.this.imagesLocationsSizes.get(realPosition)).intValue(), 1, (Object) null);
-                            z2 = z3;
+                            Bitmap bitmap = r17.parentAvatarImageView.getImageReceiver().getBitmap();
+                            int intValue = ((Integer) ProfileGalleryView.this.imagesLocationsSizes.get(realPosition)).intValue();
+                            setImageMedia((ImageLocation) ProfileGalleryView.this.videoLocations.get(realPosition), str, (ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, bitmap, intValue, 1, "avatar_" + ProfileGalleryView.this.dialogId);
+                            r11 = this;
+                            i = realPosition;
                             z = false;
                         } else {
                             ImageLocation imageLocation2 = (ImageLocation) ProfileGalleryView.this.videoLocations.get(realPosition);
-                            this.isVideo = imageLocation2 != null;
+                            r11 = this;
+                            r11.isVideo = imageLocation2 != null;
+                            String str2 = ((ImageLocation) ProfileGalleryView.this.thumbsLocations.get(realPosition)).photoSize instanceof TLRPC$TL_photoStrippedSize ? "b" : str;
+                            int intValue2 = ((Integer) ProfileGalleryView.this.imagesLocationsSizes.get(realPosition)).intValue();
+                            StringBuilder sb = new StringBuilder();
+                            sb.append("avatar_");
+                            i = realPosition;
+                            sb.append(ProfileGalleryView.this.dialogId);
                             z = false;
-                            setImageMedia(imageLocation2, (String) null, (ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, (ImageLocation) ProfileGalleryView.this.thumbsLocations.get(realPosition), ((ImageLocation) ProfileGalleryView.this.thumbsLocations.get(realPosition)).photoSize instanceof TLRPC$TL_photoStrippedSize ? "b" : str, (String) null, 0, 1, ProfileGalleryView.this.imagesLocationsSizes.get(realPosition));
+                            setImageMedia(imageLocation2, (String) null, (ImageLocation) ProfileGalleryView.this.imagesLocations.get(realPosition), (String) null, (ImageLocation) ProfileGalleryView.this.thumbsLocations.get(realPosition), str2, (String) null, intValue2, 1, sb.toString());
                             z2 = true;
                         }
                         if (z2) {
-                            RadialProgress2 radialProgress2 = (RadialProgress2) ProfileGalleryView.this.radialProgresses.get(realPosition);
-                            this.radialProgress = radialProgress2;
+                            int i3 = i;
+                            RadialProgress2 radialProgress2 = (RadialProgress2) ProfileGalleryView.this.radialProgresses.get(i3);
+                            r11.radialProgress = radialProgress2;
                             if (radialProgress2 == null) {
-                                RadialProgress2 radialProgress22 = new RadialProgress2(this);
-                                this.radialProgress = radialProgress22;
+                                RadialProgress2 radialProgress22 = new RadialProgress2(r11);
+                                r11.radialProgress = radialProgress22;
                                 radialProgress22.setOverrideAlpha(0.0f);
-                                this.radialProgress.setIcon(10, z, z);
-                                this.radialProgress.setColors(NUM, NUM, -1, -1);
-                                ProfileGalleryView.this.radialProgresses.append(realPosition, this.radialProgress);
+                                r11.radialProgress.setIcon(10, z, z);
+                                r11.radialProgress.setColors(NUM, NUM, -1, -1);
+                                ProfileGalleryView.this.radialProgresses.append(i3, r11.radialProgress);
                             }
                             postInvalidateOnAnimation();
                         }

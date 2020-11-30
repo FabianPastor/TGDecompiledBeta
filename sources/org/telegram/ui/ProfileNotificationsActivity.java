@@ -700,6 +700,7 @@ public class ProfileNotificationsActivity extends BaseFragment implements Notifi
                     edit.putString("sound_" + this.dialog_id, "NoSound");
                     edit.putString("sound_path_" + this.dialog_id, "NoSound");
                 }
+                getNotificationsController().deleteNotificationChannel(this.dialog_id);
             } else if (i == 13) {
                 if (str != null) {
                     edit.putString("ringtone_" + this.dialog_id, str);

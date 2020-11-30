@@ -247,10 +247,10 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         }
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x02ca  */
-    /* JADX WARNING: Removed duplicated region for block: B:53:0x02cf  */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x030a  */
-    /* JADX WARNING: Removed duplicated region for block: B:62:0x032a  */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x02d4  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x02d9  */
+    /* JADX WARNING: Removed duplicated region for block: B:64:0x0314  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x0334  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public android.view.View createView(android.content.Context r21) {
         /*
@@ -272,7 +272,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r3.<init>(r1)
             r0.emptyView = r3
             java.lang.String r4 = "NoResult"
-            r5 = 2131626063(0x7f0e084f, float:1.8879352E38)
+            r5 = 2131626087(0x7f0e0867, float:1.88794E38)
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r4, r5)
             r3.setText(r4)
             org.telegram.ui.Components.EmptyTextProgressView r3 = r0.emptyView
@@ -305,7 +305,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r3.setTextColor(r7)
             r3.setTag(r6)
             java.lang.String r7 = "LoadingStats"
-            r8 = 2131625766(0x7f0e0726, float:1.887875E38)
+            r8 = 2131625783(0x7f0e0737, float:1.8878784E38)
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r7, r8)
             r3.setText(r7)
             r3.setGravity(r5)
@@ -318,7 +318,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r7.setTextColor(r9)
             r7.setTag(r8)
             java.lang.String r9 = "LoadingStatsDescription"
-            r10 = 2131625767(0x7f0e0727, float:1.8878751E38)
+            r10 = 2131625784(0x7f0e0738, float:1.8878786E38)
             java.lang.String r9 = org.telegram.messenger.LocaleController.getString(r9, r10)
             r7.setText(r9)
             r7.setGravity(r5)
@@ -461,7 +461,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         L_0x01de:
             org.telegram.messenger.MessageObject r1 = r0.messageObject
             boolean r1 = r1.needDrawBluredPreview()
-            if (r1 != 0) goto L_0x02bf
+            if (r1 != 0) goto L_0x02c9
             org.telegram.messenger.MessageObject r1 = r0.messageObject
             boolean r1 = r1.isPhoto()
             if (r1 != 0) goto L_0x01fe
@@ -470,7 +470,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             if (r1 != 0) goto L_0x01fe
             org.telegram.messenger.MessageObject r1 = r0.messageObject
             boolean r1 = r1.isVideo()
-            if (r1 == 0) goto L_0x02bf
+            if (r1 == 0) goto L_0x02c9
         L_0x01fe:
             org.telegram.messenger.MessageObject r1 = r0.messageObject
             boolean r1 = r1.isWebpage()
@@ -486,13 +486,18 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
         L_0x0212:
             java.lang.String r2 = "app"
             boolean r2 = r2.equals(r1)
-            if (r2 != 0) goto L_0x02bf
+            if (r2 != 0) goto L_0x02c9
             java.lang.String r2 = "profile"
             boolean r2 = r2.equals(r1)
-            if (r2 != 0) goto L_0x02bf
+            if (r2 != 0) goto L_0x02c9
             java.lang.String r2 = "article"
-            boolean r1 = r2.equals(r1)
-            if (r1 != 0) goto L_0x02bf
+            boolean r2 = r2.equals(r1)
+            if (r2 != 0) goto L_0x02c9
+            if (r1 == 0) goto L_0x0234
+            java.lang.String r2 = "telegram_"
+            boolean r1 = r1.startsWith(r2)
+            if (r1 != 0) goto L_0x02c9
+        L_0x0234:
             org.telegram.messenger.MessageObject r1 = r0.messageObject
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r1 = r1.photoThumbs
             r2 = 40
@@ -501,30 +506,30 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             java.util.ArrayList<org.telegram.tgnet.TLRPC$PhotoSize> r2 = r2.photoThumbs
             int r4 = org.telegram.messenger.AndroidUtilities.getPhotoSize()
             org.telegram.tgnet.TLRPC$PhotoSize r2 = org.telegram.messenger.FileLoader.getClosestPhotoSizeWithSize(r2, r4)
-            if (r1 != r2) goto L_0x0243
-            goto L_0x0244
-        L_0x0243:
+            if (r1 != r2) goto L_0x024d
+            goto L_0x024e
+        L_0x024d:
             r3 = r2
-        L_0x0244:
-            if (r1 == 0) goto L_0x02bf
+        L_0x024e:
+            if (r1 == 0) goto L_0x02c9
             org.telegram.messenger.MessageObject r2 = r0.messageObject
             boolean r2 = r2.isVideo()
             r0.drawPlay = r2
             java.lang.String r2 = org.telegram.messenger.FileLoader.getAttachFileName(r3)
             org.telegram.messenger.MessageObject r4 = r0.messageObject
             boolean r4 = r4.mediaExists
-            if (r4 != 0) goto L_0x028d
+            if (r4 != 0) goto L_0x0297
             int r4 = r0.currentAccount
             org.telegram.messenger.DownloadController r4 = org.telegram.messenger.DownloadController.getInstance(r4)
             org.telegram.messenger.MessageObject r7 = r0.messageObject
             boolean r4 = r4.canDownloadMedia((org.telegram.messenger.MessageObject) r7)
-            if (r4 != 0) goto L_0x028d
+            if (r4 != 0) goto L_0x0297
             int r4 = r0.currentAccount
             org.telegram.messenger.FileLoader r4 = org.telegram.messenger.FileLoader.getInstance(r4)
             boolean r2 = r4.isLoadingFile(r2)
-            if (r2 == 0) goto L_0x0273
-            goto L_0x028d
-        L_0x0273:
+            if (r2 == 0) goto L_0x027d
+            goto L_0x0297
+        L_0x027d:
             org.telegram.messenger.ImageReceiver r11 = r0.thumbImage
             r12 = 0
             r13 = 0
@@ -537,22 +542,22 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             java.lang.String r15 = "20_20"
             r17 = r1
             r11.setImage((org.telegram.messenger.ImageLocation) r12, (java.lang.String) r13, (org.telegram.messenger.ImageLocation) r14, (java.lang.String) r15, (java.lang.String) r16, (java.lang.Object) r17, (int) r18)
-            goto L_0x02bd
-        L_0x028d:
+            goto L_0x02c7
+        L_0x0297:
             org.telegram.messenger.MessageObject r2 = r0.messageObject
             int r4 = r2.type
-            if (r4 != r5) goto L_0x029c
-            if (r3 == 0) goto L_0x0298
+            if (r4 != r5) goto L_0x02a6
+            if (r3 == 0) goto L_0x02a2
             int r4 = r3.size
-            goto L_0x0299
-        L_0x0298:
+            goto L_0x02a3
+        L_0x02a2:
             r4 = 0
-        L_0x0299:
+        L_0x02a3:
             r16 = r4
-            goto L_0x029e
-        L_0x029c:
+            goto L_0x02a8
+        L_0x02a6:
             r16 = 0
-        L_0x029e:
+        L_0x02a8:
             org.telegram.messenger.ImageReceiver r11 = r0.thumbImage
             org.telegram.tgnet.TLObject r2 = r2.photoThumbsObject
             org.telegram.messenger.ImageLocation r12 = org.telegram.messenger.ImageLocation.getForObject(r3, r2)
@@ -566,32 +571,32 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             java.lang.String r15 = "20_20"
             r18 = r1
             r11.setImage(r12, r13, r14, r15, r16, r17, r18, r19)
-        L_0x02bd:
+        L_0x02c7:
             r1 = 1
-            goto L_0x02c0
-        L_0x02bf:
+            goto L_0x02ca
+        L_0x02c9:
             r1 = 0
-        L_0x02c0:
+        L_0x02ca:
             org.telegram.messenger.MessageObject r2 = r0.messageObject
             java.lang.CharSequence r2 = r2.caption
             boolean r2 = android.text.TextUtils.isEmpty(r2)
-            if (r2 != 0) goto L_0x02cf
+            if (r2 != 0) goto L_0x02d9
             org.telegram.messenger.MessageObject r2 = r0.messageObject
             java.lang.CharSequence r2 = r2.caption
-            goto L_0x0308
-        L_0x02cf:
+            goto L_0x0312
+        L_0x02d9:
             org.telegram.messenger.MessageObject r2 = r0.messageObject
             org.telegram.tgnet.TLRPC$Message r2 = r2.messageOwner
             java.lang.String r2 = r2.message
             boolean r2 = android.text.TextUtils.isEmpty(r2)
-            if (r2 != 0) goto L_0x0304
+            if (r2 != 0) goto L_0x030e
             org.telegram.messenger.MessageObject r2 = r0.messageObject
             java.lang.CharSequence r2 = r2.messageText
             int r3 = r2.length()
             r4 = 150(0x96, float:2.1E-43)
-            if (r3 <= r4) goto L_0x02eb
+            if (r3 <= r4) goto L_0x02f5
             java.lang.CharSequence r2 = r2.subSequence(r10, r4)
-        L_0x02eb:
+        L_0x02f5:
             org.telegram.ui.Components.ChatAvatarContainer r3 = r0.avatarContainer
             org.telegram.ui.ActionBar.SimpleTextView r3 = r3.getSubtitleTextView()
             android.text.TextPaint r3 = r3.getTextPaint()
@@ -599,12 +604,12 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r4 = 1099431936(0x41880000, float:17.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
             java.lang.CharSequence r2 = org.telegram.messenger.Emoji.replaceEmoji(r2, r3, r4, r10)
-            goto L_0x0308
-        L_0x0304:
+            goto L_0x0312
+        L_0x030e:
             org.telegram.messenger.MessageObject r2 = r0.messageObject
             java.lang.CharSequence r2 = r2.messageText
-        L_0x0308:
-            if (r1 == 0) goto L_0x032a
+        L_0x0312:
+            if (r1 == 0) goto L_0x0334
             android.text.SpannableStringBuilder r1 = new android.text.SpannableStringBuilder
             r1.<init>(r2)
             java.lang.String r2 = " "
@@ -617,13 +622,13 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             r1.setSpan(r2, r10, r5, r3)
             org.telegram.ui.Components.ChatAvatarContainer r2 = r0.avatarContainer
             r2.setSubtitle(r1)
-            goto L_0x0333
-        L_0x032a:
+            goto L_0x033d
+        L_0x0334:
             org.telegram.ui.Components.ChatAvatarContainer r1 = r0.avatarContainer
             org.telegram.messenger.MessageObject r2 = r0.messageObject
             java.lang.CharSequence r2 = r2.messageText
             r1.setSubtitle(r2)
-        L_0x0333:
+        L_0x033d:
             org.telegram.ui.ActionBar.ActionBar r1 = r0.actionBar
             org.telegram.ui.ActionBar.BackDrawable r2 = new org.telegram.ui.ActionBar.BackDrawable
             r2.<init>(r10)

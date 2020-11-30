@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -277,9 +278,32 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         Activity parentActivity2 = baseFragment.getParentActivity();
         this.parentActivity = parentActivity2;
         setBackgroundColor(Theme.getColor("windowBackgroundWhite"));
-        RecyclerListView recyclerListView2 = new RecyclerListView(parentActivity2);
-        this.recyclerListView = recyclerListView2;
-        recyclerListView2.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
+        AnonymousClass3 r0 = new RecyclerListView(parentActivity2) {
+            /* access modifiers changed from: protected */
+            public void dispatchDraw(Canvas canvas) {
+                if (getAdapter() == FilteredSearchView.this.sharedPhotoVideoAdapter) {
+                    for (int i = 0; i < getChildCount(); i++) {
+                        if (getChildViewHolder(getChildAt(i)).getItemViewType() == 1) {
+                            canvas.save();
+                            canvas.translate(getChildAt(i).getX(), (getChildAt(i).getY() - ((float) getChildAt(i).getMeasuredHeight())) + ((float) AndroidUtilities.dp(2.0f)));
+                            getChildAt(i).draw(canvas);
+                            canvas.restore();
+                            invalidate();
+                        }
+                    }
+                }
+                super.dispatchDraw(canvas);
+            }
+
+            public boolean drawChild(Canvas canvas, View view, long j) {
+                if (getAdapter() == FilteredSearchView.this.sharedPhotoVideoAdapter && getChildViewHolder(view).getItemViewType() == 1) {
+                    return true;
+                }
+                return super.drawChild(canvas, view, j);
+            }
+        };
+        this.recyclerListView = r0;
+        r0.setOnItemClickListener((RecyclerListView.OnItemClickListener) new RecyclerListView.OnItemClickListener() {
             public final void onItemClick(View view, int i) {
                 FilteredSearchView.this.lambda$new$1$FilteredSearchView(view, i);
             }
@@ -319,13 +343,13 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(parentActivity2);
         this.layoutManager = linearLayoutManager;
         this.recyclerListView.setLayoutManager(linearLayoutManager);
-        AnonymousClass4 r0 = new FlickerLoadingView(parentActivity2) {
+        AnonymousClass5 r02 = new FlickerLoadingView(parentActivity2) {
             public int getColumnsCount() {
                 return FilteredSearchView.this.columnsCount;
             }
         };
-        this.loadingView = r0;
-        addView(r0);
+        this.loadingView = r02;
+        addView(r02);
         addView(this.recyclerListView);
         this.recyclerListView.setSectionsType(2);
         this.recyclerListView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -378,7 +402,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
         this.sharedLinksAdapter = new SharedLinksAdapter(getContext());
         this.sharedAudioAdapter = new SharedDocumentsAdapter(getContext(), 4);
         this.sharedVoiceAdapter = new SharedDocumentsAdapter(getContext(), 2);
-        StickerEmptyView stickerEmptyView = new StickerEmptyView(parentActivity2, r0);
+        StickerEmptyView stickerEmptyView = new StickerEmptyView(parentActivity2, r02, 1);
         this.emptyView = stickerEmptyView;
         addView(stickerEmptyView);
         this.recyclerListView.setEmptyView(this.emptyView);
@@ -419,7 +443,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             arrowSpan = r0
             org.telegram.ui.Components.ColoredImageSpan r1 = new org.telegram.ui.Components.ColoredImageSpan
             android.content.Context r2 = org.telegram.messenger.ApplicationLoader.applicationContext
-            r3 = 2131165943(0x7var_f7, float:1.7946117E38)
+            r3 = 2131165947(0x7var_fb, float:1.7946125E38)
             android.graphics.drawable.Drawable r2 = androidx.core.content.ContextCompat.getDrawable(r2, r3)
             android.graphics.drawable.Drawable r2 = r2.mutate()
             r1.<init>(r2)
@@ -1054,7 +1078,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             if (view != null) {
                 this.recyclerListView.removeView(view);
             }
-            if ((this.loadingView.getVisibility() == 0 && this.recyclerListView.getChildCount() == 0) || view != null) {
+            if ((this.loadingView.getVisibility() == 0 && this.recyclerListView.getChildCount() == 0) || !(this.recyclerListView.getAdapter() == this.sharedPhotoVideoAdapter || view == null)) {
                 final int i10 = i2;
                 getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
                     public boolean onPreDraw() {
@@ -1091,7 +1115,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                                     public void onAnimationEnd(Animator animator) {
                                         view.setAlpha(1.0f);
                                         layoutManager.stopIgnoringView(view);
-                                        AnonymousClass6 r2 = AnonymousClass6.this;
+                                        AnonymousClass7 r2 = AnonymousClass7.this;
                                         FilteredSearchView.this.recyclerListView.removeView(view);
                                     }
                                 });
@@ -1214,11 +1238,11 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
             if (FilteredSearchView.this.messages.isEmpty()) {
                 return 0;
             }
-            return (int) Math.ceil((double) (((float) FilteredSearchView.this.messages.size()) / ((float) FilteredSearchView.this.columnsCount)));
+            return ((int) Math.ceil((double) (((float) FilteredSearchView.this.messages.size()) / ((float) FilteredSearchView.this.columnsCount)))) + (FilteredSearchView.this.endReached ^ true ? 1 : 0);
         }
 
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            LoadingCell loadingCell;
+            AnonymousClass2 r4;
             if (i == 0) {
                 SharedPhotoVideoCell sharedPhotoVideoCell = new SharedPhotoVideoCell(this.mContext, 1);
                 sharedPhotoVideoCell.setDelegate(new SharedPhotoVideoCell.SharedPhotoVideoCellDelegate() {
@@ -1234,16 +1258,23 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         return true;
                     }
                 });
-                loadingCell = sharedPhotoVideoCell;
+                r4 = sharedPhotoVideoCell;
             } else if (i != 2) {
-                loadingCell = new LoadingCell(this.mContext, AndroidUtilities.dp(32.0f), AndroidUtilities.dp(74.0f));
+                AnonymousClass2 r42 = new FlickerLoadingView(this.mContext) {
+                    public int getColumnsCount() {
+                        return FilteredSearchView.this.columnsCount;
+                    }
+                };
+                r42.setIsSingleCell(true);
+                r42.setViewType(2);
+                r4 = r42;
             } else {
                 GraySectionCell graySectionCell = new GraySectionCell(this.mContext);
                 graySectionCell.setBackgroundColor(Theme.getColor("graySection") & -NUM);
-                loadingCell = graySectionCell;
+                r4 = graySectionCell;
             }
-            loadingCell.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
-            return new RecyclerListView.Holder(loadingCell);
+            r4.setLayoutParams(new RecyclerView.LayoutParams(-1, -2));
+            return new RecyclerListView.Holder(r4);
         }
 
         public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
@@ -1255,9 +1286,9 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                 sharedPhotoVideoCell.setItemsCount(filteredSearchView.columnsCount);
                 sharedPhotoVideoCell.setIsFirst(i == 0);
                 for (int i2 = 0; i2 < FilteredSearchView.this.columnsCount; i2++) {
-                    int access$600 = (FilteredSearchView.this.columnsCount * i) + i2;
-                    if (access$600 < arrayList.size()) {
-                        MessageObject messageObject = arrayList.get(access$600);
+                    int access$700 = (FilteredSearchView.this.columnsCount * i) + i2;
+                    if (access$700 < arrayList.size()) {
+                        MessageObject messageObject = arrayList.get(access$700);
                         sharedPhotoVideoCell.setItem(i2, FilteredSearchView.this.messages.indexOf(messageObject), messageObject);
                         if (FilteredSearchView.this.uiCallback.actionModeShowing()) {
                             FilteredSearchView.this.messageHashIdTmp.set(messageObject.getId(), messageObject.getDialogId());
@@ -1266,7 +1297,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                             sharedPhotoVideoCell.setChecked(i2, false, true);
                         }
                     } else {
-                        sharedPhotoVideoCell.setItem(i2, access$600, (MessageObject) null);
+                        sharedPhotoVideoCell.setItem(i2, access$700, (MessageObject) null);
                     }
                 }
                 sharedPhotoVideoCell.requestLayout();
@@ -1284,11 +1315,13 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     return;
                 }
                 dialogCell.setChecked(false, z);
+            } else if (viewHolder.getItemViewType() == 1) {
+                ((FlickerLoadingView) viewHolder.itemView).skipDrawItemsCount(FilteredSearchView.this.columnsCount - ((FilteredSearchView.this.columnsCount * ((int) Math.ceil((double) (((float) FilteredSearchView.this.messages.size()) / ((float) FilteredSearchView.this.columnsCount))))) - FilteredSearchView.this.messages.size()));
             }
         }
 
         public int getItemViewType(int i) {
-            return i < FilteredSearchView.this.messages.size() ? 0 : 1;
+            return i < ((int) Math.ceil((double) (((float) FilteredSearchView.this.messages.size()) / ((float) FilteredSearchView.this.columnsCount)))) ? 0 : 1;
         }
     }
 
@@ -1503,12 +1536,12 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                         r0 = 2
                         java.lang.CharSequence[] r0 = new java.lang.CharSequence[r0]
                         r1 = 0
-                        r2 = 2131626272(0x7f0e0920, float:1.8879776E38)
+                        r2 = 2131626303(0x7f0e093f, float:1.8879838E38)
                         java.lang.String r3 = "Open"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
                         r1 = 1
-                        r2 = 2131624925(0x7f0e03dd, float:1.8877043E38)
+                        r2 = 2131624933(0x7f0e03e5, float:1.887706E38)
                         java.lang.String r3 = "Copy"
                         java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
                         r0[r1] = r2
@@ -1992,7 +2025,7 @@ public class FilteredSearchView extends FrameLayout implements NotificationCente
                     org.telegram.ui.Cells.GraySectionCell r4 = new org.telegram.ui.Cells.GraySectionCell
                     android.content.Context r3 = r3.getContext()
                     r4.<init>(r3)
-                    r3 = 2131626978(0x7f0e0be2, float:1.8881207E38)
+                    r3 = 2131627010(0x7f0e0CLASSNAME, float:1.8881272E38)
                     java.lang.String r0 = "SearchMessages"
                     java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r0, r3)
                     r4.setText(r3)

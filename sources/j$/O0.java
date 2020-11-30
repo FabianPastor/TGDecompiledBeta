@@ -1,79 +1,75 @@
 package j$;
 
-import j$.util.CLASSNAMEk;
-import j$.util.CLASSNAMEn;
-import j$.util.CLASSNAMEo;
-import j$.util.CLASSNAMEt;
-import j$.util.function.B;
 import j$.util.function.BiConsumer;
-import j$.util.function.E;
-import j$.util.function.p;
+import j$.util.function.G;
+import j$.util.function.J;
 import j$.util.function.q;
 import j$.util.function.r;
 import j$.util.function.s;
+import j$.util.function.t;
+import j$.util.function.u;
+import j$.util.k;
+import j$.util.m;
+import j$.util.p;
 import j$.util.stream.CLASSNAMEl1;
-import j$.util.stream.CLASSNAMEx2;
-import j$.util.stream.L1;
+import j$.util.stream.CLASSNAMEs1;
+import j$.util.stream.C1;
+import j$.util.stream.H1;
 import j$.util.stream.Stream;
-import j$.util.stream.T2;
 import java.util.stream.DoubleStream;
 
-public final /* synthetic */ class O0 implements L1 {
+public final /* synthetic */ class O0 implements CLASSNAMEs1 {
     final /* synthetic */ DoubleStream a;
 
     private /* synthetic */ O0(DoubleStream doubleStream) {
         this.a = doubleStream;
     }
 
-    public static /* synthetic */ L1 m0(DoubleStream doubleStream) {
+    public static /* synthetic */ CLASSNAMEs1 m0(DoubleStream doubleStream) {
         if (doubleStream == null) {
             return null;
         }
         return doubleStream instanceof P0 ? ((P0) doubleStream).a : new O0(doubleStream);
     }
 
-    public /* synthetic */ CLASSNAMEt C(p pVar) {
-        return CLASSNAMEk.k(this.a.reduce(C.a(pVar)));
+    public /* synthetic */ p C(j$.util.function.p pVar) {
+        return k.k(this.a.reduce(C.a(pVar)));
     }
 
-    public /* synthetic */ Object D(E e, B b, BiConsumer biConsumer) {
-        return this.a.collect(D0.a(e), CLASSNAMEv0.a(b), CLASSNAMEu.a(biConsumer));
+    public /* synthetic */ Object D(J j, G g, BiConsumer biConsumer) {
+        return this.a.collect(D0.a(j), CLASSNAMEv0.a(g), CLASSNAMEu.a(biConsumer));
     }
 
-    public /* synthetic */ double H(double d, p pVar) {
+    public /* synthetic */ double G(double d, j$.util.function.p pVar) {
         return this.a.reduce(d, C.a(pVar));
     }
 
-    public /* synthetic */ L1 I(N n) {
-        return m0(this.a.map(O.a(n)));
+    public /* synthetic */ CLASSNAMEs1 H(u uVar) {
+        return m0(this.a.map(O.a(uVar)));
     }
 
-    public /* synthetic */ Stream J(r rVar) {
+    public /* synthetic */ Stream I(r rVar) {
         return U0.m0(this.a.mapToObj(G.a(rVar)));
     }
 
-    public /* synthetic */ L1 O(H h) {
-        return m0(this.a.filter(I.a(h)));
+    public /* synthetic */ boolean J(s sVar) {
+        return this.a.noneMatch(I.a(sVar));
     }
 
-    public /* synthetic */ boolean V(H h) {
-        return this.a.anyMatch(I.a(h));
+    public /* synthetic */ boolean O(s sVar) {
+        return this.a.allMatch(I.a(sVar));
     }
 
-    public /* synthetic */ CLASSNAMEt average() {
-        return CLASSNAMEk.k(this.a.average());
+    public /* synthetic */ boolean W(s sVar) {
+        return this.a.anyMatch(I.a(sVar));
     }
 
-    public /* synthetic */ boolean b(H h) {
-        return this.a.noneMatch(I.a(h));
+    public /* synthetic */ p average() {
+        return k.k(this.a.average());
     }
 
     public /* synthetic */ Stream boxed() {
         return U0.m0(this.a.boxed());
-    }
-
-    public /* synthetic */ L1 c(q qVar) {
-        return m0(this.a.peek(E.a(qVar)));
     }
 
     public /* synthetic */ void close() {
@@ -84,47 +80,47 @@ public final /* synthetic */ class O0 implements L1 {
         return this.a.count();
     }
 
-    public /* synthetic */ L1 distinct() {
+    public /* synthetic */ CLASSNAMEs1 d(q qVar) {
+        return m0(this.a.peek(E.a(qVar)));
+    }
+
+    public /* synthetic */ CLASSNAMEs1 distinct() {
         return m0(this.a.distinct());
     }
 
-    public /* synthetic */ CLASSNAMEt findAny() {
-        return CLASSNAMEk.k(this.a.findAny());
+    public /* synthetic */ p findAny() {
+        return k.k(this.a.findAny());
     }
 
-    public /* synthetic */ CLASSNAMEt findFirst() {
-        return CLASSNAMEk.k(this.a.findFirst());
-    }
-
-    public /* synthetic */ boolean h0(H h) {
-        return this.a.allMatch(I.a(h));
+    public /* synthetic */ p findFirst() {
+        return k.k(this.a.findFirst());
     }
 
     public /* synthetic */ boolean isParallel() {
         return this.a.isParallel();
     }
 
-    public /* synthetic */ void k(q qVar) {
-        this.a.forEach(E.a(qVar));
-    }
-
     public /* synthetic */ void k0(q qVar) {
         this.a.forEachOrdered(E.a(qVar));
     }
 
-    public /* synthetic */ L1 limit(long j) {
+    public /* synthetic */ void l(q qVar) {
+        this.a.forEach(E.a(qVar));
+    }
+
+    public /* synthetic */ CLASSNAMEs1 limit(long j) {
         return m0(this.a.limit(j));
     }
 
-    public /* synthetic */ CLASSNAMEt max() {
-        return CLASSNAMEk.k(this.a.max());
+    public /* synthetic */ p max() {
+        return k.k(this.a.max());
     }
 
-    public /* synthetic */ CLASSNAMEt min() {
-        return CLASSNAMEk.k(this.a.min());
+    public /* synthetic */ p min() {
+        return k.k(this.a.min());
     }
 
-    public /* synthetic */ CLASSNAMEx2 o(J j) {
+    public /* synthetic */ C1 o(J j) {
         return Q0.m0(this.a.mapToInt(j == null ? null : j.a));
     }
 
@@ -132,11 +128,11 @@ public final /* synthetic */ class O0 implements L1 {
         return K0.m0(this.a.onClose(runnable));
     }
 
-    public /* synthetic */ L1 skip(long j) {
+    public /* synthetic */ CLASSNAMEs1 skip(long j) {
         return m0(this.a.skip(j));
     }
 
-    public /* synthetic */ L1 sorted() {
+    public /* synthetic */ CLASSNAMEs1 sorted() {
         return m0(this.a.sorted());
     }
 
@@ -144,15 +140,20 @@ public final /* synthetic */ class O0 implements L1 {
         return this.a.sum();
     }
 
-    public /* synthetic */ CLASSNAMEn summaryStatistics() {
-        return CLASSNAMEo.a(this.a.summaryStatistics());
+    public m summaryStatistics() {
+        this.a.summaryStatistics();
+        throw new Error("Java 8+ API desugaring (library desugaring) cannot convert from java.util.DoubleSummaryStatistics");
+    }
+
+    public /* synthetic */ CLASSNAMEs1 t(s sVar) {
+        return m0(this.a.filter(I.a(sVar)));
     }
 
     public /* synthetic */ double[] toArray() {
         return this.a.toArray();
     }
 
-    public /* synthetic */ L1 u(r rVar) {
+    public /* synthetic */ CLASSNAMEs1 u(r rVar) {
         return m0(this.a.flatMap(G.a(rVar)));
     }
 
@@ -160,7 +161,7 @@ public final /* synthetic */ class O0 implements L1 {
         return K0.m0(this.a.unordered());
     }
 
-    public /* synthetic */ T2 v(s sVar) {
-        return S0.m0(this.a.mapToLong(M.a(sVar)));
+    public /* synthetic */ H1 v(t tVar) {
+        return S0.m0(this.a.mapToLong(M.a(tVar)));
     }
 }

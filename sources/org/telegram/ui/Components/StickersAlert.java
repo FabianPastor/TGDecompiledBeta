@@ -423,53 +423,55 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
     public /* synthetic */ void lambda$null$3$StickersAlert(TLRPC$TL_error tLRPC$TL_error, TLObject tLObject, MediaDataController mediaDataController) {
         this.reqId = 0;
         if (tLRPC$TL_error == null) {
-            AnonymousClass2 r3 = new Transition() {
-                public void captureStartValues(TransitionValues transitionValues) {
-                    transitionValues.values.put("start", Boolean.TRUE);
-                    transitionValues.values.put("offset", Integer.valueOf(StickersAlert.this.containerView.getTop() + StickersAlert.this.scrollOffsetY));
-                }
-
-                public void captureEndValues(TransitionValues transitionValues) {
-                    transitionValues.values.put("start", Boolean.FALSE);
-                    transitionValues.values.put("offset", Integer.valueOf(StickersAlert.this.containerView.getTop() + StickersAlert.this.scrollOffsetY));
-                }
-
-                public Animator createAnimator(ViewGroup viewGroup, TransitionValues transitionValues, TransitionValues transitionValues2) {
-                    int access$400 = StickersAlert.this.scrollOffsetY;
-                    int intValue = ((Integer) transitionValues.values.get("offset")).intValue() - ((Integer) transitionValues2.values.get("offset")).intValue();
-                    ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
-                    ofFloat.setDuration(250);
-                    ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(intValue, access$400) {
-                        public final /* synthetic */ int f$1;
-                        public final /* synthetic */ int f$2;
-
-                        {
-                            this.f$1 = r2;
-                            this.f$2 = r3;
-                        }
-
-                        public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                            StickersAlert.AnonymousClass2.this.lambda$createAnimator$0$StickersAlert$2(this.f$1, this.f$2, valueAnimator);
-                        }
-                    });
-                    return ofFloat;
-                }
-
-                /* access modifiers changed from: private */
-                /* renamed from: lambda$createAnimator$0 */
-                public /* synthetic */ void lambda$createAnimator$0$StickersAlert$2(int i, int i2, ValueAnimator valueAnimator) {
-                    float animatedFraction = valueAnimator.getAnimatedFraction();
-                    StickersAlert.this.gridView.setAlpha(animatedFraction);
-                    StickersAlert.this.titleTextView.setAlpha(animatedFraction);
-                    if (i != 0) {
-                        int i3 = (int) (((float) i) * (1.0f - animatedFraction));
-                        StickersAlert.this.setScrollOffsetY(i2 + i3);
-                        StickersAlert.this.gridView.setTranslationY((float) i3);
+            if (Build.VERSION.SDK_INT >= 19) {
+                AnonymousClass2 r3 = new Transition() {
+                    public void captureStartValues(TransitionValues transitionValues) {
+                        transitionValues.values.put("start", Boolean.TRUE);
+                        transitionValues.values.put("offset", Integer.valueOf(StickersAlert.this.containerView.getTop() + StickersAlert.this.scrollOffsetY));
                     }
-                }
-            };
-            r3.addTarget(this.containerView);
-            TransitionManager.beginDelayedTransition(this.container, r3);
+
+                    public void captureEndValues(TransitionValues transitionValues) {
+                        transitionValues.values.put("start", Boolean.FALSE);
+                        transitionValues.values.put("offset", Integer.valueOf(StickersAlert.this.containerView.getTop() + StickersAlert.this.scrollOffsetY));
+                    }
+
+                    public Animator createAnimator(ViewGroup viewGroup, TransitionValues transitionValues, TransitionValues transitionValues2) {
+                        int access$400 = StickersAlert.this.scrollOffsetY;
+                        int intValue = ((Integer) transitionValues.values.get("offset")).intValue() - ((Integer) transitionValues2.values.get("offset")).intValue();
+                        ValueAnimator ofFloat = ValueAnimator.ofFloat(new float[]{0.0f, 1.0f});
+                        ofFloat.setDuration(250);
+                        ofFloat.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(intValue, access$400) {
+                            public final /* synthetic */ int f$1;
+                            public final /* synthetic */ int f$2;
+
+                            {
+                                this.f$1 = r2;
+                                this.f$2 = r3;
+                            }
+
+                            public final void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                StickersAlert.AnonymousClass2.this.lambda$createAnimator$0$StickersAlert$2(this.f$1, this.f$2, valueAnimator);
+                            }
+                        });
+                        return ofFloat;
+                    }
+
+                    /* access modifiers changed from: private */
+                    /* renamed from: lambda$createAnimator$0 */
+                    public /* synthetic */ void lambda$createAnimator$0$StickersAlert$2(int i, int i2, ValueAnimator valueAnimator) {
+                        float animatedFraction = valueAnimator.getAnimatedFraction();
+                        StickersAlert.this.gridView.setAlpha(animatedFraction);
+                        StickersAlert.this.titleTextView.setAlpha(animatedFraction);
+                        if (i != 0) {
+                            int i3 = (int) (((float) i) * (1.0f - animatedFraction));
+                            StickersAlert.this.setScrollOffsetY(i2 + i3);
+                            StickersAlert.this.gridView.setTranslationY((float) i3);
+                        }
+                    }
+                };
+                r3.addTarget(this.containerView);
+                TransitionManager.beginDelayedTransition(this.container, r3);
+            }
             this.optionsButton.setVisibility(0);
             TLRPC$TL_messages_stickerSet tLRPC$TL_messages_stickerSet = (TLRPC$TL_messages_stickerSet) tLObject;
             this.stickerSet = tLRPC$TL_messages_stickerSet;
@@ -1081,7 +1083,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         }
     }
 
-    /* JADX WARNING: Code restructure failed: missing block: B:53:0x0081, code lost:
+    /* JADX WARNING: Code restructure failed: missing block: B:55:0x0081, code lost:
         r4 = r4;
      */
     /* JADX WARNING: Removed duplicated region for block: B:33:0x0086  */
@@ -1097,7 +1099,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
         L_0x0005:
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r10.stickerSet
             java.lang.String r1 = "dialogTextBlue2"
-            if (r0 == 0) goto L_0x014b
+            if (r0 == 0) goto L_0x014d
             r0 = 0
             r2 = 0
             java.util.regex.Pattern r3 = r10.urlPattern     // Catch:{ Exception -> 0x007c }
@@ -1189,7 +1191,7 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r10.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r1 = r0.set
             boolean r1 = r1.masks
-            r6 = 2131626833(0x7f0e0b51, float:1.8880913E38)
+            r6 = 2131626864(0x7f0e0b70, float:1.8880976E38)
             java.lang.String r7 = "RemoveStickersCount"
             if (r1 == 0) goto L_0x00d1
             java.lang.Object[] r1 = new java.lang.Object[r5]
@@ -1217,19 +1219,20 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             org.telegram.ui.Components.-$$Lambda$StickersAlert$WyqvSsJ01nnWOuDoRXg4s_uwqH8 r1 = new org.telegram.ui.Components.-$$Lambda$StickersAlert$WyqvSsJ01nnWOuDoRXg4s_uwqH8
             r1.<init>()
             r10.setButton(r1, r0, r2)
-            goto L_0x0145
+            goto L_0x0147
         L_0x00fa:
             org.telegram.ui.Components.-$$Lambda$StickersAlert$cLHS20lbkJb9L7dPEhhXIMv4dQ4 r1 = new org.telegram.ui.Components.-$$Lambda$StickersAlert$cLHS20lbkJb9L7dPEhhXIMv4dQ4
             r1.<init>()
             r10.setButton(r1, r0, r2)
-            goto L_0x0145
+            goto L_0x0147
         L_0x0103:
             org.telegram.tgnet.TLRPC$TL_messages_stickerSet r0 = r10.stickerSet
             org.telegram.tgnet.TLRPC$StickerSet r6 = r0.set
-            boolean r6 = r6.masks
-            r7 = 2131624186(0x7f0e00fa, float:1.8875545E38)
+            r7 = 2131624193(0x7f0e0101, float:1.8875559E38)
             java.lang.String r8 = "AddStickersCount"
-            if (r6 == 0) goto L_0x0127
+            if (r6 == 0) goto L_0x0129
+            boolean r6 = r6.masks
+            if (r6 == 0) goto L_0x0129
             java.lang.Object[] r4 = new java.lang.Object[r5]
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r0 = r0.documents
             int r0 = r0.size()
@@ -1237,8 +1240,8 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             r4[r2] = r0
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r8, r7, r4)
             java.lang.String r0 = r0.toUpperCase()
-            goto L_0x013d
-        L_0x0127:
+            goto L_0x013f
+        L_0x0129:
             java.lang.Object[] r3 = new java.lang.Object[r5]
             java.util.ArrayList<org.telegram.tgnet.TLRPC$Document> r0 = r0.documents
             int r0 = r0.size()
@@ -1246,23 +1249,23 @@ public class StickersAlert extends BottomSheet implements NotificationCenter.Not
             r3[r2] = r0
             java.lang.String r0 = org.telegram.messenger.LocaleController.formatString(r8, r7, r3)
             java.lang.String r0 = r0.toUpperCase()
-        L_0x013d:
+        L_0x013f:
             org.telegram.ui.Components.-$$Lambda$StickersAlert$gYrKBk7p1gYPRLV50vDWsIxIfZ0 r2 = new org.telegram.ui.Components.-$$Lambda$StickersAlert$gYrKBk7p1gYPRLV50vDWsIxIfZ0
             r2.<init>()
             r10.setButton(r2, r0, r1)
-        L_0x0145:
+        L_0x0147:
             org.telegram.ui.Components.StickersAlert$GridAdapter r0 = r10.adapter
             r0.notifyDataSetChanged()
-            goto L_0x0160
-        L_0x014b:
-            r0 = 2131624842(0x7f0e038a, float:1.8876875E38)
+            goto L_0x0162
+        L_0x014d:
+            r0 = 2131624850(0x7f0e0392, float:1.8876891E38)
             java.lang.String r2 = "Close"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r2, r0)
             java.lang.String r0 = r0.toUpperCase()
             org.telegram.ui.Components.-$$Lambda$StickersAlert$A1hIlli8L3tdnQw0uSxtdKcC7LI r2 = new org.telegram.ui.Components.-$$Lambda$StickersAlert$A1hIlli8L3tdnQw0uSxtdKcC7LI
             r2.<init>()
             r10.setButton(r2, r0, r1)
-        L_0x0160:
+        L_0x0162:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.StickersAlert.updateFields():void");

@@ -1,6 +1,6 @@
 package j$.util.stream;
 
-import j$.util.function.f;
+import j$.util.function.CLASSNAMEf;
 import j$.util.function.q;
 
 public final /* synthetic */ class C0 implements q {
@@ -14,6 +14,6 @@ public final /* synthetic */ class C0 implements q {
 
     public q k(q qVar) {
         qVar.getClass();
-        return new f(this, qVar);
+        return new CLASSNAMEf(this, qVar);
     }
 }

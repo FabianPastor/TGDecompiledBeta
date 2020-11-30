@@ -2,7 +2,7 @@ package j$.util;
 
 import j$.util.function.Consumer;
 
-public interface Iterator {
+public interface Iterator<E> {
 
     /* renamed from: j$.util.Iterator$-CC  reason: invalid class name */
     public final /* synthetic */ class CC {

@@ -123,6 +123,9 @@ public class EmuDetector {
             if (!this.detectResult) {
                 this.detectResult = checkPackageName();
             }
+            if (!this.detectResult) {
+                this.detectResult = EmuInputDevicesDetector.detect();
+            }
             return this.detectResult;
         } catch (Exception unused) {
             return false;

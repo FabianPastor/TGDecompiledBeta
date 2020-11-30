@@ -2,7 +2,7 @@ package j$.util;
 
 import java.util.NoSuchElementException;
 
-public final class Optional {
+public final class Optional<T> {
     private static final Optional b = new Optional();
     private final Object a;
 
@@ -30,7 +30,7 @@ public final class Optional {
         if (!(obj instanceof Optional)) {
             return false;
         }
-        return CLASSNAMEk.r(this.a, ((Optional) obj).a);
+        return k.r(this.a, ((Optional) obj).a);
     }
 
     public Object get() {

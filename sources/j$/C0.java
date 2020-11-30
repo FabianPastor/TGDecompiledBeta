@@ -1,16 +1,16 @@
 package j$;
 
-import j$.util.function.E;
+import j$.util.function.J;
 import java.util.function.Supplier;
 
-public final /* synthetic */ class C0 implements E {
+public final /* synthetic */ class C0 implements J {
     final /* synthetic */ Supplier a;
 
     private /* synthetic */ C0(Supplier supplier) {
         this.a = supplier;
     }
 
-    public static /* synthetic */ E a(Supplier supplier) {
+    public static /* synthetic */ J a(Supplier supplier) {
         if (supplier == null) {
             return null;
         }

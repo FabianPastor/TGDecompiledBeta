@@ -27,6 +27,7 @@ public class ManageChatUserCell extends FrameLayout {
     private Object currentObject;
     private CharSequence currrntStatus;
     private ManageChatUserCellDelegate delegate;
+    private String dividerColor;
     private boolean isAdmin;
     private TLRPC$FileLocation lastAvatar;
     private String lastName;
@@ -158,12 +159,25 @@ public class ManageChatUserCell extends FrameLayout {
         return 0;
     }
 
+    public void setStatusColors(int i, int i2) {
+        this.statusColor = i;
+        this.statusOnlineColor = i2;
+    }
+
     public void setIsAdmin(boolean z) {
         this.isAdmin = z;
     }
 
     public boolean hasAvatarSet() {
         return this.avatarImageView.getImageReceiver().hasNotThumb();
+    }
+
+    public void setNameColor(int i) {
+        this.nameTextView.setTextColor(i);
+    }
+
+    public void setDividerColor(String str) {
+        this.dividerColor = str;
     }
 
     /* JADX WARNING: Code restructure failed: missing block: B:112:0x0193, code lost:
@@ -302,14 +316,14 @@ public class ManageChatUserCell extends FrameLayout {
             goto L_0x00d2
         L_0x00c3:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131624532(0x7f0e0254, float:1.8876246E38)
+            r4 = 2131624540(0x7f0e025c, float:1.8876263E38)
             java.lang.String r5 = "BotStatusCantRead"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
             goto L_0x013e
         L_0x00d2:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131624533(0x7f0e0255, float:1.8876248E38)
+            r4 = 2131624541(0x7f0e025d, float:1.8876265E38)
             java.lang.String r5 = "BotStatusRead"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
@@ -350,7 +364,7 @@ public class ManageChatUserCell extends FrameLayout {
             int r4 = r12.statusOnlineColor
             r13.setTextColor(r4)
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131626262(0x7f0e0916, float:1.8879755E38)
+            r4 = 2131626293(0x7f0e0935, float:1.8879818E38)
             java.lang.String r5 = "Online"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
@@ -470,7 +484,7 @@ public class ManageChatUserCell extends FrameLayout {
             boolean r13 = r0.has_geo
             if (r13 == 0) goto L_0x020f
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131625864(0x7f0e0788, float:1.8878948E38)
+            r4 = 2131625881(0x7f0e0799, float:1.8878982E38)
             java.lang.String r5 = "MegaLocation"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
@@ -480,14 +494,14 @@ public class ManageChatUserCell extends FrameLayout {
             boolean r13 = android.text.TextUtils.isEmpty(r13)
             if (r13 == 0) goto L_0x0226
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131625865(0x7f0e0789, float:1.887895E38)
+            r4 = 2131625882(0x7f0e079a, float:1.8878984E38)
             java.lang.String r5 = "MegaPrivate"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
             goto L_0x0234
         L_0x0226:
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.statusTextView
-            r4 = 2131625868(0x7f0e078c, float:1.8878956E38)
+            r4 = 2131625885(0x7f0e079d, float:1.887899E38)
             java.lang.String r5 = "MegaPublic"
             java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
             r13.setText(r4)
@@ -537,7 +551,11 @@ public class ManageChatUserCell extends FrameLayout {
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
         if (this.needDivider) {
-            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(68.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(68.0f) : 0)), (float) (getMeasuredHeight() - 1), Theme.dividerPaint);
+            String str = this.dividerColor;
+            if (str != null) {
+                Theme.dividerExtraPaint.setColor(Theme.getColor(str));
+            }
+            canvas.drawLine(LocaleController.isRTL ? 0.0f : (float) AndroidUtilities.dp(68.0f), (float) (getMeasuredHeight() - 1), (float) (getMeasuredWidth() - (LocaleController.isRTL ? AndroidUtilities.dp(68.0f) : 0)), (float) (getMeasuredHeight() - 1), this.dividerColor != null ? Theme.dividerExtraPaint : Theme.dividerPaint);
         }
     }
 }

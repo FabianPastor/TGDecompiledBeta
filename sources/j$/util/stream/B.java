@@ -1,14 +1,14 @@
 package j$.util.stream;
 
-import j$.util.function.z;
+import j$.util.function.D;
 
-public final /* synthetic */ class B implements z {
+public final /* synthetic */ class B implements D {
     public static final /* synthetic */ B a = new B();
 
     private /* synthetic */ B() {
     }
 
     public final Object apply(long j) {
-        return CLASSNAMEh4.q(j);
+        return S1.q(j);
     }
 }

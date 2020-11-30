@@ -1,7 +1,6 @@
 package org.webrtc;
 
 import android.media.MediaCodecInfo;
-import android.media.MediaCodecList;
 import android.os.Build;
 import java.util.ArrayList;
 import org.webrtc.EglBase;
@@ -48,17 +47,13 @@ class MediaCodecVideoDecoderFactory implements VideoDecoderFactory {
     }
 
     private MediaCodecInfo findCodecForType(VideoCodecMimeType videoCodecMimeType) {
-        MediaCodecInfo mediaCodecInfo;
         if (Build.VERSION.SDK_INT < 19) {
             return null;
         }
-        for (int i = 0; i < MediaCodecList.getCodecCount(); i++) {
-            try {
-                mediaCodecInfo = MediaCodecList.getCodecInfoAt(i);
-            } catch (IllegalArgumentException e) {
-                Logging.e("MediaCodecVideoDecoderFactory", "Cannot retrieve decoder codec info", e);
-                mediaCodecInfo = null;
-            }
+        ArrayList<MediaCodecInfo> sortedCodecsList = MediaCodecUtils.getSortedCodecsList();
+        int size = sortedCodecsList.size();
+        for (int i = 0; i < size; i++) {
+            MediaCodecInfo mediaCodecInfo = sortedCodecsList.get(i);
             if (mediaCodecInfo != null && !mediaCodecInfo.isEncoder() && isSupportedCodec(mediaCodecInfo, videoCodecMimeType)) {
                 return mediaCodecInfo;
             }

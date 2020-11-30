@@ -1,31 +1,55 @@
 package j$.util.stream;
 
-class I2 extends CLASSNAMEo5 {
-    final /* synthetic */ J2 b;
+import j$.util.stream.S2;
+import java.util.Arrays;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    I2(J2 j2, CLASSNAMEt5 t5Var) {
-        super(t5Var);
-        this.b = j2;
+final class I2 extends E2 {
+    private S2.d c;
+
+    I2(A2 a2) {
+        super(a2);
     }
 
     public void accept(long j) {
-        T2 t2 = (T2) this.b.l.apply(j);
-        if (t2 != null) {
-            try {
-                t2.sequential().e(new Q(this));
-            } catch (Throwable unused) {
+        this.c.accept(j);
+    }
+
+    public void m() {
+        long[] jArr = (long[]) this.c.e();
+        Arrays.sort(jArr);
+        this.a.n((long) jArr.length);
+        int i = 0;
+        if (!this.b) {
+            int length = jArr.length;
+            while (i < length) {
+                this.a.accept(jArr[i]);
+                i++;
+            }
+        } else {
+            int length2 = jArr.length;
+            while (i < length2) {
+                long j = jArr[i];
+                if (this.a.p()) {
+                    break;
+                }
+                this.a.accept(j);
+                i++;
             }
         }
-        if (t2 != null) {
-            t2.close();
-            return;
-        }
-        return;
-        throw th;
+        this.a.m();
     }
 
     public void n(long j) {
-        this.a.n(-1);
+        S2.d dVar;
+        if (j < NUM) {
+            if (j > 0) {
+                int i = (int) j;
+            } else {
+                dVar = new S2.d();
+            }
+            this.c = dVar;
+            return;
+        }
+        throw new IllegalArgumentException("Stream size exceeds max array size");
     }
 }

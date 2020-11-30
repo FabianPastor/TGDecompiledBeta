@@ -17,7 +17,6 @@ public class SeekBarView extends FrameLayout {
     private float bufferedProgress;
     boolean captured;
     private float currentRadius;
-    /* access modifiers changed from: private */
     public SeekBarViewDelegate delegate;
     private Drawable hoverDrawable;
     private Paint innerPaint1;
@@ -91,8 +90,9 @@ public class SeekBarView extends FrameLayout {
             public void setProgress(float f) {
                 boolean unused = SeekBarView.this.pressed = true;
                 SeekBarView.this.setProgress(f);
-                if (SeekBarView.this.delegate != null) {
-                    SeekBarView.this.delegate.onSeekBarDrag(true, f);
+                SeekBarViewDelegate seekBarViewDelegate = SeekBarView.this.delegate;
+                if (seekBarViewDelegate != null) {
+                    seekBarViewDelegate.onSeekBarDrag(true, f);
                 }
                 boolean unused2 = SeekBarView.this.pressed = false;
             }
@@ -107,8 +107,9 @@ public class SeekBarView extends FrameLayout {
             }
 
             public CharSequence getContentDescription(View view) {
-                if (SeekBarView.this.delegate != null) {
-                    return SeekBarView.this.delegate.getContentDescription();
+                SeekBarViewDelegate seekBarViewDelegate = SeekBarView.this.delegate;
+                if (seekBarViewDelegate != null) {
+                    return seekBarViewDelegate.getContentDescription();
                 }
                 return null;
             }

@@ -1,30 +1,35 @@
 package j$;
 
+import j$.util.function.y;
 import java.util.function.IntPredicate;
 
 public final /* synthetic */ class Z implements IntPredicate {
-    final /* synthetic */ Y a;
+    final /* synthetic */ y a;
 
-    public static /* synthetic */ IntPredicate a(Y y) {
-        if (y == null) {
+    private /* synthetic */ Z(y yVar) {
+        this.a = yVar;
+    }
+
+    public static /* synthetic */ IntPredicate a(y yVar) {
+        if (yVar == null) {
             return null;
         }
-        return y.a;
+        return yVar instanceof Y ? ((Y) yVar).a : new Z(yVar);
     }
 
-    public IntPredicate and(IntPredicate intPredicate) {
-        return a(Y.a(this.a.a.and(a(Y.a(intPredicate)))));
+    public /* synthetic */ IntPredicate and(IntPredicate intPredicate) {
+        return a(Y.a(((Y) this.a).a.and(a(Y.a(intPredicate)))));
     }
 
-    public IntPredicate negate() {
-        return a(Y.a(this.a.a.negate()));
+    public /* synthetic */ IntPredicate negate() {
+        return a(Y.a(((Y) this.a).a.negate()));
     }
 
-    public IntPredicate or(IntPredicate intPredicate) {
-        return a(Y.a(this.a.a.or(a(Y.a(intPredicate)))));
+    public /* synthetic */ IntPredicate or(IntPredicate intPredicate) {
+        return a(Y.a(((Y) this.a).a.or(a(Y.a(intPredicate)))));
     }
 
-    public boolean test(int i) {
-        return this.a.a.test(i);
+    public /* synthetic */ boolean test(int i) {
+        return ((Y) this.a).a.test(i);
     }
 }

@@ -372,7 +372,7 @@ public class VoIPPiPView implements VoIPBaseService.StateListener, NotificationC
 
     public void onStateChanged(int i) {
         if (i == 11 || i == 17 || i == 4 || i == 10) {
-            AndroidUtilities.runOnUIThread($$Lambda$VoIPPiPView$tBA5mFde0ixGh2dJCrDlzjN1YM.INSTANCE, 200);
+            AndroidUtilities.runOnUIThread($$Lambda$NKsCQZEaYu8U2hXDux7RXQqeP2M.INSTANCE, 200);
         }
         VoIPService sharedInstance = VoIPService.getSharedInstance();
         if (sharedInstance == null) {

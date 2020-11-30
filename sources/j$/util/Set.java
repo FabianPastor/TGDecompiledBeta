@@ -1,15 +1,16 @@
 package j$.util;
 
+import j$.util.v;
 import java.util.Collection;
 import java.util.Iterator;
 
-public interface Set extends Collection, Collection {
+public interface Set<E> extends Collection<E> {
 
     /* renamed from: j$.util.Set$-CC  reason: invalid class name */
     public final /* synthetic */ class CC {
         public static Spliterator $default$spliterator(java.util.Set set) {
             set.getClass();
-            return new T((Collection) set, 1);
+            return new v.i((Collection) set, 1);
         }
     }
 

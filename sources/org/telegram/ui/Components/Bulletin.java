@@ -1049,6 +1049,7 @@ public final class Bulletin {
                 private boolean isUndone;
                 private Runnable undoAction;
 
+                /* JADX INFO: super call moved to the top of the method (can break code semantics) */
                 public UndoButton(Context context, boolean z) {
                     super(context);
                     int color = Theme.getColor("undo_cancelColor");
@@ -1059,7 +1060,7 @@ public final class Bulletin {
                                 Bulletin.UndoButton.this.lambda$new$0$Bulletin$UndoButton(view);
                             }
                         });
-                        textView.setBackground(Theme.createSelectorDrawable((color & 16777215) | NUM, 7));
+                        textView.setBackground(Theme.createCircleSelectorDrawable(NUM | (16777215 & color), LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : 0, !LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : 0));
                         textView.setTextSize(1, 14.0f);
                         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
                         textView.setTextColor(color);

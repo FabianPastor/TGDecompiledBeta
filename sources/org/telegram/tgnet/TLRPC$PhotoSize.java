@@ -11,6 +11,9 @@ public abstract class TLRPC$PhotoSize extends TLObject {
     public static TLRPC$PhotoSize TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$PhotoSize tLRPC$PhotoSize;
         switch (i) {
+            case -668906175:
+                tLRPC$PhotoSize = new TLRPC$TL_photoPathSize();
+                break;
             case -525288402:
                 tLRPC$PhotoSize = new TLRPC$TL_photoStrippedSize();
                 break;

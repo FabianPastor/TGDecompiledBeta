@@ -14,8 +14,10 @@ import j$.util.function.ToLongFunction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ContactsController;
+import org.telegram.messenger.DownloadController;
 import org.telegram.messenger.FileLog;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
@@ -24,6 +26,7 @@ import org.telegram.tgnet.TLObject;
 import org.telegram.tgnet.TLRPC$Dialog;
 import org.telegram.tgnet.TLRPC$RecentMeUrl;
 import org.telegram.tgnet.TLRPC$TL_contact;
+import org.telegram.ui.Adapters.DialogsAdapter;
 import org.telegram.ui.Cells.ArchiveHintCell;
 import org.telegram.ui.Cells.DialogCell;
 import org.telegram.ui.Cells.DialogMeUrlCell;
@@ -51,6 +54,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
     private Context mContext;
     private ArrayList<TLRPC$TL_contact> onlineContacts;
     private long openedDialogId;
+    private DialogsPreloader preloader;
     private int prevContactsCount;
     private PullForegroundDrawable pullForegroundDrawable;
     private ArrayList<Long> selectedDialogs;
@@ -71,6 +75,9 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             if (this.showArchiveHint) {
                 this.archiveHintCell = new ArchiveHintCell(context);
             }
+        }
+        if (i2 == 0) {
+            this.preloader = new DialogsPreloader();
         }
     }
 
@@ -413,17 +420,17 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Adapters.DialogsAdapter$2 r13 = new org.telegram.ui.Adapters.DialogsAdapter$2
             android.content.Context r0 = r12.mContext
             r13.<init>(r0)
-            goto L_0x0131
+            goto L_0x0136
         L_0x0019:
             org.telegram.ui.Cells.ArchiveHintCell r13 = r12.archiveHintCell
             android.view.ViewParent r0 = r13.getParent()
-            if (r0 == 0) goto L_0x0131
+            if (r0 == 0) goto L_0x0136
             org.telegram.ui.Cells.ArchiveHintCell r0 = r12.archiveHintCell
             android.view.ViewParent r0 = r0.getParent()
             android.view.ViewGroup r0 = (android.view.ViewGroup) r0
             org.telegram.ui.Cells.ArchiveHintCell r1 = r12.archiveHintCell
             r0.removeView(r1)
-            goto L_0x0131
+            goto L_0x0136
         L_0x0030:
             org.telegram.ui.Cells.ShadowSectionCell r4 = new org.telegram.ui.Cells.ShadowSectionCell
             android.content.Context r6 = r12.mContext
@@ -442,27 +449,27 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Cells.HeaderCell r13 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r0 = r12.mContext
             r13.<init>(r0)
-            r0 = 2131627733(0x7f0e0ed5, float:1.8882739E38)
+            r0 = 2131627797(0x7f0e0var_, float:1.8882869E38)
             java.lang.String r1 = "YourContacts"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r13.setText(r0)
-            goto L_0x0131
+            goto L_0x0136
         L_0x0067:
             org.telegram.ui.Cells.UserCell r13 = new org.telegram.ui.Cells.UserCell
             android.content.Context r0 = r12.mContext
             r1 = 8
             r13.<init>(r0, r1, r4, r4)
-            goto L_0x0131
+            goto L_0x0136
         L_0x0072:
             org.telegram.ui.Cells.DialogsEmptyCell r13 = new org.telegram.ui.Cells.DialogsEmptyCell
             android.content.Context r0 = r12.mContext
             r13.<init>(r0)
-            goto L_0x0131
+            goto L_0x0136
         L_0x007b:
             org.telegram.ui.Cells.DialogMeUrlCell r13 = new org.telegram.ui.Cells.DialogMeUrlCell
             android.content.Context r0 = r12.mContext
             r13.<init>(r0)
-            goto L_0x0131
+            goto L_0x0136
         L_0x0084:
             org.telegram.ui.Adapters.DialogsAdapter$1 r4 = new org.telegram.ui.Adapters.DialogsAdapter$1
             android.content.Context r5 = r12.mContext
@@ -480,12 +487,12 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r4.addView(r1, r13)
         L_0x00ab:
             r13 = r4
-            goto L_0x0131
+            goto L_0x0136
         L_0x00ae:
             org.telegram.ui.Cells.HeaderCell r13 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r0 = r12.mContext
             r13.<init>(r0)
-            r0 = 2131626813(0x7f0e0b3d, float:1.8880873E38)
+            r0 = 2131626844(0x7f0e0b5c, float:1.8880936E38)
             java.lang.String r1 = "RecentlyViewed"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r13.setText(r0)
@@ -500,7 +507,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             java.lang.String r1 = "windowBackgroundWhiteBlueHeader"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r0.setTextColor(r1)
-            r1 = 2131626814(0x7f0e0b3e, float:1.8880875E38)
+            r1 = 2131626845(0x7f0e0b5d, float:1.8880938E38)
             java.lang.String r4 = "RecentlyViewedHide"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r4, r1)
             r0.setText(r1)
@@ -532,12 +539,12 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$B0qIe6TxDardgaYX-7eWyt6VPHc r1 = new org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$B0qIe6TxDardgaYX-7eWyt6VPHc
             r1.<init>()
             r0.setOnClickListener(r1)
-            goto L_0x0131
+            goto L_0x0136
         L_0x011b:
             org.telegram.ui.Cells.LoadingCell r13 = new org.telegram.ui.Cells.LoadingCell
             android.content.Context r0 = r12.mContext
             r13.<init>(r0)
-            goto L_0x0131
+            goto L_0x0136
         L_0x0123:
             org.telegram.ui.Cells.DialogCell r13 = new org.telegram.ui.Cells.DialogCell
             android.content.Context r0 = r12.mContext
@@ -545,14 +552,16 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             r13.<init>(r0, r5, r4, r1)
             org.telegram.ui.Components.PullForegroundDrawable r0 = r12.pullForegroundDrawable
             r13.setArchivedPullAnimation(r0)
-        L_0x0131:
+            org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader r0 = r12.preloader
+            r13.setPreloader(r0)
+        L_0x0136:
             androidx.recyclerview.widget.RecyclerView$LayoutParams r0 = new androidx.recyclerview.widget.RecyclerView$LayoutParams
-            if (r14 != r2) goto L_0x0137
+            if (r14 != r2) goto L_0x013c
             r14 = -1
-            goto L_0x0138
-        L_0x0137:
+            goto L_0x013d
+        L_0x013c:
             r14 = -2
-        L_0x0138:
+        L_0x013d:
             r0.<init>((int) r3, (int) r14)
             r13.setLayoutParams(r0)
             org.telegram.ui.Components.RecyclerListView$Holder r14 = new org.telegram.ui.Components.RecyclerListView$Holder
@@ -584,6 +593,10 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             }
             dialogCell.setChecked(this.selectedDialogs.contains(Long.valueOf(tLRPC$Dialog.id)), false);
             dialogCell.setDialog(tLRPC$Dialog, this.dialogsType, this.folderId);
+            DialogsPreloader dialogsPreloader = this.preloader;
+            if (dialogsPreloader != null && i < 10) {
+                dialogsPreloader.add(tLRPC$Dialog.id);
+            }
         } else if (itemViewType == 4) {
             ((DialogMeUrlCell) viewHolder.itemView).setRecentMeUrl((TLRPC$RecentMeUrl) getItem(i));
         } else if (itemViewType == 5) {
@@ -678,5 +691,388 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
 
     public void setArchivedPullDrawable(PullForegroundDrawable pullForegroundDrawable2) {
         this.pullForegroundDrawable = pullForegroundDrawable2;
+    }
+
+    public void didDatabaseCleared() {
+        DialogsPreloader dialogsPreloader = this.preloader;
+        if (dialogsPreloader != null) {
+            dialogsPreloader.clear();
+        }
+    }
+
+    public void resume() {
+        DialogsPreloader dialogsPreloader = this.preloader;
+        if (dialogsPreloader != null) {
+            dialogsPreloader.resume();
+        }
+    }
+
+    public void pause() {
+        DialogsPreloader dialogsPreloader = this.preloader;
+        if (dialogsPreloader != null) {
+            dialogsPreloader.pause();
+        }
+    }
+
+    public static class DialogsPreloader {
+        Runnable clearNetworkRequestCount = new Runnable() {
+            public final void run() {
+                DialogsAdapter.DialogsPreloader.this.lambda$new$0$DialogsAdapter$DialogsPreloader();
+            }
+        };
+        int currentRequestCount;
+        HashSet<Long> dialogsReadyMap = new HashSet<>();
+        HashSet<Long> loadingDialogs = new HashSet<>();
+        int networkRequestCount;
+        ArrayList<Long> preloadDialogsPool = new ArrayList<>();
+        HashSet<Long> preloadedErrorMap = new HashSet<>();
+        boolean resumed;
+
+        public void updateList() {
+        }
+
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$new$0 */
+        public /* synthetic */ void lambda$new$0$DialogsAdapter$DialogsPreloader() {
+            this.networkRequestCount = 0;
+            start();
+        }
+
+        public void add(long j) {
+            if (!isReady(j) && !this.preloadedErrorMap.contains(Long.valueOf(j)) && !this.loadingDialogs.contains(Long.valueOf(j)) && !this.preloadDialogsPool.contains(Long.valueOf(j))) {
+                this.preloadDialogsPool.add(Long.valueOf(j));
+                start();
+            }
+        }
+
+        /* access modifiers changed from: private */
+        public void start() {
+            if (preloadidAvilable() && this.resumed && !this.preloadDialogsPool.isEmpty() && this.currentRequestCount < 4 && this.networkRequestCount <= 6) {
+                final long longValue = this.preloadDialogsPool.remove(0).longValue();
+                this.currentRequestCount++;
+                this.loadingDialogs.add(Long.valueOf(longValue));
+                MessagesController.getInstance(UserConfig.selectedAccount).ensureMessagesLoaded(longValue, 0, new MessagesController.MessagesLoadedCallback() {
+                    public void onMessagesLoaded(boolean z) {
+                        AndroidUtilities.runOnUIThread(
+                        /*  JADX ERROR: Method code generation error
+                            jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0007: INVOKE  
+                              (wrap: org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$uLfPHYxzbWAkjtxFDFkg7uuiZ0c : 0x0004: CONSTRUCTOR  (r2v0 org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$uLfPHYxzbWAkjtxFDFkg7uuiZ0c) = 
+                              (r3v0 'this' org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1 A[THIS])
+                              (r4v0 'z' boolean)
+                              (wrap: long : 0x0000: IGET  (r0v0 long) = 
+                              (r3v0 'this' org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1 A[THIS])
+                             org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.val$dialog_id long)
+                             call: org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$uLfPHYxzbWAkjtxFDFkg7uuiZ0c.<init>(org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1, boolean, long):void type: CONSTRUCTOR)
+                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.onMessagesLoaded(boolean):void, dex: classes.dex
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                            	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                            	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                            	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                            	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                            	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
+                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                            	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
+                            	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
+                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                            	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                            	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                            	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                            	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                            	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                            	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                            	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                            	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                            	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                            	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
+                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                            	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                            	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
+                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
+                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                            	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                            	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
+                            	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
+                            	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
+                            	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
+                            	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+                            	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
+                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0004: CONSTRUCTOR  (r2v0 org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$uLfPHYxzbWAkjtxFDFkg7uuiZ0c) = 
+                              (r3v0 'this' org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1 A[THIS])
+                              (r4v0 'z' boolean)
+                              (wrap: long : 0x0000: IGET  (r0v0 long) = 
+                              (r3v0 'this' org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1 A[THIS])
+                             org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.val$dialog_id long)
+                             call: org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$uLfPHYxzbWAkjtxFDFkg7uuiZ0c.<init>(org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1, boolean, long):void type: CONSTRUCTOR in method: org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.onMessagesLoaded(boolean):void, dex: classes.dex
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                            	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                            	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                            	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                            	... 83 more
+                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$uLfPHYxzbWAkjtxFDFkg7uuiZ0c, state: NOT_LOADED
+                            	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
+                            	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
+                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                            	... 89 more
+                            */
+                        /*
+                            this = this;
+                            long r0 = r2
+                            org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$uLfPHYxzbWAkjtxFDFkg7uuiZ0c r2 = new org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$uLfPHYxzbWAkjtxFDFkg7uuiZ0c
+                            r2.<init>(r3, r4, r0)
+                            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)
+                            return
+                        */
+                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.AnonymousClass1.onMessagesLoaded(boolean):void");
+                    }
+
+                    /* access modifiers changed from: private */
+                    /* renamed from: lambda$onMessagesLoaded$0 */
+                    public /* synthetic */ void lambda$onMessagesLoaded$0$DialogsAdapter$DialogsPreloader$1(boolean z, long j) {
+                        if (!z) {
+                            DialogsPreloader dialogsPreloader = DialogsPreloader.this;
+                            int i = dialogsPreloader.networkRequestCount + 1;
+                            dialogsPreloader.networkRequestCount = i;
+                            if (i >= 6) {
+                                AndroidUtilities.cancelRunOnUIThread(dialogsPreloader.clearNetworkRequestCount);
+                                AndroidUtilities.runOnUIThread(DialogsPreloader.this.clearNetworkRequestCount, 60000);
+                            }
+                        }
+                        if (DialogsPreloader.this.loadingDialogs.remove(Long.valueOf(j))) {
+                            DialogsPreloader.this.dialogsReadyMap.add(Long.valueOf(j));
+                            DialogsPreloader.this.updateList();
+                            DialogsPreloader dialogsPreloader2 = DialogsPreloader.this;
+                            dialogsPreloader2.currentRequestCount--;
+                            dialogsPreloader2.start();
+                        }
+                    }
+
+                    public void onError() {
+                        AndroidUtilities.runOnUIThread(
+                        /*  JADX ERROR: Method code generation error
+                            jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0007: INVOKE  
+                              (wrap: org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$3F-ZmIc7iTrW5y3bKNV1GMqz07U : 0x0004: CONSTRUCTOR  (r2v0 org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$3F-ZmIc7iTrW5y3bKNV1GMqz07U) = 
+                              (r3v0 'this' org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1 A[THIS])
+                              (wrap: long : 0x0000: IGET  (r0v0 long) = 
+                              (r3v0 'this' org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1 A[THIS])
+                             org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.val$dialog_id long)
+                             call: org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$3F-ZmIc7iTrW5y3bKNV1GMqz07U.<init>(org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1, long):void type: CONSTRUCTOR)
+                             org.telegram.messenger.AndroidUtilities.runOnUIThread(java.lang.Runnable):void type: STATIC in method: org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.onError():void, dex: classes.dex
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                            	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                            	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                            	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                            	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                            	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
+                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                            	at jadx.core.codegen.InsnGen.inlineAnonymousConstructor(InsnGen.java:676)
+                            	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:607)
+                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                            	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                            	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                            	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:221)
+                            	at jadx.core.codegen.RegionGen.makeSimpleBlock(RegionGen.java:109)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:55)
+                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                            	at jadx.core.codegen.RegionGen.makeRegionIndent(RegionGen.java:98)
+                            	at jadx.core.codegen.RegionGen.makeIf(RegionGen.java:142)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:62)
+                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                            	at jadx.core.codegen.RegionGen.makeSimpleRegion(RegionGen.java:92)
+                            	at jadx.core.codegen.RegionGen.makeRegion(RegionGen.java:58)
+                            	at jadx.core.codegen.MethodGen.addRegionInsns(MethodGen.java:211)
+                            	at jadx.core.codegen.MethodGen.addInstructions(MethodGen.java:204)
+                            	at jadx.core.codegen.ClassGen.addMethodCode(ClassGen.java:318)
+                            	at jadx.core.codegen.ClassGen.addMethod(ClassGen.java:271)
+                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:240)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
+                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                            	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                            	at jadx.core.codegen.ClassGen.addInnerClass(ClassGen.java:249)
+                            	at jadx.core.codegen.ClassGen.lambda$addInnerClsAndMethods$2(ClassGen.java:238)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183)
+                            	at java.util.ArrayList.forEach(ArrayList.java:1259)
+                            	at java.util.stream.SortedOps$RefSortingSink.end(SortedOps.java:395)
+                            	at java.util.stream.Sink$ChainedReference.end(Sink.java:258)
+                            	at java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:483)
+                            	at java.util.stream.AbstractPipeline.wrapAndCopyInto(AbstractPipeline.java:472)
+                            	at java.util.stream.ForEachOps$ForEachOp.evaluateSequential(ForEachOps.java:150)
+                            	at java.util.stream.ForEachOps$ForEachOp$OfRef.evaluateSequential(ForEachOps.java:173)
+                            	at java.util.stream.AbstractPipeline.evaluate(AbstractPipeline.java:234)
+                            	at java.util.stream.ReferencePipeline.forEach(ReferencePipeline.java:485)
+                            	at jadx.core.codegen.ClassGen.addInnerClsAndMethods(ClassGen.java:236)
+                            	at jadx.core.codegen.ClassGen.addClassBody(ClassGen.java:227)
+                            	at jadx.core.codegen.ClassGen.addClassCode(ClassGen.java:112)
+                            	at jadx.core.codegen.ClassGen.makeClass(ClassGen.java:78)
+                            	at jadx.core.codegen.CodeGen.wrapCodeGen(CodeGen.java:44)
+                            	at jadx.core.codegen.CodeGen.generateJavaCode(CodeGen.java:33)
+                            	at jadx.core.codegen.CodeGen.generate(CodeGen.java:21)
+                            	at jadx.core.ProcessClass.generateCode(ProcessClass.java:61)
+                            	at jadx.core.dex.nodes.ClassNode.decompile(ClassNode.java:273)
+                            Caused by: jadx.core.utils.exceptions.CodegenException: Error generate insn: 0x0004: CONSTRUCTOR  (r2v0 org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$3F-ZmIc7iTrW5y3bKNV1GMqz07U) = 
+                              (r3v0 'this' org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1 A[THIS])
+                              (wrap: long : 0x0000: IGET  (r0v0 long) = 
+                              (r3v0 'this' org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1 A[THIS])
+                             org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.val$dialog_id long)
+                             call: org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$3F-ZmIc7iTrW5y3bKNV1GMqz07U.<init>(org.telegram.ui.Adapters.DialogsAdapter$DialogsPreloader$1, long):void type: CONSTRUCTOR in method: org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.1.onError():void, dex: classes.dex
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:256)
+                            	at jadx.core.codegen.InsnGen.addWrappedArg(InsnGen.java:123)
+                            	at jadx.core.codegen.InsnGen.addArg(InsnGen.java:107)
+                            	at jadx.core.codegen.InsnGen.generateMethodArguments(InsnGen.java:787)
+                            	at jadx.core.codegen.InsnGen.makeInvoke(InsnGen.java:728)
+                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:368)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:250)
+                            	... 83 more
+                            Caused by: jadx.core.utils.exceptions.JadxRuntimeException: Expected class to be processed at this point, class: org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$3F-ZmIc7iTrW5y3bKNV1GMqz07U, state: NOT_LOADED
+                            	at jadx.core.dex.nodes.ClassNode.ensureProcessed(ClassNode.java:260)
+                            	at jadx.core.codegen.InsnGen.makeConstructor(InsnGen.java:606)
+                            	at jadx.core.codegen.InsnGen.makeInsnBody(InsnGen.java:364)
+                            	at jadx.core.codegen.InsnGen.makeInsn(InsnGen.java:231)
+                            	... 89 more
+                            */
+                        /*
+                            this = this;
+                            long r0 = r2
+                            org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$3F-ZmIc7iTrW5y3bKNV1GMqz07U r2 = new org.telegram.ui.Adapters.-$$Lambda$DialogsAdapter$DialogsPreloader$1$3F-ZmIc7iTrW5y3bKNV1GMqz07U
+                            r2.<init>(r3, r0)
+                            org.telegram.messenger.AndroidUtilities.runOnUIThread(r2)
+                            return
+                        */
+                        throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Adapters.DialogsAdapter.DialogsPreloader.AnonymousClass1.onError():void");
+                    }
+
+                    /* access modifiers changed from: private */
+                    /* renamed from: lambda$onError$1 */
+                    public /* synthetic */ void lambda$onError$1$DialogsAdapter$DialogsPreloader$1(long j) {
+                        if (DialogsPreloader.this.loadingDialogs.remove(Long.valueOf(j))) {
+                            DialogsPreloader.this.preloadedErrorMap.add(Long.valueOf(j));
+                            DialogsPreloader dialogsPreloader = DialogsPreloader.this;
+                            dialogsPreloader.currentRequestCount--;
+                            dialogsPreloader.start();
+                        }
+                    }
+                });
+            }
+        }
+
+        private boolean preloadidAvilable() {
+            return DownloadController.getInstance(UserConfig.selectedAccount).getCurrentDownloadMask() != 0;
+        }
+
+        public boolean isReady(long j) {
+            return this.dialogsReadyMap.contains(Long.valueOf(j));
+        }
+
+        public void remove(long j) {
+            this.preloadDialogsPool.remove(Long.valueOf(j));
+        }
+
+        public void clear() {
+            this.dialogsReadyMap.clear();
+            this.preloadedErrorMap.clear();
+            this.loadingDialogs.clear();
+            this.preloadDialogsPool.clear();
+            this.currentRequestCount = 0;
+            this.networkRequestCount = 0;
+            AndroidUtilities.cancelRunOnUIThread(this.clearNetworkRequestCount);
+            updateList();
+        }
+
+        public void resume() {
+            this.resumed = true;
+            start();
+        }
+
+        public void pause() {
+            this.resumed = false;
+        }
     }
 }

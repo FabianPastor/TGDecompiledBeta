@@ -1,16 +1,16 @@
 package j$;
 
-import j$.util.function.u;
+import j$.util.function.w;
 import java.util.function.IntConsumer;
 
-public final /* synthetic */ class U implements u {
+public final /* synthetic */ class U implements w {
     final /* synthetic */ IntConsumer a;
 
     private /* synthetic */ U(IntConsumer intConsumer) {
         this.a = intConsumer;
     }
 
-    public static /* synthetic */ u b(IntConsumer intConsumer) {
+    public static /* synthetic */ w b(IntConsumer intConsumer) {
         if (intConsumer == null) {
             return null;
         }
@@ -21,7 +21,7 @@ public final /* synthetic */ class U implements u {
         this.a.accept(i);
     }
 
-    public /* synthetic */ u l(u uVar) {
-        return b(this.a.andThen(V.a(uVar)));
+    public /* synthetic */ w l(w wVar) {
+        return b(this.a.andThen(V.a(wVar)));
     }
 }

@@ -6,7 +6,6 @@ import android.view.View;
 import java.util.Random;
 import org.telegram.messenger.AndroidUtilities;
 import org.telegram.ui.ActionBar.Theme;
-import org.telegram.ui.Cells.ChatMessageCell;
 
 public class AudioVisualizerDrawable {
     public int ALPHA = 61;
@@ -123,6 +122,10 @@ public class AudioVisualizerDrawable {
             this.p1.setColor(Theme.getColor("chat_inLoader"));
             this.p1.setAlpha(this.ALPHA);
         }
+        draw(canvas, f, f2);
+    }
+
+    public void draw(Canvas canvas, float f, float f2) {
         for (int i = 0; i < 8; i++) {
             float[] fArr = this.animateTo;
             float f3 = fArr[i];
@@ -191,8 +194,8 @@ public class AudioVisualizerDrawable {
         }
     }
 
-    public void setParentView(ChatMessageCell chatMessageCell) {
-        this.parentView = chatMessageCell;
+    public void setParentView(View view) {
+        this.parentView = view;
     }
 
     public View getParentView() {

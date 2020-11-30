@@ -1,5 +1,5 @@
 package j$.util.function;
 
 public interface z {
-    Object apply(long j);
+    long applyAsLong(int i);
 }

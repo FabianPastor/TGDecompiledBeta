@@ -1,27 +1,67 @@
 package j$.util.stream;
 
-import j$.util.function.h;
-import j$.util.function.y;
+import j$.util.function.C;
+import j$.util.function.CLASSNAMEe;
+import j$.util.function.CLASSNAMEh;
+import j$.util.function.Consumer;
+import j$.util.function.I;
+import j$.util.function.J;
+import j$.util.function.n;
+import j$.util.k;
+import j$.util.stream.A2;
 
-final class V1 extends X1 implements CLASSNAMEs5 {
-    final y b;
+class V1 extends CLASSNAMEv2<R> implements CLASSNAMEu2<Long, R, V1>, A2.g {
+    final /* synthetic */ J b;
+    final /* synthetic */ I c;
+    final /* synthetic */ n d;
 
-    V1(y yVar, boolean z) {
-        super(z);
-        this.b = yVar;
+    V1(J j, I i, n nVar) {
+        this.b = j;
+        this.c = i;
+        this.d = nVar;
+    }
+
+    public /* synthetic */ void accept(double d2) {
+        k.c(this);
+        throw null;
+    }
+
+    public /* synthetic */ void accept(int i) {
+        k.a(this);
+        throw null;
     }
 
     public void accept(long j) {
-        this.b.accept(j);
+        this.c.accept(this.a, j);
     }
 
-    /* renamed from: e */
+    /* renamed from: b */
     public /* synthetic */ void accept(Long l) {
-        CLASSNAMEc3.c(this, l);
+        Q1.c(this, l);
     }
 
-    public y g(y yVar) {
-        yVar.getClass();
-        return new h(this, yVar);
+    public Consumer f(Consumer consumer) {
+        consumer.getClass();
+        return new CLASSNAMEe(this, consumer);
+    }
+
+    public C g(C c2) {
+        c2.getClass();
+        return new CLASSNAMEh(this, c2);
+    }
+
+    public void i(CLASSNAMEu2 u2Var) {
+        this.a = this.d.apply(this.a, ((V1) u2Var).a);
+    }
+
+    public void m() {
+    }
+
+    public void n(long j) {
+        this.a = this.b.get();
+    }
+
+    public /* synthetic */ boolean p() {
+        return false;
     }
 }

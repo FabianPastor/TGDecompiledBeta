@@ -1,84 +1,36 @@
 package j$.util.stream;
 
 import j$.H;
-import j$.J;
-import j$.N;
-import j$.util.C;
-import j$.util.CLASSNAMEn;
-import j$.util.CLASSNAMEt;
-import j$.util.function.B;
-import j$.util.function.BiConsumer;
-import j$.util.function.E;
-import j$.util.function.p;
+import j$.util.function.CLASSNAMEf;
 import j$.util.function.q;
-import j$.util.function.r;
 import j$.util.function.s;
-import j$.util.x;
+import j$.util.stream.A2;
 
-public interface L1 extends CLASSNAMEl1 {
-    CLASSNAMEt C(p pVar);
+class L1 extends M1<Double> implements A2.e {
+    final /* synthetic */ N1 c;
+    final /* synthetic */ s d;
 
-    Object D(E e, B b, BiConsumer biConsumer);
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    L1(N1 n1, s sVar) {
+        super(n1);
+        this.c = n1;
+        this.d = sVar;
+    }
 
-    double H(double d, p pVar);
+    public void accept(double d2) {
+        if (!this.a && ((H) this.d).b(d2) == this.c.a) {
+            this.a = true;
+            this.b = this.c.b;
+        }
+    }
 
-    L1 I(N n);
+    /* renamed from: b */
+    public /* synthetic */ void accept(Double d2) {
+        Q1.a(this, d2);
+    }
 
-    Stream J(r rVar);
-
-    L1 O(H h);
-
-    boolean V(H h);
-
-    CLASSNAMEt average();
-
-    boolean b(H h);
-
-    Stream boxed();
-
-    L1 c(q qVar);
-
-    long count();
-
-    L1 distinct();
-
-    CLASSNAMEt findAny();
-
-    CLASSNAMEt findFirst();
-
-    boolean h0(H h);
-
-    x iterator();
-
-    void k(q qVar);
-
-    void k0(q qVar);
-
-    L1 limit(long j);
-
-    CLASSNAMEt max();
-
-    CLASSNAMEt min();
-
-    CLASSNAMEx2 o(J j);
-
-    L1 parallel();
-
-    L1 sequential();
-
-    L1 skip(long j);
-
-    L1 sorted();
-
-    C spliterator();
-
-    double sum();
-
-    CLASSNAMEn summaryStatistics();
-
-    double[] toArray();
-
-    L1 u(r rVar);
-
-    T2 v(s sVar);
+    public q k(q qVar) {
+        qVar.getClass();
+        return new CLASSNAMEf(this, qVar);
+    }
 }

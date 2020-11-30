@@ -3,17 +3,18 @@ package j$.util;
 import j$.lang.Iterable;
 import j$.util.function.Consumer;
 import j$.util.function.Predicate;
-import j$.util.function.v;
-import j$.util.stream.CLASSNAMEc3;
+import j$.util.function.x;
+import j$.util.stream.Q1;
 import j$.util.stream.Stream;
+import j$.util.v;
 import java.util.Iterator;
 
-public interface Collection extends Iterable, Iterable {
+public interface Collection<E> extends Iterable<E> {
 
     /* renamed from: j$.util.Collection$-CC  reason: invalid class name */
     public final /* synthetic */ class CC {
         public static Stream $default$parallelStream(java.util.Collection collection) {
-            return CLASSNAMEc3.v(CLASSNAMEk.C(collection), true);
+            return Q1.v(k.C(collection), true);
         }
 
         public static boolean $default$removeIf(java.util.Collection collection, Predicate predicate) {
@@ -34,11 +35,11 @@ public interface Collection extends Iterable, Iterable {
 
         public static Spliterator $default$spliterator(java.util.Collection collection) {
             collection.getClass();
-            return new T(collection, 0);
+            return new v.i(collection, 0);
         }
 
         public static Stream $default$stream(java.util.Collection collection) {
-            return CLASSNAMEc3.v(CLASSNAMEk.C(collection), false);
+            return Q1.v(k.C(collection), false);
         }
     }
 
@@ -80,7 +81,7 @@ public interface Collection extends Iterable, Iterable {
 
     Object[] toArray();
 
-    Object[] toArray(v vVar);
+    Object[] toArray(x xVar);
 
     Object[] toArray(Object[] objArr);
 }

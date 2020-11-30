@@ -6,7 +6,7 @@ import j$.util.function.ToIntFunction;
 import j$.util.function.ToLongFunction;
 import java.util.Collections;
 
-public interface Comparator {
+public interface Comparator<T> {
     int compare(Object obj, Object obj2);
 
     boolean equals(Object obj);
@@ -33,26 +33,26 @@ public interface Comparator {
 
         public static java.util.Comparator $default$thenComparing(java.util.Comparator comparator, Function function) {
             function.getClass();
-            return CLASSNAMEk.D(comparator, new CLASSNAMEa(function));
+            return k.D(comparator, new a(function));
         }
 
         public static java.util.Comparator $default$thenComparingDouble(java.util.Comparator comparator, ToDoubleFunction toDoubleFunction) {
             toDoubleFunction.getClass();
-            return CLASSNAMEk.D(comparator, new CLASSNAMEc(toDoubleFunction));
+            return k.D(comparator, new c(toDoubleFunction));
         }
 
         public static java.util.Comparator $default$thenComparingInt(java.util.Comparator comparator, ToIntFunction toIntFunction) {
             toIntFunction.getClass();
-            return CLASSNAMEk.D(comparator, new CLASSNAMEe(toIntFunction));
+            return k.D(comparator, new e(toIntFunction));
         }
 
         public static java.util.Comparator $default$thenComparingLong(java.util.Comparator comparator, ToLongFunction toLongFunction) {
             toLongFunction.getClass();
-            return CLASSNAMEk.D(comparator, new CLASSNAMEf(toLongFunction));
+            return k.D(comparator, new f(toLongFunction));
         }
 
         public static java.util.Comparator b() {
-            return CLASSNAMEl.INSTANCE;
+            return l.INSTANCE;
         }
 
         public static java.util.Comparator reverseOrder() {
@@ -62,12 +62,12 @@ public interface Comparator {
         public static java.util.Comparator $default$thenComparing(java.util.Comparator comparator, Function function, java.util.Comparator comparator2) {
             function.getClass();
             comparator2.getClass();
-            return CLASSNAMEk.D(comparator, new CLASSNAMEb(comparator2, function));
+            return k.D(comparator, new b(comparator2, function));
         }
 
         public static java.util.Comparator $default$thenComparing(java.util.Comparator comparator, java.util.Comparator comparator2) {
             comparator2.getClass();
-            return new CLASSNAMEd(comparator, comparator2);
+            return new d(comparator, comparator2);
         }
     }
 }

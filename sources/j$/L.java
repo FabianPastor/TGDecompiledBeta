@@ -1,16 +1,16 @@
 package j$;
 
-import j$.util.function.s;
+import j$.util.function.t;
 import java.util.function.DoubleToLongFunction;
 
-public final /* synthetic */ class L implements s {
+public final /* synthetic */ class L implements t {
     final /* synthetic */ DoubleToLongFunction a;
 
     private /* synthetic */ L(DoubleToLongFunction doubleToLongFunction) {
         this.a = doubleToLongFunction;
     }
 
-    public static /* synthetic */ s a(DoubleToLongFunction doubleToLongFunction) {
+    public static /* synthetic */ t a(DoubleToLongFunction doubleToLongFunction) {
         if (doubleToLongFunction == null) {
             return null;
         }

@@ -1,31 +1,30 @@
 package j$.util.stream;
 
-class A1 extends CLASSNAMEm5 {
-    final /* synthetic */ B1 b;
+import j$.CLASSNAMEa0;
+import j$.util.stream.A2;
+import j$.util.stream.CLASSNAMEp1;
+
+class A1 extends CLASSNAMEp1.i<Integer> {
+    final /* synthetic */ CLASSNAMEa0 l;
+
+    class a extends A2.b<Double> {
+        a(A2 a2) {
+            super(a2);
+        }
+
+        public void accept(int i) {
+            this.a.accept(A1.this.l.a(i));
+        }
+    }
 
     /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    A1(B1 b1, CLASSNAMEt5 t5Var) {
-        super(t5Var);
-        this.b = b1;
+    A1(CLASSNAMEz1 z1Var, CLASSNAMEh1 h1Var, U2 u2, int i, CLASSNAMEa0 a0Var) {
+        super(h1Var, u2, i);
+        this.l = a0Var;
     }
 
-    public void accept(double d) {
-        L1 l1 = (L1) this.b.l.apply(d);
-        if (l1 != null) {
-            try {
-                l1.sequential().k(new CLASSNAMEo(this));
-            } catch (Throwable unused) {
-            }
-        }
-        if (l1 != null) {
-            l1.close();
-            return;
-        }
-        return;
-        throw th;
-    }
-
-    public void n(long j) {
-        this.a.n(-1);
+    /* access modifiers changed from: package-private */
+    public A2 G0(int i, A2 a2) {
+        return new a(a2);
     }
 }

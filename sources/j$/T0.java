@@ -1,8 +1,7 @@
 package j$;
 
-import j$.util.CLASSNAMEk;
-import j$.util.CLASSNAMEs;
-import j$.util.stream.T2;
+import j$.util.k;
+import j$.util.stream.H1;
 import java.util.LongSummaryStatistics;
 import java.util.OptionalDouble;
 import java.util.OptionalLong;
@@ -23,25 +22,25 @@ import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 public final /* synthetic */ class T0 implements LongStream {
-    final /* synthetic */ T2 a;
+    final /* synthetic */ H1 a;
 
-    private /* synthetic */ T0(T2 t2) {
-        this.a = t2;
+    private /* synthetic */ T0(H1 h1) {
+        this.a = h1;
     }
 
-    public static /* synthetic */ LongStream m0(T2 t2) {
-        if (t2 == null) {
+    public static /* synthetic */ LongStream m0(H1 h1) {
+        if (h1 == null) {
             return null;
         }
-        return t2 instanceof S0 ? ((S0) t2).a : new T0(t2);
+        return h1 instanceof S0 ? ((S0) h1).a : new T0(h1);
     }
 
     public /* synthetic */ boolean allMatch(LongPredicate longPredicate) {
-        return this.a.y(CLASSNAMEm0.a(longPredicate));
+        return this.a.f0(CLASSNAMEm0.a(longPredicate));
     }
 
     public /* synthetic */ boolean anyMatch(LongPredicate longPredicate) {
-        return this.a.l(CLASSNAMEm0.a(longPredicate));
+        return this.a.b0(CLASSNAMEm0.a(longPredicate));
     }
 
     public /* synthetic */ DoubleStream asDoubleStream() {
@@ -49,7 +48,7 @@ public final /* synthetic */ class T0 implements LongStream {
     }
 
     public /* synthetic */ OptionalDouble average() {
-        return CLASSNAMEk.o(this.a.average());
+        return k.o(this.a.average());
     }
 
     public /* synthetic */ Stream boxed() {
@@ -61,7 +60,7 @@ public final /* synthetic */ class T0 implements LongStream {
     }
 
     public /* synthetic */ Object collect(Supplier supplier, ObjLongConsumer objLongConsumer, BiConsumer biConsumer) {
-        return this.a.c0(C0.a(supplier), y0.a(objLongConsumer), CLASSNAMEt.b(biConsumer));
+        return this.a.d0(C0.a(supplier), y0.a(objLongConsumer), CLASSNAMEt.b(biConsumer));
     }
 
     public /* synthetic */ long count() {
@@ -73,27 +72,27 @@ public final /* synthetic */ class T0 implements LongStream {
     }
 
     public /* synthetic */ LongStream filter(LongPredicate longPredicate) {
-        return m0(this.a.G(CLASSNAMEm0.a(longPredicate)));
+        return m0(this.a.g0(CLASSNAMEm0.a(longPredicate)));
     }
 
     public /* synthetic */ OptionalLong findAny() {
-        return CLASSNAMEk.q(this.a.findAny());
+        return k.q(this.a.findAny());
     }
 
     public /* synthetic */ OptionalLong findFirst() {
-        return CLASSNAMEk.q(this.a.findFirst());
+        return k.q(this.a.findFirst());
     }
 
     public /* synthetic */ LongStream flatMap(LongFunction longFunction) {
-        return m0(this.a.s(CLASSNAMEk0.a(longFunction)));
+        return m0(this.a.r(CLASSNAMEk0.a(longFunction)));
     }
 
     public /* synthetic */ void forEach(LongConsumer longConsumer) {
-        this.a.e(CLASSNAMEi0.b(longConsumer));
+        this.a.f(CLASSNAMEi0.b(longConsumer));
     }
 
     public /* synthetic */ void forEachOrdered(LongConsumer longConsumer) {
-        this.a.X(CLASSNAMEi0.b(longConsumer));
+        this.a.Y(CLASSNAMEi0.b(longConsumer));
     }
 
     public /* synthetic */ boolean isParallel() {
@@ -109,7 +108,7 @@ public final /* synthetic */ class T0 implements LongStream {
     }
 
     public /* synthetic */ DoubleStream mapToDouble(LongToDoubleFunction longToDoubleFunction) {
-        return P0.m0(this.a.i(CLASSNAMEo0.b(longToDoubleFunction)));
+        return P0.m0(this.a.j(CLASSNAMEo0.b(longToDoubleFunction)));
     }
 
     public /* synthetic */ IntStream mapToInt(LongToIntFunction longToIntFunction) {
@@ -121,15 +120,15 @@ public final /* synthetic */ class T0 implements LongStream {
     }
 
     public /* synthetic */ OptionalLong max() {
-        return CLASSNAMEk.q(this.a.max());
+        return k.q(this.a.max());
     }
 
     public /* synthetic */ OptionalLong min() {
-        return CLASSNAMEk.q(this.a.min());
+        return k.q(this.a.min());
     }
 
     public /* synthetic */ boolean noneMatch(LongPredicate longPredicate) {
-        return this.a.r(CLASSNAMEm0.a(longPredicate));
+        return this.a.c(CLASSNAMEm0.a(longPredicate));
     }
 
     public /* synthetic */ BaseStream onClose(Runnable runnable) {
@@ -145,7 +144,7 @@ public final /* synthetic */ class T0 implements LongStream {
     }
 
     public /* synthetic */ OptionalLong reduce(LongBinaryOperator longBinaryOperator) {
-        return CLASSNAMEk.q(this.a.h(CLASSNAMEg0.a(longBinaryOperator)));
+        return k.q(this.a.i(CLASSNAMEg0.a(longBinaryOperator)));
     }
 
     public /* synthetic */ LongStream skip(long j) {
@@ -160,8 +159,9 @@ public final /* synthetic */ class T0 implements LongStream {
         return this.a.sum();
     }
 
-    public /* synthetic */ LongSummaryStatistics summaryStatistics() {
-        return CLASSNAMEs.b(this.a.summaryStatistics());
+    public LongSummaryStatistics summaryStatistics() {
+        this.a.summaryStatistics();
+        throw new Error("Java 8+ API desugaring (library desugaring) cannot convert to java.util.LongSummaryStatistics");
     }
 
     public /* synthetic */ long[] toArray() {

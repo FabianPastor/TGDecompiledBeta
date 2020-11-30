@@ -1798,7 +1798,7 @@ public class TableLayout extends View {
         }
     }
 
-    static final class Assoc<K, V> extends ArrayList<Pair<K, V>> implements j$.util.List, Collection {
+    static final class Assoc<K, V> extends ArrayList<Pair<K, V>> implements j$.util.List {
         private final Class<K> keyType;
         private final Class<V> valueType;
 

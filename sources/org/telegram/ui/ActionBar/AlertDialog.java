@@ -1151,6 +1151,21 @@ public class AlertDialog extends Dialog implements Drawable.Callback {
         }
     }
 
+    public void setBackgroundColor(int i) {
+        this.shadowDrawable.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
+    }
+
+    public void setTextColor(int i) {
+        TextView textView = this.titleTextView;
+        if (textView != null) {
+            textView.setTextColor(i);
+        }
+        TextView textView2 = this.messageTextView;
+        if (textView2 != null) {
+            textView2.setTextColor(i);
+        }
+    }
+
     /* access modifiers changed from: private */
     public void showCancelAlert() {
         if (this.canCacnel && this.cancelDialog == null) {

@@ -1,25 +1,26 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEk;
+import j$.util.function.C;
 import j$.util.function.CLASSNAMEe;
+import j$.util.function.CLASSNAMEh;
 import j$.util.function.Consumer;
-import j$.util.function.h;
-import j$.util.function.y;
+import j$.util.k;
+import j$.util.stream.A2;
 
-public final /* synthetic */ class V0 implements CLASSNAMEs5 {
-    public final /* synthetic */ y a;
+public final /* synthetic */ class V0 implements A2.g {
+    public final /* synthetic */ C a;
 
-    public /* synthetic */ V0(y yVar) {
-        this.a = yVar;
+    public /* synthetic */ V0(C c) {
+        this.a = c;
     }
 
     public /* synthetic */ void accept(double d) {
-        CLASSNAMEk.c(this);
+        k.c(this);
         throw null;
     }
 
     public /* synthetic */ void accept(int i) {
-        CLASSNAMEk.a(this);
+        k.a(this);
         throw null;
     }
 
@@ -29,7 +30,7 @@ public final /* synthetic */ class V0 implements CLASSNAMEs5 {
 
     /* renamed from: b */
     public /* synthetic */ void accept(Long l) {
-        CLASSNAMEc3.c(this, l);
+        Q1.c(this, l);
     }
 
     public Consumer f(Consumer consumer) {
@@ -37,9 +38,9 @@ public final /* synthetic */ class V0 implements CLASSNAMEs5 {
         return new CLASSNAMEe(this, consumer);
     }
 
-    public y g(y yVar) {
-        yVar.getClass();
-        return new h(this, yVar);
+    public C g(C c) {
+        c.getClass();
+        return new CLASSNAMEh(this, c);
     }
 
     public void m() {

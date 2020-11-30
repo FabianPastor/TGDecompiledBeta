@@ -93,7 +93,7 @@ public class NetworkMonitorAutoDetect extends BroadcastReceiver implements Netwo
         }
 
         public void onLinkPropertiesChanged(Network network, LinkProperties linkProperties) {
-            Logging.d("NetworkMonitorAutoDetect", "link properties changed: " + linkProperties.toString());
+            Logging.d("NetworkMonitorAutoDetect", "link properties changed");
             onNetworkChanged(network);
         }
 

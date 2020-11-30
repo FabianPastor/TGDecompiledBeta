@@ -1,22 +1,22 @@
 package j$.util.stream;
 
-abstract class I1 extends K1 {
-    I1(CLASSNAMEh1 h1Var, CLASSNAMEh6 h6Var, int i) {
-        super(h1Var, i);
+import j$.util.function.Predicate;
+
+class I1 extends M1<T> {
+    final /* synthetic */ N1 c;
+    final /* synthetic */ Predicate d;
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    I1(N1 n1, Predicate predicate) {
+        super(n1);
+        this.c = n1;
+        this.d = predicate;
     }
 
-    /* access modifiers changed from: package-private */
-    public final boolean F0() {
-        return true;
-    }
-
-    public /* bridge */ /* synthetic */ L1 parallel() {
-        parallel();
-        return this;
-    }
-
-    public /* bridge */ /* synthetic */ L1 sequential() {
-        sequential();
-        return this;
+    public void accept(Object obj) {
+        if (!this.a && this.d.test(obj) == this.c.a) {
+            this.a = true;
+            this.b = this.c.b;
+        }
     }
 }

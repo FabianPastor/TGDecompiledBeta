@@ -23,6 +23,7 @@ class WebRtcAudioTrack {
     private static final int CALLBACK_BUFFER_SIZE_MS = 10;
     private static final int DEFAULT_USAGE = getDefaultUsageAttribute();
     private static final String TAG = "WebRtcAudioTrackExternal";
+    private final AudioAttributes audioAttributes;
     private final AudioManager audioManager;
     private AudioTrackThread audioThread;
     /* access modifiers changed from: private */
@@ -103,15 +104,16 @@ class WebRtcAudioTrack {
 
     @CalledByNative
     WebRtcAudioTrack(Context context2, AudioManager audioManager2) {
-        this(context2, audioManager2, (JavaAudioDeviceModule.AudioTrackErrorCallback) null, (JavaAudioDeviceModule.AudioTrackStateCallback) null);
+        this(context2, audioManager2, (AudioAttributes) null, (JavaAudioDeviceModule.AudioTrackErrorCallback) null, (JavaAudioDeviceModule.AudioTrackStateCallback) null);
     }
 
-    WebRtcAudioTrack(Context context2, AudioManager audioManager2, JavaAudioDeviceModule.AudioTrackErrorCallback audioTrackErrorCallback, JavaAudioDeviceModule.AudioTrackStateCallback audioTrackStateCallback) {
+    WebRtcAudioTrack(Context context2, AudioManager audioManager2, AudioAttributes audioAttributes2, JavaAudioDeviceModule.AudioTrackErrorCallback audioTrackErrorCallback, JavaAudioDeviceModule.AudioTrackStateCallback audioTrackStateCallback) {
         ThreadUtils.ThreadChecker threadChecker2 = new ThreadUtils.ThreadChecker();
         this.threadChecker = threadChecker2;
         threadChecker2.detachThread();
         this.context = context2;
         this.audioManager = audioManager2;
+        this.audioAttributes = audioAttributes2;
         this.errorCallback = audioTrackErrorCallback;
         this.stateCallback = audioTrackStateCallback;
         this.volumeLogger = new VolumeLogger(audioManager2);
@@ -148,7 +150,7 @@ class WebRtcAudioTrack {
         } else {
             try {
                 if (Build.VERSION.SDK_INT >= 21) {
-                    this.audioTrack = createAudioTrackOnLollipopOrHigher(i, channelCountToConfiguration, i3);
+                    this.audioTrack = createAudioTrackOnLollipopOrHigher(i, channelCountToConfiguration, i3, this.audioAttributes);
                 } else {
                     this.audioTrack = createAudioTrackOnLowerThanLollipop(i, channelCountToConfiguration, i3);
                 }
@@ -276,14 +278,24 @@ class WebRtcAudioTrack {
     }
 
     @TargetApi(21)
-    private static AudioTrack createAudioTrackOnLollipopOrHigher(int i, int i2, int i3) {
+    private static AudioTrack createAudioTrackOnLollipopOrHigher(int i, int i2, int i3, AudioAttributes audioAttributes2) {
         Logging.d("WebRtcAudioTrackExternal", "createAudioTrackOnLollipopOrHigher");
         int nativeOutputSampleRate = AudioTrack.getNativeOutputSampleRate(0);
         Logging.d("WebRtcAudioTrackExternal", "nativeOutputSampleRate: " + nativeOutputSampleRate);
         if (i != nativeOutputSampleRate) {
             Logging.w("WebRtcAudioTrackExternal", "Unable to use fast mode since requested sample rate is not native");
         }
-        return new AudioTrack(new AudioAttributes.Builder().setUsage(DEFAULT_USAGE).setContentType(1).build(), new AudioFormat.Builder().setEncoding(2).setSampleRate(i).setChannelMask(i2).build(), i3, 1, 0);
+        AudioAttributes.Builder contentType = new AudioAttributes.Builder().setUsage(DEFAULT_USAGE).setContentType(1);
+        if (audioAttributes2 != null) {
+            if (audioAttributes2.getUsage() != 0) {
+                contentType.setUsage(audioAttributes2.getUsage());
+            }
+            if (audioAttributes2.getContentType() != 0) {
+                contentType.setContentType(audioAttributes2.getContentType());
+            }
+            contentType.setAllowedCapturePolicy(audioAttributes2.getAllowedCapturePolicy()).setFlags(audioAttributes2.getFlags());
+        }
+        return new AudioTrack(contentType.build(), new AudioFormat.Builder().setEncoding(2).setSampleRate(i).setChannelMask(i2).build(), i3, 1, 0);
     }
 
     private static AudioTrack createAudioTrackOnLowerThanLollipop(int i, int i2, int i3) {

@@ -8,7 +8,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.Set;
 
-public interface Map {
+public interface Map<K, V> {
 
     /* renamed from: j$.util.Map$-CC  reason: invalid class name */
     public final /* synthetic */ class CC {
@@ -90,7 +90,7 @@ public interface Map {
 
         public static boolean $default$remove(java.util.Map map, Object obj, Object obj2) {
             Object obj3 = map.get(obj);
-            if (!CLASSNAMEk.r(obj3, obj2)) {
+            if (!k.r(obj3, obj2)) {
                 return false;
             }
             if (obj3 == null && !map.containsKey(obj)) {
@@ -107,7 +107,7 @@ public interface Map {
 
         public static boolean $default$replace(java.util.Map map, Object obj, Object obj2, Object obj3) {
             Object obj4 = map.get(obj);
-            if (!CLASSNAMEk.r(obj4, obj2)) {
+            if (!k.r(obj4, obj2)) {
                 return false;
             }
             if (obj4 == null && !map.containsKey(obj)) {
@@ -133,7 +133,7 @@ public interface Map {
         }
     }
 
-    public interface Entry {
+    public interface Entry<K, V> {
         boolean equals(Object obj);
 
         Object getKey();

@@ -9,7 +9,7 @@ public final /* synthetic */ class J0 implements PrivilegedAction {
     }
 
     public final Object run() {
-        boolean z = L6.a;
+        boolean z = i3.a;
         return Boolean.valueOf(Boolean.getBoolean("org.openjdk.java.util.stream.tripwire"));
     }
 }

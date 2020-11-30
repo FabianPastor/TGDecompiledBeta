@@ -1,15 +1,55 @@
 package j$.util.stream;
 
-class G2 extends CLASSNAMEo5 {
-    final /* synthetic */ H2 b;
+import j$.util.stream.S2;
+import java.util.Arrays;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    G2(H2 h2, CLASSNAMEt5 t5Var) {
-        super(t5Var);
-        this.b = h2;
+final class G2 extends C2 {
+    private S2.b c;
+
+    G2(A2 a2) {
+        super(a2);
     }
 
-    public void accept(long j) {
-        this.a.accept(this.b.l.a(j));
+    public void accept(double d) {
+        this.c.accept(d);
+    }
+
+    public void m() {
+        double[] dArr = (double[]) this.c.e();
+        Arrays.sort(dArr);
+        this.a.n((long) dArr.length);
+        int i = 0;
+        if (!this.b) {
+            int length = dArr.length;
+            while (i < length) {
+                this.a.accept(dArr[i]);
+                i++;
+            }
+        } else {
+            int length2 = dArr.length;
+            while (i < length2) {
+                double d = dArr[i];
+                if (this.a.p()) {
+                    break;
+                }
+                this.a.accept(d);
+                i++;
+            }
+        }
+        this.a.m();
+    }
+
+    public void n(long j) {
+        S2.b bVar;
+        if (j < NUM) {
+            if (j > 0) {
+                int i = (int) j;
+            } else {
+                bVar = new S2.b();
+            }
+            this.c = bVar;
+            return;
+        }
+        throw new IllegalArgumentException("Stream size exceeds max array size");
     }
 }

@@ -1,16 +1,54 @@
 package j$.util.stream;
 
-class N2 extends CLASSNAMEo5 {
-    final /* synthetic */ O2 b;
+import j$.util.k;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    N2(O2 o2, CLASSNAMEt5 t5Var) {
-        super(t5Var);
-        this.b = o2;
+final class N2<T> extends F2<T> {
+    private ArrayList d;
+
+    N2(A2 a2, Comparator comparator) {
+        super(a2, comparator);
     }
 
-    public void accept(long j) {
-        this.b.l.accept(j);
-        this.a.accept(j);
+    public void accept(Object obj) {
+        this.d.add(obj);
+    }
+
+    public void m() {
+        k.B(this.d, this.b);
+        this.a.n((long) this.d.size());
+        if (!this.c) {
+            ArrayList arrayList = this.d;
+            A2 a2 = this.a;
+            a2.getClass();
+            k.s(arrayList, new CLASSNAMEb(a2));
+        } else {
+            Iterator it = this.d.iterator();
+            while (it.hasNext()) {
+                Object next = it.next();
+                if (this.a.p()) {
+                    break;
+                }
+                this.a.accept(next);
+            }
+        }
+        this.a.m();
+        this.d = null;
+    }
+
+    public void n(long j) {
+        ArrayList arrayList;
+        if (j < NUM) {
+            if (j >= 0) {
+                int i = (int) j;
+            } else {
+                arrayList = new ArrayList();
+            }
+            this.d = arrayList;
+            return;
+        }
+        throw new IllegalArgumentException("Stream size exceeds max array size");
     }
 }

@@ -277,31 +277,36 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
     }
 
     public void loadStikersForEmoji(CharSequence charSequence, boolean z) {
+        String str;
         ArrayList<MediaDataController.KeywordResult> arrayList;
         TLRPC$Document emojiAnimatedSticker;
         boolean z2 = charSequence != null && charSequence.length() > 0 && charSequence.length() <= 14;
-        String charSequence2 = charSequence.toString();
-        int length = charSequence.length();
-        int i = 0;
-        while (i < length) {
-            char charAt = charSequence.charAt(i);
-            int i2 = length - 1;
-            char charAt2 = i < i2 ? charSequence.charAt(i + 1) : 0;
-            if (i < i2 && charAt == 55356 && charAt2 >= 57339 && charAt2 <= 57343) {
-                charSequence = TextUtils.concat(new CharSequence[]{charSequence.subSequence(0, i), charSequence.subSequence(i + 2, charSequence.length())});
-                length -= 2;
-            } else if (charAt == 65039) {
-                charSequence = TextUtils.concat(new CharSequence[]{charSequence.subSequence(0, i), charSequence.subSequence(i + 1, charSequence.length())});
-                length--;
-            } else {
+        if (z2) {
+            str = charSequence.toString();
+            int length = charSequence.length();
+            int i = 0;
+            while (i < length) {
+                char charAt = charSequence.charAt(i);
+                int i2 = length - 1;
+                char charAt2 = i < i2 ? charSequence.charAt(i + 1) : 0;
+                if (i < i2 && charAt == 55356 && charAt2 >= 57339 && charAt2 <= 57343) {
+                    charSequence = TextUtils.concat(new CharSequence[]{charSequence.subSequence(0, i), charSequence.subSequence(i + 2, charSequence.length())});
+                    length -= 2;
+                } else if (charAt == 65039) {
+                    charSequence = TextUtils.concat(new CharSequence[]{charSequence.subSequence(0, i), charSequence.subSequence(i + 1, charSequence.length())});
+                    length--;
+                } else {
+                    i++;
+                }
+                i--;
                 i++;
             }
-            i--;
-            i++;
+        } else {
+            str = "";
         }
         this.lastSticker = charSequence.toString().trim();
         this.stickersToLoad.clear();
-        boolean z3 = z2 && (Emoji.isValidEmoji(charSequence2) || Emoji.isValidEmoji(this.lastSticker));
+        boolean z3 = z2 && (Emoji.isValidEmoji(str) || Emoji.isValidEmoji(this.lastSticker));
         if (z3 && (emojiAnimatedSticker = MediaDataController.getInstance(this.currentAccount).getEmojiAnimatedSticker(charSequence)) != null) {
             ArrayList<TLRPC$TL_messages_stickerSet> stickerSets = MediaDataController.getInstance(this.currentAccount).getStickerSets(4);
             if (!FileLoader.getPathToAttach(emojiAnimatedSticker, true).exists()) {
@@ -421,7 +426,7 @@ public class StickersAdapter extends RecyclerListView.SelectionAdapter implement
             });
         }
         if (SharedConfig.suggestStickers == 0) {
-            searchServerStickers(this.lastSticker, charSequence2);
+            searchServerStickers(this.lastSticker, str);
         }
         ArrayList<StickerResult> arrayList4 = this.stickers;
         if (arrayList4 != null && !arrayList4.isEmpty()) {

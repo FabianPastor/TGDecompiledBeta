@@ -1,6 +1,6 @@
 package j$;
 
-import j$.util.stream.CLASSNAMEn1;
+import j$.util.stream.CLASSNAMEm1;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
@@ -9,17 +9,17 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 public final /* synthetic */ class N0 implements Collector {
-    final /* synthetic */ CLASSNAMEn1 a;
+    final /* synthetic */ CLASSNAMEm1 a;
 
-    private /* synthetic */ N0(CLASSNAMEn1 n1Var) {
-        this.a = n1Var;
+    private /* synthetic */ N0(CLASSNAMEm1 m1Var) {
+        this.a = m1Var;
     }
 
-    public static /* synthetic */ Collector a(CLASSNAMEn1 n1Var) {
-        if (n1Var == null) {
+    public static /* synthetic */ Collector a(CLASSNAMEm1 m1Var) {
+        if (m1Var == null) {
             return null;
         }
-        return n1Var instanceof M0 ? ((M0) n1Var).a : new N0(n1Var);
+        return m1Var instanceof M0 ? ((M0) m1Var).a : new N0(m1Var);
     }
 
     public /* synthetic */ BiConsumer accumulator() {

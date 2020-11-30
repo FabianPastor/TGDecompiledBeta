@@ -1,66 +1,76 @@
 package j$.util.stream;
 
-import j$.util.Spliterator;
-import java.util.concurrent.CountedCompleter;
+import j$.util.function.CLASSNAMEe;
+import j$.util.function.CLASSNAMEf;
+import j$.util.function.Consumer;
+import j$.util.function.q;
+import j$.util.k;
+import j$.util.p;
+import j$.util.stream.A2;
 
-final class Z1 extends CountedCompleter {
-    private Spliterator a;
-    private final CLASSNAMEt5 b;
-    private final CLASSNAMEi4 c;
-    private long d;
+class Z1 implements CLASSNAMEu2<Double, p, Z1>, A2.e {
+    private boolean a;
+    private double b;
+    final /* synthetic */ j$.util.function.p c;
 
-    Z1(Z1 z1, Spliterator spliterator) {
-        super(z1);
-        this.a = spliterator;
-        this.b = z1.b;
-        this.d = z1.d;
-        this.c = z1.c;
+    Z1(j$.util.function.p pVar) {
+        this.c = pVar;
     }
 
-    Z1(CLASSNAMEi4 i4Var, Spliterator spliterator, CLASSNAMEt5 t5Var) {
-        super((CountedCompleter) null);
-        this.b = t5Var;
-        this.c = i4Var;
-        this.a = spliterator;
-        this.d = 0;
+    public void accept(double d) {
+        if (this.a) {
+            this.a = false;
+        } else {
+            d = this.c.applyAsDouble(this.b, d);
+        }
+        this.b = d;
     }
 
-    public void compute() {
-        Spliterator trySplit;
-        Spliterator spliterator = this.a;
-        long estimateSize = spliterator.estimateSize();
-        long j = this.d;
-        if (j == 0) {
-            j = CLASSNAMEk1.h(estimateSize);
-            this.d = j;
+    public /* synthetic */ void accept(int i) {
+        k.a(this);
+        throw null;
+    }
+
+    public /* synthetic */ void accept(long j) {
+        k.b(this);
+        throw null;
+    }
+
+    /* renamed from: b */
+    public /* synthetic */ void accept(Double d) {
+        Q1.a(this, d);
+    }
+
+    public Consumer f(Consumer consumer) {
+        consumer.getClass();
+        return new CLASSNAMEe(this, consumer);
+    }
+
+    public Object get() {
+        return this.a ? p.a() : p.d(this.b);
+    }
+
+    public void i(CLASSNAMEu2 u2Var) {
+        Z1 z1 = (Z1) u2Var;
+        if (!z1.a) {
+            accept(z1.b);
         }
-        boolean d2 = CLASSNAMEg6.SHORT_CIRCUIT.d(this.c.r0());
-        boolean z = false;
-        CLASSNAMEt5 t5Var = this.b;
-        Z1 z1 = this;
-        while (true) {
-            if (d2 && t5Var.p()) {
-                break;
-            } else if (estimateSize <= j || (trySplit = spliterator.trySplit()) == null) {
-                z1.c.m0(t5Var, spliterator);
-            } else {
-                Z1 z12 = new Z1(z1, trySplit);
-                z1.addToPendingCount(1);
-                if (z) {
-                    spliterator = trySplit;
-                } else {
-                    Z1 z13 = z1;
-                    z1 = z12;
-                    z12 = z13;
-                }
-                z = !z;
-                z1.fork();
-                z1 = z12;
-                estimateSize = spliterator.estimateSize();
-            }
-        }
-        z1.c.m0(t5Var, spliterator);
-        z1.a = null;
-        z1.propagateCompletion();
+    }
+
+    public q k(q qVar) {
+        qVar.getClass();
+        return new CLASSNAMEf(this, qVar);
+    }
+
+    public void m() {
+    }
+
+    public void n(long j) {
+        this.a = true;
+        this.b = 0.0d;
+    }
+
+    public /* synthetic */ boolean p() {
+        return false;
     }
 }

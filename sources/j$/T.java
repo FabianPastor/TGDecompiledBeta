@@ -1,20 +1,20 @@
 package j$;
 
-import j$.util.function.t;
+import j$.util.function.v;
 import java.util.function.IntBinaryOperator;
 
 public final /* synthetic */ class T implements IntBinaryOperator {
-    final /* synthetic */ t a;
+    final /* synthetic */ v a;
 
-    private /* synthetic */ T(t tVar) {
-        this.a = tVar;
+    private /* synthetic */ T(v vVar) {
+        this.a = vVar;
     }
 
-    public static /* synthetic */ IntBinaryOperator a(t tVar) {
-        if (tVar == null) {
+    public static /* synthetic */ IntBinaryOperator a(v vVar) {
+        if (vVar == null) {
             return null;
         }
-        return tVar instanceof S ? ((S) tVar).a : new T(tVar);
+        return vVar instanceof S ? ((S) vVar).a : new T(vVar);
     }
 
     public /* synthetic */ int applyAsInt(int i, int i2) {

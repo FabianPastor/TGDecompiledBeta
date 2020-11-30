@@ -10,9 +10,6 @@ public abstract class TLRPC$Update extends TLObject {
             case -2054649973:
                 tLRPC$Update = new TLRPC$TL_updatePinnedChannelMessages();
                 break;
-            case -2046916883:
-                tLRPC$Update = new TLRPC$TL_updateGroupCall();
-                break;
             case -2027964103:
                 tLRPC$Update = new TLRPC$TL_updateGeoLiveViewed();
                 break;
@@ -106,14 +103,14 @@ public abstract class TLRPC$Update extends TLObject {
             case -298113238:
                 tLRPC$Update = new TLRPC$TL_updatePrivacy();
                 break;
+            case -219423922:
+                tLRPC$Update = new TLRPC$TL_updateGroupCallParticipants();
+                break;
             case -99664734:
                 tLRPC$Update = new TLRPC$TL_updatePinnedDialogs();
                 break;
             case -13975905:
                 tLRPC$Update = new TLRPC$TL_updateChannelUserTyping();
-                break;
-            case 92188360:
-                tLRPC$Update = new TLRPC$TL_updateGroupCallParticipant();
                 break;
             case 125178264:
                 tLRPC$Update = new TLRPC$TL_updateChatParticipants();
@@ -201,6 +198,9 @@ public abstract class TLRPC$Update extends TLObject {
                 break;
             case 1461528386:
                 tLRPC$Update = new TLRPC$TL_updateReadFeaturedStickers();
+                break;
+            case 1462009966:
+                tLRPC$Update = new TLRPC$TL_updateGroupCall();
                 break;
             case 1548249383:
                 tLRPC$Update = new TLRPC$TL_updateUserTyping();

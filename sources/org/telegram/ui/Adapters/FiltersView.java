@@ -570,7 +570,7 @@ public class FiltersView extends RecyclerListView {
         }
 
         public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            ViewHolder viewHolder = new ViewHolder(FiltersView.this, new FilterView(FiltersView.this, viewGroup.getContext()));
+            ViewHolder viewHolder = new ViewHolder(FiltersView.this, new FilterView(viewGroup.getContext()));
             RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(-2, AndroidUtilities.dp(32.0f));
             layoutParams.topMargin = AndroidUtilities.dp(6.0f);
             viewHolder.itemView.setLayoutParams(layoutParams);
@@ -586,12 +586,12 @@ public class FiltersView extends RecyclerListView {
         }
     }
 
-    public class FilterView extends FrameLayout {
+    public static class FilterView extends FrameLayout {
         BackupImageView avatarImageView;
         Drawable thumbDrawable;
         TextView titleView;
 
-        public FilterView(FiltersView filtersView, Context context) {
+        public FilterView(Context context) {
             super(context);
             BackupImageView backupImageView = new BackupImageView(context);
             this.avatarImageView = backupImageView;
@@ -728,11 +728,11 @@ public class FiltersView extends RecyclerListView {
         return super.onTouchEvent(motionEvent);
     }
 
-    private class UpdateCallback implements ListUpdateCallback {
+    private static class UpdateCallback implements ListUpdateCallback {
         final RecyclerView.Adapter adapter;
         boolean changed;
 
-        private UpdateCallback(FiltersView filtersView, RecyclerView.Adapter adapter2) {
+        private UpdateCallback(RecyclerView.Adapter adapter2) {
             this.adapter = adapter2;
         }
 

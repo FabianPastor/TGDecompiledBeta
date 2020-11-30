@@ -2,6 +2,7 @@ package org.telegram.ui.Adapters;
 
 import android.content.Context;
 import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,11 +46,19 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
     private Context mContext;
     private boolean onlyMutual;
     private SearchAdapterHelper searchAdapterHelper;
+    private boolean searchInProgress;
+    private int searchPointer;
+    private int searchReqId;
     private ArrayList<TLObject> searchResult = new ArrayList<>();
     private ArrayList<CharSequence> searchResultNames = new ArrayList<>();
     /* access modifiers changed from: private */
     public Timer searchTimer;
     private boolean useUserCell;
+
+    /* access modifiers changed from: protected */
+    public void onSearchProgressChanged() {
+        throw null;
+    }
 
     public SearchAdapter(Context context, SparseArray<TLRPC$User> sparseArray, boolean z, boolean z2, boolean z3, boolean z4, boolean z5, boolean z6, int i) {
         this.mContext = context;
@@ -74,6 +83,9 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
 
             public void onDataSetChanged(int i) {
                 SearchAdapter.this.notifyDataSetChanged();
+                if (i != 0) {
+                    SearchAdapter.this.onSearchProgressChanged();
+                }
             }
 
             public SparseArray<TLRPC$User> getExcludeUsers() {
@@ -82,8 +94,7 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         });
     }
 
-    public void searchDialogs(String str) {
-        final String str2 = str;
+    public void searchDialogs(final String str) {
         try {
             Timer timer = this.searchTimer;
             if (timer != null) {
@@ -92,28 +103,27 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         } catch (Exception e) {
             FileLog.e((Throwable) e);
         }
-        if (str2 == null) {
-            this.searchResult.clear();
-            this.searchResultNames.clear();
-            if (this.allowUsernameSearch) {
-                this.searchAdapterHelper.queryServerSearch((String) null, true, this.allowChats, this.allowBots, this.allowSelf, false, this.channelId, this.allowPhoneNumbers, 0, 0);
-            }
-            notifyDataSetChanged();
-            return;
+        this.searchResult.clear();
+        this.searchResultNames.clear();
+        if (this.allowUsernameSearch) {
+            this.searchAdapterHelper.queryServerSearch((String) null, true, this.allowChats, this.allowBots, this.allowSelf, false, this.channelId, this.allowPhoneNumbers, 0, 0);
         }
-        Timer timer2 = new Timer();
-        this.searchTimer = timer2;
-        timer2.schedule(new TimerTask() {
-            public void run() {
-                try {
-                    SearchAdapter.this.searchTimer.cancel();
-                    Timer unused = SearchAdapter.this.searchTimer = null;
-                } catch (Exception e) {
-                    FileLog.e((Throwable) e);
+        notifyDataSetChanged();
+        if (!TextUtils.isEmpty(str)) {
+            Timer timer2 = new Timer();
+            this.searchTimer = timer2;
+            timer2.schedule(new TimerTask() {
+                public void run() {
+                    try {
+                        SearchAdapter.this.searchTimer.cancel();
+                        Timer unused = SearchAdapter.this.searchTimer = null;
+                    } catch (Exception e) {
+                        FileLog.e((Throwable) e);
+                    }
+                    SearchAdapter.this.processSearch(str);
                 }
-                SearchAdapter.this.processSearch(str2);
-            }
-        }, 200, 300);
+            }, 200, 300);
+        }
     }
 
     /* access modifiers changed from: private */
@@ -135,35 +145,44 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
     /* renamed from: lambda$processSearch$1 */
     public /* synthetic */ void lambda$processSearch$1$SearchAdapter(String str) {
         if (this.allowUsernameSearch) {
-            this.searchAdapterHelper.queryServerSearch(str, true, this.allowChats, this.allowBots, this.allowSelf, false, this.channelId, this.allowPhoneNumbers, -1, 0);
+            this.searchAdapterHelper.queryServerSearch(str, true, this.allowChats, this.allowBots, this.allowSelf, false, this.channelId, this.allowPhoneNumbers, -1, 1);
         }
         int i = UserConfig.selectedAccount;
-        Utilities.searchQueue.postRunnable(new Runnable(str, new ArrayList(ContactsController.getInstance(i).contacts), i) {
+        ArrayList arrayList = new ArrayList(ContactsController.getInstance(i).contacts);
+        this.searchInProgress = true;
+        int i2 = this.searchPointer;
+        this.searchPointer = i2 + 1;
+        this.searchReqId = i2;
+        Utilities.searchQueue.postRunnable(new Runnable(str, i2, arrayList, i) {
             public final /* synthetic */ String f$1;
-            public final /* synthetic */ ArrayList f$2;
-            public final /* synthetic */ int f$3;
+            public final /* synthetic */ int f$2;
+            public final /* synthetic */ ArrayList f$3;
+            public final /* synthetic */ int f$4;
 
             {
                 this.f$1 = r2;
                 this.f$2 = r3;
                 this.f$3 = r4;
+                this.f$4 = r5;
             }
 
             public final void run() {
-                SearchAdapter.this.lambda$null$0$SearchAdapter(this.f$1, this.f$2, this.f$3);
+                SearchAdapter.this.lambda$null$0$SearchAdapter(this.f$1, this.f$2, this.f$3, this.f$4);
             }
         });
     }
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$null$0 */
-    public /* synthetic */ void lambda$null$0$SearchAdapter(String str, ArrayList arrayList, int i) {
+    public /* synthetic */ void lambda$null$0$SearchAdapter(String str, int i, ArrayList arrayList, int i2) {
+        int i3;
         String str2;
         SparseArray<TLRPC$User> sparseArray;
         String str3;
+        int i4 = i;
         String lowerCase = str.trim().toLowerCase();
         if (lowerCase.length() == 0) {
-            updateSearchResults(new ArrayList(), new ArrayList());
+            updateSearchResults(i4, new ArrayList(), new ArrayList());
             return;
         }
         String translitString = LocaleController.getInstance().getTranslitString(lowerCase);
@@ -173,20 +192,20 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
         }
         char c = 0;
         char c2 = 1;
-        int i2 = (translitString != null ? 1 : 0) + 1;
-        String[] strArr = new String[i2];
+        int i5 = (translitString != null ? 1 : 0) + 1;
+        String[] strArr = new String[i5];
         strArr[0] = lowerCase;
         if (translitString != null) {
             strArr[1] = translitString;
         }
         ArrayList arrayList2 = new ArrayList();
         ArrayList arrayList3 = new ArrayList();
-        int i3 = 0;
-        while (i3 < arrayList.size()) {
-            TLRPC$TL_contact tLRPC$TL_contact = (TLRPC$TL_contact) arrayList.get(i3);
-            TLRPC$User user = MessagesController.getInstance(i).getUser(Integer.valueOf(tLRPC$TL_contact.user_id));
+        int i6 = 0;
+        while (i6 < arrayList.size()) {
+            TLRPC$TL_contact tLRPC$TL_contact = (TLRPC$TL_contact) arrayList.get(i6);
+            TLRPC$User user = MessagesController.getInstance(i2).getUser(Integer.valueOf(tLRPC$TL_contact.user_id));
             if ((this.allowSelf || !user.self) && ((!this.onlyMutual || user.mutual_contact) && ((sparseArray = this.ignoreUsers) == null || sparseArray.indexOfKey(tLRPC$TL_contact.user_id) < 0))) {
-                int i4 = 3;
+                int i7 = 3;
                 String[] strArr2 = new String[3];
                 strArr2[c] = ContactsController.formatName(user.first_name, user.last_name).toLowerCase();
                 strArr2[c2] = LocaleController.getInstance().getTranslitString(strArr2[c]);
@@ -198,29 +217,38 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                 } else if (user.self) {
                     strArr2[2] = LocaleController.getString("SavedMessages", NUM).toLowerCase();
                 }
-                int i5 = 0;
+                int i8 = 0;
                 char c3 = 0;
                 while (true) {
-                    if (i5 >= i2) {
+                    if (i8 >= i5) {
                         break;
                     }
-                    String str5 = strArr[i5];
-                    int i6 = 0;
+                    String str5 = strArr[i8];
+                    int i9 = 0;
                     while (true) {
-                        if (i6 >= i4) {
+                        if (i9 >= i7) {
+                            i3 = i5;
                             break;
                         }
-                        String str6 = strArr2[i6];
+                        String str6 = strArr2[i9];
                         if (str6 != null) {
                             if (str6.startsWith(str5)) {
+                                i3 = i5;
                                 break;
                             }
-                            if (str6.contains(" " + str5)) {
+                            StringBuilder sb = new StringBuilder();
+                            i3 = i5;
+                            sb.append(" ");
+                            sb.append(str5);
+                            if (str6.contains(sb.toString())) {
                                 break;
                             }
+                        } else {
+                            i3 = i5;
                         }
-                        i6++;
-                        i4 = 3;
+                        i9++;
+                        i5 = i3;
+                        i7 = 3;
                     }
                     c3 = 1;
                     if (c3 == 0 && (str3 = user.username) != null && str3.startsWith(str5)) {
@@ -236,48 +264,62 @@ public class SearchAdapter extends RecyclerListView.SelectionAdapter {
                         }
                         arrayList2.add(user);
                     } else {
-                        i5++;
+                        i8++;
                         str4 = null;
-                        i4 = 3;
+                        i5 = i3;
+                        i7 = 3;
                     }
                 }
-                i3++;
+                i6++;
                 str4 = str2;
+                i5 = i3;
                 c = 0;
                 c2 = 1;
             }
+            i3 = i5;
             str2 = str4;
-            i3++;
+            i6++;
             str4 = str2;
+            i5 = i3;
             c = 0;
             c2 = 1;
         }
-        updateSearchResults(arrayList2, arrayList3);
+        updateSearchResults(i4, arrayList2, arrayList3);
     }
 
-    private void updateSearchResults(ArrayList<TLObject> arrayList, ArrayList<CharSequence> arrayList2) {
-        AndroidUtilities.runOnUIThread(new Runnable(arrayList, arrayList2) {
-            public final /* synthetic */ ArrayList f$1;
+    private void updateSearchResults(int i, ArrayList<TLObject> arrayList, ArrayList<CharSequence> arrayList2) {
+        AndroidUtilities.runOnUIThread(new Runnable(i, arrayList, arrayList2) {
+            public final /* synthetic */ int f$1;
             public final /* synthetic */ ArrayList f$2;
+            public final /* synthetic */ ArrayList f$3;
 
             {
                 this.f$1 = r2;
                 this.f$2 = r3;
+                this.f$3 = r4;
             }
 
             public final void run() {
-                SearchAdapter.this.lambda$updateSearchResults$2$SearchAdapter(this.f$1, this.f$2);
+                SearchAdapter.this.lambda$updateSearchResults$2$SearchAdapter(this.f$1, this.f$2, this.f$3);
             }
         });
     }
 
     /* access modifiers changed from: private */
     /* renamed from: lambda$updateSearchResults$2 */
-    public /* synthetic */ void lambda$updateSearchResults$2$SearchAdapter(ArrayList arrayList, ArrayList arrayList2) {
-        this.searchResult = arrayList;
-        this.searchResultNames = arrayList2;
-        this.searchAdapterHelper.mergeResults(arrayList);
-        notifyDataSetChanged();
+    public /* synthetic */ void lambda$updateSearchResults$2$SearchAdapter(int i, ArrayList arrayList, ArrayList arrayList2) {
+        if (i == this.searchReqId) {
+            this.searchResult = arrayList;
+            this.searchResultNames = arrayList2;
+            this.searchAdapterHelper.mergeResults(arrayList);
+            this.searchInProgress = false;
+            notifyDataSetChanged();
+            onSearchProgressChanged();
+        }
+    }
+
+    public boolean searchInProgress() {
+        return this.searchInProgress || this.searchAdapterHelper.isSearchInProgress();
     }
 
     public boolean isEnabled(RecyclerView.ViewHolder viewHolder) {

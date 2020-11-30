@@ -3,14 +3,14 @@ package j$.util.stream;
 import j$.util.function.o;
 
 public final /* synthetic */ class H0 implements o {
-    public final /* synthetic */ H6 a;
+    public final /* synthetic */ e3 a;
 
-    public /* synthetic */ H0(H6 h6) {
-        this.a = h6;
+    public /* synthetic */ H0(e3 e3Var) {
+        this.a = e3Var;
     }
 
     public final boolean a() {
-        H6 h6 = this.a;
-        return h6.d.b(h6.e);
+        e3 e3Var = this.a;
+        return e3Var.d.b(e3Var.e);
     }
 }

@@ -17,6 +17,7 @@ import org.telegram.messenger.AndroidUtilities;
 import org.telegram.messenger.ApplicationLoader;
 import org.telegram.messenger.Bitmaps;
 import org.telegram.messenger.DocumentObject;
+import org.telegram.messenger.SvgHelper;
 import org.telegram.ui.ActionBar.Theme;
 
 public class ThemePreviewDrawable extends BitmapDrawable {
@@ -24,7 +25,7 @@ public class ThemePreviewDrawable extends BitmapDrawable {
         super(createPreview(file, themeDocument));
     }
 
-    /* JADX WARNING: type inference failed for: r12v5, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r12v5, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r12v6 */
     /* JADX WARNING: type inference failed for: r12v21 */
     private static Bitmap createPreview(File file, DocumentObject.ThemeDocument themeDocument) {

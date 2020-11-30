@@ -1,26 +1,32 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEu;
-import j$.util.function.g;
-import j$.util.function.u;
+import j$.util.Spliterator;
+import j$.util.function.J;
 
-final class O1 extends R1 implements CLASSNAMEr5 {
-    O1() {
+final class O1<T> implements g3<T, Boolean> {
+    private final U2 a;
+    final N1 b;
+    final J c;
+
+    O1(U2 u2, N1 n1, J j) {
+        this.a = u2;
+        this.b = n1;
+        this.c = j;
     }
 
-    public void accept(int i) {
-        accept((Object) Integer.valueOf(i));
+    public int b() {
+        return T2.u | T2.r;
     }
 
-    public Object get() {
-        if (this.a) {
-            return CLASSNAMEu.d(((Integer) this.b).intValue());
-        }
-        return null;
+    public Object c(T1 t1, Spliterator spliterator) {
+        return (Boolean) new P1(this, t1, spliterator).invoke();
     }
 
-    public u l(u uVar) {
-        uVar.getClass();
-        return new g(this, uVar);
+    public Object d(T1 t1, Spliterator spliterator) {
+        M1 m1 = (M1) this.c.get();
+        CLASSNAMEh1 h1Var = (CLASSNAMEh1) t1;
+        m1.getClass();
+        h1Var.m0(h1Var.u0(m1), spliterator);
+        return Boolean.valueOf(m1.b);
     }
 }

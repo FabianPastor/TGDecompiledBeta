@@ -1,26 +1,26 @@
 package j$.util.stream;
 
-import j$.util.function.A;
-import j$.util.function.i;
-import j$.util.function.j;
+import j$.util.function.CLASSNAMEi;
+import j$.util.function.CLASSNAMEj;
+import j$.util.function.F;
 
-public final /* synthetic */ class V implements A {
+public final /* synthetic */ class V implements F {
     public static final /* synthetic */ V a = new V();
 
     private /* synthetic */ V() {
     }
 
-    public A a(A a2) {
-        a2.getClass();
-        return new i(this, a2);
+    public F a(F f) {
+        f.getClass();
+        return new CLASSNAMEi(this, f);
     }
 
     public final long applyAsLong(long j) {
         return 1;
     }
 
-    public A b(A a2) {
-        a2.getClass();
-        return new j(this, a2);
+    public F b(F f) {
+        f.getClass();
+        return new CLASSNAMEj(this, f);
     }
 }

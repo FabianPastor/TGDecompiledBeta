@@ -69,6 +69,8 @@ public class ActionBarLayout extends FrameLayout {
     /* access modifiers changed from: private */
     public DecelerateInterpolator decelerateInterpolator = new DecelerateInterpolator(1.5f);
     /* access modifiers changed from: private */
+    public boolean delayedAnimationResumed;
+    /* access modifiers changed from: private */
     public Runnable delayedOpenAnimationRunnable;
     private ActionBarLayoutDelegate delegate;
     private DrawerLayoutContainer drawerLayoutContainer;
@@ -947,8 +949,9 @@ public class ActionBarLayout extends FrameLayout {
     }
 
     public void resumeDelayedFragmentAnimation() {
+        this.delayedAnimationResumed = true;
         Runnable runnable = this.delayedOpenAnimationRunnable;
-        if (runnable != null) {
+        if (runnable != null && this.waitingForKeyboardCloseRunnable == null) {
             AndroidUtilities.cancelRunOnUIThread(runnable);
             this.delayedOpenAnimationRunnable.run();
             this.delayedOpenAnimationRunnable = null;
@@ -1112,6 +1115,7 @@ public class ActionBarLayout extends FrameLayout {
                 }
                 baseFragment3.onTransitionAnimationStart(true, false);
             }
+            this.delayedAnimationResumed = false;
             this.oldFragment = baseFragment2;
             this.newFragment = baseFragment3;
             AnimatorSet onCustomTransitionAnimation = !z7 ? baseFragment3.onCustomTransitionAnimation(true, new Runnable() {
@@ -1134,25 +1138,46 @@ public class ActionBarLayout extends FrameLayout {
                     final BaseFragment baseFragment4 = baseFragment2;
                     final BaseFragment baseFragment5 = baseFragment;
                     final boolean z10 = z4;
-                    AnonymousClass5 r0 = new Runnable() {
+                    this.waitingForKeyboardCloseRunnable = new Runnable() {
                         public void run() {
                             if (ActionBarLayout.this.waitingForKeyboardCloseRunnable == this) {
                                 Runnable unused = ActionBarLayout.this.waitingForKeyboardCloseRunnable = null;
-                                if (!z9) {
+                                if (z9) {
                                     BaseFragment baseFragment = baseFragment4;
                                     if (baseFragment != null) {
                                         baseFragment.onTransitionAnimationStart(false, false);
                                     }
                                     baseFragment5.onTransitionAnimationStart(true, false);
+                                    ActionBarLayout.this.startLayoutAnimation(true, true, z10);
+                                } else if (ActionBarLayout.this.delayedOpenAnimationRunnable != null) {
+                                    AndroidUtilities.cancelRunOnUIThread(ActionBarLayout.this.delayedOpenAnimationRunnable);
+                                    if (ActionBarLayout.this.delayedAnimationResumed) {
+                                        ActionBarLayout.this.delayedOpenAnimationRunnable.run();
+                                    } else {
+                                        AndroidUtilities.runOnUIThread(ActionBarLayout.this.delayedOpenAnimationRunnable, 200);
+                                    }
                                 }
-                                ActionBarLayout.this.startLayoutAnimation(true, true, z10);
                             }
                         }
                     };
-                    this.waitingForKeyboardCloseRunnable = r0;
-                    AndroidUtilities.runOnUIThread(r0, SharedConfig.smoothKeyboard ? 250 : 200);
+                    if (baseFragment.needDelayOpenAnimation()) {
+                        this.delayedOpenAnimationRunnable = new Runnable() {
+                            public void run() {
+                                if (ActionBarLayout.this.delayedOpenAnimationRunnable == this) {
+                                    Runnable unused = ActionBarLayout.this.delayedOpenAnimationRunnable = null;
+                                    BaseFragment baseFragment = baseFragment2;
+                                    if (baseFragment != null) {
+                                        baseFragment.onTransitionAnimationStart(false, false);
+                                    }
+                                    baseFragment3.onTransitionAnimationStart(true, false);
+                                    ActionBarLayout.this.startLayoutAnimation(true, true, z7);
+                                }
+                            }
+                        };
+                    }
+                    AndroidUtilities.runOnUIThread(this.waitingForKeyboardCloseRunnable, SharedConfig.smoothKeyboard ? 250 : 200);
                 } else if (baseFragment.needDelayOpenAnimation()) {
-                    AnonymousClass6 r02 = new Runnable() {
+                    AnonymousClass7 r0 = new Runnable() {
                         public void run() {
                             if (ActionBarLayout.this.delayedOpenAnimationRunnable == this) {
                                 Runnable unused = ActionBarLayout.this.delayedOpenAnimationRunnable = null;
@@ -1165,8 +1190,8 @@ public class ActionBarLayout extends FrameLayout {
                             }
                         }
                     };
-                    this.delayedOpenAnimationRunnable = r02;
-                    AndroidUtilities.runOnUIThread(r02, 200);
+                    this.delayedOpenAnimationRunnable = r0;
+                    AndroidUtilities.runOnUIThread(r0, 200);
                 } else {
                     startLayoutAnimation(true, true, z7);
                 }
@@ -1386,7 +1411,7 @@ public class ActionBarLayout extends FrameLayout {
             r11 = r2
             r11.<init>((double) r12, (double) r14, (double) r16, (double) r18)
             r5.setInterpolator(r2)
-            org.telegram.ui.ActionBar.ActionBarLayout$7 r2 = new org.telegram.ui.ActionBar.ActionBarLayout$7
+            org.telegram.ui.ActionBar.ActionBarLayout$8 r2 = new org.telegram.ui.ActionBar.ActionBarLayout$8
             r2.<init>(r6)
             r5.addListener(r2)
             r5.start()
@@ -1517,7 +1542,7 @@ public class ActionBarLayout extends FrameLayout {
                     if (animatorSet != null) {
                         this.currentAnimation = animatorSet;
                     } else if (this.containerView.isKeyboardVisible || this.containerViewBack.isKeyboardVisible) {
-                        AnonymousClass8 r13 = new Runnable() {
+                        AnonymousClass9 r13 = new Runnable() {
                             public void run() {
                                 if (ActionBarLayout.this.waitingForKeyboardCloseRunnable == this) {
                                     Runnable unused = ActionBarLayout.this.waitingForKeyboardCloseRunnable = null;

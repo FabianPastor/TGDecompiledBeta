@@ -9,6 +9,7 @@ public abstract class TLRPC$ChatFull extends TLObject {
     public int banned_count;
     public boolean blocked;
     public ArrayList<TLRPC$BotInfo> bot_info = new ArrayList<>();
+    public TLRPC$TL_inputGroupCall call;
     public int call_msg_id;
     public boolean can_set_location;
     public boolean can_set_stickers;
@@ -22,6 +23,7 @@ public abstract class TLRPC$ChatFull extends TLObject {
     public boolean has_scheduled;
     public boolean hidden_prehistory;
     public int id;
+    public int inviterId;
     public int kicked_count;
     public int linked_chat_id;
     public TLRPC$ChannelLocation location;
@@ -66,8 +68,11 @@ public abstract class TLRPC$ChatFull extends TLObject {
             case -304961647:
                 tLRPC$ChatFull = new TLRPC$TL_chatFull_layer92();
                 break;
-            case -253335766:
+            case -281384243:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull();
+                break;
+            case -253335766:
+                tLRPC$ChatFull = new TLRPC$TL_channelFull_layer121();
                 break;
             case -88925533:
                 tLRPC$ChatFull = new TLRPC$TL_channelFull_old();

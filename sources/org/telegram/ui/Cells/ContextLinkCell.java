@@ -145,7 +145,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
         setWillNotDraw(false);
     }
 
-    /* JADX WARNING: type inference failed for: r6v2, types: [boolean, int] */
+    /* JADX WARNING: type inference failed for: r6v2, types: [int, boolean] */
     /* JADX WARNING: type inference failed for: r11v37, types: [org.telegram.tgnet.TLRPC$WebDocument] */
     /* JADX WARNING: type inference failed for: r11v40, types: [org.telegram.tgnet.TLRPC$WebDocument] */
     /* JADX WARNING: type inference failed for: r6v10 */
@@ -693,13 +693,13 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             org.telegram.messenger.ImageReceiver r2 = r7.linkImageView
             org.telegram.tgnet.TLRPC$Document r11 = r7.documentAttach
             org.telegram.messenger.ImageLocation r21 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$VideoSize) r0, (org.telegram.tgnet.TLRPC$Document) r11)
-            r22 = 0
             org.telegram.tgnet.TLRPC$PhotoSize r0 = r7.currentPhotoObject
             org.telegram.tgnet.TLRPC$Document r11 = r7.documentAttach
             org.telegram.messenger.ImageLocation r23 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r0, (org.telegram.tgnet.TLRPC$Document) r11)
             r25 = -1
             java.lang.Object r0 = r7.parentObject
             r28 = 1
+            java.lang.String r22 = "100_100"
             r20 = r2
             r24 = r9
             r27 = r0
@@ -713,7 +713,6 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             r0.imageType = r10
         L_0x03c0:
             org.telegram.messenger.ImageReceiver r2 = r7.linkImageView
-            r22 = 0
             org.telegram.tgnet.TLRPC$PhotoSize r11 = r7.currentPhotoObject
             org.telegram.tgnet.TLRPC$Document r12 = r7.documentAttach
             org.telegram.messenger.ImageLocation r23 = org.telegram.messenger.ImageLocation.getForDocument((org.telegram.tgnet.TLRPC$PhotoSize) r11, (org.telegram.tgnet.TLRPC$Document) r12)
@@ -721,6 +720,7 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             int r11 = r11.size
             java.lang.Object r12 = r7.parentObject
             r28 = 0
+            java.lang.String r22 = "100_100"
             r20 = r2
             r21 = r0
             r24 = r9
@@ -732,13 +732,13 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
             if (r2 == 0) goto L_0x0406
             org.telegram.messenger.ImageReceiver r0 = r7.linkImageView
             org.telegram.messenger.ImageLocation r21 = org.telegram.messenger.ImageLocation.getForWebFile(r2)
-            r22 = 0
             org.telegram.tgnet.TLRPC$PhotoSize r2 = r7.currentPhotoObject
             org.telegram.tgnet.TLRPC$Photo r11 = r7.photoAttach
             org.telegram.messenger.ImageLocation r23 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r2, (org.telegram.tgnet.TLRPC$Photo) r11)
             r25 = -1
             java.lang.Object r2 = r7.parentObject
             r28 = 1
+            java.lang.String r22 = "100_100"
             r20 = r0
             r24 = r9
             r27 = r2
@@ -747,13 +747,13 @@ public class ContextLinkCell extends FrameLayout implements DownloadController.F
         L_0x0406:
             org.telegram.messenger.ImageReceiver r0 = r7.linkImageView
             org.telegram.messenger.ImageLocation r21 = org.telegram.messenger.ImageLocation.getForPath(r11)
-            r22 = 0
             org.telegram.tgnet.TLRPC$PhotoSize r2 = r7.currentPhotoObject
             org.telegram.tgnet.TLRPC$Photo r11 = r7.photoAttach
             org.telegram.messenger.ImageLocation r23 = org.telegram.messenger.ImageLocation.getForPhoto((org.telegram.tgnet.TLRPC$PhotoSize) r2, (org.telegram.tgnet.TLRPC$Photo) r11)
             r25 = -1
             java.lang.Object r2 = r7.parentObject
             r28 = 1
+            java.lang.String r22 = "100_100"
             r20 = r0
             r24 = r9
             r27 = r2

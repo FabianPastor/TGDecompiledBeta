@@ -1,4 +1,4 @@
 package j$.util.function;
 
-public interface n extends BiFunction {
+public interface n<T> extends BiFunction<T, T, T> {
 }

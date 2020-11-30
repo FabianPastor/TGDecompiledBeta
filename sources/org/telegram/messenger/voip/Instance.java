@@ -278,6 +278,58 @@ public final class Instance {
         }
     }
 
+    public static final class Fingerprint {
+        public final String fingerprint;
+        public final String hash;
+        public final String setup;
+
+        public Fingerprint(String str, String str2, String str3) {
+            this.hash = str;
+            this.setup = str2;
+            this.fingerprint = str3;
+        }
+
+        public String toString() {
+            return "Fingerprint{hash=" + this.hash + ", setup=" + this.setup + ", fingerprint=" + this.fingerprint + '}';
+        }
+    }
+
+    public static final class Candidate {
+        public final String component;
+        public final String foundation;
+        public final String generation;
+        public final String id;
+        public final String ip;
+        public final String network;
+        public final String port;
+        public final String priority;
+        public final String protocol;
+        public final String relAddr;
+        public final String relPort;
+        public final String tcpType;
+        public final String type;
+
+        public Candidate(String str, String str2, String str3, String str4, String str5, String str6, String str7, String str8, String str9, String str10, String str11, String str12, String str13) {
+            this.port = str;
+            this.protocol = str2;
+            this.network = str3;
+            this.generation = str4;
+            this.id = str5;
+            this.component = str6;
+            this.foundation = str7;
+            this.priority = str8;
+            this.ip = str9;
+            this.type = str10;
+            this.tcpType = str11;
+            this.relAddr = str12;
+            this.relPort = str13;
+        }
+
+        public String toString() {
+            return "Candidate{port=" + this.port + ", protocol=" + this.protocol + ", network=" + this.network + ", generation=" + this.generation + ", id=" + this.id + ", component=" + this.component + ", foundation=" + this.foundation + ", priority=" + this.priority + ", ip=" + this.ip + ", type=" + this.type + ", tcpType=" + this.tcpType + ", relAddr=" + this.relAddr + ", relPort=" + this.relPort + '}';
+        }
+    }
+
     public static final class ServerConfig {
         public final boolean enableStunMarking;
         public final boolean enable_h264_decoder;

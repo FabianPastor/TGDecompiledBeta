@@ -46,9 +46,9 @@ import org.telegram.ui.Cells.SharedLinkCell;
 import org.telegram.ui.Cells.SharedPhotoVideoCell;
 import org.telegram.ui.ChatActivity;
 import org.telegram.ui.Components.SearchViewPager;
+import org.telegram.ui.Components.ViewPagerFixed;
 import org.telegram.ui.DialogsActivity;
 import org.telegram.ui.FilteredSearchView;
-import org.telegram.ui.ViewPagerFixed;
 
 public class SearchViewPager extends ViewPagerFixed implements FilteredSearchView.UiCallback {
     int currentAccount = UserConfig.selectedAccount;
@@ -165,7 +165,7 @@ public class SearchViewPager extends ViewPagerFixed implements FilteredSearchVie
         this.searchContainer.addView(this.noMediaFiltersSearchView);
         FlickerLoadingView flickerLoadingView = new FlickerLoadingView(context);
         flickerLoadingView.setViewType(1);
-        AnonymousClass4 r12 = new StickerEmptyView(context, flickerLoadingView) {
+        AnonymousClass4 r12 = new StickerEmptyView(context, flickerLoadingView, 1) {
             public void setVisibility(int i) {
                 if (SearchViewPager.this.noMediaFiltersSearchView.getTag() != null) {
                     super.setVisibility(8);

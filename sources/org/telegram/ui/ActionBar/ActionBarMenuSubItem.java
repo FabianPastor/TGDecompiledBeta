@@ -53,28 +53,13 @@ public class ActionBarMenuSubItem extends FrameLayout {
             imageView3.setImageResource(NUM);
             this.checkView.setScaleType(ImageView.ScaleType.CENTER);
             this.checkView.setColorFilter(new PorterDuffColorFilter(Theme.getColor("radioBackgroundChecked"), PorterDuff.Mode.MULTIPLY));
-            addView(this.checkView, LayoutHelper.createFrame(26, -1, 51));
+            addView(this.checkView, LayoutHelper.createFrame(26, -1, 19));
         }
     }
 
     /* access modifiers changed from: protected */
     public void onMeasure(int i, int i2) {
         super.onMeasure(i, View.MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(48.0f), NUM));
-    }
-
-    /* access modifiers changed from: protected */
-    public void onLayout(boolean z, int i, int i2, int i3, int i4) {
-        int i5;
-        super.onLayout(z, i, i2, i3, i4);
-        if (this.checkView != null) {
-            if (LocaleController.isRTL) {
-                i5 = getPaddingRight();
-            } else {
-                i5 = (getMeasuredWidth() - this.checkView.getMeasuredWidth()) - getPaddingLeft();
-            }
-            ImageView imageView2 = this.checkView;
-            imageView2.layout(i5, imageView2.getTop(), this.checkView.getMeasuredWidth() + i5, this.checkView.getBottom());
-        }
     }
 
     public void setChecked(boolean z) {
@@ -84,16 +69,20 @@ public class ActionBarMenuSubItem extends FrameLayout {
         }
     }
 
+    public void setCheckColor(int i) {
+        this.checkView.setColorFilter(new PorterDuffColorFilter(i, PorterDuff.Mode.MULTIPLY));
+    }
+
     public void setTextAndIcon(CharSequence charSequence, int i) {
         this.textView.setText(charSequence);
-        if (i != 0) {
-            this.imageView.setImageResource(i);
-            this.imageView.setVisibility(0);
-            this.textView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(43.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(43.0f) : 0, 0);
+        if (i == 0 && this.checkView == null) {
+            this.imageView.setVisibility(4);
+            this.textView.setPadding(0, 0, 0, 0);
             return;
         }
-        this.imageView.setVisibility(4);
-        this.textView.setPadding(0, 0, 0, 0);
+        this.imageView.setImageResource(i);
+        this.imageView.setVisibility(0);
+        this.textView.setPadding(LocaleController.isRTL ? 0 : AndroidUtilities.dp(43.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(43.0f) : 0, 0);
     }
 
     public void setColors(int i, int i2) {

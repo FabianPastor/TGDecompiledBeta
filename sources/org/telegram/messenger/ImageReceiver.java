@@ -17,9 +17,9 @@ import android.graphics.drawable.Drawable;
 import android.view.View;
 import androidx.annotation.Keep;
 import org.telegram.messenger.NotificationCenter;
+import org.telegram.messenger.SvgHelper;
 import org.telegram.tgnet.TLRPC$Document;
 import org.telegram.ui.Components.AnimatedFileDrawable;
-import org.telegram.ui.Components.LoadingStickerDrawable;
 import org.telegram.ui.Components.RLottieDrawable;
 import org.telegram.ui.Components.RecyclableDrawable;
 
@@ -416,6 +416,9 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
                 this.staticThumbDrawable = drawable2;
                 this.currentAlpha = 1.0f;
                 this.currentSize = 0;
+                if (drawable2 instanceof SvgHelper.SvgDrawable) {
+                    ((SvgHelper.SvgDrawable) drawable2).setParent(this);
+                }
                 ImageLoader.getInstance().cancelLoadingForImageReceiver(this, true);
                 View view = this.parentView;
                 if (view != null) {
@@ -569,10 +572,13 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
             this.thumbShader = null;
             this.mediaShader = null;
             this.currentAlpha = 1.0f;
+            if (drawable6 instanceof SvgHelper.SvgDrawable) {
+                ((SvgHelper.SvgDrawable) drawable6).setParent(this);
+            }
             ImageReceiverDelegate imageReceiverDelegate3 = this.delegate;
             if (imageReceiverDelegate3 != null) {
                 Drawable drawable7 = this.currentImageDrawable;
-                boolean z8 = (drawable7 == null && this.currentThumbDrawable == null && drawable6 == null && this.currentMediaDrawable == null) ? false : true;
+                boolean z8 = (drawable7 == null && this.currentThumbDrawable == null && this.staticThumbDrawable == null && this.currentMediaDrawable == null) ? false : true;
                 if (drawable7 == null && this.currentMediaDrawable == null) {
                     z2 = false;
                     z = true;
@@ -1817,18 +1823,31 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     }
 
     public void setVisible(boolean z, boolean z2) {
-        View view;
         if (this.isVisible != z) {
             this.isVisible = z;
-            if (z2 && (view = this.parentView) != null) {
-                if (this.invalidateAll) {
-                    view.invalidate();
-                    return;
-                }
-                float f = this.imageX;
-                float f2 = this.imageY;
-                view.invalidate((int) f, (int) f2, (int) (f + this.imageW), (int) (f2 + this.imageH));
+            if (z2) {
+                invalidate();
             }
+        }
+    }
+
+    public void invalidate() {
+        View view = this.parentView;
+        if (view != null) {
+            if (this.invalidateAll) {
+                view.invalidate();
+                return;
+            }
+            float f = this.imageX;
+            float f2 = this.imageY;
+            view.invalidate((int) f, (int) f2, (int) (f + this.imageW), (int) (f2 + this.imageH));
+        }
+    }
+
+    public void getParentPosition(int[] iArr) {
+        View view = this.parentView;
+        if (view != null) {
+            view.getLocationInWindow(iArr);
         }
     }
 
@@ -2259,132 +2278,345 @@ public class ImageReceiver implements NotificationCenter.NotificationCenterDeleg
     }
 
     /* access modifiers changed from: protected */
-    public boolean setImageBitmapByKey(Drawable drawable, String str, int i, boolean z, int i2) {
-        Drawable drawable2;
-        boolean z2;
-        if (drawable == null || str == null || this.currentGuid != i2) {
-            return false;
-        }
-        if (i == 0) {
-            if (!str.equals(this.currentImageKey)) {
-                return false;
-            }
-            if (!(drawable instanceof AnimatedFileDrawable)) {
-                ImageLoader.getInstance().incrementUseCount(this.currentImageKey);
-            } else {
-                ((AnimatedFileDrawable) drawable).setStartEndTime(this.startTime, this.endTime);
-            }
-            this.currentImageDrawable = drawable;
-            if (drawable instanceof ExtendedBitmapDrawable) {
-                this.imageOrientation = ((ExtendedBitmapDrawable) drawable).getOrientation();
-            }
-            updateDrawableRadius(drawable);
-            if (!this.isVisible || ((z || this.forcePreview) && !this.forceCrossfade)) {
-                this.currentAlpha = 1.0f;
-            } else {
-                Drawable drawable3 = this.currentMediaDrawable;
-                if (!(drawable3 instanceof AnimatedFileDrawable) || !((AnimatedFileDrawable) drawable3).hasBitmap()) {
-                    z2 = this.currentImageDrawable instanceof RLottieDrawable ? this.staticThumbDrawable instanceof LoadingStickerDrawable : true;
-                } else {
-                    z2 = false;
-                }
-                if (z2 && ((this.currentThumbDrawable == null && this.staticThumbDrawable == null) || this.currentAlpha == 1.0f || this.forceCrossfade)) {
-                    this.currentAlpha = 0.0f;
-                    this.lastUpdateAlphaTime = System.currentTimeMillis();
-                    this.crossfadeWithThumb = (this.crossfadeImage == null && this.currentThumbDrawable == null && this.staticThumbDrawable == null) ? false : true;
-                }
-            }
-        } else if (i == 3) {
-            if (!str.equals(this.currentMediaKey)) {
-                return false;
-            }
-            if (!(drawable instanceof AnimatedFileDrawable)) {
-                ImageLoader.getInstance().incrementUseCount(this.currentMediaKey);
-            } else {
-                ((AnimatedFileDrawable) drawable).setStartEndTime(this.startTime, this.endTime);
-            }
-            this.currentMediaDrawable = drawable;
-            updateDrawableRadius(drawable);
-            if (this.currentImageDrawable == null) {
-                if ((z || this.forcePreview) && !this.forceCrossfade) {
-                    this.currentAlpha = 1.0f;
-                } else if ((this.currentThumbDrawable == null && this.staticThumbDrawable == null) || this.currentAlpha == 1.0f || this.forceCrossfade) {
-                    this.currentAlpha = 0.0f;
-                    this.lastUpdateAlphaTime = System.currentTimeMillis();
-                    this.crossfadeWithThumb = (this.crossfadeImage == null && this.currentThumbDrawable == null && this.staticThumbDrawable == null) ? false : true;
-                }
-            }
-        } else if (i == 1) {
-            if (this.currentThumbDrawable != null) {
-                return false;
-            }
-            if (!this.forcePreview) {
-                AnimatedFileDrawable animation = getAnimation();
-                if (animation != null && animation.hasBitmap()) {
-                    return false;
-                }
-                Drawable drawable4 = this.currentImageDrawable;
-                if ((drawable4 != null && !(drawable4 instanceof AnimatedFileDrawable)) || ((drawable2 = this.currentMediaDrawable) != null && !(drawable2 instanceof AnimatedFileDrawable))) {
-                    return false;
-                }
-            }
-            if (!str.equals(this.currentThumbKey)) {
-                return false;
-            }
-            ImageLoader.getInstance().incrementUseCount(this.currentThumbKey);
-            this.currentThumbDrawable = drawable;
-            if (drawable instanceof ExtendedBitmapDrawable) {
-                this.thumbOrientation = ((ExtendedBitmapDrawable) drawable).getOrientation();
-            }
-            updateDrawableRadius(drawable);
-            if (z || this.crossfadeAlpha == 2) {
-                this.currentAlpha = 1.0f;
-            } else {
-                Object obj = this.currentParentObject;
-                if (!(obj instanceof MessageObject) || !((MessageObject) obj).isRoundVideo() || !((MessageObject) this.currentParentObject).isSending()) {
-                    this.currentAlpha = 0.0f;
-                    this.lastUpdateAlphaTime = System.currentTimeMillis();
-                    this.crossfadeWithThumb = this.staticThumbDrawable != null && this.currentImageKey == null && this.currentMediaKey == null;
-                } else {
-                    this.currentAlpha = 1.0f;
-                }
-            }
-        }
-        ImageReceiverDelegate imageReceiverDelegate = this.delegate;
-        if (imageReceiverDelegate != null) {
-            Drawable drawable5 = this.currentImageDrawable;
-            imageReceiverDelegate.didSetImage(this, (drawable5 == null && this.currentThumbDrawable == null && this.staticThumbDrawable == null && this.currentMediaDrawable == null) ? false : true, drawable5 == null && this.currentMediaDrawable == null, z);
-        }
-        if (drawable instanceof AnimatedFileDrawable) {
-            AnimatedFileDrawable animatedFileDrawable = (AnimatedFileDrawable) drawable;
-            animatedFileDrawable.setParentView(this.parentView);
-            animatedFileDrawable.setUseSharedQueue(this.useSharedAnimationQueue);
-            if (this.allowStartAnimation) {
-                animatedFileDrawable.start();
-            }
-            animatedFileDrawable.setAllowDecodeSingleFrame(this.allowDecodeSingleFrame);
-            this.animationReadySent = false;
-        } else if (drawable instanceof RLottieDrawable) {
-            RLottieDrawable rLottieDrawable = (RLottieDrawable) drawable;
-            rLottieDrawable.addParentView(this.parentView);
-            if (this.allowStartLottieAnimation && (!rLottieDrawable.isHeavyDrawable() || this.currentOpenedLayerFlags == 0)) {
-                rLottieDrawable.start();
-            }
-            rLottieDrawable.setAllowDecodeSingleFrame(true);
-            rLottieDrawable.setAutoRepeat(this.autoRepeat);
-            this.animationReadySent = false;
-        }
-        View view = this.parentView;
-        if (view != null) {
-            if (this.invalidateAll) {
-                view.invalidate();
-            } else {
-                float f = this.imageX;
-                float f2 = this.imageY;
-                view.invalidate((int) f, (int) f2, (int) (f + this.imageW), (int) (f2 + this.imageH));
-            }
-        }
-        return true;
+    /* JADX WARNING: Code restructure failed: missing block: B:34:0x0070, code lost:
+        if ((r9 instanceof org.telegram.messenger.SvgHelper.SvgDrawable) == false) goto L_0x0060;
+     */
+    /* JADX WARNING: Removed duplicated region for block: B:51:0x009c  */
+    /* JADX WARNING: Removed duplicated region for block: B:52:0x009e  */
+    /* Code decompiled incorrectly, please refer to instructions dump. */
+    public boolean setImageBitmapByKey(android.graphics.drawable.Drawable r8, java.lang.String r9, int r10, boolean r11, int r12) {
+        /*
+            r7 = this;
+            r0 = 0
+            if (r8 == 0) goto L_0x0222
+            if (r9 == 0) goto L_0x0222
+            int r1 = r7.currentGuid
+            if (r1 == r12) goto L_0x000b
+            goto L_0x0222
+        L_0x000b:
+            r12 = 0
+            r1 = 1065353216(0x3var_, float:1.0)
+            r2 = 1
+            if (r10 != 0) goto L_0x00a7
+            java.lang.String r10 = r7.currentImageKey
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x001a
+            return r0
+        L_0x001a:
+            boolean r9 = r8 instanceof org.telegram.ui.Components.AnimatedFileDrawable
+            if (r9 != 0) goto L_0x0028
+            org.telegram.messenger.ImageLoader r9 = org.telegram.messenger.ImageLoader.getInstance()
+            java.lang.String r10 = r7.currentImageKey
+            r9.incrementUseCount(r10)
+            goto L_0x0032
+        L_0x0028:
+            r9 = r8
+            org.telegram.ui.Components.AnimatedFileDrawable r9 = (org.telegram.ui.Components.AnimatedFileDrawable) r9
+            long r3 = r7.startTime
+            long r5 = r7.endTime
+            r9.setStartEndTime(r3, r5)
+        L_0x0032:
+            r7.currentImageDrawable = r8
+            boolean r9 = r8 instanceof org.telegram.messenger.ExtendedBitmapDrawable
+            if (r9 == 0) goto L_0x0041
+            r9 = r8
+            org.telegram.messenger.ExtendedBitmapDrawable r9 = (org.telegram.messenger.ExtendedBitmapDrawable) r9
+            int r9 = r9.getOrientation()
+            r7.imageOrientation = r9
+        L_0x0041:
+            r7.updateDrawableRadius(r8)
+            boolean r9 = r7.isVisible
+            if (r9 == 0) goto L_0x00a3
+            if (r11 != 0) goto L_0x004e
+            boolean r9 = r7.forcePreview
+            if (r9 == 0) goto L_0x0052
+        L_0x004e:
+            boolean r9 = r7.forceCrossfade
+            if (r9 == 0) goto L_0x00a3
+        L_0x0052:
+            android.graphics.drawable.Drawable r9 = r7.currentMediaDrawable
+            boolean r10 = r9 instanceof org.telegram.ui.Components.AnimatedFileDrawable
+            if (r10 == 0) goto L_0x0062
+            org.telegram.ui.Components.AnimatedFileDrawable r9 = (org.telegram.ui.Components.AnimatedFileDrawable) r9
+            boolean r9 = r9.hasBitmap()
+            if (r9 == 0) goto L_0x0062
+        L_0x0060:
+            r9 = 0
+            goto L_0x0073
+        L_0x0062:
+            android.graphics.drawable.Drawable r9 = r7.currentImageDrawable
+            boolean r9 = r9 instanceof org.telegram.ui.Components.RLottieDrawable
+            if (r9 == 0) goto L_0x0072
+            android.graphics.drawable.Drawable r9 = r7.staticThumbDrawable
+            boolean r10 = r9 instanceof org.telegram.ui.Components.LoadingStickerDrawable
+            if (r10 != 0) goto L_0x0072
+            boolean r9 = r9 instanceof org.telegram.messenger.SvgHelper.SvgDrawable
+            if (r9 == 0) goto L_0x0060
+        L_0x0072:
+            r9 = 1
+        L_0x0073:
+            if (r9 == 0) goto L_0x019b
+            android.graphics.drawable.Drawable r9 = r7.currentThumbDrawable
+            if (r9 != 0) goto L_0x007d
+            android.graphics.drawable.Drawable r9 = r7.staticThumbDrawable
+            if (r9 == 0) goto L_0x0087
+        L_0x007d:
+            float r9 = r7.currentAlpha
+            int r9 = (r9 > r1 ? 1 : (r9 == r1 ? 0 : -1))
+            if (r9 == 0) goto L_0x0087
+            boolean r9 = r7.forceCrossfade
+            if (r9 == 0) goto L_0x019b
+        L_0x0087:
+            r7.currentAlpha = r12
+            long r9 = java.lang.System.currentTimeMillis()
+            r7.lastUpdateAlphaTime = r9
+            android.graphics.drawable.Drawable r9 = r7.crossfadeImage
+            if (r9 != 0) goto L_0x009e
+            android.graphics.drawable.Drawable r9 = r7.currentThumbDrawable
+            if (r9 != 0) goto L_0x009e
+            android.graphics.drawable.Drawable r9 = r7.staticThumbDrawable
+            if (r9 == 0) goto L_0x009c
+            goto L_0x009e
+        L_0x009c:
+            r9 = 0
+            goto L_0x009f
+        L_0x009e:
+            r9 = 1
+        L_0x009f:
+            r7.crossfadeWithThumb = r9
+            goto L_0x019b
+        L_0x00a3:
+            r7.currentAlpha = r1
+            goto L_0x019b
+        L_0x00a7:
+            r3 = 3
+            if (r10 != r3) goto L_0x0110
+            java.lang.String r10 = r7.currentMediaKey
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x00b3
+            return r0
+        L_0x00b3:
+            boolean r9 = r8 instanceof org.telegram.ui.Components.AnimatedFileDrawable
+            if (r9 != 0) goto L_0x00c1
+            org.telegram.messenger.ImageLoader r9 = org.telegram.messenger.ImageLoader.getInstance()
+            java.lang.String r10 = r7.currentMediaKey
+            r9.incrementUseCount(r10)
+            goto L_0x00cb
+        L_0x00c1:
+            r9 = r8
+            org.telegram.ui.Components.AnimatedFileDrawable r9 = (org.telegram.ui.Components.AnimatedFileDrawable) r9
+            long r3 = r7.startTime
+            long r5 = r7.endTime
+            r9.setStartEndTime(r3, r5)
+        L_0x00cb:
+            r7.currentMediaDrawable = r8
+            r7.updateDrawableRadius(r8)
+            android.graphics.drawable.Drawable r9 = r7.currentImageDrawable
+            if (r9 != 0) goto L_0x019b
+            if (r11 != 0) goto L_0x00da
+            boolean r9 = r7.forcePreview
+            if (r9 == 0) goto L_0x00de
+        L_0x00da:
+            boolean r9 = r7.forceCrossfade
+            if (r9 == 0) goto L_0x010c
+        L_0x00de:
+            android.graphics.drawable.Drawable r9 = r7.currentThumbDrawable
+            if (r9 != 0) goto L_0x00e6
+            android.graphics.drawable.Drawable r9 = r7.staticThumbDrawable
+            if (r9 == 0) goto L_0x00f0
+        L_0x00e6:
+            float r9 = r7.currentAlpha
+            int r9 = (r9 > r1 ? 1 : (r9 == r1 ? 0 : -1))
+            if (r9 == 0) goto L_0x00f0
+            boolean r9 = r7.forceCrossfade
+            if (r9 == 0) goto L_0x019b
+        L_0x00f0:
+            r7.currentAlpha = r12
+            long r9 = java.lang.System.currentTimeMillis()
+            r7.lastUpdateAlphaTime = r9
+            android.graphics.drawable.Drawable r9 = r7.crossfadeImage
+            if (r9 != 0) goto L_0x0107
+            android.graphics.drawable.Drawable r9 = r7.currentThumbDrawable
+            if (r9 != 0) goto L_0x0107
+            android.graphics.drawable.Drawable r9 = r7.staticThumbDrawable
+            if (r9 == 0) goto L_0x0105
+            goto L_0x0107
+        L_0x0105:
+            r9 = 0
+            goto L_0x0108
+        L_0x0107:
+            r9 = 1
+        L_0x0108:
+            r7.crossfadeWithThumb = r9
+            goto L_0x019b
+        L_0x010c:
+            r7.currentAlpha = r1
+            goto L_0x019b
+        L_0x0110:
+            if (r10 != r2) goto L_0x019b
+            android.graphics.drawable.Drawable r10 = r7.currentThumbDrawable
+            if (r10 == 0) goto L_0x0117
+            return r0
+        L_0x0117:
+            boolean r10 = r7.forcePreview
+            if (r10 != 0) goto L_0x0139
+            org.telegram.ui.Components.AnimatedFileDrawable r10 = r7.getAnimation()
+            if (r10 == 0) goto L_0x0128
+            boolean r10 = r10.hasBitmap()
+            if (r10 == 0) goto L_0x0128
+            return r0
+        L_0x0128:
+            android.graphics.drawable.Drawable r10 = r7.currentImageDrawable
+            if (r10 == 0) goto L_0x0130
+            boolean r10 = r10 instanceof org.telegram.ui.Components.AnimatedFileDrawable
+            if (r10 == 0) goto L_0x0138
+        L_0x0130:
+            android.graphics.drawable.Drawable r10 = r7.currentMediaDrawable
+            if (r10 == 0) goto L_0x0139
+            boolean r10 = r10 instanceof org.telegram.ui.Components.AnimatedFileDrawable
+            if (r10 != 0) goto L_0x0139
+        L_0x0138:
+            return r0
+        L_0x0139:
+            java.lang.String r10 = r7.currentThumbKey
+            boolean r9 = r9.equals(r10)
+            if (r9 != 0) goto L_0x0142
+            return r0
+        L_0x0142:
+            org.telegram.messenger.ImageLoader r9 = org.telegram.messenger.ImageLoader.getInstance()
+            java.lang.String r10 = r7.currentThumbKey
+            r9.incrementUseCount(r10)
+            r7.currentThumbDrawable = r8
+            boolean r9 = r8 instanceof org.telegram.messenger.ExtendedBitmapDrawable
+            if (r9 == 0) goto L_0x015a
+            r9 = r8
+            org.telegram.messenger.ExtendedBitmapDrawable r9 = (org.telegram.messenger.ExtendedBitmapDrawable) r9
+            int r9 = r9.getOrientation()
+            r7.thumbOrientation = r9
+        L_0x015a:
+            r7.updateDrawableRadius(r8)
+            if (r11 != 0) goto L_0x0199
+            byte r9 = r7.crossfadeAlpha
+            r10 = 2
+            if (r9 == r10) goto L_0x0199
+            java.lang.Object r9 = r7.currentParentObject
+            boolean r10 = r9 instanceof org.telegram.messenger.MessageObject
+            if (r10 == 0) goto L_0x017f
+            org.telegram.messenger.MessageObject r9 = (org.telegram.messenger.MessageObject) r9
+            boolean r9 = r9.isRoundVideo()
+            if (r9 == 0) goto L_0x017f
+            java.lang.Object r9 = r7.currentParentObject
+            org.telegram.messenger.MessageObject r9 = (org.telegram.messenger.MessageObject) r9
+            boolean r9 = r9.isSending()
+            if (r9 == 0) goto L_0x017f
+            r7.currentAlpha = r1
+            goto L_0x019b
+        L_0x017f:
+            r7.currentAlpha = r12
+            long r9 = java.lang.System.currentTimeMillis()
+            r7.lastUpdateAlphaTime = r9
+            android.graphics.drawable.Drawable r9 = r7.staticThumbDrawable
+            if (r9 == 0) goto L_0x0195
+            java.lang.String r9 = r7.currentImageKey
+            if (r9 != 0) goto L_0x0195
+            java.lang.String r9 = r7.currentMediaKey
+            if (r9 != 0) goto L_0x0195
+            r9 = 1
+            goto L_0x0196
+        L_0x0195:
+            r9 = 0
+        L_0x0196:
+            r7.crossfadeWithThumb = r9
+            goto L_0x019b
+        L_0x0199:
+            r7.currentAlpha = r1
+        L_0x019b:
+            org.telegram.messenger.ImageReceiver$ImageReceiverDelegate r9 = r7.delegate
+            if (r9 == 0) goto L_0x01bf
+            android.graphics.drawable.Drawable r10 = r7.currentImageDrawable
+            if (r10 != 0) goto L_0x01b2
+            android.graphics.drawable.Drawable r12 = r7.currentThumbDrawable
+            if (r12 != 0) goto L_0x01b2
+            android.graphics.drawable.Drawable r12 = r7.staticThumbDrawable
+            if (r12 != 0) goto L_0x01b2
+            android.graphics.drawable.Drawable r12 = r7.currentMediaDrawable
+            if (r12 == 0) goto L_0x01b0
+            goto L_0x01b2
+        L_0x01b0:
+            r12 = 0
+            goto L_0x01b3
+        L_0x01b2:
+            r12 = 1
+        L_0x01b3:
+            if (r10 != 0) goto L_0x01bb
+            android.graphics.drawable.Drawable r10 = r7.currentMediaDrawable
+            if (r10 != 0) goto L_0x01bb
+            r10 = 1
+            goto L_0x01bc
+        L_0x01bb:
+            r10 = 0
+        L_0x01bc:
+            r9.didSetImage(r7, r12, r10, r11)
+        L_0x01bf:
+            boolean r9 = r8 instanceof org.telegram.ui.Components.AnimatedFileDrawable
+            if (r9 == 0) goto L_0x01de
+            org.telegram.ui.Components.AnimatedFileDrawable r8 = (org.telegram.ui.Components.AnimatedFileDrawable) r8
+            android.view.View r9 = r7.parentView
+            r8.setParentView(r9)
+            boolean r9 = r7.useSharedAnimationQueue
+            r8.setUseSharedQueue(r9)
+            boolean r9 = r7.allowStartAnimation
+            if (r9 == 0) goto L_0x01d6
+            r8.start()
+        L_0x01d6:
+            boolean r9 = r7.allowDecodeSingleFrame
+            r8.setAllowDecodeSingleFrame(r9)
+            r7.animationReadySent = r0
+            goto L_0x0204
+        L_0x01de:
+            boolean r9 = r8 instanceof org.telegram.ui.Components.RLottieDrawable
+            if (r9 == 0) goto L_0x0204
+            org.telegram.ui.Components.RLottieDrawable r8 = (org.telegram.ui.Components.RLottieDrawable) r8
+            android.view.View r9 = r7.parentView
+            r8.addParentView(r9)
+            boolean r9 = r7.allowStartLottieAnimation
+            if (r9 == 0) goto L_0x01fa
+            boolean r9 = r8.isHeavyDrawable()
+            if (r9 == 0) goto L_0x01f7
+            int r9 = r7.currentOpenedLayerFlags
+            if (r9 != 0) goto L_0x01fa
+        L_0x01f7:
+            r8.start()
+        L_0x01fa:
+            r8.setAllowDecodeSingleFrame(r2)
+            int r9 = r7.autoRepeat
+            r8.setAutoRepeat(r9)
+            r7.animationReadySent = r0
+        L_0x0204:
+            android.view.View r8 = r7.parentView
+            if (r8 == 0) goto L_0x0221
+            boolean r9 = r7.invalidateAll
+            if (r9 == 0) goto L_0x0210
+            r8.invalidate()
+            goto L_0x0221
+        L_0x0210:
+            float r9 = r7.imageX
+            int r10 = (int) r9
+            float r11 = r7.imageY
+            int r12 = (int) r11
+            float r0 = r7.imageW
+            float r9 = r9 + r0
+            int r9 = (int) r9
+            float r0 = r7.imageH
+            float r11 = r11 + r0
+            int r11 = (int) r11
+            r8.invalidate(r10, r12, r9, r11)
+        L_0x0221:
+            return r2
+        L_0x0222:
+            return r0
+        */
+        throw new UnsupportedOperationException("Method not decompiled: org.telegram.messenger.ImageReceiver.setImageBitmapByKey(android.graphics.drawable.Drawable, java.lang.String, int, boolean, int):boolean");
     }
 
     public void setMediaStartEndTime(long j, long j2) {

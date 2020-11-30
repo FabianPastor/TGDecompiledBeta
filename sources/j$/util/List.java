@@ -1,13 +1,14 @@
 package j$.util;
 
 import j$.util.function.UnaryOperator;
+import j$.util.v;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.ListIterator;
 
-public interface List extends Collection, Collection {
+public interface List<E> extends Collection<E> {
 
     /* renamed from: j$.util.List$-CC  reason: invalid class name */
     public final /* synthetic */ class CC {
@@ -39,7 +40,7 @@ public interface List extends Collection, Collection {
 
         public static Spliterator $default$spliterator(java.util.List list) {
             list.getClass();
-            return new T((Collection) list, 16);
+            return new v.i((Collection) list, 16);
         }
     }
 

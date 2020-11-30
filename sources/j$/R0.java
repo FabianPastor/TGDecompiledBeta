@@ -1,8 +1,7 @@
 package j$;
 
-import j$.util.CLASSNAMEk;
-import j$.util.CLASSNAMEq;
-import j$.util.stream.CLASSNAMEx2;
+import j$.util.k;
+import j$.util.stream.C1;
 import java.util.IntSummaryStatistics;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
@@ -23,17 +22,17 @@ import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 public final /* synthetic */ class R0 implements IntStream {
-    final /* synthetic */ CLASSNAMEx2 a;
+    final /* synthetic */ C1 a;
 
-    private /* synthetic */ R0(CLASSNAMEx2 x2Var) {
-        this.a = x2Var;
+    private /* synthetic */ R0(C1 c1) {
+        this.a = c1;
     }
 
-    public static /* synthetic */ IntStream m0(CLASSNAMEx2 x2Var) {
-        if (x2Var == null) {
+    public static /* synthetic */ IntStream m0(C1 c1) {
+        if (c1 == null) {
             return null;
         }
-        return x2Var instanceof Q0 ? ((Q0) x2Var).a : new R0(x2Var);
+        return c1 instanceof Q0 ? ((Q0) c1).a : new R0(c1);
     }
 
     public /* synthetic */ boolean allMatch(IntPredicate intPredicate) {
@@ -41,7 +40,7 @@ public final /* synthetic */ class R0 implements IntStream {
     }
 
     public /* synthetic */ boolean anyMatch(IntPredicate intPredicate) {
-        return this.a.e0(Y.a(intPredicate));
+        return this.a.b(Y.a(intPredicate));
     }
 
     public /* synthetic */ DoubleStream asDoubleStream() {
@@ -53,7 +52,7 @@ public final /* synthetic */ class R0 implements IntStream {
     }
 
     public /* synthetic */ OptionalDouble average() {
-        return CLASSNAMEk.o(this.a.average());
+        return k.o(this.a.average());
     }
 
     public /* synthetic */ Stream boxed() {
@@ -77,15 +76,15 @@ public final /* synthetic */ class R0 implements IntStream {
     }
 
     public /* synthetic */ IntStream filter(IntPredicate intPredicate) {
-        return m0(this.a.Z(Y.a(intPredicate)));
+        return m0(this.a.X(Y.a(intPredicate)));
     }
 
     public /* synthetic */ OptionalInt findAny() {
-        return CLASSNAMEk.p(this.a.findAny());
+        return k.p(this.a.findAny());
     }
 
     public /* synthetic */ OptionalInt findFirst() {
-        return CLASSNAMEk.p(this.a.findFirst());
+        return k.p(this.a.findFirst());
     }
 
     public /* synthetic */ IntStream flatMap(IntFunction intFunction) {
@@ -109,15 +108,15 @@ public final /* synthetic */ class R0 implements IntStream {
     }
 
     public /* synthetic */ IntStream map(IntUnaryOperator intUnaryOperator) {
-        return m0(this.a.W(CLASSNAMEe0.b(intUnaryOperator)));
+        return m0(this.a.y(CLASSNAMEe0.b(intUnaryOperator)));
     }
 
     public /* synthetic */ DoubleStream mapToDouble(IntToDoubleFunction intToDoubleFunction) {
-        return P0.m0(this.a.g0(CLASSNAMEa0.b(intToDoubleFunction)));
+        return P0.m0(this.a.i0(CLASSNAMEa0.b(intToDoubleFunction)));
     }
 
     public /* synthetic */ LongStream mapToLong(IntToLongFunction intToLongFunction) {
-        return T0.m0(this.a.g(CLASSNAMEc0.a(intToLongFunction)));
+        return T0.m0(this.a.h(CLASSNAMEc0.a(intToLongFunction)));
     }
 
     public /* synthetic */ Stream mapToObj(IntFunction intFunction) {
@@ -125,15 +124,15 @@ public final /* synthetic */ class R0 implements IntStream {
     }
 
     public /* synthetic */ OptionalInt max() {
-        return CLASSNAMEk.p(this.a.max());
+        return k.p(this.a.max());
     }
 
     public /* synthetic */ OptionalInt min() {
-        return CLASSNAMEk.p(this.a.min());
+        return k.p(this.a.min());
     }
 
     public /* synthetic */ boolean noneMatch(IntPredicate intPredicate) {
-        return this.a.i0(Y.a(intPredicate));
+        return this.a.R(Y.a(intPredicate));
     }
 
     public /* synthetic */ BaseStream onClose(Runnable runnable) {
@@ -149,7 +148,7 @@ public final /* synthetic */ class R0 implements IntStream {
     }
 
     public /* synthetic */ OptionalInt reduce(IntBinaryOperator intBinaryOperator) {
-        return CLASSNAMEk.p(this.a.Y(S.a(intBinaryOperator)));
+        return k.p(this.a.Z(S.a(intBinaryOperator)));
     }
 
     public /* synthetic */ IntStream skip(long j) {
@@ -164,8 +163,9 @@ public final /* synthetic */ class R0 implements IntStream {
         return this.a.sum();
     }
 
-    public /* synthetic */ IntSummaryStatistics summaryStatistics() {
-        return CLASSNAMEq.b(this.a.summaryStatistics());
+    public IntSummaryStatistics summaryStatistics() {
+        this.a.summaryStatistics();
+        throw new Error("Java 8+ API desugaring (library desugaring) cannot convert to java.util.IntSummaryStatistics");
     }
 
     public /* synthetic */ int[] toArray() {

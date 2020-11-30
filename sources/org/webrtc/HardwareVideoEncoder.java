@@ -291,7 +291,7 @@ class HardwareVideoEncoder implements VideoEncoder {
             requestKeyFrame(videoFrame.getTimestampNs());
         }
         int height3 = ((buffer.getHeight() * buffer.getWidth()) * 3) / 2;
-        this.outputBuilders.offer(EncodedImage.builder().setCaptureTimeNs(videoFrame.getTimestampNs()).setCompleteFrame(true).setEncodedWidth(videoFrame.getBuffer().getWidth()).setEncodedHeight(videoFrame.getBuffer().getHeight()).setRotation(videoFrame.getRotation()));
+        this.outputBuilders.offer(EncodedImage.builder().setCaptureTimeNs(videoFrame.getTimestampNs()).setEncodedWidth(videoFrame.getBuffer().getWidth()).setEncodedHeight(videoFrame.getBuffer().getHeight()).setRotation(videoFrame.getRotation()));
         if (this.useSurfaceMode) {
             videoCodecStatus = encodeTextureBuffer(videoFrame);
         } else {

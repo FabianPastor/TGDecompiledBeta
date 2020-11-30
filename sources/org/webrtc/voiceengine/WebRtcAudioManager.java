@@ -163,10 +163,11 @@ public class WebRtcAudioManager {
         } else {
             z = WebRtcAudioUtils.deviceIsBlacklistedForOpenSLESUsage();
         }
-        if (z) {
-            Logging.d("WebRtcAudioManager", Build.MODEL + " is blacklisted for OpenSL ES usage!");
+        if (!z) {
+            return true;
         }
-        return z;
+        Logging.d("WebRtcAudioManager", Build.MODEL + " is blacklisted for OpenSL ES usage!");
+        return true;
     }
 
     private void storeAudioParameters() {

@@ -132,6 +132,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
     public boolean canSaveCameraPreview;
     /* access modifiers changed from: private */
     public boolean cancelTakingPhotos;
+    private boolean checkCameraWhenShown;
     /* access modifiers changed from: private */
     public TextView counterTextView;
     private float currentPanTranslationY;
@@ -399,6 +400,7 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
                 placeProviderObject.imageReceiver = imageReceiver;
                 placeProviderObject.thumb = imageReceiver.getBitmapSafe();
                 placeProviderObject.scale = access$700.getScale();
+                placeProviderObject.clipBottomAddition = (int) ChatAttachAlertPhotoLayout.this.parentAlert.getClipLayoutBottom();
                 access$700.showCheck(false);
                 return placeProviderObject;
             }
@@ -3010,14 +3012,27 @@ public class ChatAttachAlertPhotoLayout extends ChatAttachAlert.AttachAlertLayou
         }
         if (this.cameraView != null) {
             int childCount = this.gridView.getChildCount();
-            for (int i = 0; i < childCount; i++) {
+            int i = 0;
+            while (true) {
+                if (i >= childCount) {
+                    break;
+                }
                 View childAt = this.gridView.getChildAt(i);
                 if (childAt instanceof PhotoAttachCameraCell) {
                     childAt.setVisibility(4);
-                    return;
+                    break;
                 }
+                i++;
             }
         }
+        if (this.checkCameraWhenShown) {
+            this.checkCameraWhenShown = false;
+            checkCamera(true);
+        }
+    }
+
+    public void setCheckCameraWhenShown(boolean z) {
+        this.checkCameraWhenShown = z;
     }
 
     /* access modifiers changed from: package-private */

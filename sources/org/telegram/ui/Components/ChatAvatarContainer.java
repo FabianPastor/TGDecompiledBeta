@@ -180,14 +180,27 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             org.telegram.tgnet.TLRPC$User r1 = r1.getCurrentUser()
             org.telegram.ui.ChatActivity r2 = r7.parentFragment
             org.telegram.tgnet.TLRPC$Chat r2 = r2.getCurrentChat()
+            org.telegram.ui.Components.BackupImageView r3 = r7.avatarImageView
+            org.telegram.messenger.ImageReceiver r3 = r3.getImageReceiver()
+            java.lang.String r4 = r3.getImageKey()
+            org.telegram.messenger.ImageLoader r5 = org.telegram.messenger.ImageLoader.getInstance()
+            if (r4 == 0) goto L_0x004d
+            boolean r6 = r5.isInMemCache(r4, r0)
+            if (r6 != 0) goto L_0x004d
+            android.graphics.drawable.Drawable r3 = r3.getDrawable()
+            boolean r6 = r3 instanceof android.graphics.drawable.BitmapDrawable
+            if (r6 == 0) goto L_0x004d
+            android.graphics.drawable.BitmapDrawable r3 = (android.graphics.drawable.BitmapDrawable) r3
+            r5.putImageToCache(r3, r4)
+        L_0x004d:
             r3 = 2
             r4 = 1
-            if (r1 == 0) goto L_0x00a7
+            if (r1 == 0) goto L_0x00ca
             android.os.Bundle r2 = new android.os.Bundle
             r2.<init>()
             boolean r5 = org.telegram.messenger.UserObject.isUserSelf(r1)
             java.lang.String r6 = "dialog_id"
-            if (r5 == 0) goto L_0x006b
+            if (r5 == 0) goto L_0x008e
             org.telegram.ui.ChatActivity r8 = r7.parentFragment
             long r3 = r8.getDialogId()
             r2.putLong(r6, r3)
@@ -206,8 +219,8 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             r8.setChatInfo(r0)
             org.telegram.ui.ChatActivity r0 = r7.parentFragment
             r0.presentFragment(r8)
-            goto L_0x00d1
-        L_0x006b:
+            goto L_0x00f4
+        L_0x008e:
             int r0 = r1.id
             java.lang.String r1 = "user_id"
             r2.putInt(r1, r0)
@@ -216,28 +229,28 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             java.lang.String r1 = "reportSpam"
             r2.putBoolean(r1, r0)
             android.widget.ImageView r0 = r7.timeItem
-            if (r0 == 0) goto L_0x008a
+            if (r0 == 0) goto L_0x00ad
             org.telegram.ui.ChatActivity r0 = r7.parentFragment
             long r0 = r0.getDialogId()
             r2.putLong(r6, r0)
-        L_0x008a:
+        L_0x00ad:
             org.telegram.ui.ProfileActivity r0 = new org.telegram.ui.ProfileActivity
             org.telegram.ui.Components.SharedMediaLayout$SharedMediaPreloader r1 = r7.sharedMediaPreloader
             r0.<init>(r2, r1)
             org.telegram.ui.ChatActivity r1 = r7.parentFragment
             org.telegram.tgnet.TLRPC$UserFull r1 = r1.getCurrentUserInfo()
             r0.setUserInfo(r1)
-            if (r8 == 0) goto L_0x009d
-            goto L_0x009e
-        L_0x009d:
+            if (r8 == 0) goto L_0x00c0
+            goto L_0x00c1
+        L_0x00c0:
             r3 = 1
-        L_0x009e:
+        L_0x00c1:
             r0.setPlayProfileAnimation(r3)
             org.telegram.ui.ChatActivity r8 = r7.parentFragment
             r8.presentFragment(r0)
-            goto L_0x00d1
-        L_0x00a7:
-            if (r2 == 0) goto L_0x00d1
+            goto L_0x00f4
+        L_0x00ca:
+            if (r2 == 0) goto L_0x00f4
             android.os.Bundle r0 = new android.os.Bundle
             r0.<init>()
             int r1 = r2.id
@@ -249,15 +262,15 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
             org.telegram.ui.ChatActivity r0 = r7.parentFragment
             org.telegram.tgnet.TLRPC$ChatFull r0 = r0.getCurrentChatInfo()
             r1.setChatInfo(r0)
-            if (r8 == 0) goto L_0x00c8
-            goto L_0x00c9
-        L_0x00c8:
+            if (r8 == 0) goto L_0x00eb
+            goto L_0x00ec
+        L_0x00eb:
             r3 = 1
-        L_0x00c9:
+        L_0x00ec:
             r1.setPlayProfileAnimation(r3)
             org.telegram.ui.ChatActivity r8 = r7.parentFragment
             r8.presentFragment(r1)
-        L_0x00d1:
+        L_0x00f4:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatAvatarContainer.openProfile(boolean):void");

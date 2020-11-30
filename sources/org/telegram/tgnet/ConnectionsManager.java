@@ -11,7 +11,6 @@ import android.util.Base64;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import java.io.File;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -266,7 +265,7 @@ public class ConnectionsManager extends BaseController {
         if (TextUtils.isEmpty(str11) && !TextUtils.isEmpty(SharedConfig.pushStringStatus)) {
             str11 = SharedConfig.pushStringStatus;
         }
-        init(BuildVars.BUILD_VERSION, 120, BuildVars.APP_ID, str8, str10, str7, str, str6, file2, FileLog.getNetworkLogPath(), str11, AndroidUtilities.getCertificateSHA256Fingerprint(), (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000, getUserConfig().getClientUserId(), isPushConnectionEnabled);
+        init(BuildVars.BUILD_VERSION, 122, BuildVars.APP_ID, str8, str10, str7, str, str6, file2, FileLog.getNetworkLogPath(), str11, AndroidUtilities.getCertificateSHA256Fingerprint(), (TimeZone.getDefault().getRawOffset() + TimeZone.getDefault().getDSTSavings()) / 1000, getUserConfig().getClientUserId(), isPushConnectionEnabled);
     }
 
     public boolean isPushConnectionEnabled() {
@@ -1907,17 +1906,15 @@ public class ConnectionsManager extends BaseController {
         public NativeByteBuffer doInBackground(Void... voidArr) {
             try {
                 if (ConnectionsManager.native_isTestBackend(this.currentAccount) == 0) {
-                    this.firebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-                    FirebaseRemoteConfigSettings.Builder builder = new FirebaseRemoteConfigSettings.Builder();
-                    builder.setDeveloperModeEnabled(false);
-                    this.firebaseRemoteConfig.setConfigSettings(builder.build());
-                    String string = this.firebaseRemoteConfig.getString("ipconfigv3");
+                    FirebaseRemoteConfig instance = FirebaseRemoteConfig.getInstance();
+                    this.firebaseRemoteConfig = instance;
+                    String string = instance.getString("ipconfigv3");
                     if (BuildVars.LOGS_ENABLED) {
                         FileLog.d("current firebase value = " + string);
                     }
                     this.firebaseRemoteConfig.fetch(0).addOnCompleteListener(new OnCompleteListener() {
                         public final void onComplete(Task task) {
-                            ConnectionsManager.FirebaseTask.this.lambda$doInBackground$1$ConnectionsManager$FirebaseTask(task);
+                            ConnectionsManager.FirebaseTask.this.lambda$doInBackground$2$ConnectionsManager$FirebaseTask(task);
                         }
                     });
                     return null;
@@ -1926,7 +1923,7 @@ public class ConnectionsManager extends BaseController {
             } catch (Throwable th) {
                 Utilities.stageQueue.postRunnable(new Runnable() {
                     public final void run() {
-                        ConnectionsManager.FirebaseTask.this.lambda$doInBackground$2$ConnectionsManager$FirebaseTask();
+                        ConnectionsManager.FirebaseTask.this.lambda$doInBackground$3$ConnectionsManager$FirebaseTask();
                     }
                 });
                 FileLog.e(th);
@@ -1935,8 +1932,8 @@ public class ConnectionsManager extends BaseController {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$doInBackground$1 */
-        public /* synthetic */ void lambda$doInBackground$1$ConnectionsManager$FirebaseTask(Task task) {
+        /* renamed from: lambda$doInBackground$2 */
+        public /* synthetic */ void lambda$doInBackground$2$ConnectionsManager$FirebaseTask(Task task) {
             Utilities.stageQueue.postRunnable(new Runnable(task.isSuccessful()) {
                 public final /* synthetic */ boolean f$1;
 
@@ -1945,24 +1942,30 @@ public class ConnectionsManager extends BaseController {
                 }
 
                 public final void run() {
-                    ConnectionsManager.FirebaseTask.this.lambda$null$0$ConnectionsManager$FirebaseTask(this.f$1);
+                    ConnectionsManager.FirebaseTask.this.lambda$null$1$ConnectionsManager$FirebaseTask(this.f$1);
                 }
             });
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$null$0 */
-        public /* synthetic */ void lambda$null$0$ConnectionsManager$FirebaseTask(boolean z) {
-            String str;
-            AsyncTask unused = ConnectionsManager.currentTask = null;
+        /* renamed from: lambda$null$1 */
+        public /* synthetic */ void lambda$null$1$ConnectionsManager$FirebaseTask(boolean z) {
             if (z) {
-                this.firebaseRemoteConfig.activateFetched();
-                str = this.firebaseRemoteConfig.getString("ipconfigv3");
-            } else {
-                str = null;
+                this.firebaseRemoteConfig.activate().addOnCompleteListener(new OnCompleteListener() {
+                    public final void onComplete(Task task) {
+                        ConnectionsManager.FirebaseTask.this.lambda$null$0$ConnectionsManager$FirebaseTask(task);
+                    }
+                });
             }
-            if (!TextUtils.isEmpty(str)) {
-                byte[] decode = Base64.decode(str, 0);
+        }
+
+        /* access modifiers changed from: private */
+        /* renamed from: lambda$null$0 */
+        public /* synthetic */ void lambda$null$0$ConnectionsManager$FirebaseTask(Task task) {
+            AsyncTask unused = ConnectionsManager.currentTask = null;
+            String string = this.firebaseRemoteConfig.getString("ipconfigv3");
+            if (!TextUtils.isEmpty(string)) {
+                byte[] decode = Base64.decode(string, 0);
                 try {
                     NativeByteBuffer nativeByteBuffer = new NativeByteBuffer(decode.length);
                     nativeByteBuffer.writeBytes(decode);
@@ -1984,8 +1987,8 @@ public class ConnectionsManager extends BaseController {
         }
 
         /* access modifiers changed from: private */
-        /* renamed from: lambda$doInBackground$2 */
-        public /* synthetic */ void lambda$doInBackground$2$ConnectionsManager$FirebaseTask() {
+        /* renamed from: lambda$doInBackground$3 */
+        public /* synthetic */ void lambda$doInBackground$3$ConnectionsManager$FirebaseTask() {
             if (BuildVars.LOGS_ENABLED) {
                 FileLog.d("failed to get firebase result");
                 FileLog.d("start dns txt task");

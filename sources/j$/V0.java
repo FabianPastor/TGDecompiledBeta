@@ -1,6 +1,6 @@
 package j$;
 
-import j$.util.CLASSNAMEk;
+import j$.util.k;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Optional;
@@ -38,7 +38,7 @@ public final /* synthetic */ class V0 implements Stream {
     }
 
     public /* synthetic */ boolean allMatch(Predicate predicate) {
-        return this.a.T(A0.c(predicate));
+        return this.a.U(A0.c(predicate));
     }
 
     public /* synthetic */ boolean anyMatch(Predicate predicate) {
@@ -50,11 +50,11 @@ public final /* synthetic */ class V0 implements Stream {
     }
 
     public /* synthetic */ Object collect(Supplier supplier, BiConsumer biConsumer, BiConsumer biConsumer2) {
-        return this.a.j(C0.a(supplier), CLASSNAMEt.b(biConsumer), CLASSNAMEt.b(biConsumer2));
+        return this.a.k(C0.a(supplier), CLASSNAMEt.b(biConsumer), CLASSNAMEt.b(biConsumer2));
     }
 
     public /* synthetic */ Object collect(Collector collector) {
-        return this.a.S(M0.a(collector));
+        return this.a.T(M0.a(collector));
     }
 
     public /* synthetic */ long count() {
@@ -70,11 +70,11 @@ public final /* synthetic */ class V0 implements Stream {
     }
 
     public /* synthetic */ Optional findAny() {
-        return CLASSNAMEk.n(this.a.findAny());
+        return k.n(this.a.findAny());
     }
 
     public /* synthetic */ Optional findFirst() {
-        return CLASSNAMEk.n(this.a.findFirst());
+        return k.n(this.a.findFirst());
     }
 
     public /* synthetic */ Stream flatMap(Function function) {
@@ -86,11 +86,11 @@ public final /* synthetic */ class V0 implements Stream {
     }
 
     public /* synthetic */ IntStream flatMapToInt(Function function) {
-        return R0.m0(this.a.d(P.c(function)));
+        return R0.m0(this.a.e(P.c(function)));
     }
 
     public /* synthetic */ LongStream flatMapToLong(Function function) {
-        return T0.m0(this.a.U(P.c(function)));
+        return T0.m0(this.a.V(P.c(function)));
     }
 
     public /* synthetic */ void forEach(Consumer consumer) {
@@ -98,7 +98,7 @@ public final /* synthetic */ class V0 implements Stream {
     }
 
     public /* synthetic */ void forEachOrdered(Consumer consumer) {
-        this.a.f(CLASSNAMEz.b(consumer));
+        this.a.g(CLASSNAMEz.b(consumer));
     }
 
     public /* synthetic */ boolean isParallel() {
@@ -118,7 +118,7 @@ public final /* synthetic */ class V0 implements Stream {
     }
 
     public /* synthetic */ DoubleStream mapToDouble(ToDoubleFunction toDoubleFunction) {
-        return P0.m0(this.a.f0(E0.a(toDoubleFunction)));
+        return P0.m0(this.a.h0(E0.a(toDoubleFunction)));
     }
 
     public /* synthetic */ IntStream mapToInt(ToIntFunction toIntFunction) {
@@ -126,19 +126,19 @@ public final /* synthetic */ class V0 implements Stream {
     }
 
     public /* synthetic */ LongStream mapToLong(ToLongFunction toLongFunction) {
-        return T0.m0(this.a.d0(I0.a(toLongFunction)));
+        return T0.m0(this.a.e0(I0.a(toLongFunction)));
     }
 
     public /* synthetic */ Optional max(Comparator comparator) {
-        return CLASSNAMEk.n(this.a.max(comparator));
+        return k.n(this.a.max(comparator));
     }
 
     public /* synthetic */ Optional min(Comparator comparator) {
-        return CLASSNAMEk.n(this.a.min(comparator));
+        return k.n(this.a.min(comparator));
     }
 
     public /* synthetic */ boolean noneMatch(Predicate predicate) {
-        return this.a.b0(A0.c(predicate));
+        return this.a.c0(A0.c(predicate));
     }
 
     public /* synthetic */ BaseStream onClose(Runnable runnable) {
@@ -150,7 +150,7 @@ public final /* synthetic */ class V0 implements Stream {
     }
 
     public /* synthetic */ Stream peek(Consumer consumer) {
-        return m0(this.a.R(CLASSNAMEz.b(consumer)));
+        return m0(this.a.S(CLASSNAMEz.b(consumer)));
     }
 
     public /* synthetic */ Object reduce(Object obj, BiFunction biFunction, BinaryOperator binaryOperator) {
@@ -162,7 +162,7 @@ public final /* synthetic */ class V0 implements Stream {
     }
 
     public /* synthetic */ Optional reduce(BinaryOperator binaryOperator) {
-        return CLASSNAMEk.n(this.a.t(CLASSNAMEx.b(binaryOperator)));
+        return k.n(this.a.s(CLASSNAMEx.b(binaryOperator)));
     }
 
     public /* synthetic */ BaseStream sequential() {

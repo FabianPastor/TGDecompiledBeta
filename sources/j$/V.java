@@ -1,20 +1,20 @@
 package j$;
 
-import j$.util.function.u;
+import j$.util.function.w;
 import java.util.function.IntConsumer;
 
 public final /* synthetic */ class V implements IntConsumer {
-    final /* synthetic */ u a;
+    final /* synthetic */ w a;
 
-    private /* synthetic */ V(u uVar) {
-        this.a = uVar;
+    private /* synthetic */ V(w wVar) {
+        this.a = wVar;
     }
 
-    public static /* synthetic */ IntConsumer a(u uVar) {
-        if (uVar == null) {
+    public static /* synthetic */ IntConsumer a(w wVar) {
+        if (wVar == null) {
             return null;
         }
-        return uVar instanceof U ? ((U) uVar).a : new V(uVar);
+        return wVar instanceof U ? ((U) wVar).a : new V(wVar);
     }
 
     public /* synthetic */ void accept(int i) {

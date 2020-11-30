@@ -358,7 +358,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                                         } else {
                                             int i13 = rLottieDrawable9.currentFrame;
                                             if (i13 > i9) {
-                                                if (i13 - i3 > i9) {
+                                                if (i13 - i3 >= i9) {
                                                     rLottieDrawable9.currentFrame = i13 - i3;
                                                     rLottieDrawable9.nextFrameIsLast = false;
                                                 } else {
@@ -600,7 +600,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                                         } else {
                                             int i13 = rLottieDrawable9.currentFrame;
                                             if (i13 > i9) {
-                                                if (i13 - i3 > i9) {
+                                                if (i13 - i3 >= i9) {
                                                     rLottieDrawable9.currentFrame = i13 - i3;
                                                     rLottieDrawable9.nextFrameIsLast = false;
                                                 } else {
@@ -963,7 +963,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
                                         } else {
                                             int i13 = rLottieDrawable9.currentFrame;
                                             if (i13 > i9) {
-                                                if (i13 - i3 > i9) {
+                                                if (i13 - i3 >= i9) {
                                                     rLottieDrawable9.currentFrame = i13 - i3;
                                                     rLottieDrawable9.nextFrameIsLast = false;
                                                 } else {
@@ -1085,6 +1085,10 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
 
     public int getCurrentFrame() {
         return this.currentFrame;
+    }
+
+    public int getCustomEndFrame() {
+        return this.customEndFrame;
     }
 
     public long getDuration() {
@@ -1334,7 +1338,7 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
     }
 
     public void setCurrentFrame(int i, boolean z) {
-        setCurrentFrame(i, true, false);
+        setCurrentFrame(i, z, false);
     }
 
     public void setCurrentFrame(int i, boolean z, boolean z2) {
@@ -1397,15 +1401,20 @@ public class RLottieDrawable extends BitmapDrawable implements Animatable {
             return true;
         }
         int size = this.parentViews.size();
-        while (size > 0) {
-            if (this.parentViews.get(0).get() == null) {
-                this.parentViews.remove(0);
+        int i = 0;
+        while (i < size) {
+            View view = (View) this.parentViews.get(i).get();
+            if (view == null) {
+                this.parentViews.remove(i);
                 size--;
-            } else if (this.parentViews.get(0).get() == this.currentParentView) {
-                return true;
-            } else {
+                i--;
+            } else if (view.isShown()) {
+                if (view == this.currentParentView) {
+                    return true;
+                }
                 return false;
             }
+            i++;
         }
         return true;
     }

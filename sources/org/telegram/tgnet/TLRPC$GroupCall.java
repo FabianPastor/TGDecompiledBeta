@@ -2,28 +2,21 @@ package org.telegram.tgnet;
 
 public abstract class TLRPC$GroupCall extends TLObject {
     public long access_hash;
-    public int admin_id;
-    public int channel_id;
-    public TLRPC$TL_groupCallConnection connection;
+    public boolean can_change_join_muted;
     public int duration;
-    public byte[] encryption_key;
     public int flags;
     public long id;
-    public long key_fingerprint;
+    public boolean join_muted;
+    public TLRPC$TL_dataJSON params;
     public int participants_count;
-    public TLRPC$PhoneCallProtocol protocol;
-    public byte[] reflector_group_tag;
-    public byte[] reflector_self_secret;
-    public byte[] reflector_self_tag;
+    public int version;
 
     public static TLRPC$GroupCall TLdeserialize(AbstractSerializedData abstractSerializedData, int i, boolean z) {
         TLRPC$GroupCall tLRPC$GroupCall;
-        if (i == NUM) {
-            tLRPC$GroupCall = new TLRPC$TL_groupCall();
-        } else if (i != NUM) {
+        if (i != NUM) {
             tLRPC$GroupCall = i != NUM ? null : new TLRPC$TL_groupCallDiscarded();
         } else {
-            tLRPC$GroupCall = new TLRPC$TL_groupCallPrivate();
+            tLRPC$GroupCall = new TLRPC$TL_groupCall();
         }
         if (tLRPC$GroupCall != null || !z) {
             if (tLRPC$GroupCall != null) {

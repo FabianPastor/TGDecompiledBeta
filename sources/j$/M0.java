@@ -1,21 +1,21 @@
 package j$;
 
 import j$.util.function.BiConsumer;
-import j$.util.function.E;
 import j$.util.function.Function;
+import j$.util.function.J;
 import j$.util.function.n;
-import j$.util.stream.CLASSNAMEn1;
+import j$.util.stream.CLASSNAMEm1;
 import java.util.Set;
 import java.util.stream.Collector;
 
-public final /* synthetic */ class M0 implements CLASSNAMEn1 {
+public final /* synthetic */ class M0 implements CLASSNAMEm1 {
     final /* synthetic */ Collector a;
 
     private /* synthetic */ M0(Collector collector) {
         this.a = collector;
     }
 
-    public static /* synthetic */ CLASSNAMEn1 a(Collector collector) {
+    public static /* synthetic */ CLASSNAMEm1 a(Collector collector) {
         if (collector == null) {
             return null;
         }
@@ -38,7 +38,7 @@ public final /* synthetic */ class M0 implements CLASSNAMEn1 {
         return P.c(this.a.finisher());
     }
 
-    public /* synthetic */ E supplier() {
+    public /* synthetic */ J supplier() {
         return C0.a(this.a.supplier());
     }
 }

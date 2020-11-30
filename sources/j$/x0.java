@@ -1,20 +1,20 @@
 package j$;
 
-import j$.util.function.C;
+import j$.util.function.H;
 import java.util.function.ObjIntConsumer;
 
 public final /* synthetic */ class x0 implements ObjIntConsumer {
-    final /* synthetic */ C a;
+    final /* synthetic */ H a;
 
-    private /* synthetic */ x0(C c) {
-        this.a = c;
+    private /* synthetic */ x0(H h) {
+        this.a = h;
     }
 
-    public static /* synthetic */ ObjIntConsumer a(C c) {
-        if (c == null) {
+    public static /* synthetic */ ObjIntConsumer a(H h) {
+        if (h == null) {
             return null;
         }
-        return c instanceof w0 ? ((w0) c).a : new x0(c);
+        return h instanceof w0 ? ((w0) h).a : new x0(h);
     }
 
     public /* synthetic */ void accept(Object obj, int i) {

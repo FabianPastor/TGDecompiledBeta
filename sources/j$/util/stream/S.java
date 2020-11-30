@@ -1,8 +1,8 @@
 package j$.util.stream;
 
-import j$.util.function.v;
+import j$.util.function.x;
 
-public final /* synthetic */ class S implements v {
+public final /* synthetic */ class S implements x {
     public static final /* synthetic */ S a = new S();
 
     private /* synthetic */ S() {

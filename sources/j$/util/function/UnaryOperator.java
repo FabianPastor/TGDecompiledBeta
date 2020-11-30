@@ -1,4 +1,4 @@
 package j$.util.function;
 
-public interface UnaryOperator extends Function {
+public interface UnaryOperator<T> extends Function<T, T> {
 }

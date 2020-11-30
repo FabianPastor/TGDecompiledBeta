@@ -1,16 +1,16 @@
 package j$;
 
-import j$.util.function.v;
+import j$.util.function.x;
 import java.util.function.IntFunction;
 
-public final /* synthetic */ class W implements v {
+public final /* synthetic */ class W implements x {
     final /* synthetic */ IntFunction a;
 
     private /* synthetic */ W(IntFunction intFunction) {
         this.a = intFunction;
     }
 
-    public static /* synthetic */ v a(IntFunction intFunction) {
+    public static /* synthetic */ x a(IntFunction intFunction) {
         if (intFunction == null) {
             return null;
         }

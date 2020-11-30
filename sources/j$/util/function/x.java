@@ -1,5 +1,5 @@
 package j$.util.function;
 
-public interface x {
-    long applyAsLong(long j, long j2);
+public interface x<R> {
+    Object apply(int i);
 }

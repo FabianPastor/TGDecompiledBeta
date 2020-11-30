@@ -144,6 +144,9 @@ public class SurfaceTextureHelper {
     /* access modifiers changed from: private */
     /* renamed from: lambda$new$0 */
     public /* synthetic */ void lambda$new$0$SurfaceTextureHelper(SurfaceTexture surfaceTexture2) {
+        if (this.hasPendingTexture) {
+            Logging.d("SurfaceTextureHelper", "A frame is already pending, dropping frame.");
+        }
         this.hasPendingTexture = true;
         tryDeliverTextureFrame();
     }

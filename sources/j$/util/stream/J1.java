@@ -1,22 +1,36 @@
 package j$.util.stream;
 
-abstract class J1 extends K1 {
-    J1(CLASSNAMEh1 h1Var, CLASSNAMEh6 h6Var, int i) {
-        super(h1Var, i);
+import j$.Y;
+import j$.util.function.CLASSNAMEg;
+import j$.util.function.w;
+import j$.util.function.y;
+import j$.util.stream.A2;
+
+class J1 extends M1<Integer> implements A2.f {
+    final /* synthetic */ N1 c;
+    final /* synthetic */ y d;
+
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
+    J1(N1 n1, y yVar) {
+        super(n1);
+        this.c = n1;
+        this.d = yVar;
     }
 
-    /* access modifiers changed from: package-private */
-    public final boolean F0() {
-        return false;
+    public void accept(int i) {
+        if (!this.a && ((Y) this.d).b(i) == this.c.a) {
+            this.a = true;
+            this.b = this.c.b;
+        }
     }
 
-    public /* bridge */ /* synthetic */ L1 parallel() {
-        parallel();
-        return this;
+    /* renamed from: b */
+    public /* synthetic */ void accept(Integer num) {
+        Q1.b(this, num);
     }
 
-    public /* bridge */ /* synthetic */ L1 sequential() {
-        sequential();
-        return this;
+    public w l(w wVar) {
+        wVar.getClass();
+        return new CLASSNAMEg(this, wVar);
     }
 }

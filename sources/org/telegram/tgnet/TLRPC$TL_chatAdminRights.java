@@ -10,6 +10,7 @@ public class TLRPC$TL_chatAdminRights extends TLObject {
     public boolean edit_messages;
     public int flags;
     public boolean invite_users;
+    public boolean manage_call;
     public boolean pin_messages;
     public boolean post_messages;
 
@@ -37,10 +38,11 @@ public class TLRPC$TL_chatAdminRights extends TLObject {
         this.invite_users = (readInt32 & 32) != 0;
         this.pin_messages = (readInt32 & 128) != 0;
         this.add_admins = (readInt32 & 512) != 0;
-        if ((readInt32 & 1024) != 0) {
+        this.anonymous = (readInt32 & 1024) != 0;
+        if ((readInt32 & 2048) != 0) {
             z2 = true;
         }
-        this.anonymous = z2;
+        this.manage_call = z2;
     }
 
     public void serializeToStream(AbstractSerializedData abstractSerializedData) {
@@ -63,6 +65,8 @@ public class TLRPC$TL_chatAdminRights extends TLObject {
         this.flags = i8;
         int i9 = this.anonymous ? i8 | 1024 : i8 & -1025;
         this.flags = i9;
-        abstractSerializedData.writeInt32(i9);
+        int i10 = this.manage_call ? i9 | 2048 : i9 & -2049;
+        this.flags = i10;
+        abstractSerializedData.writeInt32(i10);
     }
 }

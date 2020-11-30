@@ -15,12 +15,15 @@ public class NumberTextView extends View {
     private boolean addNumber;
     /* access modifiers changed from: private */
     public ObjectAnimator animator;
+    private boolean center;
     private int currentNumber = 1;
     private ArrayList<StaticLayout> letters = new ArrayList<>();
     /* access modifiers changed from: private */
     public ArrayList<StaticLayout> oldLetters = new ArrayList<>();
+    private float oldTextWidth;
     private float progress = 0.0f;
     private TextPaint textPaint = new TextPaint(1);
+    private float textWidth;
 
     public NumberTextView(Context context) {
         super(context);
@@ -52,15 +55,20 @@ public class NumberTextView extends View {
     /* JADX WARNING: Code restructure failed: missing block: B:14:0x0072, code lost:
         if (r1 > r0.currentNumber) goto L_0x004e;
      */
+    /* JADX WARNING: Removed duplicated region for block: B:24:0x009e  */
+    /* JADX WARNING: Removed duplicated region for block: B:45:0x0120  */
+    /* JADX WARNING: Removed duplicated region for block: B:46:0x0123  */
+    /* JADX WARNING: Removed duplicated region for block: B:49:0x0135  */
+    /* JADX WARNING: Removed duplicated region for block: B:50:0x0138  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
-    public void setNumber(int r19, boolean r20) {
+    public void setNumber(int r22, boolean r23) {
         /*
-            r18 = this;
-            r0 = r18
-            r1 = r19
+            r21 = this;
+            r0 = r21
+            r1 = r22
             int r2 = r0.currentNumber
             if (r2 != r1) goto L_0x000b
-            if (r20 == 0) goto L_0x000b
+            if (r23 == 0) goto L_0x000b
             return
         L_0x000b:
             android.animation.ObjectAnimator r2 = r0.animator
@@ -88,7 +96,7 @@ public class NumberTextView extends View {
             java.lang.String r7 = "#%d"
             java.lang.String r6 = java.lang.String.format(r2, r7, r6)
             java.lang.Object[] r8 = new java.lang.Object[r5]
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r19)
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r22)
             r8[r4] = r9
             java.lang.String r2 = java.lang.String.format(r2, r7, r8)
             int r7 = r0.currentNumber
@@ -108,85 +116,117 @@ public class NumberTextView extends View {
             java.lang.String r7 = "%d"
             java.lang.String r6 = java.lang.String.format(r2, r7, r6)
             java.lang.Object[] r8 = new java.lang.Object[r5]
-            java.lang.Integer r9 = java.lang.Integer.valueOf(r19)
+            java.lang.Integer r9 = java.lang.Integer.valueOf(r22)
             r8[r4] = r9
             java.lang.String r2 = java.lang.String.format(r2, r7, r8)
             int r7 = r0.currentNumber
             if (r1 <= r7) goto L_0x0050
             goto L_0x004e
         L_0x0075:
+            boolean r8 = r0.center
+            if (r8 == 0) goto L_0x0091
+            android.text.TextPaint r8 = r0.textPaint
+            float r8 = r8.measureText(r2)
+            r0.textWidth = r8
+            android.text.TextPaint r8 = r0.textPaint
+            float r8 = r8.measureText(r6)
+            r0.oldTextWidth = r8
+            float r9 = r0.textWidth
+            int r8 = (r9 > r8 ? 1 : (r9 == r8 ? 0 : -1))
+            if (r8 == 0) goto L_0x0091
+            r8 = 1
+            goto L_0x0092
+        L_0x0091:
+            r8 = 0
+        L_0x0092:
             r0.currentNumber = r1
             r1 = 0
             r0.progress = r1
-            r8 = 0
-        L_0x007b:
-            int r9 = r2.length()
-            if (r8 >= r9) goto L_0x00d5
-            int r9 = r8 + 1
-            java.lang.String r11 = r2.substring(r8, r9)
-            java.util.ArrayList<android.text.StaticLayout> r10 = r0.oldLetters
-            boolean r10 = r10.isEmpty()
-            if (r10 != 0) goto L_0x009a
-            int r10 = r6.length()
-            if (r8 >= r10) goto L_0x009a
-            java.lang.String r10 = r6.substring(r8, r9)
-            goto L_0x009b
-        L_0x009a:
-            r10 = r3
-        L_0x009b:
-            if (r10 == 0) goto L_0x00b4
-            boolean r10 = r10.equals(r11)
-            if (r10 == 0) goto L_0x00b4
-            java.util.ArrayList<android.text.StaticLayout> r10 = r0.letters
+            r9 = 0
+        L_0x0098:
+            int r10 = r2.length()
+            if (r9 >= r10) goto L_0x0111
+            int r10 = r9 + 1
+            java.lang.String r12 = r2.substring(r9, r10)
             java.util.ArrayList<android.text.StaticLayout> r11 = r0.oldLetters
-            java.lang.Object r11 = r11.get(r8)
-            r10.add(r11)
-            java.util.ArrayList<android.text.StaticLayout> r10 = r0.oldLetters
-            r10.set(r8, r3)
-            goto L_0x00d3
-        L_0x00b4:
-            android.text.StaticLayout r8 = new android.text.StaticLayout
-            android.text.TextPaint r12 = r0.textPaint
-            float r10 = r12.measureText(r11)
-            double r13 = (double) r10
-            double r13 = java.lang.Math.ceil(r13)
-            int r13 = (int) r13
-            android.text.Layout$Alignment r14 = android.text.Layout.Alignment.ALIGN_NORMAL
-            r15 = 1065353216(0x3var_, float:1.0)
-            r16 = 0
-            r17 = 0
-            r10 = r8
-            r10.<init>(r11, r12, r13, r14, r15, r16, r17)
-            java.util.ArrayList<android.text.StaticLayout> r10 = r0.letters
-            r10.add(r8)
+            boolean r11 = r11.isEmpty()
+            if (r11 != 0) goto L_0x00b7
+            int r11 = r6.length()
+            if (r9 >= r11) goto L_0x00b7
+            java.lang.String r11 = r6.substring(r9, r10)
+            goto L_0x00b8
+        L_0x00b7:
+            r11 = r3
+        L_0x00b8:
+            if (r8 != 0) goto L_0x00d3
+            if (r11 == 0) goto L_0x00d3
+            boolean r13 = r11.equals(r12)
+            if (r13 == 0) goto L_0x00d3
+            java.util.ArrayList<android.text.StaticLayout> r11 = r0.letters
+            java.util.ArrayList<android.text.StaticLayout> r12 = r0.oldLetters
+            java.lang.Object r12 = r12.get(r9)
+            r11.add(r12)
+            java.util.ArrayList<android.text.StaticLayout> r11 = r0.oldLetters
+            r11.set(r9, r3)
+            goto L_0x010f
         L_0x00d3:
-            r8 = r9
-            goto L_0x007b
-        L_0x00d5:
-            if (r20 == 0) goto L_0x0110
+            if (r8 == 0) goto L_0x00f0
+            if (r11 != 0) goto L_0x00f0
+            java.util.ArrayList<android.text.StaticLayout> r9 = r0.oldLetters
+            android.text.StaticLayout r11 = new android.text.StaticLayout
+            android.text.TextPaint r15 = r0.textPaint
+            r16 = 0
+            android.text.Layout$Alignment r17 = android.text.Layout.Alignment.ALIGN_NORMAL
+            r18 = 1065353216(0x3var_, float:1.0)
+            r19 = 0
+            r20 = 0
+            java.lang.String r14 = ""
+            r13 = r11
+            r13.<init>(r14, r15, r16, r17, r18, r19, r20)
+            r9.add(r11)
+        L_0x00f0:
+            android.text.StaticLayout r9 = new android.text.StaticLayout
+            android.text.TextPaint r13 = r0.textPaint
+            float r11 = r13.measureText(r12)
+            double r14 = (double) r11
+            double r14 = java.lang.Math.ceil(r14)
+            int r14 = (int) r14
+            android.text.Layout$Alignment r15 = android.text.Layout.Alignment.ALIGN_NORMAL
+            r16 = 1065353216(0x3var_, float:1.0)
+            r17 = 0
+            r18 = 0
+            r11 = r9
+            r11.<init>(r12, r13, r14, r15, r16, r17, r18)
+            java.util.ArrayList<android.text.StaticLayout> r11 = r0.letters
+            r11.add(r9)
+        L_0x010f:
+            r9 = r10
+            goto L_0x0098
+        L_0x0111:
+            if (r23 == 0) goto L_0x014c
             java.util.ArrayList<android.text.StaticLayout> r2 = r0.oldLetters
             boolean r2 = r2.isEmpty()
-            if (r2 != 0) goto L_0x0110
+            if (r2 != 0) goto L_0x014c
             r2 = 2
             float[] r2 = new float[r2]
-            if (r7 == 0) goto L_0x00e7
+            if (r7 == 0) goto L_0x0123
             r3 = -1082130432(0xffffffffbvar_, float:-1.0)
-            goto L_0x00e9
-        L_0x00e7:
+            goto L_0x0125
+        L_0x0123:
             r3 = 1065353216(0x3var_, float:1.0)
-        L_0x00e9:
+        L_0x0125:
             r2[r4] = r3
             r2[r5] = r1
             java.lang.String r1 = "progress"
             android.animation.ObjectAnimator r1 = android.animation.ObjectAnimator.ofFloat(r0, r1, r2)
             r0.animator = r1
             boolean r2 = r0.addNumber
-            if (r2 == 0) goto L_0x00fc
+            if (r2 == 0) goto L_0x0138
             r2 = 180(0xb4, double:8.9E-322)
-            goto L_0x00fe
-        L_0x00fc:
+            goto L_0x013a
+        L_0x0138:
             r2 = 150(0x96, double:7.4E-322)
-        L_0x00fe:
+        L_0x013a:
             r1.setDuration(r2)
             android.animation.ObjectAnimator r1 = r0.animator
             org.telegram.ui.Components.NumberTextView$1 r2 = new org.telegram.ui.Components.NumberTextView$1
@@ -194,8 +234,8 @@ public class NumberTextView extends View {
             r1.addListener(r2)
             android.animation.ObjectAnimator r1 = r0.animator
             r1.start()
-        L_0x0110:
-            r18.invalidate()
+        L_0x014c:
+            r21.invalidate()
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.NumberTextView.setNumber(int, boolean):void");
@@ -220,13 +260,26 @@ public class NumberTextView extends View {
         setNumber(this.currentNumber, false);
     }
 
+    public void setCenterAlign(boolean z) {
+        this.center = z;
+    }
+
     /* access modifiers changed from: protected */
     public void onDraw(Canvas canvas) {
+        float f;
+        float f2;
         if (!this.letters.isEmpty()) {
             float height = (float) this.letters.get(0).getHeight();
             float dp = this.addNumber ? (float) AndroidUtilities.dp(4.0f) : height;
+            if (this.center) {
+                f2 = (((float) getMeasuredWidth()) - this.textWidth) / 2.0f;
+                f = ((((float) getMeasuredWidth()) - this.oldTextWidth) / 2.0f) - f2;
+            } else {
+                f2 = 0.0f;
+                f = 0.0f;
+            }
             canvas.save();
-            canvas.translate((float) getPaddingLeft(), (((float) getMeasuredHeight()) - height) / 2.0f);
+            canvas.translate(((float) getPaddingLeft()) + f2, (((float) getMeasuredHeight()) - height) / 2.0f);
             int max = Math.max(this.letters.size(), this.oldLetters.size());
             int i = 0;
             while (i < max) {
@@ -236,12 +289,12 @@ public class NumberTextView extends View {
                 if (i < this.letters.size()) {
                     staticLayout = this.letters.get(i);
                 }
-                float f = this.progress;
-                if (f > 0.0f) {
+                float f3 = this.progress;
+                if (f3 > 0.0f) {
                     if (staticLayout2 != null) {
-                        this.textPaint.setAlpha((int) (f * 255.0f));
+                        this.textPaint.setAlpha((int) (f3 * 255.0f));
                         canvas.save();
-                        canvas.translate(0.0f, (this.progress - 1.0f) * dp);
+                        canvas.translate(f, (this.progress - 1.0f) * dp);
                         staticLayout2.draw(canvas);
                         canvas.restore();
                         if (staticLayout != null) {
@@ -251,11 +304,11 @@ public class NumberTextView extends View {
                     } else {
                         this.textPaint.setAlpha(255);
                     }
-                } else if (f < 0.0f) {
+                } else if (f3 < 0.0f) {
                     if (staticLayout2 != null) {
-                        this.textPaint.setAlpha((int) ((-f) * 255.0f));
+                        this.textPaint.setAlpha((int) ((-f3) * 255.0f));
                         canvas.save();
-                        canvas.translate(0.0f, (this.progress + 1.0f) * dp);
+                        canvas.translate(f, (this.progress + 1.0f) * dp);
                         staticLayout2.draw(canvas);
                         canvas.restore();
                     }
@@ -275,6 +328,9 @@ public class NumberTextView extends View {
                 }
                 canvas.restore();
                 canvas.translate(staticLayout != null ? staticLayout.getLineWidth(0) : staticLayout2.getLineWidth(0) + ((float) AndroidUtilities.dp(1.0f)), 0.0f);
+                if (!(staticLayout == null || staticLayout2 == null)) {
+                    f += staticLayout2.getLineWidth(0) - staticLayout.getLineWidth(0);
+                }
                 i++;
             }
             canvas.restore();

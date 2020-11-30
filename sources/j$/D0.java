@@ -1,20 +1,20 @@
 package j$;
 
-import j$.util.function.E;
+import j$.util.function.J;
 import java.util.function.Supplier;
 
 public final /* synthetic */ class D0 implements Supplier {
-    final /* synthetic */ E a;
+    final /* synthetic */ J a;
 
-    private /* synthetic */ D0(E e) {
-        this.a = e;
+    private /* synthetic */ D0(J j) {
+        this.a = j;
     }
 
-    public static /* synthetic */ Supplier a(E e) {
-        if (e == null) {
+    public static /* synthetic */ Supplier a(J j) {
+        if (j == null) {
             return null;
         }
-        return e instanceof C0 ? ((C0) e).a : new D0(e);
+        return j instanceof C0 ? ((C0) j).a : new D0(j);
     }
 
     public /* synthetic */ Object get() {

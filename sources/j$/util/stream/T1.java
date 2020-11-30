@@ -1,27 +1,40 @@
 package j$.util.stream;
 
-import j$.util.function.f;
-import j$.util.function.q;
+import j$.util.Spliterator;
+import j$.util.function.x;
+import j$.util.stream.R1;
 
-final class T1 extends X1 implements CLASSNAMEq5 {
-    final q b;
-
-    T1(q qVar, boolean z) {
-        super(z);
-        this.b = qVar;
+abstract class T1<P_OUT> {
+    T1() {
     }
 
-    public void accept(double d) {
-        this.b.accept(d);
-    }
+    /* access modifiers changed from: package-private */
+    public abstract void m0(A2 a2, Spliterator spliterator);
 
-    /* renamed from: e */
-    public /* synthetic */ void accept(Double d) {
-        CLASSNAMEc3.a(this, d);
-    }
+    /* access modifiers changed from: package-private */
+    public abstract void n0(A2 a2, Spliterator spliterator);
 
-    public q k(q qVar) {
-        qVar.getClass();
-        return new f(this, qVar);
-    }
+    /* access modifiers changed from: package-private */
+    public abstract R1 o0(Spliterator spliterator, boolean z, x xVar);
+
+    /* access modifiers changed from: package-private */
+    public abstract long p0(Spliterator spliterator);
+
+    /* access modifiers changed from: package-private */
+    public abstract U2 q0();
+
+    /* access modifiers changed from: package-private */
+    public abstract int r0();
+
+    /* access modifiers changed from: package-private */
+    public abstract R1.a s0(long j, x xVar);
+
+    /* access modifiers changed from: package-private */
+    public abstract A2 t0(A2 a2, Spliterator spliterator);
+
+    /* access modifiers changed from: package-private */
+    public abstract A2 u0(A2 a2);
+
+    /* access modifiers changed from: package-private */
+    public abstract Spliterator v0(Spliterator spliterator);
 }

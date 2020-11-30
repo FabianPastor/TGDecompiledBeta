@@ -1,5 +1,5 @@
 package j$.util.function;
 
-public interface ToDoubleFunction {
+public interface ToDoubleFunction<T> {
     double applyAsDouble(Object obj);
 }

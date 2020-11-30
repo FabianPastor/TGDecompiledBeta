@@ -1,5 +1,5 @@
 package j$.util.function;
 
-public interface ToLongFunction {
+public interface ToLongFunction<T> {
     long applyAsLong(Object obj);
 }

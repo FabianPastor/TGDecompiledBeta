@@ -1,16 +1,16 @@
 package j$;
 
-import j$.util.function.D;
+import j$.util.function.I;
 import java.util.function.ObjLongConsumer;
 
-public final /* synthetic */ class y0 implements D {
+public final /* synthetic */ class y0 implements I {
     final /* synthetic */ ObjLongConsumer a;
 
     private /* synthetic */ y0(ObjLongConsumer objLongConsumer) {
         this.a = objLongConsumer;
     }
 
-    public static /* synthetic */ D a(ObjLongConsumer objLongConsumer) {
+    public static /* synthetic */ I a(ObjLongConsumer objLongConsumer) {
         if (objLongConsumer == null) {
             return null;
         }

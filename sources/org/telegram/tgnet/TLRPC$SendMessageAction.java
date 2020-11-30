@@ -30,6 +30,9 @@ public abstract class TLRPC$SendMessageAction extends TLObject {
             case -718310409:
                 tLRPC$SendMessageAction = new TLRPC$TL_sendMessageRecordAudioAction();
                 break;
+            case -651419003:
+                tLRPC$SendMessageAction = new TLRPC$TL_speakingInGroupCallAction();
+                break;
             case -580219064:
                 tLRPC$SendMessageAction = new TLRPC$TL_sendMessageGamePlayAction();
                 break;

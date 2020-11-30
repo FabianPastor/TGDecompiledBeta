@@ -1,25 +1,25 @@
 package j$;
 
-import j$.util.CLASSNAMEk;
 import j$.util.Optional;
 import j$.util.Spliterator;
 import j$.util.function.BiConsumer;
 import j$.util.function.BiFunction;
 import j$.util.function.Consumer;
-import j$.util.function.E;
 import j$.util.function.Function;
+import j$.util.function.J;
 import j$.util.function.Predicate;
 import j$.util.function.ToDoubleFunction;
 import j$.util.function.ToIntFunction;
 import j$.util.function.ToLongFunction;
 import j$.util.function.n;
-import j$.util.function.v;
+import j$.util.function.x;
+import j$.util.k;
 import j$.util.stream.CLASSNAMEl1;
-import j$.util.stream.CLASSNAMEn1;
-import j$.util.stream.CLASSNAMEx2;
-import j$.util.stream.L1;
+import j$.util.stream.CLASSNAMEm1;
+import j$.util.stream.CLASSNAMEs1;
+import j$.util.stream.C1;
+import j$.util.stream.H1;
 import j$.util.stream.Stream;
-import j$.util.stream.T2;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -37,7 +37,7 @@ public final /* synthetic */ class U0 implements Stream {
         return stream instanceof V0 ? ((V0) stream).a : new U0(stream);
     }
 
-    public /* synthetic */ L1 B(Function function) {
+    public /* synthetic */ CLASSNAMEs1 B(Function function) {
         return O0.m0(this.a.flatMapToDouble(Q.a(function)));
     }
 
@@ -45,19 +45,19 @@ public final /* synthetic */ class U0 implements Stream {
         return m0(this.a.filter(B0.a(predicate)));
     }
 
-    public /* synthetic */ Stream R(Consumer consumer) {
+    public /* synthetic */ Stream S(Consumer consumer) {
         return m0(this.a.peek(A.a(consumer)));
     }
 
-    public /* synthetic */ Object S(CLASSNAMEn1 n1Var) {
-        return this.a.collect(N0.a(n1Var));
+    public /* synthetic */ Object T(CLASSNAMEm1 m1Var) {
+        return this.a.collect(N0.a(m1Var));
     }
 
-    public /* synthetic */ boolean T(Predicate predicate) {
+    public /* synthetic */ boolean U(Predicate predicate) {
         return this.a.allMatch(B0.a(predicate));
     }
 
-    public /* synthetic */ T2 U(Function function) {
+    public /* synthetic */ H1 V(Function function) {
         return S0.m0(this.a.flatMapToLong(Q.a(function)));
     }
 
@@ -65,7 +65,7 @@ public final /* synthetic */ class U0 implements Stream {
         return this.a.anyMatch(B0.a(predicate));
     }
 
-    public /* synthetic */ boolean b0(Predicate predicate) {
+    public /* synthetic */ boolean c0(Predicate predicate) {
         return this.a.noneMatch(B0.a(predicate));
     }
 
@@ -77,36 +77,36 @@ public final /* synthetic */ class U0 implements Stream {
         return this.a.count();
     }
 
-    public /* synthetic */ CLASSNAMEx2 d(Function function) {
-        return Q0.m0(this.a.flatMapToInt(Q.a(function)));
-    }
-
-    public /* synthetic */ T2 d0(ToLongFunction toLongFunction) {
-        return S0.m0(this.a.mapToLong(J0.a(toLongFunction)));
-    }
-
     public /* synthetic */ Stream distinct() {
         return m0(this.a.distinct());
     }
 
-    public /* synthetic */ void f(Consumer consumer) {
-        this.a.forEachOrdered(A.a(consumer));
+    public /* synthetic */ C1 e(Function function) {
+        return Q0.m0(this.a.flatMapToInt(Q.a(function)));
     }
 
-    public /* synthetic */ L1 f0(ToDoubleFunction toDoubleFunction) {
-        return O0.m0(this.a.mapToDouble(F0.a(toDoubleFunction)));
+    public /* synthetic */ H1 e0(ToLongFunction toLongFunction) {
+        return S0.m0(this.a.mapToLong(J0.a(toLongFunction)));
     }
 
     public /* synthetic */ Optional findAny() {
-        return CLASSNAMEk.j(this.a.findAny());
+        return k.j(this.a.findAny());
     }
 
     public /* synthetic */ Optional findFirst() {
-        return CLASSNAMEk.j(this.a.findFirst());
+        return k.j(this.a.findFirst());
     }
 
     public /* synthetic */ void forEach(Consumer consumer) {
         this.a.forEach(A.a(consumer));
+    }
+
+    public /* synthetic */ void g(Consumer consumer) {
+        this.a.forEachOrdered(A.a(consumer));
+    }
+
+    public /* synthetic */ CLASSNAMEs1 h0(ToDoubleFunction toDoubleFunction) {
+        return O0.m0(this.a.mapToDouble(F0.a(toDoubleFunction)));
     }
 
     public /* synthetic */ boolean isParallel() {
@@ -117,8 +117,8 @@ public final /* synthetic */ class U0 implements Stream {
         return this.a.iterator();
     }
 
-    public /* synthetic */ Object j(E e, BiConsumer biConsumer, BiConsumer biConsumer2) {
-        return this.a.collect(D0.a(e), CLASSNAMEu.a(biConsumer), CLASSNAMEu.a(biConsumer2));
+    public /* synthetic */ Object k(J j, BiConsumer biConsumer, BiConsumer biConsumer2) {
+        return this.a.collect(D0.a(j), CLASSNAMEu.a(biConsumer), CLASSNAMEu.a(biConsumer2));
     }
 
     public /* synthetic */ Object l0(Object obj, n nVar) {
@@ -129,16 +129,16 @@ public final /* synthetic */ class U0 implements Stream {
         return m0(this.a.limit(j));
     }
 
-    public /* synthetic */ CLASSNAMEx2 m(ToIntFunction toIntFunction) {
+    public /* synthetic */ C1 m(ToIntFunction toIntFunction) {
         return Q0.m0(this.a.mapToInt(H0.a(toIntFunction)));
     }
 
     public /* synthetic */ Optional max(Comparator comparator) {
-        return CLASSNAMEk.j(this.a.max(comparator));
+        return k.j(this.a.max(comparator));
     }
 
     public /* synthetic */ Optional min(Comparator comparator) {
-        return CLASSNAMEk.j(this.a.min(comparator));
+        return k.j(this.a.min(comparator));
     }
 
     public /* synthetic */ Stream n(Function function) {
@@ -155,6 +155,10 @@ public final /* synthetic */ class U0 implements Stream {
 
     public /* synthetic */ CLASSNAMEl1 parallel() {
         return K0.m0(this.a.parallel());
+    }
+
+    public /* synthetic */ Optional s(n nVar) {
+        return k.j(this.a.reduce(CLASSNAMEy.a(nVar)));
     }
 
     public /* synthetic */ CLASSNAMEl1 sequential() {
@@ -177,16 +181,12 @@ public final /* synthetic */ class U0 implements Stream {
         return CLASSNAMEj.a(this.a.spliterator());
     }
 
-    public /* synthetic */ Optional t(n nVar) {
-        return CLASSNAMEk.j(this.a.reduce(CLASSNAMEy.a(nVar)));
-    }
-
     public /* synthetic */ Object[] toArray() {
         return this.a.toArray();
     }
 
-    public /* synthetic */ Object[] toArray(v vVar) {
-        return this.a.toArray(X.a(vVar));
+    public /* synthetic */ Object[] toArray(x xVar) {
+        return this.a.toArray(X.a(xVar));
     }
 
     public /* synthetic */ CLASSNAMEl1 unordered() {

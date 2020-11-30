@@ -1,21 +1,22 @@
 package j$.util.stream;
 
-import j$.util.function.g;
-import j$.util.function.u;
+import j$.util.function.CLASSNAMEg;
+import j$.util.function.w;
+import j$.util.stream.CLASSNAMEz1;
 
-public final /* synthetic */ class F implements u {
-    public final /* synthetic */ CLASSNAMEo2 a;
+public final /* synthetic */ class F implements w {
+    public final /* synthetic */ CLASSNAMEz1.g.a a;
 
-    public /* synthetic */ F(CLASSNAMEo2 o2Var) {
-        this.a = o2Var;
+    public /* synthetic */ F(CLASSNAMEz1.g.a aVar) {
+        this.a = aVar;
     }
 
     public final void accept(int i) {
         this.a.a.accept(i);
     }
 
-    public u l(u uVar) {
-        uVar.getClass();
-        return new g(this, uVar);
+    public w l(w wVar) {
+        wVar.getClass();
+        return new CLASSNAMEg(this, wVar);
     }
 }

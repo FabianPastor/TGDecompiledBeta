@@ -1,10 +1,10 @@
 package j$.util.stream;
 
-import j$.util.CLASSNAMEu;
 import j$.util.function.Predicate;
 import j$.util.function.k;
 import j$.util.function.l;
 import j$.util.function.m;
+import j$.util.q;
 
 public final /* synthetic */ class R0 implements Predicate {
     public static final /* synthetic */ R0 a = new R0();
@@ -27,6 +27,6 @@ public final /* synthetic */ class R0 implements Predicate {
     }
 
     public final boolean test(Object obj) {
-        return ((CLASSNAMEu) obj).c();
+        return ((q) obj).c();
     }
 }

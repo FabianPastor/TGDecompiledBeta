@@ -1,34 +1,134 @@
 package j$.util.stream;
 
-import j$.CLASSNAMEm0;
-import j$.util.function.h;
-import j$.util.function.y;
+import j$.util.Spliterator;
+import j$.util.function.J;
+import j$.util.function.o;
+import j$.util.k;
+import j$.util.stream.CLASSNAMEj1;
+import java.util.Comparator;
 
-class W2 extends Y2 implements CLASSNAMEs5 {
-    final /* synthetic */ Z2 c;
-    final /* synthetic */ CLASSNAMEm0 d;
+abstract class W2<P_IN, P_OUT, T_BUFFER extends CLASSNAMEj1> implements Spliterator<P_OUT> {
+    final boolean a;
+    final T1 b;
+    private J c;
+    Spliterator d;
+    A2 e;
+    o f;
+    long g;
+    CLASSNAMEj1 h;
+    boolean i;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    W2(Z2 z2, CLASSNAMEm0 m0Var) {
-        super(z2);
-        this.c = z2;
-        this.d = m0Var;
+    W2(T1 t1, Spliterator spliterator, boolean z) {
+        this.b = t1;
+        this.c = null;
+        this.d = spliterator;
+        this.a = z;
     }
 
-    public void accept(long j) {
-        if (!this.a && this.d.b(j) == this.c.a) {
-            this.a = true;
-            this.b = this.c.b;
+    W2(T1 t1, J j, boolean z) {
+        this.b = t1;
+        this.c = j;
+        this.d = null;
+        this.a = z;
+    }
+
+    private boolean f() {
+        while (this.h.count() == 0) {
+            if (this.e.p() || !this.f.a()) {
+                if (this.i) {
+                    return false;
+                }
+                this.e.m();
+                this.i = true;
+            }
+        }
+        return true;
+    }
+
+    /* access modifiers changed from: package-private */
+    public final boolean a() {
+        CLASSNAMEj1 j1Var = this.h;
+        boolean z = false;
+        if (j1Var != null) {
+            long j = this.g + 1;
+            this.g = j;
+            if (j < j1Var.count()) {
+                z = true;
+            }
+            if (z) {
+                return z;
+            }
+            this.g = 0;
+            this.h.clear();
+            return f();
+        } else if (this.i) {
+            return false;
+        } else {
+            g();
+            i();
+            this.g = 0;
+            this.e.n(this.d.getExactSizeIfKnown());
+            return f();
         }
     }
 
-    /* renamed from: b */
-    public /* synthetic */ void accept(Long l) {
-        CLASSNAMEc3.c(this, l);
+    public final int characteristics() {
+        g();
+        int g2 = T2.g(this.b.r0()) & T2.f;
+        return (g2 & 64) != 0 ? (g2 & -16449) | (this.d.characteristics() & 16448) : g2;
     }
 
-    public y g(y yVar) {
-        yVar.getClass();
-        return new h(this, yVar);
+    public final long estimateSize() {
+        g();
+        return this.d.estimateSize();
+    }
+
+    /* access modifiers changed from: package-private */
+    public final void g() {
+        if (this.d == null) {
+            this.d = (Spliterator) this.c.get();
+            this.c = null;
+        }
+    }
+
+    public Comparator getComparator() {
+        if (k.f(this, 4)) {
+            return null;
+        }
+        throw new IllegalStateException();
+    }
+
+    public final long getExactSizeIfKnown() {
+        g();
+        if (T2.SIZED.d(this.b.r0())) {
+            return this.d.getExactSizeIfKnown();
+        }
+        return -1;
+    }
+
+    public /* synthetic */ boolean hasCharacteristics(int i2) {
+        return k.f(this, i2);
+    }
+
+    /* access modifiers changed from: package-private */
+    public abstract void i();
+
+    /* access modifiers changed from: package-private */
+    public abstract W2 k(Spliterator spliterator);
+
+    public final String toString() {
+        return String.format("%s[%s]", new Object[]{getClass().getName(), this.d});
+    }
+
+    public Spliterator trySplit() {
+        if (!this.a || this.i) {
+            return null;
+        }
+        g();
+        Spliterator trySplit = this.d.trySplit();
+        if (trySplit == null) {
+            return null;
+        }
+        return k(trySplit);
     }
 }

@@ -1521,7 +1521,7 @@ public class ChatAttachAlertLocationLayout extends ChatAttachAlert.AttachAlertLa
                 public final void run() {
                     ChatAttachAlertLocationLayout.this.lambda$onMapInit$21$ChatAttachAlertLocationLayout();
                 }
-            }, 2000);
+            }, 200);
             Location lastLocation = getLastLocation();
             this.myLocation = lastLocation;
             positionMarker(lastLocation);

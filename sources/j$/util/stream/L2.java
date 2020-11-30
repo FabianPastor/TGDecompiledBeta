@@ -1,21 +1,31 @@
 package j$.util.stream;
 
-class L2 extends CLASSNAMEo5 {
-    final /* synthetic */ M2 b;
+import j$.util.Spliterator;
+import j$.util.function.x;
+import j$.util.stream.D1;
+import j$.util.stream.R1;
+import j$.util.stream.S1;
+import java.util.Arrays;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    L2(M2 m2, CLASSNAMEt5 t5Var) {
-        super(t5Var);
-        this.b = m2;
+final class L2 extends D1.h<Long> {
+    L2(CLASSNAMEh1 h1Var) {
+        super(h1Var, U2.LONG_VALUE, T2.q | T2.o);
     }
 
-    public void accept(long j) {
-        if (this.b.l.b(j)) {
-            this.a.accept(j);
+    public R1 D0(T1 t1, Spliterator spliterator, x xVar) {
+        if (T2.SORTED.d(t1.r0())) {
+            return t1.o0(spliterator, false, xVar);
         }
+        long[] jArr = (long[]) ((R1.d) t1.o0(spliterator, true, xVar)).e();
+        Arrays.sort(jArr);
+        return new S1.p(jArr);
     }
 
-    public void n(long j) {
-        this.a.n(-1);
+    public A2 G0(int i, A2 a2) {
+        a2.getClass();
+        if (T2.SORTED.d(i)) {
+            return a2;
+        }
+        return T2.SIZED.d(i) ? new Q2(a2) : new I2(a2);
     }
 }

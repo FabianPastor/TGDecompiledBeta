@@ -1,7 +1,6 @@
 package org.webrtc;
 
 import android.media.MediaCodecInfo;
-import android.media.MediaCodecList;
 import android.os.Build;
 import java.util.ArrayList;
 import org.telegram.messenger.voip.Instance;
@@ -130,22 +129,15 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
     }
 
     private MediaCodecInfo findCodecForType(VideoCodecMimeType videoCodecMimeType) {
-        int i = 0;
-        while (true) {
-            MediaCodecInfo mediaCodecInfo = null;
-            if (i >= MediaCodecList.getCodecCount()) {
-                return null;
-            }
-            try {
-                mediaCodecInfo = MediaCodecList.getCodecInfoAt(i);
-            } catch (IllegalArgumentException e) {
-                Logging.e("HardwareVideoEncoderFactory", "Cannot retrieve encoder codec info", e);
-            }
+        ArrayList<MediaCodecInfo> sortedCodecsList = MediaCodecUtils.getSortedCodecsList();
+        int size = sortedCodecsList.size();
+        for (int i = 0; i < size; i++) {
+            MediaCodecInfo mediaCodecInfo = sortedCodecsList.get(i);
             if (mediaCodecInfo != null && mediaCodecInfo.isEncoder() && isSupportedCodec(mediaCodecInfo, videoCodecMimeType)) {
                 return mediaCodecInfo;
             }
-            i++;
         }
+        return null;
     }
 
     private boolean isSupportedCodec(MediaCodecInfo mediaCodecInfo, VideoCodecMimeType videoCodecMimeType) {

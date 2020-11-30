@@ -1,16 +1,16 @@
 package j$;
 
-import j$.util.function.t;
+import j$.util.function.v;
 import java.util.function.IntBinaryOperator;
 
-public final /* synthetic */ class S implements t {
+public final /* synthetic */ class S implements v {
     final /* synthetic */ IntBinaryOperator a;
 
     private /* synthetic */ S(IntBinaryOperator intBinaryOperator) {
         this.a = intBinaryOperator;
     }
 
-    public static /* synthetic */ t a(IntBinaryOperator intBinaryOperator) {
+    public static /* synthetic */ v a(IntBinaryOperator intBinaryOperator) {
         if (intBinaryOperator == null) {
             return null;
         }

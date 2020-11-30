@@ -1,9 +1,9 @@
 package j$.util.stream;
 
-import j$.util.function.g;
-import j$.util.function.u;
+import j$.util.function.CLASSNAMEg;
+import j$.util.function.w;
 
-public final /* synthetic */ class D0 implements u {
+public final /* synthetic */ class D0 implements w {
     public static final /* synthetic */ D0 a = new D0();
 
     private /* synthetic */ D0() {
@@ -12,8 +12,8 @@ public final /* synthetic */ class D0 implements u {
     public final void accept(int i) {
     }
 
-    public u l(u uVar) {
-        uVar.getClass();
-        return new g(this, uVar);
+    public w l(w wVar) {
+        wVar.getClass();
+        return new CLASSNAMEg(this, wVar);
     }
 }

@@ -1,8 +1,7 @@
 package j$;
 
-import j$.util.CLASSNAMEk;
-import j$.util.CLASSNAMEo;
-import j$.util.stream.L1;
+import j$.util.k;
+import j$.util.stream.CLASSNAMEs1;
 import java.util.DoubleSummaryStatistics;
 import java.util.OptionalDouble;
 import java.util.function.BiConsumer;
@@ -22,29 +21,29 @@ import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 public final /* synthetic */ class P0 implements DoubleStream {
-    final /* synthetic */ L1 a;
+    final /* synthetic */ CLASSNAMEs1 a;
 
-    private /* synthetic */ P0(L1 l1) {
-        this.a = l1;
+    private /* synthetic */ P0(CLASSNAMEs1 s1Var) {
+        this.a = s1Var;
     }
 
-    public static /* synthetic */ DoubleStream m0(L1 l1) {
-        if (l1 == null) {
+    public static /* synthetic */ DoubleStream m0(CLASSNAMEs1 s1Var) {
+        if (s1Var == null) {
             return null;
         }
-        return l1 instanceof O0 ? ((O0) l1).a : new P0(l1);
+        return s1Var instanceof O0 ? ((O0) s1Var).a : new P0(s1Var);
     }
 
     public /* synthetic */ boolean allMatch(DoublePredicate doublePredicate) {
-        return this.a.h0(H.a(doublePredicate));
+        return this.a.O(H.a(doublePredicate));
     }
 
     public /* synthetic */ boolean anyMatch(DoublePredicate doublePredicate) {
-        return this.a.V(H.a(doublePredicate));
+        return this.a.W(H.a(doublePredicate));
     }
 
     public /* synthetic */ OptionalDouble average() {
-        return CLASSNAMEk.o(this.a.average());
+        return k.o(this.a.average());
     }
 
     public /* synthetic */ Stream boxed() {
@@ -68,15 +67,15 @@ public final /* synthetic */ class P0 implements DoubleStream {
     }
 
     public /* synthetic */ DoubleStream filter(DoublePredicate doublePredicate) {
-        return m0(this.a.O(H.a(doublePredicate)));
+        return m0(this.a.t(H.a(doublePredicate)));
     }
 
     public /* synthetic */ OptionalDouble findAny() {
-        return CLASSNAMEk.o(this.a.findAny());
+        return k.o(this.a.findAny());
     }
 
     public /* synthetic */ OptionalDouble findFirst() {
-        return CLASSNAMEk.o(this.a.findFirst());
+        return k.o(this.a.findFirst());
     }
 
     public /* synthetic */ DoubleStream flatMap(DoubleFunction doubleFunction) {
@@ -84,7 +83,7 @@ public final /* synthetic */ class P0 implements DoubleStream {
     }
 
     public /* synthetic */ void forEach(DoubleConsumer doubleConsumer) {
-        this.a.k(D.b(doubleConsumer));
+        this.a.l(D.b(doubleConsumer));
     }
 
     public /* synthetic */ void forEachOrdered(DoubleConsumer doubleConsumer) {
@@ -100,7 +99,7 @@ public final /* synthetic */ class P0 implements DoubleStream {
     }
 
     public /* synthetic */ DoubleStream map(DoubleUnaryOperator doubleUnaryOperator) {
-        return m0(this.a.I(N.b(doubleUnaryOperator)));
+        return m0(this.a.H(N.b(doubleUnaryOperator)));
     }
 
     public /* synthetic */ IntStream mapToInt(DoubleToIntFunction doubleToIntFunction) {
@@ -112,19 +111,19 @@ public final /* synthetic */ class P0 implements DoubleStream {
     }
 
     public /* synthetic */ Stream mapToObj(DoubleFunction doubleFunction) {
-        return V0.m0(this.a.J(F.a(doubleFunction)));
+        return V0.m0(this.a.I(F.a(doubleFunction)));
     }
 
     public /* synthetic */ OptionalDouble max() {
-        return CLASSNAMEk.o(this.a.max());
+        return k.o(this.a.max());
     }
 
     public /* synthetic */ OptionalDouble min() {
-        return CLASSNAMEk.o(this.a.min());
+        return k.o(this.a.min());
     }
 
     public /* synthetic */ boolean noneMatch(DoublePredicate doublePredicate) {
-        return this.a.b(H.a(doublePredicate));
+        return this.a.J(H.a(doublePredicate));
     }
 
     public /* synthetic */ BaseStream onClose(Runnable runnable) {
@@ -132,15 +131,15 @@ public final /* synthetic */ class P0 implements DoubleStream {
     }
 
     public /* synthetic */ DoubleStream peek(DoubleConsumer doubleConsumer) {
-        return m0(this.a.c(D.b(doubleConsumer)));
+        return m0(this.a.d(D.b(doubleConsumer)));
     }
 
     public /* synthetic */ double reduce(double d, DoubleBinaryOperator doubleBinaryOperator) {
-        return this.a.H(d, B.a(doubleBinaryOperator));
+        return this.a.G(d, B.a(doubleBinaryOperator));
     }
 
     public /* synthetic */ OptionalDouble reduce(DoubleBinaryOperator doubleBinaryOperator) {
-        return CLASSNAMEk.o(this.a.C(B.a(doubleBinaryOperator)));
+        return k.o(this.a.C(B.a(doubleBinaryOperator)));
     }
 
     public /* synthetic */ DoubleStream skip(long j) {
@@ -155,8 +154,9 @@ public final /* synthetic */ class P0 implements DoubleStream {
         return this.a.sum();
     }
 
-    public /* synthetic */ DoubleSummaryStatistics summaryStatistics() {
-        return CLASSNAMEo.b(this.a.summaryStatistics());
+    public DoubleSummaryStatistics summaryStatistics() {
+        this.a.summaryStatistics();
+        throw new Error("Java 8+ API desugaring (library desugaring) cannot convert to java.util.DoubleSummaryStatistics");
     }
 
     public /* synthetic */ double[] toArray() {

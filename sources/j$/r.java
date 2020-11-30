@@ -1,18 +1,18 @@
 package j$;
 
-import j$.util.F;
+import j$.util.Spliterator;
 import j$.util.function.Consumer;
 import java.util.Comparator;
 import java.util.Spliterator;
 
-public final /* synthetic */ class r implements F {
+public final /* synthetic */ class r implements Spliterator.d {
     final /* synthetic */ Spliterator.OfPrimitive a;
 
     private /* synthetic */ r(Spliterator.OfPrimitive ofPrimitive) {
         this.a = ofPrimitive;
     }
 
-    public static /* synthetic */ F a(Spliterator.OfPrimitive ofPrimitive) {
+    public static /* synthetic */ Spliterator.d a(Spliterator.OfPrimitive ofPrimitive) {
         if (ofPrimitive == null) {
             return null;
         }

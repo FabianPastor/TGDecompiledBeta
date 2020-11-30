@@ -1,6 +1,6 @@
 package j$.util.function;
 
-public interface Predicate {
+public interface Predicate<T> {
     Predicate a(Predicate predicate);
 
     Predicate b(Predicate predicate);

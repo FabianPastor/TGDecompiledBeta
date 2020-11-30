@@ -29,6 +29,7 @@ import org.telegram.messenger.ImageLoader;
 import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
+import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.Utilities;
 import org.telegram.ui.ActionBar.ActionBar;
@@ -696,6 +697,7 @@ public class CacheControlActivity extends BaseFragment {
             AlertDialog alertDialog = new AlertDialog(getParentActivity(), 3);
             alertDialog.setCanCacnel(false);
             alertDialog.showDelayed(500);
+            MessagesController.getInstance(this.currentAccount).clearQueryTime();
             MessagesStorage.getInstance(this.currentAccount).getStorageQueue().postRunnable(new Runnable(alertDialog) {
                 public final /* synthetic */ AlertDialog f$1;
 
@@ -1002,6 +1004,7 @@ public class CacheControlActivity extends BaseFragment {
             this.databaseSize = MessagesStorage.getInstance(this.currentAccount).getDatabaseSize();
             this.listAdapter.notifyDataSetChanged();
         }
+        NotificationCenter.getInstance(this.currentAccount).postNotificationName(NotificationCenter.didDatabaseCleared, new Object[0]);
     }
 
     public void onResume() {

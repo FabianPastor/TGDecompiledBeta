@@ -23,7 +23,7 @@ public class RtpTransceiver {
 
     private static native RtpSender nativeGetSender(long j);
 
-    private static native void nativeSetDirection(long j, RtpTransceiverDirection rtpTransceiverDirection);
+    private static native boolean nativeSetDirection(long j, RtpTransceiverDirection rtpTransceiverDirection);
 
     private static native void nativeStopInternal(long j);
 
@@ -142,9 +142,9 @@ public class RtpTransceiver {
         return nativeCurrentDirection(this.nativeRtpTransceiver);
     }
 
-    public void setDirection(RtpTransceiverDirection rtpTransceiverDirection) {
+    public boolean setDirection(RtpTransceiverDirection rtpTransceiverDirection) {
         checkRtpTransceiverExists();
-        nativeSetDirection(this.nativeRtpTransceiver, rtpTransceiverDirection);
+        return nativeSetDirection(this.nativeRtpTransceiver, rtpTransceiverDirection);
     }
 
     public void stop() {

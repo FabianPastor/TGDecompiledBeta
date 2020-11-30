@@ -10,7 +10,7 @@ import org.telegram.ui.Components.voip.VoIPHelper;
 public class VoIPPermissionActivity extends Activity {
     /* access modifiers changed from: protected */
     /* JADX WARNING: Code restructure failed: missing block: B:2:0x000a, code lost:
-        r5 = r5.call;
+        r5 = r5.privateCall;
      */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void onCreate(android.os.Bundle r5) {
@@ -20,7 +20,7 @@ public class VoIPPermissionActivity extends Activity {
             org.telegram.messenger.voip.VoIPService r5 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
             r0 = 0
             if (r5 == 0) goto L_0x0014
-            org.telegram.tgnet.TLRPC$PhoneCall r5 = r5.call
+            org.telegram.tgnet.TLRPC$PhoneCall r5 = r5.privateCall
             if (r5 == 0) goto L_0x0014
             boolean r5 = r5.video
             if (r5 == 0) goto L_0x0014

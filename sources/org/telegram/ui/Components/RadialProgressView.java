@@ -68,7 +68,6 @@ public class RadialProgressView extends View {
             this.animatedProgress = f;
         }
         this.progressAnimationStart = this.animatedProgress;
-        this.currentProgress = f;
         this.progressTime = 0;
     }
 

@@ -394,11 +394,12 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                     }
                     userConfig.saveConfig(false);
                 } else if (i == this.showMoreRow) {
+                    int size = this.users.size() - Math.min(5, this.users.size());
                     this.expanded = true;
                     updateRows(false);
                     this.listView.setItemAnimator(this.itemAnimator);
                     this.listViewAdapter.notifyItemRemoved(i);
-                    this.listViewAdapter.notifyItemRangeInserted(i, this.users.size() - Math.min(5, this.users.size()));
+                    this.listViewAdapter.notifyItemRangeInserted(i, size);
                 }
             } else if (view instanceof ManageChatUserCell) {
                 TLRPC$TL_peerLocated tLRPC$TL_peerLocated = this.users.get(i - i3);
@@ -408,7 +409,7 @@ public class PeopleNearbyActivity extends BaseFragment implements NotificationCe
                     bundle2.putBoolean("expandPhoto", true);
                 }
                 bundle2.putInt("nearby_distance", tLRPC$TL_peerLocated.distance);
-                MessagesController.getInstance(this.currentAccount).ensureMessagesLoaded((long) tLRPC$TL_peerLocated.peer.user_id, false, 0, (Runnable) null, (Runnable) null);
+                MessagesController.getInstance(this.currentAccount).ensureMessagesLoaded((long) tLRPC$TL_peerLocated.peer.user_id, 0, (MessagesController.MessagesLoadedCallback) null);
                 presentFragment(new ProfileActivity(bundle2));
             }
         }

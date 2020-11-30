@@ -214,7 +214,7 @@ public class ActionBarMenuItem extends FrameLayout {
         ActionBarPopupWindow actionBarPopupWindow2;
         int i = Build.VERSION.SDK_INT;
         if (motionEvent.getActionMasked() == 0) {
-            if (this.longClickEnabled && hasSubMenu() && ((actionBarPopupWindow2 = this.popupWindow) == null || (actionBarPopupWindow2 != null && !actionBarPopupWindow2.isShowing()))) {
+            if (this.longClickEnabled && hasSubMenu() && ((actionBarPopupWindow2 = this.popupWindow) == null || !actionBarPopupWindow2.isShowing())) {
                 $$Lambda$ActionBarMenuItem$97ELGBMVBlZJv0MzTuldUHOShYc r0 = new Runnable() {
                     public final void run() {
                         ActionBarMenuItem.this.lambda$onTouchEvent$0$ActionBarMenuItem();
@@ -249,7 +249,7 @@ public class ActionBarMenuItem extends FrameLayout {
                     this.popupWindow.dismiss();
                 }
             }
-        } else if (!this.showSubmenuByMove || !hasSubMenu() || ((actionBarPopupWindow = this.popupWindow) != null && (actionBarPopupWindow == null || actionBarPopupWindow.isShowing()))) {
+        } else if (!this.showSubmenuByMove || !hasSubMenu() || ((actionBarPopupWindow = this.popupWindow) != null && actionBarPopupWindow.isShowing())) {
             ActionBarPopupWindow actionBarPopupWindow4 = this.popupWindow;
             if (actionBarPopupWindow4 != null && actionBarPopupWindow4.isShowing()) {
                 getLocationOnScreen(this.location);
@@ -545,6 +545,22 @@ public class ActionBarMenuItem extends FrameLayout {
         }
     }
 
+    public View addDivider(int i) {
+        createPopupLayout();
+        TextView textView2 = new TextView(getContext());
+        textView2.setBackgroundColor(i);
+        textView2.setMinimumWidth(AndroidUtilities.dp(196.0f));
+        this.popupLayout.addView(textView2);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) textView2.getLayoutParams();
+        layoutParams.width = -1;
+        layoutParams.height = 1;
+        int dp = AndroidUtilities.dp(3.0f);
+        layoutParams.bottomMargin = dp;
+        layoutParams.topMargin = dp;
+        textView2.setLayoutParams(layoutParams);
+        return textView2;
+    }
+
     public void redrawPopup(int i) {
         ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = this.popupLayout;
         if (actionBarPopupWindowLayout != null && actionBarPopupWindowLayout.getBackgroundColor() != i) {
@@ -587,6 +603,13 @@ public class ActionBarMenuItem extends FrameLayout {
                     ((ActionBarMenuSubItem) childAt).setSelectorColor(i);
                 }
             }
+        }
+    }
+
+    public void setupPopupRadialSelectors(int i) {
+        ActionBarPopupWindow.ActionBarPopupWindowLayout actionBarPopupWindowLayout = this.popupLayout;
+        if (actionBarPopupWindowLayout != null) {
+            actionBarPopupWindowLayout.setupRadialSelectors(i);
         }
     }
 
@@ -1140,6 +1163,14 @@ public class ActionBarMenuItem extends FrameLayout {
                         ActionBarMenuItem.this.clearButton.callOnClick();
                     }
                     return true;
+                }
+
+                public boolean onTouchEvent(MotionEvent motionEvent) {
+                    if (motionEvent.getAction() == 0 && !AndroidUtilities.showKeyboard(this)) {
+                        clearFocus();
+                        requestFocus();
+                    }
+                    return super.onTouchEvent(motionEvent);
                 }
             };
             this.searchField = r22;

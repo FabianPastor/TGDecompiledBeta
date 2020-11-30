@@ -1505,13 +1505,13 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
         }
     }
 
-    private static class AudioBufferInfo {
-        ByteBuffer[] buffer = new ByteBuffer[10];
-        boolean last;
-        int lastWroteBuffer;
-        long[] offset = new long[10];
-        int[] read = new int[10];
-        int results;
+    public static class AudioBufferInfo {
+        public ByteBuffer[] buffer = new ByteBuffer[10];
+        public boolean last;
+        public int lastWroteBuffer;
+        public long[] offset = new long[10];
+        public int[] read = new int[10];
+        public int results;
 
         public AudioBufferInfo() {
             for (int i = 0; i < 10; i++) {
@@ -2838,11 +2838,11 @@ public class InstantCameraView extends FrameLayout implements NotificationCenter
                     InstantCameraView.this.videoEditedInfo.estimatedDuration = InstantCameraView.this.recordedTime;
                     NotificationCenter.getInstance(InstantCameraView.this.currentAccount).postNotificationName(NotificationCenter.audioDidSent, Integer.valueOf(InstantCameraView.this.recordingGuid), InstantCameraView.this.videoEditedInfo, this.videoFile.getAbsolutePath(), this.keyframeThumbs);
                 } else if (InstantCameraView.this.baseFragment.isInScheduleMode()) {
-                    AlertsCreator.createScheduleDatePickerDialog(InstantCameraView.this.baseFragment.getParentActivity(), InstantCameraView.this.baseFragment.getDialogId(), new AlertsCreator.ScheduleDatePickerDelegate() {
+                    AlertsCreator.createScheduleDatePickerDialog((Context) InstantCameraView.this.baseFragment.getParentActivity(), InstantCameraView.this.baseFragment.getDialogId(), (AlertsCreator.ScheduleDatePickerDelegate) new AlertsCreator.ScheduleDatePickerDelegate() {
                         public final void didSelectDate(boolean z, int i) {
                             InstantCameraView.VideoRecorder.this.lambda$null$2$InstantCameraView$VideoRecorder(z, i);
                         }
-                    }, new Runnable() {
+                    }, (Runnable) new Runnable() {
                         public final void run() {
                             InstantCameraView.VideoRecorder.this.lambda$null$3$InstantCameraView$VideoRecorder();
                         }

@@ -1,15 +1,16 @@
 package j$.util.stream;
 
-class C2 extends CLASSNAMEo5 {
-    final /* synthetic */ D2 b;
+import j$.util.stream.A2;
 
-    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
-    C2(D2 d2, CLASSNAMEt5 t5Var) {
-        super(t5Var);
-        this.b = d2;
+abstract class C2 extends A2.a<Double> {
+    protected boolean b;
+
+    C2(A2 a2) {
+        super(a2);
     }
 
-    public void accept(long j) {
-        this.a.accept(this.b.l.apply(j));
+    public final boolean p() {
+        this.b = true;
+        return false;
     }
 }

@@ -184,47 +184,43 @@ class AndroidVideoDecoder implements VideoDecoder, VideoSink {
         if (i3 * i4 > 0 && ((i3 != i || i4 != i2) && (reinitDecode = reinitDecode(i3, i4)) != VideoCodecStatus.OK)) {
             return reinitDecode;
         }
-        if (this.keyFrameRequired) {
-            if (encodedImage.frameType != EncodedImage.FrameType.VideoFrameKey) {
-                Logging.e("AndroidVideoDecoder", "decode() - key frame required first");
-                return VideoCodecStatus.NO_OUTPUT;
-            } else if (!encodedImage.completeFrame) {
-                Logging.e("AndroidVideoDecoder", "decode() - complete frame required first");
-                return VideoCodecStatus.NO_OUTPUT;
-            }
-        }
-        try {
-            int dequeueInputBuffer = this.codec.dequeueInputBuffer(500000);
-            if (dequeueInputBuffer < 0) {
-                Logging.e("AndroidVideoDecoder", "decode() - no HW buffers available; decoder falling behind");
-                return VideoCodecStatus.ERROR;
-            }
+        if (!this.keyFrameRequired || encodedImage.frameType == EncodedImage.FrameType.VideoFrameKey) {
             try {
-                ByteBuffer byteBuffer2 = this.codec.getInputBuffers()[dequeueInputBuffer];
-                if (byteBuffer2.capacity() < remaining) {
-                    Logging.e("AndroidVideoDecoder", "decode() - HW buffer too small");
+                int dequeueInputBuffer = this.codec.dequeueInputBuffer(500000);
+                if (dequeueInputBuffer < 0) {
+                    Logging.e("AndroidVideoDecoder", "decode() - no HW buffers available; decoder falling behind");
                     return VideoCodecStatus.ERROR;
                 }
-                byteBuffer2.put(encodedImage.buffer);
-                this.frameInfos.offer(new FrameInfo(SystemClock.elapsedRealtime(), encodedImage.rotation));
                 try {
-                    this.codec.queueInputBuffer(dequeueInputBuffer, 0, remaining, TimeUnit.NANOSECONDS.toMicros(encodedImage.captureTimeNs), 0);
-                    if (this.keyFrameRequired) {
-                        this.keyFrameRequired = false;
+                    ByteBuffer byteBuffer2 = this.codec.getInputBuffers()[dequeueInputBuffer];
+                    if (byteBuffer2.capacity() < remaining) {
+                        Logging.e("AndroidVideoDecoder", "decode() - HW buffer too small");
+                        return VideoCodecStatus.ERROR;
                     }
-                    return VideoCodecStatus.OK;
-                } catch (IllegalStateException e) {
-                    Logging.e("AndroidVideoDecoder", "queueInputBuffer failed", e);
-                    this.frameInfos.pollLast();
+                    byteBuffer2.put(encodedImage.buffer);
+                    this.frameInfos.offer(new FrameInfo(SystemClock.elapsedRealtime(), encodedImage.rotation));
+                    try {
+                        this.codec.queueInputBuffer(dequeueInputBuffer, 0, remaining, TimeUnit.NANOSECONDS.toMicros(encodedImage.captureTimeNs), 0);
+                        if (this.keyFrameRequired) {
+                            this.keyFrameRequired = false;
+                        }
+                        return VideoCodecStatus.OK;
+                    } catch (IllegalStateException e) {
+                        Logging.e("AndroidVideoDecoder", "queueInputBuffer failed", e);
+                        this.frameInfos.pollLast();
+                        return VideoCodecStatus.ERROR;
+                    }
+                } catch (IllegalStateException e2) {
+                    Logging.e("AndroidVideoDecoder", "getInputBuffers failed", e2);
                     return VideoCodecStatus.ERROR;
                 }
-            } catch (IllegalStateException e2) {
-                Logging.e("AndroidVideoDecoder", "getInputBuffers failed", e2);
+            } catch (IllegalStateException e3) {
+                Logging.e("AndroidVideoDecoder", "dequeueInputBuffer failed", e3);
                 return VideoCodecStatus.ERROR;
             }
-        } catch (IllegalStateException e3) {
-            Logging.e("AndroidVideoDecoder", "dequeueInputBuffer failed", e3);
-            return VideoCodecStatus.ERROR;
+        } else {
+            Logging.e("AndroidVideoDecoder", "decode() - key frame required first");
+            return VideoCodecStatus.NO_OUTPUT;
         }
     }
 

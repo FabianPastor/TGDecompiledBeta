@@ -2,9 +2,13 @@ package org.webrtc;
 
 import android.annotation.TargetApi;
 import android.media.MediaCodecInfo;
+import android.media.MediaCodecList;
 import android.os.Build;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import org.telegram.messenger.FileLog;
 
 class MediaCodecUtils {
     static final int COLOR_QCOM_FORMATYUV420PackedSemiPlanar32m = NUM;
@@ -27,6 +31,24 @@ class MediaCodecUtils {
             return new int[0];
         }
         return new int[]{NUM};
+    }
+
+    public static ArrayList<MediaCodecInfo> getSortedCodecsList() {
+        ArrayList<MediaCodecInfo> arrayList = new ArrayList<>();
+        try {
+            int codecCount = MediaCodecList.getCodecCount();
+            for (int i = 0; i < codecCount; i++) {
+                try {
+                    arrayList.add(MediaCodecList.getCodecInfoAt(i));
+                } catch (IllegalArgumentException e) {
+                    Logging.e("MediaCodecUtils", "Cannot retrieve codec info", e);
+                }
+            }
+            Collections.sort(arrayList, $$Lambda$MediaCodecUtils$2a7tPlee9qsf_7lHzR8WPINZSpo.INSTANCE);
+        } catch (Exception e2) {
+            FileLog.e((Throwable) e2);
+        }
+        return arrayList;
     }
 
     static Integer selectColorFormat(int[] iArr, MediaCodecInfo.CodecCapabilities codecCapabilities) {

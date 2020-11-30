@@ -1,16 +1,16 @@
 package j$;
 
-import j$.util.function.C;
+import j$.util.function.H;
 import java.util.function.ObjIntConsumer;
 
-public final /* synthetic */ class w0 implements C {
+public final /* synthetic */ class w0 implements H {
     final /* synthetic */ ObjIntConsumer a;
 
     private /* synthetic */ w0(ObjIntConsumer objIntConsumer) {
         this.a = objIntConsumer;
     }
 
-    public static /* synthetic */ C a(ObjIntConsumer objIntConsumer) {
+    public static /* synthetic */ H a(ObjIntConsumer objIntConsumer) {
         if (objIntConsumer == null) {
             return null;
         }

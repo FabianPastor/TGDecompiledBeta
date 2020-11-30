@@ -1,20 +1,20 @@
 package j$;
 
-import j$.util.function.D;
+import j$.util.function.I;
 import java.util.function.ObjLongConsumer;
 
 public final /* synthetic */ class z0 implements ObjLongConsumer {
-    final /* synthetic */ D a;
+    final /* synthetic */ I a;
 
-    private /* synthetic */ z0(D d) {
-        this.a = d;
+    private /* synthetic */ z0(I i) {
+        this.a = i;
     }
 
-    public static /* synthetic */ ObjLongConsumer a(D d) {
-        if (d == null) {
+    public static /* synthetic */ ObjLongConsumer a(I i) {
+        if (i == null) {
             return null;
         }
-        return d instanceof y0 ? ((y0) d).a : new z0(d);
+        return i instanceof y0 ? ((y0) i).a : new z0(i);
     }
 
     public /* synthetic */ void accept(Object obj, long j) {

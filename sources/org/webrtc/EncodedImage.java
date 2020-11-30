@@ -7,7 +7,6 @@ public class EncodedImage implements RefCounted {
     public final ByteBuffer buffer;
     public final long captureTimeMs;
     public final long captureTimeNs;
-    public final boolean completeFrame;
     public final int encodedHeight;
     public final int encodedWidth;
     public final FrameType frameType;
@@ -50,7 +49,7 @@ public class EncodedImage implements RefCounted {
     }
 
     @CalledByNative
-    private EncodedImage(ByteBuffer byteBuffer, Runnable runnable, int i, int i2, long j, FrameType frameType2, int i3, boolean z, Integer num) {
+    private EncodedImage(ByteBuffer byteBuffer, Runnable runnable, int i, int i2, long j, FrameType frameType2, int i3, Integer num) {
         this.buffer = byteBuffer;
         this.encodedWidth = i;
         this.encodedHeight = i2;
@@ -58,7 +57,6 @@ public class EncodedImage implements RefCounted {
         this.captureTimeNs = j;
         this.frameType = frameType2;
         this.rotation = i3;
-        this.completeFrame = z;
         this.qp = num;
         this.refCountDelegate = new RefCountDelegate(runnable);
     }
@@ -94,11 +92,6 @@ public class EncodedImage implements RefCounted {
     }
 
     @CalledByNative
-    private boolean getCompleteFrame() {
-        return this.completeFrame;
-    }
-
-    @CalledByNative
     private Integer getQp() {
         return this.qp;
     }
@@ -110,7 +103,6 @@ public class EncodedImage implements RefCounted {
     public static class Builder {
         private ByteBuffer buffer;
         private long captureTimeNs;
-        private boolean completeFrame;
         private int encodedHeight;
         private int encodedWidth;
         private FrameType frameType;
@@ -158,18 +150,13 @@ public class EncodedImage implements RefCounted {
             return this;
         }
 
-        public Builder setCompleteFrame(boolean z) {
-            this.completeFrame = z;
-            return this;
-        }
-
         public Builder setQp(Integer num) {
             this.qp = num;
             return this;
         }
 
         public EncodedImage createEncodedImage() {
-            return new EncodedImage(this.buffer, this.releaseCallback, this.encodedWidth, this.encodedHeight, this.captureTimeNs, this.frameType, this.rotation, this.completeFrame, this.qp);
+            return new EncodedImage(this.buffer, this.releaseCallback, this.encodedWidth, this.encodedHeight, this.captureTimeNs, this.frameType, this.rotation, this.qp);
         }
     }
 }

@@ -169,15 +169,20 @@ public class ActionBarPopupWindow extends PopupWindow {
                     }
                 } else {
                     int itemsCount = getItemsCount();
-                    for (int i2 = this.lastStartedChild; i2 < itemsCount; i2++) {
-                        View itemAt2 = getItemAt(i2);
+                    int i2 = 0;
+                    for (int i3 = 0; i3 < itemsCount; i3++) {
+                        View itemAt2 = getItemAt(i3);
                         if (itemAt2.getVisibility() == 0) {
-                            Integer num2 = this.positions.get(itemAt2);
-                            if (num2 != null && ((float) (((num2.intValue() + 1) * AndroidUtilities.dp(48.0f)) - AndroidUtilities.dp(24.0f))) > ((float) measuredHeight) * f) {
-                                break;
+                            i2 += itemAt2.getMeasuredHeight();
+                            if (i3 >= this.lastStartedChild) {
+                                if (this.positions.get(itemAt2) != null && ((float) (i2 - AndroidUtilities.dp(24.0f))) > ((float) measuredHeight) * f) {
+                                    break;
+                                }
+                                this.lastStartedChild = i3 + 1;
+                                startChildAnimation(itemAt2);
+                            } else {
+                                continue;
                             }
-                            this.lastStartedChild = i2 + 1;
-                            startChildAnimation(itemAt2);
                         }
                     }
                 }

@@ -1,22 +1,47 @@
 package j$.util.stream;
 
-abstract class R2 extends S2 {
-    R2(CLASSNAMEh1 h1Var, CLASSNAMEh6 h6Var, int i) {
-        super(h1Var, i);
+import java.util.Arrays;
+import java.util.Comparator;
+
+final class R2<T> extends F2<T> {
+    private Object[] d;
+    private int e;
+
+    R2(A2 a2, Comparator comparator) {
+        super(a2, comparator);
     }
 
-    /* access modifiers changed from: package-private */
-    public final boolean F0() {
-        return false;
+    public void accept(Object obj) {
+        Object[] objArr = this.d;
+        int i = this.e;
+        this.e = i + 1;
+        objArr[i] = obj;
     }
 
-    public /* bridge */ /* synthetic */ T2 parallel() {
-        parallel();
-        return this;
+    public void m() {
+        int i = 0;
+        Arrays.sort(this.d, 0, this.e, this.b);
+        this.a.n((long) this.e);
+        if (!this.c) {
+            while (i < this.e) {
+                this.a.accept(this.d[i]);
+                i++;
+            }
+        } else {
+            while (i < this.e && !this.a.p()) {
+                this.a.accept(this.d[i]);
+                i++;
+            }
+        }
+        this.a.m();
+        this.d = null;
     }
 
-    public /* bridge */ /* synthetic */ T2 sequential() {
-        sequential();
-        return this;
+    public void n(long j) {
+        if (j < NUM) {
+            this.d = new Object[((int) j)];
+            return;
+        }
+        throw new IllegalArgumentException("Stream size exceeds max array size");
     }
 }
