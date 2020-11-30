@@ -5251,6 +5251,9 @@ public final class R {
         public static final int VoipFlip = NUM;
         public static final int VoipGroupAllCanSpeak = NUM;
         public static final int VoipGroupConnecting = NUM;
+        public static final int VoipGroupEnd = NUM;
+        public static final int VoipGroupEndAlertText = NUM;
+        public static final int VoipGroupEndAlertTitle = NUM;
         public static final int VoipGroupEndChat = NUM;
         public static final int VoipGroupInviteAlreadyParticipant = NUM;
         public static final int VoipGroupInviteText = NUM;

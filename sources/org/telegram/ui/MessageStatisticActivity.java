@@ -296,7 +296,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             android.widget.TextView r3 = new android.widget.TextView
             r3.<init>(r1)
             r6 = 1101004800(0x41a00000, float:20.0)
-            r3.setTextSize(r6)
+            r3.setTextSize(r5, r6)
             java.lang.String r6 = "fonts/rmedium.ttf"
             android.graphics.Typeface r6 = org.telegram.messenger.AndroidUtilities.getTypeface(r6)
             r3.setTypeface(r6)
@@ -312,7 +312,7 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
             android.widget.TextView r7 = new android.widget.TextView
             r7.<init>(r1)
             r8 = 1097859072(0x41700000, float:15.0)
-            r7.setTextSize(r8)
+            r7.setTextSize(r5, r8)
             java.lang.String r8 = "player_actionBarSubtitle"
             int r9 = org.telegram.ui.ActionBar.Theme.getColor(r8)
             r7.setTextColor(r9)
@@ -1155,8 +1155,8 @@ public class MessageStatisticActivity extends BaseFragment implements Notificati
                 this.primary[i] = new TextView(context);
                 this.title[i] = new TextView(context);
                 this.primary[i].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                this.primary[i].setTextSize(17.0f);
-                this.title[i].setTextSize(13.0f);
+                this.primary[i].setTextSize(1, 17.0f);
+                this.title[i].setTextSize(1, 13.0f);
                 linearLayout2.addView(this.primary[i]);
                 linearLayout2.addView(this.title[i]);
                 linearLayout.addView(linearLayout2, LayoutHelper.createLinear(-1, -2, 1.0f));

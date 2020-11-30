@@ -43,12 +43,12 @@ public class ChatGreetingsView extends LinearLayout {
         setOrientation(1);
         TextView textView = new TextView(context);
         this.titleView = textView;
-        textView.setTextSize(14.0f);
+        textView.setTextSize(1, 14.0f);
         this.titleView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         this.titleView.setGravity(1);
         TextView textView2 = new TextView(context);
         this.descriptionView = textView2;
-        textView2.setTextSize(14.0f);
+        textView2.setTextSize(1, 14.0f);
         this.descriptionView.setGravity(1);
         this.stickerToSendView = new BackupImageView(context);
         addView(this.titleView, LayoutHelper.createLinear(-1, -2, 20.0f, 14.0f, 20.0f, 14.0f));

@@ -3165,12 +3165,8 @@ public class ChatUsersActivity extends BaseFragment implements NotificationCente
     /* access modifiers changed from: private */
     public void loadChatParticipants(int i, int i2) {
         if (!this.loadingUsers) {
-            boolean z = false;
             this.contactsEndReached = false;
-            if (this.selectType != 4) {
-                z = true;
-            }
-            this.botsEndReached = z;
+            this.botsEndReached = false;
             loadChatParticipants(i, i2, true);
         }
     }

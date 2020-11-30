@@ -648,9 +648,9 @@ public class PasscodeActivity extends BaseFragment implements NotificationCenter
                 this.dropDownContainer.setLayoutParams(layoutParams);
             }
             if (AndroidUtilities.isTablet() || ApplicationLoader.applicationContext.getResources().getConfiguration().orientation != 2) {
-                this.dropDown.setTextSize(20.0f);
+                this.dropDown.setTextSize(1, 20.0f);
             } else {
-                this.dropDown.setTextSize(18.0f);
+                this.dropDown.setTextSize(1, 18.0f);
             }
         }
     }

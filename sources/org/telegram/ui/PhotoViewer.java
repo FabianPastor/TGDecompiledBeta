@@ -6715,7 +6715,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             });
             TextView textView4 = new TextView(this.parentActivity);
             this.captionLimitView = textView4;
-            textView4.setTextSize(15.0f);
+            textView4.setTextSize(1, 15.0f);
             this.captionLimitView.setTextColor(-1280137);
             this.captionLimitView.setGravity(17);
             this.captionLimitView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
@@ -14486,7 +14486,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 long r9 = (long) r7
                 r13 = 1000(0x3e8, double:4.94E-321)
                 long r9 = r9 * r13
-                r7 = 2131627861(0x7f0e0var_, float:1.8882998E38)
+                r7 = 2131627864(0x7f0e0var_, float:1.8883004E38)
                 r13 = 2
                 java.lang.Object[] r14 = new java.lang.Object[r13]
                 org.telegram.messenger.LocaleController r13 = org.telegram.messenger.LocaleController.getInstance()

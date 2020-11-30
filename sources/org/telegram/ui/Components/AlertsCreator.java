@@ -5443,7 +5443,7 @@ public class AlertsCreator {
             } else {
                 textView.setText(LocaleController.getString("EnterThemeName", NUM));
             }
-            textView.setTextSize(16.0f);
+            textView.setTextSize(1, 16.0f);
             textView.setPadding(AndroidUtilities.dp(23.0f), AndroidUtilities.dp(12.0f), AndroidUtilities.dp(23.0f), AndroidUtilities.dp(6.0f));
             textView.setTextColor(Theme.getColor("dialogTextBlack"));
             linearLayout.addView(textView, LayoutHelper.createLinear(-1, -2));

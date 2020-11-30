@@ -65,11 +65,11 @@ public class LegendSignatureView extends FrameLayout {
         linearLayout.setOrientation(1);
         TextView textView = new TextView(context);
         this.time = textView;
-        textView.setTextSize(14.0f);
+        textView.setTextSize(1, 14.0f);
         this.time.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         TextView textView2 = new TextView(context);
         this.hourTime = textView2;
-        textView2.setTextSize(14.0f);
+        textView2.setTextSize(1, 14.0f);
         this.hourTime.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         ImageView imageView = new ImageView(context);
         this.chevron = imageView;
@@ -252,7 +252,7 @@ public class LegendSignatureView extends FrameLayout {
                 this.percentage.getLayoutParams().width = AndroidUtilities.dp(36.0f);
                 this.percentage.setVisibility(8);
                 this.percentage.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                this.percentage.setTextSize(13.0f);
+                this.percentage.setTextSize(1, 13.0f);
             }
             TextView textView2 = new TextView(legendSignatureView.getContext());
             this.signature = textView2;
@@ -264,10 +264,10 @@ public class LegendSignatureView extends FrameLayout {
             textView2.setGravity(8388611);
             textView3.setGravity(8388613);
             textView3.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-            textView3.setTextSize(13.0f);
+            textView3.setTextSize(1, 13.0f);
             textView3.setMinEms(4);
             textView3.setMaxEms(4);
-            textView2.setTextSize(13.0f);
+            textView2.setTextSize(1, 13.0f);
         }
     }
 }

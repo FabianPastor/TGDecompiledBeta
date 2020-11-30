@@ -403,7 +403,7 @@ public class PhotoAlbumPickerActivity extends BaseFragment implements Notificati
         TextView textView = new TextView(context2);
         this.emptyView = textView;
         textView.setTextColor(-8355712);
-        this.emptyView.setTextSize(20.0f);
+        this.emptyView.setTextSize(1, 20.0f);
         this.emptyView.setGravity(17);
         this.emptyView.setVisibility(8);
         this.emptyView.setText(LocaleController.getString("NoPhotos", NUM));

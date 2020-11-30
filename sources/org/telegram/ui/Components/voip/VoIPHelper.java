@@ -501,7 +501,7 @@ public class VoIPHelper {
         editTextBoldCursor.setHintTextColor(Theme.getColor("dialogTextHint"));
         editTextBoldCursor.setBackgroundDrawable(Theme.createEditTextDrawable(context2, true));
         editTextBoldCursor.setPadding(0, AndroidUtilities.dp(4.0f), 0, AndroidUtilities.dp(4.0f));
-        editTextBoldCursor.setTextSize(18.0f);
+        editTextBoldCursor.setTextSize(1, 18.0f);
         editTextBoldCursor.setVisibility(8);
         linearLayout.addView(editTextBoldCursor, LayoutHelper.createLinear(-1, -2, 8.0f, 8.0f, 8.0f, 0.0f));
         boolean[] zArr = {true};

@@ -189,11 +189,16 @@ public class SvgHelper {
             this.parentImageReceiver = imageReceiver;
         }
 
-        public void setupGradient() {
-            int color = Theme.getColor("chat_serviceBackground");
+        public void setupGradient(boolean z) {
+            int i;
+            if (z) {
+                i = Theme.getColor("chat_serviceBackground");
+            } else {
+                i = Theme.getColor("windowBackgroundGray");
+            }
             gradientWidth = (float) (AndroidUtilities.displaySize.x * 2);
             float dp = ((float) AndroidUtilities.dp(180.0f)) / gradientWidth;
-            int argb = Color.argb(Color.alpha(color) / 2, Color.red(color), Color.green(color), Color.blue(color));
+            int argb = Color.argb(Color.alpha(i) / 2, Color.red(i), Color.green(i), Color.blue(i));
             float f = (1.0f - dp) / 2.0f;
             float f2 = dp / 2.0f;
             this.placeholderGradient = new LinearGradient(0.0f, 0.0f, gradientWidth, 0.0f, new int[]{0, 0, argb, 0, 0}, new float[]{0.0f, f - f2, f, f + f2, 1.0f}, Shader.TileMode.REPEAT);

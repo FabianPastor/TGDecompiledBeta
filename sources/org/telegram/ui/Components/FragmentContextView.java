@@ -260,31 +260,32 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
         }
 
         /* access modifiers changed from: private */
-        public void setObject(int i, TLObject tLObject) {
+        public void setObject(int i, int i2, TLObject tLObject) {
             TLRPC$User tLRPC$User;
             TLRPC$Chat tLRPC$Chat;
+            TLObject tLObject2 = tLObject;
             int unused = this.animatingStates[i].id = 0;
-            if (tLObject == null) {
+            if (tLObject2 == null) {
                 this.animatingStates[i].imageReceiver.setImageBitmap((Drawable) null);
                 return;
             }
             long unused2 = this.animatingStates[i].lastSpeakTime = -1;
-            if (tLObject instanceof TLRPC$TL_groupCallParticipant) {
-                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = (TLRPC$TL_groupCallParticipant) tLObject;
-                TLRPC$User user = MessagesController.getInstance(UserConfig.selectedAccount).getUser(Integer.valueOf(tLRPC$TL_groupCallParticipant.user_id));
+            if (tLObject2 instanceof TLRPC$TL_groupCallParticipant) {
+                TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = (TLRPC$TL_groupCallParticipant) tLObject2;
+                TLRPC$User user = MessagesController.getInstance(i2).getUser(Integer.valueOf(tLRPC$TL_groupCallParticipant.user_id));
                 this.animatingStates[i].avatarDrawable.setInfo(user);
                 long unused3 = this.animatingStates[i].lastSpeakTime = (long) tLRPC$TL_groupCallParticipant.active_date;
                 int unused4 = this.animatingStates[i].id = user.id;
                 tLRPC$Chat = null;
                 tLRPC$User = user;
-            } else if (tLObject instanceof TLRPC$User) {
-                TLRPC$User tLRPC$User2 = (TLRPC$User) tLObject;
+            } else if (tLObject2 instanceof TLRPC$User) {
+                TLRPC$User tLRPC$User2 = (TLRPC$User) tLObject2;
                 this.animatingStates[i].avatarDrawable.setInfo(tLRPC$User2);
                 int unused5 = this.animatingStates[i].id = tLRPC$User2.id;
                 tLRPC$User = tLRPC$User2;
                 tLRPC$Chat = null;
             } else {
-                TLRPC$Chat tLRPC$Chat2 = (TLRPC$Chat) tLObject;
+                TLRPC$Chat tLRPC$Chat2 = (TLRPC$Chat) tLObject2;
                 this.animatingStates[i].avatarDrawable.setInfo(tLRPC$Chat2);
                 int unused6 = this.animatingStates[i].id = tLRPC$Chat2.id;
                 tLRPC$Chat = tLRPC$Chat2;
@@ -2038,63 +2039,69 @@ public class FragmentContextView extends FrameLayout implements NotificationCent
     }
 
     /* access modifiers changed from: private */
-    /* JADX WARNING: Removed duplicated region for block: B:12:0x002a  */
-    /* JADX WARNING: Removed duplicated region for block: B:25:? A[RETURN, SYNTHETIC] */
+    /* JADX WARNING: Removed duplicated region for block: B:14:0x003a  */
+    /* JADX WARNING: Removed duplicated region for block: B:27:? A[RETURN, SYNTHETIC] */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public void updateAvatars() {
         /*
-            r6 = this;
-            org.telegram.ui.Components.FragmentContextView$AvatarImageView r0 = r6.avatars
+            r7 = this;
+            org.telegram.ui.Components.FragmentContextView$AvatarImageView r0 = r7.avatars
             android.animation.ValueAnimator r1 = r0.transitionProgressAnimator
-            if (r1 != 0) goto L_0x0052
-            int r0 = r6.currentStyle
+            if (r1 != 0) goto L_0x0062
+            int r0 = r7.currentStyle
             r1 = 4
             r2 = 0
-            if (r0 != r1) goto L_0x001b
-            org.telegram.ui.ActionBar.BaseFragment r0 = r6.fragment
+            if (r0 != r1) goto L_0x0020
+            org.telegram.ui.ActionBar.BaseFragment r0 = r7.fragment
             boolean r1 = r0 instanceof org.telegram.ui.ChatActivity
-            if (r1 == 0) goto L_0x0019
+            if (r1 == 0) goto L_0x001d
             org.telegram.ui.ChatActivity r0 = (org.telegram.ui.ChatActivity) r0
-            org.telegram.messenger.ChatObject$Call r0 = r0.getGroupCall()
-            goto L_0x0028
-        L_0x0019:
-            r0 = r2
-            goto L_0x0028
-        L_0x001b:
+            org.telegram.messenger.ChatObject$Call r1 = r0.getGroupCall()
+            int r0 = r0.getCurrentAccount()
+            goto L_0x0038
+        L_0x001d:
+            int r0 = r7.account
+            goto L_0x0037
+        L_0x0020:
             org.telegram.messenger.voip.VoIPService r0 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            if (r0 != 0) goto L_0x0022
-            goto L_0x0019
-        L_0x0022:
+            if (r0 == 0) goto L_0x0035
             org.telegram.messenger.voip.VoIPService r0 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
-            org.telegram.messenger.ChatObject$Call r0 = r0.groupCall
-        L_0x0028:
-            if (r0 == 0) goto L_0x0055
-            r1 = 0
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r3 = r0.sortedParticipants
-            int r3 = r3.size()
-        L_0x0031:
-            r4 = 3
-            if (r1 >= r4) goto L_0x004c
-            if (r1 >= r3) goto L_0x0044
-            org.telegram.ui.Components.FragmentContextView$AvatarImageView r4 = r6.avatars
-            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r5 = r0.sortedParticipants
-            java.lang.Object r5 = r5.get(r1)
-            org.telegram.tgnet.TLObject r5 = (org.telegram.tgnet.TLObject) r5
-            r4.setObject(r1, r5)
-            goto L_0x0049
-        L_0x0044:
-            org.telegram.ui.Components.FragmentContextView$AvatarImageView r4 = r6.avatars
-            r4.setObject(r1, r2)
-        L_0x0049:
-            int r1 = r1 + 1
-            goto L_0x0031
-        L_0x004c:
-            org.telegram.ui.Components.FragmentContextView$AvatarImageView r0 = r6.avatars
+            org.telegram.messenger.ChatObject$Call r1 = r0.groupCall
+            org.telegram.messenger.voip.VoIPService r0 = org.telegram.messenger.voip.VoIPService.getSharedInstance()
+            int r0 = r0.getAccount()
+            goto L_0x0038
+        L_0x0035:
+            int r0 = r7.account
+        L_0x0037:
+            r1 = r2
+        L_0x0038:
+            if (r1 == 0) goto L_0x0065
+            r3 = 0
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r4 = r1.sortedParticipants
+            int r4 = r4.size()
+        L_0x0041:
+            r5 = 3
+            if (r3 >= r5) goto L_0x005c
+            if (r3 >= r4) goto L_0x0054
+            org.telegram.ui.Components.FragmentContextView$AvatarImageView r5 = r7.avatars
+            java.util.ArrayList<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r6 = r1.sortedParticipants
+            java.lang.Object r6 = r6.get(r3)
+            org.telegram.tgnet.TLObject r6 = (org.telegram.tgnet.TLObject) r6
+            r5.setObject(r3, r0, r6)
+            goto L_0x0059
+        L_0x0054:
+            org.telegram.ui.Components.FragmentContextView$AvatarImageView r5 = r7.avatars
+            r5.setObject(r3, r0, r2)
+        L_0x0059:
+            int r3 = r3 + 1
+            goto L_0x0041
+        L_0x005c:
+            org.telegram.ui.Components.FragmentContextView$AvatarImageView r0 = r7.avatars
             r0.commitTransition()
-            goto L_0x0055
-        L_0x0052:
+            goto L_0x0065
+        L_0x0062:
             r0.updateAfterTransitionEnd()
-        L_0x0055:
+        L_0x0065:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.FragmentContextView.updateAvatars():void");

@@ -493,14 +493,14 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
         this.imageView.setAnimation(NUM, 120, 120);
         this.imageView.playAnimation();
         TextView textView = new TextView(context2);
-        textView.setTextSize(20.0f);
+        textView.setTextSize(1, 20.0f);
         textView.setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
         textView.setTextColor(Theme.getColor("player_actionBarTitle"));
         textView.setTag("player_actionBarTitle");
         textView.setText(LocaleController.getString("LoadingStats", NUM));
         textView.setGravity(1);
         TextView textView2 = new TextView(context2);
-        textView2.setTextSize(15.0f);
+        textView2.setTextSize(1, 15.0f);
         textView2.setTextColor(Theme.getColor("player_actionBarSubtitle"));
         textView2.setTag("player_actionBarSubtitle");
         textView2.setText(LocaleController.getString("LoadingStatsDescription", NUM));
@@ -1621,7 +1621,7 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
             frameLayout.addView(this.progressView, LayoutHelper.createFrame(44, 44.0f, 17, 0.0f, 0.0f, 0.0f, 60.0f));
             TextView textView = new TextView(context);
             this.errorTextView = textView;
-            textView.setTextSize(15.0f);
+            textView.setTextSize(1, 15.0f);
             frameLayout.addView(this.errorTextView, LayoutHelper.createFrame(-2, -2.0f, 17, 0.0f, 0.0f, 0.0f, 30.0f));
             this.progressView.setVisibility(8);
             this.errorTextView.setTextColor(Theme.getColor("dialogTextGray4"));
@@ -3196,9 +3196,9 @@ public class StatisticActivity extends BaseFragment implements NotificationCente
                     this.secondary[i3] = new TextView(context);
                     this.title[i3] = new TextView(context);
                     this.primary[i3].setTypeface(AndroidUtilities.getTypeface("fonts/rmedium.ttf"));
-                    this.primary[i3].setTextSize(17.0f);
-                    this.title[i3].setTextSize(13.0f);
-                    this.secondary[i3].setTextSize(13.0f);
+                    this.primary[i3].setTextSize(1, 17.0f);
+                    this.title[i3].setTextSize(1, 13.0f);
+                    this.secondary[i3].setTextSize(1, 13.0f);
                     this.secondary[i3].setPadding(AndroidUtilities.dp(4.0f), 0, 0, 0);
                     linearLayout3.addView(this.primary[i3]);
                     linearLayout3.addView(this.secondary[i3]);

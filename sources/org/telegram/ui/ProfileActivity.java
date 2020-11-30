@@ -6668,7 +6668,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r2 = 2
             r4 = 1
             if (r1 != r2) goto L_0x0022
-            r1 = 2131627756(0x7f0e0eec, float:1.8882785E38)
+            r1 = 2131627759(0x7f0e0eef, float:1.8882792E38)
             java.lang.String r5 = "WaitingForNetwork"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             goto L_0x0049
@@ -7099,7 +7099,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x0389:
             boolean r2 = org.telegram.messenger.ChatObject.isKickedFromChat(r5)
             if (r2 == 0) goto L_0x039a
-            r2 = 2131627795(0x7f0e0var_, float:1.8882865E38)
+            r2 = 2131627798(0x7f0e0var_, float:1.888287E38)
             java.lang.String r3 = "YouWereKicked"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r2)
         L_0x0398:
@@ -7108,7 +7108,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x039a:
             boolean r2 = org.telegram.messenger.ChatObject.isLeftFromChat(r5)
             if (r2 == 0) goto L_0x03aa
-            r2 = 2131627794(0x7f0e0var_, float:1.8882862E38)
+            r2 = 2131627797(0x7f0e0var_, float:1.8882869E38)
             java.lang.String r3 = "YouLeft"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r2)
             goto L_0x0398
@@ -7514,7 +7514,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 this.editItemVisible = true;
                             }
                             if (this.chatInfo != null) {
-                                if (ChatObject.canManageCalls(chat)) {
+                                if (chat.megagroup && ChatObject.canManageCalls(chat)) {
                                     this.otherItem.addSubItem(15, NUM, LocaleController.getString("StartVoipChat", NUM));
                                 }
                                 if (this.chatInfo.can_view_stats) {
@@ -8782,7 +8782,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 goto L_0x02a6
             L_0x0216:
                 r2 = 3600(0xe10, float:5.045E-42)
-                r3 = 2131627776(0x7f0e0var_, float:1.8882826E38)
+                r3 = 2131627779(0x7f0e0var_, float:1.8882832E38)
                 java.lang.String r4 = "WillUnmuteIn"
                 if (r1 >= r2) goto L_0x0232
                 java.lang.Object[] r2 = new java.lang.Object[r10]

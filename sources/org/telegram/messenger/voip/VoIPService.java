@@ -766,7 +766,8 @@ public class VoIPService extends VoIPBaseService {
     }
 
     public boolean isJoined() {
-        return this.currentState != 1;
+        int i = this.currentState;
+        return (i == 1 || i == 6) ? false : true;
     }
 
     public void acceptIncomingCall() {
@@ -1581,6 +1582,7 @@ public class VoIPService extends VoIPBaseService {
                 tLRPC$TL_groupCallParticipant.can_self_unmute = true;
                 tLRPC$TL_groupCallParticipant.date = ConnectionsManager.getInstance(this.currentAccount).getCurrentTime();
                 this.groupCall.participants.put(tLRPC$TL_groupCallParticipant.user_id, tLRPC$TL_groupCallParticipant);
+                this.groupCall.sortedParticipants.add(tLRPC$TL_groupCallParticipant);
                 dispatchStateChanged(6);
                 TLRPC$TL_phone_createGroupCall tLRPC$TL_phone_createGroupCall = new TLRPC$TL_phone_createGroupCall();
                 tLRPC$TL_phone_createGroupCall.channel = MessagesController.getInputChannel(this.chat);
@@ -1589,7 +1591,7 @@ public class VoIPService extends VoIPBaseService {
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                         VoIPService.this.lambda$startGroupCall$25$VoIPService(tLObject, tLRPC$TL_error);
                     }
-                });
+                }, 2);
                 this.createGroupCall = 0;
             } else if (str == null) {
                 if (this.groupCall == null) {
@@ -1612,7 +1614,7 @@ public class VoIPService extends VoIPBaseService {
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                         VoIPService.this.lambda$startGroupCall$29$VoIPService(tLObject, tLRPC$TL_error);
                     }
-                });
+                }, 2);
             }
         }
     }

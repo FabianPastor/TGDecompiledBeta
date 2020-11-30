@@ -389,15 +389,15 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
         } else {
             this.inviteItem.setVisibility(8);
         }
-        if (this.call.call.can_change_join_muted) {
-            this.everyoneItem.setVisibility(0);
-            this.adminItem.setVisibility(0);
-            this.dividerItem.setVisibility(0);
+        if (!ChatObject.canManageCalls(this.currentChat) || !this.call.call.can_change_join_muted) {
+            this.everyoneItem.setVisibility(8);
+            this.adminItem.setVisibility(8);
+            this.dividerItem.setVisibility(8);
             return;
         }
-        this.everyoneItem.setVisibility(8);
-        this.adminItem.setVisibility(8);
-        this.dividerItem.setVisibility(8);
+        this.everyoneItem.setVisibility(0);
+        this.adminItem.setVisibility(0);
+        this.dividerItem.setVisibility(0);
     }
 
     public boolean onFragmentCreate() {
@@ -510,38 +510,57 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
                     GroupCallActivity groupCallActivity2 = GroupCallActivity.this;
                     groupCallActivity2.call.call.join_muted = true;
                     groupCallActivity2.toggleAdminSpeak();
-                } else if (i == 3) {
-                    TLRPC$ChatFull chatFull = GroupCallActivity.this.getMessagesController().getChatFull(GroupCallActivity.this.currentChat.id);
-                    if (!TextUtils.isEmpty(GroupCallActivity.this.currentChat.username)) {
-                        str = GroupCallActivity.this.getMessagesController().linkPrefix + "/" + GroupCallActivity.this.currentChat.username;
-                    } else {
-                        if (chatFull != null) {
-                            TLRPC$ExportedChatInvite tLRPC$ExportedChatInvite = chatFull.exported_invite;
-                            if (tLRPC$ExportedChatInvite instanceof TLRPC$TL_chatInviteExported) {
-                                str = tLRPC$ExportedChatInvite.link;
+                } else {
+                    String str2 = null;
+                    if (i == 3) {
+                        TLRPC$ChatFull chatFull = GroupCallActivity.this.getMessagesController().getChatFull(GroupCallActivity.this.currentChat.id);
+                        if (!TextUtils.isEmpty(GroupCallActivity.this.currentChat.username)) {
+                            str = GroupCallActivity.this.getMessagesController().linkPrefix + "/" + GroupCallActivity.this.currentChat.username;
+                        } else {
+                            if (chatFull != null) {
+                                TLRPC$ExportedChatInvite tLRPC$ExportedChatInvite = chatFull.exported_invite;
+                                if (tLRPC$ExportedChatInvite instanceof TLRPC$TL_chatInviteExported) {
+                                    str2 = tLRPC$ExportedChatInvite.link;
+                                }
                             }
+                            str = str2;
                         }
-                        str = null;
-                    }
-                    if (TextUtils.isEmpty(str)) {
-                        TLRPC$TL_messages_exportChatInvite tLRPC$TL_messages_exportChatInvite = new TLRPC$TL_messages_exportChatInvite();
-                        tLRPC$TL_messages_exportChatInvite.peer = MessagesController.getInputPeer(GroupCallActivity.this.currentChat);
-                        GroupCallActivity.this.getConnectionsManager().bindRequestToGuid(GroupCallActivity.this.getConnectionsManager().sendRequest(tLRPC$TL_messages_exportChatInvite, new RequestDelegate(chatFull) {
-                            public final /* synthetic */ TLRPC$ChatFull f$1;
+                        if (TextUtils.isEmpty(str)) {
+                            TLRPC$TL_messages_exportChatInvite tLRPC$TL_messages_exportChatInvite = new TLRPC$TL_messages_exportChatInvite();
+                            tLRPC$TL_messages_exportChatInvite.peer = MessagesController.getInputPeer(GroupCallActivity.this.currentChat);
+                            GroupCallActivity.this.getConnectionsManager().bindRequestToGuid(GroupCallActivity.this.getConnectionsManager().sendRequest(tLRPC$TL_messages_exportChatInvite, new RequestDelegate(chatFull) {
+                                public final /* synthetic */ TLRPC$ChatFull f$1;
 
-                            {
-                                this.f$1 = r2;
-                            }
+                                {
+                                    this.f$1 = r2;
+                                }
 
-                            public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                                GroupCallActivity.AnonymousClass1.this.lambda$onItemClick$1$GroupCallActivity$1(this.f$1, tLObject, tLRPC$TL_error);
+                                public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+                                    GroupCallActivity.AnonymousClass1.this.lambda$onItemClick$1$GroupCallActivity$1(this.f$1, tLObject, tLRPC$TL_error);
+                                }
+                            }), GroupCallActivity.this.classGuid);
+                            return;
+                        }
+                        openShareAlert(str);
+                    } else if (i == 4) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder((Context) GroupCallActivity.this.getParentActivity());
+                        builder.setTitle(LocaleController.getString("VoipGroupEndAlertTitle", NUM));
+                        builder.setMessage(LocaleController.getString("VoipGroupEndAlertText", NUM));
+                        builder.setPositiveButton(LocaleController.getString("VoipGroupEnd", NUM), new DialogInterface.OnClickListener() {
+                            public final void onClick(DialogInterface dialogInterface, int i) {
+                                GroupCallActivity.AnonymousClass1.this.lambda$onItemClick$2$GroupCallActivity$1(dialogInterface, i);
                             }
-                        }), GroupCallActivity.this.classGuid);
-                        return;
+                        });
+                        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+                        AlertDialog create = builder.create();
+                        create.setBackgroundColor(Theme.getColor("voipgroup_actionBar"));
+                        GroupCallActivity.this.showDialog(create);
+                        TextView textView = (TextView) create.getButton(-1);
+                        if (textView != null) {
+                            textView.setTextColor(Theme.getColor("dialogTextRed2"));
+                        }
+                        create.setTextColor(Theme.getColor("voipgroup_actionBarItems"));
                     }
-                    openShareAlert(str);
-                } else if (i == 4) {
-                    GroupCallActivity.this.onLeaveClick();
                 }
             }
 
@@ -571,6 +590,16 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
                     tLRPC$ChatFull.exported_invite = tLRPC$ExportedChatInvite;
                     openShareAlert(tLRPC$ExportedChatInvite.link);
                 }
+            }
+
+            /* access modifiers changed from: private */
+            /* renamed from: lambda$onItemClick$2 */
+            public /* synthetic */ void lambda$onItemClick$2$GroupCallActivity$1(DialogInterface dialogInterface, int i) {
+                if (VoIPService.getSharedInstance() != null) {
+                    VoIPService.getSharedInstance().hangUp(1);
+                }
+                GroupCallActivity.this.finishFragment();
+                NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.didStartedCall, new Object[0]);
             }
 
             public boolean canOpenMenu() {
@@ -711,12 +740,12 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
                 float f;
                 int measuredWidth = (getMeasuredWidth() - getMeasuredHeight()) / 2;
                 long elapsedRealtime = SystemClock.elapsedRealtime();
-                long access$2200 = elapsedRealtime - GroupCallActivity.this.lastUpdateTime;
+                long access$2100 = elapsedRealtime - GroupCallActivity.this.lastUpdateTime;
                 long unused = GroupCallActivity.this.lastUpdateTime = elapsedRealtime;
-                if (access$2200 > 20) {
-                    access$2200 = 17;
+                if (access$2100 > 20) {
+                    access$2100 = 17;
                 }
-                long j = access$2200;
+                long j = access$2100;
                 if (GroupCallActivity.this.currentState != null) {
                     GroupCallActivity.this.currentState.update(0, measuredWidth, getMeasuredHeight(), j);
                 }
@@ -1316,8 +1345,7 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
         this.buttonsContainer.invalidate();
     }
 
-    /* access modifiers changed from: private */
-    public void onLeaveClick() {
+    private void onLeaveClick() {
         AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
         builder.setTitle(LocaleController.getString("VoipGroupLeaveAlertTitle", NUM));
         builder.setMessage(LocaleController.getString("VoipGroupLeaveAlertText", NUM));
@@ -1801,7 +1829,7 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
                                     r11.setGravity(r5)
                                     android.text.TextUtils$TruncateAt r5 = android.text.TextUtils.TruncateAt.END
                                     r11.setEllipsize(r5)
-                                    r5 = 2131627697(0x7f0e0eb1, float:1.8882666E38)
+                                    r5 = 2131627700(0x7f0e0eb4, float:1.8882672E38)
                                     java.lang.String r12 = "VoipGroupMuteMemberAlertTitle"
                                     java.lang.String r5 = org.telegram.messenger.LocaleController.getString(r12, r5)
                                     r11.setText(r5)
@@ -1851,14 +1879,14 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
                                     r18 = 1091567616(0x41100000, float:9.0)
                                     android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r13, r14, r15, r16, r17, r18)
                                     r6.addView(r4, r5)
-                                    r5 = 2131627696(0x7f0e0eb0, float:1.8882664E38)
+                                    r5 = 2131627699(0x7f0e0eb3, float:1.888267E38)
                                     java.lang.Object[] r6 = new java.lang.Object[r7]
                                     r6[r3] = r10
                                     java.lang.String r3 = "VoipGroupMuteMemberAlertText"
                                     java.lang.String r3 = org.telegram.messenger.LocaleController.formatString(r3, r5, r6)
                                     android.text.SpannableStringBuilder r3 = org.telegram.messenger.AndroidUtilities.replaceTags(r3)
                                     r4.setText(r3)
-                                    r3 = 2131627709(0x7f0e0ebd, float:1.888269E38)
+                                    r3 = 2131627712(0x7f0e0ec0, float:1.8882696E38)
                                     java.lang.String r4 = "VoipMute"
                                     java.lang.String r3 = org.telegram.messenger.LocaleController.getString(r4, r3)
                                     org.telegram.ui.-$$Lambda$GroupCallActivity$ListAdapter$1$9aqKi3RGOWEkDvuhPLUVqqHn-O0 r4 = new org.telegram.ui.-$$Lambda$GroupCallActivity$ListAdapter$1$9aqKi3RGOWEkDvuhPLUVqqHn-O0

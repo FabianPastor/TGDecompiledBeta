@@ -5112,6 +5112,9 @@
     <public type="string" name="VoipFlip" id="NUM" />
     <public type="string" name="VoipGroupAllCanSpeak" id="NUM" />
     <public type="string" name="VoipGroupConnecting" id="NUM" />
+    <public type="string" name="VoipGroupEnd" id="NUM" />
+    <public type="string" name="VoipGroupEndAlertText" id="NUM" />
+    <public type="string" name="VoipGroupEndAlertTitle" id="NUM" />
     <public type="string" name="VoipGroupEndChat" id="NUM" />
     <public type="string" name="VoipGroupInviteAlreadyParticipant" id="NUM" />
     <public type="string" name="VoipGroupInviteText" id="NUM" />

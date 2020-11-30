@@ -27,19 +27,21 @@ public class VoIPStatusTextView extends FrameLayout {
     boolean timerShowing;
     VoIPTimerView timerView;
 
+    /* JADX INFO: super call moved to the top of the method (can break code semantics) */
     public VoIPStatusTextView(Context context) {
         super(context);
+        Context context2 = context;
         for (int i = 0; i < 2; i++) {
-            this.textView[i] = new TextView(context);
-            this.textView[i].setTextSize(15.0f);
+            this.textView[i] = new TextView(context2);
+            this.textView[i].setTextSize(1, 15.0f);
             this.textView[i].setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
             this.textView[i].setTextColor(-1);
             this.textView[i].setGravity(1);
             addView(this.textView[i]);
         }
-        TextView textView2 = new TextView(context);
+        TextView textView2 = new TextView(context2);
         this.reconnectTextView = textView2;
-        textView2.setTextSize(15.0f);
+        textView2.setTextSize(1, 15.0f);
         this.reconnectTextView.setShadowLayer((float) AndroidUtilities.dp(3.0f), 0.0f, (float) AndroidUtilities.dp(0.6666667f), NUM);
         this.reconnectTextView.setTextColor(-1);
         this.reconnectTextView.setGravity(1);
@@ -51,7 +53,7 @@ public class VoIPStatusTextView extends FrameLayout {
         spannableStringBuilder.append(spannableString);
         this.reconnectTextView.setText(spannableStringBuilder);
         this.reconnectTextView.setVisibility(8);
-        VoIPTimerView voIPTimerView = new VoIPTimerView(context);
+        VoIPTimerView voIPTimerView = new VoIPTimerView(context2);
         this.timerView = voIPTimerView;
         addView(voIPTimerView, LayoutHelper.createFrame(-1, -2.0f));
     }

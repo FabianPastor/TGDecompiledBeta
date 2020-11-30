@@ -307,7 +307,7 @@ public class FilterTabsView extends FrameLayout {
         /* JADX WARNING: Removed duplicated region for block: B:166:0x050d  */
         /* JADX WARNING: Removed duplicated region for block: B:172:0x0528  */
         /* JADX WARNING: Removed duplicated region for block: B:176:0x0550  */
-        /* JADX WARNING: Removed duplicated region for block: B:190:0x0632  */
+        /* JADX WARNING: Removed duplicated region for block: B:194:0x0636  */
         @android.annotation.SuppressLint({"DrawAllocation"})
         /* Code decompiled incorrectly, please refer to instructions dump. */
         public void onDraw(android.graphics.Canvas r30) {
@@ -793,7 +793,7 @@ public class FilterTabsView extends FrameLayout {
                 goto L_0x03c6
             L_0x03c2:
                 r2 = r20
-                goto L_0x0716
+                goto L_0x071a
             L_0x03c6:
                 org.telegram.ui.Components.FilterTabsView r2 = org.telegram.ui.Components.FilterTabsView.this
                 java.lang.String r2 = r2.aBackgroundColorKey
@@ -985,14 +985,19 @@ public class FilterTabsView extends FrameLayout {
                 org.telegram.ui.Components.FilterTabsView r10 = org.telegram.ui.Components.FilterTabsView.this
                 android.graphics.Paint r10 = r10.counterPaint
                 r7.drawRoundRect(r1, r14, r4, r10)
-                if (r15 == 0) goto L_0x0632
+                if (r15 == 0) goto L_0x0636
                 int r1 = org.telegram.messenger.AndroidUtilities.dp(r17)
                 android.text.StaticLayout r2 = r0.inCounter
                 r3 = 0
+                if (r2 == 0) goto L_0x0565
                 int r2 = r2.getLineBottom(r3)
                 android.text.StaticLayout r4 = r0.inCounter
                 int r3 = r4.getLineTop(r3)
                 int r2 = r2 - r3
+                goto L_0x0566
+            L_0x0565:
+                r2 = 0
+            L_0x0566:
                 int r1 = r1 - r2
                 float r1 = (float) r1
                 r2 = 1073741824(0x40000000, float:2.0)
@@ -1001,17 +1006,17 @@ public class FilterTabsView extends FrameLayout {
                 org.telegram.ui.Components.FilterTabsView$Tab r1 = r0.currentTab
                 int r1 = r1.id
                 r2 = 2147483647(0x7fffffff, float:NaN)
-                if (r1 == r2) goto L_0x057c
+                if (r1 == r2) goto L_0x0580
                 org.telegram.ui.Components.FilterTabsView r1 = org.telegram.ui.Components.FilterTabsView.this
                 float r1 = r1.editingStartAnimationProgress
                 r2 = 1065353216(0x3var_, float:1.0)
                 float r1 = r2 - r1
-                goto L_0x057e
-            L_0x057c:
+                goto L_0x0582
+            L_0x0580:
                 r1 = 1065353216(0x3var_, float:1.0)
-            L_0x057e:
+            L_0x0582:
                 android.text.StaticLayout r2 = r0.inCounter
-                if (r2 == 0) goto L_0x05bd
+                if (r2 == 0) goto L_0x05c1
                 r30.save()
                 org.telegram.ui.Components.FilterTabsView r2 = org.telegram.ui.Components.FilterTabsView.this
                 android.text.TextPaint r2 = r2.textCounterPaint
@@ -1039,9 +1044,9 @@ public class FilterTabsView extends FrameLayout {
                 android.text.StaticLayout r2 = r0.inCounter
                 r2.draw(r7)
                 r30.restore()
-            L_0x05bd:
+            L_0x05c1:
                 android.text.StaticLayout r2 = r0.outCounter
-                if (r2 == 0) goto L_0x05fd
+                if (r2 == 0) goto L_0x0601
                 r30.save()
                 org.telegram.ui.Components.FilterTabsView r2 = org.telegram.ui.Components.FilterTabsView.this
                 android.text.TextPaint r2 = r2.textCounterPaint
@@ -1070,9 +1075,9 @@ public class FilterTabsView extends FrameLayout {
                 android.text.StaticLayout r2 = r0.outCounter
                 r2.draw(r7)
                 r30.restore()
-            L_0x05fd:
+            L_0x0601:
                 android.text.StaticLayout r2 = r0.stableCounter
-                if (r2 == 0) goto L_0x0628
+                if (r2 == 0) goto L_0x062c
                 r30.save()
                 org.telegram.ui.Components.FilterTabsView r2 = org.telegram.ui.Components.FilterTabsView.this
                 android.text.TextPaint r2 = r2.textCounterPaint
@@ -1090,17 +1095,17 @@ public class FilterTabsView extends FrameLayout {
                 android.text.StaticLayout r1 = r0.stableCounter
                 r1.draw(r7)
                 r30.restore()
-            L_0x0628:
+            L_0x062c:
                 org.telegram.ui.Components.FilterTabsView r1 = org.telegram.ui.Components.FilterTabsView.this
                 android.text.TextPaint r1 = r1.textCounterPaint
                 r1.setAlpha(r5)
-                goto L_0x0671
-            L_0x0632:
-                if (r3 == 0) goto L_0x0671
+                goto L_0x0675
+            L_0x0636:
+                if (r3 == 0) goto L_0x0675
                 org.telegram.ui.Components.FilterTabsView$Tab r1 = r0.currentTab
                 int r1 = r1.id
                 r4 = 2147483647(0x7fffffff, float:NaN)
-                if (r1 == r4) goto L_0x0653
+                if (r1 == r4) goto L_0x0657
                 org.telegram.ui.Components.FilterTabsView r1 = org.telegram.ui.Components.FilterTabsView.this
                 android.text.TextPaint r1 = r1.textCounterPaint
                 org.telegram.ui.Components.FilterTabsView r4 = org.telegram.ui.Components.FilterTabsView.this
@@ -1110,7 +1115,7 @@ public class FilterTabsView extends FrameLayout {
                 float r4 = r4 * r6
                 int r4 = (int) r4
                 r1.setAlpha(r4)
-            L_0x0653:
+            L_0x0657:
                 android.graphics.RectF r1 = r0.rect
                 float r4 = r1.left
                 float r1 = r1.width()
@@ -1125,25 +1130,25 @@ public class FilterTabsView extends FrameLayout {
                 org.telegram.ui.Components.FilterTabsView r2 = org.telegram.ui.Components.FilterTabsView.this
                 android.text.TextPaint r2 = r2.textCounterPaint
                 r7.drawText(r3, r4, r1, r2)
-            L_0x0671:
-                if (r11 != 0) goto L_0x0675
-                if (r19 == 0) goto L_0x0678
             L_0x0675:
+                if (r11 != 0) goto L_0x0679
+                if (r19 == 0) goto L_0x067c
+            L_0x0679:
                 r30.restore()
-            L_0x0678:
+            L_0x067c:
                 org.telegram.ui.Components.FilterTabsView$Tab r1 = r0.currentTab
                 int r1 = r1.id
                 r2 = 2147483647(0x7fffffff, float:NaN)
-                if (r1 == r2) goto L_0x0715
+                if (r1 == r2) goto L_0x0719
                 org.telegram.ui.Components.FilterTabsView r1 = org.telegram.ui.Components.FilterTabsView.this
                 boolean r1 = r1.isEditing
-                if (r1 != 0) goto L_0x0694
+                if (r1 != 0) goto L_0x0698
                 org.telegram.ui.Components.FilterTabsView r1 = org.telegram.ui.Components.FilterTabsView.this
                 float r1 = r1.editingStartAnimationProgress
                 r2 = 0
                 int r1 = (r1 > r2 ? 1 : (r1 == r2 ? 0 : -1))
-                if (r1 == 0) goto L_0x0715
-            L_0x0694:
+                if (r1 == 0) goto L_0x0719
+            L_0x0698:
                 org.telegram.ui.Components.FilterTabsView r1 = org.telegram.ui.Components.FilterTabsView.this
                 android.graphics.Paint r1 = r1.deletePaint
                 org.telegram.ui.Components.FilterTabsView r2 = org.telegram.ui.Components.FilterTabsView.this
@@ -1192,20 +1197,20 @@ public class FilterTabsView extends FrameLayout {
                 android.graphics.Paint r6 = r1.deletePaint
                 r1 = r30
                 r1.drawLine(r2, r3, r4, r5, r6)
-            L_0x0715:
+            L_0x0719:
                 r2 = r9
-            L_0x0716:
+            L_0x071a:
                 org.telegram.ui.Components.FilterTabsView$Tab r1 = r0.currentTab
                 int r1 = r1.id
                 r3 = 2147483647(0x7fffffff, float:NaN)
-                if (r1 == r3) goto L_0x072d
+                if (r1 == r3) goto L_0x0731
                 org.telegram.ui.Components.FilterTabsView r1 = org.telegram.ui.Components.FilterTabsView.this
                 float r1 = r1.editingAnimationProgress
                 r3 = 0
                 int r1 = (r1 > r3 ? 1 : (r1 == r3 ? 0 : -1))
-                if (r1 == 0) goto L_0x072d
+                if (r1 == 0) goto L_0x0731
                 r30.restore()
-            L_0x072d:
+            L_0x0731:
                 r0.lastTextX = r8
                 org.telegram.ui.Components.FilterTabsView$Tab r1 = r0.currentTab
                 int r3 = r1.counter

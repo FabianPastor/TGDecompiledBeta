@@ -2402,7 +2402,11 @@ public class AndroidUtilities {
     }
 
     public static void setScrollViewEdgeEffectColor(ScrollView scrollView, int i) {
-        if (Build.VERSION.SDK_INT >= 21) {
+        int i2 = Build.VERSION.SDK_INT;
+        if (i2 >= 29) {
+            scrollView.setTopEdgeEffectColor(i);
+            scrollView.setBottomEdgeEffectColor(i);
+        } else if (i2 >= 21) {
             try {
                 Field declaredField = ScrollView.class.getDeclaredField("mEdgeGlowTop");
                 declaredField.setAccessible(true);
@@ -2416,8 +2420,7 @@ public class AndroidUtilities {
                 if (edgeEffect2 != null) {
                     edgeEffect2.setColor(i);
                 }
-            } catch (Exception e) {
-                FileLog.e((Throwable) e);
+            } catch (Exception unused) {
             }
         }
     }

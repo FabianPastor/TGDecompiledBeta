@@ -3750,6 +3750,9 @@
     <string name="VoipFlip">Flip</string>
     <string name="VoipGroupAllCanSpeak">New members can speak</string>
     <string name="VoipGroupConnecting">Connecting...</string>
+    <string name="VoipGroupEnd">End</string>
+    <string name="VoipGroupEndAlertText">Are you sure you want to end this voice chat?</string>
+    <string name="VoipGroupEndAlertTitle">End voice chat</string>
     <string name="VoipGroupEndChat">End voice chat</string>
     <string name="VoipGroupInviteAlreadyParticipant">Selected user is already participant in this voice chat.</string>
     <string name="VoipGroupInviteText">Hey! Join to our call: %1$s</string>

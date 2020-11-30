@@ -81,7 +81,7 @@ public class DocumentObject {
                     if (drawableByPath == null) {
                         return drawableByPath;
                     }
-                    drawableByPath.setupGradient();
+                    drawableByPath.setupGradient(z);
                     return drawableByPath;
                 }
             } else {

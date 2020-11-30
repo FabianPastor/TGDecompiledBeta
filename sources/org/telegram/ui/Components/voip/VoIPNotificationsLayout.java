@@ -181,7 +181,7 @@ public class VoIPNotificationsLayout extends LinearLayout {
             TextView textView2 = new TextView(context);
             this.textView = textView2;
             textView2.setTextColor(-1);
-            this.textView.setTextSize(14.0f);
+            this.textView.setTextSize(1, 14.0f);
             addView(this.textView, LayoutHelper.createFrame(-2, -2.0f, 16, 44.0f, 4.0f, 16.0f, 4.0f));
         }
 
