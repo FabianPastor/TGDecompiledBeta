@@ -449,7 +449,7 @@ public class DialogsAdapter extends RecyclerListView.SelectionAdapter {
             org.telegram.ui.Cells.HeaderCell r13 = new org.telegram.ui.Cells.HeaderCell
             android.content.Context r0 = r12.mContext
             r13.<init>(r0)
-            r0 = 2131627800(0x7f0e0var_, float:1.8882875E38)
+            r0 = 2131627804(0x7f0e0f1c, float:1.8882883E38)
             java.lang.String r1 = "YourContacts"
             java.lang.String r0 = org.telegram.messenger.LocaleController.getString(r1, r0)
             r13.setText(r0)

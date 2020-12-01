@@ -393,13 +393,13 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         /* access modifiers changed from: private */
         public SwipeController swipeController;
 
-        static /* synthetic */ int access$9008(ViewPage viewPage) {
+        static /* synthetic */ int access$9108(ViewPage viewPage) {
             int i = viewPage.lastItemsCount;
             viewPage.lastItemsCount = i + 1;
             return i;
         }
 
-        static /* synthetic */ int access$9010(ViewPage viewPage) {
+        static /* synthetic */ int access$9110(ViewPage viewPage) {
             int i = viewPage.lastItemsCount;
             viewPage.lastItemsCount = i - 1;
             return i;
@@ -704,6 +704,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 DialogsActivity dialogsActivity3 = DialogsActivity.this;
                 viewPage.setTranslationY((-(1.0f - dialogsActivity3.filterTabsProgress)) * dialogsActivity3.filterTabsMoveFrom);
             } else if (DialogsActivity.this.filterTabsView != null && DialogsActivity.this.filterTabsView.getVisibility() == 0) {
+                DialogsActivity.this.filterTabsView.setTranslationY(DialogsActivity.this.actionBar.getTranslationY());
                 DialogsActivity.this.filterTabsView.setAlpha(1.0f);
             }
             super.dispatchDraw(canvas);
@@ -1415,11 +1416,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
             boolean z = false;
             int unused = this.parentPage.archivePullViewState = SharedConfig.archiveHidden ? 2 : 0;
             if (this.parentPage.pullForegroundDrawable != null) {
-                PullForegroundDrawable access$8400 = this.parentPage.pullForegroundDrawable;
+                PullForegroundDrawable access$8500 = this.parentPage.pullForegroundDrawable;
                 if (this.parentPage.archivePullViewState != 0) {
                     z = true;
                 }
-                access$8400.setWillDraw(z);
+                access$8500.setWillDraw(z);
             }
         }
 
@@ -1704,7 +1705,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 if (DialogsActivity.this.getMessagesController().isPromoDialog(tLRPC$Dialog.id, false)) {
                     DialogsActivity.this.getMessagesController().hidePromoDialog();
                     this.parentPage.dialogsItemAnimator.prepareForRemove();
-                    ViewPage.access$9010(this.parentPage);
+                    ViewPage.access$9110(this.parentPage);
                     this.parentPage.dialogsAdapter.notifyItemRemoved(i3);
                     int unused2 = DialogsActivity.this.dialogRemoveFinished = 2;
                     return;
@@ -1712,7 +1713,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 int addDialogToFolder = DialogsActivity.this.getMessagesController().addDialogToFolder(tLRPC$Dialog.id, DialogsActivity.this.folderId == 0 ? 1 : 0, -1, 0);
                 if (!(addDialogToFolder == 2 && i3 == 0)) {
                     this.parentPage.dialogsItemAnimator.prepareForRemove();
-                    ViewPage.access$9010(this.parentPage);
+                    ViewPage.access$9110(this.parentPage);
                     this.parentPage.dialogsAdapter.notifyItemRemoved(i3);
                     int unused3 = DialogsActivity.this.dialogRemoveFinished = 2;
                 }
@@ -1724,7 +1725,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             DialogsActivity.this.setDialogsListFrozen(true);
                             this.parentPage.dialogsAdapter.notifyItemChanged(0);
                         } else {
-                            ViewPage.access$9008(this.parentPage);
+                            ViewPage.access$9108(this.parentPage);
                             this.parentPage.dialogsAdapter.notifyItemInserted(0);
                             if (!SharedConfig.archiveHidden && this.parentPage.layoutManager.findFirstVisibleItemPosition() == 0) {
                                 boolean unused5 = DialogsActivity.this.disableActionBarScrolling = true;
@@ -1782,7 +1783,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     int unused3 = DialogsActivity.this.dialogInsertFinished = 2;
                     DialogsActivity.this.setDialogsListFrozen(true);
                     this.parentPage.dialogsItemAnimator.prepareForRemove();
-                    ViewPage.access$9008(this.parentPage);
+                    ViewPage.access$9108(this.parentPage);
                     this.parentPage.dialogsAdapter.notifyItemInserted(indexOf);
                 }
                 if (dialogs2.isEmpty()) {
@@ -1795,7 +1796,7 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     }
                     DialogsActivity.frozenDialogsList.remove(0);
                     this.parentPage.dialogsItemAnimator.prepareForRemove();
-                    ViewPage.access$9010(this.parentPage);
+                    ViewPage.access$9110(this.parentPage);
                     this.parentPage.dialogsAdapter.notifyItemRemoved(0);
                     return;
                 }
@@ -1954,6 +1955,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
     /* access modifiers changed from: protected */
     public ActionBar createActionBar(Context context) {
         AnonymousClass2 r0 = new ActionBar(context) {
+            public void setTranslationY(float f) {
+                super.setTranslationY(f);
+                DialogsActivity.this.fragmentView.invalidate();
+            }
+
             /* access modifiers changed from: protected */
             public boolean shouldClipChild(View view) {
                 return super.shouldClipChild(view) || view == DialogsActivity.this.doneItem;
@@ -3046,8 +3052,8 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         }
         if (this.fragmentLocationContextView != null) {
             FragmentContextView fragmentContextView4 = this.fragmentContextView;
-            if (fragmentContextView4 != null) {
-                f = 0.0f + fragmentContextView4.getTopPadding();
+            if (fragmentContextView4 != null && fragmentContextView4.getVisibility() == 0) {
+                f = 0.0f + ((float) AndroidUtilities.dp((float) this.fragmentContextView.getStyleHeight())) + this.fragmentContextView.getTopPadding();
             }
             FragmentContextView fragmentContextView5 = this.fragmentLocationContextView;
             float topPadding3 = f + fragmentContextView5.getTopPadding() + this.actionBar.getTranslationY();
@@ -3283,11 +3289,11 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                             DialogsActivity.this.perfromSelectedDialogsAction(i2, true);
                         }
                     } else if (DialogsActivity.this.getParentActivity() != null) {
-                        DialogsActivityDelegate access$19400 = DialogsActivity.this.delegate;
+                        DialogsActivityDelegate access$19600 = DialogsActivity.this.delegate;
                         LaunchActivity launchActivity = (LaunchActivity) DialogsActivity.this.getParentActivity();
                         launchActivity.switchToAccount(i2 - 10, true);
                         DialogsActivity dialogsActivity4 = new DialogsActivity(DialogsActivity.this.arguments);
-                        dialogsActivity4.setDelegate(access$19400);
+                        dialogsActivity4.setDelegate(access$19600);
                         launchActivity.presentFragment(dialogsActivity4, false, true);
                     }
                 }
@@ -4586,24 +4592,29 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (this.isPaused) {
             z = false;
         }
+        float f = 1.0f;
         if (this.searchIsShowed) {
             ValueAnimator valueAnimator = this.filtersTabAnimator;
             if (valueAnimator != null) {
                 valueAnimator.cancel();
             }
-            this.filterTabsViewIsVisible = this.canShowFilterTabsView;
+            boolean z2 = this.canShowFilterTabsView;
+            this.filterTabsViewIsVisible = z2;
+            if (!z2) {
+                f = 0.0f;
+            }
+            this.filterTabsProgress = f;
             return;
         }
-        final boolean z2 = this.canShowFilterTabsView;
-        if (this.filterTabsViewIsVisible != z2) {
+        final boolean z3 = this.canShowFilterTabsView;
+        if (this.filterTabsViewIsVisible != z3) {
             ValueAnimator valueAnimator2 = this.filtersTabAnimator;
             if (valueAnimator2 != null) {
                 valueAnimator2.cancel();
             }
-            this.filterTabsViewIsVisible = z2;
-            float f = 0.0f;
+            this.filterTabsViewIsVisible = z3;
             if (z) {
-                if (z2) {
+                if (z3) {
                     if (this.filterTabsView.getVisibility() != 0) {
                         this.filterTabsView.setVisibility(0);
                     }
@@ -4619,14 +4630,16 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                     public void onAnimationEnd(Animator animator) {
                         DialogsActivity dialogsActivity = DialogsActivity.this;
                         dialogsActivity.filtersTabAnimator = null;
-                        if (!z2) {
+                        if (!z3) {
                             dialogsActivity.filterTabsView.setVisibility(8);
                         }
-                        DialogsActivity.this.fragmentView.requestLayout();
+                        if (DialogsActivity.this.fragmentView != null) {
+                            DialogsActivity.this.fragmentView.requestLayout();
+                        }
                         NotificationCenter.getInstance(i2).onAnimationFinish(DialogsActivity.this.animationIndex);
                     }
                 });
-                this.filtersTabAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(z2, translationY) {
+                this.filtersTabAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener(z3, translationY) {
                     public final /* synthetic */ boolean f$1;
                     public final /* synthetic */ float f$2;
 
@@ -4646,12 +4659,12 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 this.fragmentView.requestLayout();
                 return;
             }
-            if (z2) {
-                f = 1.0f;
+            if (!z3) {
+                f = 0.0f;
             }
             this.filterTabsProgress = f;
             FilterTabsView filterTabsView2 = this.filterTabsView;
-            if (!z2) {
+            if (!z3) {
                 i = 8;
             }
             filterTabsView2.setVisibility(i);
@@ -4667,7 +4680,10 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
         if (!z) {
             setScrollY(f * floatValue);
         }
-        this.fragmentView.invalidate();
+        View view = this.fragmentView;
+        if (view != null) {
+            view.invalidate();
+        }
     }
 
     private void setSearchAnimationProgress(float f) {
@@ -8297,169 +8313,169 @@ public class DialogsActivity extends BaseFragment implements NotificationCenter.
                 } else {
                     arrayList.add(new ThemeDescription(this.viewPages[i2].listView, ThemeDescription.FLAG_LISTGLOWCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarDefaultArchived"));
                 }
-                DialogsRecyclerView access$8900 = this.viewPages[i2].listView;
+                DialogsRecyclerView access$9000 = this.viewPages[i2].listView;
                 int i3 = ThemeDescription.FLAG_TEXTCOLOR;
                 Class[] clsArr = new Class[1];
                 clsArr[c] = DialogsEmptyCell.class;
                 String[] strArr = new String[1];
                 strArr[c] = "emptyTextView1";
-                arrayList.add(new ThemeDescription((View) access$8900, i3, clsArr, strArr, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_nameMessage_threeLines"));
-                DialogsRecyclerView access$89002 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$9000, i3, clsArr, strArr, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_nameMessage_threeLines"));
+                DialogsRecyclerView access$90002 = this.viewPages[i2].listView;
                 int i4 = ThemeDescription.FLAG_TEXTCOLOR;
                 Class[] clsArr2 = new Class[1];
                 clsArr2[c] = DialogsEmptyCell.class;
                 String[] strArr2 = new String[1];
                 strArr2[c] = "emptyTextView2";
-                arrayList.add(new ThemeDescription((View) access$89002, i4, clsArr2, strArr2, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_message"));
+                arrayList.add(new ThemeDescription((View) access$90002, i4, clsArr2, strArr2, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chats_message"));
                 if (SharedConfig.archiveHidden) {
-                    DialogsRecyclerView access$89003 = this.viewPages[i2].listView;
+                    DialogsRecyclerView access$90003 = this.viewPages[i2].listView;
                     Class[] clsArr3 = new Class[1];
                     clsArr3[c] = DialogCell.class;
                     RLottieDrawable[] rLottieDrawableArr = new RLottieDrawable[1];
                     rLottieDrawableArr[c] = Theme.dialogs_archiveAvatarDrawable;
-                    arrayList.add(new ThemeDescription((View) access$89003, 0, clsArr3, rLottieDrawableArr, "Arrow1", "avatar_backgroundArchivedHidden"));
-                    DialogsRecyclerView access$89004 = this.viewPages[i2].listView;
+                    arrayList.add(new ThemeDescription((View) access$90003, 0, clsArr3, rLottieDrawableArr, "Arrow1", "avatar_backgroundArchivedHidden"));
+                    DialogsRecyclerView access$90004 = this.viewPages[i2].listView;
                     Class[] clsArr4 = new Class[1];
                     clsArr4[c] = DialogCell.class;
                     RLottieDrawable[] rLottieDrawableArr2 = new RLottieDrawable[1];
                     rLottieDrawableArr2[c] = Theme.dialogs_archiveAvatarDrawable;
-                    arrayList.add(new ThemeDescription((View) access$89004, 0, clsArr4, rLottieDrawableArr2, "Arrow2", "avatar_backgroundArchivedHidden"));
+                    arrayList.add(new ThemeDescription((View) access$90004, 0, clsArr4, rLottieDrawableArr2, "Arrow2", "avatar_backgroundArchivedHidden"));
                 } else {
-                    DialogsRecyclerView access$89005 = this.viewPages[i2].listView;
+                    DialogsRecyclerView access$90005 = this.viewPages[i2].listView;
                     Class[] clsArr5 = new Class[1];
                     clsArr5[c] = DialogCell.class;
                     RLottieDrawable[] rLottieDrawableArr3 = new RLottieDrawable[1];
                     rLottieDrawableArr3[c] = Theme.dialogs_archiveAvatarDrawable;
-                    arrayList.add(new ThemeDescription((View) access$89005, 0, clsArr5, rLottieDrawableArr3, "Arrow1", "avatar_backgroundArchived"));
-                    DialogsRecyclerView access$89006 = this.viewPages[i2].listView;
+                    arrayList.add(new ThemeDescription((View) access$90005, 0, clsArr5, rLottieDrawableArr3, "Arrow1", "avatar_backgroundArchived"));
+                    DialogsRecyclerView access$90006 = this.viewPages[i2].listView;
                     Class[] clsArr6 = new Class[1];
                     clsArr6[c] = DialogCell.class;
                     RLottieDrawable[] rLottieDrawableArr4 = new RLottieDrawable[1];
                     rLottieDrawableArr4[c] = Theme.dialogs_archiveAvatarDrawable;
-                    arrayList.add(new ThemeDescription((View) access$89006, 0, clsArr6, rLottieDrawableArr4, "Arrow2", "avatar_backgroundArchived"));
+                    arrayList.add(new ThemeDescription((View) access$90006, 0, clsArr6, rLottieDrawableArr4, "Arrow2", "avatar_backgroundArchived"));
                 }
-                DialogsRecyclerView access$89007 = this.viewPages[i2].listView;
+                DialogsRecyclerView access$90007 = this.viewPages[i2].listView;
                 Class[] clsArr7 = new Class[1];
                 clsArr7[c] = DialogCell.class;
                 RLottieDrawable[] rLottieDrawableArr5 = new RLottieDrawable[1];
                 rLottieDrawableArr5[c] = Theme.dialogs_archiveAvatarDrawable;
-                arrayList.add(new ThemeDescription((View) access$89007, 0, clsArr7, rLottieDrawableArr5, "Box2", "avatar_text"));
-                DialogsRecyclerView access$89008 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$90007, 0, clsArr7, rLottieDrawableArr5, "Box2", "avatar_text"));
+                DialogsRecyclerView access$90008 = this.viewPages[i2].listView;
                 Class[] clsArr8 = new Class[1];
                 clsArr8[c] = DialogCell.class;
                 RLottieDrawable[] rLottieDrawableArr6 = new RLottieDrawable[1];
                 rLottieDrawableArr6[c] = Theme.dialogs_archiveAvatarDrawable;
-                arrayList.add(new ThemeDescription((View) access$89008, 0, clsArr8, rLottieDrawableArr6, "Box1", "avatar_text"));
-                DialogsRecyclerView access$89009 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$90008, 0, clsArr8, rLottieDrawableArr6, "Box1", "avatar_text"));
+                DialogsRecyclerView access$90009 = this.viewPages[i2].listView;
                 Class[] clsArr9 = new Class[1];
                 clsArr9[c] = DialogCell.class;
                 RLottieDrawable[] rLottieDrawableArr7 = new RLottieDrawable[1];
                 rLottieDrawableArr7[c] = Theme.dialogs_pinArchiveDrawable;
-                arrayList.add(new ThemeDescription((View) access$89009, 0, clsArr9, rLottieDrawableArr7, "Arrow", "chats_archiveIcon"));
-                DialogsRecyclerView access$890010 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$90009, 0, clsArr9, rLottieDrawableArr7, "Arrow", "chats_archiveIcon"));
+                DialogsRecyclerView access$900010 = this.viewPages[i2].listView;
                 Class[] clsArr10 = new Class[1];
                 clsArr10[c] = DialogCell.class;
                 RLottieDrawable[] rLottieDrawableArr8 = new RLottieDrawable[1];
                 rLottieDrawableArr8[c] = Theme.dialogs_pinArchiveDrawable;
-                arrayList.add(new ThemeDescription((View) access$890010, 0, clsArr10, rLottieDrawableArr8, "Line", "chats_archiveIcon"));
-                DialogsRecyclerView access$890011 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$900010, 0, clsArr10, rLottieDrawableArr8, "Line", "chats_archiveIcon"));
+                DialogsRecyclerView access$900011 = this.viewPages[i2].listView;
                 Class[] clsArr11 = new Class[1];
                 clsArr11[c] = DialogCell.class;
                 RLottieDrawable[] rLottieDrawableArr9 = new RLottieDrawable[1];
                 rLottieDrawableArr9[c] = Theme.dialogs_unpinArchiveDrawable;
-                arrayList.add(new ThemeDescription((View) access$890011, 0, clsArr11, rLottieDrawableArr9, "Arrow", "chats_archiveIcon"));
-                DialogsRecyclerView access$890012 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$900011, 0, clsArr11, rLottieDrawableArr9, "Arrow", "chats_archiveIcon"));
+                DialogsRecyclerView access$900012 = this.viewPages[i2].listView;
                 Class[] clsArr12 = new Class[1];
                 clsArr12[c] = DialogCell.class;
                 RLottieDrawable[] rLottieDrawableArr10 = new RLottieDrawable[1];
                 rLottieDrawableArr10[c] = Theme.dialogs_unpinArchiveDrawable;
-                arrayList.add(new ThemeDescription((View) access$890012, 0, clsArr12, rLottieDrawableArr10, "Line", "chats_archiveIcon"));
-                DialogsRecyclerView access$890013 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$900012, 0, clsArr12, rLottieDrawableArr10, "Line", "chats_archiveIcon"));
+                DialogsRecyclerView access$900013 = this.viewPages[i2].listView;
                 Class[] clsArr13 = new Class[1];
                 clsArr13[c] = DialogCell.class;
                 RLottieDrawable[] rLottieDrawableArr11 = new RLottieDrawable[1];
                 rLottieDrawableArr11[c] = Theme.dialogs_archiveDrawable;
-                arrayList.add(new ThemeDescription((View) access$890013, 0, clsArr13, rLottieDrawableArr11, "Arrow", "chats_archiveBackground"));
-                DialogsRecyclerView access$890014 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$900013, 0, clsArr13, rLottieDrawableArr11, "Arrow", "chats_archiveBackground"));
+                DialogsRecyclerView access$900014 = this.viewPages[i2].listView;
                 Class[] clsArr14 = new Class[1];
                 clsArr14[c] = DialogCell.class;
                 RLottieDrawable[] rLottieDrawableArr12 = new RLottieDrawable[1];
                 rLottieDrawableArr12[c] = Theme.dialogs_archiveDrawable;
-                arrayList.add(new ThemeDescription((View) access$890014, 0, clsArr14, rLottieDrawableArr12, "Box2", "chats_archiveIcon"));
-                DialogsRecyclerView access$890015 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$900014, 0, clsArr14, rLottieDrawableArr12, "Box2", "chats_archiveIcon"));
+                DialogsRecyclerView access$900015 = this.viewPages[i2].listView;
                 Class[] clsArr15 = new Class[1];
                 clsArr15[c] = DialogCell.class;
                 RLottieDrawable[] rLottieDrawableArr13 = new RLottieDrawable[1];
                 rLottieDrawableArr13[c] = Theme.dialogs_archiveDrawable;
-                arrayList.add(new ThemeDescription((View) access$890015, 0, clsArr15, rLottieDrawableArr13, "Box1", "chats_archiveIcon"));
-                DialogsRecyclerView access$890016 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$900015, 0, clsArr15, rLottieDrawableArr13, "Box1", "chats_archiveIcon"));
+                DialogsRecyclerView access$900016 = this.viewPages[i2].listView;
                 Class[] clsArr16 = new Class[1];
                 clsArr16[c] = DialogCell.class;
                 RLottieDrawable[] rLottieDrawableArr14 = new RLottieDrawable[1];
                 rLottieDrawableArr14[c] = Theme.dialogs_hidePsaDrawable;
-                arrayList.add(new ThemeDescription((View) access$890016, 0, clsArr16, rLottieDrawableArr14, "Line 1", "chats_archiveBackground"));
-                DialogsRecyclerView access$890017 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$900016, 0, clsArr16, rLottieDrawableArr14, "Line 1", "chats_archiveBackground"));
+                DialogsRecyclerView access$900017 = this.viewPages[i2].listView;
                 Class[] clsArr17 = new Class[1];
                 clsArr17[c] = DialogCell.class;
                 RLottieDrawable[] rLottieDrawableArr15 = new RLottieDrawable[1];
                 rLottieDrawableArr15[c] = Theme.dialogs_hidePsaDrawable;
-                arrayList.add(new ThemeDescription((View) access$890017, 0, clsArr17, rLottieDrawableArr15, "Line 2", "chats_archiveBackground"));
-                DialogsRecyclerView access$890018 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$900017, 0, clsArr17, rLottieDrawableArr15, "Line 2", "chats_archiveBackground"));
+                DialogsRecyclerView access$900018 = this.viewPages[i2].listView;
                 Class[] clsArr18 = new Class[1];
                 clsArr18[c] = DialogCell.class;
                 RLottieDrawable[] rLottieDrawableArr16 = new RLottieDrawable[1];
                 rLottieDrawableArr16[c] = Theme.dialogs_hidePsaDrawable;
-                arrayList.add(new ThemeDescription((View) access$890018, 0, clsArr18, rLottieDrawableArr16, "Line 3", "chats_archiveBackground"));
-                DialogsRecyclerView access$890019 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$900018, 0, clsArr18, rLottieDrawableArr16, "Line 3", "chats_archiveBackground"));
+                DialogsRecyclerView access$900019 = this.viewPages[i2].listView;
                 Class[] clsArr19 = new Class[1];
                 clsArr19[c] = DialogCell.class;
                 RLottieDrawable[] rLottieDrawableArr17 = new RLottieDrawable[1];
                 rLottieDrawableArr17[c] = Theme.dialogs_hidePsaDrawable;
-                arrayList.add(new ThemeDescription((View) access$890019, 0, clsArr19, rLottieDrawableArr17, "Cup Red", "chats_archiveIcon"));
-                DialogsRecyclerView access$890020 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$900019, 0, clsArr19, rLottieDrawableArr17, "Cup Red", "chats_archiveIcon"));
+                DialogsRecyclerView access$900020 = this.viewPages[i2].listView;
                 Class[] clsArr20 = new Class[1];
                 clsArr20[c] = DialogCell.class;
                 RLottieDrawable[] rLottieDrawableArr18 = new RLottieDrawable[1];
                 rLottieDrawableArr18[c] = Theme.dialogs_hidePsaDrawable;
-                arrayList.add(new ThemeDescription((View) access$890020, 0, clsArr20, rLottieDrawableArr18, "Box", "chats_archiveIcon"));
-                DialogsRecyclerView access$890021 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$900020, 0, clsArr20, rLottieDrawableArr18, "Box", "chats_archiveIcon"));
+                DialogsRecyclerView access$900021 = this.viewPages[i2].listView;
                 Class[] clsArr21 = new Class[1];
                 clsArr21[c] = DialogCell.class;
                 RLottieDrawable[] rLottieDrawableArr19 = new RLottieDrawable[1];
                 rLottieDrawableArr19[c] = Theme.dialogs_unarchiveDrawable;
-                arrayList.add(new ThemeDescription((View) access$890021, 0, clsArr21, rLottieDrawableArr19, "Arrow1", "chats_archiveIcon"));
-                DialogsRecyclerView access$890022 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$900021, 0, clsArr21, rLottieDrawableArr19, "Arrow1", "chats_archiveIcon"));
+                DialogsRecyclerView access$900022 = this.viewPages[i2].listView;
                 Class[] clsArr22 = new Class[1];
                 clsArr22[c] = DialogCell.class;
                 RLottieDrawable[] rLottieDrawableArr20 = new RLottieDrawable[1];
                 rLottieDrawableArr20[c] = Theme.dialogs_unarchiveDrawable;
-                arrayList.add(new ThemeDescription((View) access$890022, 0, clsArr22, rLottieDrawableArr20, "Arrow2", "chats_archivePinBackground"));
-                DialogsRecyclerView access$890023 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$900022, 0, clsArr22, rLottieDrawableArr20, "Arrow2", "chats_archivePinBackground"));
+                DialogsRecyclerView access$900023 = this.viewPages[i2].listView;
                 Class[] clsArr23 = new Class[1];
                 clsArr23[c] = DialogCell.class;
                 RLottieDrawable[] rLottieDrawableArr21 = new RLottieDrawable[1];
                 rLottieDrawableArr21[c] = Theme.dialogs_unarchiveDrawable;
-                arrayList.add(new ThemeDescription((View) access$890023, 0, clsArr23, rLottieDrawableArr21, "Box2", "chats_archiveIcon"));
-                DialogsRecyclerView access$890024 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$900023, 0, clsArr23, rLottieDrawableArr21, "Box2", "chats_archiveIcon"));
+                DialogsRecyclerView access$900024 = this.viewPages[i2].listView;
                 Class[] clsArr24 = new Class[1];
                 clsArr24[c] = DialogCell.class;
                 RLottieDrawable[] rLottieDrawableArr22 = new RLottieDrawable[1];
                 rLottieDrawableArr22[c] = Theme.dialogs_unarchiveDrawable;
-                arrayList.add(new ThemeDescription((View) access$890024, 0, clsArr24, rLottieDrawableArr22, "Box1", "chats_archiveIcon"));
-                DialogsRecyclerView access$890025 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$900024, 0, clsArr24, rLottieDrawableArr22, "Box1", "chats_archiveIcon"));
+                DialogsRecyclerView access$900025 = this.viewPages[i2].listView;
                 Class[] clsArr25 = new Class[1];
                 clsArr25[c] = UserCell.class;
                 String[] strArr3 = new String[1];
                 strArr3[c] = "nameTextView";
-                arrayList.add(new ThemeDescription((View) access$890025, 0, clsArr25, strArr3, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
-                DialogsRecyclerView access$890026 = this.viewPages[i2].listView;
+                arrayList.add(new ThemeDescription((View) access$900025, 0, clsArr25, strArr3, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "windowBackgroundWhiteBlackText"));
+                DialogsRecyclerView access$900026 = this.viewPages[i2].listView;
                 Class[] clsArr26 = new Class[1];
                 clsArr26[c] = UserCell.class;
                 String[] strArr4 = new String[1];
                 strArr4[c] = "statusColor";
                 ThemeDescription themeDescription = r1;
                 int i5 = i2;
-                ThemeDescription themeDescription2 = new ThemeDescription((View) access$890026, 0, clsArr26, strArr4, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r10, "windowBackgroundWhiteGrayText");
+                ThemeDescription themeDescription2 = new ThemeDescription((View) access$900026, 0, clsArr26, strArr4, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r10, "windowBackgroundWhiteGrayText");
                 arrayList.add(themeDescription);
                 arrayList.add(new ThemeDescription((View) this.viewPages[i5].listView, 0, new Class[]{UserCell.class}, new String[]{"statusOnlineColor"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) r10, "windowBackgroundWhiteBlueText"));
                 arrayList.add(new ThemeDescription(this.viewPages[i5].progressView, ThemeDescription.FLAG_PROGRESSBAR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "progressCircle"));

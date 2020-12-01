@@ -822,7 +822,12 @@ public class CropView extends FrameLayout implements CropAreaView.AreaViewListen
 
     public void onAreaChange() {
         this.areaView.setGridType(CropAreaView.GridType.MAJOR, false);
-        this.state.translate(this.previousAreaRect.centerX() - this.areaView.getCropCenterX(), this.previousAreaRect.centerY() - this.areaView.getCropCenterY());
+        float centerX = this.previousAreaRect.centerX() - this.areaView.getCropCenterX();
+        float centerY = this.previousAreaRect.centerY() - this.areaView.getCropCenterY();
+        CropState cropState = this.state;
+        if (cropState != null) {
+            cropState.translate(centerX, centerY);
+        }
         updateMatrix();
         this.areaView.getCropRect(this.previousAreaRect);
         fitContentInBounds(true, false, false);

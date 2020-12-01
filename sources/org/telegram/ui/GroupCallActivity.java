@@ -14,6 +14,7 @@ import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
@@ -170,6 +171,7 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
     public Paint leaveBackgroundPaint = new Paint(1);
     /* access modifiers changed from: private */
     public VoIPToggleButton leaveButton;
+    private ActionBarMenuSubItem leaveItem;
     /* access modifiers changed from: private */
     public ListAdapter listAdapter;
     /* access modifiers changed from: private */
@@ -196,8 +198,17 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
     public int oldSelfUserRow;
     /* access modifiers changed from: private */
     public int oldUsersStartRow;
+    private ActionBarMenuItem otherItem;
     /* access modifiers changed from: private */
     public Paint paint = new Paint(7);
+    /* access modifiers changed from: private */
+    public Runnable pressRunnable = new Runnable() {
+        public final void run() {
+            GroupCallActivity.this.lambda$new$0$GroupCallActivity();
+        }
+    };
+    /* access modifiers changed from: private */
+    public boolean pressed;
     /* access modifiers changed from: private */
     public WeavingState prevState;
     /* access modifiers changed from: private */
@@ -208,6 +219,8 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
     public Paint radialPaint;
     /* access modifiers changed from: private */
     public RadialProgressView radialProgressView;
+    /* access modifiers changed from: private */
+    public boolean scheduled;
     /* access modifiers changed from: private */
     public TLRPC$TL_groupCallParticipant selfDummyParticipant;
     /* access modifiers changed from: private */
@@ -220,7 +233,7 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
     /* access modifiers changed from: private */
     public BlobDrawable tinyWaveDrawable;
 
-    static /* synthetic */ boolean lambda$createView$2(View view, MotionEvent motionEvent) {
+    static /* synthetic */ boolean lambda$createView$3(View view, MotionEvent motionEvent) {
         return true;
     }
 
@@ -242,6 +255,19 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
 
     public /* synthetic */ void onVideoAvailableChange(boolean z) {
         VoIPBaseService.StateListener.CC.$default$onVideoAvailableChange(this, z);
+    }
+
+    /* access modifiers changed from: private */
+    /* renamed from: lambda$new$0 */
+    public /* synthetic */ void lambda$new$0$GroupCallActivity() {
+        if (this.scheduled && VoIPService.getSharedInstance() != null) {
+            updateMuteButton(MUTE_BUTTON_STATE_MUTE, true);
+            VoIPService.getSharedInstance().setMicMute(false);
+            this.muteButton.performHapticFeedback(3, 2);
+            editCallMember(getAccountInstance(), this.call, getUserConfig().getCurrentUser(), false);
+            this.scheduled = false;
+            this.pressed = true;
+        }
     }
 
     private class WeavingState {
@@ -347,11 +373,7 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
                     this.oldParticipants.addAll(this.call.sortedParticipants);
                     this.oldCount = this.listAdapter.getItemCount();
                     if (this.avatarContainer != null) {
-                        int i4 = this.call.call.participants_count + (this.listAdapter.addSelfToCounter() ? 1 : 0);
-                        if (i4 == 2) {
-                            FileLog.d("test");
-                        }
-                        this.avatarContainer.setSubtitle(LocaleController.formatPluralString("Members", i4));
+                        this.avatarContainer.setSubtitle(LocaleController.formatPluralString("Members", this.call.call.participants_count + (this.listAdapter.addSelfToCounter() ? 1 : 0)));
                     }
                     updateState(true);
                 }
@@ -371,33 +393,50 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
             }
             showDialog(AlertsCreator.createSimpleAlert(getParentActivity(), LocaleController.getString("VoipGroupVoiceChat", NUM), str).create(), new DialogInterface.OnDismissListener() {
                 public final void onDismiss(DialogInterface dialogInterface) {
-                    GroupCallActivity.this.lambda$didReceivedNotification$0$GroupCallActivity(dialogInterface);
+                    GroupCallActivity.this.lambda$didReceivedNotification$1$GroupCallActivity(dialogInterface);
                 }
             });
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$didReceivedNotification$0 */
-    public /* synthetic */ void lambda$didReceivedNotification$0$GroupCallActivity(DialogInterface dialogInterface) {
+    /* renamed from: lambda$didReceivedNotification$1 */
+    public /* synthetic */ void lambda$didReceivedNotification$1$GroupCallActivity(DialogInterface dialogInterface) {
         finishFragment();
     }
 
     private void updateItems() {
+        boolean z;
+        boolean z2 = true;
+        int i = 8;
         if (!TextUtils.isEmpty(this.currentChat.username) || ChatObject.canUserDoAdminAction(this.currentChat, 3)) {
             this.inviteItem.setVisibility(0);
+            z = true;
         } else {
             this.inviteItem.setVisibility(8);
+            z = false;
+        }
+        if (ChatObject.canManageCalls(this.currentChat)) {
+            this.leaveItem.setVisibility(0);
+            z = true;
+        } else {
+            this.leaveItem.setVisibility(8);
         }
         if (!ChatObject.canManageCalls(this.currentChat) || !this.call.call.can_change_join_muted) {
             this.everyoneItem.setVisibility(8);
             this.adminItem.setVisibility(8);
             this.dividerItem.setVisibility(8);
-            return;
+            z2 = z;
+        } else {
+            this.everyoneItem.setVisibility(0);
+            this.adminItem.setVisibility(0);
+            this.dividerItem.setVisibility(0);
         }
-        this.everyoneItem.setVisibility(0);
-        this.adminItem.setVisibility(0);
-        this.dividerItem.setVisibility(0);
+        ActionBarMenuItem actionBarMenuItem = this.otherItem;
+        if (z2) {
+            i = 0;
+        }
+        actionBarMenuItem.setVisibility(i);
     }
 
     public boolean onFragmentCreate() {
@@ -426,7 +465,7 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
         }
         VoIPService.audioLevelsCallback = new NativeInstance.AudioLevelsCallback() {
             public final void run(int[] iArr, float[] fArr) {
-                GroupCallActivity.this.lambda$onFragmentCreate$1$GroupCallActivity(iArr, fArr);
+                GroupCallActivity.this.lambda$onFragmentCreate$2$GroupCallActivity(iArr, fArr);
             }
         };
         getNotificationCenter().addObserver(this, NotificationCenter.groupCallUpdated);
@@ -436,8 +475,8 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onFragmentCreate$1 */
-    public /* synthetic */ void lambda$onFragmentCreate$1$GroupCallActivity(int[] iArr, float[] fArr) {
+    /* renamed from: lambda$onFragmentCreate$2 */
+    public /* synthetic */ void lambda$onFragmentCreate$2$GroupCallActivity(int[] iArr, float[] fArr) {
         int indexOf;
         RecyclerView.ViewHolder findViewHolderForAdapterPosition;
         for (int i = 0; i < iArr.length; i++) {
@@ -470,13 +509,28 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
         updateState(this.fragmentView != null && !this.isPaused);
     }
 
+    private void cancenMutePress() {
+        if (this.scheduled) {
+            this.scheduled = false;
+            AndroidUtilities.cancelRunOnUIThread(this.pressRunnable);
+        }
+        if (this.pressed) {
+            this.pressed = false;
+            MotionEvent obtain = MotionEvent.obtain(0, 0, 3, 0.0f, 0.0f, 0);
+            this.muteButton.onTouchEvent(obtain);
+            obtain.recycle();
+        }
+    }
+
     private void updateState(boolean z) {
         int i = this.currentCallState;
         if (i == 1 || i == 2 || i == 6 || i == 5) {
+            cancenMutePress();
             updateMuteButton(MUTE_BUTTON_STATE_CONNECTING, z);
         } else if (VoIPService.getSharedInstance() != null) {
             TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant = this.call.participants.get(getUserConfig().getClientUserId());
             if (tLRPC$TL_groupCallParticipant != null && !tLRPC$TL_groupCallParticipant.can_self_unmute && tLRPC$TL_groupCallParticipant.muted && !ChatObject.canManageCalls(this.currentChat)) {
+                cancenMutePress();
                 updateMuteButton(MUTE_BUTTON_STATE_MUTED_BY_ADMIN, z);
                 VoIPService.getSharedInstance().setMicMute(true);
             } else if (VoIPService.getSharedInstance().isMicMute()) {
@@ -542,7 +596,7 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
                             return;
                         }
                         openShareAlert(str);
-                    } else if (i == 4) {
+                    } else if (i == 4 && GroupCallActivity.this.getParentActivity() != null) {
                         AlertDialog.Builder builder = new AlertDialog.Builder((Context) GroupCallActivity.this.getParentActivity());
                         builder.setTitle(LocaleController.getString("VoipGroupEndAlertTitle", NUM));
                         builder.setMessage(LocaleController.getString("VoipGroupEndAlertText", NUM));
@@ -625,21 +679,22 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
             }
         });
         ActionBarMenuItem addItem = this.actionBar.createMenu().addItem(10, NUM);
+        this.otherItem = addItem;
         addItem.setContentDescription(LocaleController.getString("AccDescrMoreOptions", NUM));
-        this.everyoneItem = addItem.addSubItem(1, 0, (CharSequence) LocaleController.getString("VoipGroupAllCanSpeak", NUM), true);
-        this.adminItem = addItem.addSubItem(2, 0, (CharSequence) LocaleController.getString("VoipGroupOnlyAdminsCanSpeak", NUM), true);
+        this.everyoneItem = this.otherItem.addSubItem(1, 0, (CharSequence) LocaleController.getString("VoipGroupAllCanSpeak", NUM), true);
+        this.adminItem = this.otherItem.addSubItem(2, 0, (CharSequence) LocaleController.getString("VoipGroupOnlyAdminsCanSpeak", NUM), true);
         this.everyoneItem.setCheckColor(Theme.getColor("voipgroup_checkMenu"));
         this.everyoneItem.setColors(Theme.getColor("voipgroup_checkMenu"), Theme.getColor("voipgroup_checkMenu"));
         this.adminItem.setCheckColor(Theme.getColor("voipgroup_checkMenu"));
         this.adminItem.setColors(Theme.getColor("voipgroup_checkMenu"), Theme.getColor("voipgroup_checkMenu"));
-        this.dividerItem = addItem.addDivider(Theme.getColor("voipgroup_listViewBackground"));
-        this.inviteItem = addItem.addSubItem(3, NUM, LocaleController.getString("VoipGroupShareInviteLink", NUM));
-        ActionBarMenuSubItem addSubItem = addItem.addSubItem(4, NUM, LocaleController.getString("VoipGroupEndChat", NUM));
-        addItem.setPopupItemsColor(Theme.getColor("voipgroup_actionBarItems"), false);
-        addItem.setPopupItemsColor(Theme.getColor("voipgroup_actionBarItems"), true);
-        addItem.setPopupItemsSelectorColor(Theme.getColor("voipgroup_actionBarItemsSelector"));
-        addSubItem.setColors(Theme.getColor("voipgroup_leaveCallMenu"), Theme.getColor("voipgroup_leaveCallMenu"));
-        addItem.redrawPopup(Theme.getColor("voipgroup_actionBar"));
+        this.dividerItem = this.otherItem.addDivider(Theme.getColor("voipgroup_listViewBackground"));
+        this.inviteItem = this.otherItem.addSubItem(3, NUM, LocaleController.getString("VoipGroupShareInviteLink", NUM));
+        this.leaveItem = this.otherItem.addSubItem(4, NUM, LocaleController.getString("VoipGroupEndChat", NUM));
+        this.otherItem.setPopupItemsColor(Theme.getColor("voipgroup_actionBarItems"), false);
+        this.otherItem.setPopupItemsColor(Theme.getColor("voipgroup_actionBarItems"), true);
+        this.otherItem.setPopupItemsSelectorColor(Theme.getColor("voipgroup_actionBarItemsSelector"));
+        this.leaveItem.setColors(Theme.getColor("voipgroup_leaveCallMenu"), Theme.getColor("voipgroup_leaveCallMenu"));
+        this.otherItem.redrawPopup(Theme.getColor("voipgroup_actionBar"));
         ChatAvatarContainer chatAvatarContainer = new ChatAvatarContainer(context2, (ChatActivity) null, false);
         this.avatarContainer = chatAvatarContainer;
         this.actionBar.addView(chatAvatarContainer, 0, LayoutHelper.createFrame(-2, -1.0f, 51, !this.inPreviewMode ? 56.0f : 0.0f, 0.0f, 40.0f, 0.0f));
@@ -655,7 +710,7 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
         this.fragmentView = frameLayout;
         frameLayout.setBackgroundColor(Theme.getColor("voipgroup_actionBar"));
         this.fragmentView.setKeepScreenOn(true);
-        this.fragmentView.setOnTouchListener($$Lambda$GroupCallActivity$kpKj2OHUClkoACsgp5ZtSs7T2Bg.INSTANCE);
+        this.fragmentView.setOnTouchListener($$Lambda$GroupCallActivity$zFye6Mr_x3dzkjEV4W3VD_yVL08.INSTANCE);
         FrameLayout frameLayout2 = (FrameLayout) this.fragmentView;
         frameLayout2.setClipChildren(false);
         AnonymousClass2 r4 = new RecyclerListView(context2) {
@@ -678,7 +733,8 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
             }
         };
         this.listView = r4;
-        r4.setItemAnimator(new DefaultItemAnimator() {
+        r4.setClipChildren(false);
+        this.listView.setItemAnimator(new DefaultItemAnimator() {
             /* access modifiers changed from: protected */
             public void onMoveAnimationUpdate(RecyclerView.ViewHolder viewHolder) {
                 GroupCallActivity.this.listView.invalidate();
@@ -709,7 +765,7 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
         this.listView.setGlowColor(Theme.getColor("voipgroup_listViewBackground"));
         this.listView.setOnItemClickListener((RecyclerListView.OnItemClickListenerExtended) new RecyclerListView.OnItemClickListenerExtended() {
             public final void onItemClick(View view, int i, float f, float f2) {
-                GroupCallActivity.this.lambda$createView$3$GroupCallActivity(view, i, f, f2);
+                GroupCallActivity.this.lambda$createView$4$GroupCallActivity(view, i, f, f2);
             }
         });
         AnonymousClass6 r42 = new FrameLayout(context2) {
@@ -873,7 +929,7 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
         this.buttonsContainer.addView(this.soundButton, LayoutHelper.createFrame(68, 80.0f));
         this.soundButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                GroupCallActivity.this.lambda$createView$4$GroupCallActivity(view);
+                GroupCallActivity.this.lambda$createView$5$GroupCallActivity(view);
             }
         });
         VoIPToggleButton voIPToggleButton2 = new VoIPToggleButton(context2);
@@ -884,42 +940,19 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
         this.buttonsContainer.addView(this.leaveButton, LayoutHelper.createFrame(68, 80.0f));
         this.leaveButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                GroupCallActivity.this.lambda$createView$5$GroupCallActivity(view);
+                GroupCallActivity.this.lambda$createView$6$GroupCallActivity(view);
             }
         });
         AnonymousClass7 r43 = new RLottieImageView(context2) {
-            private Runnable pressRunnable = new Runnable() {
-                public final void run() {
-                    GroupCallActivity.AnonymousClass7.this.lambda$$0$GroupCallActivity$7();
-                }
-            };
-            private boolean pressed;
-            private boolean scheduled;
-
-            /* access modifiers changed from: private */
-            /* renamed from: lambda$$0 */
-            public /* synthetic */ void lambda$$0$GroupCallActivity$7() {
-                if (this.scheduled && VoIPService.getSharedInstance() != null) {
-                    GroupCallActivity.this.updateMuteButton(GroupCallActivity.MUTE_BUTTON_STATE_MUTE, true);
-                    VoIPService.getSharedInstance().setMicMute(false);
-                    GroupCallActivity.this.muteButton.performHapticFeedback(3, 2);
-                    AccountInstance accountInstance = GroupCallActivity.this.getAccountInstance();
-                    GroupCallActivity groupCallActivity = GroupCallActivity.this;
-                    GroupCallActivity.editCallMember(accountInstance, groupCallActivity.call, groupCallActivity.getUserConfig().getCurrentUser(), false);
-                    this.scheduled = false;
-                    this.pressed = true;
-                }
-            }
-
             public boolean onTouchEvent(MotionEvent motionEvent) {
                 if (motionEvent.getAction() == 0 && GroupCallActivity.this.muteButtonState == GroupCallActivity.MUTE_BUTTON_STATE_UNMUTE) {
-                    AndroidUtilities.runOnUIThread(this.pressRunnable, (long) ViewConfiguration.getTapTimeout());
-                    this.scheduled = true;
+                    AndroidUtilities.runOnUIThread(GroupCallActivity.this.pressRunnable, (long) ViewConfiguration.getTapTimeout());
+                    boolean unused = GroupCallActivity.this.scheduled = true;
                 } else if (motionEvent.getAction() == 1 || motionEvent.getAction() == 3) {
-                    if (this.scheduled) {
-                        AndroidUtilities.cancelRunOnUIThread(this.pressRunnable);
-                        this.scheduled = false;
-                    } else if (this.pressed) {
+                    if (GroupCallActivity.this.scheduled) {
+                        AndroidUtilities.cancelRunOnUIThread(GroupCallActivity.this.pressRunnable);
+                        boolean unused2 = GroupCallActivity.this.scheduled = false;
+                    } else if (GroupCallActivity.this.pressed) {
                         GroupCallActivity.this.updateMuteButton(GroupCallActivity.MUTE_BUTTON_STATE_UNMUTE, true);
                         if (VoIPService.getSharedInstance() != null) {
                             VoIPService.getSharedInstance().setMicMute(true);
@@ -928,7 +961,7 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
                             GroupCallActivity groupCallActivity = GroupCallActivity.this;
                             GroupCallActivity.editCallMember(accountInstance, groupCallActivity.call, groupCallActivity.getUserConfig().getCurrentUser(), true);
                         }
-                        this.pressed = false;
+                        boolean unused3 = GroupCallActivity.this.pressed = false;
                         MotionEvent obtain = MotionEvent.obtain(0, 0, 3, 0.0f, 0.0f, 0);
                         super.onTouchEvent(obtain);
                         obtain.recycle();
@@ -944,7 +977,7 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
         this.buttonsContainer.addView(this.muteButton, LayoutHelper.createFrame(122, 122, 49));
         this.muteButton.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
-                GroupCallActivity.this.lambda$createView$6$GroupCallActivity(view);
+                GroupCallActivity.this.lambda$createView$7$GroupCallActivity(view);
             }
         });
         RadialProgressView radialProgressView2 = new RadialProgressView(context2);
@@ -977,8 +1010,8 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$3 */
-    public /* synthetic */ void lambda$createView$3$GroupCallActivity(View view, int i, float f, float f2) {
+    /* renamed from: lambda$createView$4 */
+    public /* synthetic */ void lambda$createView$4$GroupCallActivity(View view, int i, float f, float f2) {
         if (view instanceof GroupCallUserCell) {
             if (ChatObject.canManageCalls(this.currentChat)) {
                 GroupCallUserCell groupCallUserCell = (GroupCallUserCell) view;
@@ -1060,22 +1093,22 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$4 */
-    public /* synthetic */ void lambda$createView$4$GroupCallActivity(View view) {
+    /* renamed from: lambda$createView$5 */
+    public /* synthetic */ void lambda$createView$5$GroupCallActivity(View view) {
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().toggleSpeakerphoneOrShowRouteSheet(getParentActivity());
         }
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$5 */
-    public /* synthetic */ void lambda$createView$5$GroupCallActivity(View view) {
+    /* renamed from: lambda$createView$6 */
+    public /* synthetic */ void lambda$createView$6$GroupCallActivity(View view) {
         onLeaveClick();
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$createView$6 */
-    public /* synthetic */ void lambda$createView$6$GroupCallActivity(View view) {
+    /* renamed from: lambda$createView$7 */
+    public /* synthetic */ void lambda$createView$7$GroupCallActivity(View view) {
         int i;
         if (VoIPService.getSharedInstance() != null && (i = this.muteButtonState) != MUTE_BUTTON_STATE_MUTED_BY_ADMIN && i != MUTE_BUTTON_STATE_CONNECTING) {
             int i2 = MUTE_BUTTON_STATE_UNMUTE;
@@ -1116,8 +1149,8 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
     }
 
     private void updateSpeakerPhoneIcon(boolean z) {
-        VoIPService sharedInstance = VoIPService.getSharedInstance();
-        if (sharedInstance != null) {
+        VoIPService sharedInstance;
+        if (this.soundButton != null && (sharedInstance = VoIPService.getSharedInstance()) != null) {
             if (sharedInstance.isBluetoothOn()) {
                 this.soundButton.setData(NUM, -1, 0, 0.5f, false, LocaleController.getString("VoipAudioRoutingBluetooth", NUM), false, z);
                 this.soundButton.setChecked(false);
@@ -1258,7 +1291,7 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
                     }
 
                     public final void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        GroupCallActivity.this.lambda$updateMuteButton$7$GroupCallActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, valueAnimator);
+                        GroupCallActivity.this.lambda$updateMuteButton$8$GroupCallActivity(this.f$1, this.f$2, this.f$3, this.f$4, this.f$5, this.f$6, this.f$7, valueAnimator);
                     }
                 });
                 this.muteButtonAnimator.addListener(new AnimatorListenerAdapter() {
@@ -1293,8 +1326,8 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$updateMuteButton$7 */
-    public /* synthetic */ void lambda$updateMuteButton$7$GroupCallActivity(int i, int i2, int i3, int i4, int i5, int i6, int i7, ValueAnimator valueAnimator) {
+    /* renamed from: lambda$updateMuteButton$8 */
+    public /* synthetic */ void lambda$updateMuteButton$8$GroupCallActivity(int i, int i2, int i3, int i4, int i5, int i6, int i7, ValueAnimator valueAnimator) {
         float floatValue = ((Float) valueAnimator.getAnimatedValue()).floatValue();
         setColors(AndroidUtilities.getOffsetColor(i, i2, floatValue, 1.0f), AndroidUtilities.getOffsetColor(i3, i4, floatValue, 1.0f), AndroidUtilities.getOffsetColor(i, i5, floatValue, 1.0f), AndroidUtilities.getOffsetColor(i6, i7, floatValue, 1.0f), floatValue);
         float f = 1.0f - floatValue;
@@ -1349,64 +1382,66 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
     }
 
     private void onLeaveClick() {
-        AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
-        builder.setTitle(LocaleController.getString("VoipGroupLeaveAlertTitle", NUM));
-        builder.setMessage(LocaleController.getString("VoipGroupLeaveAlertText", NUM));
-        CheckBoxCell[] checkBoxCellArr = new CheckBoxCell[1];
-        if (ChatObject.canManageCalls(this.currentChat)) {
-            LinearLayout linearLayout = new LinearLayout(getParentActivity());
-            linearLayout.setOrientation(1);
-            checkBoxCellArr[0] = new CheckBoxCell(getParentActivity(), 1);
-            checkBoxCellArr[0].setBackgroundDrawable(Theme.getSelectorDrawable(false));
-            checkBoxCellArr[0].setTextColor(Theme.getColor("voipgroup_actionBarItems"));
-            checkBoxCellArr[0].setTag(0);
-            checkBoxCellArr[0].setText(LocaleController.getString("VoipGroupLeaveAlertEndChat", NUM), "", false, false);
-            checkBoxCellArr[0].setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
-            linearLayout.addView(checkBoxCellArr[0], LayoutHelper.createLinear(-1, -2));
-            checkBoxCellArr[0].setOnClickListener(new View.OnClickListener(checkBoxCellArr) {
-                public final /* synthetic */ CheckBoxCell[] f$0;
+        if (getParentActivity() != null) {
+            AlertDialog.Builder builder = new AlertDialog.Builder((Context) getParentActivity());
+            builder.setTitle(LocaleController.getString("VoipGroupLeaveAlertTitle", NUM));
+            builder.setMessage(LocaleController.getString("VoipGroupLeaveAlertText", NUM));
+            CheckBoxCell[] checkBoxCellArr = new CheckBoxCell[1];
+            if (ChatObject.canManageCalls(this.currentChat)) {
+                LinearLayout linearLayout = new LinearLayout(getParentActivity());
+                linearLayout.setOrientation(1);
+                checkBoxCellArr[0] = new CheckBoxCell(getParentActivity(), 1);
+                checkBoxCellArr[0].setBackgroundDrawable(Theme.getSelectorDrawable(false));
+                checkBoxCellArr[0].setTextColor(Theme.getColor("voipgroup_actionBarItems"));
+                checkBoxCellArr[0].setTag(0);
+                checkBoxCellArr[0].setText(LocaleController.getString("VoipGroupLeaveAlertEndChat", NUM), "", false, false);
+                checkBoxCellArr[0].setPadding(LocaleController.isRTL ? AndroidUtilities.dp(16.0f) : AndroidUtilities.dp(8.0f), 0, LocaleController.isRTL ? AndroidUtilities.dp(8.0f) : AndroidUtilities.dp(16.0f), 0);
+                linearLayout.addView(checkBoxCellArr[0], LayoutHelper.createLinear(-1, -2));
+                checkBoxCellArr[0].setOnClickListener(new View.OnClickListener(checkBoxCellArr) {
+                    public final /* synthetic */ CheckBoxCell[] f$0;
+
+                    {
+                        this.f$0 = r1;
+                    }
+
+                    public final void onClick(View view) {
+                        GroupCallActivity.lambda$onLeaveClick$9(this.f$0, view);
+                    }
+                });
+                builder.setCustomViewOffset(12);
+                builder.setView(linearLayout);
+            }
+            builder.setPositiveButton(LocaleController.getString("VoipGroupLeave", NUM), new DialogInterface.OnClickListener(checkBoxCellArr) {
+                public final /* synthetic */ CheckBoxCell[] f$1;
 
                 {
-                    this.f$0 = r1;
+                    this.f$1 = r2;
                 }
 
-                public final void onClick(View view) {
-                    GroupCallActivity.lambda$onLeaveClick$8(this.f$0, view);
+                public final void onClick(DialogInterface dialogInterface, int i) {
+                    GroupCallActivity.this.lambda$onLeaveClick$10$GroupCallActivity(this.f$1, dialogInterface, i);
                 }
             });
-            builder.setCustomViewOffset(12);
-            builder.setView(linearLayout);
-        }
-        builder.setPositiveButton(LocaleController.getString("VoipGroupLeave", NUM), new DialogInterface.OnClickListener(checkBoxCellArr) {
-            public final /* synthetic */ CheckBoxCell[] f$1;
-
-            {
-                this.f$1 = r2;
+            builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
+            AlertDialog create = builder.create();
+            create.setBackgroundColor(Theme.getColor("voipgroup_actionBar"));
+            showDialog(create);
+            TextView textView = (TextView) create.getButton(-1);
+            if (textView != null) {
+                textView.setTextColor(Theme.getColor("dialogTextRed2"));
             }
-
-            public final void onClick(DialogInterface dialogInterface, int i) {
-                GroupCallActivity.this.lambda$onLeaveClick$9$GroupCallActivity(this.f$1, dialogInterface, i);
-            }
-        });
-        builder.setNegativeButton(LocaleController.getString("Cancel", NUM), (DialogInterface.OnClickListener) null);
-        AlertDialog create = builder.create();
-        create.setBackgroundColor(Theme.getColor("voipgroup_actionBar"));
-        showDialog(create);
-        TextView textView = (TextView) create.getButton(-1);
-        if (textView != null) {
-            textView.setTextColor(Theme.getColor("dialogTextRed2"));
+            create.setTextColor(Theme.getColor("voipgroup_actionBarItems"));
         }
-        create.setTextColor(Theme.getColor("voipgroup_actionBarItems"));
     }
 
-    static /* synthetic */ void lambda$onLeaveClick$8(CheckBoxCell[] checkBoxCellArr, View view) {
+    static /* synthetic */ void lambda$onLeaveClick$9(CheckBoxCell[] checkBoxCellArr, View view) {
         Integer num = (Integer) view.getTag();
         checkBoxCellArr[num.intValue()].setChecked(!checkBoxCellArr[num.intValue()].isChecked(), true);
     }
 
     /* access modifiers changed from: private */
-    /* renamed from: lambda$onLeaveClick$9 */
-    public /* synthetic */ void lambda$onLeaveClick$9$GroupCallActivity(CheckBoxCell[] checkBoxCellArr, DialogInterface dialogInterface, int i) {
+    /* renamed from: lambda$onLeaveClick$10 */
+    public /* synthetic */ void lambda$onLeaveClick$10$GroupCallActivity(CheckBoxCell[] checkBoxCellArr, DialogInterface dialogInterface, int i) {
         if (VoIPService.getSharedInstance() != null) {
             VoIPService.getSharedInstance().hangUp((checkBoxCellArr[0] == null || !checkBoxCellArr[0].isChecked()) ? 0 : 1);
         }
@@ -1419,6 +1454,16 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
         ListAdapter listAdapter2 = this.listAdapter;
         if (listAdapter2 != null) {
             listAdapter2.notifyDataSetChanged();
+        }
+        if (Build.VERSION.SDK_INT >= 23) {
+            NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.needCheckSystemBarColors, new Object[0]);
+        }
+    }
+
+    public void onPause() {
+        super.onPause();
+        if (Build.VERSION.SDK_INT >= 23) {
+            AndroidUtilities.runOnUIThread($$Lambda$GroupCallActivity$2lQombD3K3MBuly2K07waaoAr8Q.INSTANCE);
         }
     }
 
@@ -1524,15 +1569,18 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
                 if (i == this.selfUserRow) {
                     tLRPC$TL_groupCallParticipant = GroupCallActivity.this.selfDummyParticipant;
                 } else {
-                    tLRPC$TL_groupCallParticipant = GroupCallActivity.this.call.sortedParticipants.get(i - this.usersStartRow);
+                    int i2 = i - this.usersStartRow;
+                    tLRPC$TL_groupCallParticipant = (i2 < 0 || i2 >= GroupCallActivity.this.call.sortedParticipants.size()) ? null : GroupCallActivity.this.call.sortedParticipants.get(i - this.usersStartRow);
                 }
-                GroupCallActivity groupCallActivity = GroupCallActivity.this;
-                ChatObject.Call call = groupCallActivity.call;
-                boolean canManageCalls = ChatObject.canManageCalls(groupCallActivity.currentChat);
-                if (i == getItemCount() - 1) {
-                    z = false;
+                if (tLRPC$TL_groupCallParticipant != null) {
+                    GroupCallActivity groupCallActivity = GroupCallActivity.this;
+                    ChatObject.Call call = groupCallActivity.call;
+                    boolean canManageCalls = ChatObject.canManageCalls(groupCallActivity.currentChat);
+                    if (i == getItemCount() - 1) {
+                        z = false;
+                    }
+                    groupCallUserCell.setData(tLRPC$TL_groupCallParticipant, call, canManageCalls, z);
                 }
-                groupCallUserCell.setData(tLRPC$TL_groupCallParticipant, call, canManageCalls, z);
             }
         }
 
@@ -1977,12 +2025,12 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
                 tLRPC$TL_phone_editGroupCallMember.muted = z;
                 accountInstance.getConnectionsManager().sendRequest(tLRPC$TL_phone_editGroupCallMember, new RequestDelegate() {
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        GroupCallActivity.lambda$editCallMember$10(AccountInstance.this, tLObject, tLRPC$TL_error);
+                        GroupCallActivity.lambda$editCallMember$12(AccountInstance.this, tLObject, tLRPC$TL_error);
                     }
                 });
             }
 
-            static /* synthetic */ void lambda$editCallMember$10(AccountInstance accountInstance, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            static /* synthetic */ void lambda$editCallMember$12(AccountInstance accountInstance, TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                 if (tLObject != null) {
                     accountInstance.getMessagesController().processUpdates((TLRPC$Updates) tLObject, false);
                 }
@@ -1993,16 +2041,17 @@ public class GroupCallActivity extends BaseFragment implements NotificationCente
                 TLRPC$TL_phone_toggleGroupCallSettings tLRPC$TL_phone_toggleGroupCallSettings = new TLRPC$TL_phone_toggleGroupCallSettings();
                 tLRPC$TL_phone_toggleGroupCallSettings.call = this.call.getInputGroupCall();
                 tLRPC$TL_phone_toggleGroupCallSettings.join_muted = this.call.call.join_muted;
+                tLRPC$TL_phone_toggleGroupCallSettings.flags |= 1;
                 getConnectionsManager().sendRequest(tLRPC$TL_phone_toggleGroupCallSettings, new RequestDelegate() {
                     public final void run(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
-                        GroupCallActivity.this.lambda$toggleAdminSpeak$11$GroupCallActivity(tLObject, tLRPC$TL_error);
+                        GroupCallActivity.this.lambda$toggleAdminSpeak$13$GroupCallActivity(tLObject, tLRPC$TL_error);
                     }
                 });
             }
 
             /* access modifiers changed from: private */
-            /* renamed from: lambda$toggleAdminSpeak$11 */
-            public /* synthetic */ void lambda$toggleAdminSpeak$11$GroupCallActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
+            /* renamed from: lambda$toggleAdminSpeak$13 */
+            public /* synthetic */ void lambda$toggleAdminSpeak$13$GroupCallActivity(TLObject tLObject, TLRPC$TL_error tLRPC$TL_error) {
                 if (tLObject != null) {
                     getMessagesController().processUpdates((TLRPC$Updates) tLObject, false);
                 }

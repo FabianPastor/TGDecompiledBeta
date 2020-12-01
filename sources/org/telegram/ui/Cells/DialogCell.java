@@ -129,6 +129,7 @@ public class DialogCell extends BaseCell {
     private boolean isDialogCell;
     private boolean isSelected;
     private boolean isSliding;
+    long lastDialogChangedTime;
     private int lastMessageDate;
     private CharSequence lastMessageString;
     private CharSequence lastPrintString;
@@ -275,6 +276,7 @@ public class DialogCell extends BaseCell {
             this.lastStatusDrawableParams = -1;
         }
         this.currentDialogId = tLRPC$Dialog.id;
+        this.lastDialogChangedTime = System.currentTimeMillis();
         this.isDialogCell = true;
         if (tLRPC$Dialog instanceof TLRPC$TL_dialogFolder) {
             this.currentDialogFolderId = ((TLRPC$TL_dialogFolder) tLRPC$Dialog).folder.id;
@@ -360,6 +362,7 @@ public class DialogCell extends BaseCell {
             this.lastStatusDrawableParams = -1;
         }
         this.currentDialogId = j;
+        this.lastDialogChangedTime = System.currentTimeMillis();
         this.message = messageObject;
         this.useMeForMyMessages = z;
         this.isDialogCell = false;
@@ -455,12 +458,25 @@ public class DialogCell extends BaseCell {
 
     /* access modifiers changed from: protected */
     public void onLayout(boolean z, int i, int i2, int i3, int i4) {
+        int i5;
         if (this.currentDialogId != 0 || this.customDialog != null) {
             if (this.checkBox != null) {
-                int dp = LocaleController.isRTL ? (i3 - i) - AndroidUtilities.dp(45.0f) : AndroidUtilities.dp(45.0f);
-                int dp2 = AndroidUtilities.dp(46.0f);
+                float f = 45.0f;
+                if (LocaleController.isRTL) {
+                    int i6 = i3 - i;
+                    if (this.useForceThreeLines || SharedConfig.useThreeLinesLayout) {
+                        f = 43.0f;
+                    }
+                    i5 = i6 - AndroidUtilities.dp(f);
+                } else {
+                    if (this.useForceThreeLines || SharedConfig.useThreeLinesLayout) {
+                        f = 43.0f;
+                    }
+                    i5 = AndroidUtilities.dp(f);
+                }
+                int dp = AndroidUtilities.dp((this.useForceThreeLines || SharedConfig.useThreeLinesLayout) ? 48.0f : 42.0f);
                 CheckBox2 checkBox2 = this.checkBox;
-                checkBox2.layout(dp, dp2, checkBox2.getMeasuredWidth() + dp, this.checkBox.getMeasuredHeight() + dp2);
+                checkBox2.layout(i5, dp, checkBox2.getMeasuredWidth() + i5, this.checkBox.getMeasuredHeight() + dp);
             }
             if (z) {
                 try {
@@ -3944,6 +3960,9 @@ public class DialogCell extends BaseCell {
                 long j2 = tLRPC$Dialog.id;
                 boolean z3 = j != j2;
                 this.currentDialogId = j2;
+                if (z3) {
+                    this.lastDialogChangedTime = System.currentTimeMillis();
+                }
                 boolean z4 = tLRPC$Dialog instanceof TLRPC$TL_dialogFolder;
                 if (z4) {
                     this.currentDialogFolderId = ((TLRPC$TL_dialogFolder) tLRPC$Dialog).folder.id;
@@ -4059,7 +4078,7 @@ public class DialogCell extends BaseCell {
             r5.setImage(r6, r7, r8, r9, r10)
             org.telegram.messenger.ImageReceiver r1 = r0.thumbImage
             r1.setImageBitmap((android.graphics.drawable.Drawable) r3)
-            goto L_0x0499
+            goto L_0x04a6
         L_0x003d:
             int r2 = r0.unreadCount
             boolean r6 = r0.isDialogCell
@@ -4504,13 +4523,19 @@ public class DialogCell extends BaseCell {
             java.lang.String r9 = "50_50"
             r7.setImage(r8, r9, r10, r11, r12, r13)
         L_0x037c:
-            if (r22 == 0) goto L_0x0499
+            if (r22 == 0) goto L_0x04a6
             int r1 = r0.unreadCount
-            if (r2 == r1) goto L_0x0499
+            if (r2 == r1) goto L_0x04a6
+            long r6 = java.lang.System.currentTimeMillis()
+            long r8 = r0.lastDialogChangedTime
+            long r6 = r6 - r8
+            r8 = 100
+            int r1 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
+            if (r1 <= 0) goto L_0x04a6
             android.animation.ValueAnimator r1 = r0.countAnimator
-            if (r1 == 0) goto L_0x0389
+            if (r1 == 0) goto L_0x0396
             r1.cancel()
-        L_0x0389:
+        L_0x0396:
             float[] r1 = new float[r3]
             r1 = {0, NUM} // fill-array
             android.animation.ValueAnimator r1 = android.animation.ValueAnimator.ofFloat(r1)
@@ -4522,7 +4547,7 @@ public class DialogCell extends BaseCell {
             org.telegram.ui.Cells.DialogCell$1 r3 = new org.telegram.ui.Cells.DialogCell$1
             r3.<init>()
             r1.addListener(r3)
-            if (r2 != 0) goto L_0x03ba
+            if (r2 != 0) goto L_0x03c7
             android.animation.ValueAnimator r1 = r0.countAnimator
             r6 = 220(0xdc, double:1.087E-321)
             r1.setDuration(r6)
@@ -4530,35 +4555,35 @@ public class DialogCell extends BaseCell {
             android.view.animation.OvershootInterpolator r3 = new android.view.animation.OvershootInterpolator
             r3.<init>()
             r1.setInterpolator(r3)
-            goto L_0x03db
-        L_0x03ba:
+            goto L_0x03e8
+        L_0x03c7:
             int r1 = r0.unreadCount
-            if (r1 != 0) goto L_0x03cd
+            if (r1 != 0) goto L_0x03da
             android.animation.ValueAnimator r1 = r0.countAnimator
             r6 = 150(0x96, double:7.4E-322)
             r1.setDuration(r6)
             android.animation.ValueAnimator r1 = r0.countAnimator
             org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
             r1.setInterpolator(r3)
-            goto L_0x03db
-        L_0x03cd:
+            goto L_0x03e8
+        L_0x03da:
             android.animation.ValueAnimator r1 = r0.countAnimator
             r6 = 430(0x1ae, double:2.124E-321)
             r1.setDuration(r6)
             android.animation.ValueAnimator r1 = r0.countAnimator
             org.telegram.ui.Components.CubicBezierInterpolator r3 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
             r1.setInterpolator(r3)
-        L_0x03db:
+        L_0x03e8:
             boolean r1 = r0.drawCount
-            if (r1 == 0) goto L_0x0484
+            if (r1 == 0) goto L_0x0491
             android.text.StaticLayout r1 = r0.countLayout
-            if (r1 == 0) goto L_0x0484
+            if (r1 == 0) goto L_0x0491
             java.lang.String r1 = java.lang.String.valueOf(r2)
             int r3 = r0.unreadCount
             java.lang.String r3 = java.lang.String.valueOf(r3)
             int r6 = r1.length()
             int r7 = r3.length()
-            if (r6 != r7) goto L_0x0480
+            if (r6 != r7) goto L_0x048d
             android.text.SpannableStringBuilder r9 = new android.text.SpannableStringBuilder
             r9.<init>(r1)
             android.text.SpannableStringBuilder r6 = new android.text.SpannableStringBuilder
@@ -4566,12 +4591,12 @@ public class DialogCell extends BaseCell {
             android.text.SpannableStringBuilder r7 = new android.text.SpannableStringBuilder
             r7.<init>(r3)
             r8 = 0
-        L_0x0407:
+        L_0x0414:
             int r10 = r1.length()
-            if (r8 >= r10) goto L_0x0437
+            if (r8 >= r10) goto L_0x0444
             char r10 = r1.charAt(r8)
             char r11 = r3.charAt(r8)
-            if (r10 != r11) goto L_0x042a
+            if (r10 != r11) goto L_0x0437
             org.telegram.ui.Components.EmptyStubSpan r10 = new org.telegram.ui.Components.EmptyStubSpan
             r10.<init>()
             int r11 = r8 + 1
@@ -4579,16 +4604,16 @@ public class DialogCell extends BaseCell {
             org.telegram.ui.Components.EmptyStubSpan r10 = new org.telegram.ui.Components.EmptyStubSpan
             r10.<init>()
             r6.setSpan(r10, r8, r11, r5)
-            goto L_0x0434
-        L_0x042a:
+            goto L_0x0441
+        L_0x0437:
             org.telegram.ui.Components.EmptyStubSpan r10 = new org.telegram.ui.Components.EmptyStubSpan
             r10.<init>()
             int r11 = r8 + 1
             r7.setSpan(r10, r8, r11, r5)
-        L_0x0434:
+        L_0x0441:
             int r8 = r8 + 1
-            goto L_0x0407
-        L_0x0437:
+            goto L_0x0414
+        L_0x0444:
             r3 = 1094713344(0x41400000, float:12.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             android.text.TextPaint r8 = org.telegram.ui.ActionBar.Theme.dialogs_countTextPaint
@@ -4625,36 +4650,36 @@ public class DialogCell extends BaseCell {
             r11 = r6
             r10.<init>(r11, r12, r13, r14, r15, r16, r17)
             r0.countAnimationInLayout = r3
-            goto L_0x0484
-        L_0x0480:
+            goto L_0x0491
+        L_0x048d:
             android.text.StaticLayout r1 = r0.countLayout
             r0.countOldLayout = r1
-        L_0x0484:
+        L_0x0491:
             int r1 = r0.countWidth
             r0.countWidthOld = r1
             int r1 = r0.countLeft
             r0.countLeftOld = r1
             int r1 = r0.unreadCount
-            if (r1 <= r2) goto L_0x0491
-            goto L_0x0492
-        L_0x0491:
+            if (r1 <= r2) goto L_0x049e
+            goto L_0x049f
+        L_0x049e:
             r4 = 0
-        L_0x0492:
+        L_0x049f:
             r0.countAnimationIncrement = r4
             android.animation.ValueAnimator r1 = r0.countAnimator
             r1.start()
-        L_0x0499:
-            int r1 = r20.getMeasuredWidth()
-            if (r1 != 0) goto L_0x04aa
-            int r1 = r20.getMeasuredHeight()
-            if (r1 == 0) goto L_0x04a6
-            goto L_0x04aa
         L_0x04a6:
+            int r1 = r20.getMeasuredWidth()
+            if (r1 != 0) goto L_0x04b7
+            int r1 = r20.getMeasuredHeight()
+            if (r1 == 0) goto L_0x04b3
+            goto L_0x04b7
+        L_0x04b3:
             r20.requestLayout()
-            goto L_0x04ad
-        L_0x04aa:
+            goto L_0x04ba
+        L_0x04b7:
             r20.buildLayout()
-        L_0x04ad:
+        L_0x04ba:
             r20.invalidate()
             return
         */
@@ -6376,13 +6401,13 @@ public class DialogCell extends BaseCell {
             if (r0 == 0) goto L_0x0c1a
             r28.restore()
         L_0x0c1a:
+            boolean r0 = r8.isDialogCell
+            if (r0 == 0) goto L_0x0d17
+            int r0 = r8.currentDialogFolderId
+            if (r0 != 0) goto L_0x0d17
             org.telegram.tgnet.TLRPC$User r0 = r8.user
             r1 = 1086324736(0x40CLASSNAME, float:6.0)
             if (r0 == 0) goto L_0x0d1a
-            boolean r2 = r8.isDialogCell
-            if (r2 == 0) goto L_0x0d1a
-            int r2 = r8.currentDialogFolderId
-            if (r2 != 0) goto L_0x0d1a
             boolean r0 = org.telegram.messenger.MessagesController.isSupportUser(r0)
             if (r0 != 0) goto L_0x0d1a
             org.telegram.tgnet.TLRPC$User r0 = r8.user

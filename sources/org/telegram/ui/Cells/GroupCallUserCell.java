@@ -21,7 +21,6 @@ import org.telegram.messenger.LocaleController;
 import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.UserConfig;
 import org.telegram.messenger.UserObject;
-import org.telegram.tgnet.TLRPC$Chat;
 import org.telegram.tgnet.TLRPC$TL_groupCallParticipant;
 import org.telegram.tgnet.TLRPC$User;
 import org.telegram.ui.ActionBar.SimpleTextView;
@@ -75,7 +74,7 @@ public class GroupCallUserCell extends FrameLayout {
     public /* synthetic */ void lambda$new$0$GroupCallUserCell() {
         this.isSpeaking = false;
         applyParticipantChanges(true, true);
-        this.avatarWavesDrawable.setAmplitude(0.0d, this);
+        this.avatarWavesDrawable.setAmplitude(0.0d);
         this.updateRunnableScheduled = false;
     }
 
@@ -136,7 +135,7 @@ public class GroupCallUserCell extends FrameLayout {
                 GroupCallUserCell.this.lambda$new$1$GroupCallUserCell(view);
             }
         });
-        this.avatarWavesDrawable = new AvatarWavesDrawable(AndroidUtilities.dp(22.0f), AndroidUtilities.dp(28.0f));
+        this.avatarWavesDrawable = new AvatarWavesDrawable(AndroidUtilities.dp(26.0f), AndroidUtilities.dp(29.0f));
         setWillNotDraw(false);
         setFocusable(true);
     }
@@ -163,31 +162,15 @@ public class GroupCallUserCell extends FrameLayout {
     }
 
     public void setData(TLRPC$TL_groupCallParticipant tLRPC$TL_groupCallParticipant, ChatObject.Call call, boolean z, boolean z2) {
-        String str;
         this.currentCall = call;
         this.participant = tLRPC$TL_groupCallParticipant;
         this.needDivider = z2;
         TLRPC$User user = MessagesController.getInstance(this.currentAccount).getUser(Integer.valueOf(this.participant.user_id));
         this.currentUser = user;
-        if (user != null) {
-            this.avatarDrawable.setInfo(user);
-        } else {
-            this.avatarDrawable.setInfo((TLRPC$Chat) null);
-        }
-        TLRPC$User tLRPC$User = this.currentUser;
-        if (tLRPC$User != null) {
-            str = UserObject.getUserName(tLRPC$User);
-        } else {
-            str = null.title;
-        }
-        this.nameTextView.setText(str);
+        this.avatarDrawable.setInfo(user);
+        this.nameTextView.setText(UserObject.getUserName(this.currentUser));
         this.muteButton.setEnabled(z && !UserObject.isUserSelf(this.currentUser));
-        TLRPC$User tLRPC$User2 = this.currentUser;
-        if (tLRPC$User2 != null) {
-            this.avatarImageView.setImage(ImageLocation.getForUser(tLRPC$User2, false), "50_50", (Drawable) this.avatarDrawable, (Object) this.currentUser);
-        } else {
-            this.avatarImageView.setImage(ImageLocation.getForChat((TLRPC$Chat) null, false), "50_50", (Drawable) this.avatarDrawable, (Object) null);
-        }
+        this.avatarImageView.setImage(ImageLocation.getForUser(this.currentUser, false), "50_50", (Drawable) this.avatarDrawable, (Object) this.currentUser);
         applyParticipantChanges(false);
     }
 
@@ -204,12 +187,12 @@ public class GroupCallUserCell extends FrameLayout {
                 this.isSpeaking = true;
                 applyParticipantChanges(true);
             }
-            this.avatarWavesDrawable.setAmplitude(d, this);
+            this.avatarWavesDrawable.setAmplitude(d);
             AndroidUtilities.runOnUIThread(this.updateRunnable, 500);
             this.updateRunnableScheduled = true;
             return;
         }
-        this.avatarWavesDrawable.setAmplitude(0.0d, this);
+        this.avatarWavesDrawable.setAmplitude(0.0d);
     }
 
     public void clickMuteButton() {
@@ -225,16 +208,16 @@ public class GroupCallUserCell extends FrameLayout {
         applyParticipantChanges(z, false);
     }
 
-    /* JADX WARNING: Removed duplicated region for block: B:51:0x00aa  */
-    /* JADX WARNING: Removed duplicated region for block: B:52:0x00c9  */
-    /* JADX WARNING: Removed duplicated region for block: B:61:0x00f7  */
-    /* JADX WARNING: Removed duplicated region for block: B:67:0x01a4  */
-    /* JADX WARNING: Removed duplicated region for block: B:73:0x0210  */
-    /* JADX WARNING: Removed duplicated region for block: B:78:0x023c  */
-    /* JADX WARNING: Removed duplicated region for block: B:79:0x0244  */
-    /* JADX WARNING: Removed duplicated region for block: B:81:0x024b  */
-    /* JADX WARNING: Removed duplicated region for block: B:82:0x0251  */
-    /* JADX WARNING: Removed duplicated region for block: B:90:0x0273  */
+    /* JADX WARNING: Removed duplicated region for block: B:55:0x00b7  */
+    /* JADX WARNING: Removed duplicated region for block: B:56:0x00d6  */
+    /* JADX WARNING: Removed duplicated region for block: B:65:0x0104  */
+    /* JADX WARNING: Removed duplicated region for block: B:71:0x01b1  */
+    /* JADX WARNING: Removed duplicated region for block: B:77:0x021d  */
+    /* JADX WARNING: Removed duplicated region for block: B:82:0x0249  */
+    /* JADX WARNING: Removed duplicated region for block: B:83:0x0251  */
+    /* JADX WARNING: Removed duplicated region for block: B:85:0x0258  */
+    /* JADX WARNING: Removed duplicated region for block: B:86:0x025e  */
+    /* JADX WARNING: Removed duplicated region for block: B:90:0x0272  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     private void applyParticipantChanges(boolean r11, boolean r12) {
         /*
@@ -274,8 +257,8 @@ public class GroupCallUserCell extends FrameLayout {
         L_0x0035:
             org.telegram.messenger.ChatObject$Call r12 = r10.currentCall
             android.util.SparseArray<org.telegram.tgnet.TLRPC$TL_groupCallParticipant> r12 = r12.participants
-            org.telegram.tgnet.TLRPC$User r2 = r10.currentUser
-            int r2 = r2.id
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r2 = r10.participant
+            int r2 = r2.user_id
             java.lang.Object r12 = r12.get(r2)
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r12 = (org.telegram.tgnet.TLRPC$TL_groupCallParticipant) r12
             if (r12 == 0) goto L_0x0047
@@ -298,50 +281,57 @@ public class GroupCallUserCell extends FrameLayout {
             if (r3 != 0) goto L_0x006b
             java.lang.String r3 = "voipgroup_mutedByAdminIcon"
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
-            goto L_0x0083
+            goto L_0x0085
         L_0x006b:
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-            goto L_0x0083
+            goto L_0x0085
         L_0x0070:
             boolean r3 = r10.isSpeaking
-            if (r3 == 0) goto L_0x007f
+            if (r3 != 0) goto L_0x0087
+            boolean r3 = r10.isSelfUser()
+            if (r3 == 0) goto L_0x0081
+            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r10.participant
+            boolean r3 = r3.muted
+            if (r3 != 0) goto L_0x0081
+            goto L_0x0087
+        L_0x0081:
+            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+        L_0x0085:
+            r4 = r6
+            goto L_0x0091
+        L_0x0087:
             java.lang.String r3 = "voipgroup_speakingText"
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
             java.lang.Integer r4 = java.lang.Integer.valueOf(r0)
-            goto L_0x0084
-        L_0x007f:
-            int r3 = org.telegram.ui.ActionBar.Theme.getColor(r5)
-        L_0x0083:
-            r4 = r6
-        L_0x0084:
+        L_0x0091:
             android.animation.AnimatorSet r5 = r10.animatorSet
-            if (r5 == 0) goto L_0x0096
-            if (r4 != 0) goto L_0x008c
-            if (r12 != 0) goto L_0x0094
-        L_0x008c:
-            if (r4 == 0) goto L_0x0090
-            if (r12 == 0) goto L_0x0094
-        L_0x0090:
+            if (r5 == 0) goto L_0x00a3
+            if (r4 != 0) goto L_0x0099
+            if (r12 != 0) goto L_0x00a1
+        L_0x0099:
+            if (r4 == 0) goto L_0x009d
+            if (r12 == 0) goto L_0x00a1
+        L_0x009d:
             int r7 = r10.lastMuteColor
-            if (r7 == r3) goto L_0x0096
-        L_0x0094:
+            if (r7 == r3) goto L_0x00a3
+        L_0x00a1:
             r7 = 1
-            goto L_0x0097
-        L_0x0096:
+            goto L_0x00a4
+        L_0x00a3:
             r7 = 0
-        L_0x0097:
-            if (r11 == 0) goto L_0x009b
-            if (r7 == 0) goto L_0x00a0
-        L_0x009b:
-            if (r5 == 0) goto L_0x00a0
-            r5.cancel()
-        L_0x00a0:
+        L_0x00a4:
             if (r11 == 0) goto L_0x00a8
-            int r5 = r10.lastMuteColor
-            if (r5 != r3) goto L_0x00a8
-            if (r7 == 0) goto L_0x00e4
+            if (r7 == 0) goto L_0x00ad
         L_0x00a8:
-            if (r11 == 0) goto L_0x00c9
+            if (r5 == 0) goto L_0x00ad
+            r5.cancel()
+        L_0x00ad:
+            if (r11 == 0) goto L_0x00b5
+            int r5 = r10.lastMuteColor
+            if (r5 != r3) goto L_0x00b5
+            if (r7 == 0) goto L_0x00f1
+        L_0x00b5:
+            if (r11 == 0) goto L_0x00d6
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
             int r5 = r10.lastMuteColor
@@ -354,8 +344,8 @@ public class GroupCallUserCell extends FrameLayout {
             r9.<init>(r5, r3)
             r8.addUpdateListener(r9)
             r6.add(r8)
-            goto L_0x00e4
-        L_0x00c9:
+            goto L_0x00f1
+        L_0x00d6:
             org.telegram.ui.Components.RLottieImageView r5 = r10.muteButton
             android.graphics.PorterDuffColorFilter r8 = new android.graphics.PorterDuffColorFilter
             r10.lastMuteColor = r3
@@ -367,31 +357,31 @@ public class GroupCallUserCell extends FrameLayout {
             r8 = 436207615(0x19ffffff, float:2.6469778E-23)
             r3 = r3 & r8
             org.telegram.ui.ActionBar.Theme.setSelectorDrawableColor(r5, r3, r0)
-        L_0x00e4:
-            if (r11 == 0) goto L_0x00f0
-            if (r4 != 0) goto L_0x00ea
-            if (r12 != 0) goto L_0x00f0
-        L_0x00ea:
-            if (r4 == 0) goto L_0x00ee
-            if (r12 == 0) goto L_0x00f0
-        L_0x00ee:
-            if (r7 == 0) goto L_0x020e
-        L_0x00f0:
+        L_0x00f1:
+            if (r11 == 0) goto L_0x00fd
+            if (r4 != 0) goto L_0x00f7
+            if (r12 != 0) goto L_0x00fd
+        L_0x00f7:
+            if (r4 == 0) goto L_0x00fb
+            if (r12 == 0) goto L_0x00fd
+        L_0x00fb:
+            if (r7 == 0) goto L_0x021b
+        L_0x00fd:
             r12 = 1065353216(0x3var_, float:1.0)
             r3 = 1073741824(0x40000000, float:2.0)
             r5 = 0
-            if (r11 == 0) goto L_0x01a4
-            if (r6 != 0) goto L_0x00fe
+            if (r11 == 0) goto L_0x01b1
+            if (r6 != 0) goto L_0x010b
             java.util.ArrayList r6 = new java.util.ArrayList
             r6.<init>()
-        L_0x00fe:
+        L_0x010b:
             org.telegram.ui.ActionBar.SimpleTextView[] r7 = r10.statusTextView
             r7 = r7[r1]
             r7.setVisibility(r1)
             org.telegram.ui.ActionBar.SimpleTextView[] r7 = r10.statusTextView
             r7 = r7[r0]
             r7.setVisibility(r1)
-            if (r4 != 0) goto L_0x015a
+            if (r4 != 0) goto L_0x0167
             org.telegram.ui.ActionBar.SimpleTextView[] r7 = r10.statusTextView
             r7 = r7[r1]
             android.util.Property r8 = android.view.View.TRANSLATION_Y
@@ -423,8 +413,8 @@ public class GroupCallUserCell extends FrameLayout {
             r7[r1] = r5
             android.animation.ObjectAnimator r12 = android.animation.ObjectAnimator.ofFloat(r12, r3, r7)
             r6.add(r12)
-            goto L_0x0207
-        L_0x015a:
+            goto L_0x0214
+        L_0x0167:
             org.telegram.ui.ActionBar.SimpleTextView[] r7 = r10.statusTextView
             r7 = r7[r1]
             android.util.Property r8 = android.view.View.TRANSLATION_Y
@@ -455,10 +445,10 @@ public class GroupCallUserCell extends FrameLayout {
             r7[r1] = r12
             android.animation.ObjectAnimator r12 = android.animation.ObjectAnimator.ofFloat(r3, r5, r7)
             r6.add(r12)
-            goto L_0x0207
-        L_0x01a4:
+            goto L_0x0214
+        L_0x01b1:
             r7 = 4
-            if (r4 != 0) goto L_0x01d8
+            if (r4 != 0) goto L_0x01e5
             org.telegram.ui.ActionBar.SimpleTextView[] r8 = r10.statusTextView
             r8 = r8[r1]
             r8.setVisibility(r1)
@@ -480,8 +470,8 @@ public class GroupCallUserCell extends FrameLayout {
             org.telegram.ui.ActionBar.SimpleTextView[] r12 = r10.statusTextView
             r12 = r12[r0]
             r12.setAlpha(r5)
-            goto L_0x0207
-        L_0x01d8:
+            goto L_0x0214
+        L_0x01e5:
             org.telegram.ui.ActionBar.SimpleTextView[] r8 = r10.statusTextView
             r8 = r8[r1]
             r8.setVisibility(r7)
@@ -502,12 +492,12 @@ public class GroupCallUserCell extends FrameLayout {
             org.telegram.ui.ActionBar.SimpleTextView[] r3 = r10.statusTextView
             r3 = r3[r0]
             r3.setAlpha(r12)
-        L_0x0207:
+        L_0x0214:
             org.telegram.ui.ActionBar.SimpleTextView[] r12 = r10.statusTextView
             r12 = r12[r1]
             r12.setTag(r4)
-        L_0x020e:
-            if (r6 == 0) goto L_0x0230
+        L_0x021b:
+            if (r6 == 0) goto L_0x023d
             android.animation.AnimatorSet r12 = new android.animation.AnimatorSet
             r12.<init>()
             r10.animatorSet = r12
@@ -521,52 +511,51 @@ public class GroupCallUserCell extends FrameLayout {
             r12.setDuration(r3)
             android.animation.AnimatorSet r12 = r10.animatorSet
             r12.start()
-        L_0x0230:
-            if (r11 == 0) goto L_0x023a
+        L_0x023d:
+            if (r11 == 0) goto L_0x0247
             boolean r12 = r10.lastMuted
             org.telegram.tgnet.TLRPC$TL_groupCallParticipant r3 = r10.participant
             boolean r3 = r3.muted
-            if (r12 == r3) goto L_0x0261
-        L_0x023a:
-            if (r2 == 0) goto L_0x0244
+            if (r12 == r3) goto L_0x026e
+        L_0x0247:
+            if (r2 == 0) goto L_0x0251
             org.telegram.ui.Components.RLottieDrawable r12 = r10.muteDrawable
             r3 = 12
             r12.setCustomEndFrame(r3)
-            goto L_0x0249
-        L_0x0244:
+            goto L_0x0256
+        L_0x0251:
             org.telegram.ui.Components.RLottieDrawable r12 = r10.muteDrawable
             r12.setCustomEndFrame(r1)
-        L_0x0249:
-            if (r11 == 0) goto L_0x0251
+        L_0x0256:
+            if (r11 == 0) goto L_0x025e
             org.telegram.ui.Components.RLottieImageView r11 = r10.muteButton
             r11.playAnimation()
-            goto L_0x025f
-        L_0x0251:
+            goto L_0x026c
+        L_0x025e:
             org.telegram.ui.Components.RLottieDrawable r11 = r10.muteDrawable
             int r12 = r11.getCustomEndFrame()
             r11.setCurrentFrame(r12, r1, r0)
             org.telegram.ui.Components.RLottieImageView r11 = r10.muteButton
             r11.invalidate()
-        L_0x025f:
+        L_0x026c:
             r10.lastMuted = r2
-        L_0x0261:
-            org.telegram.tgnet.TLRPC$TL_groupCallParticipant r11 = r10.participant
-            boolean r11 = r11.muted
-            if (r11 != 0) goto L_0x0270
-            org.telegram.tgnet.TLRPC$User r11 = r10.currentUser
-            boolean r11 = org.telegram.messenger.UserObject.isUserSelf(r11)
-            if (r11 != 0) goto L_0x0270
-            goto L_0x0271
-        L_0x0270:
+        L_0x026e:
+            boolean r11 = r10.isSpeaking
+            if (r11 != 0) goto L_0x0279
+            org.telegram.ui.Cells.GroupCallUserCell$AvatarWavesDrawable r11 = r10.avatarWavesDrawable
+            r2 = 0
+            r11.setAmplitude(r2)
+        L_0x0279:
+            org.telegram.ui.Cells.GroupCallUserCell$AvatarWavesDrawable r11 = r10.avatarWavesDrawable
+            boolean r12 = r10.isSpeaking
+            if (r12 == 0) goto L_0x0286
+            boolean r12 = r10.isSelfUser()
+            if (r12 != 0) goto L_0x0286
+            goto L_0x0287
+        L_0x0286:
             r0 = 0
-        L_0x0271:
-            if (r0 != 0) goto L_0x027a
-            org.telegram.ui.Cells.GroupCallUserCell$AvatarWavesDrawable r11 = r10.avatarWavesDrawable
-            r1 = 0
-            r11.setAmplitude(r1, r10)
-        L_0x027a:
-            org.telegram.ui.Cells.GroupCallUserCell$AvatarWavesDrawable r11 = r10.avatarWavesDrawable
-            r11.setShowWaves(r0)
+        L_0x0287:
+            r11.setShowWaves(r0, r10)
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.GroupCallUserCell.applyParticipantChanges(boolean, boolean):void");
@@ -616,65 +605,95 @@ public class GroupCallUserCell extends FrameLayout {
             this.blobDrawable2.paint.setColor(ColorUtils.setAlphaComponent(Theme.getColor("voipgroup_speakingText"), 38));
         }
 
-        public void draw(Canvas canvas, float f, float f2, View view) {
-            float f3 = this.animateToAmplitude;
-            float f4 = this.amplitude;
-            if (f3 != f4) {
-                float f5 = this.animateAmplitudeDiff;
-                float f6 = f4 + (16.0f * f5);
-                this.amplitude = f6;
-                if (f5 > 0.0f) {
-                    if (f6 > f3) {
-                        this.amplitude = f3;
-                    }
-                } else if (f6 < f3) {
-                    this.amplitude = f3;
-                }
-                view.invalidate();
-            }
-            float f7 = (this.amplitude * 0.4f) + 0.8f;
-            if (this.showWaves || this.wavesEnter != 0.0f) {
-                canvas.save();
-                boolean z = this.showWaves;
-                if (z) {
-                    float f8 = this.wavesEnter;
-                    if (f8 != 1.0f) {
-                        float f9 = f8 + 0.045714285f;
-                        this.wavesEnter = f9;
-                        if (f9 > 1.0f) {
-                            this.wavesEnter = 1.0f;
-                        }
-                        float interpolation = f7 * CubicBezierInterpolator.DEFAULT.getInterpolation(this.wavesEnter);
-                        canvas.scale(interpolation, interpolation, f, f2);
-                        this.blobDrawable.update(this.amplitude, 1.0f);
-                        BlobDrawable blobDrawable3 = this.blobDrawable;
-                        blobDrawable3.draw(f, f2, canvas, blobDrawable3.paint);
-                        this.blobDrawable2.update(this.amplitude, 1.0f);
-                        this.blobDrawable2.draw(f, f2, canvas, this.blobDrawable.paint);
-                        view.invalidate();
-                        canvas.restore();
-                    }
-                }
-                if (!z) {
-                    float var_ = this.wavesEnter;
-                    if (var_ != 0.0f) {
-                        float var_ = var_ - 0.045714285f;
-                        this.wavesEnter = var_;
-                        if (var_ < 0.0f) {
-                            this.wavesEnter = 0.0f;
-                        }
-                    }
-                }
-                float interpolation2 = f7 * CubicBezierInterpolator.DEFAULT.getInterpolation(this.wavesEnter);
-                canvas.scale(interpolation2, interpolation2, f, f2);
-                this.blobDrawable.update(this.amplitude, 1.0f);
-                BlobDrawable blobDrawable32 = this.blobDrawable;
-                blobDrawable32.draw(f, f2, canvas, blobDrawable32.paint);
-                this.blobDrawable2.update(this.amplitude, 1.0f);
-                this.blobDrawable2.draw(f, f2, canvas, this.blobDrawable.paint);
-                view.invalidate();
-                canvas.restore();
-            }
+        /* JADX WARNING: Removed duplicated region for block: B:29:0x0094  */
+        /* Code decompiled incorrectly, please refer to instructions dump. */
+        public void draw(android.graphics.Canvas r8, float r9, float r10, android.view.View r11) {
+            /*
+                r7 = this;
+                float r0 = r7.animateToAmplitude
+                float r1 = r7.amplitude
+                r2 = 0
+                int r3 = (r0 > r1 ? 1 : (r0 == r1 ? 0 : -1))
+                if (r3 == 0) goto L_0x0023
+                float r3 = r7.animateAmplitudeDiff
+                r4 = 1098907648(0x41800000, float:16.0)
+                float r4 = r4 * r3
+                float r1 = r1 + r4
+                r7.amplitude = r1
+                int r3 = (r3 > r2 ? 1 : (r3 == r2 ? 0 : -1))
+                if (r3 <= 0) goto L_0x001d
+                int r1 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1))
+                if (r1 <= 0) goto L_0x0023
+                r7.amplitude = r0
+                goto L_0x0023
+            L_0x001d:
+                int r1 = (r1 > r0 ? 1 : (r1 == r0 ? 0 : -1))
+                if (r1 >= 0) goto L_0x0023
+                r7.amplitude = r0
+            L_0x0023:
+                r0 = 1061997773(0x3f4ccccd, float:0.8)
+                r1 = 1053609165(0x3ecccccd, float:0.4)
+                float r3 = r7.amplitude
+                float r3 = r3 * r1
+                float r3 = r3 + r0
+                boolean r0 = r7.showWaves
+                if (r0 != 0) goto L_0x0038
+                float r0 = r7.wavesEnter
+                int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
+                if (r0 == 0) goto L_0x009a
+            L_0x0038:
+                r8.save()
+                boolean r0 = r7.showWaves
+                r1 = 1027292903(0x3d3b3ee7, float:0.NUM)
+                r4 = 1065353216(0x3var_, float:1.0)
+                if (r0 == 0) goto L_0x0054
+                float r5 = r7.wavesEnter
+                int r6 = (r5 > r4 ? 1 : (r5 == r4 ? 0 : -1))
+                if (r6 == 0) goto L_0x0054
+                float r5 = r5 + r1
+                r7.wavesEnter = r5
+                int r0 = (r5 > r4 ? 1 : (r5 == r4 ? 0 : -1))
+                if (r0 <= 0) goto L_0x0065
+                r7.wavesEnter = r4
+                goto L_0x0065
+            L_0x0054:
+                if (r0 != 0) goto L_0x0065
+                float r0 = r7.wavesEnter
+                int r5 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
+                if (r5 == 0) goto L_0x0065
+                float r0 = r0 - r1
+                r7.wavesEnter = r0
+                int r0 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
+                if (r0 >= 0) goto L_0x0065
+                r7.wavesEnter = r2
+            L_0x0065:
+                org.telegram.ui.Components.CubicBezierInterpolator r0 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
+                float r1 = r7.wavesEnter
+                float r0 = r0.getInterpolation(r1)
+                float r3 = r3 * r0
+                r8.scale(r3, r3, r9, r10)
+                org.telegram.ui.Components.BlobDrawable r1 = r7.blobDrawable
+                float r3 = r7.amplitude
+                r1.update(r3, r4)
+                org.telegram.ui.Components.BlobDrawable r1 = r7.blobDrawable
+                android.graphics.Paint r3 = r1.paint
+                r1.draw(r9, r10, r8, r3)
+                org.telegram.ui.Components.BlobDrawable r1 = r7.blobDrawable2
+                float r3 = r7.amplitude
+                r1.update(r3, r4)
+                org.telegram.ui.Components.BlobDrawable r1 = r7.blobDrawable2
+                org.telegram.ui.Components.BlobDrawable r3 = r7.blobDrawable
+                android.graphics.Paint r3 = r3.paint
+                r1.draw(r9, r10, r8, r3)
+                int r9 = (r0 > r2 ? 1 : (r0 == r2 ? 0 : -1))
+                if (r9 == 0) goto L_0x0097
+                r11.invalidate()
+            L_0x0097:
+                r8.restore()
+            L_0x009a:
+                return
+            */
+            throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Cells.GroupCallUserCell.AvatarWavesDrawable.draw(android.graphics.Canvas, float, float, android.view.View):void");
         }
 
         public float getAvatarScale() {
@@ -682,12 +701,15 @@ public class GroupCallUserCell extends FrameLayout {
             return (((this.amplitude * 0.2f) + 0.9f) * interpolation) + ((1.0f - interpolation) * 1.0f);
         }
 
-        public void setShowWaves(boolean z) {
+        public void setShowWaves(boolean z, View view) {
+            if (this.showWaves != z) {
+                view.invalidate();
+            }
             this.showWaves = z;
         }
 
-        public void setAmplitude(double d, View view) {
-            float f = ((float) d) / 100.0f;
+        public void setAmplitude(double d) {
+            float f = ((float) d) / 80.0f;
             float f2 = 0.0f;
             if (!this.showWaves) {
                 f = 0.0f;
@@ -699,7 +721,6 @@ public class GroupCallUserCell extends FrameLayout {
             }
             this.animateToAmplitude = f2;
             this.animateAmplitudeDiff = (f2 - this.amplitude) / 200.0f;
-            view.invalidate();
         }
 
         public void setColor(int i) {

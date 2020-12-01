@@ -13758,13 +13758,13 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
     public static void prepareSendingDocuments(AccountInstance accountInstance, ArrayList<String> arrayList, ArrayList<String> arrayList2, ArrayList<Uri> arrayList3, String str, String str2, long j, MessageObject messageObject, MessageObject messageObject2, InputContentInfoCompat inputContentInfoCompat, MessageObject messageObject3, boolean z, int i) {
         if (arrayList != null || arrayList2 != null || arrayList3 != null) {
             if (arrayList == null || arrayList2 == null || arrayList.size() == arrayList2.size()) {
-                $$Lambda$SendMessagesHelper$xYA8gjgZuOJMcGaxNAwqoRLok r15 = r0;
-                $$Lambda$SendMessagesHelper$xYA8gjgZuOJMcGaxNAwqoRLok r0 = new Runnable(j, accountInstance, arrayList, str, i, arrayList2, str2, messageObject, messageObject2, messageObject3, z, arrayList3, inputContentInfoCompat) {
+                $$Lambda$SendMessagesHelper$WNNsQ0HEcED9k8_no1CeKn2cNPo r15 = r0;
+                $$Lambda$SendMessagesHelper$WNNsQ0HEcED9k8_no1CeKn2cNPo r0 = new Runnable(j, accountInstance, arrayList, str, i, arrayList2, str2, messageObject, messageObject2, messageObject3, inputContentInfoCompat, z, arrayList3) {
                     public final /* synthetic */ long f$0;
                     public final /* synthetic */ AccountInstance f$1;
-                    public final /* synthetic */ boolean f$10;
-                    public final /* synthetic */ ArrayList f$11;
-                    public final /* synthetic */ InputContentInfoCompat f$12;
+                    public final /* synthetic */ InputContentInfoCompat f$10;
+                    public final /* synthetic */ boolean f$11;
+                    public final /* synthetic */ ArrayList f$12;
                     public final /* synthetic */ ArrayList f$2;
                     public final /* synthetic */ String f$3;
                     public final /* synthetic */ int f$4;
@@ -13799,7 +13799,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
         }
     }
 
-    static /* synthetic */ void lambda$prepareSendingDocuments$68(long j, AccountInstance accountInstance, ArrayList arrayList, String str, int i, ArrayList arrayList2, String str2, MessageObject messageObject, MessageObject messageObject2, MessageObject messageObject3, boolean z, ArrayList arrayList3, InputContentInfoCompat inputContentInfoCompat) {
+    static /* synthetic */ void lambda$prepareSendingDocuments$68(long j, AccountInstance accountInstance, ArrayList arrayList, String str, int i, ArrayList arrayList2, String str2, MessageObject messageObject, MessageObject messageObject2, MessageObject messageObject3, InputContentInfoCompat inputContentInfoCompat, boolean z, ArrayList arrayList3) {
         long[] jArr;
         Integer[] numArr;
         boolean z2;
@@ -13841,7 +13841,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 int i10 = size;
                 Integer[] numArr3 = numArr2;
                 long[] jArr3 = jArr2;
-                if (!prepareSendingDocumentInternal(accountInstance, (String) arrayList5.get(i6), (String) arrayList2.get(i6), (Uri) null, str2, j, messageObject, messageObject2, str3, (ArrayList<TLRPC$MessageEntity>) null, messageObject3, jArr3, i7 == i4 || i6 == size + -1, true, z, i, numArr3)) {
+                if (!prepareSendingDocumentInternal(accountInstance, (String) arrayList5.get(i6), (String) arrayList2.get(i6), (Uri) null, str2, j, messageObject, messageObject2, str3, (ArrayList<TLRPC$MessageEntity>) null, messageObject3, jArr3, i7 == i4 || i6 == size + -1, inputContentInfoCompat == null, z, i, numArr3)) {
                     z2 = true;
                 }
                 i5 = j3 != jArr3[0] ? 1 : i8;
@@ -13894,7 +13894,7 @@ public class SendMessagesHelper extends BaseController implements NotificationCe
                 int i17 = i16;
                 int i18 = i12;
                 int i19 = size2;
-                if (!prepareSendingDocumentInternal(accountInstance, (String) null, (String) null, (Uri) arrayList4.get(i12), str2, j, messageObject, messageObject2, str4, (ArrayList<TLRPC$MessageEntity>) null, messageObject3, jArr, i16 == 10 || i12 == size2 + -1, true, z, i, numArr)) {
+                if (!prepareSendingDocumentInternal(accountInstance, (String) null, (String) null, (Uri) arrayList4.get(i12), str2, j, messageObject, messageObject2, str4, (ArrayList<TLRPC$MessageEntity>) null, messageObject3, jArr, i16 == 10 || i12 == size2 + -1, inputContentInfoCompat == null, z, i, numArr)) {
                     z2 = true;
                 }
                 i11 = j5 != jArr[0] ? 1 : i17;

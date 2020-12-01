@@ -1388,7 +1388,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             goto L_0x0289
         L_0x0081:
             org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
-            r10 = 2131627736(0x7f0e0ed8, float:1.8882745E38)
+            r10 = 2131627740(0x7f0e0edc, float:1.8882753E38)
             java.lang.String r11 = "VoipRinging"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r6.setText(r10, r4, r2)
@@ -1436,14 +1436,14 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             goto L_0x007d
         L_0x00e3:
             org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
-            r10 = 2131627735(0x7f0e0ed7, float:1.8882743E38)
+            r10 = 2131627739(0x7f0e0edb, float:1.888275E38)
             java.lang.String r11 = "VoipRequesting"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r6.setText(r10, r4, r2)
             goto L_0x0286
         L_0x00f3:
             org.telegram.ui.Components.voip.VoIPStatusTextView r6 = r0.statusTextView
-            r10 = 2131627751(0x7f0e0ee7, float:1.8882775E38)
+            r10 = 2131627755(0x7f0e0eeb, float:1.8882783E38)
             java.lang.String r11 = "VoipWaiting"
             java.lang.String r10 = org.telegram.messenger.LocaleController.getString(r11, r10)
             r6.setText(r10, r4, r2)
@@ -1487,7 +1487,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             java.lang.String r10 = r6.first_name
             java.lang.String r6 = r6.last_name
             java.lang.String r6 = org.telegram.messenger.ContactsController.formatName(r10, r6)
-            r10 = 2131627727(0x7f0e0ecf, float:1.8882727E38)
+            r10 = 2131627731(0x7f0e0ed3, float:1.8882735E38)
             java.lang.Object[] r11 = new java.lang.Object[r4]
             r11[r1] = r6
             java.lang.String r6 = "VoipPeerIncompatible"
@@ -1503,7 +1503,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             if (r6 == 0) goto L_0x01d9
             org.telegram.tgnet.TLRPC$User r6 = r0.callingUser
             java.lang.String r6 = org.telegram.messenger.UserObject.getFirstName(r6)
-            r12 = 2131627729(0x7f0e0ed1, float:1.888273E38)
+            r12 = 2131627733(0x7f0e0ed5, float:1.8882739E38)
             java.lang.Object[] r13 = new java.lang.Object[r4]
             r13[r1] = r6
             java.lang.String r6 = "VoipPeerVideoOutdated"
@@ -1522,7 +1522,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             org.telegram.ui.-$$Lambda$VoIPFragment$mP0jEOnCuIWrNkyG-Bbz81TFB_A r10 = new org.telegram.ui.-$$Lambda$VoIPFragment$mP0jEOnCuIWrNkyG-Bbz81TFB_A
             r10.<init>()
             r13.setNegativeButton(r6, r10)
-            r6 = 2131627730(0x7f0e0ed2, float:1.8882733E38)
+            r6 = 2131627734(0x7f0e0ed6, float:1.888274E38)
             java.lang.String r10 = "VoipPeerVideoOutdatedMakeVoice"
             java.lang.String r6 = org.telegram.messenger.LocaleController.getString(r10, r6)
             org.telegram.ui.-$$Lambda$VoIPFragment$vbNpWhW2slYfAEJG8JVTIXX5A9A r10 = new org.telegram.ui.-$$Lambda$VoIPFragment$vbNpWhW2slYfAEJG8JVTIXX5A9A
@@ -1537,7 +1537,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
         L_0x01d9:
             org.telegram.tgnet.TLRPC$User r6 = r0.callingUser
             java.lang.String r6 = org.telegram.messenger.UserObject.getFirstName(r6)
-            r10 = 2131627728(0x7f0e0ed0, float:1.8882729E38)
+            r10 = 2131627732(0x7f0e0ed4, float:1.8882737E38)
             java.lang.Object[] r11 = new java.lang.Object[r4]
             r11[r1] = r6
             java.lang.String r6 = "VoipPeerOutdated"
@@ -1968,7 +1968,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             org.telegram.ui.Components.voip.VoIPNotificationsLayout r8 = r0.notificationsLayout
             r11 = 1
             java.lang.Object[] r4 = new java.lang.Object[r11]
-            r5 = 2131627748(0x7f0e0ee4, float:1.888277E38)
+            r5 = 2131627752(0x7f0e0ee8, float:1.8882777E38)
             org.telegram.tgnet.TLRPC$User r11 = r0.callingUser
             java.lang.String r11 = org.telegram.messenger.UserObject.getFirstName(r11)
             r4[r1] = r11
@@ -1983,7 +1983,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             if (r4 != 0) goto L_0x0531
             org.telegram.ui.Components.voip.VoIPNotificationsLayout r4 = r0.notificationsLayout
             r5 = 2131165315(0x7var_, float:1.7944844E38)
-            r8 = 2131627747(0x7f0e0ee3, float:1.8882767E38)
+            r8 = 2131627751(0x7f0e0ee7, float:1.8882775E38)
             r10 = 1
             java.lang.Object[] r12 = new java.lang.Object[r10]
             org.telegram.tgnet.TLRPC$User r10 = r0.callingUser
@@ -2001,7 +2001,7 @@ public class VoIPFragment implements VoIPBaseService.StateListener, Notification
             int r4 = r3.getCurrentAudioState()
             if (r4 != 0) goto L_0x0556
             org.telegram.ui.Components.voip.VoIPNotificationsLayout r4 = r0.notificationsLayout
-            r5 = 2131627748(0x7f0e0ee4, float:1.888277E38)
+            r5 = 2131627752(0x7f0e0ee8, float:1.8882777E38)
             r8 = 1
             java.lang.Object[] r11 = new java.lang.Object[r8]
             r8 = r11

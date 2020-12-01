@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
@@ -208,28 +209,53 @@ public class VoIPHelper {
     private static void initiateCall(TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, boolean z, boolean z2, int i, Activity activity) {
         String str;
         String str2;
+        int i2;
+        String str3;
+        String str4;
+        int i3;
         if (activity == null) {
             return;
         }
         if (tLRPC$User != null || tLRPC$Chat != null) {
             if (VoIPService.getSharedInstance() != null) {
-                int i2 = tLRPC$User != null ? tLRPC$User.id : -tLRPC$Chat.id;
+                int i4 = tLRPC$User != null ? tLRPC$User.id : -tLRPC$Chat.id;
                 int callerId = VoIPService.getSharedInstance().getCallerId();
-                if (callerId != i2) {
+                if (callerId != i4) {
                     if (callerId > 0) {
                         TLRPC$User user = VoIPService.getSharedInstance().getUser();
-                        str = ContactsController.formatName(user.first_name, user.last_name);
+                        str2 = ContactsController.formatName(user.first_name, user.last_name);
+                        if (i4 > 0) {
+                            i2 = NUM;
+                            str = "VoipOngoingAlert";
+                        } else {
+                            i2 = NUM;
+                            str = "VoipOngoingAlert2";
+                        }
                     } else {
-                        str = VoIPService.getSharedInstance().getChat().title;
+                        str2 = VoIPService.getSharedInstance().getChat().title;
+                        if (i4 > 0) {
+                            i2 = NUM;
+                            str = "VoipOngoingChatAlert2";
+                        } else {
+                            i2 = NUM;
+                            str = "VoipOngoingChatAlert";
+                        }
                     }
                     if (tLRPC$User != null) {
-                        str2 = ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name);
+                        str3 = ContactsController.formatName(tLRPC$User.first_name, tLRPC$User.last_name);
                     } else {
-                        str2 = tLRPC$Chat.title;
+                        str3 = tLRPC$Chat.title;
                     }
                     AlertDialog.Builder builder = new AlertDialog.Builder((Context) activity);
-                    builder.setTitle(LocaleController.getString("VoipOngoingAlertTitle", NUM));
-                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString("VoipOngoingAlert", NUM, str, str2)));
+                    if (callerId < 0) {
+                        i3 = NUM;
+                        str4 = "VoipOngoingChatAlertTitle";
+                    } else {
+                        i3 = NUM;
+                        str4 = "VoipOngoingAlertTitle";
+                    }
+                    builder.setTitle(LocaleController.getString(str4, i3));
+                    builder.setMessage(AndroidUtilities.replaceTags(LocaleController.formatString(str, i2, str2, str3)));
                     builder.setPositiveButton(LocaleController.getString("OK", NUM), new DialogInterface.OnClickListener(tLRPC$Chat, z, z2, i, activity) {
                         public final /* synthetic */ TLRPC$Chat f$1;
                         public final /* synthetic */ boolean f$2;
@@ -278,7 +304,7 @@ public class VoIPHelper {
                 }
 
                 public final void run() {
-                    VoIPHelper.doInitiateCall(TLRPC$User.this, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
+                    VoIPHelper.lambda$null$2(TLRPC$User.this, this.f$1, this.f$2, this.f$3, this.f$4, this.f$5);
                 }
             });
         } else {
@@ -286,13 +312,17 @@ public class VoIPHelper {
         }
     }
 
-    /* access modifiers changed from: private */
-    public static void doInitiateCall(TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, boolean z, boolean z2, int i, Activity activity) {
+    static /* synthetic */ void lambda$null$2(TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, boolean z, boolean z2, int i, Activity activity) {
+        lastCallTime = 0;
+        doInitiateCall(tLRPC$User, tLRPC$Chat, z, z2, i, activity);
+    }
+
+    private static void doInitiateCall(TLRPC$User tLRPC$User, TLRPC$Chat tLRPC$Chat, boolean z, boolean z2, int i, Activity activity) {
         if (activity == null) {
             return;
         }
-        if (!(tLRPC$User == null && tLRPC$Chat == null) && System.currentTimeMillis() - lastCallTime >= 2000) {
-            lastCallTime = System.currentTimeMillis();
+        if (!(tLRPC$User == null && tLRPC$Chat == null) && SystemClock.elapsedRealtime() - lastCallTime >= 2000) {
+            lastCallTime = SystemClock.elapsedRealtime();
             Intent intent = new Intent(activity, VoIPService.class);
             if (tLRPC$User != null) {
                 intent.putExtra("user_id", tLRPC$User.id);

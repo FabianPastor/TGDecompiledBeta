@@ -7901,7 +7901,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             public final void didSelectDate(boolean z, int i) {
                 PhotoViewer.this.sendPressed(z, i);
             }
-        }, new AlertsCreator.ScheduleDatePickerColors(-1, -16777216, -1, NUM, -1, -NUM, NUM));
+        }, new AlertsCreator.ScheduleDatePickerColors(-1, -14342875, -1, NUM, -1, -NUM, NUM));
     }
 
     /* access modifiers changed from: private */
@@ -14486,7 +14486,7 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
                 long r9 = (long) r7
                 r13 = 1000(0x3e8, double:4.94E-321)
                 long r9 = r9 * r13
-                r7 = 2131627864(0x7f0e0var_, float:1.8883004E38)
+                r7 = 2131627868(0x7f0e0f5c, float:1.8883013E38)
                 r13 = 2
                 java.lang.Object[] r14 = new java.lang.Object[r13]
                 org.telegram.messenger.LocaleController r13 = org.telegram.messenger.LocaleController.getInstance()
@@ -18555,7 +18555,12 @@ public class PhotoViewer implements NotificationCenter.NotificationCenterDelegat
             }
             togglePhotosListView(false, false);
             toggleActionBar(true, false);
-            makeFocusable();
+            ChatActivity chatActivity = this.parentChatActivity;
+            if (chatActivity == null || chatActivity.getChatActivityEnterView() == null || !this.parentChatActivity.isKeyboardVisible()) {
+                makeFocusable();
+            } else {
+                this.parentChatActivity.getChatActivityEnterView().closeKeyboard();
+            }
             this.backgroundDrawable.setAlpha(255);
             this.containerView.setAlpha(1.0f);
             onPhotoShow((MessageObject) null, (TLRPC$FileLocation) null, (ImageLocation) null, (ImageLocation) null, (ArrayList<MessageObject>) null, (ArrayList<SecureDocument>) null, Collections.singletonList(photoEntry), 0, (PlaceProviderObject) null);

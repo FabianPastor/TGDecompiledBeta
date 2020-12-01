@@ -5150,7 +5150,11 @@
     <public type="string" name="VoipOfflineOpenSettings" id="NUM" />
     <public type="string" name="VoipOfflineTitle" id="NUM" />
     <public type="string" name="VoipOngoingAlert" id="NUM" />
+    <public type="string" name="VoipOngoingAlert2" id="NUM" />
     <public type="string" name="VoipOngoingAlertTitle" id="NUM" />
+    <public type="string" name="VoipOngoingChatAlert" id="NUM" />
+    <public type="string" name="VoipOngoingChatAlert2" id="NUM" />
+    <public type="string" name="VoipOngoingChatAlertTitle" id="NUM" />
     <public type="string" name="VoipOutgoingCall" id="NUM" />
     <public type="string" name="VoipOutputDevices" id="NUM" />
     <public type="string" name="VoipPeerIncompatible" id="NUM" />

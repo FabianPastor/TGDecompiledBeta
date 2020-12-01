@@ -6891,268 +6891,287 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
         /*
             r12 = this;
             org.telegram.tgnet.TLRPC$TL_document r0 = r12.audioToSend
-            if (r0 != 0) goto L_0x0373
+            if (r0 != 0) goto L_0x03a3
             org.telegram.messenger.VideoEditedInfo r0 = r12.videoToSendMessageObject
-            if (r0 != 0) goto L_0x0373
+            if (r0 != 0) goto L_0x03a3
             org.telegram.messenger.MessageObject r0 = r12.editingMessageObject
             if (r0 != r13) goto L_0x000e
-            goto L_0x0373
+            goto L_0x03a3
         L_0x000e:
             r12.editingMessageObject = r13
             r12.editingCaption = r14
             r0 = 0
             java.lang.String r1 = ""
-            r2 = 1
-            r3 = 8
-            r4 = 0
-            if (r13 == 0) goto L_0x023e
+            r2 = 0
+            r3 = 1
+            r4 = 8
+            r5 = 1036831949(0x3dcccccd, float:0.1)
+            r6 = 0
+            r7 = 1065353216(0x3var_, float:1.0)
+            if (r13 == 0) goto L_0x0274
             android.animation.AnimatorSet r13 = r12.doneButtonAnimation
-            if (r13 == 0) goto L_0x0024
+            if (r13 == 0) goto L_0x002a
             r13.cancel()
             r12.doneButtonAnimation = r0
-        L_0x0024:
+        L_0x002a:
             android.widget.FrameLayout r13 = r12.doneButtonContainer
-            r13.setVisibility(r4)
-            if (r14 == 0) goto L_0x003a
+            r13.setVisibility(r6)
+            android.widget.ImageView r13 = r12.doneButtonImage
+            r13.setScaleX(r5)
+            android.widget.ImageView r13 = r12.doneButtonImage
+            r13.setScaleY(r5)
+            android.widget.ImageView r13 = r12.doneButtonImage
+            r13.setAlpha(r2)
+            android.widget.ImageView r13 = r12.doneButtonImage
+            android.view.ViewPropertyAnimator r13 = r13.animate()
+            android.view.ViewPropertyAnimator r13 = r13.alpha(r7)
+            android.view.ViewPropertyAnimator r13 = r13.scaleX(r7)
+            android.view.ViewPropertyAnimator r13 = r13.scaleY(r7)
+            r7 = 150(0x96, double:7.4E-322)
+            android.view.ViewPropertyAnimator r13 = r13.setDuration(r7)
+            org.telegram.ui.Components.CubicBezierInterpolator r2 = org.telegram.ui.Components.CubicBezierInterpolator.DEFAULT
+            android.view.ViewPropertyAnimator r13 = r13.setInterpolator(r2)
+            r13.start()
+            if (r14 == 0) goto L_0x0070
             org.telegram.messenger.AccountInstance r13 = r12.accountInstance
             org.telegram.messenger.MessagesController r13 = r13.getMessagesController()
             int r13 = r13.maxCaptionLength
             r12.currentLimit = r13
             org.telegram.messenger.MessageObject r13 = r12.editingMessageObject
             java.lang.CharSequence r13 = r13.caption
-            goto L_0x0048
-        L_0x003a:
+            goto L_0x007e
+        L_0x0070:
             org.telegram.messenger.AccountInstance r13 = r12.accountInstance
             org.telegram.messenger.MessagesController r13 = r13.getMessagesController()
             int r13 = r13.maxMessageLength
             r12.currentLimit = r13
             org.telegram.messenger.MessageObject r13 = r12.editingMessageObject
             java.lang.CharSequence r13 = r13.messageText
-        L_0x0048:
-            if (r13 == 0) goto L_0x01e4
+        L_0x007e:
+            if (r13 == 0) goto L_0x021a
             org.telegram.messenger.MessageObject r14 = r12.editingMessageObject
             org.telegram.tgnet.TLRPC$Message r14 = r14.messageOwner
             java.util.ArrayList<org.telegram.tgnet.TLRPC$MessageEntity> r14 = r14.entities
             org.telegram.messenger.MediaDataController.sortEntities(r14)
-            android.text.SpannableStringBuilder r5 = new android.text.SpannableStringBuilder
-            r5.<init>(r13)
-            int r13 = r5.length()
-            java.lang.Class<java.lang.Object> r6 = java.lang.Object.class
-            java.lang.Object[] r13 = r5.getSpans(r4, r13, r6)
-            if (r13 == 0) goto L_0x0073
-            int r6 = r13.length
-            if (r6 <= 0) goto L_0x0073
-            r6 = 0
-        L_0x0068:
+            android.text.SpannableStringBuilder r2 = new android.text.SpannableStringBuilder
+            r2.<init>(r13)
+            int r13 = r2.length()
+            java.lang.Class<java.lang.Object> r5 = java.lang.Object.class
+            java.lang.Object[] r13 = r2.getSpans(r6, r13, r5)
+            if (r13 == 0) goto L_0x00a9
+            int r5 = r13.length
+            if (r5 <= 0) goto L_0x00a9
+            r5 = 0
+        L_0x009e:
             int r7 = r13.length
-            if (r6 >= r7) goto L_0x0073
-            r7 = r13[r6]
-            r5.removeSpan(r7)
-            int r6 = r6 + 1
-            goto L_0x0068
-        L_0x0073:
-            if (r14 == 0) goto L_0x01cb
+            if (r5 >= r7) goto L_0x00a9
+            r7 = r13[r5]
+            r2.removeSpan(r7)
+            int r5 = r5 + 1
+            goto L_0x009e
+        L_0x00a9:
+            if (r14 == 0) goto L_0x0201
             r13 = 0
-        L_0x0076:
-            int r6 = r14.size()     // Catch:{ Exception -> 0x01c7 }
-            if (r13 >= r6) goto L_0x01cb
-            java.lang.Object r6 = r14.get(r13)     // Catch:{ Exception -> 0x01c7 }
-            org.telegram.tgnet.TLRPC$MessageEntity r6 = (org.telegram.tgnet.TLRPC$MessageEntity) r6     // Catch:{ Exception -> 0x01c7 }
-            int r7 = r6.offset     // Catch:{ Exception -> 0x01c7 }
-            int r8 = r6.length     // Catch:{ Exception -> 0x01c7 }
+        L_0x00ac:
+            int r5 = r14.size()     // Catch:{ Exception -> 0x01fd }
+            if (r13 >= r5) goto L_0x0201
+            java.lang.Object r5 = r14.get(r13)     // Catch:{ Exception -> 0x01fd }
+            org.telegram.tgnet.TLRPC$MessageEntity r5 = (org.telegram.tgnet.TLRPC$MessageEntity) r5     // Catch:{ Exception -> 0x01fd }
+            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
+            int r8 = r5.length     // Catch:{ Exception -> 0x01fd }
             int r7 = r7 + r8
-            int r8 = r5.length()     // Catch:{ Exception -> 0x01c7 }
-            if (r7 <= r8) goto L_0x008f
-            goto L_0x01c3
-        L_0x008f:
-            boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName     // Catch:{ Exception -> 0x01c7 }
+            int r8 = r2.length()     // Catch:{ Exception -> 0x01fd }
+            if (r7 <= r8) goto L_0x00c5
+            goto L_0x01f9
+        L_0x00c5:
+            boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName     // Catch:{ Exception -> 0x01fd }
             r8 = 3
             r9 = 32
             r10 = 33
-            if (r7 == 0) goto L_0x00d8
-            int r7 = r6.offset     // Catch:{ Exception -> 0x01c7 }
-            int r11 = r6.length     // Catch:{ Exception -> 0x01c7 }
+            if (r7 == 0) goto L_0x010e
+            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
+            int r11 = r5.length     // Catch:{ Exception -> 0x01fd }
             int r7 = r7 + r11
-            int r11 = r5.length()     // Catch:{ Exception -> 0x01c7 }
-            if (r7 >= r11) goto L_0x00b3
-            int r7 = r6.offset     // Catch:{ Exception -> 0x01c7 }
-            int r11 = r6.length     // Catch:{ Exception -> 0x01c7 }
+            int r11 = r2.length()     // Catch:{ Exception -> 0x01fd }
+            if (r7 >= r11) goto L_0x00e9
+            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
+            int r11 = r5.length     // Catch:{ Exception -> 0x01fd }
             int r7 = r7 + r11
-            char r7 = r5.charAt(r7)     // Catch:{ Exception -> 0x01c7 }
-            if (r7 != r9) goto L_0x00b3
-            int r7 = r6.length     // Catch:{ Exception -> 0x01c7 }
-            int r7 = r7 + r2
-            r6.length = r7     // Catch:{ Exception -> 0x01c7 }
-        L_0x00b3:
-            org.telegram.ui.Components.URLSpanUserMention r7 = new org.telegram.ui.Components.URLSpanUserMention     // Catch:{ Exception -> 0x01c7 }
-            java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x01c7 }
-            r9.<init>()     // Catch:{ Exception -> 0x01c7 }
-            r9.append(r1)     // Catch:{ Exception -> 0x01c7 }
-            r11 = r6
-            org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName r11 = (org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName) r11     // Catch:{ Exception -> 0x01c7 }
-            org.telegram.tgnet.TLRPC$InputUser r11 = r11.user_id     // Catch:{ Exception -> 0x01c7 }
-            int r11 = r11.user_id     // Catch:{ Exception -> 0x01c7 }
-            r9.append(r11)     // Catch:{ Exception -> 0x01c7 }
-            java.lang.String r9 = r9.toString()     // Catch:{ Exception -> 0x01c7 }
-            r7.<init>(r9, r8)     // Catch:{ Exception -> 0x01c7 }
-            int r8 = r6.offset     // Catch:{ Exception -> 0x01c7 }
-            int r6 = r6.length     // Catch:{ Exception -> 0x01c7 }
-            int r6 = r6 + r8
-            r5.setSpan(r7, r8, r6, r10)     // Catch:{ Exception -> 0x01c7 }
-            goto L_0x01c3
-        L_0x00d8:
-            boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityMentionName     // Catch:{ Exception -> 0x01c7 }
-            if (r7 == 0) goto L_0x011a
-            int r7 = r6.offset     // Catch:{ Exception -> 0x01c7 }
-            int r11 = r6.length     // Catch:{ Exception -> 0x01c7 }
+            char r7 = r2.charAt(r7)     // Catch:{ Exception -> 0x01fd }
+            if (r7 != r9) goto L_0x00e9
+            int r7 = r5.length     // Catch:{ Exception -> 0x01fd }
+            int r7 = r7 + r3
+            r5.length = r7     // Catch:{ Exception -> 0x01fd }
+        L_0x00e9:
+            org.telegram.ui.Components.URLSpanUserMention r7 = new org.telegram.ui.Components.URLSpanUserMention     // Catch:{ Exception -> 0x01fd }
+            java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x01fd }
+            r9.<init>()     // Catch:{ Exception -> 0x01fd }
+            r9.append(r1)     // Catch:{ Exception -> 0x01fd }
+            r11 = r5
+            org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName r11 = (org.telegram.tgnet.TLRPC$TL_inputMessageEntityMentionName) r11     // Catch:{ Exception -> 0x01fd }
+            org.telegram.tgnet.TLRPC$InputUser r11 = r11.user_id     // Catch:{ Exception -> 0x01fd }
+            int r11 = r11.user_id     // Catch:{ Exception -> 0x01fd }
+            r9.append(r11)     // Catch:{ Exception -> 0x01fd }
+            java.lang.String r9 = r9.toString()     // Catch:{ Exception -> 0x01fd }
+            r7.<init>(r9, r8)     // Catch:{ Exception -> 0x01fd }
+            int r8 = r5.offset     // Catch:{ Exception -> 0x01fd }
+            int r5 = r5.length     // Catch:{ Exception -> 0x01fd }
+            int r5 = r5 + r8
+            r2.setSpan(r7, r8, r5, r10)     // Catch:{ Exception -> 0x01fd }
+            goto L_0x01f9
+        L_0x010e:
+            boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityMentionName     // Catch:{ Exception -> 0x01fd }
+            if (r7 == 0) goto L_0x0150
+            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
+            int r11 = r5.length     // Catch:{ Exception -> 0x01fd }
             int r7 = r7 + r11
-            int r11 = r5.length()     // Catch:{ Exception -> 0x01c7 }
-            if (r7 >= r11) goto L_0x00f7
-            int r7 = r6.offset     // Catch:{ Exception -> 0x01c7 }
-            int r11 = r6.length     // Catch:{ Exception -> 0x01c7 }
+            int r11 = r2.length()     // Catch:{ Exception -> 0x01fd }
+            if (r7 >= r11) goto L_0x012d
+            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
+            int r11 = r5.length     // Catch:{ Exception -> 0x01fd }
             int r7 = r7 + r11
-            char r7 = r5.charAt(r7)     // Catch:{ Exception -> 0x01c7 }
-            if (r7 != r9) goto L_0x00f7
-            int r7 = r6.length     // Catch:{ Exception -> 0x01c7 }
-            int r7 = r7 + r2
-            r6.length = r7     // Catch:{ Exception -> 0x01c7 }
-        L_0x00f7:
-            org.telegram.ui.Components.URLSpanUserMention r7 = new org.telegram.ui.Components.URLSpanUserMention     // Catch:{ Exception -> 0x01c7 }
-            java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x01c7 }
-            r9.<init>()     // Catch:{ Exception -> 0x01c7 }
-            r9.append(r1)     // Catch:{ Exception -> 0x01c7 }
-            r11 = r6
-            org.telegram.tgnet.TLRPC$TL_messageEntityMentionName r11 = (org.telegram.tgnet.TLRPC$TL_messageEntityMentionName) r11     // Catch:{ Exception -> 0x01c7 }
-            int r11 = r11.user_id     // Catch:{ Exception -> 0x01c7 }
-            r9.append(r11)     // Catch:{ Exception -> 0x01c7 }
-            java.lang.String r9 = r9.toString()     // Catch:{ Exception -> 0x01c7 }
-            r7.<init>(r9, r8)     // Catch:{ Exception -> 0x01c7 }
-            int r8 = r6.offset     // Catch:{ Exception -> 0x01c7 }
-            int r6 = r6.length     // Catch:{ Exception -> 0x01c7 }
-            int r6 = r6 + r8
-            r5.setSpan(r7, r8, r6, r10)     // Catch:{ Exception -> 0x01c7 }
-            goto L_0x01c3
-        L_0x011a:
-            boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityCode     // Catch:{ Exception -> 0x01c7 }
-            if (r7 != 0) goto L_0x01ab
-            boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityPre     // Catch:{ Exception -> 0x01c7 }
-            if (r7 == 0) goto L_0x0124
-            goto L_0x01ab
-        L_0x0124:
-            boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityBold     // Catch:{ Exception -> 0x01c7 }
-            if (r7 == 0) goto L_0x0141
-            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r7 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x01c7 }
-            r7.<init>()     // Catch:{ Exception -> 0x01c7 }
-            int r8 = r7.flags     // Catch:{ Exception -> 0x01c7 }
-            r8 = r8 | r2
-            r7.flags = r8     // Catch:{ Exception -> 0x01c7 }
-            org.telegram.ui.Components.TextStyleSpan r8 = new org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x01c7 }
-            r8.<init>(r7)     // Catch:{ Exception -> 0x01c7 }
-            int r7 = r6.offset     // Catch:{ Exception -> 0x01c7 }
-            int r6 = r6.length     // Catch:{ Exception -> 0x01c7 }
-            int r6 = r6 + r7
-            org.telegram.messenger.MediaDataController.addStyleToText(r8, r7, r6, r5, r2)     // Catch:{ Exception -> 0x01c7 }
-            goto L_0x01c3
-        L_0x0141:
-            boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityItalic     // Catch:{ Exception -> 0x01c7 }
-            if (r7 == 0) goto L_0x015e
-            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r7 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x01c7 }
-            r7.<init>()     // Catch:{ Exception -> 0x01c7 }
-            int r8 = r7.flags     // Catch:{ Exception -> 0x01c7 }
-            r8 = r8 | 2
-            r7.flags = r8     // Catch:{ Exception -> 0x01c7 }
-            org.telegram.ui.Components.TextStyleSpan r8 = new org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x01c7 }
-            r8.<init>(r7)     // Catch:{ Exception -> 0x01c7 }
-            int r7 = r6.offset     // Catch:{ Exception -> 0x01c7 }
-            int r6 = r6.length     // Catch:{ Exception -> 0x01c7 }
-            int r6 = r6 + r7
-            org.telegram.messenger.MediaDataController.addStyleToText(r8, r7, r6, r5, r2)     // Catch:{ Exception -> 0x01c7 }
-            goto L_0x01c3
-        L_0x015e:
-            boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityStrike     // Catch:{ Exception -> 0x01c7 }
-            if (r7 == 0) goto L_0x017a
-            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r7 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x01c7 }
-            r7.<init>()     // Catch:{ Exception -> 0x01c7 }
-            int r8 = r7.flags     // Catch:{ Exception -> 0x01c7 }
+            char r7 = r2.charAt(r7)     // Catch:{ Exception -> 0x01fd }
+            if (r7 != r9) goto L_0x012d
+            int r7 = r5.length     // Catch:{ Exception -> 0x01fd }
+            int r7 = r7 + r3
+            r5.length = r7     // Catch:{ Exception -> 0x01fd }
+        L_0x012d:
+            org.telegram.ui.Components.URLSpanUserMention r7 = new org.telegram.ui.Components.URLSpanUserMention     // Catch:{ Exception -> 0x01fd }
+            java.lang.StringBuilder r9 = new java.lang.StringBuilder     // Catch:{ Exception -> 0x01fd }
+            r9.<init>()     // Catch:{ Exception -> 0x01fd }
+            r9.append(r1)     // Catch:{ Exception -> 0x01fd }
+            r11 = r5
+            org.telegram.tgnet.TLRPC$TL_messageEntityMentionName r11 = (org.telegram.tgnet.TLRPC$TL_messageEntityMentionName) r11     // Catch:{ Exception -> 0x01fd }
+            int r11 = r11.user_id     // Catch:{ Exception -> 0x01fd }
+            r9.append(r11)     // Catch:{ Exception -> 0x01fd }
+            java.lang.String r9 = r9.toString()     // Catch:{ Exception -> 0x01fd }
+            r7.<init>(r9, r8)     // Catch:{ Exception -> 0x01fd }
+            int r8 = r5.offset     // Catch:{ Exception -> 0x01fd }
+            int r5 = r5.length     // Catch:{ Exception -> 0x01fd }
+            int r5 = r5 + r8
+            r2.setSpan(r7, r8, r5, r10)     // Catch:{ Exception -> 0x01fd }
+            goto L_0x01f9
+        L_0x0150:
+            boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityCode     // Catch:{ Exception -> 0x01fd }
+            if (r7 != 0) goto L_0x01e1
+            boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityPre     // Catch:{ Exception -> 0x01fd }
+            if (r7 == 0) goto L_0x015a
+            goto L_0x01e1
+        L_0x015a:
+            boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityBold     // Catch:{ Exception -> 0x01fd }
+            if (r7 == 0) goto L_0x0177
+            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r7 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x01fd }
+            r7.<init>()     // Catch:{ Exception -> 0x01fd }
+            int r8 = r7.flags     // Catch:{ Exception -> 0x01fd }
             r8 = r8 | r3
-            r7.flags = r8     // Catch:{ Exception -> 0x01c7 }
-            org.telegram.ui.Components.TextStyleSpan r8 = new org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x01c7 }
-            r8.<init>(r7)     // Catch:{ Exception -> 0x01c7 }
-            int r7 = r6.offset     // Catch:{ Exception -> 0x01c7 }
-            int r6 = r6.length     // Catch:{ Exception -> 0x01c7 }
-            int r6 = r6 + r7
-            org.telegram.messenger.MediaDataController.addStyleToText(r8, r7, r6, r5, r2)     // Catch:{ Exception -> 0x01c7 }
-            goto L_0x01c3
-        L_0x017a:
-            boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityUnderline     // Catch:{ Exception -> 0x01c7 }
-            if (r7 == 0) goto L_0x0197
-            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r7 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x01c7 }
-            r7.<init>()     // Catch:{ Exception -> 0x01c7 }
-            int r8 = r7.flags     // Catch:{ Exception -> 0x01c7 }
+            r7.flags = r8     // Catch:{ Exception -> 0x01fd }
+            org.telegram.ui.Components.TextStyleSpan r8 = new org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x01fd }
+            r8.<init>(r7)     // Catch:{ Exception -> 0x01fd }
+            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
+            int r5 = r5.length     // Catch:{ Exception -> 0x01fd }
+            int r5 = r5 + r7
+            org.telegram.messenger.MediaDataController.addStyleToText(r8, r7, r5, r2, r3)     // Catch:{ Exception -> 0x01fd }
+            goto L_0x01f9
+        L_0x0177:
+            boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityItalic     // Catch:{ Exception -> 0x01fd }
+            if (r7 == 0) goto L_0x0194
+            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r7 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x01fd }
+            r7.<init>()     // Catch:{ Exception -> 0x01fd }
+            int r8 = r7.flags     // Catch:{ Exception -> 0x01fd }
+            r8 = r8 | 2
+            r7.flags = r8     // Catch:{ Exception -> 0x01fd }
+            org.telegram.ui.Components.TextStyleSpan r8 = new org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x01fd }
+            r8.<init>(r7)     // Catch:{ Exception -> 0x01fd }
+            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
+            int r5 = r5.length     // Catch:{ Exception -> 0x01fd }
+            int r5 = r5 + r7
+            org.telegram.messenger.MediaDataController.addStyleToText(r8, r7, r5, r2, r3)     // Catch:{ Exception -> 0x01fd }
+            goto L_0x01f9
+        L_0x0194:
+            boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityStrike     // Catch:{ Exception -> 0x01fd }
+            if (r7 == 0) goto L_0x01b0
+            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r7 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x01fd }
+            r7.<init>()     // Catch:{ Exception -> 0x01fd }
+            int r8 = r7.flags     // Catch:{ Exception -> 0x01fd }
+            r8 = r8 | r4
+            r7.flags = r8     // Catch:{ Exception -> 0x01fd }
+            org.telegram.ui.Components.TextStyleSpan r8 = new org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x01fd }
+            r8.<init>(r7)     // Catch:{ Exception -> 0x01fd }
+            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
+            int r5 = r5.length     // Catch:{ Exception -> 0x01fd }
+            int r5 = r5 + r7
+            org.telegram.messenger.MediaDataController.addStyleToText(r8, r7, r5, r2, r3)     // Catch:{ Exception -> 0x01fd }
+            goto L_0x01f9
+        L_0x01b0:
+            boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityUnderline     // Catch:{ Exception -> 0x01fd }
+            if (r7 == 0) goto L_0x01cd
+            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r7 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x01fd }
+            r7.<init>()     // Catch:{ Exception -> 0x01fd }
+            int r8 = r7.flags     // Catch:{ Exception -> 0x01fd }
             r8 = r8 | 16
-            r7.flags = r8     // Catch:{ Exception -> 0x01c7 }
-            org.telegram.ui.Components.TextStyleSpan r8 = new org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x01c7 }
-            r8.<init>(r7)     // Catch:{ Exception -> 0x01c7 }
-            int r7 = r6.offset     // Catch:{ Exception -> 0x01c7 }
-            int r6 = r6.length     // Catch:{ Exception -> 0x01c7 }
-            int r6 = r6 + r7
-            org.telegram.messenger.MediaDataController.addStyleToText(r8, r7, r6, r5, r2)     // Catch:{ Exception -> 0x01c7 }
-            goto L_0x01c3
-        L_0x0197:
-            boolean r7 = r6 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl     // Catch:{ Exception -> 0x01c7 }
-            if (r7 == 0) goto L_0x01c3
-            org.telegram.ui.Components.URLSpanReplacement r7 = new org.telegram.ui.Components.URLSpanReplacement     // Catch:{ Exception -> 0x01c7 }
-            java.lang.String r8 = r6.url     // Catch:{ Exception -> 0x01c7 }
-            r7.<init>(r8)     // Catch:{ Exception -> 0x01c7 }
-            int r8 = r6.offset     // Catch:{ Exception -> 0x01c7 }
-            int r6 = r6.length     // Catch:{ Exception -> 0x01c7 }
-            int r6 = r6 + r8
-            r5.setSpan(r7, r8, r6, r10)     // Catch:{ Exception -> 0x01c7 }
-            goto L_0x01c3
-        L_0x01ab:
-            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r7 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x01c7 }
-            r7.<init>()     // Catch:{ Exception -> 0x01c7 }
-            int r8 = r7.flags     // Catch:{ Exception -> 0x01c7 }
+            r7.flags = r8     // Catch:{ Exception -> 0x01fd }
+            org.telegram.ui.Components.TextStyleSpan r8 = new org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x01fd }
+            r8.<init>(r7)     // Catch:{ Exception -> 0x01fd }
+            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
+            int r5 = r5.length     // Catch:{ Exception -> 0x01fd }
+            int r5 = r5 + r7
+            org.telegram.messenger.MediaDataController.addStyleToText(r8, r7, r5, r2, r3)     // Catch:{ Exception -> 0x01fd }
+            goto L_0x01f9
+        L_0x01cd:
+            boolean r7 = r5 instanceof org.telegram.tgnet.TLRPC$TL_messageEntityTextUrl     // Catch:{ Exception -> 0x01fd }
+            if (r7 == 0) goto L_0x01f9
+            org.telegram.ui.Components.URLSpanReplacement r7 = new org.telegram.ui.Components.URLSpanReplacement     // Catch:{ Exception -> 0x01fd }
+            java.lang.String r8 = r5.url     // Catch:{ Exception -> 0x01fd }
+            r7.<init>(r8)     // Catch:{ Exception -> 0x01fd }
+            int r8 = r5.offset     // Catch:{ Exception -> 0x01fd }
+            int r5 = r5.length     // Catch:{ Exception -> 0x01fd }
+            int r5 = r5 + r8
+            r2.setSpan(r7, r8, r5, r10)     // Catch:{ Exception -> 0x01fd }
+            goto L_0x01f9
+        L_0x01e1:
+            org.telegram.ui.Components.TextStyleSpan$TextStyleRun r7 = new org.telegram.ui.Components.TextStyleSpan$TextStyleRun     // Catch:{ Exception -> 0x01fd }
+            r7.<init>()     // Catch:{ Exception -> 0x01fd }
+            int r8 = r7.flags     // Catch:{ Exception -> 0x01fd }
             r8 = r8 | 4
-            r7.flags = r8     // Catch:{ Exception -> 0x01c7 }
-            org.telegram.ui.Components.TextStyleSpan r8 = new org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x01c7 }
-            r8.<init>(r7)     // Catch:{ Exception -> 0x01c7 }
-            int r7 = r6.offset     // Catch:{ Exception -> 0x01c7 }
-            int r6 = r6.length     // Catch:{ Exception -> 0x01c7 }
-            int r6 = r6 + r7
-            org.telegram.messenger.MediaDataController.addStyleToText(r8, r7, r6, r5, r2)     // Catch:{ Exception -> 0x01c7 }
-        L_0x01c3:
+            r7.flags = r8     // Catch:{ Exception -> 0x01fd }
+            org.telegram.ui.Components.TextStyleSpan r8 = new org.telegram.ui.Components.TextStyleSpan     // Catch:{ Exception -> 0x01fd }
+            r8.<init>(r7)     // Catch:{ Exception -> 0x01fd }
+            int r7 = r5.offset     // Catch:{ Exception -> 0x01fd }
+            int r5 = r5.length     // Catch:{ Exception -> 0x01fd }
+            int r5 = r5 + r7
+            org.telegram.messenger.MediaDataController.addStyleToText(r8, r7, r5, r2, r3)     // Catch:{ Exception -> 0x01fd }
+        L_0x01f9:
             int r13 = r13 + 1
-            goto L_0x0076
-        L_0x01c7:
+            goto L_0x00ac
+        L_0x01fd:
             r13 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r13)
-        L_0x01cb:
+        L_0x0201:
             android.text.SpannableStringBuilder r13 = new android.text.SpannableStringBuilder
-            r13.<init>(r5)
+            r13.<init>(r2)
             org.telegram.ui.Components.EditTextCaption r14 = r12.messageEditText
             android.text.TextPaint r14 = r14.getPaint()
             android.graphics.Paint$FontMetricsInt r14 = r14.getFontMetricsInt()
             r1 = 1101004800(0x41a00000, float:20.0)
             int r1 = org.telegram.messenger.AndroidUtilities.dp(r1)
-            java.lang.CharSequence r1 = org.telegram.messenger.Emoji.replaceEmoji(r13, r14, r1, r4)
-        L_0x01e4:
+            java.lang.CharSequence r1 = org.telegram.messenger.Emoji.replaceEmoji(r13, r14, r1, r6)
+        L_0x021a:
             boolean r13 = r12.keyboardVisible
-            if (r13 != 0) goto L_0x01f5
+            if (r13 != 0) goto L_0x022b
             org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$82bzurAS6Fg5d4XGCp20FKfv-4E r13 = new org.telegram.ui.Components.-$$Lambda$ChatActivityEnterView$82bzurAS6Fg5d4XGCp20FKfv-4E
             r13.<init>(r1)
             r12.setTextFieldRunnable = r13
             r0 = 200(0xc8, double:9.9E-322)
             org.telegram.messenger.AndroidUtilities.runOnUIThread(r13, r0)
-            goto L_0x0201
-        L_0x01f5:
+            goto L_0x0237
+        L_0x022b:
             java.lang.Runnable r13 = r12.setTextFieldRunnable
-            if (r13 == 0) goto L_0x01fe
+            if (r13 == 0) goto L_0x0234
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r13)
             r12.setTextFieldRunnable = r0
-        L_0x01fe:
+        L_0x0234:
             r12.setFieldText(r1)
-        L_0x0201:
+        L_0x0237:
             r12.openKeyboard()
             org.telegram.ui.Components.EditTextCaption r13 = r12.messageEditText
             android.view.ViewGroup$LayoutParams r13 = r13.getLayoutParams()
@@ -7163,121 +7182,87 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             org.telegram.ui.Components.EditTextCaption r14 = r12.messageEditText
             r14.setLayoutParams(r13)
             android.view.View r13 = r12.sendButton
-            r13.setVisibility(r3)
-            r12.setSlowModeButtonVisible(r4)
+            r13.setVisibility(r4)
+            r12.setSlowModeButtonVisible(r6)
             android.widget.ImageView r13 = r12.cancelBotButton
-            r13.setVisibility(r3)
+            r13.setVisibility(r4)
             android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
-            r13.setVisibility(r3)
+            r13.setVisibility(r4)
             android.widget.LinearLayout r13 = r12.attachLayout
-            r13.setVisibility(r3)
+            r13.setVisibility(r4)
             android.widget.FrameLayout r13 = r12.sendButtonContainer
-            r13.setVisibility(r3)
+            r13.setVisibility(r4)
             android.widget.ImageView r13 = r12.scheduledButton
-            if (r13 == 0) goto L_0x0370
-            r13.setVisibility(r3)
-            goto L_0x0370
-        L_0x023e:
+            if (r13 == 0) goto L_0x03a0
+            r13.setVisibility(r4)
+            goto L_0x03a0
+        L_0x0274:
             java.lang.Runnable r13 = r12.setTextFieldRunnable
-            if (r13 == 0) goto L_0x0247
+            if (r13 == 0) goto L_0x027d
             org.telegram.messenger.AndroidUtilities.cancelRunOnUIThread(r13)
             r12.setTextFieldRunnable = r0
-        L_0x0247:
+        L_0x027d:
             android.widget.FrameLayout r13 = r12.doneButtonContainer
-            r13.setVisibility(r3)
+            r13.setVisibility(r4)
             r13 = -1
             r12.currentLimit = r13
             org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r13 = r12.delegate
-            r13.onMessageEditEnd(r4)
+            r13.onMessageEditEnd(r6)
             android.widget.FrameLayout r13 = r12.sendButtonContainer
+            r13.setVisibility(r6)
+            android.widget.ImageView r13 = r12.cancelBotButton
+            r13.setScaleX(r5)
+            android.widget.ImageView r13 = r12.cancelBotButton
+            r13.setScaleY(r5)
+            android.widget.ImageView r13 = r12.cancelBotButton
+            r13.setAlpha(r2)
+            android.widget.ImageView r13 = r12.cancelBotButton
             r13.setVisibility(r4)
-            android.widget.ImageView r13 = r12.cancelBotButton
-            r14 = 1036831949(0x3dcccccd, float:0.1)
-            r13.setScaleX(r14)
-            android.widget.ImageView r13 = r12.cancelBotButton
-            r13.setScaleY(r14)
-            android.widget.ImageView r13 = r12.cancelBotButton
-            r0 = 0
-            r13.setAlpha(r0)
-            android.widget.ImageView r13 = r12.cancelBotButton
-            r13.setVisibility(r3)
             int r13 = r12.slowModeTimer
-            r5 = 1065353216(0x3var_, float:1.0)
-            if (r13 <= 0) goto L_0x02f8
+            if (r13 <= 0) goto L_0x0328
             boolean r13 = r12.isInScheduleMode()
-            if (r13 != 0) goto L_0x02f8
+            if (r13 != 0) goto L_0x0328
             int r13 = r12.slowModeTimer
-            r6 = 2147483647(0x7fffffff, float:NaN)
-            if (r13 != r6) goto L_0x02ab
+            r14 = 2147483647(0x7fffffff, float:NaN)
+            if (r13 != r14) goto L_0x02db
+            android.view.View r13 = r12.sendButton
+            r13.setScaleX(r7)
+            android.view.View r13 = r12.sendButton
+            r13.setScaleY(r7)
+            android.view.View r13 = r12.sendButton
+            r13.setAlpha(r7)
+            android.view.View r13 = r12.sendButton
+            r13.setVisibility(r6)
+            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
+            r13.setScaleX(r5)
+            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
+            r13.setScaleY(r5)
+            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
+            r13.setAlpha(r2)
+            r12.setSlowModeButtonVisible(r6)
+            goto L_0x0301
+        L_0x02db:
             android.view.View r13 = r12.sendButton
             r13.setScaleX(r5)
             android.view.View r13 = r12.sendButton
             r13.setScaleY(r5)
             android.view.View r13 = r12.sendButton
-            r13.setAlpha(r5)
+            r13.setAlpha(r2)
             android.view.View r13 = r12.sendButton
             r13.setVisibility(r4)
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
-            r13.setScaleX(r14)
+            r13.setScaleX(r7)
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
-            r13.setScaleY(r14)
+            r13.setScaleY(r7)
             org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
-            r13.setAlpha(r0)
-            r12.setSlowModeButtonVisible(r4)
-            goto L_0x02d1
-        L_0x02ab:
-            android.view.View r13 = r12.sendButton
-            r13.setScaleX(r14)
-            android.view.View r13 = r12.sendButton
-            r13.setScaleY(r14)
-            android.view.View r13 = r12.sendButton
-            r13.setAlpha(r0)
-            android.view.View r13 = r12.sendButton
-            r13.setVisibility(r3)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
-            r13.setScaleX(r5)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
-            r13.setScaleY(r5)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
-            r13.setAlpha(r5)
-            r12.setSlowModeButtonVisible(r2)
-        L_0x02d1:
+            r13.setAlpha(r7)
+            r12.setSlowModeButtonVisible(r3)
+        L_0x0301:
             android.widget.LinearLayout r13 = r12.attachLayout
-            r6 = 1008981770(0x3CLASSNAMEd70a, float:0.01)
-            r13.setScaleX(r6)
-            android.widget.LinearLayout r13 = r12.attachLayout
-            r13.setAlpha(r0)
-            android.widget.LinearLayout r13 = r12.attachLayout
-            r13.setVisibility(r3)
-            android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
+            r14 = 1008981770(0x3CLASSNAMEd70a, float:0.01)
             r13.setScaleX(r14)
-            android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
-            r13.setScaleY(r14)
-            android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
-            r13.setAlpha(r0)
-            android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
-            r13.setVisibility(r3)
-            goto L_0x0341
-        L_0x02f8:
-            android.view.View r13 = r12.sendButton
-            r13.setScaleX(r14)
-            android.view.View r13 = r12.sendButton
-            r13.setScaleY(r14)
-            android.view.View r13 = r12.sendButton
-            r13.setAlpha(r0)
-            android.view.View r13 = r12.sendButton
-            r13.setVisibility(r3)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
-            r13.setScaleX(r14)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
-            r13.setScaleY(r14)
-            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
-            r13.setAlpha(r0)
-            r12.setSlowModeButtonVisible(r4)
             android.widget.LinearLayout r13 = r12.attachLayout
-            r13.setScaleX(r5)
-            android.widget.LinearLayout r13 = r12.attachLayout
-            r13.setAlpha(r5)
+            r13.setAlpha(r2)
             android.widget.LinearLayout r13 = r12.attachLayout
             r13.setVisibility(r4)
             android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
@@ -7285,33 +7270,64 @@ public class ChatActivityEnterView extends FrameLayout implements NotificationCe
             android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
             r13.setScaleY(r5)
             android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
-            r13.setAlpha(r5)
+            r13.setAlpha(r2)
             android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
             r13.setVisibility(r4)
-        L_0x0341:
+            goto L_0x0371
+        L_0x0328:
+            android.view.View r13 = r12.sendButton
+            r13.setScaleX(r5)
+            android.view.View r13 = r12.sendButton
+            r13.setScaleY(r5)
+            android.view.View r13 = r12.sendButton
+            r13.setAlpha(r2)
+            android.view.View r13 = r12.sendButton
+            r13.setVisibility(r4)
+            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
+            r13.setScaleX(r5)
+            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
+            r13.setScaleY(r5)
+            org.telegram.ui.ActionBar.SimpleTextView r13 = r12.slowModeButton
+            r13.setAlpha(r2)
+            r12.setSlowModeButtonVisible(r6)
+            android.widget.LinearLayout r13 = r12.attachLayout
+            r13.setScaleX(r7)
+            android.widget.LinearLayout r13 = r12.attachLayout
+            r13.setAlpha(r7)
+            android.widget.LinearLayout r13 = r12.attachLayout
+            r13.setVisibility(r6)
+            android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
+            r13.setScaleX(r7)
+            android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
+            r13.setScaleY(r7)
+            android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
+            r13.setAlpha(r7)
+            android.widget.FrameLayout r13 = r12.audioVideoButtonContainer
+            r13.setVisibility(r6)
+        L_0x0371:
             android.widget.ImageView r13 = r12.scheduledButton
             java.lang.Object r13 = r13.getTag()
-            if (r13 == 0) goto L_0x035d
+            if (r13 == 0) goto L_0x038d
             android.widget.ImageView r13 = r12.scheduledButton
-            r13.setScaleX(r5)
+            r13.setScaleX(r7)
             android.widget.ImageView r13 = r12.scheduledButton
-            r13.setScaleY(r5)
+            r13.setScaleY(r7)
             android.widget.ImageView r13 = r12.scheduledButton
-            r13.setAlpha(r5)
+            r13.setAlpha(r7)
             android.widget.ImageView r13 = r12.scheduledButton
-            r13.setVisibility(r4)
-        L_0x035d:
+            r13.setVisibility(r6)
+        L_0x038d:
             org.telegram.ui.Components.EditTextCaption r13 = r12.messageEditText
             r13.setText(r1)
             int r13 = r12.getVisibility()
-            if (r13 != 0) goto L_0x036d
+            if (r13 != 0) goto L_0x039d
             org.telegram.ui.Components.ChatActivityEnterView$ChatActivityEnterViewDelegate r13 = r12.delegate
             r13.onAttachButtonShow()
-        L_0x036d:
-            r12.updateFieldRight(r2)
-        L_0x0370:
+        L_0x039d:
+            r12.updateFieldRight(r3)
+        L_0x03a0:
             r12.updateFieldHint()
-        L_0x0373:
+        L_0x03a3:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.ChatActivityEnterView.setEditingMessageObject(org.telegram.messenger.MessageObject, boolean):void");

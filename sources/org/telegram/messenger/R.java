@@ -5289,7 +5289,11 @@ public final class R {
         public static final int VoipOfflineOpenSettings = NUM;
         public static final int VoipOfflineTitle = NUM;
         public static final int VoipOngoingAlert = NUM;
+        public static final int VoipOngoingAlert2 = NUM;
         public static final int VoipOngoingAlertTitle = NUM;
+        public static final int VoipOngoingChatAlert = NUM;
+        public static final int VoipOngoingChatAlert2 = NUM;
+        public static final int VoipOngoingChatAlertTitle = NUM;
         public static final int VoipOutgoingCall = NUM;
         public static final int VoipOutputDevices = NUM;
         public static final int VoipPeerIncompatible = NUM;

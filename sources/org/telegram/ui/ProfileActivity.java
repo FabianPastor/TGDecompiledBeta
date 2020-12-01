@@ -253,6 +253,8 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     /* access modifiers changed from: private */
     public int clearLogsRow;
     /* access modifiers changed from: private */
+    public int createChatCallType;
+    /* access modifiers changed from: private */
     public boolean creatingChat;
     /* access modifiers changed from: private */
     public String currentBio;
@@ -4316,9 +4318,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 searchItem2.setVisibility(0);
                             }
                             AnimatorSet unused = ProfileActivity.this.headerShadowAnimatorSet = new AnimatorSet();
-                            AnimatorSet access$12400 = ProfileActivity.this.headerShadowAnimatorSet;
+                            AnimatorSet access$12700 = ProfileActivity.this.headerShadowAnimatorSet;
                             ProfileActivity profileActivity = ProfileActivity.this;
-                            access$12400.playTogether(new Animator[]{ObjectAnimator.ofFloat(profileActivity, profileActivity.HEADER_SHADOW, new float[]{1.0f})});
+                            access$12700.playTogether(new Animator[]{ObjectAnimator.ofFloat(profileActivity, profileActivity.HEADER_SHADOW, new float[]{1.0f})});
                             ProfileActivity.this.headerShadowAnimatorSet.setDuration(100);
                             ProfileActivity.this.headerShadowAnimatorSet.addListener(new AnimatorListenerAdapter() {
                                 public void onAnimationEnd(Animator animator) {
@@ -6668,7 +6670,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
             r2 = 2
             r4 = 1
             if (r1 != r2) goto L_0x0022
-            r1 = 2131627759(0x7f0e0eef, float:1.8882792E38)
+            r1 = 2131627763(0x7f0e0ef3, float:1.88828E38)
             java.lang.String r5 = "WaitingForNetwork"
             java.lang.String r1 = org.telegram.messenger.LocaleController.getString(r5, r1)
             goto L_0x0049
@@ -7099,7 +7101,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x0389:
             boolean r2 = org.telegram.messenger.ChatObject.isKickedFromChat(r5)
             if (r2 == 0) goto L_0x039a
-            r2 = 2131627798(0x7f0e0var_, float:1.888287E38)
+            r2 = 2131627802(0x7f0e0f1a, float:1.8882879E38)
             java.lang.String r3 = "YouWereKicked"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r2)
         L_0x0398:
@@ -7108,7 +7110,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
         L_0x039a:
             boolean r2 = org.telegram.messenger.ChatObject.isLeftFromChat(r5)
             if (r2 == 0) goto L_0x03aa
-            r2 = 2131627797(0x7f0e0var_, float:1.8882869E38)
+            r2 = 2131627801(0x7f0e0var_, float:1.8882877E38)
             java.lang.String r3 = "YouLeft"
             java.lang.String r7 = org.telegram.messenger.LocaleController.getString(r3, r2)
             goto L_0x0398
@@ -7541,6 +7543,9 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                                 }
                             }
                         } else {
+                            if (chat.creator) {
+                                this.otherItem.addSubItem(15, NUM, LocaleController.getString("StartVoipChat", NUM));
+                            }
                             if (ChatObject.canChangeChatInfo(chat)) {
                                 this.editItemVisible = true;
                             }
@@ -7659,36 +7664,55 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
     }
 
     public void onRequestPermissionsResultFragment(int i, String[] strArr, int[] iArr) {
-        TLRPC$User user;
         boolean z;
         ImageUpdater imageUpdater2 = this.imageUpdater;
         if (imageUpdater2 != null) {
             imageUpdater2.onRequestPermissionsResultFragment(i, strArr, iArr);
         }
-        if ((i == 101 || i == 102) && (user = getMessagesController().getUser(Integer.valueOf(this.user_id))) != null) {
-            boolean z2 = false;
-            int i2 = 0;
+        boolean z2 = false;
+        if (i == 101 || i == 102) {
+            TLRPC$User user = getMessagesController().getUser(Integer.valueOf(this.user_id));
+            if (user != null) {
+                int i2 = 0;
+                while (true) {
+                    if (i2 >= iArr.length) {
+                        z = true;
+                        break;
+                    } else if (iArr[i2] != 0) {
+                        z = false;
+                        break;
+                    } else {
+                        i2++;
+                    }
+                }
+                if (iArr.length <= 0 || !z) {
+                    VoIPHelper.permissionDenied(getParentActivity(), (Runnable) null, i);
+                    return;
+                }
+                boolean z3 = i == 102;
+                TLRPC$UserFull tLRPC$UserFull = this.userInfo;
+                if (tLRPC$UserFull != null && tLRPC$UserFull.video_calls_available) {
+                    z2 = true;
+                }
+                VoIPHelper.startCall(user, z3, z2, getParentActivity(), this.userInfo);
+            }
+        } else if (i == 103 && this.currentChat != null) {
+            int i3 = 0;
             while (true) {
-                if (i2 >= iArr.length) {
-                    z = true;
+                if (i3 >= iArr.length) {
+                    z2 = true;
                     break;
-                } else if (iArr[i2] != 0) {
-                    z = false;
+                } else if (iArr[i3] != 0) {
                     break;
                 } else {
-                    i2++;
+                    i3++;
                 }
             }
-            if (iArr.length <= 0 || !z) {
+            if (iArr.length <= 0 || !z2) {
                 VoIPHelper.permissionDenied(getParentActivity(), (Runnable) null, i);
-                return;
+            } else {
+                VoIPHelper.startCall(this.currentChat, this.createChatCallType, getParentActivity());
             }
-            boolean z3 = i == 102;
-            TLRPC$UserFull tLRPC$UserFull = this.userInfo;
-            if (tLRPC$UserFull != null && tLRPC$UserFull.video_calls_available) {
-                z2 = true;
-            }
-            VoIPHelper.startCall(user, z3, z2, getParentActivity(), this.userInfo);
         }
     }
 
@@ -8782,7 +8806,7 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                 goto L_0x02a6
             L_0x0216:
                 r2 = 3600(0xe10, float:5.045E-42)
-                r3 = 2131627779(0x7f0e0var_, float:1.8882832E38)
+                r3 = 2131627783(0x7f0e0var_, float:1.888284E38)
                 java.lang.String r4 = "WillUnmuteIn"
                 if (r1 >= r2) goto L_0x0232
                 java.lang.Object[] r2 = new java.lang.Object[r10]
@@ -10944,12 +10968,12 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         Object obj = this.recentSearches.get(i);
                         if (obj instanceof SearchResult) {
                             SearchResult searchResult = (SearchResult) obj;
-                            String access$20300 = searchResult.searchTitle;
-                            String[] access$20200 = searchResult.path;
+                            String access$20600 = searchResult.searchTitle;
+                            String[] access$20500 = searchResult.path;
                             if (i >= this.recentSearches.size() - 1) {
                                 z = false;
                             }
-                            settingsSearchCell.setTextAndValue(access$20300, access$20200, false, z);
+                            settingsSearchCell.setTextAndValue(access$20600, access$20500, false, z);
                         } else if (obj instanceof MessagesController.FaqSearchResult) {
                             MessagesController.FaqSearchResult faqSearchResult = (MessagesController.FaqSearchResult) obj;
                             String str = faqSearchResult.title;
@@ -10978,11 +11002,11 @@ public class ProfileActivity extends BaseFragment implements NotificationCenter.
                         i2 = 0;
                     }
                     CharSequence charSequence = this.resultNames.get(i);
-                    String[] access$202002 = searchResult2.path;
+                    String[] access$205002 = searchResult2.path;
                     if (i >= this.searchResults.size() - 1) {
                         z = false;
                     }
-                    settingsSearchCell.setTextAndValueAndIcon(charSequence, access$202002, i2, z);
+                    settingsSearchCell.setTextAndValueAndIcon(charSequence, access$205002, i2, z);
                 } else {
                     int size2 = i - (this.searchResults.size() + 1);
                     CharSequence charSequence2 = this.resultNames.get(this.searchResults.size() + size2);

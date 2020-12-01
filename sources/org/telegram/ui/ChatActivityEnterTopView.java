@@ -70,12 +70,20 @@ public class ChatActivityEnterTopView extends FrameLayout {
         public EditViewButton[] getButtons() {
             return this.buttons;
         }
+
+        public void updateColors() {
+            for (EditViewButton updateColors : this.buttons) {
+                updateColors.updateColors();
+            }
+        }
     }
 
-    public static class EditViewButton extends LinearLayout {
+    public static abstract class EditViewButton extends LinearLayout {
         private boolean editButton;
         private ImageView imageView;
         private TextView textView;
+
+        public abstract void updateColors();
 
         public EditViewButton(Context context) {
             super(context);

@@ -2381,7 +2381,10 @@ public class AndroidUtilities {
     }
 
     public static void setScrollViewEdgeEffectColor(HorizontalScrollView horizontalScrollView, int i) {
-        if (Build.VERSION.SDK_INT >= 21) {
+        int i2 = Build.VERSION.SDK_INT;
+        if (i2 >= 29) {
+            horizontalScrollView.setEdgeEffectColor(i);
+        } else if (i2 >= 21) {
             try {
                 Field declaredField = HorizontalScrollView.class.getDeclaredField("mEdgeGlowLeft");
                 declaredField.setAccessible(true);

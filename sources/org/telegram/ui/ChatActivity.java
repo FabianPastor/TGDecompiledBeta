@@ -2539,37 +2539,38 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
     /* JADX WARNING: Removed duplicated region for block: B:121:0x03c3  */
     /* JADX WARNING: Removed duplicated region for block: B:236:0x0871  */
     /* JADX WARNING: Removed duplicated region for block: B:244:0x08d5  */
-    /* JADX WARNING: Removed duplicated region for block: B:247:0x0a02  */
-    /* JADX WARNING: Removed duplicated region for block: B:263:0x0cbd  */
-    /* JADX WARNING: Removed duplicated region for block: B:266:0x0d21  */
-    /* JADX WARNING: Removed duplicated region for block: B:269:0x0dcc  */
-    /* JADX WARNING: Removed duplicated region for block: B:272:0x0e19  */
-    /* JADX WARNING: Removed duplicated region for block: B:280:0x105a  */
-    /* JADX WARNING: Removed duplicated region for block: B:281:0x105c  */
-    /* JADX WARNING: Removed duplicated region for block: B:286:0x1071  */
-    /* JADX WARNING: Removed duplicated region for block: B:287:0x1073  */
-    /* JADX WARNING: Removed duplicated region for block: B:290:0x107d  */
-    /* JADX WARNING: Removed duplicated region for block: B:291:0x1080  */
-    /* JADX WARNING: Removed duplicated region for block: B:294:0x10d9  */
-    /* JADX WARNING: Removed duplicated region for block: B:295:0x10f8  */
-    /* JADX WARNING: Removed duplicated region for block: B:298:0x11f6  */
-    /* JADX WARNING: Removed duplicated region for block: B:299:0x1215  */
-    /* JADX WARNING: Removed duplicated region for block: B:307:0x1440  */
-    /* JADX WARNING: Removed duplicated region for block: B:312:0x146f  */
-    /* JADX WARNING: Removed duplicated region for block: B:313:0x1471  */
-    /* JADX WARNING: Removed duplicated region for block: B:318:0x147f  */
-    /* JADX WARNING: Removed duplicated region for block: B:319:0x1481  */
-    /* JADX WARNING: Removed duplicated region for block: B:322:0x1489  */
-    /* JADX WARNING: Removed duplicated region for block: B:325:0x153a  */
-    /* JADX WARNING: Removed duplicated region for block: B:328:0x1635  */
-    /* JADX WARNING: Removed duplicated region for block: B:352:0x17bd  */
-    /* JADX WARNING: Removed duplicated region for block: B:362:0x1CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:367:0x1CLASSNAME  */
-    /* JADX WARNING: Removed duplicated region for block: B:372:0x1ca8  */
-    /* JADX WARNING: Removed duplicated region for block: B:388:0x1d00  */
-    /* JADX WARNING: Removed duplicated region for block: B:391:0x1d4d  */
-    /* JADX WARNING: Removed duplicated region for block: B:394:0x1d6c A[ADDED_TO_REGION] */
-    /* JADX WARNING: Removed duplicated region for block: B:400:0x1d90  */
+    /* JADX WARNING: Removed duplicated region for block: B:247:0x09ff  */
+    /* JADX WARNING: Removed duplicated region for block: B:263:0x0cbe  */
+    /* JADX WARNING: Removed duplicated region for block: B:266:0x0d22  */
+    /* JADX WARNING: Removed duplicated region for block: B:269:0x0dcf  */
+    /* JADX WARNING: Removed duplicated region for block: B:272:0x0e1e  */
+    /* JADX WARNING: Removed duplicated region for block: B:280:0x105f  */
+    /* JADX WARNING: Removed duplicated region for block: B:281:0x1061  */
+    /* JADX WARNING: Removed duplicated region for block: B:286:0x1076  */
+    /* JADX WARNING: Removed duplicated region for block: B:287:0x1078  */
+    /* JADX WARNING: Removed duplicated region for block: B:290:0x1082  */
+    /* JADX WARNING: Removed duplicated region for block: B:291:0x1085  */
+    /* JADX WARNING: Removed duplicated region for block: B:294:0x10de  */
+    /* JADX WARNING: Removed duplicated region for block: B:295:0x10fd  */
+    /* JADX WARNING: Removed duplicated region for block: B:298:0x11fb  */
+    /* JADX WARNING: Removed duplicated region for block: B:299:0x121a  */
+    /* JADX WARNING: Removed duplicated region for block: B:302:0x1327  */
+    /* JADX WARNING: Removed duplicated region for block: B:305:0x1442  */
+    /* JADX WARNING: Removed duplicated region for block: B:310:0x1471  */
+    /* JADX WARNING: Removed duplicated region for block: B:311:0x1473  */
+    /* JADX WARNING: Removed duplicated region for block: B:316:0x1481  */
+    /* JADX WARNING: Removed duplicated region for block: B:317:0x1483  */
+    /* JADX WARNING: Removed duplicated region for block: B:320:0x148b  */
+    /* JADX WARNING: Removed duplicated region for block: B:323:0x153c  */
+    /* JADX WARNING: Removed duplicated region for block: B:326:0x1639  */
+    /* JADX WARNING: Removed duplicated region for block: B:346:0x1791  */
+    /* JADX WARNING: Removed duplicated region for block: B:356:0x1c1a  */
+    /* JADX WARNING: Removed duplicated region for block: B:361:0x1CLASSNAME  */
+    /* JADX WARNING: Removed duplicated region for block: B:366:0x1c6e  */
+    /* JADX WARNING: Removed duplicated region for block: B:381:0x1cc4  */
+    /* JADX WARNING: Removed duplicated region for block: B:384:0x1d11  */
+    /* JADX WARNING: Removed duplicated region for block: B:387:0x1d30 A[ADDED_TO_REGION] */
+    /* JADX WARNING: Removed duplicated region for block: B:393:0x1d54  */
     /* Code decompiled incorrectly, please refer to instructions dump. */
     public android.view.View createView(android.content.Context r41) {
         /*
@@ -3691,8 +3692,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.<init>()
             r0.setOnClickListener(r1)
             org.telegram.tgnet.TLRPC$EncryptedChat r0 = r7.currentEncryptedChat
-            r17 = 436207615(0x19ffffff, float:2.6469778E-23)
-            if (r0 != 0) goto L_0x0cbd
+            if (r0 != 0) goto L_0x0cbe
             org.telegram.ui.ChatActivity$17 r0 = new org.telegram.ui.ChatActivity$17
             r0.<init>(r8)
             r7.pinnedMessageView = r0
@@ -3774,8 +3774,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r33, r34, r35, r36, r37, r38, r39)
             r0.addView(r1, r2)
             r0 = 0
-        L_0x0acb:
-            if (r0 >= r6) goto L_0x0b89
+        L_0x0ac8:
+            if (r0 >= r6) goto L_0x0b86
             org.telegram.ui.ActionBar.SimpleTextView[] r1 = r7.pinnedNameTextView
             org.telegram.ui.ChatActivity$18 r2 = new org.telegram.ui.ChatActivity$18
             r2.<init>(r8)
@@ -3843,7 +3843,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r33, r34, r35, r36, r37, r38, r39)
             r1.addView(r2, r3)
             r1 = 1
-            if (r0 != r1) goto L_0x0b85
+            if (r0 != r1) goto L_0x0b82
             org.telegram.ui.ActionBar.SimpleTextView[] r1 = r7.pinnedMessageTextView
             r1 = r1[r0]
             r1.setVisibility(r10)
@@ -3853,10 +3853,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.ui.Components.BackupImageView[] r1 = r7.pinnedMessageImageView
             r1 = r1[r0]
             r1.setVisibility(r10)
-        L_0x0b85:
+        L_0x0b82:
             int r0 = r0 + 1
-            goto L_0x0acb
-        L_0x0b89:
+            goto L_0x0ac8
+        L_0x0b86:
             android.widget.ImageView r0 = new android.widget.ImageView
             r0.<init>(r8)
             r7.pinnedListButton = r0
@@ -3888,14 +3888,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0.setScaleY(r1)
             int r0 = android.os.Build.VERSION.SDK_INT
             r1 = 21
-            if (r0 < r1) goto L_0x0beb
+            if (r0 < r1) goto L_0x0bea
             android.widget.ImageView r1 = r7.pinnedListButton
             java.lang.String r2 = "inappPlayerClose"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r2 = r2 & r17
+            r3 = 436207615(0x19ffffff, float:2.6469778E-23)
+            r2 = r2 & r3
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2)
             r1.setBackgroundDrawable(r2)
-        L_0x0beb:
+        L_0x0bea:
             android.widget.FrameLayout r1 = r7.pinnedMessageView
             android.widget.ImageView r2 = r7.pinnedListButton
             r33 = 36
@@ -3952,21 +3953,22 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r33, r34, r35, r36, r37, r38, r39)
             r1.addView(r2, r3)
             int r1 = r7.threadMessageId
-            if (r1 == 0) goto L_0x0c7f
+            if (r1 == 0) goto L_0x0c7e
             android.widget.ImageView r1 = r7.closePinned
             r1.setVisibility(r11)
-        L_0x0c7f:
+        L_0x0c7e:
             r1 = 21
-            if (r0 < r1) goto L_0x0CLASSNAME
+            if (r0 < r1) goto L_0x0c9a
             android.widget.ImageView r0 = r7.closePinned
             java.lang.String r1 = "inappPlayerClose"
             int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
-            r1 = r1 & r17
+            r2 = 436207615(0x19ffffff, float:2.6469778E-23)
+            r1 = r1 & r2
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r26)
             r3 = 1
             android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r1, r3, r2)
             r0.setBackgroundDrawable(r1)
-        L_0x0CLASSNAME:
+        L_0x0c9a:
             android.widget.FrameLayout r0 = r7.pinnedMessageView
             android.widget.ImageView r1 = r7.closePinned
             r33 = 36
@@ -3982,10 +3984,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.ui.-$$Lambda$ChatActivity$lv1c2NnKDrbv30UL_jVE7BY4DmY r1 = new org.telegram.ui.-$$Lambda$ChatActivity$lv1c2NnKDrbv30UL_jVE7BY4DmY
             r1.<init>()
             r0.setOnClickListener(r1)
-            goto L_0x0cbf
-        L_0x0cbd:
+            goto L_0x0cc0
+        L_0x0cbe:
             r4 = 1073741824(0x40000000, float:2.0)
-        L_0x0cbf:
+        L_0x0cc0:
             org.telegram.ui.ChatActivity$20 r0 = new org.telegram.ui.ChatActivity$20
             r0.<init>(r8)
             r7.topChatPanelView = r0
@@ -4024,15 +4026,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0.setTextColor(r1)
             int r0 = android.os.Build.VERSION.SDK_INT
             r1 = 21
-            if (r0 < r1) goto L_0x0d33
+            if (r0 < r1) goto L_0x0d36
             android.widget.TextView r1 = r7.reportSpamButton
             java.lang.String r2 = "chat_reportSpam"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r2 = r2 & r17
+            r3 = 436207615(0x19ffffff, float:2.6469778E-23)
+            r2 = r2 & r3
             r3 = 5
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2, r3)
             r1.setBackground(r2)
-        L_0x0d33:
+        L_0x0d36:
             android.widget.TextView r1 = r7.reportSpamButton
             java.lang.String r2 = "chat_reportSpam"
             r1.setTag(r2)
@@ -4094,15 +4097,16 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.TextView r1 = r7.addToContactsButton
             r1.setGravity(r14)
             r1 = 21
-            if (r0 < r1) goto L_0x0dde
+            if (r0 < r1) goto L_0x0de3
             android.widget.TextView r1 = r7.addToContactsButton
             java.lang.String r2 = "chat_addContact"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r2 = r2 & r17
+            r3 = 436207615(0x19ffffff, float:2.6469778E-23)
+            r2 = r2 & r3
             r3 = 5
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2, r3)
             r1.setBackground(r2)
-        L_0x0dde:
+        L_0x0de3:
             android.widget.FrameLayout r1 = r7.topChatPanelView
             android.widget.TextView r2 = r7.addToContactsButton
             r22 = -1
@@ -4127,14 +4131,15 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2 = 2131165699(0x7var_, float:1.7945622E38)
             r1.setImageResource(r2)
             r1 = 21
-            if (r0 < r1) goto L_0x0e2a
+            if (r0 < r1) goto L_0x0e31
             android.widget.ImageView r1 = r7.closeReportSpam
             java.lang.String r2 = "chat_topPanelClose"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r2 = r2 & r17
+            r3 = 436207615(0x19ffffff, float:2.6469778E-23)
+            r2 = r2 & r3
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2)
             r1.setBackground(r2)
-        L_0x0e2a:
+        L_0x0e31:
             android.widget.ImageView r1 = r7.closeReportSpam
             android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
             java.lang.String r3 = "chat_topPanelClose"
@@ -4334,7 +4339,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.addView(r2, r3)
             org.telegram.ui.Components.RecyclerListView r4 = r7.mentionListView
             org.telegram.ui.Adapters.MentionsAdapter r3 = new org.telegram.ui.Adapters.MentionsAdapter
-            r18 = 0
+            r17 = 0
             long r1 = r7.dialog_id
             org.telegram.ui.ChatActivity$28 r6 = new org.telegram.ui.ChatActivity$28
             r6.<init>()
@@ -4342,25 +4347,24 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1 = r3
             r2 = r41
             r13 = r3
-            r3 = r18
+            r3 = r17
             r11 = r4
-            r23 = 1073741824(0x40000000, float:2.0)
-            r26 = 1096810496(0x41600000, float:14.0)
+            r22 = 1073741824(0x40000000, float:2.0)
             r4 = r24
             r1.<init>(r2, r3, r4, r6)
             r7.mentionsAdapter = r13
             r11.setAdapter(r13)
             org.telegram.tgnet.TLRPC$Chat r1 = r7.currentChat
             boolean r1 = org.telegram.messenger.ChatObject.isChannel(r1)
-            if (r1 == 0) goto L_0x1041
+            if (r1 == 0) goto L_0x1046
             org.telegram.tgnet.TLRPC$Chat r1 = r7.currentChat
             boolean r1 = r1.megagroup
-            if (r1 == 0) goto L_0x1048
-        L_0x1041:
+            if (r1 == 0) goto L_0x104d
+        L_0x1046:
             org.telegram.ui.Adapters.MentionsAdapter r1 = r7.mentionsAdapter
             android.util.SparseArray<org.telegram.tgnet.TLRPC$BotInfo> r2 = r7.botInfo
             r1.setBotInfo(r2)
-        L_0x1048:
+        L_0x104d:
             org.telegram.ui.Adapters.MentionsAdapter r1 = r7.mentionsAdapter
             r1.setParentFragment(r7)
             org.telegram.ui.Adapters.MentionsAdapter r1 = r7.mentionsAdapter
@@ -4368,36 +4372,36 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.setChatInfo(r2)
             org.telegram.ui.Adapters.MentionsAdapter r1 = r7.mentionsAdapter
             org.telegram.tgnet.TLRPC$Chat r2 = r7.currentChat
-            if (r2 == 0) goto L_0x105c
+            if (r2 == 0) goto L_0x1061
             r2 = 1
-            goto L_0x105d
-        L_0x105c:
+            goto L_0x1062
+        L_0x1061:
             r2 = 0
-        L_0x105d:
+        L_0x1062:
             r1.setNeedUsernames(r2)
             org.telegram.ui.Adapters.MentionsAdapter r1 = r7.mentionsAdapter
             org.telegram.tgnet.TLRPC$EncryptedChat r2 = r7.currentEncryptedChat
             r11 = 46
-            if (r2 == 0) goto L_0x1073
+            if (r2 == 0) goto L_0x1078
             int r2 = r2.layer
             int r2 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r2)
-            if (r2 < r11) goto L_0x1071
-            goto L_0x1073
-        L_0x1071:
+            if (r2 < r11) goto L_0x1076
+            goto L_0x1078
+        L_0x1076:
             r2 = 0
-            goto L_0x1074
-        L_0x1073:
+            goto L_0x1079
+        L_0x1078:
             r2 = 1
-        L_0x1074:
+        L_0x1079:
             r1.setNeedBotContext(r2)
             org.telegram.ui.Adapters.MentionsAdapter r1 = r7.mentionsAdapter
             org.telegram.tgnet.TLRPC$Chat r2 = r7.currentChat
-            if (r2 == 0) goto L_0x1080
+            if (r2 == 0) goto L_0x1085
             int r2 = r7.botsCount
-            goto L_0x1081
-        L_0x1080:
+            goto L_0x1086
+        L_0x1085:
             r2 = 1
-        L_0x1081:
+        L_0x1086:
             r1.setBotsCount(r2)
             org.telegram.ui.Components.RecyclerListView r1 = r7.mentionListView
             org.telegram.ui.-$$Lambda$ChatActivity$y6jl57lUw1j7WSFIvRgPAVKjN3c r2 = new org.telegram.ui.-$$Lambda$ChatActivity$y6jl57lUw1j7WSFIvRgPAVKjN3c
@@ -4428,11 +4432,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2.<init>(r3, r4)
             r1.setColorFilter(r2)
             android.widget.ImageView r1 = r7.pagedownButtonImage
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r23)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r22)
             r1.setPadding(r9, r2, r9, r9)
             r1 = 1109917696(0x42280000, float:42.0)
             r2 = 21
-            if (r0 < r2) goto L_0x10f8
+            if (r0 < r2) goto L_0x10fd
             android.widget.ImageView r2 = r7.pagedownButtonImage
             org.telegram.ui.ChatActivity$30 r3 = new org.telegram.ui.ChatActivity$30
             r3.<init>(r7)
@@ -4443,13 +4447,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.String r4 = "listSelectorSDK21"
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r2, r3, r4)
-            goto L_0x1106
-        L_0x10f8:
+            goto L_0x110b
+        L_0x10fd:
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r1)
             java.lang.String r3 = "chat_goDownButton"
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
             android.graphics.drawable.ShapeDrawable r2 = org.telegram.ui.ActionBar.Theme.createCircleDrawable(r2, r3)
-        L_0x1106:
+        L_0x110b:
             android.content.res.Resources r3 = r41.getResources()
             r4 = 2131165849(0x7var_, float:1.7945927E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r4)
@@ -4533,10 +4537,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r3.<init>(r4, r5)
             r2.setColorFilter(r3)
             android.widget.ImageView r2 = r7.mentiondownButtonImage
-            int r3 = org.telegram.messenger.AndroidUtilities.dp(r23)
+            int r3 = org.telegram.messenger.AndroidUtilities.dp(r22)
             r2.setPadding(r9, r3, r9, r9)
             r2 = 21
-            if (r0 < r2) goto L_0x1215
+            if (r0 < r2) goto L_0x121a
             android.widget.ImageView r2 = r7.pagedownButtonImage
             org.telegram.ui.ChatActivity$31 r3 = new org.telegram.ui.ChatActivity$31
             r3.<init>(r7)
@@ -4547,13 +4551,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.String r4 = "listSelectorSDK21"
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSimpleSelectorCircleDrawable(r2, r3, r4)
-            goto L_0x1223
-        L_0x1215:
+            goto L_0x1228
+        L_0x121a:
             int r2 = org.telegram.messenger.AndroidUtilities.dp(r1)
             java.lang.String r3 = "chat_goDownButton"
             int r3 = org.telegram.ui.ActionBar.Theme.getColor(r3)
             android.graphics.drawable.ShapeDrawable r2 = org.telegram.ui.ActionBar.Theme.createCircleDrawable(r2, r3)
-        L_0x1223:
+        L_0x1228:
             android.content.res.Resources r3 = r41.getResources()
             r4 = 2131165849(0x7var_, float:1.7945927E38)
             android.graphics.drawable.Drawable r3 = r3.getDrawable(r4)
@@ -4622,11 +4626,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             java.lang.String r3 = "AccDescrMentionDown"
             java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r3, r2)
             r1.setContentDescription(r2)
-            boolean r1 = org.telegram.messenger.AndroidUtilities.isTablet()
-            if (r1 == 0) goto L_0x12ed
-            boolean r1 = org.telegram.messenger.AndroidUtilities.isSmallTablet()
-            if (r1 == 0) goto L_0x132a
-        L_0x12ed:
             org.telegram.ui.Components.SizeNotifierFrameLayout r1 = r7.contentView
             org.telegram.ui.Components.FragmentContextView r2 = new org.telegram.ui.Components.FragmentContextView
             r3 = 1
@@ -4653,7 +4652,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.ui.Components.FragmentContextView r1 = r7.fragmentLocationContextView
             org.telegram.ui.Components.FragmentContextView r2 = r7.fragmentContextView
             r1.setAdditionalContextView(r2)
-        L_0x132a:
+            int r1 = r7.chatMode
+            if (r1 == 0) goto L_0x132c
+            org.telegram.ui.Components.FragmentContextView r1 = r7.fragmentContextView
+            r1.setSupportsCalls(r9)
+        L_0x132c:
             org.telegram.ui.Components.RecyclerListView r1 = new org.telegram.ui.Components.RecyclerListView
             r1.<init>(r8)
             r7.messagesSearchListView = r1
@@ -4739,7 +4742,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.FrameLayout r1 = r7.bottomMessagesActionContainer
             r1.setWillNotDraw(r9)
             android.widget.FrameLayout r1 = r7.bottomMessagesActionContainer
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r23)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r22)
             r1.setPadding(r9, r2, r9, r9)
             org.telegram.ui.Components.SizeNotifierFrameLayout r1 = r7.contentView
             android.widget.FrameLayout r2 = r7.bottomMessagesActionContainer
@@ -4752,13 +4755,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.ui.ChatActivity$35 r5 = new org.telegram.ui.ChatActivity$35
             android.app.Activity r3 = r40.getParentActivity()
             org.telegram.ui.Components.SizeNotifierFrameLayout r4 = r7.contentView
-            r24 = 1
+            r23 = 1
             r1 = r5
             r2 = r40
             r14 = r5
             r5 = r40
             r9 = -2
-            r6 = r24
+            r6 = r23
             r1.<init>(r3, r4, r5, r6)
             r7.chatActivityEnterView = r14
             org.telegram.ui.ChatActivity$36 r1 = new org.telegram.ui.ChatActivity$36
@@ -4769,10 +4772,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             int r4 = r7.currentAccount
             r1.setDialogId(r2, r4)
             org.telegram.tgnet.TLRPC$ChatFull r1 = r7.chatInfo
-            if (r1 == 0) goto L_0x1445
+            if (r1 == 0) goto L_0x1447
             org.telegram.ui.Components.ChatActivityEnterView r2 = r7.chatActivityEnterView
             r2.setChatInfo(r1)
-        L_0x1445:
+        L_0x1447:
             org.telegram.ui.Components.ChatActivityEnterView r1 = r7.chatActivityEnterView
             r2 = 1000(0x3e8, float:1.401E-42)
             r1.setId(r2)
@@ -4786,35 +4789,35 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.setMinimumHeight(r2)
             org.telegram.ui.Components.ChatActivityEnterView r1 = r7.chatActivityEnterView
             org.telegram.tgnet.TLRPC$EncryptedChat r2 = r7.currentEncryptedChat
-            if (r2 == 0) goto L_0x1471
+            if (r2 == 0) goto L_0x1473
             int r2 = r2.layer
             int r2 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r2)
-            if (r2 < r13) goto L_0x146f
-            goto L_0x1471
-        L_0x146f:
-            r2 = 0
-            goto L_0x1472
+            if (r2 < r13) goto L_0x1471
+            goto L_0x1473
         L_0x1471:
+            r2 = 0
+            goto L_0x1474
+        L_0x1473:
             r2 = 1
-        L_0x1472:
+        L_0x1474:
             org.telegram.tgnet.TLRPC$EncryptedChat r3 = r7.currentEncryptedChat
-            if (r3 == 0) goto L_0x1481
+            if (r3 == 0) goto L_0x1483
             int r3 = r3.layer
             int r3 = org.telegram.messenger.AndroidUtilities.getPeerLayerVersion(r3)
-            if (r3 < r11) goto L_0x147f
-            goto L_0x1481
-        L_0x147f:
-            r3 = 0
-            goto L_0x1482
+            if (r3 < r11) goto L_0x1481
+            goto L_0x1483
         L_0x1481:
+            r3 = 0
+            goto L_0x1484
+        L_0x1483:
             r3 = 1
-        L_0x1482:
+        L_0x1484:
             r1.setAllowStickersAndGifs(r2, r3)
             boolean r1 = r7.inPreviewMode
-            if (r1 == 0) goto L_0x148e
+            if (r1 == 0) goto L_0x1490
             org.telegram.ui.Components.ChatActivityEnterView r1 = r7.chatActivityEnterView
             r1.setVisibility(r10)
-        L_0x148e:
+        L_0x1490:
             org.telegram.ui.Components.SizeNotifierFrameLayout r1 = r7.contentView
             org.telegram.ui.Components.ChatActivityEnterView r2 = r7.chatActivityEnterView
             int r3 = r1.getChildCount()
@@ -4884,17 +4887,18 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.widget.ImageView$ScaleType r3 = android.widget.ImageView.ScaleType.CENTER
             r2.setScaleType(r3)
             r2 = 21
-            if (r0 < r2) goto L_0x1552
+            if (r0 < r2) goto L_0x1556
             android.widget.ImageView r0 = r7.replyCloseImageView
             java.lang.String r2 = "inappPlayerClose"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r2 = r2 & r17
+            r3 = 436207615(0x19ffffff, float:2.6469778E-23)
+            r2 = r2 & r3
             r3 = 1099956224(0x41900000, float:18.0)
             int r3 = org.telegram.messenger.AndroidUtilities.dp(r3)
             r4 = 1
             android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2, r4, r3)
             r0.setBackgroundDrawable(r2)
-        L_0x1552:
+        L_0x1556:
             org.telegram.ui.ChatActivityEnterTopView r0 = r7.chatActivityEnterTopView
             android.widget.ImageView r2 = r7.replyCloseImageView
             r30 = 52
@@ -4946,7 +4950,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.ui.Components.BackupImageView r0 = new org.telegram.ui.Components.BackupImageView
             r0.<init>(r8)
             r7.replyImageView = r0
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r23)
+            int r2 = org.telegram.messenger.AndroidUtilities.dp(r22)
             r0.setRoundRadius(r2)
             org.telegram.ui.Components.BackupImageView r0 = r7.replyImageView
             r30 = 34
@@ -4987,68 +4991,50 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r2.addEditView(r0, r3)
             r2 = 0
             r3 = 2
-        L_0x1633:
-            if (r2 >= r3) goto L_0x1702
-            if (r2 != 0) goto L_0x1639
+        L_0x1637:
+            if (r2 >= r3) goto L_0x16d4
+            if (r2 != 0) goto L_0x163d
             r4 = 1
-            goto L_0x163a
-        L_0x1639:
+            goto L_0x163e
+        L_0x163d:
             r4 = 0
-        L_0x163a:
+        L_0x163e:
             org.telegram.ui.ChatActivity$38 r5 = new org.telegram.ui.ChatActivity$38
             r5.<init>(r7, r8, r4)
             r6 = 0
             r5.setOrientation(r6)
-            if (r4 == 0) goto L_0x1648
+            if (r4 == 0) goto L_0x164c
             r6 = 1096810496(0x41600000, float:14.0)
-            goto L_0x164a
-        L_0x1648:
+            goto L_0x164e
+        L_0x164c:
             r6 = 1098907648(0x41800000, float:16.0)
-        L_0x164a:
-            if (r4 == 0) goto L_0x164f
+        L_0x164e:
+            if (r4 == 0) goto L_0x1653
             r11 = 1098907648(0x41800000, float:16.0)
-            goto L_0x1651
-        L_0x164f:
+            goto L_0x1655
+        L_0x1653:
             r11 = 1099956224(0x41900000, float:18.0)
-        L_0x1651:
+        L_0x1655:
             r14 = 0
             org.telegram.ui.Components.ViewHelper.setPadding(r5, r6, r14, r11, r14)
-            if (r4 == 0) goto L_0x165c
-            int r6 = org.telegram.messenger.AndroidUtilities.dp(r26)
-            goto L_0x165d
-        L_0x165c:
-            r6 = 0
-        L_0x165d:
-            java.lang.String r11 = "chat_replyPanelName"
-            int r11 = org.telegram.ui.ActionBar.Theme.getColor(r11)
-            r11 = r11 & r17
-            r14 = 0
-            android.graphics.drawable.Drawable r6 = org.telegram.ui.ActionBar.Theme.createCircleSelectorDrawable(r11, r6, r14)
-            r5.setBackground(r6)
             android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r12)
-            if (r4 != 0) goto L_0x167c
+            if (r4 != 0) goto L_0x1668
             r11 = 1092616192(0x41200000, float:10.0)
             int r11 = org.telegram.messenger.AndroidUtilities.dp(r11)
             int r11 = -r11
             r6.leftMargin = r11
-        L_0x167c:
+        L_0x1668:
             r0.addButton(r5, r6)
             android.widget.ImageView r6 = new android.widget.ImageView
             r6.<init>(r8)
-            android.graphics.PorterDuffColorFilter r11 = new android.graphics.PorterDuffColorFilter
-            java.lang.String r14 = "chat_replyPanelName"
-            int r14 = org.telegram.ui.ActionBar.Theme.getColor(r14)
-            android.graphics.PorterDuff$Mode r13 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r11.<init>(r14, r13)
-            r6.setColorFilter(r11)
             android.widget.ImageView$ScaleType r11 = android.widget.ImageView.ScaleType.CENTER
             r6.setScaleType(r11)
-            if (r4 == 0) goto L_0x169f
+            if (r4 == 0) goto L_0x167b
             r4 = 2131165766(0x7var_, float:1.7945758E38)
-            goto L_0x16a2
-        L_0x169f:
+            goto L_0x167e
+        L_0x167b:
             r4 = 2131165773(0x7var_d, float:1.7945773E38)
-        L_0x16a2:
+        L_0x167e:
             r6.setImageResource(r4)
             r4 = 24
             android.widget.LinearLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createLinear(r4, r12)
@@ -5067,9 +5053,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r4.setTextSize(r6, r11)
             android.graphics.Typeface r6 = org.telegram.messenger.AndroidUtilities.getTypeface(r16)
             r4.setTypeface(r6)
-            java.lang.String r6 = "chat_replyPanelName"
-            int r6 = org.telegram.ui.ActionBar.Theme.getColor(r6)
-            r4.setTextColor(r6)
             r6 = 1119354880(0x42b80000, float:92.0)
             int r6 = org.telegram.messenger.AndroidUtilities.dp(r6)
             r4.setMaxWidth(r6)
@@ -5077,14 +5060,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r4.setGravity(r6)
             android.widget.LinearLayout$LayoutParams r6 = org.telegram.ui.Components.LayoutHelper.createLinear(r9, r12)
             r5.addTextView(r4, r6)
+            r5.updateColors()
             org.telegram.ui.-$$Lambda$ChatActivity$H0rDQJaIcRpJWWK9RjnopPGS_0k r4 = new org.telegram.ui.-$$Lambda$ChatActivity$H0rDQJaIcRpJWWK9RjnopPGS_0k
             r4.<init>(r5, r1)
             r5.setOnClickListener(r4)
             int r2 = r2 + 1
-            r13 = 23
-            r26 = 1096810496(0x41600000, float:14.0)
-            goto L_0x1633
-        L_0x1702:
+            goto L_0x1637
+        L_0x16d4:
             r11 = 1096810496(0x41600000, float:14.0)
             org.telegram.ui.ChatActivity$39 r0 = new org.telegram.ui.ChatActivity$39
             r0.<init>()
@@ -5131,14 +5113,14 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r0.setColorFilter(r1)
             android.widget.FrameLayout r0 = r7.stickersPanel
             android.widget.ImageView r1 = r7.stickersPanelArrow
-            r31 = -2
-            r32 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r33 = 83
-            r34 = 1112801280(0x42540000, float:53.0)
-            r35 = 0
-            r36 = 1112801280(0x42540000, float:53.0)
-            r37 = 0
-            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r31, r32, r33, r34, r35, r36, r37)
+            r30 = -2
+            r31 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r32 = 83
+            r33 = 1112801280(0x42540000, float:53.0)
+            r34 = 0
+            r35 = 1112801280(0x42540000, float:53.0)
+            r36 = 0
+            android.widget.FrameLayout$LayoutParams r2 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
             r0.addView(r1, r2)
             org.telegram.ui.ChatActivity$41 r0 = new org.telegram.ui.ChatActivity$41
             r0.<init>(r8)
@@ -5160,423 +5142,417 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.<init>()
             r0.setOnTouchListener(r1)
             int r0 = android.os.Build.VERSION.SDK_INT
-            r1 = 21
-            if (r0 < r1) goto L_0x17cd
-            android.view.View r1 = r7.searchAsListTogglerView
-            java.lang.String r2 = "actionBarActionModeDefaultSelector"
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r4 = 0
-            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable((int) r2, (boolean) r4)
-            r1.setBackground(r2)
-        L_0x17cd:
-            android.view.View r1 = r7.searchAsListTogglerView
-            org.telegram.ui.-$$Lambda$ChatActivity$MA1x6fNdPRPxh9lwdeeZ9QJlIpo r2 = new org.telegram.ui.-$$Lambda$ChatActivity$MA1x6fNdPRPxh9lwdeeZ9QJlIpo
-            r2.<init>()
-            r1.setOnClickListener(r2)
-            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.chat_composeShadowDrawable
-            int r1 = r1.getIntrinsicHeight()
-            float r1 = (float) r1
-            float r2 = org.telegram.messenger.AndroidUtilities.density
-            float r1 = r1 / r2
-            r2 = 1077936128(0x40400000, float:3.0)
-            float r35 = r1 - r2
-            android.widget.FrameLayout r1 = r7.searchContainer
+            java.lang.String r1 = "actionBarActionModeDefaultSelector"
+            r2 = 21
+            if (r0 < r2) goto L_0x179f
             android.view.View r2 = r7.searchAsListTogglerView
-            r31 = -1
-            r32 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r33 = 0
-            r34 = 0
-            r36 = 0
-            r37 = 0
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r31, r32, r33, r34, r35, r36, r37)
-            r1.addView(r2, r4)
-            android.widget.ImageView r1 = new android.widget.ImageView
-            r1.<init>(r8)
-            r7.searchUpButton = r1
-            android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
-            r1.setScaleType(r2)
-            android.widget.ImageView r1 = r7.searchUpButton
-            r2 = 2131165736(0x7var_, float:1.7945698E38)
-            r1.setImageResource(r2)
-            android.widget.ImageView r1 = r7.searchUpButton
-            android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
-            java.lang.String r4 = "chat_searchPanelIcons"
-            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            android.graphics.PorterDuff$Mode r5 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r2.<init>(r4, r5)
-            r1.setColorFilter(r2)
-            android.widget.ImageView r1 = r7.searchUpButton
-            java.lang.String r2 = "actionBarActionModeDefaultSelector"
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r4 = 1
-            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2, r4)
-            r1.setBackgroundDrawable(r2)
-            android.widget.FrameLayout r1 = r7.searchContainer
-            android.widget.ImageView r2 = r7.searchUpButton
-            r31 = 48
-            r32 = 1111490560(0x42400000, float:48.0)
-            r33 = 53
-            r35 = 0
-            r36 = 1111490560(0x42400000, float:48.0)
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r31, r32, r33, r34, r35, r36, r37)
-            r1.addView(r2, r4)
-            android.widget.ImageView r1 = r7.searchUpButton
-            org.telegram.ui.-$$Lambda$ChatActivity$STWZRGRI41TCtluhWMUueEgiDcY r2 = new org.telegram.ui.-$$Lambda$ChatActivity$STWZRGRI41TCtluhWMUueEgiDcY
-            r2.<init>()
-            r1.setOnClickListener(r2)
-            android.widget.ImageView r1 = r7.searchUpButton
-            r2 = 2131624020(0x7f0e0054, float:1.8875208E38)
-            java.lang.String r4 = "AccDescrSearchNext"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
-            r1.setContentDescription(r2)
-            android.widget.ImageView r1 = new android.widget.ImageView
-            r1.<init>(r8)
-            r7.searchDownButton = r1
-            android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
-            r1.setScaleType(r2)
-            android.widget.ImageView r1 = r7.searchDownButton
-            r2 = 2131165735(0x7var_, float:1.7945696E38)
-            r1.setImageResource(r2)
-            android.widget.ImageView r1 = r7.searchDownButton
-            android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
-            java.lang.String r4 = "chat_searchPanelIcons"
-            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            android.graphics.PorterDuff$Mode r5 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r2.<init>(r4, r5)
-            r1.setColorFilter(r2)
-            android.widget.ImageView r1 = r7.searchDownButton
-            java.lang.String r2 = "actionBarActionModeDefaultSelector"
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r4 = 1
-            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2, r4)
-            r1.setBackgroundDrawable(r2)
-            android.widget.FrameLayout r1 = r7.searchContainer
-            android.widget.ImageView r2 = r7.searchDownButton
-            r36 = 0
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r31, r32, r33, r34, r35, r36, r37)
-            r1.addView(r2, r4)
-            android.widget.ImageView r1 = r7.searchDownButton
-            org.telegram.ui.-$$Lambda$ChatActivity$eaTd4W3UcOopuS9j6Z8hrQQaoyM r2 = new org.telegram.ui.-$$Lambda$ChatActivity$eaTd4W3UcOopuS9j6Z8hrQQaoyM
-            r2.<init>()
-            r1.setOnClickListener(r2)
-            android.widget.ImageView r1 = r7.searchDownButton
-            r2 = 2131624021(0x7f0e0055, float:1.887521E38)
-            java.lang.String r4 = "AccDescrSearchPrev"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
-            r1.setContentDescription(r2)
-            org.telegram.tgnet.TLRPC$Chat r1 = r7.currentChat
-            if (r1 == 0) goto L_0x1931
-            boolean r1 = org.telegram.messenger.ChatObject.isChannel(r1)
-            if (r1 == 0) goto L_0x18ca
-            org.telegram.tgnet.TLRPC$Chat r1 = r7.currentChat
-            boolean r1 = r1.megagroup
-            if (r1 == 0) goto L_0x1931
-        L_0x18ca:
-            android.widget.ImageView r1 = new android.widget.ImageView
-            r1.<init>(r8)
-            r7.searchUserButton = r1
-            android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
-            r1.setScaleType(r2)
-            android.widget.ImageView r1 = r7.searchUserButton
-            r2 = 2131165805(0x7var_d, float:1.7945837E38)
-            r1.setImageResource(r2)
-            android.widget.ImageView r1 = r7.searchUserButton
-            android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
-            java.lang.String r4 = "chat_searchPanelIcons"
-            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            android.graphics.PorterDuff$Mode r5 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r2.<init>(r4, r5)
-            r1.setColorFilter(r2)
-            android.widget.ImageView r1 = r7.searchUserButton
-            java.lang.String r2 = "actionBarActionModeDefaultSelector"
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r4 = 1
-            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2, r4)
-            r1.setBackgroundDrawable(r2)
-            android.widget.FrameLayout r1 = r7.searchContainer
-            android.widget.ImageView r2 = r7.searchUserButton
-            r31 = 48
-            r32 = 1111490560(0x42400000, float:48.0)
-            r33 = 51
-            r34 = 1111490560(0x42400000, float:48.0)
-            r35 = 0
-            r36 = 0
-            r37 = 0
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r31, r32, r33, r34, r35, r36, r37)
-            r1.addView(r2, r4)
-            android.widget.ImageView r1 = r7.searchUserButton
-            org.telegram.ui.-$$Lambda$ChatActivity$oJMPZvn6var_vhTgcHHwvtcwPhEU r2 = new org.telegram.ui.-$$Lambda$ChatActivity$oJMPZvn6var_vhTgcHHwvtcwPhEU
-            r2.<init>()
-            r1.setOnClickListener(r2)
-            android.widget.ImageView r1 = r7.searchUserButton
-            r2 = 2131624019(0x7f0e0053, float:1.8875206E38)
-            java.lang.String r4 = "AccDescrSearchByUser"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
-            r1.setContentDescription(r2)
-        L_0x1931:
-            android.widget.ImageView r1 = new android.widget.ImageView
-            r1.<init>(r8)
-            r7.searchCalendarButton = r1
-            android.widget.ImageView$ScaleType r2 = android.widget.ImageView.ScaleType.CENTER
-            r1.setScaleType(r2)
-            android.widget.ImageView r1 = r7.searchCalendarButton
-            r2 = 2131165713(0x7var_, float:1.794565E38)
-            r1.setImageResource(r2)
-            android.widget.ImageView r1 = r7.searchCalendarButton
-            android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
-            java.lang.String r4 = "chat_searchPanelIcons"
-            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            android.graphics.PorterDuff$Mode r5 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r2.<init>(r4, r5)
-            r1.setColorFilter(r2)
-            android.widget.ImageView r1 = r7.searchCalendarButton
-            java.lang.String r2 = "actionBarActionModeDefaultSelector"
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r4 = 1
-            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2, r4)
-            r1.setBackgroundDrawable(r2)
-            android.widget.FrameLayout r1 = r7.searchContainer
-            android.widget.ImageView r2 = r7.searchCalendarButton
-            r4 = 48
-            r5 = 48
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r5, r15)
-            r1.addView(r2, r4)
-            android.widget.ImageView r1 = r7.searchCalendarButton
-            org.telegram.ui.-$$Lambda$ChatActivity$Kyc4HEuQu5kJPKr3ZFndKeKqrrw r2 = new org.telegram.ui.-$$Lambda$ChatActivity$Kyc4HEuQu5kJPKr3ZFndKeKqrrw
-            r2.<init>()
-            r1.setOnClickListener(r2)
-            android.widget.ImageView r1 = r7.searchCalendarButton
-            r2 = 2131625704(0x7f0e06e8, float:1.8878623E38)
-            java.lang.String r4 = "JumpToDate"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
-            r1.setContentDescription(r2)
-            org.telegram.ui.ActionBar.SimpleTextView r1 = new org.telegram.ui.ActionBar.SimpleTextView
-            r1.<init>(r8)
-            r7.searchCountText = r1
-            java.lang.String r2 = "chat_searchPanelText"
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r1.setTextColor(r2)
-            org.telegram.ui.ActionBar.SimpleTextView r1 = r7.searchCountText
-            r2 = 15
-            r1.setTextSize(r2)
-            org.telegram.ui.ActionBar.SimpleTextView r1 = r7.searchCountText
-            android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r16)
-            r1.setTypeface(r2)
-            org.telegram.ui.ActionBar.SimpleTextView r1 = r7.searchCountText
-            r2 = 3
-            r1.setGravity(r2)
-            android.widget.FrameLayout r1 = r7.searchContainer
-            org.telegram.ui.ActionBar.SimpleTextView r2 = r7.searchCountText
-            r31 = -2
-            r32 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r33 = 16
-            r34 = 0
-            r35 = 0
-            r36 = 1121452032(0x42d80000, float:108.0)
-            r37 = 0
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r31, r32, r33, r34, r35, r36, r37)
-            r1.addView(r2, r4)
-            org.telegram.ui.ChatActivity$42 r1 = new org.telegram.ui.ChatActivity$42
-            r1.<init>(r7, r8)
-            r7.bottomOverlay = r1
-            r2 = 0
-            r1.setWillNotDraw(r2)
-            android.widget.FrameLayout r1 = r7.bottomOverlay
-            r1.setVisibility(r10)
-            android.widget.FrameLayout r1 = r7.bottomOverlay
-            r4 = 1
-            r1.setFocusable(r4)
-            android.widget.FrameLayout r1 = r7.bottomOverlay
-            r1.setFocusableInTouchMode(r4)
-            android.widget.FrameLayout r1 = r7.bottomOverlay
-            r1.setClickable(r4)
-            android.widget.FrameLayout r1 = r7.bottomOverlay
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r23)
-            r1.setPadding(r2, r4, r2, r2)
-            org.telegram.ui.Components.SizeNotifierFrameLayout r1 = r7.contentView
-            android.widget.FrameLayout r2 = r7.bottomOverlay
-            r4 = 80
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r15, r4)
-            r1.addView(r2, r4)
-            android.widget.TextView r1 = new android.widget.TextView
-            r1.<init>(r8)
-            r7.bottomOverlayText = r1
-            r2 = 1
-            r1.setTextSize(r2, r11)
-            android.widget.TextView r1 = r7.bottomOverlayText
-            r2 = 17
-            r1.setGravity(r2)
-            android.widget.TextView r1 = r7.bottomOverlayText
-            r1.setMaxLines(r3)
-            android.widget.TextView r1 = r7.bottomOverlayText
-            android.text.TextUtils$TruncateAt r2 = android.text.TextUtils.TruncateAt.END
-            r1.setEllipsize(r2)
-            android.widget.TextView r1 = r7.bottomOverlayText
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r23)
-            float r2 = (float) r2
-            r4 = 1065353216(0x3var_, float:1.0)
-            r1.setLineSpacing(r2, r4)
-            android.widget.TextView r1 = r7.bottomOverlayText
-            java.lang.String r2 = "chat_secretChatStatusText"
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r1.setTextColor(r2)
-            android.widget.FrameLayout r1 = r7.bottomOverlay
-            android.widget.TextView r2 = r7.bottomOverlayText
-            r33 = 17
-            r34 = 1096810496(0x41600000, float:14.0)
-            r36 = 1096810496(0x41600000, float:14.0)
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r31, r32, r33, r34, r35, r36, r37)
-            r1.addView(r2, r4)
-            org.telegram.ui.ChatActivity$43 r1 = new org.telegram.ui.ChatActivity$43
-            r1.<init>(r8)
-            r7.bottomOverlayChat = r1
-            r2 = 0
-            r1.setWillNotDraw(r2)
-            android.widget.FrameLayout r1 = r7.bottomOverlayChat
-            r4 = 1069547520(0x3fCLASSNAME, float:1.5)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r1.setPadding(r2, r4, r2, r2)
-            android.widget.FrameLayout r1 = r7.bottomOverlayChat
-            r1.setVisibility(r10)
-            android.widget.FrameLayout r1 = r7.bottomOverlayChat
-            r1.setClipChildren(r2)
-            org.telegram.ui.Components.SizeNotifierFrameLayout r1 = r7.contentView
-            android.widget.FrameLayout r2 = r7.bottomOverlayChat
-            r4 = 80
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r15, r4)
-            r1.addView(r2, r4)
-            org.telegram.ui.ChatActivity$UnreadCounterTextView r1 = new org.telegram.ui.ChatActivity$UnreadCounterTextView
-            r1.<init>(r8)
-            r7.bottomOverlayChatText = r1
-            android.widget.FrameLayout r2 = r7.bottomOverlayChat
-            r31 = -1
-            r32 = -1082130432(0xffffffffbvar_, float:-1.0)
-            r33 = 0
-            r34 = 0
-            r35 = 1069547520(0x3fCLASSNAME, float:1.5)
-            r36 = 0
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r31, r32, r33, r34, r35, r36, r37)
-            r2.addView(r1, r4)
-            org.telegram.ui.ChatActivity$UnreadCounterTextView r1 = r7.bottomOverlayChatText
-            org.telegram.ui.-$$Lambda$ChatActivity$2GxORvjxERtcjdaBecW7yRCTb2U r2 = new org.telegram.ui.-$$Lambda$ChatActivity$2GxORvjxERtcjdaBecW7yRCTb2U
-            r2.<init>()
-            r1.setOnClickListener(r2)
-            org.telegram.ui.Components.RadialProgressView r1 = new org.telegram.ui.Components.RadialProgressView
-            r1.<init>(r8)
-            r7.bottomOverlayProgress = r1
-            r2 = 1102053376(0x41b00000, float:22.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            r1.setSize(r2)
-            org.telegram.ui.Components.RadialProgressView r1 = r7.bottomOverlayProgress
-            java.lang.String r2 = "chat_fieldOverlayText"
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r1.setProgressColor(r2)
-            org.telegram.ui.Components.RadialProgressView r1 = r7.bottomOverlayProgress
-            r1.setVisibility(r10)
-            org.telegram.ui.Components.RadialProgressView r1 = r7.bottomOverlayProgress
-            r2 = 1036831949(0x3dcccccd, float:0.1)
-            r1.setScaleX(r2)
-            org.telegram.ui.Components.RadialProgressView r1 = r7.bottomOverlayProgress
-            r1.setScaleY(r2)
-            org.telegram.ui.Components.RadialProgressView r1 = r7.bottomOverlayProgress
-            r2 = 1065353216(0x3var_, float:1.0)
-            r1.setAlpha(r2)
-            android.widget.FrameLayout r1 = r7.bottomOverlayChat
-            org.telegram.ui.Components.RadialProgressView r2 = r7.bottomOverlayProgress
-            r4 = 30
-            r5 = 30
-            r6 = 17
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r4, r5, r6)
-            r1.addView(r2, r4)
-            android.widget.TextView r1 = new android.widget.TextView
-            r1.<init>(r8)
-            r7.replyButton = r1
-            r2 = 2131626887(0x7f0e0b87, float:1.8881023E38)
-            java.lang.String r4 = "Reply"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
-            r1.setText(r2)
-            android.widget.TextView r1 = r7.replyButton
-            r2 = 16
-            r1.setGravity(r2)
-            android.widget.TextView r1 = r7.replyButton
-            r2 = 1097859072(0x41700000, float:15.0)
-            r4 = 1
-            r1.setTextSize(r4, r2)
-            android.widget.TextView r1 = r7.replyButton
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r11)
-            r4 = 1101529088(0x41a80000, float:21.0)
-            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r5 = 0
-            r1.setPadding(r2, r5, r4, r5)
-            android.widget.TextView r1 = r7.replyButton
-            java.lang.String r2 = "actionBarActionModeDefaultSelector"
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.getSelectorDrawable((int) r4, (boolean) r5)
+            r2.setBackground(r4)
+        L_0x179f:
+            android.view.View r2 = r7.searchAsListTogglerView
+            org.telegram.ui.-$$Lambda$ChatActivity$MA1x6fNdPRPxh9lwdeeZ9QJlIpo r4 = new org.telegram.ui.-$$Lambda$ChatActivity$MA1x6fNdPRPxh9lwdeeZ9QJlIpo
+            r4.<init>()
+            r2.setOnClickListener(r4)
+            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.chat_composeShadowDrawable
+            int r2 = r2.getIntrinsicHeight()
+            float r2 = (float) r2
+            float r4 = org.telegram.messenger.AndroidUtilities.density
+            float r2 = r2 / r4
+            r4 = 1077936128(0x40400000, float:3.0)
+            float r34 = r2 - r4
+            android.widget.FrameLayout r2 = r7.searchContainer
+            android.view.View r4 = r7.searchAsListTogglerView
+            r30 = -1
+            r31 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r32 = 0
+            r33 = 0
+            r35 = 0
+            r36 = 0
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
+            r2.addView(r4, r5)
+            android.widget.ImageView r2 = new android.widget.ImageView
+            r2.<init>(r8)
+            r7.searchUpButton = r2
+            android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
+            r2.setScaleType(r4)
+            android.widget.ImageView r2 = r7.searchUpButton
+            r4 = 2131165736(0x7var_, float:1.7945698E38)
+            r2.setImageResource(r4)
+            android.widget.ImageView r2 = r7.searchUpButton
+            android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r5 = "chat_searchPanelIcons"
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r4.<init>(r5, r6)
+            r2.setColorFilter(r4)
+            android.widget.ImageView r2 = r7.searchUpButton
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            r5 = 1
+            android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4, r5)
+            r2.setBackgroundDrawable(r4)
+            android.widget.FrameLayout r2 = r7.searchContainer
+            android.widget.ImageView r4 = r7.searchUpButton
+            r30 = 48
+            r31 = 1111490560(0x42400000, float:48.0)
+            r32 = 53
+            r34 = 0
+            r35 = 1111490560(0x42400000, float:48.0)
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
+            r2.addView(r4, r5)
+            android.widget.ImageView r2 = r7.searchUpButton
+            org.telegram.ui.-$$Lambda$ChatActivity$STWZRGRI41TCtluhWMUueEgiDcY r4 = new org.telegram.ui.-$$Lambda$ChatActivity$STWZRGRI41TCtluhWMUueEgiDcY
+            r4.<init>()
+            r2.setOnClickListener(r4)
+            android.widget.ImageView r2 = r7.searchUpButton
+            r4 = 2131624020(0x7f0e0054, float:1.8875208E38)
+            java.lang.String r5 = "AccDescrSearchNext"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            r2.setContentDescription(r4)
+            android.widget.ImageView r2 = new android.widget.ImageView
+            r2.<init>(r8)
+            r7.searchDownButton = r2
+            android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
+            r2.setScaleType(r4)
+            android.widget.ImageView r2 = r7.searchDownButton
+            r4 = 2131165735(0x7var_, float:1.7945696E38)
+            r2.setImageResource(r4)
+            android.widget.ImageView r2 = r7.searchDownButton
+            android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r5 = "chat_searchPanelIcons"
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r4.<init>(r5, r6)
+            r2.setColorFilter(r4)
+            android.widget.ImageView r2 = r7.searchDownButton
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            r5 = 1
+            android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4, r5)
+            r2.setBackgroundDrawable(r4)
+            android.widget.FrameLayout r2 = r7.searchContainer
+            android.widget.ImageView r4 = r7.searchDownButton
+            r35 = 0
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
+            r2.addView(r4, r5)
+            android.widget.ImageView r2 = r7.searchDownButton
+            org.telegram.ui.-$$Lambda$ChatActivity$eaTd4W3UcOopuS9j6Z8hrQQaoyM r4 = new org.telegram.ui.-$$Lambda$ChatActivity$eaTd4W3UcOopuS9j6Z8hrQQaoyM
+            r4.<init>()
+            r2.setOnClickListener(r4)
+            android.widget.ImageView r2 = r7.searchDownButton
+            r4 = 2131624021(0x7f0e0055, float:1.887521E38)
+            java.lang.String r5 = "AccDescrSearchPrev"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            r2.setContentDescription(r4)
+            org.telegram.tgnet.TLRPC$Chat r2 = r7.currentChat
+            if (r2 == 0) goto L_0x18fd
+            boolean r2 = org.telegram.messenger.ChatObject.isChannel(r2)
+            if (r2 == 0) goto L_0x1898
+            org.telegram.tgnet.TLRPC$Chat r2 = r7.currentChat
+            boolean r2 = r2.megagroup
+            if (r2 == 0) goto L_0x18fd
+        L_0x1898:
+            android.widget.ImageView r2 = new android.widget.ImageView
+            r2.<init>(r8)
+            r7.searchUserButton = r2
+            android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
+            r2.setScaleType(r4)
+            android.widget.ImageView r2 = r7.searchUserButton
+            r4 = 2131165805(0x7var_d, float:1.7945837E38)
+            r2.setImageResource(r4)
+            android.widget.ImageView r2 = r7.searchUserButton
+            android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r5 = "chat_searchPanelIcons"
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r4.<init>(r5, r6)
+            r2.setColorFilter(r4)
+            android.widget.ImageView r2 = r7.searchUserButton
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            r5 = 1
+            android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4, r5)
+            r2.setBackgroundDrawable(r4)
+            android.widget.FrameLayout r2 = r7.searchContainer
+            android.widget.ImageView r4 = r7.searchUserButton
+            r30 = 48
+            r31 = 1111490560(0x42400000, float:48.0)
+            r32 = 51
+            r33 = 1111490560(0x42400000, float:48.0)
+            r34 = 0
+            r35 = 0
+            r36 = 0
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
+            r2.addView(r4, r5)
+            android.widget.ImageView r2 = r7.searchUserButton
+            org.telegram.ui.-$$Lambda$ChatActivity$oJMPZvn6var_vhTgcHHwvtcwPhEU r4 = new org.telegram.ui.-$$Lambda$ChatActivity$oJMPZvn6var_vhTgcHHwvtcwPhEU
+            r4.<init>()
+            r2.setOnClickListener(r4)
+            android.widget.ImageView r2 = r7.searchUserButton
+            r4 = 2131624019(0x7f0e0053, float:1.8875206E38)
+            java.lang.String r5 = "AccDescrSearchByUser"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            r2.setContentDescription(r4)
+        L_0x18fd:
+            android.widget.ImageView r2 = new android.widget.ImageView
+            r2.<init>(r8)
+            r7.searchCalendarButton = r2
+            android.widget.ImageView$ScaleType r4 = android.widget.ImageView.ScaleType.CENTER
+            r2.setScaleType(r4)
+            android.widget.ImageView r2 = r7.searchCalendarButton
+            r4 = 2131165713(0x7var_, float:1.794565E38)
+            r2.setImageResource(r4)
+            android.widget.ImageView r2 = r7.searchCalendarButton
+            android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r5 = "chat_searchPanelIcons"
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r4.<init>(r5, r6)
+            r2.setColorFilter(r4)
+            android.widget.ImageView r2 = r7.searchCalendarButton
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            r5 = 1
+            android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4, r5)
+            r2.setBackgroundDrawable(r4)
+            android.widget.FrameLayout r2 = r7.searchContainer
+            android.widget.ImageView r4 = r7.searchCalendarButton
+            r5 = 48
+            r6 = 48
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r6, r15)
+            r2.addView(r4, r5)
+            android.widget.ImageView r2 = r7.searchCalendarButton
+            org.telegram.ui.-$$Lambda$ChatActivity$Kyc4HEuQu5kJPKr3ZFndKeKqrrw r4 = new org.telegram.ui.-$$Lambda$ChatActivity$Kyc4HEuQu5kJPKr3ZFndKeKqrrw
+            r4.<init>()
+            r2.setOnClickListener(r4)
+            android.widget.ImageView r2 = r7.searchCalendarButton
+            r4 = 2131625704(0x7f0e06e8, float:1.8878623E38)
+            java.lang.String r5 = "JumpToDate"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            r2.setContentDescription(r4)
+            org.telegram.ui.ActionBar.SimpleTextView r2 = new org.telegram.ui.ActionBar.SimpleTextView
+            r2.<init>(r8)
+            r7.searchCountText = r2
+            java.lang.String r4 = "chat_searchPanelText"
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            r2.setTextColor(r4)
+            org.telegram.ui.ActionBar.SimpleTextView r2 = r7.searchCountText
+            r4 = 15
+            r2.setTextSize(r4)
+            org.telegram.ui.ActionBar.SimpleTextView r2 = r7.searchCountText
+            android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r16)
+            r2.setTypeface(r4)
+            org.telegram.ui.ActionBar.SimpleTextView r2 = r7.searchCountText
             r4 = 3
-            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2, r4)
-            r1.setBackgroundDrawable(r2)
-            android.widget.TextView r1 = r7.replyButton
-            java.lang.String r2 = "actionBarActionModeDefaultIcon"
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
-            r1.setTextColor(r2)
-            android.widget.TextView r1 = r7.replyButton
-            r2 = 1088421888(0x40e00000, float:7.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            r1.setCompoundDrawablePadding(r2)
-            android.widget.TextView r1 = r7.replyButton
-            android.graphics.Typeface r2 = org.telegram.messenger.AndroidUtilities.getTypeface(r16)
-            r1.setTypeface(r2)
-            android.content.res.Resources r1 = r41.getResources()
-            r2 = 2131165543(0x7var_, float:1.7945306E38)
-            android.graphics.drawable.Drawable r1 = r1.getDrawable(r2)
-            android.graphics.drawable.Drawable r1 = r1.mutate()
-            android.graphics.PorterDuffColorFilter r2 = new android.graphics.PorterDuffColorFilter
+            r2.setGravity(r4)
+            android.widget.FrameLayout r2 = r7.searchContainer
+            org.telegram.ui.ActionBar.SimpleTextView r4 = r7.searchCountText
+            r30 = -2
+            r31 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r32 = 16
+            r33 = 0
+            r34 = 0
+            r35 = 1121452032(0x42d80000, float:108.0)
+            r36 = 0
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
+            r2.addView(r4, r5)
+            org.telegram.ui.ChatActivity$42 r2 = new org.telegram.ui.ChatActivity$42
+            r2.<init>(r7, r8)
+            r7.bottomOverlay = r2
+            r4 = 0
+            r2.setWillNotDraw(r4)
+            android.widget.FrameLayout r2 = r7.bottomOverlay
+            r2.setVisibility(r10)
+            android.widget.FrameLayout r2 = r7.bottomOverlay
+            r5 = 1
+            r2.setFocusable(r5)
+            android.widget.FrameLayout r2 = r7.bottomOverlay
+            r2.setFocusableInTouchMode(r5)
+            android.widget.FrameLayout r2 = r7.bottomOverlay
+            r2.setClickable(r5)
+            android.widget.FrameLayout r2 = r7.bottomOverlay
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r22)
+            r2.setPadding(r4, r5, r4, r4)
+            org.telegram.ui.Components.SizeNotifierFrameLayout r2 = r7.contentView
+            android.widget.FrameLayout r4 = r7.bottomOverlay
+            r5 = 80
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r15, r5)
+            r2.addView(r4, r5)
+            android.widget.TextView r2 = new android.widget.TextView
+            r2.<init>(r8)
+            r7.bottomOverlayText = r2
+            r4 = 1
+            r2.setTextSize(r4, r11)
+            android.widget.TextView r2 = r7.bottomOverlayText
+            r4 = 17
+            r2.setGravity(r4)
+            android.widget.TextView r2 = r7.bottomOverlayText
+            r2.setMaxLines(r3)
+            android.widget.TextView r2 = r7.bottomOverlayText
+            android.text.TextUtils$TruncateAt r4 = android.text.TextUtils.TruncateAt.END
+            r2.setEllipsize(r4)
+            android.widget.TextView r2 = r7.bottomOverlayText
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r22)
+            float r4 = (float) r4
+            r5 = 1065353216(0x3var_, float:1.0)
+            r2.setLineSpacing(r4, r5)
+            android.widget.TextView r2 = r7.bottomOverlayText
+            java.lang.String r4 = "chat_secretChatStatusText"
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            r2.setTextColor(r4)
+            android.widget.FrameLayout r2 = r7.bottomOverlay
+            android.widget.TextView r4 = r7.bottomOverlayText
+            r32 = 17
+            r33 = 1096810496(0x41600000, float:14.0)
+            r35 = 1096810496(0x41600000, float:14.0)
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
+            r2.addView(r4, r5)
+            org.telegram.ui.ChatActivity$43 r2 = new org.telegram.ui.ChatActivity$43
+            r2.<init>(r8)
+            r7.bottomOverlayChat = r2
+            r4 = 0
+            r2.setWillNotDraw(r4)
+            android.widget.FrameLayout r2 = r7.bottomOverlayChat
+            r5 = 1069547520(0x3fCLASSNAME, float:1.5)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            r2.setPadding(r4, r5, r4, r4)
+            android.widget.FrameLayout r2 = r7.bottomOverlayChat
+            r2.setVisibility(r10)
+            android.widget.FrameLayout r2 = r7.bottomOverlayChat
+            r2.setClipChildren(r4)
+            org.telegram.ui.Components.SizeNotifierFrameLayout r2 = r7.contentView
+            android.widget.FrameLayout r4 = r7.bottomOverlayChat
+            r5 = 80
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r12, r15, r5)
+            r2.addView(r4, r5)
+            org.telegram.ui.ChatActivity$UnreadCounterTextView r2 = new org.telegram.ui.ChatActivity$UnreadCounterTextView
+            r2.<init>(r8)
+            r7.bottomOverlayChatText = r2
+            android.widget.FrameLayout r4 = r7.bottomOverlayChat
+            r30 = -1
+            r31 = -1082130432(0xffffffffbvar_, float:-1.0)
+            r32 = 0
+            r33 = 0
+            r34 = 1069547520(0x3fCLASSNAME, float:1.5)
+            r35 = 0
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
+            r4.addView(r2, r5)
+            org.telegram.ui.ChatActivity$UnreadCounterTextView r2 = r7.bottomOverlayChatText
+            org.telegram.ui.-$$Lambda$ChatActivity$2GxORvjxERtcjdaBecW7yRCTb2U r4 = new org.telegram.ui.-$$Lambda$ChatActivity$2GxORvjxERtcjdaBecW7yRCTb2U
+            r4.<init>()
+            r2.setOnClickListener(r4)
+            org.telegram.ui.Components.RadialProgressView r2 = new org.telegram.ui.Components.RadialProgressView
+            r2.<init>(r8)
+            r7.bottomOverlayProgress = r2
+            r4 = 1102053376(0x41b00000, float:22.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r2.setSize(r4)
+            org.telegram.ui.Components.RadialProgressView r2 = r7.bottomOverlayProgress
+            java.lang.String r4 = "chat_fieldOverlayText"
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
+            r2.setProgressColor(r4)
+            org.telegram.ui.Components.RadialProgressView r2 = r7.bottomOverlayProgress
+            r2.setVisibility(r10)
+            org.telegram.ui.Components.RadialProgressView r2 = r7.bottomOverlayProgress
+            r4 = 1036831949(0x3dcccccd, float:0.1)
+            r2.setScaleX(r4)
+            org.telegram.ui.Components.RadialProgressView r2 = r7.bottomOverlayProgress
+            r2.setScaleY(r4)
+            org.telegram.ui.Components.RadialProgressView r2 = r7.bottomOverlayProgress
+            r4 = 1065353216(0x3var_, float:1.0)
+            r2.setAlpha(r4)
+            android.widget.FrameLayout r2 = r7.bottomOverlayChat
+            org.telegram.ui.Components.RadialProgressView r4 = r7.bottomOverlayProgress
+            r5 = 30
+            r6 = 30
+            r14 = 17
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r5, r6, r14)
+            r2.addView(r4, r5)
+            android.widget.TextView r2 = new android.widget.TextView
+            r2.<init>(r8)
+            r7.replyButton = r2
+            r4 = 2131626887(0x7f0e0b87, float:1.8881023E38)
+            java.lang.String r5 = "Reply"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            r2.setText(r4)
+            android.widget.TextView r2 = r7.replyButton
+            r4 = 16
+            r2.setGravity(r4)
+            android.widget.TextView r2 = r7.replyButton
+            r4 = 1097859072(0x41700000, float:15.0)
+            r5 = 1
+            r2.setTextSize(r5, r4)
+            android.widget.TextView r2 = r7.replyButton
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r11)
+            r5 = 1101529088(0x41a80000, float:21.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            r6 = 0
+            r2.setPadding(r4, r6, r5, r6)
+            android.widget.TextView r2 = r7.replyButton
+            int r4 = org.telegram.ui.ActionBar.Theme.getColor(r1)
+            r5 = 3
+            android.graphics.drawable.Drawable r4 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r4, r5)
+            r2.setBackgroundDrawable(r4)
+            android.widget.TextView r2 = r7.replyButton
             java.lang.String r4 = "actionBarActionModeDefaultIcon"
             int r4 = org.telegram.ui.ActionBar.Theme.getColor(r4)
-            android.graphics.PorterDuff$Mode r5 = android.graphics.PorterDuff.Mode.MULTIPLY
-            r2.<init>(r4, r5)
-            r1.setColorFilter(r2)
+            r2.setTextColor(r4)
             android.widget.TextView r2 = r7.replyButton
-            r4 = 0
-            r2.setCompoundDrawablesWithIntrinsicBounds(r1, r4, r4, r4)
-            android.widget.TextView r1 = r7.replyButton
-            org.telegram.ui.-$$Lambda$ChatActivity$_wcWDCePdpcms-4-CPz1CqiFlcs r2 = new org.telegram.ui.-$$Lambda$ChatActivity$_wcWDCePdpcms-4-CPz1CqiFlcs
-            r2.<init>()
-            r1.setOnClickListener(r2)
-            android.widget.FrameLayout r1 = r7.bottomMessagesActionContainer
+            r4 = 1088421888(0x40e00000, float:7.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r2.setCompoundDrawablePadding(r4)
             android.widget.TextView r2 = r7.replyButton
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r12, r15)
-            r1.addView(r2, r4)
-            android.widget.TextView r1 = new android.widget.TextView
-            r1.<init>(r8)
-            r7.forwardButton = r1
-            r2 = 2131625464(0x7f0e05f8, float:1.8878137E38)
-            java.lang.String r4 = "Forward"
-            java.lang.String r2 = org.telegram.messenger.LocaleController.getString(r4, r2)
-            r1.setText(r2)
-            android.widget.TextView r1 = r7.forwardButton
-            r2 = 16
-            r1.setGravity(r2)
-            android.widget.TextView r1 = r7.forwardButton
-            r2 = 1097859072(0x41700000, float:15.0)
-            r4 = 1
-            r1.setTextSize(r4, r2)
-            android.widget.TextView r1 = r7.forwardButton
-            r2 = 1101529088(0x41a80000, float:21.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
+            android.graphics.Typeface r4 = org.telegram.messenger.AndroidUtilities.getTypeface(r16)
+            r2.setTypeface(r4)
+            android.content.res.Resources r2 = r41.getResources()
+            r4 = 2131165543(0x7var_, float:1.7945306E38)
+            android.graphics.drawable.Drawable r2 = r2.getDrawable(r4)
+            android.graphics.drawable.Drawable r2 = r2.mutate()
+            android.graphics.PorterDuffColorFilter r4 = new android.graphics.PorterDuffColorFilter
+            java.lang.String r5 = "actionBarActionModeDefaultIcon"
+            int r5 = org.telegram.ui.ActionBar.Theme.getColor(r5)
+            android.graphics.PorterDuff$Mode r6 = android.graphics.PorterDuff.Mode.MULTIPLY
+            r4.<init>(r5, r6)
+            r2.setColorFilter(r4)
+            android.widget.TextView r4 = r7.replyButton
+            r5 = 0
+            r4.setCompoundDrawablesWithIntrinsicBounds(r2, r5, r5, r5)
+            android.widget.TextView r2 = r7.replyButton
+            org.telegram.ui.-$$Lambda$ChatActivity$_wcWDCePdpcms-4-CPz1CqiFlcs r4 = new org.telegram.ui.-$$Lambda$ChatActivity$_wcWDCePdpcms-4-CPz1CqiFlcs
+            r4.<init>()
+            r2.setOnClickListener(r4)
+            android.widget.FrameLayout r2 = r7.bottomMessagesActionContainer
+            android.widget.TextView r4 = r7.replyButton
+            android.widget.FrameLayout$LayoutParams r5 = org.telegram.ui.Components.LayoutHelper.createFrame(r9, r12, r15)
+            r2.addView(r4, r5)
+            android.widget.TextView r2 = new android.widget.TextView
+            r2.<init>(r8)
+            r7.forwardButton = r2
+            r4 = 2131625464(0x7f0e05f8, float:1.8878137E38)
+            java.lang.String r5 = "Forward"
+            java.lang.String r4 = org.telegram.messenger.LocaleController.getString(r5, r4)
+            r2.setText(r4)
+            android.widget.TextView r2 = r7.forwardButton
+            r4 = 16
+            r2.setGravity(r4)
+            android.widget.TextView r2 = r7.forwardButton
+            r4 = 1097859072(0x41700000, float:15.0)
+            r5 = 1
+            r2.setTextSize(r5, r4)
+            android.widget.TextView r2 = r7.forwardButton
             r4 = 1101529088(0x41a80000, float:21.0)
             int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
-            r5 = 0
-            r1.setPadding(r2, r5, r4, r5)
-            android.widget.TextView r1 = r7.forwardButton
-            r2 = 1086324736(0x40CLASSNAME, float:6.0)
-            int r2 = org.telegram.messenger.AndroidUtilities.dp(r2)
-            r1.setCompoundDrawablePadding(r2)
-            android.widget.TextView r1 = r7.forwardButton
-            java.lang.String r2 = "actionBarActionModeDefaultSelector"
-            int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
+            r5 = 1101529088(0x41a80000, float:21.0)
+            int r5 = org.telegram.messenger.AndroidUtilities.dp(r5)
+            r6 = 0
+            r2.setPadding(r4, r6, r5, r6)
+            android.widget.TextView r2 = r7.forwardButton
+            r4 = 1086324736(0x40CLASSNAME, float:6.0)
+            int r4 = org.telegram.messenger.AndroidUtilities.dp(r4)
+            r2.setCompoundDrawablePadding(r4)
+            android.widget.TextView r2 = r7.forwardButton
+            int r1 = org.telegram.ui.ActionBar.Theme.getColor(r1)
             r4 = 3
-            android.graphics.drawable.Drawable r2 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r2, r4)
-            r1.setBackgroundDrawable(r2)
+            android.graphics.drawable.Drawable r1 = org.telegram.ui.ActionBar.Theme.createSelectorDrawable(r1, r4)
+            r2.setBackgroundDrawable(r1)
             android.widget.TextView r1 = r7.forwardButton
             java.lang.String r2 = "actionBarActionModeDefaultIcon"
             int r2 = org.telegram.ui.ActionBar.Theme.getColor(r2)
@@ -5620,13 +5596,13 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.setAdditionalTranslationY(r2)
             org.telegram.ui.Components.SizeNotifierFrameLayout r1 = r7.contentView
             org.telegram.ui.Components.UndoView r2 = r7.undoView
-            r32 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r33 = 83
-            r34 = 1090519040(0x41000000, float:8.0)
-            r35 = 0
+            r31 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r32 = 83
+            r33 = 1090519040(0x41000000, float:8.0)
+            r34 = 0
+            r35 = 1090519040(0x41000000, float:8.0)
             r36 = 1090519040(0x41000000, float:8.0)
-            r37 = 1090519040(0x41000000, float:8.0)
-            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r31, r32, r33, r34, r35, r36, r37)
+            android.widget.FrameLayout$LayoutParams r4 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
             r1.addView(r2, r4)
             org.telegram.tgnet.TLRPC$Chat r1 = r7.currentChat
             if (r1 == 0) goto L_0x1CLASSNAME
@@ -5640,44 +5616,44 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             r1.setVisibility(r10)
             org.telegram.ui.Components.SizeNotifierFrameLayout r1 = r7.contentView
             org.telegram.ui.Components.HintView r2 = r7.slowModeHint
-            r31 = -2
-            r32 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
-            r33 = 51
-            r34 = 1100480512(0x41980000, float:19.0)
-            r35 = 0
-            r36 = 1100480512(0x41980000, float:19.0)
-            r37 = 0
-            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r31, r32, r33, r34, r35, r36, r37)
+            r30 = -2
+            r31 = -1073741824(0xffffffffCLASSNAME, float:-2.0)
+            r32 = 51
+            r33 = 1100480512(0x41980000, float:19.0)
+            r34 = 0
+            r35 = 1100480512(0x41980000, float:19.0)
+            r36 = 0
+            android.widget.FrameLayout$LayoutParams r3 = org.telegram.ui.Components.LayoutHelper.createFrame(r30, r31, r32, r33, r34, r35, r36)
             r1.addView(r2, r3)
         L_0x1CLASSNAME:
             org.telegram.ui.ChatActivity$ChatActivityAdapter r1 = r7.chatAdapter
             r1.updateRowsSafe()
             boolean r1 = r7.loading
-            if (r1 == 0) goto L_0x1ca8
+            if (r1 == 0) goto L_0x1c6e
             java.util.ArrayList<org.telegram.messenger.MessageObject> r1 = r7.messages
             boolean r1 = r1.isEmpty()
-            if (r1 == 0) goto L_0x1ca8
+            if (r1 == 0) goto L_0x1c6e
             org.telegram.ui.ChatActivity$ChatActivityAdapter r1 = r7.chatAdapter
             int r1 = r1.botInfoRow
-            if (r1 >= 0) goto L_0x1c9c
+            if (r1 >= 0) goto L_0x1CLASSNAME
             r1 = 1
-            goto L_0x1c9d
-        L_0x1c9c:
+            goto L_0x1CLASSNAME
+        L_0x1CLASSNAME:
             r1 = 0
-        L_0x1c9d:
+        L_0x1CLASSNAME:
             r7.showProgressView(r1)
             org.telegram.ui.Components.RecyclerListView r1 = r7.chatListView
             r2 = 0
             r1.setEmptyView(r2)
             r1 = 0
-            goto L_0x1cb3
-        L_0x1ca8:
+            goto L_0x1CLASSNAME
+        L_0x1c6e:
             r1 = 0
             r7.showProgressView(r1)
             org.telegram.ui.Components.RecyclerListView r2 = r7.chatListView
             android.widget.FrameLayout r3 = r7.emptyViewContainer
             r2.setEmptyView(r3)
-        L_0x1cb3:
+        L_0x1CLASSNAME:
             r40.checkBotKeyboard()
             r40.updateBottomOverlay()
             r40.updateSecretStatus()
@@ -5695,28 +5671,27 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             org.telegram.ui.Components.RecyclerAnimationScrollHelper r1 = r7.chatScrollHelper
             org.telegram.ui.ChatActivity$ChatScrollCallback r2 = r7.chatScrollHelperCallback
             r1.setAnimationCallback(r2)
-            org.telegram.tgnet.TLRPC$EncryptedChat r1 = r7.currentEncryptedChat     // Catch:{ all -> 0x1cf8 }
-            if (r1 == 0) goto L_0x1cfc
-            r1 = 23
-            if (r0 < r1) goto L_0x1cfc
-            java.lang.String r0 = org.telegram.messenger.SharedConfig.passcodeHash     // Catch:{ all -> 0x1cf8 }
-            int r0 = r0.length()     // Catch:{ all -> 0x1cf8 }
-            if (r0 == 0) goto L_0x1cf3
-            boolean r0 = org.telegram.messenger.SharedConfig.allowScreenCapture     // Catch:{ all -> 0x1cf8 }
-            if (r0 == 0) goto L_0x1cfc
-        L_0x1cf3:
+            org.telegram.tgnet.TLRPC$EncryptedChat r1 = r7.currentEncryptedChat     // Catch:{ all -> 0x1cbc }
+            if (r1 == 0) goto L_0x1cc0
+            if (r0 < r13) goto L_0x1cc0
+            java.lang.String r0 = org.telegram.messenger.SharedConfig.passcodeHash     // Catch:{ all -> 0x1cbc }
+            int r0 = r0.length()     // Catch:{ all -> 0x1cbc }
+            if (r0 == 0) goto L_0x1cb7
+            boolean r0 = org.telegram.messenger.SharedConfig.allowScreenCapture     // Catch:{ all -> 0x1cbc }
+            if (r0 == 0) goto L_0x1cc0
+        L_0x1cb7:
             r0 = 1
-            org.telegram.messenger.AndroidUtilities.setFlagSecure(r7, r0)     // Catch:{ all -> 0x1cf8 }
-            goto L_0x1cfc
-        L_0x1cf8:
+            org.telegram.messenger.AndroidUtilities.setFlagSecure(r7, r0)     // Catch:{ all -> 0x1cbc }
+            goto L_0x1cc0
+        L_0x1cbc:
             r0 = move-exception
             org.telegram.messenger.FileLog.e((java.lang.Throwable) r0)
-        L_0x1cfc:
+        L_0x1cc0:
             r1 = r29
-            if (r1 == 0) goto L_0x1d05
+            if (r1 == 0) goto L_0x1cc9
             org.telegram.ui.Components.ChatActivityEnterView r0 = r7.chatActivityEnterView
             r0.setFieldText(r1)
-        L_0x1d05:
+        L_0x1cc9:
             r40.fixLayoutInternal()
             org.telegram.ui.Cells.TextSelectionHelper$ChatListTextSelectionHelper r0 = r7.textSelectionHelper
             org.telegram.ui.ChatActivity$44 r1 = new org.telegram.ui.ChatActivity$44
@@ -5743,38 +5718,38 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
             android.os.Bundle r1 = r40.getArguments()
             java.lang.String r3 = "search_from_chat_id"
             int r1 = r1.getInt(r3, r2)
-            if (r0 == 0) goto L_0x1d6c
+            if (r0 == 0) goto L_0x1d30
             int r1 = r7.currentAccount
             org.telegram.messenger.MessagesController r1 = org.telegram.messenger.MessagesController.getInstance(r1)
             java.lang.Integer r0 = java.lang.Integer.valueOf(r0)
             org.telegram.tgnet.TLRPC$User r0 = r1.getUser(r0)
-            if (r0 == 0) goto L_0x1d8c
+            if (r0 == 0) goto L_0x1d50
             java.lang.String r1 = ""
             r7.openSearchWithText(r1)
             android.widget.ImageView r1 = r7.searchUserButton
             r1.callOnClick()
             r1 = 0
             r7.searchUserMessages(r0, r1)
-            goto L_0x1d8c
-        L_0x1d6c:
-            if (r1 == 0) goto L_0x1d8c
+            goto L_0x1d50
+        L_0x1d30:
+            if (r1 == 0) goto L_0x1d50
             int r0 = r7.currentAccount
             org.telegram.messenger.MessagesController r0 = org.telegram.messenger.MessagesController.getInstance(r0)
             java.lang.Integer r1 = java.lang.Integer.valueOf(r1)
             org.telegram.tgnet.TLRPC$Chat r0 = r0.getChat(r1)
-            if (r0 == 0) goto L_0x1d8c
+            if (r0 == 0) goto L_0x1d50
             java.lang.String r1 = ""
             r7.openSearchWithText(r1)
             android.widget.ImageView r1 = r7.searchUserButton
             r1.callOnClick()
             r1 = 0
             r7.searchUserMessages(r1, r0)
-        L_0x1d8c:
+        L_0x1d50:
             org.telegram.messenger.MessageObject r0 = r7.replyingMessageObject
-            if (r0 == 0) goto L_0x1d95
+            if (r0 == 0) goto L_0x1d59
             org.telegram.ui.Components.ChatActivityEnterView r1 = r7.chatActivityEnterView
             r1.setReplyingMessageObject(r0)
-        L_0x1d95:
+        L_0x1d59:
             android.view.View r0 = r7.fragmentView
             return r0
         */
@@ -6989,22 +6964,33 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         this.invalidateChatListViewTopPadding = true;
         this.contentView.invalidate();
         this.chatListView.invalidate();
+        float f = 0.0f;
         float max = Math.max(0.0f, ((float) AndroidUtilities.dp(48.0f)) + this.topChatPanelViewOffset);
         FrameLayout frameLayout = this.pinnedMessageView;
         if (frameLayout != null) {
             frameLayout.setTranslationY(this.contentPanTranslation + this.pinnedMessageEnterOffset + ((float) this.contentPaddingTop) + max);
         }
-        FragmentContextView fragmentContextView2 = this.fragmentContextView;
-        if (fragmentContextView2 != null) {
-            fragmentContextView2.setTranslationY(this.contentPanTranslation + ((float) this.contentPaddingTop));
+        if (this.fragmentContextView != null) {
+            FragmentContextView fragmentContextView2 = this.fragmentLocationContextView;
+            float dp = (fragmentContextView2 == null || fragmentContextView2.getVisibility() != 0) ? 0.0f : ((float) AndroidUtilities.dp(36.0f)) + 0.0f;
+            FragmentContextView fragmentContextView3 = this.fragmentContextView;
+            fragmentContextView3.setTranslationY(this.contentPanTranslation + dp + fragmentContextView3.getTopPadding());
         }
-        FragmentContextView fragmentContextView3 = this.fragmentLocationContextView;
-        if (fragmentContextView3 != null) {
-            fragmentContextView3.setTranslationY(this.contentPanTranslation + ((float) this.contentPaddingTop));
+        if (this.fragmentLocationContextView != null) {
+            FragmentContextView fragmentContextView4 = this.fragmentContextView;
+            if (fragmentContextView4 != null && fragmentContextView4.getVisibility() == 0) {
+                f = 0.0f + ((float) AndroidUtilities.dp((float) this.fragmentContextView.getStyleHeight())) + this.fragmentContextView.getTopPadding();
+            }
+            FragmentContextView fragmentContextView5 = this.fragmentLocationContextView;
+            fragmentContextView5.setTranslationY(this.contentPanTranslation + f + fragmentContextView5.getTopPadding());
         }
         FrameLayout frameLayout2 = this.topChatPanelView;
         if (frameLayout2 != null) {
             frameLayout2.setTranslationY(this.contentPanTranslation + ((float) this.contentPaddingTop) + this.topChatPanelViewOffset);
+        }
+        RecyclerListView recyclerListView = this.mentionListView;
+        if (recyclerListView != null) {
+            recyclerListView.setTranslationY(this.contentPanTranslation + ((float) this.contentPaddingTop));
         }
     }
 
@@ -11441,7 +11427,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 processSelectedAttach(0);
             } else if (i == 20 && iArr != null && iArr.length > 0 && iArr[0] == 0) {
                 processSelectedAttach(2);
-            } else if ((i == 101 || i == 102) && this.currentUser != null) {
+            } else if (((i == 101 || i == 102) && this.currentUser != null) || (i == 103 && this.currentChat != null)) {
                 int i2 = 0;
                 while (true) {
                     if (i2 >= iArr.length) {
@@ -11456,15 +11442,17 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                 }
                 if (iArr.length <= 0 || !z) {
                     VoIPHelper.permissionDenied(getParentActivity(), (Runnable) null, i);
-                    return;
+                } else if (i == 103) {
+                    VoIPHelper.startCall(this.currentChat, 0, getParentActivity());
+                } else {
+                    TLRPC$User tLRPC$User = this.currentUser;
+                    boolean z3 = i == 102;
+                    TLRPC$UserFull tLRPC$UserFull = this.userInfo;
+                    if (tLRPC$UserFull == null || !tLRPC$UserFull.video_calls_available) {
+                        z2 = false;
+                    }
+                    VoIPHelper.startCall(tLRPC$User, z3, z2, getParentActivity(), getMessagesController().getUserFull(this.currentUser.id));
                 }
-                TLRPC$User tLRPC$User = this.currentUser;
-                boolean z3 = i == 102;
-                TLRPC$UserFull tLRPC$UserFull = this.userInfo;
-                if (tLRPC$UserFull == null || !tLRPC$UserFull.video_calls_available) {
-                    z2 = false;
-                }
-                VoIPHelper.startCall(tLRPC$User, z3, z2, getParentActivity(), getMessagesController().getUserFull(this.currentUser.id));
             }
         }
     }
@@ -18919,6 +18907,7 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         int i;
         MessageObject messageObject;
         TLRPC$TL_messageReplies tLRPC$TL_messageReplies;
+        int indexOf;
         if (this.waitingForReplies.size() != 0) {
             int size = this.waitingForReplies.size();
             ArrayList arrayList = null;
@@ -18972,14 +18961,11 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
                                     groupedMessages.messages.get(i5).animateComments = true;
                                 }
                             }
-                        } else {
-                            int indexOf = this.messages.indexOf(messageObject);
-                            if (indexOf >= 0) {
-                                if (arrayList2 == null) {
-                                    arrayList2 = new ArrayList();
-                                }
-                                arrayList2.add(Integer.valueOf(indexOf + this.chatAdapter.messagesStartRow));
+                        } else if (this.chatAdapter != null && (indexOf = this.messages.indexOf(messageObject)) >= 0) {
+                            if (arrayList2 == null) {
+                                arrayList2 = new ArrayList();
                             }
+                            arrayList2.add(Integer.valueOf(indexOf + this.chatAdapter.messagesStartRow));
                         }
                     }
                 }
@@ -21559,7 +21545,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         getNotificationCenter().postNotificationName(NotificationCenter.closeChats, new Object[0]);
         Bundle bundle = new Bundle();
         bundle.putInt("chat_id", messageObject.messageOwner.action.channel_id);
-        actionBarLayout.presentFragment(new ChatActivity(bundle), true);
+        actionBarLayout.addFragmentToStack(new ChatActivity(bundle), actionBarLayout.fragmentsStack.size() - 1);
+        baseFragment.finishFragment();
     }
 
     /* access modifiers changed from: private */
@@ -32912,6 +32899,8 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         arrayList.add(new ThemeDescription(this.replyObjectTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_replyPanelMessage"));
         arrayList.add(new ThemeDescription(this.replyIconImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_replyPanelIcons"));
         arrayList.add(new ThemeDescription(this.replyCloseImageView, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_replyPanelClose"));
+        $$Lambda$ChatActivity$YQZB0ro8EMBrc_ON5KWC1RSLrw r74 = r10;
+        arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r74, "chat_replyPanelName"));
         arrayList.add(new ThemeDescription(this.searchUpButton, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_searchPanelIcons"));
         arrayList.add(new ThemeDescription(this.searchUpButton, ThemeDescription.FLAG_BACKGROUNDFILTER | ThemeDescription.FLAG_DRAWABLESELECTEDSTATE, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "actionBarActionModeDefaultSelector"));
         arrayList.add(new ThemeDescription(this.searchDownButton, ThemeDescription.FLAG_IMAGECOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_searchPanelIcons"));
@@ -32956,7 +32945,6 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         arrayList.add(new ThemeDescription(this.mentionListView, 0, new Class[]{ContextLinkCell.class}, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "divider"));
         arrayList.add(new ThemeDescription(this.gifHintTextView, ThemeDescription.FLAG_BACKGROUNDFILTER, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_gifSaveHintBackground"));
         arrayList.add(new ThemeDescription(this.gifHintTextView, ThemeDescription.FLAG_TEXTCOLOR, (Class[]) null, (Paint) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_gifSaveHintText"));
-        $$Lambda$ChatActivity$YQZB0ro8EMBrc_ON5KWC1RSLrw r74 = r10;
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r74, "chat_attachMediaBanBackground"));
         arrayList.add(new ThemeDescription((View) null, 0, (Class[]) null, (Paint) null, (Drawable[]) null, r74, "chat_attachMediaBanText"));
         arrayList.add(new ThemeDescription((View) this.noSoundHintView, ThemeDescription.FLAG_TEXTCOLOR, new Class[]{HintView.class}, new String[]{"textView"}, (Paint[]) null, (Drawable[]) null, (ThemeDescription.ThemeDescriptionDelegate) null, "chat_gifSaveHintText"));
@@ -33072,6 +33060,10 @@ public class ChatActivity extends BaseFragment implements NotificationCenter.Not
         PinnedLineView pinnedLineView2 = this.pinnedLineView;
         if (pinnedLineView2 != null) {
             pinnedLineView2.updateColors();
+        }
+        ChatActivityEnterTopView chatActivityEnterTopView2 = this.chatActivityEnterTopView;
+        if (chatActivityEnterTopView2 != null && chatActivityEnterTopView2.getEditView() != null) {
+            this.chatActivityEnterTopView.getEditView().updateColors();
         }
     }
 }

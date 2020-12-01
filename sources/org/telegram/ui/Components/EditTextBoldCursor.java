@@ -802,7 +802,11 @@ public class EditTextBoldCursor extends EditText {
 
     /* access modifiers changed from: protected */
     public void onAttachedToWindow() {
-        super.onAttachedToWindow();
+        try {
+            super.onAttachedToWindow();
+        } catch (Exception e) {
+            FileLog.e((Throwable) e);
+        }
         this.attachedToWindow = getRootView();
         AndroidUtilities.runOnUIThread(this.invalidateRunnable);
     }

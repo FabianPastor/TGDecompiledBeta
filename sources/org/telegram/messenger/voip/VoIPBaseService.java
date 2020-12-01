@@ -854,7 +854,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             }
         }
         ConnectionsManager.getInstance(this.currentAccount).setAppPaused(true, false);
-        VoIPHelper.lastCallTime = System.currentTimeMillis();
+        VoIPHelper.lastCallTime = SystemClock.elapsedRealtime();
     }
 
     /* access modifiers changed from: protected */

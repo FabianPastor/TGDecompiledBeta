@@ -7,6 +7,7 @@ import android.graphics.Shader;
 import android.view.View;
 import java.util.ArrayList;
 import org.telegram.messenger.Utilities;
+import org.telegram.messenger.voip.VoIPService;
 import org.telegram.ui.ActionBar.Theme;
 
 public class FragmentContextViewWavesDrawable {
@@ -22,6 +23,7 @@ public class FragmentContextViewWavesDrawable {
     LineBlobDrawable lineBlobDrawable2 = new LineBlobDrawable(8);
     Paint paint = new Paint(1);
     ArrayList<View> parents = new ArrayList<>();
+    WeavingState pausedState;
     WeavingState previousState;
     float progressToState = 1.0f;
     WeavingState[] states = new WeavingState[2];
@@ -135,12 +137,12 @@ public class FragmentContextViewWavesDrawable {
             r7 = 0
         L_0x009a:
             r1 = 2
-            if (r7 >= r1) goto L_0x01b9
+            if (r7 >= r1) goto L_0x01bc
             if (r7 != 0) goto L_0x00a6
             org.telegram.ui.Components.FragmentContextViewWavesDrawable$WeavingState r1 = r0.previousState
             if (r1 != 0) goto L_0x00a6
             r14 = r7
-            goto L_0x01b5
+            goto L_0x01b8
         L_0x00a6:
             if (r7 != 0) goto L_0x00ca
             float r1 = r0.progressToState
@@ -162,17 +164,20 @@ public class FragmentContextViewWavesDrawable {
             r2.setShader(r3)
         L_0x00c8:
             r12 = r1
-            goto L_0x00f0
+            goto L_0x00f3
         L_0x00ca:
-            org.telegram.ui.Components.FragmentContextViewWavesDrawable$WeavingState r1 = r0.previousState
-            if (r1 == 0) goto L_0x00d1
-            float r1 = r0.progressToState
-            goto L_0x00d3
-        L_0x00d1:
-            r1 = 1065353216(0x3var_, float:1.0)
-        L_0x00d3:
-            if (r9 == 0) goto L_0x00e6
             org.telegram.ui.Components.FragmentContextViewWavesDrawable$WeavingState r12 = r0.currentState
+            if (r12 != 0) goto L_0x00cf
+            return
+        L_0x00cf:
+            org.telegram.ui.Components.FragmentContextViewWavesDrawable$WeavingState r1 = r0.previousState
+            if (r1 == 0) goto L_0x00d6
+            float r1 = r0.progressToState
+            goto L_0x00d8
+        L_0x00d6:
+            r1 = 1065353216(0x3var_, float:1.0)
+        L_0x00d8:
+            if (r9 == 0) goto L_0x00e9
             float r2 = r24 - r22
             int r13 = (int) r2
             float r2 = r23 - r21
@@ -181,13 +186,13 @@ public class FragmentContextViewWavesDrawable {
             r15 = r18
             r17 = r2
             r12.update(r13, r14, r15, r17)
-        L_0x00e6:
+        L_0x00e9:
             android.graphics.Paint r2 = r0.paint
             org.telegram.ui.Components.FragmentContextViewWavesDrawable$WeavingState r3 = r0.currentState
             android.graphics.Shader r3 = r3.shader
             r2.setShader(r3)
             goto L_0x00c8
-        L_0x00f0:
+        L_0x00f3:
             org.telegram.ui.Components.LineBlobDrawable r1 = r0.lineBlobDrawable
             r1.minRadius = r11
             r2 = 1073741824(0x40000000, float:2.0)
@@ -237,18 +242,18 @@ public class FragmentContextViewWavesDrawable {
             org.telegram.ui.Components.LineBlobDrawable r1 = r0.lineBlobDrawable2
             float r2 = r0.amplitude
             r1.update(r2, r3)
-            if (r7 != r8) goto L_0x0169
+            if (r7 != r8) goto L_0x016c
             android.graphics.Paint r1 = r0.paint
             r2 = 1132396544(0x437var_, float:255.0)
             float r2 = r2 * r12
             int r2 = (int) r2
             r1.setAlpha(r2)
-            goto L_0x0170
-        L_0x0169:
+            goto L_0x0173
+        L_0x016c:
             android.graphics.Paint r1 = r0.paint
             r2 = 255(0xff, float:3.57E-43)
             r1.setAlpha(r2)
-        L_0x0170:
+        L_0x0173:
             org.telegram.ui.Components.LineBlobDrawable r1 = r0.lineBlobDrawable
             android.graphics.Paint r13 = r0.paint
             r2 = r21
@@ -282,10 +287,10 @@ public class FragmentContextViewWavesDrawable {
             float r3 = r22 - r12
             android.graphics.Paint r7 = r0.paint
             r1.draw(r2, r3, r4, r5, r6, r7)
-        L_0x01b5:
+        L_0x01b8:
             int r7 = r14 + 1
             goto L_0x009a
-        L_0x01b9:
+        L_0x01bc:
             return
         */
         throw new UnsupportedOperationException("Method not decompiled: org.telegram.ui.Components.FragmentContextViewWavesDrawable.draw(float, float, float, float, android.graphics.Canvas, android.view.View):void");
@@ -293,15 +298,20 @@ public class FragmentContextViewWavesDrawable {
 
     public void setState(int i) {
         WeavingState weavingState = this.currentState;
-        if (weavingState == null || weavingState.currentState != i) {
-            WeavingState weavingState2 = this.currentState;
-            this.previousState = weavingState2;
-            this.currentState = this.states[i];
-            if (weavingState2 != null) {
-                this.progressToState = 0.0f;
-            } else {
-                this.progressToState = 1.0f;
-            }
+        if (weavingState != null && weavingState.currentState == i) {
+            return;
+        }
+        if (VoIPService.getSharedInstance() == null && this.currentState == null) {
+            this.currentState = this.pausedState;
+            return;
+        }
+        WeavingState weavingState2 = this.currentState;
+        this.previousState = weavingState2;
+        this.currentState = this.states[i];
+        if (weavingState2 != null) {
+            this.progressToState = 0.0f;
+        } else {
+            this.progressToState = 1.0f;
         }
     }
 
@@ -322,6 +332,7 @@ public class FragmentContextViewWavesDrawable {
     public void removeParent(View view) {
         this.parents.remove(view);
         if (this.parents.isEmpty()) {
+            this.pausedState = this.currentState;
             this.currentState = null;
             this.previousState = null;
         }

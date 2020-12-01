@@ -1166,11 +1166,12 @@ public class ActionBarMenuItem extends FrameLayout {
                 }
 
                 public boolean onTouchEvent(MotionEvent motionEvent) {
-                    if (motionEvent.getAction() == 0 && !AndroidUtilities.showKeyboard(this)) {
+                    boolean onTouchEvent = super.onTouchEvent(motionEvent);
+                    if (motionEvent.getAction() == 1 && !AndroidUtilities.showKeyboard(this)) {
                         clearFocus();
                         requestFocus();
                     }
-                    return super.onTouchEvent(motionEvent);
+                    return onTouchEvent;
                 }
             };
             this.searchField = r22;
