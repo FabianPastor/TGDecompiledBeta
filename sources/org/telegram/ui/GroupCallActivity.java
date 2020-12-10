@@ -1944,8 +1944,8 @@ public class GroupCallActivity extends BottomSheet implements NotificationCenter
                 i = (int) (((float) AndroidUtilities.dp(13.0f)) * Math.min(1.0f, ((((float) ActionBar.getCurrentActionBarHeight()) - dp) + ((float) AndroidUtilities.dp(26.0f))) / ((float) (ActionBar.getCurrentActionBarHeight() - AndroidUtilities.dp(6.0f)))));
             }
             float f3 = (float) i;
-            this.menuItemsContainer.setTranslationY((this.scrollOffsetY - ((float) AndroidUtilities.dp(53.0f))) - f3);
-            this.titleTextView.setTranslationY((this.scrollOffsetY - ((float) AndroidUtilities.dp(44.0f))) - f3);
+            this.menuItemsContainer.setTranslationY(Math.max((float) AndroidUtilities.dp(4.0f), (this.scrollOffsetY - ((float) AndroidUtilities.dp(53.0f))) - f3));
+            this.titleTextView.setTranslationY(Math.max((float) AndroidUtilities.dp(4.0f), (this.scrollOffsetY - ((float) AndroidUtilities.dp(44.0f))) - f3));
             this.containerView.invalidate();
         }
     }

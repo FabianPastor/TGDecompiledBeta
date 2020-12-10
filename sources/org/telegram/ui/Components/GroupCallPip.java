@@ -87,9 +87,10 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
     float xRelative = -1.0f;
     float yRelative = -1.0f;
 
-    public GroupCallPip(Context context) {
+    public GroupCallPip(Context context, int i) {
+        this.currentAccount = i;
         final float scaledTouchSlop = (float) ViewConfiguration.get(context).getScaledTouchSlop();
-        AnonymousClass3 r1 = new FrameLayout(context) {
+        AnonymousClass3 r0 = new FrameLayout(context) {
             AnimatorSet moveToBoundsAnimator;
             boolean moving;
             boolean pressed;
@@ -162,7 +163,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                     float r6 = r11 * r11
                     float r8 = r4 * r4
                     float r6 = r6 + r8
-                    float r8 = r0
+                    float r8 = r14
                     float r8 = r8 * r8
                     int r6 = (r6 > r8 ? 1 : (r6 == r8 ? 0 : -1))
                     if (r6 <= 0) goto L_0x005b
@@ -485,8 +486,8 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                 }
             }
         };
-        this.windowView = r1;
-        r1.setAlpha(0.7f);
+        this.windowView = r0;
+        r0.setAlpha(0.7f);
         GroupCallPipButton groupCallPipButton = new GroupCallPipButton(context, this.currentAccount, false);
         this.button = groupCallPipButton;
         this.windowView.addView(groupCallPipButton, LayoutHelper.createFrame(-1, -1, 17));
@@ -572,7 +573,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
         rLottieImageView.setAnimation(this.deleteIcon);
         rLottieImageView.setColorFilter(-1);
         this.windowRemoveTooltipOverlayView.addView(rLottieImageView, LayoutHelper.createFrame(40, 40, 17));
-        AnonymousClass5 r0 = new FrameLayout(context) {
+        AnonymousClass5 r14 = new FrameLayout(context) {
             public boolean dispatchKeyEvent(KeyEvent keyEvent) {
                 if (keyEvent.getKeyCode() == 4 && keyEvent.getAction() == 1) {
                     GroupCallPip.this.showAlert(false);
@@ -580,8 +581,8 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
                 return super.dispatchKeyEvent(keyEvent);
             }
         };
-        this.alertContainer = r0;
-        r0.setOnClickListener(new View.OnClickListener() {
+        this.alertContainer = r14;
+        r14.setOnClickListener(new View.OnClickListener() {
             public final void onClick(View view) {
                 GroupCallPip.this.lambda$new$1$GroupCallPip(view);
             }
@@ -813,9 +814,7 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
 
     public static void show(Context context, int i) {
         if (instance == null) {
-            GroupCallPip groupCallPip = new GroupCallPip(context);
-            instance = groupCallPip;
-            groupCallPip.currentAccount = i;
+            instance = new GroupCallPip(context, i);
             WindowManager windowManager2 = (WindowManager) context.getSystemService("window");
             instance.windowManager = windowManager2;
             WindowManager.LayoutParams createWindowLayoutParams = createWindowLayoutParams(context);
@@ -831,9 +830,9 @@ public class GroupCallPip implements NotificationCenter.NotificationCenterDelega
             createWindowLayoutParams2.height = AndroidUtilities.dp(200.0f);
             windowManager2.addView(instance.windowRemoveTooltipView, createWindowLayoutParams2);
             WindowManager.LayoutParams createWindowLayoutParams3 = createWindowLayoutParams(context);
-            GroupCallPip groupCallPip2 = instance;
-            groupCallPip2.windowLayoutParams = createWindowLayoutParams3;
-            windowManager2.addView(groupCallPip2.windowView, createWindowLayoutParams3);
+            GroupCallPip groupCallPip = instance;
+            groupCallPip.windowLayoutParams = createWindowLayoutParams3;
+            windowManager2.addView(groupCallPip.windowView, createWindowLayoutParams3);
             WindowManager.LayoutParams createWindowLayoutParams4 = createWindowLayoutParams(context);
             createWindowLayoutParams4.gravity = 80;
             createWindowLayoutParams4.width = -1;

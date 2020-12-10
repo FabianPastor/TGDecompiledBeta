@@ -743,7 +743,7 @@ public abstract class VoIPBaseService extends Service implements SensorEventList
             i = NUM;
             str2 = "VoipOutgoingCall";
         }
-        Notification.Builder contentIntent = builder.setContentTitle(LocaleController.getString(str2, i)).setContentText(str).setSmallIcon(NUM).setContentIntent(PendingIntent.getActivity(this, 0, action, 0));
+        Notification.Builder contentIntent = builder.setContentTitle(LocaleController.getString(str2, i)).setContentText(str).setSmallIcon(NUM).setContentIntent(PendingIntent.getActivity(this, 50, action, 0));
         int i3 = Build.VERSION.SDK_INT;
         if (i3 >= 16) {
             Intent intent = new Intent(this, VoIPActionsReceiver.class);

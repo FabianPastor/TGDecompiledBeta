@@ -403,7 +403,7 @@ abstract class CLASSNAMEp1<E_IN> extends CLASSNAMEh1<E_IN, Double, CLASSNAMEs1> 
     }
 
     /* renamed from: iterator  reason: collision with other method in class */
-    public Iterator m20iterator() {
+    public Iterator m26iterator() {
         return v.f(spliterator());
     }
 

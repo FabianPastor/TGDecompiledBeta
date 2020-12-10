@@ -275,7 +275,11 @@ public class VoIPService extends VoIPBaseService {
                     }
                 }
                 if (intent.getBooleanExtra("start_incall_activity", false)) {
-                    startActivity(new Intent(this, LaunchActivity.class).setAction(this.user != null ? "voip" : "voip_chat").addFlags(NUM));
+                    Intent addFlags = new Intent(this, LaunchActivity.class).setAction(this.user != null ? "voip" : "voip_chat").addFlags(NUM);
+                    if (this.chat != null) {
+                        addFlags.putExtra("currentAccount", this.currentAccount);
+                    }
+                    startActivity(addFlags);
                 }
             } else {
                 NotificationCenter.getGlobalInstance().postNotificationName(NotificationCenter.closeInCallActivity, new Object[0]);
